@@ -4162,7 +4162,114 @@ def test_esef_entity_search_retries_without_country_filter(mock_get):
     assert any("/entities?" in u and "filter%5Bcountry%5D" not in u for u in calls)
 
 
+@patch("value_investor.research.filings._http_get")
+def test_esef_entity_search_retries_without_country_on_http_400(mock_get):
+    """Regression: filings.xbrl.org no longer accepts filter[country] (HTTP 400)."""
+    import urllib.error
+
+    entity_payload = {
+        "data": [
+            {
+                "attributes": {
+                    "identifier": "7245009EAAUUQJ0U4T57",
+                    "name": "Randstad N.V.",
+                }
+            }
+        ]
+    }
+    filings_payload = {
+        "data": [
+            {
+                "attributes": {
+                    "period_end": "2025-12-31",
+                    "report_url": "/7245009EAAUUQJ0U4T57/2025/reports/rand-2025.xhtml",
+                }
+            }
+        ]
+    }
+    calls: list[str] = []
+
+    def _fake_get(url: str, **kwargs):
+        calls.append(url)
+        if "/entities?" in url and "filter%5Bcountry%5D" in url:
+            raise urllib.error.HTTPError(url, 400, "BAD REQUEST", {}, None)
+        if "/entities?" in url:
+            return json.dumps(entity_payload).encode("utf-8")
+        return json.dumps(filings_payload).encode("utf-8")
+
+    mock_get.side_effect = _fake_get
+    rows = fetch_filings_esef_direct(company_name="Randstad N.V.", ticker="RAND.AS")
+    assert len(rows) == 1
+    assert rows[0]["source"] == "esef_direct"
+    assert any("filter%5Bcountry%5D" in u for u in calls)
+    assert any("/entities?" in u and "filter%5Bcountry%5D" not in u for u in calls)
+
+
+def test_fetch_filings_ir_allowlist_rand_as_builtins(tmp_path: Path):
+    """Regression: RAND.AS unmeasured when ESEF/news miss — IR allowlist seeds bodies."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("RAND.AS", path=allowlist_path)
+    assert rows
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert any("randstad.com" in row["url"] for row in rows)
+
+
+def test_sec_edgar_supplement_rejects_rand_as_homonym():
+    """RAND.AS must not pull Rand Capital Corp SEC filings (CIK homonym on RAND)."""
+    assert _sec_edgar_supplement_allowed("RAND.AS", "Randstad N.V.") is False
+
+
 @patch("value_investor.research.filings.fetch_filings_euro_news", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_investegate_company", return_value=[])
+@patch("value_investor.research.filings.fetch_filing_body", return_value=None)
+@patch("value_investor.research.filings.fetch_filings_esef_direct")
+@patch("value_investor.research.filings.fetch_filings_ir_allowlist")
+def test_ingest_filings_euro_depth_rand_as_indexes_esef_and_ir(
+    mock_ir,
+    mock_esef,
+    _mock_body,
+    _mock_investegate,
+    _mock_news,
+    tmp_path: Path,
+):
+    mock_esef.return_value = [
+        {
+            "id": "esefrand2025",
+            "source": "esef_direct",
+            "headline": "ESEF report period end 2025-12-31",
+            "published_at": "2025-12-31T00:00:00+00:00",
+            "url": "https://filings.xbrl.org/7245009EAAUUQJ0U4T57/2025/reports/rand-2025.xhtml",
+            "period": "annual",
+            "has_body": False,
+        }
+    ]
+    mock_ir.return_value = [
+        {
+            "id": "irrand2025",
+            "source": "ir_allowlist",
+            "headline": "Randstad annual report 2025 (PDF)",
+            "published_at": None,
+            "url": "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Randstad_Annual_Report_2025_F.pdf",
+            "period": "annual",
+            "has_body": False,
+        }
+    ]
+    meta = ingest_filings(
+        ticker="RAND.AS",
+        company_name="Randstad N.V.",
+        sources_dir=tmp_path,
+        market="euro_depth",
+    )
+    summary = meta.get("filings_summary") or {}
+    assert int(summary.get("total") or 0) > 0
+    index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
+    assert "esef_direct" in index["sources_used"]
+    assert "ir_allowlist" in index["sources_used"]
+    assert "sec_edgar" not in index["sources_used"]
+
+
 @patch("value_investor.research.filings.fetch_filings_esef_direct", return_value=[])
 @patch("value_investor.research.filings.fetch_filings_investegate_company", return_value=[])
 @patch("value_investor.research.filings.fetch_filings_sec_edgar")

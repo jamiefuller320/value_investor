@@ -178,6 +178,10 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "ABI.BR": [
         "https://www.bmv.com.mx/docs-pub/10-k/10-k_1539631_2025_1.pdf",
     ],
+    "RAND.AS": [
+        "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Randstad_Annual_Report_2025_F.pdf?VersionId=oWhcOhRfI3tRFxNNaGUMvL7cHYdvo0Th",
+        "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Q4_2025_Press_Release.pdf?VersionId=0.GcQMprgqooojpAbxFmT8fIdSohlsDd",
+    ],
     "ANDR.VI": [
         "https://www.andritz.com/resource/blob/520884/andritz-annual-financial-report-2025-en.pdf",
     ],
@@ -2344,33 +2348,32 @@ def _esef_country_hint(ticker: str) -> str | None:
     return _ESEF_TICKER_COUNTRY.get(suffix)
 
 
+def _esef_entity_search_rows(name: str, *, country: str | None) -> list[dict[str, Any]]:
+    """Fetch ESEF entity search rows for a legal-name variant."""
+    params: dict[str, str] = {
+        "filter[name]": name,
+        "page[size]": "8",
+    }
+    if country:
+        params["filter[country]"] = country
+    query = urllib.parse.urlencode(params)
+    url = f"{ESEF_API_BASE}/entities?{query}"
+    try:
+        payload = json.loads(_http_get(url, timeout=30).decode("utf-8"))
+    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
+        logger.debug("ESEF entity search failed for %r (country=%s): %s", name, country, exc)
+        return []
+    return list(payload.get("data") or [])
+
+
 def _esef_search_entity_identifier(company_name: str, *, ticker: str = "") -> str | None:
     """Resolve an ESEF entity LEI/identifier via name search."""
     country = _esef_country_hint(ticker)
     for name in _esef_entity_name_variants(company_name, ticker=ticker):
-        params: dict[str, str] = {
-            "filter[name]": name,
-            "page[size]": "8",
-        }
-        if country:
-            params["filter[country]"] = country
-        query = urllib.parse.urlencode(params)
-        url = f"{ESEF_API_BASE}/entities?{query}"
-        try:
-            payload = json.loads(_http_get(url, timeout=30).decode("utf-8"))
-        except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
-            logger.warning("ESEF entity search failed for %r: %s", name, exc)
-            continue
-        rows = list(payload.get("data") or [])
-        # Retry without country filter when the hint yields nothing.
+        rows = _esef_entity_search_rows(name, country=country)
+        # filings.xbrl.org dropped filter[country]; retry without it on empty/error.
         if not rows and country:
-            query = urllib.parse.urlencode({"filter[name]": name, "page[size]": "8"})
-            url = f"{ESEF_API_BASE}/entities?{query}"
-            try:
-                payload = json.loads(_http_get(url, timeout=30).decode("utf-8"))
-            except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError):
-                continue
-            rows = list(payload.get("data") or [])
+            rows = _esef_entity_search_rows(name, country=None)
         for row in rows:
             attrs = row.get("attributes") or {}
             identifier = str(attrs.get("identifier") or "").strip()
