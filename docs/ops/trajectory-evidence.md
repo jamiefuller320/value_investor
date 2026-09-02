@@ -84,4 +84,5 @@ Live screen snapshots and archive backfills now retain trajectory fields
 (`signal_trend`, `weeks_at_signal`, `passed_families`, `name`, `sector`,
 `price_vs_sma200_pct`) so boundary enrichment improves as history thickens.
 
-See also: [loser-snapshot-cards.md](loser-snapshot-cards.md).
+See also: [loser-snapshot-cards.md](loser-snapshot-cards.md) and the offline
+[news-phrase-trajectory.md](news-phrase-trajectory.md) buy∪boundary phrase panel.
