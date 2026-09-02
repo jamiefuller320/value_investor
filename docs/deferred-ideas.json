@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-01T23:13:50.002472+00:00",
+  "updated_at": "2026-09-02T08:00:26+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4599,6 +4599,81 @@
       "status": "open",
       "source": "sunday-review conviction vs suite costs discussion",
       "added_at": "2026-09-01T14:40:27+00:00"
+    },
+    {
+      "id": "L222",
+      "category": "later",
+      "section": "research",
+      "title": "News phrase to trajectory correlation panel",
+      "summary": "Offline per-ticker time-aligned join of open-source headlines (Google News RSS / Yahoo) with price and trajectory labels; mine n-grams/phrases that precede 4/8/12-week trend moves or opinion flips\u2014not same-day price correlation. Output is a research lexicon/feature candidates for AI judgment or L207 event tags, not a live sentiment quant score.",
+      "revisit_when": "Buy-tier news_manifest history is thick enough for a pilot cohort (or L207 event taxonomy starts); and trajectory_evidence has stable 8\u201312w outcome labels",
+      "tags": [
+        "news",
+        "nlp",
+        "trajectory",
+        "sentiment",
+        "open-source",
+        "L207",
+        "N6"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0611c-479f-7f38-a7b3-1f6c1d7155b7",
+      "added_at": "2026-09-02T07:55:40+00:00"
+    },
+    {
+      "id": "N55",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Live sentiment scoring from mined news phrases",
+      "summary": "Do not wire bag-of-words or lexicon sentiment into screen weights or paper knobs. Open-source news + phrase mining may later inform research memos or event tags; treating it as a quant model remains premature (extends N6).",
+      "revisit_when": "Phrase-trajectory panel shows out-of-sample lift on trajectory flips, and analysis-review proposes a gated experiment",
+      "tags": [
+        "sentiment",
+        "models",
+        "N6",
+        "news"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0611c-479f-7f38-a7b3-1f6c1d7155b7",
+      "added_at": "2026-09-02T07:55:40+00:00"
+    },
+    {
+      "id": "L223",
+      "category": "later",
+      "section": "research",
+      "title": "Prefer open-source news until quality bottleneck",
+      "summary": "Weekly value horizon does not need a paid news API yet. Keep Google News RSS + yfinance as the media layer; revisit L12 (Marketaux/Finnhub) only if memo news quality or phrase-panel coverage is the proven bottleneck.",
+      "revisit_when": "Memo news quality or phrase-panel coverage is the proven bottleneck (see L12)",
+      "tags": [
+        "news",
+        "api",
+        "costs",
+        "L12",
+        "open-source"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0611c-479f-7f38-a7b3-1f6c1d7155b7",
+      "added_at": "2026-09-02T07:55:40+00:00"
+    },
+    {
+      "id": "L224",
+      "category": "later",
+      "section": "research",
+      "title": "Chronological PIT news walk with lexicon self-improve",
+      "summary": "Offline module walks each ticker from earliest news/price day forward (full backfill, then rolling append). Phrase lexicon updates only on past windows; evaluate on forward embargoed weeks. Self-improve via propose\u2192OOS measure\u2192promote (like analysis-review), never silent live scoring. Prefer buy-tier cohort first; require cross-ticker holdout.",
+      "revisit_when": "Starting L222 offline pilot; history thick enough for walk-forward splits on a buy-tier cohort",
+      "tags": [
+        "news",
+        "nlp",
+        "trajectory",
+        "PIT",
+        "walk-forward",
+        "learning",
+        "L222"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0611c-479f-7f38-a7b3-1f6c1d7155b7",
+      "added_at": "2026-09-02T08:00:26+00:00"
     }
   ],
   "fragments": [
@@ -4951,9 +5026,10 @@
         "costs",
         "L12"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-01a046dd-77de-761d-86ba-fc1b0a02f5f1",
-      "added_at": "2026-08-29T07:22:02+00:00"
+      "added_at": "2026-08-29T07:22:02+00:00",
+      "updated_at": "2026-09-02T07:55:47+00:00"
     },
     {
       "id": "frag-20260901-01",
