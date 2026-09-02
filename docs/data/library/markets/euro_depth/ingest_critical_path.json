@@ -1,10 +1,10 @@
 {
   "market_id": "euro_depth",
-  "assessed_at": "2026-09-02T10:16:54.668358+00:00",
-  "unmeasured": [
+  "assessed_at": "2026-09-02T12:06:49.717520+00:00",
+  "unmeasured": [],
+  "zero_body": [
     "RAND.AS"
   ],
-  "zero_body": [],
   "indexed_without_body": [
     {
       "ticker": "ABI.BR",
@@ -23,6 +23,12 @@
       "indexed_without_body": 6,
       "filings_total": 90,
       "filings_with_body": 84
+    },
+    {
+      "ticker": "RAND.AS",
+      "indexed_without_body": 4,
+      "filings_total": 4,
+      "filings_with_body": 0
     },
     {
       "ticker": "BOL.ST",
@@ -141,29 +147,28 @@
     "UCB.BR",
     "AZE.BR"
   ],
-  "primary_blocker": "unmeasured",
+  "primary_blocker": "zero_body",
   "force_discovery_scan": true,
   "auto_pin_tickers": [
     "ABI.BR",
     "NOVN.SW",
     "TTE.PA",
+    "RAND.AS",
     "BOL.ST",
     "DG.PA",
     "POST.VI",
-    "ANDR.VI",
-    "AZE.BR"
+    "ANDR.VI"
   ],
   "recommended_actions": [
-    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
-    "Prefer indexed-without-body body refetch (17 tickers, top: ABI.BR(11), NOVN.SW(7), TTE.PA(6), BOL.ST(2), DG.PA(2))",
+    "Prefer indexed-without-body body refetch (18 tickers, top: ABI.BR(11), NOVN.SW(7), TTE.PA(6), RAND.AS(4), BOL.ST(2))",
     "Discovery/IR seed for 19 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 1,
-    "zero_body": 0,
-    "indexed_without_body_tickers": 17,
-    "indexed_without_body_rows": 41,
+    "unmeasured": 0,
+    "zero_body": 1,
+    "indexed_without_body_tickers": 18,
+    "indexed_without_body_rows": 45,
     "thin_need_discovery": 19,
     "thin_need_bodies": 9
   }
