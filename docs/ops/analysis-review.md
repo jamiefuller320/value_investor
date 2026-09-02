@@ -62,6 +62,10 @@ stay off-limits (N3).
 
 See [trajectory-evidence.md](trajectory-evidence.md).
 
+The same Sunday job then runs `ftse-news-phrase-trajectory --mode rolling` (observe-only
+buy∪boundary phrase lexicon). Soft-fail; artifacts commit with the trajectory bootstrap
+bundle. See [news-phrase-trajectory.md](news-phrase-trajectory.md).
+
 ## Loser cards, exclusion, and exit-timing → filter experiments
 
 The same Sunday payload includes slim:
