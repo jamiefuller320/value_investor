@@ -455,7 +455,9 @@ def so_what_summary_for_progress(snapshot: dict[str, Any] | None = None) -> dict
     if not isinstance(snapshot, dict):
         snapshot = {}
     counts = snapshot.get("counts") if isinstance(snapshot.get("counts"), dict) else {}
-    human_gates = snapshot.get("human_gates") if isinstance(snapshot.get("human_gates"), list) else []
+    human_gates = (
+        snapshot.get("human_gates") if isinstance(snapshot.get("human_gates"), list) else []
+    )
     findings = snapshot.get("findings") if isinstance(snapshot.get("findings"), list) else []
     high = [f for f in findings if isinstance(f, dict) and f.get("severity") == "high"]
     return {
