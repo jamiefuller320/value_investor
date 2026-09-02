@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T15:17:10+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T17:03:22+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -299,6 +299,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L215 | **Per-ticker wall-clock cap in library ingest loop** | A single slow ticker can still overrun the run budget until the next between-ticker check. Add a soft/hard per-ticker timeout so deepen cannot blow the GHA job timeout after discovery. | Euro or parallel library ingest again times out after the schedule runtime-budget fix lands |
 | L217 | **Alert when GHA Cursor API key auth fails** | Preflight only checks non-empty today; a set-but-dead CURSOR_API_KEY can skip rememo/research silently. Add a lightweight Actions verify-key probe or ops-monitor finding when auth fails. | After CURSOR_API_KEY_V2 is wired in GitHub Actions and the next ops-monitor pass |
 | L237 | **Expand so-what detectors beyond FCF** | Add more no-judgment enforcement detectors (cash conversion overlays, memo eligibility gates, stale research caps) to the so-what loop once FCF auto-queue proves stable in ops-monitor. | After so-what FCF auto_queue has run cleanly in production ops-monitor for several weeks |
+| L240 | **Token-free progress-report regenerate on Pages** | Pages Generate currently needs a browser-stored Actions:Write PAT (or Actions UI). A dedicated low-privilege relay or issue-form trigger would remove the PAT from localStorage. | After progress-report Pages generate is in regular use and PAT friction is annoying |
 
 ---
 
