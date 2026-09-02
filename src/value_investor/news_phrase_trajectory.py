@@ -438,9 +438,7 @@ def walk_forward_lexicon(
         _phrase_stats(train, baseline_4w=train_baseline),
         min_train_count=min_train_count,
     )
-    test_by_phrase = {
-        row["phrase"]: row for row in _phrase_stats(test, baseline_4w=test_baseline)
-    }
+    test_by_phrase = {row["phrase"]: row for row in _phrase_stats(test, baseline_4w=test_baseline)}
 
     combined: list[dict[str, Any]] = []
     for row in train_stats:
@@ -615,7 +613,9 @@ def run_news_phrase_trajectory(
     state_path = resolve_json_path(data_dir / STATE_FILENAME)
     previous_state = read_json(state_path) if state_path is not None else {}
     previous_lexicon_path = resolve_json_path(data_dir / LEXICON_FILENAME)
-    previous_lexicon = read_json(previous_lexicon_path) if previous_lexicon_path is not None else None
+    previous_lexicon = (
+        read_json(previous_lexicon_path) if previous_lexicon_path is not None else None
+    )
     watermarks = {
         str(key): _parse_dt(str(value))
         for key, value in (previous_state.get("ticker_watermarks") or {}).items()
@@ -691,9 +691,7 @@ def run_news_phrase_trajectory(
             "train_article_count": lexicon_core["train_article_count"],
             "test_article_count": lexicon_core["test_article_count"],
             "train_cutoff_at": lexicon_core["train_cutoff_at"],
-            "baseline_forward_return_4w_train": lexicon_core[
-                "baseline_forward_return_4w_train"
-            ],
+            "baseline_forward_return_4w_train": lexicon_core["baseline_forward_return_4w_train"],
             "baseline_forward_return_4w_test": lexicon_core["baseline_forward_return_4w_test"],
             "mode": mode,
         }
