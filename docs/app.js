@@ -198,8 +198,11 @@ function renderProgressReport(data) {
         </div>
       </div>
       <p class="muted small">No published progress report yet.</p>
-      <p class="small">Generate locally with <code>ftse-progress-report build --write</code>
-        (or use <code>ftse-dashboard-serve</code> so this button can call the API), then reload.</p>
+      <p class="small">
+        On GitHub Pages, Generate dispatches the <code>progress-report</code> workflow (one-time PAT via
+        <button type="button" class="btn-link" id="progress-report-token-btn">Pages token</button>).
+        Locally use <code>ftse-dashboard-serve</code> or <code>ftse-progress-report build --write</code>.
+      </p>
       ${runbookUrl ? `<p class="small"><a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Runbook</a></p>` : ""}
       <p class="small muted" id="progress-report-status" aria-live="polite"></p>
     </div>`;
@@ -325,20 +328,80 @@ function renderProgressReport(data) {
         </div>
       </details>
       <p class="small muted" style="margin-top:0.75rem">
-        GitHub Pages serves the last committed report.
-        Local regenerate needs <code>ftse-dashboard-serve</code> (or run <code>ftse-progress-report build --write</code>).
+        GitHub Pages: Generate dispatches the <code>progress-report</code> Actions workflow (one-time PAT in this browser).
+        Local: <code>ftse-dashboard-serve</code> or <code>ftse-progress-report build --write</code>.
         ${runbookUrl ? ` <a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Runbook</a>` : ""}
+        · <button type="button" class="btn-link" id="progress-report-token-btn">Pages token</button>
       </p>
       <p class="small muted" id="progress-report-status" aria-live="polite"></p>
     </div>
   `;
 }
 
+const PROGRESS_REPORT_GH_REPO = "jamiefuller320/value_investor";
+const PROGRESS_REPORT_WORKFLOW = "progress-report.yml";
+const PROGRESS_REPORT_PAT_KEY = "ftse.progressReport.githubPat";
+const PROGRESS_REPORT_ACTIONS_URL =
+  `https://github.com/${PROGRESS_REPORT_GH_REPO}/actions/workflows/${PROGRESS_REPORT_WORKFLOW}`;
+
 function setProgressReportStatus(message, isError) {
   const el = document.getElementById("progress-report-status");
   if (!el) return;
   el.textContent = message || "";
   el.classList.toggle("progress-report-status-error", Boolean(isError));
+}
+
+function setProgressReportStatusHtml(html, isError) {
+  const el = document.getElementById("progress-report-status");
+  if (!el) return;
+  el.innerHTML = html || "";
+  el.classList.toggle("progress-report-status-error", Boolean(isError));
+}
+
+function getProgressReportPat() {
+  try {
+    return String(localStorage.getItem(PROGRESS_REPORT_PAT_KEY) || "").trim();
+  } catch {
+    return "";
+  }
+}
+
+function saveProgressReportPat(token) {
+  localStorage.setItem(PROGRESS_REPORT_PAT_KEY, String(token || "").trim());
+}
+
+function clearProgressReportPat() {
+  localStorage.removeItem(PROGRESS_REPORT_PAT_KEY);
+}
+
+function sleepMs(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function showProgressReportPatPrompt(reason) {
+  const hasPat = Boolean(getProgressReportPat());
+  setProgressReportStatusHtml(
+    `<span>${esc(reason || "GitHub Pages cannot run the CLI.")}</span>
+     <div class="progress-report-pat-box">
+       <label class="small" for="progress-report-pat-input">
+         Fine-grained PAT with <code>Actions: Write</code> on this repo
+         (stored only in this browser${hasPat ? " — token already saved" : ""}):
+       </label>
+       <div class="progress-report-pat-row">
+         <input type="password" id="progress-report-pat-input" class="progress-report-pat-input"
+           autocomplete="off" spellcheck="false"
+           placeholder="${hasPat ? "•••••••• (leave blank to keep saved token)" : "github_pat_…"}" />
+         <button type="button" class="btn btn-primary" id="progress-report-pat-save-btn">Save &amp; generate</button>
+         <button type="button" class="btn" id="progress-report-pat-actions-btn">Open Actions</button>
+         ${hasPat ? '<button type="button" class="btn" id="progress-report-pat-clear-btn">Clear token</button>' : ""}
+       </div>
+       <p class="small muted" style="margin:0.35rem 0 0">
+         Actions: Write can dispatch any workflow in this repo — limit the token to
+         <code>${esc(PROGRESS_REPORT_GH_REPO)}</code> and revoke it on shared browsers.
+       </p>
+     </div>`,
+    true
+  );
 }
 
 async function fetchProgressReportJson() {
@@ -378,6 +441,128 @@ async function reloadProgressReportIntoDashboard() {
   }
 }
 
+async function githubApiFetch(path, { method = "GET", token, body } = {}) {
+  return fetch(`https://api.github.com${path}`, {
+    method,
+    headers: {
+      Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${token}`,
+      "X-GitHub-Api-Version": "2022-11-28",
+      ...(body ? { "Content-Type": "application/json" } : {}),
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+}
+
+async function dispatchProgressReportWorkflow(token) {
+  const response = await githubApiFetch(
+    `/repos/${PROGRESS_REPORT_GH_REPO}/actions/workflows/${PROGRESS_REPORT_WORKFLOW}/dispatches`,
+    {
+      method: "POST",
+      token,
+      body: { ref: "main", inputs: { force: "true" } },
+    }
+  );
+  if (response.status === 204) return;
+  let detail = `HTTP ${response.status}`;
+  try {
+    const payload = await response.json();
+    detail = payload.message || detail;
+  } catch {
+    /* ignore */
+  }
+  if (response.status === 401 || response.status === 403) {
+    throw new Error(`GitHub auth failed (${detail}). Check the PAT scopes.`);
+  }
+  if (response.status === 404) {
+    throw new Error(
+      `Workflow ${PROGRESS_REPORT_WORKFLOW} not found on main yet, or PAT lacks access.`
+    );
+  }
+  throw new Error(detail);
+}
+
+async function waitForProgressReportWorkflowRun(token, notBeforeMs, onStatus) {
+  const deadline = Date.now() + 8 * 60 * 1000;
+  let run = null;
+  while (Date.now() < deadline) {
+    const response = await githubApiFetch(
+      `/repos/${PROGRESS_REPORT_GH_REPO}/actions/workflows/${PROGRESS_REPORT_WORKFLOW}/runs?event=workflow_dispatch&per_page=5`,
+      { token }
+    );
+    if (!response.ok) throw new Error(`Could not list workflow runs (HTTP ${response.status})`);
+    const payload = await response.json();
+    run = (payload.workflow_runs || []).find(
+      (row) => Date.parse(row.created_at) >= notBeforeMs - 5000
+    );
+    if (run) break;
+    if (onStatus) onStatus("Waiting for Actions run to start…");
+    await sleepMs(4000);
+  }
+  if (!run) throw new Error("Timed out waiting for the progress-report workflow to start");
+
+  while (Date.now() < deadline) {
+    const response = await githubApiFetch(
+      `/repos/${PROGRESS_REPORT_GH_REPO}/actions/runs/${run.id}`,
+      { token }
+    );
+    if (!response.ok) throw new Error(`Could not read workflow run (HTTP ${response.status})`);
+    run = await response.json();
+    if (run.status === "completed") {
+      if (run.conclusion !== "success") {
+        throw new Error(
+          `Actions run ${run.conclusion || "failed"} — see ${run.html_url || PROGRESS_REPORT_ACTIONS_URL}`
+        );
+      }
+      return run;
+    }
+    if (onStatus) onStatus(`Actions running (${run.status})…`);
+    await sleepMs(8000);
+  }
+  throw new Error("Timed out waiting for the progress-report workflow to finish");
+}
+
+async function waitForPublishedProgressReport(previousGeneratedAt, onStatus) {
+  const prev = previousGeneratedAt ? Date.parse(previousGeneratedAt) : 0;
+  const deadline = Date.now() + 10 * 60 * 1000;
+  while (Date.now() < deadline) {
+    try {
+      const report = await fetchProgressReportJson();
+      const next = report.generated_at ? Date.parse(report.generated_at) : 0;
+      if (next && (!prev || next > prev)) {
+        return report;
+      }
+    } catch {
+      /* Pages may briefly 404 mid-deploy */
+    }
+    if (onStatus) onStatus("Workflow finished — waiting for GitHub Pages deploy…");
+    await sleepMs(10000);
+  }
+  throw new Error(
+    "Report commit may be done, but Pages has not published the new JSON yet. Try Reload in a minute."
+  );
+}
+
+async function generateProgressReportViaGithubActions(token) {
+  const previousGeneratedAt =
+    dashboardData && dashboardData.progress_report
+      ? dashboardData.progress_report.generated_at
+      : null;
+  const startedAt = Date.now();
+  setProgressReportStatus("Dispatching progress-report workflow…");
+  await dispatchProgressReportWorkflow(token);
+  await waitForProgressReportWorkflowRun(token, startedAt, setProgressReportStatus);
+  setProgressReportStatus("Workflow succeeded — waiting for Pages…");
+  const report = await waitForPublishedProgressReport(previousGeneratedAt, setProgressReportStatus);
+  if (!dashboardData) dashboardData = {};
+  dashboardData.progress_report = report;
+  renderOverview(dashboardData);
+  bindProgressReportActions();
+  setProgressReportStatus(
+    `Generated ${fmtDate(report.generated_at)} · overall ${String(report.overall || "").toUpperCase()}`
+  );
+}
+
 async function generateProgressReportFromUi() {
   const btn = document.getElementById("progress-report-generate-btn");
   if (btn) btn.disabled = true;
@@ -414,17 +599,41 @@ async function generateProgressReportFromUi() {
     }
     throw new Error(detail);
   } catch (err) {
-    if (String(err.message) === "API_UNAVAILABLE" || err instanceof TypeError) {
+    const unavailable = String(err.message) === "API_UNAVAILABLE" || err instanceof TypeError;
+    if (!unavailable) {
+      setProgressReportStatus(`Generate failed: ${err.message}`, true);
+      return;
+    }
+    const token = getProgressReportPat();
+    if (!token) {
+      showProgressReportPatPrompt(
+        "Local generate API unavailable (GitHub Pages is static). Save a PAT to run Actions from this button, or open Actions and click Run workflow."
+      );
+      return;
+    }
+    try {
+      await generateProgressReportViaGithubActions(token);
+    } catch (remoteErr) {
       setProgressReportStatus(
-        "Generate API unavailable on GitHub Pages. Run locally: ftse-dashboard-serve  — or  ftse-progress-report build --write",
+        `Remote generate failed: ${remoteErr.message}`,
         true
       );
-    } else {
-      setProgressReportStatus(`Generate failed: ${err.message}`, true);
     }
   } finally {
     if (btn) btn.disabled = false;
   }
+}
+
+function handleProgressReportPatSave() {
+  const input = document.getElementById("progress-report-pat-input");
+  const typed = input ? String(input.value || "").trim() : "";
+  const token = typed || getProgressReportPat();
+  if (!token) {
+    setProgressReportStatus("Paste a fine-grained PAT with Actions: Write first.", true);
+    return;
+  }
+  if (typed) saveProgressReportPat(typed);
+  void generateProgressReportFromUi();
 }
 
 function bindProgressReportActions() {
@@ -443,6 +652,19 @@ function bindProgressReportActions() {
     } else if (target.id === "progress-report-view-btn") {
       event.preventDefault();
       void openProgressReportMarkdown();
+    } else if (target.id === "progress-report-token-btn") {
+      event.preventDefault();
+      showProgressReportPatPrompt("Configure the GitHub Pages generate token.");
+    } else if (target.id === "progress-report-pat-save-btn") {
+      event.preventDefault();
+      handleProgressReportPatSave();
+    } else if (target.id === "progress-report-pat-actions-btn") {
+      event.preventDefault();
+      window.open(PROGRESS_REPORT_ACTIONS_URL, "_blank", "noopener");
+    } else if (target.id === "progress-report-pat-clear-btn") {
+      event.preventDefault();
+      clearProgressReportPat();
+      setProgressReportStatus("Cleared saved Pages generate token.");
     }
   });
 }
