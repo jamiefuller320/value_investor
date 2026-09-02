@@ -18,7 +18,6 @@ from value_investor.so_what_closure import (
     apply_so_what_auto_queue,
     build_so_what_section,
     render_so_what_markdown,
-    scan_so_what_issues,
     so_what_summary_for_progress,
 )
 
