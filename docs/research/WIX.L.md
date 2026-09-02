@@ -1,96 +1,107 @@
 # Wickes Group plc (WIX.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T06:54:28.894733+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-02T09:21:09.213325+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Wickes Group plc is a UK home-improvement retailer (~230 stores) with a balanced TradePro, DIY and Design & Installation model that gained share through FY2025 and into H1 2026. The quantitative screen flags a **buy** on cheapness, quality, dividend, GARP and risk metrics (10/22 models; composite 68%; P/E 12.5x, FCF yield ~38.5%, dividend yield 5.4%). Filings show FY2025 adjusted PBT up 14.4% to £49.9m on revenue of £1,636.2m (+5.9%), with cash of £91.7m and ongoing capital return via buybacks and a maintained 10.9p dividend. The valuation hook is earnings and cash generation at a mid-teens multiple against a management target of accelerated store rollout (ambition: 300 stores) and consensus FY2026 adjusted PBT of ~£55–57m. The key debate is whether volume-led outperformance and productivity can offset cyclical DIY weakness, weather volatility and a step-up in capex/IT spend — and whether headline “net cash” fairly reflects ~£720m of IFRS 16 lease liabilities.
+Wickes Group plc is a UK home-improvement retailer operating 229–230 stores across TradePro, DIY retail, and Design & Installation (D&I), with FY2025 revenue of £1,636.2m and adjusted PBT of £49.9m (Full Year Results 2025, 17 March 2026). The quantitative screen rates the name a **buy** (10/22 models, composite 68%), anchored on earnings/FCF yield, low PEG, dividend yield (~5.6%), and quality markers including Piotroski. The valuation hook is a cyclical retailer generating strong volume-led growth and cash conversion at a modest headline multiple (P/E ~12x), while returning capital via buybacks and a covered dividend. The central debate is whether operating momentum (record retail share, TradePro at 671k active members) and a step-up in store investment (ambition to 300 stores) justify the screen signal, or whether thin margins, weather-sensitive demand, and ~£628m lease-adjusted net debt offset the apparent cheapness.
 
 ## INVESTMENT THESIS
-For a value investor, Wickes offers a rare combination in UK small/mid-cap retail: positive operating momentum, demonstrable market-share gains, and shareholder returns at a screen-compelling valuation.
+For a value investor, Wickes offers a combination the screen is designed to capture: **cheap cash earnings, improving profitability, and shareholder returns**, against a business that is demonstrably gaining share rather than merely cycling with the market.
 
-**Quantitative alignment.** The screen passes earnings yield, FCF yield, Lynch/Neff PEG metrics, high dividend yield, dividend growth, Dreman contrarian, Piotroski F-Score, composite value and earnings quality — spanning cheapness, quality, dividend, GARP and risk families with full data quality (20/20 metrics). At P/E 12.5x and ROE 27.3% (screen inputs), the market prices in cyclical stagnation that filings contradict.
+**Quantitative alignment.** The screen passes five factor families—cheapness, quality, dividend, GARP, and risk—with highlights including earnings yield 8.3% (P/E 12.1), FCF yield 31.5%, PEG 0.12, dividend yield 5.6%, and ROE 27.3% (`screening_snapshot.json`). Models passed include Earnings Yield, FCF Yield, Lynch PEG, Neff PEGY, High Dividend Yield, Dividend Growth, Dreman Contrarian, Piotroski F-Score, Composite Value, and Earnings Quality. Data quality is full (20/20 metrics).
 
-**Business quality.** FY2025 Full Year Results (17 March 2026) show volume-driven growth: Retail revenue +6.5% (TradePro +9%, active members 643k), Design & Installation +4.4%, group LFL +4.9%. Adjusted operating margin expanded to 4.6% (from 4.4%) on productivity and mix. Adjusted EPS rose to 17.4p (+23.4%). Operating cash flow was £193.9m and free cash flow £168.7m (per filing cash flow statement; consistent with Yahoo FCF of £168.7m).
+**Business quality supporting the signal.** FY2025 filings show volume-led revenue growth (+5.9% to £1,636.2m) with adjusted PBT up 14.4% to £49.9m and adjusted operating margin expanding to 4.6% (from 4.4%), driven by retail (+6.5%) and D&I (+4.4%) (Full Year Results 2025). TradePro sales rose 9% in FY2025; active members reached 643k at year-end and 671k by H1 2026. The company reports record retail market share and five consecutive quarters of D&I delivered sales growth by mid-2026. Cash generation is robust: operating cash flow £193.9m and year-end cash £91.7m, with average cash £153.0m across the year (FY2025 results). Capital returns are active—£20m buyback completed in 2025, £10m programme for 2026, dividend maintained at 10.9p with stated intent to grow dividend within 1.5–2.5x cover as profits rise.
 
-**Capital allocation.** Management returned £44.8m to shareholders in FY2025 (£24.8m dividends, £20.0m buybacks), completed a £20m programme at 213.3p average (December 2025), and announced a further £10m buyback for 2026. Dividend held at 10.9p with policy to grow cover within 1.5–2.5x as profits rise.
-
-**Strategic optionality.** Proven store economics (target 25% ROIC by year five), record Retail share (GfK), and D&I recovery (five consecutive quarters of ordered sales growth in FY2025) support a self-funded growth story rather than a pure cyclical trade.
+**Why buy, not just cheap.** Unlike a distressed deep-value case, Wickes is executing a coherent post-demerger strategy (trade membership, D&I, store rollout, digital fulfilment) with management reiterating comfort with FY2026 consensus adjusted PBT (~£55–58m) through July 2026 trading updates. The screen’s quality and risk passes are consistent with an unqualified audit on FY2025 statutory accounts and a formal going-concern basis (auditor report referenced in FY2025 results release).
 
 ## FINANCIAL REVIEW
-*Primary source: RNS filing bodies. No interim (half-year) RNS with downloadable body is in the index (`interim`: 0); H1 2026 colour comes from trading updates only. Formal H1 2026 results were guided for mid-September 2026 and are not yet in the corpus.*
+*Primary source: RNS filing bodies. No separate interim/half-year accounts are present in `filings_index.json` (interim count: 0); H1 2026 colour comes from trading updates only, with half-year results guided for mid-September 2026.*
 
-**Annual trend (FY2023–FY2025, Full Year Results RNS, 17 March 2026)**
+### Annual trend (FY2022–FY2025)
 
-| Metric | FY2025 (52w to 27 Dec 2025) | FY2024 (52w to 28 Dec 2024) | FY2023 (Yahoo fallback*) |
-|---|---|---|---|
-| Revenue | £1,636.2m | £1,544.5m | £1,553.8m (CH accounts headline) / £1,554.5m (Yahoo) |
-| Statutory PBT | £48.7m | £23.2m | n/a in filing body |
-| Adjusted PBT | £49.9m (+14.4%) | £43.6m | £52.0m (CH FY2023 accounts extract) |
-| Statutory operating profit | £70.6m (4.3% margin) | £47.3m (3.1%) | — |
-| Adjusted operating profit | £74.8m (4.6%) | £67.4m (4.4%) | — |
-| Basic EPS | 16.8p | 7.7p | — |
-| Adjusted basic EPS | 17.4p | 14.1p | — |
-| Full-year dividend | 10.9p (flat) | 10.9p | — |
-| Cash & equivalents | £91.7m | £86.3m | £97.5m (Yahoo) |
-| Lease liability (IFRS 16) | £719.8m | £705.3m | — |
-| Lease liability net debt† | £628.1m | £619.0m | — |
+| Metric | FY2025 | FY2024 | FY2023 | FY2022 |
+|--------|--------|--------|--------|--------|
+| Revenue | £1,636.2m | £1,544.5m | £1,553.8m* | £1,562.4m* |
+| Adjusted PBT | £49.9m | £43.6m | £52.0m* | — |
+| Statutory PBT | £48.7m | £23.2m | £41.1m* | — |
+| Adj. operating margin | 4.6% | 4.4% | — | — |
+| Year-end cash | £91.7m | £86.3m | £97.5m† | — |
+| Lease liability net debt | £628.1m | £619.0m | — | — |
+| Dividend (total) | 10.9p | 10.9p | — | — |
+| Free cash flow | £62.8m* | £32.2m* | — | — |
 
-\*FY2023 adjusted PBT of £52.0m from Companies House FY2023 accounts body extract; Yahoo shows FY2023 revenue £1,553.8m and statutory PBT implied via pretax £41.1m — filings corpus does not include a dedicated FY2023 results RNS body.
+\*FY2023 revenue/PBT from Companies House FY2024 annual report comparative figures (`ch_12189061_MzQ2NzM3ODY5MGFkaXF6a2N4.txt`); FY2022 revenue from same source.  
+†Yahoo `financials_annual.json` (used only where CH comparatives not in primary FY2025 release).  
+\*FY2025 and FY2024 FCF from Companies House FY2025 accounts highlights (`ch_12189061_MzUxNzQ3Mjk2NWFkaXF6a2N4.txt`).
 
-†Cash less total lease liabilities, per FY2025 results note 8.
+**FY2025 (52 weeks to 27 December 2025)** — Full Year Results 2025 and consolidated statements in filing body `1f81010fab0596af.txt`:
 
-**Profit bridge.** FY2024 statutory PBT was depressed by £20.4m adjusting items (principally £18.1m store right-of-use and PPE impairments across 27 stores). FY2025 adjusting items were minimal (£1.2m pre-tax), with only £1.9m impairment across four stores — a cleaner earnings base.
+- Revenue £1,636.2m (+5.9%); LFL +4.9%.
+- Retail £1,208.9m (+6.5%); D&I £427.3m (+4.4%).
+- Adjusted gross profit £605.9m; margin 37.0% (+44 bps).
+- Adjusted operating profit £74.8m (+11.0%); margin 4.6%.
+- Adjusted PBT £49.9m (+14.4%); statutory PBT £48.7m (+109.9% vs £23.2m).
+- Basic EPS 16.8p (adjusted 17.4p).
+- Operating cash flow £193.9m; capex £28.7m; cash £91.7m.
+- Lease liabilities £719.8m; lease liability net debt £628.1m.
+- Dividend: final 7.3p; total 10.9p unchanged.
+- Adjusting items £1.2m pre-tax (vs £20.4m in FY2024, which included £18.1m store impairments on 27 stores).
 
-**Cash generation.** FY2025 operating cash flow £193.9m (FY2024: £162.0m); capex £28.7m (FY2024: £26.1m); share buybacks £20.1m; dividends £24.8m. Average cash through the year was £153.0m (FY2024: £144.3m). Working capital provided £21.8m in FY2025, partly from D&I order book; management guides £5–10m unwind in 2026.
+**FY2024** — same primary filing: revenue £1,544.5m; adjusted PBT £43.6m; statutory PBT £23.2m (impaired by large non-cash property charges); LFL revenue −2.0%. Recovery in FY2025 reflects volume growth and lower adjusting charges.
 
-**Balance sheet.** Total assets £1,100.7m; equity £130.9m; inventories £199.4m (+£6.5m). Tangible book value is thin relative to P/B (Yahoo: £111.8m tangible book vs P/B 3.6x on screen) — typical for a lease-heavy demerged retailer. No bank debt is drawn; finance costs are predominantly IFRS 16 lease interest (£31.1m). Revolving credit facility commitment fees are disclosed but no covenant breach language appears in available bodies. Auditor reports on statutory accounts were unqualified (FY2025 results RNS, note 2).
+**Cash and capital allocation.** FY2025 cash flows from operations £184.3m before working capital; net financing outflow £170.6m including £114.0m lease principal, £24.8m dividends, and £20.0m buybacks. Management guides FY2026 capex £40–45m (store acceleration), expensed technology £18–20m, working capital unwind £5–10m, and net interest £25–27m.
 
-**Interim / trading-update trajectory**
+*Yahoo fallback:* `financials_annual.json` shows FY2025 free cash flow £168.7m and operating cash flow £193.9m—consistent with the filing-derived operating cash figure; FCF in CH highlights (£62.8m) appears to use a different definition and is cited above for annual FCF trend only.
 
-- **Q4/H2 FY2025 trading update** (22 January 2026): H2 group revenue +6.3%; FY2025 revenue £1,636m; net cash £92m post buyback; adjusted PBT expected in consensus £46.8–50.7m range (actual £49.9m delivered).
-- **Spring FY2026 trading update** (12 May 2026): 17 weeks revenue £537m (+1.3%); Retail −0.4% (weather-hit outdoor projects); D&I +6.4%; TradePro +4%; consensus FY2026 adjusted PBT ~£57.1m (range £54.0–59.4m).
-- **Q2 / H1 FY2026 trading update** (21 July 2026): Q2 revenue +2.3%; H1 revenue £865m (+2.1%); H1 Retail +0.8%, D&I +5.7%; H1 net cash £152m after £10m buybacks and £10m EBT purchases; consensus FY2026 adjusted PBT ~£55.4m (range £52.8–58.0m). Half-year results not yet filed.
+### Trading updates (interim proxy)
 
-**Forward investment.** FY2026 capex guided £40–45m (vs £28.7m in FY2025) plus £18–20m expensed IT; 4–5 new stores and 15–20 refits planned, with rollout accelerating from 2028 toward a 300-store ambition.
+No formal interim accounts are indexed. Three trading updates provide intra-year trend:
 
-**Gaps.** No interim RNS body in index; Annual Report publication RNS (17 March 2026) contains no financial tables — detailed risk/viability wording is referenced to AR pages 63–69 but not extracted here. Companies House bodies are partially OCR-degraded for historical years.
+1. **Q4 / FY2025 preview (22 January 2026)** — H2 revenue +6.3%; FY2025 revenue £1,636m; adjusted PBT expected in line with consensus £46.8–50.7m; net cash ~£92m post buyback (`052805bafcf863ad.txt`).
+
+2. **17 weeks to 25 April 2026 (12 May 2026)** — Group revenue £537m (+1.3%); retail −0.4% (weather-hit outdoor projects; indoor +8 ppt vs outdoor); D&I +6.4%; TradePro +4%; comfortable with FY2026 adjusted PBT consensus mean £57.1m (`a789bbd89f2a3361.txt`).
+
+3. **Q2 / H1 2026 (21 July 2026)** — Q2 revenue £483m (+2.3%); H1 revenue £865m (+2.1%); H1 retail +0.8%, D&I +5.7%; H1 net cash £152m after £10m buyback and £10m EBT purchases; FY2026 adjusted PBT consensus mean £55.4m (`2bac523e95763ae1.txt`).
+
+**Gap:** Formal H1 2026 interim results are not yet in the filing index; profit, margin, and balance-sheet detail for the current year therefore remain unaudited at interim level.
 
 ## RISKS AND RED FLAGS
-**Cyclical / demand.** Home improvement is consumer-sensitive. Spring 2026 trading (12 May 2026) showed Retail revenue −0.4% on exceptional rainfall hitting outdoor categories; Bespoke Kitchen orders slowed as customers became “more considered” on large projects. Management acknowledges an “uncertain consumer and geopolitical environment.”
+**Cyclical and demand.** Management repeatedly flags uncertain consumer and geopolitical conditions. H1 2026 retail growth was modest (+0.8%), with Q1 outdoor categories hit by exceptional rainfall (May 2026 trading update). Bespoke kitchen orders have slowed as customers defer larger projects, though bathrooms and Lifestyle Kitchens remain strong. A housing-transaction slowdown or renewed cost-of-living pressure could compress volumes in a low-margin (4–5% adjusted operating margin) model.
 
-**Lease-adjusted leverage.** Headline cash of £91.7m (H1 2026: £152m) coexists with lease liabilities of £719.8m and lease liability net debt of £628.1m. The screen’s “risk” family pass should not be read as de-levered balance sheet risk being absent.
+**Competitive.** Wickes competes with B&Q, Screwfix/Trade counters, independents, and online players in a ~£35bn addressable market with ~5% share (FY2025 results). Share gains are real but not guaranteed; deflationary pricing in 2026 suggests limited pricing power.
 
-**Execution / growth strategy.** Ambition to reach 300 stores requires materially higher capex and property pipeline execution from 2028. Store investment returns are guided at 25% ROIC by year five — unproven at accelerated pace.
+**Leverage and lease intensity.** Reported “net cash” (£91.7m) excludes IFRS 16 lease liabilities of £719.8m; lease liability net debt is £628.1m (FY2025 results, note 8). Finance costs £21.9m are dominated by lease interest (£31.1m). Revolving credit facility commitment fees are disclosed but no covenant breach is reported; covenant detail is not in the extracted filing bodies—verify in full annual report PDF (indexed as `b39e0b987a23dab3.txt` but body is publication notice only).
 
-**Competitive.** Operates in a ~£35bn addressable market at ~5% share (FY2025 results). Competes with specialists, grocers, online and trade merchants; deflationary pricing in Retail in 2026 suggests competitive intensity.
+**Growth execution.** Acceleration to 300 stores (from 229–230) raises capex to £40–45m and property pipeline risk; FY2025 saw £1.9m store impairments (4 stores) vs £18.1m across 27 stores in FY2024. Returns are guided at 25% ROIC by year five for new cohorts—unproven at scale.
 
-**Property / impairments.** FY2024 saw £18.1m impairments (27 stores); FY2025 £1.9m (four stores). Ongoing portfolio churn (one closure in H1 2026; 229 stores) remains a monitoring point.
+**Accounting and one-offs.** FY2025 included a £1.2m prior-year deferred tax adjustment on historical goodwill (FY2025 results, note 5). Solar Fast brand fully impaired (£0.3m). Revenue re-presentation for delivery income and D&I classification affects comparability with pre-2025 disclosures.
 
-**Accounting / tax.** Prior-year deferred tax adjustment of £1.2m on historical Focus DIY goodwill (FY2025 results, note 5). FX derivative fair-value volatility is stripped from adjusted metrics (£2.1m loss in FY2025).
+**Operational/regulatory (filing language).** FY2025 results list principal risks including cyber and data security, climate change, commercial and supply chain, legal and regulatory compliance, financial management, growth strategy, and stores/distribution/installations. Statutory accounts received an unqualified audit; going-concern basis affirmed with no emphasis of matter (FY2025 results, note 2). Full risk narratives are referenced to annual report pages 63–69 but are not fully extracted in available bodies.
 
-**Governance / other.** Annual Report risk register (FY2025 results) cites cyber, climate, supply chain, IT, brand and legal/regulatory compliance among principal risks; full going-concern and viability statements are not in extracted bodies. Gas Fast minority call option (£3.0m fair-value gain in FY2025) creates M&A complexity. No pension deficit flagged in available extracts.
+**Governance.** Non-executive refresh: Octavia Morley appointed Senior Independent Director from 1 June 2026; Laura Harricks to step down 31 July 2026 (`0a7efb784db4e315.txt`).
 
-**News sentiment.** May 2026 mixed update triggered a reported ~10% share fall (“Wickes shares fall 10% after mixed trading update”, 12 May 2026) — market sensitivity to modest deceleration is high.
+**Pension.** No material pension deficit or scheme detail appears in available filing extracts; treat as unverified rather than absent.
 
 RiskTags: cyclical, competitive, leverage, governance, accounting, other
 RiskTags: cyclical, competitive, leverage, governance, accounting, other
 
 ## NEWS HIGHLIGHTS
-**Material Wickes-specific news (past year)**
+**Coverage quality:** The news manifest is noisy—many headlines refer to **Wix.com** (NASDAQ: WIX), not Wickes Group, due to ticker collision. Wickes-specific material items are limited but sufficient for strategy and capital allocation.
 
-- **“Full Year Results 2025” / “Publication of the Annual Report & Accounts 2025”** (17 March 2026): Revenue +5.9%, adjusted PBT +14.4% to £49.9m; 300-store ambition; £10m buyback; dividend maintained at 10.9p.
-- **“Completion of 2025 Share Buyback Programme”** (24 December 2025): £20m completed; 9.37m shares at 213.3p average (~3.9% of issued capital).
-- **“Trading Update for the six months ending 27 December 2025”** (22 January 2026): Strong H2 volume growth; FY2025 PBT in line with consensus.
-- **“Trading Update for the 17 weeks to 25 April 2026”** (12 May 2026): Weather-impacted Retail; D&I and TradePro resilient; shares fell on mixed reception (Yahoo/Google News, 12 May 2026).
-- **“Trading Update for the quarter ending 27 June 2026”** (21 July 2026): H1 revenue £865m (+2.1%); net cash £152m; comfortable with FY2026 consensus.
-- **“Wickes Group H2 Earnings Call Highlights”** (17 March 2026, yfinance): CEO described “stellar year” with growth across Retail and D&I.
-- **Analyst/valuation commentary** (e.g. “Should You Investigate Wickes Group plc (LON:WIX) At UK£1.72?”, 7 June 2026; fair-value pieces at ~£2.50–2.96, December 2025–February 2026): mixed but generally constructive on cash returns.
-- **Directorate change** (19 May 2026, RNS headline in index; body not downloaded): board change noted; detail thin in corpus.
+**FY2025 results and strategy (March 2026).** “Wickes Group H2 Earnings Call Highlights” (17 March 2026, yfinance) and “WIX: Revenue up 5.9%, adjusted PBT up 14.4%…” (17 March 2026, TradingView/Google News) cover record share, TradePro growth, and accelerated store investment toward 300 sites.
 
-**Coverage quality.** News manifest is **contaminated by Wix.com (NASDAQ: WIX) ticker collision** — numerous headlines on options, website builder reviews and US analyst actions are irrelevant. Wickes-specific RNS and yfinance items are adequate for strategy and trading trends but **thin on deep investigative or regulatory coverage**. No M&A, regulatory enforcement or management scandal identified in manifest.
+**Trading and weather (May–July 2026).** “Wickes shares fall 10% after mixed trading update” (12 May 2026, Yahoo Finance UK) and “Wickes reports 2.3% revenue growth as retail returns to growth” (22 July 2026, yfinance) reflect weather-disrupted Q1 retail and subsequent recovery in Q2.
+
+**Capital returns.** “Wickes Group PLC Announces Share Buyback and Cancellation” (28 August 2025, TipRanks); 2025 £20m programme completed December 2025; 2026 £10m programme notified 7 April 2026 (RNS filing `d1f1014633948ff0.txt`).
+
+**Board changes.** Directorate change announcement (19 May 2026): Octavia Morley appointed; Laura Harricks departure.
+
+**Analyst/commentary.** Several yfinance pieces (January–April 2026) discuss fair-value estimates in the £2.50–2.96 range and mixed analyst targets; “Should You Investigate Wickes Group plc (LON:WIX) At UK£1.72?” (7 June 2026). “Wickes Group sharpens the UK small-cap stocks debate” (4 August 2026, Kalkine Media).
+
+**Flag:** Substantive Wickes news is present but diluted by Wix.com articles; rely on RNS filings for factual grounding.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.74
-Rationale: Filings confirm the screen’s value case — rising adjusted profits, strong cash conversion, dividends and buybacks at a low-teens earnings multiple — but cyclical sensitivity, lease-adjusted gearing and a capex step-up warrant accumulation rather than aggressive sizing until H1 2026 results are filed.
+Confidence: 0.72
+Rationale: Primary filings confirm improving revenue, adjusted profit, cash generation, and capital returns that support the quantitative buy signal, but thin margins, lease-adjusted leverage, cyclical demand sensitivity, and the absence of indexed interim accounts warrant measured sizing rather than full conviction.
