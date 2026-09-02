@@ -2349,7 +2349,127 @@
       "priority": "medium",
       "suggestion": "Extract annual report principal risks (pp 84–88) and patent/contingency Notes into structured fields for pipeline-cliff gap-fill without manual PDF reads.",
       "recorded_at": "2026-08-30T07:52:44.471772+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "On Companies House refetch, map CH document IDs to filing_index entries and flag when OCR extracts corroborate but do not extend IR PDF content (e.g. missing cash-flow statements, truncated principal-risk pages)",
+      "recorded_at": "2026-09-02T11:12:53.724016+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Pull FDA inspection-outcome and Orange Book patent-expiry feeds keyed to Hikma US site names and disclosed product brands (Tyzavan®, sodium oxybate) to close regulatory and patent-cliff gaps the RNS/CH bodies do not address",
+      "recorded_at": "2026-09-02T11:12:53.724031+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Expand `ir_presentation_metrics.json` parsing of `ir_a70365d580129295.txt` to extract FCF bridges and pipeline submission tables already present in the presentation body but not yet structured",
+      "recorded_at": "2026-09-02T11:12:53.724036+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Attach run-history FCF divergence flags to `docs/data/history/run_*.json.gz` `action_note` for all Strong Buy names (HIK shows mismatch in snapshot but not in history export), enabling cross-ticker verification before sizing",
+      "recorded_at": "2026-09-02T11:12:53.724040+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "For healthcare/generic names with settlement distortions, compute Lynch PEG on core EPS growth (filing-sourced) alongside statutory growth, with explicit fallback when the two diverge by more than 300 bps",
+      "recorded_at": "2026-09-02T11:12:53.724043+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Filter Companies House refetch to current-period group accounts only; this pass returned 2019 parent interim and a 2020 date-change form (`ch_00735438_*`), adding no research value and risking stale citations.",
+      "recorded_at": "2026-09-02T11:12:53.724047+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Attach cross-ticker model pass/score table to gap-fill output automatically from sibling `screen_run_manifest.json` files so moat/yield ranking claims (e.g. “widest moat in group”) are evidence-backed without manual peer lookups.",
+      "recorded_at": "2026-09-02T11:12:53.724072+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Emit dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) with labels in screening_snapshot to prevent conflation of 0.84× and 1.68×.",
+      "recorded_at": "2026-09-02T11:12:53.724078+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Parse country-level revenue from annual report / H1 presentation PDFs into `ir_presentation_metrics.segment_revenue_splits` (currently empty) to close France concentration gap.",
+      "recorded_at": "2026-09-02T11:12:53.724082+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Bundle universe-level FCF reconciliation and D/E basis flags for all strong_buy tickers in screen_run_manifest so email red-flag passes on FGP.L leverage mismatches resolve without per-ticker manual fetches.",
+      "recorded_at": "2026-09-02T11:12:53.724085+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Improve Companies House PDF/iXBRL extraction for FTSE names — new body `ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4.txt` is truncated (~820 lines), OCR-degraded, and missing Finance Review/dividend-policy sections that would resolve dividend-governance gaps.",
+      "recorded_at": "2026-09-02T11:12:53.724092+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Parse IR results presentation PDFs into structured FCF bridges; `ir_presentation_metrics.json` returned zero bridges despite three allowlisted PDF bodies being present, leaving the £148m vs £187m vs £212m FCF mismatch unresolved.",
+      "recorded_at": "2026-09-02T11:12:53.724098+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Ingest Yahoo quarterly cash-flow for UK names (currently suppressed/empty for ITV) to test intra-year dividend coverage rather than relying on a single annual snapshot.",
+      "recorded_at": "2026-09-02T11:12:53.724101+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted FCF, and screen TTM diverge by >15% AND profit-to-cash falls >15pp year-on-year (ITV: 65% vs 83%, three-way FCF mismatch).",
+      "recorded_at": "2026-09-02T11:12:53.724104+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "When Piotroski ≤3 but Earnings Quality passes, emit split verdict label (momentum vs accruals) to surface watchlist/strong-buy contradictions without manual interpretation.",
+      "recorded_at": "2026-09-02T11:12:53.724109+00:00"
     }
   ],
-  "updated_at": "2026-08-30T07:52:44.471774+00:00"
+  "updated_at": "2026-09-02T11:12:53.724112+00:00"
 }
