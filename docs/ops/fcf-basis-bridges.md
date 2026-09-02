@@ -40,3 +40,9 @@ Write `docs/data/research/<TICKER>/sources/fcf_bridge.json`:
 ## Cadence
 
 Ad hoc when mismatch notes appear on buy-tier names; spot-check Sunday after analysis review if the screen still lists unresolved mismatches.
+
+## Automation vs human
+
+- **Auto (so-what / scoring tasks):** fail-closed overlay when buy-tier + material mismatch and `fcf_basis_overlay` is missing — no fix/no-fix fork.
+- **Human:** choosing `policy_fcf` in `fcf_bridge.json`. So-what surfaces these as `human_gate`; it does not invent policy numbers.
+- Runbook: [so-what-gap-closure.md](so-what-gap-closure.md)

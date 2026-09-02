@@ -55,6 +55,7 @@ from value_investor.ingest_loop import (
     ingest_health_stalled,
     load_health_log_payload,
 )
+from value_investor.so_what_closure import apply_so_what_auto_queue
 from value_investor.storage import COMMITTED_HISTORY_DIR, read_json, write_json
 from value_investor.workflow_pat import is_integration_token, resolve_workflow_dispatch_pat
 
@@ -1368,6 +1369,30 @@ def run_ops_monitor(
             if finding_email_defer_reason(row, workflow_checks=workflow_checks) is None
         ]
         drafted_ids = draft_ops_engineering_tasks(draftable, tasks_path=tasks_path)
+
+    if draft_tasks and apply_fixes:
+        so_what_snapshot = apply_so_what_auto_queue(
+            dry_run=False,
+            tasks_path=tasks_path,
+            latest_path=latest_path,
+            artifacts_dir=Path("docs/data"),
+            snapshot_path=Path("docs/data/so_what_closure.json"),
+        )
+        created = so_what_snapshot.get("created_tasks") or []
+        if created:
+            drafted_ids = list(drafted_ids) + [
+                str(row.get("task_id") or "") for row in created if row.get("task_id")
+            ]
+            auto_fixes.append(
+                {
+                    "action": "so_what_auto_queue",
+                    "detail": (
+                        f"queued {len(created)} enforcement gap(s); "
+                        f"human_gate="
+                        f"{((so_what_snapshot.get('counts') or {}).get('human_gate') or 0)}"
+                    ),
+                }
+            )
 
     dispatch = evaluate_engineering_dispatch(tasks_path=tasks_path, open_prs=open_prs)
     should_dispatch = dispatch.should_dispatch or sync_report.should_redispatch

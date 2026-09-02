@@ -1,6 +1,6 @@
 # FTSE progress report
 
-Generated `2026-08-28T11:55:47+00:00` · overall **INFO**
+Generated `2026-09-02T12:32:11+00:00` · overall **WARN**
 
 Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.
 
@@ -11,7 +11,7 @@ Infrastructure and offline library are ahead of schedule; the primary AI learnin
 | Stage | Status | Focus |
 |-------|--------|-------|
 | 0 UK quant core | complete | FTSE 350 screen, paper funds, post-open automation |
-| 1 Decision-review learning | complete | Book learns from outcomes after costs |
+| 1 Decision-review learning | in_progress | Book learns from outcomes after costs |
 | 2b Primary learning track | in_progress | AI-judgment paper book vs ^FTSE and rules control |
 | 3 Library-ready global data | complete | Offline multi-market fundamentals without live screen impact |
 | 4 Controlled universe expansion | not_started | First non-UK live screen at FTSE quality bar |
@@ -22,13 +22,12 @@ Infrastructure and offline library are ahead of schedule; the primary AI learnin
 - FTSE 350 live screen and published dashboard are operational.
 - Offline library: 21 graduated markets (focus: euro_depth).
 - Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.
-- Engineering queue: 0 open, 57 merged supervised tasks.
-- AI-judgment track beating rules control (-20.1% vs -29.1% excess).
+- Engineering queue: 3 open, 63 merged supervised tasks.
+- AI-judgment track beating rules control (-19.2% vs -28.2% excess).
 
 ### Gaps
 
-- Primary AI track still below ^FTSE after costs (-20.1% excess; history still thin).
-- Published screen bundle dated 2026-08-23 — confirm Sunday refresh.
+- Primary AI track still below ^FTSE after costs (-19.2% excess; history still thin).
 
 ### Suggested next actions
 
@@ -40,9 +39,9 @@ Infrastructure and offline library are ahead of schedule; the primary AI learnin
 ## Actionable now
 
 - Deferred `now`: **0**
-- Open fragments: **19**
-- Proposed review tasks: **5**
-- Open engineering tasks: **0**
+- Open fragments: **23**
+- Proposed review tasks: **10**
+- Open engineering tasks: **3**
 
 ### Deferred — act now (`ftse-defer status … now`)
 
@@ -93,6 +92,15 @@ _None._
 - **N45** More FTSE ingest runs for enrichment — FTSE buy-tier hard gaps are closed (0 unmeasured/zero-body/indexed-without-body). Extra daily FTSE ingest slots would mostly re-walk strong_buy names with sufficient bodies; ROI is low vs euro_depth sprint. _(revisit: Buy-tier unmeasured or zero-body rises after a Sunday screen, or residual indexed-without-body returns on live path)_
 - **N46** More frequent engineering task generation to accelerate enrichment — Engineering tasks fix stalled ingest/parsers; they do not create filing bodies. Queue is empty and FTSE/euro ingest are progressing without open ingest tasks — drafting more eng work would not speed enrichment. _(revisit: Ingest health shows multi-run stall with flat unmeasured/zero-body and micro-compile is not firing)_
 - **N47** Do not add sp500 to ingest_parity_markets until learning-depth is green — Canonical S&P filing + 12-week trajectory must be green (learning_ready) before recording ingest parity. Adding it earlier would drop the market to 4-target maintenance while thin bodies and indexed_without_body remain. _(revisit: ftse-library learning-depth --market sp500 reports learning_ready true)_
+- **N48** Flip live FTSE paper books off 3% stress costs — Keep primary FTSE learning on the 3% per-side stress case for churn discipline. Fair T212-shaped costs exist via ftse-trading-costs assess and shard/observe defaults — do not silently rewrite live configs. _(revisit: Human decides stress vs fair is the primary learning metric, or live/demo broker path starts)_
+- **N49** Do not invent new paper tracks or knob churn to 'fix' stage 2b excess — End-of-week read: AI still -20% vs FTSE after costs. Adding tracks/knobs or live breadth will not create edge; hold knobs (hor-20260811-02) and let weekday marks accumulate. _(revisit: AI-judgment excess after costs is non-negative for several weeks with enough marks, or weekly review explicitly re-opens knob policy)_
+- **N50** Treat Yahoo quarterly cashflow as optional for UK memo excellence — yahoo_quarterly_cashflow is thin on nearly every FTSE memo; do not block excellent/strong narrative quality on it. Prefer filing OCF bridges and gate/suppress empty Yahoo TTM rather than waiting for Yahoo series. _(revisit: If Yahoo UK quarterly cashflow coverage improves or a primary filing OCF bridge is standardized in every memo)_
+- **N51** Consider making value_investor private — Public visibility widens fork-PR workflow_run attack surface. Private repo would reduce outsider triggerability of privileged responders; weigh against Pages/dashboard sharing needs. _(revisit: If further secret exposure incidents occur or Pages no longer needs a public repo)_
+- **N52** Fit a new screen ruleset from Suite A stress P&L for Suite B — Do not reverse-engineer a full new screen/model from Suite A after-cost returns — those P&Ls are stress-distorted and history is thin. Suite B should warm-start from current AI+rules books and transplant stress-surviving knobs (conviction, exit confirms, cooldowns) as priors only. _(revisit: Suite B has a thick forward window and a separate offline rules lab is justified)_
+- **N53** Mirror every Suite A shadow into Suite B (full 2x fork) — Do not duplicate all calibrated/exclusion/exploratory shadows onto fair costs. Suite B should validate promotion candidates (start AI+rules); full fork doubles books, burns the ~5 experiment / ~4 shadow budget, and thins attention without much extra signal. _(revisit: Suite B AI+rules endurance is trusted and human triage load is light)_
+- **N54** Do not treat Suite A conviction floors as Suite B policy — High min_conviction discovered under 3% stress is a churn-survival filter for relative AI-vs-rules assessment. With fair costs, the same floor can starve deployable edge. Keep A floors on A; let B run suite-local conviction (including easing) and only promote floors that still help after fair costs. _(revisit: Someone proposes copying ai_judgment min_conviction onto ai_judgment_fair as a permanent lock, or using A epoch success alone to claim deployable conviction policy)_
+- **N55** Live sentiment scoring from mined news phrases — Do not wire bag-of-words or lexicon sentiment into screen weights or paper knobs. Open-source news + phrase mining may later inform research memos or event tags; treating it as a quant model remains premature (extends N6). _(revisit: Phrase-trajectory panel shows out-of-sample lift on trajectory flips, and analysis-review proposes a gated experiment)_
+- **N56** Auto-write FCF bridges without human review — Do not auto-author policy_fcf bridge numbers; choosing company-adjusted vs filing-aligned remains a judgment call. Keep human_gate for bridges. _(revisit: If an explicit deterministic source policy covers every buy-tier mismatch without filing judgment)_
 
 ### Open fragments (monthly horizon triage)
 
@@ -108,7 +116,7 @@ _None._
 - **frag-20260811-16** Stage 2b primary track still negative excess after costs while ops/library infra ran ahead — when does doctrine pause breadth until AI excess turns positive?
 - **frag-20260811-17** Ingest canonical bootstrap increases counted zero-body buy-tier stalls before depth pays off — stall metrics may need a third state beyond pass/fail.
 - **frag-20260811-19** Ops micro-compile can false-green ingest stalls when the engineering queue is empty and zero-body count unchanged — targeted escalation policy still open.
-- … and 7 more
+- … and 11 more
 
 ### Proposed review tasks
 
@@ -121,10 +129,19 @@ _None._
 **horizon**
 - hor-20260811-02: Hold ai_judgment and rules knobs fixed for one epoch — accumulate ≥2 epoch marks and ≥1 epoch trade before any human decision-review apply; isolates cost/concentration effects of 2026-08-11 knob chang
 
+**learning_director**
+- ldr-20260901-01: Human-ack forward pass on ai_judgment_exclusion_u4 vs live primary (`ldr-20260823-02`; aligns `convergence_summary.look_now[0]`) — expected learning value: first cost-aware week-pair read on whether u
+- ldr-20260901-02: Ensure scoring experiment queued for hold->buy and signal_unchanged transition keys — expected learning value: convert `analysis_review.sections.proposed_experiments` item 1 (offline conviction-timing
+- ldr-20260901-03: Ensure scoring experiment queued for quality-family composite gate on avoid cohort — expected learning value: convert `analysis_review.sections.proposed_experiments` item 2 into tracked task; tests fa
+- ldr-20260901-04: Human-ack exit-shadow cohort thickness dashboard (`ana-20260728-04`; `experiment_assessment.recommendations[0]`) — expected learning value: alert when any track reaches ≥10 closed exits with grace vs 
+- ldr-20260901-05: Human-ack extended buffered-hold counterfactual (`plr-20260901-02`) — expected learning value: 7d replay tied at delta 0 on rules/ai_judgment; extended lookback to epoch start 2026-08-12/26 may surfac
+
 
 ### Open engineering queue
 
-_None._
+- **eng-20260902-02** [open] Enable and gate Yahoo `quarterly_cashflow` for UK names; suppress TTM FCF and flag when series empty (HIK.L $14.4m TTM vs $119m filing; ITV.L empty)
+- **eng-20260902-03** [open] Emit labelled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated−capex) plus universe-level FCF divergence flags in `screening_snapsho
+- **eng-20260902-04** [open] Compute Lynch PEG and earnings-growth overlays from filing EPS (core where disclosed) with statutory fallback and >300 bps divergence warning; attach auto-gener
 
 ## Integration health
 
@@ -135,13 +152,47 @@ Overall: **OK**
 
 Overall: **INFO**
 
-- **[INFO]** Stage 2b focus aligned with primary learning gap: North-star focus is stage 2b while AI-judgment excess after costs is still negative (-20.1%). Breadth expansion and new tracks should stay deferred.
+- **[INFO]** Stage 2b focus aligned with primary learning gap: North-star focus is stage 2b while AI-judgment excess after costs is still negative (-19.2%). Breadth expansion and new tracks should stay deferred.
 - **[INFO]** Offline library ahead of live learning edge: 21 graduated library markets vs stage 2b still in progress — library growth is correctly offline; live universe expansion remains gated.
+
+## So what? (gap closure)
+
+- Findings: **56** (auto_queue=14, human_gate=22, observe=20); engineering tasks created this pass: **0**.
+- Auto-queue covers no-judgment enforcement gaps (e.g. FCF mismatch with uncapped buy/strong_buy). Human gate covers policy FCF bridge reviews.
+
+### High-severity so-whats
+
+- `BKG.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~46%. Enforcement must fail closed (overlay) without waiting for a human prompt.
+- `BME.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~39%. Enforcement must fail closed (overlay) without waiting for a human prompt.
+- `BT-A.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~35%. Enforcement must fail closed (overlay) without waiting for a human prompt.
+- `BTRW.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~111%. Enforcement must fail closed (overlay) without waiting for a human prompt.
+- `BYIT.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~29%. Enforcement must fail closed (overlay) without waiting for a human prompt.
+- `DOM.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~38%. Enforcement must fail closed (overlay) without waiting for a human prompt.
+- `FOUR.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~30%. Enforcement must fail closed (overlay) without waiting for a human prompt.
+- `GSK.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~27%. Enforcement must fail closed (overlay) without waiting for a human prompt.
+- `INCH.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~28%. Enforcement must fail closed (overlay) without waiting for a human prompt.
+- `ITV.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~30%. Enforcement must fail closed (overlay) without waiting for a human prompt.
+- `MEGP.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~38%. Enforcement must fail closed (overlay) without waiting for a human prompt.
+- `MGAM.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~29%. Enforcement must fail closed (overlay) without waiting for a human prompt.
+
+### Human gates
+
+- `ABDN.L`: Review filings for ABDN.L and write docs/data/research/ABDN.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
+- `BKG.L`: Review filings for BKG.L and write docs/data/research/BKG.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
+- `BME.L`: Review filings for BME.L and write docs/data/research/BME.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
+- `BT-A.L`: Review filings for BT-A.L and write docs/data/research/BT-A.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
+- `BTRW.L`: Review filings for BTRW.L and write docs/data/research/BTRW.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
+- `BYIT.L`: Review filings for BYIT.L and write docs/data/research/BYIT.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
+- `CNA.L`: Review filings for CNA.L and write docs/data/research/CNA.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
+- `DOM.L`: Review filings for DOM.L and write docs/data/research/DOM.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
+
 
 ## References
 
 - Deferred review: `docs/deferred-review.md`
 - Ops cadence: `docs/ops/ops-review-cadence.md`
 - Human tasks: `docs/ops/human-tasks-checklist.md`
+- So-what gap closure: `docs/ops/so-what-gap-closure.md`
 
 Regenerate: `ftse-progress-report build --write`
+Queue enforcement gaps: `ftse-progress-report so-what --apply`

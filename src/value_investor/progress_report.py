@@ -25,6 +25,7 @@ from value_investor.ops_monitor import (
     check_latest_bundle,
 )
 from value_investor.project_progress import DEFAULT_PROGRESS_PATH, build_project_progress
+from value_investor.so_what_closure import build_so_what_section, render_so_what_markdown
 from value_investor.storage import read_json
 
 DEFAULT_REPORT_PATH = Path("docs/data/progress_report.json")
@@ -536,6 +537,7 @@ def build_progress_report(
     store_path: Path = DEFAULT_STORE,
     progress_path: Path = DEFAULT_PROGRESS_PATH,
     data_dir: Path = DATA_DIR,
+    apply_so_what: bool = False,
 ) -> dict[str, Any]:
     progress = build_project_progress(
         latest_path=latest_path,
@@ -560,11 +562,21 @@ def build_progress_report(
         analysis_review_path=data_dir / "analysis_review.json",
         horizon_scan_path=data_dir / "horizon_scan.json",
     )
+    so_what = build_so_what_section(
+        apply=apply_so_what,
+        latest_path=latest_path,
+        artifacts_dir=data_dir,
+        tasks_path=tasks_path,
+        snapshot_path=data_dir / "so_what_closure.json",
+    )
 
     severities = [
         str(integration.get("overall") or "ok"),
         _overall_status(role_coherence),
     ]
+    so_what_counts = so_what.get("counts") or {}
+    if int(so_what_counts.get("auto_queue") or 0) > 0:
+        severities.append("warn")
     report_overall: Severity = "ok"
     if "fail" in severities:
         report_overall = "fail"
@@ -584,10 +596,12 @@ def build_progress_report(
             "overall": _overall_status(role_coherence),
             "checks": role_coherence,
         },
+        "so_what": so_what,
         "references": {
             "deferred_review": "docs/deferred-review.md",
             "ops_cadence": "docs/ops/ops-review-cadence.md",
             "human_tasks": "docs/ops/human-tasks-checklist.md",
+            "so_what_closure": "docs/ops/so-what-gap-closure.md",
         },
     }
 
@@ -721,6 +735,9 @@ def format_progress_report_markdown(report: dict[str, Any]) -> str:
             f"- **[{str(row.get('severity')).upper()}]** {row.get('title')}: {row.get('summary')}"
         )
 
+    so_what = report.get("so_what") or {}
+    lines.extend(["", render_so_what_markdown(so_what).rstrip(), ""])
+
     refs = report.get("references") or {}
     lines.extend(
         [
@@ -730,8 +747,10 @@ def format_progress_report_markdown(report: dict[str, Any]) -> str:
             f"- Deferred review: `{refs.get('deferred_review')}`",
             f"- Ops cadence: `{refs.get('ops_cadence')}`",
             f"- Human tasks: `{refs.get('human_tasks')}`",
+            f"- So-what gap closure: `{refs.get('so_what_closure')}`",
             "",
             "Regenerate: `ftse-progress-report build --write`",
+            "Queue enforcement gaps: `ftse-progress-report so-what --apply`",
             "",
         ]
     )
