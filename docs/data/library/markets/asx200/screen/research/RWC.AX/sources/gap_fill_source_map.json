@@ -2,35 +2,83 @@
   "ticker": "RWC.AX",
   "company_name": "Reliance Worldwide Corporation Limited",
   "market": "asx200",
-  "built_at": "2026-07-25T19:22:36.891660+00:00",
+  "built_at": "2026-09-02T09:25:30.059987+00:00",
   "inventory": {
     "available": {
       "filings_index": true,
       "filings_bodies": true,
       "yahoo_financials": true,
+      "yahoo_quarterly_cashflow": false,
+      "yahoo_quarterly_income": false,
       "news_manifest": true,
       "screening_snapshot": true,
+      "screen_run_manifest": false,
+      "ir_presentation_metrics": true,
       "macro_context": true,
       "alternate_news": true
     },
-    "thin": [],
+    "thin": [
+      "yahoo_quarterly_cashflow",
+      "yahoo_quarterly_income",
+      "screen_run_manifest"
+    ],
     "filings_body_files": 1,
     "filings_indexed_bodies": 1,
     "filings_summary": {
       "total": 1,
-      "annual": 0,
+      "annual": 1,
       "interim": 0,
-      "other": 1,
-      "with_body": 1
+      "trading_update": 0,
+      "other": 0,
+      "with_body": 1,
+      "period_coverage": {
+        "annual": {
+          "total": 1,
+          "with_body": 1
+        },
+        "interim": {
+          "total": 0,
+          "with_body": 0
+        },
+        "trading_update": {
+          "total": 0,
+          "with_body": 0
+        },
+        "other": {
+          "total": 0,
+          "with_body": 0
+        }
+      }
     },
-    "news_article_count": 52,
+    "period_coverage": {
+      "annual": {
+        "total": 1,
+        "with_body": 1
+      },
+      "interim": {
+        "total": 0,
+        "with_body": 0
+      },
+      "trading_update": {
+        "total": 0,
+        "with_body": 0
+      },
+      "other": {
+        "total": 0,
+        "with_body": 0
+      }
+    },
+    "news_article_count": 82,
     "evidence_ladder": [
       "filings_bodies",
       "filings_index",
       "yahoo_financials",
+      "yahoo_quarterly_cashflow",
       "news_manifest",
       "alternate_news",
       "screening_snapshot",
+      "screen_run_manifest",
+      "ir_presentation_metrics",
       "macro_context"
     ]
   },
@@ -41,17 +89,35 @@
     "with_body_after": 1,
     "note": "refetch_missing_filing_bodies"
   },
-  "alternate_news_added": 0,
+  "ch_refetch": {},
+  "investegate_refetch": {},
+  "ticker_rns_refetch": {},
+  "ir_refetch": {},
+  "screen_run_manifest": {
+    "attached": false,
+    "reason": "not_ftse350"
+  },
+  "ir_presentation_metrics": {
+    "bridge_count": 0,
+    "segment_split_count": 0,
+    "lease_maturity_count": 0,
+    "mandatory": false,
+    "path": "docs/data/library/markets/asx200/screen/research/RWC.AX/sources/ir_presentation_metrics.json"
+  },
+  "alternate_news_added": 3,
   "alternate_news_path": "docs/data/library/markets/asx200/screen/research/RWC.AX/sources/alternate_news.json",
   "planned_alternate_sources": [],
   "evidence_ladder": [
     "filings_bodies",
     "filings_index",
     "yahoo_financials",
+    "yahoo_quarterly_cashflow",
     "news_manifest",
     "alternate_news",
     "screening_snapshot",
+    "screen_run_manifest",
+    "ir_presentation_metrics",
     "macro_context"
   ],
-  "instructions": "Walk evidence_ladder in order. Cite what was tried. Prefer filings/bodies/*.txt when present. If still unresolved, pick from planned_alternate_sources and emit RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
+  "instructions": "Walk evidence_ladder in order. Cite what was tried. Prefer filings/bodies/*.txt when present. Use screen_run_manifest.json for universe-level signal counts and ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines, segment revenue splits, and IFRS 16 lease maturity tables. If still unresolved, pick from planned_alternate_sources and emit RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
 }
