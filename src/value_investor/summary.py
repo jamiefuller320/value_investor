@@ -868,6 +868,12 @@ def build_company_reports(
                 apply_fcf_basis_overlay_to_signal(
                     signal,
                     divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
+                    filing_screen_mismatch=bool(fcf_bundle.get("filing_screen_mismatch"))
+                    or fcf_filing_screen_mismatch(
+                        filing_aligned=fcf_bundle.get("filing_aligned"),
+                        screen_ttm=screen_ttm,
+                        divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
+                    ),
                     ticker_models=ticker_models,
                     conviction_score=conviction_score,
                     adjusted_signal=adjusted_signal_str,

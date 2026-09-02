@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-01",
+  "updated_at": "2026-09-02",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -246,6 +246,14 @@
           "automated": false,
           "doc_path": "docs/ops/gha-secret-hygiene.md",
           "doc_anchor": "which-secret-workflows-use"
+        },
+        {
+          "id": "adhoc-review-fcf-basis-bridges",
+          "title": "Review FCF basis bridges when mismatch notes fire",
+          "summary": "When buy-tier names show FCF basis mismatch (filing vs Yahoo TTM >25%), write or update docs/data/research/<TICKER>/sources/fcf_bridge.json with resolved policy FCF before trusting yield/coverage or spending on a deep memo. Prefer company-adjusted or filing-aligned annual figures; never leave divergent Yahoo TTM as policy.",
+          "automated": false,
+          "doc_path": "docs/ops/fcf-basis-bridges.md",
+          "doc_anchor": "when-to-review"
         }
       ]
     }

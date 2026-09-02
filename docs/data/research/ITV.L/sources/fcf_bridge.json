@@ -1,0 +1,51 @@
+{
+  "ticker": "ITV.L",
+  "fiscal_year": "2025",
+  "period": "annual",
+  "currency": "GBP",
+  "resolved": true,
+  "policy_basis": "company_adjusted",
+  "policy_fcf": 187000000.0,
+  "filing_aligned_ocf_minus_capex": 148000000.0,
+  "screen_ttm": 211900000.0,
+  "company_adjusted": 187000000.0,
+  "bridge_steps": [
+    {
+      "label": "Statutory operating cash flow (FY2025)",
+      "amount": 202000000.0
+    },
+    {
+      "label": "Less capital expenditure",
+      "amount": -54000000.0
+    },
+    {
+      "label": "Filing-aligned FCF (OCF − CapEx)",
+      "amount": 148000000.0
+    },
+    {
+      "label": "Company-reported free cash flow (RNS)",
+      "amount": 187000000.0,
+      "note": "ITV FY results: 'good free cash flow of £187 million' with profit-to-cash conversion disclosure"
+    },
+    {
+      "label": "Yahoo screen TTM (do not use while divergent)",
+      "amount": 211900000.0
+    },
+    {
+      "label": "Stale prior-year company FCF (£325m) — reject",
+      "amount": 325000000.0,
+      "note": "FY2024 cash conversion narrative; period-lock excludes when fiscal_year=2025"
+    }
+  ],
+  "dividend_coverage": {
+    "policy_fcf": 187000000.0,
+    "ordinary_dividend_per_share_p": 5.0,
+    "note": "Coverage assessment should use £187m company FCF (or £148m filing floor), not £212m TTM or £325m prior year"
+  },
+  "source_refs": [
+    "docs/data/research/ITV.L/sources/filings/bodies/29bdb56d3cedb539.txt",
+    "docs/data/research/ITV.L/sources/financials_annual.json"
+  ],
+  "reviewed_at": "2026-09-02T11:00:00+00:00",
+  "notes": "Policy FCF = £187m company-reported FY2025. Screen TTM (£212m) and prior-year £325m are diagnostic only."
+}

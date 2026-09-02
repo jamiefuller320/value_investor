@@ -1,4 +1,4 @@
-"""FCF basis overlay — cap conviction when FCF bases diverge and yield screens pass."""
+"""FCF basis overlay — cap conviction when FCF bases diverge (esp. vs yield screens)."""
 
 from __future__ import annotations
 
@@ -6,7 +6,11 @@ from pathlib import Path
 
 import pandas as pd
 
-from value_investor.scoring.fcf import reconcile_fcf_for_ticker, screen_ttm_from_row
+from value_investor.scoring.fcf import (
+    fcf_filing_screen_mismatch,
+    reconcile_fcf_for_ticker,
+    screen_ttm_from_row,
+)
 
 FCF_YIELD_DEPENDENT_MODEL_IDS = ("fcf_yield", "composite_value", "quality_value")
 FCF_BASIS_CONVICTION_MULTIPLIER = 0.85
@@ -34,8 +38,16 @@ def fcf_basis_overlay_triggered(
     *,
     divergence_flagged: bool,
     ticker_models: pd.DataFrame,
+    filing_screen_mismatch: bool = False,
 ) -> bool:
-    """Flag when FCF bases diverge and a yield-dependent model still passes."""
+    """Flag when the mismatch note would fire, or 50% divergence with a yield pass.
+
+    Filing/screen mismatch (25% note predicate) always triggers the overlay so Strong Buy
+    cannot persist beside an ``FCF basis mismatch`` action note. The legacy 50% divergence
+    path still requires a yield-dependent model pass.
+    """
+    if filing_screen_mismatch:
+        return True
     if not divergence_flagged:
         return False
     return fcf_yield_dependent_model_passed(ticker_models)
@@ -68,6 +80,7 @@ def apply_fcf_basis_overlay_to_signal(
     ticker_models: pd.DataFrame,
     conviction_score: float,
     adjusted_signal: str | None = None,
+    filing_screen_mismatch: bool = False,
 ) -> tuple[bool, str, float]:
     """Return overlay flag, conservative adjusted signal, and capped conviction."""
     base_adjusted = adjusted_signal or signal
@@ -75,6 +88,7 @@ def apply_fcf_basis_overlay_to_signal(
     if not fcf_basis_overlay_triggered(
         divergence_flagged=divergence_flagged,
         ticker_models=ticker_models,
+        filing_screen_mismatch=filing_screen_mismatch,
     ):
         return False, base_adjusted, base_conviction
     capped_signal = cap_signal_for_fcf_basis_overlay(signal)
@@ -106,6 +120,11 @@ def enrich_signals_with_fcf_basis_overlay(
             screen_ttm=screen_ttm,
             output_dir=output_dir,
         )
+        mismatch = bool(fcf_bundle.get("filing_screen_mismatch")) or fcf_filing_screen_mismatch(
+            filing_aligned=fcf_bundle.get("filing_aligned"),
+            screen_ttm=screen_ttm,
+            divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
+        )
 
         existing = row.get("adjusted_signal")
         existing_adjusted = (
@@ -117,6 +136,7 @@ def enrich_signals_with_fcf_basis_overlay(
         triggered, new_adjusted, new_conviction = apply_fcf_basis_overlay_to_signal(
             str(row.get("signal") or "hold"),
             divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
+            filing_screen_mismatch=mismatch,
             ticker_models=ticker_models,
             conviction_score=float(row.get("conviction_score") or 0.0),
             adjusted_signal=existing_adjusted,

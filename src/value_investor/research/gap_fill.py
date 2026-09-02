@@ -24,6 +24,7 @@ from value_investor.research.timeline import (
     build_weekly_delta,
     revision_id_from_datetime,
 )
+from value_investor.research.verdict import effective_screen_signal
 from value_investor.summary import CompanyReport
 
 logger = logging.getLogger(__name__)
@@ -98,7 +99,7 @@ def _candidate_reports(reports: list[CompanyReport]) -> dict[str, CompanyReport]
     return {
         report.ticker.upper(): report
         for report in reports
-        if report.signal in ("strong_buy", "buy")
+        if effective_screen_signal(report.signal, report.adjusted_signal) in ("strong_buy", "buy")
     }
 
 
