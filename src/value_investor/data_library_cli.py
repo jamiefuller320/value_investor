@@ -387,6 +387,7 @@ def build_parser() -> argparse.ArgumentParser:
         choices=[1, 2],
         help="Parallel sprint stream (1=ingest_parallel_sprint, 2=ingest_parallel_sprint_2)",
     )
+    ingest_sprint_p.add_argument("--max-targets", type=int, default=24)
     ingest_sprint_p.add_argument("--max-runtime-seconds", type=float, default=2100.0)
     ingest_sprint_p.add_argument("--max-bodies", type=int, default=20)
     ingest_sprint_p.add_argument("--json", action="store_true")

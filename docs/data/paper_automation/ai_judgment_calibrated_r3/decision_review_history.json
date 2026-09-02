@@ -500,5 +500,124 @@
     "track_label": "AI judgment calibrated shadow rank 3 (frozen priors)",
     "is_primary_learning_track": false,
     "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
+  },
+  {
+    "reviewed_at": "2026-09-02T08:29:58.046328+00:00",
+    "enough_history": true,
+    "applied": false,
+    "knobs_before": {
+      "max_positions": 5,
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 0.3
+    },
+    "knobs_after": {
+      "max_positions": 5,
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 0.3
+    },
+    "proposed_changes": {
+      "min_conviction": 0.05,
+      "max_positions": 4
+    },
+    "reasons": [
+      "High cost drag (5.2%) \u2014 raise min_conviction.",
+      "Weak excess after costs (-4.9%) \u2014 reduce max_positions."
+    ],
+    "metrics": {
+      "portfolio_value": 945.53,
+      "contributed_capital": 1000.0,
+      "total_return": -0.0545,
+      "total_costs": 51.61,
+      "cost_drag": 0.0516,
+      "trade_count": 9,
+      "buy_count": 7,
+      "sell_count": 2,
+      "positions": 5,
+      "cash_fraction": 0.0,
+      "equity_marks": 8,
+      "max_sector_weight": 0.2054,
+      "dominant_sector": "Consumer Defensive",
+      "benchmark_return": -0.006,
+      "excess_after_costs": -0.0485,
+      "note": ""
+    },
+    "counterfactual_preview": {
+      "scope": "rebalance_log_replay",
+      "knobs": {
+        "max_positions": 4,
+        "skip_timing_wait": true,
+        "min_conviction": 0.05,
+        "sector_cap": 0.3,
+        "use_adjusted_signal": true,
+        "require_research_accumulate": true,
+        "exit_confirm_screens": 2,
+        "candidate_source": "auto"
+      },
+      "used_screen_buy_tier_pool": false,
+      "log_entries_total": 7,
+      "log_entries_replayed": 7,
+      "lookback_days": null,
+      "replay_from": "2026-08-24T09:27:48.532958+01:00",
+      "replay_to": "2026-09-02T09:29:33.510846+01:00",
+      "simulated_nav": 961.03,
+      "baseline_nav": 1000.0,
+      "simulated_return": -0.039,
+      "simulated_total_costs": 43.22,
+      "simulated_cost_drag": 0.0432,
+      "simulated_trade_count": 6,
+      "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
+      "actual_nav": 947.44,
+      "actual_return_over_window": -0.0526,
+      "actual_total_costs_over_window": 51.61,
+      "actual_cost_drag_over_window": 0.0516,
+      "return_delta_vs_actual": 0.0136,
+      "cost_drag_delta_vs_actual": 0.0084,
+      "archive_rebalance_replay": {
+        "scope": "archive_rebalance_replay",
+        "knobs": {
+          "max_positions": 4,
+          "skip_timing_wait": true,
+          "min_conviction": 0.05,
+          "sector_cap": 0.3,
+          "use_adjusted_signal": true,
+          "require_research_accumulate": true
+        },
+        "archive_passes_replayed": 1,
+        "archive_replay_from": "2026-08-30T06:43:33.462150+00:00",
+        "archive_replay_to": "2026-08-30T06:43:33.462150+00:00",
+        "log_replay_from": "2026-08-24T09:27:48.532958+01:00",
+        "log_replay_to": "2026-09-02T09:29:33.510846+01:00",
+        "log_entries_replayed": 7,
+        "simulated_nav": 1000.0,
+        "baseline_nav": 1000.0,
+        "simulated_return": 0.0,
+        "simulated_total_costs": 0,
+        "simulated_cost_drag": 0.0,
+        "simulated_trade_count": 0,
+        "limitations": "Observe-only archive walk \u2014 one rebalance per archived weekly screen from first logged pass. Does not mutate live knobs. AI overlay gates need PIT research joins for ai_judgment tracks (L113).",
+        "actual_nav": 970.15,
+        "actual_return_over_window": -0.0299,
+        "actual_total_costs_over_window": 51.61,
+        "actual_cost_drag_over_window": 0.0516,
+        "return_delta_vs_actual": 0.0299,
+        "cost_drag_delta_vs_actual": 0.0516
+      },
+      "archive_vs_log": {
+        "log_entries_replayed": 7,
+        "archive_passes_replayed": 1,
+        "log_return_delta_vs_actual": 0.0136,
+        "archive_return_delta_vs_actual": 0.0299,
+        "return_delta_gap_archive_minus_log": 0.0163,
+        "log_simulated_return": -0.039,
+        "archive_simulated_return": 0.0
+      }
+    },
+    "note": "Frozen shadow track \u2014 knobs fixed; decision-review apply skipped.",
+    "track_id": "ai_judgment_calibrated_r3",
+    "track_label": "AI judgment calibrated shadow rank 3 (frozen priors)",
+    "is_primary_learning_track": false,
+    "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
   }
 ]
