@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T07:17:16+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T07:28:10+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -282,6 +282,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L215 | **Per-ticker wall-clock cap in library ingest loop** | A single slow ticker can still overrun the run budget until the next between-ticker check. Add a soft/hard per-ticker timeout so deepen cannot blow the GHA job timeout after discovery. | Euro or parallel library ingest again times out after the schedule runtime-budget fix lands |
 | L217 | **Alert when GHA Cursor API key auth fails** | Preflight only checks non-empty today; a set-but-dead CURSOR_API_KEY can skip rememo/research silently. Add a lightweight Actions verify-key probe or ops-monitor finding when auth fails. | After CURSOR_API_KEY_V2 is wired in GitHub Actions and the next ops-monitor pass |
 | L222 | **Investigate intermittent cloud-agent GitHub PR access reports** | A prior cloud session reported it could not create pull requests, but this session pushed a branch and opened draft PR #390 successfully. The earlier failure may have been tool/auth timing rather than a standing permission gap. | Another cloud agent reports it cannot create or update a pull request |
+| L223 | **Document cloud-agent workflow dispatch via WORKFLOW_DISPATCH_PAT** | Default gh in cloud agents is a read-only Cursor integration token and returns 403 on workflow_dispatch. This environment already has WORKFLOW_DISPATCH_PAT, which successfully started engineering-queue run 33603654780. | Next time a cloud agent needs to dispatch or rerun GitHub Actions |
 
 ---
 
