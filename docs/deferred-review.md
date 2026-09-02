@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T08:37:17+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T09:01:30+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -286,6 +286,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L214 | **Git bundle of full repo history on S3** | Weekly code tarball is a current-tree snapshot, not a full git history. A git bundle (or git-filtered archive) would recover branches and history if GitHub were unavailable. | After the first Sunday that uploads ftse-code-* to S3, or if GitHub availability becomes a real recovery concern |
 | L215 | **Per-ticker wall-clock cap in library ingest loop** | A single slow ticker can still overrun the run budget until the next between-ticker check. Add a soft/hard per-ticker timeout so deepen cannot blow the GHA job timeout after discovery. | Euro or parallel library ingest again times out after the schedule runtime-budget fix lands |
 | L217 | **Alert when GHA Cursor API key auth fails** | Preflight only checks non-empty today; a set-but-dead CURSOR_API_KEY can skip rememo/research silently. Add a lightweight Actions verify-key probe or ops-monitor finding when auth fails. | After CURSOR_API_KEY_V2 is wired in GitHub Actions and the next ops-monitor pass |
+| L227 | **Auto-register new cron-job.org keys after ingest schedule merges** | Parallel sprint-2 (asx200) shipped with import_cron_jobs.py keys and docs, but production never fired because cron-job.org re-import is a manual step and was skipped; GitHub schedule backup also produced 0 runs. Prefer CI/ops hook that dry-runs then upserts new job keys when workflow cron specs change. | Next new library ingest stream or cadence change merges, or asx200 sprint-2 still has 0 runs after human re-import |
 
 ---
 
