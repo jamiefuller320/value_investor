@@ -72,9 +72,17 @@ builds; it proposes activation with explicit triggers cited from JSON.
 
 ## Complexity budget (default)
 
-- ≤5 parallel open experiments across `analysis_tasks`, `paper_learning_tasks`, `learning_director_tasks`
-- ≤4 frozen shadow tracks (calibration + exclusion + experimental)
-- Director recommends **merge / retire / defer** when over budget
+Split so perpetual stage coverage is not sacrificed to a tight cap:
+
+| Slot | Cap | Counts | Does not count |
+|------|-----|--------|----------------|
+| **Coverage floor** | ≥1 observing experiment per lifecycle stage | Catalog / overlays | — |
+| **Discretionary tasks** | **12** (soft; warn at 75%) | proposed analysis / paper-learning / director / horizon tasks | Always-on overlays, existing live tracks |
+| **Expensive shadows** | **8** (soft; warn at 75%) | New/frozen paper books (calibration, exclusion, …) | Overlay-only experiments |
+
+Agents (experiment assessment + director) park or merge **losing discretionary**
+items when over — they must **not** retire coverage to meet a number. Soft-warn
+is not a hard reject. Tighten later when `experiment_lineage_and_park` is live.
 
 ## Discrete specialist pipelines (director as oversight)
 

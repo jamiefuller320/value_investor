@@ -41,6 +41,10 @@ Winner-evolve / loser-park-but-keep-feeding is planned in
 `experiment_lineage_and_park`. Park bound = one max value hold (84d min /
 400d default), not the 28d DCA window.
 
+Complexity: coverage experiments do **not** count against the discretionary
+cap (12 tasks / 8 expensive shadows, agent-managed). See
+[`learning-director-vision.md`](learning-director-vision.md#complexity-budget-default).
+
 Diagnostic labels from `classify_lifecycle_phase()` (`prospect_ready`,
 `starter`, `build`, `full`, `harvest`, `grace`, `exit_pending`, …) collapse
 onto these stages via `stage_for_phase()`.

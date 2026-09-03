@@ -14,6 +14,12 @@ The ledger plus the stage/factor catalog (`position_lifecycle.py`) is enough to
 covers DCA / recommit; other factors stay on their existing tracks (graduated
 allocation, hypothesis integrity, churn guards).
 
+The old ≤5 / ≤4 cap was too tight for perpetual stage coverage (the director
+already treated 8 open tasks as a violation). Budget is now **split**: coverage
+does not count; discretionary tasks **12**; expensive new paper books **8**.
+Agents manage overflow (`experiment_inventory.complexity`) — soft-warn, not a
+hard reject. See [`learning-director-vision.md`](learning-director-vision.md#complexity-budget-default).
+
 What the five states do **not** do yet (planned — vision phase
 `experiment_lineage_and_park`):
 

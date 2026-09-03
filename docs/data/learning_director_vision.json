@@ -23,9 +23,14 @@
     "bet_gate": "Promote only when cohort floor, retain rate, and deployable book agree over extending windows."
   },
   "complexity_budget": {
-    "max_parallel_open_experiments": 5,
-    "max_frozen_shadow_tracks": 4,
-    "note": "Director should recommend retire/merge/defer when budget exceeded."
+    "max_discretionary_tasks": 12,
+    "max_expensive_shadow_tracks": 8,
+    "max_parallel_open_experiments": 12,
+    "max_frozen_shadow_tracks": 8,
+    "soft_warn_fraction": 0.75,
+    "coverage_floor_required": true,
+    "management": "agent_assessment",
+    "note": "Coverage overlays and always-on tracks do not count. Discretionary task slots are generous early (12); expensive new paper books are the scarce slot (8). Agents park/merge overflow via experiment_assessment — never retire lifecycle coverage to meet a cap."
   },
   "phases": [
     {

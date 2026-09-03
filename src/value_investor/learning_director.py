@@ -388,9 +388,16 @@ inventory) and whether ready_for_cadence_analysis / model_independent_hint fire.
 Do not activate a new paper book for DCA — the overlay is the experiment.
 
 COMPLEXITY & EXPERIMENT INVENTORY
-Open experiment count vs complexity_budget. List shadow tracks. Recommend merge/retire/defer
-if over budget (max_parallel_open_experiments, max_frozen_shadow_tracks).
-Cite experiment_assessment.summary and any recommend rows (human ack only — never auto-apply).
+Cite experiment_inventory.complexity (not the raw open count alone).
+Coverage floor: lifecycle_overlays.factor_coverage.perpetual must stay true —
+never retire an observing stage/overlay to free a slot.
+Discretionary tasks (analysis/paper-learning/director/horizon) may run up to
+complexity.budget.max_discretionary_tasks (generous early). Expensive frozen
+shadow / new paper books are the scarce slot (max_expensive_shadow_tracks).
+If complexity.needs_agent_triage: park or merge **losing discretionary** items
+(keep cheap marks); do not cancel the lifecycle overlay. Soft-warn is not a
+hard reject — rely on experiment_assessment.recommend / fail, not the cap.
+Cite experiment_assessment.summary and any recommend rows (human ack only).
 Note whether analysis_review already has a scoring experiment covering the top
 trajectory focus candidate.
 

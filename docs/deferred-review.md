@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T11:47:57+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T11:51:50+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -322,6 +322,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L249 | **CLI to mark review tasks done or cancelled** | Triage currently hand-edits analysis_tasks / paper_learning_tasks / learning_director_tasks JSON. A small ftse-* mark-done/cancel command would keep status, timestamps, and reasons consistent. | The next review-queue triage needs more than a handful of status edits |
 | L254 | **Parked-but-fed experiment state with lineage** | Add parked/retired/child states to experiment assessment. Winners spawn a same-stage child; losers leave the complexity budget but keep weekday marks until max_trade_lifecycle_days (84d min, 400d default), then retire. Do not map fail to cancelled for lifecycle overlays. No auto-apply. | Complexity budget exceeded OR entry_dca_overlay ready_for_cadence_analysis OR two or more failed shadows still marking on weekdays |
 | L255 | **Apply library thinning to paper experiment artifacts** | rebalance_log, entry_dca overlay episodes, and exit-timing cohorts grow without the dense-400d then monthly then quarterly policy. When they bloat, thin marks the same way as library PIT history; keep rollup summaries. Do not hard-delete at 3 years like committed FTSE weekly history. | Paper automation artifact size is a git or dashboard problem, or parked losers need marks older than 400 days |
+| L256 | **Tighten experiment caps after park-and-evolve is live** | Early discretionary cap is 12 tasks / 8 expensive shadows so every lifecycle stage can stay covered. After experiment_lineage_and_park can park losers without cancelling their cheap feed, consider tightening discretionary tasks toward 8 if agent triage is noisy — never put coverage overlays back under the cap. | experiment_lineage_and_park is active AND experiment_inventory.complexity.needs_agent_triage is true for 3 consecutive Sunday director runs |
 
 ---
 
