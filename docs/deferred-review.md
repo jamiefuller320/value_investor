@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T09:35:39+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T09:45:05+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -52,6 +52,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260901-01 | Upgrade events show 34.69% positive_rate vs 52.38% on downgrades (`trajectory_evidence.upgrade_events` / `downgrade_events`) — what if the assessment model is structurally better at timing exits than entries, and winner-picking should defer allocation until loser-filter cohort floor is proven? | upgrade_inversion, trajectory_evidence, hypothesis |
 | frag-20260901-02 | Nine of 53 loser cards fail quality family while `opinion_flip_triggers` still permit conviction ≥0.35 upgrades above avoid — what if family-failure veto runs as a pre-upgrade gate rather than post-hoc forensics in loser_pattern_lab? | quality_veto_timing, loser_cards, hypothesis |
 | frag-20260901-03 | Suite B seed: copy Suite A stress-surviving knobs (min_conviction 0.6, exit_confirm_screens 2, reentry_cooldown 1) onto fair-cost AI+rules warm-start shadows; keep decision-review --apply scoped to Suite B track dirs only. | suite-b, warm-start, knobs |
+| frag-20260903-01 | MEGP.L 1y chart has a March 2026 close hole that draws as a vertical gap in the popup; chart outcomes still score from initial last vs latest close, so the gap did not create a false terrible path. | charts, data-quality, MEGP |
 
 ---
 
