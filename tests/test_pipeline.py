@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pandas as pd
@@ -18,6 +19,11 @@ from value_investor.research.store import ResearchStore
 from value_investor.scoring import evaluate_universe
 from value_investor.scoring.cash_conversion_overlay import (
     enrich_signals_with_cash_conversion_overlay,
+)
+from value_investor.scoring.conviction_timing_overlay import (
+    build_conviction_timing_overlay,
+    enrich_signals_with_conviction_timing_overlay,
+    resolve_transition_key,
 )
 from value_investor.scoring.dividend_yield_overlay import enrich_signals_with_dividend_yield_overlay
 from value_investor.scoring.earnings_basis_overlay import enrich_signals_with_earnings_basis_overlay
@@ -1034,6 +1040,98 @@ def test_enrich_signals_with_earnings_growth_overlay_exports_lynch_peg_and_bps_w
     assert bool(enriched.iloc[0]["earnings_growth_bps_divergence_warning"]) is True
     assert enriched.iloc[0]["lynch_peg_model"] == pytest.approx(11.6 / (0.045 * 100))
     assert enriched.iloc[0]["lynch_peg_statutory"] == pytest.approx(11.6 / (0.004 * 100))
+
+
+def test_resolve_transition_key_hold_to_buy_and_unchanged():
+    assert resolve_transition_key("hold", "buy") == "hold->buy"
+    assert resolve_transition_key("buy", "buy") == "signal_unchanged"
+    assert resolve_transition_key(None, "buy") == "new"
+
+
+def test_enrich_signals_with_conviction_timing_overlay_downweights_hold_to_buy():
+    run_at = datetime(2026, 9, 3, 10, 0, 0, tzinfo=UTC)
+    history = pd.DataFrame(
+        [
+            {
+                "run_at": "2026-08-27T10:00:00+00:00",
+                "ticker": "ABC.L",
+                "signal": "hold",
+                "signal_rank": 2,
+                "conviction_score": 0.2,
+                "data_quality_score": 1.0,
+            }
+        ]
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "ABC.L",
+                "signal": "buy",
+                "conviction_score": 0.4,
+                "timing_signal": "accumulate",
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_conviction_timing_overlay(
+        signals,
+        history,
+        run_at=run_at,
+    )
+    row = enriched.iloc[0]
+
+    assert row["transition_key"] == "hold->buy"
+    assert bool(row["conviction_timing_overlay"]) is True
+    assert row["conviction_timing_overlay_score"] == pytest.approx(0.3)
+    assert row["conviction_timing_overlay_timing"] == "wait"
+    assert row["conviction_score"] == pytest.approx(0.4)
+
+
+def test_enrich_signals_with_conviction_timing_overlay_unchanged_buy_tier():
+    run_at = datetime(2026, 9, 3, 10, 0, 0, tzinfo=UTC)
+    history = pd.DataFrame(
+        [
+            {
+                "run_at": "2026-08-27T10:00:00+00:00",
+                "ticker": "ABC.L",
+                "signal": "buy",
+                "signal_rank": 3,
+                "conviction_score": 0.35,
+                "data_quality_score": 1.0,
+            }
+        ]
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "ABC.L",
+                "signal": "buy",
+                "conviction_score": 0.35,
+                "timing_signal": "accumulate",
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_conviction_timing_overlay(
+        signals,
+        history,
+        run_at=run_at,
+    )
+    row = enriched.iloc[0]
+
+    assert row["transition_key"] == "signal_unchanged"
+    assert bool(row["conviction_timing_overlay"]) is True
+    assert row["conviction_timing_overlay_score"] == pytest.approx(0.315)
+    assert row["conviction_timing_overlay_timing"] == "wait"
+
+
+def test_build_conviction_timing_overlay_does_not_flag_improving_non_weak_key():
+    overlay = build_conviction_timing_overlay(
+        {"signal": "strong_buy", "conviction_score": 0.6, "timing_signal": "neutral"},
+        prior_signal="buy",
+    )
+    assert overlay["transition_key"] == "buy->strong_buy"
+    assert overlay["conviction_timing_overlay"] is False
 
 
 def _fgp_style_research_tree(tmp_path: Path) -> None:
