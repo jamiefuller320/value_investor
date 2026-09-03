@@ -246,6 +246,8 @@ def test_publish_dashboard_writes_latest_json(tmp_path: Path):
     assert "\n  " not in raw  # compact JSON
     data = json.loads(raw)
     assert data["meta"]["company_count"] == 2
+    assert data["chart_outcome_review"]["observe_only"] is True
+    assert (dest_dir / "data" / "chart_outcome_review.json").exists()
     assert (dest_dir / "data" / "archive" / "2026-07-08.json").exists()
 
 

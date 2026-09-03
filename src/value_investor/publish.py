@@ -376,6 +376,26 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         logger.warning("Project progress assembly skipped: %s", exc)
         project_progress = None
 
+    try:
+        from value_investor.market_status import build_market_status
+
+        live_ingest_stalled = bool(
+            ((project_progress or {}).get("ingest_bottleneck") or {}).get("stalled")
+        )
+        market_status = build_market_status(
+            live_meta={
+                "company_count": len(reports),
+                "signal_counts": signal_counts,
+                "universe": universe_name,
+            },
+            live_signal_counts=signal_counts,
+            live_run_at=run_at,
+            live_ingest_stalled=live_ingest_stalled,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Market status assembly skipped: %s", exc)
+        market_status = None
+
     return {
         "generated_at": datetime.now(UTC).isoformat(),
         "run_at": run_at,
@@ -422,6 +442,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "automation": automation,
         "project_progress": project_progress,
         "human_tasks_checklist": human_tasks_checklist,
+        "market_status": market_status,
     }
 
 
@@ -495,6 +516,17 @@ def publish_dashboard(
             if stale.name not in keep:
                 stale.unlink(missing_ok=True)
 
+    try:
+        from value_investor.chart_outcome_review import (
+            run_chart_outcome_review,
+            slim_chart_outcome_review,
+        )
+
+        chart_review = run_chart_outcome_review(data_dir=data_dir, chart_dir=charts_dest)
+        bundle["chart_outcome_review"] = slim_chart_outcome_review(chart_review)
+    except Exception as exc:  # noqa: BLE001 — dashboard must still publish
+        logger.warning("Chart outcome review skipped: %s", exc)
+
     latest_path = data_dir / "latest.json"
     write_json(latest_path, bundle, compact=True, compress=False)
 
@@ -505,6 +537,9 @@ def publish_dashboard(
 
     if bundle.get("project_progress"):
         write_json(data_dir / "project_progress.json", bundle["project_progress"], compact=False)
+
+    if bundle.get("market_status"):
+        write_json(data_dir / "market_status.json", bundle["market_status"], compact=False)
 
     if run_at := bundle.get("run_at"):
         stamp = str(run_at)[:10]
@@ -549,6 +584,7 @@ def empty_dashboard_bundle() -> dict[str, Any]:
         "paper_automation": None,
         "automation": None,
         "project_progress": None,
+        "market_status": None,
         "research": [],
         "note": "Dashboard data not published yet. Run ftse-screen and ftse-publish locally, or wait for the weekly workflow.",
     }

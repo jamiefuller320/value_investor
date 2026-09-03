@@ -21,6 +21,9 @@ from value_investor.review_payload_slim import (
     slim_backtest as _slim_backtest,
 )
 from value_investor.review_payload_slim import (
+    slim_chart_outcome_review as _slim_chart_outcome_review,
+)
+from value_investor.review_payload_slim import (
     slim_exclusion_ladder_replay as _slim_exclusion_ladder_replay,
 )
 from value_investor.review_payload_slim import (
@@ -239,6 +242,9 @@ def build_analysis_payload(
     loser_snapshot_cards = _slim_loser_snapshot_cards(
         _safe_read(data_dir / "loser_snapshot_cards.json")
     )
+    chart_outcome_review = _slim_chart_outcome_review(
+        _safe_read(data_dir / "chart_outcome_review.json")
+    )
     hypothesis_integrity = _slim_hypothesis_integrity(
         _safe_read(paper_root / "learning_tracks_hypothesis_integrity.json")
     )
@@ -283,6 +289,7 @@ def build_analysis_payload(
         "exclusion_ladder_replay": exclusion_ladder_replay,
         "trajectory_evidence": trajectory_evidence,
         "loser_snapshot_cards": loser_snapshot_cards,
+        "chart_outcome_review": chart_outcome_review,
         "hypothesis_integrity": hypothesis_integrity,
         "hypothesis_outcomes": hypothesis_outcomes,
         "churn_health": churn_health,
@@ -531,6 +538,9 @@ weeks_to_realization, and each model_focus_candidate.why. Treat weak transition 
 as assessment-model hypotheses, not live-screen mutation (N3).
 When loser_snapshot_cards is present, cite card_count, cohort_counts, and
 top_failed_families — these are Tier-1 forensics for scoring/filter hypotheses.
+When chart_outcome_review is present, cite verdict, stop_hit / terrible counts,
+and one well-timed plus one weakest name. Treat it as observe-only timing context
+— do not propose knob applies or scoring experiments from chart crossings alone.
 When exclusion_universe is present, cite recommended_step and readiness.ready_for_priors
 plus cumulative_exclusion_alpha on the recommended rung.
 

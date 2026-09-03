@@ -1,13 +1,13 @@
 {
-  "compiled_at": "2026-09-02T11:13:23.900406+00:00",
+  "compiled_at": "2026-09-03T11:18:57.149073+00:00",
   "run_at": "2026-09-02T10:22:48.084715+00:00",
-  "task_count": 72,
+  "task_count": 73,
   "tasks": [
     {
       "id": "eng-20260823-01",
       "area": "scoring",
-      "title": "Canonicalize FCF and earnings growth from filing-aligned sources when company-adjusted or filing EPS exists — use company FCF for FCF Yield/dividend-coverage mo",
-      "summary": "Canonicalize FCF and earnings growth from filing-aligned sources when company-adjusted or filing EPS exists — use company FCF for FCF Yield/dividend-coverage models, compute EPS growth from filing periods, and flag >50% divergence vs screen TTM",
+      "title": "Canonicalize FCF and earnings growth from filing-aligned sources when company-adjusted or filing EPS exists \u2014 use company FCF for FCF Yield/dividend-coverage mo",
+      "summary": "Canonicalize FCF and earnings growth from filing-aligned sources when company-adjusted or filing EPS exists \u2014 use company FCF for FCF Yield/dividend-coverage models, compute EPS growth from filing periods, and flag >50% divergence vs screen TTM",
       "priority": "high",
       "priority_score": 101.0,
       "source": "post_run_review",
@@ -62,7 +62,7 @@
       "id": "eng-20260817-01",
       "area": "scoring",
       "title": "Implement canonical filing-aligned FCF as sole input for FCF Yield, Earnings Quality, and cash-conversion overlays when `fcf.divergence_flagged` or filing vs sc",
-      "summary": "Implement canonical filing-aligned FCF as sole input for FCF Yield, Earnings Quality, and cash-conversion overlays when `fcf.divergence_flagged` or filing vs screen TTM differs by >25%; exclude Yahoo `screen_ttm` and surface both figures in action notes — eliminates false overlay downgrades across HIK.L, FGP.L, ITV.L, MEGP.L and unblocks conviction on top-quintile strong buys.",
+      "summary": "Implement canonical filing-aligned FCF as sole input for FCF Yield, Earnings Quality, and cash-conversion overlays when `fcf.divergence_flagged` or filing vs screen TTM differs by >25%; exclude Yahoo `screen_ttm` and surface both figures in action notes \u2014 eliminates false overlay downgrades across HIK.L, FGP.L, ITV.L, MEGP.L and unblocks conviction on top-quintile strong buys.",
       "priority": "high",
       "priority_score": 101.0,
       "source": "post_run_review",
@@ -209,7 +209,7 @@
       "id": "eng-20260819-01",
       "area": "ingest",
       "title": "Harden the indexed-without-body refetch pipeline (Investegate/LSE direct HTML-PDF, residual retry, entity-aware routing) and run it batch-wise on buy-tier ticke",
-      "summary": "Harden the indexed-without-body refetch pipeline (Investegate/LSE direct HTML-PDF, residual retry, entity-aware routing) and run it batch-wise on buy-tier tickers still showing memo `filings_with_body` ≪ `filings_total` (ITV.L, GFTU.L, MGNS.L, AEP.L, and backlog AEP.L 31/0 pattern)",
+      "summary": "Harden the indexed-without-body refetch pipeline (Investegate/LSE direct HTML-PDF, residual retry, entity-aware routing) and run it batch-wise on buy-tier tickers still showing memo `filings_with_body` \u226a `filings_total` (ITV.L, GFTU.L, MGNS.L, AEP.L, and backlog AEP.L 31/0 pattern)",
       "priority": "high",
       "priority_score": 100.0,
       "source": "post_run_review",
@@ -369,8 +369,8 @@
     {
       "id": "eng-20260819-03",
       "area": "scoring",
-      "title": "Implement `fcf_values_diverge()` overlay: when |filing-aligned FCF − screen TTM FCF| exceeds 25–50% of filing FCF (or sign flip), suppress screen TTM from model",
-      "summary": "Implement `fcf_values_diverge()` overlay: when |filing-aligned FCF − screen TTM FCF| exceeds 25–50% of filing FCF (or sign flip), suppress screen TTM from model evaluation and surface filing-aligned FCF as sole FCF Yield input",
+      "title": "Implement `fcf_values_diverge()` overlay: when |filing-aligned FCF \u2212 screen TTM FCF| exceeds 25\u201350% of filing FCF (or sign flip), suppress screen TTM from model",
+      "summary": "Implement `fcf_values_diverge()` overlay: when |filing-aligned FCF \u2212 screen TTM FCF| exceeds 25\u201350% of filing FCF (or sign flip), suppress screen TTM from model evaluation and surface filing-aligned FCF as sole FCF Yield input",
       "priority": "high",
       "priority_score": 99.0,
       "source": "post_run_review",
@@ -462,8 +462,8 @@
     {
       "id": "eng-20260810-03",
       "area": "scoring",
-      "title": "Unify filing-aligned FCF and EPS sources: single canonical OCF−capex FCF per reported year; suppress FCF Yield pass when `fcf.divergence_flagged=true` unless wi",
-      "summary": "Unify filing-aligned FCF and EPS sources: single canonical OCF−capex FCF per reported year; suppress FCF Yield pass when `fcf.divergence_flagged=true` unless within 25% of company filing definition; compute earnings-growth overlay from filing basic EPS",
+      "title": "Unify filing-aligned FCF and EPS sources: single canonical OCF\u2212capex FCF per reported year; suppress FCF Yield pass when `fcf.divergence_flagged=true` unless wi",
+      "summary": "Unify filing-aligned FCF and EPS sources: single canonical OCF\u2212capex FCF per reported year; suppress FCF Yield pass when `fcf.divergence_flagged=true` unless within 25% of company filing definition; compute earnings-growth overlay from filing basic EPS",
       "priority": "high",
       "priority_score": 99.0,
       "source": "post_run_review",
@@ -509,7 +509,7 @@
       "id": "eng-20260809-01",
       "area": "ingest",
       "title": "Build Companies House + LSE/Investegate primary-body pipeline for UK RNS and filed accounts (PDF/iXBRL page-range extract for pensions, covenants, adjusting-ite",
-      "summary": "Build Companies House + LSE/Investegate primary-body pipeline for UK RNS and filed accounts (PDF/iXBRL page-range extract for pensions, covenants, adjusting-items, cash-flow statements) — replaces Google News wrappers across AEP.L (31 indexed/0 bodies), ITV.L (5 failed CH refetches), FGP.L (pension/covenant gaps), and HIK.L (0/1 refetch success); expected impact: closes the largest recurring gap class (87 backlog ingest items) and lets gap-fill resolve FCF/leverage questions from primary filings rather than partial IR snippets.",
+      "summary": "Build Companies House + LSE/Investegate primary-body pipeline for UK RNS and filed accounts (PDF/iXBRL page-range extract for pensions, covenants, adjusting-items, cash-flow statements) \u2014 replaces Google News wrappers across AEP.L (31 indexed/0 bodies), ITV.L (5 failed CH refetches), FGP.L (pension/covenant gaps), and HIK.L (0/1 refetch success); expected impact: closes the largest recurring gap class (87 backlog ingest items) and lets gap-fill resolve FCF/leverage questions from primary filings rather than partial IR snippets.",
       "priority": "high",
       "priority_score": 99.0,
       "source": "post_run_review",
@@ -566,7 +566,7 @@
       "id": "eng-20260809-03",
       "area": "scoring",
       "title": "FCF basis reconciliation layer: compute and surface filing-aligned FCF, screen TTM FCF, and company-adjusted FCF side-by-side; auto-flag when divergence exceeds",
-      "summary": "FCF basis reconciliation layer: compute and surface filing-aligned FCF, screen TTM FCF, and company-adjusted FCF side-by-side; auto-flag when divergence exceeds 50% or $50m/£50m (HIK.L, MEGP.L, ITV.L, FGP.L) and cap conviction on FCF-yield-dependent models",
+      "summary": "FCF basis reconciliation layer: compute and surface filing-aligned FCF, screen TTM FCF, and company-adjusted FCF side-by-side; auto-flag when divergence exceeds 50% or $50m/\u00a350m (HIK.L, MEGP.L, ITV.L, FGP.L) and cap conviction on FCF-yield-dependent models",
       "priority": "high",
       "priority_score": 99.0,
       "source": "post_run_review",
@@ -614,8 +614,8 @@
     {
       "id": "eng-20260803-01",
       "area": "ingest",
-      "title": "Universal filing-body fetch pipeline for indexed-without-body rows — add Investegate/LSE direct HTML/PDF download with Google News URL fallback rejection, targe",
-      "summary": "Universal filing-body fetch pipeline for indexed-without-body rows — add Investegate/LSE direct HTML/PDF download with Google News URL fallback rejection, targeting buy-tier names with highest `indexed_without_body` (RIO.L 51, SHEL.L 52, GSK.L 51, COST.L 3)",
+      "title": "Universal filing-body fetch pipeline for indexed-without-body rows \u2014 add Investegate/LSE direct HTML/PDF download with Google News URL fallback rejection, targe",
+      "summary": "Universal filing-body fetch pipeline for indexed-without-body rows \u2014 add Investegate/LSE direct HTML/PDF download with Google News URL fallback rejection, targeting buy-tier names with highest `indexed_without_body` (RIO.L 51, SHEL.L 52, GSK.L 51, COST.L 3)",
       "priority": "high",
       "priority_score": 99.0,
       "source": "post_run_review",
@@ -708,8 +708,8 @@
     {
       "id": "eng-20260802-02",
       "area": "scoring",
-      "title": "Reconcile `key_metrics.FCF`, `cashflow_metrics.free_cashflow`, and filing-aligned OCF−capEx into a single canonical FCF field in `screening_snapshot.json`",
-      "summary": "Reconcile `key_metrics.FCF`, `cashflow_metrics.free_cashflow`, and filing-aligned OCF−capEx into a single canonical FCF field in `screening_snapshot.json`",
+      "title": "Reconcile `key_metrics.FCF`, `cashflow_metrics.free_cashflow`, and filing-aligned OCF\u2212capEx into a single canonical FCF field in `screening_snapshot.json`",
+      "summary": "Reconcile `key_metrics.FCF`, `cashflow_metrics.free_cashflow`, and filing-aligned OCF\u2212capEx into a single canonical FCF field in `screening_snapshot.json`",
       "priority": "high",
       "priority_score": 99.0,
       "source": "post_run_review",
@@ -841,7 +841,7 @@
       "id": "eng-20260817-03",
       "area": "ingest",
       "title": "Harden UK primary filing body pipeline: Investegate/LSE direct HTML-PDF fetch with period/headline validation gate (reject misattributed bodies), full PDF/OCR d",
-      "summary": "Harden UK primary filing body pipeline: Investegate/LSE direct HTML-PDF fetch with period/headline validation gate (reject misattributed bodies), full PDF/OCR depth for CH group accounts and IR presentations (FCF bridge, pension notes, principal risks p.84–88), and `period=annual|interim` reclassification — unlocks MEGP.L structural notes, ITV.L pension/covenant text, HIK.L regulatory-risk chunks, and residual AEP.L zero-body backlog.",
+      "summary": "Harden UK primary filing body pipeline: Investegate/LSE direct HTML-PDF fetch with period/headline validation gate (reject misattributed bodies), full PDF/OCR depth for CH group accounts and IR presentations (FCF bridge, pension notes, principal risks p.84\u201388), and `period=annual|interim` reclassification \u2014 unlocks MEGP.L structural notes, ITV.L pension/covenant text, HIK.L regulatory-risk chunks, and residual AEP.L zero-body backlog.",
       "priority": "high",
       "priority_score": 99.0,
       "source": "post_run_review",
@@ -963,8 +963,8 @@
     {
       "id": "eng-20260902-03",
       "area": "scoring",
-      "title": "Emit labelled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated−capex) plus universe-level FCF divergence flags in `screening_snapsho",
-      "summary": "Emit labelled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated−capex) plus universe-level FCF divergence flags in `screening_snapshot` and run-history `action_note` when filing, company-adjusted, and TTM differ by >15%",
+      "title": "Emit labelled dual FCF/dividend coverage (statutory OCF\u2212capex vs management cash-generated\u2212capex) plus universe-level FCF divergence flags in `screening_snapsho",
+      "summary": "Emit labelled dual FCF/dividend coverage (statutory OCF\u2212capex vs management cash-generated\u2212capex) plus universe-level FCF divergence flags in `screening_snapshot` and run-history `action_note` when filing, company-adjusted, and TTM differ by >15%",
       "priority": "high",
       "priority_score": 98.0,
       "source": "post_run_review",
@@ -1074,8 +1074,8 @@
     {
       "id": "eng-20260823-02",
       "area": "ingest",
-      "title": "Harden UK primary filing body pipeline: Investegate/LSE direct fetch for indexed-without-body items, reject HTML fallback when period label ≠ extracted headline",
-      "summary": "Harden UK primary filing body pipeline: Investegate/LSE direct fetch for indexed-without-body items, reject HTML fallback when period label ≠ extracted headline/date, and auto-refetch `period=other` FY/interim-tagged RNS",
+      "title": "Harden UK primary filing body pipeline: Investegate/LSE direct fetch for indexed-without-body items, reject HTML fallback when period label \u2260 extracted headline",
+      "summary": "Harden UK primary filing body pipeline: Investegate/LSE direct fetch for indexed-without-body items, reject HTML fallback when period label \u2260 extracted headline/date, and auto-refetch `period=other` FY/interim-tagged RNS",
       "priority": "high",
       "priority_score": 98.0,
       "source": "post_run_review",
@@ -1187,8 +1187,8 @@
     {
       "id": "eng-20260817-02",
       "area": "ingest",
-      "title": "Ship Yahoo quarterly cash-flow ingest into `financials_annual.json` plus populate `operating_cashflow` in CompanyMetrics from the same source — enables mechanic",
-      "summary": "Ship Yahoo quarterly cash-flow ingest into `financials_annual.json` plus populate `operating_cashflow` in CompanyMetrics from the same source — enables mechanical TTM FCF reconciliation in gap-fill and fixes false Piotroski/Earnings Quality failures (MEGP.L OCF None in fetch despite £90.8M in JSON).",
+      "title": "Ship Yahoo quarterly cash-flow ingest into `financials_annual.json` plus populate `operating_cashflow` in CompanyMetrics from the same source \u2014 enables mechanic",
+      "summary": "Ship Yahoo quarterly cash-flow ingest into `financials_annual.json` plus populate `operating_cashflow` in CompanyMetrics from the same source \u2014 enables mechanical TTM FCF reconciliation in gap-fill and fixes false Piotroski/Earnings Quality failures (MEGP.L OCF None in fetch despite \u00a390.8M in JSON).",
       "priority": "high",
       "priority_score": 98.0,
       "source": "post_run_review",
@@ -1238,8 +1238,8 @@
     {
       "id": "eng-20260817-04",
       "area": "scoring",
-      "title": "Align gross and net FCF/dividend coverage to a single fiscal period (annual OCF − annual capex vs annual dividends; never mix H1 OCF with FY capex) and wire int",
-      "summary": "Align gross and net FCF/dividend coverage to a single fiscal period (annual OCF − annual capex vs annual dividends; never mix H1 OCF with FY capex) and wire into `interim_quality_overlay` trigger logic — removes MEGP.L −0.90× gross artefact and prevents spurious overlay downgrades on interim-quality passes.",
+      "title": "Align gross and net FCF/dividend coverage to a single fiscal period (annual OCF \u2212 annual capex vs annual dividends; never mix H1 OCF with FY capex) and wire int",
+      "summary": "Align gross and net FCF/dividend coverage to a single fiscal period (annual OCF \u2212 annual capex vs annual dividends; never mix H1 OCF with FY capex) and wire into `interim_quality_overlay` trigger logic \u2014 removes MEGP.L \u22120.90\u00d7 gross artefact and prevents spurious overlay downgrades on interim-quality passes.",
       "priority": "high",
       "priority_score": 98.0,
       "source": "post_run_review",
@@ -1333,7 +1333,7 @@
       "id": "eng-20260809-04",
       "area": "scoring",
       "title": "Earnings-basis and interim-quality overlays in screen export: flag adjusted-vs-statutory EPS growth sign divergence (FGP.L); auto-apply buy-cap when interim EPS",
-      "summary": "Earnings-basis and interim-quality overlays in screen export: flag adjusted-vs-statutory EPS growth sign divergence (FGP.L); auto-apply buy-cap when interim EPS decline >3% AND filing-derived FCF/dividend coverage <1.0× (MEGP.L overlay already manual)",
+      "summary": "Earnings-basis and interim-quality overlays in screen export: flag adjusted-vs-statutory EPS growth sign divergence (FGP.L); auto-apply buy-cap when interim EPS decline >3% AND filing-derived FCF/dividend coverage <1.0\u00d7 (MEGP.L overlay already manual)",
       "priority": "high",
       "priority_score": 98.0,
       "source": "post_run_review",
@@ -1425,8 +1425,8 @@
     {
       "id": "eng-20260726-02",
       "area": "ingest",
-      "title": "Wire and execute IR allowlist PDF fetch pipeline (`gap_fill_source_map.json` → `company_ir_presentation`) with retry for failed body refetches (HIK.L `ir_a9733d",
-      "summary": "Wire and execute IR allowlist PDF fetch pipeline (`gap_fill_source_map.json` → `company_ir_presentation`) with retry for failed body refetches (HIK.L `ir_a9733d0de6aec27d` attempted 1, fetched 0; FGP.L/MEGP.L scored 2/2 but fetched 0)",
+      "title": "Wire and execute IR allowlist PDF fetch pipeline (`gap_fill_source_map.json` \u2192 `company_ir_presentation`) with retry for failed body refetches (HIK.L `ir_a9733d",
+      "summary": "Wire and execute IR allowlist PDF fetch pipeline (`gap_fill_source_map.json` \u2192 `company_ir_presentation`) with retry for failed body refetches (HIK.L `ir_a9733d0de6aec27d` attempted 1, fetched 0; FGP.L/MEGP.L scored 2/2 but fetched 0)",
       "priority": "high",
       "priority_score": 98.0,
       "source": "post_run_review",
@@ -1475,7 +1475,7 @@
       "id": "eng-20260726-04",
       "area": "scoring",
       "title": "Compute FCF Yield and Earnings Quality from filing cash-flow statements when bodies exist; emit divergence flag when Yahoo TTM differs >50% from latest annual f",
-      "summary": "Compute FCF Yield and Earnings Quality from filing cash-flow statements when bodies exist; emit divergence flag when Yahoo TTM differs >50% from latest annual filing (HIK.L −£66.1m vs +$119m; MEGP.L £15.7m vs £25.2m)",
+      "summary": "Compute FCF Yield and Earnings Quality from filing cash-flow statements when bodies exist; emit divergence flag when Yahoo TTM differs >50% from latest annual filing (HIK.L \u2212\u00a366.1m vs +$119m; MEGP.L \u00a315.7m vs \u00a325.2m)",
       "priority": "high",
       "priority_score": 98.0,
       "source": "post_run_review",
@@ -1918,7 +1918,7 @@
       "id": "eng-20260817-05",
       "area": "ingest",
       "title": "Attach weekly FTSE350 screen run manifest (`docs/data/history/run_*.json.gz`, `models_*.json.gz`) to each ticker gap-fill pack and parse IR cash-bridge slides i",
-      "summary": "Attach weekly FTSE350 screen run manifest (`docs/data/history/run_*.json.gz`, `models_*.json.gz`) to each ticker gap-fill pack and parse IR cash-bridge slides into structured metrics — makes universe-level signal claims auditable locally and feeds gap-fill prompts with presentation-grade FCF/dividend fields without one-off ticker prompt edits.",
+      "summary": "Attach weekly FTSE350 screen run manifest (`docs/data/history/run_*.json.gz`, `models_*.json.gz`) to each ticker gap-fill pack and parse IR cash-bridge slides into structured metrics \u2014 makes universe-level signal claims auditable locally and feeds gap-fill prompts with presentation-grade FCF/dividend fields without one-off ticker prompt edits.",
       "priority": "high",
       "priority_score": 97.0,
       "source": "post_run_review",
@@ -2017,7 +2017,7 @@
       "status": "cancelled",
       "no_diff_count": 2,
       "last_no_diff_at": "2026-08-19T19:23:13.904150+00:00",
-      "parked_reason": "agent produced no code changes 2 time(s) (cap 2) — manual review",
+      "parked_reason": "agent produced no code changes 2 time(s) (cap 2) \u2014 manual review",
       "parked_at": "2026-08-19T19:23:13.904150+00:00",
       "parked_policy": "cancelled_infra_false_positive",
       "cancelled_reason": "False-positive verify rework: post-merge gate lacked pytest (pip install -e . without [dev]). IR structured-field parsing already merged via #306/#307; acceptance tests pass. Infra fixed in engineering-queue.",
@@ -2026,8 +2026,8 @@
     {
       "id": "eng-20260809-02",
       "area": "ingest",
-      "title": "Mandatory IR allowlist PDF fetch with retry logging (`gap_fill_source_map.json`) for results presentations and trading updates — targets HIK.L (`april-2026-trad",
-      "summary": "Mandatory IR allowlist PDF fetch with retry logging (`gap_fill_source_map.json`) for results presentations and trading updates — targets HIK.L (`april-2026-trading-update-vfinal.pdf`), MEGP.L (FCF bridge, segment ROIC, June 2026 profit-warning RNS), GFTU.L, FGP.L",
+      "title": "Mandatory IR allowlist PDF fetch with retry logging (`gap_fill_source_map.json`) for results presentations and trading updates \u2014 targets HIK.L (`april-2026-trad",
+      "summary": "Mandatory IR allowlist PDF fetch with retry logging (`gap_fill_source_map.json`) for results presentations and trading updates \u2014 targets HIK.L (`april-2026-trading-update-vfinal.pdf`), MEGP.L (FCF bridge, segment ROIC, June 2026 profit-warning RNS), GFTU.L, FGP.L",
       "priority": "high",
       "priority_score": 94.0,
       "source": "post_run_review",
@@ -2339,8 +2339,8 @@
     {
       "id": "eng-20260803-04",
       "area": "ingest",
-      "title": "IR allowlist PDF fetch with Investegate RNS HTML fallback and minimum body-length gate — retry failed IDs such as HIK.L `ir_a9733d0de6aec27d`; add MEGP.L/FGP.L/",
-      "summary": "IR allowlist PDF fetch with Investegate RNS HTML fallback and minimum body-length gate — retry failed IDs such as HIK.L `ir_a9733d0de6aec27d`; add MEGP.L/FGP.L/ITV.L results presentations for FCF bridges and forward guidance",
+      "title": "IR allowlist PDF fetch with Investegate RNS HTML fallback and minimum body-length gate \u2014 retry failed IDs such as HIK.L `ir_a9733d0de6aec27d`; add MEGP.L/FGP.L/",
+      "summary": "IR allowlist PDF fetch with Investegate RNS HTML fallback and minimum body-length gate \u2014 retry failed IDs such as HIK.L `ir_a9733d0de6aec27d`; add MEGP.L/FGP.L/ITV.L results presentations for FCF bridges and forward guidance",
       "priority": "high",
       "priority_score": 93.0,
       "source": "post_run_review",
@@ -2478,7 +2478,7 @@
         "ladder_run_at": "2026-08-16T11:58:34.144147+00:00"
       },
       "acceptance_criteria": [
-        "After grow, iseq20 metrics/latest has ≥25 usable fundamentals rows",
+        "After grow, iseq20 metrics/latest has \u226525 usable fundamentals rows",
         "load_library_metrics / run_library_screen can run on iseq20 without empty-universe failure",
         "Add regression tests for the provider/suffix fix on representative tickers",
         "No change to live FTSE 350 screen path or blocked_paths"
@@ -2516,8 +2516,8 @@
     {
       "id": "eng-20260811-01",
       "area": "ops",
-      "title": "Archive rebalance replay for rules knob set (min_conviction 0.55, sector_cap 0.2) from first logged pass — full P&L path vs 5-entry preview; validates whether +",
-      "summary": "Archive rebalance replay for rules knob set (min_conviction 0.55, sector_cap 0.2) from first logged pass — full P&L path vs 5-entry preview; validates whether +5.98% return delta vs actual holds on longer window.",
+      "title": "Archive rebalance replay for rules knob set (min_conviction 0.55, sector_cap 0.2) from first logged pass \u2014 full P&L path vs 5-entry preview; validates whether +",
+      "summary": "Archive rebalance replay for rules knob set (min_conviction 0.55, sector_cap 0.2) from first logged pass \u2014 full P&L path vs 5-entry preview; validates whether +5.98% return delta vs actual holds on longer window.",
       "priority": "high",
       "priority_score": 91.0,
       "source": "horizon_scan",
@@ -2527,7 +2527,7 @@
       },
       "acceptance_criteria": [
         "Behaviour covered by unit or integration tests",
-        "Observe-only / offline — no live knob auto-apply",
+        "Observe-only / offline \u2014 no live knob auto-apply",
         "Diff stays within allowed_paths and blocked_paths"
       ],
       "allowed_paths": [
@@ -2603,8 +2603,8 @@
     {
       "id": "eng-20260811-03",
       "area": "ops",
-      "title": "Buffered-hold counterfactual on rules/ai_judgment — replay last 7d exits (3 full_exits each track, exit_streak=1 on HIK.L/ITV.L/FGP.L) with exit_confirm_screens",
-      "summary": "Buffered-hold counterfactual on rules/ai_judgment — replay last 7d exits (3 full_exits each track, exit_streak=1 on HIK.L/ITV.L/FGP.L) with exit_confirm_screens 1 vs 2; quantifies churn-guard sensitivity given 14.2% vs 6.7% cost drag.",
+      "title": "Buffered-hold counterfactual on rules/ai_judgment \u2014 replay last 7d exits (3 full_exits each track, exit_streak=1 on HIK.L/ITV.L/FGP.L) with exit_confirm_screens",
+      "summary": "Buffered-hold counterfactual on rules/ai_judgment \u2014 replay last 7d exits (3 full_exits each track, exit_streak=1 on HIK.L/ITV.L/FGP.L) with exit_confirm_screens 1 vs 2; quantifies churn-guard sensitivity given 14.2% vs 6.7% cost drag.",
       "priority": "high",
       "priority_score": 89.0,
       "source": "horizon_scan",
@@ -2614,7 +2614,7 @@
       },
       "acceptance_criteria": [
         "Behaviour covered by unit or integration tests",
-        "Observe-only / offline — no live knob auto-apply",
+        "Observe-only / offline \u2014 no live knob auto-apply",
         "Diff stays within allowed_paths and blocked_paths"
       ],
       "allowed_paths": [
@@ -2894,8 +2894,8 @@
     {
       "id": "eng-20260811-04",
       "area": "ops",
-      "title": "Extend archive near-miss to held-ticker episodes — rerun hold_recovery/swap_rotation on names that appeared in rebalance_log with buy-tier history (not only bel",
-      "summary": "Extend archive near-miss to held-ticker episodes — rerun hold_recovery/swap_rotation on names that appeared in rebalance_log with buy-tier history (not only below-buy-tier gate); closes gap that 7/7 swap verdicts are inconclusive for actual book decisions.",
+      "title": "Extend archive near-miss to held-ticker episodes \u2014 rerun hold_recovery/swap_rotation on names that appeared in rebalance_log with buy-tier history (not only bel",
+      "summary": "Extend archive near-miss to held-ticker episodes \u2014 rerun hold_recovery/swap_rotation on names that appeared in rebalance_log with buy-tier history (not only below-buy-tier gate); closes gap that 7/7 swap verdicts are inconclusive for actual book decisions.",
       "priority": "high",
       "priority_score": 88.0,
       "source": "horizon_scan",
@@ -2905,7 +2905,7 @@
       },
       "acceptance_criteria": [
         "Behaviour covered by unit or integration tests",
-        "Observe-only / offline — no live knob auto-apply",
+        "Observe-only / offline \u2014 no live knob auto-apply",
         "Diff stays within allowed_paths and blocked_paths"
       ],
       "allowed_paths": [
@@ -2939,8 +2939,8 @@
     {
       "id": "eng-20260811-05",
       "area": "ops",
-      "title": "Epoch-zero datum dashboard slice — surface per-track epoch NAV, post-apply trade count, and benchmark span availability (all tracks currently \"Insufficient epoc",
-      "summary": "Epoch-zero datum dashboard slice — surface per-track epoch NAV, post-apply trade count, and benchmark span availability (all tracks currently \"Insufficient epoch marks\"); makes stage 2b underperformance legible before further knob experiments (human gate: observe-only panel, no auto-apply).",
+      "title": "Epoch-zero datum dashboard slice \u2014 surface per-track epoch NAV, post-apply trade count, and benchmark span availability (all tracks currently \"Insufficient epoc",
+      "summary": "Epoch-zero datum dashboard slice \u2014 surface per-track epoch NAV, post-apply trade count, and benchmark span availability (all tracks currently \"Insufficient epoch marks\"); makes stage 2b underperformance legible before further knob experiments (human gate: observe-only panel, no auto-apply).",
       "priority": "high",
       "priority_score": 87.0,
       "source": "horizon_scan",
@@ -2950,7 +2950,7 @@
       },
       "acceptance_criteria": [
         "Behaviour covered by unit or integration tests",
-        "Observe-only / offline — no live knob auto-apply",
+        "Observe-only / offline \u2014 no live knob auto-apply",
         "Diff stays within allowed_paths and blocked_paths"
       ],
       "allowed_paths": [
@@ -2975,6 +2975,83 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/231",
       "pr_number": 231,
       "merged_at": "2026-08-11T11:27:24.557027+00:00"
+    },
+    {
+      "id": "eng-20260903-01",
+      "area": "ingest",
+      "title": "Close library ingest filing gaps for S&P/ASX 200 (asx200): 1 buy-tier gaps after stalled weekday loop",
+      "summary": "Library market asx200 buy-tier filing deepen stalled with 1 unmeasured and 0 zero-body names (buy_tier_count=29). Improve euro_filings / ESEF / IR allowlist source coverage for representative tickers and add regression tests; verify with ftse-library ingest-loop --market asx200. Sample unmeasured: EBO.AX.",
+      "priority": "high",
+      "priority_score": 86.0,
+      "source": "library_ingest_stall",
+      "evidence": {
+        "market_id": "asx200",
+        "library_market": "asx200",
+        "universe": "library",
+        "filing_health": {
+          "snapshot_at": "2026-09-03T11:18:32.808107+00:00",
+          "market_id": "asx200",
+          "buy_tier_count": 29,
+          "unmeasured_buy_tier": 1,
+          "zero_body_buy_tier": 0,
+          "thin_body_buy_tier": 5,
+          "indexed_without_body": 0,
+          "bodies_min": 1,
+          "bodies_median": 6.0,
+          "bodies_max": 111,
+          "coverage_scope": "canonical_plus_shards",
+          "ftse_equivalent": false,
+          "unmeasured_tickers": [
+            "EBO.AX"
+          ],
+          "zero_body_tickers": [],
+          "thin_body_tickers": [
+            "ZIM.AX",
+            "SDF.AX",
+            "JBH.AX",
+            "RWC.AX",
+            "DNL.AX"
+          ]
+        },
+        "filing_gaps": 1,
+        "sample_unmeasured": [
+          "EBO.AX"
+        ],
+        "sample_zero_body": [],
+        "rerun_library_ingest_loop": true,
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Representative asx200 buy-tier tickers gain filing indexes with bodies under the market canonical screen path",
+        "ftse-library ingest-loop --market asx200 reports improved > 0 on a verification run",
+        "Add focused regression tests for the source/parser fix",
+        "No change to live FTSE 350 ingest path or blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "pr_open",
+      "result_path": "output/engineering_result_eng-20260903-01.md",
+      "branch_name": "cursor/eng-20260903-01-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-09-03T11:39:13.238978+00:00"
     },
     {
       "id": "eng-20260902-01",
@@ -3246,8 +3323,8 @@
     {
       "id": "eng-20260726-08",
       "area": "scoring",
-      "title": "Add healthcare overlay flag when trailing FCF is negative AND Piotroski F-Score ≤ 4 — cap adjusted signal at neutral/caution despite composite Strong Buy.",
-      "summary": "Add healthcare overlay flag when trailing FCF is negative AND Piotroski F-Score ≤ 4 — cap adjusted signal at neutral/caution despite composite Strong Buy.",
+      "title": "Add healthcare overlay flag when trailing FCF is negative AND Piotroski F-Score \u2264 4 \u2014 cap adjusted signal at neutral/caution despite composite Strong Buy.",
+      "summary": "Add healthcare overlay flag when trailing FCF is negative AND Piotroski F-Score \u2264 4 \u2014 cap adjusted signal at neutral/caution despite composite Strong Buy.",
       "priority": "high",
       "priority_score": 43.0,
       "source": "research_model_suggestions",
@@ -3289,8 +3366,8 @@
     {
       "id": "eng-20260726-20",
       "area": "scoring",
-      "title": "Apply a cash-conversion cap when trailing FCF is negative and the name simultaneously passes dividend screens and has an active buyback — prevents Strong Buy on",
-      "summary": "Apply a cash-conversion cap when trailing FCF is negative and the name simultaneously passes dividend screens and has an active buyback — prevents Strong Buy on earnings-only cheapness.",
+      "title": "Apply a cash-conversion cap when trailing FCF is negative and the name simultaneously passes dividend screens and has an active buyback \u2014 prevents Strong Buy on",
+      "summary": "Apply a cash-conversion cap when trailing FCF is negative and the name simultaneously passes dividend screens and has an active buyback \u2014 prevents Strong Buy on earnings-only cheapness.",
       "priority": "high",
       "priority_score": 43.0,
       "source": "research_model_suggestions",
@@ -3410,8 +3487,8 @@
     {
       "id": "eng-20260804-42",
       "area": "scoring",
-      "title": "Reconcile screen FCF (−$66.1m TTM) with filing-derived FCF (OCF − capex) and surface the bridge in the research memo automatically when signs diverge by >$50m.",
-      "summary": "Reconcile screen FCF (−$66.1m TTM) with filing-derived FCF (OCF − capex) and surface the bridge in the research memo automatically when signs diverge by >$50m.",
+      "title": "Reconcile screen FCF (\u2212$66.1m TTM) with filing-derived FCF (OCF \u2212 capex) and surface the bridge in the research memo automatically when signs diverge by >$50m.",
+      "summary": "Reconcile screen FCF (\u2212$66.1m TTM) with filing-derived FCF (OCF \u2212 capex) and surface the bridge in the research memo automatically when signs diverge by >$50m.",
       "priority": "high",
       "priority_score": 43.0,
       "source": "research_model_suggestions",
@@ -3453,8 +3530,8 @@
     {
       "id": "eng-20260804-51",
       "area": "scoring",
-      "title": "Add overlay when trailing quality passes coincide with interim EPS decline >3% and FCF/dividend coverage <1.0×.",
-      "summary": "Add overlay when trailing quality passes coincide with interim EPS decline >3% and FCF/dividend coverage <1.0×.",
+      "title": "Add overlay when trailing quality passes coincide with interim EPS decline >3% and FCF/dividend coverage <1.0\u00d7.",
+      "summary": "Add overlay when trailing quality passes coincide with interim EPS decline >3% and FCF/dividend coverage <1.0\u00d7.",
       "priority": "high",
       "priority_score": 43.0,
       "source": "research_model_suggestions",
@@ -3533,8 +3610,8 @@
     {
       "id": "eng-20260728-07",
       "area": "ingest",
-      "title": "Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow statements — MEGP.L shows OCF £90.8m in `financials_annual.json` but `None` in fetch, cau",
-      "summary": "Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow statements — MEGP.L shows OCF £90.8m in `financials_annual.json` but `None` in fetch, causing false Piotroski/Earnings Quality failures.",
+      "title": "Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow statements \u2014 MEGP.L shows OCF \u00a390.8m in `financials_annual.json` but `None` in fetch, cau",
+      "summary": "Populate `operating_cashflow` in `CompanyMetrics` from Yahoo cash-flow statements \u2014 MEGP.L shows OCF \u00a390.8m in `financials_annual.json` but `None` in fetch, causing false Piotroski/Earnings Quality failures.",
       "priority": "high",
       "priority_score": 42.0,
       "source": "research_model_suggestions",
@@ -3666,10 +3743,10 @@
       "merged_at": "2026-07-28T20:14:22.598105+00:00"
     },
     {
-      "id": "eng-20260903-01",
+      "id": "eng-20260903-02",
       "area": "scoring",
       "title": "Offline conviction-timing overlay on hold->buy and signal_unchanged 1w hit rates",
-      "summary": "Queue the trajectory scoring experiment from ldr-20260901-02: 1w hold->buy positive_rate=0.25 (n=20) and signal_unchanged positive_rate=0.3431 (n=239). Observe-only scoring design — do not start entry-timing from the chart-outcome mix (N59).",
+      "summary": "Queue the trajectory scoring experiment from ldr-20260901-02: 1w hold->buy positive_rate=0.25 (n=20) and signal_unchanged positive_rate=0.3431 (n=239). Observe-only scoring design \u2014 do not start entry-timing from the chart-outcome mix (N59).",
       "priority": "medium",
       "priority_score": 70.0,
       "source": "analysis_review",
@@ -3680,7 +3757,7 @@
           "ldr-20260901-02"
         ],
         "triage_batch": "2026-09-03",
-        "triage_note": "Human queued 2026-09-03. Observe-only scoring design — do not implement in this triage and do not mutate assign_signal() (N3).",
+        "triage_note": "Human queued 2026-09-03. Observe-only scoring design \u2014 do not implement in this triage and do not mutate assign_signal() (N3).",
         "assessment_status": "recommend",
         "assessment_at": "2026-09-03T10:08:56.028980+00:00",
         "forward_evidence": {
@@ -3694,7 +3771,7 @@
                 "count": 20,
                 "positive_rate": 0.25,
                 "mean_forward_return": -0.008424,
-                "why": "hold->buy 1w positive_rate=0.25 mean=-0.008424 n=20 — opinion flip did not match next-week price"
+                "why": "hold->buy 1w positive_rate=0.25 mean=-0.008424 n=20 \u2014 opinion flip did not match next-week price"
               },
               {
                 "kind": "transition_key",
@@ -3703,7 +3780,7 @@
                 "count": 12,
                 "positive_rate": 0.25,
                 "mean_forward_return": -0.00492,
-                "why": "buy->strong_buy 1w positive_rate=0.25 mean=-0.00492 n=12 — opinion flip did not match next-week price"
+                "why": "buy->strong_buy 1w positive_rate=0.25 mean=-0.00492 n=12 \u2014 opinion flip did not match next-week price"
               },
               {
                 "kind": "transition_key",
@@ -3712,7 +3789,7 @@
                 "count": 239,
                 "positive_rate": 0.3431,
                 "mean_forward_return": -0.002598,
-                "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 — opinion flip did not match next-week price"
+                "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 \u2014 opinion flip did not match next-week price"
               },
               {
                 "kind": "horizon_hit_rate",
@@ -3720,7 +3797,7 @@
                 "horizon": "1w",
                 "count": 266,
                 "prediction_hit_rate": 0.406,
-                "why": "Directional hit_rate=0.406 at 1w (n=266) — implied upgrade/downgrade/conviction sign is not beating chance"
+                "why": "Directional hit_rate=0.406 at 1w (n=266) \u2014 implied upgrade/downgrade/conviction sign is not beating chance"
               }
             ],
             "recommend_candidate": {
@@ -3754,7 +3831,7 @@
       "acceptance_criteria": [
         "Change is covered by unit tests where behaviour shifts",
         "No edits under blocked paper/sim automation paths",
-        "Observe-only scoring design — do not mutate assign_signal() (N3)"
+        "Observe-only scoring design \u2014 do not mutate assign_signal() (N3)"
       ],
       "allowed_paths": [
         "src/value_investor/pipeline.py",
@@ -3774,7 +3851,7 @@
       "status": "open"
     },
     {
-      "id": "eng-20260903-02",
+      "id": "eng-20260903-03",
       "area": "scoring",
       "title": "Quality-family composite gate on avoid cohort",
       "summary": "Queue the loser-card scoring experiment from ldr-20260901-03: test a quality-family composite gate where quality failed in loser_snapshot_cards (AAL.L / AML.L pattern). Human promote still required.",
@@ -3788,7 +3865,7 @@
           "ldr-20260901-03"
         ],
         "triage_batch": "2026-09-03",
-        "triage_note": "Human queued 2026-09-03. Observe-only scoring design — do not implement in this triage and do not mutate assign_signal() (N3).",
+        "triage_note": "Human queued 2026-09-03. Observe-only scoring design \u2014 do not implement in this triage and do not mutate assign_signal() (N3).",
         "assessment_status": "recommend",
         "assessment_at": "2026-09-03T10:08:56.028980+00:00",
         "forward_evidence": {
@@ -3802,7 +3879,7 @@
                 "count": 20,
                 "positive_rate": 0.25,
                 "mean_forward_return": -0.008424,
-                "why": "hold->buy 1w positive_rate=0.25 mean=-0.008424 n=20 — opinion flip did not match next-week price"
+                "why": "hold->buy 1w positive_rate=0.25 mean=-0.008424 n=20 \u2014 opinion flip did not match next-week price"
               },
               {
                 "kind": "transition_key",
@@ -3811,7 +3888,7 @@
                 "count": 12,
                 "positive_rate": 0.25,
                 "mean_forward_return": -0.00492,
-                "why": "buy->strong_buy 1w positive_rate=0.25 mean=-0.00492 n=12 — opinion flip did not match next-week price"
+                "why": "buy->strong_buy 1w positive_rate=0.25 mean=-0.00492 n=12 \u2014 opinion flip did not match next-week price"
               },
               {
                 "kind": "transition_key",
@@ -3820,7 +3897,7 @@
                 "count": 239,
                 "positive_rate": 0.3431,
                 "mean_forward_return": -0.002598,
-                "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 — opinion flip did not match next-week price"
+                "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 \u2014 opinion flip did not match next-week price"
               },
               {
                 "kind": "horizon_hit_rate",
@@ -3828,7 +3905,7 @@
                 "horizon": "1w",
                 "count": 266,
                 "prediction_hit_rate": 0.406,
-                "why": "Directional hit_rate=0.406 at 1w (n=266) — implied upgrade/downgrade/conviction sign is not beating chance"
+                "why": "Directional hit_rate=0.406 at 1w (n=266) \u2014 implied upgrade/downgrade/conviction sign is not beating chance"
               }
             ],
             "recommend_candidate": {
@@ -3862,7 +3939,7 @@
       "acceptance_criteria": [
         "Change is covered by unit tests where behaviour shifts",
         "No edits under blocked paper/sim automation paths",
-        "Observe-only scoring design — do not mutate assign_signal() (N3)"
+        "Observe-only scoring design \u2014 do not mutate assign_signal() (N3)"
       ],
       "allowed_paths": [
         "src/value_investor/pipeline.py",
@@ -3907,49 +3984,30 @@
   "reprioritized_at": "2026-09-02T13:36:20.589785+00:00",
   "reprioritized_after_task": "eng-20260902-02",
   "library_ingest_health": {
-    "snapshot_at": "2026-09-02T11:03:54.691943+00:00",
-    "market_id": "euro_depth",
-    "buy_tier_count": 44,
-    "unmeasured_buy_tier": 0,
-    "zero_body_buy_tier": 1,
-    "thin_body_buy_tier": 24,
-    "indexed_without_body": 45,
+    "snapshot_at": "2026-09-03T11:18:32.808107+00:00",
+    "market_id": "asx200",
+    "buy_tier_count": 29,
+    "unmeasured_buy_tier": 1,
+    "zero_body_buy_tier": 0,
+    "thin_body_buy_tier": 5,
+    "indexed_without_body": 0,
     "bodies_min": 1,
-    "bodies_median": 2,
-    "bodies_max": 84,
+    "bodies_median": 6.0,
+    "bodies_max": 111,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
-    "unmeasured_tickers": [],
-    "zero_body_tickers": [
-      "RAND.AS"
+    "unmeasured_tickers": [
+      "EBO.AX"
     ],
+    "zero_body_tickers": [],
     "thin_body_tickers": [
-      "DG.PA",
-      "STR.VI",
-      "UMI.BR",
-      "SGO.PA",
-      "ACKB.BR",
-      "EG7.IR",
-      "ANDR.VI",
-      "VOE.VI",
-      "EVN.VI",
-      "GVR.IR",
-      "WIE.VI",
-      "ESSITY-B.ST",
-      "SKA-B.ST",
-      "MUV2.DE",
-      "VOLV-B.ST",
-      "APAM.AS",
-      "POST.VI",
-      "UCB.BR",
-      "BAS.DE",
-      "OMV.VI",
-      "NVG.LS",
-      "DTE.DE",
-      "DQ7A.IR",
-      "AZE.BR"
+      "ZIM.AX",
+      "SDF.AX",
+      "JBH.AX",
+      "RWC.AX",
+      "DNL.AX"
     ]
   },
   "micro_compile_source": "library_ingest_loop",
-  "library_market_id": "euro_depth"
+  "library_market_id": "asx200"
 }

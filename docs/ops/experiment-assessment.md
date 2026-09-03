@@ -92,7 +92,7 @@ Canonical open rows after the batch triage:
 | `ldr-20260823-02` | Exclusion u4 vs primary — **watch** (no promote) | `ldr-20260901-01` |
 | `ldr-20260823-03` | Archive-lab full-period replay (L111) — continue | — |
 
-Queued to engineering (human promote 2026-09-03): `eng-20260903-01` ← `ana-20260903-01` (hold→buy / `signal_unchanged`); `eng-20260903-02` ← `ana-20260903-02` (quality-family avoid gate). Observe-only scoring design — do not mutate `assign_signal()` (N3) or start chart-mix entry-timing (N59).
+Queued to engineering (human promote 2026-09-03): `eng-20260903-02` ← `ana-20260903-01` (hold→buy / `signal_unchanged`); `eng-20260903-03` ← `ana-20260903-02` (quality-family avoid gate). Observe-only scoring design — do not mutate `assign_signal()` (N3) or start chart-mix entry-timing (N59).
 
 `plr-20260901-02` is **done**. Replay: `ftse-rebalance-log buffered-hold --paper-root docs/data/paper_automation --tracks rules,ai_judgment --lookback-days 28 --exit-confirm-variants 1,2`. The 7d window was tied (delta 0). The 28d window is not:
 

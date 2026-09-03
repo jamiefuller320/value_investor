@@ -669,10 +669,13 @@ function bindProgressReportActions() {
     } else if (target.id === "progress-report-pat-actions-btn") {
       event.preventDefault();
       window.open(PROGRESS_REPORT_ACTIONS_URL, "_blank", "noopener");
-    } else if (target.id === "progress-report-pat-clear-btn") {
+    } else     if (target.id === "progress-report-pat-clear-btn") {
       event.preventDefault();
       clearProgressReportPat();
       setProgressReportStatus("Cleared saved Pages generate token.");
+    } else if (target.dataset.marketId) {
+      event.preventDefault();
+      openMarketStatusCard(target.dataset.marketId);
     }
   });
 }
@@ -797,6 +800,207 @@ function renderIngestHealth(data) {
   `;
 }
 
+const MARKET_INGEST_LABELS = {
+  live: "live",
+  sprint: "sprint",
+  maintenance: "maintenance",
+  queued: "queued",
+  idle: "idle",
+};
+
+function marketIngestBadge(ingest, stream) {
+  const key = String(ingest || "idle");
+  const cls = {
+    live: "stage-complete",
+    sprint: "stage-active",
+    maintenance: "stage-complete",
+    queued: "stage-pending",
+    idle: "stage-pending",
+  };
+  let label = MARKET_INGEST_LABELS[key] || key;
+  if (key === "sprint" && stream) {
+    label = `sprint ${stream}`;
+  }
+  return `<span class="stage-badge ${cls[key] || "stage-active"}">${esc(label)}</span>`;
+}
+
+function marketHealthBadge(health) {
+  return overallStatusBadge(health);
+}
+
+function marketSignalBar(counts) {
+  const entries = Object.entries(counts || {});
+  const total = entries.reduce((sum, [, count]) => sum + Number(count || 0), 0);
+  if (!total) {
+    return '<div class="signal-bar market-tile-bar"><span class="market-tile-bar-empty"></span></div>';
+  }
+  const segments = entries
+    .sort((a, b) => b[1] - a[1])
+    .map(([signal, count]) => {
+      const width = (Number(count) / total) * 100;
+      return `<span style="width:${width}%;background:${SIGNAL_COLORS[signal] || "#999"}" title="${esc(signal)}: ${count}"></span>`;
+    })
+    .join("");
+  return `<div class="signal-bar market-tile-bar">${segments}</div>`;
+}
+
+function marketSignalSummary(row) {
+  const counts = row.signal_counts || {};
+  const parts = [
+    ["buy", _intOrZero(counts.strong_buy) + _intOrZero(counts.buy)],
+    ["hold", _intOrZero(counts.hold)],
+    ["avoid", _intOrZero(counts.avoid)],
+  ].filter(([, count]) => count > 0);
+  if (!parts.length) return '<span class="muted">No screen yet</span>';
+  return parts.map(([label, count]) => `${esc(label)} ${count}`).join(" · ");
+}
+
+function _intOrZero(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function coverageLabel(value) {
+  if (value == null || Number.isNaN(Number(value))) return "—";
+  return `${(Number(value) * 100).toFixed(0)}%`;
+}
+
+function findMarketStatusRow(marketId) {
+  const rows = ((dashboardData || {}).market_status || {}).markets || [];
+  return rows.find((row) => row.market_id === marketId) || null;
+}
+
+function openMarketStatusCard(marketId) {
+  const dialog = document.getElementById("market-status-dialog");
+  const title = document.getElementById("market-status-title");
+  const body = document.getElementById("market-status-body");
+  if (!dialog || !title || !body) return;
+  const row = findMarketStatusRow(marketId);
+  if (!row) {
+    title.textContent = "Market status";
+    body.innerHTML = `<p class="muted">No status row for <code>${esc(marketId)}</code>.</p>`;
+    dialog.showModal();
+    return;
+  }
+  title.textContent = row.label || row.market_id;
+  body.innerHTML = renderMarketStatusCard(row);
+  dialog.showModal();
+}
+
+function renderMarketStatusCard(row) {
+  const counts = row.signal_counts || {};
+  const segments = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const filing = row.filing_health || {};
+  const blockers = row.phase_blockers || [];
+  const tags = [
+    row.is_live ? "live screen" : "",
+    row.is_focus ? "focus" : "",
+    row.is_graduated ? "graduated" : "",
+    row.is_queue ? "queue" : "",
+  ].filter(Boolean);
+  const filingRows = [];
+  if (row.filing_health) {
+    filingRows.push(settingRow("Buy-tier measured", esc(String(filing.buy_tier_count ?? "—"))));
+    filingRows.push(
+      settingRow(
+        "Filing gaps",
+        esc(
+          `unmeasured ${filing.unmeasured_buy_tier ?? 0} · zero-body ${filing.zero_body_buy_tier ?? 0} · thin ${filing.thin_body_buy_tier ?? 0} · indexed-no-body ${filing.indexed_without_body ?? 0}`
+        )
+      )
+    );
+    if (filing.bodies_median != null) {
+      filingRows.push(settingRow("Bodies (median)", esc(String(filing.bodies_median))));
+    }
+    const gapTickers = [
+      ...(filing.zero_body_tickers || []).map((t) => `${t} (zero-body)`),
+      ...(filing.thin_body_tickers || []).map((t) => `${t} (thin)`),
+      ...(filing.unmeasured_tickers || []).map((t) => `${t} (unmeasured)`),
+    ].slice(0, 10);
+    if (gapTickers.length) {
+      filingRows.push(
+        settingRow("Gap names", `<span class="small">${gapTickers.map((t) => esc(t)).join(", ")}</span>`)
+      );
+    }
+  }
+  const blockerHtml = blockers.length
+    ? `<ul class="list-plain small">${blockers.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>`
+    : '<p class="muted small">No learning-phase blockers recorded.</p>';
+  return `
+    <p class="small muted" style="margin-top:0">${esc(row.exchange || "—")} · ${esc(row.currency || "—")} · ${esc(row.market_id)}</p>
+    <div class="market-card-badges">
+      ${marketIngestBadge(row.ingest, row.ingest_stream)}
+      ${marketHealthBadge(row.health)}
+      <span class="stage-badge stage-active">${esc(row.learning_phase_label || "Not started")}</span>
+      ${tags.map((tag) => `<span class="badge badge-ii-ok">${esc(tag)}</span>`).join("")}
+    </div>
+    ${row.ingest_reason ? `<p class="small">${esc(row.ingest_reason)}</p>` : ""}
+    ${settingRow("Role", esc(row.role || "—"))}
+    ${settingRow("Coverage", `${esc(coverageLabel(row.coverage_pct))} · ${esc(String(row.ticker_count ?? "—"))} names`)}
+    ${settingRow("Fresh / stale", `${esc(String(row.fresh ?? "—"))} fresh · ${esc(String(row.stale ?? 0))} stale`)}
+    ${settingRow("Last screen", `<span class="small">${esc(fmtDate(row.last_screen_at))}</span>`)}
+    ${settingRow("Last metrics", `<span class="small">${esc(fmtDate(row.last_metrics_refresh))}</span>`)}
+    ${settingRow("Buy-tier shortlist", esc(String(row.shortlist_count ?? "—")))}
+    <h4 class="small" style="margin-top:1rem">Buy / hold / avoid</h4>
+    ${marketSignalBar(counts)}
+    <ul class="list-plain small">
+      ${
+        segments.length
+          ? segments.map(([signal, count]) => `<li>${signalBadge(signal)} ${count}</li>`).join("")
+          : "<li class='muted'>No screen-lite or live signal mix yet.</li>"
+      }
+    </ul>
+    ${
+      filingRows.length
+        ? `<h4 class="small" style="margin-top:1rem">Filing health</h4>${filingRows.join("")}`
+        : ""
+    }
+    <h4 class="small" style="margin-top:1rem">Learning phase</h4>
+    ${blockerHtml}
+  `;
+}
+
+function renderMarketStatusGrid(data) {
+  const payload = data.market_status;
+  if (!payload || !(payload.markets || []).length) {
+    return `
+    <div class="card market-status-section" id="market-status-grid">
+      <h3>Market status</h3>
+      <p class="muted small">Market status not published yet. Run <code>ftse-publish</code> to assemble the grid.</p>
+    </div>`;
+  }
+  const summary = payload.summary || {};
+  const tiles = (payload.markets || [])
+    .map((row) => {
+      const health = row.health || "ok";
+      return `
+      <button type="button" class="market-tile health-${esc(health)}" data-market-id="${esc(row.market_id)}" aria-haspopup="dialog">
+        <div class="market-tile-header">
+          <strong>${esc(row.label)}</strong>
+          ${marketIngestBadge(row.ingest, row.ingest_stream)}
+        </div>
+        <div class="small muted">${esc(row.learning_phase_label || "Not started")}${row.is_focus ? " · focus" : ""}${row.is_live ? " · live" : ""}</div>
+        ${marketSignalBar(row.signal_counts)}
+        <div class="small market-tile-signals">${marketSignalSummary(row)}</div>
+        <div class="small muted">Coverage ${esc(coverageLabel(row.coverage_pct))}</div>
+      </button>`;
+    })
+    .join("");
+  return `
+    <section class="card market-status-section" id="market-status-grid">
+      <div class="market-status-header">
+        <h3>Market status</h3>
+        <p class="small muted" style="margin:0">
+          ${esc(String(summary.sprint_count ?? 0))} sprint ·
+          ${esc(String(summary.maintenance_count ?? 0))} maintenance ·
+          ${esc(String(summary.live_count ?? 0))} live
+          · click a market for the detail card
+        </p>
+      </div>
+      <div class="market-status-grid">${tiles}</div>
+    </section>`;
+}
+
 function renderOverview(data) {
   const meta = data.meta || {};
   const counts = meta.signal_counts || {};
@@ -839,6 +1043,7 @@ function renderOverview(data) {
 
   document.getElementById("panel-overview").innerHTML = `
     ${note}
+    ${renderMarketStatusGrid(data)}
     <div class="grid">
       <div class="card">
         <h3>Operating companies</h3>
@@ -1025,6 +1230,92 @@ function renderScreener(data) {
   renderRows();
 }
 
+function chartOutcomePct(value) {
+  if (value == null || Number.isNaN(Number(value))) return "—";
+  const number = Number(value) * 100;
+  const formatted = `${number >= 0 ? "+" : ""}${number.toFixed(1)}%`;
+  return formatted;
+}
+
+function chartOutcomeBadge(outcome) {
+  const key = String(outcome || "insufficient_data").replace(/\s+/g, "_");
+  const badgeClass = {
+    well_timed: "badge-strong_buy",
+    intact_positive: "badge-buy",
+    giveback: "badge-hold",
+    underwater: "badge-wait",
+    flat: "badge-neutral",
+    terrible: "badge-avoid",
+    insufficient_data: "badge-insufficient_data",
+  }[key] || "badge-neutral";
+  return `<span class="badge ${badgeClass}">${esc(key.replace(/_/g, " "))}</span>`;
+}
+
+function renderChartOutcomeReview(data, { compact = false } = {}) {
+  const review = data.chart_outcome_review;
+  if (!review || !review.verdict || review.verdict === "empty") return "";
+  const counts = review.counts || {};
+  const stats = review.stats || {};
+  const wellTimed = review.well_timed || [];
+  const weakest = review.weakest || [];
+  const verdictClass =
+    review.verdict === "has_terrible"
+      ? "chart-outcome-verdict is-warn"
+      : "chart-outcome-verdict";
+  const nameBtn = (row) =>
+    `<button type="button" class="btn btn-ghost chart-outcome-name" data-chart-ticker="${esc(row.ticker)}">${esc(row.ticker)}</button>`;
+  const wellTimedList = wellTimed.length
+    ? wellTimed
+        .slice(0, compact ? 3 : 6)
+        .map(
+          (row) =>
+            `<li>${nameBtn(row)} ${chartOutcomePct(row.return_since)} ${chartOutcomeBadge(row.outcome)}</li>`
+        )
+        .join("")
+    : "<li class='muted'>None this pass.</li>";
+  const weakestList = weakest.length
+    ? weakest
+        .slice(0, compact ? 3 : 6)
+        .map(
+          (row) =>
+            `<li>${nameBtn(row)} ${chartOutcomePct(row.return_since)} ${chartOutcomeBadge(row.outcome)}</li>`
+        )
+        .join("")
+    : "";
+  const samples = compact
+    ? ""
+    : `<div class="chart-outcome-columns">
+        <div>
+          <h4>Well timed</h4>
+          <ul class="chart-outcome-list">${wellTimedList}</ul>
+        </div>
+        <div>
+          <h4>Weakest open returns</h4>
+          <ul class="chart-outcome-list">${weakestList}</ul>
+        </div>
+      </div>`;
+  return `
+    <div class="card chart-outcome-card">
+      <h3>Chart outcomes since recommendation</h3>
+      <p class="${verdictClass}">${esc(review.verdict_label || review.verdict)}</p>
+      <p class="small">${esc(review.headline || "")}</p>
+      <div class="chart-outcome-stats">
+        <div><span class="stat-value">${counts.well_timed ?? 0}</span><span class="small muted">Well timed</span></div>
+        <div><span class="stat-value">${counts.giveback ?? 0}</span><span class="small muted">Target then fade</span></div>
+        <div><span class="stat-value">${counts.underwater ?? 0}</span><span class="small muted">Underwater</span></div>
+        <div><span class="stat-value">${counts.stop_hit ?? 0}</span><span class="small muted">Stop hits</span></div>
+        <div><span class="stat-value">${counts.terrible ?? 0}</span><span class="small muted">Terrible</span></div>
+        <div><span class="stat-value">${chartOutcomePct(stats.median_return)}</span><span class="small muted">Median return</span></div>
+      </div>
+      ${samples}
+      <p class="small muted" style="margin-bottom:0">
+        Short-term underwater is expected while the hypothesis stands. The test is the longer path, not this first month.
+        Frozen initial levels from the first week of the current signal — observe-only, not a paper-book score.
+        ${compact ? "Open a name on Strong buys for the price chart." : "Click a ticker to open its price chart."}
+      </p>
+    </div>`;
+}
+
 function renderStrongBuys(data) {
   if (typeof window.IIUnavailable?.mergeServer === "function") {
     window.IIUnavailable.mergeServer(data.unavailable_watch);
@@ -1089,7 +1380,8 @@ function renderStrongBuys(data) {
     : "";
 
   panel.innerHTML = `
-    <p class="small muted" style="margin-top:0">Mark <strong>Unavailable</strong> to bypass a suggested trade that cannot be actioned on Trading 212. The name stays watched below and is excluded from paper auto-entries until restored.</p>
+    ${renderChartOutcomeReview(data)}
+    <p class="small muted" style="margin-top:1rem">Mark <strong>Unavailable</strong> to bypass a suggested trade that cannot be actioned on Trading 212. The name stays watched below and is excluded from paper auto-entries until restored.</p>
     ${strong.length ? `<h3>Strong buys</h3>${strong.map(cardHtml).join("")}` : ""}
     ${buys.length ? `<h3>Buys</h3>${buys.map(cardHtml).join("")}` : ""}
     ${!active.length ? '<div class="empty-state">All buy-tier names are on the unavailable watch list.</div>' : ""}
@@ -1865,6 +2157,8 @@ function renderAnalysis(data) {
 
   panel.innerHTML = `
     ${renderSundayReview(data)}
+    <h2 class="small muted" style="margin-top:1.5rem">Buy-tier chart outcomes</h2>
+    ${renderChartOutcomeReview(data, { compact: true }) || '<div class="empty-state">Chart outcome review not published yet. Run <code>ftse-chart-outcomes</code> after buy-tier charts exist.</div>'}
     <h2 class="small muted" style="margin-top:1.5rem">Portfolio deep analysis</h2>
     ${deepHtml}
     ${postRunHtml}
@@ -1878,6 +2172,7 @@ function renderAnalysis(data) {
       openMemo(research[index]);
     });
   });
+  bindChartButtons(panel, new Map((data.reports || []).map((r) => [r.ticker, r])));
 }
 
 function settingRow(label, value) {
@@ -2845,10 +3140,16 @@ async function loadDashboard() {
       const projectProgress = await loadOptionalDashboardJson("data/project_progress.json");
       if (projectProgress) data.project_progress = projectProgress;
     }
+    if (!data.market_status) {
+      const marketStatus = await loadOptionalDashboardJson("data/market_status.json");
+      if (marketStatus) data.market_status = marketStatus;
+    }
     // Prefer the sidecar every load so a freshly published report wins over any
     // stale embedded copy and over a cached progress_report.json.
     const progressReport = await loadOptionalDashboardJson("data/progress_report.json");
     if (progressReport) data.progress_report = progressReport;
+    const chartOutcomes = await loadOptionalDashboardJson("data/chart_outcome_review.json");
+    if (chartOutcomes) data.chart_outcome_review = chartOutcomes;
     if (!data.engineering_tasks && !(data.automation || {}).engineering_queue) {
       const engineering = await loadOptionalDashboardJson("data/engineering_tasks.json");
       if (engineering) data.engineering_tasks = engineering;
