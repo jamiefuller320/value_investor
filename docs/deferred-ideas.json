@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-03T15:44:22+00:00",
+  "updated_at": "2026-09-03T16:26:52+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -5382,6 +5382,23 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
       "added_at": "2026-09-03T15:44:22+00:00"
+    },
+    {
+      "id": "L259",
+      "category": "later",
+      "section": "ops",
+      "title": "Cap euro discovery_scan so deepen still finishes",
+      "summary": "Euro ingest has hit runtime_cutoff on every run since 2026-09-01, often completing 0-1 of 24 targets because listing discovery is forced by critical-path and consumes the 2700s budget before body fetch. Indexed-without-body is drifting up as discovery adds rows faster than bodies land.",
+      "revisit_when": "Next successful euro-ingest-loop still reports runtime_cutoff with results length 0-1 and improved=[]",
+      "tags": [
+        "euro",
+        "ingest",
+        "discovery",
+        "runtime"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-03T16:26:52+00:00"
     }
   ],
   "fragments": [
