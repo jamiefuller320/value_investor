@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-09-02T11:13:24.528348+00:00",
+  "updated_at": "2026-09-03T08:30:05.809003+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -19,17 +19,17 @@
   },
   "context": {
     "history_run_count": 12,
-    "backtest_run_count": 11,
+    "backtest_run_count": 12,
     "trajectory_labeled_events": 336,
     "exit_shadow_closed_total": 0,
     "experimental_track_count": 1
   },
   "summary": {
-    "continue": 3,
-    "fail": 4,
-    "recommend": 9,
-    "observing": 4,
+    "continue": 4,
     "proposed": 1,
+    "fail": 3,
+    "observing": 4,
+    "recommend": 9,
     "human_ack_pending": 9,
     "total": 21
   },
@@ -52,10 +52,10 @@
         "sector_cap": 0.2,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 11,
-      "gate_excess_after_costs": -0.0956,
-      "excess_vs_primary": 0.0965,
-      "excess_vs_rules": 0.1867,
+      "gate_marks": 12,
+      "gate_excess_after_costs": -0.0924,
+      "excess_vs_primary": 0.0966,
+      "excess_vs_rules": 0.1861,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated/calibration_provenance.json"
     },
@@ -77,10 +77,10 @@
         "sector_cap": 0.25,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 8,
-      "gate_excess_after_costs": -0.0487,
-      "excess_vs_primary": 0.1434,
-      "excess_vs_rules": 0.2336,
+      "gate_marks": 9,
+      "gate_excess_after_costs": -0.0454,
+      "excess_vs_primary": 0.1436,
+      "excess_vs_rules": 0.2331,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated_r2/calibration_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
@@ -103,10 +103,10 @@
         "sector_cap": 0.3,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 8,
-      "gate_excess_after_costs": -0.0485,
-      "excess_vs_primary": 0.1436,
-      "excess_vs_rules": 0.2338,
+      "gate_marks": 9,
+      "gate_excess_after_costs": -0.0452,
+      "excess_vs_primary": 0.1438,
+      "excess_vs_rules": 0.2333,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated_r3/calibration_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
@@ -136,13 +136,13 @@
       "title": "Screen rules + momentum grace",
       "area": "paper_churn",
       "pipeline": "paper_automation",
-      "status": "fail",
-      "source_status": "failed",
+      "status": "continue",
+      "source_status": "observing",
       "human_ack_required": false,
       "track_id": "momentum_grace",
-      "gate_marks": 19,
-      "gate_excess_after_costs": -0.0216,
-      "excess_vs_primary": 0.1705,
+      "gate_marks": 20,
+      "gate_excess_after_costs": -0.0186,
+      "excess_vs_primary": 0.1704,
       "forward_evidence": {
         "source": "learning_track_metrics",
         "use_momentum_grace": true,
@@ -205,7 +205,7 @@
         },
         "archive": {
           "history_run_count": 12,
-          "backtest_run_count": 11,
+          "backtest_run_count": 12,
           "simulation_ready": true
         },
         "loser_cards": {
@@ -278,7 +278,7 @@
       "forward_evidence": {
         "archive": {
           "history_run_count": 12,
-          "backtest_run_count": 11
+          "backtest_run_count": 12
         }
       },
       "evidence_path": "docs/data/analysis_tasks.json"
@@ -377,7 +377,7 @@
         },
         "archive": {
           "history_run_count": 12,
-          "backtest_run_count": 11,
+          "backtest_run_count": 12,
           "simulation_ready": true
         },
         "loser_cards": {
@@ -496,7 +496,7 @@
         },
         "archive": {
           "history_run_count": 12,
-          "backtest_run_count": 11,
+          "backtest_run_count": 12,
           "simulation_ready": true
         },
         "loser_cards": {
@@ -575,7 +575,7 @@
       "forward_evidence": {
         "archive": {
           "history_run_count": 12,
-          "backtest_run_count": 11
+          "backtest_run_count": 12
         }
       },
       "evidence_path": "docs/data/learning_director_tasks.json",
@@ -595,7 +595,7 @@
       "forward_evidence": {
         "archive": {
           "history_run_count": 12,
-          "backtest_run_count": 11
+          "backtest_run_count": 12
         }
       },
       "evidence_path": "docs/data/learning_director_tasks.json",
@@ -734,7 +734,28 @@
       "area": "paper_churn"
     }
   ],
-  "task_sync": null,
+  "task_sync": {
+    "updated": [
+      "ana-20260728-01",
+      "ana-20260728-02",
+      "ana-20260728-05",
+      "plr-20260901-03",
+      "ldr-20260823-03",
+      "ldr-20260901-02",
+      "ldr-20260901-03"
+    ],
+    "skipped": [
+      "ana-20260728-04",
+      "plr-20260901-01",
+      "plr-20260901-02",
+      "ldr-20260823-01",
+      "ldr-20260823-02",
+      "ldr-20260823-04",
+      "ldr-20260901-01",
+      "ldr-20260901-04",
+      "ldr-20260901-05"
+    ]
+  },
   "sources": {
     "calibration_shadow_endurance": "docs/data/paper_automation/calibration_shadow_endurance.json",
     "analysis_tasks": "docs/data/analysis_tasks.json",
