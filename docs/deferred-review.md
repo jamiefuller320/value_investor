@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T16:26:52+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T16:38:45+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -119,6 +119,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N62 | **Lot-link DCA entry blocks to tactical sells** | Do not pair individual DCA tranches with tactical take-profits to 'average down' remaining cost. Paper avg_cost is weighted-average (a skim realizes P&L, it does not lower remaining basis). A sell+rebuy clip must clear Suite A 6% round-trip or fair UK ~0.55% including stamp. Net end-value after costs is the only promotion metric; if anything is scored later, it is pause-or-cheaper-only remaining adds after a harvest during build (catalog factor skim_linked_remaining_adds). | entry_dca_overlay ready_for_cadence_analysis AND graduated harvest skims occur during open starter/build windows AND fair-cost Suite B is the evaluation lens |
 | N63 | **Pyramid add-on while still held beyond original sleeve** | A second buy trigger on a name still at/near full sleeve (pyramiding) is a different decision from recommit-after-exit. Do not allow adds above the original target until first-entry cadence is ranked and conviction-weighted sizing exists. Observe recommit-after-exit separately so it does not contaminate DCA evidence. | entry_dca_overlay ready_for_cadence_analysis on first_entry AND conviction_weighted_sizing is active |
 | N64 | **Do not raise discretionary experiment cap above 12 yet** | Live inventory is 1 open task / 4 shadows against the generous 12/8 soft budget. Raising the cap further would not add coverage (lifecycle stages are already perpetual) and would weaken the agent-triage signal. Keep 12/8 until Sunday open tasks repeatedly hit the 75% warn. | experiment_inventory.complexity.warn_discretionary_tasks is true on 3 consecutive Sunday director runs |
+| N65 | **Library ingest director (agent orchestration)** | No ingest-director module exists. ingest_critical_path already classifies blockers; the euro stall was a deterministic discovery-vs-deepen budget bug, not a missing LLM planner. A weekly director like learning-director would not fetch bodies. | Euro deepen still starves after the discovery time cap, or we need cross-market ingest scheduling beyond critical-path + budget |
 
 ---
 
@@ -326,7 +327,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L256 | **Tighten experiment caps after park-and-evolve is live** | Early discretionary cap is 12 tasks / 8 expensive shadows so every lifecycle stage can stay covered. After experiment_lineage_and_park can park losers without cancelling their cheap feed, consider tightening discretionary tasks toward 8 if agent triage is noisy — never put coverage overlays back under the cap. | experiment_lineage_and_park is active AND experiment_inventory.complexity.needs_agent_triage is true for 3 consecutive Sunday director runs |
 | L257 | **Persist observe clock when a sprint stream vacates without parity** | If a parallel sprint market is removed from ingest_parallel_sprint / _2 without landing on ingest_parity_markets or ftse_equivalent_markets, copy it to observe_sim_markets_extra so the 8-12 week archive clock does not stop. S&P is already covered by ftse_equivalent_markets; ASX usually enters ingest_parity_markets on filing parity. | A sprint stream advances a market that is not added to ingest_parity_markets or ftse_equivalent_markets |
 | L258 | **Roll gha_pip_install.sh out to remaining workflows** | Euro/library ingest now retries pip on empty-index flakes. Other long jobs (paper-auto, ops-monitor, FTSE ingest-loop, orchestrator) still use a single pip install -e . | Another workflow fails on pandas from versions: none or a similar empty-index pip flake |
-| L259 | **Cap euro discovery_scan so deepen still finishes** | Euro ingest has hit runtime_cutoff on every run since 2026-09-01, often completing 0-1 of 24 targets because listing discovery is forced by critical-path and consumes the 2700s budget before body fetch. Indexed-without-body is drifting up as discovery adds rows faster than bodies land. | Next successful euro-ingest-loop still reports runtime_cutoff with results length 0-1 and improved=[] |
 
 ---
 
