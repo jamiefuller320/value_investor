@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T06:53:01+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T09:35:39+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -111,6 +111,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N54 | **Do not treat Suite A conviction floors as Suite B policy** | High min_conviction discovered under 3% stress is a churn-survival filter for relative AI-vs-rules assessment. With fair costs, the same floor can starve deployable edge. Keep A floors on A; let B run suite-local conviction (including easing) and only promote floors that still help after fair costs. | Someone proposes copying ai_judgment min_conviction onto ai_judgment_fair as a permanent lock, or using A epoch success alone to claim deployable conviction policy |
 | N55 | **Live sentiment scoring from mined news phrases** | Do not wire bag-of-words or lexicon sentiment into screen weights or paper knobs. Open-source news + phrase mining may later inform research memos or event tags; treating it as a quant model remains premature (extends N6). | Phrase-trajectory panel shows out-of-sample lift on trajectory flips, and analysis-review proposes a gated experiment |
 | N57 | **Do not add level-crossings as a screening model input** | First-touch stop/target/SMA crosses are subsequent path after a buy-tier signal. Feeding them into Graham/quality/GARP/risk pass-fail would mix execution outcomes into point-in-time value identity and leak post-recommendation price action. | Only if a dedicated technical/timing family is designed with strict point-in-time features (RSI/SMA at screen date), not path-after-signal crossings. |
+| N58 | **Do not retune knobs from the first chart-outcome mix** | The first human and deterministic read of buy-tier charts is mixed_no_terrible (0 stop hits, 0 terrible paths). That is not a reason to tighten stops, widen targets, or apply decision-review knobs. | chart_outcome_review verdict becomes has_terrible, or stop_hit is above 0 on two consecutive Sunday passes |
 
 ---
 
@@ -149,6 +150,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L220 | **Selective A→B mirror for recommend-state experiments only** | Once Suite B base books exist, optionally spawn fair-cost twins only for Suite A experiments that reach recommend / human-ack — not for every open shadow. Keeps discover/validate pipeline without a full fork. | Suite B AI+rules warm-start books are running and experiment_assessment has stable recommend rows |
 | L221 | **Suite-aware cost_drag thresholds for conviction proposals** | decision_review HIGH_COST_DRAG (4%) and auto-raise min_conviction were tuned for Suite A 3% stress. Under Suite B fair costs (~0.55% RT), the same threshold rarely fires and may over-filter if A knobs are copied. Split proposal thresholds / idle-cash ease rules by is_fair_cost_lab so B can explore trade intensity while A stays defensive. | Suite B has enough epoch marks to compare cost_drag and trade_count vs Suite A under the same parent knobs, or decision-review starts proposing contradictory conviction moves across suites |
 | L242 | **Use initial-level crossings as paper/learning outcome labels** | Once live signal_history is stable, attach first-cross dates (core filled, stop hit, target hit, SMA200 lost) to trajectory_evidence and decision-review so the technical paper track can be scored against frozen entry levels rather than refreshed weekly plans. | After several Sunday screens have persisted signal_history and chart initial_levels, and the technical paper track is being reviewed for excess after costs. |
+| L243 | **Use giveback vs well-timed chart labels as analysis-review context** | After several Sunday chart-outcome refreshes, cite stable giveback versus well-timed cohorts in analysis-review as observe-only timing context. Keep this separate from feeding first-cross dates into decision-review (L242). | chart_outcome_review has at least 4 Sunday refreshes and giveback/well_timed counts remain populated |
 
 ### Universe & data
 
