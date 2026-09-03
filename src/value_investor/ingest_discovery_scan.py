@@ -151,9 +151,10 @@ class DiscoveryScanSummary:
     prioritization_weights: dict[str, float] = field(
         default_factory=lambda: dict(DEFAULT_PRIORITIZATION_WEIGHTS)
     )
+    runtime_cutoff: bool = False
     note: str = (
         "Scan-then-target: listing-only discovery; deepen uses existing ingest pass. "
-        "No compute throttle; weights reserved for later prioritisation. "
+        "Library sprint caps discovery wall-clock so body deepen still runs. "
         "Engineering fetch surface is never assumed complete."
     )
 
@@ -167,6 +168,7 @@ class DiscoveryScanSummary:
             "new_rows_total": self.new_rows_total,
             "curiosity_total": self.curiosity_total,
             "errors": self.errors,
+            "runtime_cutoff": self.runtime_cutoff,
             "prioritization_weights": dict(self.prioritization_weights),
             "note": self.note,
             "tickers": [hit.to_dict() for hit in self.tickers],

@@ -533,30 +533,61 @@ def run_library_ingest_loop(
             reports = pinned
 
     # Wall clock covers discovery + deepen so schedule jobs exit before GHA timeout.
+    # Discovery is capped so a forced full-universe listing scan cannot spend the
+    # whole slot (euro_depth 2026-09-01…03: cutoff after 0–1 deepen targets).
     started = time.monotonic()
     discovery_bonus_by_ticker: dict[str, float] = {}
     if discovery_scan:
         from value_investor.library_discovery_scan import run_library_buy_tier_discovery_scan
-
-        scan = run_library_buy_tier_discovery_scan(
-            reports,
-            library_root=library_root,
-            market_id=market_id,
-            persist_index=True,
-            persist_summary=True,
+        from value_investor.library_ingest_budget import (
+            discovery_prefer_tickers,
+            discovery_runtime_budget,
         )
-        discovery_bonus_by_ticker = {
-            hit.ticker: hit.priority_bonus(scan.prioritization_weights) for hit in scan.tickers
-        }
-        result.discovery_scan = {
-            "scanned": scan.scanned,
-            "hits": scan.hits,
-            "new_rows_total": scan.new_rows_total,
-            "curiosity_total": scan.curiosity_total,
-            "errors": scan.errors,
-            "prioritization_weights": scan.prioritization_weights,
-            "forced_by_critical_path": bool(critical.force_discovery_scan and not maintenance_mode),
-        }
+
+        discovery_budget = discovery_runtime_budget(max_runtime_seconds)
+        prefer = discovery_prefer_tickers(critical)
+        if discovery_budget > 0:
+            scan = run_library_buy_tier_discovery_scan(
+                reports,
+                library_root=library_root,
+                market_id=market_id,
+                persist_index=True,
+                persist_summary=True,
+                max_runtime_seconds=discovery_budget,
+                prefer_tickers=prefer,
+            )
+            discovery_bonus_by_ticker = {
+                hit.ticker: hit.priority_bonus(scan.prioritization_weights) for hit in scan.tickers
+            }
+            result.discovery_scan = {
+                "scanned": scan.scanned,
+                "hits": scan.hits,
+                "new_rows_total": scan.new_rows_total,
+                "curiosity_total": scan.curiosity_total,
+                "errors": scan.errors,
+                "prioritization_weights": scan.prioritization_weights,
+                "forced_by_critical_path": bool(
+                    critical.force_discovery_scan and not maintenance_mode
+                ),
+                "max_runtime_seconds": discovery_budget,
+                "prefer_tickers": prefer,
+                "runtime_cutoff": bool(getattr(scan, "runtime_cutoff", False)),
+            }
+        else:
+            result.discovery_scan = {
+                "scanned": 0,
+                "hits": 0,
+                "new_rows_total": 0,
+                "curiosity_total": 0,
+                "errors": 0,
+                "skipped": "discovery_budget_zero",
+                "forced_by_critical_path": bool(
+                    critical.force_discovery_scan and not maintenance_mode
+                ),
+                "max_runtime_seconds": discovery_budget,
+                "prefer_tickers": prefer,
+                "runtime_cutoff": False,
+            }
 
     result.targets = select_library_ingest_targets(
         reports,

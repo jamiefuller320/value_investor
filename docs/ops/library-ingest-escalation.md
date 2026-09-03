@@ -106,9 +106,15 @@ Parallel sprint auto-advance (`advance_parallel_sprint_on_ingest_parity`, defaul
 | Maintenance ingest | `library-ingest-maintenance.yml` | 2×/weekday FTSE-standard scan-then-target (`max_targets=62`) for markets at the FTSE quality bar |
 | Micro-compile dispatch | `euro-ingest-loop.yml` | After `micro_compiled` or `gap_closure_compiled`, runs `engineering-queue.yml` immediately |
 | Post-merge verify rerun | `engineering-queue.yml` | Tasks with `evidence.market_id` rerun **`euro-ingest-loop.yml`**; FTSE tasks still use `ingest-loop.yml` |
+| Discovery time cap | `library_ingest_budget.py` | Listing discovery may use at most 25% of `max_runtime_seconds` (675s of a 2700s euro slot) and scans thin/unmeasured/zero-body/IWB names first. Body deepen keeps the rest of the clock. |
 | Clean JSON for CI | `euro-ingest-loop.yml` | Uses `ingest-loop --json-path` / `euro-ingest-dispatch --json-path` (not `tee`) so stdout warnings (e.g. PyMuPDF `fitz`) cannot break `GITHUB_OUTPUT` parsing |
 | Artifact push | `scripts/push_library_ingest_artifacts.sh` | Stashes allowlisted paths (`docs/data/library/`, `engineering_tasks.json`, `ingest_gap_closure_runs.json`) before `checkout origin/main`; restores only files the job changed so concurrent queue updates are not clobbered |
 | pip install retry | `scripts/gha_pip_install.sh` | 4 attempts with backoff for transient PyPI / empty-index flakes (`from versions: none`) |
+
+A weekly **ingest director** (LLM synthesis like learning-director) would not
+fix this stall: the miss is deterministic budget allocation, already classified
+by `ingest_critical_path`. Revisit a director only if deepen still starves after
+the time cap, or we need cross-market ingest scheduling.
 
 ## Filing-quality bar (all library markets)
 

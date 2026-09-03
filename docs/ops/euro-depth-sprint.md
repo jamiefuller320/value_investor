@@ -39,6 +39,10 @@ Phase 3 is **complete** when `ftse-library shard-status --markets euro_depth` re
 
 ### Completion gate (ingest throttle)
 
+Sprint discovery is **time-capped** (`library_ingest_budget.py`): at most 25% of the
+2700s slot, critical-path tickers first, so body deepen is not starved when
+`force_discovery_scan` is on.
+
 `ftse-library euro-ingest-dispatch` evaluates **buy-tier filing parity** on the focus market
 and persists `docs/data/library/euro_ingest_dispatch.json`:
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import time
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -175,6 +176,23 @@ def scan_library_ticker_for_new_filings(
     return hit
 
 
+def _order_discovery_reports(
+    reports: list[CompanyReport],
+    prefer_tickers: list[str] | None,
+) -> list[CompanyReport]:
+    prefer_keys: list[str] = []
+    seen: set[str] = set()
+    for ticker in prefer_tickers or []:
+        key = str(ticker or "").strip().upper()
+        if key and key not in seen:
+            seen.add(key)
+            prefer_keys.append(key)
+    by_ticker = {row.ticker.upper(): row for row in reports}
+    head = [by_ticker[key] for key in prefer_keys if key in by_ticker]
+    tail = [row for row in reports if row.ticker.upper() not in seen]
+    return head + tail
+
+
 def run_library_buy_tier_discovery_scan(
     reports: list[CompanyReport],
     *,
@@ -185,17 +203,27 @@ def run_library_buy_tier_discovery_scan(
     persist_summary: bool = True,
     summary_path: Path = LIBRARY_DISCOVERY_SUMMARY_PATH,
     curiosity_path: Path = LIBRARY_DISCOVERY_CURIOSITY_PATH,
+    max_runtime_seconds: float | None = None,
+    prefer_tickers: list[str] | None = None,
 ) -> DiscoveryScanSummary:
     """Scan library buy-tier tickers for new listing rows (no body download)."""
     buy = [row for row in reports if row.signal in ("strong_buy", "buy")]
     buy.sort(
         key=lambda row: (0 if row.signal == "strong_buy" else 1, -row.conviction_score, row.ticker)
     )
+    buy = _order_discovery_reports(buy, prefer_tickers)
     if scan_cap is not None and scan_cap >= 0:
         buy = buy[: int(scan_cap)]
 
     summary = DiscoveryScanSummary()
+    started = time.monotonic()
+    deadline = None
+    if max_runtime_seconds is not None and float(max_runtime_seconds) >= 0:
+        deadline = started + float(max_runtime_seconds)
     for report in buy:
+        if deadline is not None and time.monotonic() >= deadline:
+            summary.runtime_cutoff = True
+            break
         hit = scan_library_ticker_for_new_filings(
             report,
             library_root=library_root,
@@ -216,6 +244,8 @@ def run_library_buy_tier_discovery_scan(
             "run_at": datetime.now(UTC).isoformat(),
             "market_id": market_id,
             "scan_cap": scan_cap,
+            "max_runtime_seconds": max_runtime_seconds,
+            "prefer_tickers": list(prefer_tickers or []),
             **summary.to_dict(),
         }
         write_json(summary_path, payload, compact=False)
@@ -239,13 +269,15 @@ def run_library_buy_tier_discovery_scan(
         write_json(curiosity_path, curiosity_payload, compact=False)
 
     logger.info(
-        "Library discovery scan %s: scanned=%d hits=%d new_rows=%d curiosity=%d errors=%d",
+        "Library discovery scan %s: scanned=%d hits=%d new_rows=%d curiosity=%d "
+        "errors=%d runtime_cutoff=%s",
         market_id,
         summary.scanned,
         summary.hits,
         summary.new_rows_total,
         summary.curiosity_total,
         summary.errors,
+        summary.runtime_cutoff,
     )
     return summary
 
