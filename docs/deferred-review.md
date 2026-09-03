@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T09:54:22+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T11:23:40+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -114,6 +114,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N57 | **Do not add level-crossings as a screening model input** | First-touch stop/target/SMA crosses are subsequent path after a buy-tier signal. Feeding them into Graham/quality/GARP/risk pass-fail would mix execution outcomes into point-in-time value identity and leak post-recommendation price action. | Only if a dedicated technical/timing family is designed with strict point-in-time features (RSI/SMA at screen date), not path-after-signal crossings. |
 | N58 | **Do not retune knobs from the first chart-outcome mix** | The first human and deterministic read of buy-tier charts is mixed_no_terrible (0 stop hits, 0 terrible paths). That is not a reason to tighten stops, widen targets, or apply decision-review knobs. | chart_outcome_review verdict becomes has_terrible, or stop_hit is above 0 on two consecutive Sunday passes |
 | N59 | **Do not start entry-timing experiments from this mixed chart pass** | The first chart-outcome read is mixed_no_terrible with short-term underwater tolerated while hypotheses stand. That is not a cue to add wait filters or delay buys. The live test is longer-horizon pick success on the paper book. | buy-tier chart outcomes span several months and drop-to-recovery or paper hold-recovery can show whether early underwater names recovered |
+| N60 | **Open non-FTSE markets from the status grid into the live screener** | Do not wire market-status tiles into the live FTSE 350 screener or publish path. Keep richness before breadth: library markets stay offline until stage 4. | Project stage 4: a shard has cleared Phase 3 and FTSE primary AI-judgment shows persistent excess. |
 
 ---
 
@@ -262,6 +263,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L236 | **Gap-fill: scoring — Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted** | Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted FCF, and screen TTM diverge by >15% AND profit-to-cash falls >15pp year-on-year (ITV: 65% vs 83%, three-way FCF mismatch). | After next weekly email gap-fill pass confirms the gap persists |
 | L238 | **Human FCF bridge override for lease/M&A definition fights** | Auto majority + filing fallback covers ordinary screen/filing/company mismatches. Keep optional fcf_bridge.json overrides for cases where lease accounting, M&A cash classification, or one-offs make the majority/filing pick wrong. | After auto FCF policy has run through at least one results season and buy-tier action notes still look wrong on specific names |
 | L239 | **Metric change without narrative mention trap** | Detect significant YoY FCF (and later earnings/div) moves when cached RNS/filing body lacks related commentary keywords; start observe-only via so_what_closure. Reuse load_filing_bodies_for_ticker + reconcile_fcf YoY, not action_note markers. | After FCF basis enforcement/so-what loop is stable and filing-body coverage is high enough on buy-tier names |
+| L246 | **Market status tile drill-down to library screener** | The Overview market status card shows signal mix and health; a later step could open the full offline screen-lite table for that market without changing the live FTSE screener. | After the market status grid has been used for a few Sunday reviews and a non-FTSE screen-lite table would save time vs opening library files. |
 
 ### Ops / reliability
 
@@ -308,6 +310,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L217 | **Alert when GHA Cursor API key auth fails** | Preflight only checks non-empty today; a set-but-dead CURSOR_API_KEY can skip rememo/research silently. Add a lightweight Actions verify-key probe or ops-monitor finding when auth fails. | After CURSOR_API_KEY_V2 is wired in GitHub Actions and the next ops-monitor pass |
 | L237 | **Expand so-what detectors beyond FCF** | Add more no-judgment enforcement detectors (cash conversion overlays, memo eligibility gates, stale research caps) to the so-what loop once FCF auto-queue proves stable in ops-monitor. | After so-what FCF auto_queue has run cleanly in production ops-monitor for several weeks |
 | L240 | **Token-free progress-report regenerate on Pages** | Pages Generate currently needs a browser-stored Actions:Write PAT (or Actions UI). A dedicated low-privilege relay or issue-form trigger would remove the PAT from localStorage. | After progress-report Pages generate is in regular use and PAT friction is annoying |
+| L247 | **On-click filing-health refresh for market status cards** | Detail cards currently use cached euro_ingest_dispatch filing health. A live re-snapshot on click would be fresher but is too expensive for a static Pages dashboard. | When the local dashboard API can serve a cheap per-market health endpoint, or dispatch snapshots are published more than once a day. |
 
 ---
 
