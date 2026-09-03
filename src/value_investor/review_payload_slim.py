@@ -291,6 +291,7 @@ def slim_entry_dca(payload: dict[str, Any] | None) -> dict[str, Any] | None:
         "observe_only": True,
         "readiness": readiness,
         "scored_count": payload.get("scored_count"),
+        "recommit_scored_count": payload.get("recommit_scored_count"),
         "tracks_with_closed": payload.get("tracks_with_closed"),
         "leading_cadence": payload.get("leading_cadence"),
         "model_independent_hint": payload.get("model_independent_hint"),

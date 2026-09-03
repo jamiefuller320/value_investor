@@ -1057,6 +1057,7 @@ def run_daily_automation(
         as_of=gate["local_time"],
     )
     buy_cost_pct = float(getattr(config, "buy_cost_pct", None) or config.trade_cost_pct or 0.0)
+    history_trades = [item.to_dict() if hasattr(item, "to_dict") else item for item in fund.trades]
     entry_dca_overlay_review = run_entry_dca_overlay_pass(
         output_dir=output_dir,
         track_id=str(config.track_id or "rules"),
@@ -1067,6 +1068,7 @@ def run_daily_automation(
         prices_by_ticker=price_map,
         buy_cost_pct=buy_cost_pct,
         as_of=gate["local_time"],
+        history_trades=history_trades,
     )
 
     result = AutomationRunResult(

@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T11:22:46+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T11:33:20+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -113,6 +113,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N57 | **Do not add level-crossings as a screening model input** | First-touch stop/target/SMA crosses are subsequent path after a buy-tier signal. Feeding them into Graham/quality/GARP/risk pass-fail would mix execution outcomes into point-in-time value identity and leak post-recommendation price action. | Only if a dedicated technical/timing family is designed with strict point-in-time features (RSI/SMA at screen date), not path-after-signal crossings. |
 | N58 | **Execute dollar-cost averaging on live paper books** | Do not change paper-auto fills to actual multi-tranche DCA until the model-independent overlay has enough closed episodes to rank cadences and a human acks ready_for_cadence_analysis. | learning_tracks_entry_dca readiness.ready_for_cadence_analysis is true and a leading cadence is stable across >=2 tracks |
 | N59 | **Lot-link DCA entry blocks to tactical sells** | Do not pair individual DCA tranches with tactical take-profits to 'average down' remaining cost. Paper avg_cost is weighted-average (a skim realizes P&L, it does not lower remaining basis). A sell+rebuy clip must clear Suite A 6% round-trip or fair UK ~0.55% including stamp. Net end-value after costs is the only promotion metric; if anything is scored later, it is pause-or-cheaper-only remaining adds after a harvest during build (catalog factor skim_linked_remaining_adds). | entry_dca_overlay ready_for_cadence_analysis AND graduated harvest skims occur during open starter/build windows AND fair-cost Suite B is the evaluation lens |
+| N60 | **Pyramid add-on while still held beyond original sleeve** | A second buy trigger on a name still at/near full sleeve (pyramiding) is a different decision from recommit-after-exit. Do not allow adds above the original target until first-entry cadence is ranked and conviction-weighted sizing exists. Observe recommit-after-exit separately so it does not contaminate DCA evidence. | entry_dca_overlay ready_for_cadence_analysis on first_entry AND conviction_weighted_sizing is active |
 
 ---
 

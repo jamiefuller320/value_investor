@@ -36,3 +36,10 @@ def test_stage_for_phase_collapses_labels():
     assert stage_for_phase("starter") == "starter"
     assert stage_for_phase("exit_buffer") == "exit"
     assert stage_for_phase("hold") == "full"
+    assert stage_for_phase("recommit") == "recommit"
+
+
+def test_recommit_stage_is_observing_via_entry_kind_tag():
+    recommit = {row["id"]: row for row in factors_for_stage("recommit")}
+    assert recommit["entry_kind_tag"]["status"] == "observing"
+    assert recommit["held_addon_pyramid"]["status"] == "deferred"

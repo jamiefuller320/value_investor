@@ -127,6 +127,37 @@ def _episode_id(track_id: str, ticker: str, started_at: str) -> str:
     return f"{track_id}:{ticker}:{started_at}"
 
 
+ENTRY_KIND_FIRST = "first_entry"
+ENTRY_KIND_RECOMMIT = "recommit"
+
+
+def alumni_tickers_from_trades(trades: list[dict[str, Any]] | None) -> set[str]:
+    """Tickers that have already had a sell — prior cycle alumni."""
+    alumni: set[str] = set()
+    for trade in trades or []:
+        if str(trade.get("side") or "").lower() != "sell":
+            continue
+        ticker = str(trade.get("ticker") or "").strip()
+        if ticker:
+            alumni.add(ticker)
+    return alumni
+
+
+def _prior_episode_tickers(store: dict[str, Any]) -> set[str]:
+    return {
+        str(row.get("ticker"))
+        for row in (store.get("episodes") or [])
+        if isinstance(row, dict) and row.get("ticker")
+    }
+
+
+def _entry_kind_of(episode: dict[str, Any]) -> str:
+    kind = str(episode.get("entry_kind") or ENTRY_KIND_FIRST)
+    if kind == ENTRY_KIND_RECOMMIT:
+        return ENTRY_KIND_RECOMMIT
+    return ENTRY_KIND_FIRST
+
+
 def framework_metadata() -> dict[str, Any]:
     return {
         "purpose": (
@@ -135,7 +166,7 @@ def framework_metadata() -> dict[str, Any]:
             "Findings are expected to be largely independent of the underlying "
             "selection model."
         ),
-        "lifecycle_stage": "starter",
+        "lifecycle_stage": "starter (first_entry) or recommit (prior cycle)",
         "questions": [
             "Does spreading a decided notional cut peak adverse £ exposure vs lump-sum?",
             "Which cadence wins after extra buy costs and missed-upside opportunity?",
@@ -190,6 +221,7 @@ def ingest_new_entries(
     buy_cost_pct: float,
     as_of: str,
     lifecycle_phase: str | None = None,
+    alumni_tickers: set[str] | None = None,
 ) -> int:
     """Open an episode for each buy that starts a new sleeve this pass."""
     episodes: list[dict[str, Any]] = list(store.get("episodes") or [])
@@ -199,6 +231,7 @@ def ingest_new_entries(
         if str(row.get("status") or "open") == "open"
     }
     held = _held_tickers(holdings_before)
+    seen_before = _prior_episode_tickers(store) | set(alumni_tickers or ())
     cmap = _candidate_map(candidates)
     added = 0
     for trade in trades:
@@ -214,7 +247,11 @@ def ingest_new_entries(
             continue
         started_at = str(trade.get("acted_at") or as_of)
         row = cmap.get(ticker) or cmap.get(ticker.upper()) or {}
-        stage = stage_for_phase(lifecycle_phase) if lifecycle_phase else "starter"
+        recommit = ticker in seen_before
+        if lifecycle_phase:
+            stage = stage_for_phase(lifecycle_phase)
+        else:
+            stage = "recommit" if recommit else "starter"
         episodes.append(
             {
                 "id": _episode_id(track_id, ticker, started_at),
@@ -223,6 +260,7 @@ def ingest_new_entries(
                 "started_at": started_at,
                 "status": "open",
                 "lifecycle_stage": stage,
+                "entry_kind": ENTRY_KIND_RECOMMIT if recommit else ENTRY_KIND_FIRST,
                 "entry_price": round(price, 4),
                 "notional": round(notional, 2),
                 "shares": round(float(shares or (notional / price)), 6),
@@ -465,23 +503,27 @@ def build_entry_dca_review(
     open_rows = [row for row in episodes if str(row.get("status") or "open") == "open"]
     closed = [row for row in episodes if str(row.get("status") or "") == "closed"]
     scored = [row for row in closed if row.get("cadence_scores")]
+    first_scored = [row for row in scored if _entry_kind_of(row) == ENTRY_KIND_FIRST]
+    recommit_scored = [row for row in scored if _entry_kind_of(row) == ENTRY_KIND_RECOMMIT]
+    # Cadence ranking uses first-entry only — recommit is a different decision.
+    ranked = first_scored
     cadence_stats: dict[str, dict[str, Any]] = {}
     for cadence in cfg.cadences:
         if cadence.id == "lump_sum":
             continue
         deltas = [
             float(score.get("end_value_delta") or 0.0)
-            for episode in scored
+            for episode in ranked
             for score in (episode.get("cadence_scores") or [])
             if score.get("id") == cadence.id and score.get("scored")
         ]
         de_risks = [
             float(score.get("de_risk_gbp") or 0.0)
-            for episode in scored
+            for episode in ranked
             for score in (episode.get("cadence_scores") or [])
             if score.get("id") == cadence.id and score.get("scored")
         ]
-        wins = sum(1 for episode in scored if episode.get("winning_cadence") == cadence.id)
+        wins = sum(1 for episode in ranked if episode.get("winning_cadence") == cadence.id)
         cadence_stats[cadence.id] = {
             "label": cadence.label,
             "scored_episodes": len(deltas),
@@ -495,15 +537,17 @@ def build_entry_dca_review(
             "win_count": wins,
         }
     winner_counts: dict[str, int] = {}
-    for episode in scored:
+    for episode in ranked:
         winner = str(episode.get("winning_cadence") or "")
         if winner:
             winner_counts[winner] = winner_counts.get(winner, 0) + 1
     readiness = assess_framework_readiness(
-        closed_episodes=len(scored),
-        tracks_with_closed=1 if scored else 0,
+        closed_episodes=len(first_scored),
+        tracks_with_closed=1 if first_scored else 0,
         cfg=cfg,
     )
+    readiness["first_entry_scored"] = len(first_scored)
+    readiness["recommit_scored"] = len(recommit_scored)
     return {
         "schema_version": 1,
         "track_id": track_id,
@@ -511,8 +555,14 @@ def build_entry_dca_review(
         "generated_at": datetime.now(UTC).isoformat(),
         "open_count": len(open_rows),
         "closed_count": len(closed),
-        "scored_count": len(scored),
-        "any_de_risk_count": sum(1 for row in scored if row.get("any_de_risk")),
+        "scored_count": len(first_scored),
+        "scored_count_all": len(scored),
+        "recommit_scored_count": len(recommit_scored),
+        "entry_kind_counts": {
+            ENTRY_KIND_FIRST: len(first_scored),
+            ENTRY_KIND_RECOMMIT: len(recommit_scored),
+        },
+        "any_de_risk_count": sum(1 for row in first_scored if row.get("any_de_risk")),
         "winning_cadence_counts": winner_counts,
         "cadence_stats": cadence_stats,
         "readiness": readiness,
@@ -536,6 +586,8 @@ def run_entry_dca_overlay_pass(
     buy_cost_pct: float,
     as_of: str,
     cfg: EntryDcaConfig | None = None,
+    alumni_tickers: set[str] | None = None,
+    history_trades: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Ingest new entries, mark open episodes, persist store + review."""
     cfg = cfg or EntryDcaConfig()
@@ -543,6 +595,8 @@ def run_entry_dca_overlay_pass(
     store_path = output_dir / EPISODES_FILENAME
     review_path = output_dir / REVIEW_FILENAME
     store = load_entry_dca_store(store_path)
+    alumni = set(alumni_tickers or ())
+    alumni |= alumni_tickers_from_trades(history_trades)
     added = ingest_new_entries(
         store,
         track_id=track_id,
@@ -551,6 +605,7 @@ def run_entry_dca_overlay_pass(
         candidates=candidates,
         buy_cost_pct=buy_cost_pct,
         as_of=as_of,
+        alumni_tickers=alumni,
     )
     progress = update_open_episodes(
         store,
@@ -580,6 +635,7 @@ def summarize_learning_tracks_entry_dca(base_dir: Path) -> dict[str, Any]:
 
     closed = 0
     scored = 0
+    recommit_scored = 0
     de_risk = 0
     winner_counts: dict[str, int] = {}
     tracks_with_closed = 0
@@ -588,6 +644,7 @@ def summarize_learning_tracks_entry_dca(base_dir: Path) -> dict[str, Any]:
             continue
         closed += int(review.get("closed_count") or 0)
         scored += int(review.get("scored_count") or 0)
+        recommit_scored += int(review.get("recommit_scored_count") or 0)
         de_risk += int(review.get("any_de_risk_count") or 0)
         if int(review.get("scored_count") or 0) > 0:
             tracks_with_closed += 1
@@ -615,6 +672,7 @@ def summarize_learning_tracks_entry_dca(base_dir: Path) -> dict[str, Any]:
         "tracks": tracks,
         "closed_count": closed,
         "scored_count": scored,
+        "recommit_scored_count": recommit_scored,
         "any_de_risk_count": de_risk,
         "tracks_with_closed": tracks_with_closed,
         "winning_cadence_counts": winner_counts,
@@ -636,6 +694,9 @@ __all__ = [
     "ROLLUP_FILENAME",
     "DcaCadence",
     "EntryDcaConfig",
+    "ENTRY_KIND_FIRST",
+    "ENTRY_KIND_RECOMMIT",
+    "alumni_tickers_from_trades",
     "assess_framework_readiness",
     "build_entry_dca_review",
     "framework_metadata",

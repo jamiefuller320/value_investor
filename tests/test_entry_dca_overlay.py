@@ -10,6 +10,7 @@ from value_investor.entry_dca_overlay import (
     DcaCadence,
     EntryDcaConfig,
     assess_framework_readiness,
+    build_entry_dca_review,
     ingest_new_entries,
     run_entry_dca_overlay_pass,
     score_cadence,
@@ -45,6 +46,7 @@ def test_ingest_opens_episode_only_for_new_sleeves():
     assert added == 1
     episode = store["episodes"][0]
     assert episode["lifecycle_stage"] == "starter"
+    assert episode["entry_kind"] == "first_entry"
     assert episode["status"] == "open"
     assert episode["conviction_score"] == 0.7
 
@@ -70,6 +72,53 @@ def test_ingest_opens_episode_only_for_new_sleeves():
     )
     # Open episode already exists; also held — still skip.
     assert skipped_top_up == 0
+
+
+def test_ingest_tags_recommit_after_prior_sell():
+    store: dict = {"episodes": []}
+    ingest_new_entries(
+        store,
+        track_id="rules",
+        trades=[_new_buy_trade()],
+        holdings_before=[],
+        candidates=[],
+        buy_cost_pct=0.03,
+        as_of="2026-09-01T09:15:00+01:00",
+        alumni_tickers={"AAA.L"},
+    )
+    episode = store["episodes"][0]
+    assert episode["entry_kind"] == "recommit"
+    assert episode["lifecycle_stage"] == "recommit"
+
+
+def test_cadence_review_ranks_first_entry_only():
+    store = {
+        "episodes": [
+            {
+                "status": "closed",
+                "entry_kind": "first_entry",
+                "any_de_risk": True,
+                "winning_cadence": "dca_2x_weekly",
+                "cadence_scores": [
+                    {"id": "dca_2x_weekly", "scored": True, "end_value_delta": 10.0, "de_risk_gbp": 5.0},
+                ],
+            },
+            {
+                "status": "closed",
+                "entry_kind": "recommit",
+                "any_de_risk": True,
+                "winning_cadence": "dca_4x_weekly",
+                "cadence_scores": [
+                    {"id": "dca_4x_weekly", "scored": True, "end_value_delta": 99.0, "de_risk_gbp": 9.0},
+                ],
+            },
+        ]
+    }
+    review = build_entry_dca_review(store, track_id="rules")
+    assert review["scored_count"] == 1
+    assert review["recommit_scored_count"] == 1
+    assert review["winning_cadence_counts"] == {"dca_2x_weekly": 1}
+    assert "dca_4x_weekly" not in review["winning_cadence_counts"]
 
 
 def test_dca_de_risks_when_price_drops_after_entry():

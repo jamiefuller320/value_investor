@@ -30,13 +30,21 @@ Canonical catalog: `value_investor.position_lifecycle.lifecycle_catalog()`.
 | **harvest** | Recycle gains without abandoning the thesis? | graduated skim urgency / gain floor |
 | **grace** | How long after leaving the target set? | exit-confirm screens, momentum grace, intact-thesis dampen |
 | **exit** | Rotate, recover, or cut a broken thesis? | thesis-broken priority, reentry cooldown; swap-score planned |
+| **recommit** | New buy *decision* on a name we already cycled? | Overlay tags `first_entry` vs `recommit` (cadence ranking uses first-entry only) |
 
 Every stage has ≥1 observing experiment. Planned factors activate when their
 `revisit_when` trigger fires — **do not spawn a new paper book per factor**.
 
 Diagnostic labels from `classify_lifecycle_phase()` (`prospect_ready`,
 `starter`, `build`, `full`, `harvest`, `grace`, `exit_pending`, …) collapse
-onto these seven stages via `stage_for_phase()`.
+onto these stages via `stage_for_phase()`.
+
+**Recommit is not a second DCA tranche.** Completing the original decided
+notional stays `build`. A second *trigger* — cooldown elapsed after an exit,
+or (later) an independent add after the first cycle is done — is a new
+decision. First-entry cadence stats exclude those episodes so they do not
+contaminate the model-independent overlay. Adding beyond the original sleeve
+while still held (pyramid) stays deferred.
 
 ## Model-independent DCA overlay
 

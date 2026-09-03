@@ -23,6 +23,7 @@ LIFECYCLE_STAGE_IDS = (
     "harvest",
     "grace",
     "exit",
+    "recommit",
 )
 
 # Map diagnostic labels from capital_allocation.classify_lifecycle_phase → stage.
@@ -38,6 +39,7 @@ PHASE_TO_STAGE: dict[str, str] = {
     "grace": "grace",
     "exit_pending": "exit",
     "exit_buffer": "exit",
+    "recommit": "recommit",
 }
 
 
@@ -312,6 +314,52 @@ def lifecycle_catalog() -> dict[str, Any]:
                         "status": "observing",
                         "experiment": "paper_churn.reentry_cooldown",
                         "artifact": "paper_fund.reentry_cooldown",
+                    },
+                ],
+            },
+            {
+                "id": "recommit",
+                "label": "Recommit (new buy trigger on a name we already cycled)",
+                "question": (
+                    "Is this a new decision — not a remaining DCA tranche — on a name "
+                    "we have already entered or exited?"
+                ),
+                "phase_labels": ["recommit"],
+                "factors": [
+                    {
+                        "id": "entry_kind_tag",
+                        "question": (
+                            "Can we keep first-entry cadence evidence uncontaminated "
+                            "by tagging recommit episodes separately?"
+                        ),
+                        "status": "observing",
+                        "experiment": "entry_dca_overlay",
+                        "artifact": "learning_tracks_entry_dca.json",
+                        "model_independent": True,
+                    },
+                    {
+                        "id": "prior_cycle_outcome",
+                        "question": "Does the previous cycle's result (winner/loser/thesis) change whether we recommit?",
+                        "status": "planned",
+                        "experiment": "entry_dca_overlay",
+                        "artifact": None,
+                        "revisit_when": "entry_dca_overlay has >=8 scored recommit episodes",
+                    },
+                    {
+                        "id": "recommit_size",
+                        "question": "Should a second cycle use a smaller starter than the first?",
+                        "status": "planned",
+                        "experiment": "entry_dca_overlay",
+                        "artifact": None,
+                        "revisit_when": "entry_dca_overlay ready_for_cadence_analysis on first_entry",
+                    },
+                    {
+                        "id": "held_addon_pyramid",
+                        "question": "Allow a second trigger to add beyond the original sleeve while still held?",
+                        "status": "deferred",
+                        "experiment": "entry_dca_overlay",
+                        "artifact": None,
+                        "revisit_when": "conviction_weighted_sizing active AND first-entry cadence ranked",
                     },
                 ],
             },
