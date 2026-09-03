@@ -127,8 +127,12 @@ def _sprint_stream_map(policy: dict[str, Any], dispatch: dict[str, Any]) -> dict
     streams: dict[str, int] = {}
     for stream, key in PARALLEL_SPRINT_POLICY_KEYS.items():
         listed = [str(m).strip() for m in _as_list(policy.get(key)) if str(m).strip()]
-        dispatch_key = "parallel_sprint_markets" if stream == 1 else f"parallel_sprint_{stream}_markets"
-        listed.extend(str(m).strip() for m in _as_list(dispatch.get(dispatch_key)) if str(m).strip())
+        dispatch_key = (
+            "parallel_sprint_markets" if stream == 1 else f"parallel_sprint_{stream}_markets"
+        )
+        listed.extend(
+            str(m).strip() for m in _as_list(dispatch.get(dispatch_key)) if str(m).strip()
+        )
         for market_id in listed:
             streams.setdefault(market_id, stream)
     return streams
@@ -376,7 +380,9 @@ def build_market_status(
         status = status_by_market.get(market_id) or {}
         if not status and market_id != LIVE_MARKET_ID:
             status = _coverage_from_manifest(library_root, market_id)
-        screen = None if market_id == LIVE_MARKET_ID else _load_screen_summary(library_root, market_id)
+        screen = (
+            None if market_id == LIVE_MARKET_ID else _load_screen_summary(library_root, market_id)
+        )
         dispatch_row = health_by_market.get(market_id) or {}
         phase_row = _slim_phase(phases_by_market.get(market_id))
         ingest, stream = _classify_ingest(
@@ -453,9 +459,7 @@ def build_market_status(
                 "signal_counts": signal_counts,
                 "shortlist_count": shortlist_count,
                 "strong_buy": _int(
-                    (screen or {}).get("strong_buy")
-                    if screen
-                    else signal_counts.get("strong_buy")
+                    (screen or {}).get("strong_buy") if screen else signal_counts.get("strong_buy")
                 ),
                 "buy": _int((screen or {}).get("buy") if screen else signal_counts.get("buy")),
                 "learning_phase": current_phase,

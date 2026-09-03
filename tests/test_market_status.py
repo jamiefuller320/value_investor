@@ -185,7 +185,10 @@ def test_build_market_status_classifies_ingest_and_signals(tmp_path: Path):
         library_root=library,
         policy_path=library / "policy.json",
         dispatch_path=library / "euro_ingest_dispatch.json",
-        live_meta={"company_count": 249, "signal_counts": {"strong_buy": 16, "buy": 47, "hold": 142}},
+        live_meta={
+            "company_count": 249,
+            "signal_counts": {"strong_buy": 16, "buy": 47, "hold": 142},
+        },
         live_signal_counts={"strong_buy": 16, "buy": 47, "hold": 142, "avoid": 43},
         live_run_at="2026-09-03T09:00:00+00:00",
     )
