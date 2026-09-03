@@ -7,7 +7,11 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
-from value_investor.data_library import DEFAULT_LIBRARY_ROOT, MARKET_REGISTRY
+from value_investor.data_library import (
+    DEFAULT_LIBRARY_ROOT,
+    MARKET_REGISTRY,
+    load_manifest,
+)
 from value_investor.library_ingest_dispatch import (
     DEFAULT_DISPATCH_PATH,
     MODE_MAINTENANCE,
@@ -210,6 +214,22 @@ def _slim_phase(raw: Any) -> dict[str, Any] | None:
     }
 
 
+def _coverage_from_manifest(library_root: Path, market_id: str) -> dict[str, Any]:
+    """Fill coverage/freshness when library_status.json omitted this market."""
+    try:
+        manifest = load_manifest(library_root, market_id)
+    except Exception:  # noqa: BLE001
+        return {}
+    if not isinstance(manifest, dict) or not manifest.get("ticker_count"):
+        return {}
+    return {
+        "ticker_count": manifest.get("ticker_count") or 0,
+        "coverage_pct": manifest.get("coverage_pct"),
+        "last_constituents_refresh": manifest.get("last_constituents_refresh"),
+        "last_metrics_refresh": manifest.get("last_metrics_refresh"),
+    }
+
+
 def _load_screen_summary(library_root: Path, market_id: str) -> dict[str, Any] | None:
     path = screen_dir_for(library_root, market_id) / "latest_summary.json"
     raw = _safe_read(path)
@@ -354,6 +374,8 @@ def build_market_status(
     markets: list[dict[str, Any]] = []
     for market_id, spec in MARKET_REGISTRY.items():
         status = status_by_market.get(market_id) or {}
+        if not status and market_id != LIVE_MARKET_ID:
+            status = _coverage_from_manifest(library_root, market_id)
         screen = None if market_id == LIVE_MARKET_ID else _load_screen_summary(library_root, market_id)
         dispatch_row = health_by_market.get(market_id) or {}
         phase_row = _slim_phase(phases_by_market.get(market_id))

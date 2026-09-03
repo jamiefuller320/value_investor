@@ -150,6 +150,16 @@ def _seed_library(root: Path) -> Path:
         compact=False,
     )
     write_json(
+        root / "markets" / "aim" / "manifest.json",
+        {
+            "ticker_count": 40,
+            "coverage_count": 38,
+            "coverage_pct": 0.95,
+            "last_metrics_refresh": "2026-09-01T08:00:00+00:00",
+        },
+        compact=False,
+    )
+    write_json(
         root / "markets" / "sp500" / "screen" / "latest_summary.json",
         {
             "market": "sp500",
@@ -216,6 +226,11 @@ def test_build_market_status_classifies_ingest_and_signals(tmp_path: Path):
     graduated = _by_id(payload, "nasdaq100")
     assert graduated["ingest"] == INGEST_MAINTENANCE
     assert graduated["is_graduated"] is True
+
+    from_manifest = _by_id(payload, "aim")
+    assert from_manifest["coverage_pct"] == 0.95
+    assert from_manifest["ticker_count"] == 40
+    assert from_manifest["last_metrics_refresh"] == "2026-09-01T08:00:00+00:00"
 
     assert payload["markets"][0]["market_id"] == LIVE_MARKET_ID
     assert payload["markets"][1]["market_id"] == "euro_depth"
