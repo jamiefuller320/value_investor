@@ -30,6 +30,7 @@ def _round_price(value: Any) -> float | None:
         return None
     return round(number, 2)
 
+
 REVIEW_FILENAME = "chart_outcome_review.json"
 REVIEW_MD_FILENAME = "chart_outcome_review.md"
 
@@ -106,12 +107,12 @@ def score_chart_payload(payload: dict[str, Any]) -> dict[str, Any]:
         else:
             closes.append(price)
     pairs = [
-        (date, close)
-        for date, close in zip(dates, closes, strict=False)
-        if date and close == close
+        (date, close) for date, close in zip(dates, closes, strict=False) if date and close == close
     ]
     since = _as_date(payload.get("initial_levels_as_of") or payload.get("signal_since"))
-    initial = payload.get("initial_levels") if isinstance(payload.get("initial_levels"), dict) else {}
+    initial = (
+        payload.get("initial_levels") if isinstance(payload.get("initial_levels"), dict) else {}
+    )
     entry = _round_price((initial or {}).get("last"))
     after = [(date, close) for date, close in pairs if not since or date >= since]
     if entry is None and after:
@@ -150,7 +151,9 @@ def score_chart_payload(payload: dict[str, Any]) -> dict[str, Any]:
         "target_hit": target_hit,
         "stop_date": _as_date(stop.get("date")),
         "target_date": _as_date(target.get("date")),
-        "days_to_target": _days_between(since, _as_date(target.get("date"))) if target_hit else None,
+        "days_to_target": _days_between(since, _as_date(target.get("date")))
+        if target_hit
+        else None,
         "bars_since": len(after),
         "has_initial_levels": bool(initial),
         "outcome": outcome,
