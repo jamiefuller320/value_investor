@@ -56,14 +56,14 @@ function ensureChartDialog() {
   return document.getElementById("chart-dialog");
 }
 
-function renderPriceChartSvg(payload) {
+function renderPriceChartSvg(payload, levelsOverride) {
   const dates = payload.dates || [];
   const closes = payload.closes || [];
   if (!dates.length || dates.length !== closes.length) {
     return `<p class="muted">No price series available.</p>`;
   }
 
-  const levels = payload.levels || {};
+  const levels = { ...(levelsOverride || payload.levels || {}) };
   const activeLevels = Object.entries(CHART_LEVEL_STYLES).filter(([key]) => levels[key] != null);
   const longestLabel = activeLevels.reduce((max, [, style]) => {
     const sample = `${style.label}`;
@@ -201,6 +201,88 @@ function levelsTableHtml(levels) {
     </div>`;
 }
 
+function crossingDirectionLabel(direction) {
+  if (direction === "up") return "broke above";
+  if (direction === "down") return "broke below";
+  return "—";
+}
+
+function crossingsTableHtml(crossings) {
+  if (!Array.isArray(crossings) || !crossings.length) return "";
+  const rows = crossings
+    .map((row) => {
+      const style = CHART_LEVEL_STYLES[row.key] || { color: "#64748b" };
+      return `<tr>
+        <td><span class="chart-legend-swatch" style="background:${style.color}"></span> ${esc(row.label || row.key)}</td>
+        <td>${formatChartPrice(row.price)}</td>
+        <td>${row.date ? esc(row.date) : "—"}</td>
+        <td>${esc(crossingDirectionLabel(row.direction))}</td>
+      </tr>`;
+    })
+    .join("");
+  return `
+    <div class="table-wrap chart-crossings-table">
+      <h3 class="chart-crossings-heading">Initial levels crossed</h3>
+      <p class="small muted">First daily close after the recommendation that crossed each frozen level.</p>
+      <table>
+        <thead><tr><th>Level</th><th>Initial</th><th>First crossed</th><th>Direction</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+function displayLevelsForSource(payload, source) {
+  const current = payload.levels || {};
+  if (source !== "initial" || !payload.initial_levels) return current;
+  return {
+    ...payload.initial_levels,
+    last: current.last ?? payload.initial_levels.last,
+  };
+}
+
+function renderChartBody(payload, report, source) {
+  const levels = displayLevelsForSource(payload, source);
+  const levelsAsOf = (payload.levels_as_of || payload.as_of || "").slice(0, 10);
+  const initialAsOf = (payload.initial_levels_as_of || payload.signal_since || "").slice(0, 10);
+  const signalSince = (payload.signal_since || "").slice(0, 10);
+  const usingInitial = source === "initial" && payload.initial_levels;
+  const planHint = !usingInitial && report.trade_plan?.trade_plan_summary
+    ? `<p class="small muted">${esc(report.trade_plan.trade_plan_summary)}</p>`
+    : "";
+  const asOfLabel = usingInitial ? initialAsOf : levelsAsOf;
+  const levelsHint = asOfLabel
+    ? `<p class="small muted">${
+        usingInitial
+          ? `Trade levels / SMAs frozen at the initial recommendation (${esc(asOfLabel)}). Last is the latest close so you can see what has played out.`
+          : `Trade levels / SMAs from the latest screen (${esc(levelsAsOf)}).`
+      }${
+        signalSince
+          ? ` Vertical line marks current signal since ${esc(signalSince)}.`
+          : ""
+      }</p>`
+    : "";
+  const hasInitial = Boolean(payload.initial_levels);
+  const toggle = `
+    <div class="chart-level-toggle" role="group" aria-label="Level source">
+      <button type="button" class="btn chart-toggle${source === "current" ? " is-active" : ""}" data-level-source="current">Latest screen</button>
+      <button type="button" class="btn chart-toggle${source === "initial" ? " is-active" : ""}" data-level-source="initial"${hasInitial ? "" : " disabled"} title="${
+        hasInitial ? "Show levels from the first week of this signal" : "No initial recommendation snapshot yet"
+      }">Initial recommendation</button>
+    </div>`;
+  return `
+    <p class="small muted">
+      ${esc(payload.period || "1y")} daily closes · as of ${esc((payload.as_of || "").slice(0, 10) || "—")}
+      ${payload.signal ? ` · ${esc(String(payload.signal).replace(/_/g, " "))}` : ""}
+    </p>
+    ${toggle}
+    ${planHint}
+    ${levelsHint}
+    ${renderPriceChartSvg(payload, levels)}
+    ${levelsTableHtml(levels)}
+    ${hasInitial ? crossingsTableHtml(payload.level_crossings || []) : ""}
+  `;
+}
+
 async function openPriceChart(report) {
   const dialog = ensureChartDialog();
   const title = document.getElementById("chart-title");
@@ -219,30 +301,17 @@ async function openPriceChart(report) {
     const response = await fetch(path);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const payload = await response.json();
-    const levelsAsOf = (payload.levels_as_of || payload.as_of || "").slice(0, 10);
-    const signalSince = (payload.signal_since || "").slice(0, 10);
-    const planHint = report.trade_plan?.trade_plan_summary
-      ? `<p class="small muted">${esc(report.trade_plan.trade_plan_summary)}</p>`
-      : "";
-    const levelsHint = levelsAsOf
-      ? `<p class="small muted">Trade levels / SMAs from the latest screen (${esc(levelsAsOf)})${
-          signalSince && signalSince !== levelsAsOf
-            ? ` · vertical line marks current signal since ${esc(signalSince)}`
-            : signalSince
-              ? ` · vertical line marks signal date`
-              : ""
-        }. Levels refresh each weekly screen; they are not frozen at first recommendation.</p>`
-      : "";
-    body.innerHTML = `
-      <p class="small muted">
-        ${esc(payload.period || "1y")} daily closes · as of ${esc((payload.as_of || "").slice(0, 10) || "—")}
-        ${payload.signal ? ` · ${esc(String(payload.signal).replace(/_/g, " "))}` : ""}
-      </p>
-      ${planHint}
-      ${levelsHint}
-      ${renderPriceChartSvg(payload)}
-      ${levelsTableHtml(payload.levels || {})}
-    `;
+    const defaultSource = "current";
+    const render = (source) => {
+      body.innerHTML = renderChartBody(payload, report, source);
+      body.querySelectorAll("[data-level-source]").forEach((button) => {
+        button.addEventListener("click", () => {
+          if (button.disabled) return;
+          render(button.dataset.levelSource);
+        });
+      });
+    };
+    render(defaultSource);
   } catch (err) {
     body.innerHTML = `
       <p class="muted">Could not load price chart (${esc(err.message)}).</p>

@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-02T23:27:11+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T06:53:01+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -110,6 +110,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N53 | **Mirror every Suite A shadow into Suite B (full 2x fork)** | Do not duplicate all calibrated/exclusion/exploratory shadows onto fair costs. Suite B should validate promotion candidates (start AI+rules); full fork doubles books, burns the ~5 experiment / ~4 shadow budget, and thins attention without much extra signal. | Suite B AI+rules endurance is trusted and human triage load is light |
 | N54 | **Do not treat Suite A conviction floors as Suite B policy** | High min_conviction discovered under 3% stress is a churn-survival filter for relative AI-vs-rules assessment. With fair costs, the same floor can starve deployable edge. Keep A floors on A; let B run suite-local conviction (including easing) and only promote floors that still help after fair costs. | Someone proposes copying ai_judgment min_conviction onto ai_judgment_fair as a permanent lock, or using A epoch success alone to claim deployable conviction policy |
 | N55 | **Live sentiment scoring from mined news phrases** | Do not wire bag-of-words or lexicon sentiment into screen weights or paper knobs. Open-source news + phrase mining may later inform research memos or event tags; treating it as a quant model remains premature (extends N6). | Phrase-trajectory panel shows out-of-sample lift on trajectory flips, and analysis-review proposes a gated experiment |
+| N57 | **Do not add level-crossings as a screening model input** | First-touch stop/target/SMA crosses are subsequent path after a buy-tier signal. Feeding them into Graham/quality/GARP/risk pass-fail would mix execution outcomes into point-in-time value identity and leak post-recommendation price action. | Only if a dedicated technical/timing family is designed with strict point-in-time features (RSI/SMA at screen date), not path-after-signal crossings. |
 
 ---
 
@@ -147,6 +148,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L204 | **Per-ticker AIM stamp exemption in cost model** | AIM row currently keeps UK stamp on for conservative learning; many AIM names are stamp-exempt. Tighten when per-ticker exemption data is reliable. | Trading AIM paper/live or when HMRC/T212 exemption list is wired |
 | L220 | **Selective A→B mirror for recommend-state experiments only** | Once Suite B base books exist, optionally spawn fair-cost twins only for Suite A experiments that reach recommend / human-ack — not for every open shadow. Keeps discover/validate pipeline without a full fork. | Suite B AI+rules warm-start books are running and experiment_assessment has stable recommend rows |
 | L221 | **Suite-aware cost_drag thresholds for conviction proposals** | decision_review HIGH_COST_DRAG (4%) and auto-raise min_conviction were tuned for Suite A 3% stress. Under Suite B fair costs (~0.55% RT), the same threshold rarely fires and may over-filter if A knobs are copied. Split proposal thresholds / idle-cash ease rules by is_fair_cost_lab so B can explore trade intensity while A stays defensive. | Suite B has enough epoch marks to compare cost_drag and trade_count vs Suite A under the same parent knobs, or decision-review starts proposing contradictory conviction moves across suites |
+| L242 | **Use initial-level crossings as paper/learning outcome labels** | Once live signal_history is stable, attach first-cross dates (core filled, stop hit, target hit, SMA200 lost) to trajectory_evidence and decision-review so the technical paper track can be scored against frozen entry levels rather than refreshed weekly plans. | After several Sunday screens have persisted signal_history and chart initial_levels, and the technical paper track is being reviewed for excess after costs. |
 
 ### Universe & data
 
@@ -254,7 +256,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L236 | **Gap-fill: scoring — Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted** | Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted FCF, and screen TTM diverge by >15% AND profit-to-cash falls >15pp year-on-year (ITV: 65% vs 83%, three-way FCF mismatch). | After next weekly email gap-fill pass confirms the gap persists |
 | L238 | **Human FCF bridge override for lease/M&A definition fights** | Auto majority + filing fallback covers ordinary screen/filing/company mismatches. Keep optional fcf_bridge.json overrides for cases where lease accounting, M&A cash classification, or one-offs make the majority/filing pick wrong. | After auto FCF policy has run through at least one results season and buy-tier action notes still look wrong on specific names |
 | L239 | **Metric change without narrative mention trap** | Detect significant YoY FCF (and later earnings/div) moves when cached RNS/filing body lacks related commentary keywords; start observe-only via so_what_closure. Reuse load_filing_bodies_for_ticker + reconcile_fcf YoY, not action_note markers. | After FCF basis enforcement/so-what loop is stable and filing-body coverage is high enough on buy-tier names |
-| L241 | **Freeze trade-plan chart levels at first recommendation** | Today charts refresh core/stop/target/SMA levels each weekly screen. Optionally snapshot levels from the first week of a buy-tier streak and keep those fixed so subsequent price action is judged against the original recommendation levels. | After live signal_history persistence has proven stable for several Sunday screens, and users still want frozen entry levels on charts. |
 
 ### Ops / reliability
 
