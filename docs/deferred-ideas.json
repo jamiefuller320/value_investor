@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-03T06:43:59+00:00",
+  "updated_at": "2026-09-03T06:53:01+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4972,6 +4972,39 @@
       "source": "screener stability / chart marker conversation / PR 404",
       "added_at": "2026-09-02T23:27:11+00:00",
       "updated_at": "2026-09-03T06:43:59+00:00"
+    },
+    {
+      "id": "N57",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not add level-crossings as a screening model input",
+      "summary": "First-touch stop/target/SMA crosses are subsequent path after a buy-tier signal. Feeding them into Graham/quality/GARP/risk pass-fail would mix execution outcomes into point-in-time value identity and leak post-recommendation price action.",
+      "revisit_when": "Only if a dedicated technical/timing family is designed with strict point-in-time features (RSI/SMA at screen date), not path-after-signal crossings.",
+      "tags": [
+        "scoring",
+        "technicals",
+        "look-ahead"
+      ],
+      "status": "open",
+      "source": "threshold crossing vs model analysis question",
+      "added_at": "2026-09-03T06:53:01+00:00"
+    },
+    {
+      "id": "L242",
+      "category": "later",
+      "section": "learning",
+      "title": "Use initial-level crossings as paper/learning outcome labels",
+      "summary": "Once live signal_history is stable, attach first-cross dates (core filled, stop hit, target hit, SMA200 lost) to trajectory_evidence and decision-review so the technical paper track can be scored against frozen entry levels rather than refreshed weekly plans.",
+      "revisit_when": "After several Sunday screens have persisted signal_history and chart initial_levels, and the technical paper track is being reviewed for excess after costs.",
+      "tags": [
+        "charts",
+        "trade-plan",
+        "learning",
+        "trajectory"
+      ],
+      "status": "open",
+      "source": "threshold crossing vs model analysis question",
+      "added_at": "2026-09-03T06:53:01+00:00"
     }
   ],
   "fragments": [
