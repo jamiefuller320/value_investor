@@ -102,6 +102,11 @@ Per track (`docs/data/paper_automation/<track_id>/`):
 
 Rollup: `docs/data/paper_automation/learning_tracks_entry_dca.json`
 
+Weekday `paper-auto.yml` must **publish** these files (and the per-track
+stores) back into `docs/data/paper_automation`. If they stay only under
+CI `output/`, the next run starts with an empty overlay and episodes never
+accumulate.
+
 Also folded into:
 
 - `experiment_assessment.json` as kind `lifecycle_overlay` (`entry_dca_overlay`)

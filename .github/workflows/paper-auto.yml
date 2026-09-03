@@ -36,23 +36,16 @@ jobs:
 
       - name: Seed paper automation state from dashboard data
         run: |
-          mkdir -p output/paper_automation output/paper_automation/ai_judgment output/paper_automation/momentum_grace output/paper_automation/ai_judgment_calibrated
-          if [ -d docs/data/paper_automation ]; then
-            cp -f docs/data/paper_automation/*.json output/paper_automation/ 2>/dev/null || true
-          fi
-          if [ -d docs/data/paper_automation/ai_judgment ]; then
-            cp -f docs/data/paper_automation/ai_judgment/*.json output/paper_automation/ai_judgment/ 2>/dev/null || true
-          fi
-          if [ -d docs/data/paper_automation/momentum_grace ]; then
-            cp -f docs/data/paper_automation/momentum_grace/*.json output/paper_automation/momentum_grace/ 2>/dev/null || true
-          fi
-          # Competing calibrated shadows (rank 1 + r2/r3/…)
-          for src in docs/data/paper_automation/ai_judgment_calibrated*; do
-            [ -d "$src" ] || continue
-            name=$(basename "$src")
-            mkdir -p "output/paper_automation/$name"
-            cp -f "$src"/*.json "output/paper_automation/$name/" 2>/dev/null || true
-          done
+          python3 - <<'PY'
+          from pathlib import Path
+          from value_investor.paper_auto_publish import seed_paper_auto_state
+
+          copied = seed_paper_auto_state(
+              Path("docs/data/paper_automation"),
+              Path("output/paper_automation"),
+          )
+          print(f"Seeded {len(copied)} paper-auto json file(s)")
+          PY
 
       - name: Ensure calibrated AI-judgment shadow tracks
         run: |
@@ -202,7 +195,13 @@ jobs:
               except Exception as exc:  # noqa: BLE001
                   print(f"automation status refresh skipped: {exc}")
               latest.write_text(json.dumps(bundle), encoding="utf-8")
-          print("Published paper automation (+ AI judgment track) artifacts")
+          from value_investor.paper_auto_publish import publish_overlay_artifacts
+
+          overlay = publish_overlay_artifacts(src, dest)
+          print(
+              "Published paper automation (+ AI judgment track) artifacts; "
+              f"overlays={len(overlay)}"
+          )
           PY
 
       - name: Refresh unified experiment assessment ledger
