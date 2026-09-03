@@ -153,6 +153,25 @@ def test_planned_sources_includes_ir_presentation_for_fgp_l():
     assert fetch_filings_ir_allowlist("FGP.L")
 
 
+def test_planned_sources_includes_ir_presentation_for_ebo_ax():
+    from value_investor.research.filings import fetch_filings_ir_allowlist
+
+    inventory = {
+        "thin": ["filings_bodies"],
+        "filings_summary": {"with_body": 0, "total": 0},
+    }
+    planned = _planned_sources_for_ticker(
+        ticker="EBO.AX",
+        market="asx200",
+        inventory=inventory,
+        ingest_suggestions=[],
+        filings_with_body=0,
+    )
+    planned_ids = {row["id"] for row in planned}
+    assert "company_ir_presentation" in planned_ids
+    assert len(fetch_filings_ir_allowlist("EBO.AX")) >= 4
+
+
 def test_select_ingest_improvement_targets_prioritises_missing_annual_bodies(tmp_path: Path):
     output_dir = tmp_path / "output"
     sources = output_dir / "research" / "MEGP.L" / "sources" / "filings"

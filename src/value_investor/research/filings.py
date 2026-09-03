@@ -212,6 +212,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.telekom.com/resource/blob/1101986/912628a6116bb7b1ecdfc36b578d66ef/dt-25-annual-report-data.pdf",
         "https://www.telekom.com/en/investor-relations/publications",
     ],
+    # asx200 buy-tier deepen — unmeasured EBO.AX (Markit latest-five feed is capital-change only).
+    "EBO.AX": [
+        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-02984095-2A1616605",
+        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03060541-2A1655632",
+        "https://announcements.asx.com.au/asxpdf/20250827/pdf/06nczkd8fndm9c.pdf",
+        "https://announcements.asx.com.au/asxpdf/20260225/pdf/06wpt1yrhc6dtq.pdf",
+    ],
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
