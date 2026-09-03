@@ -173,7 +173,11 @@ def assess_complexity_budget(
         "warn_discretionary_tasks": warn_tasks,
         "warn_expensive_shadows": warn_shadows,
         "over_budget": over_tasks or over_shadows,
-        "needs_agent_triage": over_tasks or over_shadows or warn_tasks or warn_shadows or coverage_gap,
+        "needs_agent_triage": over_tasks
+        or over_shadows
+        or warn_tasks
+        or warn_shadows
+        or coverage_gap,
         "guidance": (
             "Do not retire lifecycle coverage or always-on overlays to meet a cap. "
             "Park losing discretionary tasks (keep cheap marks) or merge siblings. "
