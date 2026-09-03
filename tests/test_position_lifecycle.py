@@ -26,6 +26,9 @@ def test_dca_factors_are_model_independent():
     assert starter["entry_dca_cadence"]["status"] == "observing"
     build = {row["id"]: row for row in factors_for_stage("build")}
     assert build["add_cadence"]["model_independent"] is True
+    assert build["add_only_if_cheaper"]["status"] == "planned"
+    assert build["skim_linked_remaining_adds"]["status"] == "planned"
+    assert build["skim_linked_remaining_adds"]["model_independent"] is True
 
 
 def test_stage_for_phase_collapses_labels():

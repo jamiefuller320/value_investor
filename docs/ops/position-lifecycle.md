@@ -60,6 +60,15 @@ For each **new sleeve** (buy of a ticker not held at the start of the pass):
 3. Compare **peak adverse £** (de-risk), **average fill**, and **end value
    after extra buy costs**.
 
+Promotion gate for any cadence (or later skim-linked variant) is **net end
+value after costs**. Peak £ de-risk is a diagnostic for loss tolerance, not a
+second objective. Do **not** lot-link entry blocks to tactical sells: a skim
+does not lower remaining `avg_cost` (weighted average is unchanged), and a
+sell+rebuy clip must clear round-trip friction (3% stress per side on Suite A;
+~0.55% fair UK including stamp on the rebuy). The material interaction, if
+any, is already parked as planned factor `skim_linked_remaining_adds`: pause
+or cheaper-only remaining adds after a harvest during build.
+
 Cadences are watched on rules, AI judgment, graduated allocation, and other
 tracks alike. If the same cadence leads on ≥2 tracks, the rollup sets
 `model_independent_hint`.

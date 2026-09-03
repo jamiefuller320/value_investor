@@ -172,6 +172,22 @@ def lifecycle_catalog() -> dict[str, Any]:
                         "revisit_when": "entry_dca_overlay closed_episodes >= 12",
                     },
                     {
+                        "id": "skim_linked_remaining_adds",
+                        "question": (
+                            "If a harvest/tactical skim fires during build, pause remaining "
+                            "tranches or recycle proceeds only when the mark is below the "
+                            "first fill? Do not lot-link blocks — net after costs is the gate."
+                        ),
+                        "status": "planned",
+                        "experiment": "entry_dca_overlay",
+                        "artifact": None,
+                        "model_independent": True,
+                        "revisit_when": (
+                            "entry_dca_overlay ready_for_cadence_analysis AND graduated "
+                            "harvest skims occur during open starter/build windows"
+                        ),
+                    },
+                    {
                         "id": "add_only_if_thesis_intact",
                         "question": "Skip remaining adds when hypothesis integrity is weakening/broken?",
                         "status": "planned",
