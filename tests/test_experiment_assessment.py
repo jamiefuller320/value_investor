@@ -209,3 +209,88 @@ def test_refresh_preserves_and_sets_initiated_at(tmp_path: Path):
     payload = refresh_experiment_assessment(data_dir, paper_root=paper_root)
     row = next(r for r in payload["experiments"] if r["experiment_id"] == "ai_judgment_calibrated")
     assert row["initiated_at"] == prior_time
+
+
+def test_refresh_skips_done_analysis_tasks(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    paper_root = data_dir / "paper_automation"
+    paper_root.mkdir(parents=True)
+    (data_dir / "analysis_tasks.json").write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "ana-20260728-01",
+                        "area": "offline_sim",
+                        "title": "Seed second weekly run",
+                        "status": "done",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = refresh_experiment_assessment(data_dir, paper_root=paper_root)
+    ids = [row["experiment_id"] for row in payload["experiments"]]
+    assert "ana-20260728-01" not in ids
+
+
+def test_refresh_watch_disposition_is_not_recommend(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    paper_root = data_dir / "paper_automation"
+    paper_root.mkdir(parents=True)
+    (data_dir / "learning_director_tasks.json").write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "ldr-20260823-02",
+                        "area": "monitoring",
+                        "title": "Watch exclusion u4",
+                        "status": "accepted",
+                        "evidence": {
+                            "human_disposition": "watch",
+                            "assessment_recommend": True,
+                        },
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    (paper_root / "learning_tracks_exit_shadow.json").write_text(
+        json.dumps({"tracks": {}, "readiness": {"ready_for_probability_analysis": True}}),
+        encoding="utf-8",
+    )
+    payload = refresh_experiment_assessment(data_dir, paper_root=paper_root, sync_task_status=True)
+    row = next(r for r in payload["experiments"] if r["experiment_id"] == "ldr-20260823-02")
+    assert row["status"] == "continue"
+    assert row["human_ack_required"] is False
+    assert row["experiment_id"] not in {r["experiment_id"] for r in payload["recommendations"]}
+    synced = json.loads((data_dir / "learning_director_tasks.json").read_text())["tasks"][0]
+    assert synced["evidence"]["assessment_status"] == "continue"
+    assert "assessment_recommend" not in synced["evidence"]
+
+
+def test_refresh_skips_cancelled_analysis_tasks(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    paper_root = data_dir / "paper_automation"
+    paper_root.mkdir(parents=True)
+    (data_dir / "analysis_tasks.json").write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "ana-20260728-02",
+                        "area": "paper_knobs",
+                        "title": "Pre vs post knob counterfactual",
+                        "status": "cancelled",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = refresh_experiment_assessment(data_dir, paper_root=paper_root)
+    ids = [row["experiment_id"] for row in payload["experiments"]]
+    assert "ana-20260728-02" not in ids

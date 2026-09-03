@@ -94,6 +94,32 @@ def test_compile_paper_learning_tasks_filters_areas(tmp_path: Path):
     assert compiled["tasks"][0]["promote_to"] == "manual"
 
 
+def test_compile_paper_learning_tasks_drops_done(tmp_path: Path):
+    review = parse_paper_learning_review(
+        "PROPOSED EXPERIMENTS\n1. [paper_churn] Tune hold buffer — less churn\n"
+    )
+    tasks_path = tmp_path / "paper_learning_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "plr-20260901-01",
+                        "area": "paper_churn",
+                        "title": "Raise min_rebalance_notional_gbp",
+                        "status": "cancelled",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    compiled = compile_paper_learning_tasks(review, run_stamp="20260903", tasks_path=tasks_path)
+    ids = [row["id"] for row in compiled["tasks"]]
+    assert "plr-20260901-01" not in ids
+    assert any(row["id"].startswith("plr-20260903-") for row in compiled["tasks"])
+
+
 def test_review_policy_defaults_enabled(tmp_path: Path):
     policy_path = tmp_path / "review_policy.json"
     policy = load_review_policy(policy_path)

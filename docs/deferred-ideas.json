@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-03T11:23:40+00:00",
+  "updated_at": "2026-09-03T11:43:27+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -5136,6 +5136,70 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a066f1-88cd-715d-a448-009a8cb953cb",
       "added_at": "2026-09-03T11:23:40+00:00"
+    },
+    {
+      "id": "L248",
+      "category": "later",
+      "section": "ops",
+      "title": "Auto-dedupe human-ack review-task wrappers on compile",
+      "summary": "Sunday compile can emit a second human-ack wrapper for an already-open analysis or paper-learning task. After the 2026-09-03 triage, teach compile to cite the canonical id instead of appending a duplicate.",
+      "revisit_when": "A Sunday compile re-adds a wrapper for ana-20260728-04, ldr-20260823-02, or plr-20260901-02",
+      "tags": [
+        "review-tasks",
+        "compile",
+        "dedupe"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06698-f813-7549-8552-e46f5f9e4acb",
+      "added_at": "2026-09-03T11:43:27+00:00"
+    },
+    {
+      "id": "L249",
+      "category": "later",
+      "section": "ops",
+      "title": "CLI to mark review tasks done or cancelled",
+      "summary": "Triage currently hand-edits analysis_tasks / paper_learning_tasks / learning_director_tasks JSON. A small ftse-* mark-done/cancel command would keep status, timestamps, and reasons consistent.",
+      "revisit_when": "The next review-queue triage needs more than a handful of status edits",
+      "tags": [
+        "review-tasks",
+        "cli",
+        "ops"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06698-f813-7549-8552-e46f5f9e4acb",
+      "added_at": "2026-09-03T11:43:27+00:00"
+    },
+    {
+      "id": "L250",
+      "category": "later",
+      "section": "learning",
+      "title": "Generalize adjacent-flip audit beyond IMB.L",
+      "summary": "The IMB.L audit was a one-ticker read of rebalance_log plus fund trades. A small CLI that classifies left-target-set flips (rank rotation vs floor vs signal downgrade) would scale when adjacent_flip_count rises again.",
+      "revisit_when": "Churn health shows adjacent_flip_count > 0 on a focus track in a weekly window",
+      "tags": [
+        "churn",
+        "adjacent-flip",
+        "audit"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06698-f813-7549-8552-e46f5f9e4acb",
+      "added_at": "2026-09-03T11:43:27+00:00"
+    },
+    {
+      "id": "L251",
+      "category": "later",
+      "section": "research",
+      "title": "Start quality-family avoid gate after timing overlay scores",
+      "summary": "Both scoring experiments are queued (eng-20260903-02 timing overlay, eng-20260903-03 quality-family avoid gate). Prefer implementing the hold\u2192buy / signal_unchanged overlay first; start the quality-family composite gate only after that overlay has a first observe-only score.",
+      "revisit_when": "eng-20260903-02 has a first observe-only score artifact, or a later review asks to start the quality gate earlier.",
+      "tags": [
+        "scoring",
+        "quality",
+        "engineering-queue"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06698-f813-7549-8552-e46f5f9e4acb",
+      "added_at": "2026-09-03T11:43:27+00:00"
     }
   ],
   "fragments": [

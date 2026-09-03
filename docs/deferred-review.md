@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T11:23:40+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T11:43:27+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -156,6 +156,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L243 | **Use giveback vs well-timed chart labels as analysis-review context** | After several Sunday chart-outcome refreshes, cite stable giveback versus well-timed cohorts in analysis-review as observe-only timing context. Keep this separate from feeding first-cross dates into decision-review (L242). | chart_outcome_review has at least 4 Sunday refreshes and giveback/well_timed counts remain populated |
 | L244 | **Chart-side drop-to-recovery metric on frozen entries** | For buy-tier charts, score max drop after the frozen recommendation close and whether/when price recovered through that entry (days underwater, recovered_to_entry). Distinct from paper hold-recovery, which only covers stressed sleeves. Use to judge short-term loss tolerance vs eventual success without retuning timing yet. | chart_outcome_review has at least 4 Sunday refreshes and several names have recovered through the frozen entry after a drawdown |
 | L245 | **Entry-timing overlay scored against missed eventual winners** | Later, a timing overlay might reduce mis-timed buys, but it must be measured against names that were underwater early and still worked. Do not tighten wait/accumulate from a mixed_no_terrible first month. Pair any timing experiment with a miss-cost / drop-to-recovery view. | drop-to-recovery or hold-recovery cohorts can split well-timed vs recovered-from-drawdown vs still-underwater on a multi-month window |
+| L250 | **Generalize adjacent-flip audit beyond IMB.L** | The IMB.L audit was a one-ticker read of rebalance_log plus fund trades. A small CLI that classifies left-target-set flips (rank rotation vs floor vs signal downgrade) would scale when adjacent_flip_count rises again. | Churn health shows adjacent_flip_count > 0 on a focus track in a weekly window |
 
 ### Universe & data
 
@@ -264,6 +265,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L238 | **Human FCF bridge override for lease/M&A definition fights** | Auto majority + filing fallback covers ordinary screen/filing/company mismatches. Keep optional fcf_bridge.json overrides for cases where lease accounting, M&A cash classification, or one-offs make the majority/filing pick wrong. | After auto FCF policy has run through at least one results season and buy-tier action notes still look wrong on specific names |
 | L239 | **Metric change without narrative mention trap** | Detect significant YoY FCF (and later earnings/div) moves when cached RNS/filing body lacks related commentary keywords; start observe-only via so_what_closure. Reuse load_filing_bodies_for_ticker + reconcile_fcf YoY, not action_note markers. | After FCF basis enforcement/so-what loop is stable and filing-body coverage is high enough on buy-tier names |
 | L246 | **Market status tile drill-down to library screener** | The Overview market status card shows signal mix and health; a later step could open the full offline screen-lite table for that market without changing the live FTSE screener. | After the market status grid has been used for a few Sunday reviews and a non-FTSE screen-lite table would save time vs opening library files. |
+| L251 | **Start quality-family avoid gate after timing overlay scores** | Both scoring experiments are queued (eng-20260903-02 timing overlay, eng-20260903-03 quality-family avoid gate). Prefer implementing the hold→buy / signal_unchanged overlay first; start the quality-family composite gate only after that overlay has a first observe-only score. | eng-20260903-02 has a first observe-only score artifact, or a later review asks to start the quality gate earlier. |
 
 ### Ops / reliability
 
@@ -311,6 +313,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L237 | **Expand so-what detectors beyond FCF** | Add more no-judgment enforcement detectors (cash conversion overlays, memo eligibility gates, stale research caps) to the so-what loop once FCF auto-queue proves stable in ops-monitor. | After so-what FCF auto_queue has run cleanly in production ops-monitor for several weeks |
 | L240 | **Token-free progress-report regenerate on Pages** | Pages Generate currently needs a browser-stored Actions:Write PAT (or Actions UI). A dedicated low-privilege relay or issue-form trigger would remove the PAT from localStorage. | After progress-report Pages generate is in regular use and PAT friction is annoying |
 | L247 | **On-click filing-health refresh for market status cards** | Detail cards currently use cached euro_ingest_dispatch filing health. A live re-snapshot on click would be fresher but is too expensive for a static Pages dashboard. | When the local dashboard API can serve a cheap per-market health endpoint, or dispatch snapshots are published more than once a day. |
+| L248 | **Auto-dedupe human-ack review-task wrappers on compile** | Sunday compile can emit a second human-ack wrapper for an already-open analysis or paper-learning task. After the 2026-09-03 triage, teach compile to cite the canonical id instead of appending a duplicate. | A Sunday compile re-adds a wrapper for ana-20260728-04, ldr-20260823-02, or plr-20260901-02 |
+| L249 | **CLI to mark review tasks done or cancelled** | Triage currently hand-edits analysis_tasks / paper_learning_tasks / learning_director_tasks JSON. A small ftse-* mark-done/cancel command would keep status, timestamps, and reasons consistent. | The next review-queue triage needs more than a handful of status edits |
 
 ---
 

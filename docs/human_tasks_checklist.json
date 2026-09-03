@@ -61,7 +61,7 @@
         {
           "id": "sunday-shadow-endurance",
           "title": "Review unified experiment assessment",
-          "summary": "Read experiment_assessment.json for continue/fail/recommend rows across calibration shadows, exclusion shadows, and open task queues. Drill into calibration_shadow_endurance.json for shadow detail.",
+          "summary": "Read experiment_assessment.json for continue/fail/recommend rows. After the 2026-09-03 human pass, task recommends should be empty: u4 and exit-shadow are watch, buffered-hold and IMB.L are done, scoring is on the engineering queue. Do not reopen cancelled N58/N59 knob rows. Drill into calibration_shadow_endurance.json for shadow detail.",
           "automated": false,
           "doc_path": "docs/ops/experiment-assessment.md",
           "doc_anchor": "human-gate"
@@ -109,7 +109,7 @@
         {
           "id": "sunday-analysis-tasks",
           "title": "Triage analysis_tasks experiments",
-          "summary": "Promote scoring/ingest candidates manually via ftse-analysis-review promote; keep paper_knobs and offline_sim experiments manual.",
+          "summary": "Scoring candidates are already queued as eng-20260903-02 (hold→buy / signal_unchanged) and eng-20260903-03 (quality-family avoid gate). Implement as observe-only overlays — do not mutate assign_signal() (N3). Keep paper_knobs and offline_sim experiments manual; do not revive cancelled N58/N59 knob counterfactuals.",
           "automated": false,
           "doc_path": "docs/ops/analysis-review.md",
           "doc_anchor": "manual-promotion-to-engineering"
@@ -125,7 +125,7 @@
         {
           "id": "sunday-triage-plr-director-tasks",
           "title": "Triage paper-learning and learning-director tasks",
-          "summary": "These queues have no promote CLI. Enact paper_churn/paper_knobs config probes manually, or mark done/cancelled. Prefer analysis-review for scoring/engineering.",
+          "summary": "These queues have no promote CLI. Remaining: watch u4 (ldr-20260823-02) and exit-shadow (ana-20260728-04); leave L111 replay as continue. Buffered-hold and IMB.L audits are done. Do not reopen duplicate human-ack wrappers. Prefer the engineering queue for the two scoring tasks.",
           "automated": false,
           "doc_path": "docs/ops/paper-learning-review.md",
           "doc_anchor": "enacting-proposed-experiments"
