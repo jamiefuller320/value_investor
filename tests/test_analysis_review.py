@@ -134,6 +134,29 @@ def test_build_analysis_payload_includes_trajectory_focus(tmp_path: Path):
         ),
         encoding="utf-8",
     )
+    (data_dir / "chart_outcome_review.json").write_text(
+        json.dumps(
+            {
+                "verdict": "mixed_no_terrible",
+                "verdict_label": "Mixed story — no terrible outcomes",
+                "headline": "Mixed story. 2 well timed; 0 stop hits.",
+                "counts": {
+                    "chart_count": 4,
+                    "well_timed": 2,
+                    "giveback": 1,
+                    "underwater": 1,
+                    "terrible": 0,
+                    "stop_hit": 0,
+                },
+                "stats": {"median_return": -0.003},
+                "well_timed": [{"ticker": "AEP.L", "return_since": 0.08, "outcome": "well_timed"}],
+                "weakest": [{"ticker": "JD.L", "return_since": -0.09, "outcome": "giveback"}],
+                "rows": [{"ticker": "AEP.L"}, {"ticker": "JD.L"}],
+                "note": "observe-only",
+            }
+        ),
+        encoding="utf-8",
+    )
     (data_dir / "loser_snapshot_cards.json").write_text(
         json.dumps(
             {
@@ -226,6 +249,10 @@ def test_build_analysis_payload_includes_trajectory_focus(tmp_path: Path):
     assert traj["labeled_event_count"] == 40
     assert traj["model_focus_candidates"]
     assert traj["model_focus_candidates"][0]["key"] == "hold->buy"
+    charts = payload["chart_outcome_review"]
+    assert charts["verdict"] == "mixed_no_terrible"
+    assert charts["observe_only"] is True
+    assert "rows" not in charts
     losers = payload["loser_snapshot_cards"]
     assert losers["card_count"] == 2
     assert losers["top_failed_families"][0][0] == "quality"

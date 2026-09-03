@@ -1025,6 +1025,92 @@ function renderScreener(data) {
   renderRows();
 }
 
+function chartOutcomePct(value) {
+  if (value == null || Number.isNaN(Number(value))) return "—";
+  const number = Number(value) * 100;
+  const formatted = `${number >= 0 ? "+" : ""}${number.toFixed(1)}%`;
+  return formatted;
+}
+
+function chartOutcomeBadge(outcome) {
+  const key = String(outcome || "insufficient_data").replace(/\s+/g, "_");
+  const badgeClass = {
+    well_timed: "badge-strong_buy",
+    intact_positive: "badge-buy",
+    giveback: "badge-hold",
+    underwater: "badge-wait",
+    flat: "badge-neutral",
+    terrible: "badge-avoid",
+    insufficient_data: "badge-insufficient_data",
+  }[key] || "badge-neutral";
+  return `<span class="badge ${badgeClass}">${esc(key.replace(/_/g, " "))}</span>`;
+}
+
+function renderChartOutcomeReview(data, { compact = false } = {}) {
+  const review = data.chart_outcome_review;
+  if (!review || !review.verdict || review.verdict === "empty") return "";
+  const counts = review.counts || {};
+  const stats = review.stats || {};
+  const wellTimed = review.well_timed || [];
+  const weakest = review.weakest || [];
+  const verdictClass =
+    review.verdict === "has_terrible"
+      ? "chart-outcome-verdict is-warn"
+      : "chart-outcome-verdict";
+  const nameBtn = (row) =>
+    `<button type="button" class="btn btn-ghost chart-outcome-name" data-chart-ticker="${esc(row.ticker)}">${esc(row.ticker)}</button>`;
+  const wellTimedList = wellTimed.length
+    ? wellTimed
+        .slice(0, compact ? 3 : 6)
+        .map(
+          (row) =>
+            `<li>${nameBtn(row)} ${chartOutcomePct(row.return_since)} ${chartOutcomeBadge(row.outcome)}</li>`
+        )
+        .join("")
+    : "<li class='muted'>None this pass.</li>";
+  const weakestList = weakest.length
+    ? weakest
+        .slice(0, compact ? 3 : 6)
+        .map(
+          (row) =>
+            `<li>${nameBtn(row)} ${chartOutcomePct(row.return_since)} ${chartOutcomeBadge(row.outcome)}</li>`
+        )
+        .join("")
+    : "";
+  const samples = compact
+    ? ""
+    : `<div class="chart-outcome-columns">
+        <div>
+          <h4>Well timed</h4>
+          <ul class="chart-outcome-list">${wellTimedList}</ul>
+        </div>
+        <div>
+          <h4>Weakest open returns</h4>
+          <ul class="chart-outcome-list">${weakestList}</ul>
+        </div>
+      </div>`;
+  return `
+    <div class="card chart-outcome-card">
+      <h3>Chart outcomes since recommendation</h3>
+      <p class="${verdictClass}">${esc(review.verdict_label || review.verdict)}</p>
+      <p class="small">${esc(review.headline || "")}</p>
+      <div class="chart-outcome-stats">
+        <div><span class="stat-value">${counts.well_timed ?? 0}</span><span class="small muted">Well timed</span></div>
+        <div><span class="stat-value">${counts.giveback ?? 0}</span><span class="small muted">Target then fade</span></div>
+        <div><span class="stat-value">${counts.underwater ?? 0}</span><span class="small muted">Underwater</span></div>
+        <div><span class="stat-value">${counts.stop_hit ?? 0}</span><span class="small muted">Stop hits</span></div>
+        <div><span class="stat-value">${counts.terrible ?? 0}</span><span class="small muted">Terrible</span></div>
+        <div><span class="stat-value">${chartOutcomePct(stats.median_return)}</span><span class="small muted">Median return</span></div>
+      </div>
+      ${samples}
+      <p class="small muted" style="margin-bottom:0">
+        Short-term underwater is expected while the hypothesis stands. The test is the longer path, not this first month.
+        Frozen initial levels from the first week of the current signal — observe-only, not a paper-book score.
+        ${compact ? "Open a name on Strong buys for the price chart." : "Click a ticker to open its price chart."}
+      </p>
+    </div>`;
+}
+
 function renderStrongBuys(data) {
   if (typeof window.IIUnavailable?.mergeServer === "function") {
     window.IIUnavailable.mergeServer(data.unavailable_watch);
@@ -1089,7 +1175,8 @@ function renderStrongBuys(data) {
     : "";
 
   panel.innerHTML = `
-    <p class="small muted" style="margin-top:0">Mark <strong>Unavailable</strong> to bypass a suggested trade that cannot be actioned on Trading 212. The name stays watched below and is excluded from paper auto-entries until restored.</p>
+    ${renderChartOutcomeReview(data)}
+    <p class="small muted" style="margin-top:1rem">Mark <strong>Unavailable</strong> to bypass a suggested trade that cannot be actioned on Trading 212. The name stays watched below and is excluded from paper auto-entries until restored.</p>
     ${strong.length ? `<h3>Strong buys</h3>${strong.map(cardHtml).join("")}` : ""}
     ${buys.length ? `<h3>Buys</h3>${buys.map(cardHtml).join("")}` : ""}
     ${!active.length ? '<div class="empty-state">All buy-tier names are on the unavailable watch list.</div>' : ""}
@@ -1865,6 +1952,8 @@ function renderAnalysis(data) {
 
   panel.innerHTML = `
     ${renderSundayReview(data)}
+    <h2 class="small muted" style="margin-top:1.5rem">Buy-tier chart outcomes</h2>
+    ${renderChartOutcomeReview(data, { compact: true }) || '<div class="empty-state">Chart outcome review not published yet. Run <code>ftse-chart-outcomes</code> after buy-tier charts exist.</div>'}
     <h2 class="small muted" style="margin-top:1.5rem">Portfolio deep analysis</h2>
     ${deepHtml}
     ${postRunHtml}
@@ -1878,6 +1967,7 @@ function renderAnalysis(data) {
       openMemo(research[index]);
     });
   });
+  bindChartButtons(panel, new Map((data.reports || []).map((r) => [r.ticker, r])));
 }
 
 function settingRow(label, value) {
@@ -2849,6 +2939,8 @@ async function loadDashboard() {
     // stale embedded copy and over a cached progress_report.json.
     const progressReport = await loadOptionalDashboardJson("data/progress_report.json");
     if (progressReport) data.progress_report = progressReport;
+    const chartOutcomes = await loadOptionalDashboardJson("data/chart_outcome_review.json");
+    if (chartOutcomes) data.chart_outcome_review = chartOutcomes;
     if (!data.engineering_tasks && !(data.automation || {}).engineering_queue) {
       const engineering = await loadOptionalDashboardJson("data/engineering_tasks.json");
       if (engineering) data.engineering_tasks = engineering;
