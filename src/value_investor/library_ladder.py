@@ -168,10 +168,7 @@ def observe_sim_screen_should_run(
     """
     if skip_screen:
         return False, "screen-lite disabled"
-    if not ladder_cfg.get(
-        "observe_sim_screen_missing_markets",
-        ladder_cfg.get("observe_sim_screen_when_research_skipped", True),
-    ):
+    if ladder_cfg.get("observe_sim_screen_missing_markets") is False:
         return False, "observe_sim_screen_missing_markets is off"
     if not ladder_cfg.get("observe_sim_screen_when_research_skipped", True):
         return False, "observe_sim_screen_when_research_skipped is off"
