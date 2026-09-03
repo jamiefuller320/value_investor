@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T16:43:38+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T17:23:36+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -327,7 +327,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L256 | **Tighten experiment caps after park-and-evolve is live** | Early discretionary cap is 12 tasks / 8 expensive shadows so every lifecycle stage can stay covered. After experiment_lineage_and_park can park losers without cancelling their cheap feed, consider tightening discretionary tasks toward 8 if agent triage is noisy — never put coverage overlays back under the cap. | experiment_lineage_and_park is active AND experiment_inventory.complexity.needs_agent_triage is true for 3 consecutive Sunday director runs |
 | L257 | **Persist observe clock when a sprint stream vacates without parity** | If a parallel sprint market is removed from ingest_parallel_sprint / _2 without landing on ingest_parity_markets or ftse_equivalent_markets, copy it to observe_sim_markets_extra so the 8-12 week archive clock does not stop. S&P is already covered by ftse_equivalent_markets; ASX usually enters ingest_parity_markets on filing parity. | A sprint stream advances a market that is not added to ingest_parity_markets or ftse_equivalent_markets |
 | L258 | **Roll gha_pip_install.sh out to remaining workflows** | Euro/library ingest now retries pip on empty-index flakes. Other long jobs (paper-auto, ops-monitor, FTSE ingest-loop, orchestrator) still use a single pip install -e . | Another workflow fails on pandas from versions: none or a similar empty-index pip flake |
-| L260 | **Wire euro weekly gap-closure follow-up for sticky library names** | FTSE weekday ingest auto-dispatches a pinned intensive gap-closure pass (then engineering-agent on stubborn refetch). Euro loop has the same compile/verify hooks but no weekly_followup/eng_idle candidate picker over library health — select_gap_closure_candidate still reads latest.json (FTSE 350). | Discovery time cap is on main and euro deepen still leaves RAND.AS or the same IWB names unimproved across two successful runs |
+| L261 | **Wire library stall/slowdown gap-closure follow-up on parallel sprint workflows** | euro-ingest-loop.yml now auto-dispatches pinned intensive gap-closure on stall or 0-improve complete runs. library-ingest-sprint.yml and library-ingest-sprint-2.yml still lack that hook, so leftover EDGAR/ASX sticky names wait for the next deepen or a manual pin. | sp500 or asx200 complete weekday batches repeatedly improve 0 tickers while IWB or zero-body remain after the discovery time cap is in production |
 
 ---
 
