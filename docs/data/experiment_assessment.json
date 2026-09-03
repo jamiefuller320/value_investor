@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-09-03T11:01:36.999472+00:00",
+  "updated_at": "2026-09-03T11:19:15.764255+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -25,13 +25,13 @@
     "experimental_track_count": 1
   },
   "summary": {
-    "recommend": 5,
+    "recommend": 0,
+    "fail": 3,
+    "continue": 4,
     "observing": 1,
     "proposed": 0,
-    "continue": 2,
-    "fail": 3,
-    "human_ack_pending": 5,
-    "total": 11
+    "human_ack_pending": 0,
+    "total": 8
   },
   "experiments": [
     {
@@ -157,198 +157,19 @@
       "title": "Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.",
       "area": "monitoring",
       "pipeline": "analysis_review",
-      "status": "recommend",
+      "status": "continue",
       "source_status": "proposed",
-      "human_ack_required": true,
+      "human_ack_required": false,
       "task_status": "proposed",
       "promote_to": "manual",
       "forward_evidence": {
         "exit_shadow": {
           "closed_total": 0,
           "exit_timing_ready": true
-        }
+        },
+        "human_disposition": "watch"
       },
       "evidence_path": "docs/data/analysis_tasks.json"
-    },
-    {
-      "experiment_id": "ana-20260903-01",
-      "kind": "analysis_task",
-      "title": "Offline conviction-timing overlay on hold->buy and signal_unchanged 1w hit rates",
-      "area": "scoring",
-      "pipeline": "analysis_review",
-      "status": "recommend",
-      "source_status": "proposed",
-      "human_ack_required": true,
-      "task_status": "proposed",
-      "promote_to": "engineering_queue",
-      "forward_evidence": {
-        "trajectory": {
-          "labeled_event_count": 336,
-          "model_focus_candidates": [
-            {
-              "kind": "transition_key",
-              "key": "hold->buy",
-              "horizon": "1w",
-              "count": 20,
-              "positive_rate": 0.25,
-              "mean_forward_return": -0.008424,
-              "why": "hold->buy 1w positive_rate=0.25 mean=-0.008424 n=20 — opinion flip did not match next-week price"
-            },
-            {
-              "kind": "transition_key",
-              "key": "buy->strong_buy",
-              "horizon": "1w",
-              "count": 12,
-              "positive_rate": 0.25,
-              "mean_forward_return": -0.00492,
-              "why": "buy->strong_buy 1w positive_rate=0.25 mean=-0.00492 n=12 — opinion flip did not match next-week price"
-            },
-            {
-              "kind": "transition_key",
-              "key": "signal_unchanged",
-              "horizon": "1w",
-              "count": 239,
-              "positive_rate": 0.3431,
-              "mean_forward_return": -0.002598,
-              "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 — opinion flip did not match next-week price"
-            },
-            {
-              "kind": "horizon_hit_rate",
-              "key": "1w",
-              "horizon": "1w",
-              "count": 266,
-              "prediction_hit_rate": 0.406,
-              "why": "Directional hit_rate=0.406 at 1w (n=266) — implied upgrade/downgrade/conviction sign is not beating chance"
-            }
-          ],
-          "recommend_candidate": {
-            "key": "hold->buy",
-            "count": 20
-          }
-        },
-        "loser_cards": {
-          "top_failed_families": [
-            [
-              "quality",
-              37
-            ],
-            [
-              "dividend",
-              35
-            ],
-            [
-              "garp",
-              28
-            ],
-            [
-              "risk",
-              21
-            ]
-          ]
-        }
-      },
-      "evidence_path": "docs/data/analysis_tasks.json",
-      "initiated_at": "2026-09-03T10:08:56.028947+00:00"
-    },
-    {
-      "experiment_id": "ana-20260903-02",
-      "kind": "analysis_task",
-      "title": "Quality-family composite gate on avoid cohort",
-      "area": "scoring",
-      "pipeline": "analysis_review",
-      "status": "recommend",
-      "source_status": "proposed",
-      "human_ack_required": true,
-      "task_status": "proposed",
-      "promote_to": "engineering_queue",
-      "forward_evidence": {
-        "trajectory": {
-          "labeled_event_count": 336,
-          "model_focus_candidates": [
-            {
-              "kind": "transition_key",
-              "key": "hold->buy",
-              "horizon": "1w",
-              "count": 20,
-              "positive_rate": 0.25,
-              "mean_forward_return": -0.008424,
-              "why": "hold->buy 1w positive_rate=0.25 mean=-0.008424 n=20 — opinion flip did not match next-week price"
-            },
-            {
-              "kind": "transition_key",
-              "key": "buy->strong_buy",
-              "horizon": "1w",
-              "count": 12,
-              "positive_rate": 0.25,
-              "mean_forward_return": -0.00492,
-              "why": "buy->strong_buy 1w positive_rate=0.25 mean=-0.00492 n=12 — opinion flip did not match next-week price"
-            },
-            {
-              "kind": "transition_key",
-              "key": "signal_unchanged",
-              "horizon": "1w",
-              "count": 239,
-              "positive_rate": 0.3431,
-              "mean_forward_return": -0.002598,
-              "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 — opinion flip did not match next-week price"
-            },
-            {
-              "kind": "horizon_hit_rate",
-              "key": "1w",
-              "horizon": "1w",
-              "count": 266,
-              "prediction_hit_rate": 0.406,
-              "why": "Directional hit_rate=0.406 at 1w (n=266) — implied upgrade/downgrade/conviction sign is not beating chance"
-            }
-          ],
-          "recommend_candidate": {
-            "key": "hold->buy",
-            "count": 20
-          }
-        },
-        "loser_cards": {
-          "top_failed_families": [
-            [
-              "quality",
-              37
-            ],
-            [
-              "dividend",
-              35
-            ],
-            [
-              "garp",
-              28
-            ],
-            [
-              "risk",
-              21
-            ]
-          ]
-        }
-      },
-      "evidence_path": "docs/data/analysis_tasks.json",
-      "initiated_at": "2026-09-03T10:08:56.028947+00:00"
-    },
-    {
-      "experiment_id": "plr-20260901-02",
-      "kind": "paper_learning_task",
-      "title": "Re-run buffered-hold counterfactual on rules/ai_judgment with extended lookback (beyond 7d, covering epoch start 2026-08-12/26) — expected learning value: the current window tied at delta 0; a longer ",
-      "area": "paper_churn",
-      "pipeline": "paper_learning_review",
-      "status": "recommend",
-      "source_status": "proposed",
-      "human_ack_required": true,
-      "task_status": "proposed",
-      "promote_to": "manual",
-      "forward_evidence": {
-        "exit_shadow": {
-          "closed_total": 0,
-          "exit_timing_ready": true
-        }
-      },
-      "evidence_path": "docs/data/paper_learning_tasks.json",
-      "initiated_at": "2026-09-02T08:30:00.469591+00:00"
     },
     {
       "experiment_id": "ldr-20260823-02",
@@ -356,16 +177,17 @@
       "title": "Forward observation pass on ai_judgment_exclusion_u4 shadow vs live primary — expected learning value: validate whether u4 ladder filtering converts archive alpha (`exclusion_universe.ladder_results[u",
       "area": "monitoring",
       "pipeline": "learning_director",
-      "status": "recommend",
+      "status": "continue",
       "source_status": "accepted",
-      "human_ack_required": true,
+      "human_ack_required": false,
       "task_status": "accepted",
       "promote_to": "manual",
       "forward_evidence": {
         "exit_shadow": {
           "closed_total": 0,
           "exit_timing_ready": true
-        }
+        },
+        "human_disposition": "watch"
       },
       "evidence_path": "docs/data/learning_director_tasks.json"
     },
@@ -450,69 +272,14 @@
       "evidence_path": "docs/data/learning_director_tasks.json"
     }
   ],
-  "recommendations": [
-    {
-      "experiment_id": "ana-20260728-04",
-      "kind": "analysis_task",
-      "title": "Exit-shadow cohort thickness dashboard: alert when any track reaches ≥10 closed exits with grace vs screen_rotation split — prerequisite before any momentum_grace knob experiment.",
-      "pipeline": "analysis_review",
-      "track_id": null,
-      "gate_marks": null,
-      "gate_excess_after_costs": null,
-      "area": "monitoring"
-    },
-    {
-      "experiment_id": "ana-20260903-01",
-      "kind": "analysis_task",
-      "title": "Offline conviction-timing overlay on hold->buy and signal_unchanged 1w hit rates",
-      "pipeline": "analysis_review",
-      "track_id": null,
-      "gate_marks": null,
-      "gate_excess_after_costs": null,
-      "area": "scoring"
-    },
-    {
-      "experiment_id": "ana-20260903-02",
-      "kind": "analysis_task",
-      "title": "Quality-family composite gate on avoid cohort",
-      "pipeline": "analysis_review",
-      "track_id": null,
-      "gate_marks": null,
-      "gate_excess_after_costs": null,
-      "area": "scoring"
-    },
-    {
-      "experiment_id": "plr-20260901-02",
-      "kind": "paper_learning_task",
-      "title": "Re-run buffered-hold counterfactual on rules/ai_judgment with extended lookback (beyond 7d, covering epoch start 2026-08-12/26) — expected learning value: the current window tied at delta 0; a longer ",
-      "pipeline": "paper_learning_review",
-      "track_id": null,
-      "gate_marks": null,
-      "gate_excess_after_costs": null,
-      "area": "paper_churn"
-    },
-    {
-      "experiment_id": "ldr-20260823-02",
-      "kind": "learning_director_task",
-      "title": "Forward observation pass on ai_judgment_exclusion_u4 shadow vs live primary — expected learning value: validate whether u4 ladder filtering converts archive alpha (`exclusion_universe.ladder_results[u",
-      "pipeline": "learning_director",
-      "track_id": null,
-      "gate_marks": null,
-      "gate_excess_after_costs": null,
-      "area": "monitoring"
-    }
-  ],
+  "recommendations": [],
   "task_sync": {
     "updated": [
+      "ana-20260728-04",
+      "ldr-20260823-02",
       "ldr-20260823-03"
     ],
-    "skipped": [
-      "ana-20260728-04",
-      "ana-20260903-01",
-      "ana-20260903-02",
-      "plr-20260901-02",
-      "ldr-20260823-02"
-    ]
+    "skipped": []
   },
   "sources": {
     "calibration_shadow_endurance": "docs/data/paper_automation/calibration_shadow_endurance.json",

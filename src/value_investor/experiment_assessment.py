@@ -26,6 +26,7 @@ from value_investor.trajectory_evidence import build_model_focus_candidates
 ASSESSMENT_FILENAME = "experiment_assessment.json"
 ASSESSMENT_STATUSES = frozenset({"proposed", "observing", "continue", "fail", "recommend"})
 CLOSED_TASK_STATUSES = frozenset({"promoted", "cancelled", "done"})
+WATCH_DISPOSITIONS = frozenset({"watch", "watching", "observe"})
 TASK_KINDS = frozenset({"analysis_task", "paper_learning_task", "learning_director_task"})
 SCORING_CANDIDATE_MIN_COUNT = 20
 EXIT_SHADOW_CONTINUE_CLOSED = 10
@@ -502,6 +503,11 @@ def _assess_task_row(
             "top_failed_families": ctx.loser_top_failed_families[:4],
         }
 
+    disposition = str((task.get("evidence") or {}).get("human_disposition") or "").strip().lower()
+    if disposition in WATCH_DISPOSITIONS:
+        assessment = "continue" if status in {"accepted", "proposed"} else "observing"
+        forward_evidence["human_disposition"] = disposition
+
     return {
         "experiment_id": task.get("id"),
         "kind": kind,
@@ -599,6 +605,8 @@ def sync_task_assessment_status(
                 else:
                     skipped.append(task_id)
             else:
+                if evidence.get("assessment_recommend"):
+                    evidence.pop("assessment_recommend", None)
                 if evidence != task.get("evidence"):
                     task["evidence"] = evidence
                     updated.append(task_id)

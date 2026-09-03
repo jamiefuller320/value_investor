@@ -262,9 +262,12 @@ def test_compile_and_promote_analysis_tasks(tmp_path: Path):
         engineering_tasks_path=eng_path,
     )
     assert result["promoted"] == [task_id]
-    eng_payload = json.loads(eng_path.read_text(encoding="utf-8"))
+    eng_text = eng_path.read_text(encoding="utf-8")
+    assert eng_text.startswith("{\n")
+    eng_payload = json.loads(eng_text)
     assert eng_payload["tasks"][0]["id"] == "eng-20260728-01"
     assert eng_payload["tasks"][0]["source"] == "analysis_review"
+    assert any("assign_signal()" in item for item in eng_payload["tasks"][0]["acceptance_criteria"])
 
     analysis_payload = json.loads(tasks_path.read_text(encoding="utf-8"))
     assert analysis_payload["tasks"][0]["status"] == "promoted"
@@ -294,6 +297,38 @@ def test_compile_drops_done_analysis_tasks(tmp_path: Path):
     ids = [row["id"] for row in compiled["tasks"]]
     assert "ana-20260728-01" not in ids
     assert any(row["id"].startswith("ana-20260903-") for row in compiled["tasks"])
+
+
+def test_promote_preserves_extra_fields_on_other_tasks(tmp_path: Path):
+    review = parse_analysis_review(
+        "PROPOSED EXPERIMENTS\n1. [scoring] Queue overlay — offline only\n"
+    )
+    tasks_path = tmp_path / "analysis_tasks.json"
+    eng_path = tmp_path / "engineering_tasks.json"
+    eng_path.write_text(json.dumps({"tasks": []}), encoding="utf-8")
+    compiled = compile_analysis_tasks(review, run_stamp="20260903", tasks_path=tasks_path)
+    scoring_id = compiled["tasks"][0]["id"]
+    compiled["tasks"].append(
+        {
+            "id": "ana-20260728-04",
+            "area": "monitoring",
+            "title": "Exit-shadow dashboard",
+            "status": "proposed",
+            "done_reason": "should-not-strip",
+            "evidence": {"triage_note": "keep me"},
+        }
+    )
+    tasks_path.write_text(json.dumps(compiled), encoding="utf-8")
+    result = promote_analysis_tasks(
+        [scoring_id],
+        analysis_tasks_path=tasks_path,
+        engineering_tasks_path=eng_path,
+    )
+    assert scoring_id in result["promoted"]
+    kept = next(row for row in json.loads(tasks_path.read_text())["tasks"] if row["id"] == "ana-20260728-04")
+    assert kept["done_reason"] == "should-not-strip"
+    assert kept["evidence"]["triage_note"] == "keep me"
+    assert eng_path.read_text(encoding="utf-8").startswith("{\n")
 
 
 def test_promote_skips_non_engineering_areas(tmp_path: Path):

@@ -442,14 +442,17 @@ def promote_analysis_tasks(
     wanted = {tid.strip() for tid in task_ids if tid.strip()}
 
     updated_tasks: list[dict[str, Any]] = []
+    now = datetime.now(UTC).isoformat()
     for row in analysis_payload.get("tasks") or []:
+        if not isinstance(row, dict):
+            continue
         task = AnalysisTask.from_dict(row)
         if task.id not in wanted:
-            updated_tasks.append(task.to_dict())
+            updated_tasks.append(row)
             continue
         if task.status == "promoted":
             skipped.append({"id": task.id, "reason": "already promoted"})
-            updated_tasks.append(task.to_dict())
+            updated_tasks.append(row)
             continue
         if task.promote_to != "engineering_queue" or task.area not in _ENGINEERING_AREAS:
             skipped.append(
@@ -458,7 +461,7 @@ def promote_analysis_tasks(
                     "reason": f"not promotable to engineering (promote_to={task.promote_to})",
                 }
             )
-            updated_tasks.append(task.to_dict())
+            updated_tasks.append(row)
             continue
         eng_id = task.id.replace("ana-", "eng-", 1)
         eng_rows.append(
@@ -474,22 +477,26 @@ def promote_analysis_tasks(
                 "acceptance_criteria": [
                     "Change is covered by unit tests where behaviour shifts",
                     "No edits under blocked paper/sim automation paths",
+                    "Observe-only scoring design — do not mutate assign_signal() (N3)",
                 ],
                 "allowed_paths": _allowed_paths_for_area(task.area),
                 "blocked_paths": list(BLOCKED_PATHS),
                 "status": "open",
             }
         )
-        task.status = "promoted"
+        merged = dict(row)
+        merged.update(task.to_dict())
+        merged["status"] = "promoted"
+        merged["promoted_at"] = now
         promoted.append(task.id)
-        updated_tasks.append(task.to_dict())
+        updated_tasks.append(merged)
 
     analysis_payload["tasks"] = updated_tasks
     analysis_payload["task_count"] = len(updated_tasks)
     eng_payload["tasks"] = eng_rows
     eng_payload["task_count"] = len(eng_rows)
     write_json(analysis_tasks_path, analysis_payload, compact=True)
-    write_json(eng_path, eng_payload, compact=True)
+    write_json(eng_path, eng_payload, compact=False)
     return {"promoted": promoted, "skipped": skipped, "engineering_tasks_path": str(eng_path)}
 
 

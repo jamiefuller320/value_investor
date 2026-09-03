@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "observe_only": true,
+  "task_id": "plr-20260901-02",
+  "lookback_days": 28,
+  "as_of": "2026-09-03T11:16:23.790839+00:00",
+  "verdict": "keep_exit_confirm_screens_2",
+  "summary": "7d window was tied at delta 0. Extended 28d lookback covering epoch start shows exit_confirm_screens=1 trades more and costs more than 2. Leave live knob at 2 (N58).",
+  "tracks": {
+    "rules": {
+      "churn_context": {
+        "exit_streak": {
+          "IMB.L": 1
+        },
+        "buffered_holdings": 1,
+        "full_exits_in_window": 2,
+        "log_entries_in_window": 11
+      },
+      "comparison": {
+        "exit_confirm_variants": [
+          1,
+          2
+        ],
+        "trade_count_delta_lower_minus_higher": 11,
+        "cost_drag_delta_lower_minus_higher": 0.1975,
+        "return_delta_lower_minus_higher": -0.2305,
+        "return_delta_vs_actual_lower_minus_higher": -0.2305
+      },
+      "screens_1": {
+        "trade_count": 23,
+        "cost_drag": 0.2972,
+        "replay_from": "2026-08-19T10:00:03.657336+01:00",
+        "replay_to": "2026-09-03T09:27:04.079101+01:00"
+      },
+      "screens_2": {
+        "trade_count": 12,
+        "cost_drag": 0.0997
+      }
+    },
+    "ai_judgment": {
+      "churn_context": {
+        "exit_streak": {
+          "IMB.L": 1
+        },
+        "buffered_holdings": 1,
+        "full_exits_in_window": 12,
+        "log_entries_in_window": 16
+      },
+      "comparison": {
+        "exit_confirm_variants": [
+          1,
+          2
+        ],
+        "trade_count_delta_lower_minus_higher": 3,
+        "cost_drag_delta_lower_minus_higher": 0.093,
+        "return_delta_lower_minus_higher": -0.1005,
+        "return_delta_vs_actual_lower_minus_higher": -0.1004
+      },
+      "screens_1": {
+        "trade_count": 29,
+        "cost_drag": 0.3295,
+        "replay_from": "2026-08-10T09:26:57.780475+01:00",
+        "replay_to": "2026-09-03T09:27:25.883323+01:00"
+      },
+      "screens_2": {
+        "trade_count": 26,
+        "cost_drag": 0.2365
+      }
+    }
+  }
+}

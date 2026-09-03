@@ -88,12 +88,20 @@ Canonical open rows after the batch triage:
 
 | Keep | Theme | Do not reopen |
 |------|-------|----------------|
-| `ana-20260728-04` | Exit-shadow cohort thickness dashboard (`closed_total` still 0) | `ldr-20260901-04` |
-| `ldr-20260823-02` | Exclusion u4 shadow vs primary (observe) | `ldr-20260901-01` |
-| `plr-20260901-02` | Extended buffered-hold 1 vs 2 | `ldr-20260901-05` |
-| `ana-20260903-01` | Scoring: hold→buy / `signal_unchanged` 1w | `ldr-20260901-02` (queued) |
-| `ana-20260903-02` | Scoring: quality-family avoid-cohort gate | `ldr-20260901-03` (queued) |
-| `ldr-20260823-03` | Archive-lab full-period replay (L111) | — |
+| `ana-20260728-04` | Exit-shadow dashboard — **watch** until `closed_total` ≥ 10 | `ldr-20260901-04` |
+| `ldr-20260823-02` | Exclusion u4 vs primary — **watch** (no promote) | `ldr-20260901-01` |
+| `ldr-20260823-03` | Archive-lab full-period replay (L111) — continue | — |
+
+Queued to engineering (human promote 2026-09-03): `eng-20260903-01` ← `ana-20260903-01` (hold→buy / `signal_unchanged`); `eng-20260903-02` ← `ana-20260903-02` (quality-family avoid gate). Observe-only scoring design — do not mutate `assign_signal()` (N3) or start chart-mix entry-timing (N59).
+
+`plr-20260901-02` is **done**. Replay: `ftse-rebalance-log buffered-hold --paper-root docs/data/paper_automation --tracks rules,ai_judgment --lookback-days 28 --exit-confirm-variants 1,2`. The 7d window was tied (delta 0). The 28d window is not:
+
+| Track | screens=1 trades | screens=2 trades | trade delta (1−2) | screens=1 cost drag | screens=2 cost drag |
+|---|---|---|---|---|---|
+| rules | 23 | 12 | **+11** | 29.72% | 9.97% |
+| ai_judgment | 29 | 26 | **+3** | 32.95% | 23.65% |
+
+Keep live `exit_confirm_screens=2`. Do not change knobs from this name (N58). Evidence: [`docs/data/buffered_hold_extended.json`](../data/buffered_hold_extended.json).
 
 `ldr-20260823-04` (IMB.L adjacent flip) is **done**. Verdict: **screen-rotation** in a 3-slot book (replaced by SN.L on 2026-08-21), not a signal/thesis exit. Evidence: [`docs/data/imb_adjacent_flip_audit.json`](../data/imb_adjacent_flip_audit.json). Do not retune hold-buffer or conviction floors from this name.
 
