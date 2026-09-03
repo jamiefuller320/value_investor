@@ -107,6 +107,8 @@ Parallel sprint auto-advance (`advance_parallel_sprint_on_ingest_parity`, defaul
 | Micro-compile dispatch | `euro-ingest-loop.yml` | After `micro_compiled` or `gap_closure_compiled`, runs `engineering-queue.yml` immediately |
 | Post-merge verify rerun | `engineering-queue.yml` | Tasks with `evidence.market_id` rerun **`euro-ingest-loop.yml`**; FTSE tasks still use `ingest-loop.yml` |
 | Clean JSON for CI | `euro-ingest-loop.yml` | Uses `ingest-loop --json-path` / `euro-ingest-dispatch --json-path` (not `tee`) so stdout warnings (e.g. PyMuPDF `fitz`) cannot break `GITHUB_OUTPUT` parsing |
+| Artifact push | `scripts/push_library_ingest_artifacts.sh` | Stashes allowlisted paths (`docs/data/library/`, `engineering_tasks.json`, `ingest_gap_closure_runs.json`) before `checkout origin/main`; restores only files the job changed so concurrent queue updates are not clobbered |
+| pip install retry | `scripts/gha_pip_install.sh` | 4 attempts with backoff for transient PyPI / empty-index flakes (`from versions: none`) |
 
 ## Filing-quality bar (all library markets)
 
