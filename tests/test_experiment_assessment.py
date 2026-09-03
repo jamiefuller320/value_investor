@@ -262,9 +262,7 @@ def test_refresh_watch_disposition_is_not_recommend(tmp_path: Path):
         json.dumps({"tracks": {}, "readiness": {"ready_for_probability_analysis": True}}),
         encoding="utf-8",
     )
-    payload = refresh_experiment_assessment(
-        data_dir, paper_root=paper_root, sync_task_status=True
-    )
+    payload = refresh_experiment_assessment(data_dir, paper_root=paper_root, sync_task_status=True)
     row = next(r for r in payload["experiments"] if r["experiment_id"] == "ldr-20260823-02")
     assert row["status"] == "continue"
     assert row["human_ack_required"] is False

@@ -325,7 +325,9 @@ def test_promote_preserves_extra_fields_on_other_tasks(tmp_path: Path):
         engineering_tasks_path=eng_path,
     )
     assert scoring_id in result["promoted"]
-    kept = next(row for row in json.loads(tasks_path.read_text())["tasks"] if row["id"] == "ana-20260728-04")
+    kept = next(
+        row for row in json.loads(tasks_path.read_text())["tasks"] if row["id"] == "ana-20260728-04"
+    )
     assert kept["done_reason"] == "should-not-strip"
     assert kept["evidence"]["triage_note"] == "keep me"
     assert eng_path.read_text(encoding="utf-8").startswith("{\n")
