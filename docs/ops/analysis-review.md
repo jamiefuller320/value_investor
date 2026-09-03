@@ -49,6 +49,7 @@ If history is still seeding, the workflow logs `payload` readiness and skips the
 | `docs/data/analysis_review.json` | Structured sections + metadata |
 | `docs/data/analysis_tasks.json` | Proposed experiments (`status: proposed`) |
 | `docs/data/trajectory_evidence_review.json` | PIT transition outcomes + `model_focus_candidates` (payload input) |
+| `docs/data/chart_outcome_review.json` | Buy-tier chart timing vs frozen initial levels (observe-only) |
 | `docs/data/ingest_trials.json` | Ingest experiments with `review_trigger: analysis_review` or `both` |
 
 ## Trajectory evidence → scoring experiments
@@ -61,6 +62,15 @@ still required (`ftse-analysis-review promote`). Frozen `assign_signal()` thresh
 stay off-limits (N3).
 
 See [trajectory-evidence.md](trajectory-evidence.md).
+
+## Chart outcomes (observe-only)
+
+Sunday `analysis-review.yml` and `ftse-publish` refresh
+[`chart-outcome-review.md`](chart-outcome-review.md) from `docs/data/charts/`.
+The payload includes a slim `chart_outcome_review` (verdict, stop/target counts,
+well-timed / weakest samples). **Cite it as timing context only** — do not
+propose knob applies or scoring experiments from first-cross labels until that
+loop is explicitly promoted. Frozen `assign_signal()` thresholds stay off-limits (N3).
 
 The same Sunday job then runs `ftse-news-phrase-trajectory --mode rolling` (observe-only
 buy∪boundary phrase lexicon). Soft-fail; artifacts commit with the trajectory bootstrap

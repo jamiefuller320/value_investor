@@ -122,6 +122,9 @@ jobs:
       - name: Trajectory evidence (transitions, boundary, loser cards, outcomes)
         run: ftse-trajectory-evidence --data-dir docs/data || true
 
+      - name: Buy-tier chart outcomes (observe-only)
+        run: ftse-chart-outcomes --data-dir docs/data || true
+
       - name: News-phrase trajectory panel (buy∪boundary, observe-only)
         run: |
           # Rolling watermark refresh after trajectory evidence densifies labels.
@@ -155,6 +158,8 @@ jobs:
             docs/data/paper_automation/ai_judgment_exclusion_*/**
             docs/data/loser_snapshot_cards.json
             docs/data/loser_snapshot_cards.md
+            docs/data/chart_outcome_review.json
+            docs/data/chart_outcome_review.md
             docs/data/trajectory_transitions.json
             docs/data/trajectory_boundary_watch.json
             docs/data/trajectory_evidence_review.json

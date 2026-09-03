@@ -495,6 +495,17 @@ def publish_dashboard(
             if stale.name not in keep:
                 stale.unlink(missing_ok=True)
 
+    try:
+        from value_investor.chart_outcome_review import (
+            run_chart_outcome_review,
+            slim_chart_outcome_review,
+        )
+
+        chart_review = run_chart_outcome_review(data_dir=data_dir, chart_dir=charts_dest)
+        bundle["chart_outcome_review"] = slim_chart_outcome_review(chart_review)
+    except Exception as exc:  # noqa: BLE001 — dashboard must still publish
+        logger.warning("Chart outcome review skipped: %s", exc)
+
     latest_path = data_dir / "latest.json"
     write_json(latest_path, bundle, compact=True, compress=False)
 
