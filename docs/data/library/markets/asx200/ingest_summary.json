@@ -1,8 +1,7 @@
 {
-  "run_at": "2026-09-03T14:18:47.978022+00:00",
+  "run_at": "2026-09-03T15:00:47.016862+00:00",
   "market_id": "asx200",
   "targets": [
-    "EBO.AX",
     "ZIM.AX",
     "SDF.AX",
     "JBH.AX",
@@ -10,14 +9,6 @@
     "DNL.AX"
   ],
   "target_details": [
-    {
-      "ticker": "EBO.AX",
-      "priority_score": 12.5776,
-      "filings_total": 0,
-      "filings_with_body": 0,
-      "indexed_without_body": 0,
-      "reason": "unmeasured"
-    },
     {
       "ticker": "ZIM.AX",
       "priority_score": 5.4431,
@@ -60,48 +51,6 @@
     }
   ],
   "results": [
-    {
-      "ticker": "EBO.AX",
-      "reason": "unmeasured",
-      "before": {
-        "filings_total": 0,
-        "filings_with_body": 0,
-        "indexed_without_body": 0
-      },
-      "after": {
-        "filings_total": 4,
-        "filings_with_body": 4,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "asx_announcements",
-      "filings_summary": {
-        "total": 4,
-        "annual": 0,
-        "interim": 4,
-        "trading_update": 0,
-        "other": 0,
-        "with_body": 4,
-        "period_coverage": {
-          "annual": {
-            "total": 0,
-            "with_body": 0
-          },
-          "interim": {
-            "total": 4,
-            "with_body": 4
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 0,
-            "with_body": 0
-          }
-        }
-      }
-    },
     {
       "ticker": "ZIM.AX",
       "reason": "thin_bodies",
@@ -313,28 +262,24 @@
       }
     }
   ],
-  "improved": [
-    "EBO.AX"
-  ],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-03T14:18:03.847377+00:00",
+    "snapshot_at": "2026-09-03T15:00:11.431644+00:00",
     "market_id": "asx200",
     "buy_tier_count": 29,
-    "unmeasured_buy_tier": 1,
+    "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 5,
     "indexed_without_body": 0,
     "bodies_min": 1,
-    "bodies_median": 6.0,
+    "bodies_median": 5,
     "bodies_max": 111,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
-    "unmeasured_tickers": [
-      "EBO.AX"
-    ],
+    "unmeasured_tickers": [],
     "zero_body_tickers": [],
     "thin_body_tickers": [
       "ZIM.AX",
@@ -345,7 +290,7 @@
     ]
   },
   "health_after": {
-    "snapshot_at": "2026-09-03T14:18:47.972419+00:00",
+    "snapshot_at": "2026-09-03T15:00:47.014956+00:00",
     "market_id": "asx200",
     "buy_tier_count": 29,
     "unmeasured_buy_tier": 0,
@@ -375,18 +320,12 @@
   "gap_closure_compile": {},
   "discovery_scan": null,
   "maintenance_mode": false,
-  "parity_handoff": {
-    "skipped": true,
-    "reason": "not_focus_market",
-    "market_id": "asx200"
-  },
+  "parity_handoff": null,
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "asx200",
-    "assessed_at": "2026-09-03T14:18:05.704029+00:00",
-    "unmeasured": [
-      "EBO.AX"
-    ],
+    "assessed_at": "2026-09-03T15:00:13.655119+00:00",
+    "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [],
     "thin_need_discovery": [
@@ -397,18 +336,15 @@
       "DNL.AX"
     ],
     "thin_need_bodies": [],
-    "primary_blocker": "unmeasured",
+    "primary_blocker": "thin_need_discovery",
     "force_discovery_scan": true,
-    "auto_pin_tickers": [
-      "EBO.AX"
-    ],
+    "auto_pin_tickers": [],
     "recommended_actions": [
-      "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
       "Discovery/IR seed for 5 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
-      "unmeasured": 1,
+      "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 0,
       "indexed_without_body_rows": 0,
