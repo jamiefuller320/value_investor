@@ -43,6 +43,11 @@ Sprint discovery is **time-capped** (`library_ingest_budget.py`): at most 25% of
 2700s slot, critical-path tickers first, so body deepen is not starved when
 `force_discovery_scan` is on.
 
+After a **complete** deepen that is stalled or improves nobody while gaps remain,
+`euro-ingest-loop.yml` auto-dispatches a pinned intensive gap-closure pass
+(`gap_closure_trigger=stall_slowdown`) for the stickiest buy-tier name. Partial /
+runtime-cutoff runs do not escalate — the discovery cap is the fix for those.
+
 `ftse-library euro-ingest-dispatch` evaluates **buy-tier filing parity** on the focus market
 and persists `docs/data/library/euro_ingest_dispatch.json`:
 
@@ -141,6 +146,7 @@ Each `ftse-library ingest-loop` run assesses buy-tier gaps and persists
 | `unmeasured` / `thin_need_discovery` | Force listing-only `discovery_scan` even in sprint |
 | `indexed_without_body` | Prefer those tickers over discovery-only thin / maintain |
 | any gap | Skip high-conviction **maintain** names (no wasted slots) |
+| stall / 0-improve complete batch | Auto-dispatch pinned intensive gap-closure (`stall_slowdown`) |
 
 Inspect with the latest loop summary (`markets/<id>/ingest_summary.json` → `critical_path`).
 
