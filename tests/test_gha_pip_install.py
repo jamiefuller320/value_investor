@@ -8,7 +8,6 @@ import subprocess
 import textwrap
 from pathlib import Path
 
-
 SCRIPT = Path("scripts/gha_pip_install.sh")
 
 
