@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-03T11:55:51+00:00",
+  "updated_at": "2026-09-03T14:46:50+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -5349,6 +5349,23 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
       "added_at": "2026-09-03T11:55:51+00:00"
+    },
+    {
+      "id": "L257",
+      "category": "later",
+      "section": "ops",
+      "title": "Persist observe clock when a sprint stream vacates without parity",
+      "summary": "If a parallel sprint market is removed from ingest_parallel_sprint / _2 without landing on ingest_parity_markets or ftse_equivalent_markets, copy it to observe_sim_markets_extra so the 8-12 week archive clock does not stop. S&P is already covered by ftse_equivalent_markets; ASX usually enters ingest_parity_markets on filing parity.",
+      "revisit_when": "A sprint stream advances a market that is not added to ingest_parity_markets or ftse_equivalent_markets",
+      "tags": [
+        "observe-sim",
+        "ingest-profile",
+        "asx200",
+        "sprint"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a066f1-88cd-715d-a448-009a8cb953cb",
+      "added_at": "2026-09-03T14:46:50+00:00"
     }
   ],
   "fragments": [
