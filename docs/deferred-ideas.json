@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-03T09:45:05+00:00",
+  "updated_at": "2026-09-03T09:54:22+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -5038,6 +5038,56 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06698-f813-7549-8552-e46f5f9e4acb",
       "added_at": "2026-09-03T09:35:39+00:00"
+    },
+    {
+      "id": "L244",
+      "category": "later",
+      "section": "learning",
+      "title": "Chart-side drop-to-recovery metric on frozen entries",
+      "summary": "For buy-tier charts, score max drop after the frozen recommendation close and whether/when price recovered through that entry (days underwater, recovered_to_entry). Distinct from paper hold-recovery, which only covers stressed sleeves. Use to judge short-term loss tolerance vs eventual success without retuning timing yet.",
+      "revisit_when": "chart_outcome_review has at least 4 Sunday refreshes and several names have recovered through the frozen entry after a drawdown",
+      "tags": [
+        "charts",
+        "timing",
+        "drop-to-recovery",
+        "hypothesis"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06698-f813-7549-8552-e46f5f9e4acb",
+      "added_at": "2026-09-03T09:54:21+00:00"
+    },
+    {
+      "id": "L245",
+      "category": "later",
+      "section": "learning",
+      "title": "Entry-timing overlay scored against missed eventual winners",
+      "summary": "Later, a timing overlay might reduce mis-timed buys, but it must be measured against names that were underwater early and still worked. Do not tighten wait/accumulate from a mixed_no_terrible first month. Pair any timing experiment with a miss-cost / drop-to-recovery view.",
+      "revisit_when": "drop-to-recovery or hold-recovery cohorts can split well-timed vs recovered-from-drawdown vs still-underwater on a multi-month window",
+      "tags": [
+        "charts",
+        "timing",
+        "miss-cost",
+        "hypothesis"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06698-f813-7549-8552-e46f5f9e4acb",
+      "added_at": "2026-09-03T09:54:22+00:00"
+    },
+    {
+      "id": "N59",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Do not start entry-timing experiments from this mixed chart pass",
+      "summary": "The first chart-outcome read is mixed_no_terrible with short-term underwater tolerated while hypotheses stand. That is not a cue to add wait filters or delay buys. The live test is longer-horizon pick success on the paper book.",
+      "revisit_when": "buy-tier chart outcomes span several months and drop-to-recovery or paper hold-recovery can show whether early underwater names recovered",
+      "tags": [
+        "charts",
+        "timing",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06698-f813-7549-8552-e46f5f9e4acb",
+      "added_at": "2026-09-03T09:54:22+00:00"
     }
   ],
   "fragments": [

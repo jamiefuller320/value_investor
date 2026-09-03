@@ -1104,6 +1104,7 @@ function renderChartOutcomeReview(data, { compact = false } = {}) {
       </div>
       ${samples}
       <p class="small muted" style="margin-bottom:0">
+        Short-term underwater is expected while the hypothesis stands. The test is the longer path, not this first month.
         Frozen initial levels from the first week of the current signal — observe-only, not a paper-book score.
         ${compact ? "Open a name on Strong buys for the price chart." : "Click a ticker to open its price chart."}
       </p>

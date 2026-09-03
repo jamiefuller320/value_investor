@@ -295,8 +295,9 @@ def build_chart_outcome_review(
         "rows": rows,
         "note": (
             "Observe-only rollup of buy-tier chart JSON. Entry is the frozen initial last "
-            "(recommendation-week close), not the first bar after signal_since. Do not apply "
-            "decision-review knobs from this file — crossings are not paper/learning labels yet."
+            "(recommendation-week close), not the first bar after signal_since. Short-term "
+            "underwater is expected while the hypothesis stands — the test is the longer path. "
+            "Do not apply decision-review knobs or entry-timing overlays from this file."
         ),
     }
 
@@ -346,6 +347,9 @@ def format_chart_outcome_markdown(payload: dict[str, Any]) -> str:
         "",
         "Observe-only. Frozen initial recommendation levels + first crossings. "
         "Not a decision-review input.",
+        "",
+        "Short-term underwater is expected while the hypothesis stands. "
+        "The test is the longer path — do not retune entry timing from this mix.",
         "",
         "## Counts",
         "",

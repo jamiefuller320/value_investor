@@ -6,6 +6,8 @@ Mixed story — no terrible outcomes. 16 well timed (including MEGP.L (+10.1%), 
 
 Observe-only. Frozen initial recommendation levels + first crossings. Not a decision-review input.
 
+Short-term underwater is expected while the hypothesis stands. The test is the longer path — do not retune entry timing from this mix.
+
 ## Counts
 
 - Charts: 59
@@ -52,5 +54,5 @@ Observe-only. Frozen initial recommendation levels + first crossings. Not a deci
 | WIX.L | buy | -5.7% | -5.7% | underwater | no | no |
 | SN.L | strong_buy | -5.3% | -5.3% | underwater | no | no |
 
-_Observe-only rollup of buy-tier chart JSON. Entry is the frozen initial last (recommendation-week close), not the first bar after signal_since. Do not apply decision-review knobs from this file — crossings are not paper/learning labels yet._
+_Observe-only rollup of buy-tier chart JSON. Entry is the frozen initial last (recommendation-week close), not the first bar after signal_since. Short-term underwater is expected while the hypothesis stands — the test is the longer path. Do not apply decision-review knobs or entry-timing overlays from this file._
 

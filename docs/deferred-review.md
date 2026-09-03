@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T09:45:05+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T09:54:22+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -113,6 +113,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N55 | **Live sentiment scoring from mined news phrases** | Do not wire bag-of-words or lexicon sentiment into screen weights or paper knobs. Open-source news + phrase mining may later inform research memos or event tags; treating it as a quant model remains premature (extends N6). | Phrase-trajectory panel shows out-of-sample lift on trajectory flips, and analysis-review proposes a gated experiment |
 | N57 | **Do not add level-crossings as a screening model input** | First-touch stop/target/SMA crosses are subsequent path after a buy-tier signal. Feeding them into Graham/quality/GARP/risk pass-fail would mix execution outcomes into point-in-time value identity and leak post-recommendation price action. | Only if a dedicated technical/timing family is designed with strict point-in-time features (RSI/SMA at screen date), not path-after-signal crossings. |
 | N58 | **Do not retune knobs from the first chart-outcome mix** | The first human and deterministic read of buy-tier charts is mixed_no_terrible (0 stop hits, 0 terrible paths). That is not a reason to tighten stops, widen targets, or apply decision-review knobs. | chart_outcome_review verdict becomes has_terrible, or stop_hit is above 0 on two consecutive Sunday passes |
+| N59 | **Do not start entry-timing experiments from this mixed chart pass** | The first chart-outcome read is mixed_no_terrible with short-term underwater tolerated while hypotheses stand. That is not a cue to add wait filters or delay buys. The live test is longer-horizon pick success on the paper book. | buy-tier chart outcomes span several months and drop-to-recovery or paper hold-recovery can show whether early underwater names recovered |
 
 ---
 
@@ -152,6 +153,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L221 | **Suite-aware cost_drag thresholds for conviction proposals** | decision_review HIGH_COST_DRAG (4%) and auto-raise min_conviction were tuned for Suite A 3% stress. Under Suite B fair costs (~0.55% RT), the same threshold rarely fires and may over-filter if A knobs are copied. Split proposal thresholds / idle-cash ease rules by is_fair_cost_lab so B can explore trade intensity while A stays defensive. | Suite B has enough epoch marks to compare cost_drag and trade_count vs Suite A under the same parent knobs, or decision-review starts proposing contradictory conviction moves across suites |
 | L242 | **Use initial-level crossings as paper/learning outcome labels** | Once live signal_history is stable, attach first-cross dates (core filled, stop hit, target hit, SMA200 lost) to trajectory_evidence and decision-review so the technical paper track can be scored against frozen entry levels rather than refreshed weekly plans. | After several Sunday screens have persisted signal_history and chart initial_levels, and the technical paper track is being reviewed for excess after costs. |
 | L243 | **Use giveback vs well-timed chart labels as analysis-review context** | After several Sunday chart-outcome refreshes, cite stable giveback versus well-timed cohorts in analysis-review as observe-only timing context. Keep this separate from feeding first-cross dates into decision-review (L242). | chart_outcome_review has at least 4 Sunday refreshes and giveback/well_timed counts remain populated |
+| L244 | **Chart-side drop-to-recovery metric on frozen entries** | For buy-tier charts, score max drop after the frozen recommendation close and whether/when price recovered through that entry (days underwater, recovered_to_entry). Distinct from paper hold-recovery, which only covers stressed sleeves. Use to judge short-term loss tolerance vs eventual success without retuning timing yet. | chart_outcome_review has at least 4 Sunday refreshes and several names have recovered through the frozen entry after a drawdown |
+| L245 | **Entry-timing overlay scored against missed eventual winners** | Later, a timing overlay might reduce mis-timed buys, but it must be measured against names that were underwater early and still worked. Do not tighten wait/accumulate from a mixed_no_terrible first month. Pair any timing experiment with a miss-cost / drop-to-recovery view. | drop-to-recovery or hold-recovery cohorts can split well-timed vs recovered-from-drawdown vs still-underwater on a multi-month window |
 
 ### Universe & data
 

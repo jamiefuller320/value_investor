@@ -178,6 +178,8 @@ def test_run_writes_artifacts_and_slim_omits_rows(tmp_path: Path):
     assert slim["observe_only"] is True
     assert slim["verdict"] == VERDICT_MIXED_NO_TERRIBLE
     assert slim["well_timed"][0]["ticker"] == "AAA.L"
+    markdown = (tmp_path / REVIEW_MD_FILENAME).read_text(encoding="utf-8")
+    assert "hypothesis stands" in markdown
 
 
 def test_empty_chart_dir(tmp_path: Path):

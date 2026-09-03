@@ -103,6 +103,7 @@ strand alone.
 ## Related
 
 - [`exit-timing-cohorts.md`](exit-timing-cohorts.md) — hold-recovery probabilities
+- [`chart-outcome-review.md`](chart-outcome-review.md) — buy-tier chart mix; short-term underwater is tolerated while the thesis holds
 - [`loser-snapshot-cards.md`](loser-snapshot-cards.md) — avoid / failed-buy alumni forensics
 - [`capital-allocation.md`](capital-allocation.md) — graduated entry/exit appetite
 - Vision phase `hypothesis_first_exit` in `docs/data/learning_director_vision.json`
