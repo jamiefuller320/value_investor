@@ -1615,3 +1615,82 @@ def test_build_company_reports_lynch_peg_uses_filing_growth_without_bps_warning(
     assert snapshot["earnings_growth_bps_divergence_warning"] is False
     assert snapshot["screening_inputs"]["model_earnings_growth_pct"] == pytest.approx(0.05)
     assert snapshot["screening_inputs"]["lynch_peg_model"] == pytest.approx(11.6 / (0.05 * 100))
+
+
+def test_build_company_reports_exports_conviction_timing_overlay_for_hold_to_buy():
+    from datetime import UTC, datetime
+
+    from value_investor.scoring.conviction_timing_overlay import HOLD_TO_BUY_KEY
+
+    run_at = datetime(2026, 9, 3, 10, 0, 0, tzinfo=UTC)
+    history = pd.DataFrame(
+        [
+            {
+                "run_at": "2026-08-27T10:00:00+00:00",
+                "ticker": "ABC.L",
+                "signal": "hold",
+                "signal_rank": 2,
+                "conviction_score": 0.2,
+                "data_quality_score": 1.0,
+            }
+        ]
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "ABC.L",
+                "name": "ABC plc",
+                "signal": "buy",
+                "signal_rank": 3,
+                "models_passed": 8,
+                "model_count": 22,
+                "composite_score": 0.55,
+                "sector_composite_score": 0.52,
+                "families_passed": 3,
+                "passed_families": "cheapness,quality,dividend",
+                "family_count": 5,
+                "data_quality_score": 1.0,
+                "metrics_present": 20,
+                "metrics_total": 20,
+                "weeks_at_signal": 1,
+                "signal_trend": "improving",
+                "conviction_score": 0.4,
+                "stability_label": "new",
+                "timing_signal": "accumulate",
+                "timing_score": 0.7,
+                "rsi_14": 45.0,
+                "price_vs_sma200_pct": -0.05,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        columns=[
+            "ticker",
+            "model_id",
+            "model_name",
+            "passed",
+            "score",
+            "reasons",
+            "failed_criteria",
+        ]
+    )
+
+    report = build_company_reports(
+        signals,
+        model_results,
+        signal_history=history,
+        run_at=run_at,
+    )[0]
+    snapshot = report.to_dict()
+
+    assert snapshot["transition_key"] == HOLD_TO_BUY_KEY
+    assert snapshot["conviction_timing_overlay"] is True
+    assert snapshot["conviction_timing_overlay_detail"][
+        "conviction_timing_overlay_score"
+    ] == pytest.approx(0.3)
+    assert (
+        snapshot["conviction_timing_overlay_detail"]["conviction_timing_overlay_timing"] == "wait"
+    )
+    assert snapshot["signal"] == "buy"
+    assert snapshot["conviction_score"] == pytest.approx(0.4)
+    assert "Conviction-timing overlay (observe-only)" in report.summary

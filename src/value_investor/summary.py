@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import ast
 from dataclasses import dataclass, field
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -13,6 +14,11 @@ from value_investor.data_quality import quality_label
 from value_investor.model_families import FAMILY_COUNT, format_family_summary
 from value_investor.models.piotroski import piotroski_snapshot_from_result
 from value_investor.scoring.cash_conversion_overlay import apply_cash_conversion_overlay_to_signal
+from value_investor.scoring.conviction_timing_overlay import (
+    build_conviction_timing_overlay,
+    format_conviction_timing_overlay_note,
+    resolve_prior_signal,
+)
 from value_investor.scoring.cyclical_exposure_overlay import (
     apply_cyclical_exposure_overlay_to_signal,
 )
@@ -112,6 +118,10 @@ class CompanyReport:
     earnings_growth_bps_divergence_warning: bool = False
     peer_model_pass_table: dict[str, Any] = field(default_factory=dict)
     fcf_basis_overlay: bool = False
+    transition_key: str | None = None
+    prior_signal: str | None = None
+    conviction_timing_overlay: bool = False
+    conviction_timing_overlay_detail: dict[str, Any] = field(default_factory=dict)
     leverage_override: bool = False
     dual_leverage_display: bool = False
     operating_cashflow: float | None = None
@@ -174,6 +184,10 @@ class CompanyReport:
             "earnings_growth_bps_divergence_warning": self.earnings_growth_bps_divergence_warning,
             "peer_model_pass_table": self.peer_model_pass_table,
             "fcf_basis_overlay": self.fcf_basis_overlay,
+            "transition_key": self.transition_key,
+            "prior_signal": self.prior_signal,
+            "conviction_timing_overlay": self.conviction_timing_overlay,
+            "conviction_timing_overlay_detail": self.conviction_timing_overlay_detail,
             "leverage_override": self.leverage_override,
             "dual_leverage_display": self.dual_leverage_display,
             "operating_cashflow": self.operating_cashflow,
@@ -244,6 +258,12 @@ class CompanyReport:
             ),
             peer_model_pass_table=dict(data.get("peer_model_pass_table") or {}),
             fcf_basis_overlay=bool(data.get("fcf_basis_overlay")),
+            transition_key=data.get("transition_key"),
+            prior_signal=data.get("prior_signal"),
+            conviction_timing_overlay=bool(data.get("conviction_timing_overlay")),
+            conviction_timing_overlay_detail=dict(
+                data.get("conviction_timing_overlay_detail") or {}
+            ),
             leverage_override=bool(data.get("leverage_override")),
             dual_leverage_display=bool(data.get("dual_leverage_display")),
             operating_cashflow=data.get("operating_cashflow"),
@@ -481,6 +501,8 @@ def _brief_summary(
     cyclical_exposure_overlay: bool = False,
     earnings_basis_overlay: bool = False,
     earnings_growth_bps_divergence_warning: bool = False,
+    conviction_timing_overlay: bool = False,
+    conviction_timing_overlay_note: str | None = None,
     fcf_basis_overlay: bool = False,
     leverage_override: bool = False,
     dual_leverage_display: bool = False,
@@ -604,6 +626,9 @@ def _brief_summary(
             "Earnings growth warning: statutory and filing core EPS growth diverge by >300 bps."
         )
 
+    if conviction_timing_overlay and conviction_timing_overlay_note:
+        parts.append(conviction_timing_overlay_note)
+
     if fcf_basis_overlay and adjusted_signal and adjusted_signal != signal:
         parts.append(
             f"FCF basis overlay: filing, screen TTM, and company-adjusted FCF diverge while "
@@ -639,6 +664,8 @@ def build_company_reports(
     model_results: pd.DataFrame,
     *,
     output_dir: Path | None = None,
+    signal_history: pd.DataFrame | None = None,
+    run_at: datetime | None = None,
 ) -> list[CompanyReport]:
     """Create a brief reason summary for every screened company."""
     reports: list[CompanyReport] = []
@@ -657,6 +684,37 @@ def build_company_reports(
         earnings_growth_overlay = build_earnings_growth_overlay(row)
         earnings_growth_bps_divergence_warning = bool(
             earnings_growth_overlay.get("bps_divergence_warning")
+        )
+        overlay_flag = row.get("conviction_timing_overlay")
+        if overlay_flag is not None and not (
+            isinstance(overlay_flag, float) and pd.isna(overlay_flag)
+        ):
+            conviction_timing_overlay_detail = {
+                "observe_only": True,
+                "transition_key": row.get("transition_key"),
+                "prior_signal": row.get("prior_signal"),
+                "conviction_timing_overlay": bool(overlay_flag),
+                "conviction_timing_overlay_score": row.get("conviction_timing_overlay_score"),
+                "conviction_timing_overlay_timing": row.get("conviction_timing_overlay_timing"),
+                "conviction_timing_overlay_action": row.get("conviction_timing_overlay_action"),
+            }
+        else:
+            prior_signal = None
+            if signal_history is not None and run_at is not None:
+                prior_signal = resolve_prior_signal(
+                    signal_history,
+                    ticker=str(ticker),
+                    run_at=run_at,
+                )
+            conviction_timing_overlay_detail = build_conviction_timing_overlay(
+                row,
+                prior_signal=prior_signal,
+            )
+        conviction_timing_overlay = bool(
+            conviction_timing_overlay_detail.get("conviction_timing_overlay")
+        )
+        conviction_timing_overlay_note = format_conviction_timing_overlay_note(
+            conviction_timing_overlay_detail
         )
         screening_inputs.update(
             {key: value for key, value in earnings_growth_overlay.items() if value is not None}
@@ -1098,6 +1156,8 @@ def build_company_reports(
             cyclical_exposure_overlay=cyclical_exposure_overlay,
             earnings_basis_overlay=earnings_basis_overlay,
             earnings_growth_bps_divergence_warning=earnings_growth_bps_divergence_warning,
+            conviction_timing_overlay=conviction_timing_overlay,
+            conviction_timing_overlay_note=conviction_timing_overlay_note,
             fcf_basis_overlay=fcf_basis_overlay,
             leverage_override=leverage_override,
             dual_leverage_display=dual_leverage_display,
@@ -1175,6 +1235,11 @@ def build_company_reports(
                 earnings_basis_overlay=earnings_basis_overlay,
                 earnings_growth_overlay=earnings_growth_overlay,
                 earnings_growth_bps_divergence_warning=earnings_growth_bps_divergence_warning,
+                conviction_timing_overlay=conviction_timing_overlay,
+                conviction_timing_overlay_detail=conviction_timing_overlay_detail,
+                transition_key=str(conviction_timing_overlay_detail.get("transition_key") or "")
+                or None,
+                prior_signal=conviction_timing_overlay_detail.get("prior_signal"),
                 peer_model_pass_table=peer_model_pass_table,
                 fcf_basis_overlay=fcf_basis_overlay,
                 leverage_override=leverage_override,

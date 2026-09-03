@@ -39,6 +39,9 @@ from value_investor.scoring import evaluate_universe, summarize_by_ticker
 from value_investor.scoring.cash_conversion_overlay import (
     enrich_signals_with_cash_conversion_overlay,
 )
+from value_investor.scoring.conviction_timing_overlay import (
+    enrich_signals_with_conviction_timing_overlay,
+)
 from value_investor.scoring.cyclical_exposure_overlay import (
     enrich_signals_with_cyclical_exposure_overlay,
 )
@@ -179,6 +182,12 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "lynch_peg_model",
         "lynch_peg_statutory",
         "fcf_basis_overlay",
+        "transition_key",
+        "prior_signal",
+        "conviction_timing_overlay",
+        "conviction_timing_overlay_score",
+        "conviction_timing_overlay_timing",
+        "conviction_timing_overlay_action",
         "operating_cashflow",
         "fcf_dividend_coverage_gross",
         "fcf_dividend_coverage_net",
@@ -380,6 +389,12 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
         signals_out,
         result.model_results,
         output_dir=output_dir,
+    )
+    history = load_signal_history(output_dir)
+    signals_out = enrich_signals_with_conviction_timing_overlay(
+        signals_out,
+        history,
+        run_at=result.run_at,
     )
     signals_out.to_csv(paths["signals"], index=False)
     result.model_results.to_csv(paths["model_results"], index=False)
