@@ -5016,6 +5016,42 @@ def test_fetch_filings_ir_allowlist_hik_l_builtin(tmp_path: Path):
     assert all(row["source"] == "ir_allowlist" for row in rows)
 
 
+def test_fetch_filings_ir_allowlist_ebo_ax_builtin(tmp_path: Path):
+    """EBO.AX annual/interim PDFs ship in the built-in IR allowlist (Markit + ASX)."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("EBO.AX", path=allowlist_path)
+    urls = {row["url"] for row in rows}
+    assert any("2924-02984095-2A1616605" in url for url in urls)
+    assert any("06nczkd8fndm9c.pdf" in url for url in urls)
+    assert len(rows) >= 4
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+
+
+@patch("value_investor.research.filings.fetch_filings_asx_news", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_asx_direct", return_value=[])
+def test_ingest_filings_asx200_ebo_ax_indexes_ir_allowlist_bodies(
+    _mock_asx_direct,
+    _mock_asx_news,
+    tmp_path: Path,
+):
+    """When Markit latest-five lacks results rows, EBO.AX still indexes IR allowlist filings."""
+    meta = ingest_filings(
+        ticker="EBO.AX",
+        company_name="EBOS Group Limited",
+        sources_dir=tmp_path,
+        market="asx200",
+    )
+    assert meta["filings_regime"] == "asx_announcements"
+    summary = meta.get("filings_summary") or {}
+    assert summary.get("total", 0) >= 4
+    index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
+    assert "ir_allowlist" in index.get("sources_used", [])
+    assert all(row["source"] == "ir_allowlist" for row in index.get("filings") or [])
+    assert (tmp_path / "filings" / "filings_index.json").exists()
+
+
 def test_load_ir_url_allowlist_merges_file_with_builtin(tmp_path: Path):
     """File allowlist URLs are merged with built-in IR URLs (not replaced)."""
     path = tmp_path / "ir.json"
