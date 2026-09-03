@@ -109,9 +109,26 @@ def test_observe_sim_explicit_euro_depth():
             "observe_sim_after_screen": True,
             "observe_sim_markets_mode": "explicit",
             "observe_sim_markets": ["euro_depth"],
+            "observe_sim_include_ingest_profile": False,
         }
     }
     assert observe_sim_markets_for_policy(policy) == ["euro_depth"]
+
+
+def test_observe_sim_ingest_profile_adds_sprint_markets():
+    policy = {
+        "focus_market": "euro_depth",
+        "ingest_parallel_sprint": ["sp500"],
+        "ingest_parallel_sprint_2": ["asx200"],
+        "ladder": {
+            "observe_sim_after_screen": True,
+            "observe_sim_markets_mode": "explicit",
+            "observe_sim_markets": ["euro_depth"],
+        },
+    }
+    assert observe_sim_markets_for_policy(policy) == ["euro_depth", "sp500", "asx200"]
+    assert "euro_depth" in MARKET_BENCHMARKS
+    assert "asx200" in MARKET_BENCHMARKS
 
 
 def test_phase1_gate_skips_ai_when_policy_disables(tmp_path: Path):

@@ -39,6 +39,37 @@ _STAMP_RE = re.compile(r"signals_(\d{8}_\d{6})\.csv$")
 DEFAULT_OBSERVE_SIM_MARKETS: tuple[str, ...] = ("sp500",)
 OBSERVE_SIM_MARKETS_MODE_EXPLICIT = "explicit"
 OBSERVE_SIM_MARKETS_MODE_GRADUATED_BENCHMARK = "graduated_benchmark"
+INGEST_PROFILE_OBSERVE_SIM_LIST_KEYS: tuple[str, ...] = (
+    "ingest_parallel_sprint",
+    "ingest_parallel_sprint_2",
+    "ingest_parity_markets",
+    "ftse_equivalent_markets",
+)
+
+
+def ingest_profile_observe_sim_markets(policy: dict[str, Any]) -> list[str]:
+    """Markets on the active ingest / measurement profile that keep an observe-sim clock.
+
+    Union of focus, both parallel sprint streams, ingest-parity (post-sprint
+    maintenance), ``ftse_equivalent_markets`` (canonical measurement track that
+    can outlive a sprint without joining parity), and weekly-paper shard
+    markets. Does **not** include Layer A grow-only graduated markets.
+    """
+    ladder = policy.get("ladder") or {}
+    ordered: list[str] = []
+
+    def _add(raw: object) -> None:
+        mid = str(raw or "").strip()
+        if mid and mid not in ordered:
+            ordered.append(mid)
+
+    _add(policy.get("focus_market") or ladder.get("focus_market"))
+    for key in INGEST_PROFILE_OBSERVE_SIM_LIST_KEYS:
+        for mid in policy.get(key) or []:
+            _add(mid)
+    for mid in ladder.get("weekly_paper_shard_markets") or []:
+        _add(mid)
+    return ordered
 
 
 def observe_sim_markets_for_policy(policy: dict[str, Any]) -> list[str]:
@@ -60,8 +91,11 @@ def observe_sim_markets_for_policy(policy: dict[str, Any]) -> list[str]:
     extra = [
         str(mid) for mid in (ladder.get("observe_sim_markets_extra") or []) if str(mid).strip()
     ]
+    profile: list[str] = []
+    if ladder.get("observe_sim_include_ingest_profile", True):
+        profile = ingest_profile_observe_sim_markets(policy)
     ordered: list[str] = []
-    for mid in [*markets, *extra]:
+    for mid in [*markets, *extra, *profile]:
         if mid not in ordered:
             ordered.append(mid)
     return [mid for mid in ordered if mid in MARKET_BENCHMARKS]

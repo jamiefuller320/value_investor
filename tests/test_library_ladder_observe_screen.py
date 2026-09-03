@@ -1,4 +1,4 @@
-"""Tests for observe-sim screen pass when research is skipped."""
+"""Tests for observe-sim screen-lite backfill."""
 
 from __future__ import annotations
 
@@ -6,7 +6,10 @@ from datetime import UTC, datetime
 from pathlib import Path
 from unittest.mock import patch
 
-from value_investor.library_ladder import _screen_observe_sim_markets
+from value_investor.library_ladder import (
+    _screen_observe_sim_markets,
+    observe_sim_screen_should_run,
+)
 
 
 def test_screen_observe_sim_markets_adds_to_screened_set():
@@ -47,3 +50,24 @@ def test_screen_observe_sim_markets_skips_when_all_screened():
         run_at=datetime.now(UTC),
     )
     assert result["skipped"] is True
+
+
+def test_observe_sim_screen_runs_even_when_research_ran():
+    enabled, reason = observe_sim_screen_should_run(skip_screen=False, ladder_cfg={})
+    assert enabled is True
+    assert reason == ""
+    enabled, reason = observe_sim_screen_should_run(
+        skip_screen=False,
+        ladder_cfg={"observe_sim_screen_when_research_skipped": False},
+    )
+    assert enabled is False
+    assert "observe_sim_screen_when_research_skipped" in reason
+    enabled, reason = observe_sim_screen_should_run(skip_screen=True, ladder_cfg={})
+    assert enabled is False
+    assert reason == "screen-lite disabled"
+    enabled, reason = observe_sim_screen_should_run(
+        skip_screen=False,
+        ladder_cfg={"observe_sim_screen_missing_markets": False},
+    )
+    assert enabled is False
+    assert "observe_sim_screen_missing_markets" in reason
