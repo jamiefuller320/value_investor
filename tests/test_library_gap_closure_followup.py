@@ -215,7 +215,9 @@ def test_recent_intensive_is_scoped_by_market(tmp_path: Path):
         compact=False,
     )
     assert has_recent_intensive_gap_closure_run(runs_path=runs_path) is True
-    assert has_recent_intensive_gap_closure_run(runs_path=runs_path, market_id="euro_depth") is False
+    assert (
+        has_recent_intensive_gap_closure_run(runs_path=runs_path, market_id="euro_depth") is False
+    )
     assert has_recent_intensive_gap_closure_run(runs_path=runs_path, market_id="sp500") is True
 
     root, reports = _euro_fixture(tmp_path)

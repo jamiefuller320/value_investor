@@ -900,9 +900,7 @@ def evaluate_library_ingest_gap_closure_followup(
     if not prefer:
         for key in ("zero_body_tickers", "unmeasured_tickers"):
             sample = [
-                str(token).strip()
-                for token in (health_after.get(key) or [])
-                if str(token).strip()
+                str(token).strip() for token in (health_after.get(key) or []) if str(token).strip()
             ]
             if sample:
                 prefer = sample[0]
