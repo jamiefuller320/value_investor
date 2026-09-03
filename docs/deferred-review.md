@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T15:44:22+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T16:26:52+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -326,6 +326,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L256 | **Tighten experiment caps after park-and-evolve is live** | Early discretionary cap is 12 tasks / 8 expensive shadows so every lifecycle stage can stay covered. After experiment_lineage_and_park can park losers without cancelling their cheap feed, consider tightening discretionary tasks toward 8 if agent triage is noisy — never put coverage overlays back under the cap. | experiment_lineage_and_park is active AND experiment_inventory.complexity.needs_agent_triage is true for 3 consecutive Sunday director runs |
 | L257 | **Persist observe clock when a sprint stream vacates without parity** | If a parallel sprint market is removed from ingest_parallel_sprint / _2 without landing on ingest_parity_markets or ftse_equivalent_markets, copy it to observe_sim_markets_extra so the 8-12 week archive clock does not stop. S&P is already covered by ftse_equivalent_markets; ASX usually enters ingest_parity_markets on filing parity. | A sprint stream advances a market that is not added to ingest_parity_markets or ftse_equivalent_markets |
 | L258 | **Roll gha_pip_install.sh out to remaining workflows** | Euro/library ingest now retries pip on empty-index flakes. Other long jobs (paper-auto, ops-monitor, FTSE ingest-loop, orchestrator) still use a single pip install -e . | Another workflow fails on pandas from versions: none or a similar empty-index pip flake |
+| L259 | **Cap euro discovery_scan so deepen still finishes** | Euro ingest has hit runtime_cutoff on every run since 2026-09-01, often completing 0-1 of 24 targets because listing discovery is forced by critical-path and consumes the 2700s budget before body fetch. Indexed-without-body is drifting up as discovery adds rows faster than bodies land. | Next successful euro-ingest-loop still reports runtime_cutoff with results length 0-1 and improved=[] |
 
 ---
 
