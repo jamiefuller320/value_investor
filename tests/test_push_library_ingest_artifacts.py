@@ -61,7 +61,11 @@ def _seed_library_repo(tmp_path: Path) -> tuple[Path, Path]:
 def _run_push(work: Path) -> subprocess.CompletedProcess[str]:
     env = {**os.environ, "MAX_ATTEMPTS": "2"}
     return subprocess.run(
-        ["bash", "scripts/push_library_ingest_artifacts.sh", "chore: euro_depth ingest loop [skip ci]"],
+        [
+            "bash",
+            "scripts/push_library_ingest_artifacts.sh",
+            "chore: euro_depth ingest loop [skip ci]",
+        ],
         cwd=work,
         env=env,
         capture_output=True,
