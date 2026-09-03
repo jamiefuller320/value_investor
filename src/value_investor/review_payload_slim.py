@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from value_investor.chart_outcome_review import slim_chart_outcome_review
+
 
 def slim_backtest(payload: dict[str, Any] | None) -> dict[str, Any] | None:
     if not isinstance(payload, dict):
@@ -311,6 +313,7 @@ def slim_entry_dca(payload: dict[str, Any] | None) -> dict[str, Any] | None:
 
 __all__ = [
     "slim_backtest",
+    "slim_chart_outcome_review",
     "slim_entry_dca",
     "slim_exclusion_ladder_replay",
     "slim_exclusion_universe",

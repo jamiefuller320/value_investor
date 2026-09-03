@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-03T11:40:57+00:00",
+  "updated_at": "2026-09-03T11:45:25+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -5009,6 +5009,137 @@
     {
       "id": "N58",
       "category": "not_now",
+      "section": "learning",
+      "title": "Do not retune knobs from the first chart-outcome mix",
+      "summary": "The first human and deterministic read of buy-tier charts is mixed_no_terrible (0 stop hits, 0 terrible paths). That is not a reason to tighten stops, widen targets, or apply decision-review knobs.",
+      "revisit_when": "chart_outcome_review verdict becomes has_terrible, or stop_hit is above 0 on two consecutive Sunday passes",
+      "tags": [
+        "charts",
+        "timing",
+        "knobs"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06698-f813-7549-8552-e46f5f9e4acb",
+      "added_at": "2026-09-03T09:35:39+00:00"
+    },
+    {
+      "id": "L243",
+      "category": "later",
+      "section": "learning",
+      "title": "Use giveback vs well-timed chart labels as analysis-review context",
+      "summary": "After several Sunday chart-outcome refreshes, cite stable giveback versus well-timed cohorts in analysis-review as observe-only timing context. Keep this separate from feeding first-cross dates into decision-review (L242).",
+      "revisit_when": "chart_outcome_review has at least 4 Sunday refreshes and giveback/well_timed counts remain populated",
+      "tags": [
+        "charts",
+        "timing",
+        "giveback",
+        "analysis-review"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06698-f813-7549-8552-e46f5f9e4acb",
+      "added_at": "2026-09-03T09:35:39+00:00"
+    },
+    {
+      "id": "L244",
+      "category": "later",
+      "section": "learning",
+      "title": "Chart-side drop-to-recovery metric on frozen entries",
+      "summary": "For buy-tier charts, score max drop after the frozen recommendation close and whether/when price recovered through that entry (days underwater, recovered_to_entry). Distinct from paper hold-recovery, which only covers stressed sleeves. Use to judge short-term loss tolerance vs eventual success without retuning timing yet.",
+      "revisit_when": "chart_outcome_review has at least 4 Sunday refreshes and several names have recovered through the frozen entry after a drawdown",
+      "tags": [
+        "charts",
+        "timing",
+        "drop-to-recovery",
+        "hypothesis"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06698-f813-7549-8552-e46f5f9e4acb",
+      "added_at": "2026-09-03T09:54:21+00:00"
+    },
+    {
+      "id": "L245",
+      "category": "later",
+      "section": "learning",
+      "title": "Entry-timing overlay scored against missed eventual winners",
+      "summary": "Later, a timing overlay might reduce mis-timed buys, but it must be measured against names that were underwater early and still worked. Do not tighten wait/accumulate from a mixed_no_terrible first month. Pair any timing experiment with a miss-cost / drop-to-recovery view.",
+      "revisit_when": "drop-to-recovery or hold-recovery cohorts can split well-timed vs recovered-from-drawdown vs still-underwater on a multi-month window",
+      "tags": [
+        "charts",
+        "timing",
+        "miss-cost",
+        "hypothesis"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06698-f813-7549-8552-e46f5f9e4acb",
+      "added_at": "2026-09-03T09:54:22+00:00"
+    },
+    {
+      "id": "N59",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Do not start entry-timing experiments from this mixed chart pass",
+      "summary": "The first chart-outcome read is mixed_no_terrible with short-term underwater tolerated while hypotheses stand. That is not a cue to add wait filters or delay buys. The live test is longer-horizon pick success on the paper book.",
+      "revisit_when": "buy-tier chart outcomes span several months and drop-to-recovery or paper hold-recovery can show whether early underwater names recovered",
+      "tags": [
+        "charts",
+        "timing",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06698-f813-7549-8552-e46f5f9e4acb",
+      "added_at": "2026-09-03T09:54:22+00:00"
+    },
+    {
+      "id": "L246",
+      "category": "later",
+      "section": "research",
+      "title": "Market status tile drill-down to library screener",
+      "summary": "The Overview market status card shows signal mix and health; a later step could open the full offline screen-lite table for that market without changing the live FTSE screener.",
+      "revisit_when": "After the market status grid has been used for a few Sunday reviews and a non-FTSE screen-lite table would save time vs opening library files.",
+      "tags": [
+        "dashboard",
+        "library",
+        "screen-lite"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a066f1-88cd-715d-a448-009a8cb953cb",
+      "added_at": "2026-09-03T11:23:39+00:00"
+    },
+    {
+      "id": "L247",
+      "category": "later",
+      "section": "ops",
+      "title": "On-click filing-health refresh for market status cards",
+      "summary": "Detail cards currently use cached euro_ingest_dispatch filing health. A live re-snapshot on click would be fresher but is too expensive for a static Pages dashboard.",
+      "revisit_when": "When the local dashboard API can serve a cheap per-market health endpoint, or dispatch snapshots are published more than once a day.",
+      "tags": [
+        "dashboard",
+        "ingest",
+        "filing-health"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a066f1-88cd-715d-a448-009a8cb953cb",
+      "added_at": "2026-09-03T11:23:39+00:00"
+    },
+    {
+      "id": "N60",
+      "category": "not_now",
+      "section": "universe",
+      "title": "Open non-FTSE markets from the status grid into the live screener",
+      "summary": "Do not wire market-status tiles into the live FTSE 350 screener or publish path. Keep richness before breadth: library markets stay offline until stage 4.",
+      "revisit_when": "Project stage 4: a shard has cleared Phase 3 and FTSE primary AI-judgment shows persistent excess.",
+      "tags": [
+        "dashboard",
+        "stage-4",
+        "live-screen"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a066f1-88cd-715d-a448-009a8cb953cb",
+      "added_at": "2026-09-03T11:23:40+00:00"
+    },
+    {
+      "id": "N61",
+      "category": "not_now",
       "section": "research",
       "title": "Execute dollar-cost averaging on live paper books",
       "summary": "Do not change paper-auto fills to actual multi-tranche DCA until the model-independent overlay has enough closed episodes to rank cadences and a human acks ready_for_cadence_analysis.",
@@ -5020,10 +5151,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
-      "added_at": "2026-09-03T11:05:08+00:00"
+      "added_at": "2026-09-03T11:45:25+00:00"
     },
     {
-      "id": "L243",
+      "id": "L252",
       "category": "later",
       "section": "research",
       "title": "Intra-day entry tranche cadence",
@@ -5036,10 +5167,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
-      "added_at": "2026-09-03T11:05:08+00:00"
+      "added_at": "2026-09-03T11:45:25+00:00"
     },
     {
-      "id": "L244",
+      "id": "L253",
       "category": "later",
       "section": "research",
       "title": "Archive-history DCA overlay to accelerate cadence evidence",
@@ -5052,10 +5183,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
-      "added_at": "2026-09-03T11:05:08+00:00"
+      "added_at": "2026-09-03T11:45:25+00:00"
     },
     {
-      "id": "N59",
+      "id": "N62",
       "category": "not_now",
       "section": "research",
       "title": "Lot-link DCA entry blocks to tactical sells",
@@ -5070,10 +5201,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
-      "added_at": "2026-09-03T11:22:46+00:00"
+      "added_at": "2026-09-03T11:45:25+00:00"
     },
     {
-      "id": "N60",
+      "id": "N63",
       "category": "not_now",
       "section": "research",
       "title": "Pyramid add-on while still held beyond original sleeve",
@@ -5087,10 +5218,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
-      "added_at": "2026-09-03T11:33:20+00:00"
+      "added_at": "2026-09-03T11:45:25+00:00"
     },
     {
-      "id": "L245",
+      "id": "L254",
       "category": "later",
       "section": "ops",
       "title": "Parked-but-fed experiment state with lineage",
@@ -5104,10 +5235,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
-      "added_at": "2026-09-03T11:40:57+00:00"
+      "added_at": "2026-09-03T11:45:25+00:00"
     },
     {
-      "id": "L246",
+      "id": "L255",
       "category": "later",
       "section": "ops",
       "title": "Apply library thinning to paper experiment artifacts",
@@ -5121,7 +5252,7 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
-      "added_at": "2026-09-03T11:40:57+00:00"
+      "added_at": "2026-09-03T11:45:25+00:00"
     }
   ],
   "fragments": [
@@ -5514,6 +5645,18 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a05d37-6943-7cdb-a519-ea81652721fc",
       "added_at": "2026-09-01T13:56:19+00:00"
+    },
+    {
+      "id": "frag-20260903-01",
+      "text": "MEGP.L 1y chart has a March 2026 close hole that draws as a vertical gap in the popup; chart outcomes still score from initial last vs latest close, so the gap did not create a false terrible path.",
+      "tags": [
+        "charts",
+        "data-quality",
+        "MEGP"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06698-f813-7549-8552-e46f5f9e4acb",
+      "added_at": "2026-09-03T09:45:05+00:00"
     }
   ]
 }

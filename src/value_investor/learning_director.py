@@ -30,6 +30,7 @@ from value_investor.learning_director_regime import (
     load_learning_director_vision,
 )
 from value_investor.review_payload_slim import (
+    slim_chart_outcome_review,
     slim_entry_dca,
     slim_exclusion_ladder_replay,
     slim_exclusion_universe,
@@ -252,6 +253,9 @@ def build_learning_director_payload(
         ),
         "loser_snapshot_cards": slim_loser_snapshot_cards(
             _safe_read(data_dir / "loser_snapshot_cards.json")
+        ),
+        "chart_outcome_review": slim_chart_outcome_review(
+            _safe_read(data_dir / "chart_outcome_review.json")
         ),
         "hypothesis_integrity": slim_hypothesis_integrity(
             _safe_read(paper_root / "learning_tracks_hypothesis_integrity.json")

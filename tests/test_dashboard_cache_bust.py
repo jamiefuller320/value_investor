@@ -15,6 +15,7 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     assert 'fetchDashboardJson("data/progress_report.json")' in text or (
         'loadOptionalDashboardJson("data/progress_report.json")' in text
     )
+    assert 'loadOptionalDashboardJson("data/market_status.json")' in text
     # Must not leave a bare uncached progress_report fetch in loadDashboard.
     load_fn = text.split("async function loadDashboard()", 1)[1].split("\nasync function ", 1)[0]
     assert 'fetch("data/progress_report.json")' not in load_fn

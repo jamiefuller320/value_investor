@@ -24,7 +24,7 @@ most automation — this list is what still needs a human.
 
 | Task | Who | Doc |
 |------|-----|-----|
-| Read **analysis review** synthesis (`analysis_review.md`) | Human | [analysis-review.md](analysis-review.md#artifacts) |
+| Read **analysis review** synthesis (`analysis_review.md`) plus the observe-only **chart-outcome** mix | Human | [analysis-review.md](analysis-review.md#artifacts) |
 | Review **knob calibration priors** (`ranking_mode`, `ready_for_shadow_bootstrap`, `bootstrap_priors`) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
 | Review **unified experiment assessment** (`experiment_assessment.json`) | Human | [experiment-assessment.md](experiment-assessment.md#human-gate) |
 | Compare **calibrated shadows vs primary** AI judgment on Automation tab | Human | [knob-calibration.md](knob-calibration.md#competing-calibrated-shadows) |
