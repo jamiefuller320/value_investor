@@ -51,6 +51,10 @@ from value_investor.scoring.leverage_overlay import (
     leverage_override_triggered,
     parse_adjusted_net_debt_gbp,
 )
+from value_investor.scoring.quality_family_avoid_gate_overlay import (
+    build_quality_family_avoid_gate_overlay,
+    enrich_signals_with_quality_family_avoid_gate,
+)
 from value_investor.scoring.sector_overrides import (
     AGRICULTURE_COMMODITIES_SECTOR,
     apply_sector_overrides,
@@ -1132,6 +1136,118 @@ def test_build_conviction_timing_overlay_does_not_flag_improving_non_weak_key():
     )
     assert overlay["transition_key"] == "buy->strong_buy"
     assert overlay["conviction_timing_overlay"] is False
+
+
+def _quality_model_results(ticker: str, *, scores: dict[str, float]) -> pd.DataFrame:
+    rows = [
+        {
+            "ticker": ticker,
+            "model_id": model_id,
+            "model_name": model_id,
+            "passed": score >= 0.55,
+            "score": score,
+        }
+        for model_id, score in scores.items()
+    ]
+    return pd.DataFrame(rows)
+
+
+def test_enrich_signals_with_quality_family_avoid_gate_flags_aal_pattern():
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "AAL.L",
+                "signal": "avoid",
+                "conviction_score": 0.0633,
+                "passed_families": "cheapness,risk",
+            }
+        ]
+    )
+    model_results = _quality_model_results(
+        "AAL.L",
+        scores={
+            "quality_value": 0.2,
+            "buffett_quality": 0.15,
+            "economic_moat": 0.1,
+            "piotroski_f": 0.25,
+        },
+    )
+
+    enriched = enrich_signals_with_quality_family_avoid_gate(signals, model_results)
+    row = enriched.iloc[0]
+
+    assert bool(row["quality_family_failed"]) is True
+    assert bool(row["quality_family_avoid_gate"]) is True
+    assert row["quality_family_avoid_gate_action"] == "cohort_watch"
+    assert row["quality_family_avoid_gate_observe_signal"] == "avoid"
+    assert bool(row["quality_family_avoid_gate_would_block_upgrade"]) is False
+    assert row["quality_family_composite_score"] == pytest.approx(0.175)
+    assert "quality" in row["co_failed_families"]
+    assert row["signal"] == "avoid"
+
+
+def test_enrich_signals_with_quality_family_avoid_gate_blocks_high_conviction():
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "AV.L",
+                "signal": "avoid",
+                "conviction_score": 0.38,
+                "passed_families": "cheapness,risk",
+            }
+        ]
+    )
+    model_results = _quality_model_results(
+        "AV.L",
+        scores={
+            "quality_value": 0.3,
+            "buffett_quality": 0.2,
+            "economic_moat": 0.1,
+            "piotroski_f": 0.4,
+        },
+    )
+
+    enriched = enrich_signals_with_quality_family_avoid_gate(signals, model_results)
+    row = enriched.iloc[0]
+
+    assert bool(row["quality_family_avoid_gate"]) is True
+    assert row["quality_family_avoid_gate_action"] == "block_upgrade"
+    assert bool(row["quality_family_avoid_gate_would_block_upgrade"]) is True
+
+
+def test_enrich_signals_with_quality_family_avoid_gate_skips_quality_pass():
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "FGP.L",
+                "signal": "avoid",
+                "conviction_score": 0.4,
+                "passed_families": "cheapness,quality,dividend,garp,risk",
+            }
+        ]
+    )
+    model_results = _quality_model_results(
+        "FGP.L",
+        scores={
+            "quality_value": 0.8,
+            "buffett_quality": 0.75,
+            "economic_moat": 0.7,
+            "piotroski_f": 0.85,
+        },
+    )
+
+    enriched = enrich_signals_with_quality_family_avoid_gate(signals, model_results)
+    row = enriched.iloc[0]
+
+    assert bool(row["quality_family_avoid_gate"]) is False
+
+
+def test_build_quality_family_avoid_gate_overlay_does_not_flag_hold_tier():
+    overlay = build_quality_family_avoid_gate_overlay(
+        {"signal": "hold", "conviction_score": 0.2, "passed_families": "cheapness,risk"},
+        quality_composite_score=0.2,
+    )
+    assert overlay["quality_family_avoid_gate"] is False
 
 
 def _fgp_style_research_tree(tmp_path: Path) -> None:

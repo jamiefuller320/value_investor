@@ -54,6 +54,11 @@ from value_investor.scoring.peer_model_pass_table import (
     attach_peer_model_pass_table,
     build_peer_model_pass_table,
 )
+from value_investor.scoring.quality_family_avoid_gate_overlay import (
+    build_quality_family_avoid_gate_overlay,
+    compute_quality_family_composite_score,
+    format_quality_family_avoid_gate_note,
+)
 from value_investor.technical_analysis import (
     TradePlan,
     format_timing_summary,
@@ -122,6 +127,8 @@ class CompanyReport:
     prior_signal: str | None = None
     conviction_timing_overlay: bool = False
     conviction_timing_overlay_detail: dict[str, Any] = field(default_factory=dict)
+    quality_family_avoid_gate: bool = False
+    quality_family_avoid_gate_detail: dict[str, Any] = field(default_factory=dict)
     leverage_override: bool = False
     dual_leverage_display: bool = False
     operating_cashflow: float | None = None
@@ -188,6 +195,8 @@ class CompanyReport:
             "prior_signal": self.prior_signal,
             "conviction_timing_overlay": self.conviction_timing_overlay,
             "conviction_timing_overlay_detail": self.conviction_timing_overlay_detail,
+            "quality_family_avoid_gate": self.quality_family_avoid_gate,
+            "quality_family_avoid_gate_detail": self.quality_family_avoid_gate_detail,
             "leverage_override": self.leverage_override,
             "dual_leverage_display": self.dual_leverage_display,
             "operating_cashflow": self.operating_cashflow,
@@ -263,6 +272,10 @@ class CompanyReport:
             conviction_timing_overlay=bool(data.get("conviction_timing_overlay")),
             conviction_timing_overlay_detail=dict(
                 data.get("conviction_timing_overlay_detail") or {}
+            ),
+            quality_family_avoid_gate=bool(data.get("quality_family_avoid_gate")),
+            quality_family_avoid_gate_detail=dict(
+                data.get("quality_family_avoid_gate_detail") or {}
             ),
             leverage_override=bool(data.get("leverage_override")),
             dual_leverage_display=bool(data.get("dual_leverage_display")),
@@ -503,6 +516,8 @@ def _brief_summary(
     earnings_growth_bps_divergence_warning: bool = False,
     conviction_timing_overlay: bool = False,
     conviction_timing_overlay_note: str | None = None,
+    quality_family_avoid_gate: bool = False,
+    quality_family_avoid_gate_note: str | None = None,
     fcf_basis_overlay: bool = False,
     leverage_override: bool = False,
     dual_leverage_display: bool = False,
@@ -629,6 +644,9 @@ def _brief_summary(
     if conviction_timing_overlay and conviction_timing_overlay_note:
         parts.append(conviction_timing_overlay_note)
 
+    if quality_family_avoid_gate and quality_family_avoid_gate_note:
+        parts.append(quality_family_avoid_gate_note)
+
     if fcf_basis_overlay and adjusted_signal and adjusted_signal != signal:
         parts.append(
             f"FCF basis overlay: filing, screen TTM, and company-adjusted FCF diverge while "
@@ -715,6 +733,41 @@ def build_company_reports(
         )
         conviction_timing_overlay_note = format_conviction_timing_overlay_note(
             conviction_timing_overlay_detail
+        )
+        gate_flag = row.get("quality_family_avoid_gate")
+        if gate_flag is not None and not (isinstance(gate_flag, float) and pd.isna(gate_flag)):
+            quality_family_avoid_gate_detail = {
+                "observe_only": True,
+                "quality_family_failed": bool(row.get("quality_family_failed")),
+                "quality_family_composite_score": row.get("quality_family_composite_score"),
+                "quality_family_avoid_gate": bool(gate_flag),
+                "quality_family_avoid_gate_action": row.get("quality_family_avoid_gate_action"),
+                "quality_family_avoid_gate_observe_signal": row.get(
+                    "quality_family_avoid_gate_observe_signal"
+                ),
+                "quality_family_avoid_gate_would_block_upgrade": bool(
+                    row.get("quality_family_avoid_gate_would_block_upgrade")
+                ),
+                "co_failed_families": [
+                    part.strip()
+                    for part in str(row.get("co_failed_families") or "").split(",")
+                    if part.strip()
+                ],
+            }
+        else:
+            quality_composite = compute_quality_family_composite_score(
+                model_results,
+                ticker=str(ticker),
+            )
+            quality_family_avoid_gate_detail = build_quality_family_avoid_gate_overlay(
+                row,
+                quality_composite_score=quality_composite,
+            )
+        quality_family_avoid_gate = bool(
+            quality_family_avoid_gate_detail.get("quality_family_avoid_gate")
+        )
+        quality_family_avoid_gate_note = format_quality_family_avoid_gate_note(
+            quality_family_avoid_gate_detail
         )
         screening_inputs.update(
             {key: value for key, value in earnings_growth_overlay.items() if value is not None}
@@ -1158,6 +1211,8 @@ def build_company_reports(
             earnings_growth_bps_divergence_warning=earnings_growth_bps_divergence_warning,
             conviction_timing_overlay=conviction_timing_overlay,
             conviction_timing_overlay_note=conviction_timing_overlay_note,
+            quality_family_avoid_gate=quality_family_avoid_gate,
+            quality_family_avoid_gate_note=quality_family_avoid_gate_note,
             fcf_basis_overlay=fcf_basis_overlay,
             leverage_override=leverage_override,
             dual_leverage_display=dual_leverage_display,
@@ -1240,6 +1295,8 @@ def build_company_reports(
                 transition_key=str(conviction_timing_overlay_detail.get("transition_key") or "")
                 or None,
                 prior_signal=conviction_timing_overlay_detail.get("prior_signal"),
+                quality_family_avoid_gate=quality_family_avoid_gate,
+                quality_family_avoid_gate_detail=quality_family_avoid_gate_detail,
                 peer_model_pass_table=peer_model_pass_table,
                 fcf_basis_overlay=fcf_basis_overlay,
                 leverage_override=leverage_override,

@@ -1694,3 +1694,66 @@ def test_build_company_reports_exports_conviction_timing_overlay_for_hold_to_buy
     assert snapshot["signal"] == "buy"
     assert snapshot["conviction_score"] == pytest.approx(0.4)
     assert "Conviction-timing overlay (observe-only)" in report.summary
+
+
+def test_build_company_reports_exports_quality_family_avoid_gate_for_aal_pattern():
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "AAL.L",
+                "name": "Anglo American plc",
+                "signal": "avoid",
+                "signal_rank": 1,
+                "models_passed": 2,
+                "model_count": 22,
+                "composite_score": 0.325,
+                "sector_composite_score": 0.31,
+                "families_passed": 2,
+                "passed_families": "cheapness,risk",
+                "family_count": 5,
+                "data_quality_score": 0.95,
+                "metrics_present": 19,
+                "metrics_total": 20,
+                "weeks_at_signal": 1,
+                "signal_trend": "new",
+                "conviction_score": 0.0633,
+                "stability_label": "new",
+                "timing_signal": "neutral",
+                "timing_score": 0.5,
+                "rsi_14": 40.0,
+                "price_vs_sma200_pct": -0.1,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "AAL.L",
+                "model_id": model_id,
+                "model_name": model_id,
+                "passed": False,
+                "score": score,
+                "reasons": [],
+                "failed_criteria": [],
+            }
+            for model_id, score in {
+                "quality_value": 0.2,
+                "buffett_quality": 0.15,
+                "economic_moat": 0.1,
+                "piotroski_f": 0.25,
+            }.items()
+        ]
+    )
+
+    report = build_company_reports(signals, model_results)[0]
+    snapshot = report.to_dict()
+
+    assert snapshot["quality_family_avoid_gate"] is True
+    assert snapshot["quality_family_avoid_gate_detail"]["quality_family_avoid_gate_action"] == (
+        "cohort_watch"
+    )
+    assert snapshot["quality_family_avoid_gate_detail"]["quality_family_composite_score"] == (
+        pytest.approx(0.175)
+    )
+    assert snapshot["signal"] == "avoid"
+    assert "Quality-family avoid gate (observe-only)" in report.summary

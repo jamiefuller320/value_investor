@@ -64,6 +64,9 @@ from value_investor.scoring.interim_quality_overlay import (
     enrich_signals_with_interim_quality_overlay,
 )
 from value_investor.scoring.leverage_overlay import enrich_universe_with_leverage_override
+from value_investor.scoring.quality_family_avoid_gate_overlay import (
+    enrich_signals_with_quality_family_avoid_gate,
+)
 from value_investor.scoring.sector_overrides import apply_sector_overrides
 from value_investor.sector_scoring import add_sector_scores
 from value_investor.signal_stability import (
@@ -188,6 +191,13 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "conviction_timing_overlay_score",
         "conviction_timing_overlay_timing",
         "conviction_timing_overlay_action",
+        "quality_family_failed",
+        "quality_family_composite_score",
+        "quality_family_avoid_gate",
+        "quality_family_avoid_gate_action",
+        "quality_family_avoid_gate_observe_signal",
+        "quality_family_avoid_gate_would_block_upgrade",
+        "co_failed_families",
         "operating_cashflow",
         "fcf_dividend_coverage_gross",
         "fcf_dividend_coverage_net",
@@ -395,6 +405,10 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
         signals_out,
         history,
         run_at=result.run_at,
+    )
+    signals_out = enrich_signals_with_quality_family_avoid_gate(
+        signals_out,
+        result.model_results,
     )
     signals_out.to_csv(paths["signals"], index=False)
     result.model_results.to_csv(paths["model_results"], index=False)
