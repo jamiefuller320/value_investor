@@ -209,3 +209,27 @@ def test_refresh_preserves_and_sets_initiated_at(tmp_path: Path):
     payload = refresh_experiment_assessment(data_dir, paper_root=paper_root)
     row = next(r for r in payload["experiments"] if r["experiment_id"] == "ai_judgment_calibrated")
     assert row["initiated_at"] == prior_time
+
+
+def test_refresh_skips_done_analysis_tasks(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    paper_root = data_dir / "paper_automation"
+    paper_root.mkdir(parents=True)
+    (data_dir / "analysis_tasks.json").write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "ana-20260728-01",
+                        "area": "offline_sim",
+                        "title": "Seed second weekly run",
+                        "status": "done",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = refresh_experiment_assessment(data_dir, paper_root=paper_root)
+    ids = [row["experiment_id"] for row in payload["experiments"]]
+    assert "ana-20260728-01" not in ids

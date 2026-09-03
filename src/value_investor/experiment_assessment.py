@@ -25,6 +25,7 @@ from value_investor.trajectory_evidence import build_model_focus_candidates
 
 ASSESSMENT_FILENAME = "experiment_assessment.json"
 ASSESSMENT_STATUSES = frozenset({"proposed", "observing", "continue", "fail", "recommend"})
+CLOSED_TASK_STATUSES = frozenset({"promoted", "cancelled", "done"})
 TASK_KINDS = frozenset({"analysis_task", "paper_learning_task", "learning_director_task"})
 SCORING_CANDIDATE_MIN_COUNT = 20
 EXIT_SHADOW_CONTINUE_CLOSED = 10
@@ -407,7 +408,7 @@ def _assess_task_row(
     tasks_path: Path,
 ) -> dict[str, Any]:
     status = str(task.get("status") or "proposed").strip().lower()
-    if status in {"promoted", "cancelled"}:
+    if status in CLOSED_TASK_STATUSES:
         return {}
     area = str(task.get("area") or "").strip().lower()
     text = _task_text(task)
@@ -582,7 +583,7 @@ def sync_task_assessment_status(
             if row.get("forward_evidence"):
                 evidence["forward_evidence"] = row["forward_evidence"]
 
-            if assessment == "fail" and task.get("status") not in {"cancelled", "promoted"}:
+            if assessment == "fail" and task.get("status") not in CLOSED_TASK_STATUSES:
                 task["status"] = "cancelled"
                 task["cancelled_at"] = now
                 task["cancel_reason"] = "Experiment assessment gate failed (auto-sync)"

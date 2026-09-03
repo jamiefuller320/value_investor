@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-09-03T08:30:05.809003+00:00",
+  "updated_at": "2026-09-03T10:01:44.130007+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -25,13 +25,13 @@
     "experimental_track_count": 1
   },
   "summary": {
-    "continue": 4,
+    "observing": 3,
     "proposed": 1,
+    "recommend": 8,
+    "continue": 3,
     "fail": 3,
-    "observing": 4,
-    "recommend": 9,
-    "human_ack_pending": 9,
-    "total": 21
+    "human_ack_pending": 8,
+    "total": 18
   },
   "experiments": [
     {
@@ -152,86 +152,6 @@
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
     },
     {
-      "experiment_id": "ana-20260728-01",
-      "kind": "analysis_task",
-      "title": "Seed second+ archived weekly run and replay rules vs ai_judgment vs momentum_grace sim tracks — unlock excess_return, trade_count, and total_costs comparisons once run_count ≥ 2.",
-      "area": "offline_sim",
-      "pipeline": "analysis_review",
-      "status": "continue",
-      "source_status": "proposed",
-      "human_ack_required": false,
-      "task_status": "proposed",
-      "promote_to": "manual",
-      "forward_evidence": {
-        "trajectory": {
-          "labeled_event_count": 336,
-          "model_focus_candidates": [
-            {
-              "kind": "transition_key",
-              "key": "hold->buy",
-              "horizon": "1w",
-              "count": 20,
-              "positive_rate": 0.25,
-              "mean_forward_return": -0.008424,
-              "why": "hold->buy 1w positive_rate=0.25 mean=-0.008424 n=20 — opinion flip did not match next-week price"
-            },
-            {
-              "kind": "transition_key",
-              "key": "buy->strong_buy",
-              "horizon": "1w",
-              "count": 12,
-              "positive_rate": 0.25,
-              "mean_forward_return": -0.00492,
-              "why": "buy->strong_buy 1w positive_rate=0.25 mean=-0.00492 n=12 — opinion flip did not match next-week price"
-            },
-            {
-              "kind": "transition_key",
-              "key": "signal_unchanged",
-              "horizon": "1w",
-              "count": 239,
-              "positive_rate": 0.3431,
-              "mean_forward_return": -0.002598,
-              "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 — opinion flip did not match next-week price"
-            },
-            {
-              "kind": "horizon_hit_rate",
-              "key": "1w",
-              "horizon": "1w",
-              "count": 266,
-              "prediction_hit_rate": 0.406,
-              "why": "Directional hit_rate=0.406 at 1w (n=266) — implied upgrade/downgrade/conviction sign is not beating chance"
-            }
-          ]
-        },
-        "archive": {
-          "history_run_count": 12,
-          "backtest_run_count": 12,
-          "simulation_ready": true
-        },
-        "loser_cards": {
-          "top_failed_families": [
-            [
-              "quality",
-              37
-            ],
-            [
-              "dividend",
-              35
-            ],
-            [
-              "garp",
-              28
-            ],
-            [
-              "risk",
-              21
-            ]
-          ]
-        }
-      },
-      "evidence_path": "docs/data/analysis_tasks.json"
-    },
-    {
       "experiment_id": "ana-20260728-02",
       "kind": "analysis_task",
       "title": "Counterfactual paper run: rules track with pre-review knobs (min_conviction 0.0, max_positions 5) vs post-review knobs (0.05, 4) on identical mark windows — quantify whether cost-drag reduction offset",
@@ -260,25 +180,6 @@
         "exit_shadow": {
           "closed_total": 0,
           "exit_timing_ready": true
-        }
-      },
-      "evidence_path": "docs/data/analysis_tasks.json"
-    },
-    {
-      "experiment_id": "ana-20260728-05",
-      "kind": "analysis_task",
-      "title": "Historical-analysis window bootstrap: archive two consecutive weekly runs with overlay_comparison populated — test whether research_overlay / adjusted_signal ranks predict forward 4w/12w excess once t",
-      "area": "analysis",
-      "pipeline": "analysis_review",
-      "status": "observing",
-      "source_status": "proposed",
-      "human_ack_required": false,
-      "task_status": "proposed",
-      "promote_to": "manual",
-      "forward_evidence": {
-        "archive": {
-          "history_run_count": 12,
-          "backtest_run_count": 12
         }
       },
       "evidence_path": "docs/data/analysis_tasks.json"
@@ -403,25 +304,6 @@
       },
       "evidence_path": "docs/data/paper_learning_tasks.json",
       "initiated_at": "2026-09-02T08:30:00.469591+00:00"
-    },
-    {
-      "experiment_id": "ldr-20260823-01",
-      "kind": "learning_director_task",
-      "title": "Epoch-zero dashboard for min_conviction 0.45 apply (2026-08-21) — expected learning value: first trajectory read on whether the opinion-flip reduced `trade_count`/`cost_drag` without eroding the +9.16",
-      "area": "monitoring",
-      "pipeline": "learning_director",
-      "status": "recommend",
-      "source_status": "accepted",
-      "human_ack_required": true,
-      "task_status": "accepted",
-      "promote_to": "manual",
-      "forward_evidence": {
-        "exit_shadow": {
-          "closed_total": 0,
-          "exit_timing_ready": true
-        }
-      },
-      "evidence_path": "docs/data/learning_director_tasks.json"
     },
     {
       "experiment_id": "ldr-20260823-02",
@@ -674,16 +556,6 @@
       "area": "paper_churn"
     },
     {
-      "experiment_id": "ldr-20260823-01",
-      "kind": "learning_director_task",
-      "title": "Epoch-zero dashboard for min_conviction 0.45 apply (2026-08-21) — expected learning value: first trajectory read on whether the opinion-flip reduced `trade_count`/`cost_drag` without eroding the +9.16",
-      "pipeline": "learning_director",
-      "track_id": null,
-      "gate_marks": null,
-      "gate_excess_after_costs": null,
-      "area": "monitoring"
-    },
-    {
       "experiment_id": "ldr-20260823-02",
       "kind": "learning_director_task",
       "title": "Forward observation pass on ai_judgment_exclusion_u4 shadow vs live primary — expected learning value: validate whether u4 ladder filtering converts archive alpha (`exclusion_universe.ladder_results[u",
@@ -736,9 +608,7 @@
   ],
   "task_sync": {
     "updated": [
-      "ana-20260728-01",
       "ana-20260728-02",
-      "ana-20260728-05",
       "plr-20260901-03",
       "ldr-20260823-03",
       "ldr-20260901-02",
@@ -748,7 +618,6 @@
       "ana-20260728-04",
       "plr-20260901-01",
       "plr-20260901-02",
-      "ldr-20260823-01",
       "ldr-20260823-02",
       "ldr-20260823-04",
       "ldr-20260901-01",

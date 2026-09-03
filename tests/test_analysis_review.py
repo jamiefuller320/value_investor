@@ -270,6 +270,32 @@ def test_compile_and_promote_analysis_tasks(tmp_path: Path):
     assert analysis_payload["tasks"][0]["status"] == "promoted"
 
 
+def test_compile_drops_done_analysis_tasks(tmp_path: Path):
+    review = parse_analysis_review(
+        "PROPOSED EXPERIMENTS\n1. [offline_sim] Replay grace — offline only\n"
+    )
+    tasks_path = tmp_path / "analysis_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "ana-20260728-01",
+                        "area": "offline_sim",
+                        "title": "Seed second weekly run",
+                        "status": "done",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    compiled = compile_analysis_tasks(review, run_stamp="20260903", tasks_path=tasks_path)
+    ids = [row["id"] for row in compiled["tasks"]]
+    assert "ana-20260728-01" not in ids
+    assert any(row["id"].startswith("ana-20260903-") for row in compiled["tasks"])
+
+
 def test_promote_skips_non_engineering_areas(tmp_path: Path):
     review = parse_analysis_review(
         "PROPOSED EXPERIMENTS\n1. [offline_sim] Replay grace — offline only\n"

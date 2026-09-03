@@ -29,6 +29,7 @@ from value_investor.deferred_ideas import (
     load_store,
     set_fragment_status,
 )
+from value_investor.experiment_assessment import CLOSED_TASK_STATUSES
 from value_investor.storage import write_json
 
 logger = logging.getLogger(__name__)
@@ -393,7 +394,7 @@ def compile_horizon_tasks(
     kept = [
         row
         for row in (existing.get("tasks") or [])
-        if str(row.get("status") or "") not in {"promoted", "cancelled"}
+        if str(row.get("status") or "") not in CLOSED_TASK_STATUSES
     ]
     new_tasks: list[AnalysisTask] = []
     seq = 1

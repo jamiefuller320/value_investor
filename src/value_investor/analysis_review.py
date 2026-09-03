@@ -12,7 +12,10 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
-from value_investor.experiment_assessment import slim_experiment_assessment_for_review
+from value_investor.experiment_assessment import (
+    CLOSED_TASK_STATUSES,
+    slim_experiment_assessment_for_review,
+)
 from value_investor.knob_calibration import KNOB_CALIBRATION_PRIORS_FILENAME
 from value_investor.review_payload_slim import (
     slim_backtest as _slim_backtest,
@@ -364,7 +367,7 @@ def compile_analysis_tasks(
     kept = [
         row
         for row in (existing.get("tasks") or [])
-        if str(row.get("status") or "") not in {"promoted", "cancelled"}
+        if str(row.get("status") or "") not in CLOSED_TASK_STATUSES
     ]
     new_tasks: list[AnalysisTask] = []
     seq = 1
