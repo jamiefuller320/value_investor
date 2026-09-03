@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T11:01:43+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T11:20:23+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -257,6 +257,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L236 | **Gap-fill: scoring — Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted** | Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted FCF, and screen TTM diverge by >15% AND profit-to-cash falls >15pp year-on-year (ITV: 65% vs 83%, three-way FCF mismatch). | After next weekly email gap-fill pass confirms the gap persists |
 | L238 | **Human FCF bridge override for lease/M&A definition fights** | Auto majority + filing fallback covers ordinary screen/filing/company mismatches. Keep optional fcf_bridge.json overrides for cases where lease accounting, M&A cash classification, or one-offs make the majority/filing pick wrong. | After auto FCF policy has run through at least one results season and buy-tier action notes still look wrong on specific names |
 | L239 | **Metric change without narrative mention trap** | Detect significant YoY FCF (and later earnings/div) moves when cached RNS/filing body lacks related commentary keywords; start observe-only via so_what_closure. Reuse load_filing_bodies_for_ticker + reconcile_fcf YoY, not action_note markers. | After FCF basis enforcement/so-what loop is stable and filing-body coverage is high enough on buy-tier names |
+| L246 | **Start quality-family avoid gate after timing overlay scores** | Both scoring experiments are queued (eng-20260903-01 timing overlay, eng-20260903-02 quality-family avoid gate). Prefer implementing the hold→buy / signal_unchanged overlay first; start the quality-family composite gate only after that overlay has a first observe-only score. | eng-20260903-01 has a first observe-only score artifact, or a later review asks to start the quality gate earlier. |
 
 ### Ops / reliability
 
