@@ -128,6 +128,42 @@
     "rules": "Buy 2564 → sell 2510 (−2.1% price) plus ~£15 round-trip costs on ~£250 notional",
     "ai_judgment": "Buy 2557 → sell 2510 (−1.8% price) plus ~£16 round-trip costs on ~£270 notional"
   },
+  "fair_vs_stress_costs": {
+    "market_id": "ftse350",
+    "stress_trade_cost_pct": 0.03,
+    "fair_buy_pct": 0.00525,
+    "fair_sell_pct": 0.00025,
+    "fair_round_trip_pct": 0.0055,
+    "note": "First-order restatement of recorded gross under T212 Invest assumptions (0.5% UK stamp on buys + 0.025% half-spread; commission 0). Does not rebuild fills or Suite B books.",
+    "episode_buy_through_first_sell": {
+      "rules": {
+        "buy_gross": 257.6,
+        "sell_gross": 252.17,
+        "price_pnl": -5.43,
+        "price_pnl_pct": -0.0211,
+        "stress_costs": 15.3,
+        "fair_costs": 1.4154,
+        "fair_buy_cost": 1.3524,
+        "fair_sell_cost": 0.063,
+        "stress_cash_pnl": -20.72,
+        "fair_cash_pnl": -6.85,
+        "cost_share_of_stress_loss": 0.74
+      },
+      "ai_judgment": {
+        "buy_gross": 275.02,
+        "sell_gross": 269.97,
+        "price_pnl": -5.05,
+        "price_pnl_pct": -0.0184,
+        "stress_costs": 16.35,
+        "fair_costs": 1.5113,
+        "fair_buy_cost": 1.4439,
+        "fair_sell_cost": 0.0675,
+        "stress_cash_pnl": -21.4,
+        "fair_cash_pnl": -6.56,
+        "cost_share_of_stress_loss": 0.76
+      }
+    }
+  },
   "echo_2026_09_03": {
     "note": "Same pattern recurring: both books have IMB.L on exit_streak=1, targets MEGP.L / ITV.L / AEP.L. IMB.L still strong_buy (conviction 0.7768) but below ITV.L (0.891) in a 3-slot book. Observe only — do not pre-empt the hold buffer.",
     "rules_trades_that_pass": ["sell AEP.L"],

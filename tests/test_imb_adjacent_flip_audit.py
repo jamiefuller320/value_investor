@@ -36,3 +36,16 @@ def test_imb_audit_shared_sell_date_and_notes():
         assert first["acted_at"].startswith("2026-08-20")
         assert first["plan_reason"] == "No longer in the top conviction target set"
         assert first["trades"] == []
+
+
+def test_imb_audit_fair_costs_are_much_smaller_than_stress():
+    payload = read_json(AUDIT_PATH)
+    costs = payload["fair_vs_stress_costs"]
+    assert costs["fair_round_trip_pct"] == 0.0055
+    assert costs["stress_trade_cost_pct"] == 0.03
+    for track_id in ("rules", "ai_judgment"):
+        row = costs["episode_buy_through_first_sell"][track_id]
+        assert row["fair_costs"] < 2
+        assert row["stress_costs"] > 15
+        assert row["cost_share_of_stress_loss"] > 0.7
+        assert row["fair_cash_pnl"] > row["stress_cash_pnl"]
