@@ -138,7 +138,7 @@
       "status": "planned",
       "label": "Experiment lineage: evolve winners, park losers with a cheap feed",
       "summary": "Assessment grows parked/retired/child states. Winners spawn a same-stage refinement; losers leave the complexity budget but keep weekday marks until max_trade_lifecycle_days (84d minimum / 400d default), then retire. No auto-apply. Do not cancel the lifecycle overlay — it is the cheap feed.",
-      "revisit_when": "Complexity budget exceeded (open experiments >5 or frozen shadows >4) OR entry_dca_overlay ready_for_cadence_analysis OR >=2 failed calibration shadows still receiving weekday marks",
+      "revisit_when": "experiment_inventory.complexity.needs_agent_triage is true for 3 Sunday director runs OR entry_dca_overlay ready_for_cadence_analysis OR >=2 failed calibration shadows still receiving weekday marks",
       "dependencies": ["v1_weekly_director", "entry_lifecycle_experiments"]
     },
     {
