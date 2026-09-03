@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T11:23:40+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T12:59:22+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -115,6 +115,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N58 | **Do not retune knobs from the first chart-outcome mix** | The first human and deterministic read of buy-tier charts is mixed_no_terrible (0 stop hits, 0 terrible paths). That is not a reason to tighten stops, widen targets, or apply decision-review knobs. | chart_outcome_review verdict becomes has_terrible, or stop_hit is above 0 on two consecutive Sunday passes |
 | N59 | **Do not start entry-timing experiments from this mixed chart pass** | The first chart-outcome read is mixed_no_terrible with short-term underwater tolerated while hypotheses stand. That is not a cue to add wait filters or delay buys. The live test is longer-horizon pick success on the paper book. | buy-tier chart outcomes span several months and drop-to-recovery or paper hold-recovery can show whether early underwater names recovered |
 | N60 | **Open non-FTSE markets from the status grid into the live screener** | Do not wire market-status tiles into the live FTSE 350 screener or publish path. Keep richness before breadth: library markets stay offline until stage 4. | Project stage 4: a shard has cleared Phase 3 and FTSE primary AI-judgment shows persistent excess. |
+| N61 | **Start weekly paper when a market enters ingest maintenance** | Do not auto-add markets to weekly_paper_shard_markets on ingest_parity_met. Filing parity is not Phase 1 or learning-depth, observe sim is still euro_depth-only, and capacity 1 would either no-op or steal the euro_depth slot if raised. | euro_depth has 8 weekly paper marks and beat_control, or the first parallel sprint market hits ingest_parity_met and learning-depth is green. |
 
 ---
 
