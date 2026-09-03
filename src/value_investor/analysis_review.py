@@ -579,6 +579,8 @@ changes, auto-spawn shadows), each with a one-line revisit trigger.
 Rules:
 - Do not invent metrics — only use the JSON.
 - Never propose auto-merging paper-auto, decision-review --apply, or assign_signal changes.
+- Do not re-propose cancelled N58/N59 knob-retune or entry-timing probes. Cite open
+  analysis_tasks ids instead of duplicating human-ack wrappers already on the ledger.
 - Distinguish forward paper evidence from archived backtest evidence.
 - Be specific enough that a human can promote an experiment to the engineering queue.
 """

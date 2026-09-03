@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-02",
+  "updated_at": "2026-09-03",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -61,7 +61,7 @@
         {
           "id": "sunday-shadow-endurance",
           "title": "Review unified experiment assessment",
-          "summary": "Read experiment_assessment.json for continue/fail/recommend rows across calibration shadows, exclusion shadows, and open task queues. Drill into calibration_shadow_endurance.json for shadow detail.",
+          "summary": "Read experiment_assessment.json for continue/fail/recommend rows across calibration shadows, exclusion shadows, and open task queues. After the 2026-09-03 triage the recommend set should be thin (canonical dashboard/u4/buffered-hold/IMB plus queued scoring tasks) — do not reopen cancelled N58/N59 knob or duplicate human-ack rows. Drill into calibration_shadow_endurance.json for shadow detail.",
           "automated": false,
           "doc_path": "docs/ops/experiment-assessment.md",
           "doc_anchor": "human-gate"
@@ -109,7 +109,7 @@
         {
           "id": "sunday-analysis-tasks",
           "title": "Triage analysis_tasks experiments",
-          "summary": "Promote scoring/ingest candidates manually via ftse-analysis-review promote; keep paper_knobs and offline_sim experiments manual.",
+          "summary": "Promote queued scoring candidates (ana-20260903-01 hold→buy / signal_unchanged; ana-20260903-02 quality-family avoid gate) manually via ftse-analysis-review promote. Keep paper_knobs and offline_sim experiments manual; do not revive cancelled N58/N59 knob counterfactuals.",
           "automated": false,
           "doc_path": "docs/ops/analysis-review.md",
           "doc_anchor": "manual-promotion-to-engineering"
@@ -125,7 +125,7 @@
         {
           "id": "sunday-triage-plr-director-tasks",
           "title": "Triage paper-learning and learning-director tasks",
-          "summary": "These queues have no promote CLI. Enact paper_churn/paper_knobs config probes manually, or mark done/cancelled. Prefer analysis-review for scoring/engineering.",
+          "summary": "These queues have no promote CLI. Enact remaining canonical probes (extended buffered-hold plr-20260901-02; u4 observe ldr-20260823-02; L111 replay; IMB.L audit) or mark done/cancelled. Do not reopen duplicate human-ack wrappers. Prefer analysis-review for scoring/engineering.",
           "automated": false,
           "doc_path": "docs/ops/paper-learning-review.md",
           "doc_anchor": "enacting-proposed-experiments"

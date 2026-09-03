@@ -21,7 +21,10 @@ from value_investor.analysis_review import (
 )
 from value_investor.deferred_ideas import DEFAULT_STORE as DEFAULT_DEFER_STORE
 from value_investor.deferred_ideas import add_fragment, list_open_fragments, write_markdown
-from value_investor.experiment_assessment import slim_experiment_assessment_for_review
+from value_investor.experiment_assessment import (
+    CLOSED_TASK_STATUSES,
+    slim_experiment_assessment_for_review,
+)
 from value_investor.learning_director_regime import (
     VISION_PATH,
     build_convergence_summary,
@@ -296,7 +299,7 @@ def compile_learning_director_tasks(
     kept = [
         row
         for row in (existing.get("tasks") or [])
-        if str(row.get("status") or "") not in {"promoted", "cancelled", "done"}
+        if str(row.get("status") or "") not in CLOSED_TASK_STATUSES
     ]
     new_tasks: list[AnalysisTask] = []
     seq = 1
@@ -392,6 +395,8 @@ research, ops.
 Do **not** use [scoring] here — that area is analysis-review + human promote.
 If trajectory focus candidates were not turned into analysis_tasks, add
 ``N. [analysis] Ensure scoring experiment for <candidate.key> — …``
+If that scoring experiment is already queued (proposed/accepted/recommend), cite the
+canonical analysis_task id — do not add a second human-ack wrapper.
 
 HORIZON FRAGMENTS
 Up to {MAX_HORIZON_FRAGMENTS} speculative observations **not** tied to existing tasks or

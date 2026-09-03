@@ -80,4 +80,22 @@ When `recommendations` is non-empty:
 4. For scoring tasks with `assessment_recommend` — triage via `ftse-analysis-review promote` (human only)
 5. Do **not** auto-apply — survivors are priors for refinement only
 
+### Queue triage (2026-09-03)
+
+Sunday compile and this ledger now treat `done` like `promoted` / `cancelled` (do not reopen).
+
+Canonical open rows after the batch triage:
+
+| Keep | Theme | Do not reopen |
+|------|-------|----------------|
+| `ana-20260728-04` | Exit-shadow cohort thickness dashboard (`closed_total` still 0) | `ldr-20260901-04` |
+| `ldr-20260823-02` | Exclusion u4 shadow vs primary (observe) | `ldr-20260901-01` |
+| `plr-20260901-02` | Extended buffered-hold 1 vs 2 | `ldr-20260901-05` |
+| `ana-20260903-01` | Scoring: hold→buy / `signal_unchanged` 1w | `ldr-20260901-02` (queued) |
+| `ana-20260903-02` | Scoring: quality-family avoid-cohort gate | `ldr-20260901-03` (queued) |
+| `ldr-20260823-03` | Archive-lab full-period replay (L111) | — |
+| `ldr-20260823-04` | IMB.L adjacent buy→sell flip audit | — |
+
+Cancelled and parked (N58/N59 — do not retune knobs or start entry-timing from the first mixed chart pass): `ana-20260728-02`, `plr-20260901-01`, `plr-20260901-03`.
+
 See also: [analysis-review.md](analysis-review.md), [learning-director-vision.md](learning-director-vision.md).

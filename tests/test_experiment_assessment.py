@@ -233,3 +233,27 @@ def test_refresh_skips_done_analysis_tasks(tmp_path: Path):
     payload = refresh_experiment_assessment(data_dir, paper_root=paper_root)
     ids = [row["experiment_id"] for row in payload["experiments"]]
     assert "ana-20260728-01" not in ids
+
+
+def test_refresh_skips_cancelled_analysis_tasks(tmp_path: Path):
+    data_dir = tmp_path / "data"
+    paper_root = data_dir / "paper_automation"
+    paper_root.mkdir(parents=True)
+    (data_dir / "analysis_tasks.json").write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "ana-20260728-02",
+                        "area": "paper_knobs",
+                        "title": "Pre vs post knob counterfactual",
+                        "status": "cancelled",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = refresh_experiment_assessment(data_dir, paper_root=paper_root)
+    ids = [row["experiment_id"] for row in payload["experiments"]]
+    assert "ana-20260728-02" not in ids

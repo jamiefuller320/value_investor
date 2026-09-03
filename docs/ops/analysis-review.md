@@ -99,9 +99,16 @@ Review experiments, then promote scoring/ingest candidates into the supervised q
 
 ```bash
 ftse-analysis-review list
-ftse-analysis-review promote --task-id ana-20260728-02
+ftse-analysis-review promote --task-id ana-20260903-01
 ftse-engineering list
 ```
+
+Queued scoring candidates (2026-09-03 triage; human promote still required):
+
+- `ana-20260903-01` — hold→buy / `signal_unchanged` 1w hit-rate overlay
+- `ana-20260903-02` — quality-family composite gate on the avoid cohort
+
+Do not promote cancelled knob-retune probes (`ana-20260728-02` and the N58/N59 paper-learning cancels).
 
 Only `scoring`, `ingest`, `prompt`, `coverage`, and `ops` areas promote to
 `engineering_tasks.json`. `offline_sim` and `paper_knobs` experiments stay

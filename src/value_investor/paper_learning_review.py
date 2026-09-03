@@ -20,6 +20,7 @@ from value_investor.review_policy import (
     load_review_policy,
     paper_learning_review_enabled,
 )
+from value_investor.experiment_assessment import CLOSED_TASK_STATUSES
 from value_investor.storage import read_json, write_json
 
 logger = logging.getLogger(__name__)
@@ -150,7 +151,7 @@ def compile_paper_learning_tasks(
     kept = [
         row
         for row in (existing.get("tasks") or [])
-        if str(row.get("status") or "") not in {"promoted", "cancelled", "done"}
+        if str(row.get("status") or "") not in CLOSED_TASK_STATUSES
     ]
     new_tasks: list[AnalysisTask] = []
     seq = 1
@@ -224,6 +225,7 @@ Numbered top 3 experiments. Each line MUST use:
 ``N. [area] Experiment title — expected learning value``
 Areas allowed: paper_churn, paper_knobs, offline_sim, monitoring, analysis.
 Prefer paper_churn for guard tuning (exit_confirm_screens, min_rebalance_notional_gbp).
+Cite an existing open paper_learning_task id instead of adding a duplicate human-ack wrapper.
 
 DEFER
 Ideas that must stay manual / observe-only until more marks (live capital, auto knob apply).
@@ -231,6 +233,7 @@ Ideas that must stay manual / observe-only until more marks (live capital, auto 
 Rules:
 - Do not invent metrics.
 - Never propose engineering PRs, decision-review --apply, or paper-auto code changes here.
+- Do not re-propose cancelled N58/N59 knob-retune, notional-floor, or calibrated-replay probes.
 - Be specific enough for a human to run a counterfactual or edit track config.json.
 """
 
