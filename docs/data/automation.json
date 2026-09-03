@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-02T11:13:24.479768+00:00",
+  "generated_at": "2026-09-03T07:15:24.612195+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -195,15 +195,15 @@
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_weekly_ops_usd": 69.6,
+        "remaining_weekly_ops_usd": 62.4,
         "budget_note": null,
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 10.4,
-        "estimated_spend_weekly_ops_usd_this_week": 10.4,
-        "estimated_spend_usd_this_cycle": 10.4,
+        "estimated_spend_usd_this_week": 20.0,
+        "estimated_spend_weekly_ops_usd_this_week": 17.6,
+        "estimated_spend_usd_this_cycle": 20.0,
         "week_id": "2026-W36",
         "cycle_id": "2026-09-d8"
       },
@@ -231,7 +231,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-09-02T08:34:55.277489+00:00"
+      "updated_at": "2026-09-03T07:15:19.856557+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -326,16 +326,16 @@
   "achievements": {
     "timeline": [
       {
+        "at": "2026-09-03T06:52:25.392888+00:00",
+        "kind": "ladder_run",
+        "title": "Library ladder run (focus euro_depth)",
+        "detail": "shortlist=46 research created=1 updated=0 spend≈0.4"
+      },
+      {
         "at": "2026-09-02T08:27:14.753256+00:00",
         "kind": "paper_run",
         "title": "Paper automation acted",
         "detail": "Rebalanced after open settle (0 trade(s))."
-      },
-      {
-        "at": "2026-09-02T06:52:24.042142+00:00",
-        "kind": "ladder_run",
-        "title": "Library ladder run (focus euro_depth)",
-        "detail": "shortlist=44 research created=None updated=None spend≈None"
       },
       {
         "at": "2026-09-01T09:52:07.968538+00:00",
@@ -705,7 +705,7 @@
       }
     ],
     "last_ladder": {
-      "run_at": "2026-09-02T06:52:24.042142+00:00",
+      "run_at": "2026-09-03T06:52:25.392888+00:00",
       "focus_market": "euro_depth",
       "graduated_markets": [
         "sp500",
@@ -762,13 +762,13 @@
           "omxs30",
           "iseq20"
         ],
-        "screen_shortlist": 44,
-        "screen_strong_buy": 19,
+        "screen_shortlist": 46,
+        "screen_strong_buy": 21,
         "screen_buy": 25,
-        "research_executed": 0,
-        "research_created": null,
-        "research_updated": null,
-        "research_estimated_spend_usd": null,
+        "research_executed": 1,
+        "research_created": 1,
+        "research_updated": 0,
+        "research_estimated_spend_usd": 0.4,
         "graduation_skipped": false,
         "graduated_to": null
       }
@@ -1144,64 +1144,27 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-02T11:13:23.900406+00:00",
-    "queue_ui_updated_at": "2026-09-02T11:13:24.481356+00:00",
-    "task_count": 69,
+    "queue_ui_updated_at": "2026-09-03T07:15:24.614080+00:00",
+    "task_count": 70,
     "status": {
-      "open_count": 3,
+      "open_count": 0,
       "pr_open_count": 0,
       "parked_count": 0,
-      "merged_count": 62,
+      "merged_count": 66,
       "failed_count": 0,
-      "next_task_id": "eng-20260902-02",
+      "next_task_id": null,
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [
-      {
-        "id": "eng-20260902-02",
-        "area": "ingest",
-        "title": "Enable and gate Yahoo `quarterly_cashflow` for UK names; suppress TTM FCF and flag when series empty (HIK.L $14.4m TTM vs $119m filing; ITV.L empty)",
-        "priority": "high",
-        "priority_score": 98.0,
-        "status": "open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260902-03",
-        "area": "scoring",
-        "title": "Emit labelled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated−capex) plus universe-level FCF divergence flags in `screening_snapsho",
-        "priority": "high",
-        "priority_score": 98.0,
-        "status": "open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260902-04",
-        "area": "scoring",
-        "title": "Compute Lynch PEG and earnings-growth overlays from filing EPS (core where disclosed) with statutory fallback and >300 bps divergence warning; attach auto-gener",
-        "priority": "high",
-        "priority_score": 97.0,
-        "status": "open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      }
-    ],
+    "queued_tasks": [],
     "attention_tasks": []
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-09-02T11:13:24.481729+00:00",
+    "generated_at": "2026-09-03T07:15:24.633194+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
