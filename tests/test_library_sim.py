@@ -11,6 +11,7 @@ import pandas as pd
 from value_investor.library_sim import (
     build_library_run_snapshot,
     enrich_signals_with_library_research,
+    ingest_profile_observe_sim_markets,
     iter_library_screen_runs,
     observe_sim_markets_for_policy,
     run_library_observe_sim,
@@ -147,6 +148,64 @@ def test_observe_sim_markets_graduated_benchmark_mode():
         "iseq20",
         "euro_stoxx50",
     ]
+
+
+def test_ingest_profile_observe_sim_markets_excludes_grow_only():
+    policy = {
+        "focus_market": "euro_depth",
+        "ingest_parallel_sprint": ["sp500"],
+        "ingest_parallel_sprint_2": ["asx200"],
+        "ingest_parity_markets": ["euro_depth"],
+        "ftse_equivalent_markets": ["sp500"],
+        "graduated_markets": [{"market": "nasdaq100"}, {"market": "dax"}],
+        "ladder": {"weekly_paper_shard_markets": ["euro_depth"]},
+    }
+    assert ingest_profile_observe_sim_markets(policy) == [
+        "euro_depth",
+        "sp500",
+        "asx200",
+    ]
+
+
+def test_observe_sim_markets_include_ingest_profile_by_default():
+    policy = {
+        "focus_market": "euro_depth",
+        "ingest_parallel_sprint": ["sp500"],
+        "ingest_parallel_sprint_2": ["asx200"],
+        "ingest_parity_markets": ["euro_depth"],
+        "ftse_equivalent_markets": ["sp500"],
+        "ladder": {
+            "observe_sim_after_screen": True,
+            "observe_sim_markets_mode": "explicit",
+            "observe_sim_markets": ["euro_depth"],
+        },
+    }
+    assert observe_sim_markets_for_policy(policy) == ["euro_depth", "sp500", "asx200"]
+    policy["ladder"]["observe_sim_include_ingest_profile"] = False
+    assert observe_sim_markets_for_policy(policy) == ["euro_depth"]
+
+
+def test_observe_sim_ingest_profile_keeps_parity_and_equivalent_after_sprint():
+    policy = {
+        "focus_market": "euro_depth",
+        "ingest_parallel_sprint": [],
+        "ingest_parallel_sprint_2": [],
+        "ingest_parity_markets": ["asx200"],
+        "ftse_equivalent_markets": ["sp500"],
+        "ladder": {
+            "observe_sim_after_screen": True,
+            "observe_sim_markets_mode": "explicit",
+            "observe_sim_markets": ["euro_depth"],
+        },
+    }
+    assert observe_sim_markets_for_policy(policy) == ["euro_depth", "asx200", "sp500"]
+
+
+def test_live_policy_observe_sim_follows_ingest_profile():
+    from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
+
+    policy = load_policy(DEFAULT_POLICY_PATH)
+    assert observe_sim_markets_for_policy(policy) == ["euro_depth", "sp500", "asx200"]
 
 
 def test_benchmark_for_iseq20():

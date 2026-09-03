@@ -82,6 +82,8 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
     ladder.setdefault("observe_sim_after_screen", True)
     ladder.setdefault("observe_sim_markets_mode", OBSERVE_SIM_MARKETS_MODE_GRADUATED_BENCHMARK)
     ladder.setdefault("observe_sim_markets", list(DEFAULT_OBSERVE_SIM_MARKETS))
+    ladder.setdefault("observe_sim_include_ingest_profile", True)
+    ladder.setdefault("observe_sim_screen_missing_markets", True)
     ladder.setdefault("observe_sim_screen_when_research_skipped", True)
     ladder.setdefault("weekly_paper_shard_after_screen", True)
     ladder.setdefault("weekly_paper_shard_markets", list(DEFAULT_WEEKLY_PAPER_SHARD_MARKETS))
@@ -131,7 +133,7 @@ def _screen_observe_sim_markets(
     screened_markets: set[str],
     run_at: datetime,
 ) -> dict[str, Any]:
-    """Screen-lite for observe-sim markets when the research pass did not screen them."""
+    """Screen-lite for observe-sim markets the research / focus pass did not screen."""
     targets = [mid for mid in observe_sim_markets_for_policy(policy) if mid not in screened_markets]
     if not targets:
         return {"skipped": True, "reason": "all observe-sim markets already screened"}
@@ -153,6 +155,24 @@ def _screen_observe_sim_markets(
             "errors": errors,
         }
     return {"skipped": False, "markets": screened, "errors": errors}
+
+
+def observe_sim_screen_should_run(
+    *, skip_screen: bool, ladder_cfg: dict[str, Any]
+) -> tuple[bool, str]:
+    """Whether ladder should backfill screen-lite for observe-sim markets not yet screened.
+
+    Runs on a normal Sunday (research ran) as well as when research is skipped, so
+    ingest-profile markets keep a dated archive clock. ``skip_screen`` and the
+    missing-markets kill switch still disable the pass.
+    """
+    if skip_screen:
+        return False, "screen-lite disabled"
+    if ladder_cfg.get("observe_sim_screen_missing_markets") is False:
+        return False, "observe_sim_screen_missing_markets is off"
+    if not ladder_cfg.get("observe_sim_screen_when_research_skipped", True):
+        return False, "observe_sim_screen_when_research_skipped is off"
+    return True, ""
 
 
 def run_library_ladder(
@@ -553,26 +573,17 @@ def run_library_ladder(
                     layer["paused_for_approval"] = True
         result["layers"]["selective_research"] = layer
 
-    # B1b — screen-lite for observe-sim markets when research pass skipped (no memos)
+    # B1b — screen-lite for observe-sim markets not already screened this pass
     policy = load_policy(policy_path)
-    research_layer = result["layers"].get("selective_research") or {}
     ladder_cfg = policy.get("ladder") or {}
-    if (
-        skip_screen
-        or not ladder_cfg.get("observe_sim_screen_when_research_skipped", True)
-        or not research_layer.get("skipped")
-    ):
+    should_screen, skip_reason = observe_sim_screen_should_run(
+        skip_screen=skip_screen,
+        ladder_cfg=ladder_cfg,
+    )
+    if not should_screen:
         result["layers"]["observe_sim_screen"] = {
             "skipped": True,
-            "reason": (
-                "screen-lite disabled"
-                if skip_screen
-                else (
-                    "research pass ran — markets already screened"
-                    if not research_layer.get("skipped")
-                    else "observe_sim_screen_when_research_skipped is off"
-                )
-            ),
+            "reason": skip_reason,
         }
     else:
         result["layers"]["observe_sim_screen"] = _screen_observe_sim_markets(
