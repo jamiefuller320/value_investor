@@ -349,13 +349,13 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 20.0,
-    "estimated_spend_usd_this_week": 20.0,
+    "estimated_spend_usd_this_cycle": 19.6,
+    "estimated_spend_usd_this_week": 19.6,
     "week_id": "2026-W36",
     "cycle_id": "2026-09-d8",
     "weekly_ops_cap_usd": 80.0,
     "enforce_weekly_ops_cap": true,
-    "estimated_spend_weekly_ops_usd_this_week": 17.6,
+    "estimated_spend_weekly_ops_usd_this_week": 17.2,
     "note": "Subscription (Pro $20/mo) is metadata only. weekly_ops_cap_usd ring-fences orchestrator Sunday runs (email + ladder). Ad-hoc depth passes use ladder.spend_since_checkpoint_usd."
   },
   "model_review": {
@@ -416,7 +416,7 @@
     "surface_escalation_candidates_in_email": true,
     "note": "Exploration phase allows more director–worker runs per week while paper turnover is unknown; auto-tighten moves to steady cap when re-escalation rate stabilises. Shadow log surfaces escalation candidates in the Sunday email for manual approval; auto_escalate_director stays false until calibrated."
   },
-  "updated_at": "2026-09-03T07:15:19.856557+00:00",
+  "updated_at": "2026-09-02T15:20:11.449946+00:00",
   "ingest_parity_markets": [
     "euro_depth"
   ],
@@ -438,10 +438,10 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-09-03T06:52:25.392888+00:00",
+      "run_at": "2026-09-02T06:52:24.042142+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
-      "screen_shortlist": 46,
+      "screen_shortlist": 44,
       "research": {
         "model": "composer-2.5",
         "research_cap": 100,
@@ -455,11 +455,11 @@
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "weekly_ops_cap_usd": 80.0,
-        "estimated_spend_weekly_ops_usd_this_week": 17.6,
+        "estimated_spend_weekly_ops_usd_this_week": 7.2,
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_usd_before": 62.8,
+        "remaining_usd_before": 72.8,
         "dedupe": {
           "already_researched_count": 433,
           "skipped_count": 44,
@@ -482,6 +482,11 @@
             {
               "market": "euro_depth",
               "ticker": "STR.VI",
+              "reason": "duplicate_ticker"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "UMI.BR",
               "reason": "duplicate_ticker"
             },
             {
@@ -521,11 +526,6 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "UMI.BR",
-              "reason": "duplicate_ticker"
-            },
-            {
-              "market": "euro_depth",
               "ticker": "ACKB.BR",
               "reason": "duplicate_ticker"
             },
@@ -556,32 +556,20 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "WKL.AS",
+              "ticker": "GVR.IR",
               "reason": "duplicate_ticker"
             },
             {
               "market": "euro_depth",
-              "ticker": "RAND.AS",
+              "ticker": "WIE.VI",
               "reason": "duplicate_ticker"
             }
           ],
           "note": "Exact Yahoo ticker match; earlier queue market wins. Existing memos in any library market are not re-created elsewhere."
         },
-        "targets": [
-          {
-            "market": "euro_depth",
-            "ticker": "AED.BR",
-            "name": "Aedifica NV/SA",
-            "signal": "buy",
-            "conviction_score": 0.4349
-          }
-        ],
-        "executed": 1,
-        "created": 1,
-        "updated": 0,
-        "errors": [],
-        "estimated_spend_usd": 0.4,
-        "remaining_usd_after": 62.4
+        "targets": [],
+        "dry_run": true,
+        "executed": 0
       },
       "graduation": {
         "graduated": false,
