@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "ticker": "IMB.L",
+  "name": "Imperial Brands PLC",
+  "task_id": "ldr-20260823-04",
+  "audited_at": "2026-09-03T11:05:00+00:00",
+  "verdict": "screen_rotation",
+  "summary": "Shared buy→sell on 2026-08-21 was 3-slot target-set rotation (replaced by SN.L), not a signal or thesis exit. Signal stayed strong_buy / accumulate. Hold buffer delayed the sell by one screen. Do not change exit_confirm_screens or conviction floors from this name.",
+  "do_not": [
+    "Do not tighten exit_confirm_screens from this episode — the 2-screen buffer already fired (Aug 20 streak=1, Aug 21 sell).",
+    "Do not treat this as a conviction/opinion flip: adjusted_signal never left strong_buy.",
+    "Do not apply knob changes from one ticker (N58)."
+  ],
+  "adjacent_flip": {
+    "from_side": "buy",
+    "to_side": "sell",
+    "sell_date": "2026-08-21",
+    "definition": "Sell immediately followed by a prior buy on the same ticker in the fund trade stream"
+  },
+  "tracks": {
+    "rules": {
+      "buy": {
+        "acted_at": "2026-08-19T10:00:03+01:00",
+        "price": 2564.0,
+        "conviction": 0.6448,
+        "min_conviction": 0.6,
+        "in_target_set": true,
+        "targets": ["MEGP.L", "AEP.L", "IMB.L"]
+      },
+      "first_outside_target": {
+        "acted_at": "2026-08-20T09:26:55+01:00",
+        "price": 2492.0,
+        "conviction": 0.5448,
+        "min_conviction": 0.6,
+        "in_target_set": false,
+        "targets": ["MEGP.L"],
+        "exit_streak_after": 1,
+        "plan_reason": "No longer in the top conviction target set",
+        "trades": [],
+        "note": "Conviction 0.5448 < rules floor 0.6. AEP.L (0.5821) and SN.L (0.5593) also failed the floor; only MEGP.L (0.6327) stayed in the 3-slot book. Hold buffer blocked the sell."
+      },
+      "sell": {
+        "acted_at": "2026-08-21T09:27:00+01:00",
+        "price": 2510.0,
+        "conviction": 0.5948,
+        "min_conviction": 0.6,
+        "in_target_set": false,
+        "targets": ["MEGP.L", "AEP.L", "SN.L"],
+        "replacement": "SN.L",
+        "replacement_conviction": 0.6093,
+        "trade_note": "Automated exit — left target set",
+        "avg_cost_at_exit": 2564.0,
+        "exit_streak_before": 1
+      },
+      "rebuy": {
+        "acted_at": "2026-08-25T09:27:01+01:00",
+        "price": 2524.0349,
+        "conviction": 0.6115,
+        "min_conviction": 0.6,
+        "in_target_set": true,
+        "targets": ["MEGP.L", "AEP.L", "IMB.L"],
+        "note": "Rank recovered above SN.L (0.6093). SN.L sold the same pass."
+      }
+    },
+    "ai_judgment": {
+      "buy": {
+        "acted_at": "2026-08-18T09:27:41+01:00",
+        "price": 2557.0,
+        "conviction": 0.4948,
+        "min_conviction": 0.25,
+        "in_target_set": true,
+        "targets": ["MEGP.L", "AEP.L", "IMB.L"]
+      },
+      "first_outside_target": {
+        "acted_at": "2026-08-20T09:27:04+01:00",
+        "price": 2492.0,
+        "conviction": 0.5448,
+        "min_conviction": 0.35,
+        "in_target_set": false,
+        "targets": ["MEGP.L", "AEP.L", "SN.L"],
+        "exit_streak_after": 1,
+        "plan_reason": "No longer in the top conviction target set",
+        "trades": [],
+        "note": "Conviction 0.5448 still above the 0.35 floor. Lost the third slot to SN.L (0.5593). Pure rank rotation; hold buffer blocked the sell."
+      },
+      "sell": {
+        "acted_at": "2026-08-21T09:27:13+01:00",
+        "price": 2510.0,
+        "conviction": 0.5948,
+        "min_conviction": 0.4,
+        "in_target_set": false,
+        "targets": ["MEGP.L", "AEP.L", "SN.L"],
+        "replacement": "SN.L",
+        "replacement_conviction": 0.6093,
+        "trade_note": "Automated exit — left target set",
+        "avg_cost_at_exit": 2557.0,
+        "exit_streak_before": 1
+      },
+      "rebuy": {
+        "acted_at": "2026-08-25T09:27:10+01:00",
+        "price": 2524.0349,
+        "conviction": 0.6115,
+        "min_conviction": 0.5,
+        "in_target_set": true,
+        "targets": ["MEGP.L", "AEP.L", "IMB.L"],
+        "note": "Rank recovered above SN.L (0.6093). SN.L sold the same pass. Tiny top-up on 2026-08-26."
+      }
+    },
+    "momentum_grace": {
+      "imb_trades": 0,
+      "note": "Never held IMB.L; no flip to audit."
+    }
+  },
+  "classification": {
+    "signal_downgrade": false,
+    "stop_or_take_profit": false,
+    "thesis_broken": false,
+    "sector_cap": false,
+    "conviction_floor_contributed": {
+      "rules": true,
+      "ai_judgment": false
+    },
+    "three_slot_rank_rotation": true,
+    "hold_buffer_delayed_exit": true,
+    "same_replacement_both_books": "SN.L"
+  },
+  "round_trip_rough": {
+    "rules": "Buy 2564 → sell 2510 (−2.1% price) plus ~£15 round-trip costs on ~£250 notional",
+    "ai_judgment": "Buy 2557 → sell 2510 (−1.8% price) plus ~£16 round-trip costs on ~£270 notional"
+  },
+  "fair_vs_stress_costs": {
+    "market_id": "ftse350",
+    "stress_trade_cost_pct": 0.03,
+    "fair_buy_pct": 0.00525,
+    "fair_sell_pct": 0.00025,
+    "fair_round_trip_pct": 0.0055,
+    "note": "First-order restatement of recorded gross under T212 Invest assumptions (0.5% UK stamp on buys + 0.025% half-spread; commission 0). Does not rebuild fills or Suite B books.",
+    "episode_buy_through_first_sell": {
+      "rules": {
+        "buy_gross": 257.6,
+        "sell_gross": 252.17,
+        "price_pnl": -5.43,
+        "price_pnl_pct": -0.0211,
+        "stress_costs": 15.3,
+        "fair_costs": 1.4154,
+        "fair_buy_cost": 1.3524,
+        "fair_sell_cost": 0.063,
+        "stress_cash_pnl": -20.72,
+        "fair_cash_pnl": -6.85,
+        "cost_share_of_stress_loss": 0.74
+      },
+      "ai_judgment": {
+        "buy_gross": 275.02,
+        "sell_gross": 269.97,
+        "price_pnl": -5.05,
+        "price_pnl_pct": -0.0184,
+        "stress_costs": 16.35,
+        "fair_costs": 1.5113,
+        "fair_buy_cost": 1.4439,
+        "fair_sell_cost": 0.0675,
+        "stress_cash_pnl": -21.4,
+        "fair_cash_pnl": -6.56,
+        "cost_share_of_stress_loss": 0.76
+      }
+    }
+  },
+  "echo_2026_09_03": {
+    "note": "Same pattern recurring: both books have IMB.L on exit_streak=1, targets MEGP.L / ITV.L / AEP.L. IMB.L still strong_buy (conviction 0.7768) but below ITV.L (0.891) in a 3-slot book. Observe only — do not pre-empt the hold buffer.",
+    "rules_trades_that_pass": ["sell AEP.L"],
+    "ai_judgment_trades_that_pass": []
+  },
+  "sources": {
+    "rules_fund": "docs/data/paper_automation/automated_fund.json",
+    "rules_log": "docs/data/paper_automation/rebalance_log.json",
+    "ai_judgment_fund": "docs/data/paper_automation/ai_judgment/automated_fund.json",
+    "ai_judgment_log": "docs/data/paper_automation/ai_judgment/rebalance_log.json"
+  }
+}

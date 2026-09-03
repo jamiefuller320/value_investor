@@ -26,16 +26,16 @@ most automation — this list is what still needs a human.
 |------|-----|-----|
 | Read **analysis review** synthesis (`analysis_review.md`) plus the observe-only **chart-outcome** mix | Human | [analysis-review.md](analysis-review.md#artifacts) |
 | Review **knob calibration priors** (`ranking_mode`, `ready_for_shadow_bootstrap`, `bootstrap_priors`) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
-| Review **unified experiment assessment** (`experiment_assessment.json`) | Human | [experiment-assessment.md](experiment-assessment.md#human-gate) |
+| Review **unified experiment assessment** (`experiment_assessment.json`) — after the 2026-09-03 human pass, task recommends should be empty (u4/exit-shadow watch; scoring on engineering queue) | Human | [experiment-assessment.md](experiment-assessment.md#human-gate) |
 | Compare **calibrated shadows vs primary** AI judgment on Automation tab | Human | [knob-calibration.md](knob-calibration.md#competing-calibrated-shadows) |
 | **Promote knob priors** only when a survivor passes gates (do not edit `ai_judgment/config.json` early) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
 | **Fair-cost gate** — keep 3% books as churn lab; require `ftse-trading-costs assess` / fair shadows before calling excess deployable | Human | [market-trading-costs.md](market-trading-costs.md#test-and-adoption-strategy-dual-suite) |
 | **Suite B fair-cost lab** — review `ai_judgment_fair` / `rules_fair` marks; keep `--suite B` applies suite-local; no primary flip until B clears gates | Human | [market-trading-costs.md](market-trading-costs.md#near-term-actions) |
 | Review **entry DCA cadence** when `ready_for_cadence_analysis` fires | Human | [position-lifecycle.md](position-lifecycle.md#human-gate) |
 | Review **hypothesis integrity** when losers breach tolerance or theses break | Human | [hypothesis-integrity.md](hypothesis-integrity.md#human-gate) |
-| Triage **analysis_tasks** — promote scoring/ingest via `ftse-analysis-review promote` | Human | [analysis-review.md](analysis-review.md#manual-promotion-to-engineering) |
+| Triage **analysis_tasks** — scoring is queued as `eng-20260903-02` / `eng-20260903-03` (observe-only; no `assign_signal()` edits); do not revive cancelled knob counterfactuals | Human | [analysis-review.md](analysis-review.md#manual-promotion-to-engineering) |
 | Check **exclusion ladder spawn gate** — if `ready_for_shadow_spawn`, run `ftse-exclusion-ladder-replay spawn-shadow` (never auto) | Human | [exclusion-ladder-replay.md](exclusion-ladder-replay.md#promotion-workflow-human-gate) |
-| Triage **paper_learning_tasks** + **learning_director_tasks** — enact config probes or mark done; no promote CLI | Human | [paper-learning-review.md](paper-learning-review.md#enacting-proposed-experiments) |
+| Triage **paper_learning_tasks** + **learning_director_tasks** — watch u4 + exit-shadow; leave L111 as continue; buffered-hold and IMB.L are done; no promote CLI | Human | [paper-learning-review.md](paper-learning-review.md#enacting-proposed-experiments) |
 | Full-period knob calibrate + shadow bootstrap + PIT warm-start + endurance | CI | [knob-calibration.md](knob-calibration.md#warm-start-zero-datum-forward-only-endurance) |
 
 ### Promotion gate (AI judgment knobs)

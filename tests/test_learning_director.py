@@ -159,6 +159,32 @@ def test_compile_learning_director_tasks_filters_areas(tmp_path: Path):
     assert compiled["tasks"][0]["source"] == "learning_director"
 
 
+def test_compile_learning_director_tasks_drops_done(tmp_path: Path):
+    review = parse_learning_director_review(
+        "PROPOSED ACTIONS\n1. [monitoring] Watch exclusion shadow — observe only\n"
+    )
+    tasks_path = tmp_path / "learning_director_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "ldr-20260901-01",
+                        "area": "monitoring",
+                        "title": "Duplicate u4 human-ack",
+                        "status": "done",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    compiled = compile_learning_director_tasks(review, run_stamp="20260903", tasks_path=tasks_path)
+    ids = [row["id"] for row in compiled["tasks"]]
+    assert "ldr-20260901-01" not in ids
+    assert any(row["id"].startswith("ldr-20260903-") for row in compiled["tasks"])
+
+
 def test_regime_summary_flags_thin_history(tmp_path: Path):
     data_dir = tmp_path / "docs" / "data"
     data_dir.mkdir(parents=True)

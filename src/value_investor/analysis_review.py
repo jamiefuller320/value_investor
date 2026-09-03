@@ -12,7 +12,10 @@ from typing import Any
 
 from cursor_sdk import Agent, AgentOptions, CursorAgentError, LocalAgentOptions
 
-from value_investor.experiment_assessment import slim_experiment_assessment_for_review
+from value_investor.experiment_assessment import (
+    CLOSED_TASK_STATUSES,
+    slim_experiment_assessment_for_review,
+)
 from value_investor.knob_calibration import KNOB_CALIBRATION_PRIORS_FILENAME
 from value_investor.review_payload_slim import (
     slim_backtest as _slim_backtest,
@@ -376,7 +379,7 @@ def compile_analysis_tasks(
     kept = [
         row
         for row in (existing.get("tasks") or [])
-        if str(row.get("status") or "") not in {"promoted", "cancelled"}
+        if str(row.get("status") or "") not in CLOSED_TASK_STATUSES
     ]
     new_tasks: list[AnalysisTask] = []
     seq = 1
@@ -451,14 +454,17 @@ def promote_analysis_tasks(
     wanted = {tid.strip() for tid in task_ids if tid.strip()}
 
     updated_tasks: list[dict[str, Any]] = []
+    now = datetime.now(UTC).isoformat()
     for row in analysis_payload.get("tasks") or []:
+        if not isinstance(row, dict):
+            continue
         task = AnalysisTask.from_dict(row)
         if task.id not in wanted:
-            updated_tasks.append(task.to_dict())
+            updated_tasks.append(row)
             continue
         if task.status == "promoted":
             skipped.append({"id": task.id, "reason": "already promoted"})
-            updated_tasks.append(task.to_dict())
+            updated_tasks.append(row)
             continue
         if task.promote_to != "engineering_queue" or task.area not in _ENGINEERING_AREAS:
             skipped.append(
@@ -467,7 +473,7 @@ def promote_analysis_tasks(
                     "reason": f"not promotable to engineering (promote_to={task.promote_to})",
                 }
             )
-            updated_tasks.append(task.to_dict())
+            updated_tasks.append(row)
             continue
         eng_id = task.id.replace("ana-", "eng-", 1)
         eng_rows.append(
@@ -483,22 +489,26 @@ def promote_analysis_tasks(
                 "acceptance_criteria": [
                     "Change is covered by unit tests where behaviour shifts",
                     "No edits under blocked paper/sim automation paths",
+                    "Observe-only scoring design — do not mutate assign_signal() (N3)",
                 ],
                 "allowed_paths": _allowed_paths_for_area(task.area),
                 "blocked_paths": list(BLOCKED_PATHS),
                 "status": "open",
             }
         )
-        task.status = "promoted"
+        merged = dict(row)
+        merged.update(task.to_dict())
+        merged["status"] = "promoted"
+        merged["promoted_at"] = now
         promoted.append(task.id)
-        updated_tasks.append(task.to_dict())
+        updated_tasks.append(merged)
 
     analysis_payload["tasks"] = updated_tasks
     analysis_payload["task_count"] = len(updated_tasks)
     eng_payload["tasks"] = eng_rows
     eng_payload["task_count"] = len(eng_rows)
     write_json(analysis_tasks_path, analysis_payload, compact=True)
-    write_json(eng_path, eng_payload, compact=True)
+    write_json(eng_path, eng_payload, compact=False)
     return {"promoted": promoted, "skipped": skipped, "engineering_tasks_path": str(eng_path)}
 
 
@@ -599,6 +609,8 @@ changes, auto-spawn shadows), each with a one-line revisit trigger.
 Rules:
 - Do not invent metrics — only use the JSON.
 - Never propose auto-merging paper-auto, decision-review --apply, or assign_signal changes.
+- Do not re-propose cancelled N58/N59 knob-retune or entry-timing probes. Cite open
+  analysis_tasks ids instead of duplicating human-ack wrappers already on the ledger.
 - Distinguish forward paper evidence from archived backtest evidence.
 - Be specific enough that a human can promote an experiment to the engineering queue.
 """
