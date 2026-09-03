@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T12:59:22+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T13:08:31+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -265,6 +265,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L238 | **Human FCF bridge override for lease/M&A definition fights** | Auto majority + filing fallback covers ordinary screen/filing/company mismatches. Keep optional fcf_bridge.json overrides for cases where lease accounting, M&A cash classification, or one-offs make the majority/filing pick wrong. | After auto FCF policy has run through at least one results season and buy-tier action notes still look wrong on specific names |
 | L239 | **Metric change without narrative mention trap** | Detect significant YoY FCF (and later earnings/div) moves when cached RNS/filing body lacks related commentary keywords; start observe-only via so_what_closure. Reuse load_filing_bodies_for_ticker + reconcile_fcf YoY, not action_note markers. | After FCF basis enforcement/so-what loop is stable and filing-body coverage is high enough on buy-tier names |
 | L246 | **Market status tile drill-down to library screener** | The Overview market status card shows signal mix and health; a later step could open the full offline screen-lite table for that market without changing the live FTSE screener. | After the market status grid has been used for a few Sunday reviews and a non-FTSE screen-lite table would save time vs opening library files. |
+| L248 | **Sprint then 8-week maintenance archives then in-shard learning** | Intended offline flow: sprint ingest to filing parity, then maintenance screen-lite plus observe sim until ~8-12 weeks of dated archives, then open a weekly paper shard in arrival order. Books stay per-market; seed only as labeled warm-start priors, not copied applied knobs. Do not start until euro_depth has proven Phase 2 once. | euro_depth has 8 weekly paper marks and beat_control, or a parallel-sprint market has ingest parity plus 8+ weeks of observe-sim archives. |
 
 ### Ops / reliability
 
