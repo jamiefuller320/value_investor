@@ -16,7 +16,8 @@ names (currently ~194). One book, benchmark `^STOXX50E`.
 |------|-------------------|--------|
 | `focus_market` | `euro_depth` | Ladder grow/screen/research target |
 | `research_all_graduated` | `false` | Selective research only on focus (stops 21-market memo spray) |
-| `observe_sim_markets_mode` | `explicit` | Observe sim only `euro_depth` |
+| `observe_sim_markets_mode` | `explicit` | Explicit list starts at `euro_depth`; ingest-profile markets also get the clock |
+| `observe_sim_include_ingest_profile` | `true` | Sunday screen-lite + observe sim for focus, sprint streams, ingest-parity, and `ftse_equivalent_markets` |
 | `weekly_paper_shard_markets` | `["euro_depth"]` | Capacity 1 isolated learning book |
 | `phase1_require_ai_beat_rules` | `false` | Phase 1→2 on archives until filing parity (L166) |
 | `focus_graduation.auto_advance` | `false` | Do not advance focus away from the pilot |
@@ -65,18 +66,19 @@ Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The
 
 **What runs:** After screen-lite in `ftse-library ladder`, `run_observe_sims_for_screened_markets` refreshes frozen-signal sims (screen rules / research overlay / AI judgment) vs local benchmark. Writes `screen/sim/observe_summary.json`.
 
-**Policy:** `ladder.observe_sim_after_screen`, `ladder.observe_sim_markets_mode`, optional `ladder.observe_sim_markets` / `observe_sim_markets_extra`.
+**Policy:** `ladder.observe_sim_after_screen`, `ladder.observe_sim_markets_mode`, optional `ladder.observe_sim_markets` / `observe_sim_markets_extra`, plus `ladder.observe_sim_include_ingest_profile` (default **on**).
 
-**Markets mode (depth-first):** `explicit` with `observe_sim_markets: ["euro_depth"]`. Legacy `graduated_benchmark` mode remains available for breadth experiments.
+**Markets mode (depth-first):** `explicit` with `observe_sim_markets: ["euro_depth"]` for the weekly-paper pilot. The observe **clock** is a standard ingest-profile step: focus + `ingest_parallel_sprint` / `_2` + `ingest_parity_markets` + `ftse_equivalent_markets` + weekly-paper shards (currently `euro_depth`, `sp500`, `asx200`). Layer A grow-only markets stay off the clock. Legacy `graduated_benchmark` mode remains available for breadth experiments.
 
-**Screen cadence:** When selective research is skipped (`weekly_ops` exhausted, checkpoint, or `--skip-research`), ladder runs a memo-free screen-lite pass for observe-sim markets (`observe_sim_screen_when_research_skipped`, default on) so Phase 1 archives do not stall to focus-only cadence.
+**Screen cadence:** Ladder backfills memo-free screen-lite for observe-sim markets that the research / focus pass did not already screen (`observe_sim_screen_missing_markets`, default on). This runs on a normal Sunday as well as when research is skipped, so sprint/parity markets keep dated archives instead of stalling to focus-only cadence.
 
 **Exit gate (per market):** ≥ **12** dated `signals_YYYYMMDD_HHMMSS.csv` files under `markets/<id>/screen/` (same bar as backtest history and L127 revisit). When `phase1_require_ai_beat_rules` is true (code default), AI must also beat rules on observe sim; depth-first policy sets this **false** until filing parity.
 
 | Market (benchmark wired) | Benchmark | Phase 1 notes |
 |--------------------------|-----------|---------------|
-| `euro_depth` | ^STOXX50E | Depth-first pilot — sole observe/weekly slot |
-| `sp500` | ^GSPC | FTSE-equivalent **measurement** track (`ftse_equivalent_markets`); not in weekly shard list under depth-first |
+| `euro_depth` | ^STOXX50E | Depth-first pilot — sole **weekly paper** slot; also on the ingest-profile observe clock |
+| `sp500` | ^GSPC | Sprint / `ftse_equivalent_markets` **measurement** clock; not in weekly shard list under depth-first |
+| `asx200` | ^AXJO | Parallel sprint stream 2 — same ingest-profile observe clock as S&P |
 | `euro_stoxx50` | ^STOXX50E | Component of `euro_depth`; demoted from weekly slot |
 
 **Timescale:** New depth book needs ~**11 Sunday ladder cycles** (~3 months at weekly cadence) before Phase 2 evidence is meaningful.
@@ -191,7 +193,7 @@ ftse-library ladder
 ## Capacity tiers (summary)
 
 ```text
-Tier 1 — Phase 1 observe sim     explicit [euro_depth] under depth-first policy
+Tier 1 — Phase 1 observe sim     ingest profile (focus + sprint + parity + equivalent)
 Tier 2 — Phase 2 weekly paper  weekly_paper_shard_markets[:capacity]  (depth-first cap 1)
 Tier 3 — Phase 3 weekday shard   one manual pilot at a time
 ```

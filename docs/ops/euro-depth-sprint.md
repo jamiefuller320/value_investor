@@ -63,7 +63,11 @@ sprint. When a parallel market reaches filing parity, `advance_parallel_sprint_o
 (default true) removes it from its stream and promotes the next `market_queue` market that
 still has gaps into the same slot. Stream 1 slots match euro focus (+30 min) via
 `library-ingest-sprint.yml`; stream 2 (+60 min) via `library-ingest-sprint-2.yml`. Learning
-focus (`weekly_paper_shard_markets`, observe sim) stays on `euro_depth` until handoff.
+Learning **weekly paper** (`weekly_paper_shard_markets`, capacity 1) stays on
+`euro_depth` until handoff. Sunday screen-lite + observe sim follow the
+**ingest profile** (focus + both sprint streams + ingest-parity +
+`ftse_equivalent_markets`), so `sp500` and `asx200` keep a dated archive clock
+without taking the weekly-paper slot.
 
 `ingest_parity_met` is the FTSE quality bar for **every** library market
 (unmeasured, zero-body, thin, and `indexed_without_body` all zero).
