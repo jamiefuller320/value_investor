@@ -413,7 +413,9 @@ def catalog_coverage(catalog: dict[str, Any] | None = None) -> dict[str, Any]:
     }
 
 
-def factors_for_stage(stage_id: str, *, catalog: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+def factors_for_stage(
+    stage_id: str, *, catalog: dict[str, Any] | None = None
+) -> list[dict[str, Any]]:
     payload = catalog or lifecycle_catalog()
     for stage in payload.get("stages") or []:
         if str(stage.get("id")) == stage_id:

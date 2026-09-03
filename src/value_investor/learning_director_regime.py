@@ -99,9 +99,7 @@ def _lifecycle_overlay_inventory(paper_root: Path) -> dict[str, Any]:
         "entry_dca_overlay": {
             "scored_count": (rollup or {}).get("scored_count"),
             "tracks_with_closed": (rollup or {}).get("tracks_with_closed"),
-            "ready_for_cadence_analysis": bool(
-                (readiness or {}).get("ready_for_cadence_analysis")
-            ),
+            "ready_for_cadence_analysis": bool((readiness or {}).get("ready_for_cadence_analysis")),
             "leading_cadence": (rollup or {}).get("leading_cadence"),
             "model_independent_hint": bool((rollup or {}).get("model_independent_hint")),
         },

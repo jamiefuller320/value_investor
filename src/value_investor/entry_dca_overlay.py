@@ -226,9 +226,7 @@ def ingest_new_entries(
     """Open an episode for each buy that starts a new sleeve this pass."""
     episodes: list[dict[str, Any]] = list(store.get("episodes") or [])
     open_tickers = {
-        str(row.get("ticker"))
-        for row in episodes
-        if str(row.get("status") or "open") == "open"
+        str(row.get("ticker")) for row in episodes if str(row.get("status") or "open") == "open"
     }
     held = _held_tickers(holdings_before)
     seen_before = _prior_episode_tickers(store) | set(alumni_tickers or ())
@@ -403,7 +401,7 @@ def score_episode(
             2,
         )
         # peak_loss is negative; DCA de-risks when its peak is less negative.
-        # de_risk_gbp = dca_peak - lump_peak  → positive when |dca| < |lump|? 
+        # de_risk_gbp = dca_peak - lump_peak  → positive when |dca| < |lump|?
         # If lump peak_loss = -100 and dca = -40, dca - lump = 60. Positive = de-risked.
         # Wait: dca_peak (-40) - lump_peak (-100) = 60. Yes positive = de-risked.
         # But I wrote dca_peak - lump_peak which is correct.
@@ -458,7 +456,9 @@ def update_open_episodes(
         episode.update(summary)
         episode["status"] = "closed"
         episode["closed_at"] = as_of
-        episode["close_reason"] = "sold_before_window" if sold and not window_done else "window_elapsed"
+        episode["close_reason"] = (
+            "sold_before_window" if sold and not window_done else "window_elapsed"
+        )
         closed += 1
     return {"marked": marked, "closed": closed}
 
@@ -476,9 +476,7 @@ def assess_framework_readiness(
     cfg: EntryDcaConfig | None = None,
 ) -> dict[str, Any]:
     cfg = cfg or EntryDcaConfig()
-    ready = (
-        closed_episodes >= cfg.min_closed_episodes and tracks_with_closed >= cfg.min_tracks
-    )
+    ready = closed_episodes >= cfg.min_closed_episodes and tracks_with_closed >= cfg.min_tracks
     return {
         "ready_for_cadence_analysis": ready,
         "closed_episodes": closed_episodes,
@@ -529,9 +527,7 @@ def build_entry_dca_review(
             "scored_episodes": len(deltas),
             "mean_end_value_delta": _mean(deltas),
             "mean_de_risk_gbp": _mean(de_risks),
-            "de_risk_rate": round(
-                sum(1 for value in de_risks if value > 0) / len(de_risks), 4
-            )
+            "de_risk_rate": round(sum(1 for value in de_risks if value > 0) / len(de_risks), 4)
             if de_risks
             else None,
             "win_count": wins,

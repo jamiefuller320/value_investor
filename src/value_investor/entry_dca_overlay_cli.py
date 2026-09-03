@@ -92,7 +92,9 @@ def main(argv: list[str] | None = None) -> int:
                 price_map[ticker] = float(position.avg_cost)
         buy_cost = float(getattr(config, "buy_cost_pct", None) or config.trade_cost_pct or 0.0)
         as_of = str(fund.last_mark_at or "")
-        history_trades = [item.to_dict() if hasattr(item, "to_dict") else item for item in fund.trades]
+        history_trades = [
+            item.to_dict() if hasattr(item, "to_dict") else item for item in fund.trades
+        ]
         reviews[track_id] = run_entry_dca_overlay_pass(
             output_dir=track_dir,
             track_id=track_id,

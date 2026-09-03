@@ -21,7 +21,9 @@ from value_investor.entry_dca_overlay import (
 from value_investor.review_payload_slim import slim_entry_dca
 
 
-def _new_buy_trade(*, price: float = 100.0, notional: float = 1000.0, at: str = "2026-09-01T09:15:00+01:00"):
+def _new_buy_trade(
+    *, price: float = 100.0, notional: float = 1000.0, at: str = "2026-09-01T09:15:00+01:00"
+):
     return {
         "side": "buy",
         "ticker": "AAA.L",
@@ -39,7 +41,14 @@ def test_ingest_opens_episode_only_for_new_sleeves():
         track_id="rules",
         trades=[_new_buy_trade()],
         holdings_before=[],
-        candidates=[{"ticker": "AAA.L", "signal": "buy", "timing_signal": "accumulate", "conviction_score": 0.7}],
+        candidates=[
+            {
+                "ticker": "AAA.L",
+                "signal": "buy",
+                "timing_signal": "accumulate",
+                "conviction_score": 0.7,
+            }
+        ],
         buy_cost_pct=0.03,
         as_of="2026-09-01T09:15:00+01:00",
     )
@@ -100,7 +109,12 @@ def test_cadence_review_ranks_first_entry_only():
                 "any_de_risk": True,
                 "winning_cadence": "dca_2x_weekly",
                 "cadence_scores": [
-                    {"id": "dca_2x_weekly", "scored": True, "end_value_delta": 10.0, "de_risk_gbp": 5.0},
+                    {
+                        "id": "dca_2x_weekly",
+                        "scored": True,
+                        "end_value_delta": 10.0,
+                        "de_risk_gbp": 5.0,
+                    },
                 ],
             },
             {
@@ -109,7 +123,12 @@ def test_cadence_review_ranks_first_entry_only():
                 "any_de_risk": True,
                 "winning_cadence": "dca_4x_weekly",
                 "cadence_scores": [
-                    {"id": "dca_4x_weekly", "scored": True, "end_value_delta": 99.0, "de_risk_gbp": 9.0},
+                    {
+                        "id": "dca_4x_weekly",
+                        "scored": True,
+                        "end_value_delta": 99.0,
+                        "de_risk_gbp": 9.0,
+                    },
                 ],
             },
         ]
@@ -201,12 +220,18 @@ def test_run_pass_writes_artifacts(tmp_path: Path):
 
 
 def test_readiness_and_slim_rollup(tmp_path: Path):
-    assert assess_framework_readiness(closed_episodes=4, tracks_with_closed=1)[
-        "ready_for_cadence_analysis"
-    ] is False
-    assert assess_framework_readiness(closed_episodes=12, tracks_with_closed=2)[
-        "ready_for_cadence_analysis"
-    ] is True
+    assert (
+        assess_framework_readiness(closed_episodes=4, tracks_with_closed=1)[
+            "ready_for_cadence_analysis"
+        ]
+        is False
+    )
+    assert (
+        assess_framework_readiness(closed_episodes=12, tracks_with_closed=2)[
+            "ready_for_cadence_analysis"
+        ]
+        is True
+    )
 
     paper = tmp_path / "paper"
     paper.mkdir(parents=True)

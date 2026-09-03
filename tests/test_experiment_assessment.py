@@ -122,7 +122,9 @@ def test_refresh_experiment_assessment_includes_shadows_and_tasks(tmp_path: Path
     assert "calibration_shadow" in kinds
     assert "analysis_task" in kinds
     assert "lifecycle_overlay" in kinds
-    dca_row = next(row for row in payload["experiments"] if row["experiment_id"] == "entry_dca_overlay")
+    dca_row = next(
+        row for row in payload["experiments"] if row["experiment_id"] == "entry_dca_overlay"
+    )
     assert dca_row["status"] == "observing"
     shadow_row = next(row for row in payload["experiments"] if row["kind"] == "calibration_shadow")
     assert shadow_row["status"] in {"continue", "recommend", "observing", "fail"}
