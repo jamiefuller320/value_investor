@@ -151,6 +151,7 @@ Assembled by `build_dashboard_bundle()` in `publish.py`:
 | `deep_analysis`, `gap_fill` | parsed `output/` summaries |
 | `historical_analysis`, `backtest`, `simulation` | `output/*.json` |
 | `paper_automation`, `automation` | ladder + weekday paper status |
+| `market_status` | per-market ingest / signal / learning-phase grid (`build_market_status`) |
 
 `research[]` index entry: `ticker`, `name`, `version`, `updated_at`, truncated
 `executive_summary`, verdict fields, `source_counts`, `memo_quality`, `memo_path`.
