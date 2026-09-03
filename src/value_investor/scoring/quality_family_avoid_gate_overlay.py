@@ -48,7 +48,7 @@ def compute_quality_family_composite_score(
     ticker: str,
 ) -> float | None:
     """Mean score across quality-family models for one ticker."""
-    if model_results.empty:
+    if model_results.empty or "model_id" not in model_results.columns:
         return None
 
     ticker_rows = model_results[
