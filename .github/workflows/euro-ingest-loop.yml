@@ -79,7 +79,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install package
-        run: pip install -e .
+        run: bash scripts/gha_pip_install.sh -e .
 
       - name: Evaluate euro ingest completion gate
         id: dispatch
@@ -174,7 +174,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install package
-        run: pip install -e .
+        run: bash scripts/gha_pip_install.sh -e .
 
       - name: Configure git author
         run: |

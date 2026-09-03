@@ -35,6 +35,8 @@ If the **latest** `CI` and `Deploy GitHub Pages` runs on `main` are green, older
 | Ops monitor red on Sunday morning while orchestrator catch-up pending | Primary orchestrator window failed; 07:45 UTC monitor runs before catch-up | **Expected** — monitor still emails `warn`/`fail`; workflow uses `--allow-workflow-stale-exit-zero` so the Actions job stays green when only workflow-overdue findings remain |
 | Duplicate orchestrator dispatches same day | Overlapping catch-up + external cron | Orchestrator **gate** job skips when another run is `in_progress`/`queued`; child dispatch uses `busyToday()` (success or active) |
 | Node 20 deprecation annotation | Older action major versions on Node 20 runtime | Upgrade `setup-python` → v6, `github-script` → v8 (done in workflow tidy PR) |
+| `pip install -e .` — *"No matching distribution found for pandas>=2.2 (from versions: none)"* | Transient PyPI / empty index on one runner (same run's other job can succeed) | Library ingest workflows retry via `scripts/gha_pip_install.sh` (4 attempts, backoff). Re-run if it still fails after retries |
+| Euro / library ingest — *local changes to engineering_tasks.json would be overwritten by checkout* | Push script stashed only `docs/data/library/`, leaving `engineering_tasks.json` dirty when origin/main moved | `scripts/push_library_ingest_artifacts.sh` now stashes the full allowlist and restores only files the job changed |
 
 ## Examples (2026-07-25)
 
