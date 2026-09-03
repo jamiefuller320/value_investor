@@ -3019,7 +3019,20 @@
         ],
         "sample_zero_body": [],
         "rerun_library_ingest_loop": true,
-        "doc": "docs/ops/library-ingest-escalation.md"
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260903-01",
+        "verified_at": "2026-09-03T12:32:18.938069+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_research_filings.py",
+            "tests/test_gap_fill_deepen.py",
+            "tests/test_ingest_improvement.py",
+            "tests/test_companies_house.py"
+          ],
+          "output_tail": "........................................................................ [ 30%]\n........................................................................ [ 61%]\n........................................................................ [ 92%]\n.................                                                        [100%]\n233 passed in 115.56s (0:01:55)"
+        }
       },
       "acceptance_criteria": [
         "Representative asx200 buy-tier tickers gain filing indexes with bodies under the market canonical screen path",
@@ -3047,8 +3060,12 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "open",
-      "no_diff_count": 0
+      "status": "merged",
+      "no_diff_count": 0,
+      "branch_name": "cursor/eng-20260903-01-1de3",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/412",
+      "pr_number": 412,
+      "merged_at": "2026-09-03T12:32:18.938798+00:00"
     },
     {
       "id": "eng-20260902-01",
@@ -3273,6 +3290,222 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/346",
       "pr_number": 346,
       "merged_at": "2026-08-25T16:39:44.264718+00:00"
+    },
+    {
+      "id": "eng-20260903-02",
+      "area": "scoring",
+      "title": "Offline conviction-timing overlay on hold->buy and signal_unchanged 1w hit rates",
+      "summary": "Queue the trajectory scoring experiment from ldr-20260901-02: 1w hold->buy positive_rate=0.25 (n=20) and signal_unchanged positive_rate=0.3431 (n=239). Observe-only scoring design — do not start entry-timing from the chart-outcome mix (N59).",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "analysis_review",
+      "evidence": {
+        "analysis_task_id": "ana-20260903-01",
+        "plan_index": 1,
+        "queued_from": [
+          "ldr-20260901-02"
+        ],
+        "triage_batch": "2026-09-03",
+        "triage_note": "Human queued 2026-09-03. Observe-only scoring design — do not implement in this triage and do not mutate assign_signal() (N3).",
+        "assessment_status": "recommend",
+        "assessment_at": "2026-09-03T10:08:56.028980+00:00",
+        "forward_evidence": {
+          "trajectory": {
+            "labeled_event_count": 336,
+            "model_focus_candidates": [
+              {
+                "kind": "transition_key",
+                "key": "hold->buy",
+                "horizon": "1w",
+                "count": 20,
+                "positive_rate": 0.25,
+                "mean_forward_return": -0.008424,
+                "why": "hold->buy 1w positive_rate=0.25 mean=-0.008424 n=20 — opinion flip did not match next-week price"
+              },
+              {
+                "kind": "transition_key",
+                "key": "buy->strong_buy",
+                "horizon": "1w",
+                "count": 12,
+                "positive_rate": 0.25,
+                "mean_forward_return": -0.00492,
+                "why": "buy->strong_buy 1w positive_rate=0.25 mean=-0.00492 n=12 — opinion flip did not match next-week price"
+              },
+              {
+                "kind": "transition_key",
+                "key": "signal_unchanged",
+                "horizon": "1w",
+                "count": 239,
+                "positive_rate": 0.3431,
+                "mean_forward_return": -0.002598,
+                "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 — opinion flip did not match next-week price"
+              },
+              {
+                "kind": "horizon_hit_rate",
+                "key": "1w",
+                "horizon": "1w",
+                "count": 266,
+                "prediction_hit_rate": 0.406,
+                "why": "Directional hit_rate=0.406 at 1w (n=266) — implied upgrade/downgrade/conviction sign is not beating chance"
+              }
+            ],
+            "recommend_candidate": {
+              "key": "hold->buy",
+              "count": 20
+            }
+          },
+          "loser_cards": {
+            "top_failed_families": [
+              [
+                "quality",
+                37
+              ],
+              [
+                "dividend",
+                35
+              ],
+              [
+                "garp",
+                28
+              ],
+              [
+                "risk",
+                21
+              ]
+            ]
+          }
+        },
+        "human_disposition": "queued"
+      },
+      "acceptance_criteria": [
+        "Change is covered by unit tests where behaviour shifts",
+        "No edits under blocked paper/sim automation paths",
+        "Observe-only scoring design — do not mutate assign_signal() (N3)"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "eng-20260903-03",
+      "area": "scoring",
+      "title": "Quality-family composite gate on avoid cohort",
+      "summary": "Queue the loser-card scoring experiment from ldr-20260901-03: test a quality-family composite gate where quality failed in loser_snapshot_cards (AAL.L / AML.L pattern). Human promote still required.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "analysis_review",
+      "evidence": {
+        "analysis_task_id": "ana-20260903-02",
+        "plan_index": 2,
+        "queued_from": [
+          "ldr-20260901-03"
+        ],
+        "triage_batch": "2026-09-03",
+        "triage_note": "Human queued 2026-09-03. Observe-only scoring design — do not implement in this triage and do not mutate assign_signal() (N3).",
+        "assessment_status": "recommend",
+        "assessment_at": "2026-09-03T10:08:56.028980+00:00",
+        "forward_evidence": {
+          "trajectory": {
+            "labeled_event_count": 336,
+            "model_focus_candidates": [
+              {
+                "kind": "transition_key",
+                "key": "hold->buy",
+                "horizon": "1w",
+                "count": 20,
+                "positive_rate": 0.25,
+                "mean_forward_return": -0.008424,
+                "why": "hold->buy 1w positive_rate=0.25 mean=-0.008424 n=20 — opinion flip did not match next-week price"
+              },
+              {
+                "kind": "transition_key",
+                "key": "buy->strong_buy",
+                "horizon": "1w",
+                "count": 12,
+                "positive_rate": 0.25,
+                "mean_forward_return": -0.00492,
+                "why": "buy->strong_buy 1w positive_rate=0.25 mean=-0.00492 n=12 — opinion flip did not match next-week price"
+              },
+              {
+                "kind": "transition_key",
+                "key": "signal_unchanged",
+                "horizon": "1w",
+                "count": 239,
+                "positive_rate": 0.3431,
+                "mean_forward_return": -0.002598,
+                "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 — opinion flip did not match next-week price"
+              },
+              {
+                "kind": "horizon_hit_rate",
+                "key": "1w",
+                "horizon": "1w",
+                "count": 266,
+                "prediction_hit_rate": 0.406,
+                "why": "Directional hit_rate=0.406 at 1w (n=266) — implied upgrade/downgrade/conviction sign is not beating chance"
+              }
+            ],
+            "recommend_candidate": {
+              "key": "hold->buy",
+              "count": 20
+            }
+          },
+          "loser_cards": {
+            "top_failed_families": [
+              [
+                "quality",
+                37
+              ],
+              [
+                "dividend",
+                35
+              ],
+              [
+                "garp",
+                28
+              ],
+              [
+                "risk",
+                21
+              ]
+            ]
+          }
+        },
+        "human_disposition": "queued"
+      },
+      "acceptance_criteria": [
+        "Change is covered by unit tests where behaviour shifts",
+        "No edits under blocked paper/sim automation paths",
+        "Observe-only scoring design — do not mutate assign_signal() (N3)"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "status": "open"
     },
     {
       "id": "eng-20260726-06",
@@ -3738,225 +3971,20 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/141",
       "pr_number": 141,
       "merged_at": "2026-07-28T20:14:22.598105+00:00"
-    },
-    {
-      "id": "eng-20260903-02",
-      "area": "scoring",
-      "title": "Offline conviction-timing overlay on hold->buy and signal_unchanged 1w hit rates",
-      "summary": "Queue the trajectory scoring experiment from ldr-20260901-02: 1w hold->buy positive_rate=0.25 (n=20) and signal_unchanged positive_rate=0.3431 (n=239). Observe-only scoring design — do not start entry-timing from the chart-outcome mix (N59).",
-      "priority": "medium",
-      "priority_score": 70.0,
-      "source": "analysis_review",
-      "evidence": {
-        "analysis_task_id": "ana-20260903-01",
-        "plan_index": 1,
-        "queued_from": [
-          "ldr-20260901-02"
-        ],
-        "triage_batch": "2026-09-03",
-        "triage_note": "Human queued 2026-09-03. Observe-only scoring design — do not implement in this triage and do not mutate assign_signal() (N3).",
-        "assessment_status": "recommend",
-        "assessment_at": "2026-09-03T10:08:56.028980+00:00",
-        "forward_evidence": {
-          "trajectory": {
-            "labeled_event_count": 336,
-            "model_focus_candidates": [
-              {
-                "kind": "transition_key",
-                "key": "hold->buy",
-                "horizon": "1w",
-                "count": 20,
-                "positive_rate": 0.25,
-                "mean_forward_return": -0.008424,
-                "why": "hold->buy 1w positive_rate=0.25 mean=-0.008424 n=20 — opinion flip did not match next-week price"
-              },
-              {
-                "kind": "transition_key",
-                "key": "buy->strong_buy",
-                "horizon": "1w",
-                "count": 12,
-                "positive_rate": 0.25,
-                "mean_forward_return": -0.00492,
-                "why": "buy->strong_buy 1w positive_rate=0.25 mean=-0.00492 n=12 — opinion flip did not match next-week price"
-              },
-              {
-                "kind": "transition_key",
-                "key": "signal_unchanged",
-                "horizon": "1w",
-                "count": 239,
-                "positive_rate": 0.3431,
-                "mean_forward_return": -0.002598,
-                "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 — opinion flip did not match next-week price"
-              },
-              {
-                "kind": "horizon_hit_rate",
-                "key": "1w",
-                "horizon": "1w",
-                "count": 266,
-                "prediction_hit_rate": 0.406,
-                "why": "Directional hit_rate=0.406 at 1w (n=266) — implied upgrade/downgrade/conviction sign is not beating chance"
-              }
-            ],
-            "recommend_candidate": {
-              "key": "hold->buy",
-              "count": 20
-            }
-          },
-          "loser_cards": {
-            "top_failed_families": [
-              [
-                "quality",
-                37
-              ],
-              [
-                "dividend",
-                35
-              ],
-              [
-                "garp",
-                28
-              ],
-              [
-                "risk",
-                21
-              ]
-            ]
-          }
-        },
-        "human_disposition": "queued"
-      },
-      "acceptance_criteria": [
-        "Change is covered by unit tests where behaviour shifts",
-        "No edits under blocked paper/sim automation paths",
-        "Observe-only scoring design — do not mutate assign_signal() (N3)"
-      ],
-      "allowed_paths": [
-        "src/value_investor/pipeline.py",
-        "src/value_investor/summary.py",
-        "src/value_investor/models/",
-        "src/value_investor/scoring/",
-        "tests/test_pipeline.py",
-        "tests/test_summary.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "status": "open"
-    },
-    {
-      "id": "eng-20260903-03",
-      "area": "scoring",
-      "title": "Quality-family composite gate on avoid cohort",
-      "summary": "Queue the loser-card scoring experiment from ldr-20260901-03: test a quality-family composite gate where quality failed in loser_snapshot_cards (AAL.L / AML.L pattern). Human promote still required.",
-      "priority": "medium",
-      "priority_score": 70.0,
-      "source": "analysis_review",
-      "evidence": {
-        "analysis_task_id": "ana-20260903-02",
-        "plan_index": 2,
-        "queued_from": [
-          "ldr-20260901-03"
-        ],
-        "triage_batch": "2026-09-03",
-        "triage_note": "Human queued 2026-09-03. Observe-only scoring design — do not implement in this triage and do not mutate assign_signal() (N3).",
-        "assessment_status": "recommend",
-        "assessment_at": "2026-09-03T10:08:56.028980+00:00",
-        "forward_evidence": {
-          "trajectory": {
-            "labeled_event_count": 336,
-            "model_focus_candidates": [
-              {
-                "kind": "transition_key",
-                "key": "hold->buy",
-                "horizon": "1w",
-                "count": 20,
-                "positive_rate": 0.25,
-                "mean_forward_return": -0.008424,
-                "why": "hold->buy 1w positive_rate=0.25 mean=-0.008424 n=20 — opinion flip did not match next-week price"
-              },
-              {
-                "kind": "transition_key",
-                "key": "buy->strong_buy",
-                "horizon": "1w",
-                "count": 12,
-                "positive_rate": 0.25,
-                "mean_forward_return": -0.00492,
-                "why": "buy->strong_buy 1w positive_rate=0.25 mean=-0.00492 n=12 — opinion flip did not match next-week price"
-              },
-              {
-                "kind": "transition_key",
-                "key": "signal_unchanged",
-                "horizon": "1w",
-                "count": 239,
-                "positive_rate": 0.3431,
-                "mean_forward_return": -0.002598,
-                "why": "signal_unchanged 1w positive_rate=0.3431 mean=-0.002598 n=239 — opinion flip did not match next-week price"
-              },
-              {
-                "kind": "horizon_hit_rate",
-                "key": "1w",
-                "horizon": "1w",
-                "count": 266,
-                "prediction_hit_rate": 0.406,
-                "why": "Directional hit_rate=0.406 at 1w (n=266) — implied upgrade/downgrade/conviction sign is not beating chance"
-              }
-            ],
-            "recommend_candidate": {
-              "key": "hold->buy",
-              "count": 20
-            }
-          },
-          "loser_cards": {
-            "top_failed_families": [
-              [
-                "quality",
-                37
-              ],
-              [
-                "dividend",
-                35
-              ],
-              [
-                "garp",
-                28
-              ],
-              [
-                "risk",
-                21
-              ]
-            ]
-          }
-        },
-        "human_disposition": "queued"
-      },
-      "acceptance_criteria": [
-        "Change is covered by unit tests where behaviour shifts",
-        "No edits under blocked paper/sim automation paths",
-        "Observe-only scoring design — do not mutate assign_signal() (N3)"
-      ],
-      "allowed_paths": [
-        "src/value_investor/pipeline.py",
-        "src/value_investor/summary.py",
-        "src/value_investor/models/",
-        "src/value_investor/scoring/",
-        "tests/test_pipeline.py",
-        "tests/test_summary.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "status": "open"
     }
   ],
   "ingest_health": {
+    "snapshot_at": "2026-09-03T12:30:20.084280+00:00",
+    "buy_tier_count": 59,
+    "measured_tickers": 59,
+    "unmeasured_buy_tier": 0,
+    "unmeasured_tickers": [],
+    "zero_body_buy_tier": 0,
+    "zero_body_tickers": [],
+    "indexed_without_body": 3,
+    "filings_with_body": 3840
+  },
+  "ingest_health_before": {
     "snapshot_at": "2026-09-02T13:36:20.589532+00:00",
     "buy_tier_count": 59,
     "measured_tickers": 59,
@@ -3967,19 +3995,8 @@
     "indexed_without_body": 3,
     "filings_with_body": 3837
   },
-  "ingest_health_before": {
-    "snapshot_at": "2026-09-02T11:13:23.900377+00:00",
-    "buy_tier_count": 61,
-    "measured_tickers": 61,
-    "unmeasured_buy_tier": 0,
-    "unmeasured_tickers": [],
-    "zero_body_buy_tier": 0,
-    "zero_body_tickers": [],
-    "indexed_without_body": 5,
-    "filings_with_body": 3971
-  },
-  "reprioritized_at": "2026-09-02T13:36:20.589785+00:00",
-  "reprioritized_after_task": "eng-20260902-02",
+  "reprioritized_at": "2026-09-03T12:30:20.084398+00:00",
+  "reprioritized_after_task": "eng-20260903-01",
   "library_ingest_health": {
     "snapshot_at": "2026-09-03T11:18:32.808107+00:00",
     "market_id": "asx200",
