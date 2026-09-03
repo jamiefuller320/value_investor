@@ -696,12 +696,27 @@ def has_recent_intensive_gap_closure_run(
     *,
     within_hours: float = 12.0,
     runs_path: Path | None = None,
+    market_id: str | None = None,
 ) -> bool:
+    """True when an intensive gap-closure run landed recently.
+
+    ``market_id`` scopes the cooldown to that library market. When omitted
+    (live FTSE path), library-universe rows are ignored so euro/sp500
+    intensives do not block weekday FTSE follow-up, and vice versa.
+    """
+    wanted_market = str(market_id or "").strip()
     store = load_ingest_gap_closure_runs(runs_path)
     now = datetime.now(UTC)
     for row in reversed(store.get("runs") or []):
         params = row.get("params") or {}
         if not params.get("intensive_gap_closure"):
+            continue
+        row_market = str(params.get("market_id") or "").strip()
+        row_universe = str(params.get("universe") or "").strip()
+        if wanted_market:
+            if row_market != wanted_market:
+                continue
+        elif row_market or row_universe == "library":
             continue
         stamp = str(row.get("recorded_at") or "")
         if not stamp:
@@ -714,6 +729,208 @@ def has_recent_intensive_gap_closure_run(
         if age_hours <= within_hours:
             return True
     return False
+
+
+def _improved_count(improved: Any) -> int:
+    if isinstance(improved, list):
+        return len(improved)
+    try:
+        return int(improved or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _library_outstanding_ingest_gaps(health: dict[str, Any]) -> int:
+    return (
+        int(health.get("unmeasured_buy_tier") or 0)
+        + int(health.get("zero_body_buy_tier") or 0)
+        + int(health.get("indexed_without_body") or 0)
+    )
+
+
+def select_library_gap_closure_candidate(
+    *,
+    market_id: str,
+    library_root: Path | None = None,
+    prefer_ticker: str | None = None,
+    reports: list[Any] | None = None,
+    max_candidates: int = 8,
+) -> dict[str, Any]:
+    """Pick the stickiest library buy-tier ticker with outstanding filing gaps."""
+    from value_investor.data_library import DEFAULT_LIBRARY_ROOT
+    from value_investor.library_ingest_escalation import library_ingest_ticker_has_gaps
+    from value_investor.library_ingest_loop import (
+        load_library_buy_tier_reports,
+        select_library_ingest_targets,
+    )
+
+    market = str(market_id or "").strip()
+    if not market:
+        return {"should_dispatch": False, "reason": "market_id required"}
+    root = Path(library_root) if library_root is not None else DEFAULT_LIBRARY_ROOT
+    loaded = reports
+    if loaded is None:
+        try:
+            loaded = load_library_buy_tier_reports(root, market)
+        except FileNotFoundError:
+            return {"should_dispatch": False, "reason": "library screen shortlist missing"}
+    if not loaded:
+        return {"should_dispatch": False, "reason": f"no buy-tier reports for {market}"}
+
+    targets = select_library_ingest_targets(
+        loaded,
+        library_root=root,
+        market_id=market,
+        max_targets=max(1, int(max_candidates)),
+        gap_only=True,
+    )
+    sticky_rank = {
+        "unmeasured": 0,
+        "zero_body": 1,
+        "indexed_without_body": 2,
+        "thin_bodies": 3,
+    }
+    targets = sorted(
+        targets,
+        key=lambda row: (
+            sticky_rank.get(str(row.reason), 9),
+            -float(row.priority_score or 0.0),
+            str(row.ticker),
+        ),
+    )
+    prefer = str(prefer_ticker or "").strip().upper()
+    if prefer:
+        for row in targets:
+            if str(row.ticker).upper() == prefer:
+                return {
+                    "should_dispatch": True,
+                    "pin_ticker": row.ticker,
+                    "market_id": market,
+                    "reason": (
+                        f"preferred sticky ticker {row.ticker} "
+                        f"(reason={row.reason}, indexed_without_body={row.indexed_without_body})"
+                    ),
+                }
+        if library_ingest_ticker_has_gaps(prefer, market_id=market, library_root=root):
+            return {
+                "should_dispatch": True,
+                "pin_ticker": prefer,
+                "market_id": market,
+                "reason": f"preferred sticky ticker {prefer} still has filing gaps",
+            }
+    if not targets:
+        return {
+            "should_dispatch": False,
+            "reason": f"no {market} buy-tier tickers with outstanding filing gaps",
+        }
+    top = targets[0]
+    return {
+        "should_dispatch": True,
+        "pin_ticker": top.ticker,
+        "market_id": market,
+        "reason": (
+            f"top {market} gap candidate {top.ticker} "
+            f"(reason={top.reason}, indexed_without_body={top.indexed_without_body})"
+        ),
+    }
+
+
+def evaluate_library_ingest_gap_closure_followup(
+    *,
+    market_id: str,
+    health_after: dict[str, Any],
+    was_gap_closure_run: bool,
+    stalled: bool = False,
+    improved: Any = None,
+    partial: bool = False,
+    runtime_cutoff: bool = False,
+    prefer_ticker: str | None = None,
+    library_root: Path | None = None,
+    reports: list[Any] | None = None,
+    tasks_path: Path = Path("docs/data/engineering_tasks.json"),
+    runs_path: Path | None = None,
+) -> dict[str, Any]:
+    """Dispatch intensive single-ticker gap closure after library stall or slowdown.
+
+    Fires when a *complete* weekday batch is stalled, or improved nobody, and
+    buy-tier gaps remain. Skips partial/runtime_cutoff runs (unfair deepen —
+    the discovery time cap is the fix for those) and productive runs that
+    still have leftover IWB.
+    """
+    market = str(market_id or "").strip()
+    if not market:
+        return {"should_dispatch": False, "reason": "market_id required"}
+    if was_gap_closure_run:
+        return {"should_dispatch": False, "reason": "current run was already gap closure"}
+    if partial or runtime_cutoff:
+        return {
+            "should_dispatch": False,
+            "reason": "partial or runtime_cutoff run — deepen was incomplete",
+        }
+    if _library_outstanding_ingest_gaps(health_after) <= 0:
+        return {
+            "should_dispatch": False,
+            "reason": "no outstanding library ingest gaps after batch",
+        }
+    improved_count = _improved_count(improved)
+    if not stalled and improved_count > 0:
+        return {
+            "should_dispatch": False,
+            "reason": "batch improved coverage; leftover gaps wait for next deepen",
+        }
+    if has_recent_intensive_gap_closure_run(
+        runs_path=runs_path,
+        within_hours=6.0,
+        market_id=market,
+    ):
+        return {
+            "should_dispatch": False,
+            "reason": f"intensive gap closure run for {market} within 6h",
+        }
+    from value_investor.library_ingest_escalation import (
+        has_open_library_ingest_task_for_market,
+    )
+
+    if has_open_library_ingest_task_for_market(market, tasks_path=tasks_path):
+        return {
+            "should_dispatch": False,
+            "reason": f"open library ingest engineering task for {market}",
+        }
+    prefer = str(prefer_ticker or "").strip() or None
+    if not prefer:
+        for key in ("zero_body_tickers", "unmeasured_tickers"):
+            sample = [
+                str(token).strip() for token in (health_after.get(key) or []) if str(token).strip()
+            ]
+            if sample:
+                prefer = sample[0]
+                break
+    candidate = select_library_gap_closure_candidate(
+        market_id=market,
+        library_root=library_root,
+        prefer_ticker=prefer,
+        reports=reports,
+    )
+    if not candidate.get("should_dispatch"):
+        return candidate
+    if stalled:
+        title = "Library ingest stall gap-closure follow-up"
+        summary = (
+            f"{market} ingest health stalled with outstanding buy-tier filing gaps; "
+            "intensive single-ticker pass for the stickiest name."
+        )
+    else:
+        title = "Library ingest slowdown gap-closure follow-up"
+        summary = (
+            f"Complete {market} weekday batch improved 0 tickers with outstanding "
+            "buy-tier filing gaps; intensive single-ticker pass for the stickiest name."
+        )
+    return {
+        **candidate,
+        "trigger": "stall_slowdown",
+        "title": title,
+        "summary": summary,
+    }
 
 
 def evaluate_weekly_gap_closure_followup(

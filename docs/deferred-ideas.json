@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-03T16:26:52+00:00",
+  "updated_at": "2026-09-03T17:23:36+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -5396,9 +5396,60 @@
         "discovery",
         "runtime"
       ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-03T16:26:52+00:00",
+      "updated_at": "2026-09-03T16:38:45+00:00"
+    },
+    {
+      "id": "N65",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Library ingest director (agent orchestration)",
+      "summary": "No ingest-director module exists. ingest_critical_path already classifies blockers; the euro stall was a deterministic discovery-vs-deepen budget bug, not a missing LLM planner. A weekly director like learning-director would not fetch bodies.",
+      "revisit_when": "Euro deepen still starves after the discovery time cap, or we need cross-market ingest scheduling beyond critical-path + budget",
+      "tags": [
+        "ingest",
+        "director",
+        "not_now"
+      ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
-      "added_at": "2026-09-03T16:26:52+00:00"
+      "added_at": "2026-09-03T16:38:32+00:00"
+    },
+    {
+      "id": "L260",
+      "category": "later",
+      "section": "ops",
+      "title": "Wire euro weekly gap-closure follow-up for sticky library names",
+      "summary": "FTSE weekday ingest auto-dispatches a pinned intensive gap-closure pass (then engineering-agent on stubborn refetch). Euro loop has the same compile/verify hooks but no weekly_followup/eng_idle candidate picker over library health \u2014 select_gap_closure_candidate still reads latest.json (FTSE 350).",
+      "revisit_when": "Discovery time cap is on main and euro deepen still leaves RAND.AS or the same IWB names unimproved across two successful runs",
+      "tags": [
+        "euro",
+        "ingest",
+        "gap-closure"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-03T16:43:38+00:00",
+      "updated_at": "2026-09-03T17:23:35+00:00"
+    },
+    {
+      "id": "L261",
+      "category": "later",
+      "section": "ops",
+      "title": "Wire library stall/slowdown gap-closure follow-up on parallel sprint workflows",
+      "summary": "euro-ingest-loop.yml now auto-dispatches pinned intensive gap-closure on stall or 0-improve complete runs. library-ingest-sprint.yml and library-ingest-sprint-2.yml still lack that hook, so leftover EDGAR/ASX sticky names wait for the next deepen or a manual pin.",
+      "revisit_when": "sp500 or asx200 complete weekday batches repeatedly improve 0 tickers while IWB or zero-body remain after the discovery time cap is in production",
+      "tags": [
+        "ingest",
+        "library",
+        "gap-closure",
+        "sprint"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-03T17:23:36+00:00"
     }
   ],
   "fragments": [

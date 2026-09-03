@@ -264,8 +264,8 @@ def test_library_ingest_json_path_survives_stdout_pollution(tmp_path: Path, caps
     assert payload["improved"] == ["BBB.DE"]
 
 
-def test_run_library_ingest_loop_counts_discovery_toward_runtime(tmp_path: Path):
-    """Discovery must consume the runtime budget so GHA jobs can finish before timeout."""
+def test_run_library_ingest_loop_caps_discovery_so_deepen_still_runs(tmp_path: Path):
+    """Forced discovery may use only a slice of the slot; deepen must still start."""
     root = tmp_path / "library"
     market = "euro_depth"
     research = root / "markets" / market / "screen" / "research"
@@ -287,6 +287,102 @@ def test_run_library_ingest_loop_counts_discovery_toward_runtime(tmp_path: Path)
         errors = 0
         prioritization_weights: dict = {}
         tickers: list = []
+
+    ingest_calls: list[str] = []
+    discovery_kwargs: dict = {}
+
+    def _fast_discovery(*_a, **kwargs):
+        discovery_kwargs.update(kwargs)
+        return _Scan()
+
+    def _track_ingest(target, **_k):
+        ingest_calls.append(target.ticker)
+        return {"ticker": target.ticker, "improved": False}
+
+    critical = type(
+        "CP",
+        (),
+        {
+            "force_discovery_scan": True,
+            "auto_pin_tickers": ["AAA.DE"],
+            "primary_blocker": "unmeasured",
+            "thin_need_discovery": ["BBB.DE"],
+            "unmeasured": ["AAA.DE"],
+            "zero_body": [],
+            "indexed_without_body": [],
+            "to_dict": lambda self: {},
+        },
+    )()
+
+    with (
+        patch(
+            "value_investor.library_ingest_loop.load_library_buy_tier_reports",
+            return_value=reports,
+        ),
+        patch(
+            "value_investor.library_ingest_loop.snapshot_library_ingest_health",
+            return_value={"unmeasured_buy_tier": 2, "zero_body_buy_tier": 0},
+        ),
+        patch("value_investor.library_ingest_loop.append_library_ingest_health_log"),
+        patch(
+            "value_investor.library_discovery_scan.run_library_buy_tier_discovery_scan",
+            side_effect=_fast_discovery,
+        ),
+        patch(
+            "value_investor.library_ingest_loop._ingest_single_library_target",
+            side_effect=_track_ingest,
+        ),
+        patch(
+            "value_investor.ingest_critical_path.assess_library_ingest_critical_path",
+            return_value=critical,
+        ),
+        patch("value_investor.ingest_critical_path.persist_ingest_critical_path"),
+        patch(
+            "value_investor.ingest_critical_path.apply_critical_path_to_target_order",
+            side_effect=lambda targets, _c: targets,
+        ),
+    ):
+        result = run_library_ingest_loop(
+            market,
+            library_root=root,
+            max_targets=2,
+            max_runtime_seconds=2700,
+            discovery_scan=True,
+            deepen_history=False,
+        )
+
+    assert ingest_calls == ["AAA.DE", "BBB.DE"]
+    assert result.runtime_cutoff is False
+    assert discovery_kwargs["max_runtime_seconds"] == 675.0
+    assert discovery_kwargs["prefer_tickers"] == ["BBB.DE", "AAA.DE"]
+    assert result.discovery_scan["max_runtime_seconds"] == 675.0
+    assert result.discovery_scan["forced_by_critical_path"] is True
+
+
+def test_run_library_ingest_loop_still_cuts_overrun_discovery(tmp_path: Path):
+    """If discovery ignores its cap and burns the whole slot, deepen is skipped."""
+    root = tmp_path / "library"
+    market = "euro_depth"
+    research = root / "markets" / market / "screen" / "research"
+    for ticker in ("AAA.DE", "BBB.DE"):
+        filings = research / ticker / "sources" / "filings"
+        filings.mkdir(parents=True)
+        write_json(
+            filings / "filings_index.json",
+            {"summary": {"total": 0, "with_body": 0}, "filings": []},
+            compact=False,
+        )
+    reports = [_report("AAA.DE"), _report("BBB.DE")]
+
+    class _Scan:
+        scanned = 2
+        hits = 0
+        new_rows_total = 0
+        curiosity_total = 0
+        errors = 0
+        prioritization_weights: dict = {}
+        tickers: list = []
+        runtime_cutoff = False
 
     ingest_calls: list[str] = []
 
@@ -324,9 +420,13 @@ def test_run_library_ingest_loop_counts_discovery_toward_runtime(tmp_path: Path)
                 "CP",
                 (),
                 {
-                    "force_discovery_scan": False,
+                    "force_discovery_scan": True,
                     "auto_pin_tickers": [],
-                    "primary_blocker": "none",
+                    "primary_blocker": "unmeasured",
+                    "thin_need_discovery": [],
+                    "unmeasured": ["AAA.DE"],
+                    "zero_body": [],
+                    "indexed_without_body": [],
                     "to_dict": lambda self: {},
                 },
             )(),

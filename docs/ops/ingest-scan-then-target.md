@@ -23,7 +23,7 @@ bootstrap (seed missing indexes)
 
 | Phase | What | Bodies? |
 |-------|------|---------|
-| Discovery scan | All buy-tier (`scan_cap=None`, no throttle today) | No |
+| Discovery scan | Buy-tier listing-only. Live FTSE: no throttle today. Library sprint: **time-capped** (≤25% of the slot; critical-path tickers first) so deepen still runs | No |
 | Deepen | Top `max_targets` (learning-phase default **62**) | Yes |
 
 ### Learning-phase bar (stage 2b)

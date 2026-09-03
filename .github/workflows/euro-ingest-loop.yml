@@ -53,7 +53,7 @@ on:
         type: string
         default: ""
       gap_closure_trigger:
-        description: "Orchestration trigger (weekly_followup, eng_idle, verification_rerun, manual)"
+        description: "Orchestration trigger (weekly_followup, stall_slowdown, eng_idle, verification_rerun, manual)"
         type: string
         default: ""
 
@@ -266,6 +266,69 @@ jobs:
               encoding="utf-8",
           )
           PY
+
+      - name: Evaluate library gap-closure follow-up
+        id: gap_followup
+        if: >-
+          steps.loop.outputs.partial != 'true'
+          && steps.loop.outputs.recorded_gap_closure != 'true'
+        env:
+          MARKET: ${{ github.event.inputs.market || 'euro_depth' }}
+        run: |
+          set -euo pipefail
+          if [ -n "${MARKET:-}" ] && ! [[ "$MARKET" =~ ^[a-z][a-z0-9_]{0,63}$ ]]; then
+            echo "Rejecting unsafe dispatch input: market" >&2
+            exit 1
+          fi
+          ftse-library ingest-gap-closure-followup \
+            --market "$MARKET" \
+            --loop-json /tmp/euro_ingest_loop.json \
+            --json \
+            --json-path /tmp/gap_followup.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/gap_followup.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"should_dispatch={'true' if data.get('should_dispatch') else 'false'}\n"
+              f"pin_ticker={data.get('pin_ticker', '')}\n"
+              f"gap_closure_trigger={data.get('trigger', 'stall_slowdown')}\n"
+              f"gap_followup_reason={data.get('reason', '')}\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Dispatch library gap-closure follow-up after stall or slowdown
+        if: steps.gap_followup.outputs.should_dispatch == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MARKET: ${{ github.event.inputs.market || 'euro_depth' }}
+          PIN_TICKER: ${{ steps.gap_followup.outputs.pin_ticker }}
+          GAP_CLOSURE_TRIGGER: ${{ steps.gap_followup.outputs.gap_closure_trigger }}
+        run: |
+          set -euo pipefail
+          require_safe() {
+            local name="$1" val="$2" re="$3"
+            if [ -n "$val" ] && ! [[ "$val" =~ $re ]]; then
+              echo "Rejecting unsafe dispatch input: $name" >&2
+              exit 1
+            fi
+          }
+          require_safe market "${MARKET:-}" '^[a-z][a-z0-9_]{0,63}$'
+          require_safe pin_ticker "${PIN_TICKER:-}" '^[A-Za-z0-9][A-Za-z0-9._%-]{0,31}$'
+          require_safe gap_closure_trigger "${GAP_CLOSURE_TRIGGER:-}" '^[a-z0-9_]{1,64}$'
+          gh workflow run euro-ingest-loop.yml \
+            -f market="$MARKET" \
+            -f max_targets=1 \
+            -f max_bodies=40 \
+            -f max_runtime_seconds=2100 \
+            -f force=true \
+            -f record_gap_closure=true \
+            -f pin_ticker="$PIN_TICKER" \
+            -f gap_closure_trigger="$GAP_CLOSURE_TRIGGER"
+          echo "Dispatched euro-ingest-loop gap-closure follow-up for $PIN_TICKER"
 
       - name: Dispatch engineering queue when tasks were added
         if: >-

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 
 from value_investor.ingest_gap_closure import (
@@ -10,6 +11,7 @@ from value_investor.ingest_gap_closure import (
     evaluate_weekly_gap_closure_followup,
     paper_holding_tickers,
 )
+from value_investor.storage import write_json
 
 
 def _gap_data_dir(tmp_path: Path, ticker: str = "HLN.L") -> Path:
@@ -115,3 +117,35 @@ def test_eng_idle_skips_when_queue_not_idle(tmp_path: Path):
     )
     assert result["should_dispatch"] is False
     assert result["reason"] == "engineering queue not idle"
+
+
+def test_weekly_followup_ignores_recent_library_intensive(tmp_path: Path):
+    data_dir = _gap_data_dir(tmp_path)
+    runs_path = data_dir / "ingest_gap_closure_runs.json"
+    write_json(
+        runs_path,
+        {
+            "runs": [
+                {
+                    "id": "igc-euro",
+                    "recorded_at": datetime.now(UTC).isoformat(),
+                    "params": {
+                        "intensive_gap_closure": True,
+                        "market_id": "euro_depth",
+                        "universe": "library",
+                    },
+                }
+            ]
+        },
+        compact=False,
+    )
+    result = evaluate_weekly_gap_closure_followup(
+        health_after={"indexed_without_body": 3, "zero_body_buy_tier": 0},
+        was_gap_closure_run=False,
+        latest_path=data_dir / "latest.json",
+        data_dir=data_dir,
+        tasks_path=data_dir / "engineering_tasks.json",
+        runs_path=runs_path,
+    )
+    assert result["should_dispatch"] is True
+    assert result["pin_ticker"] == "HLN.L"

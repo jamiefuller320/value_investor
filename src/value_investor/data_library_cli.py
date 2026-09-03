@@ -310,6 +310,51 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ingest_loop_p.set_defaults(func=cmd_library_ingest_loop)
 
+    ingest_followup_p = sub.add_parser(
+        "ingest-gap-closure-followup",
+        parents=[common],
+        help=(
+            "Evaluate automatic intensive gap-closure after a library ingest "
+            "stall or zero-improve complete run"
+        ),
+    )
+    ingest_followup_p.add_argument(
+        "--market",
+        default="",
+        help="Library market id (default: market_id from --loop-json, else euro_depth)",
+    )
+    ingest_followup_p.add_argument(
+        "--loop-json",
+        type=Path,
+        default=None,
+        help="Path to ingest-loop result JSON (health_after, stalled, improved, partial)",
+    )
+    ingest_followup_p.add_argument(
+        "--pin-ticker",
+        default="",
+        help="Prefer this sticky ticker when it still has filing gaps",
+    )
+    ingest_followup_p.add_argument(
+        "--tasks-path",
+        type=Path,
+        default=Path("docs/data/engineering_tasks.json"),
+        help="Engineering tasks JSON used to skip when a library ingest task is open",
+    )
+    ingest_followup_p.add_argument(
+        "--runs-path",
+        type=Path,
+        default=None,
+        help="ingest_gap_closure_runs.json (default: committed path)",
+    )
+    ingest_followup_p.add_argument("--json", action="store_true")
+    ingest_followup_p.add_argument(
+        "--json-path",
+        type=Path,
+        default=None,
+        help="Write result JSON to this path (avoids stdout log pollution in CI)",
+    )
+    ingest_followup_p.set_defaults(func=cmd_library_ingest_gap_closure_followup)
+
     euro_dispatch_p = sub.add_parser(
         "euro-ingest-dispatch",
         parents=[common],
@@ -1279,6 +1324,51 @@ def cmd_library_ingest_loop(args: argparse.Namespace) -> int:
         for err in result.errors:
             print(f"  error: {err}", file=sys.stderr)
     return 0 if not result.errors or result.improved else 1
+
+
+def cmd_library_ingest_gap_closure_followup(args: argparse.Namespace) -> int:
+    from value_investor.ingest_gap_closure import (
+        evaluate_library_ingest_gap_closure_followup,
+    )
+
+    loop_payload: dict[str, Any] = {}
+    if args.loop_json is not None:
+        loop_path = Path(args.loop_json)
+        try:
+            loaded = json.loads(loop_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError) as exc:
+            print(f"Could not read ingest-loop JSON at {loop_path}: {exc}", file=sys.stderr)
+            return 1
+        if isinstance(loaded, dict):
+            loop_payload = loaded
+    market = (
+        str(args.market or "").strip()
+        or str(loop_payload.get("market_id") or "").strip()
+        or "euro_depth"
+    )
+    result = evaluate_library_ingest_gap_closure_followup(
+        market_id=market,
+        health_after=loop_payload.get("health_after") or {},
+        was_gap_closure_run=bool(loop_payload.get("recorded_gap_closure")),
+        stalled=bool(loop_payload.get("stalled")),
+        improved=loop_payload.get("improved"),
+        partial=bool(loop_payload.get("partial")),
+        runtime_cutoff=bool(loop_payload.get("runtime_cutoff")),
+        prefer_ticker=str(args.pin_ticker or "").strip() or None,
+        library_root=args.root,
+        tasks_path=args.tasks_path,
+        runs_path=args.runs_path,
+    )
+    if args.json or args.json_path is not None:
+        _emit_cli_json(result, args)
+    else:
+        print(
+            f"{market}: should_dispatch={result.get('should_dispatch')} "
+            f"pin_ticker={result.get('pin_ticker') or ''} "
+            f"trigger={result.get('trigger') or ''} "
+            f"reason={result.get('reason') or ''}"
+        )
+    return 0
 
 
 def cmd_library_ingest_maintenance(args: argparse.Namespace) -> int:

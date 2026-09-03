@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import time
 from pathlib import Path
 from unittest.mock import patch
 
@@ -95,3 +96,54 @@ def test_run_library_buy_tier_discovery_scan_counts_hits(tmp_path: Path):
     assert summary.scanned == 2
     assert summary.hits == 1
     assert summary.new_rows_total == 1
+    assert summary.runtime_cutoff is False
+
+
+def test_run_library_buy_tier_discovery_scan_stops_at_deadline():
+    def _slow_hit(report: CompanyReport, **_kwargs) -> TickerDiscoveryHit:
+        time.sleep(0.04)
+        return TickerDiscoveryHit(
+            ticker=report.ticker,
+            name=report.name,
+            signal=report.signal,
+            new_row_count=0,
+        )
+
+    with patch(
+        "value_investor.library_discovery_scan.scan_library_ticker_for_new_filings",
+        side_effect=_slow_hit,
+    ):
+        summary = run_library_buy_tier_discovery_scan(
+            [_report("AAA.DE"), _report("BBB.DE"), _report("CCC.DE")],
+            library_root=Path("."),
+            market_id="euro_depth",
+            persist_summary=False,
+            max_runtime_seconds=0.05,
+        )
+    assert summary.runtime_cutoff is True
+    assert 1 <= summary.scanned < 3
+
+
+def test_run_library_buy_tier_discovery_scan_prefers_critical_tickers():
+    order: list[str] = []
+
+    def _hit(report: CompanyReport, **_kwargs) -> TickerDiscoveryHit:
+        order.append(report.ticker)
+        return TickerDiscoveryHit(
+            ticker=report.ticker,
+            name=report.name,
+            signal=report.signal,
+        )
+
+    with patch(
+        "value_investor.library_discovery_scan.scan_library_ticker_for_new_filings",
+        side_effect=_hit,
+    ):
+        run_library_buy_tier_discovery_scan(
+            [_report("AAA.DE"), _report("BBB.DE"), _report("CCC.DE")],
+            library_root=Path("."),
+            market_id="euro_depth",
+            persist_summary=False,
+            prefer_tickers=["CCC.DE"],
+        )
+    assert order[0] == "CCC.DE"
