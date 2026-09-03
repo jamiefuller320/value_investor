@@ -7,6 +7,64 @@ experiment task queues. Replaces ad-hoc status reads with one ledger:
 
 Never auto-applies knobs, configs, or engineering tasks — `recommend` is human ack only.
 
+## What already works under the lifecycle catalog
+
+The ledger plus the stage/factor catalog (`position_lifecycle.py`) is enough to
+**collect**. Do not spawn a paper book per factor. One `lifecycle_overlay` row
+covers DCA / recommit; other factors stay on their existing tracks (graduated
+allocation, hypothesis integrity, churn guards).
+
+What the five states do **not** do yet (planned — vision phase
+`experiment_lineage_and_park`):
+
+| Intent | Today | Planned |
+|--------|-------|---------|
+| Winner evolves | Human ack; next Sunday grid / new task is manual | Child experiment, same stage/factor, parent id |
+| Loser stops spending budget | `fail` → task `cancelled` (shadow dirs still mark if left on disk) | `parked`: drop from complexity budget, **keep cheap marks** |
+| Late vindication | No lifecycle bound | Park until `max_trade_lifecycle_days`, then `retired` |
+| Lineage | `initiated_at` only | `parent_id` / `superseded_by` |
+
+Until that phase is active, treat `fail` as “do not promote”, not “delete
+history”. Leave shadow directories in place so weekday paper-auto can still
+mark them. Do not cancel a lifecycle overlay — it is the cheap feed.
+
+### Park bound (max expected trade lifecycle)
+
+| Bound | Days | Role |
+|-------|------|------|
+| Exit-timing max checkpoint | **84** | Minimum park — hold/swap cohorts can still close |
+| Library dense window | **400** | Default park / hard stop — one fat value hold |
+| DCA entry window | 28 | **Not** a park bound (too short for late recovery) |
+
+A parked loser that has not beaten its control after 400 calendar days is
+retired. Summaries stay; dense marks may thin (same policy as library history).
+
+### Winner evolution
+
+A `recommend` ack should open a **child** (tighter cadence, cheaper-only adds,
+smaller recommit size) rather than a sibling on a new stage. The parent stays
+`parked` or `retired`, not deleted — the child is the live complexity-budget
+slot.
+
+### History thinning (original sketch — still suitable)
+
+The library plan stays the default for long evidence:
+
+`dense ~400d → one per month to ~4y → one per quarter thereafter`
+
+That matches a value-book trade lifecycle (dense for the current hold + open
+experiments; monthly for regime; quarterly for late “was the loser actually
+right?”). Do **not** use the 28-day DCA window as a retention bound.
+
+Two caveats, not a replacement of the sketch:
+
+1. Committed FTSE weekly `docs/data/history` still **hard-deletes after 3 years**
+   (`MAX_HISTORY_YEARS`) for git size. The library decreasing-resolution tail
+   is the long memory. Do not flatten both onto a 3-year cliff.
+2. Paper experiment artifacts (`rebalance_log`, overlay episodes, exit-timing
+   cohorts) are not thinned yet. When they bloat, apply the **same**
+   dense→monthly→quarterly policy — keep summaries, drop dense marks past 400d.
+
 ## States
 
 | State | Meaning |
@@ -14,7 +72,7 @@ Never auto-applies knobs, configs, or engineering tasks — `recommend` is human
 | `proposed` | Task-queue experiment not yet running forward |
 | `observing` | Shadow running; insufficient marks/evidence |
 | `continue` | Enough marks to keep observing; not ready to promote |
-| `fail` | Evidence gate failed — retire or stop watching |
+| `fail` | Evidence gate failed — do not promote (keep marks; park phase not built yet) |
 | `recommend` | Ready for human review / promotion ack |
 
 ## Commands

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-03T11:33:20+00:00",
+  "updated_at": "2026-09-03T11:40:57+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -5088,6 +5088,40 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
       "added_at": "2026-09-03T11:33:20+00:00"
+    },
+    {
+      "id": "L245",
+      "category": "later",
+      "section": "ops",
+      "title": "Parked-but-fed experiment state with lineage",
+      "summary": "Add parked/retired/child states to experiment assessment. Winners spawn a same-stage child; losers leave the complexity budget but keep weekday marks until max_trade_lifecycle_days (84d min, 400d default), then retire. Do not map fail to cancelled for lifecycle overlays. No auto-apply.",
+      "revisit_when": "Complexity budget exceeded OR entry_dca_overlay ready_for_cadence_analysis OR two or more failed shadows still marking on weekdays",
+      "tags": [
+        "experiments",
+        "lineage",
+        "park",
+        "lifecycle"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
+      "added_at": "2026-09-03T11:40:57+00:00"
+    },
+    {
+      "id": "L246",
+      "category": "later",
+      "section": "ops",
+      "title": "Apply library thinning to paper experiment artifacts",
+      "summary": "rebalance_log, entry_dca overlay episodes, and exit-timing cohorts grow without the dense-400d then monthly then quarterly policy. When they bloat, thin marks the same way as library PIT history; keep rollup summaries. Do not hard-delete at 3 years like committed FTSE weekly history.",
+      "revisit_when": "Paper automation artifact size is a git or dashboard problem, or parked losers need marks older than 400 days",
+      "tags": [
+        "retention",
+        "history",
+        "paper-auto",
+        "thinning"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
+      "added_at": "2026-09-03T11:40:57+00:00"
     }
   ],
   "fragments": [

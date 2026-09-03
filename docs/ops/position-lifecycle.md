@@ -35,6 +35,12 @@ Canonical catalog: `value_investor.position_lifecycle.lifecycle_catalog()`.
 Every stage has ≥1 observing experiment. Planned factors activate when their
 `revisit_when` trigger fires — **do not spawn a new paper book per factor**.
 
+Experiment **collection** is enough today (one overlay + existing tracks).
+Winner-evolve / loser-park-but-keep-feeding is planned in
+[`experiment-assessment.md`](experiment-assessment.md) and vision phase
+`experiment_lineage_and_park`. Park bound = one max value hold (84d min /
+400d default), not the 28d DCA window.
+
 Diagnostic labels from `classify_lifecycle_phase()` (`prospect_ready`,
 `starter`, `build`, `full`, `harvest`, `grace`, `exit_pending`, …) collapse
 onto these stages via `stage_for_phase()`.

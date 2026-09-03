@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T11:33:20+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T11:40:57+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -307,6 +307,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L217 | **Alert when GHA Cursor API key auth fails** | Preflight only checks non-empty today; a set-but-dead CURSOR_API_KEY can skip rememo/research silently. Add a lightweight Actions verify-key probe or ops-monitor finding when auth fails. | After CURSOR_API_KEY_V2 is wired in GitHub Actions and the next ops-monitor pass |
 | L237 | **Expand so-what detectors beyond FCF** | Add more no-judgment enforcement detectors (cash conversion overlays, memo eligibility gates, stale research caps) to the so-what loop once FCF auto-queue proves stable in ops-monitor. | After so-what FCF auto_queue has run cleanly in production ops-monitor for several weeks |
 | L240 | **Token-free progress-report regenerate on Pages** | Pages Generate currently needs a browser-stored Actions:Write PAT (or Actions UI). A dedicated low-privilege relay or issue-form trigger would remove the PAT from localStorage. | After progress-report Pages generate is in regular use and PAT friction is annoying |
+| L245 | **Parked-but-fed experiment state with lineage** | Add parked/retired/child states to experiment assessment. Winners spawn a same-stage child; losers leave the complexity budget but keep weekday marks until max_trade_lifecycle_days (84d min, 400d default), then retire. Do not map fail to cancelled for lifecycle overlays. No auto-apply. | Complexity budget exceeded OR entry_dca_overlay ready_for_cadence_analysis OR two or more failed shadows still marking on weekdays |
+| L246 | **Apply library thinning to paper experiment artifacts** | rebalance_log, entry_dca overlay episodes, and exit-timing cohorts grow without the dense-400d then monthly then quarterly policy. When they bloat, thin marks the same way as library PIT history; keep rollup summaries. Do not hard-delete at 3 years like committed FTSE weekly history. | Paper automation artifact size is a git or dashboard problem, or parked losers need marks older than 400 days |
 
 ---
 

@@ -59,6 +59,7 @@ builds; it proposes activation with explicit triggers cited from JSON.
 |-------|------|----------------|
 | `graduated_allocation_track` | Trade-plan starter sizing + harvest skims (v1 shadow) | **Active** — compare vs rules after ≥8 marks |
 | `entry_lifecycle_experiments` | Stage catalog + model-independent DCA overlay | **Active** — collect until cadence readiness |
+| `experiment_lineage_and_park` | Evolve winners; park losers with cheap marks until one trade lifecycle | Complexity budget exceeded or cadence ready |
 | `hypothesis_first_exit` | Underwater thesis cards + loser-tolerance feedback | **Active** — observe-only; pair with exit-timing |
 | `capital_rotation_coordinator` | Swap-score gate for sell→buy rotations | Exit-timing cohorts + graduated track history |
 | `conviction_weighted_sizing` | Conviction-weighted sleeves vs equal-weight | Graduated track cost_drag stable |
