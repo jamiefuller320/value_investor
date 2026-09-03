@@ -14,9 +14,11 @@ from value_investor.learning_director import (
     parse_learning_director_review,
 )
 from value_investor.learning_director_regime import (
+    assess_complexity_budget,
     build_convergence_summary,
     build_experiment_inventory,
     build_regime_summary,
+    resolve_complexity_budget,
 )
 from value_investor.review_policy import learning_director_enabled, load_review_policy
 
@@ -142,6 +144,44 @@ def test_build_experiment_inventory_counts_open_tasks(tmp_path: Path):
     inventory = build_experiment_inventory(data_dir)
     assert inventory["open_experiment_count"] == 1
     assert inventory["buckets"]["analysis_tasks"] == 1
+    assert "lifecycle_overlays" in inventory
+    assert inventory["lifecycle_overlays"]["factor_coverage"]["perpetual"] is True
+    assert inventory["complexity"]["over_budget"] is False
+    assert inventory["complexity"]["budget"]["max_discretionary_tasks"] == 12
+
+
+def test_resolve_complexity_budget_defaults_are_generous():
+    budget = resolve_complexity_budget({})
+    assert budget["max_discretionary_tasks"] == 12
+    assert budget["max_expensive_shadow_tracks"] == 8
+    legacy = resolve_complexity_budget(
+        {"complexity_budget": {"max_parallel_open_experiments": 5, "max_frozen_shadow_tracks": 4}}
+    )
+    assert legacy["max_discretionary_tasks"] == 5
+
+
+def test_assess_complexity_budget_does_not_treat_coverage_as_discretionary():
+    ok = assess_complexity_budget(
+        discretionary_open=8,
+        expensive_shadows=4,
+        coverage_perpetual=True,
+    )
+    assert ok["over_budget"] is False
+    assert ok["needs_agent_triage"] is False
+    crowded = assess_complexity_budget(
+        discretionary_open=13,
+        expensive_shadows=4,
+        coverage_perpetual=True,
+    )
+    assert crowded["over_discretionary_tasks"] is True
+    assert "coverage" in crowded["guidance"].lower()
+    gap = assess_complexity_budget(
+        discretionary_open=1,
+        expensive_shadows=0,
+        coverage_perpetual=False,
+    )
+    assert gap["coverage_gap"] is True
+    assert gap["needs_agent_triage"] is True
 
 
 def test_compile_learning_director_tasks_filters_areas(tmp_path: Path):

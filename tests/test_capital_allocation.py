@@ -73,6 +73,21 @@ def test_swap_score_penalizes_costs():
     )
 
 
+def test_classify_lifecycle_phase_starter_vs_build():
+    assert (
+        classify_lifecycle_phase(
+            held=True,
+            in_target_set=True,
+            current_value=30.0,
+            target_value=100.0,
+            exit_streak=0,
+            momentum_grace=False,
+            row={"signal": "buy", "timing_signal": "accumulate"},
+        )
+        == "starter"
+    )
+
+
 def test_classify_lifecycle_phase_build_vs_harvest():
     assert (
         classify_lifecycle_phase(

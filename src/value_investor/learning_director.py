@@ -34,6 +34,7 @@ from value_investor.learning_director_regime import (
 )
 from value_investor.review_payload_slim import (
     slim_chart_outcome_review,
+    slim_entry_dca,
     slim_exclusion_ladder_replay,
     slim_exclusion_universe,
     slim_exit_timing,
@@ -265,6 +266,9 @@ def build_learning_director_payload(
         "hypothesis_outcomes": slim_hypothesis_outcomes(
             _safe_read(paper_root / "learning_tracks_hypothesis_outcomes.json")
         ),
+        "entry_dca_overlay": slim_entry_dca(
+            _safe_read(paper_root / "learning_tracks_entry_dca.json")
+        ),
         "trajectory_evidence": slim_trajectory_evidence_for_review(
             _safe_read(data_dir / "trajectory_evidence_review.json")
         ),
@@ -379,11 +383,21 @@ whether selection_feedback_flags imply a scoring/filter gap (prefer thesis revie
 crude stops).
 When hypothesis_outcomes.readiness.ready_for_thesis_outcome_analysis is true, cite
 intact vs broken recovery_rate and learning_hints — still observe-only.
+When entry_dca_overlay is present, note lifecycle coverage (perpetual factor
+inventory) and whether ready_for_cadence_analysis / model_independent_hint fire.
+Do not activate a new paper book for DCA — the overlay is the experiment.
 
 COMPLEXITY & EXPERIMENT INVENTORY
-Open experiment count vs complexity_budget. List shadow tracks. Recommend merge/retire/defer
-if over budget (max_parallel_open_experiments, max_frozen_shadow_tracks).
-Cite experiment_assessment.summary and any recommend rows (human ack only — never auto-apply).
+Cite experiment_inventory.complexity (not the raw open count alone).
+Coverage floor: lifecycle_overlays.factor_coverage.perpetual must stay true —
+never retire an observing stage/overlay to free a slot.
+Discretionary tasks (analysis/paper-learning/director/horizon) may run up to
+complexity.budget.max_discretionary_tasks (generous early). Expensive frozen
+shadow / new paper books are the scarce slot (max_expensive_shadow_tracks).
+If complexity.needs_agent_triage: park or merge **losing discretionary** items
+(keep cheap marks); do not cancel the lifecycle overlay. Soft-warn is not a
+hard reject — rely on experiment_assessment.recommend / fail, not the cap.
+Cite experiment_assessment.summary and any recommend rows (human ack only).
 Note whether analysis_review already has a scoring experiment covering the top
 trajectory focus candidate.
 

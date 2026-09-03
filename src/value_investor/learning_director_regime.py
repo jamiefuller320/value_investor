@@ -10,6 +10,11 @@ from value_investor.storage import read_json
 
 VISION_PATH = Path("docs/data/learning_director_vision.json")
 
+# Coverage overlays/tracks do not consume these. Generous early; agents manage overflow.
+DEFAULT_MAX_DISCRETIONARY_TASKS = 12
+DEFAULT_MAX_EXPENSIVE_SHADOWS = 8
+DEFAULT_SOFT_WARN_FRACTION = 0.75
+
 
 def _safe_read(path: Path) -> dict[str, Any] | None:
     try:
@@ -89,6 +94,100 @@ def _shadow_track_inventory(paper_root: Path) -> list[dict[str, Any]]:
     return inventory
 
 
+def _lifecycle_overlay_inventory(paper_root: Path) -> dict[str, Any]:
+    """Observe-only lifecycle overlays (DCA cadence, factor catalog coverage)."""
+    from value_investor.position_lifecycle import catalog_coverage, lifecycle_catalog
+
+    rollup = _safe_read(Path(paper_root) / "learning_tracks_entry_dca.json") or {}
+    readiness = rollup.get("readiness") if isinstance(rollup, dict) else {}
+    return {
+        "entry_dca_overlay": {
+            "scored_count": (rollup or {}).get("scored_count"),
+            "tracks_with_closed": (rollup or {}).get("tracks_with_closed"),
+            "ready_for_cadence_analysis": bool((readiness or {}).get("ready_for_cadence_analysis")),
+            "leading_cadence": (rollup or {}).get("leading_cadence"),
+            "model_independent_hint": bool((rollup or {}).get("model_independent_hint")),
+        },
+        "factor_coverage": catalog_coverage(lifecycle_catalog()),
+    }
+
+
+def resolve_complexity_budget(vision: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Split coverage (always on) from discretionary tasks and expensive shadows."""
+    raw = (vision or {}).get("complexity_budget") if isinstance(vision, dict) else {}
+    if not isinstance(raw, dict):
+        raw = {}
+    discretionary = raw.get("max_discretionary_tasks")
+    if discretionary is None:
+        discretionary = raw.get("max_parallel_open_experiments", DEFAULT_MAX_DISCRETIONARY_TASKS)
+    shadows = raw.get("max_expensive_shadow_tracks")
+    if shadows is None:
+        shadows = raw.get("max_frozen_shadow_tracks", DEFAULT_MAX_EXPENSIVE_SHADOWS)
+    warn = raw.get("soft_warn_fraction", DEFAULT_SOFT_WARN_FRACTION)
+    return {
+        "max_discretionary_tasks": int(discretionary),
+        "max_expensive_shadow_tracks": int(shadows),
+        "soft_warn_fraction": float(warn),
+        "coverage_floor_required": bool(raw.get("coverage_floor_required", True)),
+        "management": str(raw.get("management") or "agent_assessment"),
+        "max_parallel_open_experiments": int(discretionary),
+        "max_frozen_shadow_tracks": int(shadows),
+        "note": str(
+            raw.get("note")
+            or (
+                "Coverage overlays/tracks do not count. Discretionary tasks are generous "
+                "early; expensive shadow books are the scarce slot. Agents park/merge "
+                "overflow — do not retire coverage to meet a cap."
+            )
+        ),
+    }
+
+
+def assess_complexity_budget(
+    *,
+    discretionary_open: int,
+    expensive_shadows: int,
+    coverage_perpetual: bool,
+    budget: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Soft budget: flags for agent management, never a hard reject."""
+    cfg = budget or resolve_complexity_budget()
+    max_tasks = int(cfg["max_discretionary_tasks"])
+    max_shadows = int(cfg["max_expensive_shadow_tracks"])
+    warn = float(cfg["soft_warn_fraction"])
+    task_ratio = (discretionary_open / max_tasks) if max_tasks else 0.0
+    shadow_ratio = (expensive_shadows / max_shadows) if max_shadows else 0.0
+    over_tasks = discretionary_open > max_tasks
+    over_shadows = expensive_shadows > max_shadows
+    warn_tasks = (not over_tasks) and task_ratio >= warn
+    warn_shadows = (not over_shadows) and shadow_ratio >= warn
+    coverage_gap = bool(cfg.get("coverage_floor_required")) and not coverage_perpetual
+    return {
+        "budget": cfg,
+        "discretionary_open": discretionary_open,
+        "expensive_shadows": expensive_shadows,
+        "coverage_perpetual": coverage_perpetual,
+        "coverage_gap": coverage_gap,
+        "over_discretionary_tasks": over_tasks,
+        "over_expensive_shadows": over_shadows,
+        "warn_discretionary_tasks": warn_tasks,
+        "warn_expensive_shadows": warn_shadows,
+        "over_budget": over_tasks or over_shadows,
+        "needs_agent_triage": over_tasks
+        or over_shadows
+        or warn_tasks
+        or warn_shadows
+        or coverage_gap,
+        "guidance": (
+            "Do not retire lifecycle coverage or always-on overlays to meet a cap. "
+            "Park losing discretionary tasks (keep cheap marks) or merge siblings. "
+            "New paper books are the scarce slot."
+            if (over_tasks or over_shadows or coverage_gap)
+            else "Within budget. Prefer filling coverage gaps over new shadow books."
+        ),
+    }
+
+
 def build_experiment_inventory(
     data_dir: Path,
     *,
@@ -104,6 +203,15 @@ def build_experiment_inventory(
         "horizon_tasks": _open_tasks(data_dir / "horizon_tasks.json"),
     }
     total_open = sum(len(rows) for rows in buckets.values())
+    overlays = _lifecycle_overlay_inventory(paper_root)
+    coverage = (overlays.get("factor_coverage") or {}) if isinstance(overlays, dict) else {}
+    vision = _safe_read(data_dir / "learning_director_vision.json") or _safe_read(VISION_PATH)
+    budget_view = assess_complexity_budget(
+        discretionary_open=total_open,
+        expensive_shadows=len(_shadow_track_inventory(paper_root)),
+        coverage_perpetual=bool(coverage.get("perpetual")),
+        budget=resolve_complexity_budget(vision if isinstance(vision, dict) else None),
+    )
     return {
         "open_experiment_count": total_open,
         "buckets": {key: len(rows) for key, rows in buckets.items()},
@@ -125,6 +233,8 @@ def build_experiment_inventory(
         "shadow_track_count": len(_shadow_track_inventory(paper_root)),
         "experimental_paper_tracks": _experimental_track_inventory(paper_root),
         "experimental_paper_track_count": len(_experimental_track_inventory(paper_root)),
+        "lifecycle_overlays": overlays,
+        "complexity": budget_view,
     }
 
 
@@ -411,9 +521,13 @@ def load_learning_director_vision(path: Path = VISION_PATH) -> dict[str, Any]:
 
 
 __all__ = [
+    "DEFAULT_MAX_DISCRETIONARY_TASKS",
+    "DEFAULT_MAX_EXPENSIVE_SHADOWS",
     "VISION_PATH",
+    "assess_complexity_budget",
     "build_convergence_summary",
     "build_experiment_inventory",
     "build_regime_summary",
     "load_learning_director_vision",
+    "resolve_complexity_budget",
 ]

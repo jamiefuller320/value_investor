@@ -268,6 +268,7 @@ def test_build_analysis_payload_includes_trajectory_focus(tmp_path: Path):
     assert timing["readiness"]["hold_closed_count"] == 5
     assert timing["hold_recovery_closed"]["count"] == 5
     assert "purpose" in timing
+    assert payload["entry_dca_overlay"] is None
 
 
 def test_compile_and_promote_analysis_tasks(tmp_path: Path):

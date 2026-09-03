@@ -58,6 +58,8 @@ builds; it proposes activation with explicit triggers cited from JSON.
 | Phase | What | Activate when |
 |-------|------|----------------|
 | `graduated_allocation_track` | Trade-plan starter sizing + harvest skims (v1 shadow) | **Active** — compare vs rules after ≥8 marks |
+| `entry_lifecycle_experiments` | Stage catalog + model-independent DCA overlay | **Active** — collect until cadence readiness |
+| `experiment_lineage_and_park` | Evolve winners; park losers with cheap marks until one trade lifecycle | Soft budget triage for 3 Sundays, or cadence ready |
 | `hypothesis_first_exit` | Underwater thesis cards + loser-tolerance feedback | **Active** — observe-only; pair with exit-timing |
 | `capital_rotation_coordinator` | Swap-score gate for sell→buy rotations | Exit-timing cohorts + graduated track history |
 | `conviction_weighted_sizing` | Conviction-weighted sleeves vs equal-weight | Graduated track cost_drag stable |
@@ -70,9 +72,17 @@ builds; it proposes activation with explicit triggers cited from JSON.
 
 ## Complexity budget (default)
 
-- ≤5 parallel open experiments across `analysis_tasks`, `paper_learning_tasks`, `learning_director_tasks`
-- ≤4 frozen shadow tracks (calibration + exclusion + experimental)
-- Director recommends **merge / retire / defer** when over budget
+Split so perpetual stage coverage is not sacrificed to a tight cap:
+
+| Slot | Cap | Counts | Does not count |
+|------|-----|--------|----------------|
+| **Coverage floor** | ≥1 observing experiment per lifecycle stage | Catalog / overlays | — |
+| **Discretionary tasks** | **12** (soft; warn at 75%) | proposed analysis / paper-learning / director / horizon tasks | Always-on overlays, existing live tracks |
+| **Expensive shadows** | **8** (soft; warn at 75%) | New/frozen paper books (calibration, exclusion, …) | Overlay-only experiments |
+
+Agents (experiment assessment + director) park or merge **losing discretionary**
+items when over — they must **not** retire coverage to meet a number. Soft-warn
+is not a hard reject. Tighten later when `experiment_lineage_and_park` is live.
 
 ## Discrete specialist pipelines (director as oversight)
 
@@ -85,6 +95,7 @@ owning every experiment:
 | Loser filters / exclusion | analysis-review (+ manual spawn) | Convergence of filter vs pick strands |
 | Churn / exit overlays | paper-learning-review | Inventory budget; do not duplicate churn experiments |
 | Hypothesis-first underwater | analysis-review (+ hypothesis cards) | Intact losers vs broken theses; selection feedback |
+| Entry lifecycle / DCA overlay | analysis-review (+ entry_dca_overlay) | Cadence readiness; do not spawn a per-model DCA book |
 | Stage / vision activation | director + monthly horizon | ACTIVATE / HOLD / RETIRE only |
 
 Director **PROPOSED ACTIONS** should stay thin (≤3–5), prefer `[analysis]` / `[monitoring]`

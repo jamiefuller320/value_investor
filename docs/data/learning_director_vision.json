@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "title": "Learning Director — capability roadmap",
-  "updated_at": "2026-08-27T00:00:00+00:00",
+  "updated_at": "2026-09-03T12:00:00+00:00",
   "north_star": "Converge winner-picking (top) and loser-filtering (bottom) into a bettable model: progressively narrow the eligible pool into a mostly-decent cohort, then allocate sleeves — with regime monitoring so assumptions expire safely.",
   "prediction_philosophy": {
     "primary_aim": "Predict future growth in value of individual stocks — not perfect historical explanation.",
@@ -23,9 +23,14 @@
     "bet_gate": "Promote only when cohort floor, retain rate, and deployable book agree over extending windows."
   },
   "complexity_budget": {
-    "max_parallel_open_experiments": 5,
-    "max_frozen_shadow_tracks": 4,
-    "note": "Director should recommend retire/merge/defer when budget exceeded."
+    "max_discretionary_tasks": 12,
+    "max_expensive_shadow_tracks": 8,
+    "max_parallel_open_experiments": 12,
+    "max_frozen_shadow_tracks": 8,
+    "soft_warn_fraction": 0.75,
+    "coverage_floor_required": true,
+    "management": "agent_assessment",
+    "note": "Coverage overlays and always-on tracks do not count. Discretionary task slots are generous early (12); expensive new paper books are the scarce slot (8). Agents park/merge overflow via experiment_assessment — never retire lifecycle coverage to meet a cap."
   },
   "phases": [
     {
@@ -113,12 +118,28 @@
       ]
     },
     {
+      "id": "entry_lifecycle_experiments",
+      "status": "active",
+      "label": "Entry–exit lifecycle factors + model-independent DCA overlay",
+      "summary": "Formal stage catalog (prospect→starter→build→full→harvest→grace→exit) with a perpetual factor inventory. Dollar-cost averaging / graduated entry is scored as a counterfactual overlay on every paper track — cadence and de-risk findings are expected to be largely model-independent. Does not execute DCA on live paper books.",
+      "revisit_when": "learning_tracks_entry_dca readiness.ready_for_cadence_analysis AND a leading cadence is stable across ≥2 tracks",
+      "dependencies": ["v1_weekly_director", "graduated_allocation_track", "hypothesis_first_exit"]
+    },
+    {
       "id": "hypothesis_first_exit",
       "status": "active",
       "label": "Hypothesis-first underwater exit (not crude stops)",
       "summary": "On mark drawdown, ask whether the investment hypothesis still holds on screen/research facts; tolerate a configured share of intact losers; feed family-fail attribution into selection feedback and balancing hints. Outcome linker stamps thesis on exit_timing cohorts and scores hold-recovery / swap results by thesis (observe-only).",
       "revisit_when": "learning_tracks_hypothesis_outcomes shows ready_for_thesis_outcome_analysis on primary track AND exit_timing hold-recovery readiness met",
       "dependencies": ["v1_weekly_director", "exit_timing_cohorts", "graduated_allocation_track"]
+    },
+    {
+      "id": "experiment_lineage_and_park",
+      "status": "planned",
+      "label": "Experiment lineage: evolve winners, park losers with a cheap feed",
+      "summary": "Assessment grows parked/retired/child states. Winners spawn a same-stage refinement; losers leave the complexity budget but keep weekday marks until max_trade_lifecycle_days (84d minimum / 400d default), then retire. No auto-apply. Do not cancel the lifecycle overlay — it is the cheap feed.",
+      "revisit_when": "experiment_inventory.complexity.needs_agent_triage is true for 3 Sunday director runs OR entry_dca_overlay ready_for_cadence_analysis OR >=2 failed calibration shadows still receiving weekday marks",
+      "dependencies": ["v1_weekly_director", "entry_lifecycle_experiments"]
     },
     {
       "id": "super_director_auto_promote",

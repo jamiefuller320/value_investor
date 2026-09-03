@@ -9,6 +9,13 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
+from value_investor.entry_dca_overlay import (
+    ROLLUP_FILENAME as ENTRY_DCA_ROLLUP_FILENAME,
+)
+from value_investor.entry_dca_overlay import (
+    run_entry_dca_overlay_pass,
+    summarize_learning_tracks_entry_dca,
+)
 from value_investor.exit_shadow import run_exit_shadow_pass, summarize_learning_tracks_exit_shadow
 from value_investor.exit_timing_cohorts import (
     run_exit_timing_cohort_pass,
@@ -872,6 +879,7 @@ class AutomationRunResult:
     exit_timing_cohorts_review: dict[str, Any] = field(default_factory=dict)
     hypothesis_integrity: dict[str, Any] = field(default_factory=dict)
     hypothesis_outcome_link: dict[str, Any] = field(default_factory=dict)
+    entry_dca_overlay_review: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -886,6 +894,7 @@ class AutomationRunResult:
             "exit_timing_cohorts_review": self.exit_timing_cohorts_review,
             "hypothesis_integrity": self.hypothesis_integrity,
             "hypothesis_outcome_link": self.hypothesis_outcome_link,
+            "entry_dca_overlay_review": self.entry_dca_overlay_review,
             "generated_at": datetime.now(UTC).isoformat(),
         }
 
@@ -1047,6 +1056,20 @@ def run_daily_automation(
         use_adjusted_signal=bool(config.use_adjusted_signal),
         as_of=gate["local_time"],
     )
+    buy_cost_pct = float(getattr(config, "buy_cost_pct", None) or config.trade_cost_pct or 0.0)
+    history_trades = [item.to_dict() if hasattr(item, "to_dict") else item for item in fund.trades]
+    entry_dca_overlay_review = run_entry_dca_overlay_pass(
+        output_dir=output_dir,
+        track_id=str(config.track_id or "rules"),
+        trades=trades,
+        holdings_before=holdings_before,
+        holdings_after_tickers=set(fund.holdings),
+        candidates=decision_candidates,
+        prices_by_ticker=price_map,
+        buy_cost_pct=buy_cost_pct,
+        as_of=gate["local_time"],
+        history_trades=history_trades,
+    )
 
     result = AutomationRunResult(
         acted=acted,
@@ -1060,6 +1083,7 @@ def run_daily_automation(
         exit_timing_cohorts_review=exit_timing_cohorts_review,
         hypothesis_integrity=hypothesis_integrity,
         hypothesis_outcome_link=hypothesis_outcome_link,
+        entry_dca_overlay_review=entry_dca_overlay_review,
     )
     payload = result.to_dict()
     payload["track_id"] = config.track_id
@@ -1421,6 +1445,7 @@ def run_learning_tracks(
             "technical track is the timing/levels baseline; "
             "momentum_grace is an experimental exit overlay; "
             "graduated_allocation tests trade-plan entry sizing and harvest skims; "
+            "entry_dca_overlay scores counterfactual entry cadences on every track; "
             "hypothesis_integrity reviews underwater holdings before crude stops."
         ),
         "tracks": results,
@@ -1447,6 +1472,11 @@ def run_learning_tracks(
     outcomes_summary = summarize_learning_tracks_hypothesis_outcomes(base_dir)
     (base_dir / HYPOTHESIS_OUTCOMES_ROLLUP_FILENAME).write_text(
         json.dumps(outcomes_summary, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    entry_dca_summary = summarize_learning_tracks_entry_dca(base_dir)
+    (base_dir / ENTRY_DCA_ROLLUP_FILENAME).write_text(
+        json.dumps(entry_dca_summary, indent=2) + "\n",
         encoding="utf-8",
     )
     return summary

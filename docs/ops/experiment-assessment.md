@@ -7,6 +7,70 @@ experiment task queues. Replaces ad-hoc status reads with one ledger:
 
 Never auto-applies knobs, configs, or engineering tasks — `recommend` is human ack only.
 
+## What already works under the lifecycle catalog
+
+The ledger plus the stage/factor catalog (`position_lifecycle.py`) is enough to
+**collect**. Do not spawn a paper book per factor. One `lifecycle_overlay` row
+covers DCA / recommit; other factors stay on their existing tracks (graduated
+allocation, hypothesis integrity, churn guards).
+
+The old ≤5 / ≤4 cap was too tight for perpetual stage coverage (the director
+already treated 8 open tasks as a violation). Budget is now **split**: coverage
+does not count; discretionary tasks **12**; expensive new paper books **8**.
+Agents manage overflow (`experiment_inventory.complexity`) — soft-warn, not a
+hard reject. See [`learning-director-vision.md`](learning-director-vision.md#complexity-budget-default).
+
+What the five states do **not** do yet (planned — vision phase
+`experiment_lineage_and_park`):
+
+| Intent | Today | Planned |
+|--------|-------|---------|
+| Winner evolves | Human ack; next Sunday grid / new task is manual | Child experiment, same stage/factor, parent id |
+| Loser stops spending budget | `fail` → task `cancelled` (shadow dirs still mark if left on disk) | `parked`: drop from complexity budget, **keep cheap marks** |
+| Late vindication | No lifecycle bound | Park until `max_trade_lifecycle_days`, then `retired` |
+| Lineage | `initiated_at` only | `parent_id` / `superseded_by` |
+
+Until that phase is active, treat `fail` as “do not promote”, not “delete
+history”. Leave shadow directories in place so weekday paper-auto can still
+mark them. Do not cancel a lifecycle overlay — it is the cheap feed.
+
+### Park bound (max expected trade lifecycle)
+
+| Bound | Days | Role |
+|-------|------|------|
+| Exit-timing max checkpoint | **84** | Minimum park — hold/swap cohorts can still close |
+| Library dense window | **400** | Default park / hard stop — one fat value hold |
+| DCA entry window | 28 | **Not** a park bound (too short for late recovery) |
+
+A parked loser that has not beaten its control after 400 calendar days is
+retired. Summaries stay; dense marks may thin (same policy as library history).
+
+### Winner evolution
+
+A `recommend` ack should open a **child** (tighter cadence, cheaper-only adds,
+smaller recommit size) rather than a sibling on a new stage. The parent stays
+`parked` or `retired`, not deleted — the child is the live complexity-budget
+slot.
+
+### History thinning (original sketch — still suitable)
+
+The library plan stays the default for long evidence:
+
+`dense ~400d → one per month to ~4y → one per quarter thereafter`
+
+That matches a value-book trade lifecycle (dense for the current hold + open
+experiments; monthly for regime; quarterly for late “was the loser actually
+right?”). Do **not** use the 28-day DCA window as a retention bound.
+
+Two caveats, not a replacement of the sketch:
+
+1. Committed FTSE weekly `docs/data/history` still **hard-deletes after 3 years**
+   (`MAX_HISTORY_YEARS`) for git size. The library decreasing-resolution tail
+   is the long memory. Do not flatten both onto a 3-year cliff.
+2. Paper experiment artifacts (`rebalance_log`, overlay episodes, exit-timing
+   cohorts) are not thinned yet. When they bloat, apply the **same**
+   dense→monthly→quarterly policy — keep summaries, drop dense marks past 400d.
+
 ## States
 
 | State | Meaning |
@@ -14,7 +78,7 @@ Never auto-applies knobs, configs, or engineering tasks — `recommend` is human
 | `proposed` | Task-queue experiment not yet running forward |
 | `observing` | Shadow running; insufficient marks/evidence |
 | `continue` | Enough marks to keep observing; not ready to promote |
-| `fail` | Evidence gate failed — retire or stop watching |
+| `fail` | Evidence gate failed — do not promote (keep marks; park phase not built yet) |
 | `recommend` | Ready for human review / promotion ack |
 
 ## Commands
@@ -40,6 +104,7 @@ ftse-experiment-assess status --data-dir docs/data --json
 | `calibration_shadow` | `calibration_shadow_endurance.json` | Post-seed excess/marks vs market + primary/rules |
 | `exclusion_shadow` | Exclusion shadow tracks | Post-seed excess vs parent track |
 | `experimental_paper_track` | momentum_grace / graduated allocation | Forward marks vs primary |
+| `lifecycle_overlay` | Entry DCA / graduated-entry cadence | Cadence readiness + cross-track agreement |
 | `analysis_task` | `analysis_tasks.json` + trajectory/archive/churn evidence | Area-specific forward_evidence |
 | `paper_learning_task` | `paper_learning_tasks.json` | Same |
 | `learning_director_task` | `learning_director_tasks.json` | Same |
@@ -51,7 +116,7 @@ ftse-experiment-assess status --data-dir docs/data --json
 | `scoring` | trajectory `model_focus_candidates`, loser card families | `continue` when candidates exist; `recommend` when candidate count ≥ 20 |
 | `offline_sim` | archive run_count, simulation readiness | `continue` when history/backtest ≥ 2 runs |
 | `paper_knobs` | linked experimental track metrics (e.g. momentum_grace) | observing/continue from gate marks |
-| `paper_churn` / `monitoring` | exit_shadow closed counts, exit_timing readiness | `recommend` when probability analysis ready |
+| `paper_churn` / `monitoring` | exit_shadow closed counts, exit_timing readiness, entry DCA readiness | `recommend` when probability analysis ready |
 
 ## Artifacts
 

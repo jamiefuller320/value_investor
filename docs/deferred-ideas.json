@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-03T11:43:27+00:00",
+  "updated_at": "2026-09-03T11:55:51+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -5200,6 +5200,155 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06698-f813-7549-8552-e46f5f9e4acb",
       "added_at": "2026-09-03T11:43:27+00:00"
+    },
+    {
+      "id": "N61",
+      "category": "not_now",
+      "section": "research",
+      "title": "Execute dollar-cost averaging on live paper books",
+      "summary": "Do not change paper-auto fills to actual multi-tranche DCA until the model-independent overlay has enough closed episodes to rank cadences and a human acks ready_for_cadence_analysis.",
+      "revisit_when": "learning_tracks_entry_dca readiness.ready_for_cadence_analysis is true and a leading cadence is stable across >=2 tracks",
+      "tags": [
+        "dca",
+        "graduated-entry",
+        "paper-auto"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
+      "added_at": "2026-09-03T11:47:57+00:00"
+    },
+    {
+      "id": "L252",
+      "category": "later",
+      "section": "research",
+      "title": "Intra-day entry tranche cadence",
+      "summary": "Weekday paper-auto marks can only score daily/weekly DCA. Sub-daily tranche timing needs intra-day prices and is not required to answer whether spreading a decided notional de-risks entries.",
+      "revisit_when": "Entry DCA overlay has a winning weekday/weekly cadence and intra-day price history is routinely available for FTSE names",
+      "tags": [
+        "dca",
+        "intraday",
+        "cadence"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
+      "added_at": "2026-09-03T11:47:57+00:00"
+    },
+    {
+      "id": "L253",
+      "category": "later",
+      "section": "research",
+      "title": "Archive-history DCA overlay to accelerate cadence evidence",
+      "summary": "Forward weekday marks will take weeks to close 12 episodes. An exit-timing-archive-style replay on weekly screens could seed priors for lump-sum vs weekly DCA without waiting for new paper buys.",
+      "revisit_when": "Entry DCA overlay has fewer than 12 closed episodes after several weeks of weekday paper-auto, or Sunday analysis-review flags thin starter-stage evidence",
+      "tags": [
+        "dca",
+        "archive",
+        "offline-sim"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
+      "added_at": "2026-09-03T11:47:57+00:00"
+    },
+    {
+      "id": "N62",
+      "category": "not_now",
+      "section": "research",
+      "title": "Lot-link DCA entry blocks to tactical sells",
+      "summary": "Do not pair individual DCA tranches with tactical take-profits to 'average down' remaining cost. Paper avg_cost is weighted-average (a skim realizes P&L, it does not lower remaining basis). A sell+rebuy clip must clear Suite A 6% round-trip or fair UK ~0.55% including stamp. Net end-value after costs is the only promotion metric; if anything is scored later, it is pause-or-cheaper-only remaining adds after a harvest during build (catalog factor skim_linked_remaining_adds).",
+      "revisit_when": "entry_dca_overlay ready_for_cadence_analysis AND graduated harvest skims occur during open starter/build windows AND fair-cost Suite B is the evaluation lens",
+      "tags": [
+        "dca",
+        "tactical-sell",
+        "harvest",
+        "costs",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
+      "added_at": "2026-09-03T11:47:57+00:00"
+    },
+    {
+      "id": "N63",
+      "category": "not_now",
+      "section": "research",
+      "title": "Pyramid add-on while still held beyond original sleeve",
+      "summary": "A second buy trigger on a name still at/near full sleeve (pyramiding) is a different decision from recommit-after-exit. Do not allow adds above the original target until first-entry cadence is ranked and conviction-weighted sizing exists. Observe recommit-after-exit separately so it does not contaminate DCA evidence.",
+      "revisit_when": "entry_dca_overlay ready_for_cadence_analysis on first_entry AND conviction_weighted_sizing is active",
+      "tags": [
+        "recommit",
+        "pyramid",
+        "dca",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
+      "added_at": "2026-09-03T11:47:57+00:00"
+    },
+    {
+      "id": "L254",
+      "category": "later",
+      "section": "ops",
+      "title": "Parked-but-fed experiment state with lineage",
+      "summary": "Add parked/retired/child states to experiment assessment. Winners spawn a same-stage child; losers leave the complexity budget but keep weekday marks until max_trade_lifecycle_days (84d min, 400d default), then retire. Do not map fail to cancelled for lifecycle overlays. No auto-apply.",
+      "revisit_when": "Complexity budget exceeded OR entry_dca_overlay ready_for_cadence_analysis OR two or more failed shadows still marking on weekdays",
+      "tags": [
+        "experiments",
+        "lineage",
+        "park",
+        "lifecycle"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
+      "added_at": "2026-09-03T11:47:57+00:00"
+    },
+    {
+      "id": "L255",
+      "category": "later",
+      "section": "ops",
+      "title": "Apply library thinning to paper experiment artifacts",
+      "summary": "rebalance_log, entry_dca overlay episodes, and exit-timing cohorts grow without the dense-400d then monthly then quarterly policy. When they bloat, thin marks the same way as library PIT history; keep rollup summaries. Do not hard-delete at 3 years like committed FTSE weekly history.",
+      "revisit_when": "Paper automation artifact size is a git or dashboard problem, or parked losers need marks older than 400 days",
+      "tags": [
+        "retention",
+        "history",
+        "paper-auto",
+        "thinning"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
+      "added_at": "2026-09-03T11:47:57+00:00"
+    },
+    {
+      "id": "L256",
+      "category": "later",
+      "section": "ops",
+      "title": "Tighten experiment caps after park-and-evolve is live",
+      "summary": "Early discretionary cap is 12 tasks / 8 expensive shadows so every lifecycle stage can stay covered. After experiment_lineage_and_park can park losers without cancelling their cheap feed, consider tightening discretionary tasks toward 8 if agent triage is noisy \u2014 never put coverage overlays back under the cap.",
+      "revisit_when": "experiment_lineage_and_park is active AND experiment_inventory.complexity.needs_agent_triage is true for 3 consecutive Sunday director runs",
+      "tags": [
+        "experiments",
+        "complexity",
+        "budget"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
+      "added_at": "2026-09-03T11:51:50+00:00"
+    },
+    {
+      "id": "N64",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not raise discretionary experiment cap above 12 yet",
+      "summary": "Live inventory is 1 open task / 4 shadows against the generous 12/8 soft budget. Raising the cap further would not add coverage (lifecycle stages are already perpetual) and would weaken the agent-triage signal. Keep 12/8 until Sunday open tasks repeatedly hit the 75% warn.",
+      "revisit_when": "experiment_inventory.complexity.warn_discretionary_tasks is true on 3 consecutive Sunday director runs",
+      "tags": [
+        "experiments",
+        "complexity",
+        "budget"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a066e8-d9ea-71a9-acf6-4efce0690efd",
+      "added_at": "2026-09-03T11:55:51+00:00"
     }
   ],
   "fragments": [
