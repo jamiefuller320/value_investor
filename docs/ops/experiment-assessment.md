@@ -94,7 +94,8 @@ Canonical open rows after the batch triage:
 | `ana-20260903-01` | Scoring: hold→buy / `signal_unchanged` 1w | `ldr-20260901-02` (queued) |
 | `ana-20260903-02` | Scoring: quality-family avoid-cohort gate | `ldr-20260901-03` (queued) |
 | `ldr-20260823-03` | Archive-lab full-period replay (L111) | — |
-| `ldr-20260823-04` | IMB.L adjacent buy→sell flip audit | — |
+
+`ldr-20260823-04` (IMB.L adjacent flip) is **done**. Verdict: **screen-rotation** in a 3-slot book (replaced by SN.L on 2026-08-21), not a signal/thesis exit. Evidence: [`docs/data/imb_adjacent_flip_audit.json`](../data/imb_adjacent_flip_audit.json). Do not retune hold-buffer or conviction floors from this name.
 
 Cancelled and parked (N58/N59 — do not retune knobs or start entry-timing from the first mixed chart pass): `ana-20260728-02`, `plr-20260901-01`, `plr-20260901-03`.
 

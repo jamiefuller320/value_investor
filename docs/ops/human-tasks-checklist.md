@@ -34,7 +34,7 @@ most automation — this list is what still needs a human.
 | Review **hypothesis integrity** when losers breach tolerance or theses break | Human | [hypothesis-integrity.md](hypothesis-integrity.md#human-gate) |
 | Triage **analysis_tasks** — promote queued scoring (`ana-20260903-01`, `ana-20260903-02`) via `ftse-analysis-review promote`; do not revive cancelled knob counterfactuals | Human | [analysis-review.md](analysis-review.md#manual-promotion-to-engineering) |
 | Check **exclusion ladder spawn gate** — if `ready_for_shadow_spawn`, run `ftse-exclusion-ladder-replay spawn-shadow` (never auto) | Human | [exclusion-ladder-replay.md](exclusion-ladder-replay.md#promotion-workflow-human-gate) |
-| Triage **paper_learning_tasks** + **learning_director_tasks** — enact remaining canonical probes (buffered-hold, u4, L111, IMB.L) or mark done; no promote CLI; skip duplicate wrappers | Human | [paper-learning-review.md](paper-learning-review.md#enacting-proposed-experiments) |
+| Triage **paper_learning_tasks** + **learning_director_tasks** — enact remaining canonical probes (buffered-hold, u4, L111) or mark done; IMB.L flip audit is done (screen-rotation); no promote CLI; skip duplicate wrappers | Human | [paper-learning-review.md](paper-learning-review.md#enacting-proposed-experiments) |
 | Full-period knob calibrate + shadow bootstrap + PIT warm-start + endurance | CI | [knob-calibration.md](knob-calibration.md#warm-start-zero-datum-forward-only-endurance) |
 
 ### Promotion gate (AI judgment knobs)
