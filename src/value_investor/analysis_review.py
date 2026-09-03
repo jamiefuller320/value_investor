@@ -18,6 +18,9 @@ from value_investor.review_payload_slim import (
     slim_backtest as _slim_backtest,
 )
 from value_investor.review_payload_slim import (
+    slim_entry_dca as _slim_entry_dca,
+)
+from value_investor.review_payload_slim import (
     slim_exclusion_ladder_replay as _slim_exclusion_ladder_replay,
 )
 from value_investor.review_payload_slim import (
@@ -242,6 +245,7 @@ def build_analysis_payload(
     hypothesis_outcomes = _slim_hypothesis_outcomes(
         _safe_read(paper_root / "learning_tracks_hypothesis_outcomes.json")
     )
+    entry_dca = _slim_entry_dca(_safe_read(paper_root / "learning_tracks_entry_dca.json"))
     churn_health = _safe_read(paper_root / "learning_tracks_churn_health.json")
     knob_calibration = _safe_read(paper_root / KNOB_CALIBRATION_PRIORS_FILENAME)
     experiment_assessment = slim_experiment_assessment_for_review(
@@ -282,6 +286,7 @@ def build_analysis_payload(
         "loser_snapshot_cards": loser_snapshot_cards,
         "hypothesis_integrity": hypothesis_integrity,
         "hypothesis_outcomes": hypothesis_outcomes,
+        "entry_dca_overlay": entry_dca,
         "churn_health": churn_health,
         "knob_calibration_priors": knob_calibration,
         "experiment_assessment": experiment_assessment,
@@ -499,7 +504,8 @@ The **purpose of this review** is to turn evidence into **focus areas that refin
 assessment models and portfolio filters** — not to archive metrics for their own sake.
 Primary diagnostics for assessment models: trajectory_evidence + loser_snapshot_cards.
 Primary diagnostics for loser filters / churn: exclusion_universe, exclusion_ladder_replay,
-exit_timing_cohorts, exit_shadow, hypothesis_integrity, hypothesis_outcomes. Paper-track P&L and backtests are context.
+exit_timing_cohorts, exit_shadow, hypothesis_integrity, hypothesis_outcomes,
+entry_dca_overlay. Paper-track P&L and backtests are context.
 
 Write SIX plain-text sections with headings exactly as shown:
 
@@ -531,6 +537,9 @@ and exit_shadow when present. Cite exit_timing_cohorts.readiness (hold/swap clos
 and exclusion_ladder_replay.readiness.ready_for_shadow_spawn when present.
 When hypothesis_integrity is present, cite per-track loser_share, within_tolerance,
 balancing_hint, and any selection_feedback_flags (intact losers are expected in a value book).
+When entry_dca_overlay is present, cite readiness.ready_for_cadence_analysis,
+leading_cadence, tracks_with_closed, and model_independent_hint (DCA findings are
+expected to transfer across models — do not spawn a per-model DCA book).
 Note unrealized vs realized marks only if present in JSON.
 
 PROPOSED EXPERIMENTS
@@ -566,6 +575,10 @@ Action contracts (include a line when the trigger fires — do not invent metric
 9. If hypothesis_outcomes.readiness.ready_for_thesis_outcome_analysis is true → ≥1
    [paper_churn] or [offline_sim] citing intact vs broken recovery_rate or learning_hints
    (observe-only; no auto-apply thesis thresholds).
+10. If entry_dca_overlay.readiness.ready_for_cadence_analysis is true → ≥1
+   [paper_churn] or [offline_sim] citing leading_cadence, de-risk vs lump-sum, and
+   whether model_independent_hint is true (observe-only; do not execute DCA on
+   paper books until a human ack).
 
 Cap at 5 lines — prioritise the strongest triggers; mention deferred triggers under DEFER.
 

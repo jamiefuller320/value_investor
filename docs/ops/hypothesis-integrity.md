@@ -105,4 +105,5 @@ strand alone.
 - [`exit-timing-cohorts.md`](exit-timing-cohorts.md) — hold-recovery probabilities
 - [`loser-snapshot-cards.md`](loser-snapshot-cards.md) — avoid / failed-buy alumni forensics
 - [`capital-allocation.md`](capital-allocation.md) — graduated entry/exit appetite
+- [`position-lifecycle.md`](position-lifecycle.md) — entry DCA overlay (de-risk *before* the sleeve is full)
 - Vision phase `hypothesis_first_exit` in `docs/data/learning_director_vision.json`

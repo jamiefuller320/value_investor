@@ -89,6 +89,26 @@ def _shadow_track_inventory(paper_root: Path) -> list[dict[str, Any]]:
     return inventory
 
 
+def _lifecycle_overlay_inventory(paper_root: Path) -> dict[str, Any]:
+    """Observe-only lifecycle overlays (DCA cadence, factor catalog coverage)."""
+    from value_investor.position_lifecycle import catalog_coverage, lifecycle_catalog
+
+    rollup = _safe_read(Path(paper_root) / "learning_tracks_entry_dca.json") or {}
+    readiness = rollup.get("readiness") if isinstance(rollup, dict) else {}
+    return {
+        "entry_dca_overlay": {
+            "scored_count": (rollup or {}).get("scored_count"),
+            "tracks_with_closed": (rollup or {}).get("tracks_with_closed"),
+            "ready_for_cadence_analysis": bool(
+                (readiness or {}).get("ready_for_cadence_analysis")
+            ),
+            "leading_cadence": (rollup or {}).get("leading_cadence"),
+            "model_independent_hint": bool((rollup or {}).get("model_independent_hint")),
+        },
+        "factor_coverage": catalog_coverage(lifecycle_catalog()),
+    }
+
+
 def build_experiment_inventory(
     data_dir: Path,
     *,
@@ -125,6 +145,7 @@ def build_experiment_inventory(
         "shadow_track_count": len(_shadow_track_inventory(paper_root)),
         "experimental_paper_tracks": _experimental_track_inventory(paper_root),
         "experimental_paper_track_count": len(_experimental_track_inventory(paper_root)),
+        "lifecycle_overlays": _lifecycle_overlay_inventory(paper_root),
     }
 
 

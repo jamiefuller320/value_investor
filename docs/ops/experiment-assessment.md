@@ -40,6 +40,7 @@ ftse-experiment-assess status --data-dir docs/data --json
 | `calibration_shadow` | `calibration_shadow_endurance.json` | Post-seed excess/marks vs market + primary/rules |
 | `exclusion_shadow` | Exclusion shadow tracks | Post-seed excess vs parent track |
 | `experimental_paper_track` | momentum_grace / graduated allocation | Forward marks vs primary |
+| `lifecycle_overlay` | Entry DCA / graduated-entry cadence | Cadence readiness + cross-track agreement |
 | `analysis_task` | `analysis_tasks.json` + trajectory/archive/churn evidence | Area-specific forward_evidence |
 | `paper_learning_task` | `paper_learning_tasks.json` | Same |
 | `learning_director_task` | `learning_director_tasks.json` | Same |
@@ -51,7 +52,7 @@ ftse-experiment-assess status --data-dir docs/data --json
 | `scoring` | trajectory `model_focus_candidates`, loser card families | `continue` when candidates exist; `recommend` when candidate count ≥ 20 |
 | `offline_sim` | archive run_count, simulation readiness | `continue` when history/backtest ≥ 2 runs |
 | `paper_knobs` | linked experimental track metrics (e.g. momentum_grace) | observing/continue from gate marks |
-| `paper_churn` / `monitoring` | exit_shadow closed counts, exit_timing readiness | `recommend` when probability analysis ready |
+| `paper_churn` / `monitoring` | exit_shadow closed counts, exit_timing readiness, entry DCA readiness | `recommend` when probability analysis ready |
 
 ## Artifacts
 

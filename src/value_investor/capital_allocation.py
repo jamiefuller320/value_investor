@@ -5,6 +5,12 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, fields
 from typing import Any
 
+from value_investor.position_lifecycle import (
+    BUILD_RATIO_CEILING,
+    HARVEST_RATIO_FLOOR,
+    STARTER_RATIO_CEILING,
+)
+
 BUY_SIGNALS = frozenset({"strong_buy", "buy"})
 
 
@@ -257,9 +263,11 @@ def classify_lifecycle_phase(
         return "hold"
 
     ratio = current_value / target_value if target_value > 0 else 0.0
-    if ratio < 0.85:
+    if ratio < STARTER_RATIO_CEILING:
+        return "starter"
+    if ratio < BUILD_RATIO_CEILING:
         return "build"
-    if ratio > 1.08:
+    if ratio > HARVEST_RATIO_FLOOR:
         signal = _screen_signal(row or {}, use_adjusted_signal=use_adjusted_signal)
         timing = str((row or {}).get("timing_signal") or "")
         if timing == "wait" or signal not in BUY_SIGNALS:

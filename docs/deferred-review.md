@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T06:53:01+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T11:05:08+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -111,6 +111,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N54 | **Do not treat Suite A conviction floors as Suite B policy** | High min_conviction discovered under 3% stress is a churn-survival filter for relative AI-vs-rules assessment. With fair costs, the same floor can starve deployable edge. Keep A floors on A; let B run suite-local conviction (including easing) and only promote floors that still help after fair costs. | Someone proposes copying ai_judgment min_conviction onto ai_judgment_fair as a permanent lock, or using A epoch success alone to claim deployable conviction policy |
 | N55 | **Live sentiment scoring from mined news phrases** | Do not wire bag-of-words or lexicon sentiment into screen weights or paper knobs. Open-source news + phrase mining may later inform research memos or event tags; treating it as a quant model remains premature (extends N6). | Phrase-trajectory panel shows out-of-sample lift on trajectory flips, and analysis-review proposes a gated experiment |
 | N57 | **Do not add level-crossings as a screening model input** | First-touch stop/target/SMA crosses are subsequent path after a buy-tier signal. Feeding them into Graham/quality/GARP/risk pass-fail would mix execution outcomes into point-in-time value identity and leak post-recommendation price action. | Only if a dedicated technical/timing family is designed with strict point-in-time features (RSI/SMA at screen date), not path-after-signal crossings. |
+| N58 | **Execute dollar-cost averaging on live paper books** | Do not change paper-auto fills to actual multi-tranche DCA until the model-independent overlay has enough closed episodes to rank cadences and a human acks ready_for_cadence_analysis. | learning_tracks_entry_dca readiness.ready_for_cadence_analysis is true and a leading cadence is stable across >=2 tracks |
 
 ---
 
@@ -256,6 +257,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L236 | **Gap-fill: scoring — Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted** | Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted FCF, and screen TTM diverge by >15% AND profit-to-cash falls >15pp year-on-year (ITV: 65% vs 83%, three-way FCF mismatch). | After next weekly email gap-fill pass confirms the gap persists |
 | L238 | **Human FCF bridge override for lease/M&A definition fights** | Auto majority + filing fallback covers ordinary screen/filing/company mismatches. Keep optional fcf_bridge.json overrides for cases where lease accounting, M&A cash classification, or one-offs make the majority/filing pick wrong. | After auto FCF policy has run through at least one results season and buy-tier action notes still look wrong on specific names |
 | L239 | **Metric change without narrative mention trap** | Detect significant YoY FCF (and later earnings/div) moves when cached RNS/filing body lacks related commentary keywords; start observe-only via so_what_closure. Reuse load_filing_bodies_for_ticker + reconcile_fcf YoY, not action_note markers. | After FCF basis enforcement/so-what loop is stable and filing-body coverage is high enough on buy-tier names |
+| L243 | **Intra-day entry tranche cadence** | Weekday paper-auto marks can only score daily/weekly DCA. Sub-daily tranche timing needs intra-day prices and is not required to answer whether spreading a decided notional de-risks entries. | Entry DCA overlay has a winning weekday/weekly cadence and intra-day price history is routinely available for FTSE names |
+| L244 | **Archive-history DCA overlay to accelerate cadence evidence** | Forward weekday marks will take weeks to close 12 episodes. An exit-timing-archive-style replay on weekly screens could seed priors for lump-sum vs weekly DCA without waiting for new paper buys. | Entry DCA overlay has fewer than 12 closed episodes after several weeks of weekday paper-auto, or Sunday analysis-review flags thin starter-stage evidence |
 
 ### Ops / reliability
 

@@ -265,8 +265,52 @@ def slim_hypothesis_outcomes(payload: dict[str, Any] | None) -> dict[str, Any] |
     }
 
 
+def slim_entry_dca(payload: dict[str, Any] | None) -> dict[str, Any] | None:
+    """Compact model-independent entry-DCA overlay for weekly reviews."""
+    if not isinstance(payload, dict):
+        return None
+    readiness = payload.get("readiness") or {}
+    coverage = (payload.get("lifecycle_catalog") or {}).get("coverage") or {}
+    tracks_raw = payload.get("tracks") or {}
+    tracks: dict[str, Any] = {}
+    if isinstance(tracks_raw, dict):
+        for track_id, row in tracks_raw.items():
+            if not isinstance(row, dict):
+                continue
+            tracks[str(track_id)] = {
+                "open_count": row.get("open_count"),
+                "scored_count": row.get("scored_count"),
+                "winning_cadence_counts": row.get("winning_cadence_counts"),
+                "any_de_risk_count": row.get("any_de_risk_count"),
+            }
+    return {
+        "purpose": (
+            "Counterfactual DCA / graduated-entry cadences on every track's new buys. "
+            "Findings are expected to be largely model-independent."
+        ),
+        "observe_only": True,
+        "readiness": readiness,
+        "scored_count": payload.get("scored_count"),
+        "tracks_with_closed": payload.get("tracks_with_closed"),
+        "leading_cadence": payload.get("leading_cadence"),
+        "model_independent_hint": payload.get("model_independent_hint"),
+        "winning_cadence_counts": payload.get("winning_cadence_counts"),
+        "lifecycle_coverage": {
+            "factor_count": coverage.get("factor_count"),
+            "by_status": coverage.get("by_status"),
+            "perpetual": coverage.get("perpetual"),
+            "stages_without_observing_experiment": coverage.get(
+                "stages_without_observing_experiment"
+            ),
+        },
+        "tracks": tracks,
+        "note": payload.get("note"),
+    }
+
+
 __all__ = [
     "slim_backtest",
+    "slim_entry_dca",
     "slim_exclusion_ladder_replay",
     "slim_exclusion_universe",
     "slim_exit_timing",

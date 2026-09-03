@@ -7,7 +7,7 @@ widens beyond hero 3-position sleeves.
 
 | Component | Status | Role |
 |-----------|--------|------|
-| `capital_allocation.py` | **Implemented** | Deterministic `entry_appetite`, `exit_urgency`, `swap_score`, lifecycle labels |
+| `capital_allocation.py` | **Implemented** | Deterministic `entry_appetite`, `exit_urgency`, `swap_score`, lifecycle labels (`starter` when sleeve &lt; 40% of target) |
 | `graduated_allocation` paper track | **Implemented** | Screen-rules book with trade-plan starter sizing + harvest skims |
 | `run_graduated_rebalance()` | **Implemented** | Weekday paper-auto when `use_graduated_allocation=true` |
 | Equal-weight primary / AI tracks | Unchanged | Control path stays equal-weight |
@@ -57,6 +57,7 @@ consistently under-weight capital-allocation evidence.
 |-------|--------|---------------|
 | `graduated_allocation_track` | **active** | v1 shadow running |
 | `hypothesis_first_exit` | **active** | Underwater thesis cards + loser tolerance |
+| `entry_lifecycle_experiments` | **active** | Stage catalog + model-independent DCA overlay |
 | `capital_rotation_coordinator` | planned | Exit-timing cohorts ready + swap rotations ≥10 closed |
 | `conviction_weighted_sizing` | planned | Graduated track ≥8 epoch marks; cost_drag stable |
 
@@ -66,7 +67,7 @@ state machine), **N38** (no live capital promotion before paper evidence).
 ## Planned (not built)
 
 1. **Swap-score gate** — sell→buy only when rotation beats hold after 2× round-trip cost
-2. **Per-holding lifecycle state** in `rebalance_state` (prospect→starter→build→full→harvest→grace→exit)
+2. **Per-holding lifecycle state** in `rebalance_state` (prospect→starter→build→full→harvest→grace→exit) — catalog + labels live; executor still L177
 3. **Conviction-weighted sleeves** — target = f(conviction) not NAV/N
 4. **Cash buffer target** — maintain 5–10% NAV dry powder for new cycle entries
 5. **AI-judgment graduated track** — same mechanics with research gates (after rules shadow proves value)
@@ -87,7 +88,8 @@ state machine), **N38** (no live capital promotion before paper evidence).
 - Screen signals frozen (N3)
 - Live capital off until stage 2b + graduated shadow beats control (N38)
 
-See also [`primary-learning-track.md`](primary-learning-track.md),
+See also [`position-lifecycle.md`](position-lifecycle.md) (DCA overlay + factor
+inventory), [`primary-learning-track.md`](primary-learning-track.md),
 [`learning-director-vision.md`](learning-director-vision.md),
 [`exit-timing-cohorts.md`](exit-timing-cohorts.md),
 [`hypothesis-integrity.md`](hypothesis-integrity.md).

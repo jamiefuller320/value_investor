@@ -142,6 +142,8 @@ def test_build_experiment_inventory_counts_open_tasks(tmp_path: Path):
     inventory = build_experiment_inventory(data_dir)
     assert inventory["open_experiment_count"] == 1
     assert inventory["buckets"]["analysis_tasks"] == 1
+    assert "lifecycle_overlays" in inventory
+    assert inventory["lifecycle_overlays"]["factor_coverage"]["perpetual"] is True
 
 
 def test_compile_learning_director_tasks_filters_areas(tmp_path: Path):

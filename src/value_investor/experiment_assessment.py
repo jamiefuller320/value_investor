@@ -61,6 +61,11 @@ class AssessmentContext:
     exit_shadow_closed_total: int
     exit_timing_ready: bool
     experimental_tracks: dict[str, dict[str, Any]]
+    entry_dca_ready: bool = False
+    entry_dca_scored: int = 0
+    entry_dca_tracks: int = 0
+    entry_dca_leading: str | None = None
+    entry_dca_model_independent: bool = False
 
 
 def _safe_read(path: Path) -> dict[str, Any] | None:
@@ -94,6 +99,25 @@ def _exit_shadow_closed_total(exit_shadow: dict[str, Any] | None) -> int:
         if isinstance(row, dict):
             total += int(row.get("closed_count") or 0)
     return total
+
+
+def _entry_dca_context(rollup: dict[str, Any] | None) -> dict[str, Any]:
+    if not isinstance(rollup, dict):
+        return {
+            "entry_dca_ready": False,
+            "entry_dca_scored": 0,
+            "entry_dca_tracks": 0,
+            "entry_dca_leading": None,
+            "entry_dca_model_independent": False,
+        }
+    readiness = rollup.get("readiness") or {}
+    return {
+        "entry_dca_ready": bool(readiness.get("ready_for_cadence_analysis")),
+        "entry_dca_scored": int(rollup.get("scored_count") or 0),
+        "entry_dca_tracks": int(rollup.get("tracks_with_closed") or 0),
+        "entry_dca_leading": rollup.get("leading_cadence"),
+        "entry_dca_model_independent": bool(rollup.get("model_independent_hint")),
+    }
 
 
 def _exit_timing_probability_ready(
@@ -196,6 +220,7 @@ def build_assessment_context(
             _safe_read(data_dir / "exit_timing_near_miss_review.json"),
         ),
         experimental_tracks=_load_experimental_tracks(paper_root),
+        **_entry_dca_context(_safe_read(paper_root / "learning_tracks_entry_dca.json")),
     )
 
 
@@ -336,6 +361,38 @@ def _experiments_from_exclusion_shadows(
             }
         )
     return rows
+
+
+def _experiments_from_entry_dca(ctx: AssessmentContext) -> list[dict[str, Any]]:
+    if ctx.entry_dca_scored <= 0 and not ctx.entry_dca_ready:
+        status = "observing"
+    elif not ctx.entry_dca_ready:
+        status = "observing"
+    elif ctx.entry_dca_ready and ctx.entry_dca_model_independent and ctx.entry_dca_leading:
+        status = "recommend"
+    else:
+        status = "continue"
+    return [
+        {
+            "experiment_id": "entry_dca_overlay",
+            "kind": "lifecycle_overlay",
+            "title": "Model-independent entry DCA / graduated-entry cadence",
+            "area": "paper_churn",
+            "pipeline": "position_lifecycle",
+            "status": status,
+            "source_status": "collecting" if not ctx.entry_dca_ready else "ready",
+            "human_ack_required": status == "recommend",
+            "forward_evidence": {
+                "source": "learning_tracks_entry_dca.json",
+                "scored_count": ctx.entry_dca_scored,
+                "tracks_with_closed": ctx.entry_dca_tracks,
+                "ready_for_cadence_analysis": ctx.entry_dca_ready,
+                "leading_cadence": ctx.entry_dca_leading,
+                "model_independent_hint": ctx.entry_dca_model_independent,
+            },
+            "evidence_path": str(ctx.paper_root / "learning_tracks_entry_dca.json"),
+        }
+    ]
 
 
 def _experiments_from_experimental_tracks(
@@ -485,6 +542,12 @@ def _assess_task_row(
             assessment = "observing"
         if ctx.exit_shadow_closed_total >= EXIT_SHADOW_CONTINUE_CLOSED:
             assessment = "continue"
+        if ctx.entry_dca_ready:
+            forward_evidence["entry_dca"] = {
+                "ready_for_cadence_analysis": True,
+                "leading_cadence": ctx.entry_dca_leading,
+                "scored_count": ctx.entry_dca_scored,
+            }
         if ctx.exit_timing_ready:
             assessment = "recommend"
 
@@ -659,6 +722,7 @@ def refresh_experiment_assessment(
         )
     )
     experiments.extend(_experiments_from_experimental_tracks(ctx, fetch_benchmark=fetch_benchmark))
+    experiments.extend(_experiments_from_entry_dca(ctx))
     experiments.extend(_experiments_from_task_queues(ctx))
 
     previous = _safe_read(data_dir / ASSESSMENT_FILENAME) or {}
@@ -717,6 +781,8 @@ def refresh_experiment_assessment(
             "trajectory_labeled_events": ctx.trajectory_summary.get("labeled_event_count"),
             "exit_shadow_closed_total": ctx.exit_shadow_closed_total,
             "experimental_track_count": len(ctx.experimental_tracks),
+            "entry_dca_scored": ctx.entry_dca_scored,
+            "entry_dca_ready": ctx.entry_dca_ready,
         },
         "summary": _summary_counts(experiments),
         "experiments": experiments,
