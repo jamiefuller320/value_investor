@@ -1010,8 +1010,8 @@ function renderScreener(data) {
         </td>
         <td>${signalBadge(report.signal)}${researchOverlayHtml(report)}</td>
         <td>${timingBadge(report.timing_signal)}<br><span class="small muted">${report.rsi_14 != null ? `RSI ${Math.round(report.rsi_14)}` : ""}</span></td>
-        <td>${report.models_passed}/${report.model_count}<br><span class="small muted">${report.families_passed}/4 families</span></td>
-        <td>${pct(report.conviction_score)}<br><span class="small muted">${esc(report.stability_label || "")}</span></td>
+        <td>${report.models_passed}/${report.model_count}<br><span class="small muted">${report.families_passed}/${report.family_count || 5} families</span></td>
+        <td>${pct(report.conviction_score)}<br><span class="small muted">${esc(report.stability_label || "")}${report.weeks_at_signal ? ` · ${report.weeks_at_signal}w` : ""}</span></td>
         <td class="small">${esc(report.summary || "")}</td>
         <td>${chartBtn}</td>
       </tr>`;

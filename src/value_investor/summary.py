@@ -10,7 +10,7 @@ from typing import Any
 import pandas as pd
 
 from value_investor.data_quality import quality_label
-from value_investor.model_families import format_family_summary
+from value_investor.model_families import FAMILY_COUNT, format_family_summary
 from value_investor.models.piotroski import piotroski_snapshot_from_result
 from value_investor.scoring.cash_conversion_overlay import apply_cash_conversion_overlay_to_signal
 from value_investor.scoring.cyclical_exposure_overlay import (
@@ -92,6 +92,8 @@ class CompanyReport:
     summary: str
     passed_models: list[str]
     key_metrics: dict[str, Any]
+    family_count: int = FAMILY_COUNT
+    signal_since: str | None = None
     failed_models: list[str] = field(default_factory=list)
     model_failures: dict[str, list[str]] = field(default_factory=dict)
     screening_inputs: dict[str, Any] = field(default_factory=dict)
@@ -136,6 +138,7 @@ class CompanyReport:
             "sector_composite_score": self.sector_composite_score,
             "families_passed": self.families_passed,
             "passed_families": self.passed_families,
+            "family_count": self.family_count,
             "data_quality_score": self.data_quality_score,
             "metrics_present": self.metrics_present,
             "metrics_total": self.metrics_total,
@@ -143,6 +146,7 @@ class CompanyReport:
             "signal_trend": self.signal_trend,
             "conviction_score": self.conviction_score,
             "stability_label": self.stability_label,
+            "signal_since": self.signal_since,
             "timing_signal": self.timing_signal,
             "timing_score": self.timing_score,
             "rsi_14": self.rsi_14,
@@ -202,6 +206,7 @@ class CompanyReport:
             sector_composite_score=data.get("sector_composite_score"),
             families_passed=int(data.get("families_passed") or 0),
             passed_families=data.get("passed_families"),
+            family_count=int(data.get("family_count") or FAMILY_COUNT),
             data_quality_score=float(data.get("data_quality_score") or 0.0),
             metrics_present=int(data.get("metrics_present") or 0),
             metrics_total=int(data.get("metrics_total") or 0),
@@ -209,6 +214,7 @@ class CompanyReport:
             signal_trend=str(data.get("signal_trend") or "new"),
             conviction_score=float(data.get("conviction_score") or 0.0),
             stability_label=str(data.get("stability_label") or "new"),
+            signal_since=data.get("signal_since"),
             timing_signal=str(data.get("timing_signal") or "neutral"),
             timing_score=float(data.get("timing_score") or 0.0),
             rsi_14=data.get("rsi_14"),
@@ -447,6 +453,7 @@ def _brief_summary(
     sector_composite_score: float | None,
     families_passed: int,
     passed_families: str | None,
+    family_count: int,
     data_quality_score: float,
     metrics_present: int,
     metrics_total: int,
@@ -494,7 +501,8 @@ def _brief_summary(
 
     if families_passed:
         family_text = format_family_summary(passed_families)
-        parts.append(f"Families: {families_passed}/4 ({family_text}).")
+        denom = family_count or FAMILY_COUNT
+        parts.append(f"Families: {families_passed}/{denom} ({family_text}).")
 
     parts.append(
         f"Data quality: {metrics_present}/{metrics_total} ({quality_label(data_quality_score)}). "
@@ -1060,6 +1068,7 @@ def build_company_reports(
             sector_composite_score=sector_composite_score,
             families_passed=int(row.get("families_passed") or 0),
             passed_families=row.get("passed_families"),
+            family_count=int(row.get("family_count") or FAMILY_COUNT),
             data_quality_score=float(row.get("data_quality_score") or 0),
             metrics_present=int(row.get("metrics_present") or 0),
             metrics_total=int(row.get("metrics_total") or 20),
@@ -1111,6 +1120,13 @@ def build_company_reports(
         if fcf_divergence_flagged:
             fcf_snapshot["fcf_divergence_flagged"] = True
 
+        signal_since_raw = row.get("signal_since")
+        signal_since = (
+            str(signal_since_raw)
+            if signal_since_raw is not None and not pd.isna(signal_since_raw)
+            else None
+        )
+
         reports.append(
             CompanyReport(
                 ticker=ticker,
@@ -1123,6 +1139,7 @@ def build_company_reports(
                 sector_composite_score=sector_composite_score,
                 families_passed=int(row.get("families_passed") or 0),
                 passed_families=row.get("passed_families"),
+                family_count=int(row.get("family_count") or FAMILY_COUNT),
                 data_quality_score=float(row.get("data_quality_score") or 0),
                 metrics_present=int(row.get("metrics_present") or 0),
                 metrics_total=int(row.get("metrics_total") or 20),
@@ -1130,6 +1147,7 @@ def build_company_reports(
                 signal_trend=str(row.get("signal_trend") or "new"),
                 conviction_score=conviction_score,
                 stability_label=str(row.get("stability_label") or "new"),
+                signal_since=signal_since,
                 timing_signal=str(row.get("timing_signal") or "insufficient_data"),
                 timing_score=float(row.get("timing_score") or 0),
                 rsi_14=float(row["rsi_14"])

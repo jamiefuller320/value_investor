@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from value_investor.backtest import load_run_snapshots
+from value_investor.signal_stability import restore_committed_signal_history
 from value_investor.storage import COMMITTED_HISTORY_DIR, restore_committed_run_history
 
 
@@ -118,6 +119,7 @@ def run_preflight(
         )
 
     restore_committed_run_history(output_dir)
+    restore_committed_signal_history(output_dir)
     snapshots = load_run_snapshots(output_dir)
     committed_runs = (
         len(list(COMMITTED_HISTORY_DIR.glob("run_*.json*")))

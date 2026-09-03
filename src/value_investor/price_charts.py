@@ -77,6 +77,7 @@ def build_price_chart_payload(
     trade_plan: dict[str, Any] | None = None,
     signal: str | None = None,
     as_of: datetime | None = None,
+    signal_since: str | None = None,
 ) -> dict[str, Any] | None:
     """Build a compact chart JSON for one ticker."""
     clean = series.dropna()
@@ -105,11 +106,21 @@ def build_price_chart_payload(
     if sma200 is not None and pd.isna(sma200):
         sma200 = None
 
+    as_of_iso = (as_of or datetime.now(UTC)).isoformat()
+    # Prefer an explicit streak start; fall back to this screen's as-of date.
+    marker = None
+    if signal_since:
+        marker = str(signal_since)[:10]
+    elif as_of_iso:
+        marker = as_of_iso[:10]
+
     return {
         "ticker": ticker,
         "name": name or ticker,
         "signal": signal,
-        "as_of": (as_of or datetime.now(UTC)).isoformat(),
+        "as_of": as_of_iso,
+        "signal_since": marker,
+        "levels_as_of": as_of_iso[:10],
         "period": CHART_LOOKBACK_PERIOD,
         "dates": dates,
         "closes": closes,
@@ -162,6 +173,9 @@ def write_buy_tier_charts_from_history(
             trade_plan=trade_plan,
             signal=str(row.get("signal") or ""),
             as_of=as_of,
+            signal_since=str(row["signal_since"])
+            if row.get("signal_since") is not None and not pd.isna(row.get("signal_since"))
+            else None,
         )
         if payload is None:
             continue
@@ -217,6 +231,7 @@ def ensure_buy_tier_charts(
             else None,
             signal=str(report.get("signal") or ""),
             as_of=as_of,
+            signal_since=str(report["signal_since"]) if report.get("signal_since") else None,
         )
         if payload is None:
             continue

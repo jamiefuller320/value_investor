@@ -532,7 +532,7 @@ def format_html_report(
               <td style="padding:12px;border-bottom:1px solid #eee;vertical-align:top">
                 <span style="color:{color};font-weight:bold">{label}</span>{overlay_html}<br>
                 <span style="color:#666;font-size:12px">{report.models_passed}/{report.model_count} models<br>
-                {report.families_passed}/4 families<br>
+                {report.families_passed}/{report.family_count or 5} families<br>
                 Conviction {report.conviction_score:.0%} ({report.stability_label})</span>
               </td>
               <td style="padding:12px;border-bottom:1px solid #eee;vertical-align:top">
