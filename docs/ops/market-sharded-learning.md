@@ -213,8 +213,10 @@ written under another index slice.
 
 Ladder selective research (`rememo_existing`, default on) still skips **fresh**
 memos, but rememos buy-tier names when ingest has added enough filing bodies
-(same lag rule as FTSE weekday rememo). A new focus / sprint / parity market
-inherits this without a per-market hook.
+(same lag rule as FTSE weekday rememo). Before a rememo, focus-market
+canonical filings are copied into the existing memo home so Sunday eligibility
+clears after the rewrite. A new focus / sprint / parity market inherits this
+without a per-market hook.
 
 ## Guardrails
 

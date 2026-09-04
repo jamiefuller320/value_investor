@@ -9,7 +9,9 @@ from value_investor.research.document import ResearchDocument
 from value_investor.research.market_store import (
     library_rememo_eligible_tickers,
     rememo_reason,
+    resolve_library_rememo_target,
     resolve_research_documents,
+    seed_home_filings_from_canonical,
 )
 from value_investor.research.overlay_refresh import refresh_dashboard_bundle
 from value_investor.storage import write_json
@@ -142,3 +144,69 @@ def test_library_rememo_eligible_uses_canonical_filings_not_home_memo(tmp_path: 
     )
     assert eligible["ERIC-B.ST"].startswith("stale_thin_grade_body_lag_")
     assert "FRESH.ST" not in eligible
+
+
+def test_seed_home_filings_from_canonical_copies_when_focus_ahead(tmp_path: Path):
+    root = tmp_path / "library"
+    home = root / "markets" / "euro_stoxx50" / "screen" / "research"
+    canonical = root / "markets" / "euro_depth" / "screen" / "research"
+    _write_memo(
+        home, "TTE.PA", verdict="accumulate", grade="strong", memo_bodies=57, disk_bodies=57
+    )
+    (canonical / "TTE.PA" / "sources" / "filings").mkdir(parents=True)
+    write_json(
+        canonical / "TTE.PA" / "sources" / "filings" / "filings_index.json",
+        {"summary": {"with_body": 91, "total": 95}},
+        compact=True,
+    )
+    (canonical / "TTE.PA" / "sources" / "filings" / "extra.txt").write_text(
+        "body", encoding="utf-8"
+    )
+
+    seeded = seed_home_filings_from_canonical(root, "TTE.PA", market_id="euro_depth")
+    assert seeded["action"] == "seeded"
+    assert seeded["canonical_bodies"] == 91
+    assert seeded["home_bodies_before"] == 57
+    assert seeded["home_bodies_after"] == 91
+    assert (home / "TTE.PA" / "sources" / "filings" / "extra.txt").read_text(
+        encoding="utf-8"
+    ) == "body"
+
+    again = seed_home_filings_from_canonical(root, "TTE.PA", market_id="euro_depth")
+    assert again["action"] == "home_ahead_or_same_store"
+
+
+def test_resolve_library_rememo_target_rewrites_home(tmp_path: Path):
+    root = tmp_path / "library"
+    home = root / "markets" / "euro_stoxx50" / "screen" / "research"
+    canonical = root / "markets" / "euro_depth" / "screen" / "research"
+    _write_memo(
+        home, "TTE.PA", verdict="accumulate", grade="strong", memo_bodies=57, disk_bodies=57
+    )
+    (canonical / "TTE.PA" / "sources" / "filings").mkdir(parents=True)
+    write_json(
+        canonical / "TTE.PA" / "sources" / "filings" / "filings_index.json",
+        {"summary": {"with_body": 91, "total": 95}},
+        compact=True,
+    )
+
+    first_time = resolve_library_rememo_target(
+        root,
+        "NEW.PA",
+        selected_market="euro_depth",
+        focus_market="euro_depth",
+        rememo_reasons={},
+    )
+    assert first_time["market"] == "euro_depth"
+    assert first_time["force_initial"] is False
+
+    rememo = resolve_library_rememo_target(
+        root,
+        "TTE.PA",
+        selected_market="euro_depth",
+        focus_market="euro_depth",
+        rememo_reasons={"TTE.PA": "strong_grade_large_body_lag_34"},
+    )
+    assert rememo["market"] == "euro_stoxx50"
+    assert rememo["force_initial"] is True
+    assert rememo["seed"]["action"] == "seeded"

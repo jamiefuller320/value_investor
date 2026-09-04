@@ -43,6 +43,7 @@ from value_investor.library_screen import (
     library_research_reports,
     research_cap_from_budget,
     run_library_screen,
+    screen_dir_for,
 )
 from value_investor.library_sim import (
     DEFAULT_OBSERVE_SIM_MARKETS,
@@ -61,6 +62,7 @@ from value_investor.market_shard_phases import (
 from value_investor.research.market_store import (
     DEFAULT_REMEMO_BODY_LAG_THRESHOLD,
     library_rememo_eligible_tickers,
+    resolve_library_rememo_target,
 )
 from value_investor.research.runner import eligible_research_targets, run_research_for_strong_buys
 from value_investor.storage import write_json
@@ -536,17 +538,33 @@ def run_library_ladder(
             else:
                 executed = created = updated = 0
                 errors: list[str] = []
+                rememo_seeds: list[dict[str, Any]] = []
                 checkpoint_reached = False
                 for mid, report in selected:
-                    scr = market_screens[mid]
+                    dest = resolve_library_rememo_target(
+                        root,
+                        str(getattr(report, "ticker", "") or ""),
+                        selected_market=mid,
+                        focus_market=market,
+                        rememo_reasons=rememo_reasons,
+                    )
+                    dest_market = str(dest["market"])
+                    dest_screen = (
+                        market_screens[dest_market].screen_dir
+                        if dest_market in market_screens
+                        else screen_dir_for(root, dest_market)
+                    )
+                    if dest.get("seed"):
+                        rememo_seeds.append(dest["seed"])
                     summary = run_research_for_strong_buys(
                         reports=[report],
-                        output_dir=scr.screen_dir,
+                        output_dir=dest_screen,
                         api_key=key,
                         model=model,
                         weekly_cap=1,
                         continue_alumni=False,
-                        market=mid,
+                        force_initial=bool(dest["force_initial"]),
+                        market=dest_market,
                     )
                     memo_executed = int(summary.created) + int(summary.updated)
                     executed += memo_executed
@@ -595,6 +613,8 @@ def run_library_ladder(
                 layer["created"] = created
                 layer["updated"] = updated
                 layer["errors"] = errors
+                if rememo_seeds:
+                    layer["rememo_seeds"] = rememo_seeds
                 if executed > 0:
                     layer["estimated_spend_usd"] = round(executed * memo_cost, 4)
                     if use_weekly_ops:
