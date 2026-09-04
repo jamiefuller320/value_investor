@@ -310,7 +310,7 @@ def publish_memo_backfill_batch(
             updated_reports.append(raw)
     payload["reports"] = updated_reports
     payload["generated_at"] = datetime.now(UTC).isoformat()
-    write_json(latest_path, payload, compact=False, compress=False)
+    write_json(latest_path, payload, compact=True, compress=False)
 
     synced = sync_output_research_to_committed(output_dir, data_dir=dest_dir / "data")
     return {
