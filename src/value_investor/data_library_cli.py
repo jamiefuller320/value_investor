@@ -223,8 +223,8 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=None,
         help=(
-            "Max weekly_ops as a fraction of plan_monthly_usd (default: 0.15). "
-            "Leaves included credit for development and other projects."
+            "Estimated-USD warning threshold as a fraction of plan_monthly_usd "
+            "(default: 0.15). Warning only — not a hard cap."
         ),
     )
     surplus_p.add_argument(
@@ -1191,9 +1191,9 @@ def cmd_policy(args: argparse.Namespace) -> int:
         ceiling = round(max(0.0, monthly * share), 2)
         if monthly > 0 and requested > ceiling and not args.json:
             print(
-                f"Warning: weekly_ops_cap ${requested:.2f} exceeds "
-                f"{share:.0%} of plan ${monthly:.0f} (${ceiling:.2f}). "
-                "Surplus apply will clamp to that ceiling.",
+                f"Note: weekly_ops_cap ${requested:.2f} is above the "
+                f"{share:.0%} estimated-USD warning (${ceiling:.2f} of "
+                f"${monthly:.0f} plan). That share is a warning, not a hard cap.",
                 file=sys.stderr,
             )
     if args.refresh_day is not None:
@@ -1248,14 +1248,18 @@ def cmd_policy(args: argparse.Namespace) -> int:
         + (f"  — {ops_status['note']}" if ops_status.get("note") else "")
     )
     print(
-        f"Weekly ops plan-credit ceiling: "
+        f"Weekly ops plan-credit warning: "
         f"{float(ops_status.get('weekly_ops_plan_credit_share_cap') or 0):.0%} of "
         f"${ops_status.get('plan_monthly_usd')} = "
-        f"${ops_status.get('weekly_ops_plan_credit_ceiling_usd')}"
+        f"${ops_status.get('weekly_ops_plan_credit_warning_usd')}"
         + (
-            "  (cap exceeds ceiling)"
-            if ops_status.get("weekly_ops_cap_exceeds_plan_share")
-            else ""
+            "  (estimated spend at/over warning)"
+            if ops_status.get("weekly_ops_plan_credit_warning")
+            else (
+                "  (estimated spend near warning)"
+                if ops_status.get("weekly_ops_plan_credit_near_warning")
+                else "  (warning only, not a hard cap)"
+            )
         )
     )
     print(
@@ -1336,11 +1340,16 @@ def cmd_cycle_surplus(args: argparse.Namespace) -> int:
                 f"(weekly bump ${assessment['weekly_bump_usd']:.2f})"
             )
             print(
-                f"Plan-credit weekly-ops ceiling "
+                f"Plan-credit weekly-ops warning "
                 f"{float(assessment.get('plan_credit_share_cap') or 0):.0%} of "
                 f"${assessment['plan_monthly_usd']:.0f} = "
-                f"${float(assessment.get('plan_credit_ceiling_usd') or 0):.2f}"
-                + ("  (ceiling binds)" if assessment.get("ceiling_bound") else "")
+                f"${float(assessment.get('plan_credit_warning_usd') or assessment.get('plan_credit_ceiling_usd') or 0):.2f}"
+                "  (warning only, not a hard cap)"
+                + (
+                    "  (proposed cap above warning)"
+                    if assessment.get("ceiling_bound")
+                    else ""
+                )
             )
             print(
                 f"weekly_ops ${assessment['current_weekly_ops_cap_usd']:.2f} → "

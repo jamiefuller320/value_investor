@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T21:06:11+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T21:15:05+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -346,6 +346,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L291 | **Review the 120 weekly_ops bump against 36 percent unused Ultra** | Usage page is 64 percent used, so leftover is about 36 percent of the listed plan, not the 1700 USD inferred from burst percentages. The 80 to 120 weekly_ops raise already sits at the 50 percent ceiling and looks aggressive versus that leftover. | Cycle-end surplus review on 2026-10-d8 keep-or-revert. |
 | L292 | **Two-column budget: included-credit fraction vs estimated API USD** | Policy today ledgers estimated on-demand USD only. Usage-page leftover is a separate included-pool meter. A later surplus review could store both, but do not invent a conversion that treats burst token dollars as a percent of Ultra. | Cycle-end surplus review on 2026-10-d8, or if Cursor exposes remaining included credits to the API. |
 | L293 | **15% weekly-ops plan-credit share binds on a large universe** | The 15% of listed plan credit weekly-ops ceiling is generous on the FTSE live path. Revisit the share (or the listed-plan denominator) when Sunday plus weekday ops regularly hit the Ultra 0 envelope because the researched universe is large. | weekly_ops regularly spends the 0 / 15% Ultra ceiling for several consecutive weeks, or live universe expansion is on the table |
+| L294 | **Drive 15% weekly-ops warning from real plan-credit remaining** | The 15% weekly-ops share is a warning on estimated list-price USD because Cursor does not expose included plan remaining to User API keys. If Cursor later exposes remaining included credits, drive that warning from the real meter instead of the estimated ledger. | Cursor User API or cloud-agent metadata exposes included plan remaining or usage-page percent |
 
 ---
 

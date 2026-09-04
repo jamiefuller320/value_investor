@@ -43,7 +43,6 @@ def test_assess_proposes_quarter_of_unused_as_weekly_bump(tmp_path: Path):
     assessment = assess_cycle_surplus(
         unused_fraction=0.40,
         plan_monthly_usd=200.0,
-        plan_credit_share_cap=1.0,
         policy=policy,
         path=path,
         now=datetime(2026, 9, 4, tzinfo=UTC),
@@ -66,7 +65,6 @@ def test_assess_caps_weekly_bump(tmp_path: Path):
         plan_monthly_usd=200.0,
         transfer_fraction=1.0,
         max_weekly_bump_usd=20.0,
-        plan_credit_share_cap=1.0,
         policy=policy,
         path=path,
     )
@@ -81,7 +79,6 @@ def test_apply_and_review_keep_revert(tmp_path: Path):
     assessment = assess_cycle_surplus(
         unused_fraction=0.40,
         plan_monthly_usd=200.0,
-        plan_credit_share_cap=1.0,
         policy=policy,
         path=policy_path,
     )
@@ -139,7 +136,6 @@ def test_review_keep_when_extra_headroom_used(tmp_path: Path):
     assessment = assess_cycle_surplus(
         unused_fraction=0.40,
         plan_monthly_usd=200.0,
-        plan_credit_share_cap=1.0,
         policy=policy,
         path=policy_path,
     )
@@ -166,7 +162,6 @@ def test_assess_unused_usd_replaces_provisional_from_original_cap(tmp_path: Path
     first = assess_cycle_surplus(
         unused_fraction=0.40,
         plan_monthly_usd=200.0,
-        plan_credit_share_cap=1.0,
         policy=policy,
         path=policy_path,
     )
@@ -180,7 +175,6 @@ def test_assess_unused_usd_replaces_provisional_from_original_cap(tmp_path: Path
         plan_monthly_usd=200.0,
         replace_provisional=True,
         max_weekly_bump_usd=40.0,
-        plan_credit_share_cap=1.0,
         policy=policy,
         path=policy_path,
     )
@@ -221,8 +215,6 @@ def test_cli_assess_apply(tmp_path: Path, monkeypatch, capsys):
             "0.40",
             "--plan-monthly-usd",
             "200",
-            "--plan-credit-share-cap",
-            "1.0",
         ]
     )
     assert rc == 0
@@ -237,7 +229,7 @@ def test_plan_credit_ceiling_is_15pct_of_ultra():
     assert weekly_ops_plan_credit_ceiling_usd(200.0, 0.15) == 30.0
 
 
-def test_assess_clamps_weekly_ops_to_15pct_of_plan_credit(tmp_path: Path):
+def test_assess_15pct_is_warning_not_a_hard_clamp(tmp_path: Path):
     path = _policy(tmp_path / "policy.json", cap=80.0)
     policy = load_policy(path)
     assessment = assess_cycle_surplus(
@@ -247,64 +239,26 @@ def test_assess_clamps_weekly_ops_to_15pct_of_plan_credit(tmp_path: Path):
         path=path,
     )
     assert assessment["plan_credit_share_cap"] == 0.15
-    assert assessment["plan_credit_ceiling_usd"] == 30.0
-    assert assessment["unclamped_weekly_ops_cap_usd"] == 85.0
-    assert assessment["proposed_weekly_ops_cap_usd"] == 30.0
-    assert assessment["weekly_bump_usd"] == -50.0
+    assert assessment["plan_credit_warning_usd"] == 30.0
+    assert assessment["proposed_weekly_ops_cap_usd"] == 85.0
+    assert assessment["weekly_bump_usd"] == 5.0
+    assert assessment["plan_credit_share_is_warning"] is True
     assert assessment["ceiling_bound"] is True
-    assert assessment["action"] == "clamp_to_ceiling"
-
-
-def test_assess_allows_surplus_bump_below_plan_credit_ceiling(tmp_path: Path):
-    path = _policy(tmp_path / "policy.json", cap=40.0)
-    policy = load_policy(path)
-    # $400 × 15% = $60 ceiling; 40% unused → $10 weekly bump → $50 < $60
-    assessment = assess_cycle_surplus(
-        unused_fraction=0.40,
-        plan_monthly_usd=400.0,
-        policy=policy,
-        path=path,
-    )
-    assert assessment["plan_credit_ceiling_usd"] == 60.0
-    assert assessment["proposed_weekly_ops_cap_usd"] == 50.0
     assert assessment["action"] == "propose_bump"
-    assert assessment["ceiling_bound"] is False
 
 
-def test_apply_clamp_and_review_revert_stay_at_ceiling(tmp_path: Path):
-    policy_path = _policy(tmp_path / "policy.json", cap=120.0)
+def test_review_revert_restores_original_cap_above_warning(tmp_path: Path):
+    policy_path = _policy(tmp_path / "policy.json", cap=80.0)
     artifact = tmp_path / "surplus.json"
     policy = load_policy(policy_path)
-    policy["budget"]["cycle_surplus_provisional"] = {
-        "status": "provisional",
-        "previous_weekly_ops_cap_usd": 80.0,
-        "applied_weekly_ops_cap_usd": 120.0,
-        "review_cycle_id": "2026-10-d8",
-        "plan_monthly_usd": 200.0,
-    }
-    save_policy(policy, policy_path)
-    policy = load_policy(policy_path)
     assessment = assess_cycle_surplus(
-        unused_fraction=0.36,
+        unused_fraction=0.40,
         plan_monthly_usd=200.0,
-        replace_provisional=True,
         policy=policy,
         path=policy_path,
     )
-    assert assessment["action"] == "clamp_to_ceiling"
-    assert assessment["proposed_weekly_ops_cap_usd"] == 30.0
-    applied = apply_cycle_surplus(
-        assessment,
-        policy_path=policy_path,
-        artifact_path=artifact,
-        replace_provisional=True,
-    )
-    assert applied["action"] == "applied_provisional"
+    apply_cycle_surplus(assessment, policy_path=policy_path, artifact_path=artifact)
     policy = load_policy(policy_path)
-    assert policy["budget"]["weekly_ops_cap_usd"] == 30.0
-    assert policy["budget"]["weekly_ops_plan_credit_share_cap"] == 0.15
-    assert policy["budget"]["cycle_surplus_provisional"]["plan_credit_ceiling_usd"] == 30.0
-
     policy["budget"]["cycle_id"] = "2026-10-d8"
     policy["budget"]["estimated_spend_weekly_ops_usd_this_week"] = 22.0
     save_policy(policy, policy_path)
@@ -315,5 +269,5 @@ def test_apply_clamp_and_review_revert_stay_at_ceiling(tmp_path: Path):
         now=datetime(2026, 10, 8, tzinfo=UTC),
     )
     assert reverted["action"] == "reverted"
-    assert reverted["revert_weekly_ops_cap_usd"] == 30.0
-    assert load_policy(policy_path)["budget"]["weekly_ops_cap_usd"] == 30.0
+    assert reverted["revert_weekly_ops_cap_usd"] == 80.0
+    assert load_policy(policy_path)["budget"]["weekly_ops_cap_usd"] == 80.0

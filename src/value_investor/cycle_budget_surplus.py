@@ -3,9 +3,10 @@
 Cursor does not expose remaining plan credits. The operator declares unused
 fraction (Ultra usage page — included-pool meter). A transfer fraction of that
 leftover becomes a *provisional* raise of ``weekly_ops_cap_usd`` (estimated
-on-demand USD meter), never past ``weekly_ops_plan_credit_share_cap`` of listed
-plan credit (default 15% / week). Do not infer leftover dollars from estimated
-token spend divided by a usage-page percentage. Rememo daily caps stay fixed.
+on-demand USD meter). ``weekly_ops_plan_credit_share_cap`` (default 15% of
+listed plan / week) is a warning on that estimated ledger, not a hard cap.
+Do not infer leftover dollars from estimated token spend divided by a
+usage-page percentage. Rememo daily caps stay fixed.
 
 Human review at the next billing-cycle end keeps or reverts the bump.
 """
@@ -32,7 +33,7 @@ DEFAULT_MAX_WEEKLY_BUMP_USD = 20.0
 DEFAULT_ULTRA_MONTHLY_USD = 200.0
 DEFAULT_PLAN_CREDIT_SHARE_CAP = DEFAULT_WEEKLY_OPS_PLAN_CREDIT_SHARE_CAP
 WEEKS_PER_CYCLE = 4.0
-APPLY_ACTIONS = frozenset({"propose_bump", "replace_provisional", "clamp_to_ceiling"})
+APPLY_ACTIONS = frozenset({"propose_bump", "replace_provisional"})
 
 
 def current_cycle_id(
@@ -71,8 +72,11 @@ def weekly_ops_plan_credit_ceiling_usd(
     plan_monthly_usd: float,
     share: float = DEFAULT_PLAN_CREDIT_SHARE_CAP,
 ) -> float:
-    """Max weekly_ops envelope as a share of listed plan credit."""
+    """Estimated-USD pseudo limit (warning only) as a share of listed plan credit."""
     return _round_usd(max(0.0, float(plan_monthly_usd) * float(share)))
+
+
+weekly_ops_plan_credit_warning_usd = weekly_ops_plan_credit_ceiling_usd
 
 
 def _resolved_plan_credit_share(
@@ -144,23 +148,20 @@ def assess_cycle_surplus(
     raw_weekly = transfer / WEEKS_PER_CYCLE
     cap_limit = min(float(max_weekly_bump_usd), rebase_cap * 0.5 if rebase_cap else 0.0)
     surplus_bump = _round_usd(max(0.0, min(raw_weekly, cap_limit)))
-    unclamped_cap = _round_usd(rebase_cap + surplus_bump)
+    proposed_cap = _round_usd(rebase_cap + surplus_bump)
+    weekly_bump = surplus_bump
     share = _resolved_plan_credit_share(share=plan_credit_share_cap, budget=budget)
-    ceiling = weekly_ops_plan_credit_ceiling_usd(plan_monthly_usd, share)
-    proposed_cap = _round_usd(min(unclamped_cap, ceiling)) if plan_monthly_usd else unclamped_cap
-    weekly_bump = _round_usd(proposed_cap - rebase_cap)
-    ceiling_bound = bool(plan_monthly_usd and unclamped_cap > ceiling)
+    warning_usd = weekly_ops_plan_credit_warning_usd(plan_monthly_usd, share)
+    spent = float(ops.get("estimated_spend_weekly_ops_usd_this_week") or 0.0)
+    above_warning = bool(plan_monthly_usd and warning_usd > 0 and proposed_cap > warning_usd)
+    spent_over_warning = bool(warning_usd > 0 and spent >= warning_usd)
 
-    if abs(proposed_cap - live_cap) < 0.01:
+    if weekly_bump <= 0:
         action = "none"
-    elif ceiling_bound and proposed_cap < live_cap:
-        action = "clamp_to_ceiling"
     elif existing.get("status") == "provisional" and existing.get("review_cycle_id"):
         action = "replace_provisional" if replace_provisional else "already_provisional"
-    elif weekly_bump > 0:
-        action = "propose_bump"
     else:
-        action = "none"
+        action = "propose_bump"
 
     return {
         "schema_version": 1,
@@ -176,10 +177,13 @@ def assess_cycle_surplus(
         "transfer_usd": transfer,
         "weekly_bump_usd": weekly_bump,
         "surplus_weekly_bump_usd": surplus_bump,
-        "unclamped_weekly_ops_cap_usd": unclamped_cap,
+        "unclamped_weekly_ops_cap_usd": proposed_cap,
         "plan_credit_share_cap": share,
-        "plan_credit_ceiling_usd": ceiling,
-        "ceiling_bound": ceiling_bound,
+        "plan_credit_warning_usd": warning_usd,
+        "plan_credit_ceiling_usd": warning_usd,
+        "plan_credit_share_is_warning": True,
+        "ceiling_bound": above_warning,
+        "spent_over_plan_credit_warning": spent_over_warning,
         "max_weekly_bump_usd": _round_usd(max_weekly_bump_usd),
         "current_weekly_ops_cap_usd": live_cap,
         "rebase_weekly_ops_cap_usd": rebase_cap,
@@ -195,8 +199,8 @@ def assess_cycle_surplus(
             "expose remaining credits to the API. --unused-usd is preferred when "
             "leftover exceeds listed plan_monthly_usd. Transfer is a provisional "
             "weekly_ops_cap raise only — rememo daily caps stay at 3. "
-            "weekly_ops cannot exceed plan_credit_share_cap of plan_monthly_usd "
-            "(default 15%) so included credit remains for development."
+            "plan_credit_share_cap of plan_monthly_usd (default 15%) is a "
+            "warning on estimated weekly_ops USD, not a hard cap."
         ),
     }
 
@@ -250,16 +254,18 @@ def apply_cycle_surplus(
         if assessment.get("plan_credit_share_cap") is not None
         else _resolved_plan_credit_share(share=None, budget=budget)
     )
-    ceiling = float(
-        assessment.get("plan_credit_ceiling_usd")
-        if assessment.get("plan_credit_ceiling_usd") is not None
-        else weekly_ops_plan_credit_ceiling_usd(
-            float(assessment.get("plan_monthly_usd") or budget.get("plan_monthly_usd") or 0.0),
-            share,
+    warning_usd = float(
+        assessment.get("plan_credit_warning_usd")
+        if assessment.get("plan_credit_warning_usd") is not None
+        else (
+            assessment.get("plan_credit_ceiling_usd")
+            if assessment.get("plan_credit_ceiling_usd") is not None
+            else weekly_ops_plan_credit_warning_usd(
+                float(assessment.get("plan_monthly_usd") or budget.get("plan_monthly_usd") or 0.0),
+                share,
+            )
         )
     )
-    if ceiling > 0:
-        proposed = min(proposed, ceiling)
     provisional = {
         "status": "provisional",
         "previous_weekly_ops_cap_usd": previous,
@@ -274,7 +280,9 @@ def apply_cycle_surplus(
         "transfer_fraction": assessment.get("transfer_fraction"),
         "plan_monthly_usd": assessment.get("plan_monthly_usd"),
         "plan_credit_share_cap": share,
-        "plan_credit_ceiling_usd": ceiling,
+        "plan_credit_warning_usd": warning_usd,
+        "plan_credit_ceiling_usd": warning_usd,
+        "plan_credit_share_is_warning": True,
         "ceiling_bound": bool(assessment.get("ceiling_bound")),
         "replaced_prior_provisional": bool(replacing and existing.get("status") == "provisional"),
     }
@@ -340,8 +348,8 @@ def review_cycle_surplus(
         or budget.get("plan_monthly_usd")
         or 0.0
     )
-    ceiling = weekly_ops_plan_credit_ceiling_usd(monthly, share)
-    revert_to = min(previous, ceiling) if ceiling > 0 else previous
+    warning_usd = weekly_ops_plan_credit_warning_usd(monthly, share)
+    revert_to = previous
     spent = float(ops.get("estimated_spend_weekly_ops_usd_this_week") or 0.0)
     used_extra = previous > 0 and spent > previous * 0.8
     recommend = "keep" if used_extra else "revert"
@@ -358,13 +366,15 @@ def review_cycle_surplus(
         "previous_weekly_ops_cap_usd": previous,
         "revert_weekly_ops_cap_usd": revert_to,
         "plan_credit_share_cap": share,
-        "plan_credit_ceiling_usd": ceiling,
+        "plan_credit_warning_usd": warning_usd,
+        "plan_credit_ceiling_usd": warning_usd,
+        "plan_credit_share_is_warning": True,
         "current_weekly_ops_cap_usd": float(ops.get("weekly_ops_cap_usd") or 0.0),
         "provisional": provisional,
         "note": (
             "Keep if weekly_ops regularly used the extra room; revert if leftover "
-            "stayed high. Revert still respects the plan-credit share ceiling. "
-            "Human must pass --keep or --revert."
+            "stayed high. The 15% plan-credit share is a warning on estimated "
+            "USD, not a revert clamp. Human must pass --keep or --revert."
         ),
     }
     if keep is None:
@@ -377,9 +387,6 @@ def review_cycle_surplus(
         return result
 
     if keep:
-        live = float(budget.get("weekly_ops_cap_usd") or 0.0)
-        if ceiling > 0:
-            budget["weekly_ops_cap_usd"] = min(live, ceiling)
         budget["weekly_ops_plan_credit_share_cap"] = share
         budget["cycle_surplus_provisional"] = {
             **provisional,
