@@ -420,8 +420,7 @@ def weekly_ops_budget_status(
     near_limit = bool(enforce and cap > 0 and (remaining / cap) <= NEAR_LIMIT_REMAINING_FRACTION)
     monthly = float(budget.get("plan_monthly_usd") or 0.0)
     share = float(
-        budget.get("weekly_ops_plan_credit_share_cap")
-        or DEFAULT_WEEKLY_OPS_PLAN_CREDIT_SHARE_CAP
+        budget.get("weekly_ops_plan_credit_share_cap") or DEFAULT_WEEKLY_OPS_PLAN_CREDIT_SHARE_CAP
     )
     ceiling = round(max(0.0, monthly * share), 2)
     exceeds_plan_share = bool(monthly > 0 and cap > ceiling)

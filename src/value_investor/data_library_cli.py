@@ -1183,7 +1183,11 @@ def cmd_policy(args: argparse.Namespace) -> int:
         requested = float(args.weekly_ops_cap_usd)
         budget["weekly_ops_cap_usd"] = requested
         changed = True
-        monthly = float(budget.get("plan_monthly_usd") or policy.get("budget", {}).get("plan_monthly_usd") or 0.0)
+        monthly = float(
+            budget.get("plan_monthly_usd")
+            or policy.get("budget", {}).get("plan_monthly_usd")
+            or 0.0
+        )
         share = float(
             budget.get("weekly_ops_plan_credit_share_cap")
             or DEFAULT_WEEKLY_OPS_PLAN_CREDIT_SHARE_CAP
@@ -1252,11 +1256,7 @@ def cmd_policy(args: argparse.Namespace) -> int:
         f"{float(ops_status.get('weekly_ops_plan_credit_share_cap') or 0):.0%} of "
         f"${ops_status.get('plan_monthly_usd')} = "
         f"${ops_status.get('weekly_ops_plan_credit_ceiling_usd')}"
-        + (
-            "  (cap exceeds ceiling)"
-            if ops_status.get("weekly_ops_cap_exceeds_plan_share")
-            else ""
-        )
+        + ("  (cap exceeds ceiling)" if ops_status.get("weekly_ops_cap_exceeds_plan_share") else "")
     )
     print(
         f"Ad hoc checkpoint: ${ladder.get('spend_since_checkpoint_usd', 0)} / "
