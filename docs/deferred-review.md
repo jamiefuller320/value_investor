@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T09:13:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T09:20:41+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -121,6 +121,9 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N64 | **Do not raise discretionary experiment cap above 12 yet** | Live inventory is 1 open task / 4 shadows against the generous 12/8 soft budget. Raising the cap further would not add coverage (lifecycle stages are already perpetual) and would weaken the agent-triage signal. Keep 12/8 until Sunday open tasks repeatedly hit the 75% warn. | experiment_inventory.complexity.warn_discretionary_tasks is true on 3 consecutive Sunday director runs |
 | N65 | **Library ingest director (agent orchestration)** | No ingest-director module exists. ingest_critical_path already classifies blockers; the euro stall was a deterministic discovery-vs-deepen budget bug, not a missing LLM planner. A weekly director like learning-director would not fetch bodies. | Euro deepen still starves after the discovery time cap, or we need cross-market ingest scheduling beyond critical-path + budget |
 | N66 | **Do not lift shard capacity just because GHA minutes are free** | Public GitHub Actions minutes are unlimited on standard runners, but weekly_paper_shard_capacity stays at 1 and research_all_graduated stays false. Cursor weekly_ops, per-job timeouts, and depth-first quality are the binding limits — not unused Actions minutes. | euro_depth Phase 3 plus filing parity are green and a second shard is promoted by L127 |
+| N67 | **Mine agent-run follow-up transcripts for latent gaps** | This morning's research-vs-learning miss surfaced from a follow-up, not eval. Horizon already forbids conversation transcript mining; keep fragments + system_gaps as the capture path. | Monthly horizon has missed two more consumer-path gaps that only appeared in agent follow-ups after system_gaps.json has run for 8 Sundays |
+| N68 | **Raise Sunday fragment capture beyond director cap of 2** | Learning director emits at most 2 blue-sky fragments per week; analysis-review and post-run emit none. That is intentional, not a transcript substitute. Do not raise the cap or add review-agent fragments until system_gaps has a track record. | After 8 Sundays of system_gaps.json, a follow-up question still surfaces a consumer-path gap that was neither a system_gaps flag nor an ftse-defer entry |
+| N69 | **Auto-promote produce and learning-clock system_gaps flags** | Persist/publish/apply high flags now open eng-sgap-* rows. Produce and learning_clock flags stay proposed because they are judgment calls (rememo vs more ingest vs clock policy), not a wire-what-we-wrote miss. | The first persist/publish/apply eng-sgap tasks have merged and the remaining produce/clock flags still repeat for two Sundays |
 
 ---
 
@@ -275,7 +278,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L252 | **Intra-day entry tranche cadence** | Weekday paper-auto marks can only score daily/weekly DCA. Sub-daily tranche timing needs intra-day prices and is not required to answer whether spreading a decided notional de-risks entries. | Entry DCA overlay has a winning weekday/weekly cadence and intra-day price history is routinely available for FTSE names |
 | L253 | **Archive-history DCA overlay to accelerate cadence evidence** | Forward weekday marks will take weeks to close 12 episodes. An exit-timing-archive-style replay on weekly screens could seed priors for lump-sum vs weekly DCA without waiting for new paper buys. | Entry DCA overlay has fewer than 12 closed episodes after several weeks of weekday paper-auto, or Sunday analysis-review flags thin starter-stage evidence |
 | L264 | **Rememo thin euro_depth buy-tier memos after filings deepen** | Sunday ladder skips all 44 euro_depth buy-tier names because a first memo already exists. Most are still mode=initial with 0 filing bodies. Dedupe should not block a rememo once euro_filings bodies increase. | euro_depth buy-tier indexed_without_body drops and ingest_parity_met is near true |
-| L267 | **Deepen Azelis AZE.BR filings after verdict catch-up** | AZE.BR has an accumulate verdict but only one indexed filing body. Next rememo needs buy-tier membership plus the usual body-lag threshold (10 adequate/thin, 25 strong), not merely bodies rising from 1 to 2. deepen-thin default (0 bodies) will not list it. | AZE.BR is buy-tier and euro_depth filings_with_body leads the memo by the rememo lag threshold |
+| L269 | **Deepen Azelis AZE.BR filings after verdict catch-up** | AZE.BR has an accumulate verdict but only one indexed filing body. Next rememo needs buy-tier membership plus the usual body-lag threshold (10 adequate/thin, 25 strong), not merely bodies rising from 1 to 2. deepen-thin default (0 bodies) will not list it. | AZE.BR is buy-tier and euro_depth filings_with_body leads the memo by the rememo lag threshold |
 
 ### Ops / reliability
 

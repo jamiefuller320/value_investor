@@ -375,3 +375,16 @@ def test_dashboard_assets_include_market_status_grid():
     assert 'id="market-status-body"' in html
     assert ".market-status-grid" in css
     assert ".market-tile" in css
+
+
+def test_dashboard_assets_include_system_gaps_card():
+    app = Path("docs/app.js").read_text(encoding="utf-8")
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    css = Path("docs/styles.css").read_text(encoding="utf-8")
+    assert "function renderSystemGapsCard(data)" in app
+    assert "function openSystemGapCard(flagId)" in app
+    assert 'id="system-gaps-card"' in app
+    assert 'id="system-gaps-dialog"' in html
+    assert 'id="system-gaps-body"' in html
+    assert ".system-gaps-grid" in css
+    assert ".system-gap-tile" in css
