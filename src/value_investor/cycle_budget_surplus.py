@@ -343,11 +343,7 @@ def review_cycle_surplus(
         share=provisional.get("plan_credit_share_cap"),
         budget=budget,
     )
-    monthly = float(
-        provisional.get("plan_monthly_usd")
-        or budget.get("plan_monthly_usd")
-        or 0.0
-    )
+    monthly = float(provisional.get("plan_monthly_usd") or budget.get("plan_monthly_usd") or 0.0)
     warning_usd = weekly_ops_plan_credit_warning_usd(monthly, share)
     revert_to = previous
     spent = float(ops.get("estimated_spend_weekly_ops_usd_this_week") or 0.0)

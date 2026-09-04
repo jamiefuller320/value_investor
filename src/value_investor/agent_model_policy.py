@@ -423,8 +423,7 @@ def weekly_ops_budget_status(
     near_limit = bool(enforce and cap > 0 and (remaining / cap) <= NEAR_LIMIT_REMAINING_FRACTION)
     monthly = float(budget.get("plan_monthly_usd") or 0.0)
     share = float(
-        budget.get("weekly_ops_plan_credit_share_cap")
-        or DEFAULT_WEEKLY_OPS_PLAN_CREDIT_SHARE_CAP
+        budget.get("weekly_ops_plan_credit_share_cap") or DEFAULT_WEEKLY_OPS_PLAN_CREDIT_SHARE_CAP
     )
     warning_usd = round(max(0.0, monthly * share), 2)
     spent_over_warning = bool(monthly > 0 and warning_usd > 0 and spent_ops >= warning_usd)
