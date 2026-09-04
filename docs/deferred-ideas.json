@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-04T11:32:19+00:00",
+  "updated_at": "2026-09-04T12:18:52+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -5761,6 +5761,40 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
       "added_at": "2026-09-04T11:32:19+00:00"
+    },
+    {
+      "id": "L274",
+      "category": "later",
+      "section": "ops",
+      "title": "Mid-run cancel of a live euro ingest job",
+      "summary": "The P2 scheduler waits, then skips if the head is still running. It does not cancel an in-flight euro-ingest-loop or stream-1 job. Add preemption only if wait+skip leaves leftover unused while the head routinely overruns spare_wait_seconds.",
+      "revisit_when": "Spare streams skip yield_after_wait on most peak slots for two consecutive weeks, or euro ingest regularly exceeds 40 minutes after wait.",
+      "tags": [
+        "ingest",
+        "scheduler",
+        "preempt",
+        "gha"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
+      "added_at": "2026-09-04T12:18:52+00:00"
+    },
+    {
+      "id": "L275",
+      "category": "later",
+      "section": "ops",
+      "title": "Cross-workflow library ingest push mutex",
+      "summary": "Artifact-push retries already absorb most euro vs spare commit races. A dedicated mutex or serialized push lock is only worth it if wait+leftover still produces repeated push failures on docs/data/library.",
+      "revisit_when": "library ingest artifact pushes fail more than twice in a week after the scheduler wait is live on main.",
+      "tags": [
+        "ingest",
+        "scheduler",
+        "git",
+        "gha"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
+      "added_at": "2026-09-04T12:18:52+00:00"
     }
   ],
   "fragments": [

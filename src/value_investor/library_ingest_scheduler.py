@@ -333,9 +333,18 @@ def evaluate_scheduler(
         config=config,
         head_needs_fat=True,
     ):
+        skip_targets, skip_runtime, _skip_mode = scale_spare_budget(
+            stream,
+            requested_targets,
+            requested_runtime,
+            config=config,
+            head_needs_fat=True,
+        )
         return IngestSchedulerDecision(
             action="skip",
             stream=stream,
+            max_targets=skip_targets,
+            max_runtime_seconds=skip_runtime,
             reason="Head busyness unknown; stream 2 yields the peak hour as a fallback.",
             code="peak_hour_fallback",
             cascade=cascade.to_dict(),

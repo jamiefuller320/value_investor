@@ -283,12 +283,8 @@ def test_dispatch_attaches_fill_down_scheduler_markets():
     from value_investor.library_ingest_dispatch import _scheduler_stream_markets
 
     evaluation = {
-        "parallel_sprint_status": [
-            {"market_id": "sp500", "should_run_parallel_ingest": False}
-        ],
-        "parallel_sprint_2_status": [
-            {"market_id": "asx200", "should_run_parallel_ingest": False}
-        ],
+        "parallel_sprint_status": [{"market_id": "sp500", "should_run_parallel_ingest": False}],
+        "parallel_sprint_2_status": [{"market_id": "asx200", "should_run_parallel_ingest": False}],
     }
     gaps = {
         "unmeasured_buy_tier": 2,
@@ -310,8 +306,6 @@ def test_dispatch_attaches_fill_down_scheduler_markets():
         "value_investor.library_ingest_dispatch.snapshot_library_buy_tier_filing_health",
         side_effect=_health,
     ):
-        attached = _scheduler_stream_markets(
-            evaluation, policy=POLICY, library_root=Path(".")
-        )
+        attached = _scheduler_stream_markets(evaluation, policy=POLICY, library_root=Path("."))
     assert attached["scheduler_stream_1_markets"] == ["ftse_smallcap"]
     assert attached["scheduler_stream_2_markets"] == ["ftse_smallcap"]

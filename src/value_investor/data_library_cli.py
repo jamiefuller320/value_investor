@@ -1526,9 +1526,7 @@ def cmd_library_ingest_schedule(args: argparse.Namespace) -> int:
         from value_investor.market_shard_phases import evaluate_market_phase
 
         phase2_ready = bool(
-            evaluate_market_phase(head, library_root=args.root, policy=policy).get(
-                "phase2_ready"
-            )
+            evaluate_market_phase(head, library_root=args.root, policy=policy).get("phase2_ready")
         )
     except Exception:  # noqa: BLE001
         phase2_ready = False

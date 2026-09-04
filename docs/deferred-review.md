@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T11:32:19+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T12:18:52+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -341,6 +341,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L262 | **Shared GHA concurrency budget across live ingest streams** | Public-repo Actions minutes are free, but more live markets add parallel ingest jobs that already contend for hosted runners and the Sunday quiet bundle. Track concurrent ingest streams and runner-queue failures as the real compute bind, not a minutes quota. | A fourth market sits on FTSE-volume ingest, runner-acquisition flakes recur, or the repo goes private |
 | L263 | **Apply committed FTSE memos to the live research overlay** | 54 of 59 FTSE buy-tier names already have accumulate memos under docs/data/research/, but latest.json research[] only lists 18, so weekday paper overlay misses names such as JSG.L. Refresh should read the committed store, not only the last publish index. | Next weekday paper-auto or overlay-refresh change, or when AI judgment looks under-gated vs the memo library |
 | L271 | **Filter machinery spend by weekday decision inputs** | Keep investing in data depth, recency, and utilization, but only when the work changes what a weekday paper-auto / AI-judgment pass can see (filings, FCF basis, overlay bind, memo recency). Extra FTSE ingest on a green buy-tier, new tracks, and live breadth are factory, not foundation. | A proposed engineering or ingest change cannot name the overlay field or buy-tier name it would change by the next Sunday cycle |
+| L274 | **Mid-run cancel of a live euro ingest job** | The P2 scheduler waits, then skips if the head is still running. It does not cancel an in-flight euro-ingest-loop or stream-1 job. Add preemption only if wait+skip leaves leftover unused while the head routinely overruns spare_wait_seconds. | Spare streams skip yield_after_wait on most peak slots for two consecutive weeks, or euro ingest regularly exceeds 40 minutes after wait. |
+| L275 | **Cross-workflow library ingest push mutex** | Artifact-push retries already absorb most euro vs spare commit races. A dedicated mutex or serialized push lock is only worth it if wait+leftover still produces repeated push failures on docs/data/library. | library ingest artifact pushes fail more than twice in a week after the scheduler wait is live on main. |
 
 ---
 

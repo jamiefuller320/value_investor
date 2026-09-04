@@ -113,9 +113,9 @@ def run_library_ingest_sprint(
         from value_investor.market_shard_phases import evaluate_market_phase
 
         phase2_ready = bool(
-            evaluate_market_phase(
-                head_id, library_root=library_root, policy=policy
-            ).get("phase2_ready")
+            evaluate_market_phase(head_id, library_root=library_root, policy=policy).get(
+                "phase2_ready"
+            )
         )
     except Exception:  # noqa: BLE001
         phase2_ready = False
@@ -131,8 +131,6 @@ def run_library_ingest_sprint(
         parallel_stream=parallel_stream,
     )
     if markets is None:
-        from value_investor.library_ingest_scheduler import fill_down_markets
-
         extra = []
         for mid in list(policy.get("market_queue") or []):
             name = str(mid or "").strip()
@@ -171,7 +169,8 @@ def run_library_ingest_sprint(
     max_targets = decision.max_targets
     max_runtime_seconds = decision.max_runtime_seconds
     outcome = LibraryIngestSprintResult(
-        cascade=decision.cascade or evaluate_ingest_cascade(
+        cascade=decision.cascade
+        or evaluate_ingest_cascade(
             policy,
             head_at_parity=ingest_parity_met(head_health),
             now=when,
