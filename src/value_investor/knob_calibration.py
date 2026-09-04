@@ -509,7 +509,9 @@ def calibrate_track(
 
     warnings: list[str] = []
     if any(entry.get("bootstrapped") for entry in acted):
-        if any(not entry.get("bootstrap_pit_research") for entry in acted if entry.get("bootstrapped")):
+        if any(
+            not entry.get("bootstrap_pit_research") for entry in acted if entry.get("bootstrapped")
+        ):
             warnings.append(
                 "rebalance_log contains bootstrapped entries without PIT research (L113)"
             )

@@ -118,10 +118,7 @@ def summarize_buy_tier_memo_utility(
     else:
         recurring = recurring[:top_n]
 
-    top_tags = [
-        {"tag": tag, "count": count}
-        for tag, count in tag_counts.most_common(top_n)
-    ]
+    top_tags = [{"tag": tag, "count": count} for tag, count in tag_counts.most_common(top_n)]
 
     return {
         "buy_tier_count": len(buy_tier),

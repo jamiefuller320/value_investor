@@ -216,9 +216,7 @@ def test_spawn_fair_twins_dry_run_empty_and_apply(tmp_path: Path, capsys):
         ],
     )
 
-    preview = spawn_fair_cost_twins_for_recommendations(
-        root, data, dry_run=True, max_spawns=2
-    )
+    preview = spawn_fair_cost_twins_for_recommendations(root, data, dry_run=True, max_spawns=2)
     assert preview["dry_run"] is True
     assert preview["recommend_count"] == 3
     assert preview["selected_count"] == 2
@@ -226,9 +224,7 @@ def test_spawn_fair_twins_dry_run_empty_and_apply(tmp_path: Path, capsys):
     assert len(preview["skipped_budget"]) == 1
     assert not (root / "ai_judgment_calibrated_fair").exists()
 
-    applied = spawn_fair_cost_twins_for_recommendations(
-        root, data, dry_run=False, max_spawns=2
-    )
+    applied = spawn_fair_cost_twins_for_recommendations(root, data, dry_run=False, max_spawns=2)
     assert applied["spawned_count"] == 2
     assert applied["created_count"] == 2
     twin_id = fair_twin_track_id("ai_judgment_calibrated")
