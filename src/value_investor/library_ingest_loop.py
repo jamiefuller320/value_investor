@@ -47,6 +47,7 @@ from value_investor.summary import CompanyReport
 logger = logging.getLogger(__name__)
 
 DEFAULT_LIBRARY_INGEST_HEALTH_LOG = Path("docs/data/library/euro_ingest_health_log.json")
+DEFAULT_LIBRARY_INGEST_PINS_PATH = Path("docs/data/library_ingest_pins.json")
 DEFAULT_WEEKDAY_BATCH_MAX_TARGETS = 12
 DEFAULT_WEEKDAY_MAX_RUNTIME_SECONDS = 2100.0
 DEFAULT_MAINTENANCE_MAX_TARGETS = 62
@@ -98,6 +99,8 @@ class LibraryIngestLoopResult:
     leftover_seconds: float | None = None
     blocker_ticker: str | None = None
     per_ticker_max_seconds: float | None = None
+    pin_tickers: list[str] = field(default_factory=list)
+    ingest_deviations: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -137,6 +140,8 @@ class LibraryIngestLoopResult:
             "leftover_seconds": self.leftover_seconds,
             "blocker_ticker": self.blocker_ticker,
             "per_ticker_max_seconds": self.per_ticker_max_seconds,
+            "pin_tickers": list(self.pin_tickers),
+            "ingest_deviations": self.ingest_deviations,
         }
 
 
@@ -362,6 +367,64 @@ def select_library_ingest_targets(
     return scored[: max(1, int(max_targets))] if scored else []
 
 
+def load_library_ingest_pins(
+    market_id: str,
+    *,
+    path: Path | None = None,
+    now: datetime | None = None,
+) -> list[str]:
+    """Committed intensive pins for one library market (expired rows are ignored)."""
+    path = Path(path or DEFAULT_LIBRARY_INGEST_PINS_PATH)
+    if not path.exists():
+        return []
+    try:
+        payload = read_json(path)
+    except (OSError, ValueError, TypeError):
+        return []
+    if not isinstance(payload, dict):
+        return []
+    current = now or datetime.now(UTC)
+    wanted = str(market_id or "").strip()
+    out: list[str] = []
+    seen: set[str] = set()
+    for raw in payload.get("pins") or []:
+        if not isinstance(raw, dict):
+            continue
+        ticker = str(raw.get("ticker") or "").strip().upper()
+        market = str(raw.get("market_id") or "").strip()
+        if not ticker or (market and market != wanted):
+            continue
+        raw_until = str(raw.get("until") or "").strip()
+        if raw_until:
+            try:
+                until = datetime.fromisoformat(raw_until.replace("Z", "+00:00"))
+            except ValueError:
+                continue
+            if until.tzinfo is None:
+                until = until.replace(tzinfo=UTC)
+            if current >= until:
+                continue
+        if ticker not in seen:
+            seen.add(ticker)
+            out.append(ticker)
+    return out
+
+
+def merge_library_ingest_pin_tickers(
+    pin_tickers: list[str] | None,
+    committed: list[str] | None,
+) -> list[str] | None:
+    """CLI/workflow pins first, then committed pins. Empty becomes ``None``."""
+    merged: list[str] = []
+    seen: set[str] = set()
+    for token in [*(pin_tickers or []), *(committed or [])]:
+        key = str(token or "").strip().upper()
+        if key and key not in seen:
+            seen.add(key)
+            merged.append(key)
+    return merged or None
+
+
 def load_library_ingest_blocker_cooldown(
     library_root: Path,
     market_id: str,
@@ -458,13 +521,16 @@ def _ingest_single_library_target(
         ticker_budget_hit = deadline_reached(deadline_monotonic)
     filings_dir = sources_dir / "filings"
     if not ticker_budget_hit:
-        refetch_residual_filing_bodies(
+        residual_meta = refetch_residual_filing_bodies(
             filings_dir,
             ticker=target.ticker,
             company_name=target.name,
             max_bodies=max_bodies,
+            deadline_monotonic=deadline_monotonic,
         )
-        ticker_budget_hit = deadline_reached(deadline_monotonic)
+        ticker_budget_hit = bool(residual_meta.get("deadline_hit")) or deadline_reached(
+            deadline_monotonic
+        )
     if not ticker_budget_hit:
         ir_meta = refetch_ir_allowlist_filing_bodies(
             filings_dir,
@@ -519,6 +585,8 @@ def run_library_ingest_loop(
     discovery_scan: bool | None = None,
     maintenance_mode: bool = False,
     per_ticker_max_seconds: float | None = DEFAULT_PER_TICKER_MAX_SECONDS,
+    pins_path: Path | None = None,
+    deviations_path: Path | None = None,
 ) -> LibraryIngestLoopResult:
     """
     Weekday deepen pass for library buy-tier names (euro_depth pilot and successors).
@@ -532,6 +600,11 @@ def run_library_ingest_loop(
         health_log_path or resolve_library_ingest_health_log_path(library_root, market_id)
     )
     result = LibraryIngestLoopResult(market_id=market_id, maintenance_mode=maintenance_mode)
+    pin_tickers = merge_library_ingest_pin_tickers(
+        pin_tickers,
+        load_library_ingest_pins(market_id, path=pins_path),
+    )
+    result.pin_tickers = list(pin_tickers or [])
     result.health_before = snapshot_library_ingest_health(market_id, library_root=library_root)
     if maintenance_mode and max_targets == DEFAULT_WEEKDAY_BATCH_MAX_TARGETS:
         max_targets = DEFAULT_MAINTENANCE_MAX_TARGETS
@@ -570,8 +643,12 @@ def run_library_ingest_loop(
         logger.warning("Failed to persist ingest critical path for %s: %s", market_id, exc)
 
     # Sprint + maintenance: run discovery whenever critical path says so (or explicit).
+    # A pin is intensive single-ticker work — do not spend 25% of the slot on listing.
     if discovery_scan is None:
-        discovery_scan = bool(maintenance_mode or critical.force_discovery_scan)
+        if pin_tickers:
+            discovery_scan = False
+        else:
+            discovery_scan = bool(maintenance_mode or critical.force_discovery_scan)
 
     gap_closure_record: dict[str, Any] | None = None
     if gap_closure_spec:
@@ -885,6 +962,19 @@ def run_library_ingest_loop(
         from value_investor.engineering_queue import refresh_engineering_queue_ui
 
         refresh_engineering_queue_ui(tasks_path=tasks_path)
+
+    try:
+        from value_investor.ingest_deviations import record_library_ingest_deviations
+
+        result.ingest_deviations = record_library_ingest_deviations(
+            market_id=market_id,
+            results=result.results,
+            improved=result.improved,
+            path=deviations_path,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Ingest deviation persist failed for %s: %s", market_id, exc)
+        result.ingest_deviations = {"error": str(exc)}
 
     return result
 

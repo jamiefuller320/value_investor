@@ -78,6 +78,7 @@ Survivors are **starting priors for learning-loop refinement** — never auto-ap
 | **Register daily GHA secret-hygiene cron** on cron-job.org after merge (`import_cron_jobs.py --job gha-secret-hygiene`) | Human | [gha-secret-hygiene.md](gha-secret-hygiene.md#automated-daily-check) |
 | **Sync valid Cursor key into GitHub Actions** (`CURSOR_API_KEY_V2` + `CURSOR_API_KEY`) when legacy secret is dead/missing | Human | [gha-secret-hygiene.md](gha-secret-hygiene.md#which-secret-workflows-use) |
 | **Override FCF auto policy** only when majority/filing fallback is wrong (or so-what `fcf_bridge_needed` with no filing/company figure) | Human (residual) | [fcf-basis-bridges.md](fcf-basis-bridges.md#when-to-review-residual) |
+| **Review ingest deviations** when Automation → Ingest deviations has open rows (IR exhausted / weekday cap + leftover IWB). Approve pins intensive; dismiss closes 7 days. Do not auto-replace IR URLs | Human | [ingest-deviations.md](ingest-deviations.md#what-needs-a-human) |
 
 ## Maintenance
 
