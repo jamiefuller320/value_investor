@@ -2995,7 +2995,20 @@
           "ASSA-B.ST"
         ],
         "rerun_library_ingest_loop": true,
-        "doc": "docs/ops/library-ingest-escalation.md"
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260904-01",
+        "verified_at": "2026-09-04T13:24:11.259607+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_research_filings.py",
+            "tests/test_gap_fill_deepen.py",
+            "tests/test_ingest_improvement.py",
+            "tests/test_companies_house.py"
+          ],
+          "output_tail": "........................................................................ [ 29%]\n........................................................................ [ 59%]\n........................................................................ [ 89%]\n..........................                                               [100%]\n242 passed in 70.53s (0:01:10)"
+        }
       },
       "acceptance_criteria": [
         "Representative euro_depth buy-tier tickers gain filing indexes with bodies under the market canonical screen path",
@@ -3023,11 +3036,14 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260904-01.md",
       "branch_name": "cursor/eng-20260904-01-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-04T13:14:46.848464+00:00"
+      "completed_at": "2026-09-04T13:14:46.848464+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/433",
+      "pr_number": 433,
+      "merged_at": "2026-09-04T13:24:11.260582+00:00"
     },
     {
       "id": "eng-20260902-01",
@@ -4048,6 +4064,17 @@
     }
   ],
   "ingest_health": {
+    "snapshot_at": "2026-09-04T13:22:57.583068+00:00",
+    "buy_tier_count": 59,
+    "measured_tickers": 59,
+    "unmeasured_buy_tier": 0,
+    "unmeasured_tickers": [],
+    "zero_body_buy_tier": 0,
+    "zero_body_tickers": [],
+    "indexed_without_body": 4,
+    "filings_with_body": 3850
+  },
+  "ingest_health_before": {
     "snapshot_at": "2026-09-03T12:30:20.084280+00:00",
     "buy_tier_count": 59,
     "measured_tickers": 59,
@@ -4058,19 +4085,8 @@
     "indexed_without_body": 3,
     "filings_with_body": 3840
   },
-  "ingest_health_before": {
-    "snapshot_at": "2026-09-02T13:36:20.589532+00:00",
-    "buy_tier_count": 59,
-    "measured_tickers": 59,
-    "unmeasured_buy_tier": 0,
-    "unmeasured_tickers": [],
-    "zero_body_buy_tier": 0,
-    "zero_body_tickers": [],
-    "indexed_without_body": 3,
-    "filings_with_body": 3837
-  },
-  "reprioritized_at": "2026-09-03T12:30:20.084398+00:00",
-  "reprioritized_after_task": "eng-20260903-01",
+  "reprioritized_at": "2026-09-04T13:22:57.583180+00:00",
+  "reprioritized_after_task": "eng-20260904-01",
   "library_ingest_health": {
     "snapshot_at": "2026-09-04T12:55:14.575018+00:00",
     "market_id": "euro_depth",
