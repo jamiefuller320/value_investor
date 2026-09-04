@@ -142,6 +142,128 @@ def test_publish_memo_backfill_batch_merges_research_index(tmp_path: Path):
     assert tickers == {"OLD.L", "NEW.L"}
     assert payload["reports"][0]["research_verdict"] == "accumulate"
     assert (docs / "research" / "NEW.L.md").exists()
+    raw = latest.read_text(encoding="utf-8")
+    assert "\n" not in raw.strip()
+
+
+def test_publish_memo_backfill_batch_restricts_output_copies(tmp_path: Path):
+    docs = tmp_path / "docs"
+    data = docs / "data" / "research"
+    data.mkdir(parents=True)
+    memo_dir = docs / "research"
+    memo_dir.mkdir()
+    latest = docs / "data" / "latest.json"
+    latest.write_text(
+        json.dumps(
+            {
+                "reports": [
+                    {
+                        "ticker": "NEW.L",
+                        "name": "New plc",
+                        "sector": "Industrials",
+                        "signal": "buy",
+                        "models_passed": 5,
+                        "model_count": 10,
+                        "composite_score": 0.7,
+                        "sector_composite_score": 0.65,
+                        "families_passed": 3,
+                        "passed_families": "cheapness",
+                        "data_quality_score": 0.9,
+                        "metrics_present": 18,
+                        "metrics_total": 20,
+                        "weeks_at_signal": 1,
+                        "signal_trend": "new",
+                        "conviction_score": 0.6,
+                        "stability_label": "new",
+                        "timing_signal": "neutral",
+                        "timing_score": 0.5,
+                        "rsi_14": 40.0,
+                        "price_vs_sma200_pct": 0.0,
+                        "action_note": "",
+                        "trade_plan": None,
+                        "summary": "summary",
+                        "passed_models": [],
+                        "key_metrics": {},
+                    }
+                ],
+                "research": [{"ticker": "OLD.L", "name": "Old plc"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    (memo_dir / "OLD.L.md").write_text("# weekday rememo OLD.L\n", encoding="utf-8")
+    old_committed = data / "OLD.L"
+    old_committed.mkdir()
+    (old_committed / "research.md").write_text("# committed OLD.L\n", encoding="utf-8")
+    (old_committed / "research.json").write_text(
+        json.dumps(
+            ResearchDocument(
+                ticker="OLD.L",
+                name="Old plc",
+                signal="buy",
+                version=2,
+                created_at="2026-09-02T00:00:00+00:00",
+                updated_at="2026-09-02T00:00:00+00:00",
+                mode="initial",
+                executive_summary="Weekday",
+                research_verdict="accumulate",
+            ).to_dict()
+        ),
+        encoding="utf-8",
+    )
+
+    output = tmp_path / "output"
+    stale = output / "research" / "OLD.L"
+    stale.mkdir(parents=True)
+    (stale / "research.md").write_text("# stale rebuild OLD.L\n", encoding="utf-8")
+    (stale / "research.json").write_text(
+        json.dumps(
+            ResearchDocument(
+                ticker="OLD.L",
+                name="Old plc",
+                signal="buy",
+                version=1,
+                created_at="2026-08-01T00:00:00+00:00",
+                updated_at="2026-08-01T00:00:00+00:00",
+                mode="initial",
+                executive_summary="Stale",
+                research_verdict="accumulate",
+            ).to_dict()
+        ),
+        encoding="utf-8",
+    )
+    fresh = output / "research" / "NEW.L"
+    fresh.mkdir()
+    (fresh / "research.md").write_text("# NEW.L memo\n", encoding="utf-8")
+    (fresh / "research.json").write_text(
+        json.dumps(
+            ResearchDocument(
+                ticker="NEW.L",
+                name="New plc",
+                signal="buy",
+                version=1,
+                created_at="2026-09-04T00:00:00+00:00",
+                updated_at="2026-09-04T00:00:00+00:00",
+                mode="initial",
+                executive_summary="Fresh",
+                research_verdict="accumulate",
+            ).to_dict()
+        ),
+        encoding="utf-8",
+    )
+
+    result = publish_memo_backfill_batch(
+        output,
+        dest_dir=docs,
+        latest_path=latest,
+        tickers=["NEW.L"],
+    )
+    assert result["tickers"] == ["NEW.L"]
+    assert (memo_dir / "NEW.L.md").read_text(encoding="utf-8") == "# NEW.L memo\n"
+    assert (memo_dir / "OLD.L.md").read_text(encoding="utf-8") == "# weekday rememo OLD.L\n"
+    assert (old_committed / "research.md").read_text(encoding="utf-8") == "# committed OLD.L\n"
+    assert not (data / "OLD.L" / "research.json").read_text(encoding="utf-8").count("Stale")
 
 
 @patch("value_investor.research.memo_backfill._process_ticker")

@@ -182,11 +182,17 @@ def _research_index_entry(ticker: str, meta: dict[str, Any], memo_rel: str) -> d
     }
 
 
-def _copy_research_memos(output_dir: Path, dest_dir: Path) -> list[dict[str, Any]]:
+def _copy_research_memos(
+    output_dir: Path,
+    dest_dir: Path,
+    *,
+    tickers: list[str] | None = None,
+) -> list[dict[str, Any]]:
     """Copy this-run memos and merge any committed store the dest already holds."""
     memo_dir = dest_dir / "research"
     memo_dir.mkdir(parents=True, exist_ok=True)
     by_ticker: dict[str, dict[str, Any]] = {}
+    wanted = {str(t).strip().upper() for t in (tickers or []) if str(t).strip()} or None
 
     summary_path = output_dir / "research_summary.json"
     summary_docs: dict[str, dict[str, Any]] = {}
@@ -197,13 +203,20 @@ def _copy_research_memos(output_dir: Path, dest_dir: Path) -> list[dict[str, Any
                 if isinstance(item, dict) and item.get("ticker"):
                     summary_docs[str(item["ticker"])] = item
 
-    def _ingest_root(research_root: Path, *, overwrite_markdown: bool) -> None:
+    def _ingest_root(
+        research_root: Path,
+        *,
+        overwrite_markdown: bool,
+        restrict: set[str] | None = None,
+    ) -> None:
         if not research_root.is_dir():
             return
         for metadata_path in sorted(research_root.glob("*/research.json")):
             ticker = metadata_path.parent.name
             key = ticker.strip().upper()
             if not key:
+                continue
+            if restrict is not None and key not in restrict:
                 continue
             if key in by_ticker:
                 continue
@@ -221,7 +234,7 @@ def _copy_research_memos(output_dir: Path, dest_dir: Path) -> list[dict[str, Any
                 continue
             by_ticker[key] = _research_index_entry(ticker, meta, f"research/{slug}.md")
 
-    _ingest_root(output_dir / "research", overwrite_markdown=True)
+    _ingest_root(output_dir / "research", overwrite_markdown=True, restrict=wanted)
     _ingest_root(dest_dir / "data" / "research", overwrite_markdown=False)
 
     index = list(by_ticker.values())
