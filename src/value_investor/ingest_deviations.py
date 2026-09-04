@@ -120,9 +120,7 @@ def collect_library_ingest_deviations(
                 "recommended_action": recommended,
                 "summary": summary,
                 "human_required": True,
-                "auto_actions": (
-                    ["ir_rows_marked_unfetchable"] if ir_exhausted else []
-                ),
+                "auto_actions": (["ir_rows_marked_unfetchable"] if ir_exhausted else []),
                 "evidence": {
                     "improved": improved,
                     "ticker_budget_hit": budget_hit,
@@ -219,9 +217,7 @@ def record_library_ingest_deviations(
         if status == "approved":
             skipped_cooldown.append(key)
             continue
-        if status == "dismissed" and _in_cooldown(
-            prior, now=current, hours=DISMISS_COOLDOWN_HOURS
-        ):
+        if status == "dismissed" and _in_cooldown(prior, now=current, hours=DISMISS_COOLDOWN_HOURS):
             skipped_cooldown.append(key)
             continue
         existing[key] = {
@@ -232,9 +228,7 @@ def record_library_ingest_deviations(
         }
         opened.append(key)
 
-    open_rows = [
-        row for row in existing.values() if str(row.get("status") or "") in OPEN_STATUSES
-    ]
+    open_rows = [row for row in existing.values() if str(row.get("status") or "") in OPEN_STATUSES]
     closed_rows = [
         row for row in existing.values() if str(row.get("status") or "") not in OPEN_STATUSES
     ]
@@ -355,9 +349,9 @@ def review_ingest_deviation(
             ticker=str(found.get("ticker") or ""),
             market_id=str(found.get("market_id") or ""),
             reason=str(found.get("summary") or "ingest deviation approved"),
-            pins_path=Path(pins_path) if pins_path is not None else Path(
-                "docs/data/library_ingest_pins.json"
-            ),
+            pins_path=Path(pins_path)
+            if pins_path is not None
+            else Path("docs/data/library_ingest_pins.json"),
             until=until,
         )
         found["status"] = "approved"
