@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import gzip
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 
 from value_investor.archive_history import (
@@ -11,8 +12,6 @@ from value_investor.archive_history import (
     list_dashboard_archives,
 )
 from value_investor.backtest import load_run_snapshots
-from datetime import UTC, datetime
-
 from value_investor.paper_automation import AutomationConfig, default_ai_judgment_config
 from value_investor.paper_fund import PaperFund, PaperFundConfig
 from value_investor.rebalance_log import (
