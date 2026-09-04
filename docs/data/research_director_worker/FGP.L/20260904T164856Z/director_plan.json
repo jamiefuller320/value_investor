@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "source": "director",
+  "open_questions": [
+    "Which free-cash figure is usable for cover and for the FCF Yield / dividend-family passes: filing-aligned £362.6m, screen TTM £302.8m, or company-adjusted £73.8m — and can FY26 cash dividends paid (£38.9m Yahoo) plus buybacks (£50.4m Yahoo) plus the 18 June 2026 £100m programme be funded on the conservative basis?",
+    "After UK rail nationalisation and franchise roll-off, what is the continuing earnings mix (First Bus vs remaining First Rail vs open-access vs the London Overground preferred-operator award) and does the screen’s P/E 8.7 / 4.0% yield still describe that residual group?",
+    "Is First Bus passenger-volume weakness (H1 2026 share-price drop on “period of transition” headlines) structural municipal/franchising risk or a transitory volume dip, and did FY26 filing-adjusted earnings actually improve versus Yahoo’s FY26 revenue £4,332.7m / NI £118.3m / FCF £362.6m step-down from FY25 £4,653.5m / £127.5m / £597.8m?",
+    "Is economic leverage actually low at £137.7m adjusted net debt (screen D/E 19%) once IFRS-16 leases (Yahoo FY26 capital-lease obligations £850m, total debt £1,005m, Yahoo D/E 161%), restricted cash (£262.4m), and working capital (−£388m) are restored — and why did leverage_override / dual_leverage_display stay false?",
+    "Do the London Overground (~£3bn preferred operator, Dec 2025), December 2025 acquisition, Sizewell C transport award, and £48m Mistral Data disposal (completed 24 Aug 2026) raise or dilute returns versus the rail earnings they replace, and is cheapness already pricing a cash-return story that depends on the optimistic FCF definition?",
+    "With RSI 35, price ~2.5% below the 200-day MA, 12 weeks at strong_buy, and research already at Accumulate / medium risk (adjusted_signal buy), is the £173.14 / £166.14 limit plan buying policy-transition and FCF-definition risk too aggressively?",
+    "Yahoo FY26 income omits EPS and share count while issued shares fall 750.7m → 570.7m and ordinary shares are ~542.6m after treasury cancellation — are P/E, yield, and ROE on the post-buyback denominator, and is the Business Standard “FGP standalone NI −11%” item a different company (India FGP) rather than FirstGroup?"
+  ],
+  "meta_reflection": [
+    {
+      "topic": "evidence_ladder",
+      "observation": "Filings-first order is adequate for a UK transport name whose live numbers sit in RNS bodies (70 local bodies; 10 annual + 7 interim + 1 trading_update in the index). It is not adequate when the FY 2026 results RNS (3bf5ff09fbc5c747, 18 Jun 2026) is catalogued period=other/priority=0, while Google News “Across the Markets”, a December 2025 Acquisition, and IR decks occupy annual/interim slots. yahoo_quarterly_cashflow is on the ladder but empty (TTM cashflow suppressed); alternate_news is a dead step while news_manifest has 126 RSS-heavy items. Trading updates are first-class in the index summary but outside the annual/interim assignment rule; the only TU is the 26 Mar 2026 pre-close, now stale versus FY26 results and the 30 Jul AGM statement.",
+      "priority": "high"
+    },
+    {
+      "topic": "task_schema",
+      "observation": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for London Overground, Mistral disposal/completion, the £100m buyback launch, Sizewell C, the March pre-close TU, or the July AGM statement. No task type exists to reconcile filing / TTM / company-adjusted FCF or lease vs adjusted net debt. Naive first/last-of-period selection would assign CH accounts, an IR FY25 deck tagged interim, or an Acquisition tagged annual. summarize_filing_body cannot carry period=annual|interim|trading_update|corporate_action, so directors must smuggle the FY26 results body in as “annual” despite the catalog tag.",
+      "priority": "high"
+    },
+    {
+      "topic": "methodology",
+      "observation": "The screen still emits strong_buy (15/22, 5/5 families including dividend and FCF Yield) while fcf_basis_overlay is true but fcf_definition_divergence and fcf_divergence_flagged stay false on a £362.6m / £302.8m / £73.8m split. Leverage overlays did not fire despite Yahoo D/E 161% vs filing-adjusted £137.7m. cyclical_exposure_detected=false on a policy-exposed bus/rail operator; interim_quality_overlay=false despite empty Yahoo quarterlies; cash_conversion_overlay=false despite OCF 754→616 and FCF 598→363. failed_models is [] despite only 15/22 passes. Research overlays already cut to Accumulate / buy, so the director–worker memo is being asked to re-verify a signal the overlay has already downgraded without changing the headline strong_buy.",
+      "priority": "high"
+    },
+    {
+      "topic": "monitoring",
+      "observation": "A 12-week persistent strong_buy with rail nationalisation, an Overground award not yet earning, an in-flight £100m buyback, and no post-FY26 trading update has no watch schema (next TU / H1 2027, DfT franchise handback dates, Overground start, buyback completion, bus-franchising decisions). conviction_score=0.63 and stability_label=persistent are not substitutes for those monitors.",
+      "priority": "high"
+    },
+    {
+      "topic": "memo_structure",
+      "observation": "A generic FINANCIAL REVIEW / RISKS split will blend declining franchise rail with new contracted/open-access work and will not force BUS vs RAIL vs OPEN ACCESS, franchise vs contracted margin, or FCF-definition / lease-adjusted leverage sections. Without an explicit CORPORATE ACTIONS slot, workers can treat the £100m buyback, Mistral £48m sale, and Overground award as news colour rather than perimeter/capital-return facts. No required slot for ticker-collision hygiene (India FGP) or for restricted-cash vs unrestricted cash in net-debt bridges.",
+      "priority": "medium"
+    },
+    {
+      "topic": "other",
+      "observation": "filings_index body_path values point at docs/data/research/FGP.L/sources/... rather than this trial snapshot (70 local bodies vs 72 indexed). RNS direct/resolved pairs and IR/CH copies inflate coverage; PDMR items share body_content_hash. News is dominated by Transaction-in-Own-Shares reprints and syndicated DirectorsTalk “40–55% upside” SEO. Yahoo FY26 income omits EPS and share count that FY25 has. ir_presentation_metrics and fcf_bridge exist in the snapshot but sit outside the director’s allowed read set and the worker type list.",
+      "priority": "low"
+    }
+  ],
+  "procedural_suggestions": [
+    {
+      "area": "ingest",
+      "summary": "Retag FY-results RNS as period=annual (3bf5ff09fbc5c747) and do not tag IR results decks as interim, Acquisition or Google News wrappers as annual, or AGM statements as interim. Promote material contract-award / disposal / buyback-programme RNS out of period=other/priority=0. De-duplicate investegate_direct vs resolved and shared body_content_hash PDMRs before counting coverage. Point body_path at the trial snapshot, not docs/data/research/FGP.L.",
+      "priority": "high"
+    },
+    {
+      "area": "orchestration",
+      "summary": "Select the latest dated annual and interim *results* bodies (FY 2026 results 3bf5ff09fbc5c747, H1 2026 Half-year Financial Report c1db8cdf5ad2bd84 — not CH FY26 accounts, not IR FY25/H1 decks, not the 30 Jul AGM tagged interim). When a policy-material contract or disposal body exists, reserve one of the five slots for it ahead of screen_context if the director already held the snapshot.",
+      "priority": "high"
+    },
+    {
+      "area": "prompt",
+      "summary": "Require annual/interim workers to extract reporting currency; First Bus vs First Rail vs open-access vs contracted (Overground) splits; statutory vs adjusted earnings; OCF/capex/FCF definitions; cash vs restricted cash vs adjusted net debt vs IFRS-16 leases; dividend declared vs cash dividends and FCF cover; buyback authorisation vs cash spent; franchise expiry / nationalisation language; FY outlook. Require news workers to drop India-FGP collisions, DirectorsTalk SEO upside pieces, and same-day buyback reprints; treat Kalkine/Proactive as headline-only.",
+      "priority": "high"
+    },
+    {
+      "area": "scoring",
+      "summary": "Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_definition_divergence true whenever filing / TTM / adj disagree. Surface dual leverage (Yahoo D/E vs adj net debt) instead of leaving leverage_override false. Treat UK bus/rail policy transition as cyclical/policy exposure. Populate failed_models for the 7/22 non-passes. Do not keep headline strong_buy when research_verdict is already accumulate.",
+      "priority": "high"
+    },
+    {
+      "area": "sources",
+      "summary": "Populate alternate_news or drop it from the ladder. Add a structured financials_interim extract from the latest interim RNS because Yahoo quarterly_income and quarterly_cashflow are empty and TTM cashflow is suppressed. Expose fcf_bridge.json to a worker type or fold its three-way FCF reconciliation into screening_snapshot.",
+      "priority": "medium"
+    },
+    {
+      "area": "schema",
+      "summary": "Allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action so a mis-tagged FY-results or Overground/disposal body can be assigned without inventing a source. Add reporting_perimeter, fcf_basis_used, and contract_roll_off / policy_transition fields on the screening snapshot.",
+      "priority": "medium"
+    },
+    {
+      "area": "monitoring",
+      "summary": "For persistent strong-buy transport names with live nationalisation and an in-flight buyback, emit watch items (next trading update / H1 2027, franchise handback dates, Overground start, remaining £100m buyback, bus-franchising decisions) rather than only raising weeks_at_signal.",
+      "priority": "medium"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "filing_fy26_annual_results",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/3bf5ff09fbc5c747.txt",
+      "focus": "FY 2026 results RNS (18 Jun 2026; catalogued period=other — this is the annual results body, not CH 10 Aug 2026 accounts, not 1 Jul AFR d45784fca483323c, not Google News “Across the Markets”). Reporting currency; group and First Bus vs First Rail vs other revenue, statutory vs adjusted EBIT/EPS vs FY25; OCF, capex, FCF definition used, cash, restricted cash, reported vs adjusted net debt, IFRS-16 leases; dividend declared vs cash dividends and cover vs FCF; £100m buyback terms; franchise expiry / nationalisation / open-access / Overground language; FY27 outlook. Prefer these figures over Yahoo (FY26 Yahoo omits EPS/share count; FCF there is £362.6m; company-adj FCF on the screen is £73.8m).",
+      "priority": 1
+    },
+    {
+      "id": "filing_h1_2026_interim",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/c1db8cdf5ad2bd84.txt",
+      "focus": "H1 2026 Half-year Financial Report (18 Nov 2025; not IR decks ir_af873270e9c4b29f / ir_032b08900a650e14, not AGM 4028c725377752a6). H1 revenue/profit/EPS vs H1 2025 by bus vs rail; passenger-volume KPIs; cash, capex, FCF, net debt, interim dividend; management “period of transition” / franchise roll-off / nationalisation wording; intra-year cash outflow / debt colour that later news attributed to this print. Prefer filing figures over Yahoo (quarterly_income and quarterly_cashflow empty).",
+      "priority": 1
+    },
+    {
+      "id": "news_digest",
+      "type": "digest_news_manifest",
+      "target": "news_manifest.json",
+      "focus": "Cluster ~126 headlines: FY26 results + £100m buyback (18 Jun 2026); H1 2026 beat-but-10% drop / bus volumes / cash outflow; London Overground ~£3bn / $4bn award (Dec 2025); Mistral Data £48m sale to Tracsis and 24 Aug completion / ~7% share wobble; open-access mix pieces; Sizewell C; AGM capital actions. Flag India-FGP “standalone NI −11%” as likely ticker collision; discard DirectorsTalk syndicated 30–55% upside SEO and same-day Transaction-in-Own-Shares / TVR reprints. Google News items are RSS titles only — do not invent article-body facts.",
+      "priority": 2
+    },
+    {
+      "id": "screen_context",
+      "type": "screen_context",
+      "target": "screening_snapshot.json",
+      "focus": "Record strong_buy 15/22, composite 86%, families 5/5, adjusted_signal buy, research_verdict accumulate / medium / 0.74. FCF bases filing £362.6m / screen TTM £302.8m / company-adj £73.8m with fcf_basis_overlay true but fcf_definition_divergence and fcf_divergence_flagged false; TTM suppressed (quarterly_cashflow_empty). Dual leverage Yahoo D/E 161% vs £137.7m adj net debt / screen D/E 19% with leverage_override false. P/E 8.7, P/B 1.3, yield 4.0%, ROE 16.7%; 12w persistent, conviction 63%, RSI 35, trade plan £173.14 / £166.14. List which claims must be confirmed on a filing-FCF, lease-adjusted, and post-nationalisation-mix basis. Note failed_models is empty despite 7 non-passes.",
+      "priority": 3
+    },
+    {
+      "id": "gap_inventory",
+      "type": "gap_inventory",
+      "target": "source_inventory",
+      "focus": "Document thin/unavailable steps: yahoo_quarterly_cashflow, yahoo_quarterly_income, alternate_news. Highest-value unread bodies the 5-cap omitted: AFR filings/bodies/d45784fca483323c.txt; AGM statement 4028c725377752a6; pre-close TU 4c56aaf324fdfd91; Overground preferred-operator aefbcf7637993f73; £100m buyback launch 152c483b0284d525; Mistral disposal 1c5ad278ca15df7c and completion f8ef13aa344cabd9; Sizewell C d4e60364bbdac9ab; Dec 2025 acquisition 5e08fec9f5b9088c. Note no post-FY26 trading update yet. List what the memo cannot verify without those reads (contract economics, cash-return residual, intra-year FCF, latest Board trading comment).",
+      "priority": 1
+    }
+  ],
+  "director_agent_id": "agent-7e5a4425-d090-4488-af29-d1482820278b"
+}

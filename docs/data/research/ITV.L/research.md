@@ -1,6 +1,6 @@
 # ITV plc (ITV.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T07:25:46.747283+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T16:48:11.736002+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
 ITV plc screens as a Strong Buy on cheapness (P/E ~12, P/B ~1.6, yield ~6.8%), quality, dividend, GARP, and risk metrics, with 20/20 data fields present. The investment case rests on a UK-listed media group trading below intrinsic value while executing a credible pivot toward ITV Studios and digital (ITVX), now amplified by the agreed sale of Media & Entertainment (M&E) to Sky for up to £1.6bn and a planned ~£950m cash return to shareholders. Filings show resilient adjusted earnings through a soft linear-advertising cycle, with FY 2025 group adjusted EBITA down only 1% to £534m despite TAR falling 5%. The central debate is whether headline valuation metrics survive the post-deal earnings step-down (loss of M&E profits), regulatory delay on the Sky transaction (CMA, possible Phase 2 to H2 2027), and tighter near-term free cash flow (FY 2025 filing FCF £187m vs dividend ~£190m). Timing is neutral (RSI ~37, price below 200-day MA).

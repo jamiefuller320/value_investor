@@ -1,0 +1,167 @@
+{
+  "task_id": "screen_context",
+  "task_type": "screen_context",
+  "status": "partial",
+  "findings": [
+    "Screen signal strong_buy on 15/22 models with composite_score 0.82 (82%); adjusted_signal remains strong_buy — source: /workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+    "All screening overlays false: healthcare_overlay, healthcare_price_erosion_overlay, cash_conversion_overlay, dividend_yield_overlay, interim_quality_overlay, cyclical_exposure_overlay, earnings_basis_overlay, fcf_basis_overlay, leverage_override, dual_leverage_display — source: .../screening_snapshot.json",
+    "FCF tri-basis: filing_aligned £148m, screen_ttm £211.9m, company_adjusted £187m (canonical source company_adjusted); divergence_flagged=false; action_note flags 'FCF basis mismatch' — source: .../screening_snapshot.json",
+    "TTM cashflow suppressed (yahoo_quarterly.ttm_cashflow_suppressed=true; reason quarterly_cashflow_empty) — source: .../screening_snapshot.json",
+    "Piotroski F-Score 3/9 (failed; threshold ≥7); failed components: ROA improving, OCF > net income, leverage declining, current ratio improving, gross margin improving, asset turnover improving — source: .../screening_snapshot.json",
+    "Balance-sheet / yield / valuation inputs: debt_to_equity 52%, current_ratio 1.29, dividend_yield_raw 7.11%, P/E 11.6 — source: .../screening_snapshot.json",
+    "Signal timing: weeks_at_signal 1, signal_trend new, stability_label new, conviction_score 53%, timing_signal neutral, rsi_14 34 — source: .../screening_snapshot.json",
+    "Trade plan: core limit £69.05 (60%), tactical limit £66.26 (40%); tactical stop £62.24, target £74.37 — source: .../screening_snapshot.json",
+    "Claims requiring post-carve-out / filing-FCF confirmation: (1) strong_buy and adjusted_signal strong_buy — screen uses company_adjusted FCF £187m, not filing £148m; (2) FCF Yield model pass — FCF basis drives cheapness family; (3) dividend sustainability (7.1% yield; fcf_dividend_coverage_gross 1.53, net 1.0 on company-adj FCF); (4) composite_score 82% and conviction 53% — may embed FCF-dependent model inputs; (5) Financial Health and Earnings Quality model passes — carve-out may alter balance-sheet and cash-conversion profile; (6) key_metrics.FCF £187m and cashflow_metrics (OCF £202m, CapEx -£54m, FCF £187m) — filing-aligned £148m is 21% lower; (7) fcf_basis_overlay=false despite explicit mismatch in action_note — filing basis not driving overlay; (8) screen_ttm £211.9m unavailable/suppressed — cannot reconcile TTM vs filing post-carve-out from this source — source: .../screening_snapshot.json",
+    "Passed models include FCF Yield, High Dividend Yield, Dividend Growth, Earnings Quality, Financial Health — all potentially sensitive to post-carve-out filing FCF — source: .../screening_snapshot.json",
+    "research_verdict, research_risk_level, research_confidence, research_rationale all null — no director research overlay in snapshot — source: .../screening_snapshot.json"
+  ],
+  "figures": [
+    {
+      "metric": "models_passed",
+      "value": "15/22",
+      "period": "screen snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "signal strong_buy"
+    },
+    {
+      "metric": "composite_score",
+      "value": "82%",
+      "period": "screen snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "0.82"
+    },
+    {
+      "metric": "adjusted_signal",
+      "value": "strong_buy",
+      "period": "screen snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "fcf_filing_aligned",
+      "value": "£148m",
+      "period": "FY2025",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "148000000 GBP"
+    },
+    {
+      "metric": "fcf_screen_ttm",
+      "value": "£211.9m",
+      "period": "screen TTM",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "211875008; suppressed quarterly_cashflow_empty"
+    },
+    {
+      "metric": "fcf_company_adjusted",
+      "value": "£187m",
+      "period": "FY2025",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "canonical source; 187000000 GBP"
+    },
+    {
+      "metric": "fcf_divergence_flagged",
+      "value": "false",
+      "period": "FY2025",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "despite filing vs company-adj gap"
+    },
+    {
+      "metric": "piotroski_f_score",
+      "value": "3/9",
+      "period": "latest screen",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "passed=false"
+    },
+    {
+      "metric": "debt_to_equity",
+      "value": "52%",
+      "period": "screen inputs",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "52.194"
+    },
+    {
+      "metric": "current_ratio",
+      "value": "1.29",
+      "period": "screen inputs",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "1.294"
+    },
+    {
+      "metric": "dividend_yield",
+      "value": "7.1%",
+      "period": "screen inputs",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "7.11 raw"
+    },
+    {
+      "metric": "P/E",
+      "value": "11.6",
+      "period": "key_metrics",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "weeks_at_signal",
+      "value": "1",
+      "period": "signal history",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "signal_trend new"
+    },
+    {
+      "metric": "conviction_score",
+      "value": "53%",
+      "period": "screen snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "0.5256"
+    },
+    {
+      "metric": "rsi_14",
+      "value": "34",
+      "period": "timing",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "33.58 rounded"
+    },
+    {
+      "metric": "trade_plan_core_limit",
+      "value": "£69.05",
+      "period": "trade plan",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "60% allocation"
+    },
+    {
+      "metric": "trade_plan_tactical_limit",
+      "value": "£66.26",
+      "period": "trade plan",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "40% allocation"
+    },
+    {
+      "metric": "fcf_dividend_coverage_gross",
+      "value": "1.53x",
+      "period": "cashflow_metrics",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "on company-adj FCF"
+    },
+    {
+      "metric": "fcf_dividend_coverage_net",
+      "value": "1.0x",
+      "period": "cashflow_metrics",
+      "source_path": "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json",
+      "note": "on company-adj FCF"
+    }
+  ],
+  "gaps": [
+    "Post-carve-out pro-forma filing FCF not present; snapshot holds pre-carve-out filing £148m vs company-adj £187m with no carve-out adjustment field",
+    "Screen canonical FCF uses company_adjusted (£187m), not filing_aligned (£148m); strong_buy, FCF Yield pass, and dividend coverage unverified on filing basis",
+    "TTM FCF £211.9m suppressed (quarterly_cashflow_empty); cannot confirm run-rate FCF post-carve-out from this source",
+    "divergence_flagged=false despite 21% filing vs company-adj gap and action_note mismatch; fcf_basis_overlay also false — no automatic downgrade applied",
+    "P/E, yield, D/E, current ratio, Piotroski inputs may reflect consolidated pre-carve-out filings; not restated in snapshot",
+    "research_verdict fields null — no independent director confirmation in this source",
+    "Carve-out scope (retained vs disposed operations) not documented in screening_snapshot.json"
+  ],
+  "sources_read": [
+    "/workspace/docs/data/research_director_worker/ITV.L/20260904T164027Z/sources/screening_snapshot.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-05d34de5-4ff6-490f-977a-b797732dabd1"
+}

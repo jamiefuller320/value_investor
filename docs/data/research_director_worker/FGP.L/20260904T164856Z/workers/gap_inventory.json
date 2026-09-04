@@ -1,0 +1,180 @@
+{
+  "task_id": "gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "yahoo_quarterly_income and yahoo_quarterly_cashflow are empty objects in financials_annual.json; ttm_cashflow_suppressed=true with reason quarterly_cashflow_empty — no intra-quarter P&L or cash bridge from Yahoo.",
+    "alternate_news is unavailable (source_inventory thin step); news_manifest.json holds 126 Google News/yfinance RSS headlines only — no full alternate-news article bodies.",
+    "filings_index.json lists exactly one trading_update (4c56aaf324fdfd91, pre-close 26 Mar 2026); no post-FY26 Board trading update exists as of source fetch (4 Sep 2026).",
+    "AFR body d45784fca483323c.txt (1 Jul 2026) is an NSM submission notice referencing the 18 Jun 2026 results announcement — not the full Annual Report financial tables.",
+    "Pre-close TU (4c56aaf324fdfd91.txt): First Bus and First Rail trading in line; modest FY26 adjusted EPS growth expected; FY26 year-end adjusted net debt £135–145m; fuel hedged c.88% FY27 and c.53% FY28; electricity hedged c.77% FY27 and c.46% FY28.",
+    "AGM statement (4028c725377752a6.txt, 30 Jul 2026): FY-to-date trading in line with 18 Jun FY26 results and 29 Jul Mistral sale announcement; H1 FY27 (six months to Sep 2026) results scheduled 17 Nov 2026 — latest formal Board trading comment, not a post-FY26 TU.",
+    "London Overground preferred-operator RNS (aefbcf7637993f73.txt): contract start 3 May 2026; initial eight-year term plus up to two-year extension; estimated value c.£3bn over eight years; TfL retains revenue risk; FRLL delivers services; profit margin on concession payments with performance fee upside; £30m Performance Bond and £80m Parent Company Guarantee required.",
+    "£100m buyback launch (152c483b0284d525.txt, 18 Jun 2026): four tranches of up to £25m (RBC tranches 1 & 3, Panmure Liberum 2 & 4); deadline 17 Jun 2027; cap 84,323,374 shares (14.99% issued); treasury then cancellation.",
+    "Buyback tranche update (478824dce96b4609.txt, 27 Jul 2026): first tranche completed 24 Jul — 13,553,662 shares for £24,806,895; second tranche commenced same day.",
+    "Mistral disposal agreed (1c5ad278ca15df7c.txt, 29 Jul 2026): enterprise value £48m cash; FY26 revenue c.£13m, operating profit c.£4m; FY27 First Rail adjusted operating profit −c.£4m; Group adjusted EPS −c.0.6p (FY26 base 20.3p); profit on disposal c.£46m (adjusting item); three-year free cash generation guidance raised to c.£435m.",
+    "Mistral completion (f8ef13aa344cabd9.txt, 23 Aug 2026): £48m cash received on completion, subject to customary adjustments.",
+    "Sizewell C contract (d4e60364bbdac9ab.txt, 7 Jul 2026): Specialist Passenger Solutions awarded up to five-year worker transport from Jul 2026; c.150 zero-emission buses (hydrogen/electric) supplied by Sizewell C Ltd; c.400 new jobs; Business & Coach segment revenue doubled to £230m in FY26.",
+    "Tootbus acquisition (5e08fec9f5b9088c.txt, Dec 2025): consideration c.£17m cash; 63 buses, c.190 staff; Tootbus FY2023 revenue £15.9m, operating loss £(0.6)m; c.£30m annual revenue anticipated by FY2029; FY2026 year-end adjusted net debt now expected £140–150m.",
+    "fcf_bridge.json documents three-way FCF divergence: company-adjusted £113.5m (policy), filing OCF−CapEx £362.6m, Yahoo screen TTM £302.8m — memo cannot reconcile intra-year FCF without quarterly Yahoo or unread H1/FY results bodies.",
+    "Without the assigned reads, memo could not verify: Overground concession economics beyond headline £3bn; £100m buyback residual after tranche 1; Mistral-driven cash uplift and FY27 EPS drag; Sizewell/Tootbus contract revenue; or any Board comment after 30 Jul 2026."
+  ],
+  "figures": [
+    {
+      "metric": "Yahoo quarterly_income records",
+      "value": "0",
+      "period": "all quarters",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/financials_annual.json",
+      "note": "Empty object — no quarterly P&L"
+    },
+    {
+      "metric": "Yahoo quarterly_cashflow records",
+      "value": "0",
+      "period": "all quarters",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/financials_annual.json",
+      "note": "Empty object; TTM cashflow suppressed"
+    },
+    {
+      "metric": "Company-adjusted FCF (policy)",
+      "value": "£113.5m",
+      "period": "FY2026",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/fcf_bridge.json",
+      "note": "Before acquisitions/returns definition"
+    },
+    {
+      "metric": "Filing-aligned FCF (OCF − CapEx)",
+      "value": "£362.6m",
+      "period": "FY2026",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/fcf_bridge.json",
+      "note": "Yahoo statutory bridge; overstates equity FCF vs management"
+    },
+    {
+      "metric": "Pre-close adjusted net debt guidance",
+      "value": "£135–145m",
+      "period": "FY2026 year-end",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/4c56aaf324fdfd91.txt",
+      "note": "Pre-close TU before final FY26 print"
+    },
+    {
+      "metric": "London Overground contract value",
+      "value": "c.£3bn",
+      "period": "8 years (+ optional 2)",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/aefbcf7637993f73.txt",
+      "note": "TfL retains revenue risk; margin on concession payments not quantified"
+    },
+    {
+      "metric": "Overground Performance Bond",
+      "value": "£30m",
+      "period": "contract term",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/aefbcf7637993f73.txt",
+      "note": "Plus £80m Parent Company Guarantee"
+    },
+    {
+      "metric": "Share buyback programme",
+      "value": "£100m",
+      "period": "Jun 2026 – Jun 2027",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/152c483b0284d525.txt",
+      "note": "Four £25m tranches"
+    },
+    {
+      "metric": "Buyback tranche 1 spend",
+      "value": "£24,806,895",
+      "period": "completed 24 Jul 2026",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/478824dce96b4609.txt",
+      "note": "13,553,662 shares; residual programme balance not aggregated in one RNS"
+    },
+    {
+      "metric": "Treasury shares held",
+      "value": "27,778,020",
+      "period": "28 Aug 2026",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/cfadd349de7818b5.txt",
+      "note": "Under £100m programme announced 18 Jun 2026"
+    },
+    {
+      "metric": "Mistral Data enterprise value",
+      "value": "£48m",
+      "period": "disposal",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/1c5ad278ca15df7c.txt",
+      "note": "Cash-free, debt-free; completed 23 Aug 2026"
+    },
+    {
+      "metric": "Mistral FY27 adjusted EPS impact",
+      "value": "−c.0.6p",
+      "period": "FY2027",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/1c5ad278ca15df7c.txt",
+      "note": "FY2026 adjusted EPS base 20.3p cited in same RNS"
+    },
+    {
+      "metric": "Three-year free cash generation guidance",
+      "value": "c.£435m",
+      "period": "post-Mistral sale",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/1c5ad278ca15df7c.txt",
+      "note": "Includes capital allocation for growth and shareholder returns"
+    },
+    {
+      "metric": "Business & Coach revenue",
+      "value": "£230m",
+      "period": "FY2026",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/d4e60364bbdac9ab.txt",
+      "note": "Doubled vs prior period per CEO comment"
+    },
+    {
+      "metric": "Tootbus acquisition consideration",
+      "value": "c.£17m",
+      "period": "Dec 2025",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/5e08fec9f5b9088c.txt",
+      "note": "Financed from existing cash; FY2023 Tootbus revenue £15.9m"
+    },
+    {
+      "metric": "Post-acquisition adjusted net debt guidance",
+      "value": "£140–150m",
+      "period": "FY2026 year-end",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/5e08fec9f5b9088c.txt",
+      "note": "Revised after Tootbus acquisition"
+    },
+    {
+      "metric": "Fuel hedge cover",
+      "value": "c.88% FY27 / c.53% FY28",
+      "period": "forward programme",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/4c56aaf324fdfd91.txt",
+      "note": "Additional hedges entered Feb 2026"
+    },
+    {
+      "metric": "News manifest article count",
+      "value": "126",
+      "period": "as of 4 Sep 2026",
+      "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json",
+      "note": "Headlines/summaries only; alternate_news body step absent"
+    }
+  ],
+  "gaps": [
+    "Intra-year and H1 FY27 FCF/OCF cannot be verified: Yahoo quarterly_cashflow empty and no structured interim extract in this task scope.",
+    "Intra-year revenue/profit seasonality unavailable: Yahoo quarterly_income empty.",
+    "alternate_news step dead — only RSS metadata in news_manifest; no full-text third-party news bodies for contract or trading colour.",
+    "AFR body d45784fca483323c.txt contains no financial statement line items; full AFR tables require separate FY26 results RNS or Companies House iXBRL body.",
+    "London Overground annual profit/margin and concession payment schedule not disclosed — only headline £3bn and qualitative margin language.",
+    "Sizewell C contract revenue/value not stated; only fleet size, term and job count.",
+    "£100m buyback residual (cumulative £ spent vs £100m cap as of Sep 2026) not published in a single figure — only tranche-1 total (£24.8m) plus incremental transaction RNS.",
+    "No post-FY26 trading update: latest Board trading comment is AGM statement 30 Jul 2026; no update after Mistral completion (23 Aug) or ongoing buyback into Sep.",
+    "FY26 Yahoo annual omits diluted EPS/share count (present for FY25 only in financials_annual.json) — adjusted EPS verification needs FY26 results RNS body outside this read set."
+  ],
+  "sources_read": [
+    "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/financials_annual.json",
+    "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/fcf_bridge.json",
+    "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json",
+    "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/filings_index.json",
+    "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/d45784fca483323c.txt",
+    "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/4028c725377752a6.txt",
+    "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/4c56aaf324fdfd91.txt",
+    "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/aefbcf7637993f73.txt",
+    "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/152c483b0284d525.txt",
+    "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/1c5ad278ca15df7c.txt",
+    "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/f8ef13aa344cabd9.txt",
+    "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/d4e60364bbdac9ab.txt",
+    "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/5e08fec9f5b9088c.txt",
+    "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/478824dce96b4609.txt",
+    "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/cfadd349de7818b5.txt"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-17013cf9-247c-43a0-bf38-d9f92953a01f"
+}
