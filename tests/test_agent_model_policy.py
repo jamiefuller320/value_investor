@@ -89,6 +89,9 @@ def test_weekly_ops_allocation(tmp_path: Path):
     assert status["remaining_weekly_ops_usd"] == 49.2
     assert status["constraining"] is False
     assert status["flag"] == "enforced"
+    assert status["weekly_ops_plan_credit_share_cap"] == 0.15
+    assert status["weekly_ops_plan_credit_ceiling_usd"] == 3.0
+    assert status["weekly_ops_cap_exceeds_plan_share"] is True
 
     plan = grow_ticker_budget(policy, base_max_tickers=40, today=datetime(2026, 7, 16, tzinfo=UTC))
     assert plan["weekly_ops_cap_usd"] == 50.0

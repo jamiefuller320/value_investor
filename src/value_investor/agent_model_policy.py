@@ -39,6 +39,9 @@ DEFAULT_POLICY_PATH = Path("docs/data/library/policy.json")
 DEFAULT_PLAN_MONTHLY_USD = 20.0  # Cursor Pro subscription (included pool metadata)
 DEFAULT_SPEND_CHECKPOINT_USD = 60.0
 DEFAULT_WEEKLY_OPS_CAP_USD = 50.0
+# Standing ceiling: weekly_ops ≤ this share of listed plan_monthly_usd.
+# Leaves the rest of included plan credit for development and other projects.
+DEFAULT_WEEKLY_OPS_PLAN_CREDIT_SHARE_CAP = 0.15
 SPEND_POOL_WEEKLY_OPS = "weekly_ops"
 SPEND_POOL_AD_HOC = "ad_hoc"
 VALID_SPEND_POOLS = frozenset({SPEND_POOL_WEEKLY_OPS, SPEND_POOL_AD_HOC})
@@ -183,14 +186,18 @@ def default_policy() -> dict[str, Any]:
             "week_id": None,
             "cycle_id": None,
             "weekly_ops_cap_usd": DEFAULT_WEEKLY_OPS_CAP_USD,
+            "weekly_ops_plan_credit_share_cap": DEFAULT_WEEKLY_OPS_PLAN_CREDIT_SHARE_CAP,
             "enforce_weekly_ops_cap": True,
             "estimated_spend_weekly_ops_usd_this_week": 0.0,
             "note": (
                 "Cursor subscription (plan_monthly_usd) is metadata only. "
                 "weekly_ops_cap_usd ring-fences the orchestrator Sunday bundle "
-                "(email report + ladder selective research). Ad-hoc depth passes "
-                "use ladder.spend_since_checkpoint_usd. Spend is estimated from "
-                "agent runs — Cursor does not expose remaining credits."
+                "(email report + ladder selective research) and must stay at or "
+                "below weekly_ops_plan_credit_share_cap of plan_monthly_usd "
+                "(default 15%) so included credit remains for development. "
+                "Ad-hoc depth passes use ladder.spend_since_checkpoint_usd. "
+                "Spend is estimated from agent runs — Cursor does not expose "
+                "remaining credits."
             ),
         },
         "model_review": {
@@ -293,6 +300,12 @@ def normalize_budget(budget: dict[str, Any] | None) -> dict[str, Any]:
     budget["plan_monthly_usd"] = monthly
     cap = float(budget.get("weekly_ops_cap_usd") or DEFAULT_WEEKLY_OPS_CAP_USD)
     budget["weekly_ops_cap_usd"] = round(max(0.0, cap), 2)
+    raw_share = budget.get("weekly_ops_plan_credit_share_cap")
+    if raw_share is None:
+        share = DEFAULT_WEEKLY_OPS_PLAN_CREDIT_SHARE_CAP
+    else:
+        share = max(0.0, min(1.0, float(raw_share)))
+    budget["weekly_ops_plan_credit_share_cap"] = share
     if "enforce_weekly_ops_cap" not in budget:
         budget["enforce_weekly_ops_cap"] = True
     budget["estimated_spend_weekly_ops_usd_this_week"] = round(
@@ -405,9 +418,19 @@ def weekly_ops_budget_status(
     enforce = bool(budget.get("enforce_weekly_ops_cap", True))
     constraining = bool(enforce and remaining < memo)
     near_limit = bool(enforce and cap > 0 and (remaining / cap) <= NEAR_LIMIT_REMAINING_FRACTION)
+    monthly = float(budget.get("plan_monthly_usd") or 0.0)
+    share = float(
+        budget.get("weekly_ops_plan_credit_share_cap")
+        or DEFAULT_WEEKLY_OPS_PLAN_CREDIT_SHARE_CAP
+    )
+    ceiling = round(max(0.0, monthly * share), 2)
+    exceeds_plan_share = bool(monthly > 0 and cap > ceiling)
     return {
         "pool": SPEND_POOL_WEEKLY_OPS,
-        "plan_monthly_usd": float(budget.get("plan_monthly_usd") or 0.0),
+        "plan_monthly_usd": monthly,
+        "weekly_ops_plan_credit_share_cap": share,
+        "weekly_ops_plan_credit_ceiling_usd": ceiling,
+        "weekly_ops_cap_exceeds_plan_share": exceeds_plan_share,
         "weekly_ops_cap_usd": cap,
         "estimated_spend_weekly_ops_usd_this_week": spent_ops,
         "estimated_spend_usd_this_week": spent_total,
