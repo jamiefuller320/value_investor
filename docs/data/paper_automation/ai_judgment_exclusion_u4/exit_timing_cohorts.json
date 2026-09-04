@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "track_id": "ai_judgment_exclusion_u4",
+  "framework": {
+    "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
+    "hold_recovery": {
+      "question": "When a position is stressed but still held, does it recover to breakeven?",
+      "episode_triggers": [
+        "unrealized below underwater_threshold",
+        "exit_streak >= 1 (hold buffer active)",
+        "momentum_grace on position",
+        "effective signal no longer buy-tier while still held"
+      ],
+      "outcomes": [
+        "recovered_to_breakeven (peak unrealized >= breakeven_threshold)",
+        "sold_while_underwater",
+        "max_window_elapsed"
+      ],
+      "fields_for_later_analysis": [
+        "data_quality_score",
+        "conviction_score",
+        "screen_signal",
+        "effective_signal",
+        "exit_streak",
+        "stress_triggers",
+        "thesis_status_at_start",
+        "recommended_action_at_start",
+        "checkpoints"
+      ]
+    },
+    "swap_rotation": {
+      "question": "When we rotate (sell + buy same pass), does the replacement beat the exit?",
+      "pairing": "same rebalance pass sells vs buys on one track",
+      "outcomes": [
+        "replacement_outperformed",
+        "exit_outperformed",
+        "inconclusive"
+      ],
+      "fields_for_later_analysis": [
+        "sell_tickers",
+        "buy_tickers",
+        "sell_realized_pct",
+        "post_rotation_returns",
+        "trade_costs"
+      ]
+    },
+    "related_artifacts": [
+      "exit_shadow.json (post-exit path after sell)",
+      "rebalance_log.json (counterfactual replay)",
+      "exit_timing_near_miss.json (archive near-miss + held-book priors)",
+      "archive_rebalance_replay (weekly-screen counterfactual from first log pass)",
+      "learning_tracks_churn_health.json"
+    ]
+  },
+  "updated_at": "2026-09-04T08:28:59.785818+00:00",
+  "hold_episodes": [
+    {
+      "episode_id": "ai_judgment_exclusion_u4:SN.L:2026-09-04T09:28:46.911794+01:00",
+      "track_id": "ai_judgment_exclusion_u4",
+      "ticker": "SN.L",
+      "name": "Smith & Nephew plc",
+      "started_at": "2026-09-04T09:28:46.911794+01:00",
+      "status": "open",
+      "stress_triggers": [
+        "exit_streak"
+      ],
+      "entry_mark": 1053.5,
+      "avg_cost": 1053.0,
+      "unrealized_pct_at_start": 0.0005,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "cheapness family no longer passes",
+        "still strong_buy",
+        "research accumulate"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": 0.0005,
+      "screen_signal": "strong_buy",
+      "effective_signal": "strong_buy",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.8349000000000001,
+      "exit_streak_at_start": 1,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0005,
+      "trough_unrealized_pct": 0.0005,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
+    }
+  ],
+  "swap_rotations": [],
+  "hypothesis_outcome_link_updated_at": "2026-09-04T09:28:46.911794+01:00"
+}

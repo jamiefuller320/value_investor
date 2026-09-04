@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "primary_learning_track": "ai_judgment",
-  "success_criterion": "Outperformance after costs vs market benchmark (^FTSE) on the primary AI-judgment track; rules track is the control; technical track is the timing/levels baseline; momentum_grace is an experimental exit overlay; graduated_allocation tests trade-plan entry sizing and harvest skims; hypothesis_integrity reviews underwater holdings before crude stops.",
+  "success_criterion": "Outperformance after costs vs market benchmark (^FTSE) on the primary AI-judgment track; rules track is the control; technical track is the timing/levels baseline; momentum_grace is an experimental exit overlay; graduated_allocation tests trade-plan entry sizing and harvest skims; entry_dca_overlay scores counterfactual entry cadences on every track; hypothesis_integrity reviews underwater holdings before crude stops.",
   "tracks": {
     "rules": {
       "output_dir": "output/paper_automation",
       "acted": true,
-      "trades": 1,
-      "note": "Rebalanced after open settle (1 trade(s)).",
+      "trades": 2,
+      "note": "Rebalanced after open settle (2 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,
@@ -25,8 +25,8 @@
     "ai_judgment": {
       "output_dir": "output/paper_automation/ai_judgment",
       "acted": true,
-      "trades": 0,
-      "note": "Rebalanced after open settle (0 trade(s)).",
+      "trades": 2,
+      "note": "Rebalanced after open settle (2 trade(s)).",
       "is_primary_learning_track": true,
       "selection": {
         "skip_timing_wait": true,
@@ -101,8 +101,8 @@
     "ai_judgment_calibrated": {
       "output_dir": "output/paper_automation/ai_judgment_calibrated",
       "acted": true,
-      "trades": 1,
-      "note": "Rebalanced after open settle (1 trade(s)).",
+      "trades": 3,
+      "note": "Rebalanced after open settle (3 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,
@@ -120,8 +120,8 @@
     "ai_judgment_calibrated_r2": {
       "output_dir": "output/paper_automation/ai_judgment_calibrated_r2",
       "acted": true,
-      "trades": 1,
-      "note": "Rebalanced after open settle (1 trade(s)).",
+      "trades": 3,
+      "note": "Rebalanced after open settle (3 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,
@@ -139,8 +139,8 @@
     "ai_judgment_calibrated_r3": {
       "output_dir": "output/paper_automation/ai_judgment_calibrated_r3",
       "acted": true,
-      "trades": 1,
-      "note": "Rebalanced after open settle (1 trade(s)).",
+      "trades": 3,
+      "note": "Rebalanced after open settle (3 trade(s)).",
       "is_primary_learning_track": false,
       "selection": {
         "skip_timing_wait": true,
@@ -148,6 +148,63 @@
         "sector_cap": 0.3,
         "use_adjusted_signal": true,
         "require_research_accumulate": true,
+        "use_momentum_grace": false,
+        "use_graduated_allocation": false,
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 1,
+        "min_rebalance_notional_gbp": 10.0
+      }
+    },
+    "ai_judgment_exclusion_u4": {
+      "output_dir": "output/paper_automation/ai_judgment_exclusion_u4",
+      "acted": true,
+      "trades": 1,
+      "note": "Rebalanced after open settle (1 trade(s)).",
+      "is_primary_learning_track": false,
+      "selection": {
+        "skip_timing_wait": true,
+        "min_conviction": 0.35,
+        "sector_cap": 0.2,
+        "use_adjusted_signal": true,
+        "require_research_accumulate": true,
+        "use_momentum_grace": false,
+        "use_graduated_allocation": false,
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 1,
+        "min_rebalance_notional_gbp": 10.0
+      }
+    },
+    "ai_judgment_fair": {
+      "output_dir": "output/paper_automation/ai_judgment_fair",
+      "acted": true,
+      "trades": 0,
+      "note": "Rebalanced after open settle (0 trade(s)).",
+      "is_primary_learning_track": false,
+      "selection": {
+        "skip_timing_wait": true,
+        "min_conviction": 0.6,
+        "sector_cap": 0.2,
+        "use_adjusted_signal": true,
+        "require_research_accumulate": true,
+        "use_momentum_grace": false,
+        "use_graduated_allocation": false,
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 1,
+        "min_rebalance_notional_gbp": 10.0
+      }
+    },
+    "rules_fair": {
+      "output_dir": "output/paper_automation/rules_fair",
+      "acted": true,
+      "trades": 0,
+      "note": "Rebalanced after open settle (0 trade(s)).",
+      "is_primary_learning_track": false,
+      "selection": {
+        "skip_timing_wait": true,
+        "min_conviction": 0.6,
+        "sector_cap": 0.2,
+        "use_adjusted_signal": false,
+        "require_research_accumulate": false,
         "use_momentum_grace": false,
         "use_graduated_allocation": false,
         "exit_confirm_screens": 2,
