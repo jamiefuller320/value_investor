@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T19:07:59+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T19:40:36+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -124,7 +124,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N75 | **Do not spend leftover Ultra on dashboard agents or new paper tracks** | Cycle-end unused Cursor Ultra is tempting to burn on UI polish, extra paper tracks, or live-universe work. Those do not change what weekday AI-judgment sees. Prefer FTSE rememo/director-worker, then let unused credit reset. | A later cycle is again >30% unused with <5 days left AND rememo backlog plus holdings director-worker are already clear |
 | N76 | **Do not spray euro_depth memos while buy-tier filings are thin** | euro_depth buy-tier still has thin/indexed_without_body gaps (median ~2 bodies). Cursor memos without filing bodies do not make the shard FTSE-equivalent. Spend leftover model credit on FTSE rememo first; leave euro deepen to GHA ingest. | ftse-library euro-ingest-dispatch reports ingest_parity_met and buy-tier thin+iwb near zero |
 | N77 | **Do not permanently raise rememo caps from a cycle-end surplus** | weekday rememo cap 3 and catch-up cap 5 are maintenance defaults. A 4-day Ultra leftover is a one-shot burst, not evidence the steady cap should rise. | After several constrained weeks, rememo backlog stays over weekly maintenance capacity and estimated_memo_usd is recalibrated from real bills |
-| N78 | **Do not spray remaining Ultra on thin-ladder buy-tier DW** | After the surplus rememo + escalate-queue director-worker burst, leftover Ultra is still large. Do not spend it by running director-worker on every buy-tier name that trips thin Yahoo quarterly/IR/news rungs. | Cycle-end surplus review on 2026-10-d8, or weekly_ops regularly binds at the $120 provisional cap |
+| N78 | **Do not lengthen the euro ingest slot after a leftover-514s productive run** | The 2026-09-04 13:15 euro slot used 2186/2700s, improved 6 names, and left 514s unused because remaining IWB were unfetchable or ABI.BR hit the 320s cap with 0 bodies. More minutes, more targets, or a fifth daily euro cron will not raise filings_with_body. | A euro sprint hits runtime_cutoff with improved>0 and leftover_seconds=0 on two consecutive slots, or discovery again consumes the deepen half of the clock. |
+| N79 | **Do not spray remaining Ultra on thin-ladder buy-tier DW** | After the surplus rememo + escalate-queue director-worker burst, leftover Ultra is still large. Do not spend it by running director-worker on every buy-tier name that trips thin Yahoo quarterly/IR/news rungs. | Cycle-end surplus review on 2026-10-d8, or weekly_ops regularly binds at the $120 provisional cap |
 
 ---
 
@@ -280,6 +281,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L269 | **Deepen Azelis AZE.BR filings after verdict catch-up** | AZE.BR has an accumulate verdict but only one indexed filing body. Next rememo needs buy-tier membership plus the usual body-lag threshold (10 adequate/thin, 25 strong), not merely bodies rising from 1 to 2. deepen-thin default (0 bodies) will not list it. | AZE.BR is buy-tier and euro_depth filings_with_body leads the memo by the rememo lag threshold |
 | L284 | **Pre-upgrade family-failure veto counterfactual** | Nine of 53 loser cards fail quality family while opinion_flip_triggers still permit conviction ≥0.35 upgrades. Estimate underwater-entry reduction with a pre-upgrade veto — observe-only, no live assign_signal change. | [offline_sim] on the 53-card loser cohort shows reduced underwater entry rate |
 | L285 | **Batch-close stale ticker-specific gap-fill deferrals** | Dozens of July/August per-ticker gap-fill items still say 'after next weekly email gap-fill pass'. Do not mass-close them from a store review; after the next Sunday email, close only those whose named gap is gone or superseded by a generic ingest path (CH/IR crawler). | Next Sunday email gap-fill pass writes gap_fill_summary.json and post_run_review.md |
+| L287 | **Replace ABI.BR IR allowlist; weekday 320s cannot clear 11 IWB** | ABI.BR was the 13:15 blocker (ticker_budget_hit, 20/20 bodies, 11 IWB). The allowlist is one bmv.com.mx 10-K PDF, which is the wrong issuer. Same class as the DG.PA GlobeNewswire miss: swap in AB InBev IR PDFs and mark failed rows unfetchable. | The next euro deepen spends another 320s on ABI.BR with improved=false, or intensive gap-closure is pinned to ABI.BR. |
 
 ### Ops / reliability
 
