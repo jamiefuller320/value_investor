@@ -1,14 +1,14 @@
 # Johnson Service Group PLC (JSG.L) — Research memo
 
-_Version 1 · Updated 2026-08-30T08:27:44.975693+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T19:59:54.903735+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Johnson Service Group is a UK and Ireland textile rental business (HORECA linen ~73% of revenue; Workwear ~27%) that the quantitative screen rates as a **strong buy** (9/22 models; composite 0.85; cheapness, quality, dividend, GARP and risk families all pass). The investment case rests on sustained margin expansion (adjusted operating margin 13.5% in FY25, targeting ≥14% in FY26), progressive dividends (4.8p, +20%), and shareholder returns (£90.3m buybacks since 2022), at valuation metrics that screen attractively (P/E 16.5, P/B 2.0, yield 3.2%, ROE 12.7%). The key debate is whether headline cheapness and cash-flow screens overstate underlying economics: company-defined FCF was £69.1m in FY25 versus filing-aligned/Yahoo FCF of £100.6m and screen TTM FCF of ~£27.4m, while H1 2026 trading showed flat revenue with HORECA organic decline amid hospitality pressure and rising net debt from buybacks.
+Johnson Service Group is a UK and Republic of Ireland textile rental business (HORECA linen ~73% of revenue; Workwear ~27%) that the quantitative screen rates as a **strong buy** (8/22 models; composite 0.85; all five factor families pass). The investment case rests on sustained margin expansion (adjusted operating margin 13.5% in FY25, targeting ≥14% in FY26), progressive dividends (4.8p, +20%), and disciplined capital returns (£90.3m buybacks since 2022), at valuation metrics that screen attractively (P/E 16.2, P/B 2.0, yield 3.2%, ROE 12.7%). The key debate is whether headline cheapness and cash-flow screens overstate underlying economics: company-defined FCF was £69.1m in FY25 versus Yahoo FCF of £100.6m and screen TTM FCF of ~£27.4m, while H1 2026 trading showed flat revenue with HORECA organic decline amid hospitality pressure and rising net debt from buybacks.
 
 ## INVESTMENT THESIS
 For a value investor, JSG combines screen-level cheapness with operational quality visible in primary filings. FY25 preliminary results (RNS, 3 March 2026) show revenue up 4.3% to £535.4m and adjusted operating profit up 16.4% to £72.5m, with ROCE rising to 17.1% (2024: 15.5%). The rental contract model—high Workwear retention (94%), scale in a fragmented market, and bolt-on contract wins (£4.9m annualised HORECA revenue in FY25)—supports recurring cash generation: operating cash flow £139.9m in FY25.
 
-Quantitative alignment is strong: passes include Graham Enterprising, FCF Yield, Neff PEGY, Quality Value, Dividend Growth, Magic Formula, Piotroski F-Score (7/9), Composite Value and Earnings Quality, with debt/equity 62% and data quality 20/20. Cheapness is not purely statistical—adjusted diluted EPS grew 19.8% to 12.1p, dividend cover held at 2.5x, and leverage (0.95x adjusted EBITDA at Dec-25) sits comfortably below covenant limits (3.0x max) and within management’s 1.0–1.5x target. Capital allocation is shareholder-friendly (progressive dividend, repeated buybacks, accretive acquisitions such as Empire Linen) while Main Market admission (August 2025) broadens the investor base without altering the core textile-services focus. Workwear resilience and price discipline partially offset HORECA cyclicality, supporting the screen’s quality-and-yield signal.
+Quantitative alignment is strong: passes include Graham Enterprising, FCF Yield, Neff PEGY, Quality Value, Dividend Growth, Piotroski F-Score, Composite Value and Earnings Quality, with debt/equity 62% and data quality 20/20. Cheapness is not purely statistical—adjusted diluted EPS grew 19.8% to 12.1p, dividend cover held at 2.5x, and leverage (0.95x adjusted EBITDA at Dec-25) sits comfortably below covenant limits (3.0x max) and within management’s 1.0–1.5x target. Capital allocation is shareholder-friendly (progressive dividend, repeated buybacks, accretive acquisitions such as Empire Linen) while Main Market admission (August 2025) broadens the investor base without altering the core textile-services focus. Workwear resilience and price discipline partially offset HORECA cyclicality, supporting the screen’s quality-and-yield signal.
 
 ## FINANCIAL REVIEW
 **Source coverage.** Primary analysis draws from RNS body extracts: FY25 preliminary results (3 March 2026), FY25 full-year trading update (16 January 2026), H1 2026 trading update (10 July 2026), and AGM statement (7 May 2026). Companies House annual report bodies (FY19–FY25) are indexed but extracts contain largely cover and strategic highlights rather than full financial tables. **No statutory interim accounts** (half-year report) are indexed—the three filings labelled `interim` are governance announcements, not H1/H2 results. H1 2026 colour comes only from the July trading update; interim results are due 8 September 2026.
@@ -49,7 +49,7 @@ Segment FY25: HORECA revenue £389.8m, adjusted operating profit £59.8m (margin
 
 **Cost inflation.** Labour was 46.0% of revenue in FY25 (+140bp YoY); UK employer NI alone added ~£6.0m annualised impact, mitigated via pricing and efficiency. Energy remains 7.4% of revenue vs 6.2% in 2019 despite hedging (85–90% of 2026 usage fixed).
 
-**Leverage and capital allocation.** Net debt rose £43.6m in FY25 and a further ~£31m to H1 2026, driven by buybacks, dividends and capex while leverage remains inside targets. Aggressive repurchases (£90.3m since 2022; new £55.0m programme May 2026) compress equity and raise financial risk if HORECA softens further. Piotroski leverage component failed (leverage not declining).
+**Leverage and capital allocation.** Net debt rose £43.6m in FY25 and a further ~£31m to H1 2026, driven by buybacks, dividends and capex while leverage remains inside targets. Aggressive repurchases (£90.3m since 2022; new £55.0m programme May 2026) compress equity and raise financial risk if HORECA softens further.
 
 **Competitive / operational.** Fragmented textile rental market with price-led competition; customer attrition when service/price misaligned. Operational incidents: Bristol Workwear fire (June 2025, £0.4m exceptional; insurance claim pending), Lancaster site closure (£1.4m reorganisation). Goodwill £154.0m on £275.1m equity—no impairment in FY25 review, but acquisition integration risk persists.
 
@@ -57,7 +57,7 @@ Segment FY25: HORECA revenue £389.8m, adjusted operating profit £59.8m (margin
 
 **Pension.** IAS 19 surplus £4.9m is favourable, but triennial valuation (Sept-25) outstanding; medium-term objective remains liability buy-out.
 
-**Liquidity.** Screen current ratio 0.93 failed Graham Defensive and Financial Health models; negative working capital is typical for rental models but bears monitoring.
+**Liquidity.** Negative working capital is typical for rental models but bears monitoring alongside rising gross debt.
 
 **Governance.** Planned board succession (Lysanne Gray NED/Audit Chair from June 2026; CFO transition to Ryan Govender October 2025) appears orderly; no red flags in indexed filings.
 
@@ -75,19 +75,17 @@ Coverage over the past year is **moderate**: dominated by results, buybacks and 
 **Capital returns**
 - Completion of £25.0m buyback (RNS, 8 January 2026); total buybacks since 2022 £90.3m.
 - “AGM Statement & Launch of Share Buyback Programme” (LSE, 6 May 2026) — new £55.0m programme.
-- Ongoing buyback RNS through August 2026; TipRanks/Kalkine coverage of repurchases at 147–152p (July–August 2026).
+- Ongoing buyback RNS through September 2026; TipRanks/Kalkine coverage of repurchases at 147–152p (July–August 2026).
 
 **Trading / market reaction**
-- H1 2026 trading update (10 July 2026): “Johnson Service Group Shares Slump Over 12% as Hospitality Weakness Hits First-Half Trading” (AskTraders, 10 July 2026); “Johnson Service backs outlook despite hospitality weakness” (Proactive Investors / Yahoo Finance UK, 10 July 2026).
+- “Johnson Service Group Shares Slump Over 12% as Hospitality Weakness Hits First-Half Trading” (AskTraders, 10 July 2026) following H1 2026 trading update.
+- “Johnson Service backs outlook despite hospitality weakness” (Proactive Investors / Yahoo Finance UK, 10 July 2026).
+- “Tweedy, Browne Company LLC's Voting Stake in Johnson Service Group Climbs to 12.02% After Share Buyback” (Kalkine Media, 29 July 2026).
 
-**Corporate / ownership**
-- Main Market admission (August 2025) per preliminary results.
-- NED appointment and Audit Committee/SID changes (RNS, 3 March 2026).
-- “Tweedy, Browne Company LLC's Voting Stake… Climbs to 12.02%” (Kalkine Media, 29 July 2026).
+**Governance / other**
+- “Johnson Service Group PLC Strengthens Board Structure Amid FTSE 350” (Kalkine Media, 3 March 2026) — NED and SID changes.
 - “Berenberg nudges up target price on Johnson Service Group” (Sharecast.com, 19 January 2026).
-- Institutional ownership ~80% (Yahoo Finance, 14–15 February 2026).
-
-No material M&A beyond bolt-on contract acquisitions (£4.9m annualised revenue) or regulatory enforcement actions surfaced in the manifest. **Gap:** thin sell-side and trade-press depth relative to RNS volume; H1 2026 interim accounts not yet released.
+- No material M&A, regulatory enforcement or litigation headlines in the manifest beyond operational fire and contract acquisitions disclosed in filings.
 
 ## RESEARCH VERDICT
 Verdict: accumulate

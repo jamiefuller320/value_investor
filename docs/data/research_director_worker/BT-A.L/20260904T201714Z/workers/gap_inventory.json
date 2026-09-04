@@ -1,0 +1,161 @@
+{
+  "task_id": "gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "financials_annual.json carries empty quarterly_income {} and quarterly_cashflow {}; cashflow_metrics sets ttm_cashflow_suppressed true with reason quarterly_cashflow_empty — no Yahoo intra-year income or cash-flow series is available (docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/financials_annual.json).",
+    "No ir_presentation_metrics.json (or equivalent) exists under sources/; Openreach/fibre KPIs and IR-slide guidance bridges are absent from the evidence pack.",
+    "No alternate_news source file exists under sources/; news_manifest.json is the sole news feed (51 articles, sources google_news and yfinance only).",
+    "filings_index.json reports period_coverage annual=8 / interim=0 / trading_update=1 (total 9, all with_body); sources_used are only companies_house and google_news_investegate — no Investegate-direct RNS or IR allowlist ingest (docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/filings/filings_index.json).",
+    "The sole trading_update entry (id 53a58f03dbad7866) is headline 'Across The Markets: Hollywood Bowl, BT Group, Castings - Investegate', published 2025-02-18, source google_news_investegate — a multi-name market wrap, not a BT operating trading update.",
+    "Eight indexed annual filings are Companies House group accounts dated 2019-07-11 through 2026-07-30 (ids ch_04190816_MzIzOTAy… through ch_04190816_MzUzNTE1…); interim count is zero.",
+    "Nine filing body files exist locally under sources/filings/bodies/ but were not opened per task instruction; index body_path values point at docs/data/research/BT-A.L/sources/… rather than this worker snapshot tree.",
+    "news_manifest.json records a 2026-07-22 'REG - BT Group PLC - Trading Statement' headline (id 8f96875abf6ef75f) and 2026-06-29 Verizon JV headlines (ids f05a8b72544ed7e1, f839f7ed-db0f-31e9-aa43-912912c8352d), but none appear in filings_index.json — no RNS bodies ingested.",
+    "As of fetched_at 2026-09-04, filings_index contains no FY26 prelim/results RNS, no Verizon JV RNS, no 22 Jul 2026 trading-statement body, and no H1 FY27 statutory/interim filing.",
+    "screening_snapshot.json flags FCF filing-aligned 1861M versus screen TTM 1200.4M and sets yahoo_quarterly.ttm_cashflow_suppressed true; absent interim filings and suppressed TTM leave intra-year FCF unverified.",
+    "News corpus is dominated by Kalkine Media SEO commentary; the only primary-ish items are Google News headline stubs for the Jul-2026 trading statement and Jun-2026 Verizon JV — insufficient to verify Q1 FY27 metrics or JV consideration without ingested RNS bodies."
+  ],
+  "figures": [
+    {
+      "metric": "quarterly_income records",
+      "value": "0 (empty object)",
+      "period": "as fetched",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/financials_annual.json",
+      "note": "yahoo_quarterly_income unavailable"
+    },
+    {
+      "metric": "quarterly_cashflow records",
+      "value": "0 (empty object)",
+      "period": "as fetched",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/financials_annual.json",
+      "note": "yahoo_quarterly_cashflow unavailable"
+    },
+    {
+      "metric": "ttm_cashflow_suppressed",
+      "value": "true",
+      "period": "FY2026 basis",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/financials_annual.json",
+      "note": "reason: quarterly_cashflow_empty"
+    },
+    {
+      "metric": "Free Cash Flow",
+      "value": "1861000000",
+      "period": "FY2026",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/financials_annual.json",
+      "note": "Yahoo annual; GBP-scale figures, no root currency field"
+    },
+    {
+      "metric": "Free Cash Flow",
+      "value": "2052000000",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/financials_annual.json",
+      "note": "prior year for trend"
+    },
+    {
+      "metric": "Operating Cash Flow",
+      "value": "7030000000",
+      "period": "FY2026",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/financials_annual.json",
+      "note": "OCF before capex"
+    },
+    {
+      "metric": "Capital Expenditure",
+      "value": "-5169000000",
+      "period": "FY2026",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/financials_annual.json",
+      "note": "capex rose vs FY2025"
+    },
+    {
+      "metric": "Total Revenue",
+      "value": "19654000000",
+      "period": "FY2026",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/financials_annual.json",
+      "note": "down from 20358000000 (FY2025) and 20797000000 (FY2024)"
+    },
+    {
+      "metric": "Net Debt",
+      "value": "18300000000",
+      "period": "FY2026",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/financials_annual.json",
+      "note": "cash and equivalents only 236m"
+    },
+    {
+      "metric": "Capital Lease Obligations",
+      "value": "4184000000",
+      "period": "FY2026",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/financials_annual.json",
+      "note": "IFRS-16 leases on balance sheet"
+    },
+    {
+      "metric": "Non Current Pension And Other Postretirement Benefit Plans",
+      "value": "4379000000",
+      "period": "FY2026",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/financials_annual.json",
+      "note": "BTPS-related liability line"
+    },
+    {
+      "metric": "Net Income",
+      "value": "1077000000",
+      "period": "FY2026 statutory",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/financials_annual.json",
+      "note": "vs Normalized Income 1711250000"
+    },
+    {
+      "metric": "screen TTM FCF",
+      "value": "1200.4M",
+      "period": "screen basis",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "action_note contrasts with filing-aligned 1861M; basis unverified without quarterlies"
+    },
+    {
+      "metric": "filings period_coverage annual",
+      "value": "8",
+      "period": "indexed",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/filings/filings_index.json",
+      "note": "all Companies House group accounts"
+    },
+    {
+      "metric": "filings period_coverage interim",
+      "value": "0",
+      "period": "indexed",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/filings/filings_index.json",
+      "note": "no H1 statutory indexed"
+    },
+    {
+      "metric": "filings period_coverage trading_update",
+      "value": "1",
+      "period": "indexed",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/filings/filings_index.json",
+      "note": "mis-tagged Across-The-Markets wrap, not BT TU"
+    },
+    {
+      "metric": "news_article_count",
+      "value": "51",
+      "period": "manifest as of 2026-09-04",
+      "source_path": "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/news_manifest.json",
+      "note": "google_news + yfinance only; alternate_news absent"
+    }
+  ],
+  "gaps": [
+    "Verified Q1 FY27 run-rate and FY27 outlook — 22 Jul 2026 REG Trading Statement exists only as a news headline (8f96875abf6ef75f); no RNS body ingested.",
+    "Verizon JV consideration, perimeter, and remaining international earnings — 29 Jun 2026 JV referenced in news_manifest only; no JV RNS body in filings_index.",
+    "Intra-year / TTM free cash flow — quarterly_cashflow empty and ttm_cashflow_suppressed; screen TTM 1200.4M vs filing FY2026 FCF 1861m cannot be reconciled from this source.",
+    "IR-presentation Openreach/fibre build, passings, take-up and harvest KPIs — ir_presentation_metrics absent.",
+    "Ofcom Openreach charge-control numbers — not present in any indexed source.",
+    "Post-trading-update Board-reported figures (segment revenue, adjusted EBIT, guidance bridges) — no TU body; interim=0.",
+    "FY26 prelim/results RNS and presentation pack — not indexed despite Yahoo FY2026 annuals being present.",
+    "H1 FY27 statutory accounts — not indexed as of 4 Sep 2026 (typical November window still open).",
+    "Highest-value unread filing bodies omitted by worker cap (not opened): ch_04190816_MzQzODQ0Nzg1NWFkaXF6a2N4.txt (FY24 CH annual, 2024-10-04) and six older ch_* accounts (2019–2023), plus 53a58f03dbad7866.txt (18 Feb 2025 Across-The-Markets wrap) — segment detail, statutory notes, and fibre/JV language may sit in these bodies.",
+    "Memo must treat Kalkine/Simply Wall St headline SEO as unverified colour; cannot infer TU metrics, JV terms, or Ofcom outcomes from news titles alone."
+  ],
+  "sources_read": [
+    "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/financials_annual.json",
+    "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/filings/filings_index.json",
+    "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/news_manifest.json",
+    "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+    "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screen_run_manifest.json",
+    "docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/macro_context.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-5e15f9c3-ff3d-4bc9-aa4e-5e02a59db6bf"
+}

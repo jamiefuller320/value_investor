@@ -1,0 +1,1027 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "ticker": "JD.L",
+  "company_name": "JD Sports Fashion Plc",
+  "signal": "buy",
+  "run_id": "20260904T195955Z",
+  "output_dir": "docs/data/research_director_worker/JD.L/20260904T195955Z",
+  "director_model": "grok-4.6",
+  "worker_model": "composer-2.5",
+  "estimated_cost_usd": 3.66,
+  "director_agent_ids": {
+    "plan": "agent-67548f10-00da-42bf-afb2-3677cf0f9815",
+    "synthesis": "agent-3d46f611-9baf-4f75-ae3d-5c41b06053df"
+  },
+  "task_plan": {
+    "schema_version": 1,
+    "orchestration_version": 1,
+    "source": "director",
+    "open_questions": [
+      "Which free-cash figure is usable for FCF Yield (~21.4%) and the dividend-family pass: company-defined FY26 FCF of about £462m (FY26 CH report; KPI changed from operating cashflow net of lease repayments) versus Yahoo FY26 FCF £956m (OCF 1,357m − capex 401m) versus screen key_metrics FCF 830m with TTM cashflow suppressed because quarterly_cashflow is empty — and can the FY26 cash dividend (Yahoo 52m) plus £200m buybacks (£201m Yahoo repurchase) plus the FY27 £200m programme be funded on the conservative filing basis while net cash ex-leases is only ~£31m?",
+      "The catalog has period=interim 0 and period=trading_update 0. News (19–20 Aug 2026) reports a second profit-guidance cut in three months (~£50m off FY27), US/Q2 sales slump, footwear/sneaker-cycle softness, and an 11–14% share drop, with Deutsche Hold at 95p (3 Sep) and UBS/RBC caution on Europe/Germany. Can a Buy be endorsed from the 5 Aug 2026 CH FY26 accounts and the 21 May 2025 FY25 RNS, or must trade wait on an ingested August trading-update / H1 statutory body?",
+      "Adjusted PBT fell two years running (FY25 £923m → FY26 £852m per existing filing extracts; Yahoo NI 539m → 490m → 436m; statutory EPS 10.45p → 9.50p → 8.54p) and FY26 LFL was −2.1% while revenue grew on Hibbett/Courir/space. Does screen P/E 9.0 / P/B 1.3 already price a sneaker-cycle trough, or a structural NA/footwear and brand-heat problem (Nike read-across 1 Jul; RBC ‘promotional / lack of brand heat’ 3 Aug)?",
+      "North America is now the largest region (FY25 RNS ~37% / £4.24bn; OTCQX upgrade Jun 2026). What do the FY26 CH accounts say on UK vs Europe vs NA LFL, footwear vs apparel mix, Hibbett/$25m synergy, Courir remedies, and Germany, and does that mix make the Aug-20 US warning a group-earnings event rather than a regional blip?",
+      "Is economic leverage actually comfortable once IFRS-16 leases (Yahoo FY26 total debt 3,680m, capital-lease obligations 3,138m, cash 854m), the Hibbett $700m term loan / refinancing, and the Genesis 20% NCI put/call deferred to 2029–30 with a £1.5bn cap (FY25 RNS) are restored — and why did cyclical_exposure_detected, cash_conversion_overlay and interim_quality_overlay stay false on a Consumer Cyclical sports-fashion retailer with empty Yahoo quarterlies and no intra-year filing?",
+      "Dividend family passed at a 1.4% yield (DPS 1.00p → 1.20p proposed) while quality/Piotroski/GARP/Earnings Quality passed through two years of statutory profit decline, £150m FY26 unusual items / £119m impairments, and a shrinking diluted share count (5,160m → 5,112m; ordinary 5,183m → 4,921m after the £200m FY26 buyback). How much of EPS/ROE 13.7% is buyback shrinkage versus operations, and what do filings say on Pentland control / remaining FY27 buyback authority versus TVR?",
+      "Screen trade_plan is null while summary cites core/tactical limits £80.66 / £77.41 (stop £72.71, target £87.71) against a share price in the ~80p area (broker TPs 86–100p). With RSI 39, price ~flat vs SMA200, 12 weeks persistent Buy since 2026-08-02 (straddling the 20 Aug warning), conviction_score 1.0, and research already at Accumulate / medium / adjusted_signal buy, is the ladder buying a post-warning name on a pounds-vs-pence limit stack?"
+    ],
+    "meta_reflection": [
+      {
+        "topic": "evidence_ladder",
+        "observation": "Filings-first order is adequate only if period tags and intra-year coverage are true. For JD.L they are not: period_coverage annual=15/interim=0/trading_update=0 counts eight CH accounts (2019–2026), a May 2025 FY25 results RNS (duplicated), and six Google News ‘Across The Markets’ wraps (JD Wetherspoon / Helios Towers / BHP) as annual, while the live August 2026 profit-warning trading update is absent. yahoo_quarterly_cashflow sits on the ladder but is empty (TTM suppressed); alternate_news and ir_presentation_metrics are dead steps. Headline-only news therefore carries the only post-FY26 operating print, ranked below empty quarterlies.",
+        "priority": "high"
+      },
+      {
+        "topic": "task_schema",
+        "observation": "Four worker types plus a five-task cap force two annual bodies (CH FY26 + FY25 RNS) + news + screen + gap and leave no slot for TVR, the Global Impact Report, or a later-ingested August TU. There is no tagged interim, so a second summarize_filing_body cannot be an H1 without inventing a source. No task type exists to reconcile filing £462m / Yahoo £956m / screen £830m FCF, to cluster JD.com / JD Wetherspoon / JD Vance collisions, or to parse an IR deck. gap_inventory can only list the missing Aug-20 RNS — it cannot fill it.",
+        "priority": "high"
+      },
+      {
+        "topic": "methodology",
+        "observation": "The screen still emits buy (11/22, 5/5 families including dividend at 1.4% yield and FCF Yield at 21.4%) while failed_models is [] despite 11 non-passes, TTM cashflow is suppressed, and fcf_definition_divergence / cyclical_exposure_detected / interim_quality_overlay / cash_conversion_overlay stay false on a three-way FCF split and a sports-fashion cyclical. Research overlays already cut to Accumulate / medium / 0.68, and action_note repeats that paragraph many times, so the trial is asked to re-verify a headline Buy the overlay has already downgraded.",
+        "priority": "high"
+      },
+      {
+        "topic": "monitoring",
+        "observation": "A 12-week persistent buy since 2026-08-02 with an in-flight FY27 £200m buyback, a 20 Aug 2026 guidance cut that has no filing body, a 1 Sep chair start (Agnefjäll), and a £1.5bn Genesis NCI option in 2029–30 has no watch schema (ingest of the Aug TU / next H1, remaining buyback vs TVR, FY27 guidance checkpoints, Nike/footwear read-across, Genesis). conviction_score 1.0 and stability_label=persistent are not substitutes for those monitors.",
+        "priority": "high"
+      },
+      {
+        "topic": "memo_structure",
+        "observation": "A generic FINANCIAL REVIEW / RISKS split will blend UK, Europe and NA and will not force GEO MIX, FCF-DEFINITION (company £462m vs Yahoo £956m vs screen £830m, including the FY26 KPI change), LEASE vs EX-LEASE NET CASH, GENESIS NCI, CAPITAL RETURNS (1.4% dividend vs cash buybacks), or an explicit PRIMARY-FILING GAP box for the missing August trading update. Without a ticker-collision slot, workers will treat JD.com revenue-plunge headlines as JD.L colour.",
+        "priority": "medium"
+      },
+      {
+        "topic": "other",
+        "observation": "filings_index body_path values point at docs/data/research/JD.L/sources/... rather than this trial snapshot. sources_used are companies_house + google_news_investegate + investegate_resolved — IR allowlist and Investegate recency did not land FY26 prelim, Jan-26 Christmas TU, Feb-26 buyback launch, or the 20 Aug 2026 TU. financials_annual.json is Yahoo-shaped (FY2023–2026; no root currency field; quarterly_income/quarterly_cashflow empty). screening_snapshot.trade_plan is null while summary cites £80.66 / £77.41 against an ~80p price. Prior-loop research_* fields already pre-answer the trial.",
+        "priority": "medium"
+      }
+    ],
+    "procedural_suggestions": [
+      {
+        "area": "ingest",
+        "summary": "Fetch the 20 Aug 2026 trading-update / FY27 guidance RNS, the FY26 prelim/results RNS (Yahoo already has FY26), the Jan 2026 Christmas TU, and the Feb 2026 £200m buyback-launch RNS. Retag ‘Across The Markets’ Google News wraps and the Investegate share-price page out of period=annual. De-duplicate Investegate/investegate.co.uk pairs (FY25 results, TVR, Global Impact Report). Reject or quarantine headlines whose issuer is JD.com / JD Wetherspoon / JD Vance. Point body_path at the trial snapshot tree. Fire the IR allowlist for FY26 results slides.",
+        "priority": "high"
+      },
+      {
+        "area": "orchestration",
+        "summary": "Select the latest dated annual *statutory* body (CH 01888425 filed 2026-08-05, ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4) plus the only company results RNS (FY25 21 May 2025, e544e58eca35fb32 — not the 8c1186fc3cb64c2d duplicate, not CH 2019–2025, not Across-The-Markets). When interim_count=0 and trading_update_count=0, do not invent or retag a TVR/Impact-Report as interim; keep gap_inventory mandatory. Raise the cap or add a trading_update type so a later-ingested Aug-20 body is not dropped.",
+        "priority": "high"
+      },
+      {
+        "area": "prompt",
+        "summary": "Require annual workers to extract reporting currency (GBP); UK/Europe/NA and footwear vs apparel; statutory vs adjusted PBT/EPS/LFL; OCF, lease principal, PPE capex, company FCF definition (note FY26 KPI change); cash vs financial debt vs IFRS-16 leases vs net cash ex-leases / net leverage; Genesis NCI put/call; dividend declared vs cash paid; buyback cash vs shares cancelled vs remaining authority; Hibbett/Courir/impairments; FY27 outlook if stated. Require news workers to collapse Kalkine/Twelfth Magpie/Simply Wall St SEO, treat Google News as titles only, and discard JD.com / Wetherspoon / Vance collisions. Do not invent August TU statutory figures from headlines.",
+        "priority": "high"
+      },
+      {
+        "area": "scoring",
+        "summary": "Set fcf_definition_divergence whenever filing ~£462m, Yahoo £956m and screen £830m disagree; do not pass FCF Yield at 21.4% without stating the basis. Do not pass the dividend family on a 1.4% yield without showing buyback-inclusive cover on company FCF. Treat sports-fashion / sneaker-cycle as cyclical_exposure. Populate failed_models for the 11/22 non-passes. Do not keep headline buy when research_verdict is already accumulate. Stop splicing prior-memo text into action_note. Validate trade-plan units (pence vs pounds) against the ~80p quote.",
+        "priority": "high"
+      },
+      {
+        "area": "sources",
+        "summary": "Populate alternate_news or drop it from the ladder. Add a structured financials_interim / trading_update extract because Yahoo quarterly_income and quarterly_cashflow are empty on this UK half-year reporter. Expose company vs Yahoo vs screen FCF and lease vs ex-lease net cash on the screening snapshot. Ingest IR presentation metrics for FY26/FY27 guidance bridges.",
+        "priority": "medium"
+      },
+      {
+        "area": "schema",
+        "summary": "Allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action so a later Aug TU can be assigned without inventing a source. Add reporting_currency, listing_unit (pence vs pounds), fcf_basis_used, geo_mix, and ticker_collision (JD.com/JDW) fields. Remap body_path into the trial sources/ tree. Treat empty Yahoo quarterlies on a UK half-year reporter as expected, not the same thin-step severity as a missing August profit-warning RNS.",
+        "priority": "medium"
+      },
+      {
+        "area": "monitoring",
+        "summary": "For a persistent buy sports-fashion name whose intra-year profit warning is news-only, emit watches (ingest of the Aug 2026 TU / next H1 statutory, remaining FY27 £200m buyback vs TVR, FY27 guidance checkpoints, Nike/footwear read-across, Genesis £1.5bn window, chair/CEO) rather than only raising weeks_at_signal. Alert when filings_index fetch time post-dates a results/guidance headline that has no body.",
+        "priority": "medium"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "filing_fy26_ch_annual",
+        "type": "summarize_filing_body",
+        "target": "filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+        "focus": "Companies House group accounts for JD Sports Fashion Plc 01888425 filed 2026-08-05 (catalogued period=annual; entity_type=consolidated; year ended ~31 Jan 2026). This is the latest statutory annual — not CH 2019–2025, not Across-The-Markets wraps tagged annual. Extract reporting currency (GBP); group and UK/Europe/NA revenue, LFL, footwear vs apparel; statutory vs adjusted PBT/EBIT/EPS/margin vs FY25 (Yahoo FY26 revenue 12,662m, NI 436m, operating income 966m, unusual items −150m); OCF, lease repayments, PPE capex, company FCF definition and the FY26 KPI change from OCF-net-of-leases; cash, financial debt, IFRS-16 leases, net cash ex-leases, net leverage; dividend declared vs cash paid; buyback cash vs shares cancelled and any FY27 programme; Genesis NCI put/call; Hibbett/Courir/impairments; wage/IT/cyber/Heerlen; FY27 outlook if stated. Prefer these figures over Yahoo (FCF 956m, total debt 3,680m, leases 3,138m, cash 854m, buybacks 201m, dividends 52m; screen FCF 830m). Do not invent August 2026 trading-update numbers.",
+        "priority": 1
+      },
+      {
+        "id": "filing_fy25_results_rns",
+        "type": "summarize_filing_body",
+        "target": "filings/bodies/e544e58eca35fb32.txt",
+        "focus": "JD SPORTS FASHION PLC FY25 RESULTS RNS (Investegate 21 May 2025; catalogued period=annual — this is the only company-authored results RNS; ignore duplicate 8c1186fc3cb64c2d). Extract FY25 (52w to 1 Feb 2025) vs FY24: revenue, organic vs LFL, adj vs statutory PBT/EPS/margins; UK/Europe/NA mix and Germany commentary; store vs online; OCF net of lease repayments, cash, borrowings including Hibbett $700m loan, capex; dividend; adjusting items / Derby DC / European closures; Genesis 20% NCI put/call and £1.5bn cap; Hibbett and Courir terms/synergies/remedies; people-cost / Heerlen / IT-security flags; medium-term plan (organic vs 2–3% market, capex 5%→3–3.5%). Prefer this body over Yahoo. Do not treat it as FY26 or as the missing Aug 2026 update.",
+        "priority": 1
+      },
+      {
+        "id": "news_digest",
+        "type": "digest_news_manifest",
+        "target": "news_manifest.json",
+        "focus": "Cluster ~93 headlines. Material JD.L clusters: 19–20 Aug 2026 FY27 guidance cut ~£50m / second warning in three months / 11–14% slump / US and footwear (WSJ, This is Money, Yahoo); 3 Sep Deutsche Hold 95p on US weakness; 25 Aug RBC Germany cuts; 12 Aug UBS Europe/footwear pre-update; 7 Aug Agnefjäll chair from 1 Sep; 3 Aug RBC downgrade (brand heat / promotional); 27 Jul buyback near completion; 14 Jul Deutsche TP 85p→95p cash-generation; 1 Jul Nike read-across; 24–25 Jun OTCQX / US largest market; 23 Feb £200m buyback; 21 Jan Christmas UK LFL down / FY26 in-line / NA improve; 16 Apr Applied Nutrition stake sale. Collapse Kalkine/Twelfth Magpie/Simply Wall St/Armchair Trader SEO into one tone line. Discard JD.com (Joybuy/618/Carrier), JD Wetherspoon, and JD Vance collisions. Google News items are RSS titles only — do not invent article-body or August TU statutory figures.",
+        "priority": 2
+      },
+      {
+        "id": "screen_context",
+        "type": "screen_context",
+        "target": "screening_snapshot.json",
+        "focus": "Record buy 11/22, composite 0.6912, sector-relative 0.599, families cheapness/quality/dividend/GARP/risk, passed_models Earnings Yield / FCF Yield / Low P/E + High Yield / Neff PEGY / Dividend Growth / Magic Formula / Acquirer’s Multiple / Dreman / Piotroski / Composite Value / Earnings Quality. Flag failed_models=[] despite 11 models not passing; TTM cashflow suppressed (quarterly_cashflow_empty); cash_conversion / cyclical_exposure / interim_quality / fcf_definition_divergence overlays false; data_quality 20/20; conviction_score 1.0, 12w persistent/stable since 2026-08-02 (includes the 20 Aug warning); timing=neutral, RSI 38.8, price +1.0% vs SMA200; trade_plan null vs summary limits £80.66 / £77.41 (stop £72.71, TP £87.71) on an ~80p name; key_metrics P/E 9.0, P/B 1.3, yield 1.4%, ROE 13.7%, FCF 830m (also E/P 11.1%, FCF yield 21.4%); adjusted_signal buy, research_verdict accumulate / medium / 0.68 with action_note boilerplate repeated many times. List which claims must be confirmed on a filing-FCF (£462m), lease-adjusted net cash, post-buyback share-count, post-Aug-warning FY27 guidance, and pence-vs-pounds trade-plan basis.",
+        "priority": 3
+      },
+      {
+        "id": "gap_inventory",
+        "type": "gap_inventory",
+        "target": "source_inventory",
+        "focus": "Document thin/unavailable steps: yahoo_quarterly_cashflow empty, yahoo_quarterly_income empty (inside financials_annual.json), ir_presentation_metrics absent, alternate_news absent, TTM cashflow suppressed. Period coverage annual=15 / interim=0 / trading_update=0 is misleading: several annuals are Across-The-Markets wraps (ed2fb2cdfb79d390, a53903de1fc9643b, 4fe2d485b4006c51, 4c52ecd247078abb, 50ac97295395a76f) or a share-price page without a body (8274cc68569c851c). Highest-value unread bodies the 5-cap omitted (do not open them): FY25 CH accounts filings/bodies/ch_01888425_MzQ3NDY0NDU0MGFkaXF6a2N4.txt; FY25 RNS duplicate 8c1186fc3cb64c2d.txt; TVR a4140958cc5ed51b.txt. Note no August 2026 trading-update RNS, no FY26 prelim RNS, and no H1 2026 statutory body are indexed as of 4 Sep 2026. State what the memo must leave unknown: verified FY27 guidance / Q2 LFL by region, intra-year FCF, remaining buyback authority, IR-slide KPIs, and any post-TU Board numbers.",
+        "priority": 1
+      }
+    ],
+    "director_agent_id": "agent-67548f10-00da-42bf-afb2-3677cf0f9815"
+  },
+  "worker_results": [
+    {
+      "task_id": "filing_fy26_ch_annual",
+      "task_type": "summarize_filing_body",
+      "status": "partial",
+      "findings": [
+        "Source is JD Sports Fashion Plc Annual Report & Accounts 2026 (Companies House consolidated group accounts, company number 01888425); reporting currency is GBP (£) throughout (source_path: /workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt).",
+        "Period covered: 52 weeks to 31 January 2026 (FY26); KPIs stated on FY26 and FY25 audited 52-week basis for comparability (source_path: .../ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt).",
+        "Filing body is truncated (~984 lines, ends mid-Chair's Statement); financial statements, CFO review, KPI detail (pp 34–43), Note 4 adjusting items, and Alternative Performance Measures (pp 222–228) are not present in this extract.",
+        "Group revenue FY26: £12,662m (+10.5% YoY); regional split NA £4,779m, Europe £4,246m, UK £3,110m, Asia Pacific £527m (totals reconcile to group revenue) (source_path: .../ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt).",
+        "Organic revenue growth +2.1% at constant FX (4.2% from new stores, −2.1% LFL); total constant-FX growth 11.7% including 9.8% from Hibbett and Courir acquisition annualisation (source_path: .../ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt).",
+        "Adjusted metrics FY26: operating profit £787m (−12.8% YoY); profit before tax and adjusting items £852m (−7.7%); operating margin before adjusting items after interest on lease liabilities 7.0% (−120 bps); adjusted basic EPS 11.71p (−5.5%) (source_path: .../ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt).",
+        "Statutory basic EPS FY26: 8.63p (−9.2% YoY); statutory PBT/PBT before tax, statutory operating profit, net income and adjusting-items breakdown not disclosed in this extract (source_path: .../ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt).",
+        "Gross margin FY26 47.0%, flat YoY; 30 bps price investment (particularly online) offset by higher marketing contributions (source_path: .../ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt).",
+        "Apparel sales penetration 30% (footwear/apparel revenue split not quantified); online 21% of sales (source_path: .../ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt).",
+        "Cash KPI change: Group updated headline KPI from operating cash flow net of lease repayments to free cash flow; full definition referenced on page 33 (not in extract) (source_path: .../ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt).",
+        "FY26 free cash flow (company KPI definition): £462m (+36% YoY); operating cash flow described as over £1.3bn (source_path: .../ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt).",
+        "Balance-sheet metrics cited qualitatively: net leverage 1.4x; net cash excluding leases £311m (OCR: 'E3tIm'); cash, financial debt and IFRS 16 lease liability amounts not in extract (source_path: .../ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt).",
+        "Shareholder returns FY26: £200m share repurchases completed; proposed total dividend 1.20p/share (final 0.87p vs FY25 final 0.67p; FY25 total 1.00p); additional £200m buyback announced February 2026 to complete in FY27; dividend cash paid and shares cancelled not stated (source_path: .../ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt).",
+        "Hibbett (acquired 2024) and Courir annualisation contributed 9.8% to revenue growth; NA back-office synergies post-Hibbett cited; Courir operates 311 stores in Europe (source_path: .../ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt).",
+        "Operational themes: Heerlen DC automation for Europe; further investment in technology infrastructure and cyber security; AI-enabled commerce referenced (source_path: .../ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt).",
+        "Medium-term guidance (not FY27 numerical trading update): organic revenue ahead of ~2–3% market; space growth ~2–3% of revenue; capex trending to 3–3.5% of revenue; ~70% capex in NA and Europe; Europe target high-single-digit operating margin; profit growth ahead of revenue over medium term (source_path: .../ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt).",
+        "FY27 outlook (Chair): qualitative only—expects continued challenges/uncertainty but remains highly cash generative and confident in resilience; no August 2026 trading-update numbers (source_path: .../ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt)."
+      ],
+      "figures": [
+        {
+          "metric": "Reporting currency",
+          "value": "GBP (£)",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "All monetary amounts in £m unless stated"
+        },
+        {
+          "metric": "Group revenue",
+          "value": "£12,662m",
+          "period": "FY26 (52w to 31 Jan 2026)",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "+10.5% YoY"
+        },
+        {
+          "metric": "North America revenue",
+          "value": "£4,779m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "~40% of global sales cited elsewhere in report"
+        },
+        {
+          "metric": "Europe revenue",
+          "value": "£4,246m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "~33% of Group sales cited elsewhere"
+        },
+        {
+          "metric": "UK revenue",
+          "value": "£3,110m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "Regional split per At a Glance"
+        },
+        {
+          "metric": "Asia Pacific revenue",
+          "value": "£527m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "Regional split per At a Glance"
+        },
+        {
+          "metric": "Group LFL (organic)",
+          "value": "−2.1%",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "Within +2.1% organic growth (4.2% space, −2.1% LFL); regional LFL not disclosed"
+        },
+        {
+          "metric": "Revenue growth (constant FX)",
+          "value": "11.7%",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "Includes 9.8% Hibbett/Courir annualisation"
+        },
+        {
+          "metric": "Apparel sales penetration",
+          "value": "30%",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "Footwear vs apparel revenue £ not split"
+        },
+        {
+          "metric": "Gross margin",
+          "value": "47.0%",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "Flat YoY"
+        },
+        {
+          "metric": "Operating profit (adjusted KPI)",
+          "value": "£787m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "−12.8% YoY; statutory operating profit not in extract"
+        },
+        {
+          "metric": "Operating margin before adjusting items (after interest on lease liabilities)",
+          "value": "7.0%",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "−120 bps YoY"
+        },
+        {
+          "metric": "Profit before tax and adjusting items",
+          "value": "£852m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "−7.7% YoY; statutory PBT not in extract"
+        },
+        {
+          "metric": "Basic EPS (statutory)",
+          "value": "8.63p",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "−9.2% YoY"
+        },
+        {
+          "metric": "Adjusted basic EPS",
+          "value": "11.71p",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "−5.5% YoY; OCR reads '11.7Ip'"
+        },
+        {
+          "metric": "Operating cash flow",
+          "value": ">£1.3bn",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "Exact OCF and lease repayments not in extract"
+        },
+        {
+          "metric": "Free cash flow (company KPI)",
+          "value": "£462m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "+36% YoY; definition on p33 not in extract; differs from Yahoo FCF"
+        },
+        {
+          "metric": "Net leverage",
+          "value": "1.4x",
+          "period": "FY26 year-end",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "Basis (EBITDA/adjusted measure) not specified in extract"
+        },
+        {
+          "metric": "Net cash excluding leases",
+          "value": "£311m",
+          "period": "FY26 year-end",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "OCR corruption 'E3tIm' interpreted as £311m from context"
+        },
+        {
+          "metric": "Share buyback cash",
+          "value": "£200m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "Completed during FY26; shares cancelled not stated"
+        },
+        {
+          "metric": "Share buyback programme (announced)",
+          "value": "£200m",
+          "period": "FY27",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "Announced February 2026; to complete during FY27"
+        },
+        {
+          "metric": "Total dividend proposed",
+          "value": "1.20p per share",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "Final 0.87p proposed; +20% vs FY25 total 1.00p"
+        },
+        {
+          "metric": "Total dividend (FY25 comparator)",
+          "value": "1.00p per share",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "FY25 final dividend 0.67p stated for comparison"
+        },
+        {
+          "metric": "Medium-term capex guidance",
+          "value": "3–3.5% of revenue",
+          "period": "Medium term",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "FY26 PPE capex £ amount not in extract"
+        }
+      ],
+      "gaps": [
+        "Filing body truncated before financial statements, notes and APM section; cannot extract statutory PBT, operating profit, net income, or adjusting/unusual items (£) vs FY25.",
+        "No consolidated income statement, cash flow statement or balance sheet: cash, financial debt, IFRS 16 lease liabilities, lease repayments and PPE capex £ amounts unavailable.",
+        "Company free cash flow definition and reconciliation (referenced p33 and pp 222–228) not in extract.",
+        "Prior-year absolute comparatives for revenue, operating profit, PBT and EPS not shown (only YoY percentages).",
+        "Regional LFL (UK, Europe, NA) not disclosed; footwear vs apparel revenue £ split not provided (only 30% apparel penetration).",
+        "Dividend cash paid in FY26 vs amount proposed; total dividend £ cash cost not stated.",
+        "Share buyback: number of shares cancelled/repurchased not stated.",
+        "Genesis NCI put/call options not mentioned in extract.",
+        "Impairment charges (Hibbett, Courir or other) not mentioned in extract.",
+        "Wage/cost inflation quantification not provided (colleague count 96k+ only).",
+        "No August 2026 trading-update or quantitative FY27 revenue/profit guidance in this source."
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-50269114-fd7f-480b-a1ea-a8d4ef0d1f6e"
+    },
+    {
+      "task_id": "filing_fy25_results_rns",
+      "task_type": "summarize_filing_body",
+      "status": "completed",
+      "findings": [
+        "FY25 covers the 52 weeks to 1 February 2025; FY24 comparatives are restated on a 52-week basis to 27 January 2024 (statutory FY24 was 53 weeks to 3 February 2024) — source: /workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+        "Group revenue £11,458m (+10.2% reported; +12.0% constant currency); organic sales growth 5.8% (LFL +0.3%, new space/conversions +5.5%), vs estimated market growth 3.8% — source: e544e58eca35fb32.txt",
+        "Gross margin before adjusting items 47.8% (FY24 48.0%, −20bps); excluding Hibbett and Courir, margin flat at 48.0% — source: e544e58eca35fb32.txt",
+        "Operating profit before adjusting items after interest on lease liabilities £937m (FY24 £940m, −0.3%; +0.8% CC); operating margin 8.2% vs 9.0% (−80bps reported, −90bps CC) — source: e544e58eca35fb32.txt",
+        "Profit before tax and adjusting items £923m (FY24 £961m, −4.0%; −2.9% CC), in line with January guidance; reduction driven partly by £35m higher net finance expense ex lease interest from lower cash and acquisition borrowings — source: e544e58eca35fb32.txt",
+        "Statutory PBT £715m (FY24 £811m, −11.8%); statutory operating profit £903m (FY24 £927m); statutory net finance expense £188m (FY24 £116m) — source: e544e58eca35fb32.txt",
+        "Adjusted basic EPS 12.39p (FY24 12.81p, −3.3%); statutory basic EPS 9.50p (FY24 10.45p, −9.1%) — source: e544e58eca35fb32.txt",
+        "Geographic revenue mix FY25: North America £4,242m (37%, +27% incl. six months Hibbett), Europe £3,510m (31%, +9.5% incl. two months Courir), UK £3,205m (28%, −4.1% mainly non-core divestments), Asia Pacific £501m (4%, +0.4%) — source: e544e58eca35fb32.txt",
+        "Germany called out as challenging vs southern Europe success: structurally higher people costs and lower consumer appetite for sports fashion — source: e544e58eca35fb32.txt",
+        "Channel mix: stores £9,081m (+15.7%, 79% of revenue); online £2,251m (−2.9%, 20%); online −6.6% ex acquisitions; shift reflects post-Covid store recovery, store investment and online profitability focus — source: e544e58eca35fb32.txt",
+        "Operating cashflow net of lease repayments £1,245m (FY24 £1,161m, +7.2%); lease liability repayments £420m — source: e544e58eca35fb32.txt",
+        "Cash and cash equivalents £695m at period end; net cash before lease liabilities £52m (FY24 £1,032m); interest-bearing loans and borrowings £679m (FY24 £130m) — source: e544e58eca35fb32.txt",
+        "Hibbett acquisition funded via $1bn term loan drawn 25 July 2024; $700m outstanding at 1 Feb 2025 after post-acquisition repayments; Group refinancing £700m RCF, $300m asset-backed loan and $700m Hibbett term loan, expected H1 FY26 — source: e544e58eca35fb32.txt",
+        "Capital expenditure £515m (stores & gyms £346m, supply chain £110m, technology & other £59m); medium-term guidance capex to trend from c.5% of revenue to 3–3.5%, with ~70% directed to North America and Europe — source: e544e58eca35fb32.txt",
+        "Total dividend per share proposed 1.00p (FY24 0.90p, +11.1%); final dividend 0.67p proposed; FY25 equity dividends paid £48m; post-period £100m share buyback commenced 9 April 2025 — source: e544e58eca35fb32.txt",
+        "Adjusting items net charge £208m (FY24 £155m): Derby DC closure impairment £76m (closed Sep 2024); European store estate review — 46 stores to close, £29m impairment; acquisition costs Hibbett/Courir £45m; amortisation of acquired intangibles £57m; Genesis/DTLR put-call revaluation £62m; Applied Nutrition disposal gain £78m — source: e544e58eca35fb32.txt",
+        "Genesis Topco (North America holding company): Group owns 80%, 20% NCI remains; March 2025 amendment defers exercise to two equal 10% instalments post-FY2029 and post-FY2030 (was four 5% instalments); option price EBITDA-based; total liability cap unchanged at £1.5bn — source: e544e58eca35fb32.txt",
+        "Hibbett: acquired 25 Jul 2024 for $1,077m (1,179 stores); expected earnings accretive first full year; cost synergies at least $25m medium term; US integration one-off cash cost ~1× annual savings — source: e544e58eca35fb32.txt",
+        "Courir: acquired 27 Nov 2024 for €391m (306 stores); €198m acquired bank debt repaid; EC remedies required sale of 21 stores across France and Portugal before FY25 end — source: e544e58eca35fb32.txt",
+        "People/infrastructure flags: >£100m additional people cost over last two years (wage inflation, age-banding removal); Heerlen DC delayed ~1 year with increased costs, now back on track (automated store orders FY26 peak, online FY27); ~£60m spent securing IT infrastructure/back-office resilience — source: e544e58eca35fb32.txt",
+        "Updated medium-term plan (April 2025): organic revenue ahead of market estimated 2–3% p.a.; space growth contribution to settle ~3–4%; profit growth ahead of revenue beyond FY26; focus on profitability, cash generation and shareholder returns — source: e544e58eca35fb32.txt"
+      ],
+      "figures": [
+        {
+          "metric": "Revenue",
+          "value": "£11,458m (+10.2% reported; +12.0% CC)",
+          "period": "FY25 52w to 1 Feb 2025 vs FY24 52w restated",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY24 restated £10,397m"
+        },
+        {
+          "metric": "Organic sales growth / LFL",
+          "value": "5.8% organic; 0.3% LFL; 5.5% new space",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "Market growth estimated 3.8%"
+        },
+        {
+          "metric": "Gross margin before adjusting items",
+          "value": "47.8% (−20bps); 48.0% ex acquisitions",
+          "period": "FY25 vs FY24",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY24 48.0%"
+        },
+        {
+          "metric": "Operating profit before adjusting items after lease interest",
+          "value": "£937m (−0.3%; +0.8% CC)",
+          "period": "FY25 vs FY24",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY24 £940m"
+        },
+        {
+          "metric": "Operating margin before adjusting items after lease interest",
+          "value": "8.2% (−80bps; −90bps CC)",
+          "period": "FY25 vs FY24",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY24 9.0%"
+        },
+        {
+          "metric": "Profit before tax and adjusting items",
+          "value": "£923m (−4.0%; −2.9% CC)",
+          "period": "FY25 vs FY24",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY24 £961m"
+        },
+        {
+          "metric": "Statutory profit before tax",
+          "value": "£715m (−11.8% vs 53w FY24)",
+          "period": "FY25 vs FY24 statutory",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY24 statutory £811m"
+        },
+        {
+          "metric": "Adjusted basic EPS",
+          "value": "12.39p (−3.3%)",
+          "period": "FY25 vs FY24 restated",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY24 12.81p"
+        },
+        {
+          "metric": "Statutory basic EPS",
+          "value": "9.50p (−9.1%)",
+          "period": "FY25 vs FY24 statutory",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY24 10.45p"
+        },
+        {
+          "metric": "UK / Europe / North America revenue",
+          "value": "£3,205m / £3,510m / £4,242m (28% / 31% / 37% of Group)",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "UK −4.1%; Europe +9.5%; NA +27%"
+        },
+        {
+          "metric": "Store vs online revenue",
+          "value": "Stores £9,081m (79%); online £2,251m (20%)",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "Stores +15.7%; online −2.9%"
+        },
+        {
+          "metric": "Operating cashflow net of lease repayments",
+          "value": "£1,245m (+7.2%)",
+          "period": "FY25 vs FY24",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY24 £1,161m"
+        },
+        {
+          "metric": "Net cash before lease liabilities",
+          "value": "£52m",
+          "period": "FY25 period end",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY24 £1,032m"
+        },
+        {
+          "metric": "Cash and cash equivalents",
+          "value": "£695m",
+          "period": "FY25 period end",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY24 £1,102m"
+        },
+        {
+          "metric": "Interest-bearing loans and borrowings",
+          "value": "£679m",
+          "period": "FY25 period end",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY24 £130m; includes $700m Hibbett term loan"
+        },
+        {
+          "metric": "Hibbett term loan balance",
+          "value": "$700m outstanding",
+          "period": "1 Feb 2025",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "Drawn from $1bn facility 25 Jul 2024"
+        },
+        {
+          "metric": "Capital expenditure",
+          "value": "£515m total",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "Stores £346m; supply chain £110m; tech £59m"
+        },
+        {
+          "metric": "Dividend per share",
+          "value": "1.00p total proposed (+11.1%); final 0.67p",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY24 0.90p"
+        },
+        {
+          "metric": "Adjusting items",
+          "value": "£208m net charge",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "Derby DC £76m; EU closures £29m; Genesis put/call £62m"
+        },
+        {
+          "metric": "Genesis NCI put/call cap",
+          "value": "£1.5bn cap; 20% NCI; two 10% exercises FY2029/FY2030",
+          "period": "Post-balance sheet amendment Mar 2025",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "Group owns 80% of Genesis Topco"
+        },
+        {
+          "metric": "Hibbett acquisition / synergies",
+          "value": "$1,077m; ≥$25m cost synergies medium term",
+          "period": "Completed Jul 2024",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "1,179 stores; earnings accretive first full year"
+        },
+        {
+          "metric": "Courir acquisition / remedies",
+          "value": "€391m; 21 stores sold for EC clearance",
+          "period": "Completed Nov 2024",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "306 stores; €198m acquired debt repaid"
+        },
+        {
+          "metric": "Medium-term capex guidance",
+          "value": "c.5% of revenue trending to 3–3.5%",
+          "period": "Medium term",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "Organic revenue target ahead of 2–3% market growth"
+        }
+      ],
+      "gaps": [
+        "Source body truncated at end; full notes/reconciliations (pages 41–47 referenced) not present in this file",
+        "Interim dividend amount not stated explicitly (only total 1.00p and final 0.67p proposed)",
+        "No standalone Germany revenue or margin figures — only qualitative commentary",
+        "Statutory operating margin not disclosed separately"
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-657266c9-e8a1-4ede-8d5a-312904a7785b"
+    },
+    {
+      "task_id": "news_digest",
+      "task_type": "digest_news_manifest",
+      "status": "partial",
+      "findings": [
+        "Manifest holds 93 headlines (updated 2026-09-04); material JD.L flow clusters Aug–Sep 2026 around US/footwear weakness, broker actions, governance and capital returns — source: /workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/news_manifest.json",
+        "19–20 Aug 2026 trading update: JD cut FY27 profit guidance by ~£50m (~$68m); yfinance cites weaker consumer sentiment, subdued footwear/sneaker demand, North America deterioration and pricing pressure; framed as second profit warning within three months (This is Money RSS title); share reaction reported at ~11% (Yahoo), 12% (Yahoo UK/Twelfth Magpie RSS titles) and >14% (Yahoo) — sources: news_manifest articles cb12172b, 5f7007d5, d5913cf1, af109da2, 038913517, 859c65f51, 22f3f509, e77906b4",
+        "WSJ (via yfinance): full-year profit guidance cut after Q2 sales fell on pricing pressure and weak US performance — source: news_manifest article af109da2",
+        "Post-update broker caution: UBS and Shore Capital flagged sharp North America deterioration (yfinance summary); no Shore detail in manifest — source: news_manifest article 22f3f509",
+        "3 Sep 2026: Deutsche Bank reiterates Hold, 95p price target; cites weaker Q2 sales and deteriorating US trends in JD’s largest market — source: news_manifest article 84ddee40",
+        "25 Aug 2026: RBC cuts JD Sports profit forecasts alongside H&M, citing sluggish German consumer demand and higher cost of living — source: news_manifest article 61017bff",
+        "12 Aug 2026 (pre-update): UBS trims price target 87p→86p, neutral; flags Europe and footwear as weak points ahead of 20 Aug update — source: news_manifest article e8d86c4a",
+        "7 Aug 2026: Peter Agnefjäll appointed chair effective 1 Sep 2026, succeeding interim chair Darren Shapland (in post since AGM 21 Jul 2026) — source: news_manifest article 758a7c57",
+        "3 Aug 2026: RBC downgrades JD to sector perform from outperform, 100p PT; cites highly promotional sportswear, lower-income consumer pressure and lack of ‘brand heat’ — source: news_manifest article 9ec9d28d",
+        "27 Jul 2026: RSS title only — buyback programme nearing completion (Yahoo Finance UK); no amounts in manifest — source: news_manifest article 3927bab7",
+        "14 Jul 2026: Deutsche raises price target 85p→95p, Hold; narrative shifts to margin rebuild and cash generation after rapid expansion (Adam Cochrane) — source: news_manifest article ffb04b86",
+        "1 Jul 2026 Nike read-across: JD shares −2.3% to 82.78p (~2% in related headline) after Nike signalled weaker sales/turnover drag — sources: news_manifest articles b2ae85af, cb5474ef, e5195bd1",
+        "24–25 Jun 2026: US listing upgraded to OTCQX from Pink Limited; coverage notes US is now JD’s largest market — sources: news_manifest articles 078a7f4f, bced9536, 02901491, 2862514d",
+        "23 Feb 2026: £200m share buyback launched (multiple RSS/yfinance titles; no further terms in manifest) — sources: news_manifest articles 75befd0eb478361e, d77a8c085b8870d0",
+        "21 Jan 2026 (RSS titles only): UK Christmas sales fall; FY26 profit seen in line with North America improving — sources: news_manifest articles 22968f0905432cfe, 1a8d91704b0e80d2",
+        "16 Apr 2026: JD sells entire Applied Nutrition stake for $66.5m (Reuters RSS title); related headline on Applied Nutrition share reaction — sources: news_manifest articles 2a6de98dc380ace5, c0637b39857eb203",
+        "Retail SEO cluster (Kalkine, Twelfth Magpie, Simply Wall St, Armchair Trader): repetitive UK value/share-price debate and watchlist framing without incremental corporate disclosures — titles only across ~15 entries in manifest",
+        "Discarded collisions (not JD Sports Fashion): JD.com/Joybuy/618/Carrier items; JD Wetherspoon round-ups; JD Vance political piece — excluded from findings",
+        "Peripheral: Genesco CEO contrasts Journeys with Foot Locker/JD Sports competitive context (3 Sep) — source: news_manifest article 82608cad"
+      ],
+      "figures": [
+        {
+          "metric": "FY27 profit guidance reduction",
+          "value": "~£50m (~$68m)",
+          "period": "Aug 2026 trading update",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/news_manifest.json",
+          "note": "Article id cb12172b (yfinance summary)"
+        },
+        {
+          "metric": "Share price move (post guidance cut)",
+          "value": "almost 11%",
+          "period": "19–20 Aug 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/news_manifest.json",
+          "note": "Article id 5f7007d5"
+        },
+        {
+          "metric": "Share price move (post guidance cut)",
+          "value": "over 14%",
+          "period": "20 Aug 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/news_manifest.json",
+          "note": "Article id d5913cf1"
+        },
+        {
+          "metric": "Share price move (post guidance cut)",
+          "value": "12%",
+          "period": "20 Aug 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/news_manifest.json",
+          "note": "RSS title only; article id 859c65f51"
+        },
+        {
+          "metric": "Deutsche Bank price target",
+          "value": "95p",
+          "period": "3 Sep 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/news_manifest.json",
+          "note": "Hold rating; article id 84ddee40"
+        },
+        {
+          "metric": "Deutsche Bank price target change",
+          "value": "85p → 95p",
+          "period": "14 Jul 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/news_manifest.json",
+          "note": "Hold maintained; article id ffb04b86"
+        },
+        {
+          "metric": "UBS price target change",
+          "value": "87p → 86p",
+          "period": "12 Aug 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/news_manifest.json",
+          "note": "Neutral rating; article id e8d86c4a"
+        },
+        {
+          "metric": "RBC price target (post-downgrade)",
+          "value": "100p",
+          "period": "3 Aug 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/news_manifest.json",
+          "note": "Sector perform from outperform; article id 9ec9d28d"
+        },
+        {
+          "metric": "Share price (Nike read-across)",
+          "value": "82.78p (−2.3%)",
+          "period": "1 Jul 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/news_manifest.json",
+          "note": "Article id b2ae85af"
+        },
+        {
+          "metric": "Share buyback programme",
+          "value": "£200m",
+          "period": "23 Feb 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/news_manifest.json",
+          "note": "RSS title only; article id 75befd0eb478361e"
+        },
+        {
+          "metric": "Applied Nutrition stake sale proceeds",
+          "value": "$66.5m",
+          "period": "16 Apr 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/news_manifest.json",
+          "note": "Reuters RSS title only; article id 2a6de98dc380ace5"
+        }
+      ],
+      "gaps": [
+        "Revised absolute FY27 profit guidance level not stated in any manifest summary",
+        "First profit warning (referenced as three months prior to Aug 2026) — date and magnitude absent",
+        "Aug trading-update statutory/Q2 sales, LFL and regional splits not in manifest (RSS titles only for several Aug items; instruction not to invent TU figures)",
+        "21 Jan 2026 Christmas UK LFL magnitude and FY26 profit range not in RSS titles",
+        "27 Jul buyback — completion status, shares purchased and remaining authorisation not disclosed",
+        "16 Apr Applied Nutrition — stake size, buyer and GBP equivalent not in manifest beyond $66.5m headline",
+        "25 Aug RBC JD-specific forecast cut magnitude and any PT change not in yfinance summary",
+        "Shore Capital post-Aug-update commentary referenced but not summarised",
+        "14 Aug pre-update piece mentions 20 Aug Regis Schultz trading update but no figures"
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/news_manifest.json"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-bc5c57a4-a813-4caa-8ffd-781242971f1f"
+    },
+    {
+      "task_id": "screen_context",
+      "task_type": "screen_context",
+      "status": "partial",
+      "findings": [
+        "Screen signal is buy with 11 of 22 models passing (models_passed=11, model_count=22) — source: /workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+        "Composite score 0.6912; sector-relative composite 0.5988 (~60%) — same source",
+        "All five factor families pass: cheapness, quality, dividend, GARP, risk (families_passed=5/5) — same source",
+        "Passed models (11): Earnings Yield, FCF Yield, Low P/E + High Yield, Neff PEGY, Dividend Growth, Magic Formula, Acquirer's Multiple, Dreman Contrarian, Piotroski F-Score, Composite Value, Earnings Quality — same source",
+        "failed_models is an empty array [] and model_failures is {} despite 11 of 22 models not passing — data inconsistency to reconcile — same source",
+        "Data quality reported as 20/20 (metrics_present=20, metrics_total=20, data_quality_score=1.0) — same source",
+        "Conviction: conviction_score=1.0, stability_label=persistent, signal_trend=stable, weeks_at_signal=12, signal_since=2026-08-02 (spans 20 Aug trading-update window per research_rationale) — same source",
+        "Summary text states conviction 64%, which conflicts with conviction_score=1.0 — same source",
+        "Timing neutral (timing_signal=neutral, timing_score=0.5); RSI(14)=38.84; price ~+1.0% vs SMA200 (price_vs_sma200_pct=0.0101) — same source",
+        "trade_plan is null; summary embeds limits core £80.66, tactical £77.41, stop £72.71, target £87.71 — on an ~80p name these read as pounds not pence; basis must be confirmed — same source",
+        "Key screen metrics: P/E 9.0, P/B 1.3, yield 1.4%, ROE 13.7%, FCF £830m (key_metrics.FCF=830000000.0); summary also cites E/P 11.1% and FCF yield 21.4% — same source",
+        "TTM cashflow suppressed: yahoo_quarterly.ttm_cashflow_suppressed=true, reason quarterly_cashflow_empty; cashflow_metrics, fcf, operating_cashflow all null — same source",
+        "Overlays all false: cash_conversion_overlay, cyclical_exposure_overlay, interim_quality_overlay, fcf_definition_divergence, fcf_divergence_flagged — same source",
+        "adjusted_signal=buy; research_verdict=accumulate, research_risk_level=medium, research_confidence=0.68 — same source",
+        "action_note repeats the same Accumulate/Medium-risk boilerplate eight times (pipe-delimited) — same source",
+        "Claims requiring filing confirmation (not present in this source): filing-basis FCF ~£462m vs screen FCF £830m; lease-adjusted net cash; post-buyback share count; post–Aug-warning FY27 guidance; pence vs pounds for trade-plan price levels"
+      ],
+      "figures": [
+        {
+          "metric": "models_passed",
+          "value": "11/22",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "signal=buy"
+        },
+        {
+          "metric": "composite_score",
+          "value": "0.6912",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "69% in summary"
+        },
+        {
+          "metric": "sector_composite_score",
+          "value": "0.5988",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "~60% sector-relative"
+        },
+        {
+          "metric": "families_passed",
+          "value": "5/5 (cheapness, quality, dividend, garp, risk)",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": ""
+        },
+        {
+          "metric": "data_quality",
+          "value": "20/20",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "data_quality_score=1.0"
+        },
+        {
+          "metric": "conviction_score",
+          "value": "1.0",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "summary says 64%; 12w persistent/stable since 2026-08-02"
+        },
+        {
+          "metric": "RSI_14",
+          "value": "38.84",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "timing=neutral"
+        },
+        {
+          "metric": "price_vs_sma200_pct",
+          "value": "+1.01%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": ""
+        },
+        {
+          "metric": "P/E",
+          "value": "9.0",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "key_metrics"
+        },
+        {
+          "metric": "P/B",
+          "value": "1.3",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "key_metrics"
+        },
+        {
+          "metric": "dividend_yield",
+          "value": "1.4%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "key_metrics.Yield"
+        },
+        {
+          "metric": "ROE",
+          "value": "13.7%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "key_metrics"
+        },
+        {
+          "metric": "FCF (screen)",
+          "value": "£830m",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "key_metrics.FCF=830000000.0; filing FCF not in source"
+        },
+        {
+          "metric": "E/P",
+          "value": "11.1%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "from summary highlights"
+        },
+        {
+          "metric": "FCF_yield",
+          "value": "21.4%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "from summary highlights"
+        },
+        {
+          "metric": "research_confidence",
+          "value": "0.68",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "verdict=accumulate, risk=medium"
+        },
+        {
+          "metric": "trade_plan_core_limit",
+          "value": "£80.66",
+          "period": "summary text only",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "trade_plan field is null; pence vs pounds unverified"
+        },
+        {
+          "metric": "trade_plan_tactical_limit",
+          "value": "£77.41",
+          "period": "summary text only",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "trade_plan field is null"
+        },
+        {
+          "metric": "trade_plan_stop",
+          "value": "£72.71",
+          "period": "summary text only",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "tactical stop"
+        },
+        {
+          "metric": "trade_plan_target",
+          "value": "£87.71",
+          "period": "summary text only",
+          "source_path": "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+          "note": "tactical target"
+        }
+      ],
+      "gaps": [
+        "failed_models empty despite 11/22 pass rate — identity of 11 failing models not recorded",
+        "Filing-basis FCF (~£462m cited externally) not in snapshot; only screen FCF £830m present",
+        "Lease-adjusted net cash not in snapshot",
+        "Post-buyback share count not in snapshot",
+        "Post–Aug-warning FY27 guidance not in snapshot",
+        "Trade-plan price basis (pence vs pounds) not defined; structured trade_plan is null",
+        "Conviction 64% in summary vs conviction_score 1.0 — unresolved",
+        "TTM/quarterly cashflow unavailable (quarterly_cashflow_empty); cashflow_metrics null",
+        "Current share price not stated in snapshot — cannot validate ~80p vs £80.66 limits",
+        "screening_inputs is empty object — no underlying input detail"
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-c2192c72-4758-4203-aab2-5d9e74cadcd5"
+    },
+    {
+      "task_id": "gap_inventory",
+      "task_type": "gap_inventory",
+      "status": "partial",
+      "findings": [
+        "financials_annual.json: quarterly_income and quarterly_cashflow are empty objects; cashflow_metrics sets ttm_cashflow_suppressed=true with reason quarterly_cashflow_empty — no Yahoo quarterly series and no TTM cash-flow roll-forward.",
+        "No ir_presentation_metrics.json and no alternate_news artefact anywhere under sources/ — IR slide KPIs and alternate news pipeline are absent.",
+        "filings/filings_index.json period_coverage reports annual=15 / interim=0 / trading_update=0 (with_body 15/0/0), but five filings classified annual are Investegate 'Across The Markets' third-party wraps, not JD statutory results: ed2fb2cdfb79d390.txt and a53903de1fc9643b.txt (2026-03-20, JD Wetherspoon piece — no JD Sports content); 4fe2d485b4006c51.txt and 4c52ecd247078abb.txt (2026-05-07, brief FY25 results commentary); 50ac97295395a76f.txt (2026-08-17, pre-update market preview only).",
+        "8274cc68569c851c in filings_index.json is period=other, has_body=false — Investegate share-price landing page indexed without extractable body.",
+        "Indexed JD primary RNS with full body is e544e58eca35fb32.txt (FY25 results, 2025-05-21); duplicate 8c1186fc3cb64c2d.txt same URL/headline also indexed but omitted from this read.",
+        "Companies House annual bodies span 2019–2026 (eight ch_01888425_* entries); most recent ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt published 2026-08-05 is labelled Annual Report & Accounts 2026 (52 weeks to 31 January 2026) — statutory group accounts, not an Investegate prelim RNS.",
+        "As of fetched_at 2026-09-04T17:29:56Z, filings_index.json contains zero interim and zero trading_update entries — no August 2026 trading-update RNS, no FY26 prelim RNS, and no H1 FY26 interim statutory filing indexed.",
+        "news_manifest.json (secondary only) records extensive 2026-08-20 press coverage of a profit-guidance cut and weak Q2/US trading, but no matching RNS body is indexed in filings — post-update Board numbers remain unverified in primary sources.",
+        "Highest-value bodies indexed but omitted under 5-cap (not opened): ch_01888425_MzQ3NDY0NDU0MGFkaXF6a2N4.txt (FY25 CH accounts, 2025-07-09); 8c1186fc3cb64c2d.txt (FY25 RNS duplicate); a4140958cc5ed51b.txt (total voting rights, 2026-01-30).",
+        "Memo must treat as unknown until primary sources ingested: verified FY27 guidance and Q2 LFL by region; intra-year FCF; remaining buyback authority; IR-slide KPIs; any post-August-2026 trading-update Board numbers."
+      ],
+      "figures": [
+        {
+          "metric": "quarterly_income records",
+          "value": "0",
+          "period": "as fetched",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/financials_annual.json",
+          "note": "quarterly_income object is empty {}"
+        },
+        {
+          "metric": "quarterly_cashflow records",
+          "value": "0",
+          "period": "as fetched",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/financials_annual.json",
+          "note": "quarterly_cashflow object is empty {}"
+        },
+        {
+          "metric": "ttm_cashflow_suppressed",
+          "value": "true",
+          "period": "as fetched",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/financials_annual.json",
+          "note": "reason: quarterly_cashflow_empty"
+        },
+        {
+          "metric": "filings period coverage (annual / interim / trading_update)",
+          "value": "15 / 0 / 0",
+          "period": "indexed total 21",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/filings_index.json",
+          "note": "summary.period_coverage; five annual-classified entries are Across-The-Markets wraps"
+        },
+        {
+          "metric": "Revenue",
+          "value": "£11,458m",
+          "period": "FY25 (52 weeks to 1 February 2025)",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY25 results RNS"
+        },
+        {
+          "metric": "Profit before tax and adjusting items",
+          "value": "£923m",
+          "period": "FY25",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY25 results RNS"
+        },
+        {
+          "metric": "Operating cashflow net of lease repayments",
+          "value": "£1,245m",
+          "period": "FY25",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY25 results RNS"
+        },
+        {
+          "metric": "Organic sales growth / LFL sales growth",
+          "value": "5.8% / 0.3%",
+          "period": "FY25",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+          "note": "FY25 results RNS"
+        },
+        {
+          "metric": "Revenue",
+          "value": "£12,662m",
+          "period": "FY26 (52 weeks to 31 January 2026)",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "Companies House Annual Report & Accounts 2026; OCR-extracted"
+        },
+        {
+          "metric": "Profit before tax and adjusting items",
+          "value": "£852m",
+          "period": "FY26",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "down 7.7% YoY per CH annual report body"
+        },
+        {
+          "metric": "LFL sales growth",
+          "value": "-2.1%",
+          "period": "FY26",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "CH annual report body"
+        },
+        {
+          "metric": "Free cash flow",
+          "value": "£462m",
+          "period": "FY26",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "CH annual report body; differs from Yahoo annual cash_flow 2026 figure below"
+        },
+        {
+          "metric": "Share buyback completed",
+          "value": "£200m",
+          "period": "FY26",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+          "note": "CH notes additional £200m programme announced; remaining authority not stated in excerpt"
+        },
+        {
+          "metric": "Total Revenue (Yahoo annual)",
+          "value": "£12,662m",
+          "period": "Yahoo label 2026",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/financials_annual.json",
+          "note": "aligns with FY26 CH revenue; Yahoo 2025 row £11,458m matches FY25 RNS"
+        },
+        {
+          "metric": "Free Cash Flow (Yahoo annual)",
+          "value": "£956m",
+          "period": "Yahoo label 2026",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/financials_annual.json",
+          "note": "not reconciled to CH FY26 £462m; TTM/quarterly path unavailable"
+        },
+        {
+          "metric": "Repurchase Of Capital Stock (Yahoo annual)",
+          "value": "£201m",
+          "period": "Yahoo label 2026",
+          "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/financials_annual.json",
+          "note": "annual cash_flow 2026; remaining buyback authority not in Yahoo feed"
+        }
+      ],
+      "gaps": [
+        "Yahoo quarterly_income and quarterly_cashflow empty — no intra-year P&L or cash-flow bridge.",
+        "TTM cash-flow metrics suppressed; cannot compute rolling FCF/OCF from this source pack.",
+        "ir_presentation_metrics absent — no verified IR-deck KPI table (store counts by format, regional margins, STATUS members, capex split, etc.).",
+        "alternate_news absent — no curated non-Yahoo/non-Google news layer.",
+        "Misleading annual coverage: five Across-The-Markets wraps and one no-body share-price page inflate annual count without JD statutory content.",
+        "No indexed August 2026 trading-update RNS — verified FY27 guidance cut, Q2 LFL by region, and post-update profit range unavailable from primary filings.",
+        "No indexed FY26 prelim results RNS (only Companies House annual body and secondary press).",
+        "No indexed H1 FY26 interim statutory filing (interim=0 in filings_index.json).",
+        "Unread high-value bodies under 5-cap: FY25 CH accounts (ch_01888425_MzQ3NDY0NDU0MGFkaXF6a2N4.txt), FY25 RNS duplicate (8c1186fc3cb64c2d.txt), latest TVR (a4140958cc5ed51b.txt) — remaining buyback authority and current voting-rights denominator not verified here.",
+        "Memo must explicitly leave unknown: verified FY27 guidance / Q2 LFL by region; intra-year FCF; remaining buyback authority; IR-slide KPIs; post-trading-update Board numbers."
+      ],
+      "sources_read": [
+        "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/financials_annual.json",
+        "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/filings_index.json",
+        "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/news_manifest.json",
+        "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screen_run_manifest.json",
+        "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+        "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/macro_context.json",
+        "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+        "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ed2fb2cdfb79d390.txt",
+        "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/a53903de1fc9643b.txt",
+        "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/4fe2d485b4006c51.txt",
+        "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/4c52ecd247078abb.txt",
+        "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/50ac97295395a76f.txt",
+        "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-f44a1866-d1aa-41c0-b3ed-4c2e7836f87a"
+    }
+  ],
+  "rubric": {
+    "citation_accuracy": 0.625,
+    "filing_alignment": 1.0,
+    "gap_honesty": 1.0,
+    "structural": 1.0,
+    "composite": 0.869,
+    "notes": []
+  },
+  "research_verdict": "accumulate",
+  "research_confidence": 0.63,
+  "markdown_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/research.md"
+}

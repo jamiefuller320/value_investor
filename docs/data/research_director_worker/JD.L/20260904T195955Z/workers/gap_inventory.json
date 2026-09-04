@@ -1,0 +1,160 @@
+{
+  "task_id": "gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "financials_annual.json: quarterly_income and quarterly_cashflow are empty objects; cashflow_metrics sets ttm_cashflow_suppressed=true with reason quarterly_cashflow_empty — no Yahoo quarterly series and no TTM cash-flow roll-forward.",
+    "No ir_presentation_metrics.json and no alternate_news artefact anywhere under sources/ — IR slide KPIs and alternate news pipeline are absent.",
+    "filings/filings_index.json period_coverage reports annual=15 / interim=0 / trading_update=0 (with_body 15/0/0), but five filings classified annual are Investegate 'Across The Markets' third-party wraps, not JD statutory results: ed2fb2cdfb79d390.txt and a53903de1fc9643b.txt (2026-03-20, JD Wetherspoon piece — no JD Sports content); 4fe2d485b4006c51.txt and 4c52ecd247078abb.txt (2026-05-07, brief FY25 results commentary); 50ac97295395a76f.txt (2026-08-17, pre-update market preview only).",
+    "8274cc68569c851c in filings_index.json is period=other, has_body=false — Investegate share-price landing page indexed without extractable body.",
+    "Indexed JD primary RNS with full body is e544e58eca35fb32.txt (FY25 results, 2025-05-21); duplicate 8c1186fc3cb64c2d.txt same URL/headline also indexed but omitted from this read.",
+    "Companies House annual bodies span 2019–2026 (eight ch_01888425_* entries); most recent ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt published 2026-08-05 is labelled Annual Report & Accounts 2026 (52 weeks to 31 January 2026) — statutory group accounts, not an Investegate prelim RNS.",
+    "As of fetched_at 2026-09-04T17:29:56Z, filings_index.json contains zero interim and zero trading_update entries — no August 2026 trading-update RNS, no FY26 prelim RNS, and no H1 FY26 interim statutory filing indexed.",
+    "news_manifest.json (secondary only) records extensive 2026-08-20 press coverage of a profit-guidance cut and weak Q2/US trading, but no matching RNS body is indexed in filings — post-update Board numbers remain unverified in primary sources.",
+    "Highest-value bodies indexed but omitted under 5-cap (not opened): ch_01888425_MzQ3NDY0NDU0MGFkaXF6a2N4.txt (FY25 CH accounts, 2025-07-09); 8c1186fc3cb64c2d.txt (FY25 RNS duplicate); a4140958cc5ed51b.txt (total voting rights, 2026-01-30).",
+    "Memo must treat as unknown until primary sources ingested: verified FY27 guidance and Q2 LFL by region; intra-year FCF; remaining buyback authority; IR-slide KPIs; any post-August-2026 trading-update Board numbers."
+  ],
+  "figures": [
+    {
+      "metric": "quarterly_income records",
+      "value": "0",
+      "period": "as fetched",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/financials_annual.json",
+      "note": "quarterly_income object is empty {}"
+    },
+    {
+      "metric": "quarterly_cashflow records",
+      "value": "0",
+      "period": "as fetched",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/financials_annual.json",
+      "note": "quarterly_cashflow object is empty {}"
+    },
+    {
+      "metric": "ttm_cashflow_suppressed",
+      "value": "true",
+      "period": "as fetched",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/financials_annual.json",
+      "note": "reason: quarterly_cashflow_empty"
+    },
+    {
+      "metric": "filings period coverage (annual / interim / trading_update)",
+      "value": "15 / 0 / 0",
+      "period": "indexed total 21",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/filings_index.json",
+      "note": "summary.period_coverage; five annual-classified entries are Across-The-Markets wraps"
+    },
+    {
+      "metric": "Revenue",
+      "value": "£11,458m",
+      "period": "FY25 (52 weeks to 1 February 2025)",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+      "note": "FY25 results RNS"
+    },
+    {
+      "metric": "Profit before tax and adjusting items",
+      "value": "£923m",
+      "period": "FY25",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+      "note": "FY25 results RNS"
+    },
+    {
+      "metric": "Operating cashflow net of lease repayments",
+      "value": "£1,245m",
+      "period": "FY25",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+      "note": "FY25 results RNS"
+    },
+    {
+      "metric": "Organic sales growth / LFL sales growth",
+      "value": "5.8% / 0.3%",
+      "period": "FY25",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+      "note": "FY25 results RNS"
+    },
+    {
+      "metric": "Revenue",
+      "value": "£12,662m",
+      "period": "FY26 (52 weeks to 31 January 2026)",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+      "note": "Companies House Annual Report & Accounts 2026; OCR-extracted"
+    },
+    {
+      "metric": "Profit before tax and adjusting items",
+      "value": "£852m",
+      "period": "FY26",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+      "note": "down 7.7% YoY per CH annual report body"
+    },
+    {
+      "metric": "LFL sales growth",
+      "value": "-2.1%",
+      "period": "FY26",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+      "note": "CH annual report body"
+    },
+    {
+      "metric": "Free cash flow",
+      "value": "£462m",
+      "period": "FY26",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+      "note": "CH annual report body; differs from Yahoo annual cash_flow 2026 figure below"
+    },
+    {
+      "metric": "Share buyback completed",
+      "value": "£200m",
+      "period": "FY26",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+      "note": "CH notes additional £200m programme announced; remaining authority not stated in excerpt"
+    },
+    {
+      "metric": "Total Revenue (Yahoo annual)",
+      "value": "£12,662m",
+      "period": "Yahoo label 2026",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/financials_annual.json",
+      "note": "aligns with FY26 CH revenue; Yahoo 2025 row £11,458m matches FY25 RNS"
+    },
+    {
+      "metric": "Free Cash Flow (Yahoo annual)",
+      "value": "£956m",
+      "period": "Yahoo label 2026",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/financials_annual.json",
+      "note": "not reconciled to CH FY26 £462m; TTM/quarterly path unavailable"
+    },
+    {
+      "metric": "Repurchase Of Capital Stock (Yahoo annual)",
+      "value": "£201m",
+      "period": "Yahoo label 2026",
+      "source_path": "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/financials_annual.json",
+      "note": "annual cash_flow 2026; remaining buyback authority not in Yahoo feed"
+    }
+  ],
+  "gaps": [
+    "Yahoo quarterly_income and quarterly_cashflow empty — no intra-year P&L or cash-flow bridge.",
+    "TTM cash-flow metrics suppressed; cannot compute rolling FCF/OCF from this source pack.",
+    "ir_presentation_metrics absent — no verified IR-deck KPI table (store counts by format, regional margins, STATUS members, capex split, etc.).",
+    "alternate_news absent — no curated non-Yahoo/non-Google news layer.",
+    "Misleading annual coverage: five Across-The-Markets wraps and one no-body share-price page inflate annual count without JD statutory content.",
+    "No indexed August 2026 trading-update RNS — verified FY27 guidance cut, Q2 LFL by region, and post-update profit range unavailable from primary filings.",
+    "No indexed FY26 prelim results RNS (only Companies House annual body and secondary press).",
+    "No indexed H1 FY26 interim statutory filing (interim=0 in filings_index.json).",
+    "Unread high-value bodies under 5-cap: FY25 CH accounts (ch_01888425_MzQ3NDY0NDU0MGFkaXF6a2N4.txt), FY25 RNS duplicate (8c1186fc3cb64c2d.txt), latest TVR (a4140958cc5ed51b.txt) — remaining buyback authority and current voting-rights denominator not verified here.",
+    "Memo must explicitly leave unknown: verified FY27 guidance / Q2 LFL by region; intra-year FCF; remaining buyback authority; IR-slide KPIs; post-trading-update Board numbers."
+  ],
+  "sources_read": [
+    "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/financials_annual.json",
+    "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/filings_index.json",
+    "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/news_manifest.json",
+    "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screen_run_manifest.json",
+    "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/screening_snapshot.json",
+    "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/macro_context.json",
+    "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/e544e58eca35fb32.txt",
+    "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ed2fb2cdfb79d390.txt",
+    "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/a53903de1fc9643b.txt",
+    "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/4fe2d485b4006c51.txt",
+    "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/4c52ecd247078abb.txt",
+    "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/50ac97295395a76f.txt",
+    "docs/data/research_director_worker/JD.L/20260904T195955Z/sources/filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-f44a1866-d1aa-41c0-b3ed-4c2e7836f87a"
+}

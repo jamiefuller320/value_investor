@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "source": "director",
+  "open_questions": [
+    "Which free-cash figure is usable for cover and for the FCF Yield / dividend-family passes: Yahoo FY2025 FCF 100.6m (OCF 139.9m − capex 39.3m) versus screen TTM ~27.4m (TTM cashflow suppressed because quarterly_cashflow is empty) versus any company-adjusted textile-rental FCF after hire-stock / ‘other investing’ (−63.7m Yahoo FY25) — and can the FY25 cash dividend (17.4m) plus buybacks (54.7m FY25; new May 2026 programme still printing weekly into September) be funded on the conservative basis while net debt rose 68.6m → 112.4m?",
+    "After the 10 July 2026 H1 trading update (shares slump >12% on hospitality/HORECA weakness; management ‘backs outlook’ and a ~14% operating-margin target with ‘consistent’ H1 revenue), is FY26 volume and the ≥14% margin still intact versus FY25 being news-described as hospitality-boosted — and does P/E 16.2 / yield 3.2% already price a cyclical linen dip or a structural hotel-linen slowdown?",
+    "The catalog has no H1 2026 half-year statutory results RNS (only the 10 July trading update plus three items tagged interim that are NED/AGM/SID notices). Can the Strong Buy be endorsed from the 3 March 2026 FY25 prelim, the July TU, and Yahoo FY2025 (revenue 535.4m, NI 37.1m, operating income 52.3m), or must trade wait on September interims and statutory hire-stock / covenant notes?",
+    "Share count is in free-fall (Yahoo diluted average 418.2m → 402.9m; ordinary shares 414.9m → 378.3m at FY25; news TVR 364.9m at 31 July 2026) while Tweedy, Browne’s voting stake is reported at 12.02% after cancellations. Are screen P/E 16.2, yield 3.2% and ROE 12.7% on the post-buyback denominator, and how much of EPS/ROE ‘quality’ is shrinkage rather than operations?",
+    "Is economic leverage actually comfortable at screen D/E 62% once IFRS-16 leases (Yahoo capital-lease obligations 46.8m, total debt 170.2m, cash 11.0m), negative working capital (−8.3m), and the in-flight buyback are restored — what do FY25 prelim covenants / headroom say, and why did cash_conversion_overlay, cyclical_exposure_detected and interim_quality_overlay stay false on a HORECA-exposed linen rental with empty Yahoo quarterlies?",
+    "FY25 unusual items widened to −7.2m (restructuring/M&A 3.9m) versus −1.6m in FY24 while statutory NI only rose 35.6m → 37.1m against normalized EBITDA 153.4m → 167.8m. Do Earnings Quality / Piotroski / GARP rest on adjusted margin expansion or on a shrinking share count and lower specials — and what is Workwear versus HORECA mix, energy/wage, and plant utilisation in the prelim?",
+    "With RSI 45, price only +2.9% versus the 200-day, 6 weeks at strong_buy, conviction_score 0.036 (summary text still says ‘Conviction 80%’), trade_plan null versus limits £144.84 / £138.99 (stop £130.56, target £151.77), and research already at Accumulate / medium / adjusted_signal buy, is the ladder buying FCF-definition and H1 HORECA risk too aggressively ahead of the still-missing H1 statutory print?"
+  ],
+  "meta_reflection": [
+    {
+      "topic": "evidence_ladder",
+      "observation": "Filings-first order is adequate only if period tags are true. For JSG.L they are not: period_coverage annual=13/interim=3/trading_update=2 counts a FY trading update, Notice of AGM, UKLR 6.4.9R notice and a PDMR as annual, and three NED/AGM/SID items as interim, while the only 2026 operating print (H1 2026 Trading Update, 09c35ef8fa3d6c34) sits as trading_update. yahoo_quarterly_cashflow is on the ladder but empty (TTM suppressed); alternate_news and ir_presentation_metrics are dead steps despite an H2 earnings-call headline. Trading updates are first-class in the index summary but outside the annual/interim assignment rule, so the live HORECA update is easy to drop.",
+      "priority": "high"
+    },
+    {
+      "topic": "task_schema",
+      "observation": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the FY25 Companies House accounts (ch_00523335_MzUxMzI4MDA2NWFkaXF6a2N4), the 16 Jan 2026 FY trading update, the May AGM/buyback launch, or the weekly Transaction-in-Own-Shares cluster. No task type exists to reconcile filing / TTM / company-adjusted FCF or hire-stock versus PPE capex. Naive first-of-period selection would assign the FY trading update as annual and a NED appointment as interim. summarize_filing_body cannot carry period=annual|interim|trading_update, so the director must smuggle the H1 TU in as the interim body.",
+      "priority": "high"
+    },
+    {
+      "topic": "methodology",
+      "observation": "The screen still emits strong_buy (8/22, 5/5 families including dividend and FCF Yield) while fcf_basis_overlay is true but fcf_definition_divergence and fcf_divergence_flagged stay false on a 100.6m / ~27.4m split, and snapshot FCF is labelled with a dollar sign on a sterling linen-rental. cyclical_exposure_detected=false and interim_quality_overlay=false despite HORECA softness and empty Yahoo quarterlies; cash_conversion_overlay=false despite OCF 141.8m → 139.9m and investing −103m. failed_models is [] despite 14/22 non-passes. Research overlays already cut to Accumulate / buy, and action_note repeats that paragraph many times, so the trial is asked to re-verify a headline Strong Buy the overlay has already downgraded.",
+      "priority": "high"
+    },
+    {
+      "topic": "monitoring",
+      "observation": "A 6-week persistent strong_buy with an in-flight May 2026 buyback, weekly own-share RNS into 2 Sep, H1 HORECA weakness on 10 July, and no H1 statutory body as of 4 Sep (typical JSG interim window) has no watch schema (H1 2026 results date, remaining buyback authority vs TVR 364.9m, Tweedy Browne 12%, next FY trading update, energy/wage). conviction_score 0.036 versus summary ‘Conviction 80%’ and stability_label=persistent are not substitutes for those monitors.",
+      "priority": "high"
+    },
+    {
+      "topic": "memo_structure",
+      "observation": "A generic FINANCIAL REVIEW / RISKS split will blend Workwear with HORECA linen and will not force SEGMENT MIX, FCF-DEFINITION (statutory vs hire-stock-adjusted vs TTM), LEVERAGE/COVENANTS after buybacks, CAPITAL RETURNS (dividend vs cash buybacks vs share cancellation), or an explicit PRIMARY-FILING GAP box for the missing H1 statutory. Without those slots workers will treat TipRanks/Kalkine buyback reprints as colour and Yahoo 100.6m FCF as equivalent to screen TTM 27.4m.",
+      "priority": "medium"
+    },
+    {
+      "topic": "other",
+      "observation": "filings_index body_path values point at docs/data/research/JSG.L/sources/... rather than this trial snapshot (62 local bodies vs 63 indexed); one Holding(s) row points at output/research/JSG.L/.... sources_used are companies_house + investegate_direct only — IR allowlist did not fire. financials_annual.json is Yahoo-shaped (FY2021–2025; no root currency field; quarterly_income/quarterly_cashflow empty). screening_snapshot.trade_plan is null while summary cites £144.84 / £138.99; cashflow_metrics/fcf/piotroski at snapshot root are null. Prior-loop research_* fields already pre-answer the trial.",
+      "priority": "medium"
+    }
+  ],
+  "procedural_suggestions": [
+    {
+      "area": "ingest",
+      "summary": "Retag FY-results RNS as period=annual (338b617c814e412b) and H1 trading updates as trading_update only; do not tag NED/SID changes, AGM notices, UKLR 6.4.9R or PDMR as annual/interim. Promote material buyback-programme launch/completion out of period=other. De-duplicate investegate Holding(s) pairs and point body_path at the trial snapshot, not docs/data/research/JSG.L or output/research/. Fetch the H1 2026 half-year report when it prints.",
+      "priority": "high"
+    },
+    {
+      "area": "orchestration",
+      "summary": "Select the latest dated annual *results* body (FY25 prelim 338b617c814e412b — not CH 2019–2024, not the Jan FY trading update tagged annual, not Notice of AGM) and the latest operating interim/TU (H1 2026 TU 09c35ef8fa3d6c34 — not NED appointments tagged interim). When tagged interims are governance-only, allow the director to assign a trading_update in that slot. Keep gap_inventory mandatory while Yahoo quarterlies and H1 statutory are missing.",
+      "priority": "high"
+    },
+    {
+      "area": "prompt",
+      "summary": "Require annual/interim workers to extract reporting currency (GBP, not USD); Workwear vs HORECA revenue/margin; statutory vs adjusted EBIT/EPS; OCF, PPE capex, hire-stock / other investing, FCF definition used; cash, reported vs covenant net debt, IFRS-16 leases; dividend declared vs cash paid and cover vs FCF; buyback authority vs cash spent vs shares cancelled; FY outlook / 14% margin language. Require news workers to collapse TipRanks/Kalkine/TradingView same-day buyback and TVR reprints; treat Google News as titles only; do not invent H1 statutory figures from TU headlines.",
+      "priority": "high"
+    },
+    {
+      "area": "scoring",
+      "summary": "Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_definition_divergence true whenever filing / TTM / adj disagree. Treat HORECA linen rental as cyclical/hospitality exposure. Populate failed_models for the 14/22 non-passes. Do not keep headline strong_buy when research_verdict is already accumulate. Stop splicing prior-memo text into action_note (the Accumulate paragraph is repeated). Fix conviction_score 0.036 versus ‘Conviction 80%’ display. Stop labelling sterling FCF with $.",
+      "priority": "high"
+    },
+    {
+      "area": "sources",
+      "summary": "Populate alternate_news or drop it from the ladder. Add a structured financials_interim extract from the latest H1 RNS/TU because Yahoo quarterly_income and quarterly_cashflow are empty. Fire the IR allowlist for the FY25 results slides (news cites an H2 earnings call). Expose hire-stock / textile-rental FCF bridge on the screening snapshot.",
+      "priority": "medium"
+    },
+    {
+      "area": "schema",
+      "summary": "Allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action so a mis-tagged H1 TU or buyback-launch body can be assigned without inventing a source. Add reporting_currency, fcf_basis_used, segment_mix, and failed_models populated. Remap body_path into the trial sources/ tree. Treat empty Yahoo quarterlies on a UK half-year reporter as expected, not the same thin-step severity as a missing H1 statutory RNS.",
+      "priority": "medium"
+    },
+    {
+      "area": "monitoring",
+      "summary": "For a persistent strong-buy textile-rental name with live HORECA weakness and an in-flight buyback, emit watch items (H1 2026 statutory results, remaining buyback vs TVR, Tweedy Browne 12%, next FY TU, energy/wage) rather than only raising weeks_at_signal. Alert when filings_index fetch time post-dates a results headline that has no body.",
+      "priority": "medium"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "filing_fy25_prelim_annual",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/338b617c814e412b.txt",
+      "focus": "FY25 Preliminary Results for the year ended 31 Dec 2025 (Investegate 3 Mar 2026; catalogued period=annual — this is the annual results RNS, not CH 2019–2025 accounts, not 16 Jan FY trading update 4d670a2084f2e410, not Notice of AGM 111b68099637c9fc). Reporting currency (GBP); group and Workwear vs HORECA/Hotel linen revenue, statutory vs adjusted EBIT/EPS/margin vs FY24; OCF, PPE capex, hire-stock / other investing, FCF definition used, cash, reported vs covenant net debt, IFRS-16 leases; dividend declared vs cash dividends and cover vs FCF; buyback cash vs shares cancelled; unusual items / restructuring; energy/wage/utilisation; FY26 outlook and any 14% margin target. Prefer these figures over Yahoo (FY25 revenue 535.4m, NI 37.1m, FCF 100.6m, net debt 112.4m; screen TTM FCF ~27.4m).",
+      "priority": 1
+    },
+    {
+      "id": "filing_h1_2026_trading_update",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/09c35ef8fa3d6c34.txt",
+      "focus": "H1 2026 Trading Update (Investegate 10 Jul 2026; catalogued period=trading_update — this is the live operating print; the three catalog period=interim bodies are NED/AGM/SID notices eb5a2930ee07cfe9, 86f5509e77a0b2c0, ed987737ddb0b3cd and are not interims). Extract only on-page claims: H1 revenue/volume/margin vs H1 2025 by Workwear vs HORECA; hospitality-weakness wording; cash, net debt, capex, buyback progress; FY26 outlook / 14% margin language held vs qualified. Do not invent a half-year statutory P&L or cash-flow. Prefer this body over Yahoo (quarterly_income and quarterly_cashflow empty).",
+      "priority": 1
+    },
+    {
+      "id": "news_digest",
+      "type": "digest_news_manifest",
+      "target": "news_manifest.json",
+      "focus": "Cluster ~52 headlines. Material clusters: 10 Jul 2026 H1 TU / >12% slump on hospitality weakness vs ‘backs outlook’ / 14% margin / consistent H1 revenue; 3 Mar 2026 FY25 +16% profit / margin expansion and same-day share plunge despite in-line results; May AGM + new buyback; weekly Aug–Sep buybacks and cancellations (TipRanks/Kalkine/Globe); TVR 364.9m at 31 Jul; Tweedy, Browne 12.02% after cancellations; Berenberg TP nudge Jan 2026; H2 earnings-call highlights (price, energy, efficiencies). Collapse same-day TipRanks/Kalkine/TradingView buyback and Holding(s) reprints into one tone line. Discard generic ‘is it time to buy’ Simply Wall St / Yahoo SEO. Google News items are RSS titles only — do not invent article-body or statutory H1 figures.",
+      "priority": 2
+    },
+    {
+      "id": "screen_context",
+      "type": "screen_context",
+      "target": "screening_snapshot.json",
+      "focus": "Record strong_buy 8/22, composite 0.847, sector-relative 0.744, families cheapness/quality/dividend/GARP/risk, passed_models Graham Enterprising / FCF Yield / Neff PEGY / Quality Value / Dividend Growth / Piotroski / Composite Value / Earnings Quality. Flag failed_models=[] despite 14 models not passing; fcf_basis_overlay true but fcf_definition_divergence and fcf_divergence_flagged false; TTM cashflow suppressed (quarterly_cashflow_empty); cash_conversion / cyclical_exposure / interim_quality overlays false; data_quality 20/20; conviction_score 0.036 vs summary ‘Conviction 80%’, 6w persistent/stable since 2026-08-10; timing=neutral, RSI 45.5, price +2.9% vs SMA200; trade_plan null vs summary limits £144.84 / £138.99 (stop £130.56, TP £151.77); key_metrics P/E 16.2, P/B 2.0, yield 3.2%, ROE 12.7%, FCF 100.6m (action_note also cites screen TTM $27.4M); D/E 62%; adjusted_signal buy, research_verdict accumulate / medium / 0.72 with action_note boilerplate repeated many times. List which claims must be confirmed on a filing-FCF, hire-stock-adjusted, post-buyback share-count, and post-H1-HORECA basis.",
+      "priority": 3
+    },
+    {
+      "id": "gap_inventory",
+      "type": "gap_inventory",
+      "target": "source_inventory",
+      "focus": "Document thin/unavailable steps: yahoo_quarterly_cashflow empty, yahoo_quarterly_income empty (inside financials_annual.json), ir_presentation_metrics absent, alternate_news absent, TTM cashflow suppressed. Period coverage annual=13 / interim=3 / trading_update=2 is misleading: tagged interims are NED/AGM/SID (eb5a2930ee07cfe9, 86f5509e77a0b2c0, ed987737ddb0b3cd); several annuals are FY TU / AGM notice / UKLR / PDMR. Highest-value unread bodies the 5-cap omitted (do not open them): FY25 CH accounts filings/bodies/ch_00523335_MzUxMzI4MDA2NWFkaXF6a2N4.txt; FY25 Full Year Trading Update 4d670a2084f2e410.txt; AGM statement & buyback launch 86f5509e77a0b2c0.txt; buyback completion 179749a189ebbdf6.txt and commencement 838f730062c571cc.txt. Note no H1 2026 half-year statutory RNS is indexed as of 4 Sep 2026. State what the memo must leave unknown: statutory hire-stock/covenant notes, intra-year FCF, IR-slide KPIs, remaining buyback authority, and any post-TU Board numbers.",
+      "priority": 1
+    }
+  ],
+  "director_agent_id": "agent-8a2d5bf8-eaa8-42e7-9b68-6d5891258aab"
+}

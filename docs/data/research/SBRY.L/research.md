@@ -1,6 +1,6 @@
 # J Sainsbury plc (SBRY.L) — Research memo
 
-_Version 1 · Updated 2026-09-04T17:33:06.895161+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T20:17:13.994640+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
 J Sainsbury plc offers a UK value case anchored on grocery momentum, strong cash generation, and an active capital-return programme, while trading at roughly 0.7× book and an ~8.8% FCF yield on screen inputs. FY2025/26 filings show grocery sales up 5.2%, retail free cash flow of £574m, and a progressive 13.7p dividend, partially offset by retail underlying operating profit falling 1.1% to £1,025m as margin compressed to 3.06%. The central debate is whether six consecutive years of volume outperformance and the Argos exit (expected February 2027) justify re-rating, or whether lease-adjusted leverage (~£5.7bn net debt including leases), prior-year earnings restatements, and a wide FY2027 profit guidance band (£975m–£1,075m) cap upside. We overlay **accumulate** on the screen’s buy signal rather than full confirmation.

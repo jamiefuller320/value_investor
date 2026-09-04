@@ -1,0 +1,147 @@
+{
+  "task_id": "gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "financials_annual.json: quarterly_income and quarterly_cashflow are empty objects; cashflow_metrics sets ttm_cashflow_suppressed=true with reason quarterly_cashflow_empty (sources/financials_annual.json).",
+    "No ir_presentation_metrics.json or alternate_news file exists under sources/; IR-slide KPI extraction and alternate news feed are unavailable.",
+    "filings_index.json summary reports period_coverage annual=10, interim=0, trading_update=1 (total 63 filings, 62 with body) as of 2026-09-04T17:32:33Z (sources/filings/filings_index.json).",
+    "Period=annual count is misleading: id 37e3b12463b412c5 (Commencement of Share Buyback Programme, 2026-04-24) is classified annual, not statutory accounts; id 915f30f0628b3048 (Argos sale to Swift Partners, 2026-07-31) is period=other despite materiality (sources/filings/filings_index.json).",
+    "No interim/H1 statutory RNS indexed (interim=0); no Jan 2026 Q3 trading-update filing body indexed—only Q1 FY27 TU id 08051ad4760460cf (2026-06-30). news_manifest lists Q3 TU headlines dated 2026-01-09 but no matching filings_index entry (sources/filings/filings_index.json, sources/news_manifest.json).",
+    "Five highest-value bodies present but excluded from this pass (5-cap): ch_00185647_MzUzNDA4NzU2M2FkaXF6a2N4 (FY26 CH accounts, filed 2026-07-21); f7461f52f6281938 (Annual Report and Notice of AGM 2026); 915f30f0628b3048 (Argos sale); 37e3b12463b412c5 (buyback commencement)—all has_body=true in index (sources/filings/filings_index.json).",
+    "FY26 preliminary results body (52bf2942fde28b0a): retail underlying operating profit £1,025m (−1.1% YoY); retail free cash flow £574m (+8.1%); net debt incl. lease liabilities £5,743m; lease liabilities £5,540m; non-lease net debt £203m; FY27 guidance total underlying operating profit £975–1,075m and retail FCF >£500m; £300m share buyback planned for FY27 (£200m core + £100m bank proceeds) (sources/filings/bodies/52bf2942fde28b0a.txt).",
+    "Q1 FY27 trading statement body (08051ad4760460cf): 16 weeks to 20 Jun 2026 total retail sales exc. fuel +2.7% to £9,153m; reiterates FY27 underlying operating profit £975–1,075m and retail FCF >£500m; H1 2026/27 interim results scheduled 22 Oct 2026 (sources/filings/bodies/08051ad4760460cf.txt).",
+    "Yahoo annual FY26 (financials_annual.json) provides full-year income/balance/cash-flow but cannot support intra-year or TTM cash metrics; screening_snapshot flags yahoo_quarterly.ttm_cashflow_suppressed=true (sources/financials_annual.json, sources/screening_snapshot.json).",
+    "News coverage is google_news/yfinance RSS only (news_manifest.json); Argos disposal press summaries cite ≥£120m cash proceeds (£70m upfront, £50m deferred) but primary RNS body 915f30f0628b3048 was not read (sources/news_manifest.json)."
+  ],
+  "figures": [
+    {
+      "metric": "Yahoo free cash flow FY26",
+      "value": "£923m",
+      "period": "FY2026",
+      "source_path": "sources/financials_annual.json",
+      "note": "Group Yahoo FCF; differs from statutory retail FCF £574m in preliminary results"
+    },
+    {
+      "metric": "Yahoo operating cash flow FY26",
+      "value": "£1,774m",
+      "period": "FY2026",
+      "source_path": "sources/financials_annual.json",
+      "note": "Continuing operations per Yahoo"
+    },
+    {
+      "metric": "Yahoo total revenue FY26",
+      "value": "£33,647m",
+      "period": "FY2026",
+      "source_path": "sources/financials_annual.json",
+      "note": null
+    },
+    {
+      "metric": "Yahoo net income FY26",
+      "value": "£393m",
+      "period": "FY2026",
+      "source_path": "sources/financials_annual.json",
+      "note": null
+    },
+    {
+      "metric": "Yahoo capital lease obligations FY26",
+      "value": "£5,540m",
+      "period": "FY2026",
+      "source_path": "sources/financials_annual.json",
+      "note": null
+    },
+    {
+      "metric": "Yahoo total debt FY26",
+      "value": "£6,601m",
+      "period": "FY2026",
+      "source_path": "sources/financials_annual.json",
+      "note": null
+    },
+    {
+      "metric": "Retail free cash flow",
+      "value": "£574m",
+      "period": "FY2025/26 (52 weeks to 28 Feb 2026)",
+      "source_path": "sources/filings/bodies/52bf2942fde28b0a.txt",
+      "note": "Retail definition per preliminary results"
+    },
+    {
+      "metric": "Retail underlying operating profit",
+      "value": "£1,025m",
+      "period": "FY2025/26",
+      "source_path": "sources/filings/bodies/52bf2942fde28b0a.txt",
+      "note": "Down 1.1% YoY"
+    },
+    {
+      "metric": "Net debt incl. lease liabilities",
+      "value": "£5,743m",
+      "period": "28 Feb 2026",
+      "source_path": "sources/filings/bodies/52bf2942fde28b0a.txt",
+      "note": "Retail net debt definition"
+    },
+    {
+      "metric": "Lease liabilities",
+      "value": "£5,540m",
+      "period": "28 Feb 2026",
+      "source_path": "sources/filings/bodies/52bf2942fde28b0a.txt",
+      "note": null
+    },
+    {
+      "metric": "Non-lease net debt",
+      "value": "£203m",
+      "period": "28 Feb 2026",
+      "source_path": "sources/filings/bodies/52bf2942fde28b0a.txt",
+      "note": null
+    },
+    {
+      "metric": "FY27 underlying operating profit guidance",
+      "value": "£975m–£1,075m",
+      "period": "FY2026/27",
+      "source_path": "sources/filings/bodies/08051ad4760460cf.txt",
+      "note": "Reiterated at Q1 TU"
+    },
+    {
+      "metric": "FY27 retail FCF guidance",
+      "value": ">£500m",
+      "period": "FY2026/27",
+      "source_path": "sources/filings/bodies/08051ad4760460cf.txt",
+      "note": "Reiterated at Q1 TU"
+    },
+    {
+      "metric": "Q1 total retail sales exc. fuel",
+      "value": "£9,153m (+2.7% YoY)",
+      "period": "16 weeks to 20 Jun 2026",
+      "source_path": "sources/filings/bodies/08051ad4760460cf.txt",
+      "note": null
+    },
+    {
+      "metric": "Filings period coverage (annual/interim/trading_update)",
+      "value": "10 / 0 / 1",
+      "period": "Index as of 4 Sep 2026",
+      "source_path": "sources/filings/filings_index.json",
+      "note": "Annual count includes non-statutory buyback RNS 37e3b12463b412c5"
+    }
+  ],
+  "gaps": [
+    "Statutory lease, covenant and pension detail from FY26 Companies House accounts (ch_00185647_MzUzNDA4NzU2M2FkaXF6a2N4)—unread under 5-cap.",
+    "Argos sale consideration mechanics, stranded costs and completion conditions from RNS 915f30f0628b3048—unread under 5-cap.",
+    "Intra-year and TTM free cash flow: quarterly_cashflow empty; TTM suppressed; only full-year Yahoo and FY26 retail FCF available.",
+    "IR presentation slide KPIs: ir_presentation_metrics absent; preliminary results reference webcast slides but no structured metrics file.",
+    "Remaining share buyback authority and programme terms from commencement RNS 37e3b12463b412c5—unread; index holds weekly transaction-in-own-shares filings only.",
+    "Post–Q1 trading-update Board-level updates beyond headline guidance (no H1 statutory pack; interim=0; Jan 2026 Q3 TU body not indexed).",
+    "Full Annual Report statutory notes (f7461f52f6281938)—unread under 5-cap.",
+    "alternate_news feed absent; news is RSS/google_news/yfinance only.",
+    "FCF basis divergence unresolved: Yahoo FCF £923m vs retail FCF £574m vs screening FCF £645m—memo cannot reconcile without CH/annual report footnotes."
+  ],
+  "sources_read": [
+    "/workspace/docs/data/research_director_worker/SBRY.L/20260904T200829Z/sources/financials_annual.json",
+    "/workspace/docs/data/research_director_worker/SBRY.L/20260904T200829Z/sources/filings/filings_index.json",
+    "/workspace/docs/data/research_director_worker/SBRY.L/20260904T200829Z/sources/news_manifest.json",
+    "/workspace/docs/data/research_director_worker/SBRY.L/20260904T200829Z/sources/screen_run_manifest.json",
+    "/workspace/docs/data/research_director_worker/SBRY.L/20260904T200829Z/sources/screening_snapshot.json",
+    "/workspace/docs/data/research_director_worker/SBRY.L/20260904T200829Z/sources/macro_context.json",
+    "/workspace/docs/data/research_director_worker/SBRY.L/20260904T200829Z/sources/filings/bodies/52bf2942fde28b0a.txt",
+    "/workspace/docs/data/research_director_worker/SBRY.L/20260904T200829Z/sources/filings/bodies/08051ad4760460cf.txt"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-438c9959-8b47-4d51-bc6d-3e9e514f0c52"
+}

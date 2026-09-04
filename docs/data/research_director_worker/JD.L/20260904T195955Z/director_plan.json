@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "source": "director",
+  "open_questions": [
+    "Which free-cash figure is usable for FCF Yield (~21.4%) and the dividend-family pass: company-defined FY26 FCF of about £462m (FY26 CH report; KPI changed from operating cashflow net of lease repayments) versus Yahoo FY26 FCF £956m (OCF 1,357m − capex 401m) versus screen key_metrics FCF 830m with TTM cashflow suppressed because quarterly_cashflow is empty — and can the FY26 cash dividend (Yahoo 52m) plus £200m buybacks (£201m Yahoo repurchase) plus the FY27 £200m programme be funded on the conservative filing basis while net cash ex-leases is only ~£31m?",
+    "The catalog has period=interim 0 and period=trading_update 0. News (19–20 Aug 2026) reports a second profit-guidance cut in three months (~£50m off FY27), US/Q2 sales slump, footwear/sneaker-cycle softness, and an 11–14% share drop, with Deutsche Hold at 95p (3 Sep) and UBS/RBC caution on Europe/Germany. Can a Buy be endorsed from the 5 Aug 2026 CH FY26 accounts and the 21 May 2025 FY25 RNS, or must trade wait on an ingested August trading-update / H1 statutory body?",
+    "Adjusted PBT fell two years running (FY25 £923m → FY26 £852m per existing filing extracts; Yahoo NI 539m → 490m → 436m; statutory EPS 10.45p → 9.50p → 8.54p) and FY26 LFL was −2.1% while revenue grew on Hibbett/Courir/space. Does screen P/E 9.0 / P/B 1.3 already price a sneaker-cycle trough, or a structural NA/footwear and brand-heat problem (Nike read-across 1 Jul; RBC ‘promotional / lack of brand heat’ 3 Aug)?",
+    "North America is now the largest region (FY25 RNS ~37% / £4.24bn; OTCQX upgrade Jun 2026). What do the FY26 CH accounts say on UK vs Europe vs NA LFL, footwear vs apparel mix, Hibbett/$25m synergy, Courir remedies, and Germany, and does that mix make the Aug-20 US warning a group-earnings event rather than a regional blip?",
+    "Is economic leverage actually comfortable once IFRS-16 leases (Yahoo FY26 total debt 3,680m, capital-lease obligations 3,138m, cash 854m), the Hibbett $700m term loan / refinancing, and the Genesis 20% NCI put/call deferred to 2029–30 with a £1.5bn cap (FY25 RNS) are restored — and why did cyclical_exposure_detected, cash_conversion_overlay and interim_quality_overlay stay false on a Consumer Cyclical sports-fashion retailer with empty Yahoo quarterlies and no intra-year filing?",
+    "Dividend family passed at a 1.4% yield (DPS 1.00p → 1.20p proposed) while quality/Piotroski/GARP/Earnings Quality passed through two years of statutory profit decline, £150m FY26 unusual items / £119m impairments, and a shrinking diluted share count (5,160m → 5,112m; ordinary 5,183m → 4,921m after the £200m FY26 buyback). How much of EPS/ROE 13.7% is buyback shrinkage versus operations, and what do filings say on Pentland control / remaining FY27 buyback authority versus TVR?",
+    "Screen trade_plan is null while summary cites core/tactical limits £80.66 / £77.41 (stop £72.71, target £87.71) against a share price in the ~80p area (broker TPs 86–100p). With RSI 39, price ~flat vs SMA200, 12 weeks persistent Buy since 2026-08-02 (straddling the 20 Aug warning), conviction_score 1.0, and research already at Accumulate / medium / adjusted_signal buy, is the ladder buying a post-warning name on a pounds-vs-pence limit stack?"
+  ],
+  "meta_reflection": [
+    {
+      "topic": "evidence_ladder",
+      "observation": "Filings-first order is adequate only if period tags and intra-year coverage are true. For JD.L they are not: period_coverage annual=15/interim=0/trading_update=0 counts eight CH accounts (2019–2026), a May 2025 FY25 results RNS (duplicated), and six Google News ‘Across The Markets’ wraps (JD Wetherspoon / Helios Towers / BHP) as annual, while the live August 2026 profit-warning trading update is absent. yahoo_quarterly_cashflow sits on the ladder but is empty (TTM suppressed); alternate_news and ir_presentation_metrics are dead steps. Headline-only news therefore carries the only post-FY26 operating print, ranked below empty quarterlies.",
+      "priority": "high"
+    },
+    {
+      "topic": "task_schema",
+      "observation": "Four worker types plus a five-task cap force two annual bodies (CH FY26 + FY25 RNS) + news + screen + gap and leave no slot for TVR, the Global Impact Report, or a later-ingested August TU. There is no tagged interim, so a second summarize_filing_body cannot be an H1 without inventing a source. No task type exists to reconcile filing £462m / Yahoo £956m / screen £830m FCF, to cluster JD.com / JD Wetherspoon / JD Vance collisions, or to parse an IR deck. gap_inventory can only list the missing Aug-20 RNS — it cannot fill it.",
+      "priority": "high"
+    },
+    {
+      "topic": "methodology",
+      "observation": "The screen still emits buy (11/22, 5/5 families including dividend at 1.4% yield and FCF Yield at 21.4%) while failed_models is [] despite 11 non-passes, TTM cashflow is suppressed, and fcf_definition_divergence / cyclical_exposure_detected / interim_quality_overlay / cash_conversion_overlay stay false on a three-way FCF split and a sports-fashion cyclical. Research overlays already cut to Accumulate / medium / 0.68, and action_note repeats that paragraph many times, so the trial is asked to re-verify a headline Buy the overlay has already downgraded.",
+      "priority": "high"
+    },
+    {
+      "topic": "monitoring",
+      "observation": "A 12-week persistent buy since 2026-08-02 with an in-flight FY27 £200m buyback, a 20 Aug 2026 guidance cut that has no filing body, a 1 Sep chair start (Agnefjäll), and a £1.5bn Genesis NCI option in 2029–30 has no watch schema (ingest of the Aug TU / next H1, remaining buyback vs TVR, FY27 guidance checkpoints, Nike/footwear read-across, Genesis). conviction_score 1.0 and stability_label=persistent are not substitutes for those monitors.",
+      "priority": "high"
+    },
+    {
+      "topic": "memo_structure",
+      "observation": "A generic FINANCIAL REVIEW / RISKS split will blend UK, Europe and NA and will not force GEO MIX, FCF-DEFINITION (company £462m vs Yahoo £956m vs screen £830m, including the FY26 KPI change), LEASE vs EX-LEASE NET CASH, GENESIS NCI, CAPITAL RETURNS (1.4% dividend vs cash buybacks), or an explicit PRIMARY-FILING GAP box for the missing August trading update. Without a ticker-collision slot, workers will treat JD.com revenue-plunge headlines as JD.L colour.",
+      "priority": "medium"
+    },
+    {
+      "topic": "other",
+      "observation": "filings_index body_path values point at docs/data/research/JD.L/sources/... rather than this trial snapshot. sources_used are companies_house + google_news_investegate + investegate_resolved — IR allowlist and Investegate recency did not land FY26 prelim, Jan-26 Christmas TU, Feb-26 buyback launch, or the 20 Aug 2026 TU. financials_annual.json is Yahoo-shaped (FY2023–2026; no root currency field; quarterly_income/quarterly_cashflow empty). screening_snapshot.trade_plan is null while summary cites £80.66 / £77.41 against an ~80p price. Prior-loop research_* fields already pre-answer the trial.",
+      "priority": "medium"
+    }
+  ],
+  "procedural_suggestions": [
+    {
+      "area": "ingest",
+      "summary": "Fetch the 20 Aug 2026 trading-update / FY27 guidance RNS, the FY26 prelim/results RNS (Yahoo already has FY26), the Jan 2026 Christmas TU, and the Feb 2026 £200m buyback-launch RNS. Retag ‘Across The Markets’ Google News wraps and the Investegate share-price page out of period=annual. De-duplicate Investegate/investegate.co.uk pairs (FY25 results, TVR, Global Impact Report). Reject or quarantine headlines whose issuer is JD.com / JD Wetherspoon / JD Vance. Point body_path at the trial snapshot tree. Fire the IR allowlist for FY26 results slides.",
+      "priority": "high"
+    },
+    {
+      "area": "orchestration",
+      "summary": "Select the latest dated annual *statutory* body (CH 01888425 filed 2026-08-05, ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4) plus the only company results RNS (FY25 21 May 2025, e544e58eca35fb32 — not the 8c1186fc3cb64c2d duplicate, not CH 2019–2025, not Across-The-Markets). When interim_count=0 and trading_update_count=0, do not invent or retag a TVR/Impact-Report as interim; keep gap_inventory mandatory. Raise the cap or add a trading_update type so a later-ingested Aug-20 body is not dropped.",
+      "priority": "high"
+    },
+    {
+      "area": "prompt",
+      "summary": "Require annual workers to extract reporting currency (GBP); UK/Europe/NA and footwear vs apparel; statutory vs adjusted PBT/EPS/LFL; OCF, lease principal, PPE capex, company FCF definition (note FY26 KPI change); cash vs financial debt vs IFRS-16 leases vs net cash ex-leases / net leverage; Genesis NCI put/call; dividend declared vs cash paid; buyback cash vs shares cancelled vs remaining authority; Hibbett/Courir/impairments; FY27 outlook if stated. Require news workers to collapse Kalkine/Twelfth Magpie/Simply Wall St SEO, treat Google News as titles only, and discard JD.com / Wetherspoon / Vance collisions. Do not invent August TU statutory figures from headlines.",
+      "priority": "high"
+    },
+    {
+      "area": "scoring",
+      "summary": "Set fcf_definition_divergence whenever filing ~£462m, Yahoo £956m and screen £830m disagree; do not pass FCF Yield at 21.4% without stating the basis. Do not pass the dividend family on a 1.4% yield without showing buyback-inclusive cover on company FCF. Treat sports-fashion / sneaker-cycle as cyclical_exposure. Populate failed_models for the 11/22 non-passes. Do not keep headline buy when research_verdict is already accumulate. Stop splicing prior-memo text into action_note. Validate trade-plan units (pence vs pounds) against the ~80p quote.",
+      "priority": "high"
+    },
+    {
+      "area": "sources",
+      "summary": "Populate alternate_news or drop it from the ladder. Add a structured financials_interim / trading_update extract because Yahoo quarterly_income and quarterly_cashflow are empty on this UK half-year reporter. Expose company vs Yahoo vs screen FCF and lease vs ex-lease net cash on the screening snapshot. Ingest IR presentation metrics for FY26/FY27 guidance bridges.",
+      "priority": "medium"
+    },
+    {
+      "area": "schema",
+      "summary": "Allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action so a later Aug TU can be assigned without inventing a source. Add reporting_currency, listing_unit (pence vs pounds), fcf_basis_used, geo_mix, and ticker_collision (JD.com/JDW) fields. Remap body_path into the trial sources/ tree. Treat empty Yahoo quarterlies on a UK half-year reporter as expected, not the same thin-step severity as a missing August profit-warning RNS.",
+      "priority": "medium"
+    },
+    {
+      "area": "monitoring",
+      "summary": "For a persistent buy sports-fashion name whose intra-year profit warning is news-only, emit watches (ingest of the Aug 2026 TU / next H1 statutory, remaining FY27 £200m buyback vs TVR, FY27 guidance checkpoints, Nike/footwear read-across, Genesis £1.5bn window, chair/CEO) rather than only raising weeks_at_signal. Alert when filings_index fetch time post-dates a results/guidance headline that has no body.",
+      "priority": "medium"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "filing_fy26_ch_annual",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt",
+      "focus": "Companies House group accounts for JD Sports Fashion Plc 01888425 filed 2026-08-05 (catalogued period=annual; entity_type=consolidated; year ended ~31 Jan 2026). This is the latest statutory annual — not CH 2019–2025, not Across-The-Markets wraps tagged annual. Extract reporting currency (GBP); group and UK/Europe/NA revenue, LFL, footwear vs apparel; statutory vs adjusted PBT/EBIT/EPS/margin vs FY25 (Yahoo FY26 revenue 12,662m, NI 436m, operating income 966m, unusual items −150m); OCF, lease repayments, PPE capex, company FCF definition and the FY26 KPI change from OCF-net-of-leases; cash, financial debt, IFRS-16 leases, net cash ex-leases, net leverage; dividend declared vs cash paid; buyback cash vs shares cancelled and any FY27 programme; Genesis NCI put/call; Hibbett/Courir/impairments; wage/IT/cyber/Heerlen; FY27 outlook if stated. Prefer these figures over Yahoo (FCF 956m, total debt 3,680m, leases 3,138m, cash 854m, buybacks 201m, dividends 52m; screen FCF 830m). Do not invent August 2026 trading-update numbers.",
+      "priority": 1
+    },
+    {
+      "id": "filing_fy25_results_rns",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/e544e58eca35fb32.txt",
+      "focus": "JD SPORTS FASHION PLC FY25 RESULTS RNS (Investegate 21 May 2025; catalogued period=annual — this is the only company-authored results RNS; ignore duplicate 8c1186fc3cb64c2d). Extract FY25 (52w to 1 Feb 2025) vs FY24: revenue, organic vs LFL, adj vs statutory PBT/EPS/margins; UK/Europe/NA mix and Germany commentary; store vs online; OCF net of lease repayments, cash, borrowings including Hibbett $700m loan, capex; dividend; adjusting items / Derby DC / European closures; Genesis 20% NCI put/call and £1.5bn cap; Hibbett and Courir terms/synergies/remedies; people-cost / Heerlen / IT-security flags; medium-term plan (organic vs 2–3% market, capex 5%→3–3.5%). Prefer this body over Yahoo. Do not treat it as FY26 or as the missing Aug 2026 update.",
+      "priority": 1
+    },
+    {
+      "id": "news_digest",
+      "type": "digest_news_manifest",
+      "target": "news_manifest.json",
+      "focus": "Cluster ~93 headlines. Material JD.L clusters: 19–20 Aug 2026 FY27 guidance cut ~£50m / second warning in three months / 11–14% slump / US and footwear (WSJ, This is Money, Yahoo); 3 Sep Deutsche Hold 95p on US weakness; 25 Aug RBC Germany cuts; 12 Aug UBS Europe/footwear pre-update; 7 Aug Agnefjäll chair from 1 Sep; 3 Aug RBC downgrade (brand heat / promotional); 27 Jul buyback near completion; 14 Jul Deutsche TP 85p→95p cash-generation; 1 Jul Nike read-across; 24–25 Jun OTCQX / US largest market; 23 Feb £200m buyback; 21 Jan Christmas UK LFL down / FY26 in-line / NA improve; 16 Apr Applied Nutrition stake sale. Collapse Kalkine/Twelfth Magpie/Simply Wall St/Armchair Trader SEO into one tone line. Discard JD.com (Joybuy/618/Carrier), JD Wetherspoon, and JD Vance collisions. Google News items are RSS titles only — do not invent article-body or August TU statutory figures.",
+      "priority": 2
+    },
+    {
+      "id": "screen_context",
+      "type": "screen_context",
+      "target": "screening_snapshot.json",
+      "focus": "Record buy 11/22, composite 0.6912, sector-relative 0.599, families cheapness/quality/dividend/GARP/risk, passed_models Earnings Yield / FCF Yield / Low P/E + High Yield / Neff PEGY / Dividend Growth / Magic Formula / Acquirer’s Multiple / Dreman / Piotroski / Composite Value / Earnings Quality. Flag failed_models=[] despite 11 models not passing; TTM cashflow suppressed (quarterly_cashflow_empty); cash_conversion / cyclical_exposure / interim_quality / fcf_definition_divergence overlays false; data_quality 20/20; conviction_score 1.0, 12w persistent/stable since 2026-08-02 (includes the 20 Aug warning); timing=neutral, RSI 38.8, price +1.0% vs SMA200; trade_plan null vs summary limits £80.66 / £77.41 (stop £72.71, TP £87.71) on an ~80p name; key_metrics P/E 9.0, P/B 1.3, yield 1.4%, ROE 13.7%, FCF 830m (also E/P 11.1%, FCF yield 21.4%); adjusted_signal buy, research_verdict accumulate / medium / 0.68 with action_note boilerplate repeated many times. List which claims must be confirmed on a filing-FCF (£462m), lease-adjusted net cash, post-buyback share-count, post-Aug-warning FY27 guidance, and pence-vs-pounds trade-plan basis.",
+      "priority": 3
+    },
+    {
+      "id": "gap_inventory",
+      "type": "gap_inventory",
+      "target": "source_inventory",
+      "focus": "Document thin/unavailable steps: yahoo_quarterly_cashflow empty, yahoo_quarterly_income empty (inside financials_annual.json), ir_presentation_metrics absent, alternate_news absent, TTM cashflow suppressed. Period coverage annual=15 / interim=0 / trading_update=0 is misleading: several annuals are Across-The-Markets wraps (ed2fb2cdfb79d390, a53903de1fc9643b, 4fe2d485b4006c51, 4c52ecd247078abb, 50ac97295395a76f) or a share-price page without a body (8274cc68569c851c). Highest-value unread bodies the 5-cap omitted (do not open them): FY25 CH accounts filings/bodies/ch_01888425_MzQ3NDY0NDU0MGFkaXF6a2N4.txt; FY25 RNS duplicate 8c1186fc3cb64c2d.txt; TVR a4140958cc5ed51b.txt. Note no August 2026 trading-update RNS, no FY26 prelim RNS, and no H1 2026 statutory body are indexed as of 4 Sep 2026. State what the memo must leave unknown: verified FY27 guidance / Q2 LFL by region, intra-year FCF, remaining buyback authority, IR-slide KPIs, and any post-TU Board numbers.",
+      "priority": 1
+    }
+  ],
+  "director_agent_id": "agent-67548f10-00da-42bf-afb2-3677cf0f9815"
+}
