@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T20:29:17+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T20:44:10+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -128,6 +128,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N78 | **Do not lengthen the euro ingest slot after a leftover-514s productive run** | The 2026-09-04 13:15 euro slot used 2186/2700s, improved 6 names, and left 514s unused because remaining IWB were unfetchable or ABI.BR hit the 320s cap with 0 bodies. More minutes, more targets, or a fifth daily euro cron will not raise filings_with_body. | A euro sprint hits runtime_cutoff with improved>0 and leftover_seconds=0 on two consecutive slots, or discovery again consumes the deepen half of the clock. |
 | N79 | **Auto-suggest replacement IR allowlist URLs** | Deviation rows can say IR exhausted, but picking the official 20-F/HY PDF still needs judgment (ABI BMV vs SEC). Do not auto-write research_ir_urls.json from host heuristics or an LLM crawler until issuer-match validation is reliable. | Issuer-name body validation rejects foreign-exchange dumps with low false positives on VINCI/Randstad-style IR hosts |
 | N80 | **Do not spray remaining Ultra on thin-ladder buy-tier DW** | After the surplus rememo + escalate-queue director-worker burst, leftover Ultra is still large. Do not spend it by running director-worker on every buy-tier name that trips thin Yahoo quarterly/IR/news rungs. | Cycle-end surplus review on 2026-10-d8, or weekly_ops regularly binds at the $120 provisional cap |
+| N81 | **Do not skip the weekly director-worker cap to burn leftover Ultra** | The 15/week exploration cap is a quality and auto-tighten guard, not a credit target. Remaining buy-tier names mostly escalate only on thin Yahoo quarterly/IR/news. Holdings MEGP and AEP already fail the live gate. Skipping the cap this week would be spend-for-its-own-sake. | A holding or buy-tier name has a non-thin-ladder escalation, or next ISO week has unused slots and a material trigger (body-lag rememo, conflicting verdict, new filing). |
 
 ---
 
@@ -341,6 +342,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L286 | **Warm-start selective A-to-B fair-cost twins** | spawn-fair-twins writes Suite B configs, but warm_start_fair_cost_lab still only seeds ai_judgment_fair and rules_fair. Generalize PIT warm-start to *_fair experiment twins after a human actually applies a spawn. | A recommend-state experiment is spawned via ftse-trading-costs spawn-fair-twins --apply |
 | L288 | **Auto-clear library ingest pin when IWB closes** | docs/data/library_ingest_pins.json is a dated intensive pin (ABI.BR through 2026-09-11). After the named ticker’s indexed-without-body count hits 0, auto-remove or expire the pin so weekday euro returns to the 24-name batch without a manual edit. | After the 16:15/next euro intensive ABI pin run, or when ABI.BR IWB is 0 |
 | L290 | **Dashboard click-to-approve ingest deviations** | Pages is static, so ingest deviations reprocess via CLI (ftse-library ingest-deviations approve). A local dashboard API or Actions dispatch would let a reviewer pin without a commit, but that is a new write path. | Local dashboard serve grows a write API, or we add a supervised workflow_dispatch for pins |
+| L291 | **Review the 120 weekly_ops bump against 36 percent unused Ultra** | Usage page is 64 percent used, so leftover is about 36 percent of the listed plan, not the 1700 USD inferred from burst percentages. The 80 to 120 weekly_ops raise already sits at the 50 percent ceiling and looks aggressive versus that leftover. | Cycle-end surplus review on 2026-10-d8 keep-or-revert. |
 
 ---
 
