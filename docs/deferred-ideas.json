@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-04T12:18:52+00:00",
+  "updated_at": "2026-09-04T12:29:51+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -4431,9 +4431,10 @@
         "timeout",
         "gha"
       ],
-      "status": "open",
+      "status": "done",
       "source": "euro ingest schedule timeout fix conversation",
-      "added_at": "2026-08-31T23:18:37+00:00"
+      "added_at": "2026-08-31T23:18:37+00:00",
+      "updated_at": "2026-09-04T10:55:27+00:00"
     },
     {
       "id": "L216",
@@ -5673,7 +5674,145 @@
       "added_at": "2026-09-04T09:20:35+00:00"
     },
     {
+      "id": "L270",
+      "category": "later",
+      "section": "learning",
+      "title": "Shared overlay flag and note contract",
+      "summary": "Scoring overlays share a family resemblance (enrich_signals_with_*, boolean columns, CompanyReport fields) but no Protocol: live overlays mutate adjusted_signal, observe-only ones write parallel fields, and summary.py repeats NaN-safe flag reads. A shared apply/enrich/format-note helper plus one optional-bool reader would cut drift when the next overlay lands.",
+      "revisit_when": "Adding the next scoring overlay or gate, or when summary.py overlay hydration is next edited for a real scoring change",
+      "tags": [
+        "scoring",
+        "overlay",
+        "flags",
+        "consistency"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06bcb-84c0-715f-b156-74e2713c98a1",
+      "added_at": "2026-09-04T10:21:26+00:00"
+    },
+    {
+      "id": "L271",
+      "category": "later",
+      "section": "ops",
+      "title": "Disambiguate overloaded fragment vocabulary",
+      "summary": "Fragment currently means four things: deferred-idea scratch rows, keyword substring lists, action-note prose snippets, and ingest-body utilization units. The deferred-ideas store is internally consistent; the other uses are unrelated. A short glossary in architecture.md would prevent treating them as one schema.",
+      "revisit_when": "Next architecture.md or scoring-overlay docs pass, or when onboarding confusion about fragments shows up in a review",
+      "tags": [
+        "docs",
+        "fragments",
+        "naming",
+        "consistency"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06bcb-84c0-715f-b156-74e2713c98a1",
+      "added_at": "2026-09-04T10:21:26+00:00"
+    },
+    {
+      "id": "L272",
+      "category": "later",
+      "section": "ops",
+      "title": "Fire library gap-closure after cutoff when deepen already ran",
+      "summary": "Euro 2026-09-04 07:15: discovery cap held then only BOL.ST and DG.PA deepened, improved=0, runtime_cutoff. Follow-up now fires when discovery finished, deepen ran at least one ticker, and nobody improved.",
+      "revisit_when": "Shipped: evaluate_library_ingest_gap_closure_followup treats cutoff+finished-discovery+deepen-ran+improved=[] as a slowdown.",
+      "tags": [
+        "euro",
+        "ingest",
+        "gap-closure",
+        "cutoff"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:32:26+00:00",
+      "updated_at": "2026-09-04T10:32:29+00:00"
+    },
+    {
       "id": "N71",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not build a separate euro stock-by-stock deepening engine",
+      "summary": "Gap-closure already is the intensive single-ticker path (pin + record_gap_closure + compile_ingest_engineering_task_from_trial, max 3 rounds). A second engine would duplicate that without fixing the miss: follow-up never fired on cutoff deepens.",
+      "revisit_when": "After the existing intensive path has fired on euro and still returns 0/N after 3 gap-closure rounds.",
+      "tags": [
+        "euro",
+        "ingest",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:32:26+00:00"
+    },
+    {
+      "id": "N72",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Per-ticker budget will not finish DG.PA-class IR blockers",
+      "summary": "A weekday per-ticker cap (L131/L215) only stops the bleed. DG.PA already used ~37 minutes on 2026-09-04 07:15, retried the same two IR IDs three times, and stayed 1 body / 2 IWB. More or less clock does not fetch GlobeNewswire HTML allowlist rows.",
+      "revisit_when": "After cutoff follow-up has pinned a sticky euro name, or someone proposes L215 expecting it to raise filings_with_body on DG.PA.",
+      "tags": [
+        "euro",
+        "ingest",
+        "ir-allowlist",
+        "time-budget"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:37:43+00:00"
+    },
+    {
+      "id": "L273",
+      "category": "later",
+      "section": "research",
+      "title": "Replace DG.PA GlobeNewswire HTML IR allowlist with VINCI PDFs",
+      "summary": "docs/data/research_ir_urls.json lists two globenewswire.com/news-release HTML pages plus one ml-eu Resource/Download for DG.PA. Those rows fail title/period validation and have no .L Investegate fallback, so euro_filings refetch burns the slot. Point the allowlist at VINCI IR PDFs and skip IR rows that fail after N attempts.",
+      "revisit_when": "Intensive gap-closure fires on DG.PA or the next euro deepen still spends >10 minutes on the same ir_5904e9509cae65e4 / ir_a21937028cbb3531 failures.",
+      "tags": [
+        "euro",
+        "ingest",
+        "ir-allowlist",
+        "DG.PA"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:37:44+00:00",
+      "updated_at": "2026-09-04T10:55:27+00:00"
+    },
+    {
+      "id": "L274",
+      "category": "later",
+      "section": "ops",
+      "title": "Pin the weekday-aborting ticker for intensive follow-up",
+      "summary": "After a mid-ticker cap (L215), follow-up should prefer the name that hit the budget or exhausted IR retries, not only health_after.zero_body_tickers[0]. Otherwise the batch moves on while RAND.AS gets the pin and DG.PA returns to the next weekday head.",
+      "revisit_when": "L215 lands or a euro run again spends most of the slot on one 0-improve IR name.",
+      "tags": [
+        "euro",
+        "ingest",
+        "gap-closure",
+        "time-budget"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:45:40+00:00",
+      "updated_at": "2026-09-04T10:55:27+00:00"
+    },
+    {
+      "id": "N73",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not backlog-first aborted hard IR tickers",
+      "summary": "FTSE ingest_backlog puts remaining tickers first. Doing that for a DG.PA-class abort would spend the first per-ticker budget of every weekday slot on the same failed GlobeNewswire rows. Keep backlog for names that never started; escalate started+failed names off the batch.",
+      "revisit_when": "Library ingest grows a backlog file and someone proposes prioritize_backlog_targets for euro.",
+      "tags": [
+        "euro",
+        "ingest",
+        "backlog",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:45:40+00:00"
+    },
+    {
+      "id": "N74",
       "category": "not_now",
       "section": "learning",
       "title": "Do not treat Suite B AI-vs-rules inversion as the weekly north-star scoreboard",
@@ -5687,10 +5826,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
-      "added_at": "2026-09-04T10:56:42+00:00"
+      "added_at": "2026-09-04T12:29:50+00:00"
     },
     {
-      "id": "L270",
+      "id": "L275",
       "category": "later",
       "section": "learning",
       "title": "Retire fail-status calibration shadows after Sunday confirms durability",
@@ -5704,10 +5843,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
-      "added_at": "2026-09-04T10:56:42+00:00"
+      "added_at": "2026-09-04T12:29:50+00:00"
     },
     {
-      "id": "L271",
+      "id": "L276",
       "category": "later",
       "section": "ops",
       "title": "Filter machinery spend by weekday decision inputs",
@@ -5721,10 +5860,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
-      "added_at": "2026-09-04T11:20:41+00:00"
+      "added_at": "2026-09-04T12:29:50+00:00"
     },
     {
-      "id": "L272",
+      "id": "L277",
       "category": "later",
       "section": "universe",
       "title": "Keep other-market ingest efficiency as priority 2 behind live-path utilization",
@@ -5741,10 +5880,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
-      "added_at": "2026-09-04T11:24:45+00:00"
+      "added_at": "2026-09-04T12:29:50+00:00"
     },
     {
-      "id": "L273",
+      "id": "L278",
       "category": "later",
       "section": "universe",
       "title": "Prefer an ingest effort cascade over a fourth equal sprint stream",
@@ -5760,10 +5899,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
-      "added_at": "2026-09-04T11:32:19+00:00"
+      "added_at": "2026-09-04T12:29:50+00:00"
     },
     {
-      "id": "L274",
+      "id": "L279",
       "category": "later",
       "section": "ops",
       "title": "Mid-run cancel of a live euro ingest job",
@@ -5777,10 +5916,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
-      "added_at": "2026-09-04T12:18:52+00:00"
+      "added_at": "2026-09-04T12:29:50+00:00"
     },
     {
-      "id": "L275",
+      "id": "L280",
       "category": "later",
       "section": "ops",
       "title": "Cross-workflow library ingest push mutex",
@@ -5794,7 +5933,7 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
-      "added_at": "2026-09-04T12:18:52+00:00"
+      "added_at": "2026-09-04T12:29:51+00:00"
     }
   ],
   "fragments": [
@@ -6212,7 +6351,7 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
-      "added_at": "2026-09-04T11:16:36+00:00"
+      "added_at": "2026-09-04T12:29:50+00:00"
     }
   ]
 }

@@ -267,6 +267,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ingest_loop_p.add_argument("--max-targets", type=int, default=12)
     ingest_loop_p.add_argument("--max-runtime-seconds", type=float, default=2100.0)
+    ingest_loop_p.add_argument(
+        "--per-ticker-max-seconds",
+        type=float,
+        default=320.0,
+        help=(
+            "Weekday mid-ticker wall-clock cap (all library markets). "
+            "Disabled automatically for --pin-ticker / --record-gap-closure. "
+            "Set 0 to disable."
+        ),
+    )
     ingest_loop_p.add_argument("--max-bodies", type=int, default=20)
     ingest_loop_p.add_argument("--stall-runs", type=int, default=2)
     ingest_loop_p.add_argument("--micro-compile-max-tasks", type=int, default=1)
@@ -1339,6 +1349,7 @@ def cmd_library_ingest_loop(args: argparse.Namespace) -> int:
         library_root=args.root,
         max_targets=args.max_targets,
         max_runtime_seconds=args.max_runtime_seconds,
+        per_ticker_max_seconds=args.per_ticker_max_seconds,
         max_bodies=args.max_bodies,
         stall_runs=args.stall_runs,
         micro_compile_max_tasks=args.micro_compile_max_tasks,

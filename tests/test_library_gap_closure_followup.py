@@ -128,7 +128,7 @@ def test_stall_dispatches_when_no_open_library_task(tmp_path: Path):
     assert "stall" in result["title"].lower()
 
 
-def test_skips_partial_or_runtime_cutoff(tmp_path: Path):
+def test_skips_partial_or_runtime_cutoff_when_deepen_never_started(tmp_path: Path):
     root, reports = _euro_fixture(tmp_path)
     for kwargs in ({"partial": True}, {"runtime_cutoff": True}):
         result = evaluate_library_ingest_gap_closure_followup(
@@ -143,7 +143,100 @@ def test_skips_partial_or_runtime_cutoff(tmp_path: Path):
             **kwargs,
         )
         assert result["should_dispatch"] is False
-        assert "incomplete" in result["reason"]
+        assert "deepen never started" in result["reason"]
+
+
+def test_skips_cutoff_when_discovery_did_not_finish(tmp_path: Path):
+    root, reports = _euro_fixture(tmp_path)
+    result = evaluate_library_ingest_gap_closure_followup(
+        market_id="euro_depth",
+        health_after=_health(),
+        was_gap_closure_run=False,
+        improved=[],
+        partial=True,
+        runtime_cutoff=True,
+        discovery_scan={"runtime_cutoff": True, "scanned": 12},
+        deepen_results=[],
+        library_root=root,
+        reports=reports,
+        tasks_path=tmp_path / "engineering_tasks.json",
+        runs_path=tmp_path / "ingest_gap_closure_runs.json",
+    )
+    assert result["should_dispatch"] is False
+    assert "discovery did not finish" in result["reason"]
+
+
+def test_cutoff_dispatches_when_discovery_finished_and_deepen_ran(tmp_path: Path):
+    root, reports = _euro_fixture(tmp_path)
+    result = evaluate_library_ingest_gap_closure_followup(
+        market_id="euro_depth",
+        health_after=_health(),
+        was_gap_closure_run=False,
+        stalled=False,
+        improved=[],
+        partial=True,
+        runtime_cutoff=True,
+        discovery_scan={"runtime_cutoff": False, "scanned": 44, "budget_seconds": 675},
+        deepen_results=[
+            {"ticker": "BOL.ST", "improved": False},
+            {"ticker": "DG.PA", "improved": False},
+        ],
+        library_root=root,
+        reports=reports,
+        tasks_path=tmp_path / "engineering_tasks.json",
+        runs_path=tmp_path / "ingest_gap_closure_runs.json",
+    )
+    assert result["should_dispatch"] is True
+    assert result["trigger"] == "stall_slowdown"
+    assert result["pin_ticker"] == "RAND.AS"
+    assert "runtime cutoff" in result["summary"]
+
+
+def test_followup_prefers_blocker_ticker_over_zero_body(tmp_path: Path):
+    root, reports = _euro_fixture(tmp_path)
+    _write_index(root, "euro_depth", "DG.PA", total=3, with_body=1)
+    reports = [*reports, _report("DG.PA")]
+    result = evaluate_library_ingest_gap_closure_followup(
+        market_id="euro_depth",
+        health_after=_health(),
+        was_gap_closure_run=False,
+        stalled=False,
+        improved=[],
+        partial=True,
+        runtime_cutoff=True,
+        discovery_scan={"runtime_cutoff": False, "scanned": 44},
+        deepen_results=[
+            {"ticker": "DG.PA", "improved": False, "ticker_budget_hit": True},
+        ],
+        blocker_ticker="DG.PA",
+        library_root=root,
+        reports=reports,
+        tasks_path=tmp_path / "engineering_tasks.json",
+        runs_path=tmp_path / "ingest_gap_closure_runs.json",
+    )
+    assert result["should_dispatch"] is True
+    assert result["pin_ticker"] == "DG.PA"
+
+
+def test_cutoff_skips_when_deepen_already_improved(tmp_path: Path):
+    root, reports = _euro_fixture(tmp_path)
+    result = evaluate_library_ingest_gap_closure_followup(
+        market_id="euro_depth",
+        health_after=_health(zero_body=0),
+        was_gap_closure_run=False,
+        stalled=False,
+        improved=["DG.PA"],
+        partial=True,
+        runtime_cutoff=True,
+        discovery_scan={"runtime_cutoff": False, "scanned": 44},
+        deepen_results=[{"ticker": "DG.PA", "improved": True}],
+        library_root=root,
+        reports=reports,
+        tasks_path=tmp_path / "engineering_tasks.json",
+        runs_path=tmp_path / "ingest_gap_closure_runs.json",
+    )
+    assert result["should_dispatch"] is False
+    assert "improved coverage" in result["reason"]
 
 
 def test_skips_productive_run_with_leftover_iwb(tmp_path: Path):
@@ -363,6 +456,93 @@ def test_followup_cli_writes_json_path(tmp_path: Path):
     assert payload["should_dispatch"] is True
     assert payload["pin_ticker"] == "RAND.AS"
     assert payload["trigger"] == "stall_slowdown"
+
+
+def test_batch_followup_uses_blocker_ticker_from_loop_payload(tmp_path: Path):
+    root, reports = _euro_fixture(tmp_path)
+    _write_index(root, "euro_depth", "DG.PA", total=3, with_body=1)
+    reports = [*reports, _report("DG.PA")]
+    sprint = {
+        "markets": ["euro_depth"],
+        "results": [
+            {
+                "market_id": "euro_depth",
+                "health_after": _health(),
+                "recorded_gap_closure": False,
+                "stalled": False,
+                "improved": [],
+                "partial": True,
+                "runtime_cutoff": True,
+                "discovery_scan": {"runtime_cutoff": False},
+                "results": [{"ticker": "DG.PA", "improved": False, "ticker_budget_hit": True}],
+                "blocker_ticker": "DG.PA",
+            }
+        ],
+    }
+    with patch(
+        "value_investor.library_ingest_loop.load_library_buy_tier_reports",
+        return_value=reports,
+    ):
+        result = evaluate_library_ingest_gap_closure_followups(
+            sprint,
+            library_root=root,
+            tasks_path=tmp_path / "engineering_tasks.json",
+            runs_path=tmp_path / "ingest_gap_closure_runs.json",
+        )
+    assert result["should_dispatch"] is True
+    assert result["pin_ticker"] == "DG.PA"
+
+
+def test_followup_cli_dispatches_after_cutoff_deepen(tmp_path: Path):
+    root, reports = _euro_fixture(tmp_path)
+    loop_path = tmp_path / "euro_ingest_loop.json"
+    out_path = tmp_path / "gap_followup.json"
+    write_json(
+        loop_path,
+        {
+            "market_id": "euro_depth",
+            "health_after": _health(),
+            "recorded_gap_closure": False,
+            "stalled": False,
+            "improved": [],
+            "partial": True,
+            "runtime_cutoff": True,
+            "discovery_scan": {"runtime_cutoff": False, "scanned": 44},
+            "results": [
+                {"ticker": "BOL.ST", "improved": False},
+                {"ticker": "DG.PA", "improved": False},
+            ],
+        },
+        compact=False,
+    )
+    with patch(
+        "value_investor.library_ingest_loop.load_library_buy_tier_reports",
+        return_value=reports,
+    ):
+        assert (
+            library_main(
+                [
+                    "ingest-gap-closure-followup",
+                    "--market",
+                    "euro_depth",
+                    "--loop-json",
+                    str(loop_path),
+                    "--root",
+                    str(root),
+                    "--tasks-path",
+                    str(tmp_path / "engineering_tasks.json"),
+                    "--runs-path",
+                    str(tmp_path / "ingest_gap_closure_runs.json"),
+                    "--json-path",
+                    str(out_path),
+                ]
+            )
+            == 0
+        )
+    payload = json.loads(out_path.read_text(encoding="utf-8"))
+    assert payload["should_dispatch"] is True
+    assert payload["pin_ticker"] == "RAND.AS"
+    assert "runtime cutoff" in payload["summary"]
 
 
 def test_batch_followup_dispatches_only_stalled_or_slowdown_markets(tmp_path: Path):

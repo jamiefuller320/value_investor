@@ -58,19 +58,22 @@ to `market_id` (`source=library_ingest_stall`).
 
 ### 2. Stall / slowdown follow-up (automatic)
 
-After a **complete** library ingest batch (not `partial` / `runtime_cutoff`,
-not already a gap-closure run), `evaluate_library_ingest_gap_closure_followup`
-dispatches a pinned intensive pass when:
+After a library ingest batch that is not already a gap-closure run,
+`evaluate_library_ingest_gap_closure_followup` dispatches a pinned intensive
+pass when:
 
 - ingest health is **stalled**, or
 - the batch **improved 0 tickers** and buy-tier gaps remain
   (unmeasured, zero-body, or `indexed_without_body`)
 
-It does **not** fire on a productive deepen that still has leftover IWB, and
-it does not fire on cutoff runs (the discovery time cap is the fix for those).
-Cooldown is **6h per `market_id`** so a FTSE intensive does not block euro
-(and vice versa). An open library ingest engineering task for that market also
-skips the dispatch.
+Partial / `runtime_cutoff` runs still skip when listing discovery itself was
+cut off or deepen never started (the discovery time cap is the fix for those).
+After the cap, a cutoff deepen that already ran ≥1 ticker and improved nobody
+**does** fire — that is today's euro failure mode (2/24 names, `improved=[]`,
+`RAND.AS` still zero-body). It does **not** fire on a productive deepen that
+still has leftover IWB. Cooldown is **6h per `market_id`** so a FTSE intensive
+does not block euro (and vice versa). An open library ingest engineering task
+for that market also skips the dispatch.
 
 The follow-up is wired on **every** library ingest workflow (`euro-ingest-loop.yml`,
 `library-ingest-sprint.yml`, `library-ingest-sprint-2.yml`,
@@ -87,7 +90,10 @@ gh workflow run euro-ingest-loop.yml \
 ```
 
 Candidate order uses `select_library_ingest_targets` (unmeasured / zero-body
-ahead of IWB), preferring `health_after.zero_body_tickers[0]` when present.
+ahead of IWB). When the weekday loop records `blocker_ticker` (hit the
+per-ticker cap or exhausted IR retries), follow-up prefers that name so the
+intensive pin is the ticker that held the queue, not only
+`health_after.zero_body_tickers[0]`.
 
 Evaluate locally with:
 
@@ -144,20 +150,24 @@ Parallel sprint auto-advance (`advance_parallel_sprint_on_ingest_parity`, defaul
 `learning-depth` is green; non-equivalent markets (euro_depth, asx200) use the same
 `ingest_parity_met` bar and enter maintenance immediately on parity.
 | Maintenance ingest | `library-ingest-maintenance.yml` | 2×/weekday FTSE-standard scan-then-target (`max_targets=62`) for markets at the FTSE quality bar |
-| Stall / slowdown follow-up | all library ingest workflows | After a complete batch with stall or `improved=0` leftover gaps, dispatches pinned `euro-ingest-loop.yml` (`record_gap_closure=true`, `max_targets=1`) via `scripts/dispatch_library_gap_closure_followups.sh` |
+| Stall / slowdown follow-up | all library ingest workflows | After stall or `improved=0` leftover gaps (including cutoff deepens that already ran), dispatches pinned `euro-ingest-loop.yml` (`record_gap_closure=true`, `max_targets=1`) via `scripts/dispatch_library_gap_closure_followups.sh` |
 | Micro-compile dispatch | `euro-ingest-loop.yml` | After `micro_compiled` or `gap_closure_compiled`, runs `engineering-queue.yml` immediately |
 | Post-merge verify rerun | `engineering-queue.yml` | Tasks with `evidence.market_id` rerun **`euro-ingest-loop.yml`**; FTSE tasks still use `ingest-loop.yml` |
 | Discovery time cap | `library_ingest_budget.py` | Listing discovery may use at most 25% of `max_runtime_seconds` (675s of a 2700s euro slot) and scans thin/unmeasured/zero-body/IWB names first. Body deepen keeps the rest of the clock. |
 | Effort cascade | `library_ingest_cascade.py` / `ingest_effort_cascade` | Static fractions while focus has filing gaps: stream 1 at 50% targets/runtime, stream 2 at 25%. Full spare caps return at head ingest parity. |
 | Ingest scheduler | `library_ingest_scheduler.py` / `ftse-library ingest-schedule` | Live wait on the head, leftover minutes after the euro run, queue fill-down when the assigned stream has no gaps. Peak-hour skip only when head busyness is unknown. |
+| Two-lane deepen | `library_ingest_loop.py` | **Lane 1 (all library markets):** weekday mid-ticker cap (`DEFAULT_PER_TICKER_MAX_SECONDS=320`, overridable). Abort the current name and continue the batch. The aborting ticker is `blocker_ticker` and is demoted for 6h so it does not re-head the next slot. **Lane 2:** intensive pin (`--pin-ticker` / `--record-gap-closure`) disables the per-ticker cap and uses the remaining slot. Failed IR allowlist rows are marked `unfetchable` and skipped on later passes (any market). |
 | Clean JSON for CI | `euro-ingest-loop.yml` | Uses `ingest-loop --json-path` / `euro-ingest-dispatch --json-path` (not `tee`) so stdout warnings (e.g. PyMuPDF `fitz`) cannot break `GITHUB_OUTPUT` parsing |
 | Artifact push | `scripts/push_library_ingest_artifacts.sh` | Stashes allowlisted paths (`docs/data/library/`, `engineering_tasks.json`, `ingest_gap_closure_runs.json`) before `checkout origin/main`; restores only files the job changed so concurrent queue updates are not clobbered |
 | pip install retry | `scripts/gha_pip_install.sh` | 4 attempts with backoff for transient PyPI / empty-index flakes (`from versions: none`) |
 
-A weekly **ingest director** (LLM synthesis like learning-director) would not
-fix this stall: the miss is deterministic budget allocation, already classified
-by `ingest_critical_path`. Revisit a director only if deepen still starves after
-the time cap, or we need cross-market ingest scheduling.
+A weekly **ingest director** or a second stock-by-stock deepening engine would
+not fix this stall: the intensive pin already exists (`record_gap_closure` +
+`compile_ingest_engineering_task_from_trial`). The miss was that follow-up
+skipped every cutoff run. Revisit a director only if the intensive path still
+returns 0/N after three gap-closure rounds, or we need cross-market ingest
+scheduling. Per-ticker time budgets (`L131`) remain the next deepen-throughput
+lever if one IR allowlist name still eats the slot.
 
 ## Filing-quality bar (all library markets)
 

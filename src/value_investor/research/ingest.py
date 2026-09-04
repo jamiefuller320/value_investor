@@ -733,6 +733,7 @@ def ingest_research_sources(
     include_filings: bool = True,
     market: str | None = None,
     deepen_history: bool = False,
+    deadline_monotonic: float | None = None,
 ) -> dict[str, Any]:
     """
     Download research sources under ``sources_dir``.
@@ -879,24 +880,30 @@ def ingest_research_sources(
                         filings_meta["ch_body_refetch"] = ch_refetch
 
             elif resolve_filings_regime(market, ticker) == "euro_filings":
+                from value_investor.library_ingest_budget import deadline_reached
                 from value_investor.research.filings import (
                     refetch_ir_allowlist_filing_bodies,
                     refetch_residual_filing_bodies,
                 )
 
                 summary = filings_meta.get("filings_summary") or {}
-                ir_refetch = refetch_ir_allowlist_filing_bodies(
-                    sources_dir / "filings",
-                    ticker=ticker,
-                    company_name=company_name,
-                    max_bodies=12,
-                )
-                residual_refetch = refetch_residual_filing_bodies(
-                    sources_dir / "filings",
-                    ticker=ticker,
-                    company_name=company_name,
-                    max_bodies=12,
-                )
+                ir_refetch: dict[str, Any] = {}
+                residual_refetch: dict[str, Any] = {}
+                if not deadline_reached(deadline_monotonic):
+                    ir_refetch = refetch_ir_allowlist_filing_bodies(
+                        sources_dir / "filings",
+                        ticker=ticker,
+                        company_name=company_name,
+                        max_bodies=12,
+                        deadline_monotonic=deadline_monotonic,
+                    )
+                if not deadline_reached(deadline_monotonic):
+                    residual_refetch = refetch_residual_filing_bodies(
+                        sources_dir / "filings",
+                        ticker=ticker,
+                        company_name=company_name,
+                        max_bodies=12,
+                    )
                 filings_meta["ir_refetch"] = ir_refetch
                 filings_meta["residual_refetch"] = residual_refetch
                 if int(ir_refetch.get("fetched") or 0) or int(residual_refetch.get("fetched") or 0):

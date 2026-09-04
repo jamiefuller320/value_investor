@@ -16,6 +16,15 @@ from value_investor.engineering_tasks import (
     compile_ingest_engineering_task_from_trial,
 )
 from value_investor.ingest_loop import has_open_ingest_engineering_tasks
+from value_investor.library_ingest_budget import (
+    DEFAULT_BLOCKER_COOLDOWN_HOURS,
+    DEFAULT_PER_TICKER_MAX_SECONDS,
+    deadline_reached,
+    select_blocker_ticker,
+    should_start_next_ticker,
+    ticker_deadline,
+    weekday_per_ticker_max_seconds,
+)
 from value_investor.library_ingest_escalation import (
     DEFAULT_STALL_RUNS,
     compile_library_ingest_engineering_tasks_micro,
@@ -87,6 +96,8 @@ class LibraryIngestLoopResult:
     used_seconds: float | None = None
     budget_seconds: float | None = None
     leftover_seconds: float | None = None
+    blocker_ticker: str | None = None
+    per_ticker_max_seconds: float | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -124,6 +135,8 @@ class LibraryIngestLoopResult:
             "used_seconds": self.used_seconds,
             "budget_seconds": self.budget_seconds,
             "leftover_seconds": self.leftover_seconds,
+            "blocker_ticker": self.blocker_ticker,
+            "per_ticker_max_seconds": self.per_ticker_max_seconds,
         }
 
 
@@ -349,6 +362,55 @@ def select_library_ingest_targets(
     return scored[: max(1, int(max_targets))] if scored else []
 
 
+def load_library_ingest_blocker_cooldown(
+    library_root: Path,
+    market_id: str,
+    *,
+    now: datetime | None = None,
+    within_hours: float = DEFAULT_BLOCKER_COOLDOWN_HOURS,
+) -> list[str]:
+    """Tickers that recently hit the weekday cap / exhausted IR — keep them off the batch head."""
+    path = library_ingest_summary_path(library_root, market_id)
+    if not path.exists():
+        return []
+    try:
+        payload = read_json(path)
+    except (OSError, ValueError, TypeError):
+        return []
+    if not isinstance(payload, dict):
+        return []
+    ticker = str(payload.get("blocker_ticker") or "").strip()
+    raw_at = str(payload.get("run_at") or "").strip()
+    if not ticker or not raw_at:
+        return []
+    try:
+        run_at = datetime.fromisoformat(raw_at.replace("Z", "+00:00"))
+    except ValueError:
+        return []
+    if run_at.tzinfo is None:
+        run_at = run_at.replace(tzinfo=UTC)
+    current = now or datetime.now(UTC)
+    age_hours = (current - run_at).total_seconds() / 3600.0
+    if age_hours < 0 or age_hours > float(within_hours):
+        return []
+    return [ticker]
+
+
+def demote_library_ingest_targets(
+    targets: list[LibraryIngestTarget],
+    demote_tickers: list[str] | None,
+) -> list[LibraryIngestTarget]:
+    """Move cooldown tickers to the end so the weekday queue is not re-blocked."""
+    keys = {
+        str(token or "").strip().upper() for token in (demote_tickers or []) if str(token).strip()
+    }
+    if not keys:
+        return list(targets)
+    head = [row for row in targets if row.ticker.upper() not in keys]
+    tail = [row for row in targets if row.ticker.upper() in keys]
+    return head + tail
+
+
 def _ingest_single_library_target(
     target: LibraryIngestTarget,
     *,
@@ -357,6 +419,7 @@ def _ingest_single_library_target(
     deepen_history: bool = True,
     max_bodies: int = 20,
     canonical_only: bool | None = None,
+    deadline_monotonic: float | None = None,
 ) -> dict[str, Any]:
     screen_dir = screen_dir_for(library_root, market_id)
     store = ResearchStore(screen_dir)
@@ -373,32 +436,45 @@ def _ingest_single_library_target(
         canonical_only=canonical_only,
     )
 
-    meta = ingest_research_sources(
-        ticker=target.ticker,
-        company_name=target.name,
-        screening_snapshot={
-            "ticker": target.ticker,
-            "name": target.name,
-            "signal": target.signal,
-            "market": market_id,
-        },
-        sources_dir=sources_dir,
-        since=None,
-        market=market_id,
-        deepen_history=deepen_history,
-    )
+    ticker_budget_hit = deadline_reached(deadline_monotonic)
+    ir_meta: dict[str, Any] = {}
+    meta: dict[str, Any] = {}
+    if not ticker_budget_hit:
+        meta = ingest_research_sources(
+            ticker=target.ticker,
+            company_name=target.name,
+            screening_snapshot={
+                "ticker": target.ticker,
+                "name": target.name,
+                "signal": target.signal,
+                "market": market_id,
+            },
+            sources_dir=sources_dir,
+            since=None,
+            market=market_id,
+            deepen_history=deepen_history,
+            deadline_monotonic=deadline_monotonic,
+        )
+        ticker_budget_hit = deadline_reached(deadline_monotonic)
     filings_dir = sources_dir / "filings"
-    refetch_residual_filing_bodies(
-        filings_dir,
-        ticker=target.ticker,
-        company_name=target.name,
-        max_bodies=max_bodies,
-    )
-    refetch_ir_allowlist_filing_bodies(
-        filings_dir,
-        ticker=target.ticker,
-        max_bodies=max_bodies,
-    )
+    if not ticker_budget_hit:
+        refetch_residual_filing_bodies(
+            filings_dir,
+            ticker=target.ticker,
+            company_name=target.name,
+            max_bodies=max_bodies,
+        )
+        ticker_budget_hit = deadline_reached(deadline_monotonic)
+    if not ticker_budget_hit:
+        ir_meta = refetch_ir_allowlist_filing_bodies(
+            filings_dir,
+            ticker=target.ticker,
+            max_bodies=max_bodies,
+            deadline_monotonic=deadline_monotonic,
+        )
+        ticker_budget_hit = bool(ir_meta.get("deadline_hit")) or deadline_reached(
+            deadline_monotonic
+        )
     after = _filing_coverage_for_ticker(
         target.ticker,
         library_root=library_root,
@@ -410,6 +486,7 @@ def _ingest_single_library_target(
         or after["filings_total"] > before["filings_total"]
     )
     filings_summary = meta.get("filings_summary") or {}
+    ir_exhausted = int(ir_meta.get("failed") or 0) > 0 and int(ir_meta.get("fetched") or 0) == 0
     return {
         "ticker": target.ticker,
         "reason": target.reason,
@@ -418,6 +495,9 @@ def _ingest_single_library_target(
         "improved": improved,
         "regime": meta.get("filings_regime"),
         "filings_summary": filings_summary,
+        "ticker_budget_hit": ticker_budget_hit,
+        "ir_exhausted": ir_exhausted,
+        "ir_refetch": ir_meta or None,
     }
 
 
@@ -438,6 +518,7 @@ def run_library_ingest_loop(
     pin_tickers: list[str] | None = None,
     discovery_scan: bool | None = None,
     maintenance_mode: bool = False,
+    per_ticker_max_seconds: float | None = DEFAULT_PER_TICKER_MAX_SECONDS,
 ) -> LibraryIngestLoopResult:
     """
     Weekday deepen pass for library buy-tier names (euro_depth pilot and successors).
@@ -604,11 +685,22 @@ def run_library_ingest_loop(
     )
     if not pin_tickers:
         result.targets = apply_critical_path_to_target_order(result.targets, critical)
+        result.targets = demote_library_ingest_targets(
+            result.targets,
+            load_library_ingest_blocker_cooldown(library_root, market_id),
+        )
     if pin_tickers and result.targets:
         pin_set = {str(t or "").strip().upper() for t in pin_tickers if str(t or "").strip()}
         result.targets = [
             row for row in result.targets if row.ticker.upper() in pin_set
         ] or result.targets[:1]
+
+    ticker_cap = weekday_per_ticker_max_seconds(
+        pin_tickers=pin_tickers,
+        record_gap_closure=bool(gap_closure_spec),
+        per_ticker_max_seconds=per_ticker_max_seconds,
+    )
+    result.per_ticker_max_seconds = ticker_cap
 
     if time.monotonic() - started >= max_runtime_seconds:
         result.runtime_cutoff = True
@@ -617,11 +709,18 @@ def run_library_ingest_loop(
     for target in result.targets:
         if result.runtime_cutoff:
             break
-        elapsed = time.monotonic() - started
-        if elapsed >= max_runtime_seconds:
+        if not should_start_next_ticker(
+            slot_started=started,
+            max_runtime_seconds=max_runtime_seconds,
+        ):
             result.runtime_cutoff = True
             result.partial = True
             break
+        deadline = ticker_deadline(
+            slot_started=started,
+            max_runtime_seconds=max_runtime_seconds,
+            per_ticker_max_seconds=ticker_cap,
+        )
         try:
             row = _ingest_single_library_target(
                 target,
@@ -629,6 +728,7 @@ def run_library_ingest_loop(
                 market_id=market_id,
                 deepen_history=deepen_history,
                 max_bodies=max_bodies,
+                deadline_monotonic=deadline,
             )
             result.results.append(row)
             if row.get("improved"):
@@ -647,6 +747,8 @@ def run_library_ingest_loop(
     result.leftover_seconds = (
         0.0 if result.runtime_cutoff else max(0.0, float(max_runtime_seconds) - used_seconds)
     )
+    result.blocker_ticker = select_blocker_ticker(result.results)
+
     result.health_after = snapshot_library_ingest_health(market_id, library_root=library_root)
 
     from value_investor.library_ingest_escalation import library_ingest_filing_gaps
