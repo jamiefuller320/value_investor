@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "source": "director",
+  "open_questions": [
+    "Screen FCF is tagged currency=USD on an LSE geotech contractor whose Yahoo annuals (revenue 3,087.3m, NI 142.7m, OCF 258.4m) match Keller’s sterling scale, while filing_aligned / cashflow_metrics FCF is 168.0m versus screen_ttm / key_metrics FCF 189.6m with divergence_flagged false and TTM cashflow suppressed — is the 9.2% FCF-yield / 13.8× P/E / 4.58× net dividend-cover stack a unit/FX or FCF-definition error (OCF−capex vs company-adjusted, leases, plant disposal proceeds), and which filing-body GBP FCF should replace Yahoo before endorsing cheapness or the strong_buy?",
+    "Yahoo FY2025 statutory NI was almost flat (142.3m → 142.7m) and basic EPS only 1.974 → 2.024 (+2.5%) while screen earnings growth is 7.8% adjusted / 2.5% statutory; Neff PEGY passed at 0.05 but Lynch PEG failed at 1.76 (13.8 / 7.8), Quality Value / Buffett / Magic Formula / Earnings Quality still passed on ROE 25.3% as ordinary shares fell 71.4m → 69.2m and treasury shares rose 1.69m → 3.85m — is the quality/GARP pass buyback-inflated ROE/EPS on a late-cycle geotech peak, or a durable cash engine?",
+    "cyclical_exposure_detected and cyclical_exposure_overlay are both false on a plant-heavy ground-engineering contractor; news (not yet the worker-read bodies) claims H1 2026 revenue +11% and underlying OP +17.1% on North American data-centre/infrastructure strength against weaker Europe and residential, plus a July 2026 guidance upgrade that jumped the shares ~16% — what do the FY2025 group accounts and the 4 Aug 2026 H1 body actually say on NA vs EME mix, data-centre concentration, order-book quality (secured vs preferred vs variation), working-capital/retentions, and whether FY2026 upgraded guidance is a peak-cycle print?",
+    "A £100m buyback tranche launched 30 Mar 2026; Yahoo FY2025 already shows buybacks 42.5m + dividends paid 36.7m against FCF 168m, and August news prints 2,874–3,182p versus the screen core/tactical limits £2,995.74 / £2,268.97 — how much of the 13.8× P/E, 2.7% yield, Piotroski ‘no dilution’ pass and 9.2% FCF yield is capital-return / share-shrinkage, are dividend-plus-buyback still covered by filing FCF after plant capex (~90m), leases (90.8m) and H1 cash, and is the name already being accumulated above its own core limit?",
+    "D/E is a modest 47.8% and Yahoo FY2025 cash 277.5m versus total debt 310.4m (financial debt 219.6m + leases 90.8m) looks near net-cash ex-IFRS-16, yet current ratio 1.44 failed Graham, current+non-current provisions are 91.6m + 85.3m, and receivables are 548m on 3.1bn revenue — what is group net debt on the annual-report definition, how much of the current-ratio fail is contract retentions/claims rather than true liquidity stress, and do FY/H1 notes show onerous contracts, litigation, or warranty that would break Financial Health / Piotroski 8/9?",
+    "No FY2025 preliminary-results RNS is period-tagged in this catalog (only the 24 Mar 2026 Annual Financial Report, the 31 May 2026 CH group accounts, a 20 Mar 2026 ‘Statement re Company Event’, and a 9 Apr 2026 ‘Michael Speakman’ directorate RNS) — which FY2025 statutory-versus-underlying bridge, FY2026 original guidance, and any material event/CFO change must the memo treat as unknown until those bodies are read or a missing prelim is ingested?",
+    "The screen is a 1-week new strong_buy (conviction 0.446, RSI 50.4, price +0.33% vs SMA200, timing=neutral) after the 7 Jul 2026 trading-update gap and the 4 Aug H1 print, while later news cites analyst targets ~3,100–3,150p and a YTD rally — has cheapness (P/E 13.8, earnings yield 7.3% already below the 8% Earnings Yield hurdle, P/B 3.2) already been competed away versus the £2,995.74/£2,268.97 ladder, and is the signal stale versus live buyback prints?",
+    "Piotroski is 8/9 with only ‘ROA improving’ failing, Moat failed on ROA <8% and margins <12%, and goodwill is a modest 101m against equity 641m — do the FY2025/H1 accounts show impairment triggers, contract-margin erosion, or pension cash (31.3m non-current liability vs 20.7m surplus asset) that would sit ahead of the 2.7% dividend if NA data-centre work slows?"
+  ],
+  "meta_reflection": [
+    {
+      "topic": "evidence_ladder",
+      "observation": "Filings-first order is adequate in principle for KLR.L (63/63 bodies; period_coverage annual=10 / interim=1 / trading_update=2) and better than names with no tagged interim: a genuine 4 Aug 2026 H1 body exists. It is not adequate in practice because yahoo_quarterly_cashflow sits on the ladder but is empty (TTM suppressed), alternate_news and ir_presentation_metrics are dead/absent steps, and the two first-class 2026 trading updates (20 May AGM; 7 Jul guidance upgrade that news says moved the shares ~16%) plus the £100m buyback launch and I-40 contract RNS are ranked as trading_update/other below empty quarterlies. Ten ‘annual’ hits include an AGM notice mis-tagged period=annual. No FY2025 prelim-results RNS is tagged.",
+      "priority": "high"
+    },
+    {
+      "topic": "task_schema",
+      "observation": "Four worker types plus a five-task cap fit this name’s annual+interim+news+screen+gap skeleton, but they consume the entire budget and leave no slot for the 7 Jul 2026 Trading Update, the 20 May AGM update, the 30 Mar £100m buyback-launch RNS, or the 9 Jun I-40 contract variation. summarize_filing_body cannot carry period=annual|interim|trading_update|corporate_action, and there is no type to cluster ~25 Transaction-in-Own-Shares, parse an IR deck, or reconcile 168.0m vs 189.6m FCF. gap_inventory can only list the July TU / IR / quarterly holes — it cannot fill them.",
+      "priority": "high"
+    },
+    {
+      "topic": "methodology",
+      "observation": "The screen emits strong_buy (11/22, five families including cheapness/quality/GARP/dividend/risk) while statutory NI is flat, Lynch PEG fails at 1.76, Earnings Yield fails (7.3%<8%), P/E 13.8 is above the Low-P/E hurdle, PEGY=0.05 contradicts that PEG, and cyclical_exposure_detected is false on a geotech contractor whose H1 narrative is NA data-centre/infra versus weak Europe/residential. Overlays are all false: fcf_basis_overlay despite 168m vs 189.6m FCF tagged USD, leverage_override unused on a near-net-cash but provision-heavy contractor, cash_conversion_overlay, and cyclical_exposure. Quality/Buffett can pass on 25% ROE created partly by shrinking share count. The director–worker loop is being asked to qualitatively veto a mechanically clean headline that sector-cycle and FCF-currency overlays failed to brake.",
+      "priority": "high"
+    },
+    {
+      "topic": "monitoring",
+      "observation": "weeks_at_signal=1 / stability=new / conviction=0.446 already mark a fresh print after a July gap-up, but there is no watch schema for: remaining £100m buyback capacity versus live prints versus the £2,995.74/£2,268.97 ladder (August reprints already show prints through the core limit), H2 order-book conversion and NA data-centre concentration, Europe/residential deterioration, FY2026 upgraded-guidance checkpoints, or the unread 20 Mar ‘Company Event’ / 9 Apr Speakman RNSs. RSI 50 + SMA200 +0.33% timing=neutral is not a substitute for those monitors.",
+      "priority": "high"
+    },
+    {
+      "topic": "memo_structure",
+      "observation": "A generic FINANCIAL REVIEW / RISKS split will blend statutory and underlying geotech margins and will not force North America versus EME, data-centre/infrastructure versus residential, order-book secured versus variation, plant-capex FCF versus company-adjusted FCF, or cash versus IFRS-16 net debt. Without explicit CAPITAL RETURNS, ORDER BOOK / END-MARKET, and CYCLICAL PEAK slots, workers will treat the daily £100m buyback flood and Kalkine industrial-leadership pieces as colour. No required slot for reporting-currency hygiene (snapshot USD vs sterling accounts) or for ‘July TU and I-40 exist as unread bodies’. Director catalog pass can form these questions without drafting the memo.",
+      "priority": "medium"
+    },
+    {
+      "topic": "other",
+      "observation": "filings_index.body_path values point at docs/data/research/KLR.L/sources/... rather than this trial snapshot tree. sources_used are only companies_house + investegate_direct — the IR allowlist and any FY2025 prelim RNS before the 24 Mar AFR did not land. news_manifest (~61 items) is dominated by TipRanks/Kalkine/Globe buyback reprints plus ASX:KLR Kaili Resources and Nasdaq:KLR Kailera Therapeutics collisions. financials_annual.json is Yahoo-shaped (FY2021–2025; quarterly_income/quarterly_cashflow empty; no root currency field). NCAV missing is expected for this model, not a KLR-specific hole.",
+      "priority": "medium"
+    }
+  ],
+  "procedural_suggestions": [
+    {
+      "area": "ingest",
+      "summary": "Deepen Investegate so the FY2025 preliminary-results RNS is not dropped when the recency window is buyback-dominated; fire the IR allowlist for Keller annual report / H1 / capital-markets PDFs; retag the 14 Apr 2026 AGM notice as period=other not annual. Point body_path at the trial snapshot tree. Deduplicate daily Transaction-in-Own-Shares before counting filing coverage. Reject Google News hits whose issuer is ASX:KLR (Kaili Resources) or Nasdaq Kailera Therapeutics (KLR).",
+      "priority": "high"
+    },
+    {
+      "area": "scoring",
+      "summary": "Fail-closed or flag when screening_snapshot.fcf.currency is USD on a GBP LSE reporter, and set fcf_definition_divergence whenever screen_ttm (189.6m) disagrees with filing_aligned (168.0m). Do not pass Neff PEGY at 0.05 while Lynch PEG fails at 1.76 on the same 7.8% growth / 13.8× P/E. Enable a construction/geotech cyclical overlay so NA data-centre boom versus Europe/resi split is not scored as a quality compounder with cyclical_exposure_detected=false. Surface a price-versus-limit warning when live buyback prints exceed the core limit.",
+      "priority": "high"
+    },
+    {
+      "area": "prompt",
+      "summary": "Require the annual worker to extract reporting currency and entity (02442580 group), statutory versus underlying EBIT/EPS, geo/end-market mix (NA / EME / APAC; infrastructure vs data-centre vs residential), OCF/capex/FCF definition including PPE disposals, cash versus financial debt versus IFRS-16 leases versus company net debt, retentions/WIP/provisions/claims, dividend declared versus cash paid and cover versus filing FCF, buyback authority versus cash spent versus share/treasury count, pension, and contract-risk language. Require the interim worker to pull H1 vs H1 comparatives, order book, FY2026 guidance, and any restatement of FY2025. Require news workers to cluster the £100m buyback reprints into one line, keep H1/July-TU/I-40/analyst-PT items as headline-only, and discard ASX:KLR and Nasdaq Kailera filler.",
+      "priority": "high"
+    },
+    {
+      "area": "sources",
+      "summary": "Ingest the FY2025 prelim results RNS if distinct from the 24 Mar 2026 AFR; keep the 7 Jul 2026 Trading Update and 9 Jun I-40 variation as first-class operating sources. Populate alternate_news or drop it from the ladder. Parse H1 cash-flow from the 4 Aug 2026 interim body to replace empty Yahoo quarterly_income/quarterly_cashflow instead of only suppressing TTM. Expose ir_presentation_metrics when Keller IR decks exist.",
+      "priority": "high"
+    },
+    {
+      "area": "orchestration",
+      "summary": "Select the latest dated annual *group* body (CH 02442580 filed 2026-05-31) — not the 2019–2025 CH files and not the 14 Apr AGM notice tagged annual. Assign the 4 Aug 2026 H1 as the interim slot. Do not invent or retag a buyback/TVR RNS as interim. Raise the cap or add trading_update / rns_cluster / corporate_action types so the 7 Jul guidance-upgrade TU, £100m buyback launch, and I-40 contract are not dropped when annual+interim+news+screen+gap are mandatory.",
+      "priority": "medium"
+    },
+    {
+      "area": "schema",
+      "summary": "Allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action. Add reporting_currency, order_book_secured_vs_preferred, end_market_mix, and fcf_basis_used on the screening snapshot. Remap filings_index.body_path into the trial sources/ tree. Validate FCF-yield inputs against listing CCY and a sanity band versus market cap; flag PEGY versus Lynch PEG contradictions.",
+      "priority": "medium"
+    },
+    {
+      "area": "monitoring",
+      "summary": "For weeks_at_signal<=1 industrials strong_buys after a gap-up trading update, require the memo to compare live price versus limit ladder versus latest buyback print versus cited analyst PTs, and emit watches (H2 order-book conversion, remaining £100m buyback, NA data-centre concentration, Europe/resi, FY2026 guidance, unread Company Event/Speakman RNSs). Do not treat stability=new or SMA200-flat timing as a reason to skip those checks.",
+      "priority": "medium"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "klr_annual_fy2025",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/ch_02442580_MzUyMzYyMjA2OWFkaXF6a2N4.txt",
+      "focus": "Companies House group accounts for Keller Group plc 02442580 filed 2026-05-31 (period=annual; entity_type=consolidated). This is the latest annual body — do not use 2019–2025 CH files, the 24 Mar 2026 AFR RNS, or the 14 Apr AGM notice (mislabeled annual). Extract reporting currency; statutory vs underlying revenue/operating profit/EBIT/EPS and the FY2024 comparative (Yahoo NI 142.3m→142.7m, revenue 2,986.7m→3,087.3m); geo and end-market mix (North America / EME / APAC; infrastructure vs data-centre vs residential); order book if stated; OCF, capex, PPE disposals, FCF definition; cash vs financial debt vs IFRS-16 leases vs reported net debt; retentions, WIP, receivables, current and long-term provisions/claims; dividend declared vs cash paid; buybacks, treasury shares and share count; pension surplus/deficit and contributions; goodwill/impairment; contract-risk/litigation language; FY outlook if stated. Prefer these figures over Yahoo (FY2025 Yahoo OCF 258.4m, FCF 168.0m, buybacks 42.5m, dividends paid 36.7m, cash 277.5m, total debt 310.4m, leases 90.8m; screen TTM FCF 189.6m tagged USD). Do not open other files.",
+      "priority": 1
+    },
+    {
+      "id": "klr_interim_h1_2026",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/5a239384189d0666.txt",
+      "focus": "Interim Results for the half year ended 30 June 2026 (Investegate, 2026-08-04, period=interim). Extract H1 revenue/underlying vs statutory operating profit/margin/EPS/OCF/FCF/net debt vs H1 2025 and vs FY2025 run-rate; dividend declaration; order book size and quality (secured vs preferred vs variation); North America vs EME vs residential commentary; data-centre/infrastructure concentration; FY2026 guidance (including any upgrade vs the unread 7 Jul trading update — only if this body itself restates it); working-capital, retentions and cash conversion; remaining buyback authority vs cash spent in H1; any restatement of FY2025; material risks or contract claims. Prefer these figures over Yahoo and over news headlines that claim revenue +11% and OP +17.1%. Do not open other files.",
+      "priority": 2
+    },
+    {
+      "id": "klr_screen_context",
+      "type": "screen_context",
+      "target": "screening_snapshot.json",
+      "focus": "Explain strong_buy 11/22, composite 0.726, sector-relative 0.701, families cheapness/quality/dividend/GARP/risk versus failed models (Graham/Schloss/Deep Value on P/B 3.2 and current ratio 1.44; Earnings Yield 7.3%<8%; Low P/E on 13.8; Lynch PEG 1.76; Moat on ROA/margins; High Dividend Yield/Dreman). Flag conviction 0.446 / 1-week new signal, timing=neutral, RSI 50.4, price +0.33% vs SMA200, trade-plan limits £2,995.74 / £2,268.97, all overlays false including fcf_basis/cyclical_exposure/cash_conversion despite a geotech contractor, TTM cashflow suppressed, FCF bases filing_aligned 168.0m vs screen_ttm 189.6m with currency=USD and divergence_flagged false, PEGY 0.05 vs Lynch PEG 1.76, yield 2.7%, ROE 25.3%, statutory growth 2.5% / adjusted 7.8%, Piotroski 8/9 (ROA-improving fail), D/E 47.8%. List which screen numbers must be replaced by filing-body sterling and which claims are unsafe until FCF currency/definition, PEGY-vs-PEG, cyclical end-market mix, and price-versus-limit (August buyback prints through the core limit) are reconciled.",
+      "priority": 3
+    },
+    {
+      "id": "klr_news_digest",
+      "type": "digest_news_manifest",
+      "target": "news_manifest.json",
+      "focus": "Cluster ~61 headlines: keep H1 2026 earnings-call notes (~4–12 Aug: record revenue/OP, NA data-centre and infrastructure, weaker Europe/residential, dividend increase, H2 outlook); 7 Jul 2026 trading update (shares +~16%, FY2026 revenue/profit guidance upgraded, record order book); 9 Jun I-40 / US highway variation; analyst PT/fair-value pieces (~3,100–3,150p later vs earlier ~£22–£25); Simply Wall St dividend notes; Stockopedia US-infrastructure undervalue (May); EME executive share sale (~27 Aug). Collapse TipRanks/Kalkine/Globe daily £100m buyback reprints (August weekly prints ~79k–109k shares at 2,874–3,182p) into one programme note versus the £2,995.74 core limit. Discard ASX:KLR Kaili Resources, Nasdaq Kailera Therapeutics (KLR) IPO, ETF lists, and Kalkine ‘industrial leadership’ pairing filler. Google News items are RSS titles — do not invent article-body or H1 statutory figures.",
+      "priority": 4
+    },
+    {
+      "id": "klr_gap_inventory",
+      "type": "gap_inventory",
+      "target": "source_inventory",
+      "focus": "Catalog thin/missing steps: yahoo_quarterly_cashflow empty, yahoo_quarterly_income empty (inside financials_annual.json), ir_presentation_metrics absent, alternate_news absent, TTM cashflow suppressed. Note period coverage annual=10 / interim=1 / trading_update=2 — the 10 annuals include an AGM notice mis-tag; no FY2025 prelim-results RNS is tagged, so do not invent that source. Highest-value unread or omitted bodies (do not open them): 7 Jul 2026 Trading Update 7971cc4e54f0af7f.txt (guidance upgrade); 20 May AGM Trading Update b4077d9a8b681947.txt; 30 Mar £100m buyback launch 8fc687cedacd3c19.txt; 9 Jun I-40 contract f3bd8f27b5624e8e.txt; 24 Mar AFR 63e24814661003ff.txt only if CH YoY notes are insufficient; 20 Mar Statement re Company Event 187f6809de97c95b.txt and 9 Apr Michael Speakman e2bdfa2494a77cbd.txt; latest TVR 22e85619476c5fb7.txt and a sample own-share body for residual £100m capacity — not substitutes for H1. Note filings_index.body_path points outside this trial tree; macro_context.json and screen_run_manifest.json are present but unused. State what the memo must leave unknown until those bodies are assigned: July TU numeric guidance, I-40 contract value/margin, remaining buyback authority, IR-slide metrics, Company Event/Speakman substance, H2 intra-quarter cashflow (Yahoo quarterlies empty).",
+      "priority": 5
+    }
+  ],
+  "director_agent_id": "agent-937d0c3f-6104-41e0-bfba-13b2d5160ff1"
+}

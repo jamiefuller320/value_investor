@@ -1,0 +1,154 @@
+{
+  "appended": [
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Retag IR FY results PDFs as period=annual, IR results decks as presentation not interim, CME decks as other/capital_markets, and Trading_Update_*.pdf as trading_update. Do not treat UK Companies House 02886378 as the Irish Grafton Group plc consolidation without an issuer/entity check. Point body_path at the trial snapshot tree. Deduplicate daily Transaction-in-Own-Shares before counting filing coverage.",
+      "source": "director_worker",
+      "run_id": "20260904T173351Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:42:11.927295+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Fail-closed when FCF yield is ~0.1% while canonical FCF is £100m+: treat that as a unit/FX error, not a model miss. Set fcf_definition_divergence whenever company_adjusted / filing_aligned / TTM disagree (£168.3m / £205.6m / £187.7m here). Enable cyclical/housing-RMI and cash-conversion overlays for builders-merchants. Surface dual leverage (IFRS-16 D/E vs ex-lease net cash). Do not pass quality/GARP on 8.4% ROE while moat/Buffett fail on the same ROE without a documented exception.",
+      "source": "director_worker",
+      "run_id": "20260904T173351Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:42:11.927312+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "prompt",
+      "priority": "high",
+      "suggestion": "Require annual/interim workers to extract reporting currency and entity (group vs UK 02886378); UK vs Ireland vs Iberia LFL vs acquired; statutory vs adjusted EBIT/EPS; OCF/capex/FCF definition; cash vs investments vs leases vs financial debt; dividend declared vs cash paid and cover vs filing FCF; buyback authorisation vs cash spent vs share count; FY outlook. Require news workers to cluster buyback reprints into one line and keep only Q1 TU, July H1 TU, CME 2030, Mercaluz, and margin/momentum pieces. Treat Kalkine/TipRanks as headline-only.",
+      "source": "director_worker",
+      "run_id": "20260904T173351Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:42:11.927317+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Ingest the H1 2026 statutory interim when published (catalog has H1 2025 only; July 2026 is a trading update). Populate alternate_news or drop it from the ladder. Parse interim cash-flow from filing bodies to replace empty Yahoo quarterly_income/quarterly_cashflow instead of only suppressing TTM. Expose ir_presentation_metrics (present here) via a worker type or fold CME/FY slides into the filing task.",
+      "source": "director_worker",
+      "run_id": "20260904T173351Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:42:11.927321+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "orchestration",
+      "priority": "medium",
+      "suggestion": "Select the latest dated annual *results* body (IR Annual Report 2025 ir_b9e18372b456fd3b or FY Final Results ir_c6a7de8af8b2c4c5 — not 2019–2024 CH). When no H1 2026 statutory interim exists, allow the latest trading_update as the second filing task rather than forcing stale H1 2025. Raise the cap or add trading_update / rns_cluster types so CME, Mercaluz, and buyback-programme RNSs are not dropped.",
+      "source": "director_worker",
+      "run_id": "20260904T173351Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:42:11.927326+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "Allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action. Add reporting_perimeter (group vs CH subsidiary), fcf_basis_used, and housing_rmi_cyclical flags. Remap filings_index.body_path into the trial sources/ tree. Validate FCF-yield inputs against listing CCY and a sanity band vs market cap.",
+      "source": "director_worker",
+      "run_id": "20260904T173351Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:42:11.927329+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "monitoring",
+      "priority": "medium",
+      "suggestion": "For weeks_at_signal<=1 merchanting strong_buys, require the memo to compare live price vs limit ladder vs latest buyback print, and emit watches (next H1 results, remaining buyback, Mercaluz integration, UK/IE LFL). Do not treat stability=new as a reason to skip those checks.",
+      "source": "director_worker",
+      "run_id": "20260904T173351Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:42:11.927334+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Filings-first order is adequate in principle (77 local bodies; 9 annual + 5 interim + 3 trading_update). It is not adequate when period tags are wrong: the only period=annual IR body is the 2025 Annual Report, while FY2025 Final Results, the FY presentation, the CME26 deck, and the July 2026 trading-update PDF are all tagged period=interim. The only true statutory interim is H1 2025 (30 Jun 2025). yahoo_quarterly_cashflow sits on the ladder but is empty (TTM suppressed); alternate_news is a dead step. Trading updates and the Mercaluz completion are first-class for a merchanting/M&A story but sit outside the annual/interim assignment rule.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T173351Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "evidence_ladder",
+      "recorded_at": "2026-09-04T17:42:11.927338+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the May 2026 Q1 trading update, the June CME/2030 RNS, Mercaluz completion, or the 30 Jun £25m buyback-programme RNS. summarize_filing_body cannot carry period=annual|interim|trading_update|corporate_action, so the director must smuggle the July 2026 trading update in as ‘interim’ because it is catalogued that way and is the only 2026 intra-year operating body. No task type exists to reconcile the three FCF bases or to cluster ~50 Transaction-in-Own-Shares RNSs.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T173351Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "task_schema",
+      "recorded_at": "2026-09-04T17:42:11.927346+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "The screen emits strong_buy (11/22, 5 families including quality/GARP/dividend) while FCF Yield fails at 0.1% despite £168–206m FCF — a contradiction that should have tripped fcf_basis_overlay / divergence_flagged (both false). cyclical_exposure_detected is false on a UK/Irish builders-merchant; interim_quality_overlay is false despite empty Yahoo quarterlies and no H1 2026 statutory interim; cash_conversion_overlay is false despite FCF definitions disagreeing. Quality/GARP can pass while Buffett/Moat/Quality Value fail on the same 8.4% ROE. The director–worker loop is being asked to qualitatively veto a mechanically clean headline that the overlays failed to brake.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T173351Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "methodology",
+      "recorded_at": "2026-09-04T17:42:11.927357+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "monitoring",
+      "priority": "high",
+      "suggestion": "weeks_at_signal=1 / stability=new / conviction=0.475 already mark a fresh print, but there is no watch schema for: next true H1 2026 results (absent from catalog on 4 Sep 2026), remaining £25m buyback capacity, Mercaluz integration, CME 2030 KPI checkpoints, or UK/Irish merchanting LFL. RSI 56 + MACD-weakening in the action_note is not a substitute for those monitors. A 1-week strong_buy with limits below live buyback prints needs a price-vs-signal freshness check, not just a stability label.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T173351Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "monitoring",
+      "recorded_at": "2026-09-04T17:42:11.927366+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "A generic FINANCIAL REVIEW / RISKS split will blend UK Selco-type merchanting, Irish Woodie’s, and Iberian distribution and will not force like-for-like vs acquired growth, statutory vs adjusted, or cash vs lease-adjusted net debt. Without an explicit CAPITAL RETURNS slot, workers will treat the daily £25m buyback flood as news colour rather than a denominator/FCF-cover fact. No required slot for CH-entity hygiene (UK 02886378 vs Irish group) or for FCF-definition reconciliation. Director catalog pass can form these questions without drafting the memo.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T173351Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "memo_structure",
+      "recorded_at": "2026-09-04T17:42:11.927374+00:00"
+    },
+    {
+      "ticker": "GFTU.L",
+      "name": "Grafton Group plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "filings_index.body_path values point at docs/data/research/GFTU.L/sources/... rather than this trial snapshot. ~50 of 60 period=other bodies are Transaction in Own Shares; news_manifest (104 items) is the same buyback reprints (TipRanks/Globe/Kalkine) plus GROUF OTC dual-listing earnings-call mirrors. financials_annual.json is Yahoo-shaped (FY2021–2025; quarterly_income/quarterly_cashflow empty; FY2025 income omits EPS/share count that FY2021 has). ir_presentation_metrics.json exists in the snapshot but is outside the director’s allowed read set and has no worker type. NCAV missing is expected, not a GFTU-specific hole.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T173351Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "other",
+      "recorded_at": "2026-09-04T17:42:11.927381+00:00"
+    }
+  ],
+  "count": 13
+}

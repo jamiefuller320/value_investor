@@ -1,0 +1,145 @@
+{
+  "task_id": "cost_gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "financials_annual.json contains annual Yahoo income_statement, balance_sheet and cash_flow for FY2021–FY2025, but quarterly_income and quarterly_cashflow are empty objects ({}) — no quarterly Yahoo series in this source.",
+    "cashflow_metrics in financials_annual.json sets ttm_cashflow_suppressed: true with reason quarterly_cashflow_empty; screening_snapshot.json repeats ttm_cashflow_suppressed under yahoo_quarterly with the same reason.",
+    "No ir_presentation_metrics file exists anywhere under the trial sources tree; the only investor-presentation filing (617a7f90264da915) is an Investor Meet Company scheduling notice with no slide KPIs or structured metrics.",
+    "No alternate_news file exists under the trial sources tree; news coverage is limited to news_manifest.json plus news_batch_*.json batches.",
+    "All 69 filings_index.json body_path values point to docs/data/research/COST.L/sources/filings/bodies/…, not to this trial tree (docs/data/research_director_worker/COST.L/20260904T172525Z/sources/…); identical body copies exist locally but index paths reference the main research tree.",
+    "Six investegate_resolved filings are mis-attributed non-Costain RNS bodies indexed under COST.L: Atlantic Lithium (ca29cecdd3c884c4), Cadence Minerals (84aa02354af58374), Anglo Asian Mining (abe3e0648357d3d3), Capita (0b3a29832772b2e5), Pennon Group (9729feed44599854), United Utilities (3c61182d5f1260cf); body text confirms other issuers.",
+    "filings_index.json lists 69 filings (8 annual Companies House, 1 interim, 1 trading_update, 59 other); substantive Costain bodies present include H1 2026 interim results (66a3fc209a987a0f) and AGM trading update (72fd72ff6bda07e5).",
+    "AGM trading update body 72fd72ff6bda07e5 (14 May 2026) states trading in line, FY26 adjusted operating margin target ~4.0%, FY26 net cash ~£175m, forward work broadly consistent with £7bn, and £20m buyback — present but flagged as unused-by-pipeline in task brief.",
+    "Contract win RNS bodies present but flagged unused: TfL £700m framework (9743d1979ad52a15), West Winch housing road (e4fb4f8046403938), United Utilities extension (e890486cf3b26209).",
+    "macro_context.json is present with secondary regime markers only (GBP/USD 1.3498, FTSE 100 10789.30 as of Sep 2026); note explicitly says not to treat as scoring input.",
+    "screen_run_manifest.json is present with strong_buy signal, conviction 0.442, 13/22 models passed, and trade-plan limits; screening_snapshot.json duplicates screen metrics with data_quality_score 1.0 and 20/20 metrics present — both flagged as unused-by-pipeline in task brief.",
+    "news_manifest.json contains 48 articles but many google_news hits are false positives (generic “cost” keyword: Tesco, BT, Vodafone, etc.); only a minority are Costain-specific (e.g. yfinance H1 earnings call, simplywall.st £2.57 target)."
+  ],
+  "figures": [
+    {
+      "metric": "Total revenue",
+      "value": "1045700000",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/financials_annual.json",
+      "note": "Yahoo income_statement 2025; units as stored (no currency field in file)"
+    },
+    {
+      "metric": "Operating income",
+      "value": "44800000",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/financials_annual.json",
+      "note": "Yahoo income_statement 2025"
+    },
+    {
+      "metric": "Net income",
+      "value": "37300000",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/financials_annual.json",
+      "note": "Yahoo income_statement 2025"
+    },
+    {
+      "metric": "Free cash flow",
+      "value": "48500000",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/financials_annual.json",
+      "note": "Yahoo cash_flow 2025; matches cashflow_metrics.free_cashflow"
+    },
+    {
+      "metric": "Operating cash flow",
+      "value": "51300000",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/financials_annual.json",
+      "note": "Yahoo cash_flow 2025"
+    },
+    {
+      "metric": "Cash and cash equivalents",
+      "value": "189300000",
+      "period": "FY2025 year-end",
+      "source_path": "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/financials_annual.json",
+      "note": "Yahoo balance_sheet 2025"
+    },
+    {
+      "metric": "Revenue",
+      "value": "543.1m",
+      "period": "H1 2026",
+      "source_path": "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/filings/bodies/66a3fc209a987a0f.txt",
+      "note": "Interim results RNS body; +3.4% vs H1 25"
+    },
+    {
+      "metric": "Adjusted operating profit",
+      "value": "17.3m",
+      "period": "H1 2026",
+      "source_path": "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/filings/bodies/66a3fc209a987a0f.txt",
+      "note": "Adjusted operating margin 3.2%"
+    },
+    {
+      "metric": "Net cash",
+      "value": "164.4m",
+      "period": "30 Jun 2026",
+      "source_path": "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/filings/bodies/66a3fc209a987a0f.txt",
+      "note": "Period-end net cash per interim RNS"
+    },
+    {
+      "metric": "Forward work position",
+      "value": "7.0bn",
+      "period": "H1 2026 / FY25 year-end",
+      "source_path": "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/filings/bodies/66a3fc209a987a0f.txt",
+      "note": "Order book plus preferred bidder book"
+    },
+    {
+      "metric": "FY26 net cash guidance",
+      "value": "approximately £175m",
+      "period": "FY2026 guidance",
+      "source_path": "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/filings/bodies/72fd72ff6bda07e5.txt",
+      "note": "AGM trading update 14 May 2026"
+    },
+    {
+      "metric": "FY26 adjusted operating margin target",
+      "value": "around 4.0%",
+      "period": "FY2026 guidance",
+      "source_path": "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/filings/bodies/72fd72ff6bda07e5.txt",
+      "note": "AGM trading update"
+    },
+    {
+      "metric": "Screen signal",
+      "value": "strong_buy",
+      "period": "screen run 2026-09-02",
+      "source_path": "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "13/22 models passed; conviction_score 0.442"
+    },
+    {
+      "metric": "P/E",
+      "value": "15.5",
+      "period": "screen snapshot",
+      "source_path": "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "key_metrics block"
+    }
+  ],
+  "gaps": [
+    "TTM operating/free cash flow cannot be derived from this source: quarterly_cashflow is empty and ttm_cashflow_suppressed is true — memo must not state Yahoo TTM cash-flow figures.",
+    "Quarterly income trajectory unknown: quarterly_income is {} with no replacement quarterly series in this tree.",
+    "Structured IR presentation metrics absent (no ir_presentation_metrics artefact; investor presentation RNS is scheduling-only) — memo cannot cite slide-deck KPI tables from this source.",
+    "alternate_news feed absent — no secondary news channel beyond news_manifest/news_batch.",
+    "Six investegate_resolved mis-indexed bodies must be excluded from Costain analysis; no valid substitute Costain content exists for those entries in this tree.",
+    "filings_index body_path references lie outside the trial tree; memo consumers relying on index paths may miss local trial copies unless paths are remapped.",
+    "macro_context, screen_run_manifest, AGM trading update, and contract RNS bodies are present but outside standard memo ingestion — macro/screen inputs should not be treated as company fundamentals; trading update and contract wins are optional context only from this inventory."
+  ],
+  "sources_read": [
+    "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/financials_annual.json",
+    "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/filings/filings_index.json",
+    "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/filings/bodies/66a3fc209a987a0f.txt",
+    "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/filings/bodies/72fd72ff6bda07e5.txt",
+    "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/filings/bodies/617a7f90264da915.txt",
+    "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/filings/bodies/ca29cecdd3c884c4.txt",
+    "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/filings/bodies/9729feed44599854.txt",
+    "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/filings/bodies/3c61182d5f1260cf.txt",
+    "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/filings/bodies/9743d1979ad52a15.txt",
+    "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/macro_context.json",
+    "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screen_run_manifest.json",
+    "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+    "docs/data/research_director_worker/COST.L/20260904T172525Z/sources/news_manifest.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-a19d5be8-b086-4321-a0b9-d42a819683dd"
+}

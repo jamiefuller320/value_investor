@@ -1,0 +1,212 @@
+{
+  "task_id": "rio_screen_context",
+  "task_type": "screen_context",
+  "status": "partial",
+  "findings": [
+    "Signal strong_buy with 11/22 models passed (model_count 22); passed_models lists 11 names: Graham Enterprising, Neff PEGY, Quality Value, Buffett Quality, Economic Moat, High Dividend Yield, Dividend Growth, Magic Formula, Acquirer's Multiple, Composite Value, Financial Health (screening_snapshot.json).",
+    "failed_models is an empty array [] and model_failures is {} despite 11 of 22 models not appearing in passed_models — the 11 failing models are not enumerated in this source (screening_snapshot.json).",
+    "composite_score 0.6792 (~68% in summary) is below sector_composite_score 0.724702380952381 (~72% sector-relative in summary) (screening_snapshot.json).",
+    "All five families pass: cheapness, quality, dividend, garp, risk (families_passed 5, family_count 5) (screening_snapshot.json).",
+    "data_quality_score 1.0 with metrics_present 20 / metrics_total 20; summary states '20/20 (high)' (screening_snapshot.json).",
+    "Signal metadata: weeks_at_signal 1, stability_label new, signal_since 2026-09-02, signal_trend improving (screening_snapshot.json).",
+    "conviction_score field is 0.6887 (~69%) but summary text states 'Conviction 44%' — internal inconsistency within the same snapshot (screening_snapshot.json).",
+    "timing_signal neutral, timing_score 0.625, rsi_14 ~53.5, price_vs_sma200_pct ~0.08%; summary describes uptrend (price > 50 > 200 MA) (screening_snapshot.json).",
+    "trade_plan is null at top level; summary embeds trade limits core £7153.82, tactical £6905.37, stop £6678.72, target £7858.20 — magnitudes consistent with LSE pence (~7153p ≈ £71.54) not headline ~£76 GBP print; units/currency labelling unreconciled in source (screening_snapshot.json).",
+    "dividend_yield_overlay is false and adjusted_signal remains strong_buy, yet summary states 'Dividend-yield overlay: high yield passes but FCF yield and earnings quality fail (adjusted to Buy)' — overlay narrative disagrees with boolean flags and adjusted_signal (screening_snapshot.json).",
+    "All overlay booleans false: healthcare_overlay, healthcare_price_erosion_overlay, cash_conversion_overlay, dividend_yield_overlay, interim_quality_overlay, cyclical_exposure_overlay, cyclical_exposure_detected, earnings_basis_overlay, fcf_basis_overlay, conviction_timing_overlay, quality_family_avoid_gate, leverage_override (screening_snapshot.json).",
+    "cyclical_exposure_overlay and cyclical_exposure_detected both false while action_note and research_rationale cite cyclical mix/leverage as reasons against maximum conviction — cyclical risk acknowledged in prose but not flagged by overlays (screening_snapshot.json).",
+    "research_verdict accumulate, research_risk_level medium, research_confidence 0.72; action_note repeats 'Research: Accumulate, Medium risk' boilerplate multiple times (screening_snapshot.json).",
+    "key_metrics.FCF is 3595500032.0 (~$3.596bn scale); cashflow_metrics, fcf, operating_cashflow, fcf_dividend_coverage* are all null; yahoo_quarterly.ttm_cashflow_suppressed true with reason quarterly_cashflow_empty — TTM cashflow path unavailable for cross-check in this snapshot (screening_snapshot.json).",
+    "Summary highlights D/E=32% and P/B=2.53 vs key_metrics P/B 2.5 — minor rounding divergence only (screening_snapshot.json).",
+    "screening_inputs is empty {}; peer_model_pass_table empty {} — no filing-body line items or peer table in this source (screening_snapshot.json)."
+  ],
+  "figures": [
+    {
+      "metric": "signal",
+      "value": "strong_buy",
+      "period": "snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "Top-level signal field"
+    },
+    {
+      "metric": "adjusted_signal",
+      "value": "strong_buy",
+      "period": "snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "Despite summary overlay text suggesting Buy adjustment"
+    },
+    {
+      "metric": "models_passed / model_count",
+      "value": "11 / 22",
+      "period": "snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "strong_buy 11/22"
+    },
+    {
+      "metric": "composite_score",
+      "value": "0.6792",
+      "period": "snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "Summary rounds to 68%"
+    },
+    {
+      "metric": "sector_composite_score",
+      "value": "0.724702380952381",
+      "period": "snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "Summary sector-relative 72%; composite below sector"
+    },
+    {
+      "metric": "families_passed",
+      "value": "5/5 (cheapness, quality, dividend, garp, risk)",
+      "period": "snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "passed_families string"
+    },
+    {
+      "metric": "data_quality",
+      "value": "20/20 (score 1.0)",
+      "period": "snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "metrics_present/metrics_total"
+    },
+    {
+      "metric": "conviction_score",
+      "value": "0.6887",
+      "period": "snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "Summary text says 44% — unreconciled"
+    },
+    {
+      "metric": "weeks_at_signal",
+      "value": "1",
+      "period": "snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "stability_label new, signal_since 2026-09-02, trend improving"
+    },
+    {
+      "metric": "timing_signal / rsi_14",
+      "value": "neutral / 53.49",
+      "period": "snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "price_vs_sma200_pct 0.084%"
+    },
+    {
+      "metric": "P/E",
+      "value": "13.7",
+      "period": "key_metrics",
+      "source_path": "screening_snapshot.json",
+      "note": "Screen ratio; filing-body USD basis not stated"
+    },
+    {
+      "metric": "P/B",
+      "value": "2.5",
+      "period": "key_metrics",
+      "source_path": "screening_snapshot.json",
+      "note": "Summary cites 2.53"
+    },
+    {
+      "metric": "Yield",
+      "value": "4.6%",
+      "period": "key_metrics",
+      "source_path": "screening_snapshot.json",
+      "note": "Dividend-yield family pass; overlay flag false"
+    },
+    {
+      "metric": "ROE",
+      "value": "19.3%",
+      "period": "key_metrics",
+      "source_path": "screening_snapshot.json",
+      "note": "Screen ratio"
+    },
+    {
+      "metric": "FCF (key_metrics)",
+      "value": "3595500032.0",
+      "period": "key_metrics",
+      "source_path": "screening_snapshot.json",
+      "note": "~3.596bn; unit/currency not labelled; must reconcile vs filing-body USD and external ~4.497bn cite"
+    },
+    {
+      "metric": "D/E",
+      "value": "32%",
+      "period": "summary highlights",
+      "source_path": "screening_snapshot.json",
+      "note": "Not in key_metrics object; net debt ~£15bn not present in source"
+    },
+    {
+      "metric": "trade_plan core limit",
+      "value": "£7153.82",
+      "period": "summary only (trade_plan null)",
+      "source_path": "screening_snapshot.json",
+      "note": "Likely pence mislabelled as pounds"
+    },
+    {
+      "metric": "trade_plan tactical limit",
+      "value": "£6905.37",
+      "period": "summary only",
+      "source_path": "screening_snapshot.json",
+      "note": "Likely pence"
+    },
+    {
+      "metric": "trade_plan stop",
+      "value": "£6678.72",
+      "period": "summary only",
+      "source_path": "screening_snapshot.json",
+      "note": "Likely pence"
+    },
+    {
+      "metric": "trade_plan target",
+      "value": "£7858.20",
+      "period": "summary only",
+      "source_path": "screening_snapshot.json",
+      "note": "Likely pence"
+    },
+    {
+      "metric": "research_verdict",
+      "value": "accumulate",
+      "period": "snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "vs signal strong_buy"
+    },
+    {
+      "metric": "research_confidence",
+      "value": "0.72",
+      "period": "snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "Medium risk per research_risk_level"
+    },
+    {
+      "metric": "dividend_yield_overlay",
+      "value": "false",
+      "period": "snapshot",
+      "source_path": "screening_snapshot.json",
+      "note": "Conflicts with summary overlay narrative"
+    },
+    {
+      "metric": "ttm_cashflow_suppressed",
+      "value": "true",
+      "period": "yahoo_quarterly",
+      "source_path": "screening_snapshot.json",
+      "note": "reason: quarterly_cashflow_empty"
+    }
+  ],
+  "gaps": [
+    "failed_models=[] omits the 11 non-passing models; model_failures empty — cannot name failing screens from this source.",
+    "FCF key_metrics 3595500032.0 vs user-cited Yahoo FY2025 FCF 4,497m / OCF 16,832m / dividends 6,145m — not in snapshot; filing-body USD reconciliation required before dividend-coverage or FCF-yield claims.",
+    "Net debt ~£15bn cited in task brief but absent from snapshot; leverage/D/E 32% unsafe for conviction until filing-body debt reconciled.",
+    "Trade plan limits in summary vs trade_plan null; pound symbol on pence-scale numbers vs ~£76 LSE print — limits unusable until currency/unit fix.",
+    "composite 0.6792 below sector 0.725 — sector-relative cheapness claim in summary ('72%') refers to sector benchmark, not Rio outperforming sector.",
+    "dividend_yield_overlay false and adjusted_signal strong_buy vs summary 'adjusted to Buy' on FCF-yield/earnings-quality fail — overlay logic not exposed.",
+    "cyclical_exposure_overlay and cyclical_exposure_detected false despite cyclical/leverage language in action_note and research_rationale.",
+    "conviction_score 0.689 vs summary 'Conviction 44%' — formula or stale summary text unknown.",
+    "Screen numbers requiring filing-body USD replacement before memo use: FCF (3595500032.0), implied net debt/leverage (D/E 32% only), any dividend/FCF coverage derived from null cashflow fields; P/E, P/B, ROE, Yield provenance (market vs filing) unstated.",
+    "Unsafe claims until reconciled: (1) full strong_buy conviction, (2) dividend sustainability / FCF covers dividend, (3) cyclical risk adequately discounted, (4) trade plan price levels, (5) sector-relative value superiority, (6) Buy vs strong_buy after dividend overlay, (7) research accumulate vs quantitative strong_buy alignment.",
+    "screening_inputs {} — no raw filing-body inputs attached; peer_model_pass_table empty.",
+    "action_note duplicated research boilerplate — research overlay may be stale or over-appended."
+  ],
+  "sources_read": [
+    "/workspace/docs/data/research_director_worker/RIO.L/20260904T183631Z/sources/screening_snapshot.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-510cad67-1899-412f-a298-01f46e8a0971"
+}

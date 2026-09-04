@@ -1,0 +1,200 @@
+{
+  "task_id": "imb_gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "Catalog thin steps confirmed in sources: financials_annual.json has quarterly_income {} and quarterly_cashflow {}; cashflow_metrics sets ttm_cashflow_suppressed true with reason quarterly_cashflow_empty — no Yahoo interim quarterlies and no TTM cashflow.",
+    "filings_index.json period coverage is annual=8 (all Companies House group accounts 2019–2026), interim=0, trading_update=0; the other 63 indexed items are almost entirely Transaction in Own Shares, Total Voting Rights, holdings and PDMR — none tagged interim or trading_update, so no H1 2026 statutory RNS body exists in this tree.",
+    "ir_presentation_metrics and alternate_news are absent from the sources tree (no matching files); news_manifest.json (71 articles) is Google News RSS / yfinance headlines only — not alternate_news and not statutory filings.",
+    "filings_index.json body_path values point to docs/data/research/IMB.L/sources/filings/bodies/... rather than this trial snapshot under research_director_worker; bodies are duplicated locally but index paths are external.",
+    "Latest annual body ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt (CH filed 2026-02-07, FY2025) gives strategic/OCR snippets only: FY25 Tobacco & NGP net revenue £8.3bn, reported revenue £32.2bn, Europe/Americas/AAACE split 42%/35%/23%; insufficient parsed statutory P&L, cash flow or net-debt tables for full memo reconciliation.",
+    "Prior CH annual ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt (filed 2025-02-07, FY2024 era) adds YoY context not fully visible in latest OCR: 2024 Tobacco & NGP net revenue £8.2bn (+4.6% cc), NGP net revenue growth +26.4%, FY24 FCF £2.4bn, dividend 153.42p (+4.5%), FY25 buyback announced £1.25bn (vs £1.1bn prior), adjusted net debt/EBITDA target range 2.0–2.5× — still no H1 2026 data.",
+    "Yahoo annual financials_annual.json (FY2021–2025 fetched 2026-09-02) is the only machine-readable full P&L/BS/CF stack: FY2025 revenue 32,171m, net income 2,071m, OCF 3,627m, FCF 3,166m, net debt 8,155m, buybacks 1,235m, dividends paid 1,558m — currency field absent; screening_snapshot.json tags FCF currency USD while figures match sterling-scale accounts.",
+    "screening_snapshot.json and screen_run_manifest.json are present but unused by other workers: strong_buy 13/22, composite 0.753, conviction 0.454, timing accumulate, FCF filing_aligned 3,166m vs screen_ttm 2,502m with divergence_flagged false and ttm_cashflow_suppressed true.",
+    "macro_context.json present but unused: GBP/USD 1.3498 and FTSE 100 10,789.30 as of 2026-09-01/02 — secondary regime markers only.",
+    "Latest TVR 2379eadea3cfebe2.txt (2026-09-01, capital as at 2026-08-28): issued 822,693,742 ordinary shares, treasury 58,089,137, voting rights 764,604,605.",
+    "Sample own-share RNS 6611f16b494a08f8.txt (2026-08-25): active GBP 1.45bn repurchase programme announced 2025-10-07; 114,422 shares bought 2026-08-24 at avg 2,501.67p; post-settlement ex-treasury count 764,917,586 — confirms programme identity and daily cadence but not cumulative £ spent or remaining authority.",
+    "Black Buffalo acquisition, H1 2026 earnings, £320m-by-2030 job savings and FY2026 numeric guidance appear only as news_manifest.json headlines (yfinance/Kalkine); zero matching RNS bodies in filings_index — memo must not treat news as statutory source.",
+    "Own-share body 0d33b380b7928ad4.txt is Barclays settlement confirmation (338,217 shares, 2,649.90p, £8.96m on 2026-06-02) — operational buyback detail only, not programme capacity."
+  ],
+  "figures": [
+    {
+      "metric": "quarterly_income records",
+      "value": "0",
+      "period": "catalog",
+      "source_path": "sources/financials_annual.json",
+      "note": "Empty object — no Yahoo interim P&L"
+    },
+    {
+      "metric": "quarterly_cashflow records",
+      "value": "0",
+      "period": "catalog",
+      "source_path": "sources/financials_annual.json",
+      "note": "Empty object — triggers TTM suppression"
+    },
+    {
+      "metric": "ttm_cashflow_suppressed",
+      "value": "true",
+      "period": "FY2025 screen",
+      "source_path": "sources/financials_annual.json",
+      "note": "Reason: quarterly_cashflow_empty"
+    },
+    {
+      "metric": "filings period=annual",
+      "value": "8",
+      "period": "catalog",
+      "source_path": "sources/filings/filings_index.json",
+      "note": "All Companies House group accounts; with_body=8"
+    },
+    {
+      "metric": "filings period=interim",
+      "value": "0",
+      "period": "catalog",
+      "source_path": "sources/filings/filings_index.json",
+      "note": "No H1 2026 statutory interim in catalog"
+    },
+    {
+      "metric": "filings period=trading_update",
+      "value": "0",
+      "period": "catalog",
+      "source_path": "sources/filings/filings_index.json",
+      "note": "No trading-update RNS tagged"
+    },
+    {
+      "metric": "Tobacco & NGP net revenue",
+      "value": "£8.3bn",
+      "period": "FY2025",
+      "source_path": "sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+      "note": "OCR from latest CH annual; reported revenue £32.2bn same source"
+    },
+    {
+      "metric": "Tobacco & NGP net revenue",
+      "value": "£8.2bn",
+      "period": "FY2024",
+      "source_path": "sources/filings/bodies/ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt",
+      "note": "+4.6% constant currency vs prior year per at-a-glance slide"
+    },
+    {
+      "metric": "NGP net revenue growth (cc)",
+      "value": "+26.4%",
+      "period": "FY2024",
+      "source_path": "sources/filings/bodies/ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt",
+      "note": "Prior-year annual only"
+    },
+    {
+      "metric": "Free cash flow",
+      "value": "£2.4bn",
+      "period": "FY2024",
+      "source_path": "sources/filings/bodies/ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt",
+      "note": "CH annual OCR; Yahoo FY2025 FCF 3,166m in financials_annual.json"
+    },
+    {
+      "metric": "Dividend per share",
+      "value": "153.42p",
+      "period": "FY2024",
+      "source_path": "sources/filings/bodies/ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt",
+      "note": "+4.5% growth; four equal payments from FY2025 onwards stated same file"
+    },
+    {
+      "metric": "Total revenue (Yahoo)",
+      "value": "32,171m",
+      "period": "FY2025",
+      "source_path": "sources/financials_annual.json",
+      "note": "Yahoo annual; no root currency field"
+    },
+    {
+      "metric": "Net income (Yahoo)",
+      "value": "2,071m",
+      "period": "FY2025",
+      "source_path": "sources/financials_annual.json",
+      "note": "Prior FY2024 2,613m in same file"
+    },
+    {
+      "metric": "Operating cash flow (Yahoo)",
+      "value": "3,627m",
+      "period": "FY2025",
+      "source_path": "sources/financials_annual.json",
+      "note": "Prior 3,307m"
+    },
+    {
+      "metric": "Free cash flow (Yahoo)",
+      "value": "3,166m",
+      "period": "FY2025",
+      "source_path": "sources/financials_annual.json",
+      "note": "screening_snapshot filing_aligned matches; screen_ttm 2,502m"
+    },
+    {
+      "metric": "Net debt (Yahoo)",
+      "value": "8,155m",
+      "period": "FY2025",
+      "source_path": "sources/financials_annual.json",
+      "note": "Prior 7,619m; company adjusted definition may differ"
+    },
+    {
+      "metric": "Share repurchase programme",
+      "value": "GBP 1.45bn",
+      "period": "announced 2025-10-07",
+      "source_path": "sources/filings/bodies/6611f16b494a08f8.txt",
+      "note": "Remaining £ authority not disclosed in catalog"
+    },
+    {
+      "metric": "Voting rights",
+      "value": "764,604,605",
+      "period": "as at 2026-08-28",
+      "source_path": "sources/filings/bodies/2379eadea3cfebe2.txt",
+      "note": "822,693,742 issued; 58,089,137 treasury"
+    },
+    {
+      "metric": "Ex-treasury shares post buyback",
+      "value": "764,917,586",
+      "period": "2026-08-24 transaction",
+      "source_path": "sources/filings/bodies/6611f16b494a08f8.txt",
+      "note": "114,422 shares @ 2,501.67p avg"
+    },
+    {
+      "metric": "GBP/USD",
+      "value": "1.3498",
+      "period": "2026-09-02",
+      "source_path": "sources/macro_context.json",
+      "note": "Present but unused by workers"
+    },
+    {
+      "metric": "Screen signal",
+      "value": "strong_buy",
+      "period": "run 2026-09-02",
+      "source_path": "sources/screen_run_manifest.json",
+      "note": "13/22 models; present but unused"
+    }
+  ],
+  "gaps": [
+    "H1 2026 statutory P&L, cash flow and net debt — interim=0 in filings_index; no period=interim body to ingest.",
+    "Black Buffalo consideration, close date and integration — no acquisition RNS in catalog; news headlines only.",
+    "Job-cut upfront cash cost versus £320m annual savings by 2030 — no restructuring RNS body; yfinance headline in news_manifest only.",
+    "Remaining £ buyback authority under the GBP 1.45bn programme — daily own-share RNS give tranche sizes/prices but not cumulative spend or residual capacity.",
+    "FY2026 numeric guidance (revenue, adjusted OP, FCF, net debt) — absent from annual bodies and from any trading_update RNS.",
+    "NGP KPIs (volume, share, losses, category mix) — no ir_presentation_metrics file; latest CH annual OCR lacks quantified NGP tables.",
+    "IR-slide / presentation metrics deck — ir_presentation_metrics absent from sources.",
+    "TTM / interim cashflow — suppressed because quarterly_cashflow empty; cannot validate screen FCF yield on a rolling basis.",
+    "Yahoo quarterly_income and quarterly_cashflow — both empty; no semi-annual bridge between FY2025 annual and today.",
+    "alternate_news feed — absent; reliance on Google News RSS duplicates (71 news_manifest items, mostly buyback reprints).",
+    "FY2025 CH annual OCR insufficient for full statutory-vs-adjusted reconciliation, excise/working-capital notes and pension detail — prior CH annuals needed for YoY only where Yahoo/ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt fills gaps.",
+    "filings_index body_path misaligned with trial tree — risk of workers resolving wrong path outside snapshot.",
+    "macro_context.json and screen_run_manifest.json ingested but not consumed by filing/news workers in this pass."
+  ],
+  "sources_read": [
+    "sources/financials_annual.json",
+    "sources/filings/filings_index.json",
+    "sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+    "sources/filings/bodies/ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt",
+    "sources/filings/bodies/2379eadea3cfebe2.txt",
+    "sources/filings/bodies/6611f16b494a08f8.txt",
+    "sources/filings/bodies/0d33b380b7928ad4.txt",
+    "sources/filings/bodies/c80fcf272de0152d.txt",
+    "sources/screening_snapshot.json",
+    "sources/screen_run_manifest.json",
+    "sources/macro_context.json",
+    "sources/news_manifest.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-8b6d7ea0-102e-4cdd-805b-9004ec8e44b5"
+}

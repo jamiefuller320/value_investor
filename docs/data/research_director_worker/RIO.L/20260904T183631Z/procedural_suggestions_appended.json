@@ -1,0 +1,154 @@
+{
+  "appended": [
+    {
+      "ticker": "RIO.L",
+      "name": "Rio Tinto Group",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Do not tag AGM notices/results, Payments to Governments, prospectuses, mineral-resources updates, Tomago/Boyne operating RNSs, or third-party SVM “Rio collab” items as period=annual. Retag quarterly production as trading_update. Deduplicate Investegate direct/resolved pairs and PDMR rows that share URL or body_content_hash. Point body_path at the trial snapshot tree, not docs/data/research or output/research. Quarantine Sovereign Metals / CMRS collisions. Keep one 20-F (sec_edgar) and do not also period-tag IR-allowlist year-end HTMs as interim with null published_at. Reconcile source_inventory 113 body files vs 118 indexed bodies.",
+      "source": "director_worker",
+      "run_id": "20260904T183631Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:45:32.862885+00:00"
+    },
+    {
+      "ticker": "RIO.L",
+      "name": "Rio Tinto Group",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Keep the dividend-yield overlay result (FCF Yield / earnings-quality fail → adjusted Buy) instead of letting prior-memo research_* lift the snapshot back to strong_buy with empty failed_models. Enable cyclical_exposure for diversified miners. Flag when screen FCF (3,596m) disagrees with Yahoo/filing FCF (4,497m) while TTM is suppressed, and when name composite (0.679) sits below sector composite (0.725) on a strong_buy. Fail-closed or annotate when trade-plan limits are ~100× the live LSE price (pence written as £). Populate failed_models from the 11 models that did not pass; surface conviction_score 0.689 vs summary “Conviction 44%” as a consistency check.",
+      "source": "director_worker",
+      "run_id": "20260904T183631Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:45:32.862905+00:00"
+    },
+    {
+      "ticker": "RIO.L",
+      "name": "Rio Tinto Group",
+      "area": "prompt",
+      "priority": "high",
+      "suggestion": "Require the annual worker to extract reporting currency, statutory vs underlying EBITDA/earnings, segment/commodity split, shipments vs realisations, OCF/capex/FCF definition, cash vs restricted vs company net debt, leases, dividend declared vs cash paid vs policy, buybacks vs share count, M&A (Arcadium/Rincon), goodwill/impairments, and jurisdictional risk language — prefer body figures over Yahoo. Require the interim worker to pull H1 vs H1 and vs FY run-rate, 2026 guidance vs cyclone-held levels, FCF vs dividend, net-debt bridge, and any restatement of FY2025. Require news workers to collapse Kalkine/ii/Yahoo-UK duplicates, drop CMRS/SVM collisions, and treat Google News items as titles only. Do not let workers cite prior research.json as a source.",
+      "source": "director_worker",
+      "run_id": "20260904T183631Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:45:32.862915+00:00"
+    },
+    {
+      "ticker": "RIO.L",
+      "name": "Rio Tinto Group",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Parse H1 2026 cash-flow from e36747cb4ebb850b instead of only suppressing TTM. Promote Q2 production (09b707e71de5493e) and the Apr drilling/production report to first-class operating evidence. Fire IR-slide parsing so ir_presentation_metrics is actually used. Populate alternate_news or drop it from the ladder. Keep the 20-F and mineral-resources RNS as reserve/risk evidence, not extra “annual” coverage. Treat empty Yahoo quarterlies on this USD half-year reporter as expected, not the same thin-step severity as an unused IR-metrics object or a missing Q3 production RNS.",
+      "source": "director_worker",
+      "run_id": "20260904T183631Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:45:32.862922+00:00"
+    },
+    {
+      "ticker": "RIO.L",
+      "name": "Rio Tinto Group",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Select the 19 Feb 2026 2025 Annual Report (a395d7da4dca5b2b) as the annual slot — not CH 2020–2026 accounts, not AGM, not SVM, not Tomago. Assign the 29 Jul 2026 H1 results (e36747cb4ebb850b) as the interim slot — not a 6-K or IR 20-F copy. Raise the cap or add trading_update / 20-F / rns_cluster / power_contract types so Q2 production, H1 slides, 20-F, Tomago, and Boyne are not dropped when annual+interim+news+screen+gap are mandatory. Stop seeding screening_snapshot.research_* / action_note from the previous RIO.L memo before the trial starts. Do not re-commission a director pass on an unchanged 17:26Z snapshot without new filings or news.",
+      "source": "director_worker",
+      "run_id": "20260904T183631Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:45:32.862930+00:00"
+    },
+    {
+      "ticker": "RIO.L",
+      "name": "Rio Tinto Group",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "Let summarize_filing_body carry period=annual|interim|trading_update|20-f|other and a catalog_mismatch bool. Add reporting_currency, listing_pair (RIO.L/RIO.AX/NYSE:RIO), price_unit (pence vs pounds), fcf_basis_used, cyclical_miner_flag, and failed_models populated from the run. Remap body_path into the trial sources/ tree. Align source_inventory body-file counts with indexed has_body rows. Treat empty Yahoo quarterlies on half-year USD reporters as expected, not the same thin-step severity as a missing Q3 production RNS.",
+      "source": "director_worker",
+      "run_id": "20260904T183631Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:45:32.862933+00:00"
+    },
+    {
+      "ticker": "RIO.L",
+      "name": "Rio Tinto Group",
+      "area": "monitoring",
+      "priority": "medium",
+      "suggestion": "For a 1-week miner strong_buy after an overlay-to-buy, MS Underweight ADR, and Glencore standstill expiry, require watches: Q3 2026 production ingest, H1-implied 2026 guidance, FCF vs dividend cash, net-debt vs 15bn Yahoo, Tomago/Boyne spend, dual-list price vs pence limits, and any revived GLEN headline. Alert when snapshot adjusted_signal disagrees with the overlay sentence in the same summary, when conviction_score disagrees with the summary conviction string, and when a director trial is launched against an unchanged source fetched_at.",
+      "source": "director_worker",
+      "run_id": "20260904T183631Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:45:32.862938+00:00"
+    },
+    {
+      "ticker": "RIO.L",
+      "name": "Rio Tinto Group",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Filings-first order is adequate in principle for RIO.L: a genuine 19 Feb 2026 Annual Report (a395d7da4dca5b2b, priority 120), 20-F, H1 2026 results (e36747cb4ebb850b), H1 slides, and Q2 production body all exist with has_body=true in the trial tree. It is not adequate in practice: period_coverage annual=20 / interim=47 / trading_update=0 counts AGM notices/results, Payments to Governments, a Supplementary Prospectus, SVM “Rio collab concludes”, and the Tomago power RNS as annual, and dumps ~40 SEC 6-Ks plus three IR-allowlist year-end HTMs (rio-2023/24/25, null published_at) into interim. Production reports that should be trading_update sit as interim. yahoo_quarterly_cashflow sits on the ladder but is empty (expected for a USD half-year reporter) while alternate_news is absent. filings_index.body_path values point at docs/data/research/RIO.L or output/research/RIO.L rather than this trial tree, and source_inventory counts 113 body files vs 118 indexed bodies even though every indexed basename is present.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T183631Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "evidence_ladder",
+      "recorded_at": "2026-09-04T18:45:32.862948+00:00"
+    },
+    {
+      "ticker": "RIO.L",
+      "name": "Rio Tinto Group",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "The screen emits strong_buy (11/22, five families, composite 0.679 vs a higher sector composite 0.725) on a 1-week new print while the snapshot summary already records a dividend-yield overlay to Buy because FCF yield and earnings quality failed. The snapshot then overwrites that brake: failed_models=[], adjusted_signal=strong_buy, conviction_score 0.689 versus summary “Conviction 44%”, and action_note/research_* are pre-seeded with repeated prior-memo “Accumulate, Medium risk” boilerplate. cyclical_exposure_detected=false and every overlay flag is false on a bulk-commodity major. Director–worker qualitative veto is doing the work a cyclical + FCF-vs-dividend + unit-hygiene overlay already half-did, then undid.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T183631Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "methodology",
+      "recorded_at": "2026-09-04T18:45:32.862957+00:00"
+    },
+    {
+      "ticker": "RIO.L",
+      "name": "Rio Tinto Group",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Mandatory annual+interim summarize_filing_body plus news+screen+gap consumes the five-task cap even when the right FY and H1 bodies are chosen. There is no type or period flag for trading_update (Q1/Q2 production), 20-F, rns_cluster (PDMR/TVR/employee shares), mineral-resources, power_contract (Tomago/Boyne), or catalog_period_mismatch (Tomago/SVM/AGM tagged annual; IR 20-F HTMs tagged interim). gap_inventory can only list that the 20-F, H1 presentation, Q2 production, mineral-resources update, and Tomago/Boyne RNSs were dropped — it cannot assign them.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T183631Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "task_schema",
+      "recorded_at": "2026-09-04T18:45:32.862977+00:00"
+    },
+    {
+      "ticker": "RIO.L",
+      "name": "Rio Tinto Group",
+      "area": "monitoring",
+      "priority": "high",
+      "suggestion": "weeks_at_signal=1 / stability=new / improving already marks a fresh print, but there is no watch schema for: mid-October Q3 production (absent from a 4 Sep 17:26Z fetch), 2026 guidance vs cyclone-held levels, FCF vs the 4.6% dividend after H1, net-debt path after 15bn Yahoo net debt, Glencore standstill follow-up, Tomago/Boyne cash calls, Morgan Stanley ADR PT vs LSE pence limits, dual-list (RIO.L / RIO.AX / NYSE:RIO) price divergence, or snapshot adjusted_signal disagreeing with the overlay text in the same object. RSI 53 + price>50>200 timing=neutral is not a substitute. News freshness stops at 2 Sep; filings_index fetched 17:26Z on 4 Sep — a two-day news stall, not a filings stall. This trial re-asks the same 17:26Z catalog without new evidence.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T183631Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "monitoring",
+      "recorded_at": "2026-09-04T18:45:32.862988+00:00"
+    },
+    {
+      "ticker": "RIO.L",
+      "name": "Rio Tinto Group",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "A generic FINANCIAL REVIEW / RISKS split will blend Yahoo USD statutory with company underlying earnings/FCF and will not force iron ore vs copper vs aluminium vs minerals/lithium, Pilbara shipments vs realisations, FCF 3,596m vs 4,497m vs cash dividends 6,145m, BS cash 6,904m vs CF end-cash 8,865m, net debt 5.6bn→15.0bn, LSE pence vs £7,154 limit-string, or ADR vs LSE. Without SEGMENT/COMMODITY MIX, CAPITAL FRAME (capex + M&A + dividend cover), GUIDANCE PATH (FY Feb → cyclone Mar → Q2 Jul → H1 Jul → missing Q3), JURISDICTION (Simandou/OT/Australia heritage/power), and UNIT HYGIENE (pence vs pounds, USD vs GBP headline) slots, workers will treat Kalkine SEO, CMRS ex-Rio-exec video, and SVM collab RNSs as colour. Director catalog pass can form these questions without drafting the memo.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T183631Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "memo_structure",
+      "recorded_at": "2026-09-04T18:45:32.862999+00:00"
+    },
+    {
+      "ticker": "RIO.L",
+      "name": "Rio Tinto Group",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "financials_annual.json is Yahoo-shaped (FY2021–2025; no root currency field though figures are USD millions; quarterly_income and quarterly_cashflow empty; cashflow_metrics FCF 4,497m / OCF 16,832m; FY2025 CF end-cash 8,865m vs BS cash 6,904m). screening_snapshot.failed_models is [] despite 11/22 not passing; trade_plan is null while summary cites £7,153.82-class limits that match pence not the ~£76 LSE print. ir_presentation_metrics is inventory-true but unused on this catalog pass. Duplicate Investegate rows share URLs; ten body_path values point at output/research/. news_manifest query pulls CMRS/Proactive and Kalkine pairings. Snapshot research_* fields already pre-answer the trial.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T183631Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "other",
+      "recorded_at": "2026-09-04T18:45:32.863007+00:00"
+    }
+  ],
+  "count": 13
+}

@@ -1,6 +1,6 @@
 # Costain Group PLC (COST.L) — Research memo
 
-_Version 1 · Updated 2026-09-02T08:34:55.046099+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T17:33:50.475588+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
 Costain Group PLC is a UK infrastructure solutions specialist focused on transport, water, energy and defence, trading on modest multiples (P/E 16.5×, P/B 2.3×, yield 2.3%) despite a net-cash balance sheet and a record £7.0bn forward work position. FY2025 revenue fell to £1,045.7m as legacy road frameworks rolled off and HS2 was rescheduled, yet adjusted operating margin expanded to 4.5% and adjusted free cash flow reached £63.1m. H1 2026 interim results confirm profit growth, net cash of £164.4m, and unchanged full-year guidance, with management targeting a revenue and margin step-change from FY2027 as AMP8 water and grid investment ramp. The central debate is whether margin expansion and capital returns (doubled interim dividend, £20m buyback) justify the screen's buy signal while reported revenue has declined for four years and Transportation margins remain thin — or whether the order book and customer diversification into regulated utilities and aviation de-risk the cyclical construction narrative.

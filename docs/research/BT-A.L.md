@@ -1,99 +1,85 @@
 # BT Group plc (BT-A.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T07:33:43.672997+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T17:29:34.845296+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-BT Group screens as a **Strong Buy** on quantitative value metrics (11/22 models, composite 77%), combining modest multiples (P/E 17.7, P/B 1.5, yield 4.2%) with passing quality, dividend, GARP, and risk screens. The investment case rests on the UK’s dominant fixed and mobile infrastructure franchise, a multi-year fibre build nearing scale, and management’s guided cash-flow inflection to ~£2bn normalised free cash flow in FY27 and ~£3bn by FY30, which would underpin a progressive dividend (8.32p proposed for FY26). Revenue has drifted lower (£20.9bn FY22 to £19.7bn FY26 per annual reports) even as adjusted EBITDA has risen to £8.2bn, reflecting cost transformation and portfolio simplification. The central debate is whether statutory earnings volatility, ~£18bn net debt (Yahoo fallback), pension obligations, and regulatory/competitive pressure on Openreach offset the approaching capex peak and FCF recovery that the market appears to be pricing in.
-
----
+BT Group plc is the UK’s incumbent fixed and mobile operator, owning Openreach and retail brands BT, EE and Plusnet. The quantitative screen rates the name a **buy** (6/22 models, composite score 72%, all five factor families passed: cheapness, quality, dividend, GARP and risk), underpinned by a ~9% FCF yield, ~4% dividend yield, P/B of 1.6 and a Piotroski pass. The investment case rests on resilient adjusted EBITDA (~£8.2bn), a management-guided normalised free cash flow inflection towards ~£2bn in FY27 and progressive dividends, as full-fibre capex peaks and transformation savings accelerate. The central debate is whether statutory earnings noise, declining reported revenue, ~£18bn net debt, pension obligations and Ofcom/regulatory oversight are adequately priced in, or whether the market is too pessimistic ahead of the capex-to-cash transition.
 
 ## INVESTMENT THESIS
-For a value investor, BT offers a rare combination of **cheapness, income, and operational leverage** in a quasi-utility asset with national strategic importance. The screen passes five factor families—cheapness, quality, dividend, GARP, and risk—including Graham Enterprising, FCF Yield, Lynch/Neff PEG variants, High Dividend Yield, Dividend Growth, Magic Formula, Acquirer’s Multiple, Piotroski F-Score, Composite Value, and Earnings Quality. Key metrics (P/E 17.7, P/B 1.53, ROE 8.5%, FCF ~£1.9bn per screen) sit below typical telco premium valuations despite BT’s scale: Openreach full fibre passing 23m premises (FY26 annual report), EE’s sustained mobile network leadership, and Consumer customer growth after eight years of decline.
+For a value investor, BT offers a classic “transition” profile: heavy past investment in full fibre and 5G, with the screen flagging cheapness on cash-based metrics rather than headline P/E alone (18.5x on depressed statutory earnings). The screen passes FCF Yield, Composite Value, Neff PEGY (0.05), Dividend Growth, Piotroski F-Score and Earnings Quality — a rare combination of yield, quality and growth-at-a-reasonable-price signals across all factor families.
 
-Business quality, as filings tell it, is improving on operational lines if not top-line growth. Adjusted EBITDA expanded from £7.6bn (FY22) to £8.2bn (FY25–FY26) while management delivered >£900m annualised transformation savings one year into a £3bn five-year programme (FY25 report) and exceeded FY26 guidance despite revenue falling 3% to £19.7bn. Normalised free cash flow improved from £1.3bn (FY24) to £1.6bn (FY25) before a 6% dip to £1.5bn (FY26) as capex rose to £5.1bn; management reiterates inflection targets and a dividend policy shift from FY27 toward low single-digit annual DPS growth until BBB+ credit metrics are met.
+Business quality, on an adjusted basis, is better than the revenue line suggests. Companies House annual report extracts (FY24–FY26) show adjusted EBITDA holding at £8.1–8.2bn despite revenue falling from £20.8bn (FY24) to £19.7bn (FY26), reflecting divestments, legacy decline and competitive pressure offset by cost transformation (programme raised to £3.7bn savings target by FY30). Openreach remains the structural asset: full fibre passed 23m premises by FY26, with management reiterating a cash-flow inflection and a dividend rising to 8.32p (FY26 proposed). Normalised free cash flow recovered from £1.3bn (FY24) to £1.6bn (FY25) before a modest dip to £1.5bn (FY26) as capex rose to £5.1bn; the chairman guides to ~£2bn in FY27 and ~£3bn by end-decade.
 
-The screen’s earnings-basis overlay flags that **statutory and adjusted EPS diverge**—consistent with filing data showing basic EPS swinging from 19.4p (FY23) to 8.7p (FY24) on specific items, then recovering to 11.0p (FY26)—yet value screens still pass on adjusted/normalised bases. That supports the Strong Buy signal for investors who accept adjusted metrics, but warrants caution on headline P/E. Timing is neutral (RSI ~45, price near 200-day MA); conviction is low at 39% given the signal is one week old.
-
----
+The screen’s filing-aligned FCF of ~£1.86bn (Yahoo statutory FCF) versus normalised £1.5bn (filings) highlights definitional divergence, but both support dividend coverage and deleveraging potential once build intensity eases. At ~1% above the 200-day moving average with neutral timing (RSI ~53), the setup favours accumulation rather than momentum chasing.
 
 ## FINANCIAL REVIEW
-**Source coverage:** Five consolidated Companies House annual accounts (published Oct 2022 through Jul 2026, covering FY22–FY26). **No interim or trading-update filing bodies** are indexed; intra-year performance cannot be verified from primary extracts. A Google News/Investegate item (18 Feb 2025) is commentary only, not a filing.
+**Primary source:** Companies House annual report extracts (`filings/bodies/`). **No interim** (half-year or trading RNS) filings are present in `filings_index.json` (0 interim); the sole `trading_update` entry is third-party Investegate commentary, not a company-issued statement. Latest annual coverage runs FY19–FY26.
 
-### Income and cash generation (annual reports — primary)
+**Annual trends (filings)**
 
-| Metric | FY22 | FY23 | FY24 | FY25 | FY26 |
-|--------|------|------|------|------|------|
-| Revenue | £20.9bn | £20.7bn | £20.8bn | £20.4bn | £19.7bn |
-| Profit before tax | £2.0bn | £1.7bn | £1.2bn | £1.3bn | £1.4bn |
-| Adjusted EBITDA | £7.6bn | £7.9bn | £8.1bn | £8.2bn | £8.2bn |
-| Operating cash flow | £5.9bn | £6.7bn | £6.0bn | £7.0bn | £7.0bn |
-| Normalised FCF | £1.4bn | £1.3bn | £1.3bn | £1.6bn | £1.5bn |
-| Basic EPS | 12.9p | 19.4p | 8.7p | 10.8p | 11.0p |
-| Capex | £5.3bn | £5.1bn | £4.9bn | £4.9bn | £5.1bn |
-| Dividend (full year) | — | 7.7p (FY23 report) | 8.0p | 8.16p | 8.32p proposed |
+| Metric | FY24 | FY25 | FY26 | Trend |
+|--------|------|------|------|-------|
+| Revenue | £20.8bn | £20.4bn | £19.7bn | Declining (~−1% to −3% YoY) |
+| Profit before tax | £1.2bn | £1.3bn | £1.4bn | Recovering |
+| Adjusted EBITDA | £8.1bn | £8.2bn | £8.2bn | Stable |
+| Operating cash flow | £6.0bn | £7.0bn | £7.0bn | Step-up in FY25, flat FY26 |
+| Normalised FCF | £1.3bn | £1.6bn | £1.5bn | Improved, then modest retreat |
+| Basic EPS | 8.7p | 10.8p | 11.0p | Rising from FY24 trough |
+| Capex | £4.9bn | £4.9bn | £5.1bn | Elevated; peak build ongoing |
+| Dividend (FY) | 8.0p | 8.16p | 8.32p (proposed) | Progressive |
 
-**Trend interpretation:** Revenue is down ~6% from FY22 peak, driven partly by international divestments and handset dynamics (FY25 CEO letter). EBITDA margin has expanded through cost transformation (£3bn savings target; FY24 report noted £3bn annualised savings achieved a year early). FY24 marked a **cash-flow inflection narrative**—peak fibre capex passed—with guidance to more than double normalised FCF over five years; FY25 delivered 25% NFCF growth to £1.6bn. FY26 saw EBITDA held at £8.2bn and operating cash flow flat at £7.0bn, but NFCF eased 6% as capex ticked up 6% to £5.1bn. Management maintains FY27 ~£2bn and end-of-decade ~£3bn NFCF targets (FY26 Chairman letter).
+Longer arc (FY23 filing): revenue £20.7bn, PBT £1.7bn, adjusted EBITDA £7.9bn, normalised FCF £1.3bn — confirming EBITDA resilience through the fibre investment cycle even as top line stagnates.
 
-Statutory earnings remain **noisy**: FY24 PBT fell 31% and basic EPS 55% despite EBITDA growth, reflecting specific items (restructuring, impairments—evident in Yahoo statutory vs normalised income gap; see fallback below). FY25–FY26 show recovery in PBT (+8% FY26) and EPS (+2%).
+FY24’s sharp statutory EPS decline (−55% to 8.7p vs 19.4p in FY23) reflects specific items and restructuring charges rather than operational collapse; adjusted EBITDA still grew 2%. FY26 operating cash flow held at £7.0bn while normalised FCF dipped 6% as capex rose 6% to £5.1bn — consistent with management’s narrative of near-peak build before inflection.
 
-### Balance sheet and leverage (Yahoo fallback — not in filing body extracts)
+**Balance sheet and cash flow (Yahoo fallback — not in filing body extracts)**
 
-Filings reference pension fund commitments and a BBB+ credit-rating target (FY26 report) but do not extract net debt figures. From `financials_annual.json`:
+Filings bodies contain strategic-report headlines only; detailed balance sheet and statutory cash-flow statement line items fall back to `financials_annual.json` (Yahoo, fetched 4 Sep 2026):
 
-- **Net debt:** £18.3bn (Mar 2026) vs £18.6bn (Mar 2025)— broadly stable.
-- **Total debt:** £22.7bn; **interest expense:** ~£1.23bn (FY26 income statement).
-- **Equity:** £12.6bn; **tangible book value:** £596m—goodwill and network PPE dominate the asset base.
-- **Pension/post-retirement liabilities (non-current):** £4.4bn (Mar 2026), down from £4.9bn (Mar 2024).
-- **Statutory net income:** £1.08bn (FY26) vs **normalised income** £1.71bn (Yahoo)—material specific-item drag persists.
+- Net debt: £18.3bn (FY26) vs £18.6bn (FY25) — modest reduction
+- Total debt: £22.7bn; long-term debt £18.1bn
+- Non-current pension and post-retirement obligations: £4.4bn
+- Shareholders’ equity: £12.6bn; tangible book value £0.6bn (goodwill/intangibles £12.0bn)
+- Statutory free cash flow (Yahoo): £1.86bn (FY26) vs £2.05bn (FY25)
+- Dividends paid: £807m (FY26) vs £788m (FY25)
 
-Yahoo **free cash flow** of £1.86bn (FY26) exceeds filing **normalised FCF** of £1.5bn; definitions differ and should not be blended.
+The gap between Yahoo statutory FCF (£1.86bn) and filing normalised FCF (£1.5bn) reflects BT’s adjusted/normalised definitions (specific items, pension funding timing, etc.) — the screen’s filing-aligned FCF figure aligns with the higher Yahoo operating-cash-less-capex construct.
 
-### Dividend
-
-Progressive policy maintained: 8.16p (FY25, +2%), 8.32p proposed (FY26, +2%). From FY27, board intends low single-digit annual DPS growth until BBB+ metrics, then residual cash for enhanced distributions (FY26 Chairman letter). At ~4.2% yield (screen), dividend screens pass coverage tests, though sustained capex and debt service constrain headroom until the guided FCF step-up.
-
-### Interim gap
-
-`filings_index.json` shows **zero interim/trading_update filings with bodies**. A trading statement headline appears in news (22 Jul 2026) but cannot be analysed here. Verify-before-trade on H1 FY27 trends is advisable.
-
----
+**Interim gap:** No half-year results, Q1/Q3 trading updates or RNS interim accounts are indexed. Near-term trajectory must be inferred from FY26 annual guidance language and external news (e.g. July 2026 trading statement headlines in `news_manifest.json`), not verified interim filing figures.
 
 ## RISKS AND RED FLAGS
-**Regulatory:** BT operates under Ofcom’s wholesale access framework; FY26 report cites “fiscal and regulatory certainty” and an Openreach “fair bet” with the regulator. News (28 May 2026, Traders Union) reports the **UK government blocked a major shareholder move**—a reminder of public-interest oversight in a critical national infrastructure owner. Pricing, copper switch-off (PSTN closure January 2027 per FY26 report), and alt-net access terms remain live debates.
+**Regulatory:** The FY25 annual report emphasises Ofcom’s Telecoms Access Review and the importance of the “fair bet” on wholesale fibre returns. Regulatory price controls on Openreach and consumer pricing caps remain a structural overhang not fully captured by value screens.
 
-**Leverage and pension:** ~£18bn net debt (Yahoo) and ~£1.2bn annual interest absorb a significant share of EBITDA. FY26 report explicitly balances dividends against **pension fund** commitments and BBB+ rating metrics. Pension liabilities ~£4.4bn (Yahoo) are reduced from prior year but remain material.
+**Leverage and pensions:** Filing chairman’s letter (FY26) ties future dividend growth to reaching metrics consistent with a BBB+ credit rating while “meeting commitments to the pension fund.” Yahoo fallback shows £18.3bn net debt and £4.4bn non-current pension liabilities — material relative to £12.6bn equity and £1.5bn normalised FCF. Rising gilt yields (noted in news flow) increase financing and pension discount-rate sensitivity.
 
-**Competitive:** Alt-nets and mobile rivals challenge Openreach’s fibre economics and retail pricing power; FY25 letter acknowledges revenue decline despite network leadership. International portfolio shrink (five non-core disposals, BT International carve-out per FY26 CEO letter) reduces diversification.
+**Competitive:** CEO and chairman letters describe a “highly competitive market”; alt-net fibre overbuild and mobile MVNO competition pressure revenue and ARPU even as EBITDA is held via transformation.
 
-**Execution/transformation:** £3bn cost programme and culture reset carry delivery risk; FY26 NFCF dipped despite EBITDA stability. Capex at £5.1bn remains elevated versus pre-build levels.
+**Governance / ownership:** May 2026 news reports UK government blocking a major shareholder (Bharti Airtel) stake increase; February 2025 Morgan Stanley reduced a 5% holding to zero. Stake-building and national-interest scrutiny add event risk.
 
-**Earnings quality:** Large recurring “specific items” (restructuring £336m, impairments, write-offs per Yahoo FY26) drive statutory/adjusted divergence flagged by the screen overlay—value metrics on adjusted bases may overstate underlying progress.
+**Statutory earnings quality:** Yahoo shows recurring “specific items” (restructuring, impairments, M&A charges of £634–993m annually FY24–26), depressing reported net income (£855m–£1.08bn) vs normalised income (~£1.7bn FY26). Screens passing Earnings Quality warrant monitoring, not blind acceptance.
 
-**Governance/sentiment:** Morgan Stanley reduced a 5% stake to zero (Investegate, 18 Feb 2025); insider sales ~£634k (23 May 2026, simplywall.st); broker caution on stretched rally (22 May 2026, Proactive Investors). Not fundamental red flags alone, but negative signalling.
+**Revenue decline:** Three consecutive years of lower reported revenue (£20.8bn → £19.7bn) despite stable EBITDA signals mix shift and divestitures, but also underlying demand/competitive headwinds.
 
-**Filing language:** Annual reports include **viability statements** and **principal risks and uncertainties** sections (indexed but not fully extracted in bodies); no going-concern qualification is evident in available extracts. Full contingency and covenant detail requires complete financial statement notes—not present in current body extracts.
+**Filing limitations:** Principal risks, viability statement and going-concern language are referenced in annual report contents pages but full text is not extracted in indexed bodies; risk assessment relies on strategic-report excerpts and chairman/CEO letters rather than complete note disclosures.
 
-RiskTags: regulatory, pension, leverage, competitive, governance, cyclical, accounting
-
----
-RiskTags: regulatory, pension, leverage, competitive, governance, cyclical, accounting
+RiskTags: regulatory, pension, leverage, competitive, governance
+RiskTags: regulatory, pension, leverage, competitive, governance
 
 ## NEWS HIGHLIGHTS
-Coverage is **heavy on commentary, light on hard corporate actions**. Material items from the past year:
+Coverage over the past year is ** voluminous but thin on primary-source corporate disclosure** — dominated by Kalkine Media commentary on sector rotation, fibre strategy and gilt-yield financing. Material items from `news_manifest.json`:
 
-- **Strategy/M&A:** “BT Group and Verizon to form joint venture, creating a scaled international connectivity platform” (29 Jun 2026, newsroom.bt.com)—strategic pivot after UK portfolio simplification; Verizon JV also cited in Yahoo market wrap (29 Jun 2026).
-- **Trading:** “REG - BT Group PLC - Trading Statement” (22 Jul 2026, TradingView headline)—content not in filing bodies; interim figures unverified here.
-- **Regulatory/governance:** “BT Group stock trades down as UK government blocks major shareholder move” (28 May 2026, Traders Union).
-- **Management/comp:** “BT Group grants equity awards to top executives under restricted share plan” (16 Jun 2026, TipRanks); Openreach CEO succession (Katie Milligan) noted in FY26 report.
-- **Sentiment:** “BT Group rally looks stretched, broker says” (22 May 2026, Proactive Investors); “Is the BT Group's investment case flattered by high hopes?” (9 Jun 2026, Proactive Investors); Morgan Stanley stake exit (18 Feb 2025, Investegate).
-- **Income:** Ex-dividend reminders (1 Aug 2026, simplywall.st).
+- **29 Jun 2026** — “BT Group and Verizon to form joint venture, creating a scaled international connectivity platform” (newsroom.bt.com / yfinance): strategic pivot aligning with international carve-out and asset-light platform ambitions referenced in FY26 annual report.
+- **15 Jul / 10 Jul 2026** — “What Does Bharti Airtel's Growing Stake Mean For BT Group?” / “Stake Push”: ownership saga; **28 May 2026** — “BT Group stock trades down as UK government blocks major shareholder move” (Traders Union): regulatory/national-interest friction on control.
+- **22 Jul 2026** — “REG - BT Group PLC - Trading Statement” (TradingView); **23 Jul 2026** — “Outcome of Audit Tender”: corporate actions, but full RNS bodies not in filings index.
+- **4 Sep 2026** — “Is BT Group Nearing The End Of Its Great Fibre Dig?” (Kalkine): market focus shifting to post-capex cash generation — consistent with management’s FY27 inflection messaging.
+- **18 Feb 2025** — “Across The Markets… Morgan Stanley cut its stake… to zero” (Investegate trading_update body): triggered >5% share price fall; signals institutional sentiment risk.
+- **16 Jun 2026** — “BT Group grants equity awards to top executives under restricted share plan” (TipRanks): governance/compensation item.
+- **Aug 2026** — Multiple articles on stake-building chatter, networks/competition and AI-enabled services: thematic, not hard data.
 
-Much recent flow is **Kalkine Media sector commentary** (Jul–Aug 2026) rather than primary disclosures—treat as background noise. Hard news density is moderate; key FY26 results are better sourced from the Jul 2026 Companies House annual report than from news feeds.
-
----
+Management change: FY26 annual report notes Patricia Cobian joining as CFO in summer 2026, succeeding Simon Lowth. Dividend ex-date flagged early August 2026 (simplywall.st).
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: high
 Confidence: 0.68
-Rationale: Deep research largely **confirms** the quantitative Strong Buy on adjusted cash-flow, dividend, and asset-quality grounds, but statutory earnings noise, leverage, pension/regulatory overhangs, and absent interim filings temper conviction versus the screen’s headline signal.
+Rationale: Filing-backed adjusted EBITDA stability, progressive dividends and the approaching fibre capex peak largely confirm the quantitative buy signal, but absent interim filings, statutory earnings volatility, leverage/pension burdens and regulatory/ownership overhangs justify accumulation rather than full conviction.

@@ -1,6 +1,6 @@
 # Keller Group plc (KLR.L) — Research memo
 
-_Version 1 · Updated 2026-08-30T08:28:35.104140+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T17:59:55.940953+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
 Keller Group is the world’s largest geotechnical specialist contractor (~£3bn revenue, ~10,000 staff), with a quality-and-cash-flow profile that aligns well with the quantitative Strong Buy signal: high ROCE, strong free cash flow, net-cash balance sheet, and an unbroken dividend record since listing. FY2025 filings show steady growth (revenue £3,087m, underlying margin 7.1%, covenant-basis net cash £59.7m), and H1 2026 has accelerated (revenue +11% constant currency, underlying operating profit +17%, record £1.9bn order book). Valuation is not deep-value—P/B ~3.2x and P/E ~13.7x screen as quality/GARP rather than Graham-style cheap—but FCF yield (~9%), Piotroski 8/9, and Neff PEGY pass support the screen. The key debate is whether North American infrastructure and data-centre momentum can offset cyclical construction exposure, H1 working-capital drag, and a share price already above the 200-day moving average.

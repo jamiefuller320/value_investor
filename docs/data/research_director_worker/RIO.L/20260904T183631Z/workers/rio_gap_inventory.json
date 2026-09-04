@@ -1,0 +1,156 @@
+{
+  "task_id": "rio_gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "financials_annual.json: quarterly_income and quarterly_cashflow are empty objects; cashflow_metrics sets ttm_cashflow_suppressed=true with reason quarterly_cashflow_empty — no intra-year Yahoo quarterly P&L or cash-flow series available on this pass.",
+    "financials_annual.json carries five full-year blocks (2021–2025) for income_statement, balance_sheet and cash_flow; only annual Yahoo data is usable for fundamentals.",
+    "No alternate_news key or file exists anywhere under sources/; news coverage is limited to news_manifest.json plus 33 news_batch_*.json files, none assigned on this catalog pass.",
+    "filings_index.json reports period coverage annual=20 / interim=47 / trading_update=0 / other=51 (118 total, all has_body=true). trading_update=0 confirms no tagged trading updates.",
+    "Annual period tag is inflated: includes Companies House group accounts (2020–2026), AGM dates/notices/results, 20-F, FY presentation, mineral-resources (05bcde704e5706ea), Tomago agreement (1d7db8012c6f174f), SVM Rio collab articles (d3a10a2ea8580311, 61b77310e7740fea), Payments to Governments and Supplementary Prospectus — not all are FY results.",
+    "Interim period tag is dominated by 39 SEC 6-K filings and three IR-allowlist 20-F HTML copies (ir_6e39d8805633faaf, ir_838fb5064b8387e7, ir_63c8fa20a8a1f7cb) with null published_at; only ~3 filings are H1-like (7fa878e87b4c6a35 presentation, e36747cb4ebb850b H1 results, one CH interim accounts).",
+    "Highest-value indexed bodies remain unread on this pass: 20-F (43516cd59d98feee), H1 presentation (7fa878e87b4c6a35), Q2 production (09b707e71de5493e), Apr drilling/production (685f8523b55e0503), mineral-resources (05bcde704e5706ea), Tomago (1d7db8012c6f174f), Boyne (18e2ff350ef22281), FY results presentation (fd65e2d286da0c49), May-2026 CLO appointment (d0e95aeedf492807) — all has_body=true in index.",
+    "All 118 filings_index body_path values point outside the trial tree (docs/data/research/RIO.L/sources/filings/bodies/…); identical body files are mirrored locally under sources/filings/bodies/ (113 .txt files present).",
+    "ir_presentation_metrics.json is inventory-present but empty (bridge_count=0, segment_split_count=0, lease_maturity_count=0) — no IR slide bridges, segment splits or IFRS-16 lease maturities extracted.",
+    "macro_context.json is inventory-present (GBP/USD 1.3543, FTSE 100 10799.57, plus US/EU/AU/CA markers as of 2026-09-04) but unused on this catalog pass.",
+    "screen_run_manifest.json and screening_snapshot.json are inventory-present; screen shows strong_buy (11/22 models), P/E 13.7, yield 4.6%, conviction 0.6887, ttm_cashflow_suppressed flagged in yahoo_quarterly overlay — neither manifest nor snapshots consumed here.",
+    "Two snapshots (20260813T073950Z.json, 20260904T172730Z.json) and 33 news_batch files present but unused; news_manifest latest article is 2026-09-02T21:09:52Z with zero items after 2 Sep 2026; no Q3 production filing indexed."
+  ],
+  "figures": [
+    {
+      "metric": "Total revenue",
+      "value": "57638000000",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "USD; Yahoo annual income_statement"
+    },
+    {
+      "metric": "Net income",
+      "value": "9966000000",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "USD; down from FY2024"
+    },
+    {
+      "metric": "Diluted EPS",
+      "value": "6.084",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "USD per share"
+    },
+    {
+      "metric": "Operating cash flow",
+      "value": "16832000000",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "USD; annual only"
+    },
+    {
+      "metric": "Free cash flow",
+      "value": "4497000000",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "USD; FY2024 was 5978000000"
+    },
+    {
+      "metric": "Capital expenditure",
+      "value": "-12335000000",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "USD outflow"
+    },
+    {
+      "metric": "Cash dividends paid",
+      "value": "-6145000000",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "USD outflow"
+    },
+    {
+      "metric": "Net debt",
+      "value": "15027000000",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "USD; up from 5612000000 in FY2024"
+    },
+    {
+      "metric": "Net income",
+      "value": "11552000000",
+      "period": "FY2024",
+      "source_path": "financials_annual.json",
+      "note": "USD; prior-year comparator"
+    },
+    {
+      "metric": "Free cash flow",
+      "value": "5978000000",
+      "period": "FY2024",
+      "source_path": "financials_annual.json",
+      "note": "USD; prior-year comparator"
+    },
+    {
+      "metric": "ttm_cashflow_suppressed",
+      "value": "true",
+      "period": "as fetched 2026-09-04",
+      "source_path": "financials_annual.json",
+      "note": "reason: quarterly_cashflow_empty"
+    },
+    {
+      "metric": "Filings count by period",
+      "value": "annual=20, interim=47, trading_update=0, other=51",
+      "period": "index as of 2026-09-04",
+      "source_path": "filings/filings_index.json",
+      "note": "118 total filings"
+    },
+    {
+      "metric": "SEC 6-K filings tagged interim",
+      "value": "39",
+      "period": "index",
+      "source_path": "filings/filings_index.json",
+      "note": "category=6-K under period=interim"
+    },
+    {
+      "metric": "P/E",
+      "value": "13.7",
+      "period": "screen as of 2026-09-02",
+      "source_path": "screening_snapshot.json",
+      "note": "screen metric; not filing-backed"
+    },
+    {
+      "metric": "Dividend yield",
+      "value": "4.6%",
+      "period": "screen as of 2026-09-02",
+      "source_path": "screening_snapshot.json",
+      "note": "screen metric"
+    },
+    {
+      "metric": "GBP/USD",
+      "value": "1.3543",
+      "period": "2026-09-04",
+      "source_path": "macro_context.json",
+      "note": "regime context only; unused on pass"
+    }
+  ],
+  "gaps": [
+    "20-F risk factors, legal contingencies and detailed SEC disclosures (43516cd59d98feee.txt) — not read; memo cannot substantiate regulatory/jurisdictional risk narrative from primary filing.",
+    "H1 2026 slide KPIs, segment bridges and management guidance (7fa878e87b4c6a35.txt, fd65e2d286da0c49.txt) — ir_presentation_metrics empty; interim quarterly income absent.",
+    "Q2 and Q1 2026 production volumes versus H1 2026 financials (09b707e71de5493e.txt, 685f8523b55e0503.txt, e36747cb4ebb850b.txt) — no reconciliation possible without body reads.",
+    "Mineral resource and ore reserve deltas YoY (05bcde704e5706ea.txt) — reserve/resource change unknown.",
+    "Tomago and Boyne contracted power terms, capex commitments and smelter economics (1d7db8012c6f174f.txt, 18e2ff350ef22281.txt) — only indexed headlines available.",
+    "Intra-year cash flow, TTM OCF/FCF and quarterly working-capital moves — quarterly_cashflow empty and ttm_cashflow_suppressed; memo must rely on FY2025 annual cash flow only.",
+    "Post-2 Sep 2026 RNS and Q3 2026 production — news_manifest latest 2026-09-02; zero Q3 production filings indexed; any events after cut-off remain unknown.",
+    "alternate_news feed absent — no secondary news corpus for cross-checking RNS or production updates.",
+    "news_batch_* (33 files) and snapshots (2 files) not assigned — incremental news and screen history not incorporated.",
+    "macro_context, screen_run_manifest and ir_presentation_metrics present but unused — no macro overlay, model-run provenance or IR metric bridges in this inventory pass."
+  ],
+  "sources_read": [
+    "financials_annual.json",
+    "filings/filings_index.json",
+    "macro_context.json",
+    "ir_presentation_metrics.json",
+    "screen_run_manifest.json",
+    "screening_snapshot.json",
+    "news_manifest.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-a84dce89-21f2-431b-bf08-6ef0c537ce93"
+}

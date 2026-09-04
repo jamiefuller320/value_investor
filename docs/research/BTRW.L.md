@@ -1,106 +1,127 @@
 # Barratt Redrow plc (BTRW.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T07:41:40.982486+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T17:34:48.269352+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Barratt Redrow is the UK's largest listed housebuilder following the August 2024 Redrow acquisition, and the quantitative screen flags it as a buy on cheapness (P/B ~0.6), dividend yield (~5.3%), GARP and financial-health metrics, with low reported leverage (D/E ~3%). The investment hook is a material discount to tangible net asset value — management cited TNAV of 433.4p per share versus a share price implying a ~36% discount in July 2026 — overlaid with net cash, active buybacks, and Redrow cost synergies tracking towards a £100m target. The central debate is whether book value and capital returns compensate for cyclical margin pressure, weak near-term free cash flow (FY25 filing FCF £8.7m per Yahoo; screen notes a TTM FCF mismatch), and legacy building-safety cash obligations exceeding £1bn on the balance sheet with £300m+ annual remediation spend guided for FY27–28. Management succession (CEO and CFO transitions in H2 2026) and a shift from ordinary dividends to predominantly buyback-led returns add execution uncertainty.
-
----
+Barratt Redrow is the enlarged UK housebuilder formed by the Barratt–Redrow merger, and the quantitative screen rates it a **buy** on cheapness (P/B ~0.6), low leverage (D/E ~3%), dividend yield (~5.5%) and financial-health metrics, with seven of 22 models passing across four factor families. The valuation hook is a balance sheet trading well below tangible net asset value—management cited a **36% discount to TNAV of 433.4p** at the July 2026 trading update—supported by year-end net cash of **~£772m** and a stepped-up **£400m FY27 buyback programme**. The central debate is whether scale, synergy delivery and capital returns offset cyclical margin pressure (adjusted gross margin **15.0%** in HY26 vs **17.0%** prior year), weak reported free cash flow, and **£630m–£645m** of scheduled land-creditor and legacy remediation cash outflows in FY27–FY28 that will absorb much of the apparent cash pile.
 
 ## INVESTMENT THESIS
-For a value investor, BTRW offers a classic asset-backed cyclical setup: the screen passes Schloss Low P/B, Deep Value, Lynch PEG, Neff PEGY, High Dividend Yield, Dividend Growth and Financial Health — four of four factor families (cheapness, dividend, GARP, risk). P/B of 0.58 and D/E of 3% signal balance-sheet optionality relative to sector peers trading through a housing downturn characterised by subdued reservation rates, elevated incentives and mortgage-affordability pressure.
+For a value investor, BTRW offers a rare combination in UK housebuilding: **sub-book equity** on a group that remains operationally profitable through a subdued cycle, with net cash on a reported basis and minimal financial debt. The screen’s buy signal is anchored in Schloss/Deep Value (P/B **0.56**), High Dividend Yield, Lynch/Neff GARP overlays, and Financial Health (low gearing), with full data quality (20/20 metrics) and a persistent eight-week buy signal.
 
-Business quality anchors remain intact in filings: industry-leading NHBC Pride in the Job awards (22 consecutive years per FY26 trading update), 17 consecutive years of HBF five-star customer satisfaction, and Redrow integration delivering incremental cost synergies (£53m in FY26 vs £50m guided). FY26 completions of 17,667 homes (+5% YoY on an aggregated basis) and adjusted profit before tax in line with consensus (~£560m) demonstrate operational resilience despite a challenging market.
+Business quality supports the cheapness case rather than contradicting it. Barratt Redrow is the volume leader post-merger (**17,667** FY26 completions), retains industry-leading customer satisfaction (17 consecutive HBF five-star years per filings), and is delivering Redrow integration synergies (**~£73m** cumulative of a **£100m** target by HY28). Reservation rates have held resilient (**0.64** net private rate in FY26 vs **0.63** FY25), and management is actively shrinking the share count—**£386m** buyback announced July 2026—rather than over-investing in land at cycle trough (only **3,029** plots approved in FY26 vs **22,530** in FY25).
 
-The screen's adjusted Hold signal is informative: high dividend yield passes, but FCF yield and earnings quality fail — consistent with housebuilder working-capital dynamics (HY26 operating cash outflow £351m on seasonal WIP build) and legacy provision charges. The value case therefore rests less on near-term earnings momentum and more on TNAV accretion via buybacks (£386m programme announced July 2026; £400m total FY27 return planned) and eventual cycle normalisation, with the proviso that building-safety and land-creditor cash calls absorb a significant share of balance-sheet capacity.
-
----
+The screen’s dividend-yield contribution should be interpreted cautiously: from FY27 the board is **replacing ordinary dividends with buybacks** (nominal **1p** dividend only), which improves capital efficiency at a TNAV discount but removes a pillar of the income screen. Reported FCF is also thin—**£8.7m** in FY25 per Yahoo/filing cross-check vs negative TTM screen input—reflecting inventory build and remediation spend rather than underlying insolvency. The buy case therefore rests on **asset backing, balance-sheet optionality, and capital return**, not on near-term cash-yield sustainability.
 
 ## FINANCIAL REVIEW
-**Source hierarchy:** Primary figures from RNS filing bodies (HY26 interim results, Q3 and FY26 trading updates). Companies House annual accounts (FY21–FY25) are indexed but body extracts are OCR-degraded and do not yield reliable line-item financial statements; audited FY25 comparatives embedded in the HY26 interim release are used for the latest annual period. Multi-year pre-merger comparatives fall back to Yahoo (`financials_annual.json`), noted explicitly below.
+### Annual results (FY25 — year ended 29 June 2025)
 
-### Annual trend
+A clean FY25 full-year RNS body is **not present** in the filings index; the **FY25 audited comparatives embedded in the HY26 interim results** (11 February 2026) are the primary source. The Companies House FY25 annual report extract (filed December 2025) is available but OCR quality is poor for line-item extraction.
 
-| Period | Revenue | Statutory PBT | Net income | Net cash (ye) | Completions | Primary source |
-|--------|---------|---------------|------------|---------------|-------------|----------------|
-| FY23 (Jun 2023) | £5,321m | £705m | £530m | £1,269m | 17,206 | Yahoo fallback (pre-Redrow Barratt; CH filing confirms PBT £705.1m) |
-| FY24 (Jun 2024) | £4,168m | £171m | £114m | £1,065m | n/a | Yahoo fallback (Redrow acquisition closed Aug 2024; not fully comparable) |
-| FY25 (Jun 2025) | £5,578m | £274m | £186m | £970m | 16,826 agg. | HY26 interim audited comparatives |
-| FY26 (Jun 2026) | n/a* | n/a* | n/a* | ~£772m | 17,667 | FY26 July trading update |
+From the HY26 interim audited comparatives (52 weeks to 29 June 2025):
 
-*Full statutory income statement for FY26 not yet published (results due 16 September 2026). Management stated adjusted PBT (before PPA adjustments, after legacy provision finance charge reclassification) was in line with company-compiled consensus of **£559.5m** (range £537–576m) on 14 July 2026.
+| Metric | FY25 |
+|--------|------|
+| Revenue | **£5,578.3m** |
+| Statutory operating profit | **£285.5m** |
+| Statutory profit before tax | **£273.7m** |
+| Profit for the year | **£186.4m** |
+| Basic EPS | **13.6p** |
+| Cash and cash equivalents (balance sheet) | **£969.6m** |
+| Total equity | **£7,873.0m** |
+| Inventories | **£8,340.6m** |
+| Provisions (current + non-current) | **£1,371.3m** |
 
-**FY25 (annual report period to 29 June 2025):** Revenue £5,578.3m, operating profit £285.5m, statutory PBT £273.7m, basic EPS 13.6p, year-end cash £969.6m (HY26 interim audited column). Reported ROCE 8.1% (HY26). This reflects the first full-year combination of Barratt and Redrow, distorted by purchase-price allocation adjustments (£95.3m in FY25 per trading update), Redrow integration costs and legacy building-safety charges.
+Operational context (July 2026 trading update): FY25 total home completions were **16,565** reported (**16,826** aggregated pre-merger basis), with year-end net cash of **~£772.6m** on the group’s net-cash definition (lower than headline cash due to land creditors and seasonal working capital).
 
-**FY26 (trading update, 15 July 2026):** Total completions 17,667 (including 566 JV, 3,774 affordable — 22% mix). Private ASP ~£396k (+3.8%); underlying pricing ex-mix ~flat to +1%. Adjusted administrative expenses ~£330m (down from ~£400m guided at HY26). Adjusted items ~£159m (including ~£95m net legacy property provision charges, ~£40m imputed finance charges, ~£35m restructuring). Net cash ~£772m; average daily net cash across FY26 only ~£122m, illustrating seasonality. Year-end total net indebtedness (net cash less land creditors) ~£52m surplus. Legacy property provision balance ~**£1,075m**; cash utilisation ~£155m in FY26 (below guidance due to delays).
+**Trend vs prior years:** Yahoo `financials_annual.json` (used only where filing bodies lack clean multi-year tables) shows the post-merger step-change: revenue rose from **£4,168m** (FY24, partial Redrow) to **£5,578m** (FY25), but profitability remains far below pre-cycle peaks (FY23 statutory PBT **£705.1m** per Yahoo—pre-merger Barratt standalone). FY25 reported free cash flow was **£8.7m** (Yahoo, consistent with screening snapshot filing FCF input), down from **£89m** in FY24 and **£442m** in FY23, driven by inventory increases and tax/working-capital movements.
 
-### Interim (HY26 — 26 weeks to 28 December 2025)
+### Interim results (HY26 — 26 weeks to 28 December 2025)
 
-- Revenue **£2,632.1m** (+10.5% vs reported HY25 comparative)
-- Adjusted operating profit (pre-PPA) **£210.2m**; margin **8.0%** (down 90bps)
-- Adjusted PBT (pre-PPA) **£199.9m** (−13.6% aggregated)
-- Statutory PBT **£156.2m**
-- Completions **7,444** (+4.7% aggregated)
-- Net cash **£173.9m** (post £171.8m dividend, £50.4m buybacks, £475m working-capital outflow)
-- Interim dividend **5.0p** (HY25: 5.5p); policy shifting to 2.0x adjusted EPS cover
-- Building safety provision **£828.9m**; reinforced concrete frame provision **£186.7m**
-- Consensus FY26 adjusted PBT range at interim: **£558–617m** (ex-PPA)
+Primary source: HY26 interim RNS body (11 February 2026).
 
-### Trading updates (interim releases)
+| Metric | HY26 | HY25 aggregated comp. | Change |
+|--------|------|---------------------|--------|
+| Total completions | **7,444** | 7,107 | +4.7% |
+| Revenue | **£2,632.1m** | £2,381.9m | +10.5% |
+| Adjusted operating profit (pre-PPA) | **£210.2m** | £210.8m | −0.3% |
+| Adjusted operating margin (pre-PPA) | **8.0%** | 8.9% | −90 bps |
+| Adjusted PBT (pre-PPA) | **£199.9m** | £231.4m | −13.6% |
+| Statutory PBT | **£156.2m** | £85.0m | +83.8% |
+| Adjusted EPS (pre-PPA) | **10.0p** | 12.8p | −21.9% |
+| Net cash (period end) | **£173.9m** | £458.9m | — |
+| Interim dividend | **5.0p** | 5.5p | — |
 
-**Q3 (29 December 2025 – 29 March 2026, 15 April 2026):** Net private reservation rate 0.64 (+3.2% YoY ex-PRS/MUS). Forward sales £3,539.2m / 11,395 homes (+12.8%). 94% forward sold for FY26. Year-end net cash guidance raised to **£550–650m**.
+Margin compression is explicit in filing language: adjusted gross margin fell **200 bps to 15.0%**, attributed to higher sales incentives, ~**1%** build-cost inflation, and completed-development provision movements, partly offset by synergy savings (**£23.2m** incremental in HY26). Legacy building-safety provision stood at **£828.9m** (plus **£186.7m** reinforced-concrete-frame provision) at 28 December 2025; HY26 remediation cash spend was **£77.8m**.
 
-**FY26 pre-close (15 July 2026):** Confirmed completions at upper end of range; capital allocation pivot — **£400m** shareholder return in FY27, predominantly buybacks (£386m programme), nominal **1p** ordinary dividend retained for mandate compliance. FY27 completions guided **17,700–18,200**; ~415 average outlets (below prior 425–435 target); build-cost inflation guided **3–4%**.
+The HY26 balance sheet (unaudited, 28 December 2025) shows **total assets £11,257.6m**, **equity £7,762.1m**, **inventories £8,674.5m**, and **net cash £173.9m**—seasonally depressed versus June year-ends.
 
-### Balance sheet and cash flow (filings + Yahoo fallback)
+Directors stated in HY26 that the risk profile had **not changed** since the FY25 annual report and that principal risks remain within tolerance; no going-concern qualification appears in the interim filing.
 
-- **FY25 (filing/Yahoo):** Total assets £11,550m; equity £7,873m; total debt £255m; inventory £8,341m; FCF **£8.7m** (Yahoo; screen flags TTM FCF −$77.2m basis mismatch)
-- **Leverage:** Headline D/E minimal; economic leverage is high via land bank (5.2 years owned+controlled at FY26 ye) and land creditors (~£720m at FY26 ye, ~15% of land bank)
-- **Pension:** Redrow Staff Pension Scheme buy-out completed October 2025; surplus £3.2m — liability discharged (HY26 interim)
+### Trading updates (FY26 trajectory)
 
-**Data gaps:** Clean statutory FY26 income statement and cash flow not yet filed. Companies House annual PDF extracts lack parseable financial tables for detailed multi-year filing-only analysis; FY23 and earlier pre-merger figures require Yahoo fallback or aggregated management disclosures.
+**Q3 trading update (15 April 2026):** Net private reservation rate **0.64** ex-PRS (+3.2% YoY); FY26 completions guidance reiterated at **17,200–17,800**; year-end net cash guidance raised to **£550m–£650m** (from **£400m–£500m**).
 
----
+**FY26 July trading update (15 July 2026):** Full-year completions **17,667** (+5% vs FY25 aggregated); adjusted PBT **in line** with consensus **~£559.5m** (range £537m–£576m); year-end net cash **~£772m**; average daily net cash across FY26 only **~£122m** (highlighting seasonality). Legacy property provision **~£1,075m** at 28 June 2026; FY26 remediation utilisation **~£155m** (c. **£100m** below plan due to delays). Adjusted items **~£159m** in FY26. Admin costs **~£330m** (below **£400m** HY26 guidance).
+
+**Capital allocation shift:** From FY27, **~£400m** return to shareholders (**~£386m** buyback + **1p** nominal dividend), replacing ordinary dividends, citing the TNAV discount widening from **~9%** (February) to **~36%** (July).
+
+### Gaps and data notes
+
+- **FY26 full annual results RNS** (expected 16 September 2026) is **not yet in the filings index**; FY26 P&L detail above comes from the July trading update and HY26 interim.
+- **Companies House annual bodies** for FY25 are on file but not relied upon for precise figures due to extraction quality.
+- Multi-year revenue/FCF history for FY22–FY24 falls back to **`financials_annual.json` (Yahoo)** where stated above.
+- Yahoo quarterly cashflow is **empty** (`ttm_cashflow_suppressed`); TTM FCF in the screen may diverge from filing-basis FCF—treat cash-flow metrics as **unresolved**.
 
 ## RISKS AND RED FLAGS
-**Cyclical / demand:** Filings repeatedly cite subdued consumer confidence, affordability constraints, mortgage-rate volatility and incentive-led sales (part-exchange 21% of private reservations in FY26). HY26 principal risks unchanged from FY25 annual report — political and economic environment could cause "rapid, severe and prolonged market disruptions." Forward private order book ASP implies ~1.4% underlying decline entering FY27.
+**Cyclical / demand:** UK housing remains sensitive to mortgage rates, affordability, and consumer confidence. FY27 guidance assumes **minimal price inflation** and **3–4%** build-cost inflation; reservation rates are resilient but forward private order book ASP implies **~1.4%** underlying deflation. Middle East conflict and rate volatility flagged as FY27 uncertainty.
 
-**Legacy building safety / litigation:** Provisions total ~£1,075m at FY26 ye (building safety £829m at HY26 interim plus concrete frame £187m). Cash spend guided ~£300m (FY27) and ~£450m (FY28) — a major call on liquidity regardless of net cash headline. HY26 notes 280 active buildings in remediation portfolio. Non-cash imputed finance charges ~£40m annually treated as adjusted items.
+**Regulatory / remediation:** Legacy building-safety provision **~£1,075m** at FY26 year-end with guided cash utilisation of **~£300m (FY27)** and **~£450m (FY28)**—a major call on cash irrespective of net-cash headline. CMA investigation closed October 2025 with **£29.0m** payment (non-deductible for tax). Scottish remediation standards remain subject to final contract terms.
 
-**Regulatory:** CMA investigation closed October 2025 with voluntary commitments; **£29m** payment to Government (non-tax-deductible). Ongoing exposure to building regulations, planning reform execution risk and Residential Property Developer Tax (4% RPDT on profits before finance costs).
+**Margins / earnings quality:** Adjusted items totalled **~£159m** in FY26 (legacy provisions, imputed finance charges **~£40m**, restructuring **~£35m**). PPA fair-value adjustments from the Redrow acquisition continue to distort statutory vs adjusted profit (**~£37m** PPA charges guided for FY26). ROE is depressed (**2.8%** screen metric) on inflated equity base post-merger.
 
-**Integration / key person:** Redrow integration substantially complete; £73m of £100m cost synergies delivered by FY26 ye. CEO David Thomas retires September 2026 (Dean Banks appointed); CFO Rebecca Napier starts August 2026 — transition risk during capital-allocation pivot.
+**Liquidity / working capital:** Period-end net cash swings from **£173.9m** (December) to **~£772m** (June); average daily net cash **~£122m** in FY26. Total net indebtedness (net cash less land creditors) was **~£593m** at HY26 and **~£52m** net surplus at FY26 year-end per July filing—land creditors **~£720m** at June 2026 with **~£330m** settlement due FY27.
 
-**Capital allocation:** Board replacing ordinary dividends with buybacks citing 36% TNAV discount — supportive for per-share book value if sustained, but removes income anchor that contributed to screen dividend pass; Phoenix Asset Management pressure for returns noted in news flow (July 2026).
+**Governance / key person:** CEO David Thomas retires; **Dean Banks** joins September 2026. CFO **Rebecca Napier** appointed from August 2026 after Mike Scott’s departure. Transition risk is moderate given operational bench strength but strategy execution sits with new leadership.
 
-**Liquidity / covenants:** No going-concern qualification identified in available bodies; HY26 cites £700m RCF to November 2029 and £200m USPP maturing 2027. Viability statement referenced in FY25 annual report (body not legible in extract). Average daily net cash £122m across FY26 vs £772m point-in-time — seasonal and provision timing matter.
+**Competitive:** Sector trading at “GFC-level valuations” per analyst commentary in news flow; incentive intensity rising (part-exchange **21%** of private reservations in FY26 vs **14%** FY25).
 
-**Earnings quality / accounting:** Significant adjusted items (£159m FY26; PPA charges ~£37m). Restatement of legacy provision finance charges as adjusted items (+£19.6m HY26) affects comparability. Screen FCF basis mismatch warrants verify-before-trade.
+**Pension:** Redrow staff pension scheme **buy-out completed** October 2025; liabilities discharged from group.
 
-RiskTags: cyclical, regulatory, governance, leverage, litigation, key_person, accounting
+**Screen-specific flags:** High dividend yield screen pass is **partially undermined** by dividend-to-buyback pivot; FCF yield fails; earnings quality overlay noted in screen action note.
 
----
-RiskTags: cyclical, regulatory, governance, leverage, litigation, key_person, accounting
+RiskTags: regulatory, cyclical, governance, liquidity, accounting, other
+RiskTags: regulatory, cyclical, governance, liquidity, accounting, other
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate-to-good, dominated by results, trading updates and capital-allocation headlines rather than deep investigative pieces.
+Coverage over the past year is **moderate-to-good** on corporate actions and results, but dominated by syndicated price-commentary rather than deep investigative pieces.
 
-**Strategy / M&A:** Redrow integration and synergy delivery remain the defining story. Q3 update (15 April 2026 — *Barratt Redrow on track for full year as sales rate improves*, Yahoo Finance UK) noted resilient spring reservations. FY26 update (15 July 2026 — *Barratt Redrow Q4 Earnings Call Highlights*, Yahoo) confirmed £400m FY27 return via buybacks.
+**Strategy / capital allocation**
+- *Barratt Redrow swaps dividends for share buybacks* (15 July 2026, ii.co.uk) — pivot to **£400m** FY27 buybacks.
+- *Barratt boosts shareholder returns in face of investor pressure* (15 July 2026, Yahoo Finance) — Phoenix Asset Management pressure cited.
+- *Barratt Redrow (BTRW) Completes Buyback of 2,056,345 Shares… Under £386 Million Repurchase Plan* (17 August 2026, Kalkine Media).
 
-**Management:** *Barratt Redrow Group Chief Executive Succession* (4 March 2026, RNS/filings) — Dean Banks to succeed David Thomas. *Appointment of Chief Financial Officer* (19 June 2026, RNS) — Rebecca Napier from Britvic/IAG.
+**Results / trading**
+- *Barratt Redrow cuts dividend as margins drop* (11 February 2026, Investors' Chronicle) — HY26 interim.
+- *Barratt Redrow on track for full year as sales rate improves* (15 April 2026, Yahoo Finance UK) — Q3 update.
+- *Revenue Beat: Barratt Redrow plc Beat Analyst Estimates By 12%* (13 February 2026, simplywall.st).
 
-**Shareholder returns / activism:** *Barratt boosts shareholder returns in face of investor pressure* (15 July 2026, Yahoo) — Phoenix Asset Management ultimatum cited. *Barratt Redrow Advances £386 Million Share Buyback* (27 July 2026, Kalkine Media). *Barratt Redrow Posts Pretax Profit Increase, Launches $517 million Buyback Program* (15 July 2026, WSJ/Yahoo).
+**Management**
+- *Barratt Redrow Group Chief Executive Succession* (4 March 2026, RNS/Investegate) — Dean Banks appointed.
+- *Barratt Redrow Climbs as New Finance Chief Brings City Pedigree to Housing Rally* (25 June 2026, AskTraders) — Rebecca Napier CFO.
 
-**Results / dividends:** *Barratt Redrow cuts dividend as margins drop* (11 February 2026, Investors' Chronicle) on HY26 interim. *Revenue Beat: Barratt Redrow plc Beat Analyst Estimates By 12%* (13 February 2026, simplywall.st).
+**Analyst / sentiment**
+- *Barratt Redrow (LSE:BTRW) Stock Gets Fair Value Trim As Analysts Cut Growth Views* (23 July 2026, Yahoo Finance).
+- *Deutsche Bank cuts Barratt Redrow target after profit slide and dividend cut* (16 February 2026, Yahoo Finance UK).
+- *Goldman Sachs Bullish on BTRW, VTY and PSN Shares* (25 November 2025, AskTraders).
 
-**Sector / sentiment:** *Why are Vistry, Taylor Wimpey, Barratt Redrow, Persimmon shares falling?* (9 July 2026, TradingView). Analyst fair-value trims to ~£3.32–3.44 cited in multiple Yahoo pieces (June–July 2026), reflecting divided Street views.
+**Sector / macro**
+- *Why are Vistry, Taylor Wimpey, Barratt Redrow, Persimmon shares falling?* (9 July 2026, TradingView).
+- *Barratt Redrow (LSE:BTRW): How Badly Do This Week's Mortgage Figures Dent The Housebuilder's Recovery Case?* (2 September 2026, Kalkine Media).
 
-**Thin areas:** Limited regulatory enforcement beyond CMA commitments; no major M&A beyond completed Redrow deal. Much coverage is syndicated price-commentary (Kalkine, Twelfth Magpie).
-
----
+No material M&A beyond the completed Redrow integration appears in the manifest. Regulatory news is reflected in filings (CMA closure) rather than standalone investigative coverage.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Deep research broadly confirms the screen's cheapness and balance-sheet case (P/B discount, net cash, buyback support) but moderates conviction given cyclical margin pressure, weak reported FCF, £1bn+ legacy remediation cash calls and the dividend-to-buyback pivot that triggered the screen's own Hold adjustment.
+Rationale: Deep research broadly confirms the screen’s cheapness and balance-sheet case (P/B discount, net cash, buyback support) but moderates conviction given cyclical margin pressure, weak reported FCF, £1bn+ legacy remediation cash calls and the dividend-to-buyback pivot that triggered the screen’s own Hold adjustment.

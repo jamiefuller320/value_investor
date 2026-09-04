@@ -1,0 +1,166 @@
+{
+  "task_id": "sn_screen_context",
+  "task_type": "screen_context",
+  "status": "partial",
+  "findings": [
+    "Signal strong_buy with 8/22 models passing (model_count 22, models_passed 8) — docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+    "Composite score 0.7505; sector-relative composite 0.7193362193362194 (~72% in summary text) — same source",
+    "All five factor families pass (5/5): cheapness, quality, dividend, GARP, risk — passed_families field",
+    "Passed models (8): Graham Enterprising, FCF Yield, Neff PEGY, Dividend Growth, Piotroski F-Score, Composite Value, Earnings Quality, Financial Health — passed_models array",
+    "Data integrity gap: failed_models=[] and model_failures={} despite only 8/22 passing (14 models implicitly not passed, not enumerated) — failed_models / model_failures fields",
+    "All requested overlays false: healthcare_overlay, healthcare_price_erosion_overlay, cash_conversion_overlay, interim_quality_overlay, fcf_basis_overlay (plus dividend_yield_overlay, cyclical_exposure_overlay, earnings_basis_overlay, conviction_timing_overlay) — overlay boolean fields",
+    "Data quality 20/20: data_quality_score 1.0, metrics_present 20, metrics_total 20",
+    "Conviction: conviction_score 0.9349, stability_label persistent, weeks_at_signal 9, signal_trend stable, signal_since 2026-08-05 — conviction/timing fields; summary text states Conviction 73% (inconsistent with 0.9349 score)",
+    "Timing neutral (timing_signal neutral, timing_score 0.5); RSI 37.65; price_vs_sma200_pct −0.12%; summary notes downtrend price < 50 < 200 MA — timing/RSI/price fields and summary",
+    "trade_plan is null but summary embeds limits: core 60% £1,039.02, tactical 40% £997.04, stop £936.58, target £1,120.44 — trade_plan vs summary fields",
+    "Key metrics on screen: P/E 19.4, P/B 2.3, Yield 2.7%, ROE 11.9%, FCF 1,059,000,000; summary highlight D/E 73% — key_metrics and summary",
+    "Cashflow layer empty/suppressed: cashflow_metrics null, fcf null, operating_cashflow null; yahoo_quarterly.ttm_cashflow_suppressed true (reason quarterly_cashflow_empty) — cashflow and yahoo_quarterly fields",
+    "research_verdict accumulate (research_confidence 0.68, research_risk_level medium); research_rationale partially confirms Strong Buy citing missing annual/interim filings and Q2 operational softness — research_* fields",
+    "action_note contains duplicated Accumulate/Medium-risk boilerplate (partially confirms repeated three times) plus filing gaps, US knee weakness, reimbursement headwinds, CFO turnover — action_note field",
+    "Screen numbers requiring filing-body USD replacement (FY/H1 bodies absent per research overlay; no numeric screen IDs in source): principally key_metrics.FCF (1,059m) and any FCF Yield / dividend-coverage inputs — key_metrics.FCF is populated while fcf/cashflow_metrics/operating_cashflow are null; P/E, P/B, ROE, Yield likely need annual/interim filing confirmation but are not flagged with explicit screen IDs in this source",
+    "Claims unsafe until reconciled (per source narrative and null/suppressed fields): improving FCF / FCF recovery thesis; FCF 1,059m vs external Yahoo FY2025 FCF 852m / OCF 1,285m (Yahoo figures not in this source); flat operating income (not present); Q2 1.6% growth (news-only, not in snapshot); reimbursement headwinds (mentioned, no overlay fired); dual-list price vs summary trade limits (trade_plan null); CFO turnover / Cevian items (CFO mentioned in action_note, Cevian not in source); full-year accounts and H1 verify-before-trade"
+  ],
+  "figures": [
+    {
+      "metric": "models_passed",
+      "value": "8/22",
+      "period": "screen run",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": "model_count 22"
+    },
+    {
+      "metric": "composite_score",
+      "value": "0.7505",
+      "period": "screen run",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": "summary rounds to 75%"
+    },
+    {
+      "metric": "sector_composite_score",
+      "value": "0.7193",
+      "period": "screen run",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": "summary states sector-relative 72%"
+    },
+    {
+      "metric": "families_passed",
+      "value": "5/5 (cheapness, quality, dividend, GARP, risk)",
+      "period": "screen run",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "data_quality",
+      "value": "20/20",
+      "period": "screen run",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": "data_quality_score 1.0"
+    },
+    {
+      "metric": "conviction_score",
+      "value": "0.9349",
+      "period": "as at snapshot",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": "9 weeks persistent, stable since 2026-08-05; summary text says 73%"
+    },
+    {
+      "metric": "RSI_14",
+      "value": "37.65",
+      "period": "as at snapshot",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": "summary rounds to 38"
+    },
+    {
+      "metric": "price_vs_sma200_pct",
+      "value": "-0.12%",
+      "period": "as at snapshot",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": "below 200-day MA; price < 50 < 200 per summary"
+    },
+    {
+      "metric": "P/E",
+      "value": "19.4",
+      "period": "key_metrics",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "P/B",
+      "value": "2.3",
+      "period": "key_metrics",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": "summary highlight P/B=2.34"
+    },
+    {
+      "metric": "Yield",
+      "value": "2.7%",
+      "period": "key_metrics",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "ROE",
+      "value": "11.9%",
+      "period": "key_metrics",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "FCF",
+      "value": "1,059,000,000",
+      "period": "key_metrics (screen-sourced)",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": "fcf/cashflow_metrics/operating_cashflow fields null; requires filing-body USD"
+    },
+    {
+      "metric": "D/E",
+      "value": "73%",
+      "period": "summary highlight",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": "not in key_metrics object"
+    },
+    {
+      "metric": "core_limit",
+      "value": "£1,039.02",
+      "period": "summary trade plan",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": "trade_plan field is null"
+    },
+    {
+      "metric": "tactical_limit",
+      "value": "£997.04",
+      "period": "summary trade plan",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": "stop £936.58, target £1,120.44 in summary"
+    },
+    {
+      "metric": "research_verdict",
+      "value": "accumulate",
+      "period": "research overlay",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": "confidence 0.68; partially confirms Strong Buy"
+    },
+    {
+      "metric": "ttm_cashflow_suppressed",
+      "value": "true",
+      "period": "yahoo_quarterly",
+      "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+      "note": "reason: quarterly_cashflow_empty"
+    }
+  ],
+  "gaps": [
+    "failed_models and model_failures empty despite 14/22 models not listed as passed — identity of failed models unavailable in this source",
+    "No explicit screen-number index mapping which metrics map to which model inputs",
+    "FY/H1 filing-body USD figures absent from snapshot; only narrative flag of missing annual/interim filings",
+    "Yahoo FY2025 FCF 852m and OCF 1,285m not present — cannot reconcile FCF 1,059m divergence from this source alone",
+    "Flat operating income, Q2 1.6% growth, dual-list price, and Cevian items not in assigned source",
+    "trade_plan null — limit/stop/target prices in summary not structurally validated",
+    "Conviction 73% in summary vs conviction_score 0.9349 unexplained in source",
+    "14 non-passing models unnamed; overlay gates (healthcare, cash_conversion, interim_quality, fcf_basis) all false despite research citing reimbursement, filing, and Q2 softness risks"
+  ],
+  "sources_read": [
+    "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-fa5ce309-f0ed-4d38-b06a-9bfece1f55db"
+}
