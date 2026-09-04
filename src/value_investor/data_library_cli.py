@@ -183,6 +183,23 @@ def build_parser() -> argparse.ArgumentParser:
         help="Declared unused Cursor plan fraction from the usage page (e.g. 0.40)",
     )
     surplus_p.add_argument(
+        "--unused-usd",
+        type=float,
+        default=None,
+        help=(
+            "Declared leftover USD from the usage page. Prefer this when leftover "
+            "exceeds listed plan_monthly_usd (do not invent a new Ultra price)."
+        ),
+    )
+    surplus_p.add_argument(
+        "--replace-provisional",
+        action="store_true",
+        help=(
+            "Rebase a new bump on the original weekly_ops cap instead of stacking "
+            "on an already-applied provisional raise"
+        ),
+    )
+    surplus_p.add_argument(
         "--plan-monthly-usd",
         type=float,
         default=None,
@@ -1202,8 +1219,12 @@ def cmd_cycle_surplus(args: argparse.Namespace) -> int:
     budget = policy.get("budget") or {}
     if args.surplus_action == "assess":
         unused = args.unused_fraction
-        if unused is None:
-            print("--unused-fraction is required for assess (e.g. 0.40)", file=sys.stderr)
+        unused_usd = args.unused_usd
+        if unused is None and unused_usd is None:
+            print(
+                "--unused-usd or --unused-fraction is required for assess",
+                file=sys.stderr,
+            )
             return 1
         plan_monthly = args.plan_monthly_usd
         if plan_monthly is None:
@@ -1212,7 +1233,8 @@ def cmd_cycle_surplus(args: argparse.Namespace) -> int:
                 existing if existing and existing >= 100 else DEFAULT_ULTRA_MONTHLY_USD
             )
         assessment = assess_cycle_surplus(
-            unused_fraction=float(unused),
+            unused_fraction=None if unused is None else float(unused),
+            unused_usd=None if unused_usd is None else float(unused_usd),
             plan_monthly_usd=float(plan_monthly),
             transfer_fraction=(
                 float(args.transfer_fraction)
@@ -1224,6 +1246,7 @@ def cmd_cycle_surplus(args: argparse.Namespace) -> int:
                 if args.max_weekly_bump_usd is not None
                 else DEFAULT_MAX_WEEKLY_BUMP_USD
             ),
+            replace_provisional=bool(args.replace_provisional),
             policy=policy,
             path=args.policy,
         )
@@ -1231,9 +1254,15 @@ def cmd_cycle_surplus(args: argparse.Namespace) -> int:
         if args.json:
             print(json.dumps(assessment, indent=2))
         else:
+            unused_frac = assessment.get("unused_fraction")
+            frac_txt = (
+                f"{float(unused_frac):.0%} of ${assessment['plan_monthly_usd']:.0f}"
+                if unused_frac is not None
+                else "declared leftover"
+            )
             print(
-                f"Cycle {assessment['cycle_id']}: unused {assessment['unused_fraction']:.0%} of "
-                f"${assessment['plan_monthly_usd']:.0f} → ${assessment['unused_monthly_usd']:.2f}"
+                f"Cycle {assessment['cycle_id']}: unused {frac_txt} → "
+                f"${assessment['unused_monthly_usd']:.2f}"
             )
             print(
                 f"Transfer {assessment['transfer_fraction']:.0%} = ${assessment['transfer_usd']:.2f} "
@@ -1254,6 +1283,7 @@ def cmd_cycle_surplus(args: argparse.Namespace) -> int:
                 policy_path=args.policy,
                 update_plan_metadata=bool(args.update_plan_metadata),
                 plan_name=args.plan_name,
+                replace_provisional=bool(args.replace_provisional),
             )
         except (FileNotFoundError, ValueError) as exc:
             print(str(exc), file=sys.stderr)

@@ -63,16 +63,22 @@ def _round_usd(value: float) -> float:
 
 def assess_cycle_surplus(
     *,
-    unused_fraction: float,
+    unused_fraction: float | None = None,
+    unused_usd: float | None = None,
     plan_monthly_usd: float = DEFAULT_ULTRA_MONTHLY_USD,
     transfer_fraction: float = DEFAULT_TRANSFER_FRACTION,
     max_weekly_bump_usd: float = DEFAULT_MAX_WEEKLY_BUMP_USD,
+    replace_provisional: bool = False,
     policy: dict[str, Any] | None = None,
     now: datetime | None = None,
     path: Path | None = None,
 ) -> dict[str, Any]:
     """Propose a provisional weekly_ops bump from declared cycle leftover."""
-    if unused_fraction < 0 or unused_fraction > 1:
+    if unused_usd is None and unused_fraction is None:
+        raise ValueError("unused_usd or unused_fraction is required")
+    if unused_usd is not None and unused_usd < 0:
+        raise ValueError("unused_usd must be >= 0")
+    if unused_fraction is not None and (unused_fraction < 0 or unused_fraction > 1):
         raise ValueError("unused_fraction must be between 0 and 1")
     if transfer_fraction < 0 or transfer_fraction > 1:
         raise ValueError("transfer_fraction must be between 0 and 1")
@@ -84,21 +90,35 @@ def assess_cycle_surplus(
     now = now or datetime.now(UTC)
     cycle_id = str(budget.get("cycle_id") or current_cycle_id(now=now, refresh_day=refresh_day))
     review_cycle = next_cycle_id(cycle_id, refresh_day=refresh_day)
+    existing = dict(budget.get("cycle_surplus_provisional") or {})
 
-    current_cap = float(ops.get("weekly_ops_cap_usd") or 0.0)
-    unused_monthly = _round_usd(float(plan_monthly_usd) * float(unused_fraction))
+    live_cap = float(ops.get("weekly_ops_cap_usd") or 0.0)
+    rebase_cap = live_cap
+    if replace_provisional and existing.get("status") == "provisional":
+        previous = float(existing.get("previous_weekly_ops_cap_usd") or 0.0)
+        if previous > 0:
+            rebase_cap = previous
+
+    if unused_usd is not None:
+        unused_monthly = _round_usd(unused_usd)
+        unused_frac = (
+            round(unused_monthly / float(plan_monthly_usd), 4) if plan_monthly_usd else None
+        )
+    else:
+        unused_frac = round(float(unused_fraction), 4)
+        unused_monthly = _round_usd(float(plan_monthly_usd) * float(unused_fraction))
+
     transfer = _round_usd(unused_monthly * float(transfer_fraction))
     raw_weekly = transfer / WEEKS_PER_CYCLE
-    cap_limit = min(float(max_weekly_bump_usd), current_cap * 0.5 if current_cap else 0.0)
+    cap_limit = min(float(max_weekly_bump_usd), rebase_cap * 0.5 if rebase_cap else 0.0)
     weekly_bump = _round_usd(min(raw_weekly, cap_limit))
-    proposed_cap = _round_usd(current_cap + weekly_bump)
+    proposed_cap = _round_usd(rebase_cap + weekly_bump)
 
-    existing = dict(budget.get("cycle_surplus_provisional") or {})
     action = "none"
     if weekly_bump <= 0:
         action = "none"
     elif existing.get("status") == "provisional" and existing.get("review_cycle_id"):
-        action = "already_provisional"
+        action = "replace_provisional" if replace_provisional else "already_provisional"
     else:
         action = "propose_bump"
 
@@ -109,22 +129,26 @@ def assess_cycle_surplus(
         "review_cycle_id": review_cycle,
         "plan_name": budget.get("plan_name") or "Cursor",
         "plan_monthly_usd": _round_usd(plan_monthly_usd),
-        "unused_fraction": round(float(unused_fraction), 4),
+        "unused_fraction": unused_frac,
+        "unused_usd_declared": unused_usd is not None,
         "unused_monthly_usd": unused_monthly,
         "transfer_fraction": round(float(transfer_fraction), 4),
         "transfer_usd": transfer,
         "weekly_bump_usd": weekly_bump,
         "max_weekly_bump_usd": _round_usd(max_weekly_bump_usd),
-        "current_weekly_ops_cap_usd": current_cap,
+        "current_weekly_ops_cap_usd": live_cap,
+        "rebase_weekly_ops_cap_usd": rebase_cap,
         "proposed_weekly_ops_cap_usd": proposed_cap,
         "weekly_ops_remaining_usd": float(ops.get("remaining_weekly_ops_usd") or 0.0),
         "weekly_ops_spent_usd": float(ops.get("estimated_spend_weekly_ops_usd_this_week") or 0.0),
         "rememo_daily_cap_unchanged": True,
+        "replace_provisional": bool(replace_provisional),
         "existing_provisional": existing or None,
         "action": action,
         "note": (
-            "Declared unused plan fraction (Cursor usage page). Cursor does not "
-            "expose remaining credits to the API. Transfer is a provisional "
+            "Declared unused plan leftover (Cursor usage page). Cursor does not "
+            "expose remaining credits to the API. --unused-usd is preferred when "
+            "leftover exceeds listed plan_monthly_usd. Transfer is a provisional "
             "weekly_ops_cap raise only — rememo daily caps stay at 3."
         ),
     }
@@ -141,6 +165,7 @@ def apply_cycle_surplus(
     artifact_path: Path = DEFAULT_ARTIFACT_PATH,
     update_plan_metadata: bool = False,
     plan_name: str | None = None,
+    replace_provisional: bool = False,
     now: datetime | None = None,
 ) -> dict[str, Any]:
     """Write a provisional weekly_ops cap. Does not raise rememo caps."""
@@ -152,8 +177,12 @@ def apply_cycle_surplus(
             raise ValueError("cycle surplus artifact must be an object")
         assessment = loaded
 
-    if assessment.get("action") == "already_provisional":
-        raise ValueError("a provisional bump is already active; review it before applying another")
+    replacing = bool(replace_provisional) or assessment.get("action") == "replace_provisional"
+    if assessment.get("action") == "already_provisional" and not replacing:
+        raise ValueError(
+            "a provisional bump is already active; re-assess with "
+            "--replace-provisional or review it before applying another"
+        )
     bump = float(assessment.get("weekly_bump_usd") or 0.0)
     if bump <= 0 or assessment.get("action") == "none":
         raise ValueError("assessment has no weekly_ops bump to apply")
@@ -161,7 +190,12 @@ def apply_cycle_surplus(
     policy = load_policy(policy_path)
     budget = normalize_budget(policy.get("budget"))
     now = now or datetime.now(UTC)
+    existing = dict(budget.get("cycle_surplus_provisional") or {})
     previous = float(budget.get("weekly_ops_cap_usd") or 0.0)
+    if replacing and existing.get("status") == "provisional":
+        original = float(existing.get("previous_weekly_ops_cap_usd") or 0.0)
+        if original > 0:
+            previous = original
     proposed = float(assessment["proposed_weekly_ops_cap_usd"])
     provisional = {
         "status": "provisional",
@@ -172,8 +206,13 @@ def apply_cycle_surplus(
         "source_cycle_id": assessment.get("cycle_id"),
         "review_cycle_id": assessment.get("review_cycle_id"),
         "unused_fraction": assessment.get("unused_fraction"),
+        "unused_monthly_usd": assessment.get("unused_monthly_usd"),
+        "unused_usd_declared": assessment.get("unused_usd_declared"),
         "transfer_fraction": assessment.get("transfer_fraction"),
         "plan_monthly_usd": assessment.get("plan_monthly_usd"),
+        "replaced_prior_provisional": bool(
+            replacing and existing.get("status") == "provisional"
+        ),
     }
     budget["weekly_ops_cap_usd"] = proposed
     budget["cycle_surplus_provisional"] = provisional

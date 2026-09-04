@@ -156,6 +156,52 @@ def test_review_keep_when_extra_headroom_used(tmp_path: Path):
     assert load_policy(policy_path)["budget"]["weekly_ops_cap_usd"] == 85.0
 
 
+def test_assess_unused_usd_replaces_provisional_from_original_cap(tmp_path: Path):
+    policy_path = _policy(tmp_path / "policy.json")
+    artifact = tmp_path / "surplus.json"
+    policy = load_policy(policy_path)
+    first = assess_cycle_surplus(
+        unused_fraction=0.40,
+        plan_monthly_usd=200.0,
+        policy=policy,
+        path=policy_path,
+    )
+    apply_cycle_surplus(first, policy_path=policy_path, artifact_path=artifact)
+    policy = load_policy(policy_path)
+    assert policy["budget"]["weekly_ops_cap_usd"] == 85.0
+
+    # $730 leftover (declared USD) → 25% / 4 weeks = $45.62, capped at 50% of $80
+    revised = assess_cycle_surplus(
+        unused_usd=730.0,
+        plan_monthly_usd=200.0,
+        replace_provisional=True,
+        max_weekly_bump_usd=40.0,
+        policy=policy,
+        path=policy_path,
+    )
+    assert revised["action"] == "replace_provisional"
+    assert revised["unused_monthly_usd"] == 730.0
+    assert revised["unused_usd_declared"] is True
+    assert revised["rebase_weekly_ops_cap_usd"] == 80.0
+    assert revised["weekly_bump_usd"] == 40.0
+    assert revised["proposed_weekly_ops_cap_usd"] == 120.0
+
+    applied = apply_cycle_surplus(
+        revised,
+        policy_path=policy_path,
+        artifact_path=artifact,
+        replace_provisional=True,
+    )
+    assert applied["action"] == "applied_provisional"
+    policy = load_policy(policy_path)
+    assert policy["budget"]["weekly_ops_cap_usd"] == 120.0
+    prov = policy["budget"]["cycle_surplus_provisional"]
+    assert prov["previous_weekly_ops_cap_usd"] == 80.0
+    assert prov["weekly_bump_usd"] == 40.0
+    assert prov["unused_monthly_usd"] == 730.0
+    assert prov["replaced_prior_provisional"] is True
+
+
 def test_cli_assess_apply(tmp_path: Path, monkeypatch, capsys):
     policy_path = _policy(tmp_path / "policy.json")
     (tmp_path / "docs" / "data").mkdir(parents=True)
