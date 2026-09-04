@@ -210,9 +210,7 @@ def apply_cycle_surplus(
         "unused_usd_declared": assessment.get("unused_usd_declared"),
         "transfer_fraction": assessment.get("transfer_fraction"),
         "plan_monthly_usd": assessment.get("plan_monthly_usd"),
-        "replaced_prior_provisional": bool(
-            replacing and existing.get("status") == "provisional"
-        ),
+        "replaced_prior_provisional": bool(replacing and existing.get("status") == "provisional"),
     }
     budget["weekly_ops_cap_usd"] = proposed
     budget["cycle_surplus_provisional"] = provisional

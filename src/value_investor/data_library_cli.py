@@ -1229,9 +1229,7 @@ def cmd_cycle_surplus(args: argparse.Namespace) -> int:
         plan_monthly = args.plan_monthly_usd
         if plan_monthly is None:
             existing = float(budget.get("plan_monthly_usd") or 0.0)
-            plan_monthly = (
-                existing if existing and existing >= 100 else DEFAULT_ULTRA_MONTHLY_USD
-            )
+            plan_monthly = existing if existing and existing >= 100 else DEFAULT_ULTRA_MONTHLY_USD
         assessment = assess_cycle_surplus(
             unused_fraction=None if unused is None else float(unused),
             unused_usd=None if unused_usd is None else float(unused_usd),

@@ -32,9 +32,7 @@ def _policy(path: Path, *, cap: float = 80.0, spent: float = 22.0) -> Path:
 def test_next_cycle_id_rolls_month_and_year():
     assert next_cycle_id("2026-09-d8") == "2026-10-d8"
     assert next_cycle_id("2026-12-d8") == "2027-01-d8"
-    assert current_cycle_id(
-        now=datetime(2026, 9, 4, tzinfo=UTC), refresh_day=8
-    ) == "2026-09-d8"
+    assert current_cycle_id(now=datetime(2026, 9, 4, tzinfo=UTC), refresh_day=8) == "2026-09-d8"
 
 
 def test_assess_proposes_quarter_of_unused_as_weekly_bump(tmp_path: Path):
