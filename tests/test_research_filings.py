@@ -4061,6 +4061,56 @@ def test_fetch_filings_ir_allowlist_euro_depth_belgian_builtins(tmp_path: Path):
         assert all(row["source"] == "ir_allowlist" for row in rows)
 
 
+def test_fetch_filings_ir_allowlist_euro_depth_aed_br_builtins(tmp_path: Path):
+    """Regression: AED.BR unmeasured when ESEF/news miss — IR allowlist seeds indexes."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("AED.BR", path=allowlist_path)
+    assert rows
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert any("aedifica.eu" in row["url"] for row in rows)
+    assert any("annual" in row["period"] for row in rows)
+
+
+def test_fetch_filings_ir_allowlist_euro_depth_assa_b_st_builtins(tmp_path: Path):
+    """Regression: ASSA-B.ST zero-body — English IR PDF alongside Swedish ESEF."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("ASSA-B.ST", path=allowlist_path)
+    assert rows
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert any("assaabloy.com" in row["url"] for row in rows)
+
+
+def test_esef_entity_variants_include_aedifica_and_assa_abloy():
+    from value_investor.research.filings import _esef_entity_name_variants
+
+    aed = _esef_entity_name_variants("Aedifica NV/SA", ticker="AED.BR")
+    assert any("Aedifica" in v for v in aed)
+    assa = _esef_entity_name_variants("ASSA ABLOY AB (publ)", ticker="ASSA-B.ST")
+    assert any("ASSA ABLOY" in v for v in assa)
+
+
+@patch("value_investor.research.filings._http_get")
+def test_fetch_filing_body_treats_pdf_query_string_as_pdf(mock_get):
+    """Regression: IR PDFs with ?VersionId= must not be parsed as HTML."""
+    mock_get.return_value = b"%PDF-1.4 fake pdf body " + (b"x" * 400)
+    url = (
+        "https://www.randstad.com/s3fs-media/rscom/public/2026-02/"
+        "Randstad_Annual_Report_2025_F.pdf?VersionId=abc123"
+    )
+    with patch(
+        "value_investor.research.filings._extract_filing_document_text",
+        return_value="Randstad consolidated income statement " + ("x" * 400),
+    ) as mock_extract:
+        body = fetch_filing_body(url)
+    assert body
+    mock_extract.assert_called_once()
+    assert mock_extract.call_args[0][1] == "application/pdf"
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_periphery_builtins(tmp_path: Path):
     """Regression: STOXX/periphery names with no ESEF/news hits carry IR allowlist rows."""
     allowlist_path = tmp_path / "ir.json"
@@ -4297,6 +4347,90 @@ def test_ingest_filings_euro_depth_rand_as_indexes_esef_and_ir(
     assert "esef_direct" in index["sources_used"]
     assert "ir_allowlist" in index["sources_used"]
     assert "sec_edgar" not in index["sources_used"]
+
+
+@patch("value_investor.research.filings.fetch_filings_euro_news", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_investegate_company", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_esef_direct", return_value=[])
+@patch("value_investor.research.filings.fetch_filing_body", return_value=None)
+@patch("value_investor.research.filings.fetch_filings_ir_allowlist")
+def test_ingest_filings_euro_depth_aed_br_indexes_ir_allowlist(
+    mock_ir,
+    _mock_body,
+    _mock_esef,
+    _mock_investegate,
+    _mock_news,
+    tmp_path: Path,
+):
+    mock_ir.return_value = [
+        {
+            "id": "iraed2025",
+            "source": "ir_allowlist",
+            "headline": "Aedifica 2025 annual report (PDF)",
+            "published_at": None,
+            "url": "https://aedifica.eu/wp-content/uploads/2026/03/AEDIFICA-RA25_EN_2026-03-24b.pdf",
+            "period": "annual",
+            "has_body": False,
+        }
+    ]
+    meta = ingest_filings(
+        ticker="AED.BR",
+        company_name="Aedifica NV/SA",
+        sources_dir=tmp_path,
+        market="euro_depth",
+    )
+    summary = meta.get("filings_summary") or {}
+    assert int(summary.get("total") or 0) > 0
+    index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
+    assert "ir_allowlist" in index["sources_used"]
+
+
+@patch("value_investor.research.filings.fetch_filings_euro_news", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_investegate_company", return_value=[])
+@patch("value_investor.research.filings.fetch_filing_body", return_value=None)
+@patch("value_investor.research.filings.fetch_filings_esef_direct")
+@patch("value_investor.research.filings.fetch_filings_ir_allowlist")
+def test_ingest_filings_euro_depth_assa_b_st_indexes_esef_and_ir(
+    mock_ir,
+    mock_esef,
+    _mock_body,
+    _mock_investegate,
+    _mock_news,
+    tmp_path: Path,
+):
+    mock_esef.return_value = [
+        {
+            "id": "esefassa2024",
+            "source": "esef_direct",
+            "headline": "ESEF report period end 2024-12-31",
+            "published_at": "2024-12-31T00:00:00+00:00",
+            "url": "https://filings.xbrl.org/549300YECS8HKCIMMB67/2024-12-31/ESEF/SE/1/ASSAABLOY-2024-12-31-0-sv/reports/ASSAABLOY-2024-12-31-0-sv.xhtml",
+            "period": "annual",
+            "has_body": False,
+        }
+    ]
+    mock_ir.return_value = [
+        {
+            "id": "irassa2025",
+            "source": "ir_allowlist",
+            "headline": "ASSA ABLOY Annual Report 2025 (PDF)",
+            "published_at": None,
+            "url": "https://www.assaabloy.com/group/en/documents/investors/annual-reports/2025/Annual%20Report%202025.pdf",
+            "period": "annual",
+            "has_body": False,
+        }
+    ]
+    meta = ingest_filings(
+        ticker="ASSA-B.ST",
+        company_name="ASSA ABLOY AB (publ)",
+        sources_dir=tmp_path,
+        market="euro_depth",
+    )
+    summary = meta.get("filings_summary") or {}
+    assert int(summary.get("total") or 0) > 0
+    index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
+    assert "esef_direct" in index["sources_used"]
+    assert "ir_allowlist" in index["sources_used"]
 
 
 @patch("value_investor.research.filings.fetch_filings_euro_news", return_value=[])
