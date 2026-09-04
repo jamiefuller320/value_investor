@@ -12,6 +12,8 @@ from value_investor.library_ingest_loop import (
     _filing_coverage_for_ticker,
     demote_library_ingest_targets,
     load_library_ingest_blocker_cooldown,
+    load_library_ingest_pins,
+    merge_library_ingest_pin_tickers,
     run_library_ingest_loop,
     select_library_ingest_targets,
 )
@@ -351,6 +353,7 @@ def test_run_library_ingest_loop_caps_discovery_so_deepen_still_runs(tmp_path: P
             max_runtime_seconds=2700,
             discovery_scan=True,
             deepen_history=False,
+            pins_path=tmp_path / "no_pins.json",
         )
 
     assert ingest_calls == ["AAA.DE", "BBB.DE"]
@@ -446,6 +449,7 @@ def test_run_library_ingest_loop_still_cuts_overrun_discovery(tmp_path: Path):
             max_runtime_seconds=0.01,
             discovery_scan=True,
             deepen_history=False,
+            pins_path=tmp_path / "no_pins.json",
         )
 
     assert result.runtime_cutoff is True
@@ -525,6 +529,7 @@ def test_weekday_loop_continues_after_per_ticker_budget_and_records_blocker(tmp_
             max_runtime_seconds=2700,
             discovery_scan=False,
             deepen_history=False,
+            pins_path=tmp_path / "no_pins.json",
         )
 
     assert ingest_calls == ["NEXT", "SLOW"]
@@ -599,6 +604,7 @@ def test_intensive_pin_disables_per_ticker_cap(tmp_path: Path):
             discovery_scan=False,
             deepen_history=False,
             pin_tickers=["BHP.AX"],
+            pins_path=tmp_path / "no_pins.json",
             record_gap_closure={
                 "title": "intensive",
                 "summary": "",
@@ -634,3 +640,131 @@ def test_blocker_cooldown_demotes_previous_hard_name(tmp_path: Path):
     ]
     ordered = demote_library_ingest_targets(rows, ["DG.PA"])
     assert [row.ticker for row in ordered] == ["RAND.AS", "DG.PA"]
+
+
+def test_load_library_ingest_pins_filters_market_and_expiry(tmp_path: Path):
+    from datetime import UTC, datetime
+
+    path = tmp_path / "pins.json"
+    write_json(
+        path,
+        {
+            "pins": [
+                {
+                    "ticker": "ABI.BR",
+                    "market_id": "euro_depth",
+                    "until": "2026-09-11T00:00:00+00:00",
+                },
+                {
+                    "ticker": "EXR",
+                    "market_id": "sp500",
+                    "until": "2026-09-11T00:00:00+00:00",
+                },
+                {
+                    "ticker": "OLD.PA",
+                    "market_id": "euro_depth",
+                    "until": "2026-09-01T00:00:00+00:00",
+                },
+            ]
+        },
+        compact=False,
+    )
+    now = datetime(2026, 9, 4, 16, 0, tzinfo=UTC)
+    assert load_library_ingest_pins("euro_depth", path=path, now=now) == ["ABI.BR"]
+    assert load_library_ingest_pins("sp500", path=path, now=now) == ["EXR"]
+    assert merge_library_ingest_pin_tickers(["DG.PA"], ["ABI.BR"]) == ["DG.PA", "ABI.BR"]
+
+
+def test_committed_pin_skips_discovery_and_drops_ticker_cap(tmp_path: Path):
+    root = tmp_path / "library"
+    market = "euro_depth"
+    screen_dir = root / "markets" / market / "screen"
+    research = screen_dir / "research"
+    for ticker in ("ABI.BR", "RAND.AS"):
+        filings = research / ticker / "sources" / "filings"
+        filings.mkdir(parents=True)
+        write_json(
+            filings / "filings_index.json",
+            {
+                "summary": {"total": 4, "with_body": 1},
+                "filings": [{"has_body": False}],
+            },
+            compact=False,
+        )
+    reports = [_report("ABI.BR"), _report("RAND.AS")]
+    pins_path = tmp_path / "pins.json"
+    write_json(
+        pins_path,
+        {
+            "pins": [
+                {
+                    "ticker": "ABI.BR",
+                    "market_id": "euro_depth",
+                    "until": "2026-09-11T00:00:00+00:00",
+                }
+            ]
+        },
+        compact=False,
+    )
+    ingest_calls: list[str] = []
+
+    def _track_ingest(target, **kwargs):
+        ingest_calls.append(target.ticker)
+        return {"ticker": target.ticker, "improved": True, "ticker_budget_hit": False}
+
+    critical = type(
+        "CP",
+        (),
+        {
+            "force_discovery_scan": True,
+            "auto_pin_tickers": [],
+            "primary_blocker": "indexed_without_body",
+            "thin_need_discovery": ["STR.VI"],
+            "unmeasured": [],
+            "zero_body": [],
+            "indexed_without_body": [{"ticker": "ABI.BR"}],
+            "to_dict": lambda self: {},
+        },
+    )()
+
+    with (
+        patch(
+            "value_investor.library_ingest_loop.load_library_buy_tier_reports",
+            return_value=reports,
+        ),
+        patch(
+            "value_investor.library_ingest_loop.snapshot_library_ingest_health",
+            return_value={"unmeasured_buy_tier": 0, "zero_body_buy_tier": 0},
+        ),
+        patch("value_investor.library_ingest_loop.append_library_ingest_health_log"),
+        patch(
+            "value_investor.library_ingest_loop._ingest_single_library_target",
+            side_effect=_track_ingest,
+        ),
+        patch(
+            "value_investor.ingest_critical_path.assess_library_ingest_critical_path",
+            return_value=critical,
+        ),
+        patch("value_investor.ingest_critical_path.persist_ingest_critical_path"),
+        patch(
+            "value_investor.ingest_critical_path.apply_critical_path_to_target_order",
+            side_effect=lambda targets, _c: targets,
+        ),
+        patch(
+            "value_investor.library_discovery_scan.run_library_buy_tier_discovery_scan"
+        ) as discovery,
+    ):
+        result = run_library_ingest_loop(
+            market,
+            library_root=root,
+            max_targets=12,
+            max_runtime_seconds=2700,
+            deepen_history=False,
+            pins_path=pins_path,
+        )
+
+    discovery.assert_not_called()
+    assert ingest_calls == ["ABI.BR"]
+    assert result.pin_tickers == ["ABI.BR"]
+    assert result.per_ticker_max_seconds is None
+    assert result.discovery_scan is None
