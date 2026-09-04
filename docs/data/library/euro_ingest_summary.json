@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-04T11:04:30.249061+00:00",
+  "run_at": "2026-09-04T12:55:14.578692+00:00",
   "market_id": "euro_depth",
   "targets": [
     "DG.PA",
@@ -10,16 +10,16 @@
     "SHELL.AS",
     "NOVN.SW",
     "RAND.AS",
-    "BOL.ST",
     "SGO.PA",
     "ANDR.VI",
     "EVN.VI",
     "WKL.AS",
     "UCB.BR",
-    "ASSA-B.ST",
     "WIE.VI",
     "SAP.DE",
+    "BOL.ST",
     "AED.BR",
+    "ASSA-B.ST",
     "STR.VI",
     "UMI.BR",
     "ACKB.BR",
@@ -93,14 +93,6 @@
       "reason": "zero_body"
     },
     {
-      "ticker": "BOL.ST",
-      "priority_score": 23.9272,
-      "filings_total": 8,
-      "filings_with_body": 7,
-      "indexed_without_body": 1,
-      "reason": "indexed_without_body"
-    },
-    {
       "ticker": "SGO.PA",
       "priority_score": 21.165100000000002,
       "filings_total": 2,
@@ -141,14 +133,6 @@
       "reason": "indexed_without_body"
     },
     {
-      "ticker": "ASSA-B.ST",
-      "priority_score": 17.3453,
-      "filings_total": 1,
-      "filings_with_body": 0,
-      "indexed_without_body": 1,
-      "reason": "zero_body"
-    },
-    {
       "ticker": "WIE.VI",
       "priority_score": 17.031599999999997,
       "filings_total": 3,
@@ -165,12 +149,28 @@
       "reason": "indexed_without_body"
     },
     {
+      "ticker": "BOL.ST",
+      "priority_score": 14.9272,
+      "filings_total": 8,
+      "filings_with_body": 7,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    },
+    {
       "ticker": "AED.BR",
       "priority_score": 12.4276,
       "filings_total": 0,
       "filings_with_body": 0,
       "indexed_without_body": 0,
       "reason": "unmeasured"
+    },
+    {
+      "ticker": "ASSA-B.ST",
+      "priority_score": 8.3453,
+      "filings_total": 1,
+      "filings_with_body": 0,
+      "indexed_without_body": 1,
+      "reason": "zero_body"
     },
     {
       "ticker": "STR.VI",
@@ -270,24 +270,24 @@
   "runtime_cutoff": true,
   "partial": true,
   "health_before": {
-    "snapshot_at": "2026-09-04T10:17:17.411459+00:00",
+    "snapshot_at": "2026-09-04T12:08:20.148466+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 45,
-    "unmeasured_buy_tier": 2,
-    "zero_body_buy_tier": 1,
+    "unmeasured_buy_tier": 1,
+    "zero_body_buy_tier": 2,
     "thin_body_buy_tier": 23,
-    "indexed_without_body": 41,
+    "indexed_without_body": 43,
     "bodies_min": 1,
     "bodies_median": 2.0,
     "bodies_max": 91,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [
-      "AED.BR",
-      "ASSA-B.ST"
+      "AED.BR"
     ],
     "zero_body_tickers": [
-      "RAND.AS"
+      "RAND.AS",
+      "ASSA-B.ST"
     ],
     "thin_body_tickers": [
       "DG.PA",
@@ -316,7 +316,7 @@
     ]
   },
   "health_after": {
-    "snapshot_at": "2026-09-04T11:04:30.244725+00:00",
+    "snapshot_at": "2026-09-04T12:55:14.575018+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 45,
     "unmeasured_buy_tier": 1,
@@ -369,8 +369,8 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 45,
-    "hits": 39,
-    "new_rows_total": 2,
+    "hits": 37,
+    "new_rows_total": 0,
     "curiosity_total": 41,
     "errors": 0,
     "prioritization_weights": {
@@ -401,8 +401,8 @@
       "OMV.VI",
       "NBA.LS",
       "AED.BR",
-      "ASSA-B.ST",
       "RAND.AS",
+      "ASSA-B.ST",
       "ABI.BR",
       "NOVN.SW",
       "POST.VI",
@@ -411,6 +411,7 @@
       "SHELL.AS",
       "VOW.DE",
       "ANDR.VI",
+      "BOL.ST",
       "EVN.VI",
       "SAP.DE",
       "WIE.VI",
@@ -423,13 +424,13 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "euro_depth",
-    "assessed_at": "2026-09-04T10:17:20.069158+00:00",
+    "assessed_at": "2026-09-04T12:08:21.459528+00:00",
     "unmeasured": [
-      "AED.BR",
-      "ASSA-B.ST"
+      "AED.BR"
     ],
     "zero_body": [
-      "RAND.AS"
+      "RAND.AS",
+      "ASSA-B.ST"
     ],
     "indexed_without_body": [
       {
@@ -485,6 +486,18 @@
         "indexed_without_body": 1,
         "filings_total": 3,
         "filings_with_body": 2
+      },
+      {
+        "ticker": "ASSA-B.ST",
+        "indexed_without_body": 1,
+        "filings_total": 1,
+        "filings_with_body": 0
+      },
+      {
+        "ticker": "BOL.ST",
+        "indexed_without_body": 1,
+        "filings_total": 8,
+        "filings_with_body": 7
       },
       {
         "ticker": "EVN.VI",
@@ -565,16 +578,16 @@
       "VOW.DE"
     ],
     "recommended_actions": [
-      "Bootstrap 2 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
-      "Prefer indexed-without-body body refetch (15 tickers, top: ABI.BR(11), NOVN.SW(7), POST.VI(4), RAND.AS(4), DG.PA(2))",
+      "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+      "Prefer indexed-without-body body refetch (17 tickers, top: ABI.BR(11), NOVN.SW(7), POST.VI(4), RAND.AS(4), DG.PA(2))",
       "Discovery/IR seed for 17 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
-      "unmeasured": 2,
-      "zero_body": 1,
-      "indexed_without_body_tickers": 15,
-      "indexed_without_body_rows": 41,
+      "unmeasured": 1,
+      "zero_body": 2,
+      "indexed_without_body_tickers": 17,
+      "indexed_without_body_rows": 43,
       "thin_need_discovery": 17,
       "thin_need_bodies": 8
     }
