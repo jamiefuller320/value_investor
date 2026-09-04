@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T11:16:36+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T11:20:41+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -338,6 +338,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L258 | **Roll gha_pip_install.sh out to remaining workflows** | Euro/library ingest now retries pip on empty-index flakes. Other long jobs (paper-auto, ops-monitor, FTSE ingest-loop, orchestrator) still use a single pip install -e . | Another workflow fails on pandas from versions: none or a similar empty-index pip flake |
 | L262 | **Shared GHA concurrency budget across live ingest streams** | Public-repo Actions minutes are free, but more live markets add parallel ingest jobs that already contend for hosted runners and the Sunday quiet bundle. Track concurrent ingest streams and runner-queue failures as the real compute bind, not a minutes quota. | A fourth market sits on FTSE-volume ingest, runner-acquisition flakes recur, or the repo goes private |
 | L263 | **Apply committed FTSE memos to the live research overlay** | 54 of 59 FTSE buy-tier names already have accumulate memos under docs/data/research/, but latest.json research[] only lists 18, so weekday paper overlay misses names such as JSG.L. Refresh should read the committed store, not only the last publish index. | Next weekday paper-auto or overlay-refresh change, or when AI judgment looks under-gated vs the memo library |
+| L271 | **Filter machinery spend by weekday decision inputs** | Keep investing in data depth, recency, and utilization, but only when the work changes what a weekday paper-auto / AI-judgment pass can see (filings, FCF basis, overlay bind, memo recency). Extra FTSE ingest on a green buy-tier, new tracks, and live breadth are factory, not foundation. | A proposed engineering or ingest change cannot name the overlay field or buy-tier name it would change by the next Sunday cycle |
 
 ---
 
