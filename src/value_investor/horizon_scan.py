@@ -233,6 +233,12 @@ def build_horizon_payload(
             "no_conversation_transcript_mining": True,
         },
     }
+    try:
+        from value_investor.fragment_weeder import propose_fragment_weeds
+
+        payload["fragment_weeder"] = propose_fragment_weeds(defer_store)
+    except (OSError, ValueError, TypeError):
+        payload["fragment_weeder"] = None
     return payload
 
 
@@ -643,11 +649,15 @@ What questions we cannot answer yet and which artifact type would answer them.
 Include unanswered system_gaps.probe_questions when flags are empty or thin.
 
 FRAGMENT CLUSTERING
-Cluster open_fragments by theme. For each cluster: synthesize in 1–2 sentences.
+Prefer fragment_weeder.actions with action=DROP — those are deterministic
+near-duplicates or fragments already captured as open/done deferred ideas.
+Confirm them as DROP lines. Then cluster remaining KEEP fragments by theme.
+For each leftover cluster: synthesize in 1–2 sentences.
 Use action lines ONLY when confident:
   - DROP frag-YYYYMMDD-NN
   - PROMOTE frag-YYYYMMDD-NN → **Title** — summary. Revisit when: trigger
 Mark stale duplicate fragments DROP. Do not PROMOTE without a clear revisit trigger.
+Do not raise the director fragment cap; weeding comes first.
 
 INGEST GAP CLOSURE REVIEW
 For each row in ingest_gap_closure_pending_review (alias ingest_trials_pending_review): summarize outcome deltas and recommend

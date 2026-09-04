@@ -676,6 +676,9 @@ function bindProgressReportActions() {
     } else if (target.dataset.marketId) {
       event.preventDefault();
       openMarketStatusCard(target.dataset.marketId);
+    } else if (target.dataset.systemGapId) {
+      event.preventDefault();
+      openSystemGapCard(target.dataset.systemGapId);
     }
   });
 }
@@ -865,6 +868,96 @@ function coverageLabel(value) {
   return `${(Number(value) * 100).toFixed(0)}%`;
 }
 
+function findSystemGapFlag(flagId) {
+  const flags = ((dashboardData || {}).system_gaps || {}).flags || [];
+  return flags.find((row) => row.id === flagId) || null;
+}
+
+function systemGapSeverityBadge(severity) {
+  const key = String(severity || "info");
+  const cls = key === "high" ? "badge-action" : key === "medium" ? "badge-watch" : "badge-info";
+  return `<span class="badge ${cls}">${esc(key)}</span>`;
+}
+
+function openSystemGapCard(flagId) {
+  const dialog = document.getElementById("system-gaps-dialog");
+  const title = document.getElementById("system-gaps-title");
+  const body = document.getElementById("system-gaps-body");
+  if (!dialog || !title || !body) return;
+  const row = findSystemGapFlag(flagId);
+  if (!row) {
+    title.textContent = "System gap";
+    body.innerHTML = `<p class="muted">No flag for <code>${esc(flagId)}</code>.</p>`;
+    dialog.showModal();
+    return;
+  }
+  title.textContent = row.title || row.id;
+  const docUrl = githubOpsDocUrl("docs/ops/analysis-review.md", "system-gaps-learning-path-integrity");
+  body.innerHTML = `
+    <p class="small muted" style="margin-top:0">${esc(row.id)} · ${esc(row.layer || "—")}</p>
+    <div class="market-card-badges">
+      ${systemGapSeverityBadge(row.severity)}
+      <span class="badge badge-info">${esc(row.layer || "layer")}</span>
+    </div>
+    <p>${esc(row.summary || "")}</p>
+    <p class="small muted">
+      Persist/publish/apply high flags auto-queue as <code>eng-sgap-*</code>
+      (no agent dispatch). Produce / learning-clock flags stay on
+      <code>ftse-analysis-review promote</code>.
+    </p>
+    ${docUrl ? `<p class="small"><a href="${esc(docUrl)}" target="_blank" rel="noopener">System-gaps runbook</a></p>` : ""}
+  `;
+  dialog.showModal();
+}
+
+function renderSystemGapsCard(data) {
+  const payload = data.system_gaps;
+  const docUrl = githubOpsDocUrl("docs/ops/analysis-review.md", "system-gaps-learning-path-integrity");
+  if (!payload) {
+    return `
+    <section class="card system-gaps-section" id="system-gaps-card">
+      <div class="market-status-header">
+        <h3>Learning-path gaps</h3>
+      </div>
+      <p class="muted small">System-gap snapshot not published yet. Sunday analysis-review writes <code>docs/data/system_gaps.json</code>.</p>
+      ${docUrl ? `<p class="small"><a href="${esc(docUrl)}" target="_blank" rel="noopener">Runbook</a></p>` : ""}
+    </section>`;
+  }
+  const flags = payload.flags || [];
+  const high = Number(payload.high_flag_count || 0);
+  const attention = high > 0 ? " system-gaps-section-attention" : "";
+  const tiles = flags.length
+    ? flags
+        .map((row) => {
+          const sev = String(row.severity || "info");
+          return `
+      <button type="button" class="system-gap-tile severity-${esc(sev)}" data-system-gap-id="${esc(row.id)}" aria-haspopup="dialog">
+        <div class="market-tile-header">
+          <strong>${esc(row.title || row.id)}</strong>
+          ${systemGapSeverityBadge(row.severity)}
+        </div>
+        <div class="small muted">${esc(row.layer || "—")} · ${esc(row.id)}</div>
+        <div class="small">${esc(row.summary || "")}</div>
+      </button>`;
+        })
+        .join("")
+    : `<p class="muted small">No learning-path integrity flags. File existence and unused budget are still not proof the book is fed.</p>`;
+  return `
+    <section class="card system-gaps-section${attention}" id="system-gaps-card">
+      <div class="market-status-header">
+        <h3>Learning-path gaps</h3>
+        <p class="small muted" style="margin:0">
+          ${esc(String(payload.flag_count ?? flags.length))} flags ·
+          ${esc(String(high))} high
+          ${payload.assessed_at ? ` · ${esc(fmtDate(payload.assessed_at))}` : ""}
+          · click a flag for the detail card
+        </p>
+      </div>
+      <div class="system-gaps-grid">${tiles}</div>
+      ${docUrl ? `<p class="small" style="margin:0.75rem 0 0"><a href="${esc(docUrl)}" target="_blank" rel="noopener">Why this card exists</a></p>` : ""}
+    </section>`;
+}
+
 function findMarketStatusRow(marketId) {
   const rows = ((dashboardData || {}).market_status || {}).markets || [];
   return rows.find((row) => row.market_id === marketId) || null;
@@ -1044,6 +1137,7 @@ function renderOverview(data) {
   document.getElementById("panel-overview").innerHTML = `
     ${note}
     ${renderMarketStatusGrid(data)}
+    ${renderSystemGapsCard(data)}
     <div class="grid">
       <div class="card">
         <h3>Operating companies</h3>
@@ -3143,6 +3237,10 @@ async function loadDashboard() {
     if (!data.market_status) {
       const marketStatus = await loadOptionalDashboardJson("data/market_status.json");
       if (marketStatus) data.market_status = marketStatus;
+    }
+    if (!data.system_gaps) {
+      const systemGaps = await loadOptionalDashboardJson("data/system_gaps.json");
+      if (systemGaps) data.system_gaps = systemGaps;
     }
     // Prefer the sidecar every load so a freshly published report wins over any
     // stale embedded copy and over a cached progress_report.json.

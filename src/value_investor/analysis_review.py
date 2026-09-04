@@ -529,6 +529,299 @@ def promote_analysis_tasks(
     return {"promoted": promoted, "skipped": skipped, "engineering_tasks_path": str(eng_path)}
 
 
+SYSTEM_GAP_TASK_PREFIX = "ana-sgap-"
+SYSTEM_GAP_ENG_PREFIX = "eng-sgap-"
+AUTO_PROMOTE_LAYERS = frozenset({"persist", "publish", "apply"})
+SYSTEM_GAP_FLAG_AREA: dict[str, str] = {
+    "buy_tier_unwired_verdict": "ingest",
+    "overlay_lagging_committed": "coverage",
+    "research_index_shrunk": "coverage",
+    "overlay_persist_hole": "ingest",
+    "thin_memo_counted_as_coverage": "coverage",
+    "research_skipped_already_done": "coverage",
+    "unused_budget_zero_research": "ops",
+    "filing_ready_learning_stale": "ops",
+    "observe_clock_stale": "ops",
+}
+
+
+def system_gap_token(flag_id: str) -> str:
+    return f"[system-gap:{flag_id}]"
+
+
+def _system_gap_task_id(flag_id: str) -> str:
+    return f"{SYSTEM_GAP_TASK_PREFIX}{flag_id}"
+
+
+def _flag_area(flag_id: str, layer: str) -> str:
+    if flag_id in SYSTEM_GAP_FLAG_AREA:
+        return SYSTEM_GAP_FLAG_AREA[flag_id]
+    if layer in {"persist", "apply"}:
+        return "ingest"
+    if layer == "publish":
+        return "coverage"
+    return "ops"
+
+
+def compile_system_gap_analysis_tasks(
+    snapshot: dict[str, Any] | None = None,
+    *,
+    data_dir: Path = DEFAULT_DATA_DIR,
+    output_dir: Path = DEFAULT_OUTPUT_DIR,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    high_only: bool = True,
+) -> dict[str, Any]:
+    """Upsert proposed analysis tasks from deterministic system_gaps flags.
+
+    Does not dispatch agents. Produce / learning_clock flags stay proposed
+    for human ``ftse-analysis-review promote``. Persist/publish/apply high
+    flags are eligible for :func:`auto_promote_system_gap_tasks`.
+    """
+    if snapshot is None:
+        committed = _safe_read(data_dir / COMMITTED_GAPS_PATH.name)
+        snapshot = (
+            committed
+            if isinstance(committed, dict)
+            else build_system_gap_snapshot(data_dir=data_dir, output_dir=output_dir)
+        )
+    existing = load_analysis_tasks(tasks_path)
+    kept: list[dict[str, Any]] = []
+    by_id: dict[str, dict[str, Any]] = {}
+    for row in existing.get("tasks") or []:
+        if not isinstance(row, dict):
+            continue
+        task_id = str(row.get("id") or "")
+        by_id[task_id] = row
+        if task_id.startswith(SYSTEM_GAP_TASK_PREFIX):
+            continue
+        if str(row.get("status") or "") in CLOSED_TASK_STATUSES:
+            continue
+        kept.append(row)
+
+    flags = [
+        row
+        for row in (snapshot.get("flags") or [])
+        if isinstance(row, dict) and row.get("id")
+    ]
+    if high_only:
+        flags = [row for row in flags if str(row.get("severity") or "") == "high"]
+    active_ids = {_system_gap_task_id(str(row["id"])) for row in flags}
+    compiled: list[str] = []
+    refreshed: list[str] = []
+    closed: list[str] = []
+    now = datetime.now(UTC).isoformat()
+
+    for task_id, row in by_id.items():
+        if not task_id.startswith(SYSTEM_GAP_TASK_PREFIX):
+            continue
+        if task_id in active_ids:
+            continue
+        if str(row.get("status") or "") == "proposed":
+            merged = dict(row)
+            merged["status"] = "done"
+            merged["done_reason"] = "flag_cleared"
+            merged["updated_at"] = now
+            kept.append(merged)
+            closed.append(task_id)
+        elif str(row.get("status") or "") not in CLOSED_TASK_STATUSES:
+            kept.append(row)
+
+    for flag in flags:
+        flag_id = str(flag["id"])
+        task_id = _system_gap_task_id(flag_id)
+        area = _flag_area(flag_id, str(flag.get("layer") or ""))
+        layer = str(flag.get("layer") or "")
+        title = f"{flag.get('title')} {system_gap_token(flag_id)}"
+        prior = by_id.get(task_id)
+        if prior and str(prior.get("status") or "") in {"promoted", "done"}:
+            kept.append(prior)
+            continue
+        task = AnalysisTask(
+            id=task_id,
+            area=area,
+            title=title[:200],
+            summary=str(flag.get("summary") or flag.get("title") or ""),
+            experiment_type=_experiment_type_for_area(area),
+            priority="high" if str(flag.get("severity")) == "high" else "medium",
+            status="proposed",
+            source="system_gaps",
+            promote_to=_promote_target_for_area(area),
+            evidence={
+                "system_gap_flag": flag_id,
+                "layer": layer,
+                "severity": flag.get("severity"),
+                "auto_promote_eligible": layer in AUTO_PROMOTE_LAYERS,
+            },
+        )
+        payload = task.to_dict()
+        if prior:
+            refreshed.append(task_id)
+        else:
+            compiled.append(task_id)
+        kept.append(payload)
+
+    out = {
+        "compiled_at": now,
+        "run_stamp": datetime.now(UTC).strftime("%Y%m%d"),
+        "source": "system_gaps",
+        "task_count": len(kept),
+        "compiled": compiled,
+        "refreshed": refreshed,
+        "closed": closed,
+        "tasks": kept,
+    }
+    tasks_path.parent.mkdir(parents=True, exist_ok=True)
+    write_json(tasks_path, out, compact=True)
+    return out
+
+
+def _engineering_has_system_gap(eng_rows: list[Any], flag_id: str) -> bool:
+    token = system_gap_token(flag_id)
+    terminal = frozenset({"cancelled", "failed"})
+    for row in eng_rows:
+        if not isinstance(row, dict):
+            continue
+        status = str(row.get("status") or "open")
+        if status in terminal:
+            continue
+        evidence = row.get("evidence") or {}
+        if str(evidence.get("system_gap_flag") or "") == flag_id:
+            return True
+        title = str(row.get("title") or "")
+        if token in title or str(row.get("id") or "") == f"{SYSTEM_GAP_ENG_PREFIX}{flag_id}":
+            return True
+    return False
+
+
+def auto_promote_system_gap_tasks(
+    *,
+    analysis_tasks_path: Path = COMMITTED_TASKS_PATH,
+    engineering_tasks_path: Path | None = None,
+    layers: frozenset[str] = AUTO_PROMOTE_LAYERS,
+) -> dict[str, Any]:
+    """Promote persist/publish/apply system-gap tasks into the engineering queue.
+
+    Title-dedupes against open/completed engineering rows. Never dispatches
+    agents — weekly engineering review still owns assignment.
+    """
+    from value_investor.engineering_tasks import (
+        BLOCKED_PATHS,
+        _allowed_paths_for_area,
+        load_engineering_tasks,
+    )
+    from value_investor.engineering_tasks import (
+        COMMITTED_TASKS_PATH as ENG_COMMITTED,
+    )
+
+    eng_path = engineering_tasks_path or ENG_COMMITTED
+    analysis_payload = load_analysis_tasks(analysis_tasks_path)
+    eng_payload = load_engineering_tasks(eng_path)
+    eng_rows = list(eng_payload.get("tasks") or [])
+    promoted: list[str] = []
+    skipped: list[dict[str, str]] = []
+    now = datetime.now(UTC).isoformat()
+    updated: list[dict[str, Any]] = []
+
+    for row in analysis_payload.get("tasks") or []:
+        if not isinstance(row, dict):
+            continue
+        task = AnalysisTask.from_dict(row)
+        flag_id = str((task.evidence or {}).get("system_gap_flag") or "")
+        layer = str((task.evidence or {}).get("layer") or "")
+        if task.source != "system_gaps" or not flag_id:
+            updated.append(row)
+            continue
+        if task.status == "promoted":
+            skipped.append({"id": task.id, "reason": "already promoted"})
+            updated.append(row)
+            continue
+        if task.status != "proposed":
+            skipped.append({"id": task.id, "reason": f"status={task.status}"})
+            updated.append(row)
+            continue
+        if layer not in layers:
+            skipped.append({"id": task.id, "reason": f"layer {layer} stays human-promote"})
+            updated.append(row)
+            continue
+        if task.promote_to != "engineering_queue" or task.area not in _ENGINEERING_AREAS:
+            skipped.append({"id": task.id, "reason": "not an engineering area"})
+            updated.append(row)
+            continue
+        if _engineering_has_system_gap(eng_rows, flag_id):
+            skipped.append({"id": task.id, "reason": "engineering task already exists"})
+            updated.append(row)
+            continue
+        eng_rows.append(
+            {
+                "id": f"{SYSTEM_GAP_ENG_PREFIX}{flag_id}",
+                "area": task.area,
+                "title": task.title,
+                "summary": task.summary,
+                "priority": "medium",
+                "priority_score": 72.0,
+                "source": "system_gaps",
+                "evidence": {
+                    "analysis_task_id": task.id,
+                    "system_gap_flag": flag_id,
+                    "layer": layer,
+                    **task.evidence,
+                },
+                "acceptance_criteria": [
+                    "Change is covered by unit tests where behaviour shifts",
+                    "No edits under blocked paper/sim automation paths",
+                    "Observe-only scoring design — do not mutate assign_signal() (N3)",
+                    "Do not dispatch further agents from this task",
+                ],
+                "allowed_paths": _allowed_paths_for_area(task.area),
+                "blocked_paths": list(BLOCKED_PATHS),
+                "status": "open",
+            }
+        )
+        merged = dict(row)
+        merged.update(task.to_dict())
+        merged["status"] = "promoted"
+        merged["promoted_at"] = now
+        promoted.append(task.id)
+        updated.append(merged)
+
+    analysis_payload["tasks"] = updated
+    analysis_payload["task_count"] = len(updated)
+    eng_payload["tasks"] = eng_rows
+    eng_payload["task_count"] = len(eng_rows)
+    write_json(analysis_tasks_path, analysis_payload, compact=True)
+    write_json(eng_path, eng_payload, compact=False)
+    return {
+        "promoted": promoted,
+        "skipped": skipped,
+        "engineering_tasks_path": str(eng_path),
+        "should_dispatch_queue": False,
+    }
+
+
+def compile_and_maybe_promote_system_gaps(
+    *,
+    data_dir: Path = DEFAULT_DATA_DIR,
+    output_dir: Path = DEFAULT_OUTPUT_DIR,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    engineering_tasks_path: Path | None = None,
+    promote: bool = True,
+    snapshot: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    compiled = compile_system_gap_analysis_tasks(
+        snapshot,
+        data_dir=data_dir,
+        output_dir=output_dir,
+        tasks_path=tasks_path,
+    )
+    result: dict[str, Any] = {"compiled": compiled, "promoted": None}
+    if promote:
+        result["promoted"] = auto_promote_system_gap_tasks(
+            analysis_tasks_path=tasks_path,
+            engineering_tasks_path=engineering_tasks_path,
+        )
+    return result
+
+
 def _build_analysis_prompt(payload_path: Path) -> str:
     return f"""You are the modelling and learning analyst for an automated FTSE value portfolio.
 

@@ -7,6 +7,7 @@ from pathlib import Path
 
 from value_investor.system_gap_analysis import (
     build_system_gap_snapshot,
+    slim_system_gaps_for_dashboard,
     slim_system_gaps_for_review,
     write_system_gap_snapshot,
 )
@@ -192,3 +193,8 @@ def test_slim_and_write_round_trip(tmp_path: Path):
     path = write_system_gap_snapshot(snapshot, path=data / "system_gaps.json")
     assert path.exists()
     assert '"schema_version"' in path.read_text(encoding="utf-8")
+    card = slim_system_gaps_for_dashboard(snapshot)
+    assert card is not None
+    assert "layers" not in card
+    assert "flags" in card
+    assert card["flag_count"] == snapshot["flag_count"]

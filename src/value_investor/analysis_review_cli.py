@@ -14,6 +14,7 @@ from value_investor.analysis_review import (
     DEFAULT_OUTPUT_DIR,
     build_analysis_payload,
     compile_analysis_tasks,
+    compile_and_maybe_promote_system_gaps,
     has_enough_analysis_inputs,
     load_analysis_tasks,
     parse_analysis_review,
@@ -135,6 +136,37 @@ def _cmd_system_gaps(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_compile_system_gaps(args: argparse.Namespace) -> int:
+    snapshot = None
+    if args.gaps_path and Path(args.gaps_path).exists():
+        from value_investor.storage import read_json
+
+        snapshot = read_json(args.gaps_path)
+    result = compile_and_maybe_promote_system_gaps(
+        data_dir=args.data_dir,
+        output_dir=args.output_dir,
+        tasks_path=args.tasks_path,
+        engineering_tasks_path=args.engineering_tasks_path,
+        promote=args.promote,
+        snapshot=snapshot,
+    )
+    if args.json:
+        _print_json(result)
+        return 0
+    compiled = result.get("compiled") or {}
+    print(
+        f"Compiled system-gap tasks: {len(compiled.get('compiled') or [])} new, "
+        f"{len(compiled.get('refreshed') or [])} refreshed, "
+        f"{len(compiled.get('closed') or [])} closed → {args.tasks_path}"
+    )
+    promoted = result.get("promoted")
+    if promoted:
+        print(f"Auto-promoted: {', '.join(promoted.get('promoted') or []) or '(none)'}")
+        for row in promoted.get("skipped") or []:
+            print(f"  skipped {row.get('id')}: {row.get('reason')}")
+    return 0
+
+
 def _cmd_promote(args: argparse.Namespace) -> int:
     if not args.task_id:
         print("At least one --task-id is required", file=sys.stderr)
@@ -217,6 +249,25 @@ def main(argv: list[str] | None = None) -> int:
         default=Path("docs/data/engineering_tasks.json"),
     )
     promote.set_defaults(func=_cmd_promote)
+
+    compile_gaps = sub.add_parser(
+        "compile-system-gaps",
+        help="Compile high system_gaps flags into analysis tasks; optionally auto-promote persist/publish/apply",
+    )
+    add_json_flags(compile_gaps)
+    compile_gaps.add_argument(
+        "--promote",
+        action="store_true",
+        help="Auto-promote persist/publish/apply high flags into engineering_tasks.json (no agent dispatch)",
+    )
+    compile_gaps.add_argument("--gaps-path", type=Path, default=None)
+    compile_gaps.add_argument("--tasks-path", type=Path, default=COMMITTED_TASKS_PATH)
+    compile_gaps.add_argument(
+        "--engineering-tasks-path",
+        type=Path,
+        default=Path("docs/data/engineering_tasks.json"),
+    )
+    compile_gaps.set_defaults(func=_cmd_compile_system_gaps)
 
     args = parser.parse_args(argv)
     return int(args.func(args))

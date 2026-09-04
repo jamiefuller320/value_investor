@@ -189,11 +189,17 @@ jobs:
       - name: Write learning-path system gaps
         run: ftse-analysis-review system-gaps --write --json || true
 
+      - name: Compile system-gap tasks
+        run: ftse-analysis-review compile-system-gaps --promote --json || true
+
       - name: Commit system-gap snapshot
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: learning-path system gaps [skip ci]"
-          file_pattern: docs/data/system_gaps.json
+          file_pattern: |
+            docs/data/system_gaps.json
+            docs/data/analysis_tasks.json
+            docs/data/engineering_tasks.json
           skip_fetch: false
 
       - name: Run modelling analysis review
@@ -220,5 +226,6 @@ jobs:
             docs/data/analysis_review.md
             docs/data/analysis_tasks.json
             docs/data/system_gaps.json
+            docs/data/engineering_tasks.json
             docs/data/paper_automation/knob_calibration_priors.json
           skip_fetch: false

@@ -116,7 +116,21 @@ file existence as proof the learning path is fed.
 ```bash
 ftse-analysis-review system-gaps --json
 ftse-analysis-review system-gaps --write
+ftse-analysis-review compile-system-gaps --promote --json
 ```
+
+Sunday `analysis-review.yml` compiles high flags into `analysis_tasks.json`
+(`ana-sgap-<flag_id>`) even when the modelling agent is skipped.
+
+**Auto-promote (narrow):** persist / publish / apply high flags
+(`overlay_persist_hole`, `overlay_lagging_committed`, `research_index_shrunk`,
+`buy_tier_unwired_verdict`) open `eng-sgap-<flag_id>` rows with title-dedupe.
+That is the written≠wired class from the morning miss. Produce and
+`learning_clock` flags stay **proposed** for human
+`ftse-analysis-review promote`. Neither path dispatches engineering agents.
+
+The overview dashboard card **Learning-path gaps** reads the snapshot (bundle
+or `data/system_gaps.json` sidecar).
 
 ## Experiment assessment ledger
 

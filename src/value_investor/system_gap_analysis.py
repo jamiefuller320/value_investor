@@ -838,6 +838,36 @@ def slim_system_gaps_for_review(snapshot: dict[str, Any] | None) -> dict[str, An
     }
 
 
+def slim_system_gaps_for_dashboard(snapshot: dict[str, Any] | None) -> dict[str, Any] | None:
+    """Flag tiles only — no layer dumps for the overview card."""
+    if not isinstance(snapshot, dict):
+        return None
+    flags = []
+    for row in _as_list(snapshot.get("flags")):
+        if not isinstance(row, dict):
+            continue
+        flags.append(
+            {
+                "id": row.get("id"),
+                "severity": row.get("severity"),
+                "layer": row.get("layer"),
+                "title": row.get("title"),
+                "summary": row.get("summary"),
+            }
+        )
+    return {
+        "schema_version": snapshot.get("schema_version"),
+        "assessed_at": snapshot.get("assessed_at"),
+        "purpose": snapshot.get("purpose"),
+        "flag_count": snapshot.get("flag_count", len(flags)),
+        "high_flag_count": snapshot.get(
+            "high_flag_count",
+            sum(1 for row in flags if row.get("severity") == "high"),
+        ),
+        "flags": flags,
+    }
+
+
 def write_system_gap_snapshot(
     snapshot: dict[str, Any],
     *,
@@ -854,6 +884,7 @@ __all__ = [
     "PROBE_QUESTIONS",
     "SCHEMA_VERSION",
     "build_system_gap_snapshot",
+    "slim_system_gaps_for_dashboard",
     "slim_system_gaps_for_review",
     "write_system_gap_snapshot",
 ]
