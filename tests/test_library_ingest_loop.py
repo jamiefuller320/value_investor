@@ -10,6 +10,8 @@ from value_investor.data_library_cli import main as library_main
 from value_investor.library_ingest_loop import (
     LibraryIngestLoopResult,
     _filing_coverage_for_ticker,
+    demote_library_ingest_targets,
+    load_library_ingest_blocker_cooldown,
     run_library_ingest_loop,
     select_library_ingest_targets,
 )
@@ -449,3 +451,186 @@ def test_run_library_ingest_loop_still_cuts_overrun_discovery(tmp_path: Path):
     assert result.runtime_cutoff is True
     assert result.partial is True
     assert ingest_calls == []
+
+
+def test_weekday_loop_continues_after_per_ticker_budget_and_records_blocker(tmp_path: Path):
+    root = tmp_path / "library"
+    market = "sp500"
+    research = root / "markets" / market / "screen" / "research"
+    for ticker in ("SLOW", "NEXT"):
+        filings = research / ticker / "sources" / "filings"
+        filings.mkdir(parents=True)
+        write_json(
+            filings / "filings_index.json",
+            {"summary": {"total": 0, "with_body": 0}, "filings": []},
+            compact=False,
+        )
+    reports = [_report("SLOW"), _report("NEXT")]
+    ingest_calls: list[str] = []
+
+    def _track_ingest(target, **kwargs):
+        ingest_calls.append(target.ticker)
+        assert "deadline_monotonic" in kwargs
+        hit = target.ticker == "SLOW"
+        return {
+            "ticker": target.ticker,
+            "improved": False,
+            "ticker_budget_hit": hit,
+            "ir_exhausted": False,
+        }
+
+    critical = type(
+        "CP",
+        (),
+        {
+            "force_discovery_scan": False,
+            "auto_pin_tickers": [],
+            "primary_blocker": "unmeasured",
+            "thin_need_discovery": [],
+            "unmeasured": ["SLOW", "NEXT"],
+            "zero_body": [],
+            "indexed_without_body": [],
+            "to_dict": lambda self: {},
+        },
+    )()
+
+    with (
+        patch(
+            "value_investor.library_ingest_loop.load_library_buy_tier_reports",
+            return_value=reports,
+        ),
+        patch(
+            "value_investor.library_ingest_loop.snapshot_library_ingest_health",
+            return_value={"unmeasured_buy_tier": 2, "zero_body_buy_tier": 0},
+        ),
+        patch("value_investor.library_ingest_loop.append_library_ingest_health_log"),
+        patch(
+            "value_investor.library_ingest_loop._ingest_single_library_target",
+            side_effect=_track_ingest,
+        ),
+        patch(
+            "value_investor.ingest_critical_path.assess_library_ingest_critical_path",
+            return_value=critical,
+        ),
+        patch("value_investor.ingest_critical_path.persist_ingest_critical_path"),
+        patch(
+            "value_investor.ingest_critical_path.apply_critical_path_to_target_order",
+            side_effect=lambda targets, _c: targets,
+        ),
+    ):
+        result = run_library_ingest_loop(
+            market,
+            library_root=root,
+            max_targets=2,
+            max_runtime_seconds=2700,
+            discovery_scan=False,
+            deepen_history=False,
+        )
+
+    assert ingest_calls == ["NEXT", "SLOW"]
+    assert result.blocker_ticker == "SLOW"
+    assert result.per_ticker_max_seconds == 320.0
+    assert result.runtime_cutoff is False
+
+
+def test_intensive_pin_disables_per_ticker_cap(tmp_path: Path):
+    root = tmp_path / "library"
+    market = "asx200"
+    research = root / "markets" / market / "screen" / "research"
+    filings = research / "BHP.AX" / "sources" / "filings"
+    filings.mkdir(parents=True)
+    write_json(
+        filings / "filings_index.json",
+        {"summary": {"total": 0, "with_body": 0}, "filings": []},
+        compact=False,
+    )
+    reports = [_report("BHP.AX")]
+    seen: dict = {}
+
+    def _track_ingest(target, **kwargs):
+        seen.update(kwargs)
+        return {"ticker": target.ticker, "improved": False, "ticker_budget_hit": False}
+
+    critical = type(
+        "CP",
+        (),
+        {
+            "force_discovery_scan": False,
+            "auto_pin_tickers": ["BHP.AX"],
+            "primary_blocker": "unmeasured",
+            "thin_need_discovery": [],
+            "unmeasured": ["BHP.AX"],
+            "zero_body": [],
+            "indexed_without_body": [],
+            "to_dict": lambda self: {},
+        },
+    )()
+
+    with (
+        patch(
+            "value_investor.library_ingest_loop.load_library_buy_tier_reports",
+            return_value=reports,
+        ),
+        patch(
+            "value_investor.library_ingest_loop.snapshot_library_ingest_health",
+            return_value={"unmeasured_buy_tier": 1, "zero_body_buy_tier": 0},
+        ),
+        patch("value_investor.library_ingest_loop.append_library_ingest_health_log"),
+        patch(
+            "value_investor.library_ingest_loop._ingest_single_library_target",
+            side_effect=_track_ingest,
+        ),
+        patch(
+            "value_investor.ingest_critical_path.assess_library_ingest_critical_path",
+            return_value=critical,
+        ),
+        patch("value_investor.ingest_critical_path.persist_ingest_critical_path"),
+        patch(
+            "value_investor.ingest_critical_path.apply_critical_path_to_target_order",
+            side_effect=lambda targets, _c: targets,
+        ),
+        patch("value_investor.ingest_gap_closure.record_ingest_gap_closure_run"),
+    ):
+        result = run_library_ingest_loop(
+            market,
+            library_root=root,
+            max_targets=1,
+            max_runtime_seconds=2100,
+            discovery_scan=False,
+            deepen_history=False,
+            pin_tickers=["BHP.AX"],
+            record_gap_closure={
+                "title": "intensive",
+                "summary": "",
+                "review_trigger": "horizon_scan",
+            },
+        )
+
+    assert result.per_ticker_max_seconds is None
+    assert seen.get("deadline_monotonic") is not None
+
+
+def test_blocker_cooldown_demotes_previous_hard_name(tmp_path: Path):
+    from datetime import UTC, datetime
+
+    from value_investor.library_ingest_loop import LibraryIngestTarget
+
+    root = tmp_path / "library"
+    market = "euro_depth"
+    summary = root / "markets" / market / "ingest_summary.json"
+    summary.parent.mkdir(parents=True)
+    write_json(
+        summary,
+        {
+            "run_at": datetime.now(UTC).isoformat(),
+            "blocker_ticker": "DG.PA",
+        },
+        compact=False,
+    )
+    assert load_library_ingest_blocker_cooldown(root, market) == ["DG.PA"]
+    rows = [
+        LibraryIngestTarget("DG.PA", "Vinci", "buy", 20.0, 3, 1, 2, "indexed_without_body"),
+        LibraryIngestTarget("RAND.AS", "Randstad", "buy", 10.0, 4, 0, 4, "zero_body"),
+    ]
+    ordered = demote_library_ingest_targets(rows, ["DG.PA"])
+    assert [row.ticker for row in ordered] == ["RAND.AS", "DG.PA"]
