@@ -272,6 +272,14 @@
           "doc_anchor": "which-secret-workflows-use"
         },
         {
+          "id": "adhoc-review-ingest-deviations",
+          "title": "Review open ingest deviations and reprocess if needed",
+          "summary": "When Automation \u2192 Ingest deviations shows open rows (IR exhausted or weekday cap with leftover IWB), inspect the ticker. Approve writes a 7-day intensive pin for the next euro slot; dismiss closes the row for 7 days. Do not auto-replace IR URLs \u2014 that stays a judged allowlist edit.",
+          "automated": false,
+          "doc_path": "docs/ops/ingest-deviations.md",
+          "doc_anchor": "what-needs-a-human"
+        },
+        {
           "id": "adhoc-review-fcf-basis-bridges",
           "title": "Override FCF auto policy only when majority/filing is wrong",
           "summary": "Ordinary buy-tier FCF mismatches auto-resolve (majority among screen/filing/company-adjusted, else filing-aligned OCF−CapEx). Write docs/data/research/<TICKER>/sources/fcf_bridge.json only as a residual override when that auto pick is wrong, or when so-what flags fcf_bridge_needed because no filing/company figure exists. Never leave divergent Yahoo TTM as policy.",

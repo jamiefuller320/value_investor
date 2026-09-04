@@ -4164,7 +4164,7 @@ def test_fetch_filings_ir_allowlist_euro_depth_periphery_builtins(tmp_path: Path
         "HEIA.AS": "theheinekencompany.com",
         "UCB.BR": "ucb.com",
         "TTE.PA": "totalenergies.com",
-        "ABI.BR": "bmv.com.mx",
+        "ABI.BR": "sec.gov/Archives/edgar/data/1668717",
     }
     for ticker, host_fragment in cases.items():
         rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
@@ -4800,6 +4800,98 @@ def test_refetch_ir_allowlist_marks_failed_rows_unfetchable_and_skips(tmp_path: 
     assert attempts["count"] == after_first
 
 
+def test_refetch_ir_allowlist_marks_removed_row_unfetchable_even_with_body(tmp_path: Path):
+    stale = "https://www.bmv.com.mx/docs-pub/10-k/wrong-issuer.pdf"
+    fresh = "https://www.sec.gov/Archives/edgar/data/1668717/000119312526088105/d65314d20f.htm"
+    allowlist_path = tmp_path / "ir_urls.json"
+    allowlist_path.write_text(json.dumps({"urls": {"FAKE.BR": [fresh]}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_stale_bmv",
+                        "source": "ir_allowlist",
+                        "headline": "Wrong issuer 10-K",
+                        "url": stale,
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": "bodies/ir_stale_bmv.txt",
+                        "priority": 80,
+                    },
+                    {
+                        "id": "ir_fresh_20f",
+                        "source": "ir_allowlist",
+                        "headline": "20-F",
+                        "url": fresh,
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": "bodies/ir_fresh_20f.txt",
+                        "priority": 130,
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "FAKE.BR",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["attempted"] == 0
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    stale_row = next(row for row in saved["filings"] if row["url"] == stale)
+    assert stale_row["unfetchable"] is True
+    assert stale_row["unfetchable_reason"] == "allowlist_removed"
+    assert stale_row["has_body"] is True
+
+
+def test_refetch_residual_stops_at_deadline(tmp_path: Path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    index = {
+        "ticker": "ABI.BR",
+        "company_name": "Anheuser-Busch InBev SA/NV",
+        "filings": [
+            {
+                "id": "sec1",
+                "source": "sec_edgar",
+                "headline": "6-K: 6-K",
+                "published_at": "2026-07-30T00:00:00+00:00",
+                "url": "https://www.sec.gov/Archives/edgar/data/1668717/000119312526326285/d175040d6k.htm",
+                "period": "interim",
+                "has_body": False,
+                "body_path": None,
+                "priority": 80,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda filings, **kwargs: list(filings),
+    )
+
+    def _boom(_url):
+        raise AssertionError("deadline should skip residual fetch")
+
+    monkeypatch.setattr("value_investor.research.filings.fetch_filing_body", _boom)
+    result = refetch_residual_filing_bodies(
+        filings_dir,
+        ticker="ABI.BR",
+        company_name="Anheuser-Busch InBev SA/NV",
+        max_bodies=4,
+        deadline_monotonic=0.0,
+    )
+    assert result["deadline_hit"] is True
+    assert result["attempted"] == 0
+    assert result["fetched"] == 0
+
+
 def test_refetch_ir_allowlist_stops_at_deadline(tmp_path: Path, monkeypatch):
     allowlist_path = tmp_path / "ir_urls.json"
     url = "https://example.com/slow-ir.pdf"
@@ -4835,6 +4927,18 @@ def test_dg_pa_ir_allowlist_uses_vinci_pdfs_not_globenewswire_html():
     assert all("vinci.com" in url for url in urls)
     assert all("globenewswire.com/news-release" not in url for url in urls)
     assert any("2025-vinci-consolidated-financial-statements" in url for url in urls)
+
+
+def test_abi_br_ir_allowlist_uses_sec_ab_inbev_not_bmv():
+    rows = fetch_filings_ir_allowlist("ABI.BR")
+    urls = [row["url"] for row in rows]
+    assert urls
+    assert all("sec.gov/Archives/edgar/data/1668717" in url for url in urls)
+    assert all("bmv.com.mx" not in url for url in urls)
+    assert any("d65314d20f.htm" in url for url in urls)
+    assert any("d142827dex991.htm" in url for url in urls)
+    builtins = _BUILTIN_IR_URLS["ABI.BR"]
+    assert all("bmv.com.mx" not in url for url in builtins)
 
 
 def test_fetch_filings_ir_allowlist_itv_l(tmp_path: Path):
