@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T11:24:45+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T11:32:19+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -186,6 +186,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L195 | **Market ingest lifecycle: sprint deepen then scan-maintain while next market sprints** | Doctrine: once a market buy-tier is filing-deepened, switch it to scan-then-target maintenance (cheap index discovery + bounded body ingest) running alongside learning experiments; start the next market on sprint deepen. FTSE is the first candidate now (hard gaps closed); euro_depth stays sprint until parity. Regime adapters still need per-market fetch work — do not assume FTSE eng fully transfers to ESEF/IR. | Designing FTSE maintenance throttle or euro_depth Phase 3 exit / filing parity review |
 | L200 | **Cross-shard winner selection deployable book** | After ≥2 market shards clear Phase 3, rank survivors across shards into a deployable book using benchmark-relative excess, conviction, T212 tradability, and liquidity — winner-selection mechanics prove utility at this layer. | ≥2 shards at Phase 3 with stable local-benchmark excess; FTSE filtered_cohort_track active with ≥8 epoch marks |
 | L272 | **Keep other-market ingest efficiency as priority 2 behind live-path utilization** | After weekday FTSE decision-input work, keep investing in parallel-sprint speed and efficiency so filing bodies and weekly screen archives accumulate before calendar span becomes a stage-4 blocker. Do not satisfy that by adding markets to the grow queue or turning on research_all_graduated — Layer A breadth is already ahead; the scarce resource is time-series depth on euro_depth / sp500 / asx200. | Someone proposes a fourth sprint stream, a new grow-queue market, or research_all_graduated=true to 'get ahead of the calendar' |
+| L273 | **Prefer an ingest effort cascade over a fourth equal sprint stream** | Do not add a fourth peer sprint. Allocate maximum ingest effort to the highest-priority market that is not yet in the learning phase (today: euro_depth until Phase 2 weekly-paper gates clear), use leftover slots on the next queue markets (sp500, then asx200), and shift the fat slot when that phase transition completes. Equal extra streams can starve the head target; cascade is work-conserving. | euro_depth is still short of Phase 2 / filing parity and a fourth library-ingest-sprint workflow is proposed, or GHA/push contention shows the current three equal streams starving focus deepen |
 
 ### Research & portfolio product
 
