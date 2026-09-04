@@ -3962,6 +3962,34 @@ def test_asx_markit_file_url():
 
 
 @patch("value_investor.research.filings._http_get")
+def test_fetch_filings_asx_direct_accepts_bsl_style_results_without_issuer_tokens(mock_get):
+    """Markit symbol-scoped rows without issuer tokens still index FY results packs."""
+    payload = {
+        "data": {
+            "items": [
+                {
+                    "announcementType": "PERIODIC REPORTS",
+                    "date": "2026-08-16T08:00:00.000Z",
+                    "documentKey": "2924-03121440-3A698870",
+                    "headline": "FY2026 Results Presentation",
+                },
+                {
+                    "announcementType": "OTHER",
+                    "date": "2026-09-04T08:00:00.000Z",
+                    "documentKey": "2924-03132082-PS-6A1342316",
+                    "headline": "S&P DJI Announces September 2026 Quarterly Rebalance",
+                },
+            ]
+        }
+    }
+    mock_get.return_value = json.dumps(payload).encode("utf-8")
+    rows = fetch_filings_asx_direct(company_name="BlueScope Steel Limited", ticker="BSL.AX")
+    assert len(rows) == 1
+    assert rows[0]["period"] == "annual"
+    assert rows[0]["headline"] == "FY2026 Results Presentation"
+
+
+@patch("value_investor.research.filings._http_get")
 def test_fetch_filings_asx_direct_parses_markit_json(mock_get):
     payload = {
         "data": {
@@ -5260,6 +5288,29 @@ def test_fetch_filings_ir_allowlist_ebo_ax_builtin(tmp_path: Path):
     assert all(row["source"] == "ir_allowlist" for row in rows)
 
 
+def test_fetch_filings_ir_allowlist_asx200_unmeasured_builtin(tmp_path: Path):
+    """CDA/BSL/PXA buy-tier IR PDFs ship in the built-in allowlist."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    cda = fetch_filings_ir_allowlist("CDA.AX", path=allowlist_path)
+    assert len(cda) >= 4
+    assert any("Codan-Limited_Annual-Report_2025.pdf" in row["url"] for row in cda)
+    assert any("H1-FY26" in row["url"] for row in cda)
+
+    bsl = fetch_filings_ir_allowlist("BSL.AX", path=allowlist_path)
+    assert len(bsl) >= 4
+    assert any(
+        "FY2026_BlueScope_Full_Year_Results_Investor_Presentation.pdf" in row["url"] for row in bsl
+    )
+
+    pxa = fetch_filings_ir_allowlist("PXA.AX", path=allowlist_path)
+    assert len(pxa) >= 4
+    assert any("Appendix-4D-and-half-year-report-FY26" in row["url"] for row in pxa)
+    assert any(row["period"] == "annual" for row in pxa)
+    assert all(row["source"] == "ir_allowlist" for row in cda + bsl + pxa)
+
+
 @patch("value_investor.research.filings.fetch_filings_asx_news", return_value=[])
 @patch("value_investor.research.filings.fetch_filings_asx_direct", return_value=[])
 def test_ingest_filings_asx200_ebo_ax_indexes_ir_allowlist_bodies(
@@ -5281,6 +5332,28 @@ def test_ingest_filings_asx200_ebo_ax_indexes_ir_allowlist_bodies(
     assert "ir_allowlist" in index.get("sources_used", [])
     assert all(row["source"] == "ir_allowlist" for row in index.get("filings") or [])
     assert (tmp_path / "filings" / "filings_index.json").exists()
+
+
+@patch("value_investor.research.filings.fetch_filings_asx_news", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_asx_direct", return_value=[])
+def test_ingest_filings_asx200_cda_ax_indexes_ir_allowlist_bodies(
+    _mock_asx_direct,
+    _mock_asx_news,
+    tmp_path: Path,
+):
+    """When Markit latest-five lacks results rows, CDA.AX still indexes IR allowlist filings."""
+    meta = ingest_filings(
+        ticker="CDA.AX",
+        company_name="Codan Limited",
+        sources_dir=tmp_path,
+        market="asx200",
+    )
+    assert meta["filings_regime"] == "asx_announcements"
+    summary = meta.get("filings_summary") or {}
+    assert summary.get("total", 0) >= 4
+    index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
+    assert "ir_allowlist" in index.get("sources_used", [])
+    assert all(row["source"] == "ir_allowlist" for row in index.get("filings") or [])
 
 
 def test_load_ir_url_allowlist_merges_file_with_builtin(tmp_path: Path):
