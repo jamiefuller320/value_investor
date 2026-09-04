@@ -1,12 +1,11 @@
 {
-  "run_at": "2026-09-04T14:04:07.035064+00:00",
+  "run_at": "2026-09-04T14:37:07.223119+00:00",
   "market_id": "sp500",
   "targets": [
     "LDOS",
     "INTU",
     "APTV",
     "FICO",
-    "EXR",
     "CRH",
     "BXP",
     "LMT",
@@ -43,14 +42,6 @@
       "filings_total": 19,
       "filings_with_body": 14,
       "indexed_without_body": 5,
-      "reason": "indexed_without_body"
-    },
-    {
-      "ticker": "EXR",
-      "priority_score": 15.326500000000001,
-      "filings_total": 69,
-      "filings_with_body": 66,
-      "indexed_without_body": 3,
       "reason": "indexed_without_body"
     },
     {
@@ -328,66 +319,6 @@
       }
     },
     {
-      "ticker": "EXR",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 69,
-        "filings_with_body": 66,
-        "indexed_without_body": 3
-      },
-      "after": {
-        "filings_total": 69,
-        "filings_with_body": 69,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "sec_edgar",
-      "filings_summary": {
-        "total": 68,
-        "annual": 17,
-        "interim": 12,
-        "trading_update": 7,
-        "other": 32,
-        "with_body": 68,
-        "period_coverage": {
-          "annual": {
-            "total": 17,
-            "with_body": 17
-          },
-          "interim": {
-            "total": 12,
-            "with_body": 12
-          },
-          "trading_update": {
-            "total": 7,
-            "with_body": 7
-          },
-          "other": {
-            "total": 32,
-            "with_body": 32
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 69,
-        "with_body_after": 69,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
-        },
-        "note": "no missing IR allowlist bodies"
-      }
-    },
-    {
       "ticker": "CRH",
       "reason": "indexed_without_body",
       "before": {
@@ -628,20 +559,18 @@
       }
     }
   ],
-  "improved": [
-    "EXR"
-  ],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-04T13:57:00.078417+00:00",
+    "snapshot_at": "2026-09-04T14:36:04.766770+00:00",
     "market_id": "sp500",
     "buy_tier_count": 137,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 18,
+    "indexed_without_body": 15,
     "bodies_min": 14,
     "bodies_median": 20,
     "bodies_max": 71,
@@ -652,7 +581,7 @@
     "thin_body_tickers": []
   },
   "health_after": {
-    "snapshot_at": "2026-09-04T14:04:07.028786+00:00",
+    "snapshot_at": "2026-09-04T14:37:07.216778+00:00",
     "market_id": "sp500",
     "buy_tier_count": 137,
     "unmeasured_buy_tier": 0,
@@ -680,7 +609,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-09-04T13:57:05.012003+00:00",
+    "assessed_at": "2026-09-04T14:36:12.082813+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -689,12 +618,6 @@
         "indexed_without_body": 5,
         "filings_total": 19,
         "filings_with_body": 14
-      },
-      {
-        "ticker": "EXR",
-        "indexed_without_body": 3,
-        "filings_total": 69,
-        "filings_with_body": 66
       },
       {
         "ticker": "APTV",
@@ -745,29 +668,29 @@
     "force_discovery_scan": false,
     "auto_pin_tickers": [
       "FICO",
-      "EXR",
       "APTV",
       "BXP",
       "CRH",
       "INTU",
       "LDOS",
-      "LMT"
+      "LMT",
+      "TSN"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (9 tickers, top: FICO(5), EXR(3), APTV(2), BXP(2), CRH(2))"
+      "Prefer indexed-without-body body refetch (8 tickers, top: FICO(5), APTV(2), BXP(2), CRH(2), INTU(1))"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 9,
-      "indexed_without_body_rows": 18,
+      "indexed_without_body_tickers": 8,
+      "indexed_without_body_rows": 15,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 416.785605304,
+  "used_seconds": 47.89332098199998,
   "budget_seconds": 1050.0,
-  "leftover_seconds": 633.214394696,
+  "leftover_seconds": 1002.106679018,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0
 }
