@@ -6,8 +6,10 @@ import json
 from pathlib import Path
 
 from value_investor.analysis_review import (
+    auto_promote_system_gap_tasks,
     build_analysis_payload,
     compile_analysis_tasks,
+    compile_system_gap_analysis_tasks,
     has_enough_analysis_inputs,
     parse_analysis_review,
     promote_analysis_tasks,
@@ -27,6 +29,9 @@ SIGNAL & BACKTEST FINDINGS
 PAPER TRACK COMPARISON
 AI judgment has lower cost drag than rules.
 
+SYSTEM GAPS
+- buy_tier_unwired_verdict: JSG.L missing from overlay
+
 PROPOSED EXPERIMENTS
 1. [offline_sim] Replay grace params on archived runs — counterfactual prior
 2. [scoring] Sector healthcare overlay — attribution gap
@@ -39,6 +44,7 @@ DEFER
     assert "Cost drag" in review.performance_diagnosis
     assert "run_count=3" in review.signal_backtest_findings
     assert "AI judgment" in review.paper_track_comparison
+    assert "JSG.L" in review.system_gaps
     assert "[offline_sim]" in review.proposed_experiments
     assert "Evolutionary" in review.defer
 
@@ -62,6 +68,8 @@ def test_build_analysis_payload_reads_learning_tracks(tmp_path: Path):
     payload = build_analysis_payload(data_dir=data_dir, output_dir=tmp_path / "output")
     assert payload["learning_tracks_review"]["beat_control"] is True
     assert payload["churn_health"]["tracks"]["rules"]["decision_review"]["cost_drag"] == 0.05
+    assert payload["system_gaps"] is not None
+    assert "probe_questions" in payload["system_gaps"]
     ok, _ = has_enough_analysis_inputs(payload)
     assert ok is True
 
@@ -378,3 +386,74 @@ def test_promote_skips_non_engineering_areas(tmp_path: Path):
     )
     assert result["promoted"] == []
     assert result["skipped"][0]["reason"].startswith("not promotable")
+
+
+def _system_gap_snapshot() -> dict:
+    return {
+        "flags": [
+            {
+                "id": "overlay_persist_hole",
+                "severity": "high",
+                "layer": "persist",
+                "title": "Overlay exists in output but not committed",
+                "summary": "paper-auto wrote overlay JSON that was not copied.",
+            },
+            {
+                "id": "observe_clock_stale",
+                "severity": "high",
+                "layer": "learning_clock",
+                "title": "Observe clock is stale",
+                "summary": "S&P screen archive is stale.",
+            },
+            {
+                "id": "unused_budget_zero_research",
+                "severity": "medium",
+                "layer": "produce",
+                "title": "Budget unused",
+                "summary": "Should not compile when high_only.",
+            },
+        ]
+    }
+
+
+def test_compile_and_auto_promote_system_gap_tasks(tmp_path: Path):
+    tasks_path = tmp_path / "analysis_tasks.json"
+    eng_path = tmp_path / "engineering_tasks.json"
+    eng_path.write_text(json.dumps({"tasks": []}), encoding="utf-8")
+    compiled = compile_system_gap_analysis_tasks(
+        _system_gap_snapshot(),
+        tasks_path=tasks_path,
+    )
+    ids = {row["id"] for row in compiled["tasks"]}
+    assert "ana-sgap-overlay_persist_hole" in ids
+    assert "ana-sgap-observe_clock_stale" in ids
+    assert "ana-sgap-unused_budget_zero_research" not in ids
+
+    result = auto_promote_system_gap_tasks(
+        analysis_tasks_path=tasks_path,
+        engineering_tasks_path=eng_path,
+    )
+    assert result["promoted"] == ["ana-sgap-overlay_persist_hole"]
+    assert result["should_dispatch_queue"] is False
+    assert any("learning_clock" in row["reason"] for row in result["skipped"])
+    eng = json.loads(eng_path.read_text(encoding="utf-8"))
+    assert eng["tasks"][0]["id"] == "eng-sgap-overlay_persist_hole"
+    assert eng["tasks"][0]["source"] == "system_gaps"
+    assert "[system-gap:overlay_persist_hole]" in eng["tasks"][0]["title"]
+
+    again = auto_promote_system_gap_tasks(
+        analysis_tasks_path=tasks_path,
+        engineering_tasks_path=eng_path,
+    )
+    assert again["promoted"] == []
+    assert len(eng_path.read_text(encoding="utf-8").split('"id": "eng-sgap-')) == 2
+
+
+def test_compile_system_gap_closes_cleared_flags(tmp_path: Path):
+    tasks_path = tmp_path / "analysis_tasks.json"
+    compile_system_gap_analysis_tasks(_system_gap_snapshot(), tasks_path=tasks_path)
+    cleared = compile_system_gap_analysis_tasks({"flags": []}, tasks_path=tasks_path)
+    by_id = {row["id"]: row for row in cleared["tasks"]}
+    assert by_id["ana-sgap-overlay_persist_hole"]["status"] == "done"
+    assert by_id["ana-sgap-overlay_persist_hole"]["done_reason"] == "flag_cleared"
+    assert "ana-sgap-overlay_persist_hole" in cleared["closed"]

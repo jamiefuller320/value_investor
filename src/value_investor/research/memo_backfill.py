@@ -11,7 +11,12 @@ from typing import Any
 
 from value_investor.paper_fund import BUY_SIGNALS
 from value_investor.research.ingest_bootstrap import ensure_canonical_research_store
-from value_investor.research.market_store import resolve_research_documents
+from value_investor.research.market_store import (
+    documents_from_research_index,
+    list_documents_from_research_root,
+    merge_documents_by_ticker,
+    resolve_research_documents,
+)
 from value_investor.research.overlay import apply_research_overlay
 from value_investor.research.runner import _process_ticker
 from value_investor.research.store import ResearchStore
@@ -192,15 +197,20 @@ def write_backfill_state(payload: dict[str, Any], path: Path = DEFAULT_STATE_PAT
 def sync_output_research_to_committed(
     output_dir: Path,
     data_dir: Path = Path("docs/data"),
+    *,
+    tickers: list[str] | None = None,
 ) -> int:
     """Copy memo artifacts from output/research into docs/data/research/{TICKER}/."""
     src_root = output_dir / "research"
     if not src_root.is_dir():
         return 0
+    wanted = {str(t).strip().upper() for t in (tickers or []) if str(t).strip()} or None
     synced = 0
     dest_root = data_dir / "research"
     for ticker_dir in sorted(src_root.iterdir()):
         if not ticker_dir.is_dir():
+            continue
+        if wanted is not None and ticker_dir.name.strip().upper() not in wanted:
             continue
         if not (ticker_dir / "research.json").exists():
             continue
@@ -261,8 +271,15 @@ def publish_memo_backfill_batch(
     *,
     dest_dir: Path = Path("docs"),
     latest_path: Path | None = None,
+    tickers: list[str] | None = None,
 ) -> dict[str, Any]:
-    """Copy new memos to docs/research and merge research overlay into latest.json."""
+    """Copy new memos to docs/research and merge research overlay into latest.json.
+
+    When ``tickers`` is set, only those trees are copied from ``output/research``
+    into markdown + committed stores. A prior full-index rebuild that restaged
+    older trees into ``output/`` must not overwrite newer weekday copies.
+    Omit ``tickers`` for ``rebuild_full_research_index``.
+    """
     from value_investor.publish import _copy_research_memos
 
     latest_path = latest_path or (dest_dir / "data" / "latest.json")
@@ -273,7 +290,12 @@ def publish_memo_backfill_batch(
     if not isinstance(payload, dict):
         return {"error": "latest.json is not an object"}
 
-    new_entries = _copy_research_memos(output_dir, dest_dir)
+    wanted = [str(t).strip().upper() for t in (tickers or []) if str(t).strip()]
+    new_entries = _copy_research_memos(
+        output_dir,
+        dest_dir,
+        tickers=wanted or None,
+    )
     by_ticker = {
         str(row.get("ticker") or "").strip().upper(): row
         for row in payload.get("research") or []
@@ -290,11 +312,23 @@ def publish_memo_backfill_batch(
         for row in payload.get("reports") or []
         if isinstance(row, dict)
     ]
-    documents = resolve_research_documents(
-        output_dir=output_dir,
-        bundle=payload,
-        committed_dir=dest_dir / "data" / "research",
-    )
+    if wanted:
+        batch_docs = [
+            doc
+            for doc in ResearchStore(output_dir).list_documents()
+            if str(doc.ticker or "").strip().upper() in set(wanted)
+        ]
+        documents = merge_documents_by_ticker(
+            batch_docs,
+            list_documents_from_research_root(dest_dir / "data" / "research"),
+            documents_from_research_index(list(payload.get("research") or [])),
+        )
+    else:
+        documents = resolve_research_documents(
+            output_dir=output_dir,
+            bundle=payload,
+            committed_dir=dest_dir / "data" / "research",
+        )
     overlay_reports = apply_research_overlay(reports, documents)
     overlay_by_ticker = {
         str(report.ticker or "").strip().upper(): report for report in overlay_reports
@@ -310,13 +344,18 @@ def publish_memo_backfill_batch(
             updated_reports.append(raw)
     payload["reports"] = updated_reports
     payload["generated_at"] = datetime.now(UTC).isoformat()
-    write_json(latest_path, payload, compact=False, compress=False)
+    write_json(latest_path, payload, compact=True, compress=False)
 
-    synced = sync_output_research_to_committed(output_dir, data_dir=dest_dir / "data")
+    synced = sync_output_research_to_committed(
+        output_dir,
+        data_dir=dest_dir / "data",
+        tickers=wanted or None,
+    )
     return {
         "new_memo_entries": len(new_entries),
         "research_index_count": len(payload["research"]),
         "synced_committed_trees": synced,
+        "tickers": wanted,
     }
 
 
@@ -407,6 +446,7 @@ def run_missing_memo_backfill(
             output_dir,
             dest_dir=dest_dir,
             latest_path=dest_dir / "data" / "latest.json",
+            tickers=summary.created,
         )
 
     write_backfill_state(
@@ -545,6 +585,7 @@ def run_legacy_rememo_pass(
             output_dir,
             dest_dir=dest_dir,
             latest_path=dest_dir / "data" / "latest.json",
+            tickers=summary.created,
         )
     if rebuild_index and not summary.remaining:
         summary.published = rebuild_full_research_index(

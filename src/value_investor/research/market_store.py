@@ -8,6 +8,7 @@ in-scope market inherits the same wiring without a per-market special case.
 
 from __future__ import annotations
 
+import shutil
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
@@ -209,6 +210,128 @@ def _memo_quality_fields(meta: dict[str, Any]) -> tuple[str | None, int, bool]:
     return grade, bodies, has_verdict
 
 
+def library_ticker_dir(research_root: Path, ticker: str) -> Path | None:
+    """Case-preserving ``{research_root}/{TICKER}`` directory, if it exists."""
+    from value_investor.library_dedupe import canonical_library_ticker
+
+    root = Path(research_root)
+    key = canonical_library_ticker(ticker)
+    if not key or not root.is_dir():
+        return None
+    direct = root / key
+    if direct.is_dir():
+        return direct
+    matches = [
+        path
+        for path in root.iterdir()
+        if path.is_dir() and canonical_library_ticker(path.name) == key
+    ]
+    return matches[0] if matches else None
+
+
+def seed_home_filings_from_canonical(
+    library_root: Path,
+    ticker: str,
+    *,
+    market_id: str,
+) -> dict[str, Any]:
+    """
+    Copy focus-market (canonical ingest) filings into the memo home.
+
+    Eligibility compares ``max(canonical, home)`` bodies. Rememoing only the
+    home store without this seed leaves Sunday lag open (TTE.PA / euro_depth).
+    """
+    from value_investor.library_dedupe import canonical_library_ticker, research_home_market
+
+    root = Path(library_root)
+    key = canonical_library_ticker(ticker)
+    result: dict[str, Any] = {
+        "ticker": key,
+        "focus_market": str(market_id).strip(),
+        "action": "skipped",
+    }
+    if not key:
+        result["action"] = "invalid_ticker"
+        return result
+
+    home_id = research_home_market(root, key)
+    result["home_market"] = home_id
+    if not home_id:
+        result["action"] = "no_home"
+        return result
+
+    focus = str(market_id).strip()
+    canonical_root = committed_research_dir(focus, library_root=root)
+    home_root = committed_research_dir(home_id, library_root=root)
+    canonical_dir = library_ticker_dir(canonical_root, key)
+    home_dir = library_ticker_dir(home_root, key)
+    if home_dir is None:
+        result["action"] = "no_home_dir"
+        return result
+
+    canon_bodies = filing_body_count(canonical_dir) if canonical_dir is not None else 0
+    home_bodies = filing_body_count(home_dir)
+    result["canonical_bodies"] = canon_bodies
+    result["home_bodies_before"] = home_bodies
+    if home_id == focus or canon_bodies <= home_bodies:
+        result["action"] = "home_ahead_or_same_store"
+        result["home_bodies_after"] = home_bodies
+        return result
+
+    src = canonical_dir / "sources" / "filings" if canonical_dir is not None else None
+    if src is None or not src.is_dir():
+        result["action"] = "no_canonical_filings"
+        result["home_bodies_after"] = home_bodies
+        return result
+
+    dest = home_dir / "sources" / "filings"
+    dest.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(src, dest, dirs_exist_ok=True)
+    result["action"] = "seeded"
+    result["home_bodies_after"] = filing_body_count(home_dir)
+    return result
+
+
+def resolve_library_rememo_target(
+    library_root: Path,
+    ticker: str,
+    *,
+    selected_market: str,
+    focus_market: str,
+    rememo_reasons: dict[str, str],
+) -> dict[str, Any]:
+    """
+    Where to write a ladder research memo, and whether to force-initial rememo.
+
+    First-time names stay on the selected queue market. Rememo-eligible names
+    seed the existing home from focus-market filings and rewrite that home.
+    """
+    from value_investor.library_dedupe import canonical_library_ticker, research_home_market
+
+    key = canonical_library_ticker(ticker)
+    if key not in rememo_reasons:
+        return {
+            "ticker": key,
+            "market": selected_market,
+            "force_initial": False,
+            "reason": None,
+            "seed": None,
+        }
+    home = research_home_market(library_root, key) or selected_market
+    seed = seed_home_filings_from_canonical(
+        library_root,
+        key,
+        market_id=focus_market,
+    )
+    return {
+        "ticker": key,
+        "market": home,
+        "force_initial": True,
+        "reason": rememo_reasons[key],
+        "seed": seed,
+    }
+
+
 def library_rememo_eligible_tickers(
     library_root: Path,
     *,
@@ -233,17 +356,11 @@ def library_rememo_eligible_tickers(
         if not ticker:
             continue
         home_id = research_home_market(root, ticker)
-        home_dir = committed_research_dir(home_id, library_root=root) / ticker if home_id else None
-        if home_dir is None or not (home_dir / "research.json").exists():
-            # Case-preserving home dir from research_home_market walk.
-            if home_id:
-                research = committed_research_dir(home_id, library_root=root)
-                matches = [
-                    p
-                    for p in research.iterdir()
-                    if p.is_dir() and canonical_library_ticker(p.name) == ticker
-                ]
-                home_dir = matches[0] if matches else None
+        home_dir = (
+            library_ticker_dir(committed_research_dir(home_id, library_root=root), ticker)
+            if home_id
+            else None
+        )
         if home_dir is None or not (home_dir / "research.json").exists():
             continue
         try:
@@ -253,8 +370,9 @@ def library_rememo_eligible_tickers(
         if not isinstance(meta, dict):
             continue
         grade, memo_bodies, has_verdict = _memo_quality_fields(meta)
+        canonical_dir = library_ticker_dir(canonical, ticker)
         disk_bodies = max(
-            filing_body_count(canonical / ticker),
+            filing_body_count(canonical_dir) if canonical_dir is not None else 0,
             filing_body_count(home_dir),
         )
         reason = rememo_reason(

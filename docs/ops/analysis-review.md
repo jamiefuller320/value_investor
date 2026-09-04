@@ -45,6 +45,7 @@ If history is still seeding, the workflow logs `payload` readiness and skips the
 | File | Purpose |
 |------|---------|
 | `docs/data/experiment_assessment.json` | Unified experiment loop (continue / fail / recommend) |
+| `docs/data/system_gaps.json` | Deterministic learning-path integrity snapshot (no LLM) |
 | `docs/data/analysis_review.md` | Human-readable synthesis |
 | `docs/data/analysis_review.json` | Structured sections + metadata |
 | `docs/data/analysis_tasks.json` | Proposed experiments (`status: proposed`) |
@@ -87,8 +88,49 @@ The same Sunday payload includes slim:
 | `exclusion_ladder_replay` | ≥1 `[monitoring]` / `[paper_knobs]` spawn-shadow gate when `ready_for_shadow_spawn` (human CLI; never auto) |
 | `exit_timing_cohorts` / `exit_timing_near_miss` | ≥1 `[paper_churn]` / `[offline_sim]` when probability readiness fires |
 | `entry_dca_overlay` | ≥1 `[paper_churn]` / `[offline_sim]` when `ready_for_cadence_analysis` (cite leading cadence; do not execute DCA) |
+| `system_gaps` | ≥1 `[ops]` / `[ingest]` / `[coverage]` / `[monitoring]` when `flags` is non-empty, citing the highest-severity flag id |
 
 Cap five experiment lines; overflow goes to **DEFER**.
+
+## System gaps (learning-path integrity)
+
+Sunday `analysis-review.yml` writes [`docs/data/system_gaps.json`](../data/system_gaps.json)
+**even when the modelling agent is skipped**. The snapshot is deterministic — it does
+not mine conversation transcripts.
+
+It exists because healthy ops counters can hide consumer-path misses:
+
+| Counter that looks green | What it can hide |
+|--------------------------|------------------|
+| `weekly_ops` remaining / not constraining | Research skipped as already-done; rememo never runs |
+| Ladder `executed: 0` + `already_researched` | Thin / zero-body first-pass memos counted as coverage |
+| Memo file exists / 100% buy-tier files | Verdict never wired onto the report the paper book reads |
+| Filing parity / maintenance ingest | Observe-sim / screen-lite clock stale; not `learning_ready` |
+| Feature tests green | Overlay JSON in `output/` never persisted to `docs/data/` |
+
+Layers in the snapshot: **produce → persist → publish → apply**, plus
+**learning_clock** (filing-ready vs learning-ready). The analysis agent must answer
+`probe_questions` in a **SYSTEM GAPS** section and must not treat unused budget or
+file existence as proof the learning path is fed.
+
+```bash
+ftse-analysis-review system-gaps --json
+ftse-analysis-review system-gaps --write
+ftse-analysis-review compile-system-gaps --promote --json
+```
+
+Sunday `analysis-review.yml` compiles high flags into `analysis_tasks.json`
+(`ana-sgap-<flag_id>`) even when the modelling agent is skipped.
+
+**Auto-promote (narrow):** persist / publish / apply high flags
+(`overlay_persist_hole`, `overlay_lagging_committed`, `research_index_shrunk`,
+`buy_tier_unwired_verdict`) open `eng-sgap-<flag_id>` rows with title-dedupe.
+That is the written≠wired class from the morning miss. Produce and
+`learning_clock` flags stay **proposed** for human
+`ftse-analysis-review promote`. Neither path dispatches engineering agents.
+
+The overview dashboard card **Learning-path gaps** reads the snapshot (bundle
+or `data/system_gaps.json` sidecar).
 
 ## Experiment assessment ledger
 

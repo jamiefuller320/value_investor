@@ -122,6 +122,8 @@ def test_build_payload_includes_vision_and_regime(tmp_path: Path):
     assert "convergence_summary" in payload
     assert "strands" in payload["convergence_summary"]
     assert payload["trajectory_evidence"] is None
+    assert payload["system_gaps"] is not None
+    assert payload["system_gaps"]["probe_questions"]
     assert payload["exclusion_universe"]["purpose"]
     assert "ladder_results_slim" in payload["exclusion_universe"]
     assert "cards" not in (payload.get("loser_snapshot_cards") or {})
