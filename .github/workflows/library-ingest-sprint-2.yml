@@ -141,6 +141,13 @@ jobs:
           fi
           exit "$rc"
 
+      - name: Refresh library state after predecessors finish
+        if: steps.wait_head.outputs.idle == 'true'
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git checkout origin/main -- docs/data/library
+
       - name: Run parallel library ingest sprint 2
         if: steps.wait_head.outputs.idle == 'true'
         env:
