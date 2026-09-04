@@ -1,8 +1,8 @@
 name: Library ingest sprint 2 (parallel)
 
-# High-tempo buy-tier filing deepen for the second parallel queue stream
-# (e.g. asx200 while sp500 stream 1 and euro_depth focus sprint continue).
-# Cadence: focus +60 min — Mon–Sat peak + daily off-peak.
+# Spare-capacity buy-tier filing deepen for the second parallel queue stream
+# (e.g. asx200). Yields 08:15/11:15 UTC to the euro_depth fat slot while focus
+# still has filing gaps (ingest_effort_cascade). Cadence: focus +60 min.
 on:
   schedule:
     - cron: "15 8 * * 1-6"
@@ -71,10 +71,13 @@ jobs:
               for row in (data.get("parallel_sprint_2_status") or [])
               if row.get("should_run_parallel_ingest")
           ]
+          cascade = data.get("ingest_cascade") or {}
+          skip_cascade = "true" if cascade.get("skip_stream_2_now") else "false"
           out = Path(os.environ["GITHUB_OUTPUT"])
           out.write_text(
               f"parallel_markets={','.join(parallel)}\n"
-              f"needing_sprint={','.join(needing)}\n",
+              f"needing_sprint={','.join(needing)}\n"
+              f"skip_cascade={skip_cascade}\n",
               encoding="utf-8",
           )
           PY
@@ -85,11 +88,17 @@ jobs:
         env:
           FORCE: ${{ github.event.inputs.force || 'false' }}
           NEEDING: ${{ steps.dispatch.outputs.needing_sprint }}
+          SKIP_CASCADE: ${{ steps.dispatch.outputs.skip_cascade }}
         with:
           script: |
             if (process.env.FORCE === 'true') {
               core.setOutput('should_run', 'true');
               core.info('force=true — running parallel library ingest sprint 2');
+              return;
+            }
+            if (process.env.SKIP_CASCADE === 'true') {
+              core.setOutput('should_run', 'false');
+              core.info('Cascade: stream 2 yields peak slot to head fat slot');
               return;
             }
             const needing = (process.env.NEEDING || '').split(',').filter(Boolean);

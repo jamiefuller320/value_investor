@@ -10,6 +10,12 @@ from typing import Any
 
 from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT
+from value_investor.library_ingest_cascade import (
+    evaluate_ingest_cascade,
+    load_cascade_config,
+    scale_spare_budget,
+    should_skip_spare_stream,
+)
 from value_investor.library_ingest_dispatch import (
     ingest_parity_met,
     list_library_ingest_parallel_sprint_markets,
@@ -32,6 +38,9 @@ class LibraryIngestSprintResult:
     results: list[dict[str, Any]] = field(default_factory=list)
     skipped: list[dict[str, Any]] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
+    cascade: dict[str, Any] | None = None
+    max_targets: int | None = None
+    max_runtime_seconds: float | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -40,6 +49,9 @@ class LibraryIngestSprintResult:
             "results": self.results,
             "skipped": self.skipped,
             "errors": self.errors,
+            "cascade": self.cascade,
+            "max_targets": self.max_targets,
+            "max_runtime_seconds": self.max_runtime_seconds,
         }
 
 
@@ -78,6 +90,7 @@ def run_library_ingest_sprint(
     max_runtime_seconds: float = 2100.0,
     max_bodies: int = 20,
     parallel_stream: int = 1,
+    now: datetime | None = None,
 ) -> LibraryIngestSprintResult:
     """Run high-tempo sprint ingest for parallel queue markets (not focus)."""
     library_root = Path(library_root)
@@ -93,12 +106,49 @@ def run_library_ingest_sprint(
         logger.warning("Parallel sprint queue reconcile failed: %s", exc)
 
     policy = load_policy(policy_path)
+    when = now or datetime.now(UTC)
+    head_id = str(policy.get("focus_market") or "").strip() or "euro_depth"
+    head_health = snapshot_library_buy_tier_filing_health(
+        head_id, library_root=library_root, policy=policy
+    )
+    cascade = evaluate_ingest_cascade(
+        policy,
+        head_at_parity=ingest_parity_met(head_health),
+        now=when,
+    )
+    cascade_cfg = load_cascade_config(policy)
+    max_targets, max_runtime_seconds, _mode = scale_spare_budget(
+        parallel_stream,
+        max_targets,
+        max_runtime_seconds,
+        config=cascade_cfg,
+        head_needs_fat=cascade.head_needs_fat_slot,
+    )
+    outcome = LibraryIngestSprintResult(
+        cascade=cascade.to_dict(),
+        max_targets=max_targets,
+        max_runtime_seconds=max_runtime_seconds,
+    )
+    if should_skip_spare_stream(
+        parallel_stream,
+        hour_utc=cascade.hour_utc,
+        config=cascade_cfg,
+        head_needs_fat=cascade.head_needs_fat_slot,
+    ):
+        outcome.skipped.append(
+            {
+                "reason": "cascade_spare_yields_to_head",
+                "head_market": cascade.head_market,
+                "hour_utc": cascade.hour_utc,
+            }
+        )
+        return outcome
     market_list = markets or parallel_sprint_markets_needing_ingest(
         library_root=library_root,
         policy=policy,
         parallel_stream=parallel_stream,
     )
-    outcome = LibraryIngestSprintResult(markets=market_list)
+    outcome.markets = market_list
     if not market_list:
         outcome.skipped.append({"reason": "no_parallel_sprint_markets_with_gaps"})
         return outcome

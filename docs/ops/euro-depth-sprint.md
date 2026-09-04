@@ -71,8 +71,13 @@ When focus reaches parity, `ingest_parity_markets` is updated and focus may adva
 Maximum effort stays on the highest-priority market that is not yet in the learning
 phase (today: `euro_depth`). Spare capacity only on the next queue markets. Do **not**
 add a fourth equal sprint workflow (`library-ingest-sprint-3.yml` or similar) that can
-starve the head target. A true preemptible scheduler is later (L273); until then, treat
-focus deepen as the fat slot.
+starve the head target.
+
+**First slice (wired):** while focus still has FTSE-standard filing gaps,
+`ingest_effort_cascade` scales stream 1 to half targets/runtime and stream 2 to
+a quarter, and **skips stream 2 at 08:15 / 11:15 UTC** so those slots cannot
+overlap the euro fat slot. Full spare caps return when the head reaches ingest
+parity. A true preemptible GHA scheduler is later (L273).
 
 **Parallel sprint:** `ingest_parallel_sprint` (default `["sp500"]`) and `ingest_parallel_sprint_2`
 (default `["asx200"]`) front-start filing deepen on queue markets while focus is still in

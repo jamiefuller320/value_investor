@@ -9,6 +9,7 @@ from typing import Any
 
 from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT
+from value_investor.library_ingest_cascade import evaluate_ingest_cascade
 from value_investor.library_ingest_escalation import (
     library_ingest_filing_gaps,
     snapshot_library_buy_tier_filing_health,
@@ -226,6 +227,10 @@ def enrich_library_ingest_dispatch(
         policy=policy,
     )
     evaluation["market_queue"] = list(policy.get("market_queue") or [])
+    evaluation["ingest_cascade"] = evaluate_ingest_cascade(
+        policy,
+        head_at_parity=bool(evaluation.get("ingest_parity_met")),
+    ).to_dict()
     return evaluation
 
 

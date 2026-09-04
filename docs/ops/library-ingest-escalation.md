@@ -136,7 +136,7 @@ ftse-library euro-ingest-dispatch --json
 |------|----------|-----------|
 | Sprint ingest (focus) | `euro-ingest-loop.yml` | Runs only when focus `should_run_sprint_ingest` |
 | Sprint ingest (parallel 1) | `library-ingest-sprint.yml` | Runs `ingest_parallel_sprint` markets with gaps (e.g. sp500) |
-| Sprint ingest (parallel 2) | `library-ingest-sprint-2.yml` | Runs `ingest_parallel_sprint_2` markets with gaps (e.g. asx200); auto-advances queue on parity |
+| Sprint ingest (parallel 2) | `library-ingest-sprint-2.yml` | Spare stream: `ingest_parallel_sprint_2` (e.g. asx200). While focus still has filing gaps, cascade scales the budget and skips 08:15/11:15 UTC so the euro fat slot is not contended. Auto-advances queue on parity. |
 
 Parallel sprint auto-advance (`advance_parallel_sprint_on_ingest_parity`, default true) rotates
 `market_queue` markets through stream slots when filing parity is met. FTSE-equivalent markets
@@ -148,6 +148,7 @@ Parallel sprint auto-advance (`advance_parallel_sprint_on_ingest_parity`, defaul
 | Micro-compile dispatch | `euro-ingest-loop.yml` | After `micro_compiled` or `gap_closure_compiled`, runs `engineering-queue.yml` immediately |
 | Post-merge verify rerun | `engineering-queue.yml` | Tasks with `evidence.market_id` rerun **`euro-ingest-loop.yml`**; FTSE tasks still use `ingest-loop.yml` |
 | Discovery time cap | `library_ingest_budget.py` | Listing discovery may use at most 25% of `max_runtime_seconds` (675s of a 2700s euro slot) and scans thin/unmeasured/zero-body/IWB names first. Body deepen keeps the rest of the clock. |
+| Effort cascade | `library_ingest_cascade.py` / `ingest_effort_cascade` | While focus has filing gaps: stream 1 runs at 50% targets/runtime, stream 2 at 25% and yields peak hours (08:00/11:00 UTC). Full spare caps return at head ingest parity. |
 | Clean JSON for CI | `euro-ingest-loop.yml` | Uses `ingest-loop --json-path` / `euro-ingest-dispatch --json-path` (not `tee`) so stdout warnings (e.g. PyMuPDF `fitz`) cannot break `GITHUB_OUTPUT` parsing |
 | Artifact push | `scripts/push_library_ingest_artifacts.sh` | Stashes allowlisted paths (`docs/data/library/`, `engineering_tasks.json`, `ingest_gap_closure_runs.json`) before `checkout origin/main`; restores only files the job changed so concurrent queue updates are not clobbered |
 | pip install retry | `scripts/gha_pip_install.sh` | 4 attempts with backoff for transient PyPI / empty-index flakes (`from versions: none`) |

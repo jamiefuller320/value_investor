@@ -215,6 +215,18 @@ def default_policy() -> dict[str, Any]:
                 "Never wire into quantitative scores or weights."
             ),
         },
+        "ingest_effort_cascade": {
+            "enabled": True,
+            "stream_1_target_fraction": 0.5,
+            "stream_1_runtime_fraction": 0.5,
+            "stream_2_target_fraction": 0.25,
+            "stream_2_runtime_fraction": 0.25,
+            "stream_2_yield_hours_utc": [8, 11],
+            "note": (
+                "While focus still has filing gaps, scale spare sprint streams "
+                "and skip stream-2 peak hours that overlap the fat slot."
+            ),
+        },
         "director_worker": {
             "phase": "exploration",
             "exploration_weekly_cap": 15,
@@ -252,6 +264,7 @@ def load_policy(path: Path | None = None) -> dict[str, Any]:
         "paper_fx",
         "macro_context",
         "director_worker",
+        "ingest_effort_cascade",
     ):
         merged = default_policy()[key]
         file_section = dict(data.get(key) or {})
