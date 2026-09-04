@@ -184,8 +184,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "TTE.PA": [
         "https://totalenergies.com/system/files/documents/totalenergies_universal-registration-document-2025_2026_en.pdf",
     ],
+    # euro_depth IWB blocker — ab-inbev.com IR is age-gated; SEC 20-F / HY 6-K (CIK 1668717).
     "ABI.BR": [
-        "https://www.bmv.com.mx/docs-pub/10-k/10-k_1539631_2025_1.pdf",
+        "https://www.sec.gov/Archives/edgar/data/1668717/000119312526088105/d65314d20f.htm",
+        "https://www.sec.gov/Archives/edgar/data/1668717/000119312525052976/d899194d20f.htm",
+        "https://www.sec.gov/Archives/edgar/data/1668717/000119312526326320/d142827dex991.htm",
+        "https://www.sec.gov/Archives/edgar/data/1668717/000119312526326285/d175040d6k.htm",
     ],
     "RAND.AS": [
         "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Randstad_Annual_Report_2025_F.pdf",
@@ -3687,12 +3691,7 @@ def refetch_ir_allowlist_filing_bodies(
         for row in filings:
             item = dict(row)
             url = str(item.get("url") or "").strip()
-            if (
-                _is_ir_allowlist_row(item)
-                and url
-                and url not in allowlist_urls
-                and not item.get("has_body")
-            ):
+            if _is_ir_allowlist_row(item) and url and url not in allowlist_urls:
                 item["unfetchable"] = True
                 item["unfetchable_reason"] = "allowlist_removed"
                 item["unfetchable_at"] = datetime.now(UTC).isoformat()
@@ -4604,8 +4603,11 @@ def _write_bodies(
     attempted_ids: set[str] | None = None,
     ticker: str = "",
     company_name: str = "",
+    deadline_monotonic: float | None = None,
 ) -> list[dict[str, Any]]:
     """Fetch bodies for the highest-priority filings with direct URLs."""
+    from value_investor.library_ingest_budget import deadline_reached
+
     bodies_dir.mkdir(parents=True, exist_ok=True)
     # Prefer annual/interim first
     candidates = sorted(
@@ -4618,6 +4620,9 @@ def _write_bodies(
     for row in candidates:
         row = dict(row)
         if downloaded < max_bodies and not row.get("has_body"):
+            if deadline_reached(deadline_monotonic):
+                updated.append(row)
+                continue
             period = row.get("period")
             if period in ("annual", "interim", "trading_update", "other"):
                 # Always try annual/interim/trading updates; only try a few "other" if slots remain
@@ -5279,6 +5284,7 @@ def refetch_residual_filing_bodies(
     max_bodies: int = 20,
     prune_index_noise: bool = True,
     prune_unfetchable_after_attempt: bool = False,
+    deadline_monotonic: float | None = None,
 ) -> dict[str, Any]:
     """
     Final sweep for indexed rows still lacking bodies after source-specific pipelines.
@@ -5288,6 +5294,8 @@ def refetch_residual_filing_bodies(
     When ``prune_unfetchable_after_attempt`` is set (ingest trials with intensive gap
     closure), also drops rows that were fetched in this pass but still lack bodies.
     """
+    from value_investor.library_ingest_budget import deadline_reached
+
     filings_dir = Path(filings_dir)
     index_path = filings_dir / "filings_index.json"
     bodies_dir = filings_dir / "bodies"
@@ -5299,6 +5307,7 @@ def refetch_residual_filing_bodies(
         "pruned_unfetchable": 0,
         "with_body_before": 0,
         "with_body_after": 0,
+        "deadline_hit": False,
     }
     if not index_path.exists():
         return {**empty, "note": "no filings_index.json"}
@@ -5332,6 +5341,7 @@ def refetch_residual_filing_bodies(
         attempted_ids=attempted_ids,
         ticker=ticker,
         company_name=company_name,
+        deadline_monotonic=deadline_monotonic,
     )
     updated, pruned_noise, pruned_unfetchable = _prune_residual_index_rows(
         updated,
@@ -5356,6 +5366,7 @@ def refetch_residual_filing_bodies(
         "pruned_unfetchable": pruned_unfetchable,
         "with_body_before": before,
         "with_body_after": after,
+        "deadline_hit": deadline_reached(deadline_monotonic),
         "note": "refetch_residual_filing_bodies",
     }
 

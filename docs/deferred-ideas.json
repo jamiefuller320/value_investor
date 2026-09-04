@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-04T14:46:01+00:00",
+  "updated_at": "2026-09-04T15:01:53+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -6082,9 +6082,42 @@
         "ir-allowlist",
         "ABI.BR"
       ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
+      "added_at": "2026-09-04T14:46:01+00:00",
+      "updated_at": "2026-09-04T15:01:41+00:00"
+    },
+    {
+      "id": "L288",
+      "category": "later",
+      "section": "ops",
+      "title": "Auto-clear library ingest pin when IWB closes",
+      "summary": "docs/data/library_ingest_pins.json is a dated intensive pin (ABI.BR through 2026-09-11). After the named ticker\u2019s indexed-without-body count hits 0, auto-remove or expire the pin so weekday euro returns to the 24-name batch without a manual edit.",
+      "revisit_when": "After the 16:15/next euro intensive ABI pin run, or when ABI.BR IWB is 0",
+      "tags": [
+        "library-ingest",
+        "pins",
+        "euro"
+      ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
-      "added_at": "2026-09-04T14:46:01+00:00"
+      "added_at": "2026-09-04T15:01:53+00:00"
+    },
+    {
+      "id": "L289",
+      "category": "later",
+      "section": "research",
+      "title": "Retry AB InBev IR PDFs if age-gate is lifted",
+      "summary": "ABI.BR allowlist now uses SEC 20-F/HY 6-K because ab-inbev.com/investors is age-gated. If the IR site starts serving direct annual/HY PDF hrefs without a birthdate wall, swap those official PDFs in for the SEC HTML mirrors.",
+      "revisit_when": "ab-inbev.com annual-and-half-year-reports exposes direct PDF links without an age-gate",
+      "tags": [
+        "ir-allowlist",
+        "ABI.BR",
+        "euro"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
+      "added_at": "2026-09-04T15:01:53+00:00"
     }
   ],
   "fragments": [

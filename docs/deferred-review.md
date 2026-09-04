@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T14:46:01+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T15:01:53+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -277,7 +277,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L269 | **Deepen Azelis AZE.BR filings after verdict catch-up** | AZE.BR has an accumulate verdict but only one indexed filing body. Next rememo needs buy-tier membership plus the usual body-lag threshold (10 adequate/thin, 25 strong), not merely bodies rising from 1 to 2. deepen-thin default (0 bodies) will not list it. | AZE.BR is buy-tier and euro_depth filings_with_body leads the memo by the rememo lag threshold |
 | L284 | **Pre-upgrade family-failure veto counterfactual** | Nine of 53 loser cards fail quality family while opinion_flip_triggers still permit conviction ≥0.35 upgrades. Estimate underwater-entry reduction with a pre-upgrade veto — observe-only, no live assign_signal change. | [offline_sim] on the 53-card loser cohort shows reduced underwater entry rate |
 | L285 | **Batch-close stale ticker-specific gap-fill deferrals** | Dozens of July/August per-ticker gap-fill items still say 'after next weekly email gap-fill pass'. Do not mass-close them from a store review; after the next Sunday email, close only those whose named gap is gone or superseded by a generic ingest path (CH/IR crawler). | Next Sunday email gap-fill pass writes gap_fill_summary.json and post_run_review.md |
-| L287 | **Replace ABI.BR IR allowlist; weekday 320s cannot clear 11 IWB** | ABI.BR was the 13:15 blocker (ticker_budget_hit, 20/20 bodies, 11 IWB). The allowlist is one bmv.com.mx 10-K PDF, which is the wrong issuer. Same class as the DG.PA GlobeNewswire miss: swap in AB InBev IR PDFs and mark failed rows unfetchable. | The next euro deepen spends another 320s on ABI.BR with improved=false, or intensive gap-closure is pinned to ABI.BR. |
+| L289 | **Retry AB InBev IR PDFs if age-gate is lifted** | ABI.BR allowlist now uses SEC 20-F/HY 6-K because ab-inbev.com/investors is age-gated. If the IR site starts serving direct annual/HY PDF hrefs without a birthdate wall, swap those official PDFs in for the SEC HTML mirrors. | ab-inbev.com annual-and-half-year-reports exposes direct PDF links without an age-gate |
 
 ### Ops / reliability
 
@@ -333,6 +333,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L280 | **Cross-workflow library ingest push mutex** | Artifact-push retries already absorb most euro vs spare commit races. A dedicated mutex or serialized push lock is only worth it if wait+leftover still produces repeated push failures on docs/data/library. | library ingest artifact pushes fail more than twice in a week after the scheduler wait is live on main. |
 | L281 | **Paper-auto git push race hardening** | Aug 27 paper-auto failed on post-run git push race; Aug 28 recovered without code change. Add commit/push locking or retry if the race recurs. | Second push-race failure appears in paper-auto logs or a second failed weekday batch |
 | L286 | **Warm-start selective A-to-B fair-cost twins** | spawn-fair-twins writes Suite B configs, but warm_start_fair_cost_lab still only seeds ai_judgment_fair and rules_fair. Generalize PIT warm-start to *_fair experiment twins after a human actually applies a spawn. | A recommend-state experiment is spawned via ftse-trading-costs spawn-fair-twins --apply |
+| L288 | **Auto-clear library ingest pin when IWB closes** | docs/data/library_ingest_pins.json is a dated intensive pin (ABI.BR through 2026-09-11). After the named ticker’s indexed-without-body count hits 0, auto-remove or expire the pin so weekday euro returns to the 24-name batch without a manual edit. | After the 16:15/next euro intensive ABI pin run, or when ABI.BR IWB is 0 |
 
 ---
 
