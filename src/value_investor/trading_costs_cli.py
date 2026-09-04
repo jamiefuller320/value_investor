@@ -15,6 +15,7 @@ from value_investor.market_trading_costs import (
 )
 
 DEFAULT_PAPER_ROOT = Path("docs/data/paper_automation")
+DEFAULT_DATA_DIR = Path("docs/data")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -98,6 +99,62 @@ def main(argv: list[str] | None = None) -> int:
     )
     warm_p.add_argument("--json", action="store_true")
     warm_p.set_defaults(func=_cmd_warm_start_fair_lab)
+
+    twins_p = sub.add_parser(
+        "spawn-fair-twins",
+        help=(
+            "Human-only: spawn Suite B fair-cost twins for experiment_assessment "
+            "recommend rows (default dry-run; never auto-fork)"
+        ),
+    )
+    twins_p.add_argument(
+        "--paper-root",
+        type=Path,
+        default=DEFAULT_PAPER_ROOT,
+        help="Paper automation root (default: docs/data/paper_automation)",
+    )
+    twins_p.add_argument(
+        "--data-dir",
+        type=Path,
+        default=DEFAULT_DATA_DIR,
+        help="Data dir with experiment_assessment.json (default: docs/data)",
+    )
+    twins_p.add_argument(
+        "--market",
+        default="ftse350",
+        help="Market id for fair cost stamps (default: ftse350)",
+    )
+    twins_p.add_argument(
+        "--max-spawns",
+        type=int,
+        default=2,
+        help="Cap new twins this invocation (default: 2)",
+    )
+    twins_p.add_argument(
+        "--experiment-id",
+        default="",
+        help="Limit to one experiment_id or track_id",
+    )
+    twins_mode = twins_p.add_mutually_exclusive_group()
+    twins_mode.add_argument(
+        "--dry-run",
+        dest="apply",
+        action="store_false",
+        help="Preview only (default)",
+    )
+    twins_mode.add_argument(
+        "--apply",
+        dest="apply",
+        action="store_true",
+        help="Write fair-cost twin configs (human gate)",
+    )
+    twins_p.add_argument(
+        "--force",
+        action="store_true",
+        help="Recreate an existing twin config/fund",
+    )
+    twins_p.add_argument("--json", action="store_true")
+    twins_p.set_defaults(apply=False, func=_cmd_spawn_fair_twins)
 
     args = parser.parse_args(argv)
     return int(args.func(args))
@@ -220,6 +277,39 @@ def _cmd_warm_start_fair_lab(args: argparse.Namespace) -> int:
             )
         else:
             print(f"  [{row.get('track_id')}] {row.get('reason') or row.get('skipped')}")
+    return 0
+
+
+def _cmd_spawn_fair_twins(args: argparse.Namespace) -> int:
+    from value_investor.fair_cost_lab import spawn_fair_cost_twins_for_recommendations
+
+    payload = spawn_fair_cost_twins_for_recommendations(
+        args.paper_root,
+        args.data_dir,
+        dry_run=not bool(args.apply),
+        max_spawns=int(args.max_spawns),
+        experiment_id=str(args.experiment_id or "").strip() or None,
+        market_id=args.market,
+        force=bool(args.force),
+    )
+    if args.json:
+        print(json.dumps(payload, indent=2))
+        return 0
+    mode = "dry-run" if payload.get("dry_run") else "apply"
+    print(
+        f"Fair twins ({mode}): recommend={payload.get('recommend_count')} "
+        f"selected={payload.get('selected_count')} spawned={payload.get('spawned_count')}"
+    )
+    print(payload.get("note") or "")
+    for row in payload.get("tracks") or []:
+        print(
+            f"  [{row.get('twin_track_id') or row.get('track_id')}] "
+            f"parent={row.get('parent_track_id')} "
+            f"spawned={row.get('spawned')} "
+            f"{row.get('reason') or ''}"
+        )
+    for skipped in payload.get("skipped_budget") or []:
+        print(f"  skipped {skipped.get('track_id')}: {skipped.get('reason')}")
     return 0
 
 

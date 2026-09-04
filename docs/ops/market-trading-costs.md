@@ -118,6 +118,7 @@ Learning-director vision caps open experiments (~5). Fair lab should start as **
 | Now | Suite B books live: `ai_judgment_fair` + `rules_fair` under `docs/data/paper_automation/` (fair T212 costs; warm-started). Suite A stays on 3% stress. |
 | Now | Weekday paper-auto includes Suite B when present; decision-review `--suite B --apply` tunes fair-lab knobs only. |
 | Now | Sunday: `ftse-trading-costs assess` + compare Suite B excess vs ^FTSE / fair rules control before any promotion talk |
+| Now | If `experiment_assessment` has **recommend** calibration / exclusion / experimental rows, dry-run then optionally apply `ftse-trading-costs spawn-fair-twins` (max 2; human only — **N53**) |
 | Later | Flip primary off 3% only after B has a thick forward window (**N48**) |
 
 ```bash
@@ -131,6 +132,23 @@ ftse-decision-review --tracks all --suite B --apply
 # Weekday paper marks for fair lab only
 ftse-paper-auto --tracks all --suite B
 ```
+
+### Selective A-to-B fair-cost twins
+
+Do **not** fork every Suite A shadow (**N53**). When a calibration / exclusion /
+experimental paper track reaches `status=recommend` in
+`experiment_assessment.json`, a human may spawn at most two fair-cost twins:
+
+```bash
+# Preview (default) — current recommend count is often 0 (no-op)
+ftse-trading-costs spawn-fair-twins --json
+
+# Write configs after reviewing the dry-run
+ftse-trading-costs spawn-fair-twins --apply --max-spawns 2
+```
+
+Base `ai_judgment` / `rules` already have Suite B books — use `spawn-fair-lab`
+for those. Never wire this into paper-auto or analysis-review.
 
 See also: [`knob-calibration.md`](knob-calibration.md) (warm-start),
 [`primary-learning-track.md`](primary-learning-track.md),
