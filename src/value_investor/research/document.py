@@ -75,7 +75,7 @@ class ResearchDocument:
             self.risks_and_flags,
             self.news_highlights,
         ]
-        body = "\n\n".join(p.strip() for p in parts if p.strip())
+        body = "\n\n".join(p.strip() for p in parts if p and str(p).strip())
         if self.weekly_updates:
             update_bits = [
                 f"### {item['date']}\n{item['summary']}"
