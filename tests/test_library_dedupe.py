@@ -83,7 +83,9 @@ def test_select_skips_already_researched(tmp_path: Path):
 def test_select_allows_stale_memo_when_not_in_already_researched():
     queues = {
         "euro_depth": [
-            SimpleNamespace(ticker="ERIC-B.ST", name="Ericsson", signal="buy", conviction_score=0.8),
+            SimpleNamespace(
+                ticker="ERIC-B.ST", name="Ericsson", signal="buy", conviction_score=0.8
+            ),
         ],
     }
     selected, skipped = select_deduped_research_targets(

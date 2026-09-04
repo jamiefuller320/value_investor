@@ -246,9 +246,7 @@ def _apply_resolved_research_overlay(
     )
     if not documents:
         return
-    reports = [
-        CompanyReport.from_dict(row) for row in raw_reports if isinstance(row, dict)
-    ]
+    reports = [CompanyReport.from_dict(row) for row in raw_reports if isinstance(row, dict)]
     updated = apply_research_overlay(reports, documents)
     bundle["reports"] = [report.to_dict() for report in updated]
 

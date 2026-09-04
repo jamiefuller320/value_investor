@@ -233,11 +233,7 @@ def library_rememo_eligible_tickers(
         if not ticker:
             continue
         home_id = research_home_market(root, ticker)
-        home_dir = (
-            committed_research_dir(home_id, library_root=root) / ticker
-            if home_id
-            else None
-        )
+        home_dir = committed_research_dir(home_id, library_root=root) / ticker if home_id else None
         if home_dir is None or not (home_dir / "research.json").exists():
             # Case-preserving home dir from research_home_market walk.
             if home_id:

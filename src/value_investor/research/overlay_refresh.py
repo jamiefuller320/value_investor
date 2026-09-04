@@ -140,9 +140,7 @@ def refresh_dashboard_bundle(
     resolved_committed = committed_dir
     if resolved_committed is None and inferred.is_dir():
         resolved_committed = inferred
-    documents = _load_research_documents(
-        output_dir, bundle, committed_dir=resolved_committed
-    )
+    documents = _load_research_documents(output_dir, bundle, committed_dir=resolved_committed)
     if not documents:
         logger.warning("No research documents available — skipping overlay refresh")
         return 0
