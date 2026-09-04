@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-04T20:52:18+00:00",
+  "updated_at": "2026-09-04T22:52:59+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -6267,6 +6267,54 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
       "added_at": "2026-09-04T20:52:18+00:00"
+    },
+    {
+      "id": "N82",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Handoff fat ingest slot when ingest slows and engineering is queued",
+      "summary": "Do not move the P2 fat slot off euro_depth because a deepen improved nobody. Slowing success is common on last-mile IWB. Keep looping the head until ingest parity; spare streams and leftover minutes already cover the next markets.",
+      "revisit_when": "euro_depth remaining gaps are a typed engineering blocker for several consecutive complete non-cutoff slots, with no fetchable IWB/unmeasured/zero-body",
+      "tags": [
+        "ingest",
+        "cascade",
+        "euro_depth"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-04T22:52:59+00:00"
+    },
+    {
+      "id": "L293",
+      "category": "later",
+      "section": "ops",
+      "title": "Boost spare ingest when head is blocked on typed engineering",
+      "summary": "If the head market remaining gaps are classified as engineering (parser/API class) rather than fetchable IWB, temporarily raise spare-stream fractions without releasing the fat slot.",
+      "revisit_when": "Head ingest parity is blocked solely by a typed engineering task after stall_slowdown gap-closure failed",
+      "tags": [
+        "ingest",
+        "cascade",
+        "engineering"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-04T22:52:59+00:00"
+    },
+    {
+      "id": "N83",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Continuously loop the whole ingest cascade instead of UTC slots",
+      "summary": "A 24/7 cascade loop would mostly replay last-mile improved=0 GHA runs, contend with the Sunday quiet bundle, and fight CH/IR rate limits plus concurrency groups. Leftover minutes, stall_slowdown pins, and runtime-cutoff chunk chaining already continue work without a daemon.",
+      "revisit_when": "Head slots regularly hit runtime_cutoff with deferred critical-path tickers after the leftover scheduler and existing chain steps, and GHA minutes plus source APIs have clear unused headroom",
+      "tags": [
+        "ingest",
+        "cascade",
+        "scheduler"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-04T22:52:59+00:00"
     }
   ],
   "fragments": [

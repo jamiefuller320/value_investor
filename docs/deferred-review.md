@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T20:52:18+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T22:52:59+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -130,6 +130,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N79 | **Auto-suggest replacement IR allowlist URLs** | Deviation rows can say IR exhausted, but picking the official 20-F/HY PDF still needs judgment (ABI BMV vs SEC). Do not auto-write research_ir_urls.json from host heuristics or an LLM crawler until issuer-match validation is reliable. | Issuer-name body validation rejects foreign-exchange dumps with low false positives on VINCI/Randstad-style IR hosts |
 | N80 | **Do not spray remaining Ultra on thin-ladder buy-tier DW** | After the surplus rememo + escalate-queue director-worker burst, leftover Ultra is still large. Do not spend it by running director-worker on every buy-tier name that trips thin Yahoo quarterly/IR/news rungs. | Cycle-end surplus review on 2026-10-d8, or weekly_ops regularly binds at the $120 provisional cap |
 | N81 | **Do not skip the weekly director-worker cap to burn leftover Ultra** | The 15/week exploration cap is a quality and auto-tighten guard, not a credit target. Remaining buy-tier names mostly escalate only on thin Yahoo quarterly/IR/news. Holdings MEGP and AEP already fail the live gate. Skipping the cap this week would be spend-for-its-own-sake. | A holding or buy-tier name has a non-thin-ladder escalation, or next ISO week has unused slots and a material trigger (body-lag rememo, conflicting verdict, new filing). |
+| N82 | **Handoff fat ingest slot when ingest slows and engineering is queued** | Do not move the P2 fat slot off euro_depth because a deepen improved nobody. Slowing success is common on last-mile IWB. Keep looping the head until ingest parity; spare streams and leftover minutes already cover the next markets. | euro_depth remaining gaps are a typed engineering blocker for several consecutive complete non-cutoff slots, with no fetchable IWB/unmeasured/zero-body |
+| N83 | **Continuously loop the whole ingest cascade instead of UTC slots** | A 24/7 cascade loop would mostly replay last-mile improved=0 GHA runs, contend with the Sunday quiet bundle, and fight CH/IR rate limits plus concurrency groups. Leftover minutes, stall_slowdown pins, and runtime-cutoff chunk chaining already continue work without a daemon. | Head slots regularly hit runtime_cutoff with deferred critical-path tickers after the leftover scheduler and existing chain steps, and GHA minutes plus source APIs have clear unused headroom |
 
 ---
 
@@ -345,6 +347,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L290 | **Dashboard click-to-approve ingest deviations** | Pages is static, so ingest deviations reprocess via CLI (ftse-library ingest-deviations approve). A local dashboard API or Actions dispatch would let a reviewer pin without a commit, but that is a new write path. | Local dashboard serve grows a write API, or we add a supervised workflow_dispatch for pins |
 | L291 | **Review the 120 weekly_ops bump against 36 percent unused Ultra** | Usage page is 64 percent used, so leftover is about 36 percent of the listed plan, not the 1700 USD inferred from burst percentages. The 80 to 120 weekly_ops raise already sits at the 50 percent ceiling and looks aggressive versus that leftover. | Cycle-end surplus review on 2026-10-d8 keep-or-revert. |
 | L292 | **Two-column budget: included-credit fraction vs estimated API USD** | Policy today ledgers estimated on-demand USD only. Usage-page leftover is a separate included-pool meter. A later surplus review could store both, but do not invent a conversion that treats burst token dollars as a percent of Ultra. | Cycle-end surplus review on 2026-10-d8, or if Cursor exposes remaining included credits to the API. |
+| L293 | **Boost spare ingest when head is blocked on typed engineering** | If the head market remaining gaps are classified as engineering (parser/API class) rather than fetchable IWB, temporarily raise spare-stream fractions without releasing the fat slot. | Head ingest parity is blocked solely by a typed engineering task after stall_slowdown gap-closure failed |
 
 ---
 
