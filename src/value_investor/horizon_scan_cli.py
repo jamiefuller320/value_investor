@@ -150,10 +150,7 @@ def _cmd_weed_fragments(args: argparse.Namespace) -> int:
     for row in proposal.get("actions") or []:
         extra = row.get("canonical_id") or row.get("idea_id") or ""
         suffix = f" → {extra}" if extra else ""
-        print(
-            f"  {row.get('action')} {row.get('fragment_id')} "
-            f"[{row.get('reason')}]{suffix}"
-        )
+        print(f"  {row.get('action')} {row.get('fragment_id')} [{row.get('reason')}]{suffix}")
     if result.get("applied"):
         applied = result.get("apply") or {}
         print(f"Dropped: {', '.join(applied.get('dropped') or []) or '(none)'}")

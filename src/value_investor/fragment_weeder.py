@@ -50,9 +50,7 @@ _STOP = frozenset(
     }
 )
 
-SAFE_DROP_REASONS = frozenset(
-    {"near_duplicate", "already_open_idea", "already_done_idea"}
-)
+SAFE_DROP_REASONS = frozenset({"near_duplicate", "already_open_idea", "already_done_idea"})
 
 
 def _utcnow() -> str:
@@ -124,9 +122,7 @@ def propose_fragment_weeds(
         matched_idea = None
         reason = ""
         for idea, idea_tok, title_tok in idea_tokens:
-            title_hit = (
-                len(title_tok) >= 3 and _jaccard(tokens, title_tok) >= IDEA_TITLE_JACCARD
-            )
+            title_hit = len(title_tok) >= 3 and _jaccard(tokens, title_tok) >= IDEA_TITLE_JACCARD
             body_hit = _near_duplicate(tokens, idea_tok, threshold=IDEA_JACCARD)
             if title_hit or body_hit:
                 matched_idea = idea

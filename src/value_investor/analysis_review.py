@@ -599,9 +599,7 @@ def compile_system_gap_analysis_tasks(
         kept.append(row)
 
     flags = [
-        row
-        for row in (snapshot.get("flags") or [])
-        if isinstance(row, dict) and row.get("id")
+        row for row in (snapshot.get("flags") or []) if isinstance(row, dict) and row.get("id")
     ]
     if high_only:
         flags = [row for row in flags if str(row.get("severity") or "") == "high"]
