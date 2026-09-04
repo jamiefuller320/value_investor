@@ -116,3 +116,6 @@ def test_library_ingest_workflows_wire_gap_closure_followup():
         text = path.read_text(encoding="utf-8")
         assert "ingest-gap-closure-followup" in text, path
         assert "scripts/dispatch_library_gap_closure_followups.sh" in text, path
+    euro = Path(".github/workflows/euro-ingest-loop.yml").read_text(encoding="utf-8")
+    assert "steps.loop.outputs.recorded_gap_closure != 'true'" in euro
+    assert "steps.loop.outputs.partial != 'true'" not in euro

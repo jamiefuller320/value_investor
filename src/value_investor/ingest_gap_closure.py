@@ -748,6 +748,18 @@ def _library_outstanding_ingest_gaps(health: dict[str, Any]) -> int:
     )
 
 
+def _library_discovery_did_not_finish(discovery_scan: Any) -> bool:
+    return isinstance(discovery_scan, dict) and bool(discovery_scan.get("runtime_cutoff"))
+
+
+def _library_deepen_result_count(results: Any) -> int:
+    if not isinstance(results, list):
+        return 0
+    return sum(
+        1 for row in results if isinstance(row, dict) and str(row.get("ticker") or "").strip()
+    )
+
+
 def select_library_gap_closure_candidate(
     *,
     market_id: str,
@@ -844,6 +856,8 @@ def evaluate_library_ingest_gap_closure_followup(
     improved: Any = None,
     partial: bool = False,
     runtime_cutoff: bool = False,
+    discovery_scan: Any = None,
+    deepen_results: Any = None,
     prefer_ticker: str | None = None,
     library_root: Path | None = None,
     reports: list[Any] | None = None,
@@ -852,10 +866,12 @@ def evaluate_library_ingest_gap_closure_followup(
 ) -> dict[str, Any]:
     """Dispatch intensive single-ticker gap closure after library stall or slowdown.
 
-    Fires when a *complete* weekday batch is stalled, or improved nobody, and
-    buy-tier gaps remain. Skips partial/runtime_cutoff runs (unfair deepen —
-    the discovery time cap is the fix for those) and productive runs that
-    still have leftover IWB.
+    Fires when a weekday batch is stalled, or improved nobody, and buy-tier
+    gaps remain. Partial / ``runtime_cutoff`` runs still skip when discovery
+    itself was cut off or deepen never started (unfair sample). After the
+    discovery time cap, a cutoff deepen that already ran ≥1 ticker and
+    improved nobody is a real slowdown and may dispatch. Productive runs
+    with leftover IWB still wait for the next deepen.
     """
     market = str(market_id or "").strip()
     if not market:
@@ -863,10 +879,16 @@ def evaluate_library_ingest_gap_closure_followup(
     if was_gap_closure_run:
         return {"should_dispatch": False, "reason": "current run was already gap closure"}
     if partial or runtime_cutoff:
-        return {
-            "should_dispatch": False,
-            "reason": "partial or runtime_cutoff run — deepen was incomplete",
-        }
+        if _library_discovery_did_not_finish(discovery_scan):
+            return {
+                "should_dispatch": False,
+                "reason": "partial or runtime_cutoff run — discovery did not finish",
+            }
+        if _library_deepen_result_count(deepen_results) <= 0:
+            return {
+                "should_dispatch": False,
+                "reason": "partial or runtime_cutoff run — deepen never started",
+            }
     if _library_outstanding_ingest_gaps(health_after) <= 0:
         return {
             "should_dispatch": False,
@@ -918,6 +940,13 @@ def evaluate_library_ingest_gap_closure_followup(
         summary = (
             f"{market} ingest health stalled with outstanding buy-tier filing gaps; "
             "intensive single-ticker pass for the stickiest name."
+        )
+    elif partial or runtime_cutoff:
+        title = "Library ingest slowdown gap-closure follow-up"
+        summary = (
+            f"{market} weekday deepen finished discovery and improved 0 tickers "
+            "before the runtime cutoff; intensive single-ticker pass for the "
+            "stickiest name."
         )
     else:
         title = "Library ingest slowdown gap-closure follow-up"
@@ -990,6 +1019,8 @@ def evaluate_library_ingest_gap_closure_followups(
             improved=row.get("improved"),
             partial=bool(row.get("partial")),
             runtime_cutoff=bool(row.get("runtime_cutoff")),
+            discovery_scan=row.get("discovery_scan"),
+            deepen_results=row.get("results"),
             prefer_ticker=prefer_ticker,
             library_root=library_root,
             tasks_path=tasks_path,
