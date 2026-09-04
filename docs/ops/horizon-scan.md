@@ -6,6 +6,11 @@ learning/evidence readiness, and the engineering queue. Complements weekly
 reconciliation.
 
 Does **not** change paper books, apply knobs, or mine conversation transcripts.
+The monthly payload includes the same deterministic `system_gaps` snapshot as
+weekly analysis-review — cite high-severity flags under AUTOMATION RISKS /
+COUNTERFACTUAL GAPS instead of treating unused budget or memo-file coverage as
+proof the learning path is fed. See
+[analysis-review.md](analysis-review.md#system-gaps-learning-path-integrity).
 
 ## Scratch fragments
 
@@ -19,7 +24,19 @@ ftse-defer fragment-status frag-20260811-01 done   # promoted/resolved
 ```
 
 Fragments appear in [`deferred-review.md`](deferred-review.md) under **Open fragments**.
-Horizon scan clusters them and may suggest `DROP` / `PROMOTE` actions (manual by default).
+A deterministic weeder drops near-duplicates and fragments already captured as
+open/done deferred ideas **before** the agent clusters what remains. Horizon
+scan may still suggest extra `DROP` / `PROMOTE` actions (`apply_fragments`
+stays **off** by default). Do not raise the director fragment cap until weeding
+has had a cycle on the current backlog.
+
+```bash
+ftse-horizon-scan weed-fragments --json          # propose only
+ftse-horizon-scan weed-fragments --apply         # safe DROPs + refresh deferred-review.md
+```
+
+Workflow input `weed_fragments` defaults **on**. Only near-dup / already-an-idea
+DROPs apply — unique fragments stay for human / agent triage.
 
 ## When it runs
 
@@ -92,6 +109,9 @@ ftse-horizon-scan run
 # Manual apply after reviewing markdown
 ftse-horizon-scan apply-defer --dry-run
 ftse-horizon-scan apply-defer
+
+ftse-horizon-scan weed-fragments --json
+ftse-horizon-scan weed-fragments --apply
 
 ftse-horizon-scan apply-fragments --dry-run
 ftse-horizon-scan apply-fragments

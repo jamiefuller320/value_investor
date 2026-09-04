@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-04T06:32:26+00:00",
+  "updated_at": "2026-09-04T07:46:45+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -5520,6 +5520,106 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06b0f-f2ff-79ae-99c8-7b375410101b",
       "added_at": "2026-09-04T06:32:26+00:00"
+    },
+    {
+      "id": "L265",
+      "category": "later",
+      "section": "ops",
+      "title": "Dashboard card for system_gaps flags",
+      "summary": "Surface docs/data/system_gaps.json high-severity flags on the Sunday review / Overview dashboard so humans see consumer-path misses without opening the JSON.",
+      "revisit_when": "system_gaps.json has been committed by two Sunday analysis-review runs and operators still miss flags until email/review markdown",
+      "tags": [
+        "system_gaps",
+        "dashboard",
+        "review"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a06b28-07b3-73f6-a956-8410e00339c3",
+      "added_at": "2026-09-04T06:55:31+00:00",
+      "updated_at": "2026-09-04T07:30:20+00:00"
+    },
+    {
+      "id": "N69",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Auto-promote high system_gaps flags to engineering",
+      "summary": "Do not auto-open engineering tasks from system_gaps flags yet. Analysis-review still proposes [ops]/[ingest] lines for human promote; wiring mistakes need a human gate.",
+      "revisit_when": "Three consecutive Sundays produce the same high-severity flag id and a human has promoted the matching analysis task twice",
+      "tags": [
+        "system_gaps",
+        "engineering",
+        "human_gate"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a06b28-07b3-73f6-a956-8410e00339c3",
+      "added_at": "2026-09-04T06:55:32+00:00",
+      "updated_at": "2026-09-04T07:30:20+00:00"
+    },
+    {
+      "id": "N67",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Mine agent-run follow-up transcripts for latent gaps",
+      "summary": "This morning's research-vs-learning miss surfaced from a follow-up, not eval. Horizon already forbids conversation transcript mining; keep fragments + system_gaps as the capture path.",
+      "revisit_when": "Monthly horizon has missed two more consumer-path gaps that only appeared in agent follow-ups after system_gaps.json has run for 8 Sundays",
+      "tags": [
+        "system_gaps",
+        "horizon",
+        "transcripts"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06b28-07b3-73f6-a956-8410e00339c3",
+      "added_at": "2026-09-04T06:55:32+00:00"
+    },
+    {
+      "id": "N68",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Raise Sunday fragment capture beyond director cap of 2",
+      "summary": "Learning director emits at most 2 blue-sky fragments per week; analysis-review and post-run emit none. That is intentional, not a transcript substitute. Do not raise the cap or add review-agent fragments until system_gaps has a track record.",
+      "revisit_when": "After 8 Sundays of system_gaps.json, a follow-up question still surfaces a consumer-path gap that was neither a system_gaps flag nor an ftse-defer entry",
+      "tags": [
+        "fragments",
+        "system_gaps",
+        "horizon"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06b28-07b3-73f6-a956-8410e00339c3",
+      "added_at": "2026-09-04T07:03:28+00:00"
+    },
+    {
+      "id": "L266",
+      "category": "later",
+      "section": "learning",
+      "title": "Fragment weeding and cluster-dedupe before raising director cap",
+      "summary": "Horizon already clusters and can DROP/PROMOTE, but apply is manual and dedupe is exact-text only. A weeder (near-duplicate, already-an-open-L/N, stale-without-trigger, cluster merge) should clear the backlog before any raise of the Sunday director cap of 2. Do not treat a higher cap as the depth fix.",
+      "revisit_when": "One horizon cycle has apply_fragments run on the current open backlog and open fragment count is still above 15, or N68 is being reconsidered",
+      "tags": [
+        "fragments",
+        "horizon",
+        "dedupe",
+        "weeding"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a06b28-07b3-73f6-a956-8410e00339c3",
+      "added_at": "2026-09-04T07:19:45+00:00",
+      "updated_at": "2026-09-04T07:30:20+00:00"
+    },
+    {
+      "id": "N69",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Auto-promote produce and learning-clock system_gaps flags",
+      "summary": "Persist/publish/apply high flags now open eng-sgap-* rows. Produce and learning_clock flags stay proposed because they are judgment calls (rememo vs more ingest vs clock policy), not a wire-what-we-wrote miss.",
+      "revisit_when": "The first persist/publish/apply eng-sgap tasks have merged and the remaining produce/clock flags still repeat for two Sundays",
+      "tags": [
+        "system_gaps",
+        "engineering",
+        "auto-promote"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06b28-07b3-73f6-a956-8410e00339c3",
+      "added_at": "2026-09-04T07:46:45+00:00"
     }
   ],
   "fragments": [
