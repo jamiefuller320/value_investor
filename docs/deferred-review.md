@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T06:32:26+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T09:13:15+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -275,6 +275,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L252 | **Intra-day entry tranche cadence** | Weekday paper-auto marks can only score daily/weekly DCA. Sub-daily tranche timing needs intra-day prices and is not required to answer whether spreading a decided notional de-risks entries. | Entry DCA overlay has a winning weekday/weekly cadence and intra-day price history is routinely available for FTSE names |
 | L253 | **Archive-history DCA overlay to accelerate cadence evidence** | Forward weekday marks will take weeks to close 12 episodes. An exit-timing-archive-style replay on weekly screens could seed priors for lump-sum vs weekly DCA without waiting for new paper buys. | Entry DCA overlay has fewer than 12 closed episodes after several weeks of weekday paper-auto, or Sunday analysis-review flags thin starter-stage evidence |
 | L264 | **Rememo thin euro_depth buy-tier memos after filings deepen** | Sunday ladder skips all 44 euro_depth buy-tier names because a first memo already exists. Most are still mode=initial with 0 filing bodies. Dedupe should not block a rememo once euro_filings bodies increase. | euro_depth buy-tier indexed_without_body drops and ingest_parity_met is near true |
+| L267 | **Deepen Azelis AZE.BR filings after verdict catch-up** | AZE.BR has an accumulate verdict but only one indexed filing body. Next rememo needs buy-tier membership plus the usual body-lag threshold (10 adequate/thin, 25 strong), not merely bodies rising from 1 to 2. deepen-thin default (0 bodies) will not list it. | AZE.BR is buy-tier and euro_depth filings_with_body leads the memo by the rememo lag threshold |
 
 ### Ops / reliability
 
