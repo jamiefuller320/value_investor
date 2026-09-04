@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-04T07:46:45+00:00",
+  "updated_at": "2026-09-04T09:20:41+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -5626,41 +5626,43 @@
       "category": "later",
       "section": "research",
       "title": "Seed library rememo from focus-market canonical filings",
-      "summary": "A home-store rememo (e.g. TTE.PA on euro_stoxx50) can still look stale vs euro_depth canonical filings, so Sunday eligibility stays open after a rememo. Copy or union the focus-market filings index into the memo home before force-initial.",
-      "revisit_when": "The next euro_depth ladder rememo pass still flags names whose home memo was just rewritten",
+      "summary": "Sunday rememo now copies focus-market filings into the memo home and force-initials that home so eligibility clears after the rewrite.",
+      "revisit_when": "Implemented on cursor/rememo-canonical-and-batch-publish-101b",
       "tags": [
         "library",
         "rememo",
         "euro_depth",
         "filings"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-01a06b0f-f2ff-79ae-99c8-7b375410101b",
-      "added_at": "2026-09-04T07:43:15+00:00"
+      "added_at": "2026-09-04T09:20:35+00:00",
+      "updated_at": "2026-09-04T09:20:41+00:00"
     },
     {
       "id": "L268",
       "category": "later",
       "section": "ops",
       "title": "Tighten memo-backfill publish to batch tickers only",
-      "summary": "publish_memo_backfill_batch copies every tree under output/research into docs/research and docs/data/research. After a full index rebuild that restages older committed trees into output, publish can overwrite newer weekday markdown copies.",
-      "revisit_when": "The next missing-memo or legacy rememo batch runs after a full research index rebuild",
+      "summary": "Missing-memo and legacy rememo publish now copy only the batch tickers from output/research, so a full-index rebuild cannot overwrite newer weekday markdown.",
+      "revisit_when": "Implemented on cursor/rememo-canonical-and-batch-publish-101b",
       "tags": [
         "publish",
         "backfill",
         "research"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-01a06b0f-f2ff-79ae-99c8-7b375410101b",
-      "added_at": "2026-09-04T07:43:16+00:00"
+      "added_at": "2026-09-04T09:20:35+00:00",
+      "updated_at": "2026-09-04T09:20:41+00:00"
     },
     {
       "id": "L269",
       "category": "later",
       "section": "research",
       "title": "Deepen Azelis AZE.BR filings after verdict catch-up",
-      "summary": "AZE.BR now has an accumulate verdict but still only one indexed filing body. Rememo again after ESEF/IR ingest actually increases bodies.",
-      "revisit_when": "AZE.BR euro_depth filings_with_body rises above 1",
+      "summary": "AZE.BR has an accumulate verdict but only one indexed filing body. Next rememo needs buy-tier membership plus the usual body-lag threshold (10 adequate/thin, 25 strong), not merely bodies rising from 1 to 2. deepen-thin default (0 bodies) will not list it.",
+      "revisit_when": "AZE.BR is buy-tier and euro_depth filings_with_body leads the memo by the rememo lag threshold",
       "tags": [
         "euro_depth",
         "filings",
@@ -5668,7 +5670,7 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06b0f-f2ff-79ae-99c8-7b375410101b",
-      "added_at": "2026-09-04T07:43:16+00:00"
+      "added_at": "2026-09-04T09:20:35+00:00"
     }
   ],
   "fragments": [
