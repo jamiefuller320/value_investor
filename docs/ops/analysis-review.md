@@ -130,7 +130,9 @@ That is the written≠wired class from the morning miss. Produce and
 `ftse-analysis-review promote`. Neither path dispatches engineering agents.
 
 The overview dashboard card **Learning-path gaps** reads the snapshot (bundle
-or `data/system_gaps.json` sidecar).
+or `data/system_gaps.json` sidecar). Enduring, market-agnostic wiring (union
+index, post-publish overlay, coverage-complete skip, stale observe clocks) is in
+[market-sharded-learning.md](market-sharded-learning.md#research-overlay-and-rememo-all-in-scope-markets).
 
 ## Experiment assessment ledger
 

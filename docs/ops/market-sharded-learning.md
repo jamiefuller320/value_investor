@@ -207,14 +207,17 @@ written under another index slice.
 
 | Surface | What it reads |
 |---------|----------------|
-| Sunday publish / weekday rememo | This-run `output/research` ∪ committed store ∪ `research[]` |
-| Weekday paper-auto overlay | Same union (committed inferred as `latest.json` sibling `research/`) |
+| Sunday publish / weekday rememo | This-run `output/research` ∪ committed store ∪ prior `research[]` (json-only memos included; publish is a union, not a replace) |
+| Weekday paper-auto overlay | Same union, then a post-publish `refresh_dashboard_bundle` so `reports[]` the book reads get verdicts |
 | Observe sim / shard paper | Focus research dir ∪ every other `markets/*/screen/research` |
 
-Ladder selective research (`rememo_existing`, default on) still skips **fresh**
-memos, but rememos buy-tier names when ingest has added enough filing bodies
-(same lag rule as FTSE weekday rememo). A new focus / sprint / parity market
-inherits this without a per-market hook.
+Ladder selective research (`rememo_existing`, default on) skips **coverage-complete**
+memos only. Zero-body / missing-verdict stubs are not “already researched”; they
+wait for ingest (`awaiting_ingest`) and rememo when filing bodies increase (same
+lag rule as FTSE weekday rememo). Observe-sim screen-lite also refreshes
+**stale** in-scope clocks (`observe_sim_screen_when_stale`), not only markets
+missed in this pass. A new focus / sprint / parity market inherits this without
+a per-market hook.
 
 ## Guardrails
 
