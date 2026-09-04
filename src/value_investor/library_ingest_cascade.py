@@ -3,9 +3,10 @@
 Doctrine (AGENTS.md): while the focus market still has FTSE-standard filing gaps,
 parallel sprint streams must not run as equal peers. Stream 1 (next queue market)
 keeps a reduced budget. Stream 2 yields the morning peak slots that overlap the
-head sprint, and otherwise runs a small leftover budget.
+head sprint unless a live wait already proved the head idle.
 
-A full preemptible GHA scheduler is later (L273). This module is the first slice.
+Runtime wait / leftover / fill-down lives in ``library_ingest_scheduler``.
+This module is the static policy (fractions, hour-skip fallback, release gate).
 """
 
 from __future__ import annotations
@@ -22,6 +23,12 @@ DEFAULT_STREAM_2_RUNTIME_FRACTION = 0.25
 DEFAULT_STREAM_2_YIELD_HOURS_UTC: tuple[int, ...] = (8, 11)
 MIN_SPARE_TARGETS = 1
 MIN_SPARE_RUNTIME_SECONDS = 60.0
+HEAD_RELEASE_INGEST_PARITY = "ingest_parity"
+HEAD_RELEASE_PHASE2 = "phase2_ready"
+DEFAULT_HEAD_RELEASE_WHEN = HEAD_RELEASE_INGEST_PARITY
+DEFAULT_LEFTOVER_MAX_AGE_SECONDS = 4 * 3600.0
+DEFAULT_SPARE_WAIT_SECONDS = 2400.0
+DEFAULT_MIN_LEFTOVER_SECONDS = 180.0
 
 
 @dataclass(frozen=True)
@@ -32,6 +39,11 @@ class IngestCascadeConfig:
     stream_2_target_fraction: float = DEFAULT_STREAM_2_TARGET_FRACTION
     stream_2_runtime_fraction: float = DEFAULT_STREAM_2_RUNTIME_FRACTION
     stream_2_yield_hours_utc: tuple[int, ...] = DEFAULT_STREAM_2_YIELD_HOURS_UTC
+    head_release_when: str = DEFAULT_HEAD_RELEASE_WHEN
+    leftover_max_age_seconds: float = DEFAULT_LEFTOVER_MAX_AGE_SECONDS
+    spare_wait_seconds: float = DEFAULT_SPARE_WAIT_SECONDS
+    min_leftover_seconds: float = DEFAULT_MIN_LEFTOVER_SECONDS
+    scheduler_enabled: bool = True
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -45,10 +57,15 @@ def default_ingest_effort_cascade_policy() -> dict[str, Any]:
         "stream_2_target_fraction": DEFAULT_STREAM_2_TARGET_FRACTION,
         "stream_2_runtime_fraction": DEFAULT_STREAM_2_RUNTIME_FRACTION,
         "stream_2_yield_hours_utc": list(DEFAULT_STREAM_2_YIELD_HOURS_UTC),
+        "head_release_when": DEFAULT_HEAD_RELEASE_WHEN,
+        "leftover_max_age_seconds": DEFAULT_LEFTOVER_MAX_AGE_SECONDS,
+        "spare_wait_seconds": DEFAULT_SPARE_WAIT_SECONDS,
+        "min_leftover_seconds": DEFAULT_MIN_LEFTOVER_SECONDS,
+        "scheduler_enabled": True,
         "note": (
-            "While focus (head) still has filing gaps, scale spare sprint streams "
-            "and skip stream-2 peak hours that overlap the fat slot. Full caps "
-            "return when the head reaches ingest parity."
+            "While the head market still holds the fat slot, spare streams wait "
+            "for a live head run, spend leftover minutes, and fill down the queue. "
+            "head_release_when=ingest_parity (default) or phase2_ready."
         ),
     }
 
@@ -82,7 +99,35 @@ def load_cascade_config(policy: dict[str, Any] | None) -> IngestCascadeConfig:
             raw.get("stream_2_runtime_fraction"), DEFAULT_STREAM_2_RUNTIME_FRACTION
         ),
         stream_2_yield_hours_utc=tuple(hours),
+        head_release_when=_release_when(raw.get("head_release_when")),
+        leftover_max_age_seconds=_positive_float(
+            raw.get("leftover_max_age_seconds"), DEFAULT_LEFTOVER_MAX_AGE_SECONDS
+        ),
+        spare_wait_seconds=_positive_float(
+            raw.get("spare_wait_seconds"), DEFAULT_SPARE_WAIT_SECONDS
+        ),
+        min_leftover_seconds=_positive_float(
+            raw.get("min_leftover_seconds"), DEFAULT_MIN_LEFTOVER_SECONDS
+        ),
+        scheduler_enabled=bool(raw.get("scheduler_enabled", True)),
     )
+
+
+def _release_when(raw: Any) -> str:
+    value = str(raw or DEFAULT_HEAD_RELEASE_WHEN).strip().lower()
+    if value == HEAD_RELEASE_PHASE2:
+        return HEAD_RELEASE_PHASE2
+    return HEAD_RELEASE_INGEST_PARITY
+
+
+def _positive_float(raw: Any, default: float) -> float:
+    try:
+        value = float(raw)
+    except (TypeError, ValueError):
+        return default
+    if value <= 0:
+        return default
+    return value
 
 
 def _fraction(raw: Any, default: float) -> float:
@@ -99,9 +144,18 @@ def head_market_id(policy: dict[str, Any] | None) -> str:
     return str((policy or {}).get("focus_market") or "euro_depth").strip() or "euro_depth"
 
 
-def head_needs_fat_slot(*, head_at_parity: bool, config: IngestCascadeConfig) -> bool:
-    """True while the focus market still needs the high-tempo sprint (filing gaps)."""
-    return bool(config.enabled) and not bool(head_at_parity)
+def head_needs_fat_slot(
+    *,
+    head_at_parity: bool,
+    config: IngestCascadeConfig,
+    phase2_ready: bool = False,
+) -> bool:
+    """True while the focus market still holds the fat ingest slot."""
+    if not config.enabled:
+        return False
+    if config.head_release_when == HEAD_RELEASE_PHASE2:
+        return not bool(phase2_ready)
+    return not bool(head_at_parity)
 
 
 def scale_spare_budget(
@@ -174,6 +228,7 @@ def evaluate_ingest_cascade(
     *,
     head_at_parity: bool,
     now: datetime | None = None,
+    phase2_ready: bool = False,
 ) -> IngestCascadeDecision:
     config = load_cascade_config(policy)
     when = now or datetime.now(UTC)
@@ -181,7 +236,11 @@ def evaluate_ingest_cascade(
         when = when.replace(tzinfo=UTC)
     hour = when.astimezone(UTC).hour
     head = head_market_id(policy)
-    needs_fat = head_needs_fat_slot(head_at_parity=head_at_parity, config=config)
+    needs_fat = head_needs_fat_slot(
+        head_at_parity=head_at_parity,
+        config=config,
+        phase2_ready=phase2_ready,
+    )
     skip_stream_2 = should_skip_spare_stream(
         2, hour_utc=hour, config=config, head_needs_fat=needs_fat
     )
@@ -219,11 +278,17 @@ def evaluate_ingest_cascade(
 
 
 __all__ = [
+    "DEFAULT_HEAD_RELEASE_WHEN",
+    "DEFAULT_LEFTOVER_MAX_AGE_SECONDS",
+    "DEFAULT_MIN_LEFTOVER_SECONDS",
+    "DEFAULT_SPARE_WAIT_SECONDS",
     "DEFAULT_STREAM_1_RUNTIME_FRACTION",
     "DEFAULT_STREAM_1_TARGET_FRACTION",
     "DEFAULT_STREAM_2_RUNTIME_FRACTION",
     "DEFAULT_STREAM_2_TARGET_FRACTION",
     "DEFAULT_STREAM_2_YIELD_HOURS_UTC",
+    "HEAD_RELEASE_INGEST_PARITY",
+    "HEAD_RELEASE_PHASE2",
     "IngestCascadeConfig",
     "IngestCascadeDecision",
     "default_ingest_effort_cascade_policy",

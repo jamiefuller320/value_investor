@@ -8,6 +8,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from value_investor.library_ingest_cascade import default_ingest_effort_cascade_policy
 from value_investor.storage import read_json, write_json
 
 # Approximate API list prices ($ / 1M tokens) from https://cursor.com/docs/models
@@ -215,18 +216,7 @@ def default_policy() -> dict[str, Any]:
                 "Never wire into quantitative scores or weights."
             ),
         },
-        "ingest_effort_cascade": {
-            "enabled": True,
-            "stream_1_target_fraction": 0.5,
-            "stream_1_runtime_fraction": 0.5,
-            "stream_2_target_fraction": 0.25,
-            "stream_2_runtime_fraction": 0.25,
-            "stream_2_yield_hours_utc": [8, 11],
-            "note": (
-                "While focus still has filing gaps, scale spare sprint streams "
-                "and skip stream-2 peak hours that overlap the fat slot."
-            ),
-        },
+        "ingest_effort_cascade": default_ingest_effort_cascade_policy(),
         "director_worker": {
             "phase": "exploration",
             "exploration_weekly_cap": 15,

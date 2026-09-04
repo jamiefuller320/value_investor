@@ -231,7 +231,50 @@ def enrich_library_ingest_dispatch(
         policy,
         head_at_parity=bool(evaluation.get("ingest_parity_met")),
     ).to_dict()
+    evaluation.update(
+        _scheduler_stream_markets(evaluation, policy=policy, library_root=library_root)
+    )
     return evaluation
+
+
+def _scheduler_stream_markets(
+    evaluation: dict[str, Any],
+    *,
+    policy: dict[str, Any],
+    library_root: Path,
+) -> dict[str, list[str]]:
+    """Fill-down markets per spare stream so GHA gates on real queue work."""
+    from value_investor.library_ingest_cascade import head_market_id
+    from value_investor.library_ingest_scheduler import fill_down_markets
+
+    head = head_market_id(policy)
+    needing: list[str] = []
+    seen: set[str] = set()
+    for parallel_stream in sorted(PARALLEL_SPRINT_POLICY_KEYS):
+        suffix = "" if parallel_stream == 1 else f"_{parallel_stream}"
+        for row in evaluation.get(f"parallel_sprint{suffix}_status") or []:
+            if not row.get("should_run_parallel_ingest"):
+                continue
+            mid = str(row.get("market_id") or "").strip()
+            if mid and mid not in seen:
+                needing.append(mid)
+                seen.add(mid)
+    for mid in list(policy.get("market_queue") or []):
+        name = str(mid or "").strip()
+        if not name or name == head or name in seen:
+            continue
+        health = snapshot_library_buy_tier_filing_health(
+            name, library_root=library_root, policy=policy
+        )
+        if not ingest_parity_met(health):
+            needing.append(name)
+            seen.add(name)
+    attached: dict[str, list[str]] = {}
+    for parallel_stream in sorted(PARALLEL_SPRINT_POLICY_KEYS):
+        attached[f"scheduler_stream_{parallel_stream}_markets"] = fill_down_markets(
+            parallel_stream, policy=policy, needing=needing
+        )
+    return attached
 
 
 def evaluate_euro_ingest_dispatch(
@@ -515,6 +558,7 @@ __all__ = [
     "cron_enabled_for_dispatch",
     "evaluate_euro_ingest_dispatch",
     "evaluate_library_ingest_dispatch",
+    "PARALLEL_SPRINT_POLICY_KEYS",
     "enrich_library_ingest_dispatch",
     "ingest_parity_met",
     "list_library_ingest_maintenance_markets",

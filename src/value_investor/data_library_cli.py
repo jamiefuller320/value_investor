@@ -438,6 +438,16 @@ def build_parser() -> argparse.ArgumentParser:
     ingest_sprint_p.add_argument("--max-targets", type=int, default=24)
     ingest_sprint_p.add_argument("--max-runtime-seconds", type=float, default=2100.0)
     ingest_sprint_p.add_argument("--max-bodies", type=int, default=20)
+    ingest_sprint_p.add_argument(
+        "--head-idle",
+        action="store_true",
+        help="Head workflow is not running (GHA already waited). Disables peak-hour fallback skip.",
+    )
+    ingest_sprint_p.add_argument(
+        "--higher-spare-in-progress",
+        action="store_true",
+        help="A higher-priority spare stream is still running",
+    )
     ingest_sprint_p.add_argument("--json", action="store_true")
     ingest_sprint_p.add_argument(
         "--json-path",
@@ -446,6 +456,44 @@ def build_parser() -> argparse.ArgumentParser:
         help="Write result JSON to this path (avoids stdout log pollution in CI)",
     )
     ingest_sprint_p.set_defaults(func=cmd_library_ingest_sprint)
+
+    ingest_sched_p = sub.add_parser(
+        "ingest-schedule",
+        parents=[common],
+        help="Evaluate P2 ingest scheduler (wait / skip / run + leftover budget)",
+    )
+    ingest_sched_p.add_argument(
+        "--stream",
+        type=int,
+        default=1,
+        choices=[1, 2],
+        dest="parallel_stream",
+    )
+    ingest_sched_p.add_argument("--max-targets", type=int, default=24)
+    ingest_sched_p.add_argument("--max-runtime-seconds", type=float, default=2100.0)
+    ingest_sched_p.add_argument(
+        "--head-in-progress",
+        action="store_true",
+        help="Focus ingest workflow is queued or in progress",
+    )
+    ingest_sched_p.add_argument(
+        "--head-idle",
+        action="store_true",
+        help="Focus ingest workflow is not running",
+    )
+    ingest_sched_p.add_argument(
+        "--higher-spare-in-progress",
+        action="store_true",
+    )
+    ingest_sched_p.add_argument(
+        "--waited-seconds",
+        type=float,
+        default=0.0,
+        help="Seconds already spent waiting on a predecessor",
+    )
+    ingest_sched_p.add_argument("--json", action="store_true")
+    ingest_sched_p.add_argument("--json-path", type=Path, default=None)
+    ingest_sched_p.set_defaults(func=cmd_library_ingest_schedule)
 
     learning_depth_p = sub.add_parser(
         "learning-depth",
@@ -1447,6 +1495,76 @@ def cmd_library_learning_depth(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_library_ingest_schedule(args: argparse.Namespace) -> int:
+    from value_investor.library_ingest_cascade import head_market_id
+    from value_investor.library_ingest_dispatch import ingest_parity_met
+    from value_investor.library_ingest_escalation import snapshot_library_buy_tier_filing_health
+    from value_investor.library_ingest_scheduler import evaluate_scheduler, load_runtime_state
+    from value_investor.library_ingest_sprint import parallel_sprint_markets_needing_ingest
+
+    policy = load_policy(args.policy)
+    head = head_market_id(policy)
+    head_health = snapshot_library_buy_tier_filing_health(
+        head, library_root=args.root, policy=policy
+    )
+    needing = parallel_sprint_markets_needing_ingest(
+        library_root=args.root,
+        policy=policy,
+        parallel_stream=int(args.parallel_stream),
+    )
+    for mid in list(policy.get("market_queue") or []):
+        name = str(mid or "").strip()
+        if not name or name == head or name in needing:
+            continue
+        health = snapshot_library_buy_tier_filing_health(
+            name, library_root=args.root, policy=policy
+        )
+        if not ingest_parity_met(health):
+            needing.append(name)
+    phase2_ready = False
+    try:
+        from value_investor.market_shard_phases import evaluate_market_phase
+
+        phase2_ready = bool(
+            evaluate_market_phase(head, library_root=args.root, policy=policy).get(
+                "phase2_ready"
+            )
+        )
+    except Exception:  # noqa: BLE001
+        phase2_ready = False
+    if args.head_idle:
+        head_in_progress: bool | None = False
+    elif args.head_in_progress:
+        head_in_progress = True
+    else:
+        head_in_progress = None
+    decision = evaluate_scheduler(
+        int(args.parallel_stream),
+        policy=policy,
+        head_at_parity=ingest_parity_met(head_health),
+        needing_markets=needing,
+        requested_targets=int(args.max_targets),
+        requested_runtime=float(args.max_runtime_seconds),
+        head_in_progress=head_in_progress,
+        higher_spare_in_progress=bool(args.higher_spare_in_progress),
+        phase2_ready=phase2_ready,
+        leftover_state=load_runtime_state(Path(args.root) / "ingest_cascade_runtime.json"),
+        waited_seconds=float(args.waited_seconds or 0.0),
+    )
+    payload = decision.to_dict()
+    if args.json or args.json_path is not None:
+        _emit_cli_json(payload, args)
+    else:
+        print(
+            f"schedule stream={decision.stream} action={decision.action} "
+            f"markets={','.join(decision.markets) or '-'} "
+            f"runtime={decision.max_runtime_seconds:.0f}s "
+            f"targets={decision.max_targets}"
+        )
+        print(f"  {decision.reason}")
+    return 0
+
+
 def cmd_library_ingest_sprint(args: argparse.Namespace) -> int:
     from value_investor.library_ingest_sprint import run_library_ingest_sprint
 
@@ -1459,6 +1577,8 @@ def cmd_library_ingest_sprint(args: argparse.Namespace) -> int:
         max_runtime_seconds=args.max_runtime_seconds,
         max_bodies=args.max_bodies,
         parallel_stream=int(args.parallel_stream),
+        head_in_progress=False if args.head_idle else None,
+        higher_spare_in_progress=bool(args.higher_spare_in_progress),
     )
     payload = outcome.to_dict()
     if args.json or args.json_path is not None:

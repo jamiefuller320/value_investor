@@ -106,8 +106,115 @@ def test_run_sprint_stream_2_yields_at_peak_when_head_has_gaps():
             now=datetime(2026, 9, 4, 8, 15, tzinfo=UTC),
         )
     run_loop.assert_not_called()
-    assert outcome.skipped[0]["reason"] == "cascade_spare_yields_to_head"
+    assert outcome.skipped[0]["reason"] == "peak_hour_fallback"
     assert outcome.max_targets == 6
+
+
+def test_run_sprint_stream_2_runs_at_peak_when_head_idle():
+    policy = {
+        "focus_market": "euro_depth",
+        "ingest_parallel_sprint_2": ["asx200"],
+        "ingest_effort_cascade": {"enabled": True},
+    }
+    gaps = {
+        "unmeasured_buy_tier": 2,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 1,
+        "indexed_without_body": 4,
+    }
+
+    class _Loop:
+        def to_dict(self) -> dict:
+            return {"market_id": "asx200", "ok": True}
+
+    with (
+        patch(
+            "value_investor.library_ingest_sprint.load_policy",
+            return_value=policy,
+        ),
+        patch(
+            "value_investor.library_ingest_sprint.snapshot_library_buy_tier_filing_health",
+            return_value=gaps,
+        ),
+        patch(
+            "value_investor.library_ingest_sprint.parallel_sprint_markets_needing_ingest",
+            return_value=["asx200"],
+        ),
+        patch(
+            "value_investor.library_ingest_sprint.run_library_ingest_loop",
+            return_value=_Loop(),
+        ) as run_loop,
+        patch(
+            "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
+        ),
+    ):
+        outcome = run_library_ingest_sprint(
+            parallel_stream=2,
+            now=datetime(2026, 9, 4, 8, 15, tzinfo=UTC),
+            head_in_progress=False,
+        )
+    run_loop.assert_called_once()
+    assert outcome.max_targets == 6
+    assert outcome.max_runtime_seconds == 525.0
+    assert run_loop.call_args.kwargs["max_targets"] == 6
+
+
+def test_run_sprint_stream_2_fills_down_when_assigned_has_no_gaps():
+    policy = {
+        "focus_market": "euro_depth",
+        "market_queue": ["sp500", "asx200", "ftse_smallcap"],
+        "ingest_parallel_sprint": ["sp500"],
+        "ingest_parallel_sprint_2": ["asx200"],
+        "ingest_effort_cascade": {"enabled": True},
+    }
+    gaps = {
+        "unmeasured_buy_tier": 2,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 1,
+        "indexed_without_body": 4,
+    }
+    parity = {
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 0,
+    }
+
+    class _Loop:
+        def to_dict(self) -> dict:
+            return {"market_id": "ftse_smallcap", "ok": True}
+
+    def _health(market_id: str, **_kwargs):
+        if market_id in {"euro_depth", "ftse_smallcap"}:
+            return gaps
+        return parity
+
+    with (
+        patch(
+            "value_investor.library_ingest_sprint.load_policy",
+            return_value=policy,
+        ),
+        patch(
+            "value_investor.library_ingest_sprint.snapshot_library_buy_tier_filing_health",
+            side_effect=_health,
+        ),
+        patch(
+            "value_investor.library_ingest_sprint.run_library_ingest_loop",
+            return_value=_Loop(),
+        ) as run_loop,
+        patch(
+            "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
+        ),
+    ):
+        outcome = run_library_ingest_sprint(
+            parallel_stream=2,
+            markets=["ftse_smallcap"],
+            now=datetime(2026, 9, 4, 14, 15, tzinfo=UTC),
+            head_in_progress=False,
+        )
+    run_loop.assert_called_once()
+    assert outcome.markets == ["ftse_smallcap"]
+    assert run_loop.call_args.args[0] == "ftse_smallcap"
 
 
 def test_run_sprint_stream_1_uses_spare_budget_when_head_has_gaps():

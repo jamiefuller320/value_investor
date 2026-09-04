@@ -1,8 +1,8 @@
 name: Library ingest sprint 2 (parallel)
 
 # Spare-capacity buy-tier filing deepen for the second parallel queue stream
-# (e.g. asx200). Yields 08:15/11:15 UTC to the euro_depth fat slot while focus
-# still has filing gaps (ingest_effort_cascade). Cadence: focus +60 min.
+# (e.g. asx200). Waits on euro + stream 1, then spends leftover / spare fraction
+# or fill-down. Hour skip is a local fallback only. Cadence: focus +60 min.
 on:
   schedule:
     - cron: "15 8 * * 1-6"
@@ -66,18 +66,17 @@ jobs:
           from pathlib import Path
           data = json.loads(Path("/tmp/library_ingest_dispatch.json").read_text())
           parallel = data.get("parallel_sprint_2_markets") or []
-          needing = [
-              row.get("market_id")
-              for row in (data.get("parallel_sprint_2_status") or [])
-              if row.get("should_run_parallel_ingest")
-          ]
-          cascade = data.get("ingest_cascade") or {}
-          skip_cascade = "true" if cascade.get("skip_stream_2_now") else "false"
+          needing = list(data.get("scheduler_stream_2_markets") or [])
+          if not needing:
+              needing = [
+                  row.get("market_id")
+                  for row in (data.get("parallel_sprint_2_status") or [])
+                  if row.get("should_run_parallel_ingest")
+              ]
           out = Path(os.environ["GITHUB_OUTPUT"])
           out.write_text(
               f"parallel_markets={','.join(parallel)}\n"
-              f"needing_sprint={','.join(needing)}\n"
-              f"skip_cascade={skip_cascade}\n",
+              f"needing_sprint={','.join(needing)}\n",
               encoding="utf-8",
           )
           PY
@@ -88,17 +87,11 @@ jobs:
         env:
           FORCE: ${{ github.event.inputs.force || 'false' }}
           NEEDING: ${{ steps.dispatch.outputs.needing_sprint }}
-          SKIP_CASCADE: ${{ steps.dispatch.outputs.skip_cascade }}
         with:
           script: |
             if (process.env.FORCE === 'true') {
               core.setOutput('should_run', 'true');
               core.info('force=true — running parallel library ingest sprint 2');
-              return;
-            }
-            if (process.env.SKIP_CASCADE === 'true') {
-              core.setOutput('should_run', 'false');
-              core.info('Cascade: stream 2 yields peak slot to head fat slot');
               return;
             }
             const needing = (process.env.NEEDING || '').split(',').filter(Boolean);
@@ -113,7 +106,7 @@ jobs:
     needs: check
     if: needs.check.outputs.should_run == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 70
+    timeout-minutes: 110
     steps:
       - uses: actions/checkout@v5
 
@@ -129,7 +122,27 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+      - name: Wait for euro_depth and stream 1
+        id: wait_head
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MAX_WAIT_SECONDS: "2400"
+        run: |
+          set -euo pipefail
+          if bash scripts/wait_for_workflow_idle.sh euro-ingest-loop.yml library-ingest-sprint.yml; then
+            echo "idle=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          rc=$?
+          if [ "$rc" -eq 75 ]; then
+            echo "idle=false" >> "$GITHUB_OUTPUT"
+            echo "Predecessor still running after wait — skip spare stream 2"
+            exit 0
+          fi
+          exit "$rc"
+
       - name: Run parallel library ingest sprint 2
+        if: steps.wait_head.outputs.idle == 'true'
         env:
           MARKETS: ${{ github.event.inputs.markets }}
           MAX_TARGETS: ${{ github.event.inputs.max_targets }}
@@ -148,7 +161,7 @@ jobs:
           require_safe max_targets "${MAX_TARGETS:-}" '^[0-9]+$'
           require_safe max_runtime_seconds "${MAX_RUNTIME_SECONDS:-}" '^[0-9]+$'
           require_safe max_bodies "${MAX_BODIES:-}" '^[0-9]+$'
-          ARGS=(ingest-sprint --parallel-stream 2 --json --json-path /tmp/library_ingest_sprint_2.json)
+          ARGS=(ingest-sprint --parallel-stream 2 --head-idle --json --json-path /tmp/library_ingest_sprint_2.json)
           if [ -n "${MARKETS:-}" ]; then
             ARGS+=(--markets "$MARKETS")
           fi

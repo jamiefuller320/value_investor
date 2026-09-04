@@ -426,15 +426,20 @@
   "ingest_parallel_sprint_2": [
     "asx200"
   ],
-  "ingest_effort_cascade": {
-    "enabled": true,
-    "stream_1_target_fraction": 0.5,
-    "stream_1_runtime_fraction": 0.5,
-    "stream_2_target_fraction": 0.25,
-    "stream_2_runtime_fraction": 0.25,
-    "stream_2_yield_hours_utc": [8, 11],
-    "note": "While focus still has filing gaps, scale spare sprint streams and skip stream-2 peak hours that overlap the fat slot. Full caps return at head ingest parity."
-  },
+    "ingest_effort_cascade": {
+      "enabled": true,
+      "stream_1_target_fraction": 0.5,
+      "stream_1_runtime_fraction": 0.5,
+      "stream_2_target_fraction": 0.25,
+      "stream_2_runtime_fraction": 0.25,
+      "stream_2_yield_hours_utc": [8, 11],
+      "head_release_when": "ingest_parity",
+      "leftover_max_age_seconds": 14400,
+      "spare_wait_seconds": 2400,
+      "min_leftover_seconds": 180,
+      "scheduler_enabled": true,
+      "note": "While focus still has filing gaps, spare streams wait on a live head run, spend leftover minutes when larger than the spare slot, and fill down the queue. Hour skip is a fallback when head busyness is unknown. Full caps return at head ingest parity."
+    },
   "ladder": {
     "enabled": true,
     "layers": [

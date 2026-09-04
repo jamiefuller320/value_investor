@@ -66,11 +66,13 @@ jobs:
           from pathlib import Path
           data = json.loads(Path("/tmp/library_ingest_dispatch.json").read_text())
           parallel = data.get("parallel_sprint_markets") or []
-          needing = [
-              row.get("market_id")
-              for row in (data.get("parallel_sprint_status") or [])
-              if row.get("should_run_parallel_ingest")
-          ]
+          needing = list(data.get("scheduler_stream_1_markets") or [])
+          if not needing:
+              needing = [
+                  row.get("market_id")
+                  for row in (data.get("parallel_sprint_status") or [])
+                  if row.get("should_run_parallel_ingest")
+              ]
           out = Path(os.environ["GITHUB_OUTPUT"])
           out.write_text(
               f"parallel_markets={','.join(parallel)}\n"
@@ -104,8 +106,8 @@ jobs:
     needs: check
     if: needs.check.outputs.should_run == 'true'
     runs-on: ubuntu-latest
-    # Exceeds per-market budget (default 2100s) + setup + commit headroom.
-    timeout-minutes: 70
+    # Wait-for-head (up to 40m) + per-market budget (2100s) + setup + commit.
+    timeout-minutes: 110
     steps:
       - uses: actions/checkout@v5
 
@@ -121,7 +123,27 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+      - name: Wait for euro_depth fat slot
+        id: wait_head
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MAX_WAIT_SECONDS: "2400"
+        run: |
+          set -euo pipefail
+          if bash scripts/wait_for_workflow_idle.sh euro-ingest-loop.yml; then
+            echo "idle=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          rc=$?
+          if [ "$rc" -eq 75 ]; then
+            echo "idle=false" >> "$GITHUB_OUTPUT"
+            echo "Head still running after wait — skip spare stream 1"
+            exit 0
+          fi
+          exit "$rc"
+
       - name: Run parallel library ingest sprint
+        if: steps.wait_head.outputs.idle == 'true'
         env:
           MARKETS: ${{ github.event.inputs.markets }}
           MAX_TARGETS: ${{ github.event.inputs.max_targets }}
@@ -140,7 +162,7 @@ jobs:
           require_safe max_targets "${MAX_TARGETS:-}" '^[0-9]+$'
           require_safe max_runtime_seconds "${MAX_RUNTIME_SECONDS:-}" '^[0-9]+$'
           require_safe max_bodies "${MAX_BODIES:-}" '^[0-9]+$'
-          ARGS=(ingest-sprint --json --json-path /tmp/library_ingest_sprint.json)
+          ARGS=(ingest-sprint --head-idle --json --json-path /tmp/library_ingest_sprint.json)
           if [ -n "${MARKETS:-}" ]; then
             ARGS+=(--markets "$MARKETS")
           fi

@@ -108,7 +108,7 @@ jobs:
     if: needs.check.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     # Exceeds per-market budget (default 3600s) + setup + commit headroom.
-    timeout-minutes: 90
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v5
 
@@ -124,7 +124,27 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+      - name: Wait for euro_depth fat slot
+        id: wait_head
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MAX_WAIT_SECONDS: "2400"
+        run: |
+          set -euo pipefail
+          if bash scripts/wait_for_workflow_idle.sh euro-ingest-loop.yml; then
+            echo "idle=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          rc=$?
+          if [ "$rc" -eq 75 ]; then
+            echo "idle=false" >> "$GITHUB_OUTPUT"
+            echo "Head still running after wait — skip maintenance this slot"
+            exit 0
+          fi
+          exit "$rc"
+
       - name: Run library ingest maintenance
+        if: steps.wait_head.outputs.idle == 'true'
         env:
           MARKETS: ${{ github.event.inputs.markets }}
           MAX_TARGETS: ${{ github.event.inputs.max_targets }}
