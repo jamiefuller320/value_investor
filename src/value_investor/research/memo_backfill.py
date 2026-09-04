@@ -11,6 +11,7 @@ from typing import Any
 
 from value_investor.paper_fund import BUY_SIGNALS
 from value_investor.research.ingest_bootstrap import ensure_canonical_research_store
+from value_investor.research.market_store import resolve_research_documents
 from value_investor.research.overlay import apply_research_overlay
 from value_investor.research.runner import _process_ticker
 from value_investor.research.store import ResearchStore
@@ -289,9 +290,15 @@ def publish_memo_backfill_batch(
         for row in payload.get("reports") or []
         if isinstance(row, dict)
     ]
-    store = ResearchStore(output_dir)
-    overlay_reports = apply_research_overlay(reports, store.list_documents())
-    overlay_by_ticker = {report.ticker: report for report in overlay_reports}
+    documents = resolve_research_documents(
+        output_dir=output_dir,
+        bundle=payload,
+        committed_dir=dest_dir / "data" / "research",
+    )
+    overlay_reports = apply_research_overlay(reports, documents)
+    overlay_by_ticker = {
+        str(report.ticker or "").strip().upper(): report for report in overlay_reports
+    }
     updated_reports: list[dict[str, Any]] = []
     for raw in payload.get("reports") or []:
         if not isinstance(raw, dict):

@@ -28,6 +28,7 @@ from value_investor.agent_model_policy import (
 from value_investor.cursor_api_key import resolve_cursor_api_key
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT, grow_library, library_status
 from value_investor.library_dedupe import (
+    canonical_library_ticker,
     existing_library_research_tickers,
     select_deduped_research_targets,
 )
@@ -57,6 +58,10 @@ from value_investor.market_shard_phases import (
     refresh_committed_phase_rollup,
     weekly_paper_shard_markets_for_policy,
 )
+from value_investor.research.market_store import (
+    DEFAULT_REMEMO_BODY_LAG_THRESHOLD,
+    library_rememo_eligible_tickers,
+)
 from value_investor.research.runner import eligible_research_targets, run_research_for_strong_buys
 from value_investor.storage import write_json
 
@@ -79,6 +84,8 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
     ladder.setdefault("estimated_memo_usd", ESTIMATED_MEMO_USD)
     ladder.setdefault("research_hard_cap", 50)
     ladder.setdefault("research_all_graduated", True)
+    ladder.setdefault("rememo_existing", True)
+    ladder.setdefault("rememo_body_lag_threshold", DEFAULT_REMEMO_BODY_LAG_THRESHOLD)
     ladder.setdefault("observe_sim_after_screen", True)
     ladder.setdefault("observe_sim_markets_mode", OBSERVE_SIM_MARKETS_MODE_GRADUATED_BENCHMARK)
     ladder.setdefault("observe_sim_markets", list(DEFAULT_OBSERVE_SIM_MARKETS))
@@ -432,8 +439,9 @@ def run_library_ladder(
                 logger.warning("Screen-lite for research market %s failed: %s", mid, exc)
 
         # Round-robin buy-tier targets across markets until research_cap is filled.
-        # Skip exact Yahoo-ticker duplicates (e.g. AAPL in sp500 + nasdaq100) and
-        # names that already have a memo under any library market.
+        # Skip exact Yahoo-ticker duplicates and *fresh* existing memos. Thin /
+        # body-lag memos stay eligible so a new focus market rememos after ingest
+        # deepens filings — not only first-time names.
         per_market_reports: dict[str, list[Any]] = {}
         per_market_queues: dict[str, list[Any]] = {}
         for mid, scr in market_screens.items():
@@ -445,11 +453,29 @@ def run_library_ladder(
             )
 
         already = existing_library_research_tickers(root)
+        rememo_reasons: dict[str, str] = {}
+        if bool((policy.get("ladder") or {}).get("rememo_existing", True)):
+            queue_tickers = {
+                canonical_library_ticker(str(getattr(report, "ticker", "") or ""))
+                for queue in per_market_queues.values()
+                for report in queue
+            }
+            rememo_reasons = library_rememo_eligible_tickers(
+                root,
+                tickers=queue_tickers,
+                market_id=market,
+                body_lag_threshold=int(
+                    (policy.get("ladder") or {}).get(
+                        "rememo_body_lag_threshold", DEFAULT_REMEMO_BODY_LAG_THRESHOLD
+                    )
+                ),
+            )
+        skip_fresh = already - set(rememo_reasons)
         selected, dedupe_skipped = select_deduped_research_targets(
             research_markets=research_markets,
             per_market_queues=per_market_queues,
             research_cap=research_cap,
-            already_researched=already,
+            already_researched=skip_fresh,
         )
 
         status = budget_status
@@ -475,11 +501,17 @@ def run_library_ladder(
             "remaining_usd_before": remaining,
             "dedupe": {
                 "already_researched_count": len(already),
+                "fresh_skipped_count": len(skip_fresh),
+                "rememo_eligible_count": len(rememo_reasons),
+                "rememo_eligible_sample": [
+                    {"ticker": ticker, "reason": rememo_reasons[ticker]}
+                    for ticker in sorted(rememo_reasons)[:20]
+                ],
                 "skipped_count": len(dedupe_skipped),
                 "skipped_sample": dedupe_skipped[:20],
                 "note": (
                     "Exact Yahoo ticker match; earlier queue market wins. "
-                    "Existing memos in any library market are not re-created elsewhere."
+                    "Fresh memos are skipped; thin / body-lag memos rememo after ingest."
                 ),
             },
             "targets": [

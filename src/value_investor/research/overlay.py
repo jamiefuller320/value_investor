@@ -21,7 +21,7 @@ from value_investor.summary import CompanyReport
 
 
 def _documents_by_ticker(documents: list[ResearchDocument]) -> dict[str, ResearchDocument]:
-    return {doc.ticker: doc for doc in documents}
+    return {str(doc.ticker or "").strip().upper(): doc for doc in documents if doc.ticker}
 
 
 def _resolve_run_at(row: pd.Series, default: datetime | str | None) -> datetime | str | None:
@@ -58,7 +58,7 @@ def apply_research_overlay(
 
     updated: list[CompanyReport] = []
     for report in reports:
-        doc = by_ticker.get(report.ticker)
+        doc = by_ticker.get(str(report.ticker or "").strip().upper())
         if doc is None or not doc.research_verdict:
             updated.append(report)
             continue
@@ -138,12 +138,13 @@ def enrich_signals_with_research(
     research_as_ofs: list[str | None] = []
 
     for _, row in out.iterrows():
-        ticker = str(row["ticker"])
+        ticker = str(row["ticker"] or "").strip()
+        ticker_key = ticker.upper()
         signal = str(row.get("signal") or "hold")
         as_of = _resolve_run_at(row, run_at)
         doc = _load_research_document(
             store=store,
-            ticker=ticker,
+            ticker=ticker_key,
             as_of=as_of,
             latest_by_ticker=latest_by_ticker,
         )

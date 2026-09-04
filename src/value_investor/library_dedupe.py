@@ -71,11 +71,13 @@ def select_deduped_research_targets(
     Round-robin pick buy-tier targets, skipping tickers already claimed.
 
     Preference: earlier ``research_markets`` order wins within a run; tickers in
-    ``already_researched`` (existing memos) are skipped entirely.
+    ``already_researched`` (fresh existing memos) are skipped as ``fresh_memo``.
+    Same-run Yahoo-ticker collisions are ``duplicate_ticker``.
 
     Returns ``(selected, skipped)`` where skipped entries explain dedupe reasons.
     """
-    seen = {canonical_library_ticker(t) for t in (already_researched or set())}
+    already = {canonical_library_ticker(t) for t in (already_researched or set())}
+    claimed: set[str] = set(already)
     # Copy queues so callers retain originals if needed.
     queues: dict[str, list[Any]] = {
         mid: list(per_market_queues.get(mid) or []) for mid in research_markets
@@ -92,16 +94,16 @@ def select_deduped_research_targets(
                 key = canonical_library_ticker(getattr(report, "ticker", ""))
                 if not key:
                     continue
-                if key in seen:
+                if key in claimed:
                     skipped.append(
                         {
                             "market": mid,
                             "ticker": str(getattr(report, "ticker", key)),
-                            "reason": "duplicate_ticker",
+                            "reason": "fresh_memo" if key in already else "duplicate_ticker",
                         }
                     )
                     continue
-                seen.add(key)
+                claimed.add(key)
                 selected.append((mid, report))
                 progressed = True
                 break
