@@ -164,6 +164,33 @@ jobs:
           fi
           ftse-library "${ARGS[@]}"
 
+      - name: Evaluate library gap-closure follow-up
+        id: gap_followup
+        run: |
+          set -euo pipefail
+          ftse-library ingest-gap-closure-followup \
+            --loop-json /tmp/library_ingest_maintenance.json \
+            --json \
+            --json-path /tmp/gap_followup.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/gap_followup.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(
+              f"should_dispatch={'true' if data.get('should_dispatch') else 'false'}\n"
+              f"gap_followup_reason={data.get('reason', '')}\n",
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Dispatch library gap-closure follow-up after stall or slowdown
+        if: steps.gap_followup.outputs.should_dispatch == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/dispatch_library_gap_closure_followups.sh /tmp/gap_followup.json
+
       - name: Refresh completion gate and sync crons
         env:
           CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}

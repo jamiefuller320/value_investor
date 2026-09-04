@@ -58,7 +58,7 @@ to `market_id` (`source=library_ingest_stall`).
 
 ### 2. Stall / slowdown follow-up (automatic)
 
-After a **complete** `euro-ingest-loop` batch (not `partial` / `runtime_cutoff`,
+After a **complete** library ingest batch (not `partial` / `runtime_cutoff`,
 not already a gap-closure run), `evaluate_library_ingest_gap_closure_followup`
 dispatches a pinned intensive pass when:
 
@@ -72,13 +72,17 @@ Cooldown is **6h per `market_id`** so a FTSE intensive does not block euro
 (and vice versa). An open library ingest engineering task for that market also
 skips the dispatch.
 
-The follow-up is:
+The follow-up is wired on **every** library ingest workflow (`euro-ingest-loop.yml`,
+`library-ingest-sprint.yml`, `library-ingest-sprint-2.yml`,
+`library-ingest-maintenance.yml`). Sprint/maintenance evaluate each market in
+the batch JSON; dispatches still run as pinned `euro-ingest-loop.yml` jobs
+(`force=true`, same intensive inputs as FTSE weekday follow-up):
 
 ```bash
 gh workflow run euro-ingest-loop.yml \
-  -f market=euro_depth -f max_targets=1 -f max_bodies=40 \
+  -f market=sp500 -f max_targets=1 -f max_bodies=40 \
   -f max_runtime_seconds=2100 -f force=true \
-  -f record_gap_closure=true -f pin_ticker=RAND.AS \
+  -f record_gap_closure=true -f pin_ticker=XYZ \
   -f gap_closure_trigger=stall_slowdown
 ```
 
@@ -140,7 +144,7 @@ Parallel sprint auto-advance (`advance_parallel_sprint_on_ingest_parity`, defaul
 `learning-depth` is green; non-equivalent markets (euro_depth, asx200) use the same
 `ingest_parity_met` bar and enter maintenance immediately on parity.
 | Maintenance ingest | `library-ingest-maintenance.yml` | 2×/weekday FTSE-standard scan-then-target (`max_targets=62`) for markets at the FTSE quality bar |
-| Stall / slowdown follow-up | `euro-ingest-loop.yml` | After a complete batch with stall or `improved=0` leftover gaps, dispatches pinned `record_gap_closure=true` (`max_targets=1`) |
+| Stall / slowdown follow-up | all library ingest workflows | After a complete batch with stall or `improved=0` leftover gaps, dispatches pinned `euro-ingest-loop.yml` (`record_gap_closure=true`, `max_targets=1`) via `scripts/dispatch_library_gap_closure_followups.sh` |
 | Micro-compile dispatch | `euro-ingest-loop.yml` | After `micro_compiled` or `gap_closure_compiled`, runs `engineering-queue.yml` immediately |
 | Post-merge verify rerun | `engineering-queue.yml` | Tasks with `evidence.market_id` rerun **`euro-ingest-loop.yml`**; FTSE tasks still use `ingest-loop.yml` |
 | Discovery time cap | `library_ingest_budget.py` | Listing discovery may use at most 25% of `max_runtime_seconds` (675s of a 2700s euro slot) and scans thin/unmeasured/zero-body/IWB names first. Body deepen keeps the rest of the clock. |
