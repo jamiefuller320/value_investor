@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T06:32:26+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T07:43:16+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -275,6 +275,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L252 | **Intra-day entry tranche cadence** | Weekday paper-auto marks can only score daily/weekly DCA. Sub-daily tranche timing needs intra-day prices and is not required to answer whether spreading a decided notional de-risks entries. | Entry DCA overlay has a winning weekday/weekly cadence and intra-day price history is routinely available for FTSE names |
 | L253 | **Archive-history DCA overlay to accelerate cadence evidence** | Forward weekday marks will take weeks to close 12 episodes. An exit-timing-archive-style replay on weekly screens could seed priors for lump-sum vs weekly DCA without waiting for new paper buys. | Entry DCA overlay has fewer than 12 closed episodes after several weeks of weekday paper-auto, or Sunday analysis-review flags thin starter-stage evidence |
 | L264 | **Rememo thin euro_depth buy-tier memos after filings deepen** | Sunday ladder skips all 44 euro_depth buy-tier names because a first memo already exists. Most are still mode=initial with 0 filing bodies. Dedupe should not block a rememo once euro_filings bodies increase. | euro_depth buy-tier indexed_without_body drops and ingest_parity_met is near true |
+| L265 | **Seed library rememo from focus-market canonical filings** | A home-store rememo (e.g. TTE.PA on euro_stoxx50) can still look stale vs euro_depth canonical filings, so Sunday eligibility stays open after a rememo. Copy or union the focus-market filings index into the memo home before force-initial. | The next euro_depth ladder rememo pass still flags names whose home memo was just rewritten |
+| L267 | **Deepen Azelis AZE.BR filings after verdict catch-up** | AZE.BR now has an accumulate verdict but still only one indexed filing body. Rememo again after ESEF/IR ingest actually increases bodies. | AZE.BR euro_depth filings_with_body rises above 1 |
 
 ### Ops / reliability
 
@@ -331,6 +333,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L258 | **Roll gha_pip_install.sh out to remaining workflows** | Euro/library ingest now retries pip on empty-index flakes. Other long jobs (paper-auto, ops-monitor, FTSE ingest-loop, orchestrator) still use a single pip install -e . | Another workflow fails on pandas from versions: none or a similar empty-index pip flake |
 | L262 | **Shared GHA concurrency budget across live ingest streams** | Public-repo Actions minutes are free, but more live markets add parallel ingest jobs that already contend for hosted runners and the Sunday quiet bundle. Track concurrent ingest streams and runner-queue failures as the real compute bind, not a minutes quota. | A fourth market sits on FTSE-volume ingest, runner-acquisition flakes recur, or the repo goes private |
 | L263 | **Apply committed FTSE memos to the live research overlay** | 54 of 59 FTSE buy-tier names already have accumulate memos under docs/data/research/, but latest.json research[] only lists 18, so weekday paper overlay misses names such as JSG.L. Refresh should read the committed store, not only the last publish index. | Next weekday paper-auto or overlay-refresh change, or when AI judgment looks under-gated vs the memo library |
+| L266 | **Tighten memo-backfill publish to batch tickers only** | publish_memo_backfill_batch copies every tree under output/research into docs/research and docs/data/research. After a full index rebuild that restages older committed trees into output, publish can overwrite newer weekday markdown copies. | The next missing-memo or legacy rememo batch runs after a full research index rebuild |
 
 ---
 
