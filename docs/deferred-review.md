@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T07:03:28+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T07:19:45+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -165,6 +165,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L244 | **Chart-side drop-to-recovery metric on frozen entries** | For buy-tier charts, score max drop after the frozen recommendation close and whether/when price recovered through that entry (days underwater, recovered_to_entry). Distinct from paper hold-recovery, which only covers stressed sleeves. Use to judge short-term loss tolerance vs eventual success without retuning timing yet. | chart_outcome_review has at least 4 Sunday refreshes and several names have recovered through the frozen entry after a drawdown |
 | L245 | **Entry-timing overlay scored against missed eventual winners** | Later, a timing overlay might reduce mis-timed buys, but it must be measured against names that were underwater early and still worked. Do not tighten wait/accumulate from a mixed_no_terrible first month. Pair any timing experiment with a miss-cost / drop-to-recovery view. | drop-to-recovery or hold-recovery cohorts can split well-timed vs recovered-from-drawdown vs still-underwater on a multi-month window |
 | L250 | **Generalize adjacent-flip audit beyond IMB.L** | The IMB.L audit was a one-ticker read of rebalance_log plus fund trades. A small CLI that classifies left-target-set flips (rank rotation vs floor vs signal downgrade) would scale when adjacent_flip_count rises again. | Churn health shows adjacent_flip_count > 0 on a focus track in a weekly window |
+| L263 | **Fragment weeding and cluster-dedupe before raising director cap** | Horizon already clusters and can DROP/PROMOTE, but apply is manual and dedupe is exact-text only. A weeder (near-duplicate, already-an-open-L/N, stale-without-trigger, cluster merge) should clear the backlog before any raise of the Sunday director cap of 2. Do not treat a higher cap as the depth fix. | One horizon cycle has apply_fragments run on the current open backlog and open fragment count is still above 15, or N68 is being reconsidered |
 
 ### Universe & data
 
