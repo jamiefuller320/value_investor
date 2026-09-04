@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-04T10:50:11.053744+00:00",
+  "run_at": "2026-09-04T12:20:34.705254+00:00",
   "market_id": "sp500",
   "targets": [
     "EXR",
@@ -17,8 +17,8 @@
       "ticker": "EXR",
       "priority_score": 21.2765,
       "filings_total": 69,
-      "filings_with_body": 26,
-      "indexed_without_body": 43,
+      "filings_with_body": 46,
+      "indexed_without_body": 23,
       "reason": "indexed_without_body"
     },
     {
@@ -92,39 +92,39 @@
       "reason": "indexed_without_body",
       "before": {
         "filings_total": 69,
-        "filings_with_body": 26,
-        "indexed_without_body": 43
+        "filings_with_body": 46,
+        "indexed_without_body": 23
       },
       "after": {
         "filings_total": 69,
-        "filings_with_body": 46,
-        "indexed_without_body": 23
+        "filings_with_body": 66,
+        "indexed_without_body": 3
       },
       "improved": true,
       "regime": "sec_edgar",
       "filings_summary": {
         "total": 68,
-        "annual": 10,
-        "interim": 11,
+        "annual": 14,
+        "interim": 12,
         "trading_update": 7,
-        "other": 40,
-        "with_body": 36,
+        "other": 35,
+        "with_body": 56,
         "period_coverage": {
           "annual": {
-            "total": 10,
-            "with_body": 10
+            "total": 14,
+            "with_body": 14
           },
           "interim": {
-            "total": 11,
-            "with_body": 11
+            "total": 12,
+            "with_body": 12
           },
           "trading_update": {
             "total": 7,
             "with_body": 7
           },
           "other": {
-            "total": 40,
-            "with_body": 8
+            "total": 35,
+            "with_body": 23
           }
         }
       }
@@ -473,13 +473,13 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-04T10:48:01.098004+00:00",
+    "snapshot_at": "2026-09-04T12:17:29.546271+00:00",
     "market_id": "sp500",
     "buy_tier_count": 137,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 1,
-    "indexed_without_body": 58,
+    "thin_body_buy_tier": 0,
+    "indexed_without_body": 38,
     "bodies_min": 14,
     "bodies_median": 20,
     "bodies_max": 71,
@@ -487,18 +487,16 @@
     "ftse_equivalent": true,
     "unmeasured_tickers": [],
     "zero_body_tickers": [],
-    "thin_body_tickers": [
-      "EXR"
-    ]
+    "thin_body_tickers": []
   },
   "health_after": {
-    "snapshot_at": "2026-09-04T10:50:11.047665+00:00",
+    "snapshot_at": "2026-09-04T12:20:34.697507+00:00",
     "market_id": "sp500",
     "buy_tier_count": 137,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 38,
+    "indexed_without_body": 18,
     "bodies_min": 14,
     "bodies_median": 20,
     "bodies_max": 71,
@@ -520,15 +518,15 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-09-04T10:48:08.435994+00:00",
+    "assessed_at": "2026-09-04T12:17:36.199575+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
       {
         "ticker": "EXR",
-        "indexed_without_body": 43,
+        "indexed_without_body": 23,
         "filings_total": 69,
-        "filings_with_body": 26
+        "filings_with_body": 46
       },
       {
         "ticker": "FICO",
@@ -580,11 +578,9 @@
       }
     ],
     "thin_need_discovery": [],
-    "thin_need_bodies": [
-      "EXR"
-    ],
+    "thin_need_bodies": [],
     "primary_blocker": "indexed_without_body",
-    "force_discovery_scan": true,
+    "force_discovery_scan": false,
     "auto_pin_tickers": [
       "EXR",
       "FICO",
@@ -596,16 +592,15 @@
       "LMT"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (9 tickers, top: EXR(43), FICO(5), APTV(2), BXP(2), CRH(2))",
-      "Run listing-only discovery_scan before deepen"
+      "Prefer indexed-without-body body refetch (9 tickers, top: EXR(23), FICO(5), APTV(2), BXP(2), CRH(2))"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 9,
-      "indexed_without_body_rows": 58,
+      "indexed_without_body_rows": 38,
       "thin_need_discovery": 0,
-      "thin_need_bodies": 1
+      "thin_need_bodies": 0
     }
   }
 }
