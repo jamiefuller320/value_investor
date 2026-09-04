@@ -1349,11 +1349,7 @@ def cmd_cycle_surplus(args: argparse.Namespace) -> int:
                 f"${assessment['plan_monthly_usd']:.0f} = "
                 f"${float(assessment.get('plan_credit_warning_usd') or assessment.get('plan_credit_ceiling_usd') or 0):.2f}"
                 "  (warning only, not a hard cap)"
-                + (
-                    "  (proposed cap above warning)"
-                    if assessment.get("ceiling_bound")
-                    else ""
-                )
+                + ("  (proposed cap above warning)" if assessment.get("ceiling_bound") else "")
             )
             print(
                 f"weekly_ops ${assessment['current_weekly_ops_cap_usd']:.2f} → "
