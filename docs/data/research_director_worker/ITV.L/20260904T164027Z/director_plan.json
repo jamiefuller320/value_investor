@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "source": "director",
+  "open_questions": [
+    "Does the 6 July 2026 £1.6bn sale of ITV Media & Entertainment to Sky/Comcast complete on stated terms and timing, or do CMA/Ofcom/public-interest conditions cut the price, delay close, or kill the deal — leaving the listed equity either a Studios stub or a failed-deal broadcaster?",
+    "After the carve-out, is the screen’s 7.1% yield and dividend-family pass still valid for the continuing Studios group, or is strong_buy scoring a disappearing M&E dividend on a pre-deal perimeter while management already plans a £950m cash return plus a £100m buyback from 31 July 2026?",
+    "Which free-cash figure is usable for cover: filing-aligned £148m versus dividends paid £187m (~0.79×), company-adjusted £187m (net cover 1.0×), or suppressed TTM £212m — and why did fcf_basis_overlay stay false when the action_note already flags the mismatch?",
+    "How much of FY25/H1 2026 “good performance” (ITVX viewing +27%, digital +13%, TAR +3%, Studios +2%) is World Cup/one-off versus structural, and what is the continuing-group outlook once linear advertising and ITVX sit with Sky (including US distribution risk flagged in trade press)?",
+    "Why did statutory NI fall 408→220 and OCF 333→202 with net debt 306→463, working capital 837→498, current debt 10→325 (2026 notes / July–August consent solicitation), and Piotroski 3/9 — is this programme-inventory timing or cash-conversion deterioration the quality/GARP passes ignore?",
+    "With weeks_at_signal=1, conviction 53%, RSI 34, price below the 200-day MA, and analysts cutting fair value toward ~81p after Sky-deal caution, is the £69.05/£66.26 limit plan buying completion and stub-quality risk too early?",
+    "Did Liberty Global’s October 2025 secondary placing (stake halved, ~£135m) plus subsequent buybacks change register/free-float dynamics in a way a one-week strong_buy does not capture?",
+    "Are “Sky buys ITV for £1.6bn/$2.1bn” headlines describing an M&E carve-out or a full takeover, and has cheapness (P/E 11.6, P/B 1.5) already priced a cash return that may not occur if the deal fails or is remixed?"
+  ],
+  "meta_reflection": [
+    {
+      "topic": "evidence_ladder",
+      "observation": "Filings-first order is adequate when the live issue is annual/interim numbers, and this pack has 17 annual + 6 interim bodies. It is not adequate when the live issue is a transformative M&A RNS filed as period=other/priority=0: the 6 July 2026 Sky M&E sale sits below trading_update, Yahoo, and news on the assignment path. Trading updates are first-class in the index summary but outside the annual/interim rule. alternate_news is a dead step while news_manifest is populated (89 RSS-heavy items). yahoo_quarterly_cashflow is on the ladder but empty, so intra-year FCF cannot be checked except via filings.",
+      "priority": "high"
+    },
+    {
+      "topic": "task_schema",
+      "observation": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading update, 31 July buyback RNS, or 2026/2032 notes consent pack. Naive first/last-of-period selection would assign Directorate Change or Share Repurchase (both tagged annual) or IR FY decks tagged interim. No task type exists to reconcile screen/Yahoo FCF bases or to mark continuing versus discontinued perimeter.",
+      "priority": "high"
+    },
+    {
+      "topic": "methodology",
+      "observation": "The screen still emits strong_buy on the pre-deal consolidated group (advertising yield, company-adjusted FCF, P/E 11.6) after a announced carve-out that changes the equity’s cash-flow identity. Overlays that should have fired did not: fcf_basis_overlay=false despite filing £148m vs TTM £212m vs adj £187m; cyclical_exposure_detected=false on an ad-funded broadcaster; interim_quality_overlay=false despite H1 existing and Yahoo quarterly statements empty. Dividend-family pass versus filing FCF cover below 1.0× is the same scoring tension seen on MEGP, now compounded by a perimeter change the director prompt does not force workers to split.",
+      "priority": "high"
+    },
+    {
+      "topic": "monitoring",
+      "observation": "A new one-week strong_buy with a live CMA/Ofcom deal, a just-started buyback, 2026 notes outstanding, and no post-H1 trading update has no watch schema (deal close/break, cash-return mechanics, next TU, dividend rebase to stub). Conviction_score=0.53 is not a substitute for those monitors.",
+      "priority": "high"
+    },
+    {
+      "topic": "memo_structure",
+      "observation": "A generic FINANCIAL REVIEW / RISKS split will blend continuing Studios with discontinued M&E and will not force a CORPORATE ACTIONS / perimeter section. Without an explicit continuing-vs-consolidated rule, workers can cite FY25 group yield and H1 TAR growth as if they persist post-close. No required slot for regulatory-deal conditions or notes-consent residual risk.",
+      "priority": "medium"
+    },
+    {
+      "topic": "other",
+      "observation": "filings_index body_path values point at docs/data/research/ITV.L/sources/... rather than this trial snapshot; RNS direct/resolved pairs and IR/CH copies inflate coverage; Google News wrappers plus an entertainment-brand query pollute the manifest (Love Island, ITV News, allergy-pen items). Yahoo FY25 income omits EPS and share count that FY24 has.",
+      "priority": "low"
+    }
+  ],
+  "procedural_suggestions": [
+    {
+      "area": "ingest",
+      "summary": "Promote material M&A/sale-of-business RNS out of period=other/priority=0; do not tag IR results decks as interim or Directorate Change / buyback programme as annual; de-duplicate investegate_direct vs resolved (same body_content_hash) before counting coverage.",
+      "priority": "high"
+    },
+    {
+      "area": "orchestration",
+      "summary": "Select the latest dated annual and interim *results* bodies (FY25 29bdb56d3cedb539, H1 2026 d19c5d3b8e0bb46a — not the 30 June period-end duplicate). When a sale-of-business or trading_update body exists, reserve one of the five slots for it ahead of screen_context if the director already held the snapshot.",
+      "priority": "high"
+    },
+    {
+      "area": "prompt",
+      "summary": "Require annual/interim workers to extract continuing versus discontinued / held-for-sale splits, deal terms, guidance, FCF versus dividend cover, and reporting currency; require news workers to separate carve-out from full-takeover headlines and to ignore ITV-the-broadcaster entertainment noise.",
+      "priority": "high"
+    },
+    {
+      "area": "scoring",
+      "summary": "Do not pass the dividend family on company-adjusted FCF when filing-aligned cover is below 1.0×; fire fcf_basis_overlay when filing / TTM / adj diverge; treat announced carve-outs as a perimeter break that blocks group-yield strong_buy until continuing-group figures exist; detect advertising broadcasters as cyclical.",
+      "priority": "high"
+    },
+    {
+      "area": "sources",
+      "summary": "Populate alternate_news or drop it from the ladder. Add a structured financials_interim extract from the latest interim RNS because Yahoo quarterly_income and quarterly_cashflow are empty and TTM cashflow is suppressed.",
+      "priority": "medium"
+    },
+    {
+      "area": "schema",
+      "summary": "Add corporate_action (sale/buyback/notes) and reporting_perimeter fields on the screening snapshot; allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action so a Sky-sale body can be assigned without inventing a source.",
+      "priority": "medium"
+    },
+    {
+      "area": "monitoring",
+      "summary": "For new strong-buy names with a live regulatory deal and a just-launched buyback, emit watch items (CMA/Ofcom decision, close/break date, cash-return circular, next trading update, 2026 notes) rather than only lowering conviction_score.",
+      "priority": "medium"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "filing_fy25_annual_results",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/29bdb56d3cedb539.txt",
+      "focus": "FY25 Full Year Results RNS (5 Mar 2026): reporting currency; group vs segment (Studios vs M&E/ITVX) revenue, adj/statutory EBIT, EPS vs FY24; OCF, capex, FCF, cash, net debt; dividend declared vs cash dividends and FCF cover; any Sky-talks or held-for-sale language; auditor/going-concern. Prefer these figures over Yahoo (FY25 Yahoo omits EPS/share count; FCF there is £148m).",
+      "priority": 1
+    },
+    {
+      "id": "filing_h1_2026_interim",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/d19c5d3b8e0bb46a.txt",
+      "focus": "H1 2026 Interim Results RNS (31 Jul 2026, not the 30 Jun duplicate): H1 revenue/profit/EPS vs H1 2025 by Studios vs M&E; TAR/digital/ITVX KPIs; FY26 outlook and whether it is group or continuing-group; cash, capex, FCF, interim dividend; stated Sky deal terms, £950m return / £100m buyback, completion conditions and accounting (discontinued ops). Prefer filing figures over Yahoo (quarterly statements empty).",
+      "priority": 1
+    },
+    {
+      "id": "news_digest",
+      "type": "digest_news_manifest",
+      "target": "news_manifest.json",
+      "focus": "Cluster ~89 headlines: Sky £1.6bn M&E carve-out vs false ‘Sky buys ITV’ full-takeover wording; analyst FV cuts (~81p) and deal-execution caution; 31 Jul 2026 buyback; Liberty Global Oct 2025 placing; H1/FY25 earnings-call notes; World Cup/ad/streaming colour. Flag duplicates and entertainment-brand noise (Love Island, ITV News). Google News items are RSS titles only — do not invent article-body facts.",
+      "priority": 2
+    },
+    {
+      "id": "screen_context",
+      "type": "screen_context",
+      "target": "screening_snapshot.json",
+      "focus": "Record strong_buy 15/22, composite 82%, adjusted_signal still strong_buy, overlays all false; FCF bases filing £148m / TTM £212m / company-adj £187m with divergence_flagged=false and TTM suppressed (quarterly_cashflow_empty); Piotroski 3/9; D/E 52%, current ratio 1.29, yield 7.1%, P/E 11.6; new 1-week signal, conviction 53%, RSI 34, trade-plan £69.05/£66.26. List which claims must be confirmed on a post-carve-out / filing-FCF basis.",
+      "priority": 3
+    },
+    {
+      "id": "gap_inventory",
+      "type": "gap_inventory",
+      "target": "source_inventory",
+      "focus": "Document thin/unavailable steps: yahoo_quarterly_cashflow, yahoo_quarterly_income, alternate_news. Highest-value unread bodies the 5-cap omitted: Sky M&E sale RNS filings/bodies/10f52d865099383d.txt (and duplicate 0b0a4b2e4b15d060), Q1 2026 TU 07db0bbb71da4f51, buyback 9e3177c079d15731, notes consent 6af23cfd24aaf304. Note no Q3 2026 TU yet. List what the memo cannot verify without those reads (deal conditions, cash-return mechanics, intra-year FCF, notes residual).",
+      "priority": 1
+    }
+  ],
+  "director_agent_id": "agent-ce9898a4-4390-482c-94e8-1c134d24a60b"
+}

@@ -1,6 +1,6 @@
 # FirstGroup plc (FGP.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T07:28:52.943659+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T16:59:15.862557+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
 FirstGroup plc is a UK-focused bus and rail operator that has reshaped its portfolio around First Bus and First Rail after exiting North American operations. The quantitative screen rates the stock a Strong Buy (10/22 models passing; composite score 91%), supported by cheapness (P/E 9.2, earnings yield 10.9%, dividend yield 3.9%), quality (Piotroski F-Score, earnings quality), and disciplined capital returns. Primary filings show adjusted EPS rising from 19.4p (FY 2025) to 20.3p (FY 2026), with a progressive dividend (7.2p) and a further £100m buyback, while adjusted net debt remains modest at £137.7m against a leverage policy of below 2.0x adjusted net debt to Rail adjusted EBITDA. The valuation hook is a cash-generative, UK transport franchise trading at single-digit adjusted earnings multiples while management guides c.£400m–£435m of free cash flow over three years and returns surplus cash to shareholders. The central debate is whether portfolio diversification (London Overground, open access rail, coach/M&A) offsets structural headwinds from UK rail renationalisation, regional bus franchising, fare-cap pressure, and a widening gap between company-adjusted free cash flow (£73.8m in FY 2026) and screen-level TTM FCF figures.

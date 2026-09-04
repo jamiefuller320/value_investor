@@ -1,0 +1,819 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "ticker": "IMB.L",
+  "company_name": "Imperial Brands PLC",
+  "signal": "strong_buy",
+  "run_id": "20260904T174213Z",
+  "output_dir": "docs/data/research_director_worker/IMB.L/20260904T174213Z",
+  "director_model": "grok-4.6",
+  "worker_model": "composer-2.5",
+  "estimated_cost_usd": 3.26,
+  "director_agent_ids": {
+    "plan": "agent-7cb56305-861b-43ae-a8e4-b850399cd587",
+    "synthesis": "agent-c9a75931-c257-445f-b3ab-4c2085c91b0a"
+  },
+  "task_plan": {
+    "schema_version": 1,
+    "orchestration_version": 1,
+    "source": "director",
+    "open_questions": [
+      "Screen FCF is tagged currency=USD on an LSE tobacco name whose Yahoo annuals (revenue 32,171m, NI 2,071m, OCF 3,627m) match Imperial’s sterling scale, while canonical/filing-aligned FCF is 3,166m versus screen_ttm / key_metrics FCF 2,502m with divergence_flagged false and TTM cashflow suppressed — is the 13.1% FCF-yield / 11.8× P/E / 2.03× net dividend-cover stack a unit/FX or FCF-definition error, and which filing-body GBP FCF (OCF−capex vs company-adjusted, leaf/inventory, leases) should replace Yahoo before endorsing cheapness or the strong_buy?",
+      "Yahoo FY2025 NI fell 2,613m → 2,071m and basic EPS 3.007 → 2.511 while the tax charge jumped 282m → 908m (rate ~9% → ~29%); screen earnings growth is −16.5% statutory / −24.1% adjusted and Lynch PEG failed, yet Quality Value, Buffett Quality, Magic Formula, Neff PEGY and Earnings Quality still passed on ROE 37.2% as equity shrank 5,442m → 4,824m and retained earnings went more negative (−479m → −1,205m) — is the quality/GARP pass buyback-inflated ROE on a one-off tax/earnings trough, or a durable tobacco cash engine?",
+      "D/E is 243.8%, Yahoo net debt rose 7,619m → 8,155m (total debt 9,996m, leases only 402m), current ratio is 0.74 and working capital −3,042m, with tax payable 7,329m sitting inside current liabilities; Financial Health, Graham, Schloss, Moat and Piotroski (6/9: ROA, leverage, asset-turnover fails) already rejected leverage/liquidity while dual_leverage_display and leverage_override are false — what is group net debt on the annual-report definition, how much of the current-ratio fail is tobacco excise rather than true liquidity stress, and can Quality/FCF-yield still be trusted at this leverage?",
+      "FY2025 cash returns were buybacks 1,235m + dividends paid 1,558m against FCF 3,166m, while net long-term debt issuance was +664m and ordinary shares fell 946.7m (FY2022) → 805m (FY2025); news cites a live £1.45bn programme with August prints ~2,497–2,767p versus the screen core/tactical limits £2,496.78 / £2,395.90 — how much of the 11.8× P/E, 6.5% yield, Piotroski ‘no dilution’ pass and FCF yield is capital-return / share-shrinkage, and are dividend-plus-buyback still covered by filing FCF after leaf inventory, NGP investment, pensions and incremental debt?",
+      "Combustible volumes are in structural decline while news (not filings) claims H1 2026 tobacco+NGP net-revenue growth, NGP/share challenges, a ≥$150m Black Buffalo pouch deal, a £320m-by-2030 savings plan with thousands of US/Europe job cuts, a UK youth cigarette-ban dip, and Morningstar combustibles/pouch concern — what do the FY2025 group accounts actually say on tobacco net revenue vs duty-paid, volume/price/mix, NGP sales/losses/investment, and contingent litigation/regulation, and is Strategy 2030 still funded by a shrinking combustible cash pool?",
+      "No period=interim or trading_update body exists in this catalog (H1 2026 results, Black Buffalo, jobs/savings and FY2026 outlook live only as news headlines from May–August 2026) — which FY2026 guidance, H1 statutory P&L/cash/net-debt, remaining buyback authority, and NGP KPIs must the memo treat as unknown until those RNSs are ingested?",
+      "Goodwill+intangibles are 16,208m against equity 4,824m (tangible book −11,384m) and P/B is 5.0, so Graham/Schloss/Deep Value failed as expected — do the FY2025 accounts show impairment triggers, brand-life assumptions, or MSA/illicit-trade provisions that would break the 13.1% FCF-yield / 37% ROE story if combustibles or NGP underperform?",
+      "The screen is a 1-week new strong_buy (conviction 0.454, RSI 38, price −0.15% vs SMA200, timing=accumulate) after an April 2026 ~7% gap that news tied to Middle East / outlook reaffirmation / youth-ban, while late-August buybacks printed through the core limit — has the name already been accumulated at the limit ladder, and is the signal stale versus the missing H1 2026 print?",
+      "Defined-benefit plans show a 801m non-current pension liability and a 314m surplus asset on the Yahoo FY2025 balance sheet — what do filings say about net IAS 19 position, contribution commitments, and whether pension cash sits ahead of the 6.5% dividend?"
+    ],
+    "meta_reflection": [
+      {
+        "topic": "evidence_ladder",
+        "observation": "Filings-first order is adequate in principle (70/71 bodies present) but not in practice for IMB.L: all 8 period=annual hits are Companies House group accounts (2019–2026 filings), interim=0 and trading_update=0, and the 63 period=other items are almost entirely Transaction-in-Own-Shares plus TVR/holdings/PDMR. yahoo_quarterly_cashflow is on the ladder but empty (TTM suppressed); alternate_news and ir_presentation_metrics are dead/absent steps. H1 2026, Black Buffalo, and the August jobs/savings plan therefore fall through to headline-only news, which the ladder ranks below empty quarterlies.",
+        "priority": "high"
+      },
+      {
+        "topic": "task_schema",
+        "observation": "Four worker types plus a five-task cap would normally force annual+interim+news+screen+gap. Here there is no tagged interim body, so a second summarize_filing_body cannot be assigned without inventing a source or smuggling a buyback RNS. summarize_filing_body cannot carry period=annual|interim|trading_update|corporate_action, and there is no type to cluster ~50 own-share RNSs, parse an IR deck, or reconcile the 2,502m vs 3,166m FCF bases. gap_inventory can only list the missing H1/IR/NGP bodies — it cannot fill them.",
+        "priority": "high"
+      },
+      {
+        "topic": "methodology",
+        "observation": "The screen emits strong_buy (13/22, five families including quality/GARP/dividend) while earnings growth is negative, D/E is 244%, current ratio is 0.74, Piotroski is 6/9, and Financial Health/Moat/Graham fail. Overlays are all false: fcf_basis_overlay despite 2,502m vs 3,166m FCF, leverage_override/dual_leverage_display despite net debt 8.2bn, dividend_yield_overlay on a 6.5% levered tobacco yield, cash_conversion_overlay, and cyclical_exposure on a secular volume-decline staple. Quality/Buffett can pass on 37% ROE created by shrinking book equity. The director–worker loop is being asked to qualitatively veto a mechanically clean headline that sector/leverage/FCF overlays failed to brake.",
+        "priority": "high"
+      },
+      {
+        "topic": "monitoring",
+        "observation": "weeks_at_signal=1 / stability=new / conviction=0.454 already mark a fresh print, but there is no watch schema for: ingest of the missing H1 2026 statutory RNS, remaining £1.45bn buyback capacity versus live prints versus the £2,496.78/£2,395.90 ladder, Black Buffalo close/integration, job-cut cash costs versus the £320m-by-2030 savings claim, FY2026 outlook checkpoints, or UK generational-ban / NGP regulation. RSI 38 + below-SMA200 timing is not a substitute for those monitors.",
+        "priority": "high"
+      },
+      {
+        "topic": "memo_structure",
+        "observation": "A generic FINANCIAL REVIEW / RISKS split will blend duty-paid revenue with tobacco net revenue and will not force combustibles volume/price versus NGP, statutory versus adjusted, excise-distorted working capital, or company versus IFRS-16 net debt. Without explicit CAPITAL RETURNS, NGP TRANSITION, and LITIGATION/REGULATION slots, workers will treat the daily £1.45bn buyback flood and Kalkine income pieces as colour. No required slot for reporting-currency hygiene (snapshot USD vs sterling accounts) or for ‘H1 exists only in news’. Director catalog pass can form these questions without drafting the memo.",
+        "priority": "medium"
+      },
+      {
+        "topic": "other",
+        "observation": "filings_index.body_path values point at docs/data/research/IMB.L/sources/... rather than this trial snapshot tree. sources_used are only companies_house + investegate_direct — the IR allowlist and any FY/H1 results RNS before the June 2026 Investegate window did not land. news_manifest (~71 items) is dominated by Kalkine/TipRanks/Globe buyback reprints, BAT+IMB cannabis pairing, and ASX:IMB Intelligent Monitoring Group collisions. financials_annual.json is Yahoo-shaped (FY2021–2025; quarterly_income/quarterly_cashflow empty; no root currency field). NCAV missing is expected for this model, not an IMB-specific hole.",
+        "priority": "medium"
+      }
+    ],
+    "procedural_suggestions": [
+      {
+        "area": "ingest",
+        "summary": "Deepen Investegate so FY results, H1 2026 interims, acquisition and restructuring RNSs are not dropped when the recency window is buyback-dominated; fire the IR allowlist for Imperial annual report / results PDFs; retag those as period=annual|interim|trading_update|corporate_action. Point body_path at the trial snapshot tree. Deduplicate daily Transaction-in-Own-Shares before counting filing coverage. Reject Google News hits whose issuer is ASX:IMB (Intelligent Monitoring Group).",
+        "priority": "high"
+      },
+      {
+        "area": "scoring",
+        "summary": "Fail-closed or flag when screening_snapshot.fcf.currency is USD on a GBP LSE reporter, and set fcf_definition_divergence whenever screen_ttm (2,502m) disagrees with filing_aligned (3,166m). Do not pass quality/GARP/Buffett on 37% ROE while earnings growth is negative and book equity is shrinking via buybacks. Enable a tobacco-excise overlay so current-ratio < 2 is not treated as ordinary industrial illiquidity without netting duty payables, and surface dual leverage when D/E > 200% even if leases are small.",
+        "priority": "high"
+      },
+      {
+        "area": "prompt",
+        "summary": "Require the annual worker to extract reporting currency and entity (03236483 group), tobacco net revenue versus duty-paid, combustibles volume/price/mix versus NGP, statutory versus adjusted EBIT/EPS, OCF/capex/FCF definition, cash versus financial debt versus leases versus company net debt, excise/tax payables inside working capital, dividend declared versus cash paid and cover versus filing FCF, buyback authority versus cash spent versus share count, pension, goodwill/impairment, and litigation/regulation language. Require news workers to cluster £1.45bn buyback reprints into one line, keep H1/Black Buffalo/jobs/BofA/Morningstar/April-gap items as headline-only, and discard ASX:IMB and cannabis-pair filler.",
+        "priority": "high"
+      },
+      {
+        "area": "sources",
+        "summary": "Ingest the H1 2026 interim results RNS/PDF (news-dated ~12 May 2026), the FY2025 results RNS if distinct from the 7 Feb 2026 CH accounts, the Black Buffalo RNS, and the August 2026 jobs/£320m-savings announcement. Populate alternate_news or drop it from the ladder. Parse interim cash-flow from filing bodies to replace empty Yahoo quarterly_income/quarterly_cashflow instead of only suppressing TTM. Expose ir_presentation_metrics when Imperial IR decks exist.",
+        "priority": "high"
+      },
+      {
+        "area": "orchestration",
+        "summary": "Select the latest dated annual *group* body (CH 03236483 filed 2026-02-07) — not 2019–2024 CH. When interim_count=0, do not invent or retag a buyback/TVR RNS as interim; keep the second filing slot empty and let gap_inventory record the missing H1. Raise the cap or add trading_update / rns_cluster / corporate_action types so a later-ingested H1, acquisition, or savings RNS is not dropped.",
+        "priority": "medium"
+      },
+      {
+        "area": "schema",
+        "summary": "Allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action. Add reporting_currency, tobacco_net_vs_duty_paid, ngp_mix, excise_in_working_capital, and fcf_basis_used on the screening snapshot. Remap filings_index.body_path into the trial sources/ tree. Validate FCF-yield inputs against listing CCY and a sanity band versus market cap.",
+        "priority": "medium"
+      },
+      {
+        "area": "monitoring",
+        "summary": "For weeks_at_signal<=1 tobacco strong_buys, require the memo to compare live price versus limit ladder versus latest buyback print, and emit watches (next true H1/FY body ingest, remaining £1.45bn buyback, NGP/Black Buffalo, job-cut cash cost, FY2026 outlook, UK generational-ban). Do not treat stability=new or RSI-oversold timing as a reason to skip those checks.",
+        "priority": "medium"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "imb_annual_fy2025",
+        "type": "summarize_filing_body",
+        "target": "filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+        "focus": "Companies House group accounts for Imperial Brands PLC 03236483 filed 2026-02-07 (period=annual; entity_type=consolidated). This is the latest annual body — do not use 2019–2025 CH files. Extract reporting currency; tobacco net revenue vs duty-paid/total revenue; statutory vs adjusted operating profit/EBIT/EPS and the FY2024 comparative (Yahoo NI 2,613m→2,071m, tax 282m→908m); combustibles volume/price/mix vs NGP; OCF, capex, FCF definition; cash vs financial debt vs IFRS-16 leases vs reported net debt; excise/tax payables and working-capital notes; dividend declared vs cash paid; buybacks and share count; pension surplus/deficit and contributions; goodwill/intangibles and impairment language; litigation/regulation/contingent liabilities; FY outlook if stated. Prefer these figures over Yahoo (FY2025 Yahoo revenue 32,171m, NI 2,071m, OCF 3,627m, FCF 3,166m, buybacks 1,235m, dividends paid 1,558m; screen TTM FCF 2,502m tagged USD). Do not open other files.",
+        "priority": 1
+      },
+      {
+        "id": "imb_screen_context",
+        "type": "screen_context",
+        "target": "screening_snapshot.json",
+        "focus": "Explain strong_buy 13/22, composite 0.753, sector-relative 0.701, families cheapness/quality/dividend/GARP/risk versus failed models (Graham/Schloss/Deep Value on P/B 5.0 and leverage; Lynch PEG on negative growth; Moat on ROA/margins/leverage; Piotroski 6/9 ROA+leverage+turnover; Financial Health on D/E 243.8% and current ratio 0.74). Flag conviction 0.454 / 1-week new signal, timing=accumulate, RSI 38, price −0.15% vs SMA200, trade-plan limits £2,496.78 / £2,395.90, all overlays false including fcf_basis/leverage/dividend/cash_conversion, TTM cashflow suppressed, FCF bases filing_aligned 3,166m vs screen_ttm 2,502m with currency=USD and divergence_flagged false, yield 6.5%, ROE 37.2%, earnings growth −16.5%/−24.1%. List which screen numbers must be replaced by filing-body sterling and which claims are unsafe until FCF currency/definition and excise-adjusted liquidity are reconciled.",
+        "priority": 2
+      },
+      {
+        "id": "imb_news_digest",
+        "type": "digest_news_manifest",
+        "target": "news_manifest.json",
+        "focus": "Cluster ~71 headlines: keep H1/Q2 2026 earnings-call notes (~12 May: on-track FY targets, US/Australia one-offs, NGP mix); Black Buffalo ≥$150m pouch deal (~27 May); Strategy 2030 / strong FY2026 start / NGP (~2 Jun); thousands of US/Europe job cuts and £320m savings by 2030 (~10 Aug); April 2026 ~7% gap with outlook reaffirmed / youth-ban / Middle East; BofA upgrade (~15 Jul); Morningstar undervalued / combustibles-pouch concern; Simply Wall St ex-dividend. Collapse Kalkine/TipRanks/Globe daily £1.45bn buyback reprints (prints ~2,497–2,767p) into one programme note. Discard ASX:IMB Intelligent Monitoring Group / ADT UK, BAT+IMB cannabis pairing, and ETF/income-list filler. Google News items are RSS titles — do not invent article-body or H1 statutory figures.",
+        "priority": 3
+      },
+      {
+        "id": "imb_gap_inventory",
+        "type": "gap_inventory",
+        "target": "source_inventory",
+        "focus": "Catalog thin/missing steps: yahoo_quarterly_cashflow empty, yahoo_quarterly_income empty (inside financials_annual.json), ir_presentation_metrics absent, alternate_news absent, TTM cashflow suppressed. Note period coverage annual=8 / interim=0 / trading_update=0 — no H1 2026 statutory interim or FY results RNS is in this catalog, so do not invent those sources. Highest-value unread or omitted bodies: prior CH annuals (ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt FY2024-era and older) only if YoY notes in the 2026-02-07 file are insufficient; latest TVR 2379eadea3cfebe2.txt and a sample own-share body for residual £1.45bn capacity — not substitutes for H1. Note filings_index.body_path points outside this trial tree; macro_context.json and screen_run_manifest.json are present but unused. State what the memo must leave unknown: H1 2026 statutory P&L/cash/net-debt, Black Buffalo consideration/close, job-cut cash cost vs £320m savings, remaining buyback authority, FY2026 numeric guidance, NGP KPIs, IR-slide metrics.",
+        "priority": 4
+      }
+    ],
+    "director_agent_id": "agent-7cb56305-861b-43ae-a8e4-b850399cd587"
+  },
+  "worker_results": [
+    {
+      "task_id": "imb_annual_fy2025",
+      "task_type": "summarize_filing_body",
+      "status": "partial",
+      "findings": [
+        "Source is Imperial Brands PLC Annual Report and Accounts 2025 (Companies House company number 03236483); extract covers only early Strategic Report pages (~1–10) and ends before Operating review (p.28), Financial review (p.76), group financial statements, notes and shareholder information listed in contents.",
+        "Figures are presented in sterling (£); reporting currency is not explicitly labelled in this excerpt but all monetary amounts use £/bn.",
+        "FY25 Tobacco & NGP net revenue £8.3 billion vs reported (duty-inclusive) revenue £32.2 billion — source_path: ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt.",
+        "FY25 Tobacco & NGP net revenue regional split: Europe 42%, Americas 35%, AAACE (Africa, Asia, Australasia and Central/Eastern Europe) 23%.",
+        "Five priority combustible markets (USA, Germany, UK, Spain, Australia) represent c.70% of adjusted tobacco operating profit; company presence in 100+ countries.",
+        "FY25 NGP net revenue growth 13.7%; strategy commits to annual double-digit NGP net revenue growth.",
+        "Priority-market net revenue proportions (FY25): USA 35%, Germany OCR ‘| 1%’ (likely 11%), UK 6%, Spain 5%, Australia 2%.",
+        "Priority-market combustible share movements (FY25): Germany +45 bps, UK −85 bps, Spain −45 bps, Australia +20 bps; USA movement OCR-corrupted (‘lbp’).",
+        "NGP category FY25 market-share gains cited: vapour UK +160 bps; heated Italy +60 bps; modern oral OCR ‘T30 bps’ (unclear). NGP footprint focused US/Europe; modern oral in US/Nordics, vaping in Western Europe, heated in southern/eastern Europe.",
+        "March 2025: five-year evolved strategy to 2030 announced — drive sustainable combustibles value in five markets; build NGP scale; enablers include consumer/brand capabilities, high-performance culture, simplified data-led organisation.",
+        "No statutory or adjusted operating profit, EBIT, EPS, net income, tax charge, cash flow, capex, FCF, net debt, lease liabilities, dividends, buybacks, share count, pension, goodwill/impairment, litigation/contingencies, excise payables, working-capital commentary, combustibles volume/price/mix bridge, or FY outlook guidance appear in this truncated body."
+      ],
+      "figures": [
+        {
+          "metric": "Tobacco & NGP net revenue",
+          "value": "£8.3bn",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "Company net revenue measure excluding excise/duty pass-through"
+        },
+        {
+          "metric": "Reported revenue (duty-paid/total)",
+          "value": "£32.2bn",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "Chart caption contrasts with Tobacco & NGP net revenue"
+        },
+        {
+          "metric": "Tobacco & NGP net revenue — Europe",
+          "value": "42%",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "Regional share of Tobacco & NGP net revenue"
+        },
+        {
+          "metric": "Tobacco & NGP net revenue — Americas",
+          "value": "35%",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "Regional share of Tobacco & NGP net revenue"
+        },
+        {
+          "metric": "Tobacco & NGP net revenue — AAACE",
+          "value": "23%",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "Africa, Asia, Australasia and Central/Eastern Europe"
+        },
+        {
+          "metric": "NGP net revenue growth",
+          "value": "13.7%",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "Group NGP net revenue growth rate"
+        },
+        {
+          "metric": "Priority market net revenue share — USA",
+          "value": "35%",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "Proportion of net revenue"
+        },
+        {
+          "metric": "Priority market net revenue share — UK",
+          "value": "6%",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "Proportion of net revenue"
+        },
+        {
+          "metric": "Priority market net revenue share — Spain",
+          "value": "5%",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "Proportion of net revenue"
+        },
+        {
+          "metric": "Priority market net revenue share — Australia",
+          "value": "2%",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "Proportion of net revenue"
+        },
+        {
+          "metric": "Priority market combustible share movement — Germany",
+          "value": "+45 bps",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "Priority market share movement"
+        },
+        {
+          "metric": "Priority market combustible share movement — UK",
+          "value": "−85 bps",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "Priority market share movement"
+        },
+        {
+          "metric": "Priority market combustible share movement — Spain",
+          "value": "−45 bps",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "Priority market share movement"
+        },
+        {
+          "metric": "Priority market combustible share movement — Australia",
+          "value": "+20 bps",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "Priority market share movement"
+        },
+        {
+          "metric": "Vapour market share growth — UK",
+          "value": "+160 bps",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "NGP category market-share gain"
+        },
+        {
+          "metric": "Heated technology market share growth — Italy",
+          "value": "+60 bps",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "NGP category market-share gain"
+        },
+        {
+          "metric": "Adjusted tobacco operating profit — five priority markets",
+          "value": ">70%",
+          "period": "FY25",
+          "source_path": "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "Qualitative share; absolute £ amount not in extract"
+        }
+      ],
+      "gaps": [
+        "Filing body truncated at ~804 lines (~page 10); Financial review (p.76), Operating review (p.28), consolidated income statement, cash flow statement, balance sheet and notes not present.",
+        "Statutory and adjusted operating profit/EBIT/EPS with FY2024 comparatives not available in source.",
+        "Net income and tax charge (incl. FY2024 NI £2,613m→£2,071m and tax £282m→£908m verification) not in source.",
+        "Combustibles volume/price/mix vs NGP revenue bridge not in source.",
+        "Operating cash flow, capex, free cash flow definition and amounts not in source.",
+        "Cash, financial debt, IFRS 16 lease liabilities and reported net debt not in source.",
+        "Excise/tax payables and working-capital notes not in source.",
+        "Dividends declared vs cash paid and share buybacks/share count not in source.",
+        "Pension surplus/deficit and contributions not in source.",
+        "Goodwill/intangibles and impairment language not in source.",
+        "Litigation, regulation and contingent liabilities not in source.",
+        "FY2026/FY outlook or guidance not in source.",
+        "Explicit reporting-currency policy statement not in source (inferred from £ presentation only).",
+        "Several OCR-corrupted figures (USA market share, Germany net revenue %, USA share movement, modern oral bps) unreadable."
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-af1f61f3-ad12-4554-a072-fed606e1c8ea"
+    },
+    {
+      "task_id": "imb_screen_context",
+      "task_type": "screen_context",
+      "status": "partial",
+      "findings": [
+        "Signal is strong_buy on 13/22 models (composite 0.7529, sector-relative 0.7007); five families pass — cheapness, quality, dividend, GARP, risk — per docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json.",
+        "Passed models include Earnings Yield, FCF Yield, Low P/E + High Yield, Neff PEGY, Quality Value, Buffett Quality, High Dividend Yield, Dividend Growth, Magic Formula, Acquirer's Multiple, Dreman Contrarian, Composite Value, and Earnings Quality (screening_snapshot.json).",
+        "Failed models: Graham Defensive (P/B or P/E×P/B too rich; current ratio < 2), Graham Enterprising (P/B ≥ 3, excessive leverage, negative earnings growth), Graham Net-Net (missing NCAV), Schloss Low P/B (P/B too high, too much leverage), Deep Value (P/B not below 1.0), Lynch PEG (missing or negative earnings growth), Economic Moat (ROA below 8%, margins below 12%, leverage too high), Piotroski F-Score (6/9 — fails ROA improving, leverage declining, asset turnover improving), Financial Health (high debt to equity, weak liquidity) (screening_snapshot.json).",
+        "Valuation headline metrics: P/E 11.8, P/B 5.0, yield 6.5%, ROE 37.2%; summary highlights E/P 8.4% and FCF yield 13.1% (screening_snapshot.json).",
+        "Leverage and liquidity inputs driving failures: debt_to_equity 243.803%, current_ratio 0.743; earnings growth negative on both bases — basic/statutory EPS −16.5%, adjusted/earnings −24.1% (screening_snapshot.json).",
+        "Conviction 0.4542 with stability_label new, weeks_at_signal 1, signal_trend new; timing_signal accumulate (timing_score 0.75), RSI 14 ≈ 38, price −0.15% vs SMA200; action_note 'Strong Buy — favourable entry timing' (screening_snapshot.json).",
+        "Trade plan: core 75% limit £2,496.78; tactical 25% limit £2,395.90; tactical stop £2,250.63, target £2,710.11 (screening_snapshot.json).",
+        "All overlays false: healthcare_overlay, healthcare_price_erosion_overlay, cash_conversion_overlay, dividend_yield_overlay, interim_quality_overlay, cyclical_exposure_overlay, earnings_basis_overlay, fcf_basis_overlay, leverage_override, dual_leverage_display (screening_snapshot.json).",
+        "Yahoo quarterly TTM cashflow suppressed (ttm_cashflow_suppressed true; reason quarterly_cashflow_empty); screen uses alternate cashflow path (screening_snapshot.json).",
+        "FCF reconciliation: filing_aligned/canonical USD 3,166m (source filing_aligned_ocf_capex, fiscal_year 2025) vs screen_ttm/cashflow_metrics FCF USD 2,502m; divergence_flagged false despite ~664m gap; key_metrics.FCF matches screen_ttm (screening_snapshot.json).",
+        "Screen numbers that must be replaced by filing-body sterling before UK-equity claims: all USD cashflow block figures — operating_cashflow 3,627m, capex −461m, free_cashflow/screen_ttm 2,502m, filing_aligned/canonical 3,166m, prior-year OCF/FCF 3,307m/2,894m, and derived fcf_dividend_coverage_net 2.03; currency field explicitly USD (screening_snapshot.json).",
+        "Unsafe until FCF currency/definition reconciled: FCF Yield pass, summary FCF yield 13.1%, key_metrics FCF, fcf_dividend_coverage_net, and any composite/family scoring implicitly tied to USD screen_ttm FCF; filing_aligned vs screen_ttm divergence not flagged (screening_snapshot.json).",
+        "Unsafe until excise-adjusted liquidity reconciled: current_ratio 0.743 (Graham Defensive current ratio < 2; Financial Health weak liquidity), debt_to_equity 243.803%, and leverage-sensitive failures across Graham Enterprising, Schloss, Deep Value, Economic Moat, Piotroski (leverage declining), and Financial Health — source does not adjust for excise/tobacco working-capital treatment (screening_snapshot.json)."
+      ],
+      "figures": [
+        {
+          "metric": "models_passed",
+          "value": "13/22",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "signal strong_buy"
+        },
+        {
+          "metric": "composite_score",
+          "value": "0.7529",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "headline composite 75% in summary"
+        },
+        {
+          "metric": "sector_composite_score",
+          "value": "0.7007",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "sector-relative 70% in summary"
+        },
+        {
+          "metric": "families_passed",
+          "value": "5 (cheapness, quality, dividend, garp, risk)",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": null
+        },
+        {
+          "metric": "conviction_score",
+          "value": "0.4542",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "stability_label new, 1 week at signal"
+        },
+        {
+          "metric": "timing_signal",
+          "value": "accumulate",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "timing_score 0.75"
+        },
+        {
+          "metric": "rsi_14",
+          "value": "37.6",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "summary rounds to 38"
+        },
+        {
+          "metric": "price_vs_sma200_pct",
+          "value": "-0.15%",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "below 200-day MA"
+        },
+        {
+          "metric": "core_limit",
+          "value": "£2,496.78",
+          "period": "trade_plan",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "75% allocation"
+        },
+        {
+          "metric": "tactical_limit",
+          "value": "£2,395.90",
+          "period": "trade_plan",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "25% allocation"
+        },
+        {
+          "metric": "P/E",
+          "value": "11.8",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": null
+        },
+        {
+          "metric": "P/B",
+          "value": "5.0",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "fails Graham/Schloss/Deep Value thresholds"
+        },
+        {
+          "metric": "dividend_yield",
+          "value": "6.5%",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "dividend_yield_raw 6.54"
+        },
+        {
+          "metric": "ROE",
+          "value": "37.2%",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": null
+        },
+        {
+          "metric": "basic_eps_growth_pct",
+          "value": "-16.5%",
+          "period": "TTM/screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "statutory_earnings_growth_pct matches"
+        },
+        {
+          "metric": "adjusted_eps_growth_pct",
+          "value": "-24.1%",
+          "period": "TTM/screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "earnings_growth_pct matches"
+        },
+        {
+          "metric": "debt_to_equity",
+          "value": "243.8%",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "Financial Health failure"
+        },
+        {
+          "metric": "current_ratio",
+          "value": "0.74",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "Graham Defensive failure; weak liquidity"
+        },
+        {
+          "metric": "piotroski_f_score",
+          "value": "6/9",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "fails ROA improving, leverage declining, asset turnover improving"
+        },
+        {
+          "metric": "fcf_filing_aligned",
+          "value": "USD 3,166m",
+          "period": "FY2025",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "source filing_aligned_ocf_capex"
+        },
+        {
+          "metric": "fcf_screen_ttm",
+          "value": "USD 2,502m",
+          "period": "screen TTM",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "divergence_flagged false"
+        },
+        {
+          "metric": "fcf_dividend_coverage_net",
+          "value": "2.03",
+          "period": "screen",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "derived from USD screen FCF"
+        },
+        {
+          "metric": "ttm_cashflow_suppressed",
+          "value": "true",
+          "period": "yahoo_quarterly",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+          "note": "quarterly_cashflow_empty"
+        }
+      ],
+      "gaps": [
+        "No filing-body sterling cashflow figures in this source; all FCF/OCF/capex values are USD-labelled.",
+        "No reconciliation of filing_aligned USD 3,166m vs screen_ttm USD 2,502m despite divergence_flagged false.",
+        "No excise-adjusted or tobacco-specific liquidity/working-capital treatment for current_ratio 0.74.",
+        "NCAV unavailable (ncav_available false) — Graham Net-Net cannot be assessed from this source.",
+        "Yahoo quarterly TTM cashflow empty; screen cashflow path provenance beyond filing_aligned label not documented here.",
+        "fcf_basis_overlay false — no overlay correction applied for FCF definition mismatch.",
+        "P/E, P/B, yield, ROE, and trade-plan GBP limits present without explicit currency basis for valuation multiples vs USD cashflow."
+      ],
+      "sources_read": [
+        "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-9a7d8b40-ca50-4282-8bfe-622ae2e5b81b"
+    },
+    {
+      "task_id": "imb_news_digest",
+      "task_type": "digest_news_manifest",
+      "status": "partial",
+      "findings": [
+        "H1/Q2 2026 earnings cluster (~12 May): yfinance summaries state Imperial remained on track for full-year targets after H1 tobacco and NGP net revenue growth; management flagged one-off headwinds in the U.S. and Australia and progress on Evolve 2030 (articles e3aaefb7, 4a824cd0; source: docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/news_manifest.json).",
+        "Q2 2026 earnings-call RSS/yfinance note (~12 May): steady financial performance with revenue growth and strategic initiatives, alongside market-share and NGP challenges (article 4a824cd0).",
+        "Morningstar post-earnings RSS title (~13 May): shares look undervalued and second half of the year should improve; no statutory H1 figures in manifest (article 1c0fa8aa).",
+        "Black Buffalo nicotine-pouch acquisition (~27 May): Imperial to spend at least $150m (£111.6m) on U.S. pouch maker Black Buffalo; shares reversed earlier losses on the announcement (article 4a1187d5).",
+        "Strategy 2030 / FY2026 start (~2 Jun): executives cited a strong start to the 2026 financial year under Strategy 2030, emphasising disciplined NGP growth, combustibles value creation and a multiyear efficiency programme (article 234f68e1).",
+        "Job cuts and savings (~10 Aug): Imperial cutting thousands of jobs in the U.S. and Europe; group employs about 25,800 people globally; plan targets £320m annual savings by 2030 (article f9f7a120).",
+        "April 2026 sell-off cluster (~14 Apr): multiple RSS titles report shares down ~7% while fiscal 2026 outlook was reaffirmed; drivers cited include Middle East conflict uncertainty and sector pricing dynamics (articles dd33dec9, 30c7acb0, 8242b96b, 6a51c1eb, 9b688d33).",
+        "UK youth cigarette ban (~28 Apr): RSS title notes stock dip on the ban but outlook remains positive (article 16e1433c).",
+        "Deutsche Bank (~15 Apr): sell-off characterised as overreaction (articles 07b0f378, a60d3dc1).",
+        "Bank of America upgrade (~15 Jul): RSS title cites improving outlook and attractive valuation; no target price or rating change detail in manifest (article 39ddadfb).",
+        "Morningstar valuation concern (~15 Apr): RSS title places shares near undervalued range but flags combustibles and nicotine-pouch concerns (article 68a909a6).",
+        "Simply Wall St ex-dividend cluster: income investors alerted ahead of ex-dividend (articles 0c2dbb391 ~16 Aug, 83f1e512 ~8 Jul); separate RSS item references a UK£0.4008 dividend (article 8ee903774).",
+        "£1.45bn share buyback programme (collapsed from ~20 Kalkine/TipRanks/Globe daily tranche reprints, Aug–Jul 2026): ongoing disclosed capital-management programme with routine repurchases/cancellations; sample August tranche prices cited at 2,497p–2,767p; July 2026 cancellation of 218,190 shares noted (articles d98704eb, 7970488d, c5270cb4, f854eb8d, f7d8f8e5, 1e2bd09c, f5e39200; others discarded as duplicate programme prints).",
+        "Analyst caution (~29 May): fair value estimate trimmed from £34.65 to £33.14 amid growing caution (article f19ab314).",
+        "Discarded as non-IMB.L or filler per brief: ASX:IMB / Intelligent Monitoring Group / ADT UK (articles c33abf47, 1d2059b5, 22513698); BAT+IMB cannabis pairing pieces (articles abb48065, be66db2b, 4a8f6d13, 1a3b1d82, 48cda994, 7b046fc8); UK income/ETF listicles and duplicate Kalkine income reprints (articles 7c6cbff6, 5a66a7d8, 73767fcc, e124d231, 56774867, 7be4e003, 99ce836e, 3c10e755, etc.)."
+      ],
+      "figures": [
+        {
+          "metric": "Black Buffalo minimum deal value (USD)",
+          "value": "≥$150m",
+          "period": "announced ~27 May 2026",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/news_manifest.json",
+          "note": "article 4a1187d5 yfinance summary"
+        },
+        {
+          "metric": "Black Buffalo minimum deal value (GBP)",
+          "value": "£111.6m",
+          "period": "announced ~27 May 2026",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/news_manifest.json",
+          "note": "article 4a1187d5 yfinance summary"
+        },
+        {
+          "metric": "Annual savings target",
+          "value": "£320m",
+          "period": "by 2030",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/news_manifest.json",
+          "note": "articles f9f7a120, 234f68e1"
+        },
+        {
+          "metric": "Global headcount",
+          "value": "~25,800",
+          "period": "Aug 2026 report context",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/news_manifest.json",
+          "note": "article f9f7a120 yfinance summary"
+        },
+        {
+          "metric": "Share price move",
+          "value": "~7% fall",
+          "period": "~14 Apr 2026",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/news_manifest.json",
+          "note": "RSS titles only; articles dd33dec9, 30c7acb0"
+        },
+        {
+          "metric": "Fair value estimate (Simply Wall St via yfinance)",
+          "value": "£34.65 → £33.14",
+          "period": "~29 May 2026",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/news_manifest.json",
+          "note": "article f19ab314 yfinance summary"
+        },
+        {
+          "metric": "Dividend per share (referenced)",
+          "value": "UK£0.4008",
+          "period": "Feb 2026 RSS item",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/news_manifest.json",
+          "note": "article 8ee903774 Google News RSS title"
+        },
+        {
+          "metric": "Buyback programme size",
+          "value": "£1.45bn",
+          "period": "ongoing 2026",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/news_manifest.json",
+          "note": "multiple articles; programme note collapsed from Kalkine/TipRanks/Globe reprints"
+        },
+        {
+          "metric": "Buyback tranche prices (sample range)",
+          "value": "2,497p–2,767p",
+          "period": "Aug 2026 daily tranches",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/news_manifest.json",
+          "note": "Kalkine RSS titles e.g. articles 7970488d, c5270cb4, d98704eb"
+        },
+        {
+          "metric": "Shares cancelled",
+          "value": "218,190",
+          "period": "July 2026",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/news_manifest.json",
+          "note": "article f854eb8d Kalkine RSS title"
+        },
+        {
+          "metric": "Headline dividend yield (third-party)",
+          "value": "6.7%",
+          "period": "Jun 2026 RSS title",
+          "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/news_manifest.json",
+          "note": "article 3c10e755; income-list filler, not company guidance"
+        }
+      ],
+      "gaps": [
+        "No H1/Q2 2026 statutory revenue, adjusted EPS, or cash-flow figures in manifest—only yfinance/RSS summaries; Google News earnings items are titles only.",
+        "Black Buffalo: structure, earn-outs, closing date and integration detail absent beyond minimum spend.",
+        "Job cuts: 'thousands' not quantified; no breakdown by region or timing.",
+        "Ex-dividend record/payment dates not stated in RSS titles (Aug/Jul cluster).",
+        "BofA upgrade: new rating, target price and rationale not in manifest.",
+        "Morningstar undervaluation: no fair value range or moat rating in RSS titles.",
+        "April ~7% move: no absolute share price or volume in source.",
+        "Evolve 2030 (May earnings note) vs Strategy 2030 (Jun article)—naming not reconciled within manifest.",
+        "Buyback programme: cumulative shares repurchased/cancelled and remaining authorisation not totalling in manifest."
+      ],
+      "sources_read": [
+        "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/news_manifest.json"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-28213219-1e1a-4abc-9c43-c323f7b1f5f6"
+    },
+    {
+      "task_id": "imb_gap_inventory",
+      "task_type": "gap_inventory",
+      "status": "partial",
+      "findings": [
+        "Catalog thin steps confirmed in sources: financials_annual.json has quarterly_income {} and quarterly_cashflow {}; cashflow_metrics sets ttm_cashflow_suppressed true with reason quarterly_cashflow_empty — no Yahoo interim quarterlies and no TTM cashflow.",
+        "filings_index.json period coverage is annual=8 (all Companies House group accounts 2019–2026), interim=0, trading_update=0; the other 63 indexed items are almost entirely Transaction in Own Shares, Total Voting Rights, holdings and PDMR — none tagged interim or trading_update, so no H1 2026 statutory RNS body exists in this tree.",
+        "ir_presentation_metrics and alternate_news are absent from the sources tree (no matching files); news_manifest.json (71 articles) is Google News RSS / yfinance headlines only — not alternate_news and not statutory filings.",
+        "filings_index.json body_path values point to docs/data/research/IMB.L/sources/filings/bodies/... rather than this trial snapshot under research_director_worker; bodies are duplicated locally but index paths are external.",
+        "Latest annual body ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt (CH filed 2026-02-07, FY2025) gives strategic/OCR snippets only: FY25 Tobacco & NGP net revenue £8.3bn, reported revenue £32.2bn, Europe/Americas/AAACE split 42%/35%/23%; insufficient parsed statutory P&L, cash flow or net-debt tables for full memo reconciliation.",
+        "Prior CH annual ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt (filed 2025-02-07, FY2024 era) adds YoY context not fully visible in latest OCR: 2024 Tobacco & NGP net revenue £8.2bn (+4.6% cc), NGP net revenue growth +26.4%, FY24 FCF £2.4bn, dividend 153.42p (+4.5%), FY25 buyback announced £1.25bn (vs £1.1bn prior), adjusted net debt/EBITDA target range 2.0–2.5× — still no H1 2026 data.",
+        "Yahoo annual financials_annual.json (FY2021–2025 fetched 2026-09-02) is the only machine-readable full P&L/BS/CF stack: FY2025 revenue 32,171m, net income 2,071m, OCF 3,627m, FCF 3,166m, net debt 8,155m, buybacks 1,235m, dividends paid 1,558m — currency field absent; screening_snapshot.json tags FCF currency USD while figures match sterling-scale accounts.",
+        "screening_snapshot.json and screen_run_manifest.json are present but unused by other workers: strong_buy 13/22, composite 0.753, conviction 0.454, timing accumulate, FCF filing_aligned 3,166m vs screen_ttm 2,502m with divergence_flagged false and ttm_cashflow_suppressed true.",
+        "macro_context.json present but unused: GBP/USD 1.3498 and FTSE 100 10,789.30 as of 2026-09-01/02 — secondary regime markers only.",
+        "Latest TVR 2379eadea3cfebe2.txt (2026-09-01, capital as at 2026-08-28): issued 822,693,742 ordinary shares, treasury 58,089,137, voting rights 764,604,605.",
+        "Sample own-share RNS 6611f16b494a08f8.txt (2026-08-25): active GBP 1.45bn repurchase programme announced 2025-10-07; 114,422 shares bought 2026-08-24 at avg 2,501.67p; post-settlement ex-treasury count 764,917,586 — confirms programme identity and daily cadence but not cumulative £ spent or remaining authority.",
+        "Black Buffalo acquisition, H1 2026 earnings, £320m-by-2030 job savings and FY2026 numeric guidance appear only as news_manifest.json headlines (yfinance/Kalkine); zero matching RNS bodies in filings_index — memo must not treat news as statutory source.",
+        "Own-share body 0d33b380b7928ad4.txt is Barclays settlement confirmation (338,217 shares, 2,649.90p, £8.96m on 2026-06-02) — operational buyback detail only, not programme capacity."
+      ],
+      "figures": [
+        {
+          "metric": "quarterly_income records",
+          "value": "0",
+          "period": "catalog",
+          "source_path": "sources/financials_annual.json",
+          "note": "Empty object — no Yahoo interim P&L"
+        },
+        {
+          "metric": "quarterly_cashflow records",
+          "value": "0",
+          "period": "catalog",
+          "source_path": "sources/financials_annual.json",
+          "note": "Empty object — triggers TTM suppression"
+        },
+        {
+          "metric": "ttm_cashflow_suppressed",
+          "value": "true",
+          "period": "FY2025 screen",
+          "source_path": "sources/financials_annual.json",
+          "note": "Reason: quarterly_cashflow_empty"
+        },
+        {
+          "metric": "filings period=annual",
+          "value": "8",
+          "period": "catalog",
+          "source_path": "sources/filings/filings_index.json",
+          "note": "All Companies House group accounts; with_body=8"
+        },
+        {
+          "metric": "filings period=interim",
+          "value": "0",
+          "period": "catalog",
+          "source_path": "sources/filings/filings_index.json",
+          "note": "No H1 2026 statutory interim in catalog"
+        },
+        {
+          "metric": "filings period=trading_update",
+          "value": "0",
+          "period": "catalog",
+          "source_path": "sources/filings/filings_index.json",
+          "note": "No trading-update RNS tagged"
+        },
+        {
+          "metric": "Tobacco & NGP net revenue",
+          "value": "£8.3bn",
+          "period": "FY2025",
+          "source_path": "sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+          "note": "OCR from latest CH annual; reported revenue £32.2bn same source"
+        },
+        {
+          "metric": "Tobacco & NGP net revenue",
+          "value": "£8.2bn",
+          "period": "FY2024",
+          "source_path": "sources/filings/bodies/ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt",
+          "note": "+4.6% constant currency vs prior year per at-a-glance slide"
+        },
+        {
+          "metric": "NGP net revenue growth (cc)",
+          "value": "+26.4%",
+          "period": "FY2024",
+          "source_path": "sources/filings/bodies/ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt",
+          "note": "Prior-year annual only"
+        },
+        {
+          "metric": "Free cash flow",
+          "value": "£2.4bn",
+          "period": "FY2024",
+          "source_path": "sources/filings/bodies/ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt",
+          "note": "CH annual OCR; Yahoo FY2025 FCF 3,166m in financials_annual.json"
+        },
+        {
+          "metric": "Dividend per share",
+          "value": "153.42p",
+          "period": "FY2024",
+          "source_path": "sources/filings/bodies/ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt",
+          "note": "+4.5% growth; four equal payments from FY2025 onwards stated same file"
+        },
+        {
+          "metric": "Total revenue (Yahoo)",
+          "value": "32,171m",
+          "period": "FY2025",
+          "source_path": "sources/financials_annual.json",
+          "note": "Yahoo annual; no root currency field"
+        },
+        {
+          "metric": "Net income (Yahoo)",
+          "value": "2,071m",
+          "period": "FY2025",
+          "source_path": "sources/financials_annual.json",
+          "note": "Prior FY2024 2,613m in same file"
+        },
+        {
+          "metric": "Operating cash flow (Yahoo)",
+          "value": "3,627m",
+          "period": "FY2025",
+          "source_path": "sources/financials_annual.json",
+          "note": "Prior 3,307m"
+        },
+        {
+          "metric": "Free cash flow (Yahoo)",
+          "value": "3,166m",
+          "period": "FY2025",
+          "source_path": "sources/financials_annual.json",
+          "note": "screening_snapshot filing_aligned matches; screen_ttm 2,502m"
+        },
+        {
+          "metric": "Net debt (Yahoo)",
+          "value": "8,155m",
+          "period": "FY2025",
+          "source_path": "sources/financials_annual.json",
+          "note": "Prior 7,619m; company adjusted definition may differ"
+        },
+        {
+          "metric": "Share repurchase programme",
+          "value": "GBP 1.45bn",
+          "period": "announced 2025-10-07",
+          "source_path": "sources/filings/bodies/6611f16b494a08f8.txt",
+          "note": "Remaining £ authority not disclosed in catalog"
+        },
+        {
+          "metric": "Voting rights",
+          "value": "764,604,605",
+          "period": "as at 2026-08-28",
+          "source_path": "sources/filings/bodies/2379eadea3cfebe2.txt",
+          "note": "822,693,742 issued; 58,089,137 treasury"
+        },
+        {
+          "metric": "Ex-treasury shares post buyback",
+          "value": "764,917,586",
+          "period": "2026-08-24 transaction",
+          "source_path": "sources/filings/bodies/6611f16b494a08f8.txt",
+          "note": "114,422 shares @ 2,501.67p avg"
+        },
+        {
+          "metric": "GBP/USD",
+          "value": "1.3498",
+          "period": "2026-09-02",
+          "source_path": "sources/macro_context.json",
+          "note": "Present but unused by workers"
+        },
+        {
+          "metric": "Screen signal",
+          "value": "strong_buy",
+          "period": "run 2026-09-02",
+          "source_path": "sources/screen_run_manifest.json",
+          "note": "13/22 models; present but unused"
+        }
+      ],
+      "gaps": [
+        "H1 2026 statutory P&L, cash flow and net debt — interim=0 in filings_index; no period=interim body to ingest.",
+        "Black Buffalo consideration, close date and integration — no acquisition RNS in catalog; news headlines only.",
+        "Job-cut upfront cash cost versus £320m annual savings by 2030 — no restructuring RNS body; yfinance headline in news_manifest only.",
+        "Remaining £ buyback authority under the GBP 1.45bn programme — daily own-share RNS give tranche sizes/prices but not cumulative spend or residual capacity.",
+        "FY2026 numeric guidance (revenue, adjusted OP, FCF, net debt) — absent from annual bodies and from any trading_update RNS.",
+        "NGP KPIs (volume, share, losses, category mix) — no ir_presentation_metrics file; latest CH annual OCR lacks quantified NGP tables.",
+        "IR-slide / presentation metrics deck — ir_presentation_metrics absent from sources.",
+        "TTM / interim cashflow — suppressed because quarterly_cashflow empty; cannot validate screen FCF yield on a rolling basis.",
+        "Yahoo quarterly_income and quarterly_cashflow — both empty; no semi-annual bridge between FY2025 annual and today.",
+        "alternate_news feed — absent; reliance on Google News RSS duplicates (71 news_manifest items, mostly buyback reprints).",
+        "FY2025 CH annual OCR insufficient for full statutory-vs-adjusted reconciliation, excise/working-capital notes and pension detail — prior CH annuals needed for YoY only where Yahoo/ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt fills gaps.",
+        "filings_index body_path misaligned with trial tree — risk of workers resolving wrong path outside snapshot.",
+        "macro_context.json and screen_run_manifest.json ingested but not consumed by filing/news workers in this pass."
+      ],
+      "sources_read": [
+        "sources/financials_annual.json",
+        "sources/filings/filings_index.json",
+        "sources/filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+        "sources/filings/bodies/ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt",
+        "sources/filings/bodies/2379eadea3cfebe2.txt",
+        "sources/filings/bodies/6611f16b494a08f8.txt",
+        "sources/filings/bodies/0d33b380b7928ad4.txt",
+        "sources/filings/bodies/c80fcf272de0152d.txt",
+        "sources/screening_snapshot.json",
+        "sources/screen_run_manifest.json",
+        "sources/macro_context.json",
+        "sources/news_manifest.json"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-8b6d7ea0-102e-4cdd-805b-9004ec8e44b5"
+    }
+  ],
+  "rubric": {
+    "citation_accuracy": 0.571,
+    "filing_alignment": 1.0,
+    "gap_honesty": 1.0,
+    "structural": 1.0,
+    "composite": 0.85,
+    "notes": []
+  },
+  "research_verdict": "caution",
+  "research_confidence": 0.58,
+  "markdown_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/research.md"
+}

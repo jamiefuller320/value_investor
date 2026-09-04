@@ -1,0 +1,241 @@
+{
+  "task_id": "klr_screen_context",
+  "task_type": "screen_context",
+  "status": "partial",
+  "findings": [
+    "Signal strong_buy with 11/22 models passed and composite 0.726 (sector-relative 0.701); five families pass: cheapness, quality, dividend, GARP, risk — source: /workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+    "Failed Graham/Schloss/Deep Value cluster: P/B 3.2 blocks Graham Enterprising (≥3), Schloss, Deep Value (<1.0); Graham Defensive fails on rich P/B or P/E×P/B and current ratio 1.44 < 2; Graham Net-Net fails on missing NCAV — source: screening_snapshot.json model_failures",
+    "Failed yield/valuation screens: Earnings Yield 7.3% < 8%; Low P/E + High Yield (P/E 13.8 not below 12); Lynch PEG 1.76 ≥ 1.0; High Dividend Yield and Dreman Contrarian fail on yield quartile/median — source: screening_snapshot.json",
+    "Failed Economic Moat on ROA below 8% and margins below 12% despite quality-family pass — source: screening_snapshot.json model_failures",
+    "Conviction 0.446, stability_label new, weeks_at_signal 1, signal_trend new; timing neutral (score 0.5); RSI 50.4; price +0.33% vs SMA200 — source: screening_snapshot.json",
+    "Trade plan: core limit £2,995.74 (60%), tactical limit £2,268.97 (40%); tactical stop £2,200.90, target £3,058.12 — source: screening_snapshot.json trade_plan",
+    "All overlays false: fcf_basis, cyclical_exposure (cyclical_exposure_detected false), cash_conversion, dividend_yield, interim_quality, earnings_basis, healthcare, leverage_override — source: screening_snapshot.json",
+    "Yahoo TTM cashflow suppressed (quarterly_cashflow_empty); FCF canonical filing_aligned 168.0m USD vs screen_ttm 189.6m USD, divergence_flagged false, fiscal_year 2025 — source: screening_snapshot.json fcf and yahoo_quarterly",
+    "PEGY 0.05 cited in summary vs Lynch PEG failure at 1.76 — unresolved definition/basis mismatch within same screen — source: screening_snapshot.json summary and model_failures",
+    "Piotroski 8/9 passed; sole fail ROA improving — source: screening_snapshot.json piotroski_f_score",
+    "Screen numbers requiring filing-body sterling replacement: all USD cashflow stack (operating_cashflow 258.4m, capex −90.4m, free_cashflow 189.6m/168.0m), FCF-yield-derived metrics (FCF yield 9.2% pass), and net FCF dividend coverage 4.58× — currency field USD and filing_aligned source — source: screening_snapshot.json fcf, cashflow_metrics, summary",
+    "Claims unsafe until reconciled: (1) FCF currency/definition — 168.0m vs 189.6m with divergence_flagged false and TTM suppressed; (2) PEGY 0.05 vs Lynch PEG 1.76; (3) cyclical end-market mix — geotech contractor with cyclical_exposure_overlay false; (4) price versus core/tactical limits — August buyback through-limit not present in this source",
+    "Growth split: statutory/basic EPS growth 2.5% vs adjusted/earnings growth 7.8%; D/E 47.8%; yield 2.68% raw (2.7% rounded); ROE 25.3% — source: screening_snapshot.json screening_inputs and key_metrics"
+  ],
+  "figures": [
+    {
+      "metric": "signal",
+      "value": "strong_buy",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "adjusted_signal also strong_buy"
+    },
+    {
+      "metric": "models_passed",
+      "value": "11/22",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "model_count 22"
+    },
+    {
+      "metric": "composite_score",
+      "value": "0.726",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "raw 0.7256"
+    },
+    {
+      "metric": "sector_composite_score",
+      "value": "0.701",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "raw 0.700507"
+    },
+    {
+      "metric": "families_passed",
+      "value": "cheapness, quality, dividend, garp, risk (5)",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "passed_families string lists five"
+    },
+    {
+      "metric": "conviction_score",
+      "value": "0.446",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "raw 0.4457; stability_label new"
+    },
+    {
+      "metric": "weeks_at_signal",
+      "value": "1",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "signal_trend new"
+    },
+    {
+      "metric": "timing_signal",
+      "value": "neutral",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "timing_score 0.5"
+    },
+    {
+      "metric": "rsi_14",
+      "value": "50.4",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "raw 50.399"
+    },
+    {
+      "metric": "price_vs_sma200_pct",
+      "value": "+0.33%",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "extended above 200-day MA per summary"
+    },
+    {
+      "metric": "core_limit_GBP",
+      "value": "£2,995.74",
+      "period": "trade_plan",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "60% core allocation"
+    },
+    {
+      "metric": "tactical_limit_GBP",
+      "value": "£2,268.97",
+      "period": "trade_plan",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "40% tactical allocation"
+    },
+    {
+      "metric": "P/E",
+      "value": "13.8",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "fails Low P/E + High Yield (<12)"
+    },
+    {
+      "metric": "P/B",
+      "value": "3.2",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "fails Graham Enterprising, Schloss, Deep Value"
+    },
+    {
+      "metric": "current_ratio",
+      "value": "1.44",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "Graham Defensive fail <2"
+    },
+    {
+      "metric": "earnings_yield",
+      "value": "7.3%",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "below 8% threshold"
+    },
+    {
+      "metric": "Lynch_PEG",
+      "value": "1.76",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "fail ≥1.0"
+    },
+    {
+      "metric": "PEGY",
+      "value": "0.05",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "Neff PEGY pass; basis vs Lynch PEG unresolved"
+    },
+    {
+      "metric": "dividend_yield",
+      "value": "2.7%",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "raw 2.68%; fails High Dividend Yield quartile"
+    },
+    {
+      "metric": "ROE",
+      "value": "25.3%",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "statutory_eps_growth",
+      "value": "2.5%",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "basic_eps_growth_pct / statutory_earnings_growth_pct"
+    },
+    {
+      "metric": "adjusted_eps_growth",
+      "value": "7.8%",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "earnings_growth_pct / adjusted_eps_growth_pct"
+    },
+    {
+      "metric": "debt_to_equity",
+      "value": "47.8%",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "47.789"
+    },
+    {
+      "metric": "piotroski_f_score",
+      "value": "8/9",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "ROA improving fail"
+    },
+    {
+      "metric": "fcf_filing_aligned",
+      "value": "168.0m",
+      "period": "FY2025",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "USD; source filing_aligned_ocf_capex"
+    },
+    {
+      "metric": "fcf_screen_ttm",
+      "value": "189.6m",
+      "period": "screen_ttm",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "USD; raw 189575008"
+    },
+    {
+      "metric": "fcf_yield",
+      "value": "9.2%",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "FCF Yield model pass; USD FCF basis"
+    },
+    {
+      "metric": "fcf_dividend_coverage_net",
+      "value": "4.58×",
+      "period": "screen_as_of_snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "raw 4.5777; USD cashflow basis"
+    },
+    {
+      "metric": "ttm_cashflow_suppressed",
+      "value": "true",
+      "period": "yahoo_quarterly",
+      "source_path": "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "reason quarterly_cashflow_empty"
+    }
+  ],
+  "gaps": [
+    "No filing-body sterling cashflow figures in this source; all FCF/OCF/capex amounts are USD — sterling replacement requires filing bodies",
+    "FCF 168.0m vs 189.6m gap not flagged (divergence_flagged false) despite ~12.8% difference; definition reconciliation unresolved",
+    "PEGY 0.05 vs Lynch PEG 1.76 — growth/yield denominators not disclosed in snapshot",
+    "Cyclical end-market revenue mix not in snapshot; cyclical_exposure_overlay false uncorroborated for geotech contractor",
+    "August buyback price versus core limit £2,995.74 not in snapshot; trade-plan viability unverified",
+    "Spot price at snapshot not recorded; price_vs_limit check impossible from this file alone",
+    "ROA and margin levels for Economic Moat fail not numerically stated",
+    "NCAV unavailable (ncav_available false) — Graham Net-Net data gap",
+    "Earnings basis for P/E, earnings yield, and growth rates (statutory vs adjusted) not fully specified"
+  ],
+  "sources_read": [
+    "/workspace/docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-ec53a027-3ae5-4d78-9d99-178da0e71cfa"
+}

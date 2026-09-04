@@ -1,0 +1,154 @@
+{
+  "appended": [
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Retag FY-results RNS as period=annual (3bf5ff09fbc5c747) and do not tag IR results decks as interim, Acquisition or Google News wrappers as annual, or AGM statements as interim. Promote material contract-award / disposal / buyback-programme RNS out of period=other/priority=0. De-duplicate investegate_direct vs resolved and shared body_content_hash PDMRs before counting coverage. Point body_path at the trial snapshot, not docs/data/research/FGP.L.",
+      "source": "director_worker",
+      "run_id": "20260904T164856Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T16:58:24.608549+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Select the latest dated annual and interim *results* bodies (FY 2026 results 3bf5ff09fbc5c747, H1 2026 Half-year Financial Report c1db8cdf5ad2bd84 — not CH FY26 accounts, not IR FY25/H1 decks, not the 30 Jul AGM tagged interim). When a policy-material contract or disposal body exists, reserve one of the five slots for it ahead of screen_context if the director already held the snapshot.",
+      "source": "director_worker",
+      "run_id": "20260904T164856Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T16:58:24.608561+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "prompt",
+      "priority": "high",
+      "suggestion": "Require annual/interim workers to extract reporting currency; First Bus vs First Rail vs open-access vs contracted (Overground) splits; statutory vs adjusted earnings; OCF/capex/FCF definitions; cash vs restricted cash vs adjusted net debt vs IFRS-16 leases; dividend declared vs cash dividends and FCF cover; buyback authorisation vs cash spent; franchise expiry / nationalisation language; FY outlook. Require news workers to drop India-FGP collisions, DirectorsTalk SEO upside pieces, and same-day buyback reprints; treat Kalkine/Proactive as headline-only.",
+      "source": "director_worker",
+      "run_id": "20260904T164856Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T16:58:24.608566+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_definition_divergence true whenever filing / TTM / adj disagree. Surface dual leverage (Yahoo D/E vs adj net debt) instead of leaving leverage_override false. Treat UK bus/rail policy transition as cyclical/policy exposure. Populate failed_models for the 7/22 non-passes. Do not keep headline strong_buy when research_verdict is already accumulate.",
+      "source": "director_worker",
+      "run_id": "20260904T164856Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T16:58:24.608572+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "sources",
+      "priority": "medium",
+      "suggestion": "Populate alternate_news or drop it from the ladder. Add a structured financials_interim extract from the latest interim RNS because Yahoo quarterly_income and quarterly_cashflow are empty and TTM cashflow is suppressed. Expose fcf_bridge.json to a worker type or fold its three-way FCF reconciliation into screening_snapshot.",
+      "source": "director_worker",
+      "run_id": "20260904T164856Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T16:58:24.608574+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "Allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action so a mis-tagged FY-results or Overground/disposal body can be assigned without inventing a source. Add reporting_perimeter, fcf_basis_used, and contract_roll_off / policy_transition fields on the screening snapshot.",
+      "source": "director_worker",
+      "run_id": "20260904T164856Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T16:58:24.608576+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "monitoring",
+      "priority": "medium",
+      "suggestion": "For persistent strong-buy transport names with live nationalisation and an in-flight buyback, emit watch items (next trading update / H1 2027, franchise handback dates, Overground start, remaining £100m buyback, bus-franchising decisions) rather than only raising weeks_at_signal.",
+      "source": "director_worker",
+      "run_id": "20260904T164856Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T16:58:24.608580+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Filings-first order is adequate for a UK transport name whose live numbers sit in RNS bodies (70 local bodies; 10 annual + 7 interim + 1 trading_update in the index). It is not adequate when the FY 2026 results RNS (3bf5ff09fbc5c747, 18 Jun 2026) is catalogued period=other/priority=0, while Google News “Across the Markets”, a December 2025 Acquisition, and IR decks occupy annual/interim slots. yahoo_quarterly_cashflow is on the ladder but empty (TTM cashflow suppressed); alternate_news is a dead step while news_manifest has 126 RSS-heavy items. Trading updates are first-class in the index summary but outside the annual/interim assignment rule; the only TU is the 26 Mar 2026 pre-close, now stale versus FY26 results and the 30 Jul AGM statement.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T164856Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "evidence_ladder",
+      "recorded_at": "2026-09-04T16:58:24.608587+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for London Overground, Mistral disposal/completion, the £100m buyback launch, Sizewell C, the March pre-close TU, or the July AGM statement. No task type exists to reconcile filing / TTM / company-adjusted FCF or lease vs adjusted net debt. Naive first/last-of-period selection would assign CH accounts, an IR FY25 deck tagged interim, or an Acquisition tagged annual. summarize_filing_body cannot carry period=annual|interim|trading_update|corporate_action, so directors must smuggle the FY26 results body in as “annual” despite the catalog tag.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T164856Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "task_schema",
+      "recorded_at": "2026-09-04T16:58:24.608594+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "The screen still emits strong_buy (15/22, 5/5 families including dividend and FCF Yield) while fcf_basis_overlay is true but fcf_definition_divergence and fcf_divergence_flagged stay false on a £362.6m / £302.8m / £73.8m split. Leverage overlays did not fire despite Yahoo D/E 161% vs filing-adjusted £137.7m. cyclical_exposure_detected=false on a policy-exposed bus/rail operator; interim_quality_overlay=false despite empty Yahoo quarterlies; cash_conversion_overlay=false despite OCF 754→616 and FCF 598→363. failed_models is [] despite only 15/22 passes. Research overlays already cut to Accumulate / buy, so the director–worker memo is being asked to re-verify a signal the overlay has already downgraded without changing the headline strong_buy.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T164856Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "methodology",
+      "recorded_at": "2026-09-04T16:58:24.608601+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "monitoring",
+      "priority": "high",
+      "suggestion": "A 12-week persistent strong_buy with rail nationalisation, an Overground award not yet earning, an in-flight £100m buyback, and no post-FY26 trading update has no watch schema (next TU / H1 2027, DfT franchise handback dates, Overground start, buyback completion, bus-franchising decisions). conviction_score=0.63 and stability_label=persistent are not substitutes for those monitors.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T164856Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "monitoring",
+      "recorded_at": "2026-09-04T16:58:24.608606+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "A generic FINANCIAL REVIEW / RISKS split will blend declining franchise rail with new contracted/open-access work and will not force BUS vs RAIL vs OPEN ACCESS, franchise vs contracted margin, or FCF-definition / lease-adjusted leverage sections. Without an explicit CORPORATE ACTIONS slot, workers can treat the £100m buyback, Mistral £48m sale, and Overground award as news colour rather than perimeter/capital-return facts. No required slot for ticker-collision hygiene (India FGP) or for restricted-cash vs unrestricted cash in net-debt bridges.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T164856Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "memo_structure",
+      "recorded_at": "2026-09-04T16:58:24.608612+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "research",
+      "priority": "low",
+      "suggestion": "filings_index body_path values point at docs/data/research/FGP.L/sources/... rather than this trial snapshot (70 local bodies vs 72 indexed). RNS direct/resolved pairs and IR/CH copies inflate coverage; PDMR items share body_content_hash. News is dominated by Transaction-in-Own-Shares reprints and syndicated DirectorsTalk “40–55% upside” SEO. Yahoo FY26 income omits EPS and share count that FY25 has. ir_presentation_metrics and fcf_bridge exist in the snapshot but sit outside the director’s allowed read set and the worker type list.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T164856Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "other",
+      "recorded_at": "2026-09-04T16:58:24.608618+00:00"
+    }
+  ],
+  "count": 13
+}

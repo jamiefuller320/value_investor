@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T19:48:16+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T19:55:58+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -126,6 +126,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N77 | **Do not permanently raise rememo caps from a cycle-end surplus** | weekday rememo cap 3 and catch-up cap 5 are maintenance defaults. A 4-day Ultra leftover is a one-shot burst, not evidence the steady cap should rise. | After several constrained weeks, rememo backlog stays over weekly maintenance capacity and estimated_memo_usd is recalibrated from real bills |
 | N78 | **Do not lengthen the euro ingest slot after a leftover-514s productive run** | The 2026-09-04 13:15 euro slot used 2186/2700s, improved 6 names, and left 514s unused because remaining IWB were unfetchable or ABI.BR hit the 320s cap with 0 bodies. More minutes, more targets, or a fifth daily euro cron will not raise filings_with_body. | A euro sprint hits runtime_cutoff with improved>0 and leftover_seconds=0 on two consecutive slots, or discovery again consumes the deepen half of the clock. |
 | N79 | **Auto-suggest replacement IR allowlist URLs** | Deviation rows can say IR exhausted, but picking the official 20-F/HY PDF still needs judgment (ABI BMV vs SEC). Do not auto-write research_ir_urls.json from host heuristics or an LLM crawler until issuer-match validation is reliable. | Issuer-name body validation rejects foreign-exchange dumps with low false positives on VINCI/Randstad-style IR hosts |
+| N80 | **Do not spray remaining Ultra on thin-ladder buy-tier DW** | After the surplus rememo + escalate-queue director-worker burst, leftover Ultra is still large. Do not spend it by running director-worker on every buy-tier name that trips thin Yahoo quarterly/IR/news rungs. | Cycle-end surplus review on 2026-10-d8, or weekly_ops regularly binds at the $120 provisional cap |
 
 ---
 

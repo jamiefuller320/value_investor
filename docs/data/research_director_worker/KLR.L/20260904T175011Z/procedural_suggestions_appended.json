@@ -1,0 +1,154 @@
+{
+  "appended": [
+    {
+      "ticker": "KLR.L",
+      "name": "Keller Group plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Deepen Investegate so the FY2025 preliminary-results RNS is not dropped when the recency window is buyback-dominated; fire the IR allowlist for Keller annual report / H1 / capital-markets PDFs; retag the 14 Apr 2026 AGM notice as period=other not annual. Point body_path at the trial snapshot tree. Deduplicate daily Transaction-in-Own-Shares before counting filing coverage. Reject Google News hits whose issuer is ASX:KLR (Kaili Resources) or Nasdaq Kailera Therapeutics (KLR).",
+      "source": "director_worker",
+      "run_id": "20260904T175011Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:59:55.934944+00:00"
+    },
+    {
+      "ticker": "KLR.L",
+      "name": "Keller Group plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Fail-closed or flag when screening_snapshot.fcf.currency is USD on a GBP LSE reporter, and set fcf_definition_divergence whenever screen_ttm (189.6m) disagrees with filing_aligned (168.0m). Do not pass Neff PEGY at 0.05 while Lynch PEG fails at 1.76 on the same 7.8% growth / 13.8× P/E. Enable a construction/geotech cyclical overlay so NA data-centre boom versus Europe/resi split is not scored as a quality compounder with cyclical_exposure_detected=false. Surface a price-versus-limit warning when live buyback prints exceed the core limit.",
+      "source": "director_worker",
+      "run_id": "20260904T175011Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:59:55.934974+00:00"
+    },
+    {
+      "ticker": "KLR.L",
+      "name": "Keller Group plc",
+      "area": "prompt",
+      "priority": "high",
+      "suggestion": "Require the annual worker to extract reporting currency and entity (02442580 group), statutory versus underlying EBIT/EPS, geo/end-market mix (NA / EME / APAC; infrastructure vs data-centre vs residential), OCF/capex/FCF definition including PPE disposals, cash versus financial debt versus IFRS-16 leases versus company net debt, retentions/WIP/provisions/claims, dividend declared versus cash paid and cover versus filing FCF, buyback authority versus cash spent versus share/treasury count, pension, and contract-risk language. Require the interim worker to pull H1 vs H1 comparatives, order book, FY2026 guidance, and any restatement of FY2025. Require news workers to cluster the £100m buyback reprints into one line, keep H1/July-TU/I-40/analyst-PT items as headline-only, and discard ASX:KLR and Nasdaq Kailera filler.",
+      "source": "director_worker",
+      "run_id": "20260904T175011Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:59:55.934984+00:00"
+    },
+    {
+      "ticker": "KLR.L",
+      "name": "Keller Group plc",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Ingest the FY2025 prelim results RNS if distinct from the 24 Mar 2026 AFR; keep the 7 Jul 2026 Trading Update and 9 Jun I-40 variation as first-class operating sources. Populate alternate_news or drop it from the ladder. Parse H1 cash-flow from the 4 Aug 2026 interim body to replace empty Yahoo quarterly_income/quarterly_cashflow instead of only suppressing TTM. Expose ir_presentation_metrics when Keller IR decks exist.",
+      "source": "director_worker",
+      "run_id": "20260904T175011Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:59:55.934991+00:00"
+    },
+    {
+      "ticker": "KLR.L",
+      "name": "Keller Group plc",
+      "area": "orchestration",
+      "priority": "medium",
+      "suggestion": "Select the latest dated annual *group* body (CH 02442580 filed 2026-05-31) — not the 2019–2025 CH files and not the 14 Apr AGM notice tagged annual. Assign the 4 Aug 2026 H1 as the interim slot. Do not invent or retag a buyback/TVR RNS as interim. Raise the cap or add trading_update / rns_cluster / corporate_action types so the 7 Jul guidance-upgrade TU, £100m buyback launch, and I-40 contract are not dropped when annual+interim+news+screen+gap are mandatory.",
+      "source": "director_worker",
+      "run_id": "20260904T175011Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:59:55.934997+00:00"
+    },
+    {
+      "ticker": "KLR.L",
+      "name": "Keller Group plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "Allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action. Add reporting_currency, order_book_secured_vs_preferred, end_market_mix, and fcf_basis_used on the screening snapshot. Remap filings_index.body_path into the trial sources/ tree. Validate FCF-yield inputs against listing CCY and a sanity band versus market cap; flag PEGY versus Lynch PEG contradictions.",
+      "source": "director_worker",
+      "run_id": "20260904T175011Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:59:55.935002+00:00"
+    },
+    {
+      "ticker": "KLR.L",
+      "name": "Keller Group plc",
+      "area": "monitoring",
+      "priority": "medium",
+      "suggestion": "For weeks_at_signal<=1 industrials strong_buys after a gap-up trading update, require the memo to compare live price versus limit ladder versus latest buyback print versus cited analyst PTs, and emit watches (H2 order-book conversion, remaining £100m buyback, NA data-centre concentration, Europe/resi, FY2026 guidance, unread Company Event/Speakman RNSs). Do not treat stability=new or SMA200-flat timing as a reason to skip those checks.",
+      "source": "director_worker",
+      "run_id": "20260904T175011Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:59:55.935008+00:00"
+    },
+    {
+      "ticker": "KLR.L",
+      "name": "Keller Group plc",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Filings-first order is adequate in principle for KLR.L (63/63 bodies; period_coverage annual=10 / interim=1 / trading_update=2) and better than names with no tagged interim: a genuine 4 Aug 2026 H1 body exists. It is not adequate in practice because yahoo_quarterly_cashflow sits on the ladder but is empty (TTM suppressed), alternate_news and ir_presentation_metrics are dead/absent steps, and the two first-class 2026 trading updates (20 May AGM; 7 Jul guidance upgrade that news says moved the shares ~16%) plus the £100m buyback launch and I-40 contract RNS are ranked as trading_update/other below empty quarterlies. Ten ‘annual’ hits include an AGM notice mis-tagged period=annual. No FY2025 prelim-results RNS is tagged.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T175011Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "evidence_ladder",
+      "recorded_at": "2026-09-04T17:59:55.935018+00:00"
+    },
+    {
+      "ticker": "KLR.L",
+      "name": "Keller Group plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Four worker types plus a five-task cap fit this name’s annual+interim+news+screen+gap skeleton, but they consume the entire budget and leave no slot for the 7 Jul 2026 Trading Update, the 20 May AGM update, the 30 Mar £100m buyback-launch RNS, or the 9 Jun I-40 contract variation. summarize_filing_body cannot carry period=annual|interim|trading_update|corporate_action, and there is no type to cluster ~25 Transaction-in-Own-Shares, parse an IR deck, or reconcile 168.0m vs 189.6m FCF. gap_inventory can only list the July TU / IR / quarterly holes — it cannot fill them.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T175011Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "task_schema",
+      "recorded_at": "2026-09-04T17:59:55.935024+00:00"
+    },
+    {
+      "ticker": "KLR.L",
+      "name": "Keller Group plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "The screen emits strong_buy (11/22, five families including cheapness/quality/GARP/dividend/risk) while statutory NI is flat, Lynch PEG fails at 1.76, Earnings Yield fails (7.3%<8%), P/E 13.8 is above the Low-P/E hurdle, PEGY=0.05 contradicts that PEG, and cyclical_exposure_detected is false on a geotech contractor whose H1 narrative is NA data-centre/infra versus weak Europe/residential. Overlays are all false: fcf_basis_overlay despite 168m vs 189.6m FCF tagged USD, leverage_override unused on a near-net-cash but provision-heavy contractor, cash_conversion_overlay, and cyclical_exposure. Quality/Buffett can pass on 25% ROE created partly by shrinking share count. The director–worker loop is being asked to qualitatively veto a mechanically clean headline that sector-cycle and FCF-currency overlays failed to brake.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T175011Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "methodology",
+      "recorded_at": "2026-09-04T17:59:55.935033+00:00"
+    },
+    {
+      "ticker": "KLR.L",
+      "name": "Keller Group plc",
+      "area": "monitoring",
+      "priority": "high",
+      "suggestion": "weeks_at_signal=1 / stability=new / conviction=0.446 already mark a fresh print after a July gap-up, but there is no watch schema for: remaining £100m buyback capacity versus live prints versus the £2,995.74/£2,268.97 ladder (August reprints already show prints through the core limit), H2 order-book conversion and NA data-centre concentration, Europe/residential deterioration, FY2026 upgraded-guidance checkpoints, or the unread 20 Mar ‘Company Event’ / 9 Apr Speakman RNSs. RSI 50 + SMA200 +0.33% timing=neutral is not a substitute for those monitors.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T175011Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "monitoring",
+      "recorded_at": "2026-09-04T17:59:55.935042+00:00"
+    },
+    {
+      "ticker": "KLR.L",
+      "name": "Keller Group plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "A generic FINANCIAL REVIEW / RISKS split will blend statutory and underlying geotech margins and will not force North America versus EME, data-centre/infrastructure versus residential, order-book secured versus variation, plant-capex FCF versus company-adjusted FCF, or cash versus IFRS-16 net debt. Without explicit CAPITAL RETURNS, ORDER BOOK / END-MARKET, and CYCLICAL PEAK slots, workers will treat the daily £100m buyback flood and Kalkine industrial-leadership pieces as colour. No required slot for reporting-currency hygiene (snapshot USD vs sterling accounts) or for ‘July TU and I-40 exist as unread bodies’. Director catalog pass can form these questions without drafting the memo.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T175011Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "memo_structure",
+      "recorded_at": "2026-09-04T17:59:55.935049+00:00"
+    },
+    {
+      "ticker": "KLR.L",
+      "name": "Keller Group plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "filings_index.body_path values point at docs/data/research/KLR.L/sources/... rather than this trial snapshot tree. sources_used are only companies_house + investegate_direct — the IR allowlist and any FY2025 prelim RNS before the 24 Mar AFR did not land. news_manifest (~61 items) is dominated by TipRanks/Kalkine/Globe buyback reprints plus ASX:KLR Kaili Resources and Nasdaq:KLR Kailera Therapeutics collisions. financials_annual.json is Yahoo-shaped (FY2021–2025; quarterly_income/quarterly_cashflow empty; no root currency field). NCAV missing is expected for this model, not a KLR-specific hole.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T175011Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "other",
+      "recorded_at": "2026-09-04T17:59:55.935056+00:00"
+    }
+  ],
+  "count": 13
+}

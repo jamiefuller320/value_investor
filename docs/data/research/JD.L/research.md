@@ -1,105 +1,118 @@
 # JD Sports Fashion Plc (JD.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T06:43:48.936732+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T17:30:45.357019+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-JD Sports is a global multi-brand sports-fashion retailer (~4,800 stores, FTSE 100) trading on a depressed multiple despite sustained revenue growth and strong underlying cash generation. The quantitative screen rates the name a **buy** (11/22 models; P/E ~10.5x, FCF yield ~21%), anchored in cheapness, quality, dividend and risk factors. Filings show revenue rising from £10.4bn (FY24) to £12.7bn (FY26), but adjusted profit has peaked and is easing: PBT before adjusting items fell from £923m (FY25) to £852m (FY26) as like-for-like sales turned negative and margins compressed. The investment debate is whether shareholder returns (dividend + buybacks), balance-sheet resilience and eventual operating leverage offset cyclical weakness, promotional trading, and lingering execution risk from a heavy M&A/integration cycle.
+JD Sports is a global multi-brand sports-fashion retailer (4,800+ stores; North America now the largest revenue region) trading on low multiples — screen P/E ~9.0, earnings yield ~11%, FCF yield ~21% — with five of five factor families passing (cheapness, quality, dividend, GARP, risk). Filings confirm a cash-generative balance sheet, rising dividends, and £400m of buybacks announced/completed across FY26–FY27, which supports a value case on asset backing and capital return. The central debate is whether cheapness reflects a cyclical trough or structural pressure: adjusted profit before tax has fallen two years running (FY25 £923m → FY26 £852m), like-for-like sales turned negative (-2.1% in FY26), and August 2026 news reports a second profit-guidance cut within three months driven by US weakness and footwear softness. Deep research confirms the screen’s cheap, cash-generative profile but weakens near-term conviction pending verified interim filing data.
 
 ---
 
 ## INVESTMENT THESIS
-For a value investor, JD offers a **cash-rich, scale franchise** in a structurally attractive category, currently priced as if growth and margins have structurally broken. The screen passes earnings yield, FCF yield, low P/E + yield, Piotroski F-Score, Magic Formula and composite value models — consistent with a business generating substantial cash (operating cashflow net of lease repayments £1,245m in FY25 per RNS; free cash flow £462m in FY26 per FY26 annual report) while earnings multiples screen cheap versus sector (composite 67% vs sector-relative 58%).
+For a value investor, JD.L offers a rare combination of deep discount, demonstrable cash generation, and improving shareholder returns against a globally scaled franchise.
 
-Business quality supports the signal: global #1 positioning in youth sports fashion, deep Nike/adidas/New Balance relationships, disciplined full-price positioning, and a proven store rollout model (JD fascia payback < three years cited in FY25 RNS). Management has pivoted from “triple double” expansion to **profit and cash focus** — capex trending to 3–3.5% of revenue, £200m buybacks completed in FY26 with a further £200m programme announced, and dividend raised 20% to 1.20p (FY26 annual report).
+**Quantitative alignment.** The screen rates Buy with high data quality (20/20 metrics), passing Earnings Yield, FCF Yield, Low P/E + High Yield, Neff PEGY, Dividend Growth, Magic Formula, Acquirer’s Multiple, Dreman Contrarian, Piotroski F-Score, Composite Value, and Earnings Quality. Key screen metrics: P/E 9.0, P/B 1.3, dividend yield 1.4%, ROE 13.7%. Timing is neutral (RSI ~39, price roughly in line with 200-day SMA). The name has sat on a stable Buy signal for 12 weeks — persistent rather than flickering.
 
-The value case is not pristine growth: organic LFL was **−2.1% in FY26** and adjusted operating margin fell to **7.0%** (−120bps). The screen’s high FCF yield partly reflects Yahoo’s £956m FCF figure, which uses a broader definition than the company’s newly adopted **£462m free cash flow KPI** in FY26 — investors should reconcile before sizing. Nonetheless, net leverage of **1.4x** and net cash before lease liabilities of **£311m** (FY26) suggest the balance sheet can fund returns while the market re-rates.
+**Business quality supporting the screen.** Primary filings portray a differentiated multi-brand, retail-first model with long-standing Nike, adidas, New Balance and Asics relationships; 75% of colleagues under 30; and a store-led omnichannel mix (~79–80% store / ~20% online at FY25). FY25 RNS organic sales growth of 5.8% exceeded estimated market growth of 3.8%, evidencing share gains even as margins compressed.
+
+**Why value, not growth.** The investment case is not earnings momentum — adjusted PBT fell 4.0% in FY25 and 7.7% in FY26 — but **capital structure and cash**. FY26 annual report cites operating cash flow exceeding £1.3bn, free cash flow of £462m (+36%), net leverage of 1.4x, and net cash excluding leases of approximately £31m (OCR in body extract). Capital allocation has pivoted: total dividend proposed at 1.20p (+20% on FY25), £200m repurchased in FY26, and a further £200m programme announced for FY27. At ~9x earnings and ~1.3x book, the market prices in sustained margin pressure; if management delivers flat-to-modest profit stabilisation and continued buybacks, equity could re-rate without heroic growth.
+
+**Catalyst path.** Medium-term plan (FY25 RNS, FY26 annual report) targets organic revenue ahead of a 2–3% market, profit growth ahead of revenue beyond FY26, capex trending from ~5% of revenue toward 3–3.5%, and North America/Europe integration synergies (Hibbett: at least $25m). Chair appointment of Peter Agnefjäll (former IKEA CEO, effective September 2026) adds governance depth.
 
 ---
 
 ## FINANCIAL REVIEW
-**Source hierarchy:** Primary figures from Companies House annual report extracts and FY25 RNS body (`e544e58eca35fb32.txt`). Yahoo (`financials_annual.json`) used only where noted. **No interim or half-year filing bodies are available in the index** — H1 FY26/H2 trends beyond FY26 full-year cannot be verified from primary interim disclosures in this pack.
+*Primary source: RNS FY25 results (21 May 2025, `e544e58eca35fb32.txt`) and Companies House FY26 annual report (published 5 August 2026, `ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4.txt`). Yahoo (`financials_annual.json`) used only where noted.*
 
-### Revenue and profitability trend (annual)
+### Annual trend (FY24 → FY26)
 
-| Period (52 weeks unless noted) | Revenue | PBT before adjusting items | Statutory PBT | Basic EPS | Operating margin (adj., post-lease interest) |
-|---|---|---|---|---|---|
-| FY23 (to 28 Jan 2023) | **£10,125m** (FY23 annual report) | ~**£801m** (FY23 annual report; OCR-degraded extract) | **£440m** (FY23 annual report) | **2.76p** (Yahoo fallback — FY23 distorted by £505m unusual items) | n/a in extract |
-| FY24 (53w; 52w comp.) | **£10,397m** (+2.2% 52w; FY24 annual report) | **£917m** (−1.5%; FY24 annual report) | **£811m** (+66.7%; FY24 annual report) | **10.45p** (FY24 annual report) | **9.4%** (FY24 annual report) |
-| FY25 (to 1 Feb 2025) | **£11,458m** (+10.2%; FY25 RNS) | **£923m** (−4.0%; FY25 RNS) | **£715m** (−11.8%; FY25 RNS) | **9.50p** (FY25 RNS) | **8.2%** (−80bps; FY25 RNS) |
-| FY26 (to 31 Jan 2026) | **£12,662m** (+10.5%; FY26 annual report) | **£852m** (−7.7%; FY26 annual report) | n/a in extract | **8.63p** (−9.2%; FY26 annual report) | **7.0%** (−120bps; FY26 annual report) |
+| Metric | FY24 (52w restated) | FY25 (52w to 1 Feb 2025) | FY26 (52w to 31 Jan 2026) |
+|--------|---------------------|--------------------------|---------------------------|
+| Revenue | £10,397m | £11,458m (+10.2%) | £12,662m (+10.5%) |
+| Gross margin (adj.) | 48.0% | 47.8% | 47.0% (flat YoY per FY26 narrative) |
+| Op. margin after lease interest (adj.) | 9.0% | 8.2% | 7.0% (-120bps) |
+| PBT before adjusting items | £961m | £923m (-4.0%) | £852m (-7.7%) |
+| Operating profit (statutory) | £927m | £903m | £787m (-12.8%) |
+| PBT (statutory) | £811m | £715m | *Not in available body extract* |
+| Adjusted basic EPS | 12.81p (restated) | 12.39p | 11.71p (-5.5%) |
+| Basic EPS (statutory) | 10.45p | 9.50p | 8.63p (-9.2%) |
+| LFL sales growth (adj.) | n/a in extract | +0.3% | -2.1% |
+| Dividend per share | 0.90p | 1.00p (+11%) | 1.20p proposed (+20%) |
 
-**Interpretation:** Top-line growth has been driven by **Hibbett (US, Jul 2024) and Courir (Europe, Nov 2024)** acquisitions plus space expansion, while organic momentum has slowed. FY25 RNS reported organic sales growth of **5.8%** (LFL +0.3%); FY26 chair’s statement cites organic growth of **+2.1%** comprising **+4.2% space / −2.1% LFL**. Adjusted PBT has declined two consecutive years after peaking near £917–923m.
+**Revenue** growth is acquisition-aided (Hibbett, Courir in FY25) plus space rollout; organic growth slowed from 5.8% (FY25) to 2.1% (FY26), with LFL turning negative.
 
-Gross margin held **47.8%** (FY25) and **47.0%** (FY26, flat YoY per chair’s statement), but operating deleverage from wage inflation, infrastructure spend (Heerlen DC, cyber/IT controls, omnichannel replatforming) and higher lease-interest burden has compressed reported margins.
+**Profitability** is deleveraging: FY26 chair/CFO narrative attributes the £852m adjusted PBT to negative LFL, cost inflation (wages, IT/cyber, dual-running on digital replatforming), and promotional markets, partly offset by efficiencies. FY25 RNS already flagged £100m+ incremental people costs over two years and Heerlen DC delays.
 
-### Cash flow and balance sheet
+**Cash flow and balance sheet (filings).**
+- FY25: operating cashflow net of lease repayments **£1,245m**; net cash before lease liabilities **£52m**; cash **£695m**; interest-bearing borrowings **£679m** (including $700m Hibbett term loan outstanding at year-end); capex **£515m**.
+- FY26: operating cash flow **>£1.3bn**; **free cash flow £462m** (+36%); net leverage **1.4x**; net cash ex-leases **~£31m** (per investment-case section; OCR garbled in extract).
+- FY25 RNS disclosed Genesis non-controlling interest put/call deferred to 2029–2030 with liability cap **£1.5bn** — a material future cash call not reflected in near-term leverage metrics.
 
-- **FY25:** Operating cashflow net of lease repayments **£1,245m** (+7.2%); net cash before lease liabilities **£52m** (from **£1,032m** prior year) after **~£1.4bn** Hibbett/Courir spend (FY25 RNS).
-- **FY24:** Net cash before lease liabilities **~£1.0bn** (FY24 annual report investment case).
-- **FY26:** Free cash flow **£462m** (+36%); **net leverage 1.4x**; net cash excluding leases **£311m** (FY26 annual report highlights). The Group completed **£200m** of share repurchases in FY26 and proposed a final dividend of **0.87p** (total **1.20p**, +20%).
+*Yahoo fallback:* FY26 total debt £3.68bn (predominantly lease-related: capital lease obligations £3.14bn); cash £854m; operating cash flow £1.36bn; free cash flow £956m. Yahoo FCF exceeds the filing’s £462m definition — the Group changed its cash KPI from operating cashflow net of lease repayments to free cash flow in FY26. Screen FCF yield (~21%) appears based on a Yahoo-derived figure (~£830m); treat cross-source FCF comparisons with caution.
 
-FY25 RNS disclosed **$700m** outstanding on a $1bn Hibbett term loan and ongoing **refinancing of £700m RCF, $300m ABL and $700m term loan** expected in H1 FY26 — covenant detail not present in available extracts.
+### Interim / trading updates
 
-**Yahoo fallback (FY26, for screen reconciliation only):** operating cash flow **£1,357m**, free cash flow **£956m**, total debt **£3.68bn**, cash **£854m**, net income **£436m**. The gap between Yahoo FCF (£956m) and filing FCF (£462m) reflects the company’s **FY26 KPI change** from “operating cashflow net of lease repayments” to “free cash flow”; treat screen FCF yield as indicative, not filing-identical.
+**None present in `filings_index.json`.** This is a material gap for a retailer mid-cycle.
 
-### Regional mix (FY25 RNS, last full segment disclosure in pack)
+News reports (not primary filings) indicate an August 2026 trading update cut FY27 profit guidance by approximately **£50m**, citing weaker US sales, subdued footwear demand, and cost-of-living pressure — the second such warning in three months, with shares falling ~12–14% (“JD Sports Shares Tumble on ‘Weak Consumer Sentiment’ and Shoe Sales Slowdown”, 20 August 2026; “JD Sports share price plunges 12% on shock results”, 20 August 2026). Until an RNS body is indexed, interim trading metrics cannot be verified from filings.
 
-North America **37%** of revenue (£4,242m, +27%); Europe **31%** (£3,510m); UK **28%** (£3,205m, −4.1%). FY26 annual report shows further geographic rebalancing: North America **£4,779m**, Europe **£4,246m**, UK **£3,110m**, Asia Pacific **£527m**.
+### Geographic mix (FY25 RNS)
 
-### Near-term trading (FY25 RNS, not classified as interim filing)
-
-Q126 (13 weeks to 3 May 2025): organic sales **+3.1%**, LFL **−2.0%**, gross margin **48.2%** in line with prior year. Management flagged tariff uncertainty but assessed direct tariff impact as **not material** (<10% of revenue in own-brand/licensed sourcing).
-
-**Gaps:** No indexed interim/H1 FY26 RNS body; FY26 statutory PBT, covenant tables, pension note and auditor going-concern wording not available in extracted bodies. Verify before trade.
+North America **37%** of revenue (£4,242m, +27%); Europe **31%** (£3,510m); UK **28%** (£3,205m, -4.1%). US concentration is now the primary earnings swing factor — consistent with broker caution (Deutsche Bank hold at 95p, 3 September 2026; RBC German consumer cuts, 25 August 2026).
 
 ---
 
 ## RISKS AND RED FLAGS
-**Cyclical / consumer:** FY26 chair’s statement describes a “promotional” global market, declining footfall, and cautious consumers; LFL **−2.1%** in FY26. UK JD revenue fell on an organic basis in FY25 (−1.1% organic, −3.0% LFL per RNS). RBC (Aug 2026 news) cited pressure on lower-income consumers and lack of “brand heat.”
+**Cyclical / consumer demand.** FY26 LFL -2.1%; Q1 FY26 (FY25 RNS) LFL -2.0%. Promotional markets, declining store footfall, and cost-of-living pressure cited in filings and August news. Germany flagged as structurally weak (higher labour costs, lower sports-fashion appetite per FY25 CEO review).
 
-**Competitive / brand concentration:** Heavy reliance on global brand partners (Nike, adidas, New Balance, Asics cited in FY26 report). Nike’s weak outlook (Jul 2026) triggered JD share weakness on read-across. Promotional intensity risks full-price strategy.
+**US / footwear cycle.** North America is largest market; August 2026 news cites deteriorating US trends and sneaker-demand cooling. Nike turnaround delays (July 2026 read-across articles) add brand-partner risk given JD’s premium-brand dependence.
 
-**Integration / leverage:** Hibbett ($1,077m) and Courir (€391m) acquisitions depleted net cash; **net leverage 1.4x** at FY26 year-end. **Genesis NCI put/call** deferred to 2029/2030 with **£1.5bn cap** (FY25 RNS post-balance sheet note) remains a future cash commitment.
+**Margin and cost inflation.** Operating margin after lease interest fell from 9.0% (FY24) to 7.0% (FY26). FY25 RNS notes infrastructure/control investments running over budget (Heerlen DC delayed; ~£60m IT security); wage inflation and removal of age banding added >£100m over two years.
 
-**Execution / governance:** FY25 chair acknowledged **forecasting/guidance accuracy** issues and **internal control weaknesses** (IT general controls, cyber). Heerlen DC delayed ~one year with elevated costs; Derby DC closure drove **£76m impairment** (FY25 adjusting items). European store review: **46 stores** earmarked for closure (£29m impairment).
+**Leverage and off-balance-sheet commitments.** Substantial IFRS 16 lease liabilities (~£3bn+ per Yahoo balance sheet); $700m term loan at FY25 year-end with refinancing expected H1 FY26 (FY25 RNS). Net leverage 1.4x per FY26 report — manageable but rising if profits fall further.
 
-**Regulatory / geopolitical:** US tariff policy cited as a monitoring item; management’s base case is immaterial direct impact but acknowledges consumer-confidence risk as the largest potential channel.
+**Genesis NCI buyout.** Put/call on 20% of North American holding company exercisable 2029–2030; cap **£1.5bn** (FY25 RNS post-balance-sheet note). Deferred exercise helps near-term liquidity but concentrates future cash risk.
 
-**Liquidity / refinancing:** Material debt stack post-acquisitions; refinancing of RCF/term facilities flagged for H1 FY26 in FY25 RNS — terms and covenants not in available extracts.
+**M&A / integration.** Hibbett ($1bn+ acquisition) and Courir (€391m) add complexity; US integration programme targeting $25m synergies at ~1x cash cost of savings. European Commission remedies on Courir required store disposals.
 
-**Governance transition:** Chair Andrew Higginson not standing for re-election (Jul 2026 AGM); **Peter Agnefjäll** (ex-IKEA) appointed chair from Sep 2026 (Aug 2026 news).
+**Governance / key person.** Interim chair Darren Shapland succeeded by Peter Agnefjäll (September 2026). CEO Régis Schultz under pressure per pre-August news (“Growth plans in focus at JD Sports after pressure on chief executive”, 14 August 2026). Chair Andrew Higginson stepping down at July 2026 AGM (FY26 report).
 
-No going-concern qualification language was found in available filing extracts; pension obligations not assessable from this pack.
+**Tariffs / macro.** FY25 RNS models US tariff impact as not material on own-brand (<10% of revenue) but flags consumer-confidence risk as largest potential impact. Macro context (GBP/USD 1.35, FTSE 100 ~10,800) is colour only — not used to override screen.
 
-RiskTags: cyclical, competitive, leverage, governance, regulatory, key_person, accounting
+**Regulatory / going concern.** No going-concern qualification language appears in available filing body extracts; full auditor report not indexed in bodies — **unverified**. Principal Risks section referenced in FY26 report contents page but not extracted in available text.
+
+**Accounting.** FY25 restated comparatives for amortisation of acquired intangibles within adjusting items (£57m FY25 charge). Adjusting items totalled £208m in FY25 (impairments including Derby DC £76m, European store closures £29m). Heavy reliance on adjusted metrics vs statutory EPS decline (9.50p → 8.63p over two years).
+
+RiskTags: cyclical, competitive, leverage, customer_concentration, governance, other
 
 ---
-RiskTags: cyclical, competitive, leverage, governance, regulatory, key_person, accounting
+RiskTags: cyclical, competitive, leverage, customer_concentration, governance, other
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate-to-good** on corporate actions, thinner on deep fundamental analysis (several aggregator/commentary pieces).
+Coverage is **moderate-to-heavy** on share-price and broker reaction; thinner on operational detail beyond RNS-linked commentary. Notable items (past 12 months):
 
-**Strategy and capital allocation**
-- *“JD Sports launches £200m share buyback”* (The Armchair Trader, 23 Feb 2026) — initial programme post-FY25; FY26 annual report confirms **£200m completed** and **£200m further programme** for FY27.
-- *“JD Sports gets target hike from Deutsche Bank as focus shifts to cash generation”* (Yahoo Finance, 14 Jul 2026) — narrative shift to margins and cash after expansion phase.
-- *“Across The Markets: Helios Towers, JD Sports, BAE Systems”* (Investegate, 7 May 2026) — FY26 results: organic sales +2.1%, adj. PBT −8%, flat FY27 profit outlook cited; dividend +20% and rolling buyback supported shares.
+**Strategy and capital return**
+- “JD Sports launches £200m share buyback” (The Armchair Trader, 23 February 2026); FY26 report confirms £200m completed plus further £200m programme for FY27.
+- “JD Sports shares climb as buyback programme nears completion” (Yahoo Finance UK, 27 July 2026).
+- “JD Sports gets target hike from Deutsche Bank as focus shifts to cash generation” (14 July 2026) — 95p target, hold rating.
 
 **M&A / portfolio**
-- *“UK retailer JD Sports sells entire Applied Nutrition stake for $66.5 million”* (Reuters, 16 Apr 2026) — non-core disposal; follows partial IPO monetisation in FY25 (£73m cash, £75m gain per RNS).
+- “UK retailer JD Sports sells entire Applied Nutrition stake for $66.5 million” (Reuters, 16 April 2026).
+- Hibbett (July 2024) and Courir (November 2024) integrations ongoing per FY25 RNS.
 
-**Management / governance**
-- *“JD Sports appoints former IKEA boss Peter Agnefjäll as chair”* (Yahoo Finance, 7 Aug 2026) — succeeds Darren Shapland (interim) from 1 Sep 2026; Higginson steps down Jul 2026.
+**Governance**
+- “JD Sports appoints former IKEA boss Peter Agnefjäll as chair” (7 August 2026), effective 1 September 2026.
 
-**Market / sell-side sentiment**
-- *“JD Sports downgraded due to pressure on consumers and lack of 'brand heat'”* (Yahoo Finance, 3 Aug 2026) — RBC cut to Sector Perform.
-- *“UBS flags Europe and footwear as danger zones before JD Sports update”* (Yahoo Finance, 12 Aug 2026) — Neutral, PT cut to 86p ahead of **20 Aug 2026** trading update.
-- *“JD Sports shares dip after Nike warns on sales”* (Yahoo Finance, 1 Jul 2026) — supplier read-across.
+**Market access**
+- “JD Sports Upgrades Listing to Broaden U.S. Investor Access” (OTCQX, 25 June 2026).
 
-**Other**
-- *“JD Sports Upgrades Listing to Broaden U.S. Investor Access”* (Yahoo Finance, 25 Jun 2026) — OTCQX upgrade from Pink Limited.
-- *“JD Group publishes 2026 Global Impact Report”* (Investegate, 22 May 2026) — ESG/community disclosure; no financial impact.
+**Negative catalysts (August 2026 cluster)**
+- “JD Sports Fashion lowers FY27 profit guidance” (19 August 2026) — shares ~-11%.
+- “JD Sports Trips Over the Sneaker Cycle” (20 August 2026) — ~£50m profit outlook reduction.
+- “JD Sports Fashion draws broker caution after profit guidance cut” (20 August 2026) — UBS/Shore Capital caution on North America and Europe.
+- “RBC warns on German consumer weakness, cuts H&M and JD Sports forecasts” (25 August 2026).
+- “Deutsche Bank keeps JD Sports at hold as US weakness weighs on outlook” (3 September 2026).
 
-**Flag:** Several Google News hits conflate **JD Wetherspoon** or generic “JD” — material JD Sports items are concentrated in May–Aug 2026 around results and broker actions.
+**Noise.** Multiple articles conflate JD Sports with JD.com (China e-commerce) — ignore for JD.L thesis.
 
 ---
 
@@ -107,4 +120,4 @@ Coverage over the past year is **moderate-to-good** on corporate actions, thinne
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Filings confirm the screen’s cheap, cash-generative profile and improving shareholder returns, but weaken the near-term buy case via two years of adjusted profit decline, negative LFL, and broker concern on Europe/footwear ahead of the August trading update.
+Rationale: Filings confirm the screen’s cheap, cash-generative profile and improving shareholder returns, but weaken the near-term buy case via two years of adjusted profit decline, negative LFL, and broker concern on Europe/footwear ahead of verified interim filing data for the August trading update.

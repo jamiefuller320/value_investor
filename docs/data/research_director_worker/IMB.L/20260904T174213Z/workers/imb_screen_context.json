@@ -1,0 +1,197 @@
+{
+  "task_id": "imb_screen_context",
+  "task_type": "screen_context",
+  "status": "partial",
+  "findings": [
+    "Signal is strong_buy on 13/22 models (composite 0.7529, sector-relative 0.7007); five families pass — cheapness, quality, dividend, GARP, risk — per docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json.",
+    "Passed models include Earnings Yield, FCF Yield, Low P/E + High Yield, Neff PEGY, Quality Value, Buffett Quality, High Dividend Yield, Dividend Growth, Magic Formula, Acquirer's Multiple, Dreman Contrarian, Composite Value, and Earnings Quality (screening_snapshot.json).",
+    "Failed models: Graham Defensive (P/B or P/E×P/B too rich; current ratio < 2), Graham Enterprising (P/B ≥ 3, excessive leverage, negative earnings growth), Graham Net-Net (missing NCAV), Schloss Low P/B (P/B too high, too much leverage), Deep Value (P/B not below 1.0), Lynch PEG (missing or negative earnings growth), Economic Moat (ROA below 8%, margins below 12%, leverage too high), Piotroski F-Score (6/9 — fails ROA improving, leverage declining, asset turnover improving), Financial Health (high debt to equity, weak liquidity) (screening_snapshot.json).",
+    "Valuation headline metrics: P/E 11.8, P/B 5.0, yield 6.5%, ROE 37.2%; summary highlights E/P 8.4% and FCF yield 13.1% (screening_snapshot.json).",
+    "Leverage and liquidity inputs driving failures: debt_to_equity 243.803%, current_ratio 0.743; earnings growth negative on both bases — basic/statutory EPS −16.5%, adjusted/earnings −24.1% (screening_snapshot.json).",
+    "Conviction 0.4542 with stability_label new, weeks_at_signal 1, signal_trend new; timing_signal accumulate (timing_score 0.75), RSI 14 ≈ 38, price −0.15% vs SMA200; action_note 'Strong Buy — favourable entry timing' (screening_snapshot.json).",
+    "Trade plan: core 75% limit £2,496.78; tactical 25% limit £2,395.90; tactical stop £2,250.63, target £2,710.11 (screening_snapshot.json).",
+    "All overlays false: healthcare_overlay, healthcare_price_erosion_overlay, cash_conversion_overlay, dividend_yield_overlay, interim_quality_overlay, cyclical_exposure_overlay, earnings_basis_overlay, fcf_basis_overlay, leverage_override, dual_leverage_display (screening_snapshot.json).",
+    "Yahoo quarterly TTM cashflow suppressed (ttm_cashflow_suppressed true; reason quarterly_cashflow_empty); screen uses alternate cashflow path (screening_snapshot.json).",
+    "FCF reconciliation: filing_aligned/canonical USD 3,166m (source filing_aligned_ocf_capex, fiscal_year 2025) vs screen_ttm/cashflow_metrics FCF USD 2,502m; divergence_flagged false despite ~664m gap; key_metrics.FCF matches screen_ttm (screening_snapshot.json).",
+    "Screen numbers that must be replaced by filing-body sterling before UK-equity claims: all USD cashflow block figures — operating_cashflow 3,627m, capex −461m, free_cashflow/screen_ttm 2,502m, filing_aligned/canonical 3,166m, prior-year OCF/FCF 3,307m/2,894m, and derived fcf_dividend_coverage_net 2.03; currency field explicitly USD (screening_snapshot.json).",
+    "Unsafe until FCF currency/definition reconciled: FCF Yield pass, summary FCF yield 13.1%, key_metrics FCF, fcf_dividend_coverage_net, and any composite/family scoring implicitly tied to USD screen_ttm FCF; filing_aligned vs screen_ttm divergence not flagged (screening_snapshot.json).",
+    "Unsafe until excise-adjusted liquidity reconciled: current_ratio 0.743 (Graham Defensive current ratio < 2; Financial Health weak liquidity), debt_to_equity 243.803%, and leverage-sensitive failures across Graham Enterprising, Schloss, Deep Value, Economic Moat, Piotroski (leverage declining), and Financial Health — source does not adjust for excise/tobacco working-capital treatment (screening_snapshot.json)."
+  ],
+  "figures": [
+    {
+      "metric": "models_passed",
+      "value": "13/22",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "signal strong_buy"
+    },
+    {
+      "metric": "composite_score",
+      "value": "0.7529",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "headline composite 75% in summary"
+    },
+    {
+      "metric": "sector_composite_score",
+      "value": "0.7007",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "sector-relative 70% in summary"
+    },
+    {
+      "metric": "families_passed",
+      "value": "5 (cheapness, quality, dividend, garp, risk)",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "conviction_score",
+      "value": "0.4542",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "stability_label new, 1 week at signal"
+    },
+    {
+      "metric": "timing_signal",
+      "value": "accumulate",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "timing_score 0.75"
+    },
+    {
+      "metric": "rsi_14",
+      "value": "37.6",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "summary rounds to 38"
+    },
+    {
+      "metric": "price_vs_sma200_pct",
+      "value": "-0.15%",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "below 200-day MA"
+    },
+    {
+      "metric": "core_limit",
+      "value": "£2,496.78",
+      "period": "trade_plan",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "75% allocation"
+    },
+    {
+      "metric": "tactical_limit",
+      "value": "£2,395.90",
+      "period": "trade_plan",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "25% allocation"
+    },
+    {
+      "metric": "P/E",
+      "value": "11.8",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "P/B",
+      "value": "5.0",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "fails Graham/Schloss/Deep Value thresholds"
+    },
+    {
+      "metric": "dividend_yield",
+      "value": "6.5%",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "dividend_yield_raw 6.54"
+    },
+    {
+      "metric": "ROE",
+      "value": "37.2%",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "basic_eps_growth_pct",
+      "value": "-16.5%",
+      "period": "TTM/screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "statutory_earnings_growth_pct matches"
+    },
+    {
+      "metric": "adjusted_eps_growth_pct",
+      "value": "-24.1%",
+      "period": "TTM/screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "earnings_growth_pct matches"
+    },
+    {
+      "metric": "debt_to_equity",
+      "value": "243.8%",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "Financial Health failure"
+    },
+    {
+      "metric": "current_ratio",
+      "value": "0.74",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "Graham Defensive failure; weak liquidity"
+    },
+    {
+      "metric": "piotroski_f_score",
+      "value": "6/9",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "fails ROA improving, leverage declining, asset turnover improving"
+    },
+    {
+      "metric": "fcf_filing_aligned",
+      "value": "USD 3,166m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "source filing_aligned_ocf_capex"
+    },
+    {
+      "metric": "fcf_screen_ttm",
+      "value": "USD 2,502m",
+      "period": "screen TTM",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "divergence_flagged false"
+    },
+    {
+      "metric": "fcf_dividend_coverage_net",
+      "value": "2.03",
+      "period": "screen",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "derived from USD screen FCF"
+    },
+    {
+      "metric": "ttm_cashflow_suppressed",
+      "value": "true",
+      "period": "yahoo_quarterly",
+      "source_path": "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json",
+      "note": "quarterly_cashflow_empty"
+    }
+  ],
+  "gaps": [
+    "No filing-body sterling cashflow figures in this source; all FCF/OCF/capex values are USD-labelled.",
+    "No reconciliation of filing_aligned USD 3,166m vs screen_ttm USD 2,502m despite divergence_flagged false.",
+    "No excise-adjusted or tobacco-specific liquidity/working-capital treatment for current_ratio 0.74.",
+    "NCAV unavailable (ncav_available false) — Graham Net-Net cannot be assessed from this source.",
+    "Yahoo quarterly TTM cashflow empty; screen cashflow path provenance beyond filing_aligned label not documented here.",
+    "fcf_basis_overlay false — no overlay correction applied for FCF definition mismatch.",
+    "P/E, P/B, yield, ROE, and trade-plan GBP limits present without explicit currency basis for valuation multiples vs USD cashflow."
+  ],
+  "sources_read": [
+    "docs/data/research_director_worker/IMB.L/20260904T174213Z/sources/screening_snapshot.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-9a7d8b40-ca50-4282-8bfe-622ae2e5b81b"
+}

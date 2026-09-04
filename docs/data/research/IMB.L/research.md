@@ -1,6 +1,6 @@
 # Imperial Brands PLC (IMB.L) — Research memo
 
-_Version 1 · Updated 2026-08-30T08:27:04.715429+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T17:50:11.068649+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
 Imperial Brands PLC screens as a **strong buy** on the quantitative model (13/22 models passed; composite score 76%; five factor families: cheapness, quality, dividend, GARP, risk), driven by a ~6.6% dividend yield, ~13% FCF yield, and P/E of ~11.9x against a cash-generative combustibles franchise. The investment case is a capital-return compounder: progressive dividends, an active **£1.45bn** buyback, and Strategy 2030’s focus on five priority markets (~70% of adjusted tobacco operating profit) plus scaling next-generation products (NGP). Valuation looks contrarian — RSI ~36, price below the 200-day moving average — but reported GAAP earnings fell in FY25 and net debt rose despite record free cash flow. The central debate is whether pricing power and shareholder returns can keep outpacing structural volume decline, regulatory tightening, and NGP investment needs; the source pack has **no interim filings** to bridge FY25 year-end to the current period.

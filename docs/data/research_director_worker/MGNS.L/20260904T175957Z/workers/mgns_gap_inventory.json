@@ -1,0 +1,148 @@
+{
+  "task_id": "mgns_gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "financials_annual.json: quarterly_income and quarterly_cashflow are empty objects; cashflow_metrics flags ttm_cashflow_suppressed=true with reason quarterly_cashflow_empty (source: docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/financials_annual.json)",
+    "financials_annual.json: FY2025 Yahoo income_statement lacks Diluted EPS, Basic EPS, Diluted Average Shares and Basic Average Shares that are present for FY2024 (and earlier years); Net Income £174.9m and Total Revenue £5,018.6m are populated (same source path)",
+    "screening_snapshot.json mirrors Yahoo gap: yahoo_quarterly.ttm_cashflow_suppressed=true (source: docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/screening_snapshot.json)",
+    "No ir_presentation_metrics file or JSON key anywhere under sources; news_manifest.json article id d33f8d44 cites 'Morgan Sindall FY 2025 slides' but structured slide KPIs are not ingested (source: docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/news_manifest.json)",
+    "alternate_news is absent: zero files matching alternate* under sources tree",
+    "filings_index.json period_coverage: annual=10 (all with_body), interim=3, trading_update=1; fetched_at 2026-09-02T10:46:51Z; 62 filings total (source: docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/filings/filings_index.json)",
+    "Annual bucket (10) includes FY notice f62aca97 (19 Jan 2026), FY results 95ec5713 (25 Feb 2026), AFR 6e75852b (24 Mar 2026, body unread), five CH group annual accounts 2021–2025, May 2026 CH group ch_MzUyMTI1 (unread), and Aug 2026 amended CH ch_MzUzODcz (unread, accounts-amended-with-accounts-type-group)",
+    "Interim bucket (3): HY notice e8256c71 (2 Jul 2026), HY results 1c0ea0df (23 Jul 2026), plus stale 2021 CH interim ch_MzMwOTQ0 (7 Aug 2021)",
+    "Only tagged trading_update is 48a987af 'Trading Update and Outlook for 2025' dated 2025-10-02 (stale); Feb and Apr 2026 'Trading and Outlook for 2026' RNS (edbd19acf3912165, 41d61c3e4bff7282) are indexed as period=other, not trading_update",
+    "filings_index body_path values point to docs/data/research/MGNS.L/sources/filings/bodies/... (main research tree), not the trial worker path docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/filings/bodies/...",
+    "macro_context.json, screen_run_manifest.json, and 22 news_batch_*.json files are present but not referenced in filings/financials indexes for memo extraction",
+    "FY2025 RNS (95ec5713407773e4.txt): adjusted PBT £232.6m (+35%), revenue £5,019m (+10%), adjusted EPS 370.0p, net cash £531m, order book £12.0bn secured plus £7.1bn preferred bidder; 2026 outlook references 12 Feb 2026 trading update without restating numbers in this body",
+    "HY2026 RNS (1c0ea0dfefa03839.txt): adjusted PBT £116.1m (+21%), revenue £2,562m (+8%), adjusted EPS 186.1p, net cash £418m; H1 operating cash outflow £10.0m with LTM operating cash inflow £202.6m; full-year performance expected in line with current expectations (no Feb/Apr numeric restatement here)",
+    "News headlines reference Apr 2026 profit-outlook upgrade (0d2407290dafe85a, 2026-04-16) and Feb 2026 upbeat trading update (0b360dcd8ed5bd18, 2026-02-12) but corresponding RNS bodies were not read in this task",
+    "Latest indexed RNS at fetch cutoff is cf469b4b Total Voting Rights (2026-09-01); no results/trading RNS dated after 2026-09-02 in filings_index"
+  ],
+  "figures": [
+    {
+      "metric": "Total Revenue",
+      "value": "£5,018.6m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/filings/bodies/95ec5713407773e4.txt",
+      "note": "RNS; Yahoo income_statement shows 5018600000 (USD units in Yahoo feed)"
+    },
+    {
+      "metric": "Adjusted profit before tax",
+      "value": "£232.6m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/filings/bodies/95ec5713407773e4.txt",
+      "note": "+35% YoY"
+    },
+    {
+      "metric": "Adjusted EPS",
+      "value": "370.0p",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/filings/bodies/95ec5713407773e4.txt",
+      "note": "Not in Yahoo FY2025 block"
+    },
+    {
+      "metric": "Net cash",
+      "value": "£531m",
+      "period": "FY2025 year-end",
+      "source_path": "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/filings/bodies/95ec5713407773e4.txt",
+      "note": "Company definition"
+    },
+    {
+      "metric": "Operating cash flow",
+      "value": "£187.3m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/financials_annual.json",
+      "note": "Yahoo annual cash_flow; RNS reports £195.9m operating cash flow"
+    },
+    {
+      "metric": "Free cash flow",
+      "value": "£170.7m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/financials_annual.json",
+      "note": "RNS reports £161.5m free cash flow"
+    },
+    {
+      "metric": "Adjusted profit before tax",
+      "value": "£116.1m",
+      "period": "HY2026",
+      "source_path": "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/filings/bodies/1c0ea0dfefa03839.txt",
+      "note": "+21% vs HY2025"
+    },
+    {
+      "metric": "Revenue",
+      "value": "£2,562m",
+      "period": "HY2026",
+      "source_path": "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/filings/bodies/1c0ea0dfefa03839.txt",
+      "note": "+8% vs HY2025"
+    },
+    {
+      "metric": "Net cash",
+      "value": "£418m",
+      "period": "HY2026 period-end",
+      "source_path": "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/filings/bodies/1c0ea0dfefa03839.txt",
+      "note": "30 Jun 2026"
+    },
+    {
+      "metric": "H1 operating cash flow",
+      "value": "outflow £10.0m",
+      "period": "HY2026",
+      "source_path": "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/filings/bodies/1c0ea0dfefa03839.txt",
+      "note": "Includes £122m Partnership Housing net investment"
+    },
+    {
+      "metric": "LTM operating cash flow",
+      "value": "inflow £202.6m",
+      "period": "to HY2026",
+      "source_path": "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/filings/bodies/1c0ea0dfefa03839.txt",
+      "note": "Not TTM from Yahoo quarterlies"
+    },
+    {
+      "metric": "Net Income",
+      "value": "£174.9m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/financials_annual.json",
+      "note": "Yahoo; EPS/share-count fields missing for this year"
+    },
+    {
+      "metric": "Cash and cash equivalents",
+      "value": "£590.5m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/financials_annual.json",
+      "note": "Yahoo balance_sheet 2025"
+    },
+    {
+      "metric": "Total Debt",
+      "value": "£132.9m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/financials_annual.json",
+      "note": "Yahoo; includes lease obligations per field Capital Lease Obligations £73.6m"
+    }
+  ],
+  "gaps": [
+    "Feb 2026 and Apr 2026 Trading and Outlook numeric guidance (profit upgrade magnitude, divisional targets) — bodies edbd19acf3912165.txt and 41d61c3e4bff7282.txt not assigned/read",
+    "Aug 2026 amended Companies House accounts substance (restatement scope, restated line items) — ch_00521970_MzUzODczOTEzNWFkaXF6a2N4.txt not read",
+    "May 2026 CH group accounts detail if RNS/AFR tables are thin — ch_00521970_MzUyMTI1NzMzOWFkaXF6a2N4.txt not read",
+    "Mar 2026 Annual Financial Report full statutory detail — 6e75852b061c3f64.txt not read",
+    "FY2025 IR presentation / slide KPIs (e.g. Fit Out +41% cited in news) — ir_presentation_metrics step absent; do not infer from news alone",
+    "H2 2026 intra-year cashflow bridge — Yahoo quarterly_cashflow empty; UK half-year reporter; only H1 RNS cash table available",
+    "Yahoo FY2025 Diluted/Basic EPS and average share counts — missing vs FY2024; memo cannot compute Yahoo-consistent PER/EPS without RNS or AFR",
+    "TTM cashflow metrics suppressed — screening cannot show rolling cash conversion from Yahoo quarterlies",
+    "alternate_news pipeline step absent — no secondary news corpus beyond news_manifest/google_news",
+    "Stale Oct 2025 trading_update (48a987af9bcbf73d.txt) is not a 2026 outlook substitute",
+    "Any RNS published after 2026-09-02 fetch cutoff — not in filings_index",
+    "macro_context.json, screen_run_manifest.json, news_batch_* files unused — sector/macro and batch news context not extracted in this source pass"
+  ],
+  "sources_read": [
+    "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/financials_annual.json",
+    "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/filings/filings_index.json",
+    "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/news_manifest.json",
+    "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/macro_context.json",
+    "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/screen_run_manifest.json",
+    "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/screening_snapshot.json",
+    "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/filings/bodies/95ec5713407773e4.txt",
+    "docs/data/research_director_worker/MGNS.L/20260904T175957Z/sources/filings/bodies/1c0ea0dfefa03839.txt"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-a2bee951-0d18-4351-b0e5-7accbd986632"
+}

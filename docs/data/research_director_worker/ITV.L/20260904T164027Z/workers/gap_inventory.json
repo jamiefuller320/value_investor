@@ -1,0 +1,143 @@
+{
+  "task_id": "gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "Thin/unavailable evidence ladder steps per source_inventory.json: yahoo_quarterly_cashflow=false, yahoo_quarterly_income=false, alternate_news=false; no Yahoo quarterly JSON files present under sources/",
+    "screening_snapshot.json suppresses TTM cashflow (yahoo_quarterly.ttm_cashflow_suppressed=true; reason quarterly_cashflow_empty), forcing FCF reconciliation to annual filings and fcf_bridge.json only",
+    "alternate_news is a dead ladder step while news_manifest.json holds 89 RSS/yfinance headlines (mostly Google News wrappers); no separate alternate_news corpus exists",
+    "Sky M&E sale RNS (filings/bodies/10f52d865099383d.txt; duplicate index entry 0b0a4b2e4b15d060 points to same body): sale to Sky UK Limited for up to £1.6bn (£1.2bn cash + £200m Love Productions EV + up to £200m contingent on FY2027 TAR >£1.7bn); completion expected H2 2027; longstop 6 July 2028",
+    "Deal conditions (Appendix 1, 10f52d865099383d.txt): (i) regulatory approvals, (ii) separation of ITV M&E including ITV Sport and 20% ITN stake, (iii) Love Productions sale to ITV; Sky break fee £80m if regulatory conditions fail by longstop; ITV Love Productions break fee £11.5m if M&E approved but Love deal blocked",
+    "Cash-return stack (10f52d865099383d.txt): net cash proceeds ~£1.05bn after ~£185m gross separation costs; de-lever Studios to ~1.5x net debt/EBITDA; Board expects ~£950m (~25p/share, ~90% of net proceeds) capital return post-completion; mechanics 'announced in due course'; £65m pension escrow to 31 March 2034; not subject to shareholder approval (UKLR Significant Transaction)",
+    "Content supply agreement: minimum £2.1bn spend commitment 2028–2032; post-close Studios stranded costs ~£25m p.a., broadly offset by Love Productions profit (10f52d865099383d.txt)",
+    "Q1 2026 trading update (filings/bodies/07db0bbb71da4f51.txt, 14 May 2026): total external revenue +1% to £766m; Studios +4%; M&E −2%; TAR −1.5% in Q1 (better than guidance); expects TAR +~10% in Q2; net debt £592m and total liquidity £1,368m at 31 March 2026; full-year guidance unchanged",
+    "£100m share repurchase programme (filings/bodies/9e3177c079d15731.txt, 31 Jul 2026): separate from the ~£950m Sky-deal capital return; Morgan Stanley riskless-principal; engagement 31 Jul 2026–9 Jul 2027; max 386m shares under 2026 AGM authority; purchased shares held in treasury; purpose is share-capital reduction",
+    "2032 notes consent (filings/bodies/6af23cfd24aaf304.txt, 5 Aug 2026): Extraordinary Resolution passed (>75% votes) amending €500m 4.25% Notes due 19 June 2032 (ISIN XS2838391170) to keep definitions meaningful post-M&E sale; effective 5 Aug 2026; consent fee paid 12 Aug 2026 to early-bird consents; amendment text not reproduced in results RNS",
+    "No Q3 2026 trading-update body in filings_index.json (trading_update count=4: Q1 2025, Q3 2025, Q1 2026 only); Q3 2026 TAR outlook exists only inside H1 2026 interim guidance (~−5% Q3), not as a standalone TU",
+    "Five-task cap omitted these bodies from assigned workers but all are present in the pack; memo workers covering only FY25 annual, H1 2026 interim, news digest and screen would lack verified deal terms, buyback mechanics, Q1 liquidity/TAR bridge and notes-consent outcome unless gap_inventory reads are merged"
+  ],
+  "figures": [
+    {
+      "metric": "Sky M&E total consideration (headline)",
+      "value": "up to £1.6bn",
+      "period": "deal announced 6 Jul 2026",
+      "source_path": "sources/filings/bodies/10f52d865099383d.txt",
+      "note": "Base £1.4bn + up to £200m contingent"
+    },
+    {
+      "metric": "Expected capital return to shareholders",
+      "value": "£950m (~25p per share)",
+      "period": "post Sky deal completion",
+      "source_path": "sources/filings/bodies/10f52d865099383d.txt",
+      "note": "Excludes contingent consideration; mechanics TBC"
+    },
+    {
+      "metric": "Net cash proceeds (pre-contingent)",
+      "value": "£1.05bn",
+      "period": "post completion",
+      "source_path": "sources/filings/bodies/10f52d865099383d.txt",
+      "note": "After ~£185m gross / ~£155m net separation costs"
+    },
+    {
+      "metric": "Sky regulatory break fee",
+      "value": "£80m",
+      "period": "SPA longstop 6 Jul 2028",
+      "source_path": "sources/filings/bodies/10f52d865099383d.txt",
+      "note": "If regulatory conditions not satisfied"
+    },
+    {
+      "metric": "CSA minimum spend commitment",
+      "value": "£2.1bn",
+      "period": "2028–2032",
+      "source_path": "sources/filings/bodies/10f52d865099383d.txt",
+      "note": "ITV Studios content supply to Sky/M&E"
+    },
+    {
+      "metric": "Pension escrow",
+      "value": "£65m",
+      "period": "before completion to 31 Mar 2034",
+      "source_path": "sources/filings/bodies/10f52d865099383d.txt",
+      "note": "Returned if scheme still in surplus at term"
+    },
+    {
+      "metric": "Q1 2026 total external revenue",
+      "value": "£766m (+1%)",
+      "period": "three months to 31 Mar 2026",
+      "source_path": "sources/filings/bodies/07db0bbb71da4f51.txt",
+      "note": "Unaudited trading statement"
+    },
+    {
+      "metric": "Q1 2026 total advertising revenue change",
+      "value": "−1.5%",
+      "period": "three months to 31 Mar 2026",
+      "source_path": "sources/filings/bodies/07db0bbb71da4f51.txt",
+      "note": "Better than guidance"
+    },
+    {
+      "metric": "Net debt",
+      "value": "£592m",
+      "period": "31 Mar 2026",
+      "source_path": "sources/filings/bodies/07db0bbb71da4f51.txt",
+      "note": "vs £566m at 31 Dec 2025"
+    },
+    {
+      "metric": "Total liquidity",
+      "value": "£1,368m",
+      "period": "31 Mar 2026",
+      "source_path": "sources/filings/bodies/07db0bbb71da4f51.txt",
+      "note": "£268m cash + £1,100m undrawn facilities"
+    },
+    {
+      "metric": "Share repurchase programme cap",
+      "value": "£100m",
+      "period": "31 Jul 2026–9 Jul 2027",
+      "source_path": "sources/filings/bodies/9e3177c079d15731.txt",
+      "note": "Distinct from ~£950m Sky-deal return"
+    },
+    {
+      "metric": "2032 notes principal",
+      "value": "€500m",
+      "period": "4.25% notes due 19 Jun 2032",
+      "source_path": "sources/filings/bodies/6af23cfd24aaf304.txt",
+      "note": "Consent solicitation closed 5 Aug 2026"
+    },
+    {
+      "metric": "Filing-aligned FCF",
+      "value": "£148m",
+      "period": "FY2025",
+      "source_path": "sources/screening_snapshot.json",
+      "note": "vs company-adj £187m and suppressed TTM £211.9m"
+    },
+    {
+      "metric": "Company-adjusted FCF",
+      "value": "£187m",
+      "period": "FY2025",
+      "source_path": "sources/fcf_bridge.json",
+      "note": "Canonical screen basis; Yahoo quarterly empty"
+    }
+  ],
+  "gaps": [
+    "yahoo_quarterly_cashflow and yahoo_quarterly_income remain empty — intra-year FCF, quarterly OCF/capex and H1/H2 cash-bridge cannot be verified from Yahoo; only annual filing-aligned £148m vs company-adj £187m vs suppressed TTM £211.9m available",
+    "alternate_news step unavailable — news coverage relies solely on news_manifest.json RSS titles; no full-text alternate corpus for analyst FV cuts or regulatory commentary beyond headlines",
+    "Capital return mechanics for the ~£950m Sky-deal proceeds still unannounced ('mechanics … announced in due course' in 10f52d865099383d.txt) — memo cannot specify special dividend vs tender vs buyback mix or timing relative to H2 2027 completion",
+    "2032 notes Proposed Amendments text not in results RNS (6af23cfd24aaf304.txt) — residual covenant/change-of-control risk for €500m 2032 notes post-M&E carve-out requires Consent Solicitation Memorandum (referenced but not in pack)",
+    "No Q3 2026 trading update filed as of pack date (filings_index trading_update=4, latest Q1 2026) — cannot verify actual Q3 2026 TAR vs interim guidance (~−5% Q3) from a standalone TU",
+    "Q1 2026 TU provides revenue/TAR/net debt but no OCF, capex or FCF — intra-year cash conversion between FY25 and H1 2026 interim still filing-dependent",
+    "Continuing versus consolidated reporting perimeter not marked in screening_snapshot.json — strong_buy metrics (7.1% yield, P/E 11.6) reflect pre-deal group; post-carve-out Studios-only dividend/FCF identity unverified in screen data",
+    "Buyback execution pace unknown from programme RNS alone — cumulative shares purchased under £100m programme require reading transaction-in-own-shares bodies (not part of this gap read set)"
+  ],
+  "sources_read": [
+    "source_inventory.json",
+    "sources/screening_snapshot.json",
+    "sources/news_manifest.json",
+    "sources/filings/filings_index.json",
+    "sources/fcf_bridge.json",
+    "sources/filings/bodies/10f52d865099383d.txt",
+    "sources/filings/bodies/0b0a4b2e4b15d060.txt",
+    "sources/filings/bodies/07db0bbb71da4f51.txt",
+    "sources/filings/bodies/9e3177c079d15731.txt",
+    "sources/filings/bodies/6af23cfd24aaf304.txt"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-e51bf811-e788-491f-963a-bb21b2695458"
+}

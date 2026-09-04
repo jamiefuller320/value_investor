@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "source": "director",
+  "open_questions": [
+    "Screen FCF Yield fails at 0.1% while snapshot FCF is company-adjusted £168.3m / filing-aligned £205.6m / TTM £187.7m on a ~191m-share LSE name trading near the £9.3–£10.4 buyback prints — is the 0.1% a unit/scale bug, and which sterling FCF should replace Yahoo before endorsing cheapness, dividend cover (gross 3.64× / net 2.32×), or the strong_buy?",
+    "Yahoo FY2025 revenue £2,520m and NI £136.6m are still well below FY2022 NI £208.6m / EBIT £241m after the FY2024 trough (£2,282m / £122.0m) — is the +10.4% FY2025 recovery organic like-for-like merchanting or acquisition/mix, and do statutory vs adjusted margins confirm a durable upturn or a still-shrunk cycle?",
+    "Kalkine (1 Sep 2026) asks whether merchanting margins are under pressure again, and Nov 2025 Woodie’s coverage cited ‘easing momentum’ (−3%) — what do the FY2025 annual report and the July 2026 trading update (news: higher H1 revenue + new £25m buyback) actually say on UK vs Ireland vs Iberia like-for-like volume, price/deflation, and margin vs the 15 May 2026 ‘resilient Q1 / raised outlook’ that still saw the shares slide?",
+    "Housing/RMI cyclicality is the core earnings driver, yet cyclical_exposure_detected and cash_conversion_overlay are false; inventory is ~£395m and receivables rose in the Yahoo FY2025 cash-flow — what do filings say about volume sensitivity, working-capital absorption, and FCF if UK/Irish rates stay higher for longer?",
+    "Ordinary shares fell 223.4m (FY2022) → 197.3m (FY2024) → 191.3m (FY2025) → TVR 187.5m (31 Jul 2026) with Yahoo FY2025 buybacks £56.7m and a live £25m programme from 30 Jun 2026 — how much of the 5.1% earnings-growth input, Piotroski ‘no dilution’ pass, and 12.4× P/E is buyback-inflated, and can dividends (£72.6m cash paid) plus buybacks be funded on filing FCF after leases and M&A?",
+    "Yahoo FY2025 cash+ST investments £496m vs total debt £619m of which leases £397m and financial debt ~£222m looks like net cash ex-IFRS-16, while screen D/E is 37.6% and dual_leverage_display is false — what is group net cash/(debt) on the annual-report definition, and is Graham Defensive’s current ratio 2.11 inventory-heavy?",
+    "Mercaluz completed 1 May 2026 and the 11 Jun 2026 Capital Markets Event set 2030 growth/M&A ambitions (news: European distribution platform) while ROE is 8.4% and Buffett/Moat/Quality Value failed on ROE, thin margins, and FCF yield — is Iberian/M&A growth value-accretive or a reinvestment of a cash pile that the screen is already treating as a GARP/quality compounder?",
+    "The screen is a 1-week new strong_buy (conviction 0.475, RSI 56, price only +0.11% vs SMA200) with core/tactical limits £969.14 / £924.81 while late-August buybacks printed ~£10.31–£10.42 — has the name already rerated through the limit ladder, and is the signal stale versus the July H1 trading print?",
+    "Companies House filings use UK number 02886378 on an Irish-domiciled plc listed as a CDI (Investegate path grafton-group-ut-cdi---gftu) — are those CH ‘full accounts’ the Grafton Group consolidation or a UK establishment/subsidiary that must not be used as group figures?",
+    "No H1 2026 statutory interim body is in the catalog as of this snapshot (only H1 2025 IR interims and a July 2026 trading-update PDF tagged interim) — what FY2026 guidance, dividend, and cash/net-debt figures remain unknown until a true H1 2026 results RNS exists?"
+  ],
+  "meta_reflection": [
+    {
+      "topic": "evidence_ladder",
+      "observation": "Filings-first order is adequate in principle (77 local bodies; 9 annual + 5 interim + 3 trading_update). It is not adequate when period tags are wrong: the only period=annual IR body is the 2025 Annual Report, while FY2025 Final Results, the FY presentation, the CME26 deck, and the July 2026 trading-update PDF are all tagged period=interim. The only true statutory interim is H1 2025 (30 Jun 2025). yahoo_quarterly_cashflow sits on the ladder but is empty (TTM suppressed); alternate_news is a dead step. Trading updates and the Mercaluz completion are first-class for a merchanting/M&A story but sit outside the annual/interim assignment rule.",
+      "priority": "high"
+    },
+    {
+      "topic": "task_schema",
+      "observation": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the May 2026 Q1 trading update, the June CME/2030 RNS, Mercaluz completion, or the 30 Jun £25m buyback-programme RNS. summarize_filing_body cannot carry period=annual|interim|trading_update|corporate_action, so the director must smuggle the July 2026 trading update in as ‘interim’ because it is catalogued that way and is the only 2026 intra-year operating body. No task type exists to reconcile the three FCF bases or to cluster ~50 Transaction-in-Own-Shares RNSs.",
+      "priority": "high"
+    },
+    {
+      "topic": "methodology",
+      "observation": "The screen emits strong_buy (11/22, 5 families including quality/GARP/dividend) while FCF Yield fails at 0.1% despite £168–206m FCF — a contradiction that should have tripped fcf_basis_overlay / divergence_flagged (both false). cyclical_exposure_detected is false on a UK/Irish builders-merchant; interim_quality_overlay is false despite empty Yahoo quarterlies and no H1 2026 statutory interim; cash_conversion_overlay is false despite FCF definitions disagreeing. Quality/GARP can pass while Buffett/Moat/Quality Value fail on the same 8.4% ROE. The director–worker loop is being asked to qualitatively veto a mechanically clean headline that the overlays failed to brake.",
+      "priority": "high"
+    },
+    {
+      "topic": "monitoring",
+      "observation": "weeks_at_signal=1 / stability=new / conviction=0.475 already mark a fresh print, but there is no watch schema for: next true H1 2026 results (absent from catalog on 4 Sep 2026), remaining £25m buyback capacity, Mercaluz integration, CME 2030 KPI checkpoints, or UK/Irish merchanting LFL. RSI 56 + MACD-weakening in the action_note is not a substitute for those monitors. A 1-week strong_buy with limits below live buyback prints needs a price-vs-signal freshness check, not just a stability label.",
+      "priority": "high"
+    },
+    {
+      "topic": "memo_structure",
+      "observation": "A generic FINANCIAL REVIEW / RISKS split will blend UK Selco-type merchanting, Irish Woodie’s, and Iberian distribution and will not force like-for-like vs acquired growth, statutory vs adjusted, or cash vs lease-adjusted net debt. Without an explicit CAPITAL RETURNS slot, workers will treat the daily £25m buyback flood as news colour rather than a denominator/FCF-cover fact. No required slot for CH-entity hygiene (UK 02886378 vs Irish group) or for FCF-definition reconciliation. Director catalog pass can form these questions without drafting the memo.",
+      "priority": "medium"
+    },
+    {
+      "topic": "other",
+      "observation": "filings_index.body_path values point at docs/data/research/GFTU.L/sources/... rather than this trial snapshot. ~50 of 60 period=other bodies are Transaction in Own Shares; news_manifest (104 items) is the same buyback reprints (TipRanks/Globe/Kalkine) plus GROUF OTC dual-listing earnings-call mirrors. financials_annual.json is Yahoo-shaped (FY2021–2025; quarterly_income/quarterly_cashflow empty; FY2025 income omits EPS/share count that FY2021 has). ir_presentation_metrics.json exists in the snapshot but is outside the director’s allowed read set and has no worker type. NCAV missing is expected, not a GFTU-specific hole.",
+      "priority": "medium"
+    }
+  ],
+  "procedural_suggestions": [
+    {
+      "area": "ingest",
+      "summary": "Retag IR FY results PDFs as period=annual, IR results decks as presentation not interim, CME decks as other/capital_markets, and Trading_Update_*.pdf as trading_update. Do not treat UK Companies House 02886378 as the Irish Grafton Group plc consolidation without an issuer/entity check. Point body_path at the trial snapshot tree. Deduplicate daily Transaction-in-Own-Shares before counting filing coverage.",
+      "priority": "high"
+    },
+    {
+      "area": "scoring",
+      "summary": "Fail-closed when FCF yield is ~0.1% while canonical FCF is £100m+: treat that as a unit/FX error, not a model miss. Set fcf_definition_divergence whenever company_adjusted / filing_aligned / TTM disagree (£168.3m / £205.6m / £187.7m here). Enable cyclical/housing-RMI and cash-conversion overlays for builders-merchants. Surface dual leverage (IFRS-16 D/E vs ex-lease net cash). Do not pass quality/GARP on 8.4% ROE while moat/Buffett fail on the same ROE without a documented exception.",
+      "priority": "high"
+    },
+    {
+      "area": "prompt",
+      "summary": "Require annual/interim workers to extract reporting currency and entity (group vs UK 02886378); UK vs Ireland vs Iberia LFL vs acquired; statutory vs adjusted EBIT/EPS; OCF/capex/FCF definition; cash vs investments vs leases vs financial debt; dividend declared vs cash paid and cover vs filing FCF; buyback authorisation vs cash spent vs share count; FY outlook. Require news workers to cluster buyback reprints into one line and keep only Q1 TU, July H1 TU, CME 2030, Mercaluz, and margin/momentum pieces. Treat Kalkine/TipRanks as headline-only.",
+      "priority": "high"
+    },
+    {
+      "area": "sources",
+      "summary": "Ingest the H1 2026 statutory interim when published (catalog has H1 2025 only; July 2026 is a trading update). Populate alternate_news or drop it from the ladder. Parse interim cash-flow from filing bodies to replace empty Yahoo quarterly_income/quarterly_cashflow instead of only suppressing TTM. Expose ir_presentation_metrics (present here) via a worker type or fold CME/FY slides into the filing task.",
+      "priority": "high"
+    },
+    {
+      "area": "orchestration",
+      "summary": "Select the latest dated annual *results* body (IR Annual Report 2025 ir_b9e18372b456fd3b or FY Final Results ir_c6a7de8af8b2c4c5 — not 2019–2024 CH). When no H1 2026 statutory interim exists, allow the latest trading_update as the second filing task rather than forcing stale H1 2025. Raise the cap or add trading_update / rns_cluster types so CME, Mercaluz, and buyback-programme RNSs are not dropped.",
+      "priority": "medium"
+    },
+    {
+      "area": "schema",
+      "summary": "Allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action. Add reporting_perimeter (group vs CH subsidiary), fcf_basis_used, and housing_rmi_cyclical flags. Remap filings_index.body_path into the trial sources/ tree. Validate FCF-yield inputs against listing CCY and a sanity band vs market cap.",
+      "priority": "medium"
+    },
+    {
+      "area": "monitoring",
+      "summary": "For weeks_at_signal<=1 merchanting strong_buys, require the memo to compare live price vs limit ladder vs latest buyback print, and emit watches (next H1 results, remaining buyback, Mercaluz integration, UK/IE LFL). Do not treat stability=new as a reason to skip those checks.",
+      "priority": "medium"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "gftu_annual_fy2025",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/ir_b9e18372b456fd3b.txt",
+      "focus": "IR Annual Report 2025 (period=annual; Grafton-Annual-Report-2025.pdf). This is the group annual body — do not treat Companies House 02886378 as a substitute. Extract sterling group revenue, statutory vs adjusted operating profit/EBIT/EPS, OCF, capex, FCF definition, cash vs short-term investments, financial debt vs IFRS-16 leases vs reported net cash/(debt), dividend declared vs cash paid, buybacks and share count, pension, inventory/receivables, goodwill, provisions, UK vs Ireland vs other segment LFL vs acquired, and risk-factor/outlook language. Prefer these figures over Yahoo (FY2025 Yahoo revenue £2,519.6m, NI £136.6m, OCF £251.8m, FCF £205.6m, buybacks £56.7m, dividends paid £72.6m; screen company-adjusted FCF £168.3m). Do not open other files.",
+      "priority": 1
+    },
+    {
+      "id": "gftu_interim_july2026_tu",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/ir_3ae4cc4aa2a00721.txt",
+      "focus": "July 2026 Trading Update PDF (catalogued period=interim; not a statutory H1 2026 interim — none is in this snapshot; not H1 2025 ir_7216cf1b38542321; not FY2025 Final Results ir_c6a7de8af8b2c4c5). Extract any H1 2026 revenue/profit/margin/cash/net-debt/LFL by geography; guidance vs the May 2026 raised outlook if this body itself cites it; £25m buyback language; Mercaluz/Iberia comments; housing/RMI/margin wording. Prefer these figures over Yahoo (quarterly_income and quarterly_cashflow empty; TTM cashflow suppressed). Do not invent a full H1 2026 income statement if the PDF is only a trading update.",
+      "priority": 1
+    },
+    {
+      "id": "gftu_screen_context",
+      "type": "screen_context",
+      "target": "screening_snapshot.json",
+      "focus": "Explain strong_buy 11/22, composite 0.712, sector-relative 0.808, families cheapness/quality/dividend/GARP/risk versus failed models (especially FCF Yield 0.1%, Lynch PEG 2.43, Buffett/Moat/Quality Value on 8.4% ROE and thin margins). Flag conviction 0.475 / 1-week new signal, neutral timing, RSI 56, price +0.11% vs SMA200, trade-plan limits £969.14 / £924.81, Piotroski 8/9 current-ratio-improving fail, all overlays false including cyclical and fcf_basis, TTM cashflow suppressed, FCF bases company_adjusted £168.3m / filing_aligned £205.6m / screen_ttm £187.7m with divergence_flagged false, D/E 37.6%, current ratio 2.11, earnings growth 5.1%. List which screen numbers must be replaced by filing-body sterling and which claims are unsafe until FCF-yield units are reconciled.",
+      "priority": 2
+    },
+    {
+      "id": "gftu_news_digest",
+      "type": "digest_news_manifest",
+      "target": "news_manifest.json",
+      "focus": "Cluster ~104 headlines: keep Q1 2026 resilient trading / raised outlook / share slide (15 May); CME 2030 growth/M&A (11 Jun); £25m buyback launch (30 Jun) as a single programme note — collapse TipRanks/Globe/Kalkine daily repurchase reprints; July 13 ‘higher first-half revenue + new £25m buyback’; Mercaluz/Iberian expansion (1 May); Kalkine margin-pressure (1 Sep) and rates-reversal (27 Aug) as questions not facts; Nov 2025 Woodie’s easing-momentum. Discard ETF lists, GROUF-only filler unless it clearly reports Grafton Group plc, and Simply Wall St / undervalued-at-£8.28 pieces as valuation colour only. Google News items are RSS titles — do not invent article-body facts.",
+      "priority": 3
+    },
+    {
+      "id": "gftu_gap_inventory",
+      "type": "gap_inventory",
+      "target": "source_inventory",
+      "focus": "Catalog thin/missing steps: yahoo_quarterly_cashflow empty, yahoo_quarterly_income empty (inside financials_annual.json), alternate_news absent, TTM cashflow suppressed. Note no H1 2026 statutory interim body. Highest-value unread bodies the 5-cap omitted: FY2025 Final Results filings/bodies/ir_c6a7de8af8b2c4c5.txt; H1 2025 interim ir_7216cf1b38542321.txt; May 2026 Trading Update db602b475451c6b6.txt; July 2026 RNS twin 8a4381478b93c824.txt; CME RNS d1505b7c2147095c.txt and deck ir_f5e30b27615e87cf.txt; Mercaluz completion e8c18785a6be3251.txt; Share Buyback Programme f91caa386b5eb78c.txt; latest CH ch_02886378_MzUyNjUwMzUyNWFkaXF6a2N4.txt (entity risk). Note ir_presentation_metrics.json and macro_context.json / screen_run_manifest.json are present but unused; filings_index.body_path points outside this trial tree. Do not invent replacement sources; state what the memo must leave as unknown (H1 2026 statutory P&L/cash-flow, CME numeric targets, Mercaluz consideration/returns).",
+      "priority": 4
+    }
+  ],
+  "director_agent_id": "agent-474ac33a-a6db-4172-8f93-33e6c5af9beb"
+}

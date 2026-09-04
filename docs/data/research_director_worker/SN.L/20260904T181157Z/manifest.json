@@ -1,0 +1,681 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "ticker": "SN.L",
+  "company_name": "Smith & Nephew plc",
+  "signal": "strong_buy",
+  "run_id": "20260904T181157Z",
+  "output_dir": "docs/data/research_director_worker/SN.L/20260904T181157Z",
+  "director_model": "grok-4.6",
+  "worker_model": "composer-2.5",
+  "estimated_cost_usd": 3.66,
+  "director_agent_ids": {
+    "plan": "agent-9087f5c5-3bcd-442c-a501-0a0b4d08b9fe",
+    "synthesis": "agent-a2431840-6849-416a-90f5-7e59386d2b49"
+  },
+  "task_plan": {
+    "schema_version": 1,
+    "orchestration_version": 1,
+    "source": "director",
+    "open_questions": [
+      "The filings catalog has no FY annual-report / 20-F body and no H1 or Q2 2026 results RNS — only a 6 May 2026 Q1 trading update plus product RNSs mis-tagged annual/interim — so can the screen’s Strong Buy (P/E 19.4, P/B 2.3, FCF Yield, Piotroski, Earnings Quality) be endorsed from Yahoo FY2025 (revenue 6,164m, NI 412m→625m, operating income 860m→857m flat, FCF 606m→852m, OCF 987m→1,285m) plus unread Q1 colour, or must trade wait on statutory FY2025 notes and the Aug 2026 H1/Q2 RNS that news says exists?",
+      "Screen key_metrics FCF is 1,059m with cashflow_metrics/fcf null and TTM cashflow suppressed (quarterly_cashflow_empty), while Yahoo FY2025 FCF is 852m (OCF 1,285m − capex 433m) and inventory release +208m flattered conversion — which USD FCF definition (statutory vs trading/adjusted, leases, one-off WC) underpins FCF Yield / quality, and does Q2 softness unwind the 2025 WC release?",
+      "Yahoo FY2025 NI +52% and diluted EPS 0.47→0.72 while operating income was flat (857m vs 860m) after unusual items fell 203m→63m and restructuring/M&A 184m→62m — is the earnings-quality / GARP / ROE 11.9% pass a transformation residual and lower specials rather than operating momentum, and what do missing FY notes say on trading profit vs statutory?",
+      "News-only Q2 2026 (5–9 Aug) cites underlying revenue growth 1.6% below management expectations, with Sports Medicine & ENT offset by US Orthopaedics and Advanced Wound Bioactives / skin-substitute headwinds, after a Nov 2025 “plunges on weaker US knees” print — has FY2026 guidance been cut, held, or made H2-launch-dependent (TESSA, CORI XT, LANDMARK/hips, LYNX, ALLEVYN), and does that break the 9-week persistent Strong Buy?",
+      "healthcare_overlay, healthcare_price_erosion_overlay, cash_conversion_overlay and interim_quality_overlay are all false on a dual-listed medtech name — what do unread Q1/H1 language and news (hospital-budget squeeze, reimbursement, competition vs Stryker/Zimmer) imply for US knee mix, CMS/skin-substitute reset, China VBP, and tariffs that the quality/GARP stack cannot see?",
+      "CFO John Rogers resigned mid-Aug 2026 for Baxter (shares −3.5% same day; still in headlines 4 Sep), alongside Orthopaedics leadership awards, CEO multi-year grants tied to a 2026 plan, “remuneration backlash”, and Cevian at 14.21% voting — is this orderly succession plus activist alignment, or execution/governance risk into a product-heavy H2 that the Financial Health pass ignores?",
+      "Yahoo FY2025 returned 502m buybacks + 330m cash dividends against FCF 852m while net debt stayed ~2.55bn (total debt 3,327m, cash 557m, D/E screen 73%), treasury shares 4.2m→28.4m and ordinary shares 873.5m→849.4m; news says a $250m tranche of a larger programme completed Aug 2026 — is the 2.7% yield and buyback-inflated EPS/ROE covered after Q2, and what is company net-debt vs IFRS-16 vs the screen D/E?",
+      "Goodwill + intangibles 3,990m vs tangible book 1,299m, inventory still 2,117m, associates 7m→121m, and no indexed statutory notes — what impairment, set/instrument capitalisation, litigation, or pension (84m) language is missing, and does P/B 2.3 / Financial Health overstate asset quality?",
+      "ADS printed a 52-week low at 28.55 USD on 3 Sep while the screen is 9-week persistent Strong Buy with conviction 0.93, timing neutral, RSI 38, price −0.12% vs SMA200 and price<50<200; trade-plan limits are £1,039.02 / £997.04 (stop £936.58, TP £1,120.44) but trade_plan is null — is cheapness already in the tape after Bernstein’s May PT cut, or is the signal stale versus live LSE/ADS prices?",
+      "Sep 2026 “portfolio strategy redraw” and Mar 2026 “transformation plan wraps up / ambitious strategy” headlines sit next to product launches and Cevian — what mix shift (Sports Med/ENT vs Orthopaedics vs Wound) is contracted versus promotional, and does it change the 6%-class growth story the screen cannot see?"
+    ],
+    "meta_reflection": [
+      {
+        "topic": "evidence_ladder",
+        "observation": "Filings-first order is adequate only if period tags are true. For SN.L they are not: period_coverage annual=1/interim=1/trading_update=1 counts a Jul 2024 CATALYSTEM 510(k) as annual and a Jul 2026 TESSA FDA De Novo as interim, while the sole real operating RNS (Q1 2026 TU, 6 May) sits below empty yahoo_quarterly_cashflow on the ladder. No FY results, 20-F, or H1/Q2 2026 body is indexed despite news of an 5 Aug Q2 call. alternate_news and ir_presentation_metrics are absent; Yahoo quarterlies empty is expected for a USD half-year reporter, not equivalent to a missing statutory pack. Axis Bank “Listing/Allotment of SN” rows show ticker-collision ingest beating the ladder.",
+        "priority": "high"
+      },
+      {
+        "topic": "methodology",
+        "observation": "The screen emits strong_buy (8/22, five families, conviction 0.93, 9w persistent) on P/E 19.4 / FCF 1,059m while Yahoo FY FCF is 852m, operating income is flat, TTM cashflow is suppressed, and every healthcare/reimbursement/cash-conversion/interim overlay is false. Prior-loop research text is already spliced into action_note/summary (repeated Accumulate/partially-confirms boilerplate), so the director–worker trial is asked to re-verify a Strong Buy whose snapshot has been contaminated by an earlier memo that already admitted missing annual/interim filings. Qualitative veto is doing the work sector overlays failed to do.",
+        "priority": "high"
+      },
+      {
+        "topic": "task_schema",
+        "observation": "Mandatory annual+interim summarize_filing_body plus news+screen+gap consumes the five-task cap on two product RNSs that are not results. There is no type or period flag for trading_update, 20-F, rns_cluster (PDMR/buyback/TVR), or “catalog_period_mismatch”. gap_inventory can only list that the Q1 TU — the only indexed financial body — and the unpublished H1 RNS were dropped. Workers cannot be told to treat a 510(k) as FY2025.",
+        "priority": "high"
+      },
+      {
+        "topic": "monitoring",
+        "observation": "weeks_at_signal=9 / stable / conviction 0.93 looks like a settled Strong Buy, but there is no watch schema for: ingest of the Aug 2026 H1/Q2 RNS (news-visible, catalog-absent), FY2026 guidance vs Q2 1.6%, US knee / skin-substitute run-rate, CFO successor and Cevian 14.21%, remaining buyback vs £1,039/£997 ladder, ADS 52-week low vs LSE print, or post-4 Sep RNS. RSI 38 + SMA200-flat timing=neutral is not a substitute. News freshness reaches 4 Sep; filings_index fetched 17:25Z the same day still lacks the August results body — a same-day coverage hole, not a stale-data hole.",
+        "priority": "high"
+      },
+      {
+        "topic": "memo_structure",
+        "observation": "A generic FINANCIAL REVIEW / RISKS split will blend Yahoo USD statutory with company trading-profit/FCF and will not force Orthopaedics vs Sports Med & ENT vs Advanced Wound Management, US knees vs rest-of-world, skin-substitute reimbursement, FCF 1,059m vs 852m, ADS vs LSE price, or an explicit PRIMARY-FILING GAP box. Without SEGMENT MIX, REIMBURSEMENT, CAPITAL RETURNS, GUIDANCE PATH (Q1 TU → missing H1 → news Q2), and GOVERNANCE/ACTIVIST slots, workers will treat Kalkine SEO and SharkNinja/Chilean .SN collisions as colour. Director catalog pass can form these questions without drafting the memo.",
+        "priority": "medium"
+      },
+      {
+        "topic": "other",
+        "observation": "filings_index.body_path values point at docs/data/research/SN.L/sources/... rather than this trial snapshot tree. sources_used are companies_house + investegate_resolved only — no IR allowlist, no SEC 20-F despite NYSE:SNN dual-list. CH hit is 2007 legacy accounts. news_manifest query `SN stock UK` pulls SharkNinja (NYSE:SN), options widgets, and Latin .SN tickers. financials_annual.json is Yahoo-shaped (FY2021–2025; no root currency field though figures are USD; quarterly_income/quarterly_cashflow empty). screening_snapshot.failed_models is [] despite 14/22 not passing; trade_plan is null while summary cites limits; healthcare flags off. Snapshot research_* fields already pre-answer the trial.",
+        "priority": "medium"
+      }
+    ],
+    "procedural_suggestions": [
+      {
+        "area": "ingest",
+        "summary": "Do not tag product 510(k)/De Novo/GNW launches as period=annual|interim. Require headline+body classifiers for results/trading_update vs product vs PDMR. Drop or quarantine non-issuer collisions (Axis Bank “SN”, SharkNinja, Chilean .SN). Fetch the H1/Q2 2026 RNS and the FY2025 annual report / 20-F when dual-listed. Point body_path at the trial snapshot tree. Deprioritise 2007 CH accounts. Deduplicate REG Holding(s)/PDMR rows that share URLs.",
+        "priority": "high"
+      },
+      {
+        "area": "scoring",
+        "summary": "Fail-closed or flag when screen FCF (1,059m) disagrees with Yahoo/filing FCF (852m) while TTM is suppressed and cashflow_metrics is null. Turn on healthcare_price_erosion / reimbursement overlays for Orthopaedics + wound-bioactives names. Do not treat 8/22 + empty failed_models as a clean five-family pass. Isolate prior-memo text from action_note so conviction 0.93 is not recycled research boilerplate. Compare LSE limits to live ADS and LSE prints before labelling cheapness persistent.",
+        "priority": "high"
+      },
+      {
+        "area": "prompt",
+        "summary": "If a worker’s target headline is a product clearance, require them to state “not a results RNS”, extract only on-page claims, and forbid inventing FY/H1 figures. Require news workers to drop SharkNinja/options/.SN collisions, collapse Kalkine/AD HOC/Stock Titan duplicates, and treat Google News items as titles only. Require screen workers to list FCF 1,059m vs 852m, overlay-false, and missing statutory pack as unsafe claims. Do not let workers cite prior research.json as a source.",
+        "priority": "high"
+      },
+      {
+        "area": "sources",
+        "summary": "Promote the 6 May 2026 Q1 TU to first-class operating evidence. Ingest the Aug 2026 H1/Q2 results RNS and FY2025 annual/20-F (news proves they exist). Parse H1 cash-flow from that body instead of only suppressing TTM. Fire the IR allowlist for results slides. Populate alternate_news or drop it from the ladder. Keep product RNSs as innovation evidence, not period coverage.",
+        "priority": "high"
+      },
+      {
+        "area": "orchestration",
+        "summary": "When tagged annual/interim are product RNSs, do not spend the two mandatory filing slots on them if a trading_update body exists — or raise the cap / add trading_update and period_mismatch types so Q1 TU is assigned. Keep gap_inventory mandatory when H1/FY bodies are missing. Stop seeding screening_snapshot.research_* from the previous SN.L memo before the trial starts.",
+        "priority": "high"
+      },
+      {
+        "area": "schema",
+        "summary": "Let summarize_filing_body carry period=annual|interim|trading_update|product|other and a catalog_mismatch bool. Add reporting_currency, listing_pair (SN.L/SNN), fcf_basis_used, healthcare_reimbursement_flag, and failed_models populated. Remap body_path into the trial sources/ tree. Treat empty Yahoo quarterlies on half-year USD reporters as expected, not the same thin-step severity as a missing H1 RNS.",
+        "priority": "medium"
+      },
+      {
+        "area": "monitoring",
+        "summary": "For a 9-week medtech Strong Buy after a news-visible Q2 miss, CFO exit, ADS 52-week low, and Cevian 14%+, require watches: ingest H1/Q2 RNS, FY2026 guidance path, US knees / skin-substitute, CFO successor, remaining buyback vs £1,039/£997, dual-list price. Do not treat RSI-oversold + SMA200-flat as clearance to skip those checks. Alert when filings_index fetch time post-dates a results headline that has no body.",
+        "priority": "medium"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "sn_annual_catalystem_510k",
+        "type": "summarize_filing_body",
+        "target": "filings/bodies/85fc7018d796b25f.txt",
+        "focus": "Catalog period=annual (Investegate, 2024-07-16, priority 100) but the headline is a CATALYSTEM Primary Hip 510(k) clearance — almost certainly not FY results. Confirm whether this body is product/regulatory news or contains any statutory FY figures. Extract only what is on the page: device scope, US clearance timing, any revenue/guidance/launch-phasing claims, competitive or risk language. Do not invent FY2025 Yahoo figures (revenue 6,164m, NI 625m, FCF 852m) or treat this as an annual report. If it is not a results RNS, say so in one line and list any hip/US-knee commercial claims relevant to later Orthopaedics weakness. Do not open other files.",
+        "priority": 1
+      },
+      {
+        "id": "sn_interim_tessa_denovo",
+        "type": "summarize_filing_body",
+        "target": "filings/bodies/4f3a5fd5c7fa1274.txt",
+        "focus": "Catalog period=interim (Investegate, 2026-07-29, priority 80) but the headline is TESSA Spatial Surgery FDA De Novo — almost certainly not H1/Q2 2026 results. Confirm body type. Extract only on-page claims: indication, De Novo vs 510(k), Sports Medicine positioning, any revenue/uptake/timing/reimbursement language, and forward-looking risk wording. Do not invent H1/Q2 figures or the news-cited 1.6% underlying growth. If this is not an interim results RNS, say so and note it does not close the missing Aug 2026 results gap. Do not open other files.",
+        "priority": 2
+      },
+      {
+        "id": "sn_screen_context",
+        "type": "screen_context",
+        "target": "screening_snapshot.json",
+        "focus": "Explain strong_buy 8/22, composite 0.7505, sector-relative 0.719, families cheapness/quality/dividend/GARP/risk, passed_models Graham Enterprising / FCF Yield / Neff PEGY / Dividend Growth / Piotroski / Composite Value / Earnings Quality / Financial Health. Flag failed_models=[] despite 14 models not passing; healthcare_* / cash_conversion / interim_quality / fcf_basis overlays all false; data_quality 20/20; conviction 0.935 / 9w persistent / stable since 2026-08-05; timing=neutral, RSI 37.6, price −0.12% vs SMA200, price<50<200; trade_plan null vs summary limits £1,039.02 / £997.04 (stop £936.58, TP £1,120.44); key_metrics P/E 19.4, P/B 2.3, yield 2.7%, ROE 11.9%, FCF 1,059m vs Yahoo FY2025 FCF 852m / OCF 1,285m; D/E 73%; TTM cashflow suppressed; snapshot research_verdict already accumulate/partially-confirms with duplicated action_note boilerplate. List which screen numbers must be replaced by filing-body USD (FY/H1 bodies absent) and which claims are unsafe until FCF 1,059 vs 852, flat operating income, Q2 1.6% (news only), reimbursement overlays, dual-list price vs limits, and CFO/Cevian items are reconciled.",
+        "priority": 3
+      },
+      {
+        "id": "sn_news_digest",
+        "type": "digest_news_manifest",
+        "target": "news_manifest.json",
+        "focus": "Cluster 115 headlines; keep issuer-specific items only. Material clusters: 5–9 Aug 2026 Q2 call (1.6% underlying, US Orthopaedics + Advanced Wound Bioactives / skin substitutes vs Sports Med & ENT); 19–20 Aug CFO John Rogers exit to Baxter and 3.5% drop, still scrutinised 4 Sep; 3 Sep ADS 52-week low 28.55 USD; 12–13 Aug Cevian 14.21% and $250m buyback completion; 2 Sep shareholder consultation / CEO and Orthopaedics share awards; 1 Sep portfolio-strategy redraw; 28 Aug remuneration backlash; 26 May Bernstein PT cut after Q1; 2 Mar transformation-plan wrap-up; Nov 2025 US-knees plunge; product/IR items (TESSA, CORI XT, LYNX, FLOW FLEXTEND, ASC platform, Imperial robotics). Collapse Kalkine / AD HOC / Stock Titan / TradingView REG duplicates into one tone line. Discard SharkNinja (NYSE:SN), Chilean .SN tickers, options-widget pages, and generic UK-healthcare pairings (Haleon, Hikma, ConvaTec) unless they state a SN.L fact. Google News items are RSS titles — do not invent article-body or statutory figures.",
+        "priority": 4
+      },
+      {
+        "id": "sn_gap_inventory",
+        "type": "gap_inventory",
+        "target": "source_inventory",
+        "focus": "Catalog thin/missing steps: yahoo_quarterly_cashflow empty, yahoo_quarterly_income empty (inside financials_annual.json), ir_presentation_metrics absent, alternate_news absent, TTM cashflow suppressed. Period coverage annual=1 / interim=1 / trading_update=1 is misleading: tagged annual is CATALYSTEM 510(k) 85fc7018d796b25f.txt (Jul 2024); tagged interim is TESSA De Novo 4f3a5fd5c7fa1274.txt (Jul 2026); neither is a results RNS. Highest-value unread or omitted bodies (do not open them): Q1 2026 Trading Update filings/bodies/b082b819f46431ce.txt — the only indexed financial RNS, dropped by the five-task cap; no FY2025 annual / 20-F / H1 or Q2 2026 results body exists in this pack despite 5 Aug 2026 earnings-call headlines. Also unused/contaminated: 2007 CH accounts ch_05579759_MTg1MzIxMjk4YWRpcXprY3g.txt; Axis Bank listing/allotment 2bfab06e2d3702a4.txt and 35fcd85e6ad8464e.txt; product others (ALLEVYN, CORI XT, LYNX, Imperial). Note filings_index.body_path points outside this trial tree; macro_context.json, screen_run_manifest.json, news_batch_* and snapshots are present but unused. State what the memo must leave unknown until those sources are assigned: statutory FY2025 notes, H1/Q2 2026 numbers and guidance, intra-year cashflow, IR-slide KPIs, and any post-4 Sep RNS.",
+        "priority": 5
+      }
+    ],
+    "director_agent_id": "agent-9087f5c5-3bcd-442c-a501-0a0b4d08b9fe"
+  },
+  "worker_results": [
+    {
+      "task_id": "sn_annual_catalystem_510k",
+      "task_type": "summarize_filing_body",
+      "status": "completed",
+      "findings": [
+        "This is not a statutory FY results RNS or annual report; it is a product/regulatory announcement of US FDA 510(k) clearance for the CATALYSTEM Primary Hip System (source: /workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/85fc7018d796b25f.txt).",
+        "Device scope: primary total hip arthroplasty stem for evolving primary hip surgery needs, including increased anterior-approach adoption and Ambulatory Surgery Centre (ASC) use; shorter, proximally filling triple-taper stem with uniform proximal loading and reduced distal geometry, suitable for anterior approach but stated as suitable for all approaches (source: /workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/85fc7018d796b25f.txt).",
+        "US clearance: Smith+Nephew received 510(k) clearance from the United States Food and Drug Administration for CATALYSTEM Primary Hip System; announcement framed as received “today” with no explicit calendar date in the body (source: /workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/85fc7018d796b25f.txt).",
+        "Commercial positioning: complements existing hip portfolio; builds on POLAR3 clinical heritage; integrates with proprietary OXINIUM Technology and CORI Surgical System robotics platform; single modular tray tailored to surgical approach for ASC efficiencies (shelf space, sterilisation costs) (source: /workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/85fc7018d796b25f.txt).",
+        "ACCUBROACH Technology (proprietary, patent-pending) claims reproducibility between broach and implant for predictable stem seating (source: /workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/85fc7018d796b25f.txt).",
+        "Market/segment language (no Smith+Nephew revenue impact stated): segment described as rapidly growing at compound annual growth rate >10%, fitting diverse patient anatomies; shift toward shorter proximally filling stems for direct anterior approach (source: /workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/85fc7018d796b25f.txt).",
+        "No revenue guidance, launch phasing, sales targets, or Orthopaedics division performance figures appear in this release (source: /workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/85fc7018d796b25f.txt).",
+        "No US knee product claims; content is hip-only (CATALYSTEM Primary Hip System) (source: /workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/85fc7018d796b25f.txt).",
+        "Risk language is generic boilerplate forward-looking statements (revenue growth, trading margins, market trends, pipeline, competition, regulatory/reimbursement, supply chain, litigation, FX, etc.); no product-specific adverse events or competitive naming (source: /workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/85fc7018d796b25f.txt).",
+        "Availability caveat: products may not be available in all markets due to regulatory and/or medical practices; readers directed to Smith+Nephew representative for local availability (source: /workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/85fc7018d796b25f.txt)."
+      ],
+      "figures": [
+        {
+          "metric": "Primary hip segment growth (industry/segment claim, not Smith+Nephew revenue)",
+          "value": ">10% CAGR",
+          "period": "Not specified",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/85fc7018d796b25f.txt",
+          "note": "Describes segment for shorter proximally filling stems; not company sales guidance."
+        },
+        {
+          "metric": "Group annual sales (boilerplate About section)",
+          "value": "$5.5 billion",
+          "period": "2023",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/85fc7018d796b25f.txt",
+          "note": "Historical corporate descriptor only; not FY2025 results and not related to CATALYSTEM launch metrics."
+        }
+      ],
+      "gaps": [
+        "Exact US clearance announcement date not stated in body (only “today”).",
+        "No commercial launch timing, rollout phasing, or US availability start date.",
+        "No revenue, margin, or Orthopaedics division guidance tied to CATALYSTEM.",
+        "No US knee commercial claims in this source.",
+        "No named competitors or quantified market-share impact."
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/85fc7018d796b25f.txt"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-fc7ccb8b-0fdb-40a0-aa64-886a6ae75aa4"
+    },
+    {
+      "task_id": "sn_interim_tessa_denovo",
+      "task_type": "summarize_filing_body",
+      "status": "partial",
+      "findings": [
+        "This is not an interim/H1/Q2 2026 results RNS. It is an Investegate-hosted regulatory/product announcement (dated 2026-07-29 in task metadata) for FDA De Novo classification of the TESSA Spatial Surgery System — it does not close the missing Aug 2026 interim results gap.",
+        "Body type: FDA De Novo clearance announcement for TESSA (Tracking Enabled Spatial Surgery Assistant) Spatial Surgery System, not financial results or trading update.",
+        "Regulatory pathway: FDA granted De Novo classification (not 510(k)). TESSA is described as the first device in a new FDA category for intra-articular orthopedic stereotaxic navigation instruments, establishing a regulatory reference point for future innovations.",
+        "Indication for use: femoral anterior cruciate ligament reconstruction (ACLR) surgery of the knee. The system assists placement and navigation of the femoral tunnel using augmented reality; broader arthroscopic applications are anticipated over time.",
+        "Clinical context cited: femoral malposition (29%) and tibial malposition (11%) are among the most common reasons for ACLR failure (source: Li X et al., Int Orthop 2023, referenced in body).",
+        "Sports Medicine positioning: framed as a generational advance and category-defining spatial surgery solution; positions Smith+Nephew as a leader in personalised, data-enabled, digital Sports Medicine. Quote from Scott Schaffner, President of Global Sports Medicine.",
+        "Technology: preoperative MR/CT scans with cloud-based deep-learning on AWS; NVIDIA AI infrastructure; overlays patient-specific 3D bone model onto live 4K arthroscopic video for real-time navigation. Technology originated from Perceive3D S.A. (University of Coimbra spin-off), acquired by Smith+Nephew.",
+        "Commercial timing: TESSA will be commercially introduced in Q3 2026 with focus on early customer adoption; increased deployment expected in 2027. No revenue, uptake, volume, or reimbursement/pricing language for TESSA.",
+        "No H1/Q2 2026 financial metrics, underlying growth rates, or trading commentary appear in this document.",
+        "Forward-looking statements disclaimer: standard Smith+Nephew boilerplate noting statements may not prove accurate; identifies risks including regulatory approvals, reimbursement decisions, product defects/recalls, litigation, supply chain disruption, competition for personnel, acquisitions, cybersecurity, FX, and other political/economic factors; references Form 20-F; no obligation to update forward-looking statements."
+      ],
+      "figures": [
+        {
+          "metric": "ACLR failure — femoral malposition (cited literature)",
+          "value": "29%",
+          "period": "not stated (referenced meta-analysis)",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/4f3a5fd5c7fa1274.txt",
+          "note": "On-page claim referencing Li X et al. 2023; not Smith+Nephew proprietary data"
+        },
+        {
+          "metric": "ACLR failure — tibial malposition (cited literature)",
+          "value": "11%",
+          "period": "not stated (referenced meta-analysis)",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/4f3a5fd5c7fa1274.txt",
+          "note": "On-page claim referencing Li X et al. 2023; not Smith+Nephew proprietary data"
+        },
+        {
+          "metric": "TESSA commercial introduction",
+          "value": "Q3 2026",
+          "period": "Q3 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/4f3a5fd5c7fa1274.txt",
+          "note": "Early customer adoption focus; no revenue forecast"
+        },
+        {
+          "metric": "TESSA broader deployment",
+          "value": "2027",
+          "period": "FY 2027",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/4f3a5fd5c7fa1274.txt",
+          "note": "Increased deployment expected; no uptake metrics"
+        },
+        {
+          "metric": "Group annual sales (About section)",
+          "value": "$6.2 billion",
+          "period": "2025",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/4f3a5fd5c7fa1274.txt",
+          "note": "Corporate boilerplate; unrelated to TESSA or interim results"
+        }
+      ],
+      "gaps": [
+        "This source is not H1/Q2 2026 interim results; Aug 2026 results gap remains open.",
+        "No revenue, sales, market share, or uptake figures for TESSA.",
+        "No reimbursement, payer coverage, or pricing language.",
+        "No 510(k) pathway discussed — De Novo only.",
+        "No 1.6% underlying growth or any H1 2026 trading metrics (not present in source)."
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/filings/bodies/4f3a5fd5c7fa1274.txt"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-2aa7a2de-bf8f-4e88-a75e-1f2a8c7702f7"
+    },
+    {
+      "task_id": "sn_screen_context",
+      "task_type": "screen_context",
+      "status": "partial",
+      "findings": [
+        "Signal strong_buy with 8/22 models passing (model_count 22, models_passed 8) — docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+        "Composite score 0.7505; sector-relative composite 0.7193362193362194 (~72% in summary text) — same source",
+        "All five factor families pass (5/5): cheapness, quality, dividend, GARP, risk — passed_families field",
+        "Passed models (8): Graham Enterprising, FCF Yield, Neff PEGY, Dividend Growth, Piotroski F-Score, Composite Value, Earnings Quality, Financial Health — passed_models array",
+        "Data integrity gap: failed_models=[] and model_failures={} despite only 8/22 passing (14 models implicitly not passed, not enumerated) — failed_models / model_failures fields",
+        "All requested overlays false: healthcare_overlay, healthcare_price_erosion_overlay, cash_conversion_overlay, interim_quality_overlay, fcf_basis_overlay (plus dividend_yield_overlay, cyclical_exposure_overlay, earnings_basis_overlay, conviction_timing_overlay) — overlay boolean fields",
+        "Data quality 20/20: data_quality_score 1.0, metrics_present 20, metrics_total 20",
+        "Conviction: conviction_score 0.9349, stability_label persistent, weeks_at_signal 9, signal_trend stable, signal_since 2026-08-05 — conviction/timing fields; summary text states Conviction 73% (inconsistent with 0.9349 score)",
+        "Timing neutral (timing_signal neutral, timing_score 0.5); RSI 37.65; price_vs_sma200_pct −0.12%; summary notes downtrend price < 50 < 200 MA — timing/RSI/price fields and summary",
+        "trade_plan is null but summary embeds limits: core 60% £1,039.02, tactical 40% £997.04, stop £936.58, target £1,120.44 — trade_plan vs summary fields",
+        "Key metrics on screen: P/E 19.4, P/B 2.3, Yield 2.7%, ROE 11.9%, FCF 1,059,000,000; summary highlight D/E 73% — key_metrics and summary",
+        "Cashflow layer empty/suppressed: cashflow_metrics null, fcf null, operating_cashflow null; yahoo_quarterly.ttm_cashflow_suppressed true (reason quarterly_cashflow_empty) — cashflow and yahoo_quarterly fields",
+        "research_verdict accumulate (research_confidence 0.68, research_risk_level medium); research_rationale partially confirms Strong Buy citing missing annual/interim filings and Q2 operational softness — research_* fields",
+        "action_note contains duplicated Accumulate/Medium-risk boilerplate (partially confirms repeated three times) plus filing gaps, US knee weakness, reimbursement headwinds, CFO turnover — action_note field",
+        "Screen numbers requiring filing-body USD replacement (FY/H1 bodies absent per research overlay; no numeric screen IDs in source): principally key_metrics.FCF (1,059m) and any FCF Yield / dividend-coverage inputs — key_metrics.FCF is populated while fcf/cashflow_metrics/operating_cashflow are null; P/E, P/B, ROE, Yield likely need annual/interim filing confirmation but are not flagged with explicit screen IDs in this source",
+        "Claims unsafe until reconciled (per source narrative and null/suppressed fields): improving FCF / FCF recovery thesis; FCF 1,059m vs external Yahoo FY2025 FCF 852m / OCF 1,285m (Yahoo figures not in this source); flat operating income (not present); Q2 1.6% growth (news-only, not in snapshot); reimbursement headwinds (mentioned, no overlay fired); dual-list price vs summary trade limits (trade_plan null); CFO turnover / Cevian items (CFO mentioned in action_note, Cevian not in source); full-year accounts and H1 verify-before-trade"
+      ],
+      "figures": [
+        {
+          "metric": "models_passed",
+          "value": "8/22",
+          "period": "screen run",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": "model_count 22"
+        },
+        {
+          "metric": "composite_score",
+          "value": "0.7505",
+          "period": "screen run",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": "summary rounds to 75%"
+        },
+        {
+          "metric": "sector_composite_score",
+          "value": "0.7193",
+          "period": "screen run",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": "summary states sector-relative 72%"
+        },
+        {
+          "metric": "families_passed",
+          "value": "5/5 (cheapness, quality, dividend, GARP, risk)",
+          "period": "screen run",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": null
+        },
+        {
+          "metric": "data_quality",
+          "value": "20/20",
+          "period": "screen run",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": "data_quality_score 1.0"
+        },
+        {
+          "metric": "conviction_score",
+          "value": "0.9349",
+          "period": "as at snapshot",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": "9 weeks persistent, stable since 2026-08-05; summary text says 73%"
+        },
+        {
+          "metric": "RSI_14",
+          "value": "37.65",
+          "period": "as at snapshot",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": "summary rounds to 38"
+        },
+        {
+          "metric": "price_vs_sma200_pct",
+          "value": "-0.12%",
+          "period": "as at snapshot",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": "below 200-day MA; price < 50 < 200 per summary"
+        },
+        {
+          "metric": "P/E",
+          "value": "19.4",
+          "period": "key_metrics",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": null
+        },
+        {
+          "metric": "P/B",
+          "value": "2.3",
+          "period": "key_metrics",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": "summary highlight P/B=2.34"
+        },
+        {
+          "metric": "Yield",
+          "value": "2.7%",
+          "period": "key_metrics",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": null
+        },
+        {
+          "metric": "ROE",
+          "value": "11.9%",
+          "period": "key_metrics",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": null
+        },
+        {
+          "metric": "FCF",
+          "value": "1,059,000,000",
+          "period": "key_metrics (screen-sourced)",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": "fcf/cashflow_metrics/operating_cashflow fields null; requires filing-body USD"
+        },
+        {
+          "metric": "D/E",
+          "value": "73%",
+          "period": "summary highlight",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": "not in key_metrics object"
+        },
+        {
+          "metric": "core_limit",
+          "value": "£1,039.02",
+          "period": "summary trade plan",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": "trade_plan field is null"
+        },
+        {
+          "metric": "tactical_limit",
+          "value": "£997.04",
+          "period": "summary trade plan",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": "stop £936.58, target £1,120.44 in summary"
+        },
+        {
+          "metric": "research_verdict",
+          "value": "accumulate",
+          "period": "research overlay",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": "confidence 0.68; partially confirms Strong Buy"
+        },
+        {
+          "metric": "ttm_cashflow_suppressed",
+          "value": "true",
+          "period": "yahoo_quarterly",
+          "source_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json",
+          "note": "reason: quarterly_cashflow_empty"
+        }
+      ],
+      "gaps": [
+        "failed_models and model_failures empty despite 14/22 models not listed as passed — identity of failed models unavailable in this source",
+        "No explicit screen-number index mapping which metrics map to which model inputs",
+        "FY/H1 filing-body USD figures absent from snapshot; only narrative flag of missing annual/interim filings",
+        "Yahoo FY2025 FCF 852m and OCF 1,285m not present — cannot reconcile FCF 1,059m divergence from this source alone",
+        "Flat operating income, Q2 1.6% growth, dual-list price, and Cevian items not in assigned source",
+        "trade_plan null — limit/stop/target prices in summary not structurally validated",
+        "Conviction 73% in summary vs conviction_score 0.9349 unexplained in source",
+        "14 non-passing models unnamed; overlay gates (healthcare, cash_conversion, interim_quality, fcf_basis) all false despite research citing reimbursement, filing, and Q2 softness risks"
+      ],
+      "sources_read": [
+        "docs/data/research_director_worker/SN.L/20260904T181157Z/sources/screening_snapshot.json"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-fa5ce309-f0ed-4d38-b06a-9bfece1f55db"
+    },
+    {
+      "task_id": "sn_news_digest",
+      "task_type": "digest_news_manifest",
+      "status": "partial",
+      "findings": [
+        "Q2 2026 earnings cluster (5–9 Aug): manifest reports second-quarter underlying revenue growth of 1.6%, below management expectations; strength in Sports Medicine and ENT offset by weakness in US Orthopaedics and Advanced Wound Bioactives; CEO Deepak Nath commentary and call transcript reference Orthopaedics gaps and skin-substitute headwinds (news_manifest.json: articles 1358eb6d-8a3a-36dd-b1e6-46a3e7fd8151, e14de086-3868-3f5a-8eb0-9b0738542805, 9aa71914da2edab7).",
+        "CFO exit cluster (19–20 Aug): John Rogers to step down for an external role; RNS-style REG directorate-change headline; Proactive Investors reports a 3.5% share drop on the finance-chief resignation; Baxter hired Rogers as CFO (change-leadership experience); AD HOC/Kalkine/Investing.com titles frame post–first-half slide and leadership turnover (news_manifest.json: 094ef460ed5f4398, 48998dec689de0d7, ccbb82723bcaf2b1, b6b8f2f8-602f-3678-8866-b475182e2c77, 73973f85ea203333, cdb043a01684e2c4, 9b2019b1149e4b58, 9a423060309eaa5a, b903fe83d75d95ac).",
+        "Post-CFO scrutiny (4 Sep): Kalkine headline asks why Smith & Nephew remains under scrutiny after its finance chief resigned—tone line only, no new facts beyond ongoing leadership concern (news_manifest.json: 3030734da3f9bf24).",
+        "ADS 52-week low (3 Sep): Investing.com UK RSS title states Smith & Nephew ADS hit a 52-week low at 28.55 USD (news_manifest.json: a8bbc8907f0731d4).",
+        "Shareholder consultation and awards (2 Sep): REG headline on shareholder consultation and grant of awards; separate RSS items state CEO multi-year share awards tied to the 2026 plan and Orthopaedics chief granted new share awards—collapsed Stock Titan/TradingView REG duplicates into one governance cluster (news_manifest.json: 759e9624de30a031, 8f3ff5c5c9044ddd, be50f88415e5e037).",
+        "Portfolio-strategy redraw (1 Sep): Kalkine title states Smith & Nephew has redrawn its portfolio strategy and asks whether it will change the growth trajectory—commentary tone only (news_manifest.json: e79d99961fbe3fda).",
+        "Remuneration backlash (28 Aug): AD HOC NEWS title links steady trading to investor weighing of remuneration backlash and FTSE 100 role—no vote percentages or AGM detail in manifest (news_manifest.json: b65f3ec9f5ffe2ba).",
+        "Cevian stake and buyback completion (12–13 Aug): activist stake reported at 14.21% of votes after August acquisition; REG holding(s)-in-company and Stock Titan duplicates collapsed; Kalkine reports finalisation of the $250 million share buyback after acquiring over 1 million shares in August 2026; earlier 7 Aug item cites 1.4 million shares repurchased and $236.5 million deployed of the $250 million plan (news_manifest.json: 641aebcf96314dfa, aeabab65accbf90b8, 10ac25ea70e32052, 922539ac91889fdc, 458261ea1ba1b8c2). Prior July Cevian disclosure at 14.010786% voting stake also present (news_manifest.json: 3b978d8507459b8e, d084e64fa1a4376f).",
+        "Bernstein price-target cut (26 May): yfinance summary states Bernstein cut PT to $31.85 from $36.20 on 11 May, maintaining Market Perform, following the fiscal Q1 trading update (news_manifest.json: ece69e15-99c2-3ad5-b45f-be62961a4cba).",
+        "Transformation-plan wrap-up (2 Mar 2026): duplicate Yahoo RSS titles state Smith & Nephew upbeat on further earnings growth as its transformation plan wraps up (news_manifest.json: 59c5eeeacffabdd2, 497063cb3901d11f).",
+        "US knees weakness (Nov 2025): Proactive Investors headline—Smith & Nephew plunges on weaker US knees; no magnitude in RSS title (news_manifest.json: 40149f423efaace6).",
+        "Product / IR launches present in manifest: FLOW FLEXTEND COBLATION Wand for hip surgery launched 18 Aug (adjustable-angle access, tissue removal in complex joint procedures); LYNX COBLATION Laryngeal Wand for ENT airway surgery launched 16 Jul; ASC Solutions platform expanded 23 Jul for value-based outpatient care (news_manifest.json: f856918a-146c-355d-9bf4-4f81e7b0d18c, 6a46ddad-b6a9-38ba-9d5b-8a95114ef465, fbcb2896-e4e7-3eca-8de9-39d9db234009).",
+        "Other issuer-specific governance / holders: multiple collapsed REG Director/PDMR shareholding lines (Aug–Jul); CEO Deepak Nath vested 47,105 shares under 2024 Restricted Share Plan and retained 27,613 after tax-related sale; July LSE approval sought for 150,000 new shares for employee awards; Bank of America reported 3.172736% voting stake (22 Jul) then trimmed holding (21 Aug REG/Stock Titan); executives acquired ADS via ESPP on 10 Jul 2026 (news_manifest.json: 180e9e2d49257bc7, 1bb1aae8f9058ce2, 755f68fbc2bbdf3b, 4c505ce691789302, 2905becf3aebfab0, c53d7da6a48b8e18, 004beabdbb69c78b).",
+        "Discarded as non-issuer or generic: Chilean .SN tickers (CMPC1.SN, ITAUCL1.SN, ABTCL.SN, ENERSIS.SN, CFILTLIQ-A.SN, etc.), NYSE:SN options-widget pages, SharkNinja (NYSE:SN) articles, and Kalkine UK-healthcare pairing pieces with Haleon/Hikma/ConvaTec/Standard Chartered unless they carried a discrete SN.L fact (most did not).",
+        "Kalkine / AD HOC / Stock Titan / TradingView REG duplicate tone (Aug–Sep): steady or sliding share-price commentary around CFO exit, remuneration, FTSE 100 context, hospital-budget/medtech-sector framing, and orthopaedics workflow commentary—collapsed where titles repeat without new issuer facts."
+      ],
+      "figures": [
+        {
+          "metric": "Q2 underlying revenue growth",
+          "value": "1.6%",
+          "period": "Q2 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/news_manifest.json",
+          "note": "Article 1358eb6d-8a3a-36dd-b1e6-46a3e7fd8151 (yfinance summary); below management expectations"
+        },
+        {
+          "metric": "ADS price (52-week low)",
+          "value": "28.55 USD",
+          "period": "2026-09-03",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/news_manifest.json",
+          "note": "Article a8bbc8907f0731d4 (Investing.com UK RSS title)"
+        },
+        {
+          "metric": "Share price move on CFO resignation",
+          "value": "−3.5%",
+          "period": "2026-08-19",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/news_manifest.json",
+          "note": "Article ccbb82723bcaf2b1 (Proactive Investors RSS title)"
+        },
+        {
+          "metric": "Cevian Capital voting stake",
+          "value": "14.21%",
+          "period": "August 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/news_manifest.json",
+          "note": "Articles 641aebcf96314dfa, aeabab65accbf90b8"
+        },
+        {
+          "metric": "Cevian Capital voting stake (prior disclosure)",
+          "value": "14.010786%",
+          "period": "2026-07-27",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/news_manifest.json",
+          "note": "Article 3b978d8507459b8e"
+        },
+        {
+          "metric": "Share buyback programme size (completed)",
+          "value": "$250 million",
+          "period": "August 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/news_manifest.json",
+          "note": "Article 922539ac91889fdc"
+        },
+        {
+          "metric": "Shares repurchased in August 2026 (buyback completion headline)",
+          "value": "over 1 million",
+          "period": "August 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/news_manifest.json",
+          "note": "Article 922539ac91889fdc"
+        },
+        {
+          "metric": "Buyback progress (shares acquired)",
+          "value": "1.4 million shares",
+          "period": "2026-08-07",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/news_manifest.json",
+          "note": "Article 458261ea1ba1b8c2"
+        },
+        {
+          "metric": "Buyback progress (cash deployed)",
+          "value": "$236.5 million of $250 million",
+          "period": "2026-08-07",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/news_manifest.json",
+          "note": "Article 458261ea1ba1b8c2"
+        },
+        {
+          "metric": "Bernstein price target",
+          "value": "$31.85 (cut from $36.20)",
+          "period": "2026-05-11",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/news_manifest.json",
+          "note": "Article ece69e15-99c2-3ad5-b45f-be62961a4cba; Market Perform maintained"
+        },
+        {
+          "metric": "Bank of America voting stake",
+          "value": "3.172736%",
+          "period": "2026-07-22",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/news_manifest.json",
+          "note": "Article 4c505ce691789302"
+        },
+        {
+          "metric": "CEO share vesting (2024 Restricted Share Plan)",
+          "value": "47,105 shares",
+          "period": "2026-08-17",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/news_manifest.json",
+          "note": "Article 180e9e2d49257bc7"
+        },
+        {
+          "metric": "CEO shares retained after tax-related sale",
+          "value": "27,613 shares",
+          "period": "2026-08-18",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/news_manifest.json",
+          "note": "Article 1bb1aae8f9058ce2"
+        },
+        {
+          "metric": "New shares for employee awards (LSE approval sought)",
+          "value": "150,000",
+          "period": "2026-07-02",
+          "source_path": "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/news_manifest.json",
+          "note": "Article 755f68fbc2bbdf3b"
+        }
+      ],
+      "gaps": [
+        "No manifest entries for TESSA, CORI XT, or Imperial robotics despite task focus.",
+        "Q2 2026 segment revenue or margin figures beyond 1.6% group underlying growth are not present in RSS titles or short summaries.",
+        "Portfolio-strategy redraw (1 Sep) and remuneration backlash (28 Aug) lack quantitative or policy detail in manifest.",
+        "Nov 2025 US-knees plunge headline gives no percentage move or revenue impact.",
+        "2 Mar 2026 transformation-plan wrap-up titles give no earnings or margin targets.",
+        "CFO exit cluster confirms Baxter hire via yfinance summary but manifest lacks official RNS wording on timing, successor, or reason.",
+        "Bank of America trim (21 Aug) REG headline present but no revised percentage disclosed in manifest.",
+        "Shareholder consultation (2 Sep) REG title present; award sizes, performance conditions, and consultation scope not in manifest.",
+        "Many Kalkine sector-commentary pieces retained only as tone lines; they add no verifiable SN.L facts."
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/SN.L/20260904T181157Z/sources/news_manifest.json"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-aa684b33-f916-4ad7-9df8-25fba19461a4"
+    },
+    {
+      "task_id": "sn_gap_inventory",
+      "task_type": "gap_inventory",
+      "status": "partial",
+      "findings": [
+        "financials_annual.json: quarterly_income and quarterly_cashflow are empty objects ({}); cashflow_metrics sets ttm_cashflow_suppressed=true with reason quarterly_cashflow_empty — no Yahoo intra-year quarterlies in this pack.",
+        "financials_annual.json carries Yahoo annual income, balance sheet and cash-flow for FY2022–FY2025 only (fetched 2026-09-04); no H1/Q2 2026 or FY2025 statutory line items beyond Yahoo’s consolidated annual view.",
+        "No ir_presentation_metrics.json or alternate_news artefact exists under sources/; evidence ladder slots for IR-slide KPIs and alternate news are unfilled.",
+        "filings_index.json period_coverage (annual=1, interim=1, trading_update=1) is misleading: tagged annual is 85fc7018d796b25f (CATALYSTEM 510(k), published 2024-07-16, priority 100); tagged interim is 4f3a5fd5c7fa1274 (TESSA FDA De Novo, published 2026-07-29, priority 80); neither is a results RNS.",
+        "Only indexed operating/financial RNS is b082b819f46431ce (Q1 2026 Trading Update, published 2026-05-06, period=trading_update, priority 80); body present locally at sources/filings/bodies/b082b819f46431ce.txt but not assigned in the five-task cap (body not opened per task rules).",
+        "No FY2025 annual results, SEC 20-F, H1 2026 or Q2 2026 results filing body is indexed despite news_manifest.json headlines for a 2026-08-05 Q2 earnings call and 2026-08-09 Q2 earnings highlights (article ids e14de086-3868-3f5a-8eb0-9b0738542805, 1358eb6d-8a3a-36dd-b1e6-46a3e7fd8151).",
+        "All filings_index.json body_path values point to docs/data/research/SN.L/sources/filings/bodies/… — outside this trial tree (sources/filings/bodies/…); 11 local body copies exist but index paths do not reference them.",
+        "Contaminated/unusable indexed bodies: ch_05579759_MTg1MzIxMjk4YWRpcXprY3g (Companies House accounts, published 2007-09-13); 2bfab06e2d3702a4 and 35fcd85e6ad8464e (Axis Bank Limited listing/allotment of SN — ticker collision, not Smith & Nephew plc).",
+        "Other indexed product/innovation RNSs (period=other, not opened): ALLEVYN d166674e66e1be55, CORI XT 09cdd1b47d4c8d9a, LYNX 1aad454352792ec9, Imperial robotics centre 39556b2a487b5614, share buyback 80448ced514904bc.",
+        "macro_context.json, screen_run_manifest.json, 27 news_batch_* files and 2 snapshots/* are present under sources/ but were not consumed by assigned workers in this trial.",
+        "screening_snapshot.json pre-seeds research_verdict=accumulate and cites missing annual/interim filings and Q2 softness; yahoo_quarterly.ttm_cashflow_suppressed mirrors financials_annual.json.",
+        "Memo must leave unknown until higher-priority sources are assigned: statutory FY2025 notes/disclosures, H1/Q2 2026 reported numbers and guidance, intra-year cash-flow bridge, IR-presentation KPIs (segment margins, organic growth, leverage targets), and any RNS published after 2026-09-04."
+      ],
+      "figures": [
+        {
+          "metric": "Total revenue",
+          "value": "6164000000 USD",
+          "period": "FY2025",
+          "source_path": "financials_annual.json",
+          "note": "Yahoo annual income_statement; latest full-year in pack"
+        },
+        {
+          "metric": "Net income",
+          "value": "625000000 USD",
+          "period": "FY2025",
+          "source_path": "financials_annual.json",
+          "note": "Yahoo annual"
+        },
+        {
+          "metric": "Free cash flow",
+          "value": "852000000 USD",
+          "period": "FY2025",
+          "source_path": "financials_annual.json",
+          "note": "Yahoo annual cash_flow"
+        },
+        {
+          "metric": "Operating cash flow",
+          "value": "1285000000 USD",
+          "period": "FY2025",
+          "source_path": "financials_annual.json",
+          "note": "Yahoo annual cash_flow"
+        },
+        {
+          "metric": "Net debt",
+          "value": "2554000000 USD",
+          "period": "FY2025",
+          "source_path": "financials_annual.json",
+          "note": "Yahoo annual balance_sheet"
+        },
+        {
+          "metric": "Diluted EPS",
+          "value": "0.716 USD",
+          "period": "FY2025",
+          "source_path": "financials_annual.json",
+          "note": "Yahoo annual income_statement"
+        },
+        {
+          "metric": "Q2 underlying revenue growth (headline)",
+          "value": "1.6%",
+          "period": "Q2 2026",
+          "source_path": "news_manifest.json",
+          "note": "From yfinance article 1358eb6d summary; not corroborated by an indexed results RNS body in this pack"
+        },
+        {
+          "metric": "Filings indexed (total / with body)",
+          "value": "11 / 11",
+          "period": "as of 2026-09-04",
+          "source_path": "filings/filings_index.json",
+          "note": "Includes 1 mis-tagged annual, 1 mis-tagged interim, 1 trading update, 8 other"
+        },
+        {
+          "metric": "News articles in manifest",
+          "value": "115",
+          "period": "as of 2026-09-04",
+          "source_path": "news_manifest.json",
+          "note": "Includes ticker-noise (other .SN tickers) alongside Smith & Nephew items"
+        },
+        {
+          "metric": "GBP/USD",
+          "value": "1.3543",
+          "period": "2026-09-04",
+          "source_path": "macro_context.json",
+          "note": "Present but unused in trial worker assignments"
+        }
+      ],
+      "gaps": [
+        "yahoo_quarterly_income and yahoo_quarterly_cashflow empty — no quarterly Yahoo series; TTM cash-flow metrics suppressed.",
+        "ir_presentation_metrics absent — no IR results-deck KPI extraction path.",
+        "alternate_news absent — no secondary news feed beyond news_manifest/news_batch_*.",
+        "No statutory FY2025 annual report, 20-F or FY2025 note disclosures in filings pack.",
+        "No H1 or Q2 2026 results RNS body despite August 2026 earnings-call news coverage.",
+        "Q1 2026 Trading Update body (b082b819f46431ce.txt) indexed and on disk but unassigned/unread in this trial.",
+        "Period tags on CATALYSTEM 510(k) and TESSA De Novo misrepresent annual/interim results coverage.",
+        "Axis Bank SN listing/allotment filings and 2007 Companies House accounts contaminate the ingest.",
+        "filings_index body_path references main research tree, not this trial sources path.",
+        "Intra-year cash-flow, segment H1/Q2 guidance, IR-slide KPIs and post-2026-09-04 RNS remain unresolved for the memo."
+      ],
+      "sources_read": [
+        "financials_annual.json",
+        "filings/filings_index.json",
+        "news_manifest.json",
+        "macro_context.json",
+        "screen_run_manifest.json",
+        "screening_snapshot.json"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-f3387f3f-9834-4b0a-b7a1-919341cc662c"
+    }
+  ],
+  "rubric": {
+    "citation_accuracy": 0.625,
+    "filing_alignment": 1.0,
+    "gap_honesty": 1.0,
+    "structural": 1.0,
+    "composite": 0.869,
+    "notes": []
+  },
+  "research_verdict": "caution",
+  "research_confidence": 0.62,
+  "markdown_path": "docs/data/research_director_worker/SN.L/20260904T181157Z/research.md"
+}

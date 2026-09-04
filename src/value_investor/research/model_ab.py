@@ -169,7 +169,9 @@ def score_memo_rubric(
     else:
         gap_honesty = 1.0 if gap_hits <= 2 else round(max(0.0, 1.0 - (gap_hits - 2) * 0.1), 3)
 
-    section_count = sum(1 for key in RESEARCH_SECTIONS if getattr(doc, key, "").strip())
+    section_count = sum(
+        1 for key in RESEARCH_SECTIONS if str(getattr(doc, key, None) or "").strip()
+    )
     verdict_ok = bool(doc.research_verdict and doc.research_confidence is not None)
     structural = round(
         min(1.0, (section_count / len(RESEARCH_SECTIONS)) * (1.0 if verdict_ok else 0.7)), 3

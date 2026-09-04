@@ -1,0 +1,52 @@
+{
+  "ticker": "FGP.L",
+  "fiscal_year": "2026",
+  "period": "annual",
+  "currency": "GBP",
+  "resolved": true,
+  "policy_basis": "company_adjusted",
+  "policy_fcf": 113500000.0,
+  "filing_aligned_ocf_minus_capex": 362600000.0,
+  "screen_ttm": 302800000.0,
+  "company_adjusted": 113500000.0,
+  "bridge_steps": [
+    {
+      "label": "Statutory operating cash flow (FY2026 Yahoo/filing)",
+      "amount": 615600000.0
+    },
+    {
+      "label": "Less capital expenditure",
+      "amount": -253000000.0
+    },
+    {
+      "label": "Filing-aligned FCF (OCF − CapEx)",
+      "amount": 362600000.0,
+      "note": "Includes lease/capex classification that overstates equity FCF vs management definition"
+    },
+    {
+      "label": "Company free cash flow before acquisitions / returns (FY results)",
+      "amount": 113500000.0,
+      "note": "Results presentation: Free cash flow 113.5 (vs 53.9 prior); also prose 'c.£114m'"
+    },
+    {
+      "label": "Alternate IR slide 'before acquisitions' £73.8m",
+      "amount": 73800000.0,
+      "note": "OCR-noisy CH extract; prefer clean 113.5 table as policy when period-locked to FY"
+    },
+    {
+      "label": "Yahoo screen TTM (do not use while divergent)",
+      "amount": 302800000.0
+    }
+  ],
+  "dividend_coverage": {
+    "policy_fcf": 113500000.0,
+    "note": "Use £113.5m company FCF before acquisitions for progressive dividend coverage; statutory £363m is not the equity cash definition"
+  },
+  "source_refs": [
+    "docs/data/research/FGP.L/sources/filings/bodies/ir_5ba5b17047f87036.txt",
+    "docs/data/research/FGP.L/sources/filings/bodies/ch_SC157176_MzUzNzM4MjMyMGFkaXF6a2N4.txt",
+    "docs/data/research/FGP.L/sources/financials_annual.json"
+  ],
+  "reviewed_at": "2026-09-02T11:00:00+00:00",
+  "notes": "Policy FCF = £113.5m company definition. Filing OCF−CapEx (£363m) and Yahoo TTM (£303m) remain labelled alternatives only."
+}

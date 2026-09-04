@@ -166,6 +166,80 @@ def build_parser() -> argparse.ArgumentParser:
     )
     policy_p.set_defaults(func=cmd_policy)
 
+    surplus_p = sub.add_parser(
+        "cycle-surplus",
+        parents=[common],
+        help="Assess / apply / review a cycle-end weekly_ops bump from leftover plan credit",
+    )
+    surplus_p.add_argument(
+        "surplus_action",
+        choices=["assess", "apply", "review"],
+        help="assess leftover, apply a provisional weekly_ops bump, or review keep/revert",
+    )
+    surplus_p.add_argument(
+        "--unused-fraction",
+        type=float,
+        default=None,
+        help="Declared unused Cursor plan fraction from the usage page (e.g. 0.40)",
+    )
+    surplus_p.add_argument(
+        "--unused-usd",
+        type=float,
+        default=None,
+        help=(
+            "Declared leftover USD from the usage page. Prefer this when leftover "
+            "exceeds listed plan_monthly_usd (do not invent a new Ultra price)."
+        ),
+    )
+    surplus_p.add_argument(
+        "--replace-provisional",
+        action="store_true",
+        help=(
+            "Rebase a new bump on the original weekly_ops cap instead of stacking "
+            "on an already-applied provisional raise"
+        ),
+    )
+    surplus_p.add_argument(
+        "--plan-monthly-usd",
+        type=float,
+        default=None,
+        help="Plan included pool USD for surplus math (default: 200 Ultra, else policy)",
+    )
+    surplus_p.add_argument(
+        "--transfer-fraction",
+        type=float,
+        default=None,
+        help="Share of unused monthly credit to move into weekly_ops (default: 0.25)",
+    )
+    surplus_p.add_argument(
+        "--max-weekly-bump-usd",
+        type=float,
+        default=None,
+        help="Hard cap on the weekly_ops raise (default: 20)",
+    )
+    surplus_p.add_argument(
+        "--update-plan-metadata",
+        action="store_true",
+        help="On apply, write plan_name / plan_monthly_usd into policy (metadata only)",
+    )
+    surplus_p.add_argument(
+        "--plan-name",
+        default=None,
+        help="plan_name to store when --update-plan-metadata is set (e.g. 'Cursor Ultra')",
+    )
+    surplus_p.add_argument(
+        "--keep",
+        action="store_true",
+        help="On review: keep the provisional weekly_ops bump",
+    )
+    surplus_p.add_argument(
+        "--revert",
+        action="store_true",
+        help="On review: revert weekly_ops_cap to the pre-bump value",
+    )
+    surplus_p.add_argument("--json", action="store_true")
+    surplus_p.set_defaults(func=cmd_cycle_surplus)
+
     review_p = sub.add_parser(
         "review-model",
         help="Re-select the cheapest Cursor agent model available to this key",
@@ -1155,6 +1229,125 @@ def cmd_policy(args: argparse.Namespace) -> int:
     )
     print(f"Research model: {model.get('model_id')} ({model.get('pool')}) — {model.get('reason')}")
     print("Set weekly ops envelope: ftse-library policy --weekly-ops-cap-usd 50")
+    return 0
+
+
+def cmd_cycle_surplus(args: argparse.Namespace) -> int:
+    from .cycle_budget_surplus import (
+        DEFAULT_ARTIFACT_PATH,
+        DEFAULT_MAX_WEEKLY_BUMP_USD,
+        DEFAULT_TRANSFER_FRACTION,
+        DEFAULT_ULTRA_MONTHLY_USD,
+        apply_cycle_surplus,
+        assess_cycle_surplus,
+        review_cycle_surplus,
+        write_cycle_surplus,
+    )
+
+    policy = load_policy(args.policy)
+    budget = policy.get("budget") or {}
+    if args.surplus_action == "assess":
+        unused = args.unused_fraction
+        unused_usd = args.unused_usd
+        if unused is None and unused_usd is None:
+            print(
+                "--unused-usd or --unused-fraction is required for assess",
+                file=sys.stderr,
+            )
+            return 1
+        plan_monthly = args.plan_monthly_usd
+        if plan_monthly is None:
+            existing = float(budget.get("plan_monthly_usd") or 0.0)
+            plan_monthly = existing if existing and existing >= 100 else DEFAULT_ULTRA_MONTHLY_USD
+        assessment = assess_cycle_surplus(
+            unused_fraction=None if unused is None else float(unused),
+            unused_usd=None if unused_usd is None else float(unused_usd),
+            plan_monthly_usd=float(plan_monthly),
+            transfer_fraction=(
+                float(args.transfer_fraction)
+                if args.transfer_fraction is not None
+                else DEFAULT_TRANSFER_FRACTION
+            ),
+            max_weekly_bump_usd=(
+                float(args.max_weekly_bump_usd)
+                if args.max_weekly_bump_usd is not None
+                else DEFAULT_MAX_WEEKLY_BUMP_USD
+            ),
+            replace_provisional=bool(args.replace_provisional),
+            policy=policy,
+            path=args.policy,
+        )
+        write_cycle_surplus(assessment)
+        if args.json:
+            print(json.dumps(assessment, indent=2))
+        else:
+            unused_frac = assessment.get("unused_fraction")
+            frac_txt = (
+                f"{float(unused_frac):.0%} of ${assessment['plan_monthly_usd']:.0f}"
+                if unused_frac is not None
+                else "declared leftover"
+            )
+            print(
+                f"Cycle {assessment['cycle_id']}: unused {frac_txt} → "
+                f"${assessment['unused_monthly_usd']:.2f}"
+            )
+            print(
+                f"Transfer {assessment['transfer_fraction']:.0%} = ${assessment['transfer_usd']:.2f} "
+                f"(weekly bump ${assessment['weekly_bump_usd']:.2f})"
+            )
+            print(
+                f"weekly_ops ${assessment['current_weekly_ops_cap_usd']:.2f} → "
+                f"${assessment['proposed_weekly_ops_cap_usd']:.2f}  "
+                f"action={assessment['action']}  review={assessment['review_cycle_id']}"
+            )
+            print("Rememo daily cap unchanged. Apply with: ftse-library cycle-surplus apply")
+            print(f"Wrote {DEFAULT_ARTIFACT_PATH}")
+        return 0
+
+    if args.surplus_action == "apply":
+        try:
+            applied = apply_cycle_surplus(
+                policy_path=args.policy,
+                update_plan_metadata=bool(args.update_plan_metadata),
+                plan_name=args.plan_name,
+                replace_provisional=bool(args.replace_provisional),
+            )
+        except (FileNotFoundError, ValueError) as exc:
+            print(str(exc), file=sys.stderr)
+            return 1
+        if args.json:
+            print(json.dumps(applied, indent=2))
+        else:
+            prov = applied.get("provisional") or {}
+            print(
+                f"Applied provisional weekly_ops "
+                f"${prov.get('previous_weekly_ops_cap_usd')} → "
+                f"${prov.get('applied_weekly_ops_cap_usd')}  "
+                f"review={prov.get('review_cycle_id')}"
+            )
+            print(f"Wrote {DEFAULT_ARTIFACT_PATH}")
+        return 0
+
+    if args.keep and args.revert:
+        print("Use only one of --keep or --revert", file=sys.stderr)
+        return 1
+    keep: bool | None
+    if args.keep:
+        keep = True
+    elif args.revert:
+        keep = False
+    else:
+        keep = None
+    reviewed = review_cycle_surplus(keep=keep, policy_path=args.policy)
+    if args.json:
+        print(json.dumps(reviewed, indent=2))
+    else:
+        print(
+            f"Review action={reviewed.get('action')} recommend={reviewed.get('recommend')} "
+            f"due={reviewed.get('review_due')} cycle={reviewed.get('cycle_id')}"
+        )
+        if reviewed.get("action") == "too_early":
+            print(f"Wait until {reviewed.get('review_cycle_id')} before --keep / --revert")
     return 0
 
 

@@ -1,0 +1,154 @@
+{
+  "appended": [
+    {
+      "ticker": "SN.L",
+      "name": "Smith & Nephew plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Do not tag product 510(k)/De Novo/GNW launches as period=annual|interim. Require headline+body classifiers for results/trading_update vs product vs PDMR. Drop or quarantine non-issuer collisions (Axis Bank “SN”, SharkNinja, Chilean .SN). Fetch the H1/Q2 2026 RNS and the FY2025 annual report / 20-F when dual-listed. Point body_path at the trial snapshot tree. Deprioritise 2007 CH accounts. Deduplicate REG Holding(s)/PDMR rows that share URLs.",
+      "source": "director_worker",
+      "run_id": "20260904T181157Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:18:44.995984+00:00"
+    },
+    {
+      "ticker": "SN.L",
+      "name": "Smith & Nephew plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Fail-closed or flag when screen FCF (1,059m) disagrees with Yahoo/filing FCF (852m) while TTM is suppressed and cashflow_metrics is null. Turn on healthcare_price_erosion / reimbursement overlays for Orthopaedics + wound-bioactives names. Do not treat 8/22 + empty failed_models as a clean five-family pass. Isolate prior-memo text from action_note so conviction 0.93 is not recycled research boilerplate. Compare LSE limits to live ADS and LSE prints before labelling cheapness persistent.",
+      "source": "director_worker",
+      "run_id": "20260904T181157Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:18:44.995999+00:00"
+    },
+    {
+      "ticker": "SN.L",
+      "name": "Smith & Nephew plc",
+      "area": "prompt",
+      "priority": "high",
+      "suggestion": "If a worker’s target headline is a product clearance, require them to state “not a results RNS”, extract only on-page claims, and forbid inventing FY/H1 figures. Require news workers to drop SharkNinja/options/.SN collisions, collapse Kalkine/AD HOC/Stock Titan duplicates, and treat Google News items as titles only. Require screen workers to list FCF 1,059m vs 852m, overlay-false, and missing statutory pack as unsafe claims. Do not let workers cite prior research.json as a source.",
+      "source": "director_worker",
+      "run_id": "20260904T181157Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:18:44.996007+00:00"
+    },
+    {
+      "ticker": "SN.L",
+      "name": "Smith & Nephew plc",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Promote the 6 May 2026 Q1 TU to first-class operating evidence. Ingest the Aug 2026 H1/Q2 results RNS and FY2025 annual/20-F (news proves they exist). Parse H1 cash-flow from that body instead of only suppressing TTM. Fire the IR allowlist for results slides. Populate alternate_news or drop it from the ladder. Keep product RNSs as innovation evidence, not period coverage.",
+      "source": "director_worker",
+      "run_id": "20260904T181157Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:18:44.996010+00:00"
+    },
+    {
+      "ticker": "SN.L",
+      "name": "Smith & Nephew plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "When tagged annual/interim are product RNSs, do not spend the two mandatory filing slots on them if a trading_update body exists — or raise the cap / add trading_update and period_mismatch types so Q1 TU is assigned. Keep gap_inventory mandatory when H1/FY bodies are missing. Stop seeding screening_snapshot.research_* from the previous SN.L memo before the trial starts.",
+      "source": "director_worker",
+      "run_id": "20260904T181157Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:18:44.996018+00:00"
+    },
+    {
+      "ticker": "SN.L",
+      "name": "Smith & Nephew plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "Let summarize_filing_body carry period=annual|interim|trading_update|product|other and a catalog_mismatch bool. Add reporting_currency, listing_pair (SN.L/SNN), fcf_basis_used, healthcare_reimbursement_flag, and failed_models populated. Remap body_path into the trial sources/ tree. Treat empty Yahoo quarterlies on half-year USD reporters as expected, not the same thin-step severity as a missing H1 RNS.",
+      "source": "director_worker",
+      "run_id": "20260904T181157Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:18:44.996021+00:00"
+    },
+    {
+      "ticker": "SN.L",
+      "name": "Smith & Nephew plc",
+      "area": "monitoring",
+      "priority": "medium",
+      "suggestion": "For a 9-week medtech Strong Buy after a news-visible Q2 miss, CFO exit, ADS 52-week low, and Cevian 14%+, require watches: ingest H1/Q2 RNS, FY2026 guidance path, US knees / skin-substitute, CFO successor, remaining buyback vs £1,039/£997, dual-list price. Do not treat RSI-oversold + SMA200-flat as clearance to skip those checks. Alert when filings_index fetch time post-dates a results headline that has no body.",
+      "source": "director_worker",
+      "run_id": "20260904T181157Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:18:44.996032+00:00"
+    },
+    {
+      "ticker": "SN.L",
+      "name": "Smith & Nephew plc",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Filings-first order is adequate only if period tags are true. For SN.L they are not: period_coverage annual=1/interim=1/trading_update=1 counts a Jul 2024 CATALYSTEM 510(k) as annual and a Jul 2026 TESSA FDA De Novo as interim, while the sole real operating RNS (Q1 2026 TU, 6 May) sits below empty yahoo_quarterly_cashflow on the ladder. No FY results, 20-F, or H1/Q2 2026 body is indexed despite news of an 5 Aug Q2 call. alternate_news and ir_presentation_metrics are absent; Yahoo quarterlies empty is expected for a USD half-year reporter, not equivalent to a missing statutory pack. Axis Bank “Listing/Allotment of SN” rows show ticker-collision ingest beating the ladder.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T181157Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "evidence_ladder",
+      "recorded_at": "2026-09-04T18:18:44.996044+00:00"
+    },
+    {
+      "ticker": "SN.L",
+      "name": "Smith & Nephew plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "The screen emits strong_buy (8/22, five families, conviction 0.93, 9w persistent) on P/E 19.4 / FCF 1,059m while Yahoo FY FCF is 852m, operating income is flat, TTM cashflow is suppressed, and every healthcare/reimbursement/cash-conversion/interim overlay is false. Prior-loop research text is already spliced into action_note/summary (repeated Accumulate/partially-confirms boilerplate), so the director–worker trial is asked to re-verify a Strong Buy whose snapshot has been contaminated by an earlier memo that already admitted missing annual/interim filings. Qualitative veto is doing the work sector overlays failed to do.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T181157Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "methodology",
+      "recorded_at": "2026-09-04T18:18:44.996055+00:00"
+    },
+    {
+      "ticker": "SN.L",
+      "name": "Smith & Nephew plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Mandatory annual+interim summarize_filing_body plus news+screen+gap consumes the five-task cap on two product RNSs that are not results. There is no type or period flag for trading_update, 20-F, rns_cluster (PDMR/buyback/TVR), or “catalog_period_mismatch”. gap_inventory can only list that the Q1 TU — the only indexed financial body — and the unpublished H1 RNS were dropped. Workers cannot be told to treat a 510(k) as FY2025.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T181157Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "task_schema",
+      "recorded_at": "2026-09-04T18:18:44.996063+00:00"
+    },
+    {
+      "ticker": "SN.L",
+      "name": "Smith & Nephew plc",
+      "area": "monitoring",
+      "priority": "high",
+      "suggestion": "weeks_at_signal=9 / stable / conviction 0.93 looks like a settled Strong Buy, but there is no watch schema for: ingest of the Aug 2026 H1/Q2 RNS (news-visible, catalog-absent), FY2026 guidance vs Q2 1.6%, US knee / skin-substitute run-rate, CFO successor and Cevian 14.21%, remaining buyback vs £1,039/£997 ladder, ADS 52-week low vs LSE print, or post-4 Sep RNS. RSI 38 + SMA200-flat timing=neutral is not a substitute. News freshness reaches 4 Sep; filings_index fetched 17:25Z the same day still lacks the August results body — a same-day coverage hole, not a stale-data hole.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T181157Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "monitoring",
+      "recorded_at": "2026-09-04T18:18:44.996070+00:00"
+    },
+    {
+      "ticker": "SN.L",
+      "name": "Smith & Nephew plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "A generic FINANCIAL REVIEW / RISKS split will blend Yahoo USD statutory with company trading-profit/FCF and will not force Orthopaedics vs Sports Med & ENT vs Advanced Wound Management, US knees vs rest-of-world, skin-substitute reimbursement, FCF 1,059m vs 852m, ADS vs LSE price, or an explicit PRIMARY-FILING GAP box. Without SEGMENT MIX, REIMBURSEMENT, CAPITAL RETURNS, GUIDANCE PATH (Q1 TU → missing H1 → news Q2), and GOVERNANCE/ACTIVIST slots, workers will treat Kalkine SEO and SharkNinja/Chilean .SN collisions as colour. Director catalog pass can form these questions without drafting the memo.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T181157Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "memo_structure",
+      "recorded_at": "2026-09-04T18:18:44.996078+00:00"
+    },
+    {
+      "ticker": "SN.L",
+      "name": "Smith & Nephew plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "filings_index.body_path values point at docs/data/research/SN.L/sources/... rather than this trial snapshot tree. sources_used are companies_house + investegate_resolved only — no IR allowlist, no SEC 20-F despite NYSE:SNN dual-list. CH hit is 2007 legacy accounts. news_manifest query `SN stock UK` pulls SharkNinja (NYSE:SN), options widgets, and Latin .SN tickers. financials_annual.json is Yahoo-shaped (FY2021–2025; no root currency field though figures are USD; quarterly_income/quarterly_cashflow empty). screening_snapshot.failed_models is [] despite 14/22 not passing; trade_plan is null while summary cites limits; healthcare flags off. Snapshot research_* fields already pre-answer the trial.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T181157Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "other",
+      "recorded_at": "2026-09-04T18:18:44.996088+00:00"
+    }
+  ],
+  "count": 13
+}

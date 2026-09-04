@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "source": "director",
+  "open_questions": [
+    "The filings catalog has no FY annual-report / 20-F body and no H1 or Q2 2026 results RNS — only a 6 May 2026 Q1 trading update plus product RNSs mis-tagged annual/interim — so can the screen’s Strong Buy (P/E 19.4, P/B 2.3, FCF Yield, Piotroski, Earnings Quality) be endorsed from Yahoo FY2025 (revenue 6,164m, NI 412m→625m, operating income 860m→857m flat, FCF 606m→852m, OCF 987m→1,285m) plus unread Q1 colour, or must trade wait on statutory FY2025 notes and the Aug 2026 H1/Q2 RNS that news says exists?",
+    "Screen key_metrics FCF is 1,059m with cashflow_metrics/fcf null and TTM cashflow suppressed (quarterly_cashflow_empty), while Yahoo FY2025 FCF is 852m (OCF 1,285m − capex 433m) and inventory release +208m flattered conversion — which USD FCF definition (statutory vs trading/adjusted, leases, one-off WC) underpins FCF Yield / quality, and does Q2 softness unwind the 2025 WC release?",
+    "Yahoo FY2025 NI +52% and diluted EPS 0.47→0.72 while operating income was flat (857m vs 860m) after unusual items fell 203m→63m and restructuring/M&A 184m→62m — is the earnings-quality / GARP / ROE 11.9% pass a transformation residual and lower specials rather than operating momentum, and what do missing FY notes say on trading profit vs statutory?",
+    "News-only Q2 2026 (5–9 Aug) cites underlying revenue growth 1.6% below management expectations, with Sports Medicine & ENT offset by US Orthopaedics and Advanced Wound Bioactives / skin-substitute headwinds, after a Nov 2025 “plunges on weaker US knees” print — has FY2026 guidance been cut, held, or made H2-launch-dependent (TESSA, CORI XT, LANDMARK/hips, LYNX, ALLEVYN), and does that break the 9-week persistent Strong Buy?",
+    "healthcare_overlay, healthcare_price_erosion_overlay, cash_conversion_overlay and interim_quality_overlay are all false on a dual-listed medtech name — what do unread Q1/H1 language and news (hospital-budget squeeze, reimbursement, competition vs Stryker/Zimmer) imply for US knee mix, CMS/skin-substitute reset, China VBP, and tariffs that the quality/GARP stack cannot see?",
+    "CFO John Rogers resigned mid-Aug 2026 for Baxter (shares −3.5% same day; still in headlines 4 Sep), alongside Orthopaedics leadership awards, CEO multi-year grants tied to a 2026 plan, “remuneration backlash”, and Cevian at 14.21% voting — is this orderly succession plus activist alignment, or execution/governance risk into a product-heavy H2 that the Financial Health pass ignores?",
+    "Yahoo FY2025 returned 502m buybacks + 330m cash dividends against FCF 852m while net debt stayed ~2.55bn (total debt 3,327m, cash 557m, D/E screen 73%), treasury shares 4.2m→28.4m and ordinary shares 873.5m→849.4m; news says a $250m tranche of a larger programme completed Aug 2026 — is the 2.7% yield and buyback-inflated EPS/ROE covered after Q2, and what is company net-debt vs IFRS-16 vs the screen D/E?",
+    "Goodwill + intangibles 3,990m vs tangible book 1,299m, inventory still 2,117m, associates 7m→121m, and no indexed statutory notes — what impairment, set/instrument capitalisation, litigation, or pension (84m) language is missing, and does P/B 2.3 / Financial Health overstate asset quality?",
+    "ADS printed a 52-week low at 28.55 USD on 3 Sep while the screen is 9-week persistent Strong Buy with conviction 0.93, timing neutral, RSI 38, price −0.12% vs SMA200 and price<50<200; trade-plan limits are £1,039.02 / £997.04 (stop £936.58, TP £1,120.44) but trade_plan is null — is cheapness already in the tape after Bernstein’s May PT cut, or is the signal stale versus live LSE/ADS prices?",
+    "Sep 2026 “portfolio strategy redraw” and Mar 2026 “transformation plan wraps up / ambitious strategy” headlines sit next to product launches and Cevian — what mix shift (Sports Med/ENT vs Orthopaedics vs Wound) is contracted versus promotional, and does it change the 6%-class growth story the screen cannot see?"
+  ],
+  "meta_reflection": [
+    {
+      "topic": "evidence_ladder",
+      "observation": "Filings-first order is adequate only if period tags are true. For SN.L they are not: period_coverage annual=1/interim=1/trading_update=1 counts a Jul 2024 CATALYSTEM 510(k) as annual and a Jul 2026 TESSA FDA De Novo as interim, while the sole real operating RNS (Q1 2026 TU, 6 May) sits below empty yahoo_quarterly_cashflow on the ladder. No FY results, 20-F, or H1/Q2 2026 body is indexed despite news of an 5 Aug Q2 call. alternate_news and ir_presentation_metrics are absent; Yahoo quarterlies empty is expected for a USD half-year reporter, not equivalent to a missing statutory pack. Axis Bank “Listing/Allotment of SN” rows show ticker-collision ingest beating the ladder.",
+      "priority": "high"
+    },
+    {
+      "topic": "methodology",
+      "observation": "The screen emits strong_buy (8/22, five families, conviction 0.93, 9w persistent) on P/E 19.4 / FCF 1,059m while Yahoo FY FCF is 852m, operating income is flat, TTM cashflow is suppressed, and every healthcare/reimbursement/cash-conversion/interim overlay is false. Prior-loop research text is already spliced into action_note/summary (repeated Accumulate/partially-confirms boilerplate), so the director–worker trial is asked to re-verify a Strong Buy whose snapshot has been contaminated by an earlier memo that already admitted missing annual/interim filings. Qualitative veto is doing the work sector overlays failed to do.",
+      "priority": "high"
+    },
+    {
+      "topic": "task_schema",
+      "observation": "Mandatory annual+interim summarize_filing_body plus news+screen+gap consumes the five-task cap on two product RNSs that are not results. There is no type or period flag for trading_update, 20-F, rns_cluster (PDMR/buyback/TVR), or “catalog_period_mismatch”. gap_inventory can only list that the Q1 TU — the only indexed financial body — and the unpublished H1 RNS were dropped. Workers cannot be told to treat a 510(k) as FY2025.",
+      "priority": "high"
+    },
+    {
+      "topic": "monitoring",
+      "observation": "weeks_at_signal=9 / stable / conviction 0.93 looks like a settled Strong Buy, but there is no watch schema for: ingest of the Aug 2026 H1/Q2 RNS (news-visible, catalog-absent), FY2026 guidance vs Q2 1.6%, US knee / skin-substitute run-rate, CFO successor and Cevian 14.21%, remaining buyback vs £1,039/£997 ladder, ADS 52-week low vs LSE print, or post-4 Sep RNS. RSI 38 + SMA200-flat timing=neutral is not a substitute. News freshness reaches 4 Sep; filings_index fetched 17:25Z the same day still lacks the August results body — a same-day coverage hole, not a stale-data hole.",
+      "priority": "high"
+    },
+    {
+      "topic": "memo_structure",
+      "observation": "A generic FINANCIAL REVIEW / RISKS split will blend Yahoo USD statutory with company trading-profit/FCF and will not force Orthopaedics vs Sports Med & ENT vs Advanced Wound Management, US knees vs rest-of-world, skin-substitute reimbursement, FCF 1,059m vs 852m, ADS vs LSE price, or an explicit PRIMARY-FILING GAP box. Without SEGMENT MIX, REIMBURSEMENT, CAPITAL RETURNS, GUIDANCE PATH (Q1 TU → missing H1 → news Q2), and GOVERNANCE/ACTIVIST slots, workers will treat Kalkine SEO and SharkNinja/Chilean .SN collisions as colour. Director catalog pass can form these questions without drafting the memo.",
+      "priority": "medium"
+    },
+    {
+      "topic": "other",
+      "observation": "filings_index.body_path values point at docs/data/research/SN.L/sources/... rather than this trial snapshot tree. sources_used are companies_house + investegate_resolved only — no IR allowlist, no SEC 20-F despite NYSE:SNN dual-list. CH hit is 2007 legacy accounts. news_manifest query `SN stock UK` pulls SharkNinja (NYSE:SN), options widgets, and Latin .SN tickers. financials_annual.json is Yahoo-shaped (FY2021–2025; no root currency field though figures are USD; quarterly_income/quarterly_cashflow empty). screening_snapshot.failed_models is [] despite 14/22 not passing; trade_plan is null while summary cites limits; healthcare flags off. Snapshot research_* fields already pre-answer the trial.",
+      "priority": "medium"
+    }
+  ],
+  "procedural_suggestions": [
+    {
+      "area": "ingest",
+      "summary": "Do not tag product 510(k)/De Novo/GNW launches as period=annual|interim. Require headline+body classifiers for results/trading_update vs product vs PDMR. Drop or quarantine non-issuer collisions (Axis Bank “SN”, SharkNinja, Chilean .SN). Fetch the H1/Q2 2026 RNS and the FY2025 annual report / 20-F when dual-listed. Point body_path at the trial snapshot tree. Deprioritise 2007 CH accounts. Deduplicate REG Holding(s)/PDMR rows that share URLs.",
+      "priority": "high"
+    },
+    {
+      "area": "scoring",
+      "summary": "Fail-closed or flag when screen FCF (1,059m) disagrees with Yahoo/filing FCF (852m) while TTM is suppressed and cashflow_metrics is null. Turn on healthcare_price_erosion / reimbursement overlays for Orthopaedics + wound-bioactives names. Do not treat 8/22 + empty failed_models as a clean five-family pass. Isolate prior-memo text from action_note so conviction 0.93 is not recycled research boilerplate. Compare LSE limits to live ADS and LSE prints before labelling cheapness persistent.",
+      "priority": "high"
+    },
+    {
+      "area": "prompt",
+      "summary": "If a worker’s target headline is a product clearance, require them to state “not a results RNS”, extract only on-page claims, and forbid inventing FY/H1 figures. Require news workers to drop SharkNinja/options/.SN collisions, collapse Kalkine/AD HOC/Stock Titan duplicates, and treat Google News items as titles only. Require screen workers to list FCF 1,059m vs 852m, overlay-false, and missing statutory pack as unsafe claims. Do not let workers cite prior research.json as a source.",
+      "priority": "high"
+    },
+    {
+      "area": "sources",
+      "summary": "Promote the 6 May 2026 Q1 TU to first-class operating evidence. Ingest the Aug 2026 H1/Q2 results RNS and FY2025 annual/20-F (news proves they exist). Parse H1 cash-flow from that body instead of only suppressing TTM. Fire the IR allowlist for results slides. Populate alternate_news or drop it from the ladder. Keep product RNSs as innovation evidence, not period coverage.",
+      "priority": "high"
+    },
+    {
+      "area": "orchestration",
+      "summary": "When tagged annual/interim are product RNSs, do not spend the two mandatory filing slots on them if a trading_update body exists — or raise the cap / add trading_update and period_mismatch types so Q1 TU is assigned. Keep gap_inventory mandatory when H1/FY bodies are missing. Stop seeding screening_snapshot.research_* from the previous SN.L memo before the trial starts.",
+      "priority": "high"
+    },
+    {
+      "area": "schema",
+      "summary": "Let summarize_filing_body carry period=annual|interim|trading_update|product|other and a catalog_mismatch bool. Add reporting_currency, listing_pair (SN.L/SNN), fcf_basis_used, healthcare_reimbursement_flag, and failed_models populated. Remap body_path into the trial sources/ tree. Treat empty Yahoo quarterlies on half-year USD reporters as expected, not the same thin-step severity as a missing H1 RNS.",
+      "priority": "medium"
+    },
+    {
+      "area": "monitoring",
+      "summary": "For a 9-week medtech Strong Buy after a news-visible Q2 miss, CFO exit, ADS 52-week low, and Cevian 14%+, require watches: ingest H1/Q2 RNS, FY2026 guidance path, US knees / skin-substitute, CFO successor, remaining buyback vs £1,039/£997, dual-list price. Do not treat RSI-oversold + SMA200-flat as clearance to skip those checks. Alert when filings_index fetch time post-dates a results headline that has no body.",
+      "priority": "medium"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "sn_annual_catalystem_510k",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/85fc7018d796b25f.txt",
+      "focus": "Catalog period=annual (Investegate, 2024-07-16, priority 100) but the headline is a CATALYSTEM Primary Hip 510(k) clearance — almost certainly not FY results. Confirm whether this body is product/regulatory news or contains any statutory FY figures. Extract only what is on the page: device scope, US clearance timing, any revenue/guidance/launch-phasing claims, competitive or risk language. Do not invent FY2025 Yahoo figures (revenue 6,164m, NI 625m, FCF 852m) or treat this as an annual report. If it is not a results RNS, say so in one line and list any hip/US-knee commercial claims relevant to later Orthopaedics weakness. Do not open other files.",
+      "priority": 1
+    },
+    {
+      "id": "sn_interim_tessa_denovo",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/4f3a5fd5c7fa1274.txt",
+      "focus": "Catalog period=interim (Investegate, 2026-07-29, priority 80) but the headline is TESSA Spatial Surgery FDA De Novo — almost certainly not H1/Q2 2026 results. Confirm body type. Extract only on-page claims: indication, De Novo vs 510(k), Sports Medicine positioning, any revenue/uptake/timing/reimbursement language, and forward-looking risk wording. Do not invent H1/Q2 figures or the news-cited 1.6% underlying growth. If this is not an interim results RNS, say so and note it does not close the missing Aug 2026 results gap. Do not open other files.",
+      "priority": 2
+    },
+    {
+      "id": "sn_screen_context",
+      "type": "screen_context",
+      "target": "screening_snapshot.json",
+      "focus": "Explain strong_buy 8/22, composite 0.7505, sector-relative 0.719, families cheapness/quality/dividend/GARP/risk, passed_models Graham Enterprising / FCF Yield / Neff PEGY / Dividend Growth / Piotroski / Composite Value / Earnings Quality / Financial Health. Flag failed_models=[] despite 14 models not passing; healthcare_* / cash_conversion / interim_quality / fcf_basis overlays all false; data_quality 20/20; conviction 0.935 / 9w persistent / stable since 2026-08-05; timing=neutral, RSI 37.6, price −0.12% vs SMA200, price<50<200; trade_plan null vs summary limits £1,039.02 / £997.04 (stop £936.58, TP £1,120.44); key_metrics P/E 19.4, P/B 2.3, yield 2.7%, ROE 11.9%, FCF 1,059m vs Yahoo FY2025 FCF 852m / OCF 1,285m; D/E 73%; TTM cashflow suppressed; snapshot research_verdict already accumulate/partially-confirms with duplicated action_note boilerplate. List which screen numbers must be replaced by filing-body USD (FY/H1 bodies absent) and which claims are unsafe until FCF 1,059 vs 852, flat operating income, Q2 1.6% (news only), reimbursement overlays, dual-list price vs limits, and CFO/Cevian items are reconciled.",
+      "priority": 3
+    },
+    {
+      "id": "sn_news_digest",
+      "type": "digest_news_manifest",
+      "target": "news_manifest.json",
+      "focus": "Cluster 115 headlines; keep issuer-specific items only. Material clusters: 5–9 Aug 2026 Q2 call (1.6% underlying, US Orthopaedics + Advanced Wound Bioactives / skin substitutes vs Sports Med & ENT); 19–20 Aug CFO John Rogers exit to Baxter and 3.5% drop, still scrutinised 4 Sep; 3 Sep ADS 52-week low 28.55 USD; 12–13 Aug Cevian 14.21% and $250m buyback completion; 2 Sep shareholder consultation / CEO and Orthopaedics share awards; 1 Sep portfolio-strategy redraw; 28 Aug remuneration backlash; 26 May Bernstein PT cut after Q1; 2 Mar transformation-plan wrap-up; Nov 2025 US-knees plunge; product/IR items (TESSA, CORI XT, LYNX, FLOW FLEXTEND, ASC platform, Imperial robotics). Collapse Kalkine / AD HOC / Stock Titan / TradingView REG duplicates into one tone line. Discard SharkNinja (NYSE:SN), Chilean .SN tickers, options-widget pages, and generic UK-healthcare pairings (Haleon, Hikma, ConvaTec) unless they state a SN.L fact. Google News items are RSS titles — do not invent article-body or statutory figures.",
+      "priority": 4
+    },
+    {
+      "id": "sn_gap_inventory",
+      "type": "gap_inventory",
+      "target": "source_inventory",
+      "focus": "Catalog thin/missing steps: yahoo_quarterly_cashflow empty, yahoo_quarterly_income empty (inside financials_annual.json), ir_presentation_metrics absent, alternate_news absent, TTM cashflow suppressed. Period coverage annual=1 / interim=1 / trading_update=1 is misleading: tagged annual is CATALYSTEM 510(k) 85fc7018d796b25f.txt (Jul 2024); tagged interim is TESSA De Novo 4f3a5fd5c7fa1274.txt (Jul 2026); neither is a results RNS. Highest-value unread or omitted bodies (do not open them): Q1 2026 Trading Update filings/bodies/b082b819f46431ce.txt — the only indexed financial RNS, dropped by the five-task cap; no FY2025 annual / 20-F / H1 or Q2 2026 results body exists in this pack despite 5 Aug 2026 earnings-call headlines. Also unused/contaminated: 2007 CH accounts ch_05579759_MTg1MzIxMjk4YWRpcXprY3g.txt; Axis Bank listing/allotment 2bfab06e2d3702a4.txt and 35fcd85e6ad8464e.txt; product others (ALLEVYN, CORI XT, LYNX, Imperial). Note filings_index.body_path points outside this trial tree; macro_context.json, screen_run_manifest.json, news_batch_* and snapshots are present but unused. State what the memo must leave unknown until those sources are assigned: statutory FY2025 notes, H1/Q2 2026 numbers and guidance, intra-year cashflow, IR-slide KPIs, and any post-4 Sep RNS.",
+      "priority": 5
+    }
+  ],
+  "director_agent_id": "agent-9087f5c5-3bcd-442c-a501-0a0b4d08b9fe"
+}

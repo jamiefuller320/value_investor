@@ -1,0 +1,154 @@
+{
+  "appended": [
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Promote material M&A/sale-of-business RNS out of period=other/priority=0; do not tag IR results decks as interim or Directorate Change / buyback programme as annual; de-duplicate investegate_direct vs resolved (same body_content_hash) before counting coverage.",
+      "source": "director_worker",
+      "run_id": "20260904T164027Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T16:48:11.730919+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Select the latest dated annual and interim *results* bodies (FY25 29bdb56d3cedb539, H1 2026 d19c5d3b8e0bb46a — not the 30 June period-end duplicate). When a sale-of-business or trading_update body exists, reserve one of the five slots for it ahead of screen_context if the director already held the snapshot.",
+      "source": "director_worker",
+      "run_id": "20260904T164027Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T16:48:11.730949+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "prompt",
+      "priority": "high",
+      "suggestion": "Require annual/interim workers to extract continuing versus discontinued / held-for-sale splits, deal terms, guidance, FCF versus dividend cover, and reporting currency; require news workers to separate carve-out from full-takeover headlines and to ignore ITV-the-broadcaster entertainment noise.",
+      "source": "director_worker",
+      "run_id": "20260904T164027Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T16:48:11.730956+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Do not pass the dividend family on company-adjusted FCF when filing-aligned cover is below 1.0×; fire fcf_basis_overlay when filing / TTM / adj diverge; treat announced carve-outs as a perimeter break that blocks group-yield strong_buy until continuing-group figures exist; detect advertising broadcasters as cyclical.",
+      "source": "director_worker",
+      "run_id": "20260904T164027Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T16:48:11.730984+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "sources",
+      "priority": "medium",
+      "suggestion": "Populate alternate_news or drop it from the ladder. Add a structured financials_interim extract from the latest interim RNS because Yahoo quarterly_income and quarterly_cashflow are empty and TTM cashflow is suppressed.",
+      "source": "director_worker",
+      "run_id": "20260904T164027Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T16:48:11.730993+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "Add corporate_action (sale/buyback/notes) and reporting_perimeter fields on the screening snapshot; allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action so a Sky-sale body can be assigned without inventing a source.",
+      "source": "director_worker",
+      "run_id": "20260904T164027Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T16:48:11.730998+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "monitoring",
+      "priority": "medium",
+      "suggestion": "For new strong-buy names with a live regulatory deal and a just-launched buyback, emit watch items (CMA/Ofcom decision, close/break date, cash-return circular, next trading update, 2026 notes) rather than only lowering conviction_score.",
+      "source": "director_worker",
+      "run_id": "20260904T164027Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T16:48:11.731008+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Filings-first order is adequate when the live issue is annual/interim numbers, and this pack has 17 annual + 6 interim bodies. It is not adequate when the live issue is a transformative M&A RNS filed as period=other/priority=0: the 6 July 2026 Sky M&E sale sits below trading_update, Yahoo, and news on the assignment path. Trading updates are first-class in the index summary but outside the annual/interim rule. alternate_news is a dead step while news_manifest is populated (89 RSS-heavy items). yahoo_quarterly_cashflow is on the ladder but empty, so intra-year FCF cannot be checked except via filings.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T164027Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "evidence_ladder",
+      "recorded_at": "2026-09-04T16:48:11.731029+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading update, 31 July buyback RNS, or 2026/2032 notes consent pack. Naive first/last-of-period selection would assign Directorate Change or Share Repurchase (both tagged annual) or IR FY decks tagged interim. No task type exists to reconcile screen/Yahoo FCF bases or to mark continuing versus discontinued perimeter.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T164027Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "task_schema",
+      "recorded_at": "2026-09-04T16:48:11.731035+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "The screen still emits strong_buy on the pre-deal consolidated group (advertising yield, company-adjusted FCF, P/E 11.6) after a announced carve-out that changes the equity’s cash-flow identity. Overlays that should have fired did not: fcf_basis_overlay=false despite filing £148m vs TTM £212m vs adj £187m; cyclical_exposure_detected=false on an ad-funded broadcaster; interim_quality_overlay=false despite H1 existing and Yahoo quarterly statements empty. Dividend-family pass versus filing FCF cover below 1.0× is the same scoring tension seen on MEGP, now compounded by a perimeter change the director prompt does not force workers to split.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T164027Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "methodology",
+      "recorded_at": "2026-09-04T16:48:11.731052+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "monitoring",
+      "priority": "high",
+      "suggestion": "A new one-week strong_buy with a live CMA/Ofcom deal, a just-started buyback, 2026 notes outstanding, and no post-H1 trading update has no watch schema (deal close/break, cash-return mechanics, next TU, dividend rebase to stub). Conviction_score=0.53 is not a substitute for those monitors.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T164027Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "monitoring",
+      "recorded_at": "2026-09-04T16:48:11.731057+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "A generic FINANCIAL REVIEW / RISKS split will blend continuing Studios with discontinued M&E and will not force a CORPORATE ACTIONS / perimeter section. Without an explicit continuing-vs-consolidated rule, workers can cite FY25 group yield and H1 TAR growth as if they persist post-close. No required slot for regulatory-deal conditions or notes-consent residual risk.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T164027Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "memo_structure",
+      "recorded_at": "2026-09-04T16:48:11.731061+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "research",
+      "priority": "low",
+      "suggestion": "filings_index body_path values point at docs/data/research/ITV.L/sources/... rather than this trial snapshot; RNS direct/resolved pairs and IR/CH copies inflate coverage; Google News wrappers plus an entertainment-brand query pollute the manifest (Love Island, ITV News, allergy-pen items). Yahoo FY25 income omits EPS and share count that FY24 has.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T164027Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "other",
+      "recorded_at": "2026-09-04T16:48:11.731066+00:00"
+    }
+  ],
+  "count": 13
+}

@@ -1,120 +1,115 @@
 # Victrex plc (VCT.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T06:40:52.191156+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T17:35:36.327341+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Victrex is a global leader in PEEK/PAEK high-performance polymers, trading at a screen-attractive valuation (P/B ~2.0x, dividend yield ~7.2%, FCF yield ~6.9%) despite a multi-year earnings reset. FY2025 showed strong volume growth (+12% to 4,164 tonnes) but underlying profit before tax fell 21% to £46.4m on adverse mix, FX and China start-up costs; H1 FY2026 brought a £60.6m non-cash China impairment and a reported H1 loss, though underlying PBT of £19.0m and Q3 momentum support full-year guidance of £42–44m. The central debate is whether the Profit Improvement Plan (≥£10m annualised savings from FY2027), new CEO execution, and volume recovery can restore margins while the 59.56p dividend is maintained. The quantitative screen rates **buy** on cheapness and balance-sheet quality, but timing flags **wait** (RSI ~78, extended above the 200-day MA).
-
----
+Victrex is a global leader in PEEK/PAEK high-performance polymers, serving aerospace, automotive, electronics, energy/industrial, and medical end-markets from a UK manufacturing base with a newer China plant. The quantitative screen flags a buy on cheapness, dividend, and financial-health metrics (P/B ~2.0x, ~7.1% yield, ~6.5% FCF yield), but reported ROE is negative after the H1 FY2026 China impairment. The valuation hook is a cash-generative, net-cash-light balance sheet and a maintained 59.56p dividend against depressed underlying earnings (FY2025 underlying PBT £46.4m; FY2026 guidance £42–44m). The central debate is whether a Profit Improvement Plan (£10m+ annualised savings from FY2027), volume recovery, and CEO James Routh’s restructuring can restore margins, or whether mix shift (VARs/E&I), Chinese competition, Medical Spine weakness, and China execution risk keep earnings structurally lower.
 
 ## INVESTMENT THESIS
-For a value investor, Victrex offers a rare combination in UK mid-cap materials: net-cash-adjacent balance sheet, high cash conversion, and a maintained dividend supported by genuine free cash flow, at a valuation that screens cheap on book and yield.
+For a value investor, Victrex offers a rare specialty-chemicals franchise—dominant in VICTREX™ PEEK—with tangible asset backing, strong operating cash conversion (121% in FY2025; 109% in H1 FY2026), and a dividend held flat at 59.56p despite a cyclical earnings trough. The screen passes five models across cheapness, dividend, and risk families (FCF Yield, Dividend Growth, Composite Value, Earnings Quality, Financial Health), with high data quality (19/20 metrics) and a persistent buy signal over eight weeks.
 
-The quantitative screen passes four of 22 models — **FCF Yield**, **Composite Value**, **Earnings Quality**, and **Financial Health** — with composite score 65% and families **cheapness** and **risk** (19/20 data quality). Key screen metrics: P/B 2.0, yield 7.2%, FCF £49.3m (Yahoo; consistent with FY2025 filing cash flow). That aligns with filing evidence: FY2025 operating cash flow £71.1m, free cash flow £49.3m (Yahoo), underlying operating cash conversion 121%, net debt £24.8m (0.34x EBITDA at year-end), and dividends held at 59.56p.
-
-Business quality remains structurally high — ~40 years of PEEK expertise, patent-box tax benefits, diversified end-markets (aerospace, auto, electronics, energy, medical), and an addressable market management describes as ~5× current scale. The value case rests on the market pricing a cyclical trough and execution risk (Medical spine, China plant, VAR pricing) rather than permanent impairment of the franchise. FY2026 is explicitly transitional: new CEO James Routh’s Profit Improvement Plan (c.10% headcount reduction, portfolio simplification) targets medium-term margin repair while Q3 trading showed YTD revenue +7% and volumes +10%, with full-year underlying PBT guidance maintained at £42–44m.
-
-The screen’s **wait** timing overlay is appropriate: near-term reported earnings are distorted by China write-downs and restructuring charges, ROE is negative on trailing data (-9.4% per screen), and competitive pricing in VARs/Energy & Industrial caps ASP recovery. Accumulation suits investors who accept a 12–24 month turnaround horizon and dividend policy risk if leverage moves sustainably above the 0.5–1.0× net debt/EBITDA band.
-
----
+Business quality remains differentiated: FY2025 volumes rose 12% to 4,164 tonnes, Q3 FY2026 YTD volumes were +10%, and the addressable market is cited as roughly five times current scale. However, quality of *earnings* has deteriorated—underlying PBT fell 21% in FY2025 and 18% in H1 FY2026 on adverse mix, competitive VARs pricing, FX (~£8m headwind in FY2025), and China start-up losses (~£8m annualised in FY2025). The buy case rests on mean reversion: gross margins should improve from H1 FY2026’s 41.7% as Medical stabilises, cost savings land, and inventory unwinds release cash. The screen’s “wait for pullback” timing overlay (RSI ~73, price above 200-day MA) is appropriate given transitional execution risk under new leadership.
 
 ## FINANCIAL REVIEW
-**Source hierarchy:** Primary figures from RNS preliminary/interim/trading bodies; Yahoo used only for multi-year context where filing bodies are announcement extracts rather than full statutory tables.
+**Annual — FY2025 (year ended 30 September 2025)**
 
-### Annual trend (FY2022–FY2025)
+Primary source: Preliminary Results RNS (2 December 2025) and audited figures in the Half-year Financial Report (11 May 2026), which restates FY2025 comparatives.
 
-| Metric | FY2022 | FY2023 | FY2024 | FY2025 (filings) |
-|--------|--------|--------|--------|------------------|
-| Revenue | £341.0m (Yahoo) | £307.0m (Yahoo) | £291.0m (prelims) | £292.7m (prelims) |
-| Group volume | — | — | 3,731t | 4,164t (+12%) |
-| Underlying PBT | — | — | £59.1m | £46.4m (-21%) |
-| Reported PBT | — | — | £23.4m | £33.8m (+44%) |
-| Basic EPS (reported) | 87.6p (Yahoo) | 70.9p (Yahoo) | 19.8p | 32.0p |
-| Dividend/share | — | — | 59.56p | 59.56p (flat) |
-| Net debt | — | — | £21.1m | £24.8m |
-| Gross margin | — | — | 46.2% | 45.3% |
+| Metric | FY2025 | FY2024 | Change |
+|--------|--------|--------|--------|
+| Revenue | £292.7m | £291.0m | +1% |
+| Sales volume | 4,164t | 3,731t | +12% |
+| Gross profit / margin | £132.6m / 45.3% | £134.3m / 46.2% | −1% / −90bps |
+| Underlying PBT | £46.4m | £59.1m | −21% |
+| Reported PBT | £33.8m | £23.4m | +44% |
+| Underlying EPS | 43.9p | 51.7p | −15% |
+| Basic EPS | 32.0p | 19.8p | +62% |
+| Dividend | 59.56p | 59.56p | Flat |
+| Net debt | £24.8m | £21.1m | +18% |
+| Cash | £24.2m | £29.3m | |
+| Operating cash conversion | 121% | 114% | |
+| Cash from operations | £75.9m | £88.7m | −14% |
+| Capex | £21.8m | £32.6m | |
+| ROIC | 9% | 10% | |
 
-FY2025 (year ended 30 September 2025, Preliminary Results, 2 December 2025): revenue £292.7m (+1%), gross profit £132.6m, underlying PBT £46.4m, reported PBT £33.8m after £12.6m exceptional items (ERP completion, Surface Generation write-off). ASP fell to £70/kg from £78/kg (~80% mix/FX). China Panjin plant annualised operating loss £8m. Cash: operating £71.1m, capex £21.8m, dividends paid £51.8m. Net debt/EBITDA 0.34x. ROIC 9% (FY2024: 10%).
+Volumes grew strongly in VARs (+21%) and Energy & Industrial (+17%), but revenue lagged because ASP fell to ~£70/kg (from ~£78/kg), driven ~80% by mix and FX rather than broad price erosion. Medical revenue fell 5% to £58.8m (Spine down 28%; Non-Spine up 7%). Exceptional items totalled £12.6m (ERP completion costs £8.6m; Surface Generation investment write-off £4.0m). China subsidiary VIPL lost £11.7m (FY2025), with £2.9m attributable to non-controlling interests.
 
-The earnings arc is clear: peak FY2022–FY2023 (Yahoo: revenue £341m / £307m, EPS 87.6p / 70.9p) gave way to FY2024 impairments and associate losses (reported PBT £23.4m), partial recovery in FY2025 on lower exceptional charges but underlying profit still down double digits.
+Going concern was affirmed in the preliminary results, but scenario analysis noted reduced cash headroom, reliance on the £60m UK RCF (SONIA +0.75–1.05%, leverage and interest-cover covenants tested biannually), and a non-committed China facility refinancing due December 2026. Mitigants include dividend deferral, capex cuts, and inventory reduction.
 
-Companies House annual accounts (FY2022–FY2025 filings in index) corroborate the down-cycle narrative; the Investegate Annual Financial Report (22 December 2025) is a publication notice only — no additional P&L beyond prelims.
+**Interim — H1 FY2026 (six months ended 31 March 2026)**
 
-### Interim H1 FY2026 (six months to 31 March 2026)
+Primary source: Half-year Financial Report RNS (11 May 2026).
 
-Half-year Financial Report (11 May 2026):
+| Metric | H1 FY2026 | H1 FY2025 | Change |
+|--------|-----------|-----------|--------|
+| Revenue | £147.1m | £145.9m | +1% |
+| Volume | 2,137t | 2,018t | +6% |
+| Gross profit / margin | £61.3m / 41.7% | £64.3m / 44.1% | −5% / −240bps |
+| Underlying PBT | £19.0m | £23.2m | −18% |
+| Reported PBT | (£44.0m) | £17.2m | |
+| Underlying EPS | 17.2p | 22.6p | −24% |
+| Basic EPS | (37.0p) | 17.4p | |
+| Interim dividend | 13.42p | 13.42p | Flat |
+| Net debt | £45.4m | £40.7m | +12% |
+| Net debt / underlying EBITDA | 0.65x | 0.51x | Within 0.5–1.0x target |
 
-- Revenue £147.1m (+1%); volume 2,137t (+6%)
-- Gross margin 41.7% (H1 2025: 44.1%)
-- Underlying PBT £19.0m (-18%); underlying EPS 17.2p
-- **Reported loss before tax £44.0m** after £63.0m exceptional items, including **£60.6m non-cash China PPE impairment**
-- Interim dividend maintained at **13.42p**
-- Net debt **£45.4m** (0.65x underlying EBITDA — within 0.5–1.0× policy band)
-- Inventory £105.9m (continued unwind from FY2023 peak)
-- UK defined-benefit pension **buy-in** completed 21 January 2026 (£46.7m from fund assets; no additional Group funding)
+Reported loss reflects £63.0m exceptional items, chiefly a £60.6m non-cash impairment of the Panjin, China plant (carrying value reduced to £10.2m value-in-use). Underlying operating cash conversion remained 109%. A £20m UK term loan was drawn (matures October 2028); RCF drawn £9.0m at period-end, expected fully repaid by 30 September 2026. UK defined-benefit pension scheme buy-in completed 21 January 2026 (£46.7m from fund assets), de-risking the balance sheet.
 
-Board guidance: **FY2026 underlying PBT £42–44m** (H2-weighted; H1 weaker as guided). Full-year exceptional items expected £75–85m (China impairment, restructuring cash ~£10m, potential up to £10m further non-cash portfolio charges in H2).
+FY2026 full-year guidance (maintained in Q3 trading update, 7 July 2026): underlying PBT £42–44m.
 
-### Trading updates (FY2026)
+**Trading updates — interim colour**
 
-- **Q1** (6 February 2026): Q1 volume -4% to 858t; revenue £62.4m (-6%); YTD volumes back in line by January; net debt £21.1m pre-final dividend.
-- **Q3** (7 July 2026): Q3 revenue +18% to £84.5m, volumes +17%; YTD revenue +7%, volumes +10%; ASP £68/kg stable YoY; net debt £43.0m, cash £27.5m; **full-year underlying PBT guidance maintained at £42–44m**.
+- **Q1 (6 February 2026):** Volume −4% to 858t; revenue −6% to £62.4m; net debt £21.1m pre-final dividend.
+- **Q3 (7 July 2026):** Q3 revenue +18% to £84.5m; YTD revenue +7% to £231.6m; YTD volumes +10% to 3,375t; ASP ~£68/kg stable; net debt £43.0m post-interim dividend.
 
-### Balance sheet and cash flow
+**Trend summary**
 
-Strength: tangible book value, working capital discipline, hedging programme (≥80% USD/EUR cover for first six months of rolling 12 months). FY2025 underlying operating cash conversion 121%; H1 FY2026 109%.
+Revenue has been broadly flat since the FY2023 peak (£307.0m per Yahoo `financials_annual.json`; filing bodies do not include a full FY2023 RNS extract in this pack). Underlying profitability has compressed materially: underlying PBT fell from £59.1m (FY2024 filing) to £46.4m (FY2025) and is guided to £42–44m (FY2026). Reported earnings are distorted by China impairment, ERP costs, and portfolio review charges (up to £10m non-cash in H2 FY2026 guided). Cash generation remains a strength—FY2025 FCF was £49.3m per Yahoo (operating cash flow £71.1m less capex £21.8m per filing)—but dividend cash outflow (~£52m p.a.) exceeds FCF, requiring periodic RCF draws.
 
-Pressure points: dividends (£51.8m FY2025; £40.2m final paid February 2026) exceed reported net income; RCF drawn seasonally for dividend payment (max £29.0m drawn H1 FY2026; £20m term loan added). Gross borrowings £77.1m at 31 March 2026 (£40.0m due within one year, including China facility repayment December 2026). Going-concern disclosures (prelims and interim) confirm adequacy for 12+ months under base case and severe scenarios, but note **materially reduced cash headroom** without mitigants (inventory unwind, capex deferral, dividend reduction).
-
-**Gaps:** Only one formal interim in index (H1 FY2026); no separate H2 FY2025 interim RNS classified as `interim`. Historical CH accounts lag RNS detail on segment mix. Yahoo ROE (-9.4%) reflects trailing reported losses including H1 FY2026 impairment — not underlying run-rate.
-
----
+**Gaps:** The Annual Financial Report RNS (22 December 2025) is a publication notice only; detailed FY2025 narrative sits in preliminary results and Companies House accounts. No separate FY2024 or FY2023 RNS annual extracts beyond Companies House filings are indexed; multi-year comparisons for FY2022–FY2023 below use Yahoo as fallback where filing bodies lack figures: FY2023 revenue £307.0m, net income £61.7m; FY2022 revenue £341.0m, net income £76.2m.
 
 ## RISKS AND RED FLAGS
-**Cyclical and demand:** Chemical sector weakness, auto production flat, aerospace supply-chain phasing, and semiconductor cyclicality all affect mix. Going-concern scenario analysis models Sustainable Solutions volume reverting toward ~3,500t and Medical revenue stuck near £53–58m — levels not seen in a decade outside COVID.
+**China execution and impairment:** H1 FY2026 £60.6m impairment reflects process technology limiting Panjin capacity well below 1,500t nameplate. The plant remains loss-making and cash-negative (~100t expected in FY2026). The Group remains committed to China (fastest-growing region; ~20% of volume/revenue), but further investment may be needed. Non-controlling interest swung to (£18.1m) at 31 March 2026.
 
-**Competitive:** Filings cite rising price competition in VARs and Energy & Industrial from established and **Chinese PEEK manufacturers**; ASP down to £69–70/kg despite stable like-for-like pricing in differentiated niches. Mega-programme revenues fell to £9.1m (FY2025) from £10.2m.
+**Competitive and mix pressure:** VARs and Energy & Industrial growth comes at lower ASP and gross margin (Sustainable Solutions GM 33.8% in H1 FY2026 vs Medical 75.7%). Filings cite increased competition from Chinese PEEK manufacturers, particularly in less-differentiated grades.
 
-**China execution:** Panjin plant impaired to £10.2m value in use (from ~£70m+ carrying value); process technology cannot reach 1,500t nameplate capacity. Facility remains loss-making and cash-negative; non-controlling interest deficit £18.1m at H1. Group remains committed to China (~20% of volume/revenue).
+**Medical structural headwinds:** US Spine share loss to titanium cages; China volume-based pricing; Medical revenue −9% in H1 FY2026. Stabilisation signs in Q3 FY2026 are early.
 
-**Medical structural:** US spine shift from PEEK to titanium/porous cages; China VBP; Medical revenue -5% FY2025, -9% H1 FY2026. Spine stabilising but visibility “limited.”
+**Cyclical and macro:** Middle East conflict flagged as potential energy/raw-material inflation; semiconductor, automotive, and aerospace exposure; going-concern scenarios model volume falling to ~3,500t (levels last seen pre-COVID except FY2020).
 
-**FX and input costs:** ~£8m FX hit FY2025; £2–3m guided FY2026. Middle East conflict flagged as potential energy/raw-material inflation into H2 FY2026/FY2027 (energy ~5% of revenue).
+**Restructuring and governance:** ~10% headcount reduction (central functions); CEO transition to Dr James Routh (1 January 2026) with exceptional transition costs; portfolio simplification may trigger further non-cash charges. Profit Improvement Plan cash cost up to ~£10m in FY2026.
 
-**Liquidity and covenants:** Net debt rising ( £24.8m → £45.4m H1 FY2026); RCF/term-loan covenants (leverage, interest cover) tested under stress scenarios — passed in disclosures, but dividend policy explicitly contingent on staying within 0.5–1.0× net debt/EBITDA.
+**Liquidity and covenants:** Going-concern assessment (H1 FY2026 interim notes) acknowledges “significantly reduced cash headroom” under stress scenarios; £40m gross debt due within one year (including China facilities); China capex facility refinancing not committed until drawdown (planned November 2026). Covenants tested successfully under modelled scenarios, but dividend policy explicitly contemplates reduction/deferral as a mitigant.
 
-**Governance / key person:** CEO transition (Jakob Sigurdsson → Dr James Routh, 1 January 2026); board refresh (Audit Chair change July 2026). Restructuring includes c.10% headcount reduction — execution risk on culture and customer service.
+**Pension:** Buy-in de-risks UK DB scheme; no longer classified as critical estimation area post-January 2026.
 
-**Pension:** Largely de-risked via January 2026 buy-in; no longer classified as critical estimation uncertainty in H1 FY2026.
+**Prior investment write-offs:** FY2025 Surface Generation (£4.0m); FY2024 associate Bond impairment (£21.2m in prior-year comparatives per preliminary results).
 
-**Accounting:** Heavy exceptional-item reporting (ERP, impairments, restructuring); China impairment involves significant judgement on value in use (10.7% pre-tax discount rate). Surface Generation investment written to nil (£4.0m FY2025).
-
-**Regulatory:** Patent Box dependence (UK effective tax rate guidance 15–19% mid-term, but FY2025/26 above range due to China losses not recognised for deferred tax).
-
-RiskTags: cyclical, competitive, governance, liquidity, key_person, accounting, other
-
----
-RiskTags: cyclical, competitive, governance, liquidity, key_person, accounting, other
+RiskTags: cyclical, competitive, liquidity, leverage, accounting, customer_concentration, key_person, other
+RiskTags: cyclical, competitive, liquidity, leverage, accounting, customer_concentration, key_person, other
 
 ## NEWS HIGHLIGHTS
-Coverage is **moderate but company-specific**; several Google hits conflate “VCT” with venture-capital-trust tax reliefs rather than Victrex plc.
+Coverage over the past year is moderate, dominated by company RNS and syndicated market wrap-ups; several Google News hits conflate “VCT” with Venture Capital Trust tax reliefs rather than Victrex plc.
 
-Material items (past year):
+**Strategy and leadership**
+- “CEO Succession update” (21 October 2025): Dr James Routh confirmed as CEO from 1 January 2026; Jakob Sigurdsson departs board post-AGM (6 February 2026).
+- “Victrex H1 Earnings Call Highlights” (11 May 2026, yfinance): New CEO cites “urgent actions” on mix, pricing, and restructuring; ~10% job cuts in Q3 FY2026.
+- “Manufacturer Victrex to axe 10th of jobs after plunging to loss” (11 May 2026, yfinance): Restructuring detail following H1 reported loss.
 
-- **Preliminary Results / dividend maintained** (Yahoo: “Victrex (LON:VCT) Has Affirmed Its Dividend Of £0.4614”, 24 December 2025) — 59.56p total dividend affirmed alongside weak underlying earnings.
-- **CEO succession** (RNS: “CEO Succession update”, 21 October 2025) — Dr James Routh starts 1 January 2026; base salary £600,000.
-- **H1 FY2026 results & job cuts** (Yahoo: “Manufacturer Victrex to axe 10th of jobs after plunging to loss”, 11 May 2026; “Victrex H1 Earnings Call Highlights”, same date) — reported H1 loss, ~10% headcount reduction, Profit Improvement Plan on track.
-- **Q3 momentum** (RNS: “Trading Statement”, 7 July 2026) — Q3 revenue +18%; FY guidance maintained.
-- **Analyst sentiment mixed** (Yahoo: “How The Victrex (LSE:VCT) Story Is Shifting…”, 10 January 2026; “Why Analysts Think Victrex’s Story Is Shifting…”, 11 December 2025) — fair-value estimates trimmed ~2–3% despite higher revenue growth forecasts.
-- **Balance-sheet commentary** (Google/simplywall.st, 27 January 2026) — third-party focus on leverage resilience.
-- **Non-material noise:** “Autumn Budget 2025: VCT tax relief cut” (Money Marketing, 26 November 2025) refers to Venture Capital Trusts, not Victrex plc.
+**Results and trading**
+- “Victrex (LON:VCT) Has Affirmed Its Dividend Of £0.4614” (24 December 2025, yfinance): Final dividend maintained.
+- “Victrex shares slip after slows start to year; guidance maintained” (6 February 2026, Proactive Investors): Q1 softness.
+- “Victrex shares jump as strong third-quarter growth supports full-year outlook (VCT)” (7 July 2026, Yahoo Finance UK): Q3 momentum; guidance unchanged.
 
-No M&A or regulatory enforcement actions identified in the manifest.
+**Market commentary**
+- “Why Analysts Think Victrex’s Story Is Shifting Amid Mixed Views On Growth And Risk” (11 December 2025, yfinance): Fair-value estimates trimmed; revenue growth forecasts revised up.
+- “Victrex plc's (LON:VCT) Dismal Stock Performance Reflects Weak Fundamentals” (31 January 2026, yfinance): Bearish sentiment piece.
+- “Does Victrex (LON:VCT) Have A Healthy Balance Sheet?” (27 January 2026, simplywall.st): Balance-sheet focus.
 
----
+No material M&A or regulatory enforcement actions identified in the manifest. News flow is adequate on results and trading but thin on independent deep-dive analysis.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Filings confirm the screen’s cheapness and financial-health case (FCF, balance sheet, dividend coverage at underlying level) but earnings quality and near-term momentum remain impaired by mix, China, and restructuring, supporting accumulation only on pullback rather than aggressive entry at current technicals.
+Rationale: Filings confirm the screen’s cheapness and financial-health case (FCF generation, balance-sheet capacity, dividend maintained at underlying level) but earnings quality and near-term momentum remain impaired by mix, China, and restructuring, supporting accumulation on pullback rather than aggressive entry at current technicals.

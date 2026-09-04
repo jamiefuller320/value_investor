@@ -88,6 +88,13 @@ def test_score_memo_rubric_prefers_filing_citations():
     assert strong_score.composite > weak_score.composite
 
 
+def test_score_memo_rubric_tolerates_none_verdict_section():
+    doc = _memo_doc(financial_review="FY2025 revenue £10m per annual report.")
+    doc.research_verdict = None  # director parse can leave RESEARCH_SECTIONS unset
+    score = score_memo_rubric(doc, inventory={"thin": []})
+    assert 0.0 <= score.composite <= 1.0
+
+
 def test_score_memo_rubric_flags_missing_gaps_when_sources_thin():
     doc = _memo_doc(financial_review="Revenue £100m with no source markers.")
     inventory = {"thin": ["filings_bodies", "yahoo_financials"]}

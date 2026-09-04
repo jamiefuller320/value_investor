@@ -1,0 +1,1058 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "ticker": "FGP.L",
+  "company_name": "FirstGroup plc",
+  "signal": "strong_buy",
+  "run_id": "20260904T164856Z",
+  "output_dir": "docs/data/research_director_worker/FGP.L/20260904T164856Z",
+  "director_model": "grok-4.6",
+  "worker_model": "composer-2.5",
+  "estimated_cost_usd": 3.66,
+  "director_agent_ids": {
+    "plan": "agent-7e5a4425-d090-4488-af29-d1482820278b",
+    "synthesis": "agent-f234ad95-5529-422b-951c-a3c58b8c695f"
+  },
+  "task_plan": {
+    "schema_version": 1,
+    "orchestration_version": 1,
+    "source": "director",
+    "open_questions": [
+      "Which free-cash figure is usable for cover and for the FCF Yield / dividend-family passes: filing-aligned £362.6m, screen TTM £302.8m, or company-adjusted £73.8m — and can FY26 cash dividends paid (£38.9m Yahoo) plus buybacks (£50.4m Yahoo) plus the 18 June 2026 £100m programme be funded on the conservative basis?",
+      "After UK rail nationalisation and franchise roll-off, what is the continuing earnings mix (First Bus vs remaining First Rail vs open-access vs the London Overground preferred-operator award) and does the screen’s P/E 8.7 / 4.0% yield still describe that residual group?",
+      "Is First Bus passenger-volume weakness (H1 2026 share-price drop on “period of transition” headlines) structural municipal/franchising risk or a transitory volume dip, and did FY26 filing-adjusted earnings actually improve versus Yahoo’s FY26 revenue £4,332.7m / NI £118.3m / FCF £362.6m step-down from FY25 £4,653.5m / £127.5m / £597.8m?",
+      "Is economic leverage actually low at £137.7m adjusted net debt (screen D/E 19%) once IFRS-16 leases (Yahoo FY26 capital-lease obligations £850m, total debt £1,005m, Yahoo D/E 161%), restricted cash (£262.4m), and working capital (−£388m) are restored — and why did leverage_override / dual_leverage_display stay false?",
+      "Do the London Overground (~£3bn preferred operator, Dec 2025), December 2025 acquisition, Sizewell C transport award, and £48m Mistral Data disposal (completed 24 Aug 2026) raise or dilute returns versus the rail earnings they replace, and is cheapness already pricing a cash-return story that depends on the optimistic FCF definition?",
+      "With RSI 35, price ~2.5% below the 200-day MA, 12 weeks at strong_buy, and research already at Accumulate / medium risk (adjusted_signal buy), is the £173.14 / £166.14 limit plan buying policy-transition and FCF-definition risk too aggressively?",
+      "Yahoo FY26 income omits EPS and share count while issued shares fall 750.7m → 570.7m and ordinary shares are ~542.6m after treasury cancellation — are P/E, yield, and ROE on the post-buyback denominator, and is the Business Standard “FGP standalone NI −11%” item a different company (India FGP) rather than FirstGroup?"
+    ],
+    "meta_reflection": [
+      {
+        "topic": "evidence_ladder",
+        "observation": "Filings-first order is adequate for a UK transport name whose live numbers sit in RNS bodies (70 local bodies; 10 annual + 7 interim + 1 trading_update in the index). It is not adequate when the FY 2026 results RNS (3bf5ff09fbc5c747, 18 Jun 2026) is catalogued period=other/priority=0, while Google News “Across the Markets”, a December 2025 Acquisition, and IR decks occupy annual/interim slots. yahoo_quarterly_cashflow is on the ladder but empty (TTM cashflow suppressed); alternate_news is a dead step while news_manifest has 126 RSS-heavy items. Trading updates are first-class in the index summary but outside the annual/interim assignment rule; the only TU is the 26 Mar 2026 pre-close, now stale versus FY26 results and the 30 Jul AGM statement.",
+        "priority": "high"
+      },
+      {
+        "topic": "task_schema",
+        "observation": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for London Overground, Mistral disposal/completion, the £100m buyback launch, Sizewell C, the March pre-close TU, or the July AGM statement. No task type exists to reconcile filing / TTM / company-adjusted FCF or lease vs adjusted net debt. Naive first/last-of-period selection would assign CH accounts, an IR FY25 deck tagged interim, or an Acquisition tagged annual. summarize_filing_body cannot carry period=annual|interim|trading_update|corporate_action, so directors must smuggle the FY26 results body in as “annual” despite the catalog tag.",
+        "priority": "high"
+      },
+      {
+        "topic": "methodology",
+        "observation": "The screen still emits strong_buy (15/22, 5/5 families including dividend and FCF Yield) while fcf_basis_overlay is true but fcf_definition_divergence and fcf_divergence_flagged stay false on a £362.6m / £302.8m / £73.8m split. Leverage overlays did not fire despite Yahoo D/E 161% vs filing-adjusted £137.7m. cyclical_exposure_detected=false on a policy-exposed bus/rail operator; interim_quality_overlay=false despite empty Yahoo quarterlies; cash_conversion_overlay=false despite OCF 754→616 and FCF 598→363. failed_models is [] despite only 15/22 passes. Research overlays already cut to Accumulate / buy, so the director–worker memo is being asked to re-verify a signal the overlay has already downgraded without changing the headline strong_buy.",
+        "priority": "high"
+      },
+      {
+        "topic": "monitoring",
+        "observation": "A 12-week persistent strong_buy with rail nationalisation, an Overground award not yet earning, an in-flight £100m buyback, and no post-FY26 trading update has no watch schema (next TU / H1 2027, DfT franchise handback dates, Overground start, buyback completion, bus-franchising decisions). conviction_score=0.63 and stability_label=persistent are not substitutes for those monitors.",
+        "priority": "high"
+      },
+      {
+        "topic": "memo_structure",
+        "observation": "A generic FINANCIAL REVIEW / RISKS split will blend declining franchise rail with new contracted/open-access work and will not force BUS vs RAIL vs OPEN ACCESS, franchise vs contracted margin, or FCF-definition / lease-adjusted leverage sections. Without an explicit CORPORATE ACTIONS slot, workers can treat the £100m buyback, Mistral £48m sale, and Overground award as news colour rather than perimeter/capital-return facts. No required slot for ticker-collision hygiene (India FGP) or for restricted-cash vs unrestricted cash in net-debt bridges.",
+        "priority": "medium"
+      },
+      {
+        "topic": "other",
+        "observation": "filings_index body_path values point at docs/data/research/FGP.L/sources/... rather than this trial snapshot (70 local bodies vs 72 indexed). RNS direct/resolved pairs and IR/CH copies inflate coverage; PDMR items share body_content_hash. News is dominated by Transaction-in-Own-Shares reprints and syndicated DirectorsTalk “40–55% upside” SEO. Yahoo FY26 income omits EPS and share count that FY25 has. ir_presentation_metrics and fcf_bridge exist in the snapshot but sit outside the director’s allowed read set and the worker type list.",
+        "priority": "low"
+      }
+    ],
+    "procedural_suggestions": [
+      {
+        "area": "ingest",
+        "summary": "Retag FY-results RNS as period=annual (3bf5ff09fbc5c747) and do not tag IR results decks as interim, Acquisition or Google News wrappers as annual, or AGM statements as interim. Promote material contract-award / disposal / buyback-programme RNS out of period=other/priority=0. De-duplicate investegate_direct vs resolved and shared body_content_hash PDMRs before counting coverage. Point body_path at the trial snapshot, not docs/data/research/FGP.L.",
+        "priority": "high"
+      },
+      {
+        "area": "orchestration",
+        "summary": "Select the latest dated annual and interim *results* bodies (FY 2026 results 3bf5ff09fbc5c747, H1 2026 Half-year Financial Report c1db8cdf5ad2bd84 — not CH FY26 accounts, not IR FY25/H1 decks, not the 30 Jul AGM tagged interim). When a policy-material contract or disposal body exists, reserve one of the five slots for it ahead of screen_context if the director already held the snapshot.",
+        "priority": "high"
+      },
+      {
+        "area": "prompt",
+        "summary": "Require annual/interim workers to extract reporting currency; First Bus vs First Rail vs open-access vs contracted (Overground) splits; statutory vs adjusted earnings; OCF/capex/FCF definitions; cash vs restricted cash vs adjusted net debt vs IFRS-16 leases; dividend declared vs cash dividends and FCF cover; buyback authorisation vs cash spent; franchise expiry / nationalisation language; FY outlook. Require news workers to drop India-FGP collisions, DirectorsTalk SEO upside pieces, and same-day buyback reprints; treat Kalkine/Proactive as headline-only.",
+        "priority": "high"
+      },
+      {
+        "area": "scoring",
+        "summary": "Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_definition_divergence true whenever filing / TTM / adj disagree. Surface dual leverage (Yahoo D/E vs adj net debt) instead of leaving leverage_override false. Treat UK bus/rail policy transition as cyclical/policy exposure. Populate failed_models for the 7/22 non-passes. Do not keep headline strong_buy when research_verdict is already accumulate.",
+        "priority": "high"
+      },
+      {
+        "area": "sources",
+        "summary": "Populate alternate_news or drop it from the ladder. Add a structured financials_interim extract from the latest interim RNS because Yahoo quarterly_income and quarterly_cashflow are empty and TTM cashflow is suppressed. Expose fcf_bridge.json to a worker type or fold its three-way FCF reconciliation into screening_snapshot.",
+        "priority": "medium"
+      },
+      {
+        "area": "schema",
+        "summary": "Allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action so a mis-tagged FY-results or Overground/disposal body can be assigned without inventing a source. Add reporting_perimeter, fcf_basis_used, and contract_roll_off / policy_transition fields on the screening snapshot.",
+        "priority": "medium"
+      },
+      {
+        "area": "monitoring",
+        "summary": "For persistent strong-buy transport names with live nationalisation and an in-flight buyback, emit watch items (next trading update / H1 2027, franchise handback dates, Overground start, remaining £100m buyback, bus-franchising decisions) rather than only raising weeks_at_signal.",
+        "priority": "medium"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "filing_fy26_annual_results",
+        "type": "summarize_filing_body",
+        "target": "filings/bodies/3bf5ff09fbc5c747.txt",
+        "focus": "FY 2026 results RNS (18 Jun 2026; catalogued period=other — this is the annual results body, not CH 10 Aug 2026 accounts, not 1 Jul AFR d45784fca483323c, not Google News “Across the Markets”). Reporting currency; group and First Bus vs First Rail vs other revenue, statutory vs adjusted EBIT/EPS vs FY25; OCF, capex, FCF definition used, cash, restricted cash, reported vs adjusted net debt, IFRS-16 leases; dividend declared vs cash dividends and cover vs FCF; £100m buyback terms; franchise expiry / nationalisation / open-access / Overground language; FY27 outlook. Prefer these figures over Yahoo (FY26 Yahoo omits EPS/share count; FCF there is £362.6m; company-adj FCF on the screen is £73.8m).",
+        "priority": 1
+      },
+      {
+        "id": "filing_h1_2026_interim",
+        "type": "summarize_filing_body",
+        "target": "filings/bodies/c1db8cdf5ad2bd84.txt",
+        "focus": "H1 2026 Half-year Financial Report (18 Nov 2025; not IR decks ir_af873270e9c4b29f / ir_032b08900a650e14, not AGM 4028c725377752a6). H1 revenue/profit/EPS vs H1 2025 by bus vs rail; passenger-volume KPIs; cash, capex, FCF, net debt, interim dividend; management “period of transition” / franchise roll-off / nationalisation wording; intra-year cash outflow / debt colour that later news attributed to this print. Prefer filing figures over Yahoo (quarterly_income and quarterly_cashflow empty).",
+        "priority": 1
+      },
+      {
+        "id": "news_digest",
+        "type": "digest_news_manifest",
+        "target": "news_manifest.json",
+        "focus": "Cluster ~126 headlines: FY26 results + £100m buyback (18 Jun 2026); H1 2026 beat-but-10% drop / bus volumes / cash outflow; London Overground ~£3bn / $4bn award (Dec 2025); Mistral Data £48m sale to Tracsis and 24 Aug completion / ~7% share wobble; open-access mix pieces; Sizewell C; AGM capital actions. Flag India-FGP “standalone NI −11%” as likely ticker collision; discard DirectorsTalk syndicated 30–55% upside SEO and same-day Transaction-in-Own-Shares / TVR reprints. Google News items are RSS titles only — do not invent article-body facts.",
+        "priority": 2
+      },
+      {
+        "id": "screen_context",
+        "type": "screen_context",
+        "target": "screening_snapshot.json",
+        "focus": "Record strong_buy 15/22, composite 86%, families 5/5, adjusted_signal buy, research_verdict accumulate / medium / 0.74. FCF bases filing £362.6m / screen TTM £302.8m / company-adj £73.8m with fcf_basis_overlay true but fcf_definition_divergence and fcf_divergence_flagged false; TTM suppressed (quarterly_cashflow_empty). Dual leverage Yahoo D/E 161% vs £137.7m adj net debt / screen D/E 19% with leverage_override false. P/E 8.7, P/B 1.3, yield 4.0%, ROE 16.7%; 12w persistent, conviction 63%, RSI 35, trade plan £173.14 / £166.14. List which claims must be confirmed on a filing-FCF, lease-adjusted, and post-nationalisation-mix basis. Note failed_models is empty despite 7 non-passes.",
+        "priority": 3
+      },
+      {
+        "id": "gap_inventory",
+        "type": "gap_inventory",
+        "target": "source_inventory",
+        "focus": "Document thin/unavailable steps: yahoo_quarterly_cashflow, yahoo_quarterly_income, alternate_news. Highest-value unread bodies the 5-cap omitted: AFR filings/bodies/d45784fca483323c.txt; AGM statement 4028c725377752a6; pre-close TU 4c56aaf324fdfd91; Overground preferred-operator aefbcf7637993f73; £100m buyback launch 152c483b0284d525; Mistral disposal 1c5ad278ca15df7c and completion f8ef13aa344cabd9; Sizewell C d4e60364bbdac9ab; Dec 2025 acquisition 5e08fec9f5b9088c. Note no post-FY26 trading update yet. List what the memo cannot verify without those reads (contract economics, cash-return residual, intra-year FCF, latest Board trading comment).",
+        "priority": 1
+      }
+    ],
+    "director_agent_id": "agent-7e5a4425-d090-4488-af29-d1482820278b"
+  },
+  "worker_results": [
+    {
+      "task_id": "filing_fy26_annual_results",
+      "task_type": "summarize_filing_body",
+      "status": "partial",
+      "findings": [
+        "Reporting currency is pounds sterling (£); all monetary figures in £m unless stated as pence per share (source: /workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt).",
+        "FY26 period: 52 weeks to 28 March 2026; RNS dated 18 June 2026 (CEO letter 17 June 2026) (source: same).",
+        "Group adjusted revenue £1,715.7m (+25% vs FY25 £1,370.0m); First Bus £1,443.6m (FY25 £1,081.5m); First Rail adjusted revenue £272.4m (FY25 £288.8m), split DfT TOCs & Rail Services £130.6m and open access/rail contracts £141.8m; group eliminations (£0.3)m (source: same).",
+        "First Bus revenue mix: Regional Bus £891.3m, Business & Coach £230.1m, Franchising £322.2m (includes ~£310m First Bus London); statutory First Bus revenue equals adjusted at £1,443.6m (source: same).",
+        "Statutory group revenue (continuing) £4,751.9m (FY25 restated £5,233.9m), driven mainly by First Rail gross DfT TOC pass-through £3,327.6m; statutory First Rail revenue fell on SWR transfer to DfTO (source: same).",
+        "Group adjusted operating profit (continuing) £219.4m (FY25 £222.8m), marginally lower; excluding DfT TOCs, adjusted operating profit grew 18%; total incl. discontinued £221.5m (FY25 £222.2m) (source: same).",
+        "First Bus adjusted operating profit £102.8m (+7% vs FY25 £96.0m); First Rail adjusted operating profit £129.9m (FY25 £148.8m), with open access adjusted OP £25.6m (FY25 £34.1m) after Stirling mobilisation and Lumo infrastructure charge (source: same).",
+        "Statutory operating profit (continuing) £219.4m (FY25 £222.6m); statutory total £221.5m (FY25 £227.5m)—matches adjusted in FY26 as no adjusting items (source: same).",
+        "Adjusted EPS (continuing) 20.3p (FY25 19.4p); total adjusted EPS 20.7p incl. discontinued 0.4p (FY25 19.3p); basic/statutory EPS 21.4p (FY25 21.3p); weighted average shares 553.4m (FY25 597.7m); shares in issue 542.6m ex-treasury/EBT (source: same).",
+        "Cash generated by operations £681.5m (FY25 £828.2m); cash capex (£253.0)m; First Bus net capex £188.2m; highlights cite ~£190m accelerated First Bus electrification capex and ~£35m growth investment/acquisitions (source: same).",
+        "Company-defined free cash flow £73.8m (FY25 £113.5m): reconciled from adjusted cash flow (£124.0)m by adding back acquisitions £35.3m, dividends £38.9m and buyback £50.4m—described in highlights as 'before acquisitions and returns' (source: same).",
+        "Cash £169.6m; ring-fenced cash £262.4m (First Rail £260.8m, other £1.6m); reported net debt £725.3m (FY25 £985.6m); adjusted net debt £137.7m (FY25 £86.9m)—excludes IFRS 16 leases and ring-fenced cash; pre-IFRS 16 net cash on bonds/bank/other debt (£124.7)m (source: same).",
+        "IFRS 16 lease liabilities £850.0m total (rail £702.3m, non-rail £147.7m); DfT TOC IFRS 16 leases on balance sheet £649.2m (FY25 £1,020.4m); net IFRS 16 operating profit impact £45.6m (FY25 £49.4m) (source: same).",
+        "Final dividend proposed 5.0p; FY26 total dividend 7.2p (FY25 6.5p), payable ~£27m final on 7 Aug 2026; dividends paid in FY26 £39m (external £38.9m); policy ~3x cover of adjusted earnings, tightening towards 2.5x over time (~2.8x on 20.3p/7.2p); FCF cover vs cash dividends paid ~1.9x (£73.8m/£38.9m) (source: same).",
+        "Shareholder returns FY26: ~£89m via dividends and completed £50m buyback; further £100m buyback announced, expected to complete within next 12 months; ~£100m anticipated via buyback over FY27–FY28 (source: same).",
+        "Rail transition/nationalisation: SWR to DfTO 25 May 2025; GWR NRC expires 13 Dec 2026 (handover to DfT Operator); WCP transfer expected around end FY27; National Rail Contracts moving to public ownership/GBR; ~£90m cash inflow anticipated over three years from Apr 2026 as GWR/WCP transition (source: same).",
+        "Open access: revenue £109.3m, 3.1m journeys (+4%); on course to more than double capacity in 2–3 years; ORR applications for ~1bn annual seat miles under review; Stirling service fully operational from Jul 2026; Carmarthen from Dec 2027 (source: same).",
+        "London Overground: contract awarded Dec 2025, mobilised 3 May 2026; eight-year term plus two-year TfL option; ~£300m anticipated revenue in FY27; ~£3bn over contract life; TfL retains revenue risk (source: same).",
+        "FY27 outlook: maintain adjusted EPS from higher-quality base; First Bus revenue just over £1.5bn with further adjusted OP progress and ~£140m decarbonisation capex; open access revenue ~£130–150m, margin progressing to mid-teens; Overground ~£300m; lower DfT TOC adjusted revenue; ~£400m FCF anticipated over next three years (source: same)."
+      ],
+      "figures": [
+        {
+          "metric": "Reporting currency",
+          "value": "GBP (pounds sterling)",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "Stated as Group reporting currency"
+        },
+        {
+          "metric": "Group adjusted revenue",
+          "value": "£1,715.7m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: £1,370.0m"
+        },
+        {
+          "metric": "First Bus revenue (adjusted/statutory)",
+          "value": "£1,443.6m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: £1,081.5m"
+        },
+        {
+          "metric": "First Rail adjusted revenue",
+          "value": "£272.4m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: £288.8m; DfT TOCs & Rail Services £130.6m; open access/contracts £141.8m"
+        },
+        {
+          "metric": "Group statutory revenue (continuing)",
+          "value": "£4,751.9m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25 restated: £5,233.9m"
+        },
+        {
+          "metric": "First Rail statutory revenue",
+          "value": "£3,327.6m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25 restated: £4,180.7m"
+        },
+        {
+          "metric": "Group adjusted operating profit (continuing)",
+          "value": "£219.4m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: £222.8m"
+        },
+        {
+          "metric": "Group statutory operating profit (continuing)",
+          "value": "£219.4m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: £222.6m"
+        },
+        {
+          "metric": "First Bus adjusted operating profit",
+          "value": "£102.8m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: £96.0m"
+        },
+        {
+          "metric": "First Rail adjusted operating profit",
+          "value": "£129.9m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: £148.8m"
+        },
+        {
+          "metric": "Adjusted EPS (continuing)",
+          "value": "20.3p",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: 19.4p"
+        },
+        {
+          "metric": "Basic/statutory EPS",
+          "value": "21.4p",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: 21.3p"
+        },
+        {
+          "metric": "Weighted average shares (basic EPS)",
+          "value": "553.4m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: 597.7m"
+        },
+        {
+          "metric": "Cash generated by operations",
+          "value": "£681.5m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: £828.2m"
+        },
+        {
+          "metric": "Capital expenditure (cash flow table)",
+          "value": "£(253.0)m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: £(156.4)m"
+        },
+        {
+          "metric": "First Bus net capital expenditure",
+          "value": "£188.2m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: £88.2m"
+        },
+        {
+          "metric": "Free cash flow (company definition)",
+          "value": "£73.8m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: £113.5m; from adjusted cash flow after adding back acquisitions, dividends and buyback"
+        },
+        {
+          "metric": "Cash",
+          "value": "£169.6m",
+          "period": "FY26 year-end",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "Unrestricted group cash"
+        },
+        {
+          "metric": "Ring-fenced cash (total)",
+          "value": "£262.4m",
+          "period": "FY26 year-end",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "First Rail £260.8m; other £1.6m; FY25 total £315.7m"
+        },
+        {
+          "metric": "Reported net debt",
+          "value": "£725.3m",
+          "period": "FY26 year-end",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: £985.6m; includes IFRS 16 and ring-fenced cash"
+        },
+        {
+          "metric": "Adjusted net debt",
+          "value": "£137.7m",
+          "period": "FY26 year-end",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: £86.9m; excludes IFRS 16 leases and ring-fenced cash"
+        },
+        {
+          "metric": "IFRS 16 lease liabilities (total)",
+          "value": "£850.0m",
+          "period": "FY26 year-end",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "Rail £702.3m; non-rail £147.7m; FY25 total £1,214.4m"
+        },
+        {
+          "metric": "DfT TOC IFRS 16 leases (balance sheet)",
+          "value": "£649.2m",
+          "period": "FY26 year-end",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "FY25: £1,020.4m"
+        },
+        {
+          "metric": "Dividend per share (declared/proposed FY total)",
+          "value": "7.2p",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "Final proposed 5.0p; FY25 6.5p"
+        },
+        {
+          "metric": "Dividends paid (cash)",
+          "value": "£39m",
+          "period": "FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "External dividends paid £38.9m"
+        },
+        {
+          "metric": "Share buyback programme (new)",
+          "value": "£100m",
+          "period": "announced FY26",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "Expected to complete within next 12 months; follows £50m completed in FY26"
+        },
+        {
+          "metric": "FY27 First Bus revenue outlook",
+          "value": "just over £1.5bn",
+          "period": "FY27 guidance",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "Further adjusted OP progress expected"
+        },
+        {
+          "metric": "FY27 open access revenue outlook",
+          "value": "c.£130–150m",
+          "period": "FY27 guidance",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "Adjusted OP margin to progress to mid-teens"
+        },
+        {
+          "metric": "FY27 London Overground revenue outlook",
+          "value": "c.£300m",
+          "period": "FY27 guidance",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "Contract mobilised 3 May 2026"
+        },
+        {
+          "metric": "FY27 adjusted EPS outlook",
+          "value": "maintain",
+          "period": "FY27 guidance",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt",
+          "note": "From higher-quality earnings base after stronger FY26 outturn"
+        }
+      ],
+      "gaps": [
+        "Source text is truncated mid–going concern section; tail of RNS not available in this file.",
+        "Full statutory financial statements and reconciling notes (notes 3–5, 20, 22–23) are referenced but not included in this body extract.",
+        "Interim dividend per share for FY26 not explicitly stated (only 7.2p total and 5.0p final proposed).",
+        "Exact WCP/Avanti transfer date beyond 'around end of FY 2027' not specified.",
+        "No standalone 'other division' revenue beyond group central eliminations and minimal discontinued Greyhound US (£2.1m adjusted OP).",
+        "Alternative FCF measures (e.g. Yahoo £362.6m) not defined or reconciled in this source—only company-adjusted FCF £73.8m is disclosed."
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/3bf5ff09fbc5c747.txt"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-9e8ba257-0fe8-45ef-a18a-26aabaccf9a9"
+    },
+    {
+      "task_id": "filing_h1_2026_interim",
+      "task_type": "summarize_filing_body",
+      "status": "completed",
+      "findings": [
+        "FirstGroup plc Half-Yearly Report for the 26 weeks to 27 September 2025, published 18 November 2025 (CEO signed 17 November 2025) — source: /workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+        "Group adjusted revenue rose 30% to £833.6m (H1 2025: £639.6m; H1 2025 re-presented down £10m from £649.6m as reported); adjusted operating profit £103.6m (H1 2025: £100.8m); margin 12.4% vs 15.8%; adjusted EPS +16% to 9.9p (H1 2025: 8.5p), aided by 22m share buybacks and weighted average shares 559.7m vs 608.5m — source: c1db8cdf5ad2bd84.txt",
+        "First Bus: revenue £702.9m (+37% vs £513.7m); adjusted operating profit £42.7m (+4% vs £41.1m); margin 6.1% vs 8.0%. Regional Bus revenue £442.1m (+3.5%); Business & Coach £105.4m; Franchising £155.4m incl. First Bus London £150.2m (acquired Feb 2025). First Bus London performing ahead of acquisition assumptions — source: c1db8cdf5ad2bd84.txt",
+        "First Rail: adjusted revenue £130.9m (+4.9% vs £126.0m); adjusted operating profit £66.6m (-1.3% vs £67.9m). DfT TOC adjusted revenue £24.1m (£26.0m) and adj. op. profit £39.7m (£44.1m); open access + Rail Services revenue £106.8m (+6.8%) and adj. op. profit £26.9m (+3.1%). Open access revenue £53.2m; Rail Services £53.6m — source: c1db8cdf5ad2bd84.txt",
+        "Bus passenger KPIs: underlying volumes -4% YoY (excl. London and acquisitions since H1 2025); concessionary +4%; commercial -7% (attributed to £3 fare cap, lower consumer confidence, modal shift). Reported passenger volumes 196m vs 204m (excl. London). Open access rail journeys 1.43m (+2% vs 1.40m) — source: c1db8cdf5ad2bd84.txt",
+        "Free cash outflow £35.6m (H1 2025: +£2.6m inflow), driven by accelerated First Bus electrification capex; adjusted cash outflow £212.2m (H1 2025: £7.8m). H1 cash capex £136.4m; First Bus net capex £110.6m; FY 2026 net capex guided c.£180m (bus decarbonisation). c.£76m returned to shareholders (£49m buyback + FY25 final dividend); interim dividend 2.2p (H1 2025: 1.7p), c.£12.0m payable 30 Dec 2025 — source: c1db8cdf5ad2bd84.txt",
+        "Adjusted net debt £207.6m at 27 Sep 2025 (FY 2025: £86.9m; H1 2025 comparative £0.2m); reported net debt £992.0m. FY 2026 year-end adjusted net debt forecast £125m–£135m before growth capital. Movement in adjusted net debt in H1: +£120.7m, reflecting ring-fenced cash +£82.9m and IFRS 16 lease liability reduction — source: c1db8cdf5ad2bd84.txt",
+        "Management frames H1 as a 'period of transition': bus industry shift from £2 to £3 fare cap; UK bus and rail industries 'transition' with portfolio diversification; business restructuring delivered c.£6m of £15m annualised savings in H1 — source: c1db8cdf5ad2bd84.txt",
+        "Franchise roll-off / nationalisation: SWR transferred to DfTO 25 May 2025; c2c 20 Jul 2025; Greater Anglia 12 Oct 2025; West Midlands expected 1 Feb 2026; GTR 31 May 2026; remaining five NRCs ~3-month intervals. Government policy to bring NRCs into public ownership 'at the earliest possible opportunity'. DfT TOCs focused on delivery ahead of transfer; FY 2026 First Rail adj. revenue/profit expected marginally lower — source: c1db8cdf5ad2bd84.txt",
+        "Anticipated c.£125m cash inflow from DfT TOCs over three years from Oct 2025 (management fees a year in arrears), net of reorganisation costs; includes Rail Services continuing ≥1 year post-NRC end. SWR ring-fenced cash £64.1m anticipated returned in due course — source: c1db8cdf5ad2bd84.txt",
+        "Debt/cash colour attributed to the print: free cash outflow explicitly linked to accelerated First Bus electrification investment (£105m H1 net investment; £83.4m decarbonisation in period); adjusted net debt rise from £86.9m to £207.6m; working capital outflow £91.9m incl. £85.9m First Rail ring-fenced cash movement; buybacks £48.7m and dividends £26.9m also cited in adjusted cash bridge — source: c1db8cdf5ad2bd84.txt",
+        "Outlook: modest adjusted EPS growth FY 2026; at least maintain adjusted EPS FY 2027. First Bus FY revenue c.£1.4bn (c.£300m London). Group expects to mitigate c.£16m Group / c.£15m Bus annualised employers' NI impact — source: c1db8cdf5ad2bd84.txt"
+      ],
+      "figures": [
+        {
+          "metric": "Group adjusted revenue",
+          "value": "£833.6m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "H1 2025: £639.6m (+30%)"
+        },
+        {
+          "metric": "Group adjusted operating profit",
+          "value": "£103.6m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "H1 2025: £100.8m"
+        },
+        {
+          "metric": "Group adjusted EPS",
+          "value": "9.9p",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "H1 2025: 8.5p (+16%)"
+        },
+        {
+          "metric": "First Bus revenue",
+          "value": "£702.9m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "H1 2025: £513.7m (+37%)"
+        },
+        {
+          "metric": "First Bus adjusted operating profit",
+          "value": "£42.7m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "H1 2025: £41.1m (+4%); margin 6.1% vs 8.0%"
+        },
+        {
+          "metric": "First Rail adjusted revenue",
+          "value": "£130.9m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "H1 2025: £126.0m"
+        },
+        {
+          "metric": "First Rail adjusted operating profit",
+          "value": "£66.6m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "H1 2025: £67.9m; DfT TOC profit £39.7m; open access + Rail Services £26.9m"
+        },
+        {
+          "metric": "Underlying bus passenger volumes",
+          "value": "-4%",
+          "period": "H1 2026 vs H1 2025",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "Concessionary +4%; commercial -7%; excl. London and post-H1 2025 acquisitions"
+        },
+        {
+          "metric": "Open access passenger journeys",
+          "value": "1.43m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "H1 2025: 1.40m (+2%)"
+        },
+        {
+          "metric": "Free cash flow",
+          "value": "£(35.6)m outflow",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "H1 2025: +£2.6m; before acquisitions and shareholder returns"
+        },
+        {
+          "metric": "Adjusted cash flow",
+          "value": "£(212.2)m outflow",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "H1 2025: £(7.8)m; incl. capex, buybacks, lease payments, ring-fenced cash"
+        },
+        {
+          "metric": "Capital expenditure (cash)",
+          "value": "£136.4m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "H1 2025: £72.5m; First Bus net capex £110.6m"
+        },
+        {
+          "metric": "FY 2026 net capex guidance",
+          "value": "c.£180m",
+          "period": "FY 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "Accelerated First Bus decarbonisation; c.£20m government co-funding"
+        },
+        {
+          "metric": "Adjusted net debt",
+          "value": "£207.6m",
+          "period": "27 Sep 2025",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "FY 2025: £86.9m; excludes IFRS 16 leases and ring-fenced cash"
+        },
+        {
+          "metric": "FY 2026 adjusted net debt forecast",
+          "value": "£125m–£135m",
+          "period": "FY 2026 year-end",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "Before deployment of any growth capital"
+        },
+        {
+          "metric": "Interim dividend per share",
+          "value": "2.2p",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "H1 2025: 1.7p; c.£12.0m; pay date 30 Dec 2025"
+        },
+        {
+          "metric": "Shareholder returns (buybacks + dividends)",
+          "value": "c.£76m",
+          "period": "H1 2026",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "Incl. £49m of £50m buyback completed Oct 2025"
+        },
+        {
+          "metric": "Expected DfT TOC cash inflow on NRC transfer",
+          "value": "c.£125m",
+          "period": "3 years from Oct 2025",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt",
+          "note": "After reorganisation costs; fees received a year in arrears"
+        }
+      ],
+      "gaps": [
+        "Source text truncated at 'Principal risks and uncertainties' — full risk register not available in this extract",
+        "Condensed interim financial statement notes (e.g. Note 3 segment reconciliations, full balance sheet/cash flow tables) referenced but not fully reproduced in the extracted body",
+        "H1 2025 adjusted net debt shown as £0.2m in the headline summary table vs £86.9m at FY 2025 — filing does not reconcile this headline comparator in the excerpt"
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/c1db8cdf5ad2bd84.txt"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-ced347e1-d621-4b80-8d5c-249846a4a67e"
+    },
+    {
+      "task_id": "news_digest",
+      "task_type": "digest_news_manifest",
+      "status": "partial",
+      "findings": [
+        "FY26 results cluster (18–19 Jun 2026): multiple RSS titles report revenue growth, electric-fleet expansion and launch of a new £100m share buyback to cut share capital; yfinance summary adds 25% revenue increase alongside the £100m buyback (news_manifest.json#412f8f65, #1553b2bc, #9bfdf3b8824b8749, #dbd885c40dac7d77).",
+        "H1 2026 reaction cluster (18 Nov 2025): RSS titles state results beat forecasts while shares fell ~10% amid a 'period of transition'; separate titles cite UK bus passenger-volume decline, cash outflow and rising debt, and earnings/revenue rise with shares tumbling (news_manifest.json#cfd060a38f6fba70, #d53fad78e1897f5e, #2ecd404ec075c166, #ed1a8039810ab520).",
+        "London Overground award (Dec 2025): Reuters title cites a $4bn contract with shares rising (9 Dec 2025); Proactive title cites a £3bn contract to run London Overground (10 Dec 2025) (news_manifest.json#797c64b30b6181da, #5778fb76b1ae652c).",
+        "Mistral Data disposal: BusinessCloud title (29 Jul 2026) reports Tracsis buying a FirstGroup arm for £48m; 24 Aug 2026 cluster reports sale completion, near-7% early share fall and subsequent recovery, plus Kalkine commentary on sharpened focus post-deal (news_manifest.json#fc0efea5888d7773, #c064eb2045550e40, #6030c61f0976d537).",
+        "Open-access / revenue-mix commentary (Sep 2026): Kalkine RSS titles ask whether open-access push is reshaping rail earnings mix and whether London Overground plus bus acquisitions are rebuilding revenue mix (news_manifest.json#cdedd5da92b04826, #f372399bd7a6a33c).",
+        "AGM and capital-actions cluster (Jul–Sep 2026): shareholders backed board, dividend and capital actions at 2026 AGM (30 Jul); expanded all-employee SAYE grants (17 Jul); executives exercised options under 2023 SAYE plan (2 Sep); routine Holding(s) in Company notices (1 Sep) (news_manifest.json#0c4c3fd9e1e3c461, #e1846f8bb094ddc8, #f8c20b1615a933ab, #178c4ba68f664881).",
+        "Ongoing £100m buyback execution (Jul–Sep 2026): repeated Transaction in Own Shares / buyback-progress headlines; titled tranches include ~3m shares over five days (20 Jul), 2.77m at 179.85p average (27 Jul), 772,452 on 10–13 Aug, and 1.65m added to treasury (24–25 Aug); latest tranche headlines 1 Sep (news_manifest.json#a8181fd3e408911e, #9beef9f91937db85, #e9c926c3792317a3, #9ef6f57ddb68930b, #b845240b142b96ba).",
+        "Ticker collision flagged: Business Standard titles 'FGP standalone net profit declines 11.11% in the June 2026 quarter' (5 Aug 2026) — Indian standalone reporting, not attributable to LSE FirstGroup plc on RSS evidence alone (news_manifest.json#8ba7396232175a4a).",
+        "Discarded as instructed: DirectorsTalk syndicated 30–55% upside SEO pieces (multiple entries May–Sep 2026); routine same-day Transaction in Own Shares / Total Voting Rights / TVR reprint syndication without incremental facts beyond title.",
+        "No Sizewell C headlines present in this manifest.",
+        "Soft FY26 earnings commentary (25 Jun 2026): Simply Wall St and Kalkine titles reference soft earnings / hidden strength (news_manifest.json#cf216746d497021d, #3c04fe90b6053aab).",
+        "Broker view (12 May 2026): Proactive title states broker sees FirstGroup able to grow despite rail nationalisation (news_manifest.json#6618b336bd905560).",
+        "Institutional ownership (Jan 2026): yfinance/Google titles report institutional shareholders own 77% (news_manifest.json#accae7da-48cf-3704-8e87-d91d5a28c5d4)."
+      ],
+      "figures": [
+        {
+          "metric": "Share buyback programme (FY26 announcement)",
+          "value": "£100m",
+          "period": "Announced 18 Jun 2026",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json#1553b2bc",
+          "note": "Google News RSS title; yfinance summary corroborates GBP100m (#412f8f65)"
+        },
+        {
+          "metric": "Revenue growth (FY26)",
+          "value": "25%",
+          "period": "Full year 2026",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json#412f8f65",
+          "note": "yfinance summary only; not in Google News titles"
+        },
+        {
+          "metric": "Share price move post H1 2026",
+          "value": "−10%",
+          "period": "H1 2026 results day, 18 Nov 2025",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json#cfd060a38f6fba70",
+          "note": "RSS title; results described as beating forecasts"
+        },
+        {
+          "metric": "London Overground contract value",
+          "value": "£3bn",
+          "period": "Award Dec 2025",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json#5778fb76b1ae652c",
+          "note": "Proactive RSS title"
+        },
+        {
+          "metric": "London Overground contract value",
+          "value": "$4bn",
+          "period": "Award Dec 2025",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json#797c64b30b6181da",
+          "note": "Reuters RSS title; currency differs from £3bn Proactive headline"
+        },
+        {
+          "metric": "Mistral Data sale price",
+          "value": "£48m",
+          "period": "Agreed Jul 2026; completion headlines 24 Aug 2026",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json#fc0efea5888d7773",
+          "note": "BusinessCloud title names Tracsis as buyer"
+        },
+        {
+          "metric": "Share price intraday move on Mistral completion",
+          "value": "near −7% early fall, then recovery",
+          "period": "24 Aug 2026",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json#c064eb2045550e40",
+          "note": "Proactive RSS title"
+        },
+        {
+          "metric": "Shares repurchased (buyback tranche)",
+          "value": "2.77 million at 179.85p average",
+          "period": "Completed tranche reported 27 Jul 2026",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json#a8181fd3e408911e",
+          "note": "Kalkine RSS title"
+        },
+        {
+          "metric": "Shares repurchased (buyback tranche)",
+          "value": "772,452",
+          "period": "10–13 Aug 2026",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json#e9c926c3792317a3",
+          "note": "Kalkine RSS title"
+        },
+        {
+          "metric": "Shares added to treasury (buyback tranche)",
+          "value": "1.65 million",
+          "period": "Reported 24–25 Aug 2026",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json#9ef6f57ddb68930b",
+          "note": "Globe and Mail / TipRanks RSS titles"
+        },
+        {
+          "metric": "Shares repurchased (five-day buyback)",
+          "value": "nearly 3 million",
+          "period": "Five-day programme reported 20 Jul 2026",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json#9beef9f91937db85",
+          "note": "Kalkine RSS title"
+        },
+        {
+          "metric": "Institutional shareholding",
+          "value": "77%",
+          "period": "Jan 2026",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json#accae7da-48cf-3704-8e87-d91d5a28c5d4",
+          "note": "yfinance summary"
+        },
+        {
+          "metric": "Dividend per share",
+          "value": "£0.022",
+          "period": "Upcoming dividend noted Nov 2025",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json#300f6f8b-0f1f-3973-bf4a-ca159d1d963a",
+          "note": "yfinance summary"
+        },
+        {
+          "metric": "Standalone net profit change (likely wrong ticker)",
+          "value": "−11.11%",
+          "period": "June 2026 quarter",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json#8ba7396232175a4a",
+          "note": "Business Standard India; flagged as probable FGP ticker collision — exclude from FirstGroup plc fundamentals"
+        }
+      ],
+      "gaps": [
+        "No Sizewell C coverage in manifest.",
+        "H1 2026 and FY26 RSS titles lack EPS, revenue, net debt, FCF and bus-volume numeric detail — only directional themes (beat, −10%, cash outflow, passenger decline).",
+        "London Overground £3bn vs $4bn discrepancy unresolved from titles alone.",
+        "Mistral/Tracsis deal: completion date confirmed in titles but no net proceeds, gain-on-disposal or use-of-proceeds figures.",
+        "Open-access Kalkine pieces are question-headline SEO only — no quantitative rail earnings-mix data.",
+        "AGM 'capital actions' backed per title but no dividend pence, scrip or buyback-authorisation amounts in RSS.",
+        "£100m buyback: no cumulative repurchase total or remaining capacity in manifest titles.",
+        "26 Aug 2026 'sharp share-price swing' headline gives no cited trigger or magnitude beyond title.",
+        "Manifest is heavily syndicated (DirectorsTalk, duplicate Google News URLs); substantive newswire body text not available."
+      ],
+      "sources_read": [
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-66980b1a-8190-43d4-9457-5989e4e02b31"
+    },
+    {
+      "task_id": "screen_context",
+      "task_type": "screen_context",
+      "status": "partial",
+      "findings": [
+        "Screen signal is strong_buy with 15/22 models passed, composite score 86.49%, sector-relative composite 87.36%, and all 5/5 families passed (cheapness, quality, dividend, GARP, risk) — source: /workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+        "Research overlay: verdict accumulate, risk medium, confidence 0.74, adjusted_signal buy; rationale cites improving adjusted earnings, manageable adjusted leverage, disciplined capital returns, but flags FCF definition divergence, lease-adjusted balance-sheet complexity, and UK transport policy transition — source: /workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+        "Signal persistence: 12 weeks at signal since 2026-08-02, stability_label persistent, signal_trend stable; conviction_score ~63% (0.628) — source: /workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+        "FCF basis overlay active (fcf_basis_overlay true): summary records filing £362.6M, screen TTM £302.8M, company-adjusted £73.8M; fcf_definition_divergence and fcf_divergence_flagged both false despite material spread — source: /workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+        "Yahoo TTM cashflow suppressed (ttm_cashflow_suppressed true, reason quarterly_cashflow_empty); cashflow_metrics and fcf top-level fields are null — source: /workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+        "Dual leverage display: Yahoo D/E 161% vs screen D/E 19% and filing-adjusted net debt £137.7m; leverage_override false, dual_leverage_display false; summary notes IFRS lease gross-up on Yahoo figure — source: /workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+        "Key valuation metrics: P/E 8.7, P/B 1.3, dividend yield 4.0%, ROE 16.7%; timing neutral, RSI ~35 — source: /workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+        "Trade plan embedded in summary (trade_plan field null): core 60% limit £173.14, tactical 40% limit £166.14, tactical stop £156.07, target £182.18 — source: /workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+        "failed_models is empty [] and model_failures {} despite 22 model_count minus 15 models_passed implying 7 non-passes; passed_models lists 15 names — source: /workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+        "Claims requiring confirmation on filing-FCF basis: filing £362.6M FCF vs screen TTM £302.8M vs company-adj £73.8M; yield-dependent screen passes under overlay; bus volume weakness and rail contract roll-off cited in action_note — source: /workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+        "Claims requiring confirmation on lease-adjusted basis: Yahoo D/E 161% (IFRS lease gross-up) vs £137.7m adjusted net debt and screen D/E 19%; research flags lease-adjusted balance-sheet complexity — source: /workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+        "Claims requiring confirmation on post-nationalisation-mix basis: UK transport policy transition; bus/rail mix, volume weakness, and rail contract roll-off referenced in research overlays — source: /workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+        "Summary text states conviction 87% while conviction_score field is ~63%; discrepancy unresolved in this source — source: /workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json"
+      ],
+      "figures": [
+        {
+          "metric": "models_passed",
+          "value": "15/22",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "signal strong_buy"
+        },
+        {
+          "metric": "composite_score",
+          "value": "86.49%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "0.8649"
+        },
+        {
+          "metric": "families_passed",
+          "value": "5/5",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "cheapness, quality, dividend, GARP, risk"
+        },
+        {
+          "metric": "adjusted_signal",
+          "value": "buy",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "screen strong_buy with research overlay"
+        },
+        {
+          "metric": "research_verdict",
+          "value": "accumulate",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "risk medium, confidence 0.74"
+        },
+        {
+          "metric": "FCF (filing)",
+          "value": "£362.6M",
+          "period": "per summary/action_note",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "fcf_basis_overlay true"
+        },
+        {
+          "metric": "FCF (screen TTM)",
+          "value": "£302.8M",
+          "period": "screen TTM",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "ttm_cashflow_suppressed true"
+        },
+        {
+          "metric": "FCF (company-adjusted)",
+          "value": "£73.8M",
+          "period": "company-adj",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "key_metrics.FCF raw 73800000.0"
+        },
+        {
+          "metric": "D/E (Yahoo)",
+          "value": "161%",
+          "period": "Yahoo",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "IFRS lease gross-up cited in summary"
+        },
+        {
+          "metric": "adjusted net debt (filing)",
+          "value": "£137.7m",
+          "period": "filing-adjusted",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "leverage_override false"
+        },
+        {
+          "metric": "D/E (screen)",
+          "value": "19%",
+          "period": "screen",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "uses filing-adjusted net debt"
+        },
+        {
+          "metric": "P/E",
+          "value": "8.7",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": null
+        },
+        {
+          "metric": "P/B",
+          "value": "1.3",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "summary also cites P/B=1.34 in highlights"
+        },
+        {
+          "metric": "dividend yield",
+          "value": "4.0%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": null
+        },
+        {
+          "metric": "ROE",
+          "value": "16.7%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": null
+        },
+        {
+          "metric": "weeks_at_signal",
+          "value": "12",
+          "period": "since 2026-08-02",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "stability_label persistent"
+        },
+        {
+          "metric": "conviction_score",
+          "value": "63%",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "0.628; summary text says 87%"
+        },
+        {
+          "metric": "RSI_14",
+          "value": "35",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "34.50 rounded; timing neutral"
+        },
+        {
+          "metric": "trade plan core limit",
+          "value": "£173.14",
+          "period": "from summary",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "60% allocation; trade_plan field null"
+        },
+        {
+          "metric": "trade plan tactical limit",
+          "value": "£166.14",
+          "period": "from summary",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "40% allocation"
+        },
+        {
+          "metric": "research_confidence",
+          "value": "0.74",
+          "period": "screen snapshot",
+          "source_path": "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json",
+          "note": "medium risk"
+        }
+      ],
+      "gaps": [
+        "Identity of 7 non-passing models not recorded: failed_models empty and model_failures {} despite model_count 22 and models_passed 15",
+        "FCF reconciliation methodology not explained: three-way spread (£362.6M / £302.8M / £73.8M) with fcf_definition_divergence and fcf_divergence_flagged both false",
+        "Yahoo TTM cashflow unavailable (quarterly_cashflow_empty); cashflow_metrics and fcf fields null — screen TTM £302.8M provenance not detailed",
+        "Lease-adjustment bridge from Yahoo D/E 161% to filing £137.7m adj net debt and screen D/E 19% not quantified in snapshot",
+        "Post-nationalisation transport mix impact (bus volumes, rail contract roll-off, policy transition) not quantified — qualitative flags only",
+        "trade_plan structured field is null; limits only in summary string",
+        "Conviction discrepancy: summary states 87% vs conviction_score field ~63%",
+        "Improving adjusted earnings, capital returns, and bus volume weakness asserted in overlays without filing line-item support in this source"
+      ],
+      "sources_read": [
+        "/workspace/docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/screening_snapshot.json"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-4317db01-ef64-408d-a91e-e0d93fff955a"
+    },
+    {
+      "task_id": "gap_inventory",
+      "task_type": "gap_inventory",
+      "status": "partial",
+      "findings": [
+        "yahoo_quarterly_income and yahoo_quarterly_cashflow are empty objects in financials_annual.json; ttm_cashflow_suppressed=true with reason quarterly_cashflow_empty — no intra-quarter P&L or cash bridge from Yahoo.",
+        "alternate_news is unavailable (source_inventory thin step); news_manifest.json holds 126 Google News/yfinance RSS headlines only — no full alternate-news article bodies.",
+        "filings_index.json lists exactly one trading_update (4c56aaf324fdfd91, pre-close 26 Mar 2026); no post-FY26 Board trading update exists as of source fetch (4 Sep 2026).",
+        "AFR body d45784fca483323c.txt (1 Jul 2026) is an NSM submission notice referencing the 18 Jun 2026 results announcement — not the full Annual Report financial tables.",
+        "Pre-close TU (4c56aaf324fdfd91.txt): First Bus and First Rail trading in line; modest FY26 adjusted EPS growth expected; FY26 year-end adjusted net debt £135–145m; fuel hedged c.88% FY27 and c.53% FY28; electricity hedged c.77% FY27 and c.46% FY28.",
+        "AGM statement (4028c725377752a6.txt, 30 Jul 2026): FY-to-date trading in line with 18 Jun FY26 results and 29 Jul Mistral sale announcement; H1 FY27 (six months to Sep 2026) results scheduled 17 Nov 2026 — latest formal Board trading comment, not a post-FY26 TU.",
+        "London Overground preferred-operator RNS (aefbcf7637993f73.txt): contract start 3 May 2026; initial eight-year term plus up to two-year extension; estimated value c.£3bn over eight years; TfL retains revenue risk; FRLL delivers services; profit margin on concession payments with performance fee upside; £30m Performance Bond and £80m Parent Company Guarantee required.",
+        "£100m buyback launch (152c483b0284d525.txt, 18 Jun 2026): four tranches of up to £25m (RBC tranches 1 & 3, Panmure Liberum 2 & 4); deadline 17 Jun 2027; cap 84,323,374 shares (14.99% issued); treasury then cancellation.",
+        "Buyback tranche update (478824dce96b4609.txt, 27 Jul 2026): first tranche completed 24 Jul — 13,553,662 shares for £24,806,895; second tranche commenced same day.",
+        "Mistral disposal agreed (1c5ad278ca15df7c.txt, 29 Jul 2026): enterprise value £48m cash; FY26 revenue c.£13m, operating profit c.£4m; FY27 First Rail adjusted operating profit −c.£4m; Group adjusted EPS −c.0.6p (FY26 base 20.3p); profit on disposal c.£46m (adjusting item); three-year free cash generation guidance raised to c.£435m.",
+        "Mistral completion (f8ef13aa344cabd9.txt, 23 Aug 2026): £48m cash received on completion, subject to customary adjustments.",
+        "Sizewell C contract (d4e60364bbdac9ab.txt, 7 Jul 2026): Specialist Passenger Solutions awarded up to five-year worker transport from Jul 2026; c.150 zero-emission buses (hydrogen/electric) supplied by Sizewell C Ltd; c.400 new jobs; Business & Coach segment revenue doubled to £230m in FY26.",
+        "Tootbus acquisition (5e08fec9f5b9088c.txt, Dec 2025): consideration c.£17m cash; 63 buses, c.190 staff; Tootbus FY2023 revenue £15.9m, operating loss £(0.6)m; c.£30m annual revenue anticipated by FY2029; FY2026 year-end adjusted net debt now expected £140–150m.",
+        "fcf_bridge.json documents three-way FCF divergence: company-adjusted £113.5m (policy), filing OCF−CapEx £362.6m, Yahoo screen TTM £302.8m — memo cannot reconcile intra-year FCF without quarterly Yahoo or unread H1/FY results bodies.",
+        "Without the assigned reads, memo could not verify: Overground concession economics beyond headline £3bn; £100m buyback residual after tranche 1; Mistral-driven cash uplift and FY27 EPS drag; Sizewell/Tootbus contract revenue; or any Board comment after 30 Jul 2026."
+      ],
+      "figures": [
+        {
+          "metric": "Yahoo quarterly_income records",
+          "value": "0",
+          "period": "all quarters",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/financials_annual.json",
+          "note": "Empty object — no quarterly P&L"
+        },
+        {
+          "metric": "Yahoo quarterly_cashflow records",
+          "value": "0",
+          "period": "all quarters",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/financials_annual.json",
+          "note": "Empty object; TTM cashflow suppressed"
+        },
+        {
+          "metric": "Company-adjusted FCF (policy)",
+          "value": "£113.5m",
+          "period": "FY2026",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/fcf_bridge.json",
+          "note": "Before acquisitions/returns definition"
+        },
+        {
+          "metric": "Filing-aligned FCF (OCF − CapEx)",
+          "value": "£362.6m",
+          "period": "FY2026",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/fcf_bridge.json",
+          "note": "Yahoo statutory bridge; overstates equity FCF vs management"
+        },
+        {
+          "metric": "Pre-close adjusted net debt guidance",
+          "value": "£135–145m",
+          "period": "FY2026 year-end",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/4c56aaf324fdfd91.txt",
+          "note": "Pre-close TU before final FY26 print"
+        },
+        {
+          "metric": "London Overground contract value",
+          "value": "c.£3bn",
+          "period": "8 years (+ optional 2)",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/aefbcf7637993f73.txt",
+          "note": "TfL retains revenue risk; margin on concession payments not quantified"
+        },
+        {
+          "metric": "Overground Performance Bond",
+          "value": "£30m",
+          "period": "contract term",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/aefbcf7637993f73.txt",
+          "note": "Plus £80m Parent Company Guarantee"
+        },
+        {
+          "metric": "Share buyback programme",
+          "value": "£100m",
+          "period": "Jun 2026 – Jun 2027",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/152c483b0284d525.txt",
+          "note": "Four £25m tranches"
+        },
+        {
+          "metric": "Buyback tranche 1 spend",
+          "value": "£24,806,895",
+          "period": "completed 24 Jul 2026",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/478824dce96b4609.txt",
+          "note": "13,553,662 shares; residual programme balance not aggregated in one RNS"
+        },
+        {
+          "metric": "Treasury shares held",
+          "value": "27,778,020",
+          "period": "28 Aug 2026",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/cfadd349de7818b5.txt",
+          "note": "Under £100m programme announced 18 Jun 2026"
+        },
+        {
+          "metric": "Mistral Data enterprise value",
+          "value": "£48m",
+          "period": "disposal",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/1c5ad278ca15df7c.txt",
+          "note": "Cash-free, debt-free; completed 23 Aug 2026"
+        },
+        {
+          "metric": "Mistral FY27 adjusted EPS impact",
+          "value": "−c.0.6p",
+          "period": "FY2027",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/1c5ad278ca15df7c.txt",
+          "note": "FY2026 adjusted EPS base 20.3p cited in same RNS"
+        },
+        {
+          "metric": "Three-year free cash generation guidance",
+          "value": "c.£435m",
+          "period": "post-Mistral sale",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/1c5ad278ca15df7c.txt",
+          "note": "Includes capital allocation for growth and shareholder returns"
+        },
+        {
+          "metric": "Business & Coach revenue",
+          "value": "£230m",
+          "period": "FY2026",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/d4e60364bbdac9ab.txt",
+          "note": "Doubled vs prior period per CEO comment"
+        },
+        {
+          "metric": "Tootbus acquisition consideration",
+          "value": "c.£17m",
+          "period": "Dec 2025",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/5e08fec9f5b9088c.txt",
+          "note": "Financed from existing cash; FY2023 Tootbus revenue £15.9m"
+        },
+        {
+          "metric": "Post-acquisition adjusted net debt guidance",
+          "value": "£140–150m",
+          "period": "FY2026 year-end",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/5e08fec9f5b9088c.txt",
+          "note": "Revised after Tootbus acquisition"
+        },
+        {
+          "metric": "Fuel hedge cover",
+          "value": "c.88% FY27 / c.53% FY28",
+          "period": "forward programme",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/4c56aaf324fdfd91.txt",
+          "note": "Additional hedges entered Feb 2026"
+        },
+        {
+          "metric": "News manifest article count",
+          "value": "126",
+          "period": "as of 4 Sep 2026",
+          "source_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json",
+          "note": "Headlines/summaries only; alternate_news body step absent"
+        }
+      ],
+      "gaps": [
+        "Intra-year and H1 FY27 FCF/OCF cannot be verified: Yahoo quarterly_cashflow empty and no structured interim extract in this task scope.",
+        "Intra-year revenue/profit seasonality unavailable: Yahoo quarterly_income empty.",
+        "alternate_news step dead — only RSS metadata in news_manifest; no full-text third-party news bodies for contract or trading colour.",
+        "AFR body d45784fca483323c.txt contains no financial statement line items; full AFR tables require separate FY26 results RNS or Companies House iXBRL body.",
+        "London Overground annual profit/margin and concession payment schedule not disclosed — only headline £3bn and qualitative margin language.",
+        "Sizewell C contract revenue/value not stated; only fleet size, term and job count.",
+        "£100m buyback residual (cumulative £ spent vs £100m cap as of Sep 2026) not published in a single figure — only tranche-1 total (£24.8m) plus incremental transaction RNS.",
+        "No post-FY26 trading update: latest Board trading comment is AGM statement 30 Jul 2026; no update after Mistral completion (23 Aug) or ongoing buyback into Sep.",
+        "FY26 Yahoo annual omits diluted EPS/share count (present for FY25 only in financials_annual.json) — adjusted EPS verification needs FY26 results RNS body outside this read set."
+      ],
+      "sources_read": [
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/financials_annual.json",
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/fcf_bridge.json",
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/news_manifest.json",
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/filings_index.json",
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/d45784fca483323c.txt",
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/4028c725377752a6.txt",
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/4c56aaf324fdfd91.txt",
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/aefbcf7637993f73.txt",
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/152c483b0284d525.txt",
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/1c5ad278ca15df7c.txt",
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/f8ef13aa344cabd9.txt",
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/d4e60364bbdac9ab.txt",
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/5e08fec9f5b9088c.txt",
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/478824dce96b4609.txt",
+        "docs/data/research_director_worker/FGP.L/20260904T164856Z/sources/filings/bodies/cfadd349de7818b5.txt"
+      ],
+      "worker_model": "composer-2.5",
+      "worker_agent_id": "agent-17013cf9-247c-43a0-bf38-d9f92953a01f"
+    }
+  ],
+  "rubric": {
+    "citation_accuracy": 0.4,
+    "filing_alignment": 0.75,
+    "gap_honesty": 1.0,
+    "structural": 1.0,
+    "composite": 0.715,
+    "notes": []
+  },
+  "research_verdict": "accumulate",
+  "research_confidence": 0.68,
+  "markdown_path": "docs/data/research_director_worker/FGP.L/20260904T164856Z/research.md"
+}

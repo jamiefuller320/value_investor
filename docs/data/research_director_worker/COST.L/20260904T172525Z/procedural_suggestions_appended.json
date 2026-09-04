@@ -1,0 +1,190 @@
+{
+  "appended": [
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Reject investegate_resolved (and Google News) hits unless issuer ticker is COST / costain-group--cost or Companies House number 01393773. Token “cost” and US ticker COST are unsafe keys for this LSE name.",
+      "source": "director_worker",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:33:50.472065+00:00"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "prompt",
+      "priority": "high",
+      "suggestion": "Worker and memo prompts should hard-ban using filings whose URL path is not costain-group--cost, and news titles that lack “Costain”. State that framework awards are not booked revenue.",
+      "source": "director_worker",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:33:50.472080+00:00"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Pull IR slide/Investor Meet metrics (RNS already flags the event) and parse H1 interim cash-flow from the filing body to replace empty Yahoo quarterly_income/quarterly_cashflow instead of only suppressing TTM.",
+      "source": "director_worker",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:33:50.472085+00:00"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "schema",
+      "priority": "high",
+      "suggestion": "Validate fcf.currency against listing CCY (GBP for COST.L); add order_book_secured / order_book_preferred / framework_only flags; remap filings_index.body_path into the trial sources/ tree.",
+      "source": "director_worker",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:33:50.472089+00:00"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Enable cyclical/public-capex and cash-conversion overlays for UK contractors; treat falling revenue + rising FCF as a quality warning until filing mix notes confirm; do not score framework wins as backlog.",
+      "source": "director_worker",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:33:50.472095+00:00"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "orchestration",
+      "priority": "medium",
+      "suggestion": "Allow a trading_update or rns_cluster task type, or raise the cap to six, so AGM updates and contract RNSs are not dropped when annual+interim+news+screen+gap are mandatory.",
+      "source": "director_worker",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:33:50.472098+00:00"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "monitoring",
+      "priority": "medium",
+      "suggestion": "For weeks_at_signal<=1 strong_buys, require the memo to compare live price vs H1-date price and vs cited analyst PTs before endorsing the screen’s limit ladder.",
+      "source": "director_worker",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:33:50.472101+00:00"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "research",
+      "priority": "high",
+      "suggestion": "Evidence ladder correctly ranks filing bodies first, and COST.L has 8 annual + 1 interim + 1 trading-update bodies. But investegate_resolved ingested non-issuer RNSs via the token “cost” (Atlantic Lithium, Cadence Minerals, Anglo Asian Mining, Capita, Pennon, United Utilities). Workers reading filings_index by headline will contaminate a Costain memo unless issuer ticker/company number is a hard filter.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "other",
+      "recorded_at": "2026-09-04T17:33:50.472106+00:00"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "research",
+      "priority": "high",
+      "suggestion": "News query `\"Costain Group PLC\" OR COST stock UK` floods the manifest with Costco (COST), Tesco/BT/Vodafone/ISA “cost” pieces. Alternate_news is a listed thin/missing step, so there is no clean second news channel. Digest prompts must require issuer=Costain and discard substring hits; otherwise qualitative tone will be garbage.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "other",
+      "recorded_at": "2026-09-04T17:33:50.472111+00:00"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Ladder + four task types + 5-task cap is adequate for annual/interim/news/screen/gaps, but drops the 2026-05-14 AGM trading update and the June–July contract RNSs (TfL, West Winch, United Utilities) that sit in filings_index as period=other. For a contractor, those are first-class evidence, not optional colour.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "methodology",
+      "recorded_at": "2026-09-04T17:33:50.472115+00:00"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "monitoring",
+      "priority": "high",
+      "suggestion": "conviction_score 0.442, weeks_at_signal=1, stability=new, timing=neutral — the screen already knows this is a fresh print. Overlays are all false, including cyclical_exposure, cash_conversion, and interim_quality, on a UK infrastructure contractor just after H1. Sector overlays are not firing where they should.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "monitoring",
+      "recorded_at": "2026-09-04T17:33:50.472119+00:00"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "financials_annual.json is Yahoo-shaped (years 2021–2025; quarterly_income/quarterly_cashflow empty; ttm_cashflow_suppressed). screening_snapshot.fcf.currency is USD. There is no schema field for order book, secured vs preferred, or framework conversion — the exact quantities a Costain verify-before-trade memo needs. NCAV is flagged missing, which is expected for this model, not a COST.L-specific hole.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "other",
+      "recorded_at": "2026-09-04T17:33:50.472127+00:00"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "orchestration",
+      "priority": "medium",
+      "suggestion": "Allowed types (summarize_filing_body, digest_news_manifest, screen_context, gap_inventory) cannot express “summarize trading_update” or “cluster contract-win RNSs” without overloading an annual/interim focus string. Director cannot assign IR-metric or quarterly-cashflow reads because those sources are thin/absent — gap_inventory is the right escape hatch, but it only inventories, it does not fill.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "task_schema",
+      "recorded_at": "2026-09-04T17:33:50.472132+00:00"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "sources",
+      "priority": "medium",
+      "suggestion": "Ladder order is sound (filings_bodies → filings_index → yahoo_financials → yahoo_quarterly_cashflow → news → alternate_news → screening → screen_run → ir_metrics → macro). Thin steps match the inventory: no ir_presentation_metrics file, no alternate_news file, empty Yahoo quarterlies. IR allowlist in filings_index.note did not fire despite an Investor Meet Company RNS — ingest gap, not ladder-order gap.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "evidence_ladder",
+      "recorded_at": "2026-09-04T17:33:50.472137+00:00"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "Director-only catalog pass can form ticker-specific questions (revenue/profit divergence, framework vs backlog, cash restrictedness, pension, buybacks, FX tag) without drafting the memo. Blind spot: body_path in filings_index points at docs/data/research/COST.L/... not the trial snapshot tree; workers need an explicit remap rule or they will miss bodies.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "memo_structure",
+      "recorded_at": "2026-09-04T17:33:50.472139+00:00"
+    },
+    {
+      "ticker": "COST.L",
+      "name": "Costain Group PLC",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "Piotroski 8/9 fails only asset turnover — consistent with falling revenue — yet the name is still strong_buy across cheapness/quality/dividend/GARP/risk. Scoring lacks a contractor-specific WIP/claims/cash-conversion brake, so the director–worker loop is being asked to qualitatively veto a mechanically clean screen.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T172525Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "other",
+      "recorded_at": "2026-09-04T17:33:50.472143+00:00"
+    }
+  ],
+  "count": 16
+}

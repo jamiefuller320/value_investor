@@ -1,0 +1,154 @@
+{
+  "task_id": "bree_gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "financials_annual.json: quarterly_income and quarterly_cashflow are empty objects; cashflow_metrics sets ttm_cashflow_suppressed true with reason quarterly_cashflow_empty — no Yahoo intra-year cashflow series available.",
+    "ir_presentation_metrics and alternate_news are absent from the assigned sources tree (no matching files or fields).",
+    "snapshots/20260904T172806Z.json and screening_snapshot.json both set cashflow_metrics, fcf and operating_cashflow to null despite key_metrics.FCF showing 133200000.0; yahoo_quarterly.ttm_cashflow_suppressed mirrors financials_annual.",
+    "filings_index.json period_coverage annual=12 is inflated: mis-tagged annual includes Notice of Annual Results (b371adb6ce5de9a3), IMC presentation (b6fc40ecc83fddc6), Backing British Cement (c7837afe18f088ea), PDMR (8269d980f8536171), duplicate Google News items (739116e6a5d9a1a8, 6decd06e57782d17) and CH initial accounts (ch_14739556_MzM5NTYwNTAwMGFkaXF6a2N4). Core annual set is roughly Final Results, 2025 Annual Report and three CH group accounts (2024–2026).",
+    "Two filings_index body_path entries point outside this worker tree: 2774f37ac9bc9add → output/research/BREE.L/...; 240bf31348a01a86 → output/research/BREE.L/... (most others reference docs/data/research/BREE.L/...).",
+    "Present but unused in a typical memo pass: macro_context.json (GBP/USD 1.3543, FTSE 100 10799.57 as of 2026-09-04), screen_run_manifest.json (strong_buy, 9/22 models, core limit £327.08), 30 news_batch_*.json files, news_manifest.json (42 articles), and two snapshots.",
+    "Highest-value bodies indexed but not opened for this task: 2025 Annual Report (af6f746de7cb473b), CH 2026 group accounts (ch_14739556_MzUyMzkyMDgwNWFkaXF6a2N4), 20 Nov 2025 Trading Update (4597aa4b4a4ee75c), 29 Apr 2026 AGM Trading Update (6dd2a912dc1d4e56), 9 Jun 2026 Acquisition RNS (a46559fbb262bfff), Back British Cement updates (0ef023e9665944cd, 240bf31348a01a86), 29 Jul NED appointment (c18069c59dfac645).",
+    "From Final Results RNS (eddaa504dfb0ee94): FY2025 revenue £1,713.8m (+9%, LFL −3%), underlying EBITDA £278.8m (+3%), Breedon-definition FCF £133.2m (+17%, conversion 48%), covenant leverage 1.8x, net debt £527.3m, DPS 15.0p, underlying EPS 31.8p; Lionmark EV US$238m; RCF extended to Jul 2029; covenant threshold 3.0x with interest cover tested half-yearly.",
+    "From Interim Results 2026 RNS (12bf5ad24805dc03): H1 revenue £857.9m (+5%, LFL +3%), underlying EBITDA £115.5m (flat, LFL +1%), covenant leverage 2.1x (H1 peak working capital), net debt £690.5m; £110m bolt-ons including Falling Springs (~£90m EV, May 2026) and Booth; FY2026 guidance in line with consensus underlying EBITDA ~£280m; interim DPS 5.00p (+5%).",
+    "Memo must leave unknown until unread sources are assigned: AR/CH statutory note detail (leases, pensions, tax, segment notes), exact covenant headroom and lender-adjusted EBITDA bridges, Nov 2025 and Apr 2026 trading-update guidance paths, June acquisition consideration/leverage impact beyond index headline, IR-slide KPIs (volume/price bridges, regional margins), H1/H2 intra-year cashflow and working-capital seasonality, cement-policy substance beyond campaign headlines, and any RNS after 3 Sep 2026 or autumn 2026 trading update."
+  ],
+  "figures": [
+    {
+      "metric": "Yahoo annual revenue",
+      "value": "1713800000",
+      "period": "FY2025",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/financials_annual.json",
+      "note": "Total Revenue field; GBP units per Yahoo"
+    },
+    {
+      "metric": "Yahoo annual free cash flow",
+      "value": "105800000",
+      "period": "FY2025",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/financials_annual.json",
+      "note": "Yahoo definition; differs from Breedon FCF £133.2m in Final Results"
+    },
+    {
+      "metric": "Yahoo net debt",
+      "value": "481100000",
+      "period": "FY2025",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/financials_annual.json",
+      "note": "Net Debt excluding IFRS16 presentation variant"
+    },
+    {
+      "metric": "Operating cashflow (annual metrics block)",
+      "value": "225900000",
+      "period": "FY2025",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/financials_annual.json",
+      "note": "cashflow_metrics.operating_cashflow"
+    },
+    {
+      "metric": "Underlying EBITDA",
+      "value": "278.8",
+      "period": "FY2025",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/filings/bodies/eddaa504dfb0ee94.txt",
+      "note": "£m; statutory release 11 Mar 2026"
+    },
+    {
+      "metric": "Breedon-definition free cash flow",
+      "value": "133.2",
+      "period": "FY2025",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/filings/bodies/eddaa504dfb0ee94.txt",
+      "note": "£m; FCF conversion 48%"
+    },
+    {
+      "metric": "Covenant leverage",
+      "value": "1.8x",
+      "period": "FY2025 year-end",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/filings/bodies/eddaa504dfb0ee94.txt",
+      "note": "Reduced 0.4x from H1 2025 peak 2.2x"
+    },
+    {
+      "metric": "Net debt",
+      "value": "527.3",
+      "period": "31 Dec 2025",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/filings/bodies/eddaa504dfb0ee94.txt",
+      "note": "£m including IFRS 16 leases"
+    },
+    {
+      "metric": "Dividend per share",
+      "value": "15.0p",
+      "period": "FY2025",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/filings/bodies/eddaa504dfb0ee94.txt",
+      "note": "Full-year DPS; payout ratio 47%"
+    },
+    {
+      "metric": "H1 underlying EBITDA",
+      "value": "115.5",
+      "period": "H1 2026",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/filings/bodies/12bf5ad24805dc03.txt",
+      "note": "£m; flat YoY, LFL +1%"
+    },
+    {
+      "metric": "H1 revenue",
+      "value": "857.9",
+      "period": "H1 2026",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/filings/bodies/12bf5ad24805dc03.txt",
+      "note": "£m; +5% reported, +3% LFL"
+    },
+    {
+      "metric": "Covenant leverage",
+      "value": "2.1x",
+      "period": "30 Jun 2026",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/filings/bodies/12bf5ad24805dc03.txt",
+      "note": "Down from 2.2x at H1 2025; peak seasonal working capital"
+    },
+    {
+      "metric": "Net debt",
+      "value": "690.5",
+      "period": "30 Jun 2026",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/filings/bodies/12bf5ad24805dc03.txt",
+      "note": "£m including IFRS 16"
+    },
+    {
+      "metric": "Falling Springs enterprise value",
+      "value": "c.£90m",
+      "period": "May 2026 acquisition",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/filings/bodies/12bf5ad24805dc03.txt",
+      "note": "Cash consideration £93.5m per note 11"
+    },
+    {
+      "metric": "Screen composite score",
+      "value": "0.8146",
+      "period": "snapshot 2026-09-04",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/snapshots/20260904T172806Z.json",
+      "note": "Strong Buy; 9/22 models passed"
+    },
+    {
+      "metric": "GBP/USD",
+      "value": "1.3543",
+      "period": "2026-09-04",
+      "source_path": "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/macro_context.json",
+      "note": "Secondary regime marker only"
+    }
+  ],
+  "gaps": [
+    "Yahoo quarterly_income and quarterly_cashflow empty — no TTM or intra-year Yahoo cashflow bridge.",
+    "ir_presentation_metrics step missing — no extracted IR-deck KPIs (volume/price/margin bridges).",
+    "alternate_news pipeline absent — only google_news/yfinance via news_manifest and news_batch files.",
+    "Snapshot cashflow_metrics and fcf null — screen FCF yield may rely on stale or mismatched Breedon vs Yahoo FCF.",
+    "Period tagging overstates annual coverage (12 vs ~5 substantive annual filings).",
+    "Eight high-priority filing bodies unread (AR, CH 2026 accounts, both trading updates, acquisition RNS, cement campaign updates, NED RNS).",
+    "Statutory note detail, covenant mathematics, acquisition economics (beyond H1 Falling Springs/Booth), trading-update guidance revisions, and post-3 Sep 2026 developments remain unassigned."
+  ],
+  "sources_read": [
+    "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/financials_annual.json",
+    "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/filings/filings_index.json",
+    "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/snapshots/20260904T172806Z.json",
+    "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+    "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/news_manifest.json",
+    "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/macro_context.json",
+    "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screen_run_manifest.json",
+    "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/news_batch_20260904_172732.json",
+    "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/filings/bodies/eddaa504dfb0ee94.txt",
+    "/workspace/docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/filings/bodies/12bf5ad24805dc03.txt"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-6a3c5083-4088-4766-b7b5-41270c4d714c"
+}
