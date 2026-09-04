@@ -89,6 +89,11 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
     ],
+    # euro_depth buy-tier deepen — unmeasured AED.BR (ESEF index miss; IR PDF seed).
+    "AED.BR": [
+        "https://aedifica.eu/wp-content/uploads/2026/03/AEDIFICA-RA25_EN_2026-03-24b.pdf",
+        "https://aedifica.eu/wp-content/uploads/2026/02/AED_CP2026_EN_FY-2025_2026-02-12d_BB.pdf",
+    ],
     "UMI.BR": [
         "https://www.umicore.com/files/secure-documents/7cfa416e-e500-4fbd-a040-2b45c0575430.pdf",
         "https://www.umicore.com/files/secure-documents/8b39d7eb-8694-4c9b-9dfc-5b12a2d2cf81.pdf",
@@ -111,6 +116,10 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     ],
     "ESSITY-B.ST": [
         "https://assets.www.essity.com/essity/Annual-Report-2025-digital.pdf",
+    ],
+    # euro_depth buy-tier deepen — zero-body ASSA-B.ST (Swedish ESEF + English IR PDF).
+    "ASSA-B.ST": [
+        "https://www.assaabloy.com/group/en/documents/investors/annual-reports/2025/Annual%20Report%202025.pdf",
     ],
     "DOC.VI": [
         "https://www.doco.com/Portals/8/berichte/jahres-und-quartalsberichte/en/q4_2526.pdf",
@@ -179,8 +188,8 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.bmv.com.mx/docs-pub/10-k/10-k_1539631_2025_1.pdf",
     ],
     "RAND.AS": [
-        "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Randstad_Annual_Report_2025_F.pdf?VersionId=oWhcOhRfI3tRFxNNaGUMvL7cHYdvo0Th",
-        "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Q4_2025_Press_Release.pdf?VersionId=0.GcQMprgqooojpAbxFmT8fIdSohlsDd",
+        "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Randstad_Annual_Report_2025_F.pdf",
+        "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Q4_2025_Press_Release.pdf",
     ],
     "ANDR.VI": [
         "https://www.andritz.com/resource/blob/520884/andritz-annual-financial-report-2025-en.pdf",
@@ -256,6 +265,8 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "ABI": ("Anheuser-Busch InBev", "Anheuser Busch InBev"),
     "RAND": ("Randstad", "Randstad N.V."),
     "NOVN": ("Novartis", "Novartis AG"),
+    "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
+    "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
 }
 
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
@@ -2932,6 +2943,12 @@ def _ch_row_needs_body_refetch(row: dict[str, Any], bodies_dir: Path) -> bool:
     return _ch_body_lacks_financial_depth(text)
 
 
+def _url_path_endswith(url: str, suffix: str) -> bool:
+    """True when the URL path (ignoring query/fragment) ends with ``suffix``."""
+    path = urllib.parse.urlparse(str(url or "")).path.lower()
+    return path.endswith(suffix.lower())
+
+
 def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> str | None:
     """Download and extract plain text from a direct announcement URL."""
     if not url or not url.startswith("http"):
@@ -2962,7 +2979,7 @@ def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> st
         return None
 
     # urlopen doesn't return headers here easily — sniff
-    if raw[:4] == b"%PDF" or str(url).lower().endswith(".pdf"):
+    if raw[:4] == b"%PDF" or _url_path_endswith(url, ".pdf"):
         text = _extract_filing_document_text(raw, "application/pdf")
         if not text or len(text) < 200:
             logger.info("PDF filing body empty/unreadable: %s", url)
@@ -3372,7 +3389,7 @@ def _fetch_ir_pdf_alternate_candidates(url: str) -> list[tuple[str, str]]:
     except (urllib.error.URLError, TimeoutError, OSError) as exc:
         logger.debug("IR PDF alternate download failed for %s: %s", url, exc)
         return []
-    if raw[:4] != b"%PDF" and not str(url).lower().endswith(".pdf"):
+    if raw[:4] != b"%PDF" and not _url_path_endswith(url, ".pdf"):
         return []
 
     seen: set[str] = set()
@@ -3387,6 +3404,7 @@ def _fetch_ir_pdf_alternate_candidates(url: str) -> list[tuple[str, str]]:
         seen.add(key)
         candidates.append((text, parser))
 
+    _add(_extract_pdf_text(raw), "pypdf")
     _add(_extract_pdf_text_fitz(raw), "pymupdf")
     ocr_text = _ocr_pdf_text(raw)
     if ocr_text:
