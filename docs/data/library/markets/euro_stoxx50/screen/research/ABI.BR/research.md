@@ -1,108 +1,100 @@
 # Anheuser-Busch InBev SA/NV (ABI.BR) — Research memo
 
-_Version 1 · Updated 2026-08-02T11:27:16.777310+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T07:34:35.093642+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Anheuser-Busch InBev is the world's largest brewer, screening as a buy on a blend of cheapness, quality, dividend, GARP, and risk metrics (composite 60%, P/E 18.6×, P/B 1.9×, FCF yield attractive, Piotroski F-Score 8/9). The investment case rests on a global beer oligopoly with improving volumes, premiumisation, and sustained deleveraging funded by ~$11bn annual free cash flow. The central debate is whether recent operational momentum—Q2 2026 market-share gains, Beyond Beer growth, and reaffirmed FY2026 guidance—justifies a share price that has risen ~52% over twelve months, against a balance sheet still carrying ~$73bn gross debt and weak reported liquidity. Primary regulatory filings were not retrieved in this research pack; all financial figures below fall back to Yahoo Finance data, and conviction is accordingly capped.
+Anheuser-Busch InBev is the world’s largest brewer, trading at a modest absolute valuation (P/E ~17, P/B ~1.7, dividend yield ~1.7%) despite improving earnings momentum, strong operating cash generation, and a visible shift back to volume growth in 2026. The quantitative screen rates ABI.BR a buy across cheapness, quality, dividend, GARP, and risk families, supported by an 8/9 Piotroski score and double-digit EPS growth in FY2025. The central debate is whether deleveraging, premiumization, and capital returns are enough to offset structural volume pressure, heavy goodwill, EM/FX exposure, and weak reported liquidity metrics. Deep research broadly supports the screen’s direction but flags leverage, balance-sheet intangibles, and thin interim filing coverage as reasons to accumulate rather than chase aggressively.
 
 ## INVESTMENT THESIS
-The quantitative screen flags ABI.BR as a buy, passing eight of twenty-two models across five factor families: cheapness (Graham Enterprising, FCF Yield), quality (Magic Formula, Earnings Quality), GARP (Lynch PEG, Neff PEGY), dividend (Dividend Growth), and risk (Piotroski F-Score 8/9). Key pass metrics include P/E 18.6 (below 25 threshold), P/B 1.91 (below 3), debt/equity 72% (below 100%), and positive FCF of ~$10.7bn. Failures on Graham Defensive, Buffett Quality, and Economic Moat reflect sub-12% ROE (11.4%) and elevated leverage rather than earnings instability.
+For a value investor, ABI offers a globally dominant franchise at a discount to its historical premium, with fundamentals that are improving rather than deteriorating. The screen passes eight models—including Graham Enterprising, FCF Yield, Lynch/Neff PEG, Magic Formula, Dividend Growth, and Earnings Quality—while failing deep-value and moat screens (ROE 11.4% vs moat thresholds, P/B not below 1.0, current ratio 0.72). That profile fits a **quality-at-a-reasonable-price** brewer, not a net-net.
 
-For a value investor, the appeal is a dominant, asset-light-at-the-margin consumer franchise generating consistent operating cash flow (~$14.9bn in FY2025 per Yahoo) while reducing net debt ($59.1bn at end-2025 vs $65.0bn at end-2023). Normalised earnings power appears to be recovering: reported net income rose from $5.34bn (2023) to $6.84bn (2025), with diluted EPS up from $2.60 to $3.39 over the same period. Management's stated strategy—premiumisation, digital BEES platform, Beyond Beer/non-alcohol expansion—aligns with the screen's quality and GARP passes. The stock offers a modest 1.5% dividend yield with recent dividend increases noted in news flow, though it fails high-yield screens.
+Business quality remains high: global megabrands, scale economics, and premium/mega-brand investment (Michelob ULTRA, Beyond Beer, digital BEES platform). FY2025 profit of the period rose to USD 8.5bn from USD 7.4bn (20-F), with diluted EPS up to USD 3.39 from USD 2.92 (Yahoo fallback for EPS line item not in filing extract). Management is allocating surplus cash to debt reduction, dividends (USD 4.5bn paid in 2025), and buybacks (USD 2.3bn in 2025 vs USD 0.9bn in 2024, per 20-F). Investment-grade ratings (S&P A-, Moody’s A3, both positive outlook per Mar 2026 20-F) support refinancing flexibility.
 
-Business quality is underwritten by global scale (600+ brands, leading positions in most major markets), high gross margins (~56% in FY2025), and improving operational trends signalled in H1 2026 news: organic volume growth returned, global market share expanded, and FY2026 guidance was reaffirmed despite China weakness.
+The screen’s buy signal aligns with operational inflection: news flow reports Q1 and Q2 2026 volume growth (~+1.1% in Q2), global market-share gains, and reaffirmed FY2026 guidance—suggesting the market may still be pricing legacy Bud Light/US volume concerns rather than current group momentum. At ~17x earnings with ~1.2% statutory earnings growth feeding a Lynch PEG well below 1.0, the valuation embeds limited growth expectations relative to recent delivery.
 
 ## FINANCIAL REVIEW
-**Source limitation:** The filings index (`filings_index.json`) contains zero entries—no annual reports, interim results, 10-K/20-F, or trading updates were indexed, and no filing body extracts exist under `filings/bodies/`. All figures below are sourced from `financials_annual.json` (Yahoo Finance); this is an explicit fallback. Interim H1 2026 data is available only via cached quarterly income in the same file and news headlines, not primary filings.
+**Annual results (primary: SEC Form 20-F, filed Mar 2025 and Mar 2026)**
 
-**Income statement trend (Yahoo, USD):**
+| Metric | FY2025 (20-F) | FY2024 (20-F) | Trend |
+|--------|---------------|---------------|-------|
+| Consolidated revenue | USD 59.3bn | USD 59.8bn (2024 20-F) | −0.7%; FX headwind USD 1.3bn |
+| Profit of the period | USD 8,477m | USD 7,416m | +14.3% |
+| Operating cash flow | USD 14,883m | USD 15,055m | −1.1% |
+| Net capex | USD 3,552m | USD 3,735m | Lower |
+| Dividends paid | USD 4,543m | USD 2,672m | Higher |
+| Share buybacks | USD 2,301m | USD 937m | Higher |
+| Cash & equivalents (net of overdrafts) | USD 11,623m | USD 11,174m | Stable |
+| Global volume | 561.1m hl | 576m hl | −2.6% reported |
+| Goodwill / indefinite intangibles | USD 117.9bn / USD 38.5bn | — | Impairment-sensitive |
 
-| Metric | FY2023 | FY2024 | FY2025 |
-|---|---|---|---|
-| Revenue | $59.38bn | $59.77bn | $59.32bn |
-| Operating income | $14.41bn | $15.27bn | $15.65bn |
-| EBITDA | $19.01bn | $20.24bn | $20.84bn |
-| Net income | $5.34bn | $5.86bn | $6.84bn |
-| Diluted EPS | $2.60 | $2.92 | $3.39 |
+Revenue declined slightly in reported USD terms, but currency translation (Argentine peso, Brazilian real, Mexican peso) masked underlying performance. Profit growth was solid. Working capital was a USD 398m cash drag in 2025. Pension contributions and provision usage totalled USD 426m (2025) vs USD 374m (2024).
 
-Revenue has been broadly flat over three years, but profitability has improved materially: operating margin expanded from ~24.3% to ~26.4%, and net income grew ~28% over the period. FY2025 included $1.23bn of unusual items (restructuring, asset sales, securities gains/losses); normalised net income (Yahoo) was ~$7.74bn vs reported $6.84bn.
+**Yahoo fallback (used where 20-F body extracts lack line items):**
+- Net income attributable to common shareholders: USD 6.84bn (2025) vs USD 5.86bn (2024); diluted EPS USD 3.39 vs USD 2.92.
+- EBITDA: USD 20.8bn (2025) vs USD 20.2bn (2024).
+- Free cash flow: USD 11.2bn (2025), broadly flat YoY; screen TTM FCF ~USD 10.7bn.
+- Net debt: USD 59.1bn (2025); total debt USD 73.0bn; D/E ~72%.
+- Interest expense: USD 3.86bn (2025), down from USD 4.13bn (2024).
 
-**Balance sheet and leverage (Yahoo, USD, year-end):**
+FY2025 showed earnings and cash-flow resilience despite flat revenue and lower reported volumes. Capital allocation shifted meaningfully toward shareholders (dividends + buybacks ~USD 6.8bn combined) while net debt trended lower (net debt down ~USD 0.3bn YoY per Yahoo).
 
-| Metric | FY2023 | FY2024 | FY2025 |
-|---|---|---|---|
-| Total debt | $78.17bn | $72.17bn | $73.03bn |
-| Net debt | $65.01bn | $58.79bn | $59.10bn |
-| Stockholders' equity | $81.85bn | $78.24bn | $87.29bn |
-| Cash & equivalents | $10.33bn | $11.08bn | $11.53bn |
-| Working capital | −$13.79bn | −$10.07bn | −$9.71bn |
+**Interim results (gap noted)**
 
-Net debt has fallen ~$5.9bn from FY2023 to FY2025, consistent with the screen's "leverage declining" Piotroski component. Gross debt ticked up slightly in FY2025 as the company issued $4.4bn of long-term debt while repaying $7.6bn. Debt/equity of 72% remains elevated; the screen flags weak liquidity (current ratio 0.72). Goodwill and intangibles total ~$160bn, producing negative tangible book value (~−$72.6bn)—typical post-SABMiller acquisition but a structural red flag for asset-based value screens.
+The filings index lists 28 interim 6-K entries (Q1/Q2 2025 and 2026, debt tenders, AGM, governance). **Critical gap:** the 30 Jul 2026 Q2/H1 2026 earnings 6-K (`2784dcbf9a391773`) and several other interim releases have **no downloadable body**; available 6-K bodies are mostly cover pages and administrative notices, not earnings tables. Interim figures below therefore fall back to **Yahoo quarterly income** and **news headlines**—not filing-primary.
 
-Non-current pension and post-retirement obligations stood at ~$1.28bn at end-FY2025 (Yahoo balance sheet); no covenant or going-concern language is available without filing bodies.
+| Period | Revenue (Yahoo) | Net income (Yahoo) | Diluted EPS (Yahoo) |
+|--------|-----------------|--------------------|---------------------|
+| Q2 2026 (Jun-26) | USD 16.66bn | USD 3.75bn | n/a in source |
+| Q1 2026 (Mar-26) | USD 15.27bn | USD 2.56bn | USD 1.30 |
+| Q4 2025 (Dec-25) | USD 15.56bn | USD 1.96bn | USD 0.99 |
 
-**Cash flow (Yahoo, USD):**
+News reports (Jul–Aug 2026) describe Q2 2026 beer volumes +1.1% YoY, global market-share gains, premium-brand strength (Michelob ULTRA), and management reaffirming FY2026 outlook, with China called out as challenging. Q1 2026 was similarly described as a beat with first volume growth in years (May 2026 headlines). **Interim organic revenue/EBITDA/normalized EPS from primary filings are unavailable in the source pack.**
 
-| Metric | FY2023 | FY2024 | FY2025 |
-|---|---|---|---|
-| Operating cash flow | $13.27bn | $15.06bn | $14.88bn |
-| Capital expenditure | ($4.64bn) | ($3.86bn) | ($3.66bn) |
-| Free cash flow | $8.63bn | $11.19bn | $11.23bn |
-| Cash dividends paid | ($3.01bn) | ($2.67bn) | ($4.54bn) |
-| Share repurchases | ($0.36bn) | ($0.94bn) | ($2.30bn) |
-| Net debt repayment | ($3.68bn) | ($4.62bn) | ($3.19bn) |
-
-FCF has stabilised above $11bn, comfortably covering dividends and contributing to deleveraging. FY2025 dividend payments rose sharply to $4.54bn (Yahoo), consistent with news of a dividend hike in May 2026. Interest paid in FY2025 operating activities was ~$3.35bn.
-
-**Interim / quarterly (Yahoo cached quarterly income; no filing body):**
-
-Q2 2026 (period ending June 2026, per Yahoo): revenue $15.27bn vs $15.13bn in Q2 2025; operating income $4.07bn vs $4.21bn; net income $2.56bn vs $1.05bn (prior year quarter depressed by $947m securities loss); diluted EPS $1.30. News flow (30 July 2026) describes H1 2026 as strong, with global market-share gains, beer volumes up ~1.1%, and FY2026 guidance reaffirmed—consistent with the quarterly income trend but not independently verified against a primary filing.
-
-**Gaps:** No annual report, 20-F, or H1 2026 interim announcement body is available in the research pack. Segment breakdowns (Americas, EMEA, APAC), organic growth rates, and net debt/EBITDA as reported by management cannot be cited from primary sources. Verify-before-trade is required for covenant terms, pension funding, and litigation contingencies.
+**Filing coverage summary:** Two annual 20-F filings with bodies (partial extracts); no full interim earnings body for H1/Q2 2026. Annual trend analysis is filing-supported; interim analysis relies on Yahoo + news with explicit uncertainty.
 
 ## RISKS AND RED FLAGS
-**Leverage and liquidity:** ~$73bn gross debt and ~$59bn net debt (Yahoo FY2025) with current ratio 0.72 and negative working capital. Interest expense was ~$3.86bn in FY2025. The screen fails Financial Health and Buffett Quality models on these grounds. Without filing bodies, covenant headroom and maturity profile are unknown.
+**Leverage and liquidity:** The 20-F states that debt levels may restrict dividends, increase vulnerability to downturns, and require restrictive covenants if refinancing conditions tighten. Net debt ~USD 59bn and negative working capital (USD 9.7bn per Yahoo) explain the screen’s Financial Health failure (current ratio 0.72). Credit ratings are investment grade with positive outlook, but a downgrade would raise borrowing costs materially (20-F language).
 
-**Intangible-heavy balance sheet:** Goodwill of ~$118bn and other intangibles of ~$42bn create impairment risk and render traditional book-value metrics less meaningful (tangible book deeply negative).
+**Goodwill and intangibles:** USD 156bn+ on balance sheet; annual impairment testing showed no 2025 charge, but any brand deterioration could trigger large non-cash hits (20-F).
 
-**Geographic concentration:** News repeatedly flags challenging conditions in China (Q2 2026 earnings call, 31 July 2026). APAC is a material profit pool; prolonged weakness would pressure group margins.
+**FX and emerging markets:** ~65% of 2025 revenue from developing markets (20-F). Currency translation reduced 2025 revenue by USD 1.3bn. Argentina hyperinflation, Brazil capital controls history, and broad EM volatility remain structural risks.
 
-**US brand legacy:** The December 2025 VinePair report on US brewery closures and the ongoing Bud Light reputational overhang (not quantified in available sources) represent structural brand risk in the largest profit market.
+**Russia/Ukraine (Efes):** AB InBev Efes investment remains classified as held for sale; Russian decree placed operations under temporary management; divestiture blocked by regulatory approvals (20-F). USD 1.1bn impairment taken earlier; outcome uncertain.
 
-**Governance:** Dirk Van de Put assumed board chair in June 2026 (Stock Titan, 16 June 2026), consolidating executive influence. No filing-based assessment of related-party transactions or board independence is possible.
+**Regulatory and excise:** Excise deductions from revenue were USD 15.3bn (2025). Alcohol taxation, marketing restrictions, and health advocacy could compress margins. US DOJ consent decree on distribution (expires Jul 2026) constrains M&A.
 
-**Cyclical and regulatory:** Alcohol excise taxes, health regulation (especially on marketing and non-alcohol positioning), and consumer trade-down in recessionary environments are ongoing risks not captured by backward-looking screens.
+**Competitive and volume:** Reported global volume fell from 576m to 561m hl in FY2025 despite 2026 recovery signals. RTD, spirits, and cannabis substitution cited in 20-F. China weakness persists per Q2 2026 commentary.
 
-**Valuation run-up:** Shares have returned ~52% over twelve months and ~38% YTD (Yahoo Finance, 2 August 2026), raising the bar for new entry and partially explaining failures on Deep Value and Dreman Contrarian screens.
+**Governance:** Dirk Van de Put succeeded Martin Barrington as chairman (Jun 2026 6-K body)—consolidation of CEO/chair roles warrants monitoring.
 
-**Pension:** ~$1.28bn non-current employee benefit obligations (Yahoo FY2025); funding status and discount-rate sensitivity unavailable without annual report notes.
+**Pension:** USD 426m pension contributions in 2025 cash flow; non-current employee benefit liabilities USD 1.3bn (Yahoo balance sheet).
+
+**Going concern:** No going-concern qualification found in available filing bodies.
+
+**Litigation/contingencies:** 20-F references material but not probable contingencies, antitrust scrutiny on Ambev, Belgian tax matters, and class-action alcohol marketing suits—quantum not fully disclosed in extracts.
+
+RiskTags: leverage, regulatory, cyclical, competitive, liquidity, governance, pension, litigation
+RiskTags: leverage, regulatory, cyclical, competitive, liquidity, governance, pension, litigation
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is concentrated around earnings and valuation commentary; operational news is material, but much flow is repetitive syndication.
+Coverage over the past year is **moderately thick on earnings and capital allocation, thin on deep strategy/regulatory analysis**, with significant noise from unrelated “ABI” tickers (Abivax, Association of British Insurers).
 
-**Q2 / H1 2026 results (late July 2026):**
-- *"Anheuser-Busch InBev (ENXTBR:ABI) Posts Strong Q2 With Market Share Gains"* (Yahoo Finance, 2 August 2026) — global share gains, Beyond Beer/non-alcohol growth, record volumes in key markets.
-- *"AB InBev Beats Expectations as Beer Recovery Continues"* (Wall Street Journal, 30 July 2026) — FIFA World Cup and premium labels lifted revenue; volumes and earnings above expectations.
-- *"Anheuser-Busch InBev SA/NV Q2 Earnings Call Highlights"* (Yahoo Finance, 31 July 2026) — CEO Michel Doukeris cited volume recovery and share gains; China flagged as challenging.
-- Mixed market reaction: *"AB InBev Earnings Beat. Why the Bud Light Brewer's Stock Is Falling"* (Barron's, 30 July 2026) despite headline beats; consensus EPS beat of ~$0.12 (MarketBeat, 31 July 2026).
+**Material items (company-specific):**
 
-**Earlier 2026:**
-- *"Anheuser-Busch InBev (ENXTBR:ABI) Is Up 5.3% After Q1 Beat And First Volume Growth In Years"* (Yahoo Finance, 9 May 2026).
-- *"Dividend Hike and Board Refresh Could Be A Game Changer For Anheuser-Busch InBev"* (simplywall.st, 1 May 2026).
-- *"Dirk Van de Put to chair AB InBev (NYSE: BUD) board after Barrington"* (Stock Titan, 16 June 2026).
+- **Q2/H1 2026 results (30 Jul 2026):** “Anheuser-Busch InBev SA/NV – AB InBev Reports Second Quarter and Half Year 2026 Results” (Moneyweb); “AB InBev Beats Expectations as Beer Recovery Continues” (WSJ, 30 Jul 2026); volumes +1.1%, market-share gains, FY2026 outlook reaffirmed; China flagged as weak.
+- **Q1 2026 (May 2026):** “Anheuser-Busch InBev (ENXTBR:ABI) Is Up 5.3% After Q1 Beat And First Volume Growth In Years” (Yahoo Finance, 9 May 2026).
+- **Governance (Jun 2026):** “Dirk Van de Put to chair AB InBev (NYSE: BUD) board after Barrington” (Stock Titan, 16 Jun 2026).
+- **Capital investment (Aug 2026):** USD 13m Baldwinsville, NY expansion for Michelob ULTRA/Cutwater; part of USD 600m US “Brewing Futures” programme (Yahoo Finance, 21 Aug 2026).
+- **FY2025 results (Feb 2026):** Q4 beat headlines; final dividend proposed for FY2025, payable May 2026 (marketscreener, 12 Feb 2026).
+- **Deleveraging (May 2025):** Debt tender offers and EUR bond issuance (6-K bodies, May 2025).
+- **US restructuring (Dec 2025):** “Anheuser-Busch Announces It Will Close Two Breweries and Sell Another” (VinePair, 11 Dec 2025).
+- **Share buyback (Oct 2025):** Progress report on programme announced 30 Oct 2025 (Moneyweb).
+- **Contrarian view:** “Anheuser-Busch InBev: Unfavourable Risk-Reward, In My Opinion” (Seeking Alpha, 1 Aug 2025).
 
-**FY2025 / late 2025:**
-- *"Anheuser-Busch InBev SA/NV Reports Earnings Results for the Fourth Quarter and Full Year Ended December 31, 2025"* (marketscreener.com, 12 February 2026) — FY2025 exceeded profit and revenue projections (Yahoo Finance, 8 March 2026).
-- *"Anheuser-Busch Announces It Will Close Two Breweries and Sell Another"* (VinePair, 11 December 2025) — US footprint rationalisation.
-
-**Analyst / valuation debate:**
-- Bullish: Wells Fargo upgrade (MarketBeat, 31 July 2026); J.P. Morgan Buy (theglobeandmail.com, 24 July 2026).
-- Bearish/neutral: *"Anheuser-Busch InBev: Unfavourable Risk-Reward, In My Opinion"* (Seeking Alpha, 1 August 2026); GuruFocus flagging overvaluation (23 July 2026).
-
-News coverage is adequate on earnings and strategy but thin on primary regulatory disclosures, pension/covenant detail, and litigation—consistent with the empty filings index.
+No major M&A announced in the period; strategy emphasis remains premiumization, digital (BEES), and selective capex over large deals.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.58
-Rationale: Operational momentum and deleveraging support the quantitative buy signal, but the absence of primary filings, elevated leverage, and a ~52% twelve-month re-rating warrant accumulation rather than full conviction until annual/interim filing bodies are ingested.
+Confidence: 0.72
+Rationale: Annual filings confirm earnings growth, strong cash generation, and active deleveraging/capital return, supporting the quantitative buy signal, but interim filing gaps, elevated leverage/intangibles, and EM/liquidity flags warrant phased accumulation rather than full conviction.

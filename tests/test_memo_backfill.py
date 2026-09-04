@@ -137,7 +137,9 @@ def test_publish_memo_backfill_batch_merges_research_index(tmp_path: Path):
 
     result = publish_memo_backfill_batch(output, dest_dir=docs, latest_path=latest)
     assert result["new_memo_entries"] == 1
-    payload = json.loads(latest.read_text(encoding="utf-8"))
+    raw = latest.read_text(encoding="utf-8")
+    assert "\n" not in raw.strip()  # compact, same as ftse-publish
+    payload = json.loads(raw)
     tickers = {row["ticker"] for row in payload["research"]}
     assert tickers == {"OLD.L", "NEW.L"}
     assert payload["reports"][0]["research_verdict"] == "accumulate"
