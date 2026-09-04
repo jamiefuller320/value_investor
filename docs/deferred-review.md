@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T09:20:41+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T10:21:26+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -166,6 +166,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L244 | **Chart-side drop-to-recovery metric on frozen entries** | For buy-tier charts, score max drop after the frozen recommendation close and whether/when price recovered through that entry (days underwater, recovered_to_entry). Distinct from paper hold-recovery, which only covers stressed sleeves. Use to judge short-term loss tolerance vs eventual success without retuning timing yet. | chart_outcome_review has at least 4 Sunday refreshes and several names have recovered through the frozen entry after a drawdown |
 | L245 | **Entry-timing overlay scored against missed eventual winners** | Later, a timing overlay might reduce mis-timed buys, but it must be measured against names that were underwater early and still worked. Do not tighten wait/accumulate from a mixed_no_terrible first month. Pair any timing experiment with a miss-cost / drop-to-recovery view. | drop-to-recovery or hold-recovery cohorts can split well-timed vs recovered-from-drawdown vs still-underwater on a multi-month window |
 | L250 | **Generalize adjacent-flip audit beyond IMB.L** | The IMB.L audit was a one-ticker read of rebalance_log plus fund trades. A small CLI that classifies left-target-set flips (rank rotation vs floor vs signal downgrade) would scale when adjacent_flip_count rises again. | Churn health shows adjacent_flip_count > 0 on a focus track in a weekly window |
+| L270 | **Shared overlay flag and note contract** | Scoring overlays share a family resemblance (enrich_signals_with_*, boolean columns, CompanyReport fields) but no Protocol: live overlays mutate adjusted_signal, observe-only ones write parallel fields, and summary.py repeats NaN-safe flag reads. A shared apply/enrich/format-note helper plus one optional-bool reader would cut drift when the next overlay lands. | Adding the next scoring overlay or gate, or when summary.py overlay hydration is next edited for a real scoring change |
 
 ### Universe & data
 
@@ -335,6 +336,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L258 | **Roll gha_pip_install.sh out to remaining workflows** | Euro/library ingest now retries pip on empty-index flakes. Other long jobs (paper-auto, ops-monitor, FTSE ingest-loop, orchestrator) still use a single pip install -e . | Another workflow fails on pandas from versions: none or a similar empty-index pip flake |
 | L262 | **Shared GHA concurrency budget across live ingest streams** | Public-repo Actions minutes are free, but more live markets add parallel ingest jobs that already contend for hosted runners and the Sunday quiet bundle. Track concurrent ingest streams and runner-queue failures as the real compute bind, not a minutes quota. | A fourth market sits on FTSE-volume ingest, runner-acquisition flakes recur, or the repo goes private |
 | L263 | **Apply committed FTSE memos to the live research overlay** | 54 of 59 FTSE buy-tier names already have accumulate memos under docs/data/research/, but latest.json research[] only lists 18, so weekday paper overlay misses names such as JSG.L. Refresh should read the committed store, not only the last publish index. | Next weekday paper-auto or overlay-refresh change, or when AI judgment looks under-gated vs the memo library |
+| L271 | **Disambiguate overloaded fragment vocabulary** | Fragment currently means four things: deferred-idea scratch rows, keyword substring lists, action-note prose snippets, and ingest-body utilization units. The deferred-ideas store is internally consistent; the other uses are unrelated. A short glossary in architecture.md would prevent treating them as one schema. | Next architecture.md or scoring-overlay docs pass, or when onboarding confusion about fragments shows up in a review |
 
 ---
 
