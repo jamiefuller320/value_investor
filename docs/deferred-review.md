@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T13:29:10+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T18:51:18+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -121,6 +121,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N72 | **Per-ticker budget will not finish DG.PA-class IR blockers** | A weekday per-ticker cap (L131/L215) only stops the bleed. DG.PA already used ~37 minutes on 2026-09-04 07:15, retried the same two IR IDs three times, and stayed 1 body / 2 IWB. More or less clock does not fetch GlobeNewswire HTML allowlist rows. | After cutoff follow-up has pinned a sticky euro name, or someone proposes L215 expecting it to raise filings_with_body on DG.PA. |
 | N73 | **Do not backlog-first aborted hard IR tickers** | FTSE ingest_backlog puts remaining tickers first. Doing that for a DG.PA-class abort would spend the first per-ticker budget of every weekday slot on the same failed GlobeNewswire rows. Keep backlog for names that never started; escalate started+failed names off the batch. | Library ingest grows a backlog file and someone proposes prioritize_backlog_targets for euro. |
 | N74 | **Do not treat Suite B AI-vs-rules inversion as the weekly north-star scoreboard** | Under fair T212 costs, rules currently beats AI (-9.7% vs -12.6% excess), the reverse of the 3% stress books. Suite B epochs started 2026-09-01 with one mark and zero trades — too thin to demote AI judgment or rewrite Suite A policy from that flip. | Each Suite B track has several weeks of post-seed marks and at least one closed trade, and Sunday analysis-review scores fair and stress books separately |
+| N75 | **Do not spray remaining Ultra on thin-ladder buy-tier DW** | After the surplus rememo + escalate-queue director-worker burst, leftover Ultra is still large. Do not spend it by running director-worker on every buy-tier name that trips thin Yahoo quarterly/IR/news rungs. | Cycle-end surplus review on 2026-10-d8, or weekly_ops regularly binds at the $120 provisional cap |
 
 ---
 
