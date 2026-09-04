@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T20:44:10+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T20:47:27+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -47,6 +47,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260903-01 | MEGP.L 1y chart has a March 2026 close hole that draws as a vertical gap in the popup; chart outcomes still score from initial last vs latest close, so the gap did not create a false terrible path. | charts, data-quality, MEGP |
 | frag-20260904-01 | This week's FCF/Yahoo-CF/memo-overlay/rememo work can only change stage-2b outcomes after the next Sunday research overlay is used in a weekday paper decision. Do not read next Friday's lifetime AI excess as a test of this week's machinery; watch the Aug-26 epoch and the first post-overlay rebalance instead. | stage-2b, lag, filings, memos, scoreboard |
 | frag-20260904-02 | BT-A.L director-worker completed under the None-verdict rubric fix but scored 0.193 with no director verdict. Live Composer rememo stayed accumulate 0.68. Worth a parse-hardening pass if more director memos lose RESEARCH VERDICT. | director-worker, rubric, BT-A |
+| frag-20260904-03 | At 64 percent Ultra used, empty engineering queue, fresh FTSE holdings/buy-tier memos, and a full 15/15 director-worker week, leftover cycle credit should sit unused. Next useful Cursor spend is next ISO week and only on a material trigger, not thin Yahoo quarterly. | surplus, ultra, p1 |
 
 ---
 
