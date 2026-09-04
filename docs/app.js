@@ -3312,10 +3312,10 @@ async function loadDashboard() {
       const engineering = await loadOptionalDashboardJson("data/engineering_tasks.json");
       if (engineering) data.engineering_tasks = engineering;
     }
-    if (!data.ingest_deviations) {
-      const deviations = await loadOptionalDashboardJson("data/ingest_deviations.json");
-      if (deviations) data.ingest_deviations = deviations;
-    }
+    const deviations = await loadOptionalDashboardJson("data/ingest_deviations.json");
+    if (deviations) data.ingest_deviations = deviations;
+    const checklist = await loadOptionalDashboardJson("human_tasks_checklist.json");
+    if (checklist) data.human_tasks_checklist = checklist;
     renderDashboard(data);
   } catch (err) {
     document.getElementById("run-meta").textContent = `Failed to load dashboard data: ${err.message}`;
