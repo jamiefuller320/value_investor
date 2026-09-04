@@ -269,9 +269,7 @@ jobs:
 
       - name: Evaluate library gap-closure follow-up
         id: gap_followup
-        if: >-
-          steps.loop.outputs.partial != 'true'
-          && steps.loop.outputs.recorded_gap_closure != 'true'
+        if: steps.loop.outputs.recorded_gap_closure != 'true'
         env:
           MARKET: ${{ github.event.inputs.market || 'euro_depth' }}
         run: |

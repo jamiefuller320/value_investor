@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-04T10:21:26+00:00",
+  "updated_at": "2026-09-04T10:45:40+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -5705,6 +5705,108 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06bcb-84c0-715f-b156-74e2713c98a1",
       "added_at": "2026-09-04T10:21:26+00:00"
+    },
+    {
+      "id": "L272",
+      "category": "later",
+      "section": "ops",
+      "title": "Fire library gap-closure after cutoff when deepen already ran",
+      "summary": "Euro 2026-09-04 07:15: discovery cap held then only BOL.ST and DG.PA deepened, improved=0, runtime_cutoff. Follow-up now fires when discovery finished, deepen ran at least one ticker, and nobody improved.",
+      "revisit_when": "Shipped: evaluate_library_ingest_gap_closure_followup treats cutoff+finished-discovery+deepen-ran+improved=[] as a slowdown.",
+      "tags": [
+        "euro",
+        "ingest",
+        "gap-closure",
+        "cutoff"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:32:26+00:00",
+      "updated_at": "2026-09-04T10:32:29+00:00"
+    },
+    {
+      "id": "N71",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not build a separate euro stock-by-stock deepening engine",
+      "summary": "Gap-closure already is the intensive single-ticker path (pin + record_gap_closure + compile_ingest_engineering_task_from_trial, max 3 rounds). A second engine would duplicate that without fixing the miss: follow-up never fired on cutoff deepens.",
+      "revisit_when": "After the existing intensive path has fired on euro and still returns 0/N after 3 gap-closure rounds.",
+      "tags": [
+        "euro",
+        "ingest",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:32:26+00:00"
+    },
+    {
+      "id": "N72",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Per-ticker budget will not finish DG.PA-class IR blockers",
+      "summary": "A weekday per-ticker cap (L131/L215) only stops the bleed. DG.PA already used ~37 minutes on 2026-09-04 07:15, retried the same two IR IDs three times, and stayed 1 body / 2 IWB. More or less clock does not fetch GlobeNewswire HTML allowlist rows.",
+      "revisit_when": "After cutoff follow-up has pinned a sticky euro name, or someone proposes L215 expecting it to raise filings_with_body on DG.PA.",
+      "tags": [
+        "euro",
+        "ingest",
+        "ir-allowlist",
+        "time-budget"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:37:43+00:00"
+    },
+    {
+      "id": "L273",
+      "category": "later",
+      "section": "research",
+      "title": "Replace DG.PA GlobeNewswire HTML IR allowlist with VINCI PDFs",
+      "summary": "docs/data/research_ir_urls.json lists two globenewswire.com/news-release HTML pages plus one ml-eu Resource/Download for DG.PA. Those rows fail title/period validation and have no .L Investegate fallback, so euro_filings refetch burns the slot. Point the allowlist at VINCI IR PDFs and skip IR rows that fail after N attempts.",
+      "revisit_when": "Intensive gap-closure fires on DG.PA or the next euro deepen still spends >10 minutes on the same ir_5904e9509cae65e4 / ir_a21937028cbb3531 failures.",
+      "tags": [
+        "euro",
+        "ingest",
+        "ir-allowlist",
+        "DG.PA"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:37:44+00:00"
+    },
+    {
+      "id": "L274",
+      "category": "later",
+      "section": "ops",
+      "title": "Pin the weekday-aborting ticker for intensive follow-up",
+      "summary": "After a mid-ticker cap (L215), follow-up should prefer the name that hit the budget or exhausted IR retries, not only health_after.zero_body_tickers[0]. Otherwise the batch moves on while RAND.AS gets the pin and DG.PA returns to the next weekday head.",
+      "revisit_when": "L215 lands or a euro run again spends most of the slot on one 0-improve IR name.",
+      "tags": [
+        "euro",
+        "ingest",
+        "gap-closure",
+        "time-budget"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:45:40+00:00"
+    },
+    {
+      "id": "N73",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not backlog-first aborted hard IR tickers",
+      "summary": "FTSE ingest_backlog puts remaining tickers first. Doing that for a DG.PA-class abort would spend the first per-ticker budget of every weekday slot on the same failed GlobeNewswire rows. Keep backlog for names that never started; escalate started+failed names off the batch.",
+      "revisit_when": "Library ingest grows a backlog file and someone proposes prioritize_backlog_targets for euro.",
+      "tags": [
+        "euro",
+        "ingest",
+        "backlog",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:45:40+00:00"
     }
   ],
   "fragments": [
