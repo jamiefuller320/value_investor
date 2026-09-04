@@ -15,6 +15,7 @@ LIBRARY_INGEST_ARTIFACT_PATHS=(
   docs/data/library
   docs/data/engineering_tasks.json
   docs/data/ingest_gap_closure_runs.json
+  docs/data/ingest_deviations.json
 )
 
 git_clean_state() {

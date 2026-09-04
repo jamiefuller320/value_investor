@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T19:39:58+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T19:48:16+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -125,6 +125,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N76 | **Do not spray euro_depth memos while buy-tier filings are thin** | euro_depth buy-tier still has thin/indexed_without_body gaps (median ~2 bodies). Cursor memos without filing bodies do not make the shard FTSE-equivalent. Spend leftover model credit on FTSE rememo first; leave euro deepen to GHA ingest. | ftse-library euro-ingest-dispatch reports ingest_parity_met and buy-tier thin+iwb near zero |
 | N77 | **Do not permanently raise rememo caps from a cycle-end surplus** | weekday rememo cap 3 and catch-up cap 5 are maintenance defaults. A 4-day Ultra leftover is a one-shot burst, not evidence the steady cap should rise. | After several constrained weeks, rememo backlog stays over weekly maintenance capacity and estimated_memo_usd is recalibrated from real bills |
 | N78 | **Do not lengthen the euro ingest slot after a leftover-514s productive run** | The 2026-09-04 13:15 euro slot used 2186/2700s, improved 6 names, and left 514s unused because remaining IWB were unfetchable or ABI.BR hit the 320s cap with 0 bodies. More minutes, more targets, or a fifth daily euro cron will not raise filings_with_body. | A euro sprint hits runtime_cutoff with improved>0 and leftover_seconds=0 on two consecutive slots, or discovery again consumes the deepen half of the clock. |
+| N79 | **Auto-suggest replacement IR allowlist URLs** | Deviation rows can say IR exhausted, but picking the official 20-F/HY PDF still needs judgment (ABI BMV vs SEC). Do not auto-write research_ir_urls.json from host heuristics or an LLM crawler until issuer-match validation is reliable. | Issuer-name body validation rejects foreign-exchange dumps with low false positives on VINCI/Randstad-style IR hosts |
 
 ---
 
@@ -337,6 +338,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L281 | **Paper-auto git push race hardening** | Aug 27 paper-auto failed on post-run git push race; Aug 28 recovered without code change. Add commit/push locking or retry if the race recurs. | Second push-race failure appears in paper-auto logs or a second failed weekday batch |
 | L286 | **Warm-start selective A-to-B fair-cost twins** | spawn-fair-twins writes Suite B configs, but warm_start_fair_cost_lab still only seeds ai_judgment_fair and rules_fair. Generalize PIT warm-start to *_fair experiment twins after a human actually applies a spawn. | A recommend-state experiment is spawned via ftse-trading-costs spawn-fair-twins --apply |
 | L288 | **Auto-clear library ingest pin when IWB closes** | docs/data/library_ingest_pins.json is a dated intensive pin (ABI.BR through 2026-09-11). After the named ticker’s indexed-without-body count hits 0, auto-remove or expire the pin so weekday euro returns to the 24-name batch without a manual edit. | After the 16:15/next euro intensive ABI pin run, or when ABI.BR IWB is 0 |
+| L290 | **Dashboard click-to-approve ingest deviations** | Pages is static, so ingest deviations reprocess via CLI (ftse-library ingest-deviations approve). A local dashboard API or Actions dispatch would let a reviewer pin without a commit, but that is a new write path. | Local dashboard serve grows a write API, or we add a supervised workflow_dispatch for pins |
 
 ---
 

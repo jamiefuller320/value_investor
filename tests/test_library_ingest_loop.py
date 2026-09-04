@@ -354,6 +354,7 @@ def test_run_library_ingest_loop_caps_discovery_so_deepen_still_runs(tmp_path: P
             discovery_scan=True,
             deepen_history=False,
             pins_path=tmp_path / "no_pins.json",
+            deviations_path=tmp_path / "deviations.json",
         )
 
     assert ingest_calls == ["AAA.DE", "BBB.DE"]
@@ -450,6 +451,7 @@ def test_run_library_ingest_loop_still_cuts_overrun_discovery(tmp_path: Path):
             discovery_scan=True,
             deepen_history=False,
             pins_path=tmp_path / "no_pins.json",
+            deviations_path=tmp_path / "deviations.json",
         )
 
     assert result.runtime_cutoff is True
@@ -530,6 +532,7 @@ def test_weekday_loop_continues_after_per_ticker_budget_and_records_blocker(tmp_
             discovery_scan=False,
             deepen_history=False,
             pins_path=tmp_path / "no_pins.json",
+            deviations_path=tmp_path / "deviations.json",
         )
 
     assert ingest_calls == ["NEXT", "SLOW"]
@@ -605,6 +608,7 @@ def test_intensive_pin_disables_per_ticker_cap(tmp_path: Path):
             deepen_history=False,
             pin_tickers=["BHP.AX"],
             pins_path=tmp_path / "no_pins.json",
+            deviations_path=tmp_path / "deviations.json",
             record_gap_closure={
                 "title": "intensive",
                 "summary": "",
@@ -761,6 +765,7 @@ def test_committed_pin_skips_discovery_and_drops_ticker_cap(tmp_path: Path):
             max_runtime_seconds=2700,
             deepen_history=False,
             pins_path=pins_path,
+            deviations_path=tmp_path / "deviations.json",
         )
 
     discovery.assert_not_called()

@@ -100,6 +100,7 @@ class LibraryIngestLoopResult:
     blocker_ticker: str | None = None
     per_ticker_max_seconds: float | None = None
     pin_tickers: list[str] = field(default_factory=list)
+    ingest_deviations: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -140,6 +141,7 @@ class LibraryIngestLoopResult:
             "blocker_ticker": self.blocker_ticker,
             "per_ticker_max_seconds": self.per_ticker_max_seconds,
             "pin_tickers": list(self.pin_tickers),
+            "ingest_deviations": self.ingest_deviations,
         }
 
 
@@ -584,6 +586,7 @@ def run_library_ingest_loop(
     maintenance_mode: bool = False,
     per_ticker_max_seconds: float | None = DEFAULT_PER_TICKER_MAX_SECONDS,
     pins_path: Path | None = None,
+    deviations_path: Path | None = None,
 ) -> LibraryIngestLoopResult:
     """
     Weekday deepen pass for library buy-tier names (euro_depth pilot and successors).
@@ -959,6 +962,19 @@ def run_library_ingest_loop(
         from value_investor.engineering_queue import refresh_engineering_queue_ui
 
         refresh_engineering_queue_ui(tasks_path=tasks_path)
+
+    try:
+        from value_investor.ingest_deviations import record_library_ingest_deviations
+
+        result.ingest_deviations = record_library_ingest_deviations(
+            market_id=market_id,
+            results=result.results,
+            improved=result.improved,
+            path=deviations_path,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Ingest deviation persist failed for %s: %s", market_id, exc)
+        result.ingest_deviations = {"error": str(exc)}
 
     return result
 

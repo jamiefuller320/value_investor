@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-04T19:39:58+00:00",
+  "updated_at": "2026-09-04T19:48:16+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -6169,6 +6169,37 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
       "added_at": "2026-09-04T19:39:58+00:00"
+    },
+    {
+      "id": "L290",
+      "category": "later",
+      "section": "ops",
+      "title": "Dashboard click-to-approve ingest deviations",
+      "summary": "Pages is static, so ingest deviations reprocess via CLI (ftse-library ingest-deviations approve). A local dashboard API or Actions dispatch would let a reviewer pin without a commit, but that is a new write path.",
+      "revisit_when": "Local dashboard serve grows a write API, or we add a supervised workflow_dispatch for pins",
+      "tags": [
+        "dashboard",
+        "ingest-deviations",
+        "pins"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
+      "added_at": "2026-09-04T19:48:16+00:00"
+    },
+    {
+      "id": "N79",
+      "category": "not_now",
+      "section": "research",
+      "title": "Auto-suggest replacement IR allowlist URLs",
+      "summary": "Deviation rows can say IR exhausted, but picking the official 20-F/HY PDF still needs judgment (ABI BMV vs SEC). Do not auto-write research_ir_urls.json from host heuristics or an LLM crawler until issuer-match validation is reliable.",
+      "revisit_when": "Issuer-name body validation rejects foreign-exchange dumps with low false positives on VINCI/Randstad-style IR hosts",
+      "tags": [
+        "ir-allowlist",
+        "ingest-deviations"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
+      "added_at": "2026-09-04T19:48:16+00:00"
     }
   ],
   "fragments": [
