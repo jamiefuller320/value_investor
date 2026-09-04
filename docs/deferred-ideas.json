@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-04T10:32:29+00:00",
+  "updated_at": "2026-09-04T10:37:44+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -5739,6 +5739,40 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
       "added_at": "2026-09-04T10:32:26+00:00"
+    },
+    {
+      "id": "N72",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Per-ticker budget will not finish DG.PA-class IR blockers",
+      "summary": "A weekday per-ticker cap (L131/L215) only stops the bleed. DG.PA already used ~37 minutes on 2026-09-04 07:15, retried the same two IR IDs three times, and stayed 1 body / 2 IWB. More or less clock does not fetch GlobeNewswire HTML allowlist rows.",
+      "revisit_when": "After cutoff follow-up has pinned a sticky euro name, or someone proposes L215 expecting it to raise filings_with_body on DG.PA.",
+      "tags": [
+        "euro",
+        "ingest",
+        "ir-allowlist",
+        "time-budget"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:37:43+00:00"
+    },
+    {
+      "id": "L273",
+      "category": "later",
+      "section": "research",
+      "title": "Replace DG.PA GlobeNewswire HTML IR allowlist with VINCI PDFs",
+      "summary": "docs/data/research_ir_urls.json lists two globenewswire.com/news-release HTML pages plus one ml-eu Resource/Download for DG.PA. Those rows fail title/period validation and have no .L Investegate fallback, so euro_filings refetch burns the slot. Point the allowlist at VINCI IR PDFs and skip IR rows that fail after N attempts.",
+      "revisit_when": "Intensive gap-closure fires on DG.PA or the next euro deepen still spends >10 minutes on the same ir_5904e9509cae65e4 / ir_a21937028cbb3531 failures.",
+      "tags": [
+        "euro",
+        "ingest",
+        "ir-allowlist",
+        "DG.PA"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:37:44+00:00"
     }
   ],
   "fragments": [

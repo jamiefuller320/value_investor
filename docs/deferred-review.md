@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T10:32:29+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T10:37:44+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -125,6 +125,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N68 | **Raise Sunday fragment capture beyond director cap of 2** | Learning director emits at most 2 blue-sky fragments per week; analysis-review and post-run emit none. That is intentional, not a transcript substitute. Do not raise the cap or add review-agent fragments until system_gaps has a track record. | After 8 Sundays of system_gaps.json, a follow-up question still surfaces a consumer-path gap that was neither a system_gaps flag nor an ftse-defer entry |
 | N70 | **Auto-promote produce and learning-clock system_gaps flags** | Persist/publish/apply high flags now open eng-sgap-* rows. Produce and learning_clock flags stay proposed because they are judgment calls (rememo vs more ingest vs clock policy), not a wire-what-we-wrote miss. | The first persist/publish/apply eng-sgap tasks have merged and the remaining produce/clock flags still repeat for two Sundays |
 | N71 | **Do not build a separate euro stock-by-stock deepening engine** | Gap-closure already is the intensive single-ticker path (pin + record_gap_closure + compile_ingest_engineering_task_from_trial, max 3 rounds). A second engine would duplicate that without fixing the miss: follow-up never fired on cutoff deepens. | After the existing intensive path has fired on euro and still returns 0/N after 3 gap-closure rounds. |
+| N72 | **Per-ticker budget will not finish DG.PA-class IR blockers** | A weekday per-ticker cap (L131/L215) only stops the bleed. DG.PA already used ~37 minutes on 2026-09-04 07:15, retried the same two IR IDs three times, and stayed 1 body / 2 IWB. More or less clock does not fetch GlobeNewswire HTML allowlist rows. | After cutoff follow-up has pinned a sticky euro name, or someone proposes L215 expecting it to raise filings_with_body on DG.PA. |
 
 ---
 
@@ -281,6 +282,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L253 | **Archive-history DCA overlay to accelerate cadence evidence** | Forward weekday marks will take weeks to close 12 episodes. An exit-timing-archive-style replay on weekly screens could seed priors for lump-sum vs weekly DCA without waiting for new paper buys. | Entry DCA overlay has fewer than 12 closed episodes after several weeks of weekday paper-auto, or Sunday analysis-review flags thin starter-stage evidence |
 | L264 | **Rememo thin euro_depth buy-tier memos after filings deepen** | Sunday ladder skips all 44 euro_depth buy-tier names because a first memo already exists. Most are still mode=initial with 0 filing bodies. Dedupe should not block a rememo once euro_filings bodies increase. | euro_depth buy-tier indexed_without_body drops and ingest_parity_met is near true |
 | L269 | **Deepen Azelis AZE.BR filings after verdict catch-up** | AZE.BR has an accumulate verdict but only one indexed filing body. Next rememo needs buy-tier membership plus the usual body-lag threshold (10 adequate/thin, 25 strong), not merely bodies rising from 1 to 2. deepen-thin default (0 bodies) will not list it. | AZE.BR is buy-tier and euro_depth filings_with_body leads the memo by the rememo lag threshold |
+| L273 | **Replace DG.PA GlobeNewswire HTML IR allowlist with VINCI PDFs** | docs/data/research_ir_urls.json lists two globenewswire.com/news-release HTML pages plus one ml-eu Resource/Download for DG.PA. Those rows fail title/period validation and have no .L Investegate fallback, so euro_filings refetch burns the slot. Point the allowlist at VINCI IR PDFs and skip IR rows that fail after N attempts. | Intensive gap-closure fires on DG.PA or the next euro deepen still spends >10 minutes on the same ir_5904e9509cae65e4 / ir_a21937028cbb3531 failures. |
 
 ### Ops / reliability
 
