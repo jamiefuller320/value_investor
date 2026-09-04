@@ -2554,6 +2554,65 @@ function renderChurnCounterfactualPanel(data) {
     </section>`;
 }
 
+function renderIngestDeviationsSection(payload) {
+  const rawItems = (payload && payload.open_items) || (payload && payload.items) || [];
+  const openItems = rawItems.filter((row) => !row.status || row.status === "open");
+  const openCount = Number(payload && payload.open_count != null ? payload.open_count : openItems.length);
+  const reviewed = (payload && payload.recent_reviewed) || [];
+  const updated = payload && payload.updated_at ? fmtDate(payload.updated_at) : "—";
+
+  const openHtml = openItems.length
+    ? `<ul class="human-tasks-list">${openItems
+        .map((row) => {
+          const approve = (row.reprocess || {}).approve || "";
+          const dismiss = (row.reprocess || {}).dismiss || "";
+          return `<li class="human-task-item ingest-deviation-open">
+            <strong>${esc(row.ticker || row.id || "Deviation")}</strong>
+            <span class="badge badge-watch">${esc(row.kind || "open")}</span>
+            <span class="small muted">${esc(row.market_id || "")}</span>
+            <div class="small muted">${esc(row.summary || "")}</div>
+            ${
+              approve
+                ? `<div class="small"><strong>Reprocess</strong> <code>${esc(approve)}</code></div>`
+                : ""
+            }
+            ${
+              dismiss
+                ? `<div class="small muted">Dismiss <code>${esc(dismiss)}</code></div>`
+                : ""
+            }
+          </li>`;
+        })
+        .join("")}</ul>`
+    : '<p class="muted">No open ingest deviations. Post-ingest will add a row when IR retries fail or a weekday cap leaves IWB with no gain.</p>';
+
+  const reviewedHtml = reviewed.length
+    ? `<details class="ingest-deviations-reviewed"><summary class="small">Recently reviewed (${reviewed.length})</summary>
+        <ul class="human-tasks-list">${reviewed
+          .map(
+            (row) => `<li class="human-task-item human-task-auto">
+              <strong>${esc(row.ticker || row.id || "")}</strong>
+              <span class="badge badge-neutral">${esc(row.status || "")}</span>
+              <div class="small muted">${esc(row.summary || "")}</div>
+            </li>`
+          )
+          .join("")}</ul></details>`
+    : "";
+
+  return `
+    <section class="automation-section automation-section-full ingest-deviations-section">
+      <h2>Ingest deviations</h2>
+      <p class="small muted" style="margin-top:0">
+        Auto-recorded after library deepen. URL replacement stays a judged allowlist edit;
+        approve writes a 7-day intensive pin for the next euro slot (Pages cannot dispatch).
+        ${openCount ? ` <strong>${esc(String(openCount))} open</strong>.` : ""}
+        Updated ${esc(updated)}.
+      </p>
+      ${openHtml}
+      ${reviewedHtml}
+    </section>`;
+}
+
 function renderHumanTasksChecklistSection(checklist) {
   if (!checklist || !Array.isArray(checklist.sections) || !checklist.sections.length) {
     return `
@@ -3106,6 +3165,7 @@ function renderAutomation(data) {
     ${renderLearningTracksPanel(data)}
     ${renderKnobBootstrapPanel(data)}
     ${renderChurnCounterfactualPanel(data)}
+    ${renderIngestDeviationsSection(data.ingest_deviations)}
     ${renderHumanTasksChecklistSection(data.human_tasks_checklist)}
     <p class="small muted" style="margin-top:0">${esc(auto.note || "Current automation settings and dated achievements.")} Updated ${esc(fmtDate(auto.generated_at))}.</p>
 
@@ -3251,6 +3311,10 @@ async function loadDashboard() {
     if (!data.engineering_tasks && !(data.automation || {}).engineering_queue) {
       const engineering = await loadOptionalDashboardJson("data/engineering_tasks.json");
       if (engineering) data.engineering_tasks = engineering;
+    }
+    if (!data.ingest_deviations) {
+      const deviations = await loadOptionalDashboardJson("data/ingest_deviations.json");
+      if (deviations) data.ingest_deviations = deviations;
     }
     renderDashboard(data);
   } catch (err) {

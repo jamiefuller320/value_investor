@@ -320,6 +320,35 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ingest_loop_p.set_defaults(func=cmd_library_ingest_loop)
 
+    ingest_dev_p = sub.add_parser(
+        "ingest-deviations",
+        help=(
+            "List / approve / dismiss post-ingest deviations "
+            "(dashboard Automation tab; approve writes an intensive pin)"
+        ),
+    )
+    ingest_dev_p.add_argument(
+        "action",
+        choices=["list", "approve", "dismiss"],
+        help="list open rows, or approve/dismiss <id>",
+    )
+    ingest_dev_p.add_argument("deviation_id", nargs="?", default="", help="Deviation id")
+    ingest_dev_p.add_argument(
+        "--store",
+        type=Path,
+        default=None,
+        help="ingest_deviations.json path (default: docs/data/ingest_deviations.json)",
+    )
+    ingest_dev_p.add_argument(
+        "--pins-path",
+        type=Path,
+        default=None,
+        help="library_ingest_pins.json path when approving",
+    )
+    ingest_dev_p.add_argument("--note", default="", help="Optional review note")
+    ingest_dev_p.add_argument("--json", action="store_true")
+    ingest_dev_p.set_defaults(func=cmd_library_ingest_deviations)
+
     ingest_followup_p = sub.add_parser(
         "ingest-gap-closure-followup",
         parents=[common],
@@ -1386,6 +1415,58 @@ def cmd_library_ingest_loop(args: argparse.Namespace) -> int:
         for err in result.errors:
             print(f"  error: {err}", file=sys.stderr)
     return 0 if not result.errors or result.improved else 1
+
+
+def cmd_library_ingest_deviations(args: argparse.Namespace) -> int:
+    from value_investor.ingest_deviations import (
+        DEFAULT_INGEST_DEVIATIONS_PATH,
+        load_ingest_deviations,
+        open_ingest_deviations,
+        review_ingest_deviation,
+        slim_ingest_deviations_for_dashboard,
+    )
+
+    store_path = Path(args.store or DEFAULT_INGEST_DEVIATIONS_PATH)
+    action = str(args.action or "").strip()
+    if action == "list":
+        payload = slim_ingest_deviations_for_dashboard(load_ingest_deviations(store_path))
+        if args.json:
+            print(json.dumps(payload, indent=2))
+        else:
+            open_rows = open_ingest_deviations(store_path)
+            print(f"open_count={len(open_rows)} store={store_path}")
+            for row in open_rows:
+                print(
+                    f"  {row.get('id')}: {row.get('ticker')} {row.get('kind')} "
+                    f"— {row.get('summary')}"
+                )
+                reprocess = row.get("reprocess") or {}
+                if reprocess.get("approve"):
+                    print(f"    approve: {reprocess['approve']}")
+        return 0
+    deviation_id = str(args.deviation_id or "").strip()
+    if not deviation_id:
+        print("deviation_id required for approve/dismiss", file=sys.stderr)
+        return 2
+    try:
+        result = review_ingest_deviation(
+            deviation_id,
+            action=action,
+            path=store_path,
+            pins_path=args.pins_path,
+            note=str(args.note or ""),
+        )
+    except (KeyError, ValueError) as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+    if args.json:
+        print(json.dumps(result, indent=2))
+    else:
+        print(f"{action} {deviation_id} open_count={result.get('open_count')}")
+        pin = result.get("pin") or {}
+        if pin.get("pin"):
+            print(f"  pin until {pin['pin'].get('until')}")
+    return 0
 
 
 def cmd_library_ingest_gap_closure_followup(args: argparse.Namespace) -> int:
