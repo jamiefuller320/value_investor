@@ -16,6 +16,7 @@ from value_investor.agent_model_policy import (
     record_estimated_spend,
     weekly_ops_budget_status,
 )
+from value_investor.research.market_store import rememo_reason
 from value_investor.research.memo_backfill import publish_memo_backfill_batch
 from value_investor.research.runner import _process_ticker
 from value_investor.research.source_quality import score_research_sources
@@ -258,23 +259,18 @@ def list_rememo_backlog(
             prefer_committed=scan_committed,
         )
         disk_bodies = _disk_body_count(committed_dir, ticker)
-        lag = disk_bodies - memo_bodies
-        grade_key = grade or ""
-        if grade_key in {"adequate", "thin", "poor", ""} and lag >= body_lag_threshold:
+        reason = rememo_reason(
+            grade=grade,
+            memo_bodies=memo_bodies,
+            disk_bodies=disk_bodies,
+            body_lag_threshold=body_lag_threshold,
+            ingest_improved=ticker in improved,
+        )
+        if reason:
             _consider(
                 ticker,
                 ingest_improved=ticker in improved,
-                reason=f"stale_{grade_key or 'missing'}_grade_body_lag_{lag}",
-                grade=grade,
-                memo_bodies=memo_bodies,
-                disk_bodies=disk_bodies,
-                name=name,
-            )
-        elif lag >= max(body_lag_threshold * 2, 25):
-            _consider(
-                ticker,
-                ingest_improved=ticker in improved,
-                reason=f"strong_grade_large_body_lag_{lag}",
+                reason=reason,
                 grade=grade,
                 memo_bodies=memo_bodies,
                 disk_bodies=disk_bodies,

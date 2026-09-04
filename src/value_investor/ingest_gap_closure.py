@@ -933,6 +933,80 @@ def evaluate_library_ingest_gap_closure_followup(
     }
 
 
+def library_ingest_followup_loop_payloads(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    """Extract per-market loop dicts from a single-loop or sprint/maintenance JSON."""
+    if not isinstance(payload, dict):
+        return []
+    if isinstance(payload.get("markets"), list) and isinstance(payload.get("results"), list):
+        loops = [
+            row
+            for row in payload.get("results") or []
+            if isinstance(row, dict) and str(row.get("market_id") or "").strip()
+        ]
+        if loops:
+            return loops
+    if payload.get("market_id") or isinstance(payload.get("health_after"), dict):
+        return [payload]
+    return []
+
+
+def library_ingest_followup_dispatch_rows(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    """Normalize single-market or batch follow-up JSON into dispatch rows."""
+    if not isinstance(payload, dict):
+        return []
+    rows = payload.get("dispatches")
+    if isinstance(rows, list):
+        return [row for row in rows if isinstance(row, dict) and row.get("should_dispatch")]
+    if payload.get("should_dispatch"):
+        return [payload]
+    return []
+
+
+def evaluate_library_ingest_gap_closure_followups(
+    payload: dict[str, Any],
+    *,
+    market_id: str | None = None,
+    prefer_ticker: str | None = None,
+    library_root: Path | None = None,
+    tasks_path: Path = Path("docs/data/engineering_tasks.json"),
+    runs_path: Path | None = None,
+) -> dict[str, Any]:
+    """Evaluate stall/slowdown follow-up for one loop JSON or a multi-market batch."""
+    wanted = str(market_id or "").strip()
+    loops = library_ingest_followup_loop_payloads(payload)
+    if wanted:
+        filtered = [row for row in loops if str(row.get("market_id") or "").strip() == wanted]
+        loops = filtered or [{**payload, "market_id": wanted}]
+    if not loops:
+        return {"should_dispatch": False, "reason": "no library ingest loop payload"}
+    evaluations: list[dict[str, Any]] = []
+    for row in loops:
+        mid = str(row.get("market_id") or wanted or "").strip()
+        result = evaluate_library_ingest_gap_closure_followup(
+            market_id=mid,
+            health_after=row.get("health_after") or {},
+            was_gap_closure_run=bool(row.get("recorded_gap_closure")),
+            stalled=bool(row.get("stalled")),
+            improved=row.get("improved"),
+            partial=bool(row.get("partial")),
+            runtime_cutoff=bool(row.get("runtime_cutoff")),
+            prefer_ticker=prefer_ticker,
+            library_root=library_root,
+            tasks_path=tasks_path,
+            runs_path=runs_path,
+        )
+        result.setdefault("market_id", mid)
+        evaluations.append(result)
+    if len(evaluations) == 1:
+        return evaluations[0]
+    dispatches = [row for row in evaluations if row.get("should_dispatch")]
+    return {
+        "should_dispatch": bool(dispatches),
+        "dispatches": dispatches,
+        "evaluations": evaluations,
+    }
+
+
 def evaluate_weekly_gap_closure_followup(
     *,
     health_after: dict[str, Any],

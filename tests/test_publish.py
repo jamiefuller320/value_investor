@@ -283,6 +283,38 @@ def test_publish_research_index_is_summarized(tmp_path: Path):
     assert (dest_dir / "research" / "AAA.L.md").exists()
 
 
+def test_publish_merges_committed_research_and_overlays_reports(tmp_path: Path):
+    output_dir = tmp_path / "output"
+    dest_dir = tmp_path / "docs"
+    _write_sample_output(output_dir)
+
+    committed = dest_dir / "data" / "research" / "BBB.L"
+    committed.mkdir(parents=True)
+    (committed / "research.json").write_text(
+        json.dumps(
+            {
+                "ticker": "BBB.L",
+                "name": "Beta PLC",
+                "version": 1,
+                "updated_at": "2026-08-01T00:00:00+00:00",
+                "executive_summary": "Committed memo.",
+                "research_verdict": "caution",
+                "research_risk_level": "medium",
+                "research_confidence": 0.4,
+            }
+        ),
+        encoding="utf-8",
+    )
+    (committed / "research.md").write_text("# Beta\n", encoding="utf-8")
+
+    path = publish_dashboard(output_dir=output_dir, dest_dir=dest_dir, include_research=True)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    tickers = {row["ticker"] for row in data["research"]}
+    assert "BBB.L" in tickers
+    reports = {row["ticker"]: row for row in data["reports"]}
+    assert reports["BBB.L"]["research_verdict"] == "caution"
+
+
 def test_publish_prunes_old_dashboard_archives(tmp_path: Path):
     output_dir = tmp_path / "output"
     dest_dir = tmp_path / "docs"

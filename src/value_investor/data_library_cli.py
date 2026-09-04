@@ -327,7 +327,10 @@ def build_parser() -> argparse.ArgumentParser:
         "--loop-json",
         type=Path,
         default=None,
-        help="Path to ingest-loop result JSON (health_after, stalled, improved, partial)",
+        help=(
+            "Path to ingest-loop JSON, or sprint/maintenance JSON with a "
+            "results[] of per-market loop payloads"
+        ),
     )
     ingest_followup_p.add_argument(
         "--pin-ticker",
@@ -1328,7 +1331,7 @@ def cmd_library_ingest_loop(args: argparse.Namespace) -> int:
 
 def cmd_library_ingest_gap_closure_followup(args: argparse.Namespace) -> int:
     from value_investor.ingest_gap_closure import (
-        evaluate_library_ingest_gap_closure_followup,
+        evaluate_library_ingest_gap_closure_followups,
     )
 
     loop_payload: dict[str, Any] = {}
@@ -1341,19 +1344,9 @@ def cmd_library_ingest_gap_closure_followup(args: argparse.Namespace) -> int:
             return 1
         if isinstance(loaded, dict):
             loop_payload = loaded
-    market = (
-        str(args.market or "").strip()
-        or str(loop_payload.get("market_id") or "").strip()
-        or "euro_depth"
-    )
-    result = evaluate_library_ingest_gap_closure_followup(
-        market_id=market,
-        health_after=loop_payload.get("health_after") or {},
-        was_gap_closure_run=bool(loop_payload.get("recorded_gap_closure")),
-        stalled=bool(loop_payload.get("stalled")),
-        improved=loop_payload.get("improved"),
-        partial=bool(loop_payload.get("partial")),
-        runtime_cutoff=bool(loop_payload.get("runtime_cutoff")),
+    result = evaluate_library_ingest_gap_closure_followups(
+        loop_payload,
+        market_id=str(args.market or "").strip() or None,
         prefer_ticker=str(args.pin_ticker or "").strip() or None,
         library_root=args.root,
         tasks_path=args.tasks_path,
@@ -1362,12 +1355,22 @@ def cmd_library_ingest_gap_closure_followup(args: argparse.Namespace) -> int:
     if args.json or args.json_path is not None:
         _emit_cli_json(result, args)
     else:
-        print(
-            f"{market}: should_dispatch={result.get('should_dispatch')} "
-            f"pin_ticker={result.get('pin_ticker') or ''} "
-            f"trigger={result.get('trigger') or ''} "
-            f"reason={result.get('reason') or ''}"
-        )
+        dispatches = result.get("dispatches")
+        if isinstance(dispatches, list):
+            print(f"should_dispatch={result.get('should_dispatch')} dispatches={len(dispatches)}")
+            for row in dispatches:
+                print(
+                    f"  {row.get('market_id')}: pin_ticker={row.get('pin_ticker') or ''} "
+                    f"trigger={row.get('trigger') or ''}"
+                )
+        else:
+            print(
+                f"{result.get('market_id') or args.market or 'euro_depth'}: "
+                f"should_dispatch={result.get('should_dispatch')} "
+                f"pin_ticker={result.get('pin_ticker') or ''} "
+                f"trigger={result.get('trigger') or ''} "
+                f"reason={result.get('reason') or ''}"
+            )
     return 0
 
 

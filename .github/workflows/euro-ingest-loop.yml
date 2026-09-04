@@ -304,31 +304,7 @@ jobs:
         if: steps.gap_followup.outputs.should_dispatch == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-          MARKET: ${{ github.event.inputs.market || 'euro_depth' }}
-          PIN_TICKER: ${{ steps.gap_followup.outputs.pin_ticker }}
-          GAP_CLOSURE_TRIGGER: ${{ steps.gap_followup.outputs.gap_closure_trigger }}
-        run: |
-          set -euo pipefail
-          require_safe() {
-            local name="$1" val="$2" re="$3"
-            if [ -n "$val" ] && ! [[ "$val" =~ $re ]]; then
-              echo "Rejecting unsafe dispatch input: $name" >&2
-              exit 1
-            fi
-          }
-          require_safe market "${MARKET:-}" '^[a-z][a-z0-9_]{0,63}$'
-          require_safe pin_ticker "${PIN_TICKER:-}" '^[A-Za-z0-9][A-Za-z0-9._%-]{0,31}$'
-          require_safe gap_closure_trigger "${GAP_CLOSURE_TRIGGER:-}" '^[a-z0-9_]{1,64}$'
-          gh workflow run euro-ingest-loop.yml \
-            -f market="$MARKET" \
-            -f max_targets=1 \
-            -f max_bodies=40 \
-            -f max_runtime_seconds=2100 \
-            -f force=true \
-            -f record_gap_closure=true \
-            -f pin_ticker="$PIN_TICKER" \
-            -f gap_closure_trigger="$GAP_CLOSURE_TRIGGER"
-          echo "Dispatched euro-ingest-loop gap-closure follow-up for $PIN_TICKER"
+        run: bash scripts/dispatch_library_gap_closure_followups.sh /tmp/gap_followup.json
 
       - name: Dispatch engineering queue when tasks were added
         if: >-

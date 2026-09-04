@@ -85,9 +85,10 @@ scoped acceptance pytest on `main`, then a capped rework task if tests fail — 
 **Automation (post-trial success):**
 - **Weekly follow-up:** after a weekday batch ingest, ingest-loop dispatches `max_targets=1`
   gap-closure when buy-tier gaps persist (`trigger: weekly_followup`).
-- **Library stall / slowdown:** after a complete `euro-ingest-loop` batch that is stalled
-  or improved nobody with leftover buy-tier gaps, dispatch a pinned intensive pass
-  (`trigger: stall_slowdown`). Partial / cutoff runs do not escalate.
+- **Library stall / slowdown:** after a complete library ingest batch (focus,
+  parallel sprint, or maintenance) that is stalled or improved nobody with leftover
+  buy-tier gaps, dispatch a pinned intensive pass (`trigger: stall_slowdown`).
+  Partial / cutoff runs do not escalate.
 - **Eng-idle hook:** when engineering-queue is idle (`open_count=0`) and paper holdings or top
   buy-tier names still have gaps, engineering-queue dispatches intensive gap closure
   (`trigger: eng_idle`).

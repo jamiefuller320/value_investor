@@ -10,7 +10,10 @@ from unittest.mock import patch
 from value_investor.data_library_cli import main as library_main
 from value_investor.ingest_gap_closure import (
     evaluate_library_ingest_gap_closure_followup,
+    evaluate_library_ingest_gap_closure_followups,
     has_recent_intensive_gap_closure_run,
+    library_ingest_followup_dispatch_rows,
+    library_ingest_followup_loop_payloads,
     select_library_gap_closure_candidate,
 )
 from value_investor.storage import write_json
@@ -360,3 +363,61 @@ def test_followup_cli_writes_json_path(tmp_path: Path):
     assert payload["should_dispatch"] is True
     assert payload["pin_ticker"] == "RAND.AS"
     assert payload["trigger"] == "stall_slowdown"
+
+
+def test_batch_followup_dispatches_only_stalled_or_slowdown_markets(tmp_path: Path):
+    root, reports = _euro_fixture(tmp_path)
+    sprint = {
+        "markets": ["euro_depth", "sp500"],
+        "results": [
+            {
+                "market_id": "euro_depth",
+                "health_after": _health(),
+                "recorded_gap_closure": False,
+                "stalled": False,
+                "improved": [],
+                "partial": False,
+                "runtime_cutoff": False,
+            },
+            {
+                "market_id": "sp500",
+                "health_after": _health(zero_body=0),
+                "recorded_gap_closure": False,
+                "stalled": False,
+                "improved": ["AAPL"],
+                "partial": False,
+                "runtime_cutoff": False,
+            },
+        ],
+    }
+    assert [row["market_id"] for row in library_ingest_followup_loop_payloads(sprint)] == [
+        "euro_depth",
+        "sp500",
+    ]
+    with patch(
+        "value_investor.library_ingest_loop.load_library_buy_tier_reports",
+        return_value=reports,
+    ):
+        result = evaluate_library_ingest_gap_closure_followups(
+            sprint,
+            library_root=root,
+            tasks_path=tmp_path / "engineering_tasks.json",
+            runs_path=tmp_path / "ingest_gap_closure_runs.json",
+        )
+    assert result["should_dispatch"] is True
+    rows = library_ingest_followup_dispatch_rows(result)
+    assert [row["market_id"] for row in rows] == ["euro_depth"]
+    assert rows[0]["pin_ticker"] == "RAND.AS"
+    reasons = {row["market_id"]: row.get("reason") for row in result["evaluations"]}
+    assert "improved coverage" in str(reasons["sp500"])
+
+
+def test_single_loop_payload_is_not_treated_as_sprint_batch():
+    payload = {
+        "market_id": "euro_depth",
+        "health_after": {"indexed_without_body": 1},
+        "results": [{"ticker": "DG.PA", "improved": False}],
+    }
+    loops = library_ingest_followup_loop_payloads(payload)
+    assert len(loops) == 1
+    assert loops[0]["market_id"] == "euro_depth"

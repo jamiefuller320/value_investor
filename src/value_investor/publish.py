@@ -18,6 +18,8 @@ from value_investor.price_charts import (
     ensure_buy_tier_charts,
     slug_ticker,
 )
+from value_investor.research.market_store import resolve_research_documents
+from value_investor.research.overlay import apply_research_overlay
 from value_investor.storage import (
     DASHBOARD_ARCHIVE_KEEP,
     prune_dashboard_archives,
@@ -25,7 +27,7 @@ from value_investor.storage import (
     summarize_text,
     write_json,
 )
-from value_investor.summary import build_company_reports
+from value_investor.summary import CompanyReport, build_company_reports
 from value_investor.trust_summary import build_trust_reports
 
 logger = logging.getLogger(__name__)
@@ -161,14 +163,30 @@ def _load_research_documents(output_dir: Path) -> list[Any]:
     return docs
 
 
-def _copy_research_memos(output_dir: Path, dest_dir: Path) -> list[dict[str, Any]]:
-    research_root = output_dir / "research"
-    if not research_root.exists():
-        return []
+def _research_index_entry(ticker: str, meta: dict[str, Any], memo_rel: str) -> dict[str, Any]:
+    raw_summary = str(meta.get("executive_summary") or "")
+    return {
+        "ticker": ticker,
+        "name": meta.get("name") or ticker,
+        "version": meta.get("version"),
+        "updated_at": meta.get("updated_at"),
+        "executive_summary": summarize_text(raw_summary),
+        "research_verdict": meta.get("research_verdict"),
+        "research_risk_level": meta.get("research_risk_level"),
+        "research_confidence": meta.get("research_confidence"),
+        "risk_tags": meta.get("risk_tags") or [],
+        "question_outcomes": meta.get("question_outcomes") or [],
+        "source_counts": meta.get("source_counts"),
+        "memo_quality": meta.get("memo_quality"),
+        "memo_path": memo_rel,
+    }
 
+
+def _copy_research_memos(output_dir: Path, dest_dir: Path) -> list[dict[str, Any]]:
+    """Copy this-run memos and merge any committed store the dest already holds."""
     memo_dir = dest_dir / "research"
     memo_dir.mkdir(parents=True, exist_ok=True)
-    index: list[dict[str, Any]] = []
+    by_ticker: dict[str, dict[str, Any]] = {}
 
     summary_path = output_dir / "research_summary.json"
     summary_docs: dict[str, dict[str, Any]] = {}
@@ -179,41 +197,58 @@ def _copy_research_memos(output_dir: Path, dest_dir: Path) -> list[dict[str, Any
                 if isinstance(item, dict) and item.get("ticker"):
                     summary_docs[str(item["ticker"])] = item
 
-    for metadata_path in sorted(research_root.glob("*/research.json")):
-        ticker = metadata_path.parent.name
-        markdown_src = metadata_path.parent / "research.md"
-        if not markdown_src.exists():
-            continue
+    def _ingest_root(research_root: Path, *, overwrite_markdown: bool) -> None:
+        if not research_root.is_dir():
+            return
+        for metadata_path in sorted(research_root.glob("*/research.json")):
+            ticker = metadata_path.parent.name
+            key = ticker.strip().upper()
+            if not key:
+                continue
+            if key in by_ticker:
+                continue
+            markdown_src = metadata_path.parent / "research.md"
+            if not markdown_src.exists():
+                continue
+            slug = _slug_ticker(ticker)
+            memo_dest = memo_dir / f"{slug}.md"
+            if overwrite_markdown or not memo_dest.exists():
+                shutil.copy2(markdown_src, memo_dest)
+            meta = summary_docs.get(ticker) if overwrite_markdown else None
+            if meta is None:
+                meta = read_json(metadata_path)
+            if not isinstance(meta, dict):
+                continue
+            by_ticker[key] = _research_index_entry(ticker, meta, f"research/{slug}.md")
 
-        slug = _slug_ticker(ticker)
-        memo_dest = memo_dir / f"{slug}.md"
-        shutil.copy2(markdown_src, memo_dest)
+    _ingest_root(output_dir / "research", overwrite_markdown=True)
+    _ingest_root(dest_dir / "data" / "research", overwrite_markdown=False)
 
-        meta = summary_docs.get(ticker)
-        if meta is None:
-            meta = read_json(metadata_path)
-
-        raw_summary = str(meta.get("executive_summary") or "")
-        index.append(
-            {
-                "ticker": ticker,
-                "name": meta.get("name") or ticker,
-                "version": meta.get("version"),
-                "updated_at": meta.get("updated_at"),
-                "executive_summary": summarize_text(raw_summary),
-                "research_verdict": meta.get("research_verdict"),
-                "research_risk_level": meta.get("research_risk_level"),
-                "research_confidence": meta.get("research_confidence"),
-                "risk_tags": meta.get("risk_tags") or [],
-                "question_outcomes": meta.get("question_outcomes") or [],
-                "source_counts": meta.get("source_counts"),
-                "memo_quality": meta.get("memo_quality"),
-                "memo_path": f"research/{slug}.md",
-            }
-        )
-
+    index = list(by_ticker.values())
     index.sort(key=lambda item: str(item.get("name")))
     return index
+
+
+def _apply_resolved_research_overlay(
+    bundle: dict[str, Any],
+    *,
+    output_dir: Path,
+    dest_dir: Path,
+) -> None:
+    """Stamp report overlay fields from the full resolved memo set."""
+    raw_reports = bundle.get("reports")
+    if not isinstance(raw_reports, list) or not raw_reports:
+        return
+    documents = resolve_research_documents(
+        output_dir=output_dir,
+        bundle=bundle,
+        committed_dir=dest_dir / "data" / "research",
+    )
+    if not documents:
+        return
+    reports = [CompanyReport.from_dict(row) for row in raw_reports if isinstance(row, dict)]
+    updated = apply_research_overlay(reports, documents)
+    bundle["reports"] = [report.to_dict() for report in updated]
 
 
 def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
@@ -484,6 +519,7 @@ def publish_dashboard(
     bundle = build_dashboard_bundle(output_dir)
     if include_research:
         bundle["research"] = _copy_research_memos(output_dir, dest_dir)
+        _apply_resolved_research_overlay(bundle, output_dir=output_dir, dest_dir=dest_dir)
     else:
         bundle["research"] = []
 

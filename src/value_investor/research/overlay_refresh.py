@@ -9,6 +9,7 @@ from typing import Any
 import pandas as pd
 
 from value_investor.research.document import ResearchDocument
+from value_investor.research.market_store import resolve_research_documents
 from value_investor.research.overlay import apply_research_overlay, enrich_signals_with_research
 from value_investor.research.store import ResearchStore
 from value_investor.storage import read_json, write_json
@@ -74,35 +75,17 @@ def _company_report_from_dict(data: dict[str, Any]) -> CompanyReport:
     )
 
 
-def _documents_from_research_index(items: list[dict[str, Any]]) -> list[ResearchDocument]:
-    documents: list[ResearchDocument] = []
-    for item in items:
-        ticker = item.get("ticker")
-        if not ticker:
-            continue
-        confidence = item.get("research_confidence")
-        documents.append(
-            ResearchDocument(
-                ticker=str(ticker),
-                name=str(item.get("name") or ticker),
-                signal="strong_buy",
-                version=int(item.get("version") or 1),
-                created_at=str(item.get("updated_at") or ""),
-                updated_at=str(item.get("updated_at") or ""),
-                mode="initial",
-                research_verdict=item.get("research_verdict"),
-                research_risk_level=item.get("research_risk_level"),
-                research_confidence=float(confidence) if confidence is not None else None,
-            )
-        )
-    return documents
-
-
-def _load_research_documents(output_dir: Path, bundle: dict[str, Any]) -> list[ResearchDocument]:
-    store_docs = ResearchStore(output_dir).list_documents()
-    if store_docs:
-        return store_docs
-    return _documents_from_research_index(list(bundle.get("research") or []))
+def _load_research_documents(
+    output_dir: Path,
+    bundle: dict[str, Any],
+    *,
+    committed_dir: Path | None = None,
+) -> list[ResearchDocument]:
+    return resolve_research_documents(
+        output_dir=output_dir,
+        bundle=bundle,
+        committed_dir=committed_dir,
+    )
 
 
 def refresh_research_overlay(output_dir: Path) -> int:
@@ -133,12 +116,14 @@ def refresh_dashboard_bundle(
     bundle_path: Path,
     *,
     output_dir: Path | None = None,
+    committed_dir: Path | None = None,
 ) -> int:
     """
     Re-apply memo verdicts to ``reports`` inside a published dashboard bundle.
 
-    Prefers ``output/research`` when present; otherwise uses the bundle's
-    ``research[]`` index (CI weekday paper-auto path).
+    Unions this-run ``output/research``, the committed FTSE store
+    (``docs/data/research/``), and the bundle ``research[]`` index so weekday
+    paper-auto sees every written memo, not only the last publish snapshot.
     """
     bundle_path = Path(bundle_path)
     bundle = read_json(bundle_path)
@@ -151,7 +136,11 @@ def refresh_dashboard_bundle(
         return 0
 
     output_dir = Path(output_dir or Path("output"))
-    documents = _load_research_documents(output_dir, bundle)
+    inferred = bundle_path.parent / "research"
+    resolved_committed = committed_dir
+    if resolved_committed is None and inferred.is_dir():
+        resolved_committed = inferred
+    documents = _load_research_documents(output_dir, bundle, committed_dir=resolved_committed)
     if not documents:
         logger.warning("No research documents available — skipping overlay refresh")
         return 0
