@@ -1,6 +1,6 @@
 # JD Sports Fashion Plc (JD.L) — Research memo
 
-_Version 1 · Updated 2026-09-04T17:30:45.357019+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T20:08:28.558230+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
 JD Sports is a global multi-brand sports-fashion retailer (4,800+ stores; North America now the largest revenue region) trading on low multiples — screen P/E ~9.0, earnings yield ~11%, FCF yield ~21% — with five of five factor families passing (cheapness, quality, dividend, GARP, risk). Filings confirm a cash-generative balance sheet, rising dividends, and £400m of buybacks announced/completed across FY26–FY27, which supports a value case on asset backing and capital return. The central debate is whether cheapness reflects a cyclical trough or structural pressure: adjusted profit before tax has fallen two years running (FY25 £923m → FY26 £852m), like-for-like sales turned negative (-2.1% in FY26), and August 2026 news reports a second profit-guidance cut within three months driven by US weakness and footwear softness. Deep research confirms the screen’s cheap, cash-generative profile but weakens near-term conviction pending verified interim filing data.

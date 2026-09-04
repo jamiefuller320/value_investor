@@ -1,0 +1,210 @@
+{
+  "task_id": "screen_context",
+  "task_type": "screen_context",
+  "status": "partial",
+  "findings": [
+    "Signal buy with 6/22 models passing; passed_models are FCF Yield, Neff PEGY, Dividend Growth, Piotroski F-Score, Composite Value, Earnings Quality (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json).",
+    "Composite score 0.7246 (summary rounds to 72%); sector-relative composite 0.6066 (summary 61%) (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json).",
+    "All five factor families pass: cheapness, quality, dividend, GARP, risk (5/5) (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json).",
+    "Data quality full: data_quality_score 1.0, metrics_present 20/20 (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json).",
+    "Buy signal persistent/stable for 5 weeks since 2026-08-16 (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json).",
+    "conviction_score field is 1.0 but summary states 'Conviction 67%' — internal inconsistency within the same snapshot (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json).",
+    "Timing neutral (timing_score 0.5); RSI 14 ≈ 53.4; price ≈ +1.5% vs SMA200 (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json).",
+    "trade_plan is null while summary embeds core limit £197.50, tactical limit £193.14, stop £181.42, target £213.47 — trade-plan basis (pence vs pounds) not defined in structured fields (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json).",
+    "failed_models is [] and model_failures is {} despite only 6/22 models passing (16 implicitly failing); failure detail absent (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json).",
+    "TTM cashflow suppressed: yahoo_quarterly.ttm_cashflow_suppressed true, reason quarterly_cashflow_empty; cashflow_metrics, fcf, operating_cashflow all null (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json).",
+    "FCF divergence noted in action_note/summary: 'filing-aligned $1861M vs screen TTM $1200.4M' but fcf_definition_divergence and fcf_divergence_flagged are both false (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json).",
+    "key_metrics.FCF is 1,861,000,000; action_note currency-labels this as $1861M — currency/unit mismatch vs GBP pence-quoted name (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json).",
+    "Overlays all false: cash_conversion_overlay, interim_quality_overlay, fcf_definition_divergence, leverage_override, dual_leverage_display (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json).",
+    "Research overlay: adjusted_signal buy; research_verdict accumulate; research_risk_level high; research_confidence 0.68; rationale cites statutory earnings noise, leverage, pension/regulatory overhangs, absent interim filings (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json).",
+    "action_note repeats the same 'Research: Accumulate, High risk' paragraph seven times (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json).",
+    "Claims requiring filing confirmation (not resolved in this source): (1) FCF 1,861m filing-aligned vs TTM 1,200.4m; (2) lease-plus-pension net debt; (3) Openreach/EE/Global/JV reporting perimeter; (4) post-fibre-peak capex trajectory; (5) pence vs pounds basis for trade-plan price levels (source: /workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json — gaps only, no corroborating detail)."
+  ],
+  "figures": [
+    {
+      "metric": "composite_score",
+      "value": "0.7246",
+      "period": "screen snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "Summary rounds to 72%"
+    },
+    {
+      "metric": "sector_composite_score",
+      "value": "0.6066",
+      "period": "screen snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "Raw 0.6065934065934067; summary 61%"
+    },
+    {
+      "metric": "models_passed / model_count",
+      "value": "6 / 22",
+      "period": "screen snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "16 models not listed in failed_models"
+    },
+    {
+      "metric": "families_passed / family_count",
+      "value": "5 / 5",
+      "period": "screen snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "cheapness, quality, dividend, garp, risk"
+    },
+    {
+      "metric": "data_quality_score",
+      "value": "1.0 (20/20 metrics)",
+      "period": "screen snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "metrics_present 20, metrics_total 20"
+    },
+    {
+      "metric": "conviction_score",
+      "value": "1.0",
+      "period": "screen snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "Summary text says Conviction 67%"
+    },
+    {
+      "metric": "weeks_at_signal / signal_trend / signal_since",
+      "value": "5 / stable / 2026-08-16",
+      "period": "screen snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "stability_label persistent"
+    },
+    {
+      "metric": "timing_signal / timing_score",
+      "value": "neutral / 0.5",
+      "period": "screen snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "RSI (14)",
+      "value": "53.37",
+      "period": "screen snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "Summary rounds to RSI 53"
+    },
+    {
+      "metric": "price_vs_sma200_pct",
+      "value": "+1.47%",
+      "period": "screen snapshot",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "Summary states +1.5%"
+    },
+    {
+      "metric": "P/E",
+      "value": "18.5",
+      "period": "key_metrics",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "P/B",
+      "value": "1.6",
+      "period": "key_metrics",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "Dividend yield",
+      "value": "4.0%",
+      "period": "key_metrics",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "ROE",
+      "value": "8.5%",
+      "period": "key_metrics",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "FCF (key_metrics)",
+      "value": "1861000000",
+      "period": "key_metrics",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "Labelled $1861M in action_note; unit/currency not specified in key_metrics"
+    },
+    {
+      "metric": "FCF filing-aligned vs TTM",
+      "value": "$1861M vs $1200.4M",
+      "period": "action_note / summary",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "Requires filing confirmation; overlays flag false"
+    },
+    {
+      "metric": "FCF yield",
+      "value": "9.3%",
+      "period": "summary highlights",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "Not in key_metrics object"
+    },
+    {
+      "metric": "PEGY (Neff)",
+      "value": "0.05",
+      "period": "summary highlights",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "Neff PEGY model passed"
+    },
+    {
+      "metric": "Growth",
+      "value": "-9.0%",
+      "period": "summary highlights",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "Basis not stated"
+    },
+    {
+      "metric": "Trade plan core limit",
+      "value": "£197.50",
+      "period": "summary only",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "trade_plan field null; pence vs pounds unclear"
+    },
+    {
+      "metric": "Trade plan tactical limit",
+      "value": "£193.14",
+      "period": "summary only",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "40% tactical allocation per summary"
+    },
+    {
+      "metric": "Trade plan stop",
+      "value": "£181.42",
+      "period": "summary only",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "Tactical stop per summary"
+    },
+    {
+      "metric": "Trade plan target",
+      "value": "£213.47",
+      "period": "summary only",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "Tactical target per summary"
+    },
+    {
+      "metric": "research_confidence",
+      "value": "0.68",
+      "period": "research overlay",
+      "source_path": "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json",
+      "note": "research_verdict accumulate, risk high"
+    }
+  ],
+  "gaps": [
+    "Filing-aligned FCF £1,861m vs screen TTM $1,200.4m not reconciled; fcf_definition_divergence overlay false despite narrative flag.",
+    "Lease-plus-pension net debt not quantified in snapshot.",
+    "Openreach / EE / Global / JV reporting perimeter not defined.",
+    "Post-fibre-peak capex trajectory not stated.",
+    "Trade-plan price levels (£197.50, £193.14, £181.42, £213.47) appear only in summary; trade_plan null; pence vs pounds basis unconfirmed for BT-A.L.",
+    "failed_models empty despite 16/22 models not passing; no model_failures detail.",
+    "conviction_score 1.0 inconsistent with summary Conviction 67%.",
+    "TTM cashflow suppressed (quarterly_cashflow_empty); structured cashflow fields null.",
+    "FCF currency/unit in action_note ($) vs GBP-listed name not resolved.",
+    "Identity of '+1 more' passed model beyond the six named in passed_models not explicit in structured fields."
+  ],
+  "sources_read": [
+    "/workspace/docs/data/research_director_worker/BT-A.L/20260904T201714Z/sources/screening_snapshot.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-9cf0526e-4bf4-4509-94d4-93f8eb98da0a"
+}

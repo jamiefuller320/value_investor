@@ -1,0 +1,107 @@
+{
+  "task_id": "gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "financials_annual.json: yahoo_quarterly_income and yahoo_quarterly_cashflow are empty objects ({}); annual Yahoo income/cash-flow/balance-sheet data present for FY2021–FY2025 only.",
+    "financials_annual.json: cashflow_metrics sets ttm_cashflow_suppressed=true with reason quarterly_cashflow_empty; no TTM operating or free cash-flow series is computed.",
+    "screening_snapshot.json: action_note flags FCF basis mismatch (filing $100.6M vs screen TTM $27.4M); yahoo_quarterly.ttm_cashflow_suppressed=true mirrors financials_annual.json.",
+    "No ir_presentation_metrics.json in sources — IR-slide KPI deck metrics (segment charts, capex/hire-stock bridges) are unavailable to the pipeline.",
+    "No alternate_news.json in sources; news_manifest.json holds 52 Google News / yfinance headline links only (no structured alternate-news feed).",
+    "filings/filings_index.json period_coverage (annual=13, interim=3, trading_update=2) is misleading: the three interims are governance only — eb5a2930ee07cfe9 (NED/Audit/SID, 2026-03-03), 86f5509e77a0b2c0 (AGM statement & buyback launch, 2026-05-07), ed987737ddb0b3cd (NED/SID, 2026-06-01); no statutory half-year results RNS is indexed.",
+    "filings/filings_index.json: several filings tagged annual are non-accounts — 4d670a2084f2e410 (2025 Full Year Trading Update), 111b68099637c9fc (Notice of AGM), d43aafbefe51b612 (UKLR 6.4.9R notification), 635065961f2e07bd (Director/PDMR Shareholding); only eight Companies House group accounts plus 338b617c814e412b Preliminary Results are genuine annual statutory/adjusted packs.",
+    "As of source fetch 2026-09-04, no H1 2026 half-year statutory RNS is indexed; 09c35ef8fa3d6c34 (H1 2026 Trading Update, 2026-07-10) states interim results for six months ended 30 June 2026 are due 8 September 2026 — after the as-of date.",
+    "Five highest-value indexed bodies were not opened (5-cap): ch_00523335_MzUxMzI4MDA2NWFkaXF6a2N4 (FY25 Companies House accounts), 4d670a2084f2e410 (FY25 Full Year Trading Update), 86f5509e77a0b2c0 (AGM statement & buyback launch), 179749a189ebbdf6 (buyback completion), 838f730062c571cc (buyback commencement); all indexed has_body=true.",
+    "338b617c814e412b.txt (Preliminary Results FY25, read): company-defined free cash flow £69.1m (net cash from operations less textile rental items less capital element of leases) vs Yahoo Free Cash Flow $100.6m in financials_annual.json — definition divergence unresolved without CH accounts / IR deck.",
+    "09c35ef8fa3d6c34.txt (H1 2026 Trading Update, read): H1 revenue expected £258.0m (flat YoY); Workwear £74.0m (+2.6% organic); HORECA £184.0m (−2.0% organic); net debt ~£190.0m at Jun-2026; May-2026 £55.0m buyback with £17.3m returned by 9 Jul 2026; margin target ≥14.0% maintained — but no statutory H1 P&L/cash-flow/balance sheet."
+  ],
+  "figures": [
+    {
+      "metric": "Yahoo annual revenue",
+      "value": "£535.4m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/financials_annual.json",
+      "note": "Total Revenue / Operating Revenue field for 2025"
+    },
+    {
+      "metric": "Yahoo annual free cash flow",
+      "value": "$100.6m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/financials_annual.json",
+      "note": "Yahoo Free Cash Flow; currency as stored in source"
+    },
+    {
+      "metric": "Yahoo annual net debt",
+      "value": "$112.4m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/financials_annual.json",
+      "note": "Net Debt field; excludes IFRS 16 lease liabilities per company reporting"
+    },
+    {
+      "metric": "Screen filing FCF (Yahoo basis)",
+      "value": "$100.6m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/screening_snapshot.json",
+      "note": "key_metrics.FCF"
+    },
+    {
+      "metric": "Screen TTM FCF (suppressed basis)",
+      "value": "$27.4m",
+      "period": "TTM (not computed)",
+      "source_path": "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/screening_snapshot.json",
+      "note": "Cited in action_note only; ttm_cashflow_suppressed=true because quarterly_cashflow empty"
+    },
+    {
+      "metric": "Company-adjusted free cash flow",
+      "value": "£69.1m",
+      "period": "FY2025",
+      "source_path": "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/filings/bodies/338b617c814e412b.txt",
+      "note": "Net cash from operating activities less textile rental items less capital element of leases"
+    },
+    {
+      "metric": "H1 revenue (trading update)",
+      "value": "£258.0m",
+      "period": "H1 2026 (six months to 30 Jun 2026)",
+      "source_path": "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/filings/bodies/09c35ef8fa3d6c34.txt",
+      "note": "Expected; flat vs £257.5m prior year — not statutory interim accounts"
+    },
+    {
+      "metric": "Net debt incl. IFRS 16 (trading update)",
+      "value": "~£190.0m",
+      "period": "Jun 2026",
+      "source_path": "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/filings/bodies/09c35ef8fa3d6c34.txt",
+      "note": "Approximate; vs £159.2m at Dec 2025 per same release"
+    },
+    {
+      "metric": "Filings indexed total",
+      "value": "63",
+      "period": "Index as of 2026-09-04",
+      "source_path": "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/filings/filings_index.json",
+      "note": "summary.total; all with_body=63"
+    }
+  ],
+  "gaps": [
+    "Statutory hire-stock / textile-rental covenant disclosures — likely in unread FY25 Companies House accounts (ch_00523335_MzUxMzI4MDA2NWFkaXF6a2N4); memo must not infer hire-stock balances or lender covenant carve-outs.",
+    "Intra-year (H1 2026) statutory free cash flow, operating cash flow, capex and working-capital — no interim RNS indexed as of 4 Sep 2026; only trading-update narrative available.",
+    "IR presentation / slide-deck KPIs — ir_presentation_metrics absent; segment margin bridges and management slide metrics unavailable.",
+    "Remaining share-buyback authority and completion status post-May 2026 programme — unread bodies 86f5509e77a0b2c0, 838f730062c571cc, 179749a189ebbdf6; H1 TU cites £55.0m programme and £17.3m returned by 9 Jul 2026 but not residual headroom.",
+    "Post-trading-update Board numbers (adjusted operating profit, EPS, leverage at H1 statutory close) — interim results scheduled 8 Sep 2026, not yet indexed.",
+    "Yahoo TTM cash-flow metrics — suppressed; screen TTM FCF ($27.4m) cannot be reconciled to filing or company-adjusted FCF without quarterly feed.",
+    "Yahoo quarterly income statement — empty; no intra-year revenue/margin series from Yahoo.",
+    "Alternate news structured feed — absent; only headline-level news_manifest entries.",
+    "FY25 Full Year Trading Update detail (4d670a2084f2e410) — indexed but unread under 5-cap; any prelims-reconciliation nuance unavailable."
+  ],
+  "sources_read": [
+    "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/financials_annual.json",
+    "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/filings/filings_index.json",
+    "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/news_manifest.json",
+    "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/screening_snapshot.json",
+    "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/screen_run_manifest.json",
+    "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/macro_context.json",
+    "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/filings/bodies/338b617c814e412b.txt",
+    "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/filings/bodies/09c35ef8fa3d6c34.txt",
+    "docs/data/research_director_worker/JSG.L/20260904T195146Z/sources/filings/bodies/f438ea1d5c657959.txt"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-dd011008-b2b1-48eb-93e9-449dd313b62c"
+}

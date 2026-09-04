@@ -1,6 +1,6 @@
 # BT Group plc (BT-A.L) — Research memo
 
-_Version 1 · Updated 2026-09-04T17:29:34.845296+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T20:24:07.521934+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
 BT Group plc is the UK’s incumbent fixed and mobile operator, owning Openreach and retail brands BT, EE and Plusnet. The quantitative screen rates the name a **buy** (6/22 models, composite score 72%, all five factor families passed: cheapness, quality, dividend, GARP and risk), underpinned by a ~9% FCF yield, ~4% dividend yield, P/B of 1.6 and a Piotroski pass. The investment case rests on resilient adjusted EBITDA (~£8.2bn), a management-guided normalised free cash flow inflection towards ~£2bn in FY27 and progressive dividends, as full-fibre capex peaks and transformation savings accelerate. The central debate is whether statutory earnings noise, declining reported revenue, ~£18bn net debt, pension obligations and Ofcom/regulatory oversight are adequately priced in, or whether the market is too pessimistic ahead of the capex-to-cash transition.

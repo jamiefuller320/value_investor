@@ -1,0 +1,154 @@
+{
+  "appended": [
+    {
+      "ticker": "JD.L",
+      "name": "JD Sports Fashion Plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch the 20 Aug 2026 trading-update / FY27 guidance RNS, the FY26 prelim/results RNS (Yahoo already has FY26), the Jan 2026 Christmas TU, and the Feb 2026 £200m buyback-launch RNS. Retag ‘Across The Markets’ Google News wraps and the Investegate share-price page out of period=annual. De-duplicate Investegate/investegate.co.uk pairs (FY25 results, TVR, Global Impact Report). Reject or quarantine headlines whose issuer is JD.com / JD Wetherspoon / JD Vance. Point body_path at the trial snapshot tree. Fire the IR allowlist for FY26 results slides.",
+      "source": "director_worker",
+      "run_id": "20260904T195955Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T20:08:28.553254+00:00"
+    },
+    {
+      "ticker": "JD.L",
+      "name": "JD Sports Fashion Plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Select the latest dated annual *statutory* body (CH 01888425 filed 2026-08-05, ch_01888425_MzUzNTk3NjU1MGFkaXF6a2N4) plus the only company results RNS (FY25 21 May 2025, e544e58eca35fb32 — not the 8c1186fc3cb64c2d duplicate, not CH 2019–2025, not Across-The-Markets). When interim_count=0 and trading_update_count=0, do not invent or retag a TVR/Impact-Report as interim; keep gap_inventory mandatory. Raise the cap or add a trading_update type so a later-ingested Aug-20 body is not dropped.",
+      "source": "director_worker",
+      "run_id": "20260904T195955Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T20:08:28.553270+00:00"
+    },
+    {
+      "ticker": "JD.L",
+      "name": "JD Sports Fashion Plc",
+      "area": "prompt",
+      "priority": "high",
+      "suggestion": "Require annual workers to extract reporting currency (GBP); UK/Europe/NA and footwear vs apparel; statutory vs adjusted PBT/EPS/LFL; OCF, lease principal, PPE capex, company FCF definition (note FY26 KPI change); cash vs financial debt vs IFRS-16 leases vs net cash ex-leases / net leverage; Genesis NCI put/call; dividend declared vs cash paid; buyback cash vs shares cancelled vs remaining authority; Hibbett/Courir/impairments; FY27 outlook if stated. Require news workers to collapse Kalkine/Twelfth Magpie/Simply Wall St SEO, treat Google News as titles only, and discard JD.com / Wetherspoon / Vance collisions. Do not invent August TU statutory figures from headlines.",
+      "source": "director_worker",
+      "run_id": "20260904T195955Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T20:08:28.553275+00:00"
+    },
+    {
+      "ticker": "JD.L",
+      "name": "JD Sports Fashion Plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Set fcf_definition_divergence whenever filing ~£462m, Yahoo £956m and screen £830m disagree; do not pass FCF Yield at 21.4% without stating the basis. Do not pass the dividend family on a 1.4% yield without showing buyback-inclusive cover on company FCF. Treat sports-fashion / sneaker-cycle as cyclical_exposure. Populate failed_models for the 11/22 non-passes. Do not keep headline buy when research_verdict is already accumulate. Stop splicing prior-memo text into action_note. Validate trade-plan units (pence vs pounds) against the ~80p quote.",
+      "source": "director_worker",
+      "run_id": "20260904T195955Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T20:08:28.553282+00:00"
+    },
+    {
+      "ticker": "JD.L",
+      "name": "JD Sports Fashion Plc",
+      "area": "sources",
+      "priority": "medium",
+      "suggestion": "Populate alternate_news or drop it from the ladder. Add a structured financials_interim / trading_update extract because Yahoo quarterly_income and quarterly_cashflow are empty on this UK half-year reporter. Expose company vs Yahoo vs screen FCF and lease vs ex-lease net cash on the screening snapshot. Ingest IR presentation metrics for FY26/FY27 guidance bridges.",
+      "source": "director_worker",
+      "run_id": "20260904T195955Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T20:08:28.553285+00:00"
+    },
+    {
+      "ticker": "JD.L",
+      "name": "JD Sports Fashion Plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "Allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action so a later Aug TU can be assigned without inventing a source. Add reporting_currency, listing_unit (pence vs pounds), fcf_basis_used, geo_mix, and ticker_collision (JD.com/JDW) fields. Remap body_path into the trial sources/ tree. Treat empty Yahoo quarterlies on a UK half-year reporter as expected, not the same thin-step severity as a missing August profit-warning RNS.",
+      "source": "director_worker",
+      "run_id": "20260904T195955Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T20:08:28.553289+00:00"
+    },
+    {
+      "ticker": "JD.L",
+      "name": "JD Sports Fashion Plc",
+      "area": "monitoring",
+      "priority": "medium",
+      "suggestion": "For a persistent buy sports-fashion name whose intra-year profit warning is news-only, emit watches (ingest of the Aug 2026 TU / next H1 statutory, remaining FY27 £200m buyback vs TVR, FY27 guidance checkpoints, Nike/footwear read-across, Genesis £1.5bn window, chair/CEO) rather than only raising weeks_at_signal. Alert when filings_index fetch time post-dates a results/guidance headline that has no body.",
+      "source": "director_worker",
+      "run_id": "20260904T195955Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T20:08:28.553295+00:00"
+    },
+    {
+      "ticker": "JD.L",
+      "name": "JD Sports Fashion Plc",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Filings-first order is adequate only if period tags and intra-year coverage are true. For JD.L they are not: period_coverage annual=15/interim=0/trading_update=0 counts eight CH accounts (2019–2026), a May 2025 FY25 results RNS (duplicated), and six Google News ‘Across The Markets’ wraps (JD Wetherspoon / Helios Towers / BHP) as annual, while the live August 2026 profit-warning trading update is absent. yahoo_quarterly_cashflow sits on the ladder but is empty (TTM suppressed); alternate_news and ir_presentation_metrics are dead steps. Headline-only news therefore carries the only post-FY26 operating print, ranked below empty quarterlies.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T195955Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "evidence_ladder",
+      "recorded_at": "2026-09-04T20:08:28.553302+00:00"
+    },
+    {
+      "ticker": "JD.L",
+      "name": "JD Sports Fashion Plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Four worker types plus a five-task cap force two annual bodies (CH FY26 + FY25 RNS) + news + screen + gap and leave no slot for TVR, the Global Impact Report, or a later-ingested August TU. There is no tagged interim, so a second summarize_filing_body cannot be an H1 without inventing a source. No task type exists to reconcile filing £462m / Yahoo £956m / screen £830m FCF, to cluster JD.com / JD Wetherspoon / JD Vance collisions, or to parse an IR deck. gap_inventory can only list the missing Aug-20 RNS — it cannot fill it.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T195955Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "task_schema",
+      "recorded_at": "2026-09-04T20:08:28.553308+00:00"
+    },
+    {
+      "ticker": "JD.L",
+      "name": "JD Sports Fashion Plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "The screen still emits buy (11/22, 5/5 families including dividend at 1.4% yield and FCF Yield at 21.4%) while failed_models is [] despite 11 non-passes, TTM cashflow is suppressed, and fcf_definition_divergence / cyclical_exposure_detected / interim_quality_overlay / cash_conversion_overlay stay false on a three-way FCF split and a sports-fashion cyclical. Research overlays already cut to Accumulate / medium / 0.68, and action_note repeats that paragraph many times, so the trial is asked to re-verify a headline Buy the overlay has already downgraded.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T195955Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "methodology",
+      "recorded_at": "2026-09-04T20:08:28.553311+00:00"
+    },
+    {
+      "ticker": "JD.L",
+      "name": "JD Sports Fashion Plc",
+      "area": "monitoring",
+      "priority": "high",
+      "suggestion": "A 12-week persistent buy since 2026-08-02 with an in-flight FY27 £200m buyback, a 20 Aug 2026 guidance cut that has no filing body, a 1 Sep chair start (Agnefjäll), and a £1.5bn Genesis NCI option in 2029–30 has no watch schema (ingest of the Aug TU / next H1, remaining buyback vs TVR, FY27 guidance checkpoints, Nike/footwear read-across, Genesis). conviction_score 1.0 and stability_label=persistent are not substitutes for those monitors.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T195955Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "monitoring",
+      "recorded_at": "2026-09-04T20:08:28.553317+00:00"
+    },
+    {
+      "ticker": "JD.L",
+      "name": "JD Sports Fashion Plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "A generic FINANCIAL REVIEW / RISKS split will blend UK, Europe and NA and will not force GEO MIX, FCF-DEFINITION (company £462m vs Yahoo £956m vs screen £830m, including the FY26 KPI change), LEASE vs EX-LEASE NET CASH, GENESIS NCI, CAPITAL RETURNS (1.4% dividend vs cash buybacks), or an explicit PRIMARY-FILING GAP box for the missing August trading update. Without a ticker-collision slot, workers will treat JD.com revenue-plunge headlines as JD.L colour.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T195955Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "memo_structure",
+      "recorded_at": "2026-09-04T20:08:28.553322+00:00"
+    },
+    {
+      "ticker": "JD.L",
+      "name": "JD Sports Fashion Plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "filings_index body_path values point at docs/data/research/JD.L/sources/... rather than this trial snapshot. sources_used are companies_house + google_news_investegate + investegate_resolved — IR allowlist and Investegate recency did not land FY26 prelim, Jan-26 Christmas TU, Feb-26 buyback launch, or the 20 Aug 2026 TU. financials_annual.json is Yahoo-shaped (FY2023–2026; no root currency field; quarterly_income/quarterly_cashflow empty). screening_snapshot.trade_plan is null while summary cites £80.66 / £77.41 against an ~80p price. Prior-loop research_* fields already pre-answer the trial.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T195955Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "other",
+      "recorded_at": "2026-09-04T20:08:28.553329+00:00"
+    }
+  ],
+  "count": 13
+}
