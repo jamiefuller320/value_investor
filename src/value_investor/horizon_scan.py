@@ -164,6 +164,15 @@ def _slim_open_engineering(path: Path) -> list[dict[str, Any]]:
     return rows[:30]
 
 
+def _safe_memo_utility_rollup(data_dir: Path) -> dict[str, Any] | None:
+    try:
+        from value_investor.research.memo_utility_rollup import summarize_buy_tier_memo_utility
+
+        return summarize_buy_tier_memo_utility(data_dir=data_dir)
+    except (OSError, ValueError, TypeError):
+        return None
+
+
 def _stage_signals(
     payload: dict[str, Any], deferred_count: int, fragment_count: int
 ) -> dict[str, Any]:
@@ -227,6 +236,7 @@ def build_horizon_payload(
         if library_policy
         else None,
         "stage_signals": _stage_signals(metrics, len(open_deferred), len(open_fragments)),
+        "memo_utility_rollup": _safe_memo_utility_rollup(data_dir),
         "guardrails": {
             **(metrics.get("guardrails") or {}),
             "horizon_scan_observe_only": True,
@@ -625,14 +635,17 @@ Read the structured JSON at: {payload_path}
 It contains north-star stage context, open deferred ideas (L/N items), scratch fragments,
 pending ingest trials (completed experiments awaiting review), open engineering tasks,
 weekly analysis_review excerpts, paper learning metrics,
-exit-timing cohort readiness, library ladder state, and system_gaps (deterministic
+exit-timing cohort readiness, library ladder state, memo_utility_rollup
+(deterministic buy-tier memo grade / risk_tag / open-question aggregate — not a
+weekly gap-fill plan), and system_gaps (deterministic
 learning-path integrity: produce / persist / publish / apply plus learning clocks).
 
 Write EIGHT plain-text sections with headings exactly as shown:
 
 STAGE READINESS
 Bullets on current stage (0–2b focus), exit criteria met vs thin, and richness-before-breadth
-compliance. Cite payload fields only.
+compliance. Cite payload fields only. When memo_utility_rollup is present, cite
+coverage/grade_histogram as a stage signal — do not re-plan ingest or prompts.
 
 EVIDENCE STRANDS
 What is instrumented (paper cohorts, archive sims, rebalance log replay) vs missing.
@@ -647,6 +660,9 @@ memo-file coverage, filing parity) would hide a consumer-path miss on a new mark
 COUNTERFACTUAL GAPS
 What questions we cannot answer yet and which artifact type would answer them.
 Include unanswered system_gaps.probe_questions when flags are empty or thin.
+If memo_utility_rollup is present, you may ask whether memo schema
+(verdict vs confidence, risk_tags, unresolved questions) should better support
+the AI-judgment paper track — do not take ownership of weekly gap-fill.
 
 FRAGMENT CLUSTERING
 Prefer fragment_weeder.actions with action=DROP — those are deterministic

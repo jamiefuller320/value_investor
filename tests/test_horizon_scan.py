@@ -117,6 +117,8 @@ def test_build_horizon_payload_includes_fragments(tmp_path: Path):
     assert payload.get("system_gaps") is not None
     assert payload.get("fragment_weeder") is not None
     assert payload["fragment_weeder"]["open_count"] == 1
+    assert "memo_utility_rollup" in payload
+    assert payload["memo_utility_rollup"]["buy_tier_count"] == 0
     ok, _ = has_enough_horizon_inputs(payload)
     assert ok
 
