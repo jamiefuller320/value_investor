@@ -167,7 +167,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--tickers",
         default="",
-        help="Comma-separated tickers for --deepen-sources (default: all memos in output-dir)",
+        help=(
+            "Comma-separated tickers for --deepen-sources, --weekday-rememo, "
+            "or --rememo-catchup (stale-by-age force rememo when used with rememo)"
+        ),
     )
     parser.add_argument(
         "--model-ab",
@@ -530,6 +533,7 @@ def main(argv: list[str] | None = None) -> int:
                 model = research_model_id()
             except Exception:  # noqa: BLE001
                 model = "composer-2.5"
+        ticker_list = [t.strip() for t in str(args.tickers).split(",") if t.strip()] or None
         summary = run_weekday_memo_rememo_pass(
             api_key=args.api_key,
             output_dir=args.output_dir,
@@ -537,8 +541,10 @@ def main(argv: list[str] | None = None) -> int:
             max_targets=int(args.rememo_catchup_cap if catchup else args.weekday_rememo_cap),
             dry_run=bool(args.dry_run),
             model=model,
-            mode="catchup" if catchup else "weekday",
-            honor_catchup_request=not catchup,
+            mode="explicit" if ticker_list else ("catchup" if catchup else "weekday"),
+            honor_catchup_request=not catchup and not ticker_list,
+            explicit_tickers=ticker_list,
+            explicit_reason="stale_by_age",
         )
         print(
             f"{label} selected={len(summary.selected)} "

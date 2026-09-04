@@ -202,6 +202,65 @@ def test_run_weekday_rememo_skips_when_weekly_ops_tight(tmp_path: Path, monkeypa
     assert "weekly_ops_headroom" in summary.skipped
 
 
+def test_explicit_tickers_force_stale_by_age_without_body_lag(tmp_path: Path, monkeypatch):
+    data = tmp_path / "docs_data"
+    _write_memo(data, "SN.L", with_body=40, total=40, grade="strong", published_bodies=40)
+    meta = data / "research" / "SN.L" / "research.json"
+    payload = json.loads(meta.read_text(encoding="utf-8"))
+    payload["memo_quality"] = {
+        "grade": "strong",
+        "filings_with_body": 40,
+        "filings_total": 40,
+    }
+    meta.write_text(json.dumps(payload), encoding="utf-8")
+    latest = tmp_path / "latest.json"
+    latest.write_text(
+        json.dumps(
+            {
+                "research": [
+                    {
+                        "ticker": "SN.L",
+                        "name": "Smith & Nephew",
+                        "memo_quality": {
+                            "grade": "strong",
+                            "filings_with_body": 40,
+                            "filings_total": 40,
+                        },
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "value_investor.research.weekday_rememo.weekly_ops_budget_status",
+        lambda estimated_memo_usd=0.4: {
+            "remaining_weekly_ops_usd": 50.0,
+            "constraining": False,
+            "weekly_ops_cap_usd": 80.0,
+        },
+    )
+    summary = run_weekday_memo_rememo_pass(
+        api_key=None,
+        latest_path=latest,
+        committed_dir=data / "research",
+        output_dir=tmp_path / "output",
+        dest_dir=tmp_path / "docs",
+        max_targets=5,
+        summary_path=tmp_path / "summary.json",
+        dry_run=True,
+        update_backlog_status=False,
+        publish=False,
+        record_spend=False,
+        honor_catchup_request=False,
+        explicit_tickers=["SN.L", "MISSING.L"],
+        mode="explicit",
+    )
+    assert summary.selected == ["SN.L"]
+    assert summary.reasons["SN.L"] == "stale_by_age"
+    assert "missing_committed:MISSING.L" in summary.skipped
+
+
 def test_list_rememo_backlog_scans_committed_without_latest_index(tmp_path: Path):
     from value_investor.research.weekday_rememo import list_rememo_backlog
 

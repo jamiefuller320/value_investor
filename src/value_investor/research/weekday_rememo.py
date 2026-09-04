@@ -287,6 +287,47 @@ def list_rememo_backlog(
     return candidates
 
 
+def resolve_explicit_rememo_targets(
+    tickers: list[str],
+    *,
+    latest_path: Path = DEFAULT_LATEST_PATH,
+    committed_dir: Path = DEFAULT_COMMITTED_RESEARCH,
+    reason: str = "stale_by_age",
+    scan_committed: bool = True,
+) -> tuple[list[WeekdayRememoTarget], list[str]]:
+    """Build rememo targets for an operator-supplied ticker list (no body-lag filter)."""
+    published = _published_research_by_ticker(latest_path)
+    targets: list[WeekdayRememoTarget] = []
+    missing: list[str] = []
+    seen: set[str] = set()
+    for raw in tickers:
+        ticker = str(raw or "").strip().upper()
+        if not ticker or ticker in seen:
+            continue
+        seen.add(ticker)
+        if not (committed_dir / ticker / "research.json").exists():
+            missing.append(ticker)
+            continue
+        grade, memo_bodies, name = _quality_snapshot(
+            ticker,
+            committed_dir=committed_dir,
+            published=published,
+            prefer_committed=scan_committed,
+        )
+        targets.append(
+            WeekdayRememoTarget(
+                ticker=ticker,
+                name=name,
+                reason=reason,
+                disk_bodies=_disk_body_count(committed_dir, ticker),
+                published_bodies=memo_bodies,
+                published_grade=grade,
+                ingest_improved=False,
+            )
+        )
+    return targets, missing
+
+
 def select_weekday_rememo_targets(
     *,
     latest_path: Path = DEFAULT_LATEST_PATH,
@@ -490,6 +531,8 @@ def run_weekday_memo_rememo_pass(
     update_backlog_status: bool = True,
     honor_catchup_request: bool = True,
     catchup_request_path: Path = DEFAULT_CATCHUP_REQUEST_PATH,
+    explicit_tickers: list[str] | None = None,
+    explicit_reason: str = "stale_by_age",
 ) -> WeekdayRememoSummary:
     """Force-initial rememo for a bounded set of lagging memo tickers."""
     summary = WeekdayRememoSummary(
@@ -507,21 +550,35 @@ def run_weekday_memo_rememo_pass(
             ingest_results = []
 
     effective_cap = int(max_targets)
-    if honor_catchup_request and summary.mode == "weekday":
+    if honor_catchup_request and summary.mode == "weekday" and not explicit_tickers:
         effective_cap = read_active_catchup_cap(
             catchup_request_path,
             default_cap=effective_cap,
         )
 
-    backlog = list_rememo_backlog(
-        latest_path=latest_path,
-        committed_dir=committed_dir,
-        ingest_results=ingest_results,
-        body_lag_threshold=body_lag_threshold,
-        scan_committed=scan_committed,
-    )
-    summary.backlog_before = len(backlog)
-    targets = backlog[: max(0, effective_cap)]
+    missing_explicit: list[str] = []
+    if explicit_tickers:
+        targets, missing_explicit = resolve_explicit_rememo_targets(
+            explicit_tickers,
+            latest_path=latest_path,
+            committed_dir=committed_dir,
+            reason=explicit_reason,
+            scan_committed=scan_committed,
+        )
+        summary.backlog_before = len(targets)
+        if missing_explicit:
+            summary.skipped.extend(f"missing_committed:{ticker}" for ticker in missing_explicit)
+        targets = targets[: max(0, effective_cap)]
+    else:
+        backlog = list_rememo_backlog(
+            latest_path=latest_path,
+            committed_dir=committed_dir,
+            ingest_results=ingest_results,
+            body_lag_threshold=body_lag_threshold,
+            scan_committed=scan_committed,
+        )
+        summary.backlog_before = len(backlog)
+        targets = backlog[: max(0, effective_cap)]
     summary.selected = [t.ticker for t in targets]
     summary.reasons = {t.ticker: t.reason for t in targets}
     for t in targets:
