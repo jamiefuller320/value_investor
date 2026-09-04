@@ -315,6 +315,56 @@ def test_publish_merges_committed_research_and_overlays_reports(tmp_path: Path):
     assert reports["BBB.L"]["research_verdict"] == "caution"
 
 
+def test_publish_indexes_json_only_committed_memos(tmp_path: Path):
+    output_dir = tmp_path / "output"
+    dest_dir = tmp_path / "docs"
+    _write_sample_output(output_dir)
+    committed = dest_dir / "data" / "research" / "CCC.L"
+    committed.mkdir(parents=True)
+    (committed / "research.json").write_text(
+        json.dumps(
+            {
+                "ticker": "CCC.L",
+                "name": "Gamma PLC",
+                "research_verdict": "accumulate",
+            }
+        ),
+        encoding="utf-8",
+    )
+    path = publish_dashboard(output_dir=output_dir, dest_dir=dest_dir, include_research=True)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    tickers = {row["ticker"] for row in data["research"]}
+    assert "CCC.L" in tickers
+    reports = {row["ticker"]: row for row in data["reports"]}
+    if "CCC.L" in reports:
+        assert reports["CCC.L"]["research_verdict"] == "accumulate"
+
+
+def test_publish_unions_prior_research_index(tmp_path: Path):
+    output_dir = tmp_path / "output"
+    dest_dir = tmp_path / "docs"
+    _write_sample_output(output_dir)
+    dest_dir.joinpath("data").mkdir(parents=True)
+    dest_dir.joinpath("data", "latest.json").write_text(
+        json.dumps(
+            {
+                "research": [
+                    {
+                        "ticker": "OLD.L",
+                        "name": "Prior Memo",
+                        "research_verdict": "hold",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    path = publish_dashboard(output_dir=output_dir, dest_dir=dest_dir, include_research=True)
+    data = json.loads(path.read_text(encoding="utf-8"))
+    tickers = {row["ticker"] for row in data["research"]}
+    assert "OLD.L" in tickers
+
+
 def test_publish_prunes_old_dashboard_archives(tmp_path: Path):
     output_dir = tmp_path / "output"
     dest_dir = tmp_path / "docs"

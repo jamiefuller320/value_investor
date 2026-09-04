@@ -182,8 +182,28 @@ def _research_index_entry(ticker: str, meta: dict[str, Any], memo_rel: str) -> d
     }
 
 
+def _existing_research_index(dest_dir: Path) -> dict[str, dict[str, Any]]:
+    """Prior ``latest.json`` research[] so a short publish cannot shrink the union."""
+    latest = _read_json(Path(dest_dir) / "data" / "latest.json")
+    if not isinstance(latest, dict):
+        return {}
+    by_ticker: dict[str, dict[str, Any]] = {}
+    for row in latest.get("research") or []:
+        if not isinstance(row, dict):
+            continue
+        key = str(row.get("ticker") or "").strip().upper()
+        if key:
+            by_ticker[key] = row
+    return by_ticker
+
+
 def _copy_research_memos(output_dir: Path, dest_dir: Path) -> list[dict[str, Any]]:
-    """Copy this-run memos and merge any committed store the dest already holds."""
+    """Union this-run memos, the committed store, and the prior published index.
+
+    Indexes ``research.json`` even when ``research.md`` is missing so a json-only
+    committed memo still reaches the dashboard and paper overlay. A partial
+    rememo publish must not replace the Sunday union.
+    """
     memo_dir = dest_dir / "research"
     memo_dir.mkdir(parents=True, exist_ok=True)
     by_ticker: dict[str, dict[str, Any]] = {}
@@ -197,7 +217,7 @@ def _copy_research_memos(output_dir: Path, dest_dir: Path) -> list[dict[str, Any
                 if isinstance(item, dict) and item.get("ticker"):
                     summary_docs[str(item["ticker"])] = item
 
-    def _ingest_root(research_root: Path, *, overwrite_markdown: bool) -> None:
+    def _ingest_root(research_root: Path, *, overwrite: bool) -> None:
         if not research_root.is_dir():
             return
         for metadata_path in sorted(research_root.glob("*/research.json")):
@@ -205,24 +225,33 @@ def _copy_research_memos(output_dir: Path, dest_dir: Path) -> list[dict[str, Any
             key = ticker.strip().upper()
             if not key:
                 continue
-            if key in by_ticker:
+            if key in by_ticker and not overwrite:
                 continue
             markdown_src = metadata_path.parent / "research.md"
-            if not markdown_src.exists():
-                continue
             slug = _slug_ticker(ticker)
             memo_dest = memo_dir / f"{slug}.md"
-            if overwrite_markdown or not memo_dest.exists():
+            if markdown_src.exists() and (overwrite or not memo_dest.exists()):
                 shutil.copy2(markdown_src, memo_dest)
-            meta = summary_docs.get(ticker) if overwrite_markdown else None
+            meta = summary_docs.get(ticker) if overwrite else None
             if meta is None:
-                meta = read_json(metadata_path)
+                try:
+                    meta = read_json(metadata_path)
+                except (OSError, ValueError, TypeError):
+                    continue
             if not isinstance(meta, dict):
                 continue
-            by_ticker[key] = _research_index_entry(ticker, meta, f"research/{slug}.md")
+            memo_rel = (
+                f"research/{slug}.md"
+                if memo_dest.exists() or markdown_src.exists()
+                else f"data/research/{ticker}/research.json"
+            )
+            by_ticker[key] = _research_index_entry(ticker, meta, memo_rel)
 
-    _ingest_root(output_dir / "research", overwrite_markdown=True)
-    _ingest_root(dest_dir / "data" / "research", overwrite_markdown=False)
+    # This-run output wins, then committed store, then the prior published index.
+    _ingest_root(output_dir / "research", overwrite=True)
+    _ingest_root(dest_dir / "data" / "research", overwrite=False)
+    for key, row in _existing_research_index(dest_dir).items():
+        by_ticker.setdefault(key, row)
 
     index = list(by_ticker.values())
     index.sort(key=lambda item: str(item.get("name")))
@@ -584,6 +613,18 @@ def publish_dashboard(
 
     latest_path = data_dir / "latest.json"
     write_json(latest_path, bundle, compact=True, compress=False)
+
+    if include_research:
+        try:
+            from value_investor.research.overlay_refresh import refresh_dashboard_bundle
+
+            refresh_dashboard_bundle(
+                latest_path,
+                output_dir=output_dir,
+                committed_dir=dest_dir / "data" / "research",
+            )
+        except Exception as exc:  # noqa: BLE001 — index already written
+            logger.warning("Post-publish research overlay refresh skipped: %s", exc)
 
     # Standalone automation snapshot so ladder/paper workflows can refresh it
     # without a full screen republish.

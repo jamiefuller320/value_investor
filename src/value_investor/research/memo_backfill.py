@@ -279,10 +279,15 @@ def publish_memo_backfill_batch(
         for row in payload.get("research") or []
         if isinstance(row, dict) and row.get("ticker")
     }
+    prior_keys = set(by_ticker)
+    added = 0
     for entry in new_entries:
         ticker = str(entry.get("ticker") or "").strip().upper()
-        if ticker:
-            by_ticker[ticker] = entry
+        if not ticker:
+            continue
+        if ticker not in prior_keys:
+            added += 1
+        by_ticker[ticker] = entry
     payload["research"] = sorted(by_ticker.values(), key=lambda item: str(item.get("name") or ""))
 
     reports = [
@@ -314,7 +319,7 @@ def publish_memo_backfill_batch(
 
     synced = sync_output_research_to_committed(output_dir, data_dir=dest_dir / "data")
     return {
-        "new_memo_entries": len(new_entries),
+        "new_memo_entries": added,
         "research_index_count": len(payload["research"]),
         "synced_committed_trees": synced,
     }
