@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-03T17:23:36+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T06:55:32+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -120,6 +120,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N63 | **Pyramid add-on while still held beyond original sleeve** | A second buy trigger on a name still at/near full sleeve (pyramiding) is a different decision from recommit-after-exit. Do not allow adds above the original target until first-entry cadence is ranked and conviction-weighted sizing exists. Observe recommit-after-exit separately so it does not contaminate DCA evidence. | entry_dca_overlay ready_for_cadence_analysis on first_entry AND conviction_weighted_sizing is active |
 | N64 | **Do not raise discretionary experiment cap above 12 yet** | Live inventory is 1 open task / 4 shadows against the generous 12/8 soft budget. Raising the cap further would not add coverage (lifecycle stages are already perpetual) and would weaken the agent-triage signal. Keep 12/8 until Sunday open tasks repeatedly hit the 75% warn. | experiment_inventory.complexity.warn_discretionary_tasks is true on 3 consecutive Sunday director runs |
 | N65 | **Library ingest director (agent orchestration)** | No ingest-director module exists. ingest_critical_path already classifies blockers; the euro stall was a deterministic discovery-vs-deepen budget bug, not a missing LLM planner. A weekly director like learning-director would not fetch bodies. | Euro deepen still starves after the discovery time cap, or we need cross-market ingest scheduling beyond critical-path + budget |
+| N66 | **Auto-promote high system_gaps flags to engineering** | Do not auto-open engineering tasks from system_gaps flags yet. Analysis-review still proposes [ops]/[ingest] lines for human promote; wiring mistakes need a human gate. | Three consecutive Sundays produce the same high-severity flag id and a human has promoted the matching analysis task twice |
+| N67 | **Mine agent-run follow-up transcripts for latent gaps** | This morning's research-vs-learning miss surfaced from a follow-up, not eval. Horizon already forbids conversation transcript mining; keep fragments + system_gaps as the capture path. | Monthly horizon has missed two more consumer-path gaps that only appeared in agent follow-ups after system_gaps.json has run for 8 Sundays |
 
 ---
 
@@ -328,6 +330,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L257 | **Persist observe clock when a sprint stream vacates without parity** | If a parallel sprint market is removed from ingest_parallel_sprint / _2 without landing on ingest_parity_markets or ftse_equivalent_markets, copy it to observe_sim_markets_extra so the 8-12 week archive clock does not stop. S&P is already covered by ftse_equivalent_markets; ASX usually enters ingest_parity_markets on filing parity. | A sprint stream advances a market that is not added to ingest_parity_markets or ftse_equivalent_markets |
 | L258 | **Roll gha_pip_install.sh out to remaining workflows** | Euro/library ingest now retries pip on empty-index flakes. Other long jobs (paper-auto, ops-monitor, FTSE ingest-loop, orchestrator) still use a single pip install -e . | Another workflow fails on pandas from versions: none or a similar empty-index pip flake |
 | L261 | **Wire library stall/slowdown gap-closure follow-up on parallel sprint workflows** | euro-ingest-loop.yml now auto-dispatches pinned intensive gap-closure on stall or 0-improve complete runs. library-ingest-sprint.yml and library-ingest-sprint-2.yml still lack that hook, so leftover EDGAR/ASX sticky names wait for the next deepen or a manual pin. | sp500 or asx200 complete weekday batches repeatedly improve 0 tickers while IWB or zero-body remain after the discovery time cap is in production |
+| L262 | **Dashboard card for system_gaps flags** | Surface docs/data/system_gaps.json high-severity flags on the Sunday review / Overview dashboard so humans see consumer-path misses without opening the JSON. | system_gaps.json has been committed by two Sunday analysis-review runs and operators still miss flags until email/review markdown |
 
 ---
 
