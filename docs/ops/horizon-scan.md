@@ -6,6 +6,11 @@ learning/evidence readiness, and the engineering queue. Complements weekly
 reconciliation.
 
 Does **not** change paper books, apply knobs, or mine conversation transcripts.
+The monthly payload includes the same deterministic `system_gaps` snapshot as
+weekly analysis-review — cite high-severity flags under AUTOMATION RISKS /
+COUNTERFACTUAL GAPS instead of treating unused budget or memo-file coverage as
+proof the learning path is fed. See
+[analysis-review.md](analysis-review.md#system-gaps-learning-path-integrity).
 
 ## Scratch fragments
 

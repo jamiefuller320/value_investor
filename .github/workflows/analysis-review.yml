@@ -186,6 +186,16 @@ jobs:
           fi
           echo "skip=false" >> "$GITHUB_OUTPUT"
 
+      - name: Write learning-path system gaps
+        run: ftse-analysis-review system-gaps --write --json || true
+
+      - name: Commit system-gap snapshot
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: learning-path system gaps [skip ci]"
+          file_pattern: docs/data/system_gaps.json
+          skip_fetch: false
+
       - name: Run modelling analysis review
         if: steps.ready.outputs.skip != 'true'
         env:
@@ -209,5 +219,6 @@ jobs:
             docs/data/analysis_review.json
             docs/data/analysis_review.md
             docs/data/analysis_tasks.json
+            docs/data/system_gaps.json
             docs/data/paper_automation/knob_calibration_priors.json
           skip_fetch: false

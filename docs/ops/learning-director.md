@@ -9,7 +9,12 @@ Scoring / assessment-model experiments stay in [analysis-review.md](analysis-rev
 churn experiments stay in [paper-learning-review.md](paper-learning-review.md). The
 director only checks that trajectory / exclusion / exit-timing triggers were turned into
 those specialist experiments — prefer thin `[analysis]` / `[monitoring]` follow-ups over
-a second experiment queue. See [learning-director-vision.md](learning-director-vision.md#discrete-specialist-pipelines-director-as-oversight).
+a second experiment queue. The payload includes `system_gaps` (same snapshot as
+analysis-review). If a high-severity flag exists and analysis-review did not name it,
+propose a thin `[ops]` / `[research]` follow-up — do not treat unused `weekly_ops` or
+memo-file coverage as proof the learning consumer is fed. See
+[learning-director-vision.md](learning-director-vision.md#discrete-specialist-pipelines-director-as-oversight)
+and [analysis-review.md](analysis-review.md#system-gaps-learning-path-integrity).
 
 Vision doc: [learning-director-vision.md](learning-director-vision.md) ·
 structured roadmap: [`docs/data/learning_director_vision.json`](../data/learning_director_vision.json).

@@ -21,6 +21,11 @@ from value_investor.analysis_review import (
     run_analysis_review,
 )
 from value_investor.cursor_api_key import resolve_cursor_api_key
+from value_investor.system_gap_analysis import (
+    COMMITTED_GAPS_PATH,
+    build_system_gap_snapshot,
+    write_system_gap_snapshot,
+)
 
 
 def _print_json(data: object) -> None:
@@ -64,6 +69,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
                     "performance_diagnosis": review.performance_diagnosis,
                     "signal_backtest_findings": review.signal_backtest_findings,
                     "paper_track_comparison": review.paper_track_comparison,
+                    "system_gaps": review.system_gaps,
                     "proposed_experiments": review.proposed_experiments,
                     "defer": review.defer,
                 },
@@ -103,6 +109,32 @@ def _cmd_list(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_system_gaps(args: argparse.Namespace) -> int:
+    snapshot = build_system_gap_snapshot(
+        data_dir=args.data_dir,
+        output_dir=args.output_dir,
+    )
+    path = args.write_path or (args.data_dir / COMMITTED_GAPS_PATH.name)
+    if args.write:
+        write_system_gap_snapshot(snapshot, path=path)
+    if args.json:
+        _print_json(snapshot)
+    else:
+        flags = snapshot.get("flags") or []
+        print(
+            f"system_gaps flags={snapshot.get('flag_count', 0)} "
+            f"high={snapshot.get('high_flag_count', 0)}"
+        )
+        for row in flags:
+            print(
+                f"  [{row.get('severity')}] {row.get('id')} "
+                f"({row.get('layer')}) — {row.get('title')}"
+            )
+        if args.write:
+            print(f"wrote {path}")
+    return 0
+
+
 def _cmd_promote(args: argparse.Namespace) -> int:
     if not args.task_id:
         print("At least one --task-id is required", file=sys.stderr)
@@ -136,6 +168,19 @@ def main(argv: list[str] | None = None) -> int:
     add_json_flags(payload)
     payload.add_argument("--allow-thin", action="store_true")
     payload.set_defaults(func=_cmd_payload)
+
+    gaps = sub.add_parser(
+        "system-gaps",
+        help="Write or print the learning-path integrity snapshot (no agent)",
+    )
+    add_json_flags(gaps)
+    gaps.add_argument(
+        "--write",
+        action="store_true",
+        help="Persist docs/data/system_gaps.json (or --write-path)",
+    )
+    gaps.add_argument("--write-path", type=Path, default=None)
+    gaps.set_defaults(func=_cmd_system_gaps)
 
     run = sub.add_parser("run", help="Run analysis synthesis agent")
     add_json_flags(run)

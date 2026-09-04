@@ -619,7 +619,8 @@ Read the structured JSON at: {payload_path}
 It contains north-star stage context, open deferred ideas (L/N items), scratch fragments,
 pending ingest trials (completed experiments awaiting review), open engineering tasks,
 weekly analysis_review excerpts, paper learning metrics,
-exit-timing cohort readiness, and library ladder state.
+exit-timing cohort readiness, library ladder state, and system_gaps (deterministic
+learning-path integrity: produce / persist / publish / apply plus learning clocks).
 
 Write EIGHT plain-text sections with headings exactly as shown:
 
@@ -634,9 +635,12 @@ Reference readiness counts when present.
 AUTOMATION RISKS
 What breaks if knobs auto-apply, breadth expands early, or agent decisions scale without
 more evidence. No live automation proposals.
+Cite system_gaps.flags when a green ops counter (budget remaining, executed=0,
+memo-file coverage, filing parity) would hide a consumer-path miss on a new market.
 
 COUNTERFACTUAL GAPS
 What questions we cannot answer yet and which artifact type would answer them.
+Include unanswered system_gaps.probe_questions when flags are empty or thin.
 
 FRAGMENT CLUSTERING
 Cluster open_fragments by theme. For each cluster: synthesize in 1–2 sentences.
@@ -659,8 +663,11 @@ Do not duplicate existing open deferred titles.
 ACCELERATE
 Numbered top 5 experiments for the next month. Each line MUST use:
 N. [area] Experiment title — expected learning value
-Areas: scoring, ingest, offline_sim, paper_knobs, paper_churn, attribution, monitoring, analysis.
-Prefer offline_sim, paper_knobs, paper_churn for knob/counterfactual ideas (human gate required).
+Areas: scoring, ingest, ops, coverage, offline_sim, paper_knobs, paper_churn,
+attribution, monitoring, analysis.
+Prefer offline_sim, paper_knobs, paper_churn for knob/counterfactual ideas (human gate).
+If system_gaps.high_flag_count > 0, include at least one [ops] or [ingest] line
+citing the flag id — consumer-path / rememo-if-stale / persist before more memos.
 
 Rules:
 - Do not invent metrics — only use the JSON.

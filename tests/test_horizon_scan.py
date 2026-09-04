@@ -114,6 +114,7 @@ def test_build_horizon_payload_includes_fragments(tmp_path: Path):
         deferred_path=defer,
     )
     assert len(payload.get("open_fragments") or []) == 1
+    assert payload.get("system_gaps") is not None
     ok, _ = has_enough_horizon_inputs(payload)
     assert ok
 

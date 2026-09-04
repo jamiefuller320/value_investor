@@ -116,6 +116,8 @@ def test_build_post_run_payload_aggregates_suggestions(tmp_path: Path):
     assert payload["suggestions_backlog"]["total"] == 2
     assert payload["suggestions_backlog"]["by_area"]["ingest"] == 1
     assert len(payload["filing_coverage"]) == 2
+    assert payload["system_gaps"] is not None
+    assert payload["system_gaps"]["healthy_counter_distrust"]
 
 
 def test_format_post_run_review_text():

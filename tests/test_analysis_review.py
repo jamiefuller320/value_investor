@@ -27,6 +27,9 @@ SIGNAL & BACKTEST FINDINGS
 PAPER TRACK COMPARISON
 AI judgment has lower cost drag than rules.
 
+SYSTEM GAPS
+- buy_tier_unwired_verdict: JSG.L missing from overlay
+
 PROPOSED EXPERIMENTS
 1. [offline_sim] Replay grace params on archived runs — counterfactual prior
 2. [scoring] Sector healthcare overlay — attribution gap
@@ -39,6 +42,7 @@ DEFER
     assert "Cost drag" in review.performance_diagnosis
     assert "run_count=3" in review.signal_backtest_findings
     assert "AI judgment" in review.paper_track_comparison
+    assert "JSG.L" in review.system_gaps
     assert "[offline_sim]" in review.proposed_experiments
     assert "Evolutionary" in review.defer
 
@@ -62,6 +66,8 @@ def test_build_analysis_payload_reads_learning_tracks(tmp_path: Path):
     payload = build_analysis_payload(data_dir=data_dir, output_dir=tmp_path / "output")
     assert payload["learning_tracks_review"]["beat_control"] is True
     assert payload["churn_health"]["tracks"]["rules"]["decision_review"]["cost_drag"] == 0.05
+    assert payload["system_gaps"] is not None
+    assert "probe_questions" in payload["system_gaps"]
     ok, _ = has_enough_analysis_inputs(payload)
     assert ok is True
 

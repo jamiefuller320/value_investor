@@ -17,6 +17,11 @@ from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH, GapFillSu
 from value_investor.research.store import ResearchStore
 from value_investor.storage import read_json, write_json
 from value_investor.summary import CompanyReport
+from value_investor.system_gap_analysis import (
+    DEFAULT_DATA_DIR,
+    build_system_gap_snapshot,
+    slim_system_gaps_for_review,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -201,10 +206,12 @@ def build_post_run_payload(
     deep_analysis: DeepAnalysis | None = None,
     gap_fill_summary: GapFillSummary | None = None,
     suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
+    data_dir: Path | None = None,
 ) -> dict[str, Any]:
     """Assemble deterministic inputs for the post-run synthesis agent."""
     effective_run_at = run_at or datetime.now(UTC)
     store = ResearchStore(output_dir)
+    data_dir = Path(data_dir or DEFAULT_DATA_DIR)
 
     buy_reports = [r for r in reports if r.signal in ("strong_buy", "buy")]
     signal_counts = Counter(r.signal for r in reports)
@@ -272,6 +279,13 @@ def build_post_run_payload(
         "suggestions_backlog": _suggestion_rollup(all_suggestions),
         "suggestions_recent": _suggestion_rollup(recent_suggestions),
         "suggestions_path": str(suggestions_path),
+        "system_gaps": slim_system_gaps_for_review(
+            build_system_gap_snapshot(
+                data_dir=data_dir,
+                output_dir=output_dir,
+                run_at=effective_run_at,
+            )
+        ),
     }
 
 
@@ -281,8 +295,9 @@ def _build_post_run_prompt(payload_path: Path) -> str:
 Read the structured JSON at: {payload_path}
 
 It contains this week's screen distribution, buy-tier filing coverage, memo quality
-snapshots, deep-analysis excerpts, gap-fill outcomes, and accumulated research-model
-suggestions (backlog + recent).
+snapshots, deep-analysis excerpts, gap-fill outcomes, accumulated research-model
+suggestions (backlog + recent), and system_gaps (learning-path integrity:
+produce / persist / publish / apply, plus filing-ready vs learning_ready).
 
 Write FIVE plain-text sections with headings exactly as shown:
 
@@ -293,6 +308,8 @@ block conviction on top picks.
 PERSISTENT WEAKNESSES
 Bullet list of recurring themes across the backlog (ingest vs scoring vs prompt).
 Cluster duplicate suggestions; cite frequency where the JSON supports it.
+When system_gaps.flags is present, include each high-severity flag as a weakness
+and say which green counter hides it (unused weekly_ops, executed=0, memo files).
 
 THIS WEEK'S FINDINGS
 What changed this run: gap-fill resolutions, new gaps, verdict shifts, fetch failures.
@@ -309,6 +326,9 @@ Bullets for ideas that should NOT be built yet, with a one-line revisit trigger 
 Rules:
 - Do not invent tickers, metrics, or filing counts — only use the JSON.
 - Distinguish filing-ingest gaps from scoring-metadata gaps from prompt gaps.
+- Distinguish written memos from wired overlay verdicts; existence from quality
+  and freshness. Unused weekly_ops + executed=0 + full memo coverage is a warning
+  when overlay_lagging_committed or thin_memo_counted_as_coverage is flagged.
 - Be specific enough that an engineer can open a ticket from each plan item.
 """
 

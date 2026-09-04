@@ -51,6 +51,12 @@ from value_investor.review_payload_slim import (
     slim_simulation as _slim_simulation,
 )
 from value_investor.storage import COMMITTED_HISTORY_DIR, read_json, write_json
+from value_investor.system_gap_analysis import (
+    COMMITTED_GAPS_PATH,
+    build_system_gap_snapshot,
+    slim_system_gaps_for_review,
+    write_system_gap_snapshot,
+)
 from value_investor.trajectory_evidence import slim_trajectory_evidence_for_review
 
 logger = logging.getLogger(__name__)
@@ -78,6 +84,7 @@ class AnalysisReview:
     performance_diagnosis: str
     signal_backtest_findings: str
     paper_track_comparison: str
+    system_gaps: str
     proposed_experiments: str
     defer: str
 
@@ -88,6 +95,7 @@ class AnalysisReview:
             ("PERFORMANCE DIAGNOSIS", self.performance_diagnosis),
             ("SIGNAL & BACKTEST FINDINGS", self.signal_backtest_findings),
             ("PAPER TRACK COMPARISON", self.paper_track_comparison),
+            ("SYSTEM GAPS", self.system_gaps),
             ("PROPOSED EXPERIMENTS", self.proposed_experiments),
             ("DEFER", self.defer),
         ]
@@ -151,6 +159,8 @@ def parse_analysis_review(text: str) -> AnalysisReview:
         "SIGNAL & BACKTEST FINDINGS": "signal_backtest_findings",
         "SIGNAL AND BACKTEST FINDINGS": "signal_backtest_findings",
         "PAPER TRACK COMPARISON": "paper_track_comparison",
+        "SYSTEM GAPS": "system_gaps",
+        "LATENT GAPS": "system_gaps",
         "PROPOSED EXPERIMENTS": "proposed_experiments",
         "DEFER": "defer",
         "DO NOT BUILD YET": "defer",
@@ -260,6 +270,12 @@ def build_analysis_payload(
     experiment_assessment = slim_experiment_assessment_for_review(
         _safe_read(data_dir / "experiment_assessment.json")
     )
+    system_gaps_full = build_system_gap_snapshot(
+        data_dir=data_dir,
+        output_dir=output_dir,
+        run_at=effective_run_at,
+    )
+    system_gaps = slim_system_gaps_for_review(system_gaps_full)
 
     model_weights = _safe_read(output_dir / "model_weights.json") or _safe_read(
         data_dir / "model_weights.json"
@@ -300,6 +316,7 @@ def build_analysis_payload(
         "churn_health": churn_health,
         "knob_calibration_priors": knob_calibration,
         "experiment_assessment": experiment_assessment,
+        "system_gaps": system_gaps,
         "model_weights": {
             "sample_count": (model_weights or {}).get("sample_count"),
             "updated_at": (model_weights or {}).get("updated_at"),
@@ -523,8 +540,10 @@ Primary diagnostics for assessment models: trajectory_evidence + loser_snapshot_
 Primary diagnostics for loser filters / churn: exclusion_universe, exclusion_ladder_replay,
 exit_timing_cohorts, exit_shadow, hypothesis_integrity, hypothesis_outcomes,
 entry_dca_overlay. Paper-track P&L and backtests are context.
+system_gaps is a deterministic learning-path integrity snapshot — treat it as
+first-class evidence, not optional colour.
 
-Write SIX plain-text sections with headings exactly as shown:
+Write SEVEN plain-text sections with headings exactly as shown:
 
 EXECUTIVE SUMMARY
 3–5 sentences on whether the quant stack and paper tracks are improving, and the single
@@ -562,12 +581,24 @@ leading_cadence, tracks_with_closed, and model_independent_hint (DCA findings ar
 expected to transfer across models — do not spawn a per-model DCA book).
 Note unrealized vs realized marks only if present in JSON.
 
+SYSTEM GAPS
+Answer every item in system_gaps.probe_questions using only JSON evidence.
+For each flag in system_gaps.flags, name the layer (produce / persist / publish /
+apply / learning_clock) and which green counter is hiding it (unused weekly_ops,
+executed=0, memo-file coverage, filing parity).
+If flags is empty, say so and still challenge one green counter from
+system_gaps.healthy_counter_distrust — do not treat file existence, skip reasons,
+or unused budget as proof the learning path is fed.
+Distinguish written memos from wired overlay verdicts; existence from quality
+and freshness; filing-ready from learning_ready.
+
 PROPOSED EXPERIMENTS
 Numbered top 5 experiments for the next sprint. Each line MUST use this format:
 ``N. [area] Experiment title — expected learning value``
-Areas: scoring, ingest, offline_sim, paper_knobs, paper_churn, attribution, monitoring, analysis.
-Use scoring/ingest only when a code change is the right next step; prefer offline_sim,
-paper_knobs, or paper_churn for knob/counterfactual ideas (human gate required).
+Areas: scoring, ingest, ops, coverage, offline_sim, paper_knobs, paper_churn,
+attribution, monitoring, analysis.
+Use scoring/ingest/ops only when a code change is the right next step; prefer
+offline_sim, paper_knobs, or paper_churn for knob/counterfactual ideas (human gate).
 
 Action contracts (include a line when the trigger fires — do not invent metrics):
 1. If trajectory_evidence.model_focus_candidates is non-empty → ≥1 [scoring] or [offline_sim]
@@ -599,6 +630,11 @@ Action contracts (include a line when the trigger fires — do not invent metric
    [paper_churn] or [offline_sim] citing leading_cadence, de-risk vs lump-sum, and
    whether model_independent_hint is true (observe-only; do not execute DCA on
    paper books until a human ack).
+11. If system_gaps.flags is non-empty → ≥1 [ops], [ingest], [coverage], or
+   [monitoring] citing the highest-severity flag id and layer (produce/persist/
+   publish/apply/learning_clock). Prefer consumer-path fixes (wired overlay,
+   persist allowlist, rememo-if-stale) over raising weekly_ops or writing more
+   first-pass memos.
 
 Cap at 5 lines — prioritise the strongest triggers; mention deferred triggers under DEFER.
 
@@ -640,6 +676,14 @@ def run_analysis_review(
     data_dir.mkdir(parents=True, exist_ok=True)
     payload_path = output_dir / "analysis_review_payload.json"
     write_json(payload_path, payload, compact=True)
+    write_system_gap_snapshot(
+        build_system_gap_snapshot(
+            data_dir=data_dir,
+            output_dir=output_dir,
+            run_at=run_at,
+        ),
+        path=data_dir / COMMITTED_GAPS_PATH.name,
+    )
 
     try:
         agent_result = Agent.prompt(
@@ -670,9 +714,15 @@ def run_analysis_review(
                 "performance_diagnosis": review.performance_diagnosis,
                 "signal_backtest_findings": review.signal_backtest_findings,
                 "paper_track_comparison": review.paper_track_comparison,
+                "system_gaps": review.system_gaps,
                 "proposed_experiments": review.proposed_experiments,
                 "defer": review.defer,
             },
+            "system_gap_flag_ids": [
+                row.get("id")
+                for row in ((payload.get("system_gaps") or {}).get("flags") or [])
+                if isinstance(row, dict) and row.get("id")
+            ],
         },
         compact=True,
     )

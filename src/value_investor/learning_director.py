@@ -48,6 +48,10 @@ from value_investor.review_policy import (
     load_review_policy,
 )
 from value_investor.storage import read_json, write_json
+from value_investor.system_gap_analysis import (
+    build_system_gap_snapshot,
+    slim_system_gaps_for_review,
+)
 from value_investor.trajectory_evidence import slim_trajectory_evidence_for_review
 
 logger = logging.getLogger(__name__)
@@ -274,6 +278,13 @@ def build_learning_director_payload(
         ),
         "learning_tracks_review": _safe_read(paper_root / "learning_tracks_review.json"),
         "learning_tracks_summary": _safe_read(paper_root / "learning_tracks_summary.json"),
+        "system_gaps": slim_system_gaps_for_review(
+            build_system_gap_snapshot(
+                data_dir=data_dir,
+                output_dir=output_dir,
+                run_at=effective_run_at,
+            )
+        ),
         "open_fragments": list_open_fragments(store_path=DEFAULT_DEFER_STORE),
         "guardrails": {
             **(vision.get("guardrails") or {}),
@@ -386,6 +397,9 @@ intact vs broken recovery_rate and learning_hints — still observe-only.
 When entry_dca_overlay is present, note lifecycle coverage (perpetual factor
 inventory) and whether ready_for_cadence_analysis / model_independent_hint fire.
 Do not activate a new paper book for DCA — the overlay is the experiment.
+When system_gaps.flags is non-empty, name the highest-severity flag and whether
+research *production* is being mistaken for learning-path *application*
+(written≠wired, existence≠quality, filing-ready≠learning_ready).
 
 COMPLEXITY & EXPERIMENT INVENTORY
 Cite experiment_inventory.complexity (not the raw open count alone).
@@ -415,6 +429,10 @@ If trajectory focus candidates were not turned into analysis_tasks, add
 ``N. [analysis] Ensure scoring experiment for <candidate.key> — …``
 If that scoring experiment is already queued (proposed/accepted/recommend), cite the
 canonical analysis_task id — do not add a second human-ack wrapper.
+If system_gaps.flags is non-empty and analysis_review.sections.system_gaps did not
+name the highest-severity flag, add
+``N. [ops] or [research] Follow up <flag.id> — …``
+Do not propose raising weekly_ops to fix a wiring / persist / rememo-if-stale gap.
 
 HORIZON FRAGMENTS
 Up to {MAX_HORIZON_FRAGMENTS} speculative observations **not** tied to existing tasks or
