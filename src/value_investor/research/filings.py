@@ -232,6 +232,27 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://announcements.asx.com.au/asxpdf/20250827/pdf/06nczkd8fndm9c.pdf",
         "https://announcements.asx.com.au/asxpdf/20260225/pdf/06wpt1yrhc6dtq.pdf",
     ],
+    # asx200 buy-tier deepen — unmeasured CDA.AX (Markit latest-five is capital-change / index noise).
+    "CDA.AX": [
+        "https://codan.com.au/wp-content/uploads/2025/09/Codan-Limited_Annual-Report_2025.pdf",
+        "https://codan.com.au/wp-content/uploads/2025/08/Combined-Cover-Letter-and-Investor-Presentation.pdf",
+        "https://codan.com.au/wp-content/uploads/2026/02/CDA-H1-FY26-Statutory-Accounts.pdf",
+        "https://codan.com.au/wp-content/uploads/2026/02/CDA-H1-FY26-Investor-Presentation.pdf",
+    ],
+    # asx200 buy-tier deepen — unmeasured BSL.AX (Markit results headlines omit issuer tokens).
+    "BSL.AX": [
+        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03121440-3A698870",
+        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03121441-3A698871",
+        "https://www.bluescope.com/content/dam/bluescope/corporate/bluescope-com/investor/documents/fy2026-full-year/FY2026_BlueScope_Full_Year_Results_Investor_Presentation.pdf",
+        "https://www.bluescope.com/content/dam/bluescope/corporate/bluescope-com/investor/documents/fy2026-full-year/FY2026_BlueScope_ASX_Release_Full_Year_Results.pdf",
+    ],
+    # asx200 buy-tier deepen — unmeasured PXA.AX (Markit latest-five is ELNO fee / director notices).
+    "PXA.AX": [
+        "https://company-announcements.afr.com/asx/pxa/04c2f7ba-845d-11f0-8c97-9ec1d8f4dacb.pdf",
+        "https://www.pexa-group.com/staticly-media/2026/02/ASX-Release-1H26-results-27.2.26-sm-1772151035.pdf",
+        "https://www.pexa-group.com/staticly-media/2026/02/Appendix-4D-and-half-year-report-FY26-sm-1772150824.pdf",
+        "https://www.pexa-group.com/staticly-media/2025/08/PEXA-FY25-Results-ASX-Announcement-sm-1756420792.pdf",
+    ],
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
@@ -304,6 +325,7 @@ _ANNUAL_PATTERNS = (
     r"\bannual results\b",
     r"\byear[- ]end results\b",
     r"\baudited results\b",
+    r"\bfy\d+\s+results\b",
 )
 _INTERIM_PATTERNS = (
     r"\bhalf[- ]year\b",
@@ -2232,7 +2254,14 @@ def fetch_filings_asx_direct(
             for token in ("result", "annual", "interim", "half year", "full year", "report")
         ):
             continue
-        if not headline_relevant_to_issuer(headline, company_name, ticker):
+        period = classify_filing_period(headline, form=ann_type)
+        # Symbol-scoped Markit feed; accept results packs and periodic reports even when
+        # headlines omit issuer tokens (e.g. BlueScope "FY2026 Results Presentation").
+        if (
+            not headline_relevant_to_issuer(headline, company_name, ticker)
+            and period == "other"
+            and ann_type != "PERIODIC REPORTS"
+        ):
             continue
         published_raw = str(item.get("date") or "")
         published: str | None = None
@@ -2247,7 +2276,6 @@ def fetch_filings_asx_direct(
         document_key = str(item.get("documentKey") or "").strip()
         if not document_key:
             continue
-        period = classify_filing_period(headline, form=ann_type)
         file_url = asx_markit_file_url(document_key)
         rows.append(
             {

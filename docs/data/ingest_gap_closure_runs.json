@@ -7027,8 +7027,115 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260904-02",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "GGP.AX",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "CDA.AX"
+        ],
+        "market_id": "asx200",
+        "universe": "library",
+        "critical_path_blocker": "unmeasured"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260904-02",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-04T15:03:02.465998+00:00",
+      "completed_at": "2026-09-04T15:03:44.321065+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "CDA.AX"
+        ],
+        "results": [
+          {
+            "ticker": "CDA.AX",
+            "reason": "unmeasured",
+            "before": {
+              "filings_total": 0,
+              "filings_with_body": 0,
+              "indexed_without_body": 0
+            },
+            "after": {
+              "filings_total": 0,
+              "filings_with_body": 0,
+              "indexed_without_body": 0
+            },
+            "improved": false,
+            "regime": "asx_announcements",
+            "filings_summary": {
+              "total": 0,
+              "annual": 0,
+              "interim": 0,
+              "trading_update": 0,
+              "other": 0,
+              "with_body": 0,
+              "period_coverage": {
+                "annual": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "interim": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 0,
+                  "with_body": 0
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 0,
+              "with_body_after": 0,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "CDA.AX",
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-04T14:41:02.224086+00:00",
+  "updated_at": "2026-09-04T15:03:44.321076+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
