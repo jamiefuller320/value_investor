@@ -1,0 +1,154 @@
+{
+  "appended": [
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Retag ‘Trading and Outlook’ RNSs as period=trading_update (not other/priority 0) and ‘Notice of … Results’ as other (not annual). Flag Companies House accounts-amended as a first-class restatement event. Point body_path at the trial snapshot tree. Deduplicate PDMR/TVR/Sharesave rows that share body_content_hash before counting coverage. Fire the IR allowlist when news cites results slides.",
+      "source": "director_worker",
+      "run_id": "20260904T175957Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:11:13.007025+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Fail-closed or flag when screening_snapshot.fcf.currency is USD on a GBP LSE reporter, and set fcf_definition_divergence whenever screen_ttm (£141.5m) disagrees with filing_aligned (£170.7m). Enable a UK-contractor cyclical + cash-conversion overlay so Fit Out boom versus housing/WIP build is not scored as a quality compounder with cyclical_exposure_detected=false. Do not pass Piotroski ‘no dilution’ without a fully-diluted share-count check against TVR/Sharesave.",
+      "source": "director_worker",
+      "run_id": "20260904T175957Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:11:13.007042+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "prompt",
+      "priority": "high",
+      "suggestion": "Require the annual worker to extract reporting currency, statutory vs adjusted PBT/EPS, divisional mix (Fit Out / Construction / Infrastructure / Partnership Housing / Urban Regeneration / Investments), order book, OCF/capex/FCF definition, cash vs restricted vs leases vs company net cash, WIP/retentions/claims, dividend declared vs cash paid, buybacks vs Sharesave issuance vs share/treasury count, and contract-risk language. Require the interim worker to pull H1 vs H1 comparatives, FY2026 guidance vs any cited trading updates, housing commentary, and any restatement of FY2025. Require news workers to collapse AD HOC NEWS/Kalkine duplicates, keep H1/FY/upgrade/PDMR/amendment items, and not invent article-body figures.",
+      "source": "director_worker",
+      "run_id": "20260904T175957Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:11:13.007049+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Keep the 16 Apr and 12 Feb 2026 Trading and Outlook RNSs as first-class operating sources. Ingest IR presentation metrics when slides exist (FY2025 slides already cited in news). Parse H1 cash-flow from the 23 Jul 2026 interim body to replace empty Yahoo quarterly_income/quarterly_cashflow instead of only suppressing TTM. Populate alternate_news or drop it from the ladder. Surface the 14 Aug 2026 amended CH accounts as a restatement source.",
+      "source": "director_worker",
+      "run_id": "20260904T175957Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:11:13.007053+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "orchestration",
+      "priority": "medium",
+      "suggestion": "Select the 25 Feb 2026 FY2025 results RNS (95ec5713407773e4) as the annual slot — not the 19 Jan notice, not stale CH 2021–2024, not the 2021 CH interim. Assign the 23 Jul 2026 H1 as the interim slot. Raise the cap or add trading_update / restatement / rns_cluster types so the April profit-upgrade TU, March AFR / May CH statutory notes, and August amended accounts are not dropped when annual+interim+news+screen+gap are mandatory.",
+      "source": "director_worker",
+      "run_id": "20260904T175957Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:11:13.007059+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "Allow summarize_filing_body to carry period=annual|interim|trading_update|amendment. Add reporting_currency, order_book_secured_vs_preferred, segment_mix, fcf_basis_used, and ch_amendment_flag on the snapshot. Remap filings_index.body_path into the trial sources/ tree. Validate FCF-yield inputs against listing CCY. Treat empty Yahoo quarterlies on UK half-year reporters as expected, not as the same thin-step severity as a missing IR deck.",
+      "source": "director_worker",
+      "run_id": "20260904T175957Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:11:13.007064+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "monitoring",
+      "priority": "medium",
+      "suggestion": "For weeks_at_signal<=1 contractor strong_buys after a spring profit upgrade and a July H1, require the memo to compare live price versus the £4,169.88/£4,001.40 ladder versus cited analyst tone, and emit watches (typical October trading update, FY2026 guidance path, Fit Out concentration, housing/WIP cash, Sharesave dilution, unread CH amendment). Do not treat RSI-oversold + SMA200-flat timing as a reason to skip those checks.",
+      "source": "director_worker",
+      "run_id": "20260904T175957Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:11:13.007070+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Filings-first order is adequate in principle for MGNS.L (62/62 bodies; period_coverage annual=10 / interim=3 / trading_update=1) and better than names with no tagged H1: a genuine 23 Jul 2026 HY body exists. It is not adequate in practice: yahoo_quarterly_cashflow sits on the ladder but is empty (TTM suppressed — expected for a UK half-year reporter, not a true hole), alternate_news and ir_presentation_metrics are absent, and the two first-class 2026 operating updates (12 Feb and 16 Apr “Trading and Outlook for 2026”, the latter a profit upgrade that moved the shares ~10%) are period=other with priority 0, ranked below empty quarterlies. Ten ‘annual’ hits include a 19 Jan 2026 Notice of Full Year Results and a 2021 CH interim is still tagged interim. The sole tagged trading_update is the stale 2 Oct 2025 “Outlook for 2025”.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T175957Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "evidence_ladder",
+      "recorded_at": "2026-09-04T18:11:13.007078+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "The screen emits strong_buy (16/22, five families including cheapness/quality/GARP/dividend/risk) on a contractor with sub-12% margins (Moat fail), current ratio 1.23, RSI 33 and a price<50<200 downtrend, while cyclical_exposure_detected is false and every overlay is off. FCF bases disagree (£170.7m filing-aligned vs £141.5m screen_ttm) with currency=USD and divergence_flagged false. Quality/Buffett/Piotroski can pass on 26% ROE and “no dilution” while WIP/receivables balloon and Sharesave issuance is continuous. The director–worker loop is being asked to qualitatively veto a mechanically clean headline that sector-cycle, cash-conversion, and FCF-currency overlays failed to brake.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T175957Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "methodology",
+      "recorded_at": "2026-09-04T18:11:13.007086+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Four worker types plus a five-task cap fit annual+interim+news+screen+gap but consume the entire budget and leave no slot for the 16 Apr 2026 profit-upgrade TU, the 12 Feb TU, the 24 Mar AFR, the 14 May CH group accounts, or the 14 Aug 2026 amended CH accounts. summarize_filing_body cannot carry period=annual|interim|trading_update|amendment, and there is no type to cluster TVR/Sharesave/PDMR RNSs or parse IR slides (news cites “FY 2025 slides”). gap_inventory can only list those holes — it cannot fill them.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T175957Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "task_schema",
+      "recorded_at": "2026-09-04T18:11:13.007092+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "monitoring",
+      "priority": "high",
+      "suggestion": "weeks_at_signal=1 / stability=new / conviction=0.496 already mark a fresh print, but there is no watch schema for: post-H1 Q3 trading update (typical October for this issuer; catalog fetch 2 Sep has none), FY2026 guidance vs the unread April upgrade, Fit Out concentration, housing/regeneration WIP cash lock-up, remaining Sharesave issuance vs the £4,169.88/£4,001.40 ladder, or the unread August CH amendment. RSI 33 + SMA200-flat timing=neutral is not a substitute. News freshness ends ~1 Sep; filings_index fetched 2 Sep — a two-day stall versus today (4 Sep).",
+      "source": "director_worker_meta",
+      "run_id": "20260904T175957Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "monitoring",
+      "recorded_at": "2026-09-04T18:11:13.007098+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "A generic FINANCIAL REVIEW / RISKS split will blend statutory and adjusted contractor margins and will not force Fit Out versus Construction versus Infrastructure versus Partnership Housing / Urban Regeneration, order-book secured versus preferred, company net cash versus IFRS-16 versus restricted cash, or FCF £170.7m versus £141.5m. Without explicit SEGMENT MIX, WORKING CAPITAL / CASH CONVERSION, CAPITAL RETURNS, and GUIDANCE PATH (Feb TU → Apr upgrade → Jul H1) slots, workers will treat AD HOC NEWS “stock holds firm” syndication and Sharesave listings as colour. No required slot for reporting-currency hygiene or for ‘April TU and August amended accounts exist as unread bodies’. Director catalog pass can form these questions without drafting the memo.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T175957Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "memo_structure",
+      "recorded_at": "2026-09-04T18:11:13.007106+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "filings_index.body_path values point at docs/data/research/MGNS.L/sources/... rather than this trial snapshot tree. sources_used are only companies_house + investegate_direct — the IR allowlist did not fire despite news citing FY2025 slides. news_manifest is dominated by AD HOC NEWS / Ad-hoc-news.de / Kalkine / TipRanks syndication (duplicate Plymouth, South East restructure, Sharesave, TVR). financials_annual.json is Yahoo-shaped (FY2021–2025; FY2025 missing EPS/share-count fields that FY2024 has; quarterly_income/quarterly_cashflow empty; no root currency field). NCAV missing is expected for this model, not an MGNS-specific hole. Duplicate PDMR index rows share body_path hashes.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T175957Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "other",
+      "recorded_at": "2026-09-04T18:11:13.007114+00:00"
+    }
+  ],
+  "count": 13
+}

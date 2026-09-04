@@ -1,0 +1,154 @@
+{
+  "appended": [
+    {
+      "ticker": "BREE.L",
+      "name": "Breedon Group plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Do not tag Notice of Annual Results, IMC presentation invites, Backing British Cement campaign RNSs, PDMR, or Google News “Across The Markets” round-ups as period=annual. Keep Nov/AGM Trading Updates as trading_update (already correct here) and promote Acquisition RNSs above TVR/holdings. Deduplicate Investegate holdings/PDMR rows that share URL or body_content_hash. Point body_path at the trial snapshot tree, not docs/data/research or output/research. Quarantine Home and Away / “Bree” soap collisions before news_article_count is used as coverage.",
+      "source": "director_worker",
+      "run_id": "20260904T182603Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:34:24.578852+00:00"
+    },
+    {
+      "ticker": "BREE.L",
+      "name": "Breedon Group plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Enable cyclical_exposure for UK heavyside construction-materials names when GB volume language and cement-output “historic lows” are in the same tape. Flag when screen FCF (133.2m) disagrees with Yahoo/filing FCF (105.8m) while TTM is suppressed and snapshot fcf is null. Fail-closed or annotate when trade-plan limits are ~100× the Street’s £4-class targets (pence written as £). Do not treat 9/22 + four families as clean when the quality family failed, ROE is 6.9%, NI is in a three-year decline, and research_* is already accumulate. Populate failed_models from the 13 models that did not pass; stop seeding research_verdict/action_note from the previous BREE.L memo before the trial starts.",
+      "source": "director_worker",
+      "run_id": "20260904T182603Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:34:24.578877+00:00"
+    },
+    {
+      "ticker": "BREE.L",
+      "name": "Breedon Group plc",
+      "area": "prompt",
+      "priority": "high",
+      "suggestion": "Require the annual worker to extract reporting currency, statutory vs underlying revenue/EBITDA/EBIT/EPS, GB vs Ireland vs US (and cement/aggregates/downstream if stated), volumes vs price/mix, OCF/capex/FCF definition, cash vs company net debt, leases, covenants, dividend declared vs cash paid vs policy, share count, M&A cash, impairments/provisions, ROIC vs target, and FY2026 outlook — prefer body figures over Yahoo. Require the interim worker to pull H1 vs H1 and vs FY run-rate, 2026 guidance vs the unread AGM TU, FCF vs dividend, net-debt bridge, June acquisition if mentioned, and any restatement of FY2025. Require news workers to collapse Kalkine/DirectorsTalk/TipRanks/TradingView duplicates, drop Home and Away collisions, and treat Google News items as titles only. Do not let workers cite prior research.json as a source.",
+      "source": "director_worker",
+      "run_id": "20260904T182603Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:34:24.578888+00:00"
+    },
+    {
+      "ticker": "BREE.L",
+      "name": "Breedon Group plc",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Parse H1 2026 cash-flow from 12bf5ad24805dc03 instead of only suppressing TTM. Promote the 9 Jun 2026 Acquisition (a46559fbb262bfff), 29 Apr AGM Trading Update, and 20 Nov 2025 TU as first-class operating/capital evidence. Fire IR-slide parsing so ir_presentation_metrics is not a thin mandatory hole. Populate alternate_news or drop it from the ladder. Keep the 23 Mar Annual Report and 31 May 2026 CH group accounts as statutory-note reserve, not extra “annual” coverage.",
+      "source": "director_worker",
+      "run_id": "20260904T182603Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:34:24.578895+00:00"
+    },
+    {
+      "ticker": "BREE.L",
+      "name": "Breedon Group plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Select the 11 Mar 2026 Final Results (eddaa504dfb0ee94) as the annual slot — not the 30 Jan notice, not CH 2023–24, not Across The Markets, not Backing British Cement, not the IMC invite. Assign the 29 Jul 2026 Interim results (12bf5ad24805dc03) as the interim slot. Raise the cap or add trading_update / acquisition / rns_cluster types so the AGM TU, Nov TU, June Acquisition, and Annual Report notes are not dropped when annual+interim+news+screen+gap are mandatory. Stop seeding screening_snapshot.research_* / action_note from the previous BREE.L memo before the trial starts.",
+      "source": "director_worker",
+      "run_id": "20260904T182603Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:34:24.578908+00:00"
+    },
+    {
+      "ticker": "BREE.L",
+      "name": "Breedon Group plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "Let summarize_filing_body carry period=annual|interim|trading_update|acquisition|other and a catalog_mismatch bool. Add reporting_currency, listing_unit (pence vs pounds), fcf_basis_used, cyclical_materials_flag, geo_mix (GB/IE/US), and failed_models populated from the run. Remap body_path into the trial sources/ tree. Treat empty Yahoo quarterlies on UK half-year reporters as expected, not the same thin-step severity as a missing IR-metrics object or an unassigned Acquisition RNS. Surface conviction_score vs summary-string conviction as a schema consistency check (0.882 vs “63%” here).",
+      "source": "director_worker",
+      "run_id": "20260904T182603Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:34:24.578915+00:00"
+    },
+    {
+      "ticker": "BREE.L",
+      "name": "Breedon Group plc",
+      "area": "monitoring",
+      "priority": "medium",
+      "suggestion": "For a 12-week materials strong_buy after H1 “GB challenged”, a June acquisition, and a cement-policy campaign, require watches: autumn 2026 trading-update ingest, H1-implied FY2026 guidance, GB volume inflection, FCF 133.2 vs 105.8 vs dividend cash, net-debt vs 481m plus the June deal, Back British Cement legislative follow-through, and pence-vs-pounds limits vs £4.05–£5.00 Street targets. Alert when snapshot research_verdict is accumulate while adjusted_signal remains strong_buy, and when news_manifest contains soap-title collisions.",
+      "source": "director_worker",
+      "run_id": "20260904T182603Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T18:34:24.578921+00:00"
+    },
+    {
+      "ticker": "BREE.L",
+      "name": "Breedon Group plc",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Filings-first order is adequate in principle for BREE.L: a genuine 11 Mar 2026 Final Results (eddaa504dfb0ee94, priority 120), 23 Mar 2025 Annual Report + AGM notice (af6f746de7cb473b), 29 Jul 2026 Interim results (12bf5ad24805dc03), Nov 2025 Trading Update, and 29 Apr 2026 AGM Trading Update all exist with has_body=true. It is not adequate in practice: period_coverage annual=12 / interim=1 / trading_update=2 counts Notice of Annual Results, Live IMC presentation, Backing British Cement, a PDMR row, two Google News “Across The Markets: Breedon, Quilter, Games Workshop” items, and CH initial/2023–24 accounts as annual. The June 2026 Acquisition — first-class capital allocation — is period=other / priority 0, ranked with TVR/holdings. yahoo_quarterly_cashflow sits on the ladder but is empty (expected for a UK half-year reporter) while alternate_news and ir_presentation_metrics are absent. filings_index.body_path values point at docs/data/research/BREE.L or output/research/BREE.L rather than this trial tree.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T182603Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "evidence_ladder",
+      "recorded_at": "2026-09-04T18:34:24.578938+00:00"
+    },
+    {
+      "ticker": "BREE.L",
+      "name": "Breedon Group plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "The screen emits strong_buy (9/22, four families, composite 0.815 vs sector 0.766) as a 12-week persistent print while quality is the missing family, ROE is 6.9%, NI/EPS have declined for three years, net debt has roughly quadrupled since FY2023, and cyclical_exposure_detected is false on a GB heavyside materials name. Snapshot research_* is already pre-seeded “Accumulate, Medium risk” with the action_note duplicated five times, conviction_score is 0.882 while the summary string says Conviction 63%, failed_models=[] despite 13 models not passing, and trade_plan is null while the summary cites £327-class limits. Director–worker qualitative veto is doing the work a cyclical + FCF-definition + unit-hygiene overlay should have done before a verify-before-trade memo is commissioned.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T182603Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "methodology",
+      "recorded_at": "2026-09-04T18:34:24.578952+00:00"
+    },
+    {
+      "ticker": "BREE.L",
+      "name": "Breedon Group plc",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Mandatory annual+interim summarize_filing_body plus news+screen+gap consumes the five-task cap even when the right FY Final Results and H1 bodies are chosen. There is no type or period flag for trading_update (Nov 2025 / Apr 2026 AGM TU), acquisition, rns_cluster (PDMR/TVR/holdings), campaign_rns (Back British Cement), or catalog_period_mismatch (Google News / IMC / notice tagged annual). gap_inventory can only list that the Annual Report, CH 2026 group accounts, June Acquisition, and both trading updates were dropped — it cannot assign them.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T182603Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "task_schema",
+      "recorded_at": "2026-09-04T18:34:24.578971+00:00"
+    },
+    {
+      "ticker": "BREE.L",
+      "name": "Breedon Group plc",
+      "area": "monitoring",
+      "priority": "high",
+      "suggestion": "weeks_at_signal=12 / stability=persistent / signal_since 2026-08-02 already mark a stale-to-mid-life print, but there is no watch schema for: a typical autumn 2026 trading update (catalog has 20 Nov 2025 TU only), GB volume inflection vs H1 “challenged” language, H1-implied FY2026 guidance, net-debt path after 481m Yahoo net debt plus the unread June acquisition, FCF 133.2m vs 105.8m vs dividend cash 51.1m, Back British Cement / UK cement-output policy, analyst PT drift £5.00→£4.05, or pence-vs-pounds limit hygiene. RSI 43 + price>50>200 timing=neutral is not a substitute. News freshness reaches 3 Sep; filings_index fetched 17:27Z on 4 Sep — a one-day news stall, not a filings stall. Home and Away “Bree” soap collisions are in the manifest.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T182603Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "monitoring",
+      "recorded_at": "2026-09-04T18:34:24.578981+00:00"
+    },
+    {
+      "ticker": "BREE.L",
+      "name": "Breedon Group plc",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "A generic FINANCIAL REVIEW / RISKS split will blend Yahoo GBP statutory with company underlying EBITDA/FCF and will not force GB vs Ireland vs US, volume vs price/mix, FCF 133.2m vs 105.8m vs cash dividends 51.1m, net debt 122m→481m plus June M&A, LSE pence vs £327 limit-string vs £4.05–£5.00 Street targets, or statutory vs underlying. Without GEO/PRODUCT MIX, CAPITAL FRAME (capex + M&A + dividend cover + covenants), GUIDANCE PATH (FY Mar → AGM TU Apr → H1 Jul → missing autumn TU), POLICY/CEMENT (Back British Cement vs structural GB decline), and UNIT HYGIENE (pence vs pounds, Yahoo cash 115.5m vs cash-flow end-cash 71.6m) slots, workers will treat Kalkine regeneration pairings, DirectorsTalk upside SEO, and Home and Away hits as colour. Director catalog pass can form these questions without drafting the memo.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T182603Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "memo_structure",
+      "recorded_at": "2026-09-04T18:34:24.578996+00:00"
+    },
+    {
+      "ticker": "BREE.L",
+      "name": "Breedon Group plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "financials_annual.json is Yahoo-shaped (FY2021–2025; no root currency field though figures are GBP; quarterly_income and quarterly_cashflow empty; cashflow_metrics FCF 105.8m / OCF 225.9m; FY2025 cash-flow end-cash 71.6m disagrees with balance-sheet cash 115.5m). screening_snapshot.failed_models is [] despite 9/22 not passing; trade_plan is null; ir_presentation_metrics is a thin/absent mandatory step. Duplicate Investegate holdings rows share URLs or body hashes; one MPs Back British Cement body_path points at output/research/. news_manifest query pulls Home and Away soap titles on “Bree”. Snapshot research_verdict/action_note already pre-answer the trial.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T182603Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "other",
+      "recorded_at": "2026-09-04T18:34:24.579004+00:00"
+    }
+  ],
+  "count": 13
+}

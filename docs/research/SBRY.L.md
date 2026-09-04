@@ -1,93 +1,139 @@
 # J Sainsbury plc (SBRY.L) — Research memo
 
-_Version 1 · Updated 2026-08-13T06:40:05.343309+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T17:33:06.895161+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-J Sainsbury plc (SBRY.L) screens as a **buy** on quantitative value metrics — P/B ~0.8, FCF yield ~12%, dividend yield ~3.9%, and EV/EBITDA ~7.7 — while operating the UK’s second-largest grocery franchise with six consecutive years of volume outperformance. The investment case rests on a discounted asset base, strong retail free cash flow (£574m in FY26), progressive dividends, and an active £300m buyback programme, against a strategic pivot to pure-play food retail via the pending Argos disposal. The central debate is whether margin compression (retail underlying operating profit down 1.1% to £1,025m despite 5.2% grocery sales growth) is a temporary cost-of-living investment cycle or a structural ceiling on profitability in an intensely competitive market. Filings support cash generation and balance-sheet resilience, but the screen’s earnings-basis overlay downgrades the raw signal to **hold**, and no indexed interim results are available to bridge annual periods.
+J Sainsbury plc offers a UK value case anchored on grocery momentum, strong cash generation, and an active capital-return programme, while trading at roughly 0.7× book and an ~8.8% FCF yield on screen inputs. FY2025/26 filings show grocery sales up 5.2%, retail free cash flow of £574m, and a progressive 13.7p dividend, partially offset by retail underlying operating profit falling 1.1% to £1,025m as margin compressed to 3.06%. The central debate is whether six consecutive years of volume outperformance and the Argos exit (expected February 2027) justify re-rating, or whether lease-adjusted leverage (~£5.7bn net debt including leases), prior-year earnings restatements, and a wide FY2027 profit guidance band (£975m–£1,075m) cap upside. We overlay **accumulate** on the screen’s buy signal rather than full confirmation.
+
+---
 
 ## INVESTMENT THESIS
-The quantitative screen passes seven of 22 models across all four value families (cheapness, dividend, GARP, risk), with a composite score of 74% versus 62% sector-relative. At P/B 0.77 and FCF yield 12.1%, the market prices SBRY as a low-growth, lease-heavy retailer rather than a grocery operator gaining share: grocery volumes have outperformed the market for six years, with FY26 grocery sales up 5.2% to £24.3bn (preliminary results, 23 April 2026).
+The quantitative screen flags SBRY across cheapness (P/B 0.73, EV/EBITDA 7.5), cash return (4.1% yield, dividend growth), GARP (Neff PEGY pass), and risk metrics — consistent with a defensive grocer generating material free cash flow at a discount to book.
 
-Business quality aligns with the screen’s risk-family pass. Retail free cash flow rose 8.1% to **£574m** in FY26; net debt to EBITDA held at **2.6x** within the stated 2.4x–3.0x leverage target; fixed charge cover was **2.7x**; and non-lease net debt fell to **£203m**. Capital returns are material: FY26 ordinary dividends of £316m, a £250m special dividend from bank disposals, and a £250m share buyback, with a further **£300m buyback** committed for FY27 (RNS, 24 April 2026).
+Filings support the **business-quality** pillar more than the **earnings-growth** pillar. Sainsbury’s has outperformed the grocery market for six years; FY2025/26 grocery sales rose 5.2% on strong volume, and Q1 FY2026/27 (trading statement, 30 June 2026) showed grocery +3.6% with continued volume gains. Retail free cash flow of **£574m** (+8.1% YoY) and management’s commitment to **>£500m** retail FCF in FY2027 underpin the screen’s FCF Yield and Dividend Growth passes. Capital returns are tangible: **£816m** returned in FY2025/26 (ordinary dividends, £250m special dividend from bank exit, £251m buybacks), with a **£300m** buyback planned for FY2027.
 
-The Next Level Sainsbury’s strategy — food-first focus, £1bn cost savings (c.£680m delivered), Nectar/retail media monetisation — supports the GARP and dividend passes. The July 2026 agreement to sell Argos to Swift Partners for at least **£120m** (expected completion February 2027) simplifies the group toward higher-margin food, with management guiding broadly neutral underlying operating profit and low single-digit underlying EPS accretion. For a value investor, the screen correctly identifies cheapness and cash return; deep research confirms the cash and strategic direction but flags earnings quality divergence (statutory basic EPS 17.3p vs underlying 22.3p) that the screen already penalises via its adjusted hold overlay.
+The valuation hook is structural simplification: exit from core banking (largely complete), plus the agreed **Argos sale to Swift Partners** for at least **£120m** cash (31 July 2026 RNS), intended to sharpen focus on food, reduce lease-adjusted net debt by ~£250m, and deliver low single-digit underlying EPS accretion. At **P/B ~0.7** and **P/E ~18.7**, the market prices modest ROE (6.4% on screen) and margin pressure rather than grocery share gains and Nectar360 retail-media upside.
+
+For a value investor, the case is **cash-backed cheapness with operational momentum**, not pristine earnings growth — the screen’s buy signal is directionally right, but filing evidence of margin compression and accounting restatements warrants a measured **accumulate** overlay rather than unconstrained buy.
+
+---
 
 ## FINANCIAL REVIEW
-**Source coverage.** The filings index contains **six annual** bodies (Companies House accounts FY22–FY26 plus Annual Report 2026), **one trading update** (Q1 FY27, 30 June 2026), and **no indexed interim/half-year results**. Preliminary FY26 results (23 April 2026) are indexed as “other” but carry full financial statements. All figures below are from filing body extracts unless noted.
+**Source hierarchy:** Primary figures from RNS filing bodies; Yahoo (`financials_annual.json`) used only where noted.
 
-**FY26 (52 weeks to 28 February 2026) — preliminary results**
+### Coverage gaps
 
-| Metric | FY26 | FY25 | YoY |
-|--------|------|------|-----|
-| Group revenue (excl. VAT, inc. fuel) | £33,647m | £32,772m | +2.7% |
-| Retail sales (excl. VAT, excl. fuel) | £29,992m | £28,754m | +4.3% |
+- **Annual:** FY2025/26 preliminary results (23 April 2026) and Annual Report/AGM notice (2 June 2026) are present with full bodies. Companies House group accounts span FY2019/20–FY2024/25.
+- **Interim:** The filings index lists **zero** `interim` period filings. Latest intra-year update is the **Q1 trading statement** (30 June 2026), not a half-year results pack. Interim P&L, balance sheet, and cash flow are **not available** from primary sources in this dataset.
+
+### FY2025/26 (52 weeks to 28 February 2026) — Preliminary Results RNS
+
+| Metric | FY2025/26 | FY2024/25 | Change |
+|--------|-----------|-----------|--------|
+| Group revenue (ex VAT, inc. fuel) | £33,647m | £32,772m | +2.7% |
+| Retail sales (ex VAT, ex fuel) | £29,992m | £28,754m | +4.3% |
 | Grocery sales | £24,256m | £23,060m | +5.2% |
 | Retail underlying operating profit | £1,025m | £1,036m | −1.1% |
-| Underlying PBT | £718m | £709m | +1.3% |
+| Retail underlying operating margin | 3.06% | 3.17% | −11 bps |
+| Underlying profit before tax | £718m | £709m | +1.3% |
 | Underlying basic EPS | 22.3p | 21.6p | +3.2% |
 | Statutory profit after tax | £393m | £253m | +55.3% |
-| Statutory basic EPS | 17.3p | 10.9p | +58.7% |
-| Retail free cash flow | £574m | £531m | +8.1% |
-| Full-year dividend | 13.7p | 13.6p | +0.7% |
-| Net debt (incl. lease liabilities) | £(5,743)m | £(5,758)m | −£15m |
-| Non-lease net debt | £(203)m | £(264)m | −£61m |
+| Retail free cash flow | **£574m** | £531m | +8.1% |
+| Proposed full-year dividend | 13.7p | 13.6p | +0.7% |
+| Net debt (incl. lease liabilities) | £(5,743)m | £(5,758)m | £15m |
+| Non-lease net debt | £(203)m | £(264)m | £61m |
+| Net debt / EBITDA | 2.6× | 2.6× | stable |
 | ROCE | 8.9% | 9.0% | −10 bps |
-| Net debt / EBITDA | 2.6x | 2.6x | stable |
-| IAS 19 pension surplus (group) | £525m | £731m | −£206m |
+| Fixed charge cover | 2.7× | 2.8× | stable |
 
-Retail underlying operating margin compressed to **3.06%** (from 3.17%) as the group absorbed National Insurance, Extended Producer Responsibility, and deliberate value investment rather than fully passing through cost inflation. Statutory PAT rose sharply mainly on lower Financial Services discontinued-operation losses (£21m vs £168m) and reduced non-underlying charges.
+Retail underlying operating profit fell despite **4.3%** sales growth, reflecting operating cost inflation (National Insurance, Extended Producer Responsibility), colleague pay investment, and sustained price investment. Statutory PAT rose sharply mainly from lower Financial Services discontinued-operation losses and smaller non-underlying charges (£115m vs £251m).
 
-**FY25 (52 weeks to 1 March 2025) — Companies House / Annual Report 2025**
+**Cash flow:** Retail FCF of **£574m** was driven by underlying EBITDA of £2,211m, a **£128m** working-capital inflow, and capex of **£843m**. Management expects **>£500m** retail FCF in FY2027, consistent with the Next Level plan target of **£1.6bn+** over three years to March 2027 (£1.1bn delivered in the first two years).
 
-FY25 showed stronger profit leverage: retail underlying operating profit **£1,036m** (+7.2%), retail free cash flow **£531m**, ROCE **9.0%**, and cumulative Next Level cost savings of **£349m**. The group held investment-grade ratings (Moody’s Baa3, S&P BBB) and established a £5bn EMTN programme. This provides the comparison base for FY26’s margin give-back.
+**Balance sheet and pensions:** IAS 19 net defined-benefit surplus **£525m** (down £206m), with FY2027 cash contributions expected at **~£27m**. Lease liabilities total **£5,540m**; underlying net finance costs were **£307m**, of which **£266m** relates to leases. Management targets leverage of **2.4×–3.0×** net debt/EBITDA for a solid investment-grade profile — currently **2.6×**.
 
-**Trading update — Q1 FY27 (16 weeks to 20 June 2026)**
+**Prior-period restatements (material):** FY2024/25 comparatives were restated for (a) deferred tax misclassification and omission of tax effects on prior impairments/disposals, (b) balance-sheet re-presentations (taxes, lease current/non-current split, pension presentation, cash classification), and (c) reclassification of Financial Services exit items from underlying to non-underlying. Underlying EPS for FY2024/25 was restated to **21.6p** (from 21.6p reported pre-adjustment in some lines). These restatements complicate trend analysis and screen earnings-quality inputs.
 
-Total retail sales excl. fuel rose **2.7%** to **£9,153m**; grocery **+3.6%** to £7,603m; Argos **−0.5%** to £1,114m; like-for-like excl. fuel **+2.1%**. Management reaffirmed FY27 guidance: total underlying operating profit **£975m–£1,075m** and retail free cash flow **>£500m**, citing Middle East conflict uncertainty.
+**Going concern:** Directors state the Group has sufficient resources to continue for at least **12 months** from approval, with assessment over **16 months to 10 September 2027**, and adopt the going-concern basis.
 
-**Cash flow note.** Yahoo `financials_annual.json` reports group free cash flow of **£923m** for FY26 versus filing retail free cash flow of **£574m**; the screen’s FCF metric appears to use the Yahoo group figure. We treat **£574m retail FCF** as the primary filing metric and note the definitional gap.
+### Q1 FY2026/27 — Trading Statement (30 June 2026)
 
-**Gaps.** No indexed interim results; FY26 comparative restatements (deferred tax, discontinued operations reclassification) complicate year-on-year statutory comparisons — verify adjusted series before sizing.
+For the **16 weeks to 20 June 2026** (not a substitute for interim accounts):
+
+- Total retail sales (ex fuel): **£9,153m** (+2.7% YoY)
+- Grocery: **£7,603m** (+3.6%)
+- Argos: **£1,114m** (−0.5%)
+- Like-for-like sales (ex fuel): **+2.1%**
+- FY2027 guidance reaffirmed: total underlying operating profit **£975m–£1,075m**; retail FCF **>£500m**
+
+Trading momentum in grocery is positive; Argos remains subdued ahead of disposal.
+
+### Multi-year trend (annual filings)
+
+From preliminary results comparatives and Companies House accounts:
+
+- **Retail sales (ex fuel)** grew from **£28,754m** (FY2024/25) to **£29,992m** (FY2025/26), continuing post-pandemic share recovery.
+- **Retail underlying operating profit** peaked near **£1,036m** in FY2024/25 before easing to **£1,025m** — margin compression, not volume weakness, is the drag.
+- **Retail FCF** improved from **£531m** (FY2024/25, Companies House annual accounts) to **£574m** (FY2025/26).
+- **Non-lease net debt** has fallen from **£264m** to **£203m**, though lease-adjusted net debt remains ~**£5.7bn**.
+
+### Yahoo fallback (secondary only)
+
+Yahoo `financials_annual.json` shows group **free cash flow £923m** for FY2026 vs **£574m** retail FCF in filings — the divergence reflects different definitions (group statutory cash flow vs management’s retail FCF metric, which excludes bank exit flows and applies retail-specific adjustments). **Screen FCF yield should be reconciled to the £574m filing figure**, not Yahoo’s £923m/£645m headline.
+
+Yahoo statutory **ROE** implied from net income £393m and equity £6,150m ≈ **6.4%**, aligning with the screen.
+
+---
 
 ## RISKS AND RED FLAGS
-**Competitive and cyclical.** UK grocery remains highly competitive (Aldi, Lidl, Tesco, M&S). FY26 retail underlying operating profit fell despite volume outperformance, confirming that share gains do not automatically translate to margin expansion. Management repeatedly cites Middle East conflict impacts on cost of living and guidance width (£975m–£1,075m).
+**Competitive and cyclical:** UK grocery remains intensely competitive (Aldi, Lidl, Tesco). FY2025/26 margin fell **11 bps** despite volume outperformance; FY2027 guidance spans **£100m** (£975m–£1,075m), explicitly citing Middle East conflict uncertainty. May 2026 news reported government pressure on supermarkets to cap food prices, a regulatory overhang for margin recovery.
 
-**Leverage and leases.** Reported net debt is **£5,743m** including **£5,540m** of lease liabilities; non-lease net debt is only **£203m**. Fixed charge cover **2.7x** is adequate but lease-intensive. Post-Argos sale, lease-adjusted net debt is expected to fall by c.£250m, but Sainsbury retains parental guarantees on limited Argos leases.
+**Argos disposal:** Sale for **≥£120m** vs **~£1.4bn** acquisition cost in 2016 implies substantial value destruction; a **~£350m non-cash impairment** is expected. Sainsbury **retains the Argos defined-benefit pension** (£143m IAS surplus at February 2026) and **parental guarantees** on selected property leases. Completion is expected **February 2027** — execution and separation risk remain.
 
-**Pension.** Group IAS 19 surplus **£525m** (down £206m YoY on mortality/inflation assumption updates). Sainsbury **retains the Argos defined benefit scheme** (£143m surplus at February 2026) after the Swift sale — a contingent balance-sheet item not fully captured by screens.
+**Leverage and leases:** Reported **£203m** non-lease net debt understates economic leverage: **£5,540m** of lease liabilities drive **£266m** annual lease interest. Fixed charge cover **2.7×** leaves limited headroom if operating profit softens.
 
-**Litigation and regulatory.** Annual Report audit committee references **equal pay claims** under the Equality Act 2010 (note 36, contingent liabilities). Extended Producer Responsibility, Deposit Return Scheme, and food-strategy regulation add cost uncertainty. Prior-year **deferred tax restatements** (FY25 comparatives) warrant scrutiny on earnings quality — consistent with the screen’s earnings-basis overlay flagging statutory vs adjusted EPS divergence.
+**Accounting and governance:** FY2024/25 **material restatements** (deferred tax, balance-sheet presentation, underlying/non-underlying reclassification) warrant scrutiny of screen earnings-quality metrics. Insider sales flagged in news (e.g. CFO Blathnaid Bergin selling 31% of holding, 23 August 2026) are a sentiment negative, not a filing red flag.
 
-**Governance / M&A.** Argos sold for **≥£120m** versus the **£1.4bn** 2016 acquisition — a strategic write-down with c. **£350m non-cash impairment** expected. Qatar ended a near-20-year stake as largest investor (December 2025, per news manifest). Insider sales of c. **£3.1m** reported (March 2026, Simply Wall St via Google News).
+**Pension:** Group IAS 19 surplus **£525m** is sensitive to mortality, inflation, and discount-rate assumptions; surplus erosion of **£206m** in one year illustrates volatility. Post-Argos, retained Argos scheme liabilities add complexity.
 
-**Going concern.** Preliminary results state directors are satisfied the group has sufficient resources for at least 12 months and adopt going concern (assessment period to September 2027).
+**Financial Services exit:** Bank disposals simplify the group but transitional and discontinued-operation noise persisted in FY2025/26 (**£21m** discontinued loss). NatWest partnership products are expected H2 FY2027 — integration risk remains.
 
-RiskTags: competitive, cyclical, leverage, pension, litigation, regulatory, accounting
-RiskTags: competitive, cyclical, leverage, pension, litigation, regulatory, accounting
+**Going concern / covenants:** Filings confirm going-concern adequacy for 12+ months; net debt/EBITDA **2.6×** sits within the stated **2.4×–3.0×** investment-grade target. No covenant breach language identified in available bodies; full covenant detail would require the complete annual report PDF beyond the extracted preliminary financial statements.
+
+RiskTags: competitive, regulatory, leverage, pension, accounting, cyclical, governance
+
+---
+RiskTags: competitive, regulatory, leverage, pension, accounting, cyclical, governance
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate-to-good** on corporate actions, thinner on deep operational analysis (several Kalkine/simplywall.st templated pieces).
+Coverage over the past year is **substantial** (80+ manifest entries); not thin. Material themes:
 
-**Strategy and M&A (dominant theme).**
-- *Sainsbury’s agrees sale of Argos to Swift Partners* (31 July 2026, RNS) — ≥£120m proceeds, February 2027 completion, food-focused simplification.
-- Multiple follow-on articles (31 July–3 August 2026): Yahoo Finance, Forbes — emphasising heavy loss versus 2016 purchase price and analyst fair-value revisions (£3.30–£3.90 cluster).
+**Strategy and M&A**
+- *“Sainsbury’s agrees £120m sale of Argos to Swift Partners”* (31 July 2026; multiple sources including Yahoo Finance) — focus shift to core food; heavy loss vs 2016 purchase price noted.
+- *“Deutsche Bank lifts Sainsbury's target to 390p after Argos exit”* (4 August 2026, Proactive Investors) — broker support for simplification thesis.
+- Financial Services exit largely complete; NatWest white-label products expected H2 FY2026.
 
-**Capital returns.**
-- *Commencement of Share Buyback Programme* (24 April 2026, RNS) — up to **£300m** through February 2027.
-- Recurring TipRanks/Google News items on buyback tranches (May–June 2026): 3.66m–6.08m shares cancelled per tranche.
+**Results and trading**
+- FY2025/26 preliminary results (23 April 2026): profit beat but shares fell on cautious FY2027 outlook (*“Sainsbury's Shares Dip as Fiscal 2027 Outlook Misses Forecasts”*, 23 April 2026, Yahoo Finance UK).
+- Q1 trading (30 June 2026): grocery momentum, guidance maintained (*“Sainsbury grows grocery sales and market share while maintaining full-year profit outlook”*, 30 June 2026).
 
-**Results and sentiment.**
-- *Sainsbury's FY Earnings: 23 April Results Amid Competition* (17 April 2026, ig.com).
-- *Sainsbury's Shares Dip as Fiscal 2027 Outlook Misses Forecasts on Iran War Uncertainty* (23 April 2026, Yahoo Finance UK).
-- *Sainsbury's hit by second broker downgrade in two days as Citi cuts to 'neutral'* (28 April 2026, Yahoo Finance UK).
+**Capital returns**
+- £300m buyback programme commenced April 2026; ongoing share cancellations through July 2026 (TipRanks, company RNS).
+- Progressive dividend and £250m special dividend from bank proceeds in FY2025/26.
 
-**Shareholder / governance.**
-- *Sainsbury’s shares fall as Qatar ends near-20 year spell as biggest investor* (3 December 2025, Yahoo Finance UK).
-- *Insiders At J Sainsbury Sold UK£3.1m In Stock, Alluding To Potential Weakness* (30 March 2026, simplywall.st).
+**Broker and sentiment split**
+- Goldman Sachs cut to Sell on Argos weakness (27 April 2026); Citi cut to Neutral (28 April 2026).
+- Counter-narratives on value (*“Is J Sainsbury plc (LON:SBRY) Trading At A 45% Discount?”*, 5 February 2026, simplywall.st) and grocery strength (*“Is Sainsbury's quietly becoming the UK's best supermarket?”*, 11 March 2026).
 
-**Positive narrative.**
-- *Is Sainsbury's quietly becoming the UK's best supermarket...* (11 March 2026, Proactive Investors).
-- *Should Value Investors Buy J. Sainsbury (JSAIY) Stock?* (11 August 2026, Zacks/yfinance).
+**Management / governance**
+- Ex-CFO Simon Shapland joined AG Barr as chair (1 September 2026).
+- CFO Blathnaid Bergin insider sale flagged (23 August 2026).
+- Qatar stake reduction (December 2025) removed a long-standing overhang.
+
+**Regulatory**
+- Supermarket food-price cap pressure (20 May 2026, Proactive Investors) weighed on sector sentiment.
+
+---
 
 ## RESEARCH VERDICT
 Verdict: accumulate

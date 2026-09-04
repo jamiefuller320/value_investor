@@ -1,0 +1,228 @@
+{
+  "task_id": "cost_screen_context",
+  "task_type": "screen_context",
+  "status": "partial",
+  "findings": [
+    "Overall screen verdict is strong_buy: 13/22 models pass, composite_score 0.7134, sector_composite_score 0.7010 (source: /workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json).",
+    "Five factor families pass: cheapness, quality, dividend, GARP, risk (families_passed 5; passed_families string matches) (source: .../screening_snapshot.json).",
+    "Passed models (13): Graham Enterprising, FCF Yield, Lynch PEG, Neff PEGY, Quality Value, Buffett Quality, Dividend Growth, Magic Formula, Acquirer's Multiple, Piotroski F-Score, Composite Value, Earnings Quality, Financial Health (source: .../screening_snapshot.json).",
+    "Failed models (9): Graham Defensive, Graham Net-Net, Schloss Low P/B, Deep Value, Earnings Yield, Low P/E + High Yield, Economic Moat, High Dividend Yield, Dreman Contrarian (source: .../screening_snapshot.json).",
+    "Graham Defensive fails on P/E >= 15, valuation too rich on P/B or P/E×P/B, and current ratio < 2 (screening_inputs.current_ratio 1.437) (source: .../screening_snapshot.json).",
+    "Economic Moat fails: ROE below 18%, ROA below 8%, margins below 12% — interpreted as no moat on screen inputs (source: .../screening_snapshot.json).",
+    "Several value screens fail on not being cheap enough: Schloss (P/B too high), Deep Value (P/B not below 1.0, EV/EBITDA not below 8), Earnings Yield (6.4% below 8%), Low P/E + High Yield (P/E not below 12), Dreman (P/E/P/B/yield not in cheap quartiles) (source: .../screening_snapshot.json).",
+    "Conviction is low at 0.442; signal is new with weeks_at_signal 1 and stability_label new (source: .../screening_snapshot.json).",
+    "Timing is neutral (timing_signal neutral, timing_score 0.5); action_note Strong Buy — neutral timing; RSI 14 ≈ 45, price ~15.4% above 200-day SMA (source: .../screening_snapshot.json).",
+    "Trade plan uses limit orders in GBP: core 60% limit £215.49; tactical 40% limit £188.65; tactical stop £182.99, take-profit £228.55 (source: .../screening_snapshot.json).",
+    "FCF block tags currency USD for a UK-listed name (COST.L / Costain Group PLC); filing_aligned/canonical FCF is £48.5m vs screen_ttm £49.6375m; divergence_flagged false (source: .../screening_snapshot.json).",
+    "Yahoo quarterly TTM cashflow is suppressed: ttm_cashflow_suppressed true, reason quarterly_cashflow_empty (source: .../screening_snapshot.json).",
+    "Piotroski F-Score passes at 8/9; sole fail is asset turnover improving (source: .../screening_snapshot.json).",
+    "All overlays are false: healthcare_overlay, healthcare_price_erosion_overlay, cash_conversion_overlay, dividend_yield_overlay, interim_quality_overlay, cyclical_exposure_overlay, earnings_basis_overlay, fcf_basis_overlay, leverage_override, dual_leverage_display; cyclical_exposure_detected also false (source: .../screening_snapshot.json).",
+    "Screen numbers that must be replaced by filing-body sterling (per fcf block and cashflow_metrics vs filing_aligned): key_metrics.FCF (49637500), cashflow_metrics.free_cashflow (49637500), cashflow_metrics.operating_cashflow (51300000), cashflow_metrics.capital_expenditure (-2800000), top-level operating_cashflow (51300000), fcf.screen_ttm (49637500); replace with filing_aligned/canonical 48500000 and correct GBP tagging (source: .../screening_snapshot.json).",
+    "Data quality score is 1.0 with metrics_present 20/20; research_verdict, research_risk_level, research_confidence and research_rationale are null (source: .../screening_snapshot.json)."
+  ],
+  "figures": [
+    {
+      "metric": "signal",
+      "value": "strong_buy",
+      "period": "current screen",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "adjusted_signal also strong_buy"
+    },
+    {
+      "metric": "models_passed / model_count",
+      "value": "13/22",
+      "period": "current screen",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "composite_score",
+      "value": "0.7134",
+      "period": "current screen",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "summary rounds to 71%"
+    },
+    {
+      "metric": "sector_composite_score",
+      "value": "0.7010",
+      "period": "sector-relative",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "families_passed",
+      "value": "5 (cheapness, quality, dividend, GARP, risk)",
+      "period": "current screen",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "conviction_score",
+      "value": "0.442",
+      "period": "current screen",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "44% in summary"
+    },
+    {
+      "metric": "weeks_at_signal",
+      "value": "1",
+      "period": "signal tenure",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "signal_trend new"
+    },
+    {
+      "metric": "timing_signal / timing_score",
+      "value": "neutral / 0.5",
+      "period": "current screen",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "core_limit",
+      "value": "£215.49",
+      "period": "trade plan",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "60% core allocation, limit order"
+    },
+    {
+      "metric": "tactical_limit",
+      "value": "£188.65",
+      "period": "trade plan",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "40% tactical allocation"
+    },
+    {
+      "metric": "tactical_stop_loss",
+      "value": "£182.99",
+      "period": "trade plan",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "tactical_take_profit",
+      "value": "£228.55",
+      "period": "trade plan",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "current_ratio",
+      "value": "1.437",
+      "period": "screening_inputs",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "Graham Defensive fail: current ratio < 2"
+    },
+    {
+      "metric": "P/E",
+      "value": "15.5",
+      "period": "key_metrics",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "Graham Defensive fail P/E >= 15"
+    },
+    {
+      "metric": "P/B",
+      "value": "2.2",
+      "period": "key_metrics",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "Schloss/Deep Value fail"
+    },
+    {
+      "metric": "ROE",
+      "value": "15.2%",
+      "period": "key_metrics",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "Economic Moat fail ROE below 18%"
+    },
+    {
+      "metric": "Yield",
+      "value": "2.3%",
+      "period": "key_metrics",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "dividend_yield_raw 2.32"
+    },
+    {
+      "metric": "FCF (screen / key_metrics)",
+      "value": "49637500",
+      "period": "screen_ttm",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "USD-tagged in fcf block; must be replaced by filing-body sterling"
+    },
+    {
+      "metric": "FCF (filing_aligned / canonical)",
+      "value": "48500000",
+      "period": "FY2025 filing_aligned",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "source filing_aligned_ocf_capex; currency field still USD"
+    },
+    {
+      "metric": "operating_cashflow (screen)",
+      "value": "51300000",
+      "period": "cashflow_metrics",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "replace with filing-body sterling"
+    },
+    {
+      "metric": "capital_expenditure (screen)",
+      "value": "-2800000",
+      "period": "cashflow_metrics",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "replace with filing-body sterling"
+    },
+    {
+      "metric": "fcf_dividend_coverage_net",
+      "value": "6.64",
+      "period": "cashflow_metrics",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "derived from screen FCF"
+    },
+    {
+      "metric": "piotroski_f_score",
+      "value": "8/9",
+      "period": "latest screen",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "fail: asset turnover improving"
+    },
+    {
+      "metric": "rsi_14",
+      "value": "44.95",
+      "period": "timing",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "below neutral (~45)"
+    },
+    {
+      "metric": "price_vs_sma200_pct",
+      "value": "15.38%",
+      "period": "timing",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "extended above 200-day MA"
+    },
+    {
+      "metric": "debt_to_equity",
+      "value": "12.6%",
+      "period": "screening_inputs",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "passes D/E < 100% highlight"
+    },
+    {
+      "metric": "ttm_cashflow_suppressed",
+      "value": "true (quarterly_cashflow_empty)",
+      "period": "yahoo_quarterly",
+      "source_path": "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json",
+      "note": "Yahoo TTM cashflow unavailable"
+    }
+  ],
+  "gaps": [
+    "Filing-body sterling OCF and capex components are not separately stated; only filing_aligned/canonical FCF £48.5m is given, whilst fcf.currency remains USD.",
+    "Graham Net-Net blocked by missing NCAV (ncav_available false); no filing-body NCAV in this source.",
+    "Economic Moat screen fails cite ROA and margin thresholds but ROA and margin values are not present in this snapshot.",
+    "EV/EBITDA, earnings yield (6.4%), ROA and gross/operating margins referenced in model_failures are not exported as standalone figures.",
+    "research_verdict, research_risk_level, research_confidence and research_rationale are null — no director-layer research overlay in this file.",
+    "Prior-year cashflow_metrics (operating_cashflow_prev, free_cashflow_prev) may also be screen-sourced; filing-body sterling confirmation not provided.",
+    "Whether filing_aligned £48.5m is already sterling or still mis-tagged USD cannot be resolved from this source alone."
+  ],
+  "sources_read": [
+    "/workspace/docs/data/research_director_worker/COST.L/20260904T172525Z/sources/screening_snapshot.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-8762a343-6879-4d0b-a86c-1afd9f5f1bc8"
+}

@@ -1,87 +1,128 @@
 # Keller Group plc (KLR.L) — Research memo
 
-_Version 1 · Updated 2026-09-02T11:00:51.001284+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T17:59:55.940953+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Keller Group plc is the world’s largest geotechnical specialist contractor, generating roughly £3bn of revenue across North America, Europe/Middle East and Asia-Pacific. The quantitative screen rates KLR.L as a strong buy on quality cash generation (FCF yield ~9%, Piotroski 8/9, ROE ~25%) rather than deep asset value (P/B 3.2x fails net-net and Schloss tests). Filings show accelerating momentum: record H1 2026 revenue of £1,608m and underlying operating profit of £117.9m, a £1.9bn order book, and net cash on a covenant basis. The valuation hook is mid-teens earnings on a business compounding through US infrastructure and data-centre demand, with material capital return via dividends and buybacks. The key debate is whether cyclical construction exposure and a strong share-price run already price in the upgraded 2026 outlook, or whether order-book visibility and balance-sheet strength justify further rerating.
+Keller Group is the world’s largest geotechnical specialist contractor (~£3bn revenue, ~10,000 staff), with a quality-and-cash-flow profile that aligns well with the quantitative Strong Buy signal: high ROCE, strong free cash flow, net-cash balance sheet, and an unbroken dividend record since listing. FY2025 filings show steady growth (revenue £3,087m, underlying margin 7.1%, covenant-basis net cash £59.7m), and H1 2026 has accelerated (revenue +11% constant currency, underlying operating profit +17%, record £1.9bn order book). Valuation is not deep-value—P/B ~3.2x and P/E ~13.7x screen as quality/GARP rather than Graham-style cheap—but FCF yield (~9%), Piotroski 8/9, and Neff PEGY pass support the screen. The key debate is whether North American infrastructure and data-centre momentum can offset cyclical construction exposure, H1 working-capital drag, and a share price already above the 200-day moving average.
+
+---
 
 ## INVESTMENT THESIS
-The screen’s strong-buy signal (11/22 models; composite 73%; families: cheapness, quality, dividend, GARP, risk) aligns with a business that has repaired from the 2022 earnings trough and is now delivering record results. Keller passes quality and cash-flow screens (FCF Yield, Buffett Quality, Financial Health, Earnings Quality) with filing-aligned FCF of ~£168m in FY2025 (Yahoo: £168m; interim cites £175.9m in the annual accounts extract) and FCF dividend cover above 4x. Underlying margins have stabilised around 7% (FY2025: 7.1%; H1 2026: 7.3%), with North America sustaining ~9.5% margins on infrastructure and data-centre work. ROCE reached 30.7% in FY2025 per the annual accounts. Leverage is conservative: FY2025 net cash of £59.7m on a covenant basis (0.2x net cash/EBITDA); H1 2026 net debt of £15.9m (0.1x). Capital allocation supports the value case: FY2025 dividend rebased to 70.4p (+42%), a £100m buyback launched March 2026, and an unbroken dividend record since listing. For a value investor, Keller offers compounder-like cash economics at a modest absolute multiple (P/E ~14, Neff PEGY ~0.05), with geographic diversification and no single customer above 4% of revenue limiting idiosyncratic risk. The screen fails classic deep-value and Graham defensive tests because the market already awards a quality premium; the opportunity is mispriced growth and cash yield relative to business quality, not hidden net assets.
+The Strong Buy rating rests on five model families—cheapness (FCF yield, Acquirer’s Multiple), quality (Buffett Quality, Quality Value, Magic Formula, Piotroski 8/9), dividend (Dividend Growth), GARP (Neff PEGY; adjusted EPS growth ~7.8%), and risk (Financial Health, Earnings Quality)—with full data quality (20/20 metrics). That combination fits a business generating filing-backed free cash flow (£176m FY2025 per Companies House accounts; £168m per Yahoo, aligned), covering dividends ~4.6× on a net basis, while operating on covenant-basis net cash.
+
+Business quality supports the screen rather than contradicting it. Keller is the global scale leader in ground engineering, geographically diversified (North America ~61% of H1 2026 revenue), with no customer above 3–4% of revenue. Underlying operating margin has held around 7% through the cycle; underlying ROCE was 30.7% in FY2025 (Companies House annual accounts). Management is returning surplus capital—£50m buyback completed in 2025, £100m tranche launched March 2026, dividend rebased to 70.4p full year (+42%) with 2.5–3.5× cover target—without stressing leverage (H1 2026 covenant net debt/EBITDA 0.1× vs 3.0× limit).
+
+The screen fails classic deep-value tests (Graham, Schloss, Net-Net, Lynch PEG 1.76) because the market prices quality: P/B 3.2x, current ratio 1.44. For a value investor, Keller is better framed as **quality compounder at a reasonable earnings/FCF multiple** than as asset cheapness. Record order book (£1.9bn), I-40 highway contract visibility, and US data-centre/infrastructure exposure provide an organic growth overlay the quantitative models partially capture via GARP and FCF metrics.
+
+---
 
 ## FINANCIAL REVIEW
-Primary source: UK RNS and Companies House annual accounts (regime: uk_rns). One interim release is indexed (H1 2026, 4 August 2026); no separate FY2025 preliminary RNS body is in the index—the annual report notice (24 March 2026) and Companies House FY2025 accounts (filed 31 May 2026) supply full-year data. Two trading updates (20 May and 7 July 2026) provide intra-year guidance.
+*Primary source: filing body extracts under `filings/bodies/`. Yahoo used only where noted.*
 
-Annual trend (FY2024–FY2025, Companies House accounts extracts):
-- Revenue: £2,986.7m (FY2024) → £3,087.3m (FY2025), +3%.
-- Underlying operating profit: £212.6m (FY2024) → approximately £219m (FY2025, +3% per accounts highlights; the absolute FY2025 headline is OCR-corrupted in the extract as “£2 M”—prior-year comparator and growth rate are legible).
-- Underlying operating margin: 7.1% in both years (FY2024: +100bps YoY from 6.1% in FY2023 per prior accounts).
-- Statutory operating profit: £205.1m → £207.3m; statutory profit after tax: £142.7m → £143.1m.
-- Diluted underlying EPS: 199.9p → 211.3p (+6%).
-- Free cash flow: £192.6m → £175.9m (−9%); Yahoo FY2025 FCF £168m (used by screen; filing-aligned OCF £258.4m less capex £90.4m).
-- Net debt (covenant/IAS 17 basis): £29.5m net debt → £59.7m net cash; leverage 0.1x → 0.2x net cash/underlying EBITDA.
-- Order book: £1.6bn → £1.5bn (annual accounts); subsequently rebuilt to record levels in 2026 trading updates.
-- Dividend: 49.7p → 70.4p (+42%); policy rebased to 2.5x–3.5x cover.
+### Annual trend (FY2022–FY2025)
 
-Interim H1 2026 (RNS, 4 August 2026):
-- Revenue £1,608.0m (+10.3%; +11.1% constant currency).
-- Underlying operating profit £117.9m (+14.9%; +17.1% CC); margin 7.3% (+30bps).
-- Underlying diluted EPS 120.1p (+22.4%).
-- Statutory profit before tax £103.3m (+18.2%).
-- Free cash flow before interest and tax £43.0m (H1 2025: £51.6m); operating cash conversion 36% (seasonally H2-weighted).
-- Net debt (covenant basis) £15.9m vs £61.5m prior year; leverage 0.1x.
-- Interim dividend 28.7p (+56.8%).
-- Record order book £1.9bn (H1 2025: £1.6bn).
-- FY2026 consensus cited in filing: revenue £3,337m, underlying operating profit £242m (seven analysts); management expects full-year performance in line with upgraded expectations after the July trading update.
+| Metric | FY2022 | FY2023 | FY2024 | FY2025 | Source |
+|--------|--------|--------|--------|--------|--------|
+| Revenue | £2,945m | £2,966m | £2,987m | **£3,087m** (+3%) | CH 2025 accounts; 2022–24 via Yahoo fallback* |
+| Underlying operating profit | n/a† | n/a† | **£213m** | **~£219m** (+3%; 7.1% margin) | CH 2025 accounts (2024 comparator £212.6m) |
+| Statutory profit after tax | £46m | £89m | £143m | **£143m** (flat) | CH 2025 accounts; 2022–23 Yahoo fallback* |
+| Underlying diluted EPS | n/a† | n/a† | 199.9p | **211.3p** (+6%) | CH 2025 accounts |
+| Free cash flow | (£27m) | £103m | £193m | **£176m** (−9%) | CH 2025 accounts |
+| Net debt/(cash) (covenant) | n/a† | n/a† | £(29.5m) net debt | **£(59.7)m net cash** | CH 2025 accounts |
+| Dividend per share | n/a† | n/a† | 49.7p | **70.4p** (+42%) | CH 2025 accounts |
+| Order book | n/a† | n/a† | £1.6bn | **£1.5bn** (−4%) | CH 2025 accounts |
 
-Divisional H1 2026 (interim filing): North America revenue £984.4m (+16.7% CC), underlying OP £93.8m, margin 9.5%; EME revenue £396.1m (−5.2% CC) but underlying OP £19.2m (+28%), margin 4.8%; APAC revenue £227.5m (+22.8% CC), underlying OP £13.8m (flat), margin 6.1%.
+\*2022–2024 revenue and statutory profit from Yahoo `financials_annual.json` where older Companies House extracts are OCR-degraded; FY2025 figures from Companies House group accounts (`ch_02442580_MzUyMzYyMjA2OWFkaXF6a2N4.txt`, filed May 2026).  
+†Underlying metrics not reliably extracted from older CH bodies in this pack.
 
-Balance sheet and covenants (interim): cash £209.7m; undrawn committed facilities £446.1m including £400m RCF extended to June 2031; US private placement $300m ($120m 2030, $180m 2033). Net debt/EBITDA covenant 0.1x vs 3.0x limit; going concern confirmed through December 2027 under severe downside scenarios (10% revenue decline modelled without covenant breach).
+**FY2025 (year ended 31 December 2025):** Revenue grew 3% to £3,087.3m; underlying operating margin 7.1%; statutory operating profit £207.3m (+1%). Free cash flow £175.9m remained robust despite a 9% decline versus FY2024 (£192.6m), with operating cash flow of £258.4m (Yahoo, consistent with screening inputs). The balance sheet shifted to **covenant-basis net cash of £59.7m** (0.2× net cash/EBITDA). Underlying ROCE 30.7% (+250bps). Dividend increased sharply as policy moved to 2.5–3.5× cover (final dividend 52.1p confirmed at AGM notice, April 2026).
 
-Pension: net defined benefit liabilities £15.2m at 30 June 2026; UK scheme fully funded on IAS 19 with £nil net liability.
+**Recovery arc:** From the 2022 cyclical trough (statutory net income ~£46m per Yahoo), earnings rebuilt through 2023–25; FY2025 represents a fourth year of margin discipline above 7% and net-cash positioning—consistent with Piotroski and Financial Health screen passes.
 
-Gaps: FY2025 underlying operating profit headline unreadable in the CH extract (growth rate and prior-year base allow approximation only). No audited full-year RNS body with complete income statement in the index—annual accounts extract used. Yahoo quarterly cash flow is empty (TTM suppressed); annual filing figures used for FCF.
+**Gap:** No standalone preliminary results RNS body in `filings_index.json`; FY2025 numbers are taken from the Annual Report announcement (24 March 2026) and Companies House consolidated accounts. Full statutory notes (provisions detail, segment restatements) are not fully extracted in this pack.
+
+### Interim H1 2026 (half year ended 30 June 2026)
+
+Source: RNS interim results body (`5a239384189d0666.txt`, 4 August 2026).
+
+| H1 2026 | H1 2025 | Change (ccy) |
+|---------|---------|--------------|
+| Revenue £1,608.0m | £1,457.7m | +11.1% |
+| Underlying operating profit £117.9m | £102.6m | +17.1% |
+| Underlying margin 7.3% | 7.0% | +30bps |
+| Underlying diluted EPS 120.1p | 98.1p | +22.4% |
+| Free cash flow before interest & tax £43.0m | £51.6m | −16.7% |
+| Covenant net debt £15.9m | £61.5m | −74.1% (0.1× leverage) |
+| Interim dividend 28.7p | 18.3p | +56.8% |
+| Order book **£1.9bn** | £1.6bn | record |
+
+**Divisional H1 2026:** North America revenue £984m (+16.7% cc), margin 9.5%—driven by infrastructure and data centres, offsetting South Florida residential softness. EME profit +28% on lower revenue (weather, project mix). APAC revenue +22.8% but margin compressed to 6.1% (Australia pricing, Queensland weather).
+
+**Cash/working capital:** H1 operating cash conversion 36% (vs 50% prior year)—typical seasonal pattern; working capital increased £87.5m (inventory +£36.7m, receivables +£76.8m). Management expects H2-weighted cash generation. Average H1 net cash (ex-IFRS 16) £25.5m; £400m RCF undrawn (extended to June 2031).
+
+**FY2026 outlook (filings):** July trading update upgraded expectations vs consensus (£3,150m revenue / £223m underlying OP); H1 results guide full year **in line with upgraded consensus** (£3,337m / £242m, seven analysts)—i.e. momentum confirmed but not re-upgraded at interim.
+
+**Gap:** Only one interim filing in the index (H1 2026). No H1 2025 or H2 trading updates as separate interim accounts.
+
+### Balance sheet and covenants (H1 2026 filing)
+
+- Cash £209.7m; total net debt (IFRS 16) £102.6m; covenant net debt £15.9m.  
+- Debt: US private placement $120m (2030), $180m (2033); £400m RCF undrawn.  
+- Covenants: net debt/underlying EBITDA ≤3.0× (actual 0.1×); EBITDA/interest 23.5×.  
+- Retirement benefit liabilities £15.2m; UK Keller Group Pension Scheme **£nil** net liability after buy-in (H1 2026).  
+- Going concern: Board and EY review confirm going concern through December 2027 under severe downside scenarios (10% revenue decline, margin stress, working-capital deterioration)—no covenant breach modelled.
+
+---
 
 ## RISKS AND RED FLAGS
-Cyclicality: The annual report and H1 interim both flag construction market downturn as a principal viability risk—revenue falls harder in contractions than in many industries. H1 2026 notes renewed inflation pressure from Middle East conflict, US steel tariffs, and potential customer project delays if rates re-rise. South Florida residential softness and UK market weakness are already visible; Moretrench Industrial remediation deferred by customers.
+**Cyclical construction exposure.** Filings describe construction as pro-cyclical—“grows more during expansion and falls harder in contraction.” H1 risk commentary flags renewed inflation pressure from Middle East conflict and US tariffs, with potential customer project delays. South Florida residential and Moretrench industrial remediation already show deferrals.
 
-Project execution: Contract margin risk from ground conditions, cost overruns and disputes; provisions for contract and legal disputes increased in H1 working capital. Project Performance Management rollout is intended to mitigate but remains an implementation risk.
+**Project execution and provisions.** Principal risk: ineffective project management leading to cost overruns and disputes. H1 2026: provisions increased as contract/legal dispute accruals exceeded settlements. APAC margin pressure and non-repeat of prior settlements illustrate earnings sensitivity to individual projects.
 
-Geopolitical and supply chain: Operations in the Middle East (conflict-related productivity risk, though H1 Middle East profit grew); Iran conflict cited as renewed supply-chain pressure on steel, cement and energy.
+**Working-capital seasonality.** H1 2026 FCF before interest/tax fell 17% on working-capital build; screen FCF yield uses FY2025 filing-aligned £168m—H1 conversion weakness warrants monitoring, not yet a red flag given historic H2 bias and net-cash position.
 
-Regulatory and compliance: Multi-jurisdiction exposure (bribery, modern slavery, GDPR, UK “failure to prevent fraud” offence from September 2025). No material enforcement actions disclosed in indexed bodies.
+**Leverage and liquidity (low absolute risk, non-zero).** £400m RCF and $300m US PP notes create refinancing calendar (2030–2033); currently undrawn RCF and net cash provide headroom. Bank guarantees drawn £212m—normal for contract business but ties capacity.
 
-Health and safety: TRIR rose to 0.60 (H1 2025: 0.48) alongside higher activity; serious injury/fatality remains a principal risk with criminal prosecution potential.
+**Pension.** Net defined benefit obligations £15.2m (Germany, Austria, Middle East end-of-service; UK scheme de-risked). Not material at group level but flagged in filings.
 
-Balance sheet / liquidity: Low leverage mitigates financial risk, but H1 working capital absorbed £87.5m (receivables +£76.8m, inventory +£36.7m)—typical seasonality but worth monitoring against cyclical slowdown. Buybacks (£44.2m H1) and higher dividends compete with growth capex and bolt-on M&A.
+**Regulatory and compliance.** Multi-jurisdiction exposure (bribery, modern slavery, GDPR, UK “failure to prevent fraud” offence September 2025). No specific enforcement actions in bodies reviewed.
 
-Valuation: Screen failures on Graham Defensive (current ratio <2, P/B rich), Economic Moat (ROA/margins vs screen thresholds), Lynch PEG (1.76), and Dreman contrarian quartile tests suggest the name is not statistically cheap on classical deep-value metrics—rerating risk if NA momentum fades.
+**Governance / capital allocation.** Aggressive dividend rebase (+42%) and £150m cumulative buyback intent (2025 + 2026 tranches) while stock trades near highs—disciplined if cycle turns. Executive share sales reported (e.g. Peter Wyton disposal, 26 August 2026)—routine PDMR activity, not cluster selling.
 
-Governance: Key management compensation £9.0m (2025). Former CEO Michael Speakman passed away April 2026; current CEO James Wroath in post since August 2025—leadership transition recently completed.
+**Competitive / moat.** Screen fails Economic Moat (ROA below 8% threshold); geotechnical contracting is competitive locally despite global scale. Technology and safety differentiation cited in annual report but not impregnable.
 
-Going concern: Auditor review (EY, H1 2026) found no inappropriate going concern adoption; management downside modelling shows no covenant breach even under aggregated severe scenarios.
+**Accounting.** ERP implementation costs (£4.7m H1 non-underlying) and finance transformation (£0.4m) adjust reported earnings; underlying measures exclude these by design—track statutory vs underlying convergence from 2027 ERP roll-out.
 
-RiskTags: cyclical, competitive, regulatory, pension, leverage, litigation
-RiskTags: cyclical, competitive, regulatory, pension, leverage, litigation
+**Not captured by screens:** Geopolitical exposure (Middle East operations during conflict), climate/CSRD compliance costs, cyber/IT risk, HSEQ (AFR 0.05 H1 2026 vs 0.04 prior year).
+
+RiskTags: cyclical, competitive, liquidity, leverage, pension, regulatory, governance, key_person, litigation, other
+
+---
+RiskTags: cyclical, competitive, liquidity, leverage, pension, regulatory, governance, key_person, litigation, other
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is active but heavily skewed towards buyback mechanics, earnings reactions and third-party commentary rather than investigative journalism.
+Coverage over the past year is **moderate-to-heavy on price action and buybacks**, with fewer independent investigative pieces. Material items from `news_manifest.json` and RNS cross-reference:
 
-Material company announcements (from news manifest and filings):
-- “Interim Results for the half year ended 30 June 26” (4 August 2026): record H1 revenue and profit; dividend raised to 28.7p; order book £1.9bn.
-- “Trading Update; Upgrade to Full Year 2026 expectations” (7 July 2026): FY2026 revenue and underlying OP expected materially ahead of consensus (£3,150m / £223m); shares reportedly jumped ~16% (“Keller shares jump 16% after upbeat trading update; brokers lift price targets”, 7 July 2026, Yahoo Finance UK / Proactive Investors).
-- “Multi-year US highway contract variation award” (9 June 2026): $207m I-40 variation; total secured ~$380m.
-- “Launch of £100 million share buyback tranche” (30 March 2026): second £100m programme under multi-year buyback.
-- “AGM Trading Update” (20 May 2026): strong start to 2026; order book ~£1.7bn.
-- “Michael Speakman” (9 April 2026): death of former CEO.
-- Analyst narrative: fair-value/target articles citing ~3,100–3,150p ranges (“Keller Group (LSE:KLR) Stock Fair Value Edges Higher After Analyst Target Increases”, 7 August 2026, Yahoo Finance).
-- H1 earnings call highlights (12 August 2026, Yahoo): fourth consecutive record performance; NA data-centre and infrastructure strength.
+| Date | Headline / event |
+|------|------------------|
+| 4 Aug 2026 | **Interim Results for the half year ended 30 June 26** — record H1 revenue/profit; interim dividend 28.7p; order book £1.9bn (RNS/filing). |
+| 7 Jul 2026 | **Trading Update** — FY2026 revenue and underlying OP expected materially ahead of prior consensus; shares reportedly +16% (Yahoo Finance UK / Proactive Investors). |
+| 9 Jun 2026 | **Multi-year US highway contract variation award** — I-40 total ~$380m secured (RNS). |
+| 20 May 2026 | **AGM Trading Update** — strong start to 2026; order book ~£1.7bn (RNS). |
+| 30 Mar 2026 | **Launch of £100 million share buyback tranche** (RNS). |
+| 24 Mar 2026 | **Annual Financial Report** FY2025 published (RNS). |
+| Jul–Aug 2026 | Multiple **share buyback** completion reports (Kalkine Media, TipRanks); analyst target nudges higher (~3,100–3,150p per Yahoo Finance, 7 Aug 2026). |
+| 27 Aug 2026 | **Keller Group discloses share sale by senior EME executive** (TipRanks). |
+| 5 Mar 2026 | **Keller provides confidence on margin debate but shares fairly valued** (Proactive Investors — analyst caution). |
 
-Noise to filter: Several “KLR” articles refer to Kaili Resources (ASX) or Kailera Therapeutics (Nasdaq), not Keller Group plc.
+**Strategy themes:** Pivot to US infrastructure and data centres; bolt-on M&A optionality; enhanced dividend policy and sustained buybacks; Capital Markets Day scheduled 14 October 2026.
 
-Overall: news confirms strategic pivot to US infrastructure/data centres and aggressive capital return; limited independent scrutiny of margin sustainability or cyclical downside. Not thin, but repetitive.
+**Noise:** Several Google hits conflate ASX:KLR (Kaili Resources) or other “KLR” tickers—excluded from Keller Group narrative.
+
+---
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Filings confirm strong cash generation, record order-book visibility and conservative leverage, supporting the quantitative strong-buy signal, but cyclical construction exposure, working-capital seasonality and a quality-premium valuation (not deep value) warrant phased accumulation rather than unqualified conviction.
+Confidence: 0.74
+Rationale: Deep research confirms the screen’s quality, cash-flow and GARP case—record order book, covenant-basis net cash, and accelerating H1 2026 earnings—but cyclical construction exposure, H1 working-capital seasonality, and the absence of deep-value screen passes warrant accumulation rather than aggressive conviction at current technical levels.

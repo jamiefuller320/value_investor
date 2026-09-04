@@ -1,0 +1,152 @@
+{
+  "task_id": "klr_gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "financials_annual.json: quarterly_income and quarterly_cashflow are empty objects; cashflow_metrics.ttm_cashflow_suppressed=true with reason quarterly_cashflow_empty — no Yahoo quarterly bridge for H2 intra-quarter cashflow.",
+    "No ir_presentation_metrics or alternate_news artefact in sources tree; news_manifest.json carries Google News and yfinance headlines only.",
+    "filings_index.json period_coverage: annual=10 (all with_body), interim=1, trading_update=2, other=50; total 63 filings.",
+    "Annual bucket includes AGM notice mis-tag: a4efce9888760016 ('Notice of 2026 Annual General Meeting', 2026-04-14) tagged period=annual alongside eight Companies House group accounts, 24 Mar 2026 AFR (63e24814661003ff), and May-2026 CH filing.",
+    "No FY2025 preliminary-results RNS tagged in filings_index (no prelim/preliminary headline match); memo must not cite an invented prelim source.",
+    "filings_index body_path values point to docs/data/research/KLR.L/... (outside this trial tree); local bodies exist under research_director_worker/KLR.L/20260904T175011Z/sources/filings/bodies/.",
+    "macro_context.json and screen_run_manifest.json present but unused in this pass; macro_context is secondary regime markers only (GBP/USD, FTSE, related-domain yields).",
+    "H1 2026 interim (5a239384189d0666.txt, 2026-08-04): revenue £1,608.0m (+10.3% reported, +11.1% constant currency); underlying operating profit £117.9m (+14.9%, +17.1% CC); margin 7.3%; underlying diluted EPS 120.1p (+22.4%); interim dividend 28.7p (+56.8%); record order book £1.9bn (H1 2025 £1.6bn), citing I-40 variation; FY26 outlook in line with upgraded consensus (revenue £3,337m, underlying OP £242m, seven analysts).",
+    "H1 buyback disclosure (as at 30 Jun 2026): £100m tranche launched 30 Mar 2026; c.£35m completed since launch; £44.2m cash outflow in H1 including completion of prior £50m tranche; total capital returned £82.4m — remaining authority after 30 Jun not resolved without latest TVR/own-share bodies.",
+    "H1 net debt: covenant (IAS 17) £15.9m, leverage 0.1x; statutory IFRS 16 net debt £102.6m; free cash flow before interest and tax £43.0m (36% OCF conversion, H2-weighted); net cash inflow from operating activities £51.8m.",
+    "Companies House account bodies (e.g. ch_02442580_MzQ2NzM2MjE3NWFkaXF6a2N4) are OCR-degraded; insufficient for reliable YoY extraction — H1 and Yahoo annuals are the usable numeric bases.",
+    "Highest-value bodies deliberately not opened this pass: 7971cc4e54f0af7f (7 Jul 2026 Trading Update — guidance upgrade), b4077d9a8b681947 (20 May AGM Trading Update), 8fc687cedacd3c19 (£100m buyback launch), f3bd8f27b5624e8e (9 Jun I-40 contract), 187f6809de97c95b (Company Event), e2bdfa2494a77cbd (Michael Speakman), 22e85619476c5fb7 (latest TVR 2026-09-01), plus own-share transaction sample for residual buyback capacity.",
+    "screening_snapshot.json: Strong Buy (11/22 models), composite 72.6%, P/E 13.8, P/B 3.2, yield 2.7%, ROE 25.3%, canonical FCF $168m FY2025 (Yahoo filing-aligned)."
+  ],
+  "figures": [
+    {
+      "metric": "H1 revenue",
+      "value": "£1,608.0m",
+      "period": "H1 2026",
+      "source_path": "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/filings/bodies/5a239384189d0666.txt",
+      "note": "+10.3% reported; +11.1% constant currency vs H1 2025"
+    },
+    {
+      "metric": "Underlying operating profit",
+      "value": "£117.9m",
+      "period": "H1 2026",
+      "source_path": "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/filings/bodies/5a239384189d0666.txt",
+      "note": "Margin 7.3%; +17.1% constant currency"
+    },
+    {
+      "metric": "Underlying diluted EPS",
+      "value": "120.1p",
+      "period": "H1 2026",
+      "source_path": "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/filings/bodies/5a239384189d0666.txt",
+      "note": "+22.4% vs H1 2025"
+    },
+    {
+      "metric": "Interim dividend per share",
+      "value": "28.7p",
+      "period": "H1 2026",
+      "source_path": "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/filings/bodies/5a239384189d0666.txt",
+      "note": "+56.8%; payable 11 Sep 2026"
+    },
+    {
+      "metric": "Order book",
+      "value": "£1.9bn",
+      "period": "30 Jun 2026",
+      "source_path": "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/filings/bodies/5a239384189d0666.txt",
+      "note": "Record; I-40 variation cited; contract value/margin not in this source"
+    },
+    {
+      "metric": "Net debt (covenant IAS 17 basis)",
+      "value": "£15.9m",
+      "period": "30 Jun 2026",
+      "source_path": "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/filings/bodies/5a239384189d0666.txt",
+      "note": "Leverage 0.1x"
+    },
+    {
+      "metric": "Buyback completed (programme launch)",
+      "value": "c.£35m",
+      "period": "to 30 Jun 2026",
+      "source_path": "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/filings/bodies/5a239384189d0666.txt",
+      "note": "Of £100m tranche launched 30 Mar 2026; residual post-Sep not stated"
+    },
+    {
+      "metric": "FY26 consensus revenue",
+      "value": "£3,337m",
+      "period": "FY 2026E",
+      "source_path": "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/filings/bodies/5a239384189d0666.txt",
+      "note": "Seven analysts; footnote 4 in H1 RNS"
+    },
+    {
+      "metric": "FY26 consensus underlying operating profit",
+      "value": "£242m",
+      "period": "FY 2026E",
+      "source_path": "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/filings/bodies/5a239384189d0666.txt",
+      "note": "Upgraded expectations referenced; July TU numeric upgrade not read"
+    },
+    {
+      "metric": "Total revenue",
+      "value": "$3,087.3m",
+      "period": "FY 2025",
+      "source_path": "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/financials_annual.json",
+      "note": "Yahoo income_statement 2025; USD"
+    },
+    {
+      "metric": "Net income",
+      "value": "$142.7m",
+      "period": "FY 2025",
+      "source_path": "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/financials_annual.json",
+      "note": "Diluted EPS $1.987"
+    },
+    {
+      "metric": "Free cash flow",
+      "value": "$168.0m",
+      "period": "FY 2025",
+      "source_path": "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/financials_annual.json",
+      "note": "Operating cash flow $258.4m; capex $90.4m"
+    },
+    {
+      "metric": "Cash and equivalents",
+      "value": "$277.5m",
+      "period": "FY 2025",
+      "source_path": "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/financials_annual.json",
+      "note": "Yahoo balance_sheet 2025; net debt field absent (net cash position)"
+    },
+    {
+      "metric": "Filings period coverage (annual)",
+      "value": "10",
+      "period": "index snapshot",
+      "source_path": "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/filings/filings_index.json",
+      "note": "Includes AGM notice mis-tag; no FY2025 prelim RNS"
+    },
+    {
+      "metric": "Screen composite score",
+      "value": "72.6%",
+      "period": "2026-09-02",
+      "source_path": "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+      "note": "Strong Buy; 11/22 models passed"
+    }
+  ],
+  "gaps": [
+    "July 2026 Trading Update (7971cc4e54f0af7f): numeric FY guidance upgrade not extracted — memo must leave upgraded revenue/profit ranges unknown until assigned.",
+    "I-40 US highway contract (f3bd8f27b5624e8e): contract value, duration economics and margin impact unknown; H1 only references order-book elevation.",
+    "Remaining £100m buyback authority as of latest date: requires 22e85619476c5fb7 (TVR 2026-09-01) plus own-share transaction body — H1 c.£35m snapshot is stale and not a substitute.",
+    "IR presentation / slide metrics: pipeline step absent; no segment KPI deck beyond H1 narrative tables.",
+    "Statement re Company Event (187f6809de97c95b) and Michael Speakman (e2bdfa2494a77cbd): corporate/governance substance unknown.",
+    "May AGM Trading Update (b4077d9a8b681947) and buyback launch RNS (8fc687cedacd3c19): unread; may contain guidance and programme terms not in H1.",
+    "H2 intra-quarter cashflow and TTM OCF/FCF: Yahoo quarterly_income and quarterly_cashflow empty; ttm_cashflow_suppressed — memo cannot state rolling cash metrics.",
+    "alternate_news absent; secondary news corroboration limited to Google/yfinance manifest.",
+    "24 Mar AFR body (63e24814661003ff) unread; CH OCR bodies unreliable for YoY — full FY2025 RNS narrative metrics not sourced here.",
+    "macro_context.json and screen_run_manifest.json unused — no macro overlay or screen-run lineage in memo from this pass."
+  ],
+  "sources_read": [
+    "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/financials_annual.json",
+    "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/filings/filings_index.json",
+    "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/filings/bodies/5a239384189d0666.txt",
+    "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/filings/bodies/ch_02442580_MzQ2NzM2MjE3NWFkaXF6a2N4.txt",
+    "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/filings/bodies/ch_02442580_MzUyMzYyMjA2OWFkaXF6a2N4.txt",
+    "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/news_manifest.json",
+    "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screening_snapshot.json",
+    "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/macro_context.json",
+    "docs/data/research_director_worker/KLR.L/20260904T175011Z/sources/screen_run_manifest.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-4d9dc1cc-931e-4653-b420-da9d8e5caf81"
+}

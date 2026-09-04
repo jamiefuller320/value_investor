@@ -1,0 +1,154 @@
+{
+  "appended": [
+    {
+      "ticker": "IMB.L",
+      "name": "Imperial Brands PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Deepen Investegate so FY results, H1 2026 interims, acquisition and restructuring RNSs are not dropped when the recency window is buyback-dominated; fire the IR allowlist for Imperial annual report / results PDFs; retag those as period=annual|interim|trading_update|corporate_action. Point body_path at the trial snapshot tree. Deduplicate daily Transaction-in-Own-Shares before counting filing coverage. Reject Google News hits whose issuer is ASX:IMB (Intelligent Monitoring Group).",
+      "source": "director_worker",
+      "run_id": "20260904T174213Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:50:11.064366+00:00"
+    },
+    {
+      "ticker": "IMB.L",
+      "name": "Imperial Brands PLC",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Fail-closed or flag when screening_snapshot.fcf.currency is USD on a GBP LSE reporter, and set fcf_definition_divergence whenever screen_ttm (2,502m) disagrees with filing_aligned (3,166m). Do not pass quality/GARP/Buffett on 37% ROE while earnings growth is negative and book equity is shrinking via buybacks. Enable a tobacco-excise overlay so current-ratio < 2 is not treated as ordinary industrial illiquidity without netting duty payables, and surface dual leverage when D/E > 200% even if leases are small.",
+      "source": "director_worker",
+      "run_id": "20260904T174213Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:50:11.064379+00:00"
+    },
+    {
+      "ticker": "IMB.L",
+      "name": "Imperial Brands PLC",
+      "area": "prompt",
+      "priority": "high",
+      "suggestion": "Require the annual worker to extract reporting currency and entity (03236483 group), tobacco net revenue versus duty-paid, combustibles volume/price/mix versus NGP, statutory versus adjusted EBIT/EPS, OCF/capex/FCF definition, cash versus financial debt versus leases versus company net debt, excise/tax payables inside working capital, dividend declared versus cash paid and cover versus filing FCF, buyback authority versus cash spent versus share count, pension, goodwill/impairment, and litigation/regulation language. Require news workers to cluster £1.45bn buyback reprints into one line, keep H1/Black Buffalo/jobs/BofA/Morningstar/April-gap items as headline-only, and discard ASX:IMB and cannabis-pair filler.",
+      "source": "director_worker",
+      "run_id": "20260904T174213Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:50:11.064387+00:00"
+    },
+    {
+      "ticker": "IMB.L",
+      "name": "Imperial Brands PLC",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Ingest the H1 2026 interim results RNS/PDF (news-dated ~12 May 2026), the FY2025 results RNS if distinct from the 7 Feb 2026 CH accounts, the Black Buffalo RNS, and the August 2026 jobs/£320m-savings announcement. Populate alternate_news or drop it from the ladder. Parse interim cash-flow from filing bodies to replace empty Yahoo quarterly_income/quarterly_cashflow instead of only suppressing TTM. Expose ir_presentation_metrics when Imperial IR decks exist.",
+      "source": "director_worker",
+      "run_id": "20260904T174213Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:50:11.064393+00:00"
+    },
+    {
+      "ticker": "IMB.L",
+      "name": "Imperial Brands PLC",
+      "area": "orchestration",
+      "priority": "medium",
+      "suggestion": "Select the latest dated annual *group* body (CH 03236483 filed 2026-02-07) — not 2019–2024 CH. When interim_count=0, do not invent or retag a buyback/TVR RNS as interim; keep the second filing slot empty and let gap_inventory record the missing H1. Raise the cap or add trading_update / rns_cluster / corporate_action types so a later-ingested H1, acquisition, or savings RNS is not dropped.",
+      "source": "director_worker",
+      "run_id": "20260904T174213Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:50:11.064398+00:00"
+    },
+    {
+      "ticker": "IMB.L",
+      "name": "Imperial Brands PLC",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "Allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action. Add reporting_currency, tobacco_net_vs_duty_paid, ngp_mix, excise_in_working_capital, and fcf_basis_used on the screening snapshot. Remap filings_index.body_path into the trial sources/ tree. Validate FCF-yield inputs against listing CCY and a sanity band versus market cap.",
+      "source": "director_worker",
+      "run_id": "20260904T174213Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:50:11.064405+00:00"
+    },
+    {
+      "ticker": "IMB.L",
+      "name": "Imperial Brands PLC",
+      "area": "monitoring",
+      "priority": "medium",
+      "suggestion": "For weeks_at_signal<=1 tobacco strong_buys, require the memo to compare live price versus limit ladder versus latest buyback print, and emit watches (next true H1/FY body ingest, remaining £1.45bn buyback, NGP/Black Buffalo, job-cut cash cost, FY2026 outlook, UK generational-ban). Do not treat stability=new or RSI-oversold timing as a reason to skip those checks.",
+      "source": "director_worker",
+      "run_id": "20260904T174213Z",
+      "director_model": "grok-4.6",
+      "recorded_at": "2026-09-04T17:50:11.064415+00:00"
+    },
+    {
+      "ticker": "IMB.L",
+      "name": "Imperial Brands PLC",
+      "area": "sources",
+      "priority": "high",
+      "suggestion": "Filings-first order is adequate in principle (70/71 bodies present) but not in practice for IMB.L: all 8 period=annual hits are Companies House group accounts (2019–2026 filings), interim=0 and trading_update=0, and the 63 period=other items are almost entirely Transaction-in-Own-Shares plus TVR/holdings/PDMR. yahoo_quarterly_cashflow is on the ladder but empty (TTM suppressed); alternate_news and ir_presentation_metrics are dead/absent steps. H1 2026, Black Buffalo, and the August jobs/savings plan therefore fall through to headline-only news, which the ladder ranks below empty quarterlies.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T174213Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "evidence_ladder",
+      "recorded_at": "2026-09-04T17:50:11.064422+00:00"
+    },
+    {
+      "ticker": "IMB.L",
+      "name": "Imperial Brands PLC",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "Four worker types plus a five-task cap would normally force annual+interim+news+screen+gap. Here there is no tagged interim body, so a second summarize_filing_body cannot be assigned without inventing a source or smuggling a buyback RNS. summarize_filing_body cannot carry period=annual|interim|trading_update|corporate_action, and there is no type to cluster ~50 own-share RNSs, parse an IR deck, or reconcile the 2,502m vs 3,166m FCF bases. gap_inventory can only list the missing H1/IR/NGP bodies — it cannot fill them.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T174213Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "task_schema",
+      "recorded_at": "2026-09-04T17:50:11.064428+00:00"
+    },
+    {
+      "ticker": "IMB.L",
+      "name": "Imperial Brands PLC",
+      "area": "orchestration",
+      "priority": "high",
+      "suggestion": "The screen emits strong_buy (13/22, five families including quality/GARP/dividend) while earnings growth is negative, D/E is 244%, current ratio is 0.74, Piotroski is 6/9, and Financial Health/Moat/Graham fail. Overlays are all false: fcf_basis_overlay despite 2,502m vs 3,166m FCF, leverage_override/dual_leverage_display despite net debt 8.2bn, dividend_yield_overlay on a 6.5% levered tobacco yield, cash_conversion_overlay, and cyclical_exposure on a secular volume-decline staple. Quality/Buffett can pass on 37% ROE created by shrinking book equity. The director–worker loop is being asked to qualitatively veto a mechanically clean headline that sector/leverage/FCF overlays failed to brake.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T174213Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "methodology",
+      "recorded_at": "2026-09-04T17:50:11.064435+00:00"
+    },
+    {
+      "ticker": "IMB.L",
+      "name": "Imperial Brands PLC",
+      "area": "monitoring",
+      "priority": "high",
+      "suggestion": "weeks_at_signal=1 / stability=new / conviction=0.454 already mark a fresh print, but there is no watch schema for: ingest of the missing H1 2026 statutory RNS, remaining £1.45bn buyback capacity versus live prints versus the £2,496.78/£2,395.90 ladder, Black Buffalo close/integration, job-cut cash costs versus the £320m-by-2030 savings claim, FY2026 outlook checkpoints, or UK generational-ban / NGP regulation. RSI 38 + below-SMA200 timing is not a substitute for those monitors.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T174213Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "monitoring",
+      "recorded_at": "2026-09-04T17:50:11.064440+00:00"
+    },
+    {
+      "ticker": "IMB.L",
+      "name": "Imperial Brands PLC",
+      "area": "schema",
+      "priority": "medium",
+      "suggestion": "A generic FINANCIAL REVIEW / RISKS split will blend duty-paid revenue with tobacco net revenue and will not force combustibles volume/price versus NGP, statutory versus adjusted, excise-distorted working capital, or company versus IFRS-16 net debt. Without explicit CAPITAL RETURNS, NGP TRANSITION, and LITIGATION/REGULATION slots, workers will treat the daily £1.45bn buyback flood and Kalkine income pieces as colour. No required slot for reporting-currency hygiene (snapshot USD vs sterling accounts) or for ‘H1 exists only in news’. Director catalog pass can form these questions without drafting the memo.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T174213Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "memo_structure",
+      "recorded_at": "2026-09-04T17:50:11.064447+00:00"
+    },
+    {
+      "ticker": "IMB.L",
+      "name": "Imperial Brands PLC",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "filings_index.body_path values point at docs/data/research/IMB.L/sources/... rather than this trial snapshot tree. sources_used are only companies_house + investegate_direct — the IR allowlist and any FY/H1 results RNS before the June 2026 Investegate window did not land. news_manifest (~71 items) is dominated by Kalkine/TipRanks/Globe buyback reprints, BAT+IMB cannabis pairing, and ASX:IMB Intelligent Monitoring Group collisions. financials_annual.json is Yahoo-shaped (FY2021–2025; quarterly_income/quarterly_cashflow empty; no root currency field). NCAV missing is expected for this model, not an IMB-specific hole.",
+      "source": "director_worker_meta",
+      "run_id": "20260904T174213Z",
+      "director_model": "grok-4.6",
+      "meta_topic": "other",
+      "recorded_at": "2026-09-04T17:50:11.064454+00:00"
+    }
+  ],
+  "count": 13
+}

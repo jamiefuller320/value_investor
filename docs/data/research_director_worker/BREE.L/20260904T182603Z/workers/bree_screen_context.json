@@ -1,0 +1,172 @@
+{
+  "task_id": "bree_screen_context",
+  "task_type": "screen_context",
+  "status": "partial",
+  "findings": [
+    "Signal is strong_buy with 9/22 models passing (models_passed=9, model_count=22); composite_score 0.8146 exceeds sector_composite_score 0.766 (docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json).",
+    "Families 4/5 pass: cheapness, dividend, garp, risk; quality family implicitly failed (family_count=5, families_passed=4; quality not in passed_families) (screening_snapshot.json).",
+    "passed_models lists nine names including Earnings Quality and Financial Health; failed_models is [] and model_failures is {} despite 13 of 22 models not passing (screening_snapshot.json).",
+    "conviction_score is 0.8824 (~88%) but summary text states 'Conviction 63% (persistent, 12w at signal, stable)' — internal inconsistency within the same snapshot (screening_snapshot.json).",
+    "Signal persistence: weeks_at_signal=12, signal_trend=stable, stability_label=persistent, signal_since=2026-08-02 (screening_snapshot.json).",
+    "Timing: timing_signal=neutral, timing_score=0.625, rsi_14≈43.0, price_vs_sma200_pct≈+3.86%; summary notes uptrend (price > 50 > 200 MA) and MACD momentum weakening (screening_snapshot.json).",
+    "trade_plan is null while summary embeds core limit £327.08, tactical limit £317.87, stop £298.60, target £351.33 — magnitudes consistent with GBX/pence not Street £4.05–£5.00 targets (screening_snapshot.json).",
+    "research_verdict=accumulate, research_risk_level=medium, research_confidence=0.74 conflicts with signal/adjusted_signal=strong_buy and conviction_score 0.882 (screening_snapshot.json).",
+    "action_note repeats the same 'Research: Accumulate, Medium risk — …' boilerplate five times (pipe-delimited segments) (screening_snapshot.json).",
+    "key_metrics.FCF=133200000.0 (£133.2m) while cashflow_metrics, fcf, operating_cashflow and all fcf_dividend_coverage fields are null; yahoo_quarterly.ttm_cashflow_suppressed=true with reason quarterly_cashflow_empty (screening_snapshot.json).",
+    "All overlays false: healthcare_overlay, cyclical_exposure_overlay, cyclical_exposure_detected, fcf_basis_overlay, cash_conversion_overlay, dividend_yield_overlay, interim_quality_overlay, earnings_basis_overlay, conviction_timing_overlay, quality_family_avoid_gate, leverage_override (screening_snapshot.json).",
+    "Screen numbers that must be replaced or verified against filing-body GBP before use: key_metrics.FCF (£133.2m), summary trade-plan limits/stop/target (£327.08 / £317.87 / £298.60 / £351.33), and any dividend-coverage or net-debt claims implied by rationale but absent from snapshot fields (screening_snapshot.json).",
+    "Claims unsafe until reconciled: (1) FCF £133.2m vs filing/Yahoo cashflow; (2) progressive dividend and covenant headroom without fcf_dividend_coverage or net-debt figures in snapshot; (3) quality-family fail vs Earnings Quality model pass; (4) cyclical_exposure_overlay=false vs rationale citing cyclical GB weakness and M&A-driven leverage; (5) pence-denominated trade limits vs pound-denominated analyst targets; (6) strong_buy/88% conviction vs accumulate/74% research verdict and summary 63% conviction; (7) empty failed_models despite 13 non-passing models."
+  ],
+  "figures": [
+    {
+      "metric": "signal",
+      "value": "strong_buy",
+      "period": "snapshot",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "adjusted_signal also strong_buy"
+    },
+    {
+      "metric": "models_passed / model_count",
+      "value": "9 / 22",
+      "period": "snapshot",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "strong_buy 9/22"
+    },
+    {
+      "metric": "composite_score",
+      "value": "0.8146",
+      "period": "snapshot",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "summary rounds to 81%"
+    },
+    {
+      "metric": "sector_composite_score",
+      "value": "0.7664",
+      "period": "snapshot",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "summary rounds to sector-relative 77%"
+    },
+    {
+      "metric": "families_passed / family_count",
+      "value": "4 / 5",
+      "period": "snapshot",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "passed: cheapness, dividend, garp, risk; quality failed"
+    },
+    {
+      "metric": "conviction_score",
+      "value": "0.8824",
+      "period": "snapshot",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "summary text says 63% — mismatch"
+    },
+    {
+      "metric": "weeks_at_signal",
+      "value": "12",
+      "period": "snapshot",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "stable, persistent since 2026-08-02"
+    },
+    {
+      "metric": "rsi_14",
+      "value": "43.01",
+      "period": "snapshot",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "below neutral per summary"
+    },
+    {
+      "metric": "price_vs_sma200_pct",
+      "value": "3.86%",
+      "period": "snapshot",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "uptrend context in summary"
+    },
+    {
+      "metric": "P/E",
+      "value": "13.9",
+      "period": "key_metrics",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "P/B",
+      "value": "0.9",
+      "period": "key_metrics",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "highlights P/B=0.94 in summary"
+    },
+    {
+      "metric": "Yield",
+      "value": "4.5%",
+      "period": "key_metrics",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "ROE",
+      "value": "6.9%",
+      "period": "key_metrics",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": null
+    },
+    {
+      "metric": "FCF",
+      "value": "£133.2m",
+      "period": "key_metrics",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "133200000.0; cashflow_metrics/fcf null — filing-body GBP replacement required"
+    },
+    {
+      "metric": "EV/EBITDA",
+      "value": "7.2",
+      "period": "highlights (summary)",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "only in summary string, not key_metrics"
+    },
+    {
+      "metric": "FCF yield",
+      "value": "11.5%",
+      "period": "highlights (summary)",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "only in summary string"
+    },
+    {
+      "metric": "research_confidence",
+      "value": "0.74",
+      "period": "research overlay",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "research_verdict=accumulate, risk=medium"
+    },
+    {
+      "metric": "trade_plan core limit",
+      "value": "£327.08",
+      "period": "summary only",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "trade_plan field null; likely pence not pounds"
+    },
+    {
+      "metric": "trade_plan tactical limit / stop / target",
+      "value": "£317.87 / £298.60 / £351.33",
+      "period": "summary only",
+      "source_path": "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json",
+      "note": "trade_plan field null; pence-vs-pound reconciliation needed"
+    }
+  ],
+  "gaps": [
+    "failed_models empty — identities of 13 non-passing models not in snapshot",
+    "trade_plan null — structured limits only in summary prose",
+    "cashflow_metrics, fcf, operating_cashflow all null; TTM cashflow suppressed (quarterly_cashflow_empty)",
+    "No net-debt, OCF, dividend cash paid, or June M&A figures in snapshot — cannot reconcile leverage/M&A claims from rationale",
+    "FCF £133.2m not cross-checked to filing-body GBP or external Yahoo FY2025 FCF/OCF/dividends in this source",
+    "conviction_score 88% vs summary 63% — derivation of displayed conviction not explained",
+    "Quality family fail vs Earnings Quality model pass — gate logic not documented in snapshot",
+    "cyclical_exposure_overlay=false despite cyclical language in research_rationale",
+    "strong_buy vs research_verdict accumulate — no reconciliation rule in snapshot",
+    "Screening_inputs empty — provenance of key_metrics.FCF and valuation multiples not traceable"
+  ],
+  "sources_read": [
+    "docs/data/research_director_worker/BREE.L/20260904T182603Z/sources/screening_snapshot.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-221ffb0a-eb35-49e1-adeb-b60b5ed5060c"
+}

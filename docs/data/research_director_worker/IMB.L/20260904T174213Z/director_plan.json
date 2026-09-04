@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "source": "director",
+  "open_questions": [
+    "Screen FCF is tagged currency=USD on an LSE tobacco name whose Yahoo annuals (revenue 32,171m, NI 2,071m, OCF 3,627m) match Imperial’s sterling scale, while canonical/filing-aligned FCF is 3,166m versus screen_ttm / key_metrics FCF 2,502m with divergence_flagged false and TTM cashflow suppressed — is the 13.1% FCF-yield / 11.8× P/E / 2.03× net dividend-cover stack a unit/FX or FCF-definition error, and which filing-body GBP FCF (OCF−capex vs company-adjusted, leaf/inventory, leases) should replace Yahoo before endorsing cheapness or the strong_buy?",
+    "Yahoo FY2025 NI fell 2,613m → 2,071m and basic EPS 3.007 → 2.511 while the tax charge jumped 282m → 908m (rate ~9% → ~29%); screen earnings growth is −16.5% statutory / −24.1% adjusted and Lynch PEG failed, yet Quality Value, Buffett Quality, Magic Formula, Neff PEGY and Earnings Quality still passed on ROE 37.2% as equity shrank 5,442m → 4,824m and retained earnings went more negative (−479m → −1,205m) — is the quality/GARP pass buyback-inflated ROE on a one-off tax/earnings trough, or a durable tobacco cash engine?",
+    "D/E is 243.8%, Yahoo net debt rose 7,619m → 8,155m (total debt 9,996m, leases only 402m), current ratio is 0.74 and working capital −3,042m, with tax payable 7,329m sitting inside current liabilities; Financial Health, Graham, Schloss, Moat and Piotroski (6/9: ROA, leverage, asset-turnover fails) already rejected leverage/liquidity while dual_leverage_display and leverage_override are false — what is group net debt on the annual-report definition, how much of the current-ratio fail is tobacco excise rather than true liquidity stress, and can Quality/FCF-yield still be trusted at this leverage?",
+    "FY2025 cash returns were buybacks 1,235m + dividends paid 1,558m against FCF 3,166m, while net long-term debt issuance was +664m and ordinary shares fell 946.7m (FY2022) → 805m (FY2025); news cites a live £1.45bn programme with August prints ~2,497–2,767p versus the screen core/tactical limits £2,496.78 / £2,395.90 — how much of the 11.8× P/E, 6.5% yield, Piotroski ‘no dilution’ pass and FCF yield is capital-return / share-shrinkage, and are dividend-plus-buyback still covered by filing FCF after leaf inventory, NGP investment, pensions and incremental debt?",
+    "Combustible volumes are in structural decline while news (not filings) claims H1 2026 tobacco+NGP net-revenue growth, NGP/share challenges, a ≥$150m Black Buffalo pouch deal, a £320m-by-2030 savings plan with thousands of US/Europe job cuts, a UK youth cigarette-ban dip, and Morningstar combustibles/pouch concern — what do the FY2025 group accounts actually say on tobacco net revenue vs duty-paid, volume/price/mix, NGP sales/losses/investment, and contingent litigation/regulation, and is Strategy 2030 still funded by a shrinking combustible cash pool?",
+    "No period=interim or trading_update body exists in this catalog (H1 2026 results, Black Buffalo, jobs/savings and FY2026 outlook live only as news headlines from May–August 2026) — which FY2026 guidance, H1 statutory P&L/cash/net-debt, remaining buyback authority, and NGP KPIs must the memo treat as unknown until those RNSs are ingested?",
+    "Goodwill+intangibles are 16,208m against equity 4,824m (tangible book −11,384m) and P/B is 5.0, so Graham/Schloss/Deep Value failed as expected — do the FY2025 accounts show impairment triggers, brand-life assumptions, or MSA/illicit-trade provisions that would break the 13.1% FCF-yield / 37% ROE story if combustibles or NGP underperform?",
+    "The screen is a 1-week new strong_buy (conviction 0.454, RSI 38, price −0.15% vs SMA200, timing=accumulate) after an April 2026 ~7% gap that news tied to Middle East / outlook reaffirmation / youth-ban, while late-August buybacks printed through the core limit — has the name already been accumulated at the limit ladder, and is the signal stale versus the missing H1 2026 print?",
+    "Defined-benefit plans show a 801m non-current pension liability and a 314m surplus asset on the Yahoo FY2025 balance sheet — what do filings say about net IAS 19 position, contribution commitments, and whether pension cash sits ahead of the 6.5% dividend?"
+  ],
+  "meta_reflection": [
+    {
+      "topic": "evidence_ladder",
+      "observation": "Filings-first order is adequate in principle (70/71 bodies present) but not in practice for IMB.L: all 8 period=annual hits are Companies House group accounts (2019–2026 filings), interim=0 and trading_update=0, and the 63 period=other items are almost entirely Transaction-in-Own-Shares plus TVR/holdings/PDMR. yahoo_quarterly_cashflow is on the ladder but empty (TTM suppressed); alternate_news and ir_presentation_metrics are dead/absent steps. H1 2026, Black Buffalo, and the August jobs/savings plan therefore fall through to headline-only news, which the ladder ranks below empty quarterlies.",
+      "priority": "high"
+    },
+    {
+      "topic": "task_schema",
+      "observation": "Four worker types plus a five-task cap would normally force annual+interim+news+screen+gap. Here there is no tagged interim body, so a second summarize_filing_body cannot be assigned without inventing a source or smuggling a buyback RNS. summarize_filing_body cannot carry period=annual|interim|trading_update|corporate_action, and there is no type to cluster ~50 own-share RNSs, parse an IR deck, or reconcile the 2,502m vs 3,166m FCF bases. gap_inventory can only list the missing H1/IR/NGP bodies — it cannot fill them.",
+      "priority": "high"
+    },
+    {
+      "topic": "methodology",
+      "observation": "The screen emits strong_buy (13/22, five families including quality/GARP/dividend) while earnings growth is negative, D/E is 244%, current ratio is 0.74, Piotroski is 6/9, and Financial Health/Moat/Graham fail. Overlays are all false: fcf_basis_overlay despite 2,502m vs 3,166m FCF, leverage_override/dual_leverage_display despite net debt 8.2bn, dividend_yield_overlay on a 6.5% levered tobacco yield, cash_conversion_overlay, and cyclical_exposure on a secular volume-decline staple. Quality/Buffett can pass on 37% ROE created by shrinking book equity. The director–worker loop is being asked to qualitatively veto a mechanically clean headline that sector/leverage/FCF overlays failed to brake.",
+      "priority": "high"
+    },
+    {
+      "topic": "monitoring",
+      "observation": "weeks_at_signal=1 / stability=new / conviction=0.454 already mark a fresh print, but there is no watch schema for: ingest of the missing H1 2026 statutory RNS, remaining £1.45bn buyback capacity versus live prints versus the £2,496.78/£2,395.90 ladder, Black Buffalo close/integration, job-cut cash costs versus the £320m-by-2030 savings claim, FY2026 outlook checkpoints, or UK generational-ban / NGP regulation. RSI 38 + below-SMA200 timing is not a substitute for those monitors.",
+      "priority": "high"
+    },
+    {
+      "topic": "memo_structure",
+      "observation": "A generic FINANCIAL REVIEW / RISKS split will blend duty-paid revenue with tobacco net revenue and will not force combustibles volume/price versus NGP, statutory versus adjusted, excise-distorted working capital, or company versus IFRS-16 net debt. Without explicit CAPITAL RETURNS, NGP TRANSITION, and LITIGATION/REGULATION slots, workers will treat the daily £1.45bn buyback flood and Kalkine income pieces as colour. No required slot for reporting-currency hygiene (snapshot USD vs sterling accounts) or for ‘H1 exists only in news’. Director catalog pass can form these questions without drafting the memo.",
+      "priority": "medium"
+    },
+    {
+      "topic": "other",
+      "observation": "filings_index.body_path values point at docs/data/research/IMB.L/sources/... rather than this trial snapshot tree. sources_used are only companies_house + investegate_direct — the IR allowlist and any FY/H1 results RNS before the June 2026 Investegate window did not land. news_manifest (~71 items) is dominated by Kalkine/TipRanks/Globe buyback reprints, BAT+IMB cannabis pairing, and ASX:IMB Intelligent Monitoring Group collisions. financials_annual.json is Yahoo-shaped (FY2021–2025; quarterly_income/quarterly_cashflow empty; no root currency field). NCAV missing is expected for this model, not an IMB-specific hole.",
+      "priority": "medium"
+    }
+  ],
+  "procedural_suggestions": [
+    {
+      "area": "ingest",
+      "summary": "Deepen Investegate so FY results, H1 2026 interims, acquisition and restructuring RNSs are not dropped when the recency window is buyback-dominated; fire the IR allowlist for Imperial annual report / results PDFs; retag those as period=annual|interim|trading_update|corporate_action. Point body_path at the trial snapshot tree. Deduplicate daily Transaction-in-Own-Shares before counting filing coverage. Reject Google News hits whose issuer is ASX:IMB (Intelligent Monitoring Group).",
+      "priority": "high"
+    },
+    {
+      "area": "scoring",
+      "summary": "Fail-closed or flag when screening_snapshot.fcf.currency is USD on a GBP LSE reporter, and set fcf_definition_divergence whenever screen_ttm (2,502m) disagrees with filing_aligned (3,166m). Do not pass quality/GARP/Buffett on 37% ROE while earnings growth is negative and book equity is shrinking via buybacks. Enable a tobacco-excise overlay so current-ratio < 2 is not treated as ordinary industrial illiquidity without netting duty payables, and surface dual leverage when D/E > 200% even if leases are small.",
+      "priority": "high"
+    },
+    {
+      "area": "prompt",
+      "summary": "Require the annual worker to extract reporting currency and entity (03236483 group), tobacco net revenue versus duty-paid, combustibles volume/price/mix versus NGP, statutory versus adjusted EBIT/EPS, OCF/capex/FCF definition, cash versus financial debt versus leases versus company net debt, excise/tax payables inside working capital, dividend declared versus cash paid and cover versus filing FCF, buyback authority versus cash spent versus share count, pension, goodwill/impairment, and litigation/regulation language. Require news workers to cluster £1.45bn buyback reprints into one line, keep H1/Black Buffalo/jobs/BofA/Morningstar/April-gap items as headline-only, and discard ASX:IMB and cannabis-pair filler.",
+      "priority": "high"
+    },
+    {
+      "area": "sources",
+      "summary": "Ingest the H1 2026 interim results RNS/PDF (news-dated ~12 May 2026), the FY2025 results RNS if distinct from the 7 Feb 2026 CH accounts, the Black Buffalo RNS, and the August 2026 jobs/£320m-savings announcement. Populate alternate_news or drop it from the ladder. Parse interim cash-flow from filing bodies to replace empty Yahoo quarterly_income/quarterly_cashflow instead of only suppressing TTM. Expose ir_presentation_metrics when Imperial IR decks exist.",
+      "priority": "high"
+    },
+    {
+      "area": "orchestration",
+      "summary": "Select the latest dated annual *group* body (CH 03236483 filed 2026-02-07) — not 2019–2024 CH. When interim_count=0, do not invent or retag a buyback/TVR RNS as interim; keep the second filing slot empty and let gap_inventory record the missing H1. Raise the cap or add trading_update / rns_cluster / corporate_action types so a later-ingested H1, acquisition, or savings RNS is not dropped.",
+      "priority": "medium"
+    },
+    {
+      "area": "schema",
+      "summary": "Allow summarize_filing_body to carry period=annual|interim|trading_update|corporate_action. Add reporting_currency, tobacco_net_vs_duty_paid, ngp_mix, excise_in_working_capital, and fcf_basis_used on the screening snapshot. Remap filings_index.body_path into the trial sources/ tree. Validate FCF-yield inputs against listing CCY and a sanity band versus market cap.",
+      "priority": "medium"
+    },
+    {
+      "area": "monitoring",
+      "summary": "For weeks_at_signal<=1 tobacco strong_buys, require the memo to compare live price versus limit ladder versus latest buyback print, and emit watches (next true H1/FY body ingest, remaining £1.45bn buyback, NGP/Black Buffalo, job-cut cash cost, FY2026 outlook, UK generational-ban). Do not treat stability=new or RSI-oversold timing as a reason to skip those checks.",
+      "priority": "medium"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "imb_annual_fy2025",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/ch_03236483_MzUwMzU1MzMxOGFkaXF6a2N4.txt",
+      "focus": "Companies House group accounts for Imperial Brands PLC 03236483 filed 2026-02-07 (period=annual; entity_type=consolidated). This is the latest annual body — do not use 2019–2025 CH files. Extract reporting currency; tobacco net revenue vs duty-paid/total revenue; statutory vs adjusted operating profit/EBIT/EPS and the FY2024 comparative (Yahoo NI 2,613m→2,071m, tax 282m→908m); combustibles volume/price/mix vs NGP; OCF, capex, FCF definition; cash vs financial debt vs IFRS-16 leases vs reported net debt; excise/tax payables and working-capital notes; dividend declared vs cash paid; buybacks and share count; pension surplus/deficit and contributions; goodwill/intangibles and impairment language; litigation/regulation/contingent liabilities; FY outlook if stated. Prefer these figures over Yahoo (FY2025 Yahoo revenue 32,171m, NI 2,071m, OCF 3,627m, FCF 3,166m, buybacks 1,235m, dividends paid 1,558m; screen TTM FCF 2,502m tagged USD). Do not open other files.",
+      "priority": 1
+    },
+    {
+      "id": "imb_screen_context",
+      "type": "screen_context",
+      "target": "screening_snapshot.json",
+      "focus": "Explain strong_buy 13/22, composite 0.753, sector-relative 0.701, families cheapness/quality/dividend/GARP/risk versus failed models (Graham/Schloss/Deep Value on P/B 5.0 and leverage; Lynch PEG on negative growth; Moat on ROA/margins/leverage; Piotroski 6/9 ROA+leverage+turnover; Financial Health on D/E 243.8% and current ratio 0.74). Flag conviction 0.454 / 1-week new signal, timing=accumulate, RSI 38, price −0.15% vs SMA200, trade-plan limits £2,496.78 / £2,395.90, all overlays false including fcf_basis/leverage/dividend/cash_conversion, TTM cashflow suppressed, FCF bases filing_aligned 3,166m vs screen_ttm 2,502m with currency=USD and divergence_flagged false, yield 6.5%, ROE 37.2%, earnings growth −16.5%/−24.1%. List which screen numbers must be replaced by filing-body sterling and which claims are unsafe until FCF currency/definition and excise-adjusted liquidity are reconciled.",
+      "priority": 2
+    },
+    {
+      "id": "imb_news_digest",
+      "type": "digest_news_manifest",
+      "target": "news_manifest.json",
+      "focus": "Cluster ~71 headlines: keep H1/Q2 2026 earnings-call notes (~12 May: on-track FY targets, US/Australia one-offs, NGP mix); Black Buffalo ≥$150m pouch deal (~27 May); Strategy 2030 / strong FY2026 start / NGP (~2 Jun); thousands of US/Europe job cuts and £320m savings by 2030 (~10 Aug); April 2026 ~7% gap with outlook reaffirmed / youth-ban / Middle East; BofA upgrade (~15 Jul); Morningstar undervalued / combustibles-pouch concern; Simply Wall St ex-dividend. Collapse Kalkine/TipRanks/Globe daily £1.45bn buyback reprints (prints ~2,497–2,767p) into one programme note. Discard ASX:IMB Intelligent Monitoring Group / ADT UK, BAT+IMB cannabis pairing, and ETF/income-list filler. Google News items are RSS titles — do not invent article-body or H1 statutory figures.",
+      "priority": 3
+    },
+    {
+      "id": "imb_gap_inventory",
+      "type": "gap_inventory",
+      "target": "source_inventory",
+      "focus": "Catalog thin/missing steps: yahoo_quarterly_cashflow empty, yahoo_quarterly_income empty (inside financials_annual.json), ir_presentation_metrics absent, alternate_news absent, TTM cashflow suppressed. Note period coverage annual=8 / interim=0 / trading_update=0 — no H1 2026 statutory interim or FY results RNS is in this catalog, so do not invent those sources. Highest-value unread or omitted bodies: prior CH annuals (ch_03236483_MzQ1NDA4ODc4MWFkaXF6a2N4.txt FY2024-era and older) only if YoY notes in the 2026-02-07 file are insufficient; latest TVR 2379eadea3cfebe2.txt and a sample own-share body for residual £1.45bn capacity — not substitutes for H1. Note filings_index.body_path points outside this trial tree; macro_context.json and screen_run_manifest.json are present but unused. State what the memo must leave unknown: H1 2026 statutory P&L/cash/net-debt, Black Buffalo consideration/close, job-cut cash cost vs £320m savings, remaining buyback authority, FY2026 numeric guidance, NGP KPIs, IR-slide metrics.",
+      "priority": 4
+    }
+  ],
+  "director_agent_id": "agent-7cb56305-861b-43ae-a8e4-b850399cd587"
+}

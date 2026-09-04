@@ -1,0 +1,185 @@
+{
+  "task_id": "gftu_gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "financials_annual.json: quarterly_income and quarterly_cashflow are empty objects; cashflow_metrics flags ttm_cashflow_suppressed=true with reason quarterly_cashflow_empty — no Yahoo quarterly series or TTM cash-flow in this source tree.",
+    "No alternate_news file present under sources; news coverage is limited to news_manifest.json and news_batch_*.json (Google News only).",
+    "filings_index.json lists 77 filings with bodies, but every body_path references docs/data/research/GFTU.L/... rather than this trial path (research_director_worker/GFTU.L/20260904T173351Z/...); local copies exist under filings/bodies/.",
+    "No H1 2026 statutory interim results body in filings_index (five interim entries are FY2025 final results, H1 2025, CME deck, July 2026 trading PDF, and CME presentation); July 2026 trading update states half-year results due 3 September 2026.",
+    "FY2025 final results (ir_c6a7de8af8b2c4c5.txt): revenue £2,520m (+10.4%); adjusted operating profit £190.2m (+7.1%); adjusted EPS 75.4p (+5.1%); full-year dividend 37.75p; adjusted ROCE 10.9%; net cash before IFRS 16 leases £274.0m; company-defined free cash flow £168.3m; Jan–Feb 2026 group LFL revenue +0.2%.",
+    "H1 2025 interim (ir_7216cf1b38542321.txt): revenue £1,252m (+10.1%); adjusted operating profit £91.0m (+9.5%); adjusted EPS 35.5p; interim dividend 10.75p; net cash before leases £245.8m; statutory operating profit £87.7m.",
+    "May 2026 trading update (db602b475451c6b6.txt): four months to 30 April 2026 revenue £830.1m (+3.2%); group LFL flat; GB LFL (5.0%); Cygnum completed 31 March 2026; Mercaluz completed 30 April 2026; FY2026 adjusted operating profit guidance £190m–£200m; eighth buyback returned £25m (2.75m shares at £9.10 avg).",
+    "July 2026 trading update (8a4381478b93c824.txt): H1 2026 revenue £1.34bn (+6.7%, +4.7% cc); group LFL +0.6%; GB LFL (5.1%); FY2026 adjusted operating profit guidance £190m–£200m maintained; ninth £25m buyback launched 30 June 2026; cumulative buybacks since May 2022 £457.6m (52.51m shares, 21.8% share-count reduction).",
+    "CME RNS (d1505b7c2147095c.txt) and deck (ir_f5e30b27615e87cf.txt): medium-term targets — adjusted EPS CAGR >10% (2025–2030, base 73.8p ex-property); cumulative FCF >£850m (2026–2030); ROCE ~13% by 2030; lease-adjusted net debt/EBITDA 1.0x–2.0x; dividend cover 2.0x–3.0x plus incremental returns.",
+    "CME deck FY25 geographic revenue mix (also in ir_presentation_metrics.json, unused): GB 30.4%, Island of Ireland 42.5%, Northern Europe 18.6%, Iberia 8.5%.",
+    "Mercaluz completion (e8c18785a6be3251.txt): acquired 30 April 2026; Spanish HVAC distributor with c.10,500 customers in 2025; no purchase price or return metrics disclosed.",
+    "Share buyback programme (f91caa386b5eb78c.txt): up to £25.0m from 30 June 2026 to 31 October 2026; max 18,866,404 shares under AGM authority.",
+    "Latest CH entity filing (ch_02886378_MzUyNjUwMzUyNWFkaXF6a2N4.txt): Grafton Group (UK) PLC parent-only accounts FY2025; profit after tax £47.7m; £36.6m investment impairment; principal risks are intercompany receivables collectability and subsidiary investment carrying values — not consolidated group performance.",
+    "macro_context.json, screen_run_manifest.json and screening_snapshot.json present but unused: screen signal strong_buy (11/22 models); FCF yield model failed (0.85% score); screening uses company-adjusted FCF £168.3m not Yahoo £205.6m."
+  ],
+  "figures": [
+    {
+      "metric": "Revenue",
+      "value": "£2,520m",
+      "period": "FY2025",
+      "source_path": "filings/bodies/ir_c6a7de8af8b2c4c5.txt",
+      "note": "Total operations, reported final results"
+    },
+    {
+      "metric": "Adjusted operating profit",
+      "value": "£190.2m",
+      "period": "FY2025",
+      "source_path": "filings/bodies/ir_c6a7de8af8b2c4c5.txt",
+      "note": "Before property profit £184.3m"
+    },
+    {
+      "metric": "Adjusted EPS",
+      "value": "75.4p",
+      "period": "FY2025",
+      "source_path": "filings/bodies/ir_c6a7de8af8b2c4c5.txt",
+      "note": "Adjusted basis per company definition"
+    },
+    {
+      "metric": "Net cash (before IFRS 16 leases)",
+      "value": "£274.0m",
+      "period": "FY2025",
+      "source_path": "filings/bodies/ir_c6a7de8af8b2c4c5.txt",
+      "note": "Strength of balance sheet headline"
+    },
+    {
+      "metric": "Free cash flow (company definition)",
+      "value": "£168.3m",
+      "period": "FY2025",
+      "source_path": "filings/bodies/ir_c6a7de8af8b2c4c5.txt",
+      "note": "After lease payments and tax; differs from Yahoo FCF"
+    },
+    {
+      "metric": "Operating cash flow",
+      "value": "£251,827,000",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "Yahoo annual cash_flow block"
+    },
+    {
+      "metric": "Free cash flow",
+      "value": "£205,620,000",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "Yahoo definition; screening_snapshot uses company-adjusted £168.3m instead"
+    },
+    {
+      "metric": "Revenue",
+      "value": "£1,252m",
+      "period": "H1 2025",
+      "source_path": "filings/bodies/ir_7216cf1b38542321.txt",
+      "note": "Six months ended 30 June 2025"
+    },
+    {
+      "metric": "Adjusted operating profit",
+      "value": "£91.0m",
+      "period": "H1 2025",
+      "source_path": "filings/bodies/ir_7216cf1b38542321.txt",
+      "note": "+9.5% vs H1 2024"
+    },
+    {
+      "metric": "Revenue",
+      "value": "£830.1m",
+      "period": "Four months to 30 April 2026",
+      "source_path": "filings/bodies/db602b475451c6b6.txt",
+      "note": "+3.2% reported; LFL flat"
+    },
+    {
+      "metric": "Revenue",
+      "value": "£1.34bn",
+      "period": "H1 2026 (trading update, unaudited)",
+      "source_path": "filings/bodies/8a4381478b93c824.txt",
+      "note": "+6.7% reported; +4.7% constant currency; not statutory interim accounts"
+    },
+    {
+      "metric": "Group LFL revenue change",
+      "value": "+0.6%",
+      "period": "H1 2026",
+      "source_path": "filings/bodies/8a4381478b93c824.txt",
+      "note": "Constant currency"
+    },
+    {
+      "metric": "FY2026 adjusted operating profit guidance",
+      "value": "£190m–£200m",
+      "period": "FY2026",
+      "source_path": "filings/bodies/8a4381478b93c824.txt",
+      "note": "Maintained July 2026; consensus circa £193.7m cited"
+    },
+    {
+      "metric": "Adjusted EPS CAGR target",
+      "value": ">10%",
+      "period": "2025–2030",
+      "source_path": "filings/bodies/d1505b7c2147095c.txt",
+      "note": "Base 73.8p ex-property profit per CME materials"
+    },
+    {
+      "metric": "Cumulative FCF target",
+      "value": ">£850m",
+      "period": "2026–2030",
+      "source_path": "filings/bodies/d1505b7c2147095c.txt",
+      "note": "Medium-term framework headline"
+    },
+    {
+      "metric": "ROCE target",
+      "value": "~13%",
+      "period": "2030",
+      "source_path": "filings/bodies/d1505b7c2147095c.txt",
+      "note": "Medium-term framework headline"
+    },
+    {
+      "metric": "GB revenue share",
+      "value": "30.4%",
+      "period": "FY2025",
+      "source_path": "ir_presentation_metrics.json",
+      "note": "Extracted from CME deck; parse_confidence medium"
+    },
+    {
+      "metric": "Profit after tax (parent entity)",
+      "value": "£47,657,308",
+      "period": "FY2025",
+      "source_path": "filings/bodies/ch_02886378_MzUyNjUwMzUyNWFkaXF6a2N4.txt",
+      "note": "Grafton Group (UK) PLC only; investment holding company"
+    },
+    {
+      "metric": "Investment impairment",
+      "value": "£36.6m",
+      "period": "FY2025",
+      "source_path": "filings/bodies/ch_02886378_MzUyNjUwMzUyNWFkaXF6a2N4.txt",
+      "note": "Parent-company entity risk signal"
+    }
+  ],
+  "gaps": [
+    "H1 2026 statutory interim P&L, balance sheet and cash-flow statement absent — only unaudited trading updates available; statutory H1 2026 results scheduled 3 September 2026 per July 2026 RNS.",
+    "Yahoo quarterly_income and quarterly_cashflow empty in financials_annual.json; TTM cash-flow suppressed — memo cannot cite rolling quarterly cash metrics from this source.",
+    "alternate_news source absent — no supplementary news feed beyond Google News batches.",
+    "Mercaluz acquisition consideration, financing and expected financial returns not disclosed in completion RNS (e8c18785a6be3251.txt).",
+    "CME headline 2030 targets are stated in RNS/deck, but no audited year-by-year revenue/EBITA bridge or segment profit path to 2030 in structured form; memo cannot quantify interim milestones beyond qualitative deck slides.",
+    "filings_index body_path pointers target docs/data/research/GFTU.L trial tree, not this worker snapshot path — cross-reference risk if memo pipeline resolves paths literally.",
+    "ir_presentation_metrics.json (geographic revenue splits), macro_context.json (GBP/USD, FTSE markers) and screen_run_manifest.json (strong_buy screen context) present in sources but not ingested by prior memo steps.",
+    "Latest CH filing (ch_02886378_MzUyNjUwMzUyNWFkaXF6a2N4.txt) is parent-only entity accounts filed 24 June 2026 — not a substitute for missing H1 2026 consolidated interim."
+  ],
+  "sources_read": [
+    "financials_annual.json",
+    "filings/filings_index.json",
+    "macro_context.json",
+    "ir_presentation_metrics.json",
+    "screen_run_manifest.json",
+    "screening_snapshot.json",
+    "filings/bodies/ir_c6a7de8af8b2c4c5.txt",
+    "filings/bodies/ir_7216cf1b38542321.txt",
+    "filings/bodies/db602b475451c6b6.txt",
+    "filings/bodies/8a4381478b93c824.txt",
+    "filings/bodies/d1505b7c2147095c.txt",
+    "filings/bodies/ir_f5e30b27615e87cf.txt",
+    "filings/bodies/e8c18785a6be3251.txt",
+    "filings/bodies/f91caa386b5eb78c.txt",
+    "filings/bodies/ch_02886378_MzUyNjUwMzUyNWFkaXF6a2N4.txt"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-d42c3229-8824-47f5-b0b9-c7841b937c78"
+}

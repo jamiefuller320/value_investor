@@ -1,6 +1,6 @@
 # Grafton Group plc (GFTU.L) — Research memo
 
-_Version 1 · Updated 2026-08-30T08:26:11.896678+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T17:42:11.931651+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
 Grafton Group plc is a geographically diversified European distributor of construction-related products and solutions, operating across the Island of Ireland, Great Britain, Northern Europe and Iberia, with Woodie’s as Ireland’s leading home improvement retailer. The quantitative screen rates GFTU.L as a strong buy (10/22 models; composite score 82%), driven by cheapness (P/E 12.7, P/B 1.2), dividend yield (3.6%), FCF generation, Piotroski F-Score 8/9 and financial health (current ratio 2.1). Primary filings confirm a net-cash balance sheet (£274.0m before IFRS 16 leases at FY2025) and sustained capital returns, but sub-12% ROE and regional cyclicality — especially Great Britain — temper the earnings-growth narrative. The central debate is whether Iberia/Ireland diversification and M&A can offset a structurally weak UK RMI market long enough for the valuation discount to close.

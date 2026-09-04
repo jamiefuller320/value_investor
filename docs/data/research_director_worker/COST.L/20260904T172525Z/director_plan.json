@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "orchestration_version": 1,
+  "source": "director",
+  "open_questions": [
+    "FY2022–FY2025 Yahoo annuals show revenue falling from ~£1.42bn to ~£1.05bn while operating profit and FCF rose — is the screen’s quality/GARP pass a durable higher-margin mix shift (consultancy/services vs construction) or a shrinking, de-risked book that eventually caps growth?",
+    "H1 2026 RNS/call headlines claim an “inflection point” and a ~£7bn forward work position; how much of that is legally contracted vs preferred-bidder/framework places (e.g. the £700m TfL win is a framework seat), and what is the conversion/timing risk into FY2026–28 revenue?",
+    "Do the FY2025 Companies House accounts and H1 2026 interim disclose contract-risk items typical of a UK contractor — onerous-contract provisions, claims/unagreed variations, retentions, performance bonds, joint-venture recourse, and fixed-price vs cost-reimbursable mix — that the cheapness/quality models ignore?",
+    "How free is the ~£189m cash? Restricted cash was ~£26m at FY2025, current ratio is 1.44 (fails Graham Defensive), FY2025 working-capital outflow was ~£9.5m, and TTM cash-flow is suppressed because quarterly cashflow is empty — what do statutory cash notes and H1 cash say about bonds, escrow, and cash conversion?",
+    "Defined-benefit pension surplus is ~£60m on the FY2025 Yahoo balance sheet — is that surplus recoverable, and what deficit/contribution risk appears if discount rates fall?",
+    "Ongoing 2026 “Transaction in Own Shares” plus ~£12m FY2025 buybacks shrink the share count (Piotroski “no dilution” passed) while the signal is only 1 week old — how much of the 15.5x P/E, FCF-yield, and EPS-growth (~22%) scores is buyback-inflated rather than operating?",
+    "Screen FCF is tagged currency=USD on a GBP LSE name (canonical £48.5m filing-aligned vs screen TTM £49.6m) — do filing-body sterling figures confirm the multiples, or is there a unit/FX integrity error in the strong-buy score?",
+    "Cyclical/public-capex overlay is off despite water AMP, transport/HS2 overrun news, energy/nuclear, and UK Spending Review dependence — what do FY2025/H1 filings say about customer concentration (National Highways, TfL, water majors) and FY2026 guidance vs the May 2026 AGM trading update?",
+    "Post-H1 press cites analyst value ~£2.57 vs the screen’s core limit £2.15 / tactical £1.89 — has the H1 print already rerated the name so the “new strong buy” is stale relative to live price?",
+    "Kalkine “UK Defence Stocks: COST…” vs Costain’s civil-infrastructure identity — is there a real nuclear/defence mix change in the filings, or ticker-collision noise that must not inform the memo?"
+  ],
+  "meta_reflection": [
+    {
+      "topic": "other",
+      "observation": "Evidence ladder correctly ranks filing bodies first, and COST.L has 8 annual + 1 interim + 1 trading-update bodies. But investegate_resolved ingested non-issuer RNSs via the token “cost” (Atlantic Lithium, Cadence Minerals, Anglo Asian Mining, Capita, Pennon, United Utilities). Workers reading filings_index by headline will contaminate a Costain memo unless issuer ticker/company number is a hard filter.",
+      "priority": "high"
+    },
+    {
+      "topic": "other",
+      "observation": "News query `\"Costain Group PLC\" OR COST stock UK` floods the manifest with Costco (COST), Tesco/BT/Vodafone/ISA “cost” pieces. Alternate_news is a listed thin/missing step, so there is no clean second news channel. Digest prompts must require issuer=Costain and discard substring hits; otherwise qualitative tone will be garbage.",
+      "priority": "high"
+    },
+    {
+      "topic": "methodology",
+      "observation": "Ladder + four task types + 5-task cap is adequate for annual/interim/news/screen/gaps, but drops the 2026-05-14 AGM trading update and the June–July contract RNSs (TfL, West Winch, United Utilities) that sit in filings_index as period=other. For a contractor, those are first-class evidence, not optional colour.",
+      "priority": "high"
+    },
+    {
+      "topic": "monitoring",
+      "observation": "conviction_score 0.442, weeks_at_signal=1, stability=new, timing=neutral — the screen already knows this is a fresh print. Overlays are all false, including cyclical_exposure, cash_conversion, and interim_quality, on a UK infrastructure contractor just after H1. Sector overlays are not firing where they should.",
+      "priority": "high"
+    },
+    {
+      "topic": "other",
+      "observation": "financials_annual.json is Yahoo-shaped (years 2021–2025; quarterly_income/quarterly_cashflow empty; ttm_cashflow_suppressed). screening_snapshot.fcf.currency is USD. There is no schema field for order book, secured vs preferred, or framework conversion — the exact quantities a Costain verify-before-trade memo needs. NCAV is flagged missing, which is expected for this model, not a COST.L-specific hole.",
+      "priority": "medium"
+    },
+    {
+      "topic": "task_schema",
+      "observation": "Allowed types (summarize_filing_body, digest_news_manifest, screen_context, gap_inventory) cannot express “summarize trading_update” or “cluster contract-win RNSs” without overloading an annual/interim focus string. Director cannot assign IR-metric or quarterly-cashflow reads because those sources are thin/absent — gap_inventory is the right escape hatch, but it only inventories, it does not fill.",
+      "priority": "medium"
+    },
+    {
+      "topic": "evidence_ladder",
+      "observation": "Ladder order is sound (filings_bodies → filings_index → yahoo_financials → yahoo_quarterly_cashflow → news → alternate_news → screening → screen_run → ir_metrics → macro). Thin steps match the inventory: no ir_presentation_metrics file, no alternate_news file, empty Yahoo quarterlies. IR allowlist in filings_index.note did not fire despite an Investor Meet Company RNS — ingest gap, not ladder-order gap.",
+      "priority": "medium"
+    },
+    {
+      "topic": "memo_structure",
+      "observation": "Director-only catalog pass can form ticker-specific questions (revenue/profit divergence, framework vs backlog, cash restrictedness, pension, buybacks, FX tag) without drafting the memo. Blind spot: body_path in filings_index points at docs/data/research/COST.L/... not the trial snapshot tree; workers need an explicit remap rule or they will miss bodies.",
+      "priority": "medium"
+    },
+    {
+      "topic": "other",
+      "observation": "Piotroski 8/9 fails only asset turnover — consistent with falling revenue — yet the name is still strong_buy across cheapness/quality/dividend/GARP/risk. Scoring lacks a contractor-specific WIP/claims/cash-conversion brake, so the director–worker loop is being asked to qualitatively veto a mechanically clean screen.",
+      "priority": "medium"
+    }
+  ],
+  "procedural_suggestions": [
+    {
+      "area": "ingest",
+      "summary": "Reject investegate_resolved (and Google News) hits unless issuer ticker is COST / costain-group--cost or Companies House number 01393773. Token “cost” and US ticker COST are unsafe keys for this LSE name.",
+      "priority": "high"
+    },
+    {
+      "area": "prompt",
+      "summary": "Worker and memo prompts should hard-ban using filings whose URL path is not costain-group--cost, and news titles that lack “Costain”. State that framework awards are not booked revenue.",
+      "priority": "high"
+    },
+    {
+      "area": "sources",
+      "summary": "Pull IR slide/Investor Meet metrics (RNS already flags the event) and parse H1 interim cash-flow from the filing body to replace empty Yahoo quarterly_income/quarterly_cashflow instead of only suppressing TTM.",
+      "priority": "high"
+    },
+    {
+      "area": "schema",
+      "summary": "Validate fcf.currency against listing CCY (GBP for COST.L); add order_book_secured / order_book_preferred / framework_only flags; remap filings_index.body_path into the trial sources/ tree.",
+      "priority": "high"
+    },
+    {
+      "area": "scoring",
+      "summary": "Enable cyclical/public-capex and cash-conversion overlays for UK contractors; treat falling revenue + rising FCF as a quality warning until filing mix notes confirm; do not score framework wins as backlog.",
+      "priority": "high"
+    },
+    {
+      "area": "orchestration",
+      "summary": "Allow a trading_update or rns_cluster task type, or raise the cap to six, so AGM updates and contract RNSs are not dropped when annual+interim+news+screen+gap are mandatory.",
+      "priority": "medium"
+    },
+    {
+      "area": "monitoring",
+      "summary": "For weeks_at_signal<=1 strong_buys, require the memo to compare live price vs H1-date price and vs cited analyst PTs before endorsing the screen’s limit ladder.",
+      "priority": "medium"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "cost_annual_fy2025",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/ch_01393773_MzUyMzYxNDYyN2FkaXF6a2N4.txt",
+      "focus": "Latest Companies House group accounts (filed 2026-05-31, period=annual, FY2025). Extract statutory sterling revenue, operating profit, adjusted vs statutory, EPS, OCF, capex, FCF, cash vs restricted cash, net cash/debt, lease liabilities, pension surplus/deficit and contributions, provisions/claims/onerous contracts, WIP/retentions, segment mix, order book if stated, buybacks/dividends/scrip, share count, going-concern and risk-factor language. Prefer these figures over Yahoo. Ignore any non-Costain resolved RNS. Do not invent IR slides.",
+      "priority": 1
+    },
+    {
+      "id": "cost_interim_h1_2026",
+      "type": "summarize_filing_body",
+      "target": "filings/bodies/66a3fc209a987a0f.txt",
+      "focus": "H1 2026 Half-year Financial Results (Investegate, 2026-08-13). Extract H1 revenue/profit/margin/EPS/cash/FCF vs H1 2025 and vs FY2025 run-rate; guidance and “inflection point” wording; forward work / order book split (secured vs preferred vs framework); contract wins/losses; working-capital and cash-conversion comments; dividend/buyback; any restatement of FY2025. Reconcile qualitatively to the May 2026 AGM trading-update headline only if this body itself cites it — do not open other files.",
+      "priority": 1
+    },
+    {
+      "id": "cost_screen_context",
+      "type": "screen_context",
+      "target": "screening_snapshot.json",
+      "focus": "Explain the strong_buy (13/22, composite 0.713, families cheapness/quality/dividend/GARP/risk) versus failed models (Graham Defensive current ratio, no moat, not cheap enough). Flag conviction 0.442 / 1-week new signal, neutral timing, trade-plan limits, FCF USD tag vs GBP name, TTM cashflow suppressed (quarterly_cashflow_empty), Piotroski 8/9 asset-turnover fail, and all overlays false. List which screen numbers must be replaced by filing-body sterling.",
+      "priority": 2
+    },
+    {
+      "id": "cost_news_digest",
+      "type": "digest_news_manifest",
+      "target": "news_manifest.json",
+      "focus": "Keep only Costain-issuer items (H1 2026 earnings call, FY2025/H2 call, Simply Wall St PT ~£2.57, analyst-target upgrades, dividend note). Discard Costco/COST, Tesco, BT, Vodafone, ISA/low-cost, supermarket, and other “cost” collisions. Note HS2 Old Oak Common overrun as sector context only. Do not treat Kalkine defence-stock headlines as fact unless they clearly discuss Costain Group PLC operations.",
+      "priority": 3
+    },
+    {
+      "id": "cost_gap_inventory",
+      "type": "gap_inventory",
+      "target": "source_inventory",
+      "focus": "Catalog thin/missing steps: yahoo_quarterly_cashflow empty, yahoo_quarterly_income empty (inside financials_annual.json), ir_presentation_metrics absent, alternate_news absent. Also note TTM cashflow suppressed, filings_index.body_path pointing outside this trial tree, six investegate_resolved bodies that are not Costain, and unused-but-present items (AGM trading update 72fd72ff6bda07e5, contract RNSs, macro_context, screen_run_manifest). Do not invent replacement sources; state what the memo must leave as unknown.",
+      "priority": 4
+    }
+  ],
+  "director_agent_id": "agent-8031d3f2-aae4-4da0-a2ca-57911eb96a26"
+}

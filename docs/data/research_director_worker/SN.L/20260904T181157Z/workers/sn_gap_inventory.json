@@ -1,0 +1,113 @@
+{
+  "task_id": "sn_gap_inventory",
+  "task_type": "gap_inventory",
+  "status": "partial",
+  "findings": [
+    "financials_annual.json: quarterly_income and quarterly_cashflow are empty objects ({}); cashflow_metrics sets ttm_cashflow_suppressed=true with reason quarterly_cashflow_empty — no Yahoo intra-year quarterlies in this pack.",
+    "financials_annual.json carries Yahoo annual income, balance sheet and cash-flow for FY2022–FY2025 only (fetched 2026-09-04); no H1/Q2 2026 or FY2025 statutory line items beyond Yahoo’s consolidated annual view.",
+    "No ir_presentation_metrics.json or alternate_news artefact exists under sources/; evidence ladder slots for IR-slide KPIs and alternate news are unfilled.",
+    "filings_index.json period_coverage (annual=1, interim=1, trading_update=1) is misleading: tagged annual is 85fc7018d796b25f (CATALYSTEM 510(k), published 2024-07-16, priority 100); tagged interim is 4f3a5fd5c7fa1274 (TESSA FDA De Novo, published 2026-07-29, priority 80); neither is a results RNS.",
+    "Only indexed operating/financial RNS is b082b819f46431ce (Q1 2026 Trading Update, published 2026-05-06, period=trading_update, priority 80); body present locally at sources/filings/bodies/b082b819f46431ce.txt but not assigned in the five-task cap (body not opened per task rules).",
+    "No FY2025 annual results, SEC 20-F, H1 2026 or Q2 2026 results filing body is indexed despite news_manifest.json headlines for a 2026-08-05 Q2 earnings call and 2026-08-09 Q2 earnings highlights (article ids e14de086-3868-3f5a-8eb0-9b0738542805, 1358eb6d-8a3a-36dd-b1e6-46a3e7fd8151).",
+    "All filings_index.json body_path values point to docs/data/research/SN.L/sources/filings/bodies/… — outside this trial tree (sources/filings/bodies/…); 11 local body copies exist but index paths do not reference them.",
+    "Contaminated/unusable indexed bodies: ch_05579759_MTg1MzIxMjk4YWRpcXprY3g (Companies House accounts, published 2007-09-13); 2bfab06e2d3702a4 and 35fcd85e6ad8464e (Axis Bank Limited listing/allotment of SN — ticker collision, not Smith & Nephew plc).",
+    "Other indexed product/innovation RNSs (period=other, not opened): ALLEVYN d166674e66e1be55, CORI XT 09cdd1b47d4c8d9a, LYNX 1aad454352792ec9, Imperial robotics centre 39556b2a487b5614, share buyback 80448ced514904bc.",
+    "macro_context.json, screen_run_manifest.json, 27 news_batch_* files and 2 snapshots/* are present under sources/ but were not consumed by assigned workers in this trial.",
+    "screening_snapshot.json pre-seeds research_verdict=accumulate and cites missing annual/interim filings and Q2 softness; yahoo_quarterly.ttm_cashflow_suppressed mirrors financials_annual.json.",
+    "Memo must leave unknown until higher-priority sources are assigned: statutory FY2025 notes/disclosures, H1/Q2 2026 reported numbers and guidance, intra-year cash-flow bridge, IR-presentation KPIs (segment margins, organic growth, leverage targets), and any RNS published after 2026-09-04."
+  ],
+  "figures": [
+    {
+      "metric": "Total revenue",
+      "value": "6164000000 USD",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "Yahoo annual income_statement; latest full-year in pack"
+    },
+    {
+      "metric": "Net income",
+      "value": "625000000 USD",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "Yahoo annual"
+    },
+    {
+      "metric": "Free cash flow",
+      "value": "852000000 USD",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "Yahoo annual cash_flow"
+    },
+    {
+      "metric": "Operating cash flow",
+      "value": "1285000000 USD",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "Yahoo annual cash_flow"
+    },
+    {
+      "metric": "Net debt",
+      "value": "2554000000 USD",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "Yahoo annual balance_sheet"
+    },
+    {
+      "metric": "Diluted EPS",
+      "value": "0.716 USD",
+      "period": "FY2025",
+      "source_path": "financials_annual.json",
+      "note": "Yahoo annual income_statement"
+    },
+    {
+      "metric": "Q2 underlying revenue growth (headline)",
+      "value": "1.6%",
+      "period": "Q2 2026",
+      "source_path": "news_manifest.json",
+      "note": "From yfinance article 1358eb6d summary; not corroborated by an indexed results RNS body in this pack"
+    },
+    {
+      "metric": "Filings indexed (total / with body)",
+      "value": "11 / 11",
+      "period": "as of 2026-09-04",
+      "source_path": "filings/filings_index.json",
+      "note": "Includes 1 mis-tagged annual, 1 mis-tagged interim, 1 trading update, 8 other"
+    },
+    {
+      "metric": "News articles in manifest",
+      "value": "115",
+      "period": "as of 2026-09-04",
+      "source_path": "news_manifest.json",
+      "note": "Includes ticker-noise (other .SN tickers) alongside Smith & Nephew items"
+    },
+    {
+      "metric": "GBP/USD",
+      "value": "1.3543",
+      "period": "2026-09-04",
+      "source_path": "macro_context.json",
+      "note": "Present but unused in trial worker assignments"
+    }
+  ],
+  "gaps": [
+    "yahoo_quarterly_income and yahoo_quarterly_cashflow empty — no quarterly Yahoo series; TTM cash-flow metrics suppressed.",
+    "ir_presentation_metrics absent — no IR results-deck KPI extraction path.",
+    "alternate_news absent — no secondary news feed beyond news_manifest/news_batch_*.",
+    "No statutory FY2025 annual report, 20-F or FY2025 note disclosures in filings pack.",
+    "No H1 or Q2 2026 results RNS body despite August 2026 earnings-call news coverage.",
+    "Q1 2026 Trading Update body (b082b819f46431ce.txt) indexed and on disk but unassigned/unread in this trial.",
+    "Period tags on CATALYSTEM 510(k) and TESSA De Novo misrepresent annual/interim results coverage.",
+    "Axis Bank SN listing/allotment filings and 2007 Companies House accounts contaminate the ingest.",
+    "filings_index body_path references main research tree, not this trial sources path.",
+    "Intra-year cash-flow, segment H1/Q2 guidance, IR-slide KPIs and post-2026-09-04 RNS remain unresolved for the memo."
+  ],
+  "sources_read": [
+    "financials_annual.json",
+    "filings/filings_index.json",
+    "news_manifest.json",
+    "macro_context.json",
+    "screen_run_manifest.json",
+    "screening_snapshot.json"
+  ],
+  "worker_model": "composer-2.5",
+  "worker_agent_id": "agent-f3387f3f-9834-4b0a-b7a1-919341cc662c"
+}

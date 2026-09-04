@@ -1,6 +1,6 @@
 # Morgan Sindall Group plc (MGNS.L) — Research memo
 
-_Version 1 · Updated 2026-08-30T08:30:03.772837+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-04T18:11:13.011869+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
 Morgan Sindall Group is a UK-listed construction and regeneration group operating through five decentralised divisions — Partnership Housing, Mixed Use Partnerships, Fit Out, Construction and Infrastructure — with FY 2025 revenue of £5.0bn and over 8,500 employees. The quantitative screen rates the stock a **strong buy** (16/22 models, composite 76%, five factor families: cheapness, quality, dividend, GARP, risk) on P/E 11.5×, P/B 2.7×, 3.7% yield, ROE 26.1%, net-cash balance sheet and Piotroski 8/9. Primary RNS filings confirm record FY 2025 and H1 2026 earnings, a £19.1–19.5bn secured plus preferred-bidder workload, and 20% dividend growth to 158p. The valuation hook is a statistically cheap, cash-rich compounder (18% ten-year adjusted PBT CAGR per management) trading below its 200-day moving average with neutral timing. The central debate is whether cash-generative Fit Out and public-sector Construction/Infrastructure can continue to offset housing-related capital absorption, partnership losses and eventual mean reversion in Fit Out margins.
