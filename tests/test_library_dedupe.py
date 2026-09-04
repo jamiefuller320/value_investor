@@ -77,6 +77,23 @@ def test_select_skips_already_researched(tmp_path: Path):
     )
     assert [r.ticker for _, r in selected] == ["MDB"]
     assert skipped[0]["ticker"] == "AAPL"
+    assert skipped[0]["reason"] == "fresh_memo"
+
+
+def test_select_allows_stale_memo_when_not_in_already_researched():
+    queues = {
+        "euro_depth": [
+            SimpleNamespace(ticker="ERIC-B.ST", name="Ericsson", signal="buy", conviction_score=0.8),
+        ],
+    }
+    selected, skipped = select_deduped_research_targets(
+        research_markets=["euro_depth"],
+        per_market_queues=queues,
+        research_cap=5,
+        already_researched=set(),
+    )
+    assert [r.ticker for _, r in selected] == ["ERIC-B.ST"]
+    assert skipped == []
 
 
 def test_grow_library_reuses_fetch_for_overlap(tmp_path: Path, monkeypatch):

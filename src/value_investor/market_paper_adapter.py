@@ -14,8 +14,8 @@ from value_investor.library_screen import (
     screen_dir_for,
 )
 from value_investor.library_sim import benchmark_for_market
+from value_investor.research.market_store import resolve_research_documents
 from value_investor.research.overlay import apply_research_overlay
-from value_investor.research.store import ResearchStore
 from value_investor.storage import read_json, write_json
 from value_investor.summary import CompanyReport
 
@@ -86,8 +86,11 @@ def build_market_reports_bundle(
     library_root = Path(library_root)
     result = screen_result or load_library_screen_result(library_root, market_id)
     reports = library_research_reports(result)
-    store = ResearchStore(result.screen_dir)
-    documents = store.list_documents()
+    documents = resolve_research_documents(
+        market_id=market_id,
+        output_dir=result.screen_dir,
+        library_root=library_root,
+    )
     if documents:
         reports = apply_research_overlay(reports, documents)
 

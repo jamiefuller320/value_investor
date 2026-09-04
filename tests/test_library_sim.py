@@ -83,6 +83,32 @@ def test_enrich_signals_with_library_research_pit(tmp_path: Path):
     assert enriched.loc[0, "adjusted_signal"] == "buy"
 
 
+def test_enrich_signals_with_library_research_reads_sibling_home(tmp_path: Path):
+    sibling = tmp_path / "omxs30" / "ERIC-B.ST"
+    sibling.mkdir(parents=True)
+    (sibling / "research.json").write_text(
+        '{"ticker":"ERIC-B.ST","created_at":"2026-07-01T12:00:00+00:00","research_verdict":"accumulate"}',
+        encoding="utf-8",
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "ERIC-B.ST",
+                "signal": "buy",
+                "conviction_score": 0.7,
+                "data_quality_score": 1.0,
+            }
+        ]
+    )
+    enriched = enrich_signals_with_library_research(
+        signals,
+        research_dir=tmp_path / "euro_depth",
+        run_at=datetime(2026, 7, 2, 12, 0, tzinfo=UTC),
+        extra_research_dirs=[tmp_path / "omxs30"],
+    )
+    assert enriched.loc[0, "research_verdict"] == "accumulate"
+
+
 def test_run_library_observe_sim_writes_summary(tmp_path: Path):
     root = tmp_path / "library"
     screen_dir = root / "markets" / "sp500" / "screen"

@@ -198,6 +198,24 @@ Tier 2 — Phase 2 weekly paper  weekly_paper_shard_markets[:capacity]  (depth-f
 Tier 3 — Phase 3 weekday shard   one manual pilot at a time
 ```
 
+## Research overlay and rememo (all in-scope markets)
+
+One resolver (`research/market_store.py`) maps memos for **whatever market is in
+scope** — FTSE live (`docs/data/research/`) or any library shard
+(`markets/<id>/screen/research/`), plus sibling-home memos when a name was first
+written under another index slice.
+
+| Surface | What it reads |
+|---------|----------------|
+| Sunday publish / weekday rememo | This-run `output/research` ∪ committed store ∪ `research[]` |
+| Weekday paper-auto overlay | Same union (committed inferred as `latest.json` sibling `research/`) |
+| Observe sim / shard paper | Focus research dir ∪ every other `markets/*/screen/research` |
+
+Ladder selective research (`rememo_existing`, default on) still skips **fresh**
+memos, but rememos buy-tier names when ingest has added enough filing bodies
+(same lag rule as FTSE weekday rememo). A new focus / sprint / parity market
+inherits this without a per-market hook.
+
 ## Guardrails
 
 - Shards do **not** write FTSE `docs/data/latest.json` or FTSE `paper_automation/` configs.

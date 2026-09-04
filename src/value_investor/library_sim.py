@@ -15,6 +15,7 @@ import yfinance as yf
 from value_investor.backtest import HISTORY_DIR, RunSnapshot, load_run_snapshots
 from value_investor.library_screen import screen_dir_for
 from value_investor.market_trading_costs import trade_cost_pct_for_market
+from value_investor.research.market_store import library_research_dirs
 from value_investor.research.verdict import coerce_research_verdict, compute_adjusted_signal
 from value_investor.simulator import SimulationSummary, SimulatorConfig, run_simulation
 from value_investor.storage import read_json, write_json
@@ -223,6 +224,16 @@ def _load_research_index(research_dir: Path) -> dict[str, list[tuple[datetime, d
     return index
 
 
+def _merge_research_index(
+    dest: dict[str, list[tuple[datetime, dict[str, Any]]]],
+    src: dict[str, list[tuple[datetime, dict[str, Any]]]],
+) -> None:
+    for ticker, rows in src.items():
+        dest.setdefault(ticker, []).extend(rows)
+    for rows in dest.values():
+        rows.sort(key=lambda item: item[0])
+
+
 def _research_as_of(
     index: dict[str, list[tuple[datetime, dict[str, Any]]]],
     ticker: str,
@@ -243,10 +254,14 @@ def enrich_signals_with_library_research(
     *,
     research_dir: Path,
     run_at: datetime,
+    extra_research_dirs: list[Path] | None = None,
 ) -> pd.DataFrame:
-    if signals.empty or not research_dir.exists():
+    if signals.empty:
         return signals
-    index = _load_research_index(research_dir)
+    index: dict[str, list[tuple[datetime, dict[str, Any]]]] = {}
+    for path in [research_dir, *(extra_research_dirs or [])]:
+        if path is not None and Path(path).exists():
+            _merge_research_index(index, _load_research_index(Path(path)))
     if not index:
         return signals
     out = signals.copy()
@@ -360,7 +375,9 @@ def save_library_run_snapshots(
 
     bench = benchmark or benchmark_for_market(market_id)
     closes = _benchmark_closes(bench, runs[0][0], runs[-1][0])
-    research_dir = screen_dir / "research"
+    research_dirs = library_research_dirs(root, market_id)
+    research_dir = research_dirs[0] if research_dirs else screen_dir / "research"
+    extra_research_dirs = research_dirs[1:]
     history_dir = screen_dir / HISTORY_DIR
     history_dir.mkdir(parents=True, exist_ok=True)
 
@@ -372,6 +389,7 @@ def save_library_run_snapshots(
             signals,
             research_dir=research_dir,
             run_at=run_at,
+            extra_research_dirs=extra_research_dirs,
         )
         snapshot = build_library_run_snapshot(
             signals=signals,

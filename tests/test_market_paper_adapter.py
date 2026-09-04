@@ -70,6 +70,36 @@ def test_build_market_reports_bundle_shape(tmp_path: Path):
     assert len(bundle["reports"]) >= 1
 
 
+def test_build_market_reports_bundle_uses_sibling_home_memo(tmp_path: Path):
+    root = tmp_path / "library"
+    screen_dir = root / "markets" / "euro_depth" / "screen"
+    _write_latest_artifacts(screen_dir)
+    # Rename AAPL row is already there; write sibling memo for AAPL under nasdaq100.
+    home = root / "markets" / "nasdaq100" / "screen" / "research" / "AAPL"
+    home.mkdir(parents=True)
+    write_json = __import__("value_investor.storage", fromlist=["write_json"]).write_json
+    write_json(
+        home / "research.json",
+        {
+            "ticker": "AAPL",
+            "name": "Apple",
+            "signal": "strong_buy",
+            "version": 1,
+            "created_at": "2026-07-01T00:00:00+00:00",
+            "updated_at": "2026-07-01T00:00:00+00:00",
+            "mode": "initial",
+            "research_verdict": "accumulate",
+            "research_confidence": 0.8,
+        },
+        compact=True,
+    )
+    (home / "research.md").write_text("# Apple\n", encoding="utf-8")
+    bundle = build_market_reports_bundle(root, "euro_depth")
+    report = bundle["reports"][0]
+    assert report["ticker"] == "AAPL"
+    assert report["research_verdict"] == "accumulate"
+
+
 def test_write_market_screen_bundle(tmp_path: Path):
     root = tmp_path / "library"
     screen_dir = root / "markets" / "sp500" / "screen"
