@@ -60,6 +60,7 @@ from value_investor.market_shard_phases import (
 )
 from value_investor.research.market_store import (
     DEFAULT_REMEMO_BODY_LAG_THRESHOLD,
+    library_coverage_incomplete_tickers,
     library_rememo_eligible_tickers,
 )
 from value_investor.research.runner import eligible_research_targets, run_research_for_strong_buys
@@ -92,6 +93,7 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
     ladder.setdefault("observe_sim_include_ingest_profile", True)
     ladder.setdefault("observe_sim_screen_missing_markets", True)
     ladder.setdefault("observe_sim_screen_when_research_skipped", True)
+    ladder.setdefault("observe_sim_screen_when_stale", True)
     ladder.setdefault("weekly_paper_shard_after_screen", True)
     ladder.setdefault("weekly_paper_shard_markets", list(DEFAULT_WEEKLY_PAPER_SHARD_MARKETS))
     ladder.setdefault("weekly_paper_shard_capacity", DEFAULT_WEEKLY_PAPER_SHARD_CAPACITY)
@@ -133,6 +135,38 @@ def _research_markets(policy: dict[str, Any], focus: str) -> list[str]:
     return ordered or ([focus] if focus else [])
 
 
+def _stale_clock_markets(root: Path, policy: dict[str, Any]) -> list[str]:
+    """In-scope markets whose screen archive clock is stale.
+
+    Uses queue + graduated + observe-sim lists so a new market inherits the
+    same clock refresh without a per-index special case.
+    """
+    ladder = policy.get("ladder") or {}
+    if ladder.get("observe_sim_screen_when_stale", True) is False:
+        return []
+    from value_investor.library_learning_depth import assess_screen_archive_span
+
+    candidates: list[str] = []
+    for mid in [
+        *observe_sim_markets_for_policy(policy),
+        *list(policy.get("market_queue") or []),
+        *graduated_market_ids(policy),
+        str(policy.get("focus_market") or ""),
+    ]:
+        name = str(mid or "").strip()
+        if name and name not in candidates:
+            candidates.append(name)
+    stale: list[str] = []
+    for mid in candidates:
+        try:
+            screen = assess_screen_archive_span(root, mid)
+        except (OSError, ValueError, TypeError):
+            continue
+        if screen.get("stale"):
+            stale.append(mid)
+    return stale
+
+
 def _screen_observe_sim_markets(
     root: Path,
     policy: dict[str, Any],
@@ -142,6 +176,11 @@ def _screen_observe_sim_markets(
 ) -> dict[str, Any]:
     """Screen-lite for observe-sim markets the research / focus pass did not screen."""
     targets = [mid for mid in observe_sim_markets_for_policy(policy) if mid not in screened_markets]
+    stale_added: list[str] = []
+    for mid in _stale_clock_markets(root, policy):
+        if mid not in screened_markets and mid not in targets:
+            targets.append(mid)
+            stale_added.append(mid)
     if not targets:
         return {"skipped": True, "reason": "all observe-sim markets already screened"}
     screened: list[str] = []
@@ -154,14 +193,28 @@ def _screen_observe_sim_markets(
         except Exception as exc:  # noqa: BLE001
             logger.warning("Observe-sim screen-lite for %s failed: %s", mid, exc)
             errors[mid] = str(exc)
+    if screened:
+        try:
+            from value_investor.library_learning_depth import assess_library_learning_depth
+
+            for mid in screened:
+                assess_library_learning_depth(mid, library_root=root, write=True, now=run_at)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Learning-depth refresh after observe-sim screen skipped: %s", exc)
     if not screened:
         return {
             "skipped": True,
             "reason": "observe-sim screen-lite failed for all targets",
             "targets": targets,
+            "stale_clock_added": stale_added,
             "errors": errors,
         }
-    return {"skipped": False, "markets": screened, "errors": errors}
+    return {
+        "skipped": False,
+        "markets": screened,
+        "stale_clock_added": stale_added,
+        "errors": errors,
+    }
 
 
 def observe_sim_screen_should_run(
@@ -454,6 +507,7 @@ def run_library_ladder(
 
         already = existing_library_research_tickers(root)
         rememo_reasons: dict[str, str] = {}
+        incomplete = library_coverage_incomplete_tickers(root)
         if bool((policy.get("ladder") or {}).get("rememo_existing", True)):
             queue_tickers = {
                 canonical_library_ticker(str(getattr(report, "ticker", "") or ""))
@@ -470,12 +524,14 @@ def run_library_ladder(
                     )
                 ),
             )
-        skip_fresh = already - set(rememo_reasons)
+        coverage_complete = already - set(incomplete)
+        skip_fresh = coverage_complete - set(rememo_reasons)
+        awaiting_ingest = set(incomplete) - set(rememo_reasons)
         selected, dedupe_skipped = select_deduped_research_targets(
             research_markets=research_markets,
             per_market_queues=per_market_queues,
             research_cap=research_cap,
-            already_researched=skip_fresh,
+            already_researched=skip_fresh | awaiting_ingest,
         )
 
         status = budget_status
@@ -500,7 +556,10 @@ def run_library_ladder(
             "budget_flag": status["flag"],
             "remaining_usd_before": remaining,
             "dedupe": {
-                "already_researched_count": len(already),
+                "already_researched_count": len(coverage_complete),
+                "memo_file_count": len(already),
+                "coverage_incomplete_count": len(incomplete),
+                "awaiting_ingest_count": len(awaiting_ingest),
                 "fresh_skipped_count": len(skip_fresh),
                 "rememo_eligible_count": len(rememo_reasons),
                 "rememo_eligible_sample": [
@@ -511,7 +570,8 @@ def run_library_ladder(
                 "skipped_sample": dedupe_skipped[:20],
                 "note": (
                     "Exact Yahoo ticker match; earlier queue market wins. "
-                    "Fresh memos are skipped; thin / body-lag memos rememo after ingest."
+                    "Coverage-complete memos are skipped. Zero-body / missing-verdict "
+                    "stubs wait for ingest; rememo when bodies increase."
                 ),
             },
             "targets": [

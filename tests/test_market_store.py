@@ -7,6 +7,8 @@ from pathlib import Path
 
 from value_investor.research.document import ResearchDocument
 from value_investor.research.market_store import (
+    coverage_incomplete_reason,
+    library_coverage_incomplete_tickers,
     library_rememo_eligible_tickers,
     rememo_reason,
     resolve_research_documents,
@@ -49,6 +51,37 @@ def _write_memo(
         {"summary": {"with_body": disk_bodies, "total": disk_bodies}},
         compact=True,
     )
+
+
+def test_coverage_incomplete_reason_zero_body_or_missing_verdict():
+    assert coverage_incomplete_reason(grade="thin", memo_bodies=0, has_verdict=True) == (
+        "zero_body"
+    )
+    assert coverage_incomplete_reason(grade="strong", memo_bodies=20, has_verdict=True) is None
+    assert coverage_incomplete_reason(grade="strong", memo_bodies=20, has_verdict=False) == (
+        "missing_verdict"
+    )
+
+
+def test_library_coverage_incomplete_tickers_scans_all_shards(tmp_path: Path):
+    _write_memo(
+        tmp_path / "markets" / "euro_depth" / "screen" / "research",
+        "ERIC-B.ST",
+        verdict="accumulate",
+        grade="thin",
+        memo_bodies=0,
+    )
+    _write_memo(
+        tmp_path / "markets" / "sp500" / "screen" / "research",
+        "AAPL",
+        verdict="accumulate",
+        grade="strong",
+        memo_bodies=40,
+        disk_bodies=40,
+    )
+    incomplete = library_coverage_incomplete_tickers(tmp_path)
+    assert incomplete["ERIC-B.ST"] == "zero_body"
+    assert "AAPL" not in incomplete
 
 
 def test_rememo_reason_requires_body_lag_not_thin_alone():

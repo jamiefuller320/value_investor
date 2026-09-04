@@ -17,12 +17,16 @@ def canonical_library_ticker(ticker: str) -> str:
     return str(ticker or "").strip().upper()
 
 
+def _has_library_memo(entry: Path) -> bool:
+    return (entry / "research.json").exists() or (entry / "research.md").exists()
+
+
 def existing_library_research_tickers(root: Path) -> set[str]:
     """
-    Tickers that already have a ``research.md`` under any market library.
+    Tickers that already have a memo under any market library.
 
-    Used so a buy-tier name researched under ``sp500`` is not memo'd again under
-    ``nasdaq100``.
+    Counts ``research.json`` or ``research.md`` so json-only stubs are visible.
+    Coverage-complete vs stub is decided by ``library_coverage_incomplete_tickers``.
     """
     markets_root = Path(root) / "markets"
     found: set[str] = set()
@@ -35,7 +39,7 @@ def existing_library_research_tickers(root: Path) -> set[str]:
         if not research.is_dir():
             continue
         for entry in research.iterdir():
-            if entry.is_dir() and (entry / "research.md").exists():
+            if entry.is_dir() and _has_library_memo(entry):
                 found.add(canonical_library_ticker(entry.name))
     return found
 
@@ -47,7 +51,8 @@ def research_home_market(root: Path, ticker: str) -> str | None:
     if not markets_root.is_dir():
         return None
     for market_dir in sorted(markets_root.iterdir(), key=lambda p: p.name):
-        if (market_dir / "screen" / "research" / key / "research.md").exists():
+        home = market_dir / "screen" / "research" / key
+        if _has_library_memo(home):
             return market_dir.name
         # Directory names preserve original casing from when memo was written.
         research = market_dir / "screen" / "research"
@@ -55,7 +60,7 @@ def research_home_market(root: Path, ticker: str) -> str | None:
             continue
         for entry in research.iterdir():
             if entry.is_dir() and canonical_library_ticker(entry.name) == key:
-                if (entry / "research.md").exists():
+                if _has_library_memo(entry):
                     return market_dir.name
     return None
 

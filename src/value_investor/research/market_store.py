@@ -195,6 +195,25 @@ def rememo_reason(
     return None
 
 
+def coverage_incomplete_reason(
+    *,
+    grade: str | None,
+    memo_bodies: int,
+    has_verdict: bool = True,
+) -> str | None:
+    """Why a memo file is not learning coverage, or ``None`` if it is complete.
+
+    File existence is not coverage. Zero-body / missing-verdict stubs stay
+    eligible for rememo after ingest — they must not be treated as done on
+    every market.
+    """
+    if not has_verdict:
+        return "missing_verdict"
+    if int(memo_bodies or 0) <= 0:
+        return "zero_body"
+    return None
+
+
 def _memo_quality_fields(meta: dict[str, Any]) -> tuple[str | None, int, bool]:
     mq = meta.get("memo_quality") or {}
     if not isinstance(mq, dict):
@@ -267,3 +286,47 @@ def library_rememo_eligible_tickers(
         if reason:
             eligible[ticker] = reason
     return eligible
+
+
+def library_coverage_incomplete_tickers(library_root: Path) -> dict[str, str]:
+    """Tickers whose memo file exists but is not learning coverage.
+
+    Scans every ``markets/*/screen/research`` shard. A newly in-scope market
+    inherits the same existence≠coverage rule without a per-market special case.
+    """
+    from value_investor.library_dedupe import canonical_library_ticker
+
+    incomplete: dict[str, str] = {}
+    markets = Path(library_root) / "markets"
+    if not markets.is_dir():
+        return incomplete
+    for market_dir in markets.iterdir():
+        if not market_dir.is_dir():
+            continue
+        research = market_dir / "screen" / "research"
+        if not research.is_dir():
+            continue
+        for entry in research.iterdir():
+            if not entry.is_dir():
+                continue
+            meta_path = entry / "research.json"
+            if not meta_path.exists():
+                continue
+            ticker = canonical_library_ticker(entry.name)
+            if not ticker or ticker in incomplete:
+                continue
+            try:
+                meta = read_json(meta_path)
+            except (OSError, ValueError, TypeError):
+                continue
+            if not isinstance(meta, dict):
+                continue
+            grade, memo_bodies, has_verdict = _memo_quality_fields(meta)
+            reason = coverage_incomplete_reason(
+                grade=grade,
+                memo_bodies=memo_bodies,
+                has_verdict=has_verdict,
+            )
+            if reason:
+                incomplete[ticker] = reason
+    return incomplete

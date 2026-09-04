@@ -80,6 +80,35 @@ def test_select_skips_already_researched(tmp_path: Path):
     assert skipped[0]["reason"] == "fresh_memo"
 
 
+def test_select_skips_awaiting_ingest_but_allows_rememo_targets():
+    queues = {
+        "euro_depth": [
+            SimpleNamespace(ticker="STUB.ST", name="Stub", signal="buy", conviction_score=0.8),
+            SimpleNamespace(ticker="FRESH.ST", name="Fresh", signal="buy", conviction_score=0.7),
+            SimpleNamespace(ticker="NEW.ST", name="New", signal="buy", conviction_score=0.9),
+        ],
+    }
+    coverage_complete = {"FRESH.ST"}
+    awaiting_ingest = {"STUB.ST"}
+    selected, skipped = select_deduped_research_targets(
+        research_markets=["euro_depth"],
+        per_market_queues=queues,
+        research_cap=5,
+        already_researched=coverage_complete | awaiting_ingest,
+    )
+    assert [r.ticker for _, r in selected] == ["NEW.ST"]
+    reasons = {row["ticker"]: row["reason"] for row in skipped}
+    assert reasons["STUB.ST"] == "fresh_memo"
+    assert reasons["FRESH.ST"] == "fresh_memo"
+
+
+def test_existing_library_research_tickers_counts_json_only(tmp_path: Path):
+    research = tmp_path / "markets" / "euro_depth" / "screen" / "research" / "ERIC-B.ST"
+    research.mkdir(parents=True)
+    (research / "research.json").write_text("{}", encoding="utf-8")
+    assert "ERIC-B.ST" in existing_library_research_tickers(tmp_path)
+
+
 def test_select_allows_stale_memo_when_not_in_already_researched():
     queues = {
         "euro_depth": [

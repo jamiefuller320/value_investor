@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 from value_investor.library_ladder import (
     _screen_observe_sim_markets,
+    _stale_clock_markets,
     observe_sim_screen_should_run,
 )
 
@@ -50,6 +51,46 @@ def test_screen_observe_sim_markets_skips_when_all_screened():
         run_at=datetime.now(UTC),
     )
     assert result["skipped"] is True
+
+
+def test_stale_clock_markets_are_added_even_when_already_in_observe_list(tmp_path: Path):
+    policy = {
+        "focus_market": "euro_depth",
+        "market_queue": ["sp500"],
+        "ladder": {
+            "observe_sim_after_screen": True,
+            "observe_sim_markets_mode": "explicit",
+            "observe_sim_markets": ["euro_stoxx50"],
+            "observe_sim_include_ingest_profile": False,
+            "observe_sim_screen_when_stale": True,
+        },
+    }
+    with patch(
+        "value_investor.library_learning_depth.assess_screen_archive_span",
+        side_effect=lambda root, mid, **kwargs: {"stale": mid == "sp500"},
+    ):
+        stale = _stale_clock_markets(tmp_path, policy)
+    assert stale == ["sp500"]
+
+    screened: set[str] = {"euro_stoxx50"}
+    with (
+        patch(
+            "value_investor.library_learning_depth.assess_screen_archive_span",
+            side_effect=lambda root, mid, **kwargs: {"stale": mid == "sp500"},
+        ),
+        patch("value_investor.library_ladder.run_library_screen") as mock_screen,
+        patch("value_investor.library_learning_depth.assess_library_learning_depth"),
+    ):
+        result = _screen_observe_sim_markets(
+            tmp_path,
+            policy,
+            screened_markets=screened,
+            run_at=datetime(2026, 8, 16, 12, 0, tzinfo=UTC),
+        )
+    assert result["skipped"] is False
+    assert "sp500" in result["markets"]
+    assert result["stale_clock_added"] == ["sp500"]
+    assert mock_screen.call_count == 1
 
 
 def test_observe_sim_screen_runs_even_when_research_ran():
