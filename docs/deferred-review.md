@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T13:29:10+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T16:27:43+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -121,6 +121,9 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N72 | **Per-ticker budget will not finish DG.PA-class IR blockers** | A weekday per-ticker cap (L131/L215) only stops the bleed. DG.PA already used ~37 minutes on 2026-09-04 07:15, retried the same two IR IDs three times, and stayed 1 body / 2 IWB. More or less clock does not fetch GlobeNewswire HTML allowlist rows. | After cutoff follow-up has pinned a sticky euro name, or someone proposes L215 expecting it to raise filings_with_body on DG.PA. |
 | N73 | **Do not backlog-first aborted hard IR tickers** | FTSE ingest_backlog puts remaining tickers first. Doing that for a DG.PA-class abort would spend the first per-ticker budget of every weekday slot on the same failed GlobeNewswire rows. Keep backlog for names that never started; escalate started+failed names off the batch. | Library ingest grows a backlog file and someone proposes prioritize_backlog_targets for euro. |
 | N74 | **Do not treat Suite B AI-vs-rules inversion as the weekly north-star scoreboard** | Under fair T212 costs, rules currently beats AI (-9.7% vs -12.6% excess), the reverse of the 3% stress books. Suite B epochs started 2026-09-01 with one mark and zero trades — too thin to demote AI judgment or rewrite Suite A policy from that flip. | Each Suite B track has several weeks of post-seed marks and at least one closed trade, and Sunday analysis-review scores fair and stress books separately |
+| N75 | **Do not spend leftover Ultra on dashboard agents or new paper tracks** | Cycle-end unused Cursor Ultra is tempting to burn on UI polish, extra paper tracks, or live-universe work. Those do not change what weekday AI-judgment sees. Prefer FTSE rememo/director-worker, then let unused credit reset. | A later cycle is again >30% unused with <5 days left AND rememo backlog plus holdings director-worker are already clear |
+| N76 | **Do not spray euro_depth memos while buy-tier filings are thin** | euro_depth buy-tier still has thin/indexed_without_body gaps (median ~2 bodies). Cursor memos without filing bodies do not make the shard FTSE-equivalent. Spend leftover model credit on FTSE rememo first; leave euro deepen to GHA ingest. | ftse-library euro-ingest-dispatch reports ingest_parity_met and buy-tier thin+iwb near zero |
+| N77 | **Do not permanently raise rememo caps from a cycle-end surplus** | weekday rememo cap 3 and catch-up cap 5 are maintenance defaults. A 4-day Ultra leftover is a one-shot burst, not evidence the steady cap should rise. | After several constrained weeks, rememo backlog stays over weekly maintenance capacity and estimated_memo_usd is recalibrated from real bills |
 
 ---
 
