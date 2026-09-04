@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import replace
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 import pandas as pd
 
@@ -190,3 +191,19 @@ def enrich_signals_with_research(
     out["adjusted_signal"] = adjusted_signals
     out["research_as_of"] = research_as_ofs
     return out
+
+
+def enrich_marked_rows_with_research(
+    rows: list[dict[str, Any]],
+    output_dir: Path,
+    *,
+    as_of: datetime | str | None = None,
+) -> list[dict[str, Any]]:
+    """Apply PIT research overlay to marked-row dicts (archive / bootstrap)."""
+    if not rows:
+        return rows
+    frame = pd.DataFrame(list(rows))
+    if "ticker" not in frame.columns:
+        return list(rows)
+    enriched = enrich_signals_with_research(frame, Path(output_dir), run_at=as_of)
+    return enriched.to_dict(orient="records")

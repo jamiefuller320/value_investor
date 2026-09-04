@@ -6,7 +6,11 @@ from pathlib import Path
 import pandas as pd
 
 from value_investor.research.document import ResearchDocument
-from value_investor.research.overlay import apply_research_overlay, enrich_signals_with_research
+from value_investor.research.overlay import (
+    apply_research_overlay,
+    enrich_marked_rows_with_research,
+    enrich_signals_with_research,
+)
 from value_investor.research.store import ResearchStore
 from value_investor.summary import build_company_reports
 
@@ -105,3 +109,30 @@ def test_enrich_signals_with_research(tmp_path: Path):
 
     meta = json.loads((tmp_path / "research" / "AAA.L" / "research.json").read_text())
     assert meta["research_verdict"] == "pass"
+
+
+def test_enrich_marked_rows_with_research_pass_downgrade(tmp_path: Path):
+    store = ResearchStore(tmp_path)
+    store.save(
+        ResearchDocument(
+            ticker="AAA.L",
+            name="Alpha PLC",
+            signal="strong_buy",
+            version=1,
+            created_at="2026-01-01T00:00:00+00:00",
+            updated_at="2026-07-08T00:00:00+00:00",
+            mode="initial",
+            research_verdict="pass",
+            research_risk_level="high",
+            research_confidence=0.6,
+            research_rationale="Balance sheet weaker than screen suggests.",
+        )
+    )
+    rows = enrich_marked_rows_with_research(
+        [{"ticker": "AAA.L", "signal": "strong_buy"}],
+        tmp_path,
+        as_of="2026-07-20T00:00:00+00:00",
+    )
+    assert rows[0]["research_verdict"] == "pass"
+    assert rows[0]["adjusted_signal"] == "hold"
+    assert rows[0]["signal"] == "strong_buy"

@@ -95,8 +95,10 @@ Disable with `ftse-knob-calibrate run ... --no-cohort-fitness`.
 
 Add `--include-churn-knobs` to sweep `exit_confirm_screens` (1, 2).
 
-AI overlay gates (`use_adjusted_signal`, `require_research_accumulate`) stay fixed
-to track config until L113 PIT bootstrap.
+AI overlay gates (`use_adjusted_signal`, `require_research_accumulate`) stay
+fixed to track config. Archive replay and rebalance-log bootstrap now join
+point-in-time research when a timeline exists (L113). Bootstrapped AI entries
+without `bootstrap_pit_research` are still flagged.
 
 ## Commands
 
@@ -202,7 +204,7 @@ refinement, not live writes.
 
 - Observe-only — no `decision-review --apply` on shadows
 - Screen signals frozen (N3) — portfolio knobs only
-- Bootstrapped logs flagged (L113 AI-gate caveat)
+- Bootstrapped logs flagged (PIT research applied vs missing, L113)
 - Thin history → low confidence / bootstrap not ready
 - Evolution (L2/N2) remains deferred
 

@@ -11,13 +11,17 @@ from value_investor.archive_history import (
     list_dashboard_archives,
 )
 from value_investor.backtest import load_run_snapshots
-from value_investor.paper_automation import AutomationConfig
+from datetime import UTC, datetime
+
+from value_investor.paper_automation import AutomationConfig, default_ai_judgment_config
 from value_investor.paper_fund import PaperFund, PaperFundConfig
 from value_investor.rebalance_log import (
     REBALANCE_LOG_FILENAME,
     bootstrap_rebalance_log,
     load_rebalance_log,
 )
+from value_investor.research.document import ResearchDocument
+from value_investor.research.store import ResearchStore
 from value_investor.simulator import SimulatorConfig, run_grace_parameter_sweep
 
 
@@ -199,6 +203,114 @@ def test_bootstrap_rebalance_log_from_trades_and_archive(tmp_path: Path):
     assert "gate_excluded" in entries[0]
     assert len(entries[0]["trades"]) == 2
     assert (track / REBALANCE_LOG_FILENAME).exists()
+    assert entries[0].get("bootstrap_pit_research") is False
+    assert entries[0]["bootstrap_source"] == "trades+archives"
+
+
+def _research_doc(*, verdict: str, updated_at: str, version: int = 1) -> ResearchDocument:
+    return ResearchDocument(
+        ticker="AAA.L",
+        name="Alpha PLC",
+        signal="strong_buy",
+        version=version,
+        created_at="2026-07-01T00:00:00+00:00",
+        updated_at=updated_at,
+        mode="initial" if version == 1 else "weekly_update",
+        research_verdict=verdict,
+        research_risk_level="high" if verdict == "pass" else "low",
+        research_confidence=0.8,
+        research_rationale=f"Verdict {verdict}",
+    )
+
+
+def test_bootstrap_rebalance_log_ai_judgment_uses_pit_research(tmp_path: Path):
+    """Pass-at-archive-date must gate-exclude; later accumulate must not leak (L113)."""
+    track = tmp_path / "ai_judgment"
+    track.mkdir()
+    archive = tmp_path / "archive"
+    archive.mkdir()
+
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="AI Auto",
+            mode="automated",
+            initial_cash=1000,
+            trade_cost_pct=0.0,
+            max_positions=2,
+        )
+    )
+    fund.buy(
+        ticker="AAA.L",
+        price=10,
+        sizing_mode="cash",
+        amount=400,
+        sector="Banks",
+        name="Alpha",
+        acted_at="2026-07-20T21:32:40+01:00",
+    )
+    (track / "automated_fund.json").write_text(
+        json.dumps(fund.to_dict()),
+        encoding="utf-8",
+    )
+    cfg = default_ai_judgment_config()
+    cfg.trade_cost_pct = 0.0
+    cfg.max_positions = 2
+    (track / "config.json").write_text(
+        json.dumps(cfg.to_dict()),
+        encoding="utf-8",
+    )
+    (archive / "2026-07-20.json").write_text(
+        json.dumps(
+            {
+                "run_at": "2026-07-20T20:32:27+00:00",
+                "reports": [
+                    {
+                        "ticker": "AAA.L",
+                        "signal": "strong_buy",
+                        "conviction_score": 0.9,
+                        "timing_signal": "accumulate",
+                        "sector": "Banks",
+                    },
+                    {
+                        "ticker": "BBB.L",
+                        "signal": "buy",
+                        "conviction_score": 0.8,
+                        "timing_signal": "accumulate",
+                        "sector": "Mining",
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    store = ResearchStore(tmp_path)
+    store.save(
+        _research_doc(verdict="pass", updated_at="2026-07-19T12:00:00+00:00", version=1),
+        run_at=datetime(2026, 7, 19, 12, 0, tzinfo=UTC),
+    )
+    store.save(
+        _research_doc(
+            verdict="accumulate",
+            updated_at="2026-08-01T12:00:00+00:00",
+            version=2,
+        ),
+        run_at=datetime(2026, 8, 1, 12, 0, tzinfo=UTC),
+    )
+
+    result = bootstrap_rebalance_log(track, archive_dir=archive, fetch_prices=False)
+    assert result["ok"] is True
+    assert result["entries"] == 1
+    entries = load_rebalance_log(track)
+    assert entries[0]["bootstrapped"] is True
+    assert entries[0]["bootstrap_pit_research"] is True
+    assert entries[0]["bootstrap_source"] == "trades+archives+pit_research"
+    assert "AAA.L" in entries[0]["gate_excluded"]
+    candidate_tickers = {row["ticker"] for row in entries[0]["candidates"]}
+    screen_tickers = {row["ticker"] for row in entries[0]["screen_buy_tier"]}
+    assert "AAA.L" in screen_tickers
+    assert "AAA.L" not in candidate_tickers
+    assert "BBB.L" in candidate_tickers
 
 
 def test_grace_parameter_sweep_runs():
