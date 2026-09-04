@@ -10,7 +10,7 @@
     "learning_tracks_review missing or inconclusive"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-04T12:55:39.841480+00:00",
+    "snapshot_at": "2026-09-04T12:58:58.948902+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 45,
     "unmeasured_buy_tier": 1,
@@ -67,7 +67,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-09-04T12:55:39.842674+00:00",
+  "evaluated_at": "2026-09-04T12:58:58.950567+00:00",
   "maintenance_markets": [],
   "parallel_sprint_markets": [
     "sp500"
@@ -77,20 +77,20 @@
       "market_id": "sp500",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=38)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=18)",
       "ingest_parity_met": false,
       "phase3_ready": false,
       "phase_blockers": [
         "sp500 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-04T12:55:45.381716+00:00",
+        "snapshot_at": "2026-09-04T12:59:08.585818+00:00",
         "market_id": "sp500",
         "buy_tier_count": 137,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 38,
+        "indexed_without_body": 18,
         "bodies_min": 14,
         "bodies_median": 20,
         "bodies_max": 71,
@@ -112,7 +112,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-04T12:55:45.384743+00:00",
+      "evaluated_at": "2026-09-04T12:59:08.590094+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -124,20 +124,20 @@
       "market_id": "asx200",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=3, zero_body=0, thin=3, indexed_without_body=28)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=3, zero_body=0, thin=3, indexed_without_body=9)",
       "ingest_parity_met": false,
       "phase3_ready": false,
       "phase_blockers": [
         "asx200 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-04T12:55:46.685783+00:00",
+        "snapshot_at": "2026-09-04T12:59:10.980650+00:00",
         "market_id": "asx200",
         "buy_tier_count": 32,
         "unmeasured_buy_tier": 3,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 3,
-        "indexed_without_body": 28,
+        "indexed_without_body": 9,
         "bodies_min": 2,
         "bodies_median": 7,
         "bodies_max": 111,
@@ -167,7 +167,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-04T12:55:46.687001+00:00",
+      "evaluated_at": "2026-09-04T12:59:10.981740+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -181,5 +181,38 @@
     "asx200",
     "ftse_smallcap",
     "tsx60"
+  ],
+  "ingest_cascade": {
+    "enabled": true,
+    "head_market": "euro_depth",
+    "head_at_parity": false,
+    "head_needs_fat_slot": true,
+    "hour_utc": 12,
+    "skip_stream_2_now": false,
+    "stream_1_mode": "spare",
+    "stream_2_mode": "spare",
+    "reason": "Head euro_depth still has filing gaps; stream 1/2 run spare fractions (0.50/0.25).",
+    "config": {
+      "enabled": true,
+      "stream_1_target_fraction": 0.5,
+      "stream_1_runtime_fraction": 0.5,
+      "stream_2_target_fraction": 0.25,
+      "stream_2_runtime_fraction": 0.25,
+      "stream_2_yield_hours_utc": [
+        8,
+        11
+      ],
+      "head_release_when": "ingest_parity",
+      "leftover_max_age_seconds": 14400.0,
+      "spare_wait_seconds": 2400.0,
+      "min_leftover_seconds": 180.0,
+      "scheduler_enabled": true
+    }
+  },
+  "scheduler_stream_1_markets": [
+    "sp500"
+  ],
+  "scheduler_stream_2_markets": [
+    "asx200"
   ]
 }
