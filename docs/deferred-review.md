@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T19:55:58+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T20:29:17+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -46,6 +46,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260811-26 | Build ethos: trade API/engineering cost and some over-engineering now for maximum historic-data capability and future counterfactual utility — front-load depth on archives, replay, and ingest over short-term efficiency gates; live-path safety and knob auto-apply remain gated. | ethos, platform, data_utility, counterfactual |
 | frag-20260903-01 | MEGP.L 1y chart has a March 2026 close hole that draws as a vertical gap in the popup; chart outcomes still score from initial last vs latest close, so the gap did not create a false terrible path. | charts, data-quality, MEGP |
 | frag-20260904-01 | This week's FCF/Yahoo-CF/memo-overlay/rememo work can only change stage-2b outcomes after the next Sunday research overlay is used in a weekday paper decision. Do not read next Friday's lifetime AI excess as a test of this week's machinery; watch the Aug-26 epoch and the first post-overlay rebalance instead. | stage-2b, lag, filings, memos, scoreboard |
+| frag-20260904-02 | BT-A.L director-worker completed under the None-verdict rubric fix but scored 0.193 with no director verdict. Live Composer rememo stayed accumulate 0.68. Worth a parse-hardening pass if more director memos lose RESEARCH VERDICT. | director-worker, rubric, BT-A |
 
 ---
 
