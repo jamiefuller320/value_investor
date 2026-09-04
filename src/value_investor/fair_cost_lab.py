@@ -48,6 +48,11 @@ FAIR_COST_LAB_TRACK_IDS: tuple[str, ...] = (
     RULES_FAIR_TRACK_ID,
 )
 FAIR_COST_LAB_PROVENANCE_FILENAME = "fair_cost_lab_provenance.json"
+FAIR_TWIN_SUFFIX = "_fair"
+MIRRORABLE_EXPERIMENT_KINDS = frozenset(
+    {"calibration_shadow", "exclusion_shadow", "experimental_paper_track"}
+)
+DEFAULT_FAIR_TWIN_MAX_SPAWNS = 2
 
 _FAIR_PARENTS: dict[str, str] = {
     AI_JUDGMENT_FAIR_TRACK_ID: AI_JUDGMENT_TRACK_ID,
@@ -59,32 +64,66 @@ _FAIR_SUBDIRS: dict[str, str] = {
 }
 
 
+def fair_twin_track_id(parent_track_id: str) -> str:
+    tid = str(parent_track_id or "").strip()
+    if not tid:
+        raise ValueError("parent_track_id is required")
+    if tid.endswith(FAIR_TWIN_SUFFIX):
+        raise ValueError(f"{tid} is already a fair-cost track")
+    return f"{tid}{FAIR_TWIN_SUFFIX}"
+
+
 def fair_cost_lab_subdir(track_id: str) -> str:
     tid = str(track_id or "").strip()
-    if tid not in _FAIR_SUBDIRS:
-        raise ValueError(f"Unknown fair-cost lab track_id: {track_id!r}")
-    return _FAIR_SUBDIRS[tid]
+    if tid in _FAIR_SUBDIRS:
+        return _FAIR_SUBDIRS[tid]
+    if is_fair_cost_lab_track_id(tid):
+        return tid
+    raise ValueError(f"Unknown fair-cost lab track_id: {track_id!r}")
 
 
 def fair_cost_lab_parent_track_id(track_id: str) -> str:
     tid = str(track_id or "").strip()
-    if tid not in _FAIR_PARENTS:
-        raise ValueError(f"Unknown fair-cost lab track_id: {track_id!r}")
-    return _FAIR_PARENTS[tid]
+    if tid in _FAIR_PARENTS:
+        return _FAIR_PARENTS[tid]
+    if tid.endswith(FAIR_TWIN_SUFFIX) and len(tid) > len(FAIR_TWIN_SUFFIX):
+        return tid[: -len(FAIR_TWIN_SUFFIX)]
+    raise ValueError(f"Unknown fair-cost lab track_id: {track_id!r}")
 
 
 def is_fair_cost_lab_track_id(track_id: str | None) -> bool:
-    return str(track_id or "").strip() in FAIR_COST_LAB_TRACK_IDS
+    tid = str(track_id or "").strip()
+    return tid in FAIR_COST_LAB_TRACK_IDS or tid.endswith(FAIR_TWIN_SUFFIX)
 
 
 def discover_fair_cost_lab_track_ids(paper_root: Path) -> list[str]:
     """Return Suite B track ids that already have a config under paper_root."""
     root = Path(paper_root)
-    return [
-        track_id
-        for track_id, subdir in _FAIR_SUBDIRS.items()
-        if (root / subdir / CONFIG_FILENAME).exists()
-    ]
+    found: list[str] = []
+    seen: set[str] = set()
+    for track_id, subdir in _FAIR_SUBDIRS.items():
+        if (root / subdir / CONFIG_FILENAME).exists():
+            found.append(track_id)
+            seen.add(track_id)
+    if not root.is_dir():
+        return found
+    for child in sorted(root.iterdir()):
+        if not child.is_dir() or child.name in seen:
+            continue
+        config_path = child / CONFIG_FILENAME
+        if not config_path.exists():
+            continue
+        try:
+            raw = json.loads(config_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
+            continue
+        track_id = str((raw or {}).get("track_id") or child.name).strip()
+        if not track_id or track_id in seen:
+            continue
+        if bool((raw or {}).get("is_fair_cost_lab")) or is_fair_cost_lab_track_id(track_id):
+            found.append(track_id)
+            seen.add(track_id)
+    return found
 
 
 def stamp_fair_costs(config: AutomationConfig, *, market_id: str = LIVE_PAPER_MARKET_ID) -> None:
@@ -241,6 +280,232 @@ def spawn_fair_cost_lab(
         "created_count": sum(1 for r in rows if r.get("created")),
         "market_id": market_id,
         "tracks": rows,
+    }
+
+
+def _build_fair_twin_config(
+    *,
+    twin_id: str,
+    parent: AutomationConfig,
+    parent_track_id: str,
+    market_id: str,
+) -> AutomationConfig:
+    cfg = AutomationConfig.from_dict(parent.to_dict())
+    cfg.track_id = twin_id
+    parent_label = str(parent.track_label or parent_track_id)
+    cfg.track_label = f"{parent_label} fair-cost twin (Suite B)"
+    cfg.is_primary_learning_track = False
+    cfg.is_fair_cost_lab = True
+    cfg.fair_cost_parent_track = parent_track_id
+    stamp_fair_costs(cfg, market_id=market_id)
+    return cfg
+
+
+def spawn_fair_cost_twin_for_parent(
+    paper_root: Path,
+    parent_track_id: str,
+    *,
+    market_id: str = LIVE_PAPER_MARKET_ID,
+    force: bool = False,
+    dry_run: bool = False,
+) -> dict[str, Any]:
+    """Spawn one fair-cost twin of an existing Suite A experiment track."""
+    paper_root = Path(paper_root)
+    parent_id = str(parent_track_id or "").strip()
+    if not parent_id:
+        return {"spawned": False, "reason": "parent_track_id required"}
+    if is_fair_cost_lab_track_id(parent_id):
+        return {
+            "spawned": False,
+            "parent_track_id": parent_id,
+            "reason": "parent is already a fair-cost track",
+        }
+    if parent_id in {AI_JUDGMENT_TRACK_ID, RULES_TRACK_ID}:
+        return {
+            "spawned": False,
+            "parent_track_id": parent_id,
+            "reason": "base AI/rules fair books already exist — use spawn-fair-lab",
+        }
+
+    try:
+        twin_id = fair_twin_track_id(parent_id)
+    except ValueError as exc:
+        return {"spawned": False, "parent_track_id": parent_id, "reason": str(exc)}
+
+    parent_dir = resolve_track_dir(paper_root, parent_id)
+    if not (parent_dir / CONFIG_FILENAME).exists():
+        return {
+            "spawned": False,
+            "parent_track_id": parent_id,
+            "twin_track_id": twin_id,
+            "reason": f"parent config missing at {parent_dir / CONFIG_FILENAME}",
+        }
+
+    shadow_dir = paper_root / fair_cost_lab_subdir(twin_id)
+    config_path = shadow_dir / CONFIG_FILENAME
+    if dry_run:
+        return {
+            "spawned": False,
+            "dry_run": True,
+            "would_spawn": not config_path.exists() or force,
+            "parent_track_id": parent_id,
+            "twin_track_id": twin_id,
+            "track_dir": str(shadow_dir),
+            "reason": "dry_run",
+        }
+
+    parent = _load_parent_config(paper_root, parent_id)
+    shadow_dir.mkdir(parents=True, exist_ok=True)
+    fund_path = shadow_dir / FUND_FILENAME
+    provenance_path = shadow_dir / FAIR_COST_LAB_PROVENANCE_FILENAME
+    existed = config_path.exists()
+    if existed and not force:
+        cfg = AutomationConfig.from_dict(json.loads(config_path.read_text(encoding="utf-8")))
+        cfg.is_fair_cost_lab = True
+        cfg.fair_cost_parent_track = parent_id
+        cfg.is_primary_learning_track = False
+        stamp_fair_costs(cfg, market_id=market_id)
+        config_path.write_text(json.dumps(cfg.to_dict(), indent=2) + "\n", encoding="utf-8")
+        ensure_automated_fund(fund_path, cfg)
+        return {
+            "spawned": True,
+            "created": False,
+            "track_id": twin_id,
+            "parent_track_id": parent_id,
+            "track_dir": str(shadow_dir),
+            "reason": "already exists — refreshed fair-cost stamps",
+        }
+
+    cfg = _build_fair_twin_config(
+        twin_id=twin_id,
+        parent=parent,
+        parent_track_id=parent_id,
+        market_id=market_id,
+    )
+    if fund_path.exists() and force:
+        fund_path.unlink()
+    config_path.write_text(json.dumps(cfg.to_dict(), indent=2) + "\n", encoding="utf-8")
+    ensure_automated_fund(fund_path, cfg)
+    provenance = {
+        "schema_version": 1,
+        "suite": "B",
+        "spawned_at": _utcnow_iso(),
+        "track_id": twin_id,
+        "parent_track_id": parent_id,
+        "market_id": market_id,
+        "spawn_reason": "experiment_assessment_recommend",
+        "fair_costs": cost_fields_for_config(market_id),
+        "parent_knobs_at_spawn": {
+            "min_conviction": parent.min_conviction,
+            "exit_confirm_screens": parent.exit_confirm_screens,
+            "reentry_cooldown_screens": parent.reentry_cooldown_screens,
+            "max_positions": parent.max_positions,
+            "sector_cap": parent.sector_cap,
+        },
+        "note": (
+            "Selective Suite B twin of a recommend-state Suite A experiment. "
+            "Human spawn only — do not auto-fork every shadow (N53)."
+        ),
+    }
+    write_json(provenance_path, provenance, compact=False)
+    return {
+        "spawned": True,
+        "created": not existed or force,
+        "track_id": twin_id,
+        "parent_track_id": parent_id,
+        "track_dir": str(shadow_dir),
+        "provenance_path": str(provenance_path),
+        "fair_costs": provenance["fair_costs"],
+    }
+
+
+def recommend_rows_for_fair_twins(assessment: dict[str, Any]) -> list[dict[str, Any]]:
+    """Return experiment_assessment rows eligible for a selective A→B twin."""
+    rows: list[dict[str, Any]] = []
+    for row in assessment.get("experiments") or []:
+        if not isinstance(row, dict):
+            continue
+        if str(row.get("status") or "") != "recommend":
+            continue
+        if str(row.get("kind") or "") not in MIRRORABLE_EXPERIMENT_KINDS:
+            continue
+        track_id = str(row.get("track_id") or "").strip()
+        if not track_id or is_fair_cost_lab_track_id(track_id):
+            continue
+        if track_id in {AI_JUDGMENT_TRACK_ID, RULES_TRACK_ID}:
+            continue
+        rows.append(row)
+    return rows
+
+
+def spawn_fair_cost_twins_for_recommendations(
+    paper_root: Path,
+    data_dir: Path,
+    *,
+    dry_run: bool = True,
+    max_spawns: int = DEFAULT_FAIR_TWIN_MAX_SPAWNS,
+    experiment_id: str | None = None,
+    market_id: str = LIVE_PAPER_MARKET_ID,
+    force: bool = False,
+) -> dict[str, Any]:
+    """Spawn fair-cost twins only for recommend-state Suite A experiments."""
+    from value_investor.experiment_assessment import ASSESSMENT_FILENAME
+
+    paper_root = Path(paper_root)
+    assessment_path = Path(data_dir) / ASSESSMENT_FILENAME
+    try:
+        raw = read_json(assessment_path)
+        assessment = raw if isinstance(raw, dict) else {}
+    except (OSError, ValueError, FileNotFoundError):
+        assessment = {}
+
+    candidates = recommend_rows_for_fair_twins(assessment)
+    if experiment_id:
+        wanted = str(experiment_id).strip()
+        candidates = [
+            row
+            for row in candidates
+            if str(row.get("experiment_id") or "") == wanted
+            or str(row.get("track_id") or "") == wanted
+        ]
+
+    cap = max(0, int(max_spawns))
+    selected = candidates[:cap]
+    skipped_budget = candidates[cap:]
+    rows = [
+        spawn_fair_cost_twin_for_parent(
+            paper_root,
+            str(row.get("track_id") or ""),
+            market_id=market_id,
+            force=force,
+            dry_run=dry_run,
+        )
+        | {
+            "experiment_id": row.get("experiment_id"),
+            "kind": row.get("kind"),
+            "status": row.get("status"),
+        }
+        for row in selected
+    ]
+    return {
+        "dry_run": dry_run,
+        "recommend_count": len(candidates),
+        "selected_count": len(selected),
+        "spawned_count": sum(1 for r in rows if r.get("spawned")),
+        "created_count": sum(1 for r in rows if r.get("created")),
+        "skipped_budget": [
+            {
+                "experiment_id": row.get("experiment_id"),
+                "track_id": row.get("track_id"),
+                "reason": "max_spawns",
+            }
+            for row in skipped_budget
+        ],
+        "tracks": rows,
+        "note": (
+            "Human gate only — recommend rows never auto-spawn (N41/N53). "
+            "Default dry_run=True; pass dry_run=False to write configs."
+        ),
     }
 
 

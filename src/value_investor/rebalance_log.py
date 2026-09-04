@@ -1170,6 +1170,11 @@ def replay_counterfactual_from_archive(
             if ticker and price is not None and float(price) > 0:
                 price_hints[ticker] = float(price)
 
+        if effective_use_adj or effective_req_acc:
+            from value_investor.research.overlay import enrich_marked_rows_with_research
+
+            marked = enrich_marked_rows_with_research(marked, data_dir, as_of=when)
+
         candidates = collect_decision_candidates(
             marked,
             fund,
@@ -1244,7 +1249,8 @@ def replay_counterfactual_from_archive(
         "limitations": (
             "Observe-only archive walk — one rebalance per archived weekly screen "
             "from first logged pass. Does not mutate live knobs. AI overlay gates "
-            "need PIT research joins for ai_judgment tracks (L113)."
+            "use PIT research joins (L113) when a research timeline exists under "
+            "the archive parent data_dir."
         ),
     }
 
@@ -1691,8 +1697,10 @@ def bootstrap_rebalance_log(
     """
     Reconstruct rebalance_log.json from trade history + nearest dashboard archives.
 
-    Intended for pre-logging backfill (rules track first). Entries are marked
-    ``bootstrapped: true``.
+    Rules tracks join archives only. Tracks with AI overlay gates
+    (``use_adjusted_signal`` / ``require_research_accumulate``) also apply
+    point-in-time research via ``get_research_as_of`` (L113). Entries are
+    marked ``bootstrapped: true``.
     """
     from value_investor.archive_history import list_dashboard_archives
     from value_investor.paper_automation import (
@@ -1759,12 +1767,24 @@ def bootstrap_rebalance_log(
         if archive_path is None:
             continue
 
+        archive_payload = json.loads(archive_path.read_text(encoding="utf-8"))
         marked = archive_to_marked_rows(
             archive_path,
             price_hints=price_hints,
             fetch_prices=fetch_prices,
         )
         selection = selection_at_time(config, knob_timeline, acted_at, initial_knobs=initial_knobs)
+        pit_research = bool(
+            selection.get("use_adjusted_signal") or selection.get("require_research_accumulate")
+        )
+        if pit_research:
+            from value_investor.research.overlay import enrich_marked_rows_with_research
+
+            marked = enrich_marked_rows_with_research(
+                marked,
+                data_dir,
+                as_of=archive_payload.get("run_at") or acted_at,
+            )
         max_pos = int(selection.get("max_positions") or config.max_positions)
         replay_fund.config.max_positions = max_pos
 
@@ -1843,7 +1863,6 @@ def bootstrap_rebalance_log(
             if float(trade.price) > 0:
                 prices_post[str(trade.ticker)] = float(trade.price)
 
-        archive_payload = json.loads(archive_path.read_text(encoding="utf-8"))
         entry = build_rebalance_log_entry(
             track_id=str(config.track_id or "rules"),
             track_label=str(config.track_label or ""),
@@ -1882,7 +1901,10 @@ def bootstrap_rebalance_log(
             rebalance_state_after=replay_fund.rebalance_state.to_dict(),
         )
         entry["bootstrapped"] = True
-        entry["bootstrap_source"] = "trades+archives"
+        entry["bootstrap_source"] = (
+            "trades+archives+pit_research" if pit_research else "trades+archives"
+        )
+        entry["bootstrap_pit_research"] = pit_research
         entries.append(entry)
 
     log_path.write_text(json.dumps(entries, indent=2) + "\n", encoding="utf-8")

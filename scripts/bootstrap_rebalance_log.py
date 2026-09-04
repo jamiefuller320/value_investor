@@ -35,9 +35,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--tracks",
-        choices=["rules", "all"],
+        choices=["rules", "ai_judgment", "all"],
         default="rules",
-        help="Which track(s) to bootstrap (default: rules only)",
+        help="Which track(s) to bootstrap (default: rules only; ai_judgment uses PIT research)",
     )
     parser.add_argument(
         "--archive-dir",
@@ -62,6 +62,9 @@ def main(argv: list[str] | None = None) -> int:
         targets = [("custom", Path(args.track_dir))]
     elif args.tracks == "all":
         targets = list(learning_track_dirs(Path(args.base_dir)).items())
+    elif args.tracks == "ai_judgment":
+        dirs = learning_track_dirs(Path(args.base_dir))
+        targets = [("ai_judgment", dirs["ai_judgment"])]
     else:
         targets = [("rules", Path(args.base_dir))]
 

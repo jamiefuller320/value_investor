@@ -6,7 +6,11 @@ from value_investor.research.gap_fill import (
     extract_gap_fill_targets,
     run_red_flag_gap_fill,
 )
-from value_investor.research.overlay import apply_research_overlay, enrich_signals_with_research
+from value_investor.research.overlay import (
+    apply_research_overlay,
+    enrich_marked_rows_with_research,
+    enrich_signals_with_research,
+)
 from value_investor.research.runner import (
     DEFAULT_RESEARCH_ALUMNI_CAP,
     DEFAULT_RESEARCH_WEEKLY_CAP,
@@ -34,6 +38,7 @@ __all__ = [
     "compute_adjusted_signal",
     "eligible_alumni_research_targets",
     "eligible_research_targets",
+    "enrich_marked_rows_with_research",
     "enrich_signals_with_research",
     "extract_gap_fill_targets",
     "get_research_as_of",

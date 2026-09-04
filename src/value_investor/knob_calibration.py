@@ -509,12 +509,20 @@ def calibrate_track(
 
     warnings: list[str] = []
     if any(entry.get("bootstrapped") for entry in acted):
-        warnings.append(
-            "rebalance_log contains bootstrapped entries (L113 PIT caveat for AI gates)"
-        )
+        if any(
+            not entry.get("bootstrap_pit_research") for entry in acted if entry.get("bootstrapped")
+        ):
+            warnings.append(
+                "rebalance_log contains bootstrapped entries without PIT research (L113)"
+            )
+        else:
+            warnings.append(
+                "rebalance_log contains bootstrapped entries (PIT research applied, L113)"
+            )
     if use_adjusted_signal or require_research_accumulate:
         warnings.append(
-            "AI overlay gates fixed to track config — not swept until L113 PIT bootstrap"
+            "AI overlay gates use track config; archive/bootstrap PIT joins applied when "
+            "a research timeline exists (L113)"
         )
     if len(acted) < MIN_ACTED_FOR_CONFIDENT_PRIORS:
         warnings.append(f"only {len(acted)} acted log entries — priors are low confidence")

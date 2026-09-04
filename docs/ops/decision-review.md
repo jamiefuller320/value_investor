@@ -124,12 +124,17 @@ Tracks that traded before logging existed can be bootstrapped from trade history
 
 ```bash
 python3 scripts/bootstrap_rebalance_log.py --tracks rules
+# AI-judgment (PIT research overlay via get_research_as_of):
+python3 scripts/bootstrap_rebalance_log.py --tracks ai_judgment --overwrite
 # or all tracks with trades:
 python3 scripts/bootstrap_rebalance_log.py --tracks all --overwrite
 ```
 
-Entries are marked `bootstrapped: true`. AI-judgment bootstrap is lossier (needs
-PIT research); rules track is the reference implementation.
+Entries are marked `bootstrapped: true`. Rules tracks join archives only. AI
+tracks with `use_adjusted_signal` / `require_research_accumulate` also apply
+point-in-time research (`bootstrap_source=trades+archives+pit_research`) so
+`adjusted_signal` / `gate_excluded` match what the overlay knew that day. Later
+memo revisions must not leak into earlier passes.
 
 ### Archive → history backfill
 
