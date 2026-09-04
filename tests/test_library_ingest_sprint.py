@@ -88,8 +88,21 @@ def test_ingest_sprint_cli_accepts_max_targets_and_parallel_stream():
     from value_investor.data_library_cli import build_parser
 
     args = build_parser().parse_args(
-        ["ingest-sprint", "--max-targets", "24", "--parallel-stream", "2", "--json"]
+        [
+            "ingest-sprint",
+            "--max-targets",
+            "24",
+            "--parallel-stream",
+            "2",
+            "--head-idle",
+            "--json",
+        ]
     )
     assert args.max_targets == 24
     assert args.parallel_stream == 2
+    assert args.head_idle is True
     assert args.json is True
+
+    sched = build_parser().parse_args(["ingest-schedule", "--stream", "2", "--head-idle", "--json"])
+    assert sched.parallel_stream == 2
+    assert sched.head_idle is True

@@ -87,7 +87,7 @@ Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The
 
 **What runs:** Full track set (rules, AI judgment, grace, technical), exit-shadow and exit-timing cohorts, churn health — **Sunday batch only** after ladder, using library screen → reports adapter. No weekday settle stepping yet; no `--apply` on knobs.
 
-**Policy:** `ladder.weekly_paper_shard_after_screen`, `ladder.weekly_paper_shard_markets`, `ladder.weekly_paper_shard_capacity` (depth-first: capacity **1**, markets `["euro_depth"]`).
+**Policy:** `ladder.weekly_paper_shard_after_screen`, `ladder.weekly_paper_shard_markets`, `ladder.weekly_paper_shard_capacity` (depth-first: capacity **1**, markets `["euro_depth"]`). Ingest effort follows the same cascade (P2 in [`AGENTS.md`](../AGENTS.md)): fat slot on the current learning-phase candidate, spare on the next queue markets, no fourth equal sprint stream.
 
 **Orchestration:** After observe sim in `ftse-library ladder`, `run_weekly_paper_shards_for_screened_markets` runs for markets that passed Phase 1 and were screened this run. Phase rollup refreshes to `docs/data/library/shard_phases.json`.
 

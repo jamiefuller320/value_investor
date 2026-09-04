@@ -8,6 +8,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from value_investor.library_ingest_cascade import default_ingest_effort_cascade_policy
 from value_investor.storage import read_json, write_json
 
 # Approximate API list prices ($ / 1M tokens) from https://cursor.com/docs/models
@@ -215,6 +216,7 @@ def default_policy() -> dict[str, Any]:
                 "Never wire into quantitative scores or weights."
             ),
         },
+        "ingest_effort_cascade": default_ingest_effort_cascade_policy(),
         "director_worker": {
             "phase": "exploration",
             "exploration_weekly_cap": 15,
@@ -252,6 +254,7 @@ def load_policy(path: Path | None = None) -> dict[str, Any]:
         "paper_fx",
         "macro_context",
         "director_worker",
+        "ingest_effort_cascade",
     ):
         merged = default_policy()[key]
         file_section = dict(data.get(key) or {})

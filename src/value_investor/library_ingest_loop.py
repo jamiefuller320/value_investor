@@ -93,6 +93,9 @@ class LibraryIngestLoopResult:
     parity_handoff: dict[str, Any] | None = None
     parallel_sprint_handoff: dict[str, Any] | None = None
     critical_path: dict[str, Any] | None = None
+    used_seconds: float | None = None
+    budget_seconds: float | None = None
+    leftover_seconds: float | None = None
     blocker_ticker: str | None = None
     per_ticker_max_seconds: float | None = None
 
@@ -129,6 +132,9 @@ class LibraryIngestLoopResult:
             "parity_handoff": self.parity_handoff,
             "parallel_sprint_handoff": self.parallel_sprint_handoff,
             "critical_path": self.critical_path,
+            "used_seconds": self.used_seconds,
+            "budget_seconds": self.budget_seconds,
+            "leftover_seconds": self.leftover_seconds,
             "blocker_ticker": self.blocker_ticker,
             "per_ticker_max_seconds": self.per_ticker_max_seconds,
         }
@@ -735,6 +741,12 @@ def run_library_ingest_loop(
             result.partial = True
             break
 
+    used_seconds = max(0.0, time.monotonic() - started)
+    result.used_seconds = used_seconds
+    result.budget_seconds = float(max_runtime_seconds)
+    result.leftover_seconds = (
+        0.0 if result.runtime_cutoff else max(0.0, float(max_runtime_seconds) - used_seconds)
+    )
     result.blocker_ticker = select_blocker_ticker(result.results)
 
     result.health_after = snapshot_library_ingest_health(market_id, library_root=library_root)
@@ -810,6 +822,23 @@ def run_library_ingest_loop(
         refresh_euro_ingest_dispatch(library_root=library_root, market_id=market_id)
     except Exception as exc:  # noqa: BLE001
         logger.warning("Library ingest dispatch refresh failed: %s", exc)
+
+    try:
+        from value_investor.agent_model_policy import load_policy
+        from value_investor.library_ingest_dispatch import ingest_parity_met as _head_parity
+        from value_investor.library_ingest_scheduler import persist_head_runtime_from_loop
+
+        persist_head_runtime_from_loop(
+            market_id=market_id,
+            used_seconds=float(result.used_seconds or 0.0),
+            budget_seconds=float(result.budget_seconds or max_runtime_seconds),
+            runtime_cutoff=bool(result.runtime_cutoff),
+            head_at_parity=_head_parity(result.health_after),
+            policy=load_policy(),
+            library_root=library_root,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Cascade leftover persist failed for %s: %s", market_id, exc)
 
     result.stalled = library_ingest_health_stalled(
         health_log_path,

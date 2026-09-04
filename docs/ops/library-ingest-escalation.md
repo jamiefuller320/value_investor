@@ -142,7 +142,7 @@ ftse-library euro-ingest-dispatch --json
 |------|----------|-----------|
 | Sprint ingest (focus) | `euro-ingest-loop.yml` | Runs only when focus `should_run_sprint_ingest` |
 | Sprint ingest (parallel 1) | `library-ingest-sprint.yml` | Runs `ingest_parallel_sprint` markets with gaps (e.g. sp500) |
-| Sprint ingest (parallel 2) | `library-ingest-sprint-2.yml` | Runs `ingest_parallel_sprint_2` markets with gaps (e.g. asx200); auto-advances queue on parity |
+| Sprint ingest (parallel 2) | `library-ingest-sprint-2.yml` | Spare stream: `ingest_parallel_sprint_2` (e.g. asx200). Waits on euro + stream 1, then leftover / spare fraction or queue fill-down. Peak-hour skip is a local fallback only. Auto-advances queue on parity. |
 
 Parallel sprint auto-advance (`advance_parallel_sprint_on_ingest_parity`, default true) rotates
 `market_queue` markets through stream slots when filing parity is met. FTSE-equivalent markets
@@ -154,6 +154,8 @@ Parallel sprint auto-advance (`advance_parallel_sprint_on_ingest_parity`, defaul
 | Micro-compile dispatch | `euro-ingest-loop.yml` | After `micro_compiled` or `gap_closure_compiled`, runs `engineering-queue.yml` immediately |
 | Post-merge verify rerun | `engineering-queue.yml` | Tasks with `evidence.market_id` rerun **`euro-ingest-loop.yml`**; FTSE tasks still use `ingest-loop.yml` |
 | Discovery time cap | `library_ingest_budget.py` | Listing discovery may use at most 25% of `max_runtime_seconds` (675s of a 2700s euro slot) and scans thin/unmeasured/zero-body/IWB names first. Body deepen keeps the rest of the clock. |
+| Effort cascade | `library_ingest_cascade.py` / `ingest_effort_cascade` | Static fractions while focus has filing gaps: stream 1 at 50% targets/runtime, stream 2 at 25%. Full spare caps return at head ingest parity. |
+| Ingest scheduler | `library_ingest_scheduler.py` / `ftse-library ingest-schedule` | Live wait on the head, leftover minutes after the euro run, queue fill-down when the assigned stream has no gaps. Peak-hour skip only when head busyness is unknown. |
 | Two-lane deepen | `library_ingest_loop.py` | **Lane 1 (all library markets):** weekday mid-ticker cap (`DEFAULT_PER_TICKER_MAX_SECONDS=320`, overridable). Abort the current name and continue the batch. The aborting ticker is `blocker_ticker` and is demoted for 6h so it does not re-head the next slot. **Lane 2:** intensive pin (`--pin-ticker` / `--record-gap-closure`) disables the per-ticker cap and uses the remaining slot. Failed IR allowlist rows are marked `unfetchable` and skipped on later passes (any market). |
 | Clean JSON for CI | `euro-ingest-loop.yml` | Uses `ingest-loop --json-path` / `euro-ingest-dispatch --json-path` (not `tee`) so stdout warnings (e.g. PyMuPDF `fitz`) cannot break `GITHUB_OUTPUT` parsing |
 | Artifact push | `scripts/push_library_ingest_artifacts.sh` | Stashes allowlisted paths (`docs/data/library/`, `engineering_tasks.json`, `ingest_gap_closure_runs.json`) before `checkout origin/main`; restores only files the job changed so concurrent queue updates are not clobbered |
