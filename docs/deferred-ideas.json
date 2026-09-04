@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-04T16:27:43+00:00",
+  "updated_at": "2026-09-04T19:05:38+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -6102,6 +6102,40 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
       "added_at": "2026-09-04T16:27:43+00:00"
+    },
+    {
+      "id": "N78",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not lengthen the euro ingest slot after a leftover-514s productive run",
+      "summary": "The 2026-09-04 13:15 euro slot used 2186/2700s, improved 6 names, and left 514s unused because remaining IWB were unfetchable or ABI.BR hit the 320s cap with 0 bodies. More minutes, more targets, or a fifth daily euro cron will not raise filings_with_body.",
+      "revisit_when": "A euro sprint hits runtime_cutoff with improved>0 and leftover_seconds=0 on two consecutive slots, or discovery again consumes the deepen half of the clock.",
+      "tags": [
+        "euro",
+        "ingest",
+        "not-now",
+        "budget"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
+      "added_at": "2026-09-04T19:05:38+00:00"
+    },
+    {
+      "id": "L287",
+      "category": "later",
+      "section": "research",
+      "title": "Replace ABI.BR IR allowlist; weekday 320s cannot clear 11 IWB",
+      "summary": "ABI.BR was the 13:15 blocker (ticker_budget_hit, 20/20 bodies, 11 IWB). The allowlist is one bmv.com.mx 10-K PDF, which is the wrong issuer. Same class as the DG.PA GlobeNewswire miss: swap in AB InBev IR PDFs and mark failed rows unfetchable.",
+      "revisit_when": "The next euro deepen spends another 320s on ABI.BR with improved=false, or intensive gap-closure is pinned to ABI.BR.",
+      "tags": [
+        "euro",
+        "ingest",
+        "ir-allowlist",
+        "ABI.BR"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06c0e-0206-7006-ab84-6ae9e47ee4fd",
+      "added_at": "2026-09-04T19:05:38+00:00"
     }
   ],
   "fragments": [
