@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T06:55:32+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T07:03:28+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -122,6 +122,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N65 | **Library ingest director (agent orchestration)** | No ingest-director module exists. ingest_critical_path already classifies blockers; the euro stall was a deterministic discovery-vs-deepen budget bug, not a missing LLM planner. A weekly director like learning-director would not fetch bodies. | Euro deepen still starves after the discovery time cap, or we need cross-market ingest scheduling beyond critical-path + budget |
 | N66 | **Auto-promote high system_gaps flags to engineering** | Do not auto-open engineering tasks from system_gaps flags yet. Analysis-review still proposes [ops]/[ingest] lines for human promote; wiring mistakes need a human gate. | Three consecutive Sundays produce the same high-severity flag id and a human has promoted the matching analysis task twice |
 | N67 | **Mine agent-run follow-up transcripts for latent gaps** | This morning's research-vs-learning miss surfaced from a follow-up, not eval. Horizon already forbids conversation transcript mining; keep fragments + system_gaps as the capture path. | Monthly horizon has missed two more consumer-path gaps that only appeared in agent follow-ups after system_gaps.json has run for 8 Sundays |
+| N68 | **Raise Sunday fragment capture beyond director cap of 2** | Learning director emits at most 2 blue-sky fragments per week; analysis-review and post-run emit none. That is intentional, not a transcript substitute. Do not raise the cap or add review-agent fragments until system_gaps has a track record. | After 8 Sundays of system_gaps.json, a follow-up question still surfaces a consumer-path gap that was neither a system_gaps flag nor an ftse-defer entry |
 
 ---
 
