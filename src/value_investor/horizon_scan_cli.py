@@ -133,26 +133,28 @@ def _cmd_apply_defer(args: argparse.Namespace) -> int:
     return 0
 
 
-def _cmd_promote_engineering(args: argparse.Namespace) -> int:
-    if not args.task_ids and not args.all_engineering:
-        print(
-            "Pass horizon task id(s) or --all-engineering",
-            file=sys.stderr,
-        )
-        return 1
-    result = promote_horizon_engineering_tasks(
-        list(args.task_ids) if args.task_ids else None,
-        horizon_tasks_path=args.tasks_path,
-        engineering_tasks_path=args.engineering_tasks_path,
-        promote_all_engineering=args.all_engineering,
-    )
+def _cmd_weed_fragments(args: argparse.Namespace) -> int:
+    from value_investor.fragment_weeder import weed_fragments
+
+    result = weed_fragments(store_path=args.deferred_store, apply=args.apply)
+    if args.apply:
+        write_markdown(store_path=args.deferred_store, markdown_path=args.markdown)
     if args.json:
         _print_json(result)
-    else:
-        print(f"Promoted: {', '.join(result['promoted']) or '(none)'}")
-        for row in result["skipped"]:
-            print(f"  skipped {row['id']}: {row['reason']}")
-        print(f"Engineering tasks → {result['engineering_tasks_path']}")
+        return 0
+    proposal = result.get("proposal") or {}
+    print(
+        f"fragment weeder open={proposal.get('open_count', 0)} "
+        f"drop={proposal.get('drop_count', 0)} keep={proposal.get('keep_count', 0)}"
+    )
+    for row in proposal.get("actions") or []:
+        extra = row.get("canonical_id") or row.get("idea_id") or ""
+        suffix = f" → {extra}" if extra else ""
+        print(f"  {row.get('action')} {row.get('fragment_id')} [{row.get('reason')}]{suffix}")
+    if result.get("applied"):
+        applied = result.get("apply") or {}
+        print(f"Dropped: {', '.join(applied.get('dropped') or []) or '(none)'}")
+        print(f"Open remaining: {applied.get('open_remaining', 0)}")
     return 0
 
 
@@ -270,6 +272,18 @@ def main(argv: list[str] | None = None) -> int:
         help="Mark PROMOTE fragments done without creating deferred ideas",
     )
     apply_frag.set_defaults(func=_cmd_apply_fragments)
+
+    weed = sub.add_parser(
+        "weed-fragments",
+        help="Drop near-duplicate fragments and ones already captured as deferred ideas",
+    )
+    add_json_flags(weed)
+    weed.add_argument(
+        "--apply",
+        action="store_true",
+        help="Apply deterministic DROP actions (default: propose only)",
+    )
+    weed.set_defaults(func=_cmd_weed_fragments)
 
     promote_eng = sub.add_parser(
         "promote-engineering",

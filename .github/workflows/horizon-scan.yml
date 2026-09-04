@@ -24,6 +24,10 @@ on:
         description: "Promote proposed horizon ACCELERATE tasks into engineering queue"
         type: boolean
         default: false
+      weed_fragments:
+        description: "Apply deterministic near-dup / already-an-idea fragment DROPs before the agent"
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -94,6 +98,16 @@ jobs:
             cp -f docs/data/history/run_* output/history/ 2>/dev/null || true
           fi
 
+      - name: Weed near-duplicate fragments
+        env:
+          WEED_FRAGMENTS: ${{ github.event.inputs.weed_fragments || 'true' }}
+        run: |
+          if [ "$WEED_FRAGMENTS" = "true" ]; then
+            ftse-horizon-scan weed-fragments --apply --json || true
+          else
+            ftse-horizon-scan weed-fragments --json || true
+          fi
+
       - name: Check horizon inputs
         id: ready
         run: |
@@ -148,8 +162,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git pull --rebase --autostash origin main
 
-      - name: Commit horizon scan artifacts
-        if: steps.ready.outputs.skip != 'true'
+      - name: Commit fragment weeder + horizon artifacts
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: monthly horizon scan [skip ci]"

@@ -1,0 +1,868 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-04T08:29:26.028562+00:00",
+  "framework": {
+    "purpose": "Observe-only graduated-entry / DCA overlay. Score counterfactual cadences on the same decided notional across every paper model. Findings are expected to be largely independent of the underlying selection model.",
+    "lifecycle_stage": "starter (first_entry) or recommit (prior cycle)",
+    "questions": [
+      "Does spreading a decided notional cut peak adverse \u00a3 exposure vs lump-sum?",
+      "Which cadence wins after extra buy costs and missed-upside opportunity?"
+    ],
+    "cadences": [
+      {
+        "id": "lump_sum",
+        "tranches": 1,
+        "interval_days": 0,
+        "window_days": 0,
+        "label": "100% at decision"
+      },
+      {
+        "id": "dca_2x_weekly",
+        "tranches": 2,
+        "interval_days": 7,
+        "window_days": 7,
+        "label": "50/50 over 1 week"
+      },
+      {
+        "id": "dca_4x_weekly",
+        "tranches": 4,
+        "interval_days": 7,
+        "window_days": 21,
+        "label": "25% weekly \u00d7 4"
+      },
+      {
+        "id": "dca_2x_biweekly",
+        "tranches": 2,
+        "interval_days": 14,
+        "window_days": 14,
+        "label": "50/50 over 2 weeks"
+      },
+      {
+        "id": "dca_5x_weekday",
+        "tranches": 5,
+        "interval_days": 1,
+        "window_days": 4,
+        "label": "20% over 5 weekday marks"
+      }
+    ],
+    "outcomes": [
+      "fill_advantage_pct (positive = cheaper average fill than lump-sum)",
+      "de_risk_gbp (positive = smaller peak unrealized \u00a3 loss than lump-sum)",
+      "end_value_delta (DCA end value \u2212 lump-sum end value after extra costs)"
+    ],
+    "related_artifacts": [
+      "graduated_allocation rebalance_log (starter sizing already live on one track)",
+      "hypothesis_integrity (loss tolerance after the sleeve is on)",
+      "exit_timing_cohorts (hold vs swap once the position exists)",
+      "position_lifecycle catalog (perpetual factor inventory)"
+    ]
+  },
+  "lifecycle_catalog": {
+    "purpose": "Break the entry\u2013exit lifecycle into stages, name the factors that apply at each stage, and keep an experiment running on every factor. Dollar-cost averaging / graduated entry is watched across all paper models first \u2014 fill and de-risk findings are expected to be largely model-independent.",
+    "coverage": {
+      "factor_count": 27,
+      "by_status": {
+        "observing": 18,
+        "planned": 8,
+        "deferred": 1,
+        "other": 0
+      },
+      "model_independent_factors": 4,
+      "stages_without_observing_experiment": [],
+      "by_stage": [
+        {
+          "id": "prospect",
+          "observing": 4,
+          "planned": 0,
+          "deferred": 0,
+          "factor_count": 4
+        },
+        {
+          "id": "starter",
+          "observing": 2,
+          "planned": 1,
+          "deferred": 0,
+          "factor_count": 3
+        },
+        {
+          "id": "build",
+          "observing": 1,
+          "planned": 4,
+          "deferred": 0,
+          "factor_count": 5
+        },
+        {
+          "id": "full",
+          "observing": 3,
+          "planned": 0,
+          "deferred": 0,
+          "factor_count": 3
+        },
+        {
+          "id": "harvest",
+          "observing": 2,
+          "planned": 0,
+          "deferred": 0,
+          "factor_count": 2
+        },
+        {
+          "id": "grace",
+          "observing": 3,
+          "planned": 0,
+          "deferred": 0,
+          "factor_count": 3
+        },
+        {
+          "id": "exit",
+          "observing": 2,
+          "planned": 1,
+          "deferred": 0,
+          "factor_count": 3
+        },
+        {
+          "id": "recommit",
+          "observing": 1,
+          "planned": 2,
+          "deferred": 1,
+          "factor_count": 4
+        }
+      ],
+      "perpetual": true,
+      "note": "Every stage should have \u22651 observing experiment. Planned factors activate when their revisit_when trigger fires \u2014 do not spawn a new paper book per factor."
+    }
+  },
+  "tracks": {
+    "rules": {
+      "schema_version": 1,
+      "track_id": "rules",
+      "observe_only": true,
+      "generated_at": "2026-09-04T08:27:13.896392+00:00",
+      "open_count": 1,
+      "closed_count": 0,
+      "scored_count": 0,
+      "scored_count_all": 0,
+      "recommit_scored_count": 0,
+      "entry_kind_counts": {
+        "first_entry": 0,
+        "recommit": 0
+      },
+      "any_de_risk_count": 0,
+      "winning_cadence_counts": {},
+      "cadence_stats": {
+        "dca_2x_weekly": {
+          "label": "50/50 over 1 week",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_4x_weekly": {
+          "label": "25% weekly \u00d7 4",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_2x_biweekly": {
+          "label": "50/50 over 2 weeks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_5x_weekday": {
+          "label": "20% over 5 weekday marks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        }
+      },
+      "readiness": {
+        "ready_for_cadence_analysis": false,
+        "closed_episodes": 0,
+        "closed_target": 12,
+        "tracks_with_closed": 0,
+        "tracks_target": 2,
+        "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
+        "first_entry_scored": 0,
+        "recommit_scored": 0
+      },
+      "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
+      "ingested_this_pass": 1,
+      "marked_this_pass": 0,
+      "closed_this_pass": 0
+    },
+    "ai_judgment": {
+      "schema_version": 1,
+      "track_id": "ai_judgment",
+      "observe_only": true,
+      "generated_at": "2026-09-04T08:27:26.988784+00:00",
+      "open_count": 1,
+      "closed_count": 0,
+      "scored_count": 0,
+      "scored_count_all": 0,
+      "recommit_scored_count": 0,
+      "entry_kind_counts": {
+        "first_entry": 0,
+        "recommit": 0
+      },
+      "any_de_risk_count": 0,
+      "winning_cadence_counts": {},
+      "cadence_stats": {
+        "dca_2x_weekly": {
+          "label": "50/50 over 1 week",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_4x_weekly": {
+          "label": "25% weekly \u00d7 4",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_2x_biweekly": {
+          "label": "50/50 over 2 weeks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_5x_weekday": {
+          "label": "20% over 5 weekday marks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        }
+      },
+      "readiness": {
+        "ready_for_cadence_analysis": false,
+        "closed_episodes": 0,
+        "closed_target": 12,
+        "tracks_with_closed": 0,
+        "tracks_target": 2,
+        "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
+        "first_entry_scored": 0,
+        "recommit_scored": 0
+      },
+      "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
+      "ingested_this_pass": 1,
+      "marked_this_pass": 0,
+      "closed_this_pass": 0
+    },
+    "momentum_grace": {
+      "schema_version": 1,
+      "track_id": "momentum_grace",
+      "observe_only": true,
+      "generated_at": "2026-09-04T08:27:40.392920+00:00",
+      "open_count": 0,
+      "closed_count": 0,
+      "scored_count": 0,
+      "scored_count_all": 0,
+      "recommit_scored_count": 0,
+      "entry_kind_counts": {
+        "first_entry": 0,
+        "recommit": 0
+      },
+      "any_de_risk_count": 0,
+      "winning_cadence_counts": {},
+      "cadence_stats": {
+        "dca_2x_weekly": {
+          "label": "50/50 over 1 week",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_4x_weekly": {
+          "label": "25% weekly \u00d7 4",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_2x_biweekly": {
+          "label": "50/50 over 2 weeks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_5x_weekday": {
+          "label": "20% over 5 weekday marks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        }
+      },
+      "readiness": {
+        "ready_for_cadence_analysis": false,
+        "closed_episodes": 0,
+        "closed_target": 12,
+        "tracks_with_closed": 0,
+        "tracks_target": 2,
+        "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
+        "first_entry_scored": 0,
+        "recommit_scored": 0
+      },
+      "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
+      "ingested_this_pass": 0,
+      "marked_this_pass": 0,
+      "closed_this_pass": 0
+    },
+    "graduated_allocation": {
+      "schema_version": 1,
+      "track_id": "graduated_allocation",
+      "observe_only": true,
+      "generated_at": "2026-09-04T08:27:54.474889+00:00",
+      "open_count": 4,
+      "closed_count": 0,
+      "scored_count": 0,
+      "scored_count_all": 0,
+      "recommit_scored_count": 0,
+      "entry_kind_counts": {
+        "first_entry": 0,
+        "recommit": 0
+      },
+      "any_de_risk_count": 0,
+      "winning_cadence_counts": {},
+      "cadence_stats": {
+        "dca_2x_weekly": {
+          "label": "50/50 over 1 week",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_4x_weekly": {
+          "label": "25% weekly \u00d7 4",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_2x_biweekly": {
+          "label": "50/50 over 2 weeks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_5x_weekday": {
+          "label": "20% over 5 weekday marks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        }
+      },
+      "readiness": {
+        "ready_for_cadence_analysis": false,
+        "closed_episodes": 0,
+        "closed_target": 12,
+        "tracks_with_closed": 0,
+        "tracks_target": 2,
+        "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
+        "first_entry_scored": 0,
+        "recommit_scored": 0
+      },
+      "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
+      "ingested_this_pass": 4,
+      "marked_this_pass": 0,
+      "closed_this_pass": 0
+    },
+    "technical": {
+      "schema_version": 1,
+      "track_id": "technical",
+      "observe_only": true,
+      "generated_at": "2026-09-04T08:28:08.344465+00:00",
+      "open_count": 3,
+      "closed_count": 0,
+      "scored_count": 0,
+      "scored_count_all": 0,
+      "recommit_scored_count": 0,
+      "entry_kind_counts": {
+        "first_entry": 0,
+        "recommit": 0
+      },
+      "any_de_risk_count": 0,
+      "winning_cadence_counts": {},
+      "cadence_stats": {
+        "dca_2x_weekly": {
+          "label": "50/50 over 1 week",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_4x_weekly": {
+          "label": "25% weekly \u00d7 4",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_2x_biweekly": {
+          "label": "50/50 over 2 weeks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_5x_weekday": {
+          "label": "20% over 5 weekday marks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        }
+      },
+      "readiness": {
+        "ready_for_cadence_analysis": false,
+        "closed_episodes": 0,
+        "closed_target": 12,
+        "tracks_with_closed": 0,
+        "tracks_target": 2,
+        "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
+        "first_entry_scored": 0,
+        "recommit_scored": 0
+      },
+      "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
+      "ingested_this_pass": 3,
+      "marked_this_pass": 0,
+      "closed_this_pass": 0
+    },
+    "ai_judgment_calibrated": {
+      "schema_version": 1,
+      "track_id": "ai_judgment_calibrated",
+      "observe_only": true,
+      "generated_at": "2026-09-04T08:28:21.246839+00:00",
+      "open_count": 1,
+      "closed_count": 0,
+      "scored_count": 0,
+      "scored_count_all": 0,
+      "recommit_scored_count": 0,
+      "entry_kind_counts": {
+        "first_entry": 0,
+        "recommit": 0
+      },
+      "any_de_risk_count": 0,
+      "winning_cadence_counts": {},
+      "cadence_stats": {
+        "dca_2x_weekly": {
+          "label": "50/50 over 1 week",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_4x_weekly": {
+          "label": "25% weekly \u00d7 4",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_2x_biweekly": {
+          "label": "50/50 over 2 weeks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_5x_weekday": {
+          "label": "20% over 5 weekday marks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        }
+      },
+      "readiness": {
+        "ready_for_cadence_analysis": false,
+        "closed_episodes": 0,
+        "closed_target": 12,
+        "tracks_with_closed": 0,
+        "tracks_target": 2,
+        "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
+        "first_entry_scored": 0,
+        "recommit_scored": 0
+      },
+      "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
+      "ingested_this_pass": 1,
+      "marked_this_pass": 0,
+      "closed_this_pass": 0
+    },
+    "ai_judgment_calibrated_r2": {
+      "schema_version": 1,
+      "track_id": "ai_judgment_calibrated_r2",
+      "observe_only": true,
+      "generated_at": "2026-09-04T08:28:34.082016+00:00",
+      "open_count": 1,
+      "closed_count": 0,
+      "scored_count": 0,
+      "scored_count_all": 0,
+      "recommit_scored_count": 0,
+      "entry_kind_counts": {
+        "first_entry": 0,
+        "recommit": 0
+      },
+      "any_de_risk_count": 0,
+      "winning_cadence_counts": {},
+      "cadence_stats": {
+        "dca_2x_weekly": {
+          "label": "50/50 over 1 week",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_4x_weekly": {
+          "label": "25% weekly \u00d7 4",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_2x_biweekly": {
+          "label": "50/50 over 2 weeks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_5x_weekday": {
+          "label": "20% over 5 weekday marks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        }
+      },
+      "readiness": {
+        "ready_for_cadence_analysis": false,
+        "closed_episodes": 0,
+        "closed_target": 12,
+        "tracks_with_closed": 0,
+        "tracks_target": 2,
+        "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
+        "first_entry_scored": 0,
+        "recommit_scored": 0
+      },
+      "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
+      "ingested_this_pass": 1,
+      "marked_this_pass": 0,
+      "closed_this_pass": 0
+    },
+    "ai_judgment_calibrated_r3": {
+      "schema_version": 1,
+      "track_id": "ai_judgment_calibrated_r3",
+      "observe_only": true,
+      "generated_at": "2026-09-04T08:28:46.882956+00:00",
+      "open_count": 1,
+      "closed_count": 0,
+      "scored_count": 0,
+      "scored_count_all": 0,
+      "recommit_scored_count": 0,
+      "entry_kind_counts": {
+        "first_entry": 0,
+        "recommit": 0
+      },
+      "any_de_risk_count": 0,
+      "winning_cadence_counts": {},
+      "cadence_stats": {
+        "dca_2x_weekly": {
+          "label": "50/50 over 1 week",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_4x_weekly": {
+          "label": "25% weekly \u00d7 4",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_2x_biweekly": {
+          "label": "50/50 over 2 weeks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_5x_weekday": {
+          "label": "20% over 5 weekday marks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        }
+      },
+      "readiness": {
+        "ready_for_cadence_analysis": false,
+        "closed_episodes": 0,
+        "closed_target": 12,
+        "tracks_with_closed": 0,
+        "tracks_target": 2,
+        "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
+        "first_entry_scored": 0,
+        "recommit_scored": 0
+      },
+      "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
+      "ingested_this_pass": 1,
+      "marked_this_pass": 0,
+      "closed_this_pass": 0
+    },
+    "ai_judgment_exclusion_u4": {
+      "schema_version": 1,
+      "track_id": "ai_judgment_exclusion_u4",
+      "observe_only": true,
+      "generated_at": "2026-09-04T08:28:59.787247+00:00",
+      "open_count": 0,
+      "closed_count": 0,
+      "scored_count": 0,
+      "scored_count_all": 0,
+      "recommit_scored_count": 0,
+      "entry_kind_counts": {
+        "first_entry": 0,
+        "recommit": 0
+      },
+      "any_de_risk_count": 0,
+      "winning_cadence_counts": {},
+      "cadence_stats": {
+        "dca_2x_weekly": {
+          "label": "50/50 over 1 week",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_4x_weekly": {
+          "label": "25% weekly \u00d7 4",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_2x_biweekly": {
+          "label": "50/50 over 2 weeks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_5x_weekday": {
+          "label": "20% over 5 weekday marks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        }
+      },
+      "readiness": {
+        "ready_for_cadence_analysis": false,
+        "closed_episodes": 0,
+        "closed_target": 12,
+        "tracks_with_closed": 0,
+        "tracks_target": 2,
+        "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
+        "first_entry_scored": 0,
+        "recommit_scored": 0
+      },
+      "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
+      "ingested_this_pass": 0,
+      "marked_this_pass": 0,
+      "closed_this_pass": 0
+    },
+    "ai_judgment_fair": {
+      "schema_version": 1,
+      "track_id": "ai_judgment_fair",
+      "observe_only": true,
+      "generated_at": "2026-09-04T08:29:13.183962+00:00",
+      "open_count": 0,
+      "closed_count": 0,
+      "scored_count": 0,
+      "scored_count_all": 0,
+      "recommit_scored_count": 0,
+      "entry_kind_counts": {
+        "first_entry": 0,
+        "recommit": 0
+      },
+      "any_de_risk_count": 0,
+      "winning_cadence_counts": {},
+      "cadence_stats": {
+        "dca_2x_weekly": {
+          "label": "50/50 over 1 week",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_4x_weekly": {
+          "label": "25% weekly \u00d7 4",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_2x_biweekly": {
+          "label": "50/50 over 2 weeks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_5x_weekday": {
+          "label": "20% over 5 weekday marks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        }
+      },
+      "readiness": {
+        "ready_for_cadence_analysis": false,
+        "closed_episodes": 0,
+        "closed_target": 12,
+        "tracks_with_closed": 0,
+        "tracks_target": 2,
+        "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
+        "first_entry_scored": 0,
+        "recommit_scored": 0
+      },
+      "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
+      "ingested_this_pass": 0,
+      "marked_this_pass": 0,
+      "closed_this_pass": 0
+    },
+    "rules_fair": {
+      "schema_version": 1,
+      "track_id": "rules_fair",
+      "observe_only": true,
+      "generated_at": "2026-09-04T08:29:26.004222+00:00",
+      "open_count": 0,
+      "closed_count": 0,
+      "scored_count": 0,
+      "scored_count_all": 0,
+      "recommit_scored_count": 0,
+      "entry_kind_counts": {
+        "first_entry": 0,
+        "recommit": 0
+      },
+      "any_de_risk_count": 0,
+      "winning_cadence_counts": {},
+      "cadence_stats": {
+        "dca_2x_weekly": {
+          "label": "50/50 over 1 week",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_4x_weekly": {
+          "label": "25% weekly \u00d7 4",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_2x_biweekly": {
+          "label": "50/50 over 2 weeks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        },
+        "dca_5x_weekday": {
+          "label": "20% over 5 weekday marks",
+          "scored_episodes": 0,
+          "mean_end_value_delta": null,
+          "mean_de_risk_gbp": null,
+          "de_risk_rate": null,
+          "win_count": 0
+        }
+      },
+      "readiness": {
+        "ready_for_cadence_analysis": false,
+        "closed_episodes": 0,
+        "closed_target": 12,
+        "tracks_with_closed": 0,
+        "tracks_target": 2,
+        "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
+        "first_entry_scored": 0,
+        "recommit_scored": 0
+      },
+      "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
+      "ingested_this_pass": 0,
+      "marked_this_pass": 0,
+      "closed_this_pass": 0
+    }
+  },
+  "closed_count": 0,
+  "scored_count": 0,
+  "recommit_scored_count": 0,
+  "any_de_risk_count": 0,
+  "tracks_with_closed": 0,
+  "winning_cadence_counts": {},
+  "leading_cadence": null,
+  "model_independent_hint": false,
+  "readiness": {
+    "ready_for_cadence_analysis": false,
+    "closed_episodes": 0,
+    "closed_target": 12,
+    "tracks_with_closed": 0,
+    "tracks_target": 2,
+    "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone."
+  },
+  "note": "Observe-only DCA / graduated-entry overlay across all paper tracks. Pair with graduated_allocation (live starter sizing) and hypothesis_integrity (loss tolerance after entry)."
+}

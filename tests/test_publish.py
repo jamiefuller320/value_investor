@@ -192,6 +192,7 @@ def test_build_dashboard_bundle_from_signals(tmp_path: Path):
     )
     assert bundle["calibration_shadow_endurance"]["shadows"][0]["status"] == "observing"
     assert bundle["experiment_assessment"]["summary"]["total"] == 1
+    assert "system_gaps" in bundle
 
 
 def test_publish_dashboard_includes_sunday_review(tmp_path: Path):

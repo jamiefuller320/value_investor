@@ -33,7 +33,7 @@ most automation — this list is what still needs a human.
 | **Suite B fair-cost lab** — review `ai_judgment_fair` / `rules_fair` marks; keep `--suite B` applies suite-local; no primary flip until B clears gates | Human | [market-trading-costs.md](market-trading-costs.md#near-term-actions) |
 | Review **entry DCA cadence** when `ready_for_cadence_analysis` fires | Human | [position-lifecycle.md](position-lifecycle.md#human-gate) |
 | Review **hypothesis integrity** when losers breach tolerance or theses break | Human | [hypothesis-integrity.md](hypothesis-integrity.md#human-gate) |
-| Triage **analysis_tasks** — scoring is queued as `eng-20260903-02` / `eng-20260903-03` (observe-only; no `assign_signal()` edits); do not revive cancelled knob counterfactuals | Human | [analysis-review.md](analysis-review.md#manual-promotion-to-engineering) |
+| Triage **analysis_tasks** — persist/publish/apply `system_gaps` flags auto-queue as `eng-sgap-*` (no dispatch); promote remaining produce/clock flags by hand; scoring stays `eng-20260903-02` / `eng-20260903-03` (observe-only; no `assign_signal()` edits); do not revive cancelled knob counterfactuals | Human | [analysis-review.md](analysis-review.md#manual-promotion-to-engineering) |
 | Check **exclusion ladder spawn gate** — if `ready_for_shadow_spawn`, run `ftse-exclusion-ladder-replay spawn-shadow` (never auto) | Human | [exclusion-ladder-replay.md](exclusion-ladder-replay.md#promotion-workflow-human-gate) |
 | Triage **paper_learning_tasks** + **learning_director_tasks** — watch u4 + exit-shadow; leave L111 as continue; buffered-hold and IMB.L are done; no promote CLI | Human | [paper-learning-review.md](paper-learning-review.md#enacting-proposed-experiments) |
 | Full-period knob calibrate + shadow bootstrap + PIT warm-start + endurance | CI | [knob-calibration.md](knob-calibration.md#warm-start-zero-datum-forward-only-endurance) |
@@ -55,7 +55,7 @@ Survivors are **starting priors for learning-loop refinement** — never auto-ap
 | Task | Who | Doc |
 |------|-----|-----|
 | Follow **unified ops review cadence** (weekly → monthly → quarterly) | Human | [ops-review-cadence.md](ops-review-cadence.md#sequence) |
-| **Horizon scan** + triage open `ftse-defer` fragments | Human | [horizon-scan.md](horizon-scan.md#when-it-runs) |
+| **Horizon scan** — weeder drops near-dups; triage remaining fragments | Human | [horizon-scan.md](horizon-scan.md#when-it-runs) |
 | Review **euro_depth filing/memo parity** vs FTSE before AI-gate / Phase 3 | Human | [market-sharded-learning.md](market-sharded-learning.md#depth-first-eu-pilot-aug-2026) |
 
 ## Quarterly

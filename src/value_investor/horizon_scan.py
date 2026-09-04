@@ -233,6 +233,12 @@ def build_horizon_payload(
             "no_conversation_transcript_mining": True,
         },
     }
+    try:
+        from value_investor.fragment_weeder import propose_fragment_weeds
+
+        payload["fragment_weeder"] = propose_fragment_weeds(defer_store)
+    except (OSError, ValueError, TypeError):
+        payload["fragment_weeder"] = None
     return payload
 
 
@@ -619,7 +625,8 @@ Read the structured JSON at: {payload_path}
 It contains north-star stage context, open deferred ideas (L/N items), scratch fragments,
 pending ingest trials (completed experiments awaiting review), open engineering tasks,
 weekly analysis_review excerpts, paper learning metrics,
-exit-timing cohort readiness, and library ladder state.
+exit-timing cohort readiness, library ladder state, and system_gaps (deterministic
+learning-path integrity: produce / persist / publish / apply plus learning clocks).
 
 Write EIGHT plain-text sections with headings exactly as shown:
 
@@ -634,16 +641,23 @@ Reference readiness counts when present.
 AUTOMATION RISKS
 What breaks if knobs auto-apply, breadth expands early, or agent decisions scale without
 more evidence. No live automation proposals.
+Cite system_gaps.flags when a green ops counter (budget remaining, executed=0,
+memo-file coverage, filing parity) would hide a consumer-path miss on a new market.
 
 COUNTERFACTUAL GAPS
 What questions we cannot answer yet and which artifact type would answer them.
+Include unanswered system_gaps.probe_questions when flags are empty or thin.
 
 FRAGMENT CLUSTERING
-Cluster open_fragments by theme. For each cluster: synthesize in 1–2 sentences.
+Prefer fragment_weeder.actions with action=DROP — those are deterministic
+near-duplicates or fragments already captured as open/done deferred ideas.
+Confirm them as DROP lines. Then cluster remaining KEEP fragments by theme.
+For each leftover cluster: synthesize in 1–2 sentences.
 Use action lines ONLY when confident:
   - DROP frag-YYYYMMDD-NN
   - PROMOTE frag-YYYYMMDD-NN → **Title** — summary. Revisit when: trigger
 Mark stale duplicate fragments DROP. Do not PROMOTE without a clear revisit trigger.
+Do not raise the director fragment cap; weeding comes first.
 
 INGEST GAP CLOSURE REVIEW
 For each row in ingest_gap_closure_pending_review (alias ingest_trials_pending_review): summarize outcome deltas and recommend
@@ -659,8 +673,11 @@ Do not duplicate existing open deferred titles.
 ACCELERATE
 Numbered top 5 experiments for the next month. Each line MUST use:
 N. [area] Experiment title — expected learning value
-Areas: scoring, ingest, offline_sim, paper_knobs, paper_churn, attribution, monitoring, analysis.
-Prefer offline_sim, paper_knobs, paper_churn for knob/counterfactual ideas (human gate required).
+Areas: scoring, ingest, ops, coverage, offline_sim, paper_knobs, paper_churn,
+attribution, monitoring, analysis.
+Prefer offline_sim, paper_knobs, paper_churn for knob/counterfactual ideas (human gate).
+If system_gaps.high_flag_count > 0, include at least one [ops] or [ingest] line
+citing the flag id — consumer-path / rememo-if-stale / persist before more memos.
 
 Rules:
 - Do not invent metrics — only use the JSON.

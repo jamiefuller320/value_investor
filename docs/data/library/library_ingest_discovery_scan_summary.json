@@ -1,12 +1,48 @@
 {
-  "run_at": "2026-09-03T16:20:06.340766+00:00",
+  "run_at": "2026-09-04T07:19:09.796175+00:00",
   "market_id": "euro_depth",
   "scan_cap": null,
+  "max_runtime_seconds": 675.0,
+  "prefer_tickers": [
+    "STR.VI",
+    "UMI.BR",
+    "SGO.PA",
+    "ACKB.BR",
+    "EG7.IR",
+    "VOE.VI",
+    "GVR.IR",
+    "ESSITY-B.ST",
+    "SKA-B.ST",
+    "MUV2.DE",
+    "VOLV-B.ST",
+    "APAM.AS",
+    "UCB.BR",
+    "BAS.DE",
+    "OMV.VI",
+    "NVG.LS",
+    "DTE.DE",
+    "DQ7A.IR",
+    "AZE.BR",
+    "RAND.AS",
+    "ABI.BR",
+    "NOVN.SW",
+    "POST.VI",
+    "BOL.ST",
+    "DG.PA",
+    "SHELL.AS",
+    "VOW.DE",
+    "ANDR.VI",
+    "EVN.VI",
+    "SAP.DE",
+    "WIE.VI",
+    "WKL.AS"
+  ],
   "scanned": 44,
-  "hits": 38,
-  "new_rows_total": 0,
+  "hits": 39,
+  "new_rows_total": 1,
   "curiosity_total": 42,
   "errors": 0,
+  "runtime_cutoff": false,
   "prioritization_weights": {
     "new_index_rows": 8.0,
     "new_index_row_cap": 10.0,
@@ -14,67 +50,8 @@
     "unknown_host": 2.0,
     "strong_buy": 1.0
   },
-  "note": "Scan-then-target: listing-only discovery; deepen uses existing ingest pass. No compute throttle; weights reserved for later prioritisation. Engineering fetch surface is never assumed complete.",
+  "note": "Scan-then-target: listing-only discovery; deepen uses existing ingest pass. Library sprint caps discovery wall-clock so body deepen still runs. Engineering fetch surface is never assumed complete.",
   "tickers": [
-    {
-      "ticker": "ERIC-B.ST",
-      "name": "Telefonaktiebolaget LM Ericsson (publ)",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 2,
-      "prior_count": 3,
-      "priority_bonus": 0.0,
-      "curiosity": [],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "AD.AS",
-      "name": "Koninklijke Ahold Delhaize N.V.",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 3,
-      "prior_count": 3,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'media.aholddelhaize.com'",
-          "source": "ir_allowlist",
-          "url": "https://media.aholddelhaize.com/media/bdsnpbxm/ahold-delhaize-q4-2025-summary-report.pdf",
-          "headline": "IR allowlist document — ahold-delhaize-q4-2025-summary-report.pdf"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "DG.PA",
-      "name": "Vinci SA",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 3,
-      "prior_count": 3,
-      "priority_bonus": 4.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.globenewswire.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.globenewswire.com/news-release/2026/02/05/3233287/0/en/VINCI-2025-full-year-results-Outstanding-performance-record-free-cash-flow.html",
-          "headline": "IR allowlist document — VINCI-2025-full-year-results-Outstanding-performance-record-free-cash-flow.html"
-        },
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'ml-eu.globenewswire.com'",
-          "source": "ir_allowlist",
-          "url": "https://ml-eu.globenewswire.com/Resource/Download/c98a3bbe-a3d3-42e8-9116-f19e76e61577",
-          "headline": "IR allowlist document — c98a3bbe-a3d3-42e8-9116-f19e76e61577"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
     {
       "ticker": "STR.VI",
       "name": "Strabag SE",
@@ -116,18 +93,6 @@
       "error": null
     },
     {
-      "ticker": "SHELL.AS",
-      "name": "Shell plc",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 38,
-      "prior_count": 42,
-      "priority_bonus": 0.0,
-      "curiosity": [],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
       "ticker": "SGO.PA",
       "name": "Compagnie de Saint-Gobain S.A.",
       "signal": "strong_buy",
@@ -151,90 +116,6 @@
           "headline": "IR allowlist document — regulated-information"
         }
       ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "SAN.PA",
-      "name": "Sanofi",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 3,
-      "prior_count": 3,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.sanofi.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.sanofi.com/assets/dotcom/content-app/publications/annual-report-on-form-20-f/2025-01-01-form-20-f-2025-en.pdf",
-          "headline": "IR allowlist document — 2025-01-01-form-20-f-2025-en.pdf"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "PHIA.AS",
-      "name": "Koninklijke Philips N.V.",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 4,
-      "prior_count": 4,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.results.philips.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.results.philips.com/app/uploads/2026/04/Philips20F-2025.pdf",
-          "headline": "IR allowlist document — Philips20F-2025.pdf"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "LOGN.SW",
-      "name": "Logitech International S.A.",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 9,
-      "prior_count": 9,
-      "priority_bonus": 0.0,
-      "curiosity": [],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "DHL.DE",
-      "name": "Deutsche Post AG",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 2,
-      "prior_count": 3,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'reporting-hub.group.dhl.com'",
-          "source": "ir_allowlist",
-          "url": "https://reporting-hub.group.dhl.com/ecomaXL/files/DHL-Group-2025-Annual-Report.pdf",
-          "headline": "IR allowlist document — DHL-Group-2025-Annual-Report.pdf"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "MIO.IR",
-      "name": "Mincon Group plc",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 27,
-      "prior_count": 27,
-      "priority_bonus": 0.0,
-      "curiosity": [],
       "new_row_ids": [],
       "error": null
     },
@@ -279,26 +160,6 @@
       "error": null
     },
     {
-      "ticker": "ANDR.VI",
-      "name": "Andritz AG",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 3,
-      "prior_count": 3,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.andritz.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.andritz.com/resource/blob/520884/andritz-annual-financial-report-2025-en.pdf",
-          "headline": "IR allowlist document — andritz-annual-financial-report-2025-en.pdf"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
       "ticker": "VOE.VI",
       "name": "Voestalpine AG",
       "signal": "strong_buy",
@@ -313,46 +174,6 @@
           "source": "ir_allowlist",
           "url": "https://www.voestalpine.com/group/static/sites/group/.downloads/en/publications-2025-26/2025-26-annual-report.pdf",
           "headline": "IR allowlist document — 2025-26-annual-report.pdf"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "VOW.DE",
-      "name": "Volkswagen AG",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 3,
-      "prior_count": 5,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.volkswagen-group.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.volkswagen-group.com/en/press-releases/volkswagen-group-strengthens-financial-resilience-in-2025-strong-fourth-quarter-in-a-challenging-environment-20202/download?disposition=attachment",
-          "headline": "IR allowlist document — download?disposition=attachment"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "EVN.VI",
-      "name": "EVN AG",
-      "signal": "strong_buy",
-      "new_row_count": 0,
-      "listed_count": 3,
-      "prior_count": 3,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.evn.at'",
-          "source": "ir_allowlist",
-          "url": "https://www.evn.at/en/investor-relations/publications/",
-          "headline": "IR allowlist document — https://www.evn.at/en/investor-relations/publications/"
         }
       ],
       "new_row_ids": [],
@@ -379,26 +200,6 @@
       "error": null
     },
     {
-      "ticker": "WIE.VI",
-      "name": "Wienerberger AG",
-      "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 3,
-      "prior_count": 3,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.wienerberger.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.wienerberger.com/en/investors/reports-presentations.html",
-          "headline": "IR allowlist document — reports-presentations.html"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
       "ticker": "ESSITY-B.ST",
       "name": "Essity AB (publ)",
       "signal": "buy",
@@ -413,78 +214,6 @@
           "source": "ir_allowlist",
           "url": "https://assets.www.essity.com/essity/Annual-Report-2025-digital.pdf",
           "headline": "IR allowlist document — Annual-Report-2025-digital.pdf"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "AKZA.AS",
-      "name": "Akzo Nobel N.V.",
-      "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 3,
-      "prior_count": 3,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.akzonobel.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.akzonobel.com/en/investors/results-center",
-          "headline": "IR allowlist document — results-center"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "NOVN.SW",
-      "name": "Novartis AG",
-      "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 30,
-      "prior_count": 30,
-      "priority_bonus": 0.0,
-      "curiosity": [],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "ABI.BR",
-      "name": "Anheuser-Busch InBev SA/NV",
-      "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 30,
-      "prior_count": 31,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.bmv.com.mx'",
-          "source": "ir_allowlist",
-          "url": "https://www.bmv.com.mx/docs-pub/10-k/10-k_1539631_2025_1.pdf",
-          "headline": "IR allowlist document — 10-k_1539631_2025_1.pdf"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "SAP.DE",
-      "name": "SAP SE",
-      "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 17,
-      "prior_count": 17,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.sap.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.sap.com/investors/en/financial-documents-and-events/financial-documents.html",
-          "headline": "IR allowlist document — financial-documents.html"
         }
       ],
       "new_row_ids": [],
@@ -511,26 +240,6 @@
       "error": null
     },
     {
-      "ticker": "HEIA.AS",
-      "name": "Heineken N.V.",
-      "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 4,
-      "prior_count": 4,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.theheinekencompany.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.theheinekencompany.com/sites/heineken-corp/files/2025-12/heineken-nv-annual-report-interactive-2025.pdf",
-          "headline": "IR allowlist document — heineken-nv-annual-report-interactive-2025.pdf"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
       "ticker": "MUV2.DE",
       "name": "Münchener Rückversicherungs-Gesellschaft Aktiengesellschaft in München",
       "signal": "buy",
@@ -545,46 +254,6 @@
           "source": "ir_allowlist",
           "url": "https://www.munichre.com/en/company/investors/reports-and-presentations.html",
           "headline": "IR allowlist document — reports-and-presentations.html"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "DOC.VI",
-      "name": "DO & CO Aktiengesellschaft",
-      "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 4,
-      "prior_count": 4,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.doco.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.doco.com/Portals/8/berichte/jahres-und-quartalsberichte/en/q4_2526.pdf",
-          "headline": "IR allowlist document — q4_2526.pdf"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "MELE.BR",
-      "name": "Melexis NV",
-      "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 3,
-      "prior_count": 3,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.melexis.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.melexis.com/-/media/files/documents/investor-relations/2026/en/260204-melexis-q4-2025-investor-presentation.pdf?ts=20260205t0821293810",
-          "headline": "IR allowlist document — 260204-melexis-q4-2025-investor-presentation.pdf?ts=20260205t0821293810"
         }
       ],
       "new_row_ids": [],
@@ -611,38 +280,6 @@
       "error": null
     },
     {
-      "ticker": "TTE.PA",
-      "name": "TotalEnergies SE",
-      "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 87,
-      "prior_count": 91,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'totalenergies.com'",
-          "source": "ir_allowlist",
-          "url": "https://totalenergies.com/system/files/documents/totalenergies_universal-registration-document-2025_2026_en.pdf",
-          "headline": "IR allowlist document — totalenergies_universal-registration-document-2025_2026_en.pdf"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "BOL.ST",
-      "name": "Boliden AB (publ)",
-      "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 3,
-      "prior_count": 9,
-      "priority_bonus": 0.0,
-      "curiosity": [],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
       "ticker": "APAM.AS",
       "name": "Aperam S.A.",
       "signal": "buy",
@@ -657,26 +294,6 @@
           "source": "ir_allowlist",
           "url": "https://www.aperam.com/sites/default/files/documents/Aperam_AnnualReport_2025.pdf",
           "headline": "IR allowlist document — Aperam_AnnualReport_2025.pdf"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "POST.VI",
-      "name": "Österreichische Post AG",
-      "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 3,
-      "prior_count": 5,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'assets.post.at'",
-          "source": "ir_allowlist",
-          "url": "https://assets.post.at/-/media/Dokumente/En/Investor-Relations/Geschaefts--und-Nachhaltigkeitsberichte/AustrianPost_Annual_Report_2025.pdf",
-          "headline": "IR allowlist document — AustrianPost_Annual_Report_2025.pdf"
         }
       ],
       "new_row_ids": [],
@@ -770,53 +387,6 @@
       "error": null
     },
     {
-      "ticker": "RAND.AS",
-      "name": "Randstad N.V.",
-      "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 4,
-      "prior_count": 4,
-      "priority_bonus": 2.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.randstad.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Randstad_Annual_Report_2025_F.pdf?VersionId=oWhcOhRfI3tRFxNNaGUMvL7cHYdvo0Th",
-          "headline": "IR allowlist document — Randstad_Annual_Report_2025_F.pdf?VersionId=oWhcOhRfI3tRFxNNaGUMvL7cHYdvo0Th"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
-      "ticker": "WKL.AS",
-      "name": "Wolters Kluwer N.V.",
-      "signal": "buy",
-      "new_row_count": 0,
-      "listed_count": 4,
-      "prior_count": 4,
-      "priority_bonus": 4.0,
-      "curiosity": [
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'www.globenewswire.com'",
-          "source": "ir_allowlist",
-          "url": "https://www.globenewswire.com/news-release/2026/02/25/3244280/0/en/Wolters-Kluwer-2025-Full-Year-Report.html",
-          "headline": "IR allowlist document — Wolters-Kluwer-2025-Full-Year-Report.html"
-        },
-        {
-          "kind": "unknown_host",
-          "detail": "Unfamiliar filing URL host 'ml-eu.globenewswire.com'",
-          "source": "ir_allowlist",
-          "url": "https://ml-eu.globenewswire.com/Resource/Download/38679066-656c-433a-8fcd-02c538a9b417",
-          "headline": "IR allowlist document — 38679066-656c-433a-8fcd-02c538a9b417"
-        }
-      ],
-      "new_row_ids": [],
-      "error": null
-    },
-    {
       "ticker": "DTE.DE",
       "name": "Deutsche Telekom AG",
       "signal": "buy",
@@ -871,6 +441,474 @@
           "source": "ir_allowlist",
           "url": "https://www.azelis.com/en/investors",
           "headline": "IR allowlist document — investors"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "RAND.AS",
+      "name": "Randstad N.V.",
+      "signal": "buy",
+      "new_row_count": 0,
+      "listed_count": 4,
+      "prior_count": 4,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.randstad.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Randstad_Annual_Report_2025_F.pdf?VersionId=oWhcOhRfI3tRFxNNaGUMvL7cHYdvo0Th",
+          "headline": "IR allowlist document — Randstad_Annual_Report_2025_F.pdf?VersionId=oWhcOhRfI3tRFxNNaGUMvL7cHYdvo0Th"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "ABI.BR",
+      "name": "Anheuser-Busch InBev SA/NV",
+      "signal": "buy",
+      "new_row_count": 0,
+      "listed_count": 30,
+      "prior_count": 31,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.bmv.com.mx'",
+          "source": "ir_allowlist",
+          "url": "https://www.bmv.com.mx/docs-pub/10-k/10-k_1539631_2025_1.pdf",
+          "headline": "IR allowlist document — 10-k_1539631_2025_1.pdf"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "NOVN.SW",
+      "name": "Novartis AG",
+      "signal": "buy",
+      "new_row_count": 0,
+      "listed_count": 30,
+      "prior_count": 30,
+      "priority_bonus": 0.0,
+      "curiosity": [],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "POST.VI",
+      "name": "Österreichische Post AG",
+      "signal": "buy",
+      "new_row_count": 0,
+      "listed_count": 3,
+      "prior_count": 5,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'assets.post.at'",
+          "source": "ir_allowlist",
+          "url": "https://assets.post.at/-/media/Dokumente/En/Investor-Relations/Geschaefts--und-Nachhaltigkeitsberichte/AustrianPost_Annual_Report_2025.pdf",
+          "headline": "IR allowlist document — AustrianPost_Annual_Report_2025.pdf"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "BOL.ST",
+      "name": "Boliden AB (publ)",
+      "signal": "buy",
+      "new_row_count": 1,
+      "listed_count": 2,
+      "prior_count": 9,
+      "priority_bonus": 9.0,
+      "curiosity": [],
+      "new_row_ids": [
+        "99181af06d1db84f"
+      ],
+      "error": null
+    },
+    {
+      "ticker": "DG.PA",
+      "name": "Vinci SA",
+      "signal": "strong_buy",
+      "new_row_count": 0,
+      "listed_count": 3,
+      "prior_count": 3,
+      "priority_bonus": 4.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.globenewswire.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.globenewswire.com/news-release/2026/02/05/3233287/0/en/VINCI-2025-full-year-results-Outstanding-performance-record-free-cash-flow.html",
+          "headline": "IR allowlist document — VINCI-2025-full-year-results-Outstanding-performance-record-free-cash-flow.html"
+        },
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'ml-eu.globenewswire.com'",
+          "source": "ir_allowlist",
+          "url": "https://ml-eu.globenewswire.com/Resource/Download/c98a3bbe-a3d3-42e8-9116-f19e76e61577",
+          "headline": "IR allowlist document — c98a3bbe-a3d3-42e8-9116-f19e76e61577"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "SHELL.AS",
+      "name": "Shell plc",
+      "signal": "strong_buy",
+      "new_row_count": 0,
+      "listed_count": 38,
+      "prior_count": 42,
+      "priority_bonus": 0.0,
+      "curiosity": [],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "VOW.DE",
+      "name": "Volkswagen AG",
+      "signal": "strong_buy",
+      "new_row_count": 0,
+      "listed_count": 3,
+      "prior_count": 5,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.volkswagen-group.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.volkswagen-group.com/en/press-releases/volkswagen-group-strengthens-financial-resilience-in-2025-strong-fourth-quarter-in-a-challenging-environment-20202/download?disposition=attachment",
+          "headline": "IR allowlist document — download?disposition=attachment"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "ANDR.VI",
+      "name": "Andritz AG",
+      "signal": "strong_buy",
+      "new_row_count": 0,
+      "listed_count": 3,
+      "prior_count": 3,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.andritz.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.andritz.com/resource/blob/520884/andritz-annual-financial-report-2025-en.pdf",
+          "headline": "IR allowlist document — andritz-annual-financial-report-2025-en.pdf"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "EVN.VI",
+      "name": "EVN AG",
+      "signal": "strong_buy",
+      "new_row_count": 0,
+      "listed_count": 3,
+      "prior_count": 3,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.evn.at'",
+          "source": "ir_allowlist",
+          "url": "https://www.evn.at/en/investor-relations/publications/",
+          "headline": "IR allowlist document — https://www.evn.at/en/investor-relations/publications/"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "SAP.DE",
+      "name": "SAP SE",
+      "signal": "buy",
+      "new_row_count": 0,
+      "listed_count": 17,
+      "prior_count": 17,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.sap.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.sap.com/investors/en/financial-documents-and-events/financial-documents.html",
+          "headline": "IR allowlist document — financial-documents.html"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "WIE.VI",
+      "name": "Wienerberger AG",
+      "signal": "buy",
+      "new_row_count": 0,
+      "listed_count": 3,
+      "prior_count": 3,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.wienerberger.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.wienerberger.com/en/investors/reports-presentations.html",
+          "headline": "IR allowlist document — reports-presentations.html"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "WKL.AS",
+      "name": "Wolters Kluwer N.V.",
+      "signal": "buy",
+      "new_row_count": 0,
+      "listed_count": 4,
+      "prior_count": 4,
+      "priority_bonus": 4.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.globenewswire.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.globenewswire.com/news-release/2026/02/25/3244280/0/en/Wolters-Kluwer-2025-Full-Year-Report.html",
+          "headline": "IR allowlist document — Wolters-Kluwer-2025-Full-Year-Report.html"
+        },
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'ml-eu.globenewswire.com'",
+          "source": "ir_allowlist",
+          "url": "https://ml-eu.globenewswire.com/Resource/Download/38679066-656c-433a-8fcd-02c538a9b417",
+          "headline": "IR allowlist document — 38679066-656c-433a-8fcd-02c538a9b417"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "ERIC-B.ST",
+      "name": "Telefonaktiebolaget LM Ericsson (publ)",
+      "signal": "strong_buy",
+      "new_row_count": 0,
+      "listed_count": 1,
+      "prior_count": 3,
+      "priority_bonus": 0.0,
+      "curiosity": [],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "AD.AS",
+      "name": "Koninklijke Ahold Delhaize N.V.",
+      "signal": "strong_buy",
+      "new_row_count": 0,
+      "listed_count": 3,
+      "prior_count": 3,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'media.aholddelhaize.com'",
+          "source": "ir_allowlist",
+          "url": "https://media.aholddelhaize.com/media/bdsnpbxm/ahold-delhaize-q4-2025-summary-report.pdf",
+          "headline": "IR allowlist document — ahold-delhaize-q4-2025-summary-report.pdf"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "SAN.PA",
+      "name": "Sanofi",
+      "signal": "strong_buy",
+      "new_row_count": 0,
+      "listed_count": 3,
+      "prior_count": 3,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.sanofi.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.sanofi.com/assets/dotcom/content-app/publications/annual-report-on-form-20-f/2025-01-01-form-20-f-2025-en.pdf",
+          "headline": "IR allowlist document — 2025-01-01-form-20-f-2025-en.pdf"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "PHIA.AS",
+      "name": "Koninklijke Philips N.V.",
+      "signal": "strong_buy",
+      "new_row_count": 0,
+      "listed_count": 4,
+      "prior_count": 4,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.results.philips.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.results.philips.com/app/uploads/2026/04/Philips20F-2025.pdf",
+          "headline": "IR allowlist document — Philips20F-2025.pdf"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "LOGN.SW",
+      "name": "Logitech International S.A.",
+      "signal": "strong_buy",
+      "new_row_count": 0,
+      "listed_count": 9,
+      "prior_count": 9,
+      "priority_bonus": 0.0,
+      "curiosity": [],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "DHL.DE",
+      "name": "Deutsche Post AG",
+      "signal": "strong_buy",
+      "new_row_count": 0,
+      "listed_count": 2,
+      "prior_count": 3,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'reporting-hub.group.dhl.com'",
+          "source": "ir_allowlist",
+          "url": "https://reporting-hub.group.dhl.com/ecomaXL/files/DHL-Group-2025-Annual-Report.pdf",
+          "headline": "IR allowlist document — DHL-Group-2025-Annual-Report.pdf"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "MIO.IR",
+      "name": "Mincon Group plc",
+      "signal": "strong_buy",
+      "new_row_count": 0,
+      "listed_count": 27,
+      "prior_count": 27,
+      "priority_bonus": 0.0,
+      "curiosity": [],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "AKZA.AS",
+      "name": "Akzo Nobel N.V.",
+      "signal": "buy",
+      "new_row_count": 0,
+      "listed_count": 3,
+      "prior_count": 3,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.akzonobel.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.akzonobel.com/en/investors/results-center",
+          "headline": "IR allowlist document — results-center"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "HEIA.AS",
+      "name": "Heineken N.V.",
+      "signal": "buy",
+      "new_row_count": 0,
+      "listed_count": 4,
+      "prior_count": 4,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.theheinekencompany.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.theheinekencompany.com/sites/heineken-corp/files/2025-12/heineken-nv-annual-report-interactive-2025.pdf",
+          "headline": "IR allowlist document — heineken-nv-annual-report-interactive-2025.pdf"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "DOC.VI",
+      "name": "DO & CO Aktiengesellschaft",
+      "signal": "buy",
+      "new_row_count": 0,
+      "listed_count": 4,
+      "prior_count": 4,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.doco.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.doco.com/Portals/8/berichte/jahres-und-quartalsberichte/en/q4_2526.pdf",
+          "headline": "IR allowlist document — q4_2526.pdf"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "MELE.BR",
+      "name": "Melexis NV",
+      "signal": "buy",
+      "new_row_count": 0,
+      "listed_count": 3,
+      "prior_count": 3,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'www.melexis.com'",
+          "source": "ir_allowlist",
+          "url": "https://www.melexis.com/-/media/files/documents/investor-relations/2026/en/260204-melexis-q4-2025-investor-presentation.pdf?ts=20260205t0821293810",
+          "headline": "IR allowlist document — 260204-melexis-q4-2025-investor-presentation.pdf?ts=20260205t0821293810"
+        }
+      ],
+      "new_row_ids": [],
+      "error": null
+    },
+    {
+      "ticker": "TTE.PA",
+      "name": "TotalEnergies SE",
+      "signal": "buy",
+      "new_row_count": 0,
+      "listed_count": 87,
+      "prior_count": 91,
+      "priority_bonus": 2.0,
+      "curiosity": [
+        {
+          "kind": "unknown_host",
+          "detail": "Unfamiliar filing URL host 'totalenergies.com'",
+          "source": "ir_allowlist",
+          "url": "https://totalenergies.com/system/files/documents/totalenergies_universal-registration-document-2025_2026_en.pdf",
+          "headline": "IR allowlist document — totalenergies_universal-registration-document-2025_2026_en.pdf"
         }
       ],
       "new_row_ids": [],

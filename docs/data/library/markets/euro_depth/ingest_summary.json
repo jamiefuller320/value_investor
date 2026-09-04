@@ -1,14 +1,14 @@
 {
-  "run_at": "2026-09-03T17:04:36.396545+00:00",
+  "run_at": "2026-09-04T08:04:12.927039+00:00",
   "market_id": "euro_depth",
   "targets": [
+    "BOL.ST",
     "DG.PA",
     "ABI.BR",
     "VOW.DE",
     "POST.VI",
     "SHELL.AS",
     "NOVN.SW",
-    "BOL.ST",
     "RAND.AS",
     "SGO.PA",
     "EG7.IR",
@@ -28,6 +28,14 @@
     "SKA-B.ST"
   ],
   "target_details": [
+    {
+      "ticker": "BOL.ST",
+      "priority_score": 24.6126,
+      "filings_total": 10,
+      "filings_with_body": 7,
+      "indexed_without_body": 3,
+      "reason": "indexed_without_body"
+    },
     {
       "ticker": "DG.PA",
       "priority_score": 21.5738,
@@ -77,14 +85,6 @@
       "reason": "indexed_without_body"
     },
     {
-      "ticker": "BOL.ST",
-      "priority_score": 15.262599999999999,
-      "filings_total": 9,
-      "filings_with_body": 7,
-      "indexed_without_body": 2,
-      "reason": "indexed_without_body"
-    },
-    {
       "ticker": "RAND.AS",
       "priority_score": 10.4356,
       "filings_total": 4,
@@ -102,10 +102,10 @@
     },
     {
       "ticker": "EG7.IR",
-      "priority_score": 19.0588,
-      "filings_total": 2,
+      "priority_score": 19.4088,
+      "filings_total": 3,
       "filings_with_body": 1,
-      "indexed_without_body": 1,
+      "indexed_without_body": 2,
       "reason": "indexed_without_body"
     },
     {
@@ -223,6 +223,48 @@
   ],
   "results": [
     {
+      "ticker": "BOL.ST",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 10,
+        "filings_with_body": 7,
+        "indexed_without_body": 3
+      },
+      "after": {
+        "filings_total": 7,
+        "filings_with_body": 7,
+        "indexed_without_body": 0
+      },
+      "improved": false,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 10,
+        "annual": 7,
+        "interim": 0,
+        "trading_update": 0,
+        "other": 3,
+        "with_body": 7,
+        "period_coverage": {
+          "annual": {
+            "total": 7,
+            "with_body": 7
+          },
+          "interim": {
+            "total": 0,
+            "with_body": 0
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 3,
+            "with_body": 0
+          }
+        }
+      }
+    },
+    {
       "ticker": "DG.PA",
       "reason": "indexed_without_body",
       "before": {
@@ -270,7 +312,7 @@
   "runtime_cutoff": true,
   "partial": true,
   "health_before": {
-    "snapshot_at": "2026-09-03T16:17:20.107509+00:00",
+    "snapshot_at": "2026-09-04T07:17:18.019243+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 44,
     "unmeasured_buy_tier": 0,
@@ -314,13 +356,13 @@
     ]
   },
   "health_after": {
-    "snapshot_at": "2026-09-03T17:04:36.392858+00:00",
+    "snapshot_at": "2026-09-04T08:04:12.923698+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 44,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 1,
     "thin_body_buy_tier": 24,
-    "indexed_without_body": 43,
+    "indexed_without_body": 42,
     "bodies_min": 1,
     "bodies_median": 2,
     "bodies_max": 91,
@@ -365,8 +407,8 @@
   "gap_closure_compile": {},
   "discovery_scan": {
     "scanned": 44,
-    "hits": 38,
-    "new_rows_total": 0,
+    "hits": 39,
+    "new_rows_total": 1,
     "curiosity_total": 42,
     "errors": 0,
     "prioritization_weights": {
@@ -376,14 +418,50 @@
       "unknown_host": 2.0,
       "strong_buy": 1.0
     },
-    "forced_by_critical_path": true
+    "forced_by_critical_path": true,
+    "max_runtime_seconds": 675.0,
+    "prefer_tickers": [
+      "STR.VI",
+      "UMI.BR",
+      "SGO.PA",
+      "ACKB.BR",
+      "EG7.IR",
+      "VOE.VI",
+      "GVR.IR",
+      "ESSITY-B.ST",
+      "SKA-B.ST",
+      "MUV2.DE",
+      "VOLV-B.ST",
+      "APAM.AS",
+      "UCB.BR",
+      "BAS.DE",
+      "OMV.VI",
+      "NVG.LS",
+      "DTE.DE",
+      "DQ7A.IR",
+      "AZE.BR",
+      "RAND.AS",
+      "ABI.BR",
+      "NOVN.SW",
+      "POST.VI",
+      "BOL.ST",
+      "DG.PA",
+      "SHELL.AS",
+      "VOW.DE",
+      "ANDR.VI",
+      "EVN.VI",
+      "SAP.DE",
+      "WIE.VI",
+      "WKL.AS"
+    ],
+    "runtime_cutoff": false
   },
   "maintenance_mode": false,
   "parity_handoff": null,
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "euro_depth",
-    "assessed_at": "2026-09-03T16:17:22.199296+00:00",
+    "assessed_at": "2026-09-04T07:17:20.180610+00:00",
     "unmeasured": [],
     "zero_body": [
       "RAND.AS"
