@@ -44,7 +44,7 @@ Sprint discovery is **time-capped** (`library_ingest_budget.py`): at most 25% of
 `force_discovery_scan` is on.
 
 After a **complete** deepen that is stalled or improves nobody while gaps remain,
-`euro-ingest-loop.yml` auto-dispatches a pinned intensive gap-closure pass
+every library ingest workflow auto-dispatches a pinned intensive gap-closure pass
 (`gap_closure_trigger=stall_slowdown`) for the stickiest buy-tier name. Partial /
 runtime-cutoff runs do not escalate — the discovery cap is the fix for those.
 

@@ -103,3 +103,16 @@ def test_library_ingest_workflows_use_pip_retry():
         text = path.read_text(encoding="utf-8")
         assert "scripts/gha_pip_install.sh" in text, path
         assert "run: pip install -e ." not in text, path
+
+
+def test_library_ingest_workflows_wire_gap_closure_followup():
+    workflows = (
+        Path(".github/workflows/euro-ingest-loop.yml"),
+        Path(".github/workflows/library-ingest-sprint.yml"),
+        Path(".github/workflows/library-ingest-sprint-2.yml"),
+        Path(".github/workflows/library-ingest-maintenance.yml"),
+    )
+    for path in workflows:
+        text = path.read_text(encoding="utf-8")
+        assert "ingest-gap-closure-followup" in text, path
+        assert "scripts/dispatch_library_gap_closure_followups.sh" in text, path
