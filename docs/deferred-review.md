@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T09:20:41+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T10:56:42+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -124,6 +124,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N67 | **Mine agent-run follow-up transcripts for latent gaps** | This morning's research-vs-learning miss surfaced from a follow-up, not eval. Horizon already forbids conversation transcript mining; keep fragments + system_gaps as the capture path. | Monthly horizon has missed two more consumer-path gaps that only appeared in agent follow-ups after system_gaps.json has run for 8 Sundays |
 | N68 | **Raise Sunday fragment capture beyond director cap of 2** | Learning director emits at most 2 blue-sky fragments per week; analysis-review and post-run emit none. That is intentional, not a transcript substitute. Do not raise the cap or add review-agent fragments until system_gaps has a track record. | After 8 Sundays of system_gaps.json, a follow-up question still surfaces a consumer-path gap that was neither a system_gaps flag nor an ftse-defer entry |
 | N70 | **Auto-promote produce and learning-clock system_gaps flags** | Persist/publish/apply high flags now open eng-sgap-* rows. Produce and learning_clock flags stay proposed because they are judgment calls (rememo vs more ingest vs clock policy), not a wire-what-we-wrote miss. | The first persist/publish/apply eng-sgap tasks have merged and the remaining produce/clock flags still repeat for two Sundays |
+| N71 | **Do not treat Suite B AI-vs-rules inversion as the weekly north-star scoreboard** | Under fair T212 costs, rules currently beats AI (-9.7% vs -12.6% excess), the reverse of the 3% stress books. Suite B epochs started 2026-09-01 with one mark and zero trades — too thin to demote AI judgment or rewrite Suite A policy from that flip. | Each Suite B track has several weeks of post-seed marks and at least one closed trade, and Sunday analysis-review scores fair and stress books separately |
 
 ---
 
@@ -166,6 +167,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L244 | **Chart-side drop-to-recovery metric on frozen entries** | For buy-tier charts, score max drop after the frozen recommendation close and whether/when price recovered through that entry (days underwater, recovered_to_entry). Distinct from paper hold-recovery, which only covers stressed sleeves. Use to judge short-term loss tolerance vs eventual success without retuning timing yet. | chart_outcome_review has at least 4 Sunday refreshes and several names have recovered through the frozen entry after a drawdown |
 | L245 | **Entry-timing overlay scored against missed eventual winners** | Later, a timing overlay might reduce mis-timed buys, but it must be measured against names that were underwater early and still worked. Do not tighten wait/accumulate from a mixed_no_terrible first month. Pair any timing experiment with a miss-cost / drop-to-recovery view. | drop-to-recovery or hold-recovery cohorts can split well-timed vs recovered-from-drawdown vs still-underwater on a multi-month window |
 | L250 | **Generalize adjacent-flip audit beyond IMB.L** | The IMB.L audit was a one-ticker read of rebalance_log plus fund trades. A small CLI that classifies left-target-set flips (rank rotation vs floor vs signal downgrade) would scale when adjacent_flip_count rises again. | Churn health shows adjacent_flip_count > 0 on a focus track in a weekly window |
+| L270 | **Retire fail-status calibration shadows after Sunday confirms durability** | All three calibrated shadows and momentum_grace are experiment_assessment=fail while still occupying the shadow/experiment budget. Retiring them would free slots, but doing it mid-week from one snapshot risks chopping a useful observe series. | Sunday learning-director / experiment_assessment still marks calibrated r1-r3 and momentum_grace as fail with no new forward differentiation |
 
 ### Universe & data
 
