@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-03T17:23:36+00:00",
+  "updated_at": "2026-09-04T06:32:26+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -5450,6 +5450,75 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
       "added_at": "2026-09-03T17:23:36+00:00"
+    },
+    {
+      "id": "L262",
+      "category": "later",
+      "section": "ops",
+      "title": "Shared GHA concurrency budget across live ingest streams",
+      "summary": "Public-repo Actions minutes are free, but more live markets add parallel ingest jobs that already contend for hosted runners and the Sunday quiet bundle. Track concurrent ingest streams and runner-queue failures as the real compute bind, not a minutes quota.",
+      "revisit_when": "A fourth market sits on FTSE-volume ingest, runner-acquisition flakes recur, or the repo goes private",
+      "tags": [
+        "gha",
+        "compute",
+        "ingest",
+        "markets",
+        "concurrency"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06b0f-f2ff-79ae-99c8-7b375410101b",
+      "added_at": "2026-09-04T06:18:30+00:00"
+    },
+    {
+      "id": "N66",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not lift shard capacity just because GHA minutes are free",
+      "summary": "Public GitHub Actions minutes are unlimited on standard runners, but weekly_paper_shard_capacity stays at 1 and research_all_graduated stays false. Cursor weekly_ops, per-job timeouts, and depth-first quality are the binding limits \u2014 not unused Actions minutes.",
+      "revisit_when": "euro_depth Phase 3 plus filing parity are green and a second shard is promoted by L127",
+      "tags": [
+        "capacity",
+        "markets",
+        "compute",
+        "weekly-ops"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06b0f-f2ff-79ae-99c8-7b375410101b",
+      "added_at": "2026-09-04T06:18:30+00:00"
+    },
+    {
+      "id": "L263",
+      "category": "later",
+      "section": "ops",
+      "title": "Apply committed FTSE memos to the live research overlay",
+      "summary": "54 of 59 FTSE buy-tier names already have accumulate memos under docs/data/research/, but latest.json research[] only lists 18, so weekday paper overlay misses names such as JSG.L. Refresh should read the committed store, not only the last publish index.",
+      "revisit_when": "Next weekday paper-auto or overlay-refresh change, or when AI judgment looks under-gated vs the memo library",
+      "tags": [
+        "research",
+        "overlay",
+        "paper-auto",
+        "publish"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06b0f-f2ff-79ae-99c8-7b375410101b",
+      "added_at": "2026-09-04T06:32:26+00:00"
+    },
+    {
+      "id": "L264",
+      "category": "later",
+      "section": "research",
+      "title": "Rememo thin euro_depth buy-tier memos after filings deepen",
+      "summary": "Sunday ladder skips all 44 euro_depth buy-tier names because a first memo already exists. Most are still mode=initial with 0 filing bodies. Dedupe should not block a rememo once euro_filings bodies increase.",
+      "revisit_when": "euro_depth buy-tier indexed_without_body drops and ingest_parity_met is near true",
+      "tags": [
+        "euro_depth",
+        "research",
+        "rememo",
+        "filings"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06b0f-f2ff-79ae-99c8-7b375410101b",
+      "added_at": "2026-09-04T06:32:26+00:00"
     }
   ],
   "fragments": [
