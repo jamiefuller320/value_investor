@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-04T10:37:44+00:00",
+  "updated_at": "2026-09-04T10:45:40+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -5773,6 +5773,40 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
       "added_at": "2026-09-04T10:37:44+00:00"
+    },
+    {
+      "id": "L274",
+      "category": "later",
+      "section": "ops",
+      "title": "Pin the weekday-aborting ticker for intensive follow-up",
+      "summary": "After a mid-ticker cap (L215), follow-up should prefer the name that hit the budget or exhausted IR retries, not only health_after.zero_body_tickers[0]. Otherwise the batch moves on while RAND.AS gets the pin and DG.PA returns to the next weekday head.",
+      "revisit_when": "L215 lands or a euro run again spends most of the slot on one 0-improve IR name.",
+      "tags": [
+        "euro",
+        "ingest",
+        "gap-closure",
+        "time-budget"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:45:40+00:00"
+    },
+    {
+      "id": "N73",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not backlog-first aborted hard IR tickers",
+      "summary": "FTSE ingest_backlog puts remaining tickers first. Doing that for a DG.PA-class abort would spend the first per-ticker budget of every weekday slot on the same failed GlobeNewswire rows. Keep backlog for names that never started; escalate started+failed names off the batch.",
+      "revisit_when": "Library ingest grows a backlog file and someone proposes prioritize_backlog_targets for euro.",
+      "tags": [
+        "euro",
+        "ingest",
+        "backlog",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a067cc-8ad0-79da-9022-c7d8d69cd891",
+      "added_at": "2026-09-04T10:45:40+00:00"
     }
   ],
   "fragments": [
