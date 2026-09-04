@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T20:47:27+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T20:52:18+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -344,6 +344,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L288 | **Auto-clear library ingest pin when IWB closes** | docs/data/library_ingest_pins.json is a dated intensive pin (ABI.BR through 2026-09-11). After the named ticker’s indexed-without-body count hits 0, auto-remove or expire the pin so weekday euro returns to the 24-name batch without a manual edit. | After the 16:15/next euro intensive ABI pin run, or when ABI.BR IWB is 0 |
 | L290 | **Dashboard click-to-approve ingest deviations** | Pages is static, so ingest deviations reprocess via CLI (ftse-library ingest-deviations approve). A local dashboard API or Actions dispatch would let a reviewer pin without a commit, but that is a new write path. | Local dashboard serve grows a write API, or we add a supervised workflow_dispatch for pins |
 | L291 | **Review the 120 weekly_ops bump against 36 percent unused Ultra** | Usage page is 64 percent used, so leftover is about 36 percent of the listed plan, not the 1700 USD inferred from burst percentages. The 80 to 120 weekly_ops raise already sits at the 50 percent ceiling and looks aggressive versus that leftover. | Cycle-end surplus review on 2026-10-d8 keep-or-revert. |
+| L292 | **Two-column budget: included-credit fraction vs estimated API USD** | Policy today ledgers estimated on-demand USD only. Usage-page leftover is a separate included-pool meter. A later surplus review could store both, but do not invent a conversion that treats burst token dollars as a percent of Ultra. | Cycle-end surplus review on 2026-10-d8, or if Cursor exposes remaining included credits to the API. |
 
 ---
 

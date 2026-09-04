@@ -1,8 +1,10 @@
 """Cycle-end Cursor surplus → provisional weekly_ops bump with next-cycle review.
 
 Cursor does not expose remaining plan credits. The operator declares unused
-fraction (Ultra usage page). A transfer fraction of that leftover becomes a
-*provisional* raise of ``weekly_ops_cap_usd``. Rememo daily caps stay fixed.
+fraction (Ultra usage page — included-pool meter). A transfer fraction of that
+leftover becomes a *provisional* raise of ``weekly_ops_cap_usd`` (estimated
+on-demand USD meter). Do not infer leftover dollars from estimated token spend
+divided by a usage-page percentage. Rememo daily caps stay fixed.
 
 Human review at the next billing-cycle end keeps or reverts the bump.
 """
