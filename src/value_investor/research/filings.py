@@ -3617,6 +3617,9 @@ def refetch_ir_allowlist_filing_bodies(
     max_bodies: int = 20,
     max_retries: int = IR_BODY_FETCH_RETRIES,
     allowlist_path: Path | None = None,
+    deadline_monotonic: float | None = None,
+    skip_unfetchable: bool = True,
+    mark_unfetchable_on_fail: bool = True,
 ) -> dict[str, Any]:
     """
     Merge IR allowlist URLs then re-download bodies with retries.
@@ -3651,17 +3654,62 @@ def refetch_ir_allowlist_filing_bodies(
             "note": f"unreadable index: {exc}",
         }
 
+    from value_investor.library_ingest_budget import deadline_reached
+
     filings = list(payload.get("filings") or [])
+    allowlist_rows = fetch_filings_ir_allowlist(ticker, path=allowlist_path)
+    allowlist_urls = {
+        str(row.get("url") or "").strip()
+        for row in allowlist_rows
+        if str(row.get("url") or "").strip()
+    }
+    stale_marked = 0
+    if allowlist_urls:
+        refreshed: list[dict[str, Any]] = []
+        for row in filings:
+            item = dict(row)
+            url = str(item.get("url") or "").strip()
+            if (
+                _is_ir_allowlist_row(item)
+                and url
+                and url not in allowlist_urls
+                and not item.get("has_body")
+            ):
+                item["unfetchable"] = True
+                item["unfetchable_reason"] = "allowlist_removed"
+                item["unfetchable_at"] = datetime.now(UTC).isoformat()
+                stale_marked += 1
+            refreshed.append(item)
+        filings = refreshed
+
     before = sum(1 for row in filings if row.get("has_body"))
     ir_rows = [row for row in filings if _is_ir_allowlist_row(row)]
-    missing = [row for row in ir_rows if row.get("url") and not row.get("has_body")]
+    missing = [
+        row
+        for row in ir_rows
+        if row.get("url")
+        and not row.get("has_body")
+        and not (skip_unfetchable and row.get("unfetchable"))
+    ]
+    skipped_unfetchable = sum(
+        1
+        for row in ir_rows
+        if row.get("url") and not row.get("has_body") and row.get("unfetchable")
+    )
     if not missing:
+        if stale_marked:
+            payload["filings"] = filings
+            payload["summary"] = summarize_filings(filings)
+            index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
         return {
             "attempted": 0,
             "fetched": 0,
+            "failed": 0,
             "with_body_before": before,
             "with_body_after": before,
             "investegate_fallbacks": 0,
+            "skipped_unfetchable": skipped_unfetchable,
+            "deadline_hit": False,
             "merge": merge_meta,
             "note": "no missing IR allowlist bodies",
         }
@@ -3676,6 +3724,8 @@ def refetch_ir_allowlist_filing_bodies(
     bodies_dir.mkdir(parents=True, exist_ok=True)
     downloaded = 0
     retries_used = 0
+    failed = 0
+    deadline_hit = False
     investegate_fallbacks = 0
     retry_log: list[dict[str, Any]] = []
     known_body_hashes = _filing_body_hashes_from_rows(filings, bodies_dir=bodies_dir)
@@ -3687,12 +3737,20 @@ def refetch_ir_allowlist_filing_bodies(
             and _is_ir_allowlist_row(item)
             and item.get("url")
             and not item.get("has_body")
+            and not (skip_unfetchable and item.get("unfetchable"))
         ):
+            if deadline_reached(deadline_monotonic):
+                deadline_hit = True
+                updated.append(item)
+                continue
             body = None
             fetch_source: str | None = None
             row_url = str(item.get("url") or "")
             row_id = str(item.get("id") or "")
             for attempt in range(max_retries + 1):
+                if deadline_reached(deadline_monotonic):
+                    deadline_hit = True
+                    break
                 body, fetch_source = _fetch_ir_allowlist_body(
                     item,
                     ticker=ticker,
@@ -3741,7 +3799,17 @@ def refetch_ir_allowlist_filing_bodies(
                         attempt + 1,
                         max_retries + 1,
                     )
-            if not body:
+            if not body and deadline_hit:
+                retry_log.append(
+                    {
+                        "filing_id": row_id,
+                        "url": row_url,
+                        "attempt": attempt + 1,
+                        "outcome": "deadline",
+                        "source": None,
+                    }
+                )
+            elif not body:
                 retry_log.append(
                     {
                         "filing_id": row_id,
@@ -3757,6 +3825,12 @@ def refetch_ir_allowlist_filing_bodies(
                     row_id,
                     max_retries + 1,
                 )
+                failed += 1
+                if mark_unfetchable_on_fail:
+                    item["unfetchable"] = True
+                    item["unfetchable_reason"] = "ir_allowlist_fetch_failed"
+                    item["unfetchable_at"] = datetime.now(UTC).isoformat()
+                    skipped_unfetchable += 1
             if body:
                 content_hash, dup_reason = _reject_duplicate_filing_body_hash(
                     row_id,
@@ -3793,11 +3867,14 @@ def refetch_ir_allowlist_filing_bodies(
     return {
         "attempted": len(missing),
         "fetched": max(0, after - before),
+        "failed": failed,
         "with_body_before": before,
         "with_body_after": after,
         "retries_used": retries_used,
         "retry_log": retry_log,
         "investegate_fallbacks": investegate_fallbacks,
+        "skipped_unfetchable": skipped_unfetchable,
+        "deadline_hit": deadline_hit,
         "merge": merge_meta,
         "mandatory": True,
         "note": "refetch_ir_allowlist_filing_bodies",

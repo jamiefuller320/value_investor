@@ -858,6 +858,7 @@ def evaluate_library_ingest_gap_closure_followup(
     runtime_cutoff: bool = False,
     discovery_scan: Any = None,
     deepen_results: Any = None,
+    blocker_ticker: str | None = None,
     prefer_ticker: str | None = None,
     library_root: Path | None = None,
     reports: list[Any] | None = None,
@@ -918,7 +919,7 @@ def evaluate_library_ingest_gap_closure_followup(
             "should_dispatch": False,
             "reason": f"open library ingest engineering task for {market}",
         }
-    prefer = str(prefer_ticker or "").strip() or None
+    prefer = str(prefer_ticker or "").strip() or str(blocker_ticker or "").strip() or None
     if not prefer:
         for key in ("zero_body_tickers", "unmeasured_tickers"):
             sample = [
@@ -1021,6 +1022,7 @@ def evaluate_library_ingest_gap_closure_followups(
             runtime_cutoff=bool(row.get("runtime_cutoff")),
             discovery_scan=row.get("discovery_scan"),
             deepen_results=row.get("results"),
+            blocker_ticker=row.get("blocker_ticker"),
             prefer_ticker=prefer_ticker,
             library_root=library_root,
             tasks_path=tasks_path,

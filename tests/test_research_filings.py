@@ -4578,6 +4578,103 @@ def test_refetch_ir_allowlist_filing_bodies_retries_failed_fetch(tmp_path: Path,
     assert (filings_dir / "bodies" / f"ir_{digest}.txt").exists()
 
 
+def test_refetch_ir_allowlist_marks_failed_rows_unfetchable_and_skips(tmp_path: Path, monkeypatch):
+    allowlist_path = tmp_path / "ir_urls.json"
+    url = "https://example.com/dead-ir.pdf"
+    allowlist_path.write_text(json.dumps({"urls": {"SLOW.PA": [url]}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    digest = __import__("hashlib").sha256(url.encode("utf-8")).hexdigest()[:16]
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": f"ir_{digest}",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document",
+                        "url": url,
+                        "period": "other",
+                        "has_body": False,
+                        "body_path": None,
+                        "priority": 130,
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    attempts = {"count": 0}
+
+    def fake_fetch(_url):
+        attempts["count"] += 1
+        return None
+
+    monkeypatch.setattr("value_investor.research.filings.fetch_filing_body", fake_fetch)
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
+    )
+    first = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "SLOW.PA",
+        max_bodies=5,
+        max_retries=1,
+        allowlist_path=allowlist_path,
+    )
+    assert first["failed"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["unfetchable"] is True
+    after_first = attempts["count"]
+    second = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "SLOW.PA",
+        max_bodies=5,
+        max_retries=1,
+        allowlist_path=allowlist_path,
+    )
+    assert second["attempted"] == 0
+    assert second["skipped_unfetchable"] >= 1
+    assert attempts["count"] == after_first
+
+
+def test_refetch_ir_allowlist_stops_at_deadline(tmp_path: Path, monkeypatch):
+    allowlist_path = tmp_path / "ir_urls.json"
+    url = "https://example.com/slow-ir.pdf"
+    allowlist_path.write_text(json.dumps({"urls": {"SLOW.PA": [url]}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": []}),
+        encoding="utf-8",
+    )
+    merge_ir_allowlist_filings("SLOW.PA", filings_dir, path=allowlist_path)
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda _url: None,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "SLOW.PA",
+        max_bodies=5,
+        max_retries=2,
+        allowlist_path=allowlist_path,
+        deadline_monotonic=0.0,
+    )
+    assert result["deadline_hit"] is True
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert not saved["filings"][0].get("unfetchable")
+
+
+def test_dg_pa_ir_allowlist_uses_vinci_pdfs_not_globenewswire_html():
+    rows = fetch_filings_ir_allowlist("DG.PA")
+    urls = [row["url"] for row in rows]
+    assert urls
+    assert all("vinci.com" in url for url in urls)
+    assert all("globenewswire.com/news-release" not in url for url in urls)
+    assert any("2025-vinci-consolidated-financial-statements" in url for url in urls)
+
+
 def test_fetch_filings_ir_allowlist_itv_l(tmp_path: Path):
     """ITV.L IR results decks are allowlisted for segment/dividend/cash-flow gap-fill."""
     allowlist_path = tmp_path / "empty_ir.json"
