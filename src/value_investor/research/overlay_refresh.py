@@ -8,6 +8,7 @@ from typing import Any
 
 import pandas as pd
 
+from value_investor.research.document import ResearchDocument
 from value_investor.research.market_store import resolve_research_documents
 from value_investor.research.overlay import apply_research_overlay, enrich_signals_with_research
 from value_investor.research.store import ResearchStore

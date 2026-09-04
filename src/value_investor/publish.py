@@ -18,6 +18,8 @@ from value_investor.price_charts import (
     ensure_buy_tier_charts,
     slug_ticker,
 )
+from value_investor.research.market_store import resolve_research_documents
+from value_investor.research.overlay import apply_research_overlay
 from value_investor.storage import (
     DASHBOARD_ARCHIVE_KEEP,
     prune_dashboard_archives,
@@ -25,8 +27,6 @@ from value_investor.storage import (
     summarize_text,
     write_json,
 )
-from value_investor.research.market_store import resolve_research_documents
-from value_investor.research.overlay import apply_research_overlay
 from value_investor.summary import CompanyReport, build_company_reports
 from value_investor.trust_summary import build_trust_reports
 

@@ -8,8 +8,9 @@ in-scope market inherits the same wiring without a per-market special case.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from value_investor.research.document import ResearchDocument
 from value_investor.research.store import ResearchStore
