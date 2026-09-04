@@ -66,6 +66,14 @@ Phase 3 readiness is **informational only** — weekday ladder crons stay enable
 When focus reaches parity, `ingest_parity_markets` is updated and focus may advance to
 `market_queue[0]` when `focus_graduation.advance_focus_on_ingest_parity` is true.
 
+**Effort cascade (doctrine):** P2 offline ingest is a cascade, not equal streams — see
+[`AGENTS.md`](../../AGENTS.md) and [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md#machinery-spend-p1--p2).
+Maximum effort stays on the highest-priority market that is not yet in the learning
+phase (today: `euro_depth`). Spare capacity only on the next queue markets. Do **not**
+add a fourth equal sprint workflow (`library-ingest-sprint-3.yml` or similar) that can
+starve the head target. A true preemptible scheduler is later (L273); until then, treat
+focus deepen as the fat slot.
+
 **Parallel sprint:** `ingest_parallel_sprint` (default `["sp500"]`) and `ingest_parallel_sprint_2`
 (default `["asx200"]`) front-start filing deepen on queue markets while focus is still in
 sprint. When a parallel market reaches filing parity, `advance_parallel_sprint_on_ingest_parity`

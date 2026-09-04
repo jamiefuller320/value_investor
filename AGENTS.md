@@ -7,6 +7,15 @@ Interim goal: **high-quality prompts / decision packs** for manual verification 
 
 North-star stages and the “richness before breadth on the live path” rule are in [`docs/PROJECT_OBJECTIVE.md`](docs/PROJECT_OBJECTIVE.md). Pipeline and data-model reference: [`docs/architecture.md`](docs/architecture.md). Keep the live screener on FTSE 350 until stage 4; grow other markets via `ftse-library` offline.
 
+## Spend priorities (now)
+
+Prefer work that serves these two, in order. Anything else should be parked with `ftse-defer`, not started.
+
+1. **P1 — Live-path utilization.** Change what a weekday paper-auto / AI-judgment pass can see: filings, FCF basis, overlay bind, memo recency on FTSE holdings and buy-tier. Extra FTSE ingest on a green buy-tier, new paper tracks, and live universe expansion are factory, not foundation.
+2. **P2 — Offline ingest cascade.** After P1, use leftover capacity so filing bodies and weekly screen archives accumulate before calendar span blocks stage 4. Put **maximum effort** on the highest-priority market that is not yet in the learning phase (today: `euro_depth` until Phase 2 weekly-paper gates clear). Use **spare** capacity only on the next queue markets (`sp500`, then `asx200`). **Shift** the fat slot when that phase transition completes. Do **not** add a fourth equal sprint stream that can starve the head target.
+
+See [`docs/ops/market-sharded-learning.md`](docs/ops/market-sharded-learning.md) and [`docs/ops/euro-depth-sprint.md`](docs/ops/euro-depth-sprint.md).
+
 ## Parked / later ideas (required)
 
 When you give advice that is **not relevant now** or **potentially useful later** (deferred features, premature ideas, “revisit when…”, out-of-scope enhancements), **append it to the deferred-ideas store before ending the turn**:

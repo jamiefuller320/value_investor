@@ -32,8 +32,15 @@ Work proceeds stage-by-stage. Do **not** skip ahead into global breadth or full 
 1. **Primary learning track (hands-off):** AI quasi-human paper decisions using research available at the time → confirm by **outperformance after costs vs the market** (and vs a rules control book). See [`docs/ops/primary-learning-track.md`](ops/primary-learning-track.md).
 2. **Keep decision-review learning running** — weekday paper-auto + `ftse-decision-review` on both tracks until knobs can apply.
 3. **Optional human packs** — still useful for live capital verification; not the primary improvement loop.
-4. **Grow data libraries in the background** — progressive multi-market snapshots ready for stage 4, without changing the live screen.
+4. **Grow data libraries in the background (P2, cascaded)** — filing bodies and weekly archives on the current learning-phase candidate first (`euro_depth` until Phase 2 weekly-paper gates clear); leftover ingest on `sp500`, then `asx200`. Do **not** add a fourth equal sprint stream. Do not change the live screen.
 5. **Only then** expand live coverage and tighten automation.
+
+### Machinery spend (P1 / P2)
+
+Agent and engineering time, in order (also in [`AGENTS.md`](../AGENTS.md)):
+
+1. **P1 — Live-path utilization.** Work that changes what a weekday paper-auto / AI-judgment pass can see (filings, FCF basis, overlay bind, memo recency on FTSE holdings and buy-tier). Extra FTSE ingest on a green buy-tier, new paper tracks, and live breadth are factory, not foundation.
+2. **P2 — Offline ingest cascade.** After P1, maximum effort on the highest-priority market not yet in the learning phase; spare capacity on the next queue names; shift the fat slot when that phase transition completes. Equal extra sprint streams can starve the head target — do not add them.
 
 ---
 
