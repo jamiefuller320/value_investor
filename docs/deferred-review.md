@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T18:13:16+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T19:26:16+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -137,6 +137,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N86 | **Do not spider company websites as the euro last-mile source** | Finding the IR host is not the leftover problem (ABI.BR is age-gated; several allowlist rows are already JS publications indexes). A general site crawl would burn the 320s ticker cap, pull ESG/wrong-year PDFs, and auto-write URLs that N79 already forbids. Keep IR as a manual allowlist; the later generic helper is L56 (same-origin PDF harvest from a known IR page). | LEI-first ESEF and the next complete fat slot still leave thin_need_discovery names whose official annual/interim PDF is only on a static same-origin IR library |
 | N87 | **Do not add a separate last-mile ingest workflow** | Two-lane deepen, intensive pin, stall_slowdown, and deviations already are the last-mile mode. A fourth workflow would starve the 24-name batch. Apply identity-first official-register lookup inside existing euro_filings / uk_rns / asx regimes instead. | After LEI-first ESEF and one national OAM adapter, leftover gaps still need a different control loop than pin + deviations |
 | N88 | **Do not farm remaining national OAMs until Belgium harvest produces bodies** | Belgium official / Euronext Brussels is wired for leftover .BR names. The live regulated-info page is still JS with 0 PDF hrefs. Do not start FSMA STORI, NBB CBSO, SIX, or an all-OAM farm until a complete euro slot actually indexes belgium_official bodies on AED.BR or ABI.BR. | A complete euro_depth slot indexes at least one belgium_official body on AED.BR or ABI.BR, or IWB leftovers are no longer Belgian. |
+| N89 | **Do not flood euro-ingest-loop dispatches to force AED.BR** | Saturday slots already used the daily success cap on 1-target ABI.BR pins. Extra workflow_dispatch will not give LEI or Belgium a fair run and crowds out the next complete deepen. | A complete euro_depth slot after #446 merge lists AED.BR as a target and health still shows unmeasured. |
 
 ---
 
