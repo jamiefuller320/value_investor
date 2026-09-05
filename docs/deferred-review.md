@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T20:07:19+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T20:12:42+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -297,6 +297,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L285 | **Batch-close stale ticker-specific gap-fill deferrals** | Dozens of July/August per-ticker gap-fill items still say 'after next weekly email gap-fill pass'. Do not mass-close them from a store review; after the next Sunday email, close only those whose named gap is gone or superseded by a generic ingest path (CH/IR crawler). | Next Sunday email gap-fill pass writes gap_fill_summary.json and post_run_review.md |
 | L289 | **Retry AB InBev IR PDFs if age-gate is lifted** | ABI.BR allowlist now uses SEC 20-F/HY 6-K because ab-inbev.com/investors is age-gated. If the IR site starts serving direct annual/HY PDF hrefs without a birthdate wall, swap those official PDFs in for the SEC HTML mirrors. | ab-inbev.com annual-and-half-year-reports exposes direct PDF links without an age-gate |
 | L303 | **Refetch already-indexed SEC 6-K bodies for dual-listed IWB** | Most leftover IWB is not a missing official register: ABI.BR has 11 body-less SEC 6-K URLs and NOVN.SW has 6. #446 will not fetch those. A bounded SEC-body pass on existing index rows is the next IWB lever after AED is measured on main. | AED.BR is measured on main and euro IWB is still 20+ with dual-listed SEC 6-K rows lacking bodies. |
+| L304 | **Material-event overlay to invalidate stale filing assumptions** | News value is not phrase-to-return lift or extra filing bodies. It is catching leadership changes, material M&A, lost contracts, and strategy shifts that make the last annual/interim assumptions stale. Needs issuer-filtered headlines plus a materiality gate vs company size, then a rememo/open-question flag — not article crawl or live screen weights. | Live FTSE holdings/buy-tier have filing+FCF+overlay bind, and weekly rememo still misses obvious CEO/deal/contract events that a human would treat as thesis-changing. |
 
 ### Ops / reliability
 
