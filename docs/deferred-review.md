@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T20:58:27+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T21:05:40+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -141,6 +141,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N90 | **Do not expand the event journal to euro leftovers yet** | Euro news manifests are noisier (AED/dirham-class issuer failures). Keep the journal on FTSE buy∪boundary until issuer precision and class false-positive rates are visible on Sunday artifacts. | FTSE journal issuer_reject and class review look stable for several Sunday runs, and euro leftovers have usable issuer identity (LEI/ISIN) plus non-junk headlines. |
 | N91 | **Do not add a general news-article body crawl** | Headline volume on buy∪boundary is ~27 unique articles/day (90d mean); 90% are Google News wrappers and teasers already exist (~109 chars). A Comparison-tool-style website harvest across publishers is the wrong collector: paywalls, unstable templates, and P1/P2 steal. Size/likelihood/timeline belong as optional fields on the event journal later, fetched only for event rows still missing those facts after title+teaser and later-filing join. | Sunday event journal has several weeks of dated events, later-filing confirmation is measured on body_match ≥30 days later, and a material share of M&A/contract events still lack size/likelihood/timeline after title+teaser and filings_index join. |
 | N92 | **Do not use NewsAPI.org free tier for production news** | NewsAPI developer plan is free and has a 24-hour article delay, but it returns no full text on any plan, caps 100 requests/day, and forbids staging/production. It does not solve size/likelihood/timeline extraction and is not usable on GitHub Actions. | A paid NewsAPI (or similar) plan is explicitly budgeted after open sources (Guardian, GDELT, RNS) are shown insufficient for event-journal fields. |
+| N93 | **Do not ngram full annual-report bodies for unknowns** | Unknown-unknown discovery uses leftover official RNS headlines already on disk. Do not bag-of-words 60MB of annual accounts (same failure mode as the news-phrase lexicon). Short leftover RNS headlines are the teacher set. | Leftover RNS headline phrases have produced at least one promoted event class and a human wants note-level facts that headlines never carry. |
 
 ---
 

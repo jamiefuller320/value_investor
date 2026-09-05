@@ -36,6 +36,8 @@ Optional: `--tickers AAA.L BBB.L`, `--json`.
 | `docs/data/news_event_rules.json` | Per-type confirmation rates vs later filings |
 | `docs/data/news_event_journal_state.json` | Per-ticker watermarks |
 | `docs/data/news_event_journal_review.md` | Human-readable summary |
+| `docs/data/filing_event_unknowns.json` | Leftover official filing headlines (no extra HTTP) |
+| `docs/data/filing_event_unknowns_review.md` | Recurring phrases the closed taxonomy missed |
 
 ## Method (short)
 
@@ -55,6 +57,11 @@ Optional: `--tickers AAA.L BBB.L`, `--json`.
    `seek_richer_source` + `richer_source: guardian_open_platform`. That is
    the learning-loop trigger to fetch a licensed body later — nothing is
    fetched in this job. Nothing writes screen weights or judgment prompts.
+9. Scan **already-fetched** `filings_index` headlines on the same cohort.
+   Drop routine RNS (PDMR, TVR, AGM, LTIP, Companies House labels). Count
+   known event classes, then keep leftovers as unknown-unknown candidates.
+   Recurring leftover phrases (≥3 tickers) are taxonomy holes for the next
+   rule pass. No extra downloads.
 
 ## What this is not
 

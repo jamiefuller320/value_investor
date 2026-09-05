@@ -40,6 +40,9 @@ def test_classify_headline_event_types():
     leadership = classify_headline("Alpha Plc CEO John Smith resigns")
     assert leadership["primary_event_type"] == "leadership"
     assert "leadership:0" in leadership["matched_rules"]
+    assert classify_headline("Appointment of Chief Financial Officer")["primary_event_type"] == (
+        "leadership"
+    )
 
     deal = classify_headline("Alpha agrees acquisition of rival")
     assert deal["primary_event_type"] == "m_and_a"

@@ -100,6 +100,12 @@ _TYPE_PATTERNS: dict[str, tuple[re.Pattern[str], ...]] = {
         ),
         re.compile(r"\b(new|interim)\s+(ceo|cfo|chairman|chairwoman)\b", flags=re.I),
         re.compile(r"\b(ceo|cfo)\s+(succession|departure|exit)\b", flags=re.I),
+        re.compile(
+            r"\bappointment of\s+(?:an?\s+)?"
+            r"(ceo|cfo|chairman|chairwoman|chief executive|chief financial officer)\b",
+            flags=re.I,
+        ),
+        re.compile(r"\bdirectorate change\b", flags=re.I),
     ),
     "m_and_a": (
         re.compile(r"\b(acqui(?:re|res|red|sition|ring)|takeover|merger)\b", flags=re.I),
@@ -779,10 +785,14 @@ def run_news_event_journal(
         _format_review_markdown(journal, rules),
         encoding="utf-8",
     )
+    from value_investor.filing_event_discovery import run_filing_event_discovery
+
+    unknowns = run_filing_event_discovery(data_dir, tickers=tickers)
     return {
         "journal": journal,
         "rules": rules,
         "state": state,
+        "unknowns": unknowns,
         "paths": {
             "journal": str(data_dir / JOURNAL_FILENAME),
             "rules": str(data_dir / RULES_FILENAME),

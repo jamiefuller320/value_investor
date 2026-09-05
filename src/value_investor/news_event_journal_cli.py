@@ -7,6 +7,8 @@ import json
 import sys
 from pathlib import Path
 
+from value_investor.filing_event_discovery import REVIEW_MD_FILENAME as UNK_REVIEW
+from value_investor.filing_event_discovery import UNKNOWN_FILENAME
 from value_investor.news_event_journal import (
     JOURNAL_FILENAME,
     REVIEW_MD_FILENAME,
@@ -57,12 +59,16 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Wrote {args.data_dir / RULES_FILENAME}")
         print(f"Wrote {args.data_dir / STATE_FILENAME}")
         print(f"Wrote {args.data_dir / REVIEW_MD_FILENAME}")
+        print(f"Wrote {args.data_dir / UNKNOWN_FILENAME}")
+        print(f"Wrote {args.data_dir / UNK_REVIEW}")
+        unknowns = payload.get("unknowns") or {}
         print(
             f"mode={journal.get('mode')} cohort={journal.get('cohort_ticker_count')} "
             f"news={journal.get('tickers_with_news')} articles={journal.get('article_count')} "
             f"events={journal.get('event_count')} confirmed={journal.get('confirmed_count')} "
             f"seek_richer={journal.get('seek_richer_source_count')} "
-            f"issuer_reject={journal.get('issuer_reject_count')}"
+            f"issuer_reject={journal.get('issuer_reject_count')} "
+            f"filing_unknowns={unknowns.get('unknown_count')}"
         )
     return 0
 
