@@ -11,6 +11,7 @@ from typing import Any
 
 from .agent_model_policy import (
     DEFAULT_POLICY_PATH,
+    DEFAULT_WEEKLY_OPS_PLAN_CREDIT_SHARE_CAP,
     focus_markets,
     grow_ticker_budget,
     load_policy,
@@ -216,6 +217,15 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=None,
         help="Hard cap on the weekly_ops raise (default: 20)",
+    )
+    surplus_p.add_argument(
+        "--plan-credit-share-cap",
+        type=float,
+        default=None,
+        help=(
+            "Estimated-USD warning threshold as a fraction of plan_monthly_usd "
+            "(default: 0.15). Warning only — not a hard cap."
+        ),
     )
     surplus_p.add_argument(
         "--update-plan-metadata",
@@ -1170,8 +1180,26 @@ def cmd_policy(args: argparse.Namespace) -> int:
         budget["plan_monthly_usd"] = float(args.plan_monthly_usd)
         changed = True
     if args.weekly_ops_cap_usd is not None:
-        budget["weekly_ops_cap_usd"] = float(args.weekly_ops_cap_usd)
+        requested = float(args.weekly_ops_cap_usd)
+        budget["weekly_ops_cap_usd"] = requested
         changed = True
+        monthly = float(
+            budget.get("plan_monthly_usd")
+            or policy.get("budget", {}).get("plan_monthly_usd")
+            or 0.0
+        )
+        share = float(
+            budget.get("weekly_ops_plan_credit_share_cap")
+            or DEFAULT_WEEKLY_OPS_PLAN_CREDIT_SHARE_CAP
+        )
+        ceiling = round(max(0.0, monthly * share), 2)
+        if monthly > 0 and requested > ceiling and not args.json:
+            print(
+                f"Note: weekly_ops_cap ${requested:.2f} is above the "
+                f"{share:.0%} estimated-USD warning (${ceiling:.2f} of "
+                f"${monthly:.0f} plan). That share is a warning, not a hard cap.",
+                file=sys.stderr,
+            )
     if args.refresh_day is not None:
         budget["plan_refresh_day_of_month"] = max(1, min(28, int(args.refresh_day)))
         changed = True
@@ -1224,6 +1252,21 @@ def cmd_policy(args: argparse.Namespace) -> int:
         + (f"  — {ops_status['note']}" if ops_status.get("note") else "")
     )
     print(
+        f"Weekly ops plan-credit warning: "
+        f"{float(ops_status.get('weekly_ops_plan_credit_share_cap') or 0):.0%} of "
+        f"${ops_status.get('plan_monthly_usd')} = "
+        f"${ops_status.get('weekly_ops_plan_credit_warning_usd')}"
+        + (
+            "  (estimated spend at/over warning)"
+            if ops_status.get("weekly_ops_plan_credit_warning")
+            else (
+                "  (estimated spend near warning)"
+                if ops_status.get("weekly_ops_plan_credit_near_warning")
+                else "  (warning only, not a hard cap)"
+            )
+        )
+    )
+    print(
         f"Ad hoc checkpoint: ${ladder.get('spend_since_checkpoint_usd', 0)} / "
         f"${ladder.get('spend_checkpoint_usd', 60)}"
     )
@@ -1273,6 +1316,11 @@ def cmd_cycle_surplus(args: argparse.Namespace) -> int:
                 if args.max_weekly_bump_usd is not None
                 else DEFAULT_MAX_WEEKLY_BUMP_USD
             ),
+            plan_credit_share_cap=(
+                float(args.plan_credit_share_cap)
+                if args.plan_credit_share_cap is not None
+                else None
+            ),
             replace_provisional=bool(args.replace_provisional),
             policy=policy,
             path=args.policy,
@@ -1294,6 +1342,14 @@ def cmd_cycle_surplus(args: argparse.Namespace) -> int:
             print(
                 f"Transfer {assessment['transfer_fraction']:.0%} = ${assessment['transfer_usd']:.2f} "
                 f"(weekly bump ${assessment['weekly_bump_usd']:.2f})"
+            )
+            print(
+                f"Plan-credit weekly-ops warning "
+                f"{float(assessment.get('plan_credit_share_cap') or 0):.0%} of "
+                f"${assessment['plan_monthly_usd']:.0f} = "
+                f"${float(assessment.get('plan_credit_warning_usd') or assessment.get('plan_credit_ceiling_usd') or 0):.2f}"
+                "  (warning only, not a hard cap)"
+                + ("  (proposed cap above warning)" if assessment.get("ceiling_bound") else "")
             )
             print(
                 f"weekly_ops ${assessment['current_weekly_ops_cap_usd']:.2f} → "
