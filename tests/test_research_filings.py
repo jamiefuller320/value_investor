@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 from unittest.mock import patch
 
@@ -4310,6 +4311,105 @@ def test_esef_entity_search_retries_without_country_on_http_400(mock_get):
     assert rows[0]["source"] == "esef_direct"
     assert any("filter%5Bcountry%5D" in u for u in calls)
     assert any("/entities?" in u and "filter%5Bcountry%5D" not in u for u in calls)
+
+
+@patch("value_investor.research.filings._http_get")
+def test_fetch_filings_esef_direct_uses_cached_lei_when_name_would_miss(mock_get, tmp_path: Path):
+    """AED.BR name search is empty on filings.xbrl.org; builtin LEI still finds packages."""
+    filings_payload = {
+        "data": [
+            {
+                "attributes": {
+                    "period_end": "2023-12-31",
+                    "report_url": (
+                        "/529900DTKNXL0AXQFN28/2023-12-31/ESEF/BE/1/"
+                        "529900DTKNXL0AXQFN28-2023-12-31-en/reports/"
+                        "529900DTKNXL0AXQFN28-2023-12-31-en.xhtml"
+                    ),
+                }
+            },
+            {
+                "attributes": {
+                    "period_end": "2023-12-31",
+                    "report_url": (
+                        "/529900DTKNXL0AXQFN28/2023-12-31/ESEF/BE/0/"
+                        "529900DTKNXL0AXQFN28-2023-12-31-nl/reports/"
+                        "529900DTKNXL0AXQFN28-2023-12-31-nl.xhtml"
+                    ),
+                }
+            },
+            {
+                "attributes": {
+                    "period_end": "2022-12-31",
+                    "report_url": (
+                        "/529900DTKNXL0AXQFN28/2022-12-31/ESEF/BE/1/"
+                        "529900DTKNXL0AXQFN28-2022-12-31-en/reports/"
+                        "529900DTKNXL0AXQFN28-2022-12-31-en.xhtml"
+                    ),
+                }
+            },
+        ]
+    }
+    calls: list[str] = []
+
+    def _fake_get(url: str, **kwargs):
+        calls.append(url)
+        if "/entities?" in url:
+            return json.dumps({"data": []}).encode("utf-8")
+        return json.dumps(filings_payload).encode("utf-8")
+
+    mock_get.side_effect = _fake_get
+    rows = fetch_filings_esef_direct(
+        company_name="Aedifica NV/SA",
+        ticker="AED.BR",
+        lookback_days=800,
+        official_annual_floor=2,
+        identifier_map_path=tmp_path / "empty.json",
+        now=datetime(2026, 9, 5, tzinfo=UTC),
+    )
+    assert len(rows) == 2
+    assert {row["period_end"] for row in rows} == {"2023-12-31", "2022-12-31"}
+    assert all(row["entity_identifier"] == "529900DTKNXL0AXQFN28" for row in rows)
+    assert all("-en.xhtml" in row["url"] for row in rows)
+    assert not any("/entities?" in url for url in calls)
+    assert any("filter%5Bentity.identifier%5D=529900DTKNXL0AXQFN28" in url for url in calls)
+
+
+@patch("value_investor.research.filings._http_get")
+def test_fetch_filings_esef_direct_lookback_keeps_recent_without_floor(mock_get):
+    filings_payload = {
+        "data": [
+            {
+                "attributes": {
+                    "period_end": "2025-12-31",
+                    "report_url": "/529900D6BF99LW9R2E68/2025/reports/sap-2025-en.xhtml",
+                }
+            },
+            {
+                "attributes": {
+                    "period_end": "2022-12-31",
+                    "report_url": "/529900D6BF99LW9R2E68/2022/reports/sap-2022-en.xhtml",
+                }
+            },
+        ]
+    }
+
+    def _fake_get(url: str, **kwargs):
+        if "/entities?" in url:
+            return json.dumps(
+                {"data": [{"attributes": {"identifier": "529900D6BF99LW9R2E68"}}]}
+            ).encode("utf-8")
+        return json.dumps(filings_payload).encode("utf-8")
+
+    mock_get.side_effect = _fake_get
+    rows = fetch_filings_esef_direct(
+        company_name="SAP SE",
+        ticker="SAP.DE",
+        lookback_days=800,
+        official_annual_floor=2,
+        now=datetime(2026, 9, 5, tzinfo=UTC),
+    )
+    assert [row["period_end"] for row in rows] == ["2025-12-31"]
 
 
 def test_fetch_filings_ir_allowlist_rand_as_builtins(tmp_path: Path):
