@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T20:53:46+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T20:58:27+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -301,6 +301,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L304 | **Event-only body fields with learn-and-refetch** | If bodies are fetched at all, do it only for issuer-filtered journal events still missing size/likelihood/timeline. Resolve Google wrappers, store structured fields not full HTML, skip paywalls, and refetch when extractor version bumps (Comparison-tool skip-existing + stale/ETag + post-learn recapture). Today+1-day walkback to 90d is feasible at that scale (~1 URL/day, ~47 pages in 90d), not as an all-headline crawl (~50+ resolve+fetch/day). | The not-now general body crawl is lifted and event-journal confirmation rates are stable enough to spend a Sunday slot on a bounded event-only fetch. |
 | L305 | **Guardian Open Platform as licensed event-body enricher** | The one major free API that returns licensed full article text is The Guardian (developer key: 500 calls/day, 1/s, non-commercial). 24h lag is fine. Coverage is Guardian-only, so it can fill size/likelihood/timeline on a subset of UK events after title+teaser and filing join, not replace Google/Yahoo discovery. GDELT DOC/GKG is the free no-key index (search + extracted amounts/themes, no redistributable body). Watch Guardian non-commercial terms if this becomes a sold product (then L12). | Event journal has several Sunday runs and a material share of M&A/contract events still lack size/likelihood/timeline after title+teaser and filings_index join. |
 | L306 | **Revisit commercial news licences only if use is no longer personal** | This project is personal use. The Guardian Open Platform developer key (non-commercial, 500 calls/day, licensed article text) is in-bounds when we later enrich event-journal fields. Paid NewsAPI, Guardian commercial, Finnhub/Marketaux, and other commercial news licences stay parked. If use ever becomes a sold or third-party product, revisit L12 and those licences before keeping a developer key. | The project is no longer personal-only (sold, third-party users, or commercial redistribution of article text). |
+| L307 | **Guardian fetch is gated on seek_richer_source** | The event journal now flags issuer-filtered events that still lack required size/likelihood after title+teaser and a confirming filing. Do not fetch Guardian (or any article body) until Sunday news_event_rules.json shows a stable seek_richer_source count worth spending the 500/day personal developer key on. Fetch only those flagged rows. | Several Sunday journal runs show a material, stable seek_richer_source_count (not just one noisy backfill) and personal Guardian developer key is available. |
 
 ### Ops / reliability
 

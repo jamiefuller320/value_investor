@@ -50,7 +50,11 @@ Optional: `--tickers AAA.L BBB.L`, `--json`.
    on-disk body mentions the event class.
 6. Attach archive forward returns at 4/8/12 weeks when history exists.
 7. Score each event type `watch` / `promising` / `weak` from confirmation rate.
-   Nothing writes screen weights or judgment prompts.
+8. After title+teaser+confirming filing, require size (M&A/contract) and
+   likelihood (M&A/strategy). Missing required facts set
+   `seek_richer_source` + `richer_source: guardian_open_platform`. That is
+   the learning-loop trigger to fetch a licensed body later — nothing is
+   fetched in this job. Nothing writes screen weights or judgment prompts.
 
 ## What this is not
 

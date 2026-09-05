@@ -35,7 +35,8 @@ STATE_FILENAME = "news_event_journal_state.json"
 REVIEW_MD_FILENAME = "news_event_journal_review.md"
 
 SOURCE_POOL = "buy_boundary"
-EXTRACTOR_VERSION = "headline-rules-v1"
+EXTRACTOR_VERSION = "headline-rules-v1.1"
+RICHER_SOURCE = "guardian_open_platform"
 FILING_LOOKAHEAD_DAYS = 400
 BODY_SCAN_CHARS = 24_000
 MIN_CONFIRM_N = 4
@@ -119,6 +120,34 @@ _TYPE_PATTERNS: dict[str, tuple[re.Pattern[str], ...]] = {
         re.compile(r"\b(exit|exits|exiting)\s+(the\s+)?(market|division|business)\b", flags=re.I),
     ),
 }
+
+# Fields that must be present after title+teaser+confirming filing, else
+# the learning loop flags a richer-source seek (Guardian later; not fetched here).
+REQUIRED_FACTS: dict[str, tuple[str, ...]] = {
+    "leadership": (),
+    "m_and_a": ("size", "likelihood"),
+    "contract": ("size",),
+    "strategy": ("likelihood",),
+}
+
+_SIZE_RE = re.compile(
+    r"£\s?[\d.,]+\s?(?:bn|billion|m|million)?|"
+    r"\$\s?[\d.,]+\s?(?:bn|billion|m|million)?|"
+    r"\b[\d.,]+\s?(?:bn|billion|million)\b",
+    flags=re.I,
+)
+_LIKELIHOOD_RE = re.compile(
+    r"\b(talks?|approach(?:ed|es)?|possible|potential|rumour(?:ed)?|rumored|"
+    r"recommended|agrees?|agreed|confirms?|confirmed|completed?|completes|"
+    r"wins?|won|awarded|lost|resigns?|resigned|appoints?|appointed|named)\b",
+    flags=re.I,
+)
+_TIMELINE_RE = re.compile(
+    r"\b(h1|h2|q[1-4]|fy\s?\d{2,4}|20\d{2}|next year|this year|"
+    r"deadline|completion|expected to close|within \d+|"
+    r"by (?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*)\b",
+    flags=re.I,
+)
 
 _TYPE_CONFIRM_TERMS: dict[str, tuple[str, ...]] = {
     "leadership": (
@@ -210,6 +239,43 @@ def classify_headline(title: str, summary: str = "") -> dict[str, Any]:
         "primary_event_type": matched[0] if matched else None,
         "matched_rules": rules,
         "claim": text[:220] or None,
+    }
+
+
+def _fact_hit(pattern: re.Pattern[str], text: str) -> dict[str, Any]:
+    match = pattern.search(text or "")
+    snippet = match.group(0).strip() if match else None
+    return {"found": bool(snippet), "snippet": snippet}
+
+
+def extract_event_facts(*texts: str) -> dict[str, dict[str, Any]]:
+    """Pull size / likelihood / timeline tokens from already-held text."""
+    blob = " ".join(part for part in texts if part)
+    return {
+        "size": _fact_hit(_SIZE_RE, blob),
+        "likelihood": _fact_hit(_LIKELIHOOD_RE, blob),
+        "timeline": _fact_hit(_TIMELINE_RE, blob),
+    }
+
+
+def assess_evidence(
+    event_type: str,
+    title: str,
+    summary: str = "",
+    filing_text: str = "",
+) -> dict[str, Any]:
+    """Flag missing required facts as a richer-source trigger. Does not fetch."""
+    facts = extract_event_facts(title, summary, filing_text)
+    required = REQUIRED_FACTS.get(event_type) or ()
+    missing = [name for name in required if not facts[name]["found"]]
+    seek = bool(missing)
+    return {
+        "facts": facts,
+        "required_fields": list(required),
+        "missing_fields": missing,
+        "evidence_status": "insufficient" if seek else "sufficient",
+        "seek_richer_source": seek,
+        "richer_source": RICHER_SOURCE if seek else None,
     }
 
 
@@ -310,6 +376,7 @@ def join_later_filing(
         "later_filing_published_at": None,
         "days_to_later_filing": None,
         "confirmation_kind": None,
+        "filing_evidence_text": "",
     }
     window_end = published_at + timedelta(days=lookahead_days)
     later = [row for row in filings if published_at <= row.published_at <= window_end]
@@ -321,12 +388,14 @@ def join_later_filing(
 
     def _confirm(row: FilingRow, kind: str) -> dict[str, Any]:
         delta = (row.published_at.date() - published_at.date()).days
+        evidence = " ".join(part for part in (row.headline, row.body_text) if part)
         return {
             "later_filing_available": True,
             "later_filing_id": row.filing_id or None,
             "later_filing_published_at": _iso(row.published_at),
             "days_to_later_filing": delta,
             "confirmation_kind": kind,
+            "filing_evidence_text": evidence[:BODY_SCAN_CHARS],
         }
 
     for row in later:
@@ -385,9 +454,11 @@ def _score_rules(events: list[dict[str, Any]]) -> dict[str, Any]:
             for row in bucket
             if row.get("forward_return_4w") is not None
         ]
+        gaps = [row for row in bucket if row.get("seek_richer_source")]
         confirm_rate = (
             round(len(confirmed) / len(with_later), 4) if with_later else None
         )
+        gap_rate = round(len(gaps) / len(bucket), 4) if bucket else None
         if confirm_rate is None or len(with_later) < MIN_CONFIRM_N:
             status = "watch"
             reason = "insufficient_later_filings"
@@ -408,6 +479,8 @@ def _score_rules(events: list[dict[str, Any]]) -> dict[str, Any]:
                 "mean_forward_return_4w": (
                     round(sum(labeled) / len(labeled), 6) if labeled else None
                 ),
+                "seek_richer_source_count": len(gaps),
+                "evidence_gap_rate": gap_rate,
                 "status": status,
                 "status_reason": reason,
             }
@@ -438,11 +511,13 @@ def _format_review_markdown(journal: dict[str, Any], rules: dict[str, Any]) -> s
         f"- Events kept: **{journal.get('event_count')}**",
         f"- Later filings available: **{journal.get('later_filing_available_count')}**",
         f"- Filing-confirmed: **{journal.get('confirmed_count')}**",
+        f"- Seek richer source (insufficient facts): "
+        f"**{journal.get('seek_richer_source_count')}**",
         "",
         "## Rule confirmation (later filings, not live scores)",
         "",
-        "| type | events | later filings | confirmed | rate | status |",
-        "|---|---:|---:|---:|---:|---|",
+        "| type | events | later filings | confirmed | rate | seek richer | status |",
+        "|---|---:|---:|---:|---:|---:|---|",
     ]
     for row in rules.get("event_types") or []:
         rate = row.get("confirmation_rate")
@@ -450,24 +525,41 @@ def _format_review_markdown(journal: dict[str, Any], rules: dict[str, Any]) -> s
         lines.append(
             f"| `{row.get('event_type')}` | {row.get('event_count')} | "
             f"{row.get('later_filing_count')} | {row.get('confirmed_count')} | "
-            f"{rate_s} | {row.get('status')} |"
+            f"{rate_s} | {row.get('seek_richer_source_count')} | "
+            f"{row.get('status')} |"
         )
     lines.extend(["", "## Recent events", ""])
     recent = list(journal.get("events") or [])[-12:]
     if not recent:
         lines.append("_No issuer-filtered material events this run._")
     else:
-        lines.append("| date | ticker | type | confirm | claim |")
-        lines.append("|---|---|---|---|---|")
+        lines.append("| date | ticker | type | confirm | evidence | claim |")
+        lines.append("|---|---|---|---|---|---|")
         for row in recent:
             stamp = str(row.get("published_at") or "")[:10]
             kind = row.get("confirmation_kind") or (
                 "pending" if not row.get("later_filing_available") else "unconfirmed"
             )
+            evidence = "seek" if row.get("seek_richer_source") else (row.get("evidence_status") or "")
             claim = str(row.get("claim") or "").replace("|", "/")
             lines.append(
                 f"| {stamp} | `{row.get('ticker')}` | `{row.get('primary_event_type')}` | "
-                f"{kind} | {claim} |"
+                f"{kind} | {evidence} | {claim} |"
+            )
+    gaps = [row for row in (journal.get("events") or []) if row.get("seek_richer_source")][-8:]
+    lines.extend(["", "## Insufficient evidence (seek richer source later)", ""])
+    if not gaps:
+        lines.append("_No events flagged for a richer source this run._")
+    else:
+        lines.append("| date | ticker | type | missing | claim |")
+        lines.append("|---|---|---|---|---|")
+        for row in gaps:
+            stamp = str(row.get("published_at") or "")[:10]
+            missing = ", ".join(row.get("missing_fields") or []) or "—"
+            claim = str(row.get("claim") or "").replace("|", "/")
+            lines.append(
+                f"| {stamp} | `{row.get('ticker')}` | `{row.get('primary_event_type')}` | "
+                f"{missing} | {claim} |"
             )
     lines.extend(["", "## Coverage notes", ""])
     for note in journal.get("notes") or []:
@@ -517,6 +609,13 @@ def extract_events_for_ticker(
             ticker=ticker,
             filings=filings,
         )
+        filing_text = str(join.pop("filing_evidence_text", "") or "")
+        evidence = assess_evidence(
+            classified["primary_event_type"],
+            title,
+            summary,
+            filing_text,
+        )
         counts["events"] += 1
         events.append(
             {
@@ -538,6 +637,7 @@ def extract_events_for_ticker(
                 "forward_return_8w": forwards.get("forward_return_8w"),
                 "forward_return_12w": forwards.get("forward_return_12w"),
                 **join,
+                **evidence,
             }
         )
     return events, counts
@@ -625,12 +725,15 @@ def run_news_event_journal(
     generated_at = datetime.now(UTC).isoformat()
     confirmed = sum(1 for row in events if row.get("confirmation_kind"))
     later_avail = sum(1 for row in events if row.get("later_filing_available"))
+    seek_richer = sum(1 for row in events if row.get("seek_richer_source"))
     notes = [
         "Observe-only: does not modify screen weights, paper knobs, or AI-judgment prompts.",
         "Input is existing news_manifest title+teaser — no article HTML and no IR crawl.",
         "Issuer gate reuses headline_relevant_to_issuer plus a short-EPIC currency reject.",
         "Filing confirmation looks at later filings_index headlines/bodies already on disk.",
         "Forward returns use archive snapshots (same family as trajectory evidence).",
+        "Insufficient size/likelihood after title+teaser+confirming filing sets "
+        f"seek_richer_source (planned next: {RICHER_SOURCE}); nothing is fetched yet.",
         "Do not promote a rule into the live path until confirmation_rate is promising "
         f"and later-filing n ≥ {MIN_CONFIRM_N}.",
     ]
@@ -654,6 +757,7 @@ def run_news_event_journal(
         "event_count": len(events),
         "later_filing_available_count": later_avail,
         "confirmed_count": confirmed,
+        "seek_richer_source_count": seek_richer,
         "per_ticker": per_ticker,
         "events": events,
         "notes": notes,
@@ -694,7 +798,9 @@ __all__ = [
     "RULES_FILENAME",
     "STATE_FILENAME",
     "FilingRow",
+    "assess_evidence",
     "classify_headline",
+    "extract_event_facts",
     "issuer_mentioned",
     "join_later_filing",
     "run_news_event_journal",

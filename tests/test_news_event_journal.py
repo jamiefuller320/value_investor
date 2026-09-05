@@ -11,7 +11,9 @@ from value_investor.news_event_journal import (
     RULES_FILENAME,
     STATE_FILENAME,
     FilingRow,
+    assess_evidence,
     classify_headline,
+    extract_event_facts,
     issuer_mentioned,
     join_later_filing,
     run_news_event_journal,
@@ -79,6 +81,27 @@ def test_issuer_mentioned_rejects_currency_homonym():
         company_name="Alpha Plc",
         ticker="AAA.L",
     )
+
+
+def test_assess_evidence_flags_missing_size():
+    facts = extract_event_facts("Sky agrees to buy ITV for up to £1.6 billion")
+    assert facts["size"]["found"] is True
+    assert facts["likelihood"]["found"] is True
+
+    rich = assess_evidence(
+        "m_and_a",
+        "Sky agrees to buy ITV for up to £1.6 billion",
+    )
+    assert rich["seek_richer_source"] is False
+    assert rich["evidence_status"] == "sufficient"
+
+    thin = assess_evidence("contract", "Alpha wins major contract with NHS")
+    assert thin["seek_richer_source"] is True
+    assert thin["missing_fields"] == ["size"]
+    assert thin["richer_source"] == "guardian_open_platform"
+
+    leadership = assess_evidence("leadership", "Alpha Plc CEO Jane Roe resigns")
+    assert leadership["seek_richer_source"] is False
 
 
 def test_join_later_filing_headline_and_body():
@@ -242,7 +265,11 @@ def test_run_news_event_journal_full_and_rolling(tmp_path: Path):
     assert types == {"leadership", "contract"}
     by_type = {row["primary_event_type"]: row for row in journal["events"]}
     assert by_type["leadership"]["confirmation_kind"] == "headline_match"
+    assert by_type["leadership"]["seek_richer_source"] is False
     assert by_type["contract"]["confirmation_kind"] == "body_match"
+    assert by_type["contract"]["seek_richer_source"] is True
+    assert by_type["contract"]["missing_fields"] == ["size"]
+    assert journal["seek_richer_source_count"] == 1
     assert (data_dir / JOURNAL_FILENAME).is_file()
     assert (data_dir / RULES_FILENAME).is_file()
     assert (data_dir / STATE_FILENAME).is_file()

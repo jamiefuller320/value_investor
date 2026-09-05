@@ -61,6 +61,7 @@ def main(argv: list[str] | None = None) -> int:
             f"mode={journal.get('mode')} cohort={journal.get('cohort_ticker_count')} "
             f"news={journal.get('tickers_with_news')} articles={journal.get('article_count')} "
             f"events={journal.get('event_count')} confirmed={journal.get('confirmed_count')} "
+            f"seek_richer={journal.get('seek_richer_source_count')} "
             f"issuer_reject={journal.get('issuer_reject_count')}"
         )
     return 0
