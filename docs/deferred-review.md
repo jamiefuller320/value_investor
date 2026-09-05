@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T19:44:26+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T20:04:03+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -138,6 +138,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N87 | **Do not add a separate last-mile ingest workflow** | Two-lane deepen, intensive pin, stall_slowdown, and deviations already are the last-mile mode. A fourth workflow would starve the 24-name batch. Apply identity-first official-register lookup inside existing euro_filings / uk_rns / asx regimes instead. | After LEI-first ESEF and one national OAM adapter, leftover gaps still need a different control loop than pin + deviations |
 | N88 | **Do not farm remaining national OAMs until Belgium harvest produces bodies** | Belgium official / Euronext Brussels is wired for leftover .BR names. The live regulated-info page is still JS with 0 PDF hrefs. Do not start FSMA STORI, NBB CBSO, SIX, or an all-OAM farm until a complete euro slot actually indexes belgium_official bodies on AED.BR or ABI.BR. | A complete euro_depth slot indexes at least one belgium_official body on AED.BR or ABI.BR, or IWB leftovers are no longer Belgian. |
 | N89 | **Do not flood euro-ingest-loop dispatches to force AED.BR** | Saturday slots already used the daily success cap on 1-target ABI.BR pins. Extra workflow_dispatch will not give LEI or Belgium a fair run and crowds out the next complete deepen. | A complete euro_depth slot after #446 merge lists AED.BR as a target and health still shows unmeasured. |
+| N90 | **Do not fetch general news article bodies to thicken euro filings** | News is title plus RSS/Yahoo teaser only. Full articles are paywalled, often duplicate IR press copy, and on euro names the Google query already pulls currency/homonym junk (AED dirham vs Aedifica). Filing bodies remain the FINANCIAL REVIEW source. Do not add a news-article crawler to chase thin/IWB. | Euro ingest parity is met and NEWS HIGHLIGHTS quality is the live-path bottleneck, with a copyright-safe publisher subset. |
 
 ---
 
