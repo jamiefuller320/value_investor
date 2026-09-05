@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T20:04:03+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T20:07:19+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -139,6 +139,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N88 | **Do not farm remaining national OAMs until Belgium harvest produces bodies** | Belgium official / Euronext Brussels is wired for leftover .BR names. The live regulated-info page is still JS with 0 PDF hrefs. Do not start FSMA STORI, NBB CBSO, SIX, or an all-OAM farm until a complete euro slot actually indexes belgium_official bodies on AED.BR or ABI.BR. | A complete euro_depth slot indexes at least one belgium_official body on AED.BR or ABI.BR, or IWB leftovers are no longer Belgian. |
 | N89 | **Do not flood euro-ingest-loop dispatches to force AED.BR** | Saturday slots already used the daily success cap on 1-target ABI.BR pins. Extra workflow_dispatch will not give LEI or Belgium a fair run and crowds out the next complete deepen. | A complete euro_depth slot after #446 merge lists AED.BR as a target and health still shows unmeasured. |
 | N90 | **Do not fetch general news article bodies to thicken euro filings** | News is title plus RSS/Yahoo teaser only. Full articles are paywalled, often duplicate IR press copy, and on euro names the Google query already pulls currency/homonym junk (AED dirham vs Aedifica). Filing bodies remain the FINANCIAL REVIEW source. Do not add a news-article crawler to chase thin/IWB. | Euro ingest parity is met and NEWS HIGHLIGHTS quality is the live-path bottleneck, with a copyright-safe publisher subset. |
+| N91 | **Do not expand news-phrase lexicon into live scoring or a second crawl** | The Sunday phrase panel tokenizes headline+RSS teaser only. That text is shallow, stopword-heavy, and often homonym junk. Keep the rolling observe-only job; do not widen the cohort, fetch article bodies, or write screen/paper knobs until promotions show stable out-of-sample lift on the existing FTSE buy∪boundary panel (already gated by L225). | news_phrase_lexicon.json has multiple phrases in promoted status with agreeing test lift across several Sunday generations, on FTSE names, not euro last-mile. |
 
 ---
 
