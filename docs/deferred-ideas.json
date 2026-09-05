@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-05T06:37:26+00:00",
+  "updated_at": "2026-09-05T06:43:34+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -6382,6 +6382,75 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
       "added_at": "2026-09-05T06:37:26+00:00"
+    },
+    {
+      "id": "L297",
+      "category": "later",
+      "section": "ops",
+      "title": "GLEIF LEI-first ESEF resolve",
+      "summary": "filings.xbrl.org name search misses AEDIFICA (0 rows) while GLEIF LEI 529900DTKNXL0AXQFN28 returns 7 ESEF packages. Resolve ticker\u2192LEI then filter[entity.identifier] before name search. Lookback 800d still drops 2023 Aedifica annuals from a Sep 2026 run.",
+      "revisit_when": "AED.BR still unmeasured after the next complete euro fat slot has had a chance to merge the builtin IR PDF seeds",
+      "tags": [
+        "euro_depth",
+        "esef",
+        "lei",
+        "gleif",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:43:34+00:00"
+    },
+    {
+      "id": "L298",
+      "category": "later",
+      "section": "ops",
+      "title": "National OAM / Euronext regulated-info adapters",
+      "summary": "The real Companies House equivalent for euro leftovers: FSMA STORI / NBB (BE), AFM, AMF Info-financi\u00e8re, Bundesanzeiger, FMA, CMVM, FI. Needed for interims and aggregator-lag annuals that filings.xbrl.org does not have. Do not build all OAMs at once.",
+      "revisit_when": "LEI-first ESEF plus IR seeds still leave thin_need_discovery or IWB on BE/AT/PT/IE periphery after several complete fat slots",
+      "tags": [
+        "euro_depth",
+        "oam",
+        "euronext",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:43:34+00:00"
+    },
+    {
+      "id": "L299",
+      "category": "later",
+      "section": "ops",
+      "title": "SIX regulated filings for Swiss leftover IWB",
+      "summary": "NOVN.SW has a GLEIF LEI but 0 ESEF filings (Switzerland is outside ESEF). Leftover Novartis IWB cannot be closed by filings.xbrl.org. SIX Exchange Regulation is the official path.",
+      "revisit_when": "Swiss names remain in euro IWB after dual-listed SEC/IR paths are exhausted",
+      "tags": [
+        "euro_depth",
+        "six",
+        "novartis",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:43:34+00:00"
+    },
+    {
+      "id": "N85",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not build a structured ESEF XBRL fact parser to clear last-mile IWB",
+      "summary": "iXBRL XHTML text extract already exists. Leftover gaps are identity, aggregator lag, and unfetchable IR URLs, not missing fact tags. Structured borrowings/FCF extract is a memo-quality later item, same class as CH iXBRL (L83).",
+      "revisit_when": "Euro buy-tier IWB is near zero and memos still lack FCF/segment facts that exist only in tagged XBRL",
+      "tags": [
+        "euro_depth",
+        "xbrl",
+        "parser",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:43:34+00:00"
     }
   ],
   "fragments": [
