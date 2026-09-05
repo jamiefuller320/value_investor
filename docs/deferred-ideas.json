@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-05T20:32:34+00:00",
+  "updated_at": "2026-09-05T20:40:06+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -6602,6 +6602,40 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
       "added_at": "2026-09-05T20:32:34+00:00"
+    },
+    {
+      "id": "N91",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not add a general news-article body crawl",
+      "summary": "Headline volume on buy\u222aboundary is ~27 unique articles/day (90d mean); 90% are Google News wrappers and teasers already exist (~109 chars). A Comparison-tool-style website harvest across publishers is the wrong collector: paywalls, unstable templates, and P1/P2 steal. Size/likelihood/timeline belong as optional fields on the event journal later, fetched only for event rows still missing those facts after title+teaser and later-filing join.",
+      "revisit_when": "Sunday event journal has several weeks of dated events, later-filing confirmation is measured on body_match \u226530 days later, and a material share of M&A/contract events still lack size/likelihood/timeline after title+teaser and filings_index join.",
+      "tags": [
+        "news",
+        "body",
+        "extractor",
+        "comparison-tool"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T20:40:06+00:00"
+    },
+    {
+      "id": "L304",
+      "category": "later",
+      "section": "research",
+      "title": "Event-only body fields with learn-and-refetch",
+      "summary": "If bodies are fetched at all, do it only for issuer-filtered journal events still missing size/likelihood/timeline. Resolve Google wrappers, store structured fields not full HTML, skip paywalls, and refetch when extractor version bumps (Comparison-tool skip-existing + stale/ETag + post-learn recapture). Today+1-day walkback to 90d is feasible at that scale (~1 URL/day, ~47 pages in 90d), not as an all-headline crawl (~50+ resolve+fetch/day).",
+      "revisit_when": "The not-now general body crawl is lifted and event-journal confirmation rates are stable enough to spend a Sunday slot on a bounded event-only fetch.",
+      "tags": [
+        "news",
+        "events",
+        "body",
+        "refetch"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T20:40:06+00:00"
     }
   ],
   "fragments": [
