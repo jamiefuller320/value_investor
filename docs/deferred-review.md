@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T20:51:48+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T20:53:46+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -300,6 +300,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L303 | **Keep event journal off the live path until future-filing proof** | The observe-only news event journal starts the calendar clock. Do not let extracted events veto buys or rewrite AI-judgment until confirmation is measured against later filings and later returns, not same-period annual boilerplate or same-day RNS mirrors. | Sunday news_event_rules.json shows a stable promising confirmation rate on body_match events whose later filing is at least 30 days after the headline, and 8w/12w archive labels exist. |
 | L304 | **Event-only body fields with learn-and-refetch** | If bodies are fetched at all, do it only for issuer-filtered journal events still missing size/likelihood/timeline. Resolve Google wrappers, store structured fields not full HTML, skip paywalls, and refetch when extractor version bumps (Comparison-tool skip-existing + stale/ETag + post-learn recapture). Today+1-day walkback to 90d is feasible at that scale (~1 URL/day, ~47 pages in 90d), not as an all-headline crawl (~50+ resolve+fetch/day). | The not-now general body crawl is lifted and event-journal confirmation rates are stable enough to spend a Sunday slot on a bounded event-only fetch. |
 | L305 | **Guardian Open Platform as licensed event-body enricher** | The one major free API that returns licensed full article text is The Guardian (developer key: 500 calls/day, 1/s, non-commercial). 24h lag is fine. Coverage is Guardian-only, so it can fill size/likelihood/timeline on a subset of UK events after title+teaser and filing join, not replace Google/Yahoo discovery. GDELT DOC/GKG is the free no-key index (search + extracted amounts/themes, no redistributable body). Watch Guardian non-commercial terms if this becomes a sold product (then L12). | Event journal has several Sunday runs and a material share of M&A/contract events still lack size/likelihood/timeline after title+teaser and filings_index join. |
+| L306 | **Revisit commercial news licences only if use is no longer personal** | This project is personal use. The Guardian Open Platform developer key (non-commercial, 500 calls/day, licensed article text) is in-bounds when we later enrich event-journal fields. Paid NewsAPI, Guardian commercial, Finnhub/Marketaux, and other commercial news licences stay parked. If use ever becomes a sold or third-party product, revisit L12 and those licences before keeping a developer key. | The project is no longer personal-only (sold, third-party users, or commercial redistribution of article text). |
 
 ### Ops / reliability
 
