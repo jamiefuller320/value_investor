@@ -40,6 +40,10 @@ BELGIUM_LOOKBACK_DAYS = 800
 BELGIUM_OFFICIAL_ANNUAL_FLOOR = 2
 BELGIUM_MAX_ITEMS = 40
 
+_ANCHOR_RE = re.compile(
+    r"""<a\b[^>]*(?:href|data-file|data-url|data-href|data-document)\s*=\s*["']([^"']+)["'][^>]*>(.*?)</a>""",
+    re.I | re.S,
+)
 _DOC_ATTR_RE = re.compile(
     r"""(?:href|data-file|data-url|data-href|data-document)\s*=\s*["']([^"']+)["']""",
     re.I,
@@ -181,22 +185,6 @@ def _strip_tags(html: str) -> str:
     return unescape(re.sub(r"\s+", " ", text)).strip()
 
 
-def _headline_near(html: str, href: str) -> str:
-    idx = html.find(href)
-    if idx < 0:
-        return ""
-    window = html[max(0, idx - 280) : idx + len(href) + 280]
-    text = _strip_tags(window)
-    if not text:
-        return ""
-    # Prefer the nearest non-trivial phrase.
-    parts = [part.strip(" -–|/.,") for part in re.split(r"\s{2,}|[|•]", text) if part.strip()]
-    for part in parts:
-        if 8 <= len(part) <= 180 and not part.lower().startswith("http"):
-            return part
-    return text[:180]
-
-
 def _parse_date(blob: str) -> str | None:
     iso = _ISO_DATE_RE.search(blob)
     if iso:
@@ -292,6 +280,25 @@ def apply_belgium_recency_bound(
     return kept
 
 
+def _document_candidates(html: str) -> list[tuple[str, str]]:
+    """Return ``(href, headline)`` pairs bound to a single link, not neighboring copy."""
+    found: list[tuple[str, str]] = []
+    seen_hrefs: set[str] = set()
+    for match in _ANCHOR_RE.finditer(html or ""):
+        href = match.group(1)
+        if href in seen_hrefs:
+            continue
+        seen_hrefs.add(href)
+        found.append((href, _strip_tags(match.group(2))))
+    for match in _DOC_ATTR_RE.finditer(html or ""):
+        href = match.group(1)
+        if href in seen_hrefs:
+            continue
+        seen_hrefs.add(href)
+        found.append((href, ""))
+    return found
+
+
 def parse_euronext_regulated_info_html(
     html: str,
     *,
@@ -301,21 +308,19 @@ def parse_euronext_regulated_info_html(
     """Harvest PDF / XHTML / zip document links from a regulated-info HTML page."""
     rows: list[dict[str, Any]] = []
     seen: set[str] = set()
-    for match in _DOC_ATTR_RE.finditer(html or ""):
-        href = match.group(1)
+    for href, anchor_text in _document_candidates(html):
         if not _DOC_EXT_RE.search(urllib.parse.urlparse(href).path):
             continue
         url = _absolute_url(href, page_url)
         if not url or url in seen:
             continue
-        headline = _headline_near(html, href) or urllib.parse.unquote(
-            Path(urllib.parse.urlparse(url).path).name
-        )
-        blob = f"{headline} {url}"
+        filename = urllib.parse.unquote(Path(urllib.parse.urlparse(url).path).name)
+        headline = (anchor_text or "").strip() or filename
+        blob = f"{headline} {filename} {url}"
         if not _KEYWORD_RE.search(blob):
             continue
         period = _classify_period(headline)
-        published = _parse_date(blob)
+        published = _parse_date(f"{headline} {filename}")
         period_end = published or ""
         seen.add(url)
         rows.append(
