@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-04T21:15:05+00:00",
+  "updated_at": "2026-09-05T06:56:56+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -6301,6 +6301,240 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
       "added_at": "2026-09-04T21:15:05+00:00"
+    },
+    {
+      "id": "N82",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Handoff fat ingest slot when ingest slows and engineering is queued",
+      "summary": "Do not move the P2 fat slot off euro_depth because a deepen improved nobody. Slowing success is common on last-mile IWB. Keep looping the head until ingest parity; spare streams and leftover minutes already cover the next markets.",
+      "revisit_when": "euro_depth remaining gaps are a typed engineering blocker for several consecutive complete non-cutoff slots, with no fetchable IWB/unmeasured/zero-body",
+      "tags": [
+        "ingest",
+        "cascade",
+        "euro_depth"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:56:56+00:00"
+    },
+    {
+      "id": "L295",
+      "category": "later",
+      "section": "ops",
+      "title": "Boost spare ingest when head is blocked on typed engineering",
+      "summary": "If the head market remaining gaps are classified as engineering (parser/API class) rather than fetchable IWB, temporarily raise spare-stream fractions without releasing the fat slot.",
+      "revisit_when": "Head ingest parity is blocked solely by a typed engineering task after stall_slowdown gap-closure failed",
+      "tags": [
+        "ingest",
+        "cascade",
+        "engineering"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:56:56+00:00"
+    },
+    {
+      "id": "N83",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Continuously loop the whole ingest cascade instead of UTC slots",
+      "summary": "A 24/7 cascade loop would mostly replay last-mile improved=0 GHA runs, contend with the Sunday quiet bundle, and fight CH/IR rate limits plus concurrency groups. Leftover minutes, stall_slowdown pins, and runtime-cutoff chunk chaining already continue work without a daemon.",
+      "revisit_when": "Head slots regularly hit runtime_cutoff with deferred critical-path tickers after the leftover scheduler and existing chain steps, and GHA minutes plus source APIs have clear unused headroom",
+      "tags": [
+        "ingest",
+        "cascade",
+        "scheduler"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:56:56+00:00"
+    },
+    {
+      "id": "L296",
+      "category": "later",
+      "section": "ops",
+      "title": "Reassess euro ingest cascade impact after a week of complete slots",
+      "summary": "The P2 cascade only landed 2026-09-04. One complete 13:53 slot closed IWB 43 to 27 and zero-body 2 to 0, but that coincided with the discovery cap and two-lane deepen. Re-read euro_ingest_health_log after several non-cutoff fat-slot days before attributing material gap closure to the cascade.",
+      "revisit_when": "euro_depth has at least 6 complete non-cutoff fat-slot runs after 2026-09-04, or weekly paper Phase 2 gates start clearing",
+      "tags": [
+        "ingest",
+        "cascade",
+        "euro_depth"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:56:56+00:00"
+    },
+    {
+      "id": "L297",
+      "category": "later",
+      "section": "ops",
+      "title": "Same-day euro deepen after IR-seed merges",
+      "summary": "AED.BR builtin IR seeds landed at 13:14 UTC on 4 Sep; the 13:15 fat slot still reported total_allowlist=0, and later scheduled euro jobs skipped on the daily success cap. Last-mile URL seeds do not apply until the next complete deepen.",
+      "revisit_when": "Another euro IR-seed or allowlist fix merges while euro is still in sprint and the same-day remaining slots would be skipped by max_daily_successes",
+      "tags": [
+        "euro_depth",
+        "ingest",
+        "last-mile",
+        "allowlist"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:56:56+00:00"
+    },
+    {
+      "id": "L298",
+      "category": "later",
+      "section": "ops",
+      "title": "Non-.L HTML/PDF fallback for leftover euro IWB",
+      "summary": "Investegate HTML fallback is .L-only. Leftover euro IWB (ABI.BR interims, periphery IR) is skipped as unfetchable after PDF validation fails. A non-L HTML or exchange-site fallback is last-mile source work, not more slots.",
+      "revisit_when": "After six complete non-cutoff euro fat slots, leftover IWB is still concentrated in non-.L names with skipped_unfetchable>0",
+      "tags": [
+        "euro_depth",
+        "ingest",
+        "iwb",
+        "filings"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:56:56+00:00"
+    },
+    {
+      "id": "N84",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not lower the 3-body thin bar to clear euro last mile",
+      "summary": "23 thin buy-tier names often already have bodies for every indexed filing (median 2.0). Lowering thin to 1-2 bodies would fake parity while discovery is exhausted. Keep the FTSE-standard bar.",
+      "revisit_when": "euro_depth filing parity review after IWB and AED.BR close, if thin_need_discovery is the only remaining sprint reason",
+      "tags": [
+        "euro_depth",
+        "ingest",
+        "thin",
+        "parity"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:56:56+00:00"
+    },
+    {
+      "id": "L299",
+      "category": "later",
+      "section": "ops",
+      "title": "GLEIF LEI-first ESEF resolve",
+      "summary": "filings.xbrl.org name search misses AEDIFICA (0 rows) while GLEIF LEI 529900DTKNXL0AXQFN28 returns 7 ESEF packages. Resolve ticker\u2192LEI then filter[entity.identifier] before name search. Lookback 800d still drops 2023 Aedifica annuals from a Sep 2026 run.",
+      "revisit_when": "AED.BR still unmeasured after the next complete euro fat slot has had a chance to merge the builtin IR PDF seeds",
+      "tags": [
+        "euro_depth",
+        "esef",
+        "lei",
+        "gleif",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:56:56+00:00"
+    },
+    {
+      "id": "L300",
+      "category": "later",
+      "section": "ops",
+      "title": "National OAM / Euronext regulated-info adapters",
+      "summary": "The real Companies House equivalent for euro leftovers: FSMA STORI / NBB (BE), AFM, AMF Info-financi\u00e8re, Bundesanzeiger, FMA, CMVM, FI. Needed for interims and aggregator-lag annuals that filings.xbrl.org does not have. Do not build all OAMs at once.",
+      "revisit_when": "LEI-first ESEF plus IR seeds still leave thin_need_discovery or IWB on BE/AT/PT/IE periphery after several complete fat slots",
+      "tags": [
+        "euro_depth",
+        "oam",
+        "euronext",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:56:56+00:00"
+    },
+    {
+      "id": "L301",
+      "category": "later",
+      "section": "ops",
+      "title": "SIX regulated filings for Swiss leftover IWB",
+      "summary": "NOVN.SW has a GLEIF LEI but 0 ESEF filings (Switzerland is outside ESEF). Leftover Novartis IWB cannot be closed by filings.xbrl.org. SIX Exchange Regulation is the official path.",
+      "revisit_when": "Swiss names remain in euro IWB after dual-listed SEC/IR paths are exhausted",
+      "tags": [
+        "euro_depth",
+        "six",
+        "novartis",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:56:56+00:00"
+    },
+    {
+      "id": "N85",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not build a structured ESEF XBRL fact parser to clear last-mile IWB",
+      "summary": "iXBRL XHTML text extract already exists. Leftover gaps are identity, aggregator lag, and unfetchable IR URLs, not missing fact tags. Structured borrowings/FCF extract is a memo-quality later item, same class as CH iXBRL (L83).",
+      "revisit_when": "Euro buy-tier IWB is near zero and memos still lack FCF/segment facts that exist only in tagged XBRL",
+      "tags": [
+        "euro_depth",
+        "xbrl",
+        "parser",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:56:56+00:00"
+    },
+    {
+      "id": "N86",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not spider company websites as the euro last-mile source",
+      "summary": "Finding the IR host is not the leftover problem (ABI.BR is age-gated; several allowlist rows are already JS publications indexes). A general site crawl would burn the 320s ticker cap, pull ESG/wrong-year PDFs, and auto-write URLs that N79 already forbids. Keep IR as a manual allowlist; the later generic helper is L56 (same-origin PDF harvest from a known IR page).",
+      "revisit_when": "LEI-first ESEF and the next complete fat slot still leave thin_need_discovery names whose official annual/interim PDF is only on a static same-origin IR library",
+      "tags": [
+        "euro_depth",
+        "ir",
+        "crawler",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:56:56+00:00"
+    },
+    {
+      "id": "N87",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not add a separate last-mile ingest workflow",
+      "summary": "Two-lane deepen, intensive pin, stall_slowdown, and deviations already are the last-mile mode. A fourth workflow would starve the 24-name batch. Apply identity-first official-register lookup inside existing euro_filings / uk_rns / asx regimes instead.",
+      "revisit_when": "After LEI-first ESEF and one national OAM adapter, leftover gaps still need a different control loop than pin + deviations",
+      "tags": [
+        "ingest",
+        "last-mile",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:56:56+00:00"
+    },
+    {
+      "id": "L302",
+      "category": "later",
+      "section": "ops",
+      "title": "Shared issuer-identifier cache across regimes",
+      "summary": "UK already caches Yahoo ticker \u2192 Companies House number. Euro needs Yahoo ticker \u2192 LEI the same way; SEC aliases already map ABI\u2192BUD. One small identifier store, market-specific register adapters. Do not wait to invent a universal OAM crawler.",
+      "revisit_when": "GLEIF LEI-first ESEF lands and a second market (CH cache or ASX) would reuse the same lookup shape",
+      "tags": [
+        "ingest",
+        "lei",
+        "identity",
+        "generalize"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T06:56:56+00:00"
     }
   ],
   "fragments": [
