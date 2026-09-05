@@ -15,9 +15,10 @@ import logging
 import re
 import urllib.error
 import urllib.parse
+from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 from value_investor.storage import write_json
 
