@@ -131,6 +131,12 @@ jobs:
           # Soft-fail until news manifests / archive history are thick enough.
           ftse-news-phrase-trajectory --data-dir docs/data --mode rolling || true
 
+      - name: News event journal (buy∪boundary, observe-only)
+        run: |
+          # Material-event extract from existing headlines; join later filings.
+          # Soft-fail; does not fetch article HTML or write live scores.
+          ftse-news-event-journal --data-dir docs/data --mode rolling || true
+
       - name: Exit-timing archive near-miss priors (observe-only)
         run: |
           # Wider surplus-budget gate (pre_buy floor + more episodes/week). Soft-fail
@@ -168,6 +174,10 @@ jobs:
             docs/data/news_phrase_lexicon.json
             docs/data/news_phrase_trajectory_state.json
             docs/data/news_phrase_trajectory_review.md
+            docs/data/news_event_journal.json
+            docs/data/news_event_rules.json
+            docs/data/news_event_journal_state.json
+            docs/data/news_event_journal_review.md
             docs/data/exit_timing_near_miss.json
             docs/data/exit_timing_near_miss_review.json
           skip_fetch: false

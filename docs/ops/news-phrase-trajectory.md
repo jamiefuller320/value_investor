@@ -58,4 +58,5 @@ this panel shows stable out-of-sample usefulness — see deferred idea **L225**.
 ## Related
 
 - [trajectory-evidence.md](trajectory-evidence.md)
+- [news-event-journal.md](news-event-journal.md) — commit-time event classes (not ngrams)
 - Research ingest news manifests (Google News RSS + Yahoo; no paid API required)
