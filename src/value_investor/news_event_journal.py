@@ -50,6 +50,26 @@ _CURRENCY_NOISE = re.compile(
 _ISSUER_LEGAL = frozenset(
     "plc ltd limited nv sa se ag spa gmbh group company companies holdings holdco".split()
 )
+_CLICKBAIT = re.compile(
+    r"time to buy|should you buy|buy,\s*hold or exit|warrant your attention|"
+    r"makes an interesting case|interesting case",
+    flags=re.I,
+)
+_M_AND_A_NOT_DEAL = re.compile(
+    r"\b(buyback|share repurchase|repurchase[sd]?|treasury shares?|"
+    r"incentive plan|employee stock|depositary shares)\b|"
+    r"\bacquires? \d[\d,]*\s+shares?\b|"
+    r"\bacquires? shares\b|"
+    r"\b(director|insider|insiders|non-executive|executive|cfo)\b.{0,40}\bacqui",
+    flags=re.I,
+)
+_GENERIC_CONFIRM = frozenset(
+    """
+    earnings revenue profit growth shares share stock stocks group plc ltd
+    limited case attention warrant interesting time hold exit buy company
+    companies holdings holdco update report results
+    """.split()
+)
 _CONTENT_STOPS = frozenset(
     """
     a an the and or but if in on at to for of from with by as is are was were be
@@ -82,7 +102,7 @@ _TYPE_PATTERNS: dict[str, tuple[re.Pattern[str], ...]] = {
     ),
     "m_and_a": (
         re.compile(r"\b(acqui(?:re|res|red|sition|ring)|takeover|merger)\b", flags=re.I),
-        re.compile(r"\b(to buy|agrees? to buy|agreed to buy)\b", flags=re.I),
+        re.compile(r"\bagrees? to (buy|acquire)\b", flags=re.I),
         re.compile(r"\b(recommended|possible|potential)\s+(offer|bid)\b", flags=re.I),
         re.compile(r"\b(disposal|divest(?:s|ed|iture|ment)?)\b", flags=re.I),
     ),
@@ -166,11 +186,20 @@ def issuer_mentioned(
 
 
 def classify_headline(title: str, summary: str = "") -> dict[str, Any]:
-    """Return matched event types and the patterns that fired. No issuer gate."""
-    text = f"{title} {summary}".strip()
+    """Return matched event types and the patterns that fired. No issuer gate.
+
+    Classify the title only. RSS teasers are full of ``time to buy`` clickbait
+    that would poison the journal if mixed in.
+    """
+    del summary  # kept for call-site compatibility; do not classify teasers
+    text = (title or "").strip()
     matched: list[str] = []
     rules: list[str] = []
     for event_type, patterns in _TYPE_PATTERNS.items():
+        if event_type == "m_and_a" and (
+            _CLICKBAIT.search(text) or _M_AND_A_NOT_DEAL.search(text)
+        ):
+            continue
         for index, pattern in enumerate(patterns):
             if pattern.search(text):
                 matched.append(event_type)
@@ -180,26 +209,26 @@ def classify_headline(title: str, summary: str = "") -> dict[str, Any]:
         "event_types": matched,
         "primary_event_type": matched[0] if matched else None,
         "matched_rules": rules,
-        "claim": (title or "").strip()[:220] or None,
+        "claim": text[:220] or None,
     }
 
 
 def event_id(ticker: str, published_at: datetime, title: str) -> str:
     stamp = published_at.date().isoformat()
     norm = re.sub(r"\s+", " ", (title or "").strip().lower())
-    digest = hashlib.sha1(f"{ticker}|{stamp}|{norm}".encode("utf-8")).hexdigest()
+    digest = hashlib.sha1(f"{ticker}|{stamp}|{norm}".encode()).hexdigest()
     return digest[:16]
 
 
 def _content_tokens(title: str, *, company_name: str | None, ticker: str) -> list[str]:
-    stops = _CONTENT_STOPS | set(_issuer_name_tokens(company_name))
+    stops = set(_CONTENT_STOPS) | set(_issuer_name_tokens(company_name))
     epic = ticker.split(".")[0].lower()
     if epic:
         stops.add(epic)
     tokens: list[str] = []
     seen: set[str] = set()
     for tok in re.findall(r"[a-z0-9][a-z0-9'-]{3,}", (title or "").lower()):
-        if tok in stops or tok.isdigit() or tok in seen:
+        if tok in stops or tok in _GENERIC_CONFIRM or tok.isdigit() or tok in seen:
             continue
         seen.add(tok)
         tokens.append(tok)
@@ -303,13 +332,13 @@ def join_later_filing(
     for row in later:
         if _text_has_any(row.headline, terms):
             return _confirm(row, "headline_match")
-    for row in later:
-        if not row.body_text:
-            continue
-        if _text_has_any(row.body_text, terms) and (
-            not tokens or any(tok in row.body_text.lower() for tok in tokens)
-        ):
-            return _confirm(row, "body_match")
+    if tokens:
+        for row in later:
+            if not row.body_text:
+                continue
+            body_l = row.body_text.lower()
+            if _text_has_any(body_l, terms) and any(tok in body_l for tok in tokens):
+                return _confirm(row, "body_match")
     return empty
 
 

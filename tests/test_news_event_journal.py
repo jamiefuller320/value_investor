@@ -51,6 +51,14 @@ def test_classify_headline_event_types():
     none = classify_headline("Alpha Plc trading update in line with expectations")
     assert none["primary_event_type"] is None
 
+    assert classify_headline("GSK Stock Down 14%: Time to Buy, Hold or Exit?")["primary_event_type"] is None
+    assert classify_headline(
+        "Do Alfa Financial Software Holdings' Earnings Warrant Your Attention?"
+    )["primary_event_type"] is None
+    assert classify_headline(
+        "Balfour Beatty (BBY) Acquires 455,285 Shares at 807p in Latest Buyback"
+    )["primary_event_type"] is None
+
 
 def test_issuer_mentioned_rejects_currency_homonym():
     assert issuer_mentioned(
@@ -98,7 +106,7 @@ def test_join_later_filing_headline_and_body():
         published_at=datetime(2026, 6, 1, tzinfo=UTC),
         headline="Annual Report 2026",
         has_body=True,
-        body_text="The board notes that John resigned as CEO in March.",
+        body_text="The board notes that John Smith resigned as CEO in March.",
     )
     joined_body = join_later_filing(
         published_at=event_at,

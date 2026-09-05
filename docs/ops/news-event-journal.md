@@ -43,8 +43,9 @@ Optional: `--tickers AAA.L BBB.L`, `--json`.
 2. For each ticker, walk `research/{TICKER}/sources/news_manifest.json`.
 3. Drop headlines that fail `headline_relevant_to_issuer`, plus short-EPIC
    currency/FX homonyms (the `AED` / dirham failure mode).
-4. Classify remaining title+teaser with tight role+action / deal / contract /
-   strategy patterns. Trading updates and generic results stay out.
+4. Classify the **title only** with tight role+action / deal / contract /
+   strategy patterns. RSS teasers are ignored (they are full of
+   ``time to buy`` clickbait). Share buybacks and insider dealing are not M&A.
 5. Join the earliest later filing (same ticker, ≤400 days) whose headline or
    on-disk body mentions the event class.
 6. Attach archive forward returns at 4/8/12 weeks when history exists.
