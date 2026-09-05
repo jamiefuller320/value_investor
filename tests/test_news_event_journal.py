@@ -56,13 +56,22 @@ def test_classify_headline_event_types():
     none = classify_headline("Alpha Plc trading update in line with expectations")
     assert none["primary_event_type"] is None
 
-    assert classify_headline("GSK Stock Down 14%: Time to Buy, Hold or Exit?")["primary_event_type"] is None
-    assert classify_headline(
-        "Do Alfa Financial Software Holdings' Earnings Warrant Your Attention?"
-    )["primary_event_type"] is None
-    assert classify_headline(
-        "Balfour Beatty (BBY) Acquires 455,285 Shares at 807p in Latest Buyback"
-    )["primary_event_type"] is None
+    assert (
+        classify_headline("GSK Stock Down 14%: Time to Buy, Hold or Exit?")["primary_event_type"]
+        is None
+    )
+    assert (
+        classify_headline("Do Alfa Financial Software Holdings' Earnings Warrant Your Attention?")[
+            "primary_event_type"
+        ]
+        is None
+    )
+    assert (
+        classify_headline("Balfour Beatty (BBY) Acquires 455,285 Shares at 807p in Latest Buyback")[
+            "primary_event_type"
+        ]
+        is None
+    )
 
 
 def test_issuer_mentioned_rejects_currency_homonym():

@@ -115,7 +115,10 @@ _TYPE_PATTERNS: dict[str, tuple[re.Pattern[str], ...]] = {
     ),
     "contract": (
         re.compile(r"\b(contract|tender)\s+(win|won|wins|award|awarded|loss|lost)\b", flags=re.I),
-        re.compile(r"\b(win|won|wins|award|awarded|loss|lost|loses)\s+(a\s+)?(contract|tender)\b", flags=re.I),
+        re.compile(
+            r"\b(win|won|wins|award|awarded|loss|lost|loses)\s+(a\s+)?(contract|tender)\b",
+            flags=re.I,
+        ),
         re.compile(r"\b(major|key|new)\s+contract\b", flags=re.I),
         re.compile(r"\b(lost|loses|wins|won)\s+(a\s+)?(customer|client)\b", flags=re.I),
     ),
@@ -231,9 +234,7 @@ def classify_headline(title: str, summary: str = "") -> dict[str, Any]:
     matched: list[str] = []
     rules: list[str] = []
     for event_type, patterns in _TYPE_PATTERNS.items():
-        if event_type == "m_and_a" and (
-            _CLICKBAIT.search(text) or _M_AND_A_NOT_DEAL.search(text)
-        ):
+        if event_type == "m_and_a" and (_CLICKBAIT.search(text) or _M_AND_A_NOT_DEAL.search(text)):
             continue
         for index, pattern in enumerate(patterns):
             if pattern.search(text):
@@ -461,9 +462,7 @@ def _score_rules(events: list[dict[str, Any]]) -> dict[str, Any]:
             if row.get("forward_return_4w") is not None
         ]
         gaps = [row for row in bucket if row.get("seek_richer_source")]
-        confirm_rate = (
-            round(len(confirmed) / len(with_later), 4) if with_later else None
-        )
+        confirm_rate = round(len(confirmed) / len(with_later), 4) if with_later else None
         gap_rate = round(len(gaps) / len(bucket), 4) if bucket else None
         if confirm_rate is None or len(with_later) < MIN_CONFIRM_N:
             status = "watch"
@@ -517,8 +516,7 @@ def _format_review_markdown(journal: dict[str, Any], rules: dict[str, Any]) -> s
         f"- Events kept: **{journal.get('event_count')}**",
         f"- Later filings available: **{journal.get('later_filing_available_count')}**",
         f"- Filing-confirmed: **{journal.get('confirmed_count')}**",
-        f"- Seek richer source (insufficient facts): "
-        f"**{journal.get('seek_richer_source_count')}**",
+        f"- Seek richer source (insufficient facts): **{journal.get('seek_richer_source_count')}**",
         "",
         "## Rule confirmation (later filings, not live scores)",
         "",
@@ -546,7 +544,9 @@ def _format_review_markdown(journal: dict[str, Any], rules: dict[str, Any]) -> s
             kind = row.get("confirmation_kind") or (
                 "pending" if not row.get("later_filing_available") else "unconfirmed"
             )
-            evidence = "seek" if row.get("seek_richer_source") else (row.get("evidence_status") or "")
+            evidence = (
+                "seek" if row.get("seek_richer_source") else (row.get("evidence_status") or "")
+            )
             claim = str(row.get("claim") or "").replace("|", "/")
             lines.append(
                 f"| {stamp} | `{row.get('ticker')}` | `{row.get('primary_event_type')}` | "
@@ -707,9 +707,7 @@ def run_news_event_journal(
         latest_article_at = max(dated_ok) if dated_ok else None
         if latest_article_at is not None:
             new_watermarks[ticker] = latest_article_at.isoformat()
-        ticker_event_count = sum(
-            1 for row in events_by_id.values() if row.get("ticker") == ticker
-        )
+        ticker_event_count = sum(1 for row in events_by_id.values() if row.get("ticker") == ticker)
         per_ticker.append(
             {
                 "ticker": ticker,
@@ -744,9 +742,7 @@ def run_news_event_journal(
         f"and later-filing n ≥ {MIN_CONFIRM_N}.",
     ]
     if len(indexed) < 13:
-        notes.append(
-            f"Archive history is thin ({len(indexed)} snapshots); 12w labels stay sparse."
-        )
+        notes.append(f"Archive history is thin ({len(indexed)} snapshots); 12w labels stay sparse.")
 
     journal = {
         "schema_version": SCHEMA_VERSION,

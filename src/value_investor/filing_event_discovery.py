@@ -63,9 +63,7 @@ def is_routine_filing_headline(headline: str) -> bool:
 
 def _phrases(headline: str) -> list[str]:
     tokens = [
-        tok
-        for tok in re.findall(r"[a-z][a-z'-]{3,}", (headline or "").lower())
-        if tok not in _STOP
+        tok for tok in re.findall(r"[a-z][a-z'-]{3,}", (headline or "").lower()) if tok not in _STOP
     ]
     out: list[str] = []
     seen: set[str] = set()
@@ -118,9 +116,7 @@ def _format_review(payload: dict[str, Any]) -> str:
         lines.append("|---|---|---|")
         for row in samples:
             title = str(row.get("headline") or "").replace("|", "/")
-            lines.append(
-                f"| `{row.get('ticker')}` | {row.get('period')} | {title} |"
-            )
+            lines.append(f"| `{row.get('ticker')}` | {row.get('period')} | {title} |")
     lines.extend(["", "## Notes", ""])
     for note in payload.get("notes") or []:
         lines.append(f"- {note}")

@@ -20,7 +20,9 @@ def _write_json(path: Path, payload: object) -> None:
 
 def test_routine_and_known_filing_headlines():
     assert is_routine_filing_headline("Total Voting Rights")
-    assert is_routine_filing_headline("Companies House accounts — accounts-with-accounts-type-group")
+    assert is_routine_filing_headline(
+        "Companies House accounts — accounts-with-accounts-type-group"
+    )
     assert not is_routine_filing_headline("Proposed IPO of PT AEP Nusantara")
     assert classify_headline("Appointment of Chief Financial Officer")["primary_event_type"] == (
         "leadership"
