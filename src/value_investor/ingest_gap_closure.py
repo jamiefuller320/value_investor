@@ -847,6 +847,29 @@ def select_library_gap_closure_candidate(
     }
 
 
+def preferred_library_gap_closure_ticker(
+    *,
+    prefer_ticker: str | None = None,
+    blocker_ticker: str | None = None,
+    health_after: dict[str, Any] | None = None,
+) -> str | None:
+    """Coverage holes first; IWB blocker only when unmeasured / zero-body are empty.
+
+    Intensive pins that prefer an IWB ``blocker_ticker`` can starve the unmeasured
+    leftover (AED.BR on 5 Sep 2026 never ran after the LEI path merged).
+    """
+    explicit = str(prefer_ticker or "").strip()
+    if explicit:
+        return explicit
+    health = health_after if isinstance(health_after, dict) else {}
+    for key in ("unmeasured_tickers", "zero_body_tickers"):
+        sample = [str(token).strip() for token in (health.get(key) or []) if str(token).strip()]
+        if sample:
+            return sample[0]
+    blocker = str(blocker_ticker or "").strip()
+    return blocker or None
+
+
 def evaluate_library_ingest_gap_closure_followup(
     *,
     market_id: str,
@@ -919,15 +942,11 @@ def evaluate_library_ingest_gap_closure_followup(
             "should_dispatch": False,
             "reason": f"open library ingest engineering task for {market}",
         }
-    prefer = str(prefer_ticker or "").strip() or str(blocker_ticker or "").strip() or None
-    if not prefer:
-        for key in ("zero_body_tickers", "unmeasured_tickers"):
-            sample = [
-                str(token).strip() for token in (health_after.get(key) or []) if str(token).strip()
-            ]
-            if sample:
-                prefer = sample[0]
-                break
+    prefer = preferred_library_gap_closure_ticker(
+        prefer_ticker=prefer_ticker,
+        blocker_ticker=blocker_ticker,
+        health_after=health_after,
+    )
     candidate = select_library_gap_closure_candidate(
         market_id=market,
         library_root=library_root,

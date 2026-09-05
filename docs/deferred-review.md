@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T06:56:56+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T18:13:16+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -136,6 +136,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N85 | **Do not build a structured ESEF XBRL fact parser to clear last-mile IWB** | iXBRL XHTML text extract already exists. Leftover gaps are identity, aggregator lag, and unfetchable IR URLs, not missing fact tags. Structured borrowings/FCF extract is a memo-quality later item, same class as CH iXBRL (L83). | Euro buy-tier IWB is near zero and memos still lack FCF/segment facts that exist only in tagged XBRL |
 | N86 | **Do not spider company websites as the euro last-mile source** | Finding the IR host is not the leftover problem (ABI.BR is age-gated; several allowlist rows are already JS publications indexes). A general site crawl would burn the 320s ticker cap, pull ESG/wrong-year PDFs, and auto-write URLs that N79 already forbids. Keep IR as a manual allowlist; the later generic helper is L56 (same-origin PDF harvest from a known IR page). | LEI-first ESEF and the next complete fat slot still leave thin_need_discovery names whose official annual/interim PDF is only on a static same-origin IR library |
 | N87 | **Do not add a separate last-mile ingest workflow** | Two-lane deepen, intensive pin, stall_slowdown, and deviations already are the last-mile mode. A fourth workflow would starve the 24-name batch. Apply identity-first official-register lookup inside existing euro_filings / uk_rns / asx regimes instead. | After LEI-first ESEF and one national OAM adapter, leftover gaps still need a different control loop than pin + deviations |
+| N88 | **Do not farm remaining national OAMs until Belgium harvest produces bodies** | Belgium official / Euronext Brussels is wired for leftover .BR names. The live regulated-info page is still JS with 0 PDF hrefs. Do not start FSMA STORI, NBB CBSO, SIX, or an all-OAM farm until a complete euro slot actually indexes belgium_official bodies on AED.BR or ABI.BR. | A complete euro_depth slot indexes at least one belgium_official body on AED.BR or ABI.BR, or IWB leftovers are no longer Belgian. |
 
 ---
 

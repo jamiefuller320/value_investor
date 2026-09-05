@@ -152,9 +152,10 @@ off-peak schedules and disables old weekday-only titles. GitHub `schedule` alone
 ### Filing sources (euro_filings)
 
 1. **ESEF direct** — `filings.xbrl.org` API (`esef_direct`); LEI cache / GLEIF first, then country-hinted name search; one package per period-end (English preferred); lookback plus a 2-annual floor when the aggregator lags
-2. **Google News** — euro exchange site clauses (existing)
-3. **IR allowlist** — `docs/data/research_ir_urls.json` + builtin seeds for thin/unmeasured/iwb names
-4. **SEC 20-F** — dual-listed names (existing)
+2. **Belgium official** — Euronext Brussels regulated-information HTML harvest for `.BR` leftovers (`belgium_official`); identity via cached ISIN / CBE / MIC; same lookback + 2-annual floor as ESEF. Not a new workflow and not the sales-gated Euronext gateway.
+3. **Google News** — euro exchange site clauses (existing)
+4. **IR allowlist** — `docs/data/research_ir_urls.json` + builtin seeds for thin/unmeasured/iwb names
+5. **SEC 20-F** — dual-listed names (existing)
 
 ### Critical-path monitoring (automated)
 
@@ -166,7 +167,7 @@ Each `ftse-library ingest-loop` run assesses buy-tier gaps and persists
 | `unmeasured` / `thin_need_discovery` | Force listing-only `discovery_scan` even in sprint |
 | `indexed_without_body` | Prefer those tickers over discovery-only thin / maintain |
 | any gap | Skip high-conviction **maintain** names (no wasted slots) |
-| stall / 0-improve batch (or cutoff deepen that already ran) | Auto-dispatch pinned intensive gap-closure (`stall_slowdown`); prefer `blocker_ticker` when the weekday cap aborted a name |
+| stall / 0-improve batch (or cutoff deepen that already ran) | Auto-dispatch pinned intensive gap-closure (`stall_slowdown`); prefer unmeasured / zero-body over an IWB `blocker_ticker` |
 | weekday mid-ticker cap (320s, all library markets) | Abort the current ticker and continue the batch; intensive pin disables the cap |
 
 Inspect with the latest loop summary (`markets/<id>/ingest_summary.json` → `critical_path`).

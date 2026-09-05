@@ -52,6 +52,7 @@ KNOWN_FILING_SOURCES = frozenset(
         "asx_direct",
         "google_news_asx",
         "esef_direct",
+        "belgium_official",
         "google_news_euro",
         "google_news_tsx",
         "google_news_asia",
@@ -64,6 +65,7 @@ KNOWN_URL_HOST_SUFFIXES = (
     "companieshouse.gov.uk",
     "sec.gov",
     "xbrl.org",
+    "euronext.com",
     "google.com",
     "news.google.com",
 )

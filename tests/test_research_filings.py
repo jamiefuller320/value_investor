@@ -4480,11 +4480,13 @@ def test_ingest_filings_euro_depth_rand_as_indexes_esef_and_ir(
 @patch("value_investor.research.filings.fetch_filings_euro_news", return_value=[])
 @patch("value_investor.research.filings.fetch_filings_investegate_company", return_value=[])
 @patch("value_investor.research.filings.fetch_filings_esef_direct", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_belgium_official", return_value=[])
 @patch("value_investor.research.filings.fetch_filing_body", return_value=None)
 @patch("value_investor.research.filings.fetch_filings_ir_allowlist")
 def test_ingest_filings_euro_depth_aed_br_indexes_ir_allowlist(
     mock_ir,
     _mock_body,
+    _mock_belgium,
     _mock_esef,
     _mock_investegate,
     _mock_news,
@@ -4511,6 +4513,44 @@ def test_ingest_filings_euro_depth_aed_br_indexes_ir_allowlist(
     assert int(summary.get("total") or 0) > 0
     index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
     assert "ir_allowlist" in index["sources_used"]
+
+
+@patch("value_investor.research.filings.fetch_filings_euro_news", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_investegate_company", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_esef_direct", return_value=[])
+@patch("value_investor.research.filings.fetch_filing_body", return_value=None)
+@patch("value_investor.research.filings.fetch_filings_ir_allowlist", return_value=[])
+@patch("value_investor.research.filings.fetch_filings_belgium_official")
+def test_ingest_filings_euro_depth_aed_br_indexes_belgium_official(
+    mock_belgium,
+    _mock_ir,
+    _mock_body,
+    _mock_esef,
+    _mock_investegate,
+    _mock_news,
+    tmp_path: Path,
+):
+    mock_belgium.return_value = [
+        {
+            "id": "beaed2025",
+            "source": "belgium_official",
+            "headline": "Aedifica annual financial report 2025",
+            "published_at": "2026-03-24T00:00:00+00:00",
+            "url": "https://live.euronext.com/sites/default/files/aedifica-2025-annual.pdf",
+            "period": "annual",
+            "has_body": False,
+        }
+    ]
+    meta = ingest_filings(
+        ticker="AED.BR",
+        company_name="Aedifica NV/SA",
+        sources_dir=tmp_path,
+        market="euro_depth",
+    )
+    summary = meta.get("filings_summary") or {}
+    assert int(summary.get("total") or 0) > 0
+    index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
+    assert "belgium_official" in index["sources_used"]
 
 
 @patch("value_investor.research.filings.fetch_filings_euro_news", return_value=[])

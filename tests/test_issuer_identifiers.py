@@ -6,8 +6,12 @@ import json
 from pathlib import Path
 
 from value_investor.research.issuer_identifiers import (
+    cached_cbe,
+    cached_isin,
+    cached_issuer_identity,
     cached_lei,
     resolve_lei,
+    save_issuer_identity,
     save_issuer_lei,
     search_lei_gleif,
 )
@@ -29,6 +33,41 @@ def test_cached_lei_builtin_aed_br(tmp_path: Path):
     empty = tmp_path / "missing.json"
     assert cached_lei("AED.BR", path=empty) == "529900DTKNXL0AXQFN28"
     assert cached_lei("AED", path=empty) == "529900DTKNXL0AXQFN28"
+
+
+def test_cached_belgium_identity_builtins(tmp_path: Path):
+    empty = tmp_path / "missing.json"
+    assert cached_isin("AED.BR", path=empty) == "BE0003851681"
+    assert cached_cbe("AED.BR", path=empty) == "0877248501"
+    assert cached_isin("ABI.BR", path=empty) == "BE0974293251"
+    assert cached_cbe("ABI.BR", path=empty) == "0417497106"
+    abi = cached_issuer_identity("ABI.BR", path=empty)
+    assert abi["mic"] == "XBRU"
+    assert cached_isin("ABI", path=empty) is None
+
+
+def test_save_issuer_identity_keeps_lei(tmp_path: Path):
+    path = tmp_path / "ids.json"
+    save_issuer_lei(
+        "AED.BR",
+        "529900DTKNXL0AXQFN28",
+        path=path,
+        lei_name="AEDIFICA",
+        lei_country="BE",
+        source="gleif",
+    )
+    save_issuer_identity(
+        "AED.BR",
+        path=path,
+        isin="BE0003851681",
+        cbe="0877.248.501",
+        mic="XBRU",
+        source="belgium_official",
+    )
+    row = cached_issuer_identity("AED.BR", path=path)
+    assert row["lei"] == "529900DTKNXL0AXQFN28"
+    assert row["isin"] == "BE0003851681"
+    assert row["cbe"] == "0877248501"
 
 
 def test_resolve_lei_uses_cache_before_gleif(tmp_path: Path):
