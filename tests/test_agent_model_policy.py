@@ -89,6 +89,10 @@ def test_weekly_ops_allocation(tmp_path: Path):
     assert status["remaining_weekly_ops_usd"] == 49.2
     assert status["constraining"] is False
     assert status["flag"] == "enforced"
+    assert status["weekly_ops_plan_credit_share_cap"] == 0.15
+    assert status["weekly_ops_plan_credit_warning_usd"] == 3.0
+    assert status["weekly_ops_plan_credit_warning"] is False
+    assert status["weekly_ops_cap_exceeds_plan_share"] is True
 
     plan = grow_ticker_budget(policy, base_max_tickers=40, today=datetime(2026, 7, 16, tzinfo=UTC))
     assert plan["weekly_ops_cap_usd"] == 50.0
@@ -114,6 +118,28 @@ def test_weekly_ops_constraining_flag(tmp_path: Path):
     gated = grow_ticker_budget(policy, base_max_tickers=40, today=datetime(2026, 7, 16, tzinfo=UTC))
     assert gated["allow_research"] is False
     assert gated["constraining"] is True
+
+
+def test_plan_credit_share_warning_does_not_constrain(tmp_path: Path):
+    path = tmp_path / "policy.json"
+    policy = load_policy(path)
+    policy["budget"]["plan_monthly_usd"] = 200.0
+    policy["budget"]["weekly_ops_cap_usd"] = 80.0
+    policy["budget"]["estimated_spend_weekly_ops_usd_this_week"] = 35.0
+    policy["budget"]["week_id"] = datetime.now(UTC).strftime("%G-W%V")
+    save_policy(policy, path)
+    policy = load_policy(path)
+
+    status = weekly_ops_budget_status(policy)
+    assert status["weekly_ops_plan_credit_warning_usd"] == 30.0
+    assert status["weekly_ops_plan_credit_warning"] is True
+    assert status["constraining"] is False
+    assert status["flag"] == "enforced"
+    assert "warning only" in (status.get("note") or "")
+
+    plan = grow_ticker_budget(policy, base_max_tickers=40, today=datetime(2026, 7, 16, tzinfo=UTC))
+    assert plan["allow_research"] is True
+    assert plan["constraining"] is False
 
 
 def test_review_model_persists(tmp_path: Path):

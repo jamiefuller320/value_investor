@@ -16,7 +16,7 @@ Related: [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md), [`primary-learning-t
 | **Focus `euro_depth`** | Constituents seeded (STOXX50 ∪ periphery); research_all_graduated off | Sunday ladder concentrates weekly_ops on this book only |
 | **S&P 500 FTSE-equivalent** | Canonical-only filing + trajectory measurement; not weekly-paper | Close unmeasured / thin / `indexed_without_body` on **buy-tier** via parallel sprint; do not count nasdaq100 overlap |
 | **S&P / STOXX shards** | Demoted from weekly slot under depth-first policy | Layer A maintenance only until euro_depth filing parity |
-| **`weekly_ops`** | $80 cap | Sunday email + ladder selective research |
+| **`weekly_ops`** | $80 operational cap; 15% of listed Ultra ($30) is an estimated-USD warning | Sunday email + ladder selective research |
 | **Director–worker** | Exploration phase (15/week); **MEGP.L** trial run 2026-08-16 | `auto_escalate_director` stays false until calibrated |
 
 ## Spend pools (what costs money)
@@ -101,11 +101,14 @@ python3 -c "from value_investor.library_grow_health import snapshot_focus_market
 
 | Knob | Value | Effect |
 |------|-------|--------|
-| `weekly_ops_cap_usd` | **80** | ~$30 more headroom for Sunday bundle |
+| `weekly_ops_cap_usd` | **80** | Operational Sunday envelope; 15% ($30) is a warning only |
 | `research_hard_cap` | **100** | Max memos per ladder run |
 | `observe_sim_markets` | `euro_depth` + ingest profile | Per-market observe sim after screen-lite — see [`market-sharded-learning.md`](market-sharded-learning.md) |
 
-At $0.40/memo and ~$35–45 Sunday email burn, **$80 weekly_ops** supports roughly **~40–60 selective memos/week** across graduated markets (round-robin buy-tier).
+At $0.40/memo and ~$35–45 Sunday email burn, **$80 weekly_ops** supports roughly
+**~40–60 selective memos/week** across graduated markets. Estimated spend at or
+over **$30** (15% of listed Ultra) is a warning only — see
+[cycle-budget-surplus.md](cycle-budget-surplus.md#weekly-ops-plan-credit-warning-15-estimated-usd).
 
 ### Progression through markets
 

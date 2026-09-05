@@ -12,6 +12,7 @@ from value_investor.cycle_budget_surplus import (
     current_cycle_id,
     next_cycle_id,
     review_cycle_surplus,
+    weekly_ops_plan_credit_ceiling_usd,
 )
 from value_investor.data_library_cli import main as library_main
 
@@ -221,3 +222,52 @@ def test_cli_assess_apply(tmp_path: Path, monkeypatch, capsys):
     assert "weekly bump $5.00" in out
     assert "85.00" in out
     assert (tmp_path / "docs" / "data" / "cycle_budget_surplus.json").is_file()
+
+
+def test_plan_credit_ceiling_is_15pct_of_ultra():
+    assert weekly_ops_plan_credit_ceiling_usd(200.0) == 30.0
+    assert weekly_ops_plan_credit_ceiling_usd(200.0, 0.15) == 30.0
+
+
+def test_assess_15pct_is_warning_not_a_hard_clamp(tmp_path: Path):
+    path = _policy(tmp_path / "policy.json", cap=80.0)
+    policy = load_policy(path)
+    assessment = assess_cycle_surplus(
+        unused_fraction=0.40,
+        plan_monthly_usd=200.0,
+        policy=policy,
+        path=path,
+    )
+    assert assessment["plan_credit_share_cap"] == 0.15
+    assert assessment["plan_credit_warning_usd"] == 30.0
+    assert assessment["proposed_weekly_ops_cap_usd"] == 85.0
+    assert assessment["weekly_bump_usd"] == 5.0
+    assert assessment["plan_credit_share_is_warning"] is True
+    assert assessment["ceiling_bound"] is True
+    assert assessment["action"] == "propose_bump"
+
+
+def test_review_revert_restores_original_cap_above_warning(tmp_path: Path):
+    policy_path = _policy(tmp_path / "policy.json", cap=80.0)
+    artifact = tmp_path / "surplus.json"
+    policy = load_policy(policy_path)
+    assessment = assess_cycle_surplus(
+        unused_fraction=0.40,
+        plan_monthly_usd=200.0,
+        policy=policy,
+        path=policy_path,
+    )
+    apply_cycle_surplus(assessment, policy_path=policy_path, artifact_path=artifact)
+    policy = load_policy(policy_path)
+    policy["budget"]["cycle_id"] = "2026-10-d8"
+    policy["budget"]["estimated_spend_weekly_ops_usd_this_week"] = 22.0
+    save_policy(policy, policy_path)
+    reverted = review_cycle_surplus(
+        keep=False,
+        policy_path=policy_path,
+        artifact_path=artifact,
+        now=datetime(2026, 10, 8, tzinfo=UTC),
+    )
+    assert reverted["action"] == "reverted"
+    assert reverted["revert_weekly_ops_cap_usd"] == 80.0
+    assert load_policy(policy_path)["budget"]["weekly_ops_cap_usd"] == 80.0
