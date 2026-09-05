@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T06:44:35+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T06:48:56+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -135,6 +135,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N84 | **Do not lower the 3-body thin bar to clear euro last mile** | 23 thin buy-tier names often already have bodies for every indexed filing (median 2.0). Lowering thin to 1-2 bodies would fake parity while discovery is exhausted. Keep the FTSE-standard bar. | euro_depth filing parity review after IWB and AED.BR close, if thin_need_discovery is the only remaining sprint reason |
 | N85 | **Do not build a structured ESEF XBRL fact parser to clear last-mile IWB** | iXBRL XHTML text extract already exists. Leftover gaps are identity, aggregator lag, and unfetchable IR URLs, not missing fact tags. Structured borrowings/FCF extract is a memo-quality later item, same class as CH iXBRL (L83). | Euro buy-tier IWB is near zero and memos still lack FCF/segment facts that exist only in tagged XBRL |
 | N86 | **Do not spider company websites as the euro last-mile source** | Finding the IR host is not the leftover problem (ABI.BR is age-gated; several allowlist rows are already JS publications indexes). A general site crawl would burn the 320s ticker cap, pull ESG/wrong-year PDFs, and auto-write URLs that N79 already forbids. Keep IR as a manual allowlist; the later generic helper is L56 (same-origin PDF harvest from a known IR page). | LEI-first ESEF and the next complete fat slot still leave thin_need_discovery names whose official annual/interim PDF is only on a static same-origin IR library |
+| N87 | **Do not add a separate last-mile ingest workflow** | Two-lane deepen, intensive pin, stall_slowdown, and deviations already are the last-mile mode. A fourth workflow would starve the 24-name batch. Apply identity-first official-register lookup inside existing euro_filings / uk_rns / asx regimes instead. | After LEI-first ESEF and one national OAM adapter, leftover gaps still need a different control loop than pin + deviations |
 
 ---
 
@@ -357,6 +358,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L297 | **GLEIF LEI-first ESEF resolve** | filings.xbrl.org name search misses AEDIFICA (0 rows) while GLEIF LEI 529900DTKNXL0AXQFN28 returns 7 ESEF packages. Resolve ticker→LEI then filter[entity.identifier] before name search. Lookback 800d still drops 2023 Aedifica annuals from a Sep 2026 run. | AED.BR still unmeasured after the next complete euro fat slot has had a chance to merge the builtin IR PDF seeds |
 | L298 | **National OAM / Euronext regulated-info adapters** | The real Companies House equivalent for euro leftovers: FSMA STORI / NBB (BE), AFM, AMF Info-financière, Bundesanzeiger, FMA, CMVM, FI. Needed for interims and aggregator-lag annuals that filings.xbrl.org does not have. Do not build all OAMs at once. | LEI-first ESEF plus IR seeds still leave thin_need_discovery or IWB on BE/AT/PT/IE periphery after several complete fat slots |
 | L299 | **SIX regulated filings for Swiss leftover IWB** | NOVN.SW has a GLEIF LEI but 0 ESEF filings (Switzerland is outside ESEF). Leftover Novartis IWB cannot be closed by filings.xbrl.org. SIX Exchange Regulation is the official path. | Swiss names remain in euro IWB after dual-listed SEC/IR paths are exhausted |
+| L300 | **Shared issuer-identifier cache across regimes** | UK already caches Yahoo ticker → Companies House number. Euro needs Yahoo ticker → LEI the same way; SEC aliases already map ABI→BUD. One small identifier store, market-specific register adapters. Do not wait to invent a universal OAM crawler. | GLEIF LEI-first ESEF lands and a second market (CH cache or ASX) would reuse the same lookup shape |
 
 ---
 
