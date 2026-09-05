@@ -192,13 +192,68 @@ def test_cutoff_dispatches_when_discovery_finished_and_deepen_ran(tmp_path: Path
     assert "runtime cutoff" in result["summary"]
 
 
-def test_followup_prefers_blocker_ticker_over_zero_body(tmp_path: Path):
+def test_followup_prefers_zero_body_over_blocker_ticker(tmp_path: Path):
     root, reports = _euro_fixture(tmp_path)
     _write_index(root, "euro_depth", "DG.PA", total=3, with_body=1)
     reports = [*reports, _report("DG.PA")]
     result = evaluate_library_ingest_gap_closure_followup(
         market_id="euro_depth",
         health_after=_health(),
+        was_gap_closure_run=False,
+        stalled=False,
+        improved=[],
+        partial=True,
+        runtime_cutoff=True,
+        discovery_scan={"runtime_cutoff": False, "scanned": 44},
+        deepen_results=[
+            {"ticker": "DG.PA", "improved": False, "ticker_budget_hit": True},
+        ],
+        blocker_ticker="DG.PA",
+        library_root=root,
+        reports=reports,
+        tasks_path=tmp_path / "engineering_tasks.json",
+        runs_path=tmp_path / "ingest_gap_closure_runs.json",
+    )
+    assert result["should_dispatch"] is True
+    assert result["pin_ticker"] == "RAND.AS"
+
+
+def test_followup_prefers_unmeasured_over_blocker_ticker(tmp_path: Path):
+    root, reports = _euro_fixture(tmp_path)
+    _write_index(root, "euro_depth", "AED.BR", total=0, with_body=0)
+    reports = [*reports, _report("AED.BR")]
+    health = _health(unmeasured=1, zero_body=0)
+    health["unmeasured_tickers"] = ["AED.BR"]
+    health["zero_body_tickers"] = []
+    result = evaluate_library_ingest_gap_closure_followup(
+        market_id="euro_depth",
+        health_after=health,
+        was_gap_closure_run=False,
+        stalled=False,
+        improved=[],
+        partial=True,
+        runtime_cutoff=True,
+        discovery_scan={"runtime_cutoff": False, "scanned": 44},
+        deepen_results=[
+            {"ticker": "ABI.BR", "improved": False, "ticker_budget_hit": True},
+        ],
+        blocker_ticker="ABI.BR",
+        library_root=root,
+        reports=reports,
+        tasks_path=tmp_path / "engineering_tasks.json",
+        runs_path=tmp_path / "ingest_gap_closure_runs.json",
+    )
+    assert result["should_dispatch"] is True
+    assert result["pin_ticker"] == "AED.BR"
+
+
+def test_followup_uses_blocker_when_no_coverage_holes(tmp_path: Path):
+    root, reports = _euro_fixture(tmp_path)
+    _write_index(root, "euro_depth", "DG.PA", total=3, with_body=1)
+    reports = [*reports, _report("DG.PA")]
+    result = evaluate_library_ingest_gap_closure_followup(
+        market_id="euro_depth",
+        health_after=_health(zero_body=0, unmeasured=0),
         was_gap_closure_run=False,
         stalled=False,
         improved=[],
@@ -458,7 +513,7 @@ def test_followup_cli_writes_json_path(tmp_path: Path):
     assert payload["trigger"] == "stall_slowdown"
 
 
-def test_batch_followup_uses_blocker_ticker_from_loop_payload(tmp_path: Path):
+def test_batch_followup_prefers_zero_body_over_loop_blocker(tmp_path: Path):
     root, reports = _euro_fixture(tmp_path)
     _write_index(root, "euro_depth", "DG.PA", total=3, with_body=1)
     reports = [*reports, _report("DG.PA")]
@@ -490,7 +545,7 @@ def test_batch_followup_uses_blocker_ticker_from_loop_payload(tmp_path: Path):
             runs_path=tmp_path / "ingest_gap_closure_runs.json",
         )
     assert result["should_dispatch"] is True
-    assert result["pin_ticker"] == "DG.PA"
+    assert result["pin_ticker"] == "RAND.AS"
 
 
 def test_followup_cli_dispatches_after_cutoff_deepen(tmp_path: Path):

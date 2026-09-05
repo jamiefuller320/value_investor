@@ -24,6 +24,7 @@ from value_investor.research.filings import (
     fetch_filings_asia_news,
     fetch_filings_asx_direct,
     fetch_filings_asx_news,
+    fetch_filings_belgium_official,
     fetch_filings_esef_direct,
     fetch_filings_euro_news,
     fetch_filings_investegate_company,
@@ -78,6 +79,7 @@ def list_regime_filings_index_only(
         groups.extend(
             [
                 fetch_filings_esef_direct(company_name=company_name, ticker=ticker),
+                fetch_filings_belgium_official(company_name=company_name, ticker=ticker),
                 fetch_filings_euro_news(company_name=company_name, ticker=ticker, market=market),
                 fetch_filings_investegate_company(ticker=ticker, company_name=company_name),
             ]

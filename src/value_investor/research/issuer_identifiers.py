@@ -29,13 +29,41 @@ GLEIF_LEI_RECORDS_URL = "https://api.gleif.org/api/v1/lei-records"
 GLEIF_PAGE_SIZE = 8
 HttpGet = Callable[..., bytes]
 
-# Verified last-mile LEIs (Yahoo ticker / base symbol). Same role as builtin IR URLs.
+# Verified last-mile identity (Yahoo ticker / base symbol). Same role as builtin IR URLs.
+# Bare ABI is omitted — it collides with the US ticker alias used for SEC 20-F.
+_BUILTIN_ISSUERS: dict[str, dict[str, str]] = {
+    "AED.BR": {
+        "lei": "529900DTKNXL0AXQFN28",
+        "lei_name": "AEDIFICA",
+        "lei_country": "BE",
+        "isin": "BE0003851681",
+        "cbe": "0877248501",
+        "mic": "XBRU",
+    },
+    "AED": {
+        "lei": "529900DTKNXL0AXQFN28",
+        "lei_name": "AEDIFICA",
+        "lei_country": "BE",
+        "isin": "BE0003851681",
+        "cbe": "0877248501",
+        "mic": "XBRU",
+    },
+    "ABI.BR": {
+        "lei": "5493008H3828EMEXB082",
+        "lei_name": "ANHEUSER-BUSCH INBEV",
+        "lei_country": "BE",
+        "isin": "BE0974293251",
+        "cbe": "0417497106",
+        "mic": "XBRU",
+    },
+}
 _BUILTIN_LEIS: dict[str, str] = {
-    "AED.BR": "529900DTKNXL0AXQFN28",
-    "AED": "529900DTKNXL0AXQFN28",
+    key: str(row.get("lei") or "") for key, row in _BUILTIN_ISSUERS.items() if row.get("lei")
 }
 
 _LEI_RE = re.compile(r"^[A-Z0-9]{20}$")
+_ISIN_RE = re.compile(r"^[A-Z]{2}[A-Z0-9]{9}[0-9]$")
+_MIC_RE = re.compile(r"^[A-Z]{4}$")
 _ISSUER_STOPWORDS = frozenset(
     {
         "sa",
@@ -75,15 +103,39 @@ def _normalize_lei(value: str | None) -> str | None:
     return None
 
 
+def _normalize_isin(value: str | None) -> str | None:
+    isin = re.sub(r"[^A-Z0-9]", "", (value or "").strip().upper())
+    if _ISIN_RE.match(isin):
+        return isin
+    return None
+
+
+def _normalize_cbe(value: str | None) -> str | None:
+    digits = re.sub(r"\D", "", value or "")
+    if len(digits) == 9:
+        digits = digits.zfill(10)
+    if len(digits) == 10:
+        return digits
+    return None
+
+
+def _normalize_mic(value: str | None) -> str | None:
+    mic = re.sub(r"[^A-Z]", "", (value or "").strip().upper())
+    if _MIC_RE.match(mic):
+        return mic
+    return None
+
+
 def load_issuer_identifiers(path: Path | None = None) -> dict[str, Any]:
     path = Path(path or DEFAULT_ISSUER_IDENTIFIERS_PATH)
     empty = {
         "schema_version": 1,
         "updated_at": None,
         "note": (
-            "Yahoo ticker → official identifiers (LEI via GLEIF). "
-            "Identity is durable; edit manually if the wrong entity was cached. "
-            "Filing recency is enforced by the register fetch, not by expiring LEIs."
+            "Yahoo ticker → official identifiers (LEI via GLEIF; ISIN / CBE / MIC "
+            "for national registers). Identity is durable; edit manually if the "
+            "wrong entity was cached. Filing recency is enforced by the register "
+            "fetch, not by expiring identifiers."
         ),
         "issuers": {},
     }
@@ -111,20 +163,55 @@ def load_issuer_identifiers(path: Path | None = None) -> dict[str, Any]:
     }
 
 
+def _merge_issuer_rows(*rows: dict[str, Any] | None) -> dict[str, Any]:
+    merged: dict[str, Any] = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        for field, raw in row.items():
+            if raw in (None, ""):
+                continue
+            if field == "lei":
+                value = _normalize_lei(str(raw))
+            elif field == "isin":
+                value = _normalize_isin(str(raw))
+            elif field == "cbe":
+                value = _normalize_cbe(str(raw))
+            elif field == "mic":
+                value = _normalize_mic(str(raw))
+            elif field == "lei_country":
+                value = str(raw).strip().upper()
+            else:
+                value = str(raw).strip() if isinstance(raw, str) else raw
+            if value not in (None, ""):
+                merged[field] = value
+    return merged
+
+
+def cached_issuer_identity(ticker: str, *, path: Path | None = None) -> dict[str, Any]:
+    """Return builtin + cached official identifiers for a Yahoo ticker."""
+    issuers = load_issuer_identifiers(path).get("issuers") or {}
+    merged: dict[str, Any] = {}
+    for key in reversed(_ticker_keys(ticker)):
+        builtin = _BUILTIN_ISSUERS.get(key)
+        cached = issuers.get(key) if isinstance(issuers.get(key), dict) else None
+        merged = _merge_issuer_rows(merged, builtin, cached)
+    return merged
+
+
 def cached_lei(ticker: str, *, path: Path | None = None) -> str | None:
     """Return a builtin or cached LEI without calling GLEIF."""
-    for key in _ticker_keys(ticker):
-        builtin = _normalize_lei(_BUILTIN_LEIS.get(key))
-        if builtin:
-            return builtin
-    issuers = load_issuer_identifiers(path).get("issuers") or {}
-    for key in _ticker_keys(ticker):
-        row = issuers.get(key)
-        if isinstance(row, dict):
-            lei = _normalize_lei(str(row.get("lei") or ""))
-            if lei:
-                return lei
-    return None
+    return _normalize_lei(str(cached_issuer_identity(ticker, path=path).get("lei") or ""))
+
+
+def cached_isin(ticker: str, *, path: Path | None = None) -> str | None:
+    """Return a builtin or cached equity ISIN."""
+    return _normalize_isin(str(cached_issuer_identity(ticker, path=path).get("isin") or ""))
+
+
+def cached_cbe(ticker: str, *, path: Path | None = None) -> str | None:
+    """Return a builtin or cached Belgian CBE / enterprise number (10 digits)."""
+    return _normalize_cbe(str(cached_issuer_identity(ticker, path=path).get("cbe") or ""))
 
 
 def save_issuer_lei(
@@ -154,6 +241,63 @@ def save_issuer_lei(
         "source": source or "gleif",
         "resolved_at": datetime.now(UTC).isoformat(),
     }
+    payload["issuers"] = issuers
+    payload["updated_at"] = datetime.now(UTC).isoformat()
+    payload["schema_version"] = 1
+    path.parent.mkdir(parents=True, exist_ok=True)
+    write_json(path, payload)
+    return path
+
+
+def save_issuer_identity(
+    ticker: str,
+    *,
+    path: Path | None = None,
+    lei: str = "",
+    lei_name: str = "",
+    lei_country: str = "",
+    isin: str = "",
+    cbe: str = "",
+    mic: str = "",
+    source: str = "manual",
+) -> Path:
+    """Persist durable official identifiers without dropping previously cached fields."""
+    path = Path(path or DEFAULT_ISSUER_IDENTIFIERS_PATH)
+    payload = load_issuer_identifiers(path)
+    issuers = dict(payload.get("issuers") or {})
+    key = (ticker or "").strip().upper()
+    if not key:
+        raise ValueError("ticker is required")
+    previous = issuers.get(key) if isinstance(issuers.get(key), dict) else {}
+    row = _merge_issuer_rows(
+        previous,
+        {
+            "lei": lei,
+            "lei_name": lei_name,
+            "lei_country": lei_country,
+            "isin": isin,
+            "cbe": cbe,
+            "mic": mic,
+        },
+    )
+    if lei:
+        normalized = _normalize_lei(lei)
+        if not normalized:
+            raise ValueError(f"invalid LEI for {ticker}: {lei!r}")
+        row["lei"] = normalized
+    if isin:
+        normalized_isin = _normalize_isin(isin)
+        if not normalized_isin:
+            raise ValueError(f"invalid ISIN for {ticker}: {isin!r}")
+        row["isin"] = normalized_isin
+    if cbe:
+        normalized_cbe = _normalize_cbe(cbe)
+        if not normalized_cbe:
+            raise ValueError(f"invalid CBE for {ticker}: {cbe!r}")
+        row["cbe"] = normalized_cbe
+    row["source"] = source or previous.get("source") or "manual"
+    row["resolved_at"] = datetime.now(UTC).isoformat()
+    issuers[key] = row
     payload["issuers"] = issuers
     payload["updated_at"] = datetime.now(UTC).isoformat()
     payload["schema_version"] = 1
@@ -347,9 +491,13 @@ def resolve_lei(
 
 __all__ = [
     "DEFAULT_ISSUER_IDENTIFIERS_PATH",
+    "cached_cbe",
+    "cached_isin",
+    "cached_issuer_identity",
     "cached_lei",
     "load_issuer_identifiers",
     "resolve_lei",
+    "save_issuer_identity",
     "save_issuer_lei",
     "search_lei_gleif",
 ]

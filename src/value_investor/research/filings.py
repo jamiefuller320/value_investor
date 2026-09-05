@@ -7,7 +7,7 @@ Regimes:
 - ``uk_rns`` (FTSE / ``.L``): Ticker.app RNS API + Investegate via Google News
 - ``sec_edgar`` (S&P 500 / bare US tickers): SEC EDGAR submissions + HTML bodies
 - ``asx_announcements`` (ASX 200 / ``.AX``): Markit Digital JSON feed (direct PDFs) + Google News fallback
-- ``euro_filings`` (EURO STOXX 50 / DAX / CAC): ESEF by LEI then name search, Google News, IR allowlist, SEC 20-F/6-K when dual-listed
+- ``euro_filings`` (EURO STOXX 50 / DAX / CAC): ESEF by LEI then name search, Belgium official / Euronext Brussels for ``.BR``, Google News, IR allowlist, SEC 20-F/6-K when dual-listed
 - ``tsx_announcements`` (TSX 60 / ``.TO``): SEDAR+ / issuer headlines via Google News
 
 UK RNS headlines are tagged ``period=annual|interim|trading_update|other`` via
@@ -36,6 +36,7 @@ from io import BytesIO
 from pathlib import Path
 from typing import Any
 
+from value_investor.research.belgium_official import fetch_filings_belgium_official
 from value_investor.research.issuer_identifiers import resolve_lei
 
 logger = logging.getLogger(__name__)
@@ -3204,6 +3205,8 @@ def _source_bonus(source: str | None) -> int:
         return 28
     if source == "asx_direct":
         return 27
+    if source in {"esef_direct", "belgium_official"}:
+        return 26
     if source == "ir_allowlist":
         return 25
     return 0
@@ -5967,6 +5970,7 @@ def ingest_filings(
         groups.append(fetch_filings_asx_news(company_name=company_name, ticker=ticker))
     elif regime == "euro_filings":
         groups.append(fetch_filings_esef_direct(company_name=company_name, ticker=ticker))
+        groups.append(fetch_filings_belgium_official(company_name=company_name, ticker=ticker))
         groups.append(
             fetch_filings_euro_news(company_name=company_name, ticker=ticker, market=market)
         )
@@ -6080,6 +6084,7 @@ def ingest_filings(
     elif regime == "euro_filings":
         note = (
             "Euro-listed results discovery via ESEF (filings.xbrl.org when available), "
+            "Belgium official / Euronext Brussels regulated-information for .BR names, "
             "Google News, optional IR allowlist URLs, Investegate (when listed), "
             "plus SEC 20-F/6-K when the issuer is dual-listed. period=annual|interim|other. "
             "Bodies when a direct HTML/PDF URL is available."
