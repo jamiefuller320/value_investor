@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-09-04T17:19:10.340073+00:00",
+  "compiled_at": "2026-09-05T19:41:19.436742+00:00",
   "run_at": "2026-09-02T10:22:48.084715+00:00",
   "task_count": 74,
   "tasks": [
@@ -2929,6 +2929,103 @@
       "merged_at": "2026-08-11T11:27:24.557027+00:00"
     },
     {
+      "id": "eng-20260902-01",
+      "area": "ingest",
+      "title": "Close library ingest filing gaps for EU depth composite (STOXX50 + periphery) (euro_depth): 1 buy-tier gaps after stalled weekday loop",
+      "summary": "Library market euro_depth buy-tier filing deepen stalled with 1 unmeasured and 0 zero-body names (buy_tier_count=45). Improve euro_filings / ESEF / IR allowlist source coverage for representative tickers and add regression tests; verify with ftse-library ingest-loop --market euro_depth. Sample unmeasured: AED.BR.",
+      "priority": "high",
+      "priority_score": 86.0,
+      "source": "library_ingest_stall",
+      "evidence": {
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "universe": "library",
+        "filing_health": {
+          "snapshot_at": "2026-09-05T19:41:04.201676+00:00",
+          "market_id": "euro_depth",
+          "buy_tier_count": 45,
+          "unmeasured_buy_tier": 1,
+          "zero_body_buy_tier": 0,
+          "thin_body_buy_tier": 23,
+          "indexed_without_body": 28,
+          "bodies_min": 1,
+          "bodies_median": 2.0,
+          "bodies_max": 91,
+          "coverage_scope": "canonical_plus_shards",
+          "ftse_equivalent": false,
+          "unmeasured_tickers": [
+            "AED.BR"
+          ],
+          "zero_body_tickers": [],
+          "thin_body_tickers": [
+            "STR.VI",
+            "SGO.PA",
+            "UMI.BR",
+            "ACKB.BR",
+            "EG7.IR",
+            "ANDR.VI",
+            "VOE.VI",
+            "EVN.VI",
+            "GVR.IR",
+            "WIE.VI",
+            "ESSITY-B.ST",
+            "SKA-B.ST",
+            "MUV2.DE",
+            "VOLV-B.ST",
+            "APAM.AS",
+            "POST.VI",
+            "DTE.DE",
+            "UCB.BR",
+            "BAS.DE",
+            "DQ7A.IR",
+            "ASSA-B.ST",
+            "OMV.VI",
+            "NBA.LS"
+          ]
+        },
+        "filing_gaps": 1,
+        "sample_unmeasured": [
+          "AED.BR"
+        ],
+        "sample_zero_body": [],
+        "rerun_library_ingest_loop": true,
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Representative euro_depth buy-tier tickers gain filing indexes with bodies under the market canonical screen path",
+        "ftse-library ingest-loop --market euro_depth reports improved > 0 on a verification run",
+        "Add focused regression tests for the source/parser fix",
+        "No change to live FTSE 350 ingest path or blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "result_path": "output/engineering_result_eng-20260902-01.md",
+      "branch_name": "cursor/eng-20260902-01-1de3",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/392",
+      "pr_number": 392,
+      "completed_at": "2026-09-02T08:08:26.777946+00:00",
+      "merged_at": "2026-09-02T08:26:49.316776+00:00"
+    },
+    {
       "id": "eng-20260904-02",
       "area": "ingest",
       "title": "Close library ingest filing gaps for S&P/ASX 200 (asx200): 3 buy-tier gaps after stalled weekday loop",
@@ -3139,104 +3236,6 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/433",
       "pr_number": 433,
       "merged_at": "2026-09-04T13:24:11.260582+00:00"
-    },
-    {
-      "id": "eng-20260902-01",
-      "area": "ingest",
-      "title": "Close library ingest filing gaps for EU depth composite (STOXX50 + periphery) (euro_depth): 1 buy-tier gaps after stalled weekday loop",
-      "summary": "Library market euro_depth buy-tier filing deepen stalled with 0 unmeasured and 1 zero-body names (buy_tier_count=44). Improve euro_filings / ESEF / IR allowlist source coverage for representative tickers and add regression tests; verify with ftse-library ingest-loop --market euro_depth. Sample zero-body: RAND.AS.",
-      "priority": "high",
-      "priority_score": 86.0,
-      "source": "library_ingest_stall",
-      "evidence": {
-        "market_id": "euro_depth",
-        "library_market": "euro_depth",
-        "universe": "library",
-        "filing_health": {
-          "snapshot_at": "2026-09-04T08:04:12.923698+00:00",
-          "market_id": "euro_depth",
-          "buy_tier_count": 44,
-          "unmeasured_buy_tier": 0,
-          "zero_body_buy_tier": 1,
-          "thin_body_buy_tier": 24,
-          "indexed_without_body": 42,
-          "bodies_min": 1,
-          "bodies_median": 2,
-          "bodies_max": 91,
-          "coverage_scope": "canonical_plus_shards",
-          "ftse_equivalent": false,
-          "unmeasured_tickers": [],
-          "zero_body_tickers": [
-            "RAND.AS"
-          ],
-          "thin_body_tickers": [
-            "DG.PA",
-            "STR.VI",
-            "UMI.BR",
-            "SGO.PA",
-            "ACKB.BR",
-            "EG7.IR",
-            "ANDR.VI",
-            "VOE.VI",
-            "EVN.VI",
-            "GVR.IR",
-            "WIE.VI",
-            "ESSITY-B.ST",
-            "SKA-B.ST",
-            "MUV2.DE",
-            "VOLV-B.ST",
-            "APAM.AS",
-            "POST.VI",
-            "UCB.BR",
-            "BAS.DE",
-            "OMV.VI",
-            "NVG.LS",
-            "DTE.DE",
-            "DQ7A.IR",
-            "AZE.BR"
-          ]
-        },
-        "filing_gaps": 1,
-        "sample_unmeasured": [],
-        "sample_zero_body": [
-          "RAND.AS"
-        ],
-        "rerun_library_ingest_loop": true,
-        "doc": "docs/ops/library-ingest-escalation.md"
-      },
-      "acceptance_criteria": [
-        "Representative euro_depth buy-tier tickers gain filing indexes with bodies under the market canonical screen path",
-        "ftse-library ingest-loop --market euro_depth reports improved > 0 on a verification run",
-        "Add focused regression tests for the source/parser fix",
-        "No change to live FTSE 350 ingest path or blocked_paths"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "merged",
-      "result_path": "output/engineering_result_eng-20260902-01.md",
-      "branch_name": "cursor/eng-20260902-01-1de3",
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/392",
-      "pr_number": 392,
-      "completed_at": "2026-09-02T08:08:26.777946+00:00",
-      "merged_at": "2026-09-02T08:26:49.316776+00:00"
     },
     {
       "id": "eng-20260903-01",
@@ -4183,30 +4182,48 @@
   "reprioritized_at": "2026-09-04T19:00:23.685653+00:00",
   "reprioritized_after_task": "eng-20260904-02",
   "library_ingest_health": {
-    "snapshot_at": "2026-09-04T17:18:45.260362+00:00",
-    "market_id": "asx200",
-    "buy_tier_count": 32,
-    "unmeasured_buy_tier": 3,
+    "snapshot_at": "2026-09-05T19:41:04.201676+00:00",
+    "market_id": "euro_depth",
+    "buy_tier_count": 45,
+    "unmeasured_buy_tier": 1,
     "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 3,
-    "indexed_without_body": 1,
-    "bodies_min": 2,
-    "bodies_median": 7,
-    "bodies_max": 111,
+    "thin_body_buy_tier": 23,
+    "indexed_without_body": 28,
+    "bodies_min": 1,
+    "bodies_median": 2.0,
+    "bodies_max": 91,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [
-      "CDA.AX",
-      "BSL.AX",
-      "PXA.AX"
+      "AED.BR"
     ],
     "zero_body_tickers": [],
     "thin_body_tickers": [
-      "JBH.AX",
-      "DNL.AX",
-      "ZIM.AX"
+      "STR.VI",
+      "SGO.PA",
+      "UMI.BR",
+      "ACKB.BR",
+      "EG7.IR",
+      "ANDR.VI",
+      "VOE.VI",
+      "EVN.VI",
+      "GVR.IR",
+      "WIE.VI",
+      "ESSITY-B.ST",
+      "SKA-B.ST",
+      "MUV2.DE",
+      "VOLV-B.ST",
+      "APAM.AS",
+      "POST.VI",
+      "DTE.DE",
+      "UCB.BR",
+      "BAS.DE",
+      "DQ7A.IR",
+      "ASSA-B.ST",
+      "OMV.VI",
+      "NBA.LS"
     ]
   },
   "micro_compile_source": "library_ingest_loop",
-  "library_market_id": "asx200"
+  "library_market_id": "euro_depth"
 }
