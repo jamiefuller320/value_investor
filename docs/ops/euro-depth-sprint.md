@@ -151,7 +151,7 @@ off-peak schedules and disables old weekday-only titles. GitHub `schedule` alone
 
 ### Filing sources (euro_filings)
 
-1. **ESEF direct** — `filings.xbrl.org` API (`esef_direct`); country-hinted entity search + periphery aliases
+1. **ESEF direct** — `filings.xbrl.org` API (`esef_direct`); LEI cache / GLEIF first, then country-hinted name search; one package per period-end (English preferred); lookback plus a 2-annual floor when the aggregator lags
 2. **Google News** — euro exchange site clauses (existing)
 3. **IR allowlist** — `docs/data/research_ir_urls.json` + builtin seeds for thin/unmeasured/iwb names
 4. **SEC 20-F** — dual-listed names (existing)

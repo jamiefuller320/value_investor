@@ -7,7 +7,7 @@ Regimes:
 - ``uk_rns`` (FTSE / ``.L``): Ticker.app RNS API + Investegate via Google News
 - ``sec_edgar`` (S&P 500 / bare US tickers): SEC EDGAR submissions + HTML bodies
 - ``asx_announcements`` (ASX 200 / ``.AX``): Markit Digital JSON feed (direct PDFs) + Google News fallback
-- ``euro_filings`` (EURO STOXX 50 / DAX / CAC): results headlines via Google News + SEC 20-F/6-K when dual-listed
+- ``euro_filings`` (EURO STOXX 50 / DAX / CAC): ESEF by LEI then name search, Google News, IR allowlist, SEC 20-F/6-K when dual-listed
 - ``tsx_announcements`` (TSX 60 / ``.TO``): SEDAR+ / issuer headlines via Google News
 
 UK RNS headlines are tagged ``period=annual|interim|trading_update|other`` via
@@ -36,10 +36,15 @@ from io import BytesIO
 from pathlib import Path
 from typing import Any
 
+from value_investor.research.issuer_identifiers import resolve_lei
+
 logger = logging.getLogger(__name__)
 
 USER_AGENT = "value-investor-research/0.1 (+filings)"
 FILINGS_LOOKBACK_DAYS = 800  # ~2.2 years — cover annual + several interims
+# When lookback drops every official ESEF package (aggregator lag), keep this
+# many latest distinct period-ends so identity still yields a current annual.
+ESEF_OFFICIAL_ANNUAL_FLOOR = 2
 FILINGS_MAX_ITEMS = 40
 FILINGS_BODY_MAX_CHARS = 80_000
 # Lead narrative kept from the start; depth sections are spliced from later pages.
@@ -2432,19 +2437,151 @@ def _esef_search_entity_identifier(company_name: str, *, ticker: str = "") -> st
     return None
 
 
+def _esef_report_language_score(url: str) -> int:
+    """Prefer English ESEF packages when the same period is filed in several languages."""
+    lower = (url or "").lower()
+    if re.search(r"[-_/]en(?:[./_-]|$)", lower):
+        return 30
+    if re.search(r"[-_/](nl|fr|de|sv|it|es|fi|da|pt)(?:[./_-]|$)", lower):
+        return 10
+    return 20
+
+
+def _esef_one_report_per_period(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Keep the best language variant per ``period_end`` (English first)."""
+    best: dict[str, dict[str, Any]] = {}
+    passthrough: list[dict[str, Any]] = []
+    for row in rows:
+        period_end = str(row.get("period_end") or "").strip()
+        if not period_end:
+            passthrough.append(row)
+            continue
+        score = _esef_report_language_score(str(row.get("url") or ""))
+        current = best.get(period_end)
+        current_score = (
+            _esef_report_language_score(str(current.get("url") or "")) if current else -1
+        )
+        if current is None or score > current_score:
+            best[period_end] = row
+    ordered = sorted(best.items(), key=lambda item: item[0], reverse=True)
+    return [row for _period, row in ordered] + passthrough
+
+
+def _esef_period_end_dt(period_end: str) -> datetime | None:
+    text = (period_end or "").strip()
+    if not text:
+        return None
+    try:
+        return datetime.strptime(text[:10], "%Y-%m-%d").replace(tzinfo=UTC)
+    except ValueError:
+        return None
+
+
+def _esef_apply_recency_bound(
+    rows: list[dict[str, Any]],
+    *,
+    lookback_days: int,
+    official_annual_floor: int,
+    now: datetime | None = None,
+) -> list[dict[str, Any]]:
+    """Drop stale rows, but keep the latest official annuals if lookback empties the set.
+
+    Identity (LEI) is durable. This bound is the time-limited influence: we do not
+    ingest unbounded history, and we do not treat a single old annual as coverage
+    forever when a newer package exists.
+    """
+    now_dt = now or datetime.now(UTC)
+    cutoff = now_dt - timedelta(days=max(0, int(lookback_days)))
+    recent: list[dict[str, Any]] = []
+    older: list[dict[str, Any]] = []
+    for row in rows:
+        period_dt = _esef_period_end_dt(str(row.get("period_end") or ""))
+        if period_dt is None or period_dt >= cutoff:
+            recent.append(row)
+        else:
+            older.append(row)
+    if recent:
+        return recent
+    floor = max(0, int(official_annual_floor))
+    if floor <= 0 or not older:
+        return []
+    older_sorted = sorted(
+        older,
+        key=lambda row: str(row.get("period_end") or ""),
+        reverse=True,
+    )
+    kept: list[dict[str, Any]] = []
+    seen_periods: set[str] = set()
+    for row in older_sorted:
+        period_end = str(row.get("period_end") or "")
+        if period_end in seen_periods:
+            continue
+        seen_periods.add(period_end)
+        kept.append(row)
+        if len(kept) >= floor:
+            break
+    return kept
+
+
+def _esef_resolve_identifier(
+    company_name: str,
+    *,
+    ticker: str,
+    identifier_map_path: Path | None = None,
+) -> str | None:
+    """LEI cache first, then filings.xbrl.org name search, then one GLEIF lookup."""
+    variants = _esef_entity_name_variants(company_name, ticker=ticker)
+    country = _esef_country_hint(ticker)
+    cached = resolve_lei(
+        ticker,
+        company_name=company_name,
+        country_hint=country,
+        path=identifier_map_path,
+        search=False,
+        persist=False,
+        name_variants=variants,
+    )
+    if cached:
+        return cached
+    identifier = _esef_search_entity_identifier(company_name, ticker=ticker)
+    if identifier:
+        return identifier
+    return resolve_lei(
+        ticker,
+        company_name=company_name,
+        country_hint=country,
+        path=identifier_map_path,
+        search=True,
+        persist=True,
+        name_variants=variants,
+    )
+
+
 def fetch_filings_esef_direct(
     *,
     company_name: str,
     ticker: str,
     max_items: int = FILINGS_MAX_ITEMS,
     lookback_days: int = FILINGS_LOOKBACK_DAYS,
+    official_annual_floor: int = ESEF_OFFICIAL_ANNUAL_FLOOR,
+    identifier_map_path: Path | None = None,
+    now: datetime | None = None,
 ) -> list[dict[str, Any]]:
     """
     Fetch EU annual/interim ESEF/iXBRL filings via the public filings.xbrl.org API.
 
+    Resolves the entity by cached/GLEIF LEI when name search misses, then queries
+    filings by identifier. Language variants of the same period-end collapse to
+    one row (English preferred). Lookback bounds recency; if that window is empty
+    the latest ``official_annual_floor`` period-ends are still returned.
+
     Returns metadata rows with direct XHTML report URLs suitable for body extraction.
     """
-    identifier = _esef_search_entity_identifier(company_name, ticker=ticker)
+    identifier = _esef_resolve_identifier(
+        company_name,
+        ticker=ticker,
+        identifier_map_path=identifier_map_path,
+    )
     if not identifier:
         return []
     query = urllib.parse.urlencode(
@@ -2461,20 +2598,14 @@ def fetch_filings_esef_direct(
         logger.warning("ESEF filings fetch failed for %s (%s): %s", ticker, company_name, exc)
         return []
 
-    cutoff = datetime.now(UTC) - timedelta(days=lookback_days)
-    rows: list[dict[str, Any]] = []
+    raw_rows: list[dict[str, Any]] = []
     for item in payload.get("data") or []:
         attrs = item.get("attributes") or {}
         period_end = str(attrs.get("period_end") or "")
         published: str | None = period_end or None
         if period_end:
-            try:
-                published_dt = datetime.strptime(period_end, "%Y-%m-%d").replace(tzinfo=UTC)
-                if published_dt < cutoff:
-                    continue
-                published = published_dt.isoformat()
-            except ValueError:
-                published = period_end
+            period_dt = _esef_period_end_dt(period_end)
+            published = period_dt.isoformat() if period_dt else period_end
         report_path = str(attrs.get("report_url") or "").strip()
         if not report_path:
             continue
@@ -2486,7 +2617,7 @@ def fetch_filings_esef_direct(
         if period == "other" and period_end:
             month = int(period_end[5:7]) if len(period_end) >= 7 else 0
             period = "interim" if month in {6, 9} else "annual"
-        rows.append(
+        raw_rows.append(
             {
                 "id": _filing_id("esef_direct", report_path),
                 "source": "esef_direct",
@@ -2494,6 +2625,7 @@ def fetch_filings_esef_direct(
                 "published_at": published,
                 "url": file_url,
                 "period": period,
+                "period_end": period_end,
                 "category": "ESEF",
                 "summary": headline,
                 "has_body": False,
@@ -2502,8 +2634,15 @@ def fetch_filings_esef_direct(
                 "entity_identifier": identifier,
             }
         )
-        if len(rows) >= max_items:
-            break
+
+    rows = _esef_apply_recency_bound(
+        _esef_one_report_per_period(raw_rows),
+        lookback_days=lookback_days,
+        official_annual_floor=official_annual_floor,
+        now=now,
+    )
+    if len(rows) > max_items:
+        rows = rows[: max(1, int(max_items))]
     if rows:
         logger.info("ESEF direct: %s → %d filings", ticker, len(rows))
     return rows
