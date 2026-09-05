@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-04T22:52:59+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T06:25:03+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -348,6 +348,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L291 | **Review the 120 weekly_ops bump against 36 percent unused Ultra** | Usage page is 64 percent used, so leftover is about 36 percent of the listed plan, not the 1700 USD inferred from burst percentages. The 80 to 120 weekly_ops raise already sits at the 50 percent ceiling and looks aggressive versus that leftover. | Cycle-end surplus review on 2026-10-d8 keep-or-revert. |
 | L292 | **Two-column budget: included-credit fraction vs estimated API USD** | Policy today ledgers estimated on-demand USD only. Usage-page leftover is a separate included-pool meter. A later surplus review could store both, but do not invent a conversion that treats burst token dollars as a percent of Ultra. | Cycle-end surplus review on 2026-10-d8, or if Cursor exposes remaining included credits to the API. |
 | L293 | **Boost spare ingest when head is blocked on typed engineering** | If the head market remaining gaps are classified as engineering (parser/API class) rather than fetchable IWB, temporarily raise spare-stream fractions without releasing the fat slot. | Head ingest parity is blocked solely by a typed engineering task after stall_slowdown gap-closure failed |
+| L294 | **Reassess euro ingest cascade impact after a week of complete slots** | The P2 cascade only landed 2026-09-04. One complete 13:53 slot closed IWB 43 to 27 and zero-body 2 to 0, but that coincided with the discovery cap and two-lane deepen. Re-read euro_ingest_health_log after several non-cutoff fat-slot days before attributing material gap closure to the cascade. | euro_depth has at least 6 complete non-cutoff fat-slot runs after 2026-09-04, or weekly paper Phase 2 gates start clearing |
 
 ---
 
