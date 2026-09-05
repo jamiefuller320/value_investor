@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T06:25:03+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T06:37:26+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -132,6 +132,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N81 | **Do not skip the weekly director-worker cap to burn leftover Ultra** | The 15/week exploration cap is a quality and auto-tighten guard, not a credit target. Remaining buy-tier names mostly escalate only on thin Yahoo quarterly/IR/news. Holdings MEGP and AEP already fail the live gate. Skipping the cap this week would be spend-for-its-own-sake. | A holding or buy-tier name has a non-thin-ladder escalation, or next ISO week has unused slots and a material trigger (body-lag rememo, conflicting verdict, new filing). |
 | N82 | **Handoff fat ingest slot when ingest slows and engineering is queued** | Do not move the P2 fat slot off euro_depth because a deepen improved nobody. Slowing success is common on last-mile IWB. Keep looping the head until ingest parity; spare streams and leftover minutes already cover the next markets. | euro_depth remaining gaps are a typed engineering blocker for several consecutive complete non-cutoff slots, with no fetchable IWB/unmeasured/zero-body |
 | N83 | **Continuously loop the whole ingest cascade instead of UTC slots** | A 24/7 cascade loop would mostly replay last-mile improved=0 GHA runs, contend with the Sunday quiet bundle, and fight CH/IR rate limits plus concurrency groups. Leftover minutes, stall_slowdown pins, and runtime-cutoff chunk chaining already continue work without a daemon. | Head slots regularly hit runtime_cutoff with deferred critical-path tickers after the leftover scheduler and existing chain steps, and GHA minutes plus source APIs have clear unused headroom |
+| N84 | **Do not lower the 3-body thin bar to clear euro last mile** | 23 thin buy-tier names often already have bodies for every indexed filing (median 2.0). Lowering thin to 1-2 bodies would fake parity while discovery is exhausted. Keep the FTSE-standard bar. | euro_depth filing parity review after IWB and AED.BR close, if thin_need_discovery is the only remaining sprint reason |
 
 ---
 
@@ -349,6 +350,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L292 | **Two-column budget: included-credit fraction vs estimated API USD** | Policy today ledgers estimated on-demand USD only. Usage-page leftover is a separate included-pool meter. A later surplus review could store both, but do not invent a conversion that treats burst token dollars as a percent of Ultra. | Cycle-end surplus review on 2026-10-d8, or if Cursor exposes remaining included credits to the API. |
 | L293 | **Boost spare ingest when head is blocked on typed engineering** | If the head market remaining gaps are classified as engineering (parser/API class) rather than fetchable IWB, temporarily raise spare-stream fractions without releasing the fat slot. | Head ingest parity is blocked solely by a typed engineering task after stall_slowdown gap-closure failed |
 | L294 | **Reassess euro ingest cascade impact after a week of complete slots** | The P2 cascade only landed 2026-09-04. One complete 13:53 slot closed IWB 43 to 27 and zero-body 2 to 0, but that coincided with the discovery cap and two-lane deepen. Re-read euro_ingest_health_log after several non-cutoff fat-slot days before attributing material gap closure to the cascade. | euro_depth has at least 6 complete non-cutoff fat-slot runs after 2026-09-04, or weekly paper Phase 2 gates start clearing |
+| L295 | **Same-day euro deepen after IR-seed merges** | AED.BR builtin IR seeds landed at 13:14 UTC on 4 Sep; the 13:15 fat slot still reported total_allowlist=0, and later scheduled euro jobs skipped on the daily success cap. Last-mile URL seeds do not apply until the next complete deepen. | Another euro IR-seed or allowlist fix merges while euro is still in sprint and the same-day remaining slots would be skipped by max_daily_successes |
+| L296 | **Non-.L HTML/PDF fallback for leftover euro IWB** | Investegate HTML fallback is .L-only. Leftover euro IWB (ABI.BR interims, periphery IR) is skipped as unfetchable after PDF validation fails. A non-L HTML or exchange-site fallback is last-mile source work, not more slots. | After six complete non-cutoff euro fat slots, leftover IWB is still concentrated in non-.L names with skipped_unfetchable>0 |
 
 ---
 
