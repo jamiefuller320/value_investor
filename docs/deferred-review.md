@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T06:43:34+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-05T06:44:35+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -134,6 +134,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N83 | **Continuously loop the whole ingest cascade instead of UTC slots** | A 24/7 cascade loop would mostly replay last-mile improved=0 GHA runs, contend with the Sunday quiet bundle, and fight CH/IR rate limits plus concurrency groups. Leftover minutes, stall_slowdown pins, and runtime-cutoff chunk chaining already continue work without a daemon. | Head slots regularly hit runtime_cutoff with deferred critical-path tickers after the leftover scheduler and existing chain steps, and GHA minutes plus source APIs have clear unused headroom |
 | N84 | **Do not lower the 3-body thin bar to clear euro last mile** | 23 thin buy-tier names often already have bodies for every indexed filing (median 2.0). Lowering thin to 1-2 bodies would fake parity while discovery is exhausted. Keep the FTSE-standard bar. | euro_depth filing parity review after IWB and AED.BR close, if thin_need_discovery is the only remaining sprint reason |
 | N85 | **Do not build a structured ESEF XBRL fact parser to clear last-mile IWB** | iXBRL XHTML text extract already exists. Leftover gaps are identity, aggregator lag, and unfetchable IR URLs, not missing fact tags. Structured borrowings/FCF extract is a memo-quality later item, same class as CH iXBRL (L83). | Euro buy-tier IWB is near zero and memos still lack FCF/segment facts that exist only in tagged XBRL |
+| N86 | **Do not spider company websites as the euro last-mile source** | Finding the IR host is not the leftover problem (ABI.BR is age-gated; several allowlist rows are already JS publications indexes). A general site crawl would burn the 320s ticker cap, pull ESG/wrong-year PDFs, and auto-write URLs that N79 already forbids. Keep IR as a manual allowlist; the later generic helper is L56 (same-origin PDF harvest from a known IR page). | LEI-first ESEF and the next complete fat slot still leave thin_need_discovery names whose official annual/interim PDF is only on a static same-origin IR library |
 
 ---
 
