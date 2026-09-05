@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-05T18:13:16+00:00",
+  "updated_at": "2026-09-05T21:05:40+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -6552,6 +6552,172 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
       "added_at": "2026-09-05T18:13:16+00:00"
+    },
+    {
+      "id": "N89",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not port Comparison-tool website capture here",
+      "summary": "School Compass qualitative loop harvests school websites with learned URL terms and QA junk phrases. That capture/CSS harvest does not belong on the FTSE live path (N86, paywalls, unstable IR templates). Reuse only the extract-then-score-later-official-text loop, which the news event journal already does on existing headlines.",
+      "revisit_when": "A named official register still has zero harvest after identity is bound and a human has approved one bounded adapter, or the event journal shows issuer-filtered headlines are not enough to prove filing correlation.",
+      "tags": [
+        "news",
+        "extractor",
+        "n86",
+        "comparison-tool"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T20:32:34+00:00"
+    },
+    {
+      "id": "L303",
+      "category": "later",
+      "section": "research",
+      "title": "Keep event journal off the live path until future-filing proof",
+      "summary": "The observe-only news event journal starts the calendar clock. Do not let extracted events veto buys or rewrite AI-judgment until confirmation is measured against later filings and later returns, not same-period annual boilerplate or same-day RNS mirrors.",
+      "revisit_when": "Sunday news_event_rules.json shows a stable promising confirmation rate on body_match events whose later filing is at least 30 days after the headline, and 8w/12w archive labels exist.",
+      "tags": [
+        "news",
+        "events",
+        "live-path",
+        "L304"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T20:32:34+00:00"
+    },
+    {
+      "id": "N90",
+      "category": "not_now",
+      "section": "research",
+      "title": "Do not expand the event journal to euro leftovers yet",
+      "summary": "Euro news manifests are noisier (AED/dirham-class issuer failures). Keep the journal on FTSE buy\u222aboundary until issuer precision and class false-positive rates are visible on Sunday artifacts.",
+      "revisit_when": "FTSE journal issuer_reject and class review look stable for several Sunday runs, and euro leftovers have usable issuer identity (LEI/ISIN) plus non-junk headlines.",
+      "tags": [
+        "news",
+        "events",
+        "euro"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T20:32:34+00:00"
+    },
+    {
+      "id": "N91",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not add a general news-article body crawl",
+      "summary": "Headline volume on buy\u222aboundary is ~27 unique articles/day (90d mean); 90% are Google News wrappers and teasers already exist (~109 chars). A Comparison-tool-style website harvest across publishers is the wrong collector: paywalls, unstable templates, and P1/P2 steal. Size/likelihood/timeline belong as optional fields on the event journal later, fetched only for event rows still missing those facts after title+teaser and later-filing join.",
+      "revisit_when": "Sunday event journal has several weeks of dated events, later-filing confirmation is measured on body_match \u226530 days later, and a material share of M&A/contract events still lack size/likelihood/timeline after title+teaser and filings_index join.",
+      "tags": [
+        "news",
+        "body",
+        "extractor",
+        "comparison-tool"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T20:40:06+00:00"
+    },
+    {
+      "id": "L304",
+      "category": "later",
+      "section": "research",
+      "title": "Event-only body fields with learn-and-refetch",
+      "summary": "If bodies are fetched at all, do it only for issuer-filtered journal events still missing size/likelihood/timeline. Resolve Google wrappers, store structured fields not full HTML, skip paywalls, and refetch when extractor version bumps (Comparison-tool skip-existing + stale/ETag + post-learn recapture). Today+1-day walkback to 90d is feasible at that scale (~1 URL/day, ~47 pages in 90d), not as an all-headline crawl (~50+ resolve+fetch/day).",
+      "revisit_when": "The not-now general body crawl is lifted and event-journal confirmation rates are stable enough to spend a Sunday slot on a bounded event-only fetch.",
+      "tags": [
+        "news",
+        "events",
+        "body",
+        "refetch"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T20:40:06+00:00"
+    },
+    {
+      "id": "N92",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not use NewsAPI.org free tier for production news",
+      "summary": "NewsAPI developer plan is free and has a 24-hour article delay, but it returns no full text on any plan, caps 100 requests/day, and forbids staging/production. It does not solve size/likelihood/timeline extraction and is not usable on GitHub Actions.",
+      "revisit_when": "A paid NewsAPI (or similar) plan is explicitly budgeted after open sources (Guardian, GDELT, RNS) are shown insufficient for event-journal fields.",
+      "tags": [
+        "news",
+        "api",
+        "newsapi"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T20:51:48+00:00"
+    },
+    {
+      "id": "L305",
+      "category": "later",
+      "section": "research",
+      "title": "Guardian Open Platform as licensed event-body enricher",
+      "summary": "The one major free API that returns licensed full article text is The Guardian (developer key: 500 calls/day, 1/s, non-commercial). 24h lag is fine. Coverage is Guardian-only, so it can fill size/likelihood/timeline on a subset of UK events after title+teaser and filing join, not replace Google/Yahoo discovery. GDELT DOC/GKG is the free no-key index (search + extracted amounts/themes, no redistributable body). Watch Guardian non-commercial terms if this becomes a sold product (then L12).",
+      "revisit_when": "Event journal has several Sunday runs and a material share of M&A/contract events still lack size/likelihood/timeline after title+teaser and filings_index join.",
+      "tags": [
+        "news",
+        "guardian",
+        "gdelt",
+        "body"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T20:51:48+00:00"
+    },
+    {
+      "id": "L306",
+      "category": "later",
+      "section": "research",
+      "title": "Revisit commercial news licences only if use is no longer personal",
+      "summary": "This project is personal use. The Guardian Open Platform developer key (non-commercial, 500 calls/day, licensed article text) is in-bounds when we later enrich event-journal fields. Paid NewsAPI, Guardian commercial, Finnhub/Marketaux, and other commercial news licences stay parked. If use ever becomes a sold or third-party product, revisit L12 and those licences before keeping a developer key.",
+      "revisit_when": "The project is no longer personal-only (sold, third-party users, or commercial redistribution of article text).",
+      "tags": [
+        "news",
+        "licence",
+        "guardian",
+        "personal-use"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T20:53:46+00:00"
+    },
+    {
+      "id": "L307",
+      "category": "later",
+      "section": "research",
+      "title": "Guardian fetch is gated on seek_richer_source",
+      "summary": "The event journal now flags issuer-filtered events that still lack required size/likelihood after title+teaser and a confirming filing. Do not fetch Guardian (or any article body) until Sunday news_event_rules.json shows a stable seek_richer_source count worth spending the 500/day personal developer key on. Fetch only those flagged rows.",
+      "revisit_when": "Several Sunday journal runs show a material, stable seek_richer_source_count (not just one noisy backfill) and personal Guardian developer key is available.",
+      "tags": [
+        "news",
+        "guardian",
+        "evidence-gap"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T20:58:27+00:00"
+    },
+    {
+      "id": "N93",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not ngram full annual-report bodies for unknowns",
+      "summary": "Unknown-unknown discovery uses leftover official RNS headlines already on disk. Do not bag-of-words 60MB of annual accounts (same failure mode as the news-phrase lexicon). Short leftover RNS headlines are the teacher set.",
+      "revisit_when": "Leftover RNS headline phrases have produced at least one promoted event class and a human wants note-level facts that headlines never carry.",
+      "tags": [
+        "filings",
+        "unknowns",
+        "ngrams"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
+      "added_at": "2026-09-05T21:05:40+00:00"
     }
   ],
   "fragments": [

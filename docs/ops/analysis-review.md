@@ -74,8 +74,11 @@ propose knob applies or scoring experiments from first-cross labels until that
 loop is explicitly promoted. Frozen `assign_signal()` thresholds stay off-limits (N3).
 
 The same Sunday job then runs `ftse-news-phrase-trajectory --mode rolling` (observe-only
-buy∪boundary phrase lexicon). Soft-fail; artifacts commit with the trajectory bootstrap
-bundle. See [news-phrase-trajectory.md](news-phrase-trajectory.md).
+buy∪boundary phrase lexicon) and `ftse-news-event-journal --mode rolling` (observe-only
+material-event extract from the same headlines, joined to later filings). Soft-fail;
+artifacts commit with the trajectory bootstrap bundle. See
+[news-phrase-trajectory.md](news-phrase-trajectory.md) and
+[news-event-journal.md](news-event-journal.md).
 
 ## Loser cards, exclusion, and exit-timing → filter experiments
 
