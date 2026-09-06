@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "assessed_at": "2026-09-06T10:38:11.813408+00:00",
+  "assessed_at": "2026-09-06T20:27:10.430375+00:00",
   "purpose": "Latent learning-path gaps that healthy ops counters hide. Split produce / persist / publish / apply, and filing parity vs learning clock. Existence is not quality; unused budget is not demand met.",
   "probe_questions": [
     "Is the learning consumer seeing the research we already paid for?",
@@ -13,11 +13,11 @@
   "high_flag_count": 0,
   "flags": [
     {
-      "id": "observe_clock_stale",
+      "id": "filing_ready_learning_stale",
       "severity": "medium",
       "layer": "learning_clock",
-      "title": "Observe / screen-lite clock is stale on an in-scope market",
-      "summary": "sp500 have a stale screen archive. Ingest health can stay green while the learning series stops.",
+      "title": "Filing parity is not the same as a learning clock",
+      "summary": "sp500 look filing-ready but are not learning_ready (observe-sim / archive span still short or stale).",
       "evidence": {
         "markets": [
           "sp500"
@@ -284,26 +284,36 @@
           "filing_ready": null,
           "learning_ready": null,
           "trajectory_ready": null,
-          "screen_stale": null,
-          "unique_days": null,
-          "last_screen": null,
-          "observe_snapshots": null
+          "screen_stale": false,
+          "unique_days": 14,
+          "last_screen": "2026-09-06",
+          "observe_snapshots": 16
+        },
+        {
+          "market_id": "asx200",
+          "filing_ready": null,
+          "learning_ready": null,
+          "trajectory_ready": null,
+          "screen_stale": false,
+          "unique_days": 9,
+          "last_screen": "2026-09-06",
+          "observe_snapshots": 14
         },
         {
           "market_id": "sp500",
-          "filing_ready": false,
+          "filing_ready": true,
           "learning_ready": false,
           "trajectory_ready": false,
-          "screen_stale": true,
-          "unique_days": 7,
-          "last_screen": "2026-08-16",
-          "observe_snapshots": 12
+          "screen_stale": false,
+          "unique_days": 9,
+          "last_screen": "2026-09-06",
+          "observe_snapshots": 14
         }
       ],
-      "filing_ready_learning_stale": [],
-      "observe_clock_stale": [
+      "filing_ready_learning_stale": [
         "sp500"
-      ]
+      ],
+      "observe_clock_stale": []
     }
   },
   "healthy_counter_distrust": {
