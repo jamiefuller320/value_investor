@@ -101,6 +101,7 @@ class LibraryIngestLoopResult:
     per_ticker_max_seconds: float | None = None
     pin_tickers: list[str] = field(default_factory=list)
     ingest_deviations: dict[str, Any] | None = None
+    exhaustion: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -142,6 +143,7 @@ class LibraryIngestLoopResult:
             "per_ticker_max_seconds": self.per_ticker_max_seconds,
             "pin_tickers": list(self.pin_tickers),
             "ingest_deviations": self.ingest_deviations,
+            "exhaustion": self.exhaustion,
         }
 
 
@@ -309,6 +311,9 @@ def select_library_ingest_targets(
         from value_investor.library_ingest_escalation import is_ftse_equivalent_market
 
         canonical_only = is_ftse_equivalent_market(market_id)
+    from value_investor.library_ingest_exhaustion import learning_pool_excluded_tickers
+
+    parked = learning_pool_excluded_tickers(market_id, library_root=library_root)
     scored: list[LibraryIngestTarget] = []
     for report in reports:
         coverage = _filing_coverage_for_ticker(
@@ -340,6 +345,8 @@ def select_library_ingest_targets(
                 score += THIN_BODY_PRIORITY_BONUS
             reason = "thin_bodies"
         if reason not in GAP_REASONS and gap_only:
+            continue
+        if report.ticker in parked and reason not in {"unmeasured", "zero_body"}:
             continue
         if report.signal == "strong_buy":
             score += 2.0
@@ -829,10 +836,14 @@ def run_library_ingest_loop(
     result.health_after = snapshot_library_ingest_health(market_id, library_root=library_root)
 
     from value_investor.library_ingest_escalation import library_ingest_filing_gaps
+    from value_investor.library_ingest_dispatch import sprint_ingest_complete
+    from value_investor.library_ingest_exhaustion import (
+        overlay_exhaustion_on_health,
+        refresh_library_ingest_exhaustion,
+    )
 
     gaps_before = library_ingest_filing_gaps(result.health_before)
     gaps_after = library_ingest_filing_gaps(result.health_after)
-    from value_investor.library_ingest_dispatch import ingest_parity_met as _ingest_parity_met
 
     if gaps_before > 0 and gaps_after == 0:
         try:
@@ -849,7 +860,38 @@ def run_library_ingest_loop(
             logger.warning("Ingest parity handoff failed for %s: %s", market_id, exc)
             result.parity_handoff = {"error": str(exc)}
 
-    if _ingest_parity_met(result.health_after):
+    append_library_ingest_health_log(
+        {
+            "run_at": datetime.now(UTC).isoformat(),
+            "source": "library_ingest_loop",
+            "market_id": market_id,
+            "health_before": result.health_before,
+            "health_after": result.health_after,
+            "targets": len(result.targets),
+            "improved": len(result.improved),
+            "improved_tickers": list(result.improved),
+            "runtime_cutoff": result.runtime_cutoff,
+            "partial": result.partial,
+            "errors": result.errors[:5],
+        },
+        path=health_log_path,
+    )
+    try:
+        result.exhaustion = refresh_library_ingest_exhaustion(
+            market_id,
+            library_root=library_root,
+            health=result.health_after,
+            health_log_path=health_log_path,
+        )
+        result.health_after = overlay_exhaustion_on_health(
+            result.health_after,
+            result.exhaustion,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Ingest exhaustion refresh failed for %s: %s", market_id, exc)
+        result.exhaustion = {"error": str(exc)}
+
+    if sprint_ingest_complete(result.health_after):
         try:
             from value_investor.library_ingest_maintenance import (
                 maybe_advance_parallel_sprint_on_parity,
@@ -864,21 +906,6 @@ def run_library_ingest_loop(
             logger.warning("Parallel sprint handoff failed for %s: %s", market_id, exc)
             result.parallel_sprint_handoff = {"error": str(exc)}
 
-    append_library_ingest_health_log(
-        {
-            "run_at": datetime.now(UTC).isoformat(),
-            "source": "library_ingest_loop",
-            "market_id": market_id,
-            "health_before": result.health_before,
-            "health_after": result.health_after,
-            "targets": len(result.targets),
-            "improved": len(result.improved),
-            "improved_tickers": list(result.improved),
-            "runtime_cutoff": result.runtime_cutoff,
-            "errors": result.errors[:5],
-        },
-        path=health_log_path,
-    )
     summary_path = library_ingest_summary_path(library_root, market_id)
     write_json(
         summary_path,
@@ -902,7 +929,7 @@ def run_library_ingest_loop(
 
     try:
         from value_investor.agent_model_policy import load_policy
-        from value_investor.library_ingest_dispatch import ingest_parity_met as _head_parity
+        from value_investor.library_ingest_dispatch import sprint_ingest_complete as _head_complete
         from value_investor.library_ingest_scheduler import persist_head_runtime_from_loop
 
         persist_head_runtime_from_loop(
@@ -910,7 +937,7 @@ def run_library_ingest_loop(
             used_seconds=float(result.used_seconds or 0.0),
             budget_seconds=float(result.budget_seconds or max_runtime_seconds),
             runtime_cutoff=bool(result.runtime_cutoff),
-            head_at_parity=_head_parity(result.health_after),
+            head_at_parity=_head_complete(result.health_after),
             policy=load_policy(),
             library_root=library_root,
         )

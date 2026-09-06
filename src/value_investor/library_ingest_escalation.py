@@ -313,6 +313,8 @@ def snapshot_library_buy_tier_filing_health(
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
         "thin_body_tickers": [],
+        "indexed_without_body_tickers": [],
+        "indexed_without_body_by_ticker": {},
     }
     try:
         reports = load_library_buy_tier_reports(library_root, market_id)
@@ -323,6 +325,8 @@ def snapshot_library_buy_tier_filing_health(
     zero_body_tickers: list[str] = []
     thin_body_tickers: list[str] = []
     indexed_without_body = 0
+    indexed_without_body_tickers: list[str] = []
+    indexed_without_body_by_ticker: dict[str, int] = {}
     body_counts: list[int] = []
     for report in reports:
         coverage = _filing_coverage_for_ticker(
@@ -333,7 +337,11 @@ def snapshot_library_buy_tier_filing_health(
         )
         total = int(coverage.get("filings_total") or 0)
         with_body = int(coverage.get("filings_with_body") or 0)
-        indexed_without_body += int(coverage.get("indexed_without_body") or 0)
+        iwb = int(coverage.get("indexed_without_body") or 0)
+        indexed_without_body += iwb
+        if iwb > 0:
+            indexed_without_body_tickers.append(report.ticker)
+            indexed_without_body_by_ticker[report.ticker] = iwb
         if with_body > 0:
             body_counts.append(with_body)
         if total == 0:
@@ -343,7 +351,7 @@ def snapshot_library_buy_tier_filing_health(
         elif with_body < max(3, total // 2):
             thin_body_tickers.append(report.ticker)
 
-    return {
+    snapshot = {
         "snapshot_at": datetime.now(UTC).isoformat(),
         "market_id": market_id,
         "buy_tier_count": len(reports),
@@ -356,10 +364,19 @@ def snapshot_library_buy_tier_filing_health(
         "bodies_max": max(body_counts) if body_counts else None,
         "coverage_scope": coverage_scope,
         "ftse_equivalent": ftse_equivalent,
-        "unmeasured_tickers": unmeasured_tickers[:25],
-        "zero_body_tickers": zero_body_tickers[:25],
-        "thin_body_tickers": thin_body_tickers[:25],
+        "unmeasured_tickers": unmeasured_tickers,
+        "zero_body_tickers": zero_body_tickers,
+        "thin_body_tickers": thin_body_tickers,
+        "indexed_without_body_tickers": indexed_without_body_tickers,
+        "indexed_without_body_by_ticker": indexed_without_body_by_ticker,
     }
+    from value_investor.library_ingest_exhaustion import apply_stored_exhaustion_overlay
+
+    return apply_stored_exhaustion_overlay(
+        snapshot,
+        market_id=market_id,
+        library_root=library_root,
+    )
 
 
 def snapshot_library_ingest_health(

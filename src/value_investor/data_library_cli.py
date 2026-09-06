@@ -1838,7 +1838,7 @@ def cmd_library_learning_depth(args: argparse.Namespace) -> int:
 
 def cmd_library_ingest_schedule(args: argparse.Namespace) -> int:
     from value_investor.library_ingest_cascade import head_market_id
-    from value_investor.library_ingest_dispatch import ingest_parity_met
+    from value_investor.library_ingest_dispatch import sprint_ingest_complete
     from value_investor.library_ingest_escalation import snapshot_library_buy_tier_filing_health
     from value_investor.library_ingest_scheduler import evaluate_scheduler, load_runtime_state
     from value_investor.library_ingest_sprint import parallel_sprint_markets_needing_ingest
@@ -1860,7 +1860,7 @@ def cmd_library_ingest_schedule(args: argparse.Namespace) -> int:
         health = snapshot_library_buy_tier_filing_health(
             name, library_root=args.root, policy=policy
         )
-        if not ingest_parity_met(health):
+        if not sprint_ingest_complete(health):
             needing.append(name)
     phase2_ready = False
     try:
@@ -1880,7 +1880,7 @@ def cmd_library_ingest_schedule(args: argparse.Namespace) -> int:
     decision = evaluate_scheduler(
         int(args.parallel_stream),
         policy=policy,
-        head_at_parity=ingest_parity_met(head_health),
+        head_at_parity=sprint_ingest_complete(head_health),
         needing_markets=needing,
         requested_targets=int(args.max_targets),
         requested_runtime=float(args.max_runtime_seconds),

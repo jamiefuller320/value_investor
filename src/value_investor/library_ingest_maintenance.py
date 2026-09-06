@@ -20,6 +20,7 @@ from value_investor.library_ingest_dispatch import (
     next_parallel_sprint_queue_market,
     parallel_sprint_stream_for_market,
     replace_parallel_sprint_market,
+    sprint_ingest_complete,
 )
 from value_investor.library_ingest_escalation import (
     is_ftse_equivalent_market,
@@ -234,8 +235,9 @@ def maybe_advance_parallel_sprint_on_parity(
     health: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """
-    When a parallel sprint market reaches filing parity, record maintenance eligibility
-    and promote the next ``market_queue`` market into the same stream slot.
+    When a parallel sprint market reaches filing parity **or** leftover thin/IWB
+    names are parked as exhausted, record maintenance eligibility only on true
+    parity and promote the next ``market_queue`` market into the same stream slot.
     """
     library_root = Path(library_root)
     policy = load_policy(policy_path)
@@ -244,7 +246,7 @@ def maybe_advance_parallel_sprint_on_parity(
         return {"skipped": True, "reason": "not_parallel_sprint_market", "market_id": market_id}
 
     health = health or snapshot_library_buy_tier_filing_health(market_id, library_root=library_root)
-    if not ingest_parity_met(health):
+    if not sprint_ingest_complete(health):
         return {"skipped": True, "reason": "parity_not_met", "market_id": market_id}
 
     if not _parallel_sprint_advance_enabled(policy):
@@ -254,12 +256,21 @@ def maybe_advance_parallel_sprint_on_parity(
             "market_id": market_id,
         }
 
-    policy, parity_event = _record_parallel_parity_for_maintenance(
-        policy,
-        market_id,
-        library_root=library_root,
-        health=health,
-    )
+    if ingest_parity_met(health):
+        policy, parity_event = _record_parallel_parity_for_maintenance(
+            policy,
+            market_id,
+            library_root=library_root,
+            health=health,
+        )
+    else:
+        parity_event = {
+            "recorded": False,
+            "reason": "ingest_exhausted_leftover_gaps",
+            "market_id": market_id,
+            "ingest_exhausted": True,
+            "parked_tickers": list(health.get("parked_tickers") or []),
+        }
     nxt = next_parallel_sprint_queue_market(
         policy,
         library_root=library_root,
@@ -326,7 +337,7 @@ def reconcile_parallel_sprint_queues(
                 market_id,
                 library_root=library_root,
             )
-            if not ingest_parity_met(health):
+            if not sprint_ingest_complete(health):
                 continue
             event = maybe_advance_parallel_sprint_on_parity(
                 market_id=market_id,

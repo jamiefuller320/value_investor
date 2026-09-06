@@ -94,6 +94,12 @@ def build_market_reports_bundle(
     if documents:
         reports = apply_research_overlay(reports, documents)
 
+    from value_investor.library_ingest_exhaustion import learning_pool_excluded_tickers
+
+    excluded = learning_pool_excluded_tickers(market_id, library_root=library_root)
+    if excluded:
+        reports = [row for row in reports if row.ticker not in excluded]
+
     signal_counts: dict[str, int] = {}
     if not result.signals.empty and "signal" in result.signals.columns:
         for key, value in result.signals["signal"].value_counts().to_dict().items():

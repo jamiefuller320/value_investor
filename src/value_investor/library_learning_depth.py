@@ -13,7 +13,7 @@ from typing import Any
 
 from value_investor.backtest import load_run_snapshots
 from value_investor.data_library import DEFAULT_LIBRARY_ROOT
-from value_investor.library_ingest_dispatch import ingest_parity_met
+from value_investor.library_ingest_dispatch import ingest_parity_met, sprint_ingest_complete
 from value_investor.library_ingest_escalation import (
     DEFAULT_FTSE_EQUIVALENT_MARKETS,
     ftse_equivalent_markets,
@@ -268,14 +268,9 @@ def assess_library_learning_depth(
         library_root=library_root,
         policy=policy,
     )
-    # Learning-depth filing_ready is the FTSE bar (unmeasured/zero/thin/bodies).
-    # ingest_parity_met stays easier for euro_depth (unmeasured+zero_body only).
-    filing_ready = (
-        int(health.get("unmeasured_buy_tier") or 0) == 0
-        and int(health.get("zero_body_buy_tier") or 0) == 0
-        and int(health.get("thin_body_buy_tier") or 0) == 0
-        and int(health.get("indexed_without_body") or 0) == 0
-    )
+    # Learning-depth filing_ready treats parked leftover thin/IWB as out of pool.
+    # True FTSE maintenance parity (all four raw counts zero) stays on ingest_parity_met.
+    filing_ready = sprint_ingest_complete(health)
 
     screen = assess_screen_archive_span(library_root, market_id, now=now)
     trajectory = _assess_trajectory(
@@ -311,10 +306,16 @@ def assess_library_learning_depth(
                     "unmeasured_tickers",
                     "zero_body_tickers",
                     "thin_body_tickers",
+                    "indexed_without_body_tickers",
+                    "parked_tickers",
+                    "ingest_exhausted",
+                    "effective_thin_body_buy_tier",
+                    "effective_indexed_without_body",
                 )
             },
             "filing_ready": filing_ready,
             "ingest_parity_met": ingest_parity_met(health),
+            "ingest_sprint_complete": sprint_ingest_complete(health),
         },
         "screen": screen,
         "trajectory": trajectory,

@@ -30,6 +30,7 @@ PARALLEL_SPRINT_POLICY_KEYS: dict[int, str] = {
 
 MODE_SPRINT = "sprint"
 MODE_MAINTENANCE = "maintenance"
+MODE_EXHAUSTED = "exhausted"
 # Deprecated alias — parity met maps to maintenance (daily scan+deepen), not zero ingest.
 MODE_IDLE = MODE_MAINTENANCE
 
@@ -61,6 +62,18 @@ MAINTENANCE_CONFIG: dict[str, Any] = {
     "cron_maintenance": True,
 }
 
+# Leftover thin/IWB parked — stop fruitless sprints; do not start FTSE-volume maintenance.
+EXHAUSTED_CONFIG: dict[str, Any] = {
+    "max_daily_successes": 0,
+    "max_targets": 0,
+    "cron_morning": False,
+    "cron_afternoon": False,
+    "cron_midafternoon": False,
+    "cron_evening": False,
+    "cron_ladder_weekday": True,
+    "cron_maintenance": False,
+}
+
 EURO_INGEST_CRON_TITLES = {
     # Peak slots: Mon–Sat (skip Sunday quiet-bundle morning). Off-peak: daily.
     "morning": "Euro ingest loop (Mon-Sat morning)",
@@ -81,6 +94,8 @@ def ingest_parity_met(health: dict[str, Any]) -> bool:
     Every library market uses the same gate: unmeasured, zero-body, thin-body,
     and ``indexed_without_body`` must all be zero. ``ftse_equivalent`` only
     changes *measurement* (canonical-only coverage), not the quality bar.
+    Parked leftover thin/IWB names do **not** count as parity — they stop
+    sprint via ``sprint_ingest_complete`` without opening maintenance.
     """
     if library_ingest_filing_gaps(health) != 0:
         return False
@@ -88,6 +103,13 @@ def ingest_parity_met(health: dict[str, Any]) -> bool:
         int(health.get("thin_body_buy_tier") or 0) == 0
         and int(health.get("indexed_without_body") or 0) == 0
     )
+
+
+def sprint_ingest_complete(health: dict[str, Any]) -> bool:
+    """True when automated sprint should stop (raw parity or leftover gaps parked)."""
+    if ingest_parity_met(health):
+        return True
+    return bool(health.get("ingest_exhausted"))
 
 
 def should_run_parallel_sprint_ingest(
@@ -103,7 +125,7 @@ def should_run_parallel_sprint_ingest(
         parallel_stream=parallel_stream,
     ):
         return False
-    return not ingest_parity_met(health)
+    return not sprint_ingest_complete(health)
 
 
 def evaluate_library_ingest_dispatch(
@@ -118,6 +140,8 @@ def evaluate_library_ingest_dispatch(
 
     Sprint (high tempo) while FTSE-standard filing gaps remain; maintenance once
     unmeasured, zero-body, thin-body, and ``indexed_without_body`` are all zero.
+    When leftover thin/IWB names are parked as exhausted, sprint stops without
+    opening maintenance so the effort cascade can move on.
     Phase 3 readiness is informational only — ladder/shard crons continue
     separately during maintenance.
     """
@@ -135,6 +159,8 @@ def evaluate_library_ingest_dispatch(
     )
     gaps = library_ingest_filing_gaps(health)
     parity = ingest_parity_met(health)
+    exhausted = bool(health.get("ingest_exhausted")) and not parity
+    parked = [str(t).strip() for t in (health.get("parked_tickers") or []) if str(t).strip()]
 
     if parity:
         mode = MODE_MAINTENANCE
@@ -142,6 +168,15 @@ def evaluate_library_ingest_dispatch(
             "Ingest parity met — focus on daily maintenance; Phase 3 ladder continues separately"
         )
         config = MAINTENANCE_CONFIG
+    elif exhausted:
+        mode = MODE_EXHAUSTED
+        sample = ", ".join(parked[:8]) if parked else "leftover thin/IWB"
+        reason = (
+            "Ingest avenues exhausted — parked "
+            f"{len(parked)} leftover thin/IWB name(s) ({sample}); "
+            "sprint stops so the cascade can move on"
+        )
+        config = EXHAUSTED_CONFIG
     else:
         mode = MODE_SPRINT
         reason = (
@@ -159,6 +194,9 @@ def evaluate_library_ingest_dispatch(
         "mode": mode,
         "reason": reason,
         "ingest_parity_met": parity,
+        "ingest_exhausted": exhausted,
+        "ingest_sprint_complete": sprint_ingest_complete(health),
+        "parked_tickers": parked,
         "phase3_ready": bool(phase.get("phase3_ready")),
         "phase_blockers": list(phase.get("blockers") or []),
         "filing_health": health,
@@ -229,7 +267,7 @@ def enrich_library_ingest_dispatch(
     evaluation["market_queue"] = list(policy.get("market_queue") or [])
     evaluation["ingest_cascade"] = evaluate_ingest_cascade(
         policy,
-        head_at_parity=bool(evaluation.get("ingest_parity_met")),
+        head_at_parity=bool(evaluation.get("ingest_sprint_complete")),
     ).to_dict()
     evaluation.update(
         _scheduler_stream_markets(evaluation, policy=policy, library_root=library_root)
@@ -266,7 +304,7 @@ def _scheduler_stream_markets(
         health = snapshot_library_buy_tier_filing_health(
             name, library_root=library_root, policy=policy
         )
-        if not ingest_parity_met(health):
+        if not sprint_ingest_complete(health):
             needing.append(name)
             seen.add(name)
     attached: dict[str, list[str]] = {}
@@ -370,8 +408,8 @@ def next_parallel_sprint_queue_market(
     """
     Next ``market_queue`` market that still needs sprint deepen.
 
-    Skips focus, markets already in a parallel stream (except ``vacating``), and
-    markets already at filing parity.
+    Skips focus, markets already in a parallel stream (except ``vacating``),
+    markets already at filing parity, and markets whose leftover gaps are parked.
     """
     library_root = Path(library_root)
     focus = str(policy.get("focus_market") or "").strip()
@@ -388,7 +426,7 @@ def next_parallel_sprint_queue_market(
             library_root=library_root,
             policy=policy,
         )
-        if ingest_parity_met(health):
+        if sprint_ingest_complete(health):
             continue
         return market_id
     return None
@@ -434,7 +472,7 @@ def list_library_ingest_sprint_markets(
             library_root=library_root,
             policy=policy,
         )
-        if not ingest_parity_met(health):
+        if not sprint_ingest_complete(health):
             markets.append(focus)
     for parallel_stream in sorted(PARALLEL_SPRINT_POLICY_KEYS):
         for market_id in list_library_ingest_parallel_sprint_markets(
@@ -448,7 +486,7 @@ def list_library_ingest_sprint_markets(
                 library_root=library_root,
                 policy=policy,
             )
-            if not ingest_parity_met(health):
+            if not sprint_ingest_complete(health):
                 markets.append(market_id)
     return markets
 
@@ -550,7 +588,9 @@ __all__ = [
     "FTSE_MAINTENANCE_MAX_DAILY_SUCCESSES",
     "FTSE_MAINTENANCE_MAX_RUNTIME_SECONDS",
     "FTSE_MAINTENANCE_MAX_TARGETS",
+    "EXHAUSTED_CONFIG",
     "MAINTENANCE_CONFIG",
+    "MODE_EXHAUSTED",
     "MODE_IDLE",
     "MODE_MAINTENANCE",
     "MODE_SPRINT",
@@ -572,5 +612,6 @@ __all__ = [
     "refresh_euro_ingest_dispatch",
     "should_run_parallel_sprint_ingest",
     "snapshot_library_buy_tier_filing_health",
+    "sprint_ingest_complete",
     "write_euro_ingest_dispatch",
 ]
