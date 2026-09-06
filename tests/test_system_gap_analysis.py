@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 
 from value_investor.system_gap_analysis import (
@@ -174,6 +175,51 @@ def test_snapshot_flags_persist_hole_and_stale_learning_clock(tmp_path: Path):
     persist = snapshot["layers"]["persist"]
     assert persist["persist_hole"] is True
     assert "learning_tracks_entry_dca.json" in persist["in_output_not_committed"]
+
+
+def test_observe_clock_uses_dated_archives_not_stale_learning_depth(tmp_path: Path):
+    data = tmp_path / "data"
+    library = tmp_path / "library"
+    screen = library / "markets" / "sp500" / "screen"
+    screen.mkdir(parents=True)
+    (screen / "signals_20260906_062205.csv").write_text("ticker\nAAPL\n", encoding="utf-8")
+    (screen / "universe_20260906_062205.csv").write_text("ticker\nAAPL\n", encoding="utf-8")
+    _write_json(
+        library / "markets" / "sp500" / "learning_depth.json",
+        {
+            "filing_ready": False,
+            "learning_ready": False,
+            "trajectory_ready": False,
+            "screen": {
+                "stale": True,
+                "unique_days": 7,
+                "last_screen": "2026-08-16",
+                "archive_files": 12,
+            },
+        },
+    )
+    _write_json(
+        library / "policy.json",
+        {
+            "focus_market": "euro_depth",
+            "ftse_equivalent_markets": ["sp500"],
+            "ladder": {"observe_sim_markets": ["euro_depth"]},
+        },
+    )
+    snapshot = build_system_gap_snapshot(
+        data_dir=data,
+        output_dir=tmp_path / "output",
+        library_root=library,
+        policy_path=library / "policy.json",
+        paper_root=data / "paper_automation",
+        run_at=datetime(2026, 9, 6, 12, 0, tzinfo=UTC),
+    )
+    ids = {row["id"] for row in snapshot["flags"]}
+    assert "observe_clock_stale" not in ids
+    clocks = snapshot["layers"]["learning_clock"]
+    sp500 = next(row for row in clocks["markets"] if row["market_id"] == "sp500")
+    assert sp500["screen_stale"] is False
+    assert sp500["last_screen"] == "2026-09-06"
 
 
 def test_slim_and_write_round_trip(tmp_path: Path):

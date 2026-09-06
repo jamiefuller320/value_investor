@@ -35,7 +35,7 @@ depth offline using the same eng escalation semantics as FTSE.
 | `docs/data/library/markets/{market_id}/ingest_health_log.json` | Before/after filing health snapshots |
 | `docs/data/library/markets/{market_id}/ingest_summary.json` | Latest run targets + per-ticker results |
 | `docs/data/library/markets/{market_id}/ingest_exhaustion.json` | Parked leftover thin/IWB names after complete 0-improve sprints |
-| `docs/data/library/markets/{market_id}/learning_depth.json` | FTSE-equivalent filing + trajectory readiness (`ftse-library learning-depth --write`) |
+| `docs/data/library/markets/{market_id}/learning_depth.json` | FTSE-equivalent filing + trajectory readiness (refreshed after observe-sim; or `ftse-library learning-depth --write`) |
 | `docs/data/library/markets/{market_id}/screen/trajectory_*.json` | Library trajectory artifacts (refreshed after observe-sim on FTSE-equivalent markets) |
 | `docs/data/library/euro_ingest_dispatch.json` | Sprint vs maintenance gate (focus market) |
 | `docs/data/library/library_ingest_discovery_scan_summary.json` | Maintenance discovery scan summary |

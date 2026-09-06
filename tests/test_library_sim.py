@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from datetime import UTC, datetime
 from pathlib import Path
 from unittest.mock import patch
@@ -138,6 +139,11 @@ def test_run_library_observe_sim_writes_summary(tmp_path: Path):
     # Default cost is fair market proxy (~0.175% for sp500), not 3% stress.
     assert result.tracks["screen_rules"]["trade_cost_pct"] < 0.01
     assert result.tracks["screen_rules"]["trade_cost_pct"] > 0.001
+    depth_path = root / "markets" / "sp500" / "learning_depth.json"
+    assert depth_path.exists()
+    depth = json.loads(depth_path.read_text(encoding="utf-8"))
+    assert depth["screen"]["last_screen"] == "2026-07-08"
+    assert depth["screen"]["archive_files"] == 2
 
 
 def test_observe_sim_markets_from_policy_respects_toggle(tmp_path: Path):
