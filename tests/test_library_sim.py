@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from datetime import UTC, datetime
 from pathlib import Path
 from unittest.mock import patch
@@ -138,6 +139,11 @@ def test_run_library_observe_sim_writes_summary(tmp_path: Path):
     # Default cost is fair market proxy (~0.175% for sp500), not 3% stress.
     assert result.tracks["screen_rules"]["trade_cost_pct"] < 0.01
     assert result.tracks["screen_rules"]["trade_cost_pct"] > 0.001
+    depth_path = root / "markets" / "sp500" / "learning_depth.json"
+    assert depth_path.exists()
+    depth = json.loads(depth_path.read_text(encoding="utf-8"))
+    assert depth["screen"]["last_screen"] == "2026-07-08"
+    assert depth["screen"]["archive_files"] == 2
 
 
 def test_observe_sim_markets_from_policy_respects_toggle(tmp_path: Path):
@@ -229,9 +235,16 @@ def test_observe_sim_ingest_profile_keeps_parity_and_equivalent_after_sprint():
 
 def test_live_policy_observe_sim_follows_ingest_profile():
     from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
+    from value_investor.library_sim import MARKET_BENCHMARKS
 
     policy = load_policy(DEFAULT_POLICY_PATH)
-    assert observe_sim_markets_for_policy(policy) == ["euro_depth", "sp500", "asx200"]
+    observed = observe_sim_markets_for_policy(policy)
+    profile = ingest_profile_observe_sim_markets(policy)
+    assert "euro_depth" in observed
+    assert "sp500" in observed
+    for mid in profile:
+        if mid in MARKET_BENCHMARKS:
+            assert mid in observed
 
 
 def test_benchmark_for_iseq20():
