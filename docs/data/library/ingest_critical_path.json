@@ -1,81 +1,101 @@
 {
-  "market_id": "sp500",
-  "assessed_at": "2026-09-06T18:41:08.687552+00:00",
+  "market_id": "ftse_smallcap",
+  "assessed_at": "2026-09-06T19:13:03.406724+00:00",
   "unmeasured": [],
-  "zero_body": [],
+  "zero_body": [
+    "FOXT.L",
+    "MER.L",
+    "GMS.L"
+  ],
   "indexed_without_body": [
     {
-      "ticker": "FICO",
+      "ticker": "APTD.L",
+      "indexed_without_body": 23,
+      "filings_total": 73,
+      "filings_with_body": 50
+    },
+    {
+      "ticker": "SBRE.L",
+      "indexed_without_body": 22,
+      "filings_total": 52,
+      "filings_with_body": 30
+    },
+    {
+      "ticker": "DFS.L",
+      "indexed_without_body": 15,
+      "filings_total": 58,
+      "filings_with_body": 43
+    },
+    {
+      "ticker": "FORT.L",
+      "indexed_without_body": 15,
+      "filings_total": 56,
+      "filings_with_body": 41
+    },
+    {
+      "ticker": "ULTP.L",
+      "indexed_without_body": 14,
+      "filings_total": 56,
+      "filings_with_body": 42
+    },
+    {
+      "ticker": "TPT.L",
+      "indexed_without_body": 9,
+      "filings_total": 55,
+      "filings_with_body": 46
+    },
+    {
+      "ticker": "BOOT.L",
+      "indexed_without_body": 8,
+      "filings_total": 58,
+      "filings_with_body": 50
+    },
+    {
+      "ticker": "FOXT.L",
       "indexed_without_body": 5,
-      "filings_total": 19,
-      "filings_with_body": 14
+      "filings_total": 5,
+      "filings_with_body": 0
     },
     {
-      "ticker": "APTV",
-      "indexed_without_body": 2,
-      "filings_total": 20,
-      "filings_with_body": 18
+      "ticker": "GMS.L",
+      "indexed_without_body": 5,
+      "filings_total": 5,
+      "filings_with_body": 0
     },
     {
-      "ticker": "BXP",
-      "indexed_without_body": 2,
-      "filings_total": 71,
-      "filings_with_body": 69
-    },
-    {
-      "ticker": "CRH",
-      "indexed_without_body": 2,
-      "filings_total": 69,
-      "filings_with_body": 67
-    },
-    {
-      "ticker": "INTU",
-      "indexed_without_body": 1,
-      "filings_total": 19,
-      "filings_with_body": 18
-    },
-    {
-      "ticker": "LDOS",
-      "indexed_without_body": 1,
-      "filings_total": 19,
-      "filings_with_body": 18
-    },
-    {
-      "ticker": "LMT",
-      "indexed_without_body": 1,
-      "filings_total": 20,
-      "filings_with_body": 19
-    },
-    {
-      "ticker": "TSN",
-      "indexed_without_body": 1,
-      "filings_total": 21,
-      "filings_with_body": 20
+      "ticker": "MER.L",
+      "indexed_without_body": 5,
+      "filings_total": 5,
+      "filings_with_body": 0
     }
   ],
-  "thin_need_discovery": [],
+  "thin_need_discovery": [
+    "CARD.L"
+  ],
   "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "primary_blocker": "zero_body",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "FICO",
-    "APTV",
-    "BXP",
-    "CRH",
-    "INTU",
-    "LDOS",
-    "LMT",
-    "TSN"
+    "APTD.L",
+    "SBRE.L",
+    "DFS.L",
+    "FORT.L",
+    "ULTP.L",
+    "TPT.L",
+    "BOOT.L",
+    "FOXT.L"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (8 tickers, top: FICO(5), APTV(2), BXP(2), CRH(2), INTU(1))"
+    "Prefer indexed-without-body body refetch (10 tickers, top: APTD.L(23), SBRE.L(22), DFS.L(15), FORT.L(15), ULTP.L(14))",
+    "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
     "unmeasured": 0,
-    "zero_body": 0,
-    "indexed_without_body_tickers": 8,
-    "indexed_without_body_rows": 15,
-    "thin_need_discovery": 0,
+    "zero_body": 3,
+    "indexed_without_body_tickers": 10,
+    "indexed_without_body_rows": 121,
+    "thin_need_discovery": 1,
     "thin_need_bodies": 0
   }
 }
