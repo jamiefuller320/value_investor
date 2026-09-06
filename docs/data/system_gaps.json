@@ -1,0 +1,315 @@
+{
+  "schema_version": 1,
+  "assessed_at": "2026-09-06T10:38:11.813408+00:00",
+  "purpose": "Latent learning-path gaps that healthy ops counters hide. Split produce / persist / publish / apply, and filing parity vs learning clock. Existence is not quality; unused budget is not demand met.",
+  "probe_questions": [
+    "Is the learning consumer seeing the research we already paid for?",
+    "Would a new in-scope market inherit the same produce/persist/publish/apply miss?",
+    "Which green counters (budget remaining, executed=0, memo-file coverage) would still be green if memo quality were zero?",
+    "Does file existence mean freshness, or is rememo blocked by dedupe?",
+    "Are observe-sim / paper clocks accumulating on markets that look ingest-healthy?"
+  ],
+  "flag_count": 1,
+  "high_flag_count": 0,
+  "flags": [
+    {
+      "id": "observe_clock_stale",
+      "severity": "medium",
+      "layer": "learning_clock",
+      "title": "Observe / screen-lite clock is stale on an in-scope market",
+      "summary": "sp500 have a stale screen archive. Ingest health can stay green while the learning series stops.",
+      "evidence": {
+        "markets": [
+          "sp500"
+        ]
+      }
+    }
+  ],
+  "layers": {
+    "produce": {
+      "ladder_research": {
+        "run_at": "2026-09-06T06:22:05.695194+00:00",
+        "focus_market": "euro_depth",
+        "allow_research": true,
+        "executed": 1,
+        "created": 1,
+        "updated": 0,
+        "skipped": false,
+        "budget_flag": "enforced",
+        "constraining": false,
+        "remaining_usd_before": 51.6,
+        "already_researched_count": 434,
+        "dedupe_skipped_count": 45,
+        "dedupe_note": "Exact Yahoo ticker match; earlier queue market wins. Fresh memos are skipped; thin / body-lag memos rememo after ingest.",
+        "skipped_sample": [
+          {
+            "market": "euro_depth",
+            "ticker": "ERIC-B.ST",
+            "reason": "fresh_memo"
+          },
+          {
+            "market": "euro_depth",
+            "ticker": "DG.PA",
+            "reason": "fresh_memo"
+          },
+          {
+            "market": "euro_depth",
+            "ticker": "AD.AS",
+            "reason": "fresh_memo"
+          },
+          {
+            "market": "euro_depth",
+            "ticker": "STR.VI",
+            "reason": "fresh_memo"
+          },
+          {
+            "market": "euro_depth",
+            "ticker": "SGO.PA",
+            "reason": "fresh_memo"
+          },
+          {
+            "market": "euro_depth",
+            "ticker": "SHELL.AS",
+            "reason": "fresh_memo"
+          },
+          {
+            "market": "euro_depth",
+            "ticker": "SAN.PA",
+            "reason": "fresh_memo"
+          },
+          {
+            "market": "euro_depth",
+            "ticker": "PHIA.AS",
+            "reason": "fresh_memo"
+          }
+        ]
+      },
+      "weekly_ops": {
+        "remaining_weekly_ops_usd": 44.0,
+        "flag": "enforced",
+        "constraining": false,
+        "estimated_spend_weekly_ops_usd_this_week": 36.0
+      },
+      "live_committed": {
+        "committed_count": 74,
+        "committed_with_verdict": 74,
+        "thin_or_zero_body": 0,
+        "mode_initial": 74
+      },
+      "focus_library_research": {
+        "market_id": "euro_depth",
+        "buy_tier_count": 47,
+        "memo_count": 18,
+        "sampled": 18,
+        "thin_or_zero_body": 17,
+        "missing_verdict": 0,
+        "mode_initial": 18,
+        "samples": [
+          {
+            "ticker": "AED.BR",
+            "name": "Aedifica NV/SA",
+            "verdict": "accumulate",
+            "mode": "initial",
+            "grade": "adequate",
+            "filings_with_body": 0
+          },
+          {
+            "ticker": "AGS.BR",
+            "name": "ageas SA/NV",
+            "verdict": "accumulate",
+            "mode": "initial",
+            "grade": "adequate",
+            "filings_with_body": 0
+          },
+          {
+            "ticker": "ANDR.VI",
+            "name": "Andritz AG",
+            "verdict": "accumulate",
+            "mode": "initial",
+            "grade": "adequate",
+            "filings_with_body": 0
+          },
+          {
+            "ticker": "C5H.IR",
+            "name": "Cairn Homes plc",
+            "verdict": "accumulate",
+            "mode": "initial",
+            "grade": "strong",
+            "filings_with_body": 49
+          },
+          {
+            "ticker": "DOC.VI",
+            "name": "DO & CO Aktiengesellschaft",
+            "verdict": "accumulate",
+            "mode": "initial",
+            "grade": "adequate",
+            "filings_with_body": 0
+          },
+          {
+            "ticker": "EL.PA",
+            "name": "EssilorLuxottica Société anonyme",
+            "verdict": "accumulate",
+            "mode": "initial",
+            "grade": "adequate",
+            "filings_with_body": 0
+          },
+          {
+            "ticker": "HEIA.AS",
+            "name": "Heineken N.V.",
+            "verdict": "accumulate",
+            "mode": "initial",
+            "grade": "adequate",
+            "filings_with_body": 0
+          },
+          {
+            "ticker": "IFX.DE",
+            "name": "Infineon Technologies AG",
+            "verdict": "accumulate",
+            "mode": "initial",
+            "grade": "adequate",
+            "filings_with_body": 0
+          }
+        ]
+      },
+      "rememo_backlog_count": 0,
+      "rememo_action": "none"
+    },
+    "persist": {
+      "committed_overlay_files": [
+        "ai_judgment/entry_dca_overlay.json",
+        "ai_judgment/entry_dca_overlay_review.json",
+        "ai_judgment/exit_timing_cohorts.json",
+        "ai_judgment/exit_timing_cohorts_review.json",
+        "ai_judgment/hypothesis_integrity.json",
+        "ai_judgment/hypothesis_outcome_link.json",
+        "ai_judgment/hypothesis_outcome_link_review.json",
+        "ai_judgment_calibrated/entry_dca_overlay.json",
+        "ai_judgment_calibrated/entry_dca_overlay_review.json",
+        "ai_judgment_calibrated/exit_timing_cohorts.json",
+        "ai_judgment_calibrated/exit_timing_cohorts_review.json",
+        "ai_judgment_calibrated/hypothesis_integrity.json",
+        "ai_judgment_calibrated/hypothesis_outcome_link.json",
+        "ai_judgment_calibrated/hypothesis_outcome_link_review.json",
+        "ai_judgment_calibrated_r2/entry_dca_overlay.json",
+        "ai_judgment_calibrated_r2/entry_dca_overlay_review.json",
+        "ai_judgment_calibrated_r2/exit_timing_cohorts.json",
+        "ai_judgment_calibrated_r2/exit_timing_cohorts_review.json",
+        "ai_judgment_calibrated_r2/hypothesis_integrity.json",
+        "ai_judgment_calibrated_r2/hypothesis_outcome_link.json",
+        "ai_judgment_calibrated_r2/hypothesis_outcome_link_review.json",
+        "ai_judgment_calibrated_r3/entry_dca_overlay.json",
+        "ai_judgment_calibrated_r3/entry_dca_overlay_review.json",
+        "ai_judgment_calibrated_r3/exit_timing_cohorts.json",
+        "ai_judgment_calibrated_r3/exit_timing_cohorts_review.json",
+        "ai_judgment_calibrated_r3/hypothesis_integrity.json",
+        "ai_judgment_calibrated_r3/hypothesis_outcome_link.json",
+        "ai_judgment_calibrated_r3/hypothesis_outcome_link_review.json",
+        "ai_judgment_exclusion_u4/entry_dca_overlay.json",
+        "ai_judgment_exclusion_u4/entry_dca_overlay_review.json",
+        "ai_judgment_exclusion_u4/exit_timing_cohorts.json",
+        "ai_judgment_exclusion_u4/exit_timing_cohorts_review.json",
+        "ai_judgment_exclusion_u4/hypothesis_integrity.json",
+        "ai_judgment_exclusion_u4/hypothesis_outcome_link.json",
+        "ai_judgment_exclusion_u4/hypothesis_outcome_link_review.json",
+        "ai_judgment_fair/entry_dca_overlay.json",
+        "ai_judgment_fair/entry_dca_overlay_review.json",
+        "ai_judgment_fair/exit_timing_cohorts.json",
+        "ai_judgment_fair/exit_timing_cohorts_review.json",
+        "ai_judgment_fair/hypothesis_integrity.json",
+        "ai_judgment_fair/hypothesis_outcome_link.json",
+        "ai_judgment_fair/hypothesis_outcome_link_review.json",
+        "entry_dca_overlay.json",
+        "entry_dca_overlay_review.json",
+        "exit_timing_cohorts.json",
+        "exit_timing_cohorts_review.json",
+        "graduated_allocation/entry_dca_overlay.json",
+        "graduated_allocation/entry_dca_overlay_review.json",
+        "graduated_allocation/exit_timing_cohorts.json",
+        "graduated_allocation/exit_timing_cohorts_review.json",
+        "graduated_allocation/hypothesis_integrity.json",
+        "graduated_allocation/hypothesis_outcome_link.json",
+        "graduated_allocation/hypothesis_outcome_link_review.json",
+        "hypothesis_integrity.json",
+        "hypothesis_outcome_link.json",
+        "hypothesis_outcome_link_review.json",
+        "learning_tracks_entry_dca.json",
+        "learning_tracks_exit_timing.json",
+        "learning_tracks_hypothesis_integrity.json",
+        "learning_tracks_hypothesis_outcomes.json",
+        "momentum_grace/entry_dca_overlay.json",
+        "momentum_grace/entry_dca_overlay_review.json",
+        "momentum_grace/exit_timing_cohorts.json",
+        "momentum_grace/exit_timing_cohorts_review.json",
+        "momentum_grace/hypothesis_integrity.json",
+        "momentum_grace/hypothesis_outcome_link.json",
+        "momentum_grace/hypothesis_outcome_link_review.json",
+        "rules_fair/entry_dca_overlay.json",
+        "rules_fair/entry_dca_overlay_review.json",
+        "rules_fair/exit_timing_cohorts.json",
+        "rules_fair/exit_timing_cohorts_review.json",
+        "rules_fair/hypothesis_integrity.json",
+        "rules_fair/hypothesis_outcome_link.json",
+        "rules_fair/hypothesis_outcome_link_review.json",
+        "technical/entry_dca_overlay.json",
+        "technical/entry_dca_overlay_review.json",
+        "technical/exit_timing_cohorts.json",
+        "technical/exit_timing_cohorts_review.json",
+        "technical/hypothesis_integrity.json",
+        "technical/hypothesis_outcome_link.json",
+        "technical/hypothesis_outcome_link_review.json"
+      ],
+      "output_overlay_files": [],
+      "missing_committed_root_overlays": [],
+      "in_output_not_committed": [],
+      "persist_hole": false
+    },
+    "publish": {
+      "research_index_count": 74,
+      "index_missing_committed_verdicts": 0,
+      "committed_not_indexed_sample": []
+    },
+    "apply": {
+      "buy_tier_count": 61,
+      "buy_tier_wired_count": 61,
+      "strong_buy_count": 20,
+      "strong_buy_wired_count": 20,
+      "wired_missing_committed_verdicts": 0,
+      "buy_tier_unwired_with_committed_verdict": [],
+      "strong_buy_unwired_with_committed_verdict": []
+    },
+    "learning_clock": {
+      "markets": [
+        {
+          "market_id": "euro_depth",
+          "filing_ready": null,
+          "learning_ready": null,
+          "trajectory_ready": null,
+          "screen_stale": null,
+          "unique_days": null,
+          "last_screen": null,
+          "observe_snapshots": null
+        },
+        {
+          "market_id": "sp500",
+          "filing_ready": false,
+          "learning_ready": false,
+          "trajectory_ready": false,
+          "screen_stale": true,
+          "unique_days": 7,
+          "last_screen": "2026-08-16",
+          "observe_snapshots": 12
+        }
+      ],
+      "filing_ready_learning_stale": [],
+      "observe_clock_stale": [
+        "sp500"
+      ]
+    }
+  },
+  "healthy_counter_distrust": {
+    "budget_remaining_is_not_demand_met": true,
+    "executed_zero_can_mean_dedupe_not_coverage": true,
+    "memo_file_existence_is_not_quality_or_freshness": true,
+    "filing_parity_is_not_learning_ready": true
+  }
+}
