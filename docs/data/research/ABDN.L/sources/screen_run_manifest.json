@@ -1,48 +1,65 @@
 {
   "ticker": "ABDN.L",
-  "run_at": "2026-09-06T06:47:53.947778+00:00",
-  "attached_at": "2026-09-06T07:08:21.614267+00:00",
-  "history_run_path": "docs/data/history/run_20260906_064753.json.gz",
-  "history_models_path": "docs/data/history/models_20260906_064753.json.gz",
+  "run_at": "2026-08-30T06:43:33.462150+00:00",
+  "attached_at": "2026-09-02T07:41:50.199511+00:00",
+  "history_run_path": "docs/data/history/run_20260830_064333.json.gz",
+  "history_models_path": "docs/data/history/models_20260830_064333.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "buy": 29,
-      "strong_buy": 9,
-      "hold": 167,
-      "avoid": 43
+      "strong_buy": 17,
+      "buy": 44,
+      "hold": 143,
+      "avoid": 43,
+      "insufficient_data": 1
     },
-    "universe": "ftse350"
+    "strong_buy_count": 17,
+    "universe": "ftse350",
+    "universe_label": "FTSE 350",
+    "excluded_investment_vehicles": 102,
+    "include_investment_trusts": false,
+    "screen_trusts": true,
+    "trust_count": 102,
+    "trust_signal_counts": {
+      "strong_buy": 17,
+      "buy": 24,
+      "hold": 43,
+      "avoid": 18
+    },
+    "broker_overlay": "trading212",
+    "t212_overlay": true,
+    "ii_overlay": true,
+    "unavailable_watch_count": 0
   },
   "ticker_signal": {
     "ticker": "ABDN.L",
     "signal": "buy",
-    "conviction_score": 0.38947,
+    "conviction_score": 0.24394999999999997,
     "data_quality_score": 0.9,
     "name": "Aberdeen Group Plc",
     "sector": "Financial Services",
-    "timing_signal": "accumulate",
-    "timing_score": 0.75,
-    "action_note": "Buy — favourable entry timing",
-    "models_passed": 11.0,
-    "weighted_model_score": 0.6960636363636364,
+    "timing_signal": "neutral",
+    "timing_score": 0.625,
+    "action_note": "Buy — neutral timing",
+    "models_passed": 10.0,
+    "weighted_model_score": 0.6711681818181819,
     "research_verdict": null,
     "adjusted_signal": "hold",
     "research_as_of": null,
-    "signal_trend": "stable",
-    "weeks_at_signal": 13,
+    "signal_trend": "new",
+    "weeks_at_signal": 1,
     "passed_families": "cheapness,dividend,garp,risk",
-    "price_vs_sma200_pct": 0.12721840864758835,
+    "price_vs_sma200_pct": 0.1376145081109221,
     "core_order": "limit",
-    "core_limit": 247.39,
-    "core_allocation_pct": 0.65,
-    "tactical_limit": 221.78,
-    "tactical_allocation_pct": 0.35,
-    "tactical_stop_loss": 215.13,
-    "tactical_take_profit": 262.5,
-    "trade_plan_summary": "Trade plan: core 65% limit £247.39; tactical 35% limit £221.78; tactical stop £215.13, target £262.50.",
-    "atr_14": 5.4735,
-    "volume_ratio_20": 0.8475
+    "core_limit": 246.15,
+    "core_allocation_pct": 0.6,
+    "tactical_limit": 220.64,
+    "tactical_allocation_pct": 0.4,
+    "tactical_stop_loss": 214.02,
+    "tactical_take_profit": 263.55,
+    "trade_plan_summary": "Trade plan: core 60% limit £246.15; tactical 40% limit £220.64; tactical stop £214.02, target £263.55.",
+    "atr_14": 5.0478,
+    "volume_ratio_20": 1.2413
   },
   "ticker_models": [
     {
@@ -79,31 +96,31 @@
       "ticker": "ABDN.L",
       "model_id": "earnings_yield",
       "passed": true,
-      "score": 0.7
+      "score": 0.6939
     },
     {
       "ticker": "ABDN.L",
       "model_id": "fcf_yield",
       "passed": true,
-      "score": 0.9068
+      "score": 0.8746
     },
     {
       "ticker": "ABDN.L",
       "model_id": "low_pe_high_yield",
-      "passed": true,
-      "score": 1.0
+      "passed": false,
+      "score": 0.5
     },
     {
       "ticker": "ABDN.L",
       "model_id": "lynch_peg",
       "passed": true,
-      "score": 0.7203
+      "score": 0.7178
     },
     {
       "ticker": "ABDN.L",
       "model_id": "neff_pegy",
       "passed": true,
-      "score": 0.9811
+      "score": 0.9808
     },
     {
       "ticker": "ABDN.L",
@@ -127,7 +144,7 @@
       "ticker": "ABDN.L",
       "model_id": "high_dividend",
       "passed": true,
-      "score": 0.8981
+      "score": 0.893
     },
     {
       "ticker": "ABDN.L",
@@ -151,7 +168,7 @@
       "ticker": "ABDN.L",
       "model_id": "dreman_contrarian",
       "passed": true,
-      "score": 0.8572
+      "score": 0.8602
     },
     {
       "ticker": "ABDN.L",
@@ -163,7 +180,7 @@
       "ticker": "ABDN.L",
       "model_id": "composite_value",
       "passed": false,
-      "score": 0.6332
+      "score": 0.6287
     },
     {
       "ticker": "ABDN.L",
@@ -178,6 +195,6 @@
       "score": 0.6
     }
   ],
-  "models_passed": 11,
+  "models_passed": 10,
   "models_total": 22
 }
