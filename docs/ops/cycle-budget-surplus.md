@@ -86,7 +86,7 @@ Do **not** spend leftover usage-page % on offline **memo density** (hold/sell
 names, `research_all_graduated`, a lower `rememo_body_lag_threshold`, or a
 higher `research_hard_cap`). Included plan credit does not fund filing ingest;
 euro_depth buy-tier is already fully memo'd and Layer C rememos wait for body
-lag. See N94. Prefer P1 FTSE overlay/engineering, or this weekly_ops bump.
+lag. See N96. Prefer P1 FTSE overlay/engineering, or this weekly_ops bump.
 
 ## Artifacts
 

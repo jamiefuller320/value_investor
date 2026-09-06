@@ -1,118 +1,133 @@
 # Genuit Group plc (GEN.L) — Research memo
 
-_Version 1 · Updated 2026-09-02T08:52:26.866005+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-06T07:32:11.320221+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Genuit Group plc is the UK’s largest supplier of sustainable water and climate products for the built environment (Polypipe, Nuaire, Adey and related brands), operating through Water and Climate divisions after a 2026 simplification. The quantitative screen flags a **strong buy** on cheapness (P/B ~1.1, FCF yield ~9%), dividend (4.6% yield, progressive policy), GARP and financial health, with leverage at ~37% D/E — yet conviction on the signal is only 38% given the name is newly flagged and trading below its 200-day moving average.
-
-The investment case rests on a cash-generative, below-book industrial compounder with regulatory tailwinds (AMP8 water capex, Future Homes Standard, ventilation regulation) trading at a cyclical trough in UK construction, offset by bolt-on M&A (Monodraught, Davidson Holdings in H2 2025) and a lean operating model (Genuit Business System). FY2025 revenue reached £602.1m (+7.3%; +3.2% like-for-like) with underlying operating profit of £94.4m and a 12.9p dividend (+3.2%).
-
-The central debate is whether near-book valuation already prices subdued UK housing/RMI volumes, Middle East-driven polymer inflation and margin compression in Water Management Solutions, or whether structural growth drivers and 2027 cost savings (~£4m+) will re-rate earnings. H1 2026 confirmed challenging conditions (LFL revenue −4.8%) but management maintained full-year expectations, citing pricing actions and second-half margin recovery.
+Genuit Group plc is the UK’s largest supplier of sustainable water and climate products for the built environment (Polypipe, Nuaire, Adey and related brands). The quantitative screen flags a **Strong Buy** on cheapness (P/B ~1.0, FCF yield ~11%), dividend (4.8% yield, progressive policy), GARP, and financial health, with leverage at 37% D/E and filing-aligned FCF of £72.9m in FY2025. The investment case rests on a cash-generative, regulation-backed franchise trading near book value after a prolonged construction downturn, with bolt-on M&A (Monodraught, Davidson Holdings) adding scale. The central debate is whether low ROE (~5%), cyclical volume weakness (H1 2026 LFL revenue −4.8%), and goodwill-heavy intangibles (£673m) are adequately priced, or whether AMP8, Future Homes Standard and margin recovery from pricing/GBS will re-rate the stock. Near-term earnings are pressured by polymer inflation, wet weather and Middle East-related cost shocks, though management maintained full-year guidance at the H1 results.
 
 ---
 
 ## INVESTMENT THESIS
-**Why the screen likes it.** Genuit passes nine of 22 quantitative models across all four value families — cheapness, dividend, GARP and risk — with a composite score of 80% (sector-relative 70%) and full data quality (20/20 metrics). Key pass drivers: Schloss low P/B (1.06×), FCF yield (~9.1%), high dividend yield (4.6%), dividend growth, Acquirer’s Multiple, composite value, earnings quality and financial health. Net debt/EBITDA of 1.5× at FY2025 year-end (1.6× at H1 2026) sits comfortably inside covenant limits (<3.0×) and below the screen’s leverage threshold.
+**Why the screen’s Strong Buy aligns with a value lens**
 
-**Why a value investor might agree.** Genuit exhibits several classic deep-value plus quality characteristics: trading near tangible book (Yahoo reports negative tangible book of −£10.1m at FY2025, reflecting acquisition intangibles, but statutory equity of £662.9m supports P/B ~1.1× on market cap); strong cash conversion (102% pre-capex in FY2025; management guiding >90% for FY2026); progressive dividend with ~2× cover target; no defined-benefit pension liability (defined contribution only); and a dominant UK market position in drainage, ventilation and water-management niches with high recycled-polymer content (~50% of inputs).
+The screen passes nine models spanning **Schloss Low P/B**, **FCF Yield**, **Neff PEGY**, **High Dividend Yield**, **Dividend Growth**, **Acquirer’s Multiple**, **Composite Value**, **Earnings Quality**, and **Financial Health** — a profile typical of a cyclical industrial at a trough multiple rather than a quality compounder. At P/B ~1.02 and D/E ~37%, the balance sheet supports the “risk” family pass; filing-aligned FCF of **£72.9m** (FY2025) implies a double-digit FCF yield on current market cap, with underlying operating cash conversion at **102%** pre-capex (Final Results).
 
-**Business quality overlay.** Management has outgrown the market through FY2025 (+3.2% organic revenue vs. soft construction) via share gains (e.g. competitor exit in drainage, Barratt Redrow), ventilation growth (~10%) and disciplined bolt-ons. The Genuit Business System (75+ kaizen events in 2025; >800 employees engaged in H1 2026) supports productivity and working-capital discipline. Sustainability credentials (Green Economy Mark; >75% green revenues) align with long-cycle regulatory demand rather than short-cycle new-build alone.
+**Business quality (mixed but defensible)**
 
-**Caveat.** Screen conviction is low (38%) and timing is neutral — the stock sits slightly below its 200-day MA with weakening MACD momentum. Near-term earnings are not accelerating: H1 2026 underlying EPS fell 9.5% to 10.5p, and the May 2026 trading update guided FY2026 underlying operating profit towards the lower end of analyst consensus (£94.7m–£105.5m). The value case is therefore **cyclical recovery plus structural optionality**, not current earnings momentum.
+Genuit holds #1/#2 positions in UK drainage, ventilation and water-management niches, with **>75% “green” revenues** and structural tailwinds (AMP8 £104bn water cycle, Future Homes Standard, Awaab’s Law ventilation, Warm Homes Plan). FY2025 **like-for-like revenue +3.2%** in a subdued UK construction market demonstrates share gains (e.g. competitor exit in drainage, Barratt Redrow). The **Genuit Business System** (lean/kaizen) and two-division simplification (Water / Climate from 2026) target operational leverage.
+
+**Where the screen and fundamentals diverge**
+
+The screen **fails** Graham Defensive, Buffett Quality, Economic Moat, Magic Formula and Piotroski (6/9) — consistent with **ROE 5.2%**, negative statutory earnings growth (−12%), and thin reported margins. That is not a deep-value net-net; it is a **cyclical, goodwill-intensive** name where value hinges on normalised cash returns and a construction recovery, not on moat-quality metrics. For a value investor, the hook is **asset-backed cash yield + progressive dividend (12.9p FY2025, cover ~2× on underlying EPS)** at a price already below the 200-day MA (screen timing: neutral).
 
 ---
 
 ## FINANCIAL REVIEW
-*Primary source: RNS filing bodies. Yahoo used only for multi-year statutory context where filings lack full history.*
+*Primary source: RNS filing bodies. Yahoo `financials_annual.json` used only where noted for multi-year context.*
 
-**Annual trend (FY2022–FY2025)**
+### FY2025 — Final Results (year ended 31 Dec 2025; published 10 Mar 2026)
 
-| Metric | FY2022 | FY2023 | FY2024 | FY2025 (RNS) |
-|--------|--------|--------|--------|--------------|
-| Revenue | £622.2m* | £586.5m* | £561.3m | **£602.1m** |
-| Underlying operating profit | n/a | n/a | £92.2m | **£94.4m** |
-| Underlying operating margin | n/a | n/a | 16.4% | **15.7%** |
-| Statutory profit before tax | £45.4m* | £48.4m* | £46.3m | **£58.2m** |
-| Underlying basic EPS | n/a | n/a | 24.6p | **26.0p** |
-| Dividend per share | n/a | n/a | 12.5p | **12.9p** |
-| Net debt (incl. IFRS 16 leases) | £143.1m* | £125.9m* | £129.2m | **£208.1m** |
-| Leverage (pro-forma EBITDA) | n/a | n/a | 0.9× | **1.5×** |
+| Metric | FY2025 | FY2024 | Change |
+|--------|--------|--------|--------|
+| Revenue | £602.1m | £561.3m | +7.3% |
+| Like-for-like revenue | +3.2% | — | — |
+| Underlying operating profit | £94.4m | £92.2m | +2.4% |
+| Underlying operating margin | 15.7% | 16.4% | −70 bps |
+| Statutory operating profit | £69.7m | £59.2m | +17.7% |
+| Statutory PBT | £58.2m | £46.3m | +25.7% |
+| Statutory basic EPS | 18.2p | 13.5p | +34.8% |
+| Underlying basic EPS | 26.0p | 24.6p | +5.7% |
+| Dividend per share | 12.9p | 12.5p | +3.2% |
+| Cash from operations (statutory) | £103.1m | £105.1m | −1.2% |
+| Underlying cash conversion (pre-capex) | 102.0% | 107.6% | — |
+| Net debt (incl. IFRS 16 leases) | £208.1m | £129.2m | — |
+| Net debt excl. IFRS 16 | £179.3m | £101.6m | — |
+| Leverage (net debt / pro-forma EBITDA) | 1.5× | 0.9× | +0.6× |
+| Interest cover (covenant basis) | 9.7× | 8.3× | — |
 
-*\*Yahoo `financials_annual.json` — used for years prior to detailed RNS extracts in the filing index.*
+**Trend commentary:** Revenue growth was driven by **Monodraught (£55.6m EV)** and **Davidson Holdings (£49.0m EV)** in H2 2025, plus organic LFL +3.2%. Underlying profit grew modestly; margin compression reflected National Insurance / NLW headwinds and weakness in Water Management Solutions (underlying margin **5.7%**, down from 8.5%). Sustainable Building Solutions remained the profit engine (**24.3%** margin, £59.9m underlying OP). Statutory EPS rose sharply as non-underlying charges fell (£24.7m vs £33.0m pre-tax), including prior-year Adey goodwill impairment (£12.4m) not repeated.
 
-Revenue peaked in 2022 then contracted through 2024 as UK construction softened, before rebounding in 2025 on organic growth (+3.2% LFL) and acquisitions. Underlying profit grew modestly (+2.4%) despite 70bps margin compression, driven by National Insurance/National Living Wage headwinds and weakness in Water Management Solutions (WMS underlying margin 5.7% vs. 8.5% in 2024). Statutory PBT rose 25.7% as non-underlying charges fell (£24.7m vs. £33.0m), including no repeat of the £12.4m Adey goodwill impairment booked in 2024.
+**Balance sheet & cash (filings):** Total assets **£1,101.6m**; equity **£662.9m**; goodwill + intangibles **£673.0m** — tangible book is negative per Yahoo (−£10.1m at Dec 2025), a material screen limitation for asset-based models. RCF **£350m** (to Aug 2028); drawn **£175m** at year-end; liquidity headroom **£219.8m**. Covenants: leverage **1.5×** vs **<3.0×** limit; interest cover **9.7×** vs **>4.0×**.
 
-**FY2025 divisional performance (Final Results, 10 Mar 2026):**
-- **Climate Management Solutions:** revenue £178.9m (+10.7%; +5.9% LFL); underlying margin 13.6% (−130bps). Ventilation strong; underfloor heating soft.
-- **Water Management Solutions:** revenue £169.5m (+5.3%; +0.5% LFL); underlying margin 5.7% (−280bps). H2 margin recovered to 6.7% from 4.6% in H1 after pricing/GBS actions.
-- **Sustainable Building Solutions:** revenue £246.8m (+6.5%; +3.3% LFL); underlying margin 24.3% (+80bps). Best-in-group profitability.
+**Pensions (filings):** No defined benefit schemes; DC pension cost **£9.1m** (FY2025).
 
-Cash generation remained robust: underlying operating cash flow £126.4m pre-capex; conversion 102.0%. Net capital expenditure £29.7m. Two bolt-ons funded via RCF: Monodraught (£55.6m EV, August 2025) and Davidson Holdings (£49.0m EV, September 2025), lifting leverage from 0.9× to 1.5×. Liquidity headroom £219.8m at year-end. Covenants: interest cover 9.7× (requirement >4.0×); leverage 1.5× (requirement <3.0×). Going concern confirmed to at least 31 Dec 2027.
+*Yahoo fallback (historical only):* Revenue trajectory FY2022–FY2025: £622.2m → £586.5m → £561.3m → £602.1m — a dip through 2023–24 before recovery in 2025, consistent with filing narrative of “challenging markets.”
 
-**Interim H1 2026 (Half-year Report, 11 Aug 2026):**
-- Revenue **£307.8m** (+3.4% reported; **−4.8% LFL**).
-- Underlying operating profit **£43.9m** (−1.6%); margin **14.3%** (−70bps).
-- Underlying basic EPS **10.5p** (−9.5%).
-- Statutory operating profit **£26.2m** (−30.1%), reflecting £17.7m non-underlying items (restructuring £4.9m, IT transformation £4.0m, Polydeck disposal loss £1.0m, Adey operational issues £2.3m combined).
-- Leverage **1.6×** pro-forma EBITDA; net debt £190.5m (ex-leases) vs. £179.3m at Dec 2025.
-- Interim dividend maintained at **4.2p**.
-- H1 cash conversion 71.3% (phasing; FY guidance >90%).
-- **Full-year expectations unchanged**; margin recovery expected in H2 from pricing, cost discipline and non-recurrence of Adey issues.
+### H1 2026 — Half-year Report (six months to 30 Jun 2026; published 11 Aug 2026)
 
-**Trading update (22 May 2026, four months to 30 Apr 2026):**
-- Revenue £198.5m (−0.4%; **−8.7% LFL**), impacted by wet weather, Middle East conflict polymer/freight inflation and soft UK sentiment.
-- Double-digit price increases implemented in May 2026.
-- Simplification savings target **£4m–£5m** annualised from 2027 (~60–70bps margin uplift).
-- FY2026 underlying operating profit guided towards **lower end of £94.7m–£105.5m** consensus, assuming conflict resolution and macro stabilisation.
+| Metric | H1 2026 | H1 2025 | Change |
+|--------|---------|---------|--------|
+| Revenue | £307.8m | £297.8m | +3.4% |
+| Like-for-like revenue | −4.8% | — | — |
+| Underlying operating profit | £43.9m | £44.6m | −1.6% |
+| Underlying margin | 14.3% | 15.0% | −70 bps |
+| Statutory operating profit | £26.2m | £37.5m | −30.1% |
+| Underlying basic EPS | 10.5p | 11.6p | −9.5% |
+| Statutory basic EPS | 5.2p | 9.6p | −45.8% |
+| Interim dividend | 4.2p | 4.2p | unchanged |
+| Underlying cash conversion (pre-capex) | 71.3% | 65.1% | +620 bps |
+| Net debt excl. IFRS 16 | £190.5m | £114.2m | — |
+| Leverage | 1.6× | 1.0× | +0.6× |
+| Cash | £24.1m | £34.9m | — |
 
-**Balance sheet and capital allocation.** Goodwill and intangibles total £673.0m against equity of £662.9m at FY2025 — tangible book is negative, a key screen consideration despite low P/B on statutory equity. FY2025 operating cash flow £114.1m (Yahoo: FCF £72.9m after £105.6m acquisition spend). Dividends paid £31.3m; cover on underlying EPS ~2.0×. RCF extended to August 2028 at £350m committed.
+**Trend commentary:** Reported revenue rose on acquisitions, but **LFL volumes fell 4.8%**, with Jan–Apr LFL **−8.7%** (Trading Update) before May–Jun price increases. Climate Division underlying margin collapsed to **9.7%** (Adey stock provision £1.5m, supplier quality failure £0.8m — flagged as non-recurring). Water Division margin improved to **16.2%** on Davidson integration (>20% EBIT at acquired brands). Statutory profit was hit by **£17.7m** non-underlying items (restructuring £4.9m, IT transformation £4.0m, Polydeck disposal loss £1.0m, fraud excess £0.6m). Management stated **full-year expectations unchanged**; H2 margin to benefit from pricing, cost discipline and non-recurrence of Adey issues. **Polydeck Limited** disposed 31 Mar 2026 (held-for-sale at FY2025).
 
-**Filing coverage note.** The index contains FY2025 Final Results, H1 2026 interim, May 2026 trading update and Companies House annual accounts back to 2019. No separate FY2024 RNS annual filing is indexed (FY2024 comparatives appear within FY2025 results). H2 2025 interim is absent; H1 2026 provides the most recent interim detail.
+### Trading Update (four months to 30 Apr 2026; 22 May 2026)
+
+Revenue **£198.5m** (−0.4% reported, **−8.7% LFL**). Middle East conflict drove polymer and freight inflation; double-digit price increases implemented in May. H1 underlying OP expected **~£44.6m** (in line with prior year reported). FY2026 underlying OP guided **towards lower end** of analyst range **£94.7m–£105.5m** (vs FY2025 underlying OP £94.4m). Simplification savings **£4m–£5m** annualised from 2027.
+
+### Gaps and consistency notes
+
+- Annual and interim primary filings are **present and complete** for the review period; no SEC 10-K (UK RNS regime only).
+- H1 cash conversion **71.3%** is seasonally phasing; FY target **>90%** maintained.
+- Screen statutory earnings growth **−12.3%** reflects H1 2026 weakness and non-underlying charges; underlying EPS trajectory is flatter (26.0p FY2025; 10.5p H1 2026 vs 11.6p prior H1).
+- FCF: filing FY2025 operating cash **£103.1m** less capex **£30.2m** ≈ **£72.9m** FCF — matches screen filing-aligned FCF; dividend **£31.3m** covered ~2.3× on statutory OCF−capex basis.
 
 ---
 
 ## RISKS AND RED FLAGS
-**Cyclical / macro.** Genuit remains heavily UK-construction exposed (~89% UK revenue). FY2025 H2 volumes weakened around the Budget; H1 2026 LFL revenue fell 4.8%. Filings cite wet weather, Middle East conflict (polymer/freight inflation), and UK political/economic uncertainty. Middle East direct revenue (~3.5% of group) was ~50% lower in the four months to April 2026; a social-engineering fraud in the region cost £0.6m in H1 2026.
+**Cyclical / macro:** UK construction volumes remain subdued; H1 2026 LFL revenue **−4.8%**. Wet weather, Budget uncertainty (H2 2025), polymer inflation and Middle East conflict (Trading Update, H1 report) directly cited. Middle East revenue (~3.5% of Group) was **~50% lower** in the four months to April 2026; social-engineering fraud loss **£0.6m** in H1 2026.
 
-**Margin and segment risk.** WMS underlying margin collapsed to 5.7% in FY2025 (slow-moving inventory provision, NI costs); Climate Division H1 2026 margin fell to 9.7% (8.9% LFL) on Adey stock provision (£1.5m) and supplier quality failure (£0.8m). Residential RMI and new-build housebuilding remain subdued.
+**Leverage / M&A:** Leverage rose from **0.9× to 1.5×** (FY2025) and **1.6×** (H1 2026) following **~£105m** acquisition spend. Covenants have **comfortable headroom** (leverage 1.5–1.6× vs 3.0× cap; interest cover 9.7×), but de-leveraging depends on cash generation and limited further large deals near term.
 
-**Leverage and M&A.** Leverage rose from 0.9× to 1.6× in 18 months on ~£105m acquisition spend. Integration of Monodraught and Davidson is on track, but further bolt-ons at elevated leverage would tighten covenant headroom. Goodwill £509.6m; prior Adey impairment (£12.4m in 2024) demonstrates acquisition risk. Polydeck held-for-sale and disposed at a £1.0m loss (March 2026).
+**Accounting / intangibles:** Goodwill **£509.6m**; total intangibles **£673.0m** vs equity **£662.9m**. Adey impairment **£12.4m** in FY2024; no further goodwill impairment FY2025, but Adey operational issues persisted into H1 2026. Heavy acquisition amortisation (£13.7m FY2025; £6.9m H1 2026) depresses statutory earnings.
 
-**Operational / governance.** Restructuring and ERP/cloud transformation costs are rising (£4.0m in H1 2026 alone; multi-year programme). Principal risks unchanged from FY2025 AR: macro/political conditions, climate change, raw-material pricing, IT disruption, key-customer reliance, talent retention.
+**Competitive / operational:** WMS margin structurally weak (5.7% FY2025); underfloor heating soft. Customer concentration not quantified in extracts reviewed; reliance on UK housing/RMI (~89% UK revenue) is explicit.
 
-**Regulatory.** Conversely, regulatory change (Awaab’s Law, Future Homes Standard, AMP8 £104bn water cycle) is a growth driver but timing of benefit is back-end loaded (management: meaningful from 2027–2028).
+**Governance / other:** Going concern adopted to **Dec 2027** (FY2025) / **Dec 2027** (H1 2026) with reverse stress testing disclosed. **No DB pension** — limited pension risk. ERP/cloud transformation costs rising (exceptional treatment). Product liability claim largely reversed (FY2025).
 
-**Pension.** No DB scheme — DC arrangements only (£9.1m cost in FY2025). Low pension risk.
+**Regulatory:** Positive AMP8, Future Homes Standard tailwinds, but Building Safety Regulator delays cited as hurting commercial/blue-green roof projects in H1 2026.
 
-**Going concern / covenants (filing language).** Directors adopt going concern with liquidity headroom £209.1m at H1 2026 and covenant compliance “comfortably achieved.” Downside scenarios modelled including recession, customer loss and raw-material spikes.
-
-RiskTags: cyclical, competitive, leverage, accounting, other
+RiskTags: cyclical, leverage, competitive, accounting, other
 
 ---
-RiskTags: cyclical, competitive, leverage, accounting, other
+RiskTags: cyclical, leverage, competitive, accounting, other
 
 ## NEWS HIGHLIGHTS
-**Coverage is thin and noisy.** Google News RSS returns substantial false positives (Gen Z, Gen Digital, Generac and other “Gen” tickers). Material Genuit-specific items are limited; key points below are from RNS-derived yfinance summaries and a handful of relevant third-party headlines.
+*Material Genuit-specific items from `news_manifest.json` (Sep 2025–Sep 2026). Note: feed is noisy with “Gen Z / Gen AI / Gen Digital” false positives.*
 
-| Date | Headline | Relevance |
-|------|----------|-----------|
-| 11 Aug 2026 | *Genuit Group H1 Earnings Call Highlights* (Yahoo Finance) | H1 revenue +3% reported but LFL −5%; maintained FY guidance; polymer costs and Middle East cited |
-| 13 Aug 2026 | *Revenue Beat: Genuit Group plc Beat Analyst Estimates By 6.0%* (simplywall.st) | H1 revenue above consensus despite profit pressure |
-| 13 Aug 2026 | *Genuit Group PLC (FRA:0P5) (H1 2026) Earnings Call Highlights* (Yahoo Finance) | Strategic acquisitions and pricing power emphasised |
-| 12 Aug 2026 | *Genuit Non-Executive Director Increases Stake with Share Purchase* (TipRanks) | Insider buying signal |
-| 23 Aug 2026 | *Genuit Group plc (LON:GEN) Stock Goes Ex-Dividend In Just Three Days* (simplywall.st) | Dividend mechanics |
-| 23 Aug 2026 | *Why Is Genuit Group (LON:GEN) Back in Dividend Focus?* (Kalkine Media) | Income-investor attention |
-| 22 May 2026 | *UK Stock Market News: Games Workshop, Genuit, Arkle Resources* (The Armchair Trader) | Trading-update day coverage |
-| 10 Mar 2026 | *Genuit Group H2/FY2025 Earnings Call Highlights* (Yahoo Finance) | FY2025 revenue +7.3%; dividend raised; margin challenges noted |
-| 17 Nov 2025 | *Genuit slips 13% amid subdued construction market* (Proactive Investors) | Share-price reaction to weak sector sentiment |
-| 10 Apr 2026 | *Genuit FTSE 350 Incentive Share Admission Update* (Kalkine Media) | Employee incentive share issuance |
+| Date | Title / source | Relevance |
+|------|----------------|-----------|
+| 5 Sep 2026 | *Genuit Group (LSE:GEN) Warns on a Sluggish Start* — Kalkine Media | Commentary on weak start to period |
+| 3 Sep 2026 | *Genuit Group (LSE:GEN) Grows Revenue While Underlying Volumes Slide* — Kalkine Media | H1 revenue vs LFL volume divergence |
+| 13 Aug 2026 | *Revenue Beat: Genuit Group plc Beat Analyst Estimates By 6.0%* — simplywall.st | H1 revenue vs consensus |
+| 13 Aug 2026 | *Genuit Group PLC (FRA:0P5) (H1 2026) Earnings Call Highlights* — yfinance | Challenging H1; FY guidance maintained |
+| 11 Aug 2026 | *Genuit Group H1 Earnings Call Highlights* — yfinance | Subdued construction; pricing/cost actions |
+| 12 Aug 2026 | *Genuit Non-Executive Director Increases Stake with Share Purchase* — TipRanks | Insider buying signal |
+| 23 Aug 2026 | *Why Is Genuit Group (LON:GEN) Back in Dividend Focus?* — Kalkine Media | Dividend narrative |
+| 23 Aug 2026 | *Genuit Group plc (LON:GEN) Stock Goes Ex-Dividend In Just Three Days* — simplywall.st | Dividend timetable |
+| 22 May 2026 | *UK Stock Market News: Games Workshop, Genuit, Arkle Resources* — The Armchair Trader | Trading update coverage |
+| 10 Mar 2026 | *Genuit Group H2 Earnings Call Highlights* — yfinance | FY2025 results; 7.3% revenue growth |
+| 19 Mar 2026 | *Genuit Group PLC (FRA:0P5) Full Year 2025 Earnings Call Highlights* — yfinance | Strategy, dividend rise |
+| 10 Apr 2026 | *Genuit FTSE 350 Incentive Share Admission Update* — Kalkine Media | LTIP share issuance |
+| 17 Nov 2025 | *Genuit slips 13% amid subdued construction market* — Proactive Investors | Prior share price reaction to weak trading |
 
-No material M&A beyond the disclosed Monodraught/Davidson deals and Polydeck disposal. Management stable (CEO Joe Vorih, CFO Tim Pullen). Aviva PLC holding notifications appear in RNS (Aug/Jun 2026) but are routine institutional disclosure.
+**Coverage assessment:** Dedicated Genuit news is **moderate but episodic** (results, trading update, dividend pieces). A large share of manifest entries are **irrelevant** (Gen Z demographics, Gen Digital, etc.). RNS primary filings remain the authoritative source for strategy (Monodraught/Davidson integrations, divisional simplification, Polydeck exit).
 
 ---
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.68
-Rationale: Filings confirm the screen’s cheapness, dividend and balance-sheet pillars — near-book valuation, strong cash conversion, progressive dividend and manageable leverage — but cyclical volume weakness, polymer inflation and near-term margin pressure mean the strong-buy signal is better treated as a phased accumulation rather than high-conviction immediate deployment.
+Confidence: 0.72
+Rationale: Filing review confirms the screen’s cheapness and cash/dividend case—P/B ~1, strong FCF conversion, progressive dividend and manageable leverage—but partially offsets the Strong Buy on weak ROE, cyclical LFL volumes, goodwill intensity and near-term margin pressure, supporting accumulation rather than unqualified conviction.

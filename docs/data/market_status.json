@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-03T11:22:52.275325+00:00",
+  "generated_at": "2026-09-06T07:48:54.553063+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json.",
   "focus_market": "euro_depth",
   "summary": {
@@ -45,16 +45,16 @@
       "failed_fetch_count": 0,
       "last_metrics_refresh": null,
       "last_constituents_refresh": null,
-      "last_screen_at": "2026-09-02T10:22:48.084715+00:00",
+      "last_screen_at": "2026-09-06T06:47:53.947778+00:00",
       "signal_counts": {
-        "strong_buy": 19,
-        "buy": 40,
-        "hold": 146,
+        "strong_buy": 20,
+        "buy": 41,
+        "hold": 144,
         "avoid": 43
       },
-      "shortlist_count": 59,
-      "strong_buy": 19,
-      "buy": 40,
+      "shortlist_count": 61,
+      "strong_buy": 20,
+      "buy": 41,
       "learning_phase": 4,
       "learning_phase_label": "Live screen",
       "phase_blockers": [],
@@ -74,7 +74,7 @@
       "is_queue": false,
       "ingest": "sprint",
       "ingest_stream": null,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=1, thin=24, indexed_without_body=42)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=24, indexed_without_body=34)",
       "ingest_parity_met": false,
       "health": "warn",
       "coverage_pct": 0.9948,
@@ -83,23 +83,23 @@
       "stale": 0,
       "fresh": 0,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:12:05.246264+00:00",
-      "last_constituents_refresh": "2026-09-02T06:52:25.312488+00:00",
-      "last_screen_at": "2026-09-02T06:52:24.042142+00:00",
+      "last_metrics_refresh": "2026-09-06T06:43:26.055109+00:00",
+      "last_constituents_refresh": "2026-09-06T06:22:06.759465+00:00",
+      "last_screen_at": "2026-09-06T06:22:05.695194+00:00",
       "signal_counts": {
-        "hold": 124,
-        "buy": 25,
-        "avoid": 25,
-        "strong_buy": 19
+        "hold": 122,
+        "buy": 26,
+        "avoid": 24,
+        "strong_buy": 21
       },
-      "shortlist_count": 44,
-      "strong_buy": 19,
-      "buy": 25,
+      "shortlist_count": 47,
+      "strong_buy": 21,
+      "buy": 26,
       "learning_phase": 2,
       "learning_phase_label": "Weekly paper",
       "phase_blockers": [
-        "need 4 weekly batch marks (have 0)",
-        "learning_tracks_review missing or inconclusive"
+        "need 4 weekly batch marks (have 1)",
+        "primary track must beat rules control on latest review"
       ],
       "learning": {
         "current_phase": 2,
@@ -114,8 +114,8 @@
           "primary track must beat rules control on latest review"
         ],
         "phase1": {
-          "screen_archives": 13,
-          "observe_snapshot_count": 13
+          "screen_archives": 16,
+          "observe_snapshot_count": 16
         },
         "phase2": {
           "weekly_batch_count": 1,
@@ -123,28 +123,28 @@
         }
       },
       "filing_health": {
-        "buy_tier_count": 44,
-        "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 1,
+        "buy_tier_count": 47,
+        "unmeasured_buy_tier": 1,
+        "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 24,
-        "indexed_without_body": 42,
+        "indexed_without_body": 34,
         "bodies_median": 2.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
-        "zero_body_tickers": [
-          "RAND.AS"
-        ],
+        "zero_body_tickers": [],
         "thin_body_tickers": [
-          "DG.PA",
           "STR.VI",
-          "UMI.BR",
           "SGO.PA",
+          "UMI.BR",
           "ACKB.BR",
           "EG7.IR",
           "ANDR.VI",
-          "VOE.VI"
+          "VOE.VI",
+          "EVN.VI"
         ],
-        "unmeasured_tickers": []
+        "unmeasured_tickers": [
+          "AED.BR"
+        ]
       },
       "filing_gaps": 1
     },
@@ -160,47 +160,68 @@
       "is_queue": true,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=16)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=0, indexed_without_body=22)",
       "ingest_parity_met": false,
       "health": "warn",
       "coverage_pct": 1.0,
       "honest_coverage_pct": 1.0,
-      "ticker_count": 504,
+      "ticker_count": 503,
       "stale": 0,
       "fresh": 503,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T06:59:47.678011+00:00",
-      "last_constituents_refresh": "2026-09-02T06:54:30.430307+00:00",
-      "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
+      "last_metrics_refresh": "2026-09-06T06:30:10.084891+00:00",
+      "last_constituents_refresh": "2026-09-06T06:24:23.183732+00:00",
+      "last_screen_at": "2026-09-06T06:22:05.695194+00:00",
       "signal_counts": {
         "hold": 286,
-        "buy": 83,
-        "avoid": 78,
-        "strong_buy": 57
+        "buy": 79,
+        "avoid": 77,
+        "strong_buy": 61
       },
       "shortlist_count": 140,
-      "strong_buy": 57,
-      "buy": 83,
-      "learning_phase": null,
-      "learning_phase_label": "Not started",
+      "strong_buy": 61,
+      "buy": 79,
+      "learning_phase": 1,
+      "learning_phase_label": "Observe",
       "phase_blockers": [
         "sp500 not in ladder.weekly_paper_shard_markets"
       ],
-      "learning": null,
+      "learning": {
+        "current_phase": 1,
+        "next_phase": 1,
+        "phase1_ready": true,
+        "phase2_ready": false,
+        "phase3_ready": false,
+        "weekly_paper_enabled": false,
+        "weekday_paper_enabled": true,
+        "blockers": [
+          "sp500 not in ladder.weekly_paper_shard_markets"
+        ],
+        "phase1": {
+          "screen_archives": 14,
+          "observe_snapshot_count": 14
+        },
+        "phase2": {
+          "weekly_batch_count": 0,
+          "min_weekly_batches": 4
+        }
+      },
       "filing_health": {
         "buy_tier_count": 140,
-        "unmeasured_buy_tier": 0,
+        "unmeasured_buy_tier": 1,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 16,
+        "indexed_without_body": 22,
         "bodies_median": 20.0,
         "coverage_scope": "canonical",
         "ftse_equivalent": true,
         "zero_body_tickers": [],
         "thin_body_tickers": [],
-        "unmeasured_tickers": []
+        "unmeasured_tickers": [
+          "HPE"
+        ]
       },
-      "filing_gaps": 0
+      "filing_gaps": 1
     },
     {
       "market_id": "asx200",
@@ -214,53 +235,69 @@
       "is_queue": true,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=5, indexed_without_body=0)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=2, indexed_without_body=2)",
       "ingest_parity_met": false,
       "health": "warn",
-      "coverage_pct": 0.985,
-      "honest_coverage_pct": 0.985,
-      "ticker_count": 197,
+      "coverage_pct": 0.98,
+      "honest_coverage_pct": 0.98,
+      "ticker_count": 196,
       "stale": 0,
       "fresh": 200,
-      "failed_fetch_count": 3,
-      "last_metrics_refresh": "2026-09-02T07:02:32.054553+00:00",
-      "last_constituents_refresh": "2026-09-02T07:00:19.511162+00:00",
-      "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
+      "failed_fetch_count": 4,
+      "last_metrics_refresh": "2026-09-06T06:33:15.237338+00:00",
+      "last_constituents_refresh": "2026-09-06T06:30:45.254079+00:00",
+      "last_screen_at": "2026-09-06T06:22:05.695194+00:00",
       "signal_counts": {
-        "hold": 110,
-        "avoid": 55,
-        "buy": 21,
-        "strong_buy": 8,
+        "hold": 116,
+        "avoid": 47,
+        "buy": 25,
+        "strong_buy": 5,
         "insufficient_data": 3
       },
-      "shortlist_count": 29,
-      "strong_buy": 8,
-      "buy": 21,
-      "learning_phase": null,
-      "learning_phase_label": "Not started",
+      "shortlist_count": 30,
+      "strong_buy": 5,
+      "buy": 25,
+      "learning_phase": 1,
+      "learning_phase_label": "Observe",
       "phase_blockers": [
-        "need 4 observe snapshots (have 0)"
+        "asx200 not in ladder.weekly_paper_shard_markets"
       ],
-      "learning": null,
+      "learning": {
+        "current_phase": 1,
+        "next_phase": 1,
+        "phase1_ready": true,
+        "phase2_ready": false,
+        "phase3_ready": false,
+        "weekly_paper_enabled": false,
+        "weekday_paper_enabled": true,
+        "blockers": [
+          "asx200 not in ladder.weekly_paper_shard_markets"
+        ],
+        "phase1": {
+          "screen_archives": 14,
+          "observe_snapshot_count": 14
+        },
+        "phase2": {
+          "weekly_batch_count": 0,
+          "min_weekly_batches": 4
+        }
+      },
       "filing_health": {
-        "buy_tier_count": 29,
+        "buy_tier_count": 30,
         "unmeasured_buy_tier": 1,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 5,
-        "indexed_without_body": 0,
-        "bodies_median": 6.0,
+        "thin_body_buy_tier": 2,
+        "indexed_without_body": 2,
+        "bodies_median": 7.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "zero_body_tickers": [],
         "thin_body_tickers": [
-          "ZIM.AX",
-          "SDF.AX",
           "JBH.AX",
-          "RWC.AX",
           "DNL.AX"
         ],
         "unmeasured_tickers": [
-          "EBO.AX"
+          "CLW.AX"
         ]
       },
       "filing_gaps": 1
@@ -280,14 +317,14 @@
       "ingest_reason": null,
       "ingest_parity_met": null,
       "health": "ok",
-      "coverage_pct": 0.9186,
-      "honest_coverage_pct": 0.9186,
+      "coverage_pct": 0.907,
+      "honest_coverage_pct": 0.907,
       "ticker_count": 79,
       "stale": 0,
       "fresh": 86,
-      "failed_fetch_count": 7,
-      "last_metrics_refresh": "2026-09-02T07:03:46.235622+00:00",
-      "last_constituents_refresh": "2026-09-02T07:02:32.391869+00:00",
+      "failed_fetch_count": 8,
+      "last_metrics_refresh": "2026-09-06T06:34:33.988876+00:00",
+      "last_constituents_refresh": "2026-09-06T06:33:15.376489+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 47,
@@ -327,8 +364,8 @@
       "stale": 0,
       "fresh": 59,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:05:05.937810+00:00",
-      "last_constituents_refresh": "2026-09-02T07:04:28.382718+00:00",
+      "last_metrics_refresh": "2026-09-06T06:35:59.969412+00:00",
+      "last_constituents_refresh": "2026-09-06T06:35:19.329224+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 29,
@@ -367,8 +404,8 @@
       "stale": 0,
       "fresh": 25,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:09:04.150955+00:00",
-      "last_constituents_refresh": "2026-09-02T07:08:52.665063+00:00",
+      "last_metrics_refresh": "2026-09-06T06:40:03.494054+00:00",
+      "last_constituents_refresh": "2026-09-06T06:39:51.101834+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 16,
@@ -401,14 +438,14 @@
       "ingest_reason": null,
       "ingest_parity_met": null,
       "health": "warn",
-      "coverage_pct": 0.5859,
-      "honest_coverage_pct": 0.5859,
+      "coverage_pct": 0.5758,
+      "honest_coverage_pct": 0.5758,
       "ticker_count": 57,
       "stale": 0,
       "fresh": 99,
-      "failed_fetch_count": 41,
-      "last_metrics_refresh": "2026-09-02T07:08:11.382326+00:00",
-      "last_constituents_refresh": "2026-09-02T07:05:06.065581+00:00",
+      "failed_fetch_count": 42,
+      "last_metrics_refresh": "2026-09-06T06:39:04.023888+00:00",
+      "last_constituents_refresh": "2026-09-06T06:36:00.099631+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 32,
@@ -448,8 +485,8 @@
       "stale": 0,
       "fresh": 19,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:10:54.187521+00:00",
-      "last_constituents_refresh": "2026-09-02T07:10:42.206635+00:00",
+      "last_metrics_refresh": "2026-09-06T06:42:07.464089+00:00",
+      "last_constituents_refresh": "2026-09-06T06:41:53.762757+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 13,
@@ -488,8 +525,8 @@
       "stale": 0,
       "fresh": 20,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:09:16.186140+00:00",
-      "last_constituents_refresh": "2026-09-02T07:09:04.223206+00:00",
+      "last_metrics_refresh": "2026-09-06T06:40:17.530657+00:00",
+      "last_constituents_refresh": "2026-09-06T06:40:03.565382+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 10,
@@ -528,8 +565,8 @@
       "stale": 0,
       "fresh": 40,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:04:28.341475+00:00",
-      "last_constituents_refresh": "2026-09-02T07:04:11.131950+00:00",
+      "last_metrics_refresh": "2026-09-06T06:35:19.265976+00:00",
+      "last_constituents_refresh": "2026-09-06T06:35:00.568069+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 18,
@@ -568,8 +605,8 @@
       "stale": 0,
       "fresh": 40,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:04:11.087423+00:00",
-      "last_constituents_refresh": "2026-09-02T07:03:56.367211+00:00",
+      "last_metrics_refresh": "2026-09-06T06:35:00.492421+00:00",
+      "last_constituents_refresh": "2026-09-06T06:34:44.450025+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 26,
@@ -608,8 +645,8 @@
       "stale": 0,
       "fresh": 50,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:00:19.457190+00:00",
-      "last_constituents_refresh": "2026-09-02T06:59:47.805608+00:00",
+      "last_metrics_refresh": "2026-09-06T06:30:45.167347+00:00",
+      "last_constituents_refresh": "2026-09-06T06:30:10.209048+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 29,
@@ -648,8 +685,8 @@
       "stale": 0,
       "fresh": 40,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:08:52.616857+00:00",
-      "last_constituents_refresh": "2026-09-02T07:08:30.717068+00:00",
+      "last_metrics_refresh": "2026-09-06T06:39:51.019798+00:00",
+      "last_constituents_refresh": "2026-09-06T06:39:26.208109+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 23,
@@ -688,8 +725,8 @@
       "stale": 0,
       "fresh": 85,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:10:09.301689+00:00",
-      "last_constituents_refresh": "2026-09-02T07:09:16.240030+00:00",
+      "last_metrics_refresh": "2026-09-06T06:41:15.420639+00:00",
+      "last_constituents_refresh": "2026-09-06T06:40:17.617656+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 52,
@@ -728,8 +765,8 @@
       "stale": 0,
       "fresh": 35,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:08:30.603500+00:00",
-      "last_constituents_refresh": "2026-09-02T07:08:11.474517+00:00",
+      "last_metrics_refresh": "2026-09-06T06:39:26.148389+00:00",
+      "last_constituents_refresh": "2026-09-06T06:39:04.109377+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 24,
@@ -768,8 +805,8 @@
       "stale": 0,
       "fresh": 20,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:11:51.789252+00:00",
-      "last_constituents_refresh": "2026-09-02T07:11:39.082358+00:00",
+      "last_metrics_refresh": "2026-09-06T06:43:10.990203+00:00",
+      "last_constituents_refresh": "2026-09-06T06:42:56.994360+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 12,
@@ -808,8 +845,8 @@
       "stale": 0,
       "fresh": 102,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:03:56.314411+00:00",
-      "last_constituents_refresh": "2026-09-02T07:03:46.553653+00:00",
+      "last_metrics_refresh": "2026-09-06T06:34:44.367738+00:00",
+      "last_constituents_refresh": "2026-09-06T06:34:34.059294+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 45,
@@ -848,8 +885,8 @@
       "stale": 0,
       "fresh": 30,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:11:39.040389+00:00",
-      "last_constituents_refresh": "2026-09-02T07:11:20.449201+00:00",
+      "last_metrics_refresh": "2026-09-06T06:42:56.929809+00:00",
+      "last_constituents_refresh": "2026-09-06T06:42:37.182100+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 17,
@@ -888,8 +925,8 @@
       "stale": 0,
       "fresh": 18,
       "failed_fetch_count": 1,
-      "last_metrics_refresh": "2026-09-02T07:11:08.569781+00:00",
-      "last_constituents_refresh": "2026-09-02T07:10:54.229350+00:00",
+      "last_metrics_refresh": "2026-09-06T06:42:23.071482+00:00",
+      "last_constituents_refresh": "2026-09-06T06:42:07.528828+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 13,
@@ -927,8 +964,8 @@
       "stale": 0,
       "fresh": 20,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:11:20.408756+00:00",
-      "last_constituents_refresh": "2026-09-02T07:11:08.614635+00:00",
+      "last_metrics_refresh": "2026-09-06T06:42:37.116757+00:00",
+      "last_constituents_refresh": "2026-09-06T06:42:23.143443+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 12,
@@ -967,8 +1004,8 @@
       "stale": 0,
       "fresh": 30,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:10:27.345863+00:00",
-      "last_constituents_refresh": "2026-09-02T07:10:09.349365+00:00",
+      "last_metrics_refresh": "2026-09-06T06:41:38.590452+00:00",
+      "last_constituents_refresh": "2026-09-06T06:41:15.487094+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 17,
@@ -1007,8 +1044,8 @@
       "stale": 0,
       "fresh": 24,
       "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-02T07:10:42.204714+00:00",
-      "last_constituents_refresh": "2026-09-02T07:10:27.348134+00:00",
+      "last_metrics_refresh": "2026-09-06T06:41:53.760277+00:00",
+      "last_constituents_refresh": "2026-09-06T06:41:38.593506+00:00",
       "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
       "signal_counts": {
         "hold": 17,

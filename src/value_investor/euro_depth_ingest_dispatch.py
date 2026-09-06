@@ -5,7 +5,9 @@ from __future__ import annotations
 from value_investor.library_ingest_dispatch import (  # noqa: F401
     DEFAULT_DISPATCH_PATH,
     EURO_INGEST_CRON_TITLES,
+    EXHAUSTED_CONFIG,
     MAINTENANCE_CONFIG,
+    MODE_EXHAUSTED,
     MODE_IDLE,
     MODE_MAINTENANCE,
     MODE_SPRINT,
@@ -17,6 +19,7 @@ from value_investor.library_ingest_dispatch import (  # noqa: F401
     list_library_ingest_maintenance_markets,
     load_euro_ingest_dispatch,
     refresh_euro_ingest_dispatch,
+    sprint_ingest_complete,
     write_euro_ingest_dispatch,
 )
 from value_investor.library_ingest_escalation import snapshot_library_buy_tier_filing_health
@@ -25,13 +28,16 @@ from value_investor.library_ingest_escalation import snapshot_library_buy_tier_f
 MODE_CONFIG = {
     MODE_SPRINT: SPRINT_CONFIG,
     MODE_MAINTENANCE: MAINTENANCE_CONFIG,
+    MODE_EXHAUSTED: EXHAUSTED_CONFIG,
     MODE_IDLE: MAINTENANCE_CONFIG,
 }
 
 __all__ = [
     "DEFAULT_DISPATCH_PATH",
     "EURO_INGEST_CRON_TITLES",
+    "EXHAUSTED_CONFIG",
     "MODE_CONFIG",
+    "MODE_EXHAUSTED",
     "MODE_IDLE",
     "MODE_MAINTENANCE",
     "MODE_SPRINT",
@@ -43,5 +49,6 @@ __all__ = [
     "load_euro_ingest_dispatch",
     "refresh_euro_ingest_dispatch",
     "snapshot_library_buy_tier_filing_health",
+    "sprint_ingest_complete",
     "write_euro_ingest_dispatch",
 ]
