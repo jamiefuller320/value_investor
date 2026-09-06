@@ -332,26 +332,47 @@ def _ladder_research(library_root: Path) -> dict[str, Any]:
 def _policy_markets(policy: dict[str, Any]) -> list[str]:
     ladder = _as_dict(policy.get("ladder"))
     markets: list[str] = []
-    focus = str(policy.get("focus_market") or "").strip()
-    if focus:
-        markets.append(focus)
+
+    def _add(raw: object) -> None:
+        name = str(raw or "").strip()
+        if name and name not in markets:
+            markets.append(name)
+
+    _add(policy.get("focus_market"))
     for key in (
         "observe_sim_markets",
         "observe_sim_markets_extra",
         "weekly_paper_shard_markets",
-        "ingest_parity_markets",
     ):
         for mid in _as_list(ladder.get(key)):
-            name = str(mid or "").strip()
-            if name and name not in markets:
-                markets.append(name)
+            _add(mid)
+    try:
+        from value_investor.library_sim import (
+            MARKET_BENCHMARKS,
+            ingest_profile_observe_sim_markets,
+            observe_sim_markets_for_policy,
+        )
+
+        # Ingest-profile / FTSE-equivalent markets keep a dated archive only
+        # when they are on the observe-sim screen path (need a benchmark).
+        for mid in observe_sim_markets_for_policy(policy):
+            _add(mid)
+        for mid in ingest_profile_observe_sim_markets(policy):
+            if mid in MARKET_BENCHMARKS:
+                _add(mid)
+    except Exception:  # noqa: BLE001 — clock list must still build
+        pass
     return markets
 
 
 def _learning_clocks(
     library_root: Path,
     policy: dict[str, Any],
+    *,
+    now: datetime | None = None,
 ) -> dict[str, Any]:
+    from value_investor.library_learning_depth import assess_screen_archive_span
+
     markets = _policy_markets(policy)
     depth_root = Path(library_root) / "markets"
     if depth_root.is_dir():
@@ -365,28 +386,36 @@ def _learning_clocks(
     for mid in markets:
         depth = _as_dict(_safe_read(Path(library_root) / "markets" / mid / "learning_depth.json"))
         screen = _as_dict(depth.get("screen"))
+        live = assess_screen_archive_span(library_root, mid, now=now)
+        live_files = _int(live.get("archive_files"), 0)
+        # Dated CSVs are the clock. A stale learning_depth.json snapshot is not.
+        if live_files > 0:
+            screen = {**screen, **live}
+            stale = bool(live.get("stale"))
+        else:
+            stale = bool(screen.get("stale"))
         filing_ready = bool(depth.get("filing_ready"))
         learning_ready = bool(depth.get("learning_ready"))
-        stale = bool(screen.get("stale"))
+        has_clock = bool(depth) or live_files > 0
         row = {
             "market_id": mid,
             "filing_ready": filing_ready if depth else None,
             "learning_ready": learning_ready if depth else None,
             "trajectory_ready": depth.get("trajectory_ready") if depth else None,
-            "screen_stale": stale if depth else None,
+            "screen_stale": stale if has_clock else None,
             "unique_days": screen.get("unique_days"),
             "last_screen": screen.get("last_screen"),
             "observe_snapshots": _int(
                 (_as_dict(depth.get("trajectory"))).get("snapshot_count"),
                 default=_int(screen.get("archive_files"), 0),
             )
-            if depth
+            if has_clock
             else None,
         }
         rows.append(row)
         if depth and filing_ready and not learning_ready:
             filing_ready_learning_stale.append(mid)
-        if depth and stale:
+        if has_clock and stale:
             observe_stale.append(mid)
     return {
         "markets": rows,
@@ -679,7 +708,7 @@ def build_system_gap_snapshot(
     persist = _persist_holes(paper_root, output_dir)
     ladder = _ladder_research(library_root)
     budget = _budget_status(policy)
-    clocks = _learning_clocks(library_root, policy)
+    clocks = _learning_clocks(library_root, policy, now=run_at)
     library_quality = _library_focus_quality(library_root, policy, ladder)
     rememo_backlog = _as_dict(_safe_read(data_dir / "memo_rememo_backlog.json"))
     flags = _build_flags(
