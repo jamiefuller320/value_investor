@@ -144,17 +144,7 @@ ftse-library euro-ingest-dispatch --json
 | Sprint ingest (focus) | `euro-ingest-loop.yml` | Runs only when focus `should_run_sprint_ingest` |
 | Sprint ingest (parallel 1) | `library-ingest-sprint.yml` | Runs `ingest_parallel_sprint` markets with gaps (e.g. sp500) |
 | Sprint ingest (parallel 2) | `library-ingest-sprint-2.yml` | Spare stream: `ingest_parallel_sprint_2` (e.g. asx200). Waits on euro + stream 1, then leftover / spare fraction or queue fill-down. Peak-hour skip is a local fallback only. Auto-advances queue on parity. |
-
-Parallel sprint auto-advance (`advance_parallel_sprint_on_ingest_parity`, default true) rotates
-`market_queue` markets through stream slots when filing parity is met **or leftover
-thin/IWB ingest is exhausted** (parked after 3 complete 0-improve runs). Unmeasured
-and zero-body names are never parked. FTSE-equivalent markets
-(`ftse_equivalent_markets`, e.g. sp500) still defer `ingest_parity_markets` / maintenance until
-true raw parity **and** `learning-depth` is green; exhaustion vacates the sprint slot
-without opening maintenance. Non-equivalent markets (euro_depth, asx200) use the same
-`ingest_parity_met` bar for maintenance; exhausted leftovers stop sprint without
-that maintenance pass.
-| Maintenance ingest | `library-ingest-maintenance.yml` | 2×/weekday FTSE-standard scan-then-target (`max_targets=62`) for markets at the FTSE quality bar |
+| Maintenance ingest | `library-ingest-maintenance.yml` | 2×/weekday FTSE-standard scan-then-target (`max_targets=62`) for markets at the FTSE quality bar **or** exhausted leftovers (unparked names only) |
 | Stall / slowdown follow-up | all library ingest workflows | After stall or `improved=0` leftover gaps (including cutoff deepens that already ran), dispatches pinned `euro-ingest-loop.yml` (`record_gap_closure=true`, `max_targets=1`) via `scripts/dispatch_library_gap_closure_followups.sh` |
 | Micro-compile dispatch | `euro-ingest-loop.yml` | After `micro_compiled` or `gap_closure_compiled`, runs `engineering-queue.yml` immediately |
 | Post-merge verify rerun | `engineering-queue.yml` | Tasks with `evidence.market_id` rerun **`euro-ingest-loop.yml`**; FTSE tasks still use `ingest-loop.yml` |
@@ -165,6 +155,19 @@ that maintenance pass.
 | Clean JSON for CI | `euro-ingest-loop.yml` | Uses `ingest-loop --json-path` / `euro-ingest-dispatch --json-path` (not `tee`) so stdout warnings (e.g. PyMuPDF `fitz`) cannot break `GITHUB_OUTPUT` parsing |
 | Artifact push | `scripts/push_library_ingest_artifacts.sh` | Stashes allowlisted paths (`docs/data/library/`, `engineering_tasks.json`, `ingest_gap_closure_runs.json`) before `checkout origin/main`; restores only files the job changed so concurrent queue updates are not clobbered |
 | pip install retry | `scripts/gha_pip_install.sh` | 4 attempts with backoff for transient PyPI / empty-index flakes (`from versions: none`) |
+
+Parallel sprint auto-advance (`advance_parallel_sprint_on_ingest_parity`, default true) rotates
+`market_queue` markets through stream slots when filing parity is met **or leftover
+thin/IWB ingest is exhausted** (parked after 3 complete 0-improve runs). Unmeasured
+and zero-body names are never parked. FTSE-equivalent markets
+(`ftse_equivalent_markets`, e.g. sp500) still defer `ingest_parity_markets` until
+true raw parity **and** `learning-depth` is green. Exhausted leftovers vacate the
+sprint slot and join `ingest_exhausted_markets` so unparked names keep FTSE-volume
+maintenance (`library-ingest-maintenance.yml`). Parked leftover tickers are skipped
+by targeting; a low-priority `parked_source_hunter` engineering task (back of the
+queue, one ticker per compile, chained after merge) hunts a fetchable IR source.
+Non-equivalent markets (euro_depth, asx200) use the same `ingest_parity_met` bar
+for true parity; exhausted leftovers still get that unparked maintenance pass.
 
 A weekly **ingest director** or a second stock-by-stock deepening engine would
 not fix this stall: the intensive pin already exists (`record_gap_closure` +
@@ -181,7 +184,14 @@ unmeasured, zero-body, thin-body, and `indexed_without_body` must all be zero.
 `sprint_ingest_complete()` is that bar **or** leftover thin/IWB parked after
 ingest avenues are exhausted (`markets/{id}/ingest_exhaustion.json`). Parked
 names are excluded from the observe-sim / paper learning pool until coverage
-improves; they do not open maintenance.
+improves. Unparked names stay on FTSE-volume maintenance
+(`ingest_exhausted_markets`); parked leftovers do not count as
+`ingest_parity_met`.
+A capped `parked_source_hunter` engineering task (`priority=low`, score 12) sits
+at the back of the queue: ingest loop / `ftse-library parked-hunter-compile` /
+hourly `engineering-queue.yml` compile one parked ticker; after that task is
+merged, the next ticker compiles. Stall and gap-closure compile ignore this
+source so it cannot block higher-priority ingest work.
 Maintenance then uses the same deepen volume as `ingest-loop.yml`
 (`max_targets=62`, `max_bodies=40`, 2×/weekday). Do not keep a lighter library
 variant — learning needs the same body quality as soon as a market is the

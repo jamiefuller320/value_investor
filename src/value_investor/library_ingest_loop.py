@@ -28,6 +28,7 @@ from value_investor.library_ingest_budget import (
 from value_investor.library_ingest_escalation import (
     DEFAULT_STALL_RUNS,
     compile_library_ingest_engineering_tasks_micro,
+    compile_parked_source_hunter_task,
     library_ingest_health_stalled,
     library_ingest_summary_path,
     resolve_library_ingest_health_log_path,
@@ -102,6 +103,8 @@ class LibraryIngestLoopResult:
     pin_tickers: list[str] = field(default_factory=list)
     ingest_deviations: dict[str, Any] | None = None
     exhaustion: dict[str, Any] | None = None
+    exhausted_maintenance: dict[str, Any] | None = None
+    parked_hunter_compile: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -144,6 +147,8 @@ class LibraryIngestLoopResult:
             "pin_tickers": list(self.pin_tickers),
             "ingest_deviations": self.ingest_deviations,
             "exhaustion": self.exhaustion,
+            "exhausted_maintenance": self.exhausted_maintenance,
+            "parked_hunter_compile": self.parked_hunter_compile,
         }
 
 
@@ -905,6 +910,30 @@ def run_library_ingest_loop(
         except Exception as exc:  # noqa: BLE001
             logger.warning("Parallel sprint handoff failed for %s: %s", market_id, exc)
             result.parallel_sprint_handoff = {"error": str(exc)}
+
+    try:
+        from value_investor.library_ingest_maintenance import (
+            maybe_record_exhausted_maintenance,
+        )
+
+        result.exhausted_maintenance = maybe_record_exhausted_maintenance(
+            market_id=market_id,
+            library_root=library_root,
+            health=result.health_after,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Exhausted-maintenance record failed for %s: %s", market_id, exc)
+        result.exhausted_maintenance = {"error": str(exc)}
+
+    try:
+        result.parked_hunter_compile = compile_parked_source_hunter_task(
+            library_root=library_root,
+            tasks_path=tasks_path,
+            committed_path=tasks_path,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Parked-source hunter compile failed for %s: %s", market_id, exc)
+        result.parked_hunter_compile = {"error": str(exc)}
 
     summary_path = library_ingest_summary_path(library_root, market_id)
     write_json(

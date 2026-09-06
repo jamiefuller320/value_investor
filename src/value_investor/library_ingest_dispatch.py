@@ -62,17 +62,20 @@ MAINTENANCE_CONFIG: dict[str, Any] = {
     "cron_maintenance": True,
 }
 
-# Leftover thin/IWB parked — stop fruitless sprints; do not start FTSE-volume maintenance.
+# Leftover thin/IWB parked — stop fruitless sprints; keep FTSE-volume maintenance
+# so unparked names still pick up new reports. True raw parity is unchanged.
 EXHAUSTED_CONFIG: dict[str, Any] = {
-    "max_daily_successes": 0,
-    "max_targets": 0,
+    "max_daily_successes": FTSE_MAINTENANCE_MAX_DAILY_SUCCESSES,
+    "max_targets": FTSE_MAINTENANCE_MAX_TARGETS,
     "cron_morning": False,
     "cron_afternoon": False,
     "cron_midafternoon": False,
     "cron_evening": False,
     "cron_ladder_weekday": True,
-    "cron_maintenance": False,
+    "cron_maintenance": True,
 }
+
+INGEST_EXHAUSTED_MARKETS_KEY = "ingest_exhausted_markets"
 
 EURO_INGEST_CRON_TITLES = {
     # Peak slots: Mon–Sat (skip Sunday quiet-bundle morning). Off-peak: daily.
@@ -95,7 +98,8 @@ def ingest_parity_met(health: dict[str, Any]) -> bool:
     and ``indexed_without_body`` must all be zero. ``ftse_equivalent`` only
     changes *measurement* (canonical-only coverage), not the quality bar.
     Parked leftover thin/IWB names do **not** count as parity — they stop
-    sprint via ``sprint_ingest_complete`` without opening maintenance.
+    sprint via ``sprint_ingest_complete`` and join maintenance for unparked
+    names via ``ingest_exhausted_markets``.
     """
     if library_ingest_filing_gaps(health) != 0:
         return False
@@ -140,8 +144,9 @@ def evaluate_library_ingest_dispatch(
 
     Sprint (high tempo) while FTSE-standard filing gaps remain; maintenance once
     unmeasured, zero-body, thin-body, and ``indexed_without_body`` are all zero.
-    When leftover thin/IWB names are parked as exhausted, sprint stops without
-    opening maintenance so the effort cascade can move on.
+    When leftover thin/IWB names are parked as exhausted, sprint stops so the
+    effort cascade can move on; unparked names still run FTSE-volume
+    maintenance (discovery + deepen). True raw parity is unchanged.
     Phase 3 readiness is informational only — ladder/shard crons continue
     separately during maintenance.
     """
@@ -174,7 +179,8 @@ def evaluate_library_ingest_dispatch(
         reason = (
             "Ingest avenues exhausted — parked "
             f"{len(parked)} leftover thin/IWB name(s) ({sample}); "
-            "sprint stops so the cascade can move on"
+            "sprint stops so the cascade can move on; unparked names stay on "
+            "FTSE-volume maintenance"
         )
         config = EXHAUSTED_CONFIG
     else:
@@ -210,7 +216,7 @@ def evaluate_library_ingest_dispatch(
         "cron_ladder_weekday": bool(config["cron_ladder_weekday"]),
         "cron_maintenance": bool(config.get("cron_maintenance")),
         "should_run_sprint_ingest": mode == MODE_SPRINT,
-        "should_run_maintenance_ingest": mode == MODE_MAINTENANCE,
+        "should_run_maintenance_ingest": mode in {MODE_MAINTENANCE, MODE_EXHAUSTED},
         # Back-compat for euro-ingest-loop gate (sprint workflow only).
         "should_run_ingest": mode == MODE_SPRINT,
         "evaluated_at": datetime.now(UTC).isoformat(),
@@ -232,6 +238,9 @@ def enrich_library_ingest_dispatch(
         policy_path=policy_path,
         policy=policy,
     )
+    evaluation["ingest_exhausted_markets"] = [
+        str(m).strip() for m in (policy.get(INGEST_EXHAUSTED_MARKETS_KEY) or []) if str(m).strip()
+    ]
     for parallel_stream in sorted(PARALLEL_SPRINT_POLICY_KEYS):
         suffix = "" if parallel_stream == 1 else f"_{parallel_stream}"
         parallel = list_library_ingest_parallel_sprint_markets(
@@ -497,12 +506,15 @@ def list_library_ingest_maintenance_markets(
     policy_path: Path = DEFAULT_POLICY_PATH,
     policy: dict[str, Any] | None = None,
 ) -> list[str]:
-    """Markets that currently meet the FTSE filing-quality bar."""
+    """Markets at raw FTSE parity or with leftover thin/IWB parked as exhausted."""
     library_root = Path(library_root)
     policy = policy if policy is not None else load_policy(policy_path)
     candidates: set[str] = {
         str(m).strip() for m in (policy.get("ingest_parity_markets") or []) if str(m).strip()
     }
+    candidates.update(
+        str(m).strip() for m in (policy.get(INGEST_EXHAUSTED_MARKETS_KEY) or []) if str(m).strip()
+    )
     focus = str(policy.get("focus_market") or "").strip()
     if focus:
         candidates.add(focus)
@@ -513,7 +525,7 @@ def list_library_ingest_maintenance_markets(
             library_root=library_root,
             policy=policy,
         )
-        if ingest_parity_met(health):
+        if ingest_parity_met(health) or bool(health.get("ingest_exhausted")):
             markets.append(market_id)
     return markets
 
@@ -589,6 +601,7 @@ __all__ = [
     "FTSE_MAINTENANCE_MAX_RUNTIME_SECONDS",
     "FTSE_MAINTENANCE_MAX_TARGETS",
     "EXHAUSTED_CONFIG",
+    "INGEST_EXHAUSTED_MARKETS_KEY",
     "MAINTENANCE_CONFIG",
     "MODE_EXHAUSTED",
     "MODE_IDLE",

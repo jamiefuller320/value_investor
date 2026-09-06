@@ -4,8 +4,8 @@ Sprint loops must not keep re-running once unmeasured and zero-body names are
 gone and remaining thin / indexed-without-body rows have failed every complete
 deepen. Those leftovers are parked (accepted as thin for now), excluded from
 the learning pool, and treated as sprint-complete so the effort cascade can
-move on. True FTSE filing parity (all four counts zero) is unchanged and still
-gates maintenance.
+move on. Unparked names stay on FTSE-volume maintenance. True FTSE filing
+parity (all four counts zero) is unchanged and still gates ``ingest_parity_markets``.
 """
 
 from __future__ import annotations
@@ -86,6 +86,51 @@ def parked_tickers_from_exhaustion(exhaustion: dict[str, Any] | None) -> list[st
         if ticker and ticker not in seen:
             seen.add(ticker)
             out.append(ticker)
+    return out
+
+
+def iter_parked_hunter_candidates(
+    *,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    policy: dict[str, Any] | None = None,
+) -> list[tuple[str, str, dict[str, Any]]]:
+    """Return ``(market_id, ticker, parked_row)`` for leftover parked names."""
+    if policy is None:
+        from value_investor.agent_model_policy import load_policy
+
+        try:
+            policy = load_policy()
+        except (OSError, ValueError, TypeError):
+            policy = {}
+    policy = policy or {}
+    market_ids: list[str] = []
+    seen: set[str] = set()
+
+    def _add(market_id: str) -> None:
+        mid = str(market_id or "").strip()
+        if mid and mid not in seen:
+            seen.add(mid)
+            market_ids.append(mid)
+
+    _add(str(policy.get("focus_market") or ""))
+    for key in (
+        "market_queue",
+        "ingest_exhausted_markets",
+        "ingest_parallel_sprint",
+        "ingest_parallel_sprint_2",
+    ):
+        for mid in policy.get(key) or []:
+            _add(str(mid))
+
+    out: list[tuple[str, str, dict[str, Any]]] = []
+    for market_id in market_ids:
+        exhaustion = load_ingest_exhaustion(market_id, library_root=library_root)
+        for row in exhaustion.get("parked") or []:
+            if not isinstance(row, dict):
+                continue
+            ticker = str(row.get("ticker") or "").strip()
+            if ticker:
+                out.append((market_id, ticker, row))
     return out
 
 
@@ -371,6 +416,7 @@ __all__ = [
     "count_trailing_complete_zero_improve_runs",
     "empty_exhaustion",
     "ingest_exhaustion_path",
+    "iter_parked_hunter_candidates",
     "learning_pool_excluded_tickers",
     "load_ingest_exhaustion",
     "overlay_exhaustion_on_health",

@@ -14,6 +14,7 @@ from value_investor.library_ingest_dispatch import (
     FTSE_MAINTENANCE_MAX_BODIES,
     FTSE_MAINTENANCE_MAX_RUNTIME_SECONDS,
     FTSE_MAINTENANCE_MAX_TARGETS,
+    INGEST_EXHAUSTED_MARKETS_KEY,
     ingest_parity_met,
     list_library_ingest_maintenance_markets,
     list_library_ingest_parallel_sprint_markets,
@@ -63,6 +64,56 @@ def record_ingest_parity_market(
     return policy
 
 
+def record_ingest_exhausted_market(
+    policy: dict[str, Any],
+    market_id: str,
+) -> dict[str, Any]:
+    """Add ``market_id`` to ``ingest_exhausted_markets`` for leftover-gap maintenance."""
+    markets = list(policy.get(INGEST_EXHAUSTED_MARKETS_KEY) or [])
+    if market_id not in markets:
+        markets.append(market_id)
+        policy[INGEST_EXHAUSTED_MARKETS_KEY] = sorted(set(markets))
+    return policy
+
+
+def maybe_record_exhausted_maintenance(
+    *,
+    market_id: str,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    policy_path: Path = DEFAULT_POLICY_PATH,
+    health: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Record an exhausted market for FTSE-volume maintenance on unparked names.
+
+    Does **not** add the market to ``ingest_parity_markets`` (raw all-four-zero
+    plus, for FTSE-equivalent markets, ``learning_ready``).
+    """
+    library_root = Path(library_root)
+    policy = load_policy(policy_path)
+    health = health or snapshot_library_buy_tier_filing_health(
+        market_id,
+        library_root=library_root,
+        policy=policy,
+    )
+    if ingest_parity_met(health):
+        return {"skipped": True, "reason": "true_parity", "market_id": market_id}
+    if not health.get("ingest_exhausted"):
+        return {"skipped": True, "reason": "not_exhausted", "market_id": market_id}
+
+    before = list(policy.get(INGEST_EXHAUSTED_MARKETS_KEY) or [])
+    policy = record_ingest_exhausted_market(policy, market_id)
+    after = list(policy.get(INGEST_EXHAUSTED_MARKETS_KEY) or [])
+    first_time = market_id not in before
+    if after != before:
+        save_policy(policy, policy_path)
+    return {
+        "recorded": True,
+        "first_time": first_time,
+        "market_id": market_id,
+        "ingest_exhausted_markets": after,
+    }
+
+
 def run_library_ingest_maintenance(
     *,
     library_root: Path = DEFAULT_LIBRARY_ROOT,
@@ -73,7 +124,7 @@ def run_library_ingest_maintenance(
     max_bodies: int = FTSE_MAINTENANCE_MAX_BODIES,
     discovery_scan: bool = True,
 ) -> LibraryIngestMaintenanceResult:
-    """Run scan-then-target maintenance for all parity library markets."""
+    """Run scan-then-target maintenance for parity and exhausted leftover markets."""
     library_root = Path(library_root)
     policy = load_policy(policy_path)
     market_list = markets or list_library_ingest_maintenance_markets(
@@ -82,12 +133,12 @@ def run_library_ingest_maintenance(
     )
     outcome = LibraryIngestMaintenanceResult(markets=market_list)
     if not market_list:
-        outcome.errors.append("no parity markets configured for maintenance")
+        outcome.errors.append("no maintenance markets configured")
         return outcome
 
     for market_id in market_list:
         health = snapshot_library_buy_tier_filing_health(market_id, library_root=library_root)
-        if not ingest_parity_met(health):
+        if not ingest_parity_met(health) and not health.get("ingest_exhausted"):
             outcome.errors.append(f"{market_id}: parity lost — skipped maintenance")
             continue
         try:
@@ -236,8 +287,9 @@ def maybe_advance_parallel_sprint_on_parity(
 ) -> dict[str, Any]:
     """
     When a parallel sprint market reaches filing parity **or** leftover thin/IWB
-    names are parked as exhausted, record maintenance eligibility only on true
-    parity and promote the next ``market_queue`` market into the same stream slot.
+    names are parked as exhausted, record ``ingest_parity_markets`` only on true
+    parity (exhausted leftovers go to ``ingest_exhausted_markets`` for unparked
+    maintenance) and promote the next ``market_queue`` market into the same slot.
     """
     library_root = Path(library_root)
     policy = load_policy(policy_path)
@@ -264,11 +316,13 @@ def maybe_advance_parallel_sprint_on_parity(
             health=health,
         )
     else:
+        policy = record_ingest_exhausted_market(policy, market_id)
         parity_event = {
             "recorded": False,
             "reason": "ingest_exhausted_leftover_gaps",
             "market_id": market_id,
             "ingest_exhausted": True,
+            "exhausted_maintenance_recorded": True,
             "parked_tickers": list(health.get("parked_tickers") or []),
         }
     nxt = next_parallel_sprint_queue_market(
@@ -356,7 +410,9 @@ __all__ = [
     "LibraryIngestMaintenanceResult",
     "maybe_advance_parallel_sprint_on_parity",
     "maybe_handoff_focus_on_ingest_parity",
+    "maybe_record_exhausted_maintenance",
     "reconcile_parallel_sprint_queues",
+    "record_ingest_exhausted_market",
     "record_ingest_parity_market",
     "run_library_ingest_maintenance",
 ]

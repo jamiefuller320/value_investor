@@ -54,7 +54,7 @@ and persists `docs/data/library/euro_ingest_dispatch.json`:
 | Mode | When | Sprint workflow (`euro-ingest-loop.yml`) | Maintenance workflow |
 |------|------|------------------------------------------|----------------------|
 | `sprint` | any of unmeasured / zero-body / thin / `indexed_without_body` > 0 (and leftover names are not yet parked) | ≤4×/day, 24 targets | off |
-| `exhausted` | unmeasured + zero-body are 0, leftover thin/IWB names parked after complete 0-improve sprints | off | off — cascade vacates the stream; learning continues on solid names |
+| `exhausted` | unmeasured + zero-body are 0, leftover thin/IWB names parked after complete 0-improve sprints | off | on — unparked names stay on FTSE-volume maintenance; parked leftovers skipped |
 | `maintenance` | FTSE quality bar met (all four **raw** counts zero) | off (skipped) | ≤4×/day, 62 targets + discovery scan via `library-ingest-maintenance.yml` |
 
 Phase 3 readiness is **informational only** — weekday ladder crons stay enabled during maintenance.
@@ -94,8 +94,14 @@ exhausted**, `advance_parallel_sprint_on_ingest_parity`
 (default true) removes it from its stream and promotes the next `market_queue` market that
 still has fetchable gaps into the same slot. Exhaustion parks unfetchable 8-K /
 awaiting-report names out of the learning pool after
-**3 complete (non-cutoff) 0-improve runs** — it does **not** open FTSE-volume
-maintenance and does **not** add the market to `ingest_parity_markets`.
+**3 complete (non-cutoff) 0-improve runs** — it does **not** add the market to
+`ingest_parity_markets` (raw all-four-zero still required, and FTSE-equivalent
+markets still wait on `learning_ready`). Exhausted leftovers **do** join
+`ingest_exhausted_markets` so `library-ingest-maintenance.yml` keeps discovering
+and deepening **unparked** names at FTSE volume (`max_targets=62`). Targeting
+already skips parked tickers. A low-priority `parked_source_hunter` engineering
+task (score 12, back of the queue, one ticker at a time) looks for a real IR
+allowlist after each hunter merge via `ftse-library parked-hunter-compile`.
 Stream 1 slots match euro focus (+30 min) via
 `library-ingest-sprint.yml`; stream 2 (+60 min) via `library-ingest-sprint-2.yml`.
 Learning **weekly paper** (`weekly_paper_shard_markets`, capacity 1) stays on

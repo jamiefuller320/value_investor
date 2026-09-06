@@ -273,7 +273,7 @@ def test_refresh_unparks_when_coverage_improves(tmp_path: Path):
     assert payload["exhausted"] is False
 
 
-def test_evaluate_dispatch_exhausted_stops_sprint_without_maintenance():
+def test_evaluate_dispatch_exhausted_stops_sprint_keeps_maintenance():
     phase = {"phase3_ready": False, "blockers": []}
     health = overlay_exhaustion_on_health(
         _health(
@@ -303,10 +303,12 @@ def test_evaluate_dispatch_exhausted_stops_sprint_without_maintenance():
     assert result["ingest_exhausted"] is True
     assert result["ingest_sprint_complete"] is True
     assert result["should_run_sprint_ingest"] is False
-    assert result["should_run_maintenance_ingest"] is False
+    assert result["should_run_maintenance_ingest"] is True
     assert result["should_run_ingest"] is False
+    assert result["cron_maintenance"] is True
+    assert result["max_targets"] == 62
     assert cron_enabled_for_dispatch(result)["morning"] is False
-    assert cron_enabled_for_dispatch(result)["maintenance"] is False
+    assert cron_enabled_for_dispatch(result)["maintenance"] is True
 
 
 def test_evaluate_dispatch_still_sprints_when_leftover_not_parked():
@@ -328,7 +330,7 @@ def test_evaluate_dispatch_still_sprints_when_leftover_not_parked():
     assert MODE_MAINTENANCE != result["mode"]
 
 
-def test_maybe_advance_on_exhaustion_vacates_without_maintenance(tmp_path: Path):
+def test_maybe_advance_on_exhaustion_vacates_and_records_maintenance(tmp_path: Path):
     policy = {
         "focus_market": "euro_depth",
         "market_queue": ["sp500", "asx200", "ftse_smallcap"],
@@ -379,7 +381,9 @@ def test_maybe_advance_on_exhaustion_vacates_without_maintenance(tmp_path: Path)
     assert event["to_market"] == "ftse_smallcap"
     assert event["parity_event"]["reason"] == "ingest_exhausted_leftover_gaps"
     assert event["parity_event"]["recorded"] is False
+    assert event["parity_event"]["exhausted_maintenance_recorded"] is True
     assert "sp500" not in saved["ingest_parity_markets"]
+    assert saved["ingest_exhausted_markets"] == ["sp500"]
     assert saved["ingest_parallel_sprint"] == ["ftse_smallcap"]
 
 
