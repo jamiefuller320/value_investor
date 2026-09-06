@@ -184,6 +184,59 @@ def test_compile_ingest_engineering_tasks_micro_appends_ingest_tasks(tmp_path: P
     assert task_title_key(open_tasks[0]["title"]).startswith("implement companies house")
 
 
+def test_compile_ingest_engineering_tasks_micro_ignores_open_hunter(tmp_path: Path):
+    from value_investor.engineering_tasks import (
+        PARKED_SOURCE_HUNTER_PRIORITY_SCORE,
+        PARKED_SOURCE_HUNTER_SOURCE,
+    )
+    from value_investor.ingest_loop import has_open_ingest_engineering_tasks
+
+    suggestions = tmp_path / "suggestions.json"
+    suggestions.write_text(
+        json.dumps(
+            {
+                "suggestions": [
+                    {
+                        "area": "ingest",
+                        "priority": "high",
+                        "suggestion": "Implement Companies House filed-accounts PDF fetch pipeline",
+                        "ticker": "ITV.L",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    EngineeringTask(
+                        id="eng-20260906-01",
+                        area="ingest",
+                        title="Hunt fetchable IR source for parked sp500 leftover FICO",
+                        summary="low priority hunter",
+                        priority="low",
+                        priority_score=PARKED_SOURCE_HUNTER_PRIORITY_SCORE,
+                        source=PARKED_SOURCE_HUNTER_SOURCE,
+                        status="open",
+                    ).to_dict()
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert has_open_ingest_engineering_tasks(tasks_path) is False
+    result = compile_ingest_engineering_tasks_micro(
+        suggestions_path=suggestions,
+        max_tasks=2,
+        tasks_path=tasks_path,
+        committed_path=tasks_path,
+    )
+    assert result["compiled_count"] == 1
+
+
 def test_compile_ingest_engineering_tasks_micro_skips_already_merged(tmp_path: Path):
     suggestions = tmp_path / "suggestions.json"
     suggestions.write_text(

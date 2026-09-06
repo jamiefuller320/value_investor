@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-06T07:01:53+00:00",
+  "updated_at": "2026-09-06T10:00:28+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -6720,7 +6720,96 @@
       "added_at": "2026-09-05T21:05:40+00:00"
     },
     {
+      "id": "L308",
+      "category": "later",
+      "section": "ops",
+      "title": "Calendar unpark of exhausted ingest leftovers",
+      "summary": "Ingest exhaustion unparks when filing coverage improves. If a parked name sits unchanged through an earnings season, a calendar revisit could re-open one discovery pass without waiting for an index fingerprint change.",
+      "revisit_when": "Parked leftovers remain after the next reporting season with no coverage change, or operators want a scheduled unpark instead of coverage-triggered unpark.",
+      "tags": [
+        "ingest",
+        "exhaustion",
+        "library",
+        "cascade"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-4e8f6cc3-6dd0-4a9d-ae76-82513ae5f453",
+      "added_at": "2026-09-06T07:39:35+00:00"
+    },
+    {
       "id": "N94",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Weekly paper for exhausted spare-stream markets",
+      "summary": "Exhaustion vacates the ingest sprint slot and can flip filing_ready on solid names. Do not auto-add those markets to weekly_paper_shard_markets while capacity stays 1 on euro_depth.",
+      "revisit_when": "euro_depth Phase 2 weekly-paper gates are green and weekly_paper_shard_capacity can hold a second book.",
+      "tags": [
+        "weekly-paper",
+        "exhaustion",
+        "cascade",
+        "euro_depth"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-4e8f6cc3-6dd0-4a9d-ae76-82513ae5f453",
+      "added_at": "2026-09-06T07:39:35+00:00"
+    },
+    {
+      "id": "N95",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Parked-name ingest source-hunter agent",
+      "summary": "Do not add a standing agent that walks parked leftover tickers one-by-one looking for new IR/exhibit/exchange sources. Gap-closure plus engineering compile already exist; a hunter would spend P1 LLM budget on names the sprint has already exhausted. Revisit as a capped, eng-queued allowlist proposer (one ticker, patch+test, no silent ingest writes) after euro bootstrap gaps are gone and the parked set is stable.",
+      "revisit_when": "euro_depth unmeasured and zero-body are clear, ingest_exhaustion.json has a stable parked set after cascade vacate, and gap-closure still returns 0/N with no new allowlist seeds landing by hand.",
+      "tags": [
+        "ingest",
+        "exhaustion",
+        "director",
+        "allowlist",
+        "not_now"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-4e8f6cc3-6dd0-4a9d-ae76-82513ae5f453",
+      "added_at": "2026-09-06T07:42:47+00:00",
+      "updated_at": "2026-09-06T08:30:10+00:00"
+    },
+    {
+      "id": "N96",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not raise offline memo density from leftover Cursor plan credit",
+      "summary": "euro_depth buy-tier is already 45/45 memo'd with 0 body-lag rememo hits at threshold 10. Leftover Ultra (usage-page %) does not fund ingest; raising research_hard_cap, research_all_graduated, hold/sell memos, or lowering rememo_body_lag_threshold only rewrites thin first-pass notes. Spend leftover on P1 (FTSE overlay/engineering) or the existing cycle-surplus weekly_ops bump \u2014 not Layer C spray.",
+      "revisit_when": "euro_depth ingest parity is green and Phase 2 weekly paper still lacks buy-tier overlay after rememo_existing runs, or a first-time buy-tier shortlist appears on the focus market",
+      "tags": [
+        "memo",
+        "offline",
+        "weekly-ops",
+        "euro_depth",
+        "surplus",
+        "layer-c"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-4e8f6cc3-6dd0-4a9d-ae76-82513ae5f453",
+      "added_at": "2026-09-06T09:50:44+00:00"
+    },
+    {
+      "id": "L309",
+      "category": "later",
+      "section": "research",
+      "title": "Rememo euro_depth thin first-pass buy-tier after filing parity",
+      "summary": "Many euro_depth buy-tier memos are thin/adequate with memo_quality filings_with_body=0 while disk now has 2-9 bodies \u2014 below the rememo lag of 10. After ingest parity, run the existing rememo_existing path; only then consider a one-cycle threshold tweak for remaining 0-body first-pass notes. Do not lower the threshold just to burn leftover plan credit.",
+      "revisit_when": "euro_ingest_dispatch ingest_parity_met is true and rememo_existing still reports 0 eligible on the euro_depth buy-tier",
+      "tags": [
+        "euro_depth",
+        "rememo",
+        "filings",
+        "memo-quality"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-4e8f6cc3-6dd0-4a9d-ae76-82513ae5f453",
+      "added_at": "2026-09-06T09:50:44+00:00"
+    },
+    {
+      "id": "N97",
       "category": "not_now",
       "section": "not_now",
       "title": "Do not add extra S&P or ASX sprint slots for leftover IWB",
@@ -6734,10 +6823,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-4e8f6cc3-6dd0-4a9d-ae76-82513ae5f453",
-      "added_at": "2026-09-06T07:01:53+00:00"
+      "added_at": "2026-09-06T10:00:28+00:00"
     },
     {
-      "id": "L308",
+      "id": "L310",
       "category": "later",
       "section": "research",
       "title": "Follow 8-K EX-99.1 or stop counting leftover 8-K IWB for S&P parity",
@@ -6752,10 +6841,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-4e8f6cc3-6dd0-4a9d-ae76-82513ae5f453",
-      "added_at": "2026-09-06T07:01:53+00:00"
+      "added_at": "2026-09-06T10:00:28+00:00"
     },
     {
-      "id": "L309",
+      "id": "L311",
       "category": "later",
       "section": "universe",
       "title": "ASX announcement history beyond Markit latest-five",
@@ -6769,7 +6858,7 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-4e8f6cc3-6dd0-4a9d-ae76-82513ae5f453",
-      "added_at": "2026-09-06T07:01:53+00:00"
+      "added_at": "2026-09-06T10:00:28+00:00"
     }
   ],
   "fragments": [

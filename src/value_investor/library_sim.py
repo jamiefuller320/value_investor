@@ -381,6 +381,9 @@ def save_library_run_snapshots(
     history_dir = screen_dir / HISTORY_DIR
     history_dir.mkdir(parents=True, exist_ok=True)
 
+    from value_investor.library_ingest_exhaustion import learning_pool_excluded_tickers
+
+    excluded = learning_pool_excluded_tickers(market_id, library_root=root)
     written: list[Path] = []
     for run_at, signals_path, universe_path in runs:
         signals = pd.read_csv(signals_path)
@@ -391,6 +394,8 @@ def save_library_run_snapshots(
             run_at=run_at,
             extra_research_dirs=extra_research_dirs,
         )
+        if excluded and "ticker" in signals.columns:
+            signals = signals[~signals["ticker"].astype(str).isin(excluded)].copy()
         snapshot = build_library_run_snapshot(
             signals=signals,
             universe=universe,

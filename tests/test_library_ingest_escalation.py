@@ -112,3 +112,110 @@ def test_compile_library_ingest_micro_when_stalled(tmp_path: Path, monkeypatch):
     assert task["area"] == "ingest"
     assert task["source"] == "library_ingest_stall"
     assert task["evidence"]["market_id"] == "euro_depth"
+
+
+def test_compile_library_ingest_micro_ignores_open_hunter(tmp_path: Path):
+    from value_investor.engineering_tasks import (
+        PARKED_SOURCE_HUNTER_PRIORITY_SCORE,
+        PARKED_SOURCE_HUNTER_SOURCE,
+    )
+    from value_investor.storage import read_json
+
+    tasks_path = tmp_path / "engineering_tasks.json"
+    write_json(
+        tasks_path,
+        {
+            "tasks": [
+                {
+                    "id": "eng-20260906-01",
+                    "area": "ingest",
+                    "title": "Hunt fetchable IR source for parked sp500 leftover FICO",
+                    "summary": "low priority hunter",
+                    "priority": "low",
+                    "priority_score": PARKED_SOURCE_HUNTER_PRIORITY_SCORE,
+                    "source": PARKED_SOURCE_HUNTER_SOURCE,
+                    "status": "open",
+                    "evidence": {"market_id": "sp500", "hunter_ticker": "FICO"},
+                }
+            ]
+        },
+        compact=False,
+    )
+    result = compile_library_ingest_engineering_tasks_micro(
+        market_id="euro_depth",
+        health_after=_health(unmeasured=4, zero_body=1),
+        tasks_path=tasks_path,
+        committed_path=tasks_path,
+    )
+    assert result["compiled_count"] == 1
+    payload = read_json(tasks_path)
+    sources = [row["source"] for row in payload["tasks"] if row.get("status") == "open"]
+    assert PARKED_SOURCE_HUNTER_SOURCE in sources
+    assert "library_ingest_stall" in sources
+
+
+def test_compile_parked_source_hunter_sits_at_back_and_chains(tmp_path: Path):
+    from value_investor.engineering_tasks import (
+        PARKED_SOURCE_HUNTER_PRIORITY_SCORE,
+        PARKED_SOURCE_HUNTER_SOURCE,
+    )
+    from value_investor.library_ingest_escalation import compile_parked_source_hunter_task
+    from value_investor.storage import read_json
+
+    root = tmp_path / "library"
+    tasks_path = tmp_path / "engineering_tasks.json"
+    write_json(tasks_path, {"tasks": []}, compact=False)
+    exhaustion_dir = root / "markets" / "sp500"
+    exhaustion_dir.mkdir(parents=True)
+    write_json(
+        exhaustion_dir / "ingest_exhaustion.json",
+        {
+            "schema_version": 1,
+            "market_id": "sp500",
+            "exhausted": True,
+            "parked": [
+                {"ticker": "FICO", "reason": "unfetchable_iwb"},
+                {"ticker": "JBH.AX", "reason": "awaiting_periodic_report"},
+            ],
+        },
+        compact=False,
+    )
+    policy = {
+        "focus_market": "euro_depth",
+        "market_queue": ["sp500", "asx200"],
+        "ingest_exhausted_markets": ["sp500"],
+    }
+    first = compile_parked_source_hunter_task(
+        library_root=root,
+        policy=policy,
+        tasks_path=tasks_path,
+        committed_path=tasks_path,
+    )
+    assert first["compiled_count"] == 1
+    assert first["hunter_ticker"] == "FICO"
+    assert first["priority_score"] == PARKED_SOURCE_HUNTER_PRIORITY_SCORE
+    payload = read_json(tasks_path)
+    hunter = payload["tasks"][0]
+    assert hunter["source"] == PARKED_SOURCE_HUNTER_SOURCE
+    assert hunter["priority"] == "low"
+    assert hunter["auto_merge"] is False
+
+    second = compile_parked_source_hunter_task(
+        library_root=root,
+        policy=policy,
+        tasks_path=tasks_path,
+        committed_path=tasks_path,
+    )
+    assert second["compiled_count"] == 0
+    assert second["reason"] == "open parked-source hunter already queued"
+
+    payload["tasks"][0]["status"] = "merged"
+    write_json(tasks_path, payload, compact=False)
+    third = compile_parked_source_hunter_task(
+        library_root=root,
+        policy=policy,
+        tasks_path=tasks_path,
+        committed_path=tasks_path,
+    )
+    assert third["compiled_count"] == 1
+    assert third["hunter_ticker"] == "JBH.AX"

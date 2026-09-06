@@ -15,6 +15,7 @@ from value_investor.library_ingest_dispatch import (
     ingest_parity_met,
     list_library_ingest_parallel_sprint_markets,
     should_run_parallel_sprint_ingest,
+    sprint_ingest_complete,
 )
 from value_investor.library_ingest_escalation import snapshot_library_buy_tier_filing_health
 from value_investor.library_ingest_loop import (
@@ -150,13 +151,13 @@ def run_library_ingest_sprint(
                 health = snapshot_library_buy_tier_filing_health(
                     mid, library_root=library_root, policy=policy
                 )
-                if not ingest_parity_met(health):
+                if not sprint_ingest_complete(health):
                     needing = list(dict.fromkeys([*needing, mid]))
     leftover_path = library_root / "ingest_cascade_runtime.json"
     decision = evaluate_scheduler(
         parallel_stream,
         policy=policy,
-        head_at_parity=ingest_parity_met(head_health),
+        head_at_parity=sprint_ingest_complete(head_health),
         needing_markets=needing,
         requested_targets=max_targets,
         requested_runtime=max_runtime_seconds,
@@ -172,7 +173,7 @@ def run_library_ingest_sprint(
         cascade=decision.cascade
         or evaluate_ingest_cascade(
             policy,
-            head_at_parity=ingest_parity_met(head_health),
+            head_at_parity=sprint_ingest_complete(head_health),
             now=when,
             phase2_ready=phase2_ready,
         ).to_dict(),
@@ -213,7 +214,7 @@ def run_library_ingest_sprint(
                 }
             )
             continue
-        if not assigned and ingest_parity_met(health):
+        if not assigned and sprint_ingest_complete(health):
             outcome.skipped.append(
                 {
                     "market_id": market_id,

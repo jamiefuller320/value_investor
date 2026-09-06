@@ -32,7 +32,10 @@ forces **canonical-only** filing coverage under
 `docs/data/library/markets/sp500/screen/research/{TICKER}/`. nasdaq100 (or any other
 shard) indexes must not be counted as S&P parity. Do **not** append `sp500` to
 `ingest_parity_markets` until `ftse-library learning-depth --market sp500` reports
-`learning_ready: true`. Live screen and weekly paper stay on `euro_depth`.
+`learning_ready: true` **on raw filing parity**. Leftover unfetchable 8-K / thin
+names can be parked (`ingest_exhaustion.json`) so the sprint slot vacates and
+learning continues on solid names without waiting for the next periodic report.
+Live screen and weekly paper stay on `euro_depth`.
 
 **30-day sprint:** compressed phase gates + weekday ingest/shard automation — see
 [`euro-depth-sprint.md`](euro-depth-sprint.md).

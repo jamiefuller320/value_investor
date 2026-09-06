@@ -1,86 +1,73 @@
 # Imperial Brands PLC (IMB.L) — Research memo
 
-_Version 1 · Updated 2026-09-04T17:50:11.068649+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-06T07:28:38.593877+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Imperial Brands PLC screens as a **strong buy** on the quantitative model (13/22 models passed; composite score 76%; five factor families: cheapness, quality, dividend, GARP, risk), driven by a ~6.6% dividend yield, ~13% FCF yield, and P/E of ~11.9x against a cash-generative combustibles franchise. The investment case is a capital-return compounder: progressive dividends, an active **£1.45bn** buyback, and Strategy 2030’s focus on five priority markets (~70% of adjusted tobacco operating profit) plus scaling next-generation products (NGP). Valuation looks contrarian — RSI ~36, price below the 200-day moving average — but reported GAAP earnings fell in FY25 and net debt rose despite record free cash flow. The central debate is whether pricing power and shareholder returns can keep outpacing structural volume decline, regulatory tightening, and NGP investment needs; the source pack has **no interim filings** to bridge FY25 year-end to the current period.
+Imperial Brands offers a classic tobacco-sector value proposition: low double-digit earnings yield, ~6.7% dividend yield, and filing-aligned free cash flow of £3.2bn supporting buybacks and progressive payouts. The quantitative screen passes all five factor families (cheapness, quality, dividend, GARP, risk), driven by FCF yield (~16.8%), earnings yield, and dividend models. The central debate is whether statutory earnings compression (FY25 basic EPS down ~16% per Yahoo) is cyclical/transitional or structural, and whether regulatory acceleration (UK youth smoking ban, NGP restrictions) erodes the combustibles cash engine faster than NGP and cost savings can offset. Capital return discipline (£1.45bn buyback programme, four equal quarterly dividends from FY25) supports the income case, but elevated leverage, weak current ratio, and negative tangible equity limit deep-value comfort.
 
 ## INVESTMENT THESIS
-For a value-oriented investor, IMB offers unusually high **current** cash yield backed by operational discipline rather than a single distressed metric. The screen passes Earnings Yield, FCF Yield, Low P/E + High Yield, Neff PEGY, Quality Value, Buffett Quality, High Dividend Yield, Dividend Growth, Magic Formula, Acquirer’s Multiple, Dreman Contrarian, Composite Value, and Earnings Quality — breadth across cheapness and quality that is rare in tobacco, where ESG discounting often compresses multiples without impairing near-term cash.
+For a value investor, IMB screens as a strong buy because cash generation and shareholder returns dominate the signal set while the market prices in tobacco decline and earnings volatility. The screen passes 13 of 22 models including Earnings Yield, FCF Yield, Low P/E + High Yield, Buffett Quality, High Dividend Yield, Dividend Growth, Magic Formula, Acquirer's Multiple, and Composite Value — a breadth peer BME.L (buy, 7/22) does not match. Key metrics: P/E 11.7, P/B 4.9, yield 6.7%, ROE 37.2%, with FCF dividend coverage ~2.0x on statutory OCF minus capex.
 
-Business quality, as described in the FY25 Annual Report and Accounts 2025 (Companies House, filed 7 Feb 2026), rests on a challenger positioning: concentrated exposure to the US, Germany, UK, Spain, and Australia; tobacco and NGP net revenue of **£8.3bn** on reported Group revenue of **£32.2bn**; and a March 2025 Strategy 2030 plan targeting sustainable combustibles value and double-digit annual NGP net revenue growth. FY24 narrative (Annual Report 2024) records the strongest constant-currency tobacco and NGP net revenue growth in over a decade (**+4.6%** CC), tobacco pricing **+7.8%**, and NGP net revenue **+26%** CC — evidence that the post-2021 turnaround is delivering at the top line.
-
-Capital allocation is explicit and shareholder-friendly. The FY24 annual report commits to investment-grade leverage at the **lower end of 2.0–2.5x adjusted net debt/EBITDA**, progressive dividend growth (**153.42p** total DPS in FY24, **+4.5%**), four equal quarterly payments from FY25, and surplus returns via buybacks. News and RNS filings confirm ongoing execution under a **£1.45bn** repurchase programme (Aug 2025–Aug 2026). Yahoo fallback (see Financial Review) shows FY25 FCF of **£3.17bn** covering dividends (**£1.56bn** paid) and buybacks (**£1.24bn**) with ~**2.0x** net FCF dividend coverage — consistent with the screen’s cash-yield signal.
-
-Failed screen models (Graham Defensive/Enterprising, Schloss, Deep Value, Economic Moat, Piotroski F-Score 6/9, Financial Health) flag structural constraints: high P/B (~5.0x), elevated leverage (debt/equity ~244%), weak liquidity (current ratio ~0.74), negative tangible book, and declining reported earnings growth. These are the price of a high-yield tobacco name — not reasons to dismiss the screen, but reasons the research overlay should temper conviction below the raw strong-buy signal.
+Business quality, as described in primary filings, has improved under the consumer-led “challenger” strategy: five priority combustible markets (US, Germany, UK, Spain, Australia) contribute ~70% of adjusted tobacco operating profit, with aggregate share gains after years of decline; NGP net revenue grew 26.4% (constant currency) in FY24 and 13.7% in FY25 per the FY25 annual report body. Management targets investment-grade leverage at 2.0–2.5x adjusted net debt/EBITDA, progressive dividends, and surplus capital return via buybacks (£1.25bn committed FY25; £1.45bn programme per news). FY25 reported revenue of £32.2bn and Tobacco & NGP net revenue of £8.3bn (Companies House FY25 body) align with a stabilising, cash-rich franchise rather than a distressed operator — the screen’s quality and dividend passes are therefore grounded in real capital-allocation discipline, not purely statistical cheapness.
 
 ## FINANCIAL REVIEW
-**Source coverage and gaps.** The filings index (`uk_rns` regime) contains **eight annual** Companies House accounts (FY18–FY25, filed 2019–2026) with body extracts, **zero interim**, **zero trading-update**, and **61 other** RNS items (predominantly share-buyback transactions, voting rights, and a major-holdings notification). Detailed GAAP line items are largely absent from OCR’d annual-report extracts; where filing bodies lack figures, **Yahoo `financials_annual.json` is cited explicitly as fallback**. No interim or half-year primary filing is available to assess H1 FY25/FY26 trajectory from this pack.
+**Filing coverage.** The index contains eight annual Companies House accounts (FY2019–FY2025, bodies available) under `uk_rns` regime. **No interim, half-year, or trading-update filings are indexed** — H1 commentary in this pack comes only from news, not filing bodies. Recent RNS items are overwhelmingly share-buyback transactions.
 
-**Annual trends — revenue and profitability (filings first).**
+**Annual trends (primary filings first).**
 
-| Period | Source | Key figures |
-|--------|--------|-------------|
-| **FY25** | Annual Report 2025 (CH body) | Reported Group revenue **£32.2bn**; tobacco & NGP net revenue **£8.3bn** (Europe 42%, Americas 35%, AACE 23%). Five priority markets ~**70%** of adjusted tobacco operating profit. Strategy 2030 launched March 2025. |
-| **FY24** | Annual Report 2024 (CH body) | Tobacco & NGP net revenue **£8.2bn**; CC net revenue growth **+4.6%** (strongest in >10 years); tobacco net revenue **+3.8%** CC on **+7.8%** pricing; NGP **+26%** CC; aggregate market share in five priority combustible markets **+5bps**; mid-single-digit adjusted operating profit growth. |
-| **FY23** | Annual Report 2023 (CH body) | Tobacco & NGP net revenue **£8.0bn**; CC net revenue growth **+1.4%**; dividend per share **146.82p** (+4.0%). |
+| Metric | FY23 (CH FY2023 body) | FY24 (CH FY2024 body) | FY25 (CH FY2025 body) |
+|--------|----------------------|----------------------|----------------------|
+| Tobacco & NGP net revenue | £8.0bn | £8.2bn (+4.6% cc) | £8.3bn |
+| Reported Group revenue | — | — | £32.2bn |
+| NGP net revenue growth (cc) | — | +26.4% (£329m) | +13.7% |
+| Dividend per share | 146.82p (+4.0%) | 153.42p (+4.5%) | Not stated in available FY25 extract |
+| Free cash flow | £2.4bn | £2.4bn | Not stated in available FY25 extract |
+| FY share repurchase commitment | £1.1bn (FY24) | £1.25bn (FY25) | — |
 
-*Yahoo fallback (GAAP reported, FY end September):* revenue broadly flat at **£32.2–32.5bn** (FY22–FY25). **Reported net income** peaked at **£2.61bn** (FY24) before falling to **£2.07bn** (FY25); diluted EPS declined from **£2.99** to **£2.49** (~**−17%**). Operating income was **£3.49bn** (FY25) vs **£3.55bn** (FY24). The earnings step-down is not reconciled in filing-body extracts and may reflect tax normalisation, NGP investment, or non-recurring items; adjusted metrics in annual-report narrative remain more favourable than GAAP EPS alone.
+FY24 Chair’s statement (Companies House body): group met objectives of low-single-digit tobacco growth and mid-single-digit adjusted operating profit growth; NGP achieved double-digit net revenue growth with reduced losses; total capital returns over the five-year strategy targeted at £10bn. Capital allocation framework: maintain leverage at lower end of 2.0–2.5x adjusted net debt/EBITDA; progressive dividend; surplus returned via buybacks.
 
-**Cash flow and capital returns.**
+FY25 annual report body (published Companies House 7 Feb 2026): launches Evolve/2030 strategy (March 2025) with double-digit NGP net revenue growth commitment; five priority markets still ~70% of adjusted tobacco operating profit; reported revenue £32.2bn. Detailed FY25 income statement, EPS, net debt, and cash-flow lines are **not extractable** from the available body text (OCR/front-matter heavy).
 
-- **FY24 annual report (filing):** free cash flow **£2.4bn** (unchanged vs FY23); adjusted operating cash conversion typically **90–100%**; capital returns committed **£2.0bn** in FY25 (dividends plus buybacks); **£1.25bn** buyback committed for FY25.
-- *Yahoo fallback:* FCF strengthened to **£3.17bn** (FY25) from **£2.89bn** (FY24); operating cash flow **£3.63bn** (FY25) vs **£3.31bn** (FY24). Cash dividends paid **£1.56bn** (FY25) and **£1.30bn** (FY24); share repurchases **£1.24bn** (FY25). CapEx **£461m** (FY25). FCF comfortably covers the dividend on a gross basis (~2.0x per screen metrics).
+**Yahoo fallback (`financials_annual.json`) — used where filing bodies lack figures:**
 
-FY25 FCF and dividend per share are **not extractable** from the FY25 filing body (OCR limited to strategic narrative); Yahoo and FY24 policy language (153.42p, +4.5%; four equal quarterly payments from FY25) are the best available anchors.
+- **FY25:** revenue £32.17bn; operating income £3.49bn; net income £2.07bn; basic EPS £2.511 (FY24: £3.007); operating cash flow £3.63bn; capex £461m; **FCF £3.17bn** (FY24: £2.89bn); dividends paid £1.56bn; net debt £8.16bn; total debt £10.0bn; current ratio 0.74.
+- **Trend:** revenue broadly flat to slightly down since FY22 (£32.55bn); earnings peaked FY24 then declined FY25; **FCF improved** in FY25 despite lower reported earnings — consistent with screen’s filing-aligned FCF £3.17bn vs screen TTM £2.50bn mismatch flag.
+- **Earnings basis warning (screen):** statutory EPS growth −16.5% vs filing/core −24.1% (>300 bps divergence) — treat headline P/E with caution.
 
-**Balance sheet and leverage (*Yahoo fallback — not in filing-body extracts*).**
-
-- Net debt: **£8.16bn** (FY25) vs **£7.62bn** (FY24); total debt **£10.0bn**; cash **£1.44bn**. Net debt rose despite record FCF, consistent with buybacks and working-capital build (inventory **£4.47bn**, up from **£4.08bn**).
-- Shareholders’ equity **£4.82bn**; **negative tangible book value** (~**£11.4bn**) driven by goodwill and intangibles (~**£16.2bn**).
-- Non-current pension and post-retirement obligations **~£801m** (FY25); defined pension benefit **~£314m**.
-- Working capital **−£3.04bn**; current ratio **~0.74** (screen input) — typical for tobacco working-capital profiles but a failed Graham/Financial Health criterion.
-
-**Interim coverage.** **No interim, half-year, or trading-update filings** are indexed. H1 FY25/FY26 performance referenced in May 2025 news (“Imperial Brands H1 Earnings Call Highlights”, 12 May 2025) **cannot be verified** from primary filing bodies in this pack. Yahoo quarterly cash-flow series is empty (`ttm_cashflow_suppressed`).
+**Interim gap.** No H1 FY25 or H1 FY26 interim filing bodies in index. News references an H1 FY26 earnings call (12 May 2026) citing on-track full-year targets and NGP/tobacco net revenue growth, but figures cannot be verified from primary filings in this pack.
 
 ## RISKS AND RED FLAGS
-**Regulatory and structural.** Annual-report language (FY24/FY25 bodies) emphasises evolving tobacco and nicotine regulation — EU Tobacco Products Directive review, US product approval pathways, and prohibition-leaning policies (Australia cited: ~**30%** illicit trade, excise revenue erosion, restricted NGP availability). Combustible volumes structurally decline; the model depends on continuous pricing offset — vulnerable to tax caps, plain packaging, and youth-access restrictions (e.g. UK youth cigarette ban headlines, 28 Apr 2025).
+**Regulatory.** FY24 filing language highlights concern with “prohibition”-leaning policy (Australia cited: ~30% illicit tobacco, reduced excise receipts, restricted NGP access). UK generational smoking ban (news, Apr 2026) adds long-dated volume risk. Tobacco harm reduction and NGP regulation remain core uncertainties not captured by valuation screens.
 
-**NGP transition and competitive.** Strategy 2030 commits double-digit NGP growth and M&A (Black Buffalo nicotine pouches, **≥$150m**, 27 May 2025). Imperial remains the smallest global major; BAT, PMI, and JTI outspend on NGP scale. FY24 narrative notes NGP losses being reduced while revenue scales — execution and regulatory approval risk remain material.
+**Leverage and liquidity.** Screen debt/equity 243.8%; current ratio 0.74 — fails Graham Defensive, Financial Health, and Economic Moat models. Yahoo FY25: net debt £8.2bn against equity £4.8bn; goodwill and intangibles £16.2bn drive **negative tangible book** (~£11.4bn). Pension and post-retirement liabilities ~£801m non-current (Yahoo balance sheet). Leverage covenant framework referenced at 2.0–2.5x adjusted net debt/EBITDA (FY24 filing); covenant detail not in body extracts.
 
-**Leverage and liquidity.** Management targets **2.0–2.5x adjusted net debt/EBITDA** at the lower end; Yahoo shows net debt rising to **£8.16bn** in FY25 while buybacks continue. Current ratio **~0.74** and debt/equity **~244%** fail Financial Health and Graham screens. Filing bodies in this pack do not reliably extract covenant or going-concern disclosure text — a verify-before-trade gap.
+**Earnings and transition.** FY25 statutory earnings decline (Yahoo) despite higher FCF suggests mix, tax, or one-offs — screen flags EPS basis divergence. NGP remains small relative to combustibles (£329m FY24 vs £8.2bn tobacco & NGP net revenue); transition execution risk persists. Job cuts in US and Europe targeting £320m annual savings by 2030 (Yahoo news, Aug 2026) signal restructuring pressure.
 
-**Pension.** Non-current pension and post-retirement obligations **~£801m** require monitoring if discount rates or asset returns move adversely.
+**Governance / market.** News reports insider holding reduced 59% over past year (Simply Wall St, Jun 2026). Heavy buyback cadence (daily RNS) supports EPS but concentrates capital in a declining category.
 
-**Governance and ownership.** RNS (30 Jun 2026): Spring Mountain Investments (Kenneth Bryan Dart) reduced stake from **3.99%** to **2.91%**. News (7 Jun 2025): “Imperial Brands Insider Lowered Holding By 59% During Last Year” (simplywall.st) — not corroborated in filing bodies.
+**Filing gaps.** Principal risks, going-concern, and contingency sections are indexed in FY25 contents but **not legible in body extracts**; no interim filings for trend verification. Piotroski F-Score 6/9 (fails screen threshold): leverage not declining, ROA/asset turnover not improving.
 
-**Earnings quality.** Reported EPS decline FY24→FY25 (Yahoo) contrasts with adjusted profit-growth narrative; screen shows **~−17% to −24%** earnings growth on trailing metrics. Without full adjusted reconciliation from filing tables, GAAP deterioration is an unresolved flag.
-
-**Operational restructuring.** August 2025 reports of thousands of job cuts targeting **£320m** annual savings by 2030 (Yahoo, 10 Aug 2025) bring execution and morale risk alongside efficiency upside.
-
-**Filing gaps.** Eight annual CH accounts provide strategic narrative but OCR extracts lack consolidated income-statement, balance-sheet, and cash-flow tables for FY25; **zero interim filings** limit current-year visibility.
-
-RiskTags: regulatory, competitive, leverage, pension, governance, cyclical, liquidity
-RiskTags: regulatory, competitive, leverage, pension, governance, cyclical, liquidity
+RiskTags: regulatory, leverage, competitive, pension, governance
+RiskTags: regulatory, leverage, competitive, pension, governance
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate but repetitive** — dominated by buyback tracking (Kalkine Media, daily Aug 2025–Aug 2026: e.g. “Imperial Brands (IMB) Repurchases 324,614 Shares at Average Price of 2,636p Under £1.45 Billion Buyback Plan”, 12 Aug 2025) and income-investor commentary, with fewer primary regulatory or sell-side disclosures.
+Coverage is **dense on capital returns, thin on fundamental strategy** — dominated by Kalkine buyback tranche articles (Aug–Sep 2026) under the **£1.45bn repurchase plan**.
 
-**Material items:**
+Material items (past year):
 
-- **10 Aug 2025** — “Imperial Brands cutting thousands of jobs in U.S. and Europe” (Yahoo): restructuring toward **£320m** annual savings by 2030.
-- **2 Jun 2025** — “Imperial Brands Touts Strong 2026 Start as NGP Growth and £320M Savings Plan Advance” (Yahoo): management upbeat on Strategy 2030.
-- **27 May 2025** — “Imperial Brands strengthens tobacco-free product range with Black Buffalo purchase” (Yahoo): **≥$150m** US nicotine pouch acquisition.
-- **12 May 2025** — “Imperial Brands H1 Earnings Call Highlights” / Q2 FY26 earnings coverage (Yahoo): on track for full-year targets; US/Australia one-off headwinds noted — **not verifiable from indexed interim filings**.
-- **15 Jul 2025** — “Bank of America upgrades Imperial Brands on improving outlook and attractive valuation (IMB)” (Yahoo Finance UK).
-- **14 Apr 2025** — “Imperial Brands Shares Fall Amid Middle East Conflict Uncertainty; Fiscal 2026 Outlook Reaffirmed” (Yahoo Finance UK); **15 Apr 2025** — Deutsche Bank cited calling sell-off an overreaction (Proactive Investors / Morningstar undervaluation note).
-- **28 Apr 2025** — “Imperial Brands stock dips on UK youth cigarette ban but outlook remains positive” (Pluang).
-- **30 Jun 2026** — “REG - Imperial Brands PLC - Holding(s) in Company” / Spring Mountain stake cut to **2.91%** (RNS body).
+- **Job cuts / savings (10 Aug 2026):** “Imperial Brands cutting thousands of jobs in U.S. and Europe” (Yahoo) — £320m annual savings target by 2030; shares weakened (“FTSE 100 eases… Imperial Brands slumps on job cut report”, Reuters, 10 Aug 2026).
+- **Strategy / trading (2 Jun 2026):** “Imperial Brands Touts Strong 2026 Start…” — Strategy 2030, NGP growth, combustibles value (Yahoo).
+- **Broker support (15 Jul 2026):** Bank of America upgrade on improving outlook and valuation (Yahoo Finance UK).
+- **M&A (27 May 2026):** Black Buffalo nicotine pouch acquisition, at least $150m (~£112m) (Yahoo).
+- **H1 results (12 May 2026):** H1 earnings call — on track for full-year targets; tobacco and NGP net revenue growth; US/Australia one-offs noted (Yahoo).
+- **Trading update volatility (14 Apr 2026):** Shares fell ~7% despite reaffirmed FY26 outlook; Middle East uncertainty cited (Yahoo Finance UK, Twelfth Magpie).
+- **UK regulation (28 Apr 2026):** Youth cigarette ban headline pressure (Pluang).
+- **Income focus:** Repeated dividend/ex-dividend commentary (Simply Wall St, Jul–Aug 2026); cash cover vs headline yield debated (Kalkine, 21 Aug 2026).
 
-Buyback activity is corroborated by extensive RNS “Transaction in Own Shares” filings (Jun–Aug 2026). Hard regulatory actions beyond policy debate are thin; M&A beyond Black Buffalo is absent. Much coverage is secondary commentary rather than primary disclosure.
+No major management change flagged in manifest beyond routine board updates in FY24 annual report.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.68
-Rationale: Deep research largely confirms the screen’s cash-yield, dividend-coverage, and capital-return thesis from annual filings and FY25 FCF data, but declining reported GAAP earnings, elevated leverage and weak liquidity metrics, absent interim filings, and unresolved tobacco/NGP transition risks prevent full endorsement of the strong-buy signal at face value.
+Confidence: 0.72
+Rationale: Filing-backed cash generation, dividend progress, and buyback discipline support the quantitative strong-buy signal, but FY25 earnings decline, leverage/liquidity metrics, regulatory overhang, and absent interim filings prevent full confirmation of a deep-value entry.

@@ -6,7 +6,8 @@ leftover becomes a *provisional* raise of ``weekly_ops_cap_usd`` (estimated
 on-demand USD meter). ``weekly_ops_plan_credit_share_cap`` (default 15% of
 listed plan / week) is a warning on that estimated ledger, not a hard cap.
 Do not infer leftover dollars from estimated token spend divided by a
-usage-page percentage. Rememo daily caps stay fixed.
+usage-page percentage. Rememo daily caps stay fixed; leftover credit is not
+a reason to raise offline memo density.
 
 Human review at the next billing-cycle end keeps or reverts the bump.
 """
@@ -198,7 +199,8 @@ def assess_cycle_surplus(
             "Declared unused plan leftover (Cursor usage page). Cursor does not "
             "expose remaining credits to the API. --unused-usd is preferred when "
             "leftover exceeds listed plan_monthly_usd. Transfer is a provisional "
-            "weekly_ops_cap raise only — rememo daily caps stay at 3. "
+            "weekly_ops_cap raise only — rememo daily caps stay at 3 and "
+            "offline memo density (research_all_graduated / Layer C) stays put. "
             "plan_credit_share_cap of plan_monthly_usd (default 15%) is a "
             "warning on estimated weekly_ops USD, not a hard cap."
         ),

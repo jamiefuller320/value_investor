@@ -741,10 +741,13 @@ def _improved_count(improved: Any) -> int:
 
 
 def _library_outstanding_ingest_gaps(health: dict[str, Any]) -> int:
+    iwb = health.get("effective_indexed_without_body")
+    if iwb is None:
+        iwb = health.get("indexed_without_body")
     return (
         int(health.get("unmeasured_buy_tier") or 0)
         + int(health.get("zero_body_buy_tier") or 0)
-        + int(health.get("indexed_without_body") or 0)
+        + int(iwb or 0)
     )
 
 

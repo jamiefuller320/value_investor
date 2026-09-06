@@ -1,7 +1,35 @@
 {
-  "run_at": "2026-09-05T07:46:37.334404+00:00",
-  "overall": "ok",
-  "findings": [],
+  "run_at": "2026-09-06T07:46:29.924423+00:00",
+  "overall": "fail",
+  "findings": [
+    {
+      "severity": "fail",
+      "category": "workflows",
+      "title": "Workflow overdue: Modelling analysis review",
+      "summary": "No successful run within 36h (last: 2026-08-30T13:51:35+00:00).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
+      "category": "workflows",
+      "title": "Workflow overdue: Email report",
+      "summary": "No successful run within 36h (last: 2026-09-02T10:21:57+00:00). Recovery bundle in flight (email-report.yml#34017395919).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "fail",
+      "category": "workflows",
+      "title": "Workflow overdue: FTSE Data Backup",
+      "summary": "No successful run within 36h (last: 2026-08-31T14:03:31+00:00).",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    }
+  ],
   "auto_fixes": [
     {
       "action": "so_what_auto_queue",
@@ -9,20 +37,20 @@
     }
   ],
   "drafted_task_ids": [
-    "eng-20260905-01",
-    "eng-20260905-02",
-    "eng-20260905-03",
-    "eng-20260905-04",
-    "eng-20260905-05",
-    "eng-20260905-06",
-    "eng-20260905-07",
-    "eng-20260905-08",
-    "eng-20260905-09",
-    "eng-20260905-10",
-    "eng-20260905-11",
-    "eng-20260905-12",
-    "eng-20260905-13",
-    "eng-20260905-14"
+    "eng-20260906-01",
+    "eng-20260906-02",
+    "eng-20260906-03",
+    "eng-20260906-04",
+    "eng-20260906-05",
+    "eng-20260906-06",
+    "eng-20260906-07",
+    "eng-20260906-08",
+    "eng-20260906-09",
+    "eng-20260906-10",
+    "eng-20260906-11",
+    "eng-20260906-12",
+    "eng-20260906-13",
+    "eng-20260906-14"
   ],
   "workflow_checks": [
     {
@@ -30,9 +58,9 @@
       "name": "FTSE Ingest Loop",
       "expected_today": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-09-05T07:15:35+00:00",
-      "last_success_run_id": 33952051822,
-      "age_hours": 0.5,
+      "last_success_at": "2026-09-05T23:18:37+00:00",
+      "last_success_run_id": 33998323585,
+      "age_hours": 8.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -42,9 +70,9 @@
       "name": "Automation Orchestrator",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-04T15:01:24+00:00",
-      "last_success_run_id": 33887090472,
-      "age_hours": 16.8,
+      "last_success_at": "2026-09-06T06:20:25+00:00",
+      "last_success_run_id": 34016231245,
+      "age_hours": 1.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -54,9 +82,9 @@
       "name": "FTSE Engineering Queue",
       "expected_today": false,
       "max_age_hours": 26,
-      "last_success_at": "2026-09-05T07:14:40+00:00",
-      "last_success_run_id": 33952005787,
-      "age_hours": 0.5,
+      "last_success_at": "2026-09-05T23:17:43+00:00",
+      "last_success_run_id": 33998283317,
+      "age_hours": 8.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -66,8 +94,8 @@
       "name": "CI main nightly",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-05T07:30:58+00:00",
-      "last_success_run_id": 33952773251,
+      "last_success_at": "2026-09-06T07:30:58+00:00",
+      "last_success_run_id": 34019360173,
       "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
@@ -76,23 +104,23 @@
     {
       "workflow": "analysis-review.yml",
       "name": "Modelling analysis review",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 36,
       "last_success_at": "2026-08-30T13:51:35+00:00",
       "last_success_run_id": 33315302631,
-      "age_hours": 137.9,
-      "stale": false,
+      "age_hours": 161.9,
+      "stale": true,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     },
     {
       "workflow": "library-grow.yml",
       "name": "FTSE Library Ladder",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 36,
-      "last_success_at": "2026-09-04T06:51:37+00:00",
-      "last_success_run_id": 33846134555,
-      "age_hours": 24.9,
+      "last_success_at": "2026-09-06T06:21:26+00:00",
+      "last_success_run_id": 34016273684,
+      "age_hours": 1.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -100,11 +128,11 @@
     {
       "workflow": "library-model-review.yml",
       "name": "Library model review",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 36,
-      "last_success_at": "2026-09-01T10:33:22+00:00",
-      "last_success_run_id": 33498015468,
-      "age_hours": 93.2,
+      "last_success_at": "2026-09-06T06:46:56+00:00",
+      "last_success_run_id": 34017395061,
+      "age_hours": 1.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -112,24 +140,24 @@
     {
       "workflow": "email-report.yml",
       "name": "Email report",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 36,
       "last_success_at": "2026-09-02T10:21:57+00:00",
       "last_success_run_id": 33619083272,
-      "age_hours": 69.4,
-      "stale": false,
+      "age_hours": 93.4,
+      "stale": true,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     },
     {
       "workflow": "data-backup.yml",
       "name": "FTSE Data Backup",
-      "expected_today": false,
+      "expected_today": true,
       "max_age_hours": 36,
       "last_success_at": "2026-08-31T14:03:31+00:00",
       "last_success_run_id": 33400409722,
-      "age_hours": 113.7,
-      "stale": false,
+      "age_hours": 137.7,
+      "stale": true,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     },
@@ -140,7 +168,7 @@
       "max_age_hours": 28,
       "last_success_at": "2026-09-04T08:26:15+00:00",
       "last_success_run_id": 33853425569,
-      "age_hours": 23.3,
+      "age_hours": 47.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -150,9 +178,9 @@
       "name": "FTSE Ops Monitor",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-04T16:51:22+00:00",
-      "last_success_run_id": 33897438405,
-      "age_hours": 14.9,
+      "last_success_at": "2026-09-05T16:02:54+00:00",
+      "last_success_run_id": 33976640054,
+      "age_hours": 15.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -172,6 +200,10 @@
     "spend_blocked": false
   },
   "should_dispatch_engineering": true,
-  "email_deferred": false,
-  "email_defer_reasons": []
+  "email_deferred": true,
+  "email_defer_reasons": [
+    "Workflow overdue: Modelling analysis review: Modelling analysis review scheduled slot not reached yet (email-ready after 11:00 UTC)",
+    "Workflow overdue: Email report: recovery run still in flight",
+    "Workflow overdue: FTSE Data Backup: FTSE Data Backup scheduled slot not reached yet (email-ready after 13:00 UTC)"
+  ]
 }

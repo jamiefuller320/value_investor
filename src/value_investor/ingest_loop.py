@@ -13,6 +13,7 @@ from value_investor.engineering_tasks import (
     COMMITTED_TASKS_PATH,
     compile_ingest_engineering_task_from_trial,
     compile_ingest_engineering_tasks_micro,
+    is_blocking_open_ingest_task,
     load_engineering_tasks,
 )
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
@@ -201,12 +202,7 @@ def has_open_ingest_engineering_tasks(
     tasks_path: Path = COMMITTED_TASKS_PATH,
 ) -> bool:
     payload = load_engineering_tasks(tasks_path)
-    for row in payload.get("tasks") or []:
-        if str(row.get("area") or "").lower() != "ingest":
-            continue
-        if str(row.get("status") or "open") in {"open", "pr_open"}:
-            return True
-    return False
+    return any(is_blocking_open_ingest_task(row) for row in payload.get("tasks") or [])
 
 
 def run_weekday_ingest_loop(
