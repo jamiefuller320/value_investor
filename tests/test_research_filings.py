@@ -5555,6 +5555,38 @@ def test_fetch_filings_ir_allowlist_asx200_unmeasured_builtin(tmp_path: Path):
     assert all(row["source"] == "ir_allowlist" for row in cda + bsl + pxa)
 
 
+def test_fetch_filings_ir_allowlist_jbh_dnl_thin_builtin(tmp_path: Path):
+    """JBH.AX / DNL.AX thin buy-tier: seed statutory PDFs when Markit latest-five is noise."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    jbh = fetch_filings_ir_allowlist("JBH.AX", path=allowlist_path)
+    assert len(jbh) >= 2
+    assert any("072tbcc9lp0x8b.pdf" in row["url"] for row in jbh)
+    assert any("2026_Full_Year_Results.pdf" in row["url"] for row in jbh)
+    assert any(row["period"] == "annual" for row in jbh)
+
+    dnl = fetch_filings_ir_allowlist("DNL.AX", path=allowlist_path)
+    assert len(dnl) >= 3
+    assert any("220734.pdf" in row["url"] for row in dnl)
+    assert any("06jmnm30pch1kv.pdf" in row["url"] for row in dnl)
+    assert all(row["source"] == "ir_allowlist" for row in jbh + dnl)
+
+
+def test_asx_statistics_listing_page_is_index_noise():
+    from value_investor.research.filings import _is_index_noise_row
+
+    row = {
+        "has_body": False,
+        "source": "google_news_asx_resolved",
+        "headline": "Announcements released as GGP - ASX",
+        "url": "https://www.asx.com.au/asx/v2/statistics/announcements.do?by=asxCode&asxCode=GGP&timeframe=Y&year=2008",
+    }
+    assert _is_index_noise_row(row) is True
+    row["has_body"] = True
+    assert _is_index_noise_row(row) is False
+
+
 @patch("value_investor.research.filings.fetch_filings_asx_news", return_value=[])
 @patch("value_investor.research.filings.fetch_filings_asx_direct", return_value=[])
 def test_ingest_filings_asx200_ebo_ax_indexes_ir_allowlist_bodies(
