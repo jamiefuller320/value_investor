@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-06T07:39:35+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-06T07:42:47+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -143,6 +143,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N92 | **Do not use NewsAPI.org free tier for production news** | NewsAPI developer plan is free and has a 24-hour article delay, but it returns no full text on any plan, caps 100 requests/day, and forbids staging/production. It does not solve size/likelihood/timeline extraction and is not usable on GitHub Actions. | A paid NewsAPI (or similar) plan is explicitly budgeted after open sources (Guardian, GDELT, RNS) are shown insufficient for event-journal fields. |
 | N93 | **Do not ngram full annual-report bodies for unknowns** | Unknown-unknown discovery uses leftover official RNS headlines already on disk. Do not bag-of-words 60MB of annual accounts (same failure mode as the news-phrase lexicon). Short leftover RNS headlines are the teacher set. | Leftover RNS headline phrases have produced at least one promoted event class and a human wants note-level facts that headlines never carry. |
 | N94 | **Weekly paper for exhausted spare-stream markets** | Exhaustion vacates the ingest sprint slot and can flip filing_ready on solid names. Do not auto-add those markets to weekly_paper_shard_markets while capacity stays 1 on euro_depth. | euro_depth Phase 2 weekly-paper gates are green and weekly_paper_shard_capacity can hold a second book. |
+| N95 | **Parked-name ingest source-hunter agent** | Do not add a standing agent that walks parked leftover tickers one-by-one looking for new IR/exhibit/exchange sources. Gap-closure plus engineering compile already exist; a hunter would spend P1 LLM budget on names the sprint has already exhausted. Revisit as a capped, eng-queued allowlist proposer (one ticker, patch+test, no silent ingest writes) after euro bootstrap gaps are gone and the parked set is stable. | euro_depth unmeasured and zero-body are clear, ingest_exhaustion.json has a stable parked set after cascade vacate, and gap-closure still returns 0/N with no new allowlist seeds landing by hand. |
 
 ---
 
