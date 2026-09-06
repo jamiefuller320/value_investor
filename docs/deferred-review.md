@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-06T19:49:58+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-06T20:12:43+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -314,6 +314,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L307 | **Guardian fetch is gated on seek_richer_source** | The event journal now flags issuer-filtered events that still lack required size/likelihood after title+teaser and a confirming filing. Do not fetch Guardian (or any article body) until Sunday news_event_rules.json shows a stable seek_richer_source count worth spending the 500/day personal developer key on. Fetch only those flagged rows. | Several Sunday journal runs show a material, stable seek_richer_source_count (not just one noisy backfill) and personal Guardian developer key is available. |
 | L309 | **Rememo euro_depth thin first-pass buy-tier after filing parity** | Many euro_depth buy-tier memos are thin/adequate with memo_quality filings_with_body=0 while disk now has 2-9 bodies — below the rememo lag of 10. After ingest parity, run the existing rememo_existing path; only then consider a one-cycle threshold tweak for remaining 0-body first-pass notes. Do not lower the threshold just to burn leftover plan credit. | euro_ingest_dispatch ingest_parity_met is true and rememo_existing still reports 0 eligible on the euro_depth buy-tier |
 | L310 | **Follow 8-K EX-99.1 or stop counting leftover 8-K IWB for S&P parity** | S&P buy-tier 10-K/10-Q already have bodies. Remaining indexed_without_body=15 is 8-K cover HTML (FICO earnings releases, APTV/CRH/etc.). Residual refetch already runs; exhibit helper is documented for 6-K. Either rank EX-99.1/earnings PDFs on 8-K index pages, prune after failed residual, or exclude period=other 8-K from FTSE-equivalent filing_ready so the 15-row tail does not block learning_ready. | sp500 filing_ready is still false with unmeasured=zero=thin=0 and only 8-K IWB remains after a weekday residual pass |
+| L314 | **Stamp FCF and filing PIT onto weekly run snapshots** | ARCHIVE_SIGNAL_FIELDS has signal, conviction, timing, overlay, and trade_plan, but not FCF basis or filing figures. Archive counterfactuals cannot replay FCF-aware policies until those fields are stored point-in-time on each weekly snapshot. | Live-path FCF/filing bind is producing stable PIT fields on the weekday screen and we want archive labs to replay FCF-aware entry or overlay rules. |
+| L315 | **Daily or fill-level marks for archive lifecycle replay** | Weekly snapshot prints are not fills. Lifecycle labs can apply an explicit cost model, but they cannot simulate intraweek paths, limit fills, or daily stop hits until history stores denser prices. | The weekly buy-tier level book has a thick forward epoch and a lifecycle question actually depends on intraweek path rather than Sunday-to-Sunday marks. |
 
 ### Ops / reliability
 

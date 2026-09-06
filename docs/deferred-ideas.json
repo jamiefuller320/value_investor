@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-06T19:49:58+00:00",
+  "updated_at": "2026-09-06T20:12:43+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -6947,6 +6947,39 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a076bd-bdf3-7be5-8c3e-f65ccd5a4c01",
       "added_at": "2026-09-06T19:49:58+00:00"
+    },
+    {
+      "id": "L314",
+      "category": "later",
+      "section": "research",
+      "title": "Stamp FCF and filing PIT onto weekly run snapshots",
+      "summary": "ARCHIVE_SIGNAL_FIELDS has signal, conviction, timing, overlay, and trade_plan, but not FCF basis or filing figures. Archive counterfactuals cannot replay FCF-aware policies until those fields are stored point-in-time on each weekly snapshot.",
+      "revisit_when": "Live-path FCF/filing bind is producing stable PIT fields on the weekday screen and we want archive labs to replay FCF-aware entry or overlay rules.",
+      "tags": [
+        "archive",
+        "fcf",
+        "counterfactual",
+        "p1"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a076bd-bdf3-7be5-8c3e-f65ccd5a4c01",
+      "added_at": "2026-09-06T20:12:43+00:00"
+    },
+    {
+      "id": "L315",
+      "category": "later",
+      "section": "research",
+      "title": "Daily or fill-level marks for archive lifecycle replay",
+      "summary": "Weekly snapshot prints are not fills. Lifecycle labs can apply an explicit cost model, but they cannot simulate intraweek paths, limit fills, or daily stop hits until history stores denser prices.",
+      "revisit_when": "The weekly buy-tier level book has a thick forward epoch and a lifecycle question actually depends on intraweek path rather than Sunday-to-Sunday marks.",
+      "tags": [
+        "archive",
+        "fills",
+        "lifecycle"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a076bd-bdf3-7be5-8c3e-f65ccd5a4c01",
+      "added_at": "2026-09-06T20:12:43+00:00"
     }
   ],
   "fragments": [
