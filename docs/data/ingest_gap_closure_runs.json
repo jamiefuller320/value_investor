@@ -7778,8 +7778,116 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260906-01",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "ABI.BR",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "AED.BR",
+          "ABI.BR"
+        ],
+        "market_id": "euro_depth",
+        "universe": "library",
+        "critical_path_blocker": "unmeasured"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260906-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-06T13:20:55.729185+00:00",
+      "completed_at": "2026-09-06T13:21:41.277663+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "ABI.BR"
+        ],
+        "results": [
+          {
+            "ticker": "ABI.BR",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 37,
+              "filings_with_body": 25,
+              "indexed_without_body": 12
+            },
+            "after": {
+              "filings_total": 37,
+              "filings_with_body": 25,
+              "indexed_without_body": 12
+            },
+            "improved": false,
+            "regime": "euro_filings",
+            "filings_summary": {
+              "total": 37,
+              "annual": 2,
+              "interim": 33,
+              "trading_update": 0,
+              "other": 2,
+              "with_body": 25,
+              "period_coverage": {
+                "annual": {
+                  "total": 2,
+                  "with_body": 2
+                },
+                "interim": {
+                  "total": 33,
+                  "with_body": 21
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 2,
+                  "with_body": 2
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 25,
+              "with_body_after": 25,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 1,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 4,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "ABI.BR",
+            "with_body_before": 25,
+            "with_body_after": 25,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-05T19:44:27.162270+00:00",
+  "updated_at": "2026-09-06T13:21:41.277672+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
