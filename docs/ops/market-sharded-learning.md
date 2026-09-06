@@ -172,7 +172,8 @@ A market may graduate from **Phase 2** to **Phase 3 weekday shard** when:
 ## Commands
 
 ```bash
-# S&P 500 FTSE-equivalent depth (canonical filings + trajectory)
+# S&P 500 FTSE-equivalent depth (canonical filings + trajectory).
+# Sunday observe-sim also persists learning_depth.json; CLI is a manual refresh.
 ftse-library learning-depth --market sp500 --json
 ftse-library learning-depth --market sp500 --write --write-trajectory
 

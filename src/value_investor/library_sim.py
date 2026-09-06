@@ -522,10 +522,20 @@ def run_library_observe_sim(
     if is_ftse_equivalent_market(market_id):
         try:
             from value_investor.library_learning_depth import (
+                assess_library_learning_depth,
                 refresh_library_trajectory_artifacts,
             )
 
             refresh_library_trajectory_artifacts(root, market_id)
+            assess_library_learning_depth(
+                market_id,
+                library_root=root,
+                write=True,
+            )
         except Exception as exc:  # noqa: BLE001
-            logger.warning("Library trajectory refresh failed for %s: %s", market_id, exc)
+            logger.warning(
+                "Library trajectory / learning-depth refresh failed for %s: %s",
+                market_id,
+                exc,
+            )
     return result
