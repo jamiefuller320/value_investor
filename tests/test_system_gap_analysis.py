@@ -222,6 +222,36 @@ def test_observe_clock_uses_dated_archives_not_stale_learning_depth(tmp_path: Pa
     assert sp500["last_screen"] == "2026-09-06"
 
 
+def test_observe_clock_skips_sprint_markets_without_benchmark(tmp_path: Path):
+    data = tmp_path / "data"
+    library = tmp_path / "library"
+    screen = library / "markets" / "ftse_smallcap" / "screen"
+    screen.mkdir(parents=True)
+    (screen / "signals_20260816_115834.csv").write_text("ticker\nGMS.L\n", encoding="utf-8")
+    (screen / "universe_20260816_115834.csv").write_text("ticker\nGMS.L\n", encoding="utf-8")
+    _write_json(
+        library / "policy.json",
+        {
+            "focus_market": "euro_depth",
+            "ingest_parallel_sprint_2": ["ftse_smallcap"],
+            "ftse_equivalent_markets": ["sp500"],
+            "ladder": {"observe_sim_markets": ["euro_depth"]},
+        },
+    )
+    snapshot = build_system_gap_snapshot(
+        data_dir=data,
+        output_dir=tmp_path / "output",
+        library_root=library,
+        policy_path=library / "policy.json",
+        paper_root=data / "paper_automation",
+        run_at=datetime(2026, 9, 6, 12, 0, tzinfo=UTC),
+    )
+    ids = {row["id"] for row in snapshot["flags"]}
+    assert "observe_clock_stale" not in ids
+    clock_ids = {row["market_id"] for row in snapshot["layers"]["learning_clock"]["markets"]}
+    assert "ftse_smallcap" not in clock_ids
+
+
 def test_slim_and_write_round_trip(tmp_path: Path):
     data = tmp_path / "data"
     _write_json(data / "latest.json", {"reports": [], "research": []})

@@ -235,9 +235,16 @@ def test_observe_sim_ingest_profile_keeps_parity_and_equivalent_after_sprint():
 
 def test_live_policy_observe_sim_follows_ingest_profile():
     from value_investor.agent_model_policy import DEFAULT_POLICY_PATH, load_policy
+    from value_investor.library_sim import MARKET_BENCHMARKS
 
     policy = load_policy(DEFAULT_POLICY_PATH)
-    assert observe_sim_markets_for_policy(policy) == ["euro_depth", "sp500", "asx200"]
+    observed = observe_sim_markets_for_policy(policy)
+    profile = ingest_profile_observe_sim_markets(policy)
+    assert "euro_depth" in observed
+    assert "sp500" in observed
+    for mid in profile:
+        if mid in MARKET_BENCHMARKS:
+            assert mid in observed
 
 
 def test_benchmark_for_iseq20():

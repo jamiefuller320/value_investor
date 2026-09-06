@@ -346,24 +346,20 @@ def _policy_markets(policy: dict[str, Any]) -> list[str]:
     ):
         for mid in _as_list(ladder.get(key)):
             _add(mid)
-    for key in (
-        "ingest_parity_markets",
-        "ingest_parallel_sprint",
-        "ingest_parallel_sprint_2",
-        "ftse_equivalent_markets",
-    ):
-        for mid in _as_list(policy.get(key)):
-            _add(mid)
     try:
         from value_investor.library_sim import (
+            MARKET_BENCHMARKS,
             ingest_profile_observe_sim_markets,
             observe_sim_markets_for_policy,
         )
 
-        for mid in ingest_profile_observe_sim_markets(policy):
-            _add(mid)
+        # Ingest-profile / FTSE-equivalent markets keep a dated archive only
+        # when they are on the observe-sim screen path (need a benchmark).
         for mid in observe_sim_markets_for_policy(policy):
             _add(mid)
+        for mid in ingest_profile_observe_sim_markets(policy):
+            if mid in MARKET_BENCHMARKS:
+                _add(mid)
     except Exception:  # noqa: BLE001 — clock list must still build
         pass
     return markets
