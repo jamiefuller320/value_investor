@@ -82,6 +82,12 @@ ftse-library cycle-surplus review --revert
 Keep when weekly_ops regularly used the extra room (spent > 80% of the *old*
 cap). Revert when leftover stayed high.
 
+Do **not** spend leftover usage-page % on offline **memo density** (hold/sell
+names, `research_all_graduated`, a lower `rememo_body_lag_threshold`, or a
+higher `research_hard_cap`). Included plan credit does not fund filing ingest;
+euro_depth buy-tier is already fully memo'd and Layer C rememos wait for body
+lag. See N94. Prefer P1 FTSE overlay/engineering, or this weekly_ops bump.
+
 ## Artifacts
 
 | File | Role |
@@ -93,9 +99,9 @@ cap). Revert when leftover stayed high.
 ## Human gate
 
 Monthly, around the plan refresh day (default the 8th): read the surplus
-artifact, run `review`, and keep or revert. Do not raise rememo daily caps from
-the same leftover. Treat the 15% estimated-USD share as a warning, not a reason
-to clamp `weekly_ops_cap_usd`.
+artifact, run `review`, and keep or revert. Do not raise rememo daily caps or
+offline memo density from the same leftover. Treat the 15% estimated-USD share
+as a warning, not a reason to clamp `weekly_ops_cap_usd`.
 
 Checklist: [human-tasks-checklist.md](human-tasks-checklist.md) · cadence:
 [ops-review-cadence.md](ops-review-cadence.md).
