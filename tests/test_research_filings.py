@@ -14,6 +14,7 @@ from value_investor.fetch import CompanyMetrics
 from value_investor.financials import extract_statement_metrics
 from value_investor.research.filings import (
     _BUILTIN_IR_URLS,
+    PARKED_SOURCE_HUNTER_SKIP,
     _apply_headline_period,
     _compose_filing_body_with_depth_sections,
     _compose_pdf_body_text,
@@ -6038,3 +6039,12 @@ def test_extract_ir_presentation_metrics_hik_interim_fixture(tmp_path: Path):
     split_types = {row["split_type"] for row in metrics["segment_revenue_splits"]}
     assert "interim_segment_revenue" in split_types
     assert "segment_operating_margin" in split_types
+
+
+def test_parked_source_hunter_skip_aptv_sp500():
+    """eng-20260906-01: APTV leftover IWB is 8-K tender-offer cover HTML, not missing 10-K/10-Q."""
+    assert "APTV" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["APTV"]
+    assert "8-K" in reason
+    assert "ir.aptiv.com" in reason
+    assert fetch_filings_ir_allowlist("APTV") == []
