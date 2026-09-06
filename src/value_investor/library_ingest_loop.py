@@ -835,8 +835,8 @@ def run_library_ingest_loop(
 
     result.health_after = snapshot_library_ingest_health(market_id, library_root=library_root)
 
-    from value_investor.library_ingest_escalation import library_ingest_filing_gaps
     from value_investor.library_ingest_dispatch import sprint_ingest_complete
+    from value_investor.library_ingest_escalation import library_ingest_filing_gaps
     from value_investor.library_ingest_exhaustion import (
         overlay_exhaustion_on_health,
         refresh_library_ingest_exhaustion,
