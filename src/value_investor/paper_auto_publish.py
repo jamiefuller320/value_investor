@@ -29,6 +29,20 @@ OVERLAY_TRACK_FILES = (
     "hypothesis_outcome_link_review.json",
 )
 
+TRACK_CORE_FILES = (
+    "last_run.json",
+    "automated_fund.json",
+    "config.json",
+    "decision_review.json",
+    "decision_review_history.json",
+    "rebalance_log.json",
+    "exit_shadow.json",
+    "exit_shadow_review.json",
+    "calibration_provenance.json",
+    "fair_cost_lab_provenance.json",
+    "knob_epoch.json",
+)
+
 
 def _iter_track_dirs(root: Path) -> list[Path]:
     if not root.is_dir():
@@ -65,6 +79,25 @@ def seed_paper_auto_state(docs_root: Path, output_root: Path) -> list[str]:
     return copied
 
 
+def publish_track_core_artifacts(src_root: Path, dest_root: Path) -> list[str]:
+    """Persist fund/config/log files for every track directory.
+
+    The historic paper-auto.yml allowlist only copied a few named books.
+    New first-class tracks (fair-cost twins, buy_tier_level, graduated,
+    technical) must round-trip or weekday fills reset on the next seed.
+    """
+    src_root = Path(src_root)
+    dest_root = Path(dest_root)
+    dest_root.mkdir(parents=True, exist_ok=True)
+    copied: list[str] = []
+    for src_dir in _iter_track_dirs(src_root):
+        dest_dir = dest_root / src_dir.name
+        for name in TRACK_CORE_FILES:
+            if _copy_if_present(src_dir / name, dest_dir / name):
+                copied.append(f"{src_dir.name}/{name}")
+    return copied
+
+
 def publish_overlay_artifacts(src_root: Path, dest_root: Path) -> list[str]:
     """Persist overlay stores/rollups that the historic allowlist omitted."""
     src_root = Path(src_root)
@@ -87,6 +120,8 @@ __all__ = [
     "OVERLAY_ROOT_FILES",
     "OVERLAY_TRACK_FILES",
     "SKIP_DIR_NAMES",
+    "TRACK_CORE_FILES",
     "publish_overlay_artifacts",
+    "publish_track_core_artifacts",
     "seed_paper_auto_state",
 ]

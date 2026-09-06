@@ -5,7 +5,9 @@ from pathlib import Path
 from value_investor.paper_auto_publish import (
     OVERLAY_ROOT_FILES,
     OVERLAY_TRACK_FILES,
+    TRACK_CORE_FILES,
     publish_overlay_artifacts,
+    publish_track_core_artifacts,
     seed_paper_auto_state,
 )
 
@@ -58,7 +60,26 @@ def test_overlay_file_lists_cover_dca_and_sibling_stores():
     assert "hypothesis_integrity.json" in OVERLAY_TRACK_FILES
 
 
+def test_publish_track_core_copies_new_books(tmp_path: Path):
+    src = tmp_path / "output"
+    dest = tmp_path / "docs"
+    (src / "buy_tier_level").mkdir(parents=True)
+    (src / "buy_tier_level" / "config.json").write_text('{"track_id": "buy_tier_level"}\n')
+    (src / "buy_tier_level" / "automated_fund.json").write_text('{"cash": 1000}\n')
+    (src / "markets").mkdir()
+    (src / "markets" / "config.json").write_text("{}\n")
+
+    copied = publish_track_core_artifacts(src, dest)
+
+    assert "buy_tier_level/config.json" in copied
+    assert "buy_tier_level/automated_fund.json" in copied
+    assert (dest / "buy_tier_level" / "automated_fund.json").is_file()
+    assert not (dest / "markets").exists()
+    assert "config.json" in TRACK_CORE_FILES
+
+
 def test_paper_auto_workflow_calls_overlay_seed_and_publish():
     text = Path(".github/workflows/paper-auto.yml").read_text(encoding="utf-8")
     assert "seed_paper_auto_state" in text
     assert "publish_overlay_artifacts" in text
+    assert "publish_track_core_artifacts" in text
