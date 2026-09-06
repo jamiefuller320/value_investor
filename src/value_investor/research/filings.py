@@ -259,6 +259,17 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.pexa-group.com/staticly-media/2026/02/Appendix-4D-and-half-year-report-FY26-sm-1772150824.pdf",
         "https://www.pexa-group.com/staticly-media/2025/08/PEXA-FY25-Results-ASX-Announcement-sm-1756420792.pdf",
     ],
+    # asx200 thin buy-tier — Markit latest-five is dividend/capital; Google News is
+    # marketindex commentary, not statutory reports.
+    "JBH.AX": [
+        "https://announcements.asx.com.au/asxpdf/20260817/pdf/072tbcc9lp0x8b.pdf",
+        "https://assets.ctfassets.net/xa93kvziwaye/4lDiO6pXReSpSZrNa0uJ7x/c9ed3a070c0aca69702aebbf7c302622/2026_Full_Year_Results.pdf",
+    ],
+    "DNL.AX": [
+        "https://investorpa.com/announcement-pdf/20251117/220734.pdf",
+        "https://announcements.asx.com.au/asxpdf/20250512/pdf/06jmnm30pch1kv.pdf",
+        "https://announcements.asx.com.au/asxpdf/20260511/pdf/06zg0w0pw5rswl.pdf",
+    ],
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
@@ -867,6 +878,9 @@ def _is_index_noise_row(row: dict[str, Any]) -> bool:
         return False
     url = str(row.get("url") or "").lower()
     if "news.google.com" in url:
+        return True
+    # ASX code listing pages (year=2008 etc.), not downloadable announcements.
+    if "asx.com.au/asx/v2/statistics/announcements.do" in url:
         return True
     headline = str(row.get("headline") or "").lower()
     source = str(row.get("source") or "")

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-06T09:50:44+00:00",
+  "updated_at": "2026-09-06T10:00:28+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -6807,6 +6807,58 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-4e8f6cc3-6dd0-4a9d-ae76-82513ae5f453",
       "added_at": "2026-09-06T09:50:44+00:00"
+    },
+    {
+      "id": "N97",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not add extra S&P or ASX sprint slots for leftover IWB",
+      "summary": "Saturday 5 Sep ran 8 spare-stream jobs per market with leftover minutes (S&P ~1000s unused, ASX ~2000s). S&P IWB stayed at 15 (8-K HTML); ASX thin is Markit latest-five plus Google News junk. More targets/runtime will not fetch those bodies. Prefer IR seeds, index-noise prune, and 8-K exhibit follow-through.",
+      "revisit_when": "S&P 8-K residual refetch starts returning bodies, or Markit/ASX listing history exists beyond the latest five announcements",
+      "tags": [
+        "ingest",
+        "sp500",
+        "asx200",
+        "capacity"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-4e8f6cc3-6dd0-4a9d-ae76-82513ae5f453",
+      "added_at": "2026-09-06T10:00:28+00:00"
+    },
+    {
+      "id": "L310",
+      "category": "later",
+      "section": "research",
+      "title": "Follow 8-K EX-99.1 or stop counting leftover 8-K IWB for S&P parity",
+      "summary": "S&P buy-tier 10-K/10-Q already have bodies. Remaining indexed_without_body=15 is 8-K cover HTML (FICO earnings releases, APTV/CRH/etc.). Residual refetch already runs; exhibit helper is documented for 6-K. Either rank EX-99.1/earnings PDFs on 8-K index pages, prune after failed residual, or exclude period=other 8-K from FTSE-equivalent filing_ready so the 15-row tail does not block learning_ready.",
+      "revisit_when": "sp500 filing_ready is still false with unmeasured=zero=thin=0 and only 8-K IWB remains after a weekday residual pass",
+      "tags": [
+        "sp500",
+        "sec",
+        "8-k",
+        "ingest",
+        "parity"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-4e8f6cc3-6dd0-4a9d-ae76-82513ae5f453",
+      "added_at": "2026-09-06T10:00:28+00:00"
+    },
+    {
+      "id": "L311",
+      "category": "later",
+      "section": "universe",
+      "title": "ASX announcement history beyond Markit latest-five",
+      "summary": "Markit Digital returns at most five rows per symbol with no public pagination, so thin names (JBH.AX, DNL.AX) index dividend/news instead of statutory reports. IR allowlists are the current workaround. A historical announcements.asx.com.au or AFR company-announcements listing would remove the need to hand-seed each thin ticker.",
+      "revisit_when": "More than two asx200 buy-tier names are thin_need_discovery after IR seeds, or Markit exposes a paginated feed",
+      "tags": [
+        "asx200",
+        "markit",
+        "discovery",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-4e8f6cc3-6dd0-4a9d-ae76-82513ae5f453",
+      "added_at": "2026-09-06T10:00:28+00:00"
     }
   ],
   "fragments": [
