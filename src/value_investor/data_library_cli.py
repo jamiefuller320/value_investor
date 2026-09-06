@@ -513,12 +513,12 @@ def build_parser() -> argparse.ArgumentParser:
     ingest_maint_p = sub.add_parser(
         "ingest-maintenance",
         parents=[common],
-        help="FTSE-standard scan-then-target maintenance for library markets at filing parity",
+        help="FTSE-standard scan-then-target maintenance for library markets at filing parity or exhausted leftovers",
     )
     ingest_maint_p.add_argument(
         "--markets",
         default="",
-        help="Comma-separated market ids (default: parity markets from policy + focus)",
+        help="Comma-separated market ids (default: parity and exhausted leftover markets from policy + focus)",
     )
     ingest_maint_p.add_argument("--max-targets", type=int, default=FTSE_MAINTENANCE_MAX_TARGETS)
     ingest_maint_p.add_argument(
@@ -540,6 +540,29 @@ def build_parser() -> argparse.ArgumentParser:
         help="Write result JSON to this path (avoids stdout log pollution in CI)",
     )
     ingest_maint_p.set_defaults(func=cmd_library_ingest_maintenance)
+
+    parked_hunter_p = sub.add_parser(
+        "parked-hunter-compile",
+        parents=[common],
+        help=(
+            "Queue one low-priority parked leftover source-hunter task at the "
+            "back of the engineering queue"
+        ),
+    )
+    parked_hunter_p.add_argument(
+        "--tasks-path",
+        type=Path,
+        default=Path("docs/data/engineering_tasks.json"),
+        help="Engineering tasks JSON (default: docs/data/engineering_tasks.json)",
+    )
+    parked_hunter_p.add_argument("--json", action="store_true")
+    parked_hunter_p.add_argument(
+        "--json-path",
+        type=Path,
+        default=None,
+        help="Write result JSON to this path",
+    )
+    parked_hunter_p.set_defaults(func=cmd_parked_hunter_compile)
 
     ingest_sprint_p = sub.add_parser(
         "ingest-sprint",
@@ -1787,6 +1810,32 @@ def cmd_library_ingest_maintenance(args: argparse.Namespace) -> int:
         for err in outcome.errors:
             print(f"  error: {err}", file=sys.stderr)
     return 0 if not outcome.errors else 1
+
+
+def cmd_parked_hunter_compile(args: argparse.Namespace) -> int:
+    from value_investor.library_ingest_escalation import compile_parked_source_hunter_task
+
+    policy = load_policy(args.policy)
+    payload = compile_parked_source_hunter_task(
+        library_root=args.root,
+        policy=policy,
+        tasks_path=args.tasks_path,
+        committed_path=args.tasks_path,
+    )
+    if args.json or args.json_path is not None:
+        _emit_cli_json(payload, args)
+    else:
+        compiled = int(payload.get("compiled_count") or 0)
+        reason = str(payload.get("reason") or "")
+        if compiled:
+            ids = ", ".join(payload.get("task_ids") or [])
+            print(
+                f"parked-hunter-compile: added {ids} "
+                f"({payload.get('market_id')} / {payload.get('hunter_ticker')})"
+            )
+        else:
+            print(f"parked-hunter-compile: skipped ({reason or 'no task'})")
+    return 0
 
 
 def cmd_library_learning_depth(args: argparse.Namespace) -> int:

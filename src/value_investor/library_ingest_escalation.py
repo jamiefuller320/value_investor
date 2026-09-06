@@ -17,6 +17,8 @@ from value_investor.data_library import DEFAULT_LIBRARY_ROOT
 from value_investor.engineering_tasks import (
     BLOCKED_PATHS,
     COMMITTED_TASKS_PATH,
+    PARKED_SOURCE_HUNTER_PRIORITY_SCORE,
+    PARKED_SOURCE_HUNTER_SOURCE,
     EngineeringTask,
     _allowed_paths_for_area,
     _merge_task_rows,
@@ -154,6 +156,8 @@ def has_open_library_ingest_task_for_market(
             continue
         if str(row.get("status") or "open") not in {"open", "pr_open"}:
             continue
+        if str(row.get("source") or "") == PARKED_SOURCE_HUNTER_SOURCE:
+            continue
         evidence = row.get("evidence") or {}
         if str(evidence.get("market_id") or "") == market_id:
             return True
@@ -282,6 +286,164 @@ def compile_library_ingest_engineering_tasks_micro(
     }
 
 
+def _open_parked_hunter_task(rows: list[dict[str, Any]]) -> dict[str, Any] | None:
+    for row in rows:
+        if str(row.get("source") or "") != PARKED_SOURCE_HUNTER_SOURCE:
+            continue
+        if str(row.get("status") or "open") in {"open", "pr_open"}:
+            return row
+    return None
+
+
+def _tried_parked_hunter_keys(rows: list[dict[str, Any]]) -> set[tuple[str, str]]:
+    tried: set[tuple[str, str]] = set()
+    for row in rows:
+        if str(row.get("source") or "") != PARKED_SOURCE_HUNTER_SOURCE:
+            continue
+        if str(row.get("status") or "") == "cancelled":
+            continue
+        evidence = row.get("evidence") or {}
+        market_id = str(evidence.get("market_id") or evidence.get("hunter_market_id") or "").strip()
+        ticker = str(evidence.get("hunter_ticker") or "").strip().upper()
+        if market_id and ticker:
+            tried.add((market_id, ticker))
+    return tried
+
+
+def compile_parked_source_hunter_task(
+    *,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    policy: dict[str, Any] | None = None,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    committed_path: Path = COMMITTED_TASKS_PATH,
+) -> dict[str, Any]:
+    """Queue one low-priority parked-ticker source hunt at the back of the queue.
+
+    After the current hunter task is merged, call again to compile the next
+    parked ticker. Stall / gap-closure compile ignores this source so it cannot
+    block higher-priority ingest work.
+    """
+    from value_investor.library_ingest_exhaustion import iter_parked_hunter_candidates
+
+    if policy is None:
+        from value_investor.agent_model_policy import load_policy
+
+        try:
+            policy = load_policy()
+        except (OSError, ValueError, TypeError):
+            policy = {}
+
+    existing_payload = load_engineering_tasks(committed_path)
+    existing_rows = list(existing_payload.get("tasks") or [])
+    open_hunter = _open_parked_hunter_task(existing_rows)
+    if open_hunter is not None:
+        return {
+            "compiled_count": 0,
+            "reason": "open parked-source hunter already queued",
+            "task_id": open_hunter.get("id"),
+        }
+
+    tried = _tried_parked_hunter_keys(existing_rows)
+    candidates = iter_parked_hunter_candidates(library_root=library_root, policy=policy)
+    next_row: tuple[str, str, dict[str, Any]] | None = None
+    for market_id, ticker, parked in candidates:
+        if (market_id, ticker.upper()) in tried:
+            continue
+        next_row = (market_id, ticker, parked)
+        break
+    if next_row is None:
+        return {
+            "compiled_count": 0,
+            "reason": "no parked leftover tickers remaining for hunter",
+            "tried_count": len(tried),
+            "candidate_count": len(candidates),
+        }
+
+    market_id, ticker, parked = next_row
+    from value_investor.data_library import MARKET_REGISTRY
+
+    spec = MARKET_REGISTRY.get(market_id)
+    label = spec.label if spec is not None else market_id
+    reason = str(parked.get("reason") or "leftover_thin_or_iwb")
+    revisit = str(parked.get("revisit_when") or "")
+    run_stamp = datetime.now(UTC).strftime("%Y%m%d")
+    seq = _next_engineering_seq_from_rows(existing_rows, run_stamp)
+    title = f"Hunt fetchable IR source for parked {market_id} leftover {ticker}"[:160]
+    summary = (
+        f"Library market {market_id} ({label}) parked {ticker} after ingest avenues "
+        f"were exhausted ({reason}). Look at this one ticker only: if a fetchable IR "
+        "or statutory filing URL exists, add an allowlist entry and a regression test. "
+        "If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in "
+        "tests/test_research_filings.py — do not invent URLs. auto_merge is off; this "
+        "task is priority=low so it sits at the back of the engineering queue."
+    )
+    if revisit:
+        summary += f" Revisit when: {revisit}."
+    task = EngineeringTask(
+        id=f"eng-{run_stamp}-{seq:02d}",
+        area="ingest",
+        title=title,
+        summary=summary[:500],
+        priority="low",
+        priority_score=PARKED_SOURCE_HUNTER_PRIORITY_SCORE,
+        source=PARKED_SOURCE_HUNTER_SOURCE,
+        auto_merge=False,
+        evidence={
+            "market_id": market_id,
+            "library_market": market_id,
+            "hunter_market_id": market_id,
+            "hunter_ticker": ticker.upper(),
+            "parked_reason": reason,
+            "parked_revisit_when": revisit,
+            "universe": "library",
+            "doc": "docs/ops/library-ingest-escalation.md",
+        },
+        acceptance_criteria=[
+            f"Inspect IR / exchange sources for {ticker} only — do not invent URLs",
+            "If a fetchable statutory/IR body exists, add allowlist + regression test",
+            "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+            "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund",
+        ],
+        allowed_paths=_allowed_paths_for_area("ingest"),
+        blocked_paths=list(BLOCKED_PATHS),
+    )
+    merged_rows = _merge_task_rows(existing_rows, [task])
+    open_ids_before = {
+        str(row.get("id") or "")
+        for row in existing_rows
+        if str(row.get("status") or "open") == "open"
+    }
+    newly_open = [
+        row
+        for row in merged_rows
+        if str(row.get("status") or "open") == "open"
+        and str(row.get("id") or "") not in open_ids_before
+    ]
+    payload = {
+        **existing_payload,
+        "compiled_at": datetime.now(UTC).isoformat(),
+        "task_count": len(merged_rows),
+        "tasks": merged_rows,
+        "micro_compile_source": PARKED_SOURCE_HUNTER_SOURCE,
+        "library_market_id": market_id,
+        "hunter_ticker": ticker.upper(),
+    }
+    committed_path = Path(committed_path)
+    tasks_path = Path(tasks_path)
+    committed_path.parent.mkdir(parents=True, exist_ok=True)
+    write_json(committed_path, payload, compact=False)
+    if tasks_path != committed_path:
+        write_json(tasks_path, payload, compact=False)
+    return {
+        "compiled_count": len(newly_open),
+        "task_ids": [str(row.get("id") or "") for row in newly_open],
+        "task_count": len(merged_rows),
+        "market_id": market_id,
+        "hunter_ticker": ticker.upper(),
+        "priority_score": PARKED_SOURCE_HUNTER_PRIORITY_SCORE,
+    }
+
+
 def snapshot_library_buy_tier_filing_health(
     market_id: str,
     *,
@@ -396,6 +558,7 @@ __all__ = [
     "DEFAULT_FTSE_EQUIVALENT_MARKETS",
     "DEFAULT_STALL_RUNS",
     "compile_library_ingest_engineering_tasks_micro",
+    "compile_parked_source_hunter_task",
     "ftse_equivalent_markets",
     "has_open_library_ingest_task_for_market",
     "is_ftse_equivalent_market",
