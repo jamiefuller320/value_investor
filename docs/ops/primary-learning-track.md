@@ -17,6 +17,7 @@ trade checklist — it is a performance comparison to market datums. Success =
 | **Momentum grace** *(experimental)* | `docs/data/paper_automation/momentum_grace/` | Screen rules + bounded hold on value downgrade when price trend stays strong | Exit-overlay experiment |
 | **Graduated allocation** *(experimental)* | `docs/data/paper_automation/graduated_allocation/` | Screen rules + trade-plan starter sizing + harvest skims (`max_positions=4`) | Capital recycling experiment |
 | **Exclusion ladder** *(experimental)* | `docs/data/paper_automation/ai_judgment_exclusion_u4/` | AI judgment + frozen archive ladder `u4` knobs (spawned shadow) | Loser-filter ladder experiment |
+| **Buy-tier level** *(cohort lab)* | `docs/data/paper_automation/buy_tier_level/` | Raw screen buy-tier, no conviction/sector cap, Suite B T212 costs, frozen knobs | Unfiltered cohort baseline (Monday cold start) |
 
 Both primary books use the same costs, position caps, and weekday paper-auto schedule.
 Live FTSE configs keep the **3% per-side stress** cost by default (Suite A —
@@ -83,6 +84,11 @@ python3 scripts/bootstrap_learning_loop.py
 
 Weekday CI (`paper-auto.yml`) refreshes the research overlay on `docs/data/latest.json`
 automatically before trading — no manual bootstrap needed.
+
+The **buy-tier level** cohort is Suite B (fair T212 costs), cold-starts with no
+fund on the first weekday pass, and is frozen vs decision-review `--apply`.
+The matching **buy-cross** policy is archive-only — see
+[`buy-tier-cohort-labs.md`](buy-tier-cohort-labs.md).
 
 Artifacts: `learning_tracks_summary.json`, `learning_tracks_review.json`, plus
 per-track `automated_fund.json` / `decision_review.json` / `rebalance_log.json`
