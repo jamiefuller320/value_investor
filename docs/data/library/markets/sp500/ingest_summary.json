@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-06T16:48:35.359152+00:00",
+  "run_at": "2026-09-06T18:42:33.616229+00:00",
   "market_id": "sp500",
   "targets": [
     "LDOS",
@@ -564,7 +564,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-06T16:47:48.935901+00:00",
+    "snapshot_at": "2026-09-06T18:41:02.380082+00:00",
     "market_id": "sp500",
     "buy_tier_count": 140,
     "unmeasured_buy_tier": 0,
@@ -617,7 +617,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-06T16:48:35.347985+00:00",
+    "snapshot_at": "2026-09-06T18:42:03.951598+00:00",
     "market_id": "sp500",
     "buy_tier_count": 140,
     "unmeasured_buy_tier": 0,
@@ -652,22 +652,22 @@
       "TSN": 1,
       "BXP": 2
     },
-    "parked_tickers": [],
-    "parked_count": 0,
-    "effective_thin_body_buy_tier": 0,
-    "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 15,
-    "effective_indexed_without_body_tickers": [
-      "LDOS",
-      "INTU",
-      "LMT",
+    "parked_tickers": [
       "APTV",
+      "BXP",
       "CRH",
       "FICO",
-      "TSN",
-      "BXP"
+      "INTU",
+      "LDOS",
+      "LMT",
+      "TSN"
     ],
-    "ingest_exhausted": false
+    "parked_count": 8,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -678,10 +678,37 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "sp500",
+    "to_market": "asx200",
+    "stream_markets_after": [
+      "asx200"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "sp500",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "APTV",
+        "BXP",
+        "CRH",
+        "FICO",
+        "INTU",
+        "LDOS",
+        "LMT",
+        "TSN"
+      ]
+    },
+    "at": "2026-09-06T18:42:06.023427+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-09-06T16:47:54.513539+00:00",
+    "assessed_at": "2026-09-06T18:41:08.687552+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -760,9 +787,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 35.09987022300001,
+  "used_seconds": 49.115843462,
   "budget_seconds": 1050.0,
-  "leftover_seconds": 1014.900129777,
+  "leftover_seconds": 1000.884156538,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -770,11 +797,92 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sp500",
-    "updated_at": "2026-09-06T16:48:35.355986+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-09-06T18:42:03.958063+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "APTV",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-06T18:42:03.958063+00:00",
+        "filings_total": 20,
+        "filings_with_body": 18,
+        "indexed_without_body": 2,
+        "thin": false
+      },
+      {
+        "ticker": "BXP",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-06T18:42:03.958063+00:00",
+        "filings_total": 71,
+        "filings_with_body": 69,
+        "indexed_without_body": 2,
+        "thin": false
+      },
+      {
+        "ticker": "CRH",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-06T18:42:03.958063+00:00",
+        "filings_total": 69,
+        "filings_with_body": 67,
+        "indexed_without_body": 2,
+        "thin": false
+      },
+      {
+        "ticker": "FICO",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-06T18:42:03.958063+00:00",
+        "filings_total": 19,
+        "filings_with_body": 14,
+        "indexed_without_body": 5,
+        "thin": false
+      },
+      {
+        "ticker": "INTU",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-06T18:42:03.958063+00:00",
+        "filings_total": 19,
+        "filings_with_body": 18,
+        "indexed_without_body": 1,
+        "thin": false
+      },
+      {
+        "ticker": "LDOS",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-06T18:42:03.958063+00:00",
+        "filings_total": 19,
+        "filings_with_body": 18,
+        "indexed_without_body": 1,
+        "thin": false
+      },
+      {
+        "ticker": "LMT",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-06T18:42:03.958063+00:00",
+        "filings_total": 20,
+        "filings_with_body": 19,
+        "indexed_without_body": 1,
+        "thin": false
+      },
+      {
+        "ticker": "TSN",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-06T18:42:03.958063+00:00",
+        "filings_total": 21,
+        "filings_with_body": 20,
+        "indexed_without_body": 1,
+        "thin": false
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
     "had_complete_targets": true,
     "leftover_tickers": [
@@ -787,27 +895,25 @@
       "LMT",
       "TSN"
     ],
-    "unparked_leftover": [
-      "APTV",
-      "BXP",
-      "CRH",
-      "FICO",
-      "INTU",
-      "LDOS",
-      "LMT",
-      "TSN"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/sp500/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "sp500"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "sp500",
+    "ingest_exhausted_markets": [
+      "sp500"
+    ]
   },
   "parked_hunter_compile": {
-    "compiled_count": 0,
-    "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 0,
-    "candidate_count": 0
+    "compiled_count": 1,
+    "task_ids": [
+      "eng-20260906-01"
+    ],
+    "task_count": 75,
+    "market_id": "sp500",
+    "hunter_ticker": "APTV",
+    "priority_score": 12.0
   }
 }

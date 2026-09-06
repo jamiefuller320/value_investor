@@ -13,7 +13,7 @@
     "learning_tracks_review missing or inconclusive"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-06T17:20:56.186339+00:00",
+    "snapshot_at": "2026-09-06T18:43:07.109026+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 47,
     "unmeasured_buy_tier": 1,
@@ -144,76 +144,65 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-09-06T17:20:56.188131+00:00",
-  "maintenance_markets": [],
-  "ingest_exhausted_markets": [],
-  "parallel_sprint_markets": [
+  "evaluated_at": "2026-09-06T18:43:07.110666+00:00",
+  "maintenance_markets": [
     "sp500"
+  ],
+  "ingest_exhausted_markets": [
+    "sp500"
+  ],
+  "parallel_sprint_markets": [
+    "asx200"
   ],
   "parallel_sprint_status": [
     {
-      "market_id": "sp500",
+      "market_id": "asx200",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=15)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=33)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
       "parked_tickers": [],
       "phase3_ready": false,
       "phase_blockers": [
-        "sp500 not in ladder.weekly_paper_shard_markets"
+        "asx200 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-06T17:21:08.449591+00:00",
-        "market_id": "sp500",
-        "buy_tier_count": 140,
+        "snapshot_at": "2026-09-06T18:43:19.627164+00:00",
+        "market_id": "asx200",
+        "buy_tier_count": 30,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 15,
-        "bodies_min": 14,
-        "bodies_median": 20.0,
-        "bodies_max": 71,
-        "coverage_scope": "canonical",
-        "ftse_equivalent": true,
+        "indexed_without_body": 33,
+        "bodies_min": 3,
+        "bodies_median": 12.0,
+        "bodies_max": 119,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
         "thin_body_tickers": [],
         "indexed_without_body_tickers": [
-          "LDOS",
-          "INTU",
-          "LMT",
-          "APTV",
-          "CRH",
-          "FICO",
-          "TSN",
-          "BXP"
+          "CSC.AX",
+          "BWP.AX",
+          "BPT.AX"
         ],
         "indexed_without_body_by_ticker": {
-          "LDOS": 1,
-          "INTU": 1,
-          "LMT": 1,
-          "APTV": 2,
-          "CRH": 2,
-          "FICO": 5,
-          "TSN": 1,
-          "BXP": 2
+          "CSC.AX": 1,
+          "BWP.AX": 2,
+          "BPT.AX": 30
         },
         "parked_tickers": [],
         "parked_count": 0,
         "effective_thin_body_buy_tier": 0,
         "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 15,
+        "effective_indexed_without_body": 33,
         "effective_indexed_without_body_tickers": [
-          "LDOS",
-          "INTU",
-          "LMT",
-          "APTV",
-          "CRH",
-          "FICO",
-          "TSN",
-          "BXP"
+          "CSC.AX",
+          "BWP.AX",
+          "BPT.AX"
         ],
         "ingest_exhausted": false
       },
@@ -229,7 +218,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-06T17:21:08.453918+00:00",
+      "evaluated_at": "2026-09-06T18:43:19.628138+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -251,7 +240,7 @@
         "no benchmark configured for ftse_smallcap"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-06T17:21:09.418539+00:00",
+        "snapshot_at": "2026-09-06T18:43:20.443472+00:00",
         "market_id": "ftse_smallcap",
         "buy_tier_count": 12,
         "unmeasured_buy_tier": 0,
@@ -329,13 +318,13 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-06T17:21:09.419019+00:00",
+      "evaluated_at": "2026-09-06T18:43:20.443970+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
-    "sp500",
+    "asx200",
     "ftse_smallcap"
   ],
   "market_queue": [
@@ -349,7 +338,7 @@
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 17,
+    "hour_utc": 18,
     "skip_stream_2_now": false,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",
@@ -372,7 +361,7 @@
     }
   },
   "scheduler_stream_1_markets": [
-    "sp500"
+    "asx200"
   ],
   "scheduler_stream_2_markets": [
     "ftse_smallcap"

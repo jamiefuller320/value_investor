@@ -455,13 +455,13 @@
     "surface_escalation_candidates_in_email": true,
     "note": "Exploration phase allows more director–worker runs per week while paper turnover is unknown; auto-tighten moves to steady cap when re-escalation rate stabilises. Shadow log surfaces escalation candidates in the Sunday email for manual approval; auto_escalate_director stays false until calibrated."
   },
-  "updated_at": "2026-09-06T14:19:09.721559+00:00",
+  "updated_at": "2026-09-06T18:42:06.023440+00:00",
   "ingest_parity_markets": [
     "asx200",
     "euro_depth"
   ],
   "ingest_parallel_sprint": [
-    "sp500"
+    "asx200"
   ],
   "ingest_parallel_sprint_2": [
     "ftse_smallcap"
@@ -717,7 +717,20 @@
           "ftse_smallcap"
         ],
         "ingest_parity_recorded": true
+      },
+      {
+        "at": "2026-09-06T18:42:06.023427+00:00",
+        "parallel_stream": 1,
+        "from_market": "sp500",
+        "to_market": "asx200",
+        "stream_markets_after": [
+          "asx200"
+        ],
+        "ingest_parity_recorded": false
       }
     ]
-  }
+  },
+  "ingest_exhausted_markets": [
+    "sp500"
+  ]
 }

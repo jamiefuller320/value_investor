@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-06T16:21:02.921137+00:00",
+  "compiled_at": "2026-09-06T18:42:33.612966+00:00",
   "run_at": "2026-09-02T10:22:48.084715+00:00",
-  "task_count": 74,
+  "task_count": 75,
   "tasks": [
     {
       "id": "eng-20260823-01",
@@ -4232,6 +4232,52 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/141",
       "pr_number": 141,
       "merged_at": "2026-07-28T20:14:22.598105+00:00"
+    },
+    {
+      "id": "eng-20260906-01",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked sp500 leftover APTV",
+      "summary": "Library market sp500 (S&P 500) parked APTV after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statutory re",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "sp500",
+        "library_market": "sp500",
+        "hunter_market_id": "sp500",
+        "hunter_ticker": "APTV",
+        "parked_reason": "unfetchable_iwb",
+        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for APTV only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     }
   ],
   "ingest_health": {
@@ -4378,6 +4424,7 @@
     ],
     "ingest_exhausted": false
   },
-  "micro_compile_source": "library_ingest_loop",
-  "library_market_id": "euro_depth"
+  "micro_compile_source": "parked_source_hunter",
+  "library_market_id": "sp500",
+  "hunter_ticker": "APTV"
 }
