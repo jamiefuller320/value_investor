@@ -1,8 +1,46 @@
 {
-  "compiled_at": "2026-09-05T19:44:27.157660+00:00",
-  "run_at": "2026-09-02T10:22:48.084715+00:00",
-  "task_count": 74,
+  "compiled_at": "2026-09-06T07:48:53.995841+00:00",
+  "run_at": "2026-09-06T06:47:53.947778+00:00",
+  "task_count": 79,
   "tasks": [
+    {
+      "id": "eng-20260906-01",
+      "area": "scoring",
+      "title": "Implement canonical FCF selector with divergence flag** — When filing, screen TTM, and `fcf.company_adjusted` disagree >50%, use company-adjusted for FCF Yield ",
+      "summary": "Implement canonical FCF selector with divergence flag** — When filing, screen TTM, and `fcf.company_adjusted` disagree >50%, use company-adjusted for FCF Yield and dividend-coverage models and emit a single reconciled coverage ratio in `screening_snapshot.json`",
+      "priority": "high",
+      "priority_score": 101.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "FCF",
+          "TTM"
+        ],
+        "plan_index": 1
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
     {
       "id": "eng-20260823-01",
       "area": "scoring",
@@ -848,6 +886,90 @@
       "merged_at": "2026-08-18T07:43:55.796641+00:00"
     },
     {
+      "id": "eng-20260906-02",
+      "area": "ingest",
+      "title": "Replace full-document CH OCR with iXBRL / targeted page-range extract for principal risks and pension notes** — Priority document IDs: ITV.L 04967001 (notes 3.8",
+      "summary": "Replace full-document CH OCR with iXBRL / targeted page-range extract for principal risks and pension notes** — Priority document IDs: ITV.L 04967001 (notes 3.8, pp. 43–53), HIK.L pp. 80–89, MEGP.L post-BS events note 32",
+      "priority": "high",
+      "priority_score": 98.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "CH",
+          "OCR",
+          "ITV.L",
+          "HIK.L",
+          "MEGP.L",
+          "BS"
+        ],
+        "plan_index": 2
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for CH",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260906-04",
+      "area": "scoring",
+      "title": "Relabel and gate growth metrics by provenance** — Mark `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income; compute Lynch PEG from filing dilute",
+      "summary": "Relabel and gate growth metrics by provenance** — Mark `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income; compute Lynch PEG from filing diluted EPS series",
+      "priority": "high",
+      "priority_score": 98.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "PEG",
+          "EPS"
+        ],
+        "plan_index": 4
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260902-02",
       "area": "ingest",
       "title": "Enable and gate Yahoo `quarterly_cashflow` for UK names; suppress TTM FCF and flag when series empty (HIK.L $14.4m TTM vs $119m filing; ITV.L empty)",
@@ -1659,6 +1781,88 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/327",
       "pr_number": 327,
       "merged_at": "2026-08-23T19:27:09.194493+00:00"
+    },
+    {
+      "id": "eng-20260906-03",
+      "area": "ingest",
+      "title": "Parse IR results-deck cash-flow bridges into `ir_presentation_metrics.json`** — Wire parser for HIK.L `ir_a70365d580129295.txt`, ITV.L `ir_0d388cd522a7cf4c.txt`",
+      "summary": "Parse IR results-deck cash-flow bridges into `ir_presentation_metrics.json`** — Wire parser for HIK.L `ir_a70365d580129295.txt`, ITV.L `ir_0d388cd522a7cf4c.txt`, and FGP.L allowlist decks",
+      "priority": "high",
+      "priority_score": 97.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "IR",
+          "HIK.L",
+          "ITV.L",
+          "FGP.L"
+        ],
+        "plan_index": 3
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for IR",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260906-05",
+      "area": "scoring",
+      "title": "Add sector cyclicality + thin-coverage overlays** — Media (advertising >40% revenue, Piotroski ≤4, statutory FCF/dividend ≤1.1× for ITV.L pattern); healthcare s",
+      "summary": "Add sector cyclicality + thin-coverage overlays** — Media (advertising >40% revenue, Piotroski ≤4, statutory FCF/dividend ≤1.1× for ITV.L pattern); healthcare statutory FCF cover <1.0× cap; discretionary revenue decline flags",
+      "priority": "high",
+      "priority_score": 97.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "FCF",
+          "ITV.L"
+        ],
+        "plan_index": 5
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260902-04",
@@ -4158,72 +4362,14 @@
     }
   ],
   "ingest_health": {
-    "snapshot_at": "2026-09-04T19:00:23.685550+00:00",
+    "snapshot_at": "2026-09-06T07:48:53.995815+00:00",
     "buy_tier_count": 59,
     "measured_tickers": 59,
     "unmeasured_buy_tier": 0,
     "unmeasured_tickers": [],
     "zero_body_buy_tier": 0,
     "zero_body_tickers": [],
-    "indexed_without_body": 4,
-    "filings_with_body": 3850
-  },
-  "ingest_health_before": {
-    "snapshot_at": "2026-09-04T13:22:57.583068+00:00",
-    "buy_tier_count": 59,
-    "measured_tickers": 59,
-    "unmeasured_buy_tier": 0,
-    "unmeasured_tickers": [],
-    "zero_body_buy_tier": 0,
-    "zero_body_tickers": [],
-    "indexed_without_body": 4,
-    "filings_with_body": 3850
-  },
-  "reprioritized_at": "2026-09-04T19:00:23.685653+00:00",
-  "reprioritized_after_task": "eng-20260904-02",
-  "library_ingest_health": {
-    "snapshot_at": "2026-09-05T19:44:08.581106+00:00",
-    "market_id": "euro_depth",
-    "buy_tier_count": 45,
-    "unmeasured_buy_tier": 1,
-    "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 23,
-    "indexed_without_body": 28,
-    "bodies_min": 1,
-    "bodies_median": 2.0,
-    "bodies_max": 91,
-    "coverage_scope": "canonical_plus_shards",
-    "ftse_equivalent": false,
-    "unmeasured_tickers": [
-      "AED.BR"
-    ],
-    "zero_body_tickers": [],
-    "thin_body_tickers": [
-      "STR.VI",
-      "SGO.PA",
-      "UMI.BR",
-      "ACKB.BR",
-      "EG7.IR",
-      "ANDR.VI",
-      "VOE.VI",
-      "EVN.VI",
-      "GVR.IR",
-      "WIE.VI",
-      "ESSITY-B.ST",
-      "SKA-B.ST",
-      "MUV2.DE",
-      "VOLV-B.ST",
-      "APAM.AS",
-      "POST.VI",
-      "DTE.DE",
-      "UCB.BR",
-      "BAS.DE",
-      "DQ7A.IR",
-      "ASSA-B.ST",
-      "OMV.VI",
-      "NBA.LS"
-    ]
-  },
-  "micro_compile_source": "library_ingest_loop",
-  "library_market_id": "euro_depth"
+    "indexed_without_body": 7,
+    "filings_with_body": 3878
+  }
 }

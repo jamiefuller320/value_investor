@@ -4591,7 +4591,127 @@
       "director_model": "grok-4.6",
       "meta_topic": "other",
       "recorded_at": "2026-09-04T20:24:07.516799+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Companies House PDF refetch for HIK.L returns strategic-report OCR only — add targeted page-range extract (pp. 80–89 principal risks, Notes 9/11 debt) rather than full-document OCR that stops at TOC pointers.",
+      "recorded_at": "2026-09-06T07:48:26.505294+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Parse IR results-deck cash-bridge slides into `ir_presentation_metrics.json`; refetch did not add FCF lines and H1 2026 deck bridge remains missing.",
+      "recorded_at": "2026-09-06T07:48:26.505307+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Ingest FDA Data Dashboard 483/warning-letter feed keyed to Hikma US site list for regulatory overlay.",
+      "recorded_at": "2026-09-06T07:48:26.505313+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy.",
+      "recorded_at": "2026-09-06T07:48:26.505319+00:00"
+    },
+    {
+      "ticker": "HIK.L",
+      "name": "Hikma Pharmaceuticals PLC",
+      "area": "prompt",
+      "priority": "low",
+      "suggestion": "Distinguish Buffett Quality pass (HIK.L score 0.75) from Economic Moat fail in gap-fill prompts to avoid misattributing D/E 77% to the wrong model gate.",
+      "recorded_at": "2026-09-06T07:48:26.505324+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Relabel `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income (MEGP: no adjusted EPS in 67 filing bodies) to stop false “filing core” Lynch PEG failures and >300 bps divergence flags.",
+      "recorded_at": "2026-09-06T07:48:26.505330+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Auto-flag cyclical exposure when principal-risk filings cite recession/discretionary spending and any interim month shows photobooth revenue decline >10% (MEGP Apr −17%).",
+      "recorded_at": "2026-09-06T07:48:26.505336+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Structure annual-report note 32 post-balance-sheet events (MEGP €30m BNP Paribas loan) and note 16 covenant compliance into structured fields — present in `ir_55af4b8f27e3dd6f.txt` but not surfaced to screen.",
+      "recorded_at": "2026-09-06T07:48:26.505343+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Improve Companies House PDF OCR for principal risks — refetched `ch_00735438_MzUxODY0NzMxMGFkaXF6a2N4.txt` confirms KPI table only, not risk prose.",
+      "recorded_at": "2026-09-06T07:48:26.505348+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "prompt",
+      "priority": "medium",
+      "suggestion": "When CH refetch adds corroborating bodies, require gap-fill to state whether new extracts change status or only cross-validate existing RNS figures.",
+      "recorded_at": "2026-09-06T07:48:26.505351+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "CH OCR refetch of both `ch_04967001_MzMzODcxODY0OWFkaXF6a2N4.txt` and `ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4.txt` fails to deliver Risks and Uncertainties or pension note 3.8 — switch to iXBRL tag extraction from Companies House document API (04967001).",
+      "recorded_at": "2026-09-06T07:48:26.505357+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Resolve indexed interim `db26438f6be61fe5` (has_body: false) — dedupe against `d19c5d3b8e0bb46a.txt` or retry Investegate HTML fallback.",
+      "recorded_at": "2026-09-06T07:48:26.505362+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Populate `ir_presentation_metrics.json` from `ir_0d388cd522a7cf4c.txt`.",
+      "recorded_at": "2026-09-06T07:48:26.505365+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Media cyclicality + thin FCF coverage overlay (advertising >40%, Piotroski ≤4, statutory FCF/dividend ≤1.1×).",
+      "recorded_at": "2026-09-06T07:48:26.505370+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ops",
+      "priority": "medium",
+      "suggestion": "Report which body file was refetched and whether it adds current-period vs historical depth — this pass fetched 2022 CH accounts, not incremental FY2025 content.",
+      "recorded_at": "2026-09-06T07:48:26.505375+00:00"
     }
   ],
-  "updated_at": "2026-09-04T20:24:07.516801+00:00"
+  "updated_at": "2026-09-06T07:48:26.505377+00:00"
 }

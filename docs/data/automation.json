@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-06T06:46:41.742838+00:00",
+  "generated_at": "2026-09-06T07:48:54.494415+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1158,23 +1158,84 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-05T19:44:27.157660+00:00",
-    "queue_ui_updated_at": "2026-09-06T06:46:41.744993+00:00",
-    "task_count": 74,
+    "compiled_at": "2026-09-06T07:48:53.995841+00:00",
+    "queue_ui_updated_at": "2026-09-06T07:48:54.496197+00:00",
+    "task_count": 79,
     "status": {
-      "open_count": 0,
+      "open_count": 5,
       "pr_open_count": 0,
       "parked_count": 1,
       "merged_count": 69,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260906-01",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [],
+    "queued_tasks": [
+      {
+        "id": "eng-20260906-01",
+        "area": "scoring",
+        "title": "Implement canonical FCF selector with divergence flag** — When filing, screen TTM, and `fcf.company_adjusted` disagree >50%, use company-adjusted for FCF Yield ",
+        "priority": "high",
+        "priority_score": 101.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260906-02",
+        "area": "ingest",
+        "title": "Replace full-document CH OCR with iXBRL / targeted page-range extract for principal risks and pension notes** — Priority document IDs: ITV.L 04967001 (notes 3.8",
+        "priority": "high",
+        "priority_score": 98.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260906-04",
+        "area": "scoring",
+        "title": "Relabel and gate growth metrics by provenance** — Mark `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income; compute Lynch PEG from filing dilute",
+        "priority": "high",
+        "priority_score": 98.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260906-03",
+        "area": "ingest",
+        "title": "Parse IR results-deck cash-flow bridges into `ir_presentation_metrics.json`** — Wire parser for HIK.L `ir_a70365d580129295.txt`, ITV.L `ir_0d388cd522a7cf4c.txt`",
+        "priority": "high",
+        "priority_score": 97.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260906-05",
+        "area": "scoring",
+        "title": "Add sector cyclicality + thin-coverage overlays** — Media (advertising >40% revenue, Piotroski ≤4, statutory FCF/dividend ≤1.1× for ITV.L pattern); healthcare s",
+        "priority": "high",
+        "priority_score": 97.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      }
+    ],
     "attention_tasks": [
       {
         "id": "eng-20260903-03",
@@ -1192,7 +1253,7 @@
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-09-06T06:46:41.766621+00:00",
+    "generated_at": "2026-09-06T07:48:54.496647+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
