@@ -24,6 +24,9 @@ DEFAULT_MAX_COMPILE_TASKS = 8
 DEFAULT_MAX_RUN_TASKS = 1
 DEFAULT_MIN_METRICS_FOR_SCREEN = 25
 TERMINAL_TASK_STATUSES = frozenset({"merged", "completed", "failed", "cancelled", "parked"})
+PARKED_SOURCE_HUNTER_SOURCE = "parked_source_hunter"
+INGEST_BACKGROUND_SOURCES = frozenset({PARKED_SOURCE_HUNTER_SOURCE})
+PARKED_SOURCE_HUNTER_PRIORITY_SCORE = 12.0
 
 BLOCKED_PATHS = (
     "src/value_investor/paper_fund.py",
@@ -237,6 +240,19 @@ def _extract_tickers(*chunks: str) -> list[str]:
             seen.add(token)
             found.append(token)
     return found
+
+
+def is_blocking_open_ingest_task(row: dict[str, Any]) -> bool:
+    """True for an open ingest task that should block stall / gap-closure compile.
+
+    Low-priority parked-source hunter tasks sit at the back of the queue and
+    must not prevent higher-priority ingest compile.
+    """
+    if str(row.get("area") or "").lower() != "ingest":
+        return False
+    if str(row.get("status") or "open") not in {"open", "pr_open"}:
+        return False
+    return str(row.get("source") or "") not in INGEST_BACKGROUND_SOURCES
 
 
 def _allowed_paths_for_area(area: str) -> list[str]:
@@ -650,11 +666,7 @@ def compile_ingest_engineering_tasks_micro(
     run_stamp = datetime.now(UTC).strftime("%Y%m%d")
     existing_payload = load_engineering_tasks(committed_path)
     existing_rows = list(existing_payload.get("tasks") or [])
-    if any(
-        str(row.get("area") or "").lower() == "ingest"
-        and str(row.get("status") or "open") in {"open", "pr_open"}
-        for row in existing_rows
-    ):
+    if any(is_blocking_open_ingest_task(row) for row in existing_rows):
         return {"compiled_count": 0, "reason": "open ingest engineering task already queued"}
 
     prefix = f"eng-{run_stamp}-"

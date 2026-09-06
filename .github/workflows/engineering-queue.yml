@@ -371,6 +371,9 @@ jobs:
       - name: Sync main before queue file commit
         run: git pull --rebase --autostash origin main
 
+      - name: Compile next parked leftover source-hunter
+        run: ftse-library parked-hunter-compile --json
+
       - name: Refresh engineering queue UI snapshot
         run: ftse-engineering refresh-queue-ui --json || true
 

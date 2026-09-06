@@ -53,8 +53,9 @@ and persists `docs/data/library/euro_ingest_dispatch.json`:
 
 | Mode | When | Sprint workflow (`euro-ingest-loop.yml`) | Maintenance workflow |
 |------|------|------------------------------------------|----------------------|
-| `sprint` | any of unmeasured / zero-body / thin / `indexed_without_body` > 0 | ≤4×/day, 24 targets | off |
-| `maintenance` | FTSE quality bar met (all four zero) | off (skipped) | ≤4×/day, 62 targets + discovery scan via `library-ingest-maintenance.yml` |
+| `sprint` | any of unmeasured / zero-body / thin / `indexed_without_body` > 0 (and leftover names are not yet parked) | ≤4×/day, 24 targets | off |
+| `exhausted` | unmeasured + zero-body are 0, leftover thin/IWB names parked after complete 0-improve sprints | off | on — unparked names stay on FTSE-volume maintenance; parked leftovers skipped |
+| `maintenance` | FTSE quality bar met (all four **raw** counts zero) | off (skipped) | ≤4×/day, 62 targets + discovery scan via `library-ingest-maintenance.yml` |
 
 Phase 3 readiness is **informational only** — weekday ladder crons stay enabled during maintenance.
 
@@ -88,10 +89,21 @@ live job; a held spare skips the slot after `spare_wait_seconds`.
 
 **Parallel sprint:** `ingest_parallel_sprint` (default `["sp500"]`) and `ingest_parallel_sprint_2`
 (default `["asx200"]`) front-start filing deepen on queue markets while focus is still in
-sprint. When a parallel market reaches filing parity, `advance_parallel_sprint_on_ingest_parity`
+sprint. When a parallel market reaches filing parity **or leftover thin/IWB ingest is
+exhausted**, `advance_parallel_sprint_on_ingest_parity`
 (default true) removes it from its stream and promotes the next `market_queue` market that
-still has gaps into the same slot. Stream 1 slots match euro focus (+30 min) via
-`library-ingest-sprint.yml`; stream 2 (+60 min) via `library-ingest-sprint-2.yml`. Learning
+still has fetchable gaps into the same slot. Exhaustion parks unfetchable 8-K /
+awaiting-report names out of the learning pool after
+**3 complete (non-cutoff) 0-improve runs** — it does **not** add the market to
+`ingest_parity_markets` (raw all-four-zero still required, and FTSE-equivalent
+markets still wait on `learning_ready`). Exhausted leftovers **do** join
+`ingest_exhausted_markets` so `library-ingest-maintenance.yml` keeps discovering
+and deepening **unparked** names at FTSE volume (`max_targets=62`). Targeting
+already skips parked tickers. A low-priority `parked_source_hunter` engineering
+task (score 12, back of the queue, one ticker at a time) looks for a real IR
+allowlist after each hunter merge via `ftse-library parked-hunter-compile`.
+Stream 1 slots match euro focus (+30 min) via
+`library-ingest-sprint.yml`; stream 2 (+60 min) via `library-ingest-sprint-2.yml`.
 Learning **weekly paper** (`weekly_paper_shard_markets`, capacity 1) stays on
 `euro_depth` until handoff. Sunday screen-lite + observe sim follow the
 **ingest profile** (focus + both sprint streams + ingest-parity +
@@ -100,12 +112,13 @@ without taking the weekly-paper slot.
 
 `ingest_parity_met` is the FTSE quality bar for **every** library market
 (unmeasured, zero-body, thin, and `indexed_without_body` all zero).
+`sprint_ingest_complete` is that bar **or** leftover thin/IWB parked as exhausted.
 `sp500` is also in `ftse_equivalent_markets`: coverage is **canonical-only** (do not
 count nasdaq100 overlap). Until `ftse-library learning-depth --market sp500` is
-green, the sprint must keep seeing those real gaps (24 targets) — do **not** add
-`sp500` to `ingest_parity_markets`.
-Keep Sunday screen-lite so unique days / span reach 12 weeks; do not ingest all 503
-constituents.
+green **on raw parity**, do **not** add `sp500` to `ingest_parity_markets`.
+Exhausted leftover 8-Ks may still flip `filing_ready` for learning on solid names
+and vacate the sprint slot. Keep Sunday screen-lite so unique days / span reach
+12 weeks; do not ingest all 503 constituents.
 
 The gate runs at the start of `euro-ingest-loop.yml`, after each ingest loop, and after
 library ladder when `euro_depth` is in the phase rollup. With `CRONJOB_API_KEY` in GitHub

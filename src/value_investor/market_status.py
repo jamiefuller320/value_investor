@@ -146,6 +146,7 @@ def _filing_health_index(dispatch: dict[str, Any]) -> dict[str, dict[str, Any]]:
             "mode": dispatch.get("mode"),
             "reason": dispatch.get("reason"),
             "ingest_parity_met": bool(dispatch.get("ingest_parity_met")),
+            "ingest_exhausted": bool(dispatch.get("ingest_exhausted")),
             "filing_gaps": _int(dispatch.get("filing_gaps")),
             "filing_health": _slim_filing_health(dispatch.get("filing_health")),
             "phase_blockers": [
@@ -163,6 +164,7 @@ def _filing_health_index(dispatch: dict[str, Any]) -> dict[str, dict[str, Any]]:
                 "mode": row.get("mode"),
                 "reason": row.get("reason"),
                 "ingest_parity_met": bool(row.get("ingest_parity_met")),
+                "ingest_exhausted": bool(row.get("ingest_exhausted")),
                 "filing_gaps": _int(row.get("filing_gaps")),
                 "filing_health": _slim_filing_health(row.get("filing_health")),
                 "phase_blockers": [
@@ -185,9 +187,12 @@ def _slim_filing_health(raw: Any) -> dict[str, Any] | None:
         "bodies_median": _float(health.get("bodies_median")),
         "coverage_scope": health.get("coverage_scope"),
         "ftse_equivalent": bool(health.get("ftse_equivalent")),
+        "ingest_exhausted": bool(health.get("ingest_exhausted")),
+        "parked_count": _int(health.get("parked_count")),
         "zero_body_tickers": [str(t) for t in _as_list(health.get("zero_body_tickers"))[:8]],
         "thin_body_tickers": [str(t) for t in _as_list(health.get("thin_body_tickers"))[:8]],
         "unmeasured_tickers": [str(t) for t in _as_list(health.get("unmeasured_tickers"))[:8]],
+        "parked_tickers": [str(t) for t in _as_list(health.get("parked_tickers"))[:8]],
     }
 
 
