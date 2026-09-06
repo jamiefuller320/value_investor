@@ -24,6 +24,7 @@ from typing import Any, Literal
 from value_investor.archive_history import ARCHIVE_SIGNAL_FIELDS
 from value_investor.backtest import BENCHMARK_TICKER, RunSnapshot, load_run_snapshots
 from value_investor.market_trading_costs import LIVE_PAPER_MARKET_ID, cost_fields_for_config
+from value_investor.paper_automation import BUY_TIER_LEVEL_MAX_POSITIONS
 from value_investor.paper_fund import (
     BUY_SIGNALS,
     DEFAULT_EXIT_CONFIRM_SCREENS,
@@ -33,7 +34,6 @@ from value_investor.paper_fund import (
     PaperFundConfig,
     run_automated_rebalance,
 )
-from value_investor.paper_automation import BUY_TIER_LEVEL_MAX_POSITIONS
 
 COHORTS_FILENAME = "buy_cross_archive.json"
 REVIEW_FILENAME = "buy_cross_archive_review.json"
