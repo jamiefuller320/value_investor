@@ -9,12 +9,14 @@ from pathlib import Path
 
 from value_investor.paper_automation import (
     AI_JUDGMENT_TRACK_ID,
+    BUY_TIER_LEVEL_TRACK_ID,
     DEFAULT_AUTOMATION_DIR,
     GRADUATED_ALLOCATION_TRACK_ID,
     MOMENTUM_GRACE_TRACK_ID,
     RULES_TRACK_ID,
     TECHNICAL_TRACK_ID,
     AutomationConfig,
+    default_buy_tier_level_config,
     format_automation_text,
     learning_track_dirs,
     run_daily_automation,
@@ -72,6 +74,7 @@ def main(argv: list[str] | None = None) -> int:
             "technical",
             "ai_judgment_fair",
             "rules_fair",
+            "buy_tier_level",
         ],
         help="Which learning track(s) to run (default: all, includes Suite B when present)",
     )
@@ -147,6 +150,7 @@ def main(argv: list[str] | None = None) -> int:
         "technical": TECHNICAL_TRACK_ID,
         "ai_judgment_fair": "ai_judgment_fair",
         "rules_fair": "rules_fair",
+        "buy_tier_level": BUY_TIER_LEVEL_TRACK_ID,
     }[args.tracks]
     dirs = learning_track_dirs(output_dir)
     if track_id not in dirs:
@@ -196,6 +200,8 @@ def main(argv: list[str] | None = None) -> int:
         config.use_momentum_grace = False
         config.strategy_mode = "technical"
         config.track_label = "Technical levels (stops / trade_plan)"
+    elif args.tracks == "buy_tier_level":
+        config = default_buy_tier_level_config(config)
     else:
         config.track_id = RULES_TRACK_ID
         config.is_primary_learning_track = False

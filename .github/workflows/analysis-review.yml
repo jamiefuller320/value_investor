@@ -113,6 +113,9 @@ jobs:
       - name: Exclusion-universe archive priors (observe-only)
         run: ftse-exclusion-universe-archive --output-dir docs/data || true
 
+      - name: Buy-cross archive lab (observe-only)
+        run: ftse-buy-cross-archive --output-dir docs/data || true
+
       - name: Exclusion ladder replay (rebalance_log + costs)
         run: |
           ftse-exclusion-ladder-replay run \
@@ -159,6 +162,8 @@ jobs:
             docs/data/paper_automation/ai_judgment_calibrated_r*/**
             docs/data/exclusion_universe_archive.json
             docs/data/exclusion_universe_review.json
+            docs/data/buy_cross_archive.json
+            docs/data/buy_cross_archive_review.json
             docs/data/paper_automation/exclusion_ladder_replay.json
             docs/data/paper_automation/exclusion_ladder_replay_review.json
             docs/data/paper_automation/ai_judgment_exclusion_*/**

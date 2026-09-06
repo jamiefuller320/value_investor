@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-06T10:00:28+00:00",
+  "updated_at": "2026-09-06T20:18:27+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -6859,6 +6859,127 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-4e8f6cc3-6dd0-4a9d-ae76-82513ae5f453",
       "added_at": "2026-09-06T10:00:28+00:00"
+    },
+    {
+      "id": "L312",
+      "category": "later",
+      "section": "learning",
+      "title": "Unfiltered buy-tier lifecycle baseline cohort (Suite B)",
+      "summary": "One fair-cost equal-weight paper book of raw screen buy-tier names (no extra conviction floor) as the live u0 control. Seed PIT from the current screen, freeze an epoch-zero datum, and run full entry/hold/exit lifecycle. Compare later filters and knob changes as overlays or divergence on the same holdings first \u2014 not as a 3-name hero book. Predecessor to filtered_cohort_track (15\u201320). Do not use 3% stress or spawn a twin per knob.",
+      "revisit_when": "Human authorises one new Suite B paper book after FCF-basis enforcement on live buy-tier is in flight or closed, and a written spec exists for buy-threshold (raw screen vs adjusted_signal), sector_cap, and hold-buffer.",
+      "tags": [
+        "cohort",
+        "baseline",
+        "suite-b",
+        "lifecycle",
+        "u0",
+        "paper"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a076bd-bdf3-7be5-8c3e-f65ccd5a4c01",
+      "added_at": "2026-09-06T14:51:11+00:00"
+    },
+    {
+      "id": "N98",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not spawn a 61-name buy-tier book immediately",
+      "summary": "An unfiltered lifecycle baseline is the right control, but do not stand it up this weekend as an extra paper track. Live-path FCF/overlay bind is still the spend priority; archive u0 already gives gross EW history; a same-day spawn without a written buy-threshold/sector-cap/cost spec would starve P1 and muddy epoch zero.",
+      "revisit_when": "Same gate as L312: human-authored Suite B spec exists and FCF-basis enforcement on live buy-tier is in flight or closed.",
+      "tags": [
+        "cohort",
+        "not-now",
+        "paper",
+        "complexity"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a076bd-bdf3-7be5-8c3e-f65ccd5a4c01",
+      "added_at": "2026-09-06T14:51:20+00:00"
+    },
+    {
+      "id": "N99",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "No per-knob counterfactual warm-start twins of a cohort book",
+      "summary": "When the buy-tier baseline exists, compare recommended knob changes as overlays or divergence on the same held names plus a new epoch-zero datum. Do not spawn a new warm-started twin per knob recommendation \u2014 that is the calibration-shadow factory that already failed three times (N53).",
+      "revisit_when": "A recommend-status knob has \u22654 forward weeks on the single baseline cohort and a human asks for at most one Suite B twin.",
+      "tags": [
+        "cohort",
+        "n53",
+        "warm-start",
+        "knobs"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a076bd-bdf3-7be5-8c3e-f65ccd5a4c01",
+      "added_at": "2026-09-06T14:51:20+00:00"
+    },
+    {
+      "id": "L313",
+      "category": "later",
+      "section": "learning",
+      "title": "Buy-cross lifecycle book as a second story after the level cohort",
+      "summary": "A same-ruleset book that only initiates when a name newly crosses into screen buy-tier (not when it merely is buy-tier) answers a different question than the Monday cold-start level book: are opinion upgrades good entries, and do those lives feed exit/DCA/thesis overlays. Do this first as a PIT archive replay with T212 costs and hold-buffer; spawn at most one Suite B shadow if the replay disagrees with u0 EW. Historic hold\u2192buy n is ~20\u201323 over 13 weeks \u2014 useful for a replay, not promotion truth.",
+      "revisit_when": "The unfiltered buy-tier level book is authorised or running, and an archive-lab buy-cross replay with costs exists (or history_run_count \u2265 16 with \u226540 hold\u2192buy events).",
+      "tags": [
+        "cohort",
+        "buy-cross",
+        "lifecycle",
+        "warm-start",
+        "trajectory"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a076bd-bdf3-7be5-8c3e-f65ccd5a4c01",
+      "added_at": "2026-09-06T19:49:58+00:00"
+    },
+    {
+      "id": "N100",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not run a live buy-cross warm-start in parallel tomorrow",
+      "summary": "The level vs cross contrast is real, but a second weekday paper book tomorrow duplicates the cold-start slot, sits on a thin transition sample, and is not needed to start collecting the story. Replay historic buy-crosses offline first; keep Monday (if any) as one level-cohort cold start.",
+      "revisit_when": "Same gate as the buy-cross lifecycle later idea: replay exists and disagrees with u0, or a human asks for one Suite B twin after \u22654 weeks on the level book.",
+      "tags": [
+        "cohort",
+        "not-now",
+        "warm-start",
+        "complexity"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a076bd-bdf3-7be5-8c3e-f65ccd5a4c01",
+      "added_at": "2026-09-06T19:49:58+00:00"
+    },
+    {
+      "id": "L314",
+      "category": "later",
+      "section": "research",
+      "title": "Stamp FCF and filing PIT onto weekly run snapshots",
+      "summary": "ARCHIVE_SIGNAL_FIELDS has signal, conviction, timing, overlay, and trade_plan, but not FCF basis or filing figures. Archive counterfactuals cannot replay FCF-aware policies until those fields are stored point-in-time on each weekly snapshot.",
+      "revisit_when": "Live-path FCF/filing bind is producing stable PIT fields on the weekday screen and we want archive labs to replay FCF-aware entry or overlay rules.",
+      "tags": [
+        "archive",
+        "fcf",
+        "counterfactual",
+        "p1"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a076bd-bdf3-7be5-8c3e-f65ccd5a4c01",
+      "added_at": "2026-09-06T20:12:43+00:00"
+    },
+    {
+      "id": "L315",
+      "category": "later",
+      "section": "research",
+      "title": "Daily or fill-level marks for archive lifecycle replay",
+      "summary": "Weekly snapshot prints are not fills. Lifecycle labs can apply an explicit cost model, but they cannot simulate intraweek paths, limit fills, or daily stop hits until history stores denser prices.",
+      "revisit_when": "The weekly buy-tier level book has a thick forward epoch and a lifecycle question actually depends on intraweek path rather than Sunday-to-Sunday marks.",
+      "tags": [
+        "archive",
+        "fills",
+        "lifecycle"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a076bd-bdf3-7be5-8c3e-f65ccd5a4c01",
+      "added_at": "2026-09-06T20:12:43+00:00"
     }
   ],
   "fragments": [
@@ -7310,6 +7431,20 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a06d3c-b801-7e15-bb85-358f0f21b812",
       "added_at": "2026-09-04T20:47:27+00:00"
+    },
+    {
+      "id": "frag-20260906-01",
+      "text": "L314/L315 are not a sprint. L314 as written (filing/memo PIT on snapshots) is not worth it; the only cheap slice is allowlisting already-published FCF flags after live bind is stable, and L229 already covers that flag-in-history idea. L315 daily/fill marks wait until buy_tier_level has a thick epoch and a question Sunday-to-Sunday marks cannot answer.",
+      "tags": [
+        "archive",
+        "fcf",
+        "l314",
+        "l315",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a076bd-bdf3-7be5-8c3e-f65ccd5a4c01",
+      "added_at": "2026-09-06T20:18:27+00:00"
     }
   ]
 }

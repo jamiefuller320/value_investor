@@ -890,7 +890,10 @@ def run_decision_review(
     else:
         config = AutomationConfig()
 
-    if (config.is_calibration_shadow or config.is_exclusion_shadow) and apply:
+    frozen_lab = bool(
+        config.is_calibration_shadow or config.is_exclusion_shadow or config.is_cohort_lab
+    )
+    if frozen_lab and apply:
         apply = False
 
     fund = ensure_automated_fund(fund_path, config)
@@ -940,8 +943,8 @@ def run_decision_review(
         elif apply and not changes:
             note = "Reviewed; no knob changes to apply."
             knobs_after = knobs_before
-        elif config.is_calibration_shadow or config.is_exclusion_shadow:
-            note = "Frozen shadow track — knobs fixed; decision-review apply skipped."
+        elif frozen_lab:
+            note = "Frozen lab/shadow track — knobs fixed; decision-review apply skipped."
             knobs_after = knobs_before
         elif force and not apply:
             note = "Forced proposal with thin history (not applied)."

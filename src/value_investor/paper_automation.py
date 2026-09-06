@@ -123,6 +123,8 @@ class AutomationConfig:
     # Suite B fair-cost lab — T212-shaped costs; decision-review apply allowed on these tracks.
     is_fair_cost_lab: bool = False
     fair_cost_parent_track: str | None = None
+    # Cohort lab — unfiltered buy-tier book; frozen vs decision-review --apply.
+    is_cohort_lab: bool = False
     # Churn guards — tuneable via config.json (not decision-review knobs yet).
     exit_confirm_screens: int = DEFAULT_EXIT_CONFIRM_SCREENS
     reentry_cooldown_screens: int = DEFAULT_REENTRY_COOLDOWN_SCREENS
@@ -215,6 +217,7 @@ class AutomationConfig:
             fair_cost_parent_track=(
                 str(raw["fair_cost_parent_track"]) if raw.get("fair_cost_parent_track") else None
             ),
+            is_cohort_lab=bool(raw.get("is_cohort_lab", False)),
             exit_confirm_screens=int(raw.get("exit_confirm_screens", DEFAULT_EXIT_CONFIRM_SCREENS)),
             reentry_cooldown_screens=int(
                 raw.get("reentry_cooldown_screens", DEFAULT_REENTRY_COOLDOWN_SCREENS)
@@ -231,11 +234,14 @@ RULES_TRACK_ID = "rules"
 MOMENTUM_GRACE_TRACK_ID = "momentum_grace"
 GRADUATED_ALLOCATION_TRACK_ID = "graduated_allocation"
 TECHNICAL_TRACK_ID = "technical"
+BUY_TIER_LEVEL_TRACK_ID = "buy_tier_level"
 AI_JUDGMENT_SUBDIR = "ai_judgment"
 AI_JUDGMENT_CALIBRATED_SUBDIR = "ai_judgment_calibrated"
 MOMENTUM_GRACE_SUBDIR = "momentum_grace"
 GRADUATED_ALLOCATION_SUBDIR = "graduated_allocation"
 TECHNICAL_SUBDIR = "technical"
+BUY_TIER_LEVEL_SUBDIR = "buy_tier_level"
+BUY_TIER_LEVEL_MAX_POSITIONS = 120
 LEARNING_TRACK_IDS = (
     RULES_TRACK_ID,
     AI_JUDGMENT_TRACK_ID,
@@ -243,6 +249,7 @@ LEARNING_TRACK_IDS = (
     MOMENTUM_GRACE_TRACK_ID,
     GRADUATED_ALLOCATION_TRACK_ID,
     TECHNICAL_TRACK_ID,
+    BUY_TIER_LEVEL_TRACK_ID,
 )
 
 
@@ -304,6 +311,32 @@ def default_rules_config(base: AutomationConfig | None = None) -> AutomationConf
     return cfg
 
 
+def default_buy_tier_level_config(base: AutomationConfig | None = None) -> AutomationConfig:
+    """Suite B cohort lab: hold every raw-screen buy-tier name (cold start)."""
+    from value_investor.fair_cost_lab import stamp_fair_costs
+
+    cfg = default_rules_config(base)
+    cfg.track_id = BUY_TIER_LEVEL_TRACK_ID
+    cfg.track_label = "Buy-tier level cohort (raw screen, Suite B costs, cold start)"
+    cfg.is_primary_learning_track = False
+    cfg.is_cohort_lab = True
+    cfg.is_fair_cost_lab = False
+    cfg.is_calibration_shadow = False
+    cfg.is_exclusion_shadow = False
+    cfg.use_adjusted_signal = False
+    cfg.require_research_accumulate = False
+    cfg.use_momentum_grace = False
+    cfg.use_graduated_allocation = False
+    cfg.skip_timing_wait = True
+    cfg.min_conviction = 0.0
+    cfg.sector_cap = 1.0
+    cfg.max_positions = BUY_TIER_LEVEL_MAX_POSITIONS
+    cfg.exit_confirm_screens = DEFAULT_EXIT_CONFIRM_SCREENS
+    cfg.reentry_cooldown_screens = DEFAULT_REENTRY_COOLDOWN_SCREENS
+    stamp_fair_costs(cfg)
+    return cfg
+
+
 def learning_track_dirs(base_dir: Path) -> dict[str, Path]:
     """Map track_id → output directory under the paper-automation root."""
     from value_investor.exclusion_ladder_replay import (
@@ -324,6 +357,7 @@ def learning_track_dirs(base_dir: Path) -> dict[str, Path]:
         MOMENTUM_GRACE_TRACK_ID: root / MOMENTUM_GRACE_SUBDIR,
         GRADUATED_ALLOCATION_TRACK_ID: root / GRADUATED_ALLOCATION_SUBDIR,
         TECHNICAL_TRACK_ID: root / TECHNICAL_SUBDIR,
+        BUY_TIER_LEVEL_TRACK_ID: root / BUY_TIER_LEVEL_SUBDIR,
     }
     for rank in discover_calibration_shadow_ranks(root):
         track_id = calibrated_shadow_track_id(rank)
@@ -1372,6 +1406,40 @@ def ensure_learning_track_configs(base_dir: Path) -> dict[str, AutomationConfig]
         shadow_path.write_text(json.dumps(shadow.to_dict(), indent=2), encoding="utf-8")
         configs[track_id] = shadow
 
+    btl_dir = dirs[BUY_TIER_LEVEL_TRACK_ID]
+    btl_path = btl_dir / CONFIG_FILENAME
+    btl_dir.mkdir(parents=True, exist_ok=True)
+    if btl_path.exists():
+        btl = AutomationConfig.from_dict(json.loads(btl_path.read_text(encoding="utf-8")))
+        btl.track_id = BUY_TIER_LEVEL_TRACK_ID
+        btl.is_primary_learning_track = False
+        btl.is_cohort_lab = True
+        btl.is_fair_cost_lab = False
+        btl.is_calibration_shadow = False
+        btl.is_exclusion_shadow = False
+        btl.use_adjusted_signal = False
+        btl.require_research_accumulate = False
+        btl.use_momentum_grace = False
+        btl.use_graduated_allocation = False
+        btl.skip_timing_wait = True
+        btl.min_conviction = 0.0
+        btl.sector_cap = 1.0
+        if int(btl.max_positions) < BUY_TIER_LEVEL_MAX_POSITIONS:
+            btl.max_positions = BUY_TIER_LEVEL_MAX_POSITIONS
+        btl.track_label = btl.track_label or (
+            "Buy-tier level cohort (raw screen, Suite B costs, cold start)"
+        )
+        btl.timezone = rules.timezone
+        btl.market_open = rules.market_open
+        btl.settle_minutes_after_open = rules.settle_minutes_after_open
+        btl.weekdays_only = rules.weekdays_only
+        # Keep Suite B fair costs — do NOT inherit Suite A 3% stress.
+        stamp_fair_costs(btl)
+    else:
+        btl = default_buy_tier_level_config(rules)
+    btl_path.write_text(json.dumps(btl.to_dict(), indent=2), encoding="utf-8")
+    configs[BUY_TIER_LEVEL_TRACK_ID] = btl
+
     return configs
 
 
@@ -1399,6 +1467,7 @@ def run_learning_tracks(
         AI_JUDGMENT_TRACK_ID,
         MOMENTUM_GRACE_TRACK_ID,
         GRADUATED_ALLOCATION_TRACK_ID,
+        BUY_TIER_LEVEL_TRACK_ID,
     ]
     shadow_ids = [
         track_id
@@ -1406,6 +1475,7 @@ def run_learning_tracks(
         if getattr(cfg, "is_calibration_shadow", False)
         or getattr(cfg, "is_exclusion_shadow", False)
         or getattr(cfg, "is_fair_cost_lab", False)
+        or getattr(cfg, "is_cohort_lab", False)
     ]
     insert_at = default_tracks.index(AI_JUDGMENT_TRACK_ID) + 1
     for track_id in sorted(shadow_ids):
@@ -1445,6 +1515,7 @@ def run_learning_tracks(
             "technical track is the timing/levels baseline; "
             "momentum_grace is an experimental exit overlay; "
             "graduated_allocation tests trade-plan entry sizing and harvest skims; "
+            "buy_tier_level is a Suite B unfiltered buy-tier cohort (frozen knobs); "
             "entry_dca_overlay scores counterfactual entry cadences on every track; "
             "hypothesis_integrity reviews underwater holdings before crude stops."
         ),
