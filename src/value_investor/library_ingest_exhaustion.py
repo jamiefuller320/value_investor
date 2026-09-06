@@ -27,9 +27,7 @@ REVISIT_UNFETCHABLE_IWB = (
     "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR "
     "allowlist body lands for the leftover rows"
 )
-REVISIT_AWAITING_PERIODIC = (
-    "Next statutory annual or interim report is issued and indexed"
-)
+REVISIT_AWAITING_PERIODIC = "Next statutory annual or interim report is issued and indexed"
 
 
 def ingest_exhaustion_path(library_root: Path, market_id: str) -> Path:
@@ -98,9 +96,7 @@ def learning_pool_excluded_tickers(
 ) -> set[str]:
     """Tickers parked from observe-sim / paper learning until coverage improves."""
     return set(
-        parked_tickers_from_exhaustion(
-            load_ingest_exhaustion(market_id, library_root=library_root)
-        )
+        parked_tickers_from_exhaustion(load_ingest_exhaustion(market_id, library_root=library_root))
     )
 
 
@@ -271,8 +267,7 @@ def refresh_library_ingest_exhaustion(
     existing = load_ingest_exhaustion(market_id, library_root=library_root)
     health = dict(health or {})
     log_path = Path(
-        health_log_path
-        or resolve_library_ingest_health_log_path(library_root, market_id)
+        health_log_path or resolve_library_ingest_health_log_path(library_root, market_id)
     )
     zero_runs, had_targets = count_trailing_complete_zero_improve_runs(
         log_path,
@@ -282,14 +277,10 @@ def refresh_library_ingest_exhaustion(
     unmeasured = {
         str(t).strip() for t in (health.get("unmeasured_tickers") or []) if str(t).strip()
     }
-    zero_body = {
-        str(t).strip() for t in (health.get("zero_body_tickers") or []) if str(t).strip()
-    }
+    zero_body = {str(t).strip() for t in (health.get("zero_body_tickers") or []) if str(t).strip()}
     thin = {str(t).strip() for t in (health.get("thin_body_tickers") or []) if str(t).strip()}
     iwb = {
-        str(t).strip()
-        for t in (health.get("indexed_without_body_tickers") or [])
-        if str(t).strip()
+        str(t).strip() for t in (health.get("indexed_without_body_tickers") or []) if str(t).strip()
     }
     bootstrap = unmeasured | zero_body
     leftover = (thin | iwb) - bootstrap
@@ -302,9 +293,7 @@ def refresh_library_ingest_exhaustion(
             continue
         if ticker not in leftover:
             continue
-        coverage = _coverage_for_ticker(
-            ticker, market_id=market_id, library_root=library_root
-        )
+        coverage = _coverage_for_ticker(ticker, market_id=market_id, library_root=library_root)
         if _coverage_improved(row, coverage):
             continue
         reason, revisit = _park_reason(ticker, iwb_tickers=iwb)
@@ -333,9 +322,7 @@ def refresh_library_ingest_exhaustion(
         for ticker in sorted(leftover):
             if ticker in seen:
                 continue
-            coverage = _coverage_for_ticker(
-                ticker, market_id=market_id, library_root=library_root
-            )
+            coverage = _coverage_for_ticker(ticker, market_id=market_id, library_root=library_root)
             reason, revisit = _park_reason(ticker, iwb_tickers=iwb)
             kept.append(
                 {

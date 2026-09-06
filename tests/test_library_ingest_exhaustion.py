@@ -488,4 +488,3 @@ def test_paper_bundle_excludes_parked_tickers(tmp_path: Path):
     tickers = [row["ticker"] for row in bundle["reports"]]
     assert "AAPL" in tickers
     assert "FICO" not in tickers
-
