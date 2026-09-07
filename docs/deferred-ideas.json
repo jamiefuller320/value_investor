@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-07T08:04:21+00:00",
+  "updated_at": "2026-09-07T09:26:55+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7048,6 +7048,58 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
       "added_at": "2026-09-07T08:04:21+00:00"
+    },
+    {
+      "id": "L319",
+      "category": "later",
+      "section": "learning",
+      "title": "Start shard weekday epoch-0 buy-tier-level without archive history",
+      "summary": "A frozen Suite B buy-tier-level book needs one current screen, prices, and a weekday runner \u2014 not 12 archives or learning_ready. Exhaustion can flip filing_ready on solid names and should unblock this start, not more spare ingest. Keep knobs frozen; do not clone the full AI weekday stack. History is for promote/apply and for replaying names the wide book never held.",
+      "revisit_when": "FTSE buy_tier_level has first-fill marks and euro_depth weekly-paper is either green or explicitly deprioritized in favor of this cheaper weekday start",
+      "tags": [
+        "shards",
+        "epoch-zero",
+        "buy-tier-level",
+        "weekday",
+        "exhaustion"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T09:26:55+00:00"
+    },
+    {
+      "id": "N102",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not treat spare ingest throughput as learning progress",
+      "summary": "Spare-slot ingest plus observe-sim can look busy while phase1_ready markets (sp500, asx200) have zero weekly and weekday paper batches. Exhaustion vacates the sprint; it does not start a lifecycle book. Score learning by books started and marks accrued, not by ingest job count.",
+      "revisit_when": "A frozen shard buy-tier-level book is wired (L319) or weekly_paper_shard_capacity holds a second book after euro_depth Phase 2",
+      "tags": [
+        "ingest",
+        "spare-slot",
+        "exhaustion",
+        "learning"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T09:26:55+00:00"
+    },
+    {
+      "id": "L320",
+      "category": "later",
+      "section": "learning",
+      "title": "Shard below-tier and buy-not-now counterfactual observer from week 0",
+      "summary": "A buy-tier-only book never sees names that never hit buy-tier. Buy-tier but not buy-now (timing wait, conviction, overlay) is the first tight-knob check. Start Layer B screens the same week as the epoch-0 book so exclusion-universe and exit-timing-style replays have PIT fields \u2014 do not wait for those archives before the first fill.",
+      "revisit_when": "A shard buy-tier-level book is running and that market has >=2 dated screen archives",
+      "tags": [
+        "shards",
+        "counterfactual",
+        "exclusion",
+        "timing-wait"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T09:26:55+00:00"
     }
   ],
   "fragments": [
