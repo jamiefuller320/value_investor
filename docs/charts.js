@@ -396,20 +396,20 @@ function renderHeldVsMarketPolylines(payload, { width, height, pad }) {
   return { polylines, minY, maxY, xAt, points, series };
 }
 
-function heldVsMarketLastCaption(payload) {
+function heldVsMarketLastCaption(payload, { showExcess = true } = {}) {
   const last = payload?.last || {};
   const currency = payload?.currency;
   if (last.held == null) return "";
   const excess = last.excess_pct;
   const excessHtml =
-    excess == null
-      ? ""
-      : `<span class="${excess >= 0 ? "text-positive" : "text-negative"}">${(Number(excess) * 100).toFixed(1)}%</span>`;
-  return `<div class="small held-vs-market-spark-caption">
-        Held ${esc(formatHeldMoney(last.held, currency))}
-        ${last.market != null ? ` · mkt ${esc(formatHeldMoney(last.market, currency))}` : ""}
-        ${excessHtml ? ` · ${excessHtml}` : ""}
-      </div>`;
+    showExcess && excess != null
+      ? ` · <span class="${excess >= 0 ? "text-positive" : "text-negative"}">${(Number(excess) * 100).toFixed(1)}%</span>`
+      : "";
+  const marketHtml =
+    last.market != null ? ` · mkt ${esc(formatHeldMoney(last.market, currency))}` : "";
+  return `<div class="small held-vs-market-spark-caption">Held ${esc(
+    formatHeldMoney(last.held, currency)
+  )}${marketHtml}${excessHtml}</div>`;
 }
 
 function renderHeldVsMarketSparkline(payload) {
@@ -421,8 +421,8 @@ function renderHeldVsMarketSparkline(payload) {
   if (points.length < 2) {
     const day = (payload.last && payload.last.date) || (points[0] && points[0].date) || "";
     return `<div class="held-vs-market-spark empty">
-      ${heldVsMarketLastCaption(payload)}
-      <span class="muted small">Path after next dated mark${day ? ` · opened ${esc(day)}` : ""}</span>
+      ${heldVsMarketLastCaption(payload, { showExcess: false })}
+      <div class="muted small">${day ? `Opened ${esc(day)} · ` : ""}path after next mark</div>
     </div>`;
   }
   const width = 220;

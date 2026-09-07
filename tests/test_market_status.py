@@ -405,6 +405,9 @@ def test_dashboard_assets_include_market_status_grid():
     assert 'class="market-tile-chips"' in app
     assert "function equalizeMarketTileHeights()" in app
     assert "equalizeMarketTileHeights()" in app
+    assert "function heldVsMarketLastCaption(payload, { showExcess = true } = {})" in Path(
+        "docs/charts.js"
+    ).read_text(encoding="utf-8")
     assert "function renderHeldVsMarketSparkline(payload)" in Path("docs/charts.js").read_text(
         encoding="utf-8"
     )
@@ -414,6 +417,9 @@ def test_dashboard_assets_include_market_status_grid():
     assert "renderHeldVsMarketSparkline(row.held_vs_market)" in app
     assert "renderHeldVsMarketChart(row.held_vs_market)" in app
     assert ".held-vs-market-spark" in css
+    assert "flex-direction: column" in css.split(".held-vs-market-spark.empty {", 1)[1].split("}", 1)[
+        0
+    ]
     assert "branch-ready" in Path("docs/charts.js").read_text(encoding="utf-8")
     tile_css = css.split(".market-tile {", 1)[1].split("}", 1)[0]
     assert "white-space: normal" in tile_css
