@@ -61,6 +61,27 @@ Each non-FTSE shard compares excess vs a **local benchmark** (`^GSPC`, `^STOXX50
 
 **Trading costs:** market shards and observe sims use **fair T212-shaped** per-market assumptions (UK stamp / FX / half-spread), not the live FTSE 3% stress case. See [`market-trading-costs.md`](market-trading-costs.md).
 
+## What “enter learning” means
+
+Shards are **independent stacks** (same processes, separate artifacts, local benchmarks). That is not the same as every shard opening a paper book the day it can print a buy list.
+
+Independence answers *how books are kept apart*. **Gates + capacity** answer *when a book starts*. Do not conflate these four phrases:
+
+| Phrase | What it is | Starts when |
+|--------|------------|-------------|
+| **Valid buy-tier** | Screen-lite produced `buy` / `strong_buy` names | Metrics floor for screen-lite is met (`effective_min_metrics_for_screen`) |
+| **Observe / ingest clock** | Dated archives, observe sim, buy-tier filing deepen | Market is on the ingest profile (focus + sprint + parity + `ftse_equivalent_markets`) |
+| **Learning phase** *(P2 / weekly paper)* | Isolated paper book: rules, AI judgment, grace, technical | Phase 1 archive/observe gate **and** a `weekly_paper_shard_markets` slot (depth-first **capacity 1**) |
+| **`learning_ready`** | FTSE-equivalent *parity* (canonical filings + 12-week trajectory) | `filing_ready` **and** span ≥12 weeks / 12 unique screen days |
+
+**Buy-tier existence is the start of targeting, not of paper learning.** As soon as a shard can screen, it should independently accumulate Layer B archives, observe-sim marks, and (via the ingest cascade) buy-tier filing bodies. That is the “as soon as it is able” path.
+
+**Paper learning waits for history and a scarce slot.** Phase 2 evidence is meaningless on a one-snapshot toy book — default ≥12 dated archives / observe snapshots (sprint may compress to 4). Even then only the policy list, sliced by `weekly_paper_shard_capacity`, actually runs `shard-paper`. Weekday paper is still **one** non-FTSE pilot at a time.
+
+**FTSE epoch-zero is not the shard entry model.** The live `buy_tier_level` book ([`buy-tier-cohort-labs.md`](buy-tier-cohort-labs.md)) can cold-start on the first weekday paper-auto because FTSE already has a live screen, weekday `paper-auto`, and filing depth. First fill is epoch-zero of a *cohort lab* on that path — frozen knobs, Suite B costs, unfiltered buy-tier. A new library shard does not inherit that machinery. Copying epoch-zero onto a shard at first buy-tier would skip the archive-span gate and consume paper-stack capacity that the depth-first cascade keeps on the current learning-phase candidate (`euro_depth` until Phase 2 weekly-paper gates clear).
+
+AI-judgment on a shard is also **not** treated as FTSE-equivalent until filing/memo parity looks FTSE-like (`phase1_require_ai_beat_rules` stays false on the euro pilot until then). A raw buy-tier list without bodies is enough to *hold names in observe-sim*; it is not enough to start an AI learning epoch.
+
 ## Phases and timescale
 
 Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The Sunday quiet bundle is the natural heartbeat (~1 screen-lite pass per market per week when that market is in the maintenance/screen set).

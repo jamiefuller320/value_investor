@@ -32,7 +32,7 @@ Work proceeds stage-by-stage. Do **not** skip ahead into global breadth or full 
 1. **Primary learning track (hands-off):** AI quasi-human paper decisions using research available at the time → confirm by **outperformance after costs vs the market** (and vs a rules control book). See [`docs/ops/primary-learning-track.md`](ops/primary-learning-track.md).
 2. **Keep decision-review learning running** — weekday paper-auto + `ftse-decision-review` on both tracks until knobs can apply.
 3. **Optional human packs** — still useful for live capital verification; not the primary improvement loop.
-4. **Grow data libraries in the background (P2, cascaded)** — filing bodies and weekly archives on the current learning-phase candidate first (`euro_depth` until Phase 2 weekly-paper gates clear); leftover ingest on `sp500`, then `asx200`. Do **not** add a fourth equal sprint stream. Do not change the live screen.
+4. **Grow data libraries in the background (P2, cascaded)** — filing bodies and weekly archives on the current learning-phase candidate first (`euro_depth` until Phase 2 weekly-paper gates clear); leftover ingest on `sp500`, then `asx200`. Do **not** add a fourth equal sprint stream. Do not change the live screen. A shard “enters learning” at the Phase 2 weekly-paper slot, not at first buy-tier — see [`ops/market-sharded-learning.md`](ops/market-sharded-learning.md#what-enter-learning-means).
 5. **Only then** expand live coverage and tighten automation.
 
 ### Machinery spend (P1 / P2)
