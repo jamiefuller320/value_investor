@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-07T16:36:28.012290+00:00",
+  "run_at": "2026-09-07T18:24:25.334058+00:00",
   "market_id": "asx200",
   "targets": [
     "AMC.AX",
@@ -139,10 +139,10 @@
       },
       "after": {
         "filings_total": 14,
-        "filings_with_body": 13,
-        "indexed_without_body": 1
+        "filings_with_body": 14,
+        "indexed_without_body": 0
       },
-      "improved": false,
+      "improved": true,
       "regime": "asx_announcements",
       "filings_summary": {
         "total": 14,
@@ -176,8 +176,8 @@
         "attempted": 0,
         "fetched": 0,
         "failed": 0,
-        "with_body_before": 13,
-        "with_body_after": 13,
+        "with_body_before": 14,
+        "with_body_after": 14,
         "investegate_fallbacks": 0,
         "skipped_unfetchable": 0,
         "deadline_hit": false,
@@ -491,6 +491,7 @@
     }
   ],
   "improved": [
+    "SHL.AX",
     "GGP.AX",
     "WDS.AX"
   ],
@@ -498,7 +499,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-07T16:34:54.241819+00:00",
+    "snapshot_at": "2026-09-07T18:22:29.223833+00:00",
     "market_id": "asx200",
     "buy_tier_count": 29,
     "unmeasured_buy_tier": 0,
@@ -536,13 +537,13 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-07T16:36:28.006338+00:00",
+    "snapshot_at": "2026-09-07T18:24:25.328055+00:00",
     "market_id": "asx200",
     "buy_tier_count": 29,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 3,
+    "indexed_without_body": 2,
     "bodies_min": 3,
     "bodies_median": 13,
     "bodies_max": 123,
@@ -552,12 +553,10 @@
     "zero_body_tickers": [],
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
-      "SHL.AX",
       "AMC.AX",
       "WGX.AX"
     ],
     "indexed_without_body_by_ticker": {
-      "SHL.AX": 1,
       "AMC.AX": 1,
       "WGX.AX": 1
     },
@@ -565,9 +564,8 @@
     "parked_count": 0,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 3,
+    "effective_indexed_without_body": 2,
     "effective_indexed_without_body_tickers": [
-      "SHL.AX",
       "AMC.AX",
       "WGX.AX"
     ],
@@ -606,7 +604,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "asx200",
-    "assessed_at": "2026-09-07T16:34:56.298146+00:00",
+    "assessed_at": "2026-09-07T18:22:31.246521+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -650,9 +648,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 89.58715269299995,
+  "used_seconds": 112.10548125799997,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3510.412847307,
+  "leftover_seconds": 3487.894518742,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -660,7 +658,7 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "asx200",
-    "updated_at": "2026-09-07T16:36:28.009965+00:00",
+    "updated_at": "2026-09-07T18:24:25.331259+00:00",
     "exhausted": false,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
@@ -669,12 +667,10 @@
     "had_complete_targets": false,
     "leftover_tickers": [
       "AMC.AX",
-      "SHL.AX",
       "WGX.AX"
     ],
     "unparked_leftover": [
       "AMC.AX",
-      "SHL.AX",
       "WGX.AX"
     ],
     "path": "docs/data/library/markets/asx200/ingest_exhaustion.json"
@@ -685,8 +681,13 @@
     "market_id": "asx200"
   },
   "parked_hunter_compile": {
-    "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20260907-02"
+    "compiled_count": 1,
+    "task_ids": [
+      "eng-20260907-03"
+    ],
+    "task_count": 3,
+    "market_id": "sp500",
+    "hunter_ticker": "CRH",
+    "priority_score": 12.0
   }
 }
