@@ -80,7 +80,7 @@ def test_run_daily_automation_force_rebalances_without_network(tmp_path, monkeyp
 
     monkeypatch.setattr(
         "value_investor.paper_automation.refresh_candidate_marks",
-        lambda candidates, extra_tickers=None: candidates,
+        lambda candidates, extra_tickers=None, **kwargs: candidates,
     )
 
     config = AutomationConfig(
@@ -116,7 +116,7 @@ def test_run_daily_automation_skips_before_settle(tmp_path, monkeypatch):
     )
     monkeypatch.setattr(
         "value_investor.paper_automation.refresh_candidate_marks",
-        lambda candidates, extra_tickers=None: candidates,
+        lambda candidates, extra_tickers=None, **kwargs: candidates,
     )
     result = run_daily_automation(
         output_dir=tmp_path / "auto",
@@ -160,7 +160,7 @@ def test_run_learning_tracks_primary_ai_and_rules_control(tmp_path, monkeypatch)
     reports_path.write_text(__import__("json").dumps(reports), encoding="utf-8")
     monkeypatch.setattr(
         "value_investor.paper_automation.refresh_candidate_marks",
-        lambda candidates, extra_tickers=None: candidates,
+        lambda candidates, extra_tickers=None, **kwargs: candidates,
     )
 
     summary = run_learning_tracks(
@@ -249,7 +249,7 @@ def test_run_daily_automation_technical_pass(tmp_path, monkeypatch):
     )
     monkeypatch.setattr(
         "value_investor.paper_automation.refresh_candidate_marks",
-        lambda candidates, extra_tickers=None: candidates,
+        lambda candidates, extra_tickers=None, **kwargs: candidates,
     )
     out = tmp_path / "auto" / "technical"
     config = default_technical_config()
@@ -299,7 +299,7 @@ def test_run_daily_automation_skips_duplicate_rebalance_same_day(tmp_path, monke
     )
     monkeypatch.setattr(
         "value_investor.paper_automation.refresh_candidate_marks",
-        lambda candidates, extra_tickers=None: candidates,
+        lambda candidates, extra_tickers=None, **kwargs: candidates,
     )
     out = tmp_path / "auto"
     when = datetime(2026, 7, 15, 9, 20, tzinfo=LONDON)
