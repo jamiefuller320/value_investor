@@ -8,8 +8,8 @@ automated next steps for library (and FTSE-shaped) ingest loops:
 - ``thin_need_discovery`` — need more filings found (IR/ESEF/news), not re-download
 - ``thin_need_bodies`` — thin with residual indexed rows still missing bodies
 
-Used by ``library_ingest_loop`` to force discovery scans, prefer iwb/unmeasured
-targets, and persist a rollup for ops dashboards.
+Used by ``library_ingest_loop`` to force discovery scans, prefer unmeasured /
+zero-body then IWB targets, and persist a rollup for ops dashboards.
 """
 
 from __future__ import annotations
@@ -157,13 +157,15 @@ def assess_library_ingest_critical_path(
     )
 
     auto_pin: list[str] = []
-    for row in iwb_rows:
-        if len(auto_pin) >= auto_pin_limit:
-            break
-        auto_pin.append(str(row["ticker"]))
     for ticker in unmeasured + zero_body:
         if len(auto_pin) >= auto_pin_limit:
             break
+        if ticker not in auto_pin:
+            auto_pin.append(ticker)
+    for row in iwb_rows:
+        if len(auto_pin) >= auto_pin_limit:
+            break
+        ticker = str(row["ticker"])
         if ticker not in auto_pin:
             auto_pin.append(ticker)
 
@@ -232,14 +234,28 @@ def apply_critical_path_to_target_order(
     targets: list[Any],
     assessment: IngestCriticalPath,
 ) -> list[Any]:
-    """Stable-prefer auto-pin / critical tickers at the front of an already-scored list."""
+    """Prefer auto-pin tickers at the front, in auto-pin order (bootstrap first)."""
     if not targets:
         return targets
-    pin = {str(t).strip().upper() for t in assessment.auto_pin_tickers if str(t).strip()}
-    if not pin:
+    pin_order = [
+        str(t).strip().upper() for t in assessment.auto_pin_tickers if str(t).strip()
+    ]
+    if not pin_order:
         return targets
-    head = [row for row in targets if str(getattr(row, "ticker", "")).upper() in pin]
-    tail = [row for row in targets if str(getattr(row, "ticker", "")).upper() not in pin]
+    pin_rank = {ticker: idx for idx, ticker in enumerate(pin_order)}
+    head = sorted(
+        [
+            row
+            for row in targets
+            if str(getattr(row, "ticker", "")).upper() in pin_rank
+        ],
+        key=lambda row: pin_rank[str(getattr(row, "ticker", "")).upper()],
+    )
+    tail = [
+        row
+        for row in targets
+        if str(getattr(row, "ticker", "")).upper() not in pin_rank
+    ]
     return head + tail
 
 

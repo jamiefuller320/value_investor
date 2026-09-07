@@ -57,6 +57,14 @@ ZERO_BODY_PRIORITY_BONUS = 8.0
 INDEXED_WITHOUT_BODY_PRIORITY_BONUS = 14.0
 THIN_DISCOVERY_PRIORITY_BONUS = 3.0
 THIN_BODY_PRIORITY_BONUS = 5.0
+# Coverage holes before body-fill. IWB bonuses can exceed unmeasured scores
+# (ABI.BR 12-row IWB outranked AED.BR and left it unmeasured).
+_REASON_RANK = {
+    "unmeasured": 0,
+    "zero_body": 1,
+    "indexed_without_body": 2,
+    "thin_bodies": 3,
+}
 # Only deepen tickers with a real filing gap — skip high-conviction "maintain".
 GAP_REASONS = frozenset({"unmeasured", "zero_body", "indexed_without_body", "thin_bodies"})
 
@@ -371,6 +379,7 @@ def select_library_ingest_targets(
         )
     scored.sort(
         key=lambda row: (
+            _REASON_RANK.get(row.reason, 9),
             -row.priority_score,
             -int(row.indexed_without_body or 0),
             row.ticker,
@@ -435,6 +444,32 @@ def merge_library_ingest_pin_tickers(
             seen.add(key)
             merged.append(key)
     return merged or None
+
+
+def prepend_bootstrap_pins(
+    pin_tickers: list[str] | None,
+    *,
+    unmeasured: list[str] | None = None,
+    zero_body: list[str] | None = None,
+) -> list[str] | None:
+    """Keep unmeasured / zero-body names inside an existing pin set.
+
+    Committed IWB pins (ABI.BR) otherwise restrict the whole slot to body-fill
+    and starve the last unmeasured leftover (AED.BR after the LEI path merged).
+    No-op when nothing is pinned — weekday scoring already prefers bootstrap.
+    """
+    if not pin_tickers:
+        return pin_tickers
+    bootstrap: list[str] = []
+    seen: set[str] = set()
+    for token in [*(unmeasured or []), *(zero_body or [])]:
+        key = str(token or "").strip().upper()
+        if key and key not in seen:
+            seen.add(key)
+            bootstrap.append(key)
+    if not bootstrap:
+        return list(pin_tickers)
+    return merge_library_ingest_pin_tickers(bootstrap, pin_tickers)
 
 
 def load_library_ingest_blocker_cooldown(
@@ -653,6 +688,13 @@ def run_library_ingest_loop(
         persist_ingest_critical_path(critical, library_root=library_root)
     except OSError as exc:
         logger.warning("Failed to persist ingest critical path for %s: %s", market_id, exc)
+
+    pin_tickers = prepend_bootstrap_pins(
+        pin_tickers,
+        unmeasured=critical.unmeasured,
+        zero_body=critical.zero_body,
+    )
+    result.pin_tickers = list(pin_tickers or [])
 
     # Sprint + maintenance: run discovery whenever critical path says so (or explicit).
     # A pin is intensive single-ticker work — do not spend 25% of the slot on listing.

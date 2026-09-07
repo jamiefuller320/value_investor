@@ -14,6 +14,7 @@ from value_investor.library_ingest_loop import (
     load_library_ingest_blocker_cooldown,
     load_library_ingest_pins,
     merge_library_ingest_pin_tickers,
+    prepend_bootstrap_pins,
     run_library_ingest_loop,
     select_library_ingest_targets,
 )
@@ -77,6 +78,48 @@ def test_select_library_ingest_targets_prioritizes_unmeasured(tmp_path: Path):
     )
     assert targets[0].ticker == "AAA.DE"
     assert targets[0].reason == "unmeasured"
+
+
+def test_select_library_ingest_targets_unmeasured_beats_high_iwb(tmp_path: Path):
+    """Regression: ABI.BR 12-row IWB outranked AED.BR (unmeasured leftover)."""
+    root = tmp_path / "library"
+    market = "euro_depth"
+    research_dir = root / "markets" / market / "screen" / "research"
+    for ticker, total, with_body in (("AED.BR", 0, 0), ("ABI.BR", 37, 25)):
+        filings_dir = research_dir / ticker / "sources" / "filings"
+        filings_dir.mkdir(parents=True)
+        write_json(
+            filings_dir / "filings_index.json",
+            {
+                "summary": {
+                    "total": total,
+                    "with_body": with_body,
+                    "indexed_without_body": max(0, total - with_body),
+                },
+                "filings": [],
+            },
+            compact=False,
+        )
+    reports = [_report("ABI.BR", conviction=0.99), _report("AED.BR", conviction=0.1)]
+    targets = select_library_ingest_targets(
+        reports,
+        library_root=root,
+        market_id=market,
+        max_targets=2,
+    )
+    assert [row.ticker for row in targets] == ["AED.BR", "ABI.BR"]
+    assert targets[0].reason == "unmeasured"
+    assert targets[1].reason == "indexed_without_body"
+
+
+def test_prepend_bootstrap_pins_keeps_unmeasured_inside_iwb_pin():
+    assert prepend_bootstrap_pins(None, unmeasured=["AED.BR"]) is None
+    assert prepend_bootstrap_pins(["ABI.BR"], unmeasured=[], zero_body=[]) == ["ABI.BR"]
+    assert prepend_bootstrap_pins(
+        ["ABI.BR"],
+        unmeasured=["AED.BR"],
+        zero_body=["RAND.AS"],
+    ) == ["AED.BR", "RAND.AS", "ABI.BR"]
 
 
 def test_filing_coverage_prefers_market_canonical_index_over_stale_shard(tmp_path: Path):
@@ -773,3 +816,101 @@ def test_committed_pin_skips_discovery_and_drops_ticker_cap(tmp_path: Path):
     assert result.pin_tickers == ["ABI.BR"]
     assert result.per_ticker_max_seconds is None
     assert result.discovery_scan is None
+
+
+def test_committed_iwb_pin_does_not_starve_unmeasured(tmp_path: Path):
+    """Regression: ABI.BR pin excluded AED.BR from every euro slot after 4 Sep."""
+    root = tmp_path / "library"
+    market = "euro_depth"
+    research = root / "markets" / market / "screen" / "research"
+    for ticker, total, with_body in (("ABI.BR", 37, 25), ("AED.BR", 0, 0)):
+        filings = research / ticker / "sources" / "filings"
+        filings.mkdir(parents=True)
+        write_json(
+            filings / "filings_index.json",
+            {
+                "summary": {
+                    "total": total,
+                    "with_body": with_body,
+                    "indexed_without_body": max(0, total - with_body),
+                },
+                "filings": [],
+            },
+            compact=False,
+        )
+    reports = [_report("ABI.BR"), _report("AED.BR")]
+    pins_path = tmp_path / "pins.json"
+    write_json(
+        pins_path,
+        {
+            "pins": [
+                {
+                    "ticker": "ABI.BR",
+                    "market_id": "euro_depth",
+                    "until": "2026-09-11T00:00:00+00:00",
+                }
+            ]
+        },
+        compact=False,
+    )
+    ingest_calls: list[str] = []
+
+    def _track_ingest(target, **kwargs):
+        ingest_calls.append(target.ticker)
+        return {"ticker": target.ticker, "improved": True, "ticker_budget_hit": False}
+
+    critical = type(
+        "CP",
+        (),
+        {
+            "force_discovery_scan": True,
+            "auto_pin_tickers": ["AED.BR", "ABI.BR"],
+            "primary_blocker": "unmeasured",
+            "thin_need_discovery": [],
+            "unmeasured": ["AED.BR"],
+            "zero_body": [],
+            "indexed_without_body": [{"ticker": "ABI.BR"}],
+            "to_dict": lambda self: {},
+        },
+    )()
+
+    with (
+        patch(
+            "value_investor.library_ingest_loop.load_library_buy_tier_reports",
+            return_value=reports,
+        ),
+        patch(
+            "value_investor.library_ingest_loop.snapshot_library_ingest_health",
+            return_value={
+                "unmeasured_buy_tier": 1,
+                "zero_body_buy_tier": 0,
+                "unmeasured_tickers": ["AED.BR"],
+            },
+        ),
+        patch("value_investor.library_ingest_loop.append_library_ingest_health_log"),
+        patch(
+            "value_investor.library_ingest_loop._ingest_single_library_target",
+            side_effect=_track_ingest,
+        ),
+        patch(
+            "value_investor.ingest_critical_path.assess_library_ingest_critical_path",
+            return_value=critical,
+        ),
+        patch("value_investor.ingest_critical_path.persist_ingest_critical_path"),
+        patch(
+            "value_investor.library_discovery_scan.run_library_buy_tier_discovery_scan"
+        ) as discovery,
+    ):
+        result = run_library_ingest_loop(
+            market,
+            library_root=root,
+            max_targets=12,
+            max_runtime_seconds=2700,
+            deepen_history=False,
+            pins_path=pins_path,
+            deviations_path=tmp_path / "deviations.json",
+        )
+
+    discovery.assert_not_called()
+    assert ingest_calls == ["AED.BR", "ABI.BR"]
+    assert result.pin_tickers == ["AED.BR", "ABI.BR"]
