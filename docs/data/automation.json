@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-07T06:14:00.735959+00:00",
+  "generated_at": "2026-09-07T07:15:36.500292+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -195,16 +195,16 @@
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_weekly_ops_usd": 51.2,
-        "budget_note": "Estimated weekly_ops reached the 15% plan-credit pseudo limit ($3.00) — warning only, not a hard cap.",
+        "remaining_weekly_ops_usd": 80.0,
+        "budget_note": null,
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 92.9,
-        "estimated_spend_weekly_ops_usd_this_week": 28.8,
-        "estimated_spend_usd_this_cycle": 92.9,
-        "week_id": "2026-W36",
+        "estimated_spend_usd_this_week": 6.0,
+        "estimated_spend_weekly_ops_usd_this_week": 0.0,
+        "estimated_spend_usd_this_cycle": 107.3,
+        "week_id": "2026-W37",
         "cycle_id": "2026-09-d8"
       },
       "ladder": {
@@ -231,7 +231,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-09-06T06:46:36.210209+00:00"
+      "updated_at": "2026-09-07T07:15:31.771594+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -326,10 +326,10 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-09-06T06:22:05.695194+00:00",
+        "at": "2026-09-07T06:52:18.116971+00:00",
         "kind": "ladder_run",
         "title": "Library ladder run (focus euro_depth)",
-        "detail": "shortlist=47 research created=1 updated=0 spend≈0.4"
+        "detail": "shortlist=47 research created=None updated=None spend≈None"
       },
       {
         "at": "2026-09-04T08:27:13.896760+00:00",
@@ -705,7 +705,7 @@
       }
     ],
     "last_ladder": {
-      "run_at": "2026-09-06T06:22:05.695194+00:00",
+      "run_at": "2026-09-07T06:52:18.116971+00:00",
       "focus_market": "euro_depth",
       "graduated_markets": [
         "sp500",
@@ -731,8 +731,8 @@
         "iseq20"
       ],
       "plan": {
-        "max_tickers": 40,
-        "surplus_day": false,
+        "max_tickers": 120,
+        "surplus_day": true,
         "research_model": "composer-2.5",
         "allow_research": true
       },
@@ -765,10 +765,10 @@
         "screen_shortlist": 47,
         "screen_strong_buy": 21,
         "screen_buy": 26,
-        "research_executed": 1,
-        "research_created": 1,
-        "research_updated": 0,
-        "research_estimated_spend_usd": 0.4,
+        "research_executed": 0,
+        "research_created": null,
+        "research_updated": null,
+        "research_estimated_spend_usd": null,
         "graduation_skipped": false,
         "graduated_to": null
       }
@@ -1158,14 +1158,14 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-07T06:00:01.966575+00:00",
-    "queue_ui_updated_at": "2026-09-07T06:14:00.735857+00:00",
-    "task_count": 76,
+    "compiled_at": "2026-09-07T06:46:47.859880+00:00",
+    "queue_ui_updated_at": "2026-09-07T07:15:36.501252+00:00",
+    "task_count": 3,
     "status": {
       "open_count": 0,
-      "pr_open_count": 0,
-      "parked_count": 1,
-      "merged_count": 71,
+      "pr_open_count": 1,
+      "parked_count": 0,
+      "merged_count": 2,
       "failed_count": 0,
       "next_task_id": null,
       "in_flight_branch": null,
@@ -1174,25 +1174,25 @@
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [],
-    "attention_tasks": [
+    "queued_tasks": [
       {
-        "id": "eng-20260903-03",
-        "area": "scoring",
-        "title": "Quality-family composite gate on avoid cohort",
-        "priority": "medium",
-        "priority_score": 70.0,
-        "status": "parked",
-        "source": "analysis_review",
+        "id": "eng-20260907-03",
+        "area": "ingest",
+        "title": "Hunt fetchable IR source for parked sp500 leftover CRH",
+        "priority": "low",
+        "priority_score": 12.0,
+        "status": "pr_open",
+        "source": "parked_source_hunter",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": null
+        "branch_name": "cursor/eng-20260907-03-1de3"
       }
-    ]
+    ],
+    "attention_tasks": []
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-09-06T07:48:54.496647+00:00",
+    "generated_at": "2026-09-07T07:15:36.522633+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",

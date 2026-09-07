@@ -455,7 +455,7 @@
     "surface_escalation_candidates_in_email": true,
     "note": "Exploration phase allows more director–worker runs per week while paper turnover is unknown; auto-tighten moves to steady cap when re-escalation rate stabilises. Shadow log surfaces escalation candidates in the Sunday email for manual approval; auto_escalate_director stays false until calibrated."
   },
-  "updated_at": "2026-09-07T06:50:12.063136+00:00",
+  "updated_at": "2026-09-07T07:15:31.771594+00:00",
   "ingest_parity_markets": [
     "asx200",
     "euro_depth"
@@ -478,7 +478,7 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-09-06T06:22:05.695194+00:00",
+      "run_at": "2026-09-07T06:52:18.116971+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
       "screen_shortlist": 47,
@@ -495,22 +495,17 @@
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "weekly_ops_cap_usd": 80.0,
-        "estimated_spend_weekly_ops_usd_this_week": 28.8,
+        "estimated_spend_weekly_ops_usd_this_week": 0.0,
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_usd_before": 51.6,
+        "remaining_usd_before": 80.0,
         "dedupe": {
           "already_researched_count": 434,
-          "fresh_skipped_count": 433,
-          "rememo_eligible_count": 1,
-          "rememo_eligible_sample": [
-            {
-              "ticker": "C5H.IR",
-              "reason": "stale_adequate_grade_body_lag_36"
-            }
-          ],
-          "skipped_count": 45,
+          "fresh_skipped_count": 434,
+          "rememo_eligible_count": 0,
+          "rememo_eligible_sample": [],
+          "skipped_count": 46,
           "skipped_sample": [
             {
               "market": "euro_depth",
@@ -599,11 +594,6 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "EVN.VI",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
               "ticker": "MELE.BR",
               "reason": "fresh_memo"
             },
@@ -611,36 +601,18 @@
               "market": "euro_depth",
               "ticker": "RAND.AS",
               "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "EVN.VI",
+              "reason": "fresh_memo"
             }
           ],
           "note": "Exact Yahoo ticker match; earlier queue market wins. Fresh memos are skipped; thin / body-lag memos rememo after ingest."
         },
-        "targets": [
-          {
-            "market": "euro_depth",
-            "ticker": "C5H.IR",
-            "name": "Cairn Homes plc",
-            "signal": "buy",
-            "conviction_score": 0.4196
-          }
-        ],
-        "executed": 1,
-        "created": 1,
-        "updated": 0,
-        "errors": [],
-        "rememo_seeds": [
-          {
-            "ticker": "C5H.IR",
-            "focus_market": "euro_depth",
-            "action": "home_ahead_or_same_store",
-            "home_market": "euro_depth",
-            "canonical_bodies": 36,
-            "home_bodies_before": 36,
-            "home_bodies_after": 36
-          }
-        ],
-        "estimated_spend_usd": 0.4,
-        "remaining_usd_after": 51.2
+        "targets": [],
+        "dry_run": true,
+        "executed": 0
       },
       "graduation": {
         "graduated": false,
