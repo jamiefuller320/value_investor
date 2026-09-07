@@ -4100,7 +4100,49 @@ def test_fetch_filings_ir_allowlist_euro_depth_aed_br_builtins(tmp_path: Path):
     assert rows
     assert all(row["source"] == "ir_allowlist" for row in rows)
     assert any("aedifica.eu" in row["url"] for row in rows)
-    assert any("annual" in row["period"] for row in rows)
+    assert all(row["period"] == "annual" for row in rows)
+
+
+def test_fetch_filings_ir_allowlist_aed_br_resolves_on_base_symbol(tmp_path: Path):
+    """Builtin IR URLs keyed as AED.BR must resolve when lookup uses base symbol AED."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("AED", path=allowlist_path)
+    assert len(rows) == 2
+    assert all("aedifica.eu" in row["url"] for row in rows)
+
+
+def test_ir_allowlist_period_classifies_belgian_ra_pack_as_annual():
+    from value_investor.research.filings import _ir_allowlist_period_from_url
+
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://aedifica.eu/wp-content/uploads/2026/03/AEDIFICA-RA25_EN_2026-03-24b.pdf"
+        )
+        == "annual"
+    )
+
+
+def test_merge_ir_allowlist_filings_bootstraps_empty_aed_br_index(tmp_path: Path):
+    """Empty filings_index.json must gain IR rows so unmeasured tickers become measurable."""
+    from value_investor.research.filings import merge_ir_allowlist_filings
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {"total": 0, "with_body": 0}}),
+        encoding="utf-8",
+    )
+
+    meta = merge_ir_allowlist_filings("AED.BR", filings_dir)
+    assert meta["added"] == 2
+    assert meta["total_allowlist"] == 2
+
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert int(payload["summary"]["total"]) == 2
+    assert payload["sources_used"] == ["ir_allowlist"]
+    assert all(row["period"] == "annual" for row in payload["filings"])
 
 
 def test_fetch_filings_ir_allowlist_euro_depth_assa_b_st_builtins(tmp_path: Path):

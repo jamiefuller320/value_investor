@@ -100,6 +100,10 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://aedifica.eu/wp-content/uploads/2026/03/AEDIFICA-RA25_EN_2026-03-24b.pdf",
         "https://aedifica.eu/wp-content/uploads/2026/02/AED_CP2026_EN_FY-2025_2026-02-12d_BB.pdf",
     ],
+    "AED": [
+        "https://aedifica.eu/wp-content/uploads/2026/03/AEDIFICA-RA25_EN_2026-03-24b.pdf",
+        "https://aedifica.eu/wp-content/uploads/2026/02/AED_CP2026_EN_FY-2025_2026-02-12d_BB.pdf",
+    ],
     "UMI.BR": [
         "https://www.umicore.com/files/secure-documents/7cfa416e-e500-4fbd-a040-2b45c0575430.pdf",
         "https://www.umicore.com/files/secure-documents/8b39d7eb-8694-4c9b-9dfc-5b12a2d2cf81.pdf",
@@ -3304,6 +3308,34 @@ def load_ir_url_allowlist(path: Path | None = None) -> dict[str, list[str]]:
     return _merge_ir_url_lists(file_urls, _BUILTIN_IR_URLS)
 
 
+def _ir_allowlist_period_from_url(url: str) -> str:
+    """Classify IR allowlist PDF/HTML URLs into annual / interim / trading / other."""
+    lower = str(url or "").lower()
+    if any(
+        token in lower
+        for token in (
+            "annual",
+            "fy",
+            "full-year",
+            "full_year",
+            "accounts",
+            "20-f",
+            "20f",
+            "10-k",
+            "10k",
+        )
+    ) or re.search(r"-\d{4}1231\.(htm|html|pdf)(?:$|\?)", lower):
+        return "annual"
+    # Belgian / Benelux annual report packs (e.g. AEDIFICA-RA25_EN).
+    if re.search(r"[-_/]ra\d{2}(?:[_\-]|\.|$)", lower):
+        return "annual"
+    if any(token in lower for token in ("trading",)):
+        return "trading_update"
+    if any(token in lower for token in ("interim", "half", "h1", "q1", "q2", "q3", "10-q", "10q")):
+        return "interim"
+    return "other"
+
+
 def fetch_filings_ir_allowlist(
     ticker: str,
     *,
@@ -3321,29 +3353,7 @@ def fetch_filings_ir_allowlist(
                 seen_urls.add(cleaned)
     rows: list[dict[str, Any]] = []
     for url in urls:
-        lower = url.lower()
-        period = "other"
-        if any(
-            token in lower
-            for token in (
-                "annual",
-                "fy",
-                "full-year",
-                "full_year",
-                "accounts",
-                "20-f",
-                "20f",
-                "10-k",
-                "10k",
-            )
-        ) or re.search(r"-\d{4}1231\.(htm|html|pdf)(?:$|\?)", lower):
-            period = "annual"
-        elif any(token in lower for token in ("trading",)):
-            period = "trading_update"
-        elif any(
-            token in lower for token in ("interim", "half", "h1", "q1", "q2", "q3", "10-q", "10q")
-        ):
-            period = "interim"
+        period = _ir_allowlist_period_from_url(url)
         digest = hashlib.sha256(url.encode("utf-8")).hexdigest()[:16]
         rows.append(
             {
@@ -3825,6 +3835,15 @@ def merge_ir_allowlist_filings(
 
     payload["filings"] = filings
     payload["summary"] = summarize_filings(filings)
+    sources_used = sorted(
+        {
+            str(row.get("source") or "").strip()
+            for row in filings
+            if str(row.get("source") or "").strip()
+        }
+    )
+    if sources_used:
+        payload["sources_used"] = sources_used
     if added:
         payload["ir_allowlist_merged_at"] = datetime.now(UTC).isoformat()
     index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
@@ -6003,7 +6022,15 @@ def ingest_filings(
         groups.append(fetch_filings_asx_direct(company_name=company_name, ticker=ticker))
         groups.append(fetch_filings_asx_news(company_name=company_name, ticker=ticker))
     elif regime == "euro_filings":
-        groups.append(fetch_filings_esef_direct(company_name=company_name, ticker=ticker))
+        from value_investor.research.issuer_identifiers import DEFAULT_ISSUER_IDENTIFIERS_PATH
+
+        groups.append(
+            fetch_filings_esef_direct(
+                company_name=company_name,
+                ticker=ticker,
+                identifier_map_path=DEFAULT_ISSUER_IDENTIFIERS_PATH,
+            )
+        )
         groups.append(fetch_filings_belgium_official(company_name=company_name, ticker=ticker))
         groups.append(
             fetch_filings_euro_news(company_name=company_name, ticker=ticker, market=market)
