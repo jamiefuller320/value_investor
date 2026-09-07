@@ -3,22 +3,31 @@
   "benchmark_ticker": "^GSPC",
   "current_phase": 1,
   "next_phase": 1,
-  "phase1_ready": false,
+  "phase1_ready": true,
   "phase2_ready": false,
-  "weekly_paper_enabled": true,
+  "phase3_ready": false,
+  "weekly_paper_enabled": false,
+  "weekday_paper_enabled": true,
   "phase1": {
-    "screen_archives": 12,
-    "observe_snapshot_count": 12,
-    "min_archives": 12,
-    "ai_beat_rules_observe_sim": false
+    "screen_archives": 15,
+    "observe_snapshot_count": 15,
+    "min_archives": 4,
+    "ai_beat_rules_observe_sim": true,
+    "phase1_require_ai_beat_rules": false
   },
   "phase2": {
     "weekly_batch_count": 0,
-    "min_weekly_batches": 8,
+    "min_weekly_batches": 4,
     "beat_control_latest": null
   },
+  "phase3": {
+    "weekday_batch_count": 1,
+    "min_weekday_batches": 8,
+    "exit_shadow_closed": 0,
+    "min_exit_shadow_closed": 8
+  },
   "blockers": [
-    "AI-judgment must beat rules on observe sim before Phase 2"
+    "sp500 not in ladder.weekly_paper_shard_markets"
   ],
-  "evaluated_at": "2026-08-16T21:46:18.518672+00:00"
+  "evaluated_at": "2026-09-07T10:31:56.921726+00:00"
 }

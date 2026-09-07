@@ -61,6 +61,86 @@ Each non-FTSE shard compares excess vs a **local benchmark** (`^GSPC`, `^STOXX50
 
 **Trading costs:** market shards and observe sims use **fair T212-shaped** per-market assumptions (UK stamp / FX / half-spread), not the live FTSE 3% stress case. See [`market-trading-costs.md`](market-trading-costs.md).
 
+## What “enter learning” means
+
+Shards are **independent stacks** (same processes, separate artifacts, local benchmarks). That is not the same as every shard opening a paper book the day it can print a buy list.
+
+Independence answers *how books are kept apart*. **Gates + capacity** answer *when a book starts*. Do not conflate these four phrases:
+
+| Phrase | What it is | Starts when |
+|--------|------------|-------------|
+| **Valid buy-tier** | Screen-lite produced `buy` / `strong_buy` names | Metrics floor for screen-lite is met (`effective_min_metrics_for_screen`) |
+| **Observe / ingest clock** | Dated archives, observe sim, buy-tier filing deepen | Market is on the ingest profile (focus + sprint + parity + `ftse_equivalent_markets`) |
+| **Learning phase** *(P2 / weekly paper)* | Isolated paper book: rules, AI judgment, grace, technical | Phase 1 archive/observe gate **and** a `weekly_paper_shard_markets` slot (depth-first **capacity 1**) |
+| **`learning_ready`** | FTSE-equivalent *parity* (canonical filings + 12-week trajectory) | `filing_ready` **and** span ≥12 weeks / 12 unique screen days |
+
+**Start vs promote.** History is **not** required to *open* a frozen buy-tier-level book. It is required to *judge* knobs, claim AI-equivalence, and replay the past. The live FTSE `buy_tier_level` book ([`buy-tier-cohort-labs.md`](buy-tier-cohort-labs.md)) is the intended learning instrument: hold the current raw buy-tier, let full entry/hold/exit lifecycle run, freeze knobs (`is_cohort_lab`). Later filters and “buy now” gates are overlays or counterfactuals on that wide book — not the thing you wait 12 weeks to start.
+
+| Act | Needs | Does not need |
+|-----|-------|----------------|
+| **Start epoch-zero** | One current screen with a buy-tier, prices, a paper runner | Dated archives, `learning_ready`, leftover-filing perfection |
+| **Promote / apply knobs** | Forward marks, N26 floors, cost-aware review | — |
+| **Replay below-threshold names** | Layer B snapshots (can start the same week as the book) | A 12-week wait *before* the first fill |
+
+**Cascade intent (serialize, then equalize).** The spare slot is not a permanent second class. One market at a time holds the fat sprint until it reaches the **maintenance ingest threshold**: unmeasured and zero-body are gone, leftover thin/IWB names are parked (`ingest_exhaustion.json` / hunter / next periodic report), and a solid usable set remains. That is `sprint_ingest_complete` — raw `ingest_parity_met` (all four counts zero) or exhaustion. Then:
+
+1. Sprint vacates; the next queue market gets the fat slot.
+2. The graduated market joins **steady-state maintenance** at FTSE volume on unparked names (`library-ingest-maintenance.yml`).
+3. It is **admitted** to the learning set and should receive **equivalent resource** — same maintenance ingest, screen cadence, paper instrument, and buy-tier rememo as every other admitted market (L321 / L322).
+
+Spare 50%/25% fractions apply only while a market is still *in front* of that threshold, so the head can finish. They are not the long-run treatment.
+
+**What is wired vs not.** Ingest already follows this: exhaustion parks leftovers, vacates the sprint, and puts unparked names on FTSE-volume maintenance (`ingest_exhausted_markets`, today including `sp500`). Learning does **not** flip with it — N94 still keeps weekly paper on `euro_depth`, so a maintenance-threshold market can sit `phase1_ready` with **0** paper batches. That is the busy-but-empty gap: the cascade did its job on filings; equivalent *learning* resource was not switched on.
+
+**Equal treatment after admission.** Compare only admitted markets that have the same package (N103). Do **not** spray leftover plan credit across 21 thin markets (N96). Residual skew you cannot policy away: filing *yield* (ESEF vs EDGAR vs ASX IR), session timezone, and buy-tier width. Spare-slot fractions on a *pre-threshold* market are expected; leaving a *post-threshold* market on observe-sim only is a treatment bug.
+
+**What still waits.** Shard AI-judgment and knob apply wait on the epoch-0 + near-miss watch. Phase 2 weekly AI paper stays on `euro_depth` only. FTSE remains the P1 data lead.
+
+**Admitted start (now).** `sp500` and `asx200` are on `ladder.admitted_learning_markets`. Equivalent resource starts immediately as:
+
+- Frozen weekday/Sunday **epoch-0** `buy_tier_level` book (`ftse-library shard-epoch0`)
+- Near-miss watch (`near_miss_watch.json`: buy-tier-but-not-now, hold-near-buy)
+- Existing maintenance ingest + Layer B screen clock
+
+It does **not** start a shard AI-judgment track or `decision-review --apply`. Watch epoch-0 and the near-miss groups first. FTSE stays the data lead (P1 live ingest / paper-auto). Euro keeps the fat sprint until its own maintenance threshold.
+
+**Knob apply is the AI-track gate.** `decision-review --apply` retunes picking knobs (`skip_timing_wait`, `min_conviction`, `sector_cap`). Frozen `buy_tier_level` is `is_cohort_lab=true` and cannot apply. Do not apply knobs on a shard until AI is a track, and do not make AI a track until the watch period has marks on epoch-0 **and** the near-miss groups. They are one decision, not two.
+
+**Runner wall-clock.** Work around it by **staggering** and by **parallel maintenance**, not by a fourth equal sprint.
+
+| Approach | Use when | Do not use when |
+|----------|----------|-----------------|
+| **Stagger** | One market still holds the fat sprint. Existing +30/+60 min stream offsets, maintenance at `:30`, spare wait-on-head, and session timezones (AU / EU / US weekday paper) | As a substitute for admitting a post-threshold market |
+| **Parallel pipelines** | Graduated markets on **maintenance** (FTSE-volume, unparked names) plus one fat **sprint** head | A fourth equal sprint stream while a head is unfinished |
+| **One maintenance job, many markets** | Two markets, short deepen | Several admitted books at `max_targets=62` / 3600s — the job is sequential and `timeout-minutes: 120` will clip the tail (L323) |
+
+Hosted Actions minutes are not the bind (N66). What still collides if you naive-parallel: per-job timeouts, `push_library_ingest_artifacts` checkout races, and **source** rate limits (ESEF / EDGAR / IR / Yahoo) — staggering helps those more than a fourth workflow does.
+
+**Below-tier protection against tight knobs** is a second instrument, not a reason to delay the wide book. A buy-tier-only book never sees names that never hit buy-tier. “Buy-tier but not buy now” is already the first cut on FTSE (`buy_tier_level` uses `skip_timing_wait=true`, so `timing_signal=wait` stays out). Full-screened exclusion-universe and exit-timing near-miss labs cover the rest **on FTSE** once ≥2 weekly snapshots exist. Shards get that clock by taking Layer B screens from week 0 (L320) — they do not need those archives *before* the first fill.
+
+### Practical limits (why not every shard yesterday)
+
+Book isolation is already true: shards do **not** write FTSE `docs/data/latest.json` or FTSE `paper_automation/` configs, and shard `decision-review` runs with `apply=False` until Phase 3 + N26. Live-book contamination is not the binding constraint.
+
+What *is* binding if “apply FTSE machinery to all shards as soon as possible” means the full weekday stack (ingest volume, rememo, paper tracks, review, human spot-check):
+
+| Constraint | Why it does not parallelize cleanly |
+|------------|-------------------------------------|
+| **Shared producers** | Ingest runners, Sunday ladder, `weekly_ops`, engineering queue, and human review are one pool. The ingest cascade already makes spare streams wait on `euro_depth` so they cannot starve the head. Full FTSE ingest volume (62 targets, ≤4×/day) on every shard would invert that. |
+| **Calendar span** | Phase 1 / `learning_ready` need dated Sunday archives. Extra jobs do not create 12 unique weeks. |
+| **Filing yield** | Same `ingest-loop` ≠ same bodies. ESEF / EDGAR / ASX IR / leftover 8-Ks differ. AI tracks without bodies are observe noise. |
+| **Unequal treatment** | Pre-threshold spare fractions are expected. Post-threshold observe-sim-only (N94) confounds market vs support. |
+| **`weekly_ops` spray** | One envelope funds focus-market buy-tier research + Sunday email. N96: leftover plan credit is not 21-market memo density. Equal *admitted-set* rememo is different (L321). |
+| **Weekly paper slot** | Capacity 1 is a treatment choice, not a CPU wall. A `phase1_ready` market still sits in Phase 1 with blocker `{id} not in weekly_paper_shard_markets`. |
+| **Weekday replica** | Overlay refresh, rememo, 62-target ingest, session/timezone cron, human spot-check. Phase 3 stays **one** non-FTSE weekday pilot at a time. |
+| **Phase 4** | Live-screen inclusion is a **project** gate (FTSE 2b persistent excess **and** one shard through Phase 3), not per-shard independence. |
+
+**Independent promotion when robust is the intended Phase 1–3 end-state** — once the market is admitted **and** given the same support package. Do not read observe-sim on a spare slot as a comparable result. Ingest runner wall-clock is still shared; Cursor plan credit is not the reason support is unequal.
+
+Ticker-level research is also not a perfect air gap: observe-sim / shard paper read focus research ∪ every other `markets/*/screen/research` so sibling-home memos work for dual-listed names. That is not book-P&L contamination.
+
+Admission at `sprint_ingest_complete` (exhaustion or raw parity) is L322. The equal-support package after that is L321. Weekday epoch-zero without a 12-week wait is L319. Do not treat spare ingest job count as learning progress (N102) and do not compare pre-threshold leftovers to an admitted book (N103).
+
 ## Phases and timescale
 
 Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The Sunday quiet bundle is the natural heartbeat (~1 screen-lite pass per market per week when that market is in the maintenance/screen set).
@@ -120,7 +200,7 @@ constituents — buy-tier depth only.
 
 **Enter when:** Phase 2 exit met **and** [promotion criteria](#promotion-criteria-l127) satisfied for that market.
 
-**Concurrency:** **One** non-FTSE weekday pilot at a time until L107 dashboard panel ships.
+**Concurrency:** **One** non-FTSE weekday pilot at a time (ops/review load, not book isolation).
 
 **Exit gate:** ≥ **8** weekly marks on weekday cadence; ≥ **15** closed exit-shadow episodes per primary track (N25/N26 floors); local-benchmark excess stable over rolling window.
 
@@ -183,6 +263,10 @@ ftse-library sim --markets euro_depth
 # Phase gates and advancement triggers
 ftse-library shard-status
 ftse-library shard-status --markets euro_depth --json
+
+# Admitted epoch-0 (buy-tier-level + near-miss; no AI)
+ftse-library shard-epoch0
+ftse-library shard-epoch0 --markets sp500,asx200
 
 # Manual Phase 2 weekly paper batch
 ftse-library shard-paper --markets euro_depth

@@ -52,6 +52,7 @@ from value_investor.library_sim import (
     run_observe_sims_for_screened_markets,
 )
 from value_investor.market_paper_shard import (
+    run_epoch0_shards_for_markets,
     run_weekday_paper_shards_for_markets,
     run_weekly_paper_shards_for_screened_markets,
 )
@@ -97,6 +98,8 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
     ladder.setdefault("weekly_paper_shard_after_screen", True)
     ladder.setdefault("weekly_paper_shard_markets", list(DEFAULT_WEEKLY_PAPER_SHARD_MARKETS))
     ladder.setdefault("weekly_paper_shard_capacity", DEFAULT_WEEKLY_PAPER_SHARD_CAPACITY)
+    ladder.setdefault("admitted_learning_markets", [])
+    ladder.setdefault("epoch0_shard_after_screen", True)
     ladder.setdefault("phase1_require_ai_beat_rules", DEFAULT_PHASE1_REQUIRE_AI_BEAT_RULES)
     ladder.setdefault("phase1_min_screen_archives", 12)
     ladder.setdefault("phase2_min_weekly_batches", 8)
@@ -672,6 +675,16 @@ def run_library_ladder(
             policy,
             screened_markets,
         )
+
+    # B3b — admitted epoch-0 buy-tier-level + near-miss (no AI / no knob apply)
+    policy = load_policy(policy_path)
+    if not ladder_cfg.get("epoch0_shard_after_screen", True):
+        result["layers"]["epoch0_shard"] = {
+            "skipped": True,
+            "reason": "epoch0_shard_after_screen is off",
+        }
+    else:
+        result["layers"]["epoch0_shard"] = run_epoch0_shards_for_markets(root, policy)
 
     # B4 — weekday paper shard for Phase-3 markets (after weekly when enabled)
     policy = load_policy(policy_path)

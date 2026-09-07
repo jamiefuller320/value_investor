@@ -339,6 +339,19 @@ def build_parser() -> argparse.ArgumentParser:
     shard_paper_p.add_argument("--json", action="store_true")
     shard_paper_p.set_defaults(func=cmd_shard_paper)
 
+    shard_epoch0_p = sub.add_parser(
+        "shard-epoch0",
+        parents=[common],
+        help="Start admitted-market epoch-0 buy-tier-level book + near-miss watch (no AI)",
+    )
+    shard_epoch0_p.add_argument(
+        "--markets",
+        default="",
+        help="Comma-separated market ids (empty = admitted learning markets)",
+    )
+    shard_epoch0_p.add_argument("--json", action="store_true")
+    shard_epoch0_p.set_defaults(func=cmd_shard_epoch0)
+
     ingest_loop_p = sub.add_parser(
         "ingest-loop",
         parents=[common],
@@ -1605,6 +1618,48 @@ def cmd_shard_paper(args: argparse.Namespace) -> int:
                 )
                 for blocker in phase.get("blockers") or []:
                     print(f"  blocker: {blocker}")
+        except Exception as exc:  # noqa: BLE001
+            payloads[market_id] = {"error": str(exc)}
+            if not args.json:
+                print(f"{market_id}: ERROR — {exc}", file=sys.stderr)
+    if args.json:
+        print(json.dumps({"markets": payloads}, indent=2))
+    return 0 if all("error" not in row for row in payloads.values()) else 1
+
+
+def cmd_shard_epoch0(args: argparse.Namespace) -> int:
+    from value_investor.agent_model_policy import load_policy
+    from value_investor.market_paper_shard import run_epoch0_market_shard
+    from value_investor.market_shard_admission import admitted_learning_markets_for_policy
+
+    policy = load_policy(args.policy)
+    markets = _parse_markets(args.markets) or admitted_learning_markets_for_policy(policy)
+    payloads: dict[str, Any] = {}
+    if not markets:
+        if args.json:
+            print(json.dumps({"markets": {}, "error": "no admitted learning markets"}, indent=2))
+        else:
+            print("No admitted learning markets", file=sys.stderr)
+        return 1
+    for market_id in markets:
+        try:
+            result = run_epoch0_market_shard(
+                market_id,
+                library_root=args.root,
+                force=True,
+                policy=policy,
+            )
+            payloads[market_id] = result
+            if not args.json:
+                tracks = (result.get("learning_tracks") or {}).get("tracks") or {}
+                level = tracks.get("buy_tier_level") or {}
+                near = result.get("near_miss") or {}
+                print(
+                    f"{market_id}: acted={level.get('acted')}  "
+                    f"trades={level.get('trades')}  "
+                    f"buy_not_now={near.get('buy_tier_not_now_count')}  "
+                    f"hold_near={near.get('hold_near_buy_count')}"
+                )
         except Exception as exc:  # noqa: BLE001
             payloads[market_id] = {"error": str(exc)}
             if not args.json:

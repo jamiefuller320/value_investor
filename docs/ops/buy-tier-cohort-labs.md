@@ -9,6 +9,8 @@ Two complementary experiments for an **unfiltered buy-tier book**:
 
 Neither is a promotion gate. The 3-slot Suite A primary and Suite B fair twins stay as they are. Do **not** spawn a live buy-cross book from this archive (sparse historic crossings).
 
+This live FTSE epoch-zero **is** the intended start instrument. Admitted shards (`sp500`, `asx200`) now start the same frozen level book plus a near-miss watch (`ftse-library shard-epoch0`). Do not fork shard AI-judgment or knob apply until those groups have marks. FTSE remains the data lead. See [`market-sharded-learning.md`](market-sharded-learning.md#what-enter-learning-means).
+
 ## Level book (live, Monday)
 
 - Directory: `docs/data/paper_automation/buy_tier_level/`

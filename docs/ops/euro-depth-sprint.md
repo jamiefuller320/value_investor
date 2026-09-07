@@ -67,12 +67,16 @@ Phase 3 readiness is **informational only** — weekday ladder crons stay enable
 When focus reaches parity, `ingest_parity_markets` is updated and focus may advance to
 `market_queue[0]` when `focus_graduation.advance_focus_on_ingest_parity` is true.
 
-**Effort cascade (doctrine):** P2 offline ingest is a cascade, not equal streams — see
-[`AGENTS.md`](../../AGENTS.md) and [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md#machinery-spend-p1--p2).
-Maximum effort stays on the highest-priority market that is not yet in the learning
-phase (today: `euro_depth`). Spare capacity only on the next queue markets. Do **not**
-add a fourth equal sprint workflow (`library-ingest-sprint-3.yml` or similar) that can
-starve the head target.
+**Effort cascade (doctrine):** serialize one market to the maintenance ingest
+threshold (raw parity or leftover thin/IWB parked), then give that market
+equivalent resource and move the fat slot — see
+[`AGENTS.md`](../../AGENTS.md) and
+[`market-sharded-learning.md`](market-sharded-learning.md#what-enter-learning-means).
+Spare streams only front-start the next queue names. Stagger slots and run
+**parallel maintenance** for graduated markets; do **not** add a fourth equal
+sprint workflow (`library-ingest-sprint-3.yml` or similar) that can starve the
+current head. Learning resource should flip with maintenance graduation (L322);
+today only ingest volume does.
 
 **Scheduler (wired):** while focus still has FTSE-standard filing gaps,
 `ingest_effort_cascade` scales stream 1 to half targets/runtime and stream 2 to
@@ -105,7 +109,10 @@ allowlist after each hunter merge via `ftse-library parked-hunter-compile`.
 Stream 1 slots match euro focus (+30 min) via
 `library-ingest-sprint.yml`; stream 2 (+60 min) via `library-ingest-sprint-2.yml`.
 Learning **weekly paper** (`weekly_paper_shard_markets`, capacity 1) stays on
-`euro_depth` until handoff. Sunday screen-lite + observe sim follow the
+`euro_depth` until handoff. Spare ingest without a lifecycle book is
+busy-but-empty; exhaustion should unblock a frozen buy-tier-level start
+(L319), not more jobs — see [`market-sharded-learning.md`](market-sharded-learning.md#what-enter-learning-means).
+Sunday screen-lite + observe sim follow the
 **ingest profile** (focus + both sprint streams + ingest-parity +
 `ftse_equivalent_markets`), so `sp500` and `asx200` keep a dated archive clock
 without taking the weekly-paper slot.

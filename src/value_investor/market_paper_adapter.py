@@ -105,6 +105,24 @@ def build_market_reports_bundle(
         for key, value in result.signals["signal"].value_counts().to_dict().items():
             signal_counts[str(key)] = int(value)
 
+    reports_out = [report.to_dict() for report in reports]
+    if not result.signals.empty and "last_price" in result.signals.columns:
+        prices: dict[str, float] = {}
+        for rec in result.signals.to_dict(orient="records"):
+            ticker = str(rec.get("ticker") or "").strip()
+            try:
+                price = float(rec.get("last_price"))
+            except (TypeError, ValueError):
+                continue
+            if ticker and price > 0:
+                prices[ticker] = price
+        for row in reports_out:
+            ticker = str(row.get("ticker") or "")
+            if ticker in prices:
+                row["last_price"] = prices[ticker]
+                row.setdefault("price", prices[ticker])
+                row.setdefault("last", prices[ticker])
+
     return {
         "generated_at": datetime.now(UTC).isoformat(),
         "run_at": result.run_at.isoformat(),
@@ -117,7 +135,7 @@ def build_market_reports_bundle(
             "benchmark_ticker": benchmark_for_market(market_id),
             "source": "library_screen_lite",
         },
-        "reports": [report.to_dict() for report in reports],
+        "reports": reports_out,
     }
 
 
