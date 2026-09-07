@@ -120,6 +120,7 @@ def test_equal_support_package_writes_archives_and_timing(tmp_path: Path):
     archives = row["archives"]
     assert archives["snapshots_written"] >= 2
     assert archives["exclusion"]["snapshot_count"] >= 2
+    assert "ready_for_probability_analysis" in (archives.get("exit_timing") or {})
     screen = tmp_path / "markets" / "sp500" / "screen"
     assert (screen / "exclusion_universe_review.json").exists() or (
         screen / "exclusion_universe_archive.json"

@@ -136,9 +136,11 @@ def run_admitted_counterfactual_archives(
         },
         "exit_timing": {
             "snapshot_count": exit_timing.get("snapshot_count"),
-            "ready_for_priors": (exit_timing.get("readiness") or {}).get("ready_for_priors")
-            if isinstance(exit_timing.get("readiness"), dict)
-            else None,
+            "ready_for_probability_analysis": (
+                (exit_timing.get("readiness") or {}).get("ready_for_probability_analysis")
+                if isinstance(exit_timing.get("readiness"), dict)
+                else None
+            ),
         },
     }
 
