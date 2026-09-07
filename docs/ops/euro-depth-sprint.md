@@ -67,12 +67,15 @@ Phase 3 readiness is **informational only** — weekday ladder crons stay enable
 When focus reaches parity, `ingest_parity_markets` is updated and focus may advance to
 `market_queue[0]` when `focus_graduation.advance_focus_on_ingest_parity` is true.
 
-**Effort cascade (doctrine):** P2 offline ingest is a cascade, not equal streams — see
-[`AGENTS.md`](../../AGENTS.md) and [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md#machinery-spend-p1--p2).
-Maximum effort stays on the highest-priority market that is not yet in the learning
-phase (today: `euro_depth`). Spare capacity only on the next queue markets. Do **not**
-add a fourth equal sprint workflow (`library-ingest-sprint-3.yml` or similar) that can
-starve the head target.
+**Effort cascade (doctrine):** serialize one market to the maintenance ingest
+threshold (raw parity or leftover thin/IWB parked), then give that market
+equivalent resource and move the fat slot — see
+[`AGENTS.md`](../../AGENTS.md) and
+[`market-sharded-learning.md`](market-sharded-learning.md#what-enter-learning-means).
+Spare streams only front-start the next queue names. Do **not** add a fourth
+equal sprint workflow (`library-ingest-sprint-3.yml` or similar) that can starve
+the current head. Learning resource should flip with maintenance graduation
+(L322); today only ingest volume does.
 
 **Scheduler (wired):** while focus still has FTSE-standard filing gaps,
 `ingest_effort_cascade` scales stream 1 to half targets/runtime and stream 2 to

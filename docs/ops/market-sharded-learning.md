@@ -82,15 +82,19 @@ Independence answers *how books are kept apart*. **Gates + capacity** answer *wh
 | **Promote / apply knobs** | Forward marks, N26 floors, cost-aware review | — |
 | **Replay below-threshold names** | Layer B snapshots (can start the same week as the book) | A 12-week wait *before* the first fill |
 
-**Spare ingest without a book is the busy-but-empty failure mode.** Exhaustion parks leftover thin/IWB names, can flip `filing_ready` on solid names, and vacates the sprint slot. It does **not** start a lifecycle book (N94 still keeps weekly paper on `euro_depth`). `asx200` / `sp500` can already be `phase1_ready` with **0** weekly and weekday paper batches while four ingest workflows still look busy. Treat “book started / marks accruing” as the learning signal, not ingest job count.
+**Cascade intent (serialize, then equalize).** The spare slot is not a permanent second class. One market at a time holds the fat sprint until it reaches the **maintenance ingest threshold**: unmeasured and zero-body are gone, leftover thin/IWB names are parked (`ingest_exhaustion.json` / hunter / next periodic report), and a solid usable set remains. That is `sprint_ingest_complete` — raw `ingest_parity_met` (all four counts zero) or exhaustion. Then:
 
-**Equal treatment on the learning set (comparability).** Cross-shard results are skewed if one market gets fat-slot ingest, buy-tier rememo, and a paper book while another gets leftover spare-slot deepen and observe-sim only. Plan-credit cheapness is **not** the current reason to withhold support — unused Ultra fraction is already large, and included credit does not fund filing ingest anyway. The confound is **unequal treatment**, not contamination and not Cursor $.
+1. Sprint vacates; the next queue market gets the fat slot.
+2. The graduated market joins **steady-state maintenance** at FTSE volume on unparked names (`library-ingest-maintenance.yml`).
+3. It is **admitted** to the learning set and should receive **equivalent resource** — same maintenance ingest, screen cadence, paper instrument, and buy-tier rememo as every other admitted market (L321 / L322).
 
-Once a market is **admitted** to the learning set, give it the same package: FTSE-volume buy-tier ingest (not 25–50% spare), the same screen cadence, the same paper instrument (weekday epoch-zero level book, plus the same AI tracks only if memo/filing support matches), and the same rememo/body-lag rule on buy-tier. Do **not** compare books across fat-slot vs spare-slot support (N103). Do **not** spray leftover plan credit across 21 thin markets (N96) — that is density, not equal treatment of an admitted set.
+Spare 50%/25% fractions apply only while a market is still *in front* of that threshold, so the head can finish. They are not the long-run treatment.
 
-Residual skew you cannot policy away: filing *yield* (ESEF vs EDGAR vs ASX IR), session timezone, and buy-tier width. Those are market facts. Spare-slot fractions and a single weekly-paper slot are treatment choices.
+**What is wired vs not.** Ingest already follows this: exhaustion parks leftovers, vacates the sprint, and puts unparked names on FTSE-volume maintenance (`ingest_exhausted_markets`, today including `sp500`). Learning does **not** flip with it — N94 still keeps weekly paper on `euro_depth`, so a maintenance-threshold market can sit `phase1_ready` with **0** paper batches. That is the busy-but-empty gap: the cascade did its job on filings; equivalent *learning* resource was not switched on.
 
-**What still waits.** Admitting a market without that package produces a number you cannot interpret. Runner wall-clock (shared ingest slots) is the remaining physical limit; Cursor $ is not. Phase 2 weekly-then-Phase-3 weekday remains the current *wired* path. The intended start instrument is still the frozen level book (L319), run at **full** support once admitted — not a leftover observe-sim.
+**Equal treatment after admission.** Compare only admitted markets that have the same package (N103). Do **not** spray leftover plan credit across 21 thin markets (N96). Residual skew you cannot policy away: filing *yield* (ESEF vs EDGAR vs ASX IR), session timezone, and buy-tier width. Spare-slot fractions on a *pre-threshold* market are expected; leaving a *post-threshold* market on observe-sim only is a treatment bug.
+
+**What still waits.** The learning flip at maintenance graduation is not wired (L322). Phase 2 weekly-then-Phase-3 weekday remains the current path. The intended start instrument after admission is the frozen level book (L319). Runner wall-clock is still shared across fat-slot sprints; Cursor $ is not the reason a graduated market stays on observe-sim.
 
 **Below-tier protection against tight knobs** is a second instrument, not a reason to delay the wide book. A buy-tier-only book never sees names that never hit buy-tier. “Buy-tier but not buy now” is already the first cut on FTSE (`buy_tier_level` uses `skip_timing_wait=true`, so `timing_signal=wait` stays out). Full-screened exclusion-universe and exit-timing near-miss labs cover the rest **on FTSE** once ≥2 weekly snapshots exist. Shards get that clock by taking Layer B screens from week 0 (L320) — they do not need those archives *before* the first fill.
 
@@ -105,7 +109,7 @@ What *is* binding if “apply FTSE machinery to all shards as soon as possible�
 | **Shared producers** | Ingest runners, Sunday ladder, `weekly_ops`, engineering queue, and human review are one pool. The ingest cascade already makes spare streams wait on `euro_depth` so they cannot starve the head. Full FTSE ingest volume (62 targets, ≤4×/day) on every shard would invert that. |
 | **Calendar span** | Phase 1 / `learning_ready` need dated Sunday archives. Extra jobs do not create 12 unique weeks. |
 | **Filing yield** | Same `ingest-loop` ≠ same bodies. ESEF / EDGAR / ASX IR / leftover 8-Ks differ. AI tracks without bodies are observe noise. |
-| **Unequal treatment** | Spare-slot 50%/25% ingest + paper only on `euro_depth` confounds market vs support. Plan headroom does not justify that split. |
+| **Unequal treatment** | Pre-threshold spare fractions are expected. Post-threshold observe-sim-only (N94) confounds market vs support. |
 | **`weekly_ops` spray** | One envelope funds focus-market buy-tier research + Sunday email. N96: leftover plan credit is not 21-market memo density. Equal *admitted-set* rememo is different (L321). |
 | **Weekly paper slot** | Capacity 1 is a treatment choice, not a CPU wall. A `phase1_ready` market still sits in Phase 1 with blocker `{id} not in weekly_paper_shard_markets`. |
 | **Weekday replica** | Overlay refresh, rememo, 62-target ingest, session/timezone cron, human spot-check. Phase 3 stays **one** non-FTSE weekday pilot at a time. |
@@ -115,7 +119,7 @@ What *is* binding if “apply FTSE machinery to all shards as soon as possible�
 
 Ticker-level research is also not a perfect air gap: observe-sim / shard paper read focus research ∪ every other `markets/*/screen/research` so sibling-home memos work for dual-listed names. That is not book-P&L contamination.
 
-Raising weekly-paper capacity once a second market is `phase1_ready` is L152. Auto-enqueue is L318. Starting a weekday buy-tier-level book without a 12-week wait is L319. Equal-support admission (same ingest volume, same instrument, same buy-tier rememo) is L321. Do not treat spare ingest job count as learning progress (N102) and do not compare unequal-support books (N103).
+Admission at `sprint_ingest_complete` (exhaustion or raw parity) is L322. The equal-support package after that is L321. Weekday epoch-zero without a 12-week wait is L319. Do not treat spare ingest job count as learning progress (N102) and do not compare pre-threshold leftovers to an admitted book (N103).
 
 ## Phases and timescale
 
