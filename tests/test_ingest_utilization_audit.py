@@ -86,3 +86,60 @@ def test_ingest_utilization_audit_buy_tier_matrix(tmp_path: Path):
     assert row["interim_eps_source"] == "body"
     assert row["screen_uses_body_parser"] is True
     assert row["ai_track_buy_eligible"] is True
+
+
+def test_ingest_utilization_audit_resolves_filename_only_body_path(tmp_path: Path):
+    latest = tmp_path / "latest.json"
+    research_root = tmp_path / "research"
+    memo_dir = tmp_path / "memos"
+    memo_dir.mkdir()
+    ticker = "MEGP.L"
+    sources = research_root / ticker / "sources"
+    bodies = sources / "filings" / "bodies"
+    bodies.mkdir(parents=True)
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "interim",
+                        "has_body": True,
+                        "body_path": "abc123.txt",
+                        "published_at": "2026-03-01",
+                    }
+                ],
+                "summary": {"total": 1, "with_body": 1},
+            }
+        ),
+        encoding="utf-8",
+    )
+    (bodies / "abc123.txt").write_text(
+        "diluted earnings per share decline of 3.9%",
+        encoding="utf-8",
+    )
+    (memo_dir / f"{ticker}.md").write_text("# memo", encoding="utf-8")
+    latest.write_text(
+        json.dumps(
+            {
+                "reports": [
+                    {
+                        "ticker": ticker,
+                        "signal": "buy",
+                        "adjusted_signal": "buy",
+                        "research_verdict": "accumulate",
+                        "interim_eps_decline_pct": 0.039,
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    payload = run_ingest_utilization_audit(
+        latest_path=latest,
+        research_root=research_root,
+        memo_dir=memo_dir,
+    )
+    row = payload["rows"][0]
+    assert row["interim_eps_source"] == "body"
+    assert row["screen_uses_body_parser"] is True
