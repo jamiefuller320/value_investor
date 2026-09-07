@@ -608,7 +608,6 @@ def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
     assert _by_id(written, LIVE_MARKET_ID)["ticker_count"] == 2
 
 
-
 def test_sprint_without_benchmark_shows_ingest_only(tmp_path: Path):
     library = _seed_library(tmp_path / "library")
     policy = json.loads((library / "policy.json").read_text(encoding="utf-8"))
