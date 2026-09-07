@@ -6168,7 +6168,7 @@ def test_parked_source_hunter_skip_ldos_sp500():
 
 
 def test_parked_source_hunter_skip_lmt_sp500():
-    """eng-20260907-09: LMT leftover IWB is Item 8.01 pension buy-out 8-K, not missing 10-K/10-Q."""
+    """eng-20260907-07: LMT leftover IWB is Item 8.01 pension buy-out 8-K, not missing 10-K/10-Q."""
     assert "LMT" in PARKED_SOURCE_HUNTER_SKIP
     reason = PARKED_SOURCE_HUNTER_SKIP["LMT"]
     assert "8.01" in reason
@@ -6331,7 +6331,7 @@ def test_tsn_segment_recast_8k_primary_fails_substantiveness_gate(monkeypatch):
 
 
 def test_lmt_pension_8k_primary_fails_substantiveness_gate(monkeypatch):
-    """eng-20260907-09: LMT Dec 2025 Item 8.01 pension buy-out 8-K primary is below gate."""
+    """eng-20260907-07: LMT Dec 2025 Item 8.01 pension buy-out 8-K primary is below gate."""
     cover_html = """
     <html><body>
     <ix:header><ix:hidden>dei:EntityRegistrantName LOCKHEED MARTIN CORPORATION</ix:hidden></ix:header>
