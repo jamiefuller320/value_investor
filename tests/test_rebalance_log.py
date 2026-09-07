@@ -218,7 +218,7 @@ def test_run_daily_automation_appends_rebalance_log(tmp_path, monkeypatch):
     )
     monkeypatch.setattr(
         "value_investor.paper_automation.refresh_candidate_marks",
-        lambda candidates, extra_tickers=None, **kwargs: candidates,
+        lambda candidates, extra_tickers=None, **_kwargs: candidates,
     )
     out = tmp_path / "auto"
     run_daily_automation(

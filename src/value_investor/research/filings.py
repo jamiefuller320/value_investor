@@ -294,6 +294,11 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "below the substantiveness gate; SEC complete-submission .txt is fetchable but not "
         "the indexed URL and 10-K/10-Q are already bodied."
     ),
+    "INTU": (
+        "Leftover indexed-without-body row is Item 9.01 8-K cover HTML (Nov 2025 Q1 exhibit "
+        "filing); primary fails the substantiveness gate and EX-99.01 fetches but is not the "
+        "indexed URL and duplicates the same-day 10-Q already bodied."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.

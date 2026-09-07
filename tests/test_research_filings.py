@@ -6115,6 +6115,47 @@ def test_parked_source_hunter_skip_crh_sp500():
     assert fetch_filings_ir_allowlist("CRH") == []
 
 
+def test_parked_source_hunter_skip_intu_sp500():
+    """eng-20260907-06: INTU leftover IWB is Item 9.01 8-K cover HTML, not missing 10-K/10-Q."""
+    assert "INTU" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["INTU"]
+    assert "9.01" in reason
+    assert "8-K" in reason
+    assert "EX-99.01" in reason
+    assert "10-Q" in reason
+    assert fetch_filings_ir_allowlist("INTU") == []
+
+
+def test_intu_item901_8k_primary_fails_substantiveness_gate(monkeypatch):
+    """eng-20260907-06: INTU Nov 2025 Item 9.01 8-K primary is cover-only below substantiveness gate."""
+    cover_html = """
+    <html><body>
+    <div>FORM 8-K CURRENT REPORT</div>
+    <p>Item 8.01 Other Events.</p>
+    <p>Item 9.01 Financial Statements and Exhibits.</p>
+    <p>Exhibit 99.01 — Condensed consolidated financial statements.</p>
+    <p>101.INS XBRL Instance Document — tags embedded within the Inline XBRL document.</p>
+    <p>104 Cover Page Interactive Data File (formatted as Inline XBRL).</p>
+    <p>SIGNATURES Pursuant to the requirements of the Securities Exchange Act of 1934,
+    INTUIT INC. By: /s/ SANDEEP S. AUJLA Sandeep S. Aujla Executive Vice President and
+    Chief Financial Officer Date: November 20, 2025</p>
+    </body></html>
+    """
+
+    def fake_http_get(url, headers=None, timeout=60):
+        if url.endswith("intu-20251120.htm"):
+            return cover_html.encode("utf-8")
+        if url.endswith("0000896878-25-000050-index.htm"):
+            return b'<html><body><a href="intu-20251120.htm">8-K</a></body></html>'
+        raise AssertionError(f"unexpected url {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_http_get)
+    body = fetch_filing_body(
+        "https://www.sec.gov/Archives/edgar/data/896878/000089687825000050/intu-20251120.htm"
+    )
+    assert body is None
+
+
 def test_crh_mine_safety_8k_primary_fails_substantiveness_gate(monkeypatch):
     """eng-20260907-03: CRH Mar/May 2026 mine-safety 8-K primaries extract below 1,200 chars."""
     mine_safety_html = """
