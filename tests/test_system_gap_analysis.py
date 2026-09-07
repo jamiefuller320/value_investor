@@ -132,6 +132,54 @@ def test_snapshot_flags_thin_memos_and_unused_budget(tmp_path: Path):
     assert "unused_budget_zero_research" in ids
 
 
+def test_snapshot_flags_thin_library_memos_when_ladder_executed(tmp_path: Path):
+    data = tmp_path / "data"
+    library = tmp_path / "library"
+    focus_research = library / "markets" / "euro_depth" / "screen" / "research"
+    for ticker in ("ABI.BR", "AZE.BR", "NOVN.SW", "SHELL.AS", "TTE.PA", "ASML.AS"):
+        _memo(
+            focus_research,
+            ticker,
+            verdict="accumulate",
+            grade="adequate",
+            bodies=0,
+            mode="initial",
+        )
+        (focus_research / ticker / "research.md").write_text("memo", encoding="utf-8")
+    _write_json(
+        library / "last_ladder.json",
+        {
+            "run_at": "2026-09-06T06:22:05+00:00",
+            "focus_market": "euro_depth",
+            "plan": {"allow_research": True},
+            "layers": {
+                "selective_research": {
+                    "executed": 1,
+                    "allow_research": True,
+                    "constraining": False,
+                    "budget_flag": "enforced",
+                    "remaining_usd_before": 51.6,
+                    "dedupe": {
+                        "already_researched_count": 434,
+                        "skipped_count": 45,
+                    },
+                }
+            },
+        },
+    )
+    snapshot = build_system_gap_snapshot(
+        data_dir=data,
+        output_dir=tmp_path / "output",
+        library_root=library,
+        policy_path=tmp_path / "missing-policy.json",
+        paper_root=data / "paper_automation",
+    )
+    flag = next(row for row in snapshot["flags"] if row["id"] == "thin_memo_counted_as_coverage")
+    assert flag["severity"] == "medium"
+    assert flag["evidence"]["executed"] == 1
+    assert flag["evidence"]["thin_or_zero_body"] == 6
+
+
 def test_snapshot_flags_persist_hole_and_stale_learning_clock(tmp_path: Path):
     data = tmp_path / "data"
     paper = data / "paper_automation"
