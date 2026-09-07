@@ -62,6 +62,7 @@ def test_near_miss_watch_splits_wait_and_hold(tmp_path: Path):
     payload = write_library_near_miss_watch(tmp_path, "sp500")
     assert payload["buy_tier_not_now_count"] == 1
     assert payload["hold_near_buy_count"] == 1
+    assert payload["not_buy_tier_count"] == 1
     assert payload["buy_tier_not_now"][0]["ticker"] == "AAA"
     assert payload["hold_near_buy"][0]["ticker"] == "BBB"
     assert payload["timing_signal_present"] is True

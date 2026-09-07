@@ -352,6 +352,29 @@ def build_parser() -> argparse.ArgumentParser:
     shard_epoch0_p.add_argument("--json", action="store_true")
     shard_epoch0_p.set_defaults(func=cmd_shard_epoch0)
 
+    equal_support_p = sub.add_parser(
+        "equal-support",
+        parents=[common],
+        help="Admitted-market package: timing, near-miss, counterfactual archives (no AI)",
+    )
+    equal_support_p.add_argument(
+        "--markets",
+        default="",
+        help="Comma-separated market ids (empty = admitted learning markets)",
+    )
+    equal_support_p.add_argument(
+        "--skip-timing",
+        action="store_true",
+        help="Do not Yahoo-stamp timing_signal onto screen archives",
+    )
+    equal_support_p.add_argument(
+        "--skip-archives",
+        action="store_true",
+        help="Skip exclusion-universe and exit-timing archive labs",
+    )
+    equal_support_p.add_argument("--json", action="store_true")
+    equal_support_p.set_defaults(func=cmd_equal_support)
+
     ingest_loop_p = sub.add_parser(
         "ingest-loop",
         parents=[common],
@@ -1667,6 +1690,39 @@ def cmd_shard_epoch0(args: argparse.Namespace) -> int:
     if args.json:
         print(json.dumps({"markets": payloads}, indent=2))
     return 0 if all("error" not in row for row in payloads.values()) else 1
+
+
+def cmd_equal_support(args: argparse.Namespace) -> int:
+    from value_investor.agent_model_policy import load_policy
+    from value_investor.library_equal_support import run_equal_support_package
+    from value_investor.market_shard_admission import admitted_learning_markets_for_policy
+
+    policy = load_policy(args.policy)
+    markets = _parse_markets(args.markets) or admitted_learning_markets_for_policy(policy)
+    result = run_equal_support_package(
+        args.root,
+        policy,
+        markets=markets,
+        stamp_timing=not args.skip_timing,
+        run_archives=not args.skip_archives,
+    )
+    if args.json:
+        print(json.dumps(result, indent=2, default=str))
+        return 0
+    print(f"admitted={result.get('admitted')}")
+    for mid, row in (result.get("markets") or {}).items():
+        near = row.get("near_miss") or {}
+        archives = row.get("archives") or {}
+        rememo = row.get("rememo") or {}
+        print(
+            f"{mid}: buy_not_now={near.get('buy_tier_not_now_count')}  "
+            f"not_buy_tier={near.get('not_buy_tier_count')}  "
+            f"hold_near={near.get('hold_near_buy_count')}  "
+            f"never_buy={near.get('never_buy_tier_count')}  "
+            f"rememo_eligible={rememo.get('eligible_count')}  "
+            f"exclusion_ready={(archives.get('exclusion') or {}).get('ready_for_priors')}"
+        )
+    return 0
 
 
 def _library_gap_closure_spec(args: argparse.Namespace) -> dict[str, Any] | None:

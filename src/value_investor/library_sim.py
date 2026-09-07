@@ -95,8 +95,13 @@ def observe_sim_markets_for_policy(policy: dict[str, Any]) -> list[str]:
     profile: list[str] = []
     if ladder.get("observe_sim_include_ingest_profile", True):
         profile = ingest_profile_observe_sim_markets(policy)
+    admitted: list[str] = []
+    if ladder.get("observe_sim_include_admitted", True):
+        from value_investor.market_shard_admission import admitted_learning_markets_for_policy
+
+        admitted = admitted_learning_markets_for_policy(policy)
     ordered: list[str] = []
-    for mid in [*markets, *extra, *profile]:
+    for mid in [*markets, *extra, *profile, *admitted]:
         if mid not in ordered:
             ordered.append(mid)
     return [mid for mid in ordered if mid in MARKET_BENCHMARKS]
