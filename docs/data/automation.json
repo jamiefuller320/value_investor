@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-07T12:36:22.148950+00:00",
+  "generated_at": "2026-09-07T15:28:41.044169+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1144,28 +1144,53 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-07T11:43:24.701777+00:00",
-    "queue_ui_updated_at": "2026-09-07T12:36:22.148922+00:00",
-    "task_count": 8,
+    "compiled_at": "2026-09-07T15:16:24.207760+00:00",
+    "queue_ui_updated_at": "2026-09-07T15:28:41.044137+00:00",
+    "task_count": 4,
     "status": {
-      "open_count": 0,
+      "open_count": 1,
       "pr_open_count": 0,
-      "parked_count": 1,
-      "merged_count": 7,
+      "parked_count": 2,
+      "merged_count": 1,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260907-03",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [],
-    "attention_tasks": [
+    "queued_tasks": [
       {
         "id": "eng-20260907-03",
         "area": "ingest",
-        "title": "Hunt fetchable IR source for parked sp500 leftover CRH",
+        "title": "Close library ingest filing gaps for EU depth composite (STOXX50 + periphery) (euro_depth): 1 buy-tier gaps after stalled weekday loop",
+        "priority": "high",
+        "priority_score": 88.0,
+        "status": "open",
+        "source": "library_ingest_stall",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      }
+    ],
+    "attention_tasks": [
+      {
+        "id": "eng-20260907-02",
+        "area": "ingest",
+        "title": "Hunt fetchable IR source for parked sp500 leftover BXP",
+        "priority": "low",
+        "priority_score": 12.0,
+        "status": "parked",
+        "source": "parked_source_hunter",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260907-01",
+        "area": "ingest",
+        "title": "Hunt fetchable IR source for parked sp500 leftover APTV",
         "priority": "low",
         "priority_score": 12.0,
         "status": "parked",
