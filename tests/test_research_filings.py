@@ -6138,6 +6138,51 @@ def test_parked_source_hunter_skip_intu_sp500():
     assert fetch_filings_ir_allowlist("INTU") == []
 
 
+def test_parked_source_hunter_skip_ldos_sp500():
+    """eng-20260907-08: LDOS leftover IWB is acquisition-closing 8-K primary, not missing 10-K/10-Q."""
+    assert "LDOS" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["LDOS"]
+    assert "2.01" in reason
+    assert "8-K" in reason
+    assert "EX-99.1" in reason
+    assert "substantiveness" in reason
+    assert "10-K/10-Q" in reason
+    assert fetch_filings_ir_allowlist("LDOS") == []
+
+
+def test_ldos_acquisition_8k_primary_fails_substantiveness_gate(monkeypatch):
+    """eng-20260907-08: LDOS Mar 2026 Entrust acquisition-closing 8-K primary is below gate."""
+    cover_html = """
+    <html><body>
+    <div>FORM 8-K CURRENT REPORT</div>
+    <p>Item 2.01 Completion of Acquisition or Disposition of Assets.</p>
+    <p>Item 7.01 Regulation FD Disclosure.</p>
+    <p>On March 30, 2026, the Company issued a press release announcing the closing of the
+    Transaction. The press release is attached as Exhibit 99.1 to this Current Report on
+    Form 8-K and is incorporated into this Item 7.01 by reference.</p>
+    <p>Item 9.01 Financial Statements and Exhibits.</p>
+    <p>(d) Exhibits. Exhibit 99.1 — Press Release, dated March 30, 2026.</p>
+    <p>Exhibit 104 Cover Page Interactive Data File (embedded within the Inline XBRL document).</p>
+    <p>SIGNATURE Pursuant to the requirements of the Securities Exchange Act of 1934,
+    LEIDOS HOLDINGS, INC. By: /s/ Henrique B. Canarim Henrique B. Canarim
+    Corporate Secretary Date: March 30, 2026</p>
+    </body></html>
+    """
+
+    def fake_http_get(url, headers=None, timeout=60):
+        if url.endswith("d112441d8k.htm"):
+            return cover_html.encode("utf-8")
+        if url.endswith("0001193125-26-130304-index.htm"):
+            return b'<html><body><a href="d112441d8k.htm">8-K</a></body></html>'
+        raise AssertionError(f"unexpected url {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_http_get)
+    body = fetch_filing_body(
+        "https://www.sec.gov/Archives/edgar/data/1336920/000119312526130304/d112441d8k.htm"
+    )
+    assert body is None
+
+
 def test_fico_item202_8k_primary_fails_substantiveness_gate(monkeypatch):
     """eng-20260907-07: FICO Jul 2025 Item 2.02 earnings-release 8-K primary is cover-only."""
     cover_html = """
