@@ -84,7 +84,13 @@ Independence answers *how books are kept apart*. **Gates + capacity** answer *wh
 
 **Spare ingest without a book is the busy-but-empty failure mode.** Exhaustion parks leftover thin/IWB names, can flip `filing_ready` on solid names, and vacates the sprint slot. It does **not** start a lifecycle book (N94 still keeps weekly paper on `euro_depth`). `asx200` / `sp500` can already be `phase1_ready` with **0** weekly and weekday paper batches while four ingest workflows still look busy. Treat “book started / marks accruing” as the learning signal, not ingest job count.
 
-**What still waits.** Cloning the *full* AI weekday stack (rememo, 62-target ingest, `decision-review --apply`, human spot-check) stays capacity-limited. A frozen level book is the cheap start (L319). AI-judgment on a shard is not FTSE-equivalent until filing/memo parity looks FTSE-like. Phase 2 weekly-then-Phase-3 weekday remains the current *wired* path; the gap is that Sunday-only paper plus a policy slot delay the weekday lifecycle clock exhaustion was meant to unblock.
+**Equal treatment on the learning set (comparability).** Cross-shard results are skewed if one market gets fat-slot ingest, buy-tier rememo, and a paper book while another gets leftover spare-slot deepen and observe-sim only. Plan-credit cheapness is **not** the current reason to withhold support — unused Ultra fraction is already large, and included credit does not fund filing ingest anyway. The confound is **unequal treatment**, not contamination and not Cursor $.
+
+Once a market is **admitted** to the learning set, give it the same package: FTSE-volume buy-tier ingest (not 25–50% spare), the same screen cadence, the same paper instrument (weekday epoch-zero level book, plus the same AI tracks only if memo/filing support matches), and the same rememo/body-lag rule on buy-tier. Do **not** compare books across fat-slot vs spare-slot support (N103). Do **not** spray leftover plan credit across 21 thin markets (N96) — that is density, not equal treatment of an admitted set.
+
+Residual skew you cannot policy away: filing *yield* (ESEF vs EDGAR vs ASX IR), session timezone, and buy-tier width. Those are market facts. Spare-slot fractions and a single weekly-paper slot are treatment choices.
+
+**What still waits.** Admitting a market without that package produces a number you cannot interpret. Runner wall-clock (shared ingest slots) is the remaining physical limit; Cursor $ is not. Phase 2 weekly-then-Phase-3 weekday remains the current *wired* path. The intended start instrument is still the frozen level book (L319), run at **full** support once admitted — not a leftover observe-sim.
 
 **Below-tier protection against tight knobs** is a second instrument, not a reason to delay the wide book. A buy-tier-only book never sees names that never hit buy-tier. “Buy-tier but not buy now” is already the first cut on FTSE (`buy_tier_level` uses `skip_timing_wait=true`, so `timing_signal=wait` stays out). Full-screened exclusion-universe and exit-timing near-miss labs cover the rest **on FTSE** once ≥2 weekly snapshots exist. Shards get that clock by taking Layer B screens from week 0 (L320) — they do not need those archives *before* the first fill.
 
@@ -99,8 +105,9 @@ What *is* binding if “apply FTSE machinery to all shards as soon as possible�
 | **Shared producers** | Ingest runners, Sunday ladder, `weekly_ops`, engineering queue, and human review are one pool. The ingest cascade already makes spare streams wait on `euro_depth` so they cannot starve the head. Full FTSE ingest volume (62 targets, ≤4×/day) on every shard would invert that. |
 | **Calendar span** | Phase 1 / `learning_ready` need dated Sunday archives. Extra jobs do not create 12 unique weeks. |
 | **Filing yield** | Same `ingest-loop` ≠ same bodies. ESEF / EDGAR / ASX IR / leftover 8-Ks differ. AI tracks without bodies are observe noise. |
-| **`weekly_ops`** | One envelope (currently $80) funds euro_depth selective research + Sunday email — not 21-market memo spray (`research_all_graduated: false`). |
-| **Weekly paper slot** | One Sunday batch is cheap (screen adapter → tracks → review, no apply). Capacity 1 is depth-first policy (N66 / N94), not a CPU wall. A `phase1_ready` market still sits in Phase 1 with blocker `{id} not in weekly_paper_shard_markets`. |
+| **Unequal treatment** | Spare-slot 50%/25% ingest + paper only on `euro_depth` confounds market vs support. Plan headroom does not justify that split. |
+| **`weekly_ops` spray** | One envelope funds focus-market buy-tier research + Sunday email. N96: leftover plan credit is not 21-market memo density. Equal *admitted-set* rememo is different (L321). |
+| **Weekly paper slot** | Capacity 1 is a treatment choice, not a CPU wall. A `phase1_ready` market still sits in Phase 1 with blocker `{id} not in weekly_paper_shard_markets`. |
 | **Weekday replica** | Overlay refresh, rememo, 62-target ingest, session/timezone cron, human spot-check. Phase 3 stays **one** non-FTSE weekday pilot at a time. |
 | **Phase 4** | Live-screen inclusion is a **project** gate (FTSE 2b persistent excess **and** one shard through Phase 3), not per-shard independence. |
 
@@ -108,7 +115,7 @@ What *is* binding if “apply FTSE machinery to all shards as soon as possible�
 
 Ticker-level research is also not a perfect air gap: observe-sim / shard paper read focus research ∪ every other `markets/*/screen/research` so sibling-home memos work for dual-listed names. That is not book-P&L contamination.
 
-Raising weekly-paper capacity once a second market is `phase1_ready` and Sunday headroom exists is L152. Auto-enqueue of every `phase1_ready` name into `weekly_paper_shard_markets` is later (L318). Starting a **frozen** weekday buy-tier-level book without a 12-week wait is L319 — that is the cheap start, not a second full AI track set. Do not treat spare ingest job count as learning progress (N102).
+Raising weekly-paper capacity once a second market is `phase1_ready` is L152. Auto-enqueue is L318. Starting a weekday buy-tier-level book without a 12-week wait is L319. Equal-support admission (same ingest volume, same instrument, same buy-tier rememo) is L321. Do not treat spare ingest job count as learning progress (N102) and do not compare unequal-support books (N103).
 
 ## Phases and timescale
 
