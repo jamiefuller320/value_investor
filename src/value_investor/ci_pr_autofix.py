@@ -223,12 +223,15 @@ def _suggest_companion_paths(paths: list[str]) -> list[str]:
     for path in paths:
         if path.startswith("tests/test_") and path.endswith(".py"):
             stem = path.removeprefix("tests/test_").removesuffix(".py")
-            candidate = Path("src/value_investor") / f"{stem}.py"
-            if candidate.exists():
-                extras.append(candidate.as_posix())
+            nested = Path("src/value_investor") / f"{stem.replace('_', '/')}.py"
+            flat = Path("src/value_investor") / f"{stem}.py"
+            if nested.exists():
+                extras.append(nested.as_posix())
+            elif flat.exists():
+                extras.append(flat.as_posix())
         elif path.startswith("src/value_investor/") and path.endswith(".py"):
             stem = path.removeprefix("src/value_investor/").removesuffix(".py")
-            candidate = Path("tests") / f"test_{stem}.py"
+            candidate = Path("tests") / f"test_{stem.replace('/', '_')}.py"
             if candidate.exists():
                 extras.append(candidate.as_posix())
     return extras

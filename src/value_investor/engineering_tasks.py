@@ -36,6 +36,9 @@ BLOCKED_PATHS = (
     "docs/data/library/policy.json",
 )
 
+# Allowlist expansions and queue status writes must not fail the PR path guard.
+PATH_GUARD_ALWAYS_ALLOWED = ("docs/data/engineering_tasks.json",)
+
 AREA_ALLOWED_PATHS: dict[str, list[str]] = {
     "ingest": [
         "src/value_investor/research/filings.py",
@@ -45,6 +48,7 @@ AREA_ALLOWED_PATHS: dict[str, list[str]] = {
         "src/value_investor/research/companies_house.py",
         "src/value_investor/companies_house.py",
         "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
         "tests/test_gap_fill_deepen.py",
         "tests/test_ingest_improvement.py",
         "tests/test_companies_house.py",
@@ -1296,6 +1300,29 @@ def normalize_repo_path(path: str) -> str:
     return path.replace("\\", "/").strip().lstrip("./")
 
 
+def companion_test_path(src_path: str) -> str | None:
+    """Map ``src/value_investor/foo/bar.py`` to ``tests/test_foo_bar.py``."""
+    changed = normalize_repo_path(src_path)
+    prefix = "src/value_investor/"
+    if not changed.startswith(prefix) or not changed.endswith(".py"):
+        return None
+    stem = changed[len(prefix) : -3]
+    if not stem or stem.endswith("/"):
+        return None
+    return f"tests/test_{stem.replace('/', '_')}.py"
+
+
+def effective_allowed_paths(task: EngineeringTask) -> list[str]:
+    """Stored allowlist plus companion tests for each allowed source module."""
+    merged = list(dict.fromkeys(task.allowed_paths or []))
+    extras: list[str] = []
+    for path in merged:
+        companion = companion_test_path(path)
+        if companion and companion not in merged and companion not in extras:
+            extras.append(companion)
+    return [*merged, *extras]
+
+
 def path_matches_allowed_pattern(changed: str, pattern: str) -> bool:
     """Return True when *changed* is within an allowed file or directory pattern."""
     changed = normalize_repo_path(changed)
@@ -1385,7 +1412,8 @@ def validate_engineering_pr_paths(
 ) -> PathGuardResult:
     """Validate PR file changes against task allow/block lists and global BLOCKED_PATHS."""
     blocked = list(dict.fromkeys([*BLOCKED_PATHS, *(task.blocked_paths or [])]))
-    allowed = list(task.allowed_paths or [])
+    allowed = effective_allowed_paths(task)
+    always_allowed = list(PATH_GUARD_ALWAYS_ALLOWED)
     normalized = [normalize_repo_path(path) for path in changed_files]
     normalized = [path for path in normalized if path]
 
@@ -1394,6 +1422,8 @@ def validate_engineering_pr_paths(
 
     violations: list[str] = []
     for changed in normalized:
+        if any(path_matches_allowed_pattern(changed, pattern) for pattern in always_allowed):
+            continue
         for blocked_path in blocked:
             if path_matches_blocked_pattern(changed, blocked_path):
                 violations.append(f"blocked path touched: {changed} (matches {blocked_path})")
