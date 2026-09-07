@@ -458,6 +458,7 @@ jobs:
         run: git pull --rebase --autostash origin main
 
       - name: Commit queue state
+        id: queue_merge_commit
         if: steps.eng_branch.outputs.is_task == 'true'
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
@@ -468,6 +469,13 @@ jobs:
             docs/data/automation.json
             docs/data/latest.json
           skip_fetch: false
+
+      - name: Deploy dashboard after task completion
+        if: steps.eng_branch.outputs.is_task == 'true' && steps.queue_merge_commit.outputs.changes_detected == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_ACTIONS: "true"
+        run: bash scripts/dispatch_pages.sh
 
       - name: Evaluate accelerated ladder chain (coverage verify)
         if: >-

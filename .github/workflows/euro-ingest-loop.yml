@@ -321,6 +321,9 @@ jobs:
           ftse-library euro-ingest-dispatch --refresh --sync-cron --json --json-path /tmp/euro_dispatch_refresh.json
 
       - name: Commit and push library ingest artifacts
+        env:
+          DISPATCH_PAGES: "true"
+          GH_TOKEN: ${{ github.token }}
         run: |
           bash scripts/push_library_ingest_artifacts.sh \
             'chore: euro_depth ingest loop [skip ci]'

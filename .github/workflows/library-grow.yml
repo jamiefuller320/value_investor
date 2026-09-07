@@ -115,6 +115,8 @@ jobs:
           # Refresh Automation tab snapshot for the dashboard.
           ftse-library --root "$ROOT" --policy "$ROOT/policy.json" automation-status \
             --output docs/data/automation.json
+          ftse-library --root "$ROOT" --policy "$ROOT/policy.json" market-status \
+            --output docs/data/market_status.json
           python3 -c "import json; json.load(open('$ROOT/last_ladder.json'))"
           DRAFTED=$(python3 -c "import json; d=json.load(open('$ROOT/last_ladder.json')).get('engineering_tasks',{}); print('true' if int(d.get('drafted_count') or 0)>0 else 'false')")
           echo "engineering_drafted=$DRAFTED" >> "$GITHUB_OUTPUT"
@@ -129,6 +131,7 @@ jobs:
           file_pattern: >-
             docs/data/library/**
             docs/data/automation.json
+            docs/data/market_status.json
             docs/data/engineering_tasks.json
             docs/data/library/grow_health_log.json
             docs/data/paper_automation/markets/**/automated_fund.json

@@ -12,21 +12,31 @@ from value_investor.data_library import (
     MARKET_REGISTRY,
     load_manifest,
 )
+from value_investor.library_equal_support import PACKAGE_FILENAME as EQUAL_SUPPORT_FILENAME
 from value_investor.library_ingest_dispatch import (
     DEFAULT_DISPATCH_PATH,
     MODE_MAINTENANCE,
     MODE_SPRINT,
     PARALLEL_SPRINT_POLICY_KEYS,
 )
+from value_investor.library_ingest_escalation import ftse_equivalent_markets
+from value_investor.library_near_miss_watch import NEAR_MISS_FILENAME
 from value_investor.library_screen import screen_dir_for
-from value_investor.storage import read_json
+from value_investor.market_shard_admission import admitted_learning_markets_for_policy
+from value_investor.market_shard_phases import DEFAULT_SHARD_ROOT, shard_root_for_market
+from value_investor.storage import read_json, write_json
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 LIVE_MARKET_ID = "ftse350"
+DEFAULT_MARKET_STATUS_PATH = Path("docs/data/market_status.json")
+DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
+BUY_TIER_LEVEL_TRACK = "buy_tier_level"
+EXPECTED_ADMITTED_BLOCKER_NEEDLE = "weekly_paper_shard_markets"
 
 ROLE_LIVE = "live"
 ROLE_FOCUS = "focus"
 ROLE_SPRINT = "sprint"
+ROLE_ADMITTED = "admitted"
 ROLE_QUEUE = "queue"
 ROLE_GRADUATED = "graduated"
 ROLE_OTHER = "other"
@@ -44,14 +54,16 @@ PHASE_LABELS = {
     3: "Weekday paper",
     4: "Live screen",
 }
+EPOCH0_PHASE_LABEL = "Epoch-0 level"
 
 ROLE_ORDER = {
     ROLE_LIVE: 0,
     ROLE_FOCUS: 1,
     ROLE_SPRINT: 2,
-    ROLE_QUEUE: 3,
-    ROLE_GRADUATED: 4,
-    ROLE_OTHER: 5,
+    ROLE_ADMITTED: 3,
+    ROLE_QUEUE: 4,
+    ROLE_GRADUATED: 5,
+    ROLE_OTHER: 6,
 }
 
 
@@ -283,6 +295,7 @@ def _classify_role(
     focus: str,
     graduated: set[str],
     queue: set[str],
+    admitted: set[str],
     ingest: str,
 ) -> str:
     if market_id == LIVE_MARKET_ID:
@@ -291,6 +304,8 @@ def _classify_role(
         return ROLE_FOCUS
     if ingest == INGEST_SPRINT:
         return ROLE_SPRINT
+    if market_id in admitted:
+        return ROLE_ADMITTED
     if market_id in queue:
         return ROLE_QUEUE
     if market_id in graduated:
@@ -322,12 +337,166 @@ def _health_tone(
     return "ok"
 
 
-def _phase_label(current_phase: int | None, *, is_live: bool) -> str:
+def _phase_label(
+    current_phase: int | None,
+    *,
+    is_live: bool,
+    epoch0: dict[str, Any] | None = None,
+) -> str:
     if is_live:
         return PHASE_LABELS[4]
+    if epoch0 and epoch0.get("present") and (current_phase or 0) <= 1:
+        return EPOCH0_PHASE_LABEL
     if current_phase is None:
         return PHASE_LABELS[0]
     return PHASE_LABELS.get(current_phase, f"Phase {current_phase}")
+
+
+def _is_expected_admitted_blocker(text: str) -> bool:
+    return EXPECTED_ADMITTED_BLOCKER_NEEDLE in str(text or "").lower()
+
+
+def _health_blockers(blockers: list[str], *, is_admitted: bool) -> list[str]:
+    if not is_admitted:
+        return blockers
+    return [item for item in blockers if not _is_expected_admitted_blocker(item)]
+
+
+def _queue_rank(market_id: str, queue: list[str]) -> int | None:
+    try:
+        return queue.index(market_id) + 1
+    except ValueError:
+        return None
+
+
+def _index_equal_support(library_root: Path) -> dict[str, Any]:
+    raw = _as_dict(_safe_read(Path(library_root) / EQUAL_SUPPORT_FILENAME))
+    markets = raw.get("markets") if isinstance(raw.get("markets"), dict) else {}
+    return {
+        "generated_at": raw.get("generated_at"),
+        "admitted": [str(m) for m in _as_list(raw.get("admitted")) if str(m).strip()],
+        "ai_judgment": bool(raw.get("ai_judgment")),
+        "knob_apply": bool(raw.get("knob_apply")),
+        "markets": {str(mid): value for mid, value in markets.items() if isinstance(value, dict)},
+    }
+
+
+def _slim_near_miss(raw: Any) -> dict[str, Any] | None:
+    payload = _as_dict(raw)
+    if not payload or payload.get("skipped"):
+        return None
+    watch = payload.get("buy_tier_not_now") or payload.get("buy_not_now") or []
+    hold = payload.get("hold_near_buy") or []
+    return {
+        "buy_tier_not_now_count": _int(payload.get("buy_tier_not_now_count")),
+        "hold_near_buy_count": _int(payload.get("hold_near_buy_count")),
+        "not_buy_tier_count": _int(payload.get("not_buy_tier_count")),
+        "never_buy_tier_count": _int(payload.get("never_buy_tier_count")),
+        "timing_signal_present": bool(payload.get("timing_signal_present")),
+        "observe_only": True,
+        "watch_cut": "buy_not_now + hold_near_buy",
+        "census_groups": "not_buy_tier + never_buy_tier",
+        "buy_tier_not_now_sample": [
+            _as_dict(row).get("ticker")
+            for row in _as_list(watch)[:8]
+            if _as_dict(row).get("ticker")
+        ],
+        "hold_near_buy_sample": [
+            _as_dict(row).get("ticker") for row in _as_list(hold)[:8] if _as_dict(row).get("ticker")
+        ],
+    }
+
+
+def _slim_equal_support_row(raw: Any) -> dict[str, Any] | None:
+    row = _as_dict(raw)
+    if not row:
+        return None
+    near = _as_dict(row.get("near_miss")) if isinstance(row.get("near_miss"), dict) else {}
+    rememo = _as_dict(row.get("rememo")) if isinstance(row.get("rememo"), dict) else {}
+    timing = _as_dict(row.get("timing")) if isinstance(row.get("timing"), dict) else {}
+    archives = _as_dict(row.get("archives")) if isinstance(row.get("archives"), dict) else {}
+    exclusion = _as_dict(archives.get("exclusion"))
+    return {
+        "present": True,
+        "ai_judgment": bool(row.get("ai_judgment", False)),
+        "knob_apply": bool(row.get("knob_apply", False)),
+        "paper_instrument": row.get("paper_instrument") or BUY_TIER_LEVEL_TRACK,
+        "timing_signal_present": bool(
+            row.get("timing_signal_present")
+            if "timing_signal_present" in row
+            else timing.get("timing_signal_present")
+        ),
+        "buy_tier_not_now_count": _int(
+            row.get("buy_tier_not_now_count", near.get("buy_tier_not_now_count"))
+        ),
+        "hold_near_buy_count": _int(
+            row.get("hold_near_buy_count", near.get("hold_near_buy_count"))
+        ),
+        "not_buy_tier_count": _int(row.get("not_buy_tier_count", near.get("not_buy_tier_count"))),
+        "never_buy_tier_count": _int(
+            row.get("never_buy_tier_count", near.get("never_buy_tier_count"))
+        ),
+        "rememo_eligible_count": _int(
+            row.get("rememo_eligible_count", rememo.get("eligible_count"))
+        ),
+        "exclusion_ready_for_priors": (
+            row.get("exclusion_ready_for_priors")
+            if "exclusion_ready_for_priors" in row
+            else exclusion.get("ready_for_priors")
+        ),
+    }
+
+
+def _slim_epoch0(market_id: str, *, shard_root: Path | None = None) -> dict[str, Any] | None:
+    root = shard_root_for_market(market_id, base=shard_root or DEFAULT_SHARD_ROOT)
+    fund = _as_dict(_safe_read(root / BUY_TIER_LEVEL_TRACK / "automated_fund.json"))
+    log = _as_dict(_safe_read(root / "weekday_batch_log.json"))
+    entries = [row for row in _as_list(log.get("entries")) if isinstance(row, dict)]
+    epoch_entries = [row for row in entries if str(row.get("cadence") or "") == "epoch0"]
+    latest_batch = (epoch_entries or entries or [None])[-1]
+    if not fund and not latest_batch:
+        return None
+    curve = [row for row in _as_list(fund.get("equity_curve")) if isinstance(row, dict)]
+    last_mark = curve[-1] if curve else {}
+    holdings = fund.get("holdings") if isinstance(fund.get("holdings"), dict) else {}
+    tracks_acted = _as_dict((latest_batch or {}).get("tracks_acted"))
+    return {
+        "present": True,
+        "paper_instrument": BUY_TIER_LEVEL_TRACK,
+        "ai_judgment": bool((latest_batch or {}).get("ai_judgment", False)),
+        "knob_apply": bool((latest_batch or {}).get("knob_apply", False)),
+        "acted": bool(tracks_acted.get(BUY_TIER_LEVEL_TRACK, latest_batch is not None)),
+        "last_run_at": (latest_batch or {}).get("run_at")
+        or last_mark.get("at")
+        or log.get("updated_at"),
+        "holdings": len(holdings),
+        "nav": _float(last_mark.get("portfolio_value")),
+        "cash": _float(fund.get("cash") if fund else last_mark.get("cash")),
+        "contributed_capital": _float(
+            fund.get("contributed_capital") if fund else last_mark.get("contributed_capital")
+        ),
+        "weekday_batch_count": len(entries),
+        "epoch0_batch_count": len(epoch_entries),
+    }
+
+
+def live_inputs_from_latest(latest_path: Path | None = None) -> dict[str, Any]:
+    """Pull FTSE live tile inputs from the last published dashboard bundle."""
+    latest = _as_dict(_safe_read(Path(latest_path or DEFAULT_LATEST_PATH)))
+    meta = _as_dict(latest.get("meta"))
+    progress = _as_dict(latest.get("project_progress"))
+    stalled = bool(_as_dict(progress.get("ingest_bottleneck")).get("stalled"))
+    counts = _signal_counts(meta.get("signal_counts"))
+    return {
+        "live_meta": {
+            "company_count": meta.get("company_count"),
+            "signal_counts": counts,
+            "universe": meta.get("universe"),
+        },
+        "live_signal_counts": counts,
+        "live_run_at": latest.get("run_at"),
+        "live_ingest_stalled": stalled,
+    }
 
 
 def build_market_status(
@@ -335,6 +504,7 @@ def build_market_status(
     library_root: Path | None = None,
     policy_path: Path | None = None,
     dispatch_path: Path | None = None,
+    shard_root: Path | None = None,
     live_meta: dict[str, Any] | None = None,
     live_signal_counts: dict[str, int] | None = None,
     live_run_at: str | None = None,
@@ -362,6 +532,11 @@ def build_market_status(
         if isinstance(value, dict)
     }
     health_by_market = _filing_health_index(dispatch)
+    equal_support = _index_equal_support(library_root)
+    admitted_list = admitted_learning_markets_for_policy(policy)
+    admitted = set(admitted_list)
+    equivalent = set(ftse_equivalent_markets(policy))
+    shard_base = Path(shard_root or DEFAULT_SHARD_ROOT)
 
     focus = str(policy.get("focus_market") or "").strip()
     graduated = _graduated_ids(policy)
@@ -377,6 +552,12 @@ def build_market_status(
     maintenance_markets = {
         str(m).strip() for m in _as_list(dispatch.get("maintenance_markets")) if str(m).strip()
     }
+    exhausted_markets = {
+        str(m).strip() for m in _as_list(policy.get("ingest_exhausted_markets")) if str(m).strip()
+    }
+    exhausted_markets.update(
+        str(m).strip() for m in _as_list(dispatch.get("ingest_exhausted_markets")) if str(m).strip()
+    )
     live_meta = live_meta or {}
     live_counts = _signal_counts(live_signal_counts or live_meta.get("signal_counts"))
 
@@ -405,7 +586,29 @@ def build_market_status(
             focus=focus,
             graduated=graduated,
             queue=queue_set,
+            admitted=admitted,
             ingest=ingest,
+        )
+        is_admitted = market_id in admitted
+        equal_row = _slim_equal_support_row(equal_support["markets"].get(market_id))
+        near_miss = None
+        if market_id != LIVE_MARKET_ID:
+            near_miss = _slim_near_miss(
+                _safe_read(screen_dir_for(library_root, market_id) / NEAR_MISS_FILENAME)
+            )
+            if near_miss is None and equal_row:
+                near_miss = {
+                    "buy_tier_not_now_count": equal_row.get("buy_tier_not_now_count"),
+                    "hold_near_buy_count": equal_row.get("hold_near_buy_count"),
+                    "not_buy_tier_count": equal_row.get("not_buy_tier_count"),
+                    "never_buy_tier_count": equal_row.get("never_buy_tier_count"),
+                    "timing_signal_present": equal_row.get("timing_signal_present"),
+                    "observe_only": True,
+                    "watch_cut": "buy_not_now + hold_near_buy",
+                    "census_groups": "not_buy_tier + never_buy_tier",
+                }
+        epoch0 = (
+            None if market_id == LIVE_MARKET_ID else _slim_epoch0(market_id, shard_root=shard_base)
         )
         if market_id == LIVE_MARKET_ID:
             signal_counts = live_counts
@@ -433,9 +636,10 @@ def build_market_status(
             coverage_pct=coverage_pct,
             stale=stale,
             filing_gaps=filing_gaps,
-            blockers=blockers,
+            blockers=_health_blockers(blockers, is_admitted=is_admitted),
             live_ingest_stalled=live_ingest_stalled and market_id == LIVE_MARKET_ID,
         )
+        filing_health = dispatch_row.get("filing_health")
         markets.append(
             {
                 "market_id": market_id,
@@ -447,10 +651,19 @@ def build_market_status(
                 "is_focus": market_id == focus,
                 "is_graduated": market_id in graduated,
                 "is_queue": market_id in queue_set,
+                "is_admitted": is_admitted,
+                "is_ftse_equivalent": market_id in equivalent,
                 "ingest": ingest,
                 "ingest_stream": stream,
                 "ingest_reason": dispatch_row.get("reason"),
                 "ingest_parity_met": dispatch_row.get("ingest_parity_met"),
+                "ingest_exhausted": bool(
+                    dispatch_row.get("ingest_exhausted")
+                    or _as_dict(filing_health).get("ingest_exhausted")
+                    or market_id in exhausted_markets
+                ),
+                "queue_rank": _queue_rank(market_id, queue),
+                "shared_maintenance": market_id in maintenance_markets,
                 "health": health,
                 "coverage_pct": coverage_pct,
                 "honest_coverage_pct": _float(status.get("honest_coverage_pct")),
@@ -469,12 +682,27 @@ def build_market_status(
                 "buy": _int((screen or {}).get("buy") if screen else signal_counts.get("buy")),
                 "learning_phase": current_phase,
                 "learning_phase_label": _phase_label(
-                    current_phase, is_live=market_id == LIVE_MARKET_ID
+                    current_phase,
+                    is_live=market_id == LIVE_MARKET_ID,
+                    epoch0=epoch0,
                 ),
                 "phase_blockers": blockers,
+                "expected_epoch0_blockers": [
+                    item for item in blockers if _is_expected_admitted_blocker(item)
+                ]
+                if is_admitted
+                else [],
                 "learning": phase_row,
-                "filing_health": dispatch_row.get("filing_health"),
+                "filing_health": filing_health,
                 "filing_gaps": filing_gaps if dispatch_row else None,
+                "paper_instrument": (
+                    BUY_TIER_LEVEL_TRACK if epoch0 or (equal_row and is_admitted) else None
+                ),
+                "ai_judgment": False if is_admitted else None,
+                "knob_apply": False if is_admitted else None,
+                "epoch0": epoch0,
+                "equal_support": equal_row,
+                "near_miss": near_miss,
             }
         )
 
@@ -500,9 +728,12 @@ def build_market_status(
         "note": (
             "Per-market stage and health snapshot for the dashboard grid. "
             "Ingest mode uses cached dispatch + policy lists; signal mix comes from "
-            "the live FTSE screen or each library latest_summary.json."
+            "the live FTSE screen or each library latest_summary.json. "
+            "Admitted markets show epoch-0 buy-tier-level + equal-support near-miss "
+            "(watch cut: buy-not-now / hold-near-buy)."
         ),
         "focus_market": focus or None,
+        "admitted_markets": admitted_list,
         "summary": {
             "market_count": len(markets),
             "ingest_counts": ingest_counts,
@@ -510,18 +741,57 @@ def build_market_status(
             "sprint_count": ingest_counts.get(INGEST_SPRINT, 0),
             "maintenance_count": ingest_counts.get(INGEST_MAINTENANCE, 0),
             "live_count": ingest_counts.get(INGEST_LIVE, 0),
+            "admitted_count": len(admitted_list),
+            "should_run_library_maintenance": bool(
+                dispatch.get("should_run_library_maintenance") or maintenance_markets
+            ),
+            "maintenance_markets": sorted(maintenance_markets),
+            "spare_sprint": {
+                str(stream): market_id for market_id, stream in sprint_streams.items()
+            },
+            "equal_support_generated_at": equal_support.get("generated_at"),
         },
         "markets": markets,
     }
 
 
+def write_market_status(
+    *,
+    library_root: Path | None = None,
+    policy_path: Path | None = None,
+    dispatch_path: Path | None = None,
+    shard_root: Path | None = None,
+    latest_path: Path | None = None,
+    path: Path | None = None,
+) -> Path:
+    """Rebuild ``docs/data/market_status.json`` without a full screen publish."""
+    live = live_inputs_from_latest(latest_path)
+    payload = build_market_status(
+        library_root=library_root,
+        policy_path=policy_path,
+        dispatch_path=dispatch_path,
+        shard_root=shard_root,
+        live_meta=live["live_meta"],
+        live_signal_counts=live["live_signal_counts"],
+        live_run_at=live["live_run_at"],
+        live_ingest_stalled=live["live_ingest_stalled"],
+    )
+    target = Path(path or DEFAULT_MARKET_STATUS_PATH)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    write_json(target, payload, compact=False)
+    return target
+
+
 __all__ = [
+    "DEFAULT_MARKET_STATUS_PATH",
+    "EPOCH0_PHASE_LABEL",
     "INGEST_IDLE",
     "INGEST_LIVE",
     "INGEST_MAINTENANCE",
     "INGEST_QUEUED",
     "INGEST_SPRINT",
     "LIVE_MARKET_ID",
+    "ROLE_ADMITTED",
     "ROLE_FOCUS",
     "ROLE_GRADUATED",
     "ROLE_LIVE",
@@ -530,4 +800,6 @@ __all__ = [
     "ROLE_SPRINT",
     "SCHEMA_VERSION",
     "build_market_status",
+    "live_inputs_from_latest",
+    "write_market_status",
 ]

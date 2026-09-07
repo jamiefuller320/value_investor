@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T11:37:33+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T12:57:05+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -401,6 +401,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L308 | **Calendar unpark of exhausted ingest leftovers** | Ingest exhaustion unparks when filing coverage improves. If a parked name sits unchanged through an earnings season, a calendar revisit could re-open one discovery pass without waiting for an index fingerprint change. | Parked leftovers remain after the next reporting season with no coverage change, or operators want a scheduled unpark instead of coverage-triggered unpark. |
 | L323 | **Split or stagger maintenance ingest per admitted market** | library-ingest-maintenance.yml loops admitted markets sequentially inside one 120-minute job at 62 targets / 3600s each. Once two or more markets are at the maintenance threshold, give each its own staggered slot or workflow so equivalent resource is not clipped by the shared timeout. Do not solve this with a fourth equal sprint stream. | A second market besides the sprint head is on ingest_exhausted_markets or ingest_parity_markets and maintenance runs are hitting timeout-minutes or skipping a tail market |
 | L325 | **CI PR Autofix verify pytest uses main site-packages** | Autofix installs the package from main into site-packages, then checks out the PR and runs full pytest. PR tests that import new symbols fail even when the PR CI test job (editable install) is green, so path-guard allowlist expands do not land. | The next engineering PR path-guard expand is blocked by autofix verify pytest after a green PR test job |
+| L330 | **Coalesce GitHub Pages deploys when ingest slots pile up** | Ingest, paper-auto, and engineering-merge now each dispatch pages.yml after [skip ci] commits so the dashboard is not stale. If the pages concurrency queue backs up (cancel-in-progress is false), batch those deploys or dispatch only when market_status/automation generated_at actually changed. | pages.yml waits more than a few minutes behind ingest/paper commits, or a third admitted market is on maintenance |
 
 ---
 

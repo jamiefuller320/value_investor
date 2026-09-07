@@ -418,6 +418,66 @@ async function fetchProgressReportJson() {
   return fetchDashboardJson("data/progress_report.json");
 }
 
+const DASHBOARD_SIDECARS = [
+  ["automation", "data/automation.json"],
+  ["project_progress", "data/project_progress.json"],
+  ["market_status", "data/market_status.json"],
+  ["system_gaps", "data/system_gaps.json"],
+  ["progress_report", "data/progress_report.json"],
+  ["chart_outcome_review", "data/chart_outcome_review.json"],
+  ["engineering_tasks", "data/engineering_tasks.json"],
+  ["ingest_deviations", "data/ingest_deviations.json"],
+  ["human_tasks_checklist", "human_tasks_checklist.json"],
+];
+
+let dashboardRefreshInFlight = null;
+let dashboardLastLoadedAt = 0;
+const DASHBOARD_VISIBLE_RELOAD_MS = 45 * 1000;
+
+async function applyDashboardSidecars(data) {
+  const rows = await Promise.all(
+    DASHBOARD_SIDECARS.map(async ([key, path]) => [key, await loadOptionalDashboardJson(path)])
+  );
+  for (const [key, payload] of rows) {
+    if (payload) data[key] = payload;
+  }
+  return data;
+}
+
+async function reloadDashboard({ silent } = {}) {
+  if (dashboardRefreshInFlight) return dashboardRefreshInFlight;
+  dashboardRefreshInFlight = (async () => {
+    try {
+      if (!silent) {
+        const meta = document.getElementById("run-meta");
+        if (meta && !dashboardData) meta.textContent = "Loading dashboard…";
+      }
+      const data = await fetchDashboardJson("data/latest.json");
+      await applyDashboardSidecars(data);
+      renderDashboard(data);
+      dashboardLastLoadedAt = Date.now();
+      return data;
+    } finally {
+      dashboardRefreshInFlight = null;
+    }
+  })();
+  return dashboardRefreshInFlight;
+}
+
+function bindDashboardAutoRefresh() {
+  if (window.__dashboardAutoRefreshBound) return;
+  window.__dashboardAutoRefreshBound = true;
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState !== "visible") return;
+    if (Date.now() - dashboardLastLoadedAt < DASHBOARD_VISIBLE_RELOAD_MS) return;
+    void reloadDashboard({ silent: true });
+  });
+  window.addEventListener("focus", () => {
+    if (Date.now() - dashboardLastLoadedAt < DASHBOARD_VISIBLE_RELOAD_MS) return;
+    void reloadDashboard({ silent: true });
+  });
+}
+
 async function openProgressReportMarkdown() {
   const dialog = document.getElementById("memo-dialog");
   const title = document.getElementById("memo-title");
@@ -436,13 +496,10 @@ async function openProgressReportMarkdown() {
 }
 
 async function reloadProgressReportIntoDashboard() {
-  setProgressReportStatus("Reloading published report…");
+  setProgressReportStatus("Reloading published dashboard…");
   try {
-    const report = await fetchProgressReportJson();
-    if (!dashboardData) dashboardData = {};
-    dashboardData.progress_report = report;
-    renderOverview(dashboardData);
-    bindProgressReportActions();
+    const data = await reloadDashboard({ silent: true });
+    const report = (data || {}).progress_report || {};
     setProgressReportStatus(`Reloaded · generated ${fmtDate(report.generated_at)}`);
   } catch (err) {
     setProgressReportStatus(`Reload failed: ${err.message}`, true);
@@ -562,10 +619,8 @@ async function generateProgressReportViaGithubActions(token) {
   await waitForProgressReportWorkflowRun(token, startedAt, setProgressReportStatus);
   setProgressReportStatus("Workflow succeeded — waiting for Pages…");
   const report = await waitForPublishedProgressReport(previousGeneratedAt, setProgressReportStatus);
-  if (!dashboardData) dashboardData = {};
-  dashboardData.progress_report = report;
-  renderOverview(dashboardData);
-  bindProgressReportActions();
+  setProgressReportStatus("Published — refreshing dashboard…");
+  await reloadDashboard({ silent: true });
   setProgressReportStatus(
     `Generated ${fmtDate(report.generated_at)} · overall ${String(report.overall || "").toUpperCase()}`
   );
@@ -586,10 +641,7 @@ async function generateProgressReportFromUi() {
       if (!payload.ok || !payload.report) {
         throw new Error(payload.error || "Generate API returned no report");
       }
-      if (!dashboardData) dashboardData = {};
-      dashboardData.progress_report = payload.report;
-      renderOverview(dashboardData);
-      bindProgressReportActions();
+      await reloadDashboard({ silent: true });
       setProgressReportStatus(
         `Generated ${fmtDate(payload.report.generated_at)} · overall ${String(payload.report.overall || "").toUpperCase()}`
       );
@@ -990,6 +1042,9 @@ function renderMarketStatusCard(row) {
     row.is_focus ? "focus" : "",
     row.is_graduated ? "graduated" : "",
     row.is_queue ? "queue" : "",
+    row.is_admitted ? "admitted" : "",
+    row.is_ftse_equivalent ? "FTSE-equivalent" : "",
+    row.ingest_exhausted ? "exhausted leftovers" : "",
   ].filter(Boolean);
   const filingRows = [];
   if (row.filing_health) {
@@ -1029,6 +1084,58 @@ function renderMarketStatusCard(row) {
     </div>
     ${row.ingest_reason ? `<p class="small">${esc(row.ingest_reason)}</p>` : ""}
     ${settingRow("Role", esc(row.role || "—"))}
+    ${
+      row.is_admitted
+        ? settingRow(
+            "Admitted learning",
+            '<span class="badge badge-ii-ok">epoch-0 package</span> · no AI / no knob apply'
+          )
+        : ""
+    }
+    ${
+      row.paper_instrument
+        ? settingRow("Paper instrument", esc(String(row.paper_instrument)))
+        : ""
+    }
+    ${
+      row.epoch0 && row.epoch0.present
+        ? settingRow(
+            "Epoch-0 book",
+            esc(
+              `${row.epoch0.holdings ?? "—"} names · NAV ${
+                row.epoch0.nav != null ? Number(row.epoch0.nav).toFixed(0) : "—"
+              } · last ${fmtDate(row.epoch0.last_run_at)}`
+            )
+          )
+        : ""
+    }
+    ${
+      row.near_miss
+        ? settingRow(
+            "Near-miss watch",
+            esc(
+              `buy-not-now ${row.near_miss.buy_tier_not_now_count ?? 0} · hold-near-buy ${
+                row.near_miss.hold_near_buy_count ?? 0
+              } (census: not-buy-tier ${row.near_miss.not_buy_tier_count ?? 0} · never-buy-tier ${
+                row.near_miss.never_buy_tier_count ?? 0
+              })`
+            )
+          )
+        : ""
+    }
+    ${
+      row.equal_support
+        ? settingRow(
+            "Equal-support rememo",
+            esc(`${row.equal_support.rememo_eligible_count ?? 0} buy-tier names over body-lag`)
+          )
+        : ""
+    }
+    ${
+      row.shared_maintenance
+        ? settingRow("Shared maintenance cron", '<span class="badge badge-ii-ok">on</span>')
+        : ""
+    }
     ${settingRow("Coverage", `${esc(coverageLabel(row.coverage_pct))} · ${esc(String(row.ticker_count ?? "—"))} names`)}
     ${settingRow("Fresh / stale", `${esc(String(row.fresh ?? "—"))} fresh · ${esc(String(row.stale ?? 0))} stale`)}
     ${settingRow("Last screen", `<span class="small">${esc(fmtDate(row.last_screen_at))}</span>`)}
@@ -1050,6 +1157,11 @@ function renderMarketStatusCard(row) {
     }
     <h4 class="small" style="margin-top:1rem">Learning phase</h4>
     ${blockerHtml}
+    ${
+      (row.expected_epoch0_blockers || []).length
+        ? `<p class="small muted">Weekly-paper slot still on euro_depth only — expected for admitted epoch-0 (do not fork shard AI yet).</p>`
+        : ""
+    }
   `;
 }
 
@@ -1071,11 +1183,22 @@ function renderMarketStatusGrid(data) {
         <div class="market-tile-header">
           <strong>${esc(row.label)}</strong>
           ${marketIngestBadge(row.ingest, row.ingest_stream)}
+          ${row.is_admitted ? '<span class="stage-badge stage-complete">admitted</span>' : ""}
         </div>
-        <div class="small muted">${esc(row.learning_phase_label || "Not started")}${row.is_focus ? " · focus" : ""}${row.is_live ? " · live" : ""}</div>
+        <div class="small muted">${esc(row.learning_phase_label || "Not started")}${row.is_focus ? " · focus" : ""}${row.is_live ? " · live" : ""}${row.shared_maintenance ? " · maint cron" : ""}</div>
         ${marketSignalBar(row.signal_counts)}
         <div class="small market-tile-signals">${marketSignalSummary(row)}</div>
-        <div class="small muted">Coverage ${esc(coverageLabel(row.coverage_pct))}</div>
+        <div class="small muted">Coverage ${esc(coverageLabel(row.coverage_pct))}${
+          row.near_miss
+            ? ` · watch ${esc(String(row.near_miss.buy_tier_not_now_count ?? 0))}/${esc(
+                String(row.near_miss.hold_near_buy_count ?? 0)
+              )}`
+            : ""
+        }${
+          row.epoch0 && row.epoch0.present
+            ? ` · epoch-0 ${esc(String(row.epoch0.holdings ?? "—"))} pos`
+            : ""
+        }</div>
       </button>`;
     })
     .join("");
@@ -1086,7 +1209,14 @@ function renderMarketStatusGrid(data) {
         <p class="small muted" style="margin:0">
           ${esc(String(summary.sprint_count ?? 0))} sprint ·
           ${esc(String(summary.maintenance_count ?? 0))} maintenance ·
+          ${esc(String(summary.admitted_count ?? 0))} admitted ·
           ${esc(String(summary.live_count ?? 0))} live
+          ${
+            summary.should_run_library_maintenance
+              ? " · shared maintenance cron on"
+              : ""
+          }
+          ${payload.generated_at ? ` · ${esc(fmtDate(payload.generated_at))}` : ""}
           · click a market for the detail card
         </p>
       </div>
@@ -3283,40 +3413,7 @@ async function loadOptionalDashboardJson(path) {
 
 async function loadDashboard() {
   try {
-    // Always cache-bust: Pages CDN/browser keep JSON for ~10 minutes otherwise,
-    // so a refresh after Generate can still show a stale progress report.
-    const data = await fetchDashboardJson("data/latest.json");
-    if (!data.automation) {
-      const automation = await loadOptionalDashboardJson("data/automation.json");
-      if (automation) data.automation = automation;
-    }
-    if (!data.project_progress) {
-      const projectProgress = await loadOptionalDashboardJson("data/project_progress.json");
-      if (projectProgress) data.project_progress = projectProgress;
-    }
-    if (!data.market_status) {
-      const marketStatus = await loadOptionalDashboardJson("data/market_status.json");
-      if (marketStatus) data.market_status = marketStatus;
-    }
-    if (!data.system_gaps) {
-      const systemGaps = await loadOptionalDashboardJson("data/system_gaps.json");
-      if (systemGaps) data.system_gaps = systemGaps;
-    }
-    // Prefer the sidecar every load so a freshly published report wins over any
-    // stale embedded copy and over a cached progress_report.json.
-    const progressReport = await loadOptionalDashboardJson("data/progress_report.json");
-    if (progressReport) data.progress_report = progressReport;
-    const chartOutcomes = await loadOptionalDashboardJson("data/chart_outcome_review.json");
-    if (chartOutcomes) data.chart_outcome_review = chartOutcomes;
-    if (!data.engineering_tasks && !(data.automation || {}).engineering_queue) {
-      const engineering = await loadOptionalDashboardJson("data/engineering_tasks.json");
-      if (engineering) data.engineering_tasks = engineering;
-    }
-    const deviations = await loadOptionalDashboardJson("data/ingest_deviations.json");
-    if (deviations) data.ingest_deviations = deviations;
-    const checklist = await loadOptionalDashboardJson("human_tasks_checklist.json");
-    if (checklist) data.human_tasks_checklist = checklist;
-    renderDashboard(data);
+    await reloadDashboard();
   } catch (err) {
     document.getElementById("run-meta").textContent = `Failed to load dashboard data: ${err.message}`;
     document.getElementById("panel-overview").innerHTML =
@@ -3325,4 +3422,7 @@ async function loadDashboard() {
 }
 
 initTabs();
+bindDashboardAutoRefresh();
 loadDashboard();
+window.__loadDashboard = loadDashboard;
+window.__reloadDashboard = reloadDashboard;

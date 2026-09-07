@@ -64,6 +64,16 @@ def test_dashboard_serve_get_and_generate(tmp_path: Path, monkeypatch):
         assert payload["ok"] is True
         assert payload["report"]["schema_version"] == 1
         assert (tmp_path / "docs/data/progress_report.md").exists()
+
+        conn.request(
+            "POST", "/api/refresh", body=b"{}", headers={"Content-Type": "application/json"}
+        )
+        resp = conn.getresponse()
+        refresh = json.loads(resp.read().decode("utf-8"))
+        assert resp.status == 200, refresh
+        assert refresh["ok"] is True
+        assert refresh["market_status"]["schema_version"] == 2
+        assert (tmp_path / "docs/data/market_status.json").exists()
     finally:
         server.shutdown()
         server.server_close()

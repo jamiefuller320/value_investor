@@ -214,6 +214,9 @@ jobs:
         run: bash scripts/dispatch_library_gap_closure_followups.sh /tmp/gap_followup.json
 
       - name: Commit and push library ingest artifacts
+        env:
+          DISPATCH_PAGES: "true"
+          GH_TOKEN: ${{ github.token }}
         run: |
           bash scripts/push_library_ingest_artifacts.sh \
             'chore: library ingest sprint (parallel) [skip ci]'

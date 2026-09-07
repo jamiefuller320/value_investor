@@ -13,9 +13,11 @@ from value_investor.market_status import (
     INGEST_QUEUED,
     INGEST_SPRINT,
     LIVE_MARKET_ID,
+    ROLE_ADMITTED,
     ROLE_FOCUS,
     ROLE_LIVE,
     build_market_status,
+    write_market_status,
 )
 from value_investor.publish import build_dashboard_bundle, publish_dashboard
 from value_investor.storage import write_json
@@ -281,7 +283,7 @@ def test_build_market_status_classifies_ingest_and_signals(tmp_path: Path):
         live_run_at="2026-09-03T09:00:00+00:00",
     )
 
-    assert payload["schema_version"] == 1
+    assert payload["schema_version"] == 2
     assert payload["focus_market"] == "euro_depth"
     assert payload["summary"]["sprint_count"] >= 3
     assert payload["summary"]["live_count"] == 1
@@ -346,7 +348,7 @@ def test_publish_includes_market_status(tmp_path: Path):
     _write_sample_output(tmp_path)
     bundle = build_dashboard_bundle(tmp_path)
     assert bundle["market_status"]
-    assert bundle["market_status"]["schema_version"] == 1
+    assert bundle["market_status"]["schema_version"] == 2
     live = _by_id(bundle["market_status"], LIVE_MARKET_ID)
     assert live["signal_counts"]["strong_buy"] == 1
     assert live["ticker_count"] == 2
@@ -360,7 +362,7 @@ def test_publish_writes_market_status_sidecar(tmp_path: Path):
     sidecar = dest_dir / "data" / "market_status.json"
     assert sidecar.exists()
     payload = json.loads(sidecar.read_text(encoding="utf-8"))
-    assert payload["schema_version"] == 1
+    assert payload["schema_version"] == 2
     assert any(row["market_id"] == LIVE_MARKET_ID for row in payload["markets"])
 
 
@@ -371,6 +373,11 @@ def test_dashboard_assets_include_market_status_grid():
     assert "function renderMarketStatusGrid(data)" in app
     assert "function openMarketStatusCard(marketId)" in app
     assert "function renderMarketStatusCard(row)" in app
+    assert "row.is_admitted" in app
+    assert "Epoch-0 book" in app
+    assert "Near-miss watch" in app
+    assert "function bindDashboardAutoRefresh()" in app
+    assert "async function applyDashboardSidecars(data)" in app
     assert 'id="market-status-dialog"' in html
     assert 'id="market-status-body"' in html
     assert ".market-status-grid" in css
@@ -388,3 +395,133 @@ def test_dashboard_assets_include_system_gaps_card():
     assert 'id="system-gaps-body"' in html
     assert ".system-gaps-grid" in css
     assert ".system-gap-tile" in css
+
+
+def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
+    library = _seed_library(tmp_path / "library")
+    policy = json.loads((library / "policy.json").read_text(encoding="utf-8"))
+    policy["ladder"] = {
+        "admitted_learning_markets": ["sp500", "asx200"],
+        "weekly_paper_shard_markets": ["euro_depth"],
+    }
+    policy["ingest_parallel_sprint"] = ["tsx60"]
+    policy["ingest_parallel_sprint_2"] = ["ftse_smallcap"]
+    policy["ingest_exhausted_markets"] = ["sp500"]
+    policy["ftse_equivalent_markets"] = ["sp500"]
+    (library / "policy.json").write_text(json.dumps(policy), encoding="utf-8")
+    write_json(
+        library / "equal_support_status.json",
+        {
+            "generated_at": "2026-09-07T10:54:00+00:00",
+            "admitted": ["sp500", "asx200"],
+            "ai_judgment": False,
+            "knob_apply": False,
+            "markets": {
+                "sp500": {
+                    "buy_tier_not_now_count": 12,
+                    "hold_near_buy_count": 152,
+                    "not_buy_tier_count": 363,
+                    "never_buy_tier_count": 336,
+                    "rememo_eligible_count": 54,
+                    "timing_signal_present": True,
+                }
+            },
+        },
+        compact=False,
+    )
+    write_json(
+        library / "markets" / "sp500" / "screen" / "near_miss_watch.json",
+        {
+            "buy_tier_not_now_count": 12,
+            "hold_near_buy_count": 152,
+            "not_buy_tier_count": 363,
+            "never_buy_tier_count": 336,
+            "timing_signal_present": True,
+            "buy_tier_not_now": [{"ticker": "XYZ"}],
+            "hold_near_buy": [{"ticker": "ABC"}],
+        },
+        compact=False,
+    )
+    dispatch = json.loads((library / "euro_ingest_dispatch.json").read_text(encoding="utf-8"))
+    dispatch["maintenance_markets"] = ["sp500"]
+    dispatch["should_run_library_maintenance"] = True
+    dispatch["sprint_markets"] = ["euro_depth"]
+    dispatch["parallel_sprint_markets"] = ["tsx60"]
+    dispatch["parallel_sprint_2_markets"] = ["ftse_smallcap"]
+    dispatch["parallel_sprint_status"] = []
+    (library / "euro_ingest_dispatch.json").write_text(json.dumps(dispatch), encoding="utf-8")
+
+    shard = tmp_path / "paper" / "sp500"
+    write_json(
+        shard / "weekday_batch_log.json",
+        {
+            "updated_at": "2026-09-07T10:31:56+00:00",
+            "entries": [
+                {
+                    "run_at": "2026-09-07T10:31:56+00:00",
+                    "cadence": "epoch0",
+                    "ai_judgment": False,
+                    "knob_apply": False,
+                    "tracks_acted": {"buy_tier_level": True},
+                }
+            ],
+        },
+        compact=False,
+    )
+    write_json(
+        shard / "buy_tier_level" / "automated_fund.json",
+        {
+            "cash": 0.0,
+            "contributed_capital": 1000.0,
+            "holdings": {"AAA": {"ticker": "AAA"}, "BBB": {"ticker": "BBB"}},
+            "equity_curve": [
+                {"at": "2026-09-07T10:31:56+00:00", "portfolio_value": 737.41, "cash": 0.0}
+            ],
+        },
+        compact=False,
+    )
+
+    payload = build_market_status(
+        library_root=library,
+        policy_path=library / "policy.json",
+        dispatch_path=library / "euro_ingest_dispatch.json",
+        shard_root=tmp_path / "paper",
+        live_signal_counts={"hold": 1},
+    )
+    sp500 = _by_id(payload, "sp500")
+    assert sp500["is_admitted"] is True
+    assert sp500["role"] == ROLE_ADMITTED
+    assert sp500["ingest"] == INGEST_MAINTENANCE
+    assert sp500["ingest_exhausted"] is True
+    assert sp500["shared_maintenance"] is True
+    assert sp500["is_ftse_equivalent"] is True
+    assert sp500["learning_phase_label"] == "Epoch-0 level"
+    assert sp500["epoch0"]["holdings"] == 2
+    assert sp500["epoch0"]["nav"] == 737.41
+    assert sp500["near_miss"]["buy_tier_not_now_count"] == 12
+    assert sp500["near_miss"]["hold_near_buy_sample"] == ["ABC"]
+    assert sp500["equal_support"]["rememo_eligible_count"] == 54
+    assert payload["admitted_markets"] == ["sp500", "asx200"]
+    assert payload["summary"]["should_run_library_maintenance"] is True
+
+    dest = tmp_path / "docs" / "data" / "market_status.json"
+    write_json(
+        tmp_path / "docs" / "data" / "latest.json",
+        {
+            "run_at": "2026-09-07T00:00:00+00:00",
+            "meta": {"company_count": 2, "signal_counts": {"hold": 2}},
+        },
+        compact=False,
+    )
+    path = write_market_status(
+        library_root=library,
+        policy_path=library / "policy.json",
+        dispatch_path=library / "euro_ingest_dispatch.json",
+        shard_root=tmp_path / "paper",
+        latest_path=tmp_path / "docs" / "data" / "latest.json",
+        path=dest,
+    )
+    assert path == dest
+    written = json.loads(dest.read_text(encoding="utf-8"))
+    assert written["schema_version"] == 2
+    assert _by_id(written, LIVE_MARKET_ID)["ticker_count"] == 2

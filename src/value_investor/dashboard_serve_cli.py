@@ -1,8 +1,10 @@
 """Local dashboard server with progress-report generate API.
 
 GitHub Pages is static and cannot run ``ftse-progress-report``. This CLI serves
-``docs/`` and exposes ``POST /api/progress-report`` so the Overview Generate
-button can refresh artifacts while developing locally.
+``docs/`` and exposes:
+
+- ``POST /api/progress-report`` — rebuild the Overview progress report
+- ``POST /api/refresh`` — rebuild ``market_status.json`` after local ingest/action work
 """
 
 from __future__ import annotations
@@ -31,6 +33,17 @@ DEFAULT_PORT = 8765
 def _json_bytes(payload: dict[str, Any], *, status: int = 200) -> tuple[int, bytes, str]:
     body = (json.dumps(payload, indent=2) + "\n").encode("utf-8")
     return status, body, "application/json; charset=utf-8"
+
+
+def _refresh_market_status(repo_root: Path) -> dict[str, Any]:
+    from value_investor.market_status import DEFAULT_MARKET_STATUS_PATH, write_market_status
+    from value_investor.storage import read_json
+
+    path = write_market_status(
+        latest_path=repo_root / "docs" / "data" / "latest.json",
+        path=repo_root / DEFAULT_MARKET_STATUS_PATH,
+    )
+    return {"path": str(DEFAULT_MARKET_STATUS_PATH), "payload": read_json(path)}
 
 
 def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandler]:
@@ -89,6 +102,29 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
 
         def do_POST(self) -> None:  # noqa: N802
             parsed = urlparse(self.path)
+            if parsed.path == "/api/refresh":
+                try:
+                    market = _refresh_market_status(repo_root)
+                except Exception as exc:  # noqa: BLE001 — surface to UI
+                    status, body, ctype = _json_bytes(
+                        {
+                            "ok": False,
+                            "error": str(exc),
+                            "traceback": traceback.format_exc(),
+                        },
+                        status=500,
+                    )
+                    self._send(status, body, ctype)
+                    return
+                status, body, ctype = _json_bytes(
+                    {
+                        "ok": True,
+                        "market_status": market["payload"],
+                        "paths": {"market_status": market["path"]},
+                    }
+                )
+                self._send(status, body, ctype)
+                return
             if parsed.path != "/api/progress-report":
                 self._send(404, b"Not found\n", "text/plain; charset=utf-8")
                 return
@@ -108,6 +144,11 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
                 )
                 self._send(status, body, ctype)
                 return
+            market_path = None
+            try:
+                market_path = _refresh_market_status(repo_root)["path"]
+            except Exception as exc:  # noqa: BLE001
+                sys.stderr.write(f"market status refresh skipped: {exc}\n")
             status, body, ctype = _json_bytes(
                 {
                     "ok": True,
@@ -115,6 +156,7 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
                     "paths": {
                         "json": str(DEFAULT_REPORT_PATH),
                         "markdown": str(DEFAULT_MARKDOWN_PATH),
+                        "market_status": market_path,
                     },
                 }
             )
@@ -148,6 +190,7 @@ def main(argv: list[str] | None = None) -> int:
     url = f"http://{args.host}:{args.port}/"
     print(f"Serving dashboard at {url}")
     print("POST /api/progress-report  →  ftse-progress-report build --write")
+    print("POST /api/refresh          →  rebuild market_status.json")
     print("Ctrl+C to stop")
     try:
         server.serve_forever()

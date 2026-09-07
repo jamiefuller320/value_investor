@@ -571,6 +571,18 @@ def refresh_euro_ingest_dispatch(
         except Exception as exc:  # noqa: BLE001
             logger.warning("Euro ingest cron sync failed: %s", exc)
             evaluation["cron_sync"] = {"error": str(exc)}
+    try:
+        from value_investor.market_status import write_market_status
+
+        evaluation["market_status_path"] = str(
+            write_market_status(
+                library_root=library_root,
+                policy_path=policy_path,
+            )
+        )
+    except Exception as exc:  # noqa: BLE001 — dashboard sidecar must not fail ingest
+        logger.warning("Market status refresh skipped: %s", exc)
+        evaluation["market_status_error"] = str(exc)
     return evaluation
 
 

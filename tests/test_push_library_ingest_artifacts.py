@@ -196,3 +196,29 @@ def test_push_does_not_commit_stale_ops_status(tmp_path: Path):
     dispatch = _git(work, "show", "origin/main:docs/data/library/euro_ingest_dispatch.json").stdout
     assert '"run_at":"new"' in ops.replace(" ", ""), f"ops_status was clobbered:\n{ops}"
     assert '"run":"job"' in dispatch.replace(" ", ""), dispatch
+
+
+def test_ingest_and_action_workflows_dispatch_pages_after_skip_ci() -> None:
+    script = Path("scripts/push_library_ingest_artifacts.sh").read_text(encoding="utf-8")
+    assert "docs/data/market_status.json" in script
+    assert "DISPATCH_PAGES" in script
+    helper = Path("scripts/dispatch_pages.sh").read_text(encoding="utf-8")
+    assert "gh workflow run pages.yml" in helper
+    workflows = Path(".github/workflows")
+    ingest = "\n".join(
+        (workflows / name).read_text(encoding="utf-8")
+        for name in (
+            "euro-ingest-loop.yml",
+            "library-ingest-maintenance.yml",
+            "library-ingest-sprint.yml",
+            "library-ingest-sprint-2.yml",
+        )
+    )
+    assert ingest.count("DISPATCH_PAGES") >= 4
+    assert "scripts/dispatch_pages.sh" in (workflows / "paper-auto.yml").read_text(encoding="utf-8")
+    assert "scripts/dispatch_pages.sh" in (workflows / "engineering-queue.yml").read_text(
+        encoding="utf-8"
+    )
+    grow = (workflows / "library-grow.yml").read_text(encoding="utf-8")
+    assert "market-status" in grow
+    assert "docs/data/market_status.json" in grow

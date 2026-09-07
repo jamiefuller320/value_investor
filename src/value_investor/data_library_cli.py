@@ -1097,6 +1097,31 @@ def build_parser() -> argparse.ArgumentParser:
     auto_p.add_argument("--json", action="store_true")
     auto_p.set_defaults(func=cmd_automation_status)
 
+    market_status_p = sub.add_parser(
+        "market-status",
+        parents=[common],
+        help="Rebuild the dashboard market-status grid sidecar (no full screen publish)",
+    )
+    market_status_p.add_argument(
+        "--output",
+        type=Path,
+        default=Path("docs/data/market_status.json"),
+        help="Write path (default: docs/data/market_status.json)",
+    )
+    market_status_p.add_argument(
+        "--latest",
+        type=Path,
+        default=Path("docs/data/latest.json"),
+        help="Published latest.json used for the live FTSE tile",
+    )
+    market_status_p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print summary without writing",
+    )
+    market_status_p.add_argument("--json", action="store_true")
+    market_status_p.set_defaults(func=cmd_market_status)
+
     return parser
 
 
@@ -2801,6 +2826,51 @@ def cmd_automation_status(args: argparse.Namespace) -> int:
     print(f"Timeline events: {len(timeline)}")
     for event in timeline[:8]:
         print(f"  {event.get('at')}: {event.get('title')}")
+    if not args.dry_run:
+        print(f"Wrote: {payload.get('wrote')}")
+    return 0
+
+
+def cmd_market_status(args: argparse.Namespace) -> int:
+    from value_investor.market_status import (
+        build_market_status,
+        live_inputs_from_latest,
+        write_market_status,
+    )
+
+    live = live_inputs_from_latest(args.latest)
+    if args.dry_run:
+        payload = build_market_status(
+            library_root=args.root,
+            policy_path=args.policy,
+            live_meta=live["live_meta"],
+            live_signal_counts=live["live_signal_counts"],
+            live_run_at=live["live_run_at"],
+            live_ingest_stalled=live["live_ingest_stalled"],
+        )
+    else:
+        path = write_market_status(
+            library_root=args.root,
+            policy_path=args.policy,
+            latest_path=args.latest,
+            path=args.output,
+        )
+        from value_investor.storage import read_json as _read_json
+
+        payload = {**_read_json(path), "wrote": str(path)}
+
+    if args.json:
+        print(json.dumps(payload, indent=2, default=str))
+        return 0
+
+    summary = payload.get("summary") or {}
+    print(f"Focus: {payload.get('focus_market')}")
+    print("Admitted: " + (", ".join(payload.get("admitted_markets") or []) or "—"))
+    print(
+        f"Sprint {summary.get('sprint_count', 0)}  "
+        f"maintenance {summary.get('maintenance_count', 0)}  "
+        f"live {summary.get('live_count', 0)}"
+    )
     if not args.dry_run:
         print(f"Wrote: {payload.get('wrote')}")
     return 0
