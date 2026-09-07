@@ -2,20 +2,24 @@
   "ticker": "GIB-A.TO",
   "company_name": "CGI Inc.",
   "market": "tsx60",
-  "built_at": "2026-07-26T17:53:57.160879+00:00",
+  "built_at": "2026-09-07T13:51:47.145304+00:00",
   "inventory": {
     "available": {
       "filings_index": true,
       "filings_bodies": false,
       "yahoo_financials": true,
+      "yahoo_quarterly_cashflow": true,
+      "yahoo_quarterly_income": true,
       "news_manifest": true,
       "screening_snapshot": true,
-      "macro_context": false,
+      "screen_run_manifest": false,
+      "ir_presentation_metrics": true,
+      "macro_context": true,
       "alternate_news": true
     },
     "thin": [
       "filings_bodies",
-      "macro_context"
+      "screen_run_manifest"
     ],
     "filings_body_files": 0,
     "filings_indexed_bodies": 0,
@@ -23,17 +27,57 @@
       "total": 0,
       "annual": 0,
       "interim": 0,
+      "trading_update": 0,
       "other": 0,
-      "with_body": 0
+      "with_body": 0,
+      "period_coverage": {
+        "annual": {
+          "total": 0,
+          "with_body": 0
+        },
+        "interim": {
+          "total": 0,
+          "with_body": 0
+        },
+        "trading_update": {
+          "total": 0,
+          "with_body": 0
+        },
+        "other": {
+          "total": 0,
+          "with_body": 0
+        }
+      }
     },
-    "news_article_count": 58,
+    "period_coverage": {
+      "annual": {
+        "total": 0,
+        "with_body": 0
+      },
+      "interim": {
+        "total": 0,
+        "with_body": 0
+      },
+      "trading_update": {
+        "total": 0,
+        "with_body": 0
+      },
+      "other": {
+        "total": 0,
+        "with_body": 0
+      }
+    },
+    "news_article_count": 86,
     "evidence_ladder": [
       "filings_bodies",
       "filings_index",
       "yahoo_financials",
+      "yahoo_quarterly_cashflow",
       "news_manifest",
       "alternate_news",
       "screening_snapshot",
+      "screen_run_manifest",
+      "ir_presentation_metrics",
       "macro_context"
     ]
   },
@@ -45,7 +89,21 @@
     "note": "refetch_missing_filing_bodies"
   },
   "ch_refetch": {},
-  "alternate_news_added": 8,
+  "investegate_refetch": {},
+  "ticker_rns_refetch": {},
+  "ir_refetch": {},
+  "screen_run_manifest": {
+    "attached": false,
+    "reason": "not_ftse350"
+  },
+  "ir_presentation_metrics": {
+    "bridge_count": 0,
+    "segment_split_count": 0,
+    "lease_maturity_count": 0,
+    "mandatory": false,
+    "path": "docs/data/library/markets/tsx60/screen/research/GIB-A.TO/sources/ir_presentation_metrics.json"
+  },
+  "alternate_news_added": 6,
   "alternate_news_path": "docs/data/library/markets/tsx60/screen/research/GIB-A.TO/sources/alternate_news.json",
   "planned_alternate_sources": [
     {
@@ -65,10 +123,13 @@
     "filings_bodies",
     "filings_index",
     "yahoo_financials",
+    "yahoo_quarterly_cashflow",
     "news_manifest",
     "alternate_news",
     "screening_snapshot",
+    "screen_run_manifest",
+    "ir_presentation_metrics",
     "macro_context"
   ],
-  "instructions": "Walk evidence_ladder in order. Cite what was tried. Prefer filings/bodies/*.txt when present. If still unresolved, pick from planned_alternate_sources and emit RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
+  "instructions": "Walk evidence_ladder in order. Cite what was tried. Prefer filings/bodies/*.txt when present. Use screen_run_manifest.json for universe-level signal counts and ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines, segment revenue splits, and IFRS 16 lease maturity tables. If still unresolved, pick from planned_alternate_sources and emit RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
 }
