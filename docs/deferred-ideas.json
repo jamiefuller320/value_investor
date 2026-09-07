@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-07T10:08:18+00:00",
+  "updated_at": "2026-09-07T10:14:34+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7151,6 +7151,23 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
       "added_at": "2026-09-07T10:08:18+00:00"
+    },
+    {
+      "id": "L323",
+      "category": "later",
+      "section": "ops",
+      "title": "Split or stagger maintenance ingest per admitted market",
+      "summary": "library-ingest-maintenance.yml loops admitted markets sequentially inside one 120-minute job at 62 targets / 3600s each. Once two or more markets are at the maintenance threshold, give each its own staggered slot or workflow so equivalent resource is not clipped by the shared timeout. Do not solve this with a fourth equal sprint stream.",
+      "revisit_when": "A second market besides the sprint head is on ingest_exhausted_markets or ingest_parity_markets and maintenance runs are hitting timeout-minutes or skipping a tail market",
+      "tags": [
+        "ingest",
+        "maintenance",
+        "stagger",
+        "wall-clock"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T10:14:34+00:00"
     }
   ],
   "fragments": [
