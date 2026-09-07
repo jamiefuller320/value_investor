@@ -82,6 +82,28 @@ Independence answers *how books are kept apart*. **Gates + capacity** answer *wh
 
 AI-judgment on a shard is also **not** treated as FTSE-equivalent until filing/memo parity looks FTSE-like (`phase1_require_ai_beat_rules` stays false on the euro pilot until then). A raw buy-tier list without bodies is enough to *hold names in observe-sim*; it is not enough to start an AI learning epoch.
 
+### Practical limits (why not every shard yesterday)
+
+Book isolation is already true: shards do **not** write FTSE `docs/data/latest.json` or FTSE `paper_automation/` configs, and shard `decision-review` runs with `apply=False` until Phase 3 + N26. Live-book contamination is not the binding constraint.
+
+What *is* binding if “apply FTSE machinery to all shards as soon as possible” means the full weekday stack (ingest volume, rememo, paper tracks, review, human spot-check):
+
+| Constraint | Why it does not parallelize cleanly |
+|------------|-------------------------------------|
+| **Shared producers** | Ingest runners, Sunday ladder, `weekly_ops`, engineering queue, and human review are one pool. The ingest cascade already makes spare streams wait on `euro_depth` so they cannot starve the head. Full FTSE ingest volume (62 targets, ≤4×/day) on every shard would invert that. |
+| **Calendar span** | Phase 1 / `learning_ready` need dated Sunday archives. Extra jobs do not create 12 unique weeks. |
+| **Filing yield** | Same `ingest-loop` ≠ same bodies. ESEF / EDGAR / ASX IR / leftover 8-Ks differ. AI tracks without bodies are observe noise. |
+| **`weekly_ops`** | One envelope (currently $80) funds euro_depth selective research + Sunday email — not 21-market memo spray (`research_all_graduated: false`). |
+| **Weekly paper slot** | One Sunday batch is cheap (screen adapter → tracks → review, no apply). Capacity 1 is depth-first policy (N66 / N94), not a CPU wall. A `phase1_ready` market still sits in Phase 1 with blocker `{id} not in weekly_paper_shard_markets`. |
+| **Weekday replica** | Overlay refresh, rememo, 62-target ingest, session/timezone cron, human spot-check. Phase 3 stays **one** non-FTSE weekday pilot at a time. |
+| **Phase 4** | Live-screen inclusion is a **project** gate (FTSE 2b persistent excess **and** one shard through Phase 3), not per-shard independence. |
+
+**Independent promotion when robust is the intended Phase 1–3 end-state** — once the archive/filing gates are met *and* a slot is free. It is not “turn on the full FTSE weekday stack everywhere now, then wait for robustness.” The machinery that *creates* robustness (filing deepen, memos, weekday cadence) is the zero-sum part. Observe-sim + ingest-profile screen-lite already apply the cheap, independent slice to focus + sprint + parity + `ftse_equivalent_markets`.
+
+Ticker-level research is also not a perfect air gap: observe-sim / shard paper read focus research ∪ every other `markets/*/screen/research` so sibling-home memos work for dual-listed names. That is not book-P&L contamination.
+
+Raising weekly-paper capacity once a second market is `phase1_ready` and Sunday headroom exists is L152. Auto-enqueue of every `phase1_ready` name into `weekly_paper_shard_markets` is later (L318) — do not do it while capacity stays 1 on `euro_depth`.
+
 ## Phases and timescale
 
 Use **Sunday ladder cycles** and **archive counts**, not calendar deadlines. The Sunday quiet bundle is the natural heartbeat (~1 screen-lite pass per market per week when that market is in the maintenance/screen set).
@@ -141,7 +163,7 @@ constituents — buy-tier depth only.
 
 **Enter when:** Phase 2 exit met **and** [promotion criteria](#promotion-criteria-l127) satisfied for that market.
 
-**Concurrency:** **One** non-FTSE weekday pilot at a time until L107 dashboard panel ships.
+**Concurrency:** **One** non-FTSE weekday pilot at a time (ops/review load, not book isolation).
 
 **Exit gate:** ≥ **8** weekly marks on weekday cadence; ≥ **15** closed exit-shadow episodes per primary track (N25/N26 floors); local-benchmark excess stable over rolling window.
 
