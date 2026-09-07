@@ -142,6 +142,8 @@ class CompanyReport:
     research_risk_level: str | None = None
     research_confidence: float | None = None
     research_rationale: str | None = None
+    interim_eps_decline_pct: float | None = None
+    adjusted_eps_growth_pct: float | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -210,6 +212,8 @@ class CompanyReport:
             "research_risk_level": self.research_risk_level,
             "research_confidence": self.research_confidence,
             "research_rationale": self.research_rationale,
+            "interim_eps_decline_pct": self.interim_eps_decline_pct,
+            "adjusted_eps_growth_pct": self.adjusted_eps_growth_pct,
         }
 
     @classmethod
@@ -290,6 +294,8 @@ class CompanyReport:
             research_risk_level=data.get("research_risk_level"),
             research_confidence=data.get("research_confidence"),
             research_rationale=data.get("research_rationale"),
+            interim_eps_decline_pct=data.get("interim_eps_decline_pct"),
+            adjusted_eps_growth_pct=data.get("adjusted_eps_growth_pct"),
         )
 
 
@@ -954,6 +960,13 @@ def build_company_reports(
             and not (isinstance(interim_decline, float) and pd.isna(interim_decline))
             else None
         )
+        adjusted_metric = row.get("adjusted_eps_growth_pct")
+        adjusted_eps_growth_pct = (
+            float(adjusted_metric)
+            if adjusted_metric is not None
+            and not (isinstance(adjusted_metric, float) and pd.isna(adjusted_metric))
+            else None
+        )
         dividends = row.get("dividends_paid")
         dividends_paid = (
             float(dividends)
@@ -1039,13 +1052,7 @@ def build_company_reports(
             earnings_basis_overlay = bool(earnings_basis_overlay_flag)
         else:
             statutory_growth = resolve_statutory_earnings_growth(row)
-            adjusted_metric = row.get("adjusted_eps_growth_pct")
-            adjusted_growth = (
-                float(adjusted_metric)
-                if adjusted_metric is not None
-                and not (isinstance(adjusted_metric, float) and pd.isna(adjusted_metric))
-                else None
-            )
+            adjusted_growth = adjusted_eps_growth_pct
             earnings_basis_overlay, adjusted_signal_str, conviction_score = (
                 apply_earnings_basis_overlay_to_signal(
                     signal,
@@ -1312,6 +1319,8 @@ def build_company_reports(
                 research_risk_level=research_risk_str,
                 research_confidence=research_confidence,
                 research_rationale=research_rationale_str,
+                interim_eps_decline_pct=interim_eps_decline_pct,
+                adjusted_eps_growth_pct=adjusted_eps_growth_pct,
             )
         )
 

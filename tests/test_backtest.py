@@ -1,5 +1,7 @@
 """Tests for signal backtest framework."""
 
+from datetime import UTC, datetime
+
 from value_investor.backtest import (
     BacktestSummary,
     RunSnapshot,
@@ -77,3 +79,40 @@ def test_backtest_insufficient_history_note():
     summary = BacktestSummary(run_count=1, note="Need at least 2 archived runs")
     text = format_backtest_text(summary)
     assert "2 archived runs" in text
+
+
+def test_save_run_snapshot_keeps_overlay_fields(tmp_path, monkeypatch):
+    import pandas as pd
+
+    from value_investor.backtest import load_run_snapshots, save_run_snapshot
+
+    monkeypatch.setattr(
+        "value_investor.backtest.snapshot_prices",
+        lambda tickers: {ticker: 10.0 for ticker in tickers} | {"^FTSE": 8000.0},
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "AAA.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.8,
+                "data_quality_score": 0.9,
+                "research_verdict": "accumulate",
+                "adjusted_signal": "buy",
+                "fcf_basis_overlay": True,
+                "interim_eps_decline_pct": 0.04,
+                "adjusted_eps_growth_pct": 0.12,
+            }
+        ]
+    )
+    save_run_snapshot(
+        tmp_path,
+        run_at=datetime(2026, 9, 7, tzinfo=UTC),
+        signals=signals,
+    )
+    row = load_run_snapshots(tmp_path)[0].signals[0]
+    assert row["research_verdict"] == "accumulate"
+    assert row["adjusted_signal"] == "buy"
+    assert row["fcf_basis_overlay"] in (True, 1)
+    assert row["interim_eps_decline_pct"] == 0.04
+    assert row["adjusted_eps_growth_pct"] == 0.12

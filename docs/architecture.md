@@ -156,6 +156,12 @@ Assembled by `build_dashboard_bundle()` in `publish.py`:
 `research[]` index entry: `ticker`, `name`, `version`, `updated_at`, truncated
 `executive_summary`, verdict fields, `source_counts`, `memo_quality`, `memo_path`.
 
+Published `reports[]` also keep screen overlay inputs the paper path can see:
+`adjusted_signal`, `research_verdict`, `fcf_basis_overlay`,
+`interim_eps_decline_pct`, and `adjusted_eps_growth_pct`. History snapshots
+(`output/history/run_*.json.gz`) persist the same overlay columns when present
+so replay is not limited to raw `signal`.
+
 ---
 
 ## Historical replay
@@ -209,3 +215,4 @@ a third parallel store.
 - [`ops/data-backup.md`](ops/data-backup.md) — tier-1 + code backup, restore drill, scheduling
 - [`ops/backtest-health.md`](ops/backtest-health.md) — archived run snapshot audit and safe repair
 - [`ops/primary-learning-track.md`](ops/primary-learning-track.md) — paper book vs market
+- [`ops/project-audit.md`](ops/project-audit.md) — dated integrity audit (logic, data spec, deferred)

@@ -1186,6 +1186,7 @@ def test_build_company_reports_interim_quality_uses_filing_fcf_for_megp():
 
     assert snapshot["interim_quality_overlay"] is True
     assert snapshot["adjusted_signal"] == "buy"
+    assert snapshot["interim_eps_decline_pct"] == pytest.approx(0.039)
     assert "Interim-quality overlay" in report.summary
 
 
