@@ -29,6 +29,12 @@ def test_ingest_allowed_paths_include_companies_house_module_tests():
     assert "tests/test_companies_house.py" in paths
 
 
+def test_ingest_allowed_paths_include_research_ingest_companion_tests():
+    paths = AREA_ALLOWED_PATHS["ingest"]
+    assert "src/value_investor/research/ingest.py" in paths
+    assert "tests/test_research_ingest.py" in paths
+
+
 def test_needs_engineering_implementation_filters_ingest_retry_only():
     assert (
         needs_engineering_implementation(
