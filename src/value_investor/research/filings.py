@@ -309,6 +309,12 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "primary below the substantiveness gate; EX-99.1 press release fetches but is not the "
         "indexed URL and 10-K/10-Q are already bodied."
     ),
+    "LMT": (
+        "Leftover indexed-without-body row is Item 8.01 pension buy-out 8-K iXBRL primary "
+        "below the substantiveness gate; narrative extraction trims at a forward-looking "
+        "Management's Discussion cross-reference and SEC complete-submission .txt is fetchable "
+        "but not the indexed URL and 10-K/10-Q are already bodied."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.

@@ -6150,6 +6150,18 @@ def test_parked_source_hunter_skip_ldos_sp500():
     assert fetch_filings_ir_allowlist("LDOS") == []
 
 
+def test_parked_source_hunter_skip_lmt_sp500():
+    """eng-20260907-09: LMT leftover IWB is Item 8.01 pension buy-out 8-K, not missing 10-K/10-Q."""
+    assert "LMT" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["LMT"]
+    assert "8.01" in reason
+    assert "8-K" in reason
+    assert "pension" in reason
+    assert "substantiveness" in reason
+    assert "10-K/10-Q" in reason
+    assert fetch_filings_ir_allowlist("LMT") == []
+
+
 def test_ldos_acquisition_8k_primary_fails_substantiveness_gate(monkeypatch):
     """eng-20260907-08: LDOS Mar 2026 Entrust acquisition-closing 8-K primary is below gate."""
     cover_html = """
@@ -6241,6 +6253,51 @@ def test_intu_item901_8k_primary_fails_substantiveness_gate(monkeypatch):
     monkeypatch.setattr("value_investor.research.filings._http_get", fake_http_get)
     body = fetch_filing_body(
         "https://www.sec.gov/Archives/edgar/data/896878/000089687825000050/intu-20251120.htm"
+    )
+    assert body is None
+
+
+def test_lmt_pension_8k_primary_fails_substantiveness_gate(monkeypatch):
+    """eng-20260907-09: LMT Dec 2025 Item 8.01 pension buy-out 8-K primary is below gate."""
+    cover_html = """
+    <html><body>
+    <ix:header><ix:hidden>dei:EntityRegistrantName LOCKHEED MARTIN CORPORATION</ix:hidden></ix:header>
+    <div>FORM 8-K CURRENT REPORT</div>
+    <p>Item 8.01 Other Events.</p>
+    <p>On December 16, 2025, Lockheed Martin Corporation executed buy-out conversions of group
+    annuity contracts previously purchased using assets from certain defined benefit pension plans.
+    The conversions result in the transfer of approximately $900 million of gross pension
+    obligations from the plans to certain insurance companies with no additional costs or funding
+    contributions required by Lockheed Martin. Upon completion, the insurance companies legally
+    assumed the pension obligations for approximately 9,000 U.S. retirees and beneficiaries.
+    The Company expects to recognize a non-cash, non-operating pretax settlement charge of
+    approximately $480 million in the fourth quarter of 2025.</p>
+    <p>Forward Looking Statements</p>
+    <p>See Management\u2019s Discussion and Analysis of Financial Condition and Results of Operations
+    and Risk Factors in the Company\u2019s most recent Annual Report on Form 10-K and subsequent
+    quarterly reports on Form 10-Q. The Company\u2019s filings may be accessed through the Investor
+    Relations page of its website, www.lockheedmartin.com/investor, or through the website
+    maintained by the SEC at www.sec.gov. Except where required by applicable law, the Company
+    expressly disclaims a duty to provide updates to forward-looking statements after the date
+    of this Form 8-K to reflect subsequent events, changed circumstances, changes in expectations,
+    or the estimates and assumptions associated with them. The forward-looking statements in this
+    Form 8-K are intended to be subject to the safe harbor protection provided by the federal
+    securities laws.</p>
+    <p>SIGNATURE Pursuant to the requirements of the Securities Exchange Act of 1934,
+    LOCKHEED MARTIN CORPORATION By: /s/ John E. Stevens Date: December 18, 2025</p>
+    </body></html>
+    """
+
+    def fake_http_get(url, headers=None, timeout=60):
+        if url.endswith("lmt-20251218.htm"):
+            return cover_html.encode("utf-8")
+        if url.endswith("0000936468-25-000057-index.htm"):
+            return b'<html><body><a href="lmt-20251218.htm">8-K</a></body></html>'
+        raise AssertionError(f"unexpected url {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_http_get)
+    body = fetch_filing_body(
+        "https://www.sec.gov/Archives/edgar/data/936468/000093646825000057/lmt-20251218.htm"
     )
     assert body is None
 
