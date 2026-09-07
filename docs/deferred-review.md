@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T19:58:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T22:37:03+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -323,6 +323,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L310 | **Follow 8-K EX-99.1 or stop counting leftover 8-K IWB for S&P parity** | S&P buy-tier 10-K/10-Q already have bodies. Remaining indexed_without_body=15 is 8-K cover HTML (FICO earnings releases, APTV/CRH/etc.). Residual refetch already runs; exhibit helper is documented for 6-K. Either rank EX-99.1/earnings PDFs on 8-K index pages, prune after failed residual, or exclude period=other 8-K from FTSE-equivalent filing_ready so the 15-row tail does not block learning_ready. | sp500 filing_ready is still false with unmeasured=zero=thin=0 and only 8-K IWB remains after a weekday residual pass |
 | L314 | **Stamp FCF and filing PIT onto weekly run snapshots** | ARCHIVE_SIGNAL_FIELDS has signal, conviction, timing, overlay, and trade_plan, but not FCF basis or filing figures. Archive counterfactuals cannot replay FCF-aware policies until those fields are stored point-in-time on each weekly snapshot. | Live-path FCF/filing bind is producing stable PIT fields on the weekday screen and we want archive labs to replay FCF-aware entry or overlay rules. |
 | L315 | **Daily or fill-level marks for archive lifecycle replay** | Weekly snapshot prints are not fills. Lifecycle labs can apply an explicit cost model, but they cannot simulate intraweek paths, limit fills, or daily stop hits until history stores denser prices. | The weekly buy-tier level book has a thick forward epoch and a lifecycle question actually depends on intraweek path rather than Sunday-to-Sunday marks. |
+| L340 | **IR body period reclassifier marks Aedifica FY packs as interim** | AED.BR RA25 and FY-2025 IR PDFs classify as annual from the URL, then _apply_headline_period flips them to interim after body extract. Coverage is measured (4 bodies) but period mix is wrong; do not treat this as a filing-quality win for annual cadence. | Reviewing euro_depth filing period quality or AED.BR annual coverage after the next deepen |
 
 ### Ops / reliability
 

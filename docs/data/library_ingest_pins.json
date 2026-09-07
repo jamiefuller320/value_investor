@@ -3,15 +3,9 @@
   "note": "Committed intensive pins for library weekday ingest. Expired rows are ignored. Remove or let until lapse after the named gap closes.",
   "pins": [
     {
-      "ticker": "AED.BR",
-      "market_id": "euro_depth",
-      "reason": "Last unmeasured euro buy-tier leftover. The ABI.BR IWB pin starved AED.BR after IR/LEI seeds landed. Pin so the next fat slot bootstraps Aedifica first.",
-      "until": "2026-09-14T00:00:00+00:00"
-    },
-    {
       "ticker": "ABI.BR",
       "market_id": "euro_depth",
-      "reason": "Wrong BMV 10-K allowlist replaced with AB InBev SEC 20-F / HY 6-K. Weekday 320s cap was the IWB blocker; pin drops the cap and skips discovery so the next euro slot retries ABI after AED.BR is measured.",
+      "reason": "Wrong BMV 10-K allowlist replaced with AB InBev SEC 20-F / HY 6-K. Weekday 320s cap was the IWB blocker; pin drops the cap and skips discovery so the next euro slot retries ABI. Unmeasured leftovers are prepended automatically and are no longer excluded.",
       "until": "2026-09-11T00:00:00+00:00"
     }
   ]

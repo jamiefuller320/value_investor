@@ -403,7 +403,7 @@ def test_run_library_ingest_loop_caps_discovery_so_deepen_still_runs(tmp_path: P
     assert ingest_calls == ["AAA.DE", "BBB.DE"]
     assert result.runtime_cutoff is False
     assert discovery_kwargs["max_runtime_seconds"] == 675.0
-    assert discovery_kwargs["prefer_tickers"] == ["BBB.DE", "AAA.DE"]
+    assert discovery_kwargs["prefer_tickers"] == ["AAA.DE", "BBB.DE"]
     assert result.discovery_scan["max_runtime_seconds"] == 675.0
     assert result.discovery_scan["forced_by_critical_path"] is True
 
