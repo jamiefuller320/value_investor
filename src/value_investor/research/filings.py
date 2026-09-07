@@ -294,6 +294,11 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "below the substantiveness gate; SEC complete-submission .txt is fetchable but not "
         "the indexed URL and 10-K/10-Q are already bodied."
     ),
+    "FICO": (
+        "Leftover indexed-without-body rows are Item 2.02 earnings-release 8-K cover HTML; "
+        "primary fails the substantiveness gate and EX-99.1 exhibits fetch but are not the "
+        "indexed URLs and duplicate already-bodied 10-Q filings."
+    ),
     "INTU": (
         "Leftover indexed-without-body row is Item 9.01 8-K cover HTML (Nov 2025 Q1 exhibit "
         "filing); primary fails the substantiveness gate and EX-99.01 fetches but is not the "
