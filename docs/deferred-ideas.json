@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-07T11:16:28+00:00",
+  "updated_at": "2026-09-07T11:23:57+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7291,6 +7291,40 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
       "added_at": "2026-09-07T11:16:28+00:00"
+    },
+    {
+      "id": "N106",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Decouple admitted-market maintenance crons from euro sprint mode",
+      "summary": "When euro_depth is still in sprint, cron_maintenance is false and sync turns off all four library-ingest-maintenance cron-job.org jobs. Dispatch already lists maintenance_markets as sp500+asx200. Admitted books then depend on flaky GitHub schedule (no maintenance run so far today). Keep those crons on whenever maintenance_markets is nonempty.",
+      "revisit_when": "Next weekday maintenance slot is missed while euro is still in sprint and admitted markets need deepen",
+      "tags": [
+        "ingest",
+        "maintenance",
+        "cron",
+        "admitted"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T11:23:57+00:00"
+    },
+    {
+      "id": "L329",
+      "category": "later",
+      "section": "ops",
+      "title": "Publish epoch-0 shard books from Sunday ladder commit",
+      "summary": "library-grow.yml runs ftse-library ladder (epoch0 + equal-support) but file_pattern is docs/data/library/** only. Fund marks under docs/data/paper_automation/markets/{sp500,asx200}/ are dropped after CI. First fill is already on main from the equal-support PR; later Sunday epoch0 refreshes will not persist unless the commit pattern includes those shard dirs.",
+      "revisit_when": "The next Sunday ladder runs after admitted epoch-0 and weekday_batch_log does not gain a new mark",
+      "tags": [
+        "epoch0",
+        "ladder",
+        "publish",
+        "paper-automation"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T11:23:57+00:00"
     }
   ],
   "fragments": [
