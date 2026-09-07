@@ -304,6 +304,11 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "filing); primary fails the substantiveness gate and EX-99.01 fetches but is not the "
         "indexed URL and duplicates the same-day 10-Q already bodied."
     ),
+    "LDOS": (
+        "Leftover indexed-without-body row is Item 2.01/7.01/9.01 acquisition-closing 8-K "
+        "primary below the substantiveness gate; EX-99.1 press release fetches but is not the "
+        "indexed URL and 10-K/10-Q are already bodied."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
