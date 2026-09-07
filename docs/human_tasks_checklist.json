@@ -14,7 +14,7 @@
         {
           "id": "weekday-verify-paper-auto",
           "title": "Spot-check learning tracks after paper-auto",
-          "summary": "Confirm weekday CI acted; on Automation tab compare AI judgment excess vs ^FTSE, rules control, and competing calibrated shadow knobs.",
+          "summary": "Confirm weekday CI acted; on Automation tab compare AI judgment excess vs ^FTSE, rules control, competing calibrated shadow knobs, and the Suite B buy_tier_level cohort after its Monday cold start.",
           "automated": false,
           "doc_path": "docs/ops/primary-learning-track.md",
           "doc_anchor": "commands"
@@ -22,7 +22,7 @@
         {
           "id": "weekday-paper-auto-runs",
           "title": "Paper-auto + decision-review apply",
-          "summary": "Runs all learning tracks (including competing calibrated shadows), refreshes overlay, appends rebalance_log, applies clamped knobs when history is thick. Shadows are observe-only (no --apply); endurance ledger refreshes after review.",
+          "summary": "Runs all learning tracks (including competing calibrated shadows and the Suite B buy_tier_level cohort), refreshes overlay, appends rebalance_log, applies clamped knobs when history is thick. Shadows and the cohort lab are observe-only (no --apply); endurance ledger refreshes after review.",
           "automated": true,
           "doc_path": "docs/ops/decision-review.md",
           "doc_anchor": "commands"
@@ -34,6 +34,14 @@
           "automated": true,
           "doc_path": "docs/ops/gha-secret-hygiene.md",
           "doc_anchor": "automated-daily-check"
+        },
+        {
+          "id": "weekday-buy-tier-level-first-fill",
+          "title": "Confirm buy-tier level cohort first fill",
+          "summary": "After Monday paper-auto, check docs/data/paper_automation/buy_tier_level/: empty cash should become a wide raw-screen buy-tier book under T212 costs. Knobs stay frozen. Do not treat first-fill NAV as promotion truth.",
+          "automated": false,
+          "doc_path": "docs/ops/buy-tier-cohort-labs.md",
+          "doc_anchor": "level-book-live-monday"
         }
       ]
     },
@@ -49,6 +57,14 @@
           "automated": false,
           "doc_path": "docs/ops/analysis-review.md",
           "doc_anchor": "artifacts"
+        },
+        {
+          "id": "sunday-buy-cross-archive",
+          "title": "Read buy-cross archive review",
+          "summary": "After analysis-review, read buy_cross_archive_review.json: cross-book vs level comparison, week-0 cash, names that never entered because they stayed buy-tier. Observe-only — do not spawn a live cross book from sparse historic crossings.",
+          "automated": false,
+          "doc_path": "docs/ops/buy-tier-cohort-labs.md",
+          "doc_anchor": "cross-book-archive-only"
         },
         {
           "id": "sunday-knob-calibration-priors",

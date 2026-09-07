@@ -16,15 +16,17 @@ most automation — this list is what still needs a human.
 
 | Task | Who | Doc |
 |------|-----|-----|
-| **Spot-check learning tracks** after paper-auto — AI excess vs ^FTSE, rules control, competing calibrated shadows | Human | [primary-learning-track.md](primary-learning-track.md#commands) |
-| Paper-auto + decision-review `--apply` (all tracks; shadows observe-only; endurance ledger) | CI | [decision-review.md](decision-review.md#commands) |
+| **Spot-check learning tracks** after paper-auto — AI excess vs ^FTSE, rules control, competing calibrated shadows, Suite B `buy_tier_level` after Monday cold start | Human | [primary-learning-track.md](primary-learning-track.md#commands) |
+| Paper-auto + decision-review `--apply` (all tracks including `buy_tier_level`; shadows + cohort lab observe-only; endurance ledger) | CI | [decision-review.md](decision-review.md#commands) |
 | **GHA secret hygiene** scan (skips if no merges / workflow touches in 36h) | CI | [gha-secret-hygiene.md](gha-secret-hygiene.md#automated-daily-check) |
+| **Confirm buy-tier level first fill** — Monday paper-auto should open the wide raw-screen Suite B book; knobs stay frozen | Human | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#level-book-live-monday) |
 
 ## Sunday
 
 | Task | Who | Doc |
 |------|-----|-----|
 | Read **analysis review** synthesis (`analysis_review.md`) plus the observe-only **chart-outcome** mix | Human | [analysis-review.md](analysis-review.md#artifacts) |
+| Read **buy-cross archive** review (`buy_cross_archive_review.json`) — cross vs level comparison; do not spawn a live cross book | Human | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#cross-book-archive-only) |
 | Review **knob calibration priors** (`ranking_mode`, `ready_for_shadow_bootstrap`, `bootstrap_priors`) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
 | Review **unified experiment assessment** (`experiment_assessment.json`) — after the 2026-09-03 human pass, task recommends should be empty (u4/exit-shadow watch; scoring on engineering queue) | Human | [experiment-assessment.md](experiment-assessment.md#human-gate) |
 | Compare **calibrated shadows vs primary** AI judgment on Automation tab | Human | [knob-calibration.md](knob-calibration.md#competing-calibrated-shadows) |

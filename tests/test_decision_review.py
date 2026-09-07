@@ -512,3 +512,40 @@ def test_benchmark_ticker_for_shard_meta(tmp_path: Path):
         summary = compare_learning_tracks(base_dir=shard_root, force=True, fetch_benchmark=False)
     assert summary["benchmark_ticker"] == "^GSPC"
     assert "^GSPC" in summary["success_criterion"]
+
+
+def test_cohort_lab_is_frozen_against_apply(tmp_path: Path):
+    fund = PaperFund.create(
+        PaperFundConfig(
+            name="Cohort",
+            mode="automated",
+            initial_cash=1000,
+            trade_cost_pct=0.00275,
+            max_positions=120,
+        )
+    )
+    out = tmp_path / "buy_tier_level"
+    out.mkdir()
+    config = AutomationConfig(
+        max_positions=120,
+        min_conviction=0.0,
+        sector_cap=1.0,
+        is_cohort_lab=True,
+        track_id="buy_tier_level",
+    )
+    (out / "config.json").write_text(__import__("json").dumps(config.to_dict()), encoding="utf-8")
+    (out / "automated_fund.json").write_text(
+        __import__("json").dumps(fund.to_dict()), encoding="utf-8"
+    )
+    result = run_decision_review(
+        output_dir=out,
+        apply=True,
+        force=True,
+        fetch_benchmark=False,
+        benchmark_return=0.0,
+    )
+    assert result.applied is False
+    assert "Frozen" in result.note
+    cfg = __import__("json").loads((out / "config.json").read_text(encoding="utf-8"))
+    assert cfg["min_conviction"] == 0.0
+    assert cfg["max_positions"] == 120

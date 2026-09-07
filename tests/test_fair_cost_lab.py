@@ -105,11 +105,14 @@ def test_suite_filter_and_cli_spawn(tmp_path: Path, capsys):
         RULES_FAIR_TRACK_ID,
         "ai_judgment_calibrated",
     ]
+    ids.append("buy_tier_level")
     assert filter_track_ids_for_suite(ids, "B") == [
         AI_JUDGMENT_FAIR_TRACK_ID,
         RULES_FAIR_TRACK_ID,
+        "buy_tier_level",
     ]
     assert AI_JUDGMENT_FAIR_TRACK_ID not in filter_track_ids_for_suite(ids, "A")
+    assert "buy_tier_level" not in filter_track_ids_for_suite(ids, "A")
 
     rc = trading_costs_main(["spawn-fair-lab", "--paper-root", str(root), "--force", "--json"])
     assert rc == 0

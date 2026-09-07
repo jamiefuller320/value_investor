@@ -22,6 +22,7 @@ from value_investor.decision_review import (
 from value_investor.market_trading_costs import LIVE_PAPER_MARKET_ID, cost_fields_for_config
 from value_investor.paper_automation import (
     AI_JUDGMENT_TRACK_ID,
+    BUY_TIER_LEVEL_TRACK_ID,
     CONFIG_FILENAME,
     FUND_FILENAME,
     RULES_TRACK_ID,
@@ -94,6 +95,15 @@ def fair_cost_lab_parent_track_id(track_id: str) -> str:
 def is_fair_cost_lab_track_id(track_id: str | None) -> bool:
     tid = str(track_id or "").strip()
     return tid in FAIR_COST_LAB_TRACK_IDS or tid.endswith(FAIR_TWIN_SUFFIX)
+
+
+def is_cohort_lab_track_id(track_id: str | None) -> bool:
+    return str(track_id or "").strip() == BUY_TIER_LEVEL_TRACK_ID
+
+
+def is_suite_b_track_id(track_id: str | None) -> bool:
+    """Suite B = fair-cost lab twins plus frozen buy-tier cohort labs."""
+    return is_fair_cost_lab_track_id(track_id) or is_cohort_lab_track_id(track_id)
 
 
 def discover_fair_cost_lab_track_ids(paper_root: Path) -> list[str]:
@@ -695,7 +705,7 @@ def filter_track_ids_for_suite(
     if suite_norm in {"", "all", "*"}:
         return ids
     if suite_norm in {"b", "suite_b", "fair", "fair_lab"}:
-        return [t for t in ids if is_fair_cost_lab_track_id(t)]
+        return [t for t in ids if is_suite_b_track_id(t)]
     if suite_norm in {"a", "suite_a", "stress"}:
-        return [t for t in ids if not is_fair_cost_lab_track_id(t)]
+        return [t for t in ids if not is_suite_b_track_id(t)]
     raise ValueError(f"Unknown suite filter: {suite!r} (use A, B, or all)")

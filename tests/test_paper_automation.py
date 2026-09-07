@@ -201,6 +201,26 @@ def test_run_learning_tracks_primary_ai_and_rules_control(tmp_path, monkeypatch)
     assert (tmp_path / "auto" / "graduated_allocation" / "config.json").exists()
     assert "technical" in summary["tracks"]
     assert (tmp_path / "auto" / "technical" / "config.json").exists()
+    assert "buy_tier_level" in summary["tracks"]
+    assert (tmp_path / "auto" / "buy_tier_level" / "config.json").exists()
+    btl_cfg = __import__("json").loads(
+        (tmp_path / "auto" / "buy_tier_level" / "config.json").read_text(encoding="utf-8")
+    )
+    assert btl_cfg["is_cohort_lab"] is True
+    assert btl_cfg["use_adjusted_signal"] is False
+    assert float(btl_cfg["min_conviction"]) == 0.0
+    assert float(btl_cfg["sector_cap"]) == 1.0
+    assert float(btl_cfg["buy_cost_pct"]) == 0.00525
+    assert float(btl_cfg["sell_cost_pct"]) == 0.00025
+    btl_fund = PaperFund.from_dict(
+        __import__("json").loads(
+            (tmp_path / "auto" / "buy_tier_level" / "automated_fund.json").read_text(
+                encoding="utf-8"
+            )
+        )
+    )
+    assert "GOOD.L" in btl_fund.holdings
+    assert "SCREEN.L" in btl_fund.holdings
 
 
 def test_run_daily_automation_technical_pass(tmp_path, monkeypatch):

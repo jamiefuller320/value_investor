@@ -64,6 +64,8 @@ builds; it proposes activation with explicit triggers cited from JSON.
 | `capital_rotation_coordinator` | Swap-score gate for sell→buy rotations | Exit-timing cohorts + graduated track history |
 | `conviction_weighted_sizing` | Conviction-weighted sleeves vs equal-weight | Graduated track cost_drag stable |
 | `regime_slices_8_16_24` | Rolling 8/16/24-week metric slices | ≥16 archive weeks |
+| `buy_tier_level_book` | Unfiltered raw-screen buy-tier paper book (Suite B, frozen, Monday cold start) | **Active** — first fills on next weekday paper-auto |
+| `buy_cross_archive_lab` | Archive-only: buy on screen buy-tier *crosses*; level comparison in the same replay | **Active** — Sunday observe-only; do not spawn a live cross book |
 | `filtered_cohort_track` | 15–20 EW sleeve cohort after ladder filter | u4 stable + replay gate |
 | `loser_pattern_lab` | PIT loser feature attribution | Cohort track or ≥20 history runs |
 | `filter_invention_loop` | Search invented exclusion rules | ≥3 validated patterns |

@@ -195,12 +195,16 @@ jobs:
               except Exception as exc:  # noqa: BLE001
                   print(f"automation status refresh skipped: {exc}")
               latest.write_text(json.dumps(bundle), encoding="utf-8")
-          from value_investor.paper_auto_publish import publish_overlay_artifacts
+          from value_investor.paper_auto_publish import (
+              publish_overlay_artifacts,
+              publish_track_core_artifacts,
+          )
 
+          tracks = publish_track_core_artifacts(src, dest)
           overlay = publish_overlay_artifacts(src, dest)
           print(
               "Published paper automation (+ AI judgment track) artifacts; "
-              f"overlays={len(overlay)}"
+              f"track_core={len(tracks)} overlays={len(overlay)}"
           )
           PY
 
