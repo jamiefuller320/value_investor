@@ -51,9 +51,9 @@ runtime-cutoff runs do not escalate — the discovery cap is the fix for those.
 `ftse-library euro-ingest-dispatch` evaluates **buy-tier filing parity** on the focus market
 and persists `docs/data/library/euro_ingest_dispatch.json`:
 
-| Mode | When | Sprint workflow (`euro-ingest-loop.yml`) | Maintenance workflow |
-|------|------|------------------------------------------|----------------------|
-| `sprint` | any of unmeasured / zero-body / thin / `indexed_without_body` > 0 (and leftover names are not yet parked) | ≤4×/day, 24 targets | off |
+| Mode | When | Sprint workflow (`euro-ingest-loop.yml`) | Shared maintenance workflow |
+|------|------|------------------------------------------|-----------------------------|
+| `sprint` | any of unmeasured / zero-body / thin / `indexed_without_body` > 0 (and leftover names are not yet parked) | ≤4×/day, 24 targets | **on if** `maintenance_markets` is nonempty (admitted / exhausted / parity). Euro itself stays on the sprint loop; do not turn off the shared workflow just because focus is still sprinting. |
 | `exhausted` | unmeasured + zero-body are 0, leftover thin/IWB names parked after complete 0-improve sprints | off | on — unparked names stay on FTSE-volume maintenance; parked leftovers skipped |
 | `maintenance` | FTSE quality bar met (all four **raw** counts zero) | off (skipped) | ≤4×/day, 62 targets + discovery scan via `library-ingest-maintenance.yml` |
 

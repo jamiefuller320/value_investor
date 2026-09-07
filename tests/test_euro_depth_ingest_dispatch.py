@@ -9,6 +9,7 @@ from value_investor.euro_depth_ingest_dispatch import (
     MODE_IDLE,
     MODE_MAINTENANCE,
     MODE_SPRINT,
+    apply_library_maintenance_schedule,
     cron_enabled_for_dispatch,
     evaluate_euro_ingest_dispatch,
     ingest_parity_met,
@@ -115,6 +116,48 @@ def test_evaluate_dispatch_sprint_when_filing_gaps_remain():
         "maintenance_midafternoon": False,
         "maintenance_evening": False,
     }
+
+
+def test_focus_sprint_keeps_shared_maintenance_crons_when_admitted_markets_need_them():
+    """Euro sprint slots stay on; library maintenance crons follow maintenance_markets."""
+    sprint_row = {
+        "mode": MODE_SPRINT,
+        "cron_morning": True,
+        "cron_afternoon": True,
+        "cron_midafternoon": True,
+        "cron_evening": True,
+        "cron_ladder_weekday": True,
+        "cron_maintenance": False,
+        "should_run_sprint_ingest": True,
+        "should_run_maintenance_ingest": False,
+        "maintenance_markets": ["asx200", "sp500"],
+    }
+    apply_library_maintenance_schedule(sprint_row)
+    assert sprint_row["should_run_library_maintenance"] is True
+    assert sprint_row["cron_maintenance"] is True
+    assert sprint_row["should_run_maintenance_ingest"] is False
+    enabled = cron_enabled_for_dispatch(sprint_row)
+    assert enabled["morning"] is True
+    assert enabled["maintenance"] is True
+    assert enabled["maintenance_evening"] is True
+
+    empty = {
+        "mode": MODE_SPRINT,
+        "cron_morning": True,
+        "cron_maintenance": False,
+        "should_run_maintenance_ingest": False,
+        "maintenance_markets": [],
+    }
+    apply_library_maintenance_schedule(empty)
+    assert empty["should_run_library_maintenance"] is False
+    assert empty["cron_maintenance"] is False
+    assert cron_enabled_for_dispatch(empty)["maintenance"] is False
+
+
+def test_library_grow_commits_shard_paper_books():
+    text = Path(".github/workflows/library-grow.yml").read_text(encoding="utf-8")
+    assert "docs/data/paper_automation/markets/**/automated_fund.json" in text
+    assert "docs/data/paper_automation/markets/**/weekday_batch_log.json" in text
 
 
 def test_evaluate_dispatch_sprint_when_phase3_ready_but_gaps_remain():
