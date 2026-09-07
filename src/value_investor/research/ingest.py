@@ -906,7 +906,12 @@ def ingest_research_sources(
                     )
                 filings_meta["ir_refetch"] = ir_refetch
                 filings_meta["residual_refetch"] = residual_refetch
-                if int(ir_refetch.get("fetched") or 0) or int(residual_refetch.get("fetched") or 0):
+                merge_added = int((ir_refetch.get("merge") or {}).get("added") or 0)
+                if (
+                    int(ir_refetch.get("fetched") or 0)
+                    or int(residual_refetch.get("fetched") or 0)
+                    or merge_added > 0
+                ):
                     index_path = sources_dir / "filings" / "filings_index.json"
                     resolved_index = resolve_json_path(index_path)
                     if resolved_index is not None:

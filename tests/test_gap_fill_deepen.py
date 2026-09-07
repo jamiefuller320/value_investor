@@ -616,3 +616,42 @@ def test_prepare_gap_fill_calls_ir_refetch_for_ebo_ax(
     assert pack["ir_refetch"]["fetched"] == 1
     assert pack["ir_refetch"]["mandatory"] is True
     assert pack["body_refetch"]["fetched"] == 1
+
+
+@patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
+@patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
+def test_prepare_gap_fill_calls_ir_refetch_for_unmeasured_aed_br(
+    mock_refetch,
+    mock_ir_refetch,
+    mock_news,
+    tmp_path: Path,
+):
+    """Unmeasured AED.BR must trigger mandatory IR allowlist merge before gap-fill."""
+    from value_investor.research.gap_fill_sources import prepare_gap_fill_source_pack
+
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"summary": {"with_body": 0, "total": 0}, "filings": []}),
+        encoding="utf-8",
+    )
+    mock_refetch.return_value = {"fetched": 0, "with_body_after": 0}
+    mock_ir_refetch.return_value = {
+        "fetched": 0,
+        "with_body_after": 0,
+        "merge": {"added": 2, "total_allowlist": 2},
+        "mandatory": True,
+    }
+
+    pack = prepare_gap_fill_source_pack(
+        ticker="AED.BR",
+        company_name="Aedifica NV/SA",
+        sources_dir=tmp_path,
+        open_questions=["annual report bodies"],
+        market="euro_depth",
+    )
+
+    mock_ir_refetch.assert_called_once()
+    assert pack["ir_refetch"]["merge"]["added"] == 2
+    assert pack["ir_refetch"]["allowlist_count"] == 2
