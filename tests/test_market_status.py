@@ -270,12 +270,22 @@ def _by_id(payload: dict, market_id: str) -> dict:
     return next(row for row in payload["markets"] if row["market_id"] == market_id)
 
 
+def _status_roots(tmp_path: Path) -> dict:
+    return {
+        "paper_root": tmp_path / "paper_live",
+        "charts_dir": tmp_path / "charts",
+        "macro_root": tmp_path / "macro",
+        "shard_root": tmp_path / "paper",
+    }
+
+
 def test_build_market_status_classifies_ingest_and_signals(tmp_path: Path):
     library = _seed_library(tmp_path / "library")
     payload = build_market_status(
         library_root=library,
         policy_path=library / "policy.json",
         dispatch_path=library / "euro_ingest_dispatch.json",
+        **_status_roots(tmp_path),
         live_meta={
             "company_count": 249,
             "signal_counts": {"strong_buy": 16, "buy": 47, "hold": 142},
@@ -295,6 +305,11 @@ def test_build_market_status_classifies_ingest_and_signals(tmp_path: Path):
     assert live["signal_counts"]["strong_buy"] == 16
     assert live["learning_phase_label"] == "Live screen"
     assert live["ticker_count"] == 249
+    assert live["held_vs_market"]["branch_ready"] is True
+    assert all(
+        isinstance((row.get("held_vs_market") or {}).get("points"), list)
+        for row in payload["markets"]
+    )
 
     focus = _by_id(payload, "euro_depth")
     assert focus["role"] == ROLE_FOCUS
@@ -337,6 +352,7 @@ def test_build_market_status_survives_empty_library(tmp_path: Path):
         library_root=library,
         policy_path=library / "missing-policy.json",
         dispatch_path=library / "missing-dispatch.json",
+        **_status_roots(tmp_path),
         live_signal_counts={"hold": 10},
     )
     live = _by_id(payload, LIVE_MARKET_ID)
@@ -394,6 +410,25 @@ def test_dashboard_assets_include_market_status_grid():
     assert "admission-flag" in app
     assert ".admission-flag" in css
     assert ".market-tile-sprint" in css
+    assert "function equalizeMarketTileHeights()" in app
+    assert "equalizeMarketTileHeights()" in app
+    assert "function heldVsMarketLastCaption(payload, { showExcess = true } = {})" in Path(
+        "docs/charts.js"
+    ).read_text(encoding="utf-8")
+    assert "function renderHeldVsMarketSparkline(payload)" in Path("docs/charts.js").read_text(
+        encoding="utf-8"
+    )
+    assert "function renderHeldVsMarketChart(payload)" in Path("docs/charts.js").read_text(
+        encoding="utf-8"
+    )
+    assert "renderHeldVsMarketSparkline(row.held_vs_market)" in app
+    assert "renderHeldVsMarketChart(row.held_vs_market)" in app
+    assert ".held-vs-market-spark" in css
+    assert (
+        "flex-direction: column"
+        in css.split(".held-vs-market-spark.empty {", 1)[1].split("}", 1)[0]
+    )
+    assert "branch-ready" in Path("docs/charts.js").read_text(encoding="utf-8")
     tile_css = css.split(".market-tile {", 1)[1].split("}", 1)[0]
     assert "white-space: normal" in tile_css
     assert "height: 100%" in tile_css
@@ -492,7 +527,18 @@ def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
             "contributed_capital": 1000.0,
             "holdings": {"AAA": {"ticker": "AAA"}, "BBB": {"ticker": "BBB"}},
             "equity_curve": [
-                {"at": "2026-09-07T10:31:56+00:00", "portfolio_value": 737.41, "cash": 0.0}
+                {
+                    "at": "2026-09-01T10:31:56+00:00",
+                    "portfolio_value": 1000.0,
+                    "cash": 0.0,
+                    "positions": 2,
+                },
+                {
+                    "at": "2026-09-07T10:31:56+00:00",
+                    "portfolio_value": 737.41,
+                    "cash": 0.0,
+                    "positions": 2,
+                },
             ],
         },
         compact=False,
@@ -502,7 +548,7 @@ def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
         library_root=library,
         policy_path=library / "policy.json",
         dispatch_path=library / "euro_ingest_dispatch.json",
-        shard_root=tmp_path / "paper",
+        **_status_roots(tmp_path),
         live_signal_counts={"hold": 1},
     )
     sp500 = _by_id(payload, "sp500")
@@ -515,6 +561,13 @@ def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
     assert sp500["learning_phase_label"] == "Epoch-0 level"
     assert sp500["epoch0"]["holdings"] == 2
     assert sp500["epoch0"]["nav"] == 737.41
+    chart = sp500["held_vs_market"]
+    assert chart["status"] == "ok"
+    assert chart["branch_ready"] is True
+    assert chart["source"] == "paper_fund"
+    assert len(chart["points"]) == 2
+    assert chart["points"][-1]["held"] == 737.41
+    assert any(row["kind"] == "branch" or row["id"] == "held" for row in chart["series"])
     assert sp500["near_miss"]["buy_tier_not_now_count"] == 12
     assert sp500["near_miss"]["hold_near_buy_sample"] == ["ABC"]
     assert sp500["equal_support"]["rememo_eligible_count"] == 54
@@ -535,7 +588,7 @@ def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
         library_root=library,
         policy_path=library / "policy.json",
         dispatch_path=library / "euro_ingest_dispatch.json",
-        shard_root=tmp_path / "paper",
+        **_status_roots(tmp_path),
         latest_path=tmp_path / "docs" / "data" / "latest.json",
         path=dest,
     )

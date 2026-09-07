@@ -1225,6 +1225,7 @@ function renderMarketStatusCard(row) {
       <span class="stage-badge stage-active">${esc(row.learning_phase_label || "Not started")}</span>
       ${tags.map((tag) => `<span class="badge badge-ii-ok">${esc(tag)}</span>`).join("")}
     </div>
+    ${typeof renderHeldVsMarketChart === "function" ? renderHeldVsMarketChart(row.held_vs_market) : ""}
     ${row.ingest_reason ? `<p class="small">${esc(row.ingest_reason)}</p>` : ""}
     ${settingRow("Role", esc(row.role || "—"))}
     ${
@@ -1339,6 +1340,7 @@ function renderMarketStatusGrid(data) {
         <div class="market-tile-body">
         ${marketSignalBar(row.signal_counts)}
         <div class="small market-tile-signals">${marketSignalSummary(row)}</div>
+        ${typeof renderHeldVsMarketSparkline === "function" ? renderHeldVsMarketSparkline(row.held_vs_market) : ""}
         </div>
         <div class="small muted market-tile-meta">Coverage ${esc(coverageLabel(row.coverage_pct))}${
           row.near_miss

@@ -12,6 +12,12 @@ from value_investor.data_library import (
     MARKET_REGISTRY,
     load_manifest,
 )
+from value_investor.held_vs_market import (
+    assemble_held_vs_market,
+    bench_closes_for_market,
+    empty_held_vs_market,
+    load_macro_index_closes,
+)
 from value_investor.library_equal_support import PACKAGE_FILENAME as EQUAL_SUPPORT_FILENAME
 from value_investor.library_ingest_dispatch import (
     DEFAULT_DISPATCH_PATH,
@@ -26,6 +32,7 @@ from value_investor.library_ingest_escalation import (
 )
 from value_investor.library_near_miss_watch import NEAR_MISS_FILENAME
 from value_investor.library_screen import screen_dir_for
+from value_investor.macro_context import DEFAULT_MACRO_ROOT
 from value_investor.market_shard_admission import admitted_learning_markets_for_policy
 from value_investor.market_shard_phases import DEFAULT_SHARD_ROOT, shard_root_for_market
 from value_investor.storage import read_json, write_json
@@ -34,6 +41,8 @@ SCHEMA_VERSION = 3
 LIVE_MARKET_ID = "ftse350"
 DEFAULT_MARKET_STATUS_PATH = Path("docs/data/market_status.json")
 DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
+DEFAULT_PAPER_ROOT = Path("docs/data/paper_automation")
+DEFAULT_CHARTS_DIR = Path("docs/data/charts")
 BUY_TIER_LEVEL_TRACK = "buy_tier_level"
 EXPECTED_ADMITTED_BLOCKER_NEEDLE = "weekly_paper_shard_markets"
 SPRINT_PROGRESS_WINDOW_DAYS = 2
@@ -651,6 +660,58 @@ def _slim_equal_support_row(raw: Any) -> dict[str, Any] | None:
     }
 
 
+def _paper_fund_path(
+    market_id: str,
+    *,
+    paper_root: Path,
+    shard_root: Path,
+) -> Path:
+    if market_id == LIVE_MARKET_ID:
+        return paper_root / BUY_TIER_LEVEL_TRACK / "automated_fund.json"
+    return (
+        shard_root_for_market(market_id, base=shard_root)
+        / BUY_TIER_LEVEL_TRACK
+        / "automated_fund.json"
+    )
+
+
+def _observe_summary_path(library_root: Path, market_id: str) -> Path:
+    return screen_dir_for(library_root, market_id) / "sim" / "observe_summary.json"
+
+
+def _held_vs_market_row(
+    market_id: str,
+    *,
+    currency: str | None,
+    library_root: Path,
+    paper_root: Path,
+    shard_root: Path,
+    charts_dir: Path | None,
+    macro_closes: dict[str, dict[str, float]],
+) -> dict[str, Any]:
+    fund_path = _paper_fund_path(market_id, paper_root=paper_root, shard_root=shard_root)
+    fund = _as_dict(_safe_read(fund_path))
+    observe = None
+    if market_id != LIVE_MARKET_ID:
+        observe = _as_dict(_safe_read(_observe_summary_path(library_root, market_id)))
+    try:
+        return assemble_held_vs_market(
+            market_id,
+            fund=fund or None,
+            observe=observe or None,
+            charts_dir=charts_dir if market_id == LIVE_MARKET_ID else None,
+            bench_closes=bench_closes_for_market(market_id, macro_closes=macro_closes),
+            currency=currency,
+            allow_chart_densify=market_id == LIVE_MARKET_ID,
+        )
+    except Exception:  # noqa: BLE001 — grid must still render
+        return empty_held_vs_market(
+            market_id=market_id,
+            currency=currency,
+            reason="Held vs market series failed to assemble",
+        )
+
+
 def _slim_epoch0(market_id: str, *, shard_root: Path | None = None) -> dict[str, Any] | None:
     root = shard_root_for_market(market_id, base=shard_root or DEFAULT_SHARD_ROOT)
     fund = _as_dict(_safe_read(root / BUY_TIER_LEVEL_TRACK / "automated_fund.json"))
@@ -709,6 +770,9 @@ def build_market_status(
     policy_path: Path | None = None,
     dispatch_path: Path | None = None,
     shard_root: Path | None = None,
+    paper_root: Path | None = None,
+    charts_dir: Path | None = None,
+    macro_root: Path | None = None,
     live_meta: dict[str, Any] | None = None,
     live_signal_counts: dict[str, int] | None = None,
     live_run_at: str | None = None,
@@ -722,6 +786,9 @@ def build_market_status(
         as_of = as_of.replace(tzinfo=UTC)
     policy_path = Path(policy_path or DEFAULT_POLICY_PATH)
     dispatch_path = Path(dispatch_path or DEFAULT_DISPATCH_PATH)
+    paper_base = Path(paper_root or DEFAULT_PAPER_ROOT)
+    charts_base = Path(charts_dir) if charts_dir is not None else DEFAULT_CHARTS_DIR
+    macro_closes = load_macro_index_closes(Path(macro_root or DEFAULT_MACRO_ROOT))
 
     try:
         policy = load_policy(policy_path)
@@ -867,6 +934,20 @@ def build_market_status(
             ingest_exhausted=ingest_exhausted,
             now=as_of,
         )
+        held_vs_market = _held_vs_market_row(
+            market_id,
+            currency=spec.currency,
+            library_root=library_root,
+            paper_root=paper_base,
+            shard_root=shard_base,
+            charts_dir=charts_base,
+            macro_closes=macro_closes,
+        )
+        paper_instrument = None
+        if held_vs_market.get("status") == "ok" and held_vs_market.get("paper_instrument"):
+            paper_instrument = held_vs_market.get("paper_instrument")
+        elif epoch0 or (equal_row and is_admitted) or market_id == LIVE_MARKET_ID:
+            paper_instrument = BUY_TIER_LEVEL_TRACK
         markets.append(
             {
                 "market_id": market_id,
@@ -918,15 +999,14 @@ def build_market_status(
                 "learning": phase_row,
                 "filing_health": filing_health,
                 "filing_gaps": filing_gaps if dispatch_row else None,
-                "paper_instrument": (
-                    BUY_TIER_LEVEL_TRACK if epoch0 or (equal_row and is_admitted) else None
-                ),
+                "paper_instrument": paper_instrument,
                 "ai_judgment": False if is_admitted else None,
                 "knob_apply": False if is_admitted else None,
                 "epoch0": epoch0,
                 "equal_support": equal_row,
                 "near_miss": near_miss,
                 "sprint_progress": sprint_progress,
+                "held_vs_market": held_vs_market,
             }
         )
 
@@ -955,7 +1035,9 @@ def build_market_status(
             "the live FTSE screen or each library latest_summary.json. "
             "Admitted markets show epoch-0 buy-tier-level + equal-support near-miss "
             "(watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest "
-            "rollup and admission-progress flags."
+            "rollup and admission-progress flags. held_vs_market plots held-stock "
+            "value vs local-index equivalent; knob-changed branches overlay the same "
+            "dates when applied."
         ),
         "focus_market": focus or None,
         "admitted_markets": admitted_list,
@@ -986,6 +1068,9 @@ def write_market_status(
     policy_path: Path | None = None,
     dispatch_path: Path | None = None,
     shard_root: Path | None = None,
+    paper_root: Path | None = None,
+    charts_dir: Path | None = None,
+    macro_root: Path | None = None,
     latest_path: Path | None = None,
     path: Path | None = None,
 ) -> Path:
@@ -996,6 +1081,9 @@ def write_market_status(
         policy_path=policy_path,
         dispatch_path=dispatch_path,
         shard_root=shard_root,
+        paper_root=paper_root,
+        charts_dir=charts_dir,
+        macro_root=macro_root,
         live_meta=live["live_meta"],
         live_signal_counts=live["live_signal_counts"],
         live_run_at=live["live_run_at"],

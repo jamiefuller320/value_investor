@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-07T15:12:04+00:00",
+  "updated_at": "2026-09-07T18:03:10+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7400,6 +7400,87 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a07c65-704f-7e0f-b730-4d21ffa591bb",
       "added_at": "2026-09-07T15:12:04+00:00"
+    },
+    {
+      "id": "L333",
+      "category": "later",
+      "section": "universe",
+      "title": "Yahoo benchmark for FTSE SmallCap observe clock",
+      "summary": "Sprint 2 (ftse_smallcap) is on the ingest profile but observe_sim_markets_for_policy drops it because it is missing from MARKET_BENCHMARKS. Phase evaluation then stays at 0 with blocker 'no benchmark configured for ftse_smallcap', so Sunday screen-lite never starts the dated archive clock. Add a Yahoo SmallCap index ticker (verify symbol) so stream 2 matches tsx60.",
+      "revisit_when": "Next Sunday ladder after ftse_smallcap is still on ingest_parallel_sprint_2, or when filling a spare stream with any market not in MARKET_BENCHMARKS",
+      "tags": [
+        "ftse_smallcap",
+        "observe-sim",
+        "benchmark",
+        "sprint"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-f018d59e-1f24-40f1-b38f-7d0b1555bd03",
+      "added_at": "2026-09-07T16:27:56+00:00"
+    },
+    {
+      "id": "L334",
+      "category": "later",
+      "section": "ops",
+      "title": "Market-status tile: ingest vs learning phase for spare sprints",
+      "summary": "Dashboard tiles show learning_phase_label 'Not started' whenever a market is missing from shard_phases.json. Spare sprint markets (tsx60, ftse_smallcap) already have live ingest badges, so the phase line reads as if the sprint has not begun. Derive Observe from live dispatch/evaluate_market_phase, or split ingest status from learning-book status.",
+      "revisit_when": "The Overview market grid is next edited, or a spare stream market is again asked why it shows not started",
+      "tags": [
+        "dashboard",
+        "market-status",
+        "sprint"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-f018d59e-1f24-40f1-b38f-7d0b1555bd03",
+      "added_at": "2026-09-07T16:28:11+00:00"
+    },
+    {
+      "id": "L335",
+      "category": "later",
+      "section": "ops",
+      "title": "Daily index densify for market-card held vs market charts",
+      "summary": "Market equivalent currently uses dated macro snapshots (and observe-sim period endpoints when those are missing). A publish-time daily index series would fill intraweek path without fetching on dashboard refresh.",
+      "revisit_when": "Held vs market charts are in regular Sunday use and a market with a paper book has >=5 weekday marks still missing intraweek index levels.",
+      "tags": [
+        "dashboard",
+        "charts",
+        "benchmark"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fb826a8a-b91b-4ef9-b0a6-6f183dcade83",
+      "added_at": "2026-09-07T18:03:10+00:00"
+    },
+    {
+      "id": "N108",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Overlay knob-changed branches on market-card held vs market charts",
+      "summary": "The dashboard series is branch-ready (kind=branch on the same dates via merge_branch_series). Do not apply a knob-changed overlay until shard/live books may apply knobs; do not spawn a twin book per knob.",
+      "revisit_when": "A recommend-status knob has >=4 forward weeks on the baseline cohort and a human asks for at most one overlay on the held vs market chart.",
+      "tags": [
+        "dashboard",
+        "knobs",
+        "N99"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fb826a8a-b91b-4ef9-b0a6-6f183dcade83",
+      "added_at": "2026-09-07T18:03:10+00:00"
+    },
+    {
+      "id": "L336",
+      "category": "later",
+      "section": "ops",
+      "title": "Add S&P 500 index levels to dated macro snapshots",
+      "summary": "US macro files currently have yields and DXY, not ^GSPC, so S&P paper books cannot draw a market-equivalent path on the market card until another index source exists.",
+      "revisit_when": "Admitted S&P buy_tier_level has >=2 dated marks and the Overview chart still has market_path none.",
+      "tags": [
+        "dashboard",
+        "macro",
+        "sp500"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fb826a8a-b91b-4ef9-b0a6-6f183dcade83",
+      "added_at": "2026-09-07T18:03:10+00:00"
     }
   ],
   "fragments": [
