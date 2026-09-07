@@ -8,6 +8,8 @@ from pathlib import Path
 from value_investor.engineering_tasks import (
     BLOCKED_PATHS,
     EngineeringTask,
+    companion_test_path,
+    effective_allowed_paths,
     find_engineering_task,
     normalize_repo_path,
     path_matches_allowed_pattern,
@@ -96,6 +98,52 @@ def test_validate_engineering_pr_paths_rejects_blocked_paths():
     )
     assert not result.ok
     assert any("blocked path touched" in item for item in result.violations)
+
+
+def test_companion_test_path_flattens_nested_source_modules():
+    assert (
+        companion_test_path("src/value_investor/research/ingest.py")
+        == "tests/test_research_ingest.py"
+    )
+    assert companion_test_path("tests/test_research_ingest.py") is None
+
+
+def test_effective_allowed_paths_include_companion_tests():
+    task = _ingest_task()
+    task.allowed_paths = [
+        "src/value_investor/research/ingest.py",
+        "tests/test_research_filings.py",
+    ]
+    allowed = effective_allowed_paths(task)
+    assert "src/value_investor/research/ingest.py" in allowed
+    assert "tests/test_research_ingest.py" in allowed
+
+
+def test_validate_engineering_pr_paths_allows_companion_ingest_tests():
+    task = _ingest_task()
+    task.allowed_paths = [
+        "src/value_investor/research/ingest.py",
+        "tests/test_research_filings.py",
+    ]
+    result = validate_engineering_pr_paths(
+        task=task,
+        changed_files=[
+            "src/value_investor/research/ingest.py",
+            "tests/test_research_ingest.py",
+        ],
+    )
+    assert result.ok
+    assert result.violations == []
+
+
+def test_validate_engineering_pr_paths_allows_engineering_tasks_json():
+    task = _ingest_task()
+    result = validate_engineering_pr_paths(
+        task=task,
+        changed_files=["docs/data/engineering_tasks.json"],
+    )
+    assert result.ok
+    assert result.violations == []
 
 
 def test_validate_engineering_pr_paths_for_task_id_from_queue_file(tmp_path: Path):

@@ -107,6 +107,9 @@ failed CI workflow:
 - Skips when the latest commit already starts with `chore(ci):` (one bot attempt per push)
 - Pytest and committed-data JSON failures are **diagnosed but not auto-fixed** on PRs
 - Path-guard expand only adds non-blocked paths; blocked paths still need agent/human edits
+- The path guard also allows companion tests for each allowed `src/` module
+  (`src/value_investor/research/ingest.py` → `tests/test_research_ingest.py`) and
+  `docs/data/engineering_tasks.json` so allowlist expands are not a self-violation
 - See [gha-secret-hygiene.md](gha-secret-hygiene.md) for why these gates matter on a public repo
 
 **Local dry-run:**

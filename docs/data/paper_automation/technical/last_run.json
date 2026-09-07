@@ -1,0 +1,724 @@
+{
+  "acted": true,
+  "gate": {
+    "local_time": "2026-09-07T09:28:07.378942+01:00",
+    "trading_day": true,
+    "after_settle": true,
+    "market_open_at": "2026-09-07T08:00:00+01:00",
+    "settle_at": "2026-09-07T09:15:00+01:00",
+    "can_act": true,
+    "reason": "ok"
+  },
+  "trades": [
+    {
+      "id": "96a3bd4c-94a6-4673-a0b7-e8b5f03a6480",
+      "fund_id": "9fe1b2aa-bb11-427f-bcdd-b7a7222b0d2b",
+      "acted_at": "2026-09-07T09:28:07.378942+01:00",
+      "ticker": "MGNS.L",
+      "side": "buy",
+      "sizing_mode": "pct_nav",
+      "shares": 0.022941,
+      "price": 4232.0,
+      "gross": 97.09,
+      "cost": 2.91,
+      "net_cash": -100.0,
+      "note": "Technical entry at core limit",
+      "name": "Morgan Sindall Group plc"
+    },
+    {
+      "id": "dd98af95-365e-416e-a2e5-3ba24b1b18fe",
+      "fund_id": "9fe1b2aa-bb11-427f-bcdd-b7a7222b0d2b",
+      "acted_at": "2026-09-07T09:28:07.378942+01:00",
+      "ticker": "IMB.L",
+      "side": "buy",
+      "sizing_mode": "pct_nav",
+      "shares": 0.03916,
+      "price": 2472.0,
+      "gross": 96.8,
+      "cost": 2.9,
+      "net_cash": -99.71,
+      "note": "Technical entry at core limit",
+      "name": "Imperial Brands PLC"
+    },
+    {
+      "id": "889ab507-a5ad-4064-976d-6e7413adf366",
+      "fund_id": "9fe1b2aa-bb11-427f-bcdd-b7a7222b0d2b",
+      "acted_at": "2026-09-07T09:28:07.378942+01:00",
+      "ticker": "KLR.L",
+      "side": "buy",
+      "sizing_mode": "pct_nav",
+      "shares": 0.031709,
+      "price": 3044.0,
+      "gross": 96.52,
+      "cost": 2.9,
+      "net_cash": -99.42,
+      "note": "Technical entry at core limit",
+      "name": "Keller Group plc"
+    }
+  ],
+  "plan": {
+    "rules": [
+      "Exits first: full sell if last mark \u2264 stop loss or \u2265 take-profit.",
+      "Entries next: unused buy-tier names (timing \u2260 wait) at core limit when available.",
+      "Position size for new entries: about 10% of current NAV, capped by cash.",
+      "Names exited in the same pass are not re-bought immediately.",
+      "Hard cap: 3 open names."
+    ],
+    "nav": 991.29,
+    "cash": 700.87,
+    "buy_pct_nav": 0.1,
+    "anticipated_exits": [],
+    "anticipated_buys": [],
+    "anticipated_holds": [
+      {
+        "action": "hold",
+        "ticker": "MGNS.L",
+        "name": "Morgan Sindall Group plc",
+        "reason": "Between stop and target (or levels not set)",
+        "value": 97.09
+      },
+      {
+        "action": "hold",
+        "ticker": "IMB.L",
+        "name": "Imperial Brands PLC",
+        "reason": "Between stop and target (or levels not set)",
+        "value": 96.8
+      },
+      {
+        "action": "hold",
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "reason": "Between stop and target (or levels not set)",
+        "value": 96.52
+      }
+    ],
+    "deferred": [
+      {
+        "ticker": "\u2014",
+        "name": "New entries",
+        "reason": "No open slots or cash available after exits"
+      }
+    ],
+    "summary": "Next technical pass would keep 3 holding(s) between levels."
+  },
+  "alerts": [
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 4232.0,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "IMB.L",
+      "name": "Imperial Brands PLC",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 2472.0,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "KLR.L",
+      "name": "Keller Group plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 3044.0,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "insufficient_data"
+    }
+  ],
+  "fund": {
+    "config": {
+      "name": "Technical levels (stops / trade_plan)",
+      "mode": "technical",
+      "initial_cash": 1000.0,
+      "monthly_deposit": 0.0,
+      "trade_cost_pct": 0.03,
+      "buy_cost_pct": null,
+      "sell_cost_pct": null,
+      "max_positions": 3,
+      "reporting_currency": "GBP",
+      "hedge_assumption": "none",
+      "id": "9fe1b2aa-bb11-427f-bcdd-b7a7222b0d2b",
+      "created_at": "2026-09-07T08:28:07.379041+00:00"
+    },
+    "cash": 700.87,
+    "contributed_capital": 1000.0,
+    "deposits_applied": 0,
+    "holdings": {
+      "MGNS.L": {
+        "ticker": "MGNS.L",
+        "shares": 0.022941,
+        "avg_cost": 4232.0,
+        "name": "Morgan Sindall Group plc",
+        "sector": "Industrials",
+        "currency": "GBP",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-07T09:28:07.378942+01:00"
+      },
+      "IMB.L": {
+        "ticker": "IMB.L",
+        "shares": 0.03916,
+        "avg_cost": 2472.0,
+        "name": "Imperial Brands PLC",
+        "sector": "Consumer Defensive",
+        "currency": "GBP",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-07T09:28:07.378942+01:00"
+      },
+      "KLR.L": {
+        "ticker": "KLR.L",
+        "shares": 0.031709,
+        "avg_cost": 3044.0,
+        "name": "Keller Group plc",
+        "sector": "Industrials",
+        "currency": "GBP",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-07T09:28:07.378942+01:00"
+      }
+    },
+    "trades": [
+      {
+        "id": "96a3bd4c-94a6-4673-a0b7-e8b5f03a6480",
+        "fund_id": "9fe1b2aa-bb11-427f-bcdd-b7a7222b0d2b",
+        "acted_at": "2026-09-07T09:28:07.378942+01:00",
+        "ticker": "MGNS.L",
+        "side": "buy",
+        "sizing_mode": "pct_nav",
+        "shares": 0.022941,
+        "price": 4232.0,
+        "gross": 97.09,
+        "cost": 2.91,
+        "net_cash": -100.0,
+        "note": "Technical entry at core limit",
+        "name": "Morgan Sindall Group plc"
+      },
+      {
+        "id": "dd98af95-365e-416e-a2e5-3ba24b1b18fe",
+        "fund_id": "9fe1b2aa-bb11-427f-bcdd-b7a7222b0d2b",
+        "acted_at": "2026-09-07T09:28:07.378942+01:00",
+        "ticker": "IMB.L",
+        "side": "buy",
+        "sizing_mode": "pct_nav",
+        "shares": 0.03916,
+        "price": 2472.0,
+        "gross": 96.8,
+        "cost": 2.9,
+        "net_cash": -99.71,
+        "note": "Technical entry at core limit",
+        "name": "Imperial Brands PLC"
+      },
+      {
+        "id": "889ab507-a5ad-4064-976d-6e7413adf366",
+        "fund_id": "9fe1b2aa-bb11-427f-bcdd-b7a7222b0d2b",
+        "acted_at": "2026-09-07T09:28:07.378942+01:00",
+        "ticker": "KLR.L",
+        "side": "buy",
+        "sizing_mode": "pct_nav",
+        "shares": 0.031709,
+        "price": 3044.0,
+        "gross": 96.52,
+        "cost": 2.9,
+        "net_cash": -99.42,
+        "note": "Technical entry at core limit",
+        "name": "Keller Group plc"
+      }
+    ],
+    "equity_curve": [
+      {
+        "at": "2026-09-07T08:28:07.379041+00:00",
+        "portfolio_value": 1000.0,
+        "cash": 1000.0,
+        "contributed_capital": 1000.0,
+        "positions": 0,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "USD": 0.73838,
+            "EUR": 0.85901,
+            "AUD": 0.5328,
+            "CAD": 0.5337,
+            "HKD": 0.09413,
+            "SGD": 0.58333,
+            "CHF": 0.9126,
+            "SEK": 0.07683
+          },
+          "issues": []
+        },
+        "note": "Fund opened"
+      },
+      {
+        "at": "2026-09-07T09:28:07.378942+01:00",
+        "portfolio_value": 991.29,
+        "cash": 700.87,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Technical pass"
+      }
+    ],
+    "last_mark_at": "2026-09-07T09:28:07.378942+01:00",
+    "rebalance_state": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    }
+  },
+  "note": "Technical pass after open settle (3 trade(s)).",
+  "exit_shadow_review": {
+    "schema_version": 1,
+    "track_id": "technical",
+    "generated_at": "2026-09-07T08:28:24.043614+00:00",
+    "open_count": 0,
+    "closed_count": 0,
+    "by_exit_kind": {},
+    "grace_vs_rotation": {
+      "grace_closed": {
+        "count": 0
+      },
+      "screen_rotation_closed": {
+        "count": 0
+      }
+    },
+    "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
+    "ingested_this_pass": 0,
+    "checkpoints_added_this_pass": 0
+  },
+  "exit_timing_cohorts_review": {
+    "schema_version": 1,
+    "track_id": "technical",
+    "generated_at": "2026-09-07T08:28:24.044020+00:00",
+    "framework": {
+      "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
+      "hold_recovery": {
+        "question": "When a position is stressed but still held, does it recover to breakeven?",
+        "episode_triggers": [
+          "unrealized below underwater_threshold",
+          "exit_streak >= 1 (hold buffer active)",
+          "momentum_grace on position",
+          "effective signal no longer buy-tier while still held"
+        ],
+        "outcomes": [
+          "recovered_to_breakeven (peak unrealized >= breakeven_threshold)",
+          "sold_while_underwater",
+          "max_window_elapsed"
+        ],
+        "fields_for_later_analysis": [
+          "data_quality_score",
+          "conviction_score",
+          "screen_signal",
+          "effective_signal",
+          "exit_streak",
+          "stress_triggers",
+          "thesis_status_at_start",
+          "recommended_action_at_start",
+          "checkpoints"
+        ]
+      },
+      "swap_rotation": {
+        "question": "When we rotate (sell + buy same pass), does the replacement beat the exit?",
+        "pairing": "same rebalance pass sells vs buys on one track",
+        "outcomes": [
+          "replacement_outperformed",
+          "exit_outperformed",
+          "inconclusive"
+        ],
+        "fields_for_later_analysis": [
+          "sell_tickers",
+          "buy_tickers",
+          "sell_realized_pct",
+          "post_rotation_returns",
+          "trade_costs"
+        ]
+      },
+      "related_artifacts": [
+        "exit_shadow.json (post-exit path after sell)",
+        "rebalance_log.json (counterfactual replay)",
+        "exit_timing_near_miss.json (archive near-miss + held-book priors)",
+        "archive_rebalance_replay (weekly-screen counterfactual from first log pass)",
+        "learning_tracks_churn_health.json"
+      ]
+    },
+    "readiness": {
+      "ready_for_probability_analysis": false,
+      "hold_closed_count": 0,
+      "swap_closed_count": 0,
+      "hold_with_data_quality_count": 0,
+      "gaps": [
+        "hold_recovery closed episodes=0 (target >=15)",
+        "swap_rotation closed rotations=0 (target >=10)",
+        "no hold episodes with data_quality_score yet (needs screen marks on pass)"
+      ],
+      "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
+    },
+    "hold_recovery": {
+      "open": {
+        "count": 0
+      },
+      "closed": {
+        "count": 0
+      }
+    },
+    "swap_rotation": {
+      "open": {
+        "count": 0
+      },
+      "closed": {
+        "count": 0
+      }
+    },
+    "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
+    "ingested_this_pass": {
+      "hold_episodes": 0,
+      "swap_rotations": 0
+    },
+    "checkpoints_added_this_pass": {
+      "hold_episodes": 0,
+      "swap_rotations": 0
+    }
+  },
+  "hypothesis_integrity": {
+    "schema_version": 1,
+    "scope": "hypothesis_integrity",
+    "observe_only": true,
+    "track_id": "technical",
+    "updated_at": "2026-09-07T08:28:24.044614+00:00",
+    "as_of": "2026-09-07T09:28:07.378942+01:00",
+    "config": {
+      "underwater_pct": -0.05,
+      "deep_underwater_pct": -0.15,
+      "loser_share_tolerance": 0.4,
+      "loser_nav_tolerance": 0.35,
+      "min_data_quality": 0.55,
+      "min_conviction_for_intact": 0.35,
+      "intact_urgency_dampen": 0.18,
+      "broken_urgency_boost": 0.28,
+      "skip_underwater_urgency_when_intact": true
+    },
+    "holding_count": 3,
+    "underwater_count": 0,
+    "thesis_status_counts": {
+      "intact": 3,
+      "weakening": 0,
+      "broken": 0,
+      "insufficient_data": 0
+    },
+    "portfolio_feedback": {
+      "holding_count": 3,
+      "loser_count": 0,
+      "loser_share": 0.0,
+      "loser_nav_share": 0.0,
+      "loser_share_tolerance": 0.4,
+      "loser_nav_tolerance": 0.35,
+      "within_tolerance": true,
+      "intact_loser_count": 0,
+      "weakening_loser_count": 0,
+      "broken_loser_count": 0,
+      "family_fail_rate_losers": {
+        "cheapness": 0.0,
+        "quality": 0.0,
+        "dividend": 0.0,
+        "garp": 0.0,
+        "risk": 0.0
+      },
+      "family_fail_rate_non_losers": {
+        "cheapness": 0.0,
+        "quality": 0.0,
+        "dividend": 0.0,
+        "garp": 0.0,
+        "risk": 0.0
+      },
+      "selection_feedback_flags": [],
+      "balancing_hint": "maintain",
+      "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
+    },
+    "holdings": [
+      {
+        "ticker": "MGNS.L",
+        "name": "Morgan Sindall Group plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 4232.0,
+        "avg_cost": 4232.0,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.961,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 96%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 96%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "IMB.L",
+        "name": "Imperial Brands PLC",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 2472.0,
+        "avg_cost": 2472.0,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.8884,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 89%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 89%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 3044.0,
+        "avg_cost": 3044.0,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.8557,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 86%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 86%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      }
+    ],
+    "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
+  },
+  "hypothesis_outcome_link": {
+    "schema_version": 1,
+    "scope": "hypothesis_outcome_link",
+    "observe_only": true,
+    "track_id": "technical",
+    "generated_at": "2026-09-07T08:28:24.045341+00:00",
+    "stamped_this_pass": {
+      "hold_episodes": 0,
+      "swap_rotations": 0
+    },
+    "hold_recovery_by_thesis": {
+      "closed_total": 0,
+      "closed_unknown_thesis": 0,
+      "open_with_thesis": 0,
+      "by_thesis_status": {
+        "intact": {
+          "closed_count": 0
+        },
+        "weakening": {
+          "closed_count": 0
+        },
+        "broken": {
+          "closed_count": 0
+        },
+        "insufficient_data": {
+          "closed_count": 0
+        }
+      }
+    },
+    "swap_rotation_by_thesis": {
+      "closed_rotation_count": 0,
+      "sell_legs_total": 0,
+      "sell_legs_unknown_thesis": 0,
+      "by_thesis_status": {
+        "intact": {
+          "leg_count": 0
+        },
+        "weakening": {
+          "leg_count": 0
+        },
+        "broken": {
+          "leg_count": 0
+        },
+        "insufficient_data": {
+          "leg_count": 0
+        }
+      }
+    },
+    "readiness": {
+      "ready_for_thesis_outcome_analysis": false,
+      "hold_closed_with_thesis": 0,
+      "swap_sell_legs_with_thesis": 0,
+      "gaps": [
+        "hold closed with thesis=0 (target >=8)",
+        "swap sell legs with thesis=0 (target >=5)"
+      ],
+      "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
+    },
+    "learning_hints": [],
+    "note": "Links thesis_status_at_start on exit_timing cohorts to hold-recovery and swap-rotation outcomes. Does not auto-apply exit policy."
+  },
+  "entry_dca_overlay_review": {
+    "schema_version": 1,
+    "track_id": "technical",
+    "observe_only": true,
+    "generated_at": "2026-09-07T08:28:24.046947+00:00",
+    "open_count": 3,
+    "closed_count": 2,
+    "scored_count": 2,
+    "scored_count_all": 2,
+    "recommit_scored_count": 0,
+    "entry_kind_counts": {
+      "first_entry": 2,
+      "recommit": 0
+    },
+    "any_de_risk_count": 1,
+    "winning_cadence_counts": {
+      "dca_4x_weekly": 1,
+      "dca_2x_weekly": 1
+    },
+    "cadence_stats": {
+      "dca_2x_weekly": {
+        "label": "50/50 over 1 week",
+        "scored_episodes": 2,
+        "mean_end_value_delta": 0.305,
+        "mean_de_risk_gbp": 0.42,
+        "de_risk_rate": 0.5,
+        "win_count": 1
+      },
+      "dca_4x_weekly": {
+        "label": "25% weekly \u00d7 4",
+        "scored_episodes": 2,
+        "mean_end_value_delta": 0.455,
+        "mean_de_risk_gbp": 0.635,
+        "de_risk_rate": 0.5,
+        "win_count": 1
+      },
+      "dca_2x_biweekly": {
+        "label": "50/50 over 2 weeks",
+        "scored_episodes": 2,
+        "mean_end_value_delta": 0.305,
+        "mean_de_risk_gbp": 0.42,
+        "de_risk_rate": 0.5,
+        "win_count": 0
+      },
+      "dca_5x_weekday": {
+        "label": "20% over 5 weekday marks",
+        "scored_episodes": 2,
+        "mean_end_value_delta": -1.26,
+        "mean_de_risk_gbp": 0.53,
+        "de_risk_rate": 0.5,
+        "win_count": 0
+      }
+    },
+    "readiness": {
+      "ready_for_cadence_analysis": false,
+      "closed_episodes": 2,
+      "closed_target": 12,
+      "tracks_with_closed": 1,
+      "tracks_target": 2,
+      "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
+      "first_entry_scored": 2,
+      "recommit_scored": 0
+    },
+    "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
+    "ingested_this_pass": 2,
+    "marked_this_pass": 3,
+    "closed_this_pass": 2
+  },
+  "generated_at": "2026-09-07T08:28:24.047229+00:00",
+  "track_id": "technical",
+  "track_label": "Technical levels (stops / trade_plan)",
+  "is_primary_learning_track": false,
+  "selection": {
+    "skip_timing_wait": true,
+    "min_conviction": 0.6,
+    "sector_cap": 0.2,
+    "use_adjusted_signal": false,
+    "require_research_accumulate": false,
+    "use_momentum_grace": false,
+    "use_graduated_allocation": false,
+    "exit_confirm_screens": 2,
+    "reentry_cooldown_screens": 1,
+    "min_rebalance_notional_gbp": 10.0
+  }
+}
