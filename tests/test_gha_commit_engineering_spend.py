@@ -45,7 +45,9 @@ def _write_policy(path: Path, *, spend: float, focus: str = "euro_depth") -> Non
 
 
 def _policy_spend(path: Path) -> float:
-    return float(json.loads(path.read_text(encoding="utf-8"))["ladder"]["spend_since_checkpoint_usd"])
+    return float(
+        json.loads(path.read_text(encoding="utf-8"))["ladder"]["spend_since_checkpoint_usd"]
+    )
 
 
 def _seed_repo(tmp_path: Path) -> tuple[Path, Path]:
@@ -204,7 +206,12 @@ def test_record_spend_cli_increments_policy(tmp_path: Path, capsys):
     path = tmp_path / "policy.json"
     save_policy(load_policy(path), path)
     before = load_policy(path)
-    assert engineering_main(["--policy", str(path), "--json", "record-spend", "--estimated-usd", "1.2"]) == 0
+    assert (
+        engineering_main(
+            ["--policy", str(path), "--json", "record-spend", "--estimated-usd", "1.2"]
+        )
+        == 0
+    )
     payload = json.loads(capsys.readouterr().out)
     after = load_policy(path)
     assert payload["estimated_usd"] == 1.2
