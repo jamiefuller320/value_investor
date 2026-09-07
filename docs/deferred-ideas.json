@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-07T10:54:20+00:00",
+  "updated_at": "2026-09-07T11:11:28+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7205,6 +7205,57 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a07ad9-a785-7b61-a74e-69c091c3a277",
       "added_at": "2026-09-07T07:59:38+00:00"
+    },
+    {
+      "id": "L326",
+      "category": "later",
+      "section": "learning",
+      "title": "Full-screened exclusion on admitted shards",
+      "summary": "Admitted-market equal-support runs exclusion-universe in the default buy_tier_only mode, so not-buy-tier names never enter that ladder. Below-tier counterfactuals today come from exit-timing (hold \u2265 0.28, top 25/week). Switch shards to full_screened only if buy-tier exclusion plus exit-timing cannot answer whether looser knobs would have helped.",
+      "revisit_when": "Deciding whether to fork shard AI and buy_tier_only exclusion plus exit-timing look insufficient for below-tier knob questions",
+      "tags": [
+        "equal-support",
+        "near-miss",
+        "exclusion",
+        "sp500",
+        "asx200"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T11:11:27+00:00"
+    },
+    {
+      "id": "N104",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Do not fold shard near-miss reviews into FTSE Sunday analysis-review",
+      "summary": "Equal-support writes exclusion and exit-timing reviews under markets/<id>/screen/. Learning director and analysis-review still read FTSE docs/data/ only. Keep it that way so shard watch stays a Sunday human task and does not steal P1 FTSE review attention.",
+      "revisit_when": "Epoch-0 and tight near-miss groups have forward marks and a single review surface is needed to decide the AI-fork gate",
+      "tags": [
+        "equal-support",
+        "near-miss",
+        "analysis-review",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T11:11:28+00:00"
+    },
+    {
+      "id": "L327",
+      "category": "later",
+      "section": "learning",
+      "title": "Extra near-miss cuts: sector-cap blocks and buy-tier dropouts",
+      "summary": "Current watch groups do not isolate names that would be buy-tier but were sector-capped, or names that printed buy then dropped to hold. Add those cuts only if buy-not-now plus hold-near-buy leave an obvious counterfactual hole.",
+      "revisit_when": "After several Sunday screens, buy-not-now and hold-near-buy marks look too thin or biased to answer knob questions",
+      "tags": [
+        "equal-support",
+        "near-miss",
+        "sector-cap"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T11:11:28+00:00"
     }
   ],
   "fragments": [
