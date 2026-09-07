@@ -277,7 +277,8 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
 PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
     "APTV": (
         "Leftover indexed-without-body rows are third-party 8-K cover HTML "
-        "(tender-offer EX-99.1); ir.aptiv.com is Cloudflare-gated with no direct PDF href."
+        "(tender-offer EX-99.1); EX-99.1 exhibits fetch but are not the indexed URLs "
+        "and IR PDFs duplicate already-bodied 10-K/10-Q."
     ),
     "BXP": (
         "Leftover indexed-without-body rows are misattributed Investegate RNS for "
