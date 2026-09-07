@@ -118,6 +118,32 @@ def sprint_ingest_complete(health: dict[str, Any]) -> bool:
     return bool(health.get("ingest_exhausted"))
 
 
+def should_keep_on_library_maintenance(
+    market_id: str,
+    health: dict[str, Any],
+    *,
+    policy: dict[str, Any] | None = None,
+) -> bool:
+    """True when the shared maintenance workflow should deepen this market.
+
+    Live raw parity or leftover exhaustion always qualify. Admitted learning
+    markets stay on the loop even after a screen or discovery pass adds
+    buy-tier names and live parity dips — that is how new stocks stay in
+    view. A still-sprinting focus market does not qualify just because it
+    remains on a stale ``ingest_parity_markets`` list.
+    """
+    if ingest_parity_met(health) or bool(health.get("ingest_exhausted")):
+        return True
+    from value_investor.market_shard_admission import admitted_learning_markets_for_policy
+
+    admitted = set(admitted_learning_markets_for_policy(policy))
+    mid = str(market_id or "").strip()
+    if mid not in admitted:
+        return False
+    focus = str((policy or {}).get("focus_market") or "").strip()
+    return mid != focus
+
+
 def should_run_parallel_sprint_ingest(
     market_id: str,
     health: dict[str, Any],
@@ -510,7 +536,11 @@ def list_library_ingest_maintenance_markets(
     policy_path: Path = DEFAULT_POLICY_PATH,
     policy: dict[str, Any] | None = None,
 ) -> list[str]:
-    """Markets at raw FTSE parity or with leftover thin/IWB parked as exhausted."""
+    """Admitted, exhausted, or live-parity markets for FTSE-volume deepen.
+
+    Admitted names stay listed when a later screen adds buy-tier gaps.
+    Sprinting focus is omitted unless live parity or exhaustion is true.
+    """
     library_root = Path(library_root)
     policy = policy if policy is not None else load_policy(policy_path)
     candidates: set[str] = {
@@ -532,7 +562,7 @@ def list_library_ingest_maintenance_markets(
             library_root=library_root,
             policy=policy,
         )
-        if ingest_parity_met(health) or bool(health.get("ingest_exhausted")):
+        if should_keep_on_library_maintenance(market_id, health, policy=policy):
             markets.append(market_id)
     return markets
 
@@ -652,6 +682,7 @@ __all__ = [
     "refresh_euro_ingest_dispatch",
     "should_run_parallel_sprint_ingest",
     "snapshot_library_buy_tier_filing_health",
+    "should_keep_on_library_maintenance",
     "sprint_ingest_complete",
     "write_euro_ingest_dispatch",
 ]

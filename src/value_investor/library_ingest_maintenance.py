@@ -21,6 +21,7 @@ from value_investor.library_ingest_dispatch import (
     next_parallel_sprint_queue_market,
     parallel_sprint_stream_for_market,
     replace_parallel_sprint_market,
+    should_keep_on_library_maintenance,
     sprint_ingest_complete,
 )
 from value_investor.library_ingest_escalation import (
@@ -138,7 +139,7 @@ def run_library_ingest_maintenance(
 
     for market_id in market_list:
         health = snapshot_library_buy_tier_filing_health(market_id, library_root=library_root)
-        if not ingest_parity_met(health) and not health.get("ingest_exhausted"):
+        if not should_keep_on_library_maintenance(market_id, health, policy=policy):
             outcome.errors.append(f"{market_id}: parity lost — skipped maintenance")
             continue
         try:

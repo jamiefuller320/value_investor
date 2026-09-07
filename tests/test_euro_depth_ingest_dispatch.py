@@ -87,6 +87,12 @@ def test_evaluate_dispatch_sprint_when_filing_gaps_remain():
         "unmeasured_buy_tier": 2,
         "zero_body_buy_tier": 1,
     }
+    policy = {
+        "focus_market": "euro_depth",
+        "ladder": {"admitted_learning_markets": ["asx200", "sp500"]},
+        "ingest_exhausted_markets": ["sp500"],
+        "ingest_parity_markets": ["asx200"],
+    }
     with (
         patch(
             "value_investor.library_ingest_dispatch.evaluate_market_phase",
@@ -95,6 +101,10 @@ def test_evaluate_dispatch_sprint_when_filing_gaps_remain():
         patch(
             "value_investor.library_ingest_dispatch.snapshot_library_buy_tier_filing_health",
             return_value=health,
+        ),
+        patch(
+            "value_investor.library_ingest_dispatch.load_policy",
+            return_value=policy,
         ),
     ):
         result = evaluate_euro_ingest_dispatch()
@@ -105,16 +115,21 @@ def test_evaluate_dispatch_sprint_when_filing_gaps_remain():
     assert result["ingest_parity_met"] is False
     assert result["max_daily_successes"] == 4
     assert result["max_targets"] == 24
+    # Admitted ASX/S&P stay on the shared maintenance loop even while euro sprints
+    # and even if a later screen reopens buy-tier filing gaps.
+    assert "asx200" in result["maintenance_markets"]
+    assert "sp500" in result["maintenance_markets"]
+    assert result["should_run_library_maintenance"] is True
     assert cron_enabled_for_dispatch(result) == {
         "morning": True,
         "afternoon": True,
         "midafternoon": True,
         "evening": True,
         "ladder_weekday": True,
-        "maintenance": False,
-        "maintenance_afternoon": False,
-        "maintenance_midafternoon": False,
-        "maintenance_evening": False,
+        "maintenance": True,
+        "maintenance_afternoon": True,
+        "maintenance_midafternoon": True,
+        "maintenance_evening": True,
     }
 
 

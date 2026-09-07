@@ -109,7 +109,7 @@ It does **not** start a shard AI-judgment track or `decision-review --apply`. Wa
 
 | Element | Wiring | Not this |
 |---------|--------|----------|
-| FTSE-volume ingest | Maintenance candidates include admitted ∪ exhausted ∪ parity | Fourth sprint stream |
+| FTSE-volume ingest | Maintenance candidates include admitted ∪ exhausted ∪ live parity. Admitted markets stay on that loop when a later screen adds buy-tier names and live parity dips | Fourth sprint stream |
 | Layer B screen clock | `observe_sim_include_admitted` | Focus-only Sunday screens |
 | Paper instrument | Frozen `buy_tier_level` | Shard AI / knob apply |
 | Buy-tier rememo | Same `rememo_body_lag_threshold` on that market's buy-tier | `research_all_graduated` / 21-market spray (N96) |
