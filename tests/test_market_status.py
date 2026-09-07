@@ -789,6 +789,6 @@ def test_sprint_tiles_include_two_day_ingest_and_admission_flags(tmp_path: Path)
 
     focus = _by_id(payload, "euro_depth")
     assert focus["ingest"] == INGEST_SPRINT
-    assert {row["id"] for row in (focus["sprint_progress"] or {}).get("admission_warnings") or []} >= {
-        "no_ingest_in_window"
-    }
+    assert {
+        row["id"] for row in (focus["sprint_progress"] or {}).get("admission_warnings") or []
+    } >= {"no_ingest_in_window"}

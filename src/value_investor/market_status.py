@@ -543,7 +543,11 @@ def _sprint_progress(
     if screen_at is None or (as_of.date() - screen_at.date()) > timedelta(
         days=STALE_SCREEN_AFTER_DAYS
     ):
-        age = "no dated screen" if screen_at is None else f"last screen {screen_at.date().isoformat()}"
+        age = (
+            "no dated screen"
+            if screen_at is None
+            else f"last screen {screen_at.date().isoformat()}"
+        )
         warnings.append(
             _admission_warning(
                 "stale_buy_tier_screen",
