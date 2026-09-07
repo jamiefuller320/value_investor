@@ -1257,6 +1257,33 @@ function renderMarketStatusGrid(data) {
     </section>`;
 }
 
+function equalizeMarketTileHeights() {
+  const tiles = document.querySelectorAll(".market-status-grid .market-tile");
+  if (!tiles.length) return;
+  tiles.forEach((tile) => {
+    tile.style.minHeight = "";
+    tile.style.height = "auto";
+  });
+  let max = 0;
+  tiles.forEach((tile) => {
+    max = Math.max(max, tile.offsetHeight);
+  });
+  const px = `${Math.ceil(max)}px`;
+  tiles.forEach((tile) => {
+    tile.style.height = "";
+    tile.style.minHeight = px;
+  });
+}
+
+function bindMarketTileEqualize() {
+  if (window.__marketTileEqualizeBound) return;
+  window.__marketTileEqualizeBound = true;
+  window.addEventListener("resize", () => {
+    window.clearTimeout(window.__marketTileEqualizeTimer);
+    window.__marketTileEqualizeTimer = window.setTimeout(equalizeMarketTileHeights, 50);
+  });
+}
+
 function renderOverview(data) {
   const meta = data.meta || {};
   const counts = meta.signal_counts || {};
@@ -3434,6 +3461,7 @@ function renderDashboard(data) {
   renderAutomation(data);
   renderPerformance(data);
   renderAnalysis(data);
+  equalizeMarketTileHeights();
 }
 
 async function loadOptionalDashboardJson(path) {
@@ -3456,6 +3484,7 @@ async function loadDashboard() {
 
 initTabs();
 bindDashboardAutoRefresh();
+bindMarketTileEqualize();
 loadDashboard();
 window.__loadDashboard = loadDashboard;
 window.__reloadDashboard = reloadDashboard;
