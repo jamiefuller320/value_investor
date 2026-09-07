@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-07T17:01:08+00:00",
+  "updated_at": "2026-09-07T18:03:10+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7404,6 +7404,39 @@
     {
       "id": "L333",
       "category": "later",
+      "section": "universe",
+      "title": "Yahoo benchmark for FTSE SmallCap observe clock",
+      "summary": "Sprint 2 (ftse_smallcap) is on the ingest profile but observe_sim_markets_for_policy drops it because it is missing from MARKET_BENCHMARKS. Phase evaluation then stays at 0 with blocker 'no benchmark configured for ftse_smallcap', so Sunday screen-lite never starts the dated archive clock. Add a Yahoo SmallCap index ticker (verify symbol) so stream 2 matches tsx60.",
+      "revisit_when": "Next Sunday ladder after ftse_smallcap is still on ingest_parallel_sprint_2, or when filling a spare stream with any market not in MARKET_BENCHMARKS",
+      "tags": [
+        "ftse_smallcap",
+        "observe-sim",
+        "benchmark",
+        "sprint"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-f018d59e-1f24-40f1-b38f-7d0b1555bd03",
+      "added_at": "2026-09-07T16:27:56+00:00"
+    },
+    {
+      "id": "L334",
+      "category": "later",
+      "section": "ops",
+      "title": "Market-status tile: ingest vs learning phase for spare sprints",
+      "summary": "Dashboard tiles show learning_phase_label 'Not started' whenever a market is missing from shard_phases.json. Spare sprint markets (tsx60, ftse_smallcap) already have live ingest badges, so the phase line reads as if the sprint has not begun. Derive Observe from live dispatch/evaluate_market_phase, or split ingest status from learning-book status.",
+      "revisit_when": "The Overview market grid is next edited, or a spare stream market is again asked why it shows not started",
+      "tags": [
+        "dashboard",
+        "market-status",
+        "sprint"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-f018d59e-1f24-40f1-b38f-7d0b1555bd03",
+      "added_at": "2026-09-07T16:28:11+00:00"
+    },
+    {
+      "id": "L335",
+      "category": "later",
       "section": "ops",
       "title": "Daily index densify for market-card held vs market charts",
       "summary": "Market equivalent currently uses dated macro snapshots (and observe-sim period endpoints when those are missing). A publish-time daily index series would fill intraweek path without fetching on dashboard refresh.",
@@ -7415,7 +7448,7 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-fb826a8a-b91b-4ef9-b0a6-6f183dcade83",
-      "added_at": "2026-09-07T17:01:08+00:00"
+      "added_at": "2026-09-07T18:03:10+00:00"
     },
     {
       "id": "N108",
@@ -7431,10 +7464,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-fb826a8a-b91b-4ef9-b0a6-6f183dcade83",
-      "added_at": "2026-09-07T17:01:08+00:00"
+      "added_at": "2026-09-07T18:03:10+00:00"
     },
     {
-      "id": "L334",
+      "id": "L336",
       "category": "later",
       "section": "ops",
       "title": "Add S&P 500 index levels to dated macro snapshots",
@@ -7447,7 +7480,7 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-fb826a8a-b91b-4ef9-b0a6-6f183dcade83",
-      "added_at": "2026-09-07T17:01:08+00:00"
+      "added_at": "2026-09-07T18:03:10+00:00"
     }
   ],
   "fragments": [
