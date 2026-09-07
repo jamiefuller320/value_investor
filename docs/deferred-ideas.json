@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-07T12:59:34+00:00",
+  "updated_at": "2026-09-07T15:12:04+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7368,6 +7368,38 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-8fc7b723-fa23-473d-94f0-bbfff2771d0f",
       "added_at": "2026-09-07T12:59:34+00:00"
+    },
+    {
+      "id": "N107",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Serialize engineering agents to one to avoid main races",
+      "summary": "max_parallel_engineering_agents=2 is useful for queue throughput, but concurrent jobs still race on main (queue JSON, automation.json). The spend-commit retry unblocks the PR path; do not drop parallel dispatch just to hide remaining bookkeeping races.",
+      "revisit_when": "Another engineering-agent or queue job fails because two main commits collide after the spend-retry fix lands",
+      "tags": [
+        "engineering",
+        "gha",
+        "concurrency"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07c65-704f-7e0f-b730-4d21ffa591bb",
+      "added_at": "2026-09-07T15:12:04+00:00"
+    },
+    {
+      "id": "L332",
+      "category": "later",
+      "section": "ops",
+      "title": "Move ad-hoc spend ledger off shared policy.json",
+      "summary": "Engineering-agent, ingest, and ladder jobs all mutate docs/data/library/policy.json. A dedicated spend ledger would remove the hottest contention point on main without changing checkpoint semantics.",
+      "revisit_when": "Spend or policy.json races persist after gha_commit_engineering_spend.sh is on main",
+      "tags": [
+        "engineering",
+        "spend",
+        "policy"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07c65-704f-7e0f-b730-4d21ffa591bb",
+      "added_at": "2026-09-07T15:12:04+00:00"
     }
   ],
   "fragments": [
