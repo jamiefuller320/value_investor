@@ -163,7 +163,9 @@ def _make_fund(cfg: BuyCrossArchiveConfig, *, name: str, created_at: str) -> Pap
     return fund
 
 
-def _price_map(candidates: list[dict[str, Any]], extra: dict[str, float] | None = None) -> dict[str, float]:
+def _price_map(
+    candidates: list[dict[str, Any]], extra: dict[str, float] | None = None
+) -> dict[str, float]:
     prices = {str(row["ticker"]): float(row["price"]) for row in candidates}
     if extra:
         for ticker, price in extra.items():
@@ -210,9 +212,7 @@ def _replay_book(
         bench_px = float(bench) if bench is not None and float(bench) > 0 else None
 
         rebalance_rows = [
-            row
-            for row in candidates
-            if str(row["ticker"]) in targets or str(row["ticker"]) in held
+            row for row in candidates if str(row["ticker"]) in targets or str(row["ticker"]) in held
         ]
         # Include held names that dropped out of the screen so exits can mark.
         held_missing = held - {str(row["ticker"]) for row in rebalance_rows}
@@ -299,9 +299,7 @@ def _replay_book(
         bench_total = (float(last_bench) / float(first_bench)) - 1.0
     week_pairs = max(0, len(weekly) - 1)
     excesses = [
-        float(row["weekly_excess"])
-        for row in weekly
-        if row.get("weekly_excess") is not None
+        float(row["weekly_excess"]) for row in weekly if row.get("weekly_excess") is not None
     ]
     summary = {
         "week_pairs": week_pairs,
@@ -310,13 +308,9 @@ def _replay_book(
         "total_return": None if total_ret is None else round(total_ret, 6),
         "benchmark_total_return": None if bench_total is None else round(bench_total, 6),
         "excess_vs_benchmark": (
-            None
-            if total_ret is None or bench_total is None
-            else round(total_ret - bench_total, 6)
+            None if total_ret is None or bench_total is None else round(total_ret - bench_total, 6)
         ),
-        "mean_weekly_excess": (
-            None if not excesses else round(sum(excesses) / len(excesses), 6)
-        ),
+        "mean_weekly_excess": (None if not excesses else round(sum(excesses) / len(excesses), 6)),
         "final_holdings_count": weekly[-1]["holdings_count"] if weekly else 0,
         "total_crosses": sum(int(row["cross_count"]) for row in weekly),
         "total_trades": sum(int(row["trade_count"]) for row in weekly),
@@ -425,12 +419,8 @@ def run_buy_cross_archive_sim(
 
 
 def _write_artifacts(output_dir: Path, store: dict[str, Any], review: dict[str, Any]) -> None:
-    (output_dir / COHORTS_FILENAME).write_text(
-        json.dumps(store, indent=2) + "\n", encoding="utf-8"
-    )
-    (output_dir / REVIEW_FILENAME).write_text(
-        json.dumps(review, indent=2) + "\n", encoding="utf-8"
-    )
+    (output_dir / COHORTS_FILENAME).write_text(json.dumps(store, indent=2) + "\n", encoding="utf-8")
+    (output_dir / REVIEW_FILENAME).write_text(json.dumps(review, indent=2) + "\n", encoding="utf-8")
 
 
 def format_buy_cross_archive_text(review: dict[str, Any]) -> str:

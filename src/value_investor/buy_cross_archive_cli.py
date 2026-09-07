@@ -50,11 +50,7 @@ def main(argv: list[str] | None = None) -> int:
     review = run_buy_cross_archive_sim(args.output_dir, config=config)
 
     if args.json:
-        slim = {
-            key: value
-            for key, value in review.items()
-            if key not in {"cross", "level"}
-        }
+        slim = {key: value for key, value in review.items() if key not in {"cross", "level"}}
         slim["cross_summary"] = (review.get("cross") or {}).get("summary")
         slim["level_summary"] = (review.get("level") or {}).get("summary")
         print(json.dumps(slim, indent=2))
