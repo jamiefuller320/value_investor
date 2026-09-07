@@ -9,6 +9,7 @@ from pathlib import Path
 
 from value_investor.ci_pr_autofix import (
     AUTOFIX_COMMIT_PREFIX,
+    _suggest_companion_paths,
     attempt_engineering_path_guard_autofix,
     attempt_pr_ci_autofix,
     ci_bot_already_attempted,
@@ -55,6 +56,13 @@ def test_classify_ci_log_failures_path_guard():
 def test_parse_path_guard_violations():
     paths = parse_path_guard_violations(PATH_GUARD_LOG)
     assert paths == ["tests/test_trial_engineering_chain.py"]
+
+
+def test_suggest_companion_paths_flattens_nested_research_modules():
+    extras = _suggest_companion_paths(["src/value_investor/research/ingest.py"])
+    assert "tests/test_research_ingest.py" in extras
+    extras = _suggest_companion_paths(["tests/test_research_ingest.py"])
+    assert "src/value_investor/research/ingest.py" in extras
 
 
 def test_diagnose_pr_ci_failure_engineering_branch():

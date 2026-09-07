@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-06T20:27:47+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T07:59:38+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -388,6 +388,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L301 | **SIX regulated filings for Swiss leftover IWB** | NOVN.SW has a GLEIF LEI but 0 ESEF filings (Switzerland is outside ESEF). Leftover Novartis IWB cannot be closed by filings.xbrl.org. SIX Exchange Regulation is the official path. | Swiss names remain in euro IWB after dual-listed SEC/IR paths are exhausted |
 | L302 | **Shared issuer-identifier cache across regimes** | UK already caches Yahoo ticker → Companies House number. Euro needs Yahoo ticker → LEI the same way; SEC aliases already map ABI→BUD. One small identifier store, market-specific register adapters. Do not wait to invent a universal OAM crawler. | GLEIF LEI-first ESEF lands and a second market (CH cache or ASX) would reuse the same lookup shape |
 | L308 | **Calendar unpark of exhausted ingest leftovers** | Ingest exhaustion unparks when filing coverage improves. If a parked name sits unchanged through an earnings season, a calendar revisit could re-open one discovery pass without waiting for an index fingerprint change. | Parked leftovers remain after the next reporting season with no coverage change, or operators want a scheduled unpark instead of coverage-triggered unpark. |
+| L317 | **CI PR Autofix verify pytest uses main site-packages** | Autofix installs the package from main into site-packages, then checks out the PR and runs full pytest. PR tests that import new symbols fail even when the PR CI test job (editable install) is green, so path-guard allowlist expands do not land. | The next engineering PR path-guard expand is blocked by autofix verify pytest after a green PR test job |
 
 ---
 
