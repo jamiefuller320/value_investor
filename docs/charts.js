@@ -396,33 +396,45 @@ function renderHeldVsMarketPolylines(payload, { width, height, pad }) {
   return { polylines, minY, maxY, xAt, points, series };
 }
 
-function renderHeldVsMarketSparkline(payload) {
-  const points = payload?.points || [];
-  if (payload?.status !== "ok" || points.length < 2) {
-    const reason = payload?.reason || "No marks yet";
-    return `<div class="held-vs-market-spark empty"><span class="muted small">${esc(reason)}</span></div>`;
-  }
-  const width = 220;
-  const height = 42;
-  const pad = { top: 4, right: 4, bottom: 4, left: 4 };
-  const drawn = renderHeldVsMarketPolylines(payload, { width, height, pad });
-  const last = payload.last || {};
-  const currency = payload.currency;
+function heldVsMarketLastCaption(payload) {
+  const last = payload?.last || {};
+  const currency = payload?.currency;
+  if (last.held == null) return "";
   const excess = last.excess_pct;
   const excessHtml =
     excess == null
       ? ""
       : `<span class="${excess >= 0 ? "text-positive" : "text-negative"}">${(Number(excess) * 100).toFixed(1)}%</span>`;
+  return `<div class="small held-vs-market-spark-caption">
+        Held ${esc(formatHeldMoney(last.held, currency))}
+        ${last.market != null ? ` · mkt ${esc(formatHeldMoney(last.market, currency))}` : ""}
+        ${excessHtml ? ` · ${excessHtml}` : ""}
+      </div>`;
+}
+
+function renderHeldVsMarketSparkline(payload) {
+  const points = payload?.points || [];
+  if (!payload || payload.status !== "ok") {
+    const reason = payload?.reason || "No marks yet";
+    return `<div class="held-vs-market-spark empty"><span class="muted small">${esc(reason)}</span></div>`;
+  }
+  if (points.length < 2) {
+    const day = (payload.last && payload.last.date) || (points[0] && points[0].date) || "";
+    return `<div class="held-vs-market-spark empty">
+      ${heldVsMarketLastCaption(payload)}
+      <span class="muted small">Path after next dated mark${day ? ` · opened ${esc(day)}` : ""}</span>
+    </div>`;
+  }
+  const width = 220;
+  const height = 42;
+  const pad = { top: 4, right: 4, bottom: 4, left: 4 };
+  const drawn = renderHeldVsMarketPolylines(payload, { width, height, pad });
   return `
     <div class="held-vs-market-spark">
       <svg viewBox="0 0 ${width} ${height}" class="held-vs-market-spark-svg" role="img" aria-label="Held book vs market equivalent">
         ${drawn.polylines}
       </svg>
-      <div class="small held-vs-market-spark-caption">
-        Held ${esc(formatHeldMoney(last.held, currency))}
-        ${last.market != null ? ` · mkt ${esc(formatHeldMoney(last.market, currency))}` : ""}
-        ${excessHtml ? ` · ${excessHtml}` : ""}
-      </div>
+      ${heldVsMarketLastCaption(payload)}
     </div>`;
 }
 
@@ -441,7 +453,7 @@ function renderHeldVsMarketChart(payload) {
       <div class="held-vs-market-chart">
         <h4 class="small" style="margin-top:1rem">Held vs market</h4>
         ${note}
-        <p class="muted small">${esc(payload.reason || "Need two dated marks before a path can plot.")}</p>
+        <p class="muted small">${esc(payload.reason || "Need two dated marks before a path can plot. Last print is still shown.")}</p>
         ${
           last.held != null
             ? `<p class="small">Last held ${esc(formatHeldMoney(last.held, currency))}${
