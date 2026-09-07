@@ -7,7 +7,9 @@ Two complementary experiments for an **unfiltered buy-tier book**:
 | **Level book** (`buy_tier_level`) | Live weekday paper-auto, Suite B | Monday cold start (empty cash → first fills) | Hold every raw-screen `buy` / `strong_buy` name |
 | **Cross book** (`buy_cross_archive`) | Sunday archive replay only | Week 0 is cash (no prior → no crosses) | Buy only names that *newly enter* buy-tier vs the prior weekly snapshot |
 
-Neither is a promotion gate. The 3-slot Suite A primary and Suite B fair twins stay as they are. Do **not** spawn a live buy-cross book from this archive (sparse historic crossings). This live FTSE epoch-zero is **not** the shard paper-entry model — library shards still wait for the Phase 1 archive gate and a weekly-paper slot ([`market-sharded-learning.md`](market-sharded-learning.md#what-enter-learning-means)).
+Neither is a promotion gate. The 3-slot Suite A primary and Suite B fair twins stay as they are. Do **not** spawn a live buy-cross book from this archive (sparse historic crossings).
+
+This live FTSE epoch-zero **is** the intended start instrument: history is not required to open the wide book; it is required to judge knobs and to replay names the book never held. Cloning the frozen level book onto a shard (L319) is later — do not wait for 12 archives to *start*, and do not treat spare ingest as a substitute. See [`market-sharded-learning.md`](market-sharded-learning.md#what-enter-learning-means).
 
 ## Level book (live, Monday)
 

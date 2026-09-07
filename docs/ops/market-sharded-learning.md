@@ -74,13 +74,19 @@ Independence answers *how books are kept apart*. **Gates + capacity** answer *wh
 | **Learning phase** *(P2 / weekly paper)* | Isolated paper book: rules, AI judgment, grace, technical | Phase 1 archive/observe gate **and** a `weekly_paper_shard_markets` slot (depth-first **capacity 1**) |
 | **`learning_ready`** | FTSE-equivalent *parity* (canonical filings + 12-week trajectory) | `filing_ready` **and** span ≥12 weeks / 12 unique screen days |
 
-**Buy-tier existence is the start of targeting, not of paper learning.** As soon as a shard can screen, it should independently accumulate Layer B archives, observe-sim marks, and (via the ingest cascade) buy-tier filing bodies. That is the “as soon as it is able” path.
+**Start vs promote.** History is **not** required to *open* a frozen buy-tier-level book. It is required to *judge* knobs, claim AI-equivalence, and replay the past. The live FTSE `buy_tier_level` book ([`buy-tier-cohort-labs.md`](buy-tier-cohort-labs.md)) is the intended learning instrument: hold the current raw buy-tier, let full entry/hold/exit lifecycle run, freeze knobs (`is_cohort_lab`). Later filters and “buy now” gates are overlays or counterfactuals on that wide book — not the thing you wait 12 weeks to start.
 
-**Paper learning waits for history and a scarce slot.** Phase 2 evidence is meaningless on a one-snapshot toy book — default ≥12 dated archives / observe snapshots (sprint may compress to 4). Even then only the policy list, sliced by `weekly_paper_shard_capacity`, actually runs `shard-paper`. Weekday paper is still **one** non-FTSE pilot at a time.
+| Act | Needs | Does not need |
+|-----|-------|----------------|
+| **Start epoch-zero** | One current screen with a buy-tier, prices, a paper runner | Dated archives, `learning_ready`, leftover-filing perfection |
+| **Promote / apply knobs** | Forward marks, N26 floors, cost-aware review | — |
+| **Replay below-threshold names** | Layer B snapshots (can start the same week as the book) | A 12-week wait *before* the first fill |
 
-**FTSE epoch-zero is not the shard entry model.** The live `buy_tier_level` book ([`buy-tier-cohort-labs.md`](buy-tier-cohort-labs.md)) can cold-start on the first weekday paper-auto because FTSE already has a live screen, weekday `paper-auto`, and filing depth. First fill is epoch-zero of a *cohort lab* on that path — frozen knobs, Suite B costs, unfiltered buy-tier. A new library shard does not inherit that machinery. Copying epoch-zero onto a shard at first buy-tier would skip the archive-span gate and consume paper-stack capacity that the depth-first cascade keeps on the current learning-phase candidate (`euro_depth` until Phase 2 weekly-paper gates clear).
+**Spare ingest without a book is the busy-but-empty failure mode.** Exhaustion parks leftover thin/IWB names, can flip `filing_ready` on solid names, and vacates the sprint slot. It does **not** start a lifecycle book (N94 still keeps weekly paper on `euro_depth`). `asx200` / `sp500` can already be `phase1_ready` with **0** weekly and weekday paper batches while four ingest workflows still look busy. Treat “book started / marks accruing” as the learning signal, not ingest job count.
 
-AI-judgment on a shard is also **not** treated as FTSE-equivalent until filing/memo parity looks FTSE-like (`phase1_require_ai_beat_rules` stays false on the euro pilot until then). A raw buy-tier list without bodies is enough to *hold names in observe-sim*; it is not enough to start an AI learning epoch.
+**What still waits.** Cloning the *full* AI weekday stack (rememo, 62-target ingest, `decision-review --apply`, human spot-check) stays capacity-limited. A frozen level book is the cheap start (L319). AI-judgment on a shard is not FTSE-equivalent until filing/memo parity looks FTSE-like. Phase 2 weekly-then-Phase-3 weekday remains the current *wired* path; the gap is that Sunday-only paper plus a policy slot delay the weekday lifecycle clock exhaustion was meant to unblock.
+
+**Below-tier protection against tight knobs** is a second instrument, not a reason to delay the wide book. A buy-tier-only book never sees names that never hit buy-tier. “Buy-tier but not buy now” is already the first cut on FTSE (`buy_tier_level` uses `skip_timing_wait=true`, so `timing_signal=wait` stays out). Full-screened exclusion-universe and exit-timing near-miss labs cover the rest **on FTSE** once ≥2 weekly snapshots exist. Shards get that clock by taking Layer B screens from week 0 (L320) — they do not need those archives *before* the first fill.
 
 ### Practical limits (why not every shard yesterday)
 
@@ -102,7 +108,7 @@ What *is* binding if “apply FTSE machinery to all shards as soon as possible�
 
 Ticker-level research is also not a perfect air gap: observe-sim / shard paper read focus research ∪ every other `markets/*/screen/research` so sibling-home memos work for dual-listed names. That is not book-P&L contamination.
 
-Raising weekly-paper capacity once a second market is `phase1_ready` and Sunday headroom exists is L152. Auto-enqueue of every `phase1_ready` name into `weekly_paper_shard_markets` is later (L318) — do not do it while capacity stays 1 on `euro_depth`.
+Raising weekly-paper capacity once a second market is `phase1_ready` and Sunday headroom exists is L152. Auto-enqueue of every `phase1_ready` name into `weekly_paper_shard_markets` is later (L318). Starting a **frozen** weekday buy-tier-level book without a 12-week wait is L319 — that is the cheap start, not a second full AI track set. Do not treat spare ingest job count as learning progress (N102).
 
 ## Phases and timescale
 
