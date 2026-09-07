@@ -328,3 +328,180 @@ function bindChartButtons(root, reportsByTicker) {
     });
   });
 }
+
+const HELD_VS_MARKET_KIND_STYLE = {
+  held: { dash: "", width: 2.25 },
+  market: { dash: "5 4", width: 1.8 },
+  branch: { dash: "3 3", width: 1.8 },
+};
+
+function formatHeldMoney(value, currency) {
+  if (value == null || Number.isNaN(Number(value))) return "—";
+  const amount = Number(value);
+  const symbol =
+    currency === "USD" ? "$" : currency === "EUR" ? "€" : currency === "AUD" ? "A$" : "£";
+  return `${symbol}${amount.toFixed(0)}`;
+}
+
+function heldVsMarketSeriesList(payload) {
+  const series = Array.isArray(payload?.series) ? payload.series : [];
+  if (series.length) return series;
+  return [
+    { id: "held", kind: "held", label: "Held book", color: "#2b6cb0" },
+    { id: "market", kind: "market", label: "Market equivalent", color: "#64748b" },
+  ];
+}
+
+function heldVsMarketPointValue(point, seriesRow) {
+  const kind = seriesRow.kind || seriesRow.id;
+  if (kind === "held" || seriesRow.id === "held") return point.held;
+  if (kind === "market" || seriesRow.id === "market") return point.market;
+  const branchId = String(seriesRow.id || "").replace(/^branch:/, "");
+  const branches = point.branches || {};
+  return branches[branchId];
+}
+
+function renderHeldVsMarketPolylines(payload, { width, height, pad }) {
+  const points = (payload.points || []).filter((row) => row && row.date);
+  const series = heldVsMarketSeriesList(payload);
+  const plotW = width - pad.left - pad.right;
+  const plotH = height - pad.top - pad.bottom;
+  const values = [];
+  for (const row of points) {
+    for (const seriesRow of series) {
+      const value = Number(heldVsMarketPointValue(row, seriesRow));
+      if (Number.isFinite(value)) values.push(value);
+    }
+  }
+  const minY = values.length ? Math.min(...values) * 0.995 : 0;
+  const maxY = values.length ? Math.max(...values) * 1.005 : 1;
+  const spanY = maxY - minY || 1;
+  const xAt = (index) => pad.left + (index / Math.max(points.length - 1, 1)) * plotW;
+  const yAt = (value) => pad.top + plotH - ((value - minY) / spanY) * plotH;
+  const polylines = series
+    .map((seriesRow) => {
+      const pairs = points
+        .map((row, index) => {
+          const value = Number(heldVsMarketPointValue(row, seriesRow));
+          if (!Number.isFinite(value)) return null;
+          return `${xAt(index)},${yAt(value)}`;
+        })
+        .filter(Boolean);
+      if (pairs.length < 2) return "";
+      const style = HELD_VS_MARKET_KIND_STYLE[seriesRow.kind] || HELD_VS_MARKET_KIND_STYLE.branch;
+      const color = seriesRow.color || (seriesRow.kind === "market" ? "#64748b" : "#2b6cb0");
+      return `<polyline fill="none" stroke="${color}" stroke-width="${style.width}" stroke-dasharray="${style.dash}" points="${pairs.join(" ")}" />`;
+    })
+    .join("");
+  return { polylines, minY, maxY, xAt, points, series };
+}
+
+function renderHeldVsMarketSparkline(payload) {
+  const points = payload?.points || [];
+  if (payload?.status !== "ok" || points.length < 2) {
+    const reason = payload?.reason || "No marks yet";
+    return `<div class="held-vs-market-spark empty"><span class="muted small">${esc(reason)}</span></div>`;
+  }
+  const width = 220;
+  const height = 42;
+  const pad = { top: 4, right: 4, bottom: 4, left: 4 };
+  const drawn = renderHeldVsMarketPolylines(payload, { width, height, pad });
+  const last = payload.last || {};
+  const currency = payload.currency;
+  const excess = last.excess_pct;
+  const excessHtml =
+    excess == null
+      ? ""
+      : `<span class="${excess >= 0 ? "text-positive" : "text-negative"}">${(Number(excess) * 100).toFixed(1)}%</span>`;
+  return `
+    <div class="held-vs-market-spark">
+      <svg viewBox="0 0 ${width} ${height}" class="held-vs-market-spark-svg" role="img" aria-label="Held book vs market equivalent">
+        ${drawn.polylines}
+      </svg>
+      <div class="small held-vs-market-spark-caption">
+        Held ${esc(formatHeldMoney(last.held, currency))}
+        ${last.market != null ? ` · mkt ${esc(formatHeldMoney(last.market, currency))}` : ""}
+        ${excessHtml ? ` · ${excessHtml}` : ""}
+      </div>
+    </div>`;
+}
+
+function renderHeldVsMarketChart(payload) {
+  if (!payload) {
+    return `<p class="muted small">Held vs market series not published yet.</p>`;
+  }
+  const points = payload.points || [];
+  const currency = payload.currency;
+  const last = payload.last || {};
+  const note = payload.note
+    ? `<p class="small muted">${esc(payload.note)}</p>`
+    : `<p class="small muted">Held-stock value vs the same capital in ${esc(payload.benchmark_ticker || "the local index")}. Knob-changed branches overlay here when applied.</p>`;
+  if (payload.status !== "ok" || points.length < 2) {
+    return `
+      <div class="held-vs-market-chart">
+        <h4 class="small" style="margin-top:1rem">Held vs market</h4>
+        ${note}
+        <p class="muted small">${esc(payload.reason || "Need two dated marks before a path can plot.")}</p>
+        ${
+          last.held != null
+            ? `<p class="small">Last held ${esc(formatHeldMoney(last.held, currency))}${
+                last.date ? ` · ${esc(last.date)}` : ""
+              }</p>`
+            : ""
+        }
+      </div>`;
+  }
+  const width = 620;
+  const height = 220;
+  const pad = { top: 18, right: 16, bottom: 36, left: 48 };
+  const drawn = renderHeldVsMarketPolylines(payload, { width, height, pad });
+  const xLabels = drawn.points
+    .map((row, index) => ({ date: row.date, index }))
+    .filter(
+      ({ index }) =>
+        index === 0 ||
+        index === drawn.points.length - 1 ||
+        index % Math.max(1, Math.ceil(drawn.points.length / 4)) === 0
+    )
+    .map(
+      ({ date, index }) =>
+        `<text x="${drawn.xAt(index)}" y="${height - 12}" text-anchor="middle" class="chart-axis-label">${esc(String(date).slice(0, 10))}</text>`
+    )
+    .join("");
+  const legend = drawn.series
+    .map((seriesRow) => {
+      const pending = seriesRow.status === "pending" ? " (pending)" : "";
+      return `<span class="chart-legend-item"><span class="chart-legend-swatch" style="background:${esc(
+        seriesRow.color || "#64748b"
+      )}"></span>${esc(seriesRow.label || seriesRow.id)}${esc(pending)}</span>`;
+    })
+    .join("");
+  const source = payload.source === "observe_sim" ? "observe sim" : payload.paper_instrument || "paper book";
+  return `
+    <div class="held-vs-market-chart">
+      <h4 class="small" style="margin-top:1rem">Held vs market</h4>
+      ${note}
+      <p class="small muted" style="margin-top:0">${esc(source)} · ${esc(payload.held_path || "marks")} / ${esc(
+        payload.market_path || "none"
+      )}${payload.branch_ready ? " · branch-ready" : ""}</p>
+      <div class="price-chart-wrap held-vs-market-wrap">
+        <svg viewBox="0 0 ${width} ${height}" class="price-chart held-vs-market-svg" role="img" aria-label="Held book versus market equivalent">
+          <text x="${pad.left}" y="${pad.top}" class="chart-axis-label">${esc(formatHeldMoney(drawn.maxY, currency))}</text>
+          <text x="${pad.left}" y="${height - pad.bottom}" class="chart-axis-label">${esc(formatHeldMoney(drawn.minY, currency))}</text>
+          ${drawn.polylines}
+          ${xLabels}
+        </svg>
+        <div class="chart-legend">${legend}</div>
+      </div>
+      <p class="small">
+        Last held ${esc(formatHeldMoney(last.held, currency))}
+        ${last.market != null ? ` vs market ${esc(formatHeldMoney(last.market, currency))}` : ""}
+        ${
+          last.excess_pct != null
+            ? ` · excess ${(Number(last.excess_pct) * 100).toFixed(1)}%`
+            : ""
+        }
+        ${last.date ? ` · ${esc(last.date)}` : ""}
+      </p>
+    </div>`;
+}
