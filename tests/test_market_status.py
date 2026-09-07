@@ -384,6 +384,12 @@ def test_dashboard_assets_include_market_status_grid():
     assert 'id="market-status-body"' in html
     assert ".market-status-grid" in css
     assert ".market-tile" in css
+    assert ".market-tile-chips" in css
+    assert "grid-auto-rows: 1fr" in css
+    assert 'class="market-tile-chips"' in app
+    tile_css = css.split(".market-tile {", 1)[1].split("}", 1)[0]
+    assert "white-space: normal" in tile_css
+    assert "height: 100%" in tile_css
 
 
 def test_dashboard_assets_include_system_gaps_card():

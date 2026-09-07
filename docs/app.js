@@ -1210,13 +1210,17 @@ function renderMarketStatusGrid(data) {
       <button type="button" class="market-tile health-${esc(health)}" data-market-id="${esc(row.market_id)}" aria-haspopup="dialog">
         <div class="market-tile-header">
           <strong>${esc(row.label)}</strong>
-          ${marketIngestBadge(row.ingest, row.ingest_stream)}
-          ${row.is_admitted ? '<span class="stage-badge stage-complete">admitted</span>' : ""}
+          <span class="market-tile-chips">
+            ${marketIngestBadge(row.ingest, row.ingest_stream)}
+            ${row.is_admitted ? '<span class="stage-badge stage-complete">admitted</span>' : ""}
+          </span>
         </div>
-        <div class="small muted">${esc(row.learning_phase_label || "Not started")}${row.is_focus ? " · focus" : ""}${row.is_live ? " · live" : ""}${row.shared_maintenance ? " · maint cron" : ""}</div>
+        <div class="small muted market-tile-phase">${esc(row.learning_phase_label || "Not started")}${row.is_focus ? " · focus" : ""}${row.is_live ? " · live" : ""}${row.shared_maintenance ? " · maint cron" : ""}</div>
+        <div class="market-tile-body">
         ${marketSignalBar(row.signal_counts)}
         <div class="small market-tile-signals">${marketSignalSummary(row)}</div>
-        <div class="small muted">Coverage ${esc(coverageLabel(row.coverage_pct))}${
+        </div>
+        <div class="small muted market-tile-meta">Coverage ${esc(coverageLabel(row.coverage_pct))}${
           row.near_miss
             ? ` · watch ${esc(String(row.near_miss.buy_tier_not_now_count ?? 0))}/${esc(
                 String(row.near_miss.hold_near_buy_count ?? 0)
