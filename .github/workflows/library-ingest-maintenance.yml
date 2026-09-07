@@ -1,7 +1,8 @@
 name: Library ingest maintenance
 
 # FTSE-standard scan-then-target filing maintenance for library markets at ingest
-# parity, plus exhausted leftover markets (parked thin/IWB skipped; unparked names deepen).
+# parity, exhausted leftovers (parked thin/IWB skipped), and admitted learning
+# markets. Shared workflow — stays scheduled while euro_depth is still in sprint.
 # Same quality bar and deepen volume as live ingest-loop.yml (see library_ingest_maintenance.py).
 # Cadence: Mon–Sat peak (07:30/10:30) + daily off-peak (13:30/16:30) for weekend news/IR.
 on:
@@ -74,7 +75,7 @@ jobs:
           markets = data.get("maintenance_markets") or []
           out = Path(os.environ["GITHUB_OUTPUT"])
           out.write_text(
-              f"should_run_maintenance={'true' if data.get('should_run_maintenance_ingest') else 'false'}\n"
+              f"should_run_maintenance={'true' if (data.get('should_run_library_maintenance') or markets) else 'false'}\n"
               f"maintenance_markets={','.join(markets)}\n"
               f"mode={data.get('mode', '')}\n",
               encoding="utf-8",

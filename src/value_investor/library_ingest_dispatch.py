@@ -48,6 +48,8 @@ SPRINT_CONFIG: dict[str, Any] = {
     "cron_midafternoon": True,
     "cron_evening": True,
     "cron_ladder_weekday": True,
+    # Focus-only: euro-ingest-loop stays on; shared library-ingest-maintenance
+    # crons are OR'd back on in enrich when maintenance_markets is nonempty.
     "cron_maintenance": False,
 }
 
@@ -216,6 +218,8 @@ def evaluate_library_ingest_dispatch(
         "cron_ladder_weekday": bool(config["cron_ladder_weekday"]),
         "cron_maintenance": bool(config.get("cron_maintenance")),
         "should_run_sprint_ingest": mode == MODE_SPRINT,
+        # Focus-market meaning only: this name is in maintenance/exhausted mode.
+        # Shared workflow enablement is should_run_library_maintenance after enrich.
         "should_run_maintenance_ingest": mode in {MODE_MAINTENANCE, MODE_EXHAUSTED},
         # Back-compat for euro-ingest-loop gate (sprint workflow only).
         "should_run_ingest": mode == MODE_SPRINT,
@@ -281,7 +285,7 @@ def enrich_library_ingest_dispatch(
     evaluation.update(
         _scheduler_stream_markets(evaluation, policy=policy, library_root=library_root)
     )
-    return evaluation
+    return apply_library_maintenance_schedule(evaluation)
 
 
 def _scheduler_stream_markets(
@@ -580,8 +584,27 @@ def load_euro_ingest_dispatch(*, path: Path = DEFAULT_DISPATCH_PATH) -> dict[str
         return None
 
 
+def apply_library_maintenance_schedule(evaluation: dict[str, Any]) -> dict[str, Any]:
+    """Keep shared maintenance crons on whenever any market needs that workflow.
+
+    Focus sprint mode only controls euro-ingest-loop slots. The library
+    maintenance workflow is shared by admitted / exhausted / parity markets
+    and must not turn off just because the focus market is still sprinting.
+    """
+    markets = [
+        str(m).strip() for m in (evaluation.get("maintenance_markets") or []) if str(m).strip()
+    ]
+    evaluation["maintenance_markets"] = markets
+    needs_library = bool(markets)
+    evaluation["should_run_library_maintenance"] = needs_library
+    evaluation["cron_maintenance"] = bool(evaluation.get("cron_maintenance")) or needs_library
+    return evaluation
+
+
 def cron_enabled_for_dispatch(evaluation: dict[str, Any]) -> dict[str, bool]:
-    maintenance = bool(evaluation.get("cron_maintenance"))
+    maintenance = bool(evaluation.get("cron_maintenance")) or bool(
+        evaluation.get("should_run_library_maintenance")
+    )
     return {
         "morning": bool(evaluation.get("cron_morning")),
         "afternoon": bool(evaluation.get("cron_afternoon")),
@@ -611,6 +634,7 @@ __all__ = [
     "MODE_MAINTENANCE",
     "MODE_SPRINT",
     "SPRINT_CONFIG",
+    "apply_library_maintenance_schedule",
     "cron_enabled_for_dispatch",
     "evaluate_euro_ingest_dispatch",
     "evaluate_library_ingest_dispatch",

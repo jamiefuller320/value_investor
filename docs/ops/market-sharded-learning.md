@@ -128,8 +128,10 @@ ftse-library equal-support --markets sp500,asx200
 | Approach | Use when | Do not use when |
 |----------|----------|-----------------|
 | **Stagger** | One market still holds the fat sprint. Existing +30/+60 min stream offsets, maintenance at `:30`, spare wait-on-head, and session timezones (AU / EU / US weekday paper) | As a substitute for admitting a post-threshold market |
-| **Parallel pipelines** | Graduated markets on **maintenance** (FTSE-volume, unparked names) plus one fat **sprint** head | A fourth equal sprint stream while a head is unfinished |
+| **Parallel pipelines** | Graduated markets on **maintenance** (FTSE-volume, unparked names) plus one fat **sprint** head. Shared `library-ingest-maintenance` crons stay on whenever `maintenance_markets` is nonempty — euro sprint mode does not disable them. | A fourth equal sprint stream while a head is unfinished |
 | **One maintenance job, many markets** | Two markets, short deepen | Several admitted books at `max_targets=62` / 3600s — the job is sequential and `timeout-minutes: 120` will clip the tail (L323) |
+
+**Spare auto-advance is correct.** When a spare stream hits `sprint_ingest_complete`, promote the next `market_queue` name into that slot (`tsx60` / `ftse_smallcap` today). Do not pause that rotation to “save capacity.” The watch is whether the shared runners still finish: maintenance `timeout-minutes: 120`, spare `spare_wait_seconds`, ESEF/EDGAR/IR/Yahoo rate limits. Revisit L323 when a third admitted market is on the maintenance list or a maintenance/sprint job starts clipping the tail.
 
 Hosted Actions minutes are not the bind (N66). What still collides if you naive-parallel: per-job timeouts, `push_library_ingest_artifacts` checkout races, and **source** rate limits (ESEF / EDGAR / IR / Yahoo) — staggering helps those more than a fourth workflow does.
 

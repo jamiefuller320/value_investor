@@ -126,7 +126,19 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: run offline library ladder (focus market)"
-          file_pattern: "docs/data/library/** docs/data/automation.json docs/data/engineering_tasks.json docs/data/library/grow_health_log.json"
+          file_pattern: >-
+            docs/data/library/**
+            docs/data/automation.json
+            docs/data/engineering_tasks.json
+            docs/data/library/grow_health_log.json
+            docs/data/paper_automation/markets/**/automated_fund.json
+            docs/data/paper_automation/markets/**/config.json
+            docs/data/paper_automation/markets/**/rebalance_log.json
+            docs/data/paper_automation/markets/**/shard_meta.json
+            docs/data/paper_automation/markets/**/shard_phase.json
+            docs/data/paper_automation/markets/**/weekday_batch_log.json
+            docs/data/paper_automation/markets/**/weekly_batch_log.json
+            docs/data/paper_automation/markets/**/learning_tracks_*.json
           # Email report / other automations may push to main while the ladder runs.
           skip_fetch: false
 
