@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-07T15:12:04+00:00",
+  "updated_at": "2026-09-07T17:01:08+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7400,6 +7400,54 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a07c65-704f-7e0f-b730-4d21ffa591bb",
       "added_at": "2026-09-07T15:12:04+00:00"
+    },
+    {
+      "id": "L333",
+      "category": "later",
+      "section": "ops",
+      "title": "Daily index densify for market-card held vs market charts",
+      "summary": "Market equivalent currently uses dated macro snapshots (and observe-sim period endpoints when those are missing). A publish-time daily index series would fill intraweek path without fetching on dashboard refresh.",
+      "revisit_when": "Held vs market charts are in regular Sunday use and a market with a paper book has >=5 weekday marks still missing intraweek index levels.",
+      "tags": [
+        "dashboard",
+        "charts",
+        "benchmark"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fb826a8a-b91b-4ef9-b0a6-6f183dcade83",
+      "added_at": "2026-09-07T17:01:08+00:00"
+    },
+    {
+      "id": "N108",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Overlay knob-changed branches on market-card held vs market charts",
+      "summary": "The dashboard series is branch-ready (kind=branch on the same dates via merge_branch_series). Do not apply a knob-changed overlay until shard/live books may apply knobs; do not spawn a twin book per knob.",
+      "revisit_when": "A recommend-status knob has >=4 forward weeks on the baseline cohort and a human asks for at most one overlay on the held vs market chart.",
+      "tags": [
+        "dashboard",
+        "knobs",
+        "N99"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fb826a8a-b91b-4ef9-b0a6-6f183dcade83",
+      "added_at": "2026-09-07T17:01:08+00:00"
+    },
+    {
+      "id": "L334",
+      "category": "later",
+      "section": "ops",
+      "title": "Add S&P 500 index levels to dated macro snapshots",
+      "summary": "US macro files currently have yields and DXY, not ^GSPC, so S&P paper books cannot draw a market-equivalent path on the market card until another index source exists.",
+      "revisit_when": "Admitted S&P buy_tier_level has >=2 dated marks and the Overview chart still has market_path none.",
+      "tags": [
+        "dashboard",
+        "macro",
+        "sp500"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fb826a8a-b91b-4ef9-b0a6-6f183dcade83",
+      "added_at": "2026-09-07T17:01:08+00:00"
     }
   ],
   "fragments": [
