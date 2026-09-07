@@ -61,7 +61,7 @@
         {
           "id": "sunday-shard-epoch0-watch",
           "title": "Watch shard epoch-0 and near-miss before forking AI",
-          "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book and near-miss watch only. Do not spawn shard AI-judgment or decision-review --apply until those groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
+          "summary": "Admitted markets (sp500, asx200) run a frozen buy-tier-level book plus equal-support near-miss groups (buy-not-now, not-buy-tier) and counterfactual archives. Do not spawn shard AI-judgment or decision-review --apply until those groups have marks. Knob apply is the same gate as forking the AI track. FTSE remains the data lead.",
           "automated": false,
           "doc_path": "docs/ops/market-sharded-learning.md",
           "doc_anchor": "what-enter-learning-means"
@@ -69,7 +69,7 @@
         {
           "id": "sunday-shard-epoch0-runs",
           "title": "Admitted-market epoch-0 shard (buy-tier-level + near-miss)",
-          "summary": "Ladder runs ftse-library shard-epoch0 for admitted learning markets: frozen Suite B buy-tier-level book and near_miss_watch.json. No AI-judgment track and no knob apply.",
+          "summary": "Ladder runs ftse-library shard-epoch0 then equal-support: frozen Suite B buy-tier-level book, timing stamp, near_miss_watch.json, and per-market exclusion/exit-timing archives. No AI-judgment track and no knob apply.",
           "automated": true,
           "doc_path": "docs/ops/market-sharded-learning.md",
           "doc_anchor": "what-enter-learning-means"

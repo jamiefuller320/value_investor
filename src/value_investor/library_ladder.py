@@ -32,6 +32,7 @@ from value_investor.library_dedupe import (
     existing_library_research_tickers,
     select_deduped_research_targets,
 )
+from value_investor.library_equal_support import run_equal_support_package
 from value_investor.library_graduation import (
     graduated_market_ids,
     maybe_graduate_focus,
@@ -100,6 +101,10 @@ def _ensure_ladder_policy(policy: dict[str, Any]) -> dict[str, Any]:
     ladder.setdefault("weekly_paper_shard_capacity", DEFAULT_WEEKLY_PAPER_SHARD_CAPACITY)
     ladder.setdefault("admitted_learning_markets", [])
     ladder.setdefault("epoch0_shard_after_screen", True)
+    ladder.setdefault("equal_support_after_screen", True)
+    ladder.setdefault("equal_support_stamp_timing", True)
+    ladder.setdefault("equal_support_counterfactual_archives", True)
+    ladder.setdefault("observe_sim_include_admitted", True)
     ladder.setdefault("phase1_require_ai_beat_rules", DEFAULT_PHASE1_REQUIRE_AI_BEAT_RULES)
     ladder.setdefault("phase1_min_screen_archives", 12)
     ladder.setdefault("phase2_min_weekly_batches", 8)
@@ -685,6 +690,21 @@ def run_library_ladder(
         }
     else:
         result["layers"]["epoch0_shard"] = run_epoch0_shards_for_markets(root, policy)
+
+    # B3c — equal-support: timing, near-miss groups, counterfactual archives, rememo list
+    policy = load_policy(policy_path)
+    if not ladder_cfg.get("equal_support_after_screen", True):
+        result["layers"]["equal_support"] = {
+            "skipped": True,
+            "reason": "equal_support_after_screen is off",
+        }
+    else:
+        result["layers"]["equal_support"] = run_equal_support_package(
+            root,
+            policy,
+            stamp_timing=bool(ladder_cfg.get("equal_support_stamp_timing", True)),
+            run_archives=bool(ladder_cfg.get("equal_support_counterfactual_archives", True)),
+        )
 
     # B4 — weekday paper shard for Phase-3 markets (after weekly when enabled)
     policy = load_policy(policy_path)

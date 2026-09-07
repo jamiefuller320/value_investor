@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T10:35:34+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T10:54:20+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -199,8 +199,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L317 | **Optional per-shard frozen buy-tier-level book after Phase 1** | Once a shard has the Phase 1 archive/observe gate, a cheap frozen Suite B buy-tier-level book (FTSE epoch-zero clone: no AI apply, unfiltered buy-tier) could start collecting paper marks without waiting for the capacity-1 AI weekly-paper slot. Do not launch this at first buy-tier or as a second full track set. | FTSE buy_tier_level has >=8 epoch marks and euro_depth Phase 2 weekly-paper gates are green |
 | L318 | **Auto-enqueue phase1-ready markets into weekly paper FIFO** | Once a shard meets the Phase 1 archive/observe gate, append it to weekly_paper_shard_markets behind the capacity slice instead of requiring a hand-edited policy list. Independent promotion when robust is the intended Phase 1-3 end-state. Do not enable while capacity stays 1 on euro_depth. | euro_depth Phase 2 weekly-paper gates are green and L152 raises weekly_paper_shard_capacity above 1 with proven Sunday ladder headroom |
 | L319 | **Start shard weekday epoch-0 buy-tier-level without archive history** | A frozen Suite B buy-tier-level book needs one current screen, prices, and a weekday runner — not 12 archives or learning_ready. Exhaustion can flip filing_ready on solid names and should unblock this start, not more spare ingest. Keep knobs frozen; do not clone the full AI weekday stack. History is for promote/apply and for replaying names the wide book never held. | FTSE buy_tier_level has first-fill marks and euro_depth weekly-paper is either green or explicitly deprioritized in favor of this cheaper weekday start |
-| L320 | **Shard below-tier and buy-not-now counterfactual observer from week 0** | A buy-tier-only book never sees names that never hit buy-tier. Buy-tier but not buy-now (timing wait, conviction, overlay) is the first tight-knob check. Start Layer B screens the same week as the epoch-0 book so exclusion-universe and exit-timing-style replays have PIT fields — do not wait for those archives before the first fill. | A shard buy-tier-level book is running and that market has >=2 dated screen archives |
-| L321 | **Equal-support package once a shard is admitted to learning** | When a market joins the learning set, give it FTSE-volume buy-tier ingest, the same screen cadence, the same paper instrument, and the same buy-tier rememo/body-lag rule. Plan-credit headroom is not a reason to keep spare-slot leftovers. Do not spray 21-market memo density (N96). Filing yield still differs by jurisdiction. | A second market is admitted (L319 weekday level book or weekly_paper_shard_capacity > 1) and ingest runner wall-clock can hold FTSE-volume on that set |
 
 ### Universe & data
 

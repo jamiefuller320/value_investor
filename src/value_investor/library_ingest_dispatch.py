@@ -518,6 +518,9 @@ def list_library_ingest_maintenance_markets(
     focus = str(policy.get("focus_market") or "").strip()
     if focus:
         candidates.add(focus)
+    from value_investor.market_shard_admission import admitted_learning_markets_for_policy
+
+    candidates.update(admitted_learning_markets_for_policy(policy))
     markets: list[str] = []
     for market_id in sorted(candidates):
         health = snapshot_library_buy_tier_filing_health(

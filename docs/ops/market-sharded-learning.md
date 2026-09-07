@@ -99,10 +99,27 @@ Spare 50%/25% fractions apply only while a market is still *in front* of that th
 **Admitted start (now).** `sp500` and `asx200` are on `ladder.admitted_learning_markets`. Equivalent resource starts immediately as:
 
 - Frozen weekday/Sunday **epoch-0** `buy_tier_level` book (`ftse-library shard-epoch0`)
-- Near-miss watch (`near_miss_watch.json`: buy-tier-but-not-now, hold-near-buy)
+- Near-miss watch (`near_miss_watch.json`: buy-not-now, not-buy-tier, hold-near-buy, never-buy-tier)
 - Existing maintenance ingest + Layer B screen clock
+- **Equal-support package** (`ftse-library equal-support`): market-aware timing stamp, buy-tier rememo eligibility at the same body-lag rule, and per-market exclusion-universe + exit-timing archives under `markets/<id>/screen/`
 
 It does **not** start a shard AI-judgment track or `decision-review --apply`. Watch epoch-0 and the near-miss groups first. FTSE stays the data lead (P1 live ingest / paper-auto). Euro keeps the fat sprint until its own maintenance threshold.
+
+**Equal-support package (market-agnostic).** Once a market is admitted, the same elements apply regardless of exchange suffix:
+
+| Element | Wiring | Not this |
+|---------|--------|----------|
+| FTSE-volume ingest | Maintenance candidates include admitted ∪ exhausted ∪ parity | Fourth sprint stream |
+| Layer B screen clock | `observe_sim_include_admitted` | Focus-only Sunday screens |
+| Paper instrument | Frozen `buy_tier_level` | Shard AI / knob apply |
+| Buy-tier rememo | Same `rememo_body_lag_threshold` on that market's buy-tier | `research_all_graduated` / 21-market spray (N96) |
+| Buy-not-now | `timing_signal=wait` on buy-tier (Yahoo via market mapper, PIT on dated archives) | LSE `.L` rewrite |
+| Not-buy-tier | Current below-buy-tier + `never_buy_tier` from dated archives; exit-timing archive on `screen/history/` | FTSE-only `docs/data/history` |
+
+```bash
+ftse-library equal-support
+ftse-library equal-support --markets sp500,asx200
+```
 
 **Knob apply is the AI-track gate.** `decision-review --apply` retunes picking knobs (`skip_timing_wait`, `min_conviction`, `sector_cap`). Frozen `buy_tier_level` is `is_cohort_lab=true` and cannot apply. Do not apply knobs on a shard until AI is a track, and do not make AI a track until the watch period has marks on epoch-0 **and** the near-miss groups. They are one decision, not two.
 
@@ -267,6 +284,10 @@ ftse-library shard-status --markets euro_depth --json
 # Admitted epoch-0 (buy-tier-level + near-miss; no AI)
 ftse-library shard-epoch0
 ftse-library shard-epoch0 --markets sp500,asx200
+
+# Equal-support package (timing, near-miss groups, counterfactual archives)
+ftse-library equal-support
+ftse-library equal-support --markets sp500,asx200
 
 # Manual Phase 2 weekly paper batch
 ftse-library shard-paper --markets euro_depth
