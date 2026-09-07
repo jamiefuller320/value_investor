@@ -55,7 +55,8 @@ jobs:
           if [ -n "$CURSOR_API_KEY" ]; then
             # Ingest before research-docs/gap-fill so memos see thickened filing bodies
             # (email_agent also enforces this order and syncs docs/data → output/research).
-            ARGS="$ARGS --deep-analysis --ingest-improvement-pass --ingest-improvement-cap 20 --research-docs --research-gap-fill --post-run-review --compile-engineering-tasks"
+            # L123: full-buy-tier cap matches weekday learning-phase deepen (62).
+            ARGS="$ARGS --deep-analysis --ingest-improvement-pass --ingest-improvement-cap 62 --research-docs --research-gap-fill --post-run-review --compile-engineering-tasks"
           fi
           ftse-email $ARGS
 
