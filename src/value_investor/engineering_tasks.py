@@ -37,9 +37,7 @@ BLOCKED_PATHS = (
 )
 
 # Allowlist expansions and queue status writes must not fail the PR path guard.
-PATH_GUARD_ALWAYS_ALLOWED = (
-    "docs/data/engineering_tasks.json",
-)
+PATH_GUARD_ALWAYS_ALLOWED = ("docs/data/engineering_tasks.json",)
 
 AREA_ALLOWED_PATHS: dict[str, list[str]] = {
     "ingest": [
