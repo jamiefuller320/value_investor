@@ -285,6 +285,11 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "Beximco Pharmaceuticals (AIM epic BXP collision); refetch rejects period_mismatch "
         "and SEC 10-K/10-Q are already bodied."
     ),
+    "CRH": (
+        "Leftover indexed-without-body rows are Item 1.04 mine-safety 8-K iXBRL primaries "
+        "below the substantiveness gate; SEC complete-submission .txt is fetchable but not "
+        "the indexed URL and 10-K/10-Q are already bodied."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.

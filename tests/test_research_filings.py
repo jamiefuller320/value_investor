@@ -6062,6 +6062,46 @@ def test_parked_source_hunter_skip_bxp_sp500():
     assert fetch_filings_ir_allowlist("BXP") == []
 
 
+def test_parked_source_hunter_skip_crh_sp500():
+    """eng-20260907-03: CRH leftover IWB is mine-safety 8-K iXBRL, not missing 10-K/10-Q."""
+    assert "CRH" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["CRH"]
+    assert "mine-safety" in reason
+    assert "8-K" in reason
+    assert "substantiveness" in reason
+    assert "10-K/10-Q" in reason
+    assert fetch_filings_ir_allowlist("CRH") == []
+
+
+def test_crh_mine_safety_8k_primary_fails_substantiveness_gate(monkeypatch):
+    """eng-20260907-03: CRH Mar/May 2026 mine-safety 8-K primaries extract below 1,200 chars."""
+    mine_safety_html = """
+    <html><body>
+    <ix:header><ix:hidden>us-gaap:EntityRegistrantName 2026-03-04</ix:hidden></ix:header>
+    <div>FORM 8-K CURRENT REPORT</div>
+    <p>Item 1.04 Mine Safety — Reporting of Shutdowns and Patterns of Violations.</p>
+    <p>On February 18, 2026, a subsidiary of CRH plc, APAC-Kansas, Inc., received a
+    Section 107(a) imminent danger order issued by the Mine Safety and Health Administration
+    at its Harrisonville Quarry in Harrisonville, Missouri. The order stated that three
+    employees were observed conducting maintenance work without wearing fall protection.
+    The mine manager immediately withdrew the employees and MSHA terminated the order.</p>
+    </body></html>
+    """
+
+    def fake_http_get(url, headers=None, timeout=60):
+        if url.endswith("crh-20260304.htm"):
+            return mine_safety_html.encode("utf-8")
+        if url.endswith("0001628280-26-014635-index.htm"):
+            return b'<html><body><a href="crh-20260304.htm">8-K</a></body></html>'
+        raise AssertionError(f"unexpected url {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_http_get)
+    body = fetch_filing_body(
+        "https://www.sec.gov/Archives/edgar/data/849395/000162828026014635/crh-20260304.htm"
+    )
+    assert body is None
+
+
 def test_bxp_iwb_beximco_investegate_refetch_rejects_period_mismatch():
     """eng-20260907-02: AIM epic BXP collision bodies fail refetch gate for sp500 BXP, Inc."""
     beximco_body = (
