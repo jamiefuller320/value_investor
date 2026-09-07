@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-07T16:30:17.843901+00:00",
+  "generated_at": "2026-09-07T16:34:00.530163+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy).",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -280,7 +280,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=2, thin=1, indexed_without_body=45)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=1, thin=1, indexed_without_body=65)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 3,
@@ -315,16 +315,15 @@
       "filing_health": {
         "buy_tier_count": 12,
         "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 2,
+        "zero_body_buy_tier": 1,
         "thin_body_buy_tier": 1,
-        "indexed_without_body": 45,
+        "indexed_without_body": 65,
         "bodies_median": 52.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
         "parked_count": 0,
         "zero_body_tickers": [
-          "MER.L",
           "GMS.L"
         ],
         "thin_body_tickers": [
@@ -333,7 +332,7 @@
         "unmeasured_tickers": [],
         "parked_tickers": []
       },
-      "filing_gaps": 2,
+      "filing_gaps": 1,
       "paper_instrument": null,
       "ai_judgment": null,
       "knob_apply": null,

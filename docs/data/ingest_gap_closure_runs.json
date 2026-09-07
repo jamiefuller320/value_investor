@@ -7993,8 +7993,115 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260907-01",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "FOXT.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "MER.L"
+        ],
+        "market_id": "ftse_smallcap",
+        "universe": "library",
+        "critical_path_blocker": "zero_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260907-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-07T16:32:17.929881+00:00",
+      "completed_at": "2026-09-07T16:33:28.122087+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": -20,
+        "delta_zero_body_buy_tier": 1,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "MER.L"
+        ],
+        "results": [
+          {
+            "ticker": "MER.L",
+            "reason": "zero_body",
+            "before": {
+              "filings_total": 5,
+              "filings_with_body": 0,
+              "indexed_without_body": 5
+            },
+            "after": {
+              "filings_total": 55,
+              "filings_with_body": 30,
+              "indexed_without_body": 25
+            },
+            "improved": true,
+            "regime": "uk_rns",
+            "filings_summary": {
+              "total": 55,
+              "annual": 5,
+              "interim": 1,
+              "trading_update": 2,
+              "other": 47,
+              "with_body": 10,
+              "period_coverage": {
+                "annual": {
+                  "total": 5,
+                  "with_body": 1
+                },
+                "interim": {
+                  "total": 1,
+                  "with_body": 1
+                },
+                "trading_update": {
+                  "total": 2,
+                  "with_body": 2
+                },
+                "other": {
+                  "total": 47,
+                  "with_body": 6
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 30,
+              "with_body_after": 30,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "MER.L",
+            "with_body_before": 0,
+            "with_body_after": 30,
+            "improved": true
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-06T16:34:10.208493+00:00",
+  "updated_at": "2026-09-07T16:33:28.122096+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
