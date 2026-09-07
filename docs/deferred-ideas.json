@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-07T11:11:28+00:00",
+  "updated_at": "2026-09-07T11:16:28+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7256,6 +7256,41 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
       "added_at": "2026-09-07T11:11:28+00:00"
+    },
+    {
+      "id": "N105",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not keep spare sprint on tsx60 or ftse_smallcap",
+      "summary": "After sp500/asx200 admitted, advance_parallel_sprint rotated stream 1 to tsx60 and stream 2 to ftse_smallcap. That is factory ingest on the next queue, not P2, and it also pulls those markets onto the observe-sim clock via ingest_profile. Pause both spare streams until euro_depth Phase 2 weekly-paper gates clear; keep euro fat slot plus maintenance on admitted markets.",
+      "revisit_when": "euro_depth weekly-paper Phase 2 gates clear and the fat slot is ready to shift",
+      "tags": [
+        "ingest",
+        "sprint",
+        "tsx60",
+        "ftse_smallcap",
+        "p2"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T11:16:28+00:00"
+    },
+    {
+      "id": "L328",
+      "category": "later",
+      "section": "learning",
+      "title": "Weekday local-open crons for admitted epoch-0 books",
+      "summary": "Shard buy_tier_level configs already stamp America/New_York and Australia/Sydney open+settle. There is no weekday orchestrator slot at those sessions; admitted books currently mark on Sunday ladder / one-off epoch0. Add staggered local-open dispatches only after the near-miss watch, and do not piggyback FTSE paper-auto at 08:25 UTC.",
+      "revisit_when": "Epoch-0 plus buy-not-now and hold-near-buy have enough weekday-like marks to justify a second paper clock",
+      "tags": [
+        "clock",
+        "epoch0",
+        "session",
+        "paper-auto"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T11:16:28+00:00"
     }
   ],
   "fragments": [

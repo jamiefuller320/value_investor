@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T11:11:28+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T11:16:28+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -153,6 +153,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N102 | **Do not treat spare ingest throughput as learning progress** | Spare-slot ingest plus observe-sim can look busy while phase1_ready markets (sp500, asx200) have zero weekly and weekday paper batches. Exhaustion vacates the sprint; it does not start a lifecycle book. Score learning by books started and marks accrued, not by ingest job count. | A frozen shard buy-tier-level book is wired (L319) or weekly_paper_shard_capacity holds a second book after euro_depth Phase 2 |
 | N103 | **Do not compare shard results across unequal support** | A fat-slot euro paper book is not evidence against a spare-slot S&P or ASX observe-sim. Unequal ingest volume, memo coverage, and paper cadence confound market vs treatment. Compare only after the same package is applied, or do not compare. | L321 equal-support package is wired for every admitted shard |
 | N104 | **Do not fold shard near-miss reviews into FTSE Sunday analysis-review** | Equal-support writes exclusion and exit-timing reviews under markets/<id>/screen/. Learning director and analysis-review still read FTSE docs/data/ only. Keep it that way so shard watch stays a Sunday human task and does not steal P1 FTSE review attention. | Epoch-0 and tight near-miss groups have forward marks and a single review surface is needed to decide the AI-fork gate |
+| N105 | **Do not keep spare sprint on tsx60 or ftse_smallcap** | After sp500/asx200 admitted, advance_parallel_sprint rotated stream 1 to tsx60 and stream 2 to ftse_smallcap. That is factory ingest on the next queue, not P2, and it also pulls those markets onto the observe-sim clock via ingest_profile. Pause both spare streams until euro_depth Phase 2 weekly-paper gates clear; keep euro fat slot plus maintenance on admitted markets. | euro_depth weekly-paper Phase 2 gates clear and the fat slot is ready to shift |
 
 ---
 
@@ -202,6 +203,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L319 | **Start shard weekday epoch-0 buy-tier-level without archive history** | A frozen Suite B buy-tier-level book needs one current screen, prices, and a weekday runner — not 12 archives or learning_ready. Exhaustion can flip filing_ready on solid names and should unblock this start, not more spare ingest. Keep knobs frozen; do not clone the full AI weekday stack. History is for promote/apply and for replaying names the wide book never held. | FTSE buy_tier_level has first-fill marks and euro_depth weekly-paper is either green or explicitly deprioritized in favor of this cheaper weekday start |
 | L326 | **Full-screened exclusion on admitted shards** | Admitted-market equal-support runs exclusion-universe in the default buy_tier_only mode, so not-buy-tier names never enter that ladder. Below-tier counterfactuals today come from exit-timing (hold ≥ 0.28, top 25/week). Switch shards to full_screened only if buy-tier exclusion plus exit-timing cannot answer whether looser knobs would have helped. | Deciding whether to fork shard AI and buy_tier_only exclusion plus exit-timing look insufficient for below-tier knob questions |
 | L327 | **Extra near-miss cuts: sector-cap blocks and buy-tier dropouts** | Current watch groups do not isolate names that would be buy-tier but were sector-capped, or names that printed buy then dropped to hold. Add those cuts only if buy-not-now plus hold-near-buy leave an obvious counterfactual hole. | After several Sunday screens, buy-not-now and hold-near-buy marks look too thin or biased to answer knob questions |
+| L328 | **Weekday local-open crons for admitted epoch-0 books** | Shard buy_tier_level configs already stamp America/New_York and Australia/Sydney open+settle. There is no weekday orchestrator slot at those sessions; admitted books currently mark on Sunday ladder / one-off epoch0. Add staggered local-open dispatches only after the near-miss watch, and do not piggyback FTSE paper-auto at 08:25 UTC. | Epoch-0 plus buy-not-now and hold-near-buy have enough weekday-like marks to justify a second paper clock |
 
 ### Universe & data
 
