@@ -33,6 +33,9 @@ While compute is unconstrained:
 
 - Weekday cron deepens up to **full buy-tier** (`max_targets=62`, `max_bodies=40`,
   ~60 min runtime).
+- Sunday email (`email-report.yml`) runs the same full-buy-tier ingest-improvement
+  cap (**62**, L123) *before* research/gap-fill so newly screened names have bodies
+  in the memo pass. Weekday drain still owns residual `indexed_without_body`.
 - After a successful batch, if `indexed_without_body > 0` **and progress was made**,
   the workflow chains another deepen (`drain_generation` 1…`max_drain_generations`,
   default max **12**) until gaps clear or a follow-up stalls with no progress.

@@ -185,6 +185,8 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "lynch_peg_model",
         "lynch_peg_statutory",
         "fcf_basis_overlay",
+        "interim_eps_decline_pct",
+        "adjusted_eps_growth_pct",
         "transition_key",
         "prior_signal",
         "conviction_timing_overlay",

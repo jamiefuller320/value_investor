@@ -6162,6 +6162,19 @@ def test_parked_source_hunter_skip_lmt_sp500():
     assert fetch_filings_ir_allowlist("LMT") == []
 
 
+def test_parked_source_hunter_skip_tsn_sp500():
+    """eng-20260907-10: TSN leftover IWB is Item 8.01 segment-recast 8-K, not missing 10-K/10-Q."""
+    assert "TSN" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["TSN"]
+    assert "8.01" in reason
+    assert "8-K" in reason
+    assert "segment" in reason
+    assert "EX-99.1" in reason
+    assert "substantiveness" in reason
+    assert "10-K/10-Q" in reason
+    assert fetch_filings_ir_allowlist("TSN") == []
+
+
 def test_ldos_acquisition_8k_primary_fails_substantiveness_gate(monkeypatch):
     """eng-20260907-08: LDOS Mar 2026 Entrust acquisition-closing 8-K primary is below gate."""
     cover_html = """
@@ -6253,6 +6266,49 @@ def test_intu_item901_8k_primary_fails_substantiveness_gate(monkeypatch):
     monkeypatch.setattr("value_investor.research.filings._http_get", fake_http_get)
     body = fetch_filing_body(
         "https://www.sec.gov/Archives/edgar/data/896878/000089687825000050/intu-20251120.htm"
+    )
+    assert body is None
+
+
+def test_tsn_segment_recast_8k_primary_fails_substantiveness_gate(monkeypatch):
+    """eng-20260907-10: TSN Jun 2026 Item 8.01 segment-recast 8-K primary is below gate."""
+    cover_html = """
+    <html><body>
+    <ix:header><ix:hidden>dei:EntityRegistrantName TYSON FOODS, INC.</ix:hidden></ix:header>
+    <div>FORM 8-K CURRENT REPORT</div>
+    <p>Item 8.01 Other Events.</p>
+    <p>On June 9, 2026, Tyson Foods, Inc. filed this Current Report on Form 8-K to recast
+    certain previously reported amounts to conform with segment reporting changes made to
+    align our segments with how we manage our business, with respect to the financial
+    information contained in our Annual Report on Form 10-K for the year ended
+    September 27, 2025. In February 2026, we announced that commencing in the first quarter
+    of fiscal 2026, the Company no longer allocates corporate expenses and amortization to
+    our segments. The recast information is presented in Exhibit 99.1 to this Form 8-K,
+    which is incorporated herein by reference.</p>
+    <p>Updates, where applicable, to Part I, Item 1. Business, Item 1A. Risk Factors,
+    Item 7. Management's Discussion and Analysis of Financial Condition and Results of
+    Operations, Part II, Item 8. Financial Statements and Supplementary Data, and Part IV,
+    Financial Statement Schedule from Tyson Foods, Inc. Annual Report on Form 10-K for the
+    year ended September 27, 2025, as filed with the Securities and Exchange Commission on
+    November 10, 2025.</p>
+    <p>Item 9.01 Financial Statements and Exhibits.</p>
+    <p>(d) Exhibits. Exhibit 99.1 — Recast financial information. Exhibit 104 — Cover Page
+    Interactive Data File formatted in iXBRL.</p>
+    <p>SIGNATURE Pursuant to the requirements of the Securities Exchange Act of 1934,
+    TYSON FOODS, INC. By: /s/ Curt T. Calaway Date: June 9, 2026</p>
+    </body></html>
+    """
+
+    def fake_http_get(url, headers=None, timeout=60):
+        if url.endswith("tsn-20260609.htm"):
+            return cover_html.encode("utf-8")
+        if url.endswith("0000100493-26-000032-index.htm"):
+            return b'<html><body><a href="tsn-20260609.htm">8-K</a></body></html>'
+        raise AssertionError(f"unexpected url {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_http_get)
+    body = fetch_filing_body(
+        "https://www.sec.gov/Archives/edgar/data/100493/000010049326000032/tsn-20260609.htm"
     )
     assert body is None
 

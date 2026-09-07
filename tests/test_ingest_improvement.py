@@ -9,6 +9,8 @@ from unittest.mock import patch
 from value_investor.research.format import format_ingest_improvement_text
 from value_investor.research.ingest_improvement import (
     BODY_GAP_BATCH_TICKERS,
+    DEFAULT_INGEST_IMPROVEMENT_CAP,
+    DEFAULT_WEEKDAY_BATCH_MAX_TARGETS,
     LOW_PENETRATION_BATCH_TICKERS,
     IngestImprovementSummary,
     IngestImprovementTarget,
@@ -18,6 +20,10 @@ from value_investor.research.ingest_improvement import (
     select_ingest_improvement_targets,
 )
 from value_investor.summary import CompanyReport
+
+
+def test_sunday_ingest_cap_matches_weekday_learning_phase():
+    assert DEFAULT_INGEST_IMPROVEMENT_CAP == DEFAULT_WEEKDAY_BATCH_MAX_TARGETS == 62
 
 
 def _report(ticker: str, name: str, signal: str = "strong_buy") -> CompanyReport:

@@ -47,10 +47,12 @@ from value_investor.summary import CompanyReport
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_INGEST_IMPROVEMENT_CAP = 15
 # Learning-phase default: deepen roughly full FTSE buy-tier in one weekday pass
 # when compute is unconstrained (stage 2b). Re-throttle when GHA minutes bind.
 DEFAULT_WEEKDAY_BATCH_MAX_TARGETS = 62
+# Sunday email ingest (L123) uses the same full-buy-tier cap so new screen names
+# have bodies before research/gap-fill. Do not silently drop back to a thin cap.
+DEFAULT_INGEST_IMPROVEMENT_CAP = DEFAULT_WEEKDAY_BATCH_MAX_TARGETS
 DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP = 6
 DEFAULT_PER_TICKER_MAX_SECONDS = 320.0
 PER_TICKER_MIN_BUDGET_SECONDS = 120.0

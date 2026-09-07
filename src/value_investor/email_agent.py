@@ -26,6 +26,7 @@ from value_investor.historical_analysis import (
 from value_investor.pipeline import run_screen, write_outputs
 from value_investor.publish import publish_dashboard
 from value_investor.research.format import research_documents_for_reports
+from value_investor.research.ingest_improvement import DEFAULT_WEEKDAY_BATCH_MAX_TARGETS
 from value_investor.research.overlay import apply_research_overlay, enrich_signals_with_research
 from value_investor.research.runner import (
     DEFAULT_RESEARCH_WEEKLY_CAP,
@@ -203,8 +204,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--ingest-improvement-cap",
         type=int,
-        default=15,
-        help="Max tickers for --ingest-improvement-pass (default: 15)",
+        default=DEFAULT_WEEKDAY_BATCH_MAX_TARGETS,
+        help=(
+            "Max tickers for --ingest-improvement-pass "
+            f"(default: {DEFAULT_WEEKDAY_BATCH_MAX_TARGETS}, same as weekday learning-phase deepen)"
+        ),
     )
     parser.add_argument(
         "--compile-engineering-tasks",

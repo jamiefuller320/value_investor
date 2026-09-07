@@ -83,14 +83,30 @@ def _effective_buy_signal(signal: str, adjusted: str | None) -> str:
 def _resolve_body_path(sources_dir: Path, body_path: str | None) -> Path | None:
     if not body_path:
         return None
-    path = Path(body_path)
-    if not path.is_absolute():
-        path = sources_dir / "filings" / path
-    if path.is_file():
-        return path
-    resolved = resolve_json_path(path)
-    if resolved is not None and resolved.is_file():
-        return resolved
+    raw = Path(body_path)
+    filings_dir = sources_dir / "filings"
+    candidates: list[Path] = []
+    if raw.is_absolute():
+        candidates.append(raw)
+    else:
+        candidates.extend(
+            (
+                sources_dir / raw,
+                filings_dir / raw,
+                filings_dir.parent / raw,
+                filings_dir / "bodies" / raw.name,
+            )
+        )
+    seen: set[Path] = set()
+    for path in candidates:
+        if path in seen:
+            continue
+        seen.add(path)
+        if path.is_file():
+            return path
+        resolved = resolve_json_path(path)
+        if resolved is not None and resolved.is_file():
+            return resolved
     return None
 
 

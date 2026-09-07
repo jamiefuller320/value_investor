@@ -544,17 +544,27 @@ def _build_flags(
     memo_lib = _int(library_quality.get("memo_count"), 0)
     already = _int(ladder.get("already_researched_count"), 0)
     executed = _int(ladder.get("executed"), 0)
-    if thin_lib >= THIN_MEMO_MIN and memo_lib > 0 and already > 0 and executed == 0:
+    if thin_lib >= THIN_MEMO_MIN and memo_lib > 0:
+        skipped_as_done = already > 0 and executed == 0
         flags.append(
             _flag(
                 flag_id="thin_memo_counted_as_coverage",
-                severity="high",
+                severity="high" if skipped_as_done else "medium",
                 layer="produce",
                 title="First-pass / zero-body memos are counted as research done",
                 summary=(
                     f"{thin_lib} sampled {library_quality.get('market_id') or 'focus'} "
-                    f"memos are thin or have 0 filing bodies, but the ladder skipped "
-                    f"{already} names as already researched (executed={executed})."
+                    f"memos are thin or have 0 filing bodies"
+                    + (
+                        f", but the ladder skipped {already} names as already "
+                        f"researched (executed={executed})."
+                        if skipped_as_done
+                        else (
+                            f" ({executed} memo(s) executed this pass). Observe-sim / "
+                            "AI-judgment that gates on accumulate still consumes those "
+                            "weak labels."
+                        )
+                    )
                 ),
                 evidence={
                     "market_id": library_quality.get("market_id"),
@@ -565,7 +575,7 @@ def _build_flags(
                 },
             )
         )
-    elif thin_live >= THIN_MEMO_MIN and already > 0 and executed == 0:
+    elif thin_live >= THIN_MEMO_MIN:
         flags.append(
             _flag(
                 flag_id="thin_memo_counted_as_coverage",
@@ -573,8 +583,12 @@ def _build_flags(
                 layer="produce",
                 title="Committed live memos include thin / zero-body files treated as done",
                 summary=(
-                    f"{thin_live} committed live memos are thin or have 0 filing bodies "
-                    f"while the ladder reports already_researched={already} and executed=0."
+                    f"{thin_live} committed live memos are thin or have 0 filing bodies"
+                    + (
+                        f" while the ladder reports already_researched={already} and executed=0."
+                        if already > 0 and executed == 0
+                        else f" (executed={executed})."
+                    )
                 ),
                 evidence={
                     "thin_or_zero_body": thin_live,

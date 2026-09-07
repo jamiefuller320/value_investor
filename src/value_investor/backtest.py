@@ -138,6 +138,12 @@ def save_run_snapshot(
         "research_verdict",
         "adjusted_signal",
         "research_as_of",
+        "research_confidence",
+        "fcf_basis_overlay",
+        "interim_quality_overlay",
+        "earnings_basis_overlay",
+        "interim_eps_decline_pct",
+        "adjusted_eps_growth_pct",
         # Trajectory / boundary-watch richness (cheap full-range features)
         "signal_trend",
         "weeks_at_signal",
