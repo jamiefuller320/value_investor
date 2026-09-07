@@ -907,6 +907,126 @@ function marketIngestBadge(ingest, stream) {
   return `<span class="stage-badge ${cls[key] || "stage-active"}">${esc(label)}</span>`;
 }
 
+function learningBookLine(row) {
+  const label = (row && row.learning_phase_label) || "Not started";
+  return `Learning · ${label}`;
+}
+
+const ADMISSION_FLAG_LABELS = {
+  no_ingest_in_window: "no recent ingest",
+  runtime_cutoff: "runtime cutoff",
+  ingest_errors: "ingest errors",
+  zero_improve_stall: "0-improve stall",
+  unmeasured_stuck: "unmeasured stuck",
+  zero_body_stuck: "zero-body stuck",
+  stale_buy_tier_screen: "stale screen",
+  no_observe_benchmark: "no benchmark",
+};
+
+function _signedDelta(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n === 0) return "0";
+  return n > 0 ? `+${n}` : String(n);
+}
+
+function sprintProgressLine(progress) {
+  if (!progress) return "";
+  const remaining = progress.remaining || {};
+  const delta = progress.gap_delta || {};
+  const runs = Number(progress.run_count || 0);
+  const ingestBits = [
+    `${progress.window_days || 2}d: ${runs} run${runs === 1 ? "" : "s"}`,
+    `${esc(String(progress.improved ?? 0))} improved`,
+    `${esc(String(progress.targets ?? 0))} tgt`,
+  ];
+  if (delta.indexed_without_body) {
+    ingestBits.push(`IWB ${_signedDelta(delta.indexed_without_body)}`);
+  } else if (delta.filing_gaps) {
+    ingestBits.push(`gaps ${_signedDelta(delta.filing_gaps)}`);
+  }
+  const remainBits = [
+    remaining.unmeasured ? `unmeas ${remaining.unmeasured}` : "",
+    remaining.zero_body ? `zero ${remaining.zero_body}` : "",
+    remaining.thin ? `thin ${remaining.thin}` : "",
+    remaining.indexed_without_body ? `IWB ${remaining.indexed_without_body}` : "",
+  ].filter(Boolean);
+  const remainLine = progress.admission_ready
+    ? '<div class="small muted market-tile-sprint-remain">to admit: filing bar met</div>'
+    : remainBits.length
+      ? `<div class="small muted market-tile-sprint-remain">to admit: ${esc(remainBits.join(" · "))}</div>`
+      : '<div class="small muted market-tile-sprint-remain">to admit: waiting on filing snapshot</div>';
+  const flags = progress.admission_warnings || [];
+  const flagHtml = flags.length
+    ? `<div class="market-tile-flags">${flags
+        .slice(0, 3)
+        .map((flag) => {
+          const high = String(flag.severity || "") === "high";
+          const label = ADMISSION_FLAG_LABELS[flag.id] || flag.id;
+          return `<span class="admission-flag${high ? " admission-flag-high" : ""}">${esc(
+            label
+          )}</span>`;
+        })
+        .join("")}${
+        flags.length > 3
+          ? `<span class="admission-flag">+${flags.length - 3}</span>`
+          : ""
+      }</div>`
+    : "";
+  return `<div class="market-tile-sprint">
+      <div class="small market-tile-sprint-ingest">${ingestBits.join(" · ")}</div>
+      ${remainLine}
+      ${flagHtml}
+    </div>`;
+}
+
+function renderSprintProgressCard(progress) {
+  if (!progress) return "";
+  const remaining = progress.remaining || {};
+  const before = progress.gaps_before || {};
+  const after = progress.gaps_after || {};
+  const delta = progress.gap_delta || {};
+  const flags = progress.admission_warnings || [];
+  const improved = (progress.improved_tickers || []).slice(0, 8);
+  const flagHtml = flags.length
+    ? `<ul class="list-plain small">${flags
+        .map((flag) => {
+          const high = String(flag.severity || "") === "high";
+          const label = ADMISSION_FLAG_LABELS[flag.id] || flag.id;
+          return `<li><span class="admission-flag${
+            high ? " admission-flag-high" : ""
+          }">${esc(label)}</span> ${esc(flag.summary || "")}</li>`;
+        })
+        .join("")}</ul>`
+    : '<p class="muted small">No admission-progress flags. Remaining filing work is the sprint itself.</p>';
+  return `
+    <h4 class="small" style="margin-top:1rem">Last ${esc(String(progress.window_days || 2))} days ingest</h4>
+    ${settingRow("Runs", esc(String(progress.run_count ?? 0)))}
+    ${settingRow("Targets / improved", `${esc(String(progress.targets ?? 0))} tgt · ${esc(String(progress.improved ?? 0))} improved`)}
+    ${settingRow("Last ingest", `<span class="small">${esc(fmtDate(progress.last_run_at))}</span>`)}
+    ${
+      improved.length
+        ? settingRow("Improved names", `<span class="small">${improved.map((t) => esc(t)).join(", ")}</span>`)
+        : ""
+    }
+    ${settingRow(
+      "Gap change",
+      esc(
+        `unmeas ${before.unmeasured ?? 0}→${after.unmeasured ?? 0} (${_signedDelta(delta.unmeasured)}) · zero ${before.zero_body ?? 0}→${after.zero_body ?? 0} (${_signedDelta(delta.zero_body)}) · thin ${before.thin ?? 0}→${after.thin ?? 0} (${_signedDelta(delta.thin)}) · IWB ${before.indexed_without_body ?? 0}→${after.indexed_without_body ?? 0} (${_signedDelta(delta.indexed_without_body)})`
+      )
+    )}
+    ${settingRow(
+      "Remaining to admit",
+      esc(
+        progress.admission_ready
+          ? "sprint_ingest_complete (raw parity or leftover thin/IWB parked)"
+          : `unmeas ${remaining.unmeasured ?? 0} · zero ${remaining.zero_body ?? 0} · thin ${remaining.thin ?? 0} · IWB ${remaining.indexed_without_body ?? 0}`
+      )
+    )}
+    <h4 class="small" style="margin-top:1rem">Admission flags</h4>
+    ${flagHtml}
+  `;
+}
+
 function marketHealthBadge(health) {
   return overallStatusBadge(health);
 }
@@ -1107,9 +1227,10 @@ function renderMarketStatusCard(row) {
     <div class="market-card-badges">
       ${marketIngestBadge(row.ingest, row.ingest_stream)}
       ${marketHealthBadge(row.health)}
-      <span class="stage-badge stage-active">${esc(row.learning_phase_label || "Not started")}</span>
+      <span class="stage-badge stage-active">${esc(learningBookLine(row))}</span>
       ${tags.map((tag) => `<span class="badge badge-ii-ok">${esc(tag)}</span>`).join("")}
     </div>
+    ${typeof renderHeldVsMarketChart === "function" ? renderHeldVsMarketChart(row.held_vs_market) : ""}
     ${row.ingest_reason ? `<p class="small">${esc(row.ingest_reason)}</p>` : ""}
     ${settingRow("Role", esc(row.role || "—"))}
     ${
@@ -1183,6 +1304,11 @@ function renderMarketStatusCard(row) {
         ? `<h4 class="small" style="margin-top:1rem">Filing health</h4>${filingRows.join("")}`
         : ""
     }
+    ${
+      row.sprint_progress
+        ? renderSprintProgressCard(row.sprint_progress)
+        : ""
+    }
     <h4 class="small" style="margin-top:1rem">Learning phase</h4>
     ${blockerHtml}
     ${
@@ -1215,10 +1341,11 @@ function renderMarketStatusGrid(data) {
             ${row.is_admitted ? '<span class="stage-badge stage-complete">admitted</span>' : ""}
           </span>
         </div>
-        <div class="small muted market-tile-phase">${esc(row.learning_phase_label || "Not started")}${row.is_focus ? " · focus" : ""}${row.is_live ? " · live" : ""}${row.shared_maintenance ? " · maint cron" : ""}</div>
+        <div class="small muted market-tile-phase">${esc(learningBookLine(row))}${row.is_focus ? " · focus" : ""}${row.is_live ? " · live" : ""}${row.shared_maintenance ? " · maint cron" : ""}</div>
         <div class="market-tile-body">
         ${marketSignalBar(row.signal_counts)}
         <div class="small market-tile-signals">${marketSignalSummary(row)}</div>
+        ${typeof renderHeldVsMarketSparkline === "function" ? renderHeldVsMarketSparkline(row.held_vs_market) : ""}
         </div>
         <div class="small muted market-tile-meta">Coverage ${esc(coverageLabel(row.coverage_pct))}${
           row.near_miss
@@ -1231,6 +1358,7 @@ function renderMarketStatusGrid(data) {
             ? ` · epoch-0 ${esc(String(row.epoch0.holdings ?? "—"))} pos`
             : ""
         }</div>
+        ${sprintProgressLine(row.sprint_progress)}
       </button>`;
     })
     .join("");

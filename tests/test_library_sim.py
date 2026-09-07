@@ -217,6 +217,24 @@ def test_observe_sim_markets_include_ingest_profile_by_default():
     assert observe_sim_markets_for_policy(policy) == ["euro_depth"]
 
 
+def test_observe_sim_includes_ftse_smallcap_sprint_stream():
+    policy = {
+        "focus_market": "euro_depth",
+        "ingest_parallel_sprint": ["tsx60"],
+        "ingest_parallel_sprint_2": ["ftse_smallcap"],
+        "ladder": {
+            "observe_sim_after_screen": True,
+            "observe_sim_markets_mode": "explicit",
+            "observe_sim_markets": ["euro_depth"],
+        },
+    }
+    assert observe_sim_markets_for_policy(policy) == [
+        "euro_depth",
+        "tsx60",
+        "ftse_smallcap",
+    ]
+
+
 def test_observe_sim_ingest_profile_keeps_parity_and_equivalent_after_sprint():
     policy = {
         "focus_market": "euro_depth",
@@ -251,6 +269,13 @@ def test_benchmark_for_iseq20():
     from value_investor.library_sim import benchmark_for_market
 
     assert benchmark_for_market("iseq20") == "^IETP"
+
+
+def test_benchmark_for_ftse_smallcap():
+    from value_investor.library_sim import MARKET_BENCHMARKS, benchmark_for_market
+
+    assert MARKET_BENCHMARKS["ftse_smallcap"] == "^FTSC"
+    assert benchmark_for_market("ftse_smallcap") == "^FTSC"
 
 
 def test_build_library_run_snapshot_defaults_missing_conviction(tmp_path: Path):

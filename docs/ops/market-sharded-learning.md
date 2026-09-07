@@ -57,7 +57,7 @@ ftse-library shard-status --markets euro_depth
 | `docs/data/paper_automation/markets/<id>/shard_phase.json` | Per-market phase status + blockers |
 | `docs/data/paper_automation/markets/<id>/weekly_batch_log.json` | Phase 2 weekly batch marks |
 
-Each non-FTSE shard compares excess vs a **local benchmark** (`^GSPC`, `^STOXX50E`, `^IETP`, …).
+Each non-FTSE shard compares excess vs a **local benchmark** (`^GSPC`, `^STOXX50E`, `^IETP`, `^FTSC`, …).
 
 **Trading costs:** market shards and observe sims use **fair T212-shaped** per-market assumptions (UK stamp / FX / half-spread), not the live FTSE 3% stress case. See [`market-trading-costs.md`](market-trading-costs.md).
 

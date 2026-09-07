@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pandas as pd
@@ -269,12 +270,22 @@ def _by_id(payload: dict, market_id: str) -> dict:
     return next(row for row in payload["markets"] if row["market_id"] == market_id)
 
 
+def _status_roots(tmp_path: Path) -> dict:
+    return {
+        "paper_root": tmp_path / "paper_live",
+        "charts_dir": tmp_path / "charts",
+        "macro_root": tmp_path / "macro",
+        "shard_root": tmp_path / "paper",
+    }
+
+
 def test_build_market_status_classifies_ingest_and_signals(tmp_path: Path):
     library = _seed_library(tmp_path / "library")
     payload = build_market_status(
         library_root=library,
         policy_path=library / "policy.json",
         dispatch_path=library / "euro_ingest_dispatch.json",
+        **_status_roots(tmp_path),
         live_meta={
             "company_count": 249,
             "signal_counts": {"strong_buy": 16, "buy": 47, "hold": 142},
@@ -283,7 +294,7 @@ def test_build_market_status_classifies_ingest_and_signals(tmp_path: Path):
         live_run_at="2026-09-03T09:00:00+00:00",
     )
 
-    assert payload["schema_version"] == 2
+    assert payload["schema_version"] == 3
     assert payload["focus_market"] == "euro_depth"
     assert payload["summary"]["sprint_count"] >= 3
     assert payload["summary"]["live_count"] == 1
@@ -294,6 +305,11 @@ def test_build_market_status_classifies_ingest_and_signals(tmp_path: Path):
     assert live["signal_counts"]["strong_buy"] == 16
     assert live["learning_phase_label"] == "Live screen"
     assert live["ticker_count"] == 249
+    assert live["held_vs_market"]["branch_ready"] is True
+    assert all(
+        isinstance((row.get("held_vs_market") or {}).get("points"), list)
+        for row in payload["markets"]
+    )
 
     focus = _by_id(payload, "euro_depth")
     assert focus["role"] == ROLE_FOCUS
@@ -336,6 +352,7 @@ def test_build_market_status_survives_empty_library(tmp_path: Path):
         library_root=library,
         policy_path=library / "missing-policy.json",
         dispatch_path=library / "missing-dispatch.json",
+        **_status_roots(tmp_path),
         live_signal_counts={"hold": 10},
     )
     live = _by_id(payload, LIVE_MARKET_ID)
@@ -348,7 +365,7 @@ def test_publish_includes_market_status(tmp_path: Path):
     _write_sample_output(tmp_path)
     bundle = build_dashboard_bundle(tmp_path)
     assert bundle["market_status"]
-    assert bundle["market_status"]["schema_version"] == 2
+    assert bundle["market_status"]["schema_version"] == 3
     live = _by_id(bundle["market_status"], LIVE_MARKET_ID)
     assert live["signal_counts"]["strong_buy"] == 1
     assert live["ticker_count"] == 2
@@ -362,7 +379,7 @@ def test_publish_writes_market_status_sidecar(tmp_path: Path):
     sidecar = dest_dir / "data" / "market_status.json"
     assert sidecar.exists()
     payload = json.loads(sidecar.read_text(encoding="utf-8"))
-    assert payload["schema_version"] == 2
+    assert payload["schema_version"] == 3
     assert any(row["market_id"] == LIVE_MARKET_ID for row in payload["markets"])
 
 
@@ -379,6 +396,8 @@ def test_dashboard_assets_include_market_status_grid():
     assert "function bindDashboardAutoRefresh()" in app
     assert "async function applyDashboardSidecars(data)" in app
     assert "function spareSprintLabel(spare)" in app
+    assert "function learningBookLine(row)" in app
+    assert "Learning ·" in app
     assert "async function refreshLocalMarketStatus()" in app
     assert 'id="market-status-dialog"' in html
     assert 'id="market-status-body"' in html
@@ -387,8 +406,31 @@ def test_dashboard_assets_include_market_status_grid():
     assert ".market-tile-chips" in css
     assert "grid-auto-rows: 1fr" in css
     assert 'class="market-tile-chips"' in app
+    assert "function sprintProgressLine(progress)" in app
+    assert "function renderSprintProgressCard(progress)" in app
+    assert "Last ${esc(String(progress.window_days || 2))} days ingest" in app
+    assert "admission-flag" in app
+    assert ".admission-flag" in css
+    assert ".market-tile-sprint" in css
     assert "function equalizeMarketTileHeights()" in app
     assert "equalizeMarketTileHeights()" in app
+    assert "function heldVsMarketLastCaption(payload, { showExcess = true } = {})" in Path(
+        "docs/charts.js"
+    ).read_text(encoding="utf-8")
+    assert "function renderHeldVsMarketSparkline(payload)" in Path("docs/charts.js").read_text(
+        encoding="utf-8"
+    )
+    assert "function renderHeldVsMarketChart(payload)" in Path("docs/charts.js").read_text(
+        encoding="utf-8"
+    )
+    assert "renderHeldVsMarketSparkline(row.held_vs_market)" in app
+    assert "renderHeldVsMarketChart(row.held_vs_market)" in app
+    assert ".held-vs-market-spark" in css
+    assert (
+        "flex-direction: column"
+        in css.split(".held-vs-market-spark.empty {", 1)[1].split("}", 1)[0]
+    )
+    assert "branch-ready" in Path("docs/charts.js").read_text(encoding="utf-8")
     tile_css = css.split(".market-tile {", 1)[1].split("}", 1)[0]
     assert "white-space: normal" in tile_css
     assert "height: 100%" in tile_css
@@ -487,7 +529,18 @@ def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
             "contributed_capital": 1000.0,
             "holdings": {"AAA": {"ticker": "AAA"}, "BBB": {"ticker": "BBB"}},
             "equity_curve": [
-                {"at": "2026-09-07T10:31:56+00:00", "portfolio_value": 737.41, "cash": 0.0}
+                {
+                    "at": "2026-09-01T10:31:56+00:00",
+                    "portfolio_value": 1000.0,
+                    "cash": 0.0,
+                    "positions": 2,
+                },
+                {
+                    "at": "2026-09-07T10:31:56+00:00",
+                    "portfolio_value": 737.41,
+                    "cash": 0.0,
+                    "positions": 2,
+                },
             ],
         },
         compact=False,
@@ -497,7 +550,7 @@ def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
         library_root=library,
         policy_path=library / "policy.json",
         dispatch_path=library / "euro_ingest_dispatch.json",
-        shard_root=tmp_path / "paper",
+        **_status_roots(tmp_path),
         live_signal_counts={"hold": 1},
     )
     sp500 = _by_id(payload, "sp500")
@@ -510,12 +563,27 @@ def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
     assert sp500["learning_phase_label"] == "Epoch-0 level"
     assert sp500["epoch0"]["holdings"] == 2
     assert sp500["epoch0"]["nav"] == 737.41
+    chart = sp500["held_vs_market"]
+    assert chart["status"] == "ok"
+    assert chart["branch_ready"] is True
+    assert chart["source"] == "paper_fund"
+    assert len(chart["points"]) == 2
+    assert chart["points"][-1]["held"] == 737.41
+    assert any(row["kind"] == "branch" or row["id"] == "held" for row in chart["series"])
     assert sp500["near_miss"]["buy_tier_not_now_count"] == 12
     assert sp500["near_miss"]["hold_near_buy_sample"] == ["ABC"]
     assert sp500["equal_support"]["rememo_eligible_count"] == 54
     assert payload["admitted_markets"] == ["sp500", "asx200"]
     assert payload["summary"]["should_run_library_maintenance"] is True
     assert payload["summary"]["spare_sprint"] == {"1": "tsx60", "2": "ftse_smallcap"}
+    tsx60 = _by_id(payload, "tsx60")
+    assert tsx60["ingest"] == INGEST_SPRINT
+    assert tsx60["learning_phase"] == 1
+    assert tsx60["learning_phase_label"] == "Observe"
+    smallcap = _by_id(payload, "ftse_smallcap")
+    assert smallcap["ingest"] == INGEST_SPRINT
+    assert smallcap["learning_phase"] == 1
+    assert smallcap["learning_phase_label"] == "Observe"
 
     dest = tmp_path / "docs" / "data" / "market_status.json"
     write_json(
@@ -530,11 +598,307 @@ def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
         library_root=library,
         policy_path=library / "policy.json",
         dispatch_path=library / "euro_ingest_dispatch.json",
-        shard_root=tmp_path / "paper",
+        **_status_roots(tmp_path),
         latest_path=tmp_path / "docs" / "data" / "latest.json",
         path=dest,
     )
     assert path == dest
     written = json.loads(dest.read_text(encoding="utf-8"))
-    assert written["schema_version"] == 2
+    assert written["schema_version"] == 3
     assert _by_id(written, LIVE_MARKET_ID)["ticker_count"] == 2
+
+
+def test_sprint_without_benchmark_shows_ingest_only(tmp_path: Path):
+    library = _seed_library(tmp_path / "library")
+    policy = json.loads((library / "policy.json").read_text(encoding="utf-8"))
+    policy["ingest_parallel_sprint"] = ["aim"]
+    policy["ingest_parallel_sprint_2"] = []
+    (library / "policy.json").write_text(json.dumps(policy), encoding="utf-8")
+    dispatch = json.loads((library / "euro_ingest_dispatch.json").read_text(encoding="utf-8"))
+    dispatch["sprint_markets"] = ["euro_depth", "aim"]
+    dispatch["parallel_sprint_markets"] = ["aim"]
+    dispatch["parallel_sprint_2_markets"] = []
+    dispatch["parallel_sprint_status"] = [
+        {
+            "market_id": "aim",
+            "mode": "sprint",
+            "reason": "Ingest sprint: indexed_without_body=1",
+            "phase_blockers": ["no benchmark configured for aim"],
+        }
+    ]
+    (library / "euro_ingest_dispatch.json").write_text(json.dumps(dispatch), encoding="utf-8")
+
+    payload = build_market_status(
+        library_root=library,
+        policy_path=library / "policy.json",
+        dispatch_path=library / "euro_ingest_dispatch.json",
+        **_status_roots(tmp_path),
+        live_signal_counts={"hold": 1},
+    )
+    aim = _by_id(payload, "aim")
+    assert aim["ingest"] == INGEST_SPRINT
+    assert aim["learning_phase"] == 0
+    assert aim["learning_phase_label"] == "Ingest only"
+    assert "no benchmark configured for aim" in aim["phase_blockers"]
+
+
+def test_dispatch_current_phase_fills_missing_shard_row(tmp_path: Path):
+    library = _seed_library(tmp_path / "library")
+    policy = json.loads((library / "policy.json").read_text(encoding="utf-8"))
+    policy["ingest_parallel_sprint"] = ["tsx60"]
+    (library / "policy.json").write_text(json.dumps(policy), encoding="utf-8")
+    dispatch = json.loads((library / "euro_ingest_dispatch.json").read_text(encoding="utf-8"))
+    dispatch["sprint_markets"] = ["euro_depth", "tsx60"]
+    dispatch["parallel_sprint_markets"] = ["tsx60"]
+    dispatch["parallel_sprint_status"] = [
+        {
+            "market_id": "tsx60",
+            "mode": "sprint",
+            "current_phase": 1,
+            "next_phase": 1,
+            "phase_blockers": ["need 4 observe snapshots (have 0)"],
+        }
+    ]
+    (library / "euro_ingest_dispatch.json").write_text(json.dumps(dispatch), encoding="utf-8")
+
+    payload = build_market_status(
+        library_root=library,
+        policy_path=library / "policy.json",
+        dispatch_path=library / "euro_ingest_dispatch.json",
+        **_status_roots(tmp_path),
+        live_signal_counts={"hold": 1},
+    )
+    tsx60 = _by_id(payload, "tsx60")
+    assert tsx60["learning_phase"] == 1
+    assert tsx60["learning_phase_label"] == "Observe"
+    assert tsx60["learning"]["current_phase"] == 1
+
+
+def test_stale_dispatch_benchmark_blocker_yields_to_live_phase(tmp_path: Path):
+    library = _seed_library(tmp_path / "library")
+    policy = json.loads((library / "policy.json").read_text(encoding="utf-8"))
+    policy["ingest_parallel_sprint_2"] = ["ftse_smallcap"]
+    (library / "policy.json").write_text(json.dumps(policy), encoding="utf-8")
+    dispatch = json.loads((library / "euro_ingest_dispatch.json").read_text(encoding="utf-8"))
+    dispatch["sprint_markets"] = ["euro_depth", "ftse_smallcap"]
+    dispatch["parallel_sprint_2_markets"] = ["ftse_smallcap"]
+    dispatch["parallel_sprint_2_status"] = [
+        {
+            "market_id": "ftse_smallcap",
+            "mode": "sprint",
+            "phase_blockers": ["no benchmark configured for ftse_smallcap"],
+        }
+    ]
+    (library / "euro_ingest_dispatch.json").write_text(json.dumps(dispatch), encoding="utf-8")
+
+    payload = build_market_status(
+        library_root=library,
+        policy_path=library / "policy.json",
+        dispatch_path=library / "euro_ingest_dispatch.json",
+        **_status_roots(tmp_path),
+        live_signal_counts={"hold": 1},
+    )
+    smallcap = _by_id(payload, "ftse_smallcap")
+    assert smallcap["learning_phase"] == 1
+    assert smallcap["learning_phase_label"] == "Observe"
+    assert "no benchmark configured for ftse_smallcap" not in smallcap["phase_blockers"]
+    assert any("observe snapshots" in item for item in smallcap["phase_blockers"])
+
+
+def _health_snapshot(
+    *,
+    unmeasured: int,
+    zero_body: int,
+    thin: int,
+    iwb: int,
+    unmeasured_tickers: list[str] | None = None,
+    zero_tickers: list[str] | None = None,
+) -> dict:
+    return {
+        "unmeasured_buy_tier": unmeasured,
+        "zero_body_buy_tier": zero_body,
+        "thin_body_buy_tier": thin,
+        "indexed_without_body": iwb,
+        "unmeasured_tickers": unmeasured_tickers or [],
+        "zero_body_tickers": zero_tickers or [],
+        "ingest_exhausted": False,
+    }
+
+
+def test_sprint_tiles_include_two_day_ingest_and_admission_flags(tmp_path: Path):
+    library = _seed_library(tmp_path / "library")
+    policy = json.loads((library / "policy.json").read_text(encoding="utf-8"))
+    policy["ingest_parallel_sprint"] = ["tsx60"]
+    policy["ingest_parallel_sprint_2"] = ["ftse_smallcap"]
+    (library / "policy.json").write_text(json.dumps(policy), encoding="utf-8")
+
+    dispatch = json.loads((library / "euro_ingest_dispatch.json").read_text(encoding="utf-8"))
+    dispatch["sprint_markets"] = ["euro_depth", "tsx60", "ftse_smallcap"]
+    dispatch["parallel_sprint_markets"] = ["tsx60"]
+    dispatch["parallel_sprint_2_markets"] = ["ftse_smallcap"]
+    dispatch["parallel_sprint_status"] = [
+        {
+            "market_id": "tsx60",
+            "mode": "sprint",
+            "ingest_parity_met": False,
+            "ingest_exhausted": False,
+            "filing_gaps": 2,
+            "filing_health": _health_snapshot(
+                unmeasured=1,
+                zero_body=1,
+                thin=5,
+                iwb=182,
+                unmeasured_tickers=["GIB-A.TO"],
+                zero_tickers=["CCL-B.TO"],
+            ),
+        }
+    ]
+    dispatch["parallel_sprint_2_status"] = [
+        {
+            "market_id": "ftse_smallcap",
+            "mode": "sprint",
+            "ingest_parity_met": False,
+            "ingest_exhausted": False,
+            "filing_gaps": 2,
+            "phase_blockers": ["no benchmark configured for ftse_smallcap"],
+            "filing_health": _health_snapshot(unmeasured=0, zero_body=2, thin=1, iwb=45),
+        }
+    ]
+    (library / "euro_ingest_dispatch.json").write_text(json.dumps(dispatch), encoding="utf-8")
+
+    now = datetime(2026, 9, 7, 16, 0, tzinfo=UTC)
+    tsx_screen = library / "markets" / "tsx60" / "screen"
+    tsx_screen.mkdir(parents=True)
+    write_json(
+        tsx_screen / "latest_summary.json",
+        {
+            "market": "tsx60",
+            "run_at": "2026-08-16T11:58:34+00:00",
+            "ticker_count": 59,
+            "signal_counts": {"buy": 13, "strong_buy": 6, "hold": 29},
+            "shortlist_count": 19,
+        },
+        compact=False,
+    )
+    write_json(
+        library / "markets" / "tsx60" / "ingest_health_log.json",
+        {
+            "entries": [
+                {
+                    "run_at": "2026-09-06T13:42:00+00:00",
+                    "market_id": "tsx60",
+                    "health_before": _health_snapshot(unmeasured=1, zero_body=3, thin=9, iwb=235),
+                    "health_after": _health_snapshot(unmeasured=1, zero_body=1, thin=8, iwb=200),
+                    "targets": 18,
+                    "improved": 14,
+                    "improved_tickers": ["SU.TO", "NTR.TO"],
+                    "runtime_cutoff": False,
+                    "partial": False,
+                    "errors": [],
+                },
+                {
+                    "run_at": "2026-09-07T14:04:00+00:00",
+                    "market_id": "tsx60",
+                    "health_before": _health_snapshot(unmeasured=1, zero_body=1, thin=8, iwb=200),
+                    "health_after": _health_snapshot(unmeasured=1, zero_body=1, thin=5, iwb=182),
+                    "targets": 12,
+                    "improved": 4,
+                    "improved_tickers": ["CNR.TO", "WSP.TO"],
+                    "runtime_cutoff": False,
+                    "partial": False,
+                    "errors": [],
+                },
+            ]
+        },
+        compact=False,
+    )
+
+    small_screen = library / "markets" / "ftse_smallcap" / "screen"
+    small_screen.mkdir(parents=True, exist_ok=True)
+    write_json(
+        small_screen / "latest_summary.json",
+        {
+            "market": "ftse_smallcap",
+            "run_at": "2026-08-16T11:58:34+00:00",
+            "ticker_count": 79,
+            "signal_counts": {"buy": 10, "strong_buy": 2, "hold": 47},
+            "shortlist_count": 12,
+        },
+        compact=False,
+    )
+    write_json(
+        library / "markets" / "ftse_smallcap" / "ingest_health_log.json",
+        {
+            "entries": [
+                {
+                    "run_at": "2026-09-06T17:07:00+00:00",
+                    "market_id": "ftse_smallcap",
+                    "health_before": _health_snapshot(unmeasured=0, zero_body=3, thin=6, iwb=108),
+                    "health_after": _health_snapshot(unmeasured=0, zero_body=2, thin=3, iwb=70),
+                    "targets": 6,
+                    "improved": 3,
+                    "improved_tickers": ["FOXT.L"],
+                    "runtime_cutoff": False,
+                    "errors": [],
+                },
+                {
+                    "run_at": "2026-09-07T14:21:00+00:00",
+                    "market_id": "ftse_smallcap",
+                    "health_before": _health_snapshot(unmeasured=0, zero_body=2, thin=3, iwb=70),
+                    "health_after": _health_snapshot(unmeasured=0, zero_body=2, thin=1, iwb=45),
+                    "targets": 6,
+                    "improved": 2,
+                    "improved_tickers": ["DFS.L"],
+                    "runtime_cutoff": False,
+                    "errors": [],
+                },
+            ]
+        },
+        compact=False,
+    )
+
+    payload = build_market_status(
+        library_root=library,
+        policy_path=library / "policy.json",
+        dispatch_path=library / "euro_ingest_dispatch.json",
+        **_status_roots(tmp_path),
+        live_signal_counts={"hold": 1},
+        now=now,
+    )
+    tsx = _by_id(payload, "tsx60")
+    progress = tsx["sprint_progress"]
+    assert tsx["ingest"] == INGEST_SPRINT
+    assert progress["run_count"] == 2
+    assert progress["targets"] == 30
+    assert progress["improved"] == 18
+    assert progress["gap_delta"]["indexed_without_body"] == -53
+    assert progress["remaining"]["unmeasured"] == 1
+    assert progress["admission_ready"] is False
+    flag_ids = {row["id"] for row in progress["admission_warnings"]}
+    assert "stale_buy_tier_screen" in flag_ids
+    assert "unmeasured_stuck" in flag_ids
+    assert "zero_body_stuck" not in flag_ids
+    assert "no_ingest_in_window" not in flag_ids
+    assert "no_observe_benchmark" not in flag_ids
+
+    small = _by_id(payload, "ftse_smallcap")
+    small_progress = small["sprint_progress"]
+    assert small["ingest_stream"] == 2
+    assert small_progress["run_count"] == 2
+    assert small_progress["improved"] == 5
+    small_flags = {row["id"] for row in small_progress["admission_warnings"]}
+    # L333 mapped ftse_smallcap to ^FTSC, so the observe-clock flag clears.
+    assert "no_observe_benchmark" not in small_flags
+    assert "stale_buy_tier_screen" in small_flags
+    assert "zero_body_stuck" not in small_flags
+    assert "unmeasured_stuck" not in small_flags
+    assert small["learning_phase_label"] == "Observe"
+
+    live = _by_id(payload, LIVE_MARKET_ID)
+    assert live["sprint_progress"] is None
+
+    focus = _by_id(payload, "euro_depth")
+    assert focus["ingest"] == INGEST_SPRINT
+    assert {
+        row["id"] for row in (focus["sprint_progress"] or {}).get("admission_warnings") or []
+    } >= {"no_ingest_in_window"}

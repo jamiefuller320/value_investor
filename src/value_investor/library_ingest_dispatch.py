@@ -232,6 +232,8 @@ def evaluate_library_ingest_dispatch(
         "ingest_sprint_complete": sprint_ingest_complete(health),
         "parked_tickers": parked,
         "phase3_ready": bool(phase.get("phase3_ready")),
+        "current_phase": int(phase.get("current_phase") or 0),
+        "next_phase": int(phase.get("next_phase") or 0),
         "phase_blockers": list(phase.get("blockers") or []),
         "filing_health": health,
         "filing_gaps": gaps,
