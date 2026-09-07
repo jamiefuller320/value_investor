@@ -32,6 +32,7 @@ MARKET_BENCHMARKS: dict[str, str] = {
     "cac40": "^FCHI",
     "tsx60": "^GSPTSE",
     "iseq20": "^IETP",
+    "ftse_smallcap": "^FTSC",  # Yahoo FTSE SmallCap Index (verified 2026-09-07)
 }
 
 _STAMP_RE = re.compile(r"signals_(\d{8}_\d{6})\.csv$")

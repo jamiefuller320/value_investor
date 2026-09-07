@@ -122,6 +122,14 @@ def test_evaluate_market_phase_blockers_for_iseq20(tmp_path: Path):
     assert evaluation["blockers"]
 
 
+def test_evaluate_market_phase_ftse_smallcap_starts_observe(tmp_path: Path):
+    root = tmp_path / "library"
+    evaluation = evaluate_market_phase("ftse_smallcap", library_root=root, policy={})
+    assert evaluation["current_phase"] == PHASE_OBSERVE
+    assert evaluation["benchmark_ticker"] == "^FTSC"
+    assert "no benchmark configured for ftse_smallcap" not in evaluation["blockers"]
+
+
 def test_refresh_committed_phase_rollup_writes_files(tmp_path: Path, monkeypatch):
     root = tmp_path / "library"
     shard_root = tmp_path / "shards" / "sp500"
