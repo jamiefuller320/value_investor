@@ -6048,3 +6048,13 @@ def test_parked_source_hunter_skip_aptv_sp500():
     assert "8-K" in reason
     assert "ir.aptiv.com" in reason
     assert fetch_filings_ir_allowlist("APTV") == []
+
+
+def test_parked_source_hunter_skip_bxp_sp500():
+    """eng-20260907-01: BXP leftover IWB is misattributed Investegate RNS, not missing SEC filings."""
+    assert "BXP" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["BXP"]
+    assert "Investegate" in reason
+    assert "Beximco" in reason
+    assert "period_mismatch" in reason
+    assert fetch_filings_ir_allowlist("BXP") == []

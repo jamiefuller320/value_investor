@@ -279,6 +279,11 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "Leftover indexed-without-body rows are third-party 8-K cover HTML "
         "(tender-offer EX-99.1); ir.aptiv.com is Cloudflare-gated with no direct PDF href."
     ),
+    "BXP": (
+        "Leftover indexed-without-body rows are misattributed Investegate RNS for "
+        "Beximco Pharmaceuticals (AIM epic BXP collision); refetch rejects period_mismatch "
+        "and SEC 10-K/10-Q are already bodied."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
