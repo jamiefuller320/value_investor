@@ -131,6 +131,7 @@ def _seed_listed_price(row: dict[str, Any]) -> None:
         row["last"] = price
         return
 
+
 LONDON = ZoneInfo("Europe/London")
 DEFAULT_MARKET_OPEN = time(8, 0)
 DEFAULT_SETTLE_MINUTES = 75  # ~09:15 London after 08:00 open
@@ -854,9 +855,7 @@ def refresh_candidate_marks(
         return candidates
     if prefer_listed_prices:
         priced = [
-            row
-            for row in candidates
-            if row.get("ticker") and float(row.get("price") or 0) > 0
+            row for row in candidates if row.get("ticker") and float(row.get("price") or 0) > 0
         ]
         if priced and len(priced) == len([r for r in candidates if r.get("ticker")]):
             return candidates

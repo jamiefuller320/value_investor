@@ -75,9 +75,9 @@ def test_epoch0_runs_only_buy_tier_level(tmp_path: Path):
         screen / "latest_signals.csv",
         index=False,
     )
-    pd.DataFrame(
-        [{"ticker": "AAA", "score": 0.8, "passed": True, "model_name": "value"}]
-    ).to_csv(screen / "latest_model_results.csv", index=False)
+    pd.DataFrame([{"ticker": "AAA", "score": 0.8, "passed": True, "model_name": "value"}]).to_csv(
+        screen / "latest_model_results.csv", index=False
+    )
     shard_root = tmp_path / "paper" / "markets" / "sp500"
     captured: dict[str, object] = {}
 
