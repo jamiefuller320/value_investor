@@ -444,10 +444,29 @@ async function applyDashboardSidecars(data) {
   return data;
 }
 
-async function reloadDashboard({ silent } = {}) {
+function isLocalDashboardServe() {
+  return location.hostname === "127.0.0.1" || location.hostname === "localhost";
+}
+
+async function refreshLocalMarketStatus() {
+  if (!isLocalDashboardServe()) return false;
+  try {
+    const response = await fetch("/api/refresh", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function reloadDashboard({ silent, rebuild } = {}) {
   if (dashboardRefreshInFlight) return dashboardRefreshInFlight;
   dashboardRefreshInFlight = (async () => {
     try {
+      if (rebuild) await refreshLocalMarketStatus();
       if (!silent) {
         const meta = document.getElementById("run-meta");
         if (meta && !dashboardData) meta.textContent = "Loading dashboard…";
@@ -470,11 +489,11 @@ function bindDashboardAutoRefresh() {
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState !== "visible") return;
     if (Date.now() - dashboardLastLoadedAt < DASHBOARD_VISIBLE_RELOAD_MS) return;
-    void reloadDashboard({ silent: true });
+    void reloadDashboard({ silent: true, rebuild: true });
   });
   window.addEventListener("focus", () => {
     if (Date.now() - dashboardLastLoadedAt < DASHBOARD_VISIBLE_RELOAD_MS) return;
-    void reloadDashboard({ silent: true });
+    void reloadDashboard({ silent: true, rebuild: true });
   });
 }
 
@@ -498,7 +517,7 @@ async function openProgressReportMarkdown() {
 async function reloadProgressReportIntoDashboard() {
   setProgressReportStatus("Reloading published dashboard…");
   try {
-    const data = await reloadDashboard({ silent: true });
+    const data = await reloadDashboard({ silent: true, rebuild: true });
     const report = (data || {}).progress_report || {};
     setProgressReportStatus(`Reloaded · generated ${fmtDate(report.generated_at)}`);
   } catch (err) {
@@ -641,7 +660,7 @@ async function generateProgressReportFromUi() {
       if (!payload.ok || !payload.report) {
         throw new Error(payload.error || "Generate API returned no report");
       }
-      await reloadDashboard({ silent: true });
+      await reloadDashboard({ silent: true, rebuild: true });
       setProgressReportStatus(
         `Generated ${fmtDate(payload.report.generated_at)} · overall ${String(payload.report.overall || "").toUpperCase()}`
       );
@@ -862,6 +881,15 @@ const MARKET_INGEST_LABELS = {
   queued: "queued",
   idle: "idle",
 };
+
+function spareSprintLabel(spare) {
+  if (!spare || typeof spare !== "object") return "";
+  const parts = Object.keys(spare)
+    .sort((a, b) => Number(a) - Number(b))
+    .map((key) => `${key}=${spare[key]}`)
+    .filter((part) => part.includes("=") && !part.endsWith("="));
+  return parts.length ? ` · spare sprint ${esc(parts.join(" · "))}` : "";
+}
 
 function marketIngestBadge(ingest, stream) {
   const key = String(ingest || "idle");
@@ -1216,6 +1244,7 @@ function renderMarketStatusGrid(data) {
               ? " · shared maintenance cron on"
               : ""
           }
+          ${spareSprintLabel(summary.spare_sprint)}
           ${payload.generated_at ? ` · ${esc(fmtDate(payload.generated_at))}` : ""}
           · click a market for the detail card
         </p>

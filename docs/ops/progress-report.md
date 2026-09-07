@@ -51,7 +51,7 @@ items, and integration / role-coherence warnings.
 | Control | Behaviour |
 |---------|-----------|
 | **Generate fresh report** | Local: `POST /api/progress-report` via `ftse-dashboard-serve`. On GitHub Pages: dispatches the `progress-report` Actions workflow (requires a fine-grained PAT with Actions: Write stored in this browser via **Pages token**), then waits for Pages to publish the new JSON |
-| **Reload** | Re-fetches published dashboard JSON (cache-busted; same as a full page load, including market status) |
+| **Reload** | Re-fetches published dashboard JSON (cache-busted; same as a full page load, including market status). Local serve also `POST /api/refresh` to rebuild `market_status.json` first |
 | **View full report** | Opens `data/progress_report.md` in the memo dialog |
 | **Pages token** | Save / clear the browser-local PAT used for Pages generate (never committed) |
 
@@ -70,7 +70,10 @@ Initial Overview load also cache-busts `data/progress_report.json` (`?ts=…` +
 the rest) are **always** overlaid on `latest.json`, so a weekday ingest or
 ladder refresh is not hidden by Sunday's embedded copy. After Generate (local
 or Pages) the whole dashboard reloads, not just the progress card. Returning
-to the tab after 45s also re-fetches.
+to the tab after 45s also re-fetches (and locally rebuilds `market_status.json`).
+The market-status grid header shows admitted count, whether the shared
+maintenance cron is on, and spare-sprint names (`tsx60` / `ftse_smallcap`
+today). Admitted tiles show epoch-0 holdings and near-miss watch counts.
 
 GitHub Pages serves JSON with `max-age≈600`, so a plain
 refresh without busting can keep showing the previous report for up to ~10 minutes.

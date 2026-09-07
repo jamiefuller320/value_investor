@@ -378,6 +378,8 @@ def test_dashboard_assets_include_market_status_grid():
     assert "Near-miss watch" in app
     assert "function bindDashboardAutoRefresh()" in app
     assert "async function applyDashboardSidecars(data)" in app
+    assert "function spareSprintLabel(spare)" in app
+    assert "async function refreshLocalMarketStatus()" in app
     assert 'id="market-status-dialog"' in html
     assert 'id="market-status-body"' in html
     assert ".market-status-grid" in css
@@ -503,6 +505,7 @@ def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
     assert sp500["equal_support"]["rememo_eligible_count"] == 54
     assert payload["admitted_markets"] == ["sp500", "asx200"]
     assert payload["summary"]["should_run_library_maintenance"] is True
+    assert payload["summary"]["spare_sprint"] == {"1": "tsx60", "2": "ftse_smallcap"}
 
     dest = tmp_path / "docs" / "data" / "market_status.json"
     write_json(

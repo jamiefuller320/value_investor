@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-07T12:05:55+00:00",
+  "updated_at": "2026-09-07T12:59:34+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7352,6 +7352,22 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-58e13586-9496-4300-8dcc-0be00303f9e3",
       "added_at": "2026-09-07T12:05:55+00:00"
+    },
+    {
+      "id": "L331",
+      "category": "later",
+      "section": "ops",
+      "title": "Coalesce GitHub Pages deploys when ingest slots pile up",
+      "summary": "Ingest, paper-auto, and engineering-merge now each dispatch pages.yml after [skip ci] commits so the dashboard is not stale. If the pages concurrency queue backs up (cancel-in-progress is false), batch those deploys or dispatch only when market_status/automation generated_at actually changed.",
+      "revisit_when": "pages.yml waits more than a few minutes behind ingest/paper commits, or a third admitted market is on maintenance",
+      "tags": [
+        "dashboard",
+        "pages",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-8fc7b723-fa23-473d-94f0-bbfff2771d0f",
+      "added_at": "2026-09-07T12:59:34+00:00"
     }
   ],
   "fragments": [

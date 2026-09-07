@@ -21,7 +21,8 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     assert "DASHBOARD_SIDECARS" in text
     assert "function bindDashboardAutoRefresh()" in text
     assert "visibilitychange" in text
-    assert "await reloadDashboard({ silent: true })" in text
+    assert "await reloadDashboard({ silent: true, rebuild: true })" in text
+    assert 'fetch("/api/refresh"' in text
     # Sidecars overlay latest.json every load, not only when the embed is missing.
     assert "if (!data.market_status)" not in text
     assert "if (!data.automation)" not in text
