@@ -315,6 +315,12 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "Management's Discussion cross-reference and SEC complete-submission .txt is fetchable "
         "but not the indexed URL and 10-K/10-Q are already bodied."
     ),
+    "TSN": (
+        "Leftover indexed-without-body row is Item 8.01 segment-reporting recast 8-K iXBRL "
+        "primary below the substantiveness gate; narrative extraction trims at a "
+        "Management's Discussion cross-reference to the 2025 Form 10-K and EX-99.1 recast "
+        "financials fetch but are not the indexed URL and 10-K/10-Q are already bodied."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
