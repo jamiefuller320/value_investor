@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-07T11:30:10+00:00",
+  "updated_at": "2026-09-07T11:37:33+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7242,6 +7242,23 @@
       "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
       "added_at": "2026-09-07T11:30:02+00:00",
       "updated_at": "2026-09-07T11:30:10+00:00"
+    },
+    {
+      "id": "N105",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not pause spare sprint auto-advance",
+      "summary": "When a spare stream hits sprint_ingest_complete, promoting the next market_queue name (tsx60 / ftse_smallcap today) is correct. Do not stop those streams to save capacity. Watch shared runner timeouts and source rate limits instead; revisit L323 when a third admitted market is on maintenance or a job clips the tail.",
+      "revisit_when": "A third admitted market is on the maintenance list, or a maintenance/sprint job hits timeout-minutes: 120 or spare_wait skip",
+      "tags": [
+        "ingest",
+        "sprint",
+        "capacity",
+        "auto-advance"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T11:37:33+00:00"
     }
   ],
   "fragments": [

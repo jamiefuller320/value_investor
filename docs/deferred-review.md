@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T11:30:10+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T11:37:33+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -152,6 +152,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N101 | **Do not start shard paper books at first valid buy-tier** | Independence of shards means separate stacks and local benchmarks, not a paper book the day screen-lite first prints buy/strong_buy. First buy-tier starts ingest targeting, Layer B archives, and observe-sim. Paper learning still needs the Phase 1 archive/observe gate and a weekly_paper_shard_markets slot (capacity 1). The live FTSE buy_tier_level epoch-zero is a cohort lab on an already-rich weekday path, not the shard entry model. | euro_depth Phase 2 weekly-paper gates are green and a written cheaper frozen level-book path exists that does not consume the AI weekly-paper slot |
 | N102 | **Do not treat spare ingest throughput as learning progress** | Spare-slot ingest plus observe-sim can look busy while phase1_ready markets (sp500, asx200) have zero weekly and weekday paper batches. Exhaustion vacates the sprint; it does not start a lifecycle book. Score learning by books started and marks accrued, not by ingest job count. | A frozen shard buy-tier-level book is wired (L319) or weekly_paper_shard_capacity holds a second book after euro_depth Phase 2 |
 | N103 | **Do not compare shard results across unequal support** | A fat-slot euro paper book is not evidence against a spare-slot S&P or ASX observe-sim. Unequal ingest volume, memo coverage, and paper cadence confound market vs treatment. Compare only after the same package is applied, or do not compare. | L321 equal-support package is wired for every admitted shard |
+| N105 | **Do not pause spare sprint auto-advance** | When a spare stream hits sprint_ingest_complete, promoting the next market_queue name (tsx60 / ftse_smallcap today) is correct. Do not stop those streams to save capacity. Watch shared runner timeouts and source rate limits instead; revisit L323 when a third admitted market is on maintenance or a job clips the tail. | A third admitted market is on the maintenance list, or a maintenance/sprint job hits timeout-minutes: 120 or spare_wait skip |
 
 ---
 
