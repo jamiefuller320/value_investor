@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T15:12:04+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T16:28:11+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -219,6 +219,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L277 | **Keep other-market ingest efficiency as priority 2 behind live-path utilization** | After weekday FTSE decision-input work, keep investing in parallel-sprint speed and efficiency so filing bodies and weekly screen archives accumulate before calendar span becomes a stage-4 blocker. Do not satisfy that by adding markets to the grow queue or turning on research_all_graduated — Layer A breadth is already ahead; the scarce resource is time-series depth on euro_depth / sp500 / asx200. | Someone proposes a fourth sprint stream, a new grow-queue market, or research_all_graduated=true to 'get ahead of the calendar' |
 | L311 | **ASX announcement history beyond Markit latest-five** | Markit Digital returns at most five rows per symbol with no public pagination, so thin names (JBH.AX, DNL.AX) index dividend/news instead of statutory reports. IR allowlists are the current workaround. A historical announcements.asx.com.au or AFR company-announcements listing would remove the need to hand-seed each thin ticker. | More than two asx200 buy-tier names are thin_need_discovery after IR seeds, or Markit exposes a paginated feed |
 | L312 | **Add observe-sim benchmark if a sprint stream stays on a market without one** | Sprint-2 currently holds ftse_smallcap, which has no MARKET_BENCHMARKS entry, so Sunday observe-sim does not write a dated screen archive. Gap analysis correctly ignores it. If a no-benchmark market stays on a sprint stream for more than a couple of weeks, add a local index ticker so the archive clock can follow ingest effort. | A parallel sprint stream has held a market missing MARKET_BENCHMARKS for two Sunday ladders |
+| L333 | **Yahoo benchmark for FTSE SmallCap observe clock** | Sprint 2 (ftse_smallcap) is on the ingest profile but observe_sim_markets_for_policy drops it because it is missing from MARKET_BENCHMARKS. Phase evaluation then stays at 0 with blocker 'no benchmark configured for ftse_smallcap', so Sunday screen-lite never starts the dated archive clock. Add a Yahoo SmallCap index ticker (verify symbol) so stream 2 matches tsx60. | Next Sunday ladder after ftse_smallcap is still on ingest_parallel_sprint_2, or when filling a spare stream with any market not in MARKET_BENCHMARKS |
 
 ### Research & portfolio product
 
@@ -393,6 +394,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L325 | **CI PR Autofix verify pytest uses main site-packages** | Autofix installs the package from main into site-packages, then checks out the PR and runs full pytest. PR tests that import new symbols fail even when the PR CI test job (editable install) is green, so path-guard allowlist expands do not land. | The next engineering PR path-guard expand is blocked by autofix verify pytest after a green PR test job |
 | L331 | **Coalesce GitHub Pages deploys when ingest slots pile up** | Ingest, paper-auto, and engineering-merge now each dispatch pages.yml after [skip ci] commits so the dashboard is not stale. If the pages concurrency queue backs up (cancel-in-progress is false), batch those deploys or dispatch only when market_status/automation generated_at actually changed. | pages.yml waits more than a few minutes behind ingest/paper commits, or a third admitted market is on maintenance |
 | L332 | **Move ad-hoc spend ledger off shared policy.json** | Engineering-agent, ingest, and ladder jobs all mutate docs/data/library/policy.json. A dedicated spend ledger would remove the hottest contention point on main without changing checkpoint semantics. | Spend or policy.json races persist after gha_commit_engineering_spend.sh is on main |
+| L334 | **Market-status tile: ingest vs learning phase for spare sprints** | Dashboard tiles show learning_phase_label 'Not started' whenever a market is missing from shard_phases.json. Spare sprint markets (tsx60, ftse_smallcap) already have live ingest badges, so the phase line reads as if the sprint has not begun. Derive Observe from live dispatch/evaluate_market_phase, or split ingest status from learning-book status. | The Overview market grid is next edited, or a spare stream market is again asked why it shows not started |
 
 ---
 
