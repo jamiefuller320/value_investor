@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T18:03:10+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T18:52:21+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -398,6 +398,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L334 | **Market-status tile: ingest vs learning phase for spare sprints** | Dashboard tiles show learning_phase_label 'Not started' whenever a market is missing from shard_phases.json. Spare sprint markets (tsx60, ftse_smallcap) already have live ingest badges, so the phase line reads as if the sprint has not begun. Derive Observe from live dispatch/evaluate_market_phase, or split ingest status from learning-book status. | The Overview market grid is next edited, or a spare stream market is again asked why it shows not started |
 | L335 | **Daily index densify for market-card held vs market charts** | Market equivalent currently uses dated macro snapshots (and observe-sim period endpoints when those are missing). A publish-time daily index series would fill intraweek path without fetching on dashboard refresh. | Held vs market charts are in regular Sunday use and a market with a paper book has >=5 weekday marks still missing intraweek index levels. |
 | L336 | **Add S&P 500 index levels to dated macro snapshots** | US macro files currently have yields and DXY, not ^GSPC, so S&P paper books cannot draw a market-equivalent path on the market card until another index source exists. | Admitted S&P buy_tier_level has >=2 dated marks and the Overview chart still has market_path none. |
+| L337 | **Stop skip-ci ingest from rewriting committed market_status.json** | Library ingest maintenance on main regenerates docs/data/market_status.json, which conflicts with open dashboard PRs that also rewrite that snapshot. After schema 3 lands, consider serving the grid from write_market_status at publish time, or excluding the generated JSON from skip-ci ingest commits. | PR 477 is merged and another dashboard PR still conflicts on market_status.json after a skip-ci ingest |
 
 ---
 

@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-07T18:47:10.726402+00:00",
-  "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
+  "generated_at": "2026-09-07T18:51:29.044661+00:00",
+  "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
     "sp500",
@@ -88,6 +88,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
@@ -239,6 +240,58 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": {
+        "window_days": 2,
+        "run_count": 7,
+        "targets": 7,
+        "improved": 0,
+        "improved_tickers": [],
+        "last_run_at": "2026-09-07T13:31:05.584353+00:00",
+        "runtime_cutoff_runs": 0,
+        "error_runs": 0,
+        "gaps_before": {
+          "unmeasured": 1,
+          "zero_body": 0,
+          "thin": 23,
+          "indexed_without_body": 28,
+          "filing_gaps": 1
+        },
+        "gaps_after": {
+          "unmeasured": 1,
+          "zero_body": 0,
+          "thin": 24,
+          "indexed_without_body": 34,
+          "filing_gaps": 1
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 1,
+          "indexed_without_body": 6,
+          "filing_gaps": 0
+        },
+        "remaining": {
+          "unmeasured": 1,
+          "zero_body": 0,
+          "thin": 24,
+          "indexed_without_body": 34,
+          "filing_gaps": 1
+        },
+        "admission_ready": false,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": [
+          {
+            "id": "zero_improve_stall",
+            "severity": "high",
+            "summary": "Last 2 days improved nobody while filing gaps remain"
+          },
+          {
+            "id": "unmeasured_stuck",
+            "severity": "high",
+            "summary": "1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)"
+          }
+        ]
+      },
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
@@ -519,6 +572,76 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": {
+        "window_days": 2,
+        "run_count": 5,
+        "targets": 66,
+        "improved": 35,
+        "improved_tickers": [
+          "SU.TO",
+          "CVE.TO",
+          "NTR.TO",
+          "TRI.TO",
+          "MG.TO",
+          "IFC.TO",
+          "K.TO",
+          "CNQ.TO",
+          "OTEX.TO",
+          "RCI-B.TO",
+          "MRU.TO",
+          "L.TO"
+        ],
+        "last_run_at": "2026-09-07T18:32:52.675364+00:00",
+        "runtime_cutoff_runs": 0,
+        "error_runs": 1,
+        "gaps_before": {
+          "unmeasured": 1,
+          "zero_body": 3,
+          "thin": 9,
+          "indexed_without_body": 235,
+          "filing_gaps": 4
+        },
+        "gaps_after": {
+          "unmeasured": 1,
+          "zero_body": 1,
+          "thin": 2,
+          "indexed_without_body": 113,
+          "filing_gaps": 2
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": -2,
+          "thin": -7,
+          "indexed_without_body": -122,
+          "filing_gaps": -2
+        },
+        "remaining": {
+          "unmeasured": 1,
+          "zero_body": 1,
+          "thin": 2,
+          "indexed_without_body": 113,
+          "filing_gaps": 2
+        },
+        "admission_ready": false,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": [
+          {
+            "id": "ingest_errors",
+            "severity": "warn",
+            "summary": "1 ingest run(s) recorded errors: CNQ.TO: Failed to perform, curl: (16) . See https://curl.se/libcurl/c/libcurl-errors.html first for more details."
+          },
+          {
+            "id": "unmeasured_stuck",
+            "severity": "high",
+            "summary": "1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)"
+          },
+          {
+            "id": "stale_buy_tier_screen",
+            "severity": "warn",
+            "summary": "Buy-tier screen is stale (last screen 2026-08-16); ingest is deepening an old shortlist"
+          }
+        ]
+      },
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -624,6 +747,68 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": {
+        "window_days": 2,
+        "run_count": 10,
+        "targets": 59,
+        "improved": 29,
+        "improved_tickers": [
+          "APTD.L",
+          "SBRE.L",
+          "BOOT.L",
+          "DFS.L",
+          "FORT.L",
+          "TPT.L",
+          "ULTP.L",
+          "FOXT.L",
+          "MER.L"
+        ],
+        "last_run_at": "2026-09-07T18:46:17.212655+00:00",
+        "runtime_cutoff_runs": 0,
+        "error_runs": 0,
+        "gaps_before": {
+          "unmeasured": 0,
+          "zero_body": 3,
+          "thin": 6,
+          "indexed_without_body": 108,
+          "filing_gaps": 3
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 1,
+          "thin": 1,
+          "indexed_without_body": 45,
+          "filing_gaps": 1
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": -2,
+          "thin": -5,
+          "indexed_without_body": -63,
+          "filing_gaps": -2
+        },
+        "remaining": {
+          "unmeasured": 0,
+          "zero_body": 1,
+          "thin": 1,
+          "indexed_without_body": 45,
+          "filing_gaps": 1
+        },
+        "admission_ready": false,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": [
+          {
+            "id": "stale_buy_tier_screen",
+            "severity": "warn",
+            "summary": "Buy-tier screen is stale (last screen 2026-08-16); ingest is deepening an old shortlist"
+          },
+          {
+            "id": "no_observe_benchmark",
+            "severity": "warn",
+            "summary": "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock"
+          }
+        ]
+      },
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -784,6 +969,7 @@
           "DUK"
         ]
       },
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
@@ -960,6 +1146,7 @@
           "RIO.AX"
         ]
       },
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
@@ -1062,6 +1249,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -1146,6 +1334,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -1229,6 +1418,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -1312,6 +1502,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -1395,6 +1586,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -1478,6 +1670,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -1561,6 +1754,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
@@ -1729,6 +1923,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -1812,6 +2007,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -1895,6 +2091,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -1978,6 +2175,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -2061,6 +2259,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -2144,6 +2343,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -2226,6 +2426,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -2309,6 +2510,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -2392,6 +2594,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",
@@ -2475,6 +2678,7 @@
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "empty",

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pandas as pd
@@ -403,6 +404,12 @@ def test_dashboard_assets_include_market_status_grid():
     assert ".market-tile-chips" in css
     assert "grid-auto-rows: 1fr" in css
     assert 'class="market-tile-chips"' in app
+    assert "function sprintProgressLine(progress)" in app
+    assert "function renderSprintProgressCard(progress)" in app
+    assert "Last ${esc(String(progress.window_days || 2))} days ingest" in app
+    assert "admission-flag" in app
+    assert ".admission-flag" in css
+    assert ".market-tile-sprint" in css
     assert "function equalizeMarketTileHeights()" in app
     assert "equalizeMarketTileHeights()" in app
     assert "function heldVsMarketLastCaption(payload, { showExcess = true } = {})" in Path(
@@ -589,3 +596,199 @@ def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
     written = json.loads(dest.read_text(encoding="utf-8"))
     assert written["schema_version"] == 3
     assert _by_id(written, LIVE_MARKET_ID)["ticker_count"] == 2
+
+
+def _health_snapshot(
+    *,
+    unmeasured: int,
+    zero_body: int,
+    thin: int,
+    iwb: int,
+    unmeasured_tickers: list[str] | None = None,
+    zero_tickers: list[str] | None = None,
+) -> dict:
+    return {
+        "unmeasured_buy_tier": unmeasured,
+        "zero_body_buy_tier": zero_body,
+        "thin_body_buy_tier": thin,
+        "indexed_without_body": iwb,
+        "unmeasured_tickers": unmeasured_tickers or [],
+        "zero_body_tickers": zero_tickers or [],
+        "ingest_exhausted": False,
+    }
+
+
+def test_sprint_tiles_include_two_day_ingest_and_admission_flags(tmp_path: Path):
+    library = _seed_library(tmp_path / "library")
+    policy = json.loads((library / "policy.json").read_text(encoding="utf-8"))
+    policy["ingest_parallel_sprint"] = ["tsx60"]
+    policy["ingest_parallel_sprint_2"] = ["ftse_smallcap"]
+    (library / "policy.json").write_text(json.dumps(policy), encoding="utf-8")
+
+    dispatch = json.loads((library / "euro_ingest_dispatch.json").read_text(encoding="utf-8"))
+    dispatch["sprint_markets"] = ["euro_depth", "tsx60", "ftse_smallcap"]
+    dispatch["parallel_sprint_markets"] = ["tsx60"]
+    dispatch["parallel_sprint_2_markets"] = ["ftse_smallcap"]
+    dispatch["parallel_sprint_status"] = [
+        {
+            "market_id": "tsx60",
+            "mode": "sprint",
+            "ingest_parity_met": False,
+            "ingest_exhausted": False,
+            "filing_gaps": 2,
+            "filing_health": _health_snapshot(
+                unmeasured=1,
+                zero_body=1,
+                thin=5,
+                iwb=182,
+                unmeasured_tickers=["GIB-A.TO"],
+                zero_tickers=["CCL-B.TO"],
+            ),
+        }
+    ]
+    dispatch["parallel_sprint_2_status"] = [
+        {
+            "market_id": "ftse_smallcap",
+            "mode": "sprint",
+            "ingest_parity_met": False,
+            "ingest_exhausted": False,
+            "filing_gaps": 2,
+            "phase_blockers": ["no benchmark configured for ftse_smallcap"],
+            "filing_health": _health_snapshot(unmeasured=0, zero_body=2, thin=1, iwb=45),
+        }
+    ]
+    (library / "euro_ingest_dispatch.json").write_text(json.dumps(dispatch), encoding="utf-8")
+
+    now = datetime(2026, 9, 7, 16, 0, tzinfo=UTC)
+    tsx_screen = library / "markets" / "tsx60" / "screen"
+    tsx_screen.mkdir(parents=True)
+    write_json(
+        tsx_screen / "latest_summary.json",
+        {
+            "market": "tsx60",
+            "run_at": "2026-08-16T11:58:34+00:00",
+            "ticker_count": 59,
+            "signal_counts": {"buy": 13, "strong_buy": 6, "hold": 29},
+            "shortlist_count": 19,
+        },
+        compact=False,
+    )
+    write_json(
+        library / "markets" / "tsx60" / "ingest_health_log.json",
+        {
+            "entries": [
+                {
+                    "run_at": "2026-09-06T13:42:00+00:00",
+                    "market_id": "tsx60",
+                    "health_before": _health_snapshot(unmeasured=1, zero_body=3, thin=9, iwb=235),
+                    "health_after": _health_snapshot(unmeasured=1, zero_body=1, thin=8, iwb=200),
+                    "targets": 18,
+                    "improved": 14,
+                    "improved_tickers": ["SU.TO", "NTR.TO"],
+                    "runtime_cutoff": False,
+                    "partial": False,
+                    "errors": [],
+                },
+                {
+                    "run_at": "2026-09-07T14:04:00+00:00",
+                    "market_id": "tsx60",
+                    "health_before": _health_snapshot(unmeasured=1, zero_body=1, thin=8, iwb=200),
+                    "health_after": _health_snapshot(unmeasured=1, zero_body=1, thin=5, iwb=182),
+                    "targets": 12,
+                    "improved": 4,
+                    "improved_tickers": ["CNR.TO", "WSP.TO"],
+                    "runtime_cutoff": False,
+                    "partial": False,
+                    "errors": [],
+                },
+            ]
+        },
+        compact=False,
+    )
+
+    small_screen = library / "markets" / "ftse_smallcap" / "screen"
+    small_screen.mkdir(parents=True, exist_ok=True)
+    write_json(
+        small_screen / "latest_summary.json",
+        {
+            "market": "ftse_smallcap",
+            "run_at": "2026-08-16T11:58:34+00:00",
+            "ticker_count": 79,
+            "signal_counts": {"buy": 10, "strong_buy": 2, "hold": 47},
+            "shortlist_count": 12,
+        },
+        compact=False,
+    )
+    write_json(
+        library / "markets" / "ftse_smallcap" / "ingest_health_log.json",
+        {
+            "entries": [
+                {
+                    "run_at": "2026-09-06T17:07:00+00:00",
+                    "market_id": "ftse_smallcap",
+                    "health_before": _health_snapshot(unmeasured=0, zero_body=3, thin=6, iwb=108),
+                    "health_after": _health_snapshot(unmeasured=0, zero_body=2, thin=3, iwb=70),
+                    "targets": 6,
+                    "improved": 3,
+                    "improved_tickers": ["FOXT.L"],
+                    "runtime_cutoff": False,
+                    "errors": [],
+                },
+                {
+                    "run_at": "2026-09-07T14:21:00+00:00",
+                    "market_id": "ftse_smallcap",
+                    "health_before": _health_snapshot(unmeasured=0, zero_body=2, thin=3, iwb=70),
+                    "health_after": _health_snapshot(unmeasured=0, zero_body=2, thin=1, iwb=45),
+                    "targets": 6,
+                    "improved": 2,
+                    "improved_tickers": ["DFS.L"],
+                    "runtime_cutoff": False,
+                    "errors": [],
+                },
+            ]
+        },
+        compact=False,
+    )
+
+    payload = build_market_status(
+        library_root=library,
+        policy_path=library / "policy.json",
+        dispatch_path=library / "euro_ingest_dispatch.json",
+        live_signal_counts={"hold": 1},
+        now=now,
+    )
+    tsx = _by_id(payload, "tsx60")
+    progress = tsx["sprint_progress"]
+    assert tsx["ingest"] == INGEST_SPRINT
+    assert progress["run_count"] == 2
+    assert progress["targets"] == 30
+    assert progress["improved"] == 18
+    assert progress["gap_delta"]["indexed_without_body"] == -53
+    assert progress["remaining"]["unmeasured"] == 1
+    assert progress["admission_ready"] is False
+    flag_ids = {row["id"] for row in progress["admission_warnings"]}
+    assert "stale_buy_tier_screen" in flag_ids
+    assert "unmeasured_stuck" in flag_ids
+    assert "zero_body_stuck" not in flag_ids
+    assert "no_ingest_in_window" not in flag_ids
+    assert "no_observe_benchmark" not in flag_ids
+
+    small = _by_id(payload, "ftse_smallcap")
+    small_progress = small["sprint_progress"]
+    assert small["ingest_stream"] == 2
+    assert small_progress["run_count"] == 2
+    assert small_progress["improved"] == 5
+    small_flags = {row["id"] for row in small_progress["admission_warnings"]}
+    assert "no_observe_benchmark" in small_flags
+    assert "stale_buy_tier_screen" in small_flags
+    assert "zero_body_stuck" not in small_flags
+    assert "unmeasured_stuck" not in small_flags
+
+    live = _by_id(payload, LIVE_MARKET_ID)
+    assert live["sprint_progress"] is None
+
+    focus = _by_id(payload, "euro_depth")
+    assert focus["ingest"] == INGEST_SPRINT
+    assert {
+        row["id"] for row in (focus["sprint_progress"] or {}).get("admission_warnings") or []
+    } >= {"no_ingest_in_window"}
