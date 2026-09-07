@@ -69,6 +69,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%202025%20FY%20Results%20Presentation.pdf",
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%20_%202025%20Interim%20Results%20Presentation.pdf",
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%20FY%202024%20Results%20Presentation%20-%2006032025.pdf",
+        # Live-path period gap — 2026 H1 statutory report + deck (held name).
+        "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/2026-IR/2026-half-year-results-materials/ITV-plc-2026-half-year-report.pdf",
+        "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/2026-IR/2026-half-year-results-materials/ITV-plc-2026-half-year-results-presentation.pdf",
+    ],
+    # Live-path target — IMB index is own-shares/TVR; HY26 RNS was missing. IR hub is bot-gated.
+    "IMB.L": [
+        "https://www.rns-pdf.londonstockexchange.com/rns/8727D_1-2026-5-11.pdf",
     ],
     "MEGP.L": [
         "https://me-group.com/wp-content/uploads/2026/03/ME-Group-Annual-Report-2025.pdf",

@@ -5134,12 +5134,29 @@ def test_fetch_filings_ir_allowlist_itv_l(tmp_path: Path):
     assert len(mapping["ITV.L"]) >= 3
 
     rows = fetch_filings_ir_allowlist("ITV.L", path=allowlist_path)
-    assert len(rows) == 3
+    assert len(rows) == 5
     assert all(row["source"] == "ir_allowlist" for row in rows)
     periods = {row["period"] for row in rows}
     assert "annual" in periods
     assert "interim" in periods
     assert all("itvplc.com" in row["url"] for row in rows)
+    assert any("2026-half-year-report" in row["url"] for row in rows)
+
+
+def test_fetch_filings_ir_allowlist_imb_l(tmp_path: Path):
+    """IMB.L HY26 statutory RNS PDF is allowlisted — IR hub is bot-gated; leftover IWB is own-shares."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    mapping = load_ir_url_allowlist(allowlist_path)
+    assert "IMB.L" in mapping
+    assert len(mapping["IMB.L"]) == 1
+
+    rows = fetch_filings_ir_allowlist("IMB.L", path=allowlist_path)
+    assert len(rows) == 1
+    assert rows[0]["source"] == "ir_allowlist"
+    assert "rns-pdf.londonstockexchange.com" in rows[0]["url"]
+    assert "8727D_1-2026-5-11.pdf" in rows[0]["url"]
 
 
 def test_refetch_ir_allowlist_filing_bodies_itv_l(tmp_path: Path, monkeypatch):

@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T19:28:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T19:58:00+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -155,6 +155,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N105 | **Do not pause spare sprint auto-advance** | When a spare stream hits sprint_ingest_complete, promoting the next market_queue name (tsx60 / ftse_smallcap today) is correct. Do not stop those streams to save capacity. Watch shared runner timeouts and source rate limits instead; revisit L323 when a third admitted market is on maintenance or a job clips the tail. | A third admitted market is on the maintenance list, or a maintenance/sprint job hits timeout-minutes: 120 or spare_wait skip |
 | N107 | **Serialize engineering agents to one to avoid main races** | max_parallel_engineering_agents=2 is useful for queue throughput, but concurrent jobs still race on main (queue JSON, automation.json). The spend-commit retry unblocks the PR path; do not drop parallel dispatch just to hide remaining bookkeeping races. | Another engineering-agent or queue job fails because two main commits collide after the spend-retry fix lands |
 | N108 | **Overlay knob-changed branches on market-card held vs market charts** | The dashboard series is branch-ready (kind=branch on the same dates via merge_branch_series). Do not apply a knob-changed overlay until shard/live books may apply knobs; do not spawn a twin book per knob. | A recommend-status knob has >=4 forward weeks on the baseline cohort and a human asks for at most one overlay on the held vs market chart. |
+| N109 | **Do not invent last-day Cursor-credit work** | Leftover plan credit at cycle end should not fund rememo density, dashboard polish, leftover S&P IR hunts, extra FTSE ingest, or new paper tracks. Policy already prefers a weekly_ops bump or named P1 overlay/filing bind. Letting unused credit expire is better than factory work that does not change weekday AI-judgment inputs. | Usage-page leftover is high AND a named live-path overlay field or held/buy-tier filing gap is missing for the next Sunday cycle |
 
 ---
 
