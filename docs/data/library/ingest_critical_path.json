@@ -1,93 +1,114 @@
 {
-  "market_id": "ftse_smallcap",
-  "assessed_at": "2026-09-07T18:45:30.405025+00:00",
-  "unmeasured": [],
+  "market_id": "tsx60",
+  "assessed_at": "2026-09-07T20:12:25.609706+00:00",
+  "unmeasured": [
+    "GIB-A.TO"
+  ],
   "zero_body": [
-    "GMS.L"
+    "CCL-B.TO"
   ],
   "indexed_without_body": [
     {
-      "ticker": "MER.L",
+      "ticker": "TRI.TO",
+      "indexed_without_body": 36,
+      "filings_total": 147,
+      "filings_with_body": 111
+    },
+    {
+      "ticker": "SU.TO",
+      "indexed_without_body": 25,
+      "filings_total": 35,
+      "filings_with_body": 10
+    },
+    {
+      "ticker": "NTR.TO",
+      "indexed_without_body": 18,
+      "filings_total": 27,
+      "filings_with_body": 9
+    },
+    {
+      "ticker": "CNQ.TO",
+      "indexed_without_body": 10,
+      "filings_total": 36,
+      "filings_with_body": 26
+    },
+    {
+      "ticker": "RCI-B.TO",
+      "indexed_without_body": 7,
+      "filings_total": 17,
+      "filings_with_body": 10
+    },
+    {
+      "ticker": "WSP.TO",
       "indexed_without_body": 6,
-      "filings_total": 55,
-      "filings_with_body": 49
+      "filings_total": 56,
+      "filings_with_body": 50
     },
     {
-      "ticker": "APTD.L",
-      "indexed_without_body": 5,
-      "filings_total": 73,
-      "filings_with_body": 68
-    },
-    {
-      "ticker": "BOOT.L",
-      "indexed_without_body": 5,
+      "ticker": "CVE.TO",
+      "indexed_without_body": 4,
       "filings_total": 59,
-      "filings_with_body": 54
+      "filings_with_body": 55
     },
     {
-      "ticker": "DFS.L",
-      "indexed_without_body": 5,
-      "filings_total": 58,
+      "ticker": "CNR.TO",
+      "indexed_without_body": 2,
+      "filings_total": 55,
       "filings_with_body": 53
     },
     {
-      "ticker": "FORT.L",
-      "indexed_without_body": 5,
-      "filings_total": 57,
-      "filings_with_body": 52
+      "ticker": "L.TO",
+      "indexed_without_body": 2,
+      "filings_total": 38,
+      "filings_with_body": 36
     },
     {
-      "ticker": "FOXT.L",
-      "indexed_without_body": 5,
-      "filings_total": 55,
-      "filings_with_body": 50
-    },
-    {
-      "ticker": "GMS.L",
-      "indexed_without_body": 5,
+      "ticker": "ABX.TO",
+      "indexed_without_body": 1,
       "filings_total": 5,
+      "filings_with_body": 4
+    },
+    {
+      "ticker": "CCL-B.TO",
+      "indexed_without_body": 1,
+      "filings_total": 1,
       "filings_with_body": 0
     },
     {
-      "ticker": "TPT.L",
-      "indexed_without_body": 5,
-      "filings_total": 55,
-      "filings_with_body": 50
-    },
-    {
-      "ticker": "ULTP.L",
-      "indexed_without_body": 5,
-      "filings_total": 57,
-      "filings_with_body": 52
+      "ticker": "IFC.TO",
+      "indexed_without_body": 1,
+      "filings_total": 54,
+      "filings_with_body": 53
     }
   ],
-  "thin_need_discovery": [
-    "CARD.L"
+  "thin_need_discovery": [],
+  "thin_need_bodies": [
+    "SU.TO",
+    "NTR.TO"
   ],
-  "thin_need_bodies": [],
-  "primary_blocker": "zero_body",
+  "primary_blocker": "unmeasured",
   "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "MER.L",
-    "APTD.L",
-    "BOOT.L",
-    "DFS.L",
-    "FORT.L",
-    "FOXT.L",
-    "GMS.L",
-    "TPT.L"
+    "TRI.TO",
+    "SU.TO",
+    "NTR.TO",
+    "CNQ.TO",
+    "RCI-B.TO",
+    "WSP.TO",
+    "CVE.TO",
+    "CNR.TO"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (9 tickers, top: MER.L(6), APTD.L(5), BOOT.L(5), DFS.L(5), FORT.L(5))",
-    "Discovery/IR seed for 1 thin ticker(s) that already have bodies for every indexed filing",
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (12 tickers, top: TRI.TO(36), SU.TO(25), NTR.TO(18), CNQ.TO(10), RCI-B.TO(7))",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 1,
-    "indexed_without_body_tickers": 9,
-    "indexed_without_body_rows": 46,
-    "thin_need_discovery": 1,
-    "thin_need_bodies": 0
+    "indexed_without_body_tickers": 12,
+    "indexed_without_body_rows": 113,
+    "thin_need_discovery": 0,
+    "thin_need_bodies": 2
   }
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-07T18:51:29.044661+00:00",
+  "generated_at": "2026-09-07T20:14:50.794523+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -242,8 +242,8 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 7,
-        "targets": 7,
+        "run_count": 6,
+        "targets": 6,
         "improved": 0,
         "improved_tickers": [],
         "last_run_at": "2026-09-07T13:31:05.584353+00:00",
@@ -252,8 +252,8 @@
         "gaps_before": {
           "unmeasured": 1,
           "zero_body": 0,
-          "thin": 23,
-          "indexed_without_body": 28,
+          "thin": 24,
+          "indexed_without_body": 34,
           "filing_gaps": 1
         },
         "gaps_after": {
@@ -266,8 +266,8 @@
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 1,
-          "indexed_without_body": 6,
+          "thin": 0,
+          "indexed_without_body": 0,
           "filing_gaps": 0
         },
         "remaining": {
@@ -511,7 +511,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=1, thin=2, indexed_without_body=113)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=1, thin=2, indexed_without_body=105)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 4,
@@ -535,19 +535,38 @@
       "shortlist_count": 19,
       "strong_buy": 6,
       "buy": 13,
-      "learning_phase": null,
-      "learning_phase_label": "Not started",
+      "learning_phase": 1,
+      "learning_phase_label": "Observe",
       "phase_blockers": [
         "need 4 observe snapshots (have 0)"
       ],
       "expected_epoch0_blockers": [],
-      "learning": null,
+      "learning": {
+        "current_phase": 1,
+        "next_phase": 1,
+        "phase1_ready": false,
+        "phase2_ready": false,
+        "phase3_ready": false,
+        "weekly_paper_enabled": false,
+        "weekday_paper_enabled": false,
+        "blockers": [
+          "need 4 observe snapshots (have 0)"
+        ],
+        "phase1": {
+          "screen_archives": 0,
+          "observe_snapshot_count": 0
+        },
+        "phase2": {
+          "weekly_batch_count": 0,
+          "min_weekly_batches": 0
+        }
+      },
       "filing_health": {
         "buy_tier_count": 19,
         "unmeasured_buy_tier": 1,
         "zero_body_buy_tier": 1,
         "thin_body_buy_tier": 2,
-        "indexed_without_body": 113,
+        "indexed_without_body": 105,
         "bodies_median": 22.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
@@ -574,9 +593,9 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 5,
-        "targets": 66,
-        "improved": 35,
+        "run_count": 6,
+        "targets": 78,
+        "improved": 38,
         "improved_tickers": [
           "SU.TO",
           "CVE.TO",
@@ -591,7 +610,7 @@
           "MRU.TO",
           "L.TO"
         ],
-        "last_run_at": "2026-09-07T18:32:52.675364+00:00",
+        "last_run_at": "2026-09-07T20:13:49.709161+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 1,
         "gaps_before": {
@@ -605,21 +624,21 @@
           "unmeasured": 1,
           "zero_body": 1,
           "thin": 2,
-          "indexed_without_body": 113,
+          "indexed_without_body": 105,
           "filing_gaps": 2
         },
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": -2,
           "thin": -7,
-          "indexed_without_body": -122,
+          "indexed_without_body": -130,
           "filing_gaps": -2
         },
         "remaining": {
           "unmeasured": 1,
           "zero_body": 1,
           "thin": 2,
-          "indexed_without_body": 113,
+          "indexed_without_body": 105,
           "filing_gaps": 2
         },
         "admission_ready": false,
@@ -713,13 +732,32 @@
       "shortlist_count": 12,
       "strong_buy": 2,
       "buy": 10,
-      "learning_phase": null,
-      "learning_phase_label": "Not started",
+      "learning_phase": 1,
+      "learning_phase_label": "Observe",
       "phase_blockers": [
-        "no benchmark configured for ftse_smallcap"
+        "need 4 observe snapshots (have 0)"
       ],
       "expected_epoch0_blockers": [],
-      "learning": null,
+      "learning": {
+        "current_phase": 1,
+        "next_phase": 1,
+        "phase1_ready": false,
+        "phase2_ready": false,
+        "phase3_ready": false,
+        "weekly_paper_enabled": false,
+        "weekday_paper_enabled": false,
+        "blockers": [
+          "need 4 observe snapshots (have 0)"
+        ],
+        "phase1": {
+          "screen_archives": 0,
+          "observe_snapshot_count": 0
+        },
+        "phase2": {
+          "weekly_batch_count": 0,
+          "min_weekly_batches": 0
+        }
+      },
       "filing_health": {
         "buy_tier_count": 12,
         "unmeasured_buy_tier": 0,
@@ -801,11 +839,6 @@
             "id": "stale_buy_tier_screen",
             "severity": "warn",
             "summary": "Buy-tier screen is stale (last screen 2026-08-16); ingest is deepening an old shortlist"
-          },
-          {
-            "id": "no_observe_benchmark",
-            "severity": "warn",
-            "summary": "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock"
           }
         ]
       },
@@ -817,7 +850,7 @@
         "source": null,
         "paper_instrument": null,
         "currency": "GBP",
-        "benchmark_ticker": "^GSPC",
+        "benchmark_ticker": "^FTSC",
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
@@ -832,7 +865,7 @@
           },
           {
             "id": "market",
-            "label": "^GSPC equivalent",
+            "label": "^FTSC equivalent",
             "kind": "market",
             "color": "#64748b"
           }

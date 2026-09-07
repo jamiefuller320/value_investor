@@ -6156,7 +6156,7 @@ def test_parked_source_hunter_skip_intu_sp500():
 
 
 def test_parked_source_hunter_skip_ldos_sp500():
-    """eng-20260907-08: LDOS leftover IWB is acquisition-closing 8-K primary, not missing 10-K/10-Q."""
+    """eng-20260907-06: LDOS leftover IWB is acquisition-closing 8-K primary, not missing 10-K/10-Q."""
     assert "LDOS" in PARKED_SOURCE_HUNTER_SKIP
     reason = PARKED_SOURCE_HUNTER_SKIP["LDOS"]
     assert "2.01" in reason
@@ -6193,7 +6193,7 @@ def test_parked_source_hunter_skip_tsn_sp500():
 
 
 def test_ldos_acquisition_8k_primary_fails_substantiveness_gate(monkeypatch):
-    """eng-20260907-08: LDOS Mar 2026 Entrust acquisition-closing 8-K primary is below gate."""
+    """eng-20260907-06: LDOS Mar 2026 Entrust acquisition-closing 8-K primary is below gate."""
     cover_html = """
     <html><body>
     <div>FORM 8-K CURRENT REPORT</div>
