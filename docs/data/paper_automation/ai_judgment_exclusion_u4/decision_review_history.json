@@ -1,0 +1,95 @@
+[
+  {
+    "reviewed_at": "2026-09-07T08:30:19.381696+00:00",
+    "enough_history": true,
+    "applied": false,
+    "knobs_before": {
+      "max_positions": 3,
+      "skip_timing_wait": true,
+      "min_conviction": 0.35,
+      "sector_cap": 0.2
+    },
+    "knobs_after": {
+      "max_positions": 3,
+      "skip_timing_wait": true,
+      "min_conviction": 0.35,
+      "sector_cap": 0.2
+    },
+    "proposed_changes": {
+      "min_conviction": 0.4
+    },
+    "reasons": [
+      "High cost drag (10.3%) \u2014 raise min_conviction."
+    ],
+    "metrics": {
+      "portfolio_value": 891.39,
+      "contributed_capital": 1000.0,
+      "total_return": -0.1086,
+      "total_costs": 103.46,
+      "cost_drag": 0.1035,
+      "trade_count": 14,
+      "buy_count": 8,
+      "sell_count": 6,
+      "positions": 3,
+      "cash_fraction": 0.0,
+      "equity_marks": 10,
+      "max_sector_weight": 0.3485,
+      "dominant_sector": "Industrials",
+      "benchmark_return": 0.0046,
+      "excess_after_costs": -0.1132,
+      "note": "",
+      "epoch": {
+        "started_at": "2026-08-21T09:27:13.383131+01:00",
+        "knobs": {
+          "max_positions": 3,
+          "skip_timing_wait": true,
+          "min_conviction": 0.35,
+          "sector_cap": 0.2
+        },
+        "seeded_from_history": true,
+        "baseline_nav": 891.39,
+        "portfolio_value": 891.39,
+        "total_return": 0.0,
+        "total_costs": 0,
+        "cost_drag": 0.0,
+        "trade_count": 0,
+        "buy_count": 0,
+        "sell_count": 0,
+        "positions": 3,
+        "cash_fraction": 0.0,
+        "equity_marks": 1,
+        "max_sector_weight": 0.3485,
+        "dominant_sector": "Industrials",
+        "benchmark_return": null,
+        "excess_after_costs": null,
+        "note": "Insufficient epoch marks for benchmark span."
+      }
+    },
+    "counterfactual_preview": {
+      "scope": "lifetime_trade_replay",
+      "knobs": {
+        "max_positions": 3,
+        "skip_timing_wait": true,
+        "min_conviction": 0.4,
+        "sector_cap": 0.2
+      },
+      "limitations": "Replay uses max_positions and sector_cap only; min_conviction, skip_timing_wait, and AI gates need archived weekly screens for full counterfactual P&L.",
+      "executed_trades": 11,
+      "blocked_buys": 2,
+      "blocked_orphan_sells": 1,
+      "actual_total_costs": 103.46,
+      "simulated_total_costs": 83.73,
+      "estimated_cost_savings_gbp": 19.73,
+      "actual_cost_drag": 0.1035,
+      "simulated_cost_drag": 0.0837,
+      "cost_drag_delta": 0.0197,
+      "log_entries_replayed": 1,
+      "graduates_at_acted_entries": 2
+    },
+    "note": "Frozen lab/shadow track \u2014 knobs fixed; decision-review apply skipped.",
+    "track_id": "ai_judgment_exclusion_u4",
+    "track_label": "AI judgment exclusion ladder u4 (frozen priors)",
+    "is_primary_learning_track": false,
+    "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
+  }
+]

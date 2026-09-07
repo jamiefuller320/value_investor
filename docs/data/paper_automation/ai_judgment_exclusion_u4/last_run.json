@@ -1,0 +1,1040 @@
+{
+  "acted": true,
+  "gate": {
+    "local_time": "2026-09-07T09:29:10.866142+01:00",
+    "trading_day": true,
+    "after_settle": true,
+    "market_open_at": "2026-09-07T08:00:00+01:00",
+    "settle_at": "2026-09-07T09:15:00+01:00",
+    "can_act": true,
+    "reason": "ok"
+  },
+  "trades": [],
+  "plan": {
+    "rules": [
+      "Universe: only strong_buy / buy names from the latest screen.",
+      "Timing filter: names with timing_signal=wait are excluded from new buys.",
+      "Conviction floor: min_conviction=0.35.",
+      "Sector cap: at most 1 name(s) per known sector (cap=20%).",
+      "Ranking: highest conviction_score first, keep at most 3 names.",
+      "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+      "Costs: buy 3.00% / sell 3.00% (legacy symmetric slot 3.00%).",
+      "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+      "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+      "Dust guard: skip trim/top-up adjustments below \u00a310."
+    ],
+    "nav": 927.96,
+    "cash": 0.0,
+    "max_positions": 3,
+    "min_conviction": 0.35,
+    "sector_cap": 0.2,
+    "skip_timing_wait": true,
+    "use_momentum_grace": false,
+    "exit_confirm_screens": 2,
+    "reentry_cooldown_screens": 1,
+    "min_rebalance_notional_gbp": 10.0,
+    "target_sleeve_value": 302.89,
+    "targets": [
+      {
+        "ticker": "MGNS.L",
+        "name": "Morgan Sindall Group plc",
+        "signal": "strong_buy",
+        "conviction_score": 0.9610000000000002,
+        "price": 4218.0
+      },
+      {
+        "ticker": "IMB.L",
+        "name": "Imperial Brands PLC",
+        "signal": "strong_buy",
+        "conviction_score": 0.8884000000000001,
+        "price": 2471.0
+      },
+      {
+        "ticker": "SN.L",
+        "name": "Smith & Nephew plc",
+        "signal": "strong_buy",
+        "conviction_score": 0.8512000000000002,
+        "price": 1050.5
+      }
+    ],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "MEGP.L",
+        "name": "ME Group International plc",
+        "reason": "No longer in the top conviction target set",
+        "shares": 2.606275,
+        "price": 123.8,
+        "value": 322.66
+      },
+      {
+        "action": "sell",
+        "ticker": "AEP.L",
+        "name": "AEP Plantations Plc",
+        "reason": "No longer in the top conviction target set",
+        "shares": 1.593051,
+        "price": 201.263,
+        "value": 320.62
+      }
+    ],
+    "anticipated_grace_holds": [],
+    "anticipated_trims": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
+        "ticker": "MGNS.L",
+        "name": "Morgan Sindall Group plc",
+        "reason": "New sleeve",
+        "value": 302.89,
+        "price": 4218.0,
+        "target_value": 302.89,
+        "conviction_score": 0.9610000000000002,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "IMB.L",
+        "name": "Imperial Brands PLC",
+        "reason": "New sleeve",
+        "value": 302.89,
+        "price": 2471.0,
+        "target_value": 302.89,
+        "conviction_score": 0.8884000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "SN.L",
+        "name": "Smith & Nephew plc",
+        "reason": "Top-up to equal weight",
+        "value": 18.2,
+        "price": 1050.5,
+        "target_value": 302.89,
+        "conviction_score": 0.8512000000000002,
+        "signal": "strong_buy"
+      }
+    ],
+    "anticipated_holds": [],
+    "skipped": [],
+    "waitlisted": [],
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 3 buy(s)."
+  },
+  "alerts": [
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 123.80000305175781,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "AEP.L",
+      "name": "AEP Plantations Plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 201.26300048828125,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "SN.L",
+      "name": "Smith & Nephew plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 1050.5,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "insufficient_data"
+    }
+  ],
+  "fund": {
+    "config": {
+      "name": "AI judgment exclusion ladder u4 (frozen priors)",
+      "mode": "automated",
+      "initial_cash": 1000.0,
+      "monthly_deposit": 0.0,
+      "trade_cost_pct": 0.03,
+      "buy_cost_pct": null,
+      "sell_cost_pct": null,
+      "max_positions": 3,
+      "reporting_currency": "GBP",
+      "hedge_assumption": "none",
+      "id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+      "created_at": "2026-08-23T09:55:15.538430+00:00"
+    },
+    "cash": 0.0,
+    "contributed_capital": 1000.0,
+    "deposits_applied": 0,
+    "holdings": {
+      "MEGP.L": {
+        "ticker": "MEGP.L",
+        "shares": 2.606275,
+        "avg_cost": 119.2,
+        "name": "ME Group International plc",
+        "sector": "Industrials",
+        "currency": "GBP",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-07-25T06:44:21.534427+01:00"
+      },
+      "AEP.L": {
+        "ticker": "AEP.L",
+        "shares": 1.593051,
+        "avg_cost": 185.4078,
+        "name": "AEP Plantations Plc",
+        "sector": "Agriculture/Commodities",
+        "currency": "GBP",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-08-14T09:27:20.279983+01:00"
+      },
+      "SN.L": {
+        "ticker": "SN.L",
+        "shares": 0.270999,
+        "avg_cost": 1053.0,
+        "name": "Smith & Nephew plc",
+        "sector": "Healthcare",
+        "currency": "GBP",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-08-21T09:27:13.383131+01:00"
+      }
+    },
+    "trades": [
+      {
+        "id": "8f2df60f-2378-4b3b-b0ef-a4a672587c0f",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-07-25T06:44:21.534427+01:00",
+        "ticker": "MEGP.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 2.714971,
+        "price": 119.2,
+        "gross": 323.62,
+        "cost": 9.71,
+        "net_cash": -333.33,
+        "note": "Automated buy",
+        "name": "ME Group International plc"
+      },
+      {
+        "id": "a26273ef-8fa0-4457-a013-865fcdc47e26",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-07-25T06:44:21.534427+01:00",
+        "ticker": "HIK.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.196421,
+        "price": 1647.603,
+        "gross": 323.62,
+        "cost": 9.71,
+        "net_cash": -333.33,
+        "note": "Automated buy",
+        "name": "Hikma Pharmaceuticals PLC"
+      },
+      {
+        "id": "7877ef85-585c-4604-8d55-38c09f301a91",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-07-25T06:44:21.534427+01:00",
+        "ticker": "ITV.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 4.567743,
+        "price": 70.85,
+        "gross": 323.62,
+        "cost": 9.71,
+        "net_cash": -333.33,
+        "note": "Automated buy",
+        "name": "ITV plc"
+      },
+      {
+        "id": "fdcc2be6-adeb-4e7d-b224-69e8cbd7781c",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-08-14T09:27:20.279983+01:00",
+        "ticker": "HIK.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.196421,
+        "price": 1647.603,
+        "gross": 323.62,
+        "cost": 9.71,
+        "net_cash": 313.92,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Hikma Pharmaceuticals PLC",
+        "avg_cost_at_exit": 1647.603,
+        "position_closed": true
+      },
+      {
+        "id": "5c3872c1-0d10-4324-8bb6-b5b101024149",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-08-14T09:27:20.279983+01:00",
+        "ticker": "ITV.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 4.567743,
+        "price": 70.85,
+        "gross": 323.62,
+        "cost": 9.71,
+        "net_cash": 313.92,
+        "note": "Automated exit \u2014 left target set",
+        "name": "ITV plc",
+        "avg_cost_at_exit": 70.85,
+        "position_closed": true
+      },
+      {
+        "id": "13d8425e-1fa9-4b88-82b5-a5e41d05ca80",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-08-14T09:27:20.279983+01:00",
+        "ticker": "AEP.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 1.660743,
+        "price": 185.4078,
+        "gross": 307.91,
+        "cost": 9.24,
+        "net_cash": -317.15,
+        "note": "Automated buy",
+        "name": "AEP Plantations Plc"
+      },
+      {
+        "id": "e69f6097-0f54-4122-a25a-5ff4896efac8",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-08-14T09:27:20.279983+01:00",
+        "ticker": "SN.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.27584,
+        "price": 1093.5,
+        "gross": 301.63,
+        "cost": 9.05,
+        "net_cash": -310.68,
+        "note": "Automated buy",
+        "name": "Smith & Nephew plc"
+      },
+      {
+        "id": "98a79de7-6dd8-45f1-a371-bbceab296c2d",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-08-17T09:27:20.569663+01:00",
+        "ticker": "MEGP.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.108697,
+        "price": 119.2,
+        "gross": 12.96,
+        "cost": 0.39,
+        "net_cash": 12.57,
+        "note": "Automated trim",
+        "name": "ME Group International plc",
+        "avg_cost_at_exit": 119.2
+      },
+      {
+        "id": "a837828f-1c6d-4aec-b714-2c97eafe8bef",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-08-18T09:27:41.106930+01:00",
+        "ticker": "SN.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.27584,
+        "price": 1093.5,
+        "gross": 301.63,
+        "cost": 9.05,
+        "net_cash": 292.58,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Smith & Nephew plc",
+        "avg_cost_at_exit": 1093.5,
+        "position_closed": true
+      },
+      {
+        "id": "555cc51a-3acc-4142-8a80-ba9e561512ee",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-08-18T09:27:41.106930+01:00",
+        "ticker": "IMB.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.115863,
+        "price": 2557.0,
+        "gross": 296.26,
+        "cost": 8.89,
+        "net_cash": -305.15,
+        "note": "Automated buy",
+        "name": "Imperial Brands PLC"
+      },
+      {
+        "id": "de2cf746-6475-4ff1-b95b-24af242052f0",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-08-19T10:00:13.599366+01:00",
+        "ticker": "AEP.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 0.067692,
+        "price": 193.0,
+        "gross": 13.06,
+        "cost": 0.39,
+        "net_cash": 12.67,
+        "note": "Automated trim",
+        "name": "AEP Plantations Plc",
+        "avg_cost_at_exit": 185.4078
+      },
+      {
+        "id": "56afabaf-6822-44a7-b368-f8c71ff3cc8e",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-08-19T10:00:13.599366+01:00",
+        "ticker": "IMB.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.004081,
+        "price": 2564.0,
+        "gross": 10.46,
+        "cost": 0.31,
+        "net_cash": -10.78,
+        "note": "Automated buy",
+        "name": "Imperial Brands PLC"
+      },
+      {
+        "id": "91b6a41d-857c-4b78-8ac1-9fc37e668bc5",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-08-21T09:27:13.383131+01:00",
+        "ticker": "IMB.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.119944,
+        "price": 2510.0,
+        "gross": 301.06,
+        "cost": 9.03,
+        "net_cash": 292.03,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Imperial Brands PLC",
+        "avg_cost_at_exit": 2557.2382,
+        "position_closed": true
+      },
+      {
+        "id": "cfc84d3e-5512-4e89-805c-8169cc1aec9f",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-08-21T09:27:13.383131+01:00",
+        "ticker": "SN.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.270999,
+        "price": 1053.0,
+        "gross": 285.36,
+        "cost": 8.56,
+        "net_cash": -293.92,
+        "note": "Automated buy",
+        "name": "Smith & Nephew plc"
+      }
+    ],
+    "equity_curve": [
+      {
+        "at": "2026-07-25T06:44:21.534427+01:00",
+        "portfolio_value": 970.87,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-08-10T09:26:57.780475+01:00",
+        "portfolio_value": 970.87,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-08-12T10:36:21.733736+01:00",
+        "portfolio_value": 970.87,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-08-14T09:27:20.279983+01:00",
+        "portfolio_value": 933.17,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-08-17T09:27:20.569663+01:00",
+        "portfolio_value": 932.78,
+        "cash": 12.57,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-08-18T09:27:41.106930+01:00",
+        "portfolio_value": 914.84,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-08-19T10:00:13.599366+01:00",
+        "portfolio_value": 922.85,
+        "cash": 1.89,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-08-20T09:27:04.138844+01:00",
+        "portfolio_value": 914.69,
+        "cash": 1.89,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-08-21T09:27:13.383131+01:00",
+        "portfolio_value": 900.82,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-07T09:29:10.866142+01:00",
+        "portfolio_value": 927.96,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      }
+    ],
+    "last_mark_at": "2026-09-07T09:29:10.866142+01:00",
+    "rebalance_state": {
+      "exit_streak": {
+        "MEGP.L": 1,
+        "AEP.L": 1
+      },
+      "reentry_cooldown": {}
+    }
+  },
+  "note": "Rebalanced after open settle (0 trade(s)).",
+  "exit_shadow_review": {
+    "schema_version": 1,
+    "track_id": "ai_judgment_exclusion_u4",
+    "generated_at": "2026-09-07T08:29:26.581019+00:00",
+    "open_count": 4,
+    "closed_count": 0,
+    "by_exit_kind": {},
+    "grace_vs_rotation": {
+      "grace_closed": {
+        "count": 0
+      },
+      "screen_rotation_closed": {
+        "count": 0
+      }
+    },
+    "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
+    "ingested_this_pass": 4,
+    "checkpoints_added_this_pass": 4
+  },
+  "exit_timing_cohorts_review": {
+    "schema_version": 1,
+    "track_id": "ai_judgment_exclusion_u4",
+    "generated_at": "2026-09-07T08:29:26.581629+00:00",
+    "framework": {
+      "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
+      "hold_recovery": {
+        "question": "When a position is stressed but still held, does it recover to breakeven?",
+        "episode_triggers": [
+          "unrealized below underwater_threshold",
+          "exit_streak >= 1 (hold buffer active)",
+          "momentum_grace on position",
+          "effective signal no longer buy-tier while still held"
+        ],
+        "outcomes": [
+          "recovered_to_breakeven (peak unrealized >= breakeven_threshold)",
+          "sold_while_underwater",
+          "max_window_elapsed"
+        ],
+        "fields_for_later_analysis": [
+          "data_quality_score",
+          "conviction_score",
+          "screen_signal",
+          "effective_signal",
+          "exit_streak",
+          "stress_triggers",
+          "thesis_status_at_start",
+          "recommended_action_at_start",
+          "checkpoints"
+        ]
+      },
+      "swap_rotation": {
+        "question": "When we rotate (sell + buy same pass), does the replacement beat the exit?",
+        "pairing": "same rebalance pass sells vs buys on one track",
+        "outcomes": [
+          "replacement_outperformed",
+          "exit_outperformed",
+          "inconclusive"
+        ],
+        "fields_for_later_analysis": [
+          "sell_tickers",
+          "buy_tickers",
+          "sell_realized_pct",
+          "post_rotation_returns",
+          "trade_costs"
+        ]
+      },
+      "related_artifacts": [
+        "exit_shadow.json (post-exit path after sell)",
+        "rebalance_log.json (counterfactual replay)",
+        "exit_timing_near_miss.json (archive near-miss + held-book priors)",
+        "archive_rebalance_replay (weekly-screen counterfactual from first log pass)",
+        "learning_tracks_churn_health.json"
+      ]
+    },
+    "readiness": {
+      "ready_for_probability_analysis": false,
+      "hold_closed_count": 0,
+      "swap_closed_count": 0,
+      "hold_with_data_quality_count": 3,
+      "gaps": [
+        "hold_recovery closed episodes=0 (target >=15)",
+        "swap_rotation closed rotations=0 (target >=10)"
+      ],
+      "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
+    },
+    "hold_recovery": {
+      "open": {
+        "count": 3,
+        "recovered_to_breakeven": 3,
+        "close_reasons": {
+          "open": 3
+        }
+      },
+      "closed": {
+        "count": 0
+      }
+    },
+    "swap_rotation": {
+      "open": {
+        "count": 0
+      },
+      "closed": {
+        "count": 0
+      }
+    },
+    "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
+    "ingested_this_pass": {
+      "hold_episodes": 2,
+      "swap_rotations": 0
+    },
+    "checkpoints_added_this_pass": {
+      "hold_episodes": 0,
+      "swap_rotations": 0
+    }
+  },
+  "hypothesis_integrity": {
+    "schema_version": 1,
+    "scope": "hypothesis_integrity",
+    "observe_only": true,
+    "track_id": "ai_judgment_exclusion_u4",
+    "updated_at": "2026-09-07T08:29:26.582373+00:00",
+    "as_of": "2026-09-07T09:29:10.866142+01:00",
+    "config": {
+      "underwater_pct": -0.05,
+      "deep_underwater_pct": -0.15,
+      "loser_share_tolerance": 0.4,
+      "loser_nav_tolerance": 0.35,
+      "min_data_quality": 0.55,
+      "min_conviction_for_intact": 0.35,
+      "intact_urgency_dampen": 0.18,
+      "broken_urgency_boost": 0.28,
+      "skip_underwater_urgency_when_intact": true
+    },
+    "holding_count": 3,
+    "underwater_count": 0,
+    "thesis_status_counts": {
+      "intact": 3,
+      "weakening": 0,
+      "broken": 0,
+      "insufficient_data": 0
+    },
+    "portfolio_feedback": {
+      "holding_count": 3,
+      "loser_count": 0,
+      "loser_share": 0.0,
+      "loser_nav_share": 0.0,
+      "loser_share_tolerance": 0.4,
+      "loser_nav_tolerance": 0.35,
+      "within_tolerance": true,
+      "intact_loser_count": 0,
+      "weakening_loser_count": 0,
+      "broken_loser_count": 0,
+      "family_fail_rate_losers": {
+        "cheapness": 0.0,
+        "quality": 0.0,
+        "dividend": 0.0,
+        "garp": 0.0,
+        "risk": 0.0
+      },
+      "family_fail_rate_non_losers": {
+        "cheapness": 0.0,
+        "quality": 0.0,
+        "dividend": 0.0,
+        "garp": 0.0,
+        "risk": 0.0
+      },
+      "selection_feedback_flags": [],
+      "balancing_hint": "maintain",
+      "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
+    },
+    "holdings": [
+      {
+        "ticker": "SN.L",
+        "name": "Smith & Nephew plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0024,
+        "mark": 1050.5,
+        "avg_cost": 1053.0,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.8512,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 85%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 85%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "MEGP.L",
+        "name": "ME Group International plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0386,
+        "mark": 123.8,
+        "avg_cost": 119.2,
+        "signal": "buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.4423,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 44%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 44%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "AEP.L",
+        "name": "AEP Plantations Plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0855,
+        "mark": 201.263,
+        "avg_cost": 185.4078,
+        "signal": "buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.4681,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 47%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 47%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      }
+    ],
+    "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
+  },
+  "hypothesis_outcome_link": {
+    "schema_version": 1,
+    "scope": "hypothesis_outcome_link",
+    "observe_only": true,
+    "track_id": "ai_judgment_exclusion_u4",
+    "generated_at": "2026-09-07T08:29:26.583217+00:00",
+    "stamped_this_pass": {
+      "hold_episodes": 0,
+      "swap_rotations": 0
+    },
+    "hold_recovery_by_thesis": {
+      "closed_total": 0,
+      "closed_unknown_thesis": 0,
+      "open_with_thesis": 3,
+      "by_thesis_status": {
+        "intact": {
+          "closed_count": 0
+        },
+        "weakening": {
+          "closed_count": 0
+        },
+        "broken": {
+          "closed_count": 0
+        },
+        "insufficient_data": {
+          "closed_count": 0
+        }
+      }
+    },
+    "swap_rotation_by_thesis": {
+      "closed_rotation_count": 0,
+      "sell_legs_total": 0,
+      "sell_legs_unknown_thesis": 0,
+      "by_thesis_status": {
+        "intact": {
+          "leg_count": 0
+        },
+        "weakening": {
+          "leg_count": 0
+        },
+        "broken": {
+          "leg_count": 0
+        },
+        "insufficient_data": {
+          "leg_count": 0
+        }
+      }
+    },
+    "readiness": {
+      "ready_for_thesis_outcome_analysis": false,
+      "hold_closed_with_thesis": 0,
+      "swap_sell_legs_with_thesis": 0,
+      "gaps": [
+        "hold closed with thesis=0 (target >=8)",
+        "swap sell legs with thesis=0 (target >=5)"
+      ],
+      "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
+    },
+    "learning_hints": [],
+    "note": "Links thesis_status_at_start on exit_timing cohorts to hold-recovery and swap-rotation outcomes. Does not auto-apply exit policy."
+  },
+  "entry_dca_overlay_review": {
+    "schema_version": 1,
+    "track_id": "ai_judgment_exclusion_u4",
+    "observe_only": true,
+    "generated_at": "2026-09-07T08:29:26.584156+00:00",
+    "open_count": 0,
+    "closed_count": 0,
+    "scored_count": 0,
+    "scored_count_all": 0,
+    "recommit_scored_count": 0,
+    "entry_kind_counts": {
+      "first_entry": 0,
+      "recommit": 0
+    },
+    "any_de_risk_count": 0,
+    "winning_cadence_counts": {},
+    "cadence_stats": {
+      "dca_2x_weekly": {
+        "label": "50/50 over 1 week",
+        "scored_episodes": 0,
+        "mean_end_value_delta": null,
+        "mean_de_risk_gbp": null,
+        "de_risk_rate": null,
+        "win_count": 0
+      },
+      "dca_4x_weekly": {
+        "label": "25% weekly \u00d7 4",
+        "scored_episodes": 0,
+        "mean_end_value_delta": null,
+        "mean_de_risk_gbp": null,
+        "de_risk_rate": null,
+        "win_count": 0
+      },
+      "dca_2x_biweekly": {
+        "label": "50/50 over 2 weeks",
+        "scored_episodes": 0,
+        "mean_end_value_delta": null,
+        "mean_de_risk_gbp": null,
+        "de_risk_rate": null,
+        "win_count": 0
+      },
+      "dca_5x_weekday": {
+        "label": "20% over 5 weekday marks",
+        "scored_episodes": 0,
+        "mean_end_value_delta": null,
+        "mean_de_risk_gbp": null,
+        "de_risk_rate": null,
+        "win_count": 0
+      }
+    },
+    "readiness": {
+      "ready_for_cadence_analysis": false,
+      "closed_episodes": 0,
+      "closed_target": 12,
+      "tracks_with_closed": 0,
+      "tracks_target": 2,
+      "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
+      "first_entry_scored": 0,
+      "recommit_scored": 0
+    },
+    "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
+    "ingested_this_pass": 0,
+    "marked_this_pass": 0,
+    "closed_this_pass": 0
+  },
+  "generated_at": "2026-09-07T08:29:26.584426+00:00",
+  "track_id": "ai_judgment_exclusion_u4",
+  "track_label": "AI judgment exclusion ladder u4 (frozen priors)",
+  "is_primary_learning_track": false,
+  "selection": {
+    "skip_timing_wait": true,
+    "min_conviction": 0.35,
+    "sector_cap": 0.2,
+    "use_adjusted_signal": true,
+    "require_research_accumulate": true,
+    "use_momentum_grace": false,
+    "use_graduated_allocation": false,
+    "exit_confirm_screens": 2,
+    "reentry_cooldown_screens": 1,
+    "min_rebalance_notional_gbp": 10.0
+  }
+}

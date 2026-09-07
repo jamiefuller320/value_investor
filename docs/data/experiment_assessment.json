@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-09-06T07:48:54.673950+00:00",
+  "updated_at": "2026-09-07T08:30:22.058026+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -19,21 +19,21 @@
   },
   "context": {
     "history_run_count": 13,
-    "backtest_run_count": 12,
+    "backtest_run_count": 13,
     "trajectory_labeled_events": 336,
     "exit_shadow_closed_total": 0,
-    "experimental_track_count": 1,
-    "entry_dca_scored": 0,
+    "experimental_track_count": 2,
+    "entry_dca_scored": 5,
     "entry_dca_ready": false
   },
   "summary": {
-    "proposed": 0,
-    "recommend": 0,
-    "continue": 3,
     "fail": 4,
-    "observing": 2,
+    "observing": 3,
+    "continue": 3,
+    "recommend": 0,
+    "proposed": 0,
     "human_ack_pending": 0,
-    "total": 9
+    "total": 10
   },
   "experiments": [
     {
@@ -54,9 +54,9 @@
         "sector_cap": 0.2,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 13,
+      "gate_marks": 14,
       "gate_excess_after_costs": -0.1094,
-      "excess_vs_primary": 0.1053,
+      "excess_vs_primary": 0.1052,
       "excess_vs_rules": 0.193,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated/calibration_provenance.json"
@@ -79,9 +79,9 @@
         "sector_cap": 0.25,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 10,
+      "gate_marks": 11,
       "gate_excess_after_costs": -0.0627,
-      "excess_vs_primary": 0.152,
+      "excess_vs_primary": 0.1519,
       "excess_vs_rules": 0.2397,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated_r2/calibration_provenance.json",
@@ -105,9 +105,9 @@
         "sector_cap": 0.3,
         "exit_confirm_screens": 2
       },
-      "gate_marks": 10,
+      "gate_marks": 11,
       "gate_excess_after_costs": -0.0625,
-      "excess_vs_primary": 0.1522,
+      "excess_vs_primary": 0.1521,
       "excess_vs_rules": 0.2399,
       "gate_uses_post_seed": false,
       "evidence_path": "output/paper_automation/ai_judgment_calibrated_r3/calibration_provenance.json",
@@ -125,12 +125,33 @@
       "track_id": "ai_judgment_exclusion_u4",
       "exclusion_ladder_step_id": "u4",
       "parent_track_id": "ai_judgment",
-      "gate_marks": 0,
+      "gate_marks": 1,
       "gate_excess_after_costs": null,
       "excess_vs_parent": null,
       "gate_uses_post_seed": true,
       "evidence_path": "docs/data/paper_automation/ai_judgment_exclusion_u4/exclusion_provenance.json",
       "initiated_at": "2026-08-24T16:51:29.807044+00:00"
+    },
+    {
+      "experiment_id": "graduated_allocation",
+      "kind": "experimental_paper_track",
+      "title": "Screen rules + graduated allocation",
+      "area": "paper_knobs",
+      "pipeline": "paper_automation",
+      "status": "observing",
+      "source_status": "observing",
+      "human_ack_required": false,
+      "track_id": "graduated_allocation",
+      "gate_marks": 2,
+      "gate_excess_after_costs": null,
+      "excess_vs_primary": null,
+      "forward_evidence": {
+        "source": "learning_track_metrics",
+        "use_momentum_grace": false,
+        "use_graduated_allocation": true
+      },
+      "evidence_path": "docs/data/paper_automation/graduated_allocation/config.json",
+      "initiated_at": "2026-09-07T08:30:22.057015+00:00"
     },
     {
       "experiment_id": "momentum_grace",
@@ -142,8 +163,8 @@
       "source_status": "failed",
       "human_ack_required": false,
       "track_id": "momentum_grace",
-      "gate_marks": 21,
-      "gate_excess_after_costs": -0.0255,
+      "gate_marks": 22,
+      "gate_excess_after_costs": -0.0254,
       "excess_vs_primary": 0.1892,
       "forward_evidence": {
         "source": "learning_track_metrics",
@@ -164,11 +185,11 @@
       "human_ack_required": false,
       "forward_evidence": {
         "source": "learning_tracks_entry_dca.json",
-        "scored_count": 0,
-        "tracks_with_closed": 0,
+        "scored_count": 5,
+        "tracks_with_closed": 2,
         "ready_for_cadence_analysis": false,
-        "leading_cadence": null,
-        "model_independent_hint": false
+        "leading_cadence": "dca_2x_weekly",
+        "model_independent_hint": true
       },
       "evidence_path": "docs/data/paper_automation/learning_tracks_entry_dca.json",
       "initiated_at": "2026-09-04T08:29:30.298700+00:00"
@@ -267,7 +288,7 @@
         },
         "archive": {
           "history_run_count": 13,
-          "backtest_run_count": 12,
+          "backtest_run_count": 13,
           "simulation_ready": true
         },
         "loser_cards": {
@@ -295,7 +316,14 @@
     }
   ],
   "recommendations": [],
-  "task_sync": null,
+  "task_sync": {
+    "updated": [
+      "ana-20260728-04",
+      "ldr-20260823-02",
+      "ldr-20260823-03"
+    ],
+    "skipped": []
+  },
   "sources": {
     "calibration_shadow_endurance": "docs/data/paper_automation/calibration_shadow_endurance.json",
     "analysis_tasks": "docs/data/analysis_tasks.json",
