@@ -17,6 +17,7 @@ dropping still-open tasks from an older run stamp. The agent then failed with
 |-------|-----------|
 | **Merge guard** | `_merge_task_rows` preserves all `open` tasks, not only terminal/`pr_open` rows |
 | **Agent workflow** | Skips compile when `task_id` is provided; resolves stale ids via `resolve_dispatch_task_id` |
+| **Spend commit** | `scripts/gha_commit_engineering_spend.sh` rebases onto `origin/main`, re-records spend, and retries the push. Exhausted retries are `continue-on-error` so a raced `policy.json` push cannot block the draft PR |
 | **Queue recovery** | Hourly `recover-queue` marks tasks **merged** when GitHub shows a merged PR for their branch (before orphan `pr_open` reset) |
 | **Ops monitor** | Daily `check_engineering_sync()`; reconciles queue and can dispatch `engineering-queue.yml` |
 | **Dashboard UI** | `ftse-engineering refresh-queue-ui` on task status changes → `automation.json` + `latest.json` |
@@ -33,6 +34,10 @@ from value_investor.engineering_sync import (
 
 `audit_compile_drop_risk()` returns open task ids that would disappear if compile
 ran against present `output/post_run_review.md` artifacts.
+
+`ftse-engineering record-spend` re-applies the ad-hoc increment on the current
+`policy.json` (used by the agent spend-commit retry so a raced push does not
+overwrite concurrent policy edits).
 
 `run_engineering_sync(apply=True)` runs safe queue recovery only — it never
 rewrites task payloads or deletes tasks. Recovery order:

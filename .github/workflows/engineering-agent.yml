@@ -137,12 +137,8 @@ jobs:
         if: >-
           github.event.inputs.compile_only != 'true'
           && github.event.inputs.pr_only != 'true'
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          branch: main
-          commit_message: "chore: record engineering agent spend [skip ci]"
-          file_pattern: docs/data/library/policy.json
-          skip_fetch: false
+        continue-on-error: true
+        run: bash scripts/gha_commit_engineering_spend.sh
 
       - name: Clear stale engineering branch
         if: >-
