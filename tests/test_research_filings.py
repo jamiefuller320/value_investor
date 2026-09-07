@@ -6128,7 +6128,7 @@ def test_parked_source_hunter_skip_fico_sp500():
 
 
 def test_parked_source_hunter_skip_intu_sp500():
-    """eng-20260907-06: INTU leftover IWB is Item 9.01 8-K cover HTML, not missing 10-K/10-Q."""
+    """eng-20260907-05: INTU leftover IWB is Item 9.01 8-K cover HTML, not missing 10-K/10-Q."""
     assert "INTU" in PARKED_SOURCE_HUNTER_SKIP
     reason = PARKED_SOURCE_HUNTER_SKIP["INTU"]
     assert "9.01" in reason
@@ -6241,7 +6241,7 @@ def test_fico_item202_8k_primary_fails_substantiveness_gate(monkeypatch):
 
 
 def test_intu_item901_8k_primary_fails_substantiveness_gate(monkeypatch):
-    """eng-20260907-06: INTU Nov 2025 Item 9.01 8-K primary is cover-only below substantiveness gate."""
+    """eng-20260907-05: INTU Nov 2025 Item 9.01 8-K primary is cover-only below substantiveness gate."""
     cover_html = """
     <html><body>
     <div>FORM 8-K CURRENT REPORT</div>
