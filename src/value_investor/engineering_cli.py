@@ -304,6 +304,22 @@ def _cmd_park_task(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_record_spend(args: argparse.Namespace) -> int:
+    status = record_engineering_spend(
+        path=args.policy,
+        estimated_usd=args.estimated_usd,
+    )
+    if args.json:
+        _print_json(status)
+    else:
+        print(
+            "Ad-hoc spend recorded: "
+            f"${status['spend_since_checkpoint_usd']:.2f} / "
+            f"${status['spend_checkpoint_usd']:.2f}"
+        )
+    return 0
+
+
 def _cmd_record_no_diff(args: argparse.Namespace) -> int:
     result = record_agent_no_diff_run(
         str(args.task_id).strip(),
@@ -1118,6 +1134,19 @@ def main(argv: list[str] | None = None) -> int:
         help="Show the park action without writing the queue",
     )
     park_task_p.set_defaults(func=_cmd_park_task)
+
+    record_spend_p = sub.add_parser(
+        "record-spend",
+        parents=[common],
+        help="Re-apply ad-hoc engineering spend on the current policy.json",
+    )
+    record_spend_p.add_argument(
+        "--estimated-usd",
+        type=float,
+        default=DEFAULT_ESTIMATED_USD,
+        help="Estimated Cursor spend to record against ad-hoc checkpoint",
+    )
+    record_spend_p.set_defaults(func=_cmd_record_spend)
 
     record_no_diff_p = sub.add_parser(
         "record-no-diff",

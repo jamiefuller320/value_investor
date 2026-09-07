@@ -37,6 +37,7 @@ If the **latest** `CI` and `Deploy GitHub Pages` runs on `main` are green, older
 | Node 20 deprecation annotation | Older action major versions on Node 20 runtime | Upgrade `setup-python` → v6, `github-script` → v8 (done in workflow tidy PR) |
 | `pip install -e .` — *"No matching distribution found for pandas>=2.2 (from versions: none)"* | Transient PyPI / empty index on one runner (same run's other job can succeed) | Library ingest workflows retry via `scripts/gha_pip_install.sh` (4 attempts, backoff). Re-run if it still fails after retries |
 | Euro / library ingest — *local changes to engineering_tasks.json would be overwritten by checkout* | Push script stashed only `docs/data/library/`, leaving `engineering_tasks.json` dirty when origin/main moved | `scripts/push_library_ingest_artifacts.sh` now stashes the full allowlist and restores only files the job changed |
+| Engineering agent — *Commit ad-hoc spend to main* rejected (`HEAD -> main (fetch first)`) | Two parallel `engineering-agent` runs (or ingest/queue) both push `docs/data/library/policy.json` after the agent finished | `scripts/gha_commit_engineering_spend.sh` retries with a fresh increment on `origin/main`. The step is `continue-on-error` so a spent-ledger race does not skip the draft PR |
 
 ## Examples (2026-07-25)
 

@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T12:59:34+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T15:12:04+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -153,6 +153,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N103 | **Do not compare shard results across unequal support** | A fat-slot euro paper book is not evidence against a spare-slot S&P or ASX observe-sim. Unequal ingest volume, memo coverage, and paper cadence confound market vs treatment. Compare only after the same package is applied, or do not compare. | L321 equal-support package is wired for every admitted shard |
 | N104 | **Do not fold shard near-miss reviews into FTSE Sunday analysis-review** | Equal-support writes exclusion and exit-timing reviews under markets/<id>/screen/. Learning director and analysis-review still read FTSE docs/data/ only. Keep it that way so shard watch stays a Sunday human task and does not steal P1 FTSE review attention. | Epoch-0 and tight near-miss groups have forward marks and a single review surface is needed to decide the AI-fork gate |
 | N105 | **Do not pause spare sprint auto-advance** | When a spare stream hits sprint_ingest_complete, promoting the next market_queue name (tsx60 / ftse_smallcap today) is correct. Do not stop those streams to save capacity. Watch shared runner timeouts and source rate limits instead; revisit L323 when a third admitted market is on maintenance or a job clips the tail. | A third admitted market is on the maintenance list, or a maintenance/sprint job hits timeout-minutes: 120 or spare_wait skip |
+| N107 | **Serialize engineering agents to one to avoid main races** | max_parallel_engineering_agents=2 is useful for queue throughput, but concurrent jobs still race on main (queue JSON, automation.json). The spend-commit retry unblocks the PR path; do not drop parallel dispatch just to hide remaining bookkeeping races. | Another engineering-agent or queue job fails because two main commits collide after the spend-retry fix lands |
 
 ---
 
@@ -391,6 +392,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L323 | **Split or stagger maintenance ingest per admitted market** | library-ingest-maintenance.yml loops admitted markets sequentially inside one 120-minute job at 62 targets / 3600s each. Once two or more markets are at the maintenance threshold, give each its own staggered slot or workflow so equivalent resource is not clipped by the shared timeout. Do not solve this with a fourth equal sprint stream. | A second market besides the sprint head is on ingest_exhausted_markets or ingest_parity_markets and maintenance runs are hitting timeout-minutes or skipping a tail market |
 | L325 | **CI PR Autofix verify pytest uses main site-packages** | Autofix installs the package from main into site-packages, then checks out the PR and runs full pytest. PR tests that import new symbols fail even when the PR CI test job (editable install) is green, so path-guard allowlist expands do not land. | The next engineering PR path-guard expand is blocked by autofix verify pytest after a green PR test job |
 | L331 | **Coalesce GitHub Pages deploys when ingest slots pile up** | Ingest, paper-auto, and engineering-merge now each dispatch pages.yml after [skip ci] commits so the dashboard is not stale. If the pages concurrency queue backs up (cancel-in-progress is false), batch those deploys or dispatch only when market_status/automation generated_at actually changed. | pages.yml waits more than a few minutes behind ingest/paper commits, or a third admitted market is on maintenance |
+| L332 | **Move ad-hoc spend ledger off shared policy.json** | Engineering-agent, ingest, and ladder jobs all mutate docs/data/library/policy.json. A dedicated spend ledger would remove the hottest contention point on main without changing checkpoint semantics. | Spend or policy.json races persist after gha_commit_engineering_spend.sh is on main |
 
 ---
 

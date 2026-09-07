@@ -264,6 +264,7 @@ for a digest regardless of status / deferral.
 | `failed` with retries left + cooldown elapsed | Reopen → `open` |
 | `failed` after max agent retries | Park → `parked` (manual review) |
 | `pr_open` with CI red for 48h+ | Park → `parked` (unblocks queue; PR stays for you) |
+| Agent finished but spend commit to `main` raced | Retry `scripts/gha_commit_engineering_spend.sh`; do **not** treat as a task failure — PR open continues (`continue-on-error`) |
 | Agent runs with **no committable code changes** | After **2** consecutive no-diff runs → `parked` (`record-no-diff` in `engineering-agent.yml`) |
 | Agent runs with **no committable code changes** | After **2** consecutive no-diff runs → `parked` (`ftse-engineering record-no-diff`; wired in `engineering-agent.yml`) |
 
