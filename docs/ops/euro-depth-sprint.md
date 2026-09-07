@@ -72,10 +72,11 @@ threshold (raw parity or leftover thin/IWB parked), then give that market
 equivalent resource and move the fat slot — see
 [`AGENTS.md`](../../AGENTS.md) and
 [`market-sharded-learning.md`](market-sharded-learning.md#what-enter-learning-means).
-Spare streams only front-start the next queue names. Do **not** add a fourth
-equal sprint workflow (`library-ingest-sprint-3.yml` or similar) that can starve
-the current head. Learning resource should flip with maintenance graduation
-(L322); today only ingest volume does.
+Spare streams only front-start the next queue names. Stagger slots and run
+**parallel maintenance** for graduated markets; do **not** add a fourth equal
+sprint workflow (`library-ingest-sprint-3.yml` or similar) that can starve the
+current head. Learning resource should flip with maintenance graduation (L322);
+today only ingest volume does.
 
 **Scheduler (wired):** while focus still has FTSE-standard filing gaps,
 `ingest_effort_cascade` scales stream 1 to half targets/runtime and stream 2 to

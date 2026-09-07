@@ -94,7 +94,17 @@ Spare 50%/25% fractions apply only while a market is still *in front* of that th
 
 **Equal treatment after admission.** Compare only admitted markets that have the same package (N103). Do **not** spray leftover plan credit across 21 thin markets (N96). Residual skew you cannot policy away: filing *yield* (ESEF vs EDGAR vs ASX IR), session timezone, and buy-tier width. Spare-slot fractions on a *pre-threshold* market are expected; leaving a *post-threshold* market on observe-sim only is a treatment bug.
 
-**What still waits.** The learning flip at maintenance graduation is not wired (L322). Phase 2 weekly-then-Phase-3 weekday remains the current path. The intended start instrument after admission is the frozen level book (L319). Runner wall-clock is still shared across fat-slot sprints; Cursor $ is not the reason a graduated market stays on observe-sim.
+**What still waits.** The learning flip at maintenance graduation is not wired (L322). Phase 2 weekly-then-Phase-3 weekday remains the current path. The intended start instrument after admission is the frozen level book (L319). Cursor $ is not the reason a graduated market stays on observe-sim.
+
+**Runner wall-clock.** Work around it by **staggering** and by **parallel maintenance**, not by a fourth equal sprint.
+
+| Approach | Use when | Do not use when |
+|----------|----------|-----------------|
+| **Stagger** | One market still holds the fat sprint. Existing +30/+60 min stream offsets, maintenance at `:30`, spare wait-on-head, and session timezones (AU / EU / US weekday paper) | As a substitute for admitting a post-threshold market |
+| **Parallel pipelines** | Graduated markets on **maintenance** (FTSE-volume, unparked names) plus one fat **sprint** head | A fourth equal sprint stream while a head is unfinished |
+| **One maintenance job, many markets** | Two markets, short deepen | Several admitted books at `max_targets=62` / 3600s — the job is sequential and `timeout-minutes: 120` will clip the tail (L323) |
+
+Hosted Actions minutes are not the bind (N66). What still collides if you naive-parallel: per-job timeouts, `push_library_ingest_artifacts` checkout races, and **source** rate limits (ESEF / EDGAR / IR / Yahoo) — staggering helps those more than a fourth workflow does.
 
 **Below-tier protection against tight knobs** is a second instrument, not a reason to delay the wide book. A buy-tier-only book never sees names that never hit buy-tier. “Buy-tier but not buy now” is already the first cut on FTSE (`buy_tier_level` uses `skip_timing_wait=true`, so `timing_signal=wait` stays out). Full-screened exclusion-universe and exit-timing near-miss labs cover the rest **on FTSE** once ≥2 weekly snapshots exist. Shards get that clock by taking Layer B screens from week 0 (L320) — they do not need those archives *before* the first fill.
 
