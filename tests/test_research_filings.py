@@ -6052,10 +6052,37 @@ def test_parked_source_hunter_skip_aptv_sp500():
 
 
 def test_parked_source_hunter_skip_bxp_sp500():
-    """eng-20260907-01: BXP leftover IWB is misattributed Investegate RNS, not missing SEC filings."""
+    """eng-20260907-02: BXP leftover IWB is misattributed Investegate RNS, not missing SEC filings."""
     assert "BXP" in PARKED_SOURCE_HUNTER_SKIP
     reason = PARKED_SOURCE_HUNTER_SKIP["BXP"]
     assert "Investegate" in reason
     assert "Beximco" in reason
     assert "period_mismatch" in reason
+    assert "10-K/10-Q" in reason
     assert fetch_filings_ir_allowlist("BXP") == []
+
+
+def test_bxp_iwb_beximco_investegate_refetch_rejects_period_mismatch():
+    """eng-20260907-02: AIM epic BXP collision bodies fail refetch gate for sp500 BXP, Inc."""
+    beximco_body = (
+        "Beximco Pharmaceuticals Limited (AIM Symbol: BXP) Q3 Financial Results. "
+        "Nine months ended 31 March 2024 with net revenue up 13.1%. "
+        "The Company also published full year results guidance for FY2024." + ("x" * 220)
+    )
+    for headline in ("Q3 Financial Results", "Financial Results for the First Quarter"):
+        row = {
+            "headline": headline,
+            "period": "interim",
+            "url": (
+                "https://www.investegate.co.uk/announcement/rns/"
+                "beximco-pharmaceuticals-limited--bxp/q3-financial-results/8163136"
+            ),
+        }
+        valid, reason = _validate_rns_filing_body_content(
+            row,
+            beximco_body,
+            company_name="BXP, Inc.",
+            ticker="BXP",
+        )
+        assert valid is False
+        assert reason == "period_mismatch"
