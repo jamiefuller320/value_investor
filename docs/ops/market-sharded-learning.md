@@ -111,7 +111,7 @@ What *is* binding if “apply FTSE machinery to all shards as soon as possible�
 | **Weekday replica** | Overlay refresh, rememo, 62-target ingest, session/timezone cron, human spot-check. Phase 3 stays **one** non-FTSE weekday pilot at a time. |
 | **Phase 4** | Live-screen inclusion is a **project** gate (FTSE 2b persistent excess **and** one shard through Phase 3), not per-shard independence. |
 
-**Independent promotion when robust is the intended Phase 1–3 end-state** — once the archive/filing gates are met *and* a slot is free. It is not “turn on the full FTSE weekday stack everywhere now, then wait for robustness.” The machinery that *creates* robustness (filing deepen, memos, weekday cadence) is the zero-sum part. Observe-sim + ingest-profile screen-lite already apply the cheap, independent slice to focus + sprint + parity + `ftse_equivalent_markets`.
+**Independent promotion when robust is the intended Phase 1–3 end-state** — once the market is admitted **and** given the same support package. Do not read observe-sim on a spare slot as a comparable result. Ingest runner wall-clock is still shared; Cursor plan credit is not the reason support is unequal.
 
 Ticker-level research is also not a perfect air gap: observe-sim / shard paper read focus research ∪ every other `markets/*/screen/research` so sibling-home memos work for dual-listed names. That is not book-P&L contamination.
 
