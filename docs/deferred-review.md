@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T16:28:11+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T18:45:22+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -154,6 +154,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N104 | **Do not fold shard near-miss reviews into FTSE Sunday analysis-review** | Equal-support writes exclusion and exit-timing reviews under markets/<id>/screen/. Learning director and analysis-review still read FTSE docs/data/ only. Keep it that way so shard watch stays a Sunday human task and does not steal P1 FTSE review attention. | Epoch-0 and tight near-miss groups have forward marks and a single review surface is needed to decide the AI-fork gate |
 | N105 | **Do not pause spare sprint auto-advance** | When a spare stream hits sprint_ingest_complete, promoting the next market_queue name (tsx60 / ftse_smallcap today) is correct. Do not stop those streams to save capacity. Watch shared runner timeouts and source rate limits instead; revisit L323 when a third admitted market is on maintenance or a job clips the tail. | A third admitted market is on the maintenance list, or a maintenance/sprint job hits timeout-minutes: 120 or spare_wait skip |
 | N107 | **Serialize engineering agents to one to avoid main races** | max_parallel_engineering_agents=2 is useful for queue throughput, but concurrent jobs still race on main (queue JSON, automation.json). The spend-commit retry unblocks the PR path; do not drop parallel dispatch just to hide remaining bookkeeping races. | Another engineering-agent or queue job fails because two main commits collide after the spend-retry fix lands |
+| N108 | **Do not invent last-day Cursor-credit work** | Leftover plan credit at cycle end should not fund rememo density, dashboard polish, leftover S&P IR hunts, extra FTSE ingest, or new paper tracks. Policy already prefers a weekly_ops bump or named P1 overlay/filing bind. Letting unused credit expire is better than factory work that does not change weekday AI-judgment inputs. | Usage-page leftover is high AND a named live-path overlay field or held/buy-tier filing gap is missing for the next Sunday cycle |
 
 ---
 
@@ -395,6 +396,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L331 | **Coalesce GitHub Pages deploys when ingest slots pile up** | Ingest, paper-auto, and engineering-merge now each dispatch pages.yml after [skip ci] commits so the dashboard is not stale. If the pages concurrency queue backs up (cancel-in-progress is false), batch those deploys or dispatch only when market_status/automation generated_at actually changed. | pages.yml waits more than a few minutes behind ingest/paper commits, or a third admitted market is on maintenance |
 | L332 | **Move ad-hoc spend ledger off shared policy.json** | Engineering-agent, ingest, and ladder jobs all mutate docs/data/library/policy.json. A dedicated spend ledger would remove the hottest contention point on main without changing checkpoint semantics. | Spend or policy.json races persist after gha_commit_engineering_spend.sh is on main |
 | L334 | **Market-status tile: ingest vs learning phase for spare sprints** | Dashboard tiles show learning_phase_label 'Not started' whenever a market is missing from shard_phases.json. Spare sprint markets (tsx60, ftse_smallcap) already have live ingest badges, so the phase line reads as if the sprint has not begun. Derive Observe from live dispatch/evaluate_market_phase, or split ingest status from learning-book status. | The Overview market grid is next edited, or a spare stream market is again asked why it shows not started |
+| L335 | **Prefer live-path IWB (ITV/IMB) over leftover S&P hunts if credit remains** | If leftover Cursor credit is spent on ingest engineering, target indexed-without-body names that weekday paper-auto can already see (ITV.L held, IMB.L in the target set) rather than parked sp500 leftovers like BXP/APTV. Extra full-universe FTSE ingest stays low ROI (N45). | A weekday paper-auto holding or buy-tier target is still indexed-without-body after the next ingest drain, or the parked-source hunter is about to pick another leftover S&P ticker |
 
 ---
 
