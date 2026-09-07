@@ -6116,7 +6116,7 @@ def test_parked_source_hunter_skip_crh_sp500():
 
 
 def test_parked_source_hunter_skip_fico_sp500():
-    """eng-20260907-07: FICO leftover IWB is Item 2.02 earnings-release 8-K cover HTML."""
+    """eng-20260907-04: FICO leftover IWB is Item 2.02 earnings-release 8-K cover HTML."""
     assert "FICO" in PARKED_SOURCE_HUNTER_SKIP
     reason = PARKED_SOURCE_HUNTER_SKIP["FICO"]
     assert "2.02" in reason
@@ -6209,7 +6209,7 @@ def test_ldos_acquisition_8k_primary_fails_substantiveness_gate(monkeypatch):
 
 
 def test_fico_item202_8k_primary_fails_substantiveness_gate(monkeypatch):
-    """eng-20260907-07: FICO Jul 2025 Item 2.02 earnings-release 8-K primary is cover-only."""
+    """eng-20260907-04: FICO Jul 2025 Item 2.02 earnings-release 8-K primary is cover-only."""
     cover_html = """
     <html><body>
     <div>FORM 8-K CURRENT REPORT</div>
