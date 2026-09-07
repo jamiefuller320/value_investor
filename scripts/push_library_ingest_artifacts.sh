@@ -16,6 +16,7 @@ LIBRARY_INGEST_ARTIFACT_PATHS=(
   docs/data/engineering_tasks.json
   docs/data/ingest_gap_closure_runs.json
   docs/data/ingest_deviations.json
+  docs/data/market_status.json
 )
 
 git_clean_state() {
@@ -122,6 +123,9 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
     echo "Library ingest artifacts pushed to main"
     if [ -n "${ref:-}" ]; then
       git stash drop "$ref" 2>/dev/null || true
+    fi
+    if [ "${DISPATCH_PAGES:-}" = "true" ]; then
+      bash "$(dirname "$0")/dispatch_pages.sh" || echo "pages dispatch skipped"
     fi
     exit 0
   fi

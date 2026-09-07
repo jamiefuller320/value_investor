@@ -16,6 +16,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: ftse-paper-automation
@@ -220,8 +221,16 @@ jobs:
         run: git pull --rebase --autostash origin main
 
       - name: Commit automation artifacts
+        id: paper_commit
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: "chore: daily paper automation [skip ci]"
           file_pattern: docs/data/**
           skip_fetch: false
+
+      - name: Deploy dashboard after paper-auto
+        if: steps.paper_commit.outputs.changes_detected == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_ACTIONS: "true"
+        run: bash scripts/dispatch_pages.sh
