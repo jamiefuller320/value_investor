@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T18:03:10+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T22:34:56+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -202,6 +202,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L327 | **Extra near-miss cuts: sector-cap blocks and buy-tier dropouts** | Current watch groups do not isolate names that would be buy-tier but were sector-capped, or names that printed buy then dropped to hold. Add those cuts only if buy-not-now plus hold-near-buy leave an obvious counterfactual hole. | After several Sunday screens, buy-not-now and hold-near-buy marks look too thin or biased to answer knob questions |
 | L328 | **Weekday local-open crons for admitted epoch-0 books** | Shard buy_tier_level configs already stamp America/New_York and Australia/Sydney open+settle. There is no weekday orchestrator slot at those sessions; admitted books currently mark on Sunday ladder / one-off epoch0. Add staggered local-open dispatches only after the near-miss watch, and do not piggyback FTSE paper-auto at 08:25 UTC. | Epoch-0 plus buy-not-now and hold-near-buy have enough weekday-like marks to justify a second paper clock |
 | L330 | **Skip observe-sim AI accumulate when memo has zero filing bodies** | Euro_depth observe-sim AI currently treats accumulate verdicts with 0 filing bodies as valid labels (17/18 sampled). Do not add this gate to live FTSE paper (N27). When library filing parity is real, exclude zero-body accumulate from shard/observe AI so the sim is not observe noise. | Focus or admitted-market buy-tier library memos have filing-body parity and observe-sim still attributes excess to the AI-judgment accumulate gate. |
+| L337 | **Annotate held-vs-market cost treatment on market cards** | Held vs market plots stock mark-to-market (NAV minus cash). Paper and observe-sim trades are already sized after trade_cost_pct, but the cash drain from costs is stripped off the line and the index equivalent is frictionless. A caption (and optional full-NAV-after-costs series) would stop this being read as Sunday-review excess after costs. | Someone uses the market-card charts to judge paper vs index and asks about 3% stress vs fair costs, or the tile disagrees with Sunday-review excess-after-costs. |
 
 ### Universe & data
 
