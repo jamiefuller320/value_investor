@@ -6115,6 +6115,18 @@ def test_parked_source_hunter_skip_crh_sp500():
     assert fetch_filings_ir_allowlist("CRH") == []
 
 
+def test_parked_source_hunter_skip_fico_sp500():
+    """eng-20260907-07: FICO leftover IWB is Item 2.02 earnings-release 8-K cover HTML."""
+    assert "FICO" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["FICO"]
+    assert "2.02" in reason
+    assert "8-K" in reason
+    assert "EX-99.1" in reason
+    assert "substantiveness" in reason
+    assert "10-Q" in reason
+    assert fetch_filings_ir_allowlist("FICO") == []
+
+
 def test_parked_source_hunter_skip_intu_sp500():
     """eng-20260907-06: INTU leftover IWB is Item 9.01 8-K cover HTML, not missing 10-K/10-Q."""
     assert "INTU" in PARKED_SOURCE_HUNTER_SKIP
@@ -6124,6 +6136,38 @@ def test_parked_source_hunter_skip_intu_sp500():
     assert "EX-99.01" in reason
     assert "10-Q" in reason
     assert fetch_filings_ir_allowlist("INTU") == []
+
+
+def test_fico_item202_8k_primary_fails_substantiveness_gate(monkeypatch):
+    """eng-20260907-07: FICO Jul 2025 Item 2.02 earnings-release 8-K primary is cover-only."""
+    cover_html = """
+    <html><body>
+    <div>FORM 8-K CURRENT REPORT</div>
+    <p>Item 2.02 Results of Operations and Financial Condition.</p>
+    <p>On July 30, 2025, Fair Isaac Corporation issued a press release. A copy of the
+    press release is attached as Exhibit 99.1 to this Current Report on Form 8-K.</p>
+    <p>Item 9.01 Financial Statements and Exhibits.</p>
+    <p>(d) Exhibits. Exhibit 99.1 — Press release dated July 30, 2025.</p>
+    <p>101.INS XBRL Instance Document — tags embedded within the Inline XBRL document.</p>
+    <p>104 Cover Page Interactive Data File (formatted as Inline XBRL).</p>
+    <p>SIGNATURES Pursuant to the requirements of the Securities Exchange Act of 1934,
+    FAIR ISAAC CORPORATION By: /s/ STEVEN HOLDEN Steven Holden Senior Vice President and
+    Chief Financial Officer Date: July 30, 2025</p>
+    </body></html>
+    """
+
+    def fake_http_get(url, headers=None, timeout=60):
+        if url.endswith("fico-20250730.htm"):
+            return cover_html.encode("utf-8")
+        if url.endswith("0000814547-25-000024-index.htm"):
+            return b'<html><body><a href="fico-20250730.htm">8-K</a></body></html>'
+        raise AssertionError(f"unexpected url {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_http_get)
+    body = fetch_filing_body(
+        "https://www.sec.gov/Archives/edgar/data/814547/000081454725000024/fico-20250730.htm"
+    )
+    assert body is None
 
 
 def test_intu_item901_8k_primary_fails_substantiveness_gate(monkeypatch):
