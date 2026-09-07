@@ -99,7 +99,7 @@ Spare 50%/25% fractions apply only while a market is still *in front* of that th
 **Admitted start (now).** `sp500` and `asx200` are on `ladder.admitted_learning_markets`. Equivalent resource starts immediately as:
 
 - Frozen weekday/Sunday **epoch-0** `buy_tier_level` book (`ftse-library shard-epoch0`)
-- Near-miss watch (`near_miss_watch.json`: buy-not-now, not-buy-tier, hold-near-buy, never-buy-tier)
+- Near-miss watch (`near_miss_watch.json`). **Watch cut for the AI-fork gate:** buy-not-now and hold-near-buy. **Census / persistence only:** not-buy-tier (all below buy-tier) and never-buy-tier (dated archives, never printed buy). Do not treat the census counts as the near-miss sample.
 - Existing maintenance ingest + Layer B screen clock
 - **Equal-support package** (`ftse-library equal-support`): market-aware timing stamp, buy-tier rememo eligibility at the same body-lag rule, and per-market exclusion-universe + exit-timing archives under `markets/<id>/screen/`
 

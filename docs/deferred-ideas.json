@@ -7207,41 +7207,55 @@
       "added_at": "2026-09-07T07:59:38+00:00"
     },
     {
-      "id": "N104",
-      "category": "not_now",
-      "section": "not_now",
-      "title": "Decouple admitted-market maintenance crons from euro sprint mode",
-      "summary": "Implemented: shared library-ingest-maintenance crons stay on whenever maintenance_markets is nonempty. Euro sprint still controls only euro-ingest-loop slots.",
-      "revisit_when": "Implemented 2026-09-07",
-      "tags": [
-        "ingest",
-        "maintenance",
-        "cron",
-        "admitted",
-        "done"
-      ],
-      "status": "done",
-      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
-      "added_at": "2026-09-07T11:30:02+00:00",
-      "updated_at": "2026-09-07T11:30:10+00:00"
-    },
-    {
       "id": "L326",
       "category": "later",
-      "section": "ops",
-      "title": "Publish epoch-0 shard books from Sunday ladder commit",
-      "summary": "Implemented: library-grow.yml now commits shard paper book-of-record files under docs/data/paper_automation/markets/.",
-      "revisit_when": "Implemented 2026-09-07",
+      "section": "learning",
+      "title": "Full-screened exclusion on admitted shards",
+      "summary": "Admitted-market equal-support runs exclusion-universe in the default buy_tier_only mode, so not-buy-tier names never enter that ladder. Below-tier counterfactuals today come from exit-timing (hold \u2265 0.28, top 25/week). Switch shards to full_screened only if buy-tier exclusion plus exit-timing cannot answer whether looser knobs would have helped.",
+      "revisit_when": "Deciding whether to fork shard AI and buy_tier_only exclusion plus exit-timing look insufficient for below-tier knob questions",
       "tags": [
-        "epoch0",
-        "ladder",
-        "publish",
-        "done"
+        "equal-support",
+        "near-miss",
+        "exclusion",
+        "sp500",
+        "asx200"
       ],
-      "status": "done",
+      "status": "open",
       "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
-      "added_at": "2026-09-07T11:30:02+00:00",
-      "updated_at": "2026-09-07T11:30:10+00:00"
+      "added_at": "2026-09-07T11:11:27+00:00"
+    },
+    {
+      "id": "N104",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Do not fold shard near-miss reviews into FTSE Sunday analysis-review",
+      "summary": "Equal-support writes exclusion and exit-timing reviews under markets/<id>/screen/. Learning director and analysis-review still read FTSE docs/data/ only. Keep it that way so shard watch stays a Sunday human task and does not steal P1 FTSE review attention.",
+      "revisit_when": "Epoch-0 and tight near-miss groups have forward marks and a single review surface is needed to decide the AI-fork gate",
+      "tags": [
+        "equal-support",
+        "near-miss",
+        "analysis-review",
+        "not_now"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T11:11:28+00:00"
+    },
+    {
+      "id": "L327",
+      "category": "later",
+      "section": "learning",
+      "title": "Extra near-miss cuts: sector-cap blocks and buy-tier dropouts",
+      "summary": "Current watch groups do not isolate names that would be buy-tier but were sector-capped, or names that printed buy then dropped to hold. Add those cuts only if buy-not-now plus hold-near-buy leave an obvious counterfactual hole.",
+      "revisit_when": "After several Sunday screens, buy-not-now and hold-near-buy marks look too thin or biased to answer knob questions",
+      "tags": [
+        "equal-support",
+        "near-miss",
+        "sector-cap"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T11:11:28+00:00"
     },
     {
       "id": "N105",
@@ -7259,6 +7273,57 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
       "added_at": "2026-09-07T11:37:33+00:00"
+    },
+    {
+      "id": "L328",
+      "category": "later",
+      "section": "learning",
+      "title": "Weekday local-open crons for admitted epoch-0 books",
+      "summary": "Shard buy_tier_level configs already stamp America/New_York and Australia/Sydney open+settle. There is no weekday orchestrator slot at those sessions; admitted books currently mark on Sunday ladder / one-off epoch0. Add staggered local-open dispatches only after the near-miss watch, and do not piggyback FTSE paper-auto at 08:25 UTC.",
+      "revisit_when": "Epoch-0 plus buy-not-now and hold-near-buy have enough weekday-like marks to justify a second paper clock",
+      "tags": [
+        "clock",
+        "epoch0",
+        "session",
+        "paper-auto"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T11:16:28+00:00"
+    },
+    {
+      "id": "N106",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Decouple admitted-market maintenance crons from euro sprint mode",
+      "summary": "Implemented: apply_library_maintenance_schedule keeps shared weekday/Sunday maintenance crons on whenever maintenance_markets is nonempty, even while euro_depth is in sprint. Euro's own sprint slots (cron_morning / extra / evening / overnight) stay sprint-gated. should_run_maintenance_ingest remains focus-market-only so the fat slot is not given to a sprinting euro.",
+      "revisit_when": "Next weekday maintenance slot is missed while euro is still in sprint and admitted markets need deepen",
+      "tags": [
+        "ingest",
+        "maintenance",
+        "cron",
+        "admitted"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T11:23:57+00:00"
+    },
+    {
+      "id": "L329",
+      "category": "later",
+      "section": "ops",
+      "title": "Publish epoch-0 shard books from Sunday ladder commit",
+      "summary": "Implemented: library-grow.yml persist file_pattern now includes markets/**/automated_fund.json plus config, rebalance_log, shard_meta, shard_phase, weekday/weekly batch logs, and learning_tracks_*.json. Sunday ladder is the automatic epoch-0 refresh. Weekday local-open Actions for admitted shards remain later (L328).",
+      "revisit_when": "The next Sunday ladder runs after admitted epoch-0 and weekday_batch_log does not gain a new mark",
+      "tags": [
+        "epoch0",
+        "ladder",
+        "publish",
+        "paper-automation"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a07adc-c5f8-74a4-88ae-8e506ec63ace",
+      "added_at": "2026-09-07T11:23:57+00:00"
     }
   ],
   "fragments": [
@@ -7725,5 +7790,6 @@
       "source": "https://cursor.com/agents/bc-01a076bd-bdf3-7be5-8c3e-f65ccd5a4c01",
       "added_at": "2026-09-06T20:18:27+00:00"
     }
-  ]
+  ],
+  "schema_version": 1
 }

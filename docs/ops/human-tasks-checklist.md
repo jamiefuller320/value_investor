@@ -26,7 +26,7 @@ most automation — this list is what still needs a human.
 | Task | Who | Doc |
 |------|-----|-----|
 | Read **analysis review** synthesis (`analysis_review.md`) plus the observe-only **chart-outcome** mix | Human | [analysis-review.md](analysis-review.md#artifacts) |
-| **Watch shard epoch-0 + near-miss** — do not fork shard AI-judgment or knob apply until buy-not-now and not-buy-tier groups have marks; FTSE stays the data lead | Human | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
+| **Watch shard epoch-0 + near-miss** — do not fork shard AI-judgment or knob apply until epoch-0 plus the tight groups (buy-not-now, hold-near-buy) have marks; not-buy-tier / never-buy-tier are census, not the sample; FTSE stays the data lead | Human | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
 | **Watch ingest capacity** — spare sprint auto-advance is correct; check maintenance/sprint jobs still finish as more markets join; revisit L323 if a job clips the tail | Human | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
 | Admitted-market epoch-0 + equal-support (`buy_tier_level`, timing, near-miss, exclusion/exit-timing archives; no AI / no apply) | CI | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
 | Read **buy-cross archive** review (`buy_cross_archive_review.json`) — cross vs level comparison; do not spawn a live cross book | Human | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#cross-book-archive-only) |
