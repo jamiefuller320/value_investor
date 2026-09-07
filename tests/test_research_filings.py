@@ -6105,7 +6105,7 @@ def test_parked_source_hunter_skip_bxp_sp500():
 
 
 def test_parked_source_hunter_skip_crh_sp500():
-    """eng-20260907-04: CRH leftover IWB is mine-safety 8-K iXBRL, not missing 10-K/10-Q."""
+    """eng-20260907-03: CRH leftover IWB is mine-safety 8-K iXBRL, not missing 10-K/10-Q."""
     assert "CRH" in PARKED_SOURCE_HUNTER_SKIP
     reason = PARKED_SOURCE_HUNTER_SKIP["CRH"]
     assert "mine-safety" in reason
@@ -6116,7 +6116,7 @@ def test_parked_source_hunter_skip_crh_sp500():
 
 
 def test_parked_source_hunter_skip_fico_sp500():
-    """eng-20260907-07: FICO leftover IWB is Item 2.02 earnings-release 8-K cover HTML."""
+    """eng-20260907-04: FICO leftover IWB is Item 2.02 earnings-release 8-K cover HTML."""
     assert "FICO" in PARKED_SOURCE_HUNTER_SKIP
     reason = PARKED_SOURCE_HUNTER_SKIP["FICO"]
     assert "2.02" in reason
@@ -6209,7 +6209,7 @@ def test_ldos_acquisition_8k_primary_fails_substantiveness_gate(monkeypatch):
 
 
 def test_fico_item202_8k_primary_fails_substantiveness_gate(monkeypatch):
-    """eng-20260907-07: FICO Jul 2025 Item 2.02 earnings-release 8-K primary is cover-only."""
+    """eng-20260907-04: FICO Jul 2025 Item 2.02 earnings-release 8-K primary is cover-only."""
     cover_html = """
     <html><body>
     <div>FORM 8-K CURRENT REPORT</div>
@@ -6359,7 +6359,7 @@ def test_lmt_pension_8k_primary_fails_substantiveness_gate(monkeypatch):
 
 
 def test_crh_mine_safety_8k_primary_fails_substantiveness_gate(monkeypatch):
-    """eng-20260907-04: CRH Mar/Apr 2026 mine-safety 8-K primaries extract below 1,200 chars."""
+    """eng-20260907-03: CRH Mar/Apr 2026 mine-safety 8-K primaries extract below 1,200 chars."""
     mine_safety_html = """
     <html><body>
     <ix:header><ix:hidden>us-gaap:EntityRegistrantName 2026-03-04</ix:hidden></ix:header>

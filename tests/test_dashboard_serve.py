@@ -72,7 +72,7 @@ def test_dashboard_serve_get_and_generate(tmp_path: Path, monkeypatch):
         refresh = json.loads(resp.read().decode("utf-8"))
         assert resp.status == 200, refresh
         assert refresh["ok"] is True
-        assert refresh["market_status"]["schema_version"] == 2
+        assert refresh["market_status"]["schema_version"] == 3
         assert (tmp_path / "docs/data/market_status.json").exists()
     finally:
         server.shutdown()

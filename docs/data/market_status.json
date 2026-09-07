@@ -1,7 +1,7 @@
 {
-  "schema_version": 2,
-  "generated_at": "2026-09-07T17:20:00.289510+00:00",
-  "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy).",
+  "schema_version": 3,
+  "generated_at": "2026-09-07T18:51:29.044661+00:00",
+  "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
     "sp500",
@@ -82,12 +82,63 @@
       "learning": null,
       "filing_health": null,
       "filing_gaps": null,
-      "paper_instrument": null,
+      "paper_instrument": "buy_tier_level",
       "ai_judgment": null,
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "ok",
+        "reason": null,
+        "market_id": "ftse350",
+        "source": "paper_fund",
+        "paper_instrument": "buy_tier_level",
+        "currency": "GBP",
+        "benchmark_ticker": "^FTSE",
+        "held_path": "equity_marks",
+        "market_path": "index_levels",
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [
+          {
+            "date": "2026-09-07",
+            "held": 994.78,
+            "nav": 994.78,
+            "held_stock": 994.78,
+            "cash": 0.0,
+            "positions": 61,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 994.78
+          }
+        ],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^FTSE equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": {
+          "date": "2026-09-07",
+          "held": 994.78,
+          "market": 994.78,
+          "nav": 994.78,
+          "positions": 61,
+          "excess_pct": 0.0
+        }
+      }
     },
     {
       "market_id": "euro_depth",
@@ -183,12 +234,268 @@
         "parked_tickers": []
       },
       "filing_gaps": 1,
-      "paper_instrument": null,
+      "paper_instrument": "observe_sim",
       "ai_judgment": null,
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": {
+        "window_days": 2,
+        "run_count": 7,
+        "targets": 7,
+        "improved": 0,
+        "improved_tickers": [],
+        "last_run_at": "2026-09-07T13:31:05.584353+00:00",
+        "runtime_cutoff_runs": 0,
+        "error_runs": 0,
+        "gaps_before": {
+          "unmeasured": 1,
+          "zero_body": 0,
+          "thin": 23,
+          "indexed_without_body": 28,
+          "filing_gaps": 1
+        },
+        "gaps_after": {
+          "unmeasured": 1,
+          "zero_body": 0,
+          "thin": 24,
+          "indexed_without_body": 34,
+          "filing_gaps": 1
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 1,
+          "indexed_without_body": 6,
+          "filing_gaps": 0
+        },
+        "remaining": {
+          "unmeasured": 1,
+          "zero_body": 0,
+          "thin": 24,
+          "indexed_without_body": 34,
+          "filing_gaps": 1
+        },
+        "admission_ready": false,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": [
+          {
+            "id": "zero_improve_stall",
+            "severity": "high",
+            "summary": "Last 2 days improved nobody while filing gaps remain"
+          },
+          {
+            "id": "unmeasured_stuck",
+            "severity": "high",
+            "summary": "1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)"
+          }
+        ]
+      },
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "ok",
+        "reason": null,
+        "market_id": "euro_depth",
+        "source": "observe_sim",
+        "paper_instrument": "observe_sim",
+        "currency": "EUR",
+        "benchmark_ticker": "^STOXX50E",
+        "held_path": "equity_marks",
+        "market_path": "index_levels",
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [
+          {
+            "date": "2026-08-20",
+            "held": 996.68,
+            "nav": 996.68,
+            "held_stock": 996.68,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 996.68
+          },
+          {
+            "date": "2026-08-21",
+            "held": 998.41,
+            "nav": 998.41,
+            "held_stock": 998.41,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 1002.91
+          },
+          {
+            "date": "2026-08-23",
+            "held": 996.92,
+            "nav": 996.92,
+            "held_stock": 996.92,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 1002.91
+          },
+          {
+            "date": "2026-08-24",
+            "held": 996.34,
+            "nav": 996.34,
+            "held_stock": 996.34,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 1000.15
+          },
+          {
+            "date": "2026-08-26",
+            "held": 998.97,
+            "nav": 998.97,
+            "held_stock": 998.97,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 1004.23
+          },
+          {
+            "date": "2026-08-27",
+            "held": 990.59,
+            "nav": 990.59,
+            "held_stock": 990.59,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 1004.23
+          },
+          {
+            "date": "2026-08-28",
+            "held": 981.59,
+            "nav": 981.59,
+            "held_stock": 981.59,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 1006.55
+          },
+          {
+            "date": "2026-08-30",
+            "held": 977.05,
+            "nav": 977.05,
+            "held_stock": 977.05,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 1006.55
+          },
+          {
+            "date": "2026-08-31",
+            "held": 975.63,
+            "nav": 975.63,
+            "held_stock": 975.63,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 1005.26
+          },
+          {
+            "date": "2026-09-01",
+            "held": 971.29,
+            "nav": 971.29,
+            "held_stock": 971.29,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 988.44
+          },
+          {
+            "date": "2026-09-02",
+            "held": 967.13,
+            "nav": 967.13,
+            "held_stock": 967.13,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 987.38
+          },
+          {
+            "date": "2026-09-03",
+            "held": 963.71,
+            "nav": 963.71,
+            "held_stock": 963.71,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 987.38
+          },
+          {
+            "date": "2026-09-04",
+            "held": 965.93,
+            "nav": 965.93,
+            "held_stock": 965.93,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 992.16
+          },
+          {
+            "date": "2026-09-06",
+            "held": 976.35,
+            "nav": 976.35,
+            "held_stock": 976.35,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 992.16
+          },
+          {
+            "date": "2026-09-07",
+            "held": 976.35,
+            "nav": 976.35,
+            "held_stock": 976.35,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 992.16
+          }
+        ],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^STOXX50E equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": {
+          "date": "2026-09-07",
+          "held": 976.35,
+          "market": 992.16,
+          "nav": 976.35,
+          "positions": 5,
+          "excess_pct": -0.015935
+        }
+      }
     },
     {
       "market_id": "tsx60",
@@ -204,7 +511,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=1, thin=2, indexed_without_body=133)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=1, thin=2, indexed_without_body=113)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 4,
@@ -240,7 +547,7 @@
         "unmeasured_buy_tier": 1,
         "zero_body_buy_tier": 1,
         "thin_body_buy_tier": 2,
-        "indexed_without_body": 133,
+        "indexed_without_body": 113,
         "bodies_median": 22.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
@@ -264,7 +571,108 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": {
+        "window_days": 2,
+        "run_count": 5,
+        "targets": 66,
+        "improved": 35,
+        "improved_tickers": [
+          "SU.TO",
+          "CVE.TO",
+          "NTR.TO",
+          "TRI.TO",
+          "MG.TO",
+          "IFC.TO",
+          "K.TO",
+          "CNQ.TO",
+          "OTEX.TO",
+          "RCI-B.TO",
+          "MRU.TO",
+          "L.TO"
+        ],
+        "last_run_at": "2026-09-07T18:32:52.675364+00:00",
+        "runtime_cutoff_runs": 0,
+        "error_runs": 1,
+        "gaps_before": {
+          "unmeasured": 1,
+          "zero_body": 3,
+          "thin": 9,
+          "indexed_without_body": 235,
+          "filing_gaps": 4
+        },
+        "gaps_after": {
+          "unmeasured": 1,
+          "zero_body": 1,
+          "thin": 2,
+          "indexed_without_body": 113,
+          "filing_gaps": 2
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": -2,
+          "thin": -7,
+          "indexed_without_body": -122,
+          "filing_gaps": -2
+        },
+        "remaining": {
+          "unmeasured": 1,
+          "zero_body": 1,
+          "thin": 2,
+          "indexed_without_body": 113,
+          "filing_gaps": 2
+        },
+        "admission_ready": false,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": [
+          {
+            "id": "ingest_errors",
+            "severity": "warn",
+            "summary": "1 ingest run(s) recorded errors: CNQ.TO: Failed to perform, curl: (16) . See https://curl.se/libcurl/c/libcurl-errors.html first for more details."
+          },
+          {
+            "id": "unmeasured_stuck",
+            "severity": "high",
+            "summary": "1 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)"
+          },
+          {
+            "id": "stale_buy_tier_screen",
+            "severity": "warn",
+            "summary": "Buy-tier screen is stale (last screen 2026-08-16); ingest is deepening an old shortlist"
+          }
+        ]
+      },
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "tsx60",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "CAD",
+        "benchmark_ticker": "^GSPTSE",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GSPTSE equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "ftse_smallcap",
@@ -280,7 +688,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=1, thin=1, indexed_without_body=46)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=1, thin=1, indexed_without_body=45)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 3,
@@ -317,7 +725,7 @@
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 1,
         "thin_body_buy_tier": 1,
-        "indexed_without_body": 46,
+        "indexed_without_body": 45,
         "bodies_median": 52.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
@@ -338,7 +746,100 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": {
+        "window_days": 2,
+        "run_count": 10,
+        "targets": 59,
+        "improved": 29,
+        "improved_tickers": [
+          "APTD.L",
+          "SBRE.L",
+          "BOOT.L",
+          "DFS.L",
+          "FORT.L",
+          "TPT.L",
+          "ULTP.L",
+          "FOXT.L",
+          "MER.L"
+        ],
+        "last_run_at": "2026-09-07T18:46:17.212655+00:00",
+        "runtime_cutoff_runs": 0,
+        "error_runs": 0,
+        "gaps_before": {
+          "unmeasured": 0,
+          "zero_body": 3,
+          "thin": 6,
+          "indexed_without_body": 108,
+          "filing_gaps": 3
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 1,
+          "thin": 1,
+          "indexed_without_body": 45,
+          "filing_gaps": 1
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": -2,
+          "thin": -5,
+          "indexed_without_body": -63,
+          "filing_gaps": -2
+        },
+        "remaining": {
+          "unmeasured": 0,
+          "zero_body": 1,
+          "thin": 1,
+          "indexed_without_body": 45,
+          "filing_gaps": 1
+        },
+        "admission_ready": false,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": [
+          {
+            "id": "stale_buy_tier_screen",
+            "severity": "warn",
+            "summary": "Buy-tier screen is stale (last screen 2026-08-16); ingest is deepening an old shortlist"
+          },
+          {
+            "id": "no_observe_benchmark",
+            "severity": "warn",
+            "summary": "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock"
+          }
+        ]
+      },
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "ftse_smallcap",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "GBP",
+        "benchmark_ticker": "^GSPC",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GSPC equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "sp500",
@@ -467,6 +968,57 @@
           "UHS",
           "DUK"
         ]
+      },
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "ok",
+        "reason": null,
+        "market_id": "sp500",
+        "source": "paper_fund",
+        "paper_instrument": "buy_tier_level",
+        "currency": "USD",
+        "benchmark_ticker": "^GSPC",
+        "held_path": "equity_marks",
+        "market_path": "none",
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [
+          {
+            "date": "2026-09-07",
+            "held": 737.41,
+            "nav": 737.41,
+            "held_stock": 737.41,
+            "cash": 0.0,
+            "positions": 120,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": null
+          }
+        ],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GSPC equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": {
+          "date": "2026-09-07",
+          "held": 737.41,
+          "market": null,
+          "nav": 737.41,
+          "positions": 120,
+          "excess_pct": null
+        }
       }
     },
     {
@@ -593,6 +1145,57 @@
           "QBE.AX",
           "RIO.AX"
         ]
+      },
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "ok",
+        "reason": null,
+        "market_id": "asx200",
+        "source": "paper_fund",
+        "paper_instrument": "buy_tier_level",
+        "currency": "AUD",
+        "benchmark_ticker": "^AXJO",
+        "held_path": "equity_marks",
+        "market_path": "index_levels",
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [
+          {
+            "date": "2026-09-07",
+            "held": 531.87,
+            "nav": 531.87,
+            "held_stock": 531.87,
+            "cash": 0.0,
+            "positions": 29,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 531.87
+          }
+        ],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^AXJO equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": {
+          "date": "2026-09-07",
+          "held": 531.87,
+          "market": 531.87,
+          "nav": 531.87,
+          "positions": 29,
+          "excess_pct": 0.0
+        }
       }
     },
     {
@@ -645,7 +1248,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "aex",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "EUR",
+        "benchmark_ticker": "^GSPC",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GSPC equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "aim",
@@ -698,7 +1333,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "aim",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "GBP",
+        "benchmark_ticker": "^GSPC",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GSPC equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "atx",
@@ -750,7 +1417,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "atx",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "EUR",
+        "benchmark_ticker": "^GSPC",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GSPC equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "bel20",
@@ -802,7 +1501,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "bel20",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "EUR",
+        "benchmark_ticker": "^GSPC",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GSPC equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "cac40",
@@ -854,7 +1585,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "cac40",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "EUR",
+        "benchmark_ticker": "^FCHI",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^FCHI equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "dax",
@@ -906,7 +1669,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "dax",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "EUR",
+        "benchmark_ticker": "^GDAXI",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GDAXI equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "euro_stoxx50",
@@ -953,12 +1748,129 @@
       "learning": null,
       "filing_health": null,
       "filing_gaps": null,
-      "paper_instrument": null,
+      "paper_instrument": "observe_sim",
       "ai_judgment": null,
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "ok",
+        "reason": null,
+        "market_id": "euro_stoxx50",
+        "source": "observe_sim",
+        "paper_instrument": "observe_sim",
+        "currency": "EUR",
+        "benchmark_ticker": "^STOXX50E",
+        "held_path": "equity_marks",
+        "market_path": "index_levels",
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [
+          {
+            "date": "2026-07-18",
+            "held": 970.87,
+            "nav": 970.87,
+            "held_stock": 970.87,
+            "cash": 0.0,
+            "positions": 4,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 970.87
+          },
+          {
+            "date": "2026-07-19",
+            "held": 960.31,
+            "nav": 960.31,
+            "held_stock": 960.31,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 970.87
+          },
+          {
+            "date": "2026-07-20",
+            "held": 950.87,
+            "nav": 950.87,
+            "held_stock": 950.87,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 970.33
+          },
+          {
+            "date": "2026-07-25",
+            "held": 904.57,
+            "nav": 904.57,
+            "held_stock": 904.57,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 978.67
+          },
+          {
+            "date": "2026-07-26",
+            "held": 893.22,
+            "nav": 893.22,
+            "held_stock": 893.22,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 978.67
+          },
+          {
+            "date": "2026-08-02",
+            "held": 924.09,
+            "nav": 924.09,
+            "held_stock": 924.09,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 990.68
+          },
+          {
+            "date": "2026-08-16",
+            "held": 937.31,
+            "nav": 937.31,
+            "held_stock": 937.31,
+            "cash": 0.0,
+            "positions": 5,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 1018.97
+          }
+        ],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^STOXX50E equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": {
+          "date": "2026-08-16",
+          "held": 937.31,
+          "market": 1018.97,
+          "nav": 937.31,
+          "positions": 5,
+          "excess_pct": -0.08014
+        }
+      }
     },
     {
       "market_id": "ftse_mib",
@@ -1010,7 +1922,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "ftse_mib",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "EUR",
+        "benchmark_ticker": "^GSPC",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GSPC equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "hang_seng",
@@ -1062,7 +2006,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "hang_seng",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "HKD",
+        "benchmark_ticker": "^GSPC",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GSPC equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "ibex35",
@@ -1114,7 +2090,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "ibex35",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "EUR",
+        "benchmark_ticker": "^GSPC",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GSPC equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "iseq20",
@@ -1166,7 +2174,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "iseq20",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "EUR",
+        "benchmark_ticker": "^IETP",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^IETP equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "nasdaq100",
@@ -1218,7 +2258,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "nasdaq100",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "USD",
+        "benchmark_ticker": "^NDX",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^NDX equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "omxs30",
@@ -1270,7 +2342,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "omxs30",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "SEK",
+        "benchmark_ticker": "^GSPC",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GSPC equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "psi20",
@@ -1321,7 +2425,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "psi20",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "EUR",
+        "benchmark_ticker": "^GSPC",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GSPC equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "smi",
@@ -1373,7 +2509,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "smi",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "CHF",
+        "benchmark_ticker": "^GSPC",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GSPC equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "sti",
@@ -1425,7 +2593,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "sti",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "SGD",
+        "benchmark_ticker": "^GSPC",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GSPC equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     },
     {
       "market_id": "us_adr_asia",
@@ -1477,7 +2677,39 @@
       "knob_apply": null,
       "epoch0": null,
       "equal_support": null,
-      "near_miss": null
+      "near_miss": null,
+      "sprint_progress": null,
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "us_adr_asia",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "USD",
+        "benchmark_ticker": "^GSPC",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GSPC equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
     }
   ]
 }

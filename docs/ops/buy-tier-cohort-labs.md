@@ -24,6 +24,22 @@ This live FTSE epoch-zero **is** the intended start instrument. Admitted shards 
 
 Spot-check after Monday paper-auto: holdings should cover the current buy-tier (minus timing-wait), and `rebalance_log` should have the first fill row.
 
+## Dashboard: held vs market
+
+Each Overview **market card** plots **held-stock value** (paper NAV minus cash) against a **whole-market equivalent** of the same starting capital in the local index (`^FTSE`, `^STOXX50E`, `^AXJO`, …).
+
+| Book present | Series source |
+|--------------|---------------|
+| Frozen `buy_tier_level` (live FTSE or admitted shard) | Paper `equity_curve` marks. Live FTSE may densify daily from buy-tier chart JSON on the *current* book, clipped to the first fill date. |
+| No paper book yet | Observe-sim `screen_rules` equity curve when that clock exists |
+| Neither | Empty placeholder |
+
+Index levels come from dated `docs/data/library/macro/` snapshots (no extra Yahoo fetch on dashboard refresh). If those are missing, the market line falls back to the observe-sim period return as start/end points.
+
+**Branch overlays.** The payload is `branch_ready`: extra series of `kind=branch` plot on the same dates once a knob-changed book is applied. Use `merge_branch_series()` — do **not** spawn a warm-started twin per knob (N99). Pending branches render in the legend with no line.
+
+`ftse-publish` / `ftse-library market-status` / dashboard `POST /api/refresh` rebuild `docs/data/market_status.json` (`schema_version` 3, `held_vs_market` per row).
+
 ## Cross book (archive only)
 
 ```bash
