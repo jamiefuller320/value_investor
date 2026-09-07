@@ -612,3 +612,33 @@ def test_dispatch_current_phase_fills_missing_shard_row(tmp_path: Path):
     assert tsx60["learning_phase"] == 1
     assert tsx60["learning_phase_label"] == "Observe"
     assert tsx60["learning"]["current_phase"] == 1
+
+
+def test_stale_dispatch_benchmark_blocker_yields_to_live_phase(tmp_path: Path):
+    library = _seed_library(tmp_path / "library")
+    policy = json.loads((library / "policy.json").read_text(encoding="utf-8"))
+    policy["ingest_parallel_sprint_2"] = ["ftse_smallcap"]
+    (library / "policy.json").write_text(json.dumps(policy), encoding="utf-8")
+    dispatch = json.loads((library / "euro_ingest_dispatch.json").read_text(encoding="utf-8"))
+    dispatch["sprint_markets"] = ["euro_depth", "ftse_smallcap"]
+    dispatch["parallel_sprint_2_markets"] = ["ftse_smallcap"]
+    dispatch["parallel_sprint_2_status"] = [
+        {
+            "market_id": "ftse_smallcap",
+            "mode": "sprint",
+            "phase_blockers": ["no benchmark configured for ftse_smallcap"],
+        }
+    ]
+    (library / "euro_ingest_dispatch.json").write_text(json.dumps(dispatch), encoding="utf-8")
+
+    payload = build_market_status(
+        library_root=library,
+        policy_path=library / "policy.json",
+        dispatch_path=library / "euro_ingest_dispatch.json",
+        live_signal_counts={"hold": 1},
+    )
+    smallcap = _by_id(payload, "ftse_smallcap")
+    assert smallcap["learning_phase"] == 1
+    assert smallcap["learning_phase_label"] == "Observe"
+    assert "no benchmark configured for ftse_smallcap" not in smallcap["phase_blockers"]
+    assert any("observe snapshots" in item for item in smallcap["phase_blockers"])

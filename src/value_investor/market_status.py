@@ -441,6 +441,26 @@ def _is_expected_admitted_blocker(text: str) -> bool:
     return EXPECTED_ADMITTED_BLOCKER_NEEDLE in str(text or "").lower()
 
 
+def _is_no_benchmark_blocker(text: str) -> bool:
+    return "no benchmark configured" in str(text or "").lower()
+
+
+def _coalesce_phase_blockers(
+    *,
+    dispatch_blockers: list[str],
+    phase_row: dict[str, Any] | None,
+    current_phase: int | None,
+) -> list[str]:
+    """Prefer live phase blockers when dispatch still says the clock has no benchmark."""
+    live = [str(item) for item in _as_list((phase_row or {}).get("blockers")) if str(item)]
+    stale_benchmark = any(_is_no_benchmark_blocker(item) for item in dispatch_blockers)
+    if current_phase and current_phase >= 1 and stale_benchmark:
+        return live or [item for item in dispatch_blockers if not _is_no_benchmark_blocker(item)]
+    if dispatch_blockers:
+        return dispatch_blockers
+    return live
+
+
 def _health_blockers(blockers: list[str], *, is_admitted: bool) -> list[str]:
     if not is_admitted:
         return blockers
@@ -723,9 +743,11 @@ def build_market_status(
                 policy=policy,
             )
             current_phase = phase_row.get("current_phase") if phase_row else None
-            blockers = list(dispatch_row.get("phase_blockers") or [])
-            if phase_row and phase_row.get("blockers") and not blockers:
-                blockers = list(phase_row["blockers"])
+            blockers = _coalesce_phase_blockers(
+                dispatch_blockers=list(dispatch_row.get("phase_blockers") or []),
+                phase_row=phase_row,
+                current_phase=current_phase,
+            )
 
         stale = _int(status.get("stale"))
         filing_gaps = _int(dispatch_row.get("filing_gaps"))
