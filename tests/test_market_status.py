@@ -379,6 +379,8 @@ def test_dashboard_assets_include_market_status_grid():
     assert "function bindDashboardAutoRefresh()" in app
     assert "async function applyDashboardSidecars(data)" in app
     assert "function spareSprintLabel(spare)" in app
+    assert "function learningBookLine(row)" in app
+    assert "Learning ·" in app
     assert "async function refreshLocalMarketStatus()" in app
     assert 'id="market-status-dialog"' in html
     assert 'id="market-status-body"' in html
@@ -516,6 +518,14 @@ def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
     assert payload["admitted_markets"] == ["sp500", "asx200"]
     assert payload["summary"]["should_run_library_maintenance"] is True
     assert payload["summary"]["spare_sprint"] == {"1": "tsx60", "2": "ftse_smallcap"}
+    tsx60 = _by_id(payload, "tsx60")
+    assert tsx60["ingest"] == INGEST_SPRINT
+    assert tsx60["learning_phase"] == 1
+    assert tsx60["learning_phase_label"] == "Observe"
+    smallcap = _by_id(payload, "ftse_smallcap")
+    assert smallcap["ingest"] == INGEST_SPRINT
+    assert smallcap["learning_phase"] == 1
+    assert smallcap["learning_phase_label"] == "Observe"
 
     dest = tmp_path / "docs" / "data" / "market_status.json"
     write_json(
@@ -538,3 +548,67 @@ def test_build_market_status_admitted_epoch0_and_near_miss(tmp_path: Path):
     written = json.loads(dest.read_text(encoding="utf-8"))
     assert written["schema_version"] == 2
     assert _by_id(written, LIVE_MARKET_ID)["ticker_count"] == 2
+
+
+def test_sprint_without_benchmark_shows_ingest_only(tmp_path: Path):
+    library = _seed_library(tmp_path / "library")
+    policy = json.loads((library / "policy.json").read_text(encoding="utf-8"))
+    policy["ingest_parallel_sprint"] = ["aim"]
+    policy["ingest_parallel_sprint_2"] = []
+    (library / "policy.json").write_text(json.dumps(policy), encoding="utf-8")
+    dispatch = json.loads((library / "euro_ingest_dispatch.json").read_text(encoding="utf-8"))
+    dispatch["sprint_markets"] = ["euro_depth", "aim"]
+    dispatch["parallel_sprint_markets"] = ["aim"]
+    dispatch["parallel_sprint_2_markets"] = []
+    dispatch["parallel_sprint_status"] = [
+        {
+            "market_id": "aim",
+            "mode": "sprint",
+            "reason": "Ingest sprint: indexed_without_body=1",
+            "phase_blockers": ["no benchmark configured for aim"],
+        }
+    ]
+    (library / "euro_ingest_dispatch.json").write_text(json.dumps(dispatch), encoding="utf-8")
+
+    payload = build_market_status(
+        library_root=library,
+        policy_path=library / "policy.json",
+        dispatch_path=library / "euro_ingest_dispatch.json",
+        live_signal_counts={"hold": 1},
+    )
+    aim = _by_id(payload, "aim")
+    assert aim["ingest"] == INGEST_SPRINT
+    assert aim["learning_phase"] == 0
+    assert aim["learning_phase_label"] == "Ingest only"
+    assert "no benchmark configured for aim" in aim["phase_blockers"]
+
+
+def test_dispatch_current_phase_fills_missing_shard_row(tmp_path: Path):
+    library = _seed_library(tmp_path / "library")
+    policy = json.loads((library / "policy.json").read_text(encoding="utf-8"))
+    policy["ingest_parallel_sprint"] = ["tsx60"]
+    (library / "policy.json").write_text(json.dumps(policy), encoding="utf-8")
+    dispatch = json.loads((library / "euro_ingest_dispatch.json").read_text(encoding="utf-8"))
+    dispatch["sprint_markets"] = ["euro_depth", "tsx60"]
+    dispatch["parallel_sprint_markets"] = ["tsx60"]
+    dispatch["parallel_sprint_status"] = [
+        {
+            "market_id": "tsx60",
+            "mode": "sprint",
+            "current_phase": 1,
+            "next_phase": 1,
+            "phase_blockers": ["need 4 observe snapshots (have 0)"],
+        }
+    ]
+    (library / "euro_ingest_dispatch.json").write_text(json.dumps(dispatch), encoding="utf-8")
+
+    payload = build_market_status(
+        library_root=library,
+        policy_path=library / "policy.json",
+        dispatch_path=library / "euro_ingest_dispatch.json",
+        live_signal_counts={"hold": 1},
+    )
+    tsx60 = _by_id(payload, "tsx60")
+    assert tsx60["learning_phase"] == 1
+    assert tsx60["learning_phase_label"] == "Observe"
+    assert tsx60["learning"]["current_phase"] == 1
