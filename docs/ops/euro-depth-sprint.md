@@ -105,8 +105,9 @@ allowlist after each hunter merge via `ftse-library parked-hunter-compile`.
 Stream 1 slots match euro focus (+30 min) via
 `library-ingest-sprint.yml`; stream 2 (+60 min) via `library-ingest-sprint-2.yml`.
 Learning **weekly paper** (`weekly_paper_shard_markets`, capacity 1) stays on
-`euro_depth` until handoff. A valid buy-tier starts ingest + observe, not a
-paper book — see [`market-sharded-learning.md`](market-sharded-learning.md#what-enter-learning-means).
+`euro_depth` until handoff. Spare ingest without a lifecycle book is
+busy-but-empty; exhaustion should unblock a frozen buy-tier-level start
+(L319), not more jobs — see [`market-sharded-learning.md`](market-sharded-learning.md#what-enter-learning-means).
 Sunday screen-lite + observe sim follow the
 **ingest profile** (focus + both sprint streams + ingest-parity +
 `ftse_equivalent_markets`), so `sp500` and `asx200` keep a dated archive clock
