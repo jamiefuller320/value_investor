@@ -17,11 +17,11 @@ from value_investor.library_ingest_dispatch import (
     INGEST_EXHAUSTED_MARKETS_KEY,
     ingest_parity_met,
     list_library_ingest_maintenance_markets,
-    should_keep_on_library_maintenance,
     list_library_ingest_parallel_sprint_markets,
     next_parallel_sprint_queue_market,
     parallel_sprint_stream_for_market,
     replace_parallel_sprint_market,
+    should_keep_on_library_maintenance,
     sprint_ingest_complete,
 )
 from value_investor.library_ingest_escalation import (
