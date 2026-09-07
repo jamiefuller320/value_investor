@@ -68,6 +68,10 @@ def test_build_market_reports_bundle_shape(tmp_path: Path):
     assert bundle["meta"]["shard"] is True
     assert bundle["meta"]["benchmark_ticker"] == "^GSPC"
     assert len(bundle["reports"]) >= 1
+    report = bundle["reports"][0]
+    assert report["ticker"] == "AAPL"
+    assert report["last_price"] == 180.0
+    assert report["price"] == 180.0
 
 
 def test_build_market_reports_bundle_uses_sibling_home_memo(tmp_path: Path):

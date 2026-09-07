@@ -67,6 +67,70 @@ from value_investor.technical_analysis import (
     fetch_price_history,
 )
 
+
+def infer_paper_market_id(
+    output_dir: Path | None = None,
+    reports_path: Path | None = None,
+) -> str | None:
+    """Read market_id from shard_meta.json or a shard screen bundle."""
+    candidates: list[Path] = []
+    if output_dir is not None:
+        root = Path(output_dir)
+        candidates.extend([root / "shard_meta.json", root.parent / "shard_meta.json"])
+    if reports_path is not None:
+        reports = Path(reports_path)
+        candidates.extend(
+            [
+                reports.parent / "shard_meta.json",
+                reports.parent.parent / "shard_meta.json",
+            ]
+        )
+    for meta_path in candidates:
+        if not meta_path.exists():
+            continue
+        try:
+            payload = json.loads(meta_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError, TypeError):
+            continue
+        if isinstance(payload, dict):
+            mid = str(payload.get("market_id") or "").strip()
+            if mid:
+                return mid
+    if reports_path is None:
+        return None
+    path = Path(reports_path)
+    if not path.exists():
+        return None
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError, TypeError):
+        return None
+    if not isinstance(payload, dict):
+        return None
+    meta = payload.get("meta") if isinstance(payload.get("meta"), dict) else {}
+    if meta.get("shard"):
+        mid = str(meta.get("universe") or "").strip()
+        if mid:
+            return mid
+    return None
+
+
+def _seed_listed_price(row: dict[str, Any]) -> None:
+    """Keep screen last_price when Yahoo is missing or still LSE-mapped."""
+    for key in ("price", "last", "close", "last_price"):
+        value = row.get(key)
+        if value is None or value == "":
+            continue
+        try:
+            price = float(value)
+        except (TypeError, ValueError):
+            continue
+        if price <= 0:
+            continue
+        row["price"] = price
+        row["last"] = price
+        return
+
 LONDON = ZoneInfo("Europe/London")
 DEFAULT_MARKET_OPEN = time(8, 0)
 DEFAULT_SETTLE_MINUTES = 75  # ~09:15 London after 08:00 open
@@ -775,16 +839,29 @@ def load_screen_candidates(reports_path: Path | None = None) -> list[dict[str, A
 def refresh_candidate_marks(
     candidates: list[dict[str, Any]],
     extra_tickers: list[str] | None = None,
+    *,
+    market: str | None = None,
+    prefer_listed_prices: bool = False,
 ) -> list[dict[str, Any]]:
     """Attach fresh last closes + timing signals for decisioning."""
+    for row in candidates:
+        _seed_listed_price(row)
     tickers = [str(row.get("ticker")) for row in candidates if row.get("ticker")]
     if extra_tickers:
         tickers.extend(extra_tickers)
     tickers = list(dict.fromkeys(t for t in tickers if t))
     if not tickers:
         return candidates
+    if prefer_listed_prices:
+        priced = [
+            row
+            for row in candidates
+            if row.get("ticker") and float(row.get("price") or 0) > 0
+        ]
+        if priced and len(priced) == len([r for r in candidates if r.get("ticker")]):
+            return candidates
 
-    history = fetch_price_history(tickers, period="6mo")
+    history = fetch_price_history(tickers, period="6mo", market=market)
     by_ticker = {str(row.get("ticker")): dict(row) for row in candidates}
     for ticker in tickers:
         frame = history.get(ticker)
@@ -887,7 +964,7 @@ def _marked_price_map(
         ticker = str(row.get("ticker") or "")
         if not ticker:
             continue
-        for key in ("price", "last", "close"):
+        for key in ("price", "last", "close", "last_price"):
             value = row.get(key)
             if value is not None and float(value) > 0:
                 prices[ticker] = float(value)
@@ -940,6 +1017,8 @@ def run_daily_automation(
     reports_path: Path | None = None,
     now: datetime | None = None,
     force: bool = False,
+    market: str | None = None,
+    prefer_listed_prices: bool = False,
 ) -> AutomationRunResult:
     """
     Independent daily pass for the automated paper fund.
@@ -966,7 +1045,13 @@ def run_daily_automation(
 
     screen_rows = load_screen_candidates(reports_path)
     owned_tickers = list(fund.holdings.keys()) + [str(w["ticker"]) for w in watchlist]
-    marked = refresh_candidate_marks(screen_rows, extra_tickers=owned_tickers)
+    market_id = market or infer_paper_market_id(output_dir, reports_path)
+    marked = refresh_candidate_marks(
+        screen_rows,
+        extra_tickers=owned_tickers,
+        market=market_id,
+        prefer_listed_prices=prefer_listed_prices,
+    )
     select_kwargs = config.selection_kwargs()
     rebalance_kwargs = _rebalance_kwargs(select_kwargs)
 
@@ -1451,6 +1536,7 @@ def run_learning_tracks(
     force: bool = False,
     tracks: list[str] | None = None,
     surveillance_only: bool = False,
+    market: str | None = None,
 ) -> dict[str, Any]:
     """
     Run the primary AI-judgment learning track plus the rules control book.
@@ -1484,6 +1570,7 @@ def run_learning_tracks(
             insert_at += 1
     wanted = list(tracks) if tracks else default_tracks
     results: dict[str, Any] = {}
+    market_id = market or infer_paper_market_id(base_dir, reports_path)
     for track_id in wanted:
         if track_id not in configs:
             continue
@@ -1497,6 +1584,7 @@ def run_learning_tracks(
             reports_path=reports_path,
             now=now,
             force=force,
+            market=market_id,
         )
         results[track_id] = {
             "output_dir": str(dirs[track_id]),

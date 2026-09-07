@@ -12,7 +12,7 @@ from typing import Any
 import pandas as pd
 import yfinance as yf
 
-from value_investor.constituents import to_lse_ticker
+from value_investor.fetch import resolve_yahoo_ticker, resolve_yahoo_ticker_for_market
 
 logger = logging.getLogger(__name__)
 
@@ -581,17 +581,39 @@ def _extract_ohlcv_frame(data: pd.DataFrame, ticker: str) -> pd.DataFrame | None
     return data[present].copy()
 
 
+def yahoo_symbols_for_tickers(
+    tickers: list[str],
+    *,
+    market: str | None = None,
+) -> dict[str, str]:
+    """Map listed tickers to Yahoo symbols. Library shards pass ``market``."""
+    out: dict[str, str] = {}
+    for ticker in tickers:
+        raw = str(ticker or "").strip()
+        if not raw:
+            continue
+        if raw.startswith("^"):
+            out[raw] = raw
+            continue
+        if market:
+            out[raw] = resolve_yahoo_ticker_for_market(raw, market)
+        else:
+            out[raw] = resolve_yahoo_ticker(raw)
+    return out
+
+
 def fetch_price_history(
-    tickers: list[str], *, period: str = LOOKBACK_PERIOD
+    tickers: list[str],
+    *,
+    period: str = LOOKBACK_PERIOD,
+    market: str | None = None,
 ) -> dict[str, pd.DataFrame]:
     """Batch-fetch daily OHLCV frames keyed by the original ticker labels."""
     if not tickers:
         return {}
 
-    unique = list(dict.fromkeys(tickers))
-    symbol_by_ticker = {
-        ticker: (ticker if ticker.startswith("^") else to_lse_ticker(ticker)) for ticker in unique
-    }
+    unique = list(dict.fromkeys(str(t).strip() for t in tickers if str(t).strip()))
+    symbol_by_ticker = yahoo_symbols_for_tickers(unique, market=market)
     symbols = list(dict.fromkeys(symbol_by_ticker.values()))
     try:
         if len(symbols) == 1:
