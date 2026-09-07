@@ -32,9 +32,14 @@ from value_investor.library_ingest_escalation import (
 )
 from value_investor.library_near_miss_watch import NEAR_MISS_FILENAME
 from value_investor.library_screen import screen_dir_for
+from value_investor.library_sim import ingest_profile_observe_sim_markets
 from value_investor.macro_context import DEFAULT_MACRO_ROOT
 from value_investor.market_shard_admission import admitted_learning_markets_for_policy
-from value_investor.market_shard_phases import DEFAULT_SHARD_ROOT, shard_root_for_market
+from value_investor.market_shard_phases import (
+    DEFAULT_SHARD_ROOT,
+    evaluate_market_phase,
+    shard_root_for_market,
+)
 from value_investor.storage import read_json, write_json
 
 SCHEMA_VERSION = 3
@@ -70,6 +75,7 @@ PHASE_LABELS = {
     4: "Live screen",
 }
 EPOCH0_PHASE_LABEL = "Epoch-0 level"
+INGEST_ONLY_PHASE_LABEL = "Ingest only"
 
 ROLE_ORDER = {
     ROLE_LIVE: 0,
@@ -104,6 +110,15 @@ def _int(value: Any, default: int = 0) -> int:
         return int(value)
     except (TypeError, ValueError):
         return default
+
+
+def _optional_int(value: Any) -> int | None:
+    if value is None or value == "":
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def _float(value: Any) -> float | None:
@@ -179,6 +194,8 @@ def _filing_health_index(dispatch: dict[str, Any]) -> dict[str, dict[str, Any]]:
             "phase_blockers": [
                 str(item) for item in _as_list(dispatch.get("phase_blockers")) if str(item)
             ],
+            "current_phase": _optional_int(dispatch.get("current_phase")),
+            "next_phase": _optional_int(dispatch.get("next_phase")),
         }
     for key in ("parallel_sprint_status", "parallel_sprint_2_status"):
         for row in _as_list(dispatch.get(key)):
@@ -197,6 +214,8 @@ def _filing_health_index(dispatch: dict[str, Any]) -> dict[str, dict[str, Any]]:
                 "phase_blockers": [
                     str(item) for item in _as_list(row.get("phase_blockers")) if str(item)
                 ],
+                "current_phase": _optional_int(row.get("current_phase")),
+                "next_phase": _optional_int(row.get("next_phase")),
             }
     return indexed
 
@@ -357,18 +376,104 @@ def _phase_label(
     *,
     is_live: bool,
     epoch0: dict[str, Any] | None = None,
+    ingest: str | None = None,
 ) -> str:
     if is_live:
         return PHASE_LABELS[4]
     if epoch0 and epoch0.get("present") and (current_phase or 0) <= 1:
         return EPOCH0_PHASE_LABEL
+    if current_phase in (None, 0) and ingest == INGEST_SPRINT:
+        return INGEST_ONLY_PHASE_LABEL
     if current_phase is None:
         return PHASE_LABELS[0]
     return PHASE_LABELS.get(current_phase, f"Phase {current_phase}")
 
 
+def _phase_from_dispatch(dispatch_row: dict[str, Any]) -> dict[str, Any] | None:
+    if dispatch_row.get("current_phase") is None:
+        return None
+    return _slim_phase(
+        {
+            "current_phase": dispatch_row.get("current_phase"),
+            "next_phase": dispatch_row.get("next_phase"),
+            "blockers": dispatch_row.get("phase_blockers") or [],
+        }
+    )
+
+
+def _should_live_evaluate_phase(
+    market_id: str,
+    *,
+    ingest: str,
+    profile_markets: set[str],
+    admitted: set[str],
+) -> bool:
+    if ingest == INGEST_SPRINT:
+        return True
+    if market_id in profile_markets:
+        return True
+    return market_id in admitted
+
+
+def _resolve_learning_phase(
+    market_id: str,
+    *,
+    cached: dict[str, Any] | None,
+    dispatch_row: dict[str, Any],
+    ingest: str,
+    profile_markets: set[str],
+    admitted: set[str],
+    library_root: Path,
+    shard_base: Path,
+    policy: dict[str, Any],
+) -> dict[str, Any] | None:
+    """Prefer committed rollup, then live dispatch, then evaluate sprint/profile books."""
+    if cached:
+        return cached
+    from_dispatch = _phase_from_dispatch(dispatch_row)
+    if from_dispatch:
+        return from_dispatch
+    if not _should_live_evaluate_phase(
+        market_id,
+        ingest=ingest,
+        profile_markets=profile_markets,
+        admitted=admitted,
+    ):
+        return None
+    try:
+        evaluation = evaluate_market_phase(
+            market_id,
+            library_root=library_root,
+            shard_root=shard_root_for_market(market_id, base=shard_base),
+            policy=policy,
+        )
+    except Exception:  # noqa: BLE001 — dashboard must still assemble
+        return None
+    return _slim_phase(evaluation)
+
+
 def _is_expected_admitted_blocker(text: str) -> bool:
     return EXPECTED_ADMITTED_BLOCKER_NEEDLE in str(text or "").lower()
+
+
+def _is_no_benchmark_blocker(text: str) -> bool:
+    return "no benchmark configured" in str(text or "").lower()
+
+
+def _coalesce_phase_blockers(
+    *,
+    dispatch_blockers: list[str],
+    phase_row: dict[str, Any] | None,
+    current_phase: int | None,
+) -> list[str]:
+    """Prefer live phase blockers when dispatch still says the clock has no benchmark."""
+    live = [str(item) for item in _as_list((phase_row or {}).get("blockers")) if str(item)]
+    stale_benchmark = any(_is_no_benchmark_blocker(item) for item in dispatch_blockers)
+    if current_phase and current_phase >= 1 and stale_benchmark:
+        return live or [item for item in dispatch_blockers if not _is_no_benchmark_blocker(item)]
+    if dispatch_blockers:
+        return dispatch_blockers
+    return live
 
 
 def _health_blockers(blockers: list[str], *, is_admitted: bool) -> list[str]:
@@ -815,6 +920,7 @@ def build_market_status(
     admitted_list = admitted_learning_markets_for_policy(policy)
     admitted = set(admitted_list)
     equivalent = set(ftse_equivalent_markets(policy))
+    profile_markets = set(ingest_profile_observe_sim_markets(policy))
     shard_base = Path(shard_root or DEFAULT_SHARD_ROOT)
 
     focus = str(policy.get("focus_market") or "").strip()
@@ -849,7 +955,7 @@ def build_market_status(
             None if market_id == LIVE_MARKET_ID else _load_screen_summary(library_root, market_id)
         )
         dispatch_row = health_by_market.get(market_id) or {}
-        phase_row = _slim_phase(phases_by_market.get(market_id))
+        cached_phase = _slim_phase(phases_by_market.get(market_id))
         ingest, stream = _classify_ingest(
             market_id,
             focus=focus,
@@ -897,16 +1003,30 @@ def build_market_status(
             coverage_pct = 1.0 if ticker_count else _float(status.get("coverage_pct"))
             current_phase = 4
             blockers: list[str] = []
+            phase_row = cached_phase
         else:
             signal_counts = _signal_counts((screen or {}).get("signal_counts"))
             ticker_count = _int((screen or {}).get("ticker_count") or status.get("ticker_count"))
             shortlist_count = _int((screen or {}).get("shortlist_count"))
             last_screen_at = (screen or {}).get("run_at")
             coverage_pct = _float(status.get("coverage_pct"))
+            phase_row = _resolve_learning_phase(
+                market_id,
+                cached=cached_phase,
+                dispatch_row=dispatch_row,
+                ingest=ingest,
+                profile_markets=profile_markets,
+                admitted=admitted,
+                library_root=library_root,
+                shard_base=shard_base,
+                policy=policy,
+            )
             current_phase = phase_row.get("current_phase") if phase_row else None
-            blockers = list(dispatch_row.get("phase_blockers") or [])
-            if phase_row and phase_row.get("blockers") and not blockers:
-                blockers = list(phase_row["blockers"])
+            blockers = _coalesce_phase_blockers(
+                dispatch_blockers=list(dispatch_row.get("phase_blockers") or []),
+                phase_row=phase_row,
+                current_phase=current_phase,
+            )
 
         stale = _int(status.get("stale"))
         filing_gaps = _int(dispatch_row.get("filing_gaps"))
@@ -993,6 +1113,7 @@ def build_market_status(
                     current_phase,
                     is_live=market_id == LIVE_MARKET_ID,
                     epoch0=epoch0,
+                    ingest=ingest,
                 ),
                 "phase_blockers": blockers,
                 "expected_epoch0_blockers": [

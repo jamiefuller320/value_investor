@@ -82,7 +82,12 @@ def test_snapshot_library_buy_tier_filing_health_counts_gaps(tmp_path: Path):
 
 
 def test_evaluate_dispatch_sprint_when_filing_gaps_remain():
-    phase = {"phase3_ready": False, "blockers": ["need 8 weekday batch marks"]}
+    phase = {
+        "phase3_ready": False,
+        "current_phase": 2,
+        "next_phase": 2,
+        "blockers": ["need 8 weekday batch marks"],
+    }
     health = {
         "unmeasured_buy_tier": 2,
         "zero_body_buy_tier": 1,
@@ -113,6 +118,8 @@ def test_evaluate_dispatch_sprint_when_filing_gaps_remain():
     assert result["should_run_maintenance_ingest"] is False
     assert result["should_run_ingest"] is True
     assert result["ingest_parity_met"] is False
+    assert result["current_phase"] == 2
+    assert result["next_phase"] == 2
     assert result["max_daily_successes"] == 4
     assert result["max_targets"] == 24
     # Admitted ASX/S&P stay on the shared maintenance loop even while euro sprints
