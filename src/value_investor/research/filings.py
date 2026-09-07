@@ -272,6 +272,15 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     ],
 }
 
+# Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
+# Keys are Yahoo tickers; values are one-line reasons for tests and future hunter compiles.
+PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
+    "APTV": (
+        "Leftover indexed-without-body rows are third-party 8-K cover HTML "
+        "(tender-offer EX-99.1); ir.aptiv.com is Cloudflare-gated with no direct PDF href."
+    ),
+}
+
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
 _SEC_TICKER_ALIASES: dict[str, str] = {
     "SHELL": "SHEL",
