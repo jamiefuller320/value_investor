@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T10:14:34+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-07T10:26:06+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -201,7 +201,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L319 | **Start shard weekday epoch-0 buy-tier-level without archive history** | A frozen Suite B buy-tier-level book needs one current screen, prices, and a weekday runner — not 12 archives or learning_ready. Exhaustion can flip filing_ready on solid names and should unblock this start, not more spare ingest. Keep knobs frozen; do not clone the full AI weekday stack. History is for promote/apply and for replaying names the wide book never held. | FTSE buy_tier_level has first-fill marks and euro_depth weekly-paper is either green or explicitly deprioritized in favor of this cheaper weekday start |
 | L320 | **Shard below-tier and buy-not-now counterfactual observer from week 0** | A buy-tier-only book never sees names that never hit buy-tier. Buy-tier but not buy-now (timing wait, conviction, overlay) is the first tight-knob check. Start Layer B screens the same week as the epoch-0 book so exclusion-universe and exit-timing-style replays have PIT fields — do not wait for those archives before the first fill. | A shard buy-tier-level book is running and that market has >=2 dated screen archives |
 | L321 | **Equal-support package once a shard is admitted to learning** | When a market joins the learning set, give it FTSE-volume buy-tier ingest, the same screen cadence, the same paper instrument, and the same buy-tier rememo/body-lag rule. Plan-credit headroom is not a reason to keep spare-slot leftovers. Do not spray 21-market memo density (N96). Filing yield still differs by jurisdiction. | A second market is admitted (L319 weekday level book or weekly_paper_shard_capacity > 1) and ingest runner wall-clock can hold FTSE-volume on that set |
-| L322 | **Admit shards to equal learning resource at maintenance ingest threshold** | sprint_ingest_complete (raw parity or leftover thin/IWB parked) is the admission gate. Ingest already vacates the sprint and puts unparked names on FTSE-volume maintenance. Flip the same learning package on at that point (weekday epoch-0 book, screen cadence, buy-tier rememo). N94 (weekly paper stays on euro_depth) is current wiring, not the intended end-state. | A market other than euro_depth is in ingest_exhausted_markets or ingest_parity_markets (sp500 already exhausted) and weekday shard paper can be pointed at that set |
+| L324 | **Library shard paper-auto must use market ticker suffixes not .L** | First epoch-0 fills for sp500/asx200 fetched AAPL.L and BHP-AX.L, so the book cannot open a real buy-tier set. Paper-auto on library shards needs Yahoo/Stooq suffixes from the library ticker map (or screen last_price) before treating first-fill NAV as the epoch-zero book. | Admitted shard epoch-0 is wired and the next shard-epoch0 run still fails to price non-UK tickers |
 
 ### Universe & data
 

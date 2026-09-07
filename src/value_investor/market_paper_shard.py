@@ -24,10 +24,15 @@ from value_investor.market_shard_phases import (
     write_market_phase_status,
 )
 from value_investor.market_trading_costs import cost_fields_for_config, costs_for_market
+from value_investor.library_near_miss_watch import write_library_near_miss_watch
+from value_investor.market_shard_admission import admitted_learning_markets_for_policy
 from value_investor.paper_automation import (
+    BUY_TIER_LEVEL_TRACK_ID,
     CONFIG_FILENAME,
+    default_buy_tier_level_config,
     ensure_learning_track_configs,
     learning_track_dirs,
+    run_daily_automation,
     run_learning_tracks,
 )
 from value_investor.storage import read_json, write_json
@@ -52,6 +57,12 @@ MARKET_SESSION_DEFAULTS: dict[str, dict[str, Any]] = {
     "euro_depth": {
         "timezone": "Europe/Paris",
         "market_open": "09:00",
+        "settle_minutes_after_open": 30,
+        "weekdays_only": False,
+    },
+    "asx200": {
+        "timezone": "Australia/Sydney",
+        "market_open": "10:00",
         "settle_minutes_after_open": 30,
         "weekdays_only": False,
     },
@@ -130,6 +141,32 @@ def apply_shard_session_to_configs(shard_root: Path, session: dict[str, Any]) ->
         )
 
 
+def apply_epoch0_level_config(shard_root: Path, session: dict[str, Any]) -> Path:
+    """Write only the frozen buy-tier-level config — no AI or other decision tracks."""
+    shard_root = Path(shard_root)
+    cfg = default_buy_tier_level_config()
+    cfg.timezone = str(session.get("timezone") or cfg.timezone)
+    cfg.market_open = str(session.get("market_open") or cfg.market_open)
+    cfg.settle_minutes_after_open = int(
+        session.get("settle_minutes_after_open") or cfg.settle_minutes_after_open
+    )
+    if "weekdays_only" in session:
+        cfg.weekdays_only = bool(session["weekdays_only"])
+    market_id = str(session.get("market_id") or "").strip()
+    if market_id:
+        cost_fields = cost_fields_for_config(market_id)
+        cfg.trade_cost_pct = float(cost_fields["trade_cost_pct"])
+        cfg.buy_cost_pct = float(cost_fields["buy_cost_pct"])
+        cfg.sell_cost_pct = float(cost_fields["sell_cost_pct"])
+    track_dir = shard_root / "buy_tier_level"
+    track_dir.mkdir(parents=True, exist_ok=True)
+    (track_dir / CONFIG_FILENAME).write_text(
+        json.dumps(cfg.to_dict(), indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return track_dir
+
+
 def run_weekly_market_paper_shard(
     market_id: str,
     *,
@@ -153,6 +190,7 @@ def run_weekly_market_paper_shard(
         base_dir=shard_root,
         reports_path=bundle_path,
         force=force,
+        market=market_id,
     )
     review = compare_learning_tracks(
         base_dir=shard_root,
@@ -187,6 +225,127 @@ def run_weekly_market_paper_shard(
         "review": review,
         "phase": evaluation,
     }
+
+
+def run_epoch0_market_shard(
+    market_id: str,
+    *,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    shard_root: Path | None = None,
+    force: bool = True,
+    policy: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Admitted-market start: frozen buy-tier-level book + near-miss watch.
+
+    Does **not** run AI-judgment (or other decision tracks) and never applies knobs.
+    """
+    library_root = Path(library_root)
+    shard_root = Path(shard_root or shard_root_for_market(market_id))
+    meta = ensure_shard_meta(market_id, shard_root, phase=2)
+    track_dir = apply_epoch0_level_config(shard_root, meta)
+    bundle_path = write_market_screen_bundle(library_root, market_id, shard_root)
+    cfg = default_buy_tier_level_config()
+    try:
+        cfg = type(cfg).from_dict(read_json(track_dir / CONFIG_FILENAME))
+    except (OSError, ValueError, TypeError):
+        pass
+    pass_result = run_daily_automation(
+        output_dir=track_dir,
+        config=cfg,
+        reports_path=bundle_path,
+        force=force,
+        market=market_id,
+        prefer_listed_prices=True,
+    )
+    track_summary = {
+        "tracks": {
+            BUY_TIER_LEVEL_TRACK_ID: {
+                "acted": pass_result.acted,
+                "trades": len(pass_result.trades),
+                "note": pass_result.note,
+            }
+        }
+    }
+    near_miss = write_library_near_miss_watch(library_root, market_id)
+    batch_entry = {
+        "run_at": datetime.now(UTC).isoformat(),
+        "cadence": "epoch0",
+        "screen_bundle": bundle_path.name,
+        "tracks": [BUY_TIER_LEVEL_TRACK_ID],
+        "ai_judgment": False,
+        "knob_apply": False,
+        "tracks_acted": {
+            track_id: row.get("acted")
+            for track_id, row in (track_summary.get("tracks") or {}).items()
+        },
+        "near_miss": {
+            "buy_tier_not_now_count": near_miss.get("buy_tier_not_now_count"),
+            "hold_near_buy_count": near_miss.get("hold_near_buy_count"),
+        },
+    }
+    append_weekday_batch_log(shard_root, batch_entry)
+    evaluation = evaluate_market_phase(
+        market_id,
+        library_root=library_root,
+        shard_root=shard_root,
+        policy=policy or {},
+    )
+    write_market_phase_status(evaluation, shard_root=shard_root)
+    return {
+        "market_id": market_id,
+        "shard_root": str(shard_root),
+        "screen_bundle": str(bundle_path),
+        "learning_tracks": track_summary,
+        "near_miss": near_miss,
+        "phase": evaluation,
+        "ai_judgment": False,
+        "knob_apply": False,
+    }
+
+
+def run_epoch0_shards_for_markets(
+    root: Path,
+    policy: dict[str, Any],
+    *,
+    screened_markets: set[str] | list[str] | None = None,
+) -> dict[str, Any]:
+    """Start epoch-0 books for admitted markets that have screen artifacts."""
+    admitted = admitted_learning_markets_for_policy(policy)
+    if screened_markets is not None:
+        wanted = [mid for mid in admitted if mid in set(screened_markets)]
+    else:
+        wanted = list(admitted)
+    if not wanted:
+        return {
+            "skipped": True,
+            "reason": "no admitted learning markets in scope",
+            "admitted": admitted,
+        }
+    markets_out: dict[str, Any] = {}
+    for market_id in wanted:
+        try:
+            result = run_epoch0_market_shard(
+                market_id,
+                library_root=root,
+                policy=policy,
+                force=True,
+            )
+            tracks = (result.get("learning_tracks") or {}).get("tracks") or {}
+            level = tracks.get(BUY_TIER_LEVEL_TRACK_ID) or {}
+            near = result.get("near_miss") or {}
+            markets_out[market_id] = {
+                "acted": level.get("acted"),
+                "trades": level.get("trades"),
+                "buy_tier_not_now_count": near.get("buy_tier_not_now_count"),
+                "hold_near_buy_count": near.get("hold_near_buy_count"),
+                "ai_judgment": False,
+                "knob_apply": False,
+                "path": f"markets/{market_id}/",
+            }
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Epoch-0 shard for %s failed: %s", market_id, exc)
+            markets_out[market_id] = {"error": str(exc)}
+    return {"skipped": False, "admitted": admitted, "markets": markets_out}
 
 
 def run_weekly_paper_shards_for_screened_markets(
@@ -269,6 +428,7 @@ def run_weekday_market_paper_shard(
         base_dir=shard_root,
         reports_path=bundle_path,
         force=force,
+        market=market_id,
     )
     review = compare_learning_tracks(
         base_dir=shard_root,

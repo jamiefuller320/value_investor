@@ -94,7 +94,17 @@ Spare 50%/25% fractions apply only while a market is still *in front* of that th
 
 **Equal treatment after admission.** Compare only admitted markets that have the same package (N103). Do **not** spray leftover plan credit across 21 thin markets (N96). Residual skew you cannot policy away: filing *yield* (ESEF vs EDGAR vs ASX IR), session timezone, and buy-tier width. Spare-slot fractions on a *pre-threshold* market are expected; leaving a *post-threshold* market on observe-sim only is a treatment bug.
 
-**What still waits.** The learning flip at maintenance graduation is not wired (L322). Phase 2 weekly-then-Phase-3 weekday remains the current path. The intended start instrument after admission is the frozen level book (L319). Cursor $ is not the reason a graduated market stays on observe-sim.
+**What still waits.** Shard AI-judgment and knob apply wait on the epoch-0 + near-miss watch. Phase 2 weekly AI paper stays on `euro_depth` only. FTSE remains the P1 data lead.
+
+**Admitted start (now).** `sp500` and `asx200` are on `ladder.admitted_learning_markets`. Equivalent resource starts immediately as:
+
+- Frozen weekday/Sunday **epoch-0** `buy_tier_level` book (`ftse-library shard-epoch0`)
+- Near-miss watch (`near_miss_watch.json`: buy-tier-but-not-now, hold-near-buy)
+- Existing maintenance ingest + Layer B screen clock
+
+It does **not** start a shard AI-judgment track or `decision-review --apply`. Watch epoch-0 and the near-miss groups first. FTSE stays the data lead (P1 live ingest / paper-auto). Euro keeps the fat sprint until its own maintenance threshold.
+
+**Knob apply is the AI-track gate.** `decision-review --apply` retunes picking knobs (`skip_timing_wait`, `min_conviction`, `sector_cap`). Frozen `buy_tier_level` is `is_cohort_lab=true` and cannot apply. Do not apply knobs on a shard until AI is a track, and do not make AI a track until the watch period has marks on epoch-0 **and** the near-miss groups. They are one decision, not two.
 
 **Runner wall-clock.** Work around it by **staggering** and by **parallel maintenance**, not by a fourth equal sprint.
 
@@ -253,6 +263,10 @@ ftse-library sim --markets euro_depth
 # Phase gates and advancement triggers
 ftse-library shard-status
 ftse-library shard-status --markets euro_depth --json
+
+# Admitted epoch-0 (buy-tier-level + near-miss; no AI)
+ftse-library shard-epoch0
+ftse-library shard-epoch0 --markets sp500,asx200
 
 # Manual Phase 2 weekly paper batch
 ftse-library shard-paper --markets euro_depth
