@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -18,20 +18,26 @@ from value_investor.library_ingest_dispatch import (
     MODE_MAINTENANCE,
     MODE_SPRINT,
     PARALLEL_SPRINT_POLICY_KEYS,
+    sprint_ingest_complete,
 )
-from value_investor.library_ingest_escalation import ftse_equivalent_markets
+from value_investor.library_ingest_escalation import (
+    ftse_equivalent_markets,
+    resolve_library_ingest_health_log_path,
+)
 from value_investor.library_near_miss_watch import NEAR_MISS_FILENAME
 from value_investor.library_screen import screen_dir_for
 from value_investor.market_shard_admission import admitted_learning_markets_for_policy
 from value_investor.market_shard_phases import DEFAULT_SHARD_ROOT, shard_root_for_market
 from value_investor.storage import read_json, write_json
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 LIVE_MARKET_ID = "ftse350"
 DEFAULT_MARKET_STATUS_PATH = Path("docs/data/market_status.json")
 DEFAULT_LATEST_PATH = Path("docs/data/latest.json")
 BUY_TIER_LEVEL_TRACK = "buy_tier_level"
 EXPECTED_ADMITTED_BLOCKER_NEEDLE = "weekly_paper_shard_markets"
+SPRINT_PROGRESS_WINDOW_DAYS = 2
+STALE_SCREEN_AFTER_DAYS = 8
 
 ROLE_LIVE = "live"
 ROLE_FOCUS = "focus"
@@ -369,6 +375,204 @@ def _queue_rank(market_id: str, queue: list[str]) -> int | None:
         return None
 
 
+def _parse_iso_dt(value: Any) -> datetime | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    try:
+        parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=UTC)
+    return parsed.astimezone(UTC)
+
+
+def _gap_counts(health: Any) -> dict[str, int]:
+    row = _as_dict(health)
+    unmeasured = _int(row.get("unmeasured_buy_tier"))
+    zero_body = _int(row.get("zero_body_buy_tier"))
+    return {
+        "unmeasured": unmeasured,
+        "zero_body": zero_body,
+        "thin": _int(row.get("thin_body_buy_tier")),
+        "indexed_without_body": _int(row.get("indexed_without_body")),
+        "filing_gaps": unmeasured + zero_body,
+    }
+
+
+def _gap_delta(before: dict[str, int], after: dict[str, int]) -> dict[str, int]:
+    return {key: _int(after.get(key)) - _int(before.get(key)) for key in after}
+
+
+def _admission_warning(
+    warning_id: str,
+    summary: str,
+    *,
+    severity: str = "warn",
+) -> dict[str, str]:
+    return {"id": warning_id, "severity": severity, "summary": summary}
+
+
+def _load_ingest_health_entries(library_root: Path, market_id: str) -> list[dict[str, Any]]:
+    path = resolve_library_ingest_health_log_path(library_root, market_id)
+    payload = _as_dict(_safe_read(path))
+    return [row for row in _as_list(payload.get("entries")) if isinstance(row, dict)]
+
+
+def _sprint_progress(
+    market_id: str,
+    *,
+    library_root: Path,
+    ingest: str,
+    last_screen_at: str | None,
+    filing_health: dict[str, Any] | None,
+    ingest_parity: bool | None,
+    ingest_exhausted: bool,
+    now: datetime,
+) -> dict[str, Any] | None:
+    """Two-day ingest rollup and admission-progress flags for sprint tiles."""
+    if ingest != INGEST_SPRINT:
+        return None
+    as_of = now if now.tzinfo else now.replace(tzinfo=UTC)
+    window_start = as_of - timedelta(days=SPRINT_PROGRESS_WINDOW_DAYS)
+    window: list[dict[str, Any]] = []
+    for row in _load_ingest_health_entries(library_root, market_id):
+        run_at = _parse_iso_dt(row.get("run_at"))
+        if run_at is not None and run_at >= window_start:
+            window.append(row)
+
+    targets = sum(_int(row.get("targets")) for row in window)
+    improved = sum(_int(row.get("improved")) for row in window)
+    improved_tickers: list[str] = []
+    seen: set[str] = set()
+    for row in window:
+        for ticker in _as_list(row.get("improved_tickers")):
+            name = str(ticker or "").strip()
+            if name and name not in seen:
+                seen.add(name)
+                improved_tickers.append(name)
+    cutoff_runs = sum(1 for row in window if row.get("runtime_cutoff") or row.get("partial"))
+    error_runs = sum(1 for row in window if _as_list(row.get("errors")))
+    first = window[0] if window else None
+    last = window[-1] if window else None
+    remaining = _gap_counts(filing_health or (last.get("health_after") if last else None))
+    gaps_before = _gap_counts(first.get("health_before") if first else remaining)
+    gaps_after = _gap_counts((last.get("health_after") if last else None) or remaining)
+    delta = _gap_delta(gaps_before, gaps_after)
+    gate_health = dict(_as_dict(filing_health))
+    if ingest_exhausted:
+        gate_health["ingest_exhausted"] = True
+    ready = bool(ingest_parity) or sprint_ingest_complete(gate_health)
+
+    warnings: list[dict[str, str]] = []
+    if not window:
+        warnings.append(
+            _admission_warning(
+                "no_ingest_in_window",
+                f"No ingest runs in the last {SPRINT_PROGRESS_WINDOW_DAYS} days",
+                severity="high",
+            )
+        )
+    if cutoff_runs:
+        warnings.append(
+            _admission_warning(
+                "runtime_cutoff",
+                f"{cutoff_runs} ingest run(s) hit the runtime cutoff",
+                severity="high",
+            )
+        )
+    if error_runs:
+        samples = [
+            str(item).strip()
+            for row in window
+            for item in _as_list(row.get("errors"))
+            if str(item).strip()
+        ]
+        detail = f": {samples[0][:120]}" if samples else ""
+        warnings.append(
+            _admission_warning(
+                "ingest_errors",
+                f"{error_runs} ingest run(s) recorded errors{detail}",
+            )
+        )
+    if (
+        window
+        and improved == 0
+        and (
+            remaining["filing_gaps"] > 0
+            or remaining["thin"] > 0
+            or remaining["indexed_without_body"] > 0
+        )
+    ):
+        warnings.append(
+            _admission_warning(
+                "zero_improve_stall",
+                "Last 2 days improved nobody while filing gaps remain",
+                severity="high",
+            )
+        )
+    if window and remaining["unmeasured"] > 0 and delta.get("unmeasured", 0) >= 0:
+        warnings.append(
+            _admission_warning(
+                "unmeasured_stuck",
+                f"{remaining['unmeasured']} unmeasured buy-tier name(s) unchanged "
+                "(cannot park; blocks sprint_ingest_complete)",
+                severity="high",
+            )
+        )
+    if window and remaining["zero_body"] > 0 and delta.get("zero_body", 0) >= 0:
+        warnings.append(
+            _admission_warning(
+                "zero_body_stuck",
+                f"{remaining['zero_body']} zero-body buy-tier name(s) unchanged "
+                "(cannot park; blocks sprint_ingest_complete)",
+                severity="high",
+            )
+        )
+    screen_at = _parse_iso_dt(last_screen_at)
+    if screen_at is None or (as_of.date() - screen_at.date()) > timedelta(
+        days=STALE_SCREEN_AFTER_DAYS
+    ):
+        age = "no dated screen" if screen_at is None else f"last screen {screen_at.date().isoformat()}"
+        warnings.append(
+            _admission_warning(
+                "stale_buy_tier_screen",
+                f"Buy-tier screen is stale ({age}); ingest is deepening an old shortlist",
+            )
+        )
+    from value_investor.library_sim import MARKET_BENCHMARKS
+
+    if market_id not in MARKET_BENCHMARKS:
+        warnings.append(
+            _admission_warning(
+                "no_observe_benchmark",
+                "No Yahoo benchmark — Sunday screen-lite cannot refresh the buy-tier clock",
+            )
+        )
+
+    last_run_at = None
+    if last:
+        last_run_at = last.get("run_at")
+    return {
+        "window_days": SPRINT_PROGRESS_WINDOW_DAYS,
+        "run_count": len(window),
+        "targets": targets,
+        "improved": improved,
+        "improved_tickers": improved_tickers[:12],
+        "last_run_at": last_run_at,
+        "runtime_cutoff_runs": cutoff_runs,
+        "error_runs": error_runs,
+        "gaps_before": gaps_before,
+        "gaps_after": gaps_after,
+        "gap_delta": delta,
+        "remaining": remaining,
+        "admission_ready": ready,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": warnings,
+    }
+
+
 def _index_equal_support(library_root: Path) -> dict[str, Any]:
     raw = _as_dict(_safe_read(Path(library_root) / EQUAL_SUPPORT_FILENAME))
     markets = raw.get("markets") if isinstance(raw.get("markets"), dict) else {}
@@ -509,9 +713,13 @@ def build_market_status(
     live_signal_counts: dict[str, int] | None = None,
     live_run_at: str | None = None,
     live_ingest_stalled: bool = False,
+    now: datetime | None = None,
 ) -> dict[str, Any]:
     """Assemble a slim per-market status grid from cached library artifacts."""
     library_root = Path(library_root or DEFAULT_LIBRARY_ROOT)
+    as_of = now or datetime.now(UTC)
+    if as_of.tzinfo is None:
+        as_of = as_of.replace(tzinfo=UTC)
     policy_path = Path(policy_path or DEFAULT_POLICY_PATH)
     dispatch_path = Path(dispatch_path or DEFAULT_DISPATCH_PATH)
 
@@ -640,6 +848,25 @@ def build_market_status(
             live_ingest_stalled=live_ingest_stalled and market_id == LIVE_MARKET_ID,
         )
         filing_health = dispatch_row.get("filing_health")
+        ingest_exhausted = bool(
+            dispatch_row.get("ingest_exhausted")
+            or _as_dict(filing_health).get("ingest_exhausted")
+            or market_id in exhausted_markets
+        )
+        sprint_progress = _sprint_progress(
+            market_id,
+            library_root=library_root,
+            ingest=ingest,
+            last_screen_at=str(last_screen_at) if last_screen_at else None,
+            filing_health=_as_dict(filing_health) or None,
+            ingest_parity=(
+                None
+                if dispatch_row.get("ingest_parity_met") is None
+                else bool(dispatch_row.get("ingest_parity_met"))
+            ),
+            ingest_exhausted=ingest_exhausted,
+            now=as_of,
+        )
         markets.append(
             {
                 "market_id": market_id,
@@ -657,11 +884,7 @@ def build_market_status(
                 "ingest_stream": stream,
                 "ingest_reason": dispatch_row.get("reason"),
                 "ingest_parity_met": dispatch_row.get("ingest_parity_met"),
-                "ingest_exhausted": bool(
-                    dispatch_row.get("ingest_exhausted")
-                    or _as_dict(filing_health).get("ingest_exhausted")
-                    or market_id in exhausted_markets
-                ),
+                "ingest_exhausted": ingest_exhausted,
                 "queue_rank": _queue_rank(market_id, queue),
                 "shared_maintenance": market_id in maintenance_markets,
                 "health": health,
@@ -703,6 +926,7 @@ def build_market_status(
                 "epoch0": epoch0,
                 "equal_support": equal_row,
                 "near_miss": near_miss,
+                "sprint_progress": sprint_progress,
             }
         )
 
@@ -724,13 +948,14 @@ def build_market_status(
 
     return {
         "schema_version": SCHEMA_VERSION,
-        "generated_at": datetime.now(UTC).isoformat(),
+        "generated_at": as_of.isoformat(),
         "note": (
             "Per-market stage and health snapshot for the dashboard grid. "
             "Ingest mode uses cached dispatch + policy lists; signal mix comes from "
             "the live FTSE screen or each library latest_summary.json. "
             "Admitted markets show epoch-0 buy-tier-level + equal-support near-miss "
-            "(watch cut: buy-not-now / hold-near-buy)."
+            "(watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest "
+            "rollup and admission-progress flags."
         ),
         "focus_market": focus or None,
         "admitted_markets": admitted_list,
