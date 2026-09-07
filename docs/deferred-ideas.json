@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-07T18:03:10+00:00",
+  "updated_at": "2026-09-07T18:52:21+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7481,6 +7481,23 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-fb826a8a-b91b-4ef9-b0a6-6f183dcade83",
       "added_at": "2026-09-07T18:03:10+00:00"
+    },
+    {
+      "id": "L337",
+      "category": "later",
+      "section": "ops",
+      "title": "Stop skip-ci ingest from rewriting committed market_status.json",
+      "summary": "Library ingest maintenance on main regenerates docs/data/market_status.json, which conflicts with open dashboard PRs that also rewrite that snapshot. After schema 3 lands, consider serving the grid from write_market_status at publish time, or excluding the generated JSON from skip-ci ingest commits.",
+      "revisit_when": "PR 477 is merged and another dashboard PR still conflicts on market_status.json after a skip-ci ingest",
+      "tags": [
+        "dashboard",
+        "ingest",
+        "merge-conflicts",
+        "market_status"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-f018d59e-1f24-40f1-b38f-7d0b1555bd03",
+      "added_at": "2026-09-07T18:52:21+00:00"
     }
   ],
   "fragments": [
