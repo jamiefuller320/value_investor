@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T08:35:45+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T09:56:24+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -159,6 +159,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N110 | **Historical holdings path instead of current-book densify** | Live FTSE densify marks today's share counts on past daily closes. That is a current-sleeve backfill, not the actual paper book, so it is not a fair historical comparison once names rotate. | Live FTSE densify is active (held_path=current_book_marked) after at least one rotation of names. |
 | N111 | **Do not close red flags via open-web prevailing opinion** | Open qualitative flags (e.g. ITV.L linear-TV advertising decline) stay filing-first. Trade-press consensus and YoY industry blogs can confirm a risk, not mark question_outcomes resolved. News is already a secondary ladder step; N89/N91 already reject general website harvest. | Human decision-pack review repeatedly rejects filing-backed partial resolution because the missing piece is an official industry series (Ofcom, AA/WARC), not issuer text |
 | N112 | **Do not add a live sector-outlook preference overlay** | Sector research should not become a Yahoo-sector demotion layer on weekday paper-auto / AI-judgment. Macro/sector auto-veto is already forbidden; healthcare and cyclical overlays only fire with issuer fundamentals or filing language. A media-wide headwind from ITV would over-generalize and steal P1 filing/FCF/overlay-bind work. | Buy-tier filing/FCF overlay bind is green and an observe-only narrow-thesis lab (not Yahoo sector) shows excess vs the existing accumulate + adjusted_signal gates |
+| N113 | **Per-exit automatic knob-change review on epoch-0** | Do not wire position close → decision-review --apply (or cohort-lab retune). Epoch-0 is the frozen lifecycle datum; knob apply stays on AI/rules tracks after thick epoch marks, with exit-shadow still observe-only until cohort maturity. | Never unless N25 is explicitly retired and buy_tier_level is no longer is_cohort_lab; prefer overlay/divergence on the same holdings (N99) instead |
 
 ---
 
@@ -209,6 +210,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L341 | **Caption market-card held vs market as sleeve vs price index** | The chart is invested-sleeve MTM versus a frictionless local price index from the same starting held notional, not Sunday-review excess after costs (NAV vs contributed, Yahoo auto_adjust). A caption would stop the tile being read as a matched-cost or total-return hurdle. | Someone uses the market-card excess_pct to judge paper vs index, or it disagrees with Sunday-review excess_after_costs. |
 | L342 | **Universe-matched index for held vs market charts** | FTSE 350 paper is scaled to ^FTSE (FTSE 100) and euro_depth observe-sim to ^STOXX50E. That is a useful alpha hurdle but not a matched-universe market equivalent. | Held vs market charts are in regular Sunday use and a FTSE 350 or euro_depth path has >=8 weekday marks. |
 | L343 | **Add Nasdaq-100 ^NDX to dated macro snapshots** | US macro now carries ^GSPC for S&P market cards. nasdaq100 still has no local index in dated snapshots, so a Nasdaq paper book would have market_path none until ^NDX is stored the same way. | nasdaq100 has a paper book or observe-sim marks and the market card still has market_path none. |
+| L350 | **Post-exit evidence-readiness interrupt (not knob apply)** | After a full position close, check whether exit-shadow / exit-timing / lifecycle cohort floors newly crossed and queue a human or director review. Do not auto-apply knobs from a single exit, and never retune epoch-0 buy_tier_level (is_cohort_lab). | learning_tracks_exit_shadow.json shows ≥15 closed exits per primary track (N25) or a human asks for earlier readiness interrupts than Sunday paper-learning cadence |
 
 ### Universe & data
 
