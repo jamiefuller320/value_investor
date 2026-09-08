@@ -1876,6 +1876,114 @@ def test_enforce_fcf_basis_in_snapshot_without_research_verdict_trn_style():
     assert enforced["adjusted_signal"] == "hold"
 
 
+def test_enrich_signals_with_fcf_basis_overlay_caps_vty_style_universe_gap(tmp_path: Path):
+    """VTY.L-style ~16% filing/screen gap must cap strong_buy in pipeline signals export."""
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "VTY.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.6598,
+                "free_cashflow": 174_600_000.0,
+                "free_cashflow_screen_ttm": 147_400_000.0,
+                "fcf_basis_overlay": False,
+                "adjusted_signal": "strong_buy",
+                "action_note": (
+                    "Strong Buy — neutral timing | FCF basis mismatch: filing £174.6M | "
+                    "screen TTM £147.4M"
+                ),
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "VTY.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_fcf_basis_overlay(signals, model_results, output_dir=tmp_path)
+
+    assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.6598 * 0.85)
+
+
+def test_write_screening_snapshot_enforces_vty_style_fcf_note(tmp_path: Path):
+    """Persisted snapshots must not ship strong_buy beside an FCF mismatch action note."""
+    sources = tmp_path / "research" / "VTY.L" / "sources"
+    snapshot = {
+        "ticker": "VTY.L",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "fcf_basis_overlay": False,
+        "conviction_score": 0.6598,
+        "action_note": (
+            "Strong Buy — neutral timing | FCF basis mismatch: filing £174.6M | screen TTM £147.4M"
+        ),
+        "fcf": None,
+        "key_metrics": {},
+    }
+    write_screening_snapshot(sources, snapshot)
+    written = json.loads((sources / "screening_snapshot.json").read_text(encoding="utf-8"))
+    assert written["fcf_basis_overlay"] is True
+    assert written["adjusted_signal"] == "buy"
+    assert written["conviction_score"] == pytest.approx(0.6598 * 0.85)
+
+
+def test_honour_fcf_action_notes_on_signals_caps_vty_style_stale_row():
+    """Pipeline export must honour persisted FCF mismatch notes when overlay flag is stale."""
+    note = (
+        "Strong Buy — neutral timing | FCF basis mismatch: filing £174.6M | "
+        "screen TTM £147.4M | Earnings growth basis divergence >300 bps: "
+        "statutory 91.8% vs filing core 85.2%"
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "VTY.L",
+                "signal": "strong_buy",
+                "adjusted_signal": "strong_buy",
+                "conviction_score": 0.6598,
+                "fcf_basis_overlay": False,
+                "action_note": note,
+            }
+        ]
+    )
+
+    honoured = honour_fcf_action_notes_on_signals(signals)
+
+    assert bool(honoured.iloc[0]["fcf_basis_overlay"]) is True
+    assert honoured.iloc[0]["adjusted_signal"] == "buy"
+    assert honoured.iloc[0]["conviction_score"] == pytest.approx(0.6598 * 0.85)
+
+
+def test_enforce_fcf_basis_in_snapshot_without_research_verdict_vty_style():
+    """Stale VTY.L snapshots with overlay=false must still honour FCF mismatch notes."""
+    enforced = enforce_fcf_basis_in_snapshot(
+        {
+            "ticker": "VTY.L",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "fcf_basis_overlay": False,
+            "conviction_score": 0.6598,
+            "action_note": (
+                "Strong Buy — neutral timing | FCF basis mismatch: filing £174.6M | "
+                "screen TTM £147.4M"
+            ),
+        }
+    )
+    assert enforced["fcf_basis_overlay"] is True
+    assert enforced["adjusted_signal"] == "buy"
+
+
 def test_parse_adjusted_eps_growth_pct_from_ir_prose():
     assert parse_adjusted_eps_growth_pct("Adjusted EPS increased by 16% to 9.9p") == pytest.approx(
         0.16
