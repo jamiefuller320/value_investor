@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-08T08:04:29+00:00",
+  "updated_at": "2026-09-08T08:11:38+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7756,6 +7756,23 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a07fda-1bf8-71f9-8d04-03453ad9c0aa",
       "added_at": "2026-09-08T07:48:35+00:00"
+    },
+    {
+      "id": "L348",
+      "category": "later",
+      "section": "ops",
+      "title": "Pass allow_ocr through leftover non-weekday filing callers",
+      "summary": "Weekday FTSE and library ingest loops already defer OCR. refetch_missing_filing_bodies still defaults OCR-on (gap-fill is fine; the execute_planned SEC/ASX branch on a wide FTSE pass can still tesseract). library_maintenance reingest/thin-repair and ingest_bootstrap seed also default on. Thread allow_ocr/deadline through those leftover callers only if a wide batch starts hitting OCR timeouts.",
+      "revisit_when": "A weekday or library-maintenance batch hits runtime_cutoff inside refetch_missing_filing_bodies or ingest_filings with allow_ocr still defaulting true",
+      "tags": [
+        "ingest",
+        "ocr",
+        "library",
+        "market-agnostic"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07fda-1bf8-71f9-8d04-03453ad9c0aa",
+      "added_at": "2026-09-08T08:11:38+00:00"
     }
   ],
   "fragments": [
