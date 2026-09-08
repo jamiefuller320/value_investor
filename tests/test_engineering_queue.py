@@ -230,7 +230,6 @@ def test_evaluate_dispatch_prefers_disjoint_task_when_pr_open(tmp_path: Path):
 
 
 def test_select_path_disjoint_engineering_tasks_skips_overlap(tmp_path: Path):
-    tasks_path = tmp_path / "engineering_tasks.json"
     payload = {
         "tasks": [
             {
