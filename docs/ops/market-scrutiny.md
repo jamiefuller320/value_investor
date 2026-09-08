@@ -13,9 +13,9 @@ Related: [`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md), [`primary-learning-t
 | **FTSE live ingest** | buy-tier measured; **0 zero-body**; **scan-then-target** | Learning phase: same-day body deepen (`max_targets=62`) — see [`ingest-scan-then-target.md`](ingest-scan-then-target.md) |
 | **FTSE filing depth** | bodies + discovery | Weekday deepen toward `indexed_without_body≈0` on buy-tier |
 | **Offline queue** | Breadth queue complete; **depth-first focus `euro_depth`** (~194 names) | Grow metrics + screen archives; deepen `euro_filings` on buy-tier |
-| **Focus `euro_depth`** | Constituents seeded (STOXX50 ∪ periphery); research_all_graduated off | Sunday ladder concentrates weekly_ops on this book only |
-| **S&P 500 FTSE-equivalent** | Canonical-only filing + trajectory measurement; not weekly-paper | Close unmeasured / thin / `indexed_without_body` on **buy-tier** via parallel sprint; do not count nasdaq100 overlap |
-| **S&P / STOXX shards** | Demoted from weekly slot under depth-first policy | Layer A maintenance only until euro_depth filing parity |
+| **Focus `euro_depth`** | Constituents seeded (STOXX50 ∪ periphery); research_all_graduated off | Sunday weekly_ops round-robins focus first, then admitted rememo |
+| **S&P 500 FTSE-equivalent** | Ingest exhausted; epoch-0 + equal-support admitted | Sunday rememo on buy-tier body-lag; weekly paper stays on euro_depth |
+| **S&P / STOXX shards** | Demoted from weekly slot under depth-first policy | Layer A maintenance unless the market is admitted |
 | **`weekly_ops`** | $80 operational cap; 15% of listed Ultra ($30) is an estimated-USD warning | Sunday email + ladder selective research |
 | **Director–worker** | Exploration phase (15/week); **MEGP.L** trial run 2026-08-16 | `auto_escalate_director` stays false until calibrated |
 
