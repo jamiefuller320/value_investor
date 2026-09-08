@@ -989,6 +989,59 @@ def test_enrich_signals_with_fcf_basis_overlay_honours_action_note_mismatch_bree
     assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.595)
 
 
+def test_enrich_signals_with_fcf_basis_overlay_honours_universe_divergence_note(
+    tmp_path: Path,
+):
+    """15% filing/screen gap triggers overlay to match FCF basis mismatch action notes."""
+    sources = tmp_path / "research" / "BOWL.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "BOWL.L",
+                "cash_flow": {
+                    "2026": {
+                        "Operating Cash Flow": 55_000_000.0,
+                        "Capital Expenditure": -18_000_000.0,
+                        "Free Cash Flow": 37_000_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "BOWL.L",
+                "signal": "buy",
+                "conviction_score": 0.72,
+                "free_cashflow": 37_000_000.0,
+                "free_cashflow_screen_ttm": 43_800_000.0,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "BOWL.L",
+                "model_id": "graham_net_net",
+                "model_name": "Graham",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_fcf_basis_overlay(signals, model_results, output_dir=tmp_path)
+
+    assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "hold"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.72 * 0.85)
+
+
 def test_parse_adjusted_eps_growth_pct_from_ir_prose():
     assert parse_adjusted_eps_growth_pct("Adjusted EPS increased by 16% to 9.9p") == pytest.approx(
         0.16
