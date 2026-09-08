@@ -231,7 +231,7 @@ def test_research_overlay_preserves_fcf_basis_cap():
         metrics_total=20,
         weeks_at_signal=2,
         signal_trend="stable",
-        conviction_score=0.51,
+        conviction_score=0.6,
         stability_label="building",
         timing_signal="accumulate",
         timing_score=0.7,
