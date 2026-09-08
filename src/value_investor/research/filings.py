@@ -2462,7 +2462,7 @@ def fetch_filings_asx_news(
 ) -> list[dict[str, Any]]:
     """Discover ASX results / announcements via Google News (ASX + Market Index)."""
     query = (
-        f'(site:asx.com.au OR site:marketindex.com.au) '
+        f"(site:asx.com.au OR site:marketindex.com.au) "
         f'("{company_name}" OR {_google_news_symbol_clause(ticker)}) '
         f'(Results OR "Annual Report" OR "Half Year" OR "Half-year" OR Interim OR '
         f'"Full Year" OR "Preliminary Final" OR "Quarterly Activities")'
