@@ -6329,6 +6329,95 @@ def test_parked_source_hunter_skip_tsn_sp500():
     assert fetch_filings_ir_allowlist("TSN") == []
 
 
+def test_fetch_filings_ir_allowlist_euro_depth_andr_vi_builtins(tmp_path: Path):
+    """Regression: ANDR.VI parked IWB — andritz.com financial report 2025 PDF."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("ANDR.VI", path=allowlist_path)
+    assert len(rows) == 1
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert rows[0]["period"] == "annual"
+    assert "andritz.com/resource/blob/" in rows[0]["url"]
+    assert "annual-report-2025" in rows[0]["url"]
+
+
+def test_load_ir_url_allowlist_canonicalizes_andr_vi_dead_blob_url(tmp_path: Path):
+    """Dead blob/520884 URL in research_ir_urls.json maps to live financial report PDF."""
+    dead = (
+        "https://www.andritz.com/resource/blob/520884/andritz-annual-financial-report-2025-en.pdf"
+    )
+    live = _BUILTIN_IR_URLS["ANDR.VI"][0]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"ANDR.VI": [dead]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert mapping["ANDR.VI"] == [live]
+    rows = fetch_filings_ir_allowlist("ANDR.VI", path=path)
+    assert len(rows) == 1
+    assert rows[0]["url"] == live
+
+
+def test_refetch_ir_allowlist_migrates_andr_vi_dead_url(tmp_path: Path, monkeypatch):
+    """Indexed unfetchable ANDR.VI IR row is rewritten to the live financial report URL."""
+    dead = (
+        "https://www.andritz.com/resource/blob/520884/andritz-annual-financial-report-2025-en.pdf"
+    )
+    live = _BUILTIN_IR_URLS["ANDR.VI"][0]
+    allowlist_path = tmp_path / "ir_urls.json"
+    allowlist_path.write_text(json.dumps({"urls": {"ANDR.VI": [dead]}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_c31ecdd925df36ac",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — andritz-annual-financial-report-2025-en.pdf",
+                        "url": dead,
+                        "period": "annual",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "ir_allowlist_fetch_failed",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(_row, *, ticker, company_name="", investegate_cache=None):
+        return "ANDRITZ consolidated income statement revenue order intake " * 20, "pdf"
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "ANDR.VI",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    row = saved["filings"][0]
+    assert row["url"] == live
+    assert row.get("unfetchable") is not True
+    assert row["has_body"] is True
+
+
+def test_parked_source_hunter_andr_vi_euro_depth_has_fetchable_ir():
+    """eng-20260908-21: ANDR.VI has live andritz.com FY2025 financial report PDF."""
+    assert "ANDR.VI" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("ANDR.VI")
+    assert len(rows) == 1
+    assert rows[0]["period"] == "annual"
+    assert "andritz.com/resource/blob/" in rows[0]["url"]
+    assert "annual-report-2025" in rows[0]["url"]
+
+
 def test_parked_source_hunter_ackb_br_euro_depth_has_fetchable_ir():
     """eng-20260908-02: ACKB.BR has avh.be annual + VFB H1 2025 regulated PDFs."""
     assert "ACKB.BR" not in PARKED_SOURCE_HUNTER_SKIP
