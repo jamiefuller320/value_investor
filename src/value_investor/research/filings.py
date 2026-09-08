@@ -136,7 +136,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "ESSITY-B.ST": [
         "https://assets.www.essity.com/essity/Annual-Report-2025-digital.pdf",
     ],
-    # euro_depth buy-tier deepen — zero-body ASSA-B.ST (Swedish ESEF + English IR PDF).
+    # euro_depth IWB blocker — ASSA-B.ST parked awaiting_periodic_report; FY2025 English IR PDF.
     "ASSA-B.ST": [
         "https://www.assaabloy.com/group/en/documents/investors/annual-reports/2025/Annual%20Report%202025.pdf",
     ],
