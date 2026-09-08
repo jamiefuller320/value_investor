@@ -1657,7 +1657,8 @@ def test_apply_research_overlay_with_fcf_enforcement_caps_rs1_style_buy():
     overlaid = apply_research_overlay_with_fcf_enforcement([stale], [doc])[0]
     assert overlaid.fcf_basis_overlay is True
     assert overlaid.adjusted_signal == "hold"
-    assert overlaid.conviction_score == pytest.approx(0.51238 * 0.85)
+    # Research overlay adjusts conviction first; FCF cap applies to that post-research score.
+    assert overlaid.conviction_score == pytest.approx(0.56238 * 0.85)
 
 
 def test_export_enforced_report_dicts_honours_mony_style_stale_row():

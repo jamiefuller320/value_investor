@@ -689,6 +689,17 @@ def _brief_summary(
     return " ".join(parts)
 
 
+def _unwrap_fcf_overlay_wrapper(fn: Any) -> Any:
+    """Skip nested FCF enforcement wrappers when resolving the overlay base."""
+    current = fn
+    while getattr(current, "_fcf_enforcement_installed", False):
+        unwrapped = getattr(current, "_original_overlay", None)
+        if unwrapped is None or unwrapped is current:
+            break
+        current = unwrapped
+    return current
+
+
 def export_enforced_report_dicts(reports: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Re-apply FCF basis caps on serialized report rows (MONY.L-style stale exports)."""
     ensure_fcf_export_hooks()
@@ -696,7 +707,11 @@ def export_enforced_report_dicts(reports: list[dict[str, Any]]) -> list[dict[str
     for row in reports:
         if not isinstance(row, dict):
             continue
-        enforced.append(CompanyReport.from_dict(row).to_dict())
+        updated = CompanyReport.from_dict(row).to_dict()
+        extras = {key: value for key, value in row.items() if key not in updated}
+        if extras:
+            updated.update(extras)
+        enforced.append(updated)
     return enforced
 
 
@@ -709,7 +724,9 @@ def apply_research_overlay_with_fcf_enforcement(
     if base is None:
         from value_investor.research.overlay import apply_research_overlay as overlay_fn
 
-        base = getattr(overlay_fn, "_original_overlay", overlay_fn)
+        base = _unwrap_fcf_overlay_wrapper(overlay_fn)
+    else:
+        base = _unwrap_fcf_overlay_wrapper(base)
     updated = base(reports, documents)
     return [honour_fcf_action_note_enforcement(report) for report in updated]
 
@@ -1443,12 +1460,10 @@ def _patch_research_overlay_module() -> None:
         return
     if getattr(overlay_mod.apply_research_overlay, "_fcf_enforcement_installed", False):
         return
-    original = overlay_mod.apply_research_overlay
-    if not getattr(apply_research_overlay_with_fcf_enforcement, "_original_overlay", None):
-        apply_research_overlay_with_fcf_enforcement._original_overlay = original  # type: ignore[attr-defined]
+    base = _unwrap_fcf_overlay_wrapper(overlay_mod.apply_research_overlay)
+    apply_research_overlay_with_fcf_enforcement._original_overlay = base  # type: ignore[attr-defined]
     overlay_mod.apply_research_overlay = apply_research_overlay_with_fcf_enforcement  # type: ignore[assignment]
     overlay_mod.apply_research_overlay._fcf_enforcement_installed = True  # type: ignore[attr-defined]
-    overlay_mod.apply_research_overlay._original_overlay = original  # type: ignore[attr-defined]
 
 
 def _install_publish_fcf_export_hooks() -> None:
