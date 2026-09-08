@@ -106,6 +106,24 @@ budget remains, the monitor auto-writes the catch-up request so weekday rememo
 raises its cap until the backlog is back within maintenance range. If budget is
 exhausted, it drafts an engineering task instead (`action=escalate`).
 
+## Admitted / epoch-0 rememo (weekday)
+
+Admitted learning markets (`sp500`, `asx200`, plus any `ingest_exhausted`
+graduate) get the **same** body-lag rememo as FTSE: 3 names/day, catch-up 5
+when that market's backlog exceeds 15. This is not Sunday Layer C and not
+`research_all_graduated`.
+
+```bash
+ftse-library rememo --dry-run
+ftse-library rememo
+```
+
+Wired after `library-ingest-maintenance` (once per weekday; weekend slots
+skip). Artifacts: `docs/data/library/admitted_rememo_summary.json`,
+`docs/data/library/admitted_rememo_backlog.json`. Sunday still rememos the
+**focus** book only so a 50+ admitted backlog does not dump into
+`research_hard_cap`.
+
 ## Retry flow (summary)
 
 ```

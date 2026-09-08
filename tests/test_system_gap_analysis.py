@@ -225,7 +225,7 @@ def test_snapshot_flags_persist_hole_and_stale_learning_clock(tmp_path: Path):
     assert "learning_tracks_entry_dca.json" in persist["in_output_not_committed"]
 
 
-def test_snapshot_flags_admitted_rememo_not_queued(tmp_path: Path):
+def test_snapshot_flags_admitted_rememo_when_weekday_escalate(tmp_path: Path):
     data = tmp_path / "data"
     library = tmp_path / "library"
     _write_json(
@@ -238,7 +238,7 @@ def test_snapshot_flags_admitted_rememo_not_queued(tmp_path: Path):
                 "selective_research": {
                     "executed": 1,
                     "allow_research": True,
-                    "research_markets": ["euro_depth"],
+                    "research_markets": ["euro_depth", "sp500", "asx200"],
                     "research_all_graduated": False,
                     "constraining": False,
                     "budget_flag": "enforced",
@@ -254,6 +254,16 @@ def test_snapshot_flags_admitted_rememo_not_queued(tmp_path: Path):
             "markets": {
                 "sp500": {"rememo_eligible_count": 54},
                 "asx200": {"rememo_eligible_count": 7},
+            },
+        },
+    )
+    _write_json(
+        library / "admitted_rememo_backlog.json",
+        {
+            "eligible_total": 61,
+            "markets": {
+                "sp500": {"eligible_count": 54, "action": "escalate"},
+                "asx200": {"eligible_count": 7, "action": "maintain"},
             },
         },
     )
@@ -277,8 +287,46 @@ def test_snapshot_flags_admitted_rememo_not_queued(tmp_path: Path):
     flag = next(row for row in snapshot["flags"] if row["id"] == "admitted_rememo_not_queued")
     assert flag["severity"] == "high"
     ids = {row["market_id"] for row in flag["evidence"]["markets"]}
-    assert ids == {"sp500", "asx200"}
+    assert ids == {"sp500"}
     assert snapshot["layers"]["produce"]["admitted_rememo"]["starved"]
+
+
+def test_snapshot_does_not_flag_admitted_rememo_on_weekday_path(tmp_path: Path):
+    data = tmp_path / "data"
+    library = tmp_path / "library"
+    _write_json(
+        library / "equal_support_status.json",
+        {
+            "admitted": ["sp500"],
+            "markets": {"sp500": {"rememo_eligible_count": 54}},
+        },
+    )
+    _write_json(
+        library / "admitted_rememo_backlog.json",
+        {
+            "eligible_total": 54,
+            "markets": {"sp500": {"eligible_count": 54, "action": "catch_up"}},
+        },
+    )
+    _write_json(
+        library / "policy.json",
+        {
+            "focus_market": "euro_depth",
+            "ladder": {
+                "research_all_graduated": False,
+                "admitted_learning_markets": ["sp500"],
+            },
+        },
+    )
+    snapshot = build_system_gap_snapshot(
+        data_dir=data,
+        output_dir=tmp_path / "output",
+        library_root=library,
+        policy_path=library / "policy.json",
+        paper_root=data / "paper_automation",
+    )
+    ids = {row["id"] for row in snapshot["flags"]}
+    assert "admitted_rememo_not_queued" not in ids
 
 
 def test_observe_clock_uses_dated_archives_not_stale_learning_depth(tmp_path: Path):

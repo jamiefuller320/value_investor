@@ -16,10 +16,7 @@ from value_investor.scoring.fcf import (
 
 FCF_YIELD_DEPENDENT_MODEL_IDS = ("fcf_yield", "composite_value", "quality_value")
 FCF_BASIS_CONVICTION_MULTIPLIER = 0.85
-_FCF_BASIS_NOTE_MARKERS = (
-    "fcf basis mismatch",
-    "fcf filing-aligned",
-)
+FCF_BASIS_MISMATCH_NOTE_MARKER = "fcf basis mismatch"
 
 _SIGNAL_RANK = {
     "strong_buy": 4,
@@ -40,10 +37,18 @@ def fcf_yield_dependent_model_passed(ticker_models: pd.DataFrame) -> bool:
     return bool(dependent["passed"].any())
 
 
-def fcf_action_note_declares_mismatch(action_note: str) -> bool:
+def action_note_has_fcf_basis_mismatch(action_note: str | None) -> bool:
     """True when an action note already surfaces an FCF basis mismatch."""
-    note = str(action_note or "").strip().lower()
-    return any(marker in note for marker in _FCF_BASIS_NOTE_MARKERS)
+    return FCF_BASIS_MISMATCH_NOTE_MARKER in str(action_note or "").strip().lower()
+
+
+def fcf_basis_enforcement_needed(
+    *,
+    action_note_mismatch: bool,
+    action_note: str | None = None,
+) -> bool:
+    """True when numeric predicates or persisted note text require FCF basis overlay."""
+    return action_note_mismatch or action_note_has_fcf_basis_mismatch(action_note)
 
 
 def fcf_basis_action_note_mismatch(
@@ -75,22 +80,16 @@ def fcf_basis_overlay_triggered(
     filing_screen_mismatch: bool = False,
     universe_divergence_flagged: bool = False,
     action_note_mismatch: bool = False,
-    action_note_declares_mismatch: bool = False,
 ) -> bool:
     """Flag when the mismatch note would fire, or 50% divergence with a yield pass.
 
     Filing/screen mismatch (25%), universe divergence (15%, same predicate as
-    ``FCF basis mismatch`` action notes), the shared action-note mismatch
-    predicate, and any existing ``FCF basis mismatch`` action-note text always
-    trigger the overlay so buy-tier signals cannot persist beside a cosmetic note.
-    The legacy 50% divergence path still requires a yield-dependent model pass.
+    ``FCF basis mismatch`` action notes), and the shared action-note mismatch
+    predicate always trigger the overlay so buy-tier signals cannot persist beside
+    a cosmetic note. The legacy 50% divergence path still requires a yield-dependent
+    model pass.
     """
-    if (
-        filing_screen_mismatch
-        or universe_divergence_flagged
-        or action_note_mismatch
-        or action_note_declares_mismatch
-    ):
+    if filing_screen_mismatch or universe_divergence_flagged or action_note_mismatch:
         return True
     if not divergence_flagged:
         return False
@@ -111,6 +110,55 @@ def cap_conviction_for_fcf_basis_overlay(conviction_score: float) -> float:
     return max(0.0, float(conviction_score) * FCF_BASIS_CONVICTION_MULTIPLIER)
 
 
+def fcf_export_enforcement_active(
+    *,
+    fcf_basis_overlay: bool = False,
+    action_note: str | None = None,
+    fcf_bundle: dict[str, Any] | None = None,
+    screen_ttm: float | None = None,
+) -> bool:
+    """True when export/snapshot paths must cap buy-tier signals for FCF basis notes."""
+    if fcf_basis_overlay:
+        return True
+    bundle = fcf_bundle or {}
+    numeric_mismatch = fcf_basis_action_note_mismatch(
+        bundle,
+        screen_ttm=screen_ttm,
+    )
+    return fcf_basis_enforcement_needed(
+        action_note_mismatch=numeric_mismatch,
+        action_note=action_note,
+    )
+
+
+def apply_fcf_export_enforcement(
+    *,
+    signal: str,
+    adjusted_signal: str,
+    conviction_score: float,
+    action_note: str | None = None,
+    fcf_basis_overlay: bool = False,
+    fcf_bundle: dict[str, Any] | None = None,
+    screen_ttm: float | None = None,
+) -> tuple[bool, str, float]:
+    """Re-apply FCF basis caps after research merge or stale overlay flags."""
+    if not fcf_export_enforcement_active(
+        fcf_basis_overlay=fcf_basis_overlay,
+        action_note=action_note,
+        fcf_bundle=fcf_bundle,
+        screen_ttm=screen_ttm,
+    ):
+        return bool(fcf_basis_overlay), adjusted_signal, float(conviction_score or 0.0)
+
+    capped = cap_signal_for_fcf_basis_overlay(signal)
+    merged = _more_conservative_signal(adjusted_signal, capped)
+    return (
+        True,
+        merged,
+        cap_conviction_for_fcf_basis_overlay(float(conviction_score or 0.0)),
+    )
+
+
 def _more_conservative_signal(current: str, candidate: str) -> str:
     current_rank = _SIGNAL_RANK.get(current, 0)
     candidate_rank = _SIGNAL_RANK.get(candidate, 0)
@@ -127,7 +175,6 @@ def apply_fcf_basis_overlay_to_signal(
     filing_screen_mismatch: bool = False,
     universe_divergence_flagged: bool = False,
     action_note_mismatch: bool = False,
-    action_note_declares_mismatch: bool = False,
 ) -> tuple[bool, str, float]:
     """Return overlay flag, conservative adjusted signal, and capped conviction."""
     base_adjusted = adjusted_signal or signal
@@ -138,7 +185,6 @@ def apply_fcf_basis_overlay_to_signal(
         filing_screen_mismatch=filing_screen_mismatch,
         universe_divergence_flagged=universe_divergence_flagged,
         action_note_mismatch=action_note_mismatch,
-        action_note_declares_mismatch=action_note_declares_mismatch,
     ):
         return False, base_adjusted, base_conviction
     capped_signal = cap_signal_for_fcf_basis_overlay(signal)
@@ -175,12 +221,12 @@ def enrich_signals_with_fcf_basis_overlay(
             screen_ttm=screen_ttm,
             divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
         )
-        action_note_mismatch = fcf_basis_action_note_mismatch(
-            fcf_bundle,
-            screen_ttm=screen_ttm,
-        )
-        action_note_declares_mismatch = fcf_action_note_declares_mismatch(
-            str(row.get("action_note") or "")
+        action_note_mismatch = fcf_basis_enforcement_needed(
+            action_note_mismatch=fcf_basis_action_note_mismatch(
+                fcf_bundle,
+                screen_ttm=screen_ttm,
+            ),
+            action_note=str(row.get("action_note") or ""),
         )
 
         existing = row.get("adjusted_signal")
@@ -196,7 +242,6 @@ def enrich_signals_with_fcf_basis_overlay(
             filing_screen_mismatch=mismatch,
             universe_divergence_flagged=bool(fcf_bundle.get("fcf_divergence_flagged")),
             action_note_mismatch=action_note_mismatch,
-            action_note_declares_mismatch=action_note_declares_mismatch,
             ticker_models=ticker_models,
             conviction_score=float(row.get("conviction_score") or 0.0),
             adjusted_signal=existing_adjusted,

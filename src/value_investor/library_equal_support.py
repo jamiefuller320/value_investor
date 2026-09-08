@@ -11,6 +11,7 @@ import pandas as pd
 
 from value_investor.exclusion_universe_archive_sim import run_exclusion_universe_archive_sim
 from value_investor.exit_timing_archive_sim import run_exit_timing_archive_sim
+from value_investor.library_dedupe import canonical_library_ticker
 from value_investor.library_near_miss_watch import write_library_near_miss_watch
 from value_investor.library_screen import screen_dir_for
 from value_investor.library_sim import save_library_run_snapshots
@@ -117,6 +118,61 @@ def admitted_buy_tier_rememo_targets(
     )
 
 
+def admitted_buy_tier_first_time_targets(
+    library_root: Path,
+    *,
+    market_id: str,
+) -> list[str]:
+    """Buy-tier tickers on this market with no ``research.md`` in its screen store."""
+    screen_dir = screen_dir_for(Path(library_root), market_id)
+    path = screen_dir / "latest_signals.csv"
+    if not path.exists():
+        return []
+    frame = pd.read_csv(path)
+    if frame.empty or "ticker" not in frame.columns or "signal" not in frame.columns:
+        return []
+    buy = frame.loc[frame["signal"].astype(str).str.lower().isin({"buy", "strong_buy"})]
+    research = screen_dir / "research"
+    missing: list[str] = []
+    for raw in buy["ticker"].tolist():
+        ticker = str(raw).strip()
+        if not ticker:
+            continue
+        if (research / ticker / "research.md").exists():
+            continue
+        key = canonical_library_ticker(ticker)
+        if research.is_dir() and any(
+            entry.is_dir()
+            and canonical_library_ticker(entry.name) == key
+            and (entry / "research.md").exists()
+            for entry in research.iterdir()
+        ):
+            continue
+        missing.append(ticker)
+    return missing
+
+
+def _flatten_equal_support_market(row: dict[str, Any]) -> dict[str, Any]:
+    near = row.get("near_miss") if isinstance(row.get("near_miss"), dict) else {}
+    rememo = row.get("rememo") if isinstance(row.get("rememo"), dict) else {}
+    first = row.get("first_time_memos") if isinstance(row.get("first_time_memos"), dict) else {}
+    archives = row.get("archives") if isinstance(row.get("archives"), dict) else {}
+    exclusion = archives.get("exclusion") if isinstance(archives.get("exclusion"), dict) else {}
+    return {
+        **row,
+        "buy_tier_not_now_count": near.get("buy_tier_not_now_count"),
+        "not_buy_tier_count": near.get("not_buy_tier_count"),
+        "hold_near_buy_count": near.get("hold_near_buy_count"),
+        "never_buy_tier_count": near.get("never_buy_tier_count"),
+        "rememo_eligible_count": rememo.get("eligible_count"),
+        "first_time_memo_count": first.get("missing_count"),
+        "exclusion_ready_for_priors": exclusion.get("ready_for_priors"),
+        "timing_signal_present": (row.get("timing") or {}).get("timing_signal_present")
+        if isinstance(row.get("timing"), dict)
+        else near.get("timing_signal_present"),
+    }
+
+
 def run_admitted_counterfactual_archives(
     library_root: Path,
     market_id: str,
@@ -191,7 +247,20 @@ def run_equal_support_for_market(
             )
         ),
         "sample": [{"ticker": t, "reason": rememo[t]} for t in sorted(rememo)[:20]],
-        "note": "Same body-lag rule as focus buy-tier; not 21-market memo spray.",
+        "note": (
+            "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed "
+            "here; weekday `ftse-library rememo` executes the bounded 3/day cap. "
+            "Not research_all_graduated / 21-market memo spray."
+        ),
+    }
+    first_time = admitted_buy_tier_first_time_targets(library_root, market_id=market_id)
+    out["first_time_memos"] = {
+        "missing_count": len(first_time),
+        "sample": first_time[:20],
+        "note": (
+            "Buy-tier names with no research.md on this market. "
+            "Sunday _research_markets prefers these before rememo; no weekday burst."
+        ),
     }
     return out
 
@@ -203,19 +272,29 @@ def run_equal_support_package(
     markets: list[str] | None = None,
     stamp_timing: bool = True,
     run_archives: bool = True,
+    census_only: bool = False,
     price_history: dict[str, pd.DataFrame] | None = None,
 ) -> dict[str, Any]:
-    """Apply the admitted-set package. Does not fork AI or apply knobs."""
+    """Apply the admitted-set package. Does not fork AI or apply knobs.
+
+    ``census_only`` refreshes ``equal_support_status.json`` without Yahoo timing
+    stamps or archive labs (weekday keep-fresh).
+    """
+    if census_only:
+        stamp_timing = False
+        run_archives = False
     wanted = markets or equal_support_markets_for_policy(policy)
     markets_out: dict[str, Any] = {}
     for market_id in wanted:
-        markets_out[market_id] = run_equal_support_for_market(
-            market_id,
-            library_root=Path(library_root),
-            policy=policy,
-            stamp_timing=stamp_timing,
-            run_archives=run_archives,
-            price_history=price_history,
+        markets_out[market_id] = _flatten_equal_support_market(
+            run_equal_support_for_market(
+                market_id,
+                library_root=Path(library_root),
+                policy=policy,
+                stamp_timing=stamp_timing,
+                run_archives=run_archives,
+                price_history=price_history,
+            )
         )
     payload = {
         "schema_version": 1,
@@ -234,6 +313,7 @@ def run_equal_support_package(
 
 __all__ = [
     "PACKAGE_FILENAME",
+    "admitted_buy_tier_first_time_targets",
     "admitted_buy_tier_rememo_targets",
     "equal_support_markets_for_policy",
     "run_admitted_counterfactual_archives",

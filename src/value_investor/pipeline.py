@@ -105,7 +105,10 @@ def _install_research_snapshot_hooks() -> None:
         _original_overlay = research_overlay.apply_research_overlay
 
         def _apply_research_overlay_with_snapshots(reports, documents):
+            from value_investor.summary import honour_fcf_action_note_enforcement
+
             updated = _original_overlay(reports, documents)
+            updated = [honour_fcf_action_note_enforcement(report) for report in updated]
             if documents:
                 output_dir = _output_dir_from_documents(documents)
                 sync_research_verdict_snapshots(output_dir, updated, documents)

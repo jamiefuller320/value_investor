@@ -8100,8 +8100,115 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260908-01",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "FOXT.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "FOXT.L"
+        ],
+        "market_id": "ftse_smallcap",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260908-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-08T14:21:39.151526+00:00",
+      "completed_at": "2026-09-08T14:22:06.435665+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "FOXT.L"
+        ],
+        "results": [
+          {
+            "ticker": "FOXT.L",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 55,
+              "filings_with_body": 50,
+              "indexed_without_body": 5
+            },
+            "after": {
+              "filings_total": 55,
+              "filings_with_body": 50,
+              "indexed_without_body": 5
+            },
+            "improved": false,
+            "regime": "uk_rns",
+            "filings_summary": {
+              "total": 55,
+              "annual": 8,
+              "interim": 2,
+              "trading_update": 2,
+              "other": 43,
+              "with_body": 50,
+              "period_coverage": {
+                "annual": {
+                  "total": 8,
+                  "with_body": 3
+                },
+                "interim": {
+                  "total": 2,
+                  "with_body": 2
+                },
+                "trading_update": {
+                  "total": 2,
+                  "with_body": 2
+                },
+                "other": {
+                  "total": 43,
+                  "with_body": 43
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 50,
+              "with_body_after": 50,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "FOXT.L",
+            "with_body_before": 50,
+            "with_body_after": 50,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-07T16:33:28.122096+00:00",
+  "updated_at": "2026-09-08T14:22:06.435677+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }

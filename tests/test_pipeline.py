@@ -39,6 +39,8 @@ from value_investor.scoring.fcf import (
     fcf_yield_pass_suppressed,
     parse_adjusted_eps_growth_pct,
     parse_interim_eps_decline_pct,
+    parse_screen_ttm_from_action_note,
+    screen_ttm_from_row,
     suppress_fcf_yield_passes,
 )
 from value_investor.scoring.fcf_basis_overlay import enrich_signals_with_fcf_basis_overlay
@@ -66,7 +68,11 @@ from value_investor.scoring.snapshot import (
 )
 from value_investor.sector_scoring import add_sector_scores
 from value_investor.storage import write_json
-from value_investor.summary import CompanyReport, build_company_reports
+from value_investor.summary import (
+    CompanyReport,
+    build_company_reports,
+    honour_fcf_action_note_enforcement,
+)
 
 
 def _minimal_report(**overrides) -> CompanyReport:
@@ -232,6 +238,84 @@ def test_sync_research_verdict_snapshots_writes_full_report(tmp_path: Path):
     assert written["model_failures"]["Financial Health"] == ["weak liquidity"]
     assert written["research_verdict"] == "accumulate"
     assert written["adjusted_signal"] == "strong_buy"
+
+
+def test_refresh_snapshot_honours_fcf_action_note_when_overlay_false(tmp_path: Path):
+    """HLN.L-style: stale overlay=false must not leave buy beside FCF mismatch note."""
+    sources_dir = tmp_path / "research" / "HLN.L" / "sources"
+    sources_dir.mkdir(parents=True)
+    write_json(
+        sources_dir / "screening_snapshot.json",
+        {
+            "ticker": "HLN.L",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "fcf_basis_overlay": False,
+            "conviction_score": 0.8022,
+            "action_note": (
+                "Buy — neutral timing | FCF basis mismatch: filing £2221M | screen TTM £1801.8M"
+            ),
+        },
+        compact=True,
+    )
+    doc = ResearchDocument(
+        ticker="HLN.L",
+        name="Haleon plc",
+        signal="buy",
+        version=2,
+        created_at="2026-09-04T00:00:00+00:00",
+        updated_at="2026-09-04T00:00:00+00:00",
+        mode="gap_fill",
+        research_verdict="accumulate",
+        research_risk_level="medium",
+        research_confidence=0.7,
+        research_rationale="Measured accumulation.",
+        research_path=str(tmp_path / "research" / "HLN.L" / "research.md"),
+    )
+
+    assert refresh_snapshot_from_document(tmp_path, doc) is True
+    written = json.loads((sources_dir / "screening_snapshot.json").read_text(encoding="utf-8"))
+    assert written["fcf_basis_overlay"] is True
+    assert written["adjusted_signal"] == "hold"
+    assert written["conviction_score"] == pytest.approx(0.8022 * 0.85)
+
+
+def test_sync_research_verdict_preserves_fcf_overlay_cap_for_hln_style_report(tmp_path: Path):
+    report = honour_fcf_action_note_enforcement(
+        _minimal_report(
+            ticker="HLN.L",
+            name="Haleon plc",
+            signal="buy",
+            fcf_basis_overlay=False,
+            adjusted_signal="buy",
+            conviction_score=0.8022,
+            action_note=(
+                "Buy — neutral timing | FCF basis mismatch: filing £2221M | screen TTM £1801.8M"
+            ),
+        )
+    )
+    doc = ResearchDocument(
+        ticker="HLN.L",
+        name="Haleon plc",
+        signal="buy",
+        version=2,
+        created_at="2026-09-04T00:00:00+00:00",
+        updated_at="2026-09-04T00:00:00+00:00",
+        mode="gap_fill",
+        research_verdict="accumulate",
+        research_risk_level="medium",
+        research_confidence=0.7,
+        research_path=str(tmp_path / "research" / "HLN.L" / "research.md"),
+    )
+
+    sync_research_verdict_snapshots(tmp_path, [report], [doc])
+    written = json.loads(
+        (tmp_path / "research" / "HLN.L" / "sources" / "screening_snapshot.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert written["fcf_basis_overlay"] is True
+    assert written["adjusted_signal"] == "hold"
 
 
 def test_apply_research_overlay_syncs_screening_snapshot(tmp_path: Path):
@@ -1040,6 +1124,87 @@ def test_enrich_signals_with_fcf_basis_overlay_honours_universe_divergence_note(
     assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
     assert enriched.iloc[0]["adjusted_signal"] == "hold"
     assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.72 * 0.85)
+
+
+def test_enrich_signals_with_fcf_basis_overlay_caps_buy_on_dnlm_style_mismatch(
+    tmp_path: Path,
+):
+    """Pipeline export must cap buy -> hold when universe-level FCF bases diverge."""
+    sources = tmp_path / "research" / "DNLM.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    financials = {
+        "ticker": "DNLM.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 255_900_000.0,
+                "Capital Expenditure": -44_500_000.0,
+                "Free Cash Flow": 211_400_000.0,
+            }
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    (filings / "annual_results.txt").write_text(
+        "Company-adjusted free cash flow of £171.0m after working-capital normalisation",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings / "annual_results.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "DNLM.L",
+                "signal": "buy",
+                "conviction_score": 0.75,
+                "free_cashflow": 171_000_000.0,
+                "free_cashflow_screen_ttm": 163_900_000.0,
+                "action_note": (
+                    "Buy | FCF basis mismatch: filing £211.4M | screen TTM £163.9M | "
+                    "company-adj £171M"
+                ),
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "DNLM.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_fcf_basis_overlay(signals, model_results, output_dir=tmp_path)
+
+    assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "hold"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.6375)
+
+
+def test_parse_screen_ttm_from_action_note_gfrd_style():
+    """Stale notes still expose Yahoo TTM after free_cashflow_screen_ttm is lost."""
+    note = "Buy — neutral timing | FCF basis mismatch: filing £63.3M | screen TTM £50.0M"
+    assert parse_screen_ttm_from_action_note(note) == pytest.approx(50_000_000.0)
+    row = pd.Series({"free_cashflow": 63_300_000.0, "action_note": note})
+    assert screen_ttm_from_row(row) == pytest.approx(50_000_000.0)
 
 
 def test_enrich_signals_with_fcf_basis_overlay_honours_action_note_text_gfrd_style(

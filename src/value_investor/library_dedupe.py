@@ -114,6 +114,30 @@ def select_deduped_research_targets(
     return selected, skipped
 
 
+def prefer_first_time_research_queues(
+    per_market_queues: dict[str, list[Any]],
+    already_researched: set[str] | None,
+) -> dict[str, list[Any]]:
+    """Put names with no memo ahead of rememo/refresh inside each market queue.
+
+    Sunday round-robin still starts at focus. This only stops a high-conviction
+    rememo from crowding out a first-time admitted buy-tier name (N114).
+    """
+    already = {canonical_library_ticker(t) for t in (already_researched or set())}
+    ordered: dict[str, list[Any]] = {}
+    for mid, queue in per_market_queues.items():
+        first: list[Any] = []
+        rest: list[Any] = []
+        for report in queue or []:
+            key = canonical_library_ticker(getattr(report, "ticker", ""))
+            if key and key not in already:
+                first.append(report)
+            else:
+                rest.append(report)
+        ordered[mid] = first + rest
+    return ordered
+
+
 def summarize_ticker_overlaps(
     market_tickers: dict[str, Iterable[str]],
 ) -> dict[str, Any]:
