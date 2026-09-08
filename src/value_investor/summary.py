@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import ast
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -42,6 +42,7 @@ from value_investor.scoring.fcf import (
 )
 from value_investor.scoring.fcf_basis_overlay import (
     apply_fcf_basis_overlay_to_signal,
+    apply_fcf_export_enforcement,
     fcf_basis_action_note_mismatch,
     fcf_basis_enforcement_needed,
 )
@@ -685,6 +686,44 @@ def _brief_summary(
             )
 
     return " ".join(parts)
+
+
+def honour_fcf_action_note_enforcement(report: CompanyReport) -> CompanyReport:
+    """Re-apply FCF basis caps when action notes or flags require export enforcement."""
+    adjusted = str(report.adjusted_signal or report.signal)
+    fcf = report.fcf if isinstance(report.fcf, dict) else {}
+    screen_ttm = fcf.get("screen_ttm")
+    if screen_ttm is None:
+        screen_ttm = screen_ttm_from_row(
+            pd.Series(
+                {
+                    "free_cashflow_screen_ttm": report.key_metrics.get("free_cashflow_screen_ttm"),
+                    "free_cashflow": report.key_metrics.get("free_cashflow"),
+                }
+            )
+        )
+
+    overlay, adjusted, conviction = apply_fcf_export_enforcement(
+        signal=report.signal,
+        adjusted_signal=adjusted,
+        conviction_score=report.conviction_score,
+        action_note=report.action_note,
+        fcf_basis_overlay=report.fcf_basis_overlay,
+        fcf_bundle=fcf if fcf else None,
+        screen_ttm=screen_ttm,
+    )
+    if (
+        overlay == report.fcf_basis_overlay
+        and adjusted == (report.adjusted_signal or report.signal)
+        and conviction == report.conviction_score
+    ):
+        return report
+    return replace(
+        report,
+        fcf_basis_overlay=overlay,
+        adjusted_signal=adjusted,
+        conviction_score=conviction,
+    )
 
 
 def build_company_reports(

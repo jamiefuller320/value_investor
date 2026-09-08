@@ -110,6 +110,55 @@ def cap_conviction_for_fcf_basis_overlay(conviction_score: float) -> float:
     return max(0.0, float(conviction_score) * FCF_BASIS_CONVICTION_MULTIPLIER)
 
 
+def fcf_export_enforcement_active(
+    *,
+    fcf_basis_overlay: bool = False,
+    action_note: str | None = None,
+    fcf_bundle: dict[str, Any] | None = None,
+    screen_ttm: float | None = None,
+) -> bool:
+    """True when export/snapshot paths must cap buy-tier signals for FCF basis notes."""
+    if fcf_basis_overlay:
+        return True
+    bundle = fcf_bundle or {}
+    numeric_mismatch = fcf_basis_action_note_mismatch(
+        bundle,
+        screen_ttm=screen_ttm,
+    )
+    return fcf_basis_enforcement_needed(
+        action_note_mismatch=numeric_mismatch,
+        action_note=action_note,
+    )
+
+
+def apply_fcf_export_enforcement(
+    *,
+    signal: str,
+    adjusted_signal: str,
+    conviction_score: float,
+    action_note: str | None = None,
+    fcf_basis_overlay: bool = False,
+    fcf_bundle: dict[str, Any] | None = None,
+    screen_ttm: float | None = None,
+) -> tuple[bool, str, float]:
+    """Re-apply FCF basis caps after research merge or stale overlay flags."""
+    if not fcf_export_enforcement_active(
+        fcf_basis_overlay=fcf_basis_overlay,
+        action_note=action_note,
+        fcf_bundle=fcf_bundle,
+        screen_ttm=screen_ttm,
+    ):
+        return bool(fcf_basis_overlay), adjusted_signal, float(conviction_score or 0.0)
+
+    capped = cap_signal_for_fcf_basis_overlay(signal)
+    merged = _more_conservative_signal(adjusted_signal, capped)
+    return (
+        True,
+        merged,
+        cap_conviction_for_fcf_basis_overlay(float(conviction_score or 0.0)),
+    )
+
+
 def _more_conservative_signal(current: str, candidate: str) -> str:
     current_rank = _SIGNAL_RANK.get(current, 0)
     candidate_rank = _SIGNAL_RANK.get(candidate, 0)

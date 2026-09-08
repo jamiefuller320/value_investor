@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from pathlib import Path
 
 import pandas as pd
@@ -30,7 +31,7 @@ from value_investor.scoring.fcf import (
 )
 from value_investor.scoring.sector_overrides import AGRICULTURE_COMMODITIES_SECTOR
 from value_investor.signals import Signal, assign_signal
-from value_investor.summary import build_company_reports
+from value_investor.summary import build_company_reports, honour_fcf_action_note_enforcement
 
 
 def _signal_row(**overrides) -> dict:
@@ -1306,6 +1307,73 @@ def test_build_company_reports_fcf_basis_overlay_caps_buy_when_note_mismatch_dnl
     assert "filing £211.4M" in snapshot["action_note"]
     assert "screen TTM £163.9M" in snapshot["action_note"]
     assert "company-adj £171M" in snapshot["action_note"]
+
+
+def test_honour_fcf_action_note_enforcement_caps_hln_style_buy(tmp_path: Path):
+    """Export helper must fire overlay when note mentions mismatch but flag is false."""
+    sources = tmp_path / "research" / "HLN.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 2_634_000_000.0,
+                        "Capital Expenditure": -413_000_000.0,
+                        "Free Cash Flow": 2_221_000_000.0,
+                    }
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="HLN.L",
+                name="Haleon plc",
+                sector="Healthcare",
+                signal="buy",
+                conviction_score=0.8022,
+                free_cashflow=2_221_000_000.0,
+                free_cashflow_screen_ttm=1_801_800_000.0,
+                fcf_basis_overlay=False,
+                action_note=(
+                    "Buy — neutral timing | FCF basis mismatch: filing £2221M | screen TTM £1801.8M"
+                ),
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "HLN.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    assert report.fcf_basis_overlay is True
+    assert report.adjusted_signal == "hold"
+
+    stale = honour_fcf_action_note_enforcement(
+        replace(
+            report,
+            fcf_basis_overlay=False,
+            adjusted_signal="buy",
+            conviction_score=0.8022,
+        )
+    )
+    assert stale.fcf_basis_overlay is True
+    assert stale.adjusted_signal == "hold"
+    assert stale.conviction_score == pytest.approx(0.8022 * 0.85)
 
 
 def test_build_company_reports_reapplies_fcf_overlay_when_flag_true_but_buy_remains(
