@@ -71,7 +71,6 @@ def apply_research_overlay(
         # Preserve FCF basis caps when the screen already applied them.
         if report.fcf_basis_overlay:
             from value_investor.scoring.fcf_basis_overlay import (
-                cap_conviction_for_fcf_basis_overlay,
                 cap_signal_for_fcf_basis_overlay,
             )
 
@@ -80,10 +79,8 @@ def apply_research_overlay(
                 cap_signal_for_fcf_basis_overlay(report.signal),
                 report.adjusted_signal,
             )
-            conviction = min(
-                conviction,
-                cap_conviction_for_fcf_basis_overlay(report.conviction_score),
-            )
+            # Screening/export paths store post-cap conviction when the overlay flag is set.
+            conviction = min(conviction, report.conviction_score)
         research_note = format_research_action_note(
             verdict=verdict,
             risk_level=doc.research_risk_level,

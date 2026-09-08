@@ -303,6 +303,7 @@ class CompanyReport:
             interim_eps_decline_pct=data.get("interim_eps_decline_pct"),
             adjusted_eps_growth_pct=data.get("adjusted_eps_growth_pct"),
         )
+        return report
 
 
 def _parse_list_field(value: Any) -> list[str]:
