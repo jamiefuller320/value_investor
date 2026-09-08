@@ -55,7 +55,10 @@ from value_investor.scoring.fcf import (
     enrich_universe_with_filing_metrics,
     suppress_fcf_yield_passes,
 )
-from value_investor.scoring.fcf_basis_overlay import enrich_signals_with_fcf_basis_overlay
+from value_investor.scoring.fcf_basis_overlay import (
+    enrich_signals_with_fcf_basis_overlay,
+    honour_fcf_action_notes_on_signals,
+)
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
 from value_investor.scoring.healthcare_price_erosion_overlay import (
     enrich_signals_with_healthcare_price_erosion_overlay,
@@ -426,6 +429,7 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
         result.model_results,
         output_dir=output_dir,
     )
+    signals_out = honour_fcf_action_notes_on_signals(signals_out)
     history = load_signal_history(output_dir)
     signals_out = enrich_signals_with_conviction_timing_overlay(
         signals_out,

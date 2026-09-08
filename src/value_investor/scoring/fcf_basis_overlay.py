@@ -256,3 +256,41 @@ def enrich_signals_with_fcf_basis_overlay(
     out["adjusted_signal"] = adjusted
     out["conviction_score"] = convictions
     return out
+
+
+def honour_fcf_action_notes_on_signals(signals: pd.DataFrame) -> pd.DataFrame:
+    """Re-sync signal columns when persisted action notes require FCF basis overlay."""
+    if signals.empty:
+        return signals
+
+    out = signals.copy()
+    for index, row in out.iterrows():
+        action_note = str(row.get("action_note") or "")
+        if not fcf_basis_enforcement_needed(
+            action_note_mismatch=False,
+            action_note=action_note,
+        ):
+            continue
+
+        signal = str(row.get("signal") or "hold")
+        existing = row.get("adjusted_signal")
+        existing_adjusted = (
+            str(existing)
+            if existing is not None and not (isinstance(existing, float) and pd.isna(existing))
+            else None
+        )
+        overlay, merged_adjusted, conviction = apply_fcf_export_enforcement(
+            signal=signal,
+            adjusted_signal=existing_adjusted or signal,
+            conviction_score=float(row.get("conviction_score") or 0.0),
+            action_note=action_note,
+            fcf_basis_overlay=bool(row.get("fcf_basis_overlay")),
+            screen_ttm=screen_ttm_from_row(row),
+        )
+        if not overlay:
+            continue
+        out.at[index, "fcf_basis_overlay"] = overlay
+        out.at[index, "adjusted_signal"] = merged_adjusted
+        out.at[index, "conviction_score"] = conviction
+
+    return out
