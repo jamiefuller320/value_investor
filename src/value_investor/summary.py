@@ -40,7 +40,10 @@ from value_investor.scoring.fcf import (
     resolve_statutory_earnings_growth,
     screen_ttm_from_row,
 )
-from value_investor.scoring.fcf_basis_overlay import apply_fcf_basis_overlay_to_signal
+from value_investor.scoring.fcf_basis_overlay import (
+    apply_fcf_basis_overlay_to_signal,
+    fcf_basis_action_note_mismatch,
+)
 from value_investor.scoring.healthcare_overlay import (
     apply_healthcare_overlay_to_signal,
     piotroski_score_for_ticker,
@@ -1065,21 +1068,33 @@ def build_company_reports(
             )
 
         fcf_basis_overlay_flag = row.get("fcf_basis_overlay")
-        if fcf_basis_overlay_flag is not None and not (
-            isinstance(fcf_basis_overlay_flag, float) and pd.isna(fcf_basis_overlay_flag)
+        fcf_action_note_mismatch = fcf_basis_action_note_mismatch(
+            fcf_bundle,
+            screen_ttm=screen_ttm,
+            canonical=free_cashflow,
+            fcf_definition_divergence=fcf_definition_divergence,
+        )
+        filing_screen_mismatch = bool(fcf_bundle.get("filing_screen_mismatch")) or (
+            fcf_filing_screen_mismatch(
+                filing_aligned=fcf_bundle.get("filing_aligned"),
+                screen_ttm=screen_ttm,
+                divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
+            )
+        )
+        if (
+            fcf_basis_overlay_flag is not None
+            and not (isinstance(fcf_basis_overlay_flag, float) and pd.isna(fcf_basis_overlay_flag))
+            and bool(fcf_basis_overlay_flag)
         ):
-            fcf_basis_overlay = bool(fcf_basis_overlay_flag)
+            fcf_basis_overlay = True
         else:
             fcf_basis_overlay, adjusted_signal_str, conviction_score = (
                 apply_fcf_basis_overlay_to_signal(
                     signal,
                     divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
-                    filing_screen_mismatch=bool(fcf_bundle.get("filing_screen_mismatch"))
-                    or fcf_filing_screen_mismatch(
-                        filing_aligned=fcf_bundle.get("filing_aligned"),
-                        screen_ttm=screen_ttm,
-                        divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
-                    ),
+                    filing_screen_mismatch=filing_screen_mismatch,
+                    universe_divergence_flagged=fcf_divergence_flagged,
+                    action_note_mismatch=fcf_action_note_mismatch,
                     ticker_models=ticker_models,
                     conviction_score=conviction_score,
                     adjusted_signal=adjusted_signal_str,
