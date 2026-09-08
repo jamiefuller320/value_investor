@@ -1629,6 +1629,77 @@ def test_honour_fcf_action_notes_on_signals_caps_tpk_style_stale_row():
     assert honoured.iloc[0]["conviction_score"] == pytest.approx(0.4026 * 0.85)
 
 
+def test_honour_fcf_action_notes_on_signals_caps_wix_style_stale_row():
+    """WIX.L: pipeline export must honour FCF mismatch notes when overlay flag is stale."""
+    note = (
+        "Buy — neutral timing | FCF basis mismatch: filing £168.7M | screen TTM £133.9M | "
+        "Earnings growth basis divergence >300 bps: statutory 118.2% vs filing core 99.8%"
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "WIX.L",
+                "signal": "buy",
+                "adjusted_signal": "buy",
+                "conviction_score": 0.8304,
+                "fcf_basis_overlay": False,
+                "action_note": note,
+            }
+        ]
+    )
+
+    honoured = honour_fcf_action_notes_on_signals(signals)
+
+    assert bool(honoured.iloc[0]["fcf_basis_overlay"]) is True
+    assert honoured.iloc[0]["adjusted_signal"] == "hold"
+    assert honoured.iloc[0]["conviction_score"] == pytest.approx(0.8304 * 0.85)
+
+
+def test_honour_fcf_action_notes_on_signals_caps_wix_style_numeric_row_without_note():
+    """WIX.L-style row FCF columns must cap buy even before action_note is stamped."""
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "WIX.L",
+                "signal": "buy",
+                "adjusted_signal": "buy",
+                "conviction_score": 0.8304,
+                "fcf_basis_overlay": False,
+                "action_note": "Buy — neutral timing",
+                "free_cashflow": 168_700_000.0,
+                "free_cashflow_screen_ttm": 133_900_000.0,
+            }
+        ]
+    )
+
+    honoured = honour_fcf_action_notes_on_signals(signals)
+
+    assert bool(honoured.iloc[0]["fcf_basis_overlay"]) is True
+    assert honoured.iloc[0]["adjusted_signal"] == "hold"
+
+
+def test_write_screening_snapshot_enforces_wix_style_fcf_note(tmp_path: Path):
+    """Persisted WIX.L snapshots must not ship buy beside an FCF mismatch action note."""
+    sources = tmp_path / "research" / "WIX.L" / "sources"
+    snapshot = {
+        "ticker": "WIX.L",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "fcf_basis_overlay": False,
+        "conviction_score": 0.8304,
+        "action_note": (
+            "Buy — neutral timing | FCF basis mismatch: filing £168.7M | screen TTM £133.9M"
+        ),
+        "fcf": None,
+        "key_metrics": {"FCF": "168700000.0", "free_cashflow_screen_ttm": "133900000.0"},
+    }
+    write_screening_snapshot(sources, snapshot)
+    written = json.loads((sources / "screening_snapshot.json").read_text(encoding="utf-8"))
+    assert written["fcf_basis_overlay"] is True
+    assert written["adjusted_signal"] == "hold"
+    assert written["conviction_score"] == pytest.approx(0.8304 * 0.85)
+
+
 def test_enrich_signals_with_fcf_basis_overlay_honours_tpk_style_universe_gap(tmp_path: Path):
     """TPK.L-style 24% filing/screen gap must cap buy-tier signals in the pipeline."""
     sources = tmp_path / "research" / "TPK.L" / "sources"

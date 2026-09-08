@@ -298,8 +298,25 @@ def honour_fcf_action_notes_on_signals(signals: pd.DataFrame) -> pd.DataFrame:
     out = signals.copy()
     for index, row in out.iterrows():
         action_note = str(row.get("action_note") or "")
+        screen_ttm = screen_ttm_from_row(row)
+        row_fcf = row.get("fcf") if isinstance(row.get("fcf"), dict) else None
+        fcf_bundle = _fcf_bundle_for_enforcement(
+            row_fcf,
+            action_note=action_note,
+            screen_ttm=screen_ttm,
+        )
+        filing = fcf_bundle.get("filing_aligned")
+        if filing is None:
+            from value_investor.scoring.fcf import _float_or_none
+
+            row_filing = _float_or_none(row.get("free_cashflow"))
+            if row_filing is not None:
+                fcf_bundle["filing_aligned"] = row_filing
         if not fcf_basis_enforcement_needed(
-            action_note_mismatch=False,
+            action_note_mismatch=fcf_basis_action_note_mismatch(
+                fcf_bundle,
+                screen_ttm=screen_ttm,
+            ),
             action_note=action_note,
         ):
             continue
@@ -310,12 +327,6 @@ def honour_fcf_action_notes_on_signals(signals: pd.DataFrame) -> pd.DataFrame:
             str(existing)
             if existing is not None and not (isinstance(existing, float) and pd.isna(existing))
             else None
-        )
-        row_fcf = row.get("fcf") if isinstance(row.get("fcf"), dict) else None
-        fcf_bundle = _fcf_bundle_for_enforcement(
-            row_fcf,
-            action_note=action_note,
-            screen_ttm=screen_ttm_from_row(row),
         )
         overlay, merged_adjusted, conviction = apply_fcf_export_enforcement(
             signal=signal,
