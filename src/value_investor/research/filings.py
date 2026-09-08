@@ -147,6 +147,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "VIG.VI": [
         "https://group.vig/media/kyij42ig/2025-vig-group-annual-report.pdf",
     ],
+    # euro_depth IWB blocker — APAM.AS parked awaiting_periodic_report; FY2025 annual PDF.
     "APAM.AS": [
         "https://www.aperam.com/sites/default/files/documents/Aperam_AnnualReport_2025.pdf",
     ],
