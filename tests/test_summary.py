@@ -1557,6 +1557,109 @@ def test_honour_fcf_action_note_enforcement_caps_mony_style_strong_buy():
     assert snapshot["conviction_score"] == pytest.approx(0.5388 * 0.85)
 
 
+def test_honour_fcf_action_note_enforcement_caps_rs1_style_buy():
+    """RS1.L: buy-tier note below 25% filing gap must cap to hold when fcf is absent."""
+    note = (
+        "Buy — wait for pullback | FCF basis mismatch: filing £210.9M | screen TTM £168M | "
+        "FCF definition divergence: statutory 1.99× vs management 2.81× dividend coverage | "
+        "Earnings growth basis divergence >300 bps: statutory 6.5% vs filing core -3.2%"
+    )
+    report = CompanyReport.from_dict(
+        {
+            "ticker": "RS1.L",
+            "name": "RS Group plc",
+            "sector": "Industrials",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "models_passed": 11,
+            "model_count": 22,
+            "composite_score": 0.5,
+            "families_passed": 5,
+            "data_quality_score": 1.0,
+            "metrics_present": 20,
+            "metrics_total": 20,
+            "weeks_at_signal": 1,
+            "signal_trend": "stable",
+            "conviction_score": 0.51238,
+            "stability_label": "building",
+            "timing_signal": "neutral",
+            "timing_score": 0.5,
+            "action_note": note,
+            "fcf_basis_overlay": False,
+            "fcf": None,
+            "summary": "Buy (11/22 models).",
+            "passed_models": [],
+            "key_metrics": {},
+        }
+    )
+
+    enforced = honour_fcf_action_note_enforcement(report)
+    assert enforced.fcf_basis_overlay is True
+    assert enforced.adjusted_signal == "hold"
+    assert enforced.conviction_score == pytest.approx(0.51238 * 0.85)
+
+    snapshot = report.to_dict()
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "hold"
+
+
+def test_apply_research_overlay_with_fcf_enforcement_caps_rs1_style_buy():
+    """Research overlay must not restore buy when FCF mismatch note is present."""
+    from value_investor.research.document import ResearchDocument
+
+    note = (
+        "Buy — wait for pullback | FCF basis mismatch: filing £210.9M | screen TTM £168M | "
+        "FCF definition divergence: statutory 1.99× vs management 2.81× dividend coverage"
+    )
+    stale = CompanyReport.from_dict(
+        {
+            "ticker": "RS1.L",
+            "name": "RS Group plc",
+            "sector": "Industrials",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "models_passed": 11,
+            "model_count": 22,
+            "composite_score": 0.5,
+            "families_passed": 5,
+            "data_quality_score": 1.0,
+            "metrics_present": 20,
+            "metrics_total": 20,
+            "weeks_at_signal": 1,
+            "signal_trend": "stable",
+            "conviction_score": 0.51238,
+            "stability_label": "building",
+            "timing_signal": "neutral",
+            "timing_score": 0.5,
+            "action_note": note,
+            "fcf_basis_overlay": False,
+            "fcf": None,
+            "summary": "Buy (11/22 models).",
+            "passed_models": [],
+            "key_metrics": {},
+        }
+    )
+    doc = ResearchDocument(
+        ticker="RS1.L",
+        name="RS Group plc",
+        signal="buy",
+        version=2,
+        created_at="2026-09-06T00:00:00+00:00",
+        updated_at="2026-09-06T00:00:00+00:00",
+        mode="gap_fill",
+        research_verdict="accumulate",
+        research_risk_level="medium",
+        research_confidence=0.7,
+        research_rationale="Measured accumulation.",
+        research_path="docs/research/RS1.L.md",
+    )
+
+    overlaid = apply_research_overlay_with_fcf_enforcement([stale], [doc])[0]
+    assert overlaid.fcf_basis_overlay is True
+    assert overlaid.adjusted_signal == "hold"
+    assert overlaid.conviction_score == pytest.approx(0.51238 * 0.85)
+
+
 def test_export_enforced_report_dicts_honours_mony_style_stale_row():
     """Cached email_reports rows must not ship strong_buy beside an FCF mismatch note."""
     from value_investor.summary import export_enforced_report_dicts
@@ -1591,6 +1694,44 @@ def test_export_enforced_report_dicts_honours_mony_style_stale_row():
     assert exported["fcf_basis_overlay"] is True
     assert exported["adjusted_signal"] == "buy"
     assert exported["conviction_score"] == pytest.approx(0.5388 * 0.85)
+
+
+def test_export_enforced_report_dicts_honours_rs1_style_stale_row():
+    """RS1.L-style cached rows must not ship buy beside an FCF mismatch note."""
+    from value_investor.summary import export_enforced_report_dicts
+
+    stale = {
+        "ticker": "RS1.L",
+        "name": "RS Group plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "fcf_basis_overlay": False,
+        "conviction_score": 0.51238,
+        "action_note": (
+            "Buy — wait for pullback | FCF basis mismatch: filing £210.9M | "
+            "screen TTM £168M | FCF definition divergence: statutory 1.99× vs "
+            "management 2.81× dividend coverage"
+        ),
+        "models_passed": 11,
+        "model_count": 22,
+        "composite_score": 0.5,
+        "families_passed": 5,
+        "data_quality_score": 1.0,
+        "metrics_present": 20,
+        "metrics_total": 20,
+        "weeks_at_signal": 1,
+        "signal_trend": "stable",
+        "stability_label": "building",
+        "timing_signal": "neutral",
+        "timing_score": 0.5,
+        "summary": "Buy (11/22 models).",
+        "passed_models": [],
+        "key_metrics": {},
+    }
+    exported = export_enforced_report_dicts([stale])[0]
+    assert exported["fcf_basis_overlay"] is True
+    assert exported["adjusted_signal"] == "hold"
+    assert exported["conviction_score"] == pytest.approx(0.51238 * 0.85)
 
 
 def test_build_company_reports_exports_fcf_basis_overlay_for_mony_style_note(

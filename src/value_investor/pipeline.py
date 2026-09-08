@@ -155,9 +155,9 @@ def _output_dir_from_documents(documents) -> Path:
 _install_research_snapshot_hooks()
 
 try:
-    from value_investor.summary import _install_fcf_export_hooks
+    from value_investor.summary import ensure_fcf_export_hooks
 
-    _install_fcf_export_hooks()
+    ensure_fcf_export_hooks()
 except ImportError:
     pass
 
