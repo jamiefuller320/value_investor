@@ -318,6 +318,52 @@ def test_sync_research_verdict_preserves_fcf_overlay_cap_for_hln_style_report(tm
     assert written["adjusted_signal"] == "hold"
 
 
+def test_publish_load_reports_enforces_mony_style_fcf_note(tmp_path: Path):
+    """Dashboard publish must cap stale email_reports rows with FCF mismatch notes."""
+    from value_investor.publish import _load_reports
+    from value_investor.storage import write_json
+
+    write_json(
+        tmp_path / "email_reports.json",
+        [
+            {
+                "ticker": "MONY.L",
+                "name": "MONY Group plc",
+                "signal": "strong_buy",
+                "adjusted_signal": "strong_buy",
+                "fcf_basis_overlay": False,
+                "conviction_score": 0.5388,
+                "action_note": (
+                    "Strong Buy — neutral timing | FCF basis mismatch: filing £98.1M | "
+                    "screen TTM £80M"
+                ),
+                "models_passed": 15,
+                "model_count": 22,
+                "composite_score": 0.7072,
+                "families_passed": 5,
+                "data_quality_score": 1.0,
+                "metrics_present": 20,
+                "metrics_total": 20,
+                "weeks_at_signal": 2,
+                "signal_trend": "stable",
+                "stability_label": "building",
+                "timing_signal": "neutral",
+                "timing_score": 0.5,
+                "summary": "Strong Buy (15/22 models).",
+                "passed_models": [],
+                "key_metrics": {},
+            }
+        ],
+        compact=True,
+    )
+
+    reports, _run_at = _load_reports(tmp_path)
+    mony = next(row for row in reports if row["ticker"] == "MONY.L")
+    assert mony["fcf_basis_overlay"] is True
+    assert mony["adjusted_signal"] == "buy"
+    assert mony["conviction_score"] == pytest.approx(0.5388 * 0.85)
+
+
 def test_apply_research_overlay_syncs_screening_snapshot(tmp_path: Path):
     report = _minimal_report()
     doc = ResearchDocument(
