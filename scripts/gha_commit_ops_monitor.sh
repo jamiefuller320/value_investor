@@ -81,7 +81,13 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
     fi
   done
 
-  git add -- "${ALL_FILES[@]}"
+  existing=()
+  for path in "${ALL_FILES[@]}"; do
+    if [ -e "$path" ]; then
+      existing+=("$path")
+    fi
+  done
+  git add -- "${existing[@]}"
   if git diff --cached --quiet; then
     echo "No ops monitor artifact delta"
     exit 0
