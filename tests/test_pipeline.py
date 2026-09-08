@@ -920,6 +920,75 @@ def test_enrich_signals_with_fcf_basis_overlay_caps_yield_inflated_strong_buy(tm
     assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.51)
 
 
+def test_enrich_signals_with_fcf_basis_overlay_honours_action_note_mismatch_bree_style(
+    tmp_path: Path,
+):
+    """Filing/screen can agree while company-adjusted diverges — overlay must still cap."""
+    sources = tmp_path / "research" / "BREE.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    financials = {
+        "ticker": "BREE.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 150_000_000.0,
+                "Capital Expenditure": -44_200_000.0,
+                "Free Cash Flow": 105_800_000.0,
+            }
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    (filings / "ir_results.txt").write_text(
+        "Free Cash Flow of £133.2m before lease and acquisition adjustments",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings / "ir_results.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "BREE.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.7,
+                "free_cashflow": 107_800_000.0,
+                "free_cashflow_screen_ttm": 107_800_000.0,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "BREE.L",
+                "model_id": "graham_enterprising",
+                "model_name": "Graham Enterprising",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_fcf_basis_overlay(signals, model_results, output_dir=tmp_path)
+
+    assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.595)
+
+
 def test_enrich_signals_with_fcf_basis_overlay_honours_universe_divergence_note(
     tmp_path: Path,
 ):

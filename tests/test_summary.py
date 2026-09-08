@@ -1060,6 +1060,88 @@ def test_build_company_reports_exports_fcf_basis_overlay_for_fgp(tmp_path: Path)
     assert "company-adj £113.5M" in snapshot["action_note"]
 
 
+def _bree_financials() -> dict:
+    return {
+        "ticker": "BREE.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 150_000_000.0,
+                "Capital Expenditure": -44_200_000.0,
+                "Free Cash Flow": 105_800_000.0,
+            }
+        },
+    }
+
+
+def _bree_research_sources(tmp_path: Path) -> None:
+    sources = tmp_path / "research" / "BREE.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(_bree_financials()), encoding="utf-8"
+    )
+    (filings / "ir_results.txt").write_text(
+        "Free Cash Flow of £133.2m before lease and acquisition adjustments",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings / "ir_results.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_build_company_reports_fcf_basis_overlay_when_company_adj_diverges_bree_style(
+    tmp_path: Path,
+):
+    _bree_research_sources(tmp_path)
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="BREE.L",
+                name="Breedon Group plc",
+                sector="Basic Materials",
+                signal="strong_buy",
+                conviction_score=0.7,
+                free_cashflow=107_800_000.0,
+                free_cashflow_screen_ttm=107_800_000.0,
+                fcf_basis_overlay=False,
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "BREE.L",
+                "model_id": "graham_enterprising",
+                "model_name": "Graham Enterprising",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert "FCF basis mismatch" in snapshot["action_note"]
+    assert "filing £105.8M" in snapshot["action_note"]
+    assert "screen TTM £107.8M" in snapshot["action_note"]
+    assert "company-adj £133.2M" in snapshot["action_note"]
+
+
 def _bowl_financials() -> dict:
     return {
         "ticker": "BOWL.L",
