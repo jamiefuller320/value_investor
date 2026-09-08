@@ -530,6 +530,7 @@ def _ingest_single_library_target(
     max_bodies: int = 20,
     canonical_only: bool | None = None,
     deadline_monotonic: float | None = None,
+    allow_ocr: bool = True,
 ) -> dict[str, Any]:
     screen_dir = screen_dir_for(library_root, market_id)
     store = ResearchStore(screen_dir)
@@ -564,6 +565,7 @@ def _ingest_single_library_target(
             market=market_id,
             deepen_history=deepen_history,
             deadline_monotonic=deadline_monotonic,
+            allow_ocr=allow_ocr,
         )
         ticker_budget_hit = deadline_reached(deadline_monotonic)
     filings_dir = sources_dir / "filings"
@@ -574,6 +576,7 @@ def _ingest_single_library_target(
             company_name=target.name,
             max_bodies=max_bodies,
             deadline_monotonic=deadline_monotonic,
+            allow_ocr=allow_ocr,
         )
         ticker_budget_hit = bool(residual_meta.get("deadline_hit")) or deadline_reached(
             deadline_monotonic
@@ -584,6 +587,7 @@ def _ingest_single_library_target(
             ticker=target.ticker,
             max_bodies=max_bodies,
             deadline_monotonic=deadline_monotonic,
+            allow_ocr=allow_ocr,
         )
         ticker_budget_hit = bool(ir_meta.get("deadline_hit")) or deadline_reached(
             deadline_monotonic
@@ -860,6 +864,7 @@ def run_library_ingest_loop(
                 deepen_history=deepen_history,
                 max_bodies=max_bodies,
                 deadline_monotonic=deadline,
+                allow_ocr=ticker_cap is None,
             )
             result.results.append(row)
             if row.get("improved"):

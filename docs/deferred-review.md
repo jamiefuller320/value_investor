@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T07:48:35+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T08:04:29+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -409,7 +409,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L337 | **Stop skip-ci ingest from rewriting committed market_status.json** | Library ingest maintenance on main regenerates docs/data/market_status.json, which conflicts with open dashboard PRs that also rewrite that snapshot. After schema 3 lands, consider serving the grid from write_market_status at publish time, or excluding the generated JSON from skip-ci ingest commits. | PR 477 is merged and another dashboard PR still conflicts on market_status.json after a skip-ci ingest |
 | L338 | **Warn when a spare sprint stream has no MARKET_BENCHMARKS entry** | L333 added ^FTSC so ftse_smallcap can join the observe clock. L334 labels leftover no-benchmark sprints as Ingest only. Still worth a dispatch/policy check that refuses or flags assigning ingest_parallel_sprint(_2) to a market missing from MARKET_BENCHMARKS so the next spare fill does not silently drop the dated archive clock. | A spare stream is assigned to a market not in MARKET_BENCHMARKS, or the next market_queue name after tsx60/ftse_smallcap is filled |
 | L346 | **Count unique filing URLs when scoring indexed-without-body** | ITV.L’s remaining has_body=false rows are Investegate duplicates of URLs that already have bodies (FY2024 results and H1 2026 interim). Audit leftover counts treat those as real gaps. Dedup by URL before IWB scoring so weekday drain and project-audit do not re-prioritize already-covered documents. | The next ingest-utilization or project-audit pass still lists ITV.L (or peers) as indexed-without-body while a same-URL row already has a body |
-| L347 | **Time-box CH OCR on the wide ingest pass and resume via pin** | Pass deadline_monotonic into refetch_companies_house_filing_bodies on the FTSE ingest-improvement path (library residual/IR already stop). On deadline or image-only PDF, leave the row without a body and mark ocr_pending so the next drain or --pin-ticker intensive run does the OCR. Do not raise CH_OCR_MAX_PAGES on the weekday 62-name slot. | A weekday FTSE ingest-loop hits runtime_cutoff or per-ticker budget with CH OCR still in-process, or ITV-style principal-risks remain unread after iXBRL-first extract |
 
 ---
 

@@ -734,6 +734,7 @@ def ingest_research_sources(
     market: str | None = None,
     deepen_history: bool = False,
     deadline_monotonic: float | None = None,
+    allow_ocr: bool = True,
 ) -> dict[str, Any]:
     """
     Download research sources under ``sources_dir``.
@@ -835,6 +836,8 @@ def ingest_research_sources(
                 sources_dir=sources_dir,
                 market=market,
                 deepen_history=deepen_history,
+                deadline_monotonic=deadline_monotonic,
+                allow_ocr=allow_ocr,
             )
         except Exception as exc:  # noqa: BLE001 — research should continue without filings
             logger.warning("Filings ingest failed for %s: %s", ticker, exc)
@@ -862,6 +865,8 @@ def ingest_research_sources(
                     ch_refetch = refetch_companies_house_filing_bodies(
                         sources_dir / "filings",
                         max_bodies=12,
+                        deadline_monotonic=deadline_monotonic,
+                        allow_ocr=allow_ocr,
                     )
                     if int(ch_refetch.get("fetched") or 0) > 0:
                         index_path = sources_dir / "filings" / "filings_index.json"
@@ -896,6 +901,7 @@ def ingest_research_sources(
                         company_name=company_name,
                         max_bodies=12,
                         deadline_monotonic=deadline_monotonic,
+                        allow_ocr=allow_ocr,
                     )
                 if not deadline_reached(deadline_monotonic):
                     residual_refetch = refetch_residual_filing_bodies(
@@ -903,6 +909,8 @@ def ingest_research_sources(
                         ticker=ticker,
                         company_name=company_name,
                         max_bodies=12,
+                        deadline_monotonic=deadline_monotonic,
+                        allow_ocr=allow_ocr,
                     )
                 filings_meta["ir_refetch"] = ir_refetch
                 filings_meta["residual_refetch"] = residual_refetch

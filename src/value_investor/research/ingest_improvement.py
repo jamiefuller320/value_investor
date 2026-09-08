@@ -16,6 +16,7 @@ from value_investor.ingest_backlog import (
     prioritize_backlog_targets,
     record_ingest_backlog_after_pass,
 )
+from value_investor.library_ingest_budget import ticker_deadline
 from value_investor.research.filings import (
     fetch_filings_ir_allowlist,
     period_body_coverage,
@@ -625,6 +626,10 @@ def run_ingest_improvement_pass(
     discovery runs across buy-tier first; new index rows boost target priority
     so deepen focuses on fresh filings. ``discovery_scan_cap`` is reserved for
     later compute throttling (``None`` = no throttle).
+
+    Wide weekday passes leave image-only PDFs as ``ocr_pending`` and pass a
+    per-ticker ``deadline_monotonic`` into CH refetch. ``pin_tickers`` or
+    ``intensive_gap_closure`` enables OCR and drops the per-ticker cap.
     """
     bootstrap_buy_tier_research(
         reports,
@@ -685,12 +690,14 @@ def run_ingest_improvement_pass(
     store = ResearchStore(output_dir)
     suggestions_by_ticker = _load_ingest_suggestions(suggestions_path)
     started = time.monotonic()
+    allow_ocr = bool(pin_tickers or intensive_gap_closure)
+    effective_per_ticker = None if allow_ocr else per_ticker_max_seconds
 
     for target in targets:
         should_cutoff, cutoff_reason = _ingest_pass_should_cutoff(
             started,
             max_runtime_seconds=max_runtime_seconds,
-            per_ticker_max_seconds=per_ticker_max_seconds,
+            per_ticker_max_seconds=effective_per_ticker,
         )
         if should_cutoff:
             _finalize_ingest_cutoff(summary, cutoff_reason)
@@ -718,6 +725,15 @@ def run_ingest_improvement_pass(
             )
             sources_dir = _resolve_sources_dir(store, target.ticker, output_dir)
             sources_dir.mkdir(parents=True, exist_ok=True)
+            ticker_cap_deadline = (
+                ticker_deadline(
+                    slot_started=started,
+                    max_runtime_seconds=float(max_runtime_seconds or 0.0),
+                    per_ticker_max_seconds=effective_per_ticker,
+                )
+                if max_runtime_seconds or effective_per_ticker
+                else None
+            )
             sanitize_filings_index(
                 sources_dir / "filings",
                 company_name=target.name,
@@ -731,6 +747,8 @@ def run_ingest_improvement_pass(
                 since=None,
                 market=market,
                 deepen_history=True,
+                deadline_monotonic=ticker_cap_deadline,
+                allow_ocr=allow_ocr,
             )
             inventory = inspect_local_sources(sources_dir)
             ingest_suggestions = suggestions_by_ticker.get(target.ticker.upper(), [])
@@ -750,6 +768,8 @@ def run_ingest_improvement_pass(
                     ticker=target.ticker,
                     company_name=target.name,
                     max_bodies=target_max_bodies,
+                    deadline_monotonic=ticker_cap_deadline,
+                    allow_ocr=allow_ocr,
                 )
                 ch_refetch = dict(primary_refetch.get("companies_house") or {})
                 indexed_refetch = dict(primary_refetch.get("rns") or {})
@@ -770,6 +790,8 @@ def run_ingest_improvement_pass(
                     company_name=target.name,
                     max_bodies=target_max_bodies,
                     prune_unfetchable_after_attempt=prune_failed_residual_fetches,
+                    deadline_monotonic=ticker_cap_deadline,
+                    allow_ocr=allow_ocr,
                 )
                 if int(residual_refetch.get("fetched") or 0) > 0:
                     inventory = inspect_local_sources(sources_dir)
@@ -794,6 +816,8 @@ def run_ingest_improvement_pass(
                     target.ticker,
                     company_name=target.name,
                     max_bodies=target_max_bodies,
+                    deadline_monotonic=ticker_cap_deadline,
+                    allow_ocr=allow_ocr,
                 )
                 ir_refetch["mandatory"] = True
                 ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
@@ -830,6 +854,8 @@ def run_ingest_improvement_pass(
                 sources_dir=sources_dir,
                 planned=planned,
                 market=market,
+                deadline_monotonic=ticker_cap_deadline,
+                allow_ocr=allow_ocr,
             )
             deepen = deepen_thin_filings_if_needed(
                 ticker=target.ticker,
@@ -837,6 +863,8 @@ def run_ingest_improvement_pass(
                 sources_dir=sources_dir,
                 market=market,
                 filings_summary=source_meta.get("filings_summary") or {},
+                deadline_monotonic=ticker_cap_deadline,
+                allow_ocr=allow_ocr,
             )
             from value_investor.research.filings import reconcile_filings_index_body_flags
 
@@ -888,6 +916,8 @@ def run_ingest_improvement_pass(
                     ),
                     "mapped_source_ids": mapped_source_ids,
                     "planned_sources": [row.get("id") for row in planned],
+                    "allow_ocr": allow_ocr,
+                    "ocr_deferred": int(ch_refetch.get("ocr_deferred") or 0),
                     "ch_refetch": ch_refetch,
                     "investegate_refetch": investegate_refetch,
                     "ticker_rns_refetch": ticker_rns_refetch,

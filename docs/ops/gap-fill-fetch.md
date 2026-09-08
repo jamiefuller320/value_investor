@@ -141,6 +141,16 @@ export COMPANIES_HOUSE_OCR=1       # default on; set 0 to skip OCR
 export COMPANIES_HOUSE_OCR_MAX_PAGES=12  # optional cap per filing
 ```
 
+## OCR isolation (weekday vs pin)
+
+The wide FTSE ingest-improvement pass (up to 62 names) does **not** run
+tesseract. Image-only or depth-missing PDFs keep any text-layer extract, set
+`ocr_pending` on the filings index row, and leave the rest of the slot for other
+tickers. A later drain generation or `--pin-ticker` / intensive gap-closure pass
+sets `allow_ocr=True` and resumes those rows. There is no page-level OCR
+checkpoint — restart is filing/ticker level (`has_body`, `ocr_pending`,
+`ingest_backlog.json`). Do not raise `CH_OCR_MAX_PAGES` on the weekday slot.
+
 ## Commands
 
 ```bash

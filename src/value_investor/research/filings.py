@@ -34,7 +34,7 @@ from email.utils import parsedate_to_datetime
 from html import unescape
 from io import BytesIO
 from pathlib import Path
-from typing import Any
+from typing import Any, NamedTuple
 
 from value_investor.research.belgium_official import fetch_filings_belgium_official
 from value_investor.research.issuer_identifiers import resolve_lei
@@ -1462,33 +1462,83 @@ def _extract_ch_zip_ixbrl(raw: bytes) -> str | None:
     return None
 
 
-def _extract_filing_document_text(raw: bytes, content_type: str) -> str | None:
+class FilingBodyExtract(NamedTuple):
+    """Text extract plus whether OCR is still needed on a later intensive pass."""
+
+    text: str | None
+    ocr_pending: bool = False
+
+
+def _usable_filing_text(text: str | None) -> str | None:
+    if text and len(text) >= 200:
+        return text
+    return None
+
+
+def _extract_filing_document_result(
+    raw: bytes,
+    content_type: str,
+    *,
+    allow_ocr: bool = True,
+) -> FilingBodyExtract:
     """Extract searchable text from a filing document (PDF, HTML, iXBRL, or zip)."""
     ct = (content_type or "").lower()
     if ct == "application/zip" or raw[:2] == b"PK":
-        return _extract_ch_zip_ixbrl(raw)
+        return FilingBodyExtract(_extract_ch_zip_ixbrl(raw))
     if raw[:4] == b"%PDF" or "pdf" in ct:
         text = _extract_pdf_text(raw)
         if not text or len(text) < 200:
             text = _extract_pdf_text_fitz(raw)
         needs_ocr = not text or len(text) < 200 or _ch_body_lacks_financial_depth(text)
+        if needs_ocr and not allow_ocr:
+            return FilingBodyExtract(_usable_filing_text(text), ocr_pending=True)
         if needs_ocr:
             ocr_text = _ocr_pdf_text(raw)
             if ocr_text:
                 ocr_composed = _compose_filing_body_with_depth_sections(ocr_text) or ocr_text
                 if text and len(text) >= 200:
-                    return (
+                    chosen = (
                         ocr_composed
                         if _score_ch_body_text(ocr_composed) > _score_ch_body_text(text)
                         else text
                     )
-                return ocr_composed
+                    pending = _ch_body_lacks_financial_depth(chosen)
+                    return FilingBodyExtract(chosen, ocr_pending=pending)
+                return FilingBodyExtract(ocr_composed)
+            return FilingBodyExtract(_usable_filing_text(text), ocr_pending=True)
         if text and len(text) >= 200:
-            return text
-        return text
+            return FilingBodyExtract(text)
+        return FilingBodyExtract(text)
     if _is_ixbrl_html(raw) or "xhtml" in ct:
-        return _extract_ixbrl_html_text(raw.decode("utf-8", errors="replace"))
-    return _strip_html(raw.decode("utf-8", errors="replace"))
+        return FilingBodyExtract(
+            _extract_ixbrl_html_text(raw.decode("utf-8", errors="replace"))
+        )
+    return FilingBodyExtract(_strip_html(raw.decode("utf-8", errors="replace")))
+
+
+def _extract_filing_document_text(
+    raw: bytes,
+    content_type: str,
+    *,
+    allow_ocr: bool = True,
+) -> str | None:
+    """Extract searchable text from a filing document (PDF, HTML, iXBRL, or zip)."""
+    return _extract_filing_document_result(raw, content_type, allow_ocr=allow_ocr).text
+
+
+def _apply_ocr_pending(row: dict[str, Any], pending: bool) -> None:
+    if pending:
+        row["ocr_pending"] = True
+    else:
+        row.pop("ocr_pending", None)
+
+
+def _call_with_optional_ocr(func: Any, *args: Any, allow_ocr: bool, **kwargs: Any) -> Any:
+    """Call ``func`` with ``allow_ocr`` when the callee accepts it (tests often mock)."""
+    try:
+        return func(*args, allow_ocr=allow_ocr, **kwargs)
+    except TypeError:
+        return func(*args, **kwargs)
 
 
 _PDF_DEPTH_SECTION_MARKERS: tuple[tuple[str, int], ...] = (
@@ -3221,7 +3271,12 @@ def _url_path_endswith(url: str, suffix: str) -> bool:
     return path.endswith(suffix.lower())
 
 
-def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> str | None:
+def fetch_filing_body(
+    url: str | None,
+    *,
+    allow_sec_exhibits: bool = True,
+    allow_ocr: bool = True,
+) -> str | None:
     """Download and extract plain text from a direct announcement URL."""
     if not url or not url.startswith("http"):
         return None
@@ -3252,7 +3307,7 @@ def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> st
 
     # urlopen doesn't return headers here easily — sniff
     if raw[:4] == b"%PDF" or _url_path_endswith(url, ".pdf"):
-        text = _extract_filing_document_text(raw, "application/pdf")
+        text = _extract_filing_document_text(raw, "application/pdf", allow_ocr=allow_ocr)
         if not text or len(text) < 200:
             logger.info("PDF filing body empty/unreadable: %s", url)
             return None
@@ -3660,7 +3715,9 @@ def _validate_ir_allowlist_body_content(row: dict[str, Any], body: str) -> tuple
     return True, None
 
 
-def _fetch_ir_pdf_alternate_candidates(url: str) -> list[tuple[str, str]]:
+def _fetch_ir_pdf_alternate_candidates(
+    url: str, *, allow_ocr: bool = True
+) -> list[tuple[str, str]]:
     """Try alternate PDF parsers (pymupdf, OCR) when the primary extract fails validation."""
     if not url or not url.startswith("http"):
         return []
@@ -3686,9 +3743,10 @@ def _fetch_ir_pdf_alternate_candidates(url: str) -> list[tuple[str, str]]:
 
     _add(_extract_pdf_text(raw), "pypdf")
     _add(_extract_pdf_text_fitz(raw), "pymupdf")
-    ocr_text = _ocr_pdf_text(raw)
-    if ocr_text:
-        _add(_compose_filing_body_with_depth_sections(ocr_text) or ocr_text, "ocr")
+    if allow_ocr:
+        ocr_text = _ocr_pdf_text(raw)
+        if ocr_text:
+            _add(_compose_filing_body_with_depth_sections(ocr_text) or ocr_text, "ocr")
     return candidates
 
 
@@ -3802,6 +3860,7 @@ def _fetch_ir_allowlist_body(
     ticker: str,
     company_name: str = "",
     investegate_cache: list[dict[str, Any]] | None = None,
+    allow_ocr: bool = True,
 ) -> tuple[str | None, str | None]:
     """
     Fetch IR allowlist text from the PDF URL, falling back to Investegate RNS HTML.
@@ -3814,7 +3873,7 @@ def _fetch_ir_allowlist_body(
     if not url:
         return None, None
 
-    body = fetch_filing_body(url)
+    body = _call_with_optional_ocr(fetch_filing_body, url, allow_ocr=allow_ocr)
     if body:
         valid, reason = _validate_ir_allowlist_body_content(row, body)
         if valid:
@@ -3825,7 +3884,7 @@ def _fetch_ir_allowlist_body(
             reason,
         )
 
-    for alt_body, parser in _fetch_ir_pdf_alternate_candidates(url):
+    for alt_body, parser in _fetch_ir_pdf_alternate_candidates(url, allow_ocr=allow_ocr):
         valid, reason = _validate_ir_allowlist_body_content(row, alt_body)
         if valid:
             source = "pdf" if parser == "pypdf" else f"pdf_{parser}"
@@ -3927,6 +3986,7 @@ def refetch_ir_allowlist_filing_bodies(
     deadline_monotonic: float | None = None,
     skip_unfetchable: bool = True,
     mark_unfetchable_on_fail: bool = True,
+    allow_ocr: bool = True,
 ) -> dict[str, Any]:
     """
     Merge IR allowlist URLs then re-download bodies with retries.
@@ -3992,6 +4052,7 @@ def refetch_ir_allowlist_filing_bodies(
         if row.get("url")
         and not row.get("has_body")
         and not (skip_unfetchable and row.get("unfetchable"))
+        and not (row.get("ocr_pending") and not allow_ocr)
     ]
     skipped_unfetchable = sum(
         1
@@ -4040,6 +4101,7 @@ def refetch_ir_allowlist_filing_bodies(
             and item.get("url")
             and not item.get("has_body")
             and not (skip_unfetchable and item.get("unfetchable"))
+            and not (item.get("ocr_pending") and not allow_ocr)
         ):
             if deadline_reached(deadline_monotonic):
                 deadline_hit = True
@@ -4058,6 +4120,7 @@ def refetch_ir_allowlist_filing_bodies(
                     ticker=ticker,
                     company_name=company_name,
                     investegate_cache=investegate_cache,
+                    allow_ocr=allow_ocr,
                 )
                 if body:
                     if fetch_source == "investegate_html":
@@ -4112,27 +4175,39 @@ def refetch_ir_allowlist_filing_bodies(
                     }
                 )
             elif not body:
-                retry_log.append(
-                    {
-                        "filing_id": row_id,
-                        "url": row_url,
-                        "attempt": max_retries + 1,
-                        "outcome": "failed",
-                        "source": None,
-                    }
-                )
-                logger.warning(
-                    "IR allowlist body fetch failed for %s (%s) after %d attempt(s)",
-                    ticker,
-                    row_id,
-                    max_retries + 1,
-                )
-                failed += 1
-                if mark_unfetchable_on_fail:
-                    item["unfetchable"] = True
-                    item["unfetchable_reason"] = "ir_allowlist_fetch_failed"
-                    item["unfetchable_at"] = datetime.now(UTC).isoformat()
-                    skipped_unfetchable += 1
+                if not allow_ocr:
+                    _apply_ocr_pending(item, True)
+                    retry_log.append(
+                        {
+                            "filing_id": row_id,
+                            "url": row_url,
+                            "attempt": attempt + 1,
+                            "outcome": "ocr_pending",
+                            "source": None,
+                        }
+                    )
+                else:
+                    retry_log.append(
+                        {
+                            "filing_id": row_id,
+                            "url": row_url,
+                            "attempt": max_retries + 1,
+                            "outcome": "failed",
+                            "source": None,
+                        }
+                    )
+                    logger.warning(
+                        "IR allowlist body fetch failed for %s (%s) after %d attempt(s)",
+                        ticker,
+                        row_id,
+                        max_retries + 1,
+                    )
+                    failed += 1
+                    if mark_unfetchable_on_fail:
+                        item["unfetchable"] = True
+                        item["unfetchable_reason"] = "ir_allowlist_fetch_failed"
+                        item["unfetchable_at"] = datetime.now(UTC).isoformat()
+                        skipped_unfetchable += 1
             if body:
                 content_hash, dup_reason = _reject_duplicate_filing_body_hash(
                     row_id,
@@ -4153,6 +4228,7 @@ def refetch_ir_allowlist_filing_bodies(
                     item["has_body"] = True
                     item["body_path"] = str(path)
                     item["body_content_hash"] = content_hash
+                    _apply_ocr_pending(item, False)
                     known_body_hashes[content_hash] = row_id
                     if fetch_source and fetch_source.startswith("pdf_"):
                         item["body_fetch_parser"] = fetch_source.removeprefix("pdf_")
@@ -4889,6 +4965,7 @@ def _write_bodies(
     ticker: str = "",
     company_name: str = "",
     deadline_monotonic: float | None = None,
+    allow_ocr: bool = True,
 ) -> list[dict[str, Any]]:
     """Fetch bodies for the highest-priority filings with direct URLs."""
     from value_investor.library_ingest_budget import deadline_reached
@@ -4908,6 +4985,9 @@ def _write_bodies(
             if deadline_reached(deadline_monotonic):
                 updated.append(row)
                 continue
+            if row.get("ocr_pending") and not allow_ocr:
+                updated.append(row)
+                continue
             period = row.get("period")
             if period in ("annual", "interim", "trading_update", "other"):
                 # Always try annual/interim/trading updates; only try a few "other" if slots remain
@@ -4923,13 +5003,19 @@ def _write_bodies(
                 body = None
                 extracted_headline: str | None = None
                 if _is_ch_filing_row(row):
-                    body = _fetch_companies_house_body(row)
+                    body = _call_with_optional_ocr(
+                        _fetch_companies_house_body, row, allow_ocr=allow_ocr
+                    )
                 elif row.get("url"):
                     url = str(row["url"])
                     if ticker and company_name and _is_rns_body_fetch_candidate(row):
                         body, extracted_headline = _fetch_rns_filing_body_for_refetch(url)
                     else:
-                        body = fetch_filing_body(url)
+                        body = _call_with_optional_ocr(
+                            fetch_filing_body, url, allow_ocr=allow_ocr
+                        )
+                        if not body and not allow_ocr and _url_path_endswith(url, ".pdf"):
+                            _apply_ocr_pending(row, True)
                 if body:
                     if ticker and company_name and _is_rns_body_fetch_candidate(row):
                         row, _reject_reason = _try_persist_rns_filing_body(
@@ -4949,12 +5035,16 @@ def _write_bodies(
                         path.write_text(body, encoding="utf-8")
                         row["has_body"] = True
                         row["body_path"] = str(path)
+                        if not row.get("ocr_pending"):
+                            _apply_ocr_pending(row, False)
                         downloaded += 1
         updated.append(row)
     return updated
 
 
-def _fetch_companies_house_body(row: dict[str, Any]) -> str | None:
+def _fetch_companies_house_body(
+    row: dict[str, Any], *, allow_ocr: bool = True
+) -> str | None:
     """Download and extract text from a Companies House accounts filing."""
     from value_investor.research.companies_house import (
         companies_house_api_key,
@@ -4974,14 +5064,24 @@ def _fetch_companies_house_body(row: dict[str, Any]) -> str | None:
         return None
     best_text: str | None = None
     best_score = -1
+    pending = False
     for raw, content_type in downloads:
-        text = _extract_filing_document_text(raw, content_type)
-        if not text or len(text) < 200:
+        if allow_ocr:
+            text = _extract_filing_document_text(raw, content_type, allow_ocr=True)
+            extract = FilingBodyExtract(text, ocr_pending=False)
+        else:
+            extract = _extract_filing_document_result(raw, content_type, allow_ocr=False)
+        if extract.ocr_pending:
+            pending = True
+        if not extract.text or len(extract.text) < 200:
             continue
-        score = _score_ch_body_text(text)
+        score = _score_ch_body_text(extract.text)
         if score > best_score:
             best_score = score
-            best_text = text
+            best_text = extract.text
+    if best_text and not _ch_body_lacks_financial_depth(best_text):
+        pending = False
+    _apply_ocr_pending(row, pending)
     if not best_text:
         return None
     if len(best_text) > FILINGS_BODY_MAX_CHARS:
@@ -5268,34 +5368,38 @@ def refetch_companies_house_filing_bodies(
     filings_dir: Path,
     *,
     max_bodies: int = 20,
+    deadline_monotonic: float | None = None,
+    allow_ocr: bool = True,
 ) -> dict[str, Any]:
     """
     Re-download filed-accounts PDF/iXBRL bodies for indexed CH rows without text.
 
     Used by ingest-improvement and gap-fill when ``filings_with_body`` is zero
     but ``filings_index.json`` already lists Companies House document URLs.
+    Wide weekday passes set ``allow_ocr=False`` so image-only PDFs are marked
+    ``ocr_pending`` and left for a pin/drain resume. ``deadline_monotonic``
+    stops new downloads so OCR cannot consume the rest of the slot.
     """
+    from value_investor.library_ingest_budget import deadline_reached
+
     filings_dir = Path(filings_dir)
     index_path = filings_dir / "filings_index.json"
     bodies_dir = filings_dir / "bodies"
+    empty = {
+        "attempted": 0,
+        "fetched": 0,
+        "with_body_before": 0,
+        "with_body_after": 0,
+        "deadline_hit": False,
+        "ocr_deferred": 0,
+        "allow_ocr": allow_ocr,
+    }
     if not index_path.exists():
-        return {
-            "attempted": 0,
-            "fetched": 0,
-            "with_body_before": 0,
-            "with_body_after": 0,
-            "note": "no filings_index.json",
-        }
+        return {**empty, "note": "no filings_index.json"}
     try:
         payload = json.loads(index_path.read_text(encoding="utf-8"))
     except (OSError, ValueError, TypeError) as exc:
-        return {
-            "attempted": 0,
-            "fetched": 0,
-            "with_body_before": 0,
-            "with_body_after": 0,
-            "note": f"unreadable index: {exc}",
-        }
+        return {**empty, "note": f"unreadable index: {exc}"}
 
     filings = list(payload.get("filings") or [])
     before = sum(1 for row in filings if row.get("has_body"))
@@ -5304,19 +5408,32 @@ def refetch_companies_house_filing_bodies(
     missing = [row for row in ch_rows if _ch_row_needs_body_refetch(row, bodies_dir)]
     if not missing:
         return {
-            "attempted": 0,
-            "fetched": 0,
+            **empty,
             "with_body_before": before,
             "with_body_after": before,
             "note": "no missing CH bodies",
         }
 
     downloaded = 0
+    ocr_deferred = 0
+    deadline_hit = False
     updated: list[dict[str, Any]] = []
     for row in filings:
         item = dict(row)
         if downloaded < max_bodies and _ch_row_needs_body_refetch(item, bodies_dir):
-            body = _fetch_companies_house_body(item)
+            if deadline_reached(deadline_monotonic):
+                deadline_hit = True
+                updated.append(item)
+                continue
+            if item.get("ocr_pending") and not allow_ocr:
+                ocr_deferred += 1
+                updated.append(item)
+                continue
+            body = _call_with_optional_ocr(
+                _fetch_companies_house_body, item, allow_ocr=allow_ocr
+            )
+            if item.get("ocr_pending"):
+                ocr_deferred += 1
             if body:
                 filename = f"{item['id']}.txt"
                 path = bodies_dir / filename
@@ -5324,7 +5441,7 @@ def refetch_companies_house_filing_bodies(
                 item["has_body"] = True
                 item["body_path"] = str(path)
                 downloaded += 1
-            elif item.get("has_body"):
+            elif item.get("has_body") and not item.get("ocr_pending"):
                 item["has_body"] = False
                 item["body_path"] = None
         updated.append(item)
@@ -5339,6 +5456,9 @@ def refetch_companies_house_filing_bodies(
         "fetched": downloaded,
         "with_body_before": before,
         "with_body_after": after,
+        "deadline_hit": deadline_hit or deadline_reached(deadline_monotonic),
+        "ocr_deferred": ocr_deferred,
+        "allow_ocr": allow_ocr,
         "note": "refetch_companies_house_filing_bodies",
     }
 
@@ -5570,6 +5690,7 @@ def refetch_residual_filing_bodies(
     prune_index_noise: bool = True,
     prune_unfetchable_after_attempt: bool = False,
     deadline_monotonic: float | None = None,
+    allow_ocr: bool = True,
 ) -> dict[str, Any]:
     """
     Final sweep for indexed rows still lacking bodies after source-specific pipelines.
@@ -5627,6 +5748,7 @@ def refetch_residual_filing_bodies(
         ticker=ticker,
         company_name=company_name,
         deadline_monotonic=deadline_monotonic,
+        allow_ocr=allow_ocr,
     )
     updated, pruned_noise, pruned_unfetchable = _prune_residual_index_rows(
         updated,
@@ -5663,6 +5785,8 @@ def refetch_uk_primary_filing_bodies(
     company_name: str,
     max_bodies: int = 20,
     prune_failed_residual_fetches: bool = False,
+    deadline_monotonic: float | None = None,
+    allow_ocr: bool = True,
 ) -> dict[str, Any]:
     """
     UK primary-body pipeline: Companies House filed accounts + LSE/Investegate RNS.
@@ -5672,7 +5796,12 @@ def refetch_uk_primary_filing_bodies(
     adjusting items, and cash-flow statements), then fills remaining RNS rows.
     A residual sweep runs last for SEC Edgar and other direct URLs still lacking bodies.
     """
-    ch = refetch_companies_house_filing_bodies(filings_dir, max_bodies=max_bodies)
+    ch = refetch_companies_house_filing_bodies(
+        filings_dir,
+        max_bodies=max_bodies,
+        deadline_monotonic=deadline_monotonic,
+        allow_ocr=allow_ocr,
+    )
     rns = refetch_indexed_without_body_filing_bodies(
         filings_dir,
         ticker=ticker,
@@ -5685,6 +5814,8 @@ def refetch_uk_primary_filing_bodies(
         company_name=company_name,
         max_bodies=max_bodies,
         prune_unfetchable_after_attempt=prune_failed_residual_fetches,
+        deadline_monotonic=deadline_monotonic,
+        allow_ocr=allow_ocr,
     )
     before = int(ch.get("with_body_before") or 0)
     after = int(residual.get("with_body_after") or rns.get("with_body_after") or before)
@@ -5705,6 +5836,9 @@ def refetch_uk_primary_filing_bodies(
         "with_body_before": before,
         "with_body_after": after,
         "google_news_rejected": int(rns.get("google_news_rejected") or 0),
+        "deadline_hit": bool(ch.get("deadline_hit") or residual.get("deadline_hit")),
+        "ocr_deferred": int(ch.get("ocr_deferred") or 0),
+        "allow_ocr": allow_ocr,
         "note": "refetch_uk_primary_filing_bodies",
     }
 
@@ -6017,6 +6151,8 @@ def ingest_filings(
     market: str | None = None,
     deepen_history: bool = False,
     max_ch_accounts: int | None = None,
+    deadline_monotonic: float | None = None,
+    allow_ocr: bool = True,
 ) -> dict[str, Any]:
     """
     Build ``sources/filings/`` for a memo ticker.
@@ -6161,6 +6297,8 @@ def ingest_filings(
         max_bodies=max_bodies,
         ticker=ticker,
         company_name=company_name,
+        deadline_monotonic=deadline_monotonic,
+        allow_ocr=allow_ocr,
     )
     merged = _scrub_misattributed_filing_rows(
         merged,

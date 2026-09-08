@@ -465,6 +465,8 @@ def prepare_gap_fill_source_pack(
     sources_dir: Path,
     open_questions: list[str],
     market: str | None = None,
+    deadline_monotonic: float | None = None,
+    allow_ocr: bool = True,
 ) -> dict[str, Any]:
     """
     Build a source map for the agent: inventory, alternate news pull, next-source plan.
@@ -484,6 +486,8 @@ def prepare_gap_fill_source_pack(
             ticker=ticker,
             company_name=company_name,
             max_bodies=20,
+            deadline_monotonic=deadline_monotonic,
+            allow_ocr=allow_ocr,
         )
         ch_refetch = dict(primary_refetch.get("companies_house") or {})
         rns_refetch = dict(primary_refetch.get("rns") or {})
@@ -499,6 +503,8 @@ def prepare_gap_fill_source_pack(
             ticker,
             company_name=company_name,
             max_bodies=20,
+            deadline_monotonic=deadline_monotonic,
+            allow_ocr=allow_ocr,
         )
         ir_refetch["mandatory"] = True
         ir_refetch["allowlist_count"] = len(ir_allowlist_rows)
@@ -616,6 +622,8 @@ def execute_planned_alternate_sources(
     planned: list[dict[str, Any]],
     market: str | None = None,
     max_sources: int = 3,
+    deadline_monotonic: float | None = None,
+    allow_ocr: bool = True,
 ) -> dict[str, Any]:
     """
       Execute top-ranked alternate source fetchers before a gap-fill retry.
@@ -654,6 +662,8 @@ def execute_planned_alternate_sources(
                 ticker,
                 company_name=company_name,
                 max_bodies=20,
+                deadline_monotonic=deadline_monotonic,
+                allow_ocr=allow_ocr,
             )
             last_refetch["mandatory"] = True
             prune_orphaned_filing_bodies(filings_dir)
@@ -673,11 +683,18 @@ def execute_planned_alternate_sources(
                 sources_dir=sources_dir,
                 market=market,
                 deepen_history=True,
+                deadline_monotonic=deadline_monotonic,
+                allow_ocr=allow_ocr,
             )
             if _market_bucket(market, ticker) == "uk" and source_id == "companies_house_accounts":
                 from value_investor.research.filings import refetch_companies_house_filing_bodies
 
-                last_refetch = refetch_companies_house_filing_bodies(filings_dir, max_bodies=20)
+                last_refetch = refetch_companies_house_filing_bodies(
+                    filings_dir,
+                    max_bodies=20,
+                    deadline_monotonic=deadline_monotonic,
+                    allow_ocr=allow_ocr,
+                )
             elif _market_bucket(market, ticker) == "uk" and source_id == "investegate_rns_full":
                 from value_investor.research.filings import refetch_uk_primary_filing_bodies
 
@@ -686,6 +703,8 @@ def execute_planned_alternate_sources(
                     ticker=ticker,
                     company_name=company_name,
                     max_bodies=20,
+                    deadline_monotonic=deadline_monotonic,
+                    allow_ocr=allow_ocr,
                 )
             elif source_id == "investegate_rns_full":
                 from value_investor.research.filings import refetch_investegate_filing_bodies
@@ -724,6 +743,8 @@ def deepen_thin_filings_if_needed(
     filings_summary: dict[str, Any] | None = None,
     min_bodies: int = THIN_FILINGS_BODY_THRESHOLD,
     open_questions: list[str] | None = None,
+    deadline_monotonic: float | None = None,
+    allow_ocr: bool = True,
 ) -> dict[str, Any]:
     """
     When filing bodies are thin, run the gap-fill alternate-source deepen loop.
@@ -751,6 +772,8 @@ def deepen_thin_filings_if_needed(
         sources_dir=sources_dir,
         open_questions=questions,
         market=market,
+        deadline_monotonic=deadline_monotonic,
+        allow_ocr=allow_ocr,
     )
     alternate = execute_planned_alternate_sources(
         ticker=ticker,
@@ -758,6 +781,8 @@ def deepen_thin_filings_if_needed(
         sources_dir=sources_dir,
         planned=list(source_pack.get("planned_alternate_sources") or []),
         market=market,
+        deadline_monotonic=deadline_monotonic,
+        allow_ocr=allow_ocr,
     )
 
     filings_index = sources_dir / "filings" / "filings_index.json"
