@@ -1699,6 +1699,195 @@ def test_company_report_to_dict_honours_fcf_note_after_research_overlay():
     assert snapshot["conviction_score"] == pytest.approx(0.85 * 0.85)
 
 
+def _rio_fcf_mismatch_note() -> str:
+    return (
+        "Strong Buy — neutral timing | FCF basis mismatch: filing £4497M | "
+        "screen TTM £3595.5M | Earnings growth basis divergence >300 bps: "
+        "statutory -13.8% vs filing core -8.2%"
+    )
+
+
+def test_fcf_basis_overlay_honours_action_note_predicate_rio_style_gap():
+    """RIO.L-style gap: ~20% filing/screen divergence below 25% but above 15%."""
+    filing = 4_497_000_000.0
+    screen = 3_595_500_000.0
+    assert fcf_universe_divergence_flagged(
+        filing_aligned=filing,
+        screen_ttm=screen,
+        company_adjusted=None,
+        filing_currency="GBP",
+    )
+    assert not fcf_filing_screen_mismatch(
+        filing_aligned=filing,
+        screen_ttm=screen,
+        divergence_flagged=False,
+    )
+    assert fcf_action_note_mismatch(
+        filing_aligned=filing,
+        screen_ttm=screen,
+        filing_currency="GBP",
+    )
+
+
+def test_honour_fcf_action_note_enforcement_caps_rio_style_strong_buy():
+    """RIO.L: strong_buy with FCF mismatch note but fcf=None must cap on export."""
+    note = _rio_fcf_mismatch_note()
+    report = CompanyReport.from_dict(
+        {
+            "ticker": "RIO.L",
+            "name": "Rio Tinto Group",
+            "sector": "Basic Materials",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "models_passed": 11,
+            "model_count": 22,
+            "composite_score": 0.6792,
+            "sector_composite_score": 0.7247,
+            "families_passed": 5,
+            "passed_families": "cheapness,quality,dividend,garp,risk",
+            "family_count": 5,
+            "data_quality_score": 1.0,
+            "metrics_present": 20,
+            "metrics_total": 20,
+            "weeks_at_signal": 2,
+            "signal_trend": "stable",
+            "conviction_score": 0.6765,
+            "stability_label": "building",
+            "timing_signal": "neutral",
+            "timing_score": 0.5,
+            "rsi_14": 60.4,
+            "price_vs_sma200_pct": 0.1,
+            "action_note": note,
+            "fcf_basis_overlay": False,
+            "fcf": None,
+            "summary": "Strong Buy (11/22 models).",
+            "passed_models": [],
+            "key_metrics": {
+                "P/E": "14.0",
+                "P/B": "2.6",
+                "Yield": "4.6%",
+                "ROE": "19.3%",
+                "FCF": "4497000000.0",
+            },
+        }
+    )
+
+    enforced = honour_fcf_action_note_enforcement(report)
+    assert enforced.fcf_basis_overlay is True
+    assert enforced.adjusted_signal == "buy"
+    assert enforced.conviction_score == pytest.approx(0.6765 * 0.85)
+
+    snapshot = report.to_dict()
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert snapshot["conviction_score"] == pytest.approx(0.6765 * 0.85)
+
+
+def test_build_company_reports_exports_fcf_basis_overlay_for_rio(tmp_path: Path):
+    """RIO.L-style: universe divergence at 20% caps strong_buy despite sub-25% filing gap."""
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="RIO.L",
+                name="Rio Tinto Group",
+                sector="Basic Materials",
+                signal="strong_buy",
+                conviction_score=0.6765,
+                free_cashflow=4_497_000_000.0,
+                free_cashflow_screen_ttm=3_595_500_000.0,
+                fcf_basis_overlay=False,
+                adjusted_signal="strong_buy",
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "RIO.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    assert report.fcf_basis_overlay is True
+    assert report.adjusted_signal == "buy"
+    assert "FCF basis mismatch" in report.action_note
+
+    snapshot = report.to_dict()
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+
+
+def test_apply_research_overlay_with_fcf_enforcement_caps_rio_style_strong_buy(
+    tmp_path: Path,
+):
+    """RIO.L: stale overlay=false must not leave strong_buy beside FCF mismatch note."""
+    from value_investor.research.document import ResearchDocument
+
+    note = _rio_fcf_mismatch_note()
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="RIO.L",
+                name="Rio Tinto Group",
+                sector="Basic Materials",
+                signal="strong_buy",
+                conviction_score=0.6765,
+                free_cashflow=4_497_000_000.0,
+                free_cashflow_screen_ttm=3_595_500_000.0,
+                fcf_basis_overlay=False,
+                adjusted_signal="strong_buy",
+                action_note=note,
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "RIO.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    stale = replace(
+        report,
+        fcf_basis_overlay=False,
+        adjusted_signal="strong_buy",
+        conviction_score=0.6765,
+    )
+    doc = ResearchDocument(
+        ticker="RIO.L",
+        name="Rio Tinto Group",
+        signal="strong_buy",
+        version=1,
+        created_at="2026-09-06T00:00:00+00:00",
+        updated_at="2026-09-06T00:00:00+00:00",
+        mode="gap_fill",
+        research_verdict="accumulate",
+        research_risk_level="medium",
+        research_confidence=0.7,
+        research_path=str(tmp_path / "research" / "RIO.L" / "research.md"),
+    )
+
+    overlaid = apply_research_overlay_with_fcf_enforcement([stale], [doc])[0]
+    assert overlaid.fcf_basis_overlay is True
+    assert overlaid.adjusted_signal == "buy"
+    assert overlaid.to_dict()["adjusted_signal"] == "buy"
+
+
 def _gfrd_financials() -> dict:
     return {
         "ticker": "GFRD.L",

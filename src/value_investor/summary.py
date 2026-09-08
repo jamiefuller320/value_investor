@@ -711,6 +711,11 @@ def apply_research_overlay_with_fcf_enforcement(
     return [honour_fcf_action_note_enforcement(report) for report in updated]
 
 
+def enforce_fcf_export_dict(data: dict[str, Any]) -> dict[str, Any]:
+    """Re-apply FCF basis caps before publishing a persisted report dict."""
+    return CompanyReport.from_dict(data).to_dict()
+
+
 def _rebind_stale_apply_research_overlay() -> None:
     """Point direct ``apply_research_overlay`` imports at the FCF-aware wrapper."""
     import sys
