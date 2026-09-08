@@ -34,7 +34,7 @@ Each Overview **market card** plots **held-stock value** (paper NAV minus cash) 
 | No paper book yet | Observe-sim `screen_rules` equity curve when that clock exists |
 | Neither | Empty placeholder |
 
-Index levels come from dated `docs/data/library/macro/` snapshots (no extra Yahoo fetch on dashboard refresh). If those are missing, the market line falls back to the observe-sim period return as start/end points.
+Index levels come from dated `docs/data/library/macro/` snapshots (no extra Yahoo fetch on dashboard refresh), including US `^GSPC` for S&P cards. If those are missing, the market line falls back to the observe-sim period return as start/end points. `ftse-library macro --backfill-indexes` fills missing equity-index markers into existing dated files.
 
 **Branch overlays.** The payload is `branch_ready`: extra series of `kind=branch` plot on the same dates once a knob-changed book is applied. Use `merge_branch_series()` — do **not** spawn a warm-started twin per knob (N99). Pending branches render in the legend with no line.
 

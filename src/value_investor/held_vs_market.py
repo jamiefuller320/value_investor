@@ -13,8 +13,8 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.backtest import BENCHMARK_TICKER
-from value_investor.library_sim import benchmark_for_market
-from value_investor.macro_context import DEFAULT_MACRO_ROOT, domain_for_market
+from value_investor.library_sim import MARKET_BENCHMARKS, benchmark_for_market
+from value_investor.macro_context import DEFAULT_MACRO_ROOT, EQUITY_INDEX_MARKERS, domain_for_market
 from value_investor.price_charts import chart_filename
 from value_investor.storage import read_json
 
@@ -25,13 +25,7 @@ MAX_POINTS = 180
 LIVE_MARKET_ID = "ftse350"
 
 # Macro snapshot marker key → Yahoo index symbol (dated files, no live fetch).
-_MACRO_INDEX_MARKERS: dict[str, tuple[str, str]] = {
-    "uk": ("ftse_100", "^FTSE"),
-    "euro": ("euro_stoxx_50", "^STOXX50E"),
-    "au": ("asx_200", "^AXJO"),
-    "ca": ("tsx_composite", "^GSPTSE"),
-    "asia": ("hang_seng", "^HSI"),
-}
+_MACRO_INDEX_MARKERS = EQUITY_INDEX_MARKERS
 
 _DATED_MACRO = re.compile(r"^(\d{4}-\d{2}-\d{2})\.json$")
 
@@ -98,6 +92,11 @@ def date_key(value: str | None) -> str | None:
 def benchmark_ticker_for_market(market_id: str) -> str:
     if market_id == LIVE_MARKET_ID:
         return BENCHMARK_TICKER
+    if market_id in MARKET_BENCHMARKS:
+        return MARKET_BENCHMARKS[market_id]
+    marker = EQUITY_INDEX_MARKERS.get(domain_for_market(market_id))
+    if marker:
+        return marker[1]
     return benchmark_for_market(market_id)
 
 
