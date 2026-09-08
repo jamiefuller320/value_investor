@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T08:22:05+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T09:52:52+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -48,6 +48,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260904-02 | BT-A.L director-worker completed under the None-verdict rubric fix but scored 0.193 with no director verdict. Live Composer rememo stayed accumulate 0.68. Worth a parse-hardening pass if more director memos lose RESEARCH VERDICT. | director-worker, rubric, BT-A |
 | frag-20260904-03 | At 64 percent Ultra used, empty engineering queue, fresh FTSE holdings/buy-tier memos, and a full 15/15 director-worker week, leftover cycle credit should sit unused. Next useful Cursor spend is next ISO week and only on a material trigger, not thin Yahoo quarterly. | surplus, ultra, p1 |
 | frag-20260906-01 | L314/L315 are not a sprint. L314 as written (filing/memo PIT on snapshots) is not worth it; the only cheap slice is allowlisting already-published FCF flags after live bind is stable, and L229 already covers that flag-in-history idea. L315 daily/fill marks wait until buy_tier_level has a thick epoch and a question Sunday-to-Sunday marks cannot answer. | archive, fcf, l314, l315, not_now |
+| frag-20260908-01 | S&P 500 screen archives skipped several August Sundays (2026-08-09, 08-23, 08-30), so unique_days lags archive_files. Cadence is running again; do not backfill invented archives. | sp500, screen-cadence, unique-days |
 
 ---
 
@@ -209,6 +210,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L341 | **Caption market-card held vs market as sleeve vs price index** | The chart is invested-sleeve MTM versus a frictionless local price index from the same starting held notional, not Sunday-review excess after costs (NAV vs contributed, Yahoo auto_adjust). A caption would stop the tile being read as a matched-cost or total-return hurdle. | Someone uses the market-card excess_pct to judge paper vs index, or it disagrees with Sunday-review excess_after_costs. |
 | L342 | **Universe-matched index for held vs market charts** | FTSE 350 paper is scaled to ^FTSE (FTSE 100) and euro_depth observe-sim to ^STOXX50E. That is a useful alpha hurdle but not a matched-universe market equivalent. | Held vs market charts are in regular Sunday use and a FTSE 350 or euro_depth path has >=8 weekday marks. |
 | L343 | **Add Nasdaq-100 ^NDX to dated macro snapshots** | US macro now carries ^GSPC for S&P market cards. nasdaq100 still has no local index in dated snapshots, so a Nasdaq paper book would have market_path none until ^NDX is stored the same way. | nasdaq100 has a paper book or observe-sim marks and the market card still has market_path none. |
+| L349 | **Revisit S&P 500 weekly paper after 12-week trajectory** | sp500 is filing-ready and admitted (epoch-0 + rememo), but learning_ready is still false (10 unique days / 7.3 weeks). Keep weekly_paper_shard_markets on euro_depth until trajectory hits 12 unique days over 12 weeks. | ftse-library learning-depth --market sp500 reports learning_ready true on canonical filings plus 12 unique screen days |
 
 ### Universe & data
 
