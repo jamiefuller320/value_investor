@@ -280,8 +280,10 @@ def run_epoch0_market_shard(
     library_root = Path(library_root)
     shard_root = Path(shard_root or shard_root_for_market(market_id))
     meta = ensure_shard_meta(market_id, shard_root, phase=2)
-    if skip_if_marked_local_day and not force and epoch0_marked_on_local_day(
-        shard_root, meta, when=now
+    if (
+        skip_if_marked_local_day
+        and not force
+        and epoch0_marked_on_local_day(shard_root, meta, when=now)
     ):
         return {
             "skipped": True,

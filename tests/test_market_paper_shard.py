@@ -170,7 +170,7 @@ def test_epoch0_weekday_marks_after_settle(tmp_path: Path):
     assert result.get("skipped") is False
     assert result["cadence"] == "weekday"
     assert result["ai_judgment"] is False
-    log = (shard_root / "weekday_batch_log.json")
+    log = shard_root / "weekday_batch_log.json"
     assert log.exists()
     import json
 
