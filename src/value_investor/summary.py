@@ -1466,15 +1466,38 @@ def _patch_research_overlay_module() -> None:
     overlay_mod.apply_research_overlay._fcf_enforcement_installed = True  # type: ignore[attr-defined]
 
 
+def _try_install_publish_fcf_hooks() -> bool:
+    """Install publish export hooks when the module has finished loading."""
+    import sys
+
+    if getattr(_try_install_publish_fcf_hooks, "_active", False):
+        return False
+    publish_mod = sys.modules.get("value_investor.publish")
+    if publish_mod is None:
+        return False
+    if getattr(publish_mod, "_fcf_export_hooks_installed", False):
+        return True
+    if not hasattr(publish_mod, "_load_reports"):
+        return False
+    _try_install_publish_fcf_hooks._active = True
+    try:
+        _install_publish_fcf_export_hooks()
+    finally:
+        _try_install_publish_fcf_hooks._active = False
+    return bool(getattr(publish_mod, "_fcf_export_hooks_installed", False))
+
+
 def _install_publish_fcf_export_hooks() -> None:
     """Ensure dashboard publish paths enforce FCF notes on cached email_reports rows."""
-    try:
-        import value_investor.publish as publish_mod
-    except ImportError:
+    import sys
+
+    publish_mod = sys.modules.get("value_investor.publish")
+    if publish_mod is None:
         return
     if getattr(publish_mod, "_fcf_export_hooks_installed", False):
         return
     if not hasattr(publish_mod, "_load_reports"):
+        _schedule_publish_module_finalize()
         return
 
     original_load = publish_mod._load_reports
@@ -1523,6 +1546,7 @@ def ensure_fcf_export_hooks() -> None:
     _patch_research_overlay_module()
     _ensure_overlay_refresh_fcf_enforcement()
     _install_publish_fcf_export_hooks()
+    _try_install_publish_fcf_hooks()
     _rebind_stale_apply_research_overlay()
 
 
@@ -1542,8 +1566,58 @@ def _install_fcf_export_hooks() -> None:
     ensure_fcf_export_hooks()
 
 
+def _schedule_publish_module_finalize() -> None:
+    """Finalize publish hooks synchronously when ``value_investor.publish`` finishes loading."""
+    import inspect
+    import sys
+
+    if getattr(_schedule_publish_module_finalize, "_scheduled", False):
+        return
+    for frame_info in inspect.stack():
+        if frame_info.frame.f_globals.get("__name__") != "value_investor.publish":
+            continue
+        _schedule_publish_module_finalize._scheduled = True
+
+        def _trace_publish_finalize(frame, event, arg):
+            if (
+                event == "return"
+                and frame.f_code.co_filename.endswith("publish.py")
+                and frame.f_code.co_name == "<module>"
+            ):
+                ensure_fcf_export_hooks()
+                sys.settrace(None)
+            return _trace_publish_finalize
+
+        sys.settrace(_trace_publish_finalize)
+        return
+
+
+def _install_publish_import_finalize_hook() -> None:
+    """Retry publish hook install after later imports (publish-first CLI paths)."""
+    import builtins
+
+    if getattr(_install_publish_import_finalize_hook, "_installed", False):
+        return
+    _install_publish_import_finalize_hook._installed = True
+    original_import = builtins.__import__
+
+    def _import_with_publish_finalize(name, globals=None, locals=None, fromlist=(), level=0):
+        module = original_import(name, globals, locals, fromlist, level)
+        if not getattr(_import_with_publish_finalize, "_active", False):
+            _import_with_publish_finalize._active = True
+            try:
+                _try_install_publish_fcf_hooks()
+            finally:
+                _import_with_publish_finalize._active = False
+        return module
+
+    builtins.__import__ = _import_with_publish_finalize
+
+
 def _schedule_deferred_fcf_export_hooks() -> None:
     """Install publish hooks after the import graph settles (publish-first CLI paths)."""
+    _schedule_publish_module_finalize()
+    _install_publish_import_finalize_hook()
     import threading
 
     def _deferred() -> None:

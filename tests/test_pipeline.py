@@ -443,6 +443,136 @@ def test_build_dashboard_bundle_enforces_sbry_style_stale_email_reports(tmp_path
     assert sbry["conviction_score"] == pytest.approx(0.5231 * 0.85)
 
 
+def test_load_reports_enforces_srp_style_stale_email_reports_immediately(tmp_path: Path):
+    """Publish must enforce FCF notes on cached rows without waiting for deferred hooks."""
+    import sys
+
+    for module_name in (
+        "value_investor.publish",
+        "value_investor.publish_cli",
+        "value_investor.summary",
+    ):
+        sys.modules.pop(module_name, None)
+
+    from value_investor.publish import _load_reports
+    from value_investor.storage import write_json
+
+    write_json(
+        tmp_path / "email_reports.json",
+        [
+            {
+                "ticker": "SRP.L",
+                "name": "Serco Group plc",
+                "signal": "buy",
+                "adjusted_signal": "buy",
+                "fcf_basis_overlay": False,
+                "conviction_score": 0.557915,
+                "action_note": (
+                    "Buy — neutral timing | FCF basis mismatch: filing £413.5M | "
+                    "screen TTM £361.2M | company-adj £219M"
+                ),
+                "models_passed": 4,
+                "model_count": 22,
+                "composite_score": 0.6179,
+                "families_passed": 4,
+                "data_quality_score": 1.0,
+                "metrics_present": 20,
+                "metrics_total": 20,
+                "weeks_at_signal": 9,
+                "signal_trend": "stable",
+                "stability_label": "persistent",
+                "timing_signal": "neutral",
+                "timing_score": 0.5,
+                "summary": "Buy (4/22 models).",
+                "passed_models": [],
+                "key_metrics": {},
+            }
+        ],
+        compact=True,
+    )
+
+    reports, _run_at = _load_reports(tmp_path)
+    srp = next(row for row in reports if row["ticker"] == "SRP.L")
+    assert srp["fcf_basis_overlay"] is True
+    assert srp["adjusted_signal"] == "hold"
+    assert srp["conviction_score"] == pytest.approx(0.557915 * 0.85)
+
+
+def test_enrich_signals_with_fcf_basis_overlay_honours_srp_style_buy(tmp_path: Path):
+    """Pipeline export must cap buy -> hold when company-adj FCF diverges (SRP.L-style)."""
+    sources = tmp_path / "research" / "SRP.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "SRP.L",
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 500_000_000.0,
+                        "Capital Expenditure": -86_500_000.0,
+                        "Free Cash Flow": 413_500_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (filings / "annual_results.txt").write_text(
+        "Company-adjusted free cash flow of £219.0m after lease adjustments",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings / "annual_results.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "SRP.L",
+                "signal": "buy",
+                "conviction_score": 0.557915,
+                "free_cashflow": 413_500_000.0,
+                "free_cashflow_screen_ttm": 361_200_000.0,
+                "action_note": (
+                    "Buy — neutral timing | FCF basis mismatch: filing £413.5M | "
+                    "screen TTM £361.2M | company-adj £219M"
+                ),
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "SRP.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_fcf_basis_overlay(signals, model_results, output_dir=tmp_path)
+
+    assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "hold"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.557915 * 0.85)
+
+
 def test_apply_research_overlay_syncs_screening_snapshot(tmp_path: Path):
     report = _minimal_report()
     doc = ResearchDocument(
