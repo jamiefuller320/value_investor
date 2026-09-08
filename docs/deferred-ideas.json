@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-08T12:05:44+00:00",
+  "updated_at": "2026-09-08T12:47:00+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7773,7 +7773,76 @@
       "added_at": "2026-09-08T08:35:45+00:00"
     },
     {
+      "id": "L350",
+      "category": "later",
+      "section": "learning",
+      "title": "Post-exit evidence-readiness interrupt (not knob apply)",
+      "summary": "After a full position close, check whether exit-shadow / exit-timing / lifecycle cohort floors newly crossed and queue a human or director review. Do not auto-apply knobs from a single exit, and never retune epoch-0 buy_tier_level (is_cohort_lab).",
+      "revisit_when": "learning_tracks_exit_shadow.json shows \u226515 closed exits per primary track (N25) or a human asks for earlier readiness interrupts than Sunday paper-learning cadence",
+      "tags": [
+        "epoch0",
+        "exit-shadow",
+        "lifecycle",
+        "knobs",
+        "learning-triggers"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a08071-647c-787c-a659-09449e235c1b",
+      "added_at": "2026-09-08T09:56:24+00:00"
+    },
+    {
       "id": "N113",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Per-exit automatic knob-change review on epoch-0",
+      "summary": "Do not wire position close \u2192 decision-review --apply (or cohort-lab retune). Epoch-0 is the frozen lifecycle datum; knob apply stays on AI/rules tracks after thick epoch marks, with exit-shadow still observe-only until cohort maturity.",
+      "revisit_when": "Never unless N25 is explicitly retired and buy_tier_level is no longer is_cohort_lab; prefer overlay/divergence on the same holdings (N99) instead",
+      "tags": [
+        "epoch0",
+        "knobs",
+        "not-now",
+        "exit"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a08071-647c-787c-a659-09449e235c1b",
+      "added_at": "2026-09-08T09:56:24+00:00"
+    },
+    {
+      "id": "L351",
+      "category": "later",
+      "section": "learning",
+      "title": "Revisit S&P 500 weekly paper after 12-week trajectory",
+      "summary": "sp500 is filing-ready and admitted (epoch-0 + rememo), but learning_ready is still false (10 unique days / 7.3 weeks). Keep weekly_paper_shard_markets on euro_depth until trajectory hits 12 unique days over 12 weeks.",
+      "revisit_when": "ftse-library learning-depth --market sp500 reports learning_ready true on canonical filings plus 12 unique screen days",
+      "tags": [
+        "sp500",
+        "weekly-paper",
+        "learning-ready",
+        "trajectory"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a08068-ac7f-7a5b-9ee4-ad24103a703e",
+      "added_at": "2026-09-08T09:52:52+00:00"
+    },
+    {
+      "id": "N114",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Do not weekday-burst first-time memos on admitted books",
+      "summary": "Admitted first-time memos (names with no research.md yet) stay on Sunday _research_markets. Weekday rememo only rewrites existing bodies. A weekday first-memo burst would compete with euro focus research and weekly_ops the same way a Sunday rememo dump would.",
+      "revisit_when": "Sunday research has run with admitted markets on _research_markets and leftover no-memo buy-tier still grows after two live Sundays",
+      "tags": [
+        "equal-support",
+        "rememo",
+        "research",
+        "admitted"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a080e4-81a3-78d6-8307-eda7100cef63",
+      "added_at": "2026-09-08T12:25:36+00:00"
+    },
+    {
+      "id": "N115",
       "category": "not_now",
       "section": "not_now",
       "title": "Do not drain admitted rememo on Sunday or as a weekday burst",
@@ -7789,10 +7858,10 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a080e4-81a3-78d6-8307-eda7100cef63",
-      "added_at": "2026-09-08T12:05:44+00:00"
+      "added_at": "2026-09-08T12:47:00+00:00"
     },
     {
-      "id": "L350",
+      "id": "L352",
       "category": "later",
       "section": "research",
       "title": "Cap Sunday rememo separately from research_hard_cap",
@@ -7807,7 +7876,7 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a080e4-81a3-78d6-8307-eda7100cef63",
-      "added_at": "2026-09-08T12:05:44+00:00"
+      "added_at": "2026-09-08T12:47:00+00:00"
     }
   ],
   "fragments": [
@@ -8274,6 +8343,18 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a076bd-bdf3-7be5-8c3e-f65ccd5a4c01",
       "added_at": "2026-09-06T20:18:27+00:00"
+    },
+    {
+      "id": "frag-20260908-01",
+      "text": "S&P 500 screen archives skipped several August Sundays (2026-08-09, 08-23, 08-30), so unique_days lags archive_files. Cadence is running again; do not backfill invented archives.",
+      "tags": [
+        "sp500",
+        "screen-cadence",
+        "unique-days"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a08068-ac7f-7a5b-9ee4-ad24103a703e",
+      "added_at": "2026-09-08T09:52:52+00:00"
     }
   ],
   "schema_version": 1
