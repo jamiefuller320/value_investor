@@ -147,6 +147,27 @@ def test_observe_sim_includes_admitted_markets():
     assert "euro_depth" in markets
 
 
+def test_equal_support_census_counts_first_time_and_flattens(tmp_path: Path):
+    _seed_market(tmp_path, "sp500")
+    research = tmp_path / "markets" / "sp500" / "screen" / "research" / "KEEP"
+    research.mkdir(parents=True)
+    (research / "research.md").write_text("# memo\n", encoding="utf-8")
+    policy = {"ladder": {"admitted_learning_markets": ["sp500"]}}
+    result = run_equal_support_package(
+        tmp_path,
+        policy,
+        census_only=True,
+        price_history=_price_history(),
+    )
+    row = result["markets"]["sp500"]
+    assert row["first_time_memo_count"] == 1
+    assert row["first_time_memos"]["sample"] == ["AAA"]
+    assert row["rememo_eligible_count"] == row["rememo"]["eligible_count"]
+    assert row["timing"]["skipped"] is True
+    assert row["archives"]["skipped"] is True
+    assert (tmp_path / "equal_support_status.json").exists()
+
+
 def test_stamp_archives_is_point_in_time(tmp_path: Path):
     _seed_market(tmp_path, "sp500")
     out = stamp_library_timing_archives(tmp_path, "sp500", history=_price_history())

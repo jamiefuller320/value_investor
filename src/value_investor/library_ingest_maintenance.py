@@ -32,6 +32,10 @@ from value_investor.library_ingest_loop import (
     LibraryIngestLoopResult,
     run_library_ingest_loop,
 )
+from value_investor.library_maintenance_stagger import (
+    plan_maintenance_slot,
+    write_maintenance_slot_cursor,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +45,9 @@ DEFAULT_MAINTENANCE_MAX_TARGETS = FTSE_MAINTENANCE_MAX_TARGETS
 @dataclass
 class LibraryIngestMaintenanceResult:
     markets: list[str] = field(default_factory=list)
+    configured_markets: list[str] = field(default_factory=list)
+    deferred_markets: list[str] = field(default_factory=list)
+    stagger: dict[str, Any] = field(default_factory=dict)
     results: list[dict[str, Any]] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
 
@@ -48,6 +55,9 @@ class LibraryIngestMaintenanceResult:
         return {
             "run_at": datetime.now(UTC).isoformat(),
             "markets": self.markets,
+            "configured_markets": self.configured_markets,
+            "deferred_markets": self.deferred_markets,
+            "stagger": self.stagger,
             "results": self.results,
             "errors": self.errors,
         }
@@ -128,11 +138,29 @@ def run_library_ingest_maintenance(
     """Run scan-then-target maintenance for parity and exhausted leftover markets."""
     library_root = Path(library_root)
     policy = load_policy(policy_path)
-    market_list = markets or list_library_ingest_maintenance_markets(
+    configured = markets or list_library_ingest_maintenance_markets(
         library_root=library_root,
         policy=policy,
     )
-    outcome = LibraryIngestMaintenanceResult(markets=market_list)
+    explicit = markets is not None
+    stagger = (
+        {
+            "staggered": False,
+            "reason": "explicit_markets",
+            "configured": list(configured),
+            "selected": list(configured),
+            "deferred": [],
+        }
+        if explicit
+        else plan_maintenance_slot(configured, library_root=library_root)
+    )
+    market_list = list(stagger.get("selected") or [])
+    outcome = LibraryIngestMaintenanceResult(
+        markets=market_list,
+        configured_markets=list(stagger.get("configured") or configured),
+        deferred_markets=list(stagger.get("deferred") or []),
+        stagger=stagger,
+    )
     if not market_list:
         outcome.errors.append("no maintenance markets configured")
         return outcome
@@ -156,6 +184,17 @@ def run_library_ingest_maintenance(
         except Exception as exc:  # noqa: BLE001
             logger.warning("Library maintenance failed for %s: %s", market_id, exc)
             outcome.errors.append(f"{market_id}: {exc}")
+
+    if stagger.get("staggered") and market_list:
+        try:
+            write_maintenance_slot_cursor(
+                library_root,
+                last_head=market_list[-1],
+                selected=market_list,
+                deferred=list(stagger.get("deferred") or []),
+            )
+        except OSError as exc:
+            logger.warning("Maintenance slot cursor write failed: %s", exc)
 
     return outcome
 

@@ -52,7 +52,9 @@ def _utc_now() -> datetime:
     return datetime.now(UTC)
 
 
-def already_ran_today(summary_path: Path = DEFAULT_SUMMARY_PATH, *, now: datetime | None = None) -> bool:
+def already_ran_today(
+    summary_path: Path = DEFAULT_SUMMARY_PATH, *, now: datetime | None = None
+) -> bool:
     """True when a non-dry admitted rememo pass already ran this UTC day."""
     if not summary_path.exists():
         return False

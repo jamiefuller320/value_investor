@@ -1,0 +1,107 @@
+name: Library epoch-0 weekday marks
+
+# Local-open weekday marks for admitted epoch-0 buy_tier_level books (L328).
+# Separate from FTSE paper-auto (08:25 UTC) and from Phase 3 shard-weekday AI.
+# Session gate + already-marked-today skip inside ftse-library epoch0-weekday.
+on:
+  schedule:
+    # ASX 10:00+30: 00:45 UTC is 10:45 AEST / 11:45 AEDT (Mon–Fri Sydney)
+    - cron: "45 0 * * 1-5"
+    # Euro 09:00+30: 08:45 UTC is 09:45 CET / 10:45 CEST — not the FTSE 08:25 slot
+    - cron: "45 8 * * 1-5"
+    # US 09:30+30: 14:15 UTC = 10:15 EDT; 15:15 UTC = 10:15 EST
+    - cron: "15 14 * * 1-5"
+    - cron: "15 15 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      markets:
+        description: "Comma-separated market ids (empty = admitted learning markets)"
+        type: string
+        default: ""
+      force:
+        description: "Ignore session settle and already-marked-today skip"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: library-epoch0-weekday
+  cancel-in-progress: false
+
+jobs:
+  epoch0-weekday:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: bash scripts/gha_pip_install.sh -e .
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Mark admitted epoch-0 books past local settle
+        env:
+          MARKETS: ${{ github.event.inputs.markets }}
+          FORCE: ${{ github.event.inputs.force || 'false' }}
+        run: |
+          set -euo pipefail
+          require_safe() {
+            local name="$1" val="$2" re="$3"
+            if [ -n "$val" ] && ! [[ "$val" =~ $re ]]; then
+              echo "Rejecting unsafe dispatch input: $name" >&2
+              exit 1
+            fi
+          }
+          require_safe markets "${MARKETS:-}" '^[a-z0-9_,]+$'
+          ARGS=(
+            --root docs/data/library
+            --policy docs/data/library/policy.json
+            epoch0-weekday
+            --json
+            --json-path /tmp/epoch0_weekday.json
+          )
+          if [ -n "${MARKETS:-}" ]; then
+            ARGS+=(--markets "$MARKETS")
+          fi
+          if [ "${FORCE:-}" = "true" ]; then
+            ARGS+=(--force)
+          fi
+          ftse-library "${ARGS[@]}"
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path("/tmp/epoch0_weekday.json").read_text())
+          print(json.dumps(data, indent=2)[:4000])
+          PY
+
+      - name: Refresh equal-support census
+        run: |
+          ftse-library --root docs/data/library --policy docs/data/library/policy.json \
+            equal-support --census-only --json > /tmp/equal_support_census.json || true
+
+      - name: Commit epoch-0 weekday artifacts
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: admitted epoch-0 weekday marks [skip ci]"
+          file_pattern: >-
+            docs/data/library/equal_support_status.json
+            docs/data/library/markets/**/screen/near_miss_watch.json
+            docs/data/paper_automation/markets/**/automated_fund.json
+            docs/data/paper_automation/markets/**/config.json
+            docs/data/paper_automation/markets/**/rebalance_log.json
+            docs/data/paper_automation/markets/**/shard_meta.json
+            docs/data/paper_automation/markets/**/shard_phase.json
+            docs/data/paper_automation/markets/**/weekday_batch_log.json
+            docs/data/paper_automation/markets/**/buy_tier_level/**
+          skip_fetch: false

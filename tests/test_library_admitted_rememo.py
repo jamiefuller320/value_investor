@@ -177,7 +177,9 @@ def test_dry_run_selects_and_skips_weekend(tmp_path: Path, monkeypatch):
 def test_already_ran_today_gate(tmp_path: Path):
     path = tmp_path / "summary.json"
     path.write_text(
-        json.dumps({"run_at": "2026-09-08T07:40:00+00:00", "dry_run": False, "rememoed": ["sp500:AAA"]}),
+        json.dumps(
+            {"run_at": "2026-09-08T07:40:00+00:00", "dry_run": False, "rememoed": ["sp500:AAA"]}
+        ),
         encoding="utf-8",
     )
     now = datetime(2026, 9, 8, 16, 30, tzinfo=UTC)

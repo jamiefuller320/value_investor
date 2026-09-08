@@ -1,6 +1,888 @@
 {
   "tasks": [
     {
+      "id": "eng-20260908-04",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for BOWL.L",
+      "summary": "BOWL.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:BOWL.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "BOWL.L",
+        "severity": "medium",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Buy — neutral timing | FCF basis mismatch: filing £37.0M | screen TTM £43.8M | Earnings growth basis divergence >300 bps: statutory 16.4% vs filing core 1.7% | Research: Accumulate, Medium risk — Primary filings confirm accelerating revenue, strong cash generation, shareholder returns and balance-sheet headroom, broadly supporting the quantitative buy signal, while cyclical volume softness, lease intensity and site-level impairments temper conviction pending further H2 FY26 trading evidence. | Research: Accumulate, Medium risk — Primary filings confirm accelerating revenue, strong cash generation, shareholder returns and balance-sheet headroom, broadly supporting the quantitative buy signal, while cyclical volume softness, lease intensity and site-level impairments temper conviction pending further H2 FY26 trading evidence. | Research: Accumulate, Medium risk — Primary filings confirm accelerating revenue, strong cash generation, shareholder returns and balance-sheet headroom, broadly supporting the quantitative buy signal, while cyclical volume softness, lease intensity and site-level impairments temper conviction pending further H2 FY26 trading evidence.",
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260908-04",
+        "verified_at": "2026-09-08T14:03:47.535273+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_pipeline.py",
+            "tests/test_summary.py"
+          ],
+          "output_tail": "........................................................................ [ 66%]\n.....................................                                    [100%]\n109 passed in 3.43s"
+        }
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "result_path": "output/engineering_result_eng-20260908-04.md",
+      "branch_name": "cursor/eng-20260908-04-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-09-08T12:21:12.449538+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/499",
+      "pr_number": 499,
+      "merged_at": "2026-09-08T14:03:47.535698+00:00"
+    },
+    {
+      "id": "eng-20260908-05",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for BREE.L",
+      "summary": "BREE.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:BREE.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "BREE.L",
+        "severity": "medium",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £105.8M | screen TTM £107.8M | company-adj £133.2M | Earnings growth basis divergence >300 bps: statutory -13.9% vs filing core -18.7% | Research: Accumulate, Medium risk — Filings confirm the screen’s cheapness and cash-yield case (strong FCF, progressive dividend, sub-book P/B) but also validate quality-model failures through declining statutory earnings, sub-target ROIC, and leverage elevated by acquisition spending in a prolonged GB cyclical downturn. | Research: Accumulate, Medium risk — Filings confirm the screen’s cheapness and cash-yield case (strong FCF, progressive dividend, sub-book P/B) but also validate quality-model failures through declining statutory earnings, sub-target ROIC, and leverage elevated by acquisition spending in a prolonged GB cyclical downturn. | Research: Accumulate, Medium risk — Filings corroborate the screen’s value and cash-return case—sub-book valuation, strong FY2025 FCF, progressive dividend and covenant headroom—but cyclical GB weakness, M&A-driven leverage and sub-target ROIC temper outright strong-buy conviction pending a UK volume inflection. | Research: Accumulate, Medium risk — Filings corroborate the screen’s value and cash-return case—sub-book valuation, strong FY2025 FCF, progressive dividend and covenant headroom—but cyclical GB weakness, M&A-driven leverage and sub-target ROIC temper outright strong-buy conviction pending a UK volume inflection.",
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260908-05",
+        "verified_at": "2026-09-08T12:27:46.596256+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_pipeline.py",
+            "tests/test_summary.py"
+          ],
+          "output_tail": "........................................................................ [ 67%]\n..................................                                       [100%]\n106 passed in 2.80s"
+        }
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
+      "result_path": "output/engineering_result_eng-20260908-05.md",
+      "branch_name": "cursor/eng-20260908-05-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-09-08T12:21:32.913182+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/500",
+      "pr_number": 500,
+      "merged_at": "2026-09-08T12:27:46.596702+00:00"
+    },
+    {
+      "id": "eng-20260908-06",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for DNLM.L",
+      "summary": "DNLM.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:DNLM.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "DNLM.L",
+        "severity": "medium",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Buy — neutral timing | FCF basis mismatch: filing £211.4M | screen TTM £163.9M | company-adj £171M | Research: Accumulate, Medium risk — Filings confirm a cash-generative, moderately growing market leader at a screen-cheap valuation, but H1 margin pressure, consumer cyclicality and CEO transition temper conviction versus the raw buy signal. | Research: Accumulate, Medium risk — Filings confirm a cash-generative, moderately growing market leader at a screen-cheap valuation, but H1 margin pressure, consumer cyclicality and CEO transition temper conviction versus the raw buy signal. | Research: Accumulate, Medium risk — Filings confirm a cash-generative, moderately growing market leader at a screen-cheap valuation, but H1 margin pressure, consumer cyclicality and CEO transition temper conviction versus the raw buy signal."
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "pr_open",
+      "result_path": "output/engineering_result_eng-20260908-06.md",
+      "branch_name": "cursor/eng-20260908-06-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-09-08T12:32:08.334255+00:00"
+    },
+    {
+      "id": "eng-20260908-07",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for GFRD.L",
+      "summary": "GFRD.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:GFRD.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "GFRD.L",
+        "severity": "medium",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Buy — neutral timing | FCF basis mismatch: filing £63.3M | screen TTM £50.0M | Research: Accumulate, Medium risk — Primary filings confirm accelerating margins, net-cash balance sheet, record order book and dividend growth that strengthen the quantitative buy case, partially offset by construction cyclicality, legacy provision load and unquantified fire-safety contingencies. | Research: Accumulate, Medium risk — Primary filings confirm accelerating margins, net-cash balance sheet, record order book and dividend growth that strengthen the quantitative buy case, partially offset by construction cyclicality, legacy provision load and unquantified fire-safety contingencies. | Research: Accumulate, Medium risk — Primary filings confirm accelerating margins, net-cash balance sheet, record order book and dividend growth that strengthen the quantitative buy case, partially offset by construction cyclicality, legacy provision load and unquantified fire-safety contingencies."
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "pr_open",
+      "result_path": "output/engineering_result_eng-20260908-07.md",
+      "branch_name": "cursor/eng-20260908-07-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-09-08T14:07:48.642858+00:00"
+    },
+    {
+      "id": "eng-20260908-08",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for HLN.L",
+      "summary": "HLN.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:HLN.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "HLN.L",
+        "severity": "medium",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Buy — neutral timing | FCF basis mismatch: filing £2221M | screen TTM £1801.8M | Research: Accumulate, Medium risk — Filings confirm the screen’s quality, FCF, and capital-return pillars, but organic growth consistently trails medium-term ambition and the adjusted-vs-reported earnings divergence warrants caution, so deep research supports measured accumulation rather than full conviction on the raw buy signal. | Research: Accumulate, Medium risk — Filings confirm the screen’s quality, FCF, and capital-return pillars, but organic growth consistently trails medium-term ambition and the adjusted-vs-reported earnings divergence warrants caution, so deep research supports measured accumulation rather than full conviction on the raw buy signal. | Research: Accumulate, Medium risk — Filings confirm the screen’s quality, FCF, and capital-return pillars, but organic growth consistently trails medium-term ambition and the adjusted-vs-reported earnings divergence warrants caution, so deep research supports measured accumulation rather than full conviction on the raw buy signal."
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260908-09",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for IMB.L",
+      "summary": "IMB.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:IMB.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "IMB.L",
+        "severity": "medium",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £3166M | screen TTM £2502.4M | Earnings growth basis divergence >300 bps: statutory -16.5% vs filing core -24.1% | Research: Accumulate, Medium risk — Filing-backed cash generation, dividend progress, and buyback discipline support the quantitative strong-buy signal, but FY25 earnings decline, leverage/liquidity metrics, regulatory overhang, and absent interim filings prevent full confirmation of a deep-value entry. | Research: Accumulate, Medium risk — Filing-backed cash generation, dividend progress, and buyback discipline support the quantitative strong-buy signal, but FY25 earnings decline, leverage/liquidity metrics, regulatory overhang, and absent interim filings prevent full confirmation of a deep-value entry. | Research: Accumulate, Medium risk — Deep research largely confirms the screen’s cash-yield, dividend-coverage, and capital-return thesis from annual filings and FY25 FCF data, but declining reported GAAP earnings, elevated leverage and weak liquidity metrics, absent interim filings, and unresolved tobacco/NGP transition risks prevent full endorsement of the strong-buy signal at face value. | Research: Accumulate, Medium risk — Deep research largely confirms the screen’s cash-yield, dividend-coverage, and capital-return thesis from annual filings and FY25 FCF data, but declining reported GAAP earnings, elevated leverage and weak liquidity metrics, absent interim filings, and unresolved tobacco/NGP transition risks prevent full endorsement of the strong-buy signal at face value."
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260908-10",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for MGNS.L",
+      "summary": "MGNS.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:MGNS.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "MGNS.L",
+        "severity": "medium",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £170.7M | screen TTM £141.5M | Research: Accumulate, Medium risk — Primary filings confirm the screen’s quality-cheapness pairing—record earnings, net cash, rising dividends and broad model passes—but partnership housing capital intensity, Fit Out cyclicality and building-safety/regulatory overhangs prevent full conviction upgrade beyond the quantitative strong-buy signal. | Research: Accumulate, Medium risk — Primary filings confirm the screen’s quality-cheapness pairing—record earnings, net cash, rising dividends and broad model passes—but partnership housing capital intensity, Fit Out cyclicality and building-safety/regulatory overhangs prevent full conviction upgrade beyond the quantitative strong-buy signal. | Research: Accumulate, Medium risk — Primary filings confirm a high-quality, net-cash compounder with accelerating earnings, a strong order book and disciplined capital returns, supporting the quantitative Strong Buy, while housing capital lock-up, cyclical construction exposure and a new/low-duration screen signal warrant phased accumulation rather than maximum conviction. | Research: Accumulate, Medium risk — Primary filings confirm a high-quality, net-cash compounder with accelerating earnings, a strong order book and disciplined capital returns, supporting the quantitative Strong Buy, while housing capital lock-up, cyclical construction exposure and a new/low-duration screen signal warrant phased accumulation rather than maximum conviction."
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260908-11",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for MONY.L",
+      "summary": "MONY.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:MONY.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "MONY.L",
+        "severity": "medium",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £98.1M | screen TTM £80M | Research: Accumulate, Medium risk — Filings confirm a profitable, cash-generative, dividend-supported compounder trading at modest earnings and FCF multiples, broadly validating the strong-buy screen, while AI/competitive headwinds, VAT uncertainty, and slowing reported growth temper conviction versus an outright aggressive entry. | Research: Accumulate, Medium risk — Filings confirm a profitable, cash-generative, dividend-supported compounder trading at modest earnings and FCF multiples, broadly validating the strong-buy screen, while AI/competitive headwinds, VAT uncertainty, and slowing reported growth temper conviction versus an outright aggressive entry. | Research: Accumulate, Medium risk — Filings confirm the screen’s quality-and-yield buy case — record LFL revenue, disciplined costs, strong cash conversion and explicit capital returns — but AI/search disruption risk, PPC margin pressure, the HMRC VAT dispute and recent leverage build prevent full conviction without further H2 cashflow and FY2026 margin verification. | Research: Accumulate, Medium risk — Filings confirm the screen’s quality-and-yield buy case — record LFL revenue, disciplined costs, strong cash conversion and explicit capital returns — but AI/search disruption risk, PPC margin pressure, the HMRC VAT dispute and recent leverage build prevent full conviction without further H2 cashflow and FY2026 margin verification."
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260908-12",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for RIO.L",
+      "summary": "RIO.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:RIO.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "RIO.L",
+        "severity": "medium",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £4497M | screen TTM £3595.5M | Earnings growth basis divergence >300 bps: statutory -13.8% vs filing core -8.2% | Research: Accumulate, Medium risk — Filing-backed quality, dividend yield and screen cheapness support the Strong Buy signal, but cyclical price dependence, rising closure provisions, FCF/dividend tension in FY2025 and jurisdictional disputes warrant phased accumulation rather than maximum conviction. | Research: Accumulate, Medium risk — Filing-backed quality, dividend yield and screen cheapness support the Strong Buy signal, but cyclical price dependence, rising closure provisions, FCF/dividend tension in FY2025 and jurisdictional disputes warrant phased accumulation rather than maximum conviction. | Research: Accumulate, Medium risk — Filing-backed quality, dividend yield and screen cheapness support the Strong Buy signal, but cyclical price dependence, rising closure provisions, FCF/dividend tension in FY2025 and jurisdictional disputes warrant phased accumulation rather than maximum conviction."
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260908-13",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for RS1.L",
+      "summary": "RS1.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:RS1.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "RS1.L",
+        "severity": "medium",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Buy — wait for pullback | FCF basis mismatch: filing £210.9M | screen TTM £168M | FCF definition divergence: statutory 1.99× vs management 2.81× dividend coverage | Earnings growth basis divergence >300 bps: statutory 6.5% vs filing core -3.2% | Research: Accumulate, Medium risk — Filings confirm a cash-generative, conservatively levered distributor returning capital and gaining share in weak markets, supporting the screen’s quality/dividend/risk pillars, but adjusted earnings are still declining and cyclical/Mexico headwinds plus statutory-adjusted EPS divergence prevent full confirmation of a classic deep-value re-rating case. | Research: Accumulate, Medium risk — Filings confirm a cash-generative, conservatively levered distributor returning capital and gaining share in weak markets, supporting the screen’s quality/dividend/risk pillars, but adjusted earnings are still declining and cyclical/Mexico headwinds plus statutory-adjusted EPS divergence prevent full confirmation of a classic deep-value re-rating case. | Research: Accumulate, Medium risk — Filings confirm a cash-generative, conservatively levered distributor returning capital and gaining share in weak markets, supporting the screen’s quality/dividend/risk pillars, but adjusted earnings are still declining and cyclical/Mexico headwinds plus statutory-adjusted EPS divergence prevent full confirmation of a classic deep-value re-rating case."
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260908-14",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for SBRY.L",
+      "summary": "SBRY.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:SBRY.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "SBRY.L",
+        "severity": "medium",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Buy — neutral timing | FCF basis mismatch: filing £923M | screen TTM £821.9M | company-adj £574M | Research: Accumulate, Medium risk — Filings confirm the screen’s cheapness and cash-return pillars — strong grocery momentum, £574m retail FCF, progressive dividend, and buybacks — but margin compression, lease-adjusted leverage, earnings restatements, and the Argos disposal overhang prevent full confirmation of the raw buy signal. | Research: Accumulate, Medium risk — Filings confirm the screen’s cheapness and cash-return pillars — strong grocery momentum, £574m retail FCF, progressive dividend, and buybacks — but margin compression, lease-adjusted leverage, earnings restatements, and the Argos disposal overhang prevent full confirmation of the raw buy signal. | Research: Accumulate, Medium risk — Filings confirm the screen’s cheapness and cash-return pillars — strong grocery momentum, £574m retail FCF, progressive dividend, and buybacks — but margin compression, lease-adjusted leverage, earnings restatements, and the Argos disposal overhang prevent full confirmation of the raw buy signal."
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260908-15",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for SN.L",
+      "summary": "SN.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:SN.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "SN.L",
+        "severity": "medium",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £852M | screen TTM £1059M | Earnings growth basis divergence >300 bps: statutory 52.8% vs filing core 16.5% | Research: Accumulate, Medium risk — Deep research broadly supports the screen’s Strong Buy on valuation, FCF recovery and capital return, but filing gaps, US knee weakness, reimbursement headwinds and CFO turnover warrant phased conviction rather than full confidence. | Research: Accumulate, Medium risk — Deep research broadly supports the screen’s Strong Buy on valuation, FCF recovery and capital return, but filing gaps, US knee weakness, reimbursement headwinds and CFO turnover warrant phased conviction rather than full confidence. | Research: Accumulate, Medium risk — Deep research partially confirms the Strong Buy screen — improving FCF, reasonable multiples and active capital return support the case, but missing annual/interim filings, Q2 operational softness and CFO turnover mean verify-before-trade on full-year accounts and H1 results is essential. | Research: Accumulate, Medium risk — Deep research partially confirms the Strong Buy screen — improving FCF, reasonable multiples and active capital return support the case, but missing annual/interim filings, Q2 operational softness and CFO turnover mean verify-before-trade on full-year accounts and H1 results is essential."
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260908-16",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for SRP.L",
+      "summary": "SRP.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:SRP.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "SRP.L",
+        "severity": "medium",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Buy — neutral timing | FCF basis mismatch: filing £413.5M | screen TTM £361.2M | company-adj £219M | Earnings growth basis divergence >300 bps: statutory 244.8% vs filing core -41.8% | Research: Accumulate, Medium risk — Filings confirm the screen’s cash-generation and defence-led growth narrative — order book, margin progression, and surplus-capital returns — but statutory/adjusted earnings divergence and immigration/policy exposure prevent full endorsement of an unqualified buy. | Research: Accumulate, Medium risk — Filings confirm the screen’s cash-generation and defence-led growth narrative — order book, margin progression, and surplus-capital returns — but statutory/adjusted earnings divergence and immigration/policy exposure prevent full endorsement of an unqualified buy. | Research: Accumulate, Medium risk — Filings confirm the screen’s cash-generation and defence-led growth narrative — order book, margin progression, and surplus-capital returns — but statutory/adjusted earnings divergence and immigration/policy exposure prevent full endorsement of an unqualified buy."
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260908-17",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for TPK.L",
+      "summary": "TPK.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:TPK.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "TPK.L",
+        "severity": "medium",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Buy — neutral timing | FCF basis mismatch: filing £298M | screen TTM £226.1M | Earnings growth basis divergence >300 bps: statutory -127.6% vs filing core -97.2% | Research: Accumulate, Medium risk — Primary filings confirm the screen’s cheapness and financial-health pillars via strong free cash flow, net-cash-before-leases, and deleveraging, but weaken confidence in near-term earnings quality given cyclical headwinds, repeated impairments, and still-subdued Merchanting profitability. | Research: Accumulate, Medium risk — Primary filings confirm the screen’s cheapness and financial-health pillars via strong free cash flow, net-cash-before-leases, and deleveraging, but weaken confidence in near-term earnings quality given cyclical headwinds, repeated impairments, and still-subdued Merchanting profitability. | Research: Accumulate, Medium risk — Primary filings confirm the screen’s cheapness and financial-health pillars via strong free cash flow, net-cash-before-leases, and deleveraging, but weaken confidence in near-term earnings quality given cyclical headwinds, repeated impairments, and still-subdued Merchanting profitability."
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260908-18",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for TRN.L",
+      "summary": "TRN.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:TRN.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "TRN.L",
+        "severity": "medium",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Buy — favourable entry timing | FCF basis mismatch: filing £79.5M | screen TTM £62.5M | Earnings growth basis divergence >300 bps: statutory 48.4% vs filing core 36.8% | Research: Accumulate, Medium risk — Filings confirm a high-quality, cash-generative aggregator with credible European growth optionality and screen-attractive valuation, but the unresolved CMA probe and GBR market-design uncertainty prevent full confirmation of the quantitative buy signal until regulatory clarity improves. | Research: Accumulate, Medium risk — Filings confirm a high-quality, cash-generative aggregator with credible European growth optionality and screen-attractive valuation, but the unresolved CMA probe and GBR market-design uncertainty prevent full confirmation of the quantitative buy signal until regulatory clarity improves. | Research: Accumulate, Medium risk — Filings confirm a high-quality, cash-generative aggregator with credible European growth optionality and screen-attractive valuation, but the unresolved CMA probe and GBR market-design uncertainty prevent full confirmation of the quantitative buy signal until regulatory clarity improves."
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260908-19",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for VTY.L",
+      "summary": "VTY.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:VTY.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "VTY.L",
+        "severity": "medium",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £174.6M | screen TTM £147.4M | Earnings growth basis divergence >300 bps: statutory 91.8% vs filing core 85.2% | Research: Accumulate, High risk — Deep research largely confirms the screen’s deep-value and FCF credentials at FY2025, but near-term H1 losses, leadership turnover, inventory-heavy leverage, and missing consolidated interim filings temper conviction versus an unqualified Strong Buy. | Research: Accumulate, High risk — Deep research largely confirms the screen’s deep-value and FCF credentials at FY2025, but near-term H1 losses, leadership turnover, inventory-heavy leverage, and missing consolidated interim filings temper conviction versus an unqualified Strong Buy. | Research: Accumulate, High risk — Deep research confirms the screen’s extreme asset cheapness and policy-aligned demand optionality but moderates the Strong Buy on near-term earnings quality, H1 loss guidance, management turnover, and elevated average leverage during a self-imposed transition year. | Research: Accumulate, High risk — Deep research confirms the screen’s extreme asset cheapness and policy-aligned demand optionality but moderates the Strong Buy on near-term earnings quality, H1 loss guidance, management turnover, and elevated average leverage during a self-imposed transition year."
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260908-20",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement for WIX.L",
+      "summary": "WIX.L: action_note mentions FCF basis mismatch but fcf_basis_overlay=False and buy-tier signal remains. Wire note -> overlay/gate consistently so notes are not cosmetic.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "finding_id": "fcf_note_without_overlay:WIX.L",
+        "kind": "fcf_note_without_overlay",
+        "ticker": "WIX.L",
+        "severity": "medium",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "screen_ttm": null,
+        "filing_aligned": null,
+        "gap_pct": null,
+        "fcf_basis_overlay": false,
+        "action_note": "Buy — neutral timing | FCF basis mismatch: filing £168.7M | screen TTM £133.9M | Earnings growth basis divergence >300 bps: statutory 118.2% vs filing core 99.8% | Research: Accumulate, Medium risk — Primary filings confirm improving revenue, adjusted profit, cash generation, and capital returns that support the quantitative buy signal, but thin margins, lease-adjusted leverage, cyclical demand sensitivity, and the absence of indexed interim accounts warrant measured sizing rather than full conviction. | Research: Accumulate, Medium risk — Primary filings confirm improving revenue, adjusted profit, cash generation, and capital returns that support the quantitative buy signal, but thin margins, lease-adjusted leverage, cyclical demand sensitivity, and the absence of indexed interim accounts warrant measured sizing rather than full conviction. | Research: Accumulate, Medium risk — Primary filings confirm improving revenue, adjusted profit, cash generation, and capital returns that support the quantitative buy signal, but thin margins, lease-adjusted leverage, cyclical demand sensitivity, and the absence of indexed interim accounts warrant measured sizing rather than full conviction."
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260908-03",
+      "area": "ops",
+      "title": "Workflow overdue: FTSE Ops Monitor",
+      "summary": "No successful run within 28h (last: 2026-09-07T07:45:40+00:00). (category: workflows)",
+      "priority": "medium",
+      "priority_score": 45.0,
+      "source": "ops_monitor",
+      "evidence": {
+        "category": "workflows",
+        "severity": "fail"
+      },
+      "acceptance_criteria": [
+        "Prompt or export change is covered by a parser/unit test",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/automation_status.py",
+        "src/value_investor/email_agent.py",
+        "src/value_investor/ops_monitor.py",
+        "src/value_investor/backtest_health.py",
+        "src/value_investor/engineering_recovery.py",
+        "src/value_investor/engineering_sync.py",
+        "src/value_investor/engineering_pr_notify.py",
+        ".github/workflows/ops-monitor.yml",
+        ".github/workflows/engineering-agent.yml",
+        ".github/workflows/engineering-queue.yml",
+        "tests/test_automation_status.py",
+        "tests/test_ops_monitor.py",
+        "tests/test_backtest_health.py",
+        "tests/test_engineering_sync.py",
+        "tests/test_engineering_pr_notify.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260908-21",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked euro_depth leftover ANDR.VI",
+      "summary": "Library market euro_depth (EU depth composite (STOXX50 + periphery)) parked ANDR.VI after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: ",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "hunter_market_id": "euro_depth",
+        "hunter_ticker": "ANDR.VI",
+        "parked_reason": "unfetchable_iwb",
+        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for ANDR.VI only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260908-02",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked euro_depth leftover ACKB.BR",
@@ -45,9 +927,13 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "open",
-      "no_diff_count": 1,
-      "last_no_diff_at": "2026-09-08T12:07:24.918264+00:00"
+      "status": "merged",
+      "no_diff_count": 0,
+      "last_no_diff_at": "2026-09-08T12:07:24.918264+00:00",
+      "branch_name": "cursor/eng-20260908-02-1de3",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/497",
+      "pr_number": 497,
+      "merged_at": "2026-09-08T12:17:40.132033+00:00"
     },
     {
       "id": "eng-20260908-01",
@@ -102,9 +988,14 @@
       "parked_policy": "no_diff_cap"
     }
   ],
-  "compiled_at": "2026-09-08T12:05:30.526505+00:00",
-  "task_count": 2,
+  "compiled_at": "2026-09-08T12:18:33.419184+00:00",
+  "task_count": 21,
   "micro_compile_source": "parked_source_hunter",
   "library_market_id": "euro_depth",
-  "hunter_ticker": "ACKB.BR"
+  "hunter_ticker": "ANDR.VI",
+  "ops_monitor_compiled": true,
+  "schema_version": "engineering_tasks.v1",
+  "generated_at": "2026-09-08T12:17:40Z",
+  "source": "so_what_closure",
+  "so_what_compiled": true
 }

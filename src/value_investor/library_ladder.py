@@ -30,6 +30,7 @@ from value_investor.data_library import DEFAULT_LIBRARY_ROOT, grow_library, libr
 from value_investor.library_dedupe import (
     canonical_library_ticker,
     existing_library_research_tickers,
+    prefer_first_time_research_queues,
     select_deduped_research_targets,
 )
 from value_investor.library_equal_support import run_equal_support_package
@@ -493,6 +494,7 @@ def run_library_ladder(
             )
 
         already = existing_library_research_tickers(root)
+        per_market_queues = prefer_first_time_research_queues(per_market_queues, already)
         rememo_reasons: dict[str, str] = {}
         if bool((policy.get("ladder") or {}).get("rememo_existing", True)):
             body_lag = int(
@@ -565,8 +567,10 @@ def run_library_ladder(
                 ],
                 "skipped_count": len(dedupe_skipped),
                 "skipped_sample": dedupe_skipped[:20],
+                "first_time_preferred": True,
                 "note": (
                     "Exact Yahoo ticker match; earlier queue market wins. "
+                    "Each market queue puts no-memo buy-tier first, then rememo. "
                     "Fresh memos are skipped; thin / body-lag memos rememo after ingest."
                 ),
             },
