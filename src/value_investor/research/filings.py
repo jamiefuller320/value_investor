@@ -101,6 +101,8 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
+        # Belgian regulated H1 2025 press release (VFB archive; avh.be results-centre is JS-only).
+        "https://www.vfb.be/Media/Default/pdf/avh-halfjaarresultaten-2025-persbericht-20250829.pdf",
     ],
     # euro_depth buy-tier deepen — unmeasured AED.BR (ESEF index miss; IR PDF seed).
     "AED.BR": [
