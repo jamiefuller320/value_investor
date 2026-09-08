@@ -1312,14 +1312,29 @@ def companion_test_path(src_path: str) -> str | None:
     return f"tests/test_{stem.replace('/', '_')}.py"
 
 
+def companion_cli_path(src_path: str) -> str | None:
+    """Map ``src/value_investor/foo.py`` to ``src/value_investor/foo_cli.py`` when present."""
+    changed = normalize_repo_path(src_path)
+    prefix = "src/value_investor/"
+    if not changed.startswith(prefix) or not changed.endswith(".py") or changed.endswith("_cli.py"):
+        return None
+    candidate = f"{changed[:-3]}_cli.py"
+    if Path(candidate).is_file():
+        return candidate
+    return None
+
+
 def effective_allowed_paths(task: EngineeringTask) -> list[str]:
-    """Stored allowlist plus companion tests for each allowed source module."""
+    """Stored allowlist plus companion tests and CLI modules for each allowed source file."""
     merged = list(dict.fromkeys(task.allowed_paths or []))
     extras: list[str] = []
     for path in merged:
         companion = companion_test_path(path)
         if companion and companion not in merged and companion not in extras:
             extras.append(companion)
+        cli_companion = companion_cli_path(path)
+        if cli_companion and cli_companion not in merged and cli_companion not in extras:
+            extras.append(cli_companion)
     return [*merged, *extras]
 
 
