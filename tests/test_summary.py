@@ -1273,6 +1273,99 @@ def _dnlm_research_sources(tmp_path: Path) -> None:
     )
 
 
+def _tpk_financials() -> dict:
+    return {
+        "ticker": "TPK.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 350_000_000.0,
+                "Capital Expenditure": -52_000_000.0,
+                "Free Cash Flow": 298_000_000.0,
+            }
+        },
+    }
+
+
+def test_build_company_reports_fcf_basis_overlay_caps_tpk_style_buy(tmp_path: Path):
+    """TPK.L: 24% filing/screen gap (below 25%) still caps buy via universe divergence."""
+    sources = tmp_path / "research" / "TPK.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(json.dumps(_tpk_financials()), encoding="utf-8")
+
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="TPK.L",
+                name="Travis Perkins plc",
+                sector="Industrials",
+                signal="buy",
+                conviction_score=0.4026,
+                free_cashflow=298_000_000.0,
+                free_cashflow_screen_ttm=226_100_000.0,
+                fcf_basis_overlay=False,
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "TPK.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+
+    assert snapshot["fcf"]["filing_screen_mismatch"] is False
+    assert snapshot["fcf"]["fcf_divergence_flagged"] is True
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "hold"
+    assert "FCF basis mismatch" in snapshot["action_note"]
+    assert "filing £298M" in snapshot["action_note"]
+    assert "screen TTM £226.1M" in snapshot["action_note"]
+
+
+def test_company_report_from_dict_honours_tpk_style_stale_fcf_note():
+    """Deserialised rows must not ship buy beside an FCF mismatch action note."""
+    stale = {
+        "ticker": "TPK.L",
+        "name": "Travis Perkins plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "fcf_basis_overlay": False,
+        "conviction_score": 0.4026,
+        "action_note": (
+            "Buy — neutral timing | FCF basis mismatch: filing £298M | screen TTM £226.1M | "
+            "Earnings growth basis divergence >300 bps: statutory -127.6% vs filing core -97.2%"
+        ),
+        "models_passed": 4,
+        "model_count": 22,
+        "composite_score": 0.75,
+        "families_passed": 2,
+        "data_quality_score": 0.95,
+        "metrics_present": 19,
+        "metrics_total": 20,
+        "weeks_at_signal": 9,
+        "signal_trend": "stable",
+        "stability_label": "persistent",
+        "timing_signal": "neutral",
+        "timing_score": 0.375,
+        "summary": "Buy (4/22 models).",
+        "passed_models": [],
+        "key_metrics": {},
+    }
+    snapshot = CompanyReport.from_dict(stale).to_dict()
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "hold"
+    assert snapshot["conviction_score"] == pytest.approx(0.4026 * 0.85)
+
+
 def test_build_company_reports_fcf_basis_overlay_caps_buy_when_note_mismatch_dnlm_style(
     tmp_path: Path,
 ):

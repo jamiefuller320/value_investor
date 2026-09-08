@@ -43,7 +43,10 @@ from value_investor.scoring.fcf import (
     screen_ttm_from_row,
     suppress_fcf_yield_passes,
 )
-from value_investor.scoring.fcf_basis_overlay import enrich_signals_with_fcf_basis_overlay
+from value_investor.scoring.fcf_basis_overlay import (
+    enrich_signals_with_fcf_basis_overlay,
+    honour_fcf_action_notes_on_signals,
+)
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
 from value_investor.scoring.interim_quality_overlay import (
     enrich_signals_with_interim_quality_overlay,
@@ -1598,6 +1601,85 @@ def test_enforce_fcf_basis_in_snapshot_without_research_verdict():
     )
     assert enforced["fcf_basis_overlay"] is True
     assert enforced["adjusted_signal"] == "buy"
+
+
+def test_honour_fcf_action_notes_on_signals_caps_tpk_style_stale_row():
+    """Pipeline export must honour persisted FCF mismatch notes when overlay flag is stale."""
+    note = (
+        "Buy — neutral timing | FCF basis mismatch: filing £298M | screen TTM £226.1M | "
+        "Earnings growth basis divergence >300 bps: statutory -127.6% vs filing core -97.2%"
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "TPK.L",
+                "signal": "buy",
+                "adjusted_signal": "buy",
+                "conviction_score": 0.4026,
+                "fcf_basis_overlay": False,
+                "action_note": note,
+            }
+        ]
+    )
+
+    honoured = honour_fcf_action_notes_on_signals(signals)
+
+    assert bool(honoured.iloc[0]["fcf_basis_overlay"]) is True
+    assert honoured.iloc[0]["adjusted_signal"] == "hold"
+    assert honoured.iloc[0]["conviction_score"] == pytest.approx(0.4026 * 0.85)
+
+
+def test_enrich_signals_with_fcf_basis_overlay_honours_tpk_style_universe_gap(tmp_path: Path):
+    """TPK.L-style 24% filing/screen gap must cap buy-tier signals in the pipeline."""
+    sources = tmp_path / "research" / "TPK.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "TPK.L",
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 350_000_000.0,
+                        "Capital Expenditure": -52_000_000.0,
+                        "Free Cash Flow": 298_000_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "TPK.L",
+                "signal": "buy",
+                "conviction_score": 0.4026,
+                "free_cashflow": 298_000_000.0,
+                "free_cashflow_screen_ttm": 226_100_000.0,
+                "fcf_basis_overlay": False,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "TPK.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_fcf_basis_overlay(signals, model_results, output_dir=tmp_path)
+
+    assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "hold"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.4026 * 0.85)
 
 
 def test_enrich_signals_with_fcf_basis_overlay_caps_sn_style_universe_gap(tmp_path: Path):
