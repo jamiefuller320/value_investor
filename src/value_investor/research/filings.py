@@ -214,8 +214,9 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Randstad_Annual_Report_2025_F.pdf",
         "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Q4_2025_Press_Release.pdf",
     ],
+    # euro_depth IWB blocker — Andritz CMS reshuffled blob IDs; annual report PDF.
     "ANDR.VI": [
-        "https://www.andritz.com/resource/blob/520884/andritz-annual-financial-report-2025-en.pdf",
+        "https://www.andritz.com/resource/blob/689306/6ad9400073c46323b95b1be977870245/andritz-annual-report-2025-data.pdf",
     ],
     "EG7.IR": [
         "https://www.cairnhomes.com/investors/",
@@ -3363,6 +3364,56 @@ def _source_bonus(source: str | None) -> int:
     return 0
 
 
+# Dead IR allowlist URLs superseded by a live statutory PDF on the same issuer site.
+_IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
+    # eng-20260908-21: blob/520884 404s; investors-downloads annual report still serves.
+    "https://www.andritz.com/resource/blob/520884/andritz-annual-financial-report-2025-en.pdf": (
+        "https://www.andritz.com/resource/blob/689306/6ad9400073c46323b95b1be977870245/andritz-annual-report-2025-data.pdf"
+    ),
+}
+
+
+def _canonicalize_ir_url_list(urls: list[str]) -> list[str]:
+    seen: set[str] = set()
+    out: list[str] = []
+    for url in urls:
+        cleaned = str(url).strip()
+        if not cleaned:
+            continue
+        canon = _IR_ALLOWLIST_URL_CANONICAL.get(cleaned, cleaned)
+        if canon not in seen:
+            out.append(canon)
+            seen.add(canon)
+    return out
+
+
+def _migrate_ir_allowlist_row_url(row: dict[str, Any]) -> tuple[dict[str, Any], bool]:
+    """Rewrite indexed IR rows when a dead allowlist URL has a known live replacement."""
+    item = dict(row)
+    if not _is_ir_allowlist_row(item):
+        return item, False
+    url = str(item.get("url") or "").strip()
+    canon = _IR_ALLOWLIST_URL_CANONICAL.get(url, url)
+    if canon == url:
+        return item, False
+    item["url"] = canon
+    item["headline"] = f"IR allowlist document — {canon.rsplit('/', 1)[-1] or canon}"
+    item["period"] = _ir_allowlist_period_from_url(canon)
+    digest = hashlib.sha256(canon.encode("utf-8")).hexdigest()[:16]
+    item["id"] = f"ir_{digest}"
+    for key in (
+        "unfetchable",
+        "unfetchable_reason",
+        "unfetchable_at",
+        "has_body",
+        "body_path",
+        "body_content_hash",
+        "body_fetch_parser",
+    ):
+        item.pop(key, None)
+    return item, True
+
+
 def _merge_ir_url_lists(*groups: dict[str, list[str]]) -> dict[str, list[str]]:
     out: dict[str, list[str]] = {}
     for group in groups:
@@ -3418,7 +3469,8 @@ def load_ir_url_allowlist(path: Path | None = None) -> dict[str, list[str]]:
                     cleaned = [str(u).strip() for u in value if str(u).strip()]
                     if cleaned:
                         file_urls[str(key).upper()] = cleaned
-    return _merge_ir_url_lists(file_urls, _BUILTIN_IR_URLS)
+    merged = _merge_ir_url_lists(file_urls, _BUILTIN_IR_URLS)
+    return {ticker: _canonicalize_ir_url_list(urls) for ticker, urls in merged.items()}
 
 
 def _ir_allowlist_period_from_url(url: str) -> str:
@@ -3988,9 +4040,32 @@ def refetch_ir_allowlist_filing_bodies(
     when indexed IR PDF rows (e.g. ``ir_a9733d0de6aec27d``) still lack bodies.
     """
     filings_dir = Path(filings_dir)
-    merge_meta = merge_ir_allowlist_filings(ticker, filings_dir, path=allowlist_path)
     index_path = filings_dir / "filings_index.json"
     bodies_dir = filings_dir / "bodies"
+
+    pre_merge_migrated = 0
+    if index_path.exists():
+        try:
+            pre_payload = json.loads(index_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
+            pre_payload = None
+        if isinstance(pre_payload, dict):
+            pre_filings = list(pre_payload.get("filings") or [])
+            refreshed_pre: list[dict[str, Any]] = []
+            for row in pre_filings:
+                item, migrated = _migrate_ir_allowlist_row_url(row)
+                if migrated:
+                    pre_merge_migrated += 1
+                refreshed_pre.append(item)
+            if pre_merge_migrated:
+                pre_payload["filings"] = refreshed_pre
+                pre_payload["summary"] = summarize_filings(refreshed_pre)
+                index_path.write_text(
+                    json.dumps(pre_payload, indent=2) + "\n",
+                    encoding="utf-8",
+                )
+
+    merge_meta = merge_ir_allowlist_filings(ticker, filings_dir, path=allowlist_path)
     if not index_path.exists():
         return {
             "attempted": 0,
