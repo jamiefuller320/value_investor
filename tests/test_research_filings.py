@@ -6180,7 +6180,7 @@ def test_parked_source_hunter_skip_lmt_sp500():
 
 
 def test_parked_source_hunter_skip_tsn_sp500():
-    """eng-20260907-10: TSN leftover IWB is Item 8.01 segment-recast 8-K, not missing 10-K/10-Q."""
+    """eng-20260907-08: TSN leftover IWB is Item 8.01 segment-recast 8-K, not missing 10-K/10-Q."""
     assert "TSN" in PARKED_SOURCE_HUNTER_SKIP
     reason = PARKED_SOURCE_HUNTER_SKIP["TSN"]
     assert "8.01" in reason
@@ -6288,7 +6288,7 @@ def test_intu_item901_8k_primary_fails_substantiveness_gate(monkeypatch):
 
 
 def test_tsn_segment_recast_8k_primary_fails_substantiveness_gate(monkeypatch):
-    """eng-20260907-10: TSN Jun 2026 Item 8.01 segment-recast 8-K primary is below gate."""
+    """eng-20260907-08: TSN Jun 2026 Item 8.01 segment-recast 8-K primary is below gate."""
     cover_html = """
     <html><body>
     <ix:header><ix:hidden>dei:EntityRegistrantName TYSON FOODS, INC.</ix:hidden></ix:header>
