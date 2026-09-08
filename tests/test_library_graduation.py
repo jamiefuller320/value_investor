@@ -261,6 +261,19 @@ def test_research_markets_includes_full_queue_before_graduation():
     ]
 
 
+def test_sunday_rememo_reasons_stay_on_focus_when_depth_first():
+    from value_investor.library_ladder import sunday_rememo_reasons
+
+    reasons = {"ERIC-B.ST": "lag_10", "BBY": "lag_60", "WDS.AX": "lag_117"}
+    focus = {"ERIC-B.ST", "DG.PA"}
+    assert sunday_rememo_reasons(reasons, focus_tickers=focus, research_all_graduated=False) == {
+        "ERIC-B.ST": "lag_10"
+    }
+    assert (
+        sunday_rememo_reasons(reasons, focus_tickers=focus, research_all_graduated=True) == reasons
+    )
+
+
 def test_ladder_runs_graduation(tmp_path: Path, monkeypatch):
     root = tmp_path / "library"
     policy_path = tmp_path / "policy.json"

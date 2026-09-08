@@ -404,6 +404,43 @@ def build_parser() -> argparse.ArgumentParser:
     equal_support_p.add_argument("--json", action="store_true")
     equal_support_p.set_defaults(func=cmd_equal_support)
 
+    rememo_p = sub.add_parser(
+        "rememo",
+        parents=[common],
+        help=(
+            "Weekday rememo for admitted/epoch-0 markets (same 3/day body-lag "
+            "cap as FTSE; not 21-market Sunday spray)"
+        ),
+    )
+    rememo_p.add_argument(
+        "--markets",
+        default="",
+        help="Comma-separated market ids (empty = admitted learning markets)",
+    )
+    rememo_p.add_argument(
+        "--per-day-cap",
+        type=int,
+        default=3,
+        help="Max rememos per admitted market (default: 3; catch-up may raise to 5)",
+    )
+    rememo_p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Assess and select only; do not call memo agents",
+    )
+    rememo_p.add_argument(
+        "--force",
+        action="store_true",
+        help="Ignore weekday / already-ran-today gates",
+    )
+    rememo_p.add_argument(
+        "--api-key",
+        default=None,
+        help="Cursor API key (default: CURSOR_API_KEY_V2 then CURSOR_API_KEY)",
+    )
+    rememo_p.add_argument("--json", action="store_true")
+    rememo_p.set_defaults(func=cmd_admitted_rememo)
+
     ingest_loop_p = sub.add_parser(
         "ingest-loop",
         parents=[common],
@@ -1830,6 +1867,48 @@ def cmd_equal_support(args: argparse.Namespace) -> int:
             f"first_time={row.get('first_time_memo_count')}  "
             f"exclusion_ready={(archives.get('exclusion') or {}).get('ready_for_priors')}"
         )
+    return 0
+
+
+def cmd_admitted_rememo(args: argparse.Namespace) -> int:
+    from value_investor.cursor_api_key import resolve_cursor_api_key
+    from value_investor.library_admitted_rememo import run_admitted_rememo_pass
+
+    policy = load_policy(args.policy)
+    markets = _parse_markets(args.markets) or None
+    key = None
+    if not args.dry_run:
+        key = (args.api_key or "").strip() or resolve_cursor_api_key()[0]
+    payload = run_admitted_rememo_pass(
+        api_key=key,
+        library_root=args.root,
+        policy=policy,
+        markets=markets,
+        per_day_cap=int(args.per_day_cap),
+        dry_run=bool(args.dry_run),
+        force=bool(args.force),
+        record_spend=not bool(args.dry_run),
+    )
+    if args.json:
+        print(json.dumps(payload, indent=2, default=str))
+    else:
+        print(
+            f"selected={len(payload.get('selected') or [])}  "
+            f"rememoed={len(payload.get('rememoed') or [])}  "
+            f"skipped={payload.get('skipped')}  "
+            f"errors={len(payload.get('errors') or [])}"
+        )
+        for mid, row in (payload.get("markets") or {}).items():
+            print(
+                f"{mid}: eligible={row.get('eligible_count')}  "
+                f"action={row.get('action')}  "
+                f"cap={row.get('effective_cap')}  "
+                f"selected={row.get('selected')}"
+            )
+        for err in payload.get("errors") or []:
+            print(f"  ERROR {err}", file=sys.stderr)
+    if payload.get("errors") and not payload.get("rememoed"):
+        return 1
     return 0
 
 

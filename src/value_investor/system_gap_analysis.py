@@ -470,27 +470,40 @@ def _admitted_rememo_starve(
     policy: dict[str, Any],
     ladder: dict[str, Any],
     equal_support: dict[str, Any],
+    library_root: Path | None = None,
 ) -> dict[str, Any]:
-    """Admitted buy-tier rememo listed but not queued on the last ladder."""
+    """Admitted rememo backlog exists but weekday rememo is budget-blocked."""
     from value_investor.market_shard_admission import admitted_learning_markets_for_policy
 
     admitted = admitted_learning_markets_for_policy(policy)
     queued = {
         str(mid).strip() for mid in _as_list(ladder.get("research_markets")) if str(mid).strip()
     }
+    root = Path(library_root or DEFAULT_LIBRARY_ROOT)
+    weekday = _as_dict(_safe_read(root / "admitted_rememo_backlog.json"))
+    weekday_markets = _as_dict(weekday.get("markets"))
     starved: list[dict[str, Any]] = []
     for mid in admitted:
         row = _as_dict((_as_dict(equal_support.get("markets"))).get(mid))
         eligible = _int(row.get("rememo_eligible_count"), 0)
+        weekday_row = _as_dict(weekday_markets.get(mid))
+        if weekday_row:
+            eligible = _int(weekday_row.get("eligible_count"), eligible)
         if eligible <= 0:
             continue
-        if mid in queued:
-            continue
-        starved.append({"market_id": mid, "rememo_eligible_count": eligible})
+        if str(weekday_row.get("action") or "") == "escalate":
+            starved.append(
+                {
+                    "market_id": mid,
+                    "rememo_eligible_count": eligible,
+                    "action": "escalate",
+                }
+            )
     return {
         "admitted": admitted,
         "research_markets": list(queued),
         "starved": starved,
+        "weekday_backlog": weekday.get("eligible_total"),
     }
 
 
@@ -715,11 +728,11 @@ def _build_flags(
                 flag_id="admitted_rememo_not_queued",
                 severity="high",
                 layer="produce",
-                title="Admitted buy-tier rememo is listed but Sunday research never queues it",
+                title="Admitted buy-tier rememo is budget-blocked on the weekday path",
                 summary=(
-                    f"{', '.join(names)} have body-lag rememo on the equal-support "
-                    "package, but last ladder research_markets stayed on the focus "
-                    "book (research_all_graduated=false without the admitted set)."
+                    f"{', '.join(names)} have body-lag rememo above in-week capacity "
+                    "but weekly_ops headroom is too tight for catch-up "
+                    "(ftse-library rememo action=escalate)."
                 ),
                 evidence={
                     "markets": starved,
@@ -819,7 +832,10 @@ def build_system_gap_snapshot(
     rememo_backlog = _as_dict(_safe_read(data_dir / "memo_rememo_backlog.json"))
     equal_support = _equal_support_status(library_root)
     admitted_rememo = _admitted_rememo_starve(
-        policy=policy, ladder=ladder, equal_support=equal_support
+        policy=policy,
+        ladder=ladder,
+        equal_support=equal_support,
+        library_root=library_root,
     )
     flags = _build_flags(
         overlay=overlay,
