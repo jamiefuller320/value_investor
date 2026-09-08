@@ -1600,6 +1600,87 @@ def test_enforce_fcf_basis_in_snapshot_without_research_verdict():
     assert enforced["adjusted_signal"] == "buy"
 
 
+def test_enrich_signals_with_fcf_basis_overlay_caps_sn_style_universe_gap(tmp_path: Path):
+    """SN.L-style ~24% filing/screen gap must cap strong_buy in pipeline signals export."""
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "SN.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.7012,
+                "free_cashflow": 852_000_000.0,
+                "free_cashflow_screen_ttm": 1_059_000_000.0,
+                "fcf_basis_overlay": False,
+                "adjusted_signal": "strong_buy",
+                "action_note": (
+                    "Strong Buy — neutral timing | FCF basis mismatch: filing £852M | "
+                    "screen TTM £1059M"
+                ),
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "SN.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_fcf_basis_overlay(signals, model_results, output_dir=tmp_path)
+
+    assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.7012 * 0.85)
+
+
+def test_write_screening_snapshot_enforces_sn_style_fcf_note(tmp_path: Path):
+    """Persisted snapshots must not ship buy-tier beside an FCF mismatch action note."""
+    sources = tmp_path / "research" / "SN.L" / "sources"
+    snapshot = {
+        "ticker": "SN.L",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "fcf_basis_overlay": False,
+        "conviction_score": 0.7012,
+        "action_note": (
+            "Strong Buy — neutral timing | FCF basis mismatch: filing £852M | screen TTM £1059M"
+        ),
+        "fcf": None,
+        "key_metrics": {"FCF": "852000000.0"},
+    }
+    write_screening_snapshot(sources, snapshot)
+    written = json.loads((sources / "screening_snapshot.json").read_text(encoding="utf-8"))
+    assert written["fcf_basis_overlay"] is True
+    assert written["adjusted_signal"] == "buy"
+    assert written["conviction_score"] == pytest.approx(0.7012 * 0.85)
+
+
+def test_enforce_fcf_basis_in_snapshot_without_research_verdict_sn_style():
+    """Stale SN.L snapshots with overlay=false must still honour FCF mismatch notes."""
+    enforced = enforce_fcf_basis_in_snapshot(
+        {
+            "ticker": "SN.L",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "fcf_basis_overlay": False,
+            "conviction_score": 0.7012,
+            "action_note": (
+                "Strong Buy — neutral timing | FCF basis mismatch: filing £852M | screen TTM £1059M"
+            ),
+            "key_metrics": {"FCF": "852000000.0"},
+        }
+    )
+    assert enforced["fcf_basis_overlay"] is True
+    assert enforced["adjusted_signal"] == "buy"
+
+
 def test_parse_adjusted_eps_growth_pct_from_ir_prose():
     assert parse_adjusted_eps_growth_pct("Adjusted EPS increased by 16% to 9.9p") == pytest.approx(
         0.16
