@@ -456,9 +456,8 @@ function renderHeldVsMarketChart(payload) {
         <p class="muted small">${esc(payload.reason || "Need two dated marks before a path can plot. Last print is still shown.")}</p>
         ${
           last.held != null
-            ? `<p class="small">Last held ${esc(formatHeldMoney(last.held, currency))}${
-                last.date ? ` · ${esc(last.date)}` : ""
-              }</p>`
+            ? heldVsMarketLastCaption(payload, { showExcess: false }) +
+              (last.date ? `<p class="muted small">${esc(last.date)}</p>` : "")
             : ""
         }
       </div>`;

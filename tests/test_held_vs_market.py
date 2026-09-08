@@ -22,6 +22,8 @@ def test_empty_payload_is_branch_ready():
     assert payload["branch_ready"] is True
     assert payload["branches"] == []
     assert payload["benchmark_ticker"] == "^FTSE"
+    assert empty_held_vs_market(market_id="ftse_smallcap")["benchmark_ticker"] == "^FTSC"
+    assert empty_held_vs_market(market_id="sp500")["benchmark_ticker"] == "^GSPC"
     assert any(row["kind"] == "market" for row in payload["series"])
 
 
@@ -68,6 +70,39 @@ def test_build_payload_scales_market_by_index():
     assert by_date["2026-09-02"]["market"] == 1020.0
     assert by_date["2026-09-03"]["market"] == 1010.0
     assert payload["last"]["excess_pct"] == round((990.0 / 1010.0) - 1.0, 6)
+
+
+def test_sp500_scales_market_from_gspc_closes():
+    marks = [
+        {
+            "date": "2026-09-04",
+            "held": 737.41,
+            "nav": 737.41,
+            "held_stock": 737.41,
+            "cash": 0.0,
+            "positions": 2,
+            "branches": {},
+        },
+        {
+            "date": "2026-09-07",
+            "held": 740.0,
+            "nav": 740.0,
+            "held_stock": 740.0,
+            "cash": 0.0,
+            "positions": 2,
+            "branches": {},
+        },
+    ]
+    payload = build_held_vs_market_payload(
+        market_id="sp500",
+        marks=marks,
+        bench_closes={"2026-09-04": 6500.0, "2026-09-07": 6532.5},
+        currency="USD",
+    )
+    assert payload["benchmark_ticker"] == "^GSPC"
+    assert payload["market_path"] == "index_levels"
+    assert payload["points"][0]["market"] == 737.41
+    assert payload["points"][-1]["market"] == round(737.41 * (6532.5 / 6500.0), 2)
 
 
 def test_endpoint_fallback_when_index_missing():
@@ -254,11 +289,18 @@ def test_load_macro_index_closes(tmp_path: Path):
                         }
                     }
                 },
+                "us": {
+                    "markers": {
+                        "sp500": {"symbol": "^GSPC", "value": 6480.12, "as_of": "2026-09-04"}
+                    }
+                },
             }
         },
     )
     closes = load_macro_index_closes(tmp_path)
     assert closes["^FTSE"]["2026-09-04"] == 10831.1
+    assert closes["^GSPC"]["2026-09-04"] == 6480.12
     assert bench_closes_for_market("ftse350", macro_closes=closes)["2026-09-04"] == 10831.1
     assert bench_closes_for_market("euro_depth", macro_closes=closes)["2026-09-04"] == 6392.9
-    assert bench_closes_for_market("sp500", macro_closes=closes) == {}
+    assert bench_closes_for_market("sp500", macro_closes=closes)["2026-09-04"] == 6480.12
+    assert bench_closes_for_market("ftse_smallcap", macro_closes=closes)["2026-09-04"] == 10831.1

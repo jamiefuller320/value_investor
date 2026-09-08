@@ -8,7 +8,8 @@ secondary context for memos and paper-fund regime notes.
 from __future__ import annotations
 
 import logging
-from datetime import UTC, datetime
+import re
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -22,6 +23,7 @@ DOMAIN_SERIES: dict[str, dict[str, str]] = {
         "policy_proxy_13w_yield": "^IRX",
         "gov_10y_yield": "^TNX",
         "usd_index": "DX-Y.NYB",
+        "sp500": "^GSPC",
     },
     "uk": {
         "gbp_usd": "GBPUSD=X",
@@ -70,6 +72,19 @@ MARKET_TO_DOMAIN: dict[str, str] = {
     "omxs30": "euro",
     "iseq20": "euro",
 }
+
+
+# Equity indexes used by dashboard held-vs-market (dated snapshots, no live fetch).
+EQUITY_INDEX_MARKERS: dict[str, tuple[str, str]] = {
+    "uk": ("ftse_100", "^FTSE"),
+    "euro": ("euro_stoxx_50", "^STOXX50E"),
+    "au": ("asx_200", "^AXJO"),
+    "ca": ("tsx_composite", "^GSPTSE"),
+    "asia": ("hang_seng", "^HSI"),
+    "us": ("sp500", "^GSPC"),
+}
+
+_DATED_MACRO = re.compile(r"^(\d{4}-\d{2}-\d{2})\.json$")
 
 
 def domain_for_market(market: str | None) -> str:
@@ -206,3 +221,163 @@ def macro_regime_note(market: str | None, *, root: Path | None = None) -> str:
     if len(bits) == 1:
         return f"macro[{domain}]: unavailable"
     return "; ".join(bits)
+
+
+def _macro_date_key(value: str | None) -> str | None:
+    if not value:
+        return None
+    text = str(value).strip()
+    if len(text) >= 10 and text[4] == "-" and text[7] == "-":
+        return text[:10]
+    try:
+        parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=UTC)
+        return parsed.date().isoformat()
+    except ValueError:
+        return None
+
+
+def fetch_symbol_closes(
+    symbol: str,
+    *,
+    start: str,
+    end: str | None = None,
+) -> dict[str, float]:
+    """Yahoo daily closes for one symbol. Not used on dashboard refresh."""
+    try:
+        import yfinance as yf
+    except ImportError:
+        logger.warning("yfinance unavailable for %s history", symbol)
+        return {}
+    kwargs: dict[str, Any] = {"start": start}
+    if end:
+        kwargs["end"] = end
+    try:
+        hist = yf.Ticker(symbol).history(**kwargs)
+    except Exception as exc:  # noqa: BLE001
+        logger.info("Index history failed for %s: %s", symbol, exc)
+        return {}
+    if hist is None or hist.empty or "Close" not in hist.columns:
+        return {}
+    out: dict[str, float] = {}
+    for stamp, row in hist.iterrows():
+        day = _macro_date_key(stamp.isoformat() if hasattr(stamp, "isoformat") else str(stamp))
+        try:
+            close = float(row["Close"])
+        except (TypeError, ValueError):
+            continue
+        if day and close == close and close > 0:
+            out[day] = round(close, 4)
+    return out
+
+
+def _close_on_or_before(closes: dict[str, float], day: str) -> tuple[str, float] | None:
+    if day in closes:
+        return day, closes[day]
+    prior = [key for key in closes if key <= day]
+    if not prior:
+        return None
+    key = max(prior)
+    return key, closes[key]
+
+
+def backfill_equity_index_snapshots(
+    root: Path | None = None,
+    *,
+    closes_by_symbol: dict[str, dict[str, float]] | None = None,
+    fetch_missing: bool = True,
+    overwrite: bool = False,
+) -> dict[str, Any]:
+    """Write equity-index markers into dated macro files (and ``latest.json``).
+
+    Dashboard ``held_vs_market`` only *reads* these files — it does not fetch.
+    """
+    from value_investor.storage import read_json, write_json
+
+    macro_root = Path(root or DEFAULT_MACRO_ROOT)
+    dated = sorted(path for path in macro_root.glob("*.json") if _DATED_MACRO.match(path.name))
+    targets = list(dated)
+    latest = macro_root / "latest.json"
+    if latest.exists():
+        targets.append(latest)
+    if not targets:
+        return {"patched": 0, "skipped": 0, "fetched": [], "files": 0}
+
+    start = dated[0].stem if dated else datetime.now(UTC).date().isoformat()
+    # Pad start so weekend/holiday files can forward-fill from the prior session.
+    try:
+        start = (datetime.fromisoformat(start).date() - timedelta(days=7)).isoformat()
+    except ValueError:
+        pass
+    provided = {str(sym): dict(series) for sym, series in (closes_by_symbol or {}).items()}
+    fetched: list[str] = []
+    if fetch_missing:
+        needed: set[str] = set()
+        for path in targets:
+            snapshot = read_json(path)
+            if not isinstance(snapshot, dict):
+                needed.update(symbol for _key, symbol in EQUITY_INDEX_MARKERS.values())
+                continue
+            domains = snapshot.get("domains") or {}
+            for domain, (marker_key, symbol) in EQUITY_INDEX_MARKERS.items():
+                if symbol in provided:
+                    continue
+                marker = ((domains.get(domain) or {}).get("markers") or {}).get(marker_key)
+                if not isinstance(marker, dict) or marker.get("value") is None:
+                    needed.add(symbol)
+        for symbol in sorted(needed):
+            series = fetch_symbol_closes(symbol, start=start)
+            if series:
+                provided[symbol] = series
+                fetched.append(symbol)
+
+    patched = 0
+    skipped = 0
+    for path in targets:
+        match = _DATED_MACRO.match(path.name)
+        file_day = (
+            match.group(1)
+            if match
+            else _macro_date_key(str((read_json(path) or {}).get("fetched_at") or ""))
+        )
+        if not file_day and path.name == "latest.json" and dated:
+            file_day = dated[-1].stem
+        if not file_day:
+            skipped += 1
+            continue
+        snapshot = read_json(path)
+        if not isinstance(snapshot, dict):
+            skipped += 1
+            continue
+        domains = snapshot.setdefault("domains", {})
+        changed = False
+        for domain, (marker_key, symbol) in EQUITY_INDEX_MARKERS.items():
+            series = provided.get(symbol) or {}
+            picked = _close_on_or_before(series, file_day)
+            if picked is None:
+                continue
+            as_of, value = picked
+            block = domains.setdefault(domain, {"domain": domain, "markers": {}})
+            markers = block.setdefault("markers", {})
+            existing = markers.get(marker_key)
+            if not overwrite and isinstance(existing, dict) and existing.get("value") is not None:
+                continue
+            markers[marker_key] = {
+                "symbol": symbol,
+                "value": value,
+                "as_of": as_of,
+            }
+            changed = True
+        if changed:
+            write_json(path, snapshot, compact=False, compress=False)
+            patched += 1
+        else:
+            skipped += 1
+    return {
+        "patched": patched,
+        "skipped": skipped,
+        "fetched": fetched,
+        "files": len(targets),
+        "start": start,
+    }

@@ -797,6 +797,14 @@ def build_parser() -> argparse.ArgumentParser:
         help="Fetch latest Yahoo markers and write docs/data/library/macro/",
     )
     macro_p.add_argument(
+        "--backfill-indexes",
+        action="store_true",
+        help=(
+            "Fill missing equity-index markers (including ^GSPC) into dated "
+            "macro snapshots. Does not run on dashboard refresh."
+        ),
+    )
+    macro_p.add_argument(
         "--market",
         default="",
         help="Show sliced context for one market id (e.g. asx200)",
@@ -2878,6 +2886,7 @@ def cmd_market_status(args: argparse.Namespace) -> int:
 
 def cmd_macro(args: argparse.Namespace) -> int:
     from .macro_context import (
+        backfill_equity_index_snapshots,
         load_macro_snapshot,
         macro_context_for_market,
         refresh_macro_library,
@@ -2892,6 +2901,11 @@ def cmd_macro(args: argparse.Namespace) -> int:
     else:
         snapshot = load_macro_snapshot(macro_root)
         payload = {"refreshed": False, "snapshot": snapshot}
+
+    if getattr(args, "backfill_indexes", False):
+        payload["backfill"] = backfill_equity_index_snapshots(macro_root)
+        snapshot = load_macro_snapshot(macro_root) or snapshot
+        payload["snapshot"] = snapshot
 
     market = str(args.market or "").strip()
     if market:
@@ -2909,6 +2923,13 @@ def cmd_macro(args: argparse.Namespace) -> int:
     print(f"Macro root: {macro_root}")
     print(f"Fetched at: {snap.get('fetched_at')}")
     print(f"Note: {snap.get('note')}")
+    backfill = payload.get("backfill")
+    if backfill:
+        print(
+            "Backfill: "
+            f"patched={backfill.get('patched')} skipped={backfill.get('skipped')} "
+            f"fetched={','.join(backfill.get('fetched') or []) or '—'}"
+        )
     domains = snap.get("domains") or {}
     for domain, block in domains.items():
         markers = (block or {}).get("markers") or {}

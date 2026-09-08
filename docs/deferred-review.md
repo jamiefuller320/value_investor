@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T06:16:49+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T06:51:15+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -206,6 +206,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L330 | **Skip observe-sim AI accumulate when memo has zero filing bodies** | Euro_depth observe-sim AI currently treats accumulate verdicts with 0 filing bodies as valid labels (17/18 sampled). Do not add this gate to live FTSE paper (N27). When library filing parity is real, exclude zero-body accumulate from shard/observe AI so the sim is not observe noise. | Focus or admitted-market buy-tier library memos have filing-body parity and observe-sim still attributes excess to the AI-judgment accumulate gate. |
 | L341 | **Caption market-card held vs market as sleeve vs price index** | The chart is invested-sleeve MTM versus a frictionless local price index from the same starting held notional, not Sunday-review excess after costs (NAV vs contributed, Yahoo auto_adjust). A caption would stop the tile being read as a matched-cost or total-return hurdle. | Someone uses the market-card excess_pct to judge paper vs index, or it disagrees with Sunday-review excess_after_costs. |
 | L342 | **Universe-matched index for held vs market charts** | FTSE 350 paper is scaled to ^FTSE (FTSE 100) and euro_depth observe-sim to ^STOXX50E. That is a useful alpha hurdle but not a matched-universe market equivalent. | Held vs market charts are in regular Sunday use and a FTSE 350 or euro_depth path has >=8 weekday marks. |
+| L343 | **Add Nasdaq-100 ^NDX to dated macro snapshots** | US macro now carries ^GSPC for S&P market cards. nasdaq100 still has no local index in dated snapshots, so a Nasdaq paper book would have market_path none until ^NDX is stored the same way. | nasdaq100 has a paper book or observe-sim marks and the market card still has market_path none. |
 
 ### Universe & data
 
