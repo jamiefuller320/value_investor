@@ -1681,6 +1681,119 @@ def test_enforce_fcf_basis_in_snapshot_without_research_verdict_sn_style():
     assert enforced["adjusted_signal"] == "buy"
 
 
+def test_enrich_signals_with_fcf_basis_overlay_caps_trn_style_universe_gap(tmp_path: Path):
+    """TRN.L-style ~21% filing/screen gap must cap buy in pipeline signals export."""
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "TRN.L",
+                "signal": "buy",
+                "conviction_score": 0.5005,
+                "free_cashflow": 79_500_000.0,
+                "free_cashflow_screen_ttm": 62_500_000.0,
+                "fcf_basis_overlay": False,
+                "adjusted_signal": "buy",
+                "action_note": (
+                    "Buy — favourable entry timing | FCF basis mismatch: filing £79.5M | "
+                    "screen TTM £62.5M"
+                ),
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "TRN.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_fcf_basis_overlay(signals, model_results, output_dir=tmp_path)
+
+    assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "hold"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.5005 * 0.85)
+
+
+def test_load_reports_enforces_trn_style_stale_email_reports_immediately(tmp_path: Path):
+    """Publish must enforce TRN.L FCF notes on cached rows without waiting for deferred hooks."""
+    import sys
+
+    for module_name in (
+        "value_investor.publish",
+        "value_investor.publish_cli",
+        "value_investor.summary",
+    ):
+        sys.modules.pop(module_name, None)
+
+    from value_investor.publish import _load_reports
+    from value_investor.storage import write_json
+
+    write_json(
+        tmp_path / "email_reports.json",
+        [
+            {
+                "ticker": "TRN.L",
+                "name": "Trainline plc",
+                "signal": "buy",
+                "adjusted_signal": "buy",
+                "fcf_basis_overlay": False,
+                "conviction_score": 0.5005,
+                "action_note": (
+                    "Buy — favourable entry timing | FCF basis mismatch: filing £79.5M | "
+                    "screen TTM £62.5M"
+                ),
+                "models_passed": 5,
+                "model_count": 22,
+                "composite_score": 0.5,
+                "families_passed": 3,
+                "data_quality_score": 0.95,
+                "metrics_present": 18,
+                "metrics_total": 20,
+                "weeks_at_signal": 1,
+                "signal_trend": "stable",
+                "stability_label": "building",
+                "timing_signal": "favourable",
+                "timing_score": 0.7,
+                "summary": "Buy (5/22 models).",
+                "passed_models": [],
+                "key_metrics": {},
+            }
+        ],
+    )
+
+    reports, _ = _load_reports(tmp_path)
+    trn = next(row for row in reports if row["ticker"] == "TRN.L")
+    assert trn["fcf_basis_overlay"] is True
+    assert trn["adjusted_signal"] == "hold"
+    assert trn["conviction_score"] == pytest.approx(0.5005 * 0.85)
+
+
+def test_enforce_fcf_basis_in_snapshot_without_research_verdict_trn_style():
+    """Stale TRN.L snapshots with overlay=false must still honour FCF mismatch notes."""
+    enforced = enforce_fcf_basis_in_snapshot(
+        {
+            "ticker": "TRN.L",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "fcf_basis_overlay": False,
+            "conviction_score": 0.5005,
+            "action_note": (
+                "Buy — favourable entry timing | FCF basis mismatch: filing £79.5M | "
+                "screen TTM £62.5M"
+            ),
+        }
+    )
+    assert enforced["fcf_basis_overlay"] is True
+    assert enforced["adjusted_signal"] == "hold"
+
+
 def test_parse_adjusted_eps_growth_pct_from_ir_prose():
     assert parse_adjusted_eps_growth_pct("Adjusted EPS increased by 16% to 9.9p") == pytest.approx(
         0.16

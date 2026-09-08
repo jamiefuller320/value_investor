@@ -228,7 +228,7 @@ class CompanyReport:
 
         trade_plan_raw = data.get("trade_plan")
         trade_plan = trade_plan_from_row(trade_plan_raw) if trade_plan_raw else None
-        return cls(
+        report = cls(
             ticker=str(data["ticker"]),
             name=str(data.get("name") or data["ticker"]),
             sector=data.get("sector"),
@@ -303,6 +303,7 @@ class CompanyReport:
             interim_eps_decline_pct=data.get("interim_eps_decline_pct"),
             adjusted_eps_growth_pct=data.get("adjusted_eps_growth_pct"),
         )
+        return report
 
 
 def _parse_list_field(value: Any) -> list[str]:

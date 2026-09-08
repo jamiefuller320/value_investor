@@ -2371,6 +2371,224 @@ def test_build_company_reports_exports_fcf_basis_overlay_for_sn(tmp_path: Path):
     assert snapshot["adjusted_signal"] == "buy"
 
 
+def _trn_fcf_mismatch_note() -> str:
+    return (
+        "Buy — favourable entry timing | FCF basis mismatch: filing £79.5M | "
+        "screen TTM £62.5M | Earnings growth basis divergence >300 bps: "
+        "statutory 48.4% vs filing core 36.8%"
+    )
+
+
+def test_fcf_basis_overlay_honours_action_note_predicate_trn_style_gap():
+    """TRN.L-style gap: ~21% filing/screen divergence below 25% but above 15%."""
+    filing = 79_500_000.0
+    screen = 62_500_000.0
+    assert fcf_universe_divergence_flagged(
+        filing_aligned=filing,
+        screen_ttm=screen,
+        company_adjusted=None,
+        filing_currency="GBP",
+    )
+    assert not fcf_filing_screen_mismatch(
+        filing_aligned=filing,
+        screen_ttm=screen,
+        divergence_flagged=False,
+    )
+    note = _trn_fcf_mismatch_note()
+    assert parse_filing_aligned_from_action_note(note) == pytest.approx(filing)
+    assert parse_screen_ttm_from_action_note(note) == pytest.approx(screen)
+
+
+def test_honour_fcf_action_note_enforcement_caps_trn_style_buy():
+    """TRN.L: buy with FCF mismatch note but fcf=None must cap on export."""
+    note = _trn_fcf_mismatch_note()
+    report = CompanyReport.from_dict(
+        {
+            "ticker": "TRN.L",
+            "name": "Trainline plc",
+            "sector": "Technology",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "models_passed": 5,
+            "model_count": 22,
+            "composite_score": 0.5,
+            "families_passed": 3,
+            "data_quality_score": 0.95,
+            "metrics_present": 18,
+            "metrics_total": 20,
+            "weeks_at_signal": 1,
+            "signal_trend": "stable",
+            "conviction_score": 0.5005,
+            "stability_label": "building",
+            "timing_signal": "favourable",
+            "timing_score": 0.7,
+            "action_note": note,
+            "fcf_basis_overlay": False,
+            "fcf": None,
+            "summary": "Buy (5/22 models).",
+            "passed_models": [],
+            "key_metrics": {},
+        }
+    )
+
+    enforced = honour_fcf_action_note_enforcement(report)
+    assert enforced.fcf_basis_overlay is True
+    assert enforced.adjusted_signal == "hold"
+    assert enforced.conviction_score == pytest.approx(0.5005 * 0.85)
+
+    snapshot = report.to_dict()
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "hold"
+    assert snapshot["conviction_score"] == pytest.approx(0.5005 * 0.85)
+
+
+def test_build_company_reports_exports_fcf_basis_overlay_for_trn(tmp_path: Path):
+    """TRN.L-style: universe divergence at ~21% caps buy despite sub-25% filing gap."""
+    sources = tmp_path / "research" / "TRN.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "TRN.L",
+                "cash_flow": {
+                    "2026": {
+                        "Operating Cash Flow": 133_000_000.0,
+                        "Capital Expenditure": -53_500_000.0,
+                        "Free Cash Flow": 79_500_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="TRN.L",
+                name="Trainline plc",
+                sector="Technology",
+                signal="buy",
+                conviction_score=0.5005,
+                timing_signal="favourable",
+                action_note="Buy — favourable entry timing",
+                free_cashflow=79_500_000.0,
+                free_cashflow_screen_ttm=62_500_000.0,
+                fcf_basis_overlay=False,
+                adjusted_eps_growth_pct=36.8,
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "TRN.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    snapshot = report.to_dict()
+
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "hold"
+    assert snapshot["conviction_score"] == pytest.approx(0.5005 * 0.85)
+    assert "FCF basis mismatch" in snapshot["action_note"]
+    assert "filing £79.5M" in snapshot["action_note"]
+    assert "screen TTM £62.5M" in snapshot["action_note"]
+
+
+def test_export_enforced_report_dicts_honours_trn_style_stale_row():
+    """TRN.L cached email_reports rows must not ship buy beside an FCF mismatch note."""
+    from value_investor.summary import export_enforced_report_dicts
+
+    stale = {
+        "ticker": "TRN.L",
+        "name": "Trainline plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "fcf_basis_overlay": False,
+        "conviction_score": 0.5005,
+        "action_note": _trn_fcf_mismatch_note(),
+        "models_passed": 5,
+        "model_count": 22,
+        "composite_score": 0.5,
+        "families_passed": 3,
+        "data_quality_score": 0.95,
+        "metrics_present": 18,
+        "metrics_total": 20,
+        "weeks_at_signal": 1,
+        "signal_trend": "stable",
+        "stability_label": "building",
+        "timing_signal": "favourable",
+        "timing_score": 0.7,
+        "summary": "Buy (5/22 models).",
+        "passed_models": [],
+        "key_metrics": {},
+    }
+    exported = export_enforced_report_dicts([stale])[0]
+    assert exported["fcf_basis_overlay"] is True
+    assert exported["adjusted_signal"] == "hold"
+    assert exported["conviction_score"] == pytest.approx(0.5005 * 0.85)
+
+
+def test_apply_research_overlay_with_fcf_enforcement_caps_trn_style_buy():
+    """TRN.L: stale overlay=false must not leave buy beside FCF mismatch note."""
+    from value_investor.research.document import ResearchDocument
+
+    note = _trn_fcf_mismatch_note()
+    stale = CompanyReport.from_dict(
+        {
+            "ticker": "TRN.L",
+            "name": "Trainline plc",
+            "sector": "Technology",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "models_passed": 5,
+            "model_count": 22,
+            "composite_score": 0.5,
+            "families_passed": 3,
+            "data_quality_score": 0.95,
+            "metrics_present": 18,
+            "metrics_total": 20,
+            "weeks_at_signal": 1,
+            "signal_trend": "stable",
+            "conviction_score": 0.5005,
+            "stability_label": "building",
+            "timing_signal": "favourable",
+            "timing_score": 0.7,
+            "action_note": note,
+            "fcf_basis_overlay": False,
+            "fcf": None,
+            "summary": "Buy (5/22 models).",
+            "passed_models": [],
+            "key_metrics": {},
+        }
+    )
+    doc = ResearchDocument(
+        ticker="TRN.L",
+        name="Trainline plc",
+        signal="buy",
+        version=1,
+        created_at="2026-09-06T00:00:00+00:00",
+        updated_at="2026-09-06T00:00:00+00:00",
+        mode="gap_fill",
+        research_verdict="accumulate",
+        research_risk_level="medium",
+        research_confidence=0.7,
+        research_rationale="Regulatory clarity still pending.",
+    )
+
+    overlaid = apply_research_overlay_with_fcf_enforcement([stale], [doc])[0]
+    assert overlaid.fcf_basis_overlay is True
+    assert overlaid.adjusted_signal == "hold"
+
+
 def test_apply_research_overlay_with_fcf_enforcement_caps_sn_style_strong_buy(
     tmp_path: Path,
 ):
