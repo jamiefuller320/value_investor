@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T08:22:05+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T08:35:45+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -410,6 +410,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L338 | **Warn when a spare sprint stream has no MARKET_BENCHMARKS entry** | L333 added ^FTSC so ftse_smallcap can join the observe clock. L334 labels leftover no-benchmark sprints as Ingest only. Still worth a dispatch/policy check that refuses or flags assigning ingest_parallel_sprint(_2) to a market missing from MARKET_BENCHMARKS so the next spare fill does not silently drop the dated archive clock. | A spare stream is assigned to a market not in MARKET_BENCHMARKS, or the next market_queue name after tsx60/ftse_smallcap is filled |
 | L347 | **Refresh stale TSX 60 buy-tier screen** | tsx60 sprint tiles still warn stale_buy_tier_screen (last dated screen 2026-08-16). Ingest is deepening an old shortlist; a Sunday screen-lite / observe-sim pass would refresh the buy-tier clock. | Next Sunday ladder includes tsx60 or an operator runs ftse-library screen-lite --market tsx60 |
 | L348 | **Share ops-monitor commit retry with email-report and library-grow** | Email-report failed today on git pull overwriting untracked files; library-grow rebase-push could not apply its ladder commit. Both are the same main-congestion class as the ops-monitor persist bug. Reuse or generalize scripts/gha_commit_ops_monitor.sh after that helper has a clean weekday. | Ops-monitor commit retry has landed on main and a second email-report or library-grow persist failure appears in Actions |
+| L349 | **Skip path-guard autofix for timestamp-only library cache edits** | ci_pr_autofix expanded eng-20260908-01 allowed_paths to include issuer_identifiers.json after a timestamp-only ABI.BR cache refresh. Prefer reverting no-op cache timestamps over widening hunt-task allowlists. | The next engineering path-guard failure is a docs/data/library cache timestamp-only edit, or ci_pr_autofix is next touched |
 
 ---
 
