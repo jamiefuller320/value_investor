@@ -1,118 +1,100 @@
 # The Allstate Corporation (ALL) — Research memo
 
-_Version 1 · Updated 2026-07-25T10:46:10.755391+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-08T16:39:34.187129+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-The Allstate Corporation is the third-largest US personal property and casualty insurer, executing a “Transformative Growth” strategy across exclusive agency, independent agency and direct channels. The quantitative screen flags a compelling value case — P/E 5.6, P/B 2.3, ROE 45.2%, debt/equity 24% — supported by a sharp earnings recovery from 2022–2023 losses to record 2025 profitability and continued momentum into Q1 2026. The central valuation debate is whether headline multiples reflect durable underwriting improvement or are inflated by one-off divestiture gains (~$1.6bn gain on disposition in 2025 per interim filings) and an elevated investment portfolio. Key risks — catastrophe exposure, California regulatory constraints, asbestos/environmental run-off, and potential legal overhang — are not fully captured by value screens.
-
----
+The Allstate Corporation is the third-largest US personal-lines P&C insurer, executing its “Transformative Growth” strategy across auto, homeowners and protection services. The quantitative screen rates ALL as **strong buy**, though the current `screening_snapshot.json` carries no populated model metrics (0/22 models scored; data quality 0.0), limiting direct verification of valuation inputs in this ingest. Fundamentally, earnings have rebounded sharply from 2022–2023 losses to record profitability, with H1 2026 net income of **$5.7bn** (10-Q) versus **$2.7bn** a year earlier, supported by lower catastrophe losses and stronger underwriting. The valuation hook is depressed headline multiples on elevated earnings and substantial capital return (buybacks and dividends), but the key debate is whether current results represent a cyclical peak in pricing/underwriting margins—and whether catastrophe, regulatory and competitive pressures on homeowners will compress returns as the share price approaches recent highs.
 
 ## INVESTMENT THESIS
-The screen’s Strong Buy rating rests on five passed factor families: cheapness, quality, dividend, GARP and risk. Allstate passes 14 of 22 models, including Graham Enterprising, Earnings Yield, FCF Yield, Buffett Quality, Economic Moat, Dividend Growth and Composite Value, with high data quality (19/20 metrics). That breadth is unusual for a cyclical insurer and aligns with improving fundamentals.
+For a value investor, Allstate offers a classic post-hard-market recovery profile: scale franchise, a **$83.2bn** investment portfolio (2025 10-K business overview), improving underwriting and meaningful free cash generation. A cached screen snapshot in the research folder (July 2026) showed **14/22 models passed**, composite score **77%**, and key metrics including **P/E 5.6**, **P/B 2.3**, **dividend yield 1.7%** and **ROE 45.2%**—consistent with a cheapness/quality/GARP screen profile. The live `screening_snapshot.json` confirms the **strong_buy** label but lacks those metrics, so conviction rests more on filing trends than on the current screen payload.
 
-Business quality supports the signal. Per the FY2025 10-K filing body, Allstate had 211 million policies in force (up from 208 million in FY2024), a $83.24 billion investment portfolio (vs $72.61 billion), and ranks third in US personal P&C by statutory direct premiums. The Allstate Protection segment — 93.9% of consolidated insurance premiums — generated underwriting income of $4.7bn in the nine months to September 2025 (vs $1.3bn prior year), per the Q3 2025 10-Q, indicating core P&C profitability has normalised well above the 2022–2023 trough.
-
-Portfolio simplification reinforces the quality case. Allstate completed sales of employer voluntary benefits ($1.9bn cash; $888m gain) and group health ($1.23bn cash; $722m gain in Q3 2025), refocusing on auto, homeowners and Protection Services. Capital returns continue: nine-month 2025 share repurchases of $812m and common dividends declared at $3.00 per share (Q3 2025 10-Q).
-
-For a value investor, the hook is a franchise trading at mid-single-digit headline P/E despite ROE above 45%, while underlying P&C underwriting has inflected. The screen correctly identifies cheapness; the research question is normalised, recurring earnings power after divestiture gains roll off.
-
----
+Business quality supports the signal: Allstate Protection six-month underwriting income rose to **$4.7bn** in H1 2026 from **$1.6bn** in H1 2025 (Q2 2026 10-Q), catastrophe losses fell to **$3.0bn** from **$4.2bn** over the same period, and net investment income increased to **$1.9bn** from **$1.6bn**. Capital allocation is shareholder-friendly—2025 Yahoo-sourced cash flow shows **$9.9bn** free cash flow, **$1.2bn** buybacks and **$1.0bn** common dividends—while tangible book value expanded to **$24.9bn** at year-end 2025 (Yahoo). The screen’s strong-buy case aligns with a high-return, cash-generative insurer trading on low headline multiples, provided earnings normalise above the 2022–2023 trough rather than reverting from a peak.
 
 ## FINANCIAL REVIEW
-**Source note:** Annual 10-K filing bodies (FY2024 and FY2025) are present in the index but truncated before Item 8 financial statements. Annual income statement, balance sheet and cash flow figures below fall back to `financials_annual.json` (Yahoo). Interim figures are from 10-Q filing body extracts.
+**Annual results (10-K; Yahoo fallback for statement tables)**
 
-### Annual trend (Yahoo fallback)
+SEC 10-K extracts (FY 2025 filed February 2026; FY 2024 filed February 2025) provide business context—third-largest US P&C insurer, **53,000** employees, **$83.24bn** investment portfolio—but truncated bodies omit consolidated income statement tables. Annual figures below are from `financials_annual.json` (Yahoo), stated explicitly as fallback.
 
-| Metric | 2022 | 2023 | 2024 | 2025 |
-|--------|------|------|------|------|
-| Total revenue | $50.6bn | $56.6bn | $63.5bn | $67.1bn |
-| Net income | ($1.29bn) | ($188m) | $4.67bn | $10.28bn |
-| Diluted EPS | ($5.22) | ($1.20) | $16.99 | $38.06 |
-| Free cash flow | $4.70bn | $3.96bn | $8.72bn | $9.88bn |
+| Metric | FY 2025 | FY 2024 | FY 2023 | FY 2022 |
+|--------|---------|---------|---------|---------|
+| Total revenue | $67.1bn | $63.5bn | $56.6bn | $50.6bn |
+| Net income | $10.3bn | $4.7bn | ($0.2bn) | ($1.3bn) |
+| Diluted EPS | $38.06 | $16.99 | ($1.20) | ($5.22) |
+| Stockholders’ equity | $30.6bn | $21.4bn | $17.8bn | $17.5bn |
+| Operating cash flow | $10.1bn | $8.9bn | $4.2bn | $5.1bn |
+| Free cash flow | $9.9bn | $8.7bn | $4.0bn | $4.7bn |
 
-The turnaround is pronounced: from consecutive loss years (elevated catastrophe and loss-cost inflation) to record 2025 earnings. Yahoo flags $1.54bn of unusual items in 2025, including a $1.60bn gain on sale of business, implying normalised net income of roughly $9.1bn — still roughly double 2024.
+FY 2025 net income includes **$1.5bn** of unusual/special items (Yahoo); normalised income was **$9.1bn** versus **$4.7bn** in FY 2024—still a substantial underlying improvement. The loss years of 2022–2023 reflect elevated catastrophe and reserve pressure; the subsequent recovery is the central financial narrative. Total assets reached **$119.8bn** at FY 2025 (Yahoo); total debt **$7.5bn**; net debt **$6.8bn**—moderate leverage for an insurer balance sheet.
 
-Balance sheet (Yahoo, FY2025): total assets $119.8bn; stockholders’ equity $30.6bn; total debt $7.5bn; tangible book value $24.9bn; net debt $6.8bn. The balance sheet expanded with the investment portfolio and retained earnings.
+**Interim results (10-Q filing bodies — primary source)**
 
-### Interim results (primary filings)
+*Q2 2026 (10-Q, six months ended 30 June 2026 vs 2025):*
+- Property & casualty premiums: **$31.2bn** vs **$29.7bn** (+5%)
+- Total revenues: **$35.5bn** vs **$33.1bn** (+7%)
+- Claims expense: **$19.0bn** vs **$21.1bn** (↓10%)
+- Net investment income: **$1.9bn** vs **$1.6bn**
+- Net gains on investments: **$0.7bn** vs **($0.5bn)** loss
+- Net income: **$5.7bn** vs **$2.7bn** (+113%)
+- Diluted EPS (six months): **$21.73** vs **$9.85**
+- Allstate Protection underwriting income (six months): **$4.7bn** vs **$1.6bn**
+- Catastrophe losses (six months): **$3.0bn** vs **$4.2bn**
 
-**Q1 2026 (10-Q, filed April 2026):**
-- Total revenues: $16.9bn (+3% YoY)
-- Net income: $2.5bn (vs $596m)
-- Net income to common: $2.4bn; diluted EPS $9.25 (vs $2.11)
-- P&C premiums: $15.6bn (+5.8%)
-- P&C claims expense: $9.2bn (vs $10.8bn — lower cat burden)
-- Allstate Protection underwriting income: $2.7bn (vs $364m)
-- Total assets: $124.0bn; shareholders’ equity: $31.6bn; debt: $7.5bn (March 2026 filing body)
+*Q2 2026 single quarter:* net income **$3.3bn** vs **$2.1bn**; total revenues **$18.6bn** vs **$16.6bn**.
 
-**Nine months to September 2025 (Q3 2025 10-Q):**
-- Total revenues: $50.3bn (+5.8% YoY)
-- Net income: $6.4bn (vs $2.7bn)
-- Net income to common: $6.4bn; diluted EPS $23.76 (9M)
-- Gain on disposition of operations: $1.6bn (9M)
-- Allstate Protection underwriting income: $4.7bn (vs $1.3bn)
-- Catastrophe losses (9M): $4.8bn (vs $4.6bn — broadly flat YoY)
-- Q3 catastrophe losses: $558m (vs $1.7bn — materially lower)
+*Q3 2025 (10-Q, nine months ended 30 September 2025 vs 2024):*
+- P&C premiums: **$45.0bn** vs **$41.8bn**
+- Net income (nine months): **$6.4bn** vs **$2.7bn**
+- Q3 net income: **$3.7bn** vs **$1.2bn**
 
-**H1 2025 (Q2 2025 10-Q):**
-- Total revenues: $33.1bn; net income to common: $2.6bn; diluted EPS $9.85 (6M)
-- Gain on disposition: $890m (H1, health divestitures)
+Trend: premium growth is mid-single-digit, but earnings acceleration is driven disproportionately by lower cat losses, favourable claims trends and investment income/gains—not solely by top-line expansion. Combined-ratio detail is referenced in MD&A section headers but numeric ratios are not extractable from the truncated 10-Q bodies; this is a filing-data gap.
 
-### Operational metrics (10-K business sections)
+**Cash flow (Yahoo quarterly, cross-check to screen)**
 
-- Policies in force: 211m (FY2025) vs 208m (FY2024)
-- Investment portfolio: $83.2bn (FY2025) vs $72.6bn (FY2024)
-- Employees: ~53,000 (FY2025), down from ~55,000
-- Modelled 1-in-100 PML (hurricane, earthquake, wildfire, net of reinsurance): ~$3.1bn (FY2025) vs ~$3.5bn (FY2024)
-
-### Gaps
-
-- FY2025 and FY2024 audited annual financial statements are not available in filing body extracts; annual figures rely on Yahoo.
-- Q4 2025 results were announced via 8-K (4 February 2026) but the press release/investor supplement exhibits were not downloaded; Q1 2026 is the latest interim with full statements.
-- Combined ratio is not extractable from available filing body text; underwriting income trends serve as the primary profitability proxy.
-
----
+TTM free cash flow per `screening_snapshot.json` embedded quarterly data: **~$12.2bn** (operating cash flow TTM **$12.5bn**, capex TTM **$0.2bn**). H1 2026 quarterly filings show continued buyback activity (**$1.05bn** in Q2 2026 alone, per Yahoo quarterly cash flow).
 
 ## RISKS AND RED FLAGS
-**Catastrophe and climate.** Allstate’s 10-K risk factors emphasise that cat losses may exceed pricing, reinsurance limits and modelled PML. Q1 2026 cat losses were $1.2bn (down from $2.2bn YoY), but nine-month 2025 cats of $4.8bn remain substantial. The FY2025 10-K notes a California Insurance Commissioner moratorium (January 2025) on non-renewing residential coverage in wildfire-affected zip codes. Climate-driven severity remains a structural headwind for homeowners.
+**Catastrophe and climate cyclicality.** The 2025 10-K warns that catastrophe losses can constrain liquidity and that severe weather losses tied to climate change may not be fully reflected in pricing. H1 2026 cat losses improved year-on-year, but this remains the primary earnings swing factor for a homeowners-heavy book.
 
-**Regulatory and rate approval.** State prior-approval regimes can delay rate increases during inflationary periods. Certain states impose profit caps, premium refunds and mandatory participation in assigned-risk pools (including California FAIR Plan). These constraints can compress returns independent of underwriting skill.
+**Regulatory and political scrutiny.** Filings reference regulatory limitations on product marketing and profitability, plus new climate disclosure requirements (e.g. California, October 2023). News coverage highlights homeowners affordability friction (“uncomfortable reality for homeowners,” August 2026) and a high-profile claim denial case (September 2026), underscoring reputational and regulatory tail risk in personal lines.
 
-**Reserve and run-off exposure.** The Discontinued Lines and Coverage run-off segment carries asbestos, environmental and other legacy commercial claims. The FY2025 10-K states reserve changes “have occurred and may continue” from litigation, legislative and regulatory actions. Minimum pension liabilities are small ($11m per Yahoo balance sheet) and not a material flag.
+**Reserve and legacy liabilities.** The 10-K discusses asbestos, environmental and other long-tail reserves, noting that “reserve changes can be caused by new information” and that established reserves “have occurred and may continue.” This is standard for the sector but material given prior-year reserve volatility.
 
-**Earnings quality.** 2025 net income is materially boosted by ~$1.6bn in gain-on-disposition from health/benefits divestitures (Q3 2025 10-Q). Headline P/E of 5.6 on screen metrics likely reflects these non-recurring items; normalised earnings yield is lower. Q1 2026 investment losses of $405m on investments and derivatives also introduce quarter-to-quarter volatility.
+**Competitive dynamics.** State Farm’s **$5bn** customer giveback (August 2026 news) signals intensifying price competition in auto. Multiple analyst downgrades after the share-price rally (Keefe Bruyette, June and August 2026; Argus, August 2026) reflect concern that premium growth is slowing and the easy earnings comparisons are fading.
 
-**Governance and management.** October 2025 leadership reshuffle: John E. Dugenske became CFO; Jesse E. Merten moved to President, Run-off; Mario Rizzo became COO — suggesting succession planning but also transition risk.
+**Governance / data quality.** No going-concern or material weakness language was found in available 10-Q extracts. However, the research ingest’s filings index contamination (Atlantic Lithium RNS) and empty current screen metrics are operational red flags for verify-before-trade workflows—not company governance issues per se.
 
-**Legal.** The Q1 2026 10-Q references Legal Proceedings (Item 1) but detailed case descriptions are not in the truncated body. News coverage (9 July 2026) flags “legal risks linger” without specifics in the manifest — a verify-before-trade gap.
+**Peak-earnings risk.** FY 2025 included significant unusual gains (Yahoo: **$1.5bn** unusual items). Investment gains in H1 2026 (**$1.1bn** in Q2 alone) flatter reported earnings. Normalised and through-the-cycle profitability may be materially lower than trailing figures imply.
 
-**Competitive.** Personal auto and homeowners markets are highly competitive; Transformative Growth execution must sustain margin gains as peers invest in telematics and direct distribution.
-
-No going-concern language appears in available filing extracts.
-
----
+RiskTags: cyclical, regulatory, competitive, litigation, other
+RiskTags: cyclical, regulatory, competitive, litigation, other
 
 ## NEWS HIGHLIGHTS
-News coverage in the manifest is **thin on fundamental developments** and heavily skewed toward price action and peer comparison. Relevant Allstate-specific items:
+Coverage over the past year is adequate (~40 Allstate-relevant articles in `news_manifest.json` after filtering ticker false-positives), though many are syndicated valuation pieces rather than deep investigative reporting.
 
-| Date | Title | Relevance |
-|------|-------|-----------|
-| 25 Jul 2026 | *Is Allstate (ALL) Fairly Valued After Bullish Analyst Revisions Ahead Of Earnings?* (Yahoo Finance) | Bullish analyst revisions; Zacks Rank #2; shares ~$260; 3-year TSR 147% |
-| 24 Jul 2026 | *ALL or WRB: Which Is the Better Value Stock Right Now?* (Yahoo Finance) | Peer value comparison vs W.R. Berkley |
-| 24 Jul 2026 | *Allstate stock hits all-time high at 258.06 USD* (Investing.com) | Momentum/valuation context |
-| 23 Jul 2026 | *Allstate (ALL) Rises As Market Takes a Dip: Key Facts* (Yahoo Finance) | Price action |
-| 15 Jul 2026 | *Allstate (ALL) Stock Slides as Market Rises* (Yahoo Finance Singapore) | Price action |
-| 9 Jul 2026 | *Allstate (ALL) Stock Looks Undervalued On Earnings But Legal Risks Linger* (Yahoo Finance) | Valuation vs legal overhang |
-| 9 Jul 2026 | *Allstate (ALL) Stock Slides as Market Rises* (Yahoo Finance) | Price action |
+**Earnings and valuation debate**
+- “Allstate (ALL) Posted Stronger Q2 Earnings, Is The Stock Fully Priced?” (29 August 2026)
+- “Allstate's $3 billion profit comes alongside uncomfortable reality for homeowners” (28 August 2026)
+- “How Strong Q2 2026 Earnings and Buybacks Will Impact Allstate (ALL) Investors” (19 August 2026)
+- “Allstate stock hits all-time high at 258.06 USD” (24 July 2026)
 
-**Notable filing events (not in news manifest):** Q4/full-year 2025 results announced 4 February 2026 (8-K); January 2026 catastrophe losses and PIF update released 19 February 2026 (8-K). Health/benefits divestitures to Nationwide and StanCorp (completed 2025) are documented in 10-Q notes rather than recent headlines.
+**Analyst actions**
+- “Keefe Bruyette Downgrades The Allstate Corporation (ALL) Stock to Market Perform” (14 June 2026)
+- “Argus steps to the sidelines on Allstate following stock rally and slowing premium growth” (28 August 2026)
+- “One Allstate insurance group gets a credit-rating upgrade” (2 September 2026)
+- “Affirmed Financial Strength And Earnings Outlook Might Change The Case For Investing In Allstate (ALL)” (3 September 2026)
 
-Many manifest entries are false positives from the “ALL” ticker matching unrelated “all-stock” deal headlines — substantive Allstate news flow is limited.
+**Competitive / regulatory colour**
+- “State Farm Just Handed $5 Billion Back to Customers…” (24 August 2026)
+- “Tyler Perry pays $18K lien for 81-year-old woman after Allstate denied her home insurance claim” (5 September 2026)
+- “Allstate (ALL) Stock May Trade At A Discount Following Catastrophe Losses” (25 July 2026)
 
----
+**Value-screen echo**
+- Multiple “Should Value Investors Buy Allstate (ALL) Stock?” pieces (Yahoo Finance, March–September 2026), consistent with the quantitative strong-buy signal.
+
+No major M&A or CEO change headlines surfaced in the filtered manifest; strategy focus remains Transformative Growth and capital return rather than transformational deals.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Deep research confirms the quantitative Strong Buy on franchise quality, underwriting recovery and balance-sheet strength, but moderates conviction because headline earnings and P/E are flattered by divestiture gains, catastrophe and regulatory risks remain material, and annual filing bodies lack audited statements for independent verification.
+Confidence: 0.68
+Rationale: Filing trends confirm a genuine earnings and underwriting recovery that supports the quantitative strong-buy case on earnings-based multiples, but cyclical cat exposure, regulatory headwinds on homeowners, possible peak-normalised earnings and a depleted current screen payload prevent full confirmation at maximum conviction.
