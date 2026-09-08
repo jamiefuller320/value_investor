@@ -27,6 +27,7 @@ from value_investor.python_quality import (
 CI_BOT_COMMIT_PREFIX = "chore(ci):"
 AUTOFIX_COMMIT_PREFIX = "chore(ci): autofix"
 PATH_EXPAND_COMMIT_PREFIX = "chore(ci): expand engineering allowed_paths"
+PATH_REVERT_COMMIT_PREFIX = "chore(ci): drop incidental research artifacts from path guard"
 RUFF_FORMAT_MARKERS = ("ruff format failed", "would be reformatted")
 RUFF_CHECK_MARKERS = ("ruff check failed",)
 PATH_GUARD_MARKERS = (
@@ -34,7 +35,14 @@ PATH_GUARD_MARKERS = (
     "outside allowed_paths:",
     "engineering-path-guard",
 )
+PATH_GUARD_ONLY_ACTIONS = frozenset({"path_guard_expand", "path_guard_revert"})
 _OUTSIDE_ALLOWED_RE = re.compile(r"outside allowed_paths:\s+([^\s(]+)")
+# Per-ticker source dumps that FCF/scoring agents often write while reproducing
+# a live row. They are not needed for overlay unit tests and trip the path guard
+# (PR 503 DNLM peer table, PR 507 IMB screening snapshot).
+_INCIDENTAL_RESEARCH_ARTIFACT_RE = re.compile(
+    r"^docs/(?:data/)?research/[^/]+/sources/[^/]+\.json$"
+)
 
 
 @dataclass
@@ -44,6 +52,7 @@ class AutofixResult:
     reason: str
     logs: list[str]
     actions: list[str] = field(default_factory=list)
+    skip_verify_pytest: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -52,6 +61,7 @@ class AutofixResult:
             "reason": self.reason,
             "logs": self.logs,
             "actions": list(self.actions),
+            "skip_verify_pytest": self.skip_verify_pytest,
         }
 
 
@@ -135,8 +145,9 @@ def diagnose_pr_ci_failure(
     hints: list[str] = []
     if "path_guard" in kinds and task_id:
         hints.append(
-            f"Path guard: add missing paths to `{task_id}` allowed_paths "
-            "(CI may auto-expand on engineering branches)."
+            f"Path guard: drop incidental `docs/research` / `docs/data/research` "
+            f"source artifacts, or add missing paths to `{task_id}` allowed_paths "
+            "(CI may auto-revert or auto-expand on engineering branches)."
         )
     if "pytest" in kinds and task_id:
         hints.append(
@@ -217,6 +228,88 @@ def format_pr_ci_comment(
     return "\n".join(lines).strip() + "\n"
 
 
+def is_incidental_research_artifact(path: str) -> bool:
+    """True for per-ticker research source JSON that scoring tasks should not commit."""
+    return bool(_INCIDENTAL_RESEARCH_ARTIFACT_RE.fullmatch(normalize_repo_path(path)))
+
+
+def git_name_only_paths(*diff_args: str) -> list[str]:
+    """Return normalized paths from ``git diff --name-only``."""
+    proc = subprocess.run(
+        ["git", "diff", "--name-only", *diff_args],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(proc.stderr.strip() or f"git diff failed for {diff_args}")
+    paths: list[str] = []
+    seen: set[str] = set()
+    for line in (proc.stdout or "").splitlines():
+        normalized = normalize_repo_path(line.strip())
+        if normalized and normalized not in seen:
+            seen.add(normalized)
+            paths.append(normalized)
+    return paths
+
+
+def working_tree_changed_paths(base_ref: str) -> list[str]:
+    """Paths that differ from *base_ref*, including the index and working tree."""
+    return list(
+        dict.fromkeys(
+            [
+                *git_name_only_paths(base_ref),
+                *git_name_only_paths("--cached", base_ref),
+            ]
+        )
+    )
+
+
+def committed_changed_paths(base_ref: str, head_ref: str = "HEAD") -> list[str]:
+    """Paths in the committed merge-base range ``base_ref...head_ref``."""
+    return git_name_only_paths(f"{base_ref}...{head_ref}")
+
+
+def path_exists_on_ref(ref: str, path: str) -> bool:
+    proc = subprocess.run(
+        ["git", "cat-file", "-e", f"{ref}:{path}"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    return proc.returncode == 0
+
+
+def revert_incidental_research_artifact(path: str, *, base_ref: str) -> bool:
+    """Restore *path* from *base_ref*, or delete it when it is new on the PR."""
+    normalized = normalize_repo_path(path)
+    if not normalized or not is_incidental_research_artifact(normalized):
+        return False
+    if path_exists_on_ref(base_ref, normalized):
+        proc = subprocess.run(
+            ["git", "checkout", base_ref, "--", normalized],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        return proc.returncode == 0
+    target = Path(normalized)
+    if target.exists() or target.is_symlink():
+        target.unlink()
+    proc = subprocess.run(
+        ["git", "rm", "-f", "--ignore-unmatch", "--", normalized],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    return (not target.exists()) and proc.returncode == 0
+
+
+def path_guard_actions_skip_verify_pytest(actions: list[str]) -> bool:
+    """Full pytest is redundant when the original test job passed and we only touched path-guard files."""
+    return bool(actions) and set(actions).issubset(PATH_GUARD_ONLY_ACTIONS)
+
+
 def _suggest_companion_paths(paths: list[str]) -> list[str]:
     """When a test or src path is added, suggest the paired module if it exists."""
     extras: list[str] = []
@@ -267,9 +360,7 @@ def attempt_engineering_path_guard_autofix(
     violation_paths = parse_path_guard_violations(log_text or "")
     if not violation_paths:
         try:
-            changed = [
-                p.as_posix() for p in git_changed_files(base_ref=base_ref, head_ref=head_ref)
-            ]
+            changed = committed_changed_paths(base_ref, head_ref)
         except RuntimeError as exc:
             return AutofixResult(
                 fixed=False,
@@ -288,33 +379,39 @@ def attempt_engineering_path_guard_autofix(
             if "outside allowed_paths:" in line
         ]
 
-    expand_paths = list(
-        dict.fromkeys([*violation_paths, *_suggest_companion_paths(violation_paths)])
-    )
-    if not expand_paths:
-        return AutofixResult(
-            fixed=False,
-            kinds=kinds,
-            reason="path guard failed but no expandable paths found",
-            logs=logs,
+    incidental = [path for path in violation_paths if is_incidental_research_artifact(path)]
+    reverted: list[str] = []
+    for path in incidental:
+        if revert_incidental_research_artifact(path, base_ref=base_ref):
+            reverted.append(path)
+            logs.append(f"reverted incidental research artifact: {path}")
+
+    remaining = [path for path in violation_paths if path not in reverted]
+    expand_paths = list(dict.fromkeys([*remaining, *_suggest_companion_paths(remaining)]))
+    added: list[str] = []
+    if expand_paths:
+        _, added = expand_task_allowed_paths(
+            task_id,
+            expand_paths,
+            path=tasks_path,
+            committed_path=tasks_path,
         )
 
-    _, added = expand_task_allowed_paths(
-        task_id,
-        expand_paths,
-        path=tasks_path,
-        committed_path=tasks_path,
-    )
-    if not added:
+    if not reverted and not added:
+        reason = (
+            "path guard failed but no expandable paths found"
+            if not expand_paths
+            else "no new allowed_paths to add (blocked or already listed)"
+        )
         return AutofixResult(
             fixed=False,
             kinds=kinds,
-            reason="no new allowed_paths to add (blocked or already listed)",
+            reason=reason,
             logs=logs,
         )
 
     try:
-        changed = [p.as_posix() for p in git_changed_files(base_ref=base_ref, head_ref=head_ref)]
+        changed = working_tree_changed_paths(base_ref)
     except RuntimeError as exc:
         return AutofixResult(
             fixed=False,
@@ -331,17 +428,32 @@ def attempt_engineering_path_guard_autofix(
         return AutofixResult(
             fixed=False,
             kinds=kinds,
-            reason=f"path guard still failing after expand: {guard.violations[:3]}",
+            reason=f"path guard still failing after autofix: {guard.violations[:3]}",
             logs=logs,
         )
 
-    logs.append(f"expanded allowed_paths for {task_id}: {added}")
+    actions: list[str] = []
+    if reverted:
+        actions.append("path_guard_revert")
+    if added:
+        actions.append("path_guard_expand")
+        logs.append(f"expanded allowed_paths for {task_id}: {added}")
+    if reverted and not added:
+        reason = f"dropped incidental research artifacts: {reverted}"
+    elif reverted:
+        reason = (
+            "dropped incidental research artifacts and expanded engineering "
+            f"allowed_paths for {task_id}"
+        )
+    else:
+        reason = "expanded engineering allowed_paths for path guard"
     return AutofixResult(
         fixed=True,
         kinds=["path_guard"],
-        reason="expanded engineering allowed_paths for path guard",
+        reason=reason,
         logs=logs,
-        actions=["path_guard_expand"],
+        actions=actions,
+        skip_verify_pytest=path_guard_actions_skip_verify_pytest(actions),
     )
 
 

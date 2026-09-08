@@ -1,7 +1,8 @@
 name: CI PR Autofix
 
 # When CI fails on a cursor/* pull request, attempt scoped fixes (ruff; engineering
-# path-guard allowlist expand), push, and post a diagnosis comment. See docs/ops/ci-fix-automation.md.
+# path-guard revert of incidental research artifacts, then allowlist expand),
+# push, and post a diagnosis comment. See docs/ops/ci-fix-automation.md.
 #
 # Security: workflow_run has access to the default GITHUB_TOKEN (write). Public fork
 # PRs must not run here. Install the package from main (trusted), then check out the
@@ -113,6 +114,8 @@ jobs:
           Path("/tmp/autofix_actions.txt").write_text(",".join(actions))
           commit_msg = data.get("commit_message") or ""
           Path("/tmp/autofix_commit_message.txt").write_text(commit_msg)
+          skip = "true" if data.get("skip_verify_pytest") else "false"
+          Path("/tmp/autofix_skip_pytest.txt").write_text(skip)
           PY
 
       - name: Verify autofix (ruff + path guard + pytest)
@@ -122,13 +125,24 @@ jobs:
         run: |
           set -euo pipefail
           python3 /tmp/check_changed_python.py --base origin/main --head HEAD
+          ACTIONS="$(cat /tmp/autofix_actions.txt)"
+          if [[ "$ACTIONS" == *"path_guard_expand"* ]]; then
+            git add docs/data/engineering_tasks.json
+          fi
+          if [[ "$ACTIONS" == *"path_guard_revert"* ]]; then
+            git add -u -- docs/research docs/data/research || true
+          fi
           if [[ "$BRANCH" =~ ^cursor/eng-[0-9]{8}-[0-9]{2}-1de3$ ]]; then
-            git diff --name-only origin/main...HEAD > /tmp/changed_files.txt
+            git diff --name-only origin/main > /tmp/changed_files.txt
             ftse-engineering check-pr-paths \
               --branch "$BRANCH" \
               --changed-files /tmp/changed_files.txt
           fi
-          pytest -q
+          if [ "$(cat /tmp/autofix_skip_pytest.txt)" = "true" ]; then
+            echo "Skipping full pytest (path-guard-only autofix; original test job already passed)"
+          else
+            pytest -q
+          fi
 
       - name: Configure git author
         if: steps.autofix.outputs.fixed == 'true'
@@ -147,6 +161,9 @@ jobs:
           git add src/ tests/ scripts/
           if [[ "$ACTIONS" == *"path_guard_expand"* ]]; then
             git add docs/data/engineering_tasks.json
+          fi
+          if [[ "$ACTIONS" == *"path_guard_revert"* ]]; then
+            git add -u -- docs/research docs/data/research || true
           fi
           if git diff --staged --quiet; then
             echo "pushed=false" >> "$GITHUB_OUTPUT"

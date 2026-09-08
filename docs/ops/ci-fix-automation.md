@@ -91,10 +91,18 @@ failed CI workflow:
 
 1. Classifies failure kinds from failed job logs (ruff, pytest, path guard, data JSON)
 2. Attempts **scoped ruff** autofix when applicable
-3. On **`cursor/eng-*` engineering branches**, attempts **path-guard allowlist expand**
-   when `engineering-path-guard` fails (adds missing `allowed_paths` on the task in
-   `docs/data/engineering_tasks.json`, then re-validates)
-4. Verifies with scoped ruff + path guard (engineering branches) + full pytest
+3. On **`cursor/eng-*` engineering branches**, attempts **path-guard autofix**
+   when `engineering-path-guard` fails:
+   - **Revert first** for incidental per-ticker research source JSON
+     (`docs/research/*/sources/*.json`, `docs/data/research/*/sources/*.json`)
+     — FCF overlay agents often dump `screening_snapshot.json` or
+     `peer_model_pass_table.json` that unit tests do not need
+   - **Expand** remaining missing `allowed_paths` on the task in
+     `docs/data/engineering_tasks.json`, then re-validates
+4. Verifies with scoped ruff + path guard (engineering branches). Full pytest
+   runs unless the autofix was path-guard-only (original test job already
+   passed). Autofix installs the package from **main**, so a full pytest replay
+   of PR-added tests would fail even when the PR CI test job was green.
 5. Commits with `chore(ci): …` and pushes when a fix was applied
 6. **Always posts a PR comment** with diagnosis (failure kinds, violations, pytest
    nodes, hints) — even when no automatic fix was possible
@@ -107,6 +115,8 @@ failed CI workflow:
 - Skips when the latest commit already starts with `chore(ci):` (one bot attempt per push)
 - Pytest and committed-data JSON failures are **diagnosed but not auto-fixed** on PRs
 - Path-guard expand only adds non-blocked paths; blocked paths still need agent/human edits
+- Path-guard revert drops incidental research source JSON instead of widening
+  scoring-task allowlists (same class of failure as PR 503 / PR 507)
 - The path guard also allows companion tests for each allowed `src/` module
   (`src/value_investor/research/ingest.py` → `tests/test_research_ingest.py`) and
   `docs/data/engineering_tasks.json` so allowlist expands are not a self-violation
