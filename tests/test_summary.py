@@ -31,7 +31,11 @@ from value_investor.scoring.fcf import (
 )
 from value_investor.scoring.sector_overrides import AGRICULTURE_COMMODITIES_SECTOR
 from value_investor.signals import Signal, assign_signal
-from value_investor.summary import build_company_reports, honour_fcf_action_note_enforcement
+from value_investor.summary import (
+    apply_research_overlay_with_fcf_enforcement,
+    build_company_reports,
+    honour_fcf_action_note_enforcement,
+)
 
 
 def _signal_row(**overrides) -> dict:
@@ -1374,6 +1378,79 @@ def test_honour_fcf_action_note_enforcement_caps_hln_style_buy(tmp_path: Path):
     assert stale.fcf_basis_overlay is True
     assert stale.adjusted_signal == "hold"
     assert stale.conviction_score == pytest.approx(0.8022 * 0.85)
+
+
+def test_apply_research_overlay_with_fcf_enforcement_caps_mgns_style_strong_buy(
+    tmp_path: Path,
+):
+    """Strong-buy names with stale overlay=false must cap when action note flags FCF mismatch."""
+    from value_investor.research.document import ResearchDocument
+
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="MGNS.L",
+                name="Morgan Sindall Group plc",
+                sector="Industrials",
+                signal="strong_buy",
+                conviction_score=0.811,
+                free_cashflow=170_700_000.0,
+                free_cashflow_screen_ttm=141_500_000.0,
+                fcf_basis_overlay=False,
+                adjusted_signal="strong_buy",
+                action_note=(
+                    "Strong Buy — neutral timing | FCF basis mismatch: filing £170.7M | "
+                    "screen TTM £141.5M"
+                ),
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "MGNS.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    assert report.fcf_basis_overlay is True
+    assert report.adjusted_signal == "buy"
+
+    stale = replace(
+        report,
+        fcf_basis_overlay=False,
+        adjusted_signal="strong_buy",
+        conviction_score=0.811,
+    )
+    doc = ResearchDocument(
+        ticker="MGNS.L",
+        name="Morgan Sindall Group plc",
+        signal="strong_buy",
+        version=1,
+        created_at="2026-09-06T00:00:00+00:00",
+        updated_at="2026-09-06T00:00:00+00:00",
+        mode="gap_fill",
+        research_verdict="accumulate",
+        research_risk_level="medium",
+        research_confidence=0.7,
+        research_path=str(tmp_path / "research" / "MGNS.L" / "research.md"),
+    )
+
+    overlaid = apply_research_overlay_with_fcf_enforcement([stale], [doc])[0]
+    assert overlaid.fcf_basis_overlay is True
+    assert overlaid.adjusted_signal == "buy"
+
+    honoured = honour_fcf_action_note_enforcement(stale)
+    assert honoured.fcf_basis_overlay is True
+    assert honoured.adjusted_signal == "buy"
+    assert honoured.conviction_score == pytest.approx(0.811 * 0.85)
 
 
 def _gfrd_financials() -> dict:

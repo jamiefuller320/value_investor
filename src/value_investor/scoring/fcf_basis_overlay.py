@@ -152,6 +152,8 @@ def apply_fcf_export_enforcement(
 
     capped = cap_signal_for_fcf_basis_overlay(signal)
     merged = _more_conservative_signal(adjusted_signal, capped)
+    if fcf_basis_overlay and merged == adjusted_signal:
+        return True, merged, float(conviction_score or 0.0)
     return (
         True,
         merged,

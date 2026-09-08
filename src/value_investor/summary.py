@@ -688,6 +688,18 @@ def _brief_summary(
     return " ".join(parts)
 
 
+def apply_research_overlay_with_fcf_enforcement(
+    reports: list[CompanyReport],
+    documents: list[Any],
+) -> list[CompanyReport]:
+    """Apply research verdict overlay, then honour FCF basis mismatch action notes."""
+    from value_investor.research.overlay import apply_research_overlay
+
+    base = getattr(apply_research_overlay, "_original_overlay", apply_research_overlay)
+    updated = base(reports, documents)
+    return [honour_fcf_action_note_enforcement(report) for report in updated]
+
+
 def honour_fcf_action_note_enforcement(report: CompanyReport) -> CompanyReport:
     """Re-apply FCF basis caps when action notes or flags require export enforcement."""
     adjusted = str(report.adjusted_signal or report.signal)
@@ -1311,78 +1323,95 @@ def build_company_reports(
         )
 
         reports.append(
-            CompanyReport(
-                ticker=ticker,
-                name=str(row.get("name") or ticker),
-                sector=row.get("sector"),
-                signal=signal,
-                models_passed=int(row.get("models_passed") or 0),
-                model_count=int(row.get("model_count") or 0),
-                composite_score=composite_score,
-                sector_composite_score=sector_composite_score,
-                families_passed=int(row.get("families_passed") or 0),
-                passed_families=row.get("passed_families"),
-                family_count=int(row.get("family_count") or FAMILY_COUNT),
-                data_quality_score=float(row.get("data_quality_score") or 0),
-                metrics_present=int(row.get("metrics_present") or 0),
-                metrics_total=int(row.get("metrics_total") or 20),
-                weeks_at_signal=int(row.get("weeks_at_signal") or 1),
-                signal_trend=str(row.get("signal_trend") or "new"),
-                conviction_score=conviction_score,
-                stability_label=str(row.get("stability_label") or "new"),
-                signal_since=signal_since,
-                timing_signal=str(row.get("timing_signal") or "insufficient_data"),
-                timing_score=float(row.get("timing_score") or 0),
-                rsi_14=float(row["rsi_14"])
-                if row.get("rsi_14") is not None and not pd.isna(row.get("rsi_14"))
-                else None,
-                price_vs_sma200_pct=price_vs_sma200_pct,
-                action_note=action_note,
-                trade_plan=trade_plan,
-                summary=summary,
-                passed_models=passed_model_names,
-                key_metrics=key_metrics,
-                failed_models=failed_model_names,
-                model_failures=model_failures,
-                screening_inputs=screening_inputs,
-                cashflow_metrics=cashflow_metrics or None,
-                fcf=fcf_snapshot or None,
-                piotroski_f_score=piotroski_f_score,
-                healthcare_overlay=healthcare_overlay,
-                healthcare_price_erosion_overlay=healthcare_price_erosion_overlay,
-                cash_conversion_overlay=cash_conversion_overlay,
-                dividend_yield_overlay=dividend_yield_overlay,
-                interim_quality_overlay=interim_quality_overlay,
-                cyclical_exposure_overlay=cyclical_exposure_overlay,
-                cyclical_exposure_detected=cyclical_exposure_detected,
-                earnings_basis_overlay=earnings_basis_overlay,
-                earnings_growth_overlay=earnings_growth_overlay,
-                earnings_growth_bps_divergence_warning=earnings_growth_bps_divergence_warning,
-                conviction_timing_overlay=conviction_timing_overlay,
-                conviction_timing_overlay_detail=conviction_timing_overlay_detail,
-                transition_key=str(conviction_timing_overlay_detail.get("transition_key") or "")
-                or None,
-                prior_signal=conviction_timing_overlay_detail.get("prior_signal"),
-                quality_family_avoid_gate=quality_family_avoid_gate,
-                quality_family_avoid_gate_detail=quality_family_avoid_gate_detail,
-                peer_model_pass_table=peer_model_pass_table,
-                fcf_basis_overlay=fcf_basis_overlay,
-                leverage_override=leverage_override,
-                dual_leverage_display=dual_leverage_display,
-                operating_cashflow=operating_cashflow,
-                fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
-                fcf_dividend_coverage_net=fcf_dividend_coverage_net,
-                fcf_dividend_coverage=labelled_fcf_dividend_coverage,
-                fcf_definition_divergence=fcf_definition_divergence,
-                fcf_divergence_flagged=fcf_divergence_flagged,
-                adjusted_signal=adjusted_signal_str or signal,
-                research_verdict=research_verdict_str,
-                research_risk_level=research_risk_str,
-                research_confidence=research_confidence,
-                research_rationale=research_rationale_str,
-                interim_eps_decline_pct=interim_eps_decline_pct,
-                adjusted_eps_growth_pct=adjusted_eps_growth_pct,
+            honour_fcf_action_note_enforcement(
+                CompanyReport(
+                    ticker=ticker,
+                    name=str(row.get("name") or ticker),
+                    sector=row.get("sector"),
+                    signal=signal,
+                    models_passed=int(row.get("models_passed") or 0),
+                    model_count=int(row.get("model_count") or 0),
+                    composite_score=composite_score,
+                    sector_composite_score=sector_composite_score,
+                    families_passed=int(row.get("families_passed") or 0),
+                    passed_families=row.get("passed_families"),
+                    family_count=int(row.get("family_count") or FAMILY_COUNT),
+                    data_quality_score=float(row.get("data_quality_score") or 0),
+                    metrics_present=int(row.get("metrics_present") or 0),
+                    metrics_total=int(row.get("metrics_total") or 20),
+                    weeks_at_signal=int(row.get("weeks_at_signal") or 1),
+                    signal_trend=str(row.get("signal_trend") or "new"),
+                    conviction_score=conviction_score,
+                    stability_label=str(row.get("stability_label") or "new"),
+                    signal_since=signal_since,
+                    timing_signal=str(row.get("timing_signal") or "insufficient_data"),
+                    timing_score=float(row.get("timing_score") or 0),
+                    rsi_14=float(row["rsi_14"])
+                    if row.get("rsi_14") is not None and not pd.isna(row.get("rsi_14"))
+                    else None,
+                    price_vs_sma200_pct=price_vs_sma200_pct,
+                    action_note=action_note,
+                    trade_plan=trade_plan,
+                    summary=summary,
+                    passed_models=passed_model_names,
+                    key_metrics=key_metrics,
+                    failed_models=failed_model_names,
+                    model_failures=model_failures,
+                    screening_inputs=screening_inputs,
+                    cashflow_metrics=cashflow_metrics or None,
+                    fcf=fcf_snapshot or None,
+                    piotroski_f_score=piotroski_f_score,
+                    healthcare_overlay=healthcare_overlay,
+                    healthcare_price_erosion_overlay=healthcare_price_erosion_overlay,
+                    cash_conversion_overlay=cash_conversion_overlay,
+                    dividend_yield_overlay=dividend_yield_overlay,
+                    interim_quality_overlay=interim_quality_overlay,
+                    cyclical_exposure_overlay=cyclical_exposure_overlay,
+                    cyclical_exposure_detected=cyclical_exposure_detected,
+                    earnings_basis_overlay=earnings_basis_overlay,
+                    earnings_growth_overlay=earnings_growth_overlay,
+                    earnings_growth_bps_divergence_warning=earnings_growth_bps_divergence_warning,
+                    conviction_timing_overlay=conviction_timing_overlay,
+                    conviction_timing_overlay_detail=conviction_timing_overlay_detail,
+                    transition_key=str(conviction_timing_overlay_detail.get("transition_key") or "")
+                    or None,
+                    prior_signal=conviction_timing_overlay_detail.get("prior_signal"),
+                    quality_family_avoid_gate=quality_family_avoid_gate,
+                    quality_family_avoid_gate_detail=quality_family_avoid_gate_detail,
+                    peer_model_pass_table=peer_model_pass_table,
+                    fcf_basis_overlay=fcf_basis_overlay,
+                    leverage_override=leverage_override,
+                    dual_leverage_display=dual_leverage_display,
+                    operating_cashflow=operating_cashflow,
+                    fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
+                    fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+                    fcf_dividend_coverage=labelled_fcf_dividend_coverage,
+                    fcf_definition_divergence=fcf_definition_divergence,
+                    fcf_divergence_flagged=fcf_divergence_flagged,
+                    adjusted_signal=adjusted_signal_str or signal,
+                    research_verdict=research_verdict_str,
+                    research_risk_level=research_risk_str,
+                    research_confidence=research_confidence,
+                    research_rationale=research_rationale_str,
+                    interim_eps_decline_pct=interim_eps_decline_pct,
+                    adjusted_eps_growth_pct=adjusted_eps_growth_pct,
+                )
             )
         )
 
     return reports
+
+
+def _ensure_overlay_refresh_fcf_enforcement() -> None:
+    """Patch overlay refresh to honour FCF mismatch notes (MGNS.L-style stale flags)."""
+    try:
+        import value_investor.research.overlay_refresh as overlay_refresh
+    except ImportError:
+        return
+    if getattr(overlay_refresh.apply_research_overlay, "_fcf_enforcement_installed", False):
+        return
+    overlay_refresh.apply_research_overlay = apply_research_overlay_with_fcf_enforcement  # type: ignore[attr-defined]
+    overlay_refresh.apply_research_overlay._fcf_enforcement_installed = True  # type: ignore[attr-defined]
+
+
+_ensure_overlay_refresh_fcf_enforcement()
