@@ -366,6 +366,83 @@ def test_publish_load_reports_enforces_mony_style_fcf_note(tmp_path: Path):
     assert mony["conviction_score"] == pytest.approx(0.5388 * 0.85)
 
 
+def test_publish_cli_import_succeeds_after_circular_import():
+    """publish must load even when it pulls summary in before _load_reports exists."""
+    import sys
+
+    for module_name in (
+        "value_investor.publish",
+        "value_investor.publish_cli",
+        "value_investor.summary",
+    ):
+        sys.modules.pop(module_name, None)
+
+    import value_investor.publish_cli  # noqa: F401
+    from value_investor.summary import ensure_fcf_export_hooks
+
+    ensure_fcf_export_hooks()
+
+    import value_investor.publish as publish_mod
+
+    assert getattr(publish_mod, "_fcf_export_hooks_installed", False) is True
+    assert publish_mod._load_reports.__name__ == "_load_reports_with_fcf_enforcement"
+
+
+def test_build_dashboard_bundle_enforces_sbry_style_stale_email_reports(tmp_path: Path):
+    """Stale email_reports rows must not ship buy beside an FCF mismatch note."""
+    from value_investor.publish import build_dashboard_bundle
+    from value_investor.storage import write_json
+
+    write_json(
+        tmp_path / "email_reports.json",
+        [
+            {
+                "ticker": "SBRY.L",
+                "name": "J Sainsbury plc",
+                "signal": "buy",
+                "adjusted_signal": "buy",
+                "fcf_basis_overlay": False,
+                "conviction_score": 0.5231,
+                "action_note": (
+                    "Buy — neutral timing | FCF basis mismatch: filing £923M | "
+                    "screen TTM £821.9M | company-adj £574M | Research: Accumulate, Medium risk"
+                ),
+                "models_passed": 7,
+                "model_count": 22,
+                "composite_score": 0.5,
+                "families_passed": 4,
+                "data_quality_score": 1.0,
+                "metrics_present": 20,
+                "metrics_total": 20,
+                "weeks_at_signal": 1,
+                "signal_trend": "stable",
+                "stability_label": "building",
+                "timing_signal": "neutral",
+                "timing_score": 0.5,
+                "summary": "Buy (7/22 models).",
+                "passed_models": [],
+                "key_metrics": {},
+            }
+        ],
+        compact=True,
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "SBRY.L",
+                "run_at": "2026-09-06T06:47:53.947778+00:00",
+            }
+        ]
+    )
+    signals.to_csv(tmp_path / "latest_signals.csv", index=False)
+
+    bundle = build_dashboard_bundle(tmp_path)
+    sbry = next(row for row in bundle["reports"] if row["ticker"] == "SBRY.L")
+    assert sbry["fcf_basis_overlay"] is True
+    assert sbry["adjusted_signal"] == "hold"
+    assert sbry["conviction_score"] == pytest.approx(0.5231 * 0.85)
+
+
 def test_apply_research_overlay_syncs_screening_snapshot(tmp_path: Path):
     report = _minimal_report()
     doc = ResearchDocument(
