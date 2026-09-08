@@ -6448,6 +6448,90 @@ def test_parked_source_hunter_assa_b_st_euro_depth_has_fetchable_ir():
     assert "annual-reports/2025" in rows[0]["url"]
 
 
+def test_fetch_filings_ir_allowlist_euro_depth_aze_br_builtins(tmp_path: Path):
+    """Regression: AZE.BR parked IWB — azelis.com FY2025 integrated + H1 financial PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("AZE.BR", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("Integrated%20report%202025" in url for url in urls)
+    assert any("AZELIS~1_1.PDF" in url for url in urls)
+
+
+def test_load_ir_url_allowlist_canonicalizes_aze_br_dead_investors_url(tmp_path: Path):
+    """Dead /en/investors URL in research_ir_urls.json maps to live integrated report PDF."""
+    dead = "https://www.azelis.com/en/investors"
+    live = _BUILTIN_IR_URLS["AZE.BR"][0]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"AZE.BR": [dead]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live in mapping["AZE.BR"]
+    assert dead not in mapping["AZE.BR"]
+    rows = fetch_filings_ir_allowlist("AZE.BR", path=path)
+    assert any(row["url"] == live for row in rows)
+
+
+def test_refetch_ir_allowlist_migrates_aze_br_dead_url(tmp_path: Path, monkeypatch):
+    """Indexed unfetchable AZE.BR IR row is rewritten to the live integrated report URL."""
+    dead = "https://www.azelis.com/en/investors"
+    live = _BUILTIN_IR_URLS["AZE.BR"][0]
+    allowlist_path = tmp_path / "ir_urls.json"
+    allowlist_path.write_text(json.dumps({"urls": {"AZE.BR": [dead]}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_74c675ac57e5ee2b",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — investors",
+                        "url": dead,
+                        "period": "other",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "ir_allowlist_fetch_failed",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(_row, *, ticker, company_name="", investegate_cache=None):
+        return "Azelis Group NV consolidated income statement revenue gross profit " * 20, "pdf"
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "AZE.BR",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    row = saved["filings"][0]
+    assert row["url"] == live
+    assert row.get("unfetchable") is not True
+    assert row["has_body"] is True
+
+
+def test_parked_source_hunter_aze_br_euro_depth_has_fetchable_ir():
+    """eng-20260908-24: AZE.BR has live azelis.com FY2025 integrated + H1 financial PDFs."""
+    assert "AZE.BR" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("AZE.BR")
+    assert len(rows) == 2
+    assert any("Integrated%20report%202025" in row["url"] for row in rows)
+    assert any("AZELIS~1_1.PDF" in row["url"] for row in rows)
+
+
 def test_parked_source_hunter_skip_abi_br_euro_depth():
     """eng-20260908-01: ABI.BR leftover IWB is 6-K cover HTML; IR is age-gated."""
     assert "ABI.BR" in PARKED_SOURCE_HUNTER_SKIP
