@@ -689,13 +689,29 @@ def _brief_summary(
     return " ".join(parts)
 
 
+def _unwrap_fcf_overlay_wrapper(fn: Any) -> Any:
+    """Skip nested FCF enforcement wrappers when resolving the overlay base."""
+    current = fn
+    while getattr(current, "_fcf_enforcement_installed", False):
+        unwrapped = getattr(current, "_original_overlay", None)
+        if unwrapped is None or unwrapped is current:
+            break
+        current = unwrapped
+    return current
+
+
 def export_enforced_report_dicts(reports: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Re-apply FCF basis caps on serialized report rows (MONY.L-style stale exports)."""
+    ensure_fcf_export_hooks()
     enforced: list[dict[str, Any]] = []
     for row in reports:
         if not isinstance(row, dict):
             continue
-        enforced.append(CompanyReport.from_dict(row).to_dict())
+        updated = CompanyReport.from_dict(row).to_dict()
+        extras = {key: value for key, value in row.items() if key not in updated}
+        if extras:
+            updated.update(extras)
+        enforced.append(updated)
     return enforced
 
 
@@ -704,9 +720,13 @@ def apply_research_overlay_with_fcf_enforcement(
     documents: list[Any],
 ) -> list[CompanyReport]:
     """Apply research verdict overlay, then honour FCF basis mismatch action notes."""
-    from value_investor.research.overlay import apply_research_overlay
+    base = getattr(apply_research_overlay_with_fcf_enforcement, "_original_overlay", None)
+    if base is None:
+        from value_investor.research.overlay import apply_research_overlay as overlay_fn
 
-    base = getattr(apply_research_overlay, "_original_overlay", apply_research_overlay)
+        base = _unwrap_fcf_overlay_wrapper(overlay_fn)
+    else:
+        base = _unwrap_fcf_overlay_wrapper(base)
     updated = base(reports, documents)
     return [honour_fcf_action_note_enforcement(report) for report in updated]
 
@@ -1432,6 +1452,20 @@ def build_company_reports(
     return reports
 
 
+def _patch_research_overlay_module() -> None:
+    """Route all research overlay callers through FCF action-note enforcement."""
+    try:
+        import value_investor.research.overlay as overlay_mod
+    except ImportError:
+        return
+    if getattr(overlay_mod.apply_research_overlay, "_fcf_enforcement_installed", False):
+        return
+    base = _unwrap_fcf_overlay_wrapper(overlay_mod.apply_research_overlay)
+    apply_research_overlay_with_fcf_enforcement._original_overlay = base  # type: ignore[attr-defined]
+    overlay_mod.apply_research_overlay = apply_research_overlay_with_fcf_enforcement  # type: ignore[assignment]
+    overlay_mod.apply_research_overlay._fcf_enforcement_installed = True  # type: ignore[attr-defined]
+
+
 def _install_publish_fcf_export_hooks() -> None:
     """Ensure dashboard publish paths enforce FCF notes on cached email_reports rows."""
     try:
@@ -1439,6 +1473,8 @@ def _install_publish_fcf_export_hooks() -> None:
     except ImportError:
         return
     if getattr(publish_mod, "_fcf_export_hooks_installed", False):
+        return
+    if not hasattr(publish_mod, "_load_reports"):
         return
 
     original_load = publish_mod._load_reports
@@ -1450,6 +1486,17 @@ def _install_publish_fcf_export_hooks() -> None:
         return reports, run_at
 
     publish_mod._load_reports = _load_reports_with_fcf_enforcement
+
+    original_build = publish_mod.build_dashboard_bundle
+
+    def build_dashboard_bundle_with_fcf_enforcement(output_dir: Path):
+        bundle = original_build(output_dir)
+        reports = bundle.get("reports")
+        if isinstance(reports, list) and reports:
+            bundle["reports"] = export_enforced_report_dicts(reports)
+        return bundle
+
+    publish_mod.build_dashboard_bundle = build_dashboard_bundle_with_fcf_enforcement
 
     original_apply = publish_mod._apply_resolved_research_overlay
 
@@ -1471,6 +1518,14 @@ def _install_publish_fcf_export_hooks() -> None:
     publish_mod._fcf_export_hooks_installed = True
 
 
+def ensure_fcf_export_hooks() -> None:
+    """Install FCF export hooks once the import graph has finished loading."""
+    _patch_research_overlay_module()
+    _ensure_overlay_refresh_fcf_enforcement()
+    _install_publish_fcf_export_hooks()
+    _rebind_stale_apply_research_overlay()
+
+
 def _ensure_overlay_refresh_fcf_enforcement() -> None:
     """Patch overlay refresh to honour FCF mismatch notes (MGNS.L-style stale flags)."""
     try:
@@ -1484,9 +1539,18 @@ def _ensure_overlay_refresh_fcf_enforcement() -> None:
 
 
 def _install_fcf_export_hooks() -> None:
-    _ensure_overlay_refresh_fcf_enforcement()
-    _install_publish_fcf_export_hooks()
-    _rebind_stale_apply_research_overlay()
+    ensure_fcf_export_hooks()
+
+
+def _schedule_deferred_fcf_export_hooks() -> None:
+    """Install publish hooks after the import graph settles (publish-first CLI paths)."""
+    import threading
+
+    def _deferred() -> None:
+        ensure_fcf_export_hooks()
+
+    threading.Timer(0.0, _deferred).start()
 
 
 _install_fcf_export_hooks()
+_schedule_deferred_fcf_export_hooks()

@@ -102,12 +102,15 @@ def _install_research_snapshot_hooks() -> None:
     )
 
     if not getattr(research_overlay.apply_research_overlay, "_snapshot_sync_installed", False):
-        from value_investor.summary import apply_research_overlay_with_fcf_enforcement
+        from value_investor.summary import (
+            _unwrap_fcf_overlay_wrapper,
+            apply_research_overlay_with_fcf_enforcement,
+        )
 
-        _original_overlay = research_overlay.apply_research_overlay
+        _original_overlay = _unwrap_fcf_overlay_wrapper(research_overlay.apply_research_overlay)
 
         def _apply_research_overlay_with_snapshots(reports, documents):
-            updated = apply_research_overlay_with_fcf_enforcement(reports, documents)
+            updated = _original_overlay(reports, documents)
             if documents:
                 output_dir = _output_dir_from_documents(documents)
                 sync_research_verdict_snapshots(output_dir, updated, documents)
@@ -155,9 +158,9 @@ def _output_dir_from_documents(documents) -> Path:
 _install_research_snapshot_hooks()
 
 try:
-    from value_investor.summary import _install_fcf_export_hooks
+    from value_investor.summary import ensure_fcf_export_hooks
 
-    _install_fcf_export_hooks()
+    ensure_fcf_export_hooks()
 except ImportError:
     pass
 
