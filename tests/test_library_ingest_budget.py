@@ -23,18 +23,18 @@ def test_discovery_budget_zero_when_no_runtime():
     assert discovery_runtime_budget(-1) == 0.0
 
 
-def test_discovery_prefer_tickers_orders_thin_then_gaps():
+def test_discovery_prefer_tickers_orders_bootstrap_then_thin():
     critical = type(
         "CP",
         (),
         {
             "thin_need_discovery": ["STR.VI"],
-            "unmeasured": [],
+            "unmeasured": ["AED.BR"],
             "zero_body": ["RAND.AS"],
             "indexed_without_body": [{"ticker": "ABI.BR"}, {"ticker": "RAND.AS"}],
         },
     )()
-    assert discovery_prefer_tickers(critical) == ["STR.VI", "RAND.AS", "ABI.BR"]
+    assert discovery_prefer_tickers(critical) == ["AED.BR", "RAND.AS", "STR.VI", "ABI.BR"]
 
 
 def test_weekday_per_ticker_cap_disabled_for_intensive_pin():

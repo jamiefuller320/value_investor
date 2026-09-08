@@ -1069,6 +1069,22 @@ def resolve_investegate_lse_pdf_url(url: str | None) -> str | None:
     return pdf_url or url
 
 
+_IR_ALLOWLIST_HEADLINE_PREFIX = re.compile(
+    r"^ir allowlist document(?:\s+[—–-]\s*)?",
+    flags=re.I,
+)
+
+
+def _headline_for_period_classify(row: dict[str, Any], headline: str) -> str:
+    """Drop the synthetic IR-allowlist prefix so FCA ``IR`` is not read as interim."""
+    cleaned = _IR_ALLOWLIST_HEADLINE_PREFIX.sub("", headline or "").strip()
+    if cleaned:
+        return cleaned
+    url = str(row.get("url") or "")
+    filename = url.rsplit("/", 1)[-1] if url else ""
+    return filename or headline
+
+
 def _apply_headline_period(
     row: dict[str, Any],
     *,
@@ -1085,14 +1101,22 @@ def _apply_headline_period(
     headline = str(item.get("headline") or "")
     summary = str(item.get("summary") or "")
     category = item.get("category")
-    period = classify_companies_house_period(summary or headline, category=category)
+    classify_headline = _headline_for_period_classify(item, headline)
+    period = classify_companies_house_period(summary or classify_headline, category=category)
     if period is None:
         period = classify_filing_period(
-            headline,
+            classify_headline,
             category=category,
             form=item.get("form"),
         )
-    if period == "other" and body_snippet:
+    url_period = None
+    if _is_ir_allowlist_row(item) or str(category or "") == "ir_allowlist":
+        url_period = _ir_allowlist_period_from_url(str(item.get("url") or ""))
+    if url_period and url_period != "other":
+        # Curated allowlist URLs (RA25 / FY-2025) beat body H1/Q4 comparatives
+        # and the synthetic "IR allowlist document" headline.
+        period = url_period
+    elif period == "other" and body_snippet:
         body_period = classify_filing_period(
             body_snippet[:4000],
             category=category,
@@ -1692,10 +1716,14 @@ def classify_rns_headline(
         return "trading_update"
     if any(re.search(pat, blob) for pat in _INTERIM_PATTERNS):
         return "interim"
-    # FCA-style codes sometimes appear in provider metadata
-    if re.search(r"\b(fr|final results|annual)\b", blob):
-        return "annual"
-    if re.search(r"\b(ir|half[- ]year report|interim results)\b", blob):
+    # FCA-style codes sometimes appear in provider metadata.
+    # Do not treat the synthetic "IR allowlist document" prefix as interim results.
+    if "allowlist" not in blob:
+        if re.search(r"\b(fr|final results|annual)\b", blob):
+            return "annual"
+        if re.search(r"\b(ir|half[- ]year report|interim results)\b", blob):
+            return "interim"
+    elif re.search(r"\b(half[- ]year report|interim results)\b", blob):
         return "interim"
     return "other"
 
