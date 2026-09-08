@@ -728,8 +728,7 @@ def apply_research_overlay_with_fcf_enforcement(
         base = _unwrap_fcf_overlay_wrapper(overlay_fn)
     else:
         base = _unwrap_fcf_overlay_wrapper(base)
-    prepared = [honour_fcf_action_note_enforcement(report) for report in reports]
-    updated = base(prepared, documents)
+    updated = base(reports, documents)
     return [honour_fcf_action_note_enforcement(report) for report in updated]
 
 
