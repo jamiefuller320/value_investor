@@ -1,18 +1,19 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-08T06:51:21.805545+00:00",
+  "generated_at": "2026-09-08T07:19:10.943672+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
     "sp500",
-    "asx200"
+    "asx200",
+    "euro_depth"
   ],
   "summary": {
     "market_count": 23,
     "ingest_counts": {
       "live": 1,
-      "sprint": 3,
-      "maintenance": 19
+      "maintenance": 20,
+      "sprint": 2
     },
     "role_counts": {
       "live": 1,
@@ -21,13 +22,14 @@
       "admitted": 2,
       "graduated": 17
     },
-    "sprint_count": 3,
-    "maintenance_count": 19,
+    "sprint_count": 2,
+    "maintenance_count": 20,
     "live_count": 1,
-    "admitted_count": 2,
+    "admitted_count": 3,
     "should_run_library_maintenance": true,
     "maintenance_markets": [
       "asx200",
+      "euro_depth",
       "sp500"
     ],
     "spare_sprint": {
@@ -150,15 +152,15 @@
       "is_focus": true,
       "is_graduated": false,
       "is_queue": false,
-      "is_admitted": false,
+      "is_admitted": true,
       "is_ftse_equivalent": false,
-      "ingest": "sprint",
+      "ingest": "maintenance",
       "ingest_stream": null,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=24, indexed_without_body=34)",
+      "ingest_reason": "Ingest avenues exhausted — parked 30 leftover thin/IWB name(s) (ABI.BR, ACKB.BR, ANDR.VI, APAM.AS, ASSA-B.ST, AZE.BR, BAS.DE, C5H.IR); sprint stops so the cascade can move on; unparked names stay on FTSE-volume maintenance",
       "ingest_parity_met": false,
-      "ingest_exhausted": false,
+      "ingest_exhausted": true,
       "queue_rank": null,
-      "shared_maintenance": false,
+      "shared_maintenance": true,
       "health": "warn",
       "coverage_pct": 0.9948,
       "honest_coverage_pct": null,
@@ -215,8 +217,8 @@
         "bodies_median": 2.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
-        "ingest_exhausted": false,
-        "parked_count": 0,
+        "ingest_exhausted": true,
+        "parked_count": 30,
         "zero_body_tickers": [],
         "thin_body_tickers": [
           "STR.VI",
@@ -229,62 +231,25 @@
           "EVN.VI"
         ],
         "unmeasured_tickers": [],
-        "parked_tickers": []
+        "parked_tickers": [
+          "ABI.BR",
+          "ACKB.BR",
+          "ANDR.VI",
+          "APAM.AS",
+          "ASSA-B.ST",
+          "AZE.BR",
+          "BAS.DE",
+          "C5H.IR"
+        ]
       },
       "filing_gaps": 0,
       "paper_instrument": "observe_sim",
-      "ai_judgment": null,
-      "knob_apply": null,
+      "ai_judgment": false,
+      "knob_apply": false,
       "epoch0": null,
       "equal_support": null,
       "near_miss": null,
-      "sprint_progress": {
-        "window_days": 2,
-        "run_count": 6,
-        "targets": 6,
-        "improved": 0,
-        "improved_tickers": [],
-        "last_run_at": "2026-09-07T13:31:05.584353+00:00",
-        "runtime_cutoff_runs": 0,
-        "error_runs": 0,
-        "gaps_before": {
-          "unmeasured": 1,
-          "zero_body": 0,
-          "thin": 24,
-          "indexed_without_body": 34,
-          "filing_gaps": 1
-        },
-        "gaps_after": {
-          "unmeasured": 1,
-          "zero_body": 0,
-          "thin": 24,
-          "indexed_without_body": 34,
-          "filing_gaps": 1
-        },
-        "gap_delta": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 0,
-          "filing_gaps": 0
-        },
-        "remaining": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 24,
-          "indexed_without_body": 34,
-          "filing_gaps": 0
-        },
-        "admission_ready": false,
-        "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [
-          {
-            "id": "zero_improve_stall",
-            "severity": "high",
-            "summary": "Last 2 days improved nobody while filing gaps remain"
-          }
-        ]
-      },
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
