@@ -14,7 +14,6 @@ from value_investor.fetch import CompanyMetrics
 from value_investor.financials import extract_statement_metrics
 from value_investor.research.filings import (
     _BUILTIN_IR_URLS,
-    _google_news_symbol_clause,
     PARKED_SOURCE_HUNTER_SKIP,
     _apply_headline_period,
     _compose_filing_body_with_depth_sections,
@@ -27,6 +26,7 @@ from value_investor.research.filings import (
     _fetch_ir_allowlist_body,
     _fetch_rns_filing_body_for_refetch,
     _filing_text_is_substantive,
+    _google_news_symbol_clause,
     _infer_filing_period_from_row,
     _ir_body_content_hash,
     _is_other_results_rns_row,
