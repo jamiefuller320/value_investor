@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T07:14:30+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T07:24:28+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -158,6 +158,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N109 | **Do not invent last-day Cursor-credit work** | Leftover plan credit at cycle end should not fund rememo density, dashboard polish, leftover S&P IR hunts, extra FTSE ingest, or new paper tracks. Policy already prefers a weekly_ops bump or named P1 overlay/filing bind. Letting unused credit expire is better than factory work that does not change weekday AI-judgment inputs. | Usage-page leftover is high AND a named live-path overlay field or held/buy-tier filing gap is missing for the next Sunday cycle |
 | N110 | **Historical holdings path instead of current-book densify** | Live FTSE densify marks today's share counts on past daily closes. That is a current-sleeve backfill, not the actual paper book, so it is not a fair historical comparison once names rotate. | Live FTSE densify is active (held_path=current_book_marked) after at least one rotation of names. |
 | N111 | **Do not close red flags via open-web prevailing opinion** | Open qualitative flags (e.g. ITV.L linear-TV advertising decline) stay filing-first. Trade-press consensus and YoY industry blogs can confirm a risk, not mark question_outcomes resolved. News is already a secondary ladder step; N89/N91 already reject general website harvest. | Human decision-pack review repeatedly rejects filing-backed partial resolution because the missing piece is an official industry series (Ofcom, AA/WARC), not issuer text |
+| N112 | **Do not add a live sector-outlook preference overlay** | Sector research should not become a Yahoo-sector demotion layer on weekday paper-auto / AI-judgment. Macro/sector auto-veto is already forbidden; healthcare and cyclical overlays only fire with issuer fundamentals or filing language. A media-wide headwind from ITV would over-generalize and steal P1 filing/FCF/overlay-bind work. | Buy-tier filing/FCF overlay bind is green and an observe-only narrow-thesis lab (not Yahoo sector) shows excess vs the existing accumulate + adjusted_signal gates |
 
 ---
 
@@ -329,6 +330,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L314 | **Stamp FCF and filing PIT onto weekly run snapshots** | ARCHIVE_SIGNAL_FIELDS has signal, conviction, timing, overlay, and trade_plan, but not FCF basis or filing figures. Archive counterfactuals cannot replay FCF-aware policies until those fields are stored point-in-time on each weekly snapshot. | Live-path FCF/filing bind is producing stable PIT fields on the weekday screen and we want archive labs to replay FCF-aware entry or overlay rules. |
 | L315 | **Daily or fill-level marks for archive lifecycle replay** | Weekly snapshot prints are not fills. Lifecycle labs can apply an explicit cost model, but they cannot simulate intraweek paths, limit fills, or daily stop hits until history stores denser prices. | The weekly buy-tier level book has a thick forward epoch and a lifecycle question actually depends on intraweek path rather than Sunday-to-Sunday marks. |
 | L344 | **Official industry-outlook series after filings for structural flags** | If structural/competitive questions stay partially_resolved after readable principal-risks and segment notes, allow a bounded ingest of named official series (Ofcom Media Nations, AA/WARC Expenditure Report) as colour plus quantified YoY — never as a substitute for issuer filings, and never via open-web opinion scrape. | ITV.L (or another media name) still has the structural-ad question partially_resolved after CH principal-risks and pension notes are ingested with readable bodies |
+| L345 | **Observe-only narrow sector-thesis overlay with issuer triggers** | Later: test a documented thesis such as UK linear-TV advertising as observe-only fields, applied only when issuer segment mix or filing language matches, not the Communication Services bucket. Compare archive/sim excess before any live bind; reuse RiskTags/caution and official series (L344) rather than a new opinion scrape. | ITV.L principal-risks bodies are readable and at least one other UK broadcast/ad name is on the buy-tier with a memo, so a peer cohort can be scored without inventing a sector blanket |
 
 ### Ops / reliability
 
