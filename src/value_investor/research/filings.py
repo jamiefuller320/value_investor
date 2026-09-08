@@ -231,8 +231,10 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "SKA-B.ST": [
         "https://group.skanska.com/investors/reports-publications/",
     ],
+    # euro_depth IWB blocker — AZE.BR parked unfetchable_iwb; /en/investors 404s; FY2025 PDFs.
     "AZE.BR": [
-        "https://www.azelis.com/en/investors",
+        "https://www.azelis.com/sites/default/files/uploads/Azelis%20Group%20NV%20-%20Integrated%20report%202025%20(2).pdf",
+        "https://www.azelis.com/sites/default/files/uploads/AZELIS~1_1.PDF",
     ],
     "SGO.PA": [
         "https://media.saint-gobain.com/group/lettreauxactionnaires/letter-to-shareholders-n102/",
@@ -3370,6 +3372,10 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     # eng-20260908-21: blob/520884 404s; investors-downloads annual report still serves.
     "https://www.andritz.com/resource/blob/520884/andritz-annual-financial-report-2025-en.pdf": (
         "https://www.andritz.com/resource/blob/689306/6ad9400073c46323b95b1be977870245/andritz-annual-report-2025-data.pdf"
+    ),
+    # eng-20260908-24: /en/investors 404s; 2025 integrated report PDF still serves.
+    "https://www.azelis.com/en/investors": (
+        "https://www.azelis.com/sites/default/files/uploads/Azelis%20Group%20NV%20-%20Integrated%20report%202025%20(2).pdf"
     ),
 }
 
