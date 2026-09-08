@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-08T07:35:24+00:00",
+  "updated_at": "2026-09-08T07:48:35+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7721,6 +7721,40 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a07fda-1bf8-71f9-8d04-03453ad9c0aa",
       "added_at": "2026-09-08T07:35:24+00:00"
+    },
+    {
+      "id": "L347",
+      "category": "later",
+      "section": "ops",
+      "title": "Time-box CH OCR on the wide ingest pass and resume via pin",
+      "summary": "Pass deadline_monotonic into refetch_companies_house_filing_bodies on the FTSE ingest-improvement path (library residual/IR already stop). On deadline or image-only PDF, leave the row without a body and mark ocr_pending so the next drain or --pin-ticker intensive run does the OCR. Do not raise CH_OCR_MAX_PAGES on the weekday 62-name slot.",
+      "revisit_when": "A weekday FTSE ingest-loop hits runtime_cutoff or per-ticker budget with CH OCR still in-process, or ITV-style principal-risks remain unread after iXBRL-first extract",
+      "tags": [
+        "ingest",
+        "ocr",
+        "timeout",
+        "itv",
+        "p1"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07fda-1bf8-71f9-8d04-03453ad9c0aa",
+      "added_at": "2026-09-08T07:48:35+00:00"
+    },
+    {
+      "id": "N113",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not add page-level OCR checkpoints or a separate OCR worker",
+      "summary": "Tesseract page resume and a dedicated OCR GHA/queue would add schema and ops surface without changing what paper-auto can see. Ticker/batch resume already exists via ingest_backlog.json, drain_generation, and pin-ticker. Filing-level skip (has_body / ocr_pending) is enough once the wide pass can stop before OCR.",
+      "revisit_when": "Filing-level ocr_pending plus pin-ticker still leaves multiple buy-tier annual reports unreadable after several weekday drains, and iXBRL is unavailable",
+      "tags": [
+        "ingest",
+        "ocr",
+        "timeout"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07fda-1bf8-71f9-8d04-03453ad9c0aa",
+      "added_at": "2026-09-08T07:48:35+00:00"
     }
   ],
   "fragments": [
