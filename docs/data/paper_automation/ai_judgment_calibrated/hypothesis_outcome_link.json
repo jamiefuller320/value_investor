@@ -3,21 +3,29 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "ai_judgment_calibrated",
-  "generated_at": "2026-09-07T08:28:40.332328+00:00",
+  "generated_at": "2026-09-08T08:28:26.777211+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 3,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 4,
+    "open_with_thesis": 1,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 0
+        "closed_count": 3,
+        "recovery_rate": 0.6667,
+        "sold_underwater_rate": 0.3333,
+        "mean_peak_unrealized_pct": 0.0321,
+        "mean_trough_unrealized_pct": 0.0177,
+        "outcome_labels": {
+          "recovered": 2,
+          "sold_underwater": 1
+        }
       },
       "broken": {
         "closed_count": 0
@@ -48,10 +56,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 3,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=3 (target >=8)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -66,7 +74,7 @@
       "ticker": "MEGP.L",
       "name": "ME Group International plc",
       "started_at": "2026-09-07T09:28:24.069999+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -97,11 +105,11 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": 0.0546,
-      "trough_unrealized_pct": 0.0546,
+      "trough_unrealized_pct": 0.0404,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-09-08T09:28:16.113419+01:00",
+      "linked_sell_trade_id": "e4c57222-97dd-434b-80c8-2d7acf48d40e"
     },
     {
       "episode_id": "ai_judgment_calibrated:AEP.L:2026-09-07T09:28:24.069999+01:00",
@@ -109,7 +117,7 @@
       "ticker": "AEP.L",
       "name": "AEP Plantations Plc",
       "started_at": "2026-09-07T09:28:24.069999+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -140,11 +148,11 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": 0.0428,
-      "trough_unrealized_pct": 0.0428,
+      "trough_unrealized_pct": 0.0166,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-09-08T09:28:16.113419+01:00",
+      "linked_sell_trade_id": "4499a422-0c33-4884-817e-ae2d36b7fd29"
     },
     {
       "episode_id": "ai_judgment_calibrated:IMB.L:2026-09-07T09:28:24.069999+01:00",
@@ -182,7 +190,7 @@
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0201,
+      "peak_unrealized_pct": -0.0127,
       "trough_unrealized_pct": -0.0201,
       "recovered_to_breakeven": null,
       "close_reason": null,
@@ -195,7 +203,7 @@
       "ticker": "ITV.L",
       "name": "ITV plc",
       "started_at": "2026-09-07T09:28:24.069999+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -226,11 +234,11 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0011,
-      "trough_unrealized_pct": -0.0011,
+      "trough_unrealized_pct": -0.0039,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-09-08T09:28:16.113419+01:00",
+      "linked_sell_trade_id": "e359b520-0214-4b8e-a73e-d2afef24e7b8"
     }
   ],
   "swap_rotations": [
@@ -285,11 +293,131 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "GSK.L": -0.0137
+        "GSK.L": -0.0191
       },
       "buy_returns_since_rotation": {
-        "ITV.L": 0.005,
-        "SN.L": -0.0028
+        "ITV.L": 0.0021,
+        "SN.L": 0.0123
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "ai_judgment_calibrated:2026-09-08T09:28:16.113419+01:00",
+      "track_id": "ai_judgment_calibrated",
+      "logged_at": "2026-09-08T09:28:16.113419+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.03,
+      "sells": [
+        {
+          "ticker": "MEGP.L",
+          "price": 122.1387,
+          "shares": 1.51583,
+          "gross": 185.14,
+          "cost": 5.55,
+          "avg_cost_at_exit": 117.392,
+          "realized_pct": 0.0404,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0404
+        },
+        {
+          "ticker": "AEP.L",
+          "price": 196.2,
+          "shares": 0.920628,
+          "gross": 180.63,
+          "cost": 5.42,
+          "avg_cost_at_exit": 193.0,
+          "realized_pct": 0.0166,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0166
+        },
+        {
+          "ticker": "ITV.L",
+          "price": 70.55,
+          "shares": 2.595269,
+          "gross": 183.1,
+          "cost": 5.49,
+          "avg_cost_at_exit": 70.8258,
+          "realized_pct": -0.0039,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0039
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "MGNS.L",
+          "price": 4160.0,
+          "shares": 0.04168,
+          "gross": 173.39,
+          "cost": 5.2
+        },
+        {
+          "ticker": "VTY.L",
+          "price": 267.61,
+          "shares": 0.647921,
+          "gross": 173.39,
+          "cost": 5.2
+        },
+        {
+          "ticker": "BREE.L",
+          "price": 333.8,
+          "shares": 0.509622,
+          "gross": 170.11,
+          "cost": 5.1
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "MEGP.L": 0.0,
+        "AEP.L": -0.0,
+        "ITV.L": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "MGNS.L": 0.0,
+        "VTY.L": -0.0,
+        "BREE.L": -0.0
       },
       "verdict": null,
       "closed_at": null
