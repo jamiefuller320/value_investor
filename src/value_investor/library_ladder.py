@@ -133,8 +133,9 @@ def _research_markets(policy: dict[str, Any], focus: str) -> list[str]:
     they formally graduate. Prefer queue order for stable round-robin.
 
     When it is false (depth-first), keep the 21-market spray off but still
-    rememo the admitted learning set (L321). Focus stays first so weekly_ops
-    round-robin does not starve the euro book.
+    give the admitted learning set Sunday **first-time** research (L321).
+    Body-lag rememo for those books is weekday (`ftse-library rememo`).
+    Focus stays first so weekly_ops round-robin does not starve the euro book.
     """
     ladder = policy.get("ladder") or {}
     if not ladder.get("research_all_graduated", True):
@@ -150,6 +151,26 @@ def _research_markets(policy: dict[str, Any], focus: str) -> list[str]:
         if mid and mid not in ordered:
             ordered.append(mid)
     return ordered or ([focus] if focus else [])
+
+
+def sunday_rememo_reasons(
+    rememo_reasons: dict[str, str],
+    *,
+    focus_tickers: set[str],
+    research_all_graduated: bool,
+) -> dict[str, str]:
+    """Sunday rememos the focus book only when depth-first (no admitted dump).
+
+    Admitted / epoch-0 rememo runs on weekdays via ``ftse-library rememo``.
+    """
+    if research_all_graduated:
+        return dict(rememo_reasons)
+    focus = {canonical_library_ticker(t) for t in focus_tickers if t}
+    return {
+        ticker: reason
+        for ticker, reason in rememo_reasons.items()
+        if canonical_library_ticker(ticker) in focus
+    }
 
 
 def _screen_observe_sim_markets(
@@ -494,6 +515,17 @@ def run_library_ladder(
                         body_lag_threshold=body_lag,
                     )
                 )
+            focus_tickers = {
+                canonical_library_ticker(str(getattr(report, "ticker", "") or ""))
+                for report in per_market_queues.get(market, [])
+            }
+            rememo_reasons = sunday_rememo_reasons(
+                rememo_reasons,
+                focus_tickers=focus_tickers,
+                research_all_graduated=bool(
+                    (policy.get("ladder") or {}).get("research_all_graduated", True)
+                ),
+            )
         skip_fresh = already - set(rememo_reasons)
         selected, dedupe_skipped = select_deduped_research_targets(
             research_markets=research_markets,

@@ -15,7 +15,7 @@ names (currently ~194). One book, benchmark `^STOXX50E`.
 | Knob | Depth-first value | Effect |
 |------|-------------------|--------|
 | `focus_market` | `euro_depth` | Ladder grow/screen/research target |
-| `research_all_graduated` | `false` | No 21-market spray; Sunday rememo is focus + admitted set |
+| `research_all_graduated` | `false` | No 21-market spray; Sunday rememo is the focus book; admitted rememo is weekday |
 | `observe_sim_markets_mode` | `explicit` | Explicit list starts at `euro_depth`; ingest-profile markets also get the clock |
 | `observe_sim_include_ingest_profile` | `true` | Sunday screen-lite + observe sim for focus, sprint streams, ingest-parity, and `ftse_equivalent_markets` |
 | `weekly_paper_shard_markets` | `["euro_depth"]` | Capacity 1 isolated learning book |
@@ -102,6 +102,7 @@ Spare 50%/25% fractions apply only while a market is still *in front* of that th
 - Near-miss watch (`near_miss_watch.json`). **Watch cut for the AI-fork gate:** buy-not-now and hold-near-buy. **Census / persistence only:** not-buy-tier (all below buy-tier) and never-buy-tier (dated archives, never printed buy). Do not treat the census counts as the near-miss sample.
 - Existing maintenance ingest + Layer B screen clock
 - **Equal-support package** (`ftse-library equal-support`): market-aware timing stamp, buy-tier rememo eligibility at the same body-lag rule, and per-market exclusion-universe + exit-timing archives under `markets/<id>/screen/`
+- **Weekday rememo** (`ftse-library rememo`, after library ingest maintenance): same 3/day body-lag cap (catch-up 5 when that market’s backlog exceeds 15) as FTSE. Once per weekday. Not a Sunday dump and not `research_all_graduated` / 21-market spray.
 
 It does **not** start a shard AI-judgment track or `decision-review --apply`. Watch epoch-0 and the near-miss groups first. FTSE stays the data lead (P1 live ingest / paper-auto). Euro keeps the fat sprint until its own maintenance threshold.
 
@@ -112,13 +113,15 @@ It does **not** start a shard AI-judgment track or `decision-review --apply`. Wa
 | FTSE-volume ingest | Maintenance candidates include admitted ∪ exhausted ∪ live parity. Admitted markets stay on that loop when a later screen adds buy-tier names and live parity dips | Fourth sprint stream |
 | Layer B screen clock | `observe_sim_include_admitted` | Focus-only Sunday screens |
 | Paper instrument | Frozen `buy_tier_level` | Shard AI / knob apply |
-| Buy-tier rememo | Same `rememo_body_lag_threshold` on that market's buy-tier, queued via Sunday `_research_markets` (focus first, then admitted) | `research_all_graduated` / 21-market spray (N96) |
+| Buy-tier rememo | Same `rememo_body_lag_threshold` + weekday 3/day execution (`ftse-library rememo`). Sunday Layer C rememos the **focus** book only | `research_all_graduated` / 21-market spray (N96) |
 | Buy-not-now | `timing_signal=wait` on buy-tier (Yahoo via market mapper, PIT on dated archives) | LSE `.L` rewrite |
 | Not-buy-tier | Current below-buy-tier + `never_buy_tier` from dated archives; exit-timing archive on `screen/history/` | FTSE-only `docs/data/history` |
 
 ```bash
 ftse-library equal-support
 ftse-library equal-support --markets sp500,asx200
+ftse-library rememo --dry-run
+ftse-library rememo
 ```
 
 **Knob apply is the AI-track gate.** `decision-review --apply` retunes picking knobs (`skip_timing_wait`, `min_conviction`, `sector_cap`). Frozen `buy_tier_level` is `is_cohort_lab=true` and cannot apply. Do not apply knobs on a shard until AI is a track, and do not make AI a track until the watch period has marks on epoch-0 **and** the near-miss groups. They are one decision, not two.
@@ -323,14 +326,16 @@ written under another index slice.
 | Observe sim / shard paper | Focus research dir ∪ every other `markets/*/screen/research` |
 
 Ladder selective research (`rememo_existing`, default on) still skips **fresh**
-memos, but rememos buy-tier names when ingest has added enough filing bodies
-(same lag rule as FTSE weekday rememo). Depth-first policy keeps
+memos, but rememos **focus** buy-tier names when ingest has added enough filing
+bodies (same lag rule as FTSE weekday rememo). Depth-first policy keeps
 `research_all_graduated=false` so leftover weekly_ops does not spray 21 thin
-markets; `_research_markets` still includes the **admitted** set after the
-focus book. Eligibility and filing seeds are per selected market — S&P
-canonical bodies are not measured against `euro_depth`. Before a rememo, that
-market's canonical filings are copied into the existing memo home so Sunday
-eligibility clears after the rewrite.
+markets. `_research_markets` still includes the **admitted** set after the
+focus book for **first-time** memos. Admitted body-lag rememo runs on weekdays
+(`ftse-library rememo`, 3/day per market, catch-up 5 when that book exceeds 15)
+so Sunday does not dump a 50+ name backlog into `research_hard_cap`. Eligibility
+and filing seeds are per selected market — S&P canonical bodies are not measured
+against `euro_depth`. Before a rememo, that market's canonical filings are
+copied into the existing memo home so eligibility clears after the rewrite.
 
 ## Guardrails
 

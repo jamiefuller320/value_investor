@@ -226,6 +226,42 @@ jobs:
         run: |
           ftse-library euro-ingest-dispatch --refresh --sync-cron --json --json-path /tmp/library_dispatch_refresh.json
 
+      - name: Admitted epoch-0 rememo (weekday, same 3/day cap as FTSE)
+        id: admitted_rememo
+        if: steps.wait_head.outputs.idle == 'true'
+        env:
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
+        run: |
+          if [ -z "$CURSOR_API_KEY" ]; then
+            echo "CURSOR_API_KEY unset — skip admitted rememo"
+            echo "ran=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          set +e
+          ftse-library rememo --json
+          REMEMO_EXIT=$?
+          set -e
+          if [ "$REMEMO_EXIT" -ne 0 ]; then
+            echo "admitted rememo exited $REMEMO_EXIT (continuing; see summary)"
+          fi
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          path = Path("docs/data/library/admitted_rememo_summary.json")
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          if not path.exists():
+              out.open("a", encoding="utf-8").write("ran=false\nrememoed=0\n")
+              raise SystemExit(0)
+          data = json.loads(path.read_text(encoding="utf-8"))
+          rememoed = data.get("rememoed") or []
+          out.open("a", encoding="utf-8").write(
+              f"ran=true\nrememoed={len(rememoed)}\n"
+          )
+          print(json.dumps(data, indent=2)[:2000])
+          PY
+
       - name: Commit and push library ingest artifacts
         env:
           DISPATCH_PAGES: "true"

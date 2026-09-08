@@ -191,7 +191,11 @@ def run_equal_support_for_market(
             )
         ),
         "sample": [{"ticker": t, "reason": rememo[t]} for t in sorted(rememo)[:20]],
-        "note": "Same body-lag rule as focus buy-tier; not 21-market memo spray.",
+        "note": (
+            "Same body-lag rule as FTSE / focus buy-tier. Eligibility is listed "
+            "here; weekday `ftse-library rememo` executes the bounded 3/day cap. "
+            "Not research_all_graduated / 21-market memo spray."
+        ),
     }
     return out
 
