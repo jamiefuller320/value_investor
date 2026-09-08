@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-08T06:02:59+00:00",
+  "updated_at": "2026-09-08T06:51:15+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7555,6 +7555,72 @@
     {
       "id": "L340",
       "category": "later",
+      "section": "research",
+      "title": "IR body period reclassifier marks Aedifica FY packs as interim",
+      "summary": "AED.BR RA25 and FY-2025 IR PDFs classify as annual from the URL, then _apply_headline_period flips them to interim after body extract. Coverage is measured (4 bodies) but period mix is wrong; do not treat this as a filing-quality win for annual cadence.",
+      "revisit_when": "Reviewing euro_depth filing period quality or AED.BR annual coverage after the next deepen",
+      "tags": [
+        "euro_depth",
+        "AED.BR",
+        "ir_allowlist",
+        "period"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-01a07dfd-da47-7498-b055-2c1bd4e8ee8b",
+      "added_at": "2026-09-07T22:37:03+00:00",
+      "updated_at": "2026-09-08T05:57:24+00:00"
+    },
+    {
+      "id": "L341",
+      "category": "later",
+      "section": "learning",
+      "title": "Caption market-card held vs market as sleeve vs price index",
+      "summary": "The chart is invested-sleeve MTM versus a frictionless local price index from the same starting held notional, not Sunday-review excess after costs (NAV vs contributed, Yahoo auto_adjust). A caption would stop the tile being read as a matched-cost or total-return hurdle.",
+      "revisit_when": "Someone uses the market-card excess_pct to judge paper vs index, or it disagrees with Sunday-review excess_after_costs.",
+      "tags": [
+        "dashboard",
+        "held-vs-market",
+        "fairness"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fb826a8a-b91b-4ef9-b0a6-6f183dcade83",
+      "added_at": "2026-09-08T06:16:49+00:00"
+    },
+    {
+      "id": "N110",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Historical holdings path instead of current-book densify",
+      "summary": "Live FTSE densify marks today's share counts on past daily closes. That is a current-sleeve backfill, not the actual paper book, so it is not a fair historical comparison once names rotate.",
+      "revisit_when": "Live FTSE densify is active (held_path=current_book_marked) after at least one rotation of names.",
+      "tags": [
+        "dashboard",
+        "held-vs-market",
+        "fairness"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fb826a8a-b91b-4ef9-b0a6-6f183dcade83",
+      "added_at": "2026-09-08T06:16:49+00:00"
+    },
+    {
+      "id": "L342",
+      "category": "later",
+      "section": "learning",
+      "title": "Universe-matched index for held vs market charts",
+      "summary": "FTSE 350 paper is scaled to ^FTSE (FTSE 100) and euro_depth observe-sim to ^STOXX50E. That is a useful alpha hurdle but not a matched-universe market equivalent.",
+      "revisit_when": "Held vs market charts are in regular Sunday use and a FTSE 350 or euro_depth path has >=8 weekday marks.",
+      "tags": [
+        "dashboard",
+        "held-vs-market",
+        "benchmark"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-fb826a8a-b91b-4ef9-b0a6-6f183dcade83",
+      "added_at": "2026-09-08T06:16:49+00:00"
+    },
+    {
+      "id": "L343",
+      "category": "later",
       "section": "learning",
       "title": "Add Nasdaq-100 ^NDX to dated macro snapshots",
       "summary": "US macro now carries ^GSPC for S&P market cards. nasdaq100 still has no local index in dated snapshots, so a Nasdaq paper book would have market_path none until ^NDX is stored the same way.",
@@ -7566,7 +7632,7 @@
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-fb826a8a-b91b-4ef9-b0a6-6f183dcade83",
-      "added_at": "2026-09-08T06:02:59+00:00"
+      "added_at": "2026-09-08T06:51:15+00:00"
     }
   ],
   "fragments": [

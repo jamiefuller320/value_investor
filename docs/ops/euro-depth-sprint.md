@@ -188,6 +188,7 @@ Each `ftse-library ingest-loop` run assesses buy-tier gaps and persists
 | `indexed_without_body` | Prefer those tickers over discovery-only thin / maintain |
 | any gap | Skip high-conviction **maintain** names (no wasted slots) |
 | stall / 0-improve batch (or cutoff deepen that already ran) | Auto-dispatch pinned intensive gap-closure (`stall_slowdown`); prefer unmeasured / zero-body over an IWB `blocker_ticker` |
+| committed IWB pin while unmeasured / zero-body remain | Prepend those leftovers to the pin set so body-fill cannot starve bootstrap |
 | weekday mid-ticker cap (320s, all library markets) | Abort the current ticker and continue the batch; intensive pin disables the cap |
 
 Inspect with the latest loop summary (`markets/<id>/ingest_summary.json` → `critical_path`).

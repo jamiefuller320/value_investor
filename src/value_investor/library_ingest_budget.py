@@ -37,7 +37,7 @@ def discovery_runtime_budget(max_runtime_seconds: float) -> float:
 
 
 def discovery_prefer_tickers(critical: Any) -> list[str]:
-    """Scan thin / unmeasured / zero-body / IWB names before the rest of buy-tier."""
+    """Scan unmeasured / zero-body, then thin / IWB names, before the rest of buy-tier."""
     prefer: list[str] = []
     seen: set[str] = set()
 
@@ -47,11 +47,11 @@ def discovery_prefer_tickers(critical: Any) -> list[str]:
             seen.add(key)
             prefer.append(key)
 
-    for ticker in list(getattr(critical, "thin_need_discovery", None) or []):
-        _add(str(ticker))
     for ticker in list(getattr(critical, "unmeasured", None) or []):
         _add(str(ticker))
     for ticker in list(getattr(critical, "zero_body", None) or []):
+        _add(str(ticker))
+    for ticker in list(getattr(critical, "thin_need_discovery", None) or []):
         _add(str(ticker))
     for row in list(getattr(critical, "indexed_without_body", None) or []):
         if isinstance(row, dict):
