@@ -147,7 +147,8 @@ CRONJOB_API_KEY=… WORKFLOW_DISPATCH_PAT=… ./scripts/import_cron_jobs.py --al
 
 Job keys: `orchestrator-sunday`, `orchestrator-weekday-paper`, `ingest-loop-morning`,
 `ingest-loop-afternoon`,
-`analysis-review`, `ops-monitor`, `data-backup`. Dry-run: `--dry-run --json`.
+`analysis-review`, `ops-monitor`, `data-backup`,
+`library-epoch0-weekday-asx|euro|us-edt|us-est`. Dry-run: `--dry-run --json`.
 
 Manual per-job dispatch examples (what cron-job.org calls) below.
 

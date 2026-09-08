@@ -352,6 +352,30 @@ def build_parser() -> argparse.ArgumentParser:
     shard_epoch0_p.add_argument("--json", action="store_true")
     shard_epoch0_p.set_defaults(func=cmd_shard_epoch0)
 
+    epoch0_weekday_p = sub.add_parser(
+        "epoch0-weekday",
+        parents=[common],
+        help="Weekday local-open mark for admitted epoch-0 books (no AI, not FTSE paper-auto)",
+    )
+    epoch0_weekday_p.add_argument(
+        "--markets",
+        default="",
+        help="Comma-separated market ids (empty = admitted learning markets)",
+    )
+    epoch0_weekday_p.add_argument(
+        "--force",
+        action="store_true",
+        help="Ignore session settle and already-marked-today skip",
+    )
+    epoch0_weekday_p.add_argument("--json", action="store_true")
+    epoch0_weekday_p.add_argument(
+        "--json-path",
+        type=Path,
+        default=None,
+        help="Write result JSON to this path",
+    )
+    epoch0_weekday_p.set_defaults(func=cmd_epoch0_weekday)
+
     equal_support_p = sub.add_parser(
         "equal-support",
         parents=[common],
@@ -371,6 +395,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--skip-archives",
         action="store_true",
         help="Skip exclusion-universe and exit-timing archive labs",
+    )
+    equal_support_p.add_argument(
+        "--census-only",
+        action="store_true",
+        help="Refresh equal_support_status.json without Yahoo timing or archive labs",
     )
     equal_support_p.add_argument("--json", action="store_true")
     equal_support_p.set_defaults(func=cmd_equal_support)
@@ -1725,6 +1754,50 @@ def cmd_shard_epoch0(args: argparse.Namespace) -> int:
     return 0 if all("error" not in row for row in payloads.values()) else 1
 
 
+def cmd_epoch0_weekday(args: argparse.Namespace) -> int:
+    from value_investor.agent_model_policy import load_policy
+    from value_investor.market_paper_shard import run_epoch0_weekday_shards_for_markets
+    from value_investor.market_shard_admission import admitted_learning_markets_for_policy
+
+    policy = load_policy(args.policy)
+    markets = _parse_markets(args.markets) or None
+    result = run_epoch0_weekday_shards_for_markets(
+        args.root,
+        policy,
+        markets=markets,
+        force=bool(args.force),
+    )
+    if args.json or getattr(args, "json_path", None) is not None:
+        _emit_cli_json(result, args)
+    else:
+        if result.get("skipped") and not result.get("markets"):
+            print(result.get("reason") or "No admitted learning markets", file=sys.stderr)
+            return 1
+        print(
+            f"epoch0-weekday: marked={result.get('marked')}  "
+            f"admitted={admitted_learning_markets_for_policy(policy)}"
+        )
+        for mid, row in (result.get("markets") or {}).items():
+            if row.get("error"):
+                print(f"{mid}: ERROR — {row['error']}", file=sys.stderr)
+                continue
+            if row.get("skipped"):
+                print(f"{mid}: skipped ({row.get('reason')})")
+                continue
+            print(
+                f"{mid}: acted={row.get('acted')}  "
+                f"trades={row.get('trades')}  "
+                f"buy_not_now={row.get('buy_tier_not_now_count')}  "
+                f"hold_near={row.get('hold_near_buy_count')}"
+            )
+    errors = [
+        row
+        for row in (result.get("markets") or {}).values()
+        if isinstance(row, dict) and row.get("error")
+    ]
+    return 1 if errors else 0
+
+
 def cmd_equal_support(args: argparse.Namespace) -> int:
     from value_investor.agent_model_policy import load_policy
     from value_investor.library_equal_support import run_equal_support_package
@@ -1738,6 +1811,7 @@ def cmd_equal_support(args: argparse.Namespace) -> int:
         markets=markets,
         stamp_timing=not args.skip_timing,
         run_archives=not args.skip_archives,
+        census_only=bool(getattr(args, "census_only", False)),
     )
     if args.json:
         print(json.dumps(result, indent=2, default=str))
@@ -1752,7 +1826,8 @@ def cmd_equal_support(args: argparse.Namespace) -> int:
             f"not_buy_tier={near.get('not_buy_tier_count')}  "
             f"hold_near={near.get('hold_near_buy_count')}  "
             f"never_buy={near.get('never_buy_tier_count')}  "
-            f"rememo_eligible={rememo.get('eligible_count')}  "
+            f"rememo_eligible={rememo.get('eligible_count', row.get('rememo_eligible_count'))}  "
+            f"first_time={row.get('first_time_memo_count')}  "
             f"exclusion_ready={(archives.get('exclusion') or {}).get('ready_for_priors')}"
         )
     return 0

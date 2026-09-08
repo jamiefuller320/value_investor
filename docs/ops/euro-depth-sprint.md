@@ -158,6 +158,10 @@ WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py \
   --job library-ingest-maintenance-afternoon \
   --job library-ingest-maintenance-midafternoon \
   --job library-ingest-maintenance-evening \
+  --job library-epoch0-weekday-asx \
+  --job library-epoch0-weekday-euro \
+  --job library-epoch0-weekday-us-edt \
+  --job library-epoch0-weekday-us-est \
   --disable-legacy-ingest
 ```
 
