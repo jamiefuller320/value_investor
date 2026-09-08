@@ -133,7 +133,7 @@ jobs:
           APPLY_FIXES: ${{ github.event.inputs.apply_fixes || 'true' }}
           EMAIL_ALWAYS: ${{ github.event.inputs.email_always || 'false' }}
         run: |
-          set -euo pipefail
+          set +e
           ARGS=(run --json)
           if [ "${APPLY_FIXES:-}" != "false" ]; then
             :
@@ -146,42 +146,52 @@ jobs:
             ARGS+=(--email)
           fi
           ARGS+=(--allow-workflow-stale-exit-zero)
-          ftse-ops-monitor "${ARGS[@]}" > /tmp/ops_monitor.json
+          ftse-ops-monitor "${ARGS[@]}" | tee /tmp/ops_monitor.json
+          rc=${PIPESTATUS[0]}
+          echo "monitor_rc=${rc}" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+          if [ ! -s /tmp/ops_monitor.json ]; then
+            if [ -f docs/data/ops_status.json ]; then
+              cp docs/data/ops_status.json /tmp/ops_monitor.json
+            else
+              echo "Ops monitor produced no JSON" >&2
+              exit 1
+            fi
+          fi
           python3 - <<'PY'
           import json
           import os
           from pathlib import Path
           data = json.loads(Path("/tmp/ops_monitor.json").read_text())
           out = Path(os.environ["GITHUB_OUTPUT"])
-          out.write_text(
-              "should_dispatch="
-              + ("true" if data.get("should_dispatch_engineering") else "false")
-              + "\n"
-              + "email_deferred="
-              + ("true" if data.get("email_deferred") else "false")
-              + "\n",
-              encoding="utf-8",
-          )
+          with out.open("a", encoding="utf-8") as handle:
+              handle.write(
+                  "should_dispatch="
+                  + ("true" if data.get("should_dispatch_engineering") else "false")
+                  + "\n"
+                  + "email_deferred="
+                  + ("true" if data.get("email_deferred") else "false")
+                  + "\n"
+              )
+          print(f"overall={data.get('overall')}")
+          for row in data.get("findings") or []:
+              print(
+                  f"  {row.get('severity')} {row.get('title')}"
+                  f"{' [fixed]' if row.get('fixed') else ''}: {row.get('summary')}"
+              )
           PY
 
-      - name: Sync main before commit
-        run: git pull --rebase --autostash origin main
-
       - name: Commit ops monitor artifacts
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          branch: main
-          commit_message: "chore: ops monitor [skip ci]"
-          file_pattern: |
-            docs/data/ops_status.json
-            docs/data/ops_monitor_log.json
-            docs/data/engineering_tasks.json
-            docs/data/ingest_health_log.json
-            docs/data/backtest_health.json
-          skip_fetch: false
+        run: bash scripts/gha_commit_ops_monitor.sh
 
       - name: Dispatch engineering queue when ready
         if: steps.monitor.outputs.should_dispatch == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow run engineering-queue.yml
+
+      - name: Fail job if ops monitor exited non-zero
+        if: steps.monitor.outputs.monitor_rc != '0'
+        run: |
+          echo "ftse-ops-monitor exited ${{ steps.monitor.outputs.monitor_rc }}"
+          exit 1
