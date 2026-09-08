@@ -210,3 +210,30 @@ def test_resolve_library_rememo_target_rewrites_home(tmp_path: Path):
     assert rememo["market"] == "euro_stoxx50"
     assert rememo["force_initial"] is True
     assert rememo["seed"]["action"] == "seeded"
+
+
+def test_resolve_library_rememo_target_seeds_selected_not_focus(tmp_path: Path):
+    root = tmp_path / "library"
+    home = root / "markets" / "nasdaq100" / "screen" / "research"
+    canonical = root / "markets" / "sp500" / "screen" / "research"
+    _write_memo(home, "AAPL", verdict="accumulate", grade="thin", memo_bodies=0, disk_bodies=0)
+    (canonical / "AAPL" / "sources" / "filings").mkdir(parents=True)
+    write_json(
+        canonical / "AAPL" / "sources" / "filings" / "filings_index.json",
+        {"summary": {"with_body": 22, "total": 24}},
+        compact=True,
+    )
+    (canonical / "AAPL" / "sources" / "filings" / "10k.txt").write_text("body", encoding="utf-8")
+
+    rememo = resolve_library_rememo_target(
+        root,
+        "AAPL",
+        selected_market="sp500",
+        focus_market="euro_depth",
+        rememo_reasons={"AAPL": "stale_thin_grade_body_lag_22"},
+    )
+    assert rememo["market"] == "nasdaq100"
+    assert rememo["force_initial"] is True
+    assert rememo["seed"]["action"] == "seeded"
+    assert rememo["seed"]["focus_market"] == "sp500"
+    assert rememo["seed"]["canonical_bodies"] == 22

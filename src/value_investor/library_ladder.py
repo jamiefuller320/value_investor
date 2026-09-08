@@ -57,6 +57,7 @@ from value_investor.market_paper_shard import (
     run_weekday_paper_shards_for_markets,
     run_weekly_paper_shards_for_screened_markets,
 )
+from value_investor.market_shard_admission import admitted_learning_markets_for_policy
 from value_investor.market_shard_phases import (
     refresh_committed_phase_rollup,
     weekly_paper_shard_markets_for_policy,
@@ -130,13 +131,21 @@ def _research_markets(policy: dict[str, Any], focus: str) -> list[str]:
     When ``research_all_graduated`` is true (default), include the full market
     queue plus focus/graduated — so newly grown index slices get memos before
     they formally graduate. Prefer queue order for stable round-robin.
+
+    When it is false (depth-first), keep the 21-market spray off but still
+    rememo the admitted learning set (L321). Focus stays first so weekly_ops
+    round-robin does not starve the euro book.
     """
     ladder = policy.get("ladder") or {}
     if not ladder.get("research_all_graduated", True):
-        return [focus]
+        ordered: list[str] = []
+        for mid in [focus, *admitted_learning_markets_for_policy(policy)]:
+            if mid and mid not in ordered:
+                ordered.append(mid)
+        return ordered or ([focus] if focus else [])
     queue = list(policy.get("market_queue") or [])
     graduated = graduated_market_ids(policy)
-    ordered: list[str] = []
+    ordered = []
     for mid in [*queue, focus, *graduated]:
         if mid and mid not in ordered:
             ordered.append(mid)
@@ -465,21 +474,26 @@ def run_library_ladder(
         already = existing_library_research_tickers(root)
         rememo_reasons: dict[str, str] = {}
         if bool((policy.get("ladder") or {}).get("rememo_existing", True)):
-            queue_tickers = {
-                canonical_library_ticker(str(getattr(report, "ticker", "") or ""))
-                for queue in per_market_queues.values()
-                for report in queue
-            }
-            rememo_reasons = library_rememo_eligible_tickers(
-                root,
-                tickers=queue_tickers,
-                market_id=market,
-                body_lag_threshold=int(
-                    (policy.get("ladder") or {}).get(
-                        "rememo_body_lag_threshold", DEFAULT_REMEMO_BODY_LAG_THRESHOLD
-                    )
-                ),
+            body_lag = int(
+                (policy.get("ladder") or {}).get(
+                    "rememo_body_lag_threshold", DEFAULT_REMEMO_BODY_LAG_THRESHOLD
+                )
             )
+            # Eligibility is per selected market so S&P/ASX canonical filings
+            # are not measured against the euro_depth path.
+            for mid, queue in per_market_queues.items():
+                queue_tickers = {
+                    canonical_library_ticker(str(getattr(report, "ticker", "") or ""))
+                    for report in queue
+                }
+                rememo_reasons.update(
+                    library_rememo_eligible_tickers(
+                        root,
+                        tickers=queue_tickers,
+                        market_id=mid,
+                        body_lag_threshold=body_lag,
+                    )
+                )
         skip_fresh = already - set(rememo_reasons)
         selected, dedupe_skipped = select_deduped_research_targets(
             research_markets=research_markets,

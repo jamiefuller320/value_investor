@@ -245,6 +245,21 @@ def test_research_markets_includes_full_queue_before_graduation():
     policy["ladder"]["research_all_graduated"] = False
     assert _research_markets(policy, "ftse_smallcap") == ["ftse_smallcap"]
 
+    policy["ladder"]["admitted_learning_markets"] = ["sp500", "asx200"]
+    policy["ingest_exhausted_markets"] = ["sp500"]
+    assert _research_markets(policy, "ftse_smallcap") == [
+        "ftse_smallcap",
+        "sp500",
+        "asx200",
+    ]
+    # Focus stays first even when it is also exhausted / admitted.
+    policy["ingest_exhausted_markets"] = ["euro_depth", "sp500"]
+    assert _research_markets(policy, "euro_depth") == [
+        "euro_depth",
+        "sp500",
+        "asx200",
+    ]
+
 
 def test_ladder_runs_graduation(tmp_path: Path, monkeypatch):
     root = tmp_path / "library"

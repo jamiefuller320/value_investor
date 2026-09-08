@@ -40,6 +40,7 @@ PROBE_QUESTIONS = (
     "would still be green if memo quality were zero?",
     "Does file existence mean freshness, or is rememo blocked by dedupe?",
     "Are observe-sim / paper clocks accumulating on markets that look ingest-healthy?",
+    "Did Sunday rememo include admitted buy-tier, or only the focus book?",
 )
 
 _SEVERITY_RANK = {"high": 0, "medium": 1, "low": 2}
@@ -324,6 +325,11 @@ def _ladder_research(library_root: Path) -> dict[str, Any]:
         "remaining_usd_before": layer.get("remaining_usd_before"),
         "already_researched_count": _int(dedupe.get("already_researched_count"), 0),
         "dedupe_skipped_count": _int(dedupe.get("skipped_count"), 0),
+        "rememo_eligible_count": _int(dedupe.get("rememo_eligible_count"), 0),
+        "research_markets": [
+            str(mid).strip() for mid in _as_list(layer.get("research_markets")) if str(mid).strip()
+        ],
+        "research_all_graduated": bool(layer.get("research_all_graduated")),
         "dedupe_note": dedupe.get("note"),
         "skipped_sample": list(dedupe.get("skipped_sample") or [])[:8],
     }
@@ -446,6 +452,48 @@ def _library_focus_quality(
     }
 
 
+def _equal_support_status(library_root: Path) -> dict[str, Any]:
+    raw = _as_dict(_safe_read(Path(library_root) / "equal_support_status.json"))
+    markets: dict[str, dict[str, Any]] = {}
+    for mid, row in _as_dict(raw.get("markets")).items():
+        if isinstance(row, dict) and str(mid).strip():
+            markets[str(mid).strip()] = row
+    return {
+        "generated_at": raw.get("generated_at"),
+        "admitted": [str(mid).strip() for mid in _as_list(raw.get("admitted")) if str(mid).strip()],
+        "markets": markets,
+    }
+
+
+def _admitted_rememo_starve(
+    *,
+    policy: dict[str, Any],
+    ladder: dict[str, Any],
+    equal_support: dict[str, Any],
+) -> dict[str, Any]:
+    """Admitted buy-tier rememo listed but not queued on the last ladder."""
+    from value_investor.market_shard_admission import admitted_learning_markets_for_policy
+
+    admitted = admitted_learning_markets_for_policy(policy)
+    queued = {
+        str(mid).strip() for mid in _as_list(ladder.get("research_markets")) if str(mid).strip()
+    }
+    starved: list[dict[str, Any]] = []
+    for mid in admitted:
+        row = _as_dict((_as_dict(equal_support.get("markets"))).get(mid))
+        eligible = _int(row.get("rememo_eligible_count"), 0)
+        if eligible <= 0:
+            continue
+        if mid in queued:
+            continue
+        starved.append({"market_id": mid, "rememo_eligible_count": eligible})
+    return {
+        "admitted": admitted,
+        "research_markets": list(queued),
+        "starved": starved,
+    }
+
+
 def _flag(
     *,
     flag_id: str,
@@ -473,6 +521,7 @@ def _build_flags(
     budget: dict[str, Any],
     clocks: dict[str, Any],
     library_quality: dict[str, Any],
+    admitted_rememo: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     flags: list[dict[str, Any]] = []
     unwired_buy = list(overlay.get("buy_tier_unwired_with_committed_verdict") or [])
@@ -658,8 +707,36 @@ def _build_flags(
             )
         )
 
+    starved = list((admitted_rememo or {}).get("starved") or [])
+    if starved:
+        names = [str(row.get("market_id") or "") for row in starved if row.get("market_id")]
+        flags.append(
+            _flag(
+                flag_id="admitted_rememo_not_queued",
+                severity="high",
+                layer="produce",
+                title="Admitted buy-tier rememo is listed but Sunday research never queues it",
+                summary=(
+                    f"{', '.join(names)} have body-lag rememo on the equal-support "
+                    "package, but last ladder research_markets stayed on the focus "
+                    "book (research_all_graduated=false without the admitted set)."
+                ),
+                evidence={
+                    "markets": starved,
+                    "research_markets": (admitted_rememo or {}).get("research_markets") or [],
+                    "admitted": (admitted_rememo or {}).get("admitted") or [],
+                    "research_all_graduated": ladder.get("research_all_graduated"),
+                },
+            )
+        )
+
     stale_learning = list(clocks.get("filing_ready_learning_stale") or [])
     if stale_learning:
+        clock_rows = {
+            str(row.get("market_id") or ""): row
+            for row in _as_list(clocks.get("markets"))
+            if isinstance(row, dict) and row.get("market_id")
+        }
         flags.append(
             _flag(
                 flag_id="filing_ready_learning_stale",
@@ -668,9 +745,24 @@ def _build_flags(
                 title="Filing parity is not the same as a learning clock",
                 summary=(
                     f"{', '.join(stale_learning)} look filing-ready but are not "
-                    "learning_ready (observe-sim / archive span still short or stale)."
+                    "learning_ready (observe-sim / archive span still short). "
+                    "That is a 12-week replay gate, not a reason to withhold "
+                    "epoch-0 or admitted rememo."
                 ),
-                evidence={"markets": stale_learning},
+                evidence={
+                    "markets": stale_learning,
+                    "span": [
+                        {
+                            "market_id": mid,
+                            "unique_days": (clock_rows.get(mid) or {}).get("unique_days"),
+                            "observe_snapshots": (clock_rows.get(mid) or {}).get(
+                                "observe_snapshots"
+                            ),
+                            "learning_ready": (clock_rows.get(mid) or {}).get("learning_ready"),
+                        }
+                        for mid in stale_learning
+                    ],
+                },
             )
         )
 
@@ -725,6 +817,10 @@ def build_system_gap_snapshot(
     clocks = _learning_clocks(library_root, policy, now=run_at)
     library_quality = _library_focus_quality(library_root, policy, ladder)
     rememo_backlog = _as_dict(_safe_read(data_dir / "memo_rememo_backlog.json"))
+    equal_support = _equal_support_status(library_root)
+    admitted_rememo = _admitted_rememo_starve(
+        policy=policy, ladder=ladder, equal_support=equal_support
+    )
     flags = _build_flags(
         overlay=overlay,
         persist=persist,
@@ -732,6 +828,7 @@ def build_system_gap_snapshot(
         budget=budget,
         clocks=clocks,
         library_quality=library_quality,
+        admitted_rememo=admitted_rememo,
     )
     return {
         "schema_version": SCHEMA_VERSION,
@@ -765,6 +862,7 @@ def build_system_gap_snapshot(
                 "focus_library_research": library_quality,
                 "rememo_backlog_count": rememo_backlog.get("backlog_count"),
                 "rememo_action": rememo_backlog.get("action"),
+                "admitted_rememo": admitted_rememo,
             },
             "persist": persist,
             "publish": {
@@ -840,6 +938,7 @@ def slim_system_gaps_for_review(snapshot: dict[str, Any] | None) -> dict[str, An
                 },
                 "rememo_backlog_count": produce.get("rememo_backlog_count"),
                 "rememo_action": produce.get("rememo_action"),
+                "admitted_rememo": produce.get("admitted_rememo") or {},
             },
             "persist": {
                 "persist_hole": persist.get("persist_hole"),

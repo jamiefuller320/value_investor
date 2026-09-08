@@ -304,7 +304,9 @@ def resolve_library_rememo_target(
     Where to write a ladder research memo, and whether to force-initial rememo.
 
     First-time names stay on the selected queue market. Rememo-eligible names
-    seed the existing home from focus-market filings and rewrite that home.
+    seed the existing home from that selected market's canonical filings and
+    rewrite the home. ``focus_market`` is kept for callers; seeding follows
+    the queue market so admitted shards are not measured against euro_depth.
     """
     from value_investor.library_dedupe import canonical_library_ticker, research_home_market
 
@@ -318,10 +320,11 @@ def resolve_library_rememo_target(
             "seed": None,
         }
     home = research_home_market(library_root, key) or selected_market
+    canonical_market = str(selected_market or focus_market or "").strip()
     seed = seed_home_filings_from_canonical(
         library_root,
         key,
-        market_id=focus_market,
+        market_id=canonical_market,
     )
     return {
         "ticker": key,
