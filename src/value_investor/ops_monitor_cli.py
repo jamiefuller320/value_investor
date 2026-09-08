@@ -95,6 +95,17 @@ def _report_from_status(payload: dict) -> OpsMonitorReport:
     )
 
 
+def _resolve_run_exit_code(report: OpsMonitorReport, args: argparse.Namespace) -> int:
+    if report.overall != "fail":
+        return 0
+    if args.allow_workflow_stale_exit_zero and workflow_stale_only_failures(report.findings):
+        return 0
+    if report.email_deferred:
+        # Pending today's slots — do not fail the Actions job; catch-up will re-check.
+        return 0
+    return 1
+
+
 def _cmd_run(args: argparse.Namespace) -> int:
     report = run_ops_monitor(
         status_path=args.status_path,
@@ -102,6 +113,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
         draft_tasks=not args.no_draft,
     )
     append_monitor_log_entry(report, path=args.monitor_log_path)
+    exit_rc = _resolve_run_exit_code(report, args)
     if args.email or args.email_always:
         try:
             send_ops_monitor_email(
@@ -110,7 +122,12 @@ def _cmd_run(args: argparse.Namespace) -> int:
             )
         except ValueError as exc:
             print(str(exc), file=sys.stderr)
-            return 1
+            if exit_rc != 0:
+                return 1
+            print(
+                "Ops monitor email skipped — SMTP not configured; job exit unchanged",
+                file=sys.stderr,
+            )
     if args.json:
         print(json.dumps(report.to_dict(), indent=2))
     else:
@@ -123,14 +140,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
             print(f"  drafted tasks: {', '.join(report.drafted_task_ids)}")
         if report.should_dispatch_engineering:
             print("  engineering queue ready to dispatch")
-    if report.overall == "fail":
-        if args.allow_workflow_stale_exit_zero and workflow_stale_only_failures(report.findings):
-            return 0
-        if report.email_deferred:
-            # Pending today's slots — do not fail the Actions job; catch-up will re-check.
-            return 0
-        return 1
-    return 0
+    return exit_rc
 
 
 def _cmd_email(args: argparse.Namespace) -> int:

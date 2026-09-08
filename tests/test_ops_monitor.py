@@ -154,6 +154,116 @@ def test_check_workflow_freshness_engineering_queue_active_requires_hourly():
     assert any("Engineering Queue" in row.title for row in findings)
 
 
+def test_check_workflow_freshness_suppresses_ops_monitor_self_when_running_in_actions():
+    thirty_hours_ago = (weekday_noon_utc() - timedelta(hours=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    idle_queue = {
+        "open_count": 0,
+        "pr_open_count": 0,
+        "in_flight_branch": None,
+        "in_flight_pr": None,
+    }
+
+    def fake_latest(workflow_file, **kwargs):
+        if workflow_file == "ops-monitor.yml" and kwargs.get("status") == "success":
+            return {"id": 1, "created_at": thirty_hours_ago}
+        return {"id": 2, "created_at": weekday_noon_utc().strftime("%Y-%m-%dT%H:%M:%SZ")}
+
+    with (
+        patch("value_investor.ops_monitor._github_token", return_value="test-token"),
+        patch("value_investor.ops_monitor.latest_workflow_run", side_effect=fake_latest),
+        patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
+        patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
+        patch(
+            "value_investor.ops_monitor._running_inside_ops_monitor_workflow",
+            return_value=True,
+        ),
+    ):
+        findings, checks = check_workflow_freshness(queue_status=idle_queue, now=weekday_noon_utc())
+
+    ops_overdue = [row for row in findings if row.title == "Workflow overdue: FTSE Ops Monitor"]
+    assert len(ops_overdue) == 1
+    assert ops_overdue[0].fixed is True
+    assert "self-check suppressed" in (ops_overdue[0].action_taken or "")
+    assert _overall_status(findings) != "fail"
+    ops_checks = [row for row in checks if row["workflow"] == "ops-monitor.yml"]
+    assert ops_checks and ops_checks[0]["stale"] is True
+
+
+def test_check_workflow_freshness_suppresses_ops_monitor_overdue_when_recovery_active():
+    thirty_hours_ago = (weekday_noon_utc() - timedelta(hours=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    idle_queue = {
+        "open_count": 0,
+        "pr_open_count": 0,
+        "in_flight_branch": None,
+        "in_flight_pr": None,
+    }
+
+    def fake_latest(workflow_file, **kwargs):
+        if workflow_file == "ops-monitor.yml" and kwargs.get("status") == "success":
+            return {"id": 1, "created_at": thirty_hours_ago}
+        return {"id": 2, "created_at": weekday_noon_utc().strftime("%Y-%m-%dT%H:%M:%SZ")}
+
+    def fake_active(workflow_file, **kwargs):
+        if workflow_file == "ops-monitor.yml":
+            return [{"id": 34225171185, "status": "in_progress"}]
+        return []
+
+    with (
+        patch("value_investor.ops_monitor._github_token", return_value="test-token"),
+        patch("value_investor.ops_monitor.latest_workflow_run", side_effect=fake_latest),
+        patch("value_investor.ops_monitor.active_workflow_runs", side_effect=fake_active),
+        patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
+        patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
+        patch(
+            "value_investor.ops_monitor._running_inside_ops_monitor_workflow",
+            return_value=False,
+        ),
+    ):
+        findings, _checks = check_workflow_freshness(
+            queue_status=idle_queue, now=weekday_noon_utc()
+        )
+
+    ops_overdue = [row for row in findings if row.title == "Workflow overdue: FTSE Ops Monitor"]
+    assert len(ops_overdue) == 1
+    assert ops_overdue[0].fixed is True
+    assert "Recovery run in flight" in (ops_overdue[0].action_taken or "")
+    assert _overall_status(findings) != "fail"
+
+
+def test_ops_monitor_cli_email_failure_still_exits_zero_when_stale_only():
+    from value_investor.ops_monitor_cli import main
+
+    with patch("value_investor.ops_monitor_cli.run_ops_monitor") as mock_run:
+        mock_run.return_value = OpsMonitorReport(
+            run_at="2026-09-08T07:45:00+00:00",
+            overall="fail",
+            findings=[
+                OpsFinding(
+                    severity="fail",
+                    category="workflows",
+                    title="Workflow overdue: FTSE Ops Monitor",
+                    summary="No successful run within 28h.",
+                )
+            ],
+        )
+        with patch("value_investor.ops_monitor_cli.append_monitor_log_entry"):
+            with patch(
+                "value_investor.ops_monitor_cli.send_ops_monitor_email",
+                side_effect=ValueError("Missing required email env vars: SMTP_HOST"),
+            ):
+                rc = main(
+                    [
+                        "run",
+                        "--json",
+                        "--no-apply",
+                        "--no-draft",
+                        "--email",
+                        "--allow-workflow-stale-exit-zero",
+                    ]
+                )
+    assert rc == 0
+
+
 def test_check_workflow_freshness_softens_orchestrator_when_recovery_bundle_active():
     thirty_hours_ago = (weekday_noon_utc() - timedelta(hours=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
     idle_queue = {

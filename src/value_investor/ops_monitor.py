@@ -407,6 +407,14 @@ def _parse_github_time(value: str | None) -> datetime | None:
         return None
 
 
+def _running_inside_ops_monitor_workflow() -> bool:
+    """True when this process is the FTSE Ops Monitor GitHub Actions job."""
+    ref = os.environ.get("GITHUB_WORKFLOW_REF") or ""
+    if "ops-monitor.yml" in ref:
+        return True
+    return os.environ.get("GITHUB_WORKFLOW") == "FTSE Ops Monitor"
+
+
 def check_committed_json(paths: Iterable[Path] = COMMITTED_JSON_PATHS) -> list[OpsFinding]:
     findings: list[OpsFinding] = []
     for path in paths:
@@ -643,17 +651,30 @@ def check_workflow_freshness(
                 )
             findings.append(failure_finding)
         if stale:
-            findings.append(
-                OpsFinding(
-                    severity="fail" if expected_today else "warn",
-                    category="workflows",
-                    title=f"Workflow overdue: {row['name']}",
-                    summary=(
-                        f"No successful run within {int(max_age.total_seconds() // 3600)}h "
-                        f"(last: {last_run_at.isoformat() if last_run_at else 'never'})."
-                    ),
-                )
+            overdue = OpsFinding(
+                severity="fail" if expected_today else "warn",
+                category="workflows",
+                title=f"Workflow overdue: {row['name']}",
+                summary=(
+                    f"No successful run within {int(max_age.total_seconds() // 3600)}h "
+                    f"(last: {last_run_at.isoformat() if last_run_at else 'never'})."
+                ),
             )
+            if workflow == "ops-monitor.yml":
+                if _running_inside_ops_monitor_workflow():
+                    overdue.fixed = True
+                    overdue.action_taken = (
+                        "Current ops monitor run in progress; self-check suppressed"
+                    )
+                else:
+                    active = active_workflow_runs(workflow, repo=repo, token=token)
+                    if active:
+                        overdue.fixed = True
+                        active_id = active[0].get("id")
+                        overdue.action_taken = (
+                            f"Recovery run in flight (#{active_id}); suppressed from alert"
+                        )
+            findings.append(overdue)
 
     recovery_active, recovery_detail = recovery_bundle_in_flight(repo=repo, token=token)
     if recovery_active:
