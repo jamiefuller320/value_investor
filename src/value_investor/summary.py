@@ -43,6 +43,7 @@ from value_investor.scoring.fcf import (
 from value_investor.scoring.fcf_basis_overlay import (
     apply_fcf_basis_overlay_to_signal,
     fcf_basis_action_note_mismatch,
+    fcf_basis_enforcement_needed,
 )
 from value_investor.scoring.healthcare_overlay import (
     apply_healthcare_overlay_to_signal,
@@ -1068,11 +1069,15 @@ def build_company_reports(
             )
 
         fcf_basis_overlay_flag = row.get("fcf_basis_overlay")
-        fcf_action_note_mismatch = fcf_basis_action_note_mismatch(
+        fcf_numeric_note_mismatch = fcf_basis_action_note_mismatch(
             fcf_bundle,
             screen_ttm=screen_ttm,
             canonical=free_cashflow,
             fcf_definition_divergence=fcf_definition_divergence,
+        )
+        fcf_action_note_mismatch = fcf_basis_enforcement_needed(
+            action_note_mismatch=fcf_numeric_note_mismatch,
+            action_note=action_note,
         )
         filing_screen_mismatch = bool(fcf_bundle.get("filing_screen_mismatch")) or (
             fcf_filing_screen_mismatch(
@@ -1085,6 +1090,7 @@ def build_company_reports(
             fcf_basis_overlay_flag is not None
             and not (isinstance(fcf_basis_overlay_flag, float) and pd.isna(fcf_basis_overlay_flag))
             and bool(fcf_basis_overlay_flag)
+            and not fcf_action_note_mismatch
         ):
             fcf_basis_overlay = True
         else:

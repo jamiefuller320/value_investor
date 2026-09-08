@@ -1142,6 +1142,128 @@ def test_build_company_reports_fcf_basis_overlay_when_company_adj_diverges_bree_
     assert "company-adj £133.2M" in snapshot["action_note"]
 
 
+def _dnlm_research_sources(tmp_path: Path) -> None:
+    sources = tmp_path / "research" / "DNLM.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    financials = {
+        "ticker": "DNLM.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 255_900_000.0,
+                "Capital Expenditure": -44_500_000.0,
+                "Free Cash Flow": 211_400_000.0,
+            }
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    (filings / "annual_results.txt").write_text(
+        "Company-adjusted free cash flow of £171.0m after working-capital normalisation",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings / "annual_results.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_build_company_reports_fcf_basis_overlay_caps_buy_when_note_mismatch_dnlm_style(
+    tmp_path: Path,
+):
+    """Buy-tier names must downgrade to hold when FCF basis mismatch note would fire."""
+    _dnlm_research_sources(tmp_path)
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="DNLM.L",
+                name="Dunelm Group plc",
+                sector="Consumer Cyclical",
+                signal="buy",
+                conviction_score=0.75,
+                free_cashflow=171_000_000.0,
+                free_cashflow_screen_ttm=163_900_000.0,
+                fcf_basis_overlay=False,
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "DNLM.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "hold"
+    assert "FCF basis mismatch" in snapshot["action_note"]
+    assert "filing £211.4M" in snapshot["action_note"]
+    assert "screen TTM £163.9M" in snapshot["action_note"]
+    assert "company-adj £171M" in snapshot["action_note"]
+
+
+def test_build_company_reports_reapplies_fcf_overlay_when_flag_true_but_buy_remains(
+    tmp_path: Path,
+):
+    """Persisted overlay=true must not skip capping when adjusted_signal stayed buy."""
+    _dnlm_research_sources(tmp_path)
+    note = (
+        "Buy — neutral timing | FCF basis mismatch: filing £211.4M | "
+        "screen TTM £163.9M | company-adj £171M"
+    )
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="DNLM.L",
+                name="Dunelm Group plc",
+                sector="Consumer Cyclical",
+                signal="buy",
+                conviction_score=0.75,
+                free_cashflow=171_000_000.0,
+                free_cashflow_screen_ttm=163_900_000.0,
+                fcf_basis_overlay=True,
+                action_note=note,
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "DNLM.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "hold"
+
+
 def test_earnings_growth_signs_diverge_detects_fgp_style_mismatch():
     assert earnings_growth_signs_diverge(-0.059, 0.16) is True
     assert earnings_growth_signs_diverge(0.05, 0.10) is False

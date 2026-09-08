@@ -16,6 +16,7 @@ from value_investor.scoring.fcf import (
 
 FCF_YIELD_DEPENDENT_MODEL_IDS = ("fcf_yield", "composite_value", "quality_value")
 FCF_BASIS_CONVICTION_MULTIPLIER = 0.85
+FCF_BASIS_MISMATCH_NOTE_MARKER = "fcf basis mismatch"
 
 _SIGNAL_RANK = {
     "strong_buy": 4,
@@ -34,6 +35,20 @@ def fcf_yield_dependent_model_passed(ticker_models: pd.DataFrame) -> bool:
     if dependent.empty:
         return False
     return bool(dependent["passed"].any())
+
+
+def action_note_has_fcf_basis_mismatch(action_note: str | None) -> bool:
+    """True when an action note already surfaces an FCF basis mismatch."""
+    return FCF_BASIS_MISMATCH_NOTE_MARKER in str(action_note or "").strip().lower()
+
+
+def fcf_basis_enforcement_needed(
+    *,
+    action_note_mismatch: bool,
+    action_note: str | None = None,
+) -> bool:
+    """True when numeric predicates or persisted note text require FCF basis overlay."""
+    return action_note_mismatch or action_note_has_fcf_basis_mismatch(action_note)
 
 
 def fcf_basis_action_note_mismatch(
@@ -68,9 +83,9 @@ def fcf_basis_overlay_triggered(
     """Flag when the mismatch note would fire, or 50% divergence with a yield pass.
 
     Filing/screen mismatch (25% note predicate) and the shared action-note mismatch
-    predicate always trigger the overlay so Strong Buy cannot persist beside an
-    ``FCF basis mismatch`` action note. The legacy 50% divergence path still requires
-    a yield-dependent model pass.
+    predicate always trigger the overlay so buy-tier signals cannot persist beside
+    an ``FCF basis mismatch`` action note. The legacy 50% divergence path still
+    requires a yield-dependent model pass.
     """
     if filing_screen_mismatch or action_note_mismatch:
         return True
@@ -153,9 +168,12 @@ def enrich_signals_with_fcf_basis_overlay(
             screen_ttm=screen_ttm,
             divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
         )
-        action_note_mismatch = fcf_basis_action_note_mismatch(
-            fcf_bundle,
-            screen_ttm=screen_ttm,
+        action_note_mismatch = fcf_basis_enforcement_needed(
+            action_note_mismatch=fcf_basis_action_note_mismatch(
+                fcf_bundle,
+                screen_ttm=screen_ttm,
+            ),
+            action_note=str(row.get("action_note") or ""),
         )
 
         existing = row.get("adjusted_signal")
