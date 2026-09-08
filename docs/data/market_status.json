@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-07T20:37:52.074127+00:00",
+  "generated_at": "2026-09-08T06:02:33.006296+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -1013,7 +1013,7 @@
         "currency": "USD",
         "benchmark_ticker": "^GSPC",
         "held_path": "equity_marks",
-        "market_path": "none",
+        "market_path": "index_levels",
         "branch_ready": true,
         "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
         "points": [
@@ -1026,7 +1026,7 @@
             "positions": 120,
             "contributed_capital": 1000.0,
             "branches": {},
-            "market": null
+            "market": 737.41
           }
         ],
         "series": [
@@ -1047,10 +1047,10 @@
         "last": {
           "date": "2026-09-07",
           "held": 737.41,
-          "market": null,
+          "market": 737.41,
           "nav": 737.41,
           "positions": 120,
-          "excess_pct": null
+          "excess_pct": 0.0
         }
       }
     },
@@ -1291,7 +1291,7 @@
         "source": null,
         "paper_instrument": null,
         "currency": "EUR",
-        "benchmark_ticker": "^GSPC",
+        "benchmark_ticker": "^STOXX50E",
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
@@ -1306,7 +1306,7 @@
           },
           {
             "id": "market",
-            "label": "^GSPC equivalent",
+            "label": "^STOXX50E equivalent",
             "kind": "market",
             "color": "#64748b"
           }
@@ -1376,7 +1376,7 @@
         "source": null,
         "paper_instrument": null,
         "currency": "GBP",
-        "benchmark_ticker": "^GSPC",
+        "benchmark_ticker": "^FTSE",
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
@@ -1391,7 +1391,7 @@
           },
           {
             "id": "market",
-            "label": "^GSPC equivalent",
+            "label": "^FTSE equivalent",
             "kind": "market",
             "color": "#64748b"
           }
@@ -1460,7 +1460,7 @@
         "source": null,
         "paper_instrument": null,
         "currency": "EUR",
-        "benchmark_ticker": "^GSPC",
+        "benchmark_ticker": "^STOXX50E",
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
@@ -1475,7 +1475,7 @@
           },
           {
             "id": "market",
-            "label": "^GSPC equivalent",
+            "label": "^STOXX50E equivalent",
             "kind": "market",
             "color": "#64748b"
           }
@@ -1544,7 +1544,7 @@
         "source": null,
         "paper_instrument": null,
         "currency": "EUR",
-        "benchmark_ticker": "^GSPC",
+        "benchmark_ticker": "^STOXX50E",
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
@@ -1559,7 +1559,7 @@
           },
           {
             "id": "market",
-            "label": "^GSPC equivalent",
+            "label": "^STOXX50E equivalent",
             "kind": "market",
             "color": "#64748b"
           }
@@ -1965,7 +1965,7 @@
         "source": null,
         "paper_instrument": null,
         "currency": "EUR",
-        "benchmark_ticker": "^GSPC",
+        "benchmark_ticker": "^STOXX50E",
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
@@ -1980,7 +1980,7 @@
           },
           {
             "id": "market",
-            "label": "^GSPC equivalent",
+            "label": "^STOXX50E equivalent",
             "kind": "market",
             "color": "#64748b"
           }
@@ -2049,7 +2049,7 @@
         "source": null,
         "paper_instrument": null,
         "currency": "HKD",
-        "benchmark_ticker": "^GSPC",
+        "benchmark_ticker": "^HSI",
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
@@ -2064,7 +2064,7 @@
           },
           {
             "id": "market",
-            "label": "^GSPC equivalent",
+            "label": "^HSI equivalent",
             "kind": "market",
             "color": "#64748b"
           }
@@ -2133,7 +2133,7 @@
         "source": null,
         "paper_instrument": null,
         "currency": "EUR",
-        "benchmark_ticker": "^GSPC",
+        "benchmark_ticker": "^STOXX50E",
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
@@ -2148,7 +2148,7 @@
           },
           {
             "id": "market",
-            "label": "^GSPC equivalent",
+            "label": "^STOXX50E equivalent",
             "kind": "market",
             "color": "#64748b"
           }
@@ -2385,7 +2385,7 @@
         "source": null,
         "paper_instrument": null,
         "currency": "SEK",
-        "benchmark_ticker": "^GSPC",
+        "benchmark_ticker": "^STOXX50E",
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
@@ -2400,7 +2400,7 @@
           },
           {
             "id": "market",
-            "label": "^GSPC equivalent",
+            "label": "^STOXX50E equivalent",
             "kind": "market",
             "color": "#64748b"
           }
@@ -2468,7 +2468,7 @@
         "source": null,
         "paper_instrument": null,
         "currency": "EUR",
-        "benchmark_ticker": "^GSPC",
+        "benchmark_ticker": "^STOXX50E",
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
@@ -2483,7 +2483,7 @@
           },
           {
             "id": "market",
-            "label": "^GSPC equivalent",
+            "label": "^STOXX50E equivalent",
             "kind": "market",
             "color": "#64748b"
           }
@@ -2552,7 +2552,7 @@
         "source": null,
         "paper_instrument": null,
         "currency": "CHF",
-        "benchmark_ticker": "^GSPC",
+        "benchmark_ticker": "^STOXX50E",
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
@@ -2567,7 +2567,7 @@
           },
           {
             "id": "market",
-            "label": "^GSPC equivalent",
+            "label": "^STOXX50E equivalent",
             "kind": "market",
             "color": "#64748b"
           }
@@ -2636,7 +2636,7 @@
         "source": null,
         "paper_instrument": null,
         "currency": "SGD",
-        "benchmark_ticker": "^GSPC",
+        "benchmark_ticker": "^HSI",
         "held_path": null,
         "market_path": null,
         "branch_ready": true,
@@ -2651,7 +2651,7 @@
           },
           {
             "id": "market",
-            "label": "^GSPC equivalent",
+            "label": "^HSI equivalent",
             "kind": "market",
             "color": "#64748b"
           }
