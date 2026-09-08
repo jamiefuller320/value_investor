@@ -691,6 +691,7 @@ def _brief_summary(
 
 def export_enforced_report_dicts(reports: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Re-apply FCF basis caps on serialized report rows (MONY.L-style stale exports)."""
+    ensure_fcf_export_hooks()
     enforced: list[dict[str, Any]] = []
     for row in reports:
         if not isinstance(row, dict):
@@ -704,11 +705,33 @@ def apply_research_overlay_with_fcf_enforcement(
     documents: list[Any],
 ) -> list[CompanyReport]:
     """Apply research verdict overlay, then honour FCF basis mismatch action notes."""
-    from value_investor.research.overlay import apply_research_overlay
-
-    base = getattr(apply_research_overlay, "_original_overlay", apply_research_overlay)
-    updated = base(reports, documents)
+    updated = _resolve_raw_apply_research_overlay()(reports, documents)
     return [honour_fcf_action_note_enforcement(report) for report in updated]
+
+
+def _resolve_raw_apply_research_overlay():
+    """Return the unwrapped ``apply_research_overlay`` despite pipeline/summary hooks."""
+    from value_investor.research import overlay as overlay_mod
+
+    cached = getattr(overlay_mod, "_raw_apply_research_overlay", None)
+    if cached is not None:
+        return cached
+
+    fn = overlay_mod.apply_research_overlay
+    for _ in range(4):
+        if getattr(fn, "_snapshot_sync_installed", False):
+            fn = getattr(fn, "_original_overlay", None)
+            continue
+        if getattr(fn, "_fcf_enforcement_installed", False):
+            fn = getattr(overlay_mod, "_original_apply_research_overlay", None) or getattr(
+                fn, "_original_overlay", None
+            )
+            continue
+        break
+    if fn is None:
+        fn = overlay_mod.apply_research_overlay
+    overlay_mod._raw_apply_research_overlay = fn
+    return fn
 
 
 def enforce_fcf_export_dict(data: dict[str, Any]) -> dict[str, Any]:
@@ -724,10 +747,52 @@ def _rebind_stale_apply_research_overlay() -> None:
         "value_investor.publish",
         "value_investor.email_agent",
         "value_investor.research.memo_backfill",
+        "value_investor.market_paper_adapter",
     ):
         mod = sys.modules.get(mod_name)
         if mod is not None and hasattr(mod, "apply_research_overlay"):
             mod.apply_research_overlay = apply_research_overlay_with_fcf_enforcement  # type: ignore[attr-defined]
+
+
+def _patch_research_overlay_module() -> None:
+    """No-op: pipeline snapshot hook calls ``apply_research_overlay_with_fcf_enforcement`` directly."""
+
+
+def _wrap_publish_dashboard_bundle(publish_mod: Any) -> None:
+    """Ensure dashboard bundles cannot ship buy-tier beside FCF mismatch notes."""
+    if getattr(publish_mod, "_fcf_bundle_build_wrapped", False):
+        return
+    if not hasattr(publish_mod, "build_dashboard_bundle"):
+        return
+
+    original_build = publish_mod.build_dashboard_bundle
+
+    def build_dashboard_bundle_with_fcf_enforcement(*args: Any, **kwargs: Any) -> dict[str, Any]:
+        bundle = original_build(*args, **kwargs)
+        reports = bundle.get("reports")
+        if isinstance(reports, list) and reports:
+            bundle["reports"] = export_enforced_report_dicts(reports)
+        return bundle
+
+    publish_mod.build_dashboard_bundle = build_dashboard_bundle_with_fcf_enforcement
+    publish_mod._fcf_bundle_build_wrapped = True
+
+
+def _wrap_publish_dashboard(publish_mod: Any) -> None:
+    """Retry hook installation when publish loads after summary (circular import)."""
+    if getattr(publish_mod, "_fcf_publish_wrapped", False):
+        return
+    if not hasattr(publish_mod, "publish_dashboard"):
+        return
+
+    original_publish = publish_mod.publish_dashboard
+
+    def publish_dashboard_with_fcf_enforcement(*args: Any, **kwargs: Any) -> Path:
+        ensure_fcf_export_hooks()
+        return original_publish(*args, **kwargs)
+
+    publish_mod.publish_dashboard = publish_dashboard_with_fcf_enforcement
+    publish_mod._fcf_publish_wrapped = True
 
 
 def honour_fcf_action_note_enforcement(report: CompanyReport) -> CompanyReport:
@@ -1432,14 +1497,17 @@ def build_company_reports(
     return reports
 
 
-def _install_publish_fcf_export_hooks() -> None:
+def _install_publish_fcf_export_hooks() -> bool:
     """Ensure dashboard publish paths enforce FCF notes on cached email_reports rows."""
     try:
         import value_investor.publish as publish_mod
     except ImportError:
-        return
+        return False
     if getattr(publish_mod, "_fcf_export_hooks_installed", False):
-        return
+        return True
+    # publish may still be loading via circular import (deep_analysis -> summary).
+    if not hasattr(publish_mod, "_load_reports"):
+        return False
 
     original_load = publish_mod._load_reports
 
@@ -1468,7 +1536,10 @@ def _install_publish_fcf_export_hooks() -> None:
         _apply_resolved_research_overlay_with_fcf_enforcement
     )
     publish_mod.apply_research_overlay = apply_research_overlay_with_fcf_enforcement
+    _wrap_publish_dashboard_bundle(publish_mod)
+    _wrap_publish_dashboard(publish_mod)
     publish_mod._fcf_export_hooks_installed = True
+    return True
 
 
 def _ensure_overlay_refresh_fcf_enforcement() -> None:
@@ -1484,9 +1555,18 @@ def _ensure_overlay_refresh_fcf_enforcement() -> None:
 
 
 def _install_fcf_export_hooks() -> None:
+    _patch_research_overlay_module()
     _ensure_overlay_refresh_fcf_enforcement()
     _install_publish_fcf_export_hooks()
     _rebind_stale_apply_research_overlay()
 
 
-_install_fcf_export_hooks()
+def ensure_fcf_export_hooks() -> None:
+    """Retry hook installation once late imports (e.g. publish) have finished loading."""
+    _install_fcf_export_hooks()
+
+
+try:
+    _install_fcf_export_hooks()
+except Exception:  # noqa: BLE001 — never block summary import on hook wiring
+    pass

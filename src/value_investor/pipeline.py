@@ -155,9 +155,9 @@ def _output_dir_from_documents(documents) -> Path:
 _install_research_snapshot_hooks()
 
 try:
-    from value_investor.summary import _install_fcf_export_hooks
+    from value_investor.summary import ensure_fcf_export_hooks
 
-    _install_fcf_export_hooks()
+    ensure_fcf_export_hooks()
 except ImportError:
     pass
 
@@ -385,6 +385,9 @@ def run_screen(
 
 def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     """Write CSV and JSON artifacts for a screening run."""
+    from value_investor.summary import ensure_fcf_export_hooks
+
+    ensure_fcf_export_hooks()
     output_dir.mkdir(parents=True, exist_ok=True)
     restore_committed_run_history(output_dir)
     stamp = result.run_at.strftime("%Y%m%d_%H%M%S")
