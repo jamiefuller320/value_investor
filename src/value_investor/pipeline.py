@@ -124,6 +124,10 @@ def _install_research_snapshot_hooks() -> None:
         except ImportError:
             pass
 
+        from value_investor.summary import _rebind_stale_apply_research_overlay
+
+        _rebind_stale_apply_research_overlay()
+
     if getattr(ResearchStore.save, "_snapshot_sync_installed", False):
         return
 
@@ -149,6 +153,13 @@ def _output_dir_from_documents(documents) -> Path:
 
 
 _install_research_snapshot_hooks()
+
+try:
+    from value_investor.summary import _install_fcf_export_hooks
+
+    _install_fcf_export_hooks()
+except ImportError:
+    pass
 
 
 def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:

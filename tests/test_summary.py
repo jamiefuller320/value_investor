@@ -1508,6 +1508,152 @@ def test_honour_fcf_action_note_enforcement_caps_imb_style_strong_buy():
     assert snapshot["conviction_score"] == pytest.approx(0.85 * 0.85)
 
 
+def test_honour_fcf_action_note_enforcement_caps_mony_style_strong_buy():
+    """MONY.L: below-25% filing gap but FCF mismatch note must cap strong_buy on export."""
+    note = (
+        "Strong Buy — neutral timing | FCF basis mismatch: filing £98.1M | "
+        "screen TTM £80M | Research: Accumulate, Medium risk"
+    )
+    report = CompanyReport.from_dict(
+        {
+            "ticker": "MONY.L",
+            "name": "MONY Group plc",
+            "sector": "Communication Services",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "models_passed": 15,
+            "model_count": 22,
+            "composite_score": 0.7072,
+            "families_passed": 5,
+            "data_quality_score": 1.0,
+            "metrics_present": 20,
+            "metrics_total": 20,
+            "weeks_at_signal": 2,
+            "signal_trend": "stable",
+            "conviction_score": 0.5388,
+            "stability_label": "building",
+            "timing_signal": "neutral",
+            "timing_score": 0.5,
+            "action_note": note,
+            "fcf_basis_overlay": False,
+            "fcf": None,
+            "summary": "Strong Buy (15/22 models).",
+            "passed_models": [],
+            "key_metrics": {
+                "free_cashflow": 80_000_000.0,
+                "free_cashflow_screen_ttm": 80_000_000.0,
+            },
+        }
+    )
+
+    enforced = honour_fcf_action_note_enforcement(report)
+    assert enforced.fcf_basis_overlay is True
+    assert enforced.adjusted_signal == "buy"
+    assert enforced.conviction_score == pytest.approx(0.5388 * 0.85)
+
+    snapshot = report.to_dict()
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert snapshot["conviction_score"] == pytest.approx(0.5388 * 0.85)
+
+
+def test_export_enforced_report_dicts_honours_mony_style_stale_row():
+    """Cached email_reports rows must not ship strong_buy beside an FCF mismatch note."""
+    from value_investor.summary import export_enforced_report_dicts
+
+    stale = {
+        "ticker": "MONY.L",
+        "name": "MONY Group plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "fcf_basis_overlay": False,
+        "conviction_score": 0.5388,
+        "action_note": (
+            "Strong Buy — neutral timing | FCF basis mismatch: filing £98.1M | screen TTM £80M"
+        ),
+        "models_passed": 15,
+        "model_count": 22,
+        "composite_score": 0.7072,
+        "families_passed": 5,
+        "data_quality_score": 1.0,
+        "metrics_present": 20,
+        "metrics_total": 20,
+        "weeks_at_signal": 2,
+        "signal_trend": "stable",
+        "stability_label": "building",
+        "timing_signal": "neutral",
+        "timing_score": 0.5,
+        "summary": "Strong Buy (15/22 models).",
+        "passed_models": [],
+        "key_metrics": {},
+    }
+    exported = export_enforced_report_dicts([stale])[0]
+    assert exported["fcf_basis_overlay"] is True
+    assert exported["adjusted_signal"] == "buy"
+    assert exported["conviction_score"] == pytest.approx(0.5388 * 0.85)
+
+
+def test_build_company_reports_exports_fcf_basis_overlay_for_mony_style_note(
+    tmp_path: Path,
+):
+    """Universe-level 15% gap must cap buy-tier signals when FCF note would fire."""
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="MONY.L",
+                name="MONY Group plc",
+                sector="Communication Services",
+                signal="strong_buy",
+                conviction_score=0.5388,
+                free_cashflow=80_000_000.0,
+                free_cashflow_screen_ttm=80_000_000.0,
+                fcf_basis_overlay=False,
+                adjusted_signal="strong_buy",
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "MONY.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+    sources = tmp_path / "research" / "MONY.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "MONY.L",
+                "cash_flow": {
+                    "2026": {
+                        "Operating Cash Flow": 110_000_000.0,
+                        "Capital Expenditure": -11_900_000.0,
+                        "Free Cash Flow": 98_100_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    snapshot = report.to_dict()
+
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert snapshot["conviction_score"] == pytest.approx(0.5388 * 0.85)
+    assert "FCF basis mismatch" in snapshot["action_note"]
+    assert "filing £98.1M" in snapshot["action_note"]
+    assert "screen TTM £80M" in snapshot["action_note"]
+
+
 def test_company_report_to_dict_honours_fcf_note_after_research_overlay():
     """Publish/email JSON export must not leave strong_buy beside an FCF mismatch note."""
     note = "Strong Buy — neutral timing | FCF basis mismatch: filing £3166M | screen TTM £2502.4M"
