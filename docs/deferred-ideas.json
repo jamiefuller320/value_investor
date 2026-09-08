@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-08T07:24:28+00:00",
+  "updated_at": "2026-09-08T07:35:24+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7704,6 +7704,23 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a07fda-1bf8-71f9-8d04-03453ad9c0aa",
       "added_at": "2026-09-08T07:24:28+00:00"
+    },
+    {
+      "id": "L346",
+      "category": "later",
+      "section": "ops",
+      "title": "Count unique filing URLs when scoring indexed-without-body",
+      "summary": "ITV.L\u2019s remaining has_body=false rows are Investegate duplicates of URLs that already have bodies (FY2024 results and H1 2026 interim). Audit leftover counts treat those as real gaps. Dedup by URL before IWB scoring so weekday drain and project-audit do not re-prioritize already-covered documents.",
+      "revisit_when": "The next ingest-utilization or project-audit pass still lists ITV.L (or peers) as indexed-without-body while a same-URL row already has a body",
+      "tags": [
+        "ingest",
+        "audit",
+        "itv",
+        "indexed-without-body"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a07fda-1bf8-71f9-8d04-03453ad9c0aa",
+      "added_at": "2026-09-08T07:35:24+00:00"
     }
   ],
   "fragments": [
