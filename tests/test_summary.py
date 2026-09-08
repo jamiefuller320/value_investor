@@ -31,7 +31,11 @@ from value_investor.scoring.fcf import (
 )
 from value_investor.scoring.sector_overrides import AGRICULTURE_COMMODITIES_SECTOR
 from value_investor.signals import Signal, assign_signal
-from value_investor.summary import build_company_reports, honour_fcf_action_note_enforcement
+from value_investor.summary import (
+    CompanyReport,
+    build_company_reports,
+    honour_fcf_action_note_enforcement,
+)
 
 
 def _signal_row(**overrides) -> dict:
@@ -1374,6 +1378,105 @@ def test_honour_fcf_action_note_enforcement_caps_hln_style_buy(tmp_path: Path):
     assert stale.fcf_basis_overlay is True
     assert stale.adjusted_signal == "hold"
     assert stale.conviction_score == pytest.approx(0.8022 * 0.85)
+
+
+def test_honour_fcf_action_note_enforcement_caps_imb_style_strong_buy():
+    """IMB.L: strong_buy with FCF mismatch note but fcf=None must cap on export."""
+    note = (
+        "Strong Buy — neutral timing | FCF basis mismatch: filing £3166M | "
+        "screen TTM £2502.4M | Earnings growth basis divergence >300 bps"
+    )
+    report = CompanyReport.from_dict(
+        {
+            "ticker": "IMB.L",
+            "name": "Imperial Brands PLC",
+            "sector": "Consumer Defensive",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "models_passed": 13,
+            "model_count": 22,
+            "composite_score": 0.75,
+            "sector_composite_score": 0.7,
+            "families_passed": 5,
+            "passed_families": "cheapness,quality,garp,dividend,risk",
+            "family_count": 5,
+            "data_quality_score": 1.0,
+            "metrics_present": 20,
+            "metrics_total": 20,
+            "weeks_at_signal": 9,
+            "signal_trend": "stable",
+            "conviction_score": 0.85,
+            "stability_label": "persistent",
+            "timing_signal": "neutral",
+            "timing_score": 0.5,
+            "rsi_14": 50.0,
+            "price_vs_sma200_pct": 0.0,
+            "action_note": note,
+            "fcf_basis_overlay": False,
+            "fcf": None,
+            "summary": "Strong Buy (13/22 models).",
+            "passed_models": [],
+            "key_metrics": {
+                "free_cashflow": 2_502_400_000.0,
+                "free_cashflow_screen_ttm": 2_502_400_000.0,
+            },
+        }
+    )
+
+    enforced = honour_fcf_action_note_enforcement(report)
+    assert enforced.fcf_basis_overlay is True
+    assert enforced.adjusted_signal == "buy"
+    assert enforced.conviction_score == pytest.approx(0.85 * 0.85)
+
+    snapshot = report.to_dict()
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert snapshot["conviction_score"] == pytest.approx(0.85 * 0.85)
+
+
+def test_company_report_to_dict_honours_fcf_note_after_research_overlay():
+    """Publish/email JSON export must not leave strong_buy beside an FCF mismatch note."""
+    note = "Strong Buy — neutral timing | FCF basis mismatch: filing £3166M | screen TTM £2502.4M"
+    report = CompanyReport.from_dict(
+        {
+            "ticker": "IMB.L",
+            "name": "Imperial Brands PLC",
+            "sector": "Consumer Defensive",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "models_passed": 13,
+            "model_count": 22,
+            "composite_score": 0.75,
+            "families_passed": 5,
+            "data_quality_score": 1.0,
+            "metrics_present": 20,
+            "metrics_total": 20,
+            "weeks_at_signal": 9,
+            "signal_trend": "stable",
+            "conviction_score": 0.85,
+            "stability_label": "persistent",
+            "timing_signal": "neutral",
+            "timing_score": 0.5,
+            "action_note": note,
+            "fcf_basis_overlay": False,
+            "fcf": None,
+            "summary": "Strong Buy (13/22 models).",
+            "passed_models": [],
+            "key_metrics": {},
+        }
+    )
+    stale = replace(
+        report,
+        fcf_basis_overlay=False,
+        adjusted_signal="strong_buy",
+        conviction_score=0.85,
+        action_note=f"{note} | Research: Accumulate, Medium risk",
+    )
+
+    snapshot = stale.to_dict()
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert snapshot["conviction_score"] == pytest.approx(0.85 * 0.85)
 
 
 def test_build_company_reports_reapplies_fcf_overlay_when_flag_true_but_buy_remains(

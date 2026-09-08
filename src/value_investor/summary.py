@@ -151,6 +151,7 @@ class CompanyReport:
     adjusted_eps_growth_pct: float | None = None
 
     def to_dict(self) -> dict[str, Any]:
+        enforced = honour_fcf_action_note_enforcement(self)
         return {
             "ticker": self.ticker,
             "name": self.name,
@@ -168,7 +169,7 @@ class CompanyReport:
             "metrics_total": self.metrics_total,
             "weeks_at_signal": self.weeks_at_signal,
             "signal_trend": self.signal_trend,
-            "conviction_score": self.conviction_score,
+            "conviction_score": enforced.conviction_score,
             "stability_label": self.stability_label,
             "signal_since": self.signal_since,
             "timing_signal": self.timing_signal,
@@ -197,7 +198,7 @@ class CompanyReport:
             "earnings_growth_overlay": self.earnings_growth_overlay,
             "earnings_growth_bps_divergence_warning": self.earnings_growth_bps_divergence_warning,
             "peer_model_pass_table": self.peer_model_pass_table,
-            "fcf_basis_overlay": self.fcf_basis_overlay,
+            "fcf_basis_overlay": enforced.fcf_basis_overlay,
             "transition_key": self.transition_key,
             "prior_signal": self.prior_signal,
             "conviction_timing_overlay": self.conviction_timing_overlay,
@@ -212,7 +213,7 @@ class CompanyReport:
             "fcf_dividend_coverage": self.fcf_dividend_coverage,
             "fcf_definition_divergence": self.fcf_definition_divergence,
             "fcf_divergence_flagged": self.fcf_divergence_flagged,
-            "adjusted_signal": self.adjusted_signal,
+            "adjusted_signal": enforced.adjusted_signal,
             "research_verdict": self.research_verdict,
             "research_risk_level": self.research_risk_level,
             "research_confidence": self.research_confidence,
