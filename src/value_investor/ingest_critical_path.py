@@ -237,25 +237,15 @@ def apply_critical_path_to_target_order(
     """Prefer auto-pin tickers at the front, in auto-pin order (bootstrap first)."""
     if not targets:
         return targets
-    pin_order = [
-        str(t).strip().upper() for t in assessment.auto_pin_tickers if str(t).strip()
-    ]
+    pin_order = [str(t).strip().upper() for t in assessment.auto_pin_tickers if str(t).strip()]
     if not pin_order:
         return targets
     pin_rank = {ticker: idx for idx, ticker in enumerate(pin_order)}
     head = sorted(
-        [
-            row
-            for row in targets
-            if str(getattr(row, "ticker", "")).upper() in pin_rank
-        ],
+        [row for row in targets if str(getattr(row, "ticker", "")).upper() in pin_rank],
         key=lambda row: pin_rank[str(getattr(row, "ticker", "")).upper()],
     )
-    tail = [
-        row
-        for row in targets
-        if str(getattr(row, "ticker", "")).upper() not in pin_rank
-    ]
+    tail = [row for row in targets if str(getattr(row, "ticker", "")).upper() not in pin_rank]
     return head + tail
 
 
