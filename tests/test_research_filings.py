@@ -4125,6 +4125,20 @@ def test_fetch_filings_ir_allowlist_euro_depth_belgian_builtins(tmp_path: Path):
         assert all(row["source"] == "ir_allowlist" for row in rows)
 
 
+def test_fetch_filings_ir_allowlist_euro_depth_ackb_br_builtins(tmp_path: Path):
+    """Regression: ACKB.BR thin/parked — avh.be annual + VFB regulated H1 2025 press release."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("ACKB.BR", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("avh.be" in url and "annualreport" in url for url in urls)
+    assert any("vfb.be" in url and "halfjaar" in url for url in urls)
+    assert {row["period"] for row in rows} == {"annual", "interim"}
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_aed_br_builtins(tmp_path: Path):
     """Regression: AED.BR unmeasured when ESEF/news miss — IR allowlist seeds indexes."""
     allowlist_path = tmp_path / "ir.json"
@@ -6313,6 +6327,16 @@ def test_parked_source_hunter_skip_tsn_sp500():
     assert "substantiveness" in reason
     assert "10-K/10-Q" in reason
     assert fetch_filings_ir_allowlist("TSN") == []
+
+
+def test_parked_source_hunter_ackb_br_euro_depth_has_fetchable_ir():
+    """eng-20260908-02: ACKB.BR has avh.be annual + VFB H1 2025 regulated PDFs."""
+    assert "ACKB.BR" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("ACKB.BR")
+    assert len(rows) == 2
+    assert any("avh.be" in row["url"] for row in rows)
+    assert any("vfb.be" in row["url"] for row in rows)
+    assert any(row["period"] == "interim" for row in rows)
 
 
 def test_parked_source_hunter_skip_abi_br_euro_depth():
