@@ -36,6 +36,14 @@
           "doc_anchor": "automated-daily-check"
         },
         {
+          "id": "weekday-epoch0-local-open",
+          "title": "Admitted epoch-0 local-open marks",
+          "summary": "library-epoch0-weekday.yml marks admitted buy_tier_level books after ASX / EU / US open+settle. Session gate skips pre-settle and already-marked local days. No AI track, no knob apply, not FTSE paper-auto at 08:25 UTC. Census refresh writes equal_support_status.json.",
+          "automated": true,
+          "doc_path": "docs/ops/market-sharded-learning.md",
+          "doc_anchor": "weekday-epoch-0-local-open"
+        },
+        {
           "id": "weekday-buy-tier-level-first-fill",
           "title": "Confirm buy-tier level cohort first fill",
           "summary": "After Monday paper-auto, check docs/data/paper_automation/buy_tier_level/: empty cash should become a wide raw-screen buy-tier book under T212 costs. Knobs stay frozen. Do not treat first-fill NAV as promotion truth.",
@@ -69,7 +77,7 @@
         {
           "id": "sunday-ingest-capacity-watch",
           "title": "Watch ingest capacity as more markets come on stream",
-          "summary": "Spare sprint auto-advance down the queue is correct (tsx60 / ftse_smallcap after sp500 / asx200 admitted). Do not pause it. Check whether library-ingest-maintenance and spare sprint jobs still finish: 120-minute timeout, spare_wait, source rate limits. Revisit L323 when a third admitted market is on maintenance or a job clips the tail.",
+          "summary": "Spare sprint auto-advance down the queue is correct (tsx60 / ftse_smallcap after sp500 / asx200 admitted). Do not pause it. Three-plus maintenance books rotate one market per slot (L323). Check whether library-ingest-maintenance and spare sprint jobs still finish: 120-minute timeout, spare_wait, source rate limits.",
           "automated": false,
           "doc_path": "docs/ops/market-sharded-learning.md",
           "doc_anchor": "what-enter-learning-means"
@@ -77,7 +85,7 @@
         {
           "id": "sunday-shard-epoch0-runs",
           "title": "Admitted-market epoch-0 shard (buy-tier-level + near-miss)",
-          "summary": "Ladder runs ftse-library shard-epoch0 then equal-support: frozen Suite B buy-tier-level book, timing stamp, near_miss_watch.json, and per-market exclusion/exit-timing archives. Sunday selective research rememos admitted buy-tier (focus first, then the admitted set) at the same body-lag rule. No AI-judgment track and no knob apply.",
+          "summary": "Ladder runs ftse-library shard-epoch0 then equal-support: frozen Suite B buy-tier-level book, timing stamp, near_miss_watch.json, and per-market exclusion/exit-timing archives. Sunday selective research prefers first-time memos then rememos admitted buy-tier (focus first, then the admitted set). Weekday local-open marks are a separate workflow. No AI-judgment track and no knob apply.",
           "automated": true,
           "doc_path": "docs/ops/market-sharded-learning.md",
           "doc_anchor": "what-enter-learning-means"
@@ -270,6 +278,14 @@
           "automated": false,
           "doc_path": "docs/ops/paper-learning-review.md",
           "doc_anchor": null
+        },
+        {
+          "id": "adhoc-epoch0-weekday-cron-register",
+          "title": "Register admitted epoch-0 weekday local-open crons",
+          "summary": "After merging library-epoch0-weekday.yml, run import_cron_jobs.py --job library-epoch0-weekday-asx --job library-epoch0-weekday-euro --job library-epoch0-weekday-us-edt --job library-epoch0-weekday-us-est (or --all) so cron-job.org fires those UTC slots. GitHub schedule alone is best-effort. Do not attach these to FTSE weekday_paper at 08:25 UTC.",
+          "automated": false,
+          "doc_path": "docs/ops/market-sharded-learning.md",
+          "doc_anchor": "weekday-epoch-0-local-open"
         },
         {
           "id": "adhoc-euro-ingest-cron-reimport",

@@ -182,6 +182,29 @@ def test_import_cron_jobs_library_ingest_7day_peak_and_offpeak():
     assert "library-ingest-maintenance.yml" in maint["url"]
 
 
+def test_import_cron_jobs_epoch0_weekday_local_open_slots():
+    script = Path("scripts/import_cron_jobs.py")
+    expected = {
+        "library-epoch0-weekday-asx": (0, 45),
+        "library-epoch0-weekday-euro": (8, 45),
+        "library-epoch0-weekday-us-edt": (14, 15),
+        "library-epoch0-weekday-us-est": (15, 15),
+    }
+    for key, (hour, minute) in expected.items():
+        proc = subprocess.run(
+            [sys.executable, str(script), "--job", key, "--dry-run", "--json"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        payload = json.loads(proc.stdout)[0]["payload"]["job"]
+        assert payload["schedule"]["hours"] == [hour], key
+        assert payload["schedule"]["minutes"] == [minute], key
+        assert payload["schedule"]["wdays"] == [1, 2, 3, 4, 5], key
+        assert "library-epoch0-weekday.yml" in payload["url"]
+        assert "08:25" not in payload["title"]
+
+
 def test_import_cron_jobs_dry_run_ops_monitor():
     script = Path("scripts/import_cron_jobs.py")
     proc = subprocess.run(

@@ -18,6 +18,7 @@ from value_investor.market_shard_phases import (
     append_weekday_batch_log,
     append_weekly_batch_log,
     evaluate_market_phase,
+    load_weekday_batch_log,
     markets_eligible_for_weekly_paper,
     phase2_gate_met,
     shard_root_for_market,
@@ -32,8 +33,10 @@ from value_investor.paper_automation import (
     default_buy_tier_level_config,
     ensure_learning_track_configs,
     learning_track_dirs,
+    local_now,
     run_daily_automation,
     run_learning_tracks,
+    session_gate_status,
 )
 from value_investor.storage import read_json, write_json
 
@@ -227,6 +230,35 @@ def run_weekly_market_paper_shard(
     }
 
 
+def _parse_batch_run_at(raw: Any) -> datetime | None:
+    text = str(raw or "").strip()
+    if not text:
+        return None
+    try:
+        return datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
+def epoch0_marked_on_local_day(
+    shard_root: Path,
+    session: dict[str, Any],
+    *,
+    when: datetime | None = None,
+) -> bool:
+    """True when weekday_batch_log already has a mark on this market's local day."""
+    cfg = default_buy_tier_level_config()
+    cfg.timezone = str(session.get("timezone") or cfg.timezone)
+    local_date = local_now(cfg, when).date()
+    for entry in load_weekday_batch_log(Path(shard_root)):
+        run_at = _parse_batch_run_at(entry.get("run_at"))
+        if run_at is None:
+            continue
+        if local_now(cfg, run_at).date() == local_date:
+            return True
+    return False
+
+
 def run_epoch0_market_shard(
     market_id: str,
     *,
@@ -234,14 +266,50 @@ def run_epoch0_market_shard(
     shard_root: Path | None = None,
     force: bool = True,
     policy: dict[str, Any] | None = None,
+    cadence: str = "epoch0",
+    require_session: bool = False,
+    skip_if_marked_local_day: bool = False,
+    now: datetime | None = None,
 ) -> dict[str, Any]:
     """Admitted-market start: frozen buy-tier-level book + near-miss watch.
 
     Does **not** run AI-judgment (or other decision tracks) and never applies knobs.
+    Weekday local-open marks use ``require_session`` + ``skip_if_marked_local_day``
+    and do not piggyback FTSE paper-auto.
     """
     library_root = Path(library_root)
     shard_root = Path(shard_root or shard_root_for_market(market_id))
     meta = ensure_shard_meta(market_id, shard_root, phase=2)
+    if skip_if_marked_local_day and not force and epoch0_marked_on_local_day(
+        shard_root, meta, when=now
+    ):
+        return {
+            "skipped": True,
+            "reason": "already_marked_local_day",
+            "market_id": market_id,
+            "cadence": cadence,
+            "ai_judgment": False,
+            "knob_apply": False,
+        }
+    if require_session and not force:
+        gate_cfg = default_buy_tier_level_config()
+        gate_cfg.timezone = str(meta.get("timezone") or gate_cfg.timezone)
+        gate_cfg.market_open = str(meta.get("market_open") or gate_cfg.market_open)
+        gate_cfg.settle_minutes_after_open = int(
+            meta.get("settle_minutes_after_open") or gate_cfg.settle_minutes_after_open
+        )
+        gate_cfg.weekdays_only = True
+        gate = session_gate_status(gate_cfg, now)
+        if not gate.get("can_act"):
+            return {
+                "skipped": True,
+                "reason": gate.get("reason"),
+                "gate": gate,
+                "market_id": market_id,
+                "cadence": cadence,
+                "ai_judgment": False,
+                "knob_apply": False,
+            }
     track_dir = apply_epoch0_level_config(shard_root, meta)
     bundle_path = write_market_screen_bundle(library_root, market_id, shard_root)
     cfg = default_buy_tier_level_config()
@@ -256,6 +324,7 @@ def run_epoch0_market_shard(
         force=force,
         market=market_id,
         prefer_listed_prices=True,
+        now=now,
     )
     track_summary = {
         "tracks": {
@@ -268,8 +337,8 @@ def run_epoch0_market_shard(
     }
     near_miss = write_library_near_miss_watch(library_root, market_id)
     batch_entry = {
-        "run_at": datetime.now(UTC).isoformat(),
-        "cadence": "epoch0",
+        "run_at": (now or datetime.now(UTC)).isoformat(),
+        "cadence": cadence,
         "screen_bundle": bundle_path.name,
         "tracks": [BUY_TIER_LEVEL_TRACK_ID],
         "ai_judgment": False,
@@ -300,6 +369,95 @@ def run_epoch0_market_shard(
         "phase": evaluation,
         "ai_judgment": False,
         "knob_apply": False,
+        "skipped": False,
+        "cadence": cadence,
+    }
+
+
+def run_epoch0_weekday_market_shard(
+    market_id: str,
+    *,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    shard_root: Path | None = None,
+    force: bool = False,
+    policy: dict[str, Any] | None = None,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """Local-open weekday mark for an admitted epoch-0 book. No AI / no apply."""
+    return run_epoch0_market_shard(
+        market_id,
+        library_root=library_root,
+        shard_root=shard_root,
+        force=force,
+        policy=policy,
+        cadence="weekday",
+        require_session=True,
+        skip_if_marked_local_day=True,
+        now=now,
+    )
+
+
+def run_epoch0_weekday_shards_for_markets(
+    root: Path,
+    policy: dict[str, Any],
+    *,
+    markets: list[str] | None = None,
+    force: bool = False,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """Mark admitted epoch-0 books whose local session is past settle."""
+    admitted = admitted_learning_markets_for_policy(policy)
+    wanted = list(markets) if markets else list(admitted)
+    if not wanted:
+        return {
+            "skipped": True,
+            "reason": "no admitted learning markets in scope",
+            "admitted": admitted,
+        }
+    markets_out: dict[str, Any] = {}
+    marked = 0
+    for market_id in wanted:
+        try:
+            result = run_epoch0_weekday_market_shard(
+                market_id,
+                library_root=root,
+                policy=policy,
+                force=force,
+                now=now,
+            )
+            if result.get("skipped"):
+                markets_out[market_id] = {
+                    "skipped": True,
+                    "reason": result.get("reason"),
+                    "ai_judgment": False,
+                    "knob_apply": False,
+                }
+                continue
+            tracks = (result.get("learning_tracks") or {}).get("tracks") or {}
+            level = tracks.get(BUY_TIER_LEVEL_TRACK_ID) or {}
+            near = result.get("near_miss") or {}
+            marked += 1
+            markets_out[market_id] = {
+                "skipped": False,
+                "acted": level.get("acted"),
+                "trades": level.get("trades"),
+                "buy_tier_not_now_count": near.get("buy_tier_not_now_count"),
+                "hold_near_buy_count": near.get("hold_near_buy_count"),
+                "ai_judgment": False,
+                "knob_apply": False,
+                "path": f"markets/{market_id}/",
+            }
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Epoch-0 weekday shard for %s failed: %s", market_id, exc)
+            markets_out[market_id] = {"error": str(exc)}
+    return {
+        "skipped": marked == 0,
+        "admitted": admitted,
+        "marked": marked,
+        "markets": markets_out,
+        "ai_judgment": False,
+        "knob_apply": False,
+        "note": "Local-open weekday epoch-0 marks; not FTSE paper-auto and not Phase 3 AI.",
     }
 
 
