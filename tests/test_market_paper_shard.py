@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
+from datetime import UTC, datetime
 from pathlib import Path
 from unittest.mock import patch
 
 import pandas as pd
-
-from datetime import UTC, datetime
 
 from value_investor.market_paper_shard import (
     ensure_shard_meta,
@@ -16,8 +15,7 @@ from value_investor.market_paper_shard import (
     run_weekly_market_paper_shard,
     session_defaults_for_market,
 )
-from value_investor.market_shard_phases import append_weekday_batch_log
-from value_investor.market_shard_phases import PHASE1_MIN_SCREEN_ARCHIVES
+from value_investor.market_shard_phases import PHASE1_MIN_SCREEN_ARCHIVES, append_weekday_batch_log
 from value_investor.storage import write_json
 
 
