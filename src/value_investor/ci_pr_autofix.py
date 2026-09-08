@@ -327,6 +327,10 @@ def _suggest_companion_paths(paths: list[str]) -> list[str]:
             candidate = Path("tests") / f"test_{stem.replace('/', '_')}.py"
             if candidate.exists():
                 extras.append(candidate.as_posix())
+            if not path.endswith("_cli.py"):
+                cli_candidate = Path(f"{path[:-3]}_cli.py")
+                if cli_candidate.is_file():
+                    extras.append(cli_candidate.as_posix())
     return extras
 
 

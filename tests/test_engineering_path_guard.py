@@ -8,6 +8,7 @@ from pathlib import Path
 from value_investor.engineering_tasks import (
     BLOCKED_PATHS,
     EngineeringTask,
+    companion_cli_path,
     companion_test_path,
     effective_allowed_paths,
     find_engineering_task,
@@ -108,6 +109,14 @@ def test_companion_test_path_flattens_nested_source_modules():
     assert companion_test_path("tests/test_research_ingest.py") is None
 
 
+def test_companion_cli_path_maps_module_to_cli():
+    assert (
+        companion_cli_path("src/value_investor/ops_monitor.py")
+        == "src/value_investor/ops_monitor_cli.py"
+    )
+    assert companion_cli_path("src/value_investor/ops_monitor_cli.py") is None
+
+
 def test_effective_allowed_paths_include_companion_tests():
     task = _ingest_task()
     task.allowed_paths = [
@@ -131,6 +140,32 @@ def test_validate_engineering_pr_paths_allows_companion_ingest_tests():
             "src/value_investor/research/ingest.py",
             "tests/test_research_ingest.py",
         ],
+    )
+    assert result.ok
+    assert result.violations == []
+
+
+def test_effective_allowed_paths_include_companion_cli():
+    task = _ingest_task()
+    task.area = "ops"
+    task.allowed_paths = [
+        "src/value_investor/ops_monitor.py",
+        "tests/test_ops_monitor.py",
+    ]
+    allowed = effective_allowed_paths(task)
+    assert "src/value_investor/ops_monitor_cli.py" in allowed
+
+
+def test_validate_engineering_pr_paths_allows_companion_cli():
+    task = _ingest_task()
+    task.area = "ops"
+    task.allowed_paths = [
+        "src/value_investor/ops_monitor.py",
+        "tests/test_ops_monitor.py",
+    ]
+    result = validate_engineering_pr_paths(
+        task=task,
+        changed_files=["src/value_investor/ops_monitor_cli.py"],
     )
     assert result.ok
     assert result.violations == []
