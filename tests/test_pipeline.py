@@ -66,7 +66,11 @@ from value_investor.scoring.snapshot import (
 )
 from value_investor.sector_scoring import add_sector_scores
 from value_investor.storage import write_json
-from value_investor.summary import CompanyReport, build_company_reports
+from value_investor.summary import (
+    CompanyReport,
+    build_company_reports,
+    honour_fcf_action_note_enforcement,
+)
 
 
 def _minimal_report(**overrides) -> CompanyReport:
@@ -232,6 +236,84 @@ def test_sync_research_verdict_snapshots_writes_full_report(tmp_path: Path):
     assert written["model_failures"]["Financial Health"] == ["weak liquidity"]
     assert written["research_verdict"] == "accumulate"
     assert written["adjusted_signal"] == "strong_buy"
+
+
+def test_refresh_snapshot_honours_fcf_action_note_when_overlay_false(tmp_path: Path):
+    """HLN.L-style: stale overlay=false must not leave buy beside FCF mismatch note."""
+    sources_dir = tmp_path / "research" / "HLN.L" / "sources"
+    sources_dir.mkdir(parents=True)
+    write_json(
+        sources_dir / "screening_snapshot.json",
+        {
+            "ticker": "HLN.L",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "fcf_basis_overlay": False,
+            "conviction_score": 0.8022,
+            "action_note": (
+                "Buy — neutral timing | FCF basis mismatch: filing £2221M | screen TTM £1801.8M"
+            ),
+        },
+        compact=True,
+    )
+    doc = ResearchDocument(
+        ticker="HLN.L",
+        name="Haleon plc",
+        signal="buy",
+        version=2,
+        created_at="2026-09-04T00:00:00+00:00",
+        updated_at="2026-09-04T00:00:00+00:00",
+        mode="gap_fill",
+        research_verdict="accumulate",
+        research_risk_level="medium",
+        research_confidence=0.7,
+        research_rationale="Measured accumulation.",
+        research_path=str(tmp_path / "research" / "HLN.L" / "research.md"),
+    )
+
+    assert refresh_snapshot_from_document(tmp_path, doc) is True
+    written = json.loads((sources_dir / "screening_snapshot.json").read_text(encoding="utf-8"))
+    assert written["fcf_basis_overlay"] is True
+    assert written["adjusted_signal"] == "hold"
+    assert written["conviction_score"] == pytest.approx(0.8022 * 0.85)
+
+
+def test_sync_research_verdict_preserves_fcf_overlay_cap_for_hln_style_report(tmp_path: Path):
+    report = honour_fcf_action_note_enforcement(
+        _minimal_report(
+            ticker="HLN.L",
+            name="Haleon plc",
+            signal="buy",
+            fcf_basis_overlay=False,
+            adjusted_signal="buy",
+            conviction_score=0.8022,
+            action_note=(
+                "Buy — neutral timing | FCF basis mismatch: filing £2221M | screen TTM £1801.8M"
+            ),
+        )
+    )
+    doc = ResearchDocument(
+        ticker="HLN.L",
+        name="Haleon plc",
+        signal="buy",
+        version=2,
+        created_at="2026-09-04T00:00:00+00:00",
+        updated_at="2026-09-04T00:00:00+00:00",
+        mode="gap_fill",
+        research_verdict="accumulate",
+        research_risk_level="medium",
+        research_confidence=0.7,
+        research_path=str(tmp_path / "research" / "HLN.L" / "research.md"),
+    )
+
+    sync_research_verdict_snapshots(tmp_path, [report], [doc])
+    written = json.loads(
+        (tmp_path / "research" / "HLN.L" / "sources" / "screening_snapshot.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert written["fcf_basis_overlay"] is True
+    assert written["adjusted_signal"] == "hold"
 
 
 def test_apply_research_overlay_syncs_screening_snapshot(tmp_path: Path):

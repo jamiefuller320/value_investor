@@ -5,7 +5,11 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+import pandas as pd
+
 from value_investor.research.verdict import compute_adjusted_signal
+from value_investor.scoring.fcf import screen_ttm_from_row
+from value_investor.scoring.fcf_basis_overlay import apply_fcf_export_enforcement
 from value_investor.storage import read_json, write_json
 
 
@@ -31,7 +35,24 @@ def merge_research_verdict_into_snapshot(
         updated["research_rationale"] = research_rationale
 
     screen_signal = str(updated.get("signal") or "hold")
-    updated["adjusted_signal"] = compute_adjusted_signal(screen_signal, research_verdict)  # type: ignore[arg-type]
+    research_adjusted = compute_adjusted_signal(screen_signal, research_verdict)  # type: ignore[arg-type]
+    fcf = updated.get("fcf") if isinstance(updated.get("fcf"), dict) else {}
+    screen_ttm = fcf.get("screen_ttm")
+    if screen_ttm is None:
+        screen_ttm = screen_ttm_from_row(pd.Series(updated))
+
+    overlay, adjusted, conviction = apply_fcf_export_enforcement(
+        signal=screen_signal,
+        adjusted_signal=research_adjusted,
+        conviction_score=float(updated.get("conviction_score") or 0.0),
+        action_note=str(updated.get("action_note") or ""),
+        fcf_basis_overlay=bool(updated.get("fcf_basis_overlay")),
+        fcf_bundle=fcf if fcf else None,
+        screen_ttm=screen_ttm,
+    )
+    updated["adjusted_signal"] = adjusted
+    updated["fcf_basis_overlay"] = overlay
+    updated["conviction_score"] = conviction
     return updated
 
 
