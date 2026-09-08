@@ -1376,6 +1376,71 @@ def test_honour_fcf_action_note_enforcement_caps_hln_style_buy(tmp_path: Path):
     assert stale.conviction_score == pytest.approx(0.8022 * 0.85)
 
 
+def _gfrd_financials() -> dict:
+    return {
+        "ticker": "GFRD.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 65_700_000.0,
+                "Capital Expenditure": -2_400_000.0,
+                "Free Cash Flow": 63_300_000.0,
+            }
+        },
+    }
+
+
+def test_build_company_reports_exports_fcf_basis_overlay_for_gfrd_stale_note(
+    tmp_path: Path,
+):
+    """GFRD.L-style: mismatch note persists after free_cashflow_screen_ttm is lost."""
+    sources = tmp_path / "research" / "GFRD.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(_gfrd_financials()), encoding="utf-8"
+    )
+
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="GFRD.L",
+                name="Galliford Try Holdings plc",
+                sector="Industrials",
+                signal="buy",
+                conviction_score=0.7912,
+                free_cashflow=63_300_000.0,
+                fcf_basis_overlay=False,
+                adjusted_signal="buy",
+                fcf_divergence_flagged=False,
+                action_note=(
+                    "Buy — neutral timing | FCF basis mismatch: filing £63.3M | screen TTM £50.0M"
+                ),
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "GFRD.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    reports = build_company_reports(signals, model_results, output_dir=tmp_path)
+    snapshot = reports[0].to_dict()
+
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "hold"
+    assert snapshot["conviction_score"] == pytest.approx(0.7912 * 0.85)
+    assert "FCF basis mismatch" in snapshot["action_note"]
+    assert "screen TTM £50" in snapshot["action_note"]
+
+
 def test_build_company_reports_reapplies_fcf_overlay_when_flag_true_but_buy_remains(
     tmp_path: Path,
 ):

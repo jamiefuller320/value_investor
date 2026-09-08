@@ -1417,11 +1417,45 @@ def _float_or_none(value: Any) -> float | None:
         return None
 
 
+def _parse_fcf_compact_value(text: str) -> float | None:
+    """Parse ``_format_fcf_compact`` output such as ``£63.3M`` or ``−$66.1M``."""
+    match = re.search(
+        r"(?P<sign>−|-)?(?P<amount>[\d.,]+)\s*(?P<suffix>[kKmM])?",
+        text.strip(),
+    )
+    if not match:
+        return None
+    amount = float(match.group("amount").replace(",", ""))
+    suffix = (match.group("suffix") or "").upper()
+    if suffix == "M":
+        amount *= 1_000_000
+    elif suffix == "K":
+        amount *= 1_000
+    if match.group("sign"):
+        amount = -amount
+    return amount
+
+
+def parse_screen_ttm_from_action_note(action_note: str) -> float | None:
+    """Recover Yahoo screen TTM from a persisted ``FCF basis mismatch`` note."""
+    match = re.search(
+        r"screen\s+ttm\s+(?P<value>[£$€−\d.,kKmM-]+)",
+        str(action_note or ""),
+        flags=re.IGNORECASE,
+    )
+    if not match:
+        return None
+    return _parse_fcf_compact_value(match.group("value"))
+
+
 def screen_ttm_from_row(row: pd.Series) -> float | None:
     """Yahoo trailing FCF preserved before canonical enrichment."""
     preserved = _float_or_none(row.get("free_cashflow_screen_ttm"))
     if preserved is not None:
         return preserved
+    from_note = parse_screen_ttm_from_action_note(str(row.get("action_note") or ""))
+    if from_note is not None:
+        return from_note
     return _float_or_none(row.get("free_cashflow"))
 
 

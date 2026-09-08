@@ -699,6 +699,7 @@ def honour_fcf_action_note_enforcement(report: CompanyReport) -> CompanyReport:
                 {
                     "free_cashflow_screen_ttm": report.key_metrics.get("free_cashflow_screen_ttm"),
                     "free_cashflow": report.key_metrics.get("free_cashflow"),
+                    "action_note": report.action_note,
                 }
             )
         )
