@@ -349,8 +349,8 @@
     "plan_monthly_usd": 200.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 175.7,
-    "estimated_spend_usd_this_week": 74.4,
+    "estimated_spend_usd_this_cycle": 174.5,
+    "estimated_spend_usd_this_week": 73.2,
     "week_id": "2026-W37",
     "cycle_id": "2026-09-d8",
     "weekly_ops_cap_usd": 84.5,
@@ -454,7 +454,7 @@
     "surface_escalation_candidates_in_email": true,
     "note": "Exploration phase allows more director–worker runs per week while paper turnover is unknown; auto-tighten moves to steady cap when re-escalation rate stabilises. Shadow log surfaces escalation candidates in the Sunday email for manual approval; auto_escalate_director stays false until calibrated."
   },
-  "updated_at": "2026-09-08T17:19:58.170845+00:00",
+  "updated_at": "2026-09-08T17:19:08.584626+00:00",
   "ingest_parity_markets": [
     "asx200",
     "euro_depth"
@@ -463,7 +463,7 @@
     "tsx60"
   ],
   "ingest_parallel_sprint_2": [
-    "ftse_smallcap"
+    "asx200"
   ],
   "ladder": {
     "enabled": true,
@@ -717,11 +717,22 @@
           "tsx60"
         ],
         "ingest_parity_recorded": true
+      },
+      {
+        "at": "2026-09-08T17:19:08.584615+00:00",
+        "parallel_stream": 2,
+        "from_market": "ftse_smallcap",
+        "to_market": "asx200",
+        "stream_markets_after": [
+          "asx200"
+        ],
+        "ingest_parity_recorded": false
       }
     ]
   },
   "ingest_exhausted_markets": [
     "euro_depth",
+    "ftse_smallcap",
     "sp500"
   ]
 }
