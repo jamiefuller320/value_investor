@@ -6438,6 +6438,16 @@ def test_parked_source_hunter_apam_as_euro_depth_has_fetchable_ir():
     assert "AnnualReport_2025" in rows[0]["url"]
 
 
+def test_parked_source_hunter_assa_b_st_euro_depth_has_fetchable_ir():
+    """eng-20260908-23: ASSA-B.ST has live assaabloy.com FY2025 annual report PDF."""
+    assert "ASSA-B.ST" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("ASSA-B.ST")
+    assert len(rows) == 1
+    assert rows[0]["period"] == "annual"
+    assert "assaabloy.com" in rows[0]["url"]
+    assert "annual-reports/2025" in rows[0]["url"]
+
+
 def test_parked_source_hunter_skip_abi_br_euro_depth():
     """eng-20260908-01: ABI.BR leftover IWB is 6-K cover HTML; IR is age-gated."""
     assert "ABI.BR" in PARKED_SOURCE_HUNTER_SKIP
