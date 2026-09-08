@@ -91,10 +91,12 @@ gh workflow run euro-ingest-loop.yml \
 ```
 
 Candidate order uses `select_library_ingest_targets` (unmeasured / zero-body
-ahead of IWB). When the weekday loop records `blocker_ticker` (hit the
-per-ticker cap or exhausted IR retries), follow-up prefers that name so the
-intensive pin is the ticker that held the queue, not only
-`health_after.zero_body_tickers[0]`.
+ahead of IWB). A committed IWB pin cannot exclude unmeasured / zero-body
+leftovers — they are prepended to the pin set so body-fill work cannot starve
+bootstrap (AED.BR vs ABI.BR on 4–7 Sep 2026). When the weekday loop records
+`blocker_ticker` (hit the per-ticker cap or exhausted IR retries), follow-up
+prefers that name so the intensive pin is the ticker that held the queue, not
+only `health_after.zero_body_tickers[0]`.
 
 Evaluate locally with:
 
@@ -148,7 +150,7 @@ ftse-library euro-ingest-dispatch --json
 | Stall / slowdown follow-up | all library ingest workflows | After stall or `improved=0` leftover gaps (including cutoff deepens that already ran), dispatches pinned `euro-ingest-loop.yml` (`record_gap_closure=true`, `max_targets=1`) via `scripts/dispatch_library_gap_closure_followups.sh` |
 | Micro-compile dispatch | `euro-ingest-loop.yml` | After `micro_compiled` or `gap_closure_compiled`, runs `engineering-queue.yml` immediately |
 | Post-merge verify rerun | `engineering-queue.yml` | Tasks with `evidence.market_id` rerun **`euro-ingest-loop.yml`**; FTSE tasks still use `ingest-loop.yml` |
-| Discovery time cap | `library_ingest_budget.py` | Listing discovery may use at most 25% of `max_runtime_seconds` (675s of a 2700s euro slot) and scans thin/unmeasured/zero-body/IWB names first. Body deepen keeps the rest of the clock. |
+| Discovery time cap | `library_ingest_budget.py` | Listing discovery may use at most 25% of `max_runtime_seconds` (675s of a 2700s euro slot) and scans unmeasured/zero-body, then thin/IWB names, first. Body deepen keeps the rest of the clock. |
 | Effort cascade | `library_ingest_cascade.py` / `ingest_effort_cascade` | Static fractions while focus has filing gaps: stream 1 at 50% targets/runtime, stream 2 at 25%. Full spare caps return at head ingest parity. |
 | Ingest scheduler | `library_ingest_scheduler.py` / `ftse-library ingest-schedule` | Live wait on the head, leftover minutes after the euro run, queue fill-down when the assigned stream has no gaps. Peak-hour skip only when head busyness is unknown. |
 | Two-lane deepen | `library_ingest_loop.py` | **Lane 1 (all library markets):** weekday mid-ticker cap (`DEFAULT_PER_TICKER_MAX_SECONDS=320`, overridable). Abort the current name and continue the batch. The aborting ticker is `blocker_ticker` and is demoted for 6h so it does not re-head the next slot. **Lane 2:** intensive pin (`--pin-ticker` / `--record-gap-closure`) disables the per-ticker cap and uses the remaining slot. Failed IR allowlist rows are marked `unfetchable` and skipped on later passes (any market). |

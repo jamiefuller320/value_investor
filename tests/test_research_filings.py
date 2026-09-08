@@ -4122,6 +4122,48 @@ def test_ir_allowlist_period_classifies_belgian_ra_pack_as_annual():
         )
         == "annual"
     )
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://aedifica.eu/wp-content/uploads/2026/02/AED_CP2026_EN_FY-2025_2026-02-12d_BB.pdf"
+        )
+        == "annual"
+    )
+
+
+def test_classify_rns_headline_ir_allowlist_prefix_is_not_interim():
+    """FCA code IR means interim results; 'IR allowlist document' must not."""
+    assert (
+        classify_rns_headline("IR allowlist document — AEDIFICA-RA25_EN_2026-03-24b.pdf")
+        != "interim"
+    )
+    assert classify_rns_headline("IR") == "interim"
+
+
+def test_apply_headline_period_keeps_aedifica_ir_annual_despite_body_comparatives():
+    """Regression: RA25 / FY-2025 IR PDFs were flipped to interim after body extract."""
+    ra_row = {
+        "source": "ir_allowlist",
+        "headline": "IR allowlist document — AEDIFICA-RA25_EN_2026-03-24b.pdf",
+        "url": "https://aedifica.eu/wp-content/uploads/2026/03/AEDIFICA-RA25_EN_2026-03-24b.pdf",
+        "period": "annual",
+        "category": "ir_allowlist",
+        "summary": "Manual IR/results URL from docs/data/research_ir_urls.json",
+    }
+    fy_row = {
+        "source": "ir_allowlist",
+        "headline": "IR allowlist document — AED_CP2026_EN_FY-2025_2026-02-12d_BB.pdf",
+        "url": "https://aedifica.eu/wp-content/uploads/2026/02/AED_CP2026_EN_FY-2025_2026-02-12d_BB.pdf",
+        "period": "annual",
+        "category": "ir_allowlist",
+        "summary": "Manual IR/results URL from docs/data/research_ir_urls.json",
+    }
+    body = (
+        "Aedifica annual report 2025. Like-for-like rental growth in H1 and Q4 "
+        "comparatives. Interim dividend paid in May. Half-year results discussed "
+        "in the financial review. Valuation increased 0.5% in Q4."
+    )
+    assert _apply_headline_period(ra_row, body_snippet=body)["period"] == "annual"
+    assert _apply_headline_period(fy_row, body_snippet=body)["period"] == "annual"
 
 
 def test_merge_ir_allowlist_filings_bootstraps_empty_aed_br_index(tmp_path: Path):

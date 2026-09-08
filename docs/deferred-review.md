@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T05:52:57+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T06:16:49+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -204,8 +204,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L327 | **Extra near-miss cuts: sector-cap blocks and buy-tier dropouts** | Current watch groups do not isolate names that would be buy-tier but were sector-capped, or names that printed buy then dropped to hold. Add those cuts only if buy-not-now plus hold-near-buy leave an obvious counterfactual hole. | After several Sunday screens, buy-not-now and hold-near-buy marks look too thin or biased to answer knob questions |
 | L328 | **Weekday local-open crons for admitted epoch-0 books** | Shard buy_tier_level configs already stamp America/New_York and Australia/Sydney open+settle. There is no weekday orchestrator slot at those sessions; admitted books currently mark on Sunday ladder / one-off epoch0. Add staggered local-open dispatches only after the near-miss watch, and do not piggyback FTSE paper-auto at 08:25 UTC. | Epoch-0 plus buy-not-now and hold-near-buy have enough weekday-like marks to justify a second paper clock |
 | L330 | **Skip observe-sim AI accumulate when memo has zero filing bodies** | Euro_depth observe-sim AI currently treats accumulate verdicts with 0 filing bodies as valid labels (17/18 sampled). Do not add this gate to live FTSE paper (N27). When library filing parity is real, exclude zero-body accumulate from shard/observe AI so the sim is not observe noise. | Focus or admitted-market buy-tier library memos have filing-body parity and observe-sim still attributes excess to the AI-judgment accumulate gate. |
-| L340 | **Caption market-card held vs market as sleeve vs price index** | The chart is invested-sleeve MTM versus a frictionless local price index from the same starting held notional, not Sunday-review excess after costs (NAV vs contributed, Yahoo auto_adjust). A caption would stop the tile being read as a matched-cost or total-return hurdle. | Someone uses the market-card excess_pct to judge paper vs index, or it disagrees with Sunday-review excess_after_costs. |
-| L341 | **Universe-matched index for held vs market charts** | FTSE 350 paper is scaled to ^FTSE (FTSE 100) and euro_depth observe-sim to ^STOXX50E. That is a useful alpha hurdle but not a matched-universe market equivalent. | Held vs market charts are in regular Sunday use and a FTSE 350 or euro_depth path has >=8 weekday marks. |
+| L341 | **Caption market-card held vs market as sleeve vs price index** | The chart is invested-sleeve MTM versus a frictionless local price index from the same starting held notional, not Sunday-review excess after costs (NAV vs contributed, Yahoo auto_adjust). A caption would stop the tile being read as a matched-cost or total-return hurdle. | Someone uses the market-card excess_pct to judge paper vs index, or it disagrees with Sunday-review excess_after_costs. |
+| L342 | **Universe-matched index for held vs market charts** | FTSE 350 paper is scaled to ^FTSE (FTSE 100) and euro_depth observe-sim to ^STOXX50E. That is a useful alpha hurdle but not a matched-universe market equivalent. | Held vs market charts are in regular Sunday use and a FTSE 350 or euro_depth path has >=8 weekday marks. |
 
 ### Universe & data
 

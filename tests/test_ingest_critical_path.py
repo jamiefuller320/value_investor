@@ -86,7 +86,8 @@ def test_critical_path_prefers_iwb_and_forces_discovery(tmp_path: Path):
     assert path.indexed_without_body[0]["ticker"] == "BBB.DE"
     assert "CCC.DE" in path.thin_need_discovery
     assert path.force_discovery_scan is True
-    assert path.auto_pin_tickers[0] in {"BBB.DE", "AAA.DE"}
+    assert path.auto_pin_tickers[0] == "AAA.DE"
+    assert "BBB.DE" in path.auto_pin_tickers
     out = persist_ingest_critical_path(path, path=tmp_path / "cp.json", library_root=root)
     assert out.exists()
     assert (root / "markets" / market / "ingest_critical_path.json").exists()
@@ -127,4 +128,5 @@ def test_apply_critical_path_reorders_targets(tmp_path: Path):
         LibraryIngestTarget("B", "B", "buy", 1.0, reason="unmeasured"),
     ]
     ordered = apply_critical_path_to_target_order(targets, assessment)
-    assert ordered[0].ticker in assessment.auto_pin_tickers
+    assert assessment.auto_pin_tickers[0] == "B"
+    assert ordered[0].ticker == "B"
