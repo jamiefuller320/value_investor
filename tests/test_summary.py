@@ -1504,6 +1504,174 @@ def test_build_company_reports_fcf_basis_overlay_caps_sbry_style_buy(tmp_path: P
     assert "company-adj £" in snapshot["action_note"]
 
 
+def _srp_research_sources(tmp_path: Path) -> None:
+    """SRP.L: filing/screen gap below 25% but company-adj universe divergence triggers overlay."""
+    sources = tmp_path / "research" / "SRP.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "SRP.L",
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 500_000_000.0,
+                        "Capital Expenditure": -86_500_000.0,
+                        "Free Cash Flow": 413_500_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (filings / "annual_results.txt").write_text(
+        "Company-adjusted free cash flow of £219.0m after lease and working-capital adjustments",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings / "annual_results.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_build_company_reports_fcf_basis_overlay_caps_srp_style_buy(tmp_path: Path):
+    """SRP.L: buy must downgrade to hold when company-adj FCF diverges below 25% filing gap."""
+    _srp_research_sources(tmp_path)
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="SRP.L",
+                name="Serco Group plc",
+                sector="Industrials",
+                signal="buy",
+                conviction_score=0.557915,
+                free_cashflow=413_500_000.0,
+                free_cashflow_screen_ttm=361_200_000.0,
+                fcf_basis_overlay=False,
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "SRP.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "hold"
+    assert snapshot["conviction_score"] == pytest.approx(0.557915 * 0.85)
+    assert "FCF basis mismatch" in snapshot["action_note"]
+    assert "filing £413.5M" in snapshot["action_note"]
+    assert "screen TTM £361.2M" in snapshot["action_note"]
+    assert "company-adj £219M" in snapshot["action_note"]
+
+
+def test_honour_fcf_action_note_enforcement_caps_srp_style_buy():
+    """SRP.L: stale buy rows with FCF mismatch note must cap even when fcf=None."""
+    note = (
+        "Buy — neutral timing | FCF basis mismatch: filing £413.5M | screen TTM £361.2M | "
+        "company-adj £219M | Earnings growth basis divergence >300 bps: statutory 244.8% vs "
+        "filing core -41.8%"
+    )
+    report = CompanyReport.from_dict(
+        {
+            "ticker": "SRP.L",
+            "name": "Serco Group plc",
+            "sector": "Industrials",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "models_passed": 4,
+            "model_count": 22,
+            "composite_score": 0.6179,
+            "families_passed": 4,
+            "data_quality_score": 1.0,
+            "metrics_present": 20,
+            "metrics_total": 20,
+            "weeks_at_signal": 9,
+            "signal_trend": "stable",
+            "conviction_score": 0.557915,
+            "stability_label": "persistent",
+            "timing_signal": "neutral",
+            "timing_score": 0.5,
+            "action_note": note,
+            "fcf_basis_overlay": False,
+            "fcf": None,
+            "summary": "Buy (4/22 models).",
+            "passed_models": [],
+            "key_metrics": {
+                "free_cashflow": 361_200_000.0,
+                "free_cashflow_screen_ttm": 361_200_000.0,
+            },
+        }
+    )
+
+    enforced = honour_fcf_action_note_enforcement(report)
+    assert enforced.fcf_basis_overlay is True
+    assert enforced.adjusted_signal == "hold"
+    assert enforced.conviction_score == pytest.approx(0.557915 * 0.85)
+
+    snapshot = report.to_dict()
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "hold"
+
+
+def test_export_enforced_report_dicts_honours_srp_style_stale_row():
+    """SRP.L cached email_reports rows must not ship buy beside an FCF mismatch note."""
+    from value_investor.summary import export_enforced_report_dicts
+
+    stale = {
+        "ticker": "SRP.L",
+        "name": "Serco Group plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "fcf_basis_overlay": False,
+        "conviction_score": 0.557915,
+        "action_note": (
+            "Buy — neutral timing | FCF basis mismatch: filing £413.5M | screen TTM £361.2M | "
+            "company-adj £219M"
+        ),
+        "models_passed": 4,
+        "model_count": 22,
+        "composite_score": 0.6179,
+        "families_passed": 4,
+        "data_quality_score": 1.0,
+        "metrics_present": 20,
+        "metrics_total": 20,
+        "weeks_at_signal": 9,
+        "signal_trend": "stable",
+        "stability_label": "persistent",
+        "timing_signal": "neutral",
+        "timing_score": 0.5,
+        "summary": "Buy (4/22 models).",
+        "passed_models": [],
+        "key_metrics": {},
+    }
+    exported = export_enforced_report_dicts([stale])[0]
+    assert exported["fcf_basis_overlay"] is True
+    assert exported["adjusted_signal"] == "hold"
+    assert exported["conviction_score"] == pytest.approx(0.557915 * 0.85)
+
+
 def test_apply_research_overlay_with_fcf_enforcement_caps_mgns_style_strong_buy(
     tmp_path: Path,
 ):
