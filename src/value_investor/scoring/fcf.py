@@ -1448,6 +1448,48 @@ def parse_screen_ttm_from_action_note(action_note: str) -> float | None:
     return _parse_fcf_compact_value(match.group("value"))
 
 
+def parse_filing_aligned_from_action_note(action_note: str) -> float | None:
+    """Recover filing-aligned FCF from a persisted ``FCF basis mismatch`` note."""
+    match = re.search(
+        r"filing\s+(?P<value>[£$€−\d.,kKmM-]+)",
+        str(action_note or ""),
+        flags=re.IGNORECASE,
+    )
+    if not match:
+        return None
+    return _parse_fcf_compact_value(match.group("value"))
+
+
+def fcf_bundle_from_persisted_report(
+    fcf: dict[str, Any] | None,
+    *,
+    action_note: str | None = None,
+    key_metrics: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Rebuild FCF basis fields for export enforcement on stale persisted reports."""
+    bundle = dict(fcf) if isinstance(fcf, dict) else {}
+    note = str(action_note or "")
+    metrics = key_metrics or {}
+
+    filing = _float_or_none(bundle.get("filing_aligned"))
+    if filing is None:
+        filing = _float_or_none(metrics.get("free_cashflow")) or _float_or_none(metrics.get("FCF"))
+    if filing is None:
+        filing = parse_filing_aligned_from_action_note(note)
+    if filing is not None:
+        bundle.setdefault("filing_aligned", filing)
+
+    screen = _float_or_none(bundle.get("screen_ttm"))
+    if screen is None:
+        screen = _float_or_none(metrics.get("free_cashflow_screen_ttm"))
+    if screen is None:
+        screen = parse_screen_ttm_from_action_note(note)
+    if screen is not None:
+        bundle.setdefault("screen_ttm", screen)
+
+    return bundle
+
+
 def screen_ttm_from_row(row: pd.Series) -> float | None:
     """Yahoo trailing FCF preserved before canonical enrichment."""
     preserved = _float_or_none(row.get("free_cashflow_screen_ttm"))
@@ -1456,7 +1498,11 @@ def screen_ttm_from_row(row: pd.Series) -> float | None:
     from_note = parse_screen_ttm_from_action_note(str(row.get("action_note") or ""))
     if from_note is not None:
         return from_note
-    return _float_or_none(row.get("free_cashflow"))
+    for key in ("free_cashflow", "FCF"):
+        resolved = _float_or_none(row.get(key))
+        if resolved is not None:
+            return resolved
+    return None
 
 
 def resolve_free_cashflow(row: pd.Series) -> float | None:

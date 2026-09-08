@@ -752,15 +752,23 @@ def _rebind_stale_apply_research_overlay() -> None:
 
 def honour_fcf_action_note_enforcement(report: CompanyReport) -> CompanyReport:
     """Re-apply FCF basis caps when action notes or flags require export enforcement."""
+    from value_investor.scoring.fcf import fcf_bundle_from_persisted_report
+
     adjusted = str(report.adjusted_signal or report.signal)
-    fcf = report.fcf if isinstance(report.fcf, dict) else {}
+    fcf = fcf_bundle_from_persisted_report(
+        report.fcf if isinstance(report.fcf, dict) else None,
+        action_note=report.action_note,
+        key_metrics=report.key_metrics,
+    )
     screen_ttm = fcf.get("screen_ttm")
     if screen_ttm is None:
         screen_ttm = screen_ttm_from_row(
             pd.Series(
                 {
                     "free_cashflow_screen_ttm": report.key_metrics.get("free_cashflow_screen_ttm"),
-                    "free_cashflow": report.key_metrics.get("free_cashflow"),
+                    "free_cashflow": report.key_metrics.get("free_cashflow")
+                    or report.key_metrics.get("FCF"),
+                    "FCF": report.key_metrics.get("FCF"),
                     "action_note": report.action_note,
                 }
             )

@@ -27,6 +27,8 @@ from value_investor.scoring.fcf import (
     overlay_free_cashflow_from_bundle,
     parse_adjusted_eps_growth_pct,
     parse_company_adjusted_fcf,
+    parse_filing_aligned_from_action_note,
+    parse_screen_ttm_from_action_note,
     reconcile_fcf,
 )
 from value_investor.scoring.sector_overrides import AGRICULTURE_COMMODITIES_SECTOR
@@ -1964,6 +1966,172 @@ def test_build_company_reports_exports_fcf_basis_overlay_for_rio(tmp_path: Path)
     snapshot = report.to_dict()
     assert snapshot["fcf_basis_overlay"] is True
     assert snapshot["adjusted_signal"] == "buy"
+
+
+def _sn_fcf_mismatch_note() -> str:
+    return (
+        "Strong Buy — neutral timing | FCF basis mismatch: filing £852M | "
+        "screen TTM £1059M | Earnings growth basis divergence >300 bps: "
+        "statutory 52.8% vs filing core 16.5%"
+    )
+
+
+def test_fcf_basis_overlay_honours_action_note_predicate_sn_style_gap():
+    """SN.L-style gap: ~24% filing/screen divergence below 25% but above 15%."""
+    filing = 852_000_000.0
+    screen = 1_059_000_000.0
+    assert fcf_universe_divergence_flagged(
+        filing_aligned=filing,
+        screen_ttm=screen,
+        company_adjusted=None,
+        filing_currency="GBP",
+    )
+    assert not fcf_filing_screen_mismatch(
+        filing_aligned=filing,
+        screen_ttm=screen,
+        divergence_flagged=False,
+    )
+    note = _sn_fcf_mismatch_note()
+    assert parse_filing_aligned_from_action_note(note) == pytest.approx(filing)
+    assert parse_screen_ttm_from_action_note(note) == pytest.approx(screen)
+
+
+def test_honour_fcf_action_note_enforcement_caps_sn_style_strong_buy():
+    """SN.L: strong_buy with FCF mismatch note but fcf=None must cap on export."""
+    note = _sn_fcf_mismatch_note()
+    report = CompanyReport.from_dict(
+        {
+            "ticker": "SN.L",
+            "name": "Smith & Nephew plc",
+            "sector": "Healthcare",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "models_passed": 8,
+            "model_count": 22,
+            "composite_score": 0.65,
+            "families_passed": 4,
+            "data_quality_score": 1.0,
+            "metrics_present": 20,
+            "metrics_total": 20,
+            "weeks_at_signal": 3,
+            "signal_trend": "stable",
+            "conviction_score": 0.7012,
+            "stability_label": "building",
+            "timing_signal": "neutral",
+            "timing_score": 0.5,
+            "action_note": note,
+            "fcf_basis_overlay": False,
+            "fcf": None,
+            "summary": "Strong Buy (8/22 models).",
+            "passed_models": [],
+            "key_metrics": {"FCF": "852000000.0"},
+        }
+    )
+
+    enforced = honour_fcf_action_note_enforcement(report)
+    assert enforced.fcf_basis_overlay is True
+    assert enforced.adjusted_signal == "buy"
+    assert enforced.conviction_score == pytest.approx(0.7012 * 0.85)
+
+    snapshot = report.to_dict()
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert snapshot["conviction_score"] == pytest.approx(0.7012 * 0.85)
+
+
+def test_build_company_reports_exports_fcf_basis_overlay_for_sn(tmp_path: Path):
+    """SN.L-style: universe divergence at ~24% caps strong_buy despite sub-25% filing gap."""
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="SN.L",
+                name="Smith & Nephew plc",
+                sector="Healthcare",
+                signal="strong_buy",
+                conviction_score=0.7012,
+                free_cashflow=852_000_000.0,
+                free_cashflow_screen_ttm=1_059_000_000.0,
+                fcf_basis_overlay=False,
+                adjusted_signal="strong_buy",
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "SN.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    assert report.fcf_basis_overlay is True
+    assert report.adjusted_signal == "buy"
+    assert "FCF basis mismatch" in report.action_note
+
+    snapshot = report.to_dict()
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+
+
+def test_apply_research_overlay_with_fcf_enforcement_caps_sn_style_strong_buy(
+    tmp_path: Path,
+):
+    """SN.L: stale overlay=false must not leave strong_buy beside FCF mismatch note."""
+    from value_investor.research.document import ResearchDocument
+
+    note = _sn_fcf_mismatch_note()
+    stale = CompanyReport.from_dict(
+        {
+            "ticker": "SN.L",
+            "name": "Smith & Nephew plc",
+            "sector": "Healthcare",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "models_passed": 8,
+            "model_count": 22,
+            "composite_score": 0.65,
+            "families_passed": 4,
+            "data_quality_score": 1.0,
+            "metrics_present": 20,
+            "metrics_total": 20,
+            "weeks_at_signal": 3,
+            "signal_trend": "stable",
+            "conviction_score": 0.7012,
+            "stability_label": "building",
+            "timing_signal": "neutral",
+            "timing_score": 0.5,
+            "action_note": note,
+            "fcf_basis_overlay": False,
+            "fcf": None,
+            "summary": "Strong Buy (8/22 models).",
+            "passed_models": [],
+            "key_metrics": {"FCF": "852000000.0"},
+        }
+    )
+    doc = ResearchDocument(
+        ticker="SN.L",
+        name="Smith & Nephew plc",
+        signal="strong_buy",
+        version=2,
+        created_at="2026-09-06T00:00:00+00:00",
+        updated_at="2026-09-06T00:00:00+00:00",
+        mode="gap_fill",
+        research_verdict="accumulate",
+        research_risk_level="medium",
+        research_confidence=0.7,
+        research_rationale="Phased conviction warranted.",
+    )
+
+    overlaid = apply_research_overlay_with_fcf_enforcement([stale], [doc])[0]
+    assert overlaid.fcf_basis_overlay is True
+    assert overlaid.adjusted_signal == "buy"
 
 
 def test_apply_research_overlay_with_fcf_enforcement_caps_rio_style_strong_buy(
