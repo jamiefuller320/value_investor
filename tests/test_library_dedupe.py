@@ -8,6 +8,7 @@ from types import SimpleNamespace
 from value_investor.library_dedupe import (
     canonical_library_ticker,
     existing_library_research_tickers,
+    prefer_first_time_research_queues,
     select_deduped_research_targets,
     summarize_ticker_overlaps,
 )
@@ -96,6 +97,40 @@ def test_select_allows_stale_memo_when_not_in_already_researched():
     )
     assert [r.ticker for _, r in selected] == ["ERIC-B.ST"]
     assert skipped == []
+
+
+def test_prefer_first_time_research_queues_puts_no_memo_first():
+    queues = {
+        "sp500": [
+            SimpleNamespace(ticker="AAPL", name="Apple", signal="strong_buy"),
+            SimpleNamespace(ticker="HPE", name="HPE", signal="buy"),
+        ]
+    }
+    ordered = prefer_first_time_research_queues(queues, {"AAPL"})
+    assert [r.ticker for r in ordered["sp500"]] == ["HPE", "AAPL"]
+
+
+def test_select_after_first_time_preference_fills_admitted_gaps():
+    queues = prefer_first_time_research_queues(
+        {
+            "euro_depth": [
+                SimpleNamespace(ticker="ASML.AS", name="ASML", signal="strong_buy"),
+                SimpleNamespace(ticker="NEW.PA", name="New", signal="buy"),
+            ],
+            "sp500": [
+                SimpleNamespace(ticker="AAPL", name="Apple", signal="strong_buy"),
+                SimpleNamespace(ticker="HPE", name="HPE", signal="buy"),
+            ],
+        },
+        {"ASML.AS", "AAPL"},
+    )
+    selected, _ = select_deduped_research_targets(
+        research_markets=["euro_depth", "sp500"],
+        per_market_queues=queues,
+        research_cap=2,
+        already_researched=set(),
+    )
+    assert [r.ticker for _, r in selected] == ["NEW.PA", "HPE"]
 
 
 def test_grow_library_reuses_fetch_for_overlap(tmp_path: Path, monkeypatch):

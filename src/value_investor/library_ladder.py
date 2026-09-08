@@ -30,6 +30,7 @@ from value_investor.data_library import DEFAULT_LIBRARY_ROOT, grow_library, libr
 from value_investor.library_dedupe import (
     canonical_library_ticker,
     existing_library_research_tickers,
+    prefer_first_time_research_queues,
     select_deduped_research_targets,
 )
 from value_investor.library_equal_support import run_equal_support_package
@@ -133,8 +134,9 @@ def _research_markets(policy: dict[str, Any], focus: str) -> list[str]:
     they formally graduate. Prefer queue order for stable round-robin.
 
     When it is false (depth-first), keep the 21-market spray off but still
-    rememo the admitted learning set (L321). Focus stays first so weekly_ops
-    round-robin does not starve the euro book.
+    give the admitted learning set Sunday **first-time** research (L321).
+    Body-lag rememo for those books is weekday (`ftse-library rememo`).
+    Focus stays first so weekly_ops round-robin does not starve the euro book.
     """
     ladder = policy.get("ladder") or {}
     if not ladder.get("research_all_graduated", True):
@@ -150,6 +152,26 @@ def _research_markets(policy: dict[str, Any], focus: str) -> list[str]:
         if mid and mid not in ordered:
             ordered.append(mid)
     return ordered or ([focus] if focus else [])
+
+
+def sunday_rememo_reasons(
+    rememo_reasons: dict[str, str],
+    *,
+    focus_tickers: set[str],
+    research_all_graduated: bool,
+) -> dict[str, str]:
+    """Sunday rememos the focus book only when depth-first (no admitted dump).
+
+    Admitted / epoch-0 rememo runs on weekdays via ``ftse-library rememo``.
+    """
+    if research_all_graduated:
+        return dict(rememo_reasons)
+    focus = {canonical_library_ticker(t) for t in focus_tickers if t}
+    return {
+        ticker: reason
+        for ticker, reason in rememo_reasons.items()
+        if canonical_library_ticker(ticker) in focus
+    }
 
 
 def _screen_observe_sim_markets(
@@ -472,6 +494,7 @@ def run_library_ladder(
             )
 
         already = existing_library_research_tickers(root)
+        per_market_queues = prefer_first_time_research_queues(per_market_queues, already)
         rememo_reasons: dict[str, str] = {}
         if bool((policy.get("ladder") or {}).get("rememo_existing", True)):
             body_lag = int(
@@ -494,6 +517,17 @@ def run_library_ladder(
                         body_lag_threshold=body_lag,
                     )
                 )
+            focus_tickers = {
+                canonical_library_ticker(str(getattr(report, "ticker", "") or ""))
+                for report in per_market_queues.get(market, [])
+            }
+            rememo_reasons = sunday_rememo_reasons(
+                rememo_reasons,
+                focus_tickers=focus_tickers,
+                research_all_graduated=bool(
+                    (policy.get("ladder") or {}).get("research_all_graduated", True)
+                ),
+            )
         skip_fresh = already - set(rememo_reasons)
         selected, dedupe_skipped = select_deduped_research_targets(
             research_markets=research_markets,
@@ -533,8 +567,10 @@ def run_library_ladder(
                 ],
                 "skipped_count": len(dedupe_skipped),
                 "skipped_sample": dedupe_skipped[:20],
+                "first_time_preferred": True,
                 "note": (
                     "Exact Yahoo ticker match; earlier queue market wins. "
+                    "Each market queue puts no-memo buy-tier first, then rememo. "
                     "Fresh memos are skipped; thin / body-lag memos rememo after ingest."
                 ),
             },
