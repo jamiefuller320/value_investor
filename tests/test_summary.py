@@ -1060,6 +1060,94 @@ def test_build_company_reports_exports_fcf_basis_overlay_for_fgp(tmp_path: Path)
     assert "company-adj £113.5M" in snapshot["action_note"]
 
 
+def _bowl_financials() -> dict:
+    return {
+        "ticker": "BOWL.L",
+        "cash_flow": {
+            "2026": {
+                "Operating Cash Flow": 55_000_000.0,
+                "Capital Expenditure": -18_000_000.0,
+                "Free Cash Flow": 37_000_000.0,
+            }
+        },
+    }
+
+
+def test_fcf_basis_overlay_honours_action_note_predicate_below_25pct_filing_gap():
+    """BOWL.L-style gap: universe note at 15% but filing/screen ratio below 25%."""
+    filing = 37_000_000.0
+    screen = 43_800_000.0
+    assert fcf_universe_divergence_flagged(
+        filing_aligned=filing,
+        screen_ttm=screen,
+        company_adjusted=None,
+        filing_currency="GBP",
+    )
+    assert not fcf_filing_screen_mismatch(
+        filing_aligned=filing,
+        screen_ttm=screen,
+        divergence_flagged=False,
+    )
+    note = append_fcf_divergence_to_action_note(
+        "Buy — neutral timing",
+        canonical=filing,
+        screen_ttm=screen,
+        fcf_bundle={
+            "filing_aligned": filing,
+            "currency": "GBP",
+            "divergence_flagged": False,
+            "fcf_divergence_flagged": True,
+        },
+    )
+    assert "FCF basis mismatch" in note
+
+
+def test_build_company_reports_exports_fcf_basis_overlay_for_bowl(tmp_path: Path):
+    sources = tmp_path / "research" / "BOWL.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(_bowl_financials()), encoding="utf-8"
+    )
+
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="BOWL.L",
+                name="Hollywood Bowl Group plc",
+                sector="Consumer Cyclical",
+                signal="buy",
+                conviction_score=0.7284,
+                free_cashflow=37_000_000.0,
+                free_cashflow_screen_ttm=43_800_000.0,
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "BOWL.L",
+                "model_id": "graham_net_net",
+                "model_name": "Graham",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+
+    assert snapshot["fcf"]["fcf_divergence_flagged"] is True
+    assert snapshot["fcf"]["filing_screen_mismatch"] is False
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "hold"
+    assert snapshot["conviction_score"] == pytest.approx(0.7284 * 0.85)
+    assert "FCF basis mismatch" in snapshot["action_note"]
+    assert "filing £37M" in snapshot["action_note"]
+    assert "screen TTM £43.8M" in snapshot["action_note"]
+
+
 def test_earnings_growth_signs_diverge_detects_fgp_style_mismatch():
     assert earnings_growth_signs_diverge(-0.059, 0.16) is True
     assert earnings_growth_signs_diverge(0.05, 0.10) is False

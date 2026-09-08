@@ -39,14 +39,16 @@ def fcf_basis_overlay_triggered(
     divergence_flagged: bool,
     ticker_models: pd.DataFrame,
     filing_screen_mismatch: bool = False,
+    universe_divergence_flagged: bool = False,
 ) -> bool:
     """Flag when the mismatch note would fire, or 50% divergence with a yield pass.
 
-    Filing/screen mismatch (25% note predicate) always triggers the overlay so Strong Buy
-    cannot persist beside an ``FCF basis mismatch`` action note. The legacy 50% divergence
-    path still requires a yield-dependent model pass.
+    Filing/screen mismatch (25%) and universe divergence (15%, same predicate as
+    ``FCF basis mismatch`` action notes) always trigger the overlay so buy-tier signals
+    cannot persist beside a cosmetic note. The legacy 50% divergence path still requires
+    a yield-dependent model pass.
     """
-    if filing_screen_mismatch:
+    if filing_screen_mismatch or universe_divergence_flagged:
         return True
     if not divergence_flagged:
         return False
@@ -81,6 +83,7 @@ def apply_fcf_basis_overlay_to_signal(
     conviction_score: float,
     adjusted_signal: str | None = None,
     filing_screen_mismatch: bool = False,
+    universe_divergence_flagged: bool = False,
 ) -> tuple[bool, str, float]:
     """Return overlay flag, conservative adjusted signal, and capped conviction."""
     base_adjusted = adjusted_signal or signal
@@ -89,6 +92,7 @@ def apply_fcf_basis_overlay_to_signal(
         divergence_flagged=divergence_flagged,
         ticker_models=ticker_models,
         filing_screen_mismatch=filing_screen_mismatch,
+        universe_divergence_flagged=universe_divergence_flagged,
     ):
         return False, base_adjusted, base_conviction
     capped_signal = cap_signal_for_fcf_basis_overlay(signal)
@@ -137,6 +141,7 @@ def enrich_signals_with_fcf_basis_overlay(
             str(row.get("signal") or "hold"),
             divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
             filing_screen_mismatch=mismatch,
+            universe_divergence_flagged=bool(fcf_bundle.get("fcf_divergence_flagged")),
             ticker_models=ticker_models,
             conviction_score=float(row.get("conviction_score") or 0.0),
             adjusted_signal=existing_adjusted,

@@ -1080,6 +1080,7 @@ def build_company_reports(
                         screen_ttm=screen_ttm,
                         divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
                     ),
+                    universe_divergence_flagged=fcf_divergence_flagged,
                     ticker_models=ticker_models,
                     conviction_score=conviction_score,
                     adjusted_signal=adjusted_signal_str,
