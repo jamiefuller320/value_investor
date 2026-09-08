@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T06:51:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T07:35:39+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -225,6 +225,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L277 | **Keep other-market ingest efficiency as priority 2 behind live-path utilization** | After weekday FTSE decision-input work, keep investing in parallel-sprint speed and efficiency so filing bodies and weekly screen archives accumulate before calendar span becomes a stage-4 blocker. Do not satisfy that by adding markets to the grow queue or turning on research_all_graduated — Layer A breadth is already ahead; the scarce resource is time-series depth on euro_depth / sp500 / asx200. | Someone proposes a fourth sprint stream, a new grow-queue market, or research_all_graduated=true to 'get ahead of the calendar' |
 | L311 | **ASX announcement history beyond Markit latest-five** | Markit Digital returns at most five rows per symbol with no public pagination, so thin names (JBH.AX, DNL.AX) index dividend/news instead of statutory reports. IR allowlists are the current workaround. A historical announcements.asx.com.au or AFR company-announcements listing would remove the need to hand-seed each thin ticker. | More than two asx200 buy-tier names are thin_need_discovery after IR seeds, or Markit exposes a paginated feed |
 | L312 | **Add observe-sim benchmark if a sprint stream stays on a market without one** | Sprint-2 currently holds ftse_smallcap, which has no MARKET_BENCHMARKS entry, so Sunday observe-sim does not write a dated screen archive. Gap analysis correctly ignores it. If a no-benchmark market stays on a sprint stream for more than a couple of weeks, add a local index ticker so the archive clock can follow ingest effort. | A parallel sprint stream has held a market missing MARKET_BENCHMARKS for two Sunday ladders |
+| L344 | **Bootstrap CCL-B.TO zero-body leftover on TSX 60** | After GIB-A.TO left unmeasured, S&P/TSX 60 still has one zero-body buy-tier name (CCL Industries Class B). Same class-share discovery issues may apply; it cannot be parked and still blocks sprint_ingest_complete. | TSX 60 spare sprint is otherwise at leftover thin/IWB only, or the next ingest loop still reports zero_body_stuck on CCL-B.TO |
 
 ### Research & portfolio product
 
@@ -403,6 +404,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L336 | **Add S&P 500 index levels to dated macro snapshots** | US macro files currently have yields and DXY, not ^GSPC, so S&P paper books cannot draw a market-equivalent path on the market card until another index source exists. | Admitted S&P buy_tier_level has >=2 dated marks and the Overview chart still has market_path none. |
 | L337 | **Stop skip-ci ingest from rewriting committed market_status.json** | Library ingest maintenance on main regenerates docs/data/market_status.json, which conflicts with open dashboard PRs that also rewrite that snapshot. After schema 3 lands, consider serving the grid from write_market_status at publish time, or excluding the generated JSON from skip-ci ingest commits. | PR 477 is merged and another dashboard PR still conflicts on market_status.json after a skip-ci ingest |
 | L338 | **Warn when a spare sprint stream has no MARKET_BENCHMARKS entry** | L333 added ^FTSC so ftse_smallcap can join the observe clock. L334 labels leftover no-benchmark sprints as Ingest only. Still worth a dispatch/policy check that refuses or flags assigning ingest_parallel_sprint(_2) to a market missing from MARKET_BENCHMARKS so the next spare fill does not silently drop the dated archive clock. | A spare stream is assigned to a market not in MARKET_BENCHMARKS, or the next market_queue name after tsx60/ftse_smallcap is filled |
+| L345 | **Refresh stale TSX 60 buy-tier screen** | tsx60 sprint tiles still warn stale_buy_tier_screen (last dated screen 2026-08-16). Ingest is deepening an old shortlist; a Sunday screen-lite / observe-sim pass would refresh the buy-tier clock. | Next Sunday ladder includes tsx60 or an operator runs ftse-library screen-lite --market tsx60 |
 
 ---
 
