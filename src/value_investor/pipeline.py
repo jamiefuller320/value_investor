@@ -113,7 +113,12 @@ def _install_research_snapshot_hooks() -> None:
         _original_overlay = _unwrap_fcf_overlay_wrapper(research_overlay.apply_research_overlay)
 
         def _apply_research_overlay_with_snapshots(reports, documents):
-            updated = _original_overlay(reports, documents)
+            from value_investor.summary import honour_fcf_action_note_enforcement
+
+            updated = [
+                honour_fcf_action_note_enforcement(report)
+                for report in _original_overlay(reports, documents)
+            ]
             if documents:
                 output_dir = _output_dir_from_documents(documents)
                 sync_research_verdict_snapshots(output_dir, updated, documents)
@@ -408,6 +413,7 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     signals_out = result.signals.copy()
     signals_out["run_at"] = result.run_at.isoformat()
     signals_out = enrich_signals_with_research(signals_out, output_dir, run_at=result.run_at)
+    signals_out = honour_fcf_action_notes_on_signals(signals_out)
     signals_out = enrich_signals_with_healthcare_overlay(signals_out, result.model_results)
     signals_out = enrich_signals_with_healthcare_price_erosion_overlay(
         signals_out,

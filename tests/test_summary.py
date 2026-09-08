@@ -2121,6 +2121,176 @@ def test_export_enforced_report_dicts_honours_rs1_style_stale_row():
     assert exported["conviction_score"] == pytest.approx(0.51238 * 0.85)
 
 
+def _wix_style_action_note() -> str:
+    return (
+        "Buy — neutral timing | FCF basis mismatch: filing £168.7M | screen TTM £133.9M | "
+        "Earnings growth basis divergence >300 bps: statutory 118.2% vs filing core 99.8%"
+    )
+
+
+def test_honour_fcf_action_note_enforcement_caps_wix_style_buy():
+    """WIX.L: buy-tier note below 25% filing gap must cap to hold when fcf is absent."""
+    report = CompanyReport.from_dict(
+        {
+            "ticker": "WIX.L",
+            "name": "Wickes Group plc",
+            "sector": "Consumer Cyclical",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "models_passed": 11,
+            "model_count": 22,
+            "composite_score": 0.6802,
+            "families_passed": 5,
+            "data_quality_score": 1.0,
+            "metrics_present": 20,
+            "metrics_total": 20,
+            "weeks_at_signal": 13,
+            "signal_trend": "stable",
+            "conviction_score": 0.8304,
+            "stability_label": "persistent",
+            "timing_signal": "neutral",
+            "timing_score": 0.5,
+            "action_note": _wix_style_action_note(),
+            "fcf_basis_overlay": False,
+            "fcf": None,
+            "summary": "Buy (11/22 models).",
+            "passed_models": [],
+            "key_metrics": {},
+        }
+    )
+
+    enforced = honour_fcf_action_note_enforcement(report)
+    assert enforced.fcf_basis_overlay is True
+    assert enforced.adjusted_signal == "hold"
+    assert enforced.conviction_score == pytest.approx(0.8304 * 0.85)
+
+
+def test_apply_research_overlay_with_fcf_enforcement_caps_wix_style_buy():
+    """Research accumulate must not restore buy when WIX-style FCF mismatch note is present."""
+    from value_investor.research.document import ResearchDocument
+
+    stale = CompanyReport.from_dict(
+        {
+            "ticker": "WIX.L",
+            "name": "Wickes Group plc",
+            "sector": "Consumer Cyclical",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "models_passed": 11,
+            "model_count": 22,
+            "composite_score": 0.6802,
+            "families_passed": 5,
+            "data_quality_score": 1.0,
+            "metrics_present": 20,
+            "metrics_total": 20,
+            "weeks_at_signal": 13,
+            "signal_trend": "stable",
+            "conviction_score": 0.8304,
+            "stability_label": "persistent",
+            "timing_signal": "neutral",
+            "timing_score": 0.5,
+            "action_note": _wix_style_action_note(),
+            "fcf_basis_overlay": False,
+            "fcf": None,
+            "summary": "Buy (11/22 models).",
+            "passed_models": [],
+            "key_metrics": {},
+        }
+    )
+    doc = ResearchDocument(
+        ticker="WIX.L",
+        name="Wickes Group plc",
+        signal="buy",
+        version=2,
+        created_at="2026-09-06T00:00:00+00:00",
+        updated_at="2026-09-06T00:00:00+00:00",
+        mode="initial",
+        research_verdict="accumulate",
+        research_risk_level="medium",
+        research_confidence=0.7,
+        research_rationale="Measured sizing rather than full conviction.",
+        research_path="docs/research/WIX.L.md",
+    )
+
+    overlaid = apply_research_overlay_with_fcf_enforcement([stale], [doc])[0]
+    assert overlaid.fcf_basis_overlay is True
+    assert overlaid.adjusted_signal == "hold"
+
+
+def test_export_enforced_report_dicts_honours_wix_style_stale_row():
+    """WIX.L-style cached rows must not ship buy beside an FCF mismatch note."""
+    from value_investor.summary import export_enforced_report_dicts
+
+    stale = {
+        "ticker": "WIX.L",
+        "name": "Wickes Group plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "fcf_basis_overlay": False,
+        "conviction_score": 0.8304,
+        "action_note": _wix_style_action_note(),
+        "models_passed": 11,
+        "model_count": 22,
+        "composite_score": 0.6802,
+        "families_passed": 5,
+        "data_quality_score": 1.0,
+        "metrics_present": 20,
+        "metrics_total": 20,
+        "weeks_at_signal": 13,
+        "signal_trend": "stable",
+        "stability_label": "persistent",
+        "timing_signal": "neutral",
+        "timing_score": 0.5,
+        "summary": "Buy (11/22 models).",
+        "passed_models": [],
+        "key_metrics": {},
+    }
+    exported = export_enforced_report_dicts([stale])[0]
+    assert exported["fcf_basis_overlay"] is True
+    assert exported["adjusted_signal"] == "hold"
+    assert exported["conviction_score"] == pytest.approx(0.8304 * 0.85)
+
+
+def test_build_company_reports_fcf_basis_overlay_caps_wix_style_buy(tmp_path: Path):
+    """WIX.L-style 21% universe gap must cap buy-tier signals when FCF note would fire."""
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="WIX.L",
+                name="Wickes Group plc",
+                sector="Consumer Cyclical",
+                signal="buy",
+                conviction_score=0.8304,
+                free_cashflow=168_700_000.0,
+                free_cashflow_screen_ttm=133_900_000.0,
+                fcf_basis_overlay=False,
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "WIX.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "hold"
+    assert snapshot["conviction_score"] == pytest.approx(0.8304 * 0.85)
+    assert "FCF basis mismatch" in snapshot["action_note"]
+    assert "filing £168.7M" in snapshot["action_note"]
+    assert "screen TTM £133.9M" in snapshot["action_note"]
+
+
 def test_build_company_reports_exports_fcf_basis_overlay_for_mony_style_note(
     tmp_path: Path,
 ):
