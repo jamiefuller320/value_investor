@@ -1,6 +1,53 @@
 {
   "tasks": [
     {
+      "id": "eng-20260908-02",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked euro_depth leftover ACKB.BR",
+      "summary": "Library market euro_depth (EU depth composite (STOXX50 + periphery)) parked ACKB.BR after ingest avenues were exhausted (awaiting_periodic_report). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revis",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "hunter_market_id": "euro_depth",
+        "hunter_ticker": "ACKB.BR",
+        "parked_reason": "awaiting_periodic_report",
+        "parked_revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for ACKB.BR only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260908-01",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked euro_depth leftover ABI.BR",
@@ -53,9 +100,9 @@
       "parked_policy": "no_diff_cap"
     }
   ],
-  "compiled_at": "2026-09-08T09:14:54.962372+00:00",
-  "task_count": 1,
+  "compiled_at": "2026-09-08T11:01:43.749198+00:00",
+  "task_count": 2,
   "micro_compile_source": "parked_source_hunter",
   "library_market_id": "euro_depth",
-  "hunter_ticker": "ABI.BR"
+  "hunter_ticker": "ACKB.BR"
 }
