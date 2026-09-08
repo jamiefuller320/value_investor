@@ -11,8 +11,8 @@ from pathlib import Path
 from value_investor.ci_pr_autofix import (
     AUTOFIX_COMMIT_PREFIX,
     PATH_EXPAND_COMMIT_PREFIX,
+    PATH_REVERT_COMMIT_PREFIX,
     run_pr_ci_autofix_pipeline,
-    write_autofix_result,
 )
 
 
@@ -73,6 +73,8 @@ def main(argv: list[str] | None = None) -> int:
     }
     if result.fixed and result.actions == ["ruff"]:
         payload["commit_message"] = f"{AUTOFIX_COMMIT_PREFIX} ruff on changed Python files"
+    elif result.fixed and result.actions == ["path_guard_revert"]:
+        payload["commit_message"] = PATH_REVERT_COMMIT_PREFIX
     elif result.fixed and "path_guard_expand" in result.actions:
         payload["commit_message"] = PATH_EXPAND_COMMIT_PREFIX
 

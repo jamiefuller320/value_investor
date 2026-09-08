@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T12:51:01+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-08T16:04:12+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -163,6 +163,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N113 | **Per-exit automatic knob-change review on epoch-0** | Do not wire position close → decision-review --apply (or cohort-lab retune). Epoch-0 is the frozen lifecycle datum; knob apply stays on AI/rules tracks after thick epoch marks, with exit-shadow still observe-only until cohort maturity. | Never unless N25 is explicitly retired and buy_tier_level is no longer is_cohort_lab; prefer overlay/divergence on the same holdings (N99) instead |
 | N114 | **Do not weekday-burst first-time memos on admitted books** | Admitted first-time memos (names with no research.md yet) stay on Sunday _research_markets. Weekday rememo only rewrites existing bodies. A weekday first-memo burst would compete with euro focus research and weekly_ops the same way a Sunday rememo dump would. | Sunday research has run with admitted markets on _research_markets and leftover no-memo buy-tier still grows after two live Sundays |
 | N115 | **Do not drain admitted rememo on Sunday or as a weekday burst** | sp500 buy-tier has 54 rememo-eligible names and asx200 has 9, but Sunday Layer C only rememos the euro_depth focus (research_all_graduated=false). Clearing that admitted set now would be shard memo spray before those books have marks. Equal-support already records eligibility; do not flip Sunday or weekday rememo onto it. | Admitted books have enough epoch-0 / paper marks to justify forking shard rememo, or research_all_graduated is reconsidered after euro_depth body-lag rememo is actually binding |
+| N116 | **Collapse duplicate FCF action-note ticker tasks into one scoring task** | so_what_closure fans out one Honour FCF action-note engineering task per ticker with the same allowed_paths. Each agent re-implements the overlay and often dumps a research snapshot that trips the path guard. | The next so_what compile emits more than three open fcf_note_without_overlay tasks, or the IMB/DNLM overlay is merged and later tickers still open new PRs |
 
 ---
 
@@ -416,6 +417,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L347 | **Refresh stale TSX 60 buy-tier screen** | tsx60 sprint tiles still warn stale_buy_tier_screen (last dated screen 2026-08-16). Ingest is deepening an old shortlist; a Sunday screen-lite / observe-sim pass would refresh the buy-tier clock. | Next Sunday ladder includes tsx60 or an operator runs ftse-library screen-lite --market tsx60 |
 | L348 | **Share ops-monitor commit retry with email-report and library-grow** | Email-report failed today on git pull overwriting untracked files; library-grow rebase-push could not apply its ladder commit. Both are the same main-congestion class as the ops-monitor persist bug. Reuse or generalize scripts/gha_commit_ops_monitor.sh after that helper has a clean weekday. | Ops-monitor commit retry has landed on main and a second email-report or library-grow persist failure appears in Actions |
 | L349 | **Skip path-guard autofix for timestamp-only library cache edits** | ci_pr_autofix expanded eng-20260908-01 allowed_paths to include issuer_identifiers.json after a timestamp-only ABI.BR cache refresh. Prefer reverting no-op cache timestamps over widening hunt-task allowlists. | The next engineering path-guard failure is a docs/data/library cache timestamp-only edit, or ci_pr_autofix is next touched |
+| L353 | **Skip pytest on ruff-only PR autofix when the original test job passed** | Path-guard-only autofix now skips the main-installed pytest replay. Ruff-only autofix still runs full pytest against main site-packages, so a ruff fix on a PR that added new tests can still fail to land. | The next cursor/* PR fails CI on ruff only, autofix applies ruff, and verify pytest fails on PR-added tests that already passed the PR test job |
 
 ---
 

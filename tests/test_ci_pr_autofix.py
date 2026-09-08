@@ -15,7 +15,9 @@ from value_investor.ci_pr_autofix import (
     ci_bot_already_attempted,
     classify_ci_log_failures,
     diagnose_pr_ci_failure,
+    is_incidental_research_artifact,
     parse_path_guard_violations,
+    path_guard_actions_skip_verify_pytest,
     run_pr_ci_autofix_pipeline,
 )
 from value_investor.engineering_tasks import validate_engineering_pr_paths_for_task_id
@@ -56,6 +58,22 @@ def test_classify_ci_log_failures_path_guard():
 def test_parse_path_guard_violations():
     paths = parse_path_guard_violations(PATH_GUARD_LOG)
     assert paths == ["tests/test_trial_engineering_chain.py"]
+
+
+def test_is_incidental_research_artifact():
+    assert is_incidental_research_artifact("docs/research/IMB.L/sources/screening_snapshot.json")
+    assert is_incidental_research_artifact(
+        "docs/data/research/DNLM.L/sources/peer_model_pass_table.json"
+    )
+    assert not is_incidental_research_artifact("tests/test_summary.py")
+    assert not is_incidental_research_artifact("docs/research/IMB.L/memo.md")
+
+
+def test_path_guard_actions_skip_verify_pytest():
+    assert path_guard_actions_skip_verify_pytest(["path_guard_revert"])
+    assert path_guard_actions_skip_verify_pytest(["path_guard_revert", "path_guard_expand"])
+    assert not path_guard_actions_skip_verify_pytest(["ruff"])
+    assert not path_guard_actions_skip_verify_pytest([])
 
 
 def test_suggest_companion_paths_flattens_nested_research_modules():
@@ -188,6 +206,7 @@ def test_attempt_engineering_path_guard_autofix_expands_allowlist(tmp_path: Path
         os.chdir(prev)
 
     assert result.fixed is True
+    assert result.skip_verify_pytest is True
     assert guard.ok
     payload = json.loads(eng_path.read_text(encoding="utf-8"))
     allowed = payload["tasks"][0]["allowed_paths"]
@@ -252,7 +271,97 @@ Engineering path guard failed for eng-20260812-03:
 
     assert result.fixed is True
     assert "path_guard_expand" in result.actions
+    assert result.skip_verify_pytest is True
     assert diagnosis.engineering_task_id == "eng-20260812-03"
+
+
+def test_attempt_engineering_path_guard_autofix_reverts_incidental_snapshot(
+    tmp_path: Path,
+):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_git_repo(repo)
+
+    data_dir = repo / "docs" / "data"
+    data_dir.mkdir(parents=True)
+    eng_path = data_dir / "engineering_tasks.json"
+    eng_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "eng-20260908-09",
+                        "area": "scoring",
+                        "title": "Honour FCF action-note enforcement for IMB.L",
+                        "summary": "test",
+                        "priority": "medium",
+                        "priority_score": 70.0,
+                        "source": "so_what_closure",
+                        "allowed_paths": [
+                            "src/value_investor/summary.py",
+                            "tests/test_summary.py",
+                        ],
+                        "blocked_paths": [],
+                        "status": "pr_open",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    src = repo / "src" / "value_investor"
+    src.mkdir(parents=True)
+    summary = src / "summary.py"
+    summary.write_text("VALUE = 1\n", encoding="utf-8")
+    tests_dir = repo / "tests"
+    tests_dir.mkdir()
+    test_file = tests_dir / "test_summary.py"
+    test_file.write_text("def test_ok(): pass\n", encoding="utf-8")
+
+    subprocess.run(["git", "add", "."], cwd=repo, check=True)
+    subprocess.run(["git", "commit", "-m", "init"], cwd=repo, check=True)
+    subprocess.run(
+        ["git", "checkout", "-b", "cursor/eng-20260908-09-1de3"],
+        cwd=repo,
+        check=True,
+    )
+    summary.write_text("VALUE = 2\n", encoding="utf-8")
+    snapshot = repo / "docs" / "research" / "IMB.L" / "sources" / "screening_snapshot.json"
+    snapshot.parent.mkdir(parents=True)
+    snapshot.write_text('{"ticker":"IMB.L"}\n', encoding="utf-8")
+    subprocess.run(["git", "add", summary, snapshot], cwd=repo, check=True)
+    subprocess.run(["git", "commit", "-m", "eng change"], cwd=repo, check=True)
+
+    log = """
+Engineering path guard failed for eng-20260908-09:
+  - outside allowed_paths: docs/research/IMB.L/sources/screening_snapshot.json
+"""
+    prev = os.getcwd()
+    os.chdir(repo)
+    try:
+        result = attempt_engineering_path_guard_autofix(
+            branch="cursor/eng-20260908-09-1de3",
+            base_ref="main",
+            head_ref="HEAD",
+            log_text=log,
+            tasks_path=eng_path,
+        )
+        guard = validate_engineering_pr_paths_for_task_id(
+            "eng-20260908-09",
+            ["src/value_investor/summary.py"],
+            tasks_path=eng_path,
+        )
+    finally:
+        os.chdir(prev)
+
+    assert result.fixed is True
+    assert result.actions == ["path_guard_revert"]
+    assert result.skip_verify_pytest is True
+    assert not snapshot.exists()
+    payload = json.loads(eng_path.read_text(encoding="utf-8"))
+    allowed = payload["tasks"][0]["allowed_paths"]
+    assert "docs/research/IMB.L/sources/screening_snapshot.json" not in allowed
+    assert guard.ok
 
 
 def test_ci_bot_already_attempted_detects_prefix(tmp_path: Path):

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-08T12:51:01+00:00",
+  "updated_at": "2026-09-08T16:04:12+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7879,6 +7879,38 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a080e4-81a3-78d6-8307-eda7100cef63",
       "added_at": "2026-09-08T12:47:00+00:00"
+    },
+    {
+      "id": "L353",
+      "category": "later",
+      "section": "ops",
+      "title": "Skip pytest on ruff-only PR autofix when the original test job passed",
+      "summary": "Path-guard-only autofix now skips the main-installed pytest replay. Ruff-only autofix still runs full pytest against main site-packages, so a ruff fix on a PR that added new tests can still fail to land.",
+      "revisit_when": "The next cursor/* PR fails CI on ruff only, autofix applies ruff, and verify pytest fails on PR-added tests that already passed the PR test job",
+      "tags": [
+        "path-guard",
+        "ci",
+        "autofix"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/path-guard-pr507",
+      "added_at": "2026-09-08T16:04:12+00:00"
+    },
+    {
+      "id": "N116",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Collapse duplicate FCF action-note ticker tasks into one scoring task",
+      "summary": "so_what_closure fans out one Honour FCF action-note engineering task per ticker with the same allowed_paths. Each agent re-implements the overlay and often dumps a research snapshot that trips the path guard.",
+      "revisit_when": "The next so_what compile emits more than three open fcf_note_without_overlay tasks, or the IMB/DNLM overlay is merged and later tickers still open new PRs",
+      "tags": [
+        "fcf",
+        "engineering-queue",
+        "path-guard"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/path-guard-pr507",
+      "added_at": "2026-09-08T16:04:12+00:00"
     }
   ],
   "fragments": [

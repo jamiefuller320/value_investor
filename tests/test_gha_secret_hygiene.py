@@ -31,6 +31,9 @@ def test_pr_autofix_requires_same_repo_and_trusted_install() -> None:
     assert "pip install -e" not in text
     assert "cp scripts/ci_pr_autofix.py /tmp/ci_pr_autofix.py" in text
     assert "ref: main" in text
+    assert "skip_verify_pytest" in text
+    assert "path_guard_revert" in text
+    assert "git diff --name-only origin/main" in text
 
 
 def test_auto_merge_requires_same_repo_and_env_branch() -> None:

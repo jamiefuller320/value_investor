@@ -55,6 +55,7 @@ Implement ONLY that one task. Rules:
 7. Do NOT merge branches, open pull requests, or change GitHub workflows unless the task explicitly requires it.
 8. Do NOT change paper-fund, simulator, or live signal thresholds unless the task explicitly requires it.
 9. When `auto_merge` is true on the task, keep the diff minimal and within `allowed_paths` so CI and the path guard can merge automatically.
+10. Do not create or edit `docs/research/` or `docs/data/research/` source artifacts (`screening_snapshot.json`, `peer_model_pass_table.json`, and similar) unless that exact path is listed in `allowed_paths`. Overlay unit tests should construct fixtures in-memory; those dumps trip the engineering path guard.
 
 When finished, write a markdown report to:
 {result_path}
