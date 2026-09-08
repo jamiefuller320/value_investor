@@ -109,6 +109,33 @@ def test_apply_auto_queue_is_idempotent(tmp_path: Path):
     assert len(so_what_tasks) == 1
     assert so_what_tasks[0]["area"] == "scoring"
     assert so_what_tasks[0]["status"] == "open"
+    assert so_what_tasks[0]["evidence"]["batched"] is True
+
+
+def test_apply_auto_queue_batches_same_kind_tickers(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    snap_path = tmp_path / "so_what_closure.json"
+    write_json(tasks_path, {"tasks": []}, compact=False)
+    findings = scan_so_what_issues(
+        reports=[
+            _report(ticker="ALPHA.L"),
+            _report(ticker="BETA.L"),
+        ],
+        artifacts_dir=tmp_path,
+    )
+    out = apply_so_what_auto_queue(
+        findings,
+        dry_run=False,
+        tasks_path=tasks_path,
+        snapshot_path=snap_path,
+        artifacts_dir=tmp_path,
+    )
+    assert out["counts"]["tasks_created"] == 1
+    payload = read_json(tasks_path)
+    task = payload["tasks"][0]
+    assert task["title"] == "Close FCF basis enforcement gap (batched tickers)"
+    assert set(task["evidence"]["tickers"]) == {"ALPHA.L", "BETA.L"}
+    assert task["evidence"]["finding_count"] == 2
 
 
 def test_dry_run_does_not_write_tasks(tmp_path: Path):

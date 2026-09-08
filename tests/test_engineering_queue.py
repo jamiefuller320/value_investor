@@ -13,6 +13,7 @@ from value_investor.engineering_queue import (
     is_safe_to_clear_stale_branch,
     reconcile_orphaned_pr_open_tasks,
     reprioritize_queue_after_ingest_merge,
+    select_path_disjoint_engineering_tasks,
     snapshot_ingest_health,
     task_id_from_branch,
 )
@@ -98,25 +99,6 @@ def test_evaluate_dispatch_allows_parallel_when_pr_open_below_cap(tmp_path: Path
     assert decision.next_task_ids == ["eng-20260726-01"]
 
 
-def test_evaluate_dispatch_parallel_two_slots(tmp_path: Path):
-    tasks_path = tmp_path / "engineering_tasks.json"
-    payload = {
-        "tasks": [
-            _task("eng-20260726-01").to_dict(),
-            _task("eng-20260726-02", title="Second task").to_dict(),
-            _task("eng-20260726-03", title="Third task").to_dict(),
-        ]
-    }
-    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
-    decision = evaluate_engineering_dispatch(
-        tasks_path=tasks_path,
-        open_prs=[],
-        max_parallel=2,
-    )
-    assert decision.should_dispatch is True
-    assert decision.next_task_ids == ["eng-20260726-01", "eng-20260726-02"]
-
-
 def test_evaluate_dispatch_blocks_at_parallel_cap(tmp_path: Path):
     tasks_path = tmp_path / "engineering_tasks.json"
     payload = {
@@ -145,6 +127,127 @@ def test_evaluate_dispatch_blocks_at_parallel_cap(tmp_path: Path):
     )
     assert decision.should_dispatch is False
     assert "parallel cap" in decision.reason
+
+
+def test_evaluate_dispatch_parallel_two_disjoint_slots(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            {
+                **_task("eng-20260726-01").to_dict(),
+                "allowed_paths": ["src/value_investor/ingest/"],
+            },
+            {
+                **_task("eng-20260726-02", title="Second task").to_dict(),
+                "area": "scoring",
+                "allowed_paths": ["src/value_investor/scoring/"],
+            },
+            _task("eng-20260726-03", title="Third task").to_dict(),
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    decision = evaluate_engineering_dispatch(
+        tasks_path=tasks_path,
+        open_prs=[],
+        max_parallel=2,
+    )
+    assert decision.should_dispatch is True
+    assert decision.next_task_ids == ["eng-20260726-01", "eng-20260726-02"]
+
+
+def test_evaluate_dispatch_blocks_overlapping_paths(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    scoring_paths = [
+        "src/value_investor/summary.py",
+        "tests/test_summary.py",
+    ]
+    payload = {
+        "tasks": [
+            {
+                **_task("eng-20260726-02", status="pr_open").to_dict(),
+                "area": "scoring",
+                "branch_name": "cursor/eng-20260726-02-1de3",
+                "allowed_paths": scoring_paths,
+            },
+            {
+                **_task("eng-20260726-01", title="Second scoring task").to_dict(),
+                "area": "scoring",
+                "allowed_paths": scoring_paths,
+            },
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    decision = evaluate_engineering_dispatch(
+        tasks_path=tasks_path,
+        open_prs=[
+            {
+                "number": 112,
+                "headRefName": "cursor/eng-20260726-02-1de3",
+                "title": "feat(engineering): scoring",
+            }
+        ],
+        max_parallel=2,
+    )
+    assert decision.should_dispatch is False
+    assert "path-disjoint" in decision.reason
+
+
+def test_evaluate_dispatch_prefers_disjoint_task_when_pr_open(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            {
+                **_task("eng-20260726-02", status="pr_open").to_dict(),
+                "area": "scoring",
+                "branch_name": "cursor/eng-20260726-02-1de3",
+                "allowed_paths": ["src/value_investor/summary.py"],
+            },
+            {
+                **_task("eng-20260726-01").to_dict(),
+                "area": "scoring",
+                "allowed_paths": ["src/value_investor/summary.py"],
+            },
+            {
+                **_task("eng-20260726-03", title="Ingest gap").to_dict(),
+                "allowed_paths": ["src/value_investor/ingest/"],
+            },
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    decision = evaluate_engineering_dispatch(
+        tasks_path=tasks_path,
+        open_prs=[
+            {
+                "number": 112,
+                "headRefName": "cursor/eng-20260726-02-1de3",
+                "title": "feat(engineering): scoring",
+            }
+        ],
+        max_parallel=2,
+    )
+    assert decision.should_dispatch is True
+    assert decision.next_task_id == "eng-20260726-03"
+
+
+def test_select_path_disjoint_engineering_tasks_skips_overlap(tmp_path: Path):
+    payload = {
+        "tasks": [
+            {
+                **_task("eng-20260726-01").to_dict(),
+                "allowed_paths": ["src/value_investor/summary.py"],
+            },
+            {
+                **_task("eng-20260726-02", title="Ingest").to_dict(),
+                "allowed_paths": ["src/value_investor/ingest/foo.py"],
+            },
+        ]
+    }
+    picked = select_path_disjoint_engineering_tasks(
+        payload,
+        max_tasks=2,
+        blocked_paths=["src/value_investor/summary.py"],
+    )
+    assert [task.id for task in picked] == ["eng-20260726-02"]
 
 
 def test_refresh_engineering_queue_ui_updates_automation(tmp_path: Path):

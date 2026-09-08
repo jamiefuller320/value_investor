@@ -10,6 +10,7 @@ exists.
 
 from __future__ import annotations
 
+from collections import defaultdict
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -46,6 +47,11 @@ ACTION_NOTE_MARKERS = (
 CLOSURE_AUTO_QUEUE = "auto_queue"
 CLOSURE_HUMAN_GATE = "human_gate"
 CLOSURE_OBSERVE = "observe"
+
+_BATCH_TASK_TITLES: dict[str, str] = {
+    "fcf_note_without_overlay": "Honour FCF action-note enforcement (batched tickers)",
+    "fcf_enforcement_gap": "Close FCF basis enforcement gap (batched tickers)",
+}
 
 
 @dataclass(frozen=True)
@@ -333,6 +339,78 @@ def _existing_open_keys(rows: list[dict[str, Any]]) -> set[tuple[str, str]]:
     return open_keys
 
 
+def _existing_open_batch_keys(rows: list[dict[str, Any]]) -> set[tuple[str, str]]:
+    """Open (area, kind) pairs for batched or legacy per-ticker so-what tasks."""
+    keys: set[tuple[str, str]] = set()
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        if str(row.get("status") or "open").strip().lower() in TERMINAL_TASK_STATUSES:
+            continue
+        area = str(row.get("area") or "").strip()
+        evidence = row.get("evidence") if isinstance(row.get("evidence"), dict) else {}
+        kind = str(evidence.get("kind") or "").strip()
+        if area and kind in _BATCH_TASK_TITLES:
+            keys.add((area, kind))
+    return keys
+
+
+def _build_batch_engineering_task(
+    *,
+    area: str,
+    kind: str,
+    findings: list[SoWhatFinding],
+    task_id: str,
+) -> EngineeringTask:
+    title = _BATCH_TASK_TITLES[kind]
+    tickers = sorted({f.ticker for f in findings if f.ticker})
+    ticker_sample = ", ".join(tickers[:8])
+    if len(tickers) > 8:
+        ticker_sample += f" (+{len(tickers) - 8} more)"
+    severities = {f.severity for f in findings}
+    severity = "high" if "high" in severities else "medium"
+    if kind == "fcf_enforcement_gap":
+        summary = (
+            f"Batched so-what closure for {len(tickers)} buy-tier name(s) with material "
+            f"FCF basis divergence and fcf_basis_overlay=False ({ticker_sample}). "
+            "Implement fail-closed overlay once for all tickers; add regression tests per ticker."
+        )
+    else:
+        summary = (
+            f"Batched so-what closure for {len(tickers)} buy-tier name(s) where action_note "
+            f"flags FCF basis but overlay is missing ({ticker_sample}). "
+            "Wire note -> overlay/gate consistently; add regression tests per ticker."
+        )
+    return EngineeringTask(
+        id=task_id,
+        title=title[:160],
+        summary=summary[:2000],
+        area=area,
+        priority="high" if severity == "high" else "medium",
+        priority_score=82.0 if severity == "high" else 70.0,
+        status="open",
+        source="so_what_closure",
+        evidence={
+            "kind": kind,
+            "batched": True,
+            "tickers": tickers,
+            "finding_count": len(findings),
+            "findings": [
+                {
+                    "finding_id": f.finding_id,
+                    "ticker": f.ticker,
+                    "severity": f.severity,
+                    **(f.evidence or {}),
+                }
+                for f in findings
+            ],
+        },
+        acceptance_criteria=_default_acceptance_criteria(area, tickers),
+        allowed_paths=_allowed_paths_for_area(area),
+        blocked_paths=list(BLOCKED_PATHS),
+    )
+
+
 def apply_so_what_auto_queue(
     findings: list[SoWhatFinding] | None = None,
     *,
@@ -358,6 +436,7 @@ def apply_so_what_auto_queue(
         existing = {"tasks": []}
     rows = [r for r in (existing.get("tasks") or []) if isinstance(r, dict)]
     open_keys = _existing_open_keys(rows)
+    open_batch_keys = _existing_open_batch_keys(rows)
     run_stamp = datetime.now(UTC).strftime("%Y%m%d")
     next_seq = _next_engineering_seq_from_rows(rows, run_stamp)
 
@@ -365,7 +444,58 @@ def apply_so_what_auto_queue(
     skipped: list[dict[str, Any]] = []
     generated: list[EngineeringTask] = []
 
+    groups: dict[tuple[str, str], list[SoWhatFinding]] = defaultdict(list)
+    ungrouped: list[SoWhatFinding] = []
     for finding in auto:
+        area = str(finding.engineering_area or "scoring").strip() or "scoring"
+        if finding.kind in _BATCH_TASK_TITLES:
+            groups[(area, finding.kind)].append(finding)
+        else:
+            ungrouped.append(finding)
+
+    for (area, kind), group_findings in sorted(groups.items()):
+        if (area, kind) in open_batch_keys:
+            for finding in group_findings:
+                skipped.append(
+                    {
+                        "finding_id": finding.finding_id,
+                        "reason": "batch_already_open",
+                        "kind": kind,
+                    }
+                )
+            continue
+        if any(
+            bp in " ".join(f.engineering_summary or "" for f in group_findings)
+            for bp in BLOCKED_PATHS
+        ):
+            for finding in group_findings:
+                skipped.append({"finding_id": finding.finding_id, "reason": "blocked_path"})
+            continue
+
+        task_id = f"eng-{run_stamp}-{next_seq:02d}"
+        next_seq += 1
+        task = _build_batch_engineering_task(
+            area=area,
+            kind=kind,
+            findings=group_findings,
+            task_id=task_id,
+        )
+        generated.append(task)
+        open_batch_keys.add((area, kind))
+        created.append(
+            {
+                "finding_id": group_findings[0].finding_id,
+                "task_id": task_id,
+                "title": task.title,
+                "area": area,
+                "severity": task.priority,
+                "batched": True,
+                "tickers": task.evidence.get("tickers") if isinstance(task.evidence, dict) else [],
+                "finding_count": len(group_findings),
+            }
+        )
+
+    for finding in ungrouped:
         area = str(finding.engineering_area or "scoring").strip() or "scoring"
         title = str(finding.engineering_title or "").strip()
         summary = str(finding.engineering_summary or finding.so_what).strip()

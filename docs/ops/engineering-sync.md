@@ -17,6 +17,8 @@ dropping still-open tasks from an older run stamp. The agent then failed with
 |-------|-----------|
 | **Merge guard** | `_merge_task_rows` preserves all `open` tasks, not only terminal/`pr_open` rows |
 | **Agent workflow** | Skips compile when `task_id` is provided; resolves stale ids via `resolve_dispatch_task_id` |
+| **Parallel dispatch** | `max_parallel_engineering_agents` (default 2) with **path-disjoint** selection — a second agent starts only when its `allowed_paths` do not overlap an in-flight `pr_open` task |
+| **So-what batching** | `so_what_closure` groups `auto_queue` findings by `(area, kind)` so shared scoring plumbing is one PR, not one per ticker |
 | **Spend commit** | `scripts/gha_commit_engineering_spend.sh` rebases onto `origin/main`, re-records spend, and retries the push. Exhausted retries are `continue-on-error` so a raced `policy.json` push cannot block the draft PR |
 | **Queue recovery** | Hourly `recover-queue` marks tasks **merged** when GitHub shows a merged PR for their branch (before orphan `pr_open` reset) |
 | **Ops monitor** | Daily `check_engineering_sync()`; reconciles queue and can dispatch `engineering-queue.yml` |

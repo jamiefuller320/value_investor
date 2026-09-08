@@ -15,9 +15,13 @@ residual overrides (auto pick wrong, or no filing/company figure).
 
 | Class | Meaning | Action |
 |-------|---------|--------|
-| `auto_queue` | No-judgment enforcement gap | Compile an open scoring engineering task (`source=so_what_closure`) |
+| `auto_queue` | No-judgment enforcement gap | Compile **one batched** open scoring task per finding *kind* (`source=so_what_closure`) |
 | `human_gate` | Residual: cannot auto-resolve policy FCF | Surface in progress report; optional bridge override |
 | `observe` | Mild / non-actionable | Report only |
+
+Batched tasks group all tickers sharing the same `(area, kind)` — e.g. every
+`fcf_note_without_overlay` name becomes one engineering task with `evidence.tickers[]`
+instead of one PR per ticker on shared `summary.py` / `pipeline.py` paths.
 
 First detector: buy-tier names in `docs/data/latest.json` with material screen vs
 filing FCF divergence (≥25%) or FCF action-note markers, without
