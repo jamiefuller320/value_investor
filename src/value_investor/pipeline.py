@@ -102,20 +102,27 @@ def _install_research_snapshot_hooks() -> None:
     )
 
     if not getattr(research_overlay.apply_research_overlay, "_snapshot_sync_installed", False):
+        from value_investor.summary import apply_research_overlay_with_fcf_enforcement
+
         _original_overlay = research_overlay.apply_research_overlay
 
         def _apply_research_overlay_with_snapshots(reports, documents):
-            from value_investor.summary import honour_fcf_action_note_enforcement
-
-            updated = _original_overlay(reports, documents)
-            updated = [honour_fcf_action_note_enforcement(report) for report in updated]
+            updated = apply_research_overlay_with_fcf_enforcement(reports, documents)
             if documents:
                 output_dir = _output_dir_from_documents(documents)
                 sync_research_verdict_snapshots(output_dir, updated, documents)
             return updated
 
         _apply_research_overlay_with_snapshots._snapshot_sync_installed = True  # type: ignore[attr-defined]
+        _apply_research_overlay_with_snapshots._original_overlay = _original_overlay  # type: ignore[attr-defined]
         research_overlay.apply_research_overlay = _apply_research_overlay_with_snapshots
+        try:
+            import value_investor.research.overlay_refresh as overlay_refresh
+
+            overlay_refresh.apply_research_overlay = apply_research_overlay_with_fcf_enforcement  # type: ignore[attr-defined]
+            overlay_refresh.apply_research_overlay._fcf_enforcement_installed = True  # type: ignore[attr-defined]
+        except ImportError:
+            pass
 
     if getattr(ResearchStore.save, "_snapshot_sync_installed", False):
         return
