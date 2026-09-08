@@ -16,6 +16,8 @@ from value_investor.agent_model_policy import (
 from value_investor.engineering_tasks import (
     COMMITTED_TASKS_PATH,
     EngineeringTask,
+    allowed_paths_overlap,
+    effective_allowed_paths,
     load_engineering_tasks,
     select_engineering_tasks,
     task_title_key,
@@ -140,6 +142,53 @@ def compute_dispatch_slots(
     """How many new engineering-agent runs the queue may start now."""
     occupied = int(status.pr_open_count) + max(0, int(agent_running_count))
     return max(0, int(max_parallel) - occupied)
+
+
+def in_flight_allowed_paths(
+    data: dict[str, Any],
+    *,
+    open_prs: list[dict[str, Any]] | None = None,
+) -> list[str]:
+    """Collect allowed_paths from pr_open tasks whose engineering PR is still open."""
+    open_branches = {
+        str(row.get("headRefName") or row.get("head_branch") or "").strip()
+        for row in (open_prs or [])
+        if str(row.get("headRefName") or row.get("head_branch") or "").strip()
+    }
+    blocked: list[str] = []
+    for row in data.get("tasks") or []:
+        if str(row.get("status") or "") != IN_FLIGHT_STATUS:
+            continue
+        branch = str(row.get("branch_name") or "").strip()
+        if branch and branch not in open_branches:
+            continue
+        for path in row.get("allowed_paths") or []:
+            token = str(path or "").strip()
+            if token and token not in blocked:
+                blocked.append(token)
+    return blocked
+
+
+def select_path_disjoint_engineering_tasks(
+    data: dict[str, Any],
+    *,
+    max_tasks: int,
+    blocked_paths: list[str] | None = None,
+) -> list[EngineeringTask]:
+    """Pick highest-priority open tasks whose allowed_paths do not overlap in-flight work."""
+    occupied = list(blocked_paths or [])
+    selected: list[EngineeringTask] = []
+    for task in select_engineering_tasks(data, max_tasks=999):
+        task_paths = effective_allowed_paths(task)
+        if occupied and task_paths and allowed_paths_overlap(task_paths, occupied):
+            continue
+        selected.append(task)
+        for path in task_paths:
+            if path not in occupied:
+                occupied.append(path)
+        if len(selected) >= max(0, int(max_tasks)):
+            break
+    return selected
 
 
 def task_id_from_branch(branch: str) -> str | None:
@@ -269,8 +318,22 @@ def evaluate_engineering_dispatch(
         )
 
     data = load_engineering_tasks(tasks_path)
-    next_tasks = select_engineering_tasks(data, max_tasks=slots)
+    in_flight_paths = in_flight_allowed_paths(data, open_prs=open_prs)
+    next_tasks = select_path_disjoint_engineering_tasks(
+        data,
+        max_tasks=slots,
+        blocked_paths=in_flight_paths,
+    )
     if not next_tasks:
+        if status.open_count > 0 and in_flight_paths:
+            return EngineeringDispatchDecision(
+                should_dispatch=False,
+                reason=(
+                    f"no path-disjoint open task — {status.pr_open_count} pr_open "
+                    "with overlapping allowed_paths"
+                ),
+                status=status,
+            )
         return EngineeringDispatchDecision(
             should_dispatch=False,
             reason="no open engineering tasks in queue",

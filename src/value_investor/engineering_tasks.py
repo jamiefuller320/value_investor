@@ -1334,6 +1334,15 @@ def path_matches_allowed_pattern(changed: str, pattern: str) -> bool:
     return changed == pattern
 
 
+def allowed_paths_overlap(paths_a: list[str], paths_b: list[str]) -> bool:
+    """True when two allowlists could authorize edits to the same file."""
+    for left in paths_a:
+        for right in paths_b:
+            if path_matches_allowed_pattern(left, right) or path_matches_allowed_pattern(right, left):
+                return True
+    return False
+
+
 def path_matches_blocked_pattern(changed: str, blocked: str) -> bool:
     changed = normalize_repo_path(changed)
     blocked = normalize_repo_path(blocked)
