@@ -281,6 +281,19 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://announcements.asx.com.au/asxpdf/20250512/pdf/06jmnm30pch1kv.pdf",
         "https://announcements.asx.com.au/asxpdf/20260511/pdf/06zg0w0pw5rswl.pdf",
     ],
+    # tsx60 buy-tier deepen — unmeasured GIB-A.TO (class-share news query + no GIB-A SEC ticker).
+    "GIB-A.TO": [
+        "https://www.sec.gov/Archives/edgar/data/1061574/000119312525322911/d88305d40f.htm",
+        "https://www.sec.gov/Archives/edgar/data/1061574/000106157425000006/cgi-fy25_q4xmda.htm",
+        "https://www.sec.gov/Archives/edgar/data/1061574/000106157426000012/cgi-fy26_q2xmda.htm",
+        "https://www.sec.gov/Archives/edgar/data/1061574/000106157426000017/cgi-fy26_q3xpressrelease.htm",
+    ],
+    "GIB-A": [
+        "https://www.sec.gov/Archives/edgar/data/1061574/000119312525322911/d88305d40f.htm",
+        "https://www.sec.gov/Archives/edgar/data/1061574/000106157425000006/cgi-fy25_q4xmda.htm",
+        "https://www.sec.gov/Archives/edgar/data/1061574/000106157426000012/cgi-fy26_q2xmda.htm",
+        "https://www.sec.gov/Archives/edgar/data/1061574/000106157426000017/cgi-fy26_q3xpressrelease.htm",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -337,6 +350,7 @@ _SEC_TICKER_ALIASES: dict[str, str] = {
     "ABI": "BUD",
     "LOGN": "LOGI",
     "C5H": "CRH",
+    "GIB-A": "GIB",
 }
 
 # Cross-listing inheritance for manual IR allowlist URLs (e.g. Amsterdam vs LSE Shell).
@@ -1247,6 +1261,39 @@ def _base_symbol(ticker: str) -> str:
         if t.endswith(suf):
             return t[: -len(suf)]
     return t
+
+
+_CLASS_SHARE_EPIC = re.compile(r"^([A-Z0-9]{1,6})-[A-Z]$")
+
+
+def _google_news_quote_term(token: str) -> str:
+    """Quote tokens that contain Google search operators (hyphen is NOT)."""
+    cleaned = (token or "").strip()
+    if not cleaned:
+        return ""
+    if any(ch in cleaned for ch in "-./"):
+        return f'"{cleaned}"'
+    return cleaned
+
+
+def _google_news_symbol_clause(ticker: str) -> str:
+    """Issuer symbol terms for Google News, with class-share aliases quoted."""
+    terms: list[str] = []
+    seen: set[str] = set()
+
+    def _add(token: str) -> None:
+        quoted = _google_news_quote_term(token)
+        if quoted and quoted not in seen:
+            seen.add(quoted)
+            terms.append(quoted)
+
+    _add(ticker)
+    epic = _base_symbol(ticker)
+    _add(epic)
+    match = _CLASS_SHARE_EPIC.match(epic)
+    if match:
+        _add(match.group(1))
+    return " OR ".join(terms)
 
 
 # Alternate LSE/ISE EPICs seen in RNS headlines and Ticker.app metadata (primary EPIC first).
@@ -2414,9 +2461,9 @@ def fetch_filings_asx_news(
     lookback_days: int = FILINGS_LOOKBACK_DAYS,
 ) -> list[dict[str, Any]]:
     """Discover ASX results / announcements via Google News (ASX + Market Index)."""
-    epic = _base_symbol(ticker)
     query = (
-        f'(site:asx.com.au OR site:marketindex.com.au) ("{company_name}" OR {epic}) '
+        f'(site:asx.com.au OR site:marketindex.com.au) '
+        f'("{company_name}" OR {_google_news_symbol_clause(ticker)}) '
         f'(Results OR "Annual Report" OR "Half Year" OR "Half-year" OR Interim OR '
         f'"Full Year" OR "Preliminary Final" OR "Quarterly Activities")'
     )
@@ -2760,12 +2807,11 @@ def fetch_filings_euro_news(
     """Discover Euro-listed results releases via Google News headlines."""
     from value_investor.research.news_locale import euro_filing_site_clause, resolve_news_locale
 
-    epic = _base_symbol(ticker)
     site_clause = euro_filing_site_clause(ticker)
     locale = resolve_news_locale(market, ticker)
     query = (
         f"{site_clause}"
-        f'("{company_name}" OR {epic} OR {ticker}) '
+        f'("{company_name}" OR {_google_news_symbol_clause(ticker)}) '
         f'("Annual Report" OR "Full Year Results" OR "Half-year Results" OR '
         f'"Interim Results" OR "Quarterly Results" OR "Half Year Results" OR '
         f'"Preliminary Results" OR "Geschäftsbericht" OR "Résultats")'
@@ -2791,10 +2837,9 @@ def fetch_filings_tsx_news(
     lookback_days: int = FILINGS_LOOKBACK_DAYS,
 ) -> list[dict[str, Any]]:
     """Discover Canadian issuer results / SEDAR+ headlines via Google News."""
-    epic = _base_symbol(ticker)
     query = (
         f"(site:sedarplus.ca OR site:sedar.com OR site:newswire.ca) "
-        f'("{company_name}" OR {epic}) '
+        f'("{company_name}" OR {_google_news_symbol_clause(ticker)}) '
         f'(Results OR "Annual Report" OR "Annual Financial" OR Interim OR '
         f'"Management\'s Discussion" OR "MD&A" OR "Quarterly Report")'
     )
@@ -2819,9 +2864,8 @@ def fetch_filings_asia_news(
     lookback_days: int = FILINGS_LOOKBACK_DAYS,
 ) -> list[dict[str, Any]]:
     """Discover HK / Singapore results headlines via Google News."""
-    epic = _base_symbol(ticker)
     query = (
-        f'("{company_name}" OR {epic} OR {ticker}) '
+        f'("{company_name}" OR {_google_news_symbol_clause(ticker)}) '
         f'("Annual Report" OR "Full Year Results" OR "Interim Results" OR '
         f'"Half-year Results" OR "Quarterly Results" OR "Final Results")'
     )
@@ -3383,6 +3427,8 @@ def _ir_allowlist_period_from_url(url: str) -> str:
             "accounts",
             "20-f",
             "20f",
+            "40-f",
+            "40f",
             "10-k",
             "10k",
         )
@@ -6215,7 +6261,8 @@ def ingest_filings(
     elif regime == "tsx_announcements":
         note = (
             "Canadian issuer announcement discovery via Google News (SEDAR+ / "
-            "newswire), plus SEC filings when dual-listed. period=annual|interim|other."
+            "newswire), optional IR allowlist URLs, plus SEC filings when dual-listed. "
+            "period=annual|interim|other."
         )
     elif regime == "asia_filings":
         note = (

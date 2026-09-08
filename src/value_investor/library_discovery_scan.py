@@ -93,6 +93,13 @@ def list_regime_filings_index_only(
             )
     elif regime == "tsx_announcements":
         groups.append(fetch_filings_tsx_news(company_name=company_name, ticker=ticker))
+        if _sec_edgar_supplement_allowed(ticker, company_name):
+            groups.append(
+                fetch_filings_sec_edgar(
+                    ticker=_base_symbol(ticker),
+                    include_current_reports=False,
+                )
+            )
     elif regime == "asia_filings":
         groups.append(fetch_filings_asia_news(company_name=company_name, ticker=ticker))
     else:
