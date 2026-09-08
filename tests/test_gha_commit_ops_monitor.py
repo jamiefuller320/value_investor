@@ -163,7 +163,10 @@ def test_ops_monitor_commit_keeps_queue_edits_when_main_unchanged(tmp_path: Path
     assert result.returncode == 0, result.stderr
     latest = tmp_path / "latest"
     _git(tmp_path, "clone", str(remote), str(latest))
-    ids = [row["id"] for row in _read_json(latest / "docs" / "data" / "engineering_tasks.json")["tasks"]]
+    ids = [
+        row["id"]
+        for row in _read_json(latest / "docs" / "data" / "engineering_tasks.json")["tasks"]
+    ]
     assert ids == ["eng-1", "eng-2"]
 
 
