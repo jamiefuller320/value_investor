@@ -130,6 +130,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "VOE.VI": [
         "https://www.voestalpine.com/group/static/sites/group/.downloads/en/publications-2025-26/2025-26-annual-report.pdf",
     ],
+    # euro_depth IWB blocker — BAS.DE parked awaiting_periodic_report; FY2025 annual PDF.
     "BAS.DE": [
         "https://report.basf.com/2025/en/_assets/downloads/full-basf-report-2025-basf-ar25.pdf",
     ],
@@ -3502,6 +3503,9 @@ def _ir_allowlist_period_from_url(url: str) -> str:
         return "annual"
     # Belgian / Benelux annual report packs (e.g. AEDIFICA-RA25_EN).
     if re.search(r"[-_/]ra\d{2}(?:[_\-]|\.|$)", lower):
+        return "annual"
+    # DACH annual-report shorthand (e.g. BASF/OMV *-ar25.pdf).
+    if re.search(r"[-_/]ar\d{2}(?:[_\-]|\.|$)", lower):
         return "annual"
     if any(token in lower for token in ("trading",)):
         return "trading_update"
