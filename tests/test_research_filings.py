@@ -6234,6 +6234,20 @@ def test_parked_source_hunter_skip_tsn_sp500():
     assert fetch_filings_ir_allowlist("TSN") == []
 
 
+def test_parked_source_hunter_skip_abi_br_euro_depth():
+    """eng-20260908-01: ABI.BR leftover IWB is 6-K cover HTML; IR is age-gated."""
+    assert "ABI.BR" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["ABI.BR"]
+    assert "6-K" in reason
+    assert "substantiveness" in reason
+    assert "age-gated" in reason
+    assert "20-F" in reason
+    assert "EX-99.1" in reason
+    rows = fetch_filings_ir_allowlist("ABI.BR")
+    assert rows
+    assert all("sec.gov/Archives/edgar/data/1668717" in row["url"] for row in rows)
+
+
 def test_ldos_acquisition_8k_primary_fails_substantiveness_gate(monkeypatch):
     """eng-20260907-06: LDOS Mar 2026 Entrust acquisition-closing 8-K primary is below gate."""
     cover_html = """
