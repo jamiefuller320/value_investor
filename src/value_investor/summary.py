@@ -42,6 +42,7 @@ from value_investor.scoring.fcf import (
 )
 from value_investor.scoring.fcf_basis_overlay import (
     apply_fcf_basis_overlay_to_signal,
+    fcf_action_note_declares_mismatch,
     fcf_basis_action_note_mismatch,
 )
 from value_investor.scoring.healthcare_overlay import (
@@ -1073,13 +1074,16 @@ def build_company_reports(
             screen_ttm=screen_ttm,
             canonical=free_cashflow,
             fcf_definition_divergence=fcf_definition_divergence,
-        )
+        ) or fcf_action_note_declares_mismatch(action_note)
         filing_screen_mismatch = bool(fcf_bundle.get("filing_screen_mismatch")) or (
             fcf_filing_screen_mismatch(
                 filing_aligned=fcf_bundle.get("filing_aligned"),
                 screen_ttm=screen_ttm,
                 divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
             )
+        )
+        universe_divergence_flagged = fcf_divergence_flagged or bool(
+            fcf_bundle.get("fcf_divergence_flagged")
         )
         if (
             fcf_basis_overlay_flag is not None
@@ -1093,8 +1097,9 @@ def build_company_reports(
                     signal,
                     divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
                     filing_screen_mismatch=filing_screen_mismatch,
-                    universe_divergence_flagged=fcf_divergence_flagged,
+                    universe_divergence_flagged=universe_divergence_flagged,
                     action_note_mismatch=fcf_action_note_mismatch,
+                    action_note_declares_mismatch=fcf_action_note_declares_mismatch(action_note),
                     ticker_models=ticker_models,
                     conviction_score=conviction_score,
                     adjusted_signal=adjusted_signal_str,

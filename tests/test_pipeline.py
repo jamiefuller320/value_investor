@@ -1042,6 +1042,63 @@ def test_enrich_signals_with_fcf_basis_overlay_honours_universe_divergence_note(
     assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.72 * 0.85)
 
 
+def test_enrich_signals_with_fcf_basis_overlay_honours_action_note_text_gfrd_style(
+    tmp_path: Path,
+):
+    """Pipeline path: stale FCF mismatch note must still cap buy-tier signals."""
+    sources = tmp_path / "research" / "GFRD.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "GFRD.L",
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 65_700_000.0,
+                        "Capital Expenditure": -2_400_000.0,
+                        "Free Cash Flow": 63_300_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "GFRD.L",
+                "signal": "buy",
+                "conviction_score": 0.79,
+                "free_cashflow": 63_300_000.0,
+                "fcf_basis_overlay": False,
+                "adjusted_signal": "buy",
+                "action_note": (
+                    "Buy — neutral timing | FCF basis mismatch: filing £63.3M | screen TTM £50.0M"
+                ),
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "GFRD.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_fcf_basis_overlay(signals, model_results, output_dir=tmp_path)
+
+    assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "hold"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.79 * 0.85)
+
+
 def test_parse_adjusted_eps_growth_pct_from_ir_prose():
     assert parse_adjusted_eps_growth_pct("Adjusted EPS increased by 16% to 9.9p") == pytest.approx(
         0.16
