@@ -2682,6 +2682,214 @@ def test_apply_research_overlay_with_fcf_enforcement_caps_trn_style_buy():
     assert overlaid.adjusted_signal == "hold"
 
 
+def _vty_fcf_mismatch_note() -> str:
+    return (
+        "Strong Buy — neutral timing | FCF basis mismatch: filing £174.6M | "
+        "screen TTM £147.4M | Earnings growth basis divergence >300 bps: "
+        "statutory 91.8% vs filing core 85.2%"
+    )
+
+
+def test_fcf_basis_overlay_honours_action_note_predicate_vty_style_gap():
+    """VTY.L-style gap: ~16% filing/screen divergence below 25% but above 15%."""
+    filing = 174_600_000.0
+    screen = 147_400_000.0
+    assert fcf_universe_divergence_flagged(
+        filing_aligned=filing,
+        screen_ttm=screen,
+        company_adjusted=None,
+        filing_currency="GBP",
+    )
+    assert not fcf_filing_screen_mismatch(
+        filing_aligned=filing,
+        screen_ttm=screen,
+        divergence_flagged=False,
+    )
+    note = _vty_fcf_mismatch_note()
+    assert parse_filing_aligned_from_action_note(note) == pytest.approx(filing)
+    assert parse_screen_ttm_from_action_note(note) == pytest.approx(screen)
+    assert fcf_action_note_mismatch(
+        filing_aligned=filing,
+        screen_ttm=screen,
+        filing_currency="GBP",
+    )
+
+
+def test_honour_fcf_action_note_enforcement_caps_vty_style_strong_buy():
+    """VTY.L: strong_buy with FCF mismatch note but fcf=None must cap on export."""
+    note = _vty_fcf_mismatch_note()
+    report = CompanyReport.from_dict(
+        {
+            "ticker": "VTY.L",
+            "name": "Vistry Group PLC",
+            "sector": "Consumer Cyclical",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "models_passed": 11,
+            "model_count": 22,
+            "composite_score": 0.6598,
+            "sector_composite_score": 0.7247,
+            "families_passed": 4,
+            "passed_families": "cheapness,quality,dividend,risk",
+            "family_count": 5,
+            "data_quality_score": 1.0,
+            "metrics_present": 20,
+            "metrics_total": 20,
+            "weeks_at_signal": 2,
+            "signal_trend": "stable",
+            "conviction_score": 0.6598,
+            "stability_label": "building",
+            "timing_signal": "neutral",
+            "timing_score": 0.5,
+            "rsi_14": 50.0,
+            "price_vs_sma200_pct": 0.0,
+            "action_note": note,
+            "fcf_basis_overlay": False,
+            "fcf": None,
+            "summary": "Strong Buy (11/22 models).",
+            "passed_models": [],
+            "key_metrics": {},
+        }
+    )
+
+    enforced = honour_fcf_action_note_enforcement(report)
+    assert enforced.fcf_basis_overlay is True
+    assert enforced.adjusted_signal == "buy"
+    assert enforced.conviction_score == pytest.approx(0.6598 * 0.85)
+
+    snapshot = report.to_dict()
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert snapshot["conviction_score"] == pytest.approx(0.6598 * 0.85)
+
+
+def test_build_company_reports_exports_fcf_basis_overlay_for_vty(tmp_path: Path):
+    """VTY.L-style: universe divergence at 16% caps strong_buy despite sub-25% filing gap."""
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="VTY.L",
+                name="Vistry Group PLC",
+                sector="Consumer Cyclical",
+                signal="strong_buy",
+                conviction_score=0.6598,
+                free_cashflow=174_600_000.0,
+                free_cashflow_screen_ttm=147_400_000.0,
+                fcf_basis_overlay=False,
+                adjusted_signal="strong_buy",
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "VTY.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    assert report.fcf_basis_overlay is True
+    assert report.adjusted_signal == "buy"
+    assert "FCF basis mismatch" in report.action_note
+
+    snapshot = report.to_dict()
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+
+
+def test_export_enforced_report_dicts_honours_vty_style_stale_row():
+    """VTY.L cached email_reports rows must not ship strong_buy beside an FCF mismatch note."""
+    from value_investor.summary import export_enforced_report_dicts
+
+    stale = {
+        "ticker": "VTY.L",
+        "name": "Vistry Group PLC",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "fcf_basis_overlay": False,
+        "conviction_score": 0.6598,
+        "action_note": _vty_fcf_mismatch_note(),
+        "models_passed": 11,
+        "model_count": 22,
+        "composite_score": 0.6598,
+        "families_passed": 4,
+        "data_quality_score": 1.0,
+        "metrics_present": 20,
+        "metrics_total": 20,
+        "weeks_at_signal": 2,
+        "signal_trend": "stable",
+        "stability_label": "building",
+        "timing_signal": "neutral",
+        "timing_score": 0.5,
+        "summary": "Strong Buy (11/22 models).",
+        "passed_models": [],
+        "key_metrics": {},
+    }
+    exported = export_enforced_report_dicts([stale])[0]
+    assert exported["fcf_basis_overlay"] is True
+    assert exported["adjusted_signal"] == "buy"
+    assert exported["conviction_score"] == pytest.approx(0.6598 * 0.85)
+
+
+def test_apply_research_overlay_with_fcf_enforcement_caps_vty_style_strong_buy():
+    """VTY.L: stale overlay=false must not leave strong_buy beside FCF mismatch note."""
+    from value_investor.research.document import ResearchDocument
+
+    note = _vty_fcf_mismatch_note()
+    stale = CompanyReport.from_dict(
+        {
+            "ticker": "VTY.L",
+            "name": "Vistry Group PLC",
+            "sector": "Consumer Cyclical",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "models_passed": 11,
+            "model_count": 22,
+            "composite_score": 0.6598,
+            "families_passed": 4,
+            "data_quality_score": 1.0,
+            "metrics_present": 20,
+            "metrics_total": 20,
+            "weeks_at_signal": 2,
+            "signal_trend": "stable",
+            "conviction_score": 0.6598,
+            "stability_label": "building",
+            "timing_signal": "neutral",
+            "timing_score": 0.5,
+            "action_note": note,
+            "fcf_basis_overlay": False,
+            "fcf": None,
+            "summary": "Strong Buy (11/22 models).",
+            "passed_models": [],
+            "key_metrics": {},
+        }
+    )
+    doc = ResearchDocument(
+        ticker="VTY.L",
+        name="Vistry Group PLC",
+        signal="strong_buy",
+        version=1,
+        created_at="2026-09-06T00:00:00+00:00",
+        updated_at="2026-09-06T00:00:00+00:00",
+        mode="gap_fill",
+        research_verdict="accumulate",
+        research_risk_level="high",
+        research_confidence=0.7,
+        research_rationale="Deep research moderates the Strong Buy on near-term earnings quality.",
+    )
+
+    overlaid = apply_research_overlay_with_fcf_enforcement([stale], [doc])[0]
+    assert overlaid.fcf_basis_overlay is True
+    assert overlaid.adjusted_signal == "buy"
+
+
 def test_apply_research_overlay_with_fcf_enforcement_caps_sn_style_strong_buy(
     tmp_path: Path,
 ):

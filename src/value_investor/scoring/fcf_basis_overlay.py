@@ -110,6 +110,28 @@ def cap_conviction_for_fcf_basis_overlay(conviction_score: float) -> float:
     return max(0.0, float(conviction_score) * FCF_BASIS_CONVICTION_MULTIPLIER)
 
 
+def _fcf_bundle_for_enforcement(
+    fcf_bundle: dict[str, Any] | None,
+    *,
+    action_note: str | None = None,
+    screen_ttm: float | None = None,
+) -> dict[str, Any]:
+    """Rebuild filing/screen FCF bases from persisted rows or action-note text."""
+    from value_investor.scoring.fcf import fcf_bundle_from_persisted_report
+
+    bundle = dict(fcf_bundle) if fcf_bundle else {}
+    if bundle.get("filing_aligned") is None or bundle.get("screen_ttm") is None:
+        from_note = fcf_bundle_from_persisted_report(
+            bundle if bundle else None,
+            action_note=action_note,
+        )
+        for key, value in from_note.items():
+            bundle.setdefault(key, value)
+    if screen_ttm is not None and bundle.get("screen_ttm") is None:
+        bundle["screen_ttm"] = screen_ttm
+    return bundle
+
+
 def fcf_export_enforcement_active(
     *,
     fcf_basis_overlay: bool = False,
@@ -120,10 +142,14 @@ def fcf_export_enforcement_active(
     """True when export/snapshot paths must cap buy-tier signals for FCF basis notes."""
     if fcf_basis_overlay:
         return True
-    bundle = fcf_bundle or {}
+    bundle = _fcf_bundle_for_enforcement(
+        fcf_bundle,
+        action_note=action_note,
+        screen_ttm=screen_ttm,
+    )
     numeric_mismatch = fcf_basis_action_note_mismatch(
         bundle,
-        screen_ttm=screen_ttm,
+        screen_ttm=screen_ttm or bundle.get("screen_ttm"),
     )
     return fcf_basis_enforcement_needed(
         action_note_mismatch=numeric_mismatch,
@@ -142,11 +168,17 @@ def apply_fcf_export_enforcement(
     screen_ttm: float | None = None,
 ) -> tuple[bool, str, float]:
     """Re-apply FCF basis caps after research merge or stale overlay flags."""
+    bundle = _fcf_bundle_for_enforcement(
+        fcf_bundle,
+        action_note=action_note,
+        screen_ttm=screen_ttm,
+    )
+    resolved_screen_ttm = screen_ttm or bundle.get("screen_ttm")
     if not fcf_export_enforcement_active(
         fcf_basis_overlay=fcf_basis_overlay,
         action_note=action_note,
-        fcf_bundle=fcf_bundle,
-        screen_ttm=screen_ttm,
+        fcf_bundle=bundle,
+        screen_ttm=resolved_screen_ttm,
     ):
         return bool(fcf_basis_overlay), adjusted_signal, float(conviction_score or 0.0)
 
@@ -279,13 +311,20 @@ def honour_fcf_action_notes_on_signals(signals: pd.DataFrame) -> pd.DataFrame:
             if existing is not None and not (isinstance(existing, float) and pd.isna(existing))
             else None
         )
+        row_fcf = row.get("fcf") if isinstance(row.get("fcf"), dict) else None
+        fcf_bundle = _fcf_bundle_for_enforcement(
+            row_fcf,
+            action_note=action_note,
+            screen_ttm=screen_ttm_from_row(row),
+        )
         overlay, merged_adjusted, conviction = apply_fcf_export_enforcement(
             signal=signal,
             adjusted_signal=existing_adjusted or signal,
             conviction_score=float(row.get("conviction_score") or 0.0),
             action_note=action_note,
             fcf_basis_overlay=bool(row.get("fcf_basis_overlay")),
-            screen_ttm=screen_ttm_from_row(row),
+            fcf_bundle=fcf_bundle if fcf_bundle else None,
+            screen_ttm=fcf_bundle.get("screen_ttm"),
         )
         if not overlay:
             continue
