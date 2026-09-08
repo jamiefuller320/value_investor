@@ -696,7 +696,11 @@ def export_enforced_report_dicts(reports: list[dict[str, Any]]) -> list[dict[str
     for row in reports:
         if not isinstance(row, dict):
             continue
-        enforced.append(CompanyReport.from_dict(row).to_dict())
+        updated = CompanyReport.from_dict(row).to_dict()
+        extras = {key: value for key, value in row.items() if key not in updated}
+        if extras:
+            updated.update(extras)
+        enforced.append(updated)
     return enforced
 
 
