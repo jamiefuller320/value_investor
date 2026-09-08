@@ -46,7 +46,7 @@
     "learning_tracks_review missing or inconclusive"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-08T07:37:29.943479+00:00",
+    "snapshot_at": "2026-09-08T08:20:24.909896+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 47,
     "unmeasured_buy_tier": 0,
@@ -167,7 +167,7 @@
   "should_run_sprint_ingest": false,
   "should_run_maintenance_ingest": true,
   "should_run_ingest": false,
-  "evaluated_at": "2026-09-08T07:37:29.945454+00:00",
+  "evaluated_at": "2026-09-08T08:20:24.911333+00:00",
   "maintenance_markets": [
     "asx200",
     "euro_depth",
@@ -197,7 +197,7 @@
         "need 4 observe snapshots (have 0)"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-08T07:55:29.092511+00:00",
+        "snapshot_at": "2026-09-08T08:20:38.220775+00:00",
         "market_id": "tsx60",
         "buy_tier_count": 19,
         "unmeasured_buy_tier": 0,
@@ -283,7 +283,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-08T07:37:43.564930+00:00",
+      "evaluated_at": "2026-09-08T08:20:38.221410+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -295,7 +295,7 @@
       "market_id": "ftse_smallcap",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=1, thin=1, indexed_without_body=45)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=2, indexed_without_body=106)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
@@ -307,26 +307,26 @@
         "need 4 observe snapshots (have 0)"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-08T07:37:44.567265+00:00",
+        "snapshot_at": "2026-09-08T08:20:39.215322+00:00",
         "market_id": "ftse_smallcap",
         "buy_tier_count": 12,
         "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 1,
-        "thin_body_buy_tier": 1,
-        "indexed_without_body": 45,
-        "bodies_min": 2,
-        "bodies_median": 52,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 2,
+        "indexed_without_body": 106,
+        "bodies_min": 8,
+        "bodies_median": 51.0,
         "bodies_max": 68,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
-        "zero_body_tickers": [
+        "zero_body_tickers": [],
+        "thin_body_tickers": [
+          "CARD.L",
           "GMS.L"
         ],
-        "thin_body_tickers": [
-          "CARD.L"
-        ],
         "indexed_without_body_tickers": [
+          "CARD.L",
           "FOXT.L",
           "DFS.L",
           "MER.L",
@@ -338,6 +338,7 @@
           "GMS.L"
         ],
         "indexed_without_body_by_ticker": {
+          "CARD.L": 31,
           "FOXT.L": 5,
           "DFS.L": 5,
           "MER.L": 5,
@@ -346,16 +347,18 @@
           "BOOT.L": 5,
           "FORT.L": 5,
           "ULTP.L": 5,
-          "GMS.L": 5
+          "GMS.L": 35
         },
         "parked_tickers": [],
         "parked_count": 0,
-        "effective_thin_body_buy_tier": 1,
+        "effective_thin_body_buy_tier": 2,
         "effective_thin_body_tickers": [
-          "CARD.L"
+          "CARD.L",
+          "GMS.L"
         ],
-        "effective_indexed_without_body": 45,
+        "effective_indexed_without_body": 106,
         "effective_indexed_without_body_tickers": [
+          "CARD.L",
           "FOXT.L",
           "DFS.L",
           "MER.L",
@@ -368,7 +371,7 @@
         ],
         "ingest_exhausted": false
       },
-      "filing_gaps": 1,
+      "filing_gaps": 0,
       "max_daily_successes": 4,
       "max_targets": 24,
       "cron_morning": true,
@@ -380,7 +383,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-08T07:37:44.567733+00:00",
+      "evaluated_at": "2026-09-08T08:20:39.215764+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -399,7 +402,7 @@
     "head_market": "euro_depth",
     "head_at_parity": true,
     "head_needs_fat_slot": false,
-    "hour_utc": 7,
+    "hour_utc": 8,
     "skip_stream_2_now": false,
     "stream_1_mode": "full",
     "stream_2_mode": "full",
