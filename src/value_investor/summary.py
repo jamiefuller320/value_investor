@@ -701,6 +701,11 @@ def apply_research_overlay_with_fcf_enforcement(
     return [honour_fcf_action_note_enforcement(report) for report in updated]
 
 
+def enforce_fcf_export_dict(data: dict[str, Any]) -> dict[str, Any]:
+    """Re-apply FCF basis caps before publishing a persisted report dict."""
+    return CompanyReport.from_dict(data).to_dict()
+
+
 def honour_fcf_action_note_enforcement(report: CompanyReport) -> CompanyReport:
     """Re-apply FCF basis caps when action notes or flags require export enforcement."""
     adjusted = str(report.adjusted_signal or report.signal)

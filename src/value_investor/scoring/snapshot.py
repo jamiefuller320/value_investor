@@ -13,6 +13,35 @@ from value_investor.scoring.fcf_basis_overlay import apply_fcf_export_enforcemen
 from value_investor.storage import read_json, write_json
 
 
+def enforce_fcf_basis_in_snapshot(
+    snapshot: dict[str, Any],
+    *,
+    adjusted_signal: str | None = None,
+) -> dict[str, Any]:
+    """Cap buy-tier signals when FCF basis mismatch notes or flags require overlay."""
+    updated = dict(snapshot)
+    screen_signal = str(updated.get("signal") or "hold")
+    base_adjusted = adjusted_signal or str(updated.get("adjusted_signal") or screen_signal)
+    fcf = updated.get("fcf") if isinstance(updated.get("fcf"), dict) else {}
+    screen_ttm = fcf.get("screen_ttm")
+    if screen_ttm is None:
+        screen_ttm = screen_ttm_from_row(pd.Series(updated))
+
+    overlay, merged_adjusted, conviction = apply_fcf_export_enforcement(
+        signal=screen_signal,
+        adjusted_signal=base_adjusted,
+        conviction_score=float(updated.get("conviction_score") or 0.0),
+        action_note=str(updated.get("action_note") or ""),
+        fcf_basis_overlay=bool(updated.get("fcf_basis_overlay")),
+        fcf_bundle=fcf if fcf else None,
+        screen_ttm=screen_ttm,
+    )
+    updated["adjusted_signal"] = merged_adjusted
+    updated["fcf_basis_overlay"] = overlay
+    updated["conviction_score"] = conviction
+    return updated
+
+
 def merge_research_verdict_into_snapshot(
     snapshot: dict[str, Any],
     *,
@@ -23,7 +52,7 @@ def merge_research_verdict_into_snapshot(
 ) -> dict[str, Any]:
     """Overlay structured research verdict fields onto a screening snapshot dict."""
     if not research_verdict:
-        return snapshot
+        return enforce_fcf_basis_in_snapshot(snapshot)
 
     updated = dict(snapshot)
     updated["research_verdict"] = research_verdict
@@ -36,30 +65,18 @@ def merge_research_verdict_into_snapshot(
 
     screen_signal = str(updated.get("signal") or "hold")
     research_adjusted = compute_adjusted_signal(screen_signal, research_verdict)  # type: ignore[arg-type]
-    fcf = updated.get("fcf") if isinstance(updated.get("fcf"), dict) else {}
-    screen_ttm = fcf.get("screen_ttm")
-    if screen_ttm is None:
-        screen_ttm = screen_ttm_from_row(pd.Series(updated))
-
-    overlay, adjusted, conviction = apply_fcf_export_enforcement(
-        signal=screen_signal,
-        adjusted_signal=research_adjusted,
-        conviction_score=float(updated.get("conviction_score") or 0.0),
-        action_note=str(updated.get("action_note") or ""),
-        fcf_basis_overlay=bool(updated.get("fcf_basis_overlay")),
-        fcf_bundle=fcf if fcf else None,
-        screen_ttm=screen_ttm,
-    )
-    updated["adjusted_signal"] = adjusted
-    updated["fcf_basis_overlay"] = overlay
-    updated["conviction_score"] = conviction
-    return updated
+    return enforce_fcf_basis_in_snapshot(updated, adjusted_signal=research_adjusted)
 
 
 def write_screening_snapshot(sources_dir: Path, snapshot: dict[str, Any]) -> Path:
     sources_dir.mkdir(parents=True, exist_ok=True)
     path = sources_dir / "screening_snapshot.json"
-    write_json(path, snapshot, compact=True, compress=False)
+    write_json(
+        path,
+        enforce_fcf_basis_in_snapshot(snapshot),
+        compact=True,
+        compress=False,
+    )
     return path
 
 
@@ -83,7 +100,7 @@ def refresh_snapshot_from_document(output_dir: Path, doc: Any) -> bool:
         research_confidence=doc.research_confidence,
         research_rationale=doc.research_rationale,
     )
-    write_json(snapshot_path, merged, compact=True, compress=False)
+    write_screening_snapshot(snapshot_path.parent, merged)
     return True
 
 
