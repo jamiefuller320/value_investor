@@ -1042,6 +1042,79 @@ def test_enrich_signals_with_fcf_basis_overlay_honours_universe_divergence_note(
     assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.72 * 0.85)
 
 
+def test_enrich_signals_with_fcf_basis_overlay_caps_buy_on_dnlm_style_mismatch(
+    tmp_path: Path,
+):
+    """Pipeline export must cap buy -> hold when universe-level FCF bases diverge."""
+    sources = tmp_path / "research" / "DNLM.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    financials = {
+        "ticker": "DNLM.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 255_900_000.0,
+                "Capital Expenditure": -44_500_000.0,
+                "Free Cash Flow": 211_400_000.0,
+            }
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    (filings / "annual_results.txt").write_text(
+        "Company-adjusted free cash flow of £171.0m after working-capital normalisation",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings / "annual_results.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "DNLM.L",
+                "signal": "buy",
+                "conviction_score": 0.75,
+                "free_cashflow": 171_000_000.0,
+                "free_cashflow_screen_ttm": 163_900_000.0,
+                "action_note": (
+                    "Buy | FCF basis mismatch: filing £211.4M | screen TTM £163.9M | "
+                    "company-adj £171M"
+                ),
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "DNLM.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_fcf_basis_overlay(signals, model_results, output_dir=tmp_path)
+
+    assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "hold"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.6375)
+
+
 def test_parse_adjusted_eps_growth_pct_from_ir_prose():
     assert parse_adjusted_eps_growth_pct("Adjusted EPS increased by 16% to 9.9p") == pytest.approx(
         0.16
