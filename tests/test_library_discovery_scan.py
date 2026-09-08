@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 from value_investor.ingest_discovery_scan import TickerDiscoveryHit
 from value_investor.library_discovery_scan import (
+    list_regime_filings_index_only,
     run_library_buy_tier_discovery_scan,
     scan_library_ticker_for_new_filings,
 )
@@ -147,3 +148,30 @@ def test_run_library_buy_tier_discovery_scan_prefers_critical_tickers():
             prefer_tickers=["CCC.DE"],
         )
     assert order[0] == "CCC.DE"
+
+
+@patch("value_investor.library_discovery_scan.fetch_filings_ir_allowlist", return_value=[])
+@patch("value_investor.library_discovery_scan.fetch_filings_sec_edgar")
+@patch(
+    "value_investor.library_discovery_scan._sec_edgar_supplement_allowed",
+    return_value=True,
+)
+@patch("value_investor.library_discovery_scan.fetch_filings_tsx_news", return_value=[])
+def test_tsx_discovery_includes_sec_supplement_for_dual_listed(
+    _mock_news,
+    _mock_sec_ok,
+    mock_sec,
+    _mock_ir,
+):
+    mock_sec.return_value = [
+        {"id": "sec1", "url": "https://www.sec.gov/cgi-40f", "headline": "CGI 40-F"}
+    ]
+    rows = list_regime_filings_index_only(
+        ticker="GIB-A.TO",
+        company_name="CGI Inc.",
+        market="tsx60",
+    )
+    mock_sec.assert_called_once()
+    assert mock_sec.call_args.kwargs["ticker"] == "GIB-A"
+    assert mock_sec.call_args.kwargs["include_current_reports"] is False
+    assert any(row.get("id") == "sec1" for row in rows)

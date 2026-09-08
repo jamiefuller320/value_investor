@@ -26,6 +26,7 @@ from value_investor.research.filings import (
     _fetch_ir_allowlist_body,
     _fetch_rns_filing_body_for_refetch,
     _filing_text_is_substantive,
+    _google_news_symbol_clause,
     _infer_filing_period_from_row,
     _ir_body_content_hash,
     _is_other_results_rns_row,
@@ -4062,6 +4063,39 @@ def test_resolve_sec_cik_euro_depth_dual_listed_aliases():
     assert resolve_sec_cik("LOGN") == resolve_sec_cik("LOGI")
 
 
+def test_resolve_sec_cik_tsx60_gib_a_alias():
+    """Yahoo class-share GIB-A must resolve to NYSE GIB (CGI Inc.)."""
+    assert resolve_sec_cik("GIB-A") == resolve_sec_cik("GIB")
+    assert resolve_sec_cik("GIB-A") is not None
+
+
+def test_sec_edgar_supplement_allowed_tsx60_cgi():
+    assert _sec_edgar_supplement_allowed("GIB-A.TO", "CGI Inc.") is True
+    assert _sec_edgar_supplement_allowed("GIB-A.TO", "Carnival Corporation") is False
+
+
+def test_google_news_symbol_clause_quotes_tsx_class_share():
+    clause = _google_news_symbol_clause("GIB-A.TO")
+    assert '"GIB-A.TO"' in clause
+    assert '"GIB-A"' in clause
+    assert "GIB" in clause
+    assert "GIB-A" in clause
+    # Unquoted GIB-A would be Google NOT-A and drop almost every CGI hit.
+    assert " OR GIB-A" not in clause
+    assert _google_news_symbol_clause("AEM.TO") == '"AEM.TO" OR AEM'
+
+
+@patch("value_investor.research.filings.fetch_filings_google_news", return_value=[])
+def test_fetch_filings_tsx_news_quotes_class_share_epic(mock_news):
+    from value_investor.research.filings import fetch_filings_tsx_news
+
+    fetch_filings_tsx_news(company_name="CGI Inc.", ticker="GIB-A.TO")
+    query = mock_news.call_args.kwargs["query"]
+    assert '"GIB-A"' in query
+    assert "CGI Inc." in query
+    assert " OR GIB-A " not in query
+
+
 def test_sec_edgar_supplement_allowed_euro_depth_representatives():
     assert _sec_edgar_supplement_allowed("SHELL.AS", "Shell plc") is True
     assert _sec_edgar_supplement_allowed("NOVN.SW", "Novartis AG") is True
@@ -4125,6 +4159,12 @@ def test_ir_allowlist_period_classifies_belgian_ra_pack_as_annual():
     assert (
         _ir_allowlist_period_from_url(
             "https://aedifica.eu/wp-content/uploads/2026/02/AED_CP2026_EN_FY-2025_2026-02-12d_BB.pdf"
+        )
+        == "annual"
+    )
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://www.sec.gov/Archives/edgar/data/1061574/000119312525322911/d88305d40f.htm"
         )
         == "annual"
     )
@@ -5634,6 +5674,21 @@ def test_fetch_filings_ir_allowlist_ebo_ax_builtin(tmp_path: Path):
     assert all(row["source"] == "ir_allowlist" for row in rows)
 
 
+def test_fetch_filings_ir_allowlist_gib_a_to_builtin(tmp_path: Path):
+    """GIB-A.TO unmeasured leftover: SEC 40-F / 6-K HTML seeds the allowlist."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("GIB-A.TO", path=allowlist_path)
+    urls = {row["url"] for row in rows}
+    assert len(rows) >= 4
+    assert any("d88305d40f.htm" in url for url in urls)
+    assert any("cgi-fy26_q3xpressrelease.htm" in url for url in urls)
+    assert any(row["period"] == "annual" for row in rows)
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert fetch_filings_ir_allowlist("GIB-A", path=allowlist_path)
+
+
 def test_fetch_filings_ir_allowlist_asx200_unmeasured_builtin(tmp_path: Path):
     """CDA/BSL/PXA buy-tier IR PDFs ship in the built-in allowlist."""
     allowlist_path = tmp_path / "empty_ir.json"
@@ -5687,6 +5742,32 @@ def test_asx_statistics_listing_page_is_index_noise():
     assert _is_index_noise_row(row) is True
     row["has_body"] = True
     assert _is_index_noise_row(row) is False
+
+
+@patch("value_investor.research.filings.fetch_filings_tsx_news", return_value=[])
+@patch(
+    "value_investor.research.filings._sec_edgar_supplement_allowed",
+    return_value=False,
+)
+def test_ingest_filings_tsx60_gib_a_indexes_ir_allowlist_bodies(
+    _mock_sec_ok,
+    _mock_tsx_news,
+    tmp_path: Path,
+):
+    """When SEDAR news misses CGI, GIB-A.TO still indexes IR allowlist 40-F / 6-K."""
+    meta = ingest_filings(
+        ticker="GIB-A.TO",
+        company_name="CGI Inc.",
+        sources_dir=tmp_path,
+        market="tsx60",
+    )
+    assert meta["filings_regime"] == "tsx_announcements"
+    summary = meta.get("filings_summary") or {}
+    assert summary.get("total", 0) >= 4
+    assert summary.get("with_body", 0) >= 1
+    index = json.loads(Path(meta["filings_index_path"]).read_text(encoding="utf-8"))
+    assert "ir_allowlist" in index.get("sources_used", [])
+    assert any(row.get("has_body") for row in index.get("filings") or [])
 
 
 @patch("value_investor.research.filings.fetch_filings_asx_news", return_value=[])
