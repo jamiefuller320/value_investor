@@ -1,15 +1,89 @@
 {
-  "run_at": "2026-09-08T07:36:49.909601+00:00",
+  "run_at": "2026-09-08T10:41:11.647904+00:00",
   "market_id": "sp500",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "BSX"
+  ],
+  "target_details": [
+    {
+      "ticker": "BSX",
+      "priority_score": 14.701699999999999,
+      "filings_total": 22,
+      "filings_with_body": 21,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "BSX",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 22,
+        "filings_with_body": 21,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 22,
+        "filings_with_body": 22,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 22,
+        "annual": 2,
+        "interim": 7,
+        "trading_update": 0,
+        "other": 13,
+        "with_body": 22,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 7,
+            "with_body": 7
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 13,
+            "with_body": 13
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 22,
+        "with_body_after": 22,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "BSX"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-08T07:36:26.153983+00:00",
+    "snapshot_at": "2026-09-08T10:40:47.086668+00:00",
     "market_id": "sp500",
     "buy_tier_count": 140,
     "unmeasured_buy_tier": 0,
@@ -62,7 +136,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-09-08T07:36:49.891319+00:00",
+    "snapshot_at": "2026-09-08T10:41:11.635209+00:00",
     "market_id": "sp500",
     "buy_tier_count": 140,
     "unmeasured_buy_tier": 0,
@@ -156,7 +230,7 @@
   },
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-09-08T07:36:33.374704+00:00",
+    "assessed_at": "2026-09-08T10:40:51.039414+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -235,9 +309,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 9.222199836000016,
+  "used_seconds": 16.639805911000053,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3590.777800164,
+  "leftover_seconds": 3583.360194089,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -245,9 +319,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sp500",
-    "updated_at": "2026-09-08T07:36:49.898451+00:00",
+    "updated_at": "2026-09-08T10:41:11.640721+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 7,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -358,6 +432,6 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20260908-01"
+    "task_id": "eng-20260908-02"
   }
 }
