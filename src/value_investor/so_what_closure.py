@@ -464,7 +464,10 @@ def apply_so_what_auto_queue(
                     }
                 )
             continue
-        if any(bp in " ".join(f.engineering_summary or "" for f in group_findings) for bp in BLOCKED_PATHS):
+        if any(
+            bp in " ".join(f.engineering_summary or "" for f in group_findings)
+            for bp in BLOCKED_PATHS
+        ):
             for finding in group_findings:
                 skipped.append({"finding_id": finding.finding_id, "reason": "blocked_path"})
             continue
