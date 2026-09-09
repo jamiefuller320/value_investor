@@ -115,13 +115,18 @@ def maybe_record_exhausted_maintenance(
     policy = record_ingest_exhausted_market(policy, market_id)
     after = list(policy.get(INGEST_EXHAUSTED_MARKETS_KEY) or [])
     first_time = market_id not in before
-    if after != before:
+    from value_investor.market_shard_admission import admit_market_to_learning
+
+    admitted_changed = admit_market_to_learning(policy, market_id)
+    if after != before or admitted_changed:
         save_policy(policy, policy_path)
     return {
         "recorded": True,
         "first_time": first_time,
         "market_id": market_id,
         "ingest_exhausted_markets": after,
+        "learning_admitted": True,
+        "learning_admitted_changed": admitted_changed,
     }
 
 
@@ -348,6 +353,8 @@ def maybe_advance_parallel_sprint_on_parity(
             "market_id": market_id,
         }
 
+    from value_investor.market_shard_admission import admit_market_to_learning
+
     if ingest_parity_met(health):
         policy, parity_event = _record_parallel_parity_for_maintenance(
             policy,
@@ -365,6 +372,9 @@ def maybe_advance_parallel_sprint_on_parity(
             "exhausted_maintenance_recorded": True,
             "parked_tickers": list(health.get("parked_tickers") or []),
         }
+    # L322: vacating the sprint at maintenance threshold flips learning resource.
+    parity_event["learning_admitted_changed"] = admit_market_to_learning(policy, market_id)
+    parity_event["learning_admitted"] = True
     nxt = next_parallel_sprint_queue_market(
         policy,
         library_root=library_root,

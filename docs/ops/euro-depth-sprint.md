@@ -75,8 +75,9 @@ equivalent resource and move the fat slot — see
 Spare streams only front-start the next queue names. Stagger slots and run
 **parallel maintenance** for graduated markets; do **not** add a fourth equal
 sprint workflow (`library-ingest-sprint-3.yml` or similar) that can starve the
-current head. Learning resource should flip with maintenance graduation (L322);
-today only ingest volume does.
+current head. Learning resource flips with maintenance graduation (L322):
+weekday epoch-0 / equal-support admit on ``sprint_ingest_complete``; the
+capacity-1 weekly paper slot stays on ``euro_depth`` under N94.
 
 **Scheduler (wired):** while focus still has FTSE-standard filing gaps,
 `ingest_effort_cascade` scales stream 1 to half targets/runtime and stream 2 to

@@ -1,4 +1,4 @@
-"""Tests for admitted-market epoch-0 start."""
+"""Tests for admitted-market epoch-0 start and L322 threshold admission."""
 
 from __future__ import annotations
 
@@ -9,10 +9,14 @@ import pandas as pd
 
 from value_investor.library_near_miss_watch import write_library_near_miss_watch
 from value_investor.market_paper_shard import run_epoch0_market_shard
-from value_investor.market_shard_admission import admitted_learning_markets_for_policy
+from value_investor.market_shard_admission import (
+    admit_market_to_learning,
+    admitted_learning_markets_for_policy,
+    sync_admitted_learning_markets,
+)
 
 
-def test_admitted_markets_union_explicit_and_exhausted():
+def test_admitted_markets_union_explicit_exhausted_and_parity():
     policy = {
         "ladder": {"admitted_learning_markets": ["sp500", "asx200"]},
         "ingest_exhausted_markets": ["sp500", "ftse_smallcap"],
@@ -22,16 +26,36 @@ def test_admitted_markets_union_explicit_and_exhausted():
         "sp500",
         "asx200",
         "ftse_smallcap",
+        "euro_depth",
     ]
 
 
-def test_admitted_markets_ignore_parity_only_focus():
+def test_admitted_markets_include_parity_threshold_signal():
+    """L322: stored parity is a sprint_ingest_complete signal and admits learning."""
     policy = {
         "ladder": {"admitted_learning_markets": []},
         "ingest_exhausted_markets": [],
         "ingest_parity_markets": ["euro_depth"],
     }
-    assert admitted_learning_markets_for_policy(policy) == []
+    assert admitted_learning_markets_for_policy(policy) == ["euro_depth"]
+
+
+def test_admit_market_to_learning_persists_once():
+    policy: dict = {"ladder": {"admitted_learning_markets": ["sp500"]}}
+    assert admit_market_to_learning(policy, "asx200") is True
+    assert policy["ladder"]["admitted_learning_markets"] == ["sp500", "asx200"]
+    assert admit_market_to_learning(policy, "asx200") is False
+
+
+def test_sync_admitted_learning_markets_rewrites_explicit_roster():
+    policy = {
+        "ladder": {"admitted_learning_markets": ["sp500"]},
+        "ingest_exhausted_markets": ["ftse_smallcap", "euro_depth"],
+        "ingest_parity_markets": ["asx200"],
+    }
+    synced = sync_admitted_learning_markets(policy)
+    assert synced == ["sp500", "ftse_smallcap", "euro_depth", "asx200"]
+    assert policy["ladder"]["admitted_learning_markets"] == synced
 
 
 def test_near_miss_watch_splits_wait_and_hold(tmp_path: Path):
@@ -108,7 +132,7 @@ def test_epoch0_runs_only_buy_tier_level(tmp_path: Path):
             library_root=library_root,
             shard_root=shard_root,
         )
-    assert captured["output_dir"].endswith("buy_tier_level")
+    assert str(captured["output_dir"]).endswith("buy_tier_level")
     assert not (shard_root / "ai_judgment").exists()
     assert result["ai_judgment"] is False
     assert result["knob_apply"] is False
