@@ -57,6 +57,7 @@ class AutofixResult:
     logs: list[str]
     actions: list[str] = field(default_factory=list)
     skip_verify_pytest: bool = False
+    reverted_paths: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -66,6 +67,7 @@ class AutofixResult:
             "logs": self.logs,
             "actions": list(self.actions),
             "skip_verify_pytest": self.skip_verify_pytest,
+            "reverted_paths": list(self.reverted_paths),
         }
 
 
@@ -575,6 +577,7 @@ def attempt_engineering_path_guard_autofix(
         logs=logs,
         actions=actions,
         skip_verify_pytest=autofix_skip_verify_pytest(actions, ci_failure_kinds=kinds),
+        reverted_paths=list(reverted),
     )
 
 

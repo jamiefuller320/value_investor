@@ -33,7 +33,9 @@ def test_pr_autofix_requires_same_repo_and_trusted_install() -> None:
     assert "ref: main" in text
     assert "skip_verify_pytest" in text
     assert "path_guard_revert" in text
-    assert "git diff --name-only origin/main" in text
+    assert "path_guard_effective_changed_paths" in text
+    assert "reverted_paths" in text
+    assert "git diff --name-only origin/main" not in text
 
 
 def test_auto_merge_requires_same_repo_and_env_branch() -> None:
