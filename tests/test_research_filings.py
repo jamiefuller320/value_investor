@@ -6425,13 +6425,14 @@ def test_parked_source_hunter_andr_vi_euro_depth_has_fetchable_ir():
 
 
 def test_parked_source_hunter_ackb_br_euro_depth_has_fetchable_ir():
-    """eng-20260908-02: ACKB.BR has avh.be annual + VFB H1 2025 regulated PDFs."""
+    """eng-20260909-02: ACKB.BR has avh.be FY2025 annual + VFB H1 2025 regulated PDFs."""
     assert "ACKB.BR" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("ACKB.BR")
     assert len(rows) == 2
-    assert any("avh.be" in row["url"] for row in rows)
-    assert any("vfb.be" in row["url"] for row in rows)
-    assert any(row["period"] == "interim" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("avh.be" in url and "annualreport" in url for url in urls)
+    assert any("vfb.be" in url and "halfjaar" in url for url in urls)
+    assert {row["period"] for row in rows} == {"annual", "interim"}
 
 
 def test_parked_source_hunter_apam_as_euro_depth_has_fetchable_ir():
