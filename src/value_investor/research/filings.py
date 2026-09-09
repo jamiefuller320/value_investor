@@ -220,8 +220,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "ANDR.VI": [
         "https://www.andritz.com/resource/blob/689306/6ad9400073c46323b95b1be977870245/andritz-annual-report-2025-data.pdf",
     ],
-    "EG7.IR": [
-        "https://www.cairnhomes.com/investors/",
+    # euro_depth IWB blocker — C5H.IR parked unfetchable_iwb; cairnhomes.com is Cloudflare-gated.
+    "C5H.IR": [
+        "https://cdn.prod.website-files.com/69b7ef256b857dda4aea6179/69c2b338210820632d00ff19_2a0d98224d9897df732ad96934d79ca9_Cairn%20Homes%20AR25%20Financial%20statementspdf.pdf",
+    ],
+    "C5H": [
+        "https://cdn.prod.website-files.com/69b7ef256b857dda4aea6179/69c2b338210820632d00ff19_2a0d98224d9897df732ad96934d79ca9_Cairn%20Homes%20AR25%20Financial%20statementspdf.pdf",
     ],
     "EVN.VI": [
         "https://www.evn.at/en/investor-relations/publications/",
@@ -380,7 +384,7 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "ANDR": ("Andritz", "ANDRITZ AG"),
     "EVN": ("EVN AG",),
     "WIE": ("Wienerberger", "Wienerberger AG"),
-    "EG7": ("Cairn Homes",),
+    "C5H": ("Cairn Homes", "Cairn Homes plc"),
     "AZE": ("Azelis", "Azelis Group"),
     "AGS": ("ageas", "Ageas SA/NV"),
     "UCB": ("UCB", "UCB SA"),
@@ -3377,6 +3381,10 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     # eng-20260908-24: /en/investors 404s; 2025 integrated report PDF still serves.
     "https://www.azelis.com/en/investors": (
         "https://www.azelis.com/sites/default/files/uploads/Azelis%20Group%20NV%20-%20Integrated%20report%202025%20(2).pdf"
+    ),
+    # eng-20260909-09: cairnhomes.com/investors is Cloudflare-gated; AR25 financials on CDN.
+    "https://www.cairnhomes.com/investors/": (
+        "https://cdn.prod.website-files.com/69b7ef256b857dda4aea6179/69c2b338210820632d00ff19_2a0d98224d9897df732ad96934d79ca9_Cairn%20Homes%20AR25%20Financial%20statementspdf.pdf"
     ),
 }
 

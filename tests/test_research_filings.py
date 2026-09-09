@@ -6583,6 +6583,42 @@ def test_parked_source_hunter_aze_br_euro_depth_has_fetchable_ir():
     assert any("AZELIS~1_1.PDF" in row["url"] for row in rows)
 
 
+def test_fetch_filings_ir_allowlist_euro_depth_c5h_ir_builtins(tmp_path: Path):
+    """Regression: C5H.IR parked IWB — annualreport2025.cairnhomes.com AR25 financial statements PDF."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("C5H.IR", path=allowlist_path)
+    assert len(rows) == 1
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert rows[0]["period"] == "annual"
+    assert "website-files.com" in rows[0]["url"]
+    assert "AR25%20Financial%20statements" in rows[0]["url"]
+
+
+def test_load_ir_url_allowlist_canonicalizes_c5h_ir_dead_investors_hub(tmp_path: Path):
+    """Dead cairnhomes.com/investors hub maps to live AR25 financial statements CDN PDF."""
+    dead = "https://www.cairnhomes.com/investors/"
+    live = _BUILTIN_IR_URLS["C5H.IR"][0]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"C5H.IR": [dead]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live in mapping["C5H.IR"]
+    assert dead not in mapping["C5H.IR"]
+    rows = fetch_filings_ir_allowlist("C5H.IR", path=path)
+    assert any(row["url"] == live for row in rows)
+
+
+def test_parked_source_hunter_c5h_ir_euro_depth_has_fetchable_ir():
+    """eng-20260909-09: C5H.IR has live annualreport2025 CDN FY2025 financial statements PDF."""
+    assert "C5H.IR" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("C5H.IR")
+    assert len(rows) == 1
+    assert rows[0]["period"] == "annual"
+    assert "website-files.com" in rows[0]["url"]
+    assert "AR25%20Financial%20statements" in rows[0]["url"]
+
+
 def test_parked_source_hunter_skip_abi_br_euro_depth():
     """eng-20260909-01: re-hunt — leftover IWB is 6-K cover HTML; ab-inbev IR is JS-only."""
     assert "ABI.BR" in PARKED_SOURCE_HUNTER_SKIP
