@@ -4383,7 +4383,7 @@ def test_esef_entity_variants_include_periphery_aliases_and_strip_bv():
 
 
 @patch("value_investor.research.filings._http_get")
-def test_esef_entity_search_retries_without_country_filter(mock_get):
+def test_esef_entity_search_retries_without_country_filter(mock_get, tmp_path: Path):
     empty = {"data": []}
     entity_payload = {
         "data": [{"attributes": {"identifier": "529900D6BF99LW9R2E68", "name": "SAP SE"}}]
@@ -4409,14 +4409,18 @@ def test_esef_entity_search_retries_without_country_filter(mock_get):
         return json.dumps(filings_payload).encode("utf-8")
 
     mock_get.side_effect = _fake_get
-    rows = fetch_filings_esef_direct(company_name="SAP SE", ticker="SAP.DE")
+    rows = fetch_filings_esef_direct(
+        company_name="SAP SE",
+        ticker="SAP.DE",
+        identifier_map_path=tmp_path / "empty.json",
+    )
     assert len(rows) == 1
     assert any("filter%5Bcountry%5D" in u for u in calls)
     assert any("/entities?" in u and "filter%5Bcountry%5D" not in u for u in calls)
 
 
 @patch("value_investor.research.filings._http_get")
-def test_esef_entity_search_retries_without_country_on_http_400(mock_get):
+def test_esef_entity_search_retries_without_country_on_http_400(mock_get, tmp_path: Path):
     """Regression: filings.xbrl.org no longer accepts filter[country] (HTTP 400)."""
     import urllib.error
 
@@ -4451,7 +4455,11 @@ def test_esef_entity_search_retries_without_country_on_http_400(mock_get):
         return json.dumps(filings_payload).encode("utf-8")
 
     mock_get.side_effect = _fake_get
-    rows = fetch_filings_esef_direct(company_name="Randstad N.V.", ticker="RAND.AS")
+    rows = fetch_filings_esef_direct(
+        company_name="Randstad N.V.",
+        ticker="RAND.AS",
+        identifier_map_path=tmp_path / "empty.json",
+    )
     assert len(rows) == 1
     assert rows[0]["source"] == "esef_direct"
     assert any("filter%5Bcountry%5D" in u for u in calls)
