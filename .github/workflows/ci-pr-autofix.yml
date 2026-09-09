@@ -133,7 +133,24 @@ jobs:
             git add -u -- docs/research docs/data/research docs/data/library || true
           fi
           if [[ "$BRANCH" =~ ^cursor/eng-[0-9]{8}-[0-9]{2}-1de3$ ]]; then
-            git diff --name-only origin/main > /tmp/changed_files.txt
+            python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          from value_investor.ci_pr_autofix import path_guard_effective_changed_paths
+
+          result = json.loads(Path("/tmp/autofix_result.json").read_text())
+          actions = list(result.get("actions") or [])
+          paths = path_guard_effective_changed_paths(
+              base_ref="origin/main",
+              head_ref="HEAD",
+              reverted=list(result.get("reverted_paths") or []),
+              allowed_paths_added="path_guard_expand" in actions,
+          )
+          Path("/tmp/changed_files.txt").write_text(
+              "\n".join(paths) + ("\n" if paths else "")
+          )
+          PY
             ftse-engineering check-pr-paths \
               --branch "$BRANCH" \
               --changed-files /tmp/changed_files.txt

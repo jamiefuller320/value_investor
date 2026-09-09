@@ -124,6 +124,9 @@ failed CI workflow:
 - Allowlist expand writes `engineering_tasks.json` without refreshing
   `automation.json` / `latest.json` (those dashboard paths are outside typical
   engineering allowlists and previously caused autofix verify to fail)
+- Path-guard verify uses the PR merge-base diff (`origin/main...HEAD`) minus
+  reverted paths, not a two-dot diff against `main` (which falsely includes
+  files landed on main while the engineering branch was open — PR 531)
 - The path guard also allows companion tests for each allowed `src/` module
   (`src/value_investor/research/ingest.py` → `tests/test_research_ingest.py`) and
   `docs/data/engineering_tasks.json` so allowlist expands are not a self-violation

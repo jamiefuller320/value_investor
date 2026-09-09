@@ -21,6 +21,7 @@ from value_investor.ci_pr_autofix import (
     is_timestamp_only_library_cache_change,
     parse_path_guard_violations,
     path_guard_actions_skip_verify_pytest,
+    path_guard_effective_changed_paths,
     run_pr_ci_autofix_pipeline,
 )
 from value_investor.engineering_tasks import validate_engineering_pr_paths_for_task_id
@@ -77,6 +78,51 @@ def test_path_guard_actions_skip_verify_pytest():
     assert path_guard_actions_skip_verify_pytest(["path_guard_revert", "path_guard_expand"])
     assert not path_guard_actions_skip_verify_pytest(["ruff"])
     assert not path_guard_actions_skip_verify_pytest([])
+
+
+def test_path_guard_effective_changed_paths_excludes_reverted_paths(tmp_path: Path):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_git_repo(repo)
+
+    cache_dir = repo / "docs" / "data" / "library"
+    cache_dir.mkdir(parents=True)
+    cache_path = cache_dir / "issuer_identifiers.json"
+    cache_path.write_text('{"updated_at":"old"}\n', encoding="utf-8")
+    tests_dir = repo / "tests"
+    tests_dir.mkdir()
+    test_file = tests_dir / "test_research_filings.py"
+    test_file.write_text("def test_ok(): pass\n", encoding="utf-8")
+
+    subprocess.run(["git", "add", "."], cwd=repo, check=True)
+    subprocess.run(["git", "commit", "-m", "init"], cwd=repo, check=True)
+    subprocess.run(["git", "checkout", "-b", "feature"], cwd=repo, check=True)
+    cache_path.write_text('{"updated_at":"new"}\n', encoding="utf-8")
+    test_file.write_text("def test_ok():\n    assert True\n", encoding="utf-8")
+    subprocess.run(["git", "add", cache_path, test_file], cwd=repo, check=True)
+    subprocess.run(["git", "commit", "-m", "feature"], cwd=repo, check=True)
+
+    subprocess.run(["git", "checkout", "main"], cwd=repo, check=True)
+    main_only = repo / "src" / "value_investor" / "ci_pr_autofix.py"
+    main_only.parent.mkdir(parents=True)
+    main_only.write_text("# landed on main while feature branch was open\n", encoding="utf-8")
+    subprocess.run(["git", "add", main_only], cwd=repo, check=True)
+    subprocess.run(["git", "commit", "-m", "main moved on"], cwd=repo, check=True)
+    subprocess.run(["git", "checkout", "feature"], cwd=repo, check=True)
+
+    prev = os.getcwd()
+    os.chdir(repo)
+    try:
+        effective = path_guard_effective_changed_paths(
+            base_ref="main",
+            head_ref="HEAD",
+            reverted=["docs/data/library/issuer_identifiers.json"],
+            allowed_paths_added=False,
+        )
+    finally:
+        os.chdir(prev)
+
+    assert effective == ["tests/test_research_filings.py"]
 
 
 def test_autofix_skip_verify_pytest_ruff_only_without_pytest_failure():
