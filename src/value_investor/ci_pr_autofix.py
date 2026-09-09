@@ -369,7 +369,9 @@ def revert_incidental_research_artifact(path: str, *, base_ref: str) -> bool:
     return (not target.exists()) and proc.returncode == 0
 
 
-def revert_timestamp_only_library_cache(path: str, *, base_ref: str, head_ref: str = "HEAD") -> bool:
+def revert_timestamp_only_library_cache(
+    path: str, *, base_ref: str, head_ref: str = "HEAD"
+) -> bool:
     """Drop no-op library cache timestamp refreshes instead of widening hunt allowlists."""
     normalized = normalize_repo_path(path)
     if not normalized or not is_timestamp_only_library_cache_change(
@@ -398,8 +400,19 @@ def path_guard_effective_changed_paths(
     return effective
 
 
+def autofix_skip_verify_pytest(actions: list[str], *, ci_failure_kinds: list[str]) -> bool:
+    """Skip full pytest replay when CI did not fail on pytest and autofix only touched safe files."""
+    if not actions:
+        return False
+    if set(actions).issubset(PATH_GUARD_ONLY_ACTIONS):
+        return True
+    # Ruff-only failures often never reach pytest in CI; replay uses main site-packages and
+    # fails on PR-added symbols/tests even when the PR test job would pass after the fix.
+    return actions == ["ruff"] and "pytest" not in ci_failure_kinds
+
+
 def path_guard_actions_skip_verify_pytest(actions: list[str]) -> bool:
-    """Full pytest is redundant when the original test job passed and we only touched path-guard files."""
+    """True when autofix actions are path-guard-only (legacy helper for tests)."""
     return bool(actions) and set(actions).issubset(PATH_GUARD_ONLY_ACTIONS)
 
 
@@ -551,8 +564,7 @@ def attempt_engineering_path_guard_autofix(
         reason = f"reverted path-guard violations: {reverted}"
     elif reverted:
         reason = (
-            f"reverted path-guard violations and expanded engineering "
-            f"allowed_paths for {task_id}"
+            f"reverted path-guard violations and expanded engineering allowed_paths for {task_id}"
         )
     else:
         reason = "expanded engineering allowed_paths for path guard"
@@ -562,7 +574,7 @@ def attempt_engineering_path_guard_autofix(
         reason=reason,
         logs=logs,
         actions=actions,
-        skip_verify_pytest=path_guard_actions_skip_verify_pytest(actions),
+        skip_verify_pytest=autofix_skip_verify_pytest(actions, ci_failure_kinds=kinds),
     )
 
 
@@ -647,6 +659,7 @@ def attempt_pr_ci_autofix(
         reason="ruff autofix applied and verified",
         logs=logs,
         actions=["ruff"],
+        skip_verify_pytest=autofix_skip_verify_pytest(["ruff"], ci_failure_kinds=kinds),
     )
 
 

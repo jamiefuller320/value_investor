@@ -12,6 +12,7 @@ from value_investor.ci_pr_autofix import (
     _suggest_companion_paths,
     attempt_engineering_path_guard_autofix,
     attempt_pr_ci_autofix,
+    autofix_skip_verify_pytest,
     ci_bot_already_attempted,
     classify_ci_log_failures,
     diagnose_pr_ci_failure,
@@ -76,6 +77,15 @@ def test_path_guard_actions_skip_verify_pytest():
     assert path_guard_actions_skip_verify_pytest(["path_guard_revert", "path_guard_expand"])
     assert not path_guard_actions_skip_verify_pytest(["ruff"])
     assert not path_guard_actions_skip_verify_pytest([])
+
+
+def test_autofix_skip_verify_pytest_ruff_only_without_pytest_failure():
+    assert autofix_skip_verify_pytest(["ruff"], ci_failure_kinds=["ruff_format"])
+    assert not autofix_skip_verify_pytest(["ruff"], ci_failure_kinds=["ruff_format", "pytest"])
+    assert autofix_skip_verify_pytest(
+        ["path_guard_revert"],
+        ci_failure_kinds=["path_guard"],
+    )
 
 
 def test_suggest_companion_paths_flattens_nested_research_modules():

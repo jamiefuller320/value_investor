@@ -103,9 +103,9 @@ failed CI workflow:
    - **Expand** remaining missing `allowed_paths` on the task in
      `docs/data/engineering_tasks.json`, then re-validates
 4. Verifies with scoped ruff + path guard (engineering branches). Full pytest
-   runs unless the autofix was path-guard-only (original test job already
-   passed). Autofix installs the package from **main**, so a full pytest replay
-   of PR-added tests would fail even when the PR CI test job was green.
+   runs only when CI failed on pytest. Ruff-only and path-guard-only autofixes
+   skip the pytest replay — autofix installs from **main**, so replay would fail
+   on PR-added symbols/tests even when the PR CI test job was green.
 5. Commits with `chore(ci): …` and pushes when a fix was applied
 6. **Always posts a PR comment** with diagnosis (failure kinds, violations, pytest
    nodes, hints) — even when no automatic fix was possible
