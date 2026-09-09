@@ -16,8 +16,6 @@ from value_investor.agent_model_policy import (
 from value_investor.engineering_tasks import (
     COMMITTED_TASKS_PATH,
     EngineeringTask,
-    allowed_paths_overlap,
-    effective_allowed_paths,
     load_engineering_tasks,
     select_engineering_tasks,
     task_title_key,

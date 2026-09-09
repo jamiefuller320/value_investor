@@ -17,6 +17,17 @@ from typing import Any
 
 from value_investor.committed_data_json import check_path
 from value_investor.engineering_auto_merge import changed_files_for_pr
+from value_investor.engineering_tasks import (
+    EngineeringTask,
+    allowed_paths_overlap,
+    effective_allowed_paths,
+    normalize_repo_path,
+    validate_engineering_pr_paths,
+)
+from value_investor.engineering_verify import acceptance_test_paths, default_pytest_runner
+from value_investor.python_quality import git_changed_files, run_ruff_on_files
+
+logger = logging.getLogger(__name__)
 
 _ENGINEERING_BRANCH_RE = re.compile(r"^cursor/(eng-\d{8}-\d{2})-1de3$")
 
@@ -32,17 +43,7 @@ def engineering_branch_for_task_id(task_id: str) -> str | None:
         return None
     branch = f"cursor/{token}-1de3"
     return branch if _ENGINEERING_BRANCH_RE.match(branch) else None
-from value_investor.engineering_tasks import (
-    EngineeringTask,
-    effective_allowed_paths,
-    allowed_paths_overlap,
-    normalize_repo_path,
-    validate_engineering_pr_paths,
-)
-from value_investor.engineering_verify import acceptance_test_paths, default_pytest_runner
-from value_investor.python_quality import git_changed_files, run_ruff_on_files
 
-logger = logging.getLogger(__name__)
 
 # Files that must not be edited concurrently across open engineering PRs.
 SHARED_MUTABLE_FILES: frozenset[str] = frozenset(
@@ -361,10 +362,7 @@ def predict_task_clashes(
         overlap_paths = [
             path
             for path in task_paths
-            if any(
-                allowed_paths_overlap([path], [occupied])
-                for occupied in occupied_paths
-            )
+            if any(allowed_paths_overlap([path], [occupied]) for occupied in occupied_paths)
         ]
         blocked_by.append(
             ClashBlocker(

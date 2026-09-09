@@ -40,6 +40,10 @@ from value_investor.engineering_pr_notify import (
     send_engineering_pr_email,
     send_engineering_queue_block_email,
 )
+from value_investor.engineering_preflight import (
+    clash_report_for_queue,
+    run_local_preflight,
+)
 from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
     is_engineering_branch,
@@ -69,10 +73,6 @@ from value_investor.engineering_tasks import (
     select_engineering_tasks,
     sync_committed_engineering_tasks,
     validate_engineering_pr_paths_for_task_id,
-)
-from value_investor.engineering_preflight import (
-    clash_report_for_queue,
-    run_local_preflight,
 )
 from value_investor.engineering_verify import verify_merged_task
 from value_investor.storage import read_json
@@ -570,10 +570,7 @@ def _cmd_clash_report(args: argparse.Namespace) -> int:
             print(f"  {row.get('task_id')} [{flag}{rank_text}]")
             for blocker in row.get("blocked_by") or []:
                 files = ", ".join(blocker.get("clash_files") or []) or blocker.get("kind")
-                print(
-                    f"    blocked by #{blocker.get('pr_number')} "
-                    f"{blocker.get('kind')}: {files}"
-                )
+                print(f"    blocked by #{blocker.get('pr_number')} {blocker.get('kind')}: {files}")
     return 0
 
 
