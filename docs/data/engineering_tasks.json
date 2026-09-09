@@ -1,6 +1,267 @@
 {
   "tasks": [
     {
+      "id": "eng-20260909-02",
+      "area": "scoring",
+      "title": "Honour FCF action-note enforcement (batched tickers)",
+      "summary": "Batched so-what closure for 17 buy-tier name(s) where action_note flags FCF basis but overlay is missing (BOWL.L, BREE.L, DNLM.L, GFRD.L, HLN.L, IMB.L, MGNS.L, MONY.L (+9 more)). Wire note -> overlay/gate consistently; add regression tests per ticker.",
+      "priority": "medium",
+      "priority_score": 70.0,
+      "source": "so_what_closure",
+      "evidence": {
+        "kind": "fcf_note_without_overlay",
+        "batched": true,
+        "tickers": [
+          "BOWL.L",
+          "BREE.L",
+          "DNLM.L",
+          "GFRD.L",
+          "HLN.L",
+          "IMB.L",
+          "MGNS.L",
+          "MONY.L",
+          "RIO.L",
+          "RS1.L",
+          "SBRY.L",
+          "SN.L",
+          "SRP.L",
+          "TPK.L",
+          "TRN.L",
+          "VTY.L",
+          "WIX.L"
+        ],
+        "finding_count": 17,
+        "findings": [
+          {
+            "finding_id": "fcf_note_without_overlay:BOWL.L",
+            "ticker": "BOWL.L",
+            "severity": "medium",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Buy — neutral timing | FCF basis mismatch: filing £37.0M | screen TTM £43.8M | Earnings growth basis divergence >300 bps: statutory 16.4% vs filing core 1.7% | Research: Accumulate, Medium risk — Primary filings confirm accelerating revenue, strong cash generation, shareholder returns and balance-sheet headroom, broadly supporting the quantitative buy signal, while cyclical volume softness, lease intensity and site-level impairments temper conviction pending further H2 FY26 trading evidence. | Research: Accumulate, Medium risk — Primary filings confirm accelerating revenue, strong cash generation, shareholder returns and balance-sheet headroom, broadly supporting the quantitative buy signal, while cyclical volume softness, lease intensity and site-level impairments temper conviction pending further H2 FY26 trading evidence. | Research: Accumulate, Medium risk — Primary filings confirm accelerating revenue, strong cash generation, shareholder returns and balance-sheet headroom, broadly supporting the quantitative buy signal, while cyclical volume softness, lease intensity and site-level impairments temper conviction pending further H2 FY26 trading evidence."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:BREE.L",
+            "ticker": "BREE.L",
+            "severity": "medium",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £105.8M | screen TTM £107.8M | company-adj £133.2M | Earnings growth basis divergence >300 bps: statutory -13.9% vs filing core -18.7% | Research: Accumulate, Medium risk — Filings confirm the screen’s cheapness and cash-yield case (strong FCF, progressive dividend, sub-book P/B) but also validate quality-model failures through declining statutory earnings, sub-target ROIC, and leverage elevated by acquisition spending in a prolonged GB cyclical downturn. | Research: Accumulate, Medium risk — Filings confirm the screen’s cheapness and cash-yield case (strong FCF, progressive dividend, sub-book P/B) but also validate quality-model failures through declining statutory earnings, sub-target ROIC, and leverage elevated by acquisition spending in a prolonged GB cyclical downturn. | Research: Accumulate, Medium risk — Filings corroborate the screen’s value and cash-return case—sub-book valuation, strong FY2025 FCF, progressive dividend and covenant headroom—but cyclical GB weakness, M&A-driven leverage and sub-target ROIC temper outright strong-buy conviction pending a UK volume inflection. | Research: Accumulate, Medium risk — Filings corroborate the screen’s value and cash-return case—sub-book valuation, strong FY2025 FCF, progressive dividend and covenant headroom—but cyclical GB weakness, M&A-driven leverage and sub-target ROIC temper outright strong-buy conviction pending a UK volume inflection."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:DNLM.L",
+            "ticker": "DNLM.L",
+            "severity": "medium",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Buy — neutral timing | FCF basis mismatch: filing £211.4M | screen TTM £163.9M | company-adj £171M | Research: Accumulate, Medium risk — Filings confirm a cash-generative, moderately growing market leader at a screen-cheap valuation, but H1 margin pressure, consumer cyclicality and CEO transition temper conviction versus the raw buy signal. | Research: Accumulate, Medium risk — Filings confirm a cash-generative, moderately growing market leader at a screen-cheap valuation, but H1 margin pressure, consumer cyclicality and CEO transition temper conviction versus the raw buy signal. | Research: Accumulate, Medium risk — Filings confirm a cash-generative, moderately growing market leader at a screen-cheap valuation, but H1 margin pressure, consumer cyclicality and CEO transition temper conviction versus the raw buy signal."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:GFRD.L",
+            "ticker": "GFRD.L",
+            "severity": "medium",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Buy — neutral timing | FCF basis mismatch: filing £63.3M | screen TTM £50.0M | Research: Accumulate, Medium risk — Primary filings confirm accelerating margins, net-cash balance sheet, record order book and dividend growth that strengthen the quantitative buy case, partially offset by construction cyclicality, legacy provision load and unquantified fire-safety contingencies. | Research: Accumulate, Medium risk — Primary filings confirm accelerating margins, net-cash balance sheet, record order book and dividend growth that strengthen the quantitative buy case, partially offset by construction cyclicality, legacy provision load and unquantified fire-safety contingencies. | Research: Accumulate, Medium risk — Primary filings confirm accelerating margins, net-cash balance sheet, record order book and dividend growth that strengthen the quantitative buy case, partially offset by construction cyclicality, legacy provision load and unquantified fire-safety contingencies."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:HLN.L",
+            "ticker": "HLN.L",
+            "severity": "medium",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Buy — neutral timing | FCF basis mismatch: filing £2221M | screen TTM £1801.8M | Research: Accumulate, Medium risk — Filings confirm the screen’s quality, FCF, and capital-return pillars, but organic growth consistently trails medium-term ambition and the adjusted-vs-reported earnings divergence warrants caution, so deep research supports measured accumulation rather than full conviction on the raw buy signal. | Research: Accumulate, Medium risk — Filings confirm the screen’s quality, FCF, and capital-return pillars, but organic growth consistently trails medium-term ambition and the adjusted-vs-reported earnings divergence warrants caution, so deep research supports measured accumulation rather than full conviction on the raw buy signal. | Research: Accumulate, Medium risk — Filings confirm the screen’s quality, FCF, and capital-return pillars, but organic growth consistently trails medium-term ambition and the adjusted-vs-reported earnings divergence warrants caution, so deep research supports measured accumulation rather than full conviction on the raw buy signal."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:IMB.L",
+            "ticker": "IMB.L",
+            "severity": "medium",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £3166M | screen TTM £2502.4M | Earnings growth basis divergence >300 bps: statutory -16.5% vs filing core -24.1% | Research: Accumulate, Medium risk — Filing-backed cash generation, dividend progress, and buyback discipline support the quantitative strong-buy signal, but FY25 earnings decline, leverage/liquidity metrics, regulatory overhang, and absent interim filings prevent full confirmation of a deep-value entry. | Research: Accumulate, Medium risk — Filing-backed cash generation, dividend progress, and buyback discipline support the quantitative strong-buy signal, but FY25 earnings decline, leverage/liquidity metrics, regulatory overhang, and absent interim filings prevent full confirmation of a deep-value entry. | Research: Accumulate, Medium risk — Deep research largely confirms the screen’s cash-yield, dividend-coverage, and capital-return thesis from annual filings and FY25 FCF data, but declining reported GAAP earnings, elevated leverage and weak liquidity metrics, absent interim filings, and unresolved tobacco/NGP transition risks prevent full endorsement of the strong-buy signal at face value. | Research: Accumulate, Medium risk — Deep research largely confirms the screen’s cash-yield, dividend-coverage, and capital-return thesis from annual filings and FY25 FCF data, but declining reported GAAP earnings, elevated leverage and weak liquidity metrics, absent interim filings, and unresolved tobacco/NGP transition risks prevent full endorsement of the strong-buy signal at face value."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:MGNS.L",
+            "ticker": "MGNS.L",
+            "severity": "medium",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £170.7M | screen TTM £141.5M | Research: Accumulate, Medium risk — Primary filings confirm the screen’s quality-cheapness pairing—record earnings, net cash, rising dividends and broad model passes—but partnership housing capital intensity, Fit Out cyclicality and building-safety/regulatory overhangs prevent full conviction upgrade beyond the quantitative strong-buy signal. | Research: Accumulate, Medium risk — Primary filings confirm the screen’s quality-cheapness pairing—record earnings, net cash, rising dividends and broad model passes—but partnership housing capital intensity, Fit Out cyclicality and building-safety/regulatory overhangs prevent full conviction upgrade beyond the quantitative strong-buy signal. | Research: Accumulate, Medium risk — Primary filings confirm a high-quality, net-cash compounder with accelerating earnings, a strong order book and disciplined capital returns, supporting the quantitative Strong Buy, while housing capital lock-up, cyclical construction exposure and a new/low-duration screen signal warrant phased accumulation rather than maximum conviction. | Research: Accumulate, Medium risk — Primary filings confirm a high-quality, net-cash compounder with accelerating earnings, a strong order book and disciplined capital returns, supporting the quantitative Strong Buy, while housing capital lock-up, cyclical construction exposure and a new/low-duration screen signal warrant phased accumulation rather than maximum conviction."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:MONY.L",
+            "ticker": "MONY.L",
+            "severity": "medium",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £98.1M | screen TTM £80M | Research: Accumulate, Medium risk — Filings confirm a profitable, cash-generative, dividend-supported compounder trading at modest earnings and FCF multiples, broadly validating the strong-buy screen, while AI/competitive headwinds, VAT uncertainty, and slowing reported growth temper conviction versus an outright aggressive entry. | Research: Accumulate, Medium risk — Filings confirm a profitable, cash-generative, dividend-supported compounder trading at modest earnings and FCF multiples, broadly validating the strong-buy screen, while AI/competitive headwinds, VAT uncertainty, and slowing reported growth temper conviction versus an outright aggressive entry. | Research: Accumulate, Medium risk — Filings confirm the screen’s quality-and-yield buy case — record LFL revenue, disciplined costs, strong cash conversion and explicit capital returns — but AI/search disruption risk, PPC margin pressure, the HMRC VAT dispute and recent leverage build prevent full conviction without further H2 cashflow and FY2026 margin verification. | Research: Accumulate, Medium risk — Filings confirm the screen’s quality-and-yield buy case — record LFL revenue, disciplined costs, strong cash conversion and explicit capital returns — but AI/search disruption risk, PPC margin pressure, the HMRC VAT dispute and recent leverage build prevent full conviction without further H2 cashflow and FY2026 margin verification."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:RIO.L",
+            "ticker": "RIO.L",
+            "severity": "medium",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £4497M | screen TTM £3595.5M | Earnings growth basis divergence >300 bps: statutory -13.8% vs filing core -8.2% | Research: Accumulate, Medium risk — Filing-backed quality, dividend yield and screen cheapness support the Strong Buy signal, but cyclical price dependence, rising closure provisions, FCF/dividend tension in FY2025 and jurisdictional disputes warrant phased accumulation rather than maximum conviction. | Research: Accumulate, Medium risk — Filing-backed quality, dividend yield and screen cheapness support the Strong Buy signal, but cyclical price dependence, rising closure provisions, FCF/dividend tension in FY2025 and jurisdictional disputes warrant phased accumulation rather than maximum conviction. | Research: Accumulate, Medium risk — Filing-backed quality, dividend yield and screen cheapness support the Strong Buy signal, but cyclical price dependence, rising closure provisions, FCF/dividend tension in FY2025 and jurisdictional disputes warrant phased accumulation rather than maximum conviction."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:RS1.L",
+            "ticker": "RS1.L",
+            "severity": "medium",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Buy — wait for pullback | FCF basis mismatch: filing £210.9M | screen TTM £168M | FCF definition divergence: statutory 1.99× vs management 2.81× dividend coverage | Earnings growth basis divergence >300 bps: statutory 6.5% vs filing core -3.2% | Research: Accumulate, Medium risk — Filings confirm a cash-generative, conservatively levered distributor returning capital and gaining share in weak markets, supporting the screen’s quality/dividend/risk pillars, but adjusted earnings are still declining and cyclical/Mexico headwinds plus statutory-adjusted EPS divergence prevent full confirmation of a classic deep-value re-rating case. | Research: Accumulate, Medium risk — Filings confirm a cash-generative, conservatively levered distributor returning capital and gaining share in weak markets, supporting the screen’s quality/dividend/risk pillars, but adjusted earnings are still declining and cyclical/Mexico headwinds plus statutory-adjusted EPS divergence prevent full confirmation of a classic deep-value re-rating case. | Research: Accumulate, Medium risk — Filings confirm a cash-generative, conservatively levered distributor returning capital and gaining share in weak markets, supporting the screen’s quality/dividend/risk pillars, but adjusted earnings are still declining and cyclical/Mexico headwinds plus statutory-adjusted EPS divergence prevent full confirmation of a classic deep-value re-rating case."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:SBRY.L",
+            "ticker": "SBRY.L",
+            "severity": "medium",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Buy — neutral timing | FCF basis mismatch: filing £923M | screen TTM £821.9M | company-adj £574M | Research: Accumulate, Medium risk — Filings confirm the screen’s cheapness and cash-return pillars — strong grocery momentum, £574m retail FCF, progressive dividend, and buybacks — but margin compression, lease-adjusted leverage, earnings restatements, and the Argos disposal overhang prevent full confirmation of the raw buy signal. | Research: Accumulate, Medium risk — Filings confirm the screen’s cheapness and cash-return pillars — strong grocery momentum, £574m retail FCF, progressive dividend, and buybacks — but margin compression, lease-adjusted leverage, earnings restatements, and the Argos disposal overhang prevent full confirmation of the raw buy signal. | Research: Accumulate, Medium risk — Filings confirm the screen’s cheapness and cash-return pillars — strong grocery momentum, £574m retail FCF, progressive dividend, and buybacks — but margin compression, lease-adjusted leverage, earnings restatements, and the Argos disposal overhang prevent full confirmation of the raw buy signal."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:SN.L",
+            "ticker": "SN.L",
+            "severity": "medium",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £852M | screen TTM £1059M | Earnings growth basis divergence >300 bps: statutory 52.8% vs filing core 16.5% | Research: Accumulate, Medium risk — Deep research broadly supports the screen’s Strong Buy on valuation, FCF recovery and capital return, but filing gaps, US knee weakness, reimbursement headwinds and CFO turnover warrant phased conviction rather than full confidence. | Research: Accumulate, Medium risk — Deep research broadly supports the screen’s Strong Buy on valuation, FCF recovery and capital return, but filing gaps, US knee weakness, reimbursement headwinds and CFO turnover warrant phased conviction rather than full confidence. | Research: Accumulate, Medium risk — Deep research partially confirms the Strong Buy screen — improving FCF, reasonable multiples and active capital return support the case, but missing annual/interim filings, Q2 operational softness and CFO turnover mean verify-before-trade on full-year accounts and H1 results is essential. | Research: Accumulate, Medium risk — Deep research partially confirms the Strong Buy screen — improving FCF, reasonable multiples and active capital return support the case, but missing annual/interim filings, Q2 operational softness and CFO turnover mean verify-before-trade on full-year accounts and H1 results is essential."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:SRP.L",
+            "ticker": "SRP.L",
+            "severity": "medium",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Buy — neutral timing | FCF basis mismatch: filing £413.5M | screen TTM £361.2M | company-adj £219M | Earnings growth basis divergence >300 bps: statutory 244.8% vs filing core -41.8% | Research: Accumulate, Medium risk — Filings confirm the screen’s cash-generation and defence-led growth narrative — order book, margin progression, and surplus-capital returns — but statutory/adjusted earnings divergence and immigration/policy exposure prevent full endorsement of an unqualified buy. | Research: Accumulate, Medium risk — Filings confirm the screen’s cash-generation and defence-led growth narrative — order book, margin progression, and surplus-capital returns — but statutory/adjusted earnings divergence and immigration/policy exposure prevent full endorsement of an unqualified buy. | Research: Accumulate, Medium risk — Filings confirm the screen’s cash-generation and defence-led growth narrative — order book, margin progression, and surplus-capital returns — but statutory/adjusted earnings divergence and immigration/policy exposure prevent full endorsement of an unqualified buy."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:TPK.L",
+            "ticker": "TPK.L",
+            "severity": "medium",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Buy — neutral timing | FCF basis mismatch: filing £298M | screen TTM £226.1M | Earnings growth basis divergence >300 bps: statutory -127.6% vs filing core -97.2% | Research: Accumulate, Medium risk — Primary filings confirm the screen’s cheapness and financial-health pillars via strong free cash flow, net-cash-before-leases, and deleveraging, but weaken confidence in near-term earnings quality given cyclical headwinds, repeated impairments, and still-subdued Merchanting profitability. | Research: Accumulate, Medium risk — Primary filings confirm the screen’s cheapness and financial-health pillars via strong free cash flow, net-cash-before-leases, and deleveraging, but weaken confidence in near-term earnings quality given cyclical headwinds, repeated impairments, and still-subdued Merchanting profitability. | Research: Accumulate, Medium risk — Primary filings confirm the screen’s cheapness and financial-health pillars via strong free cash flow, net-cash-before-leases, and deleveraging, but weaken confidence in near-term earnings quality given cyclical headwinds, repeated impairments, and still-subdued Merchanting profitability."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:TRN.L",
+            "ticker": "TRN.L",
+            "severity": "medium",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Buy — favourable entry timing | FCF basis mismatch: filing £79.5M | screen TTM £62.5M | Earnings growth basis divergence >300 bps: statutory 48.4% vs filing core 36.8% | Research: Accumulate, Medium risk — Filings confirm a high-quality, cash-generative aggregator with credible European growth optionality and screen-attractive valuation, but the unresolved CMA probe and GBR market-design uncertainty prevent full confirmation of the quantitative buy signal until regulatory clarity improves. | Research: Accumulate, Medium risk — Filings confirm a high-quality, cash-generative aggregator with credible European growth optionality and screen-attractive valuation, but the unresolved CMA probe and GBR market-design uncertainty prevent full confirmation of the quantitative buy signal until regulatory clarity improves. | Research: Accumulate, Medium risk — Filings confirm a high-quality, cash-generative aggregator with credible European growth optionality and screen-attractive valuation, but the unresolved CMA probe and GBR market-design uncertainty prevent full confirmation of the quantitative buy signal until regulatory clarity improves."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:VTY.L",
+            "ticker": "VTY.L",
+            "severity": "medium",
+            "signal": "strong_buy",
+            "adjusted_signal": "strong_buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £174.6M | screen TTM £147.4M | Earnings growth basis divergence >300 bps: statutory 91.8% vs filing core 85.2% | Research: Accumulate, High risk — Deep research largely confirms the screen’s deep-value and FCF credentials at FY2025, but near-term H1 losses, leadership turnover, inventory-heavy leverage, and missing consolidated interim filings temper conviction versus an unqualified Strong Buy. | Research: Accumulate, High risk — Deep research largely confirms the screen’s deep-value and FCF credentials at FY2025, but near-term H1 losses, leadership turnover, inventory-heavy leverage, and missing consolidated interim filings temper conviction versus an unqualified Strong Buy. | Research: Accumulate, High risk — Deep research confirms the screen’s extreme asset cheapness and policy-aligned demand optionality but moderates the Strong Buy on near-term earnings quality, H1 loss guidance, management turnover, and elevated average leverage during a self-imposed transition year. | Research: Accumulate, High risk — Deep research confirms the screen’s extreme asset cheapness and policy-aligned demand optionality but moderates the Strong Buy on near-term earnings quality, H1 loss guidance, management turnover, and elevated average leverage during a self-imposed transition year."
+          },
+          {
+            "finding_id": "fcf_note_without_overlay:WIX.L",
+            "ticker": "WIX.L",
+            "severity": "medium",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "screen_ttm": null,
+            "filing_aligned": null,
+            "gap_pct": null,
+            "fcf_basis_overlay": false,
+            "action_note": "Buy — neutral timing | FCF basis mismatch: filing £168.7M | screen TTM £133.9M | Earnings growth basis divergence >300 bps: statutory 118.2% vs filing core 99.8% | Research: Accumulate, Medium risk — Primary filings confirm improving revenue, adjusted profit, cash generation, and capital returns that support the quantitative buy signal, but thin margins, lease-adjusted leverage, cyclical demand sensitivity, and the absence of indexed interim accounts warrant measured sizing rather than full conviction. | Research: Accumulate, Medium risk — Primary filings confirm improving revenue, adjusted profit, cash generation, and capital returns that support the quantitative buy signal, but thin margins, lease-adjusted leverage, cyclical demand sensitivity, and the absence of indexed interim accounts warrant measured sizing rather than full conviction. | Research: Accumulate, Medium risk — Primary filings confirm improving revenue, adjusted profit, cash generation, and capital returns that support the quantitative buy signal, but thin margins, lease-adjusted leverage, cyclical demand sensitivity, and the absence of indexed interim accounts warrant measured sizing rather than full conviction."
+          }
+        ]
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260909-01",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked euro_depth leftover ABI.BR",
@@ -45,16 +306,17 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
-      "result_path": "output/engineering_result_eng-20260909-01.md",
-      "branch_name": "cursor/eng-20260909-01-1de3",
-      "no_diff_count": 0,
-      "completed_at": "2026-09-09T05:55:14.395459+00:00"
+      "status": "open",
+      "no_diff_count": 0
     }
   ],
-  "compiled_at": "2026-09-09T05:52:09.557151+00:00",
-  "task_count": 1,
+  "compiled_at": "2026-09-09T07:47:02Z",
+  "task_count": 2,
   "micro_compile_source": "parked_source_hunter",
   "library_market_id": "euro_depth",
-  "hunter_ticker": "ABI.BR"
+  "hunter_ticker": "ABI.BR",
+  "schema_version": "engineering_tasks.v1",
+  "generated_at": "2026-09-09T07:47:02Z",
+  "source": "so_what_closure",
+  "so_what_compiled": true
 }
