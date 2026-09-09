@@ -4182,6 +4182,12 @@ def test_ir_allowlist_period_classifies_belgian_ra_pack_as_annual():
         )
         == "annual"
     )
+    assert (
+        _ir_allowlist_period_from_url(
+            "https://report.basf.com/2025/en/_assets/downloads/full-basf-report-2025-basf-ar25.pdf"
+        )
+        == "annual"
+    )
 
 
 def test_classify_rns_headline_ir_allowlist_prefix_is_not_interim():
@@ -6446,6 +6452,16 @@ def test_parked_source_hunter_assa_b_st_euro_depth_has_fetchable_ir():
     assert rows[0]["period"] == "annual"
     assert "assaabloy.com" in rows[0]["url"]
     assert "annual-reports/2025" in rows[0]["url"]
+
+
+def test_parked_source_hunter_bas_de_euro_depth_has_fetchable_ir():
+    """eng-20260908-25: BAS.DE has live report.basf.com FY2025 annual report PDF."""
+    assert "BAS.DE" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("BAS.DE")
+    assert len(rows) == 1
+    assert rows[0]["period"] == "annual"
+    assert "report.basf.com" in rows[0]["url"]
+    assert "basf-ar25.pdf" in rows[0]["url"]
 
 
 def test_fetch_filings_ir_allowlist_euro_depth_aze_br_builtins(tmp_path: Path):
