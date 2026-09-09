@@ -329,8 +329,6 @@ def predict_task_clashes(
 ) -> TaskDispatchReport:
     """Return whether ``task`` can dispatch without clashing with in-flight work."""
     branch = (candidate_branch or str(task.branch_name or "").strip() or "").strip()
-    if not branch:
-        branch = engineering_branch_for_task_id(task.id) or ""
 
     files = _normalize_files(candidate_files or [])
     if not files and branch:
@@ -440,7 +438,7 @@ def build_task_dispatch_reports(
             task,
             occupied_paths=occupied,
             open_pr_index=pr_index,
-            candidate_branch=str(task.branch_name or "") or engineering_branch_for_task_id(task.id),
+            candidate_branch=str(task.branch_name or "").strip() or None,
             repo_root=repo_root,
             skip_merge_tree=skip_merge_tree,
             clash_scan=clash_scan,
@@ -475,7 +473,7 @@ def select_clash_aware_dispatch_tasks(
     from value_investor.engineering_tasks import select_engineering_tasks
 
     for task in select_engineering_tasks(data, max_tasks=999):
-        branch = str(task.branch_name or "") or (engineering_branch_for_task_id(task.id) or "")
+        branch = str(task.branch_name or "").strip()
         files = git_changed_files_vs_main(branch, repo_root=repo_root) if branch else []
         if not files:
             files = estimated_task_files(task, include_shared=False)
