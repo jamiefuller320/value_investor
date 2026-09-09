@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-09T07:35:16.888429+00:00",
+  "generated_at": "2026-09-09T07:51:52.262515+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -421,7 +421,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=1, zero_body=0, thin=3, indexed_without_body=107)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=3, indexed_without_body=106)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 4,
@@ -473,11 +473,11 @@
       },
       "filing_health": {
         "buy_tier_count": 19,
-        "unmeasured_buy_tier": 1,
+        "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 3,
-        "indexed_without_body": 107,
-        "bodies_median": 20.0,
+        "indexed_without_body": 106,
+        "bodies_median": 18.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
@@ -488,12 +488,10 @@
           "GIB-A.TO",
           "NTR.TO"
         ],
-        "unmeasured_tickers": [
-          "TECK-B.TO"
-        ],
+        "unmeasured_tickers": [],
         "parked_tickers": []
       },
-      "filing_gaps": 1,
+      "filing_gaps": 0,
       "paper_instrument": "observe_sim",
       "ai_judgment": null,
       "knob_apply": null,
@@ -502,9 +500,9 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 14,
-        "targets": 182,
-        "improved": 59,
+        "run_count": 15,
+        "targets": 194,
+        "improved": 61,
         "improved_tickers": [
           "SU.TO",
           "CVE.TO",
@@ -519,7 +517,7 @@
           "MRU.TO",
           "L.TO"
         ],
-        "last_run_at": "2026-09-08T19:52:59.035109+00:00",
+        "last_run_at": "2026-09-09T07:50:48.976551+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 1,
         "gaps_before": {
@@ -532,23 +530,23 @@
         "gaps_after": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 4,
-          "indexed_without_body": 107,
+          "thin": 3,
+          "indexed_without_body": 106,
           "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": -1,
           "zero_body": -3,
-          "thin": -5,
-          "indexed_without_body": -128,
+          "thin": -6,
+          "indexed_without_body": -129,
           "filing_gaps": -4
         },
         "remaining": {
-          "unmeasured": 1,
+          "unmeasured": 0,
           "zero_body": 0,
           "thin": 3,
-          "indexed_without_body": 107,
-          "filing_gaps": 1
+          "indexed_without_body": 106,
+          "filing_gaps": 0
         },
         "admission_ready": false,
         "admission_gate": "sprint_ingest_complete",
@@ -702,7 +700,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=45)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=32)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 2,
@@ -760,8 +758,8 @@
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 45,
-        "bodies_median": 18.0,
+        "indexed_without_body": 32,
+        "bodies_median": 19.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
@@ -830,13 +828,11 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 17,
-        "targets": 153,
-        "improved": 86,
+        "run_count": 16,
+        "targets": 150,
+        "improved": 83,
         "improved_tickers": [
           "BPT.AX",
-          "BWP.AX",
-          "CSC.AX",
           "HVN.AX",
           "WDS.AX",
           "GGP.AX",
@@ -845,7 +841,9 @@
           "WGX.AX",
           "YAL.AX",
           "MND.AX",
-          "CDA.AX"
+          "CDA.AX",
+          "SHL.AX",
+          "AMC.AX"
         ],
         "last_run_at": "2026-09-08T19:58:24.480895+00:00",
         "runtime_cutoff_runs": 0,
@@ -854,7 +852,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 33,
+          "indexed_without_body": 10,
           "filing_gaps": 0
         },
         "gaps_after": {
@@ -868,14 +866,14 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 15,
+          "indexed_without_body": 38,
           "filing_gaps": 0
         },
         "remaining": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 45,
+          "indexed_without_body": 32,
           "filing_gaps": 0
         },
         "admission_ready": false,
