@@ -90,13 +90,13 @@ Independence answers *how books are kept apart*. **Gates + capacity** answer *wh
 
 Spare 50%/25% fractions apply only while a market is still *in front* of that threshold, so the head can finish. They are not the long-run treatment.
 
-**What is wired vs not.** Ingest already follows this: exhaustion parks leftovers, vacates the sprint, and puts unparked names on FTSE-volume maintenance (`ingest_exhausted_markets`, today including `sp500`). Learning does **not** flip with it — N94 still keeps weekly paper on `euro_depth`, so a maintenance-threshold market can sit `phase1_ready` with **0** paper batches. That is the busy-but-empty gap: the cascade did its job on filings; equivalent *learning* resource was not switched on.
+**What is wired vs not.** Ingest already follows this: exhaustion parks leftovers, vacates the sprint, and puts unparked names on FTSE-volume maintenance (`ingest_exhausted_markets`, today including `sp500`). **L322 learning flip:** hitting `sprint_ingest_complete` (raw parity or exhaustion) also admits the market to the equal-resource set — weekday epoch-0 `buy_tier_level`, screen cadence, equal-support near-miss watch, and buy-tier rememo (L321). **N94** still keeps the capacity-1 *weekly* paper slot on `euro_depth`; that is deliberate slot scarcity, not a missing admission. Do not read “0 weekly paper batches” on an admitted maintenance market as a failed flip when epoch-0 weekday marks are running.
 
 **Equal treatment after admission.** Compare only admitted markets that have the same package (N103). Do **not** spray leftover plan credit across 21 thin markets (N96). Residual skew you cannot policy away: filing *yield* (ESEF vs EDGAR vs ASX IR), session timezone, and buy-tier width. Spare-slot fractions on a *pre-threshold* market are expected; leaving a *post-threshold* market on observe-sim only is a treatment bug.
 
 **What still waits.** Shard AI-judgment and knob apply wait on the epoch-0 + near-miss watch. Phase 2 weekly AI paper stays on `euro_depth` only. FTSE remains the P1 data lead.
 
-**Admitted start (now).** `sp500` and `asx200` are on `ladder.admitted_learning_markets`. Equivalent resource starts immediately as:
+**Admitted start (now).** `ladder.admitted_learning_markets` is synced from the L322 threshold lists (`ingest_exhausted_markets` ∪ `ingest_parity_markets`) and currently includes `sp500`, `asx200`, `euro_depth`, and `ftse_smallcap`. Equivalent resource starts immediately as:
 
 - Frozen **epoch-0** `buy_tier_level` book (`ftse-library shard-epoch0` on Sunday; `ftse-library epoch0-weekday` at local open+settle on weekdays — not FTSE paper-auto)
 - Near-miss watch (`near_miss_watch.json`). **Watch cut for the AI-fork gate:** buy-not-now and hold-near-buy. **Census / persistence only:** not-buy-tier (all below buy-tier) and never-buy-tier (dated archives, never printed buy). Do not treat the census counts as the near-miss sample.

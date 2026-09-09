@@ -222,12 +222,17 @@ def maybe_record_ingest_parity(
     if first_time:
         markets.append(market_id)
         policy["ingest_parity_markets"] = sorted(set(markets))
+    from value_investor.market_shard_admission import admit_market_to_learning
+
+    admitted_changed = admit_market_to_learning(policy, market_id)
     return policy, {
         "recorded": True,
         "first_time": first_time,
         "market_id": market_id,
         "ingest_parity_met": True,
         "filing_health": health,
+        "learning_admitted": True,
+        "learning_admitted_changed": admitted_changed,
     }
 
 
