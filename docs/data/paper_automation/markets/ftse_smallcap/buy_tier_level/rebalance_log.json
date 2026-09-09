@@ -1,0 +1,363 @@
+[
+  {
+    "schema_version": 2,
+    "logged_at": "2026-09-09T07:23:01.796223+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/ftse_smallcap/screen_latest.json",
+      "run_at": "2026-09-09T06:52:19.884734+00:00",
+      "generated_at": "2026-09-09T07:23:01.516884+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-09-09T08:23:01.537702+01:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-09-09T08:00:00+01:00",
+      "settle_at": "2026-09-09T09:15:00+01:00",
+      "can_act": false,
+      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (4 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.003,
+    "candidates": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.7101000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "insufficient_data",
+        "sector": "Consumer Cyclical",
+        "price": 69.6,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4641,
+        "data_quality_score": 1.0,
+        "timing_signal": "insufficient_data",
+        "sector": "Basic Materials",
+        "price": 112.0,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "GLE.L",
+        "name": "MJ Gleeson plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.3285,
+        "data_quality_score": 1.0,
+        "timing_signal": "insufficient_data",
+        "sector": "Consumer Cyclical",
+        "price": 260.0,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "REC.L",
+        "name": "Record plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.41459999999999997,
+        "data_quality_score": 1.0,
+        "timing_signal": "insufficient_data",
+        "sector": "Financial Services",
+        "price": 43.0,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.7101000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "insufficient_data",
+        "sector": "Consumer Cyclical",
+        "price": 69.6,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4641,
+        "data_quality_score": 1.0,
+        "timing_signal": "insufficient_data",
+        "sector": "Basic Materials",
+        "price": 112.0,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "GLE.L",
+        "name": "MJ Gleeson plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.3285,
+        "data_quality_score": 1.0,
+        "timing_signal": "insufficient_data",
+        "sector": "Consumer Cyclical",
+        "price": 260.0,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "REC.L",
+        "name": "Record plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.41459999999999997,
+        "data_quality_score": 1.0,
+        "timing_signal": "insufficient_data",
+        "sector": "Financial Services",
+        "price": 43.0,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.55% / sell 0.05% (legacy symmetric slot 0.30%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 994.53,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 248.63,
+      "targets": [
+        {
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "signal": "strong_buy",
+          "conviction_score": 0.7101000000000001,
+          "price": 69.6
+        },
+        {
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "signal": "buy",
+          "conviction_score": 0.4641,
+          "price": 112.0
+        },
+        {
+          "ticker": "REC.L",
+          "name": "Record plc",
+          "signal": "buy",
+          "conviction_score": 0.41459999999999997,
+          "price": 43.0
+        },
+        {
+          "ticker": "GLE.L",
+          "name": "MJ Gleeson plc",
+          "signal": "buy",
+          "conviction_score": 0.3285,
+          "price": 260.0
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "reason": "Already near equal-weight target",
+          "value": 248.63,
+          "target_value": 248.63,
+          "conviction_score": 0.7101000000000001,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "reason": "Already near equal-weight target",
+          "value": 248.63,
+          "target_value": 248.63,
+          "conviction_score": 0.4641,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "REC.L",
+          "name": "Record plc",
+          "reason": "Already near equal-weight target",
+          "value": 248.63,
+          "target_value": 248.63,
+          "conviction_score": 0.41459999999999997,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "GLE.L",
+          "name": "MJ Gleeson plc",
+          "reason": "Already near equal-weight target",
+          "value": 248.63,
+          "target_value": 248.63,
+          "conviction_score": 0.3285,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 4 equal-weight sleeve(s); leave 4 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "e93bc1f0-c8a8-4d74-b091-c0e63651c20d",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-09T08:23:01.537702+01:00",
+        "ticker": "CARD.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 3.572306,
+        "price": 69.6,
+        "gross": 248.63,
+        "cost": 1.37,
+        "net_cash": -250.0,
+        "note": "Automated buy",
+        "name": "Card Factory plc"
+      },
+      {
+        "id": "532192af-1b19-47bb-97c9-75edb0cf34ff",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-09T08:23:01.537702+01:00",
+        "ticker": "CAPD.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 2.219933,
+        "price": 112.0,
+        "gross": 248.63,
+        "cost": 1.37,
+        "net_cash": -250.0,
+        "note": "Automated buy",
+        "name": "Capital Limited"
+      },
+      {
+        "id": "6d80470d-2502-4eb3-aeb3-be7e702a5c05",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-09T08:23:01.537702+01:00",
+        "ticker": "REC.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 5.782152,
+        "price": 43.0,
+        "gross": 248.63,
+        "cost": 1.37,
+        "net_cash": -250.0,
+        "note": "Automated buy",
+        "name": "Record plc"
+      },
+      {
+        "id": "c5e31a33-109a-4cb2-9823-afaf3c1bfd1b",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-09T08:23:01.537702+01:00",
+        "ticker": "GLE.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.956279,
+        "price": 260.0,
+        "gross": 248.63,
+        "cost": 1.37,
+        "net_cash": -250.0,
+        "note": "Automated buy",
+        "name": "MJ Gleeson plc"
+      }
+    ],
+    "nav_before": 1000.0,
+    "cash_before": 1000.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    },
+    "nav_after": 994.53,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "CARD.L",
+        "shares": 3.572306,
+        "avg_cost": 69.6,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAPD.L",
+        "shares": 2.219933,
+        "avg_cost": 112.0,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "REC.L",
+        "shares": 5.782152,
+        "avg_cost": 43.0,
+        "sector": "Financial Services",
+        "name": "Record plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "GLE.L",
+        "shares": 0.956279,
+        "avg_cost": 260.0,
+        "sector": "Consumer Cyclical",
+        "name": "MJ Gleeson plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {}
+    }
+  }
+]

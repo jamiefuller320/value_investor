@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "primary_learning_track": "ai_judgment",
+  "success_criterion": "Outperformance after costs vs market benchmark (^FTSE) on the primary AI-judgment track; rules track is the control; technical track is the timing/levels baseline; momentum_grace is an experimental exit overlay; graduated_allocation tests trade-plan entry sizing and harvest skims; buy_tier_level is a Suite B unfiltered buy-tier cohort (frozen knobs); entry_dca_overlay scores counterfactual entry cadences on every track; hypothesis_integrity reviews underwater holdings before crude stops.",
+  "tracks": {
+    "technical": {
+      "output_dir": "docs/data/paper_automation/markets/euro_depth/technical",
+      "acted": true,
+      "trades": 5,
+      "note": "Technical pass after open settle (5 trade(s)).",
+      "is_primary_learning_track": false,
+      "selection": {
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3,
+        "use_adjusted_signal": false,
+        "require_research_accumulate": false,
+        "use_momentum_grace": false,
+        "use_graduated_allocation": false,
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 1,
+        "min_rebalance_notional_gbp": 10.0
+      }
+    },
+    "rules": {
+      "output_dir": "docs/data/paper_automation/markets/euro_depth",
+      "acted": true,
+      "trades": 5,
+      "note": "Rebalanced after open settle (5 trade(s)).",
+      "is_primary_learning_track": false,
+      "selection": {
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3,
+        "use_adjusted_signal": false,
+        "require_research_accumulate": false,
+        "use_momentum_grace": false,
+        "use_graduated_allocation": false,
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 1,
+        "min_rebalance_notional_gbp": 10.0
+      }
+    },
+    "ai_judgment": {
+      "output_dir": "docs/data/paper_automation/markets/euro_depth/ai_judgment",
+      "acted": true,
+      "trades": 5,
+      "note": "Rebalanced after open settle (5 trade(s)).",
+      "is_primary_learning_track": true,
+      "selection": {
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3,
+        "use_adjusted_signal": true,
+        "require_research_accumulate": true,
+        "use_momentum_grace": false,
+        "use_graduated_allocation": false,
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 1,
+        "min_rebalance_notional_gbp": 10.0
+      }
+    },
+    "momentum_grace": {
+      "output_dir": "docs/data/paper_automation/markets/euro_depth/momentum_grace",
+      "acted": true,
+      "trades": 5,
+      "note": "Rebalanced after open settle (5 trade(s)).",
+      "is_primary_learning_track": false,
+      "selection": {
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3,
+        "use_adjusted_signal": false,
+        "require_research_accumulate": false,
+        "use_momentum_grace": true,
+        "use_graduated_allocation": false,
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 1,
+        "min_rebalance_notional_gbp": 10.0
+      }
+    },
+    "graduated_allocation": {
+      "output_dir": "docs/data/paper_automation/markets/euro_depth/graduated_allocation",
+      "acted": true,
+      "trades": 5,
+      "note": "Rebalanced after open settle (5 trade(s)).",
+      "is_primary_learning_track": false,
+      "selection": {
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.3,
+        "use_adjusted_signal": false,
+        "require_research_accumulate": false,
+        "use_momentum_grace": false,
+        "use_graduated_allocation": true,
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 1,
+        "min_rebalance_notional_gbp": 10.0
+      }
+    },
+    "buy_tier_level": {
+      "output_dir": "docs/data/paper_automation/markets/euro_depth/buy_tier_level",
+      "acted": true,
+      "trades": 19,
+      "note": "Rebalanced after open settle (19 trade(s)).",
+      "is_primary_learning_track": false,
+      "selection": {
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 1.0,
+        "use_adjusted_signal": false,
+        "require_research_accumulate": false,
+        "use_momentum_grace": false,
+        "use_graduated_allocation": false,
+        "exit_confirm_screens": 2,
+        "reentry_cooldown_screens": 1,
+        "min_rebalance_notional_gbp": 10.0
+      }
+    }
+  }
+}

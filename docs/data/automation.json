@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-09T05:52:02.642606+00:00",
+  "generated_at": "2026-09-09T07:25:40.885180+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -190,21 +190,21 @@
       },
       "budget": {
         "plan_name": "Cursor Ultra",
-        "plan_monthly_usd": 200.0,
+        "plan_monthly_usd": 20.0,
         "weekly_ops_cap_usd": 84.5,
         "enforce_weekly_ops_cap": true,
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_weekly_ops_usd": 84.5,
-        "budget_note": null,
+        "remaining_weekly_ops_usd": 77.3,
+        "budget_note": "Estimated weekly_ops reached the 15% plan-credit pseudo limit ($3.00) — warning only, not a hard cap.",
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 50.4,
-        "estimated_spend_weekly_ops_usd_this_week": 0.0,
-        "estimated_spend_usd_this_cycle": 151.7,
+        "estimated_spend_usd_this_week": 98.4,
+        "estimated_spend_weekly_ops_usd_this_week": 7.2,
+        "estimated_spend_usd_this_cycle": 199.7,
         "week_id": "2026-W37",
         "cycle_id": "2026-09-d8"
       },
@@ -232,7 +232,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-09-08T08:18:25.327446+00:00"
+      "updated_at": "2026-09-09T07:25:35.010222+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -327,16 +327,16 @@
   "achievements": {
     "timeline": [
       {
+        "at": "2026-09-09T06:52:19.884734+00:00",
+        "kind": "ladder_run",
+        "title": "Library ladder run (focus euro_depth)",
+        "detail": "shortlist=48 research created=9 updated=0 spend≈3.6"
+      },
+      {
         "at": "2026-09-08T08:27:32.490120+00:00",
         "kind": "paper_run",
         "title": "Paper automation acted",
         "detail": "Rebalanced after open settle (6 trade(s))."
-      },
-      {
-        "at": "2026-09-07T06:52:18.116971+00:00",
-        "kind": "ladder_run",
-        "title": "Library ladder run (focus euro_depth)",
-        "detail": "shortlist=47 research created=None updated=None spend≈None"
       },
       {
         "at": "2026-09-01T09:52:07.968538+00:00",
@@ -706,7 +706,7 @@
       }
     ],
     "last_ladder": {
-      "run_at": "2026-09-07T06:52:18.116971+00:00",
+      "run_at": "2026-09-09T06:52:19.884734+00:00",
       "focus_market": "euro_depth",
       "graduated_markets": [
         "sp500",
@@ -732,8 +732,8 @@
         "iseq20"
       ],
       "plan": {
-        "max_tickers": 120,
-        "surplus_day": true,
+        "max_tickers": 40,
+        "surplus_day": false,
         "research_model": "composer-2.5",
         "allow_research": true
       },
@@ -763,13 +763,13 @@
           "omxs30",
           "iseq20"
         ],
-        "screen_shortlist": 47,
-        "screen_strong_buy": 21,
-        "screen_buy": 26,
-        "research_executed": 0,
-        "research_created": null,
-        "research_updated": null,
-        "research_estimated_spend_usd": null,
+        "screen_shortlist": 48,
+        "screen_strong_buy": 19,
+        "screen_buy": 29,
+        "research_executed": 9,
+        "research_created": 9,
+        "research_updated": 0,
+        "research_estimated_spend_usd": 3.6,
         "graduation_skipped": false,
         "graduated_to": null
       }
@@ -1187,14 +1187,14 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-08T23:07:12.623855+00:00",
-    "queue_ui_updated_at": "2026-09-09T05:52:02.642563+00:00",
-    "task_count": 25,
+    "compiled_at": "2026-09-09T05:52:09.557151+00:00",
+    "queue_ui_updated_at": "2026-09-09T07:25:40.886029+00:00",
+    "task_count": 1,
     "status": {
       "open_count": 0,
-      "pr_open_count": 0,
-      "parked_count": 1,
-      "merged_count": 24,
+      "pr_open_count": 1,
+      "parked_count": 0,
+      "merged_count": 0,
       "failed_count": 0,
       "next_task_id": null,
       "in_flight_branch": null,
@@ -1203,25 +1203,25 @@
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [],
-    "attention_tasks": [
+    "queued_tasks": [
       {
-        "id": "eng-20260908-01",
+        "id": "eng-20260909-01",
         "area": "ingest",
         "title": "Hunt fetchable IR source for parked euro_depth leftover ABI.BR",
         "priority": "low",
         "priority_score": 12.0,
-        "status": "parked",
+        "status": "pr_open",
         "source": "parked_source_hunter",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": null
+        "branch_name": "cursor/eng-20260909-01-1de3"
       }
-    ]
+    ],
+    "attention_tasks": []
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-09-08T08:29:37.189586+00:00",
+    "generated_at": "2026-09-09T07:25:40.907831+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",

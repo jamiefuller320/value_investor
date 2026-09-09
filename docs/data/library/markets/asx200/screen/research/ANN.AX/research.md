@@ -1,0 +1,70 @@
+# Ansell Limited (ANN.AX) — Research memo
+
+_Version 1 · Updated 2026-09-09T07:18:50.232069+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Ansell is a global manufacturer of healthcare and industrial personal protection equipment, now scaling revenue above US$2bn following the Kimberly-Clark PPE acquisition and integration. FY26 marked a sharp earnings inflection—statutory net income and margins recovered strongly after a depressed FY24–FY25 period—while management expanded capital returns via buy-backs and a higher USD-denominated dividend. The quantitative screen rates the name a buy on cheapness, GARP, dividend, and balance-sheet metrics (P/E 20.9, P/B 2.1, D/E 37%, Lynch PEG ~0.13), though it fails deeper value and quality-moat tests (ROE 10.5%, FCF yield 3.5%, EV/EBIT 26.7). The central debate is whether FY26 margin and earnings gains are durable post-integration or largely reflected after the August 2026 results rally; filing extracts for the annual report and investor deck are unavailable, limiting balance-sheet risk verification from primary sources.
+
+## INVESTMENT THESIS
+For a value-oriented investor, Ansell offers a GARP-style entry into a global #1/#2 franchise in protective gloves and related PPE, trading at a moderate multiple after a cyclical trough rather than at deep-value levels. The screen passes six of 22 models across all five factor families—cheapness, quality, dividend, GARP, and risk—including Graham Enterprising, Lynch PEG, Neff PEGY, Dividend Growth, Piotroski F-Score (7/9), and Financial Health—with 64% composite score and sector-relative 65%, conviction 61% (persistent, four weeks at signal). Business quality supports the signal: broad geographic diversification (100+ countries), leading brands (HyFlex, MICROFLEX, TouchNTuff, Kimtech/KleenGuard post-acquisition), and improving gross margins. FY26 revenue of US$2.14bn (Yahoo fallback; ESG report cites ~US$2.1bn) and statutory diluted EPS of US$1.45 represent a multi-year recovery from FY24–FY25 integration drag, while net debt of US$408m and current ratio 2.3x keep leverage within screen tolerance. Capital allocation is shareholder-friendly: US$136m buy-backs and US$79m dividends in FY26 (Yahoo), plus a final dividend of US$0.415 per share confirmed in ASX filing. The name is not a net-net or deep-value candidate—P/B remains above 2x and ROE sits below Buffett/moat thresholds—but the combination of reasonable entry multiple, earnings recovery, and dividend plus buy-back support aligns with the screen’s buy classification for enterprising value investors willing to accept integration and cyclicality risk.
+
+## FINANCIAL REVIEW
+**Source limitations (important).** The filings index contains four annual-class announcements (24 August 2026 statutory accounts/annual report, FY26 investor presentation, ESG report, dividend notices) but zero interim or trading-update entries. Critically, the annual report and investor presentation body extracts contain only Market Index landing-page metadata—no extractable P&L, balance sheet, or cash-flow figures. Two indexed bodies are misattributed (Power Resources Ltd annual report; unrelated gold-drilling announcement). Usable primary filing data is limited to: (i) the FY26 final dividend ASX Appendix 3A.1 (USD 0.415, 100% unfranked conduit foreign income, record date 1 September 2026); and (ii) the FY26 ESG report (company description, ~US$2.1bn revenue highlight, CEO transition detail, Kimberly-Clark PPE acquisition in FY25). **All financial trend figures below fall back to `financials_annual.json` (Yahoo) unless noted.** No interim filing bodies are available despite HY FY26 results being reported to market on 16 February 2026 (news only).
+
+**Income and profitability (Yahoo, USD).**
+
+| Metric | FY23 | FY24 | FY25 | FY26 |
+|--------|------|------|------|------|
+| Revenue | 1,655m | 1,619m | 2,003m | 2,140m |
+| Gross profit / margin | 617m / 37% | 625m / 39% | 825m / 41% | 887m / 41% |
+| EBIT | 207m | 130m | 185m | 319m |
+| EBITDA | 275m | 202m | 260m | 399m |
+| Net income | 148m | 77m | 102m | 209m |
+| Diluted EPS | 1.17 | 0.59 | 0.70 | 1.45 |
+
+FY24–FY25 were trough years: revenue dipped in FY24 before the Kimberly-Clark PPE acquisition expanded the top line to US$2.0bn in FY25 (cash outflow US$635m for business purchase per Yahoo cash-flow statement). FY26 delivered broad-based growth—revenue +6.8% YoY, EBIT +72%, net income +105%, diluted EPS +109%—consistent with news headlines citing adjusted EPS growth of ~17.8% and statutory profit more than doubling (Kalkine, 24 August 2026). Gross margin stabilised above 41%, indicating pricing power and mix benefits post-integration. Operating income reached US$241m versus US$109m in FY25.
+
+**Cash flow and capital allocation (Yahoo, USD).** Free cash flow recovered sharply: US$113m (FY23) → US$210m (FY24) → US$170m (FY25) → US$340m (FY26). FY26 operating cash receipts from customers were US$2,219m; capex was US$49m (down from US$69m in FY25). Capital returned to shareholders accelerated: buy-backs US$136m (vs US$4m in FY25) and dividends US$79m. The screen’s TTM FCF of US$207m (auto-fallback) is lower than Yahoo FY26 FCF of US$340m—a divergence worth monitoring. The screen’s Earnings Quality model fails on “operating cash below earnings, high accruals,” and Piotroski scores miss “positive operating cash flow” and “OCF > net income” despite Yahoo FY26 direct operating cash of US$389m exceeding net income—suggesting the screen may be using a different cash-flow basis or lagged period. Treat cash-conversion as unresolved pending full annual report review.
+
+**Balance sheet (Yahoo, USD, FY26).** Total assets US$3,292m; goodwill and intangibles US$1,655m (~50% of assets), reflecting acquisition history including Kimberly-Clark PPE. Total debt US$757m; cash US$250m; net debt US$408m (down from US$461m in FY25). Stockholders’ equity US$1,991m; tangible book value US$337m. Debt/equity 37% (screen). Current ratio 2.3x. Inventory US$501m (down from US$585m in FY25). Pension/post-retirement liabilities are present (US$15m non-current employee benefits; US$76m current pension plans) but not material relative to equity—detailed covenant or going-concern language could not be verified from available filing bodies.
+
+**Dividends (primary filing).** FY26 final dividend: USD 0.415 per share (AUD 0.579 at rate 0.717), ex-date 31 August 2026, payment 17 September 2026, fully unfranked conduit foreign income (Appendix 3A.1, 2 September 2026). Full DRP available for AU/NZ/UK residents.
+
+**Interim gap.** HY FY26 results were announced 16 February 2026 (news: “Ansell shares: earnings jump and dividend rises in FY26 half-year,” Motley Fool Australia). No interim filing with extractable body is indexed; half-year P&L, balance sheet, and cash-flow trends cannot be verified from primary sources in this pack.
+
+## RISKS AND RED FLAGS
+**Integration and acquisition.** The Kimberly-Clark PPE acquisition (FY25, per ESG report) materially expanded intangibles and debt. FY25 net income remained subdued (US$102m) despite higher revenue, consistent with integration costs; FY26 recovery may partly reflect one-off synergies or favourable mix that normalises. Goodwill impairment risk is meaningful given intangibles at half of total assets—impairment testing language unavailable from annual report extract.
+
+**Cyclical and competitive exposure.** Healthcare and industrial PPE demand is tied to procedure volumes, manufacturing activity, and distributor inventory cycles. The global glove market remains competitive (low-cost Asian producers, commoditisation pressure). News coverage repeatedly frames the stock as sensitive to sector rotation (e.g., “Ansell Pulls Back as Defensive Healthcare Names Lose Momentum,” Kalkine, 10 July 2026).
+
+**Management transition.** CEO Neil Salmon retired after 13 years; Nathalie Ahlström succeeded on 16 February 2026 following a transition from 26 January 2026 (ESG report). A new CFO appointment was flagged in news (Simply Wall St, 29 June 2026). Leadership change during integration adds execution uncertainty.
+
+**Earnings quality and accounting.** The screen fails Earnings Quality and two Piotroski cash-conversion components. Without annual report notes, accrual drivers (inventory, receivables, acquisition fair-value adjustments) cannot be assessed. Yahoo FY26 shows strong reported FCF, but the screen’s lower TTM FCF and accruals flag warrant caution.
+
+**Cyber and regulatory.** “Ansell reports data breach: October 2025 update” (Motley Fool Australia, 14 October 2025) signals operational/regulatory risk; contingent liability detail not available from filing bodies. Mandatory AASB S2 climate reporting and EU CSRD preparation (ESG report) add compliance cost and disclosure risk.
+
+**Capital structure.** Net debt is manageable at current earnings, but total debt of US$757m and interest expense of US$40m (FY26) create sensitivity to rate and FX moves. Ansell reports in USD but is ASX-listed; dividends are unfranked conduit foreign income, reducing after-tax yield for Australian investors relying on franking.
+
+**Filing data quality.** Annual report and investor presentation bodies failed extraction; two misindexed filings reduce confidence in automated filing coverage. Verify covenants, contingencies, and going-concern statements directly from the 174-page statutory accounts PDF before sizing positions.
+
+RiskTags: cyclical, competitive, governance, accounting, other
+RiskTags: cyclical, competitive, governance, accounting, other
+
+## NEWS HIGHLIGHTS
+Coverage is heavy around FY26 results (August 2026) but thinner and largely price-commentary driven outside that window; no sell-side research notes are indexed.
+
+**FY26 full-year results and capital returns (August 2026).** Ansell reported strong FY26 results on 24 August 2026, triggering a sharp share-price rally (“Why Ansell (ASX:ANN) Is Up 16.6% After Strong FY26 Earnings And Expanded Capital Returns Program,” webull.com, 26 August 2026; “Health Check: No rubbery figures as glove maker Ansell beats expectations,” stockhead.com.au, 24 August 2026). Headlines cite margin gains, adjusted EPS growth of 17.8% (“Ansell (ASX:ANN) FY26 Results: Adjusted EPS Rises 17.8%,” Kalkine, 24 August 2026), Kimberly-Clark integration progress (“Ansell Shares Extend Rally as FY26 Profit More Than Doubles on Kimberly-Clark Integration,” Kalkine, 25 August 2026), expanded buy-back notification (Market Index, 24 August 2026), and debate on whether upside is priced in (“Ansell Posts Strong Full Year Results, Is The Upside Already Priced In?” simplywall.st, 29 August 2026).
+
+**Half-year FY26 (February 2026).** HY results on 16 February 2026 showed earnings and dividend increases (“Ansell shares: earnings jump and dividend rises in FY26 half-year,” Motley Fool Australia, 16 February 2026).
+
+**Leadership (January–June 2026).** CEO transition announced 8 January 2026: Neil Salmon to retire; Nathalie Ahlström to succeed (“Ansell announces CEO transition: Nathalie Ahlström to succeed Neil Salmon in 2026,” Motley Fool Australia, 8 January 2026), with share weakness on the news (“Ansell (ASX:ANN) Drops 6% on CEO Exit,” Stocks Down Under, 9 January 2026). New CFO appointment noted June 2026 (Simply Wall St, 29 June 2026).
+
+**Operational/regulatory (October 2025).** Data breach disclosure (“Ansell reports data breach: October 2025 update,” Motley Fool Australia, 14 October 2025).
+
+**Prior periods.** FY25 results coverage (October 2025) noted sales growth and EBIT improvement (Kalkine, 29 October 2025). Shares hit 52-week lows in April–May 2026 amid broader healthcare weakness (Motley Fool Australia, 28 April and 5 May 2026), setting up the later recovery.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.70
+Rationale: FY26 earnings recovery, balance-sheet metrics, and capital returns broadly confirm the quantitative buy signal, but thin primary filing extracts, absent interim bodies, earnings-quality screen failures, and post-results re-rating leave material verify-before-trade gaps.

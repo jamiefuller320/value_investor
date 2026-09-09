@@ -1,32 +1,34 @@
 {
   "schema_version": 1,
   "market_id": "sp500",
-  "assessed_at": "2026-09-07T07:14:07.864807+00:00",
+  "assessed_at": "2026-09-09T07:22:03.539602+00:00",
   "ftse_equivalent": true,
   "coverage_scope": "canonical",
   "canonical_path": "docs/data/library/markets/sp500/screen/research/{TICKER}/",
   "note": "Canonical screen research only. Other-shard filing indexes (e.g. nasdaq100) are not measured for FTSE-equivalent parity.",
   "filing": {
-    "buy_tier_count": 140,
-    "unmeasured_buy_tier": 0,
+    "buy_tier_count": 142,
+    "unmeasured_buy_tier": 1,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
     "indexed_without_body": 15,
     "bodies_min": 14,
-    "bodies_median": 20.0,
-    "bodies_max": 71,
-    "unmeasured_tickers": [],
+    "bodies_median": 20,
+    "bodies_max": 73,
+    "unmeasured_tickers": [
+      "BKNG"
+    ],
     "zero_body_tickers": [],
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
       "LDOS",
       "INTU",
-      "LMT",
       "APTV",
       "CRH",
       "TSN",
       "BXP",
-      "FICO"
+      "FICO",
+      "LMT"
     ],
     "parked_tickers": [
       "APTV",
@@ -38,37 +40,39 @@
       "LMT",
       "TSN"
     ],
-    "ingest_exhausted": true,
+    "ingest_exhausted": false,
     "effective_thin_body_buy_tier": 0,
     "effective_indexed_without_body": 0,
-    "filing_ready": true,
+    "filing_ready": false,
     "ingest_parity_met": false,
-    "ingest_sprint_complete": true
+    "ingest_sprint_complete": false
   },
   "screen": {
-    "archive_files": 15,
-    "unique_days": 10,
-    "span_days": 51,
-    "span_weeks": 7.29,
+    "archive_files": 16,
+    "unique_days": 11,
+    "span_days": 53,
+    "span_weeks": 7.57,
     "first_screen": "2026-07-18",
-    "last_screen": "2026-09-07",
+    "last_screen": "2026-09-09",
     "stale": false,
     "stale_after_days": 8
   },
   "trajectory": {
     "generated": false,
     "can_generate": true,
-    "snapshot_count": 15,
-    "event_count": 778,
-    "boundary_count": 227,
+    "snapshot_count": 16,
+    "event_count": 1338,
+    "boundary_count": 233,
     "trajectory_ready": false,
-    "ready_reason": "span 7.29w < 12w (unique_days=10; need 12 unique days over 12 weeks)",
+    "ready_reason": "span 7.57w < 12w (unique_days=11; need 12 unique days over 12 weeks)",
     "min_span_weeks": 12.0,
     "min_unique_days": 12
   },
-  "unmeasured_buy_tier": 0,
-  "unmeasured_tickers": [],
-  "filing_ready": true,
+  "unmeasured_buy_tier": 1,
+  "unmeasured_tickers": [
+    "BKNG"
+  ],
+  "filing_ready": false,
   "trajectory_ready": false,
   "learning_ready": false
 }
