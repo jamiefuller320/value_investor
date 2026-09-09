@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-09T15:13:10.555659+00:00",
+  "generated_at": "2026-09-09T16:35:29.137189+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -466,31 +466,31 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 17,
-        "targets": 212,
-        "improved": 47,
+        "run_count": 16,
+        "targets": 200,
+        "improved": 38,
         "improved_tickers": [
-          "CNR.TO",
           "TRI.TO",
-          "WSP.TO",
           "K.TO",
-          "RCI-B.TO",
-          "CVE.TO",
-          "ABX.TO",
-          "L.TO",
           "IFC.TO",
+          "CNR.TO",
           "CNQ.TO",
+          "CVE.TO",
+          "L.TO",
           "CCL-B.TO",
-          "SU.TO"
+          "SU.TO",
+          "RCI-B.TO",
+          "WSP.TO",
+          "TECK-B.TO"
         ],
         "last_run_at": "2026-09-09T15:00:00.291988+00:00",
         "runtime_cutoff_runs": 0,
-        "error_runs": 1,
+        "error_runs": 0,
         "gaps_before": {
           "unmeasured": 1,
           "zero_body": 1,
-          "thin": 5,
-          "indexed_without_body": 182,
+          "thin": 2,
+          "indexed_without_body": 177,
           "filing_gaps": 2
         },
         "gaps_after": {
@@ -503,8 +503,8 @@
         "gap_delta": {
           "unmeasured": -1,
           "zero_body": -1,
-          "thin": -2,
-          "indexed_without_body": -80,
+          "thin": 1,
+          "indexed_without_body": -75,
           "filing_gaps": -2
         },
         "remaining": {
@@ -516,13 +516,7 @@
         },
         "admission_ready": false,
         "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [
-          {
-            "id": "ingest_errors",
-            "severity": "warn",
-            "summary": "1 ingest run(s) recorded errors: CNQ.TO: Failed to perform, curl: (16) . See https://curl.se/libcurl/c/libcurl-errors.html first for more details."
-          }
-        ]
+        "admission_warnings": []
       },
       "held_vs_market": {
         "schema_version": 1,
@@ -795,9 +789,9 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 12,
-        "targets": 72,
-        "improved": 14,
+        "run_count": 11,
+        "targets": 71,
+        "improved": 13,
         "improved_tickers": [
           "MER.L",
           "GMS.L",
@@ -812,10 +806,10 @@
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
-          "zero_body": 2,
+          "zero_body": 1,
           "thin": 1,
-          "indexed_without_body": 45,
-          "filing_gaps": 2
+          "indexed_without_body": 65,
+          "filing_gaps": 1
         },
         "gaps_after": {
           "unmeasured": 0,
@@ -826,10 +820,10 @@
         },
         "gap_delta": {
           "unmeasured": 0,
-          "zero_body": -2,
+          "zero_body": -1,
           "thin": -1,
-          "indexed_without_body": 34,
-          "filing_gaps": -2
+          "indexed_without_body": 14,
+          "filing_gaps": -1
         },
         "remaining": {
           "unmeasured": 0,
