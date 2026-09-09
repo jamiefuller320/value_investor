@@ -23,7 +23,20 @@
           "tests/test_ingest_improvement.py",
           "tests/test_companies_house.py"
         ],
-        "tickers": []
+        "tickers": [],
+        "verify_status": "passed",
+        "verified_at": "2026-09-09T16:49:51.792633+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_research_filings.py",
+            "tests/test_research_ingest.py",
+            "tests/test_gap_fill_deepen.py",
+            "tests/test_ingest_improvement.py",
+            "tests/test_companies_house.py"
+          ],
+          "output_tail": "........................................................................ [ 23%]\n........................................................................ [ 47%]\n........................................................................ [ 71%]\n........................................................................ [ 95%]\n..............                                                           [100%]\n302 passed in 93.02s (0:01:33)"
+        }
       },
       "acceptance_criteria": [
         "Inspect IR / exchange sources for APAM.AS only — do not invent URLs",
@@ -52,8 +65,12 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "open",
-      "no_diff_count": 0
+      "status": "merged",
+      "no_diff_count": 0,
+      "branch_name": "cursor/eng-20260909-05-1de3",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/544",
+      "pr_number": 544,
+      "merged_at": "2026-09-09T16:49:51.792831+00:00"
     },
     {
       "id": "eng-20260909-07",
@@ -61,7 +78,7 @@
       "title": "Hunt fetchable IR source for parked euro_depth leftover AZE.BR",
       "summary": "Library market euro_depth (EU depth composite (STOXX50 + periphery)) parked AZE.BR after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: N",
       "priority": "low",
-      "priority_score": 12.0,
+      "priority_score": 14.0,
       "source": "parked_source_hunter",
       "evidence": {
         "market_id": "euro_depth",
@@ -449,6 +466,17 @@
   "library_market_id": "euro_depth",
   "hunter_ticker": "AZE.BR",
   "ingest_health": {
+    "snapshot_at": "2026-09-09T16:48:15.386692+00:00",
+    "buy_tier_count": 61,
+    "measured_tickers": 61,
+    "unmeasured_buy_tier": 0,
+    "unmeasured_tickers": [],
+    "zero_body_buy_tier": 0,
+    "zero_body_tickers": [],
+    "indexed_without_body": 10,
+    "filings_with_body": 4085
+  },
+  "ingest_health_before": {
     "snapshot_at": "2026-09-09T09:51:41.819914+00:00",
     "buy_tier_count": 61,
     "measured_tickers": 61,
@@ -459,17 +487,6 @@
     "indexed_without_body": 9,
     "filings_with_body": 4070
   },
-  "ingest_health_before": {
-    "snapshot_at": "2026-09-09T09:18:59.922016+00:00",
-    "buy_tier_count": 61,
-    "measured_tickers": 61,
-    "unmeasured_buy_tier": 0,
-    "unmeasured_tickers": [],
-    "zero_body_buy_tier": 0,
-    "zero_body_tickers": [],
-    "indexed_without_body": 9,
-    "filings_with_body": 4070
-  },
-  "reprioritized_at": "2026-09-09T09:51:41.820112+00:00",
-  "reprioritized_after_task": "eng-20260909-06"
+  "reprioritized_at": "2026-09-09T16:48:15.386848+00:00",
+  "reprioritized_after_task": "eng-20260909-05"
 }
