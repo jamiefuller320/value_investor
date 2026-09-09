@@ -6467,7 +6467,7 @@ def test_parked_source_hunter_apam_as_euro_depth_has_fetchable_ir():
 
 
 def test_parked_source_hunter_assa_b_st_euro_depth_has_fetchable_ir():
-    """eng-20260908-23: ASSA-B.ST has live assaabloy.com FY2025 annual report PDF."""
+    """eng-20260909-06: ASSA-B.ST has live assaabloy.com FY2025 annual report PDF (hunter confirmed)."""
     assert "ASSA-B.ST" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("ASSA-B.ST")
     assert len(rows) == 1
