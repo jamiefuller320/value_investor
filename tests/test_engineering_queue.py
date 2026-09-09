@@ -73,16 +73,43 @@ def test_find_in_flight_pr_matches_engineering_branch():
     assert found["number"] == 11
 
 
-def test_evaluate_dispatch_allows_parallel_when_pr_open_below_cap(tmp_path: Path):
+def test_evaluate_dispatch_allows_parallel_when_pr_open_below_cap(tmp_path: Path, monkeypatch):
     tasks_path = tmp_path / "engineering_tasks.json"
     payload = {
         "tasks": [
-            _task("eng-20260726-01", status="open").to_dict(),
-            _task("eng-20260726-02", status="pr_open").to_dict(),
-            _task("eng-20260726-03", status="open", title="Third task").to_dict(),
+            {
+                **_task("eng-20260726-01", status="open").to_dict(),
+                "allowed_paths": ["src/value_investor/research/ingest.py"],
+            },
+            {
+                **_task("eng-20260726-02", status="pr_open").to_dict(),
+                "area": "scoring",
+                "allowed_paths": ["src/value_investor/summary.py"],
+                "branch_name": "cursor/eng-20260726-02-1de3",
+            },
+            {
+                **_task("eng-20260726-03", status="open", title="Third task").to_dict(),
+                "allowed_paths": ["src/value_investor/research/ingest.py"],
+            },
         ]
     }
     tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    def fake_index(open_prs, *, repo=None, cache=None):
+        return [
+            {
+                "number": 112,
+                "branch": "cursor/eng-20260726-02-1de3",
+                "title": "feat(engineering): x",
+                "task_id": "eng-20260726-02",
+                "changed_files": ["src/value_investor/summary.py"],
+            }
+        ]
+
+    monkeypatch.setattr(
+        "value_investor.engineering_preflight.build_open_pr_file_index",
+        fake_index,
+    )
     decision = evaluate_engineering_dispatch(
         tasks_path=tasks_path,
         open_prs=[
@@ -189,7 +216,7 @@ def test_evaluate_dispatch_blocks_overlapping_paths(tmp_path: Path):
         max_parallel=2,
     )
     assert decision.should_dispatch is False
-    assert "path-disjoint" in decision.reason
+    assert "dispatch-eligible" in decision.reason
 
 
 def test_evaluate_dispatch_prefers_disjoint_task_when_pr_open(tmp_path: Path):

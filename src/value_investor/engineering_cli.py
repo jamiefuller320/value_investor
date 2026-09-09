@@ -70,6 +70,10 @@ from value_investor.engineering_tasks import (
     sync_committed_engineering_tasks,
     validate_engineering_pr_paths_for_task_id,
 )
+from value_investor.engineering_preflight import (
+    clash_report_for_queue,
+    run_local_preflight,
+)
 from value_investor.engineering_verify import verify_merged_task
 from value_investor.storage import read_json
 
@@ -151,8 +155,16 @@ def _cmd_queue_status(args: argparse.Namespace) -> int:
     return 0 if decision.should_dispatch or not args.require_dispatch else 1
 
 
+def _load_open_prs_json(path: str | None) -> list[dict[str, Any]]:
+    if not path:
+        return []
+    payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    return list(payload) if isinstance(payload, list) else []
+
+
 def _cmd_refresh_queue_ui(args: argparse.Namespace) -> int:
-    result = refresh_engineering_queue_ui()
+    open_prs = _load_open_prs_json(args.open_prs_json)
+    result = refresh_engineering_queue_ui(open_prs=open_prs or None)
     if args.json:
         _print_json(result)
     else:
@@ -341,13 +353,6 @@ def _cmd_record_no_diff(args: argparse.Namespace) -> int:
     return 0 if result.get("recorded") or result.get("skipped") else 1
 
 
-def _load_open_prs_json(path: str | None) -> list[dict[str, Any]]:
-    if not path:
-        return []
-    payload = json.loads(Path(path).read_text(encoding="utf-8"))
-    return list(payload) if isinstance(payload, list) else []
-
-
 def _cmd_try_accelerated_email(args: argparse.Namespace) -> int:
     open_prs = _load_open_prs_json(args.open_prs_json)
     status = summarize_queue(
@@ -488,6 +493,87 @@ def _cmd_mark_pr_open(args: argparse.Namespace) -> int:
         _print_json(updated.to_dict())
     else:
         print(f"Marked {updated.id} as pr_open on {args.branch}")
+    return 0
+
+
+def _cmd_preflight(args: argparse.Namespace) -> int:
+    task_id = str(args.task_id or "").strip()
+    if not task_id:
+        print("--task-id is required", file=sys.stderr)
+        return 2
+    task = find_engineering_task(task_id, path=_resolve_tasks_path(args.tasks_path))
+    if task is None:
+        print(f"Unknown task {task_id}", file=sys.stderr)
+        return 1
+
+    changed_files: list[str] = []
+    if args.changed_files:
+        changed_files = [
+            line.strip()
+            for line in Path(args.changed_files).read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+    elif args.branch:
+        from value_investor.engineering_preflight import git_changed_files_vs_main
+
+        changed_files = git_changed_files_vs_main(args.branch, repo_root=Path.cwd())
+
+    open_prs = _load_open_prs_json(args.open_prs_json)
+    report = run_local_preflight(
+        task,
+        changed_files=changed_files,
+        open_prs=open_prs or None,
+        branch=args.branch,
+        base_ref=args.base_ref,
+        head_ref=args.head_ref,
+        repo_root=Path.cwd(),
+        skip_pytest=args.skip_pytest,
+        skip_clash=args.skip_clash,
+        skip_merge_tree=args.skip_merge_tree,
+    )
+    if args.json:
+        _print_json(report.to_dict())
+    else:
+        print(f"Preflight for {task_id}: {'PASS' if report.ok else 'FAIL'}")
+        for check in report.checks:
+            status = "ok" if check.ok else "FAIL"
+            print(f"  [{status}] {check.name}: {check.detail[:200]}")
+    if args.require_pass and not report.ok:
+        return 1
+    return 0 if report.ok else 1
+
+
+def _cmd_clash_report(args: argparse.Namespace) -> int:
+    from value_investor.engineering_queue import in_flight_allowed_paths
+
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    payload = load_engineering_tasks(tasks_path)
+    open_prs = _load_open_prs_json(args.open_prs_json)
+    blocked_paths = in_flight_allowed_paths(payload, open_prs=open_prs or None)
+    report = clash_report_for_queue(
+        payload,
+        blocked_paths=blocked_paths,
+        open_prs=open_prs or None,
+    )
+    if args.json:
+        _print_json(report)
+    else:
+        print(
+            f"Clash report: {report['dispatch_eligible_count']} eligible / "
+            f"{report['open_task_count']} open "
+            f"({report['blocked_count']} blocked)"
+        )
+        for row in report.get("tasks") or []:
+            flag = "eligible" if row.get("dispatch_eligible") else "blocked"
+            rank = row.get("effective_dispatch_rank")
+            rank_text = f" rank={rank}" if rank else ""
+            print(f"  {row.get('task_id')} [{flag}{rank_text}]")
+            for blocker in row.get("blocked_by") or []:
+                files = ", ".join(blocker.get("clash_files") or []) or blocker.get("kind")
+                print(
+                    f"    blocked by #{blocker.get('pr_number')} "
+                    f"{blocker.get('kind')}: {files}"
+                )
     return 0
 
 
@@ -998,7 +1084,45 @@ def main(argv: list[str] | None = None) -> int:
         parents=[common],
         help="Publish engineering queue status to automation.json and latest.json",
     )
+    refresh_ui_p.add_argument(
+        "--open-prs-json",
+        default=None,
+        help="Path to JSON array of open PRs from gh pr list --json ...",
+    )
     refresh_ui_p.set_defaults(func=_cmd_refresh_queue_ui)
+
+    preflight_p = sub.add_parser(
+        "preflight",
+        parents=[common],
+        help="Run path guard, ruff, JSON, pytest, and clash checks before opening a PR",
+    )
+    preflight_p.add_argument("--task-id", required=True)
+    preflight_p.add_argument("--branch", default=None, help="Engineering branch on origin")
+    preflight_p.add_argument(
+        "--changed-files",
+        default=None,
+        help="Newline-delimited changed paths (default: git diff vs origin/main)",
+    )
+    preflight_p.add_argument("--open-prs-json", default=None)
+    preflight_p.add_argument("--base-ref", default="origin/main")
+    preflight_p.add_argument("--head-ref", default="HEAD")
+    preflight_p.add_argument("--skip-pytest", action="store_true")
+    preflight_p.add_argument("--skip-clash", action="store_true")
+    preflight_p.add_argument("--skip-merge-tree", action="store_true")
+    preflight_p.add_argument(
+        "--require-pass",
+        action="store_true",
+        help="Exit 1 when any preflight check fails (for workflow gates)",
+    )
+    preflight_p.set_defaults(func=_cmd_preflight)
+
+    clash_p = sub.add_parser(
+        "clash-report",
+        parents=[common],
+        help="Report dispatch eligibility and PR clashes for open engineering tasks",
+    )
+    clash_p.add_argument("--open-prs-json", default=None)
+    clash_p.set_defaults(func=_cmd_clash_report)
 
     sync_p = sub.add_parser(
         "sync-queue",

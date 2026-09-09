@@ -82,6 +82,8 @@ AREA_ALLOWED_PATHS: dict[str, list[str]] = {
         "src/value_investor/engineering_recovery.py",
         "src/value_investor/engineering_sync.py",
         "src/value_investor/engineering_pr_notify.py",
+        "src/value_investor/engineering_preflight.py",
+        "src/value_investor/engineering_queue.py",
         ".github/workflows/ops-monitor.yml",
         ".github/workflows/engineering-agent.yml",
         ".github/workflows/engineering-queue.yml",
@@ -90,6 +92,7 @@ AREA_ALLOWED_PATHS: dict[str, list[str]] = {
         "tests/test_backtest_health.py",
         "tests/test_engineering_sync.py",
         "tests/test_engineering_pr_notify.py",
+        "tests/test_engineering_preflight.py",
     ],
     "ci": [
         ".github/workflows/ci.yml",
@@ -102,11 +105,13 @@ AREA_ALLOWED_PATHS: dict[str, list[str]] = {
         "src/value_investor/python_quality.py",
         "src/value_investor/ci_fix_tasks.py",
         "src/value_investor/engineering_auto_merge.py",
+        "src/value_investor/engineering_preflight.py",
         "tests/conftest.py",
         "tests/test_committed_data_json.py",
         "tests/test_python_quality.py",
         "tests/test_ci_fix_tasks.py",
         "tests/test_engineering_auto_merge.py",
+        "tests/test_engineering_preflight.py",
         "pyproject.toml",
     ],
 }
@@ -166,9 +171,12 @@ class EngineeringTask:
     blocked_paths: list[str] = field(default_factory=list)
     auto_merge: bool = False
     status: str = "open"
+    branch_name: str | None = None
+    pr_url: str | None = None
+    pr_number: int | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload = {
             "id": self.id,
             "area": self.area,
             "title": self.title,
@@ -183,6 +191,13 @@ class EngineeringTask:
             "auto_merge": self.auto_merge,
             "status": self.status,
         }
+        if self.branch_name:
+            payload["branch_name"] = self.branch_name
+        if self.pr_url:
+            payload["pr_url"] = self.pr_url
+        if self.pr_number is not None:
+            payload["pr_number"] = self.pr_number
+        return payload
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> EngineeringTask:
@@ -200,6 +215,9 @@ class EngineeringTask:
             blocked_paths=list(data.get("blocked_paths") or BLOCKED_PATHS),
             auto_merge=bool(data.get("auto_merge")),
             status=str(data.get("status") or "open"),
+            branch_name=str(data.get("branch_name") or "").strip() or None,
+            pr_url=str(data.get("pr_url") or "").strip() or None,
+            pr_number=int(data["pr_number"]) if data.get("pr_number") is not None else None,
         )
 
 

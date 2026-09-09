@@ -17,12 +17,13 @@ dropping still-open tasks from an older run stamp. The agent then failed with
 |-------|-----------|
 | **Merge guard** | `_merge_task_rows` preserves all `open` tasks, not only terminal/`pr_open` rows |
 | **Agent workflow** | Skips compile when `task_id` is provided; resolves stale ids via `resolve_dispatch_task_id` |
-| **Parallel dispatch** | `max_parallel_engineering_agents` (default 2) with **path-disjoint** selection — a second agent starts only when its `allowed_paths` do not overlap an in-flight `pr_open` task |
+| **Parallel dispatch** | `max_parallel_engineering_agents` (default 2) with **clash-aware** selection — walks priority order, skips tasks blocked by allowlist overlap, open-PR file overlap, shared mutable files (`engineering_tasks.json`, `policy.json`, …), or optional `git merge-tree` conflicts; non-competing tasks **overtake** blocked higher-priority work |
+| **Preflight before PR** | `engineering-agent.yml` runs `ftse-engineering preflight` (path guard, ruff, JSON sanity, clash scan) after push and before `gh pr create`; failures park the task (`parked_policy=preflight_clash`) |
 | **So-what batching** | `so_what_closure` groups `auto_queue` findings by `(area, kind)` so shared scoring plumbing is one PR, not one per ticker |
 | **Spend commit** | `scripts/gha_commit_engineering_spend.sh` rebases onto `origin/main`, re-records spend, and retries the push. Exhausted retries are `continue-on-error` so a raced `policy.json` push cannot block the draft PR |
 | **Queue recovery** | Hourly `recover-queue` marks tasks **merged** when GitHub shows a merged PR for their branch (before orphan `pr_open` reset) |
 | **Ops monitor** | Daily `check_engineering_sync()`; reconciles queue and can dispatch `engineering-queue.yml` |
-| **Dashboard UI** | `ftse-engineering refresh-queue-ui` on task status changes → `automation.json` + `latest.json` |
+| **Dashboard UI** | `ftse-engineering refresh-queue-ui --open-prs-json …` on task status changes → `automation.json` + `latest.json` with `dispatch_eligible`, `blocked_by`, `effective_dispatch_rank`, and `clash_summary` |
 
 ## CLI / module
 
@@ -93,6 +94,25 @@ Rules:
   (`MAX_VERIFY_REWORK_ROUNDS`).
 - Does **not** auto-merge rework; same draft-PR / human-merge policy as the parent
   unless the parent was already `auto_merge: true` (CI-fix).
+
+Preflight / clash CLI:
+
+```bash
+# Dispatch eligibility vs open PRs (hourly queue passes --open-prs-json)
+ftse-engineering --json clash-report --open-prs-json /tmp/open_prs.json
+
+# Before opening a PR (agent workflow; --skip-pytest in CI, full pytest optional locally)
+ftse-engineering --json preflight \
+  --task-id eng-YYYYMMDD-NN \
+  --branch cursor/eng-YYYYMMDD-NN-1de3 \
+  --changed-files /tmp/changed_files.txt \
+  --open-prs-json /tmp/open_prs.json \
+  --require-pass
+```
+
+Set `ENGINEERING_DISPATCH_MERGE_TREE=1` in `engineering-queue.yml` to enable
+`git merge-tree` clash checks during hourly dispatch (always on for agent preflight
+when both branches exist on origin).
 
 Manual:
 

@@ -174,20 +174,25 @@ def select_path_disjoint_engineering_tasks(
     *,
     max_tasks: int,
     blocked_paths: list[str] | None = None,
+    open_prs: list[dict[str, Any]] | None = None,
+    repo: str | None = None,
+    repo_root: Path | None = None,
 ) -> list[EngineeringTask]:
-    """Pick highest-priority open tasks whose allowed_paths do not overlap in-flight work."""
-    occupied = list(blocked_paths or [])
-    selected: list[EngineeringTask] = []
-    for task in select_engineering_tasks(data, max_tasks=999):
-        task_paths = effective_allowed_paths(task)
-        if occupied and task_paths and allowed_paths_overlap(task_paths, occupied):
-            continue
-        selected.append(task)
-        for path in task_paths:
-            if path not in occupied:
-                occupied.append(path)
-        if len(selected) >= max(0, int(max_tasks)):
-            break
+    """Pick highest-priority open tasks that do not clash with in-flight work."""
+    from value_investor.engineering_preflight import (
+        dispatch_merge_tree_enabled,
+        select_clash_aware_dispatch_tasks,
+    )
+
+    selected, _reports = select_clash_aware_dispatch_tasks(
+        data,
+        max_tasks=max_tasks,
+        blocked_paths=blocked_paths,
+        open_prs=open_prs,
+        repo=repo,
+        repo_root=repo_root,
+        skip_merge_tree=not dispatch_merge_tree_enabled(),
+    )
     return selected
 
 
@@ -323,14 +328,15 @@ def evaluate_engineering_dispatch(
         data,
         max_tasks=slots,
         blocked_paths=in_flight_paths,
+        open_prs=open_prs,
     )
     if not next_tasks:
         if status.open_count > 0 and in_flight_paths:
             return EngineeringDispatchDecision(
                 should_dispatch=False,
                 reason=(
-                    f"no path-disjoint open task — {status.pr_open_count} pr_open "
-                    "with overlapping allowed_paths"
+                    f"no dispatch-eligible open task — {status.pr_open_count} pr_open "
+                    "(allowlist/file/merge clash with in-flight PRs)"
                 ),
                 status=status,
             )
@@ -609,8 +615,12 @@ ACTIVE_QUEUE_STATUSES = frozenset({"open", "pr_open"})
 ATTENTION_STATUSES = frozenset({"parked", "failed"})
 
 
-def _slim_task_for_dashboard(row: dict[str, Any]) -> dict[str, Any]:
-    return {
+def _slim_task_for_dashboard(
+    row: dict[str, Any],
+    *,
+    dispatch_meta: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    payload = {
         "id": row.get("id"),
         "area": row.get("area"),
         "title": row.get("title"),
@@ -622,20 +632,52 @@ def _slim_task_for_dashboard(row: dict[str, Any]) -> dict[str, Any]:
         "pr_number": row.get("pr_number"),
         "branch_name": row.get("branch_name"),
     }
+    if dispatch_meta:
+        payload["dispatch_eligible"] = dispatch_meta.get("dispatch_eligible")
+        payload["blocked_by"] = dispatch_meta.get("blocked_by") or []
+        payload["effective_dispatch_rank"] = dispatch_meta.get("effective_dispatch_rank")
+        payload["clash_scan"] = dispatch_meta.get("clash_scan")
+    return payload
 
 
 def build_engineering_queue_dashboard(
     *,
     tasks_path: Path = COMMITTED_TASKS_PATH,
+    open_prs: list[dict[str, Any]] | None = None,
+    repo: str | None = None,
 ) -> dict[str, Any]:
     """Slim engineering queue snapshot for the dashboard Automation tab."""
+    from value_investor.engineering_preflight import (
+        annotate_dispatch_ranks,
+        build_task_dispatch_reports,
+        clash_report_for_queue,
+    )
+
     data = load_engineering_tasks(tasks_path)
-    status = summarize_queue(data, tasks_path=tasks_path)
+    status = summarize_queue(data, tasks_path=tasks_path, open_prs=open_prs)
     rows = list(data.get("tasks") or [])
+    in_flight_paths = in_flight_allowed_paths(data, open_prs=open_prs)
+    dispatch_reports = build_task_dispatch_reports(
+        data,
+        blocked_paths=in_flight_paths,
+        open_prs=open_prs,
+        repo=repo,
+    )
+    annotate_dispatch_ranks(dispatch_reports)
+    dispatch_by_id = {report.task.id: report.to_dict() for report in dispatch_reports}
+    clash_summary = clash_report_for_queue(
+        data,
+        blocked_paths=in_flight_paths,
+        open_prs=open_prs,
+        repo=repo,
+    )
 
     def _active_rows(wanted: frozenset[str]) -> list[dict[str, Any]]:
         picked = [
-            _slim_task_for_dashboard(row)
+            _slim_task_for_dashboard(
+                row,
+                dispatch_meta=dispatch_by_id.get(str(row.get("id") or "")),
+            )
             for row in rows
             if str(row.get("status") or "open") in wanted
         ]
@@ -649,6 +691,11 @@ def build_engineering_queue_dashboard(
         "status": status.to_dict(),
         "queued_tasks": _active_rows(ACTIVE_QUEUE_STATUSES),
         "attention_tasks": _active_rows(ATTENTION_STATUSES),
+        "clash_summary": {
+            "open_task_count": clash_summary.get("open_task_count"),
+            "dispatch_eligible_count": clash_summary.get("dispatch_eligible_count"),
+            "blocked_count": clash_summary.get("blocked_count"),
+        },
     }
 
 
@@ -657,6 +704,8 @@ def refresh_engineering_queue_ui(
     automation_path: Path = DEFAULT_AUTOMATION_PATH,
     latest_path: Path = DEFAULT_LATEST_PATH,
     tasks_path: Path = COMMITTED_TASKS_PATH,
+    open_prs: list[dict[str, Any]] | None = None,
+    repo: str | None = None,
 ) -> dict[str, Any]:
     """
     Publish engineering queue status to automation.json and embed in latest.json.
@@ -664,7 +713,11 @@ def refresh_engineering_queue_ui(
     Called when task status changes so the dashboard Automation tab stays current
     without a full screen republish.
     """
-    dashboard_slice = build_engineering_queue_dashboard(tasks_path=tasks_path)
+    dashboard_slice = build_engineering_queue_dashboard(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        repo=repo,
+    )
     now = datetime.now(UTC).isoformat()
     automation_path = Path(automation_path)
     latest_path = Path(latest_path)
