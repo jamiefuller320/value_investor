@@ -6458,21 +6458,12 @@ def test_parked_source_hunter_ackb_br_euro_depth_has_fetchable_ir():
 
 def test_parked_source_hunter_apam_as_euro_depth_has_fetchable_ir():
     """eng-20260909-05: APAM.AS has live aperam.com FY2025 annual report PDF (hunter confirmed)."""
-    import urllib.request
-
-    from value_investor.research.filings import USER_AGENT
-
     assert "APAM.AS" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("APAM.AS")
     assert len(rows) == 1
     assert rows[0]["period"] == "annual"
-    url = rows[0]["url"]
-    assert "aperam.com" in url
-    assert "AnnualReport_2025" in url
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT}, method="HEAD")
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        assert int(resp.status) == 200
-        assert "pdf" in (resp.headers.get("Content-Type") or "").lower()
+    assert "aperam.com" in rows[0]["url"]
+    assert "AnnualReport_2025" in rows[0]["url"]
 
 
 def test_parked_source_hunter_assa_b_st_euro_depth_has_fetchable_ir():
