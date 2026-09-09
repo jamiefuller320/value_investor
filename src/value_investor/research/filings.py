@@ -232,7 +232,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "SKA-B.ST": [
         "https://group.skanska.com/investors/reports-publications/",
     ],
-    # euro_depth IWB blocker — AZE.BR parked unfetchable_iwb; /en/investors 404s; FY2025 PDFs.
+    # euro_depth — AZE.BR unfetchable_iwb resolved; /en/investors 404s; FY2025 PDFs on azelis.com.
     "AZE.BR": [
         "https://www.azelis.com/sites/default/files/uploads/Azelis%20Group%20NV%20-%20Integrated%20report%202025%20(2).pdf",
         "https://www.azelis.com/sites/default/files/uploads/AZELIS~1_1.PDF",
