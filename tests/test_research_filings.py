@@ -6562,7 +6562,7 @@ def test_refetch_ir_allowlist_migrates_aze_br_dead_url(tmp_path: Path, monkeypat
 
 
 def test_parked_source_hunter_aze_br_euro_depth_has_fetchable_ir():
-    """eng-20260908-24: AZE.BR has live azelis.com FY2025 integrated + H1 financial PDFs."""
+    """eng-20260909-07: AZE.BR has live azelis.com FY2025 integrated + H1 financial PDFs (re-hunt confirmed)."""
     assert "AZE.BR" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("AZE.BR")
     assert len(rows) == 2
