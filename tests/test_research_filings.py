@@ -4258,6 +4258,19 @@ def test_fetch_filings_ir_allowlist_euro_depth_assa_b_st_builtins(tmp_path: Path
     assert any("assaabloy.com" in row["url"] for row in rows)
 
 
+def test_fetch_filings_ir_allowlist_euro_depth_apam_as_builtins(tmp_path: Path):
+    """Regression: APAM.AS awaiting_periodic_report — aperam.com FY2025 annual PDF."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("APAM.AS", path=allowlist_path)
+    assert len(rows) == 1
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert rows[0]["period"] == "annual"
+    assert "aperam.com" in rows[0]["url"]
+    assert "AnnualReport_2025" in rows[0]["url"]
+
+
 def test_esef_entity_variants_include_aedifica_and_assa_abloy():
     from value_investor.research.filings import _esef_entity_name_variants
 
@@ -6436,7 +6449,7 @@ def test_parked_source_hunter_ackb_br_euro_depth_has_fetchable_ir():
 
 
 def test_parked_source_hunter_apam_as_euro_depth_has_fetchable_ir():
-    """eng-20260908-22: APAM.AS has live aperam.com FY2025 annual report PDF."""
+    """eng-20260909-04: APAM.AS has live aperam.com FY2025 annual report PDF."""
     assert "APAM.AS" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("APAM.AS")
     assert len(rows) == 1
