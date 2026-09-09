@@ -264,6 +264,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     screen_p = sub.add_parser(
         "screen",
+        parents=[common],
         help="Run offline screen-lite on library metrics for the focus market",
     )
     screen_p.add_argument(
