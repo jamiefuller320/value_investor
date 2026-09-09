@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-09T17:39:03.030402+00:00",
+  "generated_at": "2026-09-09T17:53:17.511790+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -38,7 +38,7 @@
       "1": "tsx60",
       "2": "ftse_smallcap"
     },
-    "equal_support_generated_at": "2026-09-09T13:10:02.870073+00:00"
+    "equal_support_generated_at": "2026-09-09T17:50:04.923139+00:00"
   },
   "markets": [
     {
@@ -660,7 +660,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=41)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=40)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": 3,
@@ -718,7 +718,7 @@
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 41,
+        "indexed_without_body": 40,
         "bodies_median": 51.5,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
@@ -763,7 +763,7 @@
         "hold_near_buy_count": 21,
         "not_buy_tier_count": 68,
         "never_buy_tier_count": 62,
-        "rememo_eligible_count": 5,
+        "rememo_eligible_count": 7,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
@@ -789,9 +789,9 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 11,
-        "targets": 68,
-        "improved": 15,
+        "run_count": 12,
+        "targets": 71,
+        "improved": 16,
         "improved_tickers": [
           "MER.L",
           "GMS.L",
@@ -801,7 +801,7 @@
           "GLE.L",
           "REC.L"
         ],
-        "last_run_at": "2026-09-09T17:19:02.192888+00:00",
+        "last_run_at": "2026-09-09T17:52:18.124099+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -815,21 +815,21 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 41,
+          "indexed_without_body": 40,
           "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": -1,
           "thin": -1,
-          "indexed_without_body": -5,
+          "indexed_without_body": -6,
           "filing_gaps": -1
         },
         "remaining": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 41,
+          "indexed_without_body": 40,
           "filing_gaps": 0
         },
         "admission_ready": true,
@@ -1174,7 +1174,7 @@
         "hold_near_buy_count": 55,
         "not_buy_tier_count": 167,
         "never_buy_tier_count": 150,
-        "rememo_eligible_count": 4,
+        "rememo_eligible_count": 5,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
