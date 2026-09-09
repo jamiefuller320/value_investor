@@ -191,6 +191,44 @@ def test_spend_commit_reapplies_increment_on_latest_policy(tmp_path: Path):
     assert (work / "src" / "keep.py").read_text(encoding="utf-8") == "value = 9\n"
 
 
+def test_spend_commit_drops_ingest_discovery_from_stash(tmp_path: Path):
+    """Concurrent ingest-loop updates must not block the engineering PR branch step."""
+    remote, work = _seed_repo(tmp_path)
+    discovery = work / "docs" / "data" / "ingest_discovery_curiosity.json"
+    discovery.parent.mkdir(parents=True, exist_ok=True)
+    discovery.write_text('{"updated_at": "local-agent", "entries": []}\n', encoding="utf-8")
+    (work / "src" / "keep.py").write_text("value = 7\n", encoding="utf-8")
+
+    other = tmp_path / "other"
+    _git(tmp_path, "clone", str(remote), str(other))
+    _git(other, "config", "user.email", "ingest@example.com")
+    _git(other, "config", "user.name", "ingest")
+    (other / "docs" / "data" / "ingest_discovery_curiosity.json").write_text(
+        '{"updated_at": "ingest-loop", "entries": [{"ticker": "KLR.L"}]}\n',
+        encoding="utf-8",
+    )
+    _git(other, "add", "docs/data/ingest_discovery_curiosity.json")
+    _git(other, "commit", "-m", "ingest discovery refresh")
+    _git(other, "push", "origin", "main")
+
+    result = _run_script(work)
+    assert result.returncode == 0, textwrap.dedent(
+        f"""
+        spend script failed
+        stdout: {result.stdout}
+        stderr: {result.stderr}
+        """
+    )
+    assert (work / "src" / "keep.py").read_text(encoding="utf-8") == "value = 7\n"
+    assert discovery.read_text(encoding="utf-8") == (
+        '{"updated_at": "ingest-loop", "entries": [{"ticker": "KLR.L"}]}\n'
+    )
+    unmerged = _git(work, "diff", "--name-only", "--diff-filter=U", check=False).stdout.strip()
+    assert unmerged == ""
+    checkout = _git(work, "checkout", "-B", "main", "origin/main", check=False)
+    assert checkout.returncode == 0, checkout.stderr
+
+
 def test_spend_commit_restores_work_when_retries_exhausted(tmp_path: Path):
     remote, work = _seed_repo(tmp_path)
     _install_pre_receive(remote, reject_first_n=9)

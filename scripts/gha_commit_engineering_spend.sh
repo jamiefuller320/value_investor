@@ -22,6 +22,20 @@ SLEEP_BASE="${GHA_COMMIT_SLEEP_BASE:-3}"
 RECORD_SPEND_CMD="${RECORD_SPEND_CMD:-ftse-engineering record-spend --json}"
 COMMIT_MESSAGE="${COMMIT_MESSAGE:-chore: record engineering agent spend [skip ci]}"
 
+# Agent deliverables live under src/, tests/, output/. docs/data/ is operational
+# (ingest-loop, queue UI, policy spend) and must not ride the agent stash — a
+# concurrent ingest push makes stash pop leave ingest_discovery* in "needs merge"
+# and the next "Create feature branch" checkout aborts.
+ENG_AGENT_WORK_PATHS=(src/ tests/ output/)
+
+git_clean_state() {
+  git merge --abort 2>/dev/null || true
+  git rebase --abort 2>/dev/null || true
+  if [ -n "$(git diff --name-only --diff-filter=U 2>/dev/null || true)" ]; then
+    git reset --hard HEAD
+  fi
+}
+
 stash_ref_for_label() {
   local label="$1"
   git stash list --format='%gd %s' | awk -v label="$label" 'index($0, label) { print $1; exit }'
@@ -31,19 +45,40 @@ working_tree_dirty() {
   [ -n "$(git status --porcelain 2>/dev/null || true)" ]
 }
 
+drop_operational_docs_data() {
+  if git rev-parse --verify HEAD >/dev/null 2>&1; then
+    git checkout HEAD -- docs/data/ 2>/dev/null || true
+  fi
+}
+
 restore_agent_work() {
   local ref="$1"
   if [ -z "$ref" ]; then
     return 0
   fi
-  if git stash pop "$ref"; then
+
+  git_clean_state
+  drop_operational_docs_data
+
+  if git stash apply "$ref"; then
+    drop_operational_docs_data
     git checkout HEAD -- "$POLICY" 2>/dev/null || true
+    git stash drop "$ref" 2>/dev/null || true
     return 0
   fi
-  echo "stash pop had conflicts — keeping HEAD policy.json and remaining stash" >&2
+
+  echo "stash apply had conflicts — restoring agent paths only" >&2
+  git_clean_state
+  drop_operational_docs_data
+  local prefix
+  for prefix in "${ENG_AGENT_WORK_PATHS[@]}"; do
+    if [ -e "$prefix" ] || git ls-tree -d HEAD "$prefix" >/dev/null 2>&1; then
+      git checkout "$ref" -- "$prefix" 2>/dev/null || true
+    fi
+  done
+  drop_operational_docs_data
   git checkout HEAD -- "$POLICY" 2>/dev/null || true
-  git checkout --ours -- "$POLICY" 2>/dev/null || true
-  git add -- "$POLICY" 2>/dev/null || true
+  git stash drop "$ref" 2>/dev/null || true
 }
 
 STASH_LABEL="eng-agent-work-$(date +%s)"
@@ -56,6 +91,7 @@ if working_tree_dirty; then
   if [ -e "$POLICY" ]; then
     git checkout -- "$POLICY" 2>/dev/null || true
   fi
+  drop_operational_docs_data
   if working_tree_dirty; then
     git stash push -u -m "$STASH_LABEL"
     STASH_REF="$(stash_ref_for_label "$STASH_LABEL")"

@@ -169,6 +169,14 @@ jobs:
           TASK_ID="${{ steps.task.outputs.task_id }}"
           BRANCH="${{ steps.task.outputs.branch }}"
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+          # Spend-commit stash restore can leave ingest-loop docs/data artifacts in
+          # "needs merge" when main moved; clear that before rebasing onto main.
+          git merge --abort 2>/dev/null || true
+          git rebase --abort 2>/dev/null || true
+          if [ -n "$(git diff --name-only --diff-filter=U 2>/dev/null || true)" ]; then
+            git checkout HEAD -- docs/data/ 2>/dev/null || true
+            git reset HEAD -- docs/data/ 2>/dev/null || true
+          fi
           git fetch origin main
           git checkout -B main origin/main
           git branch -D "$BRANCH" 2>/dev/null || true
@@ -177,6 +185,8 @@ jobs:
           for path in \
             docs/data/engineering_tasks.json \
             docs/data/library/policy.json \
+            docs/data/ingest_discovery_curiosity.json \
+            docs/data/ingest_discovery_scan_summary.json \
             src/value_investor/paper_fund.py \
             src/value_investor/simulator.py \
             src/value_investor/paper_automation_cli.py \
