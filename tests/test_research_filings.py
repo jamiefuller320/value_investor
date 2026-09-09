@@ -6549,7 +6549,7 @@ def test_parked_source_hunter_aze_br_euro_depth_has_fetchable_ir():
 
 
 def test_parked_source_hunter_skip_abi_br_euro_depth():
-    """eng-20260908-01: ABI.BR leftover IWB is 6-K cover HTML; IR is age-gated."""
+    """eng-20260909-01: re-hunt — leftover IWB is 6-K cover HTML; ab-inbev IR is JS-only."""
     assert "ABI.BR" in PARKED_SOURCE_HUNTER_SKIP
     reason = PARKED_SOURCE_HUNTER_SKIP["ABI.BR"]
     assert "6-K" in reason
@@ -6560,6 +6560,35 @@ def test_parked_source_hunter_skip_abi_br_euro_depth():
     rows = fetch_filings_ir_allowlist("ABI.BR")
     assert rows
     assert all("sec.gov/Archives/edgar/data/1668717" in row["url"] for row in rows)
+    assert any(row["url"].endswith("d175040d6k.htm") for row in rows)
+
+
+def test_abi_br_leftover_6k_cover_fails_substantiveness_gate(monkeypatch):
+    """eng-20260909-01: ABI.BR indexed-without-body row is Jul 2026 HY 6-K cover HTML."""
+    cover_html = """
+    <html><body>
+    <div>FORM 6-K REPORT OF FOREIGN PRIVATE ISSUER</div>
+    <p>Item 1 — Press release dated July 30, 2026.</p>
+    <p>Exhibit 99.1 — Press release is attached hereto and incorporated by reference.</p>
+    <p>101.INS XBRL Instance Document — tags embedded within the Inline XBRL document.</p>
+    <p>104 Cover Page Interactive Data File (formatted as Inline XBRL).</p>
+    <p>SIGNATURE Pursuant to the requirements of the Securities Exchange Act of 1934,
+    ANHEUSER-BUSCH INBEV SA/NV By: /s/ Name Title Date: July 30, 2026</p>
+    </body></html>
+    """
+
+    def fake_http_get(url, headers=None, timeout=60):
+        if url.endswith("d175040d6k.htm"):
+            return cover_html.encode("utf-8")
+        if url.endswith("0001193125-26-326285-index.htm"):
+            return b'<html><body><a href="d175040d6k.htm">6-K</a></body></html>'
+        raise AssertionError(f"unexpected url {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_http_get)
+    body = fetch_filing_body(
+        "https://www.sec.gov/Archives/edgar/data/1668717/000119312526326285/d175040d6k.htm"
+    )
+    assert body is None
 
 
 def test_ldos_acquisition_8k_primary_fails_substantiveness_gate(monkeypatch):
