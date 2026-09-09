@@ -1,107 +1,89 @@
 # CF Industries Holdings, Inc. (CF) — Research memo
 
-_Version 1 · Updated 2026-07-16T19:24:58.790336+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-09T07:38:53.792581+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-CF Industries Holdings, Inc. (CF) is a leading North American nitrogen producer whose quantitative screen reads as a **strong buy** (14/22 models; composite 76%; P/E 10.7, FCF yield 5.9%, ROE 27.3%). The investment case rests on advantaged low-cost ammonia capacity, strong cash generation through the cycle, and a capital-return programme (buybacks plus a 20% dividend increase to $0.60 per quarter in July 2026). Filings show a clear earnings inflection: net sales rose to **$7.08 billion** in FY2025 (10-K) from **$5.94 billion** in FY2024, with Q1 2026 momentum continuing (**$1.99 billion** net sales vs **$1.66 billion** a year earlier). The central debate is whether current nitrogen pricing—partly supported by geopolitical supply tightness—and low-carbon ammonia optionality justify today’s valuation after a sharp 2026 share-price rally, or whether the name is mid-cycle with mean-reversion risk. Deep research **confirms** the value/quality screen on fundamentals but flags **cyclicality, capital intensity, and new antitrust litigation** as offsets to outright conviction.
+CF Industries Holdings, Inc. (CF) is a North American nitrogen leader—the world’s largest ammonia production network—rated **strong_buy** on the quantitative screen. The investment case rests on advantaged low-cost gas-linked production, a tightening global nitrogen supply balance (Middle East disruptions in 2026), and disciplined capital return (buybacks and a 20% dividend increase to $0.60 per quarter). Valuation appeal for value investors is supported by net debt of roughly $1.2bn (Yahoo, FY2025), TTM free cash flow near $1.9bn (screening snapshot/Yahoo), and a shrinking share count. The central debate is whether current earnings power (~$4.73 diluted EPS in Q2 2026 per the 10-Q) reflects a durable mid-cycle uplift or a geopolitical price spike that will mean-revert as Middle East supply returns. Antitrust litigation (March 2026) and multi-billion-dollar Blue Point low-carbon capex add uncertainty the screen may underweight.
 
 ## INVESTMENT THESIS
-CF fits a value investor’s checklist on both cheapness and quality. The screen passes five factor families—cheapness, quality, dividend, GARP, and risk—and 14 individual models including Earnings Yield, FCF Yield, Lynch PEG, Magic Formula, Buffett Quality, and Financial Health. Reported economics support this: trailing P/E of 10.7 against ROE of 27.3% and a ~2.0% dividend yield that management has just raised materially.
+The quantitative screen flags **strong_buy**; filing-backed fundamentals support a quality cyclical compounder rather than a deep-value distressed name. CF operates six US, two Canadian, and one UK upgrading site, plus a 50% Trinidad ammonia JV (Point Lisas), with Donaldsonville as the world’s largest ammonia complex (FY2025 10-K). Product tonnage has been stable at ~19m tons annually, while net sales recovered from $5.94bn in 2024 to **$7.08bn in 2025** (FY2025 10-K), with gross margin expanding on higher nitrogen realisations.
 
-Business quality is underwritten by structural advantages disclosed in SEC filings: the world’s largest ammonia production network, ~40% North American share in key nitrogen products (2024 10-K), an unmatched distribution system, and a cost position anchored to North American natural gas. The December 2023 Waggaman acquisition added 880,000 tons of ammonia capacity; Donaldsonville carbon capture and sequestration (CCS) completed in July 2025 enables up to ~1.9 million tons of low-carbon ammonia annually. Management is reinvesting through the Blue Point joint venture (formed 8 April 2025 with JERA and Mitsui; CF holds 40%) to capture decarbonisation and export demand.
+Business quality markers visible in filings:
+- **Cost advantage**: Natural gas is ~34–36% of production cost (Q2 2026 10-Q MD&A); North American Henry Hub gas keeps CF at the low end of the global cost curve versus LNG-dependent marginal producers.
+- **Cash generation**: FY2025 operating cash flow **$2.75bn** and free cash flow **$1.80bn** (Yahoo annual; consistent with filing cash-flow narrative). H1 2026 net earnings attributable to common stockholders were **$1.34bn** on **$4.21bn** net sales (Q2 2026 10-Q).
+- **Balance sheet**: Cash and equivalents **$2.04bn** at 31 March 2026; long-term debt **$3.25bn** principal, undrawn **$750m** revolver, covenant compliance confirmed (Q1/Q2 2026 10-Q). No going-concern language in available extracts.
+- **Capital discipline**: Completed the $3bn 2022 repurchase programme; authorised a **$2bn** programme through 2029 (FY2025 10-K). ~**$1.38bn** of stock repurchased in 2025 (Yahoo). Dividend raised to **$0.60** per share (July 2026 8-K/subsequent events in Q2 10-Q).
+- **Strategic optionality**: Donaldsonville CCS completed July 2025; Blue Point low-carbon ammonia JV (40% CF, JERA 35%, Mitsui 25%) targets ~1.5m tons capacity by 2029 at an estimated **$3.7bn** plant cost plus **~$550m** common infrastructure (FY2025 10-K).
 
-Capital discipline reinforces the screen. FY2025 free cash flow was **$1.8 billion** (Yahoo fallback—see Financial Review) on **$2.75 billion** operating cash flow, funding **$1.38 billion** of share repurchases and **$326 million** of dividends while keeping net debt manageable (~**$1.2 billion** net debt at year-end 2025 per Yahoo). The combination of low multiples, high returns on equity, rising dividends, and aggressive buybacks at a cyclical upturn aligns with the screen’s strong-buy signal—provided an investor accepts commodity cyclicality.
+For a value investor, the screen’s strong_buy signal aligns with a franchise that converts cyclical upswings into per-share value via buybacks, while mid-cycle normalised FCF comfortably covers dividends and maintenance capex. Screen metadata is thin (zero models passed, no composite score in `screening_snapshot.json`), so conviction rests primarily on filings rather than granular screen metrics.
 
 ## FINANCIAL REVIEW
-**Source note:** Annual filing bodies for FY2025 and FY2024 10-Ks are truncated before Item 8 financial statements and Item 1A risk factors. Annual revenue/volume figures below are from filing narrative; full income-statement, balance-sheet, and cash-flow lines for FY2022–FY2025 use **Yahoo (`financials_annual.json`) as explicit fallback**. Interim figures are from 10-Q body extracts.
+*Primary source: SEC EDGAR filing bodies unless noted.*
 
-**Annual trends (10-K narrative + Yahoo fallback)**
+**Annual results (10-K)**
 
-| Metric | FY2025 | FY2024 | FY2023 | FY2022 |
-|--------|--------|--------|--------|--------|
-| Net sales / revenue ($m) | 7,080 (10-K) | 5,940 (10-K) | 6,630 (10-K) | 11,190 (10-K) |
-| Net income to common ($m) | 1,455 (Yahoo) | 1,218 (Yahoo) | 1,525 (Yahoo) | 3,346 (Yahoo) |
-| Diluted EPS ($) | 8.97 (Yahoo) | 6.74 (Yahoo) | 7.87 (Yahoo) | 16.38 (Yahoo) |
-| Gross margin ($m) | n/a in body* | 2,060 (10-K) | n/a in body* | n/a in body* |
-| Operating cash flow ($m) | 2,752 (Yahoo) | 2,271 (Yahoo) | 2,757 (Yahoo) | 3,855 (Yahoo) |
-| Free cash flow ($m) | 1,801 (Yahoo) | 1,750 (Yahoo) | 1,033 (Yahoo) | 3,393 (Yahoo) |
-| CapEx ($m) | 951 (Yahoo) | 521 (Yahoo) | 1,724 (Yahoo) | 462 (Yahoo) |
-| Cash ($m) | 1,982 (Yahoo) | 1,614 (Yahoo) | 2,032 (Yahoo) | 2,323 (Yahoo) |
-| Total debt ($m) | 3,636 (Yahoo) | 3,246 (Yahoo) | 3,232 (Yahoo) | 3,225 (Yahoo) |
-| Product tons sold (m) | 19.1 (10-K) | 18.9 (10-K) | 19.1 (10-K) | 18.3 (10-K) |
+| Metric | FY2025 (10-K, filed Feb 2026) | FY2024 (10-K, filed Feb 2025) | FY2023 (10-K) |
+|--------|-------------------------------|-------------------------------|--------------|
+| Net sales | **$7.08bn** (19.1m product tons) | **$5.94bn** (18.9m tons) | **$6.63bn** (19.1m tons) |
+| Gross margin | Not in truncated 10-K body; **$2.72bn** gross profit per Yahoo | **$2.06bn** gross margin stated in FY2024 10-K segment table | **$2.55bn** (FY2024 10-K comparative) |
+| Net income (common) | **$1.46bn**; diluted EPS **$8.97** (Yahoo; filing body truncated before income statement) | **$1.22bn**; EPS **$6.74** (Yahoo) | **$1.53bn**; EPS **$7.87** (Yahoo) |
+| Operating cash flow | **$2.75bn** (Yahoo) | **$2.27bn** (Yahoo) | **$2.76bn** (Yahoo) |
+| Free cash flow | **$1.80bn** (Yahoo) | **$1.75bn** (Yahoo) | **$1.03bn** (Yahoo; elevated capex incl. Waggaman) |
+| Cash (year-end) | **$1.98bn** (Yahoo balance sheet) | **$1.61bn** | **$2.03bn** |
+| Long-term debt | **$3.22bn** carrying ($3.25bn principal per Q1 10-Q) | **$3.16bn** | **$3.14bn** |
+| Net debt | **~$1.23bn** (Yahoo) | **~$1.36bn** | **~$0.94bn** |
 
-\*FY2025 and FY2023 gross margin not available in truncated 10-K bodies; Yahoo gross profit for FY2025 is **$2,724 million**.
+FY2025 revenue rose **19%** versus FY2024 on broadly flat volume, indicating price/mix improvement. FY2024 was a trough year after the 2022 peak ($11.19bn sales, per FY2024 10-K). Share count fell from ~181m diluted (2024) to ~162m (2025), amplifying per-share metrics.
 
-**Interpretation:** Revenue rebounded **19%** in FY2025 after a **10%** decline in FY2024 from the 2022 peak. Earnings per share followed: **$8.97** in FY2025 vs **$6.74** in FY2024, still well below the **$16.38** 2022 cyclical peak. Volumes were stable (~19 million product tons), so the revenue swing reflects nitrogen pricing rather than volume growth. FY2025 CapEx nearly doubled to **$951 million**, consistent with Donaldsonville CCS completion and Blue Point pre-construction; free cash flow nonetheless held at **~$1.8 billion**.
+**Interim results (10-Q)**
 
-**Interim results (10-Q filings—primary source)**
+*Q1 2026 (period ended 31 March 2026, filed May 2026):*
+- Net sales **$1,986m** (+19% YoY); gross margin **$746m** (37.5%)
+- Net earnings **$676m**; attributable to common **$615m**; diluted EPS **$3.98**
+- Operating cash flow **$496m**; capex **$223m**
+- Notable: **$170m** Orica litigation settlement gain; **$24m** 45Q tax credits; Yazoo City insurance recoveries **$25m**
 
-*Q1 2026 (period ended 31 March 2026; filed 7 May 2026):*
-- Net sales **$1,986 million** vs **$1,663 million** (+19% YoY)
-- Gross margin **$746 million** vs **$572 million**
-- Net earnings attributable to common stockholders **$615 million** vs **$312 million**
-- Diluted EPS **$3.98** vs **$1.85**
-- One-off: **$170 million** litigation settlement gain (Orica/Nelson Brothers; cash received April 2026)
-- Operating cash flow **$496 million** vs **$586 million** (working-capital headwind; receivables up **$239 million**)
-- CapEx **$223 million** vs **$132 million**
-- Cash **$2,042 million**; long-term debt **$3,216 million** (stable)
+*Q2 2026 (period ended 30 June 2026, filed August 2026):*
+- Net sales **$2,222m** (+18% YoY); gross margin **$1,145m** (**51.5%**)
+- Net earnings attributable to common **$727m**; diluted EPS **$4.73**
+- H1 2026: net sales **$4,208m**; gross margin **$1,891m** (44.9%); diluted EPS **$8.71**
+- Average selling price **$523/ton** in Q2 (+39% YoY); volumes **4.3m tons** (-14% YoY) as Yazoo City remained idled
+- Cash **$2.48bn** at 30 June 2026 (Q2 10-Q)
 
-*Nine months ended 30 September 2025 (Q3 2025 10-Q):*
-- Net sales **$5,212 million** vs **$4,412 million** (+18%)
-- Net earnings **$1,303 million** vs **$1,085 million**; attributable to common **$1,051 million** vs **$890 million**
-- Diluted EPS (9M) **$6.39** vs **$4.86**
-- Operating cash flow **$2,213 million** vs **$1,851 million**
-- CapEx **$724 million** vs **$321 million** (Blue Point and decarbonisation spend)
-- Treasury stock purchases (9M 2025): **$1,020 million**
+**Trend interpretation:** After a soft 2024, FY2025 and H1 2026 show a sharp cyclical upswing driven by tighter global nitrogen supply and elevated prices, partially offset by lower volumes (Yazoo City outage) and higher natural gas costs in H1 2026 (+14% per MMBtu for production gas, six-month basis). Underlying asset base and cost position remain intact; earnings volatility is predominantly commodity-price driven.
 
-**Balance sheet and leverage:** At 31 March 2026, total assets were **$14.6 billion** and stockholders’ equity **$5.3 billion** (10-Q). Long-term debt of **~$3.2 billion** is modest relative to equity and cash; net debt remains low-single-digit billions. Noncontrolling interests (**$2.9 billion**) reflect the CHS strategic venture (~11% of CFN) and the consolidated Blue Point VIE (60% owned by JERA/Mitsui). As of 31 March 2026, CF was **in compliance with all covenants** under its revolving credit agreement (10-Q).
-
-**Gaps:** FY2025 and FY2024 10-K bodies lack consolidated financial statement tables and Item 1A risk-factor text due to truncation. Eight-K filings (10 items) have no body extracts. Full-year FY2025 gross margin, segment margins, and pension funded-status details are not readable from available filing bodies.
+**Gaps:** FY2025 10-K body extract is truncated before full consolidated financial statements; annual income-statement and cash-flow line items above marked Yahoo are fallbacks. All seven interim 10-Q filings in the index have bodies available.
 
 ## RISKS AND RED FLAGS
-**Cyclical commodity exposure.** CF’s economics are tied to nitrogen product prices and North American natural gas costs (Haber-Bosch process; 10-K). FY2022 revenue of **$11.2 billion** vs **$5.9 billion** in FY2024 illustrates earnings volatility that screens understate.
+- **Cyclicality:** Nitrogen prices are globally traded and highly volatile. Q2 2026 MD&A warns that Middle East conflict-driven price spikes may reverse as supply normalises; FY2022–FY2024 demonstrates rapid earnings compression in downcycles.
+- **Regulatory / antitrust:** March 2026 Sherman Act class actions allege NPK fertiliser price conspiracy (CF named with Mosaic, Nutrien, Koch, Yara). CF “disputes plaintiffs’ allegations” and “cannot… estimate… potential losses” (Q1/Q2 2026 10-Q contingencies). FTC launched a fertiliser price investigation (May 2026, per Q2 MD&A). Executive orders targeting food-supply-chain competition add policy risk.
+- **Operational:** November 2025 Yazoo City AN incident idled the complex; rebuild targeted for H1 2027. **$23m** additional impairment in Q2 2026. AN segment gross margin negative in Q1/Q2 2026.
+- **Capital intensity:** Blue Point JV consolidated as VIE (~$869m assets at 30 June 2026); estimated **$3.7bn** project cost with periodic capital calls; CF’s 40% share plus **~$550m** infrastructure spend competes with buybacks/dividends in downturns.
+- **Trinidad gas:** PLNL gas contract expires January 2027; filing warns cessation of gas could trigger investment impairment (**$39m** carrying value at 31 March 2026).
+- **Tax / transfer pricing:** **~$886m** noncurrent income tax assets and **~$328m** letters of credit supporting Canadian transfer-pricing disputes (Q2 2026 10-Q)—complex, long-dated, with IRS examination activity in Q2 2026.
+- **Pension:** Primary US defined-benefit plan terminated 31 December 2025; July 2026 settlement expected to recognise **~$7m** loss (Q2 10-Q subsequent events)—manageable but adds noise.
+- **Governance / key person:** Chief Accounting Officer retirement planned 2027 (news, September 2026)—minor near-term transition risk.
+- **Noncontrolling interests:** ~10% CHS stake in CFN and 60% Blue Point partner interests reduce earnings attributable to common (~$142m NCI in Q2 2026).
 
-**Capital intensity and execution.** Blue Point low-carbon ammonia construction is estimated at **~$3.7 billion** (excluding air-separation unit), plus **~$550 million** of CF-owned infrastructure (FY2025 10-K). CF contributed **$195 million** to the JV in FY2025. Execution, cost overrun, and offtake risk for low-carbon ammonia are material. Donaldsonville CCS depends on ExxonMobil sequestration infrastructure.
+No going-concern qualification identified in filing extracts. Revolving credit covenant compliance affirmed.
 
-**UK operational restructuring.** The Ince facility was closed and Billingham ammonia production idled; ammonia is imported for upgrade (2024 10-K). Q1 2025 included **$23 million** U.K. restructuring charges; this exposes CF to European gas and import logistics.
-
-**Antitrust litigation (new).** A putative class of direct NPK fertiliser purchasers filed Sherman Act conspiracy claims on **7 March 2026** against CF and major industry peers (Q1 2026 10-Q, Note 18). Related actions seek treble damages and injunctive relief. Management **cannot estimate** potential loss; this is a material unquantified legal overhang absent from quantitative screens.
-
-**Customer concentration and JV dependence.** Filings reference CustomerOne concentration disclosures (XBRL tags present; percentage not readable in extracts). CHS holds ~11% of CFN and receives contracted urea/UAN volumes, creating related-party dynamics.
-
-**Pension and retiree obligations.** Defined-benefit pension plans in North America, Canada, and the U.K. are disclosed extensively in 10-K XBRL metadata; Yahoo shows **$47 million** employee-benefit liabilities (2025). UK pension schemes include buy-in annuity contracts—long-duration obligations requiring monitoring.
-
-**Governance of derivatives and covenants.** Energy-related derivatives affect cost of sales (unrealised MTM gains/losses in cash-flow statements). Revolving credit includes **one financial covenant**; compliance confirmed at interim dates, but leverage could tighten if earnings fall.
-
-**No going-concern flag** appears in available filing extracts. Impairment charges of **$76 million** (capital assets) and **$95 million** unusual items were recorded in FY2025 per Yahoo, suggesting asset-level write-downs worth tracking.
-
-**Regulatory/policy risk.** Section 45Q tax credits support CCS economics; changes to IRA incentives or carbon-border rules (EU CBAM) could alter project returns. Management notes ~one-third of Blue Point materials may be imported, creating tariff exposure.
+RiskTags: cyclical, regulatory, litigation, competitive, leverage, other
+RiskTags: cyclical, regulatory, litigation, competitive, leverage, other
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate and tilted toward recent dividend and geopolitical narratives**; many Google News hits are false positives (unrelated “CF Booth”, “CFMoto”, etc.).
+News coverage is **moderate-to-rich** (161 articles in manifest; many price-commentary pieces). Material items:
 
-**Capital return (July 2026):**
-- “CF Industries Boosts Shareholder Returns With 20% Dividend Hike” (Yahoo Finance, 14 July 2026)
-- “CF Industries raises quarterly dividend 20% to $0.60 per share” (Investing.com UK, 8 July 2026)
-- “Does CF Industries (CF) 20% Dividend Hike Reveal Its True Capital Allocation Priorities?” (simplywall.st, 12 July 2026)
+- **Blue Point low-carbon ammonia:** “CF Industries & Partners Break Ground on Low-Carbon Ammonia Plant” (27 August 2026, Yahoo Finance/TradingView); permits received, construction from August 2026.
+- **Q2 2026 earnings:** “CF Industries (CF) Lags Q2 Earnings and Revenue Estimates” (5 August 2026, Yahoo Finance); counter-narratives on earnings power (“CF Q2 Earnings Call Highlights Higher Mid-Cycle Earnings Power”, 7 August 2026).
+- **Capital return:** “CF Industries Just Raised Its Dividend by 20%” (13 July 2026, inkl); “CF Industries Boosts Shareholder Returns With 20% Dividend Hike” (14 July 2026).
+- **Geopolitical tailwind:** “Fertilizer stocks surge as Middle East conflict disrupts global supply” (12 March 2026, Investing.com); “CF Industries to Benefit From Strong Nitrogen Prices… Amid US-Iran Risks” (10 August 2026, RBC via news feed).
+- **Leadership:** “CF Industries Announces Planned Retirement of Chief Accounting Officer” (4 September 2026, Globe and Mail); “Blue Ammonia JV and Leadership Transition News” (5 September 2026, Simply Wall St).
+- **Litigation (filings > news):** Antitrust class actions March 2026; **$170m Orica settlement** (March 2026, disclosed in 10-Q—not prominent in news manifest).
 
-**Valuation and momentum debate:**
-- “CF Industries Just Raised Its Dividend by 20% While Its Stock Has Surged 55% in 2026” (Yahoo Finance, 13 July 2026)
-- “CF Industries: Iran War Beneficiary, 20% Dividend Hike, But Rally Requires Caution” (Seeking Alpha, 10 July 2026)
-- “CF Industries Holdings Inc (CF) Stock Up 3.4% but GF Value Says Overvalued” (GuruFocus, 13 July 2026)
-
-**Industry/geopolitical supply:**
-- “Fertilizer stocks surge as Middle East conflict disrupts global supply” (Investing.com UK, 12 March 2026)
-- “US fertiliser stocks boosted by Hormuz chaos” (Investors’ Chronicle, 2 April 2026)
-- “CF Industries: The Fertilizer Rally Is Far From Over” (Seeking Alpha, 22 May 2026)
-
-**Strategy/decarbonisation:**
-- “Does CF Industries’ Dividend and Decarbonization Push Reframe Its Capital Allocation Story for CF?” (Yahoo Finance, 30 April 2026)
-
-No material management-change announcements appear in the manifest. M&A activity in news is limited to the already-disclosed Blue Point JV (April 2025, filings). The dominant narrative is **strong nitrogen markets + shareholder returns**, with growing scepticism on valuation after the 2026 rally.
+Older manifest coverage thins before late 2025; strategy/M&A news beyond Blue Point JV formation (April 2025, in 10-K) is sparse in the feed.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Filings confirm accelerating earnings, robust cash flow, and balance-sheet capacity that support the quantitative strong-buy signal, but commodity cyclicality, heavy Blue Point capex, new antitrust litigation, and a sharp recent share-price run temper full conviction at current levels.
+Rationale: Filing-backed evidence of strong balance sheet, rising FCF, and aggressive per-share capital return supports the quantitative strong_buy, but extreme cyclicality, new antitrust exposure, and heavy Blue Point capex warrant accumulation rather than unqualified conviction at potentially peak-cycle earnings.

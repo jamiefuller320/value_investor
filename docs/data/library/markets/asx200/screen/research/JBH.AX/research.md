@@ -1,82 +1,96 @@
 # JB Hi-Fi Limited (JBH.AX) — Research memo
 
-_Version 1 · Updated 2026-07-25T19:17:51.404471+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-09T07:43:59.125197+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-JB Hi-Fi Limited screens as a **buy** on the quantitative value framework, combining cheapness (FCF yield ~6%), quality (ROE ~29%), dividend income (~4.0% yield), and GARP (PEGY ~0.04 on ~7.2% growth). Australia’s leading specialty consumer electronics and home-appliances retailer — spanning JB Hi-Fi, The Good Guys, and a growing New Zealand footprint — delivers strong cash conversion and a shareholder-return-oriented capital policy despite a three-year earnings trough (FY22 net income A$545m → FY24 A$439m) followed by FY25 re-acceleration. The valuation hook is a cash-generative franchise at ~18x P/E with durable FCF funding dividends, while the central debate is whether FY25 revenue growth (+10% to A$10.55bn) and recent trading updates (H1 FY26 sales +7.3% cited in press) mark a durable inflection or a cyclical bounce against margin pressure and rising SG&A. Primary ASX regulatory filings are entirely absent from the research library, limiting verification of risk disclosures and interim figures.
+JB Hi-Fi is Australia’s leading consumer electronics and home-appliances retailer, operating JB Hi-Fi Australia, The Good Guys, e&s, and a growing New Zealand footprint. FY26 delivered record revenue of $11.06bn and NPAT of $489.9m, with a materially higher ordinary dividend (337 cps, 75% payout) and a net-cash balance sheet. The quantitative screen rates the name **buy**, though the local screening snapshot carries no populated model metrics (data quality score 0.0), so the signal should be treated as directional rather than fully evidenced. The central debate is whether disciplined cost control, cash generation, and shareholder returns compensate for late-cycle sales deceleration—Q4 FY26 comps turned negative in Australia and the July 2026 trading update was soft across most divisions—and whether the market’s valuation already prices in a high-quality compounder.
 
 ## INVESTMENT THESIS
-For a value investor, JBH offers an uncommon blend of high return on equity (~29%), meaningful free cash flow (screen FCF ~A$520m; Yahoo FY25 FCF A$629m), and an above-market dividend yield (~4.0%) at a moderate headline P/E (~18.1x). The screen passes five metric families — cheapness, quality, dividend, GARP, and risk — and eight of 22 individual models, including FCF Yield, Neff PEGY, Quality Value, Buffett Quality, Economic Moat, Dividend Growth, Magic Formula, and Financial Health. Composite score is 57% (sector-relative 58%), with high data quality (19/20 metrics) and a persistent, stable buy signal held for four weeks at 55% conviction.
+For a value-oriented investor, JBH offers a rare combination in discretionary retail: **high cash conversion, minimal financial leverage, and explicit capital return**. The FY26 annual report shows net cash of $206.5m, zero bank borrowings, unused facilities of $270.0m, and a **0.00 gearing ratio**; return on invested capital was **51.1%**. Operating cash inflow was **$701.2m** against capex of **$87.5m**, funding **$453.7m** of dividends while maintaining balance-sheet flexibility.
 
-Business quality supports the screen. Revenue has grown from A$9.23bn (FY22) to A$10.55bn (FY25), with FY25 representing clear top-line re-acceleration after flat FY24. Free cash flow has remained robust through the earnings dip (A$570m–A$678m across FY22–FY25 per Yahoo), funding A$386m in dividends in FY25 without apparent balance-sheet stress (A$284m cash; leverage largely lease-based). The PEGY of ~0.04 suggests the market may underprice growth relative to earnings quality. The buy classification aligns with a cash-generative retail franchise at a reasonable, not distressed, multiple — provided the investor accepts consumer-cyclical exposure and the absence of verified primary filings.
+Operationally, the group has sustained growth through a difficult consumer backdrop: revenue rose from **$10,554.8m (FY25)** to **$11,064.0m (FY26)** per the audited accounts, with EBIT up to **$734.4m** and NPAT attributable to owners at **$489.9m** (448.1 cps). Management emphasises a structurally low cost-of-doing-business (CODB) model—JB Hi-Fi Australia CODB of **12.46%** in FY26—and scale advantages in supplier relationships and online (17%+ of sales across major banners).
+
+The **buy** screen signal aligns with a business that converts earnings to cash and returns surplus capital: the Board lifted the payout band to **70–80% of NPAT** from FY26 (FY26 ordinary dividend **337 cps**, fully franked). FY24–FY26 also saw portfolio expansion via the **e&s** acquisition (initial **75% for $47.8m** cash, August 2024), broadening exposure to trade/commercial appliances. Against Harvey Norman and online pure-plays, JBH’s multi-format, value-led positioning and The Good Guys’ white-goods strength provide diversification within cyclical retail.
+
+Caveat: the screening snapshot records **signal: buy** but **0/5 model families passed**, **null composite score**, and **insufficient_data** on timing—deep research must supply the qualitative and filing-based validation the screen pack currently lacks.
 
 ## FINANCIAL REVIEW
-**Source limitation:** The filings index (`regime: asx_announcements`) catalogues zero annual, interim, or other ASX announcements, with no downloadable body extracts under `filings/bodies/`. All figures below are sourced from `financials_annual.json` (Yahoo Finance) — an explicit fallback. Interim (half-year) filing bodies are absent; `quarterly_income` is empty. H1 FY26 and Q3 FY26 trading colour appears only in news headlines and cannot be verified against primary filings.
+*Primary source: ASX/IR filing bodies unless noted. FY26 annual report (Appendix 4E / audited statements, `ir_da6d687e01addb75`); FY26 results announcement (`ir_0c2b124727393f67`). Yahoo (`financials_annual.json`) used only where noted.*
 
-**Income statement trend (FY22–FY25, June year-end, Yahoo fallback)**
+### Annual trend (FY24–FY26)
 
-| Metric | FY22 | FY23 | FY24 | FY25 |
-|--------|------|------|------|------|
-| Revenue (A$m) | 9,232 | 9,626 | 9,592 | 10,555 |
-| Gross profit (A$m) | 2,080 | 2,183 | 2,140 | 2,360 |
-| EBITDA (A$m) | 992 | 974 | 864 | 926 |
-| Operating income (A$m) | 578 | 544 | 410 | 438 |
-| Net income (A$m) | 545 | 525 | 439 | 462 |
-| Diluted EPS (A$) | 4.77 | 4.78 | 4.00 | 4.21 |
+| Metric | FY24 | FY25 | FY26 |
+|--------|------|------|------|
+| Revenue | $9,592m* | $10,554.8m | $11,064.0m |
+| EBIT | — | $694.1m | $734.4m |
+| NPAT (owners) | $438.8m* | $462.4m | $489.9m |
+| Basic EPS | 401.4 cps* | 423.0 cps | 448.1 cps |
+| Operating cash flow | — | $711.6m | $701.2m |
+| Net cash (year-end) | — | $284.1m | $206.5m |
 
-FY25 marks a turnaround in top-line growth (+10.0% revenue) after FY24 stagnation, though operating income remains ~24% below the FY22 peak as selling and marketing costs rose (A$1,167m vs A$881m in FY22), reflecting wage inflation, rent (A$350m), and competitive investment. Gross margin has held broadly stable at ~22–23%. Net finance costs increased to A$37.7m (FY25) from A$20.1m (FY22).
+\*FY24 revenue/NPAT/EPS from the **12 August 2024** results commentary (`0e7b5f42a3e9a433`); cross-checked to Yahoo FY24 NPAT **$438.8m** and revenue **$9,592.4m**. FY24 EBIT not extracted from primary annual report body in this pack.
 
-**Cash flow and capital allocation (Yahoo fallback)**
+**FY26 (year ended 30 June 2026):** Revenue **$11,064.0m** (+4.8%); EBIT **$734.4m** (+5.8% statutory vs FY25, +3.8% underlying); NPAT **$489.9m** (+6.0% statutory, +2.9% underlying); total ordinary dividend **337 cps** (interim **210 cps**, final **127 cps**), representing **75% of NPAT**. Segment highlights from the results announcement: JB Hi-Fi Australia sales **$7.42bn** (+4.4%, comps +3.2%); The Good Guys **$2.94bn** (+2.7%); NZ **NZD499.5m** (+26.0%); e&s **$273.1m** (12-month comp −0.2%, EBIT **−$0.4m** while investing in commercial initiatives).
 
-Free cash flow: FY22 A$570m → FY23 A$644m → FY24 A$678m → FY25 A$629m. Cash conversion remains strong despite earnings pressure; FY25 operating cash flow was A$712m against capex of A$82m. The company returned A$386m in dividends and A$21m in buybacks in FY25. FY25 also included A$41m in business purchases (per cash-flow statement).
+**FY25 (year ended 30 June 2025):** Revenue **$10,554.8m** (+10.0% vs FY24 per audited note 5); NPAT **$462.4m**; statutory EBIT **$694.1m**. Underlying EBIT **$707.8m** and underlying NPAT **$478.1m** after excluding a one-off **$13.7m** ACCC settlement expense relating to The Good Guys (`ir_0c2b124727393f67`). FY25 included a **100 cps special dividend** alongside **275 cps** ordinary (65% payout); payout policy was raised to **70–80%** from FY26.
 
-**Balance sheet (FY25, Yahoo fallback)**
+**FY24 (year ended 30 June 2024):** A post-pandemic normalisation year—sales **$9.59bn** (−0.4%), NPAT **$438.8m** (−16.4%), EPS **401.4 cps**, plus an **80 cps special dividend**. FY23 peak earnings (Yahoo fallback: NPAT **$524.6m**, revenue **$9,626.4m**) highlight the cyclical swing.
 
-Total assets A$3.88bn; stockholders' equity A$1.62bn (minority interest A$5m). Inventory rose to A$1.30bn (from A$1.09bn in FY24, +19% YoY). Goodwill and intangibles total A$1.08bn (The Good Guys acquisition), leaving tangible book value at A$536m — relevant given screen P/B of 5.2x, which reflects franchise value rather than asset backing. Total debt of A$714m is classified entirely as capital-lease obligations (no traditional bank debt outstanding in FY25 per Yahoo). Working capital A$265m; cash A$284m.
+### Cash flow and balance sheet
 
-**Interim gap**
+FY26 net cash inflow from operations **$701.2m** (FY25: **$711.6m**). Investing outflows **$87.4m** (capex **$87.5m**; no business combinations in FY26 vs **$40.8m** for e&s in FY25). Financing outflows **$691.0m**, dominated by dividends **$453.7m** and lease principal **$210.4m**.
 
-No half-year report body is available in the filings index. News references to H1 FY26 (sales A$6.1bn, +7.3%; interim dividend +23.5%) and Q3 FY26 (sales growth intact per press) cannot be verified against primary filings and are excluded from the numeric analysis above.
+Balance sheet (FY26 audited/Yahoo-aligned): total assets **~$3,871m**; inventory **$1,356.4m** (~35% of assets per auditor focus area); cash **$206.5m**; lease liabilities **$705.0m** (AASB 16; **no bank debt**); total equity **$1,643.3m**; goodwill **~$780m** (The Good Guys CGU **$577.9m**). Franking credits available **$650.2m**. Group **complied with all financial covenants** during FY25 and FY26 (Note 18).
+
+Free cash flow (Yahoo, consistent with filing cash flows): FY26 **$613.7m**, FY25 **$629.3m**, FY24 **$678.1m**—strong but modestly declining as dividends and inventory absorb cash.
+
+### Interim results
+
+**FY26 half-year (16 February 2026):** Listed in `filings_index.json` (interim category) but **downloadable bodies contain no P&L extract**—only Market Index wrapper pages (`65f7c67f119ab698`, `64c50da35625d4c8`). Interim dividend of **210 cps** (record date 27 February 2026) is confirmed in the FY26 annual report dividend note (Note 4). **Half-year revenue, EBIT, and NPAT for 1H26 are not available from primary filing bodies in this pack.**
+
+**FY25 half-year (10 February 2025):** **Not present** in `filings_index.json`. Secondary Market Index coverage (`20b3fa300f5449c9`) reported 1H25 sales **$5.67bn** (+9.8%), EBIT **$419.9m** (+8.6%), NPAT **$285.4m** (+8.0%), interim dividend **170 cps**—useful directionally but **not a primary filing citation**.
+
+### Momentum and trading update
+
+FY26 Q4 saw a marked slowdown: JB Hi-Fi Australia comparable sales fell to **−0.8%** in Q4 (from +5.0% in Q2), citing supplier price rises, tech stock shortages, and tough prior-year comps (`259a954d4b7b090e` / results announcement). **July 2026** update (1–31 July): JB Australia total sales **−0.5%** (comps **−1.4%**); The Good Guys **−1.7%**; e&s **−2.7%**; NZ **+20.9%** (`ir_0c2b124727393f67`). This tempers the full-year record but does not yet break the multi-year earnings uptrend from the FY24 trough.
 
 ## RISKS AND RED FLAGS
-**Data gap:** Without ASX annual report or half-year body extracts, standard risk disclosures — going-concern statements, litigation contingencies, debt covenants, lease accounting assumptions — cannot be reviewed. This is a material limitation for deep due diligence.
+**Cyclical / consumer demand:** Management describes an “uncertain retail environment” with customers “seeking value” and spend migrating to promotional events. Q4 FY26 and July 2027 updates confirm deceleration; gross margins remain thin (group ~22%) and sensitive to mix and competitive pricing.
 
-**Cyclical and competitive:** Consumer Cyclical sector exposure leaves JBH vulnerable to discretionary spending slowdowns, housing turnover (appliances), and aggressive pricing from Amazon Australia, Costco, and vertically integrated suppliers. The three-year earnings decline from the FY22 peak (net income –15%) underscores cyclicality not fully captured by trailing quality metrics.
+**Competitive intensity:** Low CODB is a stated advantage, but 1H25 commentary (secondary) noted gross-margin pressure from deliberate value pricing. Online penetration (~17% of banner sales) keeps price transparency high versus Amazon, Kogan, and warehouse competitors.
 
-**Balance sheet:** Elevated inventory (A$1.30bn, +19% YoY) in a product category with rapid model turnover. Goodwill of A$780m implies acquisition risk if The Good Guys franchise deteriorates. High P/B (5.2x) limits downside asset protection for value investors.
+**Regulatory / litigation:** FY25 included a **$13.7m one-off ACCC settlement** for The Good Guys (`ir_0c2b124727393f67`). No new contingent quantification was extracted from Note 29 in this pack, but ACCC history signals ongoing scrutiny of retail conduct and extended warranties (Gold Service Extras).
 
-**Operational leverage:** SG&A growth has outpaced gross profit expansion in recent years; further wage or rent inflation could compress margins even with stable revenue. Simply Wall St commentary in the news manifest flags margin-for-market-share trade-offs.
+**e&s integration:** Twelve-month e&s comps **−3.2%**; EBIT **−$0.4m** with elevated CODB as wholesale migrates to agency recognition. Put-option liability on non-controlling interest (**$18.5m** financial liability, Note 21) adds integration complexity.
 
-**Governance / pension:** Yahoo balance sheet shows employee benefit and pension provisions (~A$9m non-current; A$136m current pension-related liabilities) — individually modest in aggregate but unverified against filing notes.
+**Inventory and audit focus:** Deloitte highlighted **inventory existence and valuation** as a key audit matter—**$1,356.4m** across **355 retail stores**, with NRV provisioning judgement. Inventory rose **$65.4m** in FY26 working-capital bridge; obsolescence risk rises if tech cycle slows.
 
-**Management transition:** News reports Nick Wells succeeding Terry Smart as CEO (August 2025); succession execution risk is not assessable from filings in this library.
+**Lease / fixed-cost leverage:** **$705.0m** lease liabilities and **$208.1m** ROU depreciation (FY26) create operational leverage in downturns despite **0.00 financial gearing**.
 
-**Screen blind spots:** Quantitative risk models may underweight structural online share shift and promotional intensity. Timing signal is "insufficient_data" (RSI and SMA200 unavailable).
+**Governance / key person:** CEO transition from Terry Smart to **Nick Wells** (appointed August 2025, `retailbiz` headline in news manifest). No governance red flags in extracted filing text; Board reports compliance with ASX Corporate Governance Principles.
+
+**Capital return sustainability:** Dividends consumed **~74% of operating cash flow** in FY26; payout at top of the 70–80% band leaves less room for buybacks or acquisitions without drawing down cash (cash fell **$77.2m** net in FY26).
+
+**Screening data gap:** Buy signal without populated metrics increases model risk—verify valuation inputs independently before sizing.
+
+RiskTags: cyclical, competitive, regulatory, leverage, accounting, other
+RiskTags: cyclical, competitive, regulatory, leverage, accounting, other
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate but skewed toward equity commentary rather than primary-source corporate disclosure; no regulatory actions or major M&A appear in the manifest. Warrant listings and syndicated Kalkine/Rask articles dominate recent headlines.
+Coverage is **moderate but repetitive**—186 articles in `news_manifest.json`, heavily skewed to Kalkine SEO pieces post-FY26; substantive reporting clusters around results dates.
 
-**Material operating news:**
-- *"JB Hi Fi Ltd (JBHIF) (H1 2026) Earnings Call Highlights: Record Sales and Strong Digital Growth..."* (16 Feb 2026) — H1 sales A$6.1bn (+7.3%), strong online growth, interim dividend +23.5%.
-- *"The JB Hi-Fi Limited (ASX:JBH) Half-Yearly Results Are Out And Analysts Have Published New Forecasts"* (17 Feb 2026) — share price reaction cited (+13% to ~A$89.10).
-- *"JB Hi-Fi (ASX:JBH) share price is up 7% after a strong HY26 result"* (16 Feb 2026, Rask Media).
-- *"JB Hi-Fi (ASX:JBH) share price in focus on strong FY26 third-quarter sales"* (6 May 2026, Rask Media); *"Q3 Update: Sales Growth Intact, But Why Did the Share Price Fall Nearly 7%?"* (6 May 2026, Kalkine).
-- *"JB Hi-Fi stock trades near record territory as FY2025 earnings and dividend highlight cash generatio"* (23 Jul 2026, AD HOC NEWS).
+**FY26 results (17 August 2026):** “JB Hi-Fi hits record FY26 sales but Q4 slowdown sinks the stock” (Market Index, 17 Aug 2026)—record **$11.06bn** sales and **22.5%** dividend lift overshadowed by Q4 comp deceleration and negative July trading. “JB Hi-Fi record sales and higher dividend overshadowed by weak July trading” (Proactive Investors, 17 Aug 2026). “JB Hi-Fi (ASX:JBH) lifts payout to 75% as dividend policy re-rates the story” (Stocks Down Under, 17 Aug 2026).
 
-**Management:**
-- *"JB Hi-Fi appoints Nick Wells as next CEO, succeeding Terry Smart"* (11 Aug 2025, retailbiz).
+**FY25 results (11 August 2025):** “JB Hi-Fi earnings are up. So why is the stock getting smashed?” (Market Index, 11 Aug 2025)—solid underlying beat but **~9.7%** share fall on valuation concerns; **100 cps special dividend** and payout-ratio uplift announced. “JB Hi-Fi appoints Nick Wells as next CEO, succeeding Terry Smart” (retailbiz, 11 Aug 2025).
 
-**Market sentiment / valuation debate:**
-- *"We expect sales growth to moderate for overvalued ASX share"* (17 Feb 2026, Morningstar Australia).
-- *"Is JB Hi-Fi (ASX:JBH) Trading Margin for Market Share as Costs and Competition Rise?"* (4 Jul 2026, Simply Wall St).
-- *"JB Hi-Fi (ASX:JBH): Down 28% in a Year — Has Consumer Electronics Retail Lost Its Shine?"* (15 Jul 2026, Kalkine).
-- *"Bell Potter Sees Buying Opportunity in JB Hi-Fi (ASX:JBH) Despite 32% Annual Share Price Drop"* (12 May 2026, Kalkine).
-- *"JB Hi-Fi Limited (ASX:JBH) Shares Could Be 20% Below Their Intrinsic Value Estimate"* (9 Oct 2025, Simply Wall St).
+**1H25 (10 February 2025):** “Why JB Hi-Fi shares slumped on strong earnings and a higher dividend” (Market Index)—broad 1H25 beat but margin miss and profit-taking at elevated multiples.
 
-**Coverage assessment:** Thin on primary-source journalism and hard corporate actions; dominated by third-party valuation articles and syndicated commentary. H1 FY26 and Q3 trading updates are the most material operating data points, but strategy and management narrative cannot be assessed from this manifest alone without ASX filing bodies.
+**FY24 (12 August 2024):** “A special dividend is up for grabs as JB Hi-Fi beats FY24 earnings expectations” (Market Index)—NPAT beat, **80 cps special dividend**, and agreement to acquire **75% of e&s for $47.8m** cash.
+
+**Trading / macro (2026):** “JB Hi-Fi (ASX:JBH) share price in focus on strong FY26 third-quarter sales” (Rask Media, 6 May 2026); “JB Hi-Fi (ASX: JBH) Gets Hit by Rate-Hike Fears” (Kalkine, 31 Aug 2026). Recent Kalkine headlines (Sep 2026) reiterate the record-results vs softer-July narrative without new primary disclosures.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.65
-Rationale: The quantitative buy case is supported by durable FCF, dividend yield, and recent trading momentum in news flow, but the complete absence of primary ASX filing bodies prevents verification of risk disclosures and interim figures, tempering conviction relative to the screen signal.
+Confidence: 0.68
+Rationale: Filing-backed cash generation, net-cash balance sheet, and rising dividends support the quantitative buy signal, but Q4/July trading softness, e&s drag, thin screen metrics, and likely full valuation temper conviction pending verified 1H26 primary filings and updated consensus.

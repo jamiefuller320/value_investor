@@ -1,98 +1,86 @@
 # Carnival Corporation Ltd. (CCL) — Research memo
 
-_Version 1 · Updated 2026-07-25T10:50:22.110286+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-09T07:38:12.740942+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Carnival is the world’s largest cruise operator, emerging from the pandemic with record demand, rising yields and a balance sheet that management says has crossed investment-grade leverage thresholds. The quantitative screen flags the stock as a strong buy on cheapness (P/E 11.4, earnings yield 8.8%, FCF yield 5.3%), quality (ROE 26.7%, Piotroski pass) and dividend reinstatement, with conviction building over three weeks. The value case rests on normalised earnings power and capital return (dividends plus a new $2.5bn buyback) against a still-leveraged balance sheet (~$25.6bn gross debt per the May 2026 10-Q). The central debate is whether post-recovery margins and deleveraging are durable, or whether fuel volatility, EU/UK emissions costs, geopolitical disruption and sector promotional pressure will cap free-cash-flow conversion — a tension visible in Q2 FY2026, where revenue grew but operating income fell year-on-year.
+Carnival is the world’s largest cruise operator, emerging from pandemic-era losses into a sustained earnings recovery. FY2025 (year ended 30 November 2025) delivered record revenue of $26.6bn and net income of $2.8bn, with management guiding FY2026 adjusted net income to ~$3.5bn. The quantitative screen rates CCL a buy, though underlying screen metrics are not populated in the current snapshot (data quality score 0.0), so conviction rests primarily on filing evidence. The valuation hook is a cyclical leisure name trading near 52-week lows despite record bookings, reinstatement of dividends ($0.15/quarter), and a $2.5bn buyback — against ~$25bn of gross debt that still absorbs roughly $1.3bn of annual interest. The central debate is whether accelerating free cash flow and deleveraging (net debt/adjusted EBITDA 3.4x at year-end 2025) justify accumulation, or whether fuel shocks, European demand softness, and macro travel risk will compress multiples before debt normalises.
 
 ## INVESTMENT THESIS
-For a value investor, CCL offers a cyclical recovery name trading at a mid-cycle multiple despite earnings that have rebounded sharply from the 2022–23 trough. The screen passes five factor families — cheapness, quality, dividend, GARP and risk — with full data coverage (20/20 metrics) and a sector-relative composite of 71%, suggesting the signal is not a data artefact.
+For a value investor, CCL offers a classic post-crisis recovery at a point where operating fundamentals have inflected but the balance sheet and share price still carry scars. The screen’s buy signal aligns directionally with filing trends: revenue rose from $21.6bn (FY2023) to $25.0bn (FY2024) to $26.6bn (FY2025), operating income from $2.0bn to $3.6bn to $4.5bn, and diluted EPS from a loss to $1.44 to $2.02. H1 FY2026 (six months to 31 May 2026) net income of $801m compares with $494m in the prior-year period, on revenue of $12.8bn versus $12.1bn.
 
-Business quality supports the screen. Filings describe the largest global cruise portfolio (eight brands, ~272,460 berths, 13.6m passengers in FY2025), 104% occupancy in Q2 FY2026, and customer deposits of $9.0bn at 31 May 2026 (vs $7.2bn at prior year-end) — a forward-demand indicator that screens do not fully capture. Management prioritises brand differentiation, destination investment (Celebration Key opened July 2025) and “outsized shareholder returns” alongside deleveraging; H1 FY2026 saw $414m dividends and $381m buybacks while net debt fell.
+Business quality indicators from filings are constructive: customer deposits reached $8.5bn at 31 May 2026 (versus $6.8bn at 30 November 2025), reflecting strong forward booking momentum; Q1 FY2026 management commentary cited double-digit booking growth at historically high prices. Onboard revenue mix continues to expand (onboard and other revenue was $9.2bn in FY2025, 35% of total). Capital allocation has shifted from survival refinancing to shareholder returns: quarterly dividends resumed in FY2026 ($414m paid in H1), alongside $381m of share repurchases in H1 FY2026.
 
-The valuation hook is straightforward: mid-teens normalised P/E on a business generating strong operating cash flow ($3.9bn H1 FY2026 per the Q2 10-Q) with interest expense falling as debt is repaid ($577m H1 FY2026 vs $718m prior year). Screen highlights — earnings yield, FCF yield, Magic Formula and Buffett Quality passes — align with a company that has restored profitability and begun returning capital, but still carries cruise-sector balance-sheet risk that pure quant signals underweight.
+The screen’s buy rating is directionally supported but cannot be fully validated from the snapshot alone — zero models passed, zero metrics present, and insufficient timing data. Qualitative filing evidence (record yields, investment-grade leverage metrics achieved at FY2025 year-end, and active debt prepayment/refinancing) strengthens the case that the name is mispriced relative to normalised earnings power, provided an investor accepts cyclicality and residual leverage risk.
 
 ## FINANCIAL REVIEW
-**Source note:** Annual 10-K body extracts (FY2025 filed 27 January 2026; FY2024 filed 27 January 2025) are truncated before Item 8 financial statements. Annual figures below therefore fall back to Yahoo `financials_annual.json`, stated explicitly. Interim figures are from SEC 10-Q body extracts.
+**Annual results (FY2025 — Form 10-K / Final Results RNS, 27 January 2026)**
 
-**Annual trend (Yahoo fallback — FY ends 30 November)**
+Primary source: Final Results filing body (Annual Report on Form 10-K for year ended 30 November 2025).
 
-| Metric | FY2023 | FY2024 | FY2025 |
+| Metric | FY2025 | FY2024 | FY2023 |
 |---|---|---|---|
-| Revenue | $21.6bn | $25.0bn | $26.6bn |
-| Operating income | $2.0bn | $3.6bn | $4.5bn |
-| Net income | $(74)m | $1.9bn | $2.8bn |
-| Diluted EPS | $(0.06) | $1.44 | $2.02 |
-| Total debt | $31.9bn | $28.9bn | $28.0bn |
-| Net debt | $28.2bn | $26.3bn | $24.7bn |
-| Free cash flow | $1.0bn | $1.3bn | $2.6bn |
-| Interest expense | $2.1bn | $1.8bn | $1.3bn |
+| Total revenue | $26,622m | $25,021m | $21,593m |
+| Operating income | $4,483m | $3,574m | $1,956m |
+| Net income | $2,760m | $1,916m | $(74)m |
+| Diluted EPS | $2.02 | $1.44 | $(0.06) |
+| Interest expense (net) | $1,349m | $1,755m | $2,066m |
+| Operating cash flow | $6,218m | $5,923m | $4,281m |
+| Capital expenditure | $(3,611)m | $(4,626)m | $(3,284)m |
 
-FY2025 (Yahoo) shows a third consecutive year of revenue growth (+6% vs FY2024) and a step-up in net income (+44%), with net debt down ~$1.9bn and FCF roughly doubling. The trajectory from FY2022’s $6.1bn net loss (Yahoo) to FY2025 profitability confirms the post-pandemic normalisation the screen is capturing.
+Management-reported adjusted metrics (4Q FY2025 earnings release, 19 December 2025): adjusted net income $3.1bn; adjusted EBITDA $7.2bn; net debt to adjusted EBITDA 3.4x (“investment grade leverage metrics”). FY2026 guidance: adjusted net income ~$3.5bn; net yield growth ~2.5%.
 
-**Interim filings (primary — SEC 10-Q)**
+Balance sheet at 30 November 2025 (10-K): cash $1,928m; current portion of long-term debt $2,603m; long-term debt $24,037m (total debt ~$26.6bn); shareholders’ equity attributable to Carnival Corporation Ltd. $12.3bn; customer deposits $6,831m (+7% YoY per RNS).
 
-*Q3 FY2025 (three months ended 31 August 2025):* Revenue $8.2bn (+3% YoY); operating income $2.3bn; net income $1.9bn; diluted EPS $1.33. Nine-month revenue $20.3bn; nine-month net income $2.3bn; diluted EPS $1.71.
+Free cash flow (FY2025): operating cash flow $6,218m less capex $3,611m implies ~$2.6bn — consistent with Yahoo fallback (`financials_annual.json`: FCF $2,607m), used here only as cross-check.
 
-*Q1 FY2026 (three months ended 28 February 2026):* Revenue $6.2bn (+6%); operating income $607m; net income attributable to shareholders $258m; diluted EPS $0.19.
+**Interim results**
 
-*Q2 FY2026 (three months ended 31 May 2026):* Revenue $6.7bn (+5%); operating income $851m (down from $934m YoY); net income $537m; diluted EPS $0.39. H1 FY2026 revenue $12.8bn (+6%); H1 operating income $1.5bn (flat YoY); H1 net income $795m; H1 diluted EPS $0.57. H1 operating cash flow $3.9bn (+17% YoY).
+*Q3 FY2025 (three months to 31 August 2025 — Form 10-Q / 3rd Quarter Results RNS, 29 September 2025):* revenue $8,153m (+3.3% YoY); operating income $2,271m; net income $1,852m; diluted EPS $1.33. Nine-month revenue $20,292m; nine-month net income $2,338m. Cash $1,763m; long-term debt $25,064m (per RNS summary). Company prepaid $9.6bn of debt instruments during 2025 (per RNS).
 
-The Q2 FY2026 10-Q MD&A attributes the operating-income decline to higher fuel ($793/metric ton vs $614), non-recurrence of prior-year ship-sale gains ($103m), Middle East-related crew travel costs, and higher EU ETS allowance costs — partially offset by ticket-price and onboard-spending gains. Revenue momentum remains positive; margin pressure is cost-driven, not demand-driven.
+*Q1 FY2026 (three months to 28 February 2026 — Form 10-Q / 1st Quarter Results RNS, 27 March 2026):* revenue $6,165m (+6.1% YoY); operating income $607m (+11.8%); net income attributable to Carnival Corporation Ltd. $258m (versus a $(78)m loss in Q1 FY2025); diluted EPS $0.19. Record booking position cited in earnings release.
 
-**Balance sheet and liquidity (Q2 FY2026 10-Q, 31 May 2026)**
+*Q2 FY2026 (three months to 31 May 2026 — Form 10-Q, 26 June 2026):* revenue $6,663m (+5.3% YoY); operating income $851m (down from $934m — fuel costs rose to $595m from $468m); net income $537m; diluted EPS $0.39. H1 FY2026: revenue $12,828m; net income $801m; diluted EPS $0.57; operating cash flow $3,893m; capex $(1,441)m.
 
-- Cash and equivalents: $2.2bn; total liquidity: $6.7bn (including $4.5bn undrawn revolver)
-- Gross debt: $25.6bn (down from $27.4bn at 30 November 2025)
-- Shareholders’ equity: $13.0bn
-- Customer deposits: $9.0bn
-- Working capital deficit: $8.9bn — structurally normal for cruise (deposits collected ahead of sailings); filings note deposits fund operations alongside operating cash flow
-- Covenant compliance: “in compliance” at 31 May 2026; key covenants include minimum interest coverage 3.0x, debt-to-capital ≤65%, minimum liquidity $1.5bn
+Balance sheet at 31 May 2026 (10-Q): cash $2,243m; total debt $24,889m ($1,471m current + $23,418m long-term, down ~$1.7bn from November 2025); customer deposits $8,457m; total liquidity $6.7bn ($2.2bn cash + $4.5bn undrawn revolver); working capital deficit $8.9bn (structural — advance customer deposits).
 
-**Annual filing gaps:** Full audited income statements, cash-flow statements and debt tables for FY2025 and FY2024 are not present in the truncated 10-K body extracts. No going-concern language was found in available extracts; risk disclosures emphasise debt service and covenant compliance rather than liquidity distress.
+**Trend assessment:** Revenue and earnings have compounded strongly since FY2023. Interest expense is declining as debt is refinanced and prepaid. H1 FY2026 shows continued top-line growth and cash generation, though Q2 operating income was pressured by higher fuel ($595m vs $468m). The company operates with a substantial working capital deficit by design (customer deposits fund operations ahead of sail dates) — not a liquidity shortfall given $6.7bn of available liquidity and covenant compliance as of 31 May 2026.
+
+**Gaps:** The standalone SEC 10-K body extract for FY2025 (filed 27 January 2026) is truncated before the financial statements; annual figures above are taken from the Final Results RNS body, which includes the full consolidated statements. No separate UK trading updates are indexed; interim coverage is via SEC 10-Q and RNS quarterlies. FY2024 annual figures rely on the same Final Results comparative columns (the FY2024 10-K body extract is similarly truncated).
 
 ## RISKS AND RED FLAGS
-**Leverage and covenants.** Gross debt remains ~$25.6bn despite deleveraging. The FY2025 10-K risk factors state: “Our debt requires a significant amount of cash to service… Our financial condition and operations could be adversely impacted if we are unable to service our debt or satisfy our covenants.” Q2 FY2026 confirms compliance, but a demand shock could tighten headroom quickly.
+**Leverage and covenants.** Gross debt remains ~$25bn despite active deleveraging. Interest expense was $1,349m in FY2025 and $577m in H1 FY2026. Covenant requirements (Q2 FY2026 10-Q) include minimum interest coverage (adjusted EBITDA to net interest) of 3.0x, minimum liquidity of $1.5bn, and debt-to-capital not exceeding 65%; the company reported compliance at 31 May 2026. An event of default could accelerate substantially all outstanding debt — a material tail risk if earnings reverse.
 
-**Fuel and emissions.** Fuel cost per metric ton rose to $793 in Q2 FY2026 from $614 YoY. EU ETS cost was $91m in FY2025 and is expected at ~$170m in FY2026 (FY2025 10-K). IMO Net Zero Framework adoption is postponed but introduces regulatory uncertainty. These costs are not fully reflected in trailing screen multiples.
+**Cyclical and fuel exposure.** Cruise demand is highly sensitive to macro conditions, geopolitical events, and fuel prices. Q2 FY2026 fuel expense rose 27% YoY; news flow in August–September 2026 cited oil spikes pressuring cruise stocks. European demand softness has been flagged in analyst commentary (news manifest).
 
-**Cyclical and geopolitical demand.** Risk factors cite geopolitical uncertainty, pandemics, inflation and higher rates as demand risks. Q2 FY2026 MD&A references Middle East conflict impacts on crew travel. Occupancy remains above 100% (industry convention), but promotional activity in the mass-market segment (noted in sector news on Norwegian Cruise Line) bears monitoring.
+**Regulatory and environmental.** Greenhouse gas regulatory expense was $91m in FY2025 (10-K cash flow statement); management targets 25% emissions-intensity reduction by 2029. Compliance costs and port/regulatory actions (e.g. environmental standards) are ongoing.
 
-**Competitive overcapacity.** Filings flag overcapacity and competition with Royal Caribbean, Norwegian and MSC (~80% of industry capacity). CCL has trailed RCL on recent total-shareholder-return commentary in sell-side coverage.
+**Structural working capital.** The $8.9bn working capital deficit is disclosed as a normal feature of the cruise model (advance deposits), but it concentrates liquidity risk if booking trends deteriorate sharply.
 
-**Legal and operational contingencies.** Q2 FY2026 10-Q notes: HELMS-Burton Cuba judgment ($110m plus fees, on appeal to Supreme Court); COVID-related class actions largely resolved; April 2026 data-security incident with consolidated class actions (management believes not material); ongoing EPA Clean Water Act inquiry. None disclosed as material individually, but litigation tail risk persists.
+**Governance / structure.** May 2026 completion of dual-listed structure unification and redomiciliation to Bermuda (Carnival Corporation Ltd.; Carnival plc delisted from LSE) simplifies the capital structure but represents a significant corporate change; integration costs and single-share liquidity effects are still settling.
 
-**Governance / structure.** DLC unification and redomiciliation to Bermuda completed May 2026 (Q2 10-Q). Execution risk on the transition is largely resolved; residual risk is Bermuda law differences vs prior Panama/UK structure.
+**Competitive dynamics.** Royal Caribbean and Norwegian Cruise Line compete aggressively on capacity and pricing; Truist downgraded NCLH citing promotional activity in the mass-market segment (July 2026), which may signal pricing pressure across the industry.
 
-**Pension.** Yahoo balance sheet shows minimum pension liabilities of ~$44m (FY2025) — immaterial relative to enterprise scale.
+**No going-concern flag.** Filings contain no going-concern language; the company is profitable and covenant-compliant. Contingencies (legal, environmental, regulatory) are acknowledged periodically but not quantified in the extracts reviewed.
 
-**Accounting.** December 2025 revision extended ship depreciable lives to 35 years with lower residual values — prospectively applied; filings state no material impact, but it affects future D&A and reported ROE/ROIC.
+RiskTags: cyclical, leverage, regulatory, competitive, liquidity
+RiskTags: cyclical, leverage, regulatory, competitive, liquidity
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is reasonably thick, though much is price-commentary rather than fundamental disclosure.
+Coverage over the past year is voluminous but heavily tilted toward price commentary and ticker confusion with unrelated “CCL” names (CCL Industries, tea stocks). Material Carnival-specific items include:
 
-**Earnings and capital return**
-- “Carnival Corp Beats Q1 Expectations, Unveils $2.5B Buyback — So Why Is CCL Stock Falling Today?” (Stocktwits, 23 July 2026)
-- “Carnival (CCL) Down 9.7% Since Last Earnings Report: Can It Rebound?” (Yahoo Finance, 23 July 2026)
-- Q2 FY2026 10-Q confirms $381m repurchases and $414m dividends in H1 FY2026 under a $2.5bn programme announced March 2026
+- **Record Q3 FY2025 results (29 September 2025):** “Carnival Corporation 3Q 2025 Earnings” — record net income $1.9bn, revenue $8.2bn, raised full-year guidance.
+- **FY2025 results and dividend reinstatement (19 December 2025):** “Carnival Corporation 4Q 2025 Earnings” — record adjusted net income $3.1bn, dividend of $0.15/share reinstated, FY2026 adjusted net income guidance ~$3.5bn.
+- **Q1 FY2026 beat and buyback (27 March 2026):** “1st Quarter Results” / “Carnival Corporation 1Q 2026 Earnings” — record Q1 operating results, $2.5bn share repurchase authorisation, PROPEL long-term targets through 2029.
+- **Corporate unification (7 May 2026):** “Carnival Corporation & plc Completes Unification…” — dual-list eliminated, redomiciled to Bermuda; Carnival plc cancelled from LSE.
+- **Loyalty and credit card launch (1 September 2026):** “Carnival Revamps Loyalty Program to Encourage Spending” (WSJ) and “Carnival (CCL) Launched A New Rewards Mastercard” — Barclays co-branded card, spend-based loyalty programme.
+- **Fleet investment:** Holland America $500m+ ship refresh (August–September 2026); Ace Class flagship “Carnival Destiny” steel-cutting (July 2026).
+- **Share price pressure (August–September 2026):** “Carnival Stock Just Hit a 52-Week Low” (Barron’s, 4 September 2026); “Carnival Slides as Oil Spike Revives Cruise Cost and Booking Fears” (31 August 2026); sector hit on hantavirus travel fears (July 2026).
+- **Booking/pricing narrative (8 September 2026):** “Carnival's Record Booking Curve Extends: Will Pricing Momentum Last?” — constructive forward pricing but European headwinds flagged.
 
-**Strategy and fleet**
-- “Carnival (CCL) Unveils Ace Class Debut With Carnival Destiny” (Yahoo Finance, 23 July 2026) — next-generation capacity for Carnival Cruise Line
-- “Celebration Key supports about 1,000 year-round jobs in Grand Bahama” (Stock Titan, 21 July 2026)
-- “Is Carnival Rewriting the Cruise Industry's Growth Playbook?” (Yahoo Finance, 22 July 2026)
-
-**Sector and macro sensitivity**
-- “Airlines, cruise stocks gain as oil prices ease…” (Seeking Alpha, 24 July 2026)
-- “RCL, NCLH, CCL: Cruise Stocks Get Hit As Rare Hantavirus Outbreak Sparks Travel Fears” (Stocktwits, 23 July 2026)
-- “Carnival: Fuel/Demand Risks Depress Near-Term Recovery Prospects; Contrarian Buy” (Seeking Alpha, 22 July 2026)
-
-**Analyst activity**
-- “CCL Maintained by Truist Securities — Price Target Raised to $3” (GuruFocus, 23 July 2026) — note ticker confusion risk in headline formatting; treat as unverified without primary broker note
-
-**Noise:** Several “CCL Industries Inc.” (Canadian packaging) headlines appear in the manifest and are not relevant to Carnival Corporation.
+News is not thin for CCL specifically, though signal-to-noise is low due to ticker collisions and repetitive valuation commentary.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
-Risk: medium
-Confidence: 0.74
-Rationale: Deep research largely confirms the screen’s strong-buy case on normalised earnings, deleveraging and capital return, but medium risk from residual leverage, fuel/emissions cost inflation and Q2 margin pressure prevents full-conviction endorsement without further quarterly verification.
+Risk: high
+Confidence: 0.68
+Rationale: Filing evidence confirms a durable post-pandemic earnings recovery, active deleveraging, and shareholder-return initiation, supporting the screen’s buy signal, but residual ~$25bn debt, cyclical fuel/macro sensitivity, and unpopulated screen metrics prevent full conviction without further deleveraging proof and Q3 FY2026 confirmation.
