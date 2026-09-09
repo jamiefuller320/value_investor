@@ -6457,7 +6457,7 @@ def test_parked_source_hunter_ackb_br_euro_depth_has_fetchable_ir():
 
 
 def test_parked_source_hunter_apam_as_euro_depth_has_fetchable_ir():
-    """eng-20260909-04: APAM.AS has live aperam.com FY2025 annual report PDF."""
+    """eng-20260909-05: APAM.AS has live aperam.com FY2025 annual report PDF (hunter confirmed)."""
     assert "APAM.AS" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("APAM.AS")
     assert len(rows) == 1
