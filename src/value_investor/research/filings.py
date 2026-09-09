@@ -205,6 +205,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "TTE.PA": [
         "https://totalenergies.com/system/files/documents/totalenergies_universal-registration-document-2025_2026_en.pdf",
     ],
+    # euro_depth IWB blocker — DG.PA unfetchable_iwb resolved; GlobeNewswire HTML → vinci.com PDFs.
+    "DG.PA": [
+        "https://www.vinci.com/sites/default/files/medias/file/2026/02/2025-vinci-consolidated-financial-statements.pdf",
+        "https://www.vinci.com/sites/default/files/medias/file/2026/07/2026-vinci_consolidated_interim_financial_statements.pdf",
+        "https://www.vinci.com/sites/default/files/medias/communiques/file/2026-07/CP%20VINCI%20H1%202026%20EN.pdf",
+        "https://www.vinci.com/sites/default/files/medias/communiques/file/2026-04/first-quarter-2026-stable-revenue-increase-in-order-intake.pdf",
+    ],
     # euro_depth IWB blocker — ab-inbev.com IR is age-gated; SEC 20-F / HY 6-K (CIK 1668717).
     "ABI.BR": [
         "https://www.sec.gov/Archives/edgar/data/1668717/000119312526088105/d65314d20f.htm",
@@ -3385,6 +3392,13 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     # eng-20260909-09: cairnhomes.com/investors is Cloudflare-gated; AR25 financials on CDN.
     "https://www.cairnhomes.com/investors/": (
         "https://cdn.prod.website-files.com/69b7ef256b857dda4aea6179/69c2b338210820632d00ff19_2a0d98224d9897df732ad96934d79ca9_Cairn%20Homes%20AR25%20Financial%20statementspdf.pdf"
+    ),
+    # eng-20260909-10: GlobeNewswire HTML IR rows fail validation; vinci.com statutory PDFs serve.
+    "https://www.globenewswire.com/news-release/2026/02/05/3233287/0/en/VINCI-2025-full-year-results-Outstanding-performance-record-free-cash-flow.html": (
+        "https://www.vinci.com/sites/default/files/medias/file/2026/02/2025-vinci-consolidated-financial-statements.pdf"
+    ),
+    "https://www.globenewswire.com/news-release/2026/04/23/3280202/0/en/VINCI-FIRST-QUARTER-2026-STABLE-REVENUE-INCREASE-IN-ORDER-INTAKE.html": (
+        "https://www.vinci.com/sites/default/files/medias/communiques/file/2026-04/first-quarter-2026-stable-revenue-increase-in-order-intake.pdf"
     ),
 }
 

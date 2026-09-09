@@ -5242,10 +5242,98 @@ def test_refetch_ir_allowlist_stops_at_deadline(tmp_path: Path, monkeypatch):
 def test_dg_pa_ir_allowlist_uses_vinci_pdfs_not_globenewswire_html():
     rows = fetch_filings_ir_allowlist("DG.PA")
     urls = [row["url"] for row in rows]
-    assert urls
+    assert len(urls) >= 4
     assert all("vinci.com" in url for url in urls)
     assert all("globenewswire.com/news-release" not in url for url in urls)
     assert any("2025-vinci-consolidated-financial-statements" in url for url in urls)
+    assert any("first-quarter-2026-stable-revenue-increase-in-order-intake" in url for url in urls)
+
+
+def test_fetch_filings_ir_allowlist_euro_depth_dg_pa_builtins(tmp_path: Path):
+    """Regression: DG.PA parked IWB — vinci.com FY2025 accounts + H1/Q1 statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("DG.PA", path=allowlist_path)
+    assert len(rows) == 4
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("2025-vinci-consolidated-financial-statements" in url for url in urls)
+    assert any("2026-vinci_consolidated_interim_financial_statements" in url for url in urls)
+    assert any("first-quarter-2026-stable-revenue-increase-in-order-intake" in url for url in urls)
+
+
+def test_load_ir_url_allowlist_canonicalizes_dg_pa_dead_globenewswire_urls(tmp_path: Path):
+    """Dead GlobeNewswire HTML URLs map to live vinci.com statutory PDFs."""
+    dead_annual = (
+        "https://www.globenewswire.com/news-release/2026/02/05/3233287/0/en/"
+        "VINCI-2025-full-year-results-Outstanding-performance-record-free-cash-flow.html"
+    )
+    dead_q1 = (
+        "https://www.globenewswire.com/news-release/2026/04/23/3280202/0/en/"
+        "VINCI-FIRST-QUARTER-2026-STABLE-REVENUE-INCREASE-IN-ORDER-INTAKE.html"
+    )
+    live_annual = _BUILTIN_IR_URLS["DG.PA"][0]
+    live_q1 = _BUILTIN_IR_URLS["DG.PA"][3]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"DG.PA": [dead_annual, dead_q1]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live_annual in mapping["DG.PA"]
+    assert live_q1 in mapping["DG.PA"]
+    assert dead_annual not in mapping["DG.PA"]
+    assert dead_q1 not in mapping["DG.PA"]
+
+
+def test_refetch_ir_allowlist_migrates_dg_pa_dead_globenewswire_url(tmp_path: Path, monkeypatch):
+    """Indexed unfetchable DG.PA GlobeNewswire annual row is rewritten to FY2025 accounts PDF."""
+    dead = (
+        "https://www.globenewswire.com/news-release/2026/02/05/3233287/0/en/"
+        "VINCI-2025-full-year-results-Outstanding-performance-record-free-cash-flow.html"
+    )
+    live = _BUILTIN_IR_URLS["DG.PA"][0]
+    allowlist_path = tmp_path / "ir_urls.json"
+    allowlist_path.write_text(json.dumps({"urls": {"DG.PA": [live]}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_5904e9509cae65e4",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — VINCI-2025-full-year-results.html",
+                        "url": dead,
+                        "period": "annual",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "allowlist_removed",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(_row, *, ticker, company_name="", investegate_cache=None):
+        return "Vinci SA consolidated income statement revenue operating income " * 20, "pdf"
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "DG.PA",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    row = saved["filings"][0]
+    assert row["url"] == live
+    assert row.get("unfetchable") is not True
+    assert row["has_body"] is True
 
 
 def test_abi_br_ir_allowlist_uses_sec_ab_inbev_not_bmv():
@@ -6617,6 +6705,17 @@ def test_parked_source_hunter_c5h_ir_euro_depth_has_fetchable_ir():
     assert rows[0]["period"] == "annual"
     assert "website-files.com" in rows[0]["url"]
     assert "AR25%20Financial%20statements" in rows[0]["url"]
+
+
+def test_parked_source_hunter_dg_pa_euro_depth_has_fetchable_ir():
+    """eng-20260909-10: DG.PA has live vinci.com FY2025 accounts + H1/Q1 statutory PDFs."""
+    assert "DG.PA" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("DG.PA")
+    assert len(rows) == 4
+    assert any("2025-vinci-consolidated-financial-statements" in row["url"] for row in rows)
+    assert any(
+        "first-quarter-2026-stable-revenue-increase-in-order-intake" in row["url"] for row in rows
+    )
 
 
 def test_parked_source_hunter_skip_abi_br_euro_depth():
