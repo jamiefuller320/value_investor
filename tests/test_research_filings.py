@@ -4271,6 +4271,19 @@ def test_fetch_filings_ir_allowlist_euro_depth_apam_as_builtins(tmp_path: Path):
     assert "AnnualReport_2025" in rows[0]["url"]
 
 
+def test_fetch_filings_ir_allowlist_euro_depth_bas_de_builtins(tmp_path: Path):
+    """Regression: BAS.DE awaiting_periodic_report — report.basf.com FY2025 annual PDF."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("BAS.DE", path=allowlist_path)
+    assert len(rows) == 1
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert rows[0]["period"] == "annual"
+    assert "report.basf.com" in rows[0]["url"]
+    assert "basf-ar25.pdf" in rows[0]["url"]
+
+
 def test_esef_entity_variants_include_aedifica_and_assa_abloy():
     from value_investor.research.filings import _esef_entity_name_variants
 
@@ -6477,7 +6490,7 @@ def test_parked_source_hunter_assa_b_st_euro_depth_has_fetchable_ir():
 
 
 def test_parked_source_hunter_bas_de_euro_depth_has_fetchable_ir():
-    """eng-20260908-25: BAS.DE has live report.basf.com FY2025 annual report PDF."""
+    """eng-20260909-08: BAS.DE has live report.basf.com FY2025 annual report PDF."""
     assert "BAS.DE" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("BAS.DE")
     assert len(rows) == 1
