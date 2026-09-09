@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-09T13:01:33.447705+00:00",
+  "generated_at": "2026-09-09T13:35:24.030156+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -38,7 +38,7 @@
       "1": "tsx60",
       "2": "asx200"
     },
-    "equal_support_generated_at": "2026-09-09T07:24:57.404424+00:00"
+    "equal_support_generated_at": "2026-09-09T13:10:02.870073+00:00"
   },
   "markets": [
     {
@@ -289,13 +289,13 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 2,
         "hold_near_buy_count": 65,
         "not_buy_tier_count": 145,
         "never_buy_tier_count": 128,
         "rememo_eligible_count": 0,
-        "exclusion_ready_for_priors": true
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 2,
@@ -758,13 +758,13 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 4,
         "hold_near_buy_count": 55,
         "not_buy_tier_count": 167,
         "never_buy_tier_count": 150,
-        "rememo_eligible_count": 7,
-        "exclusion_ready_for_priors": true
+        "rememo_eligible_count": 4,
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 4,
@@ -794,14 +794,12 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 18,
-        "targets": 173,
-        "improved": 86,
+        "run_count": 17,
+        "targets": 164,
+        "improved": 82,
         "improved_tickers": [
           "GGP.AX",
           "WDS.AX",
-          "MND.AX",
-          "CDA.AX",
           "SHL.AX",
           "WGX.AX",
           "AMC.AX",
@@ -809,7 +807,9 @@
           "JBH.AX",
           "EBO.AX",
           "FMG.AX",
-          "RRL.AX"
+          "RRL.AX",
+          "BSL.AX",
+          "BPT.AX"
         ],
         "last_run_at": "2026-09-09T13:00:26.623771+00:00",
         "runtime_cutoff_runs": 0,
@@ -818,7 +818,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 8,
+          "indexed_without_body": 4,
           "filing_gaps": 0
         },
         "gaps_after": {
@@ -832,7 +832,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 31,
+          "indexed_without_body": 35,
           "filing_gaps": 0
         },
         "remaining": {
@@ -999,13 +999,13 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 21,
         "not_buy_tier_count": 68,
         "never_buy_tier_count": 62,
-        "rememo_eligible_count": 8,
-        "exclusion_ready_for_priors": false
+        "rememo_eligible_count": 5,
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
@@ -1170,13 +1170,13 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 10,
         "hold_near_buy_count": 155,
         "not_buy_tier_count": 361,
         "never_buy_tier_count": 336,
-        "rememo_eligible_count": 49,
-        "exclusion_ready_for_priors": true
+        "rememo_eligible_count": 43,
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 10,
