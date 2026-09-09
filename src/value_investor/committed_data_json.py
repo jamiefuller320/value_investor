@@ -7,6 +7,7 @@ import json
 import sys
 from pathlib import Path
 
+# Git conflict markers only — not long pytest banners like "==== FAILURES ====".
 CONFLICT_MARKERS = ("<<<<<<<", "=======", ">>>>>>>")
 
 DEFAULT_PATHS: tuple[str, ...] = (
@@ -18,14 +19,30 @@ DEFAULT_PATHS: tuple[str, ...] = (
 )
 
 
+def _conflict_marker_in_text(text: str) -> str | None:
+    """Return a conflict marker if a git-style conflict line is present.
+
+    Matches only whole-line markers (optional surrounding whitespace). A bare
+    ``=======`` line is a conflict separator; longer ``====...====`` runs inside
+    stored pytest logs are not.
+    """
+    for raw in text.splitlines():
+        stripped = raw.strip()
+        if stripped.startswith("<<<<<<<") or stripped.startswith(">>>>>>>"):
+            return stripped[:7]
+        if stripped == "=======":
+            return "======="
+    return None
+
+
 def check_path(path: Path) -> list[str]:
     errors: list[str] = []
     if not path.exists():
         return errors
     text = path.read_text(encoding="utf-8")
-    for marker in CONFLICT_MARKERS:
-        if marker in text:
-            errors.append(f"{path}: contains merge conflict marker {marker!r}")
+    marker = _conflict_marker_in_text(text)
+    if marker is not None:
+        errors.append(f"{path}: contains merge conflict marker {marker!r}")
     try:
         json.loads(text)
     except json.JSONDecodeError as exc:
