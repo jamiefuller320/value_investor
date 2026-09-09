@@ -6415,7 +6415,7 @@ def test_refetch_ir_allowlist_migrates_andr_vi_dead_url(tmp_path: Path, monkeypa
 
 
 def test_parked_source_hunter_andr_vi_euro_depth_has_fetchable_ir():
-    """eng-20260908-21: ANDR.VI has live andritz.com FY2025 financial report PDF."""
+    """eng-20260909-03: ANDR.VI has live andritz.com FY2025 annual-report PDF (hunter confirmed)."""
     assert "ANDR.VI" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("ANDR.VI")
     assert len(rows) == 1
