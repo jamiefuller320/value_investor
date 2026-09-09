@@ -1422,9 +1422,10 @@ def expand_task_allowed_paths(
     if not added:
         return task, []
 
-    return mark_task_status(
+    # Avoid mark_task_status here — status writes refresh automation.json / latest.json
+    # and those paths are outside typical engineering allowlists (CI path-guard autofix).
+    return _update_task_queue(
         task_id,
-        str(task.status or "open"),
         path=path,
         committed_path=committed_path,
         allowed_paths=allowed,

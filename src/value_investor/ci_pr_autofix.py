@@ -43,6 +43,10 @@ _OUTSIDE_ALLOWED_RE = re.compile(r"outside allowed_paths:\s+([^\s(]+)")
 _INCIDENTAL_RESEARCH_ARTIFACT_RE = re.compile(
     r"^docs/(?:data/)?research/[^/]+/sources/[^/]+\.json$"
 )
+_LIBRARY_CACHE_JSON_RE = re.compile(r"^docs/data/library/[^/]+\.json$")
+_VOLATILE_JSON_KEYS = frozenset(
+    {"updated_at", "generated_at", "resolved_at", "compiled_at", "evaluated_at"}
+)
 
 
 @dataclass
@@ -146,7 +150,8 @@ def diagnose_pr_ci_failure(
     if "path_guard" in kinds and task_id:
         hints.append(
             f"Path guard: drop incidental `docs/research` / `docs/data/research` "
-            f"source artifacts, or add missing paths to `{task_id}` allowed_paths "
+            f"source artifacts, revert timestamp-only `docs/data/library` cache "
+            f"touching, or add missing paths to `{task_id}` allowed_paths "
             "(CI may auto-revert or auto-expand on engineering branches)."
         )
     if "pytest" in kinds and task_id:
@@ -233,6 +238,57 @@ def is_incidental_research_artifact(path: str) -> bool:
     return bool(_INCIDENTAL_RESEARCH_ARTIFACT_RE.fullmatch(normalize_repo_path(path)))
 
 
+def is_library_cache_json(path: str) -> bool:
+    """True for shared library cache JSON under docs/data/library/."""
+    return bool(_LIBRARY_CACHE_JSON_RE.fullmatch(normalize_repo_path(path)))
+
+
+def _strip_volatile_json_fields(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {
+            key: _strip_volatile_json_fields(item)
+            for key, item in value.items()
+            if key not in _VOLATILE_JSON_KEYS
+        }
+    if isinstance(value, list):
+        return [_strip_volatile_json_fields(item) for item in value]
+    return value
+
+
+def _read_json_at_ref(ref: str, path: str) -> Any | None:
+    proc = subprocess.run(
+        ["git", "show", f"{ref}:{path}"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        return None
+    try:
+        return json.loads(proc.stdout or "")
+    except (json.JSONDecodeError, TypeError):
+        return None
+
+
+def is_timestamp_only_library_cache_change(
+    path: str,
+    *,
+    base_ref: str,
+    head_ref: str = "HEAD",
+) -> bool:
+    """True when a library cache JSON differs from base only on volatile timestamp fields."""
+    normalized = normalize_repo_path(path)
+    if not normalized or not is_library_cache_json(normalized):
+        return False
+    if not path_exists_on_ref(base_ref, normalized):
+        return False
+    base_payload = _read_json_at_ref(base_ref, normalized)
+    head_payload = _read_json_at_ref(head_ref, normalized)
+    if base_payload is None or head_payload is None:
+        return False
+    return _strip_volatile_json_fields(base_payload) == _strip_volatile_json_fields(head_payload)
+
+
 def git_name_only_paths(*diff_args: str) -> list[str]:
     """Return normalized paths from ``git diff --name-only``."""
     proc = subprocess.run(
@@ -280,19 +336,27 @@ def path_exists_on_ref(ref: str, path: str) -> bool:
     return proc.returncode == 0
 
 
+def revert_tracked_path_from_base(path: str, *, base_ref: str) -> bool:
+    """Restore a tracked path from *base_ref*."""
+    normalized = normalize_repo_path(path)
+    if not normalized or not path_exists_on_ref(base_ref, normalized):
+        return False
+    proc = subprocess.run(
+        ["git", "checkout", base_ref, "--", normalized],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    return proc.returncode == 0
+
+
 def revert_incidental_research_artifact(path: str, *, base_ref: str) -> bool:
     """Restore *path* from *base_ref*, or delete it when it is new on the PR."""
     normalized = normalize_repo_path(path)
     if not normalized or not is_incidental_research_artifact(normalized):
         return False
     if path_exists_on_ref(base_ref, normalized):
-        proc = subprocess.run(
-            ["git", "checkout", base_ref, "--", normalized],
-            check=False,
-            capture_output=True,
-            text=True,
-        )
-        return proc.returncode == 0
+        return revert_tracked_path_from_base(normalized, base_ref=base_ref)
     target = Path(normalized)
     if target.exists() or target.is_symlink():
         target.unlink()
@@ -305,8 +369,50 @@ def revert_incidental_research_artifact(path: str, *, base_ref: str) -> bool:
     return (not target.exists()) and proc.returncode == 0
 
 
+def revert_timestamp_only_library_cache(
+    path: str, *, base_ref: str, head_ref: str = "HEAD"
+) -> bool:
+    """Drop no-op library cache timestamp refreshes instead of widening hunt allowlists."""
+    normalized = normalize_repo_path(path)
+    if not normalized or not is_timestamp_only_library_cache_change(
+        normalized,
+        base_ref=base_ref,
+        head_ref=head_ref,
+    ):
+        return False
+    return revert_tracked_path_from_base(normalized, base_ref=base_ref)
+
+
+def path_guard_effective_changed_paths(
+    *,
+    base_ref: str,
+    head_ref: str = "HEAD",
+    reverted: list[str],
+    allowed_paths_added: bool,
+) -> list[str]:
+    """Paths the PR would still change after path-guard autofix (committed range, not side effects)."""
+    changed = committed_changed_paths(base_ref, head_ref)
+    reverted_set = set(reverted)
+    effective = [path for path in changed if path not in reverted_set]
+    tasks_path = COMMITTED_TASKS_PATH.as_posix()
+    if allowed_paths_added and tasks_path not in effective:
+        effective.append(tasks_path)
+    return effective
+
+
+def autofix_skip_verify_pytest(actions: list[str], *, ci_failure_kinds: list[str]) -> bool:
+    """Skip full pytest replay when CI did not fail on pytest and autofix only touched safe files."""
+    if not actions:
+        return False
+    if set(actions).issubset(PATH_GUARD_ONLY_ACTIONS):
+        return True
+    # Ruff-only failures often never reach pytest in CI; replay uses main site-packages and
+    # fails on PR-added symbols/tests even when the PR test job would pass after the fix.
+    return actions == ["ruff"] and "pytest" not in ci_failure_kinds
+
+
 def path_guard_actions_skip_verify_pytest(actions: list[str]) -> bool:
-    """Full pytest is redundant when the original test job passed and we only touched path-guard files."""
+    """True when autofix actions are path-guard-only (legacy helper for tests)."""
     return bool(actions) and set(actions).issubset(PATH_GUARD_ONLY_ACTIONS)
 
 
@@ -390,6 +496,13 @@ def attempt_engineering_path_guard_autofix(
             reverted.append(path)
             logs.append(f"reverted incidental research artifact: {path}")
 
+    for path in violation_paths:
+        if path in reverted:
+            continue
+        if revert_timestamp_only_library_cache(path, base_ref=base_ref, head_ref=head_ref):
+            reverted.append(path)
+            logs.append(f"reverted timestamp-only library cache: {path}")
+
     remaining = [path for path in violation_paths if path not in reverted]
     expand_paths = list(dict.fromkeys([*remaining, *_suggest_companion_paths(remaining)]))
     added: list[str] = []
@@ -415,7 +528,12 @@ def attempt_engineering_path_guard_autofix(
         )
 
     try:
-        changed = working_tree_changed_paths(base_ref)
+        changed = path_guard_effective_changed_paths(
+            base_ref=base_ref,
+            head_ref=head_ref,
+            reverted=reverted,
+            allowed_paths_added=bool(added),
+        )
     except RuntimeError as exc:
         return AutofixResult(
             fixed=False,
@@ -443,11 +561,10 @@ def attempt_engineering_path_guard_autofix(
         actions.append("path_guard_expand")
         logs.append(f"expanded allowed_paths for {task_id}: {added}")
     if reverted and not added:
-        reason = f"dropped incidental research artifacts: {reverted}"
+        reason = f"reverted path-guard violations: {reverted}"
     elif reverted:
         reason = (
-            "dropped incidental research artifacts and expanded engineering "
-            f"allowed_paths for {task_id}"
+            f"reverted path-guard violations and expanded engineering allowed_paths for {task_id}"
         )
     else:
         reason = "expanded engineering allowed_paths for path guard"
@@ -457,7 +574,7 @@ def attempt_engineering_path_guard_autofix(
         reason=reason,
         logs=logs,
         actions=actions,
-        skip_verify_pytest=path_guard_actions_skip_verify_pytest(actions),
+        skip_verify_pytest=autofix_skip_verify_pytest(actions, ci_failure_kinds=kinds),
     )
 
 
@@ -542,6 +659,7 @@ def attempt_pr_ci_autofix(
         reason="ruff autofix applied and verified",
         logs=logs,
         actions=["ruff"],
+        skip_verify_pytest=autofix_skip_verify_pytest(["ruff"], ci_failure_kinds=kinds),
     )
 
 

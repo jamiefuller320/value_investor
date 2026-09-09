@@ -130,7 +130,7 @@ jobs:
             git add docs/data/engineering_tasks.json
           fi
           if [[ "$ACTIONS" == *"path_guard_revert"* ]]; then
-            git add -u -- docs/research docs/data/research || true
+            git add -u -- docs/research docs/data/research docs/data/library || true
           fi
           if [[ "$BRANCH" =~ ^cursor/eng-[0-9]{8}-[0-9]{2}-1de3$ ]]; then
             git diff --name-only origin/main > /tmp/changed_files.txt
@@ -163,7 +163,7 @@ jobs:
             git add docs/data/engineering_tasks.json
           fi
           if [[ "$ACTIONS" == *"path_guard_revert"* ]]; then
-            git add -u -- docs/research docs/data/research || true
+            git add -u -- docs/research docs/data/research docs/data/library || true
           fi
           if git diff --staged --quiet; then
             echo "pushed=false" >> "$GITHUB_OUTPUT"
