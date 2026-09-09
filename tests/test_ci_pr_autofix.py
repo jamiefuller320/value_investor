@@ -16,6 +16,8 @@ from value_investor.ci_pr_autofix import (
     classify_ci_log_failures,
     diagnose_pr_ci_failure,
     is_incidental_research_artifact,
+    is_library_cache_json,
+    is_timestamp_only_library_cache_change,
     parse_path_guard_violations,
     path_guard_actions_skip_verify_pytest,
     run_pr_ci_autofix_pipeline,
@@ -362,6 +364,182 @@ Engineering path guard failed for eng-20260908-09:
     allowed = payload["tasks"][0]["allowed_paths"]
     assert "docs/research/IMB.L/sources/screening_snapshot.json" not in allowed
     assert guard.ok
+
+
+def test_is_library_cache_json():
+    assert is_library_cache_json("docs/data/library/issuer_identifiers.json")
+    assert is_library_cache_json("docs/data/library/policy.json")
+    assert not is_library_cache_json("docs/data/latest.json")
+
+
+def test_is_timestamp_only_library_cache_change(tmp_path: Path):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_git_repo(repo)
+
+    cache_dir = repo / "docs" / "data" / "library"
+    cache_dir.mkdir(parents=True)
+    cache_path = cache_dir / "issuer_identifiers.json"
+    cache_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "updated_at": "2026-09-08T17:24:35.542729+00:00",
+                "issuers": {
+                    "ABI.BR": {
+                        "lei": "5493008H3828EMEXB082",
+                        "resolved_at": "2026-09-08T17:24:35.542722+00:00",
+                    }
+                },
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    subprocess.run(["git", "add", "."], cwd=repo, check=True)
+    subprocess.run(["git", "commit", "-m", "init"], cwd=repo, check=True)
+    subprocess.run(["git", "checkout", "-b", "feature"], cwd=repo, check=True)
+    cache_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "updated_at": "2026-09-09T05:53:32.524800+00:00",
+                "issuers": {
+                    "ABI.BR": {
+                        "lei": "5493008H3828EMEXB082",
+                        "resolved_at": "2026-09-09T05:53:32.524785+00:00",
+                    }
+                },
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    subprocess.run(["git", "add", cache_path], cwd=repo, check=True)
+    subprocess.run(["git", "commit", "-m", "timestamp refresh"], cwd=repo, check=True)
+
+    prev = os.getcwd()
+    os.chdir(repo)
+    try:
+        assert is_timestamp_only_library_cache_change(
+            "docs/data/library/issuer_identifiers.json",
+            base_ref="main",
+            head_ref="HEAD",
+        )
+    finally:
+        os.chdir(prev)
+
+
+def test_attempt_engineering_path_guard_autofix_reverts_library_cache_timestamp(
+    tmp_path: Path,
+):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_git_repo(repo)
+
+    data_dir = repo / "docs" / "data"
+    data_dir.mkdir(parents=True)
+    eng_path = data_dir / "engineering_tasks.json"
+    eng_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "eng-20260909-01",
+                        "area": "ingest",
+                        "title": "Hunt fetchable IR source for ABI.BR",
+                        "summary": "test",
+                        "priority": "low",
+                        "priority_score": 12.0,
+                        "source": "parked_source_hunter",
+                        "allowed_paths": ["tests/test_research_filings.py"],
+                        "blocked_paths": [],
+                        "status": "pr_open",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    cache_dir = data_dir / "library"
+    cache_dir.mkdir(parents=True)
+    cache_path = cache_dir / "issuer_identifiers.json"
+    cache_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "updated_at": "2026-09-08T17:24:35.542729+00:00",
+                "issuers": {
+                    "ABI.BR": {
+                        "lei": "5493008H3828EMEXB082",
+                        "resolved_at": "2026-09-08T17:24:35.542722+00:00",
+                    }
+                },
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    tests_dir = repo / "tests"
+    tests_dir.mkdir()
+    test_file = tests_dir / "test_research_filings.py"
+    test_file.write_text("def test_ok(): pass\n", encoding="utf-8")
+
+    subprocess.run(["git", "add", "."], cwd=repo, check=True)
+    subprocess.run(["git", "commit", "-m", "init"], cwd=repo, check=True)
+    subprocess.run(
+        ["git", "checkout", "-b", "cursor/eng-20260909-01-1de3"],
+        cwd=repo,
+        check=True,
+    )
+    cache_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "updated_at": "2026-09-09T05:53:32.524800+00:00",
+                "issuers": {
+                    "ABI.BR": {
+                        "lei": "5493008H3828EMEXB082",
+                        "resolved_at": "2026-09-09T05:53:32.524785+00:00",
+                    }
+                },
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    test_file.write_text("def test_ok():\n    assert True\n", encoding="utf-8")
+    subprocess.run(["git", "add", cache_path, test_file], cwd=repo, check=True)
+    subprocess.run(["git", "commit", "-m", "eng change"], cwd=repo, check=True)
+
+    log = """
+Engineering path guard failed for eng-20260909-01:
+  - outside allowed_paths: docs/data/library/issuer_identifiers.json
+"""
+    prev = os.getcwd()
+    os.chdir(repo)
+    try:
+        result = attempt_engineering_path_guard_autofix(
+            branch="cursor/eng-20260909-01-1de3",
+            base_ref="main",
+            head_ref="HEAD",
+            log_text=log,
+            tasks_path=eng_path,
+        )
+        guard = validate_engineering_pr_paths_for_task_id(
+            "eng-20260909-01",
+            ["tests/test_research_filings.py"],
+            tasks_path=eng_path,
+        )
+    finally:
+        os.chdir(prev)
+
+    assert result.fixed is True
+    assert result.actions == ["path_guard_revert"]
+    assert result.skip_verify_pytest is True
+    assert guard.ok
+    payload = json.loads(cache_path.read_text(encoding="utf-8"))
+    assert payload["updated_at"] == "2026-09-08T17:24:35.542729+00:00"
 
 
 def test_ci_bot_already_attempted_detects_prefix(tmp_path: Path):

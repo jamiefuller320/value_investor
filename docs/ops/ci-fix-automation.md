@@ -97,6 +97,9 @@ failed CI workflow:
      (`docs/research/*/sources/*.json`, `docs/data/research/*/sources/*.json`)
      — FCF overlay agents often dump `screening_snapshot.json` or
      `peer_model_pass_table.json` that unit tests do not need
+   - **Revert** timestamp-only `docs/data/library/*.json` cache refreshes
+     (e.g. `issuer_identifiers.json` where only `updated_at` / `resolved_at`
+     moved) instead of widening hunt-task allowlists
    - **Expand** remaining missing `allowed_paths` on the task in
      `docs/data/engineering_tasks.json`, then re-validates
 4. Verifies with scoped ruff + path guard (engineering branches). Full pytest
@@ -115,8 +118,12 @@ failed CI workflow:
 - Skips when the latest commit already starts with `chore(ci):` (one bot attempt per push)
 - Pytest and committed-data JSON failures are **diagnosed but not auto-fixed** on PRs
 - Path-guard expand only adds non-blocked paths; blocked paths still need agent/human edits
-- Path-guard revert drops incidental research source JSON instead of widening
-  scoring-task allowlists (same class of failure as PR 503 / PR 507)
+- Path-guard revert drops incidental research source JSON and timestamp-only
+  library cache edits instead of widening scoring/hunt-task allowlists (PR 503 /
+  PR 507 / PR 531)
+- Allowlist expand writes `engineering_tasks.json` without refreshing
+  `automation.json` / `latest.json` (those dashboard paths are outside typical
+  engineering allowlists and previously caused autofix verify to fail)
 - The path guard also allows companion tests for each allowed `src/` module
   (`src/value_investor/research/ingest.py` → `tests/test_research_ingest.py`) and
   `docs/data/engineering_tasks.json` so allowlist expands are not a self-violation
