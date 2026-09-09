@@ -1700,6 +1700,68 @@ def test_write_screening_snapshot_enforces_wix_style_fcf_note(tmp_path: Path):
     assert written["conviction_score"] == pytest.approx(0.8304 * 0.85)
 
 
+def test_enforce_fcf_basis_in_snapshot_without_research_verdict_wix_style():
+    """Stale WIX.L snapshots with overlay=false must still honour FCF mismatch notes."""
+    enforced = enforce_fcf_basis_in_snapshot(
+        {
+            "ticker": "WIX.L",
+            "signal": "buy",
+            "adjusted_signal": "buy",
+            "fcf_basis_overlay": False,
+            "conviction_score": 0.8304,
+            "action_note": (
+                "Buy — neutral timing | FCF basis mismatch: filing £168.7M | "
+                "screen TTM £133.9M | Earnings growth basis divergence >300 bps: "
+                "statutory 118.2% vs filing core 99.8%"
+            ),
+            "fcf": None,
+            "key_metrics": {
+                "FCF": "168700000.0",
+                "free_cashflow_screen_ttm": "133900000.0",
+            },
+        }
+    )
+    assert enforced["fcf_basis_overlay"] is True
+    assert enforced["adjusted_signal"] == "hold"
+    assert enforced["conviction_score"] == pytest.approx(0.8304 * 0.85)
+
+
+def test_enrich_signals_with_fcf_basis_overlay_caps_wix_style_universe_gap(tmp_path: Path):
+    """WIX.L-style ~21% filing/screen gap must cap buy in pipeline signals export."""
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "WIX.L",
+                "signal": "buy",
+                "adjusted_signal": "buy",
+                "conviction_score": 0.8304,
+                "free_cashflow": 168_700_000.0,
+                "free_cashflow_screen_ttm": 133_900_000.0,
+                "fcf_basis_overlay": False,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "WIX.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_fcf_basis_overlay(signals, model_results, output_dir=tmp_path)
+
+    assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "hold"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.8304 * 0.85)
+
+
 def test_enrich_signals_with_fcf_basis_overlay_honours_tpk_style_universe_gap(tmp_path: Path):
     """TPK.L-style 24% filing/screen gap must cap buy-tier signals in the pipeline."""
     sources = tmp_path / "research" / "TPK.L" / "sources"
