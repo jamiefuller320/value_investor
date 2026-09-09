@@ -312,6 +312,51 @@ jobs:
             AUTO_MERGE=true
           fi
 
+          retry_gh() {
+            local max_attempts=4 attempt=1 delay=5
+            while true; do
+              if "$@"; then return 0; fi
+              local status=$?
+              if [ "$attempt" -ge "$max_attempts" ]; then return "$status"; fi
+              echo "gh probe failed (attempt ${attempt}/${max_attempts}); retrying in ${delay}s…" >&2
+              sleep "$delay"
+              attempt=$((attempt + 1))
+              delay=$((delay * 2))
+            done
+          }
+          retry_gh gh pr list --state open --limit 50 \
+            --json number,title,headRefName,createdAt \
+            > /tmp/open_prs.json
+
+          git fetch origin main "$BRANCH"
+          git diff --name-only "origin/main...origin/$BRANCH" > /tmp/changed_files.txt
+
+          set +e
+          PREFLIGHT_JSON=$(ftse-engineering --json preflight \
+            --task-id "$TASK_ID" \
+            --branch "$BRANCH" \
+            --changed-files /tmp/changed_files.txt \
+            --open-prs-json /tmp/open_prs.json \
+            --skip-pytest \
+            --require-pass)
+          PREFLIGHT_RC=$?
+          set -e
+          if [ "$PREFLIGHT_RC" -ne 0 ]; then
+            echo "$PREFLIGHT_JSON"
+            REASON=$(python3 - <<'PY'
+          import json, os, sys
+          data = json.loads(sys.stdin.read() or "{}")
+          failed = [c for c in data.get("checks") or [] if not c.get("ok")]
+          print("; ".join(f"{c.get('name')}: {c.get('detail')}" for c in failed[:3]) or "preflight failed")
+          PY
+          <<<"$PREFLIGHT_JSON")
+            ftse-engineering park-task \
+              --task-id "$TASK_ID" \
+              --reason "preflight blocked PR open — ${REASON}" \
+              --parked-policy preflight_clash
+            exit 1
+          fi
+
           if [ "$(gh pr list --head "$BRANCH" --base main --json number --jq 'length')" = "0" ]; then
             DRAFT_FLAG=()
             BODY_SUFFIX="Draft PR — human merge required."
@@ -392,7 +437,7 @@ jobs:
             --task-id "${{ steps.task.outputs.task_id }}" \
             --branch "${{ steps.task.outputs.branch }}" \
             --result-path "output/engineering_result_${{ steps.task.outputs.task_id }}.md"
-          ftse-engineering refresh-queue-ui --json || true
+          ftse-engineering refresh-queue-ui --json --open-prs-json /tmp/open_prs.json || true
 
       - name: Sync main before pr_open queue commit
         if: >-
