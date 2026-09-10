@@ -523,3 +523,57 @@ def test_evaluate_hunter_merge_gate_unknown_already_resolved_message(tmp_path: P
     )
     assert not gate.ok
     assert "already resolved on base" in gate.reason
+
+
+def test_hunter_merge_gate_cli_skips_when_already_resolved_on_base(tmp_path: Path, monkeypatch):
+    import argparse
+
+    from value_investor.engineering_cli import _cmd_hunter_merge_gate
+
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_git_repo(repo)
+    _write_min_filings(
+        repo,
+        ticker="ESSITY-B.ST",
+        url="https://assets.www.essity.com/essity/Annual-Report-2025-digital.pdf",
+    )
+    _write_min_tests(repo, ticker="ESSITY-B.ST", slug="essity_b_st")
+    tasks_path = repo / "docs/data/engineering_tasks.json"
+    tasks_path.parent.mkdir(parents=True, exist_ok=True)
+    task = _hunter_task("ESSITY-B.ST")
+    task_row = task.to_dict()
+    task_row["id"] = "eng-20260910-04"
+    task_row["branch_name"] = "cursor/eng-20260910-04-1de3"
+    tasks_path.write_text(json.dumps({"tasks": [task_row]}), encoding="utf-8")
+    base = _commit_all(repo, "base")
+    filings = repo / "src/value_investor/research/filings.py"
+    filings.write_text(
+        "# comment-only follow-up\n" + filings.read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+    head = _commit_all(repo, "comment-only")
+    changed_path = repo / "changed.txt"
+    changed_path.write_text(
+        "src/value_investor/research/filings.py\ntests/test_research_filings.py\n",
+        encoding="utf-8",
+    )
+    monkeypatch.chdir(repo)
+    monkeypatch.setattr(
+        "value_investor.engineering_cli._resolve_tasks_path",
+        lambda _path=None: tasks_path,
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_cli.hunter_auto_merge_policy_tier",
+        lambda: "allowlist",
+    )
+    args = argparse.Namespace(
+        branch="cursor/eng-20260910-04-1de3",
+        tasks_path=str(tasks_path),
+        base_ref=base,
+        head_ref=head,
+        changed_files=str(changed_path),
+        skip_live_fetch=True,
+        json=False,
+    )
+    assert _cmd_hunter_merge_gate(args) == 0
