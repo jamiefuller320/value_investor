@@ -141,6 +141,53 @@
       "merged_at": "2026-09-09T17:11:22.608322+00:00"
     },
     {
+      "id": "eng-20260910-02",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked euro_depth leftover DTE.DE",
+      "summary": "Library market euro_depth (EU depth composite (STOXX50 + periphery)) parked DTE.DE after ingest avenues were exhausted (awaiting_periodic_report). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisi",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "hunter_market_id": "euro_depth",
+        "hunter_ticker": "DTE.DE",
+        "parked_reason": "awaiting_periodic_report",
+        "parked_revisit_when": "Next statutory annual or interim report is issued and indexed",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for DTE.DE only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260910-01",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked euro_depth leftover DQ7A.IR",
@@ -156,7 +203,22 @@
         "parked_reason": "awaiting_periodic_report",
         "parked_revisit_when": "Next statutory annual or interim report is issued and indexed",
         "universe": "library",
-        "doc": "docs/ops/library-ingest-escalation.md"
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260910-01",
+        "verified_at": "2026-09-10T08:39:34.149709+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_research_filings.py",
+            "tests/test_research_ingest.py",
+            "tests/test_gap_fill_deepen.py",
+            "tests/test_ingest_improvement.py",
+            "tests/test_companies_house.py",
+            "tests/test_engineering_preflight.py"
+          ],
+          "output_tail": "........................................................................ [ 22%]\n........................................................................ [ 44%]\n........................................................................ [ 66%]\n........................................................................ [ 88%]\n.......................................                                  [100%]\n327 passed in 99.67s (0:01:39)"
+        }
       },
       "acceptance_criteria": [
         "Inspect IR / exchange sources for DQ7A.IR only — do not invent URLs",
@@ -189,11 +251,14 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260910-01.md",
       "branch_name": "cursor/eng-20260910-01-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-10T06:55:08.284544+00:00"
+      "completed_at": "2026-09-10T06:55:08.284544+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/549",
+      "pr_number": 549,
+      "merged_at": "2026-09-10T08:39:34.150011+00:00"
     },
     {
       "id": "eng-20260909-10",
@@ -741,12 +806,23 @@
       "merged_at": "2026-09-09T08:28:25.598892+00:00"
     }
   ],
-  "compiled_at": "2026-09-10T06:52:35.040133+00:00",
-  "task_count": 11,
+  "compiled_at": "2026-09-10T08:39:41.520756+00:00",
+  "task_count": 12,
   "micro_compile_source": "parked_source_hunter",
   "library_market_id": "euro_depth",
-  "hunter_ticker": "DQ7A.IR",
+  "hunter_ticker": "DTE.DE",
   "ingest_health": {
+    "snapshot_at": "2026-09-10T08:37:50.834009+00:00",
+    "buy_tier_count": 61,
+    "measured_tickers": 61,
+    "unmeasured_buy_tier": 0,
+    "unmeasured_tickers": [],
+    "zero_body_buy_tier": 0,
+    "zero_body_tickers": [],
+    "indexed_without_body": 10,
+    "filings_with_body": 4096
+  },
+  "ingest_health_before": {
     "snapshot_at": "2026-09-10T06:51:05.177405+00:00",
     "buy_tier_count": 61,
     "measured_tickers": 61,
@@ -757,17 +833,6 @@
     "indexed_without_body": 10,
     "filings_with_body": 4085
   },
-  "ingest_health_before": {
-    "snapshot_at": "2026-09-09T23:11:33.832791+00:00",
-    "buy_tier_count": 61,
-    "measured_tickers": 61,
-    "unmeasured_buy_tier": 0,
-    "unmeasured_tickers": [],
-    "zero_body_buy_tier": 0,
-    "zero_body_tickers": [],
-    "indexed_without_body": 10,
-    "filings_with_body": 4085
-  },
-  "reprioritized_at": "2026-09-10T06:51:05.177587+00:00",
-  "reprioritized_after_task": "eng-20260909-10"
+  "reprioritized_at": "2026-09-10T08:37:50.834222+00:00",
+  "reprioritized_after_task": "eng-20260910-01"
 }
