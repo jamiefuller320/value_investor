@@ -162,8 +162,10 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://thenavigatorcompany.com/wp-content/uploads/2026/02/NVG_Divulgacao_Resultados_2025-1.pdf",
         "https://thenavigatorcompany.com/wp-content/uploads/2025/02/Navigator-l-Divulgacao_Resultados_2024.pdf",
     ],
+    # euro_depth parked DQ7A.IR — eng-20260910-01: prior allowlist misattributed DCC plc PDF.
     "DQ7A.IR": [
-        "https://www.dcc.ie/~/media/Files/D/Dcc-Corp-v3/documents/investors/annual-and-sustainability-reports/2025/annual-report-2025.pdf",
+        "https://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf",
+        "https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
     ],
     "NBA.LS": [
         "https://content.novabase.com/storage/uploads/relatorio-contas-novabase-2025-versao-ingles-nao-esef.pdf",
@@ -3392,6 +3394,10 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     # eng-20260909-09: cairnhomes.com/investors is Cloudflare-gated; AR25 financials on CDN.
     "https://www.cairnhomes.com/investors/": (
         "https://cdn.prod.website-files.com/69b7ef256b857dda4aea6179/69c2b338210820632d00ff19_2a0d98224d9897df732ad96934d79ca9_Cairn%20Homes%20AR25%20Financial%20statementspdf.pdf"
+    ),
+    # eng-20260910-01: DQ7A.IR allowlist wrongly pointed at DCC plc annual report.
+    "https://www.dcc.ie/~/media/Files/D/Dcc-Corp-v3/documents/investors/annual-and-sustainability-reports/2025/annual-report-2025.pdf": (
+        "https://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf"
     ),
     # eng-20260909-10: GlobeNewswire HTML IR rows fail validation; vinci.com statutory PDFs serve.
     "https://www.globenewswire.com/news-release/2026/02/05/3233287/0/en/VINCI-2025-full-year-results-Outstanding-performance-record-free-cash-flow.html": (
