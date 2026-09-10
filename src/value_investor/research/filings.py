@@ -371,6 +371,12 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "substantiveness gate; ab-inbev.com IR is age-gated/JS-only and statutory 20-F/ESEF "
         "plus HY EX-99.1 are already bodied via the SEC allowlist."
     ),
+    "NOVN.SW": (
+        "Leftover indexed-without-body rows are SEC 6-K cover HTML primaries below the "
+        "substantiveness gate; novartis.com IR is JS-only with no fetchable statutory PDFs, "
+        "Switzerland is outside ESEF, and same-day FORM 6-K/20-F are already bodied via "
+        "sec_edgar; EX-99.1 exhibits fetch but are not the indexed URLs."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.

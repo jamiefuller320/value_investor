@@ -6925,6 +6925,49 @@ def test_parked_source_hunter_skip_abi_br_euro_depth():
     assert any(row["url"].endswith("d175040d6k.htm") for row in rows)
 
 
+def test_parked_source_hunter_skip_novn_sw_euro_depth():
+    """eng-20260910-10: NOVN.SW leftover IWB is 6-K cover HTML; novartis IR is JS-only."""
+    assert "NOVN.SW" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["NOVN.SW"]
+    assert "6-K" in reason
+    assert "substantiveness" in reason
+    assert "JS-only" in reason
+    assert "ESEF" in reason
+    assert "20-F" in reason
+    assert "EX-99.1" in reason
+    assert fetch_filings_ir_allowlist("NOVN.SW") == []
+
+
+def test_novn_sw_leftover_6k_cover_fails_substantiveness_gate(monkeypatch):
+    """eng-20260910-10: NOVN.SW indexed-without-body row is Jul 2025 HY 6-K cover HTML."""
+    cover_html = """
+    <html><body>
+    <div>FORM 6-K REPORT OF FOREIGN PRIVATE ISSUER</div>
+    <p>Item 1 — Report on Form 6-K dated July 17, 2025.</p>
+    <p>Exhibit 99.1 — Financial Report Q2 2025 is attached hereto and incorporated by reference.</p>
+    <p>Exhibit 99.2 — Condensed financial statements are attached hereto.</p>
+    <p>101.INS XBRL Instance Document — tags embedded within the Inline XBRL document.</p>
+    <p>104 Cover Page Interactive Data File (formatted as Inline XBRL).</p>
+    <p>SIGNATURE Pursuant to the requirements of the Securities Exchange Act of 1934,
+    Novartis AG By: /s/ Paul Penepent Head of Financial Reporting and Accounting
+    Date: July 17, 2025</p>
+    </body></html>
+    """
+
+    def fake_http_get(url, headers=None, timeout=60):
+        if url.endswith("nvs-20250630.htm"):
+            return cover_html.encode("utf-8")
+        if url.endswith("0001370368-25-000012-index.htm"):
+            return b'<html><body><a href="nvs-20250630.htm">6-K</a></body></html>'
+        raise AssertionError(f"unexpected url {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_http_get)
+    body = fetch_filing_body(
+        "https://www.sec.gov/Archives/edgar/data/1114448/000137036825000012/nvs-20250630.htm"
+    )
+    assert body is None
+
+
 def test_abi_br_leftover_6k_cover_fails_substantiveness_gate(monkeypatch):
     """eng-20260909-01: ABI.BR indexed-without-body row is Jul 2026 HY 6-K cover HTML."""
     cover_html = """
