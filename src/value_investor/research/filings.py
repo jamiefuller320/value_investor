@@ -167,6 +167,11 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf",
         "https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
     ],
+    # euro_depth IWB blocker — EG7.IR parked unfetchable_iwb; prior allowlist misattributed C5H.IR hub.
+    "EG7.IR": [
+        "https://www.fbdgroup.com/sites/default/files/migrated/media/fbdgroup/files/2025_FBD_HOLDINGS_ANNUAL_REPORT.pdf",
+        "https://www.fbdgroup.com/sites/default/files/2026-08/2026-half-year-results-statement.pdf",
+    ],
     "NBA.LS": [
         "https://content.novabase.com/storage/uploads/relatorio-contas-novabase-2025-versao-ingles-nao-esef.pdf",
     ],
@@ -3437,28 +3442,59 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     ),
 }
 
+# Per-ticker dead URL overrides when a global canonical target would hit the wrong issuer.
+_IR_ALLOWLIST_TICKER_URL_CANONICAL: dict[str, dict[str, str]] = {
+    # eng-20260910-03: EG7.IR wrongly inherited cairnhomes.com/investors/ (C5H.IR hub).
+    "EG7.IR": {
+        "https://www.cairnhomes.com/investors/": (
+            "https://www.fbdgroup.com/sites/default/files/migrated/media/fbdgroup/files/2025_FBD_HOLDINGS_ANNUAL_REPORT.pdf"
+        ),
+    },
+    "EG7": {
+        "https://www.cairnhomes.com/investors/": (
+            "https://www.fbdgroup.com/sites/default/files/migrated/media/fbdgroup/files/2025_FBD_HOLDINGS_ANNUAL_REPORT.pdf"
+        ),
+    },
+}
 
-def _canonicalize_ir_url_list(urls: list[str]) -> list[str]:
+
+def _resolve_ir_allowlist_canonical(url: str, ticker: str = "") -> str:
+    cleaned = str(url or "").strip()
+    if not cleaned:
+        return cleaned
+    upper = str(ticker or "").strip().upper()
+    if upper:
+        for key in _ir_allowlist_ticker_keys(ticker):
+            override = (_IR_ALLOWLIST_TICKER_URL_CANONICAL.get(key) or {}).get(cleaned)
+            if override:
+                return override
+    return _IR_ALLOWLIST_URL_CANONICAL.get(cleaned, cleaned)
+
+
+def _canonicalize_ir_url_list(urls: list[str], *, ticker: str = "") -> list[str]:
     seen: set[str] = set()
     out: list[str] = []
     for url in urls:
         cleaned = str(url).strip()
         if not cleaned:
             continue
-        canon = _IR_ALLOWLIST_URL_CANONICAL.get(cleaned, cleaned)
+        canon = _resolve_ir_allowlist_canonical(cleaned, ticker)
         if canon not in seen:
             out.append(canon)
             seen.add(canon)
     return out
 
 
-def _migrate_ir_allowlist_row_url(row: dict[str, Any]) -> tuple[dict[str, Any], bool]:
+def _migrate_ir_allowlist_row_url(
+    row: dict[str, Any],
+    ticker: str = "",
+) -> tuple[dict[str, Any], bool]:
     """Rewrite indexed IR rows when a dead allowlist URL has a known live replacement."""
     item = dict(row)
     if not _is_ir_allowlist_row(item):
         return item, False
     url = str(item.get("url") or "").strip()
-    canon = _IR_ALLOWLIST_URL_CANONICAL.get(url, url)
+    canon = _resolve_ir_allowlist_canonical(url, ticker)
     if canon == url:
         return item, False
     item["url"] = canon
@@ -3535,7 +3571,9 @@ def load_ir_url_allowlist(path: Path | None = None) -> dict[str, list[str]]:
                     if cleaned:
                         file_urls[str(key).upper()] = cleaned
     merged = _merge_ir_url_lists(file_urls, _BUILTIN_IR_URLS)
-    return {ticker: _canonicalize_ir_url_list(urls) for ticker, urls in merged.items()}
+    return {
+        ticker: _canonicalize_ir_url_list(urls, ticker=ticker) for ticker, urls in merged.items()
+    }
 
 
 def _ir_allowlist_period_from_url(url: str) -> str:
@@ -4121,7 +4159,7 @@ def refetch_ir_allowlist_filing_bodies(
             pre_filings = list(pre_payload.get("filings") or [])
             refreshed_pre: list[dict[str, Any]] = []
             for row in pre_filings:
-                item, migrated = _migrate_ir_allowlist_row_url(row)
+                item, migrated = _migrate_ir_allowlist_row_url(row, ticker)
                 if migrated:
                     pre_merge_migrated += 1
                 refreshed_pre.append(item)
