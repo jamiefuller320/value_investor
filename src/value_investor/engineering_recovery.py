@@ -717,6 +717,22 @@ def recover_engineering_queue(
         apply=apply,
     )
 
+    from value_investor.hunter_auto_merge import reconcile_superseded_parked_hunter_tasks
+
+    for row in reconcile_superseded_parked_hunter_tasks(
+        tasks_path=tasks_path,
+        apply=apply,
+    ):
+        result.cancelled.append(
+            RecoveryAction(
+                task_id=str(row.get("task_id") or ""),
+                action="cancel_superseded_hunter",
+                reason=str(row.get("detail") or "hunter ticker already resolved on main"),
+                from_status=str(row.get("from_status") or "open"),
+                to_status="cancelled",
+            )
+        )
+
     result.cancelled.extend(
         cancel_resolved_workflow_failure_tasks(
             tasks_path=tasks_path,

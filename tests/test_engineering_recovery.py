@@ -200,6 +200,36 @@ def test_recover_engineering_queue_reconciles_orphans(tmp_path: Path):
     assert updated["tasks"][0]["status"] == "open"
 
 
+def test_recover_engineering_queue_cancels_superseded_hunter(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            {
+                "id": "eng-20260910-04",
+                "area": "ingest",
+                "title": "Hunt fetchable IR source for parked euro_depth leftover ESSITY-B.ST",
+                "summary": "x",
+                "priority": "low",
+                "priority_score": 12.0,
+                "source": "parked_source_hunter",
+                "status": "open",
+                "evidence": {
+                    "market_id": "euro_depth",
+                    "hunter_ticker": "ESSITY-B.ST",
+                },
+                "allowed_paths": ["src/value_investor/research/filings.py"],
+                "blocked_paths": [],
+            }
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    result = recover_engineering_queue(tasks_path=tasks_path, open_prs=[], apply=True)
+    assert any(row.action == "cancel_superseded_hunter" for row in result.cancelled)
+    updated = load_engineering_tasks(tasks_path)
+    assert updated["tasks"][0]["status"] == "cancelled"
+
+
 def test_mark_task_status_increments_failure_count(tmp_path: Path):
     tasks_path = tmp_path / "engineering_tasks.json"
     tasks_path.write_text(

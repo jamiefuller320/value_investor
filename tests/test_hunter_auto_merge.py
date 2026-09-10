@@ -18,11 +18,14 @@ from value_investor.engineering_verify import verify_merged_task
 from value_investor.hunter_auto_merge import (
     HunterFixKind,
     HunterOutcome,
+    HunterResolution,
     analyze_hunter_pr_diff,
     classify_hunter_fix_kind,
     evaluate_hunter_merge_gate,
     hunter_fix_eligible,
+    hunter_ticker_already_resolved_on_main,
     live_fetch_hunter_urls,
+    reconcile_superseded_parked_hunter_tasks,
     validate_hunter_diff_scope,
     verify_merged_hunter_allowlist_urls,
 )
@@ -460,3 +463,63 @@ def test_record_hunter_fix_attempt_merges_evidence(tmp_path: Path):
 def test_ci_log_shows_hunter_gate_failure():
     assert ci_log_shows_hunter_gate_failure("hunter-merge-gate: fail — missing test")
     assert not ci_log_shows_hunter_gate_failure("pytest failed: assert False")
+
+
+def test_hunter_ticker_already_resolved_on_main_detects_allowlist():
+    resolved, kind, detail = hunter_ticker_already_resolved_on_main("ESSITY-B.ST")
+    assert resolved
+    assert kind == HunterResolution.ALLOWLIST
+    assert "allowlist" in detail
+
+
+def test_reconcile_superseded_parked_hunter_tasks_cancels_open_task(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    task = _hunter_task("ESSITY-B.ST")
+    row = task.to_dict() | {"status": "open"}
+    tasks_path.write_text(json.dumps({"tasks": [row]}), encoding="utf-8")
+    cancelled = reconcile_superseded_parked_hunter_tasks(tasks_path=tasks_path)
+    assert len(cancelled) == 1
+    assert cancelled[0]["task_id"] == task.id
+    payload = load_engineering_tasks(tasks_path)
+    assert payload["tasks"][0]["status"] == "cancelled"
+    assert payload["tasks"][0]["evidence"]["superseded_resolution"] == "allowlist"
+
+
+def test_evaluate_hunter_merge_gate_unknown_already_resolved_message(tmp_path: Path):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_git_repo(repo)
+    _write_min_filings(
+        repo,
+        ticker="ESSITY-B.ST",
+        url="https://assets.www.essity.com/essity/Annual-Report-2025-digital.pdf",
+    )
+    _write_min_tests(repo, ticker="ESSITY-B.ST", slug="essity_b_st")
+    base = _commit_all(repo, "base")
+    filings = repo / "src/value_investor/research/filings.py"
+    filings.write_text(
+        "# euro_depth IWB blocker — comment-only follow-up\n" + filings.read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+    tests = repo / "tests/test_research_filings.py"
+    tests.write_text(
+        tests.read_text(encoding="utf-8")
+        + '\n\ndef test_parked_source_hunter_essity_b_st_comment_only():\n    assert True\n',
+        encoding="utf-8",
+    )
+    head = _commit_all(repo, "comment-only")
+    changed = [
+        "src/value_investor/research/filings.py",
+        "tests/test_research_filings.py",
+    ]
+    gate = evaluate_hunter_merge_gate(
+        task=_hunter_task("ESSITY-B.ST"),
+        changed_files=changed,
+        base_ref=base,
+        head_ref=head,
+        cwd=repo,
+        tier="allowlist",
+        skip_live_fetch=True,
+    )
+    assert not gate.ok
+    assert "already resolved on base" in gate.reason
