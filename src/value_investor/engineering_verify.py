@@ -76,6 +76,41 @@ def acceptance_test_paths(task: dict[str, Any] | EngineeringTask) -> list[str]:
     return paths
 
 
+def _path_allowed_for_task(path: str, allowed_test_paths: list[str]) -> bool:
+    token = str(path or "").strip().replace("\\", "/")
+    if not token:
+        return False
+    for allowed in allowed_test_paths:
+        if token == allowed:
+            return True
+        if allowed.endswith("/") and token.startswith(allowed):
+            return True
+    return False
+
+
+def preflight_pytest_paths(
+    task: dict[str, Any] | EngineeringTask,
+    changed_files: list[str] | None = None,
+) -> list[str]:
+    """Prefer changed test modules over the full acceptance suite for preflight."""
+    allowed = acceptance_test_paths(task)
+    if not allowed:
+        return []
+    changed = [
+        str(path or "").strip().replace("\\", "/")
+        for path in (changed_files or [])
+        if str(path or "").strip().endswith(".py")
+    ]
+    scoped = [
+        path
+        for path in changed
+        if path.startswith("tests/") and _path_allowed_for_task(path, allowed)
+    ]
+    if scoped:
+        return scoped
+    return allowed
+
+
 def verify_chain_root_id(task: dict[str, Any]) -> str:
     evidence = task.get("evidence") or {}
     root = str(evidence.get("verify_chain_root_id") or "").strip()

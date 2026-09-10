@@ -23,6 +23,7 @@ from value_investor.engineering_queue import (
     select_path_disjoint_engineering_tasks,
 )
 from value_investor.engineering_tasks import EngineeringTask
+from value_investor.engineering_verify import preflight_pytest_paths
 
 
 def _task(
@@ -242,6 +243,25 @@ def test_build_dashboard_includes_dispatch_metadata(tmp_path: Path, monkeypatch)
     row = dash["queued_tasks"][0]
     assert "dispatch_eligible" in row
     assert "clash_summary" in dash
+
+
+def test_preflight_pytest_paths_prefers_changed_test_modules():
+    task = _task(
+        "eng-20260726-01",
+        allowed_paths=[
+            "src/value_investor/research/filings.py",
+            "tests/test_research_filings.py",
+            "tests/test_research_ingest.py",
+        ],
+    )
+    scoped = preflight_pytest_paths(
+        task,
+        [
+            "src/value_investor/research/filings.py",
+            "tests/test_research_filings.py",
+        ],
+    )
+    assert scoped == ["tests/test_research_filings.py"]
 
 
 def test_run_local_preflight_path_guard(tmp_path: Path):

@@ -162,8 +162,10 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://thenavigatorcompany.com/wp-content/uploads/2026/02/NVG_Divulgacao_Resultados_2025-1.pdf",
         "https://thenavigatorcompany.com/wp-content/uploads/2025/02/Navigator-l-Divulgacao_Resultados_2024.pdf",
     ],
+    # euro_depth parked DQ7A.IR — eng-20260910-01: prior allowlist misattributed DCC plc PDF.
     "DQ7A.IR": [
-        "https://www.dcc.ie/~/media/Files/D/Dcc-Corp-v3/documents/investors/annual-and-sustainability-reports/2025/annual-report-2025.pdf",
+        "https://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf",
+        "https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
     ],
     "NBA.LS": [
         "https://content.novabase.com/storage/uploads/relatorio-contas-novabase-2025-versao-ingles-nao-esef.pdf",
@@ -374,6 +376,26 @@ _SEC_TICKER_ALIASES: dict[str, str] = {
     "LOGN": "LOGI",
     "C5H": "CRH",
     "GIB-A": "GIB",
+}
+
+# Verified dual-listed issuers — used when SEC company_tickers.json is unreachable (CI/rate limits).
+_SEC_TICKER_CIK_FALLBACK: dict[str, int] = {
+    "GIB": 1061574,
+    "SHEL": 1306965,
+    "NVS": 1114448,
+    "BUD": 1668717,
+    "LOGI": 1032975,
+    "CRH": 849395,
+}
+
+# Registrant names for _SEC_TICKER_CIK_FALLBACK — used when submissions metadata fetch fails.
+_SEC_ENTITY_NAME_FALLBACK: dict[int, str] = {
+    1061574: "CGI INC",
+    1306965: "Shell plc",
+    1114448: "NOVARTIS AG",
+    1668717: "Anheuser-Busch InBev SA/NV",
+    1032975: "LOGITECH INTERNATIONAL S.A.",
+    849395: "CRH PUBLIC LTD CO",
 }
 
 # Cross-listing inheritance for manual IR allowlist URLs (e.g. Amsterdam vs LSE Shell).
@@ -1995,7 +2017,7 @@ def _load_sec_ticker_cik_map() -> dict[str, int]:
         data = json.loads(payload.decode("utf-8"))
     except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
         logger.warning("SEC company_tickers fetch failed: %s", exc)
-        _sec_ticker_cik_cache = {}
+        _sec_ticker_cik_cache = dict(_SEC_TICKER_CIK_FALLBACK)
         return _sec_ticker_cik_cache
     mapping: dict[str, int] = {}
     if isinstance(data, dict):
@@ -2014,6 +2036,8 @@ def _load_sec_ticker_cik_map() -> dict[str, int]:
                 mapping[ticker] = int(cik)
             except (TypeError, ValueError):
                 continue
+    for ticker, cik in _SEC_TICKER_CIK_FALLBACK.items():
+        mapping.setdefault(ticker, cik)
     _sec_ticker_cik_cache = mapping
     return mapping
 
@@ -2040,9 +2064,9 @@ def _sec_submissions_entity_name(cik: int) -> str | None:
         data = json.loads(payload.decode("utf-8"))
     except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
         logger.debug("SEC submissions name lookup failed for CIK %s: %s", cik, exc)
-        return None
+        return _SEC_ENTITY_NAME_FALLBACK.get(cik)
     name = str(data.get("name") or "").strip()
-    return name or None
+    return name or _SEC_ENTITY_NAME_FALLBACK.get(cik)
 
 
 def _issuer_matches_sec_name(company_name: str, sec_name: str, ticker: str) -> bool:
@@ -3392,6 +3416,10 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     # eng-20260909-09: cairnhomes.com/investors is Cloudflare-gated; AR25 financials on CDN.
     "https://www.cairnhomes.com/investors/": (
         "https://cdn.prod.website-files.com/69b7ef256b857dda4aea6179/69c2b338210820632d00ff19_2a0d98224d9897df732ad96934d79ca9_Cairn%20Homes%20AR25%20Financial%20statementspdf.pdf"
+    ),
+    # eng-20260910-01: DQ7A.IR allowlist wrongly pointed at DCC plc annual report.
+    "https://www.dcc.ie/~/media/Files/D/Dcc-Corp-v3/documents/investors/annual-and-sustainability-reports/2025/annual-report-2025.pdf": (
+        "https://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf"
     ),
     # eng-20260909-10: GlobeNewswire HTML IR rows fail validation; vinci.com statutory PDFs serve.
     "https://www.globenewswire.com/news-release/2026/02/05/3233287/0/en/VINCI-2025-full-year-results-Outstanding-performance-record-free-cash-flow.html": (

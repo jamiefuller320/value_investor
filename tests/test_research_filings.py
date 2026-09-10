@@ -4057,6 +4057,20 @@ def test_fetch_filings_esef_direct_parses_xbrl_api(mock_get):
     assert rows[0]["period"] == "annual"
 
 
+def test_resolve_sec_cik_uses_fallback_when_company_tickers_unreachable(monkeypatch):
+    """Dual-listed alias resolution must survive SEC company_tickers.json outages."""
+    import value_investor.research.filings as filings_mod
+
+    monkeypatch.setattr(filings_mod, "_sec_ticker_cik_cache", None)
+
+    def _blocked(*args, **kwargs):
+        raise OSError("SEC blocked")
+
+    monkeypatch.setattr(filings_mod, "_http_get", _blocked)
+    assert resolve_sec_cik("GIB-A") is not None
+    assert _sec_edgar_supplement_allowed("SHELL.AS", "Shell plc") is True
+
+
 def test_resolve_sec_cik_euro_depth_dual_listed_aliases():
     assert resolve_sec_cik("SHELL") == resolve_sec_cik("SHEL")
     assert resolve_sec_cik("NOVN") == resolve_sec_cik("NVS")
@@ -4325,7 +4339,7 @@ def test_fetch_filings_ir_allowlist_euro_depth_periphery_builtins(tmp_path: Path
         "POST.VI": "post.at",
         "OMV.VI": "reports.omv.com",
         "NVG.LS": "thenavigatorcompany.com",
-        "DQ7A.IR": "dcc.ie",
+        "DQ7A.IR": "donegaligroup.com",
         "NBA.LS": "novabase.com",
         "MUV2.DE": "munichre.com",
         "DOC.VI": "doco.com",
@@ -5891,7 +5905,15 @@ def test_asx_statistics_listing_page_is_index_noise():
     "value_investor.research.filings._sec_edgar_supplement_allowed",
     return_value=False,
 )
+@patch(
+    "value_investor.research.filings._fetch_ir_allowlist_body",
+    return_value=(
+        "CGI Inc. annual report on Form 40-F for the fiscal year ended September 2025.",
+        None,
+    ),
+)
 def test_ingest_filings_tsx60_gib_a_indexes_ir_allowlist_bodies(
+    _mock_ir_body,
     _mock_sec_ok,
     _mock_tsx_news,
     tmp_path: Path,
@@ -6716,6 +6738,45 @@ def test_parked_source_hunter_dg_pa_euro_depth_has_fetchable_ir():
     assert any(
         "first-quarter-2026-stable-revenue-increase-in-order-intake" in row["url"] for row in rows
     )
+
+
+def test_fetch_filings_ir_allowlist_euro_depth_dq7a_ir_builtins(tmp_path: Path):
+    """Regression: DQ7A.IR awaiting_periodic_report — donegaligroup.com FY2025 AR + H1 PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("DQ7A.IR", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("annual-report-financial-statements-310825" in url for url in urls)
+    assert any("stock-exchange-release-280225" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+
+
+def test_load_ir_url_allowlist_canonicalizes_dq7a_ir_misattributed_dcc_url(tmp_path: Path):
+    """Dead DCC plc PDF misattributed to DQ7A.IR maps to Donegal FY2025 annual report."""
+    dead = (
+        "https://www.dcc.ie/~/media/Files/D/Dcc-Corp-v3/documents/investors/"
+        "annual-and-sustainability-reports/2025/annual-report-2025.pdf"
+    )
+    live = _BUILTIN_IR_URLS["DQ7A.IR"][0]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"DQ7A.IR": [dead]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live in mapping["DQ7A.IR"]
+    assert dead not in mapping["DQ7A.IR"]
+    rows = fetch_filings_ir_allowlist("DQ7A.IR", path=path)
+    assert any(row["url"] == live for row in rows)
+
+
+def test_parked_source_hunter_dq7a_ir_euro_depth_has_fetchable_ir():
+    """eng-20260910-01: DQ7A.IR has live donegaligroup.com FY2025 AR + H1 stock-exchange PDFs."""
+    assert "DQ7A.IR" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("DQ7A.IR")
+    assert len(rows) == 2
+    assert any("annual-report-financial-statements-310825" in row["url"] for row in rows)
+    assert any("stock-exchange-release-280225" in row["url"] for row in rows)
 
 
 def test_parked_source_hunter_skip_abi_br_euro_depth():
