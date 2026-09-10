@@ -8421,8 +8421,116 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260910-02",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "SU.TO",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "SU.TO"
+        ],
+        "market_id": "tsx60",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260910-02",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-10T14:02:55.502084+00:00",
+      "completed_at": "2026-09-10T14:05:45.700578+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "SU.TO"
+        ],
+        "results": [
+          {
+            "ticker": "SU.TO",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 41,
+              "filings_with_body": 16,
+              "indexed_without_body": 25
+            },
+            "after": {
+              "filings_total": 41,
+              "filings_with_body": 16,
+              "indexed_without_body": 25
+            },
+            "improved": false,
+            "regime": "tsx_announcements",
+            "filings_summary": {
+              "total": 41,
+              "annual": 1,
+              "interim": 34,
+              "trading_update": 0,
+              "other": 6,
+              "with_body": 16,
+              "period_coverage": {
+                "annual": {
+                  "total": 1,
+                  "with_body": 1
+                },
+                "interim": {
+                  "total": 34,
+                  "with_body": 9
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 6,
+                  "with_body": 6
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 16,
+              "with_body_after": 16,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "SU.TO",
+            "with_body_before": 16,
+            "with_body_after": 16,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown",
+      "engineering_task_id": "eng-20260910-15"
     }
   ],
-  "updated_at": "2026-09-10T11:21:40.624469+00:00",
+  "updated_at": "2026-09-10T14:05:45.796135+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
