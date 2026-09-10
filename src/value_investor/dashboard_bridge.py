@@ -208,7 +208,9 @@ def process_pending_dashboard_commands(
         if dry_run:
             processed.append({"id": command_id, "action": row.get("action"), "dry_run": True})
             continue
-        update_command_status(cfg, command_id, status="processing", message="Dispatching GitHub event")
+        update_command_status(
+            cfg, command_id, status="processing", message="Dispatching GitHub event"
+        )
         try:
             result = execute_dashboard_command(row, config=cfg)
             update_command_status(
@@ -221,7 +223,12 @@ def process_pending_dashboard_commands(
         except Exception as exc:  # noqa: BLE001 — record per-command failure
             update_command_status(cfg, command_id, status="failed", message=str(exc))
             processed.append(
-                {"id": command_id, "action": row.get("action"), "status": "failed", "error": str(exc)}
+                {
+                    "id": command_id,
+                    "action": row.get("action"),
+                    "status": "failed",
+                    "error": str(exc),
+                }
             )
     return {"ok": True, "processed": processed, "pending_count": len(pending)}
 

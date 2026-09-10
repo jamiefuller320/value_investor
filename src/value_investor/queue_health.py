@@ -74,7 +74,9 @@ def _merge_lane_snapshot(
         nums = ", ".join(f"#{row['number']}" for row in eng_prs if row.get("number"))
         detail = f"Open engineering PR(s) {nums or 'present'} — merge fires on CI success."
     elif in_flight_pr:
-        detail = f"In-flight PR #{in_flight_pr} — auto-merge is event-driven (not a background merger)."
+        detail = (
+            f"In-flight PR #{in_flight_pr} — auto-merge is event-driven (not a background merger)."
+        )
 
     return {
         "state": _lane_state(idle=idle, running=running and not blocked, blocked=blocked),
