@@ -50,7 +50,7 @@ items, and integration / role-coherence warnings.
 
 | Control | Behaviour |
 |---------|-----------|
-| **Generate fresh report** | Local: `POST /api/progress-report` via `ftse-dashboard-serve`. On GitHub Pages: dispatches the `progress-report` Actions workflow (requires a fine-grained PAT with Actions: Write stored in this browser via **Pages token**), then waits for Pages to publish the new JSON |
+| **Generate fresh report** | Local: `POST /api/progress-report` via `ftse-dashboard-serve`. On GitHub Pages: Supabase bridge (`data/dashboard_config.json`, see [`dashboard-bridge.md`](dashboard-bridge.md)) or legacy PAT dispatch of `progress-report` workflow |
 | **Reload** | Re-fetches published dashboard JSON (cache-busted; same as a full page load, including market status). Local serve also `POST /api/refresh` to rebuild `market_status.json` first |
 | **View full report** | Opens `data/progress_report.md` in the memo dialog |
 | **Pages token** | Save / clear the browser-local PAT used for Pages generate (never committed) |

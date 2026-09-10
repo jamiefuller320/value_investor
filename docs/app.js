@@ -424,6 +424,7 @@ const DASHBOARD_SIDECARS = [
   ["market_status", "data/market_status.json"],
   ["system_gaps", "data/system_gaps.json"],
   ["progress_report", "data/progress_report.json"],
+  ["queue_health", "data/queue_health.json"],
   ["chart_outcome_review", "data/chart_outcome_review.json"],
   ["engineering_tasks", "data/engineering_tasks.json"],
   ["ingest_deviations", "data/ingest_deviations.json"],
@@ -495,6 +496,14 @@ function bindDashboardAutoRefresh() {
     if (Date.now() - dashboardLastLoadedAt < DASHBOARD_VISIBLE_RELOAD_MS) return;
     void reloadDashboard({ silent: true, rebuild: true });
   });
+  if (window.DashboardBridge) {
+    void window.DashboardBridge.init().then((ready) => {
+      if (!ready) return;
+      window.DashboardBridge.onArtifactUpdated(() => {
+        void reloadDashboard({ silent: true, rebuild: true });
+      });
+    });
+  }
 }
 
 async function openProgressReportMarkdown() {
@@ -645,6 +654,25 @@ async function generateProgressReportViaGithubActions(token) {
   );
 }
 
+async function generateProgressReportViaBridge(onStatus) {
+  const previousGeneratedAt =
+    dashboardData && dashboardData.progress_report
+      ? dashboardData.progress_report.generated_at
+      : null;
+  await window.DashboardBridge.submitCommand(
+    "progress-report",
+    { force: true },
+    onStatus
+  );
+  setProgressReportStatus("Workflow finished — waiting for Pages…");
+  const report = await waitForPublishedProgressReport(previousGeneratedAt, onStatus);
+  setProgressReportStatus("Published — refreshing dashboard…");
+  await reloadDashboard({ silent: true, rebuild: true });
+  setProgressReportStatus(
+    `Generated ${fmtDate(report.generated_at)} · overall ${String(report.overall || "").toUpperCase()}`
+  );
+}
+
 async function generateProgressReportFromUi() {
   const btn = document.getElementById("progress-report-generate-btn");
   if (btn) btn.disabled = true;
@@ -683,10 +711,24 @@ async function generateProgressReportFromUi() {
       setProgressReportStatus(`Generate failed: ${err.message}`, true);
       return;
     }
+    if (window.DashboardBridge) {
+      try {
+        const bridgeReady = await window.DashboardBridge.init();
+        if (bridgeReady) {
+          await generateProgressReportViaBridge(setProgressReportStatus);
+          return;
+        }
+      } catch (bridgeErr) {
+        if (String(bridgeErr.message) !== "BRIDGE_DISABLED") {
+          setProgressReportStatus(`Bridge generate failed: ${bridgeErr.message}`, true);
+          return;
+        }
+      }
+    }
     const token = getProgressReportPat();
     if (!token) {
       showProgressReportPatPrompt(
-        "Local generate API unavailable (GitHub Pages is static). Save a PAT to run Actions from this button, or open Actions and click Run workflow."
+        "Configure Supabase in data/dashboard_config.json (recommended) or save a PAT to dispatch Actions from this button."
       );
       return;
     }
@@ -2980,6 +3022,80 @@ function renderHumanTasksChecklistSection(checklist) {
     </section>`;
 }
 
+function queueLaneBadge(state) {
+  const key = String(state || "unknown").toLowerCase();
+  const labels = {
+    idle: "idle",
+    running: "running",
+    active: "active",
+    blocked: "blocked",
+    unknown: "unknown",
+  };
+  const cls = {
+    idle: "queue-lane-idle",
+    running: "queue-lane-active",
+    active: "queue-lane-active",
+    blocked: "queue-lane-blocked",
+    unknown: "queue-lane-unknown",
+  };
+  return `<span class="queue-lane-badge ${cls[key] || "queue-lane-unknown"}">${esc(labels[key] || key)}</span>`;
+}
+
+function resolveQueueHealth(data) {
+  if (data.queue_health) return data.queue_health;
+  const auto = data.automation || {};
+  return auto.queue_health || null;
+}
+
+function renderQueueHealthMonitor(data) {
+  const health = resolveQueueHealth(data);
+  const runbookUrl = githubOpsDocUrl("docs/ops/dashboard-bridge.md");
+  if (!health) {
+    return `
+      <section class="automation-section automation-section-full queue-health-section">
+        <h2>Queue &amp; hunter monitor</h2>
+        <p class="muted small">Queue health snapshot not published yet. Runs with ops monitor / engineering queue refresh.</p>
+      </section>`;
+  }
+
+  const merge = health.merge_lane || {};
+  const agent = health.agent_lane || {};
+  const clearing = health.queue_clearing || {};
+  const ops = health.ops_monitor || {};
+
+  return `
+    <section class="automation-section automation-section-full queue-health-section">
+      <h2>Queue &amp; hunter monitor ${overallStatusBadge(health.overall)}</h2>
+      <p class="small" style="margin-top:0">${esc(health.headline || "—")}</p>
+      <p class="small muted">Updated ${esc(fmtDate(health.generated_at))}
+        ${runbookUrl ? ` · <a href="${esc(runbookUrl)}" target="_blank" rel="noopener">Bridge runbook</a>` : ""}
+      </p>
+      <div class="grid queue-health-grid" style="margin-top:0.75rem">
+        <div class="card queue-health-lane">
+          <h3>Merge lane ${queueLaneBadge(merge.state)}</h3>
+          <p class="small">${esc(merge.detail || "—")}</p>
+          ${settingRow("PR open", esc(String(merge.pr_open_count ?? 0)))}
+        </div>
+        <div class="card queue-health-lane">
+          <h3>Agent / hunter lane ${queueLaneBadge(agent.state)}</h3>
+          <p class="small">${esc(agent.detail || "—")}</p>
+          ${settingRow("Should dispatch", agent.should_dispatch ? "yes" : "no")}
+          ${agent.next_task_id ? settingRow("Next task", `<code>${esc(agent.next_task_id)}</code>`) : ""}
+          ${clearing.pause_active ? settingRow("Backlog pause", `<span class="badge badge-ii-no">active</span> (${esc(String(clearing.attention_parked_count ?? 0))} parked)`) : ""}
+        </div>
+        <div class="card queue-health-lane">
+          <h3>Ops monitor ${ops.overall ? overallStatusBadge(ops.overall) : ""}</h3>
+          <p class="small muted">${ops.run_at ? `Last run ${esc(fmtDate(ops.run_at))}` : "No ops_status yet"}</p>
+          ${settingRow("Dispatch signal", ops.should_dispatch_engineering ? "ready" : "hold")}
+        </div>
+      </div>
+      <p class="small muted" style="margin-top:0.75rem">
+        Auto-merge is <strong>event-driven</strong> (green CI → merge workflow), not a background merger.
+        The agent lane runs when the hourly queue dispatches <code>engineering-agent</code>.
+      </p>
+    </section>`;
+}
+
 function renderEngineeringQueueSection(queue) {
   if (!queue) {
     return `
@@ -3569,6 +3685,7 @@ function renderAutomation(data) {
         ${timelineHtml}
       </section>
     </div>
+    ${renderQueueHealthMonitor(data)}
     ${renderEngineeringQueueSection(engineeringQueue)}
   `;
 }
