@@ -6822,6 +6822,94 @@ def test_parked_source_hunter_dq7a_ir_euro_depth_has_fetchable_ir():
     assert any("stock-exchange-release-280225" in row["url"] for row in rows)
 
 
+def test_fetch_filings_ir_allowlist_euro_depth_eg7_ir_builtins(tmp_path: Path):
+    """Regression: EG7.IR parked IWB — fbdgroup.com FY2025 annual report + H1 2026 statement PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("EG7.IR", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("2025_FBD_HOLDINGS_ANNUAL_REPORT.pdf" in url for url in urls)
+    assert any("2026-half-year-results-statement.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
+def test_load_ir_url_allowlist_canonicalizes_eg7_ir_misattributed_c5h_url(tmp_path: Path):
+    """Dead cairnhomes.com/investors hub misattributed to EG7.IR maps to FBD FY2025 annual report."""
+    dead = "https://www.cairnhomes.com/investors/"
+    live = _BUILTIN_IR_URLS["EG7.IR"][0]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"EG7.IR": [dead]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live in mapping["EG7.IR"]
+    assert dead not in mapping["EG7.IR"]
+    cairn_cdn = _BUILTIN_IR_URLS["C5H.IR"][0]
+    assert cairn_cdn not in mapping["EG7.IR"]
+    rows = fetch_filings_ir_allowlist("EG7.IR", path=path)
+    assert any(row["url"] == live for row in rows)
+
+
+def test_parked_source_hunter_eg7_ir_euro_depth_has_fetchable_ir():
+    """eng-20260910-03: EG7.IR has live fbdgroup.com FY2025 annual report + H1 2026 PDFs."""
+    assert "EG7.IR" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("EG7.IR")
+    assert len(rows) == 2
+    assert any("2025_FBD_HOLDINGS_ANNUAL_REPORT.pdf" in row["url"] for row in rows)
+    assert any("2026-half-year-results-statement.pdf" in row["url"] for row in rows)
+
+
+def test_refetch_ir_allowlist_migrates_eg7_ir_dead_cairnhomes_url(tmp_path: Path, monkeypatch):
+    """Indexed unfetchable EG7.IR cairnhomes hub row is rewritten to FBD FY2025 annual report PDF."""
+    dead = "https://www.cairnhomes.com/investors/"
+    live = _BUILTIN_IR_URLS["EG7.IR"][0]
+    allowlist_path = tmp_path / "ir_urls.json"
+    allowlist_path.write_text(json.dumps({"urls": {"EG7.IR": [live]}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_91d81355c5e2a7d6",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — https://www.cairnhomes.com/investors/",
+                        "url": dead,
+                        "period": "interim",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "ir_allowlist_fetch_failed",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(_row, *, ticker, company_name="", investegate_cache=None):
+        return "FBD Holdings plc consolidated income statement gross written premium " * 20, "pdf"
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "EG7.IR",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    row = saved["filings"][0]
+    assert row["url"] == live
+    assert row.get("unfetchable") is not True
+    assert row["has_body"] is True
+
+
 def test_parked_source_hunter_skip_abi_br_euro_depth():
     """eng-20260909-01: re-hunt — leftover IWB is 6-K cover HTML; ab-inbev IR is JS-only."""
     assert "ABI.BR" in PARKED_SOURCE_HUNTER_SKIP
