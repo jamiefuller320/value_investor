@@ -75,6 +75,17 @@ from value_investor.engineering_tasks import (
     validate_engineering_pr_paths_for_task_id,
 )
 from value_investor.engineering_verify import verify_merged_task
+from value_investor.hunter_auto_merge import (
+    evaluate_hunter_merge_gate,
+    hunter_auto_merge_policy_tier,
+    is_parked_source_hunter_task,
+    load_hunter_task_for_branch,
+)
+from value_investor.hunter_verify_agent import (
+    format_observer_pr_comment,
+    post_pr_comment,
+    run_hunter_verify_observer,
+)
 from value_investor.storage import read_json
 
 
@@ -849,6 +860,130 @@ def _cmd_try_auto_merge(args: argparse.Namespace) -> int:
     return 0 if decision.should_merge or args.allow_skip else 1
 
 
+def _cmd_hunter_merge_gate(args: argparse.Namespace) -> int:
+    branch = str(args.branch or "").strip()
+    if not branch:
+        print("--branch is required", file=sys.stderr)
+        return 2
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    task = load_hunter_task_for_branch(branch, tasks_path=tasks_path)
+    if task is None:
+        if args.json:
+            _print_json({"ok": True, "reason": "unknown engineering task — skipped"})
+        else:
+            print("hunter-merge-gate: skipped (unknown task)")
+        return 0
+    if not is_parked_source_hunter_task(task):
+        if args.json:
+            _print_json({"ok": True, "reason": "not a parked_source_hunter task — skipped"})
+        else:
+            print("hunter-merge-gate: skipped (not hunter task)")
+        return 0
+    tier = hunter_auto_merge_policy_tier()
+    if tier == "off":
+        if args.json:
+            _print_json({"ok": True, "reason": "parked_hunter auto-merge disabled — skipped", "tier": tier})
+        else:
+            print("hunter-merge-gate: skipped (policy off)")
+        return 0
+
+    base_ref = str(args.base_ref or "origin/main")
+    head_ref = str(args.head_ref or "HEAD")
+    changed_path = Path(args.changed_files) if args.changed_files else None
+    if changed_path is not None:
+        changed_files = [
+            line.strip()
+            for line in changed_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+    else:
+        result = subprocess.run(
+            ["git", "diff", "--name-only", f"{base_ref}...{head_ref}"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        changed_files = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+
+    gate = evaluate_hunter_merge_gate(
+        task=task,
+        changed_files=changed_files,
+        base_ref=base_ref,
+        head_ref=head_ref,
+        tier=tier,
+        skip_live_fetch=bool(args.skip_live_fetch),
+    )
+    if args.json:
+        _print_json(gate.to_dict())
+    elif gate.ok:
+        print(f"hunter-merge-gate: pass — {gate.reason}")
+    else:
+        print(f"hunter-merge-gate: fail — {gate.reason}", file=sys.stderr)
+    return 0 if gate.ok else 1
+
+
+def _cmd_hunter_verify_observer(args: argparse.Namespace) -> int:
+    """Non-blocking observer — always exits 0 unless --strict."""
+    branch = str(args.branch or "").strip()
+    if not branch:
+        print("--branch is required", file=sys.stderr)
+        return 2
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    task = load_hunter_task_for_branch(branch, tasks_path=tasks_path)
+    if task is None:
+        if args.json:
+            _print_json({"skipped": True, "reason": "unknown task"})
+        else:
+            print("hunter-verify-observer: skipped (unknown task)")
+        return 0
+
+    base_ref = str(args.base_ref or "origin/main")
+    head_ref = str(args.head_ref or "HEAD")
+    changed_path = Path(args.changed_files) if args.changed_files else None
+    if changed_path is not None:
+        changed_files = [
+            line.strip()
+            for line in changed_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+    else:
+        result = subprocess.run(
+            ["git", "diff", "--name-only", f"{base_ref}...{head_ref}"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        changed_files = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+
+    api_key = None if args.skip_agent else resolve_cursor_api_key()
+    observer = run_hunter_verify_observer(
+        task=task,
+        changed_files=changed_files,
+        base_ref=base_ref,
+        head_ref=head_ref,
+        pr_number=args.pr_number,
+        output_dir=Path(args.output_dir),
+        api_key=api_key,
+        skip_agent=bool(args.skip_agent),
+    )
+    if args.pr_number is not None and not args.no_comment:
+        comment = format_observer_pr_comment(observer)
+        ok, detail = post_pr_comment(pr_number=int(args.pr_number), body=comment)
+        if not ok:
+            print(f"hunter-verify-observer: comment failed: {detail}", file=sys.stderr)
+
+    if args.json:
+        _print_json(observer.to_dict())
+    else:
+        print(
+            f"hunter-verify-observer: verdict={observer.verdict} "
+            f"skipped={observer.skipped}"
+        )
+    if args.strict and observer.verdict == "reject":
+        return 1
+    return 0
+
+
 def _cmd_reprioritize(args: argparse.Namespace) -> int:
     tasks_path = _resolve_tasks_path(args.tasks_path)
     result = reprioritize_queue_after_ingest_merge(
@@ -1477,6 +1612,49 @@ def main(argv: list[str] | None = None) -> int:
         help="Exit 0 when auto-merge is not applicable (for workflow conditions)",
     )
     try_merge_p.set_defaults(func=_cmd_try_auto_merge)
+
+    hunter_gate_p = sub.add_parser(
+        "hunter-merge-gate",
+        parents=[common],
+        help="CI gate for parked_source_hunter auto-merge (SKIP + allowlist live-fetch)",
+    )
+    hunter_gate_p.add_argument("--branch", required=True)
+    hunter_gate_p.add_argument("--base-ref", default="origin/main")
+    hunter_gate_p.add_argument("--head-ref", default="HEAD")
+    hunter_gate_p.add_argument(
+        "--changed-files",
+        default=None,
+        help="Newline-delimited changed paths (default: git diff base...head)",
+    )
+    hunter_gate_p.add_argument(
+        "--skip-live-fetch",
+        action="store_true",
+        help="Skip network live-fetch (tests only)",
+    )
+    hunter_gate_p.set_defaults(func=_cmd_hunter_merge_gate)
+
+    hunter_verify_p = sub.add_parser(
+        "hunter-verify-observer",
+        parents=[common],
+        help="Non-blocking LLM observer for hunter PRs (posts PR comment)",
+    )
+    hunter_verify_p.add_argument("--branch", required=True)
+    hunter_verify_p.add_argument("--pr-number", type=int, default=None)
+    hunter_verify_p.add_argument("--base-ref", default="origin/main")
+    hunter_verify_p.add_argument("--head-ref", default="HEAD")
+    hunter_verify_p.add_argument("--changed-files", default=None)
+    hunter_verify_p.add_argument("--skip-agent", action="store_true")
+    hunter_verify_p.add_argument(
+        "--no-comment",
+        action="store_true",
+        help="Do not post a PR comment",
+    )
+    hunter_verify_p.add_argument(
+        "--strict",
+        action="store_true",
+        help="Exit 1 when verdict is reject (default: always exit 0)",
+    )
+    hunter_verify_p.set_defaults(func=_cmd_hunter_verify_observer)
 
     notify_pr_p = sub.add_parser(
         "notify-pr-open",

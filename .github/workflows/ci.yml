@@ -77,3 +77,35 @@ jobs:
           ftse-engineering check-pr-paths \
             --branch "${HEAD_REF}" \
             --changed-files /tmp/changed_files.txt
+
+  hunter-merge-gate:
+    if: >-
+      github.event_name == 'pull_request'
+      && startsWith(github.head_ref, 'cursor/eng-')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package + test deps
+        run: pip install -e ".[dev]"
+
+      - name: Fetch base branch
+        run: git fetch origin "${{ github.base_ref }}"
+
+      - name: Parked-source hunter merge gate
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          git diff --name-only "origin/${{ github.base_ref }}...HEAD" > /tmp/changed_files.txt
+          ftse-engineering hunter-merge-gate \
+            --branch "$HEAD_REF" \
+            --base-ref "origin/${{ github.base_ref }}" \
+            --head-ref HEAD \
+            --changed-files /tmp/changed_files.txt

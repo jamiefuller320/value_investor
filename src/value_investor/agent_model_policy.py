@@ -245,6 +245,17 @@ def default_policy() -> dict[str, Any]:
                 "auto_escalate_director stays false until calibrated."
             ),
         },
+        "engineering": {
+            "auto_merge": {
+                "parked_hunter": "allowlist",
+                "parked_hunter_verify_observer": True,
+                "note": (
+                    "parked_hunter: off | skip | allowlist — scoped auto-merge for "
+                    "parked_source_hunter PRs after the CI hunter-merge-gate job passes. "
+                    "parked_hunter_verify_observer dispatches a non-blocking LLM reviewer."
+                ),
+            },
+        },
         "updated_at": None,
     }
 
@@ -265,6 +276,7 @@ def load_policy(path: Path | None = None) -> dict[str, Any]:
         "macro_context",
         "director_worker",
         "ingest_effort_cascade",
+        "engineering",
     ):
         merged = default_policy()[key]
         file_section = dict(data.get(key) or {})

@@ -1,7 +1,8 @@
 name: Engineering Auto Merge
 
 # Squash-merge engineering PRs when CI is green and the diff stays within the
-# task's allowed_paths. Only tasks with auto_merge=true are eligible.
+# task's allowed_paths. CI-fix tasks use auto_merge=true; parked_source_hunter
+# tasks use policy.engineering.auto_merge.parked_hunter + hunter-merge-gate.
 #
 # Security: workflow_run runs with repo secrets. Only same-repo heads; never
 # interpolate untrusted branch names into the shell (pass via env + regex gate).
