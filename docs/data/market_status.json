@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-10T15:02:07.541610+00:00",
+  "generated_at": "2026-09-10T16:36:48.780928+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -38,7 +38,7 @@
       "1": "tsx60",
       "2": "ftse_smallcap"
     },
-    "equal_support_generated_at": "2026-09-10T13:07:59.884441+00:00"
+    "equal_support_generated_at": "2026-09-10T15:38:02.360836+00:00"
   },
   "markets": [
     {
@@ -488,16 +488,16 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 17,
-        "targets": 176,
-        "improved": 26,
+        "run_count": 16,
+        "targets": 163,
+        "improved": 24,
         "improved_tickers": [
-          "RCI-B.TO",
-          "IFC.TO",
           "TRI.TO",
           "SU.TO",
+          "RCI-B.TO",
           "WSP.TO",
           "L.TO",
+          "IFC.TO",
           "TECK-B.TO",
           "CNR.TO",
           "ABX.TO"
@@ -509,7 +509,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 4,
-          "indexed_without_body": 111,
+          "indexed_without_body": 110,
           "filing_gaps": 0
         },
         "gaps_after": {
@@ -523,7 +523,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": -1,
-          "indexed_without_body": -15,
+          "indexed_without_body": -14,
           "filing_gaps": 0
         },
         "remaining": {
@@ -807,8 +807,8 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 14,
-        "targets": 52,
+        "run_count": 13,
+        "targets": 43,
         "improved": 16,
         "improved_tickers": [
           "CAPD.L",
@@ -993,10 +993,10 @@
         "acted": true,
         "last_run_at": "2026-09-09T07:22:54.551100+00:00",
         "holdings": 120,
-        "nav": 724.86,
+        "nav": 726.68,
         "cash": 0.0,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 2,
+        "weekday_batch_count": 3,
         "epoch0_batch_count": 2
       },
       "equal_support": {
@@ -1009,7 +1009,7 @@
         "hold_near_buy_count": 155,
         "not_buy_tier_count": 361,
         "never_buy_tier_count": 336,
-        "rememo_eligible_count": 37,
+        "rememo_eligible_count": 38,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
@@ -1078,6 +1078,17 @@
             "contributed_capital": 1000.0,
             "branches": {},
             "market": 733.1
+          },
+          {
+            "date": "2026-09-10",
+            "held": 726.68,
+            "nav": 726.68,
+            "held_stock": 726.68,
+            "cash": 0.0,
+            "positions": 120,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 733.1
           }
         ],
         "series": [
@@ -1096,12 +1107,12 @@
         ],
         "branches": [],
         "last": {
-          "date": "2026-09-09",
-          "held": 724.86,
+          "date": "2026-09-10",
+          "held": 726.68,
           "market": 733.1,
-          "nav": 724.86,
+          "nav": 726.68,
           "positions": 120,
-          "excess_pct": -0.01124
+          "excess_pct": -0.008757
         }
       }
     },
