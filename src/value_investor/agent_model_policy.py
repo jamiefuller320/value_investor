@@ -263,6 +263,17 @@ def default_policy() -> dict[str, Any]:
                     "missing_test, short_skip, or live_fetch_failed."
                 ),
             },
+            "queue_recovery": {
+                "immediate_park_unfixable_pr": True,
+                "max_attention_parked_tasks": 8,
+                "ci_red_park_hours": 48,
+                "note": (
+                    "immediate_park_unfixable_pr parks pr_open tasks when hunter-fix is "
+                    "ineligible/exhausted and CI is all-red; max_attention_parked_tasks "
+                    "caps manual-review backlog by trimming oldest ci_blocked/hunter_unfixable "
+                    "parks before adding new ones."
+                ),
+            },
         },
         "updated_at": None,
     }

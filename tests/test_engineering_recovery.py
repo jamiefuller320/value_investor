@@ -9,6 +9,7 @@ from typing import Any
 
 from value_investor.engineering_recovery import (
     cancel_resolved_workflow_failure_tasks,
+    count_attention_parked_tasks,
     housekeep_parked_tasks,
     park_agent_task,
     park_workflow_permission_blocked_tasks,
@@ -19,6 +20,7 @@ from value_investor.engineering_recovery import (
     summarize_parked_tasks,
     summarize_parked_tasks_needing_attention,
     task_allows_workflow_files,
+    trim_attention_parked_backlog,
 )
 from value_investor.engineering_tasks import (
     EngineeringTask,
@@ -228,6 +230,30 @@ def test_recover_engineering_queue_cancels_superseded_hunter(tmp_path: Path):
     assert any(row.action == "cancel_superseded_hunter" for row in result.cancelled)
     updated = load_engineering_tasks(tasks_path)
     assert updated["tasks"][0]["status"] == "cancelled"
+
+
+def test_trim_attention_parked_backlog_cancels_oldest(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    rows = []
+    for idx in range(9):
+        rows.append(
+            {
+                "id": f"eng-parked-{idx:02d}",
+                "title": f"Parked {idx}",
+                "status": "parked",
+                "parked_at": f"2026-09-0{idx}T10:00:00+00:00",
+                "parked_reason": "draft PR checks still failing",
+                "parked_policy": "ci_blocked",
+            }
+        )
+    tasks_path.write_text(json.dumps({"tasks": rows}), encoding="utf-8")
+    cancelled = trim_attention_parked_backlog(
+        tasks_path=tasks_path,
+        max_attention=8,
+        apply=True,
+    )
+    assert len(cancelled) == 2
+    assert count_attention_parked_tasks(tasks_path=tasks_path) == 7
 
 
 def test_mark_task_status_increments_failure_count(tmp_path: Path):
