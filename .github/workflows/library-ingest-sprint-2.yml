@@ -155,6 +155,8 @@ jobs:
           MAX_TARGETS: ${{ github.event.inputs.max_targets }}
           MAX_RUNTIME_SECONDS: ${{ github.event.inputs.max_runtime_seconds }}
           MAX_BODIES: ${{ github.event.inputs.max_bodies }}
+          CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}
+          WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
         run: |
           set -euo pipefail
           require_safe() {

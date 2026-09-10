@@ -166,6 +166,11 @@ WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py \
   --disable-legacy-ingest
 ```
 
+Epoch-0 weekday slots are also upserted automatically on learning admit and on
+`euro-ingest-dispatch --sync-cron` (see
+[`market-sharded-learning.md`](market-sharded-learning.md#weekday-epoch-0-local-open));
+keep them in the import list so a full re-import after cadence changes stays complete.
+
 Job keys: `euro-ingest-loop-morning|afternoon|midafternoon|evening`,
 `library-ingest-sprint-*`, `library-ingest-sprint-2-*`, `library-ingest-maintenance` /
 `library-ingest-maintenance-afternoon|midafternoon|evening`,

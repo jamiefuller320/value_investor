@@ -110,6 +110,20 @@ def _euro_dispatch_enabled() -> dict[str, bool]:
 
 
 def _job_specs() -> list[CronJobSpec]:
+    from value_investor.epoch0_weekday_cron import EPOCH0_WEEKDAY_SLOTS, EPOCH0_WEEKDAY_WORKFLOW
+
+    epoch0_specs = [
+        CronJobSpec(
+            key=key,
+            title=str(spec["title"]),
+            workflow=EPOCH0_WEEKDAY_WORKFLOW,
+            body={"ref": REF, "inputs": {"force": "false"}},
+            hours=list(spec["hours"]),
+            minutes=list(spec["minutes"]),
+            wdays=list(spec["wdays"]),
+        )
+        for key, spec in EPOCH0_WEEKDAY_SLOTS.items()
+    ]
     return [
         CronJobSpec(
             key="orchestrator-sunday",
@@ -264,42 +278,7 @@ def _job_specs() -> list[CronJobSpec]:
             minutes=[50],
             wdays=[1, 2, 3, 4, 5],
         ),
-        CronJobSpec(
-            key="library-epoch0-weekday-asx",
-            title="Library epoch-0 weekday (ASX local-open)",
-            workflow="library-epoch0-weekday.yml",
-            body={"ref": REF, "inputs": {"force": "false"}},
-            hours=[0],
-            minutes=[45],
-            wdays=[1, 2, 3, 4, 5],
-        ),
-        CronJobSpec(
-            key="library-epoch0-weekday-euro",
-            title="Library epoch-0 weekday (EU local-open)",
-            workflow="library-epoch0-weekday.yml",
-            body={"ref": REF, "inputs": {"force": "false"}},
-            hours=[8],
-            minutes=[45],
-            wdays=[1, 2, 3, 4, 5],
-        ),
-        CronJobSpec(
-            key="library-epoch0-weekday-us-edt",
-            title="Library epoch-0 weekday (US EDT local-open)",
-            workflow="library-epoch0-weekday.yml",
-            body={"ref": REF, "inputs": {"force": "false"}},
-            hours=[14],
-            minutes=[15],
-            wdays=[1, 2, 3, 4, 5],
-        ),
-        CronJobSpec(
-            key="library-epoch0-weekday-us-est",
-            title="Library epoch-0 weekday (US EST local-open)",
-            workflow="library-epoch0-weekday.yml",
-            body={"ref": REF, "inputs": {"force": "false"}},
-            hours=[15],
-            minutes=[15],
-            wdays=[1, 2, 3, 4, 5],
-        ),
+        *epoch0_specs,
         CronJobSpec(
             key="library-ingest-maintenance",
             title="Library ingest maintenance (Mon-Sat morning)",

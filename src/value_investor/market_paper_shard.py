@@ -51,6 +51,19 @@ MARKET_SESSION_DEFAULTS: dict[str, dict[str, Any]] = {
         "settle_minutes_after_open": 30,
         "weekdays_only": False,
     },
+    "nasdaq100": {
+        "timezone": "America/New_York",
+        "market_open": "09:30",
+        "settle_minutes_after_open": 30,
+        "weekdays_only": False,
+    },
+    "tsx60": {
+        # TSX cash open aligns with US Eastern; share US EDT/EST epoch-0 slots.
+        "timezone": "America/Toronto",
+        "market_open": "09:30",
+        "settle_minutes_after_open": 30,
+        "weekdays_only": False,
+    },
     "euro_stoxx50": {
         "timezone": "Europe/Paris",
         "market_open": "09:00",
@@ -67,6 +80,12 @@ MARKET_SESSION_DEFAULTS: dict[str, dict[str, Any]] = {
         "timezone": "Australia/Sydney",
         "market_open": "10:00",
         "settle_minutes_after_open": 30,
+        "weekdays_only": False,
+    },
+    "ftse_smallcap": {
+        "timezone": "Europe/London",
+        "market_open": "08:00",
+        "settle_minutes_after_open": 75,
         "weekdays_only": False,
     },
 }

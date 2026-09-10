@@ -193,6 +193,8 @@ jobs:
           GAP_CLOSURE_PARENT_ID: ${{ github.event.inputs.gap_closure_parent_id }}
           GAP_CLOSURE_TRIGGER: ${{ github.event.inputs.gap_closure_trigger }}
           PIN_TICKER: ${{ github.event.inputs.pin_ticker }}
+          CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}
+          WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
         run: |
           set -euo pipefail
           require_safe() {
@@ -317,6 +319,7 @@ jobs:
       - name: Refresh completion gate and sync euro crons
         env:
           CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}
+          WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
         run: |
           ftse-library euro-ingest-dispatch --refresh --sync-cron --json --json-path /tmp/euro_dispatch_refresh.json
 

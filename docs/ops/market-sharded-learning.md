@@ -130,7 +130,9 @@ ftse-library epoch0-weekday --force    # tests only; production uses session gat
 
 ### Weekday epoch-0 local-open
 
-`library-epoch0-weekday.yml` marks admitted `buy_tier_level` books after each market's open+settle (ASX 00:45, EU 08:45, US 14:15/15:15 UTC). It does **not** dispatch FTSE `paper-auto.yml`. After a mark it refreshes `equal_support_status.json` with `--census-only`. Register external crons after merge: `import_cron_jobs.py --job library-epoch0-weekday-asx` (and euro / us-edt / us-est).
+`library-epoch0-weekday.yml` marks admitted `buy_tier_level` books after each market's open+settle (ASX 00:45, EU 08:45, US 14:15/15:15 UTC). It does **not** dispatch FTSE `paper-auto.yml`. After a mark it refreshes `equal_support_status.json` with `--census-only`.
+
+**Cron registration (automated on admit).** First-time `admit_market_to_learning` upserts the timezone-bucket cron-job.org jobs for that market's session (`asx` / `euro` / `us-edt`+`us-est`). US Eastern slots also cover `America/Toronto` (`tsx60`). Markets need an explicit `MARKET_SESSION_DEFAULTS` entry — the London fallback must not silently register the EU slot. The same ensure runs on `ftse-library euro-ingest-dispatch --refresh --sync-cron` for the full admitted roster (catch-up). Requires `CRONJOB_API_KEY` + `WORKFLOW_DISPATCH_PAT` on ingest/sprint/maintenance workflows. Soft-skips when secrets are missing. Residual human when admitting a market with **no** session defaults or unmapped TZ — add `MARKET_SESSION_DEFAULTS` / extend `EPOCH0_WEEKDAY_SLOTS`, then re-run sync.
 
 **Knob apply is the AI-track gate.** `decision-review --apply` retunes picking knobs (`skip_timing_wait`, `min_conviction`, `sector_cap`). Frozen `buy_tier_level` is `is_cohort_lab=true` and cannot apply. Do not apply knobs on a shard until AI is a track, and do not make AI a track until the watch period has marks on epoch-0 **and** the near-miss groups. They are one decision, not two.
 

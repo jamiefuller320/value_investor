@@ -149,6 +149,8 @@ Job keys: `orchestrator-sunday`, `orchestrator-weekday-paper`, `ingest-loop-morn
 `ingest-loop-afternoon`,
 `analysis-review`, `ops-monitor`, `data-backup`,
 `library-epoch0-weekday-asx|euro|us-edt|us-est`. Dry-run: `--dry-run --json`.
+Epoch-0 slots are also upserted automatically on learning admit and on
+`euro-ingest-dispatch --sync-cron` (see [`market-sharded-learning.md`](market-sharded-learning.md#weekday-epoch-0-local-open)).
 
 Manual per-job dispatch examples (what cron-job.org calls) below.
 
