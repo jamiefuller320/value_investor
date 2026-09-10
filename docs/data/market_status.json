@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-10T17:25:26.885372+00:00",
+  "generated_at": "2026-09-10T17:46:06.331337+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -40,7 +40,7 @@
       "1": "sp500",
       "2": "asx200"
     },
-    "equal_support_generated_at": "2026-09-10T15:38:02.360836+00:00"
+    "equal_support_generated_at": "2026-09-10T17:42:21.109787+00:00"
   },
   "markets": [
     {
@@ -689,7 +689,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=7)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=5)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 2,
@@ -747,7 +747,7 @@
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 7,
+        "indexed_without_body": 5,
         "bodies_median": 20.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
@@ -817,9 +817,9 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 11,
-        "targets": 94,
-        "improved": 42,
+        "run_count": 12,
+        "targets": 101,
+        "improved": 44,
         "improved_tickers": [
           "BSL.AX",
           "JBH.AX",
@@ -834,7 +834,7 @@
           "SHL.AX",
           "RMD.AX"
         ],
-        "last_run_at": "2026-09-10T16:35:30.222316+00:00",
+        "last_run_at": "2026-09-10T17:45:11.044689+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -848,21 +848,21 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 7,
+          "indexed_without_body": 5,
           "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": -48,
+          "indexed_without_body": -50,
           "filing_gaps": 0
         },
         "remaining": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 7,
+          "indexed_without_body": 5,
           "filing_gaps": 0
         },
         "admission_ready": false,
@@ -1197,8 +1197,40 @@
       "ai_judgment": false,
       "knob_apply": false,
       "epoch0": null,
-      "equal_support": null,
-      "near_miss": null,
+      "equal_support": {
+        "present": true,
+        "ai_judgment": false,
+        "knob_apply": false,
+        "paper_instrument": "buy_tier_level",
+        "timing_signal_present": false,
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 18,
+        "not_buy_tier_count": 40,
+        "never_buy_tier_count": 36,
+        "rememo_eligible_count": 11,
+        "exclusion_ready_for_priors": null
+      },
+      "near_miss": {
+        "buy_tier_not_now_count": 0,
+        "hold_near_buy_count": 18,
+        "not_buy_tier_count": 40,
+        "never_buy_tier_count": 36,
+        "timing_signal_present": false,
+        "observe_only": true,
+        "watch_cut": "buy_not_now + hold_near_buy",
+        "census_groups": "not_buy_tier + never_buy_tier",
+        "buy_tier_not_now_sample": [],
+        "hold_near_buy_sample": [
+          "FFH.TO",
+          "IMO.TO",
+          "CTC-A.TO",
+          "AEM.TO",
+          "QSR.TO",
+          "MFC.TO",
+          "BAM.TO",
+          "BCE.TO"
+        ]
+      },
       "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
