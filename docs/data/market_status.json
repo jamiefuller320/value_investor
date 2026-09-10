@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-10T17:46:06.331337+00:00",
+  "generated_at": "2026-09-10T19:16:26.123212+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -40,7 +40,7 @@
       "1": "sp500",
       "2": "asx200"
     },
-    "equal_support_generated_at": "2026-09-10T17:42:21.109787+00:00"
+    "equal_support_generated_at": "2026-09-10T18:31:59.272322+00:00"
   },
   "markets": [
     {
@@ -817,22 +817,22 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 12,
-        "targets": 101,
-        "improved": 44,
+        "run_count": 11,
+        "targets": 92,
+        "improved": 38,
         "improved_tickers": [
-          "BSL.AX",
-          "JBH.AX",
-          "RRL.AX",
-          "SOL.AX",
+          "CDA.AX",
           "YAL.AX",
           "CSC.AX",
-          "CDA.AX",
+          "SOL.AX",
           "PRN.AX",
           "WDS.AX",
           "WGX.AX",
           "SHL.AX",
-          "RMD.AX"
+          "RMD.AX",
+          "FMG.AX",
+          "BSL.AX",
+          "RRL.AX"
         ],
         "last_run_at": "2026-09-10T17:45:11.044689+00:00",
         "runtime_cutoff_runs": 0,
@@ -841,7 +841,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 55,
+          "indexed_without_body": 47,
           "filing_gaps": 0
         },
         "gaps_after": {
@@ -855,7 +855,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": -50,
+          "indexed_without_body": -42,
           "filing_gaps": 0
         },
         "remaining": {
@@ -1164,7 +1164,7 @@
       "strong_buy": 3,
       "buy": 16,
       "learning_phase": 1,
-      "learning_phase_label": "Observe",
+      "learning_phase_label": "Epoch-0 level",
       "phase_blockers": [
         "tsx60 not in ladder.weekly_paper_shard_markets"
       ],
@@ -1193,10 +1193,23 @@
       },
       "filing_health": null,
       "filing_gaps": null,
-      "paper_instrument": "observe_sim",
+      "paper_instrument": "buy_tier_level",
       "ai_judgment": false,
       "knob_apply": false,
-      "epoch0": null,
+      "epoch0": {
+        "present": true,
+        "paper_instrument": "buy_tier_level",
+        "ai_judgment": false,
+        "knob_apply": false,
+        "acted": true,
+        "last_run_at": "2026-09-10T17:42:19.535734+00:00",
+        "holdings": 13,
+        "nav": 533.27,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "weekday_batch_count": 1,
+        "epoch0_batch_count": 0
+      },
       "equal_support": {
         "present": true,
         "ai_judgment": false,
@@ -1237,8 +1250,8 @@
         "status": "ok",
         "reason": null,
         "market_id": "tsx60",
-        "source": "observe_sim",
-        "paper_instrument": "observe_sim",
+        "source": "paper_fund",
+        "paper_instrument": "buy_tier_level",
         "currency": "CAD",
         "benchmark_ticker": "^GSPTSE",
         "held_path": "equity_marks",
@@ -1247,92 +1260,15 @@
         "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
         "points": [
           {
-            "date": "2026-07-18",
-            "held": 998.25,
-            "nav": 998.25,
-            "held_stock": 998.25,
+            "date": "2026-09-10",
+            "held": 533.27,
+            "nav": 533.27,
+            "held_stock": 533.27,
             "cash": 0.0,
-            "positions": 5,
+            "positions": 13,
             "contributed_capital": 1000.0,
             "branches": {},
-            "market": 998.25
-          },
-          {
-            "date": "2026-07-19",
-            "held": 998.25,
-            "nav": 998.25,
-            "held_stock": 998.25,
-            "cash": 0.0,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 998.25
-          },
-          {
-            "date": "2026-07-20",
-            "held": 1000.78,
-            "nav": 1000.78,
-            "held_stock": 1000.78,
-            "cash": 0.0,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 989.66
-          },
-          {
-            "date": "2026-07-25",
-            "held": 1000.78,
-            "nav": 1000.78,
-            "held_stock": 1000.78,
-            "cash": 0.0,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 1001.23
-          },
-          {
-            "date": "2026-07-26",
-            "held": 1051.61,
-            "nav": 1051.61,
-            "held_stock": 1051.61,
-            "cash": 0.0,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 1001.23
-          },
-          {
-            "date": "2026-08-02",
-            "held": 1048.71,
-            "nav": 1048.71,
-            "held_stock": 1048.71,
-            "cash": 0.0,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 997.18
-          },
-          {
-            "date": "2026-08-16",
-            "held": 1103.61,
-            "nav": 1103.61,
-            "held_stock": 1103.61,
-            "cash": 0.0,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 1039.76
-          },
-          {
-            "date": "2026-09-09",
-            "held": 1142.33,
-            "nav": 1142.33,
-            "held_stock": 1142.33,
-            "cash": 0.0,
-            "positions": 5,
-            "contributed_capital": 1000.0,
-            "branches": {},
-            "market": 1022.57
+            "market": 533.27
           }
         ],
         "series": [
@@ -1351,12 +1287,12 @@
         ],
         "branches": [],
         "last": {
-          "date": "2026-09-09",
-          "held": 1142.33,
-          "market": 1022.57,
-          "nav": 1142.33,
-          "positions": 5,
-          "excess_pct": 0.117117
+          "date": "2026-09-10",
+          "held": 533.27,
+          "market": 533.27,
+          "nav": 533.27,
+          "positions": 13,
+          "excess_pct": 0.0
         }
       }
     },
