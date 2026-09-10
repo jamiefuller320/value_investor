@@ -1,0 +1,92 @@
+name: Dashboard bridge worker
+
+# Poll Supabase dashboard_commands and dispatch GitHub repository events.
+# Static Pages uses the shared ftse-dashboard Supabase channel/table instead of
+# storing an Actions PAT in the browser. See docs/ops/dashboard-bridge.md.
+on:
+  schedule:
+    # Weekdays — best-effort pickup within ~10 minutes of a dashboard command.
+    - cron: "*/10 * * * 1-5"
+  workflow_dispatch:
+  repository_dispatch:
+    types: [refresh-queue-ui]
+
+permissions:
+  contents: write
+  actions: write
+  pull-requests: read
+
+concurrency:
+  group: dashboard-bridge
+  cancel-in-progress: false
+
+jobs:
+  poll-supabase:
+    if: github.event_name != 'repository_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Process pending Supabase dashboard commands
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
+        run: ftse-dashboard-bridge process-pending --json
+
+  refresh-queue-ui:
+    if: github.event_name == 'repository_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Refresh engineering queue + health UI
+        run: |
+          ftse-engineering refresh-queue-ui --json
+          ftse-dashboard-bridge refresh-queue-health --json
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit dashboard slices
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: refresh queue dashboard slices [skip ci]"
+          file_pattern: |
+            docs/data/automation.json
+            docs/data/queue_health.json
+            docs/data/latest.json
+          skip_fetch: false
+
+      - name: Notify dashboard channel
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          python3 - <<'PY'
+          from value_investor.dashboard_bridge import broadcast_dashboard_update
+          broadcast_dashboard_update(
+              event="artifact-updated",
+              payload={"artifact": "queue_health", "source": "refresh-queue-ui"},
+          )
+          PY

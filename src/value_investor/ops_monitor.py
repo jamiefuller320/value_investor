@@ -1439,6 +1439,13 @@ def run_ops_monitor(
 
     run_backtest_health(apply_repairs=False, status_path=BACKTEST_HEALTH_STATUS_PATH)
 
+    try:
+        from value_investor.queue_health import refresh_queue_health_ui
+
+        refresh_queue_health_ui(open_prs=open_prs)
+    except Exception:  # noqa: BLE001 — dashboard slice must not fail ops monitor
+        pass
+
     return report
 
 

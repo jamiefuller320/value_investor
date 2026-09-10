@@ -777,12 +777,22 @@ def refresh_engineering_queue_ui(
             latest["generated_at"] = now
             write_json(latest_path, latest, compact=True, compress=False)
 
+    from value_investor.queue_health import refresh_queue_health_ui
+
+    health = refresh_queue_health_ui(
+        automation_path=automation_path,
+        latest_path=latest_path,
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+    )
+
     return {
         "automation_path": str(automation_path),
         "latest_path": str(latest_path) if latest_path.exists() else None,
         "queue_ui_updated_at": dashboard_slice.get("queue_ui_updated_at"),
         "open_count": dashboard_slice.get("status", {}).get("open_count"),
         "pr_open_count": dashboard_slice.get("status", {}).get("pr_open_count"),
+        "queue_health": health,
     }
 
 

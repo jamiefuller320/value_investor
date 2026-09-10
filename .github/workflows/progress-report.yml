@@ -115,3 +115,26 @@ jobs:
               ref: 'main',
             });
             core.info('Dispatched pages.yml after progress report commit');
+
+      - name: Notify dashboard channel
+        if: steps.gate.outputs.should_run == 'true'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from value_investor.dashboard_bridge import broadcast_dashboard_update
+          from value_investor.storage import read_json
+          path = Path('docs/data/progress_report.json')
+          generated_at = None
+          if path.exists():
+              try:
+                  generated_at = read_json(path).get('generated_at')
+              except Exception:
+                  pass
+          broadcast_dashboard_update(
+              event='artifact-updated',
+              payload={'artifact': 'progress_report', 'generated_at': generated_at},
+          )
+          PY

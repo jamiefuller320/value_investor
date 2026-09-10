@@ -23,6 +23,8 @@ on:
         description: "Run even if a successful ops-monitor already ran today"
         type: boolean
         default: false
+  repository_dispatch:
+    types: [ops-monitor]
 
 permissions:
   contents: write
@@ -48,7 +50,7 @@ jobs:
         with:
           script: |
             const emailAlways = process.env.EMAIL_ALWAYS === 'true';
-            const force = process.env.FORCE === 'true';
+            const force = process.env.FORCE === 'true' || context.eventName === 'repository_dispatch';
             if (emailAlways || force) {
               core.setOutput('should_run', 'true');
               return;
