@@ -1,72 +1,84 @@
 # Dover Corporation (DOV) — Research memo
 
-_Version 1 · Updated 2026-07-17T04:09:37.265601+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-10T07:40:31.016507+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Dover is a diversified industrial technology group trading on a quality-and-cash-flow narrative rather than deep cyclical cheapness. The quantitative screen flags a buy on Neff PEGY, moat, dividend growth, Magic Formula, and financial health, with a composite score of 58% and PEGY of 0.26 against estimated growth of 5.3%. Post the October 2024 sale of Environmental Solutions Group (ESG) for $2.0 billion, the continuing portfolio is growing mid-single digits with improving margins and strong free cash flow conversion. The central debate is whether a 27x P/E and 3.9x P/B adequately compensate for integration risk from ongoing bolt-on M&A, industrial cyclicality, and a balance sheet heavily weighted to goodwill and intangibles.
+Dover Corporation is a diversified US industrial manufacturer organised in five segments — Engineered Products, Clean Energy & Fueling, Imaging & Identification, Pumps & Process Solutions, and Climate & Sustainability Technologies — following the 2024 sale of Environmental Solutions Group (ESG) for approximately $2.0 billion. The quantitative screen rates DOV as a buy, though the snapshot carries no populated model metrics (0/5 families, data quality score 0.0), so the signal rests on the headline rating rather than disclosed factor detail. Filings show a continuing-operations business growing mid-single digits organically, with H1 2026 revenue of $4.24 billion (+8.4% YoY) and Q2 bookings of $2.3 billion (+16.1%), supported by strong segment margins (consolidated segment earnings margin ~24% in Q2 2026). The valuation hook for a value investor is elevated free cash flow — Yahoo TTM FCF of ~$1.17 billion against a capital-light, acquisitive model — plus 71 consecutive years of dividend increases. The key debate is whether portfolio reshaping and bolt-on M&A (notably Sikora at ~$608 million) justify goodwill/intangible load of ~$7.0 billion, and whether recent share-price weakness reflects cyclical timing or fuller valuation.
 
 ## INVESTMENT THESIS
-For a value investor, Dover offers a GARP-style entry into a serial acquirer with durable niche franchises rather than a distressed cyclical. Filings describe five segments—Engineered Products, Clean Energy & Fueling, Imaging & Identification, Pumps & Process Solutions, and Climate & Sustainability Technologies—with recurring parts, consumables, services, and software representing approximately 40% of revenue (FY2025 10-K). That mix supports the screen’s passes on Economic Moat, Dividend Growth, and Financial Health.
-
-The screen’s buy signal rests on five model families (cheapness, quality, dividend, GARP, risk) with high data quality (19/20 metrics). Neff PEGY at 0.26 is the standout cheapness metric; ROE of 15% and FCF of roughly $841 million (screen snapshot) align with a quality compounder. Management targets organic growth of 4–6% through the cycle, maintains investment-grade leverage, and has raised dividends annually for 70 years (FY2025 10-K). Capital deployment is active: $663 million of acquisitions in the first nine months of 2025 (Q3 2025 10-Q) and a $500 million accelerated share repurchase in November 2025 (Q1 2026 10-Q).
-
-The name fits a patient value allocator seeking compounding industrial exposure with secular tailwinds (data-centre liquid cooling, clean-fuel infrastructure, biopharma single-use, connected fueling software) rather than a pure statistical bargain.
+Dover fits a quality-compounder value frame: niche engineered products, consumables/recurring revenue mix, and disciplined capital allocation (buybacks, dividends, targeted acquisitions). Post-ESG divestiture, the remaining portfolio is cleaner and more growth-oriented, with Clean Energy & Fueling and Pumps & Process Solutions leading organic momentum and Imaging & Identification delivering high segment margins (~28%). The buy screen aligns with filing evidence of earnings quality on a continuing basis — H1 2026 diluted EPS from continuing operations of $4.06 (+8.0% vs $3.76 prior year) and Q2 operating margin expansion to 17.9% (from 17.3%) — rather than one-off disposal gains that inflated 2024 reported net income. Cash generation rebounded sharply in FY2025 (operating cash flow $1.33 billion per Yahoo; filing-confirmed strong H2 seasonality historically), and the balance sheet is manageable: interest coverage 36.9× at June 2026 (10-Q), $1.76 billion cash, and undrawn $1.5 billion revolver. For a value investor, the case is that the market may be penalising industrial cyclicality and acquisition integration noise while underlying ROIC drivers — pricing (+2.2% in Q2 2026), productivity/restructuring, and secular exposure to clean fuels, biopharma, and data-centre thermal management — remain intact. Caveat: with empty screen metrics, conviction should come from filings and cash flow, not automated factor confirmation.
 
 ## FINANCIAL REVIEW
-**Annual results (10-K).** Two annual 10-K body extracts are available (FY2024 filed February 2025; FY2025 filed February 2026), but both are truncated before consolidated financial statement tables. Annual income-statement, balance-sheet, and cash-flow figures below are therefore sourced from `financials_annual.json` (Yahoo), with qualitative annual context from filing prose.
+**Annual (10-K):** Two annual 10-K filings are indexed (FY2024 filed 14 Feb 2025; FY2025 filed 13 Feb 2026), but both body extracts are XBRL-only and do not yield readable income-statement tables. Annual figures below fall back to `financials_annual.json` (Yahoo).
 
-| Metric (continuing ops, $m) | FY2023 | FY2024 | FY2025 |
+| Metric (continuing ops where noted) | FY2023 | FY2024 | FY2025 |
 |---|---|---|---|
-| Revenue | 7,684 | 7,746 | 8,093 |
-| Operating income | 1,219 | 1,206 | 1,373 |
-| Net income | 1,057 | 1,094* | 1,094 |
-| Diluted EPS | $7.52 | $7.94 | $7.94 |
-| Free cash flow | 1,153 | 581 | 1,113 |
+| Revenue | $7,684m | $7,746m | $8,093m |
+| Operating income | $1,219m | $1,206m | $1,373m |
+| Net income (continuing) | $944m | $1,400m | $1,097m |
+| Diluted EPS (reported) | $7.52 | $19.45* | $7.94 |
+| Free cash flow | $1,153m | $581m | $1,113m |
 
-\*FY2024 reported net income of $2,697 million includes discontinued operations and a $598 million gain on the ESG sale (Yahoo); continuing-operations EPS normalises to $7.94.
+*FY2024 diluted EPS is not comparable: discontinued operations contributed $1.30 billion net income (ESG/De-Sta-Co gains); normalised continuing EPS was ~$8–10 range implied by continuing net income.
 
-FY2025 revenue rose 4.5% to $8.09 billion; operating margin expanded to approximately 17.0% from 15.6% in FY2024 (Yahoo). FCF rebounded sharply to $1.11 billion from $581 million, aided by lower acquisition/disposal distortion versus the ESG year. Balance sheet at 31 December 2025 (Yahoo, consistent with Q1 2026 10-Q balance sheet): total assets $13.4 billion, stockholders’ equity $7.4 billion, total debt $3.57 billion, net debt $1.65 billion, cash $1.68 billion.
+FY2025 revenue rose ~4.5% with operating margin recovery to ~17.0%. FCF nearly doubled from FY2024's depressed $581 million (transition year: ESG separation, heavy acquisition spend ~$663 million in 9M 2025 per Q3 10-Q). Balance sheet at FY2025 year-end (Yahoo): total debt $3.57 billion, net debt ~$1.65 billion, stockholders' equity $7.41 billion, goodwill $5.43 billion, intangibles $1.76 billion.
 
-**Interim results (10-Q filings).** Six interim 10-Q body extracts are indexed (Q2–Q3 2024 through Q1 2026). Key trends from primary filings:
+**Interim (10-Q — primary source):**
 
-- **Q1 2026** (filed 23 April 2026): Revenue $2,053.6 million (+10.1% YoY); operating earnings $305.9 million (+3.2%); net earnings $238.4 million (+3.3%); diluted EPS $1.75. Gross margin 38.9% vs 40.0% prior year.
-- **9M 2025** (Q3 2025 10-Q): Revenue $5,993.5 million (+3.1% vs $5,816.0 million); operating earnings $1,028.1 million (+12.8%); net earnings $811.9 million vs $1,261.1 million (prior year inflated by ESG-related gains); diluted EPS $5.88 vs $9.08. Operating cash flow $794.1 million; capex $163.3 million.
-- **Q3 2025**: Revenue $2,077.8 million (+4.8% YoY); operating earnings $377.2 million (+13.0%).
+*Q2 2026 (10-Q filed 23 Jul 2026):*
+- Revenue $2,190m (+6.9% YoY); organic +4.8%, acquisition +1.2%, FX +0.9%
+- Operating earnings $392m (+10.5%); gross margin 40.2% (+30 bps)
+- Diluted EPS (continuing) $2.31 (+13.8%)
+- Bookings $2.3bn (+16.1%), broad-based segment strength
+- Segment earnings margins: Pumps & Process Solutions 32.4%, Imaging & Identification 27.9%, Clean Energy & Fueling 21.6%
 
-Balance sheet progression (filings): total assets grew from $12.5 billion (31 Dec 2024) to $13.4 billion (30 Sep 2025) to $13.5 billion (31 Mar 2026), reflecting acquisitions and working-capital build. Inventories rose to $1,370.8 million at 31 March 2026 from $1,272.8 million at year-end 2025.
+*H1 2026:*
+- Revenue $4,244m (+8.4%); organic +5.0%
+- Operating earnings $698m (+7.2%)
+- Diluted EPS (continuing) $4.06 (+8.0%)
+- Operating cash flow $427m (H1 2025: $370m) — working-capital build (receivables +inventory) absorbed cash
 
-Liquidity remains solid. At 30 September 2025 the company was in compliance with all credit-agreement covenants, with an interest-coverage ratio (consolidated EBITDA to net interest) of 109.8:1 (Q3 2025 10-Q). Cash and equivalents were $1,552.8 million at 30 September 2025 and $1,641.9 million at 31 March 2026.
+*Q3 2025 (10-Q filed 23 Oct 2025):*
+- 9M 2025 revenue $5,993m; diluted EPS (continuing) $5.96
+- Q3 revenue $2,078m; operating earnings $377m
 
-**Gaps.** Eight 8-K filings are indexed but have no body extracts. FY2025 and FY2024 10-K body extracts lack annual consolidated statement tables (truncated at 80,000 characters). MD&A sections referenced in 10-Q table-of-contents are largely absent from the extracts. Segment-level revenue tables were not recoverable from available extracts; only restructuring expense by segment was visible.
+**Trend assessment:** Continuing operations show consistent mid-single-digit organic growth and margin stability/expansion in 2025–H1 2026. FCF is lumpy (FY2024 trough, FY2025 normalisation); H1 2026 cash conversion is temporarily soft on inventory/receivable build. Near-term debt: €600m 1.25% notes (~$682m) classified current at June 2026 — refinancing risk is low given cash and revolver, but worth monitoring. No going-concern language in interim filings.
 
 ## RISKS AND RED FLAGS
-**Portfolio and M&A.** Goodwill and intangibles total approximately $7.1 billion on a $13.5 billion asset base (Q1 2026 10-Q), leaving tangible book value minimal (Yahoo: $216 million at FY2025). Nine-month 2025 acquisition spend of $663 million raises integration and goodwill-impairment risk if bolt-ons underperform.
+- **Portfolio transformation / acquisition integration:** Goodwill $5.38 billion and net intangibles $1.64 billion (June 2026 10-Q) represent a large share of $7.70 billion equity; Sikora and other 2025 deals add amortisation (~$107m in H1 2026) and integration execution risk.
+- **Cyclical end-markets:** MD&A ties growth to industrial demand, fueling/c-store capex, and refrigeration cycles; restructuring charges rose to $47m in H1 2026 (vs $22m H1 2025), concentrated in Climate & Sustainability and Pumps segments.
+- **Discontinued-operation litigation:** ESG jury verdict of ~$58.9 million (June 2025); company has not accrued, stating loss is not probable — potential tail risk if appeal fails (10-Q Note 4).
+- **Leverage and maturities:** Total debt $3.26 billion at June 2026; €600m maturity November 2026 in current portion. Covenants require minimum interest coverage 3.0× (actual 36.9×); no default language, but rising interest expense (+85% H1 YoY on net basis) as interest income normalises post-ESG cash deployment.
+- **Margin mix:** Climate & Sustainability Technologies segment margin compressed to 16.7% in Q2 2026 (from 18.6%), flagging weaker pricing/mix in one large segment.
+- **Pension:** Non-current pension liabilities ~$84m (Yahoo FY2025); ongoing amortisation in OCI but not a balance-sheet stress point.
+- **Quantitative screen gap:** `screening_snapshot.json` shows buy signal with zero populated metrics — automated conviction overlay cannot be cross-checked against factor detail.
 
-**Cyclical and macro.** FY2025 10-K forward-looking language cites supply-chain constraints, input-cost inflation, tariffs, interest-rate and FX volatility, and demand swings across industrial end markets—risks not fully captured by static screens.
-
-**Restructuring.** Restructuring charges of $32.4 million in 9M 2025 were concentrated in Climate & Sustainability Technologies, Clean Energy & Fueling, and Pumps & Process Solutions (Q3 2025 10-Q), signalling ongoing cost realignment as demand mix shifts.
-
-**Pension.** Defined-benefit pension and post-retirement plans are present; periodic pension costs flow through other comprehensive income. No going-concern language appears in available extracts.
-
-**Legal and environmental.** Q1 2026 10-Q states environmental remediation liabilities and other probable contingencies “were not significant” at 31 March 2026. Subsidiaries remain involved in CERCLA-style site clean-ups described as immaterial. Q3 2025 discontinued-operations note references post-trial litigation involving ESG (breach of contract/fiduciary duty claims) with appeal pending—legacy risk from the divested business.
-
-**Capital structure.** Net debt increased to $1.65 billion at FY2025 year-end from $1.08 billion at FY2024 (Yahoo), partly reflecting acquisition funding and the $500 million ASR. Covenants are currently met, but leverage could tighten if industrial volumes soften.
-
-**Screen data quality.** The screen’s “Yield 98.0%” metric is inconsistent with filing dividend payments (~$283 million annually per cash-flow data) and appears to be a data error; treat dividend appeal qualitatively (70-year increase streak) rather than on that figure.
+RiskTags: cyclical, leverage, litigation, other
+RiskTags: cyclical, leverage, litigation, other
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate and tilted toward commentary rather than company press releases. Material themes:
+Coverage over the past year is moderate-to-heavy on earnings and institutional flows, thinner on deep strategy analysis.
 
-- **Product/digital launches:** “Dover (DOV) Launches OPW Diamond Platform For Fuel Distribution Control” (9 July 2026); “Should Dover’s New Connected Fueling Platform Reframe the Digitalization Narrative for DOV Investors?” (11 July 2026); “Dover (DOV) Launches SIKORA Software To Catch Cable Quality Issues Early” (24 June 2026).
-- **Secular growth narrative:** “1 Hidden Tech Catalyst Makes Dover Corporation an Absolute Sanctuary for Retirees Protecting Their Wealth” (7 July 2026), citing Pumps & Process Solutions thermal connectors for data-centre liquid cooling and Climate & Sustainability Technologies organic growth.
-- **Sell-side sentiment:** “Morgan Stanley Sees More Upside in Dover (DOV) Shares” (8 June 2026); “All You Need to Know About Dover (DOV) Rating Upgrade to Buy” (15 June 2026).
-- **Earnings anticipation:** “Dover's Q2 2026 Earnings: What to Expect” (1 July 2026); “Dover Corporation (DOV) Earnings Expected to Grow: Should You Buy?” (16 July 2026).
-- **Mixed retail commentary:** “3 Reasons to Sell DOV and 1 Stock to Buy Instead” (2 July 2026) flags valuation after a strong run.
+**Material corporate developments:**
+- *Dover Q2 Earnings Beat on Margin Gains, 2026 Guidance Raised* (Yahoo Finance, 23 Jul 2026) — Q2 beat and outlook uplift.
+- *Dover Raises Annual Dividend for 71st Consecutive Year* (Stock Titan, 7 Aug 2026) — quarterly dividend raised to $0.53.
+- *Dover Plans to Buy an Indian Maker of Valves for Liquefied Natural Gas* (Stock Titan, 18 Aug 2026) — LNG valve bolt-on.
+- *Dover Precision Components offers 12,000-square-foot lab testing* / Innovation Lab expansion (Stock Titan/Yahoo Finance, Aug 2026) — testing services for machinery makers.
+- *New software… helps prevent drug shipment delays* (Stock Titan, 2 Sep 2026) — biopharma/cold-chain digitalisation.
+- *Dover (DOV) Launches OPW Diamond Platform For Fuel Distribution Control* (Yahoo Finance, 9 Jul 2026) — connected fueling platform.
+- Sikora AG acquisition (~$608m, closed Jun 2025) — wire/cable inspection; confirmed in Q3 2025 10-Q.
+- $500m accelerated share repurchase completed April 2026 at average $200.99 (Q2 2026 10-Q).
 
-No material management changes or regulatory enforcement actions appear in the manifest. News coverage is adequate for sentiment but thin on hard operational disclosures; primary filings remain the authoritative source.
+**Sentiment / positioning:**
+- *3 Reasons to Avoid DOV and 1 Stock to Buy Instead* (Yahoo Finance, 4 Sep 2026) — notes ~13.9% six-month underperformance vs S&P 500.
+- *Does Dover (DOV) Look Fairly Valued With Cash Flow Upside?* (simplywall.st, 8 Sep 2026).
+- Analyst consensus characterised as "Moderate Buy" (MarketBeat, 31 Aug 2026).
+- Heavy MarketBeat flow on institutional buying (CalSTRS, Amundi, CPPIB, HSBC) — supportive but low informational value.
+
+No material management-change or regulatory-enforcement headlines identified in the manifest.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Deep research confirms a high-quality, cash-generative industrial compounder with accelerating interim revenue and margins, supporting the quantitative buy signal, though 27x earnings and heavy intangibles temper conviction versus a classic deep-value entry.
+Confidence: 0.68
+Rationale: Filing-backed continuing-operations growth, strong segment margins, and normalising FCF support the quantitative buy signal, partially offset by empty screen metric detail, heavy acquisition-related intangibles, and cyclical/restructuring headwinds.

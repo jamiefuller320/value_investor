@@ -1,81 +1,80 @@
 # Emerson Electric Co. (EMR) — Research memo
 
-_Version 1 · Updated 2026-07-25T13:26:00.980436+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-10T07:41:17.473514+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Emerson Electric Co. (EMR) screens as a buy on quality, dividend growth, GARP and risk metrics (composite 63%, five of 22 models passed), supported by a transformed global automation portfolio, rising adjusted margins and strong free cash flow. The investment case rests on earnings compounding — FY2025 adjusted diluted EPS from continuing operations reached $6.00 (+9% year on year) — against a headline P/E of 34.2x that looks optically rich. The central debate is whether post-AspenTech and National Instruments integration, plus elevated leverage (~$13.1bn total debt at September 2025), is adequately priced in, or whether automation/software mix and FY2026 guidance ($6.45–$6.55 adjusted EPS) justify accumulation on pullbacks.
+Emerson Electric is a transformed global automation platform—Intelligent Devices plus Software & Systems—following the Copeland divestiture, the National Instruments (Test & Measurement) acquisition, and the March 2025 full buy-out of AspenTech (~$7.2 billion). The quantitative screen flags **buy**, and filing-backed fundamentals support a quality compounder profile: FY2025 net sales of $18.0 billion (+3% underlying), adjusted EPS of $6.00 (+9%), and free cash flow of $3.2 billion (~18% of sales). The valuation hook is durable cash generation and margin expansion (gross margin 52.8%) against a capital structure temporarily stretched by deal financing. The central debate is whether automation exposure to power, LNG, semiconductors, and data-centre-adjacent end markets justifies elevated leverage and a share price that news coverage often describes as fairly valued rather than deeply cheap.
 
 ## INVESTMENT THESIS
-For a value-oriented investor, EMR offers a quality compounder rather than a deep discount: the screen’s Neff PEGY pass (PEGY 0.19, growth 27.9%) signals growth-adjusted value despite P/B 4.1x and yield 1.5%. Business quality is corroborated by Piotroski F-Score and Earnings Quality passes, 70-year dividend growth pedigree, and FY2025 adjusted EBITA margin of 26.0% (up 1.3 points) on net sales of $18.0bn. Portfolio actions — divestiture of Copeland/Climate Technologies, $8.2bn NI (Test & Measurement) acquisition, and March 2025 full ownership of AspenTech (~$7.2bn) — have repositioned Emerson as a higher-software, process-automation platform. FY2026 interim filings show underlying sales growth of 1–2% with price offsetting volume weakness, and management guiding ~3% underlying growth for the full year. The buy signal aligns with a durable franchise trading at a growth-adjusted discount, not an absolute one; patience on entry is warranted given leverage and cyclical headwinds.
+For a value investor, EMR offers a post-portfolio-reset industrial with improving returns on a narrower, higher-quality asset base. The screen’s buy signal aligns with filing evidence of operational momentum: underlying sales growth, price/cost discipline, and rising adjusted EBITA margins (26.0% in FY2025 vs 24.7% in FY2024). FY2026 interim filings show continuation—nine-month net sales of $13.8 billion (+5%) and adjusted diluted EPS of $4.71 (+8%) through Q3 FY2026 (10-Q, June 2026)—with management guiding full-year adjusted EPS of approximately $6.55 and free cash flow of approximately $3.6 billion.
+
+Business quality markers from SEC filings include: (1) recurring software/control mix via AspenTech and Control Systems & Software; (2) strong cash conversion—FY2025 operating cash flow $3.7 billion, free cash flow $3.2 billion, comfortably covering $1.2 billion dividends and $1.2 billion buybacks; (3) 69 consecutive years of dividend increases (news coverage, Aug 2026). The screen snapshot itself carries sparse metric detail (`models_passed: 0`, `composite_score: null`), so the buy call rests more on directional signal than on disclosed model pass counts; filing fundamentals nonetheless corroborate a cash-rich, self-funding franchise rather than a distressed cyclical.
 
 ## FINANCIAL REVIEW
-Primary source: SEC EDGAR 10-K (FY2025, filed 10 November 2025) and 10-Q filings through Q2 FY2026 (period ended 31 March 2026). Annual and interim bodies are present in the filings index (2 annual, 6 interim, 10 other 8-Ks; 10 with downloadable bodies).
+**Primary source:** SEC EDGAR 10-K and 10-Q extracts (CIK 32604). UK Investegate entries in `filings_index.json` relate to Empresaria Group plc (ticker collision) and are excluded. Annual 10-K body extracts for FY2024 and FY2025 appear truncated in the library (risk-factor tail only); annual figures below are taken from the FY2025 10-K MD&A section present in the extract and cross-checked where noted.
 
-**Annual trends (10-K, years ended 30 September)**
+**Annual trend (10-K, year ended 30 September)**
 
 | Metric | FY2023 | FY2024 | FY2025 |
 |--------|--------|--------|--------|
-| Net sales ($m) | 15,165 | 17,492 | 18,016 |
+| Net sales | $15,165m | $17,492m | $18,016m |
 | Gross margin | 49.0% | 50.8% | 52.8% |
+| GAAP diluted EPS (continuing) | $3.96 | $2.82 | $4.03 |
 | Adjusted diluted EPS (continuing) | $4.44 | $5.49 | $6.00 |
-| GAAP diluted EPS (net) | $22.88* | $3.43 | $4.04 |
-| Operating cash flow (continuing, $m) | 2,710 | 3,317 | 3,676 |
-| Free cash flow (continuing, $m) | 2,347 | 2,898 | 3,245 |
-| Adjusted EBITA margin | 23.4% | 24.7% | 26.0% |
+| Operating cash flow (continuing) | $2,710m | $3,317m | $3,676m |
+| Free cash flow (continuing) | $2,347m | $2,898m | $3,245m |
+| FCF % of sales | 15.5% | 16.6% | 18.0% |
 
-*FY2023 GAAP EPS reflects Copeland and InSinkErator divestiture gains; not representative of run-rate earnings.
+FY2025 revenue rose 3% on 3% underlying growth (2.5% price, 0.5% volume). GAAP EPS rebounded 43% as FY2024 was depressed by NI purchase-accounting noise and a $279m Copeland note-receivable loss. Adjusted EPS grew 9%, reflecting margin expansion and AspenTech consolidation. Software & Control segment earnings rose sharply as Test & Measurement integration costs and amortisation normalised.
 
-FY2025 net sales rose 3% on 3% underlying growth (2.5% price, 0.5% volume). Intelligent Devices sales were $12.4bn (+2%); Software and Control $5.7bn (+5%), with Control Systems & Software up 7% and Test & Measurement recovering toward breakeven segment earnings. Continuing pretax earnings rose 45% to $2,934m, though GAAP figures remain distorted by acquisition amortisation ($884m), restructuring ($136m) and prior-year Copeland note loss.
+**Balance sheet and leverage (10-K, 30 September 2025):** total assets $42.0 billion; stockholders’ equity $20.3 billion; total debt $13.1 billion (up from $7.7 billion in FY2024), driven by AspenTech financing and ~$4.2 billion commercial paper. Total capital ratio 39.3%; net capital ratio 36.2%; interest coverage 8.6x (down from 12.1x in FY2023). Management states leverage is “elevated compared to historical levels” but expects improvement through cash deployment to debt reduction. No going-concern language identified.
 
-Balance sheet and capital structure strengthened operationally but weakened on leverage: total debt was $13,116m at 30 September 2025 versus $7,687m a year earlier, driven by AspenTech funding (commercial paper ~$4.2bn). Net capital ratio rose to 36.2% (from 15.9%); interest coverage was 8.6x (from 7.2x). Total assets $42.0bn; common stockholders’ equity $20.3bn. Goodwill and intangibles of $27.7bn imply negative tangible book — a material gap versus Yahoo P/B 4.1x, which uses reported equity. U.S. pension plans were overfunded by $856m at year-end. Dividends were $1,192m ($2.11/share); the board raised the annualised rate to $2.22 in November 2025. Share repurchases totalled $1,167m (9.3m shares).
+**Pension:** US defined-benefit plans overfunded by $856m (~29% above PBO) at 30 September 2025; global unfunded plans total $161m.
 
-**Interim trends (10-Q)**
+**Interim results (10-Q)**
 
-Q1 FY2026 (ended 31 December 2025): net sales $4.3bn (+4%), underlying +2%; adjusted diluted EPS $1.46 (+6%).
+- **Q1 FY2026** (Dec 2025): net sales $4.3bn (+4%); adjusted EPS $1.46 (+6%).
+- **Q2 FY2026** (Mar 2026): net sales $4.6bn (+3%); adjusted EPS ~$1.46 area; Middle East conflict cited as ~1% underlying sales headwind.
+- **Q3 FY2026** (Jun 2026): net sales $4.9bn (+7%); GAAP diluted EPS $1.28 (+24%); adjusted EPS $1.71 (+13%); gross margin 54.5%. Nine-month net sales $13.8bn (+5%); nine-month adjusted EPS $4.71 (+8%). Nine-month free cash flow $2.6bn (OCF $2.9bn less capex $284m).
 
-Q2 FY2026 (ended 31 March 2026): net sales $4.6bn (+3%), underlying +0.5% (Middle East conflict −1%, software renewal timing −2%); GAAP diluted EPS $1.10 (+28%, flattered by prior-year AspenTech transaction costs); adjusted diluted EPS $1.54 (+4%). H1 FY2026 net sales $8.9bn (+3%); adjusted diluted EPS $3.00 (+5%).
+**FY2026 outlook (Q3 10-Q):** consolidated net sales up ~5% (underlying ~3.5%); adjusted EPS ~$6.55; operating cash flow ~$4.1bn; free cash flow ~$3.6bn; ~$2.2bn shareholder returns ($1.0bn repurchases, $1.2bn dividends).
 
-Interim margin commentary: gross margin ~53.1% but down 0.4 points year on year due to tariffs (offset by pricing but dilutive) and software renewal timing (~0.8 point headwind). Interest expense rose materially (Q2 net interest $84m vs $41m prior year); H1 interest coverage 7.5x. Operating working capital increased to $2,610m at 31 March 2026. H1 FY2026 operating cash flow from continuing operations $1,478m (−$125m vs prior year, working capital build).
+**Yahoo fallback:** `financials_annual.json` shows FY2025 net income $2.29bn, total debt $13.76bn, net debt $11.57bn, negative working capital ($1.21bn), and tangible book value of -$7.37bn (goodwill/intangibles $27.7bn)—consistent with acquisition-heavy balance sheet but not used as primary figures where filings provide them.
 
-**FY2026 outlook (10-Q, May 2026):** consolidated net sales up ~4.5% (underlying ~3%); adjusted EPS $6.45–$6.55; operating cash flow $4.0–$4.1bn; free cash flow $3.5–$3.6bn; ~$2.2bn returned to shareholders.
-
-No going-concern language appears in available filing bodies. Credit facilities ($3.5bn revolving plus $2bn 364-day backup) contain no financial covenants per the 10-K. Yahoo `financials_annual.json` is broadly consistent with filing figures where comparable (FY2025 revenue $18.0bn, net income $2.29bn, FCF ~$2.67bn continuing per Yahoo vs $3.25bn continuing per 10-K — the FCF discrepancy reflects discontinued operations and classification differences; primary filing figures are used above).
+**Gaps:** FY2024 10-K full financial statements not cleanly extractable in body files; quarterly balance-sheet detail relies on Q3 FY2026 10-Q narrative rather than full XBRL tables in the corpus.
 
 ## RISKS AND RED FLAGS
-**Leverage and integration.** Total debt nearly doubled in FY2025 to fund AspenTech. Management expects ratios to improve via deleveraging, but commercial paper reliance and interest coverage trending down (7.5x H1 FY2026) warrant monitoring. NI/Test & Measurement integration and AspenTech software renewal timing add execution risk.
+**Leverage and liquidity:** Post-AspenTech debt load and commercial-paper reliance raise refinancing and rate sensitivity; interest expense rose materially in FY2025 ($237m vs $34m in FY2023). Current ratio 0.9 at June 2026—typical for industrials but worth monitoring.
 
-**Cyclical and geographic exposure.** Q2 FY2026 underlying international sales −5% (China −9% in Intelligent Devices). Middle East conflict cited as −1% underlying impact with escalation risk flagged in the 10-Q. Discrete Automation and Safety & Productivity showed volume softness in FY2025.
+**Cyclical and geographic:** Filings cite Middle East conflict as a ~1–1.5% underlying sales drag; China softness (e.g. Q3 FY2026 China down 3–8% by segment). End-market concentration in power, LNG, semiconductors, and process industries adds cyclicality.
 
-**Tariffs and policy.** Filings note tariff cost pressure partially offset by pricing but diluting margins; potential IEEPA tariff refunds remain unrecorded pending CBP process — outcome uncertain.
+**Integration and accounting:** AspenTech ($7.2bn) and NI ($8.2bn, Oct 2023) integrations drive high intangibles amortisation (~$884m FY2025) and restructuring ($136m FY2025; $141m nine-month FY2026). Adjusted metrics exclude significant recurring costs—investors must track GAAP convergence.
 
-**Accounting and balance sheet.** Heavy intangibles amortisation (~$1.38/share guided for FY2026) suppresses GAAP EPS. Negative tangible book and $18.2bn goodwill create impairment sensitivity if automation end-markets weaken.
+**Litigation:** 10-K notes asbestos and product-liability claims with reserves based on projections through 2065; management believes material adverse impact “unlikely” but acknowledges remote possibility. General legal contingencies disclosed; no quantified material liability at 30 September 2025.
 
-**Legal and pension.** 10-K discloses asbestos litigation reserved on an undiscounted basis through 2065; management states material adverse impact is unlikely but not impossible. Pension assumptions (discount rate 5.27%, return 6.75% for FY2026) remain sensitive to rate moves.
+**Regulatory/tax:** OECD global minimum tax, IEEPA tariff refund uncertainty (Q3 FY2026 recognised $82m; further refunds uncertain), and FCPA/compliance risks per risk factors.
 
-**Governance.** 8-K (12 March 2025): director Leticia Gonçalves Lourenco resigned following a change in principal occupation — routine, not a red flag on its own.
+**Competitive:** Honeywell, ABB, Siemens, and automation peers compete in control systems and test/measurement; news flow frames EMR as outperforming industrials but not clearly cheap on multiples.
 
-Screens do not fully capture leverage step-up, software revenue lumpiness, or premium headline multiples.
+**Governance:** Stable executive team (CEO Lal Karsanbhai since 2021); no red flags in available filings. UK Investegate noise in the index is a data-quality issue, not an Emerson governance event.
+
+RiskTags: cyclical, leverage, competitive, litigation, pension, accounting, regulatory
+RiskTags: cyclical, leverage, competitive, litigation, pension, accounting, regulatory
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is moderate on strategy, heavier on flow/valuation commentary.
+Coverage over the past year is moderate-to-heavy on price action and fund flows, with several material strategic items:
 
-**Strategy and product**
-- “Emerson (EMR) Launches Refinery Software That Could Matter For Automation Growth” (Yahoo Finance, 25 July 2026) — new refinery workflow automation software.
-- “Emerson Electric (EMR) Valuation Check After Solid Second Quarter Earnings And Guidance Update” (Yahoo Finance, 6 May 2026) — post-Q2 FY2025 reaction.
+- **Equinor frame agreement (Aug 2026):** “Will Emerson’s New 13‑Year Equinor Deal Reshape Emerson Electric’s (EMR) Long‑Cycle Automation Narrative?” (Yahoo Finance, 27 Aug 2026)—13-year collaboration on measurement instrumentation and lifecycle services.
+- **Energy contracts (Aug 2026):** “Emerson Electric (EMR) Wins Energy Contracts, Is The Stock Still Undervalued?” (27 Aug 2026)—Equinor plus BP automation contract; YTD share return cited ~16.5%.
+- **Analyst actions:** JPMorgan upgraded EMR to Overweight ahead of earnings (17 Jul 2026); Morgan Stanley maintained with price target raised to $135 (GuruFocus, 28 Aug 2026).
+- **Valuation debate:** “Emerson Electric: A Better Business, But Not Yet A Cheap Stock” (Seeking Alpha, 1 Sep 2026); multiple pieces flag “fairly valued” or “near fair value” despite raised guidance (Aug 2026).
+- **Product:** Refinery workflow automation software launch (Yahoo Finance, 25 Jul 2026).
+- **Dividend:** 69-year dividend-increase streak and strong FCF coverage highlighted (Yahoo Finance, 28 Aug 2026).
 
-**Analyst and sentiment**
-- “JPMorgan upgrades 3M, Emerson Electric to Overweight ahead of earnings” (Yahoo Finance, 17 July 2026) — cites improving growth and earnings momentum into 2027.
-- “Emerson Electric shares rise as recent analyst upgrade and backlog optimism support sentiment” (Quiver Quantitative, 23 July 2026).
-- Counterpoints: “Emerson Electric (EMR) Stock Looks Near Fair Value Despite 72% Returns” (simplywall.st, 25 July 2026); “Emerson Electric Co (EMR) Stock Up 3.8% but GF Value Says Overva[lued]” (GuruFocus, 23 July 2026); “Emerson Electric (EMR) Faces A Zacks Downgrade” (Yahoo Finance, 13 July 2026).
-
-**Corporate**
-- “5 Dividend Kings Have Raised Their Dividends for 70 Years” (Yahoo Finance, 24 July 2026) — EMR among long-dividend growers.
-- AspenTech full acquisition completed March 2025 (~$7.2bn per 10-K/10-Q; not a headline in the manifest but central to the story).
-
-**Thin areas:** limited manifest coverage of Copeland exit completion, NI integration milestones, or regulatory actions. Much recent news is institutional position changes (MarketBeat) rather than fundamental developments.
+Institutional flow headlines (MarketBeat buys/sells) dominate the feed and add little fundamental insight. No major regulatory enforcement or management turnover events identified in the manifest.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.72
-Rationale: Filings confirm the screen’s quality, cash generation and adjusted earnings growth thesis, but elevated post-AspenTech leverage, cyclical volume softness and a premium headline multiple temper conviction versus an outright aggressive buy.
+Confidence: 0.74
+Rationale: SEC filings confirm improving margins, strong free cash flow, and intact FY2026 guidance, supporting the quantitative buy signal, though elevated post-deal leverage and news/analyst framing of fair-to-full valuation temper conviction on deep-value entry.

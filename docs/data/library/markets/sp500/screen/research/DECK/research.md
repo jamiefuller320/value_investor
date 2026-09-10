@@ -1,143 +1,93 @@
 # Deckers Outdoor Corporation (DECK) — Research memo
 
-_Version 1 · Updated 2026-07-17T03:21:04.730920+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-10T07:38:43.801539+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-# Deckers Outdoor Corporation (DECK) — First-Pass Research Memo
-
-**Sources:** SEC EDGAR filings (regime: `sec_edgar`), `screening_snapshot.json`, `news_manifest.json`; Yahoo `financials_annual.json` where noted.
-
----
-
-## EXECUTIVE SUMMARY
-
-Deckers Outdoor is a high-quality branded footwear group whose investment case rests on HOKA’s global scaling and UGG’s resilient premium positioning, supported by structurally strong margins, net-cash liquidity, and aggressive capital return. The quantitative screen rates DECK a **strong buy** (8/22 models; composite 73%), driven by cheapness, quality, and financial health metrics including ~5.7% FCF yield, 40.9% ROE, and 18.7% profit margin at a ~15.5x P/E. The valuation hook is a quality compounder trading at mid-teens earnings despite double-digit revenue and FCF growth, partly reflecting market concern that HOKA’s growth is normalising after a multi-year rerating. The central debate is whether decelerating domestic/HOKA momentum and fashion cyclicality are already in the price—or whether brand strength and international expansion can sustain premium returns.
-
----
+Deckers Outdoor is a high-quality branded footwear compounder centred on HOKA and UGG, with net sales, earnings, and free cash flow rising steadily through fiscal 2026 while the balance sheet remains net-cash and management returns capital aggressively via buybacks. The quantitative screen rates DECK as **strong buy**, though the snapshot carries no populated model metrics (`models_passed`: 0, `key_metrics`: empty), so the signal rests on the label rather than disclosed screen inputs. The valuation hook is a business generating roughly $1.1bn in annual free cash flow on ~$5.5bn revenue, trading against a share price that news coverage describes as down ~31% over twelve months despite record FY2026 results. The central debate is whether HOKA’s growth runway and DTC mix shift justify accumulation, or whether cyclical softlines pressure, tariff uncertainty, and rising SG&A will compress margins enough to invalidate the value case.
 
 ## INVESTMENT THESIS
+For a value investor, DECK offers a rare combination: double-digit revenue compounding, expanding gross margins, minimal financial leverage, and cash returns that shrink the share count materially. Using primary filings where available and Yahoo annual data as fallback (see Financial Review), revenue grew from $4.29bn (FY2024) to $4.99bn (FY2025) to $5.47bn (FY2026), with diluted EPS rising from $4.86 to $6.33 to $7.02 over the same span. Free cash flow reached $1.10bn in FY2026 against capital expenditure of only ~$85m, supporting a capital-light, brand-asset model.
 
-For a value-oriented investor, DECK combines **quality at a reasonable price** rather than deep distress. The screen passes eight models spanning FCF Yield, Quality Value, Buffett Quality, Economic Moat, Magic Formula, Acquirer’s Multiple, Composite Value, and Financial Health—three of four factor families (cheapness, quality, risk). That aligns with filing evidence: consolidated nine-month gross margin of **57.7%** (Q3 FY2026 10-Q), segment operating margins of **36.1% (HOKA)** and **39.3% (UGG)** for the nine months ended 31 December 2025, and net income conversion that remains robust through the brand portfolio rationalisation (Sanuk sold; Koolaburra/AHNU phased out).
+Business quality aligns with what a strong-buy screen would seek: HOKA has become the growth engine (Q1 FY2027 HOKA net sales $703.5m, +7.7% YoY per the 10-Q filed 30 July 2026), while UGG remains a resilient cash generator ($278.0m in the same quarter, +4.9%). Direct-to-consumer net sales rose 13.0% in Q1 FY2027 versus wholesale +2.2%, reinforcing a higher-margin channel mix (gross margin 56.4%, +60 bps YoY). The company carries ~$1.9bn cash (Yahoo FY2026 year-end; $1.60bn at 30 June 2026 per interim 10-Q) against ~$375m of lease obligations and no drawn revolver debt; management repurchased $1.08bn of stock in FY2026 (Yahoo cash-flow statement) and a further $338m in Q1 FY2027 alone (interim 10-Q).
 
-Business quality is anchored in two scalable franchises. HOKA has become the growth engine—nine-month net sales of **$1,916.1m** (+16.3% YoY per Q3 FY2026 segment disclosure)—while UGG contributes **$2,330.2m** (+8.0%) with seasonally strong Q3 performance ($1,305.5m in the quarter). Direct-to-consumer mix (41% of nine-month sales) and international expansion (+27.1% nine-month international net sales) support pricing power and reduce wholesale dependency, though domestic sales were essentially flat over nine months (+0.1%), a nuance the screen may underweight.
-
-Balance-sheet quality reinforces the case: **$2,086.7m** cash at 31 December 2025 (Q3 10-Q) against capital lease obligations of **$375.2m** (Yahoo FY2026 balance sheet—no traditional term debt evident). FY2026 operating cash flow of **$1,181.9m** and FCF of **$1,097.3m** (Yahoo; filing bodies lack full-year cash flow tables due to truncation) fund large buybacks (**$813.5m** in the first nine months of FY2026 per Q3 10-Q). At ~15.5x P/E and ~6.1x P/B, the market prices DECK as a mature compounder, not a hyper-growth name—creating room if HOKA innovation and marketplace management stabilise growth, as recent sell-side commentary suggests.
-
----
+The screen’s strong-buy label is directionally consistent with a franchise trading below intrinsic value on cash-earnings power, but the empty metric payload limits cross-checking; deep research supports the qualitative case while flagging near-term margin and sector headwinds.
 
 ## FINANCIAL REVIEW
+**Filing coverage.** The index contains three annual 10-K filings (FY2024–FY2026), seven interim 10-Q filings, and twelve 8-K items. FY2026 and FY2025 10-K body extracts include full business, risk, and MD&A narrative but **lack readable consolidated income-statement tables** in the plain-text extracts (XBRL metadata dominates). Annual dollar figures below therefore **fall back to `financials_annual.json` (Yahoo)** unless sourced from interim filing MD&A. Interim Q1 FY2027 and Q3 FY2026 figures are taken from filing body MD&A and financial statements.
 
-### Source note
-Annual 10-K body extracts (`38516ad0498fe9e2`, `8afd666ceac3419a`, `4cfc9bc4c8fd20f2`) are **truncated at 80,000 characters** and do not include Item 8 financial statements or full MD&A numerical tables. **Annual consolidated income, cash flow, and balance-sheet totals below are sourced from `financials_annual.json` (Yahoo) with explicit fallback.** Interim figures are from filing body extracts under `filings/bodies/`.
+**Annual trend (Yahoo fallback — FY ends 31 March)**
 
-Eight 8-K filings are indexed but have **no downloadable bodies**; they are not used for figures.
+| Metric | FY2024 | FY2025 | FY2026 |
+|--------|--------|--------|--------|
+| Revenue | $4,287.8m | $4,985.6m | $5,472.3m |
+| Operating income | $927.5m | $1,179.1m | $1,262.9m |
+| Net income | $759.6m | $966.1m | $1,024.1m |
+| Diluted EPS | $4.86 | $6.33 | $7.02 |
+| Operating cash flow | $1,033.2m | $1,044.5m | $1,181.9m |
+| Free cash flow | $943.8m | $958.4m | $1,097.3m |
+| Cash & equivalents (year-end) | $1,502.1m | $1,889.2m | $1,907.2m |
+| Total debt (incl. leases) | $266.9m | $277.0m | $375.2m |
+| Stockholders’ equity | $2,107.5m | $2,513.0m | $2,500.0m |
 
----
+Revenue CAGR FY2024–FY2026 is approximately 13%; net income CAGR ~16%. Gross margin (gross profit ÷ revenue) implied ~55.7% in FY2024, rising to ~57.7% in FY2026. FCF conversion remains strong: FY2026 FCF/ net income ≈ 107%. Share count fell from ~156m diluted average (FY2024) to ~146m (FY2026), amplifying EPS growth.
 
-### Annual trends (Yahoo fallback — fiscal years ended 31 March)
+**Interim — Q3 FY2026 (10-Q, quarter ended 31 December 2025, filing body)**
 
-| Metric | FY2024 | FY2025 | FY2026 | FY25→26 |
-|--------|--------|--------|--------|---------|
-| Revenue | $4,287.8m | $4,985.6m | $5,472.3m | +9.8% |
-| Operating income | $927.5m | $1,179.1m | $1,262.9m | +7.1% |
-| Net income | $759.6m | $966.1m | $1,024.1m | +6.0% |
-| Diluted EPS | $4.86 | $6.33 | $7.02 | +10.9% |
-| FCF | $943.8m | $958.4m | $1,097.3m | +14.5% |
+- Q3 net sales: **$1,957.5m** (+7.1% YoY vs $1,827.2m).
+- Q3 gross margin: **59.8%**; operating income **$614.4m** (31.4% of sales).
+- Q3 diluted EPS: **$3.33** (+11.0% YoY).
+- Nine months net sales: **$4,352.9m** (+9.8% YoY); nine-month net income **$888.5m**; diluted EPS **$6.04**.
+- Cash at 31 Dec 2025: **$2,086.7m**.
+- Nine-month share repurchases: **$813.5m** (~8.0m shares).
 
-Implied FY2026 operating margin: **~23.1%**; net margin: **~18.7%** (consistent with screen input). Revenue has compounded strongly since FY2024, though net income growth moderated slightly in FY2026 as SG&A scaled with brand investment and retail expansion (203 company-owned stores at 31 March 2026 per FY2026 10-K business section).
+**Interim — Q1 FY2027 (10-Q, quarter ended 30 June 2026, filing body)**
 
-Balance sheet at FY2026 year-end (Yahoo fallback): cash **$1,907.2m**, total debt/capital leases **$375.2m**, stockholders’ equity **$2,499.6m**, working capital **$2,046.3m**. Share count fell from ~152.7m (FY2025 diluted average) to ~145.8m (FY2026), reflecting **$1,083.5m** of repurchases in FY2026.
+- Q1 net sales: **$1,019.5m** (+5.7% YoY).
+  - HOKA: $703.5m (+7.7%); UGG: $278.0m (+4.9%); Other brands: $37.9m (−18.1%, reflecting Koolaburra/AHNU phase-outs).
+  - DTC: $352.8m (+13.0%); Wholesale: $666.7m (+2.2%).
+- Gross margin: **56.4%** (+60 bps); operating margin: **15.2%** (−190 bps) as SG&A rose 12.7%.
+- Diluted EPS: **$0.94** (+1.1% YoY), aided by lower share count despite lower net income (−6.6%).
+- Cash at 30 Jun 2026: **$1,602.6m** (seasonal build ahead of UGG peak; down from $1,907.2m at 31 Mar 2026).
+- Q1 operating cash flow: **$47.9m**; Q1 repurchases: **$338.5m**.
 
----
+**Liquidity and capital structure (filings).** Primary and China revolving credit facilities had **no borrowings** in Q1 FY2027; the company was **in compliance with all financial covenants** (Q1 FY2027 10-Q). No going-concern language appears in available extracts. IEEPA tariffs of approximately **$120m** were paid cumulatively; refund filings have begun but **no refunds are recognised** in financial statements as of the Q1 FY2027 filing date.
 
-### Interim trends (primary filings)
-
-**Q1 FY2026** (10-Q, period ended 30 June 2025, `7ab3365b2e2b2e92`):
-- Net sales **$964.5m** (+16.9% vs Q1 FY2025 $825.3m)
-- Income from operations **$165.3m** (+24.5%)
-- Net income **$139.2m** (+20.4%)
-
-**H1 FY2026** (10-Q, six months ended 30 September 2025, `8de2aee11b0f3698` — MD&A):
-- Net sales **$2,395.4m** (+12.1%)
-- HOKA **$1,287.2m** (+15.3%); UGG **$1,024.7m** (+12.3%)
-- Wholesale **+18.2%**; DTC **-0.2%**
-- Domestic **-2.1%**; international **+37.5%**
-- Gross margin **56.0%** (-30 bps); income from operations **$491.8m** (+12.3%)
-- Diluted EPS **$2.74** (+17.1%)
-
-**Nine months FY2026** (10-Q, period ended 31 December 2025, `833dca21ec730d2e`):
-- Net sales **$4,352.9m** (+9.8% vs $3,963.8m)
-- Income from operations **$1,106.2m** (+10.0%)
-- Net income **$888.5m** (+9.1%); diluted EPS **$6.04** (+13.3%)
-- Cash **$2,086.7m** (vs $1,889.2m at 31 March 2025)
-- Operating cash flow (nine months) **$1,086.1m**
-- Share repurchases (nine months) **$813.5m** (8.0m shares at ~$101.44)
-
-**Q3 FY2026** (quarter ended 31 December 2025, same filing):
-- Net sales **$1,957.5m** (+7.1%)
-- Net income **$481.1m** (+5.3%); diluted EPS **$3.33**
-- HOKA Q3 sales **$628.9m**; UGG **$1,305.5m** (seasonal peak)
-- DTC **$1,093.0m** (56% of quarter); wholesale **$864.6m**
-
-**Trend read:** Growth remains positive but is **decelerating through FY2026** (Q1 +17% → nine-month +10% → Q3 +7% revenue). International and wholesale are carrying growth; domestic and DTC are softer in H1. Margins remain elite but compressed slightly (nine-month gross margin 57.7% vs 58.2% prior year). Inventory rose to **$633.5m** at 31 December 2025 (+28% vs March 2025), consistent with forward demand planning but worth monitoring.
-
----
+**Gaps.** Annual consolidated statement tables are not extractable from 10-K bodies; Yahoo is used for FY totals. Q2 FY2027 10-Q (filed 31 October 2025 in index — calendar timing reflects fiscal Q2 ended September 2025) body is XBRL-heavy without readable MD&A in extract; Q3 FY2026 and Q1 FY2027 provide the strongest interim narrative coverage.
 
 ## RISKS AND RED FLAGS
+**Cyclical and sector.** Filings describe premium discretionary footwear as sensitive to macro conditions, inflation, and promotional intensity. BMO’s September 2026 sector note warns of a “weakening consumer” and a “messy” outlook for athletic retailers; Dick’s Sporting Goods’ August 2025 profit warning triggered a broad sportswear selloff including DECK. Q1 FY2027 operating margin compression (−190 bps) shows SG&A investment (HOKA retail, marketing, IT) can outpace gross-profit gains in softer demand environments.
 
-**Cyclical / demand.** FY2026 10-K risk factors emphasise that HOKA and UGG are **premium discretionary** purchases sensitive to inflation, employment, and consumer confidence; economic weakness could force promotional activity and margin pressure. Filing language also flags rapid shifts in fashion preferences and social-media amplification of reputational risks.
+**Tariffs and regulatory.** The Q1 FY2027 10-Q flags ongoing US trade-policy and IEEPA tariff exposure; management does not expect mitigation to fully offset incremental tariff costs in the current fiscal year. Approximately $120m in IEEPA tariffs paid with uncertain refund timing and amount — a contingent upside, not booked.
 
-**Growth normalisation.** H1 FY2026 MD&A shows **domestic net sales down 2.1%** and **DTC flat (-0.2%)** while HOKA still grew 15.3%—the market debate (reflected in recent news) is whether HOKA’s deceleration is temporary execution/product-cycle related or structural competitive pressure from larger athletic brands and private-label entrants.
+**Competitive.** The FY2026 10-K risk section emphasises intense competition from larger global brands and faster-moving entrants, with pricing and promotional pressure “expected to continue.” HOKA’s success has attracted dedicated competitors (On Holding, Nike recovery narratives, etc.).
 
-**Supply chain / geopolitical.** Production is concentrated in **Vietnam and Indonesia** (<5% from any other single country including China, per FY2026 10-K). Tariffs, retaliatory trade measures, and geopolitical instability are explicitly cited forward-looking risks. Sheepskin sourcing for UGG remains concentrated (Australia origin; two Chinese tanneries).
+**Brand and customer concentration.** Growth is heavily HOKA-dependent; UGG remains seasonally concentrated in fiscal Q3. One wholesale customer represented **12.0%** of trade receivables at 31 December 2025 (Q3 FY2026 10-Q) — below the 10% sales threshold but a receivables concentration worth monitoring.
 
-**Operational / inventory.** Long lead times create forecasting risk; nine-month inventory build and elevated accounts payable ($598.5m vs $418.0m at year-end prior) reflect growth investment but increase markdown risk if demand softens.
+**Supply chain.** Production is concentrated in Vietnam and Indonesia; sheepskin for UGG is sourced via China tanneries. Geopolitical, logistics, and 3PL transition risks are explicitly flagged (European 3PL partner change underway).
 
-**Customer concentration.** One wholesale customer represented **12.0%** of net receivables at 31 December 2025 (Q3 10-Q); no single customer exceeded 10% of net sales.
+**Governance / litigation.** Ordinary-course IP enforcement and employment claims; management states no material probable losses. Dave Powers retired from the board (8-K, 24 July 2025); no CEO change flagged. Aggressive buybacks ($338m in a single soft quarter) reduce flexibility if demand weakens further.
 
-**Capital allocation.** FY2026 nine-month repurchases ($813.5m) exceeded nine-month net income ($888.5m)—aggressive but sustainable given cash generation; remaining authorisation **$1,811.2m** at 31 December 2025. Buybacks at ~$101/share reduced float but limit balance-sheet optionality.
+**Accounting.** No restatements or going-concern flags in extracts. IEEPA refund recognition timing adds estimation uncertainty.
 
-**Governance / legal.** Q3 10-Q states no material probable litigation losses. No **going concern** language appears in available filing bodies. Credit facilities include a **total net leverage ratio** covenant (referenced in FY2026 10-K XBRL metadata); the company reports available revolving capacity and substantial cash—**drawn debt levels are not disclosed in truncated annual bodies**.
-
-**Portfolio rationalisation.** Koolaburra, AHNU, and Sanuk exits simplify the portfolio but remove diversification; immaterial exit costs were reported.
-
-**Screen gaps.** The screen does not capture timing (RSI/SMA200 unavailable), domestic softness, or brand-specific growth deceleration; P/B of 6.1x is rich on traditional value metrics despite reasonable P/E.
-
----
+RiskTags: cyclical, competitive, regulatory, customer_concentration
+RiskTags: cyclical, competitive, regulatory, customer_concentration
 
 ## NEWS HIGHLIGHTS
+Coverage over the past year is **moderate but noisy**: many Google News hits are false positives (“earnings on deck,” Steam Deck, etc.). Material DECK-specific items include:
 
-**Coverage quality:** Company-specific news is **moderate but recent-heavy**; Google News RSS is dominated by irrelevant “Steam Deck” (Valve gaming hardware) articles and should be disregarded.
+- **“Deckers Brands Reports First Quarter Fiscal Year 2027 Financial Results”** (Deckers Brands / Google News, 23 July 2026) — Q1 FY2027 release and updated FY2027 outlook (corroborated by 8-K, 23 July 2026).
+- **“Deckers Brands Reports Fourth Quarter and Full Fiscal Year 2026 Financial Results”** (Deckers Brands, 21 May 2026) — record FY2026 year-end.
+- **“BMO cautious on softlines, bearish on athletic names”** (Yahoo Finance, 9 September 2026) and **“DECK, DKS Stocks In Focus: BMO Warns Athletic Retailers Face A ‘Messy’ Road Ahead”** (Stocktwits, 9 September 2026) — sector caution post-Dick’s.
+- **“DECK Stock Falls Overnight As Q2 Sales Growth Slows — Retail Calls The Drop 'Absurd'”** (Stocktwits, 25 August 2026) and **“VF Corp, Levi's, Under Armour, Deckers, and Crocs Stocks Trade Down”** (Yahoo Finance, 25 August 2026) — peer read-through selling.
+- **“Jefferies bullish on Deckers Outdoor, sees HOKA growth slowdown as oversold”** (Yahoo Finance, 13 July 2025) — upgrade to Buy, HOKA-focused thesis.
+- **“Deckers' Expanding DTC Business Supports a Favorable Sales Mix”** (Yahoo Finance, 3 September 2026) — strategic DTC emphasis.
+- **“A trail shoe tested across 1,500 miles is Teva's first co-created with athletes”** (Stock Titan, 1 September 2026) — Teva Trailpeak product launch.
+- Board compensation grant filings (Stock Titan, 1–2 September 2026) — routine governance, not strategic.
 
-**Material DECK items (past year, from `news_manifest.json`):**
-
-| Date | Title | Relevance |
-|------|-------|-----------|
-| 13 Jul 2026 | *Jefferies bullish on Deckers Outdoor, sees HOKA growth slowdown as oversold* | Upgrade to Buy; argues slowdown priced in |
-| 13 Jul 2026 | *Deckers Outdoor Shares Climb After Jefferies Upgrades Stock to Buy* | Price target raised to $130 from $110 |
-| 13 Jul 2026 | *How Jefferies’ HOKA-Focused Upgrade Will Impact Deckers Outdoor (DECK) Investors* | Execution/product pipeline cited as recovery path |
-| 13 Jul 2026 | *Deckers Outdoor (DECK) Stock Still Looks Cheap After A 70% Run* | Valuation/DCF framing |
-| 17 Jul 2026 | *3 Reasons to Sell DECK and 1 Stock to Buy Instead* | Counter-bearish retail commentary |
-| 13 Feb 2026 | *Central Cee and Su Yiming front UGG’s new clogs — just 2,000 pairs worldwide* | UGG brand/marketing activity |
-
-No material M&A, regulatory enforcement, or senior management change headlines appear in the manifest. Strategy news aligns with filings: HOKA-focused growth, portfolio pruning, and repurchases.
-
----
+No M&A of significance; portfolio simplification (Sanuk sale, Koolaburra/AHNU phase-outs) is reflected in filings rather than recent headlines.
 
 ## RESEARCH VERDICT
-
-Verdict: accumulate  
-Risk: medium  
-Confidence: 0.74  
-Rationale: Deep research largely **confirms** the screen’s quality-and-cash-flow case and reasonable earnings multiple, but **moderates** outright strong-buy conviction given visible HOKA/domestic growth deceleration, rich P/B, and inventory build that screens do not fully capture.
-
-## INVESTMENT THESIS
-
-
-## FINANCIAL REVIEW
-
-
-## RISKS AND RED FLAGS
-
-
-## NEWS HIGHLIGHTS
+Verdict: accumulate
+Risk: medium
+Confidence: 0.72
+Rationale: Filings confirm a cash-rich, compounding HOKA/UGG franchise with strong FY2026 results and continued Q1 FY2027 growth, supporting the quantitative strong-buy signal on business quality, while margin pressure, tariff uncertainty, and sector caution warrant accumulation rather than unqualified conviction.
