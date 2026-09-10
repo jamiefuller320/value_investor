@@ -258,9 +258,9 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.volkswagen-group.com/en/press-releases/volkswagen-group-strengthens-financial-resilience-in-2025-strong-fourth-quarter-in-a-challenging-environment-20202/download?disposition=attachment",
         "https://www.volkswagen-group.com/en/publications/more/annual-report-2025-1886",
     ],
+    # euro_depth IWB blocker — DTE.DE parked awaiting_periodic_report; FY2025 entire annual report PDF.
     "DTE.DE": [
-        "https://www.telekom.com/resource/blob/1101986/912628a6116bb7b1ecdfc36b578d66ef/dt-25-annual-report-data.pdf",
-        "https://www.telekom.com/en/investor-relations/publications",
+        "https://report.telekom.com/annual-report-2025/_assets/downloads/entire-dtag-ar25.pdf",
     ],
     # asx200 buy-tier deepen — unmeasured EBO.AX (Markit latest-five feed is capital-change only).
     "EBO.AX": [
@@ -3427,6 +3427,13 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     ),
     "https://www.globenewswire.com/news-release/2026/04/23/3280202/0/en/VINCI-FIRST-QUARTER-2026-STABLE-REVENUE-INCREASE-IN-ORDER-INTAKE.html": (
         "https://www.vinci.com/sites/default/files/medias/communiques/file/2026-04/first-quarter-2026-stable-revenue-increase-in-order-intake.pdf"
+    ),
+    # eng-20260910-02: blob/1101986 404s; report.telekom.com entire-dtag-ar25.pdf serves.
+    "https://www.telekom.com/resource/blob/1101986/912628a6116bb7b1ecdfc36b578d66ef/dt-25-annual-report-data.pdf": (
+        "https://report.telekom.com/annual-report-2025/_assets/downloads/entire-dtag-ar25.pdf"
+    ),
+    "https://www.telekom.com/en/investor-relations/publications": (
+        "https://report.telekom.com/annual-report-2025/_assets/downloads/entire-dtag-ar25.pdf"
     ),
 }
 
