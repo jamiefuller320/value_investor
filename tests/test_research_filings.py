@@ -4298,6 +4298,19 @@ def test_fetch_filings_ir_allowlist_euro_depth_bas_de_builtins(tmp_path: Path):
     assert "basf-ar25.pdf" in rows[0]["url"]
 
 
+def test_fetch_filings_ir_allowlist_euro_depth_essity_b_st_builtins(tmp_path: Path):
+    """Regression: ESSITY-B.ST awaiting_periodic_report — essity.com FY2025 annual PDF."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("ESSITY-B.ST", path=allowlist_path)
+    assert len(rows) == 1
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert rows[0]["period"] == "annual"
+    assert "essity.com" in rows[0]["url"]
+    assert "Annual-Report-2025" in rows[0]["url"]
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_dte_de_builtins(tmp_path: Path):
     """Regression: DTE.DE awaiting_periodic_report — report.telekom.com FY2025 entire annual PDF."""
     allowlist_path = tmp_path / "ir.json"
@@ -6640,6 +6653,16 @@ def test_parked_source_hunter_bas_de_euro_depth_has_fetchable_ir():
     assert rows[0]["period"] == "annual"
     assert "report.basf.com" in rows[0]["url"]
     assert "basf-ar25.pdf" in rows[0]["url"]
+
+
+def test_parked_source_hunter_essity_b_st_euro_depth_has_fetchable_ir():
+    """eng-20260910-04: ESSITY-B.ST has live essity.com FY2025 annual report PDF."""
+    assert "ESSITY-B.ST" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("ESSITY-B.ST")
+    assert len(rows) == 1
+    assert rows[0]["period"] == "annual"
+    assert "essity.com" in rows[0]["url"]
+    assert "Annual-Report-2025" in rows[0]["url"]
 
 
 def test_parked_source_hunter_dte_de_euro_depth_has_fetchable_ir():
