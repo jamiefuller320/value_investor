@@ -230,6 +230,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Randstad_Annual_Report_2025_F.pdf",
         "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Q4_2025_Press_Release.pdf",
     ],
+    # euro_depth IWB blocker — NOVN.SW unfetchable_iwb resolved; SEC 20-F + novartis.com statutory PDFs.
+    "NOVN.SW": [
+        "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000004/nvs-20251231.htm",
+        "https://www.novartis.com/sites/novartis_com/files/q4-2025-interim-financial-report-en.pdf",
+        "https://www.novartis.com/sites/novartis_com/files/2025-01-interim-financial-report-en.pdf",
+    ],
     # euro_depth IWB blocker — Andritz CMS reshuffled blob IDs; annual report PDF.
     "ANDR.VI": [
         "https://www.andritz.com/resource/blob/689306/6ad9400073c46323b95b1be977870245/andritz-annual-report-2025-data.pdf",
@@ -3733,8 +3739,15 @@ def _reject_duplicate_filing_body_hash(
     return content_hash, None
 
 
-def _ir_body_title_tokens_match(row: dict[str, Any], body: str) -> bool:
+def _ir_body_title_tokens_match(row: dict[str, Any], body: str, *, ticker: str = "") -> bool:
     tokens = _ir_row_search_tokens(row)
+    url = str(row.get("url") or "").lower()
+    if "sec.gov/" in url and ticker:
+        base = _base_symbol(ticker)
+        for alias in _ESEF_ENTITY_SEARCH_ALIASES.get(base, ()):
+            for tok in re.split(r"[^a-z0-9]+", alias.lower()):
+                if len(tok) >= 4:
+                    tokens.add(tok)
     if not tokens:
         return True
     sample = (body or "")[:4000].lower()
@@ -3845,7 +3858,12 @@ def _try_persist_rns_filing_body(
     return updated, None
 
 
-def _validate_ir_allowlist_body_content(row: dict[str, Any], body: str) -> tuple[bool, str | None]:
+def _validate_ir_allowlist_body_content(
+    row: dict[str, Any],
+    body: str,
+    *,
+    ticker: str = "",
+) -> tuple[bool, str | None]:
     """
     Title/period/hash gate before marking IR allowlist rows ``has_body``.
 
@@ -3858,7 +3876,7 @@ def _validate_ir_allowlist_body_content(row: dict[str, Any], body: str) -> tuple
     if not valid:
         return False, reason
 
-    if not _ir_body_title_tokens_match(row, body):
+    if not _ir_body_title_tokens_match(row, body, ticker=ticker):
         return False, "title_mismatch"
 
     url = str(row.get("url") or "")
@@ -4027,7 +4045,7 @@ def _fetch_ir_allowlist_body(
 
     body = fetch_filing_body(url)
     if body:
-        valid, reason = _validate_ir_allowlist_body_content(row, body)
+        valid, reason = _validate_ir_allowlist_body_content(row, body, ticker=ticker)
         if valid:
             return body, "pdf"
         logger.debug(
@@ -4037,7 +4055,7 @@ def _fetch_ir_allowlist_body(
         )
 
     for alt_body, parser in _fetch_ir_pdf_alternate_candidates(url):
-        valid, reason = _validate_ir_allowlist_body_content(row, alt_body)
+        valid, reason = _validate_ir_allowlist_body_content(row, alt_body, ticker=ticker)
         if valid:
             source = "pdf" if parser == "pypdf" else f"pdf_{parser}"
             return alt_body, source
@@ -4060,7 +4078,7 @@ def _fetch_ir_allowlist_body(
     ig_url = str(matched.get("url") or "")
     html_body = _fetch_investegate_html_body(ig_url)
     if html_body:
-        valid, reason = _validate_ir_allowlist_body_content(row, html_body)
+        valid, reason = _validate_ir_allowlist_body_content(row, html_body, ticker=ticker)
         if valid:
             return html_body, "investegate_html"
         logger.debug(

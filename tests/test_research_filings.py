@@ -6675,6 +6675,55 @@ def test_parked_source_hunter_dte_de_euro_depth_has_fetchable_ir():
     assert "entire-dtag-ar25.pdf" in rows[0]["url"]
 
 
+def test_ir_allowlist_sec_edgar_body_accepts_issuer_alias_tokens():
+    """SEC 20-F inline HTML may omit URL filename tokens; issuer aliases must suffice."""
+    url = "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000004/nvs-20251231.htm"
+    row = {
+        "id": "hunter_gate",
+        "url": url,
+        "period": "annual",
+        "source": "ir_allowlist",
+        "headline": "20-F",
+    }
+    body = fetch_filing_body(url)
+    assert body
+    valid, reason = _validate_ir_allowlist_body_content(row, body, ticker="NOVN.SW")
+    assert valid, reason
+
+
+def test_fetch_filings_ir_allowlist_euro_depth_novn_sw_builtins(tmp_path: Path):
+    """Regression: NOVN.SW parked IWB — SEC FY2025 20-F + novartis.com statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("NOVN.SW", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any(
+        "sec.gov/Archives/edgar/data/1114448" in url and url.endswith("nvs-20251231.htm")
+        for url in urls
+    )
+    assert any(
+        "novartis.com" in url and "q4-2025-interim-financial-report-en.pdf" in url for url in urls
+    )
+    assert any(
+        "novartis.com" in url and "2025-01-interim-financial-report-en.pdf" in url for url in urls
+    )
+    assert {row["period"] for row in rows} == {"annual", "interim"}
+
+
+def test_parked_source_hunter_novn_sw_euro_depth_has_fetchable_ir():
+    """eng-20260910-01: NOVN.SW has live SEC 20-F + novartis.com FY2025/H1 statutory PDFs."""
+    assert "NOVN.SW" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("NOVN.SW")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert any(url.endswith("nvs-20251231.htm") for url in urls)
+    assert any("q4-2025-interim-financial-report-en.pdf" in url for url in urls)
+    assert any("2025-01-interim-financial-report-en.pdf" in url for url in urls)
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_aze_br_builtins(tmp_path: Path):
     """Regression: AZE.BR parked IWB — azelis.com FY2025 integrated + H1 financial PDFs."""
     allowlist_path = tmp_path / "ir.json"
