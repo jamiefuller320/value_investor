@@ -19,6 +19,7 @@ most automation — this list is what still needs a human.
 | **Spot-check learning tracks** after paper-auto — AI excess vs ^FTSE, rules control, competing calibrated shadows, Suite B `buy_tier_level` after Monday cold start | Human | [primary-learning-track.md](primary-learning-track.md#commands) |
 | Paper-auto + decision-review `--apply` (all tracks including `buy_tier_level`; shadows + cohort lab observe-only; endurance ledger) | CI | [decision-review.md](decision-review.md#commands) |
 | Admitted epoch-0 **local-open marks** (ASX / EU / US settle; not FTSE paper-auto; census refresh) | CI | [market-sharded-learning.md](market-sharded-learning.md#weekday-epoch-0-local-open) |
+| Epoch-0 weekday **cron upsert** on learning admit + `--sync-cron` (timezone buckets; residual human only for unmapped TZ) | CI | [market-sharded-learning.md](market-sharded-learning.md#weekday-epoch-0-local-open) |
 | **GHA secret hygiene** scan (skips if no merges / workflow touches in 36h) | CI | [gha-secret-hygiene.md](gha-secret-hygiene.md#automated-daily-check) |
 | **Confirm buy-tier level first fill** — Monday paper-auto should open the wide raw-screen Suite B book; knobs stay frozen | Human | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#level-book-live-monday) |
 | Admitted-market weekday rememo (3/day per epoch-0 book after maintenance ingest; catch-up 5 if that book exceeds 15) | CI | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
@@ -80,7 +81,7 @@ Survivors are **starting priors for learning-loop refinement** — never auto-ap
 |------|-----|-----|
 | **Decision packs** before live capital (verify checklist) | Human | [primary-learning-track.md](primary-learning-track.md#success-datums) |
 | **Paper-learning review** when churn / exit-timing cohorts mature | Human | [paper-learning-review.md](paper-learning-review.md) |
-| **Register admitted epoch-0 weekday local-open crons** on cron-job.org after merge (`library-epoch0-weekday-asx|euro|us-edt|us-est`) | Human | [market-sharded-learning.md](market-sharded-learning.md#weekday-epoch-0-local-open) |
+| **Extend epoch-0 cron timezone map** when admitting a market whose session TZ has no ASX/EU/US bucket (`EPOCH0_WEEKDAY_SLOTS`) | Human (residual) | [market-sharded-learning.md](market-sharded-learning.md#weekday-epoch-0-local-open) |
 | **Re-import library ingest crons** after cadence changes (Mon–Sat peak + daily off-peak; sprint ≤4×/day × 24; maintenance ≤4×/day × 62) | Human | [euro-depth-sprint.md](euro-depth-sprint.md#register-euro-ingest-crons-after-cadence-changes) |
 | **Register ops-monitor 13:15 catch-up** on cron-job.org after email-deferral merge | Human | [ops-monitor.md](ops-monitor.md#email-deferral-day-complete-gate) |
 | **Rotate `CURSOR_API_KEY`** (and review Actions) if Cursor API misuse or secret exposure is suspected | Human | [gha-secret-hygiene.md](gha-secret-hygiene.md#if-cursor_api_key-may-already-be-compromised) |

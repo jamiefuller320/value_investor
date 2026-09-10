@@ -160,6 +160,8 @@ jobs:
           MAX_RUNTIME_SECONDS: ${{ github.event.inputs.max_runtime_seconds }}
           MAX_BODIES: ${{ github.event.inputs.max_bodies }}
           NO_DISCOVERY_SCAN: ${{ github.event.inputs.no_discovery_scan }}
+          CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}
+          WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
         run: |
           set -euo pipefail
           require_safe() {
@@ -223,6 +225,7 @@ jobs:
       - name: Refresh completion gate and sync crons
         env:
           CRONJOB_API_KEY: ${{ secrets.CRONJOB_API_KEY }}
+          WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
         run: |
           ftse-library euro-ingest-dispatch --refresh --sync-cron --json --json-path /tmp/library_dispatch_refresh.json
 

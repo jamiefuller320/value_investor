@@ -603,6 +603,14 @@ def refresh_euro_ingest_dispatch(
         except Exception as exc:  # noqa: BLE001
             logger.warning("Euro ingest cron sync failed: %s", exc)
             evaluation["cron_sync"] = {"error": str(exc)}
+        try:
+            from value_investor.epoch0_weekday_cron import ensure_epoch0_weekday_crons_for_policy
+
+            policy = load_policy(policy_path)
+            evaluation["epoch0_cron_sync"] = ensure_epoch0_weekday_crons_for_policy(policy)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Epoch-0 weekday cron ensure failed: %s", exc)
+            evaluation["epoch0_cron_sync"] = {"error": str(exc)}
     try:
         from value_investor.market_status import write_market_status
 

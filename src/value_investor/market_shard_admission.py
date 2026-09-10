@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 
 def _clean_market_ids(values: Any) -> list[str]:
@@ -14,10 +17,42 @@ def _clean_market_ids(values: Any) -> list[str]:
     return out
 
 
-def admit_market_to_learning(policy: dict[str, Any], market_id: str) -> bool:
+def _ensure_epoch0_crons_after_admit(market_id: str) -> dict[str, Any] | None:
+    """Upsert timezone-bucket epoch-0 weekday crons; never raise into callers."""
+    try:
+        from value_investor.epoch0_weekday_cron import ensure_epoch0_weekday_crons_for_markets
+
+        result = ensure_epoch0_weekday_crons_for_markets([market_id])
+        if result.get("skipped"):
+            logger.info(
+                "Epoch-0 weekday cron ensure skipped for %s: %s",
+                market_id,
+                result.get("reason"),
+            )
+        else:
+            logger.info(
+                "Epoch-0 weekday cron ensure for %s: keys=%s results=%s",
+                market_id,
+                result.get("keys"),
+                result.get("results"),
+            )
+        return result
+    except Exception as exc:  # noqa: BLE001 — admission must not fail on cron API
+        logger.warning("Epoch-0 weekday cron ensure failed for %s: %s", market_id, exc)
+        return {"error": str(exc), "market_id": market_id}
+
+
+def admit_market_to_learning(
+    policy: dict[str, Any],
+    market_id: str,
+    *,
+    ensure_crons: bool = True,
+) -> bool:
     """Persist ``market_id`` onto ``ladder.admitted_learning_markets``.
 
-    Returns True when the explicit admitted list changed.
+    Returns True when the explicit admitted list changed. On first admit, upserts
+    the shared timezone-bucket cron-job.org slots for that market's session
+    (soft-skip when secrets are missing).
     """
     mid = str(market_id or "").strip()
     if not mid:
@@ -31,6 +66,8 @@ def admit_market_to_learning(policy: dict[str, Any], market_id: str) -> bool:
     admitted.append(mid)
     ladder["admitted_learning_markets"] = admitted
     policy["ladder"] = ladder
+    if ensure_crons:
+        _ensure_epoch0_crons_after_admit(mid)
     return True
 
 

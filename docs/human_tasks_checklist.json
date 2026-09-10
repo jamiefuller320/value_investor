@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-08",
+  "updated_at": "2026-09-10",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -39,6 +39,14 @@
           "id": "weekday-epoch0-local-open",
           "title": "Admitted epoch-0 local-open marks",
           "summary": "library-epoch0-weekday.yml marks admitted buy_tier_level books after ASX / EU / US open+settle. Session gate skips pre-settle and already-marked local days. No AI track, no knob apply, not FTSE paper-auto at 08:25 UTC. Census refresh writes equal_support_status.json.",
+          "automated": true,
+          "doc_path": "docs/ops/market-sharded-learning.md",
+          "doc_anchor": "weekday-epoch-0-local-open"
+        },
+        {
+          "id": "adhoc-epoch0-weekday-cron-register",
+          "title": "Epoch-0 weekday local-open crons (admit + sync)",
+          "summary": "On learning admit and on euro-ingest-dispatch --sync-cron, upsert timezone-bucket cron-job.org jobs (asx/euro/us-edt/us-est) for admitted markets. Ingest/sprint/maintenance workflows pass CRONJOB_API_KEY + WORKFLOW_DISPATCH_PAT. Soft-skips when secrets are missing. Do not attach these to FTSE weekday_paper at 08:25 UTC.",
           "automated": true,
           "doc_path": "docs/ops/market-sharded-learning.md",
           "doc_anchor": "weekday-epoch-0-local-open"
@@ -296,9 +304,9 @@
           "doc_anchor": null
         },
         {
-          "id": "adhoc-epoch0-weekday-cron-register",
-          "title": "Register admitted epoch-0 weekday local-open crons",
-          "summary": "After merging library-epoch0-weekday.yml, run import_cron_jobs.py --job library-epoch0-weekday-asx --job library-epoch0-weekday-euro --job library-epoch0-weekday-us-edt --job library-epoch0-weekday-us-est (or --all) so cron-job.org fires those UTC slots. GitHub schedule alone is best-effort. Do not attach these to FTSE weekday_paper at 08:25 UTC.",
+          "id": "adhoc-epoch0-cron-unmapped-timezone",
+          "title": "Extend epoch-0 cron timezone map for new session",
+          "summary": "When admitting a market whose session timezone is not in EPOCH0_WEEKDAY_SLOTS (ASX/EU/US buckets), add a mapped slot (or reuse an existing UTC fire), then re-run euro-ingest-dispatch --sync-cron or import_cron_jobs for that key.",
           "automated": false,
           "doc_path": "docs/ops/market-sharded-learning.md",
           "doc_anchor": "weekday-epoch-0-local-open"
