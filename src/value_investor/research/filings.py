@@ -377,6 +377,12 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "substantiveness gate; ab-inbev.com IR is age-gated/JS-only and statutory 20-F/ESEF "
         "plus HY EX-99.1 are already bodied via the SEC allowlist."
     ),
+    "SAP.DE": (
+        "Leftover indexed-without-body row is IR allowlist hub HTML "
+        "(financial-documents.html); sap.com is Akamai bot-gated (403) and "
+        "FY2025 20-F PDF on sap.com/docs also 403; SEC 20-F/6-K are already "
+        "bodied via sec_edgar."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.

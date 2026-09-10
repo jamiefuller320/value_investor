@@ -6982,6 +6982,20 @@ def test_refetch_ir_allowlist_migrates_eg7_ir_dead_cairnhomes_url(tmp_path: Path
     assert row["has_body"] is True
 
 
+def test_parked_source_hunter_skip_sap_de_euro_depth():
+    """eng-20260910-02: SAP.DE leftover IWB is bot-gated IR hub; SEC filings already bodied."""
+    assert "SAP.DE" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["SAP.DE"]
+    assert "bot-gated" in reason
+    assert "403" in reason
+    assert "20-F" in reason
+    assert "sec_edgar" in reason
+    rows = fetch_filings_ir_allowlist("SAP.DE")
+    assert len(rows) == 1
+    assert "financial-documents.html" in rows[0]["url"]
+    assert fetch_filing_body(rows[0]["url"]) is None
+
+
 def test_parked_source_hunter_skip_abi_br_euro_depth():
     """eng-20260909-01: re-hunt — leftover IWB is 6-K cover HTML; ab-inbev IR is JS-only."""
     assert "ABI.BR" in PARKED_SOURCE_HUNTER_SKIP
