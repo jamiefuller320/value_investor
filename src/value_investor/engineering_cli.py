@@ -882,7 +882,9 @@ def _cmd_hunter_merge_gate(args: argparse.Namespace) -> int:
     tier = hunter_auto_merge_policy_tier()
     if tier == "off":
         if args.json:
-            _print_json({"ok": True, "reason": "parked_hunter auto-merge disabled — skipped", "tier": tier})
+            _print_json(
+                {"ok": True, "reason": "parked_hunter auto-merge disabled — skipped", "tier": tier}
+            )
         else:
             print("hunter-merge-gate: skipped (policy off)")
         return 0
@@ -975,10 +977,7 @@ def _cmd_hunter_verify_observer(args: argparse.Namespace) -> int:
     if args.json:
         _print_json(observer.to_dict())
     else:
-        print(
-            f"hunter-verify-observer: verdict={observer.verdict} "
-            f"skipped={observer.skipped}"
-        )
+        print(f"hunter-verify-observer: verdict={observer.verdict} skipped={observer.skipped}")
     if args.strict and observer.verdict == "reject":
         return 1
     return 0

@@ -156,9 +156,7 @@ def format_observer_pr_comment(result: HunterVerifyObserverResult) -> str:
             f"{result.deterministic_gate.get('reason', '')}"
         )
         lines.append("")
-        lines.append(
-            "_This comment is informational only and does not block merge or auto-merge._"
-        )
+        lines.append("_This comment is informational only and does not block merge or auto-merge._")
     return "\n".join(lines)
 
 
