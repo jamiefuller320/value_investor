@@ -8314,8 +8314,115 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260910-01",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "DFS.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "DFS.L"
+        ],
+        "market_id": "ftse_smallcap",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260910-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-10T11:21:11.443342+00:00",
+      "completed_at": "2026-09-10T11:21:40.624457+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "DFS.L"
+        ],
+        "results": [
+          {
+            "ticker": "DFS.L",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 59,
+              "filings_with_body": 54,
+              "indexed_without_body": 5
+            },
+            "after": {
+              "filings_total": 59,
+              "filings_with_body": 54,
+              "indexed_without_body": 5
+            },
+            "improved": false,
+            "regime": "uk_rns",
+            "filings_summary": {
+              "total": 59,
+              "annual": 9,
+              "interim": 7,
+              "trading_update": 5,
+              "other": 38,
+              "with_body": 54,
+              "period_coverage": {
+                "annual": {
+                  "total": 9,
+                  "with_body": 6
+                },
+                "interim": {
+                  "total": 7,
+                  "with_body": 5
+                },
+                "trading_update": {
+                  "total": 5,
+                  "with_body": 5
+                },
+                "other": {
+                  "total": 38,
+                  "with_body": 38
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 54,
+              "with_body_after": 54,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "DFS.L",
+            "with_body_before": 54,
+            "with_body_after": 54,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-09T19:58:18.922039+00:00",
+  "updated_at": "2026-09-10T11:21:40.624469+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
