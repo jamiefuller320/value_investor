@@ -17,6 +17,12 @@ from value_investor.engineering_tasks import (
     find_engineering_task,
     validate_engineering_pr_paths,
 )
+from value_investor.hunter_auto_merge import (
+    hunter_auto_merge_policy_tier,
+    hunter_task_eligible_for_auto_merge,
+    is_parked_source_hunter_task,
+    validate_hunter_diff_scope,
+)
 
 GITHUB_API_VERSION = "2022-11-28"
 
@@ -185,10 +191,17 @@ def evaluate_auto_merge(
             f"task status is {task.status!r}, expected pr_open",
             task_id=task_id,
         )
-    if not task_eligible_for_auto_merge(task):
+
+    if not is_parked_source_hunter_task(task) and not task_eligible_for_auto_merge(task):
         return AutoMergeDecision(
             False,
             "task is not eligible for auto-merge (auto_merge=false or scope too broad)",
+            task_id=task_id,
+        )
+    if is_parked_source_hunter_task(task) and not hunter_task_eligible_for_auto_merge(task):
+        return AutoMergeDecision(
+            False,
+            "parked_hunter auto-merge disabled by policy",
             task_id=task_id,
         )
 
@@ -207,6 +220,30 @@ def evaluate_auto_merge(
         return AutoMergeDecision(
             False,
             f"path guard failed: {'; '.join(guard.violations[:3])}",
+            task_id=task_id,
+            pr_number=pr_number,
+        )
+
+    if is_parked_source_hunter_task(task):
+        if not hunter_task_eligible_for_auto_merge(task):
+            return AutoMergeDecision(
+                False,
+                "parked_hunter auto-merge disabled by policy",
+                task_id=task_id,
+                pr_number=pr_number,
+            )
+        scope_ok, scope_reason = validate_hunter_diff_scope(changed)
+        if not scope_ok:
+            return AutoMergeDecision(
+                False,
+                f"hunter scope check: {scope_reason}",
+                task_id=task_id,
+                pr_number=pr_number,
+            )
+        tier = hunter_auto_merge_policy_tier()
+        return AutoMergeDecision(
+            True,
+            f"hunter auto-merge eligible (tier={tier}; full gate passed in CI hunter-merge-gate)",
             task_id=task_id,
             pr_number=pr_number,
         )

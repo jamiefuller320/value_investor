@@ -1,0 +1,64 @@
+name: Engineering Hunter Verify Observer
+
+# Non-blocking read-only reviewer for parked_source_hunter PRs.
+# Posts an informational PR comment; never blocks merge or auto-merge.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: engineering-hunter-verify-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  verify-observer:
+    if: >-
+      startsWith(github.event.pull_request.head.ref, 'cursor/eng-')
+      && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e ".[dev]"
+
+      - name: Fetch base branch
+        run: git fetch origin main
+
+      - name: Run hunter verify observer (non-blocking)
+        env:
+          CURSOR_API_KEY_V2: ${{ secrets.CURSOR_API_KEY_V2 }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY_V2 || secrets.CURSOR_API_KEY }}
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          BRANCH: ${{ github.event.pull_request.head.ref }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$BRANCH" =~ ^cursor/eng-[0-9]{8}-[0-9]{2}-1de3$ ]]; then
+            echo "Skipping non-engineering branch"
+            exit 0
+          fi
+          git diff --name-only origin/main...HEAD > /tmp/changed_files.txt
+          ftse-engineering hunter-verify-observer \
+            --branch "$BRANCH" \
+            --pr-number "$PR_NUMBER" \
+            --base-ref origin/main \
+            --head-ref HEAD \
+            --changed-files /tmp/changed_files.txt \
+            --output-dir output \
+            || true
+          exit 0
