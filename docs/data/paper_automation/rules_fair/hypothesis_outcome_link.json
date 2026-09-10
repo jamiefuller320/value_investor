@@ -3,26 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "rules_fair",
-  "generated_at": "2026-09-09T08:31:10.411453+00:00",
+  "generated_at": "2026-09-10T08:29:40.117962+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 2,
+    "closed_total": 5,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 0,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 2,
-        "recovery_rate": 1.0,
-        "sold_underwater_rate": 0.0,
-        "mean_peak_unrealized_pct": 0.0479,
-        "mean_trough_unrealized_pct": 0.0301,
+        "closed_count": 5,
+        "recovery_rate": 0.4,
+        "sold_underwater_rate": 0.6,
+        "mean_peak_unrealized_pct": 0.0113,
+        "mean_trough_unrealized_pct": -0.0079,
         "outcome_labels": {
+          "sold_underwater": 3,
           "recovered": 2
         }
       },
@@ -55,11 +56,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 2,
+    "hold_closed_with_thesis": 5,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=2 (target >=8)",
-      "hold thesis buckets thin (weakening=2; target >=3 each)",
+      "hold closed with thesis=5 (target >=8)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -74,7 +74,7 @@
       "ticker": "IMB.L",
       "name": "Imperial Brands PLC",
       "started_at": "2026-09-04T09:29:13.202583+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -105,11 +105,11 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0075,
-      "trough_unrealized_pct": -0.0222,
+      "trough_unrealized_pct": -0.0297,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-09-10T09:29:26.451600+01:00",
+      "linked_sell_trade_id": "06725b74-5b69-443b-a216-02ea8d289126"
     },
     {
       "episode_id": "rules_fair:MEGP.L:2026-09-07T09:29:42.597750+01:00",
@@ -203,7 +203,7 @@
       "ticker": "MGNS.L",
       "name": "Morgan Sindall Group plc",
       "started_at": "2026-09-09T09:30:52.804190+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -234,11 +234,11 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0029,
-      "trough_unrealized_pct": -0.0029,
+      "trough_unrealized_pct": -0.0275,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-09-10T09:29:26.451600+01:00",
+      "linked_sell_trade_id": "c4ca469b-caed-4cde-b61e-225e2cb81d36"
     },
     {
       "episode_id": "rules_fair:SN.L:2026-09-09T09:30:52.804190+01:00",
@@ -246,7 +246,7 @@
       "ticker": "SN.L",
       "name": "Smith & Nephew plc",
       "started_at": "2026-09-09T09:30:52.804190+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater",
         "exit_streak"
@@ -278,11 +278,11 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0286,
-      "trough_unrealized_pct": -0.0286,
+      "trough_unrealized_pct": -0.0422,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-09-10T09:29:26.451600+01:00",
+      "linked_sell_trade_id": "a9beec68-c222-48e1-9947-4db0c378d781"
     }
   ],
   "swap_rotations": [
@@ -369,13 +369,133 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "MEGP.L": -0.0011,
-        "AEP.L": 0.0299
+        "MEGP.L": -0.022,
+        "AEP.L": 0.0081
       },
       "buy_returns_since_rotation": {
-        "MGNS.L": -0.0029,
-        "IMB.L": -0.0084,
-        "SN.L": -0.0286
+        "MGNS.L": -0.0275,
+        "IMB.L": -0.0161,
+        "SN.L": -0.0422
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "rules_fair:2026-09-10T09:29:26.451600+01:00",
+      "track_id": "rules_fair",
+      "logged_at": "2026-09-10T09:29:26.451600+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0028,
+      "sells": [
+        {
+          "ticker": "IMB.L",
+          "price": 2449.0,
+          "shares": 0.126724,
+          "gross": 310.35,
+          "cost": 0.08,
+          "avg_cost_at_exit": 2522.8836,
+          "realized_pct": -0.0293,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0293
+        },
+        {
+          "ticker": "MGNS.L",
+          "price": 4038.0,
+          "shares": 0.075584,
+          "gross": 305.21,
+          "cost": 0.08,
+          "avg_cost_at_exit": 4152.0,
+          "realized_pct": -0.0275,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0275
+        },
+        {
+          "ticker": "SN.L",
+          "price": 1021.5,
+          "shares": 0.294256,
+          "gross": 300.58,
+          "cost": 0.08,
+          "avg_cost_at_exit": 1066.5,
+          "realized_pct": -0.0422,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0422
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "KLR.L",
+          "price": 2980.0,
+          "shares": 0.101916,
+          "gross": 303.71,
+          "cost": 1.59
+        },
+        {
+          "ticker": "DSCV.L",
+          "price": 776.0,
+          "shares": 0.391377,
+          "gross": 303.71,
+          "cost": 1.59
+        },
+        {
+          "ticker": "JD.L",
+          "price": 80.438,
+          "shares": 3.775684,
+          "gross": 303.71,
+          "cost": 1.59
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "IMB.L": 0.0,
+        "MGNS.L": 0.0,
+        "SN.L": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "KLR.L": 0.0,
+        "DSCV.L": 0.0,
+        "JD.L": 0.0
       },
       "verdict": null,
       "closed_at": null

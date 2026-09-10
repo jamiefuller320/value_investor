@@ -195,5 +195,119 @@
     "track_label": "Technical levels (stops / trade_plan)",
     "is_primary_learning_track": false,
     "success_criterion": "Timing/levels baseline \u2014 stock-picking tracks should beat this after costs; uses trade_plan stops/targets, not conviction rebalance."
+  },
+  {
+    "reviewed_at": "2026-09-10T08:29:55.700847+00:00",
+    "enough_history": true,
+    "applied": true,
+    "knobs_before": {
+      "max_positions": 3,
+      "skip_timing_wait": true,
+      "min_conviction": 0.6,
+      "sector_cap": 0.2
+    },
+    "knobs_after": {
+      "max_positions": 3,
+      "skip_timing_wait": true,
+      "min_conviction": 0.55,
+      "sector_cap": 0.2
+    },
+    "proposed_changes": {
+      "min_conviction": 0.55
+    },
+    "reasons": [
+      "Large idle cash with low cost drag \u2014 ease min_conviction."
+    ],
+    "metrics": {
+      "portfolio_value": 991.28,
+      "contributed_capital": 1000.0,
+      "total_return": -0.0087,
+      "total_costs": 8.71,
+      "cost_drag": 0.0087,
+      "trade_count": 3,
+      "buy_count": 3,
+      "sell_count": 0,
+      "positions": 3,
+      "cash_fraction": 0.707,
+      "equity_marks": 5,
+      "max_sector_weight": 0.6667,
+      "dominant_sector": "Industrials",
+      "benchmark_return": -0.014,
+      "excess_after_costs": 0.0053,
+      "note": "",
+      "epoch": {
+        "started_at": "2026-09-10T08:29:55.700847+00:00",
+        "knobs": {
+          "max_positions": 3,
+          "skip_timing_wait": true,
+          "min_conviction": 0.55,
+          "sector_cap": 0.2
+        },
+        "seeded_from_history": false,
+        "baseline_nav": 991.28,
+        "portfolio_value": 991.28,
+        "total_return": 0.0,
+        "total_costs": 0,
+        "cost_drag": 0.0,
+        "trade_count": 0,
+        "buy_count": 0,
+        "sell_count": 0,
+        "positions": 3,
+        "cash_fraction": 0.707,
+        "equity_marks": 0,
+        "max_sector_weight": 0.6667,
+        "dominant_sector": "Industrials",
+        "benchmark_return": null,
+        "excess_after_costs": null,
+        "note": "Insufficient epoch marks for benchmark span."
+      }
+    },
+    "counterfactual_preview": {
+      "scope": "rebalance_log_replay",
+      "knobs": {
+        "max_positions": 3,
+        "skip_timing_wait": true,
+        "min_conviction": 0.55,
+        "sector_cap": 0.2,
+        "use_adjusted_signal": false,
+        "require_research_accumulate": false,
+        "exit_confirm_screens": 2,
+        "candidate_source": "auto"
+      },
+      "used_screen_buy_tier_pool": true,
+      "log_entries_total": 4,
+      "log_entries_replayed": 4,
+      "lookback_days": null,
+      "replay_from": "2026-09-07T09:28:07.378942+01:00",
+      "replay_to": "2026-09-10T09:28:07.177044+01:00",
+      "simulated_nav": 983.78,
+      "baseline_nav": 1000.0,
+      "simulated_return": -0.0162,
+      "simulated_total_costs": 8.71,
+      "simulated_cost_drag": 0.0087,
+      "simulated_trade_count": 3,
+      "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
+      "actual_nav": 983.77,
+      "actual_return_over_window": -0.0162,
+      "actual_total_costs_over_window": 8.71,
+      "actual_cost_drag_over_window": 0.0087,
+      "return_delta_vs_actual": 0.0,
+      "cost_drag_delta_vs_actual": -0.0,
+      "archive_rebalance_replay": null,
+      "archive_vs_log": {
+        "log_entries_replayed": 4,
+        "archive_passes_replayed": null,
+        "log_return_delta_vs_actual": 0.0,
+        "archive_return_delta_vs_actual": null,
+        "return_delta_gap_archive_minus_log": null,
+        "log_simulated_return": -0.0162,
+        "archive_simulated_return": null
+      }
+    },
+    "note": "Applied clamped knob updates from decision review; started new knob epoch.",
+    "track_id": "technical",
+    "track_label": "Technical levels (stops / trade_plan)",
+    "is_primary_learning_track": false,
+    "success_criterion": "Timing/levels baseline \u2014 stock-picking tracks should beat this after costs; uses trade_plan stops/targets, not conviction rebalance."
   }
 ]

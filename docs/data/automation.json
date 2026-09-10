@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-09T08:31:37.473982+00:00",
+  "generated_at": "2026-09-10T08:29:59.875131+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -196,15 +196,15 @@
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_weekly_ops_usd": 72.5,
+        "remaining_weekly_ops_usd": 67.7,
         "budget_note": "Estimated weekly_ops reached the 15% plan-credit pseudo limit ($3.00) \u2014 warning only, not a hard cap.",
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 105.6,
-        "estimated_spend_weekly_ops_usd_this_week": 12.0,
-        "estimated_spend_usd_this_cycle": 206.9,
+        "estimated_spend_usd_this_week": 139.2,
+        "estimated_spend_weekly_ops_usd_this_week": 16.8,
+        "estimated_spend_usd_this_cycle": 240.5,
         "week_id": "2026-W37",
         "cycle_id": "2026-09-d8"
       },
@@ -232,7 +232,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-09-09T07:54:13.008368+00:00"
+      "updated_at": "2026-09-10T07:46:20.407281+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -327,10 +327,10 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-09-09T08:27:35.611821+00:00",
+        "at": "2026-09-10T08:27:27.366249+00:00",
         "kind": "paper_run",
         "title": "Paper automation acted",
-        "detail": "Rebalanced after open settle (0 trade(s))."
+        "detail": "Rebalanced after open settle (6 trade(s))."
       },
       {
         "at": "2026-09-09T06:52:19.884734+00:00",
@@ -907,20 +907,63 @@
       }
     },
     "paper_last_run": {
-      "generated_at": "2026-09-09T08:27:35.611821+00:00",
+      "generated_at": "2026-09-10T08:27:27.366249+00:00",
       "acted": true,
-      "note": "Rebalanced after open settle (0 trade(s)).",
+      "note": "Rebalanced after open settle (6 trade(s)).",
       "gate": {
-        "local_time": "2026-09-09T09:27:16.934346+01:00",
+        "local_time": "2026-09-10T09:27:13.956063+01:00",
         "trading_day": true,
         "after_settle": true,
-        "market_open_at": "2026-09-09T08:00:00+01:00",
-        "settle_at": "2026-09-09T09:15:00+01:00",
+        "market_open_at": "2026-09-10T08:00:00+01:00",
+        "settle_at": "2026-09-10T09:15:00+01:00",
         "can_act": true,
         "reason": "ok"
       },
-      "trade_count": 0,
-      "trades_sample": [],
+      "trade_count": 6,
+      "trades_sample": [
+        {
+          "acted_at": "2026-09-10T09:27:13.956063+01:00",
+          "ticker": "MGNS.L",
+          "side": "sell",
+          "name": "Morgan Sindall Group plc",
+          "net_cash": 221.71
+        },
+        {
+          "acted_at": "2026-09-10T09:27:13.956063+01:00",
+          "ticker": "IMB.L",
+          "side": "sell",
+          "name": "Imperial Brands PLC",
+          "net_cash": 224.87
+        },
+        {
+          "acted_at": "2026-09-10T09:27:13.956063+01:00",
+          "ticker": "SN.L",
+          "side": "sell",
+          "name": "Smith & Nephew plc",
+          "net_cash": 218.78
+        },
+        {
+          "acted_at": "2026-09-10T09:27:13.956063+01:00",
+          "ticker": "KLR.L",
+          "side": "buy",
+          "name": "Keller Group plc",
+          "net_cash": -221.79
+        },
+        {
+          "acted_at": "2026-09-10T09:27:13.956063+01:00",
+          "ticker": "DSCV.L",
+          "side": "buy",
+          "name": "discoverIE Group plc",
+          "net_cash": -221.79
+        },
+        {
+          "acted_at": "2026-09-10T09:27:13.956063+01:00",
+          "ticker": "JD.L",
+          "side": "buy",
+          "name": "JD Sports Fashion Plc",
+          "net_cash": -221.79
+        }
+      ],
       "fund": {
         "cash": 0.0,
         "nav": null,
@@ -1144,14 +1187,14 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-09T05:52:09.557151+00:00",
-    "queue_ui_updated_at": "2026-09-09T08:31:37.474696+00:00",
-    "task_count": 1,
+    "compiled_at": "2026-09-10T06:52:35.040133+00:00",
+    "queue_ui_updated_at": "2026-09-10T08:29:59.896949+00:00",
+    "task_count": 11,
     "status": {
       "open_count": 0,
       "pr_open_count": 1,
       "parked_count": 0,
-      "merged_count": 0,
+      "merged_count": 10,
       "failed_count": 0,
       "next_task_id": null,
       "in_flight_branch": null,
@@ -1162,23 +1205,28 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260909-01",
+        "id": "eng-20260910-01",
         "area": "ingest",
-        "title": "Hunt fetchable IR source for parked euro_depth leftover ABI.BR",
+        "title": "Hunt fetchable IR source for parked euro_depth leftover DQ7A.IR",
         "priority": "low",
         "priority_score": 12.0,
         "status": "pr_open",
         "source": "parked_source_hunter",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": "cursor/eng-20260909-01-1de3"
+        "branch_name": "cursor/eng-20260910-01-1de3"
       }
     ],
-    "attention_tasks": []
+    "attention_tasks": [],
+    "clash_summary": {
+      "open_task_count": 0,
+      "dispatch_eligible_count": 0,
+      "blocked_count": 0
+    }
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-09-09T08:31:37.493145+00:00",
+    "generated_at": "2026-09-10T08:29:59.918559+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs \u22652 equity marks and \u22651 post-apply trade before epoch-scoped excess is used for knob proposals \u2014 no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
@@ -1190,13 +1238,13 @@
         "applied": false,
         "epoch_started_at": "2026-08-26T08:28:55.552465+00:00",
         "baseline_nav": 821.98,
-        "epoch_nav": 783.02,
-        "epoch_return": -0.0474,
-        "post_apply_trade_count": 8,
-        "equity_marks": 9,
+        "epoch_nav": 715.33,
+        "epoch_return": -0.1297,
+        "post_apply_trade_count": 14,
+        "equity_marks": 10,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0061,
-        "excess_after_costs": -0.0413,
+        "benchmark_return": -0.0191,
+        "excess_after_costs": -0.1106,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1267,13 +1315,13 @@
         "applied": false,
         "epoch_started_at": "2026-08-21T09:27:13.383131+01:00",
         "baseline_nav": 891.39,
-        "epoch_nav": 880.39,
-        "epoch_return": -0.0123,
-        "post_apply_trade_count": 5,
-        "equity_marks": 3,
+        "epoch_nav": 807.88,
+        "epoch_return": -0.0937,
+        "post_apply_trade_count": 11,
+        "equity_marks": 4,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0005,
-        "excess_after_costs": -0.0119,
+        "benchmark_return": -0.0135,
+        "excess_after_costs": -0.0801,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1290,13 +1338,13 @@
         "applied": false,
         "epoch_started_at": "2026-09-01T09:27:42.628249+01:00",
         "baseline_nav": 878.94,
-        "epoch_nav": 893.09,
-        "epoch_return": 0.0161,
-        "post_apply_trade_count": 4,
-        "equity_marks": 3,
+        "epoch_nav": 859.08,
+        "epoch_return": -0.0226,
+        "post_apply_trade_count": 10,
+        "equity_marks": 4,
         "benchmark_span_available": true,
-        "benchmark_return": 0.0021,
-        "excess_after_costs": 0.014,
+        "benchmark_return": -0.011,
+        "excess_after_costs": -0.0115,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1328,19 +1376,24 @@
         "track_id": "graduated_allocation",
         "track_label": "Screen rules + graduated allocation",
         "is_primary_learning_track": false,
-        "applied": false,
-        "epoch_started_at": null,
-        "baseline_nav": null,
-        "epoch_nav": null,
-        "epoch_return": null,
+        "applied": true,
+        "epoch_started_at": "2026-09-10T08:29:55.464805+00:00",
+        "baseline_nav": 943.53,
+        "epoch_nav": 943.53,
+        "epoch_return": 0.0,
         "post_apply_trade_count": 0,
         "equity_marks": 0,
         "benchmark_span_available": false,
         "benchmark_return": null,
         "excess_after_costs": null,
         "enough_epoch_history": false,
-        "note": "",
-        "knobs": {}
+        "note": "Insufficient epoch marks for benchmark span.",
+        "knobs": {
+          "max_positions": 3,
+          "skip_timing_wait": true,
+          "min_conviction": 0.6,
+          "sector_cap": 0.2
+        }
       },
       "momentum_grace": {
         "track_id": "momentum_grace",
@@ -1352,10 +1405,10 @@
         "epoch_nav": 970.87,
         "epoch_return": 0.0,
         "post_apply_trade_count": 0,
-        "equity_marks": 19,
+        "equity_marks": 20,
         "benchmark_span_available": true,
-        "benchmark_return": -0.002,
-        "excess_after_costs": 0.002,
+        "benchmark_return": -0.0151,
+        "excess_after_costs": 0.0151,
         "enough_epoch_history": false,
         "note": "",
         "knobs": {
@@ -1372,13 +1425,13 @@
         "applied": false,
         "epoch_started_at": "2026-08-12T09:36:42.012926+00:00",
         "baseline_nav": 862.27,
-        "epoch_nav": 707.13,
-        "epoch_return": -0.1799,
-        "post_apply_trade_count": 25,
-        "equity_marks": 19,
+        "epoch_nav": 645.99,
+        "epoch_return": -0.2508,
+        "post_apply_trade_count": 31,
+        "equity_marks": 20,
         "benchmark_span_available": true,
-        "benchmark_return": -0.002,
-        "excess_after_costs": -0.1779,
+        "benchmark_return": -0.0151,
+        "excess_after_costs": -0.2358,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1395,13 +1448,13 @@
         "applied": false,
         "epoch_started_at": "2026-09-01T09:27:27.726879+01:00",
         "baseline_nav": 932.39,
-        "epoch_nav": 947.36,
-        "epoch_return": 0.0161,
-        "post_apply_trade_count": 5,
-        "equity_marks": 3,
+        "epoch_nav": 911.13,
+        "epoch_return": -0.0228,
+        "post_apply_trade_count": 11,
+        "equity_marks": 4,
         "benchmark_span_available": true,
-        "benchmark_return": 0.0021,
-        "excess_after_costs": 0.014,
+        "benchmark_return": -0.011,
+        "excess_after_costs": -0.0118,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1415,27 +1468,32 @@
         "track_id": "technical",
         "track_label": "Technical levels (stops / trade_plan)",
         "is_primary_learning_track": false,
-        "applied": false,
-        "epoch_started_at": null,
-        "baseline_nav": null,
-        "epoch_nav": null,
-        "epoch_return": null,
+        "applied": true,
+        "epoch_started_at": "2026-09-10T08:29:55.700847+00:00",
+        "baseline_nav": 991.28,
+        "epoch_nav": 991.28,
+        "epoch_return": 0.0,
         "post_apply_trade_count": 0,
         "equity_marks": 0,
         "benchmark_span_available": false,
         "benchmark_return": null,
         "excess_after_costs": null,
         "enough_epoch_history": false,
-        "note": "",
-        "knobs": {}
+        "note": "Insufficient epoch marks for benchmark span.",
+        "knobs": {
+          "max_positions": 3,
+          "skip_timing_wait": true,
+          "min_conviction": 0.55,
+          "sector_cap": 0.2
+        }
       }
     },
     "summary": {
       "track_count": 12,
-      "tracks_with_epoch": 6,
+      "tracks_with_epoch": 8,
       "tracks_benchmark_span_ready": 6,
       "tracks_with_post_apply_trades": 5,
-      "tracks_insufficient_epoch_marks": 0,
+      "tracks_insufficient_epoch_marks": 2,
       "all_benchmark_spans_insufficient": false
     }
   }
