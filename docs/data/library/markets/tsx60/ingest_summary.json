@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-10T14:51:52.047604+00:00",
+  "run_at": "2026-09-10T17:07:33.630525+00:00",
   "market_id": "tsx60",
   "targets": [
     "TRI.TO",
@@ -70,8 +70,8 @@
       },
       "after": {
         "filings_total": 150,
-        "filings_with_body": 121,
-        "indexed_without_body": 29
+        "filings_with_body": 120,
+        "indexed_without_body": 30
       },
       "improved": false,
       "regime": "tsx_announcements",
@@ -101,24 +101,9 @@
           }
         }
       },
-      "ticker_budget_hit": false,
+      "ticker_budget_hit": true,
       "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 121,
-        "with_body_after": 121,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 0,
-          "note": "no allowlist urls for ticker"
-        },
-        "note": "no missing IR allowlist bodies"
-      }
+      "ir_refetch": null
     },
     {
       "ticker": "SU.TO",
@@ -426,7 +411,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-10T14:41:40.045088+00:00",
+    "snapshot_at": "2026-09-10T16:47:54.125159+00:00",
     "market_id": "tsx60",
     "buy_tier_count": 19,
     "unmeasured_buy_tier": 0,
@@ -481,16 +466,16 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-10T14:51:52.041411+00:00",
+    "snapshot_at": "2026-09-10T17:06:44.226513+00:00",
     "market_id": "tsx60",
     "buy_tier_count": 19,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 3,
-    "indexed_without_body": 96,
+    "indexed_without_body": 97,
     "bodies_min": 3,
     "bodies_median": 18,
-    "bodies_max": 121,
+    "bodies_max": 120,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -514,26 +499,22 @@
       "NTR.TO": 18,
       "CNQ.TO": 10,
       "CVE.TO": 3,
-      "TRI.TO": 29
+      "TRI.TO": 30
     },
-    "parked_tickers": [],
-    "parked_count": 0,
-    "effective_thin_body_buy_tier": 3,
-    "effective_thin_body_tickers": [
-      "SU.TO",
-      "GIB-A.TO",
-      "NTR.TO"
-    ],
-    "effective_indexed_without_body": 96,
-    "effective_indexed_without_body_tickers": [
-      "SU.TO",
-      "GIB-A.TO",
-      "NTR.TO",
+    "parked_tickers": [
       "CNQ.TO",
       "CVE.TO",
+      "GIB-A.TO",
+      "NTR.TO",
+      "SU.TO",
       "TRI.TO"
     ],
-    "ingest_exhausted": false
+    "parked_count": 6,
+    "effective_thin_body_buy_tier": 0,
+    "effective_thin_body_tickers": [],
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -544,10 +525,37 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "tsx60",
+    "to_market": "sp500",
+    "stream_markets_after": [
+      "sp500"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "tsx60",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "CNQ.TO",
+        "CVE.TO",
+        "GIB-A.TO",
+        "NTR.TO",
+        "SU.TO",
+        "TRI.TO"
+      ],
+      "learning_admitted_changed": true,
+      "learning_admitted": true
+    },
+    "at": "2026-09-10T17:06:52.333843+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "tsx60",
-    "assessed_at": "2026-09-10T14:41:40.797390+00:00",
+    "assessed_at": "2026-09-10T16:47:55.041602+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -617,21 +625,82 @@
       "thin_need_bodies": 3
     }
   },
-  "used_seconds": 610.54204851,
+  "used_seconds": 1128.3169060930002,
   "budget_seconds": 2100.0,
-  "leftover_seconds": 1489.4579514900001,
-  "blocker_ticker": null,
+  "leftover_seconds": 971.6830939069998,
+  "blocker_ticker": "TRI.TO",
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "tsx60",
-    "updated_at": "2026-09-10T14:51:52.045132+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-09-10T17:06:44.231047+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
-    "parked": [],
+    "parked": [
+      {
+        "ticker": "CNQ.TO",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-10T17:06:44.231047+00:00",
+        "filings_total": 36,
+        "filings_with_body": 26,
+        "indexed_without_body": 10,
+        "thin": false
+      },
+      {
+        "ticker": "CVE.TO",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-10T17:06:44.231047+00:00",
+        "filings_total": 59,
+        "filings_with_body": 56,
+        "indexed_without_body": 3,
+        "thin": false
+      },
+      {
+        "ticker": "GIB-A.TO",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-10T17:06:44.231047+00:00",
+        "filings_total": 20,
+        "filings_with_body": 9,
+        "indexed_without_body": 11,
+        "thin": true
+      },
+      {
+        "ticker": "NTR.TO",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-10T17:06:44.231047+00:00",
+        "filings_total": 27,
+        "filings_with_body": 9,
+        "indexed_without_body": 18,
+        "thin": true
+      },
+      {
+        "ticker": "SU.TO",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-10T17:06:44.231047+00:00",
+        "filings_total": 41,
+        "filings_with_body": 16,
+        "indexed_without_body": 25,
+        "thin": true
+      },
+      {
+        "ticker": "TRI.TO",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-10T17:06:44.231047+00:00",
+        "filings_total": 150,
+        "filings_with_body": 120,
+        "indexed_without_body": 30,
+        "thin": false
+      }
+    ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
     "had_complete_targets": true,
     "leftover_tickers": [
@@ -642,20 +711,21 @@
       "SU.TO",
       "TRI.TO"
     ],
-    "unparked_leftover": [
-      "CNQ.TO",
-      "CVE.TO",
-      "GIB-A.TO",
-      "NTR.TO",
-      "SU.TO",
-      "TRI.TO"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/tsx60/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "tsx60"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "tsx60",
+    "ingest_exhausted_markets": [
+      "euro_depth",
+      "ftse_smallcap",
+      "sp500",
+      "tsx60"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
