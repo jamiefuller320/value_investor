@@ -153,13 +153,44 @@ def collect_queue_block_alerts(
     recovery: dict[str, Any] | None = None,
     sync: dict[str, Any] | None = None,
     dispatch: dict[str, Any] | None = None,
+    tasks_path: Path | None = None,
 ) -> list[EngineeringQueueAlert]:
     """Build immediate email alerts for engineering queue blockers (L96)."""
+    from value_investor.engineering_recovery import summarize_parked_tasks_needing_attention
+    from value_investor.engineering_tasks import COMMITTED_TASKS_PATH
+
     alerts: list[EngineeringQueueAlert] = []
     recovery = recovery or {}
     sync = sync or {}
     dispatch = dispatch or {}
     status = dict(dispatch.get("status") or {})
+    tasks_path = tasks_path or COMMITTED_TASKS_PATH
+
+    queue_clearing = dict(recovery.get("queue_clearing") or {})
+    if queue_clearing.get("should_send_full_queue_warning"):
+        parked_rows = summarize_parked_tasks_needing_attention(tasks_path)
+        parked_rows.sort(key=lambda row: str(row.get("parked_at") or ""))
+        task_ids = [str(row.get("id") or "") for row in parked_rows if row.get("id")]
+        lines = [
+            f"{row.get('id')}: {row.get('parked_policy')} — "
+            f"{str(row.get('title') or '')[:80]}"
+            for row in parked_rows
+        ]
+        count = int(queue_clearing.get("attention_parked_count") or len(parked_rows))
+        alerts.append(
+            EngineeringQueueAlert(
+                kind="parked_backlog_full",
+                title="Engineering parked backlog full — dispatch paused",
+                summary=(
+                    f"{count} attention-parked task(s) at cap. New engineering dispatch "
+                    f"and parked-hunter-compile are paused until backlog drops below policy "
+                    f"threshold and clearing work has been idle long enough. "
+                    f"Triage oldest first via `ftse-engineering list-parked`."
+                    + (f" Queue: {'; '.join(lines[:8])}" if lines else "")
+                ),
+                task_ids=task_ids,
+            )
+        )
 
     merged = [str(task_id) for task_id in recovery.get("merged") or [] if task_id]
     if merged:

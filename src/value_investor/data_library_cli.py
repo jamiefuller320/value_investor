@@ -2112,7 +2112,19 @@ def cmd_library_ingest_maintenance(args: argparse.Namespace) -> int:
 
 
 def cmd_parked_hunter_compile(args: argparse.Namespace) -> int:
+    from value_investor.engineering_recovery import is_queue_clearing_pause_active
     from value_investor.library_ingest_escalation import compile_parked_source_hunter_task
+
+    if is_queue_clearing_pause_active(tasks_path=args.tasks_path):
+        payload = {
+            "compiled_count": 0,
+            "reason": "queue_clearing_pause_active",
+        }
+        if args.json or args.json_path is not None:
+            _emit_cli_json(payload, args)
+        else:
+            print("parked-hunter-compile: skipped (attention parked backlog clearing pause)")
+        return 0
 
     policy = load_policy(args.policy)
     payload = compile_parked_source_hunter_task(

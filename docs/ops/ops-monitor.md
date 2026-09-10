@@ -276,6 +276,26 @@ for a digest regardless of status / deferral.
 
 List parked tasks: `ftse-engineering list-parked`
 
+### Engineering parked backlog clearing
+
+When **8 or more** attention-parked engineering tasks accumulate, `engineering-queue`
+pauses new **engineering-agent** dispatch and **parked-hunter-compile**, and sends a
+full-queue email (ordered `list-parked` summary).
+
+Human triage (oldest first):
+
+1. `ftse-engineering list-parked`
+2. For each task: merge the PR, cancel stale work, or unpark/reopen when appropriate
+3. Duplicate/superseded hunter parks may auto-cancel during recovery — do not rely on
+   mass auto-cancel; only obvious duplicates are trimmed automatically
+
+**Auto-resume:** dispatch restarts when attention-parked count drops **below 7** **and**
+**30 minutes** have elapsed since the last clearing action (cancel / merge / unpark).
+Brief dips while you are still triaging therefore do not restart the queue mid-session.
+
+Policy keys: `engineering.queue_recovery.max_attention_parked_tasks`,
+`resume_attention_parked_below`, `resume_idle_minutes` in agent model policy.
+
 To resume a parked task manually, set status back to `open` in `engineering_tasks.json` or add a fresh task.
 
 See also: [`orchestrator-cron.md`](orchestrator-cron.md), [`analysis-review.md`](analysis-review.md), [`backtest-health.md`](backtest-health.md), [`engineering-sync.md`](engineering-sync.md).

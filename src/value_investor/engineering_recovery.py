@@ -37,13 +37,6 @@ PARKED_POLICY_HUNTER_UNFIXABLE = "hunter_unfixable"
 PARKED_POLICY_WORKFLOW_PERMISSION = "workflow_permission"
 PARKED_POLICY_MANUAL = "manual"
 INFORMATIONAL_PARKED_POLICIES = frozenset({PARKED_POLICY_DUPLICATE, PARKED_POLICY_NO_DIFF})
-TRIMMABLE_ATTENTION_PARKED_POLICIES = frozenset(
-    {
-        PARKED_POLICY_CI_BLOCKED,
-        PARKED_POLICY_HUNTER_UNFIXABLE,
-        PARKED_POLICY_MANUAL,
-    }
-)
 DUPLICATE_PARKED_REASON_RE = re.compile(r"duplicate|dup of|superseded", re.IGNORECASE)
 NO_DIFF_PARKED_REASON_RE = re.compile(r"no code changes", re.IGNORECASE)
 WORKFLOW_PERMISSION_REASON_RE = re.compile(
@@ -55,6 +48,8 @@ DEFAULT_MAX_NO_DIFF_RUNS = 2
 DEFAULT_RETRY_COOLDOWN_HOURS = 24
 DEFAULT_CI_RED_PARK_HOURS = 48
 DEFAULT_MAX_ATTENTION_PARKED_TASKS = 8
+DEFAULT_RESUME_ATTENTION_PARKED_BELOW = 7
+DEFAULT_RESUME_IDLE_MINUTES = 30
 DEFAULT_IMMEDIATE_PARK_UNFIXABLE_PR = True
 GITHUB_API_VERSION = "2022-11-28"
 WORKFLOW_PATH_PREFIX = ".github/workflows/"
@@ -122,6 +117,7 @@ class RecoveryResult:
     cancelled: list[RecoveryAction] = field(default_factory=list)
     parked: list[RecoveryAction] = field(default_factory=list)
     skipped: list[dict[str, str]] = field(default_factory=list)
+    queue_clearing: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -131,6 +127,7 @@ class RecoveryResult:
             "cancelled": [row.to_dict() for row in self.cancelled],
             "parked": [row.to_dict() for row in self.parked],
             "skipped": self.skipped,
+            "queue_clearing": self.queue_clearing,
             "action_count": len(self.merged)
             + len(self.reconciled)
             + len(self.reopened)
@@ -258,6 +255,20 @@ def _engineering_queue_recovery_policy() -> dict[str, Any]:
     except (TypeError, ValueError):
         max_attention = DEFAULT_MAX_ATTENTION_PARKED_TASKS
     try:
+        resume_below = max(
+            0,
+            int(block.get("resume_attention_parked_below") or DEFAULT_RESUME_ATTENTION_PARKED_BELOW),
+        )
+    except (TypeError, ValueError):
+        resume_below = DEFAULT_RESUME_ATTENTION_PARKED_BELOW
+    try:
+        resume_idle_minutes = max(
+            1,
+            int(block.get("resume_idle_minutes") or DEFAULT_RESUME_IDLE_MINUTES),
+        )
+    except (TypeError, ValueError):
+        resume_idle_minutes = DEFAULT_RESUME_IDLE_MINUTES
+    try:
         ci_red_hours = max(1, int(block.get("ci_red_park_hours") or DEFAULT_CI_RED_PARK_HOURS))
     except (TypeError, ValueError):
         ci_red_hours = DEFAULT_CI_RED_PARK_HOURS
@@ -267,6 +278,8 @@ def _engineering_queue_recovery_policy() -> dict[str, Any]:
     return {
         "immediate_park_unfixable_pr": bool(immediate),
         "max_attention_parked_tasks": max_attention,
+        "resume_attention_parked_below": resume_below,
+        "resume_idle_minutes": resume_idle_minutes,
         "ci_red_park_hours": ci_red_hours,
     }
 
@@ -275,55 +288,141 @@ def count_attention_parked_tasks(*, tasks_path: Path = COMMITTED_TASKS_PATH) -> 
     return len(summarize_parked_tasks_needing_attention(tasks_path))
 
 
-def trim_attention_parked_backlog(
+def get_queue_clearing_state(*, tasks_path: Path = COMMITTED_TASKS_PATH) -> dict[str, Any]:
+    data = load_engineering_tasks(tasks_path)
+    return dict(data.get("queue_clearing") or {})
+
+
+def is_queue_clearing_pause_active(*, tasks_path: Path = COMMITTED_TASKS_PATH) -> bool:
+    return bool(get_queue_clearing_state(tasks_path=tasks_path).get("pause_active"))
+
+
+def _save_queue_clearing_state(
+    state: dict[str, Any],
+    *,
+    tasks_path: Path,
+    apply: bool,
+) -> None:
+    if not apply:
+        return
+    from value_investor.storage import write_json
+
+    data = load_engineering_tasks(tasks_path)
+    data["queue_clearing"] = state
+    tasks_path = Path(tasks_path)
+    tasks_path.parent.mkdir(parents=True, exist_ok=True)
+    write_json(tasks_path, data, compact=False)
+
+
+def record_queue_clearing_action(
     *,
     tasks_path: Path = COMMITTED_TASKS_PATH,
-    max_attention: int,
     apply: bool = True,
     now: datetime | None = None,
-) -> list[str]:
-    """Cancel oldest trimmable parked tasks until attention count is below max_attention."""
+) -> dict[str, Any]:
+    """Stamp last clearing action while queue-clearing pause is active."""
     now = now or datetime.now(UTC)
-    if max_attention <= 0:
-        return []
-    data = load_engineering_tasks(tasks_path)
-    rows = list(data.get("tasks") or [])
-    merged_ids = _merged_task_ids(rows)
-    parked_rows: list[dict[str, Any]] = []
-    for row in rows:
-        if str(row.get("status") or "") != PARKED_STATUS:
-            continue
-        grade = classify_parked_task(row, merged_ids=merged_ids)
-        if not grade.get("needs_attention"):
-            continue
-        policy = str(grade.get("parked_policy") or PARKED_POLICY_MANUAL)
-        if policy not in TRIMMABLE_ATTENTION_PARKED_POLICIES:
-            continue
-        parked_rows.append({**row, "_parked_policy": policy, "_parked_at": row.get("parked_at")})
+    state = get_queue_clearing_state(tasks_path=tasks_path)
+    if not state.get("pause_active"):
+        return state
+    state = dict(state)
+    state["last_clearing_action_at"] = now.isoformat()
+    _save_queue_clearing_state(state, tasks_path=tasks_path, apply=apply)
+    return state
 
-    parked_rows.sort(key=lambda row: str(row.get("_parked_at") or row.get("parked_at") or ""))
-    cancelled: list[str] = []
-    while count_attention_parked_tasks(tasks_path=tasks_path) >= max_attention and parked_rows:
-        row = parked_rows.pop(0)
-        task_id = str(row.get("id") or "")
-        if not task_id:
-            continue
-        reason = (
-            f"attention parked backlog cap ({max_attention}) — "
-            f"auto-cancelled oldest {row.get('_parked_policy')} park"
+
+def maybe_record_queue_clearing_action(
+    prior_row: dict[str, Any] | None,
+    *,
+    new_status: str,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    apply: bool = True,
+    now: datetime | None = None,
+) -> None:
+    if not prior_row or str(prior_row.get("status") or "") != PARKED_STATUS:
+        return
+    if str(new_status or "") == PARKED_STATUS:
+        return
+    merged_ids = _merged_task_ids(load_engineering_tasks(tasks_path).get("tasks") or [])
+    grade = classify_parked_task(prior_row, merged_ids=merged_ids)
+    if not grade.get("needs_attention"):
+        return
+    record_queue_clearing_action(tasks_path=tasks_path, apply=apply, now=now)
+
+
+def evaluate_queue_clearing_pause(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    apply: bool = True,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """Pause dispatch at attention-parked cap; resume after idle clearing work."""
+    now = now or datetime.now(UTC)
+    policy = _engineering_queue_recovery_policy()
+    max_trigger = int(policy["max_attention_parked_tasks"])
+    resume_below = int(policy["resume_attention_parked_below"])
+    idle_minutes = int(policy["resume_idle_minutes"])
+
+    state = dict(get_queue_clearing_state(tasks_path=tasks_path))
+    count = count_attention_parked_tasks(tasks_path=tasks_path)
+    pause_active = bool(state.get("pause_active"))
+    changes: dict[str, Any] = {}
+
+    if not pause_active and count >= max_trigger:
+        state["pause_active"] = True
+        state["pause_started_at"] = now.isoformat()
+        state.pop("warned_at", None)
+        state.pop("resumed_at", None)
+        changes["activated"] = True
+    elif pause_active:
+        pause_started = _parse_iso(str(state.get("pause_started_at") or ""))
+        last_action = _parse_iso(str(state.get("last_clearing_action_at") or ""))
+        effective_last = last_action
+        if pause_started and last_action and last_action < pause_started:
+            effective_last = None
+        idle_ok = (
+            effective_last is not None
+            and (now - effective_last) >= timedelta(minutes=idle_minutes)
         )
-        if apply:
-            mark_task_status(
-                task_id,
-                "cancelled",
-                path=tasks_path,
-                committed_path=tasks_path,
-                cancelled_at=now.isoformat(),
-                cancelled_reason=reason,
-                parked_policy=str(row.get("_parked_policy") or ""),
-            )
-        cancelled.append(task_id)
-    return cancelled
+        if count < resume_below and idle_ok:
+            state["pause_active"] = False
+            state["resumed_at"] = now.isoformat()
+            state.pop("pause_started_at", None)
+            state.pop("last_clearing_action_at", None)
+            state.pop("warned_at", None)
+            state.pop("resume_pending", None)
+            changes["resumed"] = True
+        elif count < resume_below:
+            state["resume_pending"] = True
+            changes["resume_pending"] = True
+        else:
+            state.pop("resume_pending", None)
+
+    state["attention_parked_count"] = count
+    state["evaluated_at"] = now.isoformat()
+    state["should_send_full_queue_warning"] = bool(state.get("pause_active")) and not state.get(
+        "warned_at"
+    )
+    if changes:
+        state["last_change"] = changes
+    _save_queue_clearing_state(state, tasks_path=tasks_path, apply=apply)
+    return state
+
+
+def mark_queue_clearing_warned(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    apply: bool = True,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    now = now or datetime.now(UTC)
+    state = dict(get_queue_clearing_state(tasks_path=tasks_path))
+    if not state.get("pause_active"):
+        return state
+    state["warned_at"] = now.isoformat()
+    state["should_send_full_queue_warning"] = False
+    _save_queue_clearing_state(state, tasks_path=tasks_path, apply=apply)
+    return state
 
 
 def _park_task_with_cap(
@@ -336,12 +435,6 @@ def _park_task_with_cap(
     parked_policy: str | None = None,
     max_attention: int = DEFAULT_MAX_ATTENTION_PARKED_TASKS,
 ) -> RecoveryAction:
-    if apply and count_attention_parked_tasks(tasks_path=tasks_path) >= max_attention:
-        trim_attention_parked_backlog(
-            tasks_path=tasks_path,
-            max_attention=max_attention,
-            apply=True,
-        )
     return _park_task(
         task_id,
         reason=reason,
@@ -1064,6 +1157,11 @@ def recover_engineering_queue(
             recent_agent_failures=recent_agent_failures,
             apply=apply,
         )
+    )
+
+    result.queue_clearing = evaluate_queue_clearing_pause(
+        tasks_path=tasks_path,
+        apply=apply,
     )
 
     return result

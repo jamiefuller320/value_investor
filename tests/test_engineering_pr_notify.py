@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from unittest.mock import patch
 
 from value_investor.engineering_pr_notify import (
@@ -58,6 +59,41 @@ def test_send_engineering_pr_email(mock_send):
         mock_cfg.return_value = object()
         assert send_engineering_pr_email(note) is True
     mock_send.assert_called_once()
+
+
+def test_collect_queue_block_alerts_parked_backlog_full(tmp_path: Path):
+    import json
+
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "eng-parked-01",
+                        "title": "Parked hunter",
+                        "status": "parked",
+                        "parked_at": "2026-09-01T10:00:00+00:00",
+                        "parked_reason": "hunter pr unfixable",
+                        "parked_policy": "hunter_unfixable",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    alerts = collect_queue_block_alerts(
+        recovery={
+            "queue_clearing": {
+                "should_send_full_queue_warning": True,
+                "attention_parked_count": 8,
+            }
+        },
+        tasks_path=tasks_path,
+    )
+    assert len(alerts) == 1
+    assert alerts[0].kind == "parked_backlog_full"
+    assert "eng-parked-01" in alerts[0].task_ids
 
 
 def test_collect_queue_block_alerts_spend_blocked():

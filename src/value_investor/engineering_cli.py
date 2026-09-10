@@ -1198,12 +1198,18 @@ def _load_optional_json(path: str | None) -> dict[str, Any]:
 
 
 def _cmd_notify_queue_blocked(args: argparse.Namespace) -> int:
+    tasks_path = _resolve_tasks_path(args.tasks_path)
     alerts = collect_queue_block_alerts(
         recovery=_load_optional_json(args.recovery_json),
         sync=_load_optional_json(args.sync_json),
         dispatch=_load_optional_json(args.queue_status_json),
+        tasks_path=tasks_path,
     )
     sent = send_engineering_queue_block_email(alerts)
+    if sent and any(alert.kind == "parked_backlog_full" for alert in alerts):
+        from value_investor.engineering_recovery import mark_queue_clearing_warned
+
+        mark_queue_clearing_warned(tasks_path=tasks_path, apply=True)
     payload = {
         "alert_count": len(alerts),
         "alerts": [row.to_dict() for row in alerts],

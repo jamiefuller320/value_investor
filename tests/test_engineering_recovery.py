@@ -10,17 +10,18 @@ from typing import Any
 from value_investor.engineering_recovery import (
     cancel_resolved_workflow_failure_tasks,
     count_attention_parked_tasks,
+    evaluate_queue_clearing_pause,
     housekeep_parked_tasks,
     park_agent_task,
     park_workflow_permission_blocked_tasks,
     reconcile_merged_pr_open_tasks,
     record_agent_no_diff_run,
+    record_queue_clearing_action,
     recover_engineering_queue,
     retry_failed_tasks,
     summarize_parked_tasks,
     summarize_parked_tasks_needing_attention,
     task_allows_workflow_files,
-    trim_attention_parked_backlog,
 )
 from value_investor.engineering_tasks import (
     EngineeringTask,
@@ -232,10 +233,10 @@ def test_recover_engineering_queue_cancels_superseded_hunter(tmp_path: Path):
     assert updated["tasks"][0]["status"] == "cancelled"
 
 
-def test_trim_attention_parked_backlog_cancels_oldest(tmp_path: Path):
+def test_queue_clearing_pause_activates_at_cap(tmp_path: Path):
     tasks_path = tmp_path / "engineering_tasks.json"
     rows = []
-    for idx in range(9):
+    for idx in range(8):
         rows.append(
             {
                 "id": f"eng-parked-{idx:02d}",
@@ -247,13 +248,87 @@ def test_trim_attention_parked_backlog_cancels_oldest(tmp_path: Path):
             }
         )
     tasks_path.write_text(json.dumps({"tasks": rows}), encoding="utf-8")
-    cancelled = trim_attention_parked_backlog(
-        tasks_path=tasks_path,
-        max_attention=8,
-        apply=True,
+
+    state = evaluate_queue_clearing_pause(tasks_path=tasks_path, apply=True)
+    assert state["pause_active"] is True
+    assert state["should_send_full_queue_warning"] is True
+    assert count_attention_parked_tasks(tasks_path=tasks_path) == 8
+
+
+def test_queue_clearing_resume_requires_count_and_idle(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    now = datetime(2026, 9, 10, 12, 0, tzinfo=UTC)
+
+    def _parked_rows(count: int) -> list[dict[str, Any]]:
+        return [
+            {
+                "id": f"eng-parked-{idx:02d}",
+                "title": f"Parked {idx}",
+                "status": "parked",
+                "parked_at": f"2026-09-0{idx}T10:00:00+00:00",
+                "parked_reason": "draft PR checks still failing",
+                "parked_policy": "ci_blocked",
+            }
+            for idx in range(count)
+        ]
+
+    tasks_path.write_text(json.dumps({"tasks": _parked_rows(8)}), encoding="utf-8")
+    paused = evaluate_queue_clearing_pause(tasks_path=tasks_path, apply=True, now=now)
+
+    tasks_path.write_text(
+        json.dumps({"tasks": _parked_rows(6), "queue_clearing": paused}),
+        encoding="utf-8",
     )
-    assert len(cancelled) == 2
-    assert count_attention_parked_tasks(tasks_path=tasks_path) == 7
+    record_queue_clearing_action(tasks_path=tasks_path, apply=True, now=now)
+    still_paused = evaluate_queue_clearing_pause(
+        tasks_path=tasks_path,
+        apply=True,
+        now=now + timedelta(minutes=10),
+    )
+    assert still_paused["pause_active"] is True
+    assert still_paused.get("resume_pending") is True
+
+    resumed = evaluate_queue_clearing_pause(
+        tasks_path=tasks_path,
+        apply=True,
+        now=now + timedelta(minutes=31),
+    )
+    assert resumed["pause_active"] is False
+    assert resumed.get("resumed_at")
+
+
+def test_mark_task_status_records_queue_clearing_action(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    now = datetime(2026, 9, 10, 12, 0, tzinfo=UTC)
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "eng-parked-01",
+                        "title": "Parked",
+                        "status": "parked",
+                        "parked_at": "2026-09-01T10:00:00+00:00",
+                        "parked_reason": "draft PR checks still failing",
+                        "parked_policy": "ci_blocked",
+                    }
+                ],
+                "queue_clearing": {
+                    "pause_active": True,
+                    "pause_started_at": now.isoformat(),
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    mark_task_status(
+        "eng-parked-01",
+        "cancelled",
+        path=tasks_path,
+        committed_path=tasks_path,
+    )
+    updated = load_engineering_tasks(tasks_path)
+    assert updated["queue_clearing"]["last_clearing_action_at"]
 
 
 def test_mark_task_status_increments_failure_count(tmp_path: Path):
