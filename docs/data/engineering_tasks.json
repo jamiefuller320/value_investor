@@ -141,6 +141,55 @@
       "merged_at": "2026-09-09T17:11:22.608322+00:00"
     },
     {
+      "id": "eng-20260910-12",
+      "area": "ingest",
+      "title": "Repair dead hunter allowlist URL for DQ7A.IR",
+      "summary": "Monitor detected live-fetch failure for https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf (DQ7A.IR, euro_depth). Inspect whether the URL rot is fixable via a known canonical replacement, a fresh allowlist entry, or a PARKED_SOURCE_HUNTER_SKIP update. Do not invent URLs.",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "hunter_url_repair",
+      "evidence": {
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "hunter_market_id": "euro_depth",
+        "hunter_ticker": "DQ7A.IR",
+        "failed_url": "https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
+        "monitor_reason": "live-fetch failed or body too short for https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
+        "parent_task_id": "eng-20260910-01",
+        "parent_merged_at": "2026-09-10T08:39:34.150011+00:00",
+        "universe": "library",
+        "doc": "docs/ops/ops-monitor.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for DQ7A.IR only — do not invent URLs",
+        "Repair or replace the dead URL recorded for DQ7A.IR",
+        "Add/adjust regression coverage in tests/test_research_filings.py",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260910-10",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked euro_depth leftover NOVN.SW",
@@ -259,55 +308,6 @@
       "acceptance_criteria": [
         "Inspect IR / exchange sources for DG.PA only — do not invent URLs",
         "Repair or replace the dead URL recorded for DG.PA",
-        "Add/adjust regression coverage in tests/test_research_filings.py",
-        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open"
-    },
-    {
-      "id": "eng-20260910-07",
-      "area": "ingest",
-      "title": "Repair dead hunter allowlist URL for DQ7A.IR",
-      "summary": "Monitor detected live-fetch failure for https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf (DQ7A.IR, euro_depth). Inspect whether the URL rot is fixable via a known canonical replacement, a fresh allowlist entry, or a PARKED_SOURCE_HUNTER_SKIP update. Do not invent URLs.",
-      "priority": "low",
-      "priority_score": 12.0,
-      "source": "hunter_url_repair",
-      "evidence": {
-        "market_id": "euro_depth",
-        "library_market": "euro_depth",
-        "hunter_market_id": "euro_depth",
-        "hunter_ticker": "DQ7A.IR",
-        "failed_url": "https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
-        "monitor_reason": "live-fetch failed or body too short for https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
-        "parent_task_id": "eng-20260910-01",
-        "parent_merged_at": "2026-09-10T08:39:34.150011+00:00",
-        "universe": "library",
-        "doc": "docs/ops/ops-monitor.md"
-      },
-      "acceptance_criteria": [
-        "Inspect IR / exchange sources for DQ7A.IR only — do not invent URLs",
-        "Repair or replace the dead URL recorded for DQ7A.IR",
         "Add/adjust regression coverage in tests/test_research_filings.py",
         "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
       ],
@@ -1194,11 +1194,11 @@
       "merged_at": "2026-09-09T08:28:25.598892+00:00"
     }
   ],
-  "compiled_at": "2026-09-10T11:37:23.605439+00:00",
+  "compiled_at": "2026-09-10T12:18:29.720755+00:00",
   "task_count": 19,
-  "micro_compile_source": "parked_source_hunter",
+  "micro_compile_source": "hunter_url_repair",
   "library_market_id": "euro_depth",
-  "hunter_ticker": "NOVN.SW",
+  "hunter_ticker": "DQ7A.IR",
   "ingest_health": {
     "snapshot_at": "2026-09-10T09:10:12.968766+00:00",
     "buy_tier_count": 61,
@@ -1223,10 +1223,10 @@
   },
   "reprioritized_at": "2026-09-10T09:10:12.968985+00:00",
   "reprioritized_after_task": "eng-20260910-03",
-  "failed_url": "https://www.aperam.com/sites/default/files/documents/Aperam_AnnualReport_2025.pdf",
+  "failed_url": "https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-10T11:37:20.593756+00:00",
+    "evaluated_at": "2026-09-10T12:19:43.898090+00:00",
     "should_send_full_queue_warning": false
   }
 }
