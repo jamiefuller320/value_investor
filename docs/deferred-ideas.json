@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-09T09:21:37+00:00",
+  "updated_at": "2026-09-10T08:29:36+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7911,6 +7911,38 @@
       "status": "open",
       "source": "https://cursor.com/agents/path-guard-pr507",
       "added_at": "2026-09-08T16:04:12+00:00"
+    },
+    {
+      "id": "L354",
+      "category": "later",
+      "section": "ops",
+      "title": "Hunter PR deterministic auto-merge (SKIP-only tier)",
+      "summary": "Extend evaluate_auto_merge with a parked_source_hunter tier: auto_merge when diff is only filings.py + test_research_filings.py for the task ticker, adds exactly one PARKED_SOURCE_HUNTER_SKIP entry (no new URLs), scoped pytest green, path guard pass. Safest first step before allowlist auto-merge.",
+      "revisit_when": "Parked hunter queue has 10+ consecutive human merges with zero bad URL/skip outcomes and euro_depth parked set is stable",
+      "tags": [
+        "auto_merge",
+        "parked_source_hunter",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "hunter auto-merge design discussion",
+      "added_at": "2026-09-10T08:29:36+00:00"
+    },
+    {
+      "id": "L355",
+      "category": "later",
+      "section": "ops",
+      "title": "Independent verify-agent gate for hunter allowlist PRs",
+      "summary": "After hunter PR opens, dispatch a read-only verify Cloud Agent (separate session/model) that live-checks proposed IR URLs and writes a structured approval artifact; engineering-auto-merge requires artifact approve=true in addition to CI and path guard. Use as supplement to live-fetch pytest, not a substitute.",
+      "revisit_when": "SKIP-only hunter auto-merge tier has run cleanly for 4+ weeks and allowlist-add PRs are the throughput bottleneck",
+      "tags": [
+        "auto_merge",
+        "parked_source_hunter",
+        "verify_agent"
+      ],
+      "status": "open",
+      "source": "hunter auto-merge design discussion",
+      "added_at": "2026-09-10T08:29:36+00:00"
     }
   ],
   "fragments": [
