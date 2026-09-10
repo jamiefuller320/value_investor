@@ -38,9 +38,7 @@ def test_cron_keys_for_policy_unions_admitted_timezones():
 
 def test_unmapped_admitted_markets_empty_for_current_roster():
     policy = {
-        "ladder": {
-            "admitted_learning_markets": ["sp500", "asx200", "euro_depth", "ftse_smallcap"]
-        },
+        "ladder": {"admitted_learning_markets": ["sp500", "asx200", "euro_depth", "ftse_smallcap"]},
     }
     assert unmapped_admitted_markets(policy) == []
 
@@ -78,9 +76,7 @@ def test_ensure_skips_without_workflow_pat(monkeypatch):
 
 def test_admit_market_ensures_crons_once():
     policy: dict = {"ladder": {"admitted_learning_markets": []}}
-    with patch(
-        "value_investor.market_shard_admission._ensure_epoch0_crons_after_admit"
-    ) as ensure:
+    with patch("value_investor.market_shard_admission._ensure_epoch0_crons_after_admit") as ensure:
         ensure.return_value = {"skipped": False, "keys": ["library-epoch0-weekday-asx"]}
         assert admit_market_to_learning(policy, "asx200") is True
         ensure.assert_called_once_with("asx200")
@@ -90,9 +86,7 @@ def test_admit_market_ensures_crons_once():
 
 def test_admit_market_can_skip_cron_ensure():
     policy: dict = {"ladder": {"admitted_learning_markets": []}}
-    with patch(
-        "value_investor.market_shard_admission._ensure_epoch0_crons_after_admit"
-    ) as ensure:
+    with patch("value_investor.market_shard_admission._ensure_epoch0_crons_after_admit") as ensure:
         assert admit_market_to_learning(policy, "sp500", ensure_crons=False) is True
         ensure.assert_not_called()
 
