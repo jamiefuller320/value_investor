@@ -163,6 +163,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://thenavigatorcompany.com/wp-content/uploads/2025/02/Navigator-l-Divulgacao_Resultados_2024.pdf",
     ],
     # euro_depth parked DQ7A.IR — eng-20260910-01: prior allowlist misattributed DCC plc PDF.
+    # eng-20260910-14: https/www TLS resets; canonical maps to plain http on donegaligroup.com.
     "DQ7A.IR": [
         "https://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf",
         "https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
@@ -3424,7 +3425,14 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     ),
     # eng-20260910-01: DQ7A.IR allowlist wrongly pointed at DCC plc annual report.
     "https://www.dcc.ie/~/media/Files/D/Dcc-Corp-v3/documents/investors/annual-and-sustainability-reports/2025/annual-report-2025.pdf": (
-        "https://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf"
+        "http://donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf"
+    ),
+    # eng-20260910-14: donegaligroup.com https/www resets; plain http serves.
+    "https://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf": (
+        "http://donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf"
+    ),
+    "https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf": (
+        "http://donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf"
     ),
     # eng-20260909-10: GlobeNewswire HTML IR rows fail validation; vinci.com statutory PDFs serve.
     "https://www.globenewswire.com/news-release/2026/02/05/3233287/0/en/VINCI-2025-full-year-results-Outstanding-performance-record-free-cash-flow.html": (
@@ -3653,7 +3661,20 @@ def _is_ir_allowlist_row(row: dict[str, Any]) -> bool:
 IR_BODY_FETCH_RETRIES = 2
 IR_BODY_MIN_CHARS = 200
 _IR_ROW_TOKEN_SKIP = frozenset(
-    {"pdf", "vfinal", "final", "allowlist", "document", "media", "files", "presentation"}
+    {
+        "pdf",
+        "vfinal",
+        "final",
+        "allowlist",
+        "document",
+        "media",
+        "files",
+        "presentation",
+        # Irish/Euronext stock-exchange-release PDF filenames (tokens absent from body text).
+        "stock",
+        "exchange",
+        "release",
+    }
 )
 _IR_PERIOD_HEADLINE_CUES: dict[str, tuple[str, ...]] = {
     "annual": ("full year", "final results", "annual results", "annual report", "fy "),
@@ -3912,7 +3933,7 @@ def _ir_row_search_tokens(row: dict[str, Any]) -> set[str]:
     return {
         tok
         for tok in re.split(r"[^a-z0-9]+", blob)
-        if len(tok) >= 3 and tok not in _IR_ROW_TOKEN_SKIP
+        if len(tok) >= 3 and tok not in _IR_ROW_TOKEN_SKIP and not re.fullmatch(r"\d{6}", tok)
     }
 
 

@@ -6826,7 +6826,7 @@ def test_load_ir_url_allowlist_canonicalizes_dq7a_ir_misattributed_dcc_url(tmp_p
         "https://www.dcc.ie/~/media/Files/D/Dcc-Corp-v3/documents/investors/"
         "annual-and-sustainability-reports/2025/annual-report-2025.pdf"
     )
-    live = _BUILTIN_IR_URLS["DQ7A.IR"][0]
+    live = "http://donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf"
     path = tmp_path / "ir.json"
     path.write_text(json.dumps({"urls": {"DQ7A.IR": [dead]}}), encoding="utf-8")
     mapping = load_ir_url_allowlist(path)
@@ -6836,13 +6836,43 @@ def test_load_ir_url_allowlist_canonicalizes_dq7a_ir_misattributed_dcc_url(tmp_p
     assert any(row["url"] == live for row in rows)
 
 
+def test_load_ir_url_allowlist_canonicalizes_dq7a_ir_dead_https_urls(tmp_path: Path):
+    """eng-20260910-14: donegaligroup.com https/www resets; plain http PDFs serve."""
+    dead_annual = (
+        "https://www.donegaligroup.com/media/1316/"
+        "donegal-investment-group-annual-report-financial-statements-310825-final.pdf"
+    )
+    dead_h1 = "https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf"
+    live_annual = "http://donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf"
+    live_h1 = "http://donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf"
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"DQ7A.IR": [dead_annual, dead_h1]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live_annual in mapping["DQ7A.IR"]
+    assert live_h1 in mapping["DQ7A.IR"]
+    assert dead_annual not in mapping["DQ7A.IR"]
+    assert dead_h1 not in mapping["DQ7A.IR"]
+    rows = fetch_filings_ir_allowlist("DQ7A.IR", path=path)
+    assert {row["url"] for row in rows} == {live_annual, live_h1}
+
+
 def test_parked_source_hunter_dq7a_ir_euro_depth_has_fetchable_ir():
-    """eng-20260910-01: DQ7A.IR has live donegaligroup.com FY2025 AR + H1 stock-exchange PDFs."""
+    """eng-20260910-14: DQ7A.IR has live donegaligroup.com FY2025 AR + H1 stock-exchange PDFs."""
     assert "DQ7A.IR" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("DQ7A.IR")
     assert len(rows) == 2
+    assert all(row["url"].startswith("http://donegaligroup.com/") for row in rows)
     assert any("annual-report-financial-statements-310825" in row["url"] for row in rows)
     assert any("stock-exchange-release-280225" in row["url"] for row in rows)
+
+
+def test_live_fetch_hunter_dq7a_ir_donegaligroup_https_canonical_to_http():
+    """eng-20260910-14: hunter gate resolves https/www donegaligroup.com to fetchable http PDFs."""
+    from value_investor.hunter_auto_merge import live_fetch_hunter_urls
+
+    for url in _BUILTIN_IR_URLS["DQ7A.IR"]:
+        ok, reason = live_fetch_hunter_urls([url], ticker="DQ7A.IR")
+        assert ok, reason
 
 
 def test_fetch_filings_ir_allowlist_euro_depth_eg7_ir_builtins(tmp_path: Path):
