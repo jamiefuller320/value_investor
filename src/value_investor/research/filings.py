@@ -134,6 +134,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "BAS.DE": [
         "https://report.basf.com/2025/en/_assets/downloads/full-basf-report-2025-basf-ar25.pdf",
     ],
+    # euro_depth IWB blocker — ESSITY-B.ST parked awaiting_periodic_report; FY2025 annual PDF.
     "ESSITY-B.ST": [
         "https://assets.www.essity.com/essity/Annual-Report-2025-digital.pdf",
     ],
