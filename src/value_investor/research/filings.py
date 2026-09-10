@@ -230,6 +230,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Randstad_Annual_Report_2025_F.pdf",
         "https://www.randstad.com/s3fs-media/rscom/public/2026-02/Q4_2025_Press_Release.pdf",
     ],
+    # euro_depth IWB blocker — NOVN.SW unfetchable_iwb resolved; SEC 20-F + novartis.com statutory PDFs.
+    "NOVN.SW": [
+        "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000004/nvs-20251231.htm",
+        "https://www.novartis.com/sites/novartis_com/files/q4-2025-interim-financial-report-en.pdf",
+        "https://www.novartis.com/sites/novartis_com/files/2025-01-interim-financial-report-en.pdf",
+    ],
     # euro_depth IWB blocker — Andritz CMS reshuffled blob IDs; annual report PDF.
     "ANDR.VI": [
         "https://www.andritz.com/resource/blob/689306/6ad9400073c46323b95b1be977870245/andritz-annual-report-2025-data.pdf",
