@@ -141,6 +141,249 @@
       "merged_at": "2026-09-09T17:11:22.608322+00:00"
     },
     {
+      "id": "eng-20260910-10",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked euro_depth leftover NOVN.SW",
+      "summary": "Library market euro_depth (EU depth composite (STOXX50 + periphery)) parked NOVN.SW after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: ",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "hunter_market_id": "euro_depth",
+        "hunter_ticker": "NOVN.SW",
+        "parked_reason": "unfetchable_iwb",
+        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for NOVN.SW only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260910-09",
+      "area": "ingest",
+      "title": "Repair dead hunter allowlist URL for APAM.AS",
+      "summary": "Monitor detected live-fetch failure for https://www.aperam.com/sites/default/files/documents/Aperam_AnnualReport_2025.pdf (APAM.AS, euro_depth). Inspect whether the URL rot is fixable via a known canonical replacement, a fresh allowlist entry, or a PARKED_SOURCE_HUNTER_SKIP update. Do not invent URLs.",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "hunter_url_repair",
+      "evidence": {
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "hunter_market_id": "euro_depth",
+        "hunter_ticker": "APAM.AS",
+        "failed_url": "https://www.aperam.com/sites/default/files/documents/Aperam_AnnualReport_2025.pdf",
+        "monitor_reason": "live-fetch failed or body too short for https://www.aperam.com/sites/default/files/documents/Aperam_AnnualReport_2025.pdf",
+        "parent_task_id": "eng-20260909-04",
+        "parent_merged_at": "2026-09-09T09:22:00.759531+00:00",
+        "universe": "library",
+        "doc": "docs/ops/ops-monitor.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for APAM.AS only — do not invent URLs",
+        "Repair or replace the dead URL recorded for APAM.AS",
+        "Add/adjust regression coverage in tests/test_research_filings.py",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260910-08",
+      "area": "ingest",
+      "title": "Repair dead hunter allowlist URL for DG.PA",
+      "summary": "Monitor detected live-fetch failure for https://www.vinci.com/sites/default/files/medias/communiques/file/2026-07/CP%20VINCI%20H1%202026%20EN.pdf (DG.PA, euro_depth). Inspect whether the URL rot is fixable via a known canonical replacement, a fresh allowlist entry, or a PARKED_SOURCE_HUNTER_SKIP update. Do not invent URLs.",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "hunter_url_repair",
+      "evidence": {
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "hunter_market_id": "euro_depth",
+        "hunter_ticker": "DG.PA",
+        "failed_url": "https://www.vinci.com/sites/default/files/medias/communiques/file/2026-07/CP%20VINCI%20H1%202026%20EN.pdf",
+        "monitor_reason": "live-fetch failed or body too short for https://www.vinci.com/sites/default/files/medias/communiques/file/2026-07/CP%20VINCI%20H1%202026%20EN.pdf",
+        "parent_task_id": "eng-20260909-10",
+        "parent_merged_at": "2026-09-10T06:52:29.957576+00:00",
+        "universe": "library",
+        "doc": "docs/ops/ops-monitor.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for DG.PA only — do not invent URLs",
+        "Repair or replace the dead URL recorded for DG.PA",
+        "Add/adjust regression coverage in tests/test_research_filings.py",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260910-07",
+      "area": "ingest",
+      "title": "Repair dead hunter allowlist URL for DQ7A.IR",
+      "summary": "Monitor detected live-fetch failure for https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf (DQ7A.IR, euro_depth). Inspect whether the URL rot is fixable via a known canonical replacement, a fresh allowlist entry, or a PARKED_SOURCE_HUNTER_SKIP update. Do not invent URLs.",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "hunter_url_repair",
+      "evidence": {
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "hunter_market_id": "euro_depth",
+        "hunter_ticker": "DQ7A.IR",
+        "failed_url": "https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
+        "monitor_reason": "live-fetch failed or body too short for https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
+        "parent_task_id": "eng-20260910-01",
+        "parent_merged_at": "2026-09-10T08:39:34.150011+00:00",
+        "universe": "library",
+        "doc": "docs/ops/ops-monitor.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for DQ7A.IR only — do not invent URLs",
+        "Repair or replace the dead URL recorded for DQ7A.IR",
+        "Add/adjust regression coverage in tests/test_research_filings.py",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260910-05",
+      "area": "ingest",
+      "title": "Repair dead hunter allowlist URL for DTE.DE",
+      "summary": "Monitor detected live-fetch failure for https://report.telekom.com/annual-report-2025/_assets/downloads/entire-dtag-ar25.pdf (DTE.DE, euro_depth). Inspect whether the URL rot is fixable via a known canonical replacement, a fresh allowlist entry, or a PARKED_SOURCE_HUNTER_SKIP update. Do not invent URLs.",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "hunter_url_repair",
+      "evidence": {
+        "market_id": "euro_depth",
+        "library_market": "euro_depth",
+        "hunter_market_id": "euro_depth",
+        "hunter_ticker": "DTE.DE",
+        "failed_url": "https://report.telekom.com/annual-report-2025/_assets/downloads/entire-dtag-ar25.pdf",
+        "monitor_reason": "live-fetch failed or body too short for https://report.telekom.com/annual-report-2025/_assets/downloads/entire-dtag-ar25.pdf",
+        "parent_task_id": "eng-20260910-02",
+        "parent_merged_at": "2026-09-10T08:54:09.221005+00:00",
+        "universe": "library",
+        "doc": "docs/ops/ops-monitor.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for DTE.DE only — do not invent URLs",
+        "Repair or replace the dead URL recorded for DTE.DE",
+        "Add/adjust regression coverage in tests/test_research_filings.py",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260910-04",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked euro_depth leftover ESSITY-B.ST",
@@ -951,11 +1194,11 @@
       "merged_at": "2026-09-09T08:28:25.598892+00:00"
     }
   ],
-  "compiled_at": "2026-09-10T09:11:50.582475+00:00",
-  "task_count": 14,
+  "compiled_at": "2026-09-10T11:37:23.605439+00:00",
+  "task_count": 19,
   "micro_compile_source": "parked_source_hunter",
   "library_market_id": "euro_depth",
-  "hunter_ticker": "ESSITY-B.ST",
+  "hunter_ticker": "NOVN.SW",
   "ingest_health": {
     "snapshot_at": "2026-09-10T09:10:12.968766+00:00",
     "buy_tier_count": 61,
@@ -979,5 +1222,11 @@
     "filings_with_body": 4096
   },
   "reprioritized_at": "2026-09-10T09:10:12.968985+00:00",
-  "reprioritized_after_task": "eng-20260910-03"
+  "reprioritized_after_task": "eng-20260910-03",
+  "failed_url": "https://www.aperam.com/sites/default/files/documents/Aperam_AnnualReport_2025.pdf",
+  "queue_clearing": {
+    "attention_parked_count": 0,
+    "evaluated_at": "2026-09-10T11:37:20.593756+00:00",
+    "should_send_full_queue_warning": false
+  }
 }
