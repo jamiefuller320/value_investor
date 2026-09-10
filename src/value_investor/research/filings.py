@@ -3739,8 +3739,15 @@ def _reject_duplicate_filing_body_hash(
     return content_hash, None
 
 
-def _ir_body_title_tokens_match(row: dict[str, Any], body: str) -> bool:
+def _ir_body_title_tokens_match(row: dict[str, Any], body: str, *, ticker: str = "") -> bool:
     tokens = _ir_row_search_tokens(row)
+    url = str(row.get("url") or "").lower()
+    if "sec.gov/" in url and ticker:
+        base = _base_symbol(ticker)
+        for alias in _ESEF_ENTITY_SEARCH_ALIASES.get(base, ()):
+            for tok in re.split(r"[^a-z0-9]+", alias.lower()):
+                if len(tok) >= 4:
+                    tokens.add(tok)
     if not tokens:
         return True
     sample = (body or "")[:4000].lower()
@@ -3851,7 +3858,12 @@ def _try_persist_rns_filing_body(
     return updated, None
 
 
-def _validate_ir_allowlist_body_content(row: dict[str, Any], body: str) -> tuple[bool, str | None]:
+def _validate_ir_allowlist_body_content(
+    row: dict[str, Any],
+    body: str,
+    *,
+    ticker: str = "",
+) -> tuple[bool, str | None]:
     """
     Title/period/hash gate before marking IR allowlist rows ``has_body``.
 
@@ -3864,7 +3876,7 @@ def _validate_ir_allowlist_body_content(row: dict[str, Any], body: str) -> tuple
     if not valid:
         return False, reason
 
-    if not _ir_body_title_tokens_match(row, body):
+    if not _ir_body_title_tokens_match(row, body, ticker=ticker):
         return False, "title_mismatch"
 
     url = str(row.get("url") or "")
@@ -4033,7 +4045,7 @@ def _fetch_ir_allowlist_body(
 
     body = fetch_filing_body(url)
     if body:
-        valid, reason = _validate_ir_allowlist_body_content(row, body)
+        valid, reason = _validate_ir_allowlist_body_content(row, body, ticker=ticker)
         if valid:
             return body, "pdf"
         logger.debug(
@@ -4043,7 +4055,7 @@ def _fetch_ir_allowlist_body(
         )
 
     for alt_body, parser in _fetch_ir_pdf_alternate_candidates(url):
-        valid, reason = _validate_ir_allowlist_body_content(row, alt_body)
+        valid, reason = _validate_ir_allowlist_body_content(row, alt_body, ticker=ticker)
         if valid:
             source = "pdf" if parser == "pypdf" else f"pdf_{parser}"
             return alt_body, source
@@ -4066,7 +4078,7 @@ def _fetch_ir_allowlist_body(
     ig_url = str(matched.get("url") or "")
     html_body = _fetch_investegate_html_body(ig_url)
     if html_body:
-        valid, reason = _validate_ir_allowlist_body_content(row, html_body)
+        valid, reason = _validate_ir_allowlist_body_content(row, html_body, ticker=ticker)
         if valid:
             return html_body, "investegate_html"
         logger.debug(

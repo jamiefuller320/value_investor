@@ -6675,6 +6675,22 @@ def test_parked_source_hunter_dte_de_euro_depth_has_fetchable_ir():
     assert "entire-dtag-ar25.pdf" in rows[0]["url"]
 
 
+def test_ir_allowlist_sec_edgar_body_accepts_issuer_alias_tokens():
+    """SEC 20-F inline HTML may omit URL filename tokens; issuer aliases must suffice."""
+    url = "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000004/nvs-20251231.htm"
+    row = {
+        "id": "hunter_gate",
+        "url": url,
+        "period": "annual",
+        "source": "ir_allowlist",
+        "headline": "20-F",
+    }
+    body = fetch_filing_body(url)
+    assert body
+    valid, reason = _validate_ir_allowlist_body_content(row, body, ticker="NOVN.SW")
+    assert valid, reason
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_novn_sw_builtins(tmp_path: Path):
     """Regression: NOVN.SW parked IWB — SEC FY2025 20-F + novartis.com statutory PDFs."""
     allowlist_path = tmp_path / "ir.json"
