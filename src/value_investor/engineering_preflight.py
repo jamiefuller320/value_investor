@@ -24,7 +24,10 @@ from value_investor.engineering_tasks import (
     normalize_repo_path,
     validate_engineering_pr_paths,
 )
-from value_investor.engineering_verify import acceptance_test_paths, default_pytest_runner
+from value_investor.engineering_verify import (
+    default_pytest_runner,
+    preflight_pytest_paths,
+)
 from value_investor.python_quality import git_changed_files, run_ruff_on_files
 
 logger = logging.getLogger(__name__)
@@ -594,7 +597,7 @@ def run_local_preflight(
     if skip_pytest:
         checks.append(PreflightCheck(name="pytest", ok=True, detail="skipped"))
     else:
-        test_paths = acceptance_test_paths(task)
+        test_paths = preflight_pytest_paths(task, normalized)
         if test_paths:
             result = pytest_runner(test_paths, root)
             checks.append(

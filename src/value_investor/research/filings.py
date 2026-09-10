@@ -378,6 +378,26 @@ _SEC_TICKER_ALIASES: dict[str, str] = {
     "GIB-A": "GIB",
 }
 
+# Verified dual-listed issuers — used when SEC company_tickers.json is unreachable (CI/rate limits).
+_SEC_TICKER_CIK_FALLBACK: dict[str, int] = {
+    "GIB": 1061574,
+    "SHEL": 1306965,
+    "NVS": 1114448,
+    "BUD": 1668717,
+    "LOGI": 1032975,
+    "CRH": 849395,
+}
+
+# Registrant names for _SEC_TICKER_CIK_FALLBACK — used when submissions metadata fetch fails.
+_SEC_ENTITY_NAME_FALLBACK: dict[int, str] = {
+    1061574: "CGI INC",
+    1306965: "Shell plc",
+    1114448: "NOVARTIS AG",
+    1668717: "Anheuser-Busch InBev SA/NV",
+    1032975: "LOGITECH INTERNATIONAL S.A.",
+    849395: "CRH PUBLIC LTD CO",
+}
+
 # Cross-listing inheritance for manual IR allowlist URLs (e.g. Amsterdam vs LSE Shell).
 _IR_ALLOWLIST_TICKER_ALIASES: dict[str, tuple[str, ...]] = {
     "SHELL.AS": ("SHEL.L",),
@@ -1997,7 +2017,7 @@ def _load_sec_ticker_cik_map() -> dict[str, int]:
         data = json.loads(payload.decode("utf-8"))
     except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
         logger.warning("SEC company_tickers fetch failed: %s", exc)
-        _sec_ticker_cik_cache = {}
+        _sec_ticker_cik_cache = dict(_SEC_TICKER_CIK_FALLBACK)
         return _sec_ticker_cik_cache
     mapping: dict[str, int] = {}
     if isinstance(data, dict):
@@ -2016,6 +2036,8 @@ def _load_sec_ticker_cik_map() -> dict[str, int]:
                 mapping[ticker] = int(cik)
             except (TypeError, ValueError):
                 continue
+    for ticker, cik in _SEC_TICKER_CIK_FALLBACK.items():
+        mapping.setdefault(ticker, cik)
     _sec_ticker_cik_cache = mapping
     return mapping
 
@@ -2042,9 +2064,9 @@ def _sec_submissions_entity_name(cik: int) -> str | None:
         data = json.loads(payload.decode("utf-8"))
     except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
         logger.debug("SEC submissions name lookup failed for CIK %s: %s", cik, exc)
-        return None
+        return _SEC_ENTITY_NAME_FALLBACK.get(cik)
     name = str(data.get("name") or "").strip()
-    return name or None
+    return name or _SEC_ENTITY_NAME_FALLBACK.get(cik)
 
 
 def _issuer_matches_sec_name(company_name: str, sec_name: str, ticker: str) -> bool:

@@ -4057,6 +4057,20 @@ def test_fetch_filings_esef_direct_parses_xbrl_api(mock_get):
     assert rows[0]["period"] == "annual"
 
 
+def test_resolve_sec_cik_uses_fallback_when_company_tickers_unreachable(monkeypatch):
+    """Dual-listed alias resolution must survive SEC company_tickers.json outages."""
+    import value_investor.research.filings as filings_mod
+
+    monkeypatch.setattr(filings_mod, "_sec_ticker_cik_cache", None)
+
+    def _blocked(*args, **kwargs):
+        raise OSError("SEC blocked")
+
+    monkeypatch.setattr(filings_mod, "_http_get", _blocked)
+    assert resolve_sec_cik("GIB-A") is not None
+    assert _sec_edgar_supplement_allowed("SHELL.AS", "Shell plc") is True
+
+
 def test_resolve_sec_cik_euro_depth_dual_listed_aliases():
     assert resolve_sec_cik("SHELL") == resolve_sec_cik("SHEL")
     assert resolve_sec_cik("NOVN") == resolve_sec_cik("NVS")
@@ -5891,7 +5905,15 @@ def test_asx_statistics_listing_page_is_index_noise():
     "value_investor.research.filings._sec_edgar_supplement_allowed",
     return_value=False,
 )
+@patch(
+    "value_investor.research.filings._fetch_ir_allowlist_body",
+    return_value=(
+        "CGI Inc. annual report on Form 40-F for the fiscal year ended September 2025.",
+        None,
+    ),
+)
 def test_ingest_filings_tsx60_gib_a_indexes_ir_allowlist_bodies(
+    _mock_ir_body,
     _mock_sec_ok,
     _mock_tsx_news,
     tmp_path: Path,
