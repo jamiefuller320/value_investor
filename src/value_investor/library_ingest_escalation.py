@@ -345,18 +345,29 @@ def compile_parked_source_hunter_task(
 
     tried = _tried_parked_hunter_keys(existing_rows)
     candidates = iter_parked_hunter_candidates(library_root=library_root, policy=policy)
+    from value_investor.hunter_auto_merge import hunter_ticker_already_resolved_on_main
+
     next_row: tuple[str, str, dict[str, Any]] | None = None
+    skipped_resolved: list[str] = []
     for market_id, ticker, parked in candidates:
         if (market_id, ticker.upper()) in tried:
+            continue
+        resolved, _kind, _detail = hunter_ticker_already_resolved_on_main(ticker.upper())
+        if resolved:
+            skipped_resolved.append(ticker.upper())
             continue
         next_row = (market_id, ticker, parked)
         break
     if next_row is None:
+        reason = "no parked leftover tickers remaining for hunter"
+        if skipped_resolved and not tried:
+            reason = "parked hunter candidates already resolved on main"
         return {
             "compiled_count": 0,
-            "reason": "no parked leftover tickers remaining for hunter",
+            "reason": reason,
             "tried_count": len(tried),
             "candidate_count": len(candidates),
+            "skipped_resolved_tickers": skipped_resolved,
         }
 
     market_id, ticker, parked = next_row

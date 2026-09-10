@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import re
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
@@ -32,6 +33,7 @@ PARKED_STATUS = "parked"
 PARKED_POLICY_DUPLICATE = "duplicate"
 PARKED_POLICY_NO_DIFF = "no_diff_cap"
 PARKED_POLICY_CI_BLOCKED = "ci_blocked"
+PARKED_POLICY_HUNTER_UNFIXABLE = "hunter_unfixable"
 PARKED_POLICY_WORKFLOW_PERMISSION = "workflow_permission"
 PARKED_POLICY_MANUAL = "manual"
 INFORMATIONAL_PARKED_POLICIES = frozenset({PARKED_POLICY_DUPLICATE, PARKED_POLICY_NO_DIFF})
@@ -45,6 +47,10 @@ DEFAULT_MAX_AGENT_RETRIES = 2
 DEFAULT_MAX_NO_DIFF_RUNS = 2
 DEFAULT_RETRY_COOLDOWN_HOURS = 24
 DEFAULT_CI_RED_PARK_HOURS = 48
+DEFAULT_MAX_ATTENTION_PARKED_TASKS = 8
+DEFAULT_RESUME_ATTENTION_PARKED_BELOW = 7
+DEFAULT_RESUME_IDLE_MINUTES = 30
+DEFAULT_IMMEDIATE_PARK_UNFIXABLE_PR = True
 GITHUB_API_VERSION = "2022-11-28"
 WORKFLOW_PATH_PREFIX = ".github/workflows/"
 
@@ -111,6 +117,8 @@ class RecoveryResult:
     cancelled: list[RecoveryAction] = field(default_factory=list)
     parked: list[RecoveryAction] = field(default_factory=list)
     skipped: list[dict[str, str]] = field(default_factory=list)
+    queue_clearing: dict[str, Any] = field(default_factory=dict)
+    hunter_url_monitor: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -120,6 +128,8 @@ class RecoveryResult:
             "cancelled": [row.to_dict() for row in self.cancelled],
             "parked": [row.to_dict() for row in self.parked],
             "skipped": self.skipped,
+            "queue_clearing": self.queue_clearing,
+            "hunter_url_monitor": self.hunter_url_monitor,
             "action_count": len(self.merged)
             + len(self.reconciled)
             + len(self.reopened)
@@ -237,6 +247,209 @@ def _pr_check_state(
     }
 
 
+def _engineering_queue_recovery_policy() -> dict[str, Any]:
+    from value_investor.agent_model_policy import load_policy
+
+    engineering = load_policy().get("engineering") or {}
+    block = engineering.get("queue_recovery") or {}
+    try:
+        max_attention = max(
+            1, int(block.get("max_attention_parked_tasks") or DEFAULT_MAX_ATTENTION_PARKED_TASKS)
+        )
+    except (TypeError, ValueError):
+        max_attention = DEFAULT_MAX_ATTENTION_PARKED_TASKS
+    try:
+        resume_below = max(
+            0,
+            int(
+                block.get("resume_attention_parked_below") or DEFAULT_RESUME_ATTENTION_PARKED_BELOW
+            ),
+        )
+    except (TypeError, ValueError):
+        resume_below = DEFAULT_RESUME_ATTENTION_PARKED_BELOW
+    try:
+        resume_idle_minutes = max(
+            1,
+            int(block.get("resume_idle_minutes") or DEFAULT_RESUME_IDLE_MINUTES),
+        )
+    except (TypeError, ValueError):
+        resume_idle_minutes = DEFAULT_RESUME_IDLE_MINUTES
+    try:
+        ci_red_hours = max(1, int(block.get("ci_red_park_hours") or DEFAULT_CI_RED_PARK_HOURS))
+    except (TypeError, ValueError):
+        ci_red_hours = DEFAULT_CI_RED_PARK_HOURS
+    immediate = block.get("immediate_park_unfixable_pr")
+    if immediate is None:
+        immediate = DEFAULT_IMMEDIATE_PARK_UNFIXABLE_PR
+    return {
+        "immediate_park_unfixable_pr": bool(immediate),
+        "max_attention_parked_tasks": max_attention,
+        "resume_attention_parked_below": resume_below,
+        "resume_idle_minutes": resume_idle_minutes,
+        "ci_red_park_hours": ci_red_hours,
+    }
+
+
+def count_attention_parked_tasks(*, tasks_path: Path = COMMITTED_TASKS_PATH) -> int:
+    return len(summarize_parked_tasks_needing_attention(tasks_path))
+
+
+def get_queue_clearing_state(*, tasks_path: Path = COMMITTED_TASKS_PATH) -> dict[str, Any]:
+    data = load_engineering_tasks(tasks_path)
+    return dict(data.get("queue_clearing") or {})
+
+
+def is_queue_clearing_pause_active(*, tasks_path: Path = COMMITTED_TASKS_PATH) -> bool:
+    return bool(get_queue_clearing_state(tasks_path=tasks_path).get("pause_active"))
+
+
+def _save_queue_clearing_state(
+    state: dict[str, Any],
+    *,
+    tasks_path: Path,
+    apply: bool,
+) -> None:
+    if not apply:
+        return
+    from value_investor.storage import write_json
+
+    data = load_engineering_tasks(tasks_path)
+    data["queue_clearing"] = state
+    tasks_path = Path(tasks_path)
+    tasks_path.parent.mkdir(parents=True, exist_ok=True)
+    write_json(tasks_path, data, compact=False)
+
+
+def record_queue_clearing_action(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    apply: bool = True,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """Stamp last clearing action while queue-clearing pause is active."""
+    now = now or datetime.now(UTC)
+    state = get_queue_clearing_state(tasks_path=tasks_path)
+    if not state.get("pause_active"):
+        return state
+    state = dict(state)
+    state["last_clearing_action_at"] = now.isoformat()
+    _save_queue_clearing_state(state, tasks_path=tasks_path, apply=apply)
+    return state
+
+
+def maybe_record_queue_clearing_action(
+    prior_row: dict[str, Any] | None,
+    *,
+    new_status: str,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    apply: bool = True,
+    now: datetime | None = None,
+) -> None:
+    if not prior_row or str(prior_row.get("status") or "") != PARKED_STATUS:
+        return
+    if str(new_status or "") == PARKED_STATUS:
+        return
+    merged_ids = _merged_task_ids(load_engineering_tasks(tasks_path).get("tasks") or [])
+    grade = classify_parked_task(prior_row, merged_ids=merged_ids)
+    if not grade.get("needs_attention"):
+        return
+    record_queue_clearing_action(tasks_path=tasks_path, apply=apply, now=now)
+
+
+def evaluate_queue_clearing_pause(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    apply: bool = True,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """Pause dispatch at attention-parked cap; resume after idle clearing work."""
+    now = now or datetime.now(UTC)
+    policy = _engineering_queue_recovery_policy()
+    max_trigger = int(policy["max_attention_parked_tasks"])
+    resume_below = int(policy["resume_attention_parked_below"])
+    idle_minutes = int(policy["resume_idle_minutes"])
+
+    state = dict(get_queue_clearing_state(tasks_path=tasks_path))
+    count = count_attention_parked_tasks(tasks_path=tasks_path)
+    pause_active = bool(state.get("pause_active"))
+    changes: dict[str, Any] = {}
+
+    if not pause_active and count >= max_trigger:
+        state["pause_active"] = True
+        state["pause_started_at"] = now.isoformat()
+        state.pop("warned_at", None)
+        state.pop("resumed_at", None)
+        changes["activated"] = True
+    elif pause_active:
+        pause_started = _parse_iso(str(state.get("pause_started_at") or ""))
+        last_action = _parse_iso(str(state.get("last_clearing_action_at") or ""))
+        effective_last = last_action
+        if pause_started and last_action and last_action < pause_started:
+            effective_last = None
+        idle_ok = effective_last is not None and (now - effective_last) >= timedelta(
+            minutes=idle_minutes
+        )
+        if count < resume_below and idle_ok:
+            state["pause_active"] = False
+            state["resumed_at"] = now.isoformat()
+            state.pop("pause_started_at", None)
+            state.pop("last_clearing_action_at", None)
+            state.pop("warned_at", None)
+            state.pop("resume_pending", None)
+            changes["resumed"] = True
+        elif count < resume_below:
+            state["resume_pending"] = True
+            changes["resume_pending"] = True
+        else:
+            state.pop("resume_pending", None)
+
+    state["attention_parked_count"] = count
+    state["evaluated_at"] = now.isoformat()
+    state["should_send_full_queue_warning"] = bool(state.get("pause_active")) and not state.get(
+        "warned_at"
+    )
+    if changes:
+        state["last_change"] = changes
+    _save_queue_clearing_state(state, tasks_path=tasks_path, apply=apply)
+    return state
+
+
+def mark_queue_clearing_warned(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    apply: bool = True,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    now = now or datetime.now(UTC)
+    state = dict(get_queue_clearing_state(tasks_path=tasks_path))
+    if not state.get("pause_active"):
+        return state
+    state["warned_at"] = now.isoformat()
+    state["should_send_full_queue_warning"] = False
+    _save_queue_clearing_state(state, tasks_path=tasks_path, apply=apply)
+    return state
+
+
+def _park_task_with_cap(
+    task_id: str,
+    *,
+    reason: str,
+    tasks_path: Path,
+    from_status: str,
+    apply: bool,
+    parked_policy: str | None = None,
+    max_attention: int = DEFAULT_MAX_ATTENTION_PARKED_TASKS,
+) -> RecoveryAction:
+    return _park_task(
+        task_id,
+        reason=reason,
+        tasks_path=tasks_path,
+        from_status=from_status,
+        apply=apply,
+        parked_policy=parked_policy,
+    )
+
+
 def _infer_parked_policy(reason: str, *, explicit: str | None = None) -> str:
     if explicit:
         return str(explicit).strip().lower()
@@ -273,8 +486,10 @@ def _park_task(
             task_id,
             PARKED_STATUS,
             path=tasks_path,
+            committed_path=tasks_path,
             parked_reason=reason,
             parked_policy=_infer_parked_policy(reason, explicit=parked_policy),
+            parked_at=datetime.now(UTC).isoformat(),
         )
     return action
 
@@ -612,6 +827,164 @@ def park_ci_blocked_pr_open_tasks(
     return parked
 
 
+def _latest_commit_subject(
+    branch: str,
+    *,
+    repo: str | None = None,
+    token: str | None = None,
+) -> str | None:
+    branch = str(branch or "").strip()
+    repo = repo or _github_repo()
+    if not branch or not repo:
+        return None
+    token = token or _github_token()
+    if not token:
+        return None
+    owner, name = repo.split("/", 1)
+    try:
+        commits = _github_api_get(
+            f"/repos/{owner}/{name}/commits?sha={urllib.parse.quote(branch, safe='')}&per_page=1",
+            token=token,
+        )
+    except (OSError, ValueError, RuntimeError):
+        return None
+    if not isinstance(commits, list) or not commits:
+        return None
+    message = str((commits[0].get("commit") or {}).get("message") or "")
+    return message.splitlines()[0].strip() if message else None
+
+
+def park_hunter_pr_if_unfixable(
+    *,
+    branch: str,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    open_prs: list[dict[str, Any]] | None = None,
+    repo: str | None = None,
+    token: str | None = None,
+    apply: bool = True,
+    base_ref: str = "origin/main",
+    head_ref: str = "HEAD",
+    cwd: Path | None = None,
+    max_attention_parked: int | None = None,
+) -> RecoveryAction | None:
+    """Park a hunter pr_open task when CI is red and hunter-fix cannot recover it."""
+    from value_investor.engineering_queue import task_id_from_branch
+    from value_investor.hunter_auto_merge import (
+        evaluate_hunter_merge_gate,
+        hunter_fix_eligible,
+        is_parked_source_hunter_task,
+        load_hunter_task_for_branch,
+    )
+    from value_investor.hunter_fix_agent import latest_commit_is_hunter_fix
+
+    branch = str(branch or "").strip()
+    task_id = task_id_from_branch(branch)
+    if not task_id:
+        return None
+    data = load_engineering_tasks(tasks_path)
+    row = next(
+        (item for item in data.get("tasks") or [] if str(item.get("id") or "") == task_id), None
+    )
+    if not isinstance(row, dict) or str(row.get("status") or "") != IN_FLIGHT_STATUS:
+        return None
+    task = load_hunter_task_for_branch(branch, tasks_path=tasks_path)
+    if task is None or not is_parked_source_hunter_task(task):
+        return None
+
+    pr = _open_pr_by_branch(open_prs or []).get(branch)
+    if pr is None or pr.get("number") is None:
+        return None
+    check_state = _pr_check_state(int(pr["number"]), repo=repo, token=token)
+    if not check_state.get("available") or not check_state.get("all_failed"):
+        return None
+
+    workdir = Path(cwd or Path.cwd())
+    import subprocess
+
+    diff = subprocess.run(
+        ["git", "diff", "--name-only", f"{base_ref}...{head_ref}"],
+        check=False,
+        capture_output=True,
+        text=True,
+        cwd=workdir,
+    )
+    changed_files = [line.strip() for line in diff.stdout.splitlines() if line.strip()]
+    gate = evaluate_hunter_merge_gate(
+        task=task,
+        changed_files=changed_files,
+        base_ref=base_ref,
+        head_ref=head_ref,
+        cwd=workdir,
+    )
+    eligible, eligibility_reason, _fix_kind = hunter_fix_eligible(task=task, gate=gate)
+    fix_commit = latest_commit_is_hunter_fix(cwd=workdir)
+    subject = _latest_commit_subject(branch, repo=repo, token=token) or ""
+    fix_attempted = fix_commit or subject.startswith("chore(hunter-fix):")
+
+    if eligible and not fix_attempted:
+        return None
+
+    if eligible and fix_attempted and gate.ok:
+        return None
+
+    reason = eligibility_reason
+    if fix_attempted and not gate.ok:
+        reason = f"hunter-fix exhausted — gate still failing: {gate.reason}"
+    elif not eligible:
+        reason = f"hunter PR unfixable — {eligibility_reason}; gate: {gate.reason}"
+
+    policy_cfg = _engineering_queue_recovery_policy()
+    max_attention = (
+        int(max_attention_parked)
+        if max_attention_parked is not None
+        else int(policy_cfg["max_attention_parked_tasks"])
+    )
+    return _park_task_with_cap(
+        task_id,
+        reason=reason[:500],
+        tasks_path=tasks_path,
+        from_status=IN_FLIGHT_STATUS,
+        apply=apply,
+        parked_policy=PARKED_POLICY_HUNTER_UNFIXABLE,
+        max_attention=max_attention,
+    )
+
+
+def park_unfixable_pr_open_tasks(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    open_prs: list[dict[str, Any]] | None = None,
+    repo: str | None = None,
+    token: str | None = None,
+    apply: bool = True,
+    cwd: Path | None = None,
+    max_attention_parked: int | None = None,
+) -> list[RecoveryAction]:
+    """Park pr_open hunter tasks that are deterministically unfixable (free queue slots)."""
+    if not _engineering_queue_recovery_policy().get("immediate_park_unfixable_pr"):
+        return []
+    pr_by_branch = _open_pr_by_branch(open_prs or [])
+    parked: list[RecoveryAction] = []
+    seen: set[str] = set()
+    for branch in pr_by_branch:
+        if branch in seen:
+            continue
+        seen.add(branch)
+        action = park_hunter_pr_if_unfixable(
+            branch=branch,
+            tasks_path=tasks_path,
+            open_prs=open_prs,
+            repo=repo,
+            token=token,
+            apply=apply,
+            cwd=cwd,
+            max_attention_parked=max_attention_parked,
+        )
+        if action is not None:
+            parked.append(action)
+    return parked
+
+
 def find_merged_pull_for_branch(
     branch: str,
     *,
@@ -705,8 +1078,9 @@ def recover_engineering_queue(
     2. Cancel workflow_failure tasks whose workflow has already recovered
     3. Reconcile orphaned pr_open → open
     4. Retry cooled-down failed tasks (or park when retries exhausted)
-    5. Park pr_open tasks blocked on long-running red CI
-    6. Park open workflow-path tasks when agent push is permission-blocked
+    5. Park pr_open hunter tasks that are deterministically unfixable
+    6. Park pr_open tasks blocked on long-running red CI
+    7. Park open workflow-path tasks when agent push is permission-blocked
     """
     result = RecoveryResult()
 
@@ -716,6 +1090,22 @@ def recover_engineering_queue(
         token=token,
         apply=apply,
     )
+
+    from value_investor.hunter_auto_merge import reconcile_superseded_parked_hunter_tasks
+
+    for row in reconcile_superseded_parked_hunter_tasks(
+        tasks_path=tasks_path,
+        apply=apply,
+    ):
+        result.cancelled.append(
+            RecoveryAction(
+                task_id=str(row.get("task_id") or ""),
+                action="cancel_superseded_hunter",
+                reason=str(row.get("detail") or "hunter ticker already resolved on main"),
+                from_status=str(row.get("from_status") or "open"),
+                to_status="cancelled",
+            )
+        )
 
     result.cancelled.extend(
         cancel_resolved_workflow_failure_tasks(
@@ -745,13 +1135,25 @@ def recover_engineering_queue(
     result.reopened = reopened
     result.parked.extend(parked_failed)
 
+    recovery_policy = _engineering_queue_recovery_policy()
+    result.parked.extend(
+        park_unfixable_pr_open_tasks(
+            tasks_path=tasks_path,
+            open_prs=open_prs,
+            repo=repo,
+            token=token,
+            apply=apply,
+            max_attention_parked=int(recovery_policy["max_attention_parked_tasks"]),
+        )
+    )
+
     result.parked.extend(
         park_ci_blocked_pr_open_tasks(
             tasks_path=tasks_path,
             open_prs=open_prs,
             repo=repo,
             token=token,
-            ci_red_hours=ci_red_park_hours,
+            ci_red_hours=int(recovery_policy["ci_red_park_hours"]),
             apply=apply,
         )
     )
@@ -762,6 +1164,19 @@ def recover_engineering_queue(
             recent_agent_failures=recent_agent_failures,
             apply=apply,
         )
+    )
+
+    from value_investor.hunter_url_monitor import monitor_merged_hunter_allowlist_urls
+
+    result.hunter_url_monitor = monitor_merged_hunter_allowlist_urls(
+        tasks_path=tasks_path,
+        committed_path=tasks_path,
+        apply=apply,
+    ).to_dict()
+
+    result.queue_clearing = evaluate_queue_clearing_pause(
+        tasks_path=tasks_path,
+        apply=apply,
     )
 
     return result
@@ -792,6 +1207,8 @@ def classify_parked_task(
             policy = PARKED_POLICY_NO_DIFF
         elif "checks still failing" in reason.lower() or "ci blocked" in reason.lower():
             policy = PARKED_POLICY_CI_BLOCKED
+        elif "hunter-fix exhausted" in reason.lower() or "hunter pr unfixable" in reason.lower():
+            policy = PARKED_POLICY_HUNTER_UNFIXABLE
         elif WORKFLOW_PERMISSION_REASON_RE.search(reason):
             policy = PARKED_POLICY_WORKFLOW_PERMISSION
         else:

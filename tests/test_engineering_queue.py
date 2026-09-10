@@ -312,6 +312,29 @@ def test_evaluate_dispatch_ready_when_queue_open_and_no_pr(tmp_path: Path):
     assert decision.next_task_id == "eng-20260726-01"
 
 
+def test_evaluate_dispatch_blocked_by_queue_clearing_pause(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [_task("eng-20260726-01").to_dict()],
+        "queue_clearing": {"pause_active": True, "pause_started_at": "2026-09-10T10:00:00+00:00"},
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    decision = evaluate_engineering_dispatch(tasks_path=tasks_path, open_prs=[])
+    assert decision.should_dispatch is False
+    assert "clearing pause" in decision.reason.lower()
+
+
+def test_evaluate_dispatch_ignores_queue_clearing_pause_with_force(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [_task("eng-20260726-01").to_dict()],
+        "queue_clearing": {"pause_active": True, "pause_started_at": "2026-09-10T10:00:00+00:00"},
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    decision = evaluate_engineering_dispatch(tasks_path=tasks_path, open_prs=[], force=True)
+    assert decision.should_dispatch is True
+
+
 def test_reconcile_orphaned_pr_open_resets_without_matching_pr(tmp_path: Path):
     tasks_path = tmp_path / "engineering_tasks.json"
     payload = {

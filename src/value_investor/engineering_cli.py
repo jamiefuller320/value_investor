@@ -297,6 +297,56 @@ def _cmd_recover_queue(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_monitor_hunter_urls(args: argparse.Namespace) -> int:
+    from value_investor.hunter_url_monitor import monitor_merged_hunter_allowlist_urls
+
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    result = monitor_merged_hunter_allowlist_urls(
+        tasks_path=tasks_path,
+        committed_path=tasks_path,
+        apply=not args.dry_run,
+    )
+    if args.json:
+        _print_json(result.to_dict())
+    else:
+        payload = result.to_dict()
+        print(
+            f"Hunter URL monitor: checked={payload.get('checked_urls')} "
+            f"actions={payload.get('action_count')}"
+        )
+        for row in result.actions:
+            if row.action == "ok":
+                continue
+            print(f"  {row.ticker} {row.url[:60]}… -> {row.action}: {row.reason[:120]}")
+    return 0
+
+
+def _cmd_park_unfixable_pr(args: argparse.Namespace) -> int:
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    open_prs: list[dict] = []
+    if args.open_prs_json:
+        open_prs = json.loads(Path(args.open_prs_json).read_text(encoding="utf-8"))
+    elif args.branch:
+        open_prs = [{"headRefName": str(args.branch).strip()}]
+    from value_investor.engineering_recovery import park_hunter_pr_if_unfixable
+
+    action = park_hunter_pr_if_unfixable(
+        branch=str(args.branch).strip(),
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        apply=not args.dry_run,
+        base_ref=str(args.base_ref or "origin/main"),
+        head_ref=str(args.head_ref or "HEAD"),
+    )
+    if args.json:
+        _print_json(action.to_dict() if action else {"parked": False})
+    elif action:
+        print(f"Parked {action.task_id}: {action.reason}")
+    else:
+        print("No park action (task not unfixable or not pr_open hunter with red CI)")
+    return 0 if action else 1
+
+
 def _cmd_list_parked(args: argparse.Namespace) -> int:
     rows = summarize_parked_tasks(_resolve_tasks_path(args.tasks_path))
     if args.json:
@@ -1172,12 +1222,18 @@ def _load_optional_json(path: str | None) -> dict[str, Any]:
 
 
 def _cmd_notify_queue_blocked(args: argparse.Namespace) -> int:
+    tasks_path = _resolve_tasks_path(args.tasks_path)
     alerts = collect_queue_block_alerts(
         recovery=_load_optional_json(args.recovery_json),
         sync=_load_optional_json(args.sync_json),
         dispatch=_load_optional_json(args.queue_status_json),
+        tasks_path=tasks_path,
     )
     sent = send_engineering_queue_block_email(alerts)
+    if sent and any(alert.kind == "parked_backlog_full" for alert in alerts):
+        from value_investor.engineering_recovery import mark_queue_clearing_warned
+
+        mark_queue_clearing_warned(tasks_path=tasks_path, apply=True)
     payload = {
         "alert_count": len(alerts),
         "alerts": [row.to_dict() for row in alerts],
@@ -1428,6 +1484,26 @@ def main(argv: list[str] | None = None) -> int:
         help="Optional JSON list of recent engineering-agent failures",
     )
     recover_p.set_defaults(func=_cmd_recover_queue)
+
+    monitor_urls_p = sub.add_parser(
+        "monitor-hunter-urls",
+        parents=[common],
+        help="Re-live-fetch recent merged hunter allowlist URLs; repair or re-queue on rot",
+    )
+    monitor_urls_p.add_argument("--dry-run", action="store_true")
+    monitor_urls_p.set_defaults(func=_cmd_monitor_hunter_urls)
+
+    park_unfixable_p = sub.add_parser(
+        "park-unfixable-pr",
+        parents=[common],
+        help="Park a hunter pr_open task when hunter-fix cannot recover it",
+    )
+    park_unfixable_p.add_argument("--branch", required=True)
+    park_unfixable_p.add_argument("--open-prs-json", default=None)
+    park_unfixable_p.add_argument("--base-ref", default="origin/main")
+    park_unfixable_p.add_argument("--head-ref", default="HEAD")
+    park_unfixable_p.add_argument("--dry-run", action="store_true")
+    park_unfixable_p.set_defaults(func=_cmd_park_unfixable_pr)
 
     try_accel_p = sub.add_parser(
         "try-accelerated-email",

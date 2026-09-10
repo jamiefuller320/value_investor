@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-10T08:29:36+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-10T09:55:53+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -420,6 +420,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L353 | **Skip pytest on ruff-only PR autofix when the original test job passed** | Path-guard-only autofix now skips the main-installed pytest replay. Ruff-only autofix still runs full pytest against main site-packages, so a ruff fix on a PR that added new tests can still fail to land. | The next cursor/* PR fails CI on ruff only, autofix applies ruff, and verify pytest fails on PR-added tests that already passed the PR test job |
 | L354 | **Hunter PR deterministic auto-merge (SKIP-only tier)** | Extend evaluate_auto_merge with a parked_source_hunter tier: auto_merge when diff is only filings.py + test_research_filings.py for the task ticker, adds exactly one PARKED_SOURCE_HUNTER_SKIP entry (no new URLs), scoped pytest green, path guard pass. Safest first step before allowlist auto-merge. | Parked hunter queue has 10+ consecutive human merges with zero bad URL/skip outcomes and euro_depth parked set is stable |
 | L355 | **Independent verify-agent gate for hunter allowlist PRs** | After hunter PR opens, dispatch a read-only verify Cloud Agent (separate session/model) that live-checks proposed IR URLs and writes a structured approval artifact; engineering-auto-merge requires artifact approve=true in addition to CI and path guard. Use as supplement to live-fetch pytest, not a substitute. | SKIP-only hunter auto-merge tier has run cleanly for 4+ weeks and allowlist-add PRs are the throughput bottleneck |
+| L356 | **Immediate park for non-hunter unfixable PRs** | Extend immediate park_unfixable beyond hunter tasks (e.g. ci_failure pytest regressions after autofix exhausted) using the same attention parked cap. | Non-hunter pr_open tasks routinely hit 48h ci_blocked park without autofix recovery |
 
 ---
 

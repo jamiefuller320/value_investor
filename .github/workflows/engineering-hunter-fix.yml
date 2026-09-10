@@ -143,6 +143,59 @@ jobs:
             --head-ref HEAD \
             --changed-files /tmp/changed_files.txt
 
+      - name: Park unfixable hunter PR (not eligible for fix)
+        if: >-
+          steps.branch.outputs.branch != ''
+          && steps.gate.outputs.skip != 'true'
+          && steps.eligible.outputs.eligible == 'false'
+        env:
+          BRANCH: ${{ steps.branch.outputs.branch }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh pr view "$BRANCH" --json number,headRefName > /tmp/open_pr.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          row = json.loads(Path("/tmp/open_pr.json").read_text())
+          Path("/tmp/open_prs.json").write_text(json.dumps([row]), encoding="utf-8")
+          PY
+          ftse-engineering park-unfixable-pr \
+            --branch "$BRANCH" \
+            --open-prs-json /tmp/open_prs.json \
+            --base-ref origin/main \
+            --head-ref HEAD \
+            || true
+
+      - name: Park hunter PR after exhausted hunter-fix
+        if: >-
+          steps.branch.outputs.branch != ''
+          && (
+            steps.gate.outputs.skip == 'true'
+            || (
+              steps.eligible.outputs.eligible == 'true'
+              && steps.fix.outputs.gate_pass == 'false'
+            )
+          )
+        env:
+          BRANCH: ${{ steps.branch.outputs.branch }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh pr view "$BRANCH" --json number,headRefName > /tmp/open_pr.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          row = json.loads(Path("/tmp/open_pr.json").read_text())
+          Path("/tmp/open_prs.json").write_text(json.dumps([row]), encoding="utf-8")
+          PY
+          ftse-engineering park-unfixable-pr \
+            --branch "$BRANCH" \
+            --open-prs-json /tmp/open_prs.json \
+            --base-ref origin/main \
+            --head-ref HEAD \
+            || true
+
       - name: Commit and push hunter-fix
         if: >-
           steps.branch.outputs.branch != ''

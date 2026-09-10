@@ -7,6 +7,7 @@ import re
 import subprocess
 import time
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from enum import StrEnum
 from pathlib import Path
 from typing import Any
@@ -17,6 +18,8 @@ from value_investor.engineering_tasks import (
     PARKED_SOURCE_HUNTER_SOURCE,
     EngineeringTask,
     find_engineering_task,
+    load_engineering_tasks,
+    mark_task_status,
     validate_engineering_pr_paths,
 )
 
@@ -36,6 +39,11 @@ class HunterOutcome(StrEnum):
     SKIP = "skip"
     ALLOWLIST = "allowlist"
     UNKNOWN = "unknown"
+
+
+class HunterResolution(StrEnum):
+    SKIP = "skip"
+    ALLOWLIST = "allowlist"
 
 
 class HunterFixKind(StrEnum):
@@ -310,6 +318,92 @@ def _added_test_names(base_tests: str, head_tests: str) -> list[str]:
     return sorted(head_names - base_names)
 
 
+def default_filings_path(*, cwd: Path | None = None) -> Path:
+    return Path(cwd or Path.cwd()) / "src/value_investor/research/filings.py"
+
+
+def hunter_ticker_resolution_in_filings(
+    filings_source: str,
+    ticker: str,
+) -> HunterResolution | None:
+    """Return how a ticker is already recorded in filings.py, if at all."""
+    token = ticker.strip().upper()
+    if not token:
+        return None
+    if token in _parse_skip_map(filings_source):
+        return HunterResolution.SKIP
+    if _parse_builtin_urls(filings_source).get(token):
+        return HunterResolution.ALLOWLIST
+    return None
+
+
+def hunter_ticker_already_resolved_on_main(
+    ticker: str,
+    *,
+    filings_path: Path | None = None,
+    cwd: Path | None = None,
+) -> tuple[bool, HunterResolution | None, str]:
+    """True when committed filings.py already records SKIP or ALLOWLIST for ticker."""
+    path = filings_path or default_filings_path(cwd=cwd)
+    if not path.exists():
+        return False, None, "filings.py not found"
+    resolution = hunter_ticker_resolution_in_filings(path.read_text(encoding="utf-8"), ticker)
+    if resolution is None:
+        return False, None, "not resolved on main"
+    return True, resolution, f"already {resolution.value} on main"
+
+
+def reconcile_superseded_parked_hunter_tasks(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    filings_path: Path | None = None,
+    cwd: Path | None = None,
+    apply: bool = True,
+) -> list[dict[str, Any]]:
+    """Cancel open/pr_open hunter tasks whose ticker is already resolved in filings.py."""
+    data = load_engineering_tasks(tasks_path)
+    cancelled: list[dict[str, Any]] = []
+    for row in data.get("tasks") or []:
+        if str(row.get("source") or "") != PARKED_SOURCE_HUNTER_SOURCE:
+            continue
+        status = str(row.get("status") or "")
+        if status not in {"open", "pr_open"}:
+            continue
+        ticker = str((row.get("evidence") or {}).get("hunter_ticker") or "").strip().upper()
+        if not ticker:
+            continue
+        resolved, kind, detail = hunter_ticker_already_resolved_on_main(
+            ticker,
+            filings_path=filings_path,
+            cwd=cwd,
+        )
+        if not resolved or kind is None:
+            continue
+        task_id = str(row.get("id") or "")
+        evidence = dict(row.get("evidence") or {})
+        evidence["superseded_resolution"] = kind.value
+        evidence["superseded_reason"] = detail
+        evidence["superseded_at"] = datetime.now(UTC).isoformat()
+        if apply:
+            mark_task_status(
+                task_id,
+                "cancelled",
+                path=tasks_path,
+                committed_path=tasks_path,
+                evidence=evidence,
+            )
+        cancelled.append(
+            {
+                "task_id": task_id,
+                "ticker": ticker,
+                "from_status": status,
+                "resolution": kind.value,
+                "detail": detail,
+            }
+        )
+    return cancelled
+
+
 def analyze_hunter_pr_diff(
     *,
     base_ref: str,
@@ -412,13 +506,16 @@ def live_fetch_hunter_urls(
     for url in urls:
         if not url.lower().startswith("https://"):
             return False, f"URL must be HTTPS: {url}"
+        from value_investor.research.filings import _resolve_ir_allowlist_canonical
+
+        fetch_url = _resolve_ir_allowlist_canonical(str(url).strip(), ticker)
         row = {
             "id": "hunter_gate",
-            "url": url,
-            "period": _ir_allowlist_period_from_url(url),
+            "url": fetch_url,
+            "period": _ir_allowlist_period_from_url(fetch_url),
             "source": "ir_allowlist",
         }
-        last_reason = f"live-fetch failed or body too short for {url}"
+        last_reason = f"live-fetch failed or body too short for {fetch_url}"
         for attempt in range(max(1, max_attempts)):
             body, _source = _fetch_ir_allowlist_body(row, ticker=ticker)
             if body and len(body) >= IR_BODY_MIN_CHARS:
@@ -517,10 +614,21 @@ def evaluate_hunter_merge_gate(
         cwd=cwd,
     )
     if analysis.outcome == HunterOutcome.UNKNOWN:
+        base_filings = (
+            _git_show(f"{base_ref}", "src/value_investor/research/filings.py", cwd=cwd) or ""
+        )
+        base_resolution = hunter_ticker_resolution_in_filings(base_filings, ticker)
+        if base_resolution is not None:
+            reason = (
+                f"hunter ticker already resolved on base ({base_resolution.value}) — "
+                "no new SKIP or ALLOWLIST outcome in diff"
+            )
+        else:
+            reason = "could not classify hunter diff as SKIP or ALLOWLIST"
         return _finalize_gate_result(
             HunterGateResult(
                 False,
-                "could not classify hunter diff as SKIP or ALLOWLIST",
+                reason,
                 analysis=analysis,
                 tier=tier,
             )
@@ -631,6 +739,7 @@ __all__ = [
     "HunterFixKind",
     "HunterGateResult",
     "HunterOutcome",
+    "HunterResolution",
     "analyze_hunter_pr_diff",
     "classify_hunter_fix_kind",
     "evaluate_hunter_auto_merge",
@@ -642,10 +751,13 @@ __all__ = [
     "hunter_live_fetch_retry_config",
     "hunter_task_eligible_for_auto_merge",
     "hunter_task_ticker",
+    "hunter_ticker_already_resolved_on_main",
+    "hunter_ticker_resolution_in_filings",
     "hunter_verify_observer_enabled",
     "is_parked_source_hunter_task",
     "live_fetch_hunter_urls",
     "load_hunter_task_for_branch",
+    "reconcile_superseded_parked_hunter_tasks",
     "validate_hunter_diff_scope",
     "verify_merged_hunter_allowlist_urls",
 ]

@@ -174,8 +174,8 @@ def test_compile_parked_source_hunter_sits_at_back_and_chains(tmp_path: Path):
             "market_id": "sp500",
             "exhausted": True,
             "parked": [
-                {"ticker": "FICO", "reason": "unfetchable_iwb"},
-                {"ticker": "JBH.AX", "reason": "awaiting_periodic_report"},
+                {"ticker": "ZZZZ.TEST", "reason": "unfetchable_iwb"},
+                {"ticker": "YYYY.TEST", "reason": "awaiting_periodic_report"},
             ],
         },
         compact=False,
@@ -192,7 +192,7 @@ def test_compile_parked_source_hunter_sits_at_back_and_chains(tmp_path: Path):
         committed_path=tasks_path,
     )
     assert first["compiled_count"] == 1
-    assert first["hunter_ticker"] == "FICO"
+    assert first["hunter_ticker"] == "ZZZZ.TEST"
     assert first["priority_score"] == PARKED_SOURCE_HUNTER_PRIORITY_SCORE
     payload = read_json(tasks_path)
     hunter = payload["tasks"][0]
@@ -218,4 +218,47 @@ def test_compile_parked_source_hunter_sits_at_back_and_chains(tmp_path: Path):
         committed_path=tasks_path,
     )
     assert third["compiled_count"] == 1
-    assert third["hunter_ticker"] == "JBH.AX"
+    assert third["hunter_ticker"] == "YYYY.TEST"
+
+
+def test_compile_parked_source_hunter_skips_tickers_already_on_main(tmp_path: Path, monkeypatch):
+    from value_investor.library_ingest_escalation import compile_parked_source_hunter_task
+
+    root = tmp_path / "library"
+    tasks_path = tmp_path / "engineering_tasks.json"
+    write_json(tasks_path, {"tasks": []}, compact=False)
+    exhaustion_dir = root / "markets" / "sp500"
+    exhaustion_dir.mkdir(parents=True)
+    write_json(
+        exhaustion_dir / "ingest_exhaustion.json",
+        {
+            "schema_version": 1,
+            "market_id": "sp500",
+            "exhausted": True,
+            "parked": [{"ticker": "FICO", "reason": "unfetchable_iwb"}],
+        },
+        compact=False,
+    )
+    monkeypatch.setattr(
+        "value_investor.hunter_auto_merge.hunter_ticker_already_resolved_on_main",
+        lambda ticker, **kwargs: (
+            True,
+            __import__(
+                "value_investor.hunter_auto_merge", fromlist=["HunterResolution"]
+            ).HunterResolution.SKIP,
+            "already skip on main",
+        ),
+    )
+    result = compile_parked_source_hunter_task(
+        library_root=root,
+        policy={
+            "focus_market": "euro_depth",
+            "market_queue": ["sp500"],
+            "ingest_exhausted_markets": ["sp500"],
+        },
+        tasks_path=tasks_path,
+        committed_path=tasks_path,
+    )
+    assert result["compiled_count"] == 0
+    assert result["reason"] == "parked hunter candidates already resolved on main"
+    assert result["skipped_resolved_tickers"] == ["FICO"]

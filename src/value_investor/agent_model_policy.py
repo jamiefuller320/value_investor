@@ -263,6 +263,31 @@ def default_policy() -> dict[str, Any]:
                     "missing_test, short_skip, or live_fetch_failed."
                 ),
             },
+            "queue_recovery": {
+                "immediate_park_unfixable_pr": True,
+                "max_attention_parked_tasks": 8,
+                "resume_attention_parked_below": 7,
+                "resume_idle_minutes": 30,
+                "ci_red_park_hours": 48,
+                "note": (
+                    "immediate_park_unfixable_pr parks pr_open tasks when hunter-fix is "
+                    "ineligible/exhausted and CI is all-red; max_attention_parked_tasks "
+                    "pauses engineering dispatch and emails when attention-parked backlog "
+                    "is full. Resume when count drops below resume_attention_parked_below "
+                    "and resume_idle_minutes have elapsed since the last clearing action."
+                ),
+            },
+            "hunter_url_monitor": {
+                "enabled": True,
+                "lookback_days": 30,
+                "market_ids": ["euro_depth"],
+                "note": (
+                    "Re-live-fetch allowlist URLs from recently merged hunter tasks in the "
+                    "scoped library markets. Known canonical replacements are applied in "
+                    "filings.py; otherwise queue verify-rework or a low-priority "
+                    "hunter_url_repair engineering task."
+                ),
+            },
         },
         "updated_at": None,
     }

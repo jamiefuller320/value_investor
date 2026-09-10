@@ -25,7 +25,8 @@ DEFAULT_MAX_RUN_TASKS = 1
 DEFAULT_MIN_METRICS_FOR_SCREEN = 25
 TERMINAL_TASK_STATUSES = frozenset({"merged", "completed", "failed", "cancelled", "parked"})
 PARKED_SOURCE_HUNTER_SOURCE = "parked_source_hunter"
-INGEST_BACKGROUND_SOURCES = frozenset({PARKED_SOURCE_HUNTER_SOURCE})
+HUNTER_URL_REPAIR_SOURCE = "hunter_url_repair"
+INGEST_BACKGROUND_SOURCES = frozenset({PARKED_SOURCE_HUNTER_SOURCE, HUNTER_URL_REPAIR_SOURCE})
 PARKED_SOURCE_HUNTER_PRIORITY_SCORE = 12.0
 
 BLOCKED_PATHS = (
@@ -1195,9 +1196,11 @@ def _update_task_queue(
 ) -> EngineeringTask | None:
     data = load_engineering_tasks(path)
     updated: EngineeringTask | None = None
+    prior_row: dict[str, Any] | None = None
     for row in data.get("tasks") or []:
         if str(row.get("id")) != task_id:
             continue
+        prior_row = dict(row)
         row.update(fields)
         updated = EngineeringTask.from_dict(row)
         break
@@ -1206,13 +1209,25 @@ def _update_task_queue(
         committed = Path(committed_path)
         committed.parent.mkdir(parents=True, exist_ok=True)
         _write_task_queue(data, path=committed)
-        if committed.resolve() == Path(COMMITTED_TASKS_PATH).resolve() and "status" in fields:
+        if "status" in fields:
             try:
-                from value_investor.engineering_queue import refresh_engineering_queue_ui
+                from value_investor.engineering_recovery import maybe_record_queue_clearing_action
 
-                refresh_engineering_queue_ui(tasks_path=committed)
-            except OSError:
+                maybe_record_queue_clearing_action(
+                    prior_row,
+                    new_status=str(fields.get("status") or ""),
+                    tasks_path=committed,
+                    apply=True,
+                )
+            except ImportError:
                 pass
+            if committed.resolve() == Path(COMMITTED_TASKS_PATH).resolve():
+                try:
+                    from value_investor.engineering_queue import refresh_engineering_queue_ui
+
+                    refresh_engineering_queue_ui(tasks_path=committed)
+                except OSError:
+                    pass
     return updated
 
 

@@ -289,6 +289,29 @@ def evaluate_engineering_dispatch(
         policy_path=policy_path,
         open_prs=open_prs,
     )
+
+    if not force:
+        from value_investor.engineering_recovery import (
+            _engineering_queue_recovery_policy,
+            count_attention_parked_tasks,
+            is_queue_clearing_pause_active,
+        )
+
+        if is_queue_clearing_pause_active(tasks_path=tasks_path):
+            policy = _engineering_queue_recovery_policy()
+            count = count_attention_parked_tasks(tasks_path=tasks_path)
+            resume_below = int(policy["resume_attention_parked_below"])
+            idle_minutes = int(policy["resume_idle_minutes"])
+            return EngineeringDispatchDecision(
+                should_dispatch=False,
+                reason=(
+                    f"attention parked backlog clearing pause "
+                    f"({count} task(s); resume when < {resume_below} and "
+                    f"{idle_minutes}m since last clearing action)"
+                ),
+                status=status,
+            )
+
     running_count = (
         int(agent_running_count)
         if agent_running_count is not None

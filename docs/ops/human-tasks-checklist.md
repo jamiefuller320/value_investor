@@ -22,6 +22,7 @@ most automation — this list is what still needs a human.
 | **GHA secret hygiene** scan (skips if no merges / workflow touches in 36h) | CI | [gha-secret-hygiene.md](gha-secret-hygiene.md#automated-daily-check) |
 | **Confirm buy-tier level first fill** — Monday paper-auto should open the wide raw-screen Suite B book; knobs stay frozen | Human | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#level-book-live-monday) |
 | Admitted-market weekday rememo (3/day per epoch-0 book after maintenance ingest; catch-up 5 if that book exceeds 15) | CI | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
+| **Clear engineering parked backlog** when dispatch pauses — triage oldest `list-parked` tasks; queue resumes when count &lt; 7 and 30m idle since last clearing action | Human | [ops-monitor.md](ops-monitor.md#engineering-parked-backlog-clearing) |
 
 ## Sunday
 
