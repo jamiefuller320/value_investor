@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-10T08:19:24.969774+00:00",
+  "generated_at": "2026-09-10T10:37:17.808224+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -139,6 +139,17 @@
             "contributed_capital": 1000.0,
             "branches": {},
             "market": 993.0
+          },
+          {
+            "date": "2026-09-10",
+            "held": 969.22,
+            "nav": 969.22,
+            "held_stock": 969.22,
+            "cash": 0.0,
+            "positions": 61,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 993.0
           }
         ],
         "series": [
@@ -157,12 +168,12 @@
         ],
         "branches": [],
         "last": {
-          "date": "2026-09-09",
-          "held": 980.53,
+          "date": "2026-09-10",
+          "held": 969.22,
           "market": 993.0,
-          "nav": 980.53,
+          "nav": 969.22,
           "positions": 61,
-          "excess_pct": -0.012558
+          "excess_pct": -0.023948
         }
       }
     },
@@ -785,9 +796,9 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 13,
-        "targets": 66,
-        "improved": 19,
+        "run_count": 12,
+        "targets": 56,
+        "improved": 17,
         "improved_tickers": [
           "GMS.L",
           "CARD.L",
@@ -801,10 +812,10 @@
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
-          "zero_body": 1,
-          "thin": 1,
-          "indexed_without_body": 45,
-          "filing_gaps": 1
+          "zero_body": 0,
+          "thin": 2,
+          "indexed_without_body": 106,
+          "filing_gaps": 0
         },
         "gaps_after": {
           "unmeasured": 0,
@@ -815,10 +826,10 @@
         },
         "gap_delta": {
           "unmeasured": 0,
-          "zero_body": -1,
-          "thin": -1,
-          "indexed_without_body": -5,
-          "filing_gaps": -1
+          "zero_body": 0,
+          "thin": -2,
+          "indexed_without_body": -66,
+          "filing_gaps": 0
         },
         "remaining": {
           "unmeasured": 0,
