@@ -29,9 +29,11 @@ from value_investor.research.filings import (
     _google_news_symbol_clause,
     _infer_filing_period_from_row,
     _ir_body_content_hash,
+    _ir_body_title_tokens_match,
     _is_other_results_rns_row,
     _issuer_matches_sec_name,
     _match_ir_row_to_investegate,
+    _resolve_ir_allowlist_canonical,
     _scrub_misattributed_filing_rows,
     _sec_edgar_supplement_allowed,
     _uk_ticker_sec_dual_listed,
@@ -6826,7 +6828,7 @@ def test_load_ir_url_allowlist_canonicalizes_dq7a_ir_misattributed_dcc_url(tmp_p
         "https://www.dcc.ie/~/media/Files/D/Dcc-Corp-v3/documents/investors/"
         "annual-and-sustainability-reports/2025/annual-report-2025.pdf"
     )
-    live = _BUILTIN_IR_URLS["DQ7A.IR"][0]
+    live = _resolve_ir_allowlist_canonical(_BUILTIN_IR_URLS["DQ7A.IR"][0], "DQ7A.IR")
     path = tmp_path / "ir.json"
     path.write_text(json.dumps({"urls": {"DQ7A.IR": [dead]}}), encoding="utf-8")
     mapping = load_ir_url_allowlist(path)
@@ -6836,11 +6838,50 @@ def test_load_ir_url_allowlist_canonicalizes_dq7a_ir_misattributed_dcc_url(tmp_p
     assert any(row["url"] == live for row in rows)
 
 
+def test_ir_body_title_tokens_match_dq7a_ir_stock_exchange_release_slug():
+    """eng-20260910-12: stock-exchange-release-280225 slugs defer to period gate, not URL tokens."""
+    url = "http://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf"
+    row = {
+        "url": url,
+        "headline": f"IR allowlist document — {url.rsplit('/', 1)[-1]}",
+        "period": "interim",
+    }
+    body = (
+        "DONEGAL INVESTMENT GROUP PLC\n"
+        "ANNOUNCEMENT OF RESULTS FOR THE 6 MONTHS ENDED 28 FEBRUARY 2025\n"
+        "Donegal Investment Group plc reports its interim results for the 6 months ended 28 February 2025."
+    )
+    assert _ir_body_title_tokens_match(row, body)
+
+
+def test_load_ir_url_allowlist_canonicalizes_dq7a_ir_dead_https_urls(tmp_path: Path):
+    """eng-20260910-12: donegaligroup.com HTTPS URLs map to live HTTP /media PDFs."""
+    dead_ar = (
+        "https://www.donegaligroup.com/media/1316/"
+        "donegal-investment-group-annual-report-financial-statements-310825-final.pdf"
+    )
+    dead_h1 = "https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf"
+    live_ar = _resolve_ir_allowlist_canonical(dead_ar, "DQ7A.IR")
+    live_h1 = _resolve_ir_allowlist_canonical(dead_h1, "DQ7A.IR")
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"DQ7A.IR": [dead_ar, dead_h1]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live_ar in mapping["DQ7A.IR"]
+    assert live_h1 in mapping["DQ7A.IR"]
+    assert dead_ar not in mapping["DQ7A.IR"]
+    assert dead_h1 not in mapping["DQ7A.IR"]
+    assert live_ar.startswith("http://www.donegaligroup.com/")
+    assert live_h1.startswith("http://www.donegaligroup.com/")
+    rows = fetch_filings_ir_allowlist("DQ7A.IR", path=path)
+    assert {row["url"] for row in rows} == {live_ar, live_h1}
+
+
 def test_parked_source_hunter_dq7a_ir_euro_depth_has_fetchable_ir():
-    """eng-20260910-01: DQ7A.IR has live donegaligroup.com FY2025 AR + H1 stock-exchange PDFs."""
+    """eng-20260910-01/12: DQ7A.IR HTTPS allowlist canonicalizes to live HTTP donegaligroup PDFs."""
     assert "DQ7A.IR" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("DQ7A.IR")
     assert len(rows) == 2
+    assert all(row["url"].startswith("http://www.donegaligroup.com/") for row in rows)
     assert any("annual-report-financial-statements-310825" in row["url"] for row in rows)
     assert any("stock-exchange-release-280225" in row["url"] for row in rows)
 
