@@ -78,8 +78,14 @@ from value_investor.engineering_verify import verify_merged_task
 from value_investor.hunter_auto_merge import (
     evaluate_hunter_merge_gate,
     hunter_auto_merge_policy_tier,
+    hunter_fix_eligible,
     is_parked_source_hunter_task,
     load_hunter_task_for_branch,
+)
+from value_investor.hunter_fix_agent import (
+    ci_log_shows_hunter_gate_failure,
+    latest_commit_is_hunter_fix,
+    run_hunter_fix_agent,
 )
 from value_investor.hunter_verify_agent import (
     format_observer_pr_comment,
@@ -983,6 +989,138 @@ def _cmd_hunter_verify_observer(args: argparse.Namespace) -> int:
     return 0
 
 
+def _changed_files_for_refs(*, base_ref: str, head_ref: str) -> list[str]:
+    result = subprocess.run(
+        ["git", "diff", "--name-only", f"{base_ref}...{head_ref}"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    return [line.strip() for line in result.stdout.splitlines() if line.strip()]
+
+
+def _cmd_hunter_fix_eligible(args: argparse.Namespace) -> int:
+    branch = str(args.branch or "").strip()
+    if not branch:
+        print("--branch is required", file=sys.stderr)
+        return 2
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    task = load_hunter_task_for_branch(branch, tasks_path=tasks_path)
+    if task is None:
+        payload = {"eligible": False, "reason": "unknown task"}
+        if args.json:
+            _print_json(payload)
+        else:
+            print("hunter-fix-eligible: no (unknown task)")
+        return 0
+    if not is_parked_source_hunter_task(task):
+        payload = {"eligible": False, "reason": "not a hunter task"}
+        if args.json:
+            _print_json(payload)
+        else:
+            print("hunter-fix-eligible: no (not hunter task)")
+        return 0
+
+    base_ref = str(args.base_ref or "origin/main")
+    head_ref = str(args.head_ref or "HEAD")
+    changed_path = Path(args.changed_files) if args.changed_files else None
+    if changed_path is not None:
+        changed_files = [
+            line.strip()
+            for line in changed_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+    else:
+        changed_files = _changed_files_for_refs(base_ref=base_ref, head_ref=head_ref)
+
+    gate = evaluate_hunter_merge_gate(
+        task=task,
+        changed_files=changed_files,
+        base_ref=base_ref,
+        head_ref=head_ref,
+        skip_live_fetch=bool(args.skip_live_fetch),
+    )
+    eligible, reason, fix_kind = hunter_fix_eligible(task=task, gate=gate)
+    ci_log = ""
+    if args.ci_log:
+        ci_log = Path(args.ci_log).read_text(encoding="utf-8", errors="replace")
+    hunter_gate_failed = ci_log_shows_hunter_gate_failure(ci_log) if ci_log else True
+    if args.require_ci_log and not hunter_gate_failed:
+        eligible = False
+        reason = "CI log does not show hunter-merge-gate failure"
+    if latest_commit_is_hunter_fix():
+        eligible = False
+        reason = "latest commit is already a hunter-fix bot commit"
+
+    payload = {
+        "eligible": eligible,
+        "reason": reason,
+        "fix_kind": fix_kind.value if fix_kind else None,
+        "gate": gate.to_dict(),
+        "hunter_gate_failed_in_log": hunter_gate_failed,
+    }
+    if args.json:
+        _print_json(payload)
+    else:
+        print(
+            f"hunter-fix-eligible: {'yes' if eligible else 'no'} — {reason}"
+            + (f" ({fix_kind.value})" if fix_kind else "")
+        )
+    return 0 if eligible else 1
+
+
+def _cmd_hunter_fix(args: argparse.Namespace) -> int:
+    branch = str(args.branch or "").strip()
+    if not branch:
+        print("--branch is required", file=sys.stderr)
+        return 2
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    task = load_hunter_task_for_branch(branch, tasks_path=tasks_path)
+    if task is None:
+        print("hunter-fix: skipped (unknown task)", file=sys.stderr)
+        return 1
+
+    base_ref = str(args.base_ref or "origin/main")
+    head_ref = str(args.head_ref or "HEAD")
+    changed_path = Path(args.changed_files) if args.changed_files else None
+    if changed_path is not None:
+        changed_files = [
+            line.strip()
+            for line in changed_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+    else:
+        changed_files = _changed_files_for_refs(base_ref=base_ref, head_ref=head_ref)
+
+    api_key = None
+    if not args.skip_agent:
+        key, _env = resolve_cursor_api_key()
+        api_key = key or None
+    fix = run_hunter_fix_agent(
+        task=task,
+        changed_files=changed_files,
+        base_ref=base_ref,
+        head_ref=head_ref,
+        pr_number=args.pr_number,
+        output_dir=Path(args.output_dir),
+        api_key=api_key,
+        skip_agent=bool(args.skip_agent),
+        tasks_path=tasks_path,
+        record_attempt=not args.no_record_attempt,
+    )
+    if args.json:
+        _print_json(fix.to_dict())
+    else:
+        print(
+            f"hunter-fix: skipped={fix.skipped} kind={fix.fix_kind} "
+            f"gate_after_ok={(fix.gate_after or {}).get('ok')}"
+        )
+    if fix.skipped:
+        return 1
+    gate_after_ok = bool((fix.gate_after or {}).get("ok"))
+    return 0 if gate_after_ok else 1
+
+
 def _cmd_reprioritize(args: argparse.Namespace) -> int:
     tasks_path = _resolve_tasks_path(args.tasks_path)
     result = reprioritize_queue_after_ingest_merge(
@@ -1654,6 +1792,46 @@ def main(argv: list[str] | None = None) -> int:
         help="Exit 1 when verdict is reject (default: always exit 0)",
     )
     hunter_verify_p.set_defaults(func=_cmd_hunter_verify_observer)
+
+    hunter_fix_eligible_p = sub.add_parser(
+        "hunter-fix-eligible",
+        parents=[common],
+        help="Check whether a capped hunter-fix round may run for this PR",
+    )
+    hunter_fix_eligible_p.add_argument("--branch", required=True)
+    hunter_fix_eligible_p.add_argument("--base-ref", default="origin/main")
+    hunter_fix_eligible_p.add_argument("--head-ref", default="HEAD")
+    hunter_fix_eligible_p.add_argument("--changed-files", default=None)
+    hunter_fix_eligible_p.add_argument("--ci-log", default=None, help="Failed CI log file")
+    hunter_fix_eligible_p.add_argument(
+        "--require-ci-log",
+        action="store_true",
+        help="Require CI log to mention hunter-merge-gate failure",
+    )
+    hunter_fix_eligible_p.add_argument(
+        "--skip-live-fetch",
+        action="store_true",
+        help="Skip network live-fetch when evaluating gate (tests only)",
+    )
+    hunter_fix_eligible_p.set_defaults(func=_cmd_hunter_fix_eligible)
+
+    hunter_fix_p = sub.add_parser(
+        "hunter-fix",
+        parents=[common],
+        help="Run one capped hunter-fix agent round for merge-gate failures",
+    )
+    hunter_fix_p.add_argument("--branch", required=True)
+    hunter_fix_p.add_argument("--pr-number", type=int, default=None)
+    hunter_fix_p.add_argument("--base-ref", default="origin/main")
+    hunter_fix_p.add_argument("--head-ref", default="HEAD")
+    hunter_fix_p.add_argument("--changed-files", default=None)
+    hunter_fix_p.add_argument("--skip-agent", action="store_true")
+    hunter_fix_p.add_argument(
+        "--no-record-attempt",
+        action="store_true",
+        help="Do not increment evidence.hunter_fix_attempts",
+    )
+    hunter_fix_p.set_defaults(func=_cmd_hunter_fix)
 
     notify_pr_p = sub.add_parser(
         "notify-pr-open",

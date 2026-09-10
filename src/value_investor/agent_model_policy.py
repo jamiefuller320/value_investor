@@ -249,10 +249,18 @@ def default_policy() -> dict[str, Any]:
             "auto_merge": {
                 "parked_hunter": "allowlist",
                 "parked_hunter_verify_observer": True,
+                "hunter_fix": {
+                    "enabled": True,
+                    "max_rounds": 1,
+                    "live_fetch_retries": 3,
+                    "live_fetch_backoff_seconds": [1.0, 2.0],
+                },
                 "note": (
                     "parked_hunter: off | skip | allowlist — scoped auto-merge for "
                     "parked_source_hunter PRs after the CI hunter-merge-gate job passes. "
-                    "parked_hunter_verify_observer dispatches a non-blocking LLM reviewer."
+                    "parked_hunter_verify_observer dispatches a non-blocking LLM reviewer. "
+                    "hunter_fix runs one capped fix round when hunter-merge-gate fails on "
+                    "missing_test, short_skip, or live_fetch_failed."
                 ),
             },
         },

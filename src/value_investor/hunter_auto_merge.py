@@ -5,6 +5,7 @@ from __future__ import annotations
 import ast
 import re
 import subprocess
+import time
 from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
@@ -37,6 +38,15 @@ class HunterOutcome(StrEnum):
     UNKNOWN = "unknown"
 
 
+class HunterFixKind(StrEnum):
+    MISSING_TEST = "missing_test"
+    SHORT_SKIP = "short_skip"
+    LIVE_FETCH_FAILED = "live_fetch_failed"
+
+
+HUNTER_FIXABLE_KINDS = frozenset(HunterFixKind)
+
+
 @dataclass
 class HunterDiffAnalysis:
     outcome: HunterOutcome
@@ -61,12 +71,14 @@ class HunterGateResult:
     reason: str
     analysis: HunterDiffAnalysis | None = None
     tier: str | None = None
+    fix_kind: HunterFixKind | None = None
 
     def to_dict(self) -> dict[str, Any]:
         payload: dict[str, Any] = {
             "ok": self.ok,
             "reason": self.reason,
             "tier": self.tier,
+            "fix_kind": self.fix_kind.value if self.fix_kind else None,
         }
         if self.analysis is not None:
             payload["analysis"] = self.analysis.to_dict()
@@ -106,6 +118,85 @@ def hunter_verify_observer_enabled() -> bool:
     if value is None:
         return True
     return bool(value)
+
+
+def _hunter_fix_policy() -> dict[str, Any]:
+    auto_merge = _engineering_policy().get("auto_merge") or {}
+    block = auto_merge.get("hunter_fix") or {}
+    return dict(block) if isinstance(block, dict) else {}
+
+
+def hunter_fix_enabled() -> bool:
+    block = _hunter_fix_policy()
+    if "enabled" in block:
+        return bool(block.get("enabled"))
+    return True
+
+
+def hunter_fix_max_rounds() -> int:
+    block = _hunter_fix_policy()
+    try:
+        return max(0, int(block.get("max_rounds") or 1))
+    except (TypeError, ValueError):
+        return 1
+
+
+def hunter_live_fetch_retry_config() -> tuple[int, tuple[float, ...]]:
+    block = _hunter_fix_policy()
+    try:
+        retries = max(1, int(block.get("live_fetch_retries") or 3))
+    except (TypeError, ValueError):
+        retries = 3
+    raw_backoff = block.get("live_fetch_backoff_seconds") or [1.0, 2.0]
+    backoff: list[float] = []
+    if isinstance(raw_backoff, list):
+        for value in raw_backoff:
+            try:
+                backoff.append(max(0.0, float(value)))
+            except (TypeError, ValueError):
+                continue
+    if not backoff:
+        backoff = [1.0, 2.0]
+    return retries, tuple(backoff)
+
+
+def classify_hunter_fix_kind(result: HunterGateResult) -> HunterFixKind | None:
+    """Return a fixable failure kind, or None when human triage is required."""
+    if result.ok:
+        return None
+    reason = result.reason.lower()
+    if "missing new test_parked_source_hunter" in reason:
+        return HunterFixKind.MISSING_TEST
+    if "skip reason too short" in reason:
+        return HunterFixKind.SHORT_SKIP
+    if "live-fetch failed" in reason or "body too short" in reason:
+        return HunterFixKind.LIVE_FETCH_FAILED
+    return None
+
+
+def hunter_fix_attempt_count(task: EngineeringTask | dict[str, Any]) -> int:
+    evidence = task.evidence if isinstance(task, EngineeringTask) else (task.get("evidence") or {})
+    try:
+        return max(0, int(evidence.get("hunter_fix_attempts") or 0))
+    except (TypeError, ValueError):
+        return 0
+
+
+def hunter_fix_eligible(
+    *,
+    task: EngineeringTask,
+    gate: HunterGateResult,
+) -> tuple[bool, str, HunterFixKind | None]:
+    if not hunter_fix_enabled():
+        return False, "hunter_fix disabled by policy", None
+    fix_kind = classify_hunter_fix_kind(gate)
+    if fix_kind is None:
+        return False, "gate failure is not hunter-fix eligible", None
+    attempts = hunter_fix_attempt_count(task)
+    max_rounds = hunter_fix_max_rounds()
+    if attempts >= max_rounds:
+        return False, f"hunter_fix exhausted ({attempts}/{max_rounds})", fix_kind
+    return True, "eligible", fix_kind
 
 
 def _git_show(ref: str, path: str, *, cwd: Path | None = None) -> str | None:
@@ -302,6 +393,8 @@ def live_fetch_hunter_urls(
     urls: list[str],
     *,
     ticker: str,
+    max_attempts: int | None = None,
+    backoff_seconds: tuple[float, ...] | None = None,
 ) -> tuple[bool, str]:
     from value_investor.research.filings import (
         IR_BODY_MIN_CHARS,
@@ -311,6 +404,11 @@ def live_fetch_hunter_urls(
 
     if not urls:
         return False, "no URLs to live-fetch"
+    if max_attempts is None or backoff_seconds is None:
+        configured_attempts, configured_backoff = hunter_live_fetch_retry_config()
+        max_attempts = max_attempts or configured_attempts
+        backoff_seconds = backoff_seconds if backoff_seconds is not None else configured_backoff
+
     for url in urls:
         if not url.lower().startswith("https://"):
             return False, f"URL must be HTTPS: {url}"
@@ -320,10 +418,60 @@ def live_fetch_hunter_urls(
             "period": _ir_allowlist_period_from_url(url),
             "source": "ir_allowlist",
         }
-        body, _source = _fetch_ir_allowlist_body(row, ticker=ticker)
-        if not body or len(body) < IR_BODY_MIN_CHARS:
-            return False, f"live-fetch failed or body too short for {url}"
+        last_reason = f"live-fetch failed or body too short for {url}"
+        for attempt in range(max(1, max_attempts)):
+            body, _source = _fetch_ir_allowlist_body(row, ticker=ticker)
+            if body and len(body) >= IR_BODY_MIN_CHARS:
+                break
+            if attempt + 1 < max_attempts:
+                delay = backoff_seconds[min(attempt, len(backoff_seconds) - 1)]
+                if delay > 0:
+                    time.sleep(delay)
+        else:
+            return False, last_reason
     return True, f"live-fetch ok for {len(urls)} URL(s)"
+
+
+def _finalize_gate_result(result: HunterGateResult) -> HunterGateResult:
+    if result.ok or result.fix_kind is not None:
+        return result
+    return HunterGateResult(
+        ok=result.ok,
+        reason=result.reason,
+        analysis=result.analysis,
+        tier=result.tier,
+        fix_kind=classify_hunter_fix_kind(result),
+    )
+
+
+def verify_merged_hunter_allowlist_urls(
+    task: EngineeringTask | dict[str, Any],
+    *,
+    merge_base_ref: str = "HEAD^",
+    merge_head_ref: str = "HEAD",
+    cwd: Path | None = None,
+) -> tuple[bool, str]:
+    """Re-live-fetch allowlist URLs introduced by a merged hunter task."""
+    if not is_parked_source_hunter_task(task):
+        return True, "not a hunter task"
+    ticker = hunter_task_ticker(task)
+    if not ticker:
+        return True, "missing hunter ticker"
+    analysis = analyze_hunter_pr_diff(
+        base_ref=merge_base_ref,
+        head_ref=merge_head_ref,
+        hunter_ticker=ticker,
+        cwd=cwd,
+    )
+    if analysis.outcome != HunterOutcome.ALLOWLIST:
+        return True, "merged hunter outcome is not ALLOWLIST"
+    urls = list(analysis.new_urls or [])
+    if not urls:
+        return True, "no new allowlist URLs in merge commit"
+    ok, reason = live_fetch_hunter_urls(urls, ticker=ticker)
+    if ok:
+        return True, reason
+    return False, f"post-merge hunter URL verify failed: {reason}"
 
 
 def evaluate_hunter_merge_gate(
@@ -343,18 +491,22 @@ def evaluate_hunter_merge_gate(
 
     ticker = hunter_task_ticker(task)
     if not ticker:
-        return HunterGateResult(False, "hunter task missing evidence.hunter_ticker", tier=tier)
+        return _finalize_gate_result(
+            HunterGateResult(False, "hunter task missing evidence.hunter_ticker", tier=tier)
+        )
 
     scope_ok, scope_reason = validate_hunter_diff_scope(changed_files)
     if not scope_ok:
-        return HunterGateResult(False, scope_reason, tier=tier)
+        return _finalize_gate_result(HunterGateResult(False, scope_reason, tier=tier))
 
     guard = validate_engineering_pr_paths(task=task, changed_files=changed_files)
     if not guard.ok:
-        return HunterGateResult(
-            False,
-            f"path guard failed: {'; '.join(guard.violations[:3])}",
-            tier=tier,
+        return _finalize_gate_result(
+            HunterGateResult(
+                False,
+                f"path guard failed: {'; '.join(guard.violations[:3])}",
+                tier=tier,
+            )
         )
 
     analysis = analyze_hunter_pr_diff(
@@ -365,46 +517,56 @@ def evaluate_hunter_merge_gate(
         cwd=cwd,
     )
     if analysis.outcome == HunterOutcome.UNKNOWN:
-        return HunterGateResult(
-            False,
-            "could not classify hunter diff as SKIP or ALLOWLIST",
-            analysis=analysis,
-            tier=tier,
+        return _finalize_gate_result(
+            HunterGateResult(
+                False,
+                "could not classify hunter diff as SKIP or ALLOWLIST",
+                analysis=analysis,
+                tier=tier,
+            )
         )
     if not _tier_allows_outcome(tier, analysis.outcome):
-        return HunterGateResult(
-            False,
-            f"policy tier {tier!r} does not allow {analysis.outcome.value} auto-merge",
-            analysis=analysis,
-            tier=tier,
+        return _finalize_gate_result(
+            HunterGateResult(
+                False,
+                f"policy tier {tier!r} does not allow {analysis.outcome.value} auto-merge",
+                analysis=analysis,
+                tier=tier,
+            )
         )
 
     if not analysis.added_test_names:
-        return HunterGateResult(
-            False,
-            "missing new test_parked_source_hunter_* regression test",
-            analysis=analysis,
-            tier=tier,
+        return _finalize_gate_result(
+            HunterGateResult(
+                False,
+                "missing new test_parked_source_hunter_* regression test",
+                analysis=analysis,
+                tier=tier,
+            )
         )
 
     if analysis.outcome == HunterOutcome.SKIP:
         reason = analysis.new_skip_reason or ""
         if len(reason.strip()) < HUNTER_MIN_SKIP_REASON_CHARS:
-            return HunterGateResult(
-                False,
-                f"SKIP reason too short (need >= {HUNTER_MIN_SKIP_REASON_CHARS} chars)",
-                analysis=analysis,
-                tier=tier,
+            return _finalize_gate_result(
+                HunterGateResult(
+                    False,
+                    f"SKIP reason too short (need >= {HUNTER_MIN_SKIP_REASON_CHARS} chars)",
+                    analysis=analysis,
+                    tier=tier,
+                )
             )
         return HunterGateResult(True, "SKIP hunter gate passed", analysis=analysis, tier=tier)
 
     new_urls = list(analysis.new_urls or [])
     if not new_urls or len(new_urls) > HUNTER_MAX_NEW_URLS:
-        return HunterGateResult(
-            False,
-            f"ALLOWLIST requires 1–{HUNTER_MAX_NEW_URLS} new URL(s)",
-            analysis=analysis,
-            tier=tier,
+        return _finalize_gate_result(
+            HunterGateResult(
+                False,
+                f"ALLOWLIST requires 1–{HUNTER_MAX_NEW_URLS} new URL(s)",
+                analysis=analysis,
+                tier=tier,
+            )
         )
 
     if skip_live_fetch:
@@ -417,7 +579,9 @@ def evaluate_hunter_merge_gate(
 
     fetch_ok, fetch_reason = live_fetch_hunter_urls(new_urls, ticker=ticker)
     if not fetch_ok:
-        return HunterGateResult(False, fetch_reason, analysis=analysis, tier=tier)
+        return _finalize_gate_result(
+            HunterGateResult(False, fetch_reason, analysis=analysis, tier=tier)
+        )
     return HunterGateResult(True, fetch_reason, analysis=analysis, tier=tier)
 
 
@@ -464,12 +628,18 @@ def load_hunter_task_for_branch(
 
 __all__ = [
     "HunterDiffAnalysis",
+    "HunterFixKind",
     "HunterGateResult",
     "HunterOutcome",
     "analyze_hunter_pr_diff",
+    "classify_hunter_fix_kind",
     "evaluate_hunter_auto_merge",
     "evaluate_hunter_merge_gate",
     "hunter_auto_merge_policy_tier",
+    "hunter_fix_eligible",
+    "hunter_fix_enabled",
+    "hunter_fix_max_rounds",
+    "hunter_live_fetch_retry_config",
     "hunter_task_eligible_for_auto_merge",
     "hunter_task_ticker",
     "hunter_verify_observer_enabled",
@@ -477,4 +647,5 @@ __all__ = [
     "live_fetch_hunter_urls",
     "load_hunter_task_for_branch",
     "validate_hunter_diff_scope",
+    "verify_merged_hunter_allowlist_urls",
 ]

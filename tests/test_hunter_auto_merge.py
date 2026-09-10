@@ -12,12 +12,23 @@ from value_investor.engineering_tasks import (
     BLOCKED_PATHS,
     PARKED_SOURCE_HUNTER_SOURCE,
     EngineeringTask,
+    load_engineering_tasks,
 )
+from value_investor.engineering_verify import verify_merged_task
 from value_investor.hunter_auto_merge import (
+    HunterFixKind,
     HunterOutcome,
     analyze_hunter_pr_diff,
+    classify_hunter_fix_kind,
     evaluate_hunter_merge_gate,
+    hunter_fix_eligible,
+    live_fetch_hunter_urls,
     validate_hunter_diff_scope,
+    verify_merged_hunter_allowlist_urls,
+)
+from value_investor.hunter_fix_agent import (
+    ci_log_shows_hunter_gate_failure,
+    record_hunter_fix_attempt,
 )
 
 
@@ -317,3 +328,135 @@ def test_hunter_verify_observer_skips_without_api_key(tmp_path, monkeypatch):
     )
     assert result.skipped
     assert result.deterministic_gate is not None
+
+
+def test_classify_hunter_fix_kind_for_gate_failures():
+    from value_investor.hunter_auto_merge import HunterGateResult
+
+    missing = HunterGateResult(False, "missing new test_parked_source_hunter_* regression test")
+    assert classify_hunter_fix_kind(missing) == HunterFixKind.MISSING_TEST
+
+    short = HunterGateResult(False, "SKIP reason too short (need >= 20 chars)")
+    assert classify_hunter_fix_kind(short) == HunterFixKind.SHORT_SKIP
+
+    fetch = HunterGateResult(
+        False, "live-fetch failed or body too short for https://x.example/a.pdf"
+    )
+    assert classify_hunter_fix_kind(fetch) == HunterFixKind.LIVE_FETCH_FAILED
+
+    scope = HunterGateResult(False, "unexpected changed files: foo.py")
+    assert classify_hunter_fix_kind(scope) is None
+
+
+def test_hunter_fix_eligible_respects_max_rounds(monkeypatch):
+    monkeypatch.setattr("value_investor.hunter_auto_merge.hunter_fix_max_rounds", lambda: 1)
+    task = _hunter_task("AZE.BR")
+    task.evidence = dict(task.evidence or {})
+    task.evidence["hunter_fix_attempts"] = 1
+    from value_investor.hunter_auto_merge import HunterGateResult
+
+    gate = HunterGateResult(
+        ok=False,
+        reason="missing new test_parked_source_hunter_* regression test",
+        tier="allowlist",
+    )
+    eligible, reason, fix_kind = hunter_fix_eligible(task=task, gate=gate)
+    assert not eligible
+    assert fix_kind == HunterFixKind.MISSING_TEST
+    assert "exhausted" in reason
+
+
+def test_live_fetch_hunter_urls_retries_before_failure(monkeypatch):
+    calls = {"count": 0}
+
+    def fake_fetch(row, ticker):
+        calls["count"] += 1
+        if calls["count"] < 2:
+            return None, "fail"
+        return "x" * 250, "ok"
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    monkeypatch.setattr(
+        "value_investor.hunter_auto_merge.hunter_live_fetch_retry_config",
+        lambda: (3, (0.0, 0.0)),
+    )
+    ok, reason = live_fetch_hunter_urls(["https://issuer.example/report.pdf"], ticker="AZE.BR")
+    assert ok
+    assert calls["count"] == 2
+    assert "live-fetch ok" in reason
+
+
+def test_verify_merged_hunter_allowlist_urls_skips_non_allowlist(tmp_path: Path):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_git_repo(repo)
+    _write_min_filings(
+        repo,
+        ticker="ABI.BR",
+        skip_reason="No fetchable IR after exhaustive search on issuer site and exchange.",
+    )
+    _write_min_tests(repo, ticker="ABI.BR", slug="abi_br")
+    _commit_all(repo, "skip merge")
+    task = _hunter_task("ABI.BR")
+    ok, reason = verify_merged_hunter_allowlist_urls(
+        task,
+        merge_base_ref="HEAD^",
+        merge_head_ref="HEAD",
+        cwd=repo,
+    )
+    assert ok
+    assert "not ALLOWLIST" in reason
+
+
+def test_verify_merged_task_queues_rework_on_post_merge_url_failure(tmp_path: Path, monkeypatch):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    task = _hunter_task("AZE.BR")
+    task_dict = task.to_dict() | {
+        "status": "merged",
+        "branch_name": "cursor/eng-20260910-01-1de3",
+    }
+    tasks_path.write_text(json.dumps({"tasks": [task_dict]}), encoding="utf-8")
+
+    monkeypatch.setattr(
+        "value_investor.engineering_verify.verify_merged_hunter_allowlist_urls",
+        lambda row, cwd=None, merge_base_ref="HEAD^", merge_head_ref="HEAD": (
+            False,
+            "post-merge hunter URL verify failed: live-fetch failed",
+        ),
+    )
+
+    def fake_pytest(paths, cwd):
+        return {"ok": True, "returncode": 0, "paths": paths, "existing_paths": paths, "output": ""}
+
+    result = verify_merged_task(
+        task.id,
+        tasks_path=tasks_path,
+        pytest_runner=fake_pytest,
+        apply=True,
+    )
+    assert result["should_rework"]
+    assert result["reason"] == "post_merge_hunter_url_verify_failed"
+
+
+def test_record_hunter_fix_attempt_merges_evidence(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    task = _hunter_task("ABI.BR")
+    row = task.to_dict() | {
+        "status": "pr_open",
+        "evidence": {"hunter_ticker": "ABI.BR", "market_id": "euro_depth"},
+    }
+    tasks_path.write_text(json.dumps({"tasks": [row]}), encoding="utf-8")
+    attempts = record_hunter_fix_attempt(task.id, tasks_path=tasks_path)
+    assert attempts == 1
+    payload = load_engineering_tasks(tasks_path)
+    evidence = payload["tasks"][0]["evidence"]
+    assert evidence["hunter_fix_attempts"] == 1
+    assert evidence["market_id"] == "euro_depth"
+
+
+def test_ci_log_shows_hunter_gate_failure():
+    assert ci_log_shows_hunter_gate_failure("hunter-merge-gate: fail — missing test")
+    assert not ci_log_shows_hunter_gate_failure("pytest failed: assert False")

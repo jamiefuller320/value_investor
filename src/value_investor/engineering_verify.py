@@ -21,6 +21,10 @@ from value_investor.engineering_tasks import (
     load_engineering_tasks,
     mark_task_status,
 )
+from value_investor.hunter_auto_merge import (
+    is_parked_source_hunter_task,
+    verify_merged_hunter_allowlist_urls,
+)
 from value_investor.storage import write_json
 
 logger = logging.getLogger(__name__)
@@ -423,10 +427,68 @@ def verify_merged_task(
     paths = acceptance_test_paths(row)
     runner = pytest_runner or default_pytest_runner
     workdir = Path(cwd or Path.cwd())
-    pytest_result = runner(paths, workdir)
     rounds = count_verify_chain_rounds(chain_root, tasks_path=tasks_path)
     if rounds <= 0:
         rounds = 1
+
+    hunter_url_result: dict[str, Any] | None = None
+    if is_parked_source_hunter_task(row):
+        url_ok, url_reason = verify_merged_hunter_allowlist_urls(row, cwd=workdir)
+        hunter_url_result = {"ok": url_ok, "reason": url_reason}
+        if not url_ok:
+            pytest_result = {
+                "ok": False,
+                "returncode": 1,
+                "paths": paths,
+                "existing_paths": paths,
+                "output": url_reason,
+                "hunter_url_verify": hunter_url_result,
+            }
+            if rounds >= MAX_VERIFY_REWORK_ROUNDS:
+                if apply:
+                    _mark_parent_exhausted(
+                        row,
+                        chain_root=chain_root,
+                        pytest_result=pytest_result,
+                        tasks_path=tasks_path,
+                        rounds=rounds,
+                    )
+                return {
+                    "task_id": task_id,
+                    "action": "exhausted",
+                    "should_rework": False,
+                    "reason": "post_merge_hunter_url_verify_failed",
+                    "verify_chain_root_id": chain_root,
+                    "verify_round": rounds,
+                    "max_verify_rounds": MAX_VERIFY_REWORK_ROUNDS,
+                    "hunter_url_verify": hunter_url_result,
+                    "pytest": pytest_result,
+                }
+
+            next_round = rounds + 1
+            rework: dict[str, Any] | None = None
+            if apply:
+                rework = _queue_rework_task(
+                    row,
+                    chain_root=chain_root,
+                    next_round=next_round,
+                    pytest_result=pytest_result,
+                    tasks_path=tasks_path,
+                )
+            return {
+                "task_id": task_id,
+                "action": "rework_queued",
+                "should_rework": True,
+                "reason": "post_merge_hunter_url_verify_failed",
+                "verify_chain_root_id": chain_root,
+                "verify_round": next_round,
+                "max_verify_rounds": MAX_VERIFY_REWORK_ROUNDS,
+                "rework_task_id": (rework or {}).get("id"),
+                "hunter_url_verify": hunter_url_result,
+                "pytest": pytest_result,
+            }
+
+    pytest_result = runner(paths, workdir)
 
     if pytest_result.get("ok"):
         if apply:
@@ -444,6 +506,7 @@ def verify_merged_task(
             "verify_chain_root_id": chain_root,
             "verify_round": rounds,
             "pytest": pytest_result,
+            **({"hunter_url_verify": hunter_url_result} if hunter_url_result else {}),
         }
 
     if is_pytest_infra_failure(pytest_result):
