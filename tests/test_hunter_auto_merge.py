@@ -7,10 +7,12 @@ import subprocess
 from pathlib import Path
 from unittest.mock import patch
 
-import pytest
-
 from value_investor.engineering_auto_merge import evaluate_auto_merge
-from value_investor.engineering_tasks import BLOCKED_PATHS, EngineeringTask, PARKED_SOURCE_HUNTER_SOURCE
+from value_investor.engineering_tasks import (
+    BLOCKED_PATHS,
+    PARKED_SOURCE_HUNTER_SOURCE,
+    EngineeringTask,
+)
 from value_investor.hunter_auto_merge import (
     HunterOutcome,
     analyze_hunter_pr_diff,
@@ -28,11 +30,13 @@ def _init_git_repo(path: Path) -> None:
 def _commit_all(path: Path, message: str) -> str:
     subprocess.run(["git", "add", "-A"], cwd=path, check=True, capture_output=True)
     subprocess.run(["git", "commit", "-m", message], cwd=path, check=True, capture_output=True)
-    result = subprocess.run(["git", "rev-parse", "HEAD"], cwd=path, check=True, capture_output=True, text=True)
+    result = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=path, check=True, capture_output=True, text=True
+    )
     return result.stdout.strip()
 
 
-SKIP_SNIPPET = '''
+SKIP_SNIPPET = """
 PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {{
     "ABI.BR": (
         "Leftover indexed-without-body rows are SEC 6-K cover HTML primaries below the "
@@ -42,9 +46,9 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {{
         "{reason}"
     ),
 }}
-'''
+"""
 
-ALLOWLIST_SNIPPET = '''
+ALLOWLIST_SNIPPET = """
 _BUILTIN_IR_URLS: dict[str, list[str]] = {{
     "ANDR.VI": [
         "https://www.andritz.com/resource/blob/520884/annual-report-2025-en.pdf",
@@ -53,22 +57,24 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {{
         "{url}",
     ],
 }}
-'''
+"""
 
-TEST_SNIPPET = '''
+TEST_SNIPPET = """
 def test_parked_source_hunter_{slug}_euro_depth_skip():
     assert "{ticker}" in PARKED_SOURCE_HUNTER_SKIP
-'''
+"""
 
 
-def _write_min_filings(path: Path, *, ticker: str = "ABI.BR", skip_reason: str | None = None, url: str | None = None) -> None:
+def _write_min_filings(
+    path: Path, *, ticker: str = "ABI.BR", skip_reason: str | None = None, url: str | None = None
+) -> None:
     filings = path / "src/value_investor/research"
     filings.mkdir(parents=True, exist_ok=True)
     content = "from __future__ import annotations\n\n"
     if skip_reason:
         content += SKIP_SNIPPET.format(ticker=ticker, reason=skip_reason)
     else:
-        content += 'PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {}\n\n'
+        content += "PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {}\n\n"
     if url:
         content += ALLOWLIST_SNIPPET.format(ticker=ticker, url=url)
     else:

@@ -6,15 +6,15 @@ import ast
 import re
 import subprocess
 from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
 from value_investor.agent_model_policy import load_policy
 from value_investor.engineering_tasks import (
     COMMITTED_TASKS_PATH,
-    EngineeringTask,
     PARKED_SOURCE_HUNTER_SOURCE,
+    EngineeringTask,
     find_engineering_task,
     validate_engineering_pr_paths,
 )
@@ -31,7 +31,7 @@ HUNTER_MIN_SKIP_REASON_CHARS = 20
 HUNTER_TEST_NAME_RE = re.compile(r"^def (test_parked_source_hunter_[a-z0-9_]+)\(", re.MULTILINE)
 
 
-class HunterOutcome(str, Enum):
+class HunterOutcome(StrEnum):
     SKIP = "skip"
     ALLOWLIST = "allowlist"
     UNKNOWN = "unknown"
