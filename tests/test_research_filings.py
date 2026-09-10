@@ -4298,6 +4298,39 @@ def test_fetch_filings_ir_allowlist_euro_depth_bas_de_builtins(tmp_path: Path):
     assert "basf-ar25.pdf" in rows[0]["url"]
 
 
+def test_fetch_filings_ir_allowlist_euro_depth_dte_de_builtins(tmp_path: Path):
+    """Regression: DTE.DE awaiting_periodic_report — report.telekom.com FY2025 entire annual PDF."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("DTE.DE", path=allowlist_path)
+    assert len(rows) == 1
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert rows[0]["period"] == "annual"
+    assert "report.telekom.com" in rows[0]["url"]
+    assert "entire-dtag-ar25.pdf" in rows[0]["url"]
+
+
+def test_load_ir_url_allowlist_canonicalizes_dte_de_dead_urls(tmp_path: Path):
+    """Dead blob/publications URLs in research_ir_urls.json map to live FY2025 annual report PDF."""
+    dead_pdf = (
+        "https://www.telekom.com/resource/blob/1101986/"
+        "912628a6116bb7b1ecdfc36b578d66ef/dt-25-annual-report-data.pdf"
+    )
+    dead_html = "https://www.telekom.com/en/investor-relations/publications"
+    live = _BUILTIN_IR_URLS["DTE.DE"][0]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"DTE.DE": [dead_pdf, dead_html]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live in mapping["DTE.DE"]
+    assert dead_pdf not in mapping["DTE.DE"]
+    assert dead_html not in mapping["DTE.DE"]
+    assert mapping["DTE.DE"].count(live) == 1
+    rows = fetch_filings_ir_allowlist("DTE.DE", path=path)
+    assert len(rows) == 1
+    assert rows[0]["url"] == live
+
+
 def test_esef_entity_variants_include_aedifica_and_assa_abloy():
     from value_investor.research.filings import _esef_entity_name_variants
 
@@ -6607,6 +6640,16 @@ def test_parked_source_hunter_bas_de_euro_depth_has_fetchable_ir():
     assert rows[0]["period"] == "annual"
     assert "report.basf.com" in rows[0]["url"]
     assert "basf-ar25.pdf" in rows[0]["url"]
+
+
+def test_parked_source_hunter_dte_de_euro_depth_has_fetchable_ir():
+    """eng-20260910-02: DTE.DE has live report.telekom.com FY2025 entire annual report PDF."""
+    assert "DTE.DE" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("DTE.DE")
+    assert len(rows) == 1
+    assert rows[0]["period"] == "annual"
+    assert "report.telekom.com" in rows[0]["url"]
+    assert "entire-dtag-ar25.pdf" in rows[0]["url"]
 
 
 def test_fetch_filings_ir_allowlist_euro_depth_aze_br_builtins(tmp_path: Path):
