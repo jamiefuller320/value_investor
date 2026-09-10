@@ -118,6 +118,7 @@ class RecoveryResult:
     parked: list[RecoveryAction] = field(default_factory=list)
     skipped: list[dict[str, str]] = field(default_factory=list)
     queue_clearing: dict[str, Any] = field(default_factory=dict)
+    hunter_url_monitor: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -128,6 +129,7 @@ class RecoveryResult:
             "parked": [row.to_dict() for row in self.parked],
             "skipped": self.skipped,
             "queue_clearing": self.queue_clearing,
+            "hunter_url_monitor": self.hunter_url_monitor,
             "action_count": len(self.merged)
             + len(self.reconciled)
             + len(self.reopened)
@@ -1163,6 +1165,14 @@ def recover_engineering_queue(
             apply=apply,
         )
     )
+
+    from value_investor.hunter_url_monitor import monitor_merged_hunter_allowlist_urls
+
+    result.hunter_url_monitor = monitor_merged_hunter_allowlist_urls(
+        tasks_path=tasks_path,
+        committed_path=tasks_path,
+        apply=apply,
+    ).to_dict()
 
     result.queue_clearing = evaluate_queue_clearing_pause(
         tasks_path=tasks_path,

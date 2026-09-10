@@ -297,6 +297,30 @@ def _cmd_recover_queue(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_monitor_hunter_urls(args: argparse.Namespace) -> int:
+    from value_investor.hunter_url_monitor import monitor_merged_hunter_allowlist_urls
+
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    result = monitor_merged_hunter_allowlist_urls(
+        tasks_path=tasks_path,
+        committed_path=tasks_path,
+        apply=not args.dry_run,
+    )
+    if args.json:
+        _print_json(result.to_dict())
+    else:
+        payload = result.to_dict()
+        print(
+            f"Hunter URL monitor: checked={payload.get('checked_urls')} "
+            f"actions={payload.get('action_count')}"
+        )
+        for row in result.actions:
+            if row.action == "ok":
+                continue
+            print(f"  {row.ticker} {row.url[:60]}… -> {row.action}: {row.reason[:120]}")
+    return 0
+
+
 def _cmd_park_unfixable_pr(args: argparse.Namespace) -> int:
     tasks_path = _resolve_tasks_path(args.tasks_path)
     open_prs: list[dict] = []
@@ -1460,6 +1484,14 @@ def main(argv: list[str] | None = None) -> int:
         help="Optional JSON list of recent engineering-agent failures",
     )
     recover_p.set_defaults(func=_cmd_recover_queue)
+
+    monitor_urls_p = sub.add_parser(
+        "monitor-hunter-urls",
+        parents=[common],
+        help="Re-live-fetch recent merged hunter allowlist URLs; repair or re-queue on rot",
+    )
+    monitor_urls_p.add_argument("--dry-run", action="store_true")
+    monitor_urls_p.set_defaults(func=_cmd_monitor_hunter_urls)
 
     park_unfixable_p = sub.add_parser(
         "park-unfixable-pr",

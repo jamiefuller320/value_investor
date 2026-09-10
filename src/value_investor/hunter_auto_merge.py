@@ -506,13 +506,16 @@ def live_fetch_hunter_urls(
     for url in urls:
         if not url.lower().startswith("https://"):
             return False, f"URL must be HTTPS: {url}"
+        from value_investor.research.filings import _resolve_ir_allowlist_canonical
+
+        fetch_url = _resolve_ir_allowlist_canonical(str(url).strip(), ticker)
         row = {
             "id": "hunter_gate",
-            "url": url,
-            "period": _ir_allowlist_period_from_url(url),
+            "url": fetch_url,
+            "period": _ir_allowlist_period_from_url(fetch_url),
             "source": "ir_allowlist",
         }
-        last_reason = f"live-fetch failed or body too short for {url}"
+        last_reason = f"live-fetch failed or body too short for {fetch_url}"
         for attempt in range(max(1, max_attempts)):
             body, _source = _fetch_ir_allowlist_body(row, ticker=ticker)
             if body and len(body) >= IR_BODY_MIN_CHARS:

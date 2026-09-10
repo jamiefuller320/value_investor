@@ -277,6 +277,17 @@ def default_policy() -> dict[str, Any]:
                     "and resume_idle_minutes have elapsed since the last clearing action."
                 ),
             },
+            "hunter_url_monitor": {
+                "enabled": True,
+                "lookback_days": 30,
+                "market_ids": ["euro_depth"],
+                "note": (
+                    "Re-live-fetch allowlist URLs from recently merged hunter tasks in the "
+                    "scoped library markets. Known canonical replacements are applied in "
+                    "filings.py; otherwise queue verify-rework or a low-priority "
+                    "hunter_url_repair engineering task."
+                ),
+            },
         },
         "updated_at": None,
     }

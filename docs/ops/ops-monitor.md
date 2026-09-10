@@ -296,6 +296,18 @@ Brief dips while you are still triaging therefore do not restart the queue mid-s
 Policy keys: `engineering.queue_recovery.max_attention_parked_tasks`,
 `resume_attention_parked_below`, `resume_idle_minutes` in agent model policy.
 
+### Hunter allowlist URL monitor
+
+Hourly `recover-engineering-queue` re-live-fetches allowlist URLs from hunter tasks
+merged in the last 30 days (default market: `euro_depth`). On failure:
+
+1. Apply a known `_IR_ALLOWLIST_URL_CANONICAL` replacement in `filings.py` when the
+   replacement URL still live-fetches cleanly
+2. Else queue capped post-merge verify rework when the verify chain is not exhausted
+3. Else draft a low-priority `hunter_url_repair` engineering task (deduped per ticker+URL)
+
+Manual replay: `ftse-engineering monitor-hunter-urls --json [--dry-run]`
+
 To resume a parked task manually, set status back to `open` in `engineering_tasks.json` or add a fresh task.
 
 See also: [`orchestrator-cron.md`](orchestrator-cron.md), [`analysis-review.md`](analysis-review.md), [`backtest-health.md`](backtest-health.md), [`engineering-sync.md`](engineering-sync.md).
