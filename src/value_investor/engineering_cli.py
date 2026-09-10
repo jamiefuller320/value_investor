@@ -971,6 +971,21 @@ def _cmd_hunter_merge_gate(args: argparse.Namespace) -> int:
         tier=tier,
         skip_live_fetch=bool(args.skip_live_fetch),
     )
+    superseded_skip = (not gate.ok) and "already resolved on base" in gate.reason
+    if superseded_skip:
+        skip_reason = f"{gate.reason} — close PR without merge"
+        if args.json:
+            _print_json(
+                {
+                    **gate.to_dict(),
+                    "ok": True,
+                    "skipped": True,
+                    "reason": skip_reason,
+                }
+            )
+        else:
+            print(f"hunter-merge-gate: skipped — {skip_reason}")
+        return 0
     if args.json:
         _print_json(gate.to_dict())
     elif gate.ok:
