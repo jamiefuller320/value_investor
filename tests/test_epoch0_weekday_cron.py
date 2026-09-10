@@ -22,6 +22,23 @@ def test_cron_keys_for_known_markets():
         "library-epoch0-weekday-us-edt",
         "library-epoch0-weekday-us-est",
     ]
+    assert cron_keys_for_market("tsx60") == [
+        "library-epoch0-weekday-us-edt",
+        "library-epoch0-weekday-us-est",
+    ]
+    assert cron_keys_for_market("nasdaq100") == [
+        "library-epoch0-weekday-us-edt",
+        "library-epoch0-weekday-us-est",
+    ]
+    # No explicit session defaults → do not inherit London→euro.
+    assert cron_keys_for_market("unknown_market") == []
+
+
+def test_unmapped_admitted_markets_flags_fallback_session():
+    policy = {
+        "ladder": {"admitted_learning_markets": ["sp500", "cac40"]},
+    }
+    assert unmapped_admitted_markets(policy) == ["cac40"]
 
 
 def test_cron_keys_for_policy_unions_admitted_timezones():

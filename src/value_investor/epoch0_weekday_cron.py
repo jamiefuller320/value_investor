@@ -15,7 +15,10 @@ import urllib.error
 import urllib.request
 from typing import Any
 
-from value_investor.market_paper_shard import session_defaults_for_market
+from value_investor.market_paper_shard import (
+    MARKET_SESSION_DEFAULTS,
+    session_defaults_for_market,
+)
 from value_investor.market_shard_admission import admitted_learning_markets_for_policy
 from value_investor.workflow_pat import resolve_workflow_dispatch_pat
 
@@ -49,14 +52,15 @@ EPOCH0_WEEKDAY_SLOTS: dict[str, dict[str, Any]] = {
         "hours": [14],
         "minutes": [15],
         "wdays": [1, 2, 3, 4, 5],
-        "timezones": ("America/New_York",),
+        # Toronto shares Eastern wall-clock with New York.
+        "timezones": ("America/New_York", "America/Toronto"),
     },
     "library-epoch0-weekday-us-est": {
         "title": "Library epoch-0 weekday (US EST local-open)",
         "hours": [15],
         "minutes": [15],
         "wdays": [1, 2, 3, 4, 5],
-        "timezones": ("America/New_York",),
+        "timezones": ("America/New_York", "America/Toronto"),
     },
 }
 
@@ -82,8 +86,15 @@ def cron_keys_for_timezone(timezone: str) -> list[str]:
 
 
 def cron_keys_for_market(market_id: str) -> list[str]:
-    """Map a market's session timezone to shared epoch-0 weekday cron keys."""
-    session = session_defaults_for_market(str(market_id or "").strip())
+    """Map a market's session timezone to shared epoch-0 weekday cron keys.
+
+    Markets without an explicit ``MARKET_SESSION_DEFAULTS`` entry are unmapped
+    (empty list) so a London fallback does not silently register the EU slot.
+    """
+    mid = str(market_id or "").strip()
+    if mid not in MARKET_SESSION_DEFAULTS:
+        return []
+    session = session_defaults_for_market(mid)
     return cron_keys_for_timezone(str(session.get("timezone") or ""))
 
 

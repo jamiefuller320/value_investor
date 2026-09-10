@@ -306,7 +306,7 @@
         {
           "id": "adhoc-epoch0-cron-unmapped-timezone",
           "title": "Extend epoch-0 cron timezone map for new session",
-          "summary": "When admitting a market whose session timezone is not in EPOCH0_WEEKDAY_SLOTS (ASX/EU/US buckets), add a mapped slot (or reuse an existing UTC fire), then re-run euro-ingest-dispatch --sync-cron or import_cron_jobs for that key.",
+          "summary": "When admitting a market with no MARKET_SESSION_DEFAULTS entry (or a timezone not in EPOCH0_WEEKDAY_SLOTS), add an explicit session + bucket mapping (e.g. tsx60\to America/Toronto\to US EDT/EST). Do not rely on the London DEFAULT_SESSION fallback. Then re-run euro-ingest-dispatch --sync-cron or import_cron_jobs for that key.",
           "automated": false,
           "doc_path": "docs/ops/market-sharded-learning.md",
           "doc_anchor": "weekday-epoch-0-local-open"
