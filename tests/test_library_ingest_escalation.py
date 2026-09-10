@@ -241,11 +241,21 @@ def test_compile_parked_source_hunter_skips_tickers_already_on_main(tmp_path: Pa
     )
     monkeypatch.setattr(
         "value_investor.hunter_auto_merge.hunter_ticker_already_resolved_on_main",
-        lambda ticker, **kwargs: (True, __import__("value_investor.hunter_auto_merge", fromlist=["HunterResolution"]).HunterResolution.SKIP, "already skip on main"),
+        lambda ticker, **kwargs: (
+            True,
+            __import__(
+                "value_investor.hunter_auto_merge", fromlist=["HunterResolution"]
+            ).HunterResolution.SKIP,
+            "already skip on main",
+        ),
     )
     result = compile_parked_source_hunter_task(
         library_root=root,
-        policy={"focus_market": "euro_depth", "market_queue": ["sp500"], "ingest_exhausted_markets": ["sp500"]},
+        policy={
+            "focus_market": "euro_depth",
+            "market_queue": ["sp500"],
+            "ingest_exhausted_markets": ["sp500"],
+        },
         tasks_path=tasks_path,
         committed_path=tasks_path,
     )

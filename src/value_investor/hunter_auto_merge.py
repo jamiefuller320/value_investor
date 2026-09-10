@@ -611,7 +611,9 @@ def evaluate_hunter_merge_gate(
         cwd=cwd,
     )
     if analysis.outcome == HunterOutcome.UNKNOWN:
-        base_filings = _git_show(f"{base_ref}", "src/value_investor/research/filings.py", cwd=cwd) or ""
+        base_filings = (
+            _git_show(f"{base_ref}", "src/value_investor/research/filings.py", cwd=cwd) or ""
+        )
         base_resolution = hunter_ticker_resolution_in_filings(base_filings, ticker)
         if base_resolution is not None:
             reason = (

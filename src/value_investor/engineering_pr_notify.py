@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 from value_investor.emailer import EmailConfig, send_email
@@ -172,8 +173,7 @@ def collect_queue_block_alerts(
         parked_rows.sort(key=lambda row: str(row.get("parked_at") or ""))
         task_ids = [str(row.get("id") or "") for row in parked_rows if row.get("id")]
         lines = [
-            f"{row.get('id')}: {row.get('parked_policy')} — "
-            f"{str(row.get('title') or '')[:80]}"
+            f"{row.get('id')}: {row.get('parked_policy')} — {str(row.get('title') or '')[:80]}"
             for row in parked_rows
         ]
         count = int(queue_clearing.get("attention_parked_count") or len(parked_rows))

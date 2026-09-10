@@ -251,13 +251,17 @@ def _engineering_queue_recovery_policy() -> dict[str, Any]:
     engineering = load_policy().get("engineering") or {}
     block = engineering.get("queue_recovery") or {}
     try:
-        max_attention = max(1, int(block.get("max_attention_parked_tasks") or DEFAULT_MAX_ATTENTION_PARKED_TASKS))
+        max_attention = max(
+            1, int(block.get("max_attention_parked_tasks") or DEFAULT_MAX_ATTENTION_PARKED_TASKS)
+        )
     except (TypeError, ValueError):
         max_attention = DEFAULT_MAX_ATTENTION_PARKED_TASKS
     try:
         resume_below = max(
             0,
-            int(block.get("resume_attention_parked_below") or DEFAULT_RESUME_ATTENTION_PARKED_BELOW),
+            int(
+                block.get("resume_attention_parked_below") or DEFAULT_RESUME_ATTENTION_PARKED_BELOW
+            ),
         )
     except (TypeError, ValueError):
         resume_below = DEFAULT_RESUME_ATTENTION_PARKED_BELOW
@@ -380,9 +384,8 @@ def evaluate_queue_clearing_pause(
         effective_last = last_action
         if pause_started and last_action and last_action < pause_started:
             effective_last = None
-        idle_ok = (
-            effective_last is not None
-            and (now - effective_last) >= timedelta(minutes=idle_minutes)
+        idle_ok = effective_last is not None and (now - effective_last) >= timedelta(
+            minutes=idle_minutes
         )
         if count < resume_below and idle_ok:
             state["pause_active"] = False
@@ -877,7 +880,9 @@ def park_hunter_pr_if_unfixable(
     if not task_id:
         return None
     data = load_engineering_tasks(tasks_path)
-    row = next((item for item in data.get("tasks") or [] if str(item.get("id") or "") == task_id), None)
+    row = next(
+        (item for item in data.get("tasks") or [] if str(item.get("id") or "") == task_id), None
+    )
     if not isinstance(row, dict) or str(row.get("status") or "") != IN_FLIGHT_STATUS:
         return None
     task = load_hunter_task_for_branch(branch, tasks_path=tasks_path)

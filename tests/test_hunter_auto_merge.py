@@ -504,7 +504,7 @@ def test_evaluate_hunter_merge_gate_unknown_already_resolved_message(tmp_path: P
     tests = repo / "tests/test_research_filings.py"
     tests.write_text(
         tests.read_text(encoding="utf-8")
-        + '\n\ndef test_parked_source_hunter_essity_b_st_comment_only():\n    assert True\n',
+        + "\n\ndef test_parked_source_hunter_essity_b_st_comment_only():\n    assert True\n",
         encoding="utf-8",
     )
     head = _commit_all(repo, "comment-only")
