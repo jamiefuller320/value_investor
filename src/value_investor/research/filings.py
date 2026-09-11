@@ -104,6 +104,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.henryboot.co.uk/media/fv0nuosu/32326-henry-boot-ar2024-web.pdf",
         "https://www.henryboot.co.uk/media/tqvbhcvt/interim-results-25_main.pdf",
     ],
+    # ftse_smallcap IWB blocker — MER.L parked unfetchable_iwb; CH PDFs fail but mearsgroup.co.uk statutory PDFs fetch.
+    "MER.L": [
+        "https://www.mearsgroup.co.uk/media/jc1hix2m/mears-group-plc-annual-report-and-accounts-2025.pdf",
+        "https://www.mearsgroup.co.uk/media/4mape5as/mears-group-plc-annual-report-and-accounts-20242.pdf",
+        "https://www.mearsgroup.co.uk/media/q0zbvllk/mears-group-plc-half-year-results-2025.pdf",
+    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
