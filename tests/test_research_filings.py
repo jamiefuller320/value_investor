@@ -6758,6 +6758,34 @@ def test_parked_source_hunter_mer_l_ftse_smallcap_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_ftse_smallcap_tpt_l_builtins(tmp_path: Path):
+    """Regression: TPT.L parked IWB — toppsgroup.com FY2025/2024 AR + H1 statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("TPT.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("topps-group-annual-report-2025.pdf" in url for url in urls)
+    assert any("topps-tiles-ar2024-web.pdf" in url for url in urls)
+    assert any("2025-interims.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
+def test_parked_source_hunter_tpt_l_ftse_smallcap_has_fetchable_ir():
+    """eng-20260911-05: TPT.L has live toppsgroup.com FY2025/2024 AR + H1 statutory PDFs."""
+    assert "TPT.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("TPT.L")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("toppsgroup.com" in url for url in urls)
+    assert any("topps-group-annual-report-2025.pdf" in url for url in urls)
+    body = fetch_filing_body(urls[0])
+    assert body
+    assert len(body) >= 50000
+
+
 def test_ir_allowlist_sec_edgar_body_accepts_issuer_alias_tokens():
     """SEC 20-F inline HTML may omit URL filename tokens; issuer aliases must suffice."""
     url = "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000004/nvs-20251231.htm"
