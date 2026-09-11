@@ -4,6 +4,11 @@ name: Engineering Auto Merge
 # task's allowed_paths. CI-fix tasks use auto_merge=true; parked_source_hunter
 # tasks use policy.engineering.auto_merge.parked_hunter + hunter-merge-gate.
 #
+# After a successful merge, mark the task merged and compile the next parked
+# hunter on main. GITHUB_TOKEN merges do not re-trigger pull_request closed
+# workflows, so engineering-queue would otherwise miss the handoff until the
+# next hourly cron recovery.
+#
 # Security: workflow_run runs with repo secrets. Only same-repo heads; never
 # interpolate untrusted branch names into the shell (pass via env + regex gate).
 on:
@@ -14,6 +19,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  actions: write
 
 concurrency:
   group: engineering-auto-merge-${{ github.event.workflow_run.head_branch }}
@@ -39,6 +45,7 @@ jobs:
         run: pip install -e .
 
       - name: Try scoped auto-merge
+        id: auto_merge
         env:
           GH_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -52,4 +59,58 @@ jobs:
           fi
           ftse-engineering try-auto-merge \
             --branch "$BRANCH" \
-            --allow-skip
+            --allow-skip \
+            --json | tee /tmp/auto_merge.json
+          MERGED=$(python3 -c 'import json; print(str(bool(json.load(open("/tmp/auto_merge.json")).get("merged"))).lower())')
+          PR_NUMBER=$(python3 -c 'import json; print(json.load(open("/tmp/auto_merge.json")).get("pr_number") or "")')
+          TASK_ID=$(python3 -c 'import json; print(json.load(open("/tmp/auto_merge.json")).get("task_id") or "")')
+          echo "merged=${MERGED}" >> "$GITHUB_OUTPUT"
+          echo "pr_number=${PR_NUMBER}" >> "$GITHUB_OUTPUT"
+          echo "task_id=${TASK_ID}" >> "$GITHUB_OUTPUT"
+
+      - name: Mark merged and compile next parked hunter
+        if: steps.auto_merge.outputs.merged == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          PR_NUMBER: ${{ steps.auto_merge.outputs.pr_number }}
+          TASK_ID: ${{ steps.auto_merge.outputs.task_id }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$BRANCH" =~ ^cursor/eng-[0-9]{8}-[0-9]{2}-1de3$ ]]; then
+            echo "Rejecting non-engineering or unsafe branch name"
+            exit 1
+          fi
+          if [[ ! "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
+            echo "Missing/invalid PR number from auto-merge result"
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git checkout -B main origin/main
+
+          PR_URL="https://github.com/${GITHUB_REPOSITORY}/pull/${PR_NUMBER}"
+          ftse-engineering mark-merged \
+            --branch "$BRANCH" \
+            --pr-url "$PR_URL" \
+            --pr-number "$PR_NUMBER"
+
+          # Keep the hunter chain moving without waiting for hourly queue cron.
+          ftse-library parked-hunter-compile --json | tee /tmp/parked_hunter_compile.json || true
+
+          if git diff --quiet -- docs/data/engineering_tasks.json; then
+            echo "No engineering_tasks.json changes after mark-merged/compile"
+          else
+            git add docs/data/engineering_tasks.json
+            SUBJECT="chore(engineering): mark ${TASK_ID:-$BRANCH} merged after auto-merge [skip ci]"
+            git commit -m "$SUBJECT"
+            git push origin HEAD:main
+          fi
+
+          # Queue listens on pull_request closed; GITHUB_TOKEN merges do not
+          # fire that event. Kick the hourly processor so the next open hunter
+          # (or CI-fix task) can dispatch without waiting for cron.
+          gh workflow run engineering-queue.yml
+          echo "Dispatched engineering-queue after auto-merge handoff"
