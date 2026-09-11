@@ -1,13 +1,22 @@
 {
-  "run_at": "2026-09-10T19:19:58.190990+00:00",
+  "run_at": "2026-09-11T07:48:23.538727+00:00",
   "market_id": "sp500",
   "targets": [
+    "TPR",
     "INTU"
   ],
   "target_details": [
     {
+      "ticker": "TPR",
+      "priority_score": 17.4252,
+      "filings_total": 19,
+      "filings_with_body": 10,
+      "indexed_without_body": 9,
+      "reason": "indexed_without_body"
+    },
+    {
       "ticker": "INTU",
-      "priority_score": 17.1108,
+      "priority_score": 17.110200000000003,
       "filings_total": 20,
       "filings_with_body": 19,
       "indexed_without_body": 1,
@@ -15,6 +24,66 @@
     }
   ],
   "results": [
+    {
+      "ticker": "TPR",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 19,
+        "filings_with_body": 10,
+        "indexed_without_body": 9
+      },
+      "after": {
+        "filings_total": 19,
+        "filings_with_body": 19,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 19,
+        "annual": 3,
+        "interim": 6,
+        "trading_update": 0,
+        "other": 10,
+        "with_body": 19,
+        "period_coverage": {
+          "annual": {
+            "total": 3,
+            "with_body": 3
+          },
+          "interim": {
+            "total": 6,
+            "with_body": 6
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 10,
+            "with_body": 10
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 19,
+        "with_body_after": 19,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "note": "no missing IR allowlist bodies"
+      }
+    },
     {
       "ticker": "INTU",
       "reason": "indexed_without_body",
@@ -76,19 +145,21 @@
       }
     }
   ],
-  "improved": [],
+  "improved": [
+    "TPR"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-10T19:19:39.551988+00:00",
+    "snapshot_at": "2026-09-11T07:48:05.670099+00:00",
     "market_id": "sp500",
-    "buy_tier_count": 142,
+    "buy_tier_count": 140,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 15,
-    "bodies_min": 14,
+    "indexed_without_body": 24,
+    "bodies_min": 10,
     "bodies_median": 20.0,
     "bodies_max": 73,
     "coverage_scope": "canonical",
@@ -101,20 +172,22 @@
       "INTU",
       "APTV",
       "CRH",
+      "LMT",
       "TSN",
       "BXP",
       "FICO",
-      "LMT"
+      "TPR"
     ],
     "indexed_without_body_by_ticker": {
       "LDOS": 1,
       "INTU": 1,
       "APTV": 2,
       "CRH": 2,
+      "LMT": 1,
       "TSN": 1,
       "BXP": 2,
       "FICO": 5,
-      "LMT": 1
+      "TPR": 9
     },
     "parked_tickers": [
       "APTV",
@@ -128,16 +201,17 @@
     "parked_count": 7,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body": 10,
     "effective_indexed_without_body_tickers": [
-      "INTU"
+      "INTU",
+      "TPR"
     ],
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-10T19:19:58.173166+00:00",
+    "snapshot_at": "2026-09-11T07:48:23.523707+00:00",
     "market_id": "sp500",
-    "buy_tier_count": 142,
+    "buy_tier_count": 140,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
@@ -155,20 +229,20 @@
       "INTU",
       "APTV",
       "CRH",
+      "LMT",
       "TSN",
       "BXP",
-      "FICO",
-      "LMT"
+      "FICO"
     ],
     "indexed_without_body_by_ticker": {
       "LDOS": 1,
       "INTU": 1,
       "APTV": 2,
       "CRH": 2,
+      "LMT": 1,
       "TSN": 1,
       "BXP": 2,
-      "FICO": 5,
-      "LMT": 1
+      "FICO": 5
     },
     "parked_tickers": [
       "APTV",
@@ -200,10 +274,16 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-09-10T19:19:46.965190+00:00",
+    "assessed_at": "2026-09-11T07:48:10.658620+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
+      {
+        "ticker": "TPR",
+        "indexed_without_body": 9,
+        "filings_total": 19,
+        "filings_with_body": 10
+      },
       {
         "ticker": "FICO",
         "indexed_without_body": 5,
@@ -258,30 +338,30 @@
     "primary_blocker": "indexed_without_body",
     "force_discovery_scan": false,
     "auto_pin_tickers": [
+      "TPR",
       "FICO",
       "APTV",
       "BXP",
       "CRH",
       "INTU",
       "LDOS",
-      "LMT",
-      "TSN"
+      "LMT"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (8 tickers, top: FICO(5), APTV(2), BXP(2), CRH(2), INTU(1))"
+      "Prefer indexed-without-body body refetch (9 tickers, top: TPR(9), FICO(5), APTV(2), BXP(2), CRH(2))"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 8,
-      "indexed_without_body_rows": 15,
+      "indexed_without_body_tickers": 9,
+      "indexed_without_body_rows": 24,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 3.748755439000007,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2096.251244561,
+  "used_seconds": 7.955743623999993,
+  "budget_seconds": 1050.0,
+  "leftover_seconds": 1042.044256376,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -289,9 +369,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sp500",
-    "updated_at": "2026-09-10T19:19:58.180588+00:00",
+    "updated_at": "2026-09-11T07:48:23.530775+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -366,7 +446,7 @@
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
-    "had_complete_targets": true,
+    "had_complete_targets": false,
     "leftover_tickers": [
       "APTV",
       "BXP",
@@ -390,6 +470,6 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20260910-01"
+    "task_id": "eng-20260911-02"
   }
 }
