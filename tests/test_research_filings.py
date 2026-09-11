@@ -6841,6 +6841,34 @@ def test_parked_source_hunter_dfs_l_ftse_smallcap_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_ftse_smallcap_gle_l_builtins(tmp_path: Path):
+    """Regression: GLE.L parked IWB — mjgleesonplc.com FY2025/2024 AR + H1 statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("GLE.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("mj-gleeson-ar-2025.pdf" in url for url in urls)
+    assert any("mjgleeson-ar-2024-web.pdf" in url for url in urls)
+    assert any("results-for-the-half-year-ended-31-december-2024.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
+def test_parked_source_hunter_gle_l_ftse_smallcap_has_fetchable_ir():
+    """eng-20260911-09: GLE.L has live mjgleesonplc.com FY2025/2024 AR + H1 statutory PDFs."""
+    assert "GLE.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("GLE.L")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("mjgleesonplc.com" in url for url in urls)
+    assert any("mj-gleeson-ar-2025.pdf" in url for url in urls)
+    body = fetch_filing_body(urls[0])
+    assert body
+    assert len(body) >= 50000
+
+
 def test_parked_source_hunter_ultp_l_ftse_smallcap_skip():
     """eng-20260911-06: ULTP.L Investegate RNS fails allowlist live-fetch title_mismatch; IR bot-gated."""
     assert "ULTP.L" in PARKED_SOURCE_HUNTER_SKIP

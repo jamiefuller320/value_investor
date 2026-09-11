@@ -128,6 +128,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.dfscorporate.co.uk/media/qz5kd4bw/44642-dfs-ar-2024-web.pdf",
         "https://www.dfscorporate.co.uk/media/kftaxgtd/dfs-interim-report-h1-fy25.pdf",
     ],
+    # ftse_smallcap IWB blocker — GLE.L parked unfetchable_iwb; CH PDFs fail but mjgleesonplc.com statutory PDFs fetch.
+    "GLE.L": [
+        "https://www.mjgleesonplc.com/media/11xbnc3y/mj-gleeson-ar-2025.pdf",
+        "https://www.mjgleesonplc.com/media/h4he2vmc/mjgleeson-ar-2024-web.pdf",
+        "https://www.mjgleesonplc.com/media/nwwdqr2z/results-for-the-half-year-ended-31-december-2024.pdf",
+    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
