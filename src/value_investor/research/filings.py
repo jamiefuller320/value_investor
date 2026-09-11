@@ -540,6 +540,8 @@ _ANNUAL_PATTERNS = (
     r"\bfinal results\b",
     r"\bannual report\b",
     r"\bannual results\b",
+    r"\bannual information form\b",
+    r"\baif\b",
     r"\byear[- ]end results\b",
     r"\baudited results\b",
     r"\bfy\d+\s+results\b",
@@ -3668,6 +3670,7 @@ def _ir_allowlist_period_from_url(url: str) -> str:
         token in lower
         for token in (
             "annual",
+            "aif",  # Canadian Annual Information Form (e.g. CNQ_2025-AIF-….pdf)
             "fy",
             "full-year",
             "full_year",
