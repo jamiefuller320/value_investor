@@ -747,7 +747,7 @@ def test_committed_pin_skips_discovery_and_drops_ticker_cap(tmp_path: Path):
                 {
                     "ticker": "ABI.BR",
                     "market_id": "euro_depth",
-                    "until": "2026-09-11T00:00:00+00:00",
+                    "until": "2099-01-01T00:00:00+00:00",
                 }
             ]
         },
@@ -847,7 +847,7 @@ def test_committed_iwb_pin_does_not_starve_unmeasured(tmp_path: Path):
                 {
                     "ticker": "ABI.BR",
                     "market_id": "euro_depth",
-                    "until": "2026-09-11T00:00:00+00:00",
+                    "until": "2099-01-01T00:00:00+00:00",
                 }
             ]
         },
