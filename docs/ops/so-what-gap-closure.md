@@ -23,6 +23,10 @@ Batched tasks group all tickers sharing the same `(area, kind)` — e.g. every
 `fcf_note_without_overlay` name becomes one engineering task with `evidence.tickers[]`
 instead of one PR per ticker on shared `summary.py` / `pipeline.py` paths.
 
+The progress-report **So what?** section and Overview card also **group the same
+issue into one row + ticker list** (human gates and high-severity findings), so a
+long list of identical bridge/enforcement items does not repeat per name.
+
 First detector: buy-tier names in `docs/data/latest.json` with material screen vs
 filing FCF divergence (≥25%) or FCF action-note markers, without
 `fcf_basis_overlay`. Policy FCF no longer requires a human bridge when
@@ -75,4 +79,6 @@ ftse-progress-report build --write
 
 ## Dashboard
 
-Overview → Progress report → **So what? — needs your judgment** lists live `human_gate` items. Auto-queue counts are informational; engineering picks those up from the queue.
+Overview → Progress report → **So what? — needs your judgment** groups live
+`human_gate` items by issue kind (one row + ticker list). Auto-queue counts are
+informational; engineering picks those up from the queue.

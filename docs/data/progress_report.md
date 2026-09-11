@@ -157,34 +157,14 @@ Overall: **INFO**
 
 ## So what? (gap closure)
 
-- Findings: **56** (auto_queue=14, human_gate=22, observe=20); engineering tasks created this pass: **0**.
+- Findings: **45** (auto_queue=0, human_gate=45, observe=0); engineering tasks created this pass: **0**.
 - Auto-queue covers no-judgment enforcement gaps (e.g. FCF mismatch with uncapped buy/strong_buy). Human gate covers policy FCF bridge reviews.
-
-### High-severity so-whats
-
-- `BKG.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~46%. Enforcement must fail closed (overlay) without waiting for a human prompt.
-- `BME.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~39%. Enforcement must fail closed (overlay) without waiting for a human prompt.
-- `BT-A.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~35%. Enforcement must fail closed (overlay) without waiting for a human prompt.
-- `BTRW.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~111%. Enforcement must fail closed (overlay) without waiting for a human prompt.
-- `BYIT.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~29%. Enforcement must fail closed (overlay) without waiting for a human prompt.
-- `DOM.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~38%. Enforcement must fail closed (overlay) without waiting for a human prompt.
-- `FOUR.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~30%. Enforcement must fail closed (overlay) without waiting for a human prompt.
-- `GSK.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~27%. Enforcement must fail closed (overlay) without waiting for a human prompt.
-- `INCH.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~28%. Enforcement must fail closed (overlay) without waiting for a human prompt.
-- `ITV.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~30%. Enforcement must fail closed (overlay) without waiting for a human prompt.
-- `MEGP.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~38%. Enforcement must fail closed (overlay) without waiting for a human prompt.
-- `MGAM.L` (auto_queue): Buy-tier signal remains uncapped while screen vs filing FCF diverge by ~29%. Enforcement must fail closed (overlay) without waiting for a human prompt.
+- Same-issue names are grouped by kind (one row + ticker list), matching batched engineering tasks.
 
 ### Human gates
 
-- `ABDN.L`: Review filings for ABDN.L and write docs/data/research/ABDN.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
-- `BKG.L`: Review filings for BKG.L and write docs/data/research/BKG.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
-- `BME.L`: Review filings for BME.L and write docs/data/research/BME.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
-- `BT-A.L`: Review filings for BT-A.L and write docs/data/research/BT-A.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
-- `BTRW.L`: Review filings for BTRW.L and write docs/data/research/BTRW.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
-- `BYIT.L`: Review filings for BYIT.L and write docs/data/research/BYIT.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
-- `CNA.L`: Review filings for CNA.L and write docs/data/research/CNA.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
-- `DOM.L`: Review filings for DOM.L and write docs/data/research/DOM.L/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true).
+- **45 names** (`fcf_bridge_needed`): If auto policy cannot run (missing filing/company figures), write docs/data/research/<ticker>/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true). Otherwise leave the automatic majority / filing fallback in place.
+  - Tickers: `ABDN.L`, `ABF.L`, `AEP.L`, `ALFA.L`, `BKG.L`, `BME.L`, `BOWL.L`, `BREE.L`
 
 
 ## References
