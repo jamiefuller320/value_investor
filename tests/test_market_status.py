@@ -421,7 +421,7 @@ def test_dashboard_assets_include_market_status_grid():
     assert "function heldVsMarketLabelIndexes(pointCount" in charts_js
     assert "function heldVsMarketDateLabels(points, xAt" in charts_js
     assert "HELD_VS_MARKET_LABEL_ALL_MAX" in charts_js
-    assert "text-anchor=\"${anchor}\"" in charts_js or 'text-anchor="${anchor}"' in charts_js
+    assert 'text-anchor="${anchor}"' in charts_js or 'text-anchor="${anchor}"' in charts_js
     assert "function renderHeldVsMarketSparkline(payload)" in charts_js
     assert "function renderHeldVsMarketChart(payload)" in charts_js
     assert "heldVsMarketDateLabels(drawn.points, drawn.xAt" in charts_js
