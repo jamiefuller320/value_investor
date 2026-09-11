@@ -185,7 +185,7 @@ class CompanyReport:
             "screening_inputs": self.screening_inputs,
             "key_metrics": self.key_metrics,
             "cashflow_metrics": self.cashflow_metrics,
-            "fcf": self.fcf,
+            "fcf": enforced.fcf,
             "piotroski_f_score": self.piotroski_f_score,
             "healthcare_overlay": self.healthcare_overlay,
             "healthcare_price_erosion_overlay": self.healthcare_price_erosion_overlay,
@@ -756,8 +756,9 @@ def honour_fcf_action_note_enforcement(report: CompanyReport) -> CompanyReport:
     from value_investor.scoring.fcf import fcf_bundle_from_persisted_report
 
     adjusted = str(report.adjusted_signal or report.signal)
+    original_fcf = report.fcf if isinstance(report.fcf, dict) else {}
     fcf = fcf_bundle_from_persisted_report(
-        report.fcf if isinstance(report.fcf, dict) else None,
+        original_fcf or None,
         action_note=report.action_note,
         key_metrics=report.key_metrics,
     )
@@ -784,10 +785,14 @@ def honour_fcf_action_note_enforcement(report: CompanyReport) -> CompanyReport:
         fcf_bundle=fcf if fcf else None,
         screen_ttm=screen_ttm,
     )
+    fcf_changed = fcf.get("filing_aligned") != original_fcf.get("filing_aligned") or fcf.get(
+        "screen_ttm"
+    ) != original_fcf.get("screen_ttm")
     if (
         overlay == report.fcf_basis_overlay
         and adjusted == (report.adjusted_signal or report.signal)
         and conviction == report.conviction_score
+        and not fcf_changed
     ):
         return report
     return replace(
@@ -795,6 +800,7 @@ def honour_fcf_action_note_enforcement(report: CompanyReport) -> CompanyReport:
         fcf_basis_overlay=overlay,
         adjusted_signal=adjusted,
         conviction_score=conviction,
+        fcf=fcf if fcf else report.fcf,
     )
 
 

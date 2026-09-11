@@ -1471,13 +1471,19 @@ def fcf_bundle_from_persisted_report(
     note = str(action_note or "")
     metrics = key_metrics or {}
 
+    # Prefer an explicit note "filing …" figure over key_metrics FCF: metrics often
+    # hold company-adjusted / policy values that are not filing-aligned OCF−CapEx.
+    note_filing = parse_filing_aligned_from_action_note(note)
     filing = _float_or_none(bundle.get("filing_aligned"))
     if filing is None:
-        filing = _float_or_none(metrics.get("free_cashflow")) or _float_or_none(metrics.get("FCF"))
-    if filing is None:
-        filing = parse_filing_aligned_from_action_note(note)
+        if note_filing is not None:
+            filing = note_filing
+        else:
+            filing = _float_or_none(metrics.get("free_cashflow")) or _float_or_none(
+                metrics.get("FCF")
+            )
     if filing is not None:
-        bundle.setdefault("filing_aligned", filing)
+        bundle["filing_aligned"] = filing
 
     screen = _float_or_none(bundle.get("screen_ttm"))
     if screen is None:
@@ -1485,7 +1491,7 @@ def fcf_bundle_from_persisted_report(
     if screen is None:
         screen = parse_screen_ttm_from_action_note(note)
     if screen is not None:
-        bundle.setdefault("screen_ttm", screen)
+        bundle["screen_ttm"] = screen
 
     return bundle
 

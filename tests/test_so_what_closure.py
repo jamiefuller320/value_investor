@@ -9,6 +9,7 @@ from value_investor.so_what_closure import (
     CLOSURE_HUMAN_GATE,
     apply_so_what_auto_queue,
     build_so_what_section,
+    group_so_what_rows,
     render_so_what_markdown,
     scan_so_what_issues,
 )
@@ -22,7 +23,7 @@ def _report(
     adjusted: str | None = None,
     overlay: bool = False,
     screen: float = 200.0,
-    filing: float = 100.0,
+    filing: float | None = 100.0,
     note: str = "Strong Buy | FCF basis mismatch: filing vs screen TTM",
 ) -> dict:
     return {
@@ -172,3 +173,77 @@ def test_build_section_and_markdown(tmp_path: Path):
     md = render_so_what_markdown(section)
     assert "So what?" in md
     assert "FAKE.L" in md
+
+
+def test_group_so_what_rows_collapses_same_kind():
+    rows = [
+        {
+            "finding_id": "fcf_bridge_needed:AAA.L",
+            "kind": "fcf_bridge_needed",
+            "ticker": "AAA.L",
+            "severity": "medium",
+            "so_what": "missing filing",
+            "recommended_closure": CLOSURE_HUMAN_GATE,
+            "human_action": "write docs/data/research/AAA.L/sources/fcf_bridge.json",
+            "human_doc_path": "docs/ops/fcf-basis-bridges.md",
+        },
+        {
+            "finding_id": "fcf_bridge_needed:BBB.L",
+            "kind": "fcf_bridge_needed",
+            "ticker": "BBB.L",
+            "severity": "medium",
+            "so_what": "missing filing",
+            "recommended_closure": CLOSURE_HUMAN_GATE,
+            "human_action": "write docs/data/research/BBB.L/sources/fcf_bridge.json",
+            "human_doc_path": "docs/ops/fcf-basis-bridges.md",
+        },
+    ]
+    groups = group_so_what_rows(rows)
+    assert len(groups) == 1
+    assert groups[0]["count"] == 2
+    assert groups[0]["tickers"] == ["AAA.L", "BBB.L"]
+    assert "<ticker>" in (groups[0]["human_action"] or "")
+
+
+def test_markdown_groups_same_issue_names(tmp_path: Path):
+    latest = tmp_path / "latest.json"
+    write_json(
+        latest,
+        {
+            "reports": [
+                _report(ticker="AAA.L", filing=None, overlay=True),
+                _report(ticker="BBB.L", filing=None, overlay=True),
+            ]
+        },
+        compact=False,
+    )
+    section = build_so_what_section(
+        apply=False,
+        latest_path=latest,
+        artifacts_dir=tmp_path,
+        tasks_path=tmp_path / "engineering_tasks.json",
+        snapshot_path=tmp_path / "so_what_closure.json",
+    )
+    assert section["counts"]["human_gate"] >= 2
+    assert section["human_gate_groups"]
+    assert section["human_gate_groups"][0]["count"] >= 2
+    md = render_so_what_markdown(section)
+    assert "names" in md
+    assert "AAA.L" in md and "BBB.L" in md
+
+
+def test_scan_backfills_filing_from_action_note_clears_bridge_gate(tmp_path: Path):
+    """Stale exports keep mismatch notes but drop structured fcf — recover bases."""
+    report = {
+        "ticker": "ABDN.L",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "fcf_basis_overlay": True,
+        "action_note": (
+            "Buy — favourable entry timing | FCF basis mismatch: filing £406M | "
+            "screen TTM £967.8M | RSI 42"
+        ),
+        "fcf": None,
+    }
+    findings = scan_so_what_issues(reports=[report], artifacts_dir=tmp_path)
+    assert "fcf_bridge_needed" not in {f.kind for f in findings}

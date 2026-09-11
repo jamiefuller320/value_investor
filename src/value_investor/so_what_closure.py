@@ -53,6 +53,108 @@ _BATCH_TASK_TITLES: dict[str, str] = {
     "fcf_enforcement_gap": "Close FCF basis enforcement gap (batched tickers)",
 }
 
+_KIND_LABELS: dict[str, str] = {
+    "fcf_enforcement_gap": (
+        "Buy-tier signal remains uncapped while screen vs filing FCF diverge materially. "
+        "Enforcement must fail closed (overlay) without waiting for a human prompt."
+    ),
+    "fcf_note_without_overlay": (
+        "Action note flags an FCF basis concern but adjusted_signal was not downgraded. "
+        "Treat as an enforcement gap."
+    ),
+    "fcf_bridge_needed": (
+        "Buy-tier FCF concern with no filing-aligned or company-adjusted figure for auto "
+        "majority / filing fallback. Optional human bridge can still lock policy FCF; "
+        "default path remains fail-closed."
+    ),
+    "fcf_mild_mismatch": (
+        "Mild screen vs filing FCF gap. Observe unless it widens past 25% or an action "
+        "note appears on a buy-tier name."
+    ),
+}
+
+_SHARED_HUMAN_ACTIONS: dict[str, str] = {
+    "fcf_bridge_needed": (
+        "If auto policy cannot run (missing filing/company figures), write "
+        "docs/data/research/<ticker>/sources/fcf_bridge.json "
+        "(policy_fcf + policy_basis + source_refs; set resolved=true). "
+        "Otherwise leave the automatic majority / filing fallback in place."
+    ),
+}
+
+
+def _kind_from_row(row: dict[str, Any]) -> str:
+    kind = str(row.get("kind") or "").strip()
+    if kind:
+        return kind
+    finding_id = str(row.get("finding_id") or "")
+    if ":" in finding_id:
+        return finding_id.split(":", 1)[0]
+    return "unknown"
+
+
+def _normalize_human_action(action: str | None, *, kind: str) -> str:
+    shared = _SHARED_HUMAN_ACTIONS.get(kind)
+    if shared:
+        return shared
+    text = str(action or "").strip()
+    if not text:
+        return ""
+    # Collapse per-ticker research paths so identical actions group cleanly.
+    parts = text.split("docs/data/research/")
+    if len(parts) == 2 and "/sources/" in parts[1]:
+        suffix = parts[1].split("/sources/", 1)[1]
+        return f"{parts[0]}docs/data/research/<ticker>/sources/{suffix}"
+    return text
+
+
+def group_so_what_rows(
+    rows: list[dict[str, Any]],
+    *,
+    closure_key: str = "recommended_closure",
+) -> list[dict[str, Any]]:
+    """Collapse same-kind findings into one row with a ticker list."""
+    buckets: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        kind = _kind_from_row(row)
+        closure = str(row.get(closure_key) or row.get("recommended_closure") or "").strip()
+        buckets[(kind, closure)].append(row)
+
+    grouped: list[dict[str, Any]] = []
+    for (kind, closure), members in sorted(buckets.items()):
+        tickers = sorted(
+            {
+                str(m.get("ticker") or "").strip()
+                for m in members
+                if str(m.get("ticker") or "").strip()
+            }
+        )
+        sample = members[0]
+        severities = {str(m.get("severity") or "") for m in members}
+        severity = (
+            "high"
+            if "high" in severities
+            else ("medium" if "medium" in severities else (next(iter(severities), "") or None))
+        )
+        grouped.append(
+            {
+                "kind": kind,
+                "label": _KIND_LABELS.get(kind, kind),
+                "recommended_closure": closure or None,
+                "severity": severity,
+                "so_what": _KIND_LABELS.get(kind) or sample.get("so_what"),
+                "human_action": _normalize_human_action(sample.get("human_action"), kind=kind),
+                "human_doc_path": sample.get("human_doc_path"),
+                "count": len(tickers),
+                "tickers": tickers,
+                "tickers_preview": tickers[:12],
+            }
+        )
+    grouped.sort(key=lambda g: (-int(g.get("count") or 0), str(g.get("kind") or "")))
+    return grouped
+
 
 @dataclass(frozen=True)
 class SoWhatFinding:
@@ -145,11 +247,21 @@ def _fcf_findings_from_report(
 
     signal = _norm_signal(report.get("signal"))
     effective = _norm_signal(report.get("adjusted_signal")) or signal
-    fcf = report.get("fcf") if isinstance(report.get("fcf"), dict) else {}
+    # Recover structured bases from persisted mismatch notes when fcf was dropped
+    # on overlay/export refresh (notes keep filing/screen figures; fcf blob does not).
+    from value_investor.scoring.fcf import fcf_bundle_from_persisted_report
+
+    raw_fcf = report.get("fcf") if isinstance(report.get("fcf"), dict) else None
+    key_metrics = report.get("key_metrics") if isinstance(report.get("key_metrics"), dict) else None
+    action_note = str(report.get("action_note") or "").strip()
+    fcf = fcf_bundle_from_persisted_report(
+        raw_fcf,
+        action_note=action_note,
+        key_metrics=key_metrics,
+    )
     screen = _as_float(fcf.get("screen_ttm"))
     filing = _as_float(fcf.get("filing_aligned"))
     overlay = bool(report.get("fcf_basis_overlay"))
-    action_note = str(report.get("action_note") or "").strip()
     bridge = _load_bridge(ticker, artifacts_dir=artifacts_dir)
     bridge_ok = _policy_fcf_resolved(bridge, fcf)
 
@@ -579,8 +691,11 @@ def apply_so_what_auto_queue(
         "human_gates": [
             {
                 "finding_id": f.finding_id,
+                "kind": f.kind,
                 "ticker": f.ticker,
+                "severity": f.severity,
                 "so_what": f.so_what,
+                "recommended_closure": f.recommended_closure,
                 "human_action": f.human_action,
                 "human_doc_path": f.human_doc_path,
             }
@@ -606,6 +721,20 @@ def so_what_summary_for_progress(snapshot: dict[str, Any] | None = None) -> dict
     )
     findings = snapshot.get("findings") if isinstance(snapshot.get("findings"), list) else []
     high = [f for f in findings if isinstance(f, dict) and f.get("severity") == "high"]
+    high_groups = group_so_what_rows(high)
+    human_gate_groups = group_so_what_rows(
+        [g for g in human_gates if isinstance(g, dict)],
+        closure_key="recommended_closure",
+    )
+    # Fall back: derive human-gate groups from findings when snapshot gates lack kind.
+    if not human_gate_groups and findings:
+        human_gate_groups = group_so_what_rows(
+            [
+                f
+                for f in findings
+                if isinstance(f, dict) and f.get("recommended_closure") == CLOSURE_HUMAN_GATE
+            ]
+        )
     return {
         "generated_at": snapshot.get("generated_at"),
         "counts": {
@@ -618,13 +747,16 @@ def so_what_summary_for_progress(snapshot: dict[str, Any] | None = None) -> dict
         "high_severity": [
             {
                 "finding_id": f.get("finding_id"),
+                "kind": f.get("kind"),
                 "ticker": f.get("ticker"),
                 "so_what": f.get("so_what"),
                 "recommended_closure": f.get("recommended_closure"),
             }
             for f in high[:12]
         ],
+        "high_severity_groups": high_groups,
         "human_gates_preview": human_gates[:8],
+        "human_gate_groups": human_gate_groups,
     }
 
 
@@ -671,8 +803,11 @@ def build_so_what_section(
             "human_gates": [
                 {
                     "finding_id": f.finding_id,
+                    "kind": f.kind,
                     "ticker": f.ticker,
+                    "severity": f.severity,
                     "so_what": f.so_what,
+                    "recommended_closure": f.recommended_closure,
                     "human_action": f.human_action,
                     "human_doc_path": f.human_doc_path,
                 }
@@ -683,11 +818,23 @@ def build_so_what_section(
     return so_what_summary_for_progress(snapshot)
 
 
+def _format_ticker_list(tickers: list[Any], *, limit: int = 12) -> str:
+    names = [str(t).strip() for t in tickers if str(t).strip()]
+    if not names:
+        return "—"
+    shown = names[:limit]
+    text = ", ".join(f"`{name}`" for name in shown)
+    remaining = len(names) - len(shown)
+    if remaining > 0:
+        text += f" (+{remaining} more)"
+    return text
+
+
 def render_so_what_markdown(section: dict[str, Any] | None = None) -> str:
     """Render markdown from a progress-report so_what section (or full snapshot)."""
     if section is None:
         summary = so_what_summary_for_progress()
-    elif "high_severity" in section:
+    elif "high_severity" in section or "human_gate_groups" in section:
         summary = section
     else:
         summary = so_what_summary_for_progress(section)
@@ -706,19 +853,33 @@ def render_so_what_markdown(section: dict[str, Any] | None = None) -> str:
             "- Auto-queue covers no-judgment enforcement gaps (e.g. FCF mismatch with "
             "uncapped buy/strong_buy). Human gate covers policy FCF bridge reviews."
         ),
+        "- Same-issue names are grouped by kind (one row + ticker list), matching batched "
+        "engineering tasks.",
     ]
-    high = summary.get("high_severity") or []
-    if high:
+    high_groups = summary.get("high_severity_groups") or []
+    if not high_groups and summary.get("high_severity"):
+        high_groups = group_so_what_rows(
+            [row for row in summary.get("high_severity") or [] if isinstance(row, dict)]
+        )
+    if high_groups:
         lines.extend(["", "### High-severity so-whats", ""])
-        for row in high:
+        for group in high_groups:
+            closure = group.get("recommended_closure") or "—"
             lines.append(
-                f"- `{row.get('ticker')}` ({row.get('recommended_closure')}): {row.get('so_what')}"
+                f"- **{group.get('count', 0)} names** (`{group.get('kind')}`, {closure}): "
+                f"{group.get('so_what') or group.get('label')}"
             )
-    gates = summary.get("human_gates_preview") or []
-    if gates:
+            lines.append(f"  - Tickers: {_format_ticker_list(group.get('tickers') or [])}")
+    gates_groups = summary.get("human_gate_groups") or []
+    if not gates_groups and summary.get("human_gates_preview"):
+        gates_groups = group_so_what_rows(
+            [row for row in summary.get("human_gates_preview") or [] if isinstance(row, dict)]
+        )
+    if gates_groups:
         lines.extend(["", "### Human gates", ""])
-        for row in gates:
-            action = row.get("human_action") or row.get("so_what")
-            lines.append(f"- `{row.get('ticker')}`: {action}")
+        for group in gates_groups:
+            action = group.get("human_action") or group.get("so_what") or group.get("label")
+            lines.append(f"- **{group.get('count', 0)} names** (`{group.get('kind')}`): {action}")
+            lines.append(f"  - Tickers: {_format_ticker_list(group.get('tickers') or [])}")
     lines.append("")
     return "\n".join(lines)

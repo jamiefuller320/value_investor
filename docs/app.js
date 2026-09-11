@@ -246,15 +246,48 @@ function renderProgressReport(data) {
   const humanGateCount = Number(soCounts.human_gate || 0);
   const autoQueueCount = Number(soCounts.auto_queue || 0);
   const observeCount = Number(soCounts.observe || 0);
+  const gateGroups = soWhat.human_gate_groups || [];
   const gates = soWhat.human_gates_preview || [];
   const soWhatDocUrl = githubOpsDocUrl("docs/ops/so-what-gap-closure.md");
-  const gatesHtml = gates.length
-    ? `<ul class="list-plain small so-what-gate-list">${gates
-        .map((row) => {
-          const docPath = row.human_doc_path || "";
-          const docUrl = docPath ? githubOpsDocUrl(docPath) : null;
-          const action = row.human_action || row.so_what || "";
-          return `<li class="so-what-gate-item">
+  const formatTickerPreview = (tickers, limit = 10) => {
+    const names = (tickers || []).map((t) => String(t || "").trim()).filter(Boolean);
+    if (!names.length) return "—";
+    const shown = names.slice(0, limit);
+    const extra = names.length - shown.length;
+    return `${shown.join(", ")}${extra > 0 ? ` (+${extra} more)` : ""}`;
+  };
+  let gatesHtml;
+  if (gateGroups.length) {
+    gatesHtml = `<ul class="list-plain small so-what-gate-list">${gateGroups
+      .map((group) => {
+        const docPath = group.human_doc_path || "";
+        const docUrl = docPath ? githubOpsDocUrl(docPath) : null;
+        const action = group.human_action || group.so_what || group.label || "";
+        const count = Number(group.count || (group.tickers || []).length || 0);
+        return `<li class="so-what-gate-item so-what-gate-group">
+            <div class="so-what-gate-group-head">
+              <strong>${esc(String(count))} names</strong>
+              <span class="muted so-what-gate-kind">${esc(group.kind || "issue")}</span>
+              ${
+                docUrl
+                  ? `<a class="small" href="${esc(docUrl)}" target="_blank" rel="noopener">Runbook</a>`
+                  : ""
+              }
+            </div>
+            <span class="so-what-gate-action">${esc(action)}</span>
+            <div class="small muted so-what-gate-tickers">${esc(
+              formatTickerPreview(group.tickers_preview || group.tickers || [])
+            )}</div>
+          </li>`;
+      })
+      .join("")}</ul>`;
+  } else if (gates.length) {
+    gatesHtml = `<ul class="list-plain small so-what-gate-list">${gates
+      .map((row) => {
+        const docPath = row.human_doc_path || "";
+        const docUrl = docPath ? githubOpsDocUrl(docPath) : null;
+        const action = row.human_action || row.so_what || "";
+        return `<li class="so-what-gate-item">
             <strong>${esc(row.ticker || "—")}</strong>
             <span class="so-what-gate-action">${esc(action)}</span>
             ${
@@ -263,11 +296,14 @@ function renderProgressReport(data) {
                 : ""
             }
           </li>`;
-        })
-        .join("")}</ul>`
-    : humanGateCount > 0
-      ? '<p class="small muted">Human gates present — open the full report for the complete list.</p>'
-      : '<p class="small muted">No human gates right now.</p>';
+      })
+      .join("")}</ul>`;
+  } else if (humanGateCount > 0) {
+    gatesHtml =
+      '<p class="small muted">Human gates present — open the full report for the complete list.</p>';
+  } else {
+    gatesHtml = '<p class="small muted">No human gates right now.</p>';
+  }
   const soWhatSection = `
       <section class="so-what-section${humanGateCount > 0 ? " so-what-section-attention" : ""}">
         <div class="so-what-section-header">
@@ -275,8 +311,8 @@ function renderProgressReport(data) {
           ${soWhatDocUrl ? `<a class="small" href="${esc(soWhatDocUrl)}" target="_blank" rel="noopener">How this works</a>` : ""}
         </div>
         <p class="small muted" style="margin-top:0">
-          Human gates need a policy/filing choice. Enforcement gaps
-          (<strong>${esc(String(autoQueueCount))}</strong> auto-queued) are handled by the engineering queue without a prompt.
+          Human gates need a policy/filing choice. Same-issue names are grouped into one row.
+          Enforcement gaps (<strong>${esc(String(autoQueueCount))}</strong> auto-queued) are handled by the engineering queue without a prompt.
           ${observeCount ? ` · ${esc(String(observeCount))} observe-only` : ""}
         </p>
         <div class="grid so-what-count-grid">
