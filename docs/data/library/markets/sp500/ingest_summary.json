@@ -1,46 +1,46 @@
 {
-  "run_at": "2026-09-11T13:49:37.720886+00:00",
+  "run_at": "2026-09-11T14:38:00.678652+00:00",
   "market_id": "sp500",
   "targets": [
-    "INTU"
+    "WYNN"
   ],
   "target_details": [
     {
-      "ticker": "INTU",
-      "priority_score": 17.110200000000003,
-      "filings_total": 20,
-      "filings_with_body": 19,
+      "ticker": "WYNN",
+      "priority_score": 14.7727,
+      "filings_total": 23,
+      "filings_with_body": 22,
       "indexed_without_body": 1,
       "reason": "indexed_without_body"
     }
   ],
   "results": [
     {
-      "ticker": "INTU",
+      "ticker": "WYNN",
       "reason": "indexed_without_body",
       "before": {
-        "filings_total": 20,
-        "filings_with_body": 19,
+        "filings_total": 23,
+        "filings_with_body": 22,
         "indexed_without_body": 1
       },
       "after": {
-        "filings_total": 20,
-        "filings_with_body": 19,
-        "indexed_without_body": 1
+        "filings_total": 23,
+        "filings_with_body": 23,
+        "indexed_without_body": 0
       },
-      "improved": false,
+      "improved": true,
       "regime": "sec_edgar",
       "filings_summary": {
-        "total": 20,
-        "annual": 3,
+        "total": 23,
+        "annual": 2,
         "interim": 7,
         "trading_update": 0,
-        "other": 10,
-        "with_body": 19,
+        "other": 14,
+        "with_body": 23,
         "period_coverage": {
           "annual": {
-            "total": 3,
-            "with_body": 3
+            "total": 2,
+            "with_body": 2
           },
           "interim": {
             "total": 7,
@@ -51,8 +51,8 @@
             "with_body": 0
           },
           "other": {
-            "total": 10,
-            "with_body": 9
+            "total": 14,
+            "with_body": 14
           }
         }
       },
@@ -62,8 +62,8 @@
         "attempted": 0,
         "fetched": 0,
         "failed": 0,
-        "with_body_before": 19,
-        "with_body_after": 19,
+        "with_body_before": 23,
+        "with_body_after": 23,
         "investegate_fallbacks": 0,
         "skipped_unfetchable": 0,
         "deadline_hit": false,
@@ -76,12 +76,14 @@
       }
     }
   ],
-  "improved": [],
+  "improved": [
+    "WYNN"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-11T13:48:40.024201+00:00",
+    "snapshot_at": "2026-09-11T14:37:27.155899+00:00",
     "market_id": "sp500",
     "buy_tier_count": 140,
     "unmeasured_buy_tier": 0,
@@ -121,21 +123,20 @@
       "BXP",
       "CRH",
       "FICO",
+      "INTU",
       "LDOS",
       "LMT",
       "TSN"
     ],
-    "parked_count": 7,
+    "parked_count": 8,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
-    "effective_indexed_without_body_tickers": [
-      "INTU"
-    ],
-    "ingest_exhausted": false
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-09-11T13:48:59.942634+00:00",
+    "snapshot_at": "2026-09-11T14:38:00.664895+00:00",
     "market_id": "sp500",
     "buy_tier_count": 140,
     "unmeasured_buy_tier": 0,
@@ -193,42 +194,43 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
+  "discovery_scan": {
+    "scanned": 140,
+    "hits": 0,
+    "new_rows_total": 0,
+    "curiosity_total": 0,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "FICO",
+      "APTV",
+      "BXP",
+      "CRH",
+      "INTU",
+      "LDOS",
+      "LMT",
+      "TSN"
+    ],
+    "runtime_cutoff": false
+  },
+  "maintenance_mode": true,
   "parity_handoff": null,
   "parallel_sprint_handoff": {
-    "advanced": true,
-    "parallel_stream": 1,
-    "from_market": "sp500",
-    "to_market": "asx200",
-    "stream_markets_after": [
-      "asx200"
-    ],
-    "parity_event": {
-      "recorded": false,
-      "reason": "ingest_exhausted_leftover_gaps",
-      "market_id": "sp500",
-      "ingest_exhausted": true,
-      "exhausted_maintenance_recorded": true,
-      "parked_tickers": [
-        "APTV",
-        "BXP",
-        "CRH",
-        "FICO",
-        "INTU",
-        "LDOS",
-        "LMT",
-        "TSN"
-      ],
-      "learning_admitted_changed": false,
-      "learning_admitted": true
-    },
-    "at": "2026-09-11T13:49:02.416107+00:00",
-    "ingest_parity_recorded": false
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "sp500"
   },
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-09-11T13:48:47.474114+00:00",
+    "assessed_at": "2026-09-11T14:37:31.319928+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -307,9 +309,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 4.983905086000021,
-  "budget_seconds": 1526.725986771,
-  "leftover_seconds": 1521.742081685,
+  "used_seconds": 25.27837967299996,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3574.721620327,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -317,9 +319,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sp500",
-    "updated_at": "2026-09-11T13:48:59.950743+00:00",
+    "updated_at": "2026-09-11T14:38:00.671000+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 3,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -404,7 +406,7 @@
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
-    "had_complete_targets": true,
+    "had_complete_targets": false,
     "leftover_tickers": [
       "APTV",
       "BXP",
