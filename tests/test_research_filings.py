@@ -5994,6 +5994,37 @@ def test_ingest_filings_tsx60_gib_a_indexes_ir_allowlist_bodies(
     assert any(row.get("has_body") for row in index.get("filings") or [])
 
 
+def test_fetch_filings_ir_allowlist_tsx60_cnq_to_builtins(tmp_path: Path):
+    """Regression: CNQ.TO parked IWB — SEC EX-99.2 MD&A exhibit HTML for recent quarters."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("CNQ.TO", path=allowlist_path)
+    assert len(rows) == 4
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert all("sec.gov/Archives/edgar/data/1017413" in url for url in urls)
+    assert any("a09302025q3mda.htm" in url for url in urls)
+    assert any("a12312025q4mda.htm" in url for url in urls)
+    assert any("a03312026q1mda.htm" in url for url in urls)
+    assert any("a06302026q2mda.htm" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "interim") == 3
+    assert sum(1 for row in rows if row["period"] == "other") == 1
+
+
+def test_parked_source_hunter_cnq_to_tsx60_has_fetchable_ir():
+    """eng-20260911-01: CNQ.TO has live SEC EX-99.2 MD&A exhibits for recent quarters."""
+    assert "CNQ.TO" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("CNQ.TO")
+    assert len(rows) == 4
+    urls = [row["url"] for row in rows]
+    assert any("a06302026q2mda.htm" in url for url in urls)
+    body, source = _fetch_ir_allowlist_body(rows[-1], ticker="CNQ.TO")
+    assert body
+    assert source == "pdf"
+    assert len(body) >= 50000
+
+
 @patch("value_investor.research.filings.fetch_filings_asx_news", return_value=[])
 @patch("value_investor.research.filings.fetch_filings_asx_direct", return_value=[])
 def test_ingest_filings_asx200_ebo_ax_indexes_ir_allowlist_bodies(

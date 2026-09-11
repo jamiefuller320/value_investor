@@ -364,6 +364,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://announcements.asx.com.au/asxpdf/20250512/pdf/06jmnm30pch1kv.pdf",
         "https://announcements.asx.com.au/asxpdf/20260511/pdf/06zg0w0pw5rswl.pdf",
     ],
+    # tsx60 IWB blocker — CNQ.TO parked unfetchable_iwb; 6-K covers fail substantiveness
+    # gate but SEC EX-99.2 MD&A exhibit HTML fetches and validates with CNQ issuer alias.
+    "CNQ.TO": [
+        "https://www.sec.gov/Archives/edgar/data/1017413/000101741325000056/a09302025q3mda.htm",
+        "https://www.sec.gov/Archives/edgar/data/1017413/000101741326000006/a12312025q4mda.htm",
+        "https://www.sec.gov/Archives/edgar/data/1017413/000101741326000024/a03312026q1mda.htm",
+        "https://www.sec.gov/Archives/edgar/data/1017413/000101741326000043/a06302026q2mda.htm",
+    ],
     # tsx60 buy-tier deepen — unmeasured GIB-A.TO (class-share news query + no GIB-A SEC ticker).
     "GIB-A.TO": [
         "https://www.sec.gov/Archives/edgar/data/1061574/000119312525322911/d88305d40f.htm",
@@ -501,6 +509,7 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "NOVN": ("Novartis", "Novartis AG"),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
+    "CNQ": ("Canadian Natural Resources", "Canadian Natural Resources Limited"),
 }
 
 SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
