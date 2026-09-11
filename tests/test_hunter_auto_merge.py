@@ -347,6 +347,9 @@ def test_classify_hunter_fix_kind_for_gate_failures():
     )
     assert classify_hunter_fix_kind(fetch) == HunterFixKind.LIVE_FETCH_FAILED
 
+    too_many = HunterGateResult(False, "ALLOWLIST requires 1–3 new URL(s)")
+    assert classify_hunter_fix_kind(too_many) == HunterFixKind.TOO_MANY_URLS
+
     scope = HunterGateResult(False, "unexpected changed files: foo.py")
     assert classify_hunter_fix_kind(scope) is None
 

@@ -130,6 +130,13 @@ def _fix_instructions(fix_kind: HunterFixKind) -> str:
             "the outcome to SKIP with a detailed reason (>= 20 chars) and remove the bad "
             "URL(s). Keep at most 3 new URLs."
         )
+    if fix_kind == HunterFixKind.TOO_MANY_URLS:
+        return (
+            "Trim the new `_BUILTIN_IR_URLS` entry for this ticker to 1–3 HTTPS issuer IR "
+            "URLs (prefer the newest annual + one interim if both exist). Update the "
+            "matching `test_parked_source_hunter_*` / allowlist regression assertions to "
+            "the same URL set. Do not add SKIP."
+        )
     return "Fix the hunter merge-gate failure."
 
 
