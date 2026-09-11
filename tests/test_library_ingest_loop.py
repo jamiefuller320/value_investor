@@ -723,6 +723,8 @@ def test_load_library_ingest_pins_filters_market_and_expiry(tmp_path: Path):
 
 
 def test_committed_pin_skips_discovery_and_drops_ticker_cap(tmp_path: Path):
+    from datetime import UTC, datetime, timedelta
+
     root = tmp_path / "library"
     market = "euro_depth"
     screen_dir = root / "markets" / market / "screen"
@@ -740,6 +742,8 @@ def test_committed_pin_skips_discovery_and_drops_ticker_cap(tmp_path: Path):
         )
     reports = [_report("ABI.BR"), _report("RAND.AS")]
     pins_path = tmp_path / "pins.json"
+    # Relative future — hard-coded calendar days expire and re-open discovery.
+    pin_until = (datetime.now(UTC) + timedelta(days=7)).isoformat()
     write_json(
         pins_path,
         {
@@ -747,7 +751,7 @@ def test_committed_pin_skips_discovery_and_drops_ticker_cap(tmp_path: Path):
                 {
                     "ticker": "ABI.BR",
                     "market_id": "euro_depth",
-                    "until": "2099-01-01T00:00:00+00:00",
+                    "until": pin_until,
                 }
             ]
         },
@@ -820,6 +824,8 @@ def test_committed_pin_skips_discovery_and_drops_ticker_cap(tmp_path: Path):
 
 def test_committed_iwb_pin_does_not_starve_unmeasured(tmp_path: Path):
     """Regression: ABI.BR pin excluded AED.BR from every euro slot after 4 Sep."""
+    from datetime import UTC, datetime, timedelta
+
     root = tmp_path / "library"
     market = "euro_depth"
     research = root / "markets" / market / "screen" / "research"
@@ -840,6 +846,7 @@ def test_committed_iwb_pin_does_not_starve_unmeasured(tmp_path: Path):
         )
     reports = [_report("ABI.BR"), _report("AED.BR")]
     pins_path = tmp_path / "pins.json"
+    pin_until = (datetime.now(UTC) + timedelta(days=7)).isoformat()
     write_json(
         pins_path,
         {
@@ -847,7 +854,7 @@ def test_committed_iwb_pin_does_not_starve_unmeasured(tmp_path: Path):
                 {
                     "ticker": "ABI.BR",
                     "market_id": "euro_depth",
-                    "until": "2099-01-01T00:00:00+00:00",
+                    "until": pin_until,
                 }
             ]
         },
