@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-11T06:24:33+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-11T10:46:00+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -340,6 +340,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L344 | **Official industry-outlook series after filings for structural flags** | If structural/competitive questions stay partially_resolved after readable principal-risks and segment notes, allow a bounded ingest of named official series (Ofcom Media Nations, AA/WARC Expenditure Report) as colour plus quantified YoY — never as a substitute for issuer filings, and never via open-web opinion scrape. | ITV.L (or another media name) still has the structural-ad question partially_resolved after CH principal-risks and pension notes are ingested with readable bodies |
 | L345 | **Observe-only narrow sector-thesis overlay with issuer triggers** | Later: test a documented thesis such as UK linear-TV advertising as observe-only fields, applied only when issuer segment mix or filing language matches, not the Communication Services bucket. Compare archive/sim excess before any live bind; reuse RiskTags/caution and official series (L344) rather than a new opinion scrape. | ITV.L principal-risks bodies are readable and at least one other UK broadcast/ad name is on the buy-tier with a memo, so a peer cohort can be scored without inventing a sector blanket |
 | L352 | **Cap Sunday rememo separately from research_hard_cap** | Sunday research_hard_cap is 100 and weekly_ops is ~$84 this week. If euro_depth rememo eligibility ever spikes, Layer C could dump a rememo burst into the same envelope as the Sunday email. Prefer the existing weekday catch-up trigger (cap 3, raise only when backlog >15) over a Sunday dump; add a Sunday rememo sub-cap only if focus rememo_eligible exceeds a handful. | euro_depth Sunday rememo_eligible_count is above 5, or a future focus market shows rememo_eligible near research_hard_cap |
+| L358 | **Investegate numeric RNS-id slug title_mismatch** | Investegate announcement URLs ending in numeric RNS ids fail IR allowlist live-fetch title_mismatch even when narrative body fetches; hunters then need SKIP or alternate hosts. | Next wave of UK Investegate-heavy hunter failures, or when tuning _validate_ir_allowlist_body_content |
 
 ### Ops / reliability
 
