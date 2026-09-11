@@ -8959,8 +8959,115 @@
       },
       "trigger": "stall_slowdown",
       "engineering_task_id": "eng-20260911-13"
+    },
+    {
+      "id": "igc-20260911-04",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "SHL.AX",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "SHL.AX"
+        ],
+        "market_id": "asx200",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260911-04",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-11T16:53:02.094789+00:00",
+      "completed_at": "2026-09-11T16:53:39.647872+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 1,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "SHL.AX"
+        ],
+        "results": [
+          {
+            "ticker": "SHL.AX",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 18,
+              "filings_with_body": 17,
+              "indexed_without_body": 1
+            },
+            "after": {
+              "filings_total": 18,
+              "filings_with_body": 18,
+              "indexed_without_body": 0
+            },
+            "improved": true,
+            "regime": "asx_announcements",
+            "filings_summary": {
+              "total": 18,
+              "annual": 11,
+              "interim": 1,
+              "trading_update": 0,
+              "other": 6,
+              "with_body": 17,
+              "period_coverage": {
+                "annual": {
+                  "total": 11,
+                  "with_body": 11
+                },
+                "interim": {
+                  "total": 1,
+                  "with_body": 1
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 6,
+                  "with_body": 5
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 18,
+              "with_body_after": 18,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "SHL.AX",
+            "with_body_before": 17,
+            "with_body_after": 18,
+            "improved": true
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-11T15:18:16.887697+00:00",
+  "updated_at": "2026-09-11T16:53:39.647880+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
