@@ -6730,6 +6730,34 @@ def test_parked_source_hunter_boot_l_ftse_smallcap_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_ftse_smallcap_mer_l_builtins(tmp_path: Path):
+    """Regression: MER.L parked IWB — mearsgroup.co.uk FY2025/2024 AR + H1 statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("MER.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("mears-group-plc-annual-report-and-accounts-2025.pdf" in url for url in urls)
+    assert any("mears-group-plc-annual-report-and-accounts-20242.pdf" in url for url in urls)
+    assert any("mears-group-plc-half-year-results-2025.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
+def test_parked_source_hunter_mer_l_ftse_smallcap_has_fetchable_ir():
+    """eng-20260911-04: MER.L has live mearsgroup.co.uk FY2025/2024 AR + H1 statutory PDFs."""
+    assert "MER.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("MER.L")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("mearsgroup.co.uk" in url for url in urls)
+    assert any("annual-report-and-accounts-2025.pdf" in url for url in urls)
+    body = fetch_filing_body(urls[0])
+    assert body
+    assert len(body) >= 50000
+
+
 def test_ir_allowlist_sec_edgar_body_accepts_issuer_alias_tokens():
     """SEC 20-F inline HTML may omit URL filename tokens; issuer aliases must suffice."""
     url = "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000004/nvs-20251231.htm"
