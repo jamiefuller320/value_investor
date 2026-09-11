@@ -175,6 +175,10 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "NBA.LS": [
         "https://content.novabase.com/storage/uploads/relatorio-contas-novabase-2025-versao-ingles-nao-esef.pdf",
     ],
+    # euro_depth IWB blocker — JMT.LS parked awaiting_periodic_report; FY2025 entire annual PDF.
+    "JMT.LS": [
+        "https://reports.jeronimomartins.com/annual-report/2025/_assets/downloads/entire-jeronimomartins-ar25.pdf",
+    ],
     "MUV2.DE": [
         "https://www.munichre.com/content/dam/munichre/mrwebsiteslaunches/2025-annual-report/MunichRe-Group-Annual-Report-2025-en.pdf/_jcr_content/renditions/original./MunichRe-Group-Annual-Report-2025-en.pdf",
     ],
