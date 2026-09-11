@@ -4,7 +4,7 @@
       "id": "eng-20260911-04",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked ftse_smallcap leftover MER.L",
-      "summary": "Library market ftse_smallcap (FTSE SmallCap) parked MER.L after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivale",
+      "summary": "Library market ftse_smallcap (FTSE SmallCap) parked MER.L after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py \u2014 do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivale",
       "priority": "low",
       "priority_score": 12.0,
       "source": "parked_source_hunter",
@@ -19,7 +19,7 @@
         "doc": "docs/ops/library-ingest-escalation.md"
       },
       "acceptance_criteria": [
-        "Inspect IR / exchange sources for MER.L only — do not invent URLs",
+        "Inspect IR / exchange sources for MER.L only \u2014 do not invent URLs",
         "If a fetchable statutory/IR body exists, add allowlist + regression test",
         "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
         "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
@@ -51,7 +51,7 @@
       "id": "eng-20260911-03",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked ftse_smallcap leftover BOOT.L",
-      "summary": "Library market ftse_smallcap (FTSE SmallCap) parked BOOT.L after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equival",
+      "summary": "Library market ftse_smallcap (FTSE SmallCap) parked BOOT.L after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py \u2014 do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equival",
       "priority": "low",
       "priority_score": 12.0,
       "source": "parked_source_hunter",
@@ -63,10 +63,13 @@
         "parked_reason": "unfetchable_iwb",
         "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
         "universe": "library",
-        "doc": "docs/ops/library-ingest-escalation.md"
+        "doc": "docs/ops/library-ingest-escalation.md",
+        "superseded_resolution": "allowlist",
+        "superseded_reason": "already allowlist on main",
+        "superseded_at": "2026-09-11T09:14:37.221466+00:00"
       },
       "acceptance_criteria": [
-        "Inspect IR / exchange sources for BOOT.L only — do not invent URLs",
+        "Inspect IR / exchange sources for BOOT.L only \u2014 do not invent URLs",
         "If a fetchable statutory/IR body exists, add allowlist + regression test",
         "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
         "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
@@ -99,13 +102,13 @@
       "completed_at": "2026-09-11T08:25:00.166813+00:00",
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/568",
       "pr_number": 568,
-      "merged_at": "2026-09-11T09:02:49.663879+00:00"
+      "merged_at": "2026-09-11T08:59:42Z"
     },
     {
       "id": "eng-20260911-02",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked euro_depth leftover JMT.LS",
-      "summary": "Library market euro_depth (EU depth composite (STOXX50 + periphery)) parked JMT.LS after ingest avenues were exhausted (awaiting_periodic_report). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisi",
+      "summary": "Library market euro_depth (EU depth composite (STOXX50 + periphery)) parked JMT.LS after ingest avenues were exhausted (awaiting_periodic_report). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py \u2014 do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisi",
       "priority": "low",
       "priority_score": 12.0,
       "source": "parked_source_hunter",
@@ -123,7 +126,7 @@
         "superseded_at": "2026-09-11T08:12:09.224362+00:00"
       },
       "acceptance_criteria": [
-        "Inspect IR / exchange sources for JMT.LS only — do not invent URLs",
+        "Inspect IR / exchange sources for JMT.LS only \u2014 do not invent URLs",
         "If a fetchable statutory/IR body exists, add allowlist + regression test",
         "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
         "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
@@ -161,7 +164,7 @@
       "id": "eng-20260911-01",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked euro_depth leftover WKL.AS",
-      "summary": "Library market euro_depth (EU depth composite (STOXX50 + periphery)) parked WKL.AS after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: N",
+      "summary": "Library market euro_depth (EU depth composite (STOXX50 + periphery)) parked WKL.AS after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py \u2014 do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: N",
       "priority": "low",
       "priority_score": 12.0,
       "source": "parked_source_hunter",
@@ -190,7 +193,7 @@
         }
       },
       "acceptance_criteria": [
-        "Inspect IR / exchange sources for WKL.AS only — do not invent URLs",
+        "Inspect IR / exchange sources for WKL.AS only \u2014 do not invent URLs",
         "If a fetchable statutory/IR body exists, add allowlist + regression test",
         "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
         "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
@@ -229,7 +232,7 @@
       "id": "eng-20260910-02",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked euro_depth leftover SAP.DE",
-      "summary": "Library market euro_depth (EU depth composite (STOXX50 + periphery)) parked SAP.DE after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: N",
+      "summary": "Library market euro_depth (EU depth composite (STOXX50 + periphery)) parked SAP.DE after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py \u2014 do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: N",
       "priority": "low",
       "priority_score": 12.0,
       "source": "parked_source_hunter",
@@ -258,7 +261,7 @@
         }
       },
       "acceptance_criteria": [
-        "Inspect IR / exchange sources for SAP.DE only — do not invent URLs",
+        "Inspect IR / exchange sources for SAP.DE only \u2014 do not invent URLs",
         "If a fetchable statutory/IR body exists, add allowlist + regression test",
         "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
         "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
@@ -297,7 +300,7 @@
       "id": "eng-20260910-01",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked euro_depth leftover NOVN.SW",
-      "summary": "Library market euro_depth (EU depth composite (STOXX50 + periphery)) parked NOVN.SW after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: ",
+      "summary": "Library market euro_depth (EU depth composite (STOXX50 + periphery)) parked NOVN.SW after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py \u2014 do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: ",
       "priority": "low",
       "priority_score": 12.0,
       "source": "parked_source_hunter",
@@ -326,7 +329,7 @@
         }
       },
       "acceptance_criteria": [
-        "Inspect IR / exchange sources for NOVN.SW only — do not invent URLs",
+        "Inspect IR / exchange sources for NOVN.SW only \u2014 do not invent URLs",
         "If a fetchable statutory/IR body exists, add allowlist + regression test",
         "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
         "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
@@ -362,14 +365,14 @@
       "merged_at": "2026-09-10T20:44:15.620863+00:00"
     }
   ],
-  "compiled_at": "2026-09-11T09:02:52.497487+00:00",
+  "compiled_at": "2026-09-11T09:15:11.184303+00:00",
   "task_count": 6,
   "micro_compile_source": "parked_source_hunter",
   "library_market_id": "ftse_smallcap",
   "hunter_ticker": "MER.L",
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-11T08:16:46.040932+00:00",
+    "evaluated_at": "2026-09-11T09:15:04.757757+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health": {
