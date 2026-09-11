@@ -98,6 +98,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/presentation/251118-firstgroup-plc-h1-2026-results-presentation.pdf",
         "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/press-release/firstgroup-plc-h1-2026-results.pdf",
     ],
+    # ftse_smallcap IWB blocker — BOOT.L parked unfetchable_iwb; CH PDFs fail but henryboot.co.uk statutory PDFs fetch.
+    "BOOT.L": [
+        "https://www.henryboot.co.uk/media/qlhercoe/32783-henry-boot-ar2025-interactive.pdf",
+        "https://www.henryboot.co.uk/media/fv0nuosu/32326-henry-boot-ar2024-web.pdf",
+        "https://www.henryboot.co.uk/media/tqvbhcvt/interim-results-25_main.pdf",
+    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
