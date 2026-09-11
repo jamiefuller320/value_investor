@@ -2,11 +2,11 @@
   "ticker": "DQ7A.IR",
   "company_name": "Donegal Investment Group plc",
   "market": "euro_depth",
-  "built_at": "2026-09-11T13:32:46.028225+00:00",
+  "built_at": "2026-09-11T14:27:55.834514+00:00",
   "inventory": {
     "available": {
       "filings_index": true,
-      "filings_bodies": true,
+      "filings_bodies": false,
       "yahoo_financials": true,
       "yahoo_quarterly_cashflow": false,
       "yahoo_quarterly_income": false,
@@ -18,22 +18,23 @@
       "alternate_news": true
     },
     "thin": [
+      "filings_bodies",
       "yahoo_quarterly_cashflow",
       "yahoo_quarterly_income",
       "screen_run_manifest"
     ],
-    "filings_body_files": 1,
+    "filings_body_files": 0,
     "filings_indexed_bodies": 0,
     "filings_summary": {
-      "total": 3,
-      "annual": 2,
+      "total": 2,
+      "annual": 1,
       "interim": 0,
       "trading_update": 0,
       "other": 1,
       "with_body": 0,
       "period_coverage": {
         "annual": {
-          "total": 2,
+          "total": 1,
           "with_body": 0
         },
         "interim": {
@@ -52,7 +53,7 @@
     },
     "period_coverage": {
       "annual": {
-        "total": 2,
+        "total": 1,
         "with_body": 0
       },
       "interim": {
@@ -83,7 +84,7 @@
     ]
   },
   "body_refetch": {
-    "attempted": 3,
+    "attempted": 2,
     "fetched": 0,
     "with_body_before": 0,
     "with_body_after": 0,
@@ -99,7 +100,7 @@
     "with_body_before": 0,
     "with_body_after": 0,
     "investegate_fallbacks": 0,
-    "skipped_unfetchable": 3,
+    "skipped_unfetchable": 2,
     "deadline_hit": false,
     "merge": {
       "added": 0,
@@ -121,9 +122,28 @@
     "mandatory": true,
     "path": "docs/data/library/markets/euro_depth/screen/research/DQ7A.IR/sources/ir_presentation_metrics.json"
   },
-  "alternate_news_added": 1,
+  "alternate_news_added": 0,
   "alternate_news_path": "docs/data/library/markets/euro_depth/screen/research/DQ7A.IR/sources/alternate_news.json",
-  "planned_alternate_sources": [],
+  "planned_alternate_sources": [
+    {
+      "id": "investegate_rns_full",
+      "label": "Full Investegate / RNS HTML body re-pull",
+      "why": "Many Euro large-caps publish on Investegate; index may list filings without bodies",
+      "score": "3"
+    },
+    {
+      "id": "exchange_filings_full",
+      "label": "Euronext / national register filing full-text re-pull",
+      "why": "Euro memos often index headlines without bodies",
+      "score": "3"
+    },
+    {
+      "id": "company_ir_presentation",
+      "label": "Company IR annual report / results deck PDF",
+      "why": "ESEF/iXBRL and segment tables often missing from Yahoo",
+      "score": "3"
+    }
+  ],
   "evidence_ladder": [
     "filings_bodies",
     "filings_index",
