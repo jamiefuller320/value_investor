@@ -134,6 +134,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.mjgleesonplc.com/media/h4he2vmc/mjgleeson-ar-2024-web.pdf",
         "https://www.mjgleesonplc.com/media/nwwdqr2z/results-for-the-half-year-ended-31-december-2024.pdf",
     ],
+    # ftse_smallcap IWB blocker — REC.L parked unfetchable_iwb; CH PDFs fail but recordfg.com statutory PDFs fetch.
+    "REC.L": [
+        "https://recordfg.com/wp-content/uploads/2025/06/2025-Annual-Report-Record-plc-1.pdf",
+        "https://recordfg.com/wp-content/uploads/2025/06/2024-Annual-Report-Record-plc.pdf",
+        "https://recordfg.com/wp-content/uploads/2025/06/2024-Half-Year-Report-Record-plc.pdf",
+    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
