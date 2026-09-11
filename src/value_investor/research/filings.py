@@ -116,12 +116,6 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.toppsgroup.com/media/4p1mmmbg/topps-tiles-ar2024-web.pdf",
         "https://www.toppsgroup.com/media/zbndsl2b/2025-interims.pdf",
     ],
-    # ftse_smallcap IWB blocker — ULTP.L parked unfetchable_iwb; CH PDFs fail and upplc.com is bot-gated (403).
-    "ULTP.L": [
-        "https://www.investegate.co.uk/announcement/rns/ultimate-products--ultp/audited-results-for-the-year-ended-31-july-2025/9197676",
-        "https://www.investegate.co.uk/announcement/rns/ultimate-products--ultp/audited-results-for-the-year-ended-31-july-2024/8514413",
-        "https://www.investegate.co.uk/announcement/rns/ultimate-products--ultp/interim-results/8794781",
-    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
@@ -416,6 +410,12 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "(financial-documents.html); sap.com is Akamai bot-gated (403) and "
         "FY2025 20-F PDF on sap.com/docs also 403; SEC 20-F/6-K are already "
         "bodied via sec_edgar."
+    ),
+    "ULTP.L": (
+        "ftse_smallcap leftover IWB: Investegate RNS URLs fetch narrative but fail "
+        "IR allowlist live-fetch title_mismatch (slug ends in numeric RNS id); "
+        "issuer IR at upplc.com/investors.upplc.com is bot-gated (403/429) and "
+        "Companies House annual PDFs still fail extraction."
     ),
 }
 
