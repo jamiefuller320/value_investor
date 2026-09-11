@@ -411,6 +411,12 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "FY2025 20-F PDF on sap.com/docs also 403; SEC 20-F/6-K are already "
         "bodied via sec_edgar."
     ),
+    "ULTP.L": (
+        "ftse_smallcap leftover IWB: Investegate RNS URLs fetch narrative but fail "
+        "IR allowlist live-fetch title_mismatch (slug ends in numeric RNS id); "
+        "issuer IR at upplc.com/investors.upplc.com is bot-gated (403/429) and "
+        "Companies House annual PDFs still fail extraction."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.

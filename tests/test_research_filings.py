@@ -6786,6 +6786,16 @@ def test_parked_source_hunter_tpt_l_ftse_smallcap_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_parked_source_hunter_ultp_l_ftse_smallcap_skip():
+    """eng-20260911-06: ULTP.L Investegate RNS fails allowlist live-fetch title_mismatch; IR bot-gated."""
+    assert "ULTP.L" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["ULTP.L"]
+    assert "title_mismatch" in reason
+    assert "Investegate" in reason
+    assert "bot-gated" in reason
+    assert fetch_filings_ir_allowlist("ULTP.L") == []
+
+
 def test_ir_allowlist_sec_edgar_body_accepts_issuer_alias_tokens():
     """SEC 20-F inline HTML may omit URL filename tokens; issuer aliases must suffice."""
     url = "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000004/nvs-20251231.htm"
