@@ -1,16 +1,16 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-10T05:14:28.310995+00:00
+Track: `buy_tier_level` · updated 2026-09-11T05:14:02.094010+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **1** / 29 (3% count, 3% NAV)
+- Losers: **1** / 25 (4% count, 4% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 - Selection feedback:
-  - quality fails more often among losers (100% vs 32%)
-  - dividend fails more often among losers (100% vs 18%)
-  - garp fails more often among losers (100% vs 18%)
+  - quality fails more often among losers (100% vs 33%)
+  - dividend fails more often among losers (100% vs 17%)
+  - garp fails more often among losers (100% vs 21%)
 
 ## Holding reviews
 
@@ -87,13 +87,6 @@ Track: `buy_tier_level` · updated 2026-09-10T05:14:28.310995+00:00
 - data_quality 0.90
 - conviction 44%
 
-### RRL.AX — intact / hold_tolerate (-2.2%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 83%
-
 ### RMD.AX — intact / hold_tolerate (-2.1%)
 - still buy
 - research accumulate
@@ -122,20 +115,6 @@ Track: `buy_tier_level` · updated 2026-09-10T05:14:28.310995+00:00
 - data_quality 0.95
 - conviction 70%
 
-### WAF.AX — intact / hold_tolerate (-0.3%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.90
-- conviction 62%
-
-### WHC.AX — intact / hold_tolerate (-0.2%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 53%
-
 ### PRN.AX — weakening / watch_review (+0.0%)
 - conviction 18% below intact floor
 - still buy
@@ -147,13 +126,6 @@ Track: `buy_tier_level` · updated 2026-09-10T05:14:28.310995+00:00
 - cheapness family still passes
 - data_quality 0.90
 - conviction 58%
-
-### ANN.AX — intact / hold_tolerate (+0.4%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 66%
 
 ### BPT.AX — intact / hold_tolerate (+0.6%)
 - still buy
