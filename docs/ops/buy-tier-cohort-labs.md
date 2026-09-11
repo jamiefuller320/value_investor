@@ -30,7 +30,7 @@ Each Overview **market card** plots **held-stock value** (paper NAV minus cash) 
 
 | Book present | Series source |
 |--------------|---------------|
-| Frozen `buy_tier_level` (live FTSE or admitted shard) | Paper `equity_curve` marks. Live FTSE may densify daily from buy-tier chart JSON on the *current* book, clipped to the first fill date. |
+| Frozen `buy_tier_level` (live FTSE or admitted shard) | Paper `equity_curve` marks. Live FTSE may densify daily from buy-tier chart JSON on the *current* book, clipped to the first fill date. Short epoch-0 histories label **every** mark day on the tile sparkline and detail chart (last date uses end-anchor so it stays inside the tile). |
 | No paper book yet | Observe-sim `screen_rules` equity curve when that clock exists |
 | Neither | Empty placeholder |
 
