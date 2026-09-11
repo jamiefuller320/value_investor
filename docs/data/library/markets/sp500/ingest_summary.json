@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-11T12:23:48.286830+00:00",
+  "run_at": "2026-09-11T13:49:37.720886+00:00",
   "market_id": "sp500",
   "targets": [
     "INTU"
@@ -81,7 +81,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-11T12:23:29.017618+00:00",
+    "snapshot_at": "2026-09-11T13:48:40.024201+00:00",
     "market_id": "sp500",
     "buy_tier_count": 140,
     "unmeasured_buy_tier": 0,
@@ -135,7 +135,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-11T12:23:48.267997+00:00",
+    "snapshot_at": "2026-09-11T13:48:59.942634+00:00",
     "market_id": "sp500",
     "buy_tier_count": 140,
     "unmeasured_buy_tier": 0,
@@ -175,18 +175,17 @@
       "BXP",
       "CRH",
       "FICO",
+      "INTU",
       "LDOS",
       "LMT",
       "TSN"
     ],
-    "parked_count": 7,
+    "parked_count": 8,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
-    "effective_indexed_without_body_tickers": [
-      "INTU"
-    ],
-    "ingest_exhausted": false
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -197,10 +196,39 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "sp500",
+    "to_market": "asx200",
+    "stream_markets_after": [
+      "asx200"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "sp500",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "APTV",
+        "BXP",
+        "CRH",
+        "FICO",
+        "INTU",
+        "LDOS",
+        "LMT",
+        "TSN"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "at": "2026-09-11T13:49:02.416107+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-09-11T12:23:36.843000+00:00",
+    "assessed_at": "2026-09-11T13:48:47.474114+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -279,9 +307,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 3.6320700560000034,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2096.367929944,
+  "used_seconds": 4.983905086000021,
+  "budget_seconds": 1526.725986771,
+  "leftover_seconds": 1521.742081685,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -289,9 +317,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sp500",
-    "updated_at": "2026-09-11T12:23:48.276177+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-09-11T13:48:59.950743+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -363,6 +391,16 @@
         "filings_with_body": 20,
         "indexed_without_body": 1,
         "thin": false
+      },
+      {
+        "ticker": "INTU",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-11T13:48:59.950743+00:00",
+        "filings_total": 20,
+        "filings_with_body": 19,
+        "indexed_without_body": 1,
+        "thin": false
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
@@ -377,19 +415,25 @@
       "LMT",
       "TSN"
     ],
-    "unparked_leftover": [
-      "INTU"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/sp500/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "sp500"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "sp500",
+    "ingest_exhausted_markets": [
+      "euro_depth",
+      "ftse_smallcap",
+      "sp500",
+      "tsx60"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20260911-10"
+    "task_id": "eng-20260911-11"
   }
 }
