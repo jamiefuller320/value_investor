@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-11T13:59:23+00:00",
+  "updated_at": "2026-09-11T16:11:04+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8062,6 +8062,23 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0909c-587a-7ed2-ad66-ce1378d6ff08",
       "added_at": "2026-09-11T13:59:23+00:00"
+    },
+    {
+      "id": "L361",
+      "category": "later",
+      "section": "ops",
+      "title": "Path guard: resolve hunter task from PR head or merge-base queue",
+      "summary": "CI path-guard checks out the PR merge commit with main. When main's engineering_tasks.json was clobbered, eng-20260911-11 vanished from the merge tree and path-guard reported unknown task id even though the branch tip still had the task. Consider loading the task row from PR head SHA or merge-base, or always-allow listed hunter paths when the branch task id is missing from the merge tree.",
+      "revisit_when": "Another hunter PR fails path-guard with unknown task id after main queue churn, or after retry-by-kind (#585) lands",
+      "tags": [
+        "hunter",
+        "path-guard",
+        "ci",
+        "engineering-queue"
+      ],
+      "status": "open",
+      "source": "conversation: fail-park and hunter-fix retry-by-kind",
+      "added_at": "2026-09-11T16:11:04+00:00"
     }
   ],
   "fragments": [
