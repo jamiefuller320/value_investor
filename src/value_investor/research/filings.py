@@ -122,6 +122,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.aptitudesoftware.com/wp-content/uploads/Annual-Report.pdf",
         "https://www.aptitudesoftware.com/wp-content/uploads/2024-H1-results-presentation-FINAL-PDF.pdf",
     ],
+    # ftse_smallcap IWB blocker — DFS.L parked unfetchable_iwb; CH PDFs fail but dfscorporate.co.uk statutory PDFs fetch.
+    "DFS.L": [
+        "https://www.dfscorporate.co.uk/media/ckzjqq2k/fy25-preliminary-results.pdf",
+        "https://www.dfscorporate.co.uk/media/qz5kd4bw/44642-dfs-ar-2024-web.pdf",
+        "https://www.dfscorporate.co.uk/media/kftaxgtd/dfs-interim-report-h1-fy25.pdf",
+    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
