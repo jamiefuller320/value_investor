@@ -487,8 +487,6 @@ def run_hunter_fix_agent(
     )
 
 
-
-
 __all__ = [
     "HunterFixResult",
     "ci_log_shows_hunter_gate_failure",
