@@ -110,6 +110,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.mearsgroup.co.uk/media/4mape5as/mears-group-plc-annual-report-and-accounts-20242.pdf",
         "https://www.mearsgroup.co.uk/media/q0zbvllk/mears-group-plc-half-year-results-2025.pdf",
     ],
+    # ftse_smallcap IWB blocker — TPT.L parked unfetchable_iwb; CH PDFs fail but toppsgroup.com statutory PDFs fetch.
+    "TPT.L": [
+        "https://www.toppsgroup.com/media/3c2bwa1e/topps-group-annual-report-2025.pdf",
+        "https://www.toppsgroup.com/media/4p1mmmbg/topps-tiles-ar2024-web.pdf",
+        "https://www.toppsgroup.com/media/zbndsl2b/2025-interims.pdf",
+    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
