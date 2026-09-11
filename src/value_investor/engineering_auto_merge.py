@@ -130,26 +130,51 @@ def find_open_pr_for_branch(branch: str, *, repo: str | None = None) -> dict[str
     return rows[0] if rows else None
 
 
+# gh pr checks --json buckets (gh >= ~2.80): pass | fail | pending | skipping | cancel.
+# Older runners asked for a removed "conclusion" field and always skipped auto-merge.
+_PASS_CHECK_BUCKETS = frozenset({"pass", "skipping"})
+_PENDING_CHECK_BUCKETS = frozenset({"pending"})
+_FAIL_CHECK_BUCKETS = frozenset({"fail", "cancel"})
+_PENDING_CHECK_STATES = frozenset(
+    {"PENDING", "IN_PROGRESS", "QUEUED", "REQUESTED", "WAITING", "EXPECTED"}
+)
+_PASS_CHECK_STATES = frozenset({"SUCCESS", "SKIPPED", "NEUTRAL"})
+
+
 def pr_checks_successful(pr_number: int, *, repo: str | None = None) -> tuple[bool, str]:
     repo = repo or _github_repo()
     if not repo:
         return False, "GITHUB_REPOSITORY not set"
-    result = _run_gh(["pr", "checks", str(pr_number), "--json", "name,state,conclusion"])
+    # Fields must match `gh pr checks --json` (no "conclusion" on modern gh).
+    result = _run_gh(["pr", "checks", str(pr_number), "--json", "name,state,bucket"])
     if result.returncode != 0:
         return False, (result.stderr or result.stdout or "gh pr checks failed").strip()
     checks = json.loads(result.stdout or "[]")
     if not checks:
         return False, "no PR checks reported yet"
-    pending = [row for row in checks if str(row.get("state") or "").upper() != "COMPLETED"]
+
+    pending: list[dict[str, Any]] = []
+    failed: list[dict[str, Any]] = []
+    for row in checks:
+        bucket = str(row.get("bucket") or "").strip().lower()
+        state = str(row.get("state") or "").strip().upper()
+        if bucket in _PENDING_CHECK_BUCKETS or (not bucket and state in _PENDING_CHECK_STATES):
+            pending.append(row)
+        elif bucket in _PASS_CHECK_BUCKETS or (not bucket and state in _PASS_CHECK_STATES):
+            continue
+        elif bucket in _FAIL_CHECK_BUCKETS or bucket:
+            # Known fail/cancel, or any unrecognized bucket → do not auto-merge.
+            failed.append(row)
+        elif state in _PASS_CHECK_STATES:
+            continue
+        elif state in _PENDING_CHECK_STATES:
+            pending.append(row)
+        else:
+            failed.append(row)
+
     if pending:
         names = ", ".join(str(row.get("name") or "") for row in pending[:3])
         return False, f"checks still pending: {names}"
-    failed = [
-        row
-        for row in checks
-        if str(row.get("conclusion") or row.get("state") or "").lower()
-        not in {"success", "skipped", "neutral"}
-    ]
     if failed:
         names = ", ".join(str(row.get("name") or "") for row in failed[:3])
         return False, f"checks not green: {names}"
