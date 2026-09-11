@@ -1,54 +1,6 @@
 {
   "tasks": [
     {
-      "id": "eng-20260911-02",
-      "area": "ingest",
-      "title": "Hunt fetchable IR source for parked euro_depth leftover JMT.LS",
-      "summary": "Library market euro_depth (EU depth composite (STOXX50 + periphery)) parked JMT.LS after ingest avenues were exhausted (awaiting_periodic_report). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisi",
-      "priority": "low",
-      "priority_score": 12.0,
-      "source": "parked_source_hunter",
-      "evidence": {
-        "market_id": "euro_depth",
-        "library_market": "euro_depth",
-        "hunter_market_id": "euro_depth",
-        "hunter_ticker": "JMT.LS",
-        "parked_reason": "awaiting_periodic_report",
-        "parked_revisit_when": "Next statutory annual or interim report is issued and indexed",
-        "universe": "library",
-        "doc": "docs/ops/library-ingest-escalation.md"
-      },
-      "acceptance_criteria": [
-        "Inspect IR / exchange sources for JMT.LS only — do not invent URLs",
-        "If a fetchable statutory/IR body exists, add allowlist + regression test",
-        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
-        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open",
-      "no_diff_count": 0
-    },
-    {
       "id": "eng-20260911-01",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked euro_depth leftover WKL.AS",
@@ -64,21 +16,7 @@
         "parked_reason": "unfetchable_iwb",
         "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
         "universe": "library",
-        "doc": "docs/ops/library-ingest-escalation.md",
-        "verify_status": "passed",
-        "verify_chain_root_id": "eng-20260911-01",
-        "verified_at": "2026-09-11T07:38:07.361348+00:00",
-        "verify_pytest": {
-          "returncode": 0,
-          "paths": [
-            "tests/test_research_filings.py",
-            "tests/test_research_ingest.py",
-            "tests/test_gap_fill_deepen.py",
-            "tests/test_ingest_improvement.py",
-            "tests/test_companies_house.py"
-          ],
-          "output_tail": "........................................................................ [ 21%]\n........................................................................ [ 43%]\n........................................................................ [ 65%]\n........................................................................ [ 87%]\n..........................................                               [100%]\n330 passed in 99.66s (0:01:39)"
-        }
+        "doc": "docs/ops/library-ingest-escalation.md"
       },
       "acceptance_criteria": [
         "Inspect IR / exchange sources for WKL.AS only — do not invent URLs",
@@ -107,14 +45,11 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "merged",
+      "status": "pr_open",
       "result_path": "output/engineering_result_eng-20260911-01.md",
       "branch_name": "cursor/eng-20260911-01-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-11T06:39:11.013436+00:00",
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/564",
-      "pr_number": 564,
-      "merged_at": "2026-09-11T07:38:07.361645+00:00"
+      "completed_at": "2026-09-11T06:39:11.013436+00:00"
     },
     {
       "id": "eng-20260910-02",
@@ -253,28 +188,17 @@
       "merged_at": "2026-09-10T20:44:15.620863+00:00"
     }
   ],
-  "compiled_at": "2026-09-11T07:38:35.199482+00:00",
-  "task_count": 4,
+  "compiled_at": "2026-09-11T06:33:14.345833+00:00",
+  "task_count": 3,
   "micro_compile_source": "parked_source_hunter",
   "library_market_id": "euro_depth",
-  "hunter_ticker": "JMT.LS",
+  "hunter_ticker": "WKL.AS",
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-11T07:47:14.951106+00:00",
+    "evaluated_at": "2026-09-11T06:33:09.005282+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health": {
-    "snapshot_at": "2026-09-11T07:36:09.694719+00:00",
-    "buy_tier_count": 61,
-    "measured_tickers": 61,
-    "unmeasured_buy_tier": 0,
-    "unmeasured_tickers": [],
-    "zero_body_buy_tier": 0,
-    "zero_body_tickers": [],
-    "indexed_without_body": 8,
-    "filings_with_body": 4109
-  },
-  "ingest_health_before": {
     "snapshot_at": "2026-09-11T06:31:16.613951+00:00",
     "buy_tier_count": 61,
     "measured_tickers": 61,
@@ -285,6 +209,17 @@
     "indexed_without_body": 8,
     "filings_with_body": 4109
   },
-  "reprioritized_at": "2026-09-11T07:36:09.694892+00:00",
-  "reprioritized_after_task": "eng-20260911-01"
+  "ingest_health_before": {
+    "snapshot_at": "2026-09-10T20:42:26.942759+00:00",
+    "buy_tier_count": 61,
+    "measured_tickers": 61,
+    "unmeasured_buy_tier": 0,
+    "unmeasured_tickers": [],
+    "zero_body_buy_tier": 0,
+    "zero_body_tickers": [],
+    "indexed_without_body": 8,
+    "filings_with_body": 4109
+  },
+  "reprioritized_at": "2026-09-11T06:31:16.614122+00:00",
+  "reprioritized_after_task": "eng-20260910-02"
 }
