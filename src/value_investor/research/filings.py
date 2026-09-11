@@ -116,6 +116,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.toppsgroup.com/media/4p1mmmbg/topps-tiles-ar2024-web.pdf",
         "https://www.toppsgroup.com/media/zbndsl2b/2025-interims.pdf",
     ],
+    # ftse_smallcap IWB blocker — APTD.L parked unfetchable_iwb; CH PDFs fail but aptitudesoftware.com ESEF/PDFs fetch.
+    "APTD.L": [
+        "https://www.aptitudesoftware.com/wp-content/uploads/reports/2138009VHA1WI2VKMA28-2025-12-31-T01.xhtml",
+        "https://www.aptitudesoftware.com/wp-content/uploads/Annual-Report.pdf",
+        "https://www.aptitudesoftware.com/wp-content/uploads/2024-H1-results-presentation-FINAL-PDF.pdf",
+    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
