@@ -4324,6 +4324,19 @@ def test_fetch_filings_ir_allowlist_euro_depth_dte_de_builtins(tmp_path: Path):
     assert "entire-dtag-ar25.pdf" in rows[0]["url"]
 
 
+def test_fetch_filings_ir_allowlist_euro_depth_jmt_ls_builtins(tmp_path: Path):
+    """Regression: JMT.LS awaiting_periodic_report — reports.jeronimomartins.com FY2025 annual PDF."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("JMT.LS", path=allowlist_path)
+    assert len(rows) == 1
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert rows[0]["period"] == "annual"
+    assert "reports.jeronimomartins.com" in rows[0]["url"]
+    assert "entire-jeronimomartins-ar25.pdf" in rows[0]["url"]
+
+
 def test_load_ir_url_allowlist_canonicalizes_dte_de_dead_urls(tmp_path: Path):
     """Dead blob/publications URLs in research_ir_urls.json map to live FY2025 annual report PDF."""
     dead_pdf = (
@@ -4385,6 +4398,7 @@ def test_fetch_filings_ir_allowlist_euro_depth_periphery_builtins(tmp_path: Path
         "POST.VI": "post.at",
         "OMV.VI": "reports.omv.com",
         "NVG.LS": "thenavigatorcompany.com",
+        "JMT.LS": "reports.jeronimomartins.com",
         "DQ7A.IR": "donegaligroup.com",
         "NBA.LS": "novabase.com",
         "MUV2.DE": "munichre.com",
@@ -6673,6 +6687,19 @@ def test_parked_source_hunter_dte_de_euro_depth_has_fetchable_ir():
     assert rows[0]["period"] == "annual"
     assert "report.telekom.com" in rows[0]["url"]
     assert "entire-dtag-ar25.pdf" in rows[0]["url"]
+
+
+def test_parked_source_hunter_jmt_ls_euro_depth_has_fetchable_ir():
+    """eng-20260911-02: JMT.LS has live reports.jeronimomartins.com FY2025 entire annual PDF."""
+    assert "JMT.LS" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("JMT.LS")
+    assert len(rows) == 1
+    assert rows[0]["period"] == "annual"
+    assert "reports.jeronimomartins.com" in rows[0]["url"]
+    assert "entire-jeronimomartins-ar25.pdf" in rows[0]["url"]
+    body = fetch_filing_body(rows[0]["url"])
+    assert body
+    assert len(body) >= 50000
 
 
 def test_ir_allowlist_sec_edgar_body_accepts_issuer_alias_tokens():
