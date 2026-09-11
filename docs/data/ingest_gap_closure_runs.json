@@ -8743,8 +8743,116 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260911-02",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "DQ7A.IR",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "DQ7A.IR"
+        ],
+        "market_id": "euro_depth",
+        "universe": "library",
+        "critical_path_blocker": "zero_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260911-02",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-11T14:35:11.219616+00:00",
+      "completed_at": "2026-09-11T14:36:11.374612+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 1,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "DQ7A.IR"
+        ],
+        "results": [
+          {
+            "ticker": "DQ7A.IR",
+            "reason": "zero_body",
+            "before": {
+              "filings_total": 3,
+              "filings_with_body": 0,
+              "indexed_without_body": 3
+            },
+            "after": {
+              "filings_total": 2,
+              "filings_with_body": 0,
+              "indexed_without_body": 2
+            },
+            "improved": false,
+            "regime": "euro_filings",
+            "filings_summary": {
+              "total": 2,
+              "annual": 1,
+              "interim": 0,
+              "trading_update": 0,
+              "other": 1,
+              "with_body": 0,
+              "period_coverage": {
+                "annual": {
+                  "total": 1,
+                  "with_body": 0
+                },
+                "interim": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 1,
+                  "with_body": 0
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 0,
+              "with_body_after": 0,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 2,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 2,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "DQ7A.IR",
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown",
+      "engineering_task_id": "eng-20260911-12"
     }
   ],
-  "updated_at": "2026-09-11T10:53:48.579574+00:00",
+  "updated_at": "2026-09-11T14:36:11.528871+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
