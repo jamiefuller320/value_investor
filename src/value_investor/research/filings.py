@@ -377,6 +377,22 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/1061574/000106157426000012/cgi-fy26_q2xmda.htm",
         "https://www.sec.gov/Archives/edgar/data/1061574/000106157426000017/cgi-fy26_q3xpressrelease.htm",
     ],
+    # tsx60 IWB blocker — CNQ.TO parked unfetchable_iwb; 6-K cover HTML primaries fail gate;
+    # SEC 40-F + cnrl.com statutory AIF/interim PDFs fetch.
+    "CNQ.TO": [
+        "https://www.sec.gov/Archives/edgar/data/1017413/000101741326000018/cnq-20251231.htm",
+        "https://www.sec.gov/Archives/edgar/data/1017413/000101741325000024/cnq-20241231.htm",
+        "https://www.cnrl.com/content/uploads/2026/03/CNQ_2025-AIF-March-25-2026.pdf",
+        "https://www.cnrl.com/content/uploads/2026/08/26-Q2-Interim-Report.pdf",
+        "https://www.cnrl.com/content/uploads/2026/05/26-Q1-Interim-Report.pdf",
+    ],
+    "CNQ": [
+        "https://www.sec.gov/Archives/edgar/data/1017413/000101741326000018/cnq-20251231.htm",
+        "https://www.sec.gov/Archives/edgar/data/1017413/000101741325000024/cnq-20241231.htm",
+        "https://www.cnrl.com/content/uploads/2026/03/CNQ_2025-AIF-March-25-2026.pdf",
+        "https://www.cnrl.com/content/uploads/2026/08/26-Q2-Interim-Report.pdf",
+        "https://www.cnrl.com/content/uploads/2026/05/26-Q1-Interim-Report.pdf",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
