@@ -107,7 +107,9 @@ def _run_script(
 def test_artifact_commit_preserves_untracked_files_across_main_sync(tmp_path: Path):
     """Email-report Sep-8 mode: untracked research bodies must survive reset+push."""
     remote, work = _seed_repo(tmp_path)
-    body = work / "docs" / "research" / "ITV.L" / "sources" / "filings" / "bodies" / "ir_deadbeef.txt"
+    body = (
+        work / "docs" / "research" / "ITV.L" / "sources" / "filings" / "bodies" / "ir_deadbeef.txt"
+    )
     _write(body, "filing body from this run\n")
     _write(work / "docs" / "data" / "latest.json", json.dumps({"tickers": 1}) + "\n")
 
@@ -132,7 +134,14 @@ def test_artifact_commit_preserves_untracked_files_across_main_sync(tmp_path: Pa
     latest = tmp_path / "latest"
     _git(tmp_path, "clone", str(remote), str(latest))
     committed_body = (
-        latest / "docs" / "research" / "ITV.L" / "sources" / "filings" / "bodies" / "ir_deadbeef.txt"
+        latest
+        / "docs"
+        / "research"
+        / "ITV.L"
+        / "sources"
+        / "filings"
+        / "bodies"
+        / "ir_deadbeef.txt"
     )
     assert committed_body.read_text(encoding="utf-8") == "filing body from this run\n"
     assert json.loads((latest / "docs" / "data" / "latest.json").read_text(encoding="utf-8")) == {
