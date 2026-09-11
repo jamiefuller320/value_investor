@@ -6869,6 +6869,34 @@ def test_parked_source_hunter_gle_l_ftse_smallcap_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_ftse_smallcap_rec_l_builtins(tmp_path: Path):
+    """Regression: REC.L parked IWB — recordfg.com FY2025/2024 AR + H1 FY25 statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("REC.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("2025-Annual-Report-Record-plc-1.pdf" in url for url in urls)
+    assert any("2024-Annual-Report-Record-plc.pdf" in url for url in urls)
+    assert any("2024-Half-Year-Report-Record-plc.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
+def test_parked_source_hunter_rec_l_ftse_smallcap_has_fetchable_ir():
+    """eng-20260911-10: REC.L has live recordfg.com FY2025/2024 AR + H1 FY25 statutory PDFs."""
+    assert "REC.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("REC.L")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("recordfg.com" in url for url in urls)
+    assert any("2025-Annual-Report-Record-plc-1.pdf" in url for url in urls)
+    body = fetch_filing_body(urls[0])
+    assert body
+    assert len(body) >= 50000
+
+
 def test_parked_source_hunter_ultp_l_ftse_smallcap_skip():
     """eng-20260911-06: ULTP.L Investegate RNS fails allowlist live-fetch title_mismatch; IR bot-gated."""
     assert "ULTP.L" in PARKED_SOURCE_HUNTER_SKIP
