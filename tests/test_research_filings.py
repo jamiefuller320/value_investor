@@ -3093,7 +3093,9 @@ def test_classify_filing_period_annual_and_interim():
     )
     assert classify_filing_period("Shell Publishes Annual Report and Accounts") == "annual"
     assert classify_filing_period("CNQ 2025 Annual Information Form") == "annual"
-    assert classify_filing_period("IR allowlist document — CNQ_2025-AIF-March-25-2026.pdf") == "annual"
+    assert (
+        classify_filing_period("IR allowlist document — CNQ_2025-AIF-March-25-2026.pdf") == "annual"
+    )
     assert classify_filing_period("Half-year Results") == "interim"
     assert classify_filing_period("Q1 Trading Update") == "trading_update"
     assert classify_filing_period("Interim Results for the six months ended 30 June") == "interim"
