@@ -377,6 +377,14 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/1061574/000106157426000012/cgi-fy26_q2xmda.htm",
         "https://www.sec.gov/Archives/edgar/data/1061574/000106157426000017/cgi-fy26_q3xpressrelease.htm",
     ],
+    # tsx60 IWB blocker — CNQ.TO parked unfetchable_iwb; keep the one cnrl.com AIF PDF
+    # that live-fetches (SEC 40-F HTML + Q2 interim PDF currently fail the gate).
+    "CNQ.TO": [
+        "https://www.cnrl.com/content/uploads/2026/03/CNQ_2025-AIF-March-25-2026.pdf",
+    ],
+    "CNQ": [
+        "https://www.cnrl.com/content/uploads/2026/03/CNQ_2025-AIF-March-25-2026.pdf",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -532,6 +540,8 @@ _ANNUAL_PATTERNS = (
     r"\bfinal results\b",
     r"\bannual report\b",
     r"\bannual results\b",
+    r"\bannual information form\b",
+    r"\baif\b",
     r"\byear[- ]end results\b",
     r"\baudited results\b",
     r"\bfy\d+\s+results\b",
@@ -3660,6 +3670,7 @@ def _ir_allowlist_period_from_url(url: str) -> str:
         token in lower
         for token in (
             "annual",
+            "aif",  # Canadian Annual Information Form (e.g. CNQ_2025-AIF-….pdf)
             "fy",
             "full-year",
             "full_year",

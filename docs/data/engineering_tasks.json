@@ -1,10 +1,10 @@
 {
   "tasks": [
     {
-      "id": "eng-20260911-01",
+      "id": "eng-20260911-11",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked tsx60 leftover CNQ.TO",
-      "summary": "Library market tsx60 (S&P/TSX 60) parked CNQ.TO after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statuto",
+      "summary": "Library market tsx60 (S&P/TSX 60) parked CNQ.TO after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py \u2014 do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statuto",
       "priority": "low",
       "priority_score": 12.0,
       "source": "parked_source_hunter",
@@ -19,7 +19,7 @@
         "doc": "docs/ops/library-ingest-escalation.md"
       },
       "acceptance_criteria": [
-        "Inspect IR / exchange sources for CNQ.TO only — do not invent URLs",
+        "Inspect IR / exchange sources for CNQ.TO only \u2014 do not invent URLs",
         "If a fetchable statutory/IR body exists, add allowlist + regression test",
         "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
         "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
@@ -45,7 +45,7 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "open"
+      "status": "pr_open"
     }
   ],
   "compiled_at": "2026-09-11T15:19:38.589436+00:00",

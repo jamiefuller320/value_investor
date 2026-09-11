@@ -3092,6 +3092,10 @@ def test_classify_filing_period_annual_and_interim():
         == "annual"
     )
     assert classify_filing_period("Shell Publishes Annual Report and Accounts") == "annual"
+    assert classify_filing_period("CNQ 2025 Annual Information Form") == "annual"
+    assert (
+        classify_filing_period("IR allowlist document — CNQ_2025-AIF-March-25-2026.pdf") == "annual"
+    )
     assert classify_filing_period("Half-year Results") == "interim"
     assert classify_filing_period("Q1 Trading Update") == "trading_update"
     assert classify_filing_period("Interim Results for the six months ended 30 June") == "interim"
@@ -6892,6 +6896,32 @@ def test_parked_source_hunter_rec_l_ftse_smallcap_has_fetchable_ir():
     urls = [row["url"] for row in rows]
     assert all("recordfg.com" in url for url in urls)
     assert any("2025-Annual-Report-Record-plc-1.pdf" in url for url in urls)
+    body = fetch_filing_body(urls[0])
+    assert body
+    assert len(body) >= 50000
+
+
+def test_fetch_filings_ir_allowlist_tsx60_cnq_to_builtins(tmp_path: Path):
+    """Regression: CNQ.TO parked IWB — cnrl.com AIF PDF that live-fetches."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("CNQ.TO", path=allowlist_path)
+    assert len(rows) == 1
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("CNQ_2025-AIF-March-25-2026.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") >= 1
+    assert len(fetch_filings_ir_allowlist("CNQ", path=allowlist_path)) == 1
+
+
+def test_parked_source_hunter_cnq_to_tsx60_has_fetchable_ir():
+    """eng-20260911-11: CNQ.TO has a live-fetchable cnrl.com AIF PDF."""
+    assert "CNQ.TO" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("CNQ.TO")
+    assert len(rows) == 1
+    urls = [row["url"] for row in rows]
+    assert any("cnrl.com" in url and url.endswith(".pdf") for url in urls)
     body = fetch_filing_body(urls[0])
     assert body
     assert len(body) >= 50000
