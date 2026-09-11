@@ -785,10 +785,9 @@ def honour_fcf_action_note_enforcement(report: CompanyReport) -> CompanyReport:
         fcf_bundle=fcf if fcf else None,
         screen_ttm=screen_ttm,
     )
-    fcf_changed = (
-        fcf.get("filing_aligned") != original_fcf.get("filing_aligned")
-        or fcf.get("screen_ttm") != original_fcf.get("screen_ttm")
-    )
+    fcf_changed = fcf.get("filing_aligned") != original_fcf.get("filing_aligned") or fcf.get(
+        "screen_ttm"
+    ) != original_fcf.get("screen_ttm")
     if (
         overlay == report.fcf_basis_overlay
         and adjusted == (report.adjusted_signal or report.signal)

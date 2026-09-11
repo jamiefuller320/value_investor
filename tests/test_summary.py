@@ -20,6 +20,7 @@ from value_investor.scoring.fcf import (
     extract_company_adjusted_fcf_from_reconciliation_bridges,
     fcf_action_note_mismatch,
     fcf_basis_divergence_flagged,
+    fcf_bundle_from_persisted_report,
     fcf_filing_screen_mismatch,
     fcf_universe_divergence_flagged,
     fcf_values_diverge,
@@ -27,7 +28,6 @@ from value_investor.scoring.fcf import (
     overlay_free_cashflow_from_bundle,
     parse_adjusted_eps_growth_pct,
     parse_company_adjusted_fcf,
-    fcf_bundle_from_persisted_report,
     parse_filing_aligned_from_action_note,
     parse_screen_ttm_from_action_note,
     reconcile_fcf,
@@ -4000,10 +4000,7 @@ def test_fcf_bundle_from_persisted_report_prefers_note_filing_over_metrics():
 
 
 def test_honour_and_to_dict_backfill_structured_fcf_from_note():
-    note = (
-        "Buy — neutral timing | FCF basis mismatch: filing £192.1M | "
-        "screen TTM £353.2M"
-    )
+    note = "Buy — neutral timing | FCF basis mismatch: filing £192.1M | screen TTM £353.2M"
     report = CompanyReport.from_dict(
         {
             "ticker": "BKG.L",
