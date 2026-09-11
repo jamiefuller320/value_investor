@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from unittest.mock import patch
 
-from value_investor.engineering_auto_merge import evaluate_auto_merge
+from value_investor.engineering_auto_merge import evaluate_auto_merge, pr_checks_successful
 from value_investor.engineering_tasks import BLOCKED_PATHS, EngineeringTask
 
 
@@ -80,3 +80,84 @@ def test_evaluate_auto_merge_rejects_when_auto_merge_disabled(tmp_path):
     )
     assert not decision.should_merge
     assert "not eligible" in decision.reason
+
+
+def test_pr_checks_successful_uses_modern_gh_json_fields():
+    """Regression: requesting removed 'conclusion' made every auto-merge skip."""
+
+    class _Result:
+        returncode = 0
+        stdout = json.dumps(
+            [
+                {"name": "test", "state": "SUCCESS", "bucket": "pass"},
+                {"name": "hunter-merge-gate", "state": "SUCCESS", "bucket": "pass"},
+                {"name": "verify-observer", "state": "SKIPPED", "bucket": "skipping"},
+            ]
+        )
+        stderr = ""
+
+    with (
+        patch("value_investor.engineering_auto_merge._github_repo", return_value="o/r"),
+        patch("value_investor.engineering_auto_merge._run_gh", return_value=_Result()) as run_gh,
+    ):
+        ok, reason = pr_checks_successful(564)
+    assert ok
+    assert reason == "all checks green"
+    assert run_gh.call_args.args[0] == ["pr", "checks", "564", "--json", "name,state,bucket"]
+
+
+def test_pr_checks_successful_waits_on_pending_bucket():
+    class _Result:
+        returncode = 0
+        stdout = json.dumps(
+            [
+                {"name": "test", "state": "IN_PROGRESS", "bucket": "pending"},
+                {"name": "hunter-merge-gate", "state": "SUCCESS", "bucket": "pass"},
+            ]
+        )
+        stderr = ""
+
+    with (
+        patch("value_investor.engineering_auto_merge._github_repo", return_value="o/r"),
+        patch("value_investor.engineering_auto_merge._run_gh", return_value=_Result()),
+    ):
+        ok, reason = pr_checks_successful(564)
+    assert not ok
+    assert "pending" in reason
+    assert "test" in reason
+
+
+def test_pr_checks_successful_rejects_fail_bucket():
+    class _Result:
+        returncode = 0
+        stdout = json.dumps(
+            [
+                {"name": "test", "state": "FAILURE", "bucket": "fail"},
+                {"name": "path-guard", "state": "SUCCESS", "bucket": "pass"},
+            ]
+        )
+        stderr = ""
+
+    with (
+        patch("value_investor.engineering_auto_merge._github_repo", return_value="o/r"),
+        patch("value_investor.engineering_auto_merge._run_gh", return_value=_Result()),
+    ):
+        ok, reason = pr_checks_successful(564)
+    assert not ok
+    assert "not green" in reason
+    assert "test" in reason
+
+
+def test_pr_checks_successful_surfaces_unknown_json_field_errors():
+    class _Result:
+        returncode = 1
+        stdout = ""
+        stderr = 'Unknown JSON field: "conclusion"\nAvailable fields:\n  bucket\n  state\n'
+
+    with (
+        patch("value_investor.engineering_auto_merge._github_repo", return_value="o/r"),
+        patch("value_investor.engineering_auto_merge._run_gh", return_value=_Result()),
+    ):
+        ok, reason = pr_checks_successful(564)
+    assert not ok
+    assert "conclusion" in reason
