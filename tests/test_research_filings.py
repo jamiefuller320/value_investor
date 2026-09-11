@@ -6786,6 +6786,35 @@ def test_parked_source_hunter_tpt_l_ftse_smallcap_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_ftse_smallcap_ultp_l_builtins(tmp_path: Path):
+    """Regression: ULTP.L parked IWB — Investegate FY2025/2024 audited RNS + H1 interim."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("ULTP.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert all("investegate.co.uk/announcement/rns/ultimate-products--ultp" in url for url in urls)
+    assert any("audited-results-for-the-year-ended-31-july-2025" in url for url in urls)
+    assert any("audited-results-for-the-year-ended-31-july-2024" in url for url in urls)
+    assert any("interim-results/8794781" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
+def test_parked_source_hunter_ultp_l_ftse_smallcap_has_fetchable_ir():
+    """eng-20260911-06: ULTP.L has live Investegate FY2025/2024 audited RNS + H1 interim."""
+    assert "ULTP.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("ULTP.L")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("investegate.co.uk" in url for url in urls)
+    assert any("audited-results-for-the-year-ended-31-july-2025" in url for url in urls)
+    body = fetch_filing_body(urls[0])
+    assert body
+    assert len(body) >= 50000
+
+
 def test_ir_allowlist_sec_edgar_body_accepts_issuer_alias_tokens():
     """SEC 20-F inline HTML may omit URL filename tokens; issuer aliases must suffice."""
     url = "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000004/nvs-20251231.htm"

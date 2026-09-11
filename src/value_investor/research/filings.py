@@ -116,6 +116,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.toppsgroup.com/media/4p1mmmbg/topps-tiles-ar2024-web.pdf",
         "https://www.toppsgroup.com/media/zbndsl2b/2025-interims.pdf",
     ],
+    # ftse_smallcap IWB blocker — ULTP.L parked unfetchable_iwb; CH PDFs fail and upplc.com is bot-gated (403).
+    "ULTP.L": [
+        "https://www.investegate.co.uk/announcement/rns/ultimate-products--ultp/audited-results-for-the-year-ended-31-july-2025/9197676",
+        "https://www.investegate.co.uk/announcement/rns/ultimate-products--ultp/audited-results-for-the-year-ended-31-july-2024/8514413",
+        "https://www.investegate.co.uk/announcement/rns/ultimate-products--ultp/interim-results/8794781",
+    ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
         "https://www.avh.be/~/media/Files/A/avh/corp/annual-report-2025-UK/2025-AvH-annualreport_UK_A4.pdf",
