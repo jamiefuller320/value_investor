@@ -5432,7 +5432,7 @@ def test_fetch_filings_ir_allowlist_itv_l(tmp_path: Path):
     assert len(mapping["ITV.L"]) >= 3
 
     rows = fetch_filings_ir_allowlist("ITV.L", path=allowlist_path)
-    assert len(rows) == 3
+    assert len(rows) == 5
     assert all(row["source"] == "ir_allowlist" for row in rows)
     periods = {row["period"] for row in rows}
     assert "annual" in periods
