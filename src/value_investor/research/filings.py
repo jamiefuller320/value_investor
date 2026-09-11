@@ -377,17 +377,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/1061574/000106157426000012/cgi-fy26_q2xmda.htm",
         "https://www.sec.gov/Archives/edgar/data/1061574/000106157426000017/cgi-fy26_q3xpressrelease.htm",
     ],
-    # tsx60 IWB blocker — CNQ.TO parked unfetchable_iwb; 6-K cover HTML primaries fail gate;
-    # SEC FY2025 40-F + cnrl.com AIF + Q2 interim PDFs fetch.
+    # tsx60 IWB blocker — CNQ.TO parked unfetchable_iwb; keep the one cnrl.com AIF PDF
+    # that live-fetches (SEC 40-F HTML + Q2 interim PDF currently fail the gate).
     "CNQ.TO": [
-        "https://www.sec.gov/Archives/edgar/data/1017413/000101741326000018/cnq-20251231.htm",
         "https://www.cnrl.com/content/uploads/2026/03/CNQ_2025-AIF-March-25-2026.pdf",
-        "https://www.cnrl.com/content/uploads/2026/08/26-Q2-Interim-Report.pdf",
     ],
     "CNQ": [
-        "https://www.sec.gov/Archives/edgar/data/1017413/000101741326000018/cnq-20251231.htm",
         "https://www.cnrl.com/content/uploads/2026/03/CNQ_2025-AIF-March-25-2026.pdf",
-        "https://www.cnrl.com/content/uploads/2026/08/26-Q2-Interim-Report.pdf",
     ],
 }
 

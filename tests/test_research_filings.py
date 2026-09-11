@@ -6898,30 +6898,26 @@ def test_parked_source_hunter_rec_l_ftse_smallcap_has_fetchable_ir():
 
 
 def test_fetch_filings_ir_allowlist_tsx60_cnq_to_builtins(tmp_path: Path):
-    """Regression: CNQ.TO parked IWB — SEC FY2025 40-F + cnrl.com AIF + Q2 interim PDFs."""
+    """Regression: CNQ.TO parked IWB — cnrl.com AIF PDF that live-fetches."""
     allowlist_path = tmp_path / "ir.json"
     allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
 
     rows = fetch_filings_ir_allowlist("CNQ.TO", path=allowlist_path)
-    assert len(rows) == 3
+    assert len(rows) == 1
     assert all(row["source"] == "ir_allowlist" for row in rows)
     urls = [row["url"] for row in rows]
-    assert any(url.endswith("cnq-20251231.htm") for url in urls)
     assert any("CNQ_2025-AIF-March-25-2026.pdf" in url for url in urls)
-    assert any("26-Q2-Interim-Report.pdf" in url for url in urls)
     assert sum(1 for row in rows if row["period"] == "annual") >= 1
-    assert sum(1 for row in rows if row["period"] == "interim") >= 1
-    assert len(fetch_filings_ir_allowlist("CNQ", path=allowlist_path)) == 3
+    assert len(fetch_filings_ir_allowlist("CNQ", path=allowlist_path)) == 1
 
 
 def test_parked_source_hunter_cnq_to_tsx60_has_fetchable_ir():
-    """eng-20260911-11: CNQ.TO has live SEC FY2025 40-F + cnrl.com AIF and Q2 interim PDFs."""
+    """eng-20260911-11: CNQ.TO has a live-fetchable cnrl.com AIF PDF."""
     assert "CNQ.TO" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("CNQ.TO")
-    assert len(rows) == 3
+    assert len(rows) == 1
     urls = [row["url"] for row in rows]
-    assert any(url.endswith("cnq-20251231.htm") for url in urls)
-    assert any("cnrl.com" in url for url in urls)
+    assert any("cnrl.com" in url and url.endswith(".pdf") for url in urls)
     body = fetch_filing_body(urls[0])
     assert body
     assert len(body) >= 50000
