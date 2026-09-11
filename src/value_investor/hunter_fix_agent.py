@@ -27,6 +27,7 @@ from value_investor.hunter_auto_merge import (
     hunter_fix_eligible,
     hunter_task_ticker,
     is_parked_source_hunter_task,
+    strip_unexpected_hunter_files,
 )
 from value_investor.storage import write_json
 
@@ -91,6 +92,24 @@ def latest_commit_is_hunter_fix(*, cwd: Path | None = None) -> bool:
     return subject.startswith(_HUNTER_FIX_COMMIT_PREFIX)
 
 
+def hunter_fix_kind_from_commit_subject(subject: str) -> str | None:
+    """Parse fix kind from `chore(hunter-fix): address hunter-merge-gate <kind>`."""
+    text = str(subject or "").strip()
+    match = re.search(r"address hunter-merge-gate ([a-z0-9_]+)$", text)
+    return match.group(1) if match else None
+
+
+def tip_hunter_fix_kind(*, cwd: Path | None = None) -> str | None:
+    result = subprocess.run(
+        ["git", "log", "-1", "--pretty=%s"],
+        check=False,
+        capture_output=True,
+        text=True,
+        cwd=cwd,
+    )
+    return hunter_fix_kind_from_commit_subject((result.stdout or "").strip())
+
+
 def _git_diff_excerpt(base_ref: str, head_ref: str, *, cwd: Path | None = None) -> str:
     paths = [
         "src/value_investor/research/filings.py",
@@ -135,7 +154,15 @@ def _fix_instructions(fix_kind: HunterFixKind) -> str:
             "Trim the new `_BUILTIN_IR_URLS` entry for this ticker to 1–3 HTTPS issuer IR "
             "URLs (prefer the newest annual + one interim if both exist). Update the "
             "matching `test_parked_source_hunter_*` / allowlist regression assertions to "
-            "the same URL set. Do not add SKIP."
+            "the same URL set. Do not add SKIP. Do not edit docs/data/*.json except "
+            "`docs/data/engineering_tasks.json`."
+        )
+    if fix_kind == HunterFixKind.UNEXPECTED_FILES:
+        return (
+            "Remove or revert any files outside the hunter allowlist "
+            "(`src/value_investor/research/filings.py`, `tests/test_research_filings.py`, "
+            "`docs/data/engineering_tasks.json`). Prefer restoring incidental docs/data "
+            "paths from origin/main."
         )
     return "Fix the hunter merge-gate failure."
 
@@ -192,6 +219,7 @@ def record_hunter_fix_attempt(
     *,
     tasks_path: Path = COMMITTED_TASKS_PATH,
     apply: bool = True,
+    fix_kind: HunterFixKind | str | None = None,
 ) -> int:
     """Increment evidence.hunter_fix_attempts; return new count."""
     payload = load_engineering_tasks(tasks_path)
@@ -208,6 +236,21 @@ def record_hunter_fix_attempt(
         attempts = 0
     attempts += 1
     evidence["hunter_fix_attempts"] = attempts
+    kind_value = (
+        fix_kind.value
+        if isinstance(fix_kind, HunterFixKind)
+        else str(fix_kind or "").strip() or None
+    )
+    if kind_value:
+        kinds = [
+            str(item).strip()
+            for item in (evidence.get("hunter_fix_kinds_attempted") or [])
+            if str(item or "").strip()
+        ]
+        if kind_value not in kinds:
+            kinds.append(kind_value)
+        evidence["hunter_fix_kinds_attempted"] = kinds
+        evidence["last_hunter_fix_kind"] = kind_value
     if apply:
         mark_task_status(
             task_id,
@@ -301,37 +344,98 @@ def run_hunter_fix_agent(
     eligible, eligibility_reason, fix_kind = hunter_fix_eligible(task=task, gate=gate)
     gate_before = gate.to_dict()
 
-    if not eligible or fix_kind is None:
-        result = HunterFixResult(
-            task_id=task.id,
-            fix_kind=fix_kind,
-            gate_before=gate_before,
-            gate_after=None,
-            agent_id=None,
-            summary=eligibility_reason,
-            skipped=True,
-            skip_reason=eligibility_reason,
-        )
+    def _persist(result: HunterFixResult) -> HunterFixResult:
         write_json(output_dir / f"hunter_fix_{task.id}.json", result.to_dict(), compact=False)
+        if pr_number is not None:
+            ok, detail = post_pr_comment(
+                pr_number=pr_number,
+                body=format_hunter_fix_pr_comment(result),
+            )
+            if not ok:
+                logger.warning("Hunter fix PR comment failed for #%s: %s", pr_number, detail)
         return result
+
+    if not eligible or fix_kind is None:
+        return _persist(
+            HunterFixResult(
+                task_id=task.id,
+                fix_kind=fix_kind,
+                gate_before=gate_before,
+                gate_after=None,
+                agent_id=None,
+                summary=eligibility_reason,
+                skipped=True,
+                skip_reason=eligibility_reason,
+            )
+        )
+
+    if record_attempt:
+        record_hunter_fix_attempt(task.id, tasks_path=tasks_path, fix_kind=fix_kind)
+
+    def _current_changed() -> list[str]:
+        diff_result = subprocess.run(
+            ["git", "diff", "--name-only", f"{base_ref}...HEAD"],
+            check=False,
+            capture_output=True,
+            text=True,
+            cwd=workdir,
+        )
+        names = [line.strip() for line in diff_result.stdout.splitlines() if line.strip()]
+        dirty = subprocess.run(
+            ["git", "diff", "--name-only"],
+            check=False,
+            capture_output=True,
+            text=True,
+            cwd=workdir,
+        )
+        for line in dirty.stdout.splitlines():
+            path_name = line.strip()
+            if path_name and path_name not in names:
+                names.append(path_name)
+        return names
+
+    # Deterministic strip for scope pollution — no LLM needed.
+    if fix_kind == HunterFixKind.UNEXPECTED_FILES:
+        stripped = strip_unexpected_hunter_files(base_ref=base_ref, cwd=workdir)
+        changed_after = _current_changed()
+        gate_after_obj = evaluate_hunter_merge_gate(
+            task=task,
+            changed_files=changed_after or changed_files,
+            base_ref=base_ref,
+            head_ref="HEAD",
+            cwd=workdir,
+            skip_live_fetch=False,
+        )
+        summary = (
+            f"Stripped unexpected files: {', '.join(stripped) or '(none)'}. "
+            f"Gate after: {gate_after_obj.reason}"
+        )
+        return _persist(
+            HunterFixResult(
+                task_id=task.id,
+                fix_kind=fix_kind,
+                gate_before=gate_before,
+                gate_after=gate_after_obj.to_dict(),
+                agent_id=None,
+                summary=summary,
+                changed_files=changed_after,
+            )
+        )
 
     if skip_agent or not api_key:
         reason = "CURSOR_API_KEY not set" if not api_key else "agent skipped"
-        result = HunterFixResult(
-            task_id=task.id,
-            fix_kind=fix_kind,
-            gate_before=gate_before,
-            gate_after=None,
-            agent_id=None,
-            summary=f"Hunter fix not run ({reason}).",
-            skipped=True,
-            skip_reason=reason,
+        return _persist(
+            HunterFixResult(
+                task_id=task.id,
+                fix_kind=fix_kind,
+                gate_before=gate_before,
+                gate_after=None,
+                agent_id=None,
+                summary=f"Hunter fix not run ({reason}).",
+                skipped=True,
+                skip_reason=reason,
+            )
         )
-        write_json(output_dir / f"hunter_fix_{task.id}.json", result.to_dict(), compact=False)
-        return result
-
-    if record_attempt:
-        record_hunter_fix_attempt(task.id, tasks_path=tasks_path)
 
     diff_excerpt = _git_diff_excerpt(base_ref, head_ref, cwd=workdir)
     prompt = _build_fix_prompt(
@@ -359,43 +463,28 @@ def run_hunter_fix_agent(
     except CursorAgentError as err:
         agent_text = f"Hunter fix agent startup failed: {err.message}"
 
-    diff_result = subprocess.run(
-        ["git", "diff", "--name-only", f"{base_ref}...{head_ref}"],
-        check=False,
-        capture_output=True,
-        text=True,
-        cwd=workdir,
-    )
-    changed_after = [line.strip() for line in diff_result.stdout.splitlines() if line.strip()]
-
+    # Always drop incidental files the agent may have touched.
+    strip_unexpected_hunter_files(base_ref=base_ref, cwd=workdir)
+    changed_after = _current_changed()
     gate_after_obj = evaluate_hunter_merge_gate(
         task=task,
         changed_files=changed_after or changed_files,
         base_ref=base_ref,
-        head_ref=head_ref,
+        head_ref="HEAD",
         cwd=workdir,
         skip_live_fetch=False,
     )
-    gate_after = gate_after_obj.to_dict()
-
-    result = HunterFixResult(
-        task_id=task.id,
-        fix_kind=fix_kind,
-        gate_before=gate_before,
-        gate_after=gate_after,
-        agent_id=agent_id,
-        summary=agent_text or "Hunter fix agent returned no text.",
-        changed_files=changed_after,
-    )
-    write_json(output_dir / f"hunter_fix_{task.id}.json", result.to_dict(), compact=False)
-    if pr_number is not None:
-        ok, detail = post_pr_comment(
-            pr_number=pr_number,
-            body=format_hunter_fix_pr_comment(result),
+    return _persist(
+        HunterFixResult(
+            task_id=task.id,
+            fix_kind=fix_kind,
+            gate_before=gate_before,
+            gate_after=gate_after_obj.to_dict(),
+            agent_id=agent_id,
+            summary=agent_text or "Hunter fix agent returned no text.",
+            changed_files=changed_after,
         )
-        if not ok:
-            logger.warning("Hunter fix PR comment failed for #%s: %s", pr_number, detail)
-    return result
+    )
 
 
 __all__ = [

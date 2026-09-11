@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-11T13:59:23+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-11T16:11:04+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -426,6 +426,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L356 | **Immediate park for non-hunter unfixable PRs** | Extend immediate park_unfixable beyond hunter tasks (e.g. ci_failure pytest regressions after autofix exhausted) using the same attention parked cap. | Non-hunter pr_open tasks routinely hit 48h ci_blocked park without autofix recovery |
 | L357 | **Add pull --rebase before dashboard-bridge and library-model-review auto-commits** | Those two workflows still call git-auto-commit-action without the Sync-main-before-commit rebase used by paper-auto / eng-queue / epoch0-weekday. Same push-reject race is possible under concurrent bot writers. | Either workflow fails Commit artifacts with main -> main (fetch first), or after epoch0 rebase fix lands and we do a hygiene pass on auto-commit workflows. |
 | L360 | **Refresh buy-tier charts past first fill for densify overlap** | FTSE densify is allowed but charts currently end before the paper book fill date, so held_path stays equity_marks. Refreshing charts through the latest mark would unlock daily densified tile paths. | docs/data/charts as_of/dates lag behind buy_tier_level equity_curve last mark |
+| L361 | **Path guard: resolve hunter task from PR head or merge-base queue** | CI path-guard checks out the PR merge commit with main. When main's engineering_tasks.json was clobbered, eng-20260911-11 vanished from the merge tree and path-guard reported unknown task id even though the branch tip still had the task. Consider loading the task row from PR head SHA or merge-base, or always-allow listed hunter paths when the branch task id is missing from the merge tree. | Another hunter PR fails path-guard with unknown task id after main queue churn, or after retry-by-kind (#585) lands |
 
 ---
 

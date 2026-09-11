@@ -51,6 +51,7 @@ class HunterFixKind(StrEnum):
     SHORT_SKIP = "short_skip"
     LIVE_FETCH_FAILED = "live_fetch_failed"
     TOO_MANY_URLS = "too_many_urls"
+    UNEXPECTED_FILES = "unexpected_files"
 
 
 HUNTER_FIXABLE_KINDS = frozenset(HunterFixKind)
@@ -183,6 +184,8 @@ def classify_hunter_fix_kind(result: HunterGateResult) -> HunterFixKind | None:
     # Gate text: "ALLOWLIST requires 1–{N} new URL(s)" when 0 or >N URLs.
     if "allowlist requires" in reason and "new url" in reason:
         return HunterFixKind.TOO_MANY_URLS
+    if "unexpected changed files" in reason:
+        return HunterFixKind.UNEXPECTED_FILES
     return None
 
 
@@ -192,6 +195,20 @@ def hunter_fix_attempt_count(task: EngineeringTask | dict[str, Any]) -> int:
         return max(0, int(evidence.get("hunter_fix_attempts") or 0))
     except (TypeError, ValueError):
         return 0
+
+
+def hunter_fix_kinds_attempted(task: EngineeringTask | dict[str, Any]) -> list[str]:
+    """Return distinct hunter-fix kinds already attempted for this task."""
+    evidence = task.evidence if isinstance(task, EngineeringTask) else (task.get("evidence") or {})
+    raw = evidence.get("hunter_fix_kinds_attempted") or []
+    if not isinstance(raw, list):
+        return []
+    out: list[str] = []
+    for item in raw:
+        kind = str(item or "").strip()
+        if kind and kind not in out:
+            out.append(kind)
+    return out
 
 
 def hunter_fix_eligible(
@@ -204,11 +221,77 @@ def hunter_fix_eligible(
     fix_kind = classify_hunter_fix_kind(gate)
     if fix_kind is None:
         return False, "gate failure is not hunter-fix eligible", None
-    attempts = hunter_fix_attempt_count(task)
+    attempted = hunter_fix_kinds_attempted(task)
+    if fix_kind.value in attempted:
+        return False, f"already attempted fix kind {fix_kind.value}", fix_kind
     max_rounds = hunter_fix_max_rounds()
-    if attempts >= max_rounds:
+    # Prefer distinct-kind budget so a new failure mode can still get one fix.
+    if len(attempted) >= max_rounds:
+        return (
+            False,
+            f"hunter_fix exhausted ({len(attempted)}/{max_rounds} kinds)",
+            fix_kind,
+        )
+    attempts = hunter_fix_attempt_count(task)
+    if attempts >= max_rounds and not attempted:
+        # Legacy tasks that only tracked hunter_fix_attempts.
         return False, f"hunter_fix exhausted ({attempts}/{max_rounds})", fix_kind
     return True, "eligible", fix_kind
+
+
+def strip_unexpected_hunter_files(
+    *,
+    base_ref: str,
+    cwd: Path | None = None,
+) -> list[str]:
+    """Restore non-allowlisted paths from base_ref; return stripped paths."""
+    workdir = Path(cwd or Path.cwd())
+    result = subprocess.run(
+        ["git", "diff", "--name-only", f"{base_ref}...HEAD"],
+        check=False,
+        capture_output=True,
+        text=True,
+        cwd=workdir,
+    )
+    names = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+    # Also include unstaged/untracked edits from the fix agent working tree.
+    dirty = subprocess.run(
+        ["git", "status", "--porcelain"],
+        check=False,
+        capture_output=True,
+        text=True,
+        cwd=workdir,
+    )
+    for line in dirty.stdout.splitlines():
+        path = line[3:].strip()
+        if " -> " in path:
+            path = path.split(" -> ", 1)[1].strip()
+        if path:
+            names.append(path)
+    stripped: list[str] = []
+    for path in sorted(set(names)):
+        if path in HUNTER_AUTO_MERGE_ALLOWED_FILES:
+            continue
+        checkout = subprocess.run(
+            ["git", "checkout", base_ref, "--", path],
+            check=False,
+            capture_output=True,
+            text=True,
+            cwd=workdir,
+        )
+        if checkout.returncode != 0:
+            # Path may be new on the branch — remove it.
+            subprocess.run(
+                ["git", "rm", "-f", "--ignore-unmatch", "--", path],
+                check=False,
+                capture_output=True,
+                text=True,
+                cwd=workdir,
+            )
+            if Path(workdir, path).exists():
+                Path(workdir, path).unlink(missing_ok=True)
+        stripped.append(path)
+    return stripped
 
 
 def _git_show(ref: str, path: str, *, cwd: Path | None = None) -> str | None:

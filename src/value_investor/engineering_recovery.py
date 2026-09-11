@@ -866,8 +866,13 @@ def park_hunter_pr_if_unfixable(
     head_ref: str = "HEAD",
     cwd: Path | None = None,
     max_attention_parked: int | None = None,
+    trust_local_gate: bool = False,
 ) -> RecoveryAction | None:
-    """Park a hunter pr_open task when CI is red and hunter-fix cannot recover it."""
+    """Park a hunter open/pr_open task when CI is red and hunter-fix cannot recover it.
+
+    When trust_local_gate is True (hunter-fix post-verify), skip the GitHub
+    check-run all-failed requirement — a fresh push often leaves checks pending.
+    """
     from value_investor.engineering_queue import task_id_from_branch
     from value_investor.hunter_auto_merge import (
         evaluate_hunter_merge_gate,
@@ -885,7 +890,12 @@ def park_hunter_pr_if_unfixable(
     row = next(
         (item for item in data.get("tasks") or [] if str(item.get("id") or "") == task_id), None
     )
-    if not isinstance(row, dict) or str(row.get("status") or "") != IN_FLIGHT_STATUS:
+    if not isinstance(row, dict):
+        return None
+    status = str(row.get("status") or "")
+    # Accept open as well as pr_open: hunter PRs sometimes stay "open" if
+    # mark-pr-open never landed, and fail→park must still reclaim the slot.
+    if status not in {IN_FLIGHT_STATUS, DISPATCHABLE_STATUS}:
         return None
     task = load_hunter_task_for_branch(branch, tasks_path=tasks_path)
     if task is None or not is_parked_source_hunter_task(task):
@@ -894,9 +904,10 @@ def park_hunter_pr_if_unfixable(
     pr = _open_pr_by_branch(open_prs or []).get(branch)
     if pr is None or pr.get("number") is None:
         return None
-    check_state = _pr_check_state(int(pr["number"]), repo=repo, token=token)
-    if not check_state.get("available") or not check_state.get("all_failed"):
-        return None
+    if not trust_local_gate:
+        check_state = _pr_check_state(int(pr["number"]), repo=repo, token=token)
+        if not check_state.get("available") or not check_state.get("all_failed"):
+            return None
 
     workdir = Path(cwd or Path.cwd())
     import subprocess
@@ -916,19 +927,19 @@ def park_hunter_pr_if_unfixable(
         head_ref=head_ref,
         cwd=workdir,
     )
+    if gate.ok:
+        return None
     eligible, eligibility_reason, _fix_kind = hunter_fix_eligible(task=task, gate=gate)
     fix_commit = latest_commit_is_hunter_fix(cwd=workdir)
     subject = _latest_commit_subject(branch, repo=repo, token=token) or ""
     fix_attempted = fix_commit or subject.startswith("chore(hunter-fix):")
 
-    if eligible and not fix_attempted:
-        return None
-
-    if eligible and fix_attempted and gate.ok:
+    # Another distinct fix kind can still run — do not park yet.
+    if eligible:
         return None
 
     reason = eligibility_reason
-    if fix_attempted and not gate.ok:
+    if fix_attempted:
         reason = f"hunter-fix exhausted — gate still failing: {gate.reason}"
     elif not eligible:
         reason = f"hunter PR unfixable — {eligibility_reason}; gate: {gate.reason}"
@@ -943,7 +954,7 @@ def park_hunter_pr_if_unfixable(
         task_id,
         reason=reason[:500],
         tasks_path=tasks_path,
-        from_status=IN_FLIGHT_STATUS,
+        from_status=status,
         apply=apply,
         parked_policy=PARKED_POLICY_HUNTER_UNFIXABLE,
         max_attention=max_attention,

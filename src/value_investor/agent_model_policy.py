@@ -251,7 +251,7 @@ def default_policy() -> dict[str, Any]:
                 "parked_hunter_verify_observer": True,
                 "hunter_fix": {
                     "enabled": True,
-                    "max_rounds": 1,
+                    "max_rounds": 2,
                     "live_fetch_retries": 3,
                     "live_fetch_backoff_seconds": [1.0, 2.0],
                 },
@@ -259,8 +259,9 @@ def default_policy() -> dict[str, Any]:
                     "parked_hunter: off | skip | allowlist — scoped auto-merge for "
                     "parked_source_hunter PRs after the CI hunter-merge-gate job passes. "
                     "parked_hunter_verify_observer dispatches a non-blocking LLM reviewer. "
-                    "hunter_fix runs one capped fix round when hunter-merge-gate fails on "
-                    "missing_test, short_skip, or live_fetch_failed."
+                    "hunter_fix runs capped fix rounds when hunter-merge-gate fails on "
+                    "missing_test, short_skip, live_fetch_failed, too_many_urls, or "
+                    "unexpected_files; distinct failure kinds can each consume one round."
                 ),
             },
             "queue_recovery": {
@@ -270,11 +271,12 @@ def default_policy() -> dict[str, Any]:
                 "resume_idle_minutes": 30,
                 "ci_red_park_hours": 48,
                 "note": (
-                    "immediate_park_unfixable_pr parks pr_open tasks when hunter-fix is "
-                    "ineligible/exhausted and CI is all-red; max_attention_parked_tasks "
-                    "pauses engineering dispatch and emails when attention-parked backlog "
-                    "is full. Resume when count drops below resume_attention_parked_below "
-                    "and resume_idle_minutes have elapsed since the last clearing action."
+                    "immediate_park_unfixable_pr parks open/pr_open tasks when hunter-fix is "
+                    "ineligible/exhausted and CI is all-red (or trust-local-gate after verify); "
+                    "max_attention_parked_tasks pauses engineering dispatch and emails when "
+                    "attention-parked backlog is full. Resume when count drops below "
+                    "resume_attention_parked_below and resume_idle_minutes have elapsed since "
+                    "the last clearing action."
                 ),
             },
             "hunter_url_monitor": {

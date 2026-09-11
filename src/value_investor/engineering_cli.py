@@ -86,6 +86,7 @@ from value_investor.hunter_fix_agent import (
     ci_log_shows_hunter_gate_failure,
     latest_commit_is_hunter_fix,
     run_hunter_fix_agent,
+    tip_hunter_fix_kind,
 )
 from value_investor.hunter_verify_agent import (
     format_observer_pr_comment,
@@ -337,13 +338,14 @@ def _cmd_park_unfixable_pr(args: argparse.Namespace) -> int:
         apply=not args.dry_run,
         base_ref=str(args.base_ref or "origin/main"),
         head_ref=str(args.head_ref or "HEAD"),
+        trust_local_gate=bool(getattr(args, "trust_local_gate", False)),
     )
     if args.json:
         _print_json(action.to_dict() if action else {"parked": False})
     elif action:
         print(f"Parked {action.task_id}: {action.reason}")
     else:
-        print("No park action (task not unfixable or not pr_open hunter with red CI)")
+        print("No park action (task not unfixable / still fixable / checks not red)")
     return 0 if action else 1
 
 
@@ -1113,9 +1115,16 @@ def _cmd_hunter_fix_eligible(args: argparse.Namespace) -> int:
     if args.require_ci_log and not hunter_gate_failed:
         eligible = False
         reason = "CI log does not show hunter-merge-gate failure"
-    if latest_commit_is_hunter_fix():
-        eligible = False
-        reason = "latest commit is already a hunter-fix bot commit"
+    # Tip chore(hunter-fix) only blocks when it already addressed this same
+    # failure kind — a new kind may still consume a fresh round.
+    if eligible and latest_commit_is_hunter_fix() and fix_kind is not None:
+        tip_kind = tip_hunter_fix_kind() or ""
+        if tip_kind and tip_kind == fix_kind.value:
+            eligible = False
+            reason = f"latest commit already addressed fix kind {tip_kind}"
+        elif not tip_kind:
+            eligible = False
+            reason = "latest commit is already a hunter-fix bot commit"
 
     payload = {
         "eligible": eligible,
@@ -1518,6 +1527,11 @@ def main(argv: list[str] | None = None) -> int:
     park_unfixable_p.add_argument("--base-ref", default="origin/main")
     park_unfixable_p.add_argument("--head-ref", default="HEAD")
     park_unfixable_p.add_argument("--dry-run", action="store_true")
+    park_unfixable_p.add_argument(
+        "--trust-local-gate",
+        action="store_true",
+        help="Skip GitHub check-run all-failed requirement (post hunter-fix verify)",
+    )
     park_unfixable_p.set_defaults(func=_cmd_park_unfixable_pr)
 
     try_accel_p = sub.add_parser(

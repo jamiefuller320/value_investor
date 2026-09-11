@@ -351,7 +351,7 @@ def test_classify_hunter_fix_kind_for_gate_failures():
     assert classify_hunter_fix_kind(too_many) == HunterFixKind.TOO_MANY_URLS
 
     scope = HunterGateResult(False, "unexpected changed files: foo.py")
-    assert classify_hunter_fix_kind(scope) is None
+    assert classify_hunter_fix_kind(scope) == HunterFixKind.UNEXPECTED_FILES
 
 
 def test_hunter_fix_eligible_respects_max_rounds(monkeypatch):
@@ -370,6 +370,32 @@ def test_hunter_fix_eligible_respects_max_rounds(monkeypatch):
     assert not eligible
     assert fix_kind == HunterFixKind.MISSING_TEST
     assert "exhausted" in reason
+
+
+def test_hunter_fix_eligible_allows_new_kind_after_prior_kind(monkeypatch):
+    monkeypatch.setattr("value_investor.hunter_auto_merge.hunter_fix_max_rounds", lambda: 2)
+    task = _hunter_task("AZE.BR")
+    task.evidence = dict(task.evidence or {})
+    task.evidence["hunter_fix_attempts"] = 1
+    task.evidence["hunter_fix_kinds_attempted"] = ["too_many_urls"]
+    from value_investor.hunter_auto_merge import HunterGateResult
+
+    gate = HunterGateResult(
+        ok=False,
+        reason="unexpected changed files: docs/data/automation.json",
+        tier="allowlist",
+    )
+    eligible, reason, fix_kind = hunter_fix_eligible(task=task, gate=gate)
+    assert eligible
+    assert fix_kind == HunterFixKind.UNEXPECTED_FILES
+    assert reason == "eligible"
+
+    # Same kind again is blocked.
+    task.evidence["hunter_fix_kinds_attempted"] = ["too_many_urls", "unexpected_files"]
+    eligible2, reason2, fix_kind2 = hunter_fix_eligible(task=task, gate=gate)
+    assert not eligible2
+    assert fix_kind2 == HunterFixKind.UNEXPECTED_FILES
+    assert "already attempted" in reason2 or "exhausted" in reason2
 
 
 def test_live_fetch_hunter_urls_retries_before_failure(monkeypatch):
