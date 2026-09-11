@@ -90,6 +90,11 @@ jobs:
           ftse-library --root docs/data/library --policy docs/data/library/policy.json \
             equal-support --census-only --json > /tmp/equal_support_census.json || true
 
+      # Rebase before auto-commit: ASX 00:45 UTC overlaps engineering-queue
+      # schedule; without this, push rejects lose marks until a later slot.
+      - name: Sync main before commit
+        run: git pull --rebase --autostash origin main
+
       - name: Commit epoch-0 weekday artifacts
         uses: stefanzweifel/git-auto-commit-action@v6
         with:

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-10T09:55:53+00:00",
+  "updated_at": "2026-09-11T06:24:33+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -7959,6 +7959,40 @@
       "status": "open",
       "source": "PR556 queue clearing discussion",
       "added_at": "2026-09-10T09:55:53+00:00"
+    },
+    {
+      "id": "L357",
+      "category": "later",
+      "section": "ops",
+      "title": "Add pull --rebase before dashboard-bridge and library-model-review auto-commits",
+      "summary": "Those two workflows still call git-auto-commit-action without the Sync-main-before-commit rebase used by paper-auto / eng-queue / epoch0-weekday. Same push-reject race is possible under concurrent bot writers.",
+      "revisit_when": "Either workflow fails Commit artifacts with main -> main (fetch first), or after epoch0 rebase fix lands and we do a hygiene pass on auto-commit workflows.",
+      "tags": [
+        "gha",
+        "auto-commit",
+        "rebase",
+        "ops"
+      ],
+      "status": "open",
+      "source": "epoch marks run failure investigation",
+      "added_at": "2026-09-11T06:24:33+00:00"
+    },
+    {
+      "id": "N117",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Shared concurrency group across eng-queue and epoch0-weekday",
+      "summary": "ASX 00:45 UTC overlaps engineering-queue schedule. A shared concurrency group would serialize writers, but pull --rebase is the established cheaper fix; avoid extra queueing unless races persist after rebase.",
+      "revisit_when": "epoch0-weekday still push-rejects after Sync main before commit is on main for several ASX slots.",
+      "tags": [
+        "gha",
+        "concurrency",
+        "epoch0",
+        "engineering-queue"
+      ],
+      "status": "open",
+      "source": "epoch marks run failure investigation",
+      "added_at": "2026-09-11T06:24:33+00:00"
     }
   ],
   "fragments": [
