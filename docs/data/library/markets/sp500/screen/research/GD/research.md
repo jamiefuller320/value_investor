@@ -1,46 +1,30 @@
 # General Dynamics Corporation (GD) — Research memo
 
-_Version 1 · Updated 2026-07-16T19:27:04.406009+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-11T07:41:50.999805+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-# General Dynamics Corporation (GD) — First-Pass Research Memo
-
-**Sources:** SEC EDGAR filings (`filings_index.json`, bodies where available), `screening_snapshot.json`, `news_manifest.json`. Annual consolidated statements fall back to `financials_annual.json` where 10-K bodies are truncated.
-
----
-
-## EXECUTIVE SUMMARY
-
-General Dynamics is a diversified aerospace and defence compounder: Gulfstream business jets, sole-source US submarine and destroyer franchises, land combat platforms, and IT/C5ISR services. The quantitative screen rates **Strong Buy** (8/22 models; composite 76%), supported by 5.3% FCF yield, 18% ROE, dividend growth, and a PEGY of 0.12 on ~12% growth.
-
-Filings show accelerating fundamentals: FY2025 revenue rose to **$52.6bn** (Yahoo fallback; 10-K body truncated before consolidated statements), Q1 2026 revenue **$13.5bn** (+10% YoY per 10-Q), and backlog reached **$130.8bn** at 5 April 2026. The valuation hook is quality compounder metrics against a multi-year defence and bizjet upcycle.
-
-The key debate is whether record backlog and submarine/aerospace momentum are already priced in after an all-time high (~$370), and whether programme execution (Columbia/Virginia ramp, Ajax, international land contracts) will constrain margins and FCF conversion.
-
----
+General Dynamics is a diversified aerospace and defence compounder: Gulfstream business jets plus submarine, combat vehicle, munitions and IT franchises tied to multi-decade U.S. and allied procurement cycles. The quantitative screen rates GD as a strong buy; filing evidence supports improving revenue, margins and cash conversion, with record backlog of $136.5 billion at 2Q 2026. The valuation debate is whether five-year share-price gains and a ~20× earnings multiple already embed submarine and bizjet upcycles, versus visible earnings power from $186.9 billion of total estimated contract value. Key risks are U.S. government budget and appropriation timing, submarine industrial-base execution, and programme-specific exposure (Ajax, M10 Booker termination, large international land contract).
 
 ## INVESTMENT THESIS
+GD fits a value-quality screen: durable franchises, rising free cash flow, net debt that is manageable relative to earnings, and a dividend raised annually since 1999 ($1.59 per quarter declared in the 2Q 2026 10-Q). The screen signal is strong_buy, though the snapshot carries zero passed models and a data_quality_score of 0.0 — metric detail is thin and should not be over-weighted without verify-before-trade packs.
 
-GD fits a value-quality-GARP screen unusually well for a defence prime.
+Business quality is high. The FY2025 10-K describes four segments — Aerospace (Gulfstream/Jet Aviation), Marine Systems (Electric Boat submarines, Bath Iron Works destroyers), Combat Systems (Abrams, Stryker, munitions) and Technologies (IT/C5ISR). Segment narratives show Aerospace revenue of $13.1 billion (+17% vs 2024) and Marine Systems of $16.7 billion (+17%), together ~57% of consolidated revenue. Columbia-class ballistic-missile submarines alone carry a Navy program of record exceeding $125 billion.
 
-**Quantitative alignment.** The screen passes eight models across five families: cheapness (FCF Yield, Magic Formula, Composite Value), quality (Quality Value, Buffett Quality, Financial Health), dividend (Dividend Growth), and GARP (Neff PEGY). At P/E 23.1, P/B 3.8, 1.7% yield, and ROE 18.0%, the name scores as inexpensive relative to earnings power and cash generation (FCF ~$5.3bn per screen; Yahoo FY2025 FCF **$4.0bn**). PEGY 0.12 implies growth is not fully reflected in the multiple.
+Interim filings confirm momentum: 1H 2026 revenue $27.6 billion (+9.1% YoY), operating margin 10.4% (+20 bps), and 1H operating cash flow $4.0 billion vs $1.5 billion in 1H 2025 (2Q 2026 10-Q). Backlog rose to $136.5 billion; book-to-bill was 1.4× in 2Q and 1.8× in 1H 2026. Aerospace orders exceeded revenue (1.5× in 2Q) despite double-digit revenue growth — a rare combination in defence.
 
-**Business quality behind the metrics.**
-
-1. **Visibility** — Q1 2026 10-Q reports **$130.8bn** remaining performance obligations (~2.5× LTM revenue), with 55% expected recognised by end-2027. Q3 2025 interim showed **$109.9bn** backlog, confirming build through 2025.
-2. **Franchise depth** — FY2025 10-K (business section): Marine Systems revenue **$16.7bn** (+17% vs 2024); Aerospace **$13.1bn** (+16%). Electric Boat leads Columbia-class ballistic-missile submarines (program of record >$125bn) and Virginia-class attack boats; Gulfstream G800 entered service in 2025.
-3. **Earnings leverage** — Q1 2026 diluted EPS **$4.10** vs **$3.66** prior year (+12%) on revenue +10%; nine months 2025 net earnings **$3.07bn** vs **$2.63bn** (+16%) per Q3 2025 10-Q.
-4. **Balance sheet** — Q1 2026: cash **$3.65bn**, total debt **$8.0bn**, shareholders’ equity **$26.1bn**; covenants compliant per 10-Q. Yahoo FY2025 net debt **$5.7bn** — manageable for the cash profile.
-
-For a value investor, GD offers contracted revenue, rising returns on invested capital, and FCF recovery (Q1 2026 operating cash flow **$2.16bn** vs **$(148)m** in Q1 2025 as working capital normalised), with screen metrics suggesting the market still underprices the growth-cash combination.
-
----
+For a value investor, the hook is earnings and cash flow compounding on contracted backlog rather than speculative growth. Tangible book remains modest ($3.2 billion per Yahoo at FY2025) given $21 billion of goodwill, but contract economics and pension funding trends (retirement benefits liability $1.1 billion at 2Q 2026 per 10-Q) do not presently threaten the capital-return model.
 
 ## FINANCIAL REVIEW
+Annual (10-K filings indexed; consolidated statement tables not present in body extracts)
 
-### Annual results (10-K)
+Both FY2025 (filed 30 January 2026) and FY2024 (filed 7 February 2025) 10-K bodies are available but truncated before Item 8 financial statement tables. Segment revenue is readable from the business narrative:
 
-**Coverage:** Two annual 10-K bodies are present (FY2024 filed 7 Feb 2025; FY2025 filed 30 Jan 2026). Both are truncated at ~80,000 characters and contain the business overview and segment product tables, but **not** consolidated income statements, cash flow statements, or full risk-factor text. Consolidated annual figures below use **`financials_annual.json` (Yahoo fallback)** unless noted.
+| Segment | FY2025 | FY2024 | Source |
+|---------|--------|--------|--------|
+| Aerospace | $13,110m | $11,249m | FY2025 10-K body |
+| Marine Systems | $16,723m | $14,343m | FY2025 10-K body |
+
+Combat Systems and Technologies segment totals are not present in the truncated extracts. Consolidated annual figures below fall back to Yahoo (`financials_annual.json`), stated explicitly:
 
 | Metric | FY2025 | FY2024 | FY2023 | Source |
 |--------|--------|--------|--------|--------|
@@ -51,142 +35,64 @@ For a value investor, GD offers contracted revenue, rising returns on invested c
 | Operating cash flow | $5.12bn | $4.11bn | $4.71bn | Yahoo fallback |
 | Free cash flow | $3.96bn | $3.20bn | $3.81bn | Yahoo fallback |
 
-Revenue CAGR 2023–2025 is ~11%; EPS growth outpaced revenue, consistent with mix shift toward higher-margin Aerospace and operating leverage in Marine.
+Trend: four-year revenue CAGR ~7%; EPS growth outpaced revenue (FY2023–FY2025 diluted EPS +28%). FCF re-accelerated in FY2025 (+24% vs FY2024). Net debt was $5.68 billion at FY2025 year-end (Yahoo fallback); cash rose to $4.33 billion by 2Q 2026 (10-Q).
 
-**From FY2025 10-K filing body (segment revenue, primary source):**
+Interim (10-Q filings — primary source)
 
-| Segment | 2025 | 2024 | 2023 |
-|---------|------|------|------|
-| Aerospace | $13,110m | $11,249m | $8,621m |
-| Marine Systems | $16,723m | $14,343m | $12,461m |
+Seven interim 10-Q filings are indexed (2024–2026). The 2Q 2026 filing (period ended 5 July 2026, filed 29 July 2026) provides the freshest consolidated data:
 
-Combat Systems and Technologies segment tables sit beyond the truncation point; no primary filing figures for those segments or consolidated total in the available bodies.
+**2Q 2026 vs 2Q 2025 (10-Q body):**
+- Revenue: $14.09bn vs $13.04bn (+8.1%)
+- Operating earnings: $1.46bn vs $1.31bn (+11.9%); margin 10.4% vs 10.0%
+- Diluted EPS: $4.24 vs $3.74
 
-### Interim results (10-Q)
+**1H 2026 vs 1H 2025 (10-Q body):**
+- Revenue: $27.58bn vs $25.26bn (+9.1%)
+- Operating earnings: $2.88bn vs $2.57bn (+11.9%); margin 10.4% vs 10.2%
+- Diluted EPS: $8.35 vs $7.40
+- Operating cash flow: $4.04bn vs $1.45bn
 
-Six interim 10-Q bodies are available (Q2–Q3 2024 through Q1 2026). Key trends:
+Segment drivers (1H 2026 MD&A in 10-Q): Aerospace revenue +11.8% on Gulfstream deliveries (79 units vs 74); Marine +15.3% on submarine and T-AO oiler throughput; Combat Systems +2.6% (munitions up, U.S. military vehicles down on Army recapitalisation and M10 Booker termination); Technologies +4.2% on C5ISR volume.
 
-**Q1 2026** (period ended 5 April 2026; filed 29 April 2026):
+Backlog and balance sheet (10-Q, 5 July 2026): total backlog $136.5bn (vs $130.8bn at 1Q 2026); estimated potential contract value $186.9bn. Funded backlog $104.1bn. Unbilled receivables $9.3bn; customer advances $11.0bn — typical for percentage-of-completion defence accounting. Total debt $7.5bn; the company reports covenant compliance.
 
-| | Q1 2026 | Q1 2025 | YoY |
-|--|---------|---------|-----|
-| Revenue | $13,481m | $12,223m | +10.3% |
-| Operating earnings | $1,420m | $1,268m | +12.0% |
-| Net earnings | $1,125m | $994m | +13.2% |
-| Diluted EPS | $4.10 | $3.66 | +12.0% |
-| Operating cash flow | $2,155m | $(148)m | — |
-| Backlog | **$130.8bn** | — | — |
-
-Segment Q1 2026 revenue (10-Q): Aerospace $3,279m; Marine $4,343m; Combat $2,283m; Technologies $3,576m. Marine and Aerospace drove growth (submarines +25% YoY at $3,272m; Aerospace +8%).
-
-**Nine months 2025** (Q3 2025 10-Q, period ended 28 September 2025):
-
-| | 9M 2025 | 9M 2024 | YoY |
-|--|---------|---------|-----|
-| Revenue | $38,171m | $34,378m | +11.0% |
-| Operating earnings | $3,904m | $3,373m | +15.7% |
-| Net earnings | $3,067m | $2,634m | +16.4% |
-| Diluted EPS | $11.29 | $9.49 | +19.0% |
-| Backlog (28 Sep 2025) | **$109.9bn** | — | — |
-
-**Q1 2025 vs Q1 2024** (Q1 2025 10-Q): revenue $12,223m vs $10,731m (+14%); net earnings $994m vs $799m (+24%).
-
-### Balance sheet and cash (Q1 2026 10-Q, primary)
-
-- Total assets: **$59.0bn**; cash **$3.65bn** (vs $2.33bn at 31 Dec 2025)
-- Net unbilled receivables: **$9.05bn** (long-cycle contract accounting)
-- Customer advances/deposits: **$10.85bn**
-- Total debt: **$8.01bn**; long-term **$6.26bn**
-- Dividend: **$1.59/share** in Q1 2026 (vs $1.50 in Q1 2025)
-
-### Data gaps
-
-- Consolidated FY2025/FY2024 income and cash flow: **not in filing bodies**; Yahoo used.
-- Nine 8-K filings indexed (May 2025–May 2026) have **no body extracts** — no primary text for earnings releases or guidance updates beyond quarterly filings.
-- Full Item 1A risk-factor narrative absent from truncated 10-K bodies; risk language drawn from Q1 2026 10-Q Note J and MD&A where available.
-
----
+**Gap note:** Annual consolidated income/cash-flow statement figures are not extractable from 10-K body files; Yahoo is used for those lines. Interim quarterly tables in older 10-Q bodies (2024–2025) are largely XBRL-only; 2Q 2026 10-Q has full readable statements.
 
 ## RISKS AND RED FLAGS
+**Regulatory / customer concentration.** The 2Q 2026 10-Q states performance is “significantly influenced by U.S. government spending levels.” Q2 U.S. government revenue (DoW, other agencies, FMS) was $9.48bn of $14.09bn (~67%). Unfunded backlog “includes amounts we believe are likely to be funded, but there is no guarantee that future budgets and appropriations will provide the same funding level.” Budget delays or reprogramming would affect timing, not necessarily long-term demand, but near-term working capital can swing.
 
-**Programme and execution**
+**Execution / industrial base.** MD&A flags pressure on the shipbuilding supply chain and workforce ramp for concurrent Columbia and Virginia submarine production. Trump administration pressure to accelerate submarine output (July 2025 news) adds schedule risk if capacity lags demand.
 
-- **Submarine industrial base:** FY2025 10-K and Q1 2026 MD&A cite supply-chain and workforce pressure on concurrent Columbia/Virginia production. Execution slippage could affect margins on cost-reimbursement and fixed-price mix.
-- **International land-vehicles contract:** Q1 2026 10-Q flags variable consideration on a large Combat Systems tracked-vehicle contract; actual realisation could fall short with **material unfavourable impact**. Net unbilled receivables include **$1.3bn** tied to this programme.
-- **Ajax (UK):** News reports (not primary filings) cite crew health problems and job-risk warnings on GD Land Systems’ Ajax programme (e.g. “Over one third of Ajax vehicles caused crew health problems”, 5 Dec 2025; “MP warns Ajax flaws threaten Welsh armoured jobs”, 15 Jan 2026). Reputational and contract risk for European Land Systems.
+**Programme-specific.** Combat Systems: U.S. military vehicle revenue fell in 1H 2026 on lower Army demand and M10 Booker termination (10-Q). UK Ajax armoured vehicle programme drew parliamentary scrutiny over crew health issues (UK Defence Journal, December 2025). A “large international tracked vehicle contract” carries variable consideration that “could be less than our estimate” with potentially material unfavourable impact (10-Q Note B).
 
-**Legal and regulatory**
+**Litigation.** A Sherman Act wage-fixing class action against shipyard defendants was dismissed against GD in May 2026 (10-Q Note J); other incidental claims ongoing. Environmental PRP sites disclosed; company states aggregate liability “will not have a material impact.”
 
-- **Antitrust litigation:** Q1 2026 10-Q Note J describes a Sherman Act class action (filed Oct 2023) alleging wage-fixing among shipyard employers. Fourth Circuit remanded the case (May 2025); Supreme Court petition filed Sep 2025. GD states it **cannot estimate loss** and outcome **could be material**.
-- **Government dependence:** ~76% of Q1 2026 revenue from US government (DoW, non-DoW, FMS per 10-Q). Budget delays, continuing resolutions, or priority shifts pose revenue timing risk (MD&A notes partial DHS shutdown immaterial to date).
-- **Contract disputes:** REAs and claims routinely disputed; company believes resolutions will not be material in aggregate.
+**Pension.** Defined-benefit net periodic cost was $47m in 1H 2026 (10-Q Note O); noncurrent retirement benefits liability $1.07bn. U.S. government contracts recover pension costs under FAR/CAS — timing differences vs GAAP create deferred credits.
 
-**Financial structure**
+**Competitive / cyclical.** Defence peer rotation (Jim Cramer preferring Lockheed, September 2025) and sector underperformance vs the S&P 500 (Barron’s, September 2026) highlight cyclical sentiment risk even when fundamentals improve. Gulfstream faces supply-chain delays (Middle East airframe supplier cited in 10-Q MD&A).
 
-- **Pension/OPEB:** Other liabilities include retirement benefits **$1.09bn** (non-current, Q1 2026). Accumulated OCI includes **$(1.33bn)** retirement-plan adjustment. Not a near-term liquidity threat but a long-duration obligation.
-- **Working capital volatility:** Defence revenue recognition drives large unbilled receivables and customer advances; Q1 2025 had negative operating cash flow before Q1 2026 normalised.
-- **Goodwill/intangibles:** Goodwill **$21.0bn** (~36% of total assets at Q1 2026); Technologies reporting unit carries **$1.8bn** accumulated impairment history per 10-Q.
+**Accounting.** No going-concern language in available extracts. Contract estimate adjustments added $135m to 1H 2026 revenue and $83m to operating earnings — immaterial individually but worth monitoring on fixed-price submarine and vehicle programmes.
 
-**Governance**
+**Governance.** General counsel succession announced July 2025; CEO share sale reported August 2025 (Quiver Quantitative) — routine but worth tracking.
 
-- General counsel succession (Jul 2025 news): long-serving GC retiring, deputy promoted — routine but worth monitoring for government-contract compliance oversight.
-
-**Not observed:** No going-concern language in available filing bodies. Debt covenants: **in compliance** as of 5 April 2026.
-
----
+RiskTags: regulatory, cyclical, customer_concentration, pension, competitive, litigation, other
+RiskTags: regulatory, cyclical, customer_concentration, pension, competitive, litigation, other
 
 ## NEWS HIGHLIGHTS
+Coverage is voluminous but skewed toward institutional flow (MarketBeat position changes) and valuation opinion pieces; material company-specific items include:
 
-Coverage is **moderately thick** for GD-specific items, though diluted by unrelated “GD” ticker matches (e.g. GD Culture Group).
+- **2Q 2026 earnings beat and backlog expansion** — “General Dynamics: Why Q2 Results And Market-Cap Weighted Multiples Trigger An Upgrade (Rating Upgrade)” (Seeking Alpha, 22 August 2026); “General Dynamics (GD) Could Be 8% Undervalued As Q2 Earnings Beat Lands” (Yahoo Finance, 29 August 2026).
+- **Contract wins** — “Can the Sea-Launched Cruise Missile Program Boost GD's Growth?” ($194.1m Navy contract; Yahoo Finance, 4 September 2026); “Canada inks near C$2 billion deal with General Dynamics for armored vehicles” (Reuters/Yahoo, 16 July 2026); references to ~$76.6bn submarine programme context (Yahoo Finance, 30 July 2026).
+- **Policy / production pressure** — “Trump Urges Faster Submarine Production, Singles Out General Dynamics at Summit” (Bloomberg/Yahoo, 15 July 2026).
+- **Management / governance** — “General Dynamics (GD) Names New Top Lawyer As Marine Systems Earnings Stay Strong” (Yahoo Finance, 15 July 2026); “Insider Sale: Chairman and CEO of $GD Sells 15,917 Shares” (Quiver Quantitative, 4 August 2026).
+- **Dividend** — “Is General Dynamics Corporation (GD) Still a Dividend Powerhouse?” — $1.59 quarterly dividend declared August 2026, payable November 2026 (Yahoo Finance, 26 August 2026).
+- **Analyst divergence** — Jefferies raised target on aero strength (Investing.com, 9 July 2026); Deutsche Bank downgrade to Hold cited in April 2026 coverage; GuruFocus DCF article implying intrinsic value ~$189 vs price ~$357 (9 September 2026) — highlights valuation dispersion.
+- **Sector context** — “Time to Buy the Dip on Defense Stocks?” (Barron’s, 8 September 2026) noting defence ETF underperformance despite record spending.
 
-**Strategy and orders**
-
-- “Canada inks near C$2 billion deal with General Dynamics for armored vehicles” (16 Jul 2026) — 190 armoured combat support vehicles over four years via Canadian subsidiary.
-- “Trump Urges Faster Submarine Production, Singles Out General Dynamics at Summit” (15 Jul 2026, Bloomberg) — political pressure to accelerate submarine output, aligning with Electric Boat backlog.
-- “General Dynamics Texas Munitions Bet Reshapes Defense Capacity And Investor Focus” (3 Jun 2026) — munitions capacity investment.
-- “Expanded Navy C5ISR Role Might Change The Case For Investing In General Dynamics (GD)” (29 Jun 2026) — Technologies segment positioning.
-
-**Financial / market**
-
-- “General Dynamics stock hits all-time high at 369.71 USD” (2 Jul 2026, Investing.com).
-- “General Dynamics (GD) Stock Could Be 13% Undervalued As Raised Guidance Lands” (8 Jul 2026, simplywall.st).
-- “Jefferies raises General Dynamics stock price target on aero strength” (9 Jul 2026).
-- “General Dynamics Downgraded to Hold at Deutsche Bank” (8 Apr 2026) — counterpoint on valuation after run-up.
-- “How Record Backlog and Dividend Hike At General Dynamics (GD) Has Changed Its Investment Story” (15 Feb 2026).
-
-**Management / governance**
-
-- “General Dynamics (GD) Names New Top Lawyer As Marine Systems Earnings Stay Strong” (15 Jul 2026).
-- “General Dynamics Stock (GD) Opinions on Leadership Transition and Ajax Program Risks” (12 Dec 2025, Quiver Quantitative).
-
-**Programme risks (news, not filings)**
-
-- Ajax health and job-risk headlines (Dec 2025–Jan 2026, UK Defence Journal).
-
-**Earnings cycle**
-
-- “General Dynamics (GD) Earnings Growth Outpaces Revenue And Tests Moderately Bullish Narratives” (30 Apr 2026) — consistent with filing trend of margin/EPS leverage.
-
----
+Overall: news confirms operational momentum and contract pipeline; less independent investigative depth on programme risks (Ajax, submarine delays).
 
 ## RESEARCH VERDICT
-
-Verdict: accumulate  
-Risk: medium  
-Confidence: 0.78  
-Rationale: Deep research confirms the Strong Buy screen — backlog at $130.8bn, double-digit revenue and EPS growth in recent quarters, and strong FCF/quality metrics — but medium risk from programme execution, antitrust litigation, and a full valuation after the all-time high slightly tempers outright conviction.
-
----
-
-*Note: This memo is a first-pass overlay on the quantitative screen. It is not investment advice and does not include price targets.*
-
-## INVESTMENT THESIS
-
-
-## FINANCIAL REVIEW
-
-
-## RISKS AND RED FLAGS
-
-
-## NEWS HIGHLIGHTS
+Verdict: accumulate
+Risk: medium
+Confidence: 0.72
+Rationale: Filing-backed revenue, margin and backlog trends support the quantitative strong-buy signal on business quality, but truncated annual filing extracts, sparse screen metrics, and mixed third-party valuation views warrant phased accumulation rather than full conviction at current levels.

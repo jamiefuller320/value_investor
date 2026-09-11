@@ -1,88 +1,113 @@
 # Fortive Corporation (FTV) — Research memo
 
-_Version 1 · Updated 2026-08-02T12:31:36.550810+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-11T07:40:55.189483+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Fortive is a post-spin industrial technology and healthcare workflow business, now focused on Intelligent Operating Solutions (IOS) and Advanced Healthcare Solutions (AHS) following the June 2025 Ralliant separation. The quantitative screen flags a buy on cash-flow yield, growth-adjusted valuation (PEGY), dividend growth, and earnings quality, despite failing most classic deep-value and quality-moat models. H1 2026 interim filings show accelerating demand—core revenue up 6.1% with operating margin expanding to roughly 19%—and aggressive capital return ($700m of buybacks in six months). The central debate is whether simplified portfolio execution and FBS-driven margin gains justify a headline P/E near 31x, or whether goodwill-heavy balance sheet, leverage, and separation-related liabilities cap upside for a value investor.
+Fortive is a post-spin industrial technology business (Intelligent Operating Solutions and Advanced Healthcare Solutions) that completed the Ralliant separation on 28 June 2025, materially simplifying the portfolio. The quantitative screen rates FTV a buy, though the latest snapshot carries zero populated model metrics; an August 2026 snapshot showed four of 22 models passing (FCF Yield, Neff PEGY, Dividend Growth, Earnings Quality) with a 59% composite score. H1 2026 continuing-operations trends are constructive: sales up 7.8% to $2.17bn and operating profit up 20% to $402m, with strong cash conversion. The valuation hook is cash-flow yield and GARP-style metrics against a business showing post-spin margin expansion and aggressive capital return. The key debate is whether ~31x trailing P/E and heavy intangible leverage are already priced in, given European end-market softness and the comparability break from the spin-off.
 
 ## INVESTMENT THESIS
-The screen’s buy signal rests on cash generation rather than asset cheapness. Fortive passes FCF Yield (5.3%), Neff PEGY (0.70), Dividend Growth, and Earnings Quality, with all four valuation families (cheapness, dividend, GARP, risk) clearing thresholds; composite score 59% versus sector 56%. That profile fits a **GARP/cash-return** value investor more than a net-net or Graham buyer—the name fails 18 of 22 models, including Graham Defensive, Deep Value, Buffett Quality, and Economic Moat (ROE 7.3%, P/B 3.0x, EV/EBIT 29.3x).
+Fortive fits a value-oriented GARP profile rather than deep value. The screen’s buy signal rests on cash generation and earnings quality, not classic Graham metrics — Graham Defensive, Deep Value, and Lynch PEG all failed in the fuller August screen, largely on P/E (~31x), modest ROE (7.3%), and low headline growth (4%). What passes is more instructive: FCF yield (~5.3%), PEGY (0.70), dividend growth (16.7% hike to $0.07 per quarter), and earnings quality (OCF exceeding net income).
 
-Business quality post-Ralliant looks improved in the filings. The Q2 2026 10-Q reports H1 continuing sales of **$2,166.2m** (+7.8% YoY), core growth of **6.1%**, and operating profit of **$401.6m** versus **$335.1m** prior year. IOS (Fluke, ServiceChannel, Gordian, etc.) drives roughly 69% of revenue; AHS (ASP sterilisation, Provation, etc.) contributes the balance with higher healthcare exposure (~30% of Q2 end markets). Recurring/software characteristics are material: remaining performance obligations totalled **$824.8m** at 3 July 2026, with deferred revenue of **$476.7m**.
+Business quality supports the screen. Post-Ralliant, Fortive operates two focused segments — IOS (instrumentation/software, e.g. Fluke) and AHS (healthcare workflow) — under the Fortive Business System culture of continuous improvement. H1 2026 operating margin expanded to 18.5% from 16.7% year-on-year (Q2 2026 10-Q). Management is returning capital aggressively: $700m of share repurchases in H1 2026 alone, on top of a multi-year programme (55.5m shares / $3.42bn since 2022 per news coverage). Q2 2026 revenue of $1.10bn beat expectations (+7.9% YoY on a continuing basis), and full-year adjusted EPS guidance was raised at the July 2026 earnings release.
 
-Management is returning capital at scale. H1 2026 repurchases were **$700.3m** (12.3m shares at **$57.13** average), funded partly by May 2026 note issuance ($1.1bn gross) and commercial paper. The Fortive Business System and “Fortive Accelerated” strategy (organic growth, disciplined M&A, investor trust) provide an operational framework that aligns with the screen’s earnings-quality pass. For a value investor, the case is: **improving post-spin earnings power + FCF yield + buyback support**, not asset-based cheapness.
+For a value investor, the case is: simplified, higher-quality remaining portfolio; improving margins and organic growth; FCF well above reported earnings; and capital return at a valuation where cash-flow-based screens still find margin of safety — even as earnings-multiple screens do not.
 
 ## FINANCIAL REVIEW
-**Annual (10-K) — gap noted.** Two annual 10-K filings are indexed (FY2024, filed 25 Feb 2025; FY2025, filed 25 Feb 2026), but body extracts are truncated before Item 8 financial statements. Annual figures below are from **Yahoo `financials_annual.json` (fallback)** on a continuing-operations basis consistent with post-Ralliant reporting.
+**Source note:** SEC EDGAR 10-Q body extracts provide reliable interim figures. Both FY2025 and FY2024 10-K body extracts in the library are truncated before the consolidated financial statement tables; annual figures below fall back to `financials_annual.json` (Yahoo) and are flagged accordingly. UK Investegate entries in `filings_index.json` (Foresight VCT) are a ticker collision and are excluded.
 
-| Metric | FY2023 | FY2024 | FY2025 |
+**Annual (10-K — Yahoo fallback where filing bodies lack tables)**
+
+| Metric | FY2025 | FY2024 | FY2023 |
 |--------|--------|--------|--------|
-| Revenue | $3,913.9m | $4,080.9m | $4,159.1m |
-| Operating income | $574.0m | $716.3m | $720.2m |
-| Net income (continuing) | $408.4m | $482.5m | $532.7m |
-| Diluted EPS | $2.43* | $2.36* | $1.73 |
-| Free cash flow | $1,353.6m | $1,526.8m | $1,083.2m |
+| Total revenue | $4,159m | $4,081m | $3,914m |
+| Operating income | $720m | $716m | $574m |
+| Net income (continuing) | $533m | $483m | $408m |
+| Diluted EPS | $1.73 | $2.36* | $2.43* |
+| Free cash flow | $1,083m | $1,527m | $1,354m |
+| Operating cash flow (continuing) | $1,036m | $1,029m | $833m |
 
-*FY2023–24 EPS includes discontinued operations in headline Yahoo totals; continuing NI trend is nonetheless upward ($408m → $483m → $533m).
+*FY2024–23 diluted EPS in Yahoo includes discontinued operations; continuing EPS was lower ($1.37 implied for FY2024 continuing from quarterly data). Treat YoY EPS comparisons with caution around the Ralliant spin.*
 
-FY2025 revenue grew ~2% with operating income broadly flat year on year; FCF fell from an elevated FY2024 level (partly reflecting separation dynamics and working-capital shifts). Balance sheet at 31 Dec 2025 (Yahoo fallback): total assets **$11,737.7m**, goodwill **$7,298.3m**, other intangibles **$2,188.4m**, total debt **$3,306.6m**, net debt **$2,830.5m**, cash **$375.5m**, negative working capital **-$640.9m**, shareholders’ equity **$6,461.1m**.
+FY2025 revenue rose 1.9% and continuing net income rose ~10%. FCF fell to $1.08bn from $1.53bn, partly reflecting $1.61bn of share repurchases and portfolio transition. FY2025 balance sheet (Yahoo fallback): total assets $11.7bn, net debt $2.83bn, total debt $3.31bn, goodwill $7.30bn, tangible book value negative $3.03bn.
 
-**Interim (10-Q) — primary source.** Seven interim 10-Q filings are indexed; the latest with a full body extract is Q2 2026 (filed 29 Jul 2026, period ended 3 Jul 2026).
+**Interim (10-Q filings — primary source)**
 
-*Q2 2026 (three months ended 3 Jul 2026 vs prior year):*
-- Sales **$1,096.8m** (+7.9%); core revenue **+6.7%** (pricing +2.4%, volume +4.3%)
-- Operating profit **$209.9m**; margin **19.1%** vs **16.7%** (+240 bps)
-- Net earnings from continuing operations **$157.3m**; diluted EPS **$0.51** vs **$0.33**
-- IOS sales **$758.2m**; AHS **$338.6m**
+*Q2 2026 (three months ended 3 July 2026, filed 29 July 2026):*
+- Total sales: **$1,096.8m** vs $1,016.4m (+7.9% YoY, continuing)
+- Operating profit: **$209.9m** vs $169.8m (+23.6%)
+- Diluted EPS (continuing): **$0.51** vs $0.33
 
-*H1 2026 (six months ended 3 Jul 2026 vs prior year):*
-- Sales **$2,166.2m** (+7.8%); core revenue **+6.1%**
-- Operating profit **$401.6m** vs **$335.1m**
-- Net earnings from continuing operations **$293.7m**; diluted EPS **$0.95** vs **$0.65**
-- Operating cash flow from continuing operations **$519.1m** vs **$396.8m**
-- Capex **$54.7m**; small AHS acquisition **~$58m**
+*H1 2026 (six months ended 3 July 2026):*
+- Total sales: **$2,166.2m** vs $2,009.5m (+7.8%)
+- Operating profit: **$401.6m** vs $335.1m (+19.8%)
+- Net earnings (continuing): **$293.7m** vs $224.2m
+- Diluted EPS (continuing): **$0.95** vs $0.65
+- Operating cash flow (continuing): **$519.1m** vs $396.8m (+31%)
 
-*Balance sheet at 3 Jul 2026 (10-Q):* cash **$374.2m**; long-term debt carrying value **$3,509.3m** (commercial paper **$1,076.6m**; new 4.75% 2031 and 5.25% 2036 notes); goodwill **$7,339.7m**; total assets **$11,615.0m**. Company confirmed **compliance with debt covenants** (consolidated net leverage ≤3.75x) as of 3 Jul 2026. No going-concern qualification appears in available extracts.
+*Q1 2026 (three months ended 3 April 2026):*
+- Total sales: **$1,069.4m** vs $993.1m (+7.7%)
+- Operating profit: **$191.7m** vs $165.3m
 
-**Trend read:** Annual data show a stable ~$4.2bn revenue base with improving continuing earnings post-spin; interim 2026 data indicate an **acceleration** in organic growth and margin expansion. FCF conversion in H1 2026 is tracking well (operating cash $519m on net income $294m), though full-year FCF will depend on H2 seasonality and working-capital movements not yet filed.
+*Q3 2025 (nine months ended 26 September 2025 — pre/post-spin mix in discontinued line):*
+- Continuing sales (9M): $3,036.6m vs $3,008.1m (+0.9%)
+- Continuing operating profit (9M): $494.7m vs $504.1m (−1.9%)
+
+The trend inflects positively in 2026: margins and growth accelerate on the continuing base after the June 2025 Ralliant distribution.
+
+**Balance sheet and liquidity (3 July 2026, 10-Q):**
+- Cash: $374.2m; total assets: $11,615m
+- Long-term debt (carrying value): $3,509.3m; commercial paper: $1,076.6m
+- Goodwill: $7,339.7m; other intangibles: $2,022.1m (~81% of total assets)
+- Stockholders’ equity: $6,069.4m; net debt ~$3.1bn
+- Current portion of debt: $0 (vs $899.5m at 31 Dec 2025 — refinancing into long-term notes and CP)
+- **Debt covenants:** maximum consolidated net leverage 3.75x (4.25x for four quarters post-large acquisitions); **in compliance as of 3 July 2026** (Q2 2026 10-Q, Note 4)
+
+**Gaps:** FY2025/FY2024 10-K body extracts lack auditable income statement and cash flow tables. No segment-level revenue splits were extractable from available 10-Q bodies. Q3 2026 10-Q is not yet in the index at time of writing.
 
 ## RISKS AND RED FLAGS
-**Separation and governance.** The 28 Jun 2025 Ralliant spin-off (8-K, 30 Jun 2025) triggered CEO transition from James Lico to Olumide Soroye and created ongoing indemnification exposure to Ralliant and Vontier under separation agreements—filings explicitly warn these could “materially and adversely affect” results. Residual discontinued-operations receivables from Ralliant totalled **$4.9m** at 3 Jul 2026.
+**Leverage and liquidity.** The FY2025 10-K risk summary states Fortive has “incurred a significant amount of debt” and obligations could rise further. At mid-2026, ~$1.1bn sits in commercial paper atop $3.5bn of long-term notes. The screen flagged a weak current ratio (~0.71) and Piotroski leverage/current-ratio components failing. Covenant headroom exists but rising rates or a credit downgrade would pressure financing costs — language the 10-K explicitly cites.
 
-**Balance sheet and leverage.** Goodwill plus intangibles exceed **$9.3bn** (~80% of assets); filings flag impairment risk. Debt rose to **$3.5bn** while cash remains ~**$375m**; buybacks and M&A are debt-funded. Screen current ratio **0.71** and negative working capital warrant monitoring. Piotroski F-Score **6/9** (failed: leverage not declining, current ratio not improving, gross margin not improving).
+**Goodwill and intangibles.** ~81% of assets are goodwill and intangibles; tangible book is deeply negative. The 10-K warns Fortive may be “required to recognize impairment charges for our goodwill and other intangible assets.” Any write-down would hit equity and reported earnings.
 
-**Regulatory and cyclical.** AHS faces FDA/medical-device and global healthcare compliance risk; IOS faces tariff/trade-policy volatility. The Q2 2026 10-Q discusses IEEPA tariff refund uncertainty and potential customer refund requests. ~44% of sales are non-US (2025 10-K overview), adding FX and geopolitical exposure.
+**Spin-off complexity.** The Ralliant separation (28 June 2025) restated all periods as discontinued operations. Tax matters, transition services, and FBS licence agreements create ongoing related-party exposure. Historical comparability is impaired — a risk screens may not fully capture.
 
-**Pension.** AOCI includes pension and post-retirement obligations (**-$17.9m** component at 3 Jul 2026); full funded status is in the FY2025 10-K note referenced but not present in truncated body extract.
+**Cyclical and end-market.** Risk factors cite cyclical end markets, intense competition, and price pressure. Q2 2026 earnings commentary (news) flagged European weakness, partially offset by data-centre and AI software demand — geographic and end-market concentration risk.
 
-**Tax.** Filings warn that Separation Transactions could be deemed taxable, creating significant liability. Effective tax rate in H1 2026 was **14.4%**, below the 21% statutory rate.
+**Litigation and regulatory.** The 10-K states Fortive is “subject to a variety of litigation and other legal and regulatory proceedings.” Healthcare exposure (AHS) adds regulatory complexity. No going-concern language was found in available filing bodies.
 
-**Screen data quality.** Reported “Yield 41.0%” in the screening snapshot appears erroneous (raw input 0.41%); treat dividend yield as **unverified** pending confirmation from filings.
+**Governance / insider activity.** Chief Legal Officer sold 8,662 shares (11 August 2026, news); routine but worth monitoring alongside large buybacks.
 
-**Annual filing gap.** FY2025 and FY2024 10-K financial statement tables are not available in cached body extracts; verify-before-trade on full 10-K MD&A, segment footnotes, and pension/contingency disclosures is recommended.
+**Data quality.** Current `screening_snapshot.json` shows buy signal with zero models/metrics populated — verify-before-trade on screen inputs is warranted.
+
+RiskTags: leverage, accounting, cyclical, competitive, other
+RiskTags: leverage, accounting, cyclical, competitive, other
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **earnings-heavy** with limited deep strategic reporting; institutional flow articles dominate Google News.
+Coverage over the past year is substantial, centred on the portfolio transformation and H1 2026 results.
 
-**Corporate / strategy**
-- **Fortive: A Simplified And Accelerated Special Situation** (Seeking Alpha, 24 Jul 2025) — spin-off framing.
-- **Fortive (FTV) Leaves An Index, Is The Stock Still Cheap?** (Yahoo Finance, 7 Jul 2025) — index removal.
-- **Fortive (FTV) Stock Could Be 9% Undervalued After AI Energy Deal** (simplywall.st, 22 Jul 2025) — IOS energy/software angle.
+**Strategy and portfolio:**
+- **Ralliant spin-off completed 28 June 2025** — Precision Technologies separated; Fortive retained IOS and AHS (8-K, 30 June 2025; Q2 2026 10-Q)
+- **UV Smart acquisition** (Fortive unit ASP), 24 June 2026 — disinfection for specialty scopes (Stock Titan)
+- **Fluke CalStudio Conduit** no-code platform for calibration labs launched, 21 August 2026 (Yahoo Finance)
 
-**Q2 2026 earnings cluster (29–31 Jul 2026)**
-- **FTV Q2 Earnings Beat on Core Growth, Guidance Raised** (Yahoo Finance / TradingView, 29 Jul 2026).
-- **Fortive Q2 Earnings Call Highlights** (Yahoo Finance, 30 Jul 2026) — 6.7% core growth, adjusted EBITDA +12%, adjusted EPS outlook raised (non-GAAP; not in 10-Q body).
-- **Fortive Falls Despite Q2 Beat and Higher 2026 EPS Outlook** (quiverquant.com, 29 Jul 2026) — market sold off ~7–9% post-print.
-- **How Fortive’s EPS Guidance Hike and Buyback Push At Fortive (FTV) Has Changed Its Investment Story** (simplywall.st, 30 Jul 2026).
+**Earnings and guidance:**
+- **Q2 2026 earnings beat**, 29 July 2026: revenue $1.10bn (+7.9%), non-GAAP EPS $0.74; core revenue +6.7%, adjusted EBITDA +12%; full-year adjusted EPS outlook raised (Yahoo Finance: “FTV Q2 Earnings Beat on Core Growth, Guidance Raised”; StockStory deep dive, 1 August 2026)
+- **Q1 2026**: sales beat but shares fell on unchanged full-year outlook, 30 April 2026 (Quiver Quantitative)
+- Post-earnings share decline despite beat — “Fortive Falls Despite Q2 Beat and Higher 2026 EPS Outlook”, 29 July 2026
 
-**Management / M&A**
-- Ralliant separation and Soroye CEO appointment documented in 8-K (30 Jun 2025).
-- Small AHS acquisition (~€51m) disclosed in Q2 2026 10-Q.
+**Capital return:**
+- **16.7% dividend increase** to $0.07/quarter, payable 25 September 2026 (Yahoo Finance, 21 August 2026)
+- Continued large buybacks ($700m H1 2026 per 10-Q cash flow statement)
 
-**Noise:** Numerous MarketBeat institutional position articles; Neptune Insurance “FTV” ticker confusion (Jul 2026) is unrelated to Fortive Corporation.
+**Other:**
+- Jim Cramer: “It’s Nothing Special, Frankly”, 15 June 2026 (Yahoo Finance) — sentiment counterpoint
+- Index removal noted, 7 July 2026 (Yahoo Finance: “Fortive (FTV) Leaves An Index”)
+- Valuation debate ongoing: simplywall.st articles split on whether FTV is undervalued on cash flow but overvalued on earnings (August–September 2026)
+
+News coverage is **not thin**; it is heavily earnings- and valuation-oriented with limited sell-side depth in the manifest.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Deep research confirms improving post-spin fundamentals and cash-return discipline that support the screen’s FCF/GARP buy case, but headline multiples, leverage, goodwill concentration, and incomplete annual filing extracts prevent full confirmation of classic value cheapness.
+Rationale: Post-spin operating momentum, FCF strength, and capital return support the quantitative buy signal, but truncated annual filings, spin-off comparability, and leverage/intangible load prevent full confirmation of deep-value margin of safety.

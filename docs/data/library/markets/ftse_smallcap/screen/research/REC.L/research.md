@@ -1,95 +1,80 @@
 # Record plc (REC.L) — Research memo
 
-_Version 1 · Updated 2026-07-25T19:55:38.088334+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-11T07:46:40.935179+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Record plc is a UK-listed specialist currency and asset manager whose shares screen as a **buy** on cheapness (P/E ~10.9, earnings yield ~9.2%), high dividend yield (~8.3%), strong reported ROE (~24.7%), and robust free cash flow (~9.8% FCF yield). The valuation hook is an asset-light, cash-generative franchise trading below mid-cycle earnings power while returning most cash to shareholders. The central debate is whether revenue and profit compression alongside rising AUM reflects cyclical fee/performance-fee softness or structural mix pressure, and whether dividends near ~£9m annually remain sustainable when net income has fallen to £7.7m (Yahoo, FY2026). Primary annual and interim report bodies are absent from the source pack; only the Q4 FY26 trading update RNS body was available for verification.
+Record plc is a UK-listed specialist asset manager evolving from currency hedging into Private Markets, with AUM up 14% to $114.6bn in FY26 (year ended 31 March 2026) yet revenue and earnings under pressure. The quantitative screen flags a buy, but populated screen metrics are absent (`data_quality_score` 0.0; no models or key metrics loaded), so the valuation hook rests on asset-light economics, net-cash balance sheet, and a 92% payout ratio on a reduced 3.60p ordinary dividend. The central debate is whether AUM growth and Private Markets pipeline (Infrastructure Equity, Solutions for Asset Managers) will restore EPS after FY26’s 22% decline, or whether client concentration, performance-fee volatility, and capital diverted to Record Asset Management GmbH will keep returns muted.
 
 ## INVESTMENT THESIS
-The quantitative screen passes **12 of 22 models** (composite **62%**, sector-relative **63%**) across five factor families — **cheapness, quality, dividend, GARP, and risk** — with **59% conviction** held for five weeks on a stable signal. That profile suits a value investor seeking income plus quality at a discount rather than growth-at-any-price.
-
-Business quality indicators align with the screen: gross margins remain very high (minimal cost of revenue), and the model is capital-light with recurring management fees. Passes on **Buffett Quality**, **Economic Moat**, **Magic Formula**, and **Financial Health** suggest the market may be penalising near-term earnings softness rather than balance-sheet or franchise quality.
-
-The Q4 FY26 RNS (24 April 2026) supports franchise resilience: **third successive quarter of net inflows**, AUM of **US$114.6bn** at year-end, **average fee rates broadly unchanged**, and **full-year earnings expectations unchanged** despite macro volatility. For a value investor, the case is to buy a profitable, dividend-paying UK small-cap asset manager at ~11× earnings and ~8% yield, backed by net cash, recurring fee streams, and optionality from private-markets/infrastructure growth and institutional partnerships (e.g. Swiss pension commitments to the infrastructure fund, July 2026). The screen’s buy signal is coherent with reported cash economics even where reported net income has softened.
+For a value investor, the case is a cash-generative, debt-free niche manager trading on depressed earnings after a one-off tax normalisation and legacy client losses, with scale ($122.0bn AUM at 30 June 2026 per Q1 FY27 update) not reflected in near-term profits. Filings show no external borrowings, £13.0m cash at 31 March 2026, and net assets of £27.8m—£19.2m above the FCA/BaFin minimum regulatory capital requirement of £8.6m. Management is deliberately reinvesting in Private Markets (RAM Group) while maintaining a high dividend payout, implying confidence in fee conversion from $1.2bn undeployed infrastructure commitments. The screen’s buy signal aligns directionally with balance-sheet quality and dividend discipline, but the empty metric set means conviction must come from filings, not the quant layer. Business quality is specialist and institutional, with 40-year hedging heritage and growing higher-margin SAM (+39% revenue in FY26); offsetting this, two clients accounted for >10% of revenue (£6.0m and £4.4m in FY26), and Risk Management still supplies ~66% of revenue.
 
 ## FINANCIAL REVIEW
-**Primary filings — what is available**
+**Annual results (primary: FY26 Annual Financial Report, 19 June 2026; FY25 Final Results, 20 June 2025)**
 
-The filing index (`regime: uk_rns`) lists **10 entries**: five Companies House account filings (Jul 2024–Nov 2025), one Record plc interim trading update with body, and four mis-matched “REC” tickers (Recordati, REC Silicon ASA) that must be excluded.
+| Metric | FY26 | FY25 | FY24 (FY25 filing) |
+|--------|------|------|---------------------|
+| AUM | $114.6bn | $100.9bn | $102.2bn |
+| Revenue | £40.1m | £41.6m | £45.4m |
+| Operating profit | £10.0m | £10.7m | £12.6m |
+| Operating margin | 25.0% | 25.6% | 27.8% |
+| Profit after tax | £7.0m | £9.1m | £9.3m |
+| Basic EPS | 3.92p | 5.03p | 4.84p |
+| Total ordinary dividend | 3.60p | 4.65p | 4.60p |
+| Net assets | £27.8m | £29.1m | £28.9m |
+| Cash & equivalents (Group) | £13.0m | £11.8m | £7.9m |
 
-| Source | Period | Body available? |
-|--------|--------|-----------------|
-| Q4 FY26 Trading Update (Investegate, 24 Apr 2026) | Interim | **Yes** |
-| Companies House accounts (×5) | Annual (indexed) | **No** — metadata only |
-| Recordati / REC Silicon entries | Annual/other | Wrong issuer — ignore |
+Trend: AUM has re-accelerated (+14% FY26; +6% in Q1 FY27 to $122.0bn), but revenue has fallen for three years (£45.4m → £41.6m → £40.1m) on lower performance fees, mandate recompositions, and a major multi-product client loss in late FY25. EPS peaked in FY25 aided by a low 17% effective tax rate from deferred tax credits on German subsidiary losses (£1.4m one-off in FY25; only £0.3m additional in FY26); FY26 tax reverted to 28%, explaining much of the 23% PAT decline despite flat-ish operating profit. Operating costs fell 2% to £30.4m in FY26; bonus pool cut to £3.6m from £4.6m.
 
-**Interim / trading update (primary filing body)**
+Revenue mix (FY26 filing): Risk Management £26.6m (66%), Absolute Return £2.4m (6%), Private Markets £11.1m (28%). Solutions for Asset Managers (now under Private Markets) drove +39% management-fee growth. Performance fees: £2.8m FY26 vs £3.2m FY25 vs £5.8m FY24.
 
-From the Q4 FY26 RNS body extract:
+Cash flow (FY26 filing): operating cash inflow £9.2m; dividends paid £9.1m; no external debt (lease liabilities £6.6m). Going concern affirmed with ≥12 months’ liquidity and capital.
 
-- **AUM** at 31 March 2026: **US$114.6bn** (31 December 2025: US$115.9bn).
-- **Net flows** in Q4: **+US$1.4bn** (third consecutive quarter of net inflows); offset by asset movements **−US$1.4bn** and FX/scaling **−US$1.3bn**.
-- **Performance fees**: **£0.4m** in Q4 (Q4 FY25: £0.3m); **£2.8m** full year (FY25: **£3.2m**).
-- **Average fee rates** in the quarter **broadly unchanged** from the prior quarter.
-- Management stated **full-year earnings expectations remain unchanged** despite global volatility.
-- AUM by product at 31 March 2026: Passive Hedging **US$75.8bn**, Dynamic Hedging **US$17.0bn**, Solutions for Asset Managers **US$17.0bn**, Risk Management **US$109.8bn** (aggregate risk-management bucket), FX Alpha **US$2.6bn**, Private Markets **US$1.1bn**, Infrastructure **US$0.1bn**.
-- FY2026 results scheduled for **19 June 2026** (per the RNS; news summaries confirm publication).
+**Interim results (Half-year Financial Report, 7 November 2025; six months to 30 September 2025)**
 
-**Annual trend — Yahoo fallback (`financials_annual.json`)**
+- AUM record $110.3bn (+9% vs 31 March 2025).
+- Revenue £19.2m (-9% vs H1 FY25 £21.1m); management fees £17.5m (-8%).
+- Operating profit £4.5m (-20%); margin 23.4% vs 26.8%.
+- Basic EPS 1.93p (H1 FY25: 2.58p).
+- Interim dividend maintained at 2.15p; net assets £27.8m; cash £11.4m.
+- First Infrastructure Equity deployment ($120m Pattern Energy); second investment signed.
 
-No Record plc annual report or Companies House account **body text** is available. All P&L, balance-sheet, and cash-flow figures below are from **Yahoo annual statements**, stated explicitly as fallback. Year-end is **March**.
+**Trading updates**
 
-| Metric | FY2023 | FY2024 | FY2025 | FY2026 |
-|--------|--------|--------|--------|--------|
-| Revenue | £44.7m | £45.4m | £41.6m | **£40.1m** |
-| Operating income | £14.8m | £14.6m | £10.3m | **£9.5m** |
-| Net income | £11.3m | £9.3m | £9.7m | **£7.7m** |
-| EBITDA | £15.4m | £13.7m | £11.9m | **£11.6m** |
-| Diluted EPS | 5.81p | 4.78p | 4.94p | *(not in cache)* |
-| Free cash flow | £9.3m | £12.2m | £4.9m | **£8.5m** |
-| Cash dividends paid | £9.1m | £10.1m | £10.0m | **£9.1m** |
+- Q4 FY26 (24 April 2026): AUM $114.6bn; third consecutive quarter of net inflows; FY26 performance fees £2.8m.
+- Q1 FY27 AUM Update (23 July 2026): AUM $122.0bn (+6%); positive net flows across all pillars; undeployed Private Markets commitments $1.2bn.
 
-**Interpretation:** Revenue peaked in FY2024 and has fallen **~12%** to FY2026. Net income is down **~32%** from the FY2023 peak; FY2024 included a **£1.9m impairment** (Yahoo). EBITDA has been more stable (£11.6m–£15.4m), and FY2026 FCF rebounded to **£8.5m** (operating cash flow **£9.2m**), supporting the screen’s FCF-yield pass. Dividend cash outflows (~**£9–10m p.a.**) have consistently matched or exceeded net income — a high payout ratio dependent partly on balance-sheet cash.
+**Gaps and fallback**
 
-The Q4 RNS reconciles the AUM-versus-revenue tension: client flows are positive and fee rates stable, but **performance fees fell** (£2.8m vs £3.2m) and market/FX movements weighed on reported AUM. Revenue decline likely reflects fee mix, performance-fee softness, and possibly scaling — not wholesale client attrition — but this cannot be fully verified without the annual report body.
-
-**Balance sheet (Yahoo fallback, FY2026):** Total assets **£40.6m**; equity **£27.2m**; cash **£13.0m**; total debt **£6.6m** (substantially **capital lease** obligations); working capital **£20.4m**. Current pension/post-retirement provision **£2.5m**. Tangible book **£26.4m**; screen P/B **3.1×** reflects franchise value rather than deep asset discount. Net cash (cash less debt) remains positive.
-
-**Gaps:** No audited primary text for going concern, contingencies, covenant detail, precise interim P&L, or dividend policy. Yahoo quarterly income cache is empty. FY2026 diluted EPS/share count not populated. Half-year financial report (indexed at Companies House, Nov 2025) has no downloadable body.
+Companies House annual/interim accounts (July 2024–November 2025) are indexed but without downloadable bodies. No material conflicts observed versus RNS extracts. Yahoo `financials_annual.json` corroborates FY26 revenue £40.1m, net income £7.66m, FCF £8.5m, and operating cashflow £9.2m; quarterly cashflow is suppressed (empty). Screen `key_metrics` are unpopulated—valuation ratios cannot be verified from the screen file.
 
 ## RISKS AND RED FLAGS
-**Earnings and dividend sustainability:** Net income is on a downward trajectory while dividends remain near **£9m+** annually — cash dividends exceeded FY2026 net income. Without filing language on dividend policy or distributable reserves, this is the principal red flag for income investors.
+- **Customer concentration:** FY26 annual report discloses two clients each >10% of revenue (£6.0m and £4.4m); late-FY25 multi-product client exit continues to weigh on management fees.
+- **Earnings quality:** Performance fees are lumpy (£2.8m FY26 vs £5.8m FY24); 92% dividend payout exceeds FY26 EPS (3.92p vs 3.60p dividend only works because PAT attributable to parent £7.7m exceeds group PAT £7.0m—payout sustainability depends on earnings recovery).
+- **Strategic execution:** Asset Management segment (RAM) reported a £1.7m operating loss in FY26; capital and NCI dilution (41% economic / 59% NCI) absorb upside from Private Markets until deployments mature.
+- **Regulatory:** FCA/BaFin regulated; principal risks cite regulatory trends, cyber/data security, and operational trade-execution risk (interim report, November 2025).
+- **Macro/geopolitical:** Chairman and CEO flag uncertain global outlook affecting client commitment timing; not a going-concern issue—directors confirm adequate resources for ≥12 months.
+- **Governance/leadership:** Multiple board and executive changes (interim CFO, directorate changes Oct 2025–Mar 2026); no material adverse governance findings in bodies reviewed.
+- **Lease obligations:** Right-of-use liabilities £6.6m (ten-year London HQ from October 2024); no debt covenants, but fixed cost base.
 
-**Revenue vs AUM divergence:** Q4 RNS confirms **+US$1.4bn net flows** and stable fee rates, yet Yahoo shows revenue **−3.6%** YoY (FY2025→FY2026) and news headlines cite **revenue −4%** alongside **AUM +14%** (TradingView/Sharecast, 19 Jun 2026). Performance-fee decline and product mix (Passive Hedging dominates at US$75.8bn vs Private Markets US$1.1bn) may structurally cap revenue growth — a risk static value screens may underweight.
-
-**Lease and pension obligations:** Capital lease liabilities of **£6.6m** and current pension-related provisions of **£2.5m** (Yahoo) add fixed commitments. Primary filing risk disclosures (going concern, litigation, covenants) **could not be reviewed** — no annual/interim bodies.
-
-**FX and cyclicality:** Record’s earnings correlate with currency-market activity and institutional hedging demand. Q4 RNS explicitly cites **FX headwinds** on AUM; a softer macro backdrop for FX hedging could prolong revenue pressure.
-
-**Governance / management:** Q4 RNS lists **Samantha Dunn as Interim CFO** alongside CEO Dr Jan Witte — interim finance leadership warrants monitoring. News (22 Jul 2026, Kalkine) references **board changes** approved at the 2026 AGM. Filing index shows ongoing **share buyback** activity (Jul 2026 headline in prior index). Institutional ownership ~**42%** (Yahoo, Oct 2025) aids liquidity but concentrates price sensitivity.
-
-**Share-price performance:** Yahoo flagged that **“the past three years for Record (LON:REC) investors has not been profitable”** (9 Dec 2025) — weak price performance despite cash generation.
-
-**Source-quality risk:** Four of five filing bodies in the pack belong to **wrong issuers** (Recordati, REC Silicon). News manifest is **heavily polluted** by Indian REC Ltd/PFC merger stories, KPMG/REC UK jobs surveys, and unrelated “REC” tickers. Regulatory risk language remains unverified.
+RiskTags: customer_concentration, cyclical, key_person, competitive, regulatory, other
+RiskTags: customer_concentration, cyclical, key_person, competitive, regulatory, other
 
 ## NEWS HIGHLIGHTS
-**Record plc–relevant (past year):**
+Record plc-specific coverage is moderate and often drowned out by unrelated “REC” tickers (Indian REC Ltd, Recruitment & Employment Confederation).
 
-- **24 Apr 2026** — *“RECORD PLC FOURTH QUARTER TRADING UPDATE (Q4 FY26)”* (RNS/Investegate): third consecutive quarter of net inflows; AUM **US$114.6bn**; performance fees **£2.8m** FY26; earnings guidance unchanged.
-- **19 Jun 2026** — *“REC: AUM up 14% to $114.6bn, revenue down 4%, with strong Private Markets growth and positive FY27 outlook”* (TradingView); *“Record reports lower annual profits despite rise in AuM”* (Sharecast.com): key FY2026 operational snapshot.
-- **23 Jul 2026** — *“REG - Record PLC - First Quarter AUM Update”* (TradingView); *“REG - Record PLC - Result of AGM”* (TradingView): post-year-end disclosure cycle.
-- **22 Jul 2026** — *“Record plc Secures Strong Shareholder Approval for All Resolutions at 2026 AGM Including Dividend and Board Changes”* (Kalkine Media).
-- **14 Jul 2026** — *“Swiss Pension Funds Increase Commitments to Record Infrastructure Equity Fund to EUR 1.23 Billion”* (Business Wire): private-markets momentum.
-- **10 Nov 2025** — *“Record Plc’s partnership with APG sees over €250m deployed into flagship infrastructure projects”* (DirectorsTalk): strategic partnership progress.
-- **24 Apr 2026** — *“Record keeps its cool as markets wobble; AUM holds steady near $115bn”* (Yahoo Finance UK); *“Record Shares Dip Despite Third Quarter of Net Inflows”* (AskTraders).
-- **9 Dec 2025** (Yahoo) — *“The past three years for Record (LON:REC) investors has not been profitable”*: bearish price-performance framing.
-- **28 Oct 2025** (Yahoo) — *“Owning 42% shares, institutional owners seem interested in Record plc”*: ownership concentration.
-- **16 Dec 2025** — *“Record plc Positioned on FTSE All Share Within the Asset Management Sector”* (Kalkine Media).
+Material items (past year):
 
-**Coverage quality:** Material company-specific news is **thin but improving** — one verified primary RNS body (Q4 trading update) plus several third-party results summaries and partnership headlines. The manifest remains **noisy**: a large share of “REC” articles refer to Indian REC Ltd, REC Silicon, the Recruitment & Employment Confederation, or unrelated tickers. Treat non–Record-plc headlines as noise.
+- **19 June 2026** — “Record reports lower annual profits despite rise in AuM” (Sharecast.com); “Record shares slump on dividend cut as tax changes bite” (Investors’ Chronicle) — FY26 results and dividend reduction.
+- **22–23 July 2026** — “Record plc Secures Strong Shareholder Approval for All Resolutions at 2026 AGM” (Kalkine Media); “REG - Record PLC - First Quarter AUM Update” (TradingView) — AGM approval; Q1 FY27 AUM $122.0bn.
+- **14 July 2026** — “Swiss Pension Funds Increase Commitments to Record Infrastructure Equity Fund to EUR 1.23 Billion” (Business Wire) — Private Markets momentum.
+- **24 April 2026** — “Record keeps its cool as markets wobble; AUM holds steady near $115bn” (Yahoo Finance UK) — Q4 trading update.
+- **10 November 2025** — “Record Plc’s partnership with APG sees over €250m deployed into flagship infrastructure projects” (DirectorsTalk Interviews).
+- **9 December 2025** — Yahoo Finance: “The past three years for Record (LON:REC) investors has not been profitable” — sentiment headwind.
+
+Filings also note Swiss pension fund NorthC datacenters investment (30 March 2026 RNS). Overall: strategy and infrastructure wins are visible; third-party analytical coverage is thin relative to RNS flow.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.70
-Rationale: Quantitative cheapness, quality, and cash-flow signals are partially corroborated by the Q4 RNS (net inflows, stable fee rates, unchanged earnings guidance) and Yahoo financials showing strong FCF and a solid balance sheet, but declining revenue/earnings, a high dividend payout, and the absence of annual/interim report bodies prevent full confirmation of the screen’s buy case.
+Confidence: 0.62
+Rationale: Filings confirm a solvent, cash-generative franchise with rising AUM and a credible Private Markets pivot, partially offsetting the screen’s unpopulated metrics and a clear near-term EPS/dividend downtrend that warrants selective accumulation rather than high conviction.

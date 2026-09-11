@@ -1,86 +1,105 @@
 # Canadian National Railway Company (CNR.TO) — Research memo
 
-_Version 1 · Updated 2026-07-26T18:08:22.643580+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-11T07:48:07.592060+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Canadian National Railway is a North American Class I railroad with a near-20,000-mile network connecting Canadian coasts to the US Midwest and Gulf Coast. The quantitative screen rates CNR.TO as a buy on quality, GARP, dividend growth, and economic moat characteristics rather than deep value: P/E 23.5, ROE 22%, PEGY 0.11, and a Piotroski F-Score of 8/9. The investment case rests on a wide moat franchise, rising volumes, productivity gains, and capital return via dividends and buybacks, against a backdrop where classic cheapness screens (Graham, deep value, FCF yield) fail. The central debate is whether recent operational momentum and network expansion (Union Pacific access, energy infrastructure partnerships) justify a premium multiple, or whether the stock is already fully priced after a strong run. Primary regulatory filing bodies were not available for financial verification; figures below rely on Yahoo fallback data.
+Canadian National Railway is a North American Class I rail franchise with a three-coast network, recurring cash generation, and a capital-return programme that fits a quality-value framework. The quantitative screen rates the name a buy, though the screening snapshot carries no populated model metrics, so the signal rests on the headline rating rather than disclosed factor scores. Operationally, CN has delivered accelerating volume and raised 2026 guidance after a strong Q2; the investment case rests on network moat, pricing power, and free cash flow after heavy but disciplined capex. The central debate is valuation: several commentaries flag the shares as fully priced on cash-flow metrics despite reasonable earnings multiples, while tariff exposure (~$350M revenue impact cited for 2025) and rising leverage temper upside. Filing discovery is materially contaminated by ticker collision with AIM-listed Condor Gold (also “CNR”), leaving annual AIF/40-F as the only reliable primary filing bodies and no legitimate interim filing extracts for CN.
 
 ## INVESTMENT THESIS
-CN fits a quality-oriented value framework more than a deep-value one. The screen passes seven models across five families — cheapness (Neff PEGY), quality (Buffett Quality, Economic Moat, Magic Formula, Piotroski F-Score, Earnings Quality), dividend (Dividend Growth), GARP, and risk — with full data quality (20/20 metrics). That profile is consistent with a compounder: high ROE, durable cash generation, and disciplined capital allocation rather than statistically cheap multiples.
+CN qualifies as a buy for a value investor on business quality rather than on a richly populated quantitative screen. The screening snapshot assigns signal “buy” but reports `models_passed: 0`, `metrics_present: 0`, and `data_quality_score: 0.0`, so the screen’s factor-level confirmation cannot be verified from available data. What can be verified is the underlying franchise: a regulated, asset-heavy network with high barriers to entry, oligopolistic North American rail competition, and management’s stated focus on “make the plan, run the plan, sell the plan” operating discipline, profitable top-line growth, free cash flow generation, and returns above cost of capital (2025 Annual Information Form, filed 4 February 2026).
 
-Business quality is supported by structural advantages. The only downloadable filing body (Keyera/AltaGas partnership release, 20 May 2026) describes CN as safely transporting over 300 million tons annually across a network linking Canada's eastern and western coasts with the US Midwest and Gulf Coast — a geographically unique, hard-to-replicate asset base. Management under CEO Tracy Robinson is executing on productivity ($100 million savings cited in Q2 2026 earnings coverage) and strategic network extensions.
-
-The screen's growth input (10.2%) and Neff PEGY pass (0.11) suggest earnings growth is not fully reflected in the multiple, even at P/E 23.5. Dividend growth and share repurchases ($2.1 billion in 2025 per Yahoo) reinforce total-return appeal. For a value investor accepting moderate absolute valuation in exchange for moat and compounding, the buy signal is coherent — though conviction is early-stage (37%, one week at signal, improving trend).
+Yahoo-sourced financials (fallback — see Financial Review) show revenue recovering from $16.8B (2023) to $17.3B (2025), net income of $4.72B and diluted EPS of $7.57 in 2025, and free cash flow of $3.39B after capex of $3.66B. TTM free cash flow through Q2 2026 is $3.55B. CN returns capital via dividends (~$2.2B paid in 2025 per Yahoo) and buybacks (NCIB authorisation for up to 24.0 million shares, February 2026–February 2027, per 2025 AIF). Recent operational momentum — record August 2026 grain volumes, Q2 earnings beat, and raised full-year guidance — supports the screen’s directional buy call even where factor detail is absent.
 
 ## FINANCIAL REVIEW
-**Filing coverage gap.** The filings index (`regime: tsx_announcements`) lists four documents: one annual (2024 Annual Information Form, 4 February 2025), zero interim, and three other (including Form 40-F, 4 February 2026). None of the annual or interim financial filings have downloadable body extracts; a refetch attempt recovered zero additional bodies. The sole filing body is a strategic press release, not financial statements. **All financial figures below are sourced from `financials_annual.json` (Yahoo) as an explicit fallback.** Interim/quarterly filing verification is unavailable; Yahoo cached quarterly income is used for recent-period colour only.
+**Primary filing coverage and gaps**
 
-**Annual trends (Yahoo fallback, CAD millions unless noted).**
+The filings index contains 50 entries, but 44 are misattributed to Condor Gold plc (AIM: CNR), a UK gold explorer — not Canadian National Railway. The two indexed “interim” bodies (`Interim Report & Accounts - 6 Months to 30 June 23` and `Interim Report & Accounts for 6 Months To 30 June`) are Condor Gold documents and must be disregarded for CN analysis. **No legitimate CN interim MD&A, quarterly report, or half-year filing body is present in the index.** Interim analysis below therefore relies on Yahoo quarterly data, explicitly flagged as fallback.
 
-| Metric | 2022 | 2023 | 2024 | 2025 |
-|--------|------|------|------|------|
-| Total revenue | 17,107 | 16,828 | 17,046 | 17,304 |
-| Operating income | 6,840 | 6,597 | 6,325 | 6,587 |
-| Net income | 5,118 | 5,625 | 4,448 | 4,720 |
+Legitimate annual primary filings:
+
+| Filing | Date | Source |
+|--------|------|--------|
+| 2024 Annual Information Form | 4 February 2025 | SEDAR (`0de17a98ba85aaf1`) |
+| 2025 Annual Information Form / Form 40-F | 4 February 2026 | SEDAR (`cb7caedb9954a948`) |
+
+Both AIFs incorporate financial detail by reference to the MD&A rather than reproducing full income statements in the body extract. CapEx, liquidity, and covenant data are available from the 2025 AIF; P&L and cash-flow line items fall back to Yahoo.
+
+**Annual trends (Yahoo `financials_annual.json` — fallback for P&L and cash flow)**
+
+| Metric (CAD) | 2022 | 2023 | 2024 | 2025 |
+|---|---:|---:|---:|---:|
+| Total revenue | $17.11B | $16.83B | $17.05B | $17.30B |
+| Operating income | $6.84B | $6.60B | $6.33B | $6.59B |
+| Net income | $5.12B | $5.63B | $4.45B | $4.72B |
 | Diluted EPS | $7.44 | $8.53 | $7.01 | $7.57 |
-| EBITDA | 9,040 | 9,027 | 8,635 | 9,115 |
-| Operating cash flow | 6,667 | 6,965 | 6,699 | 7,049 |
-| Free cash flow | 3,917 | 3,778 | 3,150 | 3,391 |
-| Capital expenditure | (2,750) | (3,187) | (3,549) | (3,658) |
+| Operating cash flow | $6.67B | $6.97B | $6.70B | $7.05B |
+| Free cash flow | $3.92B | $3.78B | $3.15B | $3.39B |
+| Capital expenditure | ($2.75B) | ($3.19B) | ($3.55B) | ($3.66B) |
 
-Revenue dipped in 2023 before recovering to a new high in 2025. Net income peaked in 2023 ($5.6 billion) before a 2024 trough ($4.4 billion), then rebounded 6% to $4.7 billion in 2025; diluted EPS followed a similar arc ($8.53 → $7.01 → $7.57). Operating margins remain robust though operating income has not yet exceeded 2022 levels on a reported basis.
+Revenue dipped in 2023 before recovering; 2023 net income was elevated relative to 2024–2025 (Yahoo flags unusual items in each year). Operating cash flow reached $7.05B in 2025 while capex continued rising, compressing FCF versus 2022–2023 but stabilising above $3.3B.
 
-**Balance sheet and capital structure (Yahoo fallback).** Total debt rose from $15.9 billion (2022) to $21.6 billion (2025); net debt from $15.1 billion to $20.9 billion. Interest expense increased from $548 million to $913 million over the same period. Cash remains minimal ($350 million at year-end 2025). Working capital is persistently negative (–$1.2 billion in 2025), typical for railroads but worth monitoring. Share count fell from 688 million diluted (2022) to 624 million (2025), reflecting aggressive buybacks ($4.6 billion in 2023; $2.1 billion in 2025). Dividends paid totalled approximately $2.2 billion in 2025.
+**Balance sheet and leverage (Yahoo fallback, year-end 2025)**
 
-Defined pension benefit assets on the balance sheet increased from $3.0 billion (2022) to $5.4 billion (2025); non-current pension/post-retirement liabilities were $453 million. Without annual report body text, funded-status detail, discount-rate assumptions, and covenant language cannot be verified from primary filings.
+- Total debt: $21.63B; net debt: $20.86B (up from $15.10B net debt at end-2022)
+- Stockholders’ equity: $21.57B; total assets: $58.56B
+- Working capital: negative $1.23B (typical for capital-intensive operators)
+- Defined pension benefit (asset): $5.36B on balance sheet
 
-**Recent interim (Yahoo quarterly fallback, not filing-verified).** Q2 2026 (period ending June 2026): revenue $4.38 billion, net income $1.15 billion, diluted EPS $1.87 — broadly in line with Q2 2025 ($4.27 billion revenue, $1.17 billion net income, EPS $1.87). News coverage (24 July 2026) reports CN beat Q2 estimates, delivered 12% exchange-adjusted EPS growth, generated approximately $4.8 billion revenue with grain and energy strength, and raised full-year 2026 guidance on EPS, revenue, and free cash flow. These operational data points are from news headlines, not filing bodies.
+The 2025 AIF confirms CN was **in compliance** with its sole financial covenant (debt as a percentage of total capitalization) as at 31 December 2025, with no outstanding borrowings on revolving credit facilities ($2.5B + $1.0B). Commercial paper outstanding fell sharply to US$90M ($124M) at year-end 2025 from US$501M ($721M) at year-end 2024. Equipment term loans outstanding: $1,329M at 3.85% weighted-average rate.
 
-**Annual filing index (not body-verified).** The 2024 Annual Information Form (4 February 2025) and Form 40-F (4 February 2026) are catalogued but their financial content could not be extracted. FY2025 year-end results were announced via headline ("CN Announces Solid Fourth Quarter and Year-End Results," 30 January 2026) without a corresponding body in this research pack.
+**Capex (2025 AIF — primary source)**
+
+CN spent approximately **$3.7B** on its 2025 capital programme: ~$1.8B network maintenance, ~$1.4B strategic capacity/resiliency, ~$0.5B equipment. Comparable figures: ~$3.5B (2024), ~$3.2B (2023). Rising reinvestment supports volume growth but absorbs cash available for buybacks.
+
+**Interim / recent quarter (Yahoo quarterly fallback — no CN interim filing body)**
+
+| Period | Revenue | Diluted EPS | Op CF | FCF |
+|---|---:|---:|---:|---:|
+| Q2 2026 (Jun) | $4.75B | $2.06 | $1.61B | $0.92B |
+| Q1 2026 (Mar) | $4.38B | $1.87 | $1.27B | $0.83B |
+| Q4 2025 (Dec) | $4.46B | $2.03 | $2.23B | $1.00B |
+
+TTM operating cash flow: $7.02B; TTM free cash flow: $3.55B (Yahoo). H1 2026 combined diluted EPS of $3.93 implies a strong run-rate versus FY2025 EPS of $7.57, consistent with management’s Q2 guidance upgrade (news-sourced; not in filing bodies).
 
 ## RISKS AND RED FLAGS
-**Primary filing gaps.** Without annual report or 40-F body extracts, going-concern language, contingent liabilities, covenant thresholds, and pension footnotes cannot be assessed from primary sources. This is a material research limitation, not evidence of distress.
+**Regulatory and trade.** The 2025 AIF forward-looking risk language explicitly cites tariffs, trade restrictions, and changes to international trade arrangements as material uncertainties. News coverage reported tariffs taking a ~$350M bite out of CN Rail revenues in 2025, with management describing trade-policy uncertainty as the “biggest risk” (*Tariffs take $350M bite out of CN Rail revenues, with uncertainty now ‘biggest risk’*, BNN Bloomberg, 30 January 2026). CN operates under Canadian and US rail regulation (STB, Transport Canada); the Iowa Northern Railway acquisition required STB approval (granted January 2025, control assumed March 2025, per 2025 AIF).
 
-**Leverage and interest burden.** Net debt has risen roughly $5.8 billion since 2022 while interest expense nearly doubled. Rising rates and continued capex ($3.7 billion in 2025) compress financial flexibility if volumes soften.
+**Labor.** The 2025 AIF states many employees are unionised and CN “is involved in several ongoing negotiations,” with no assurance that agreements will be reached “without a strike or lockout.” Outcomes could materially affect results.
 
-**Cyclicality.** Freight volumes tie to grain, energy, intermodal, and industrial production. Q2 2026 strength in grain and energy is positive but cyclically exposed; a downturn would pressure the operating ratio and earnings.
+**Pension.** Pension funding requirements and volatility are listed among principal risk factors. The AIF describes board-level oversight of pension plan funding, actuarial valuations, and investment policy. Yahoo shows a defined pension benefit asset of $5.36B (2025), but funding volatility remains a long-cycle risk for a mature railroad.
 
-**Regulatory and competitive.** CN operates under Canadian and US Surface Transportation Board oversight. The Union Pacific access agreement (24 July 2026) addresses some STB competition concerns around the Norfolk Southern transaction but introduces network-complexity and regulatory-approval risk. Canadian Pacific Kansas City remains the primary Class I competitor on overlapping corridors.
+**Leverage and liquidity.** Net debt has risen ~$5.8B since 2022 (Yahoo). While covenant-compliant with undrawn revolvers, CN relies on commercial paper and capital markets access; the AIF notes that loss of commercial-paper market access would require reliance on credit facilities. Negative working capital and minimal cash ($350M at year-end 2025 per Yahoo) are structural, not distress signals, but limit balance-sheet flexibility.
 
-**Valuation risk.** The screen fails 15 of 22 models, including Graham Defensive, Deep Value, FCF Yield, and Low P/E + High Yield. Multiple news items (July 2026) flag the stock as "fully priced" or potentially 11% overvalued. The buy case depends on growth and quality, not margin of safety on absolute multiples.
+**Operational and environmental.** Derailment liability, hazardous-materials transport, wildfires, severe weather, illegal blockades, and cybersecurity are all flagged in filing risk language. No going-concern qualification appears in the CN AIF extracts.
 
-**Governance and labour.** CN is a federally regulated employer in Canada. Labour relations and safety incidents — standard railroad risks — are not detailed in available filing bodies.
+**Data integrity red flag.** The filings index conflates CN with Condor Gold (AIM: CNR). Any automated pipeline pulling “interim” or “annual” bodies from this index without entity validation would produce dangerously wrong financials. **Do not use Condor Gold filing bodies for CN analysis.**
 
-**Pension.** Balance-sheet pension assets grew materially, but without AIF/40-F text the funded status and future contribution requirements remain unverified.
+**Governance.** No material governance controversies surfaced in legitimate CN filings. CEO Tracy Robinson has led since February 2022; board refresh includes Madeleine Paquin (appointed October 2025).
+
+RiskTags: regulatory, cyclical, pension, leverage, competitive
+RiskTags: regulatory, cyclical, pension, leverage, competitive
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is substantial (60 articles in manifest) but skewed toward earnings reactions and valuation commentary rather than deep investigative reporting.
+Coverage over the past year is extensive but heavily skewed toward syndicated valuation commentary (Kalkine, Simply Wall St, Yahoo Finance). Material operational and strategic items include:
 
-**Operational and guidance (July 2026).**
-- "CN Railway beats second-quarter expectations and lifts 2026 outlook" (24 July 2026) — beat on EPS and revenue; raised FY2026 outlook.
-- "CN boosts outlook as volume growth tops expectations" (24 July 2026, FreightWaves).
-- "CNI (CNI) Q2 2026 Earnings Call Transcript" (25 July 2026) — grain and energy drove ~$4.8 billion revenue; $100 million productivity savings cited.
-- "Union Pacific Wins CN Support for Norfolk Southern Deal With New Rail Access Agreement" (24 July 2026) — CN gains operating rights across key US corridors.
+- **Q2 2026 earnings beat and guidance raise** (24 July 2026): Multiple sources report CN beat consensus on EPS and revenue and lifted 2026 outlook; *CN Railway beats second-quarter expectations and lifts 2026 outlook* (Yahoo Finance, 24 July 2026); *CN boosts outlook as volume growth tops expectations* (FreightWaves, 24 July 2026); management cited ~12% exchange-adjusted EPS growth and ~$100M productivity savings (Q2 earnings call coverage, July 2026).
 
-**Strategic infrastructure.**
-- "Keyera, AltaGas and CN Partner to Build Strategic Canadian Infrastructure" (20 May 2026) — ACE Rail Terminal in Alberta Industrial Heartland; ~45,000 bpd propane/butane capacity; mid-2028 in-service target; CEO Tracy Robinson quoted on trade-enabling infrastructure and Port of Prince Rupert access.
+- **Union Pacific rail-access agreement** (23–24 July 2026): CN agreed to support Union Pacific’s Norfolk Southern deal in exchange for new operating rights across US Midwest/South corridors (*Union Pacific Wins CN Support for Norfolk Southern Deal With New Rail Access Agreement*, Yahoo Finance, 24 July 2026).
 
-**Network and commercial expansion.**
-- "Canadian National Railway (TSX:CNR) Secures Long Term PlasCred Lease For Scotford Recycling Facility" (30 June 2026).
-- "Canadian National Railway (TSX:CNR) Signs Scotford Lease, Is The Stock Fully Valued?" (8 July 2026).
-- Cross-border route expansion coverage (Kalkine Media, 24 July 2026).
+- **Record grain performance** (3–7 September 2026): CN reported 2.50 MMT moved in August 2026, a monthly record (*Canadian National Reports Robust Grain Performance Record in August*, Yahoo Finance, 7 September 2026).
 
-**Capital returns and prior results.**
-- "Canadian National Railway (TSE:CNR) Will Pay A Larger Dividend Than Last Year At CA$0.915" (3 February 2026).
-- "CN Announces Solid Fourth Quarter and Year-End Results" (30 January 2026).
-- Bank of America upgrade on volume gains and valuation (9 April 2026).
+- **ACE Rail Terminal partnership** (20 May 2026): CN partnered with Keyera and AltaGas on the Alberta Corridor Export rail terminal (~45,000 bpd propane/butane capacity, mid-2028 in-service) (*Keyera, AltaGas and CN Partner to Build Strategic Canadian Infrastructure*, PR Newswire Canada, 20 May 2026).
 
-**Valuation debate.** Multiple pieces from Simply Wall St and Yahoo Finance (June–July 2026) question whether the stock is fully priced after recent gains — a recurring theme that tempers the buy narrative.
+- **Hybrid locomotive programme** (August 2026): CN expanded hybrid-electric testing; pilot unit achieved up to 50% fuel-efficiency improvement (*Does Hybrid Locomotive Fuel Savings Reshape the Bull Case for Canadian National Railway (TSX:CNR)?*, Yahoo Finance, 23 August 2026).
 
-No material M&A involving CN itself was identified; the Union Pacific/Norfolk Southern access agreement is the most significant regulatory/strategic development.
+- **Tariff impact on FY2025** (30 January 2026): Reports of ~$350M revenue impact and combined ~$550M tariff hit across CN and CPKC (*CN and CPKC, Canada's largest railways, took a $550-million tariff hit in 2025*, Calgary Herald, 30 January 2026).
+
+- **Valuation debate** (ongoing): Several August–September 2026 pieces describe the stock as “stretched on cash flow but reasonable on earnings” or “fully valued” (*Canadian National Railway (TSX:CNR) Stock Looks Stretched On Cash Flow But Reasonable On Earnings*, Yahoo Finance, 23 August 2026).
+
+News is not thin on volume, but depth is shallow — much is templated SEO content rather than primary-source investigative reporting. Key primary events (earnings, infrastructure partnerships) are well covered.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Operational momentum, moat quality, and screen alignment support the buy signal, but absent primary filing financials and with multiple deep-value screens failing, conviction is moderated pending verified annual/interim filing review.
+Rationale: Business quality, recent operational momentum, and cash-return discipline support the quantitative buy signal, but filing-index contamination, absent interim primary filings, rising leverage, and mixed valuation commentary prevent full conviction without verified MD&A extracts before sizing.

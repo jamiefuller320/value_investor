@@ -1,92 +1,94 @@
 # Mears Group plc (MER.L) — Research memo
 
-_Version 1 · Updated 2026-07-25T19:54:18.704312+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-11T07:45:51.787376+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Mears Group plc screens as a **buy** across all four quantitative families (cheapness, dividend, GARP, risk), with headline metrics of P/E 8.0, P/B 1.9, yield 4.1% and ROE 23.4%. The investment case rests on a UK social-housing and care outsourcing franchise that has expanded operating profit and EPS over four years while materially reducing the share count through buybacks, even as reported revenue has plateaued. Valuation looks inexpensive relative to earnings power and cash generation, but this pass cannot validate balance-sheet risk language from primary filings: five Companies House annual accounts are indexed with zero downloadable body extracts and no interim RNS results. The central debate is whether improving margins and capital return mask structural pressures—flat top line, falling free cash flow, lease-heavy liabilities and negative working capital—or whether the market is under-pricing a resilient, contract-backed income stream.
+Mears Group is a UK social-housing services contractor managing ~450,000 homes under long-term local- and central-government contracts, with an order book at a record £4.2bn (H1 2026). The quantitative screen rates the name a buy, though the screening snapshot carries no populated model metrics — the hook is a cash-generative, contract-backed franchise trading on modest earnings power while returning capital aggressively via dividends and buybacks (share count down ~27% since 2023). The central debate is whether maintenance-led growth, compliance expansion (Pennington), and portfolio simplification (FM disposal) can offset asylum-accommodation (AASC) revenue normalisation and the near-term margin drag from intensive contract mobilisations; H1 2026 adjusted PBT fell 10% year-on-year despite revenue growth.
 
 ## INVESTMENT THESIS
-The quantitative screen flags MER.L with 10 of 22 models passing, composite score 63% (sector-relative 65%), full metric coverage (20/20), and a stable buy signal held for three weeks at 45% building conviction. That profile fits a classic UK small-cap value setup: low multiple, meaningful yield, and returns on equity well above the screen’s 8% hurdle.
+For a value investor, Mears offers several features screens typically reward: visible contracted revenue, improving business mix (maintenance-led revenue rose 12% to £620.4m in FY25, now 55% of group revenue), disciplined capital allocation, and tangible shareholder returns. FY25 preliminary results (26 Mar 2026) show flat group revenue at £1,135.5m but adjusted operating margin (pre-IFRS 16) strengthening to 5.7%, diluted EPS up 10% to 53.86p on a shrinking share base, and the full-year dividend raised 9% to 17.50p alongside a new £20m buyback. Management targets maintenance-led organic growth of 5–9% annually, supported by retentions (Cross Keys, Leeds, Livin, Moat, Thurrock) and new wins (Birmingham £450m, Rooftop £150m).
 
-Business quality, inferred from Yahoo financials (filing bodies unavailable), shows a multi-year improvement story. Revenue rose from £959.6m (FY2022) to £1,135.5m (FY2025), though growth has stalled in the latest year (+0.3% YoY). Operating income strengthened from £40.4m to £75.0m over the same span, and basic EPS advanced from 25.5p to 55.7p—partly earnings growth, partly a share count cut from ~111m to ~83m via repurchases (£52.0m in FY2024, £17.8m in FY2025 per Yahoo cash-flow data).
-
-The screen’s FCF yield, earnings-quality and Acquirer’s Multiple passes align with operating cash flow that exceeded £110m in three of the last four years, though FY2025 FCF fell to £65.7m on higher capex and working-capital outflows. Dividend models pass with ~£13.9m cash dividends paid in FY2025 against rising per-share earnings. For a value investor, the hook is clear: a contract-heavy services business trading below 10x earnings with a 4%+ yield, active buybacks, and ROE above 20%—without requiring heroic growth assumptions.
+The buy screen aligns with business quality on cash and contract visibility rather than explosive earnings growth. Average daily adjusted net cash was £52.8m in FY25; EBITDA-to-operating-cash conversion averaged 104% over four years (82% in FY25 after working-capital unwind). The £70m revolving credit facility was undrawn at H1 2026, with going-concern confirmed to at least September 2027 and covenant headroom under stress-tested scenarios. Non-core FM disposal (£18m, Mar 2026) sharpens strategic focus on housing. Gaps in the screen payload (zero models passed, no composite score or key metrics) mean the buy signal should be treated as directional pending fuller quantitative verification.
 
 ## FINANCIAL REVIEW
-Source limitation: The filings index (`regime: uk_rns`, source: Companies House) lists five annual accounts (filed Jun 2022 through Jun 2026) and zero interim releases. None have body extracts (`with_body: 0`; no files under `filings/bodies/`). All figures below therefore fall back to `financials_annual.json` (Yahoo); quarterly income is empty in that file.
+**Annual (FY25 — Preliminary Results, 26 Mar 2026; primary filing body)**
 
-Income and profitability (Yahoo, FY ends December)
+| Metric | FY25 | FY24 | Change |
+|--------|------|------|--------|
+| Total revenue | £1,135.5m | £1,132.5m | +0% |
+| Maintenance-led revenue | £620.4m | £555.8m | +12% |
+| Management-led revenue | £515.0m | £576.7m | −11% |
+| Statutory operating profit | £75.0m | £72.6m | +3% |
+| Adjusted operating profit (pre-IFRS 16) | £64.8m | £63.6m | +2% |
+| Adjusted operating margin (pre-IFRS 16) | 5.7% | 5.6% | +10 bps |
+| Profit before tax | £63.5m | £64.1m | −1% |
+| Diluted EPS | 53.86p | 48.86p | +10% |
+| Full-year dividend | 17.50p | 16.00p | +9% |
+| Average daily adjusted net cash | £52.8m | £59.6m | −11% |
+| Year-end adjusted net cash | £51.8m | £91.4m | — |
+| Order book | £4.0bn | £2.9bn (ex-FM) | — |
+| EBITDA-to-operating-cash conversion | 82% | 101% | — |
 
-| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
-|--------|--------|--------|--------|--------|
-| Revenue | £959.6m | £1,089.3m | £1,132.5m | £1,135.5m |
-| Operating income | £40.4m | £51.7m | £71.5m | £75.0m |
-| EBITDA | £97.1m | £118.2m | £149.2m | £160.3m |
-| Net income | £28.3m | £35.2m | £46.5m | £46.2m |
-| Basic EPS | 25.5p | 32.9p | 50.3p | 55.7p |
+FY25 revenue was flat as 11% organic growth in maintenance (plus Pennington acquisition in Sep 2025 for ~£9.5m cash) offset AASC normalisation (AASC revenue down 16% to £370m; management guides toward ~£200m annually over time). Statutory operating margin improved to 6.6%. Cash conversion dipped as anticipated timing benefits from payments-on-account and gainshares unwound (~£36m working-capital headwind referenced in H1 2026 filing). Capital deployed included £17.2m buybacks, £13.9m dividends, ~£27.4m net property acquisitions for AASC, and £8.9m M&A.
 
-Revenue growth was strong through FY2024 but effectively flat in FY2025. Margin expansion has been the main profit driver: gross profit rose from £195.7m to £265.8m (gross margin roughly 20% to 23%). Net income plateaued in FY2025 despite higher EBITDA, with interest expense rising from £8.4m (FY2022) to £16.1m (FY2025).
+**Interim (H1 2026 — Interim Results, 6 Aug 2026; primary filing body)**
 
-Cash flow and capital allocation (Yahoo)
+| Metric | H1 2026 | H1 2025 | Change |
+|--------|---------|---------|--------|
+| Revenue (ex-FM) | £555.6m | £544.2m | +2% |
+| Maintenance-led revenue | £305.7m | £287.0m | +7% |
+| Management-led revenue | £249.9m | £257.2m | −3% |
+| Adjusted PBT (pre-IFRS 16) | £28.9m | £32.2m | −10% |
+| Adjusted diluted EPS | 25.26p | 27.82p | −9% |
+| Adjusted operating margin (pre-IFRS 16) | 5.2% | 5.6% | −40 bps |
+| Statutory PBT | £38.0m | £32.0m | +18%* |
+| Interim dividend | 6.20p | 5.60p | +11% |
+| Average daily adjusted net cash | £29.7m | £67.7m | −57% |
+| Period-end adjusted net cash | £70.5m | £81.1m | — |
+| EBITDA-to-operating-cash conversion | 92% | 105% | — |
+| Order book | £4.2bn | £3.3bn (ex-FM) | — |
 
-| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
-|--------|--------|--------|--------|--------|
-| Operating cash flow | £110.9m | £135.9m | £128.8m | £112.7m |
-| Capex | £9.4m | £25.8m | £31.3m | £46.9m |
-| Free cash flow | £101.5m | £110.0m | £97.5m | £65.7m |
-| Share repurchases | £0 | £37.9m | £52.0m | £17.8m |
-| Dividends paid | £9.7m | £11.8m | £12.9m | £13.9m |
+*Statutory H1 2026 PBT includes £9.4m profit on FM disposal.
 
-FCF compression in FY2025 warrants scrutiny: working-capital outflow of £29.7m and higher PPE spend (£45.2m) absorbed cash despite solid operating inflows. The screen’s trailing FCF key metric (£31.5m) is lower than the full-year Yahoo figure (£65.7m), consistent with recent deterioration. Buybacks and dividends together consumed roughly £32m in FY2025 against £65.7m FCF—sustainable at current levels but tighter than prior years.
+H1 margin compression reflects an intensive mobilisation period (new contracts typically reach full margin over ~24 months). Full-year FY26 guidance maintained: revenue ~£1,038m and adjusted PBT ~£50.7m (consensus cited in filing). FY26 operating margin guided at 5.0–5.2% (pre-IFRS 16), below FY25, owing to mobilisations and AASC uncertainty.
 
-Balance sheet (Yahoo, FY2025)
+**Trading updates:** Pre-close update (22 Jan 2026) flagged maintenance revenue >£610m and adjusted PBT ≥£62.5m for FY25. Trading statement (30 Jun 2026) confirmed momentum and Rooftop contract (£150m/10 years).
 
-- Total assets: £740.1m; equity: £201.7m (minority interest £3.1m).
-- Investment properties: £259.8m (up from £187.1m in FY2022)—a material, growing asset class atypical of pure-play outsourcing.
-- Goodwill and intangibles: £127.9m; tangible book value: £73.8m (P/B 1.9x reflects goodwill and property, not liquid net assets).
-- Total debt / capital lease obligations: £318.7m, essentially all capital leases (£238.1m non-current, £80.7m current). Covenant and maturity detail is not available without filing bodies.
-- Defined pension benefit: £24.1m.
-- Working capital: −£58.0m (negative and worsening vs −£43.4m in FY2024).
-- Cash: £48.5m (down from £91.4m in FY2024).
+**Historical context (Yahoo fallback — used only for multi-year trend where filing bodies lack full history):** Revenue grew from £959.6m (2022) to £1,135.5m (2025). Reported net income rose from £27.8m (2022) to £46.2m (2025). Free cash flow was £65.7m in 2025 vs £97.5m in 2024 (Yahoo), consistent with filing narrative on working-capital normalisation. Yahoo shows negative working capital (~£58m) and total debt ~£319m, substantially IFRS 16 lease liabilities (£238m long-term plus £81m current per filing balance sheet); management’s covenant and liquidity metrics use pre-IFRS 16 adjusted net cash.
 
-Interim gap: No half-year RNS, trading update or equivalent appears in the filings index. Latest operational trends beyond FY2025 year-end cannot be verified from primary sources in this pack.
+**Gaps:** The Annual Financial Report RNS (17 Apr 2026) is a distribution notice only — no financial statements in the body extract. Four Companies House annual accounts are indexed without downloadable bodies. Multi-year statutory cash-flow detail beyond FY25/H1 2026 relies on Yahoo where noted.
 
 ## RISKS AND RED FLAGS
-Data gap (critical): Without filing body extracts, this memo cannot cite going-concern assessments, contingent liabilities, lease covenant language, contract concentration, or audit emphasis-of-matter paragraphs. That is a material limitation for a regulated, contract-heavy UK outsourcer.
+**Public-sector and regulatory exposure:** ~450,000 homes under contract with local and central government; AASC revenues are politically sensitive and normalising (H1 2026 AASC revenue £180m, −5% half-on-half; hotels targeted for exit in 2026). Reformed Decent Homes Standard (DHS2) is a long-term tailwind but raises compliance cost and execution risk.
 
-Balance-sheet structure (Yahoo):
+**Contract and competitive risk:** Rebid attrition remains material — Eastbourne & Lewes lost (~£8m annual revenue, Mar 2026); Orbit Housing (~£30m) ends Mar 2027 after working-capital strain. Intensive mobilisations are pressuring margins within the stated 5–6% target band. Order-book quality is high, but bidding discipline limits growth from new customers historically.
 
-- Lease-heavy funding: £318.7m of capital lease obligations against £201.7m equity suggests meaningful embedded commitments; the interest burden is rising.
-- Property exposure: Investment properties at £259.8m tie earnings to asset values and housing-market/regulatory dynamics; revaluation or disposal assumptions are unverified.
-- Pension: Defined-benefit obligation £24.1m—a manageable but persistent legacy risk in a labour-intensive sector.
-- Negative working capital: −£58.0m may reflect contract payment terms but increases liquidity sensitivity if operating cash weakens.
-- FCF trend: FY2025 FCF down ~33% YoY; if sustained, dividend-plus-buyback policy becomes harder to fund without additional leverage.
+**Balance sheet and liquidity:** IFRS 16 lease liabilities create statutory net debt of ~£237m at H1 2026 despite £70.5m adjusted net cash. Average daily net cash fell to £29.7m in H1 2026 after property purchases, dividends, buybacks (£13.6m in H1), and FY25 working-capital unwind. Covenants (leverage ≤3.0x, interest cover ≥3.5x on pre-IFRS 16 basis) were met; going-concern assessment extends to September 2027 with undrawn £70m RCF.
 
-Operational / sector (inferred, not from filings):
+**Pension:** Multiple defined-benefit schemes including LGPS admitted-body arrangements; recognised pension asset £26.6m at H1 2026 (actuarial gain £2.2m in period). Surplus recognition is limited on many schemes — complexity and contract-linked recovery rights add judgement risk.
 
-- UK social housing and care outsourcing faces local-authority budget pressure, procurement scrutiny and wage inflation—consistent with flat FY2025 revenue in Yahoo data.
-- Customer concentration and contract re-tender risk cannot be quantified from available sources.
+**Litigation and provisions:** £18.3m contract asset on a single maintenance contract subject to dispute/adjudication, with possible outcomes ±£2.0m (H1 2026 note 9). Onerous-contract, legal, and insurance provisions total £16.3m at H1 2026. Right-of-use asset impairment £0.9m in FY25 on community housing schemes.
 
-Governance / news: No material governance or regulatory actions surfaced in the news manifest; coverage is thin on operational detail.
+**Governance:** Board refresh (Dame Clare Tickell NED from Apr 2026; Employee Director transition to Kiren Sampla, Jan 2026) appears orderly; no red flags in available filings.
+
+RiskTags: regulatory, customer_concentration, pension, competitive, litigation, cyclical, leverage
+RiskTags: regulatory, customer_concentration, pension, competitive, litigation, cyclical, leverage
 
 ## NEWS HIGHLIGHTS
-News coverage over the past year is thin on company-specific strategy and regulatory developments, with significant noise from unrelated “Mer/MER” tickers (Mer Mec, Meren Energy, Mer Telemanagement, etc.).
+Coverage is moderate for MER.L specifically; many “MER” headlines refer to unrelated tickers (Meren Energy, etc.) and should be disregarded.
 
-Material MER.L items:
+**Strategy and portfolio:** Disposal of Morrison Facilities Management for £18m completed Mar 2026 (RNS). Pennington Choices acquired Sep 2025 for compliance capabilities. FM exit and Pennington integration widely noted in H1 2026 results commentary.
 
-- 20 Jul 2026 — *Mears Group Cancels Further Shares as Buyback Programme Advances* (TipRanks): confirms ongoing capital return.
-- 20 Jul 2026 — *Mears Group PLC Finalizes Purchase of 124,709 Shares Over Three Days in July 2026 Under Ongoing Buyback Program* (Kalkine Media): buyback execution detail.
-- 23 Jul 2026 — *REG - Mears Grp PLC - Holding(s) in Company* (TradingView): standard RNS holder notification.
-- 6 Jul 2026 — *How Mears Group managed risk in ‘unprecedented’ times* (Construction Wave): sector/risk-management commentary; no financial figures in manifest.
-- 8 Apr 2026 — *Mears Group's (LON:MER) Earnings Seem To Be Promising* (Yahoo Finance): post-results market commentary noting market underreaction.
-- 7 Aug 2025 — *Mears doing well despite falling revenue* (Investors' Chronicle): notes revenue pressure offset by performance elsewhere.
-- 15 Dec 2025 — *Investors in Mears Group (LON:MER) have seen strong returns of 206% over the past five years* (Yahoo Finance): long-term performance context.
-- 8 Sep 2025 — *Be Sure To Check Out Mears Group plc (LON:MER) Before It Goes Ex-Dividend* (simplywall.st): dividend calendar item.
+**Contract wins (RNS, 2026):** Birmingham City Council (~£450m/10 years); Moat Homes (~£200m); Thurrock Council (~£240m); Rooftop Housing Group (£150m/10 years, announced 30 Jun 2026). Order book reached record levels.
 
-No manifest entries report management changes, M&A, or regulatory enforcement against Mears Group plc specifically. Strategy commentary is largely absent beyond buyback activity and generic dividend-screen inclusion.
+**Capital returns:** £20m buyback launched Apr 2026; ongoing weekly repurchases reported in news (“Mears Group PLC (MER) Buys Back 244,057 Shares…”, Kalkine Media, 1 Sep 2026; similar updates Jul–Aug 2026). Dividend narrative picked up (“Why Is the Dividend Story Gaining Strength?”, Kalkine Media, 24 Aug 2026).
+
+**Results and sentiment:** “Mears doing well despite falling revenue” (Investors’ Chronicle, 7 Aug 2025). “Mears Group's (LON:MER) Earnings Seem To Be Promising” (Yahoo Finance, 8 Apr 2026). “How Mears Group managed risk in ‘unprecedented’ times” (Construction Wave, 6 Jul 2026). Mears included in European undervalued small-cap/insider-buying lists (Yahoo Finance, 28 May 2026).
+
+**Management:** CEO Lucas Critchley and CFO Andrew Smith leading; board additions noted above. No material M&A beyond Pennington in the past year.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.58
-Rationale: Quantitative cheapness, yield and quality metrics are supported by a credible multi-year margin and EPS story, but missing primary filing bodies and interim disclosures prevent verification of lease, pension and contract risks, leaving the buy case intact yet under-audited.
+Confidence: 0.68
+Rationale: Primary filings confirm a contract-backed, cash-generative housing-services franchise with strong order-book visibility and active capital return, supporting the quantitative buy signal, but near-term adjusted earnings are declining on mobilisation and AASC normalisation while screen metadata is largely unpopulated.
