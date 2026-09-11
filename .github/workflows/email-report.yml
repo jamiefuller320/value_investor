@@ -69,21 +69,20 @@ jobs:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
         run: ftse-email --send-only
 
-      # Rebase in case main moved (e.g. PR merge) during the long screen step.
-      - name: Sync main before dashboard commit
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git pull --rebase --autostash origin "${{ github.ref_name }}"
-
+      # Fetch+reset overlay with push retry (L348). Avoids pull --rebase failing on
+      # untracked research bodies and recovers from concurrent main writers.
       - name: Commit dashboard data
         id: dashboard_commit
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: update dashboard data [skip ci]"
+        env:
+          COMMIT_MESSAGE: "chore: update dashboard data [skip ci]"
+          GHA_COMMIT_LABEL: "Email report"
+          GHA_COMMIT_REF: ${{ github.ref_name }}
           # Includes docs/data/history/ run snapshots for backtest/sim replay.
-          file_pattern: docs/data/** docs/research/* docs/data/engineering_tasks.json
-          skip_fetch: false
+          GHA_COMMIT_OWNED: |
+            docs/data
+            docs/research
+            docs/data/engineering_tasks.json
+        run: bash scripts/gha_commit_artifacts.sh
 
       # [skip ci] on the commit above skips this workflow's push trigger for Pages;
       # dispatch pages.yml explicitly so jamiefuller320.github.io picks up latest.json.

@@ -52,11 +52,12 @@ slots, quiet-bundle recovery still in flight, dashboard waiting on email-report)
 Same-day skip applies only after a run that did **not** defer email — the 13:15
 catch-up re-checks and emails only if issues remain.
 
-Artifact commit uses `scripts/gha_commit_ops_monitor.sh` (fetch + retry). Status
-files always overlay; `engineering_tasks.json` / health logs overlay only when
-`main` has not changed them since checkout. The workflow commits those artifacts
-even when `ftse-ops-monitor` exits non-zero, then fails the job afterward so a
-red finding cannot leave `ops_status.json` stale.
+Artifact commit uses `scripts/gha_commit_ops_monitor.sh` → shared
+`scripts/gha_commit_artifacts.sh` (fetch + retry; also used by email-report and
+library-grow). Status files always overlay; `engineering_tasks.json` / health
+logs overlay only when `main` has not changed them since checkout. The workflow
+commits those artifacts even when `ftse-ops-monitor` exits non-zero, then fails
+the job afterward so a red finding cannot leave `ops_status.json` stale.
 
 ### Email deferral (day-complete gate)
 

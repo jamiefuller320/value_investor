@@ -47,10 +47,12 @@ def _seed_repo(tmp_path: Path) -> tuple[Path, Path]:
         work / "docs" / "data" / "engineering_tasks.json",
         {"tasks": [{"id": "eng-1", "status": "open"}]},
     )
-    script = work / "scripts" / "gha_commit_ops_monitor.sh"
-    script.parent.mkdir()
-    script.write_text(SCRIPT.read_text(encoding="utf-8"), encoding="utf-8")
-    script.chmod(script.stat().st_mode | stat.S_IEXEC)
+    scripts_dir = work / "scripts"
+    scripts_dir.mkdir()
+    for name in ("gha_commit_ops_monitor.sh", "gha_commit_artifacts.sh"):
+        script = scripts_dir / name
+        script.write_text(Path("scripts", name).read_text(encoding="utf-8"), encoding="utf-8")
+        script.chmod(script.stat().st_mode | stat.S_IEXEC)
 
     _git(work, "add", "docs", "scripts")
     _git(work, "commit", "-m", "seed")
