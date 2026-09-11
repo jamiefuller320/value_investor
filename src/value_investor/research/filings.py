@@ -219,6 +219,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.vinci.com/sites/default/files/medias/communiques/file/2026-07/CP%20VINCI%20H1%202026%20EN.pdf",
         "https://www.vinci.com/sites/default/files/medias/communiques/file/2026-04/first-quarter-2026-stable-revenue-increase-in-order-intake.pdf",
     ],
+    # euro_depth IWB blocker — WKL.AS unfetchable_iwb resolved; contenthub PDFs (wolterskluwer.com is Cloudflare-gated).
+    "WKL.AS": [
+        "https://assets.contenthub.wolterskluwer.com/api/public/content/3210406-wolters-kluwer-2025-annual-report-pdf-8bb01b4e47?v=ddef685b",
+        "https://assets.contenthub.wolterskluwer.com/api/public/content/3118646-2026-02-25-wolters-kluwer-2025-full-year-results-7391945524?v=2c966da9",
+        "https://assets.contenthub.wolterskluwer.com/api/public/content/3775537-2026-08-05-wolters-kluwer-2026-half-year-results-7d85c04c6c?v=15135ed1",
+    ],
     # euro_depth IWB blocker — ab-inbev.com IR is age-gated; SEC 20-F / HY 6-K (CIK 1668717).
     "ABI.BR": [
         "https://www.sec.gov/Archives/edgar/data/1668717/000119312526088105/d65314d20f.htm",
@@ -3444,6 +3450,13 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     ),
     "https://www.globenewswire.com/news-release/2026/04/23/3280202/0/en/VINCI-FIRST-QUARTER-2026-STABLE-REVENUE-INCREASE-IN-ORDER-INTAKE.html": (
         "https://www.vinci.com/sites/default/files/medias/communiques/file/2026-04/first-quarter-2026-stable-revenue-increase-in-order-intake.pdf"
+    ),
+    # eng-20260911-01: GlobeNewswire HTML/PDF IR rows fail validation; contenthub statutory PDFs serve.
+    "https://www.globenewswire.com/news-release/2026/02/25/3244280/0/en/Wolters-Kluwer-2025-Full-Year-Report.html": (
+        "https://assets.contenthub.wolterskluwer.com/api/public/content/3118646-2026-02-25-wolters-kluwer-2025-full-year-results-7391945524?v=2c966da9"
+    ),
+    "https://ml-eu.globenewswire.com/Resource/Download/38679066-656c-433a-8fcd-02c538a9b417": (
+        "https://assets.contenthub.wolterskluwer.com/api/public/content/3118646-2026-02-25-wolters-kluwer-2025-full-year-results-7391945524?v=2c966da9"
     ),
     # eng-20260910-02: blob/1101986 404s; report.telekom.com entire-dtag-ar25.pdf serves.
     "https://www.telekom.com/resource/blob/1101986/912628a6116bb7b1ecdfc36b578d66ef/dt-25-annual-report-data.pdf": (

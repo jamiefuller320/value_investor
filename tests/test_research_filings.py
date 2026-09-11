@@ -6855,6 +6855,53 @@ def test_parked_source_hunter_dg_pa_euro_depth_has_fetchable_ir():
     )
 
 
+def test_fetch_filings_ir_allowlist_euro_depth_wkl_as_builtins(tmp_path: Path):
+    """Regression: WKL.AS parked IWB — contenthub FY2025 annual + full-year + H1 2026 PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("WKL.AS", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("wolters-kluwer-2025-annual-report-pdf" in url for url in urls)
+    assert any("wolters-kluwer-2025-full-year-results" in url for url in urls)
+    assert any("wolters-kluwer-2026-half-year-results" in url for url in urls)
+    assert {row["period"] for row in rows} == {"annual", "interim"}
+
+
+def test_load_ir_url_allowlist_canonicalizes_wkl_as_dead_globenewswire_urls(tmp_path: Path):
+    """Dead GlobeNewswire HTML/PDF URLs map to live contenthub statutory PDFs."""
+    dead_html = (
+        "https://www.globenewswire.com/news-release/2026/02/25/3244280/0/en/"
+        "Wolters-Kluwer-2025-Full-Year-Report.html"
+    )
+    dead_pdf = (
+        "https://ml-eu.globenewswire.com/Resource/Download/38679066-656c-433a-8fcd-02c538a9b417"
+    )
+    live = _BUILTIN_IR_URLS["WKL.AS"][1]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"WKL.AS": [dead_html, dead_pdf]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live in mapping["WKL.AS"]
+    assert dead_html not in mapping["WKL.AS"]
+    assert dead_pdf not in mapping["WKL.AS"]
+    rows = fetch_filings_ir_allowlist("WKL.AS", path=path)
+    assert any(row["url"] == live for row in rows)
+
+
+def test_parked_source_hunter_wkl_as_euro_depth_has_fetchable_ir():
+    """eng-20260911-01: WKL.AS has live contenthub FY2025 annual + full-year + H1 2026 PDFs."""
+    assert "WKL.AS" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("WKL.AS")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("contenthub.wolterskluwer.com" in url for url in urls)
+    assert all("globenewswire.com" not in url for url in urls)
+    assert any("wolters-kluwer-2025-annual-report-pdf" in url for url in urls)
+    assert any("wolters-kluwer-2026-half-year-results" in url for url in urls)
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_dq7a_ir_builtins(tmp_path: Path):
     """Regression: DQ7A.IR awaiting_periodic_report — donegaligroup.com FY2025 AR + H1 PDFs."""
     allowlist_path = tmp_path / "ir.json"
