@@ -3,13 +3,13 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "graduated_allocation",
-  "generated_at": "2026-09-10T08:28:07.143841+00:00",
+  "generated_at": "2026-09-11T08:28:46.302447+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 3,
+    "closed_total": 4,
     "closed_unknown_thesis": 0,
     "open_with_thesis": 1,
     "by_thesis_status": {
@@ -17,13 +17,14 @@
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 3,
-        "recovery_rate": 0.0,
-        "sold_underwater_rate": 1.0,
-        "mean_peak_unrealized_pct": -0.0258,
-        "mean_trough_unrealized_pct": -0.0473,
+        "closed_count": 4,
+        "recovery_rate": 0.25,
+        "sold_underwater_rate": 0.75,
+        "mean_peak_unrealized_pct": -0.0138,
+        "mean_trough_unrealized_pct": -0.0378,
         "outcome_labels": {
-          "sold_underwater": 3
+          "sold_underwater": 3,
+          "recovered": 1
         }
       },
       "broken": {
@@ -55,10 +56,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 3,
+    "hold_closed_with_thesis": 4,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=3 (target >=8)",
+      "hold closed with thesis=4 (target >=8)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -203,7 +204,7 @@
       "ticker": "IMB.L",
       "name": "Imperial Brands PLC",
       "started_at": "2026-09-10T09:27:53.931652+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -233,8 +234,51 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0093,
+      "peak_unrealized_pct": 0.0223,
       "trough_unrealized_pct": -0.0093,
+      "recovered_to_breakeven": true,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-09-11T09:28:29.064814+01:00",
+      "linked_sell_trade_id": "3170c284-8019-4b3c-a04d-524290158c83"
+    },
+    {
+      "episode_id": "graduated_allocation:JD.L:2026-09-11T09:28:29.064814+01:00",
+      "track_id": "graduated_allocation",
+      "ticker": "JD.L",
+      "name": "JD Sports Fashion Plc",
+      "started_at": "2026-09-11T09:28:29.064814+01:00",
+      "status": "open",
+      "stress_triggers": [
+        "underwater"
+      ],
+      "entry_mark": 78.8,
+      "avg_cost": 80.3603,
+      "unrealized_pct_at_start": -0.0194,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "cheapness family no longer passes",
+        "still buy",
+        "research accumulate"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": -0.0194,
+      "screen_signal": "buy",
+      "effective_signal": "buy",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.9522000000000003,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0194,
+      "trough_unrealized_pct": -0.0194,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -350,14 +394,66 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "MGNS.L": 0.0,
-        "SN.L": 0.0,
-        "VTY.L": 0.0
+        "MGNS.L": -0.0099,
+        "SN.L": 0.0034,
+        "VTY.L": -0.0136
       },
       "buy_returns_since_rotation": {
-        "KLR.L": 0.0,
-        "DSCV.L": 0.0,
-        "JD.L": -0.0
+        "KLR.L": -0.005,
+        "DSCV.L": 0.0026,
+        "JD.L": -0.0194
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "graduated_allocation:2026-09-11T09:28:29.064814+01:00",
+      "track_id": "graduated_allocation",
+      "logged_at": "2026-09-11T09:28:29.064814+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.03,
+      "sells": [
+        {
+          "ticker": "IMB.L",
+          "price": 2526.0,
+          "shares": 0.053042,
+          "gross": 133.98,
+          "cost": 4.02,
+          "avg_cost_at_exit": 2471.0,
+          "realized_pct": 0.0223,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0223
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "FRES.L",
+          "price": 2971.0,
+          "shares": 0.03954,
+          "gross": 117.47,
+          "cost": 3.52
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "IMB.L": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "FRES.L": 0.0
       },
       "verdict": null,
       "closed_at": null

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "track_id": "graduated_allocation",
-  "generated_at": "2026-09-10T08:28:07.141876+00:00",
+  "generated_at": "2026-09-11T08:28:46.301100+00:00",
   "framework": {
     "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
     "hold_recovery": {
@@ -55,11 +55,11 @@
   },
   "readiness": {
     "ready_for_probability_analysis": false,
-    "hold_closed_count": 3,
+    "hold_closed_count": 4,
     "swap_closed_count": 0,
-    "hold_with_data_quality_count": 4,
+    "hold_with_data_quality_count": 5,
     "gaps": [
-      "hold_recovery closed episodes=3 (target >=15)",
+      "hold_recovery closed episodes=4 (target >=15)",
       "swap_rotation closed rotations=0 (target >=10)"
     ],
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
@@ -73,18 +73,19 @@
       }
     },
     "closed": {
-      "count": 3,
-      "recovered_to_breakeven": 0,
+      "count": 4,
+      "recovered_to_breakeven": 1,
       "close_reasons": {
-        "sold_while_underwater": 3
+        "sold_while_underwater": 3,
+        "sold_while_recovered": 1
       }
     }
   },
   "swap_rotation": {
     "open": {
-      "count": 1,
+      "count": 2,
       "verdicts": {
-        "open": 1
+        "open": 2
       }
     },
     "closed": {
