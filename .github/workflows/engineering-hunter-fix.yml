@@ -59,24 +59,64 @@ jobs:
           git fetch --no-tags origin "$BRANCH"
           git checkout --force "$SHA"
 
-      - name: Skip if hunter-fix bot already attempted on latest commit
-        if: steps.branch.outputs.branch != ''
-        id: gate
-        run: |
-          if git log -1 --pretty=%s | grep -q '^chore(hunter-fix):'; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "Latest commit is already a hunter-fix bot commit"
-          else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-          fi
-
+      # Fetch CI logs before skip so a new failure kind can still retry.
       - name: Fetch failed CI logs
-        if: steps.branch.outputs.branch != '' && steps.gate.outputs.skip != 'true'
+        if: steps.branch.outputs.branch != ''
         env:
           GH_TOKEN: ${{ github.token }}
           RUN_ID: ${{ github.event.workflow_run.id }}
         run: |
           gh run view "$RUN_ID" --log-failed > /tmp/ci_failed.log 2>&1 || true
+
+      - name: Skip only when tip hunter-fix already covered this failure kind
+        if: steps.branch.outputs.branch != ''
+        id: gate
+        env:
+          BRANCH: ${{ steps.branch.outputs.branch }}
+        run: |
+          set -euo pipefail
+          SUBJECT=$(git log -1 --pretty=%s)
+          if [[ ! "$SUBJECT" =~ ^chore\(hunter-fix\): ]]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git fetch origin main
+          git diff --name-only origin/main...HEAD > /tmp/changed_files.txt
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          from value_investor.hunter_auto_merge import (
+              classify_hunter_fix_kind,
+              evaluate_hunter_merge_gate,
+              load_hunter_task_for_branch,
+          )
+          from value_investor.hunter_fix_agent import tip_hunter_fix_kind
+
+          branch = os.environ["BRANCH"]
+          last_kind = tip_hunter_fix_kind() or ""
+          changed = [
+              line.strip()
+              for line in Path("/tmp/changed_files.txt").read_text().splitlines()
+              if line.strip()
+          ]
+          current = ""
+          task = load_hunter_task_for_branch(branch)
+          if task is not None:
+              gate = evaluate_hunter_merge_gate(
+                  task=task,
+                  changed_files=changed,
+                  base_ref="origin/main",
+                  head_ref="HEAD",
+              )
+              kind = classify_hunter_fix_kind(gate)
+              current = kind.value if kind else ""
+          skip = bool(last_kind and current and last_kind == current)
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"skip={'true' if skip else 'false'}\n")
+              fh.write(f"last_kind={last_kind}\n")
+              fh.write(f"current_kind={current}\n")
+          print(f"tip_fix_kind={last_kind!r} current_kind={current!r} skip={skip}")
+          PY
 
       - name: Check hunter-fix eligibility
         if: steps.branch.outputs.branch != '' && steps.gate.outputs.skip != 'true'
@@ -131,9 +171,8 @@ jobs:
           else
             echo "gate_pass=false" >> "$GITHUB_OUTPUT"
           fi
-
-      # Commit before verify: hunter-merge-gate reads committed HEAD, not the
-      # working tree. Pushing first is what lets SKIP conversions clear CI.
+      # Commit before verify: hunter-merge-gate reads committed HEAD. Stage only
+      # hunter-allowlisted paths so ops JSON churn cannot pollute the PR.
       - name: Commit and push hunter-fix
         if: >-
           steps.branch.outputs.branch != ''
@@ -146,12 +185,23 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet && git diff --cached --quiet; then
+          python3 - <<'PY'
+          import subprocess
+          from pathlib import Path
+          from value_investor.hunter_auto_merge import (
+              HUNTER_AUTO_MERGE_ALLOWED_FILES,
+              strip_unexpected_hunter_files,
+          )
+          strip_unexpected_hunter_files(base_ref="origin/main")
+          for path in sorted(HUNTER_AUTO_MERGE_ALLOWED_FILES):
+              if Path(path).exists():
+                  subprocess.run(["git", "add", "--", path], check=False)
+          PY
+          if git diff --cached --quiet; then
             echo "pushed=false" >> "$GITHUB_OUTPUT"
-            echo "No changes after hunter-fix agent"
+            echo "No allowlisted changes after hunter-fix agent"
             exit 0
           fi
-          git add -A
           FIX_KIND=$(python3 -c "import json; print(json.load(open('/tmp/hunter_fix_result.json')).get('fix_kind') or 'gate')")
           git commit -m "chore(hunter-fix): address hunter-merge-gate ${FIX_KIND}"
           git push origin "HEAD:$BRANCH"
@@ -200,6 +250,7 @@ jobs:
             --open-prs-json /tmp/open_prs.json \
             --base-ref origin/main \
             --head-ref HEAD \
+            --trust-local-gate \
             || true
 
       # Prefer verify outcome over the agent's pre-commit gate_pass: the agent
@@ -230,4 +281,5 @@ jobs:
             --open-prs-json /tmp/open_prs.json \
             --base-ref origin/main \
             --head-ref HEAD \
+            --trust-local-gate \
             || true
