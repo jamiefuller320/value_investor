@@ -417,25 +417,54 @@ def test_dashboard_assets_include_market_status_grid():
     assert "function heldVsMarketLastCaption(payload, { showExcess = true } = {})" in Path(
         "docs/charts.js"
     ).read_text(encoding="utf-8")
-    assert "function renderHeldVsMarketSparkline(payload)" in Path("docs/charts.js").read_text(
-        encoding="utf-8"
-    )
-    assert "function renderHeldVsMarketChart(payload)" in Path("docs/charts.js").read_text(
-        encoding="utf-8"
-    )
+    charts_js = Path("docs/charts.js").read_text(encoding="utf-8")
+    assert "function heldVsMarketLabelIndexes(pointCount" in charts_js
+    assert "function heldVsMarketDateLabels(points, xAt" in charts_js
+    assert "HELD_VS_MARKET_LABEL_ALL_MAX" in charts_js
+    assert 'text-anchor="${anchor}"' in charts_js or 'text-anchor="${anchor}"' in charts_js
+    assert "function renderHeldVsMarketSparkline(payload)" in charts_js
+    assert "function renderHeldVsMarketChart(payload)" in charts_js
+    assert "heldVsMarketDateLabels(drawn.points, drawn.xAt" in charts_js
     assert "renderHeldVsMarketSparkline(row.held_vs_market)" in app
     assert "renderHeldVsMarketChart(row.held_vs_market)" in app
     assert ".held-vs-market-spark" in css
+    assert ".held-vs-market-date-label" in css
+    assert "height: 58px" in css.split(".held-vs-market-spark-svg {", 1)[1].split("}", 1)[0]
     assert (
         "flex-direction: column"
         in css.split(".held-vs-market-spark.empty {", 1)[1].split("}", 1)[0]
     )
-    assert "branch-ready" in Path("docs/charts.js").read_text(encoding="utf-8")
+    assert "branch-ready" in charts_js
     tile_css = css.split(".market-tile {", 1)[1].split("}", 1)[0]
     assert "white-space: normal" in tile_css
     assert "height: 100%" in tile_css
     header_css = css.split(".market-tile-header {", 1)[1].split("}", 1)[0]
     assert "flex-direction: column" in header_css
+
+
+def test_held_vs_market_label_indexes_cover_short_histories():
+    """Mirror docs/charts.js heldVsMarketLabelIndexes for short epoch-0 books."""
+
+    def label_indexes(point_count: int, label_all_max: int = 16) -> list[int]:
+        if point_count <= 0:
+            return []
+        if point_count == 1:
+            return [0]
+        if point_count <= label_all_max:
+            return list(range(point_count))
+        step = max(1, (point_count + 3) // 4)
+        indexes = list(range(0, point_count, step))
+        if indexes[-1] != point_count - 1:
+            indexes.append(point_count - 1)
+        return indexes
+
+    assert label_indexes(3) == [0, 1, 2]
+    assert label_indexes(5) == [0, 1, 2, 3, 4]
+    assert label_indexes(16) == list(range(16))
+    long_indexes = label_indexes(20)
+    assert long_indexes[0] == 0
+    assert long_indexes[-1] == 19
+    assert len(long_indexes) < 20
 
 
 def test_dashboard_assets_include_system_gaps_card():

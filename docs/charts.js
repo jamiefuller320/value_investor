@@ -412,6 +412,58 @@ function heldVsMarketLastCaption(payload, { showExcess = true } = {}) {
   )}${marketHtml}${excessHtml}</div>`;
 }
 
+/** Short epoch-0 books label every day; longer densified series keep a sparse axis. */
+const HELD_VS_MARKET_LABEL_ALL_MAX = 16;
+
+function formatHeldVsMarketDateLabel(date, { compact = false } = {}) {
+  const text = String(date || "").slice(0, 10);
+  if (!compact) return text;
+  return text.length >= 10 ? text.slice(5) : text;
+}
+
+function heldVsMarketLabelIndexes(pointCount, { labelAllMax = HELD_VS_MARKET_LABEL_ALL_MAX } = {}) {
+  if (pointCount <= 0) return [];
+  if (pointCount === 1) return [0];
+  if (pointCount <= labelAllMax) {
+    return Array.from({ length: pointCount }, (_, index) => index);
+  }
+  const step = Math.max(1, Math.ceil(pointCount / 4));
+  const indexes = [];
+  for (let index = 0; index < pointCount; index += step) {
+    indexes.push(index);
+  }
+  if (indexes[indexes.length - 1] !== pointCount - 1) {
+    indexes.push(pointCount - 1);
+  }
+  return indexes;
+}
+
+function heldVsMarketDateLabels(points, xAt, { y, compact = false, width = null } = {}) {
+  const lastIndex = points.length - 1;
+  return heldVsMarketLabelIndexes(points.length)
+    .map((index) => {
+      const date = points[index] && points[index].date;
+      if (!date) return "";
+      let x = xAt(index);
+      let anchor = "middle";
+      if (index === 0) {
+        anchor = "start";
+        // Keep the first glyph inside the viewBox even when the plot starts at pad.left.
+        x = width != null ? Math.min(Math.max(2, x), width - 2) : Math.max(0, x);
+      } else if (index === lastIndex) {
+        anchor = "end";
+        // Pin to the viewBox edge so end-anchored text cannot spill past the SVG.
+        x = width != null ? width - 2 : x;
+      }
+      const label = formatHeldVsMarketDateLabel(date, { compact });
+      return `<text x="${x}" y="${y}" text-anchor="${anchor}" class="chart-axis-label held-vs-market-date-label">${esc(
+        label
+      )}</text>`;
+    })
+    .filter(Boolean)
+    .join("");
+}
+
 function renderHeldVsMarketSparkline(payload) {
   const points = payload?.points || [];
   if (!payload || payload.status !== "ok") {
@@ -426,13 +478,20 @@ function renderHeldVsMarketSparkline(payload) {
     </div>`;
   }
   const width = 220;
-  const height = 42;
-  const pad = { top: 4, right: 4, bottom: 4, left: 4 };
+  const height = 58;
+  // Inset the plot so end-anchored MM-DD labels stay inside the tile button.
+  const pad = { top: 4, right: 18, bottom: 16, left: 14 };
   const drawn = renderHeldVsMarketPolylines(payload, { width, height, pad });
+  const xLabels = heldVsMarketDateLabels(drawn.points, drawn.xAt, {
+    y: height - 3,
+    compact: true,
+    width,
+  });
   return `
     <div class="held-vs-market-spark">
       <svg viewBox="0 0 ${width} ${height}" class="held-vs-market-spark-svg" role="img" aria-label="Held book vs market equivalent">
         ${drawn.polylines}
+        ${xLabels}
       </svg>
       ${heldVsMarketLastCaption(payload)}
     </div>`;
@@ -464,21 +523,14 @@ function renderHeldVsMarketChart(payload) {
   }
   const width = 620;
   const height = 220;
-  const pad = { top: 18, right: 16, bottom: 36, left: 48 };
+  const pad = { top: 18, right: 28, bottom: 36, left: 48 };
   const drawn = renderHeldVsMarketPolylines(payload, { width, height, pad });
-  const xLabels = drawn.points
-    .map((row, index) => ({ date: row.date, index }))
-    .filter(
-      ({ index }) =>
-        index === 0 ||
-        index === drawn.points.length - 1 ||
-        index % Math.max(1, Math.ceil(drawn.points.length / 4)) === 0
-    )
-    .map(
-      ({ date, index }) =>
-        `<text x="${drawn.xAt(index)}" y="${height - 12}" text-anchor="middle" class="chart-axis-label">${esc(String(date).slice(0, 10))}</text>`
-    )
-    .join("");
+  const xLabels = heldVsMarketDateLabels(drawn.points, drawn.xAt, {
+    y: height - 12,
+    // Same compact MM-DD as the tile; full ISO stays in the caption under the chart.
+    compact: true,
+    width,
+  });
   const legend = drawn.series
     .map((seriesRow) => {
       const pending = seriesRow.status === "pending" ? " (pending)" : "";

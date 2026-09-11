@@ -1,23 +1,72 @@
 {
-  "market_id": "asx200",
-  "assessed_at": "2026-09-11T12:21:34.925094+00:00",
+  "market_id": "tsx60",
+  "assessed_at": "2026-09-11T15:12:27.388971+00:00",
   "unmeasured": [],
   "zero_body": [],
-  "indexed_without_body": [],
+  "indexed_without_body": [
+    {
+      "ticker": "TRI.TO",
+      "indexed_without_body": 30,
+      "filings_total": 152,
+      "filings_with_body": 122
+    },
+    {
+      "ticker": "SU.TO",
+      "indexed_without_body": 25,
+      "filings_total": 42,
+      "filings_with_body": 17
+    },
+    {
+      "ticker": "NTR.TO",
+      "indexed_without_body": 18,
+      "filings_total": 27,
+      "filings_with_body": 9
+    },
+    {
+      "ticker": "GIB-A.TO",
+      "indexed_without_body": 11,
+      "filings_total": 20,
+      "filings_with_body": 9
+    },
+    {
+      "ticker": "CNQ.TO",
+      "indexed_without_body": 10,
+      "filings_total": 36,
+      "filings_with_body": 26
+    },
+    {
+      "ticker": "CVE.TO",
+      "indexed_without_body": 3,
+      "filings_total": 60,
+      "filings_with_body": 57
+    }
+  ],
   "thin_need_discovery": [],
-  "thin_need_bodies": [],
-  "primary_blocker": "none",
-  "force_discovery_scan": false,
-  "auto_pin_tickers": [],
+  "thin_need_bodies": [
+    "SU.TO",
+    "GIB-A.TO",
+    "NTR.TO"
+  ],
+  "primary_blocker": "indexed_without_body",
+  "force_discovery_scan": true,
+  "auto_pin_tickers": [
+    "TRI.TO",
+    "SU.TO",
+    "NTR.TO",
+    "GIB-A.TO",
+    "CNQ.TO",
+    "CVE.TO"
+  ],
   "recommended_actions": [
-    "Filing critical path clear — maintenance deepen only"
+    "Prefer indexed-without-body body refetch (6 tickers, top: TRI.TO(30), SU.TO(25), NTR.TO(18), GIB-A.TO(11), CNQ.TO(10))",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
     "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 0,
-    "indexed_without_body_rows": 0,
+    "indexed_without_body_tickers": 6,
+    "indexed_without_body_rows": 97,
     "thin_need_discovery": 0,
-    "thin_need_bodies": 0
+    "thin_need_bodies": 3
   }
 }

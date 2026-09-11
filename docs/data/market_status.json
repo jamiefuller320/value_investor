@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-11T12:26:01.959948+00:00",
+  "generated_at": "2026-09-11T15:18:50.669551+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -36,10 +36,10 @@
       "tsx60"
     ],
     "spare_sprint": {
-      "1": "sp500",
+      "1": "asx200",
       "2": "tsx60"
     },
-    "equal_support_generated_at": "2026-09-11T08:46:33.344732+00:00"
+    "equal_support_generated_at": "2026-09-11T14:16:29.893082+00:00"
   },
   "markets": [
     {
@@ -203,7 +203,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": null,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=25, indexed_without_body=83)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=1, thin=14, indexed_without_body=25)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": null,
@@ -258,24 +258,26 @@
       "filing_health": {
         "buy_tier_count": 48,
         "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 25,
-        "indexed_without_body": 83,
-        "bodies_median": 2.0,
+        "zero_body_buy_tier": 1,
+        "thin_body_buy_tier": 14,
+        "indexed_without_body": 25,
+        "bodies_median": 3.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
         "parked_count": 11,
-        "zero_body_tickers": [],
+        "zero_body_tickers": [
+          "DQ7A.IR"
+        ],
         "thin_body_tickers": [
           "SGO.PA",
-          "STR.VI",
-          "UMI.BR",
           "ACKB.BR",
-          "ANDR.VI",
-          "EG7.IR",
           "EVN.VI",
-          "DTE.DE"
+          "DTE.DE",
+          "WIE.VI",
+          "ESSITY-B.ST",
+          "SKA-B.ST",
+          "MUV2.DE"
         ],
         "unmeasured_tickers": [],
         "parked_tickers": [
@@ -289,7 +291,7 @@
           "SGO.PA"
         ]
       },
-      "filing_gaps": 0,
+      "filing_gaps": 1,
       "paper_instrument": "buy_tier_level",
       "ai_judgment": false,
       "knob_apply": false,
@@ -345,17 +347,24 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 5,
-        "targets": 7,
-        "improved": 5,
+        "run_count": 6,
+        "targets": 30,
+        "improved": 23,
         "improved_tickers": [
           "TTE.PA",
           "SAN.PA",
           "RAND.AS",
           "BOL.ST",
-          "MELE.BR"
+          "MELE.BR",
+          "ASSA-B.ST",
+          "C5H.IR",
+          "NOVN.SW",
+          "ESSITY-B.ST",
+          "WKL.AS",
+          "DG.PA",
+          "EG7.IR"
         ],
-        "last_run_at": "2026-09-11T12:17:56.603555+00:00",
+        "last_run_at": "2026-09-11T14:35:39.901364+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -367,28 +376,34 @@
         },
         "gaps_after": {
           "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 25,
-          "indexed_without_body": 83,
-          "filing_gaps": 0
+          "zero_body": 1,
+          "thin": 13,
+          "indexed_without_body": 25,
+          "filing_gaps": 1
         },
         "gap_delta": {
           "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 49,
-          "filing_gaps": 0
+          "zero_body": 1,
+          "thin": -12,
+          "indexed_without_body": -9,
+          "filing_gaps": 1
         },
         "remaining": {
           "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 25,
-          "indexed_without_body": 83,
-          "filing_gaps": 0
+          "zero_body": 1,
+          "thin": 14,
+          "indexed_without_body": 25,
+          "filing_gaps": 1
         },
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": []
+        "admission_warnings": [
+          {
+            "id": "zero_body_stuck",
+            "severity": "high",
+            "summary": "1 zero-body buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)"
+          }
+        ]
       },
       "held_vs_market": {
         "schema_version": 1,
@@ -464,50 +479,51 @@
       }
     },
     {
-      "market_id": "sp500",
-      "label": "S&P 500",
-      "exchange": "US",
-      "currency": "USD",
+      "market_id": "asx200",
+      "label": "S&P/ASX 200",
+      "exchange": "ASX",
+      "currency": "AUD",
       "role": "sprint",
       "is_live": false,
       "is_focus": false,
       "is_graduated": true,
       "is_queue": true,
       "is_admitted": true,
-      "is_ftse_equivalent": true,
+      "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=15)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=3)",
       "ingest_parity_met": false,
-      "ingest_exhausted": true,
-      "queue_rank": 1,
+      "ingest_exhausted": false,
+      "queue_rank": 2,
       "shared_maintenance": true,
       "health": "ok",
-      "coverage_pct": 1.0,
-      "honest_coverage_pct": 1.0,
-      "ticker_count": 503,
+      "coverage_pct": 0.98,
+      "honest_coverage_pct": 0.98,
+      "ticker_count": 196,
       "stale": 0,
-      "fresh": 503,
-      "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-11T07:07:07.842387+00:00",
-      "last_constituents_refresh": "2026-09-11T06:57:54.369719+00:00",
+      "fresh": 200,
+      "failed_fetch_count": 4,
+      "last_metrics_refresh": "2026-09-11T07:11:58.025671+00:00",
+      "last_constituents_refresh": "2026-09-11T07:08:03.535573+00:00",
       "last_screen_at": "2026-09-11T06:54:46.330925+00:00",
       "signal_counts": {
-        "hold": 286,
-        "buy": 81,
-        "avoid": 77,
-        "strong_buy": 59
+        "hold": 119,
+        "avoid": 45,
+        "buy": 23,
+        "strong_buy": 6,
+        "insufficient_data": 3
       },
-      "shortlist_count": 140,
-      "strong_buy": 59,
-      "buy": 81,
+      "shortlist_count": 29,
+      "strong_buy": 6,
+      "buy": 23,
       "learning_phase": 1,
       "learning_phase_label": "Epoch-0 level",
       "phase_blockers": [
-        "sp500 not in ladder.weekly_paper_shard_markets"
+        "asx200 not in ladder.weekly_paper_shard_markets"
       ],
       "expected_epoch0_blockers": [
-        "sp500 not in ladder.weekly_paper_shard_markets"
+        "asx200 not in ladder.weekly_paper_shard_markets"
       ],
       "learning": {
         "current_phase": 1,
@@ -518,7 +534,7 @@
         "weekly_paper_enabled": false,
         "weekday_paper_enabled": true,
         "blockers": [
-          "sp500 not in ladder.weekly_paper_shard_markets"
+          "asx200 not in ladder.weekly_paper_shard_markets"
         ],
         "phase1": {
           "screen_archives": 17,
@@ -530,28 +546,20 @@
         }
       },
       "filing_health": {
-        "buy_tier_count": 140,
+        "buy_tier_count": 29,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 15,
-        "bodies_median": 20.0,
-        "coverage_scope": "canonical",
-        "ftse_equivalent": true,
+        "indexed_without_body": 3,
+        "bodies_median": 23.0,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
         "ingest_exhausted": false,
-        "parked_count": 7,
+        "parked_count": 0,
         "zero_body_tickers": [],
         "thin_body_tickers": [],
         "unmeasured_tickers": [],
-        "parked_tickers": [
-          "APTV",
-          "BXP",
-          "CRH",
-          "FICO",
-          "LDOS",
-          "LMT",
-          "TSN"
-        ]
+        "parked_tickers": []
       },
       "filing_gaps": 0,
       "paper_instrument": "buy_tier_level",
@@ -563,12 +571,12 @@
         "ai_judgment": false,
         "knob_apply": false,
         "acted": true,
-        "last_run_at": "2026-09-11T07:31:05.878595+00:00",
-        "holdings": 120,
-        "nav": 717.62,
-        "cash": 0.0,
+        "last_run_at": "2026-09-11T07:31:08.382668+00:00",
+        "holdings": 25,
+        "nav": 574.28,
+        "cash": 136.68,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 4,
+        "weekday_batch_count": 6,
         "epoch0_batch_count": 3
       },
       "equal_support": {
@@ -577,93 +585,88 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 7,
-        "hold_near_buy_count": 157,
-        "not_buy_tier_count": 363,
-        "never_buy_tier_count": 335,
-        "rememo_eligible_count": 32,
+        "buy_tier_not_now_count": 2,
+        "hold_near_buy_count": 55,
+        "not_buy_tier_count": 167,
+        "never_buy_tier_count": 150,
+        "rememo_eligible_count": 0,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 7,
-        "hold_near_buy_count": 157,
-        "not_buy_tier_count": 363,
-        "never_buy_tier_count": 335,
+        "buy_tier_not_now_count": 2,
+        "hold_near_buy_count": 55,
+        "not_buy_tier_count": 167,
+        "never_buy_tier_count": 150,
         "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
         "buy_tier_not_now_sample": [
-          "APA",
-          "GEN",
-          "TEL",
-          "EQT",
-          "CRM",
-          "NEM",
-          "DG"
+          "ANN.AX",
+          "WAF.AX"
         ],
         "hold_near_buy_sample": [
-          "EIX",
-          "ES",
-          "EXC",
-          "T",
-          "DAL",
-          "HON",
-          "DUK",
-          "UHS"
+          "GQG.AX",
+          "LSF.AX",
+          "DRR.AX",
+          "PRU.AX",
+          "QBE.AX",
+          "ALK.AX",
+          "RIO.AX",
+          "SPK.AX"
         ]
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 7,
-        "targets": 17,
-        "improved": 13,
+        "run_count": 9,
+        "targets": 65,
+        "improved": 36,
         "improved_tickers": [
-          "XYL",
-          "FOX",
-          "INVH",
-          "UDR",
-          "MAA",
-          "INTU",
-          "DD",
-          "WYNN",
-          "ADBE",
-          "NKE",
-          "FTV",
-          "ADSK"
+          "SHL.AX",
+          "WDS.AX",
+          "CSC.AX",
+          "FMG.AX",
+          "SOL.AX",
+          "WAF.AX",
+          "BPT.AX",
+          "WHC.AX",
+          "PRN.AX",
+          "BSL.AX",
+          "AMC.AX",
+          "JBH.AX"
         ],
-        "last_run_at": "2026-09-11T10:53:02.246975+00:00",
+        "last_run_at": "2026-09-11T14:42:13.036112+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 15,
+          "indexed_without_body": 0,
           "filing_gaps": 0
         },
         "gaps_after": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 15,
+          "indexed_without_body": 3,
           "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 0,
+          "indexed_without_body": 3,
           "filing_gaps": 0
         },
         "remaining": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 15,
+          "indexed_without_body": 3,
           "filing_gaps": 0
         },
-        "admission_ready": true,
+        "admission_ready": false,
         "admission_gate": "sprint_ingest_complete",
         "admission_warnings": []
       },
@@ -671,11 +674,11 @@
         "schema_version": 1,
         "status": "ok",
         "reason": null,
-        "market_id": "sp500",
+        "market_id": "asx200",
         "source": "paper_fund",
         "paper_instrument": "buy_tier_level",
-        "currency": "USD",
-        "benchmark_ticker": "^GSPC",
+        "currency": "AUD",
+        "benchmark_ticker": "^AXJO",
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
@@ -683,47 +686,47 @@
         "points": [
           {
             "date": "2026-09-07",
-            "held": 737.41,
-            "nav": 737.41,
-            "held_stock": 737.41,
+            "held": 531.87,
+            "nav": 531.87,
+            "held_stock": 531.87,
             "cash": 0.0,
-            "positions": 120,
+            "positions": 29,
             "contributed_capital": 1000.0,
             "branches": {},
-            "market": 737.41
+            "market": 531.87
           },
           {
             "date": "2026-09-09",
-            "held": 724.86,
-            "nav": 724.86,
-            "held_stock": 724.86,
+            "held": 527.72,
+            "nav": 527.72,
+            "held_stock": 527.72,
             "cash": 0.0,
-            "positions": 120,
+            "positions": 29,
             "contributed_capital": 1000.0,
             "branches": {},
-            "market": 733.1
+            "market": 526.0
           },
           {
             "date": "2026-09-10",
-            "held": 726.68,
-            "nav": 726.68,
-            "held_stock": 726.68,
+            "held": 526.56,
+            "nav": 526.56,
+            "held_stock": 526.56,
             "cash": 0.0,
-            "positions": 120,
+            "positions": 29,
             "contributed_capital": 1000.0,
             "branches": {},
-            "market": 725.29
+            "market": 526.0
           },
           {
             "date": "2026-09-11",
-            "held": 717.62,
-            "nav": 717.62,
-            "held_stock": 717.62,
-            "cash": 0.0,
-            "positions": 120,
+            "held": 437.6,
+            "nav": 574.28,
+            "held_stock": 437.6,
+            "cash": 136.68,
+            "positions": 25,
             "contributed_capital": 1000.0,
             "branches": {},
-            "market": 725.29
+            "market": 515.95
           }
         ],
         "series": [
@@ -735,7 +738,7 @@
           },
           {
             "id": "market",
-            "label": "^GSPC equivalent",
+            "label": "^AXJO equivalent",
             "kind": "market",
             "color": "#64748b"
           }
@@ -743,11 +746,11 @@
         "branches": [],
         "last": {
           "date": "2026-09-11",
-          "held": 717.62,
-          "market": 725.29,
-          "nav": 717.62,
-          "positions": 120,
-          "excess_pct": -0.010575
+          "held": 437.6,
+          "market": 515.95,
+          "nav": 574.28,
+          "positions": 25,
+          "excess_pct": -0.151856
         }
       }
     },
@@ -765,7 +768,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=3, indexed_without_body=99)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=3, indexed_without_body=97)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": 4,
@@ -822,7 +825,7 @@
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 3,
-        "indexed_without_body": 99,
+        "indexed_without_body": 97,
         "bodies_median": 21.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
@@ -898,49 +901,50 @@
       "sprint_progress": {
         "window_days": 2,
         "run_count": 13,
-        "targets": 111,
-        "improved": 16,
+        "targets": 82,
+        "improved": 14,
         "improved_tickers": [
+          "ABX.TO",
+          "CNR.TO",
+          "IFC.TO",
+          "TRI.TO",
           "L.TO",
           "RCI-B.TO",
           "WSP.TO",
-          "IFC.TO",
-          "ABX.TO",
-          "CNR.TO",
-          "TRI.TO",
           "SAP.TO",
           "K.TO",
-          "OTEX.TO"
+          "OTEX.TO",
+          "SU.TO"
         ],
-        "last_run_at": "2026-09-11T10:34:18.154500+00:00",
+        "last_run_at": "2026-09-11T15:17:48.059723+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 3,
-          "indexed_without_body": 105,
+          "indexed_without_body": 102,
           "filing_gaps": 0
         },
         "gaps_after": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 3,
-          "indexed_without_body": 99,
+          "indexed_without_body": 97,
           "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": -6,
+          "indexed_without_body": -5,
           "filing_gaps": 0
         },
         "remaining": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 3,
-          "indexed_without_body": 99,
+          "indexed_without_body": 97,
           "filing_gaps": 0
         },
         "admission_ready": true,
@@ -1206,51 +1210,50 @@
       }
     },
     {
-      "market_id": "asx200",
-      "label": "S&P/ASX 200",
-      "exchange": "ASX",
-      "currency": "AUD",
+      "market_id": "sp500",
+      "label": "S&P 500",
+      "exchange": "US",
+      "currency": "USD",
       "role": "admitted",
       "is_live": false,
       "is_focus": false,
       "is_graduated": true,
       "is_queue": true,
       "is_admitted": true,
-      "is_ftse_equivalent": false,
+      "is_ftse_equivalent": true,
       "ingest": "maintenance",
       "ingest_stream": null,
       "ingest_reason": null,
       "ingest_parity_met": null,
-      "ingest_exhausted": false,
-      "queue_rank": 2,
+      "ingest_exhausted": true,
+      "queue_rank": 1,
       "shared_maintenance": true,
       "health": "ok",
-      "coverage_pct": 0.98,
-      "honest_coverage_pct": 0.98,
-      "ticker_count": 196,
+      "coverage_pct": 1.0,
+      "honest_coverage_pct": 1.0,
+      "ticker_count": 503,
       "stale": 0,
-      "fresh": 200,
-      "failed_fetch_count": 4,
-      "last_metrics_refresh": "2026-09-11T07:11:58.025671+00:00",
-      "last_constituents_refresh": "2026-09-11T07:08:03.535573+00:00",
+      "fresh": 503,
+      "failed_fetch_count": 0,
+      "last_metrics_refresh": "2026-09-11T07:07:07.842387+00:00",
+      "last_constituents_refresh": "2026-09-11T06:57:54.369719+00:00",
       "last_screen_at": "2026-09-11T06:54:46.330925+00:00",
       "signal_counts": {
-        "hold": 119,
-        "avoid": 45,
-        "buy": 23,
-        "strong_buy": 6,
-        "insufficient_data": 3
+        "hold": 286,
+        "buy": 81,
+        "avoid": 77,
+        "strong_buy": 59
       },
-      "shortlist_count": 29,
-      "strong_buy": 6,
-      "buy": 23,
+      "shortlist_count": 140,
+      "strong_buy": 59,
+      "buy": 81,
       "learning_phase": 1,
       "learning_phase_label": "Epoch-0 level",
       "phase_blockers": [
-        "asx200 not in ladder.weekly_paper_shard_markets"
+        "sp500 not in ladder.weekly_paper_shard_markets"
       ],
       "expected_epoch0_blockers": [
-        "asx200 not in ladder.weekly_paper_shard_markets"
+        "sp500 not in ladder.weekly_paper_shard_markets"
       ],
       "learning": {
         "current_phase": 1,
@@ -1261,7 +1264,7 @@
         "weekly_paper_enabled": false,
         "weekday_paper_enabled": true,
         "blockers": [
-          "asx200 not in ladder.weekly_paper_shard_markets"
+          "sp500 not in ladder.weekly_paper_shard_markets"
         ],
         "phase1": {
           "screen_archives": 17,
@@ -1283,12 +1286,12 @@
         "ai_judgment": false,
         "knob_apply": false,
         "acted": true,
-        "last_run_at": "2026-09-11T07:31:08.382668+00:00",
-        "holdings": 25,
-        "nav": 574.28,
-        "cash": 136.68,
+        "last_run_at": "2026-09-11T07:31:05.878595+00:00",
+        "holdings": 120,
+        "nav": 717.62,
+        "cash": 0.0,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 6,
+        "weekday_batch_count": 4,
         "epoch0_batch_count": 3
       },
       "equal_support": {
@@ -1297,35 +1300,40 @@
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
         "timing_signal_present": false,
-        "buy_tier_not_now_count": 2,
-        "hold_near_buy_count": 55,
-        "not_buy_tier_count": 167,
-        "never_buy_tier_count": 150,
-        "rememo_eligible_count": 0,
+        "buy_tier_not_now_count": 7,
+        "hold_near_buy_count": 157,
+        "not_buy_tier_count": 363,
+        "never_buy_tier_count": 335,
+        "rememo_eligible_count": 32,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
-        "buy_tier_not_now_count": 2,
-        "hold_near_buy_count": 55,
-        "not_buy_tier_count": 167,
-        "never_buy_tier_count": 150,
+        "buy_tier_not_now_count": 7,
+        "hold_near_buy_count": 157,
+        "not_buy_tier_count": 363,
+        "never_buy_tier_count": 335,
         "timing_signal_present": true,
         "observe_only": true,
         "watch_cut": "buy_not_now + hold_near_buy",
         "census_groups": "not_buy_tier + never_buy_tier",
         "buy_tier_not_now_sample": [
-          "ANN.AX",
-          "WAF.AX"
+          "APA",
+          "GEN",
+          "TEL",
+          "EQT",
+          "CRM",
+          "NEM",
+          "DG"
         ],
         "hold_near_buy_sample": [
-          "GQG.AX",
-          "LSF.AX",
-          "DRR.AX",
-          "PRU.AX",
-          "QBE.AX",
-          "ALK.AX",
-          "RIO.AX",
-          "SPK.AX"
+          "EIX",
+          "ES",
+          "EXC",
+          "T",
+          "DAL",
+          "HON",
+          "DUK",
+          "UHS"
         ]
       },
       "sprint_progress": null,
@@ -1333,11 +1341,11 @@
         "schema_version": 1,
         "status": "ok",
         "reason": null,
-        "market_id": "asx200",
+        "market_id": "sp500",
         "source": "paper_fund",
         "paper_instrument": "buy_tier_level",
-        "currency": "AUD",
-        "benchmark_ticker": "^AXJO",
+        "currency": "USD",
+        "benchmark_ticker": "^GSPC",
         "held_path": "equity_marks",
         "market_path": "index_levels",
         "branch_ready": true,
@@ -1345,47 +1353,47 @@
         "points": [
           {
             "date": "2026-09-07",
-            "held": 531.87,
-            "nav": 531.87,
-            "held_stock": 531.87,
+            "held": 737.41,
+            "nav": 737.41,
+            "held_stock": 737.41,
             "cash": 0.0,
-            "positions": 29,
+            "positions": 120,
             "contributed_capital": 1000.0,
             "branches": {},
-            "market": 531.87
+            "market": 737.41
           },
           {
             "date": "2026-09-09",
-            "held": 527.72,
-            "nav": 527.72,
-            "held_stock": 527.72,
+            "held": 724.86,
+            "nav": 724.86,
+            "held_stock": 724.86,
             "cash": 0.0,
-            "positions": 29,
+            "positions": 120,
             "contributed_capital": 1000.0,
             "branches": {},
-            "market": 526.0
+            "market": 733.1
           },
           {
             "date": "2026-09-10",
-            "held": 526.56,
-            "nav": 526.56,
-            "held_stock": 526.56,
+            "held": 726.68,
+            "nav": 726.68,
+            "held_stock": 726.68,
             "cash": 0.0,
-            "positions": 29,
+            "positions": 120,
             "contributed_capital": 1000.0,
             "branches": {},
-            "market": 526.0
+            "market": 725.29
           },
           {
             "date": "2026-09-11",
-            "held": 437.6,
-            "nav": 574.28,
-            "held_stock": 437.6,
-            "cash": 136.68,
-            "positions": 25,
+            "held": 717.62,
+            "nav": 717.62,
+            "held_stock": 717.62,
+            "cash": 0.0,
+            "positions": 120,
             "contributed_capital": 1000.0,
             "branches": {},
-            "market": 515.95
+            "market": 725.29
           }
         ],
         "series": [
@@ -1397,7 +1405,7 @@
           },
           {
             "id": "market",
-            "label": "^AXJO equivalent",
+            "label": "^GSPC equivalent",
             "kind": "market",
             "color": "#64748b"
           }
@@ -1405,11 +1413,11 @@
         "branches": [],
         "last": {
           "date": "2026-09-11",
-          "held": 437.6,
-          "market": 515.95,
-          "nav": 574.28,
-          "positions": 25,
-          "excess_pct": -0.151856
+          "held": 717.62,
+          "market": 725.29,
+          "nav": 717.62,
+          "positions": 120,
+          "excess_pct": -0.010575
         }
       }
     },

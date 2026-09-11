@@ -178,8 +178,11 @@ def test_focus_sprint_keeps_shared_maintenance_crons_when_admitted_markets_need_
 
 def test_library_grow_commits_shard_paper_books():
     text = Path(".github/workflows/library-grow.yml").read_text(encoding="utf-8")
-    assert "docs/data/paper_automation/markets/**/automated_fund.json" in text
-    assert "docs/data/paper_automation/markets/**/weekday_batch_log.json" in text
+    # L348: library-grow commits via gha_commit_artifacts.sh with a markets/
+    # directory owned pathspec (covers automated_fund + weekday_batch_log).
+    assert "scripts/gha_commit_artifacts.sh" in text
+    assert "docs/data/paper_automation/markets" in text
+    assert "stefanzweifel/git-auto-commit-action@v6" not in text
 
 
 def test_evaluate_dispatch_sprint_when_phase3_ready_but_gaps_remain():

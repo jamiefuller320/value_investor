@@ -121,40 +121,22 @@ jobs:
           DRAFTED=$(python3 -c "import json; d=json.load(open('$ROOT/last_ladder.json')).get('engineering_tasks',{}); print('true' if int(d.get('drafted_count') or 0)>0 else 'false')")
           echo "engineering_drafted=$DRAFTED" >> "$GITHUB_OUTPUT"
 
+      # Shared fetch+reset overlay + push retry (L348) — same helper as ops-monitor /
+      # email-report. Replaces git-auto-commit + fragile rebase-push fallback.
       - name: Commit library ladder artifacts
         id: commit
         if: steps.plan.outputs.skip != 'true'
-        continue-on-error: true
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: run offline library ladder (focus market)"
-          file_pattern: >-
-            docs/data/library/**
+        env:
+          COMMIT_MESSAGE: "chore: run offline library ladder (focus market)"
+          GHA_COMMIT_LABEL: "Library grow"
+          GHA_COMMIT_OWNED: |
+            docs/data/library
             docs/data/automation.json
             docs/data/market_status.json
             docs/data/engineering_tasks.json
             docs/data/library/grow_health_log.json
-            docs/data/paper_automation/markets/**/automated_fund.json
-            docs/data/paper_automation/markets/**/config.json
-            docs/data/paper_automation/markets/**/rebalance_log.json
-            docs/data/paper_automation/markets/**/shard_meta.json
-            docs/data/paper_automation/markets/**/shard_phase.json
-            docs/data/paper_automation/markets/**/weekday_batch_log.json
-            docs/data/paper_automation/markets/**/weekly_batch_log.json
-            docs/data/paper_automation/markets/**/learning_tracks_*.json
-          # Email report / other automations may push to main while the ladder runs.
-          skip_fetch: false
-
-      - name: Rebase-push if commit raced with another automation
-        if: steps.plan.outputs.skip != 'true' && steps.commit.outcome == 'failure'
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # git-auto-commit can leave unstaged files after a rejected push.
-          git add -A
-          git pull --rebase --autostash origin main
-          git push origin HEAD:main
+            docs/data/paper_automation/markets
+        run: bash scripts/gha_commit_artifacts.sh
 
       - name: Dispatch engineering queue when ladder drafted tasks
         if: steps.plan.outputs.skip != 'true' && steps.ladder.outputs.engineering_drafted == 'true'
