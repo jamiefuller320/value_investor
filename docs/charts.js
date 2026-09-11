@@ -438,15 +438,25 @@ function heldVsMarketLabelIndexes(pointCount, { labelAllMax = HELD_VS_MARKET_LAB
   return indexes;
 }
 
-function heldVsMarketDateLabels(points, xAt, { y, compact = false } = {}) {
+function heldVsMarketDateLabels(points, xAt, { y, compact = false, width = null } = {}) {
   const lastIndex = points.length - 1;
   return heldVsMarketLabelIndexes(points.length)
     .map((index) => {
       const date = points[index] && points[index].date;
       if (!date) return "";
-      const anchor = index === 0 ? "start" : index === lastIndex ? "end" : "middle";
+      let x = xAt(index);
+      let anchor = "middle";
+      if (index === 0) {
+        anchor = "start";
+        // Keep the first glyph inside the viewBox even when the plot starts at pad.left.
+        x = width != null ? Math.min(Math.max(2, x), width - 2) : Math.max(0, x);
+      } else if (index === lastIndex) {
+        anchor = "end";
+        // Pin to the viewBox edge so end-anchored text cannot spill past the SVG.
+        x = width != null ? width - 2 : x;
+      }
       const label = formatHeldVsMarketDateLabel(date, { compact });
-      return `<text x="${xAt(index)}" y="${y}" text-anchor="${anchor}" class="chart-axis-label held-vs-market-date-label">${esc(
+      return `<text x="${x}" y="${y}" text-anchor="${anchor}" class="chart-axis-label held-vs-market-date-label">${esc(
         label
       )}</text>`;
     })
@@ -469,11 +479,13 @@ function renderHeldVsMarketSparkline(payload) {
   }
   const width = 220;
   const height = 58;
-  const pad = { top: 4, right: 2, bottom: 16, left: 2 };
+  // Inset the plot so end-anchored MM-DD labels stay inside the tile button.
+  const pad = { top: 4, right: 18, bottom: 16, left: 14 };
   const drawn = renderHeldVsMarketPolylines(payload, { width, height, pad });
   const xLabels = heldVsMarketDateLabels(drawn.points, drawn.xAt, {
     y: height - 3,
     compact: true,
+    width,
   });
   return `
     <div class="held-vs-market-spark">
@@ -511,11 +523,13 @@ function renderHeldVsMarketChart(payload) {
   }
   const width = 620;
   const height = 220;
-  const pad = { top: 18, right: 8, bottom: 36, left: 48 };
+  const pad = { top: 18, right: 28, bottom: 36, left: 48 };
   const drawn = renderHeldVsMarketPolylines(payload, { width, height, pad });
   const xLabels = heldVsMarketDateLabels(drawn.points, drawn.xAt, {
     y: height - 12,
-    compact: false,
+    // Same compact MM-DD as the tile; full ISO stays in the caption under the chart.
+    compact: true,
+    width,
   });
   const legend = drawn.series
     .map((seriesRow) => {
