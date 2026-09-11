@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-10T09:55:53+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-11T06:24:33+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -164,6 +164,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N114 | **Do not weekday-burst first-time memos on admitted books** | Admitted first-time memos (names with no research.md yet) stay on Sunday _research_markets. Weekday rememo only rewrites existing bodies. A weekday first-memo burst would compete with euro focus research and weekly_ops the same way a Sunday rememo dump would. | Sunday research has run with admitted markets on _research_markets and leftover no-memo buy-tier still grows after two live Sundays |
 | N115 | **Do not drain admitted rememo on Sunday or as a weekday burst** | sp500 buy-tier has 54 rememo-eligible names and asx200 has 9, but Sunday Layer C only rememos the euro_depth focus (research_all_graduated=false). Clearing that admitted set now would be shard memo spray before those books have marks. Equal-support already records eligibility; do not flip Sunday or weekday rememo onto it. | Admitted books have enough epoch-0 / paper marks to justify forking shard rememo, or research_all_graduated is reconsidered after euro_depth body-lag rememo is actually binding |
 | N116 | **Collapse duplicate FCF action-note ticker tasks into one scoring task** | so_what_closure fans out one Honour FCF action-note engineering task per ticker with the same allowed_paths. Each agent re-implements the overlay and often dumps a research snapshot that trips the path guard. | The next so_what compile emits more than three open fcf_note_without_overlay tasks, or the IMB/DNLM overlay is merged and later tickers still open new PRs |
+| N117 | **Shared concurrency group across eng-queue and epoch0-weekday** | ASX 00:45 UTC overlaps engineering-queue schedule. A shared concurrency group would serialize writers, but pull --rebase is the established cheaper fix; avoid extra queueing unless races persist after rebase. | epoch0-weekday still push-rejects after Sync main before commit is on main for several ASX slots. |
 
 ---
 
@@ -421,6 +422,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L354 | **Hunter PR deterministic auto-merge (SKIP-only tier)** | Extend evaluate_auto_merge with a parked_source_hunter tier: auto_merge when diff is only filings.py + test_research_filings.py for the task ticker, adds exactly one PARKED_SOURCE_HUNTER_SKIP entry (no new URLs), scoped pytest green, path guard pass. Safest first step before allowlist auto-merge. | Parked hunter queue has 10+ consecutive human merges with zero bad URL/skip outcomes and euro_depth parked set is stable |
 | L355 | **Independent verify-agent gate for hunter allowlist PRs** | After hunter PR opens, dispatch a read-only verify Cloud Agent (separate session/model) that live-checks proposed IR URLs and writes a structured approval artifact; engineering-auto-merge requires artifact approve=true in addition to CI and path guard. Use as supplement to live-fetch pytest, not a substitute. | SKIP-only hunter auto-merge tier has run cleanly for 4+ weeks and allowlist-add PRs are the throughput bottleneck |
 | L356 | **Immediate park for non-hunter unfixable PRs** | Extend immediate park_unfixable beyond hunter tasks (e.g. ci_failure pytest regressions after autofix exhausted) using the same attention parked cap. | Non-hunter pr_open tasks routinely hit 48h ci_blocked park without autofix recovery |
+| L357 | **Add pull --rebase before dashboard-bridge and library-model-review auto-commits** | Those two workflows still call git-auto-commit-action without the Sync-main-before-commit rebase used by paper-auto / eng-queue / epoch0-weekday. Same push-reject race is possible under concurrent bot writers. | Either workflow fails Commit artifacts with main -> main (fetch first), or after epoch0 rebase fix lands and we do a hygiene pass on auto-commit workflows. |
 
 ---
 
