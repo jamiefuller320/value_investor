@@ -27,6 +27,8 @@ The progress-report **So what?** section and Overview card also **group the same
 issue into one row + ticker list** (human gates and high-severity findings), so a
 long list of identical bridge/enforcement items does not repeat per name.
 
+Structured `fcf.filing_aligned` / `screen_ttm` are recovered from persisted mismatch action notes when the `fcf` blob was dropped on overlay/export refresh, so auto policy can resolve without hand-writing bridges.
+
 First detector: buy-tier names in `docs/data/latest.json` with material screen vs
 filing FCF divergence (≥25%) or FCF action-note markers, without
 `fcf_basis_overlay`. Policy FCF no longer requires a human bridge when

@@ -27,6 +27,7 @@ from value_investor.scoring.fcf import (
     overlay_free_cashflow_from_bundle,
     parse_adjusted_eps_growth_pct,
     parse_company_adjusted_fcf,
+    fcf_bundle_from_persisted_report,
     parse_filing_aligned_from_action_note,
     parse_screen_ttm_from_action_note,
     reconcile_fcf,
@@ -3985,3 +3986,56 @@ def test_build_company_reports_exports_quality_family_avoid_gate_for_aal_pattern
     )
     assert snapshot["signal"] == "avoid"
     assert "Quality-family avoid gate (observe-only)" in report.summary
+
+
+def test_fcf_bundle_from_persisted_report_prefers_note_filing_over_metrics():
+    note = "Buy | FCF basis mismatch: filing £148M | screen TTM £211.9M"
+    bundle = fcf_bundle_from_persisted_report(
+        None,
+        action_note=note,
+        key_metrics={"FCF": 187_000_000.0, "free_cashflow": 187_000_000.0},
+    )
+    assert bundle["filing_aligned"] == pytest.approx(148_000_000.0)
+    assert bundle["screen_ttm"] == pytest.approx(211_900_000.0)
+
+
+def test_honour_and_to_dict_backfill_structured_fcf_from_note():
+    note = (
+        "Buy — neutral timing | FCF basis mismatch: filing £192.1M | "
+        "screen TTM £353.2M"
+    )
+    report = CompanyReport.from_dict(
+        {
+            "ticker": "BKG.L",
+            "name": "The Berkeley Group Holdings plc",
+            "sector": "Consumer Cyclical",
+            "signal": "buy",
+            "adjusted_signal": "hold",
+            "models_passed": 10,
+            "model_count": 22,
+            "composite_score": 0.6,
+            "families_passed": 4,
+            "data_quality_score": 1.0,
+            "metrics_present": 18,
+            "metrics_total": 20,
+            "weeks_at_signal": 2,
+            "signal_trend": "stable",
+            "conviction_score": 0.7,
+            "stability_label": "new",
+            "timing_signal": "neutral",
+            "timing_score": 0.5,
+            "action_note": note,
+            "fcf_basis_overlay": True,
+            "fcf": None,
+            "summary": "Buy.",
+            "passed_models": [],
+            "key_metrics": {},
+        }
+    )
+    enforced = honour_fcf_action_note_enforcement(report)
+    assert enforced.fcf is not None
+    assert enforced.fcf["filing_aligned"] == pytest.approx(192_100_000.0)
+    assert enforced.fcf["screen_ttm"] == pytest.approx(353_200_000.0)
+    snapshot = report.to_dict()
+    assert snapshot["fcf"]["filing_aligned"] == pytest.approx(192_100_000.0)
+    assert snapshot["fcf"]["screen_ttm"] == pytest.approx(353_200_000.0)

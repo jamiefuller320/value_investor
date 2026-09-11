@@ -230,3 +230,20 @@ def test_markdown_groups_same_issue_names(tmp_path: Path):
     md = render_so_what_markdown(section)
     assert "names" in md
     assert "AAA.L" in md and "BBB.L" in md
+
+
+def test_scan_backfills_filing_from_action_note_clears_bridge_gate(tmp_path: Path):
+    """Stale exports keep mismatch notes but drop structured fcf — recover bases."""
+    report = {
+        "ticker": "ABDN.L",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "fcf_basis_overlay": True,
+        "action_note": (
+            "Buy — favourable entry timing | FCF basis mismatch: filing £406M | "
+            "screen TTM £967.8M | RSI 42"
+        ),
+        "fcf": None,
+    }
+    findings = scan_so_what_issues(reports=[report], artifacts_dir=tmp_path)
+    assert "fcf_bridge_needed" not in {f.kind for f in findings}

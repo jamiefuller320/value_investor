@@ -157,14 +157,9 @@ Overall: **INFO**
 
 ## So what? (gap closure)
 
-- Findings: **45** (auto_queue=0, human_gate=45, observe=0); engineering tasks created this pass: **0**.
+- Findings: **0** (auto_queue=0, human_gate=0, observe=0); engineering tasks created this pass: **0**.
 - Auto-queue covers no-judgment enforcement gaps (e.g. FCF mismatch with uncapped buy/strong_buy). Human gate covers policy FCF bridge reviews.
 - Same-issue names are grouped by kind (one row + ticker list), matching batched engineering tasks.
-
-### Human gates
-
-- **45 names** (`fcf_bridge_needed`): If auto policy cannot run (missing filing/company figures), write docs/data/research/<ticker>/sources/fcf_bridge.json (policy_fcf + policy_basis + source_refs; set resolved=true). Otherwise leave the automatic majority / filing fallback in place.
-  - Tickers: `ABDN.L`, `ABF.L`, `AEP.L`, `ALFA.L`, `BKG.L`, `BME.L`, `BOWL.L`, `BREE.L`
 
 
 ## References

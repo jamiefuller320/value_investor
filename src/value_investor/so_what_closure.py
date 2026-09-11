@@ -247,11 +247,21 @@ def _fcf_findings_from_report(
 
     signal = _norm_signal(report.get("signal"))
     effective = _norm_signal(report.get("adjusted_signal")) or signal
-    fcf = report.get("fcf") if isinstance(report.get("fcf"), dict) else {}
+    # Recover structured bases from persisted mismatch notes when fcf was dropped
+    # on overlay/export refresh (notes keep filing/screen figures; fcf blob does not).
+    from value_investor.scoring.fcf import fcf_bundle_from_persisted_report
+
+    raw_fcf = report.get("fcf") if isinstance(report.get("fcf"), dict) else None
+    key_metrics = report.get("key_metrics") if isinstance(report.get("key_metrics"), dict) else None
+    action_note = str(report.get("action_note") or "").strip()
+    fcf = fcf_bundle_from_persisted_report(
+        raw_fcf,
+        action_note=action_note,
+        key_metrics=key_metrics,
+    )
     screen = _as_float(fcf.get("screen_ttm"))
     filing = _as_float(fcf.get("filing_aligned"))
     overlay = bool(report.get("fcf_basis_overlay"))
-    action_note = str(report.get("action_note") or "").strip()
     bridge = _load_bridge(ticker, artifacts_dir=artifacts_dir)
     bridge_ok = _policy_fcf_resolved(bridge, fcf)
 
