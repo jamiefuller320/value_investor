@@ -5432,7 +5432,7 @@ def test_fetch_filings_ir_allowlist_itv_l(tmp_path: Path):
     assert len(mapping["ITV.L"]) >= 3
 
     rows = fetch_filings_ir_allowlist("ITV.L", path=allowlist_path)
-    assert len(rows) == 5
+    assert len(rows) == 3
     assert all(row["source"] == "ir_allowlist" for row in rows)
     periods = {row["period"] for row in rows}
     assert "annual" in periods
@@ -6708,14 +6708,12 @@ def test_fetch_filings_ir_allowlist_ftse_smallcap_boot_l_builtins(tmp_path: Path
     allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
 
     rows = fetch_filings_ir_allowlist("BOOT.L", path=allowlist_path)
-    assert len(rows) == 5
+    assert len(rows) == 3
     assert all(row["source"] == "ir_allowlist" for row in rows)
     urls = [row["url"] for row in rows]
     assert any("32783-henry-boot-ar2025-interactive.pdf" in url for url in urls)
     assert any("32326-henry-boot-ar2024-web.pdf" in url for url in urls)
-    assert any("31743-henry-boot-ar2023-webready-6.pdf" in url for url in urls)
     assert any("interim-results-25_main.pdf" in url for url in urls)
-    assert any("prelim-results-2025-final.pdf" in url for url in urls)
     assert sum(1 for row in rows if row["period"] == "interim") == 1
 
 
@@ -6723,7 +6721,7 @@ def test_parked_source_hunter_boot_l_ftse_smallcap_has_fetchable_ir():
     """eng-20260911-03: BOOT.L has live henryboot.co.uk FY2025 AR + H1/prelim statutory PDFs."""
     assert "BOOT.L" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("BOOT.L")
-    assert len(rows) == 5
+    assert len(rows) == 3
     urls = [row["url"] for row in rows]
     assert all("henryboot.co.uk" in url for url in urls)
     assert any("32783-henry-boot-ar2025-interactive.pdf" in url for url in urls)

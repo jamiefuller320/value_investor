@@ -102,9 +102,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "BOOT.L": [
         "https://www.henryboot.co.uk/media/qlhercoe/32783-henry-boot-ar2025-interactive.pdf",
         "https://www.henryboot.co.uk/media/fv0nuosu/32326-henry-boot-ar2024-web.pdf",
-        "https://www.henryboot.co.uk/media/se0ipu20/31743-henry-boot-ar2023-webready-6.pdf",
         "https://www.henryboot.co.uk/media/tqvbhcvt/interim-results-25_main.pdf",
-        "https://www.henryboot.co.uk/media/cttphy1b/prelim-results-2025-final.pdf",
     ],
     # euro_depth buy-tier deepen — representative periphery / STOXX names without ESEF hits.
     "ACKB.BR": [
