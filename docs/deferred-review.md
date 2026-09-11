@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-11T10:46:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-11T11:25:02+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -165,6 +165,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N115 | **Do not drain admitted rememo on Sunday or as a weekday burst** | sp500 buy-tier has 54 rememo-eligible names and asx200 has 9, but Sunday Layer C only rememos the euro_depth focus (research_all_graduated=false). Clearing that admitted set now would be shard memo spray before those books have marks. Equal-support already records eligibility; do not flip Sunday or weekday rememo onto it. | Admitted books have enough epoch-0 / paper marks to justify forking shard rememo, or research_all_graduated is reconsidered after euro_depth body-lag rememo is actually binding |
 | N116 | **Collapse duplicate FCF action-note ticker tasks into one scoring task** | so_what_closure fans out one Honour FCF action-note engineering task per ticker with the same allowed_paths. Each agent re-implements the overlay and often dumps a research snapshot that trips the path guard. | The next so_what compile emits more than three open fcf_note_without_overlay tasks, or the IMB/DNLM overlay is merged and later tickers still open new PRs |
 | N117 | **Shared concurrency group across eng-queue and epoch0-weekday** | ASX 00:45 UTC overlaps engineering-queue schedule. A shared concurrency group would serialize writers, but pull --rebase is the established cheaper fix; avoid extra queueing unless races persist after rebase. | epoch0-weekday still push-rejects after Sync main before commit is on main for several ASX slots. |
+| N118 | **Whole-universe buy-now-only epoch-0 meta book** | Do not run a combined mega-book that admits only triggered buy-now names alongside per-market buy_tier_level epoch-0. Cross-market P&L confounds local benchmarks/costs/sessions; buy-now is meant as an overlay on the wide level book, not a tighter live admit. Optional later: offline meta rollup of cycle/gate stats across equal-support admitted shards once marks exist. | Multiple admitted markets have sufficient epoch-0 plus buy-not-now near-miss marks under equal-support (N103), and a cross-market analytics question remains after per-shard counterfactuals |
 
 ---
 
