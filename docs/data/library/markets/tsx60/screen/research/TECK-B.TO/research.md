@@ -1,0 +1,96 @@
+# Teck Resources Limited (TECK-B.TO) — Research memo
+
+_Version 1 · Updated 2026-09-11T07:29:36.401861+00:00 · Mode: initial_
+
+## EXECUTIVE SUMMARY
+Teck Resources is a post-coal-divestiture Canadian copper and zinc producer whose quantitative profile screens as a buy on cheapness (P/E 17.9, P/B 1.6), dividend growth, Lynch/Neff PEG, Piotroski F-Score (8/9), earnings quality, and financial health, with all five value families passing. The investment case rests on copper-led earnings momentum (record Q2 2026 results), a world-class growth pipeline (Quebrada Blanca Phase 2), and optionality from the proposed merger of equals with Anglo American, including a planned US$4.5 billion special dividend. The central debate is whether current copper euphoria and a 100%+ one-year share-price run have already priced in the cycle, merger synergies, and Trail critical-minerals capex, leaving screens that favour “enterprising” value but fail deep value, FCF yield, and acquirer’s-multiple tests. Primary regulatory filings (annual report, interim MD&A) were not captured in the research pack, so financial conclusions rely on Yahoo fallback data and must be verified before sizing.
+
+## INVESTMENT THESIS
+For a value investor, Teck offers a rerating story from a simplified, copper-centric asset base after the 2023–2024 steelmaking-coal exit. The screen’s buy signal is underpinned by moderate absolute valuation (P/E below 25, P/B below 3), conservative leverage (debt/equity 34%), and improving financial quality: Piotroski 8/9 with positive net income, positive operating cash flow, declining leverage, improving gross margin, and no share dilution. Lynch PEG (~0.06 on statutory earnings growth) and Neff PEGY pass reflect low headline growth against a recovering earnings base rather than structural high-ROE quality (ROE 8.7% fails Buffett/moat screens).
+
+Business quality aligns with the screen’s “quality” and “risk” family passes: copper now drives revenue and margins, QB2 adds long-life production, and Trail Operations provides critical-minerals diversification (germanium, gallium, antimony) supported by up to C$850 million of potential investment including C$400 million from Canada Growth Fund (press release, 7 Jul 2026). Cash generation has inflected in 2026—Q1 and Q2 operating cash flow of US$1.02 billion and US$1.72 billion respectively (Yahoo quarterly, fallback)—supporting debt paydown and modest dividends despite heavy growth capex. The screen fails on deep value, FCF yield (3.9% vs 5% hurdle), and EV/EBIT (32.1), signalling that the name is a GARP/cyclical value play rather than a distressed or net-net candidate. Conviction is building (49%) but not yet high; the signal is only three weeks old.
+
+## FINANCIAL REVIEW
+**Filing coverage gap:** `filings_index.json` contains eight items, all classified `period: other` (press releases via Google News/SEDAR+ discovery). There are zero annual and zero interim filings with body text. No 10-K, annual report, MD&A, or quarterly results document is available in the pack for primary-source verification. All figures below are from `financials_annual.json` (Yahoo), stated explicitly as fallback.
+
+**Annual trend (Yahoo fallback, USD):**
+
+| Year | Revenue | Net income (common) | Diluted EPS | EBITDA | Operating CF | Free CF | Net debt |
+|------|---------|---------------------|-------------|--------|--------------|---------|----------|
+| 2022 | $17.3B | $3.32B | $6.19 | $8.22B | $7.98B* | $2.52B | $7.6B |
+| 2023 | $6.48B | $2.41B** | $4.59 | $0.86B | $4.08B* | −$0.26B | $9.3B |
+| 2024 | $9.07B | $0.41B | $0.78 | $1.78B | $2.79B* | $0.16B | $1.4B |
+| 2025 | $10.76B | $1.40B | $2.83 | $4.14B | $1.48B | −$0.58B | $3.6B |
+
+\*2022–2024 operating cash flow includes discontinued coal operations; 2025 is continuing only.  
+\*\*2023 net income includes ~$2.62B from discontinued operations (coal sale).
+
+**Interpretation:** Revenue rebounded 19% in 2025 after the portfolio reset, with net income recovering to $1.4 billion from a coal-transition-distorted 2024. Normalised EBITDA (Yahoo) was $3.36 billion versus reported $4.14 billion, reflecting ~$782 million of unusual items including an ~$877 million gain on sale of securities. Continuing operations net income was $1.07 billion in 2025. The 2025 free cash flow deficit (−$583 million) reflects capital expenditure of $2.06 billion against operating cash flow of $1.48 billion, plus $1.01 billion of share repurchases and $845 million of debt repayment.
+
+**Balance sheet (Yahoo, 2025 year-end):** Cash $5.0 billion; total debt $9.6 billion; net debt $3.6 billion; shareholders’ equity $25.1 billion; total assets $45.4 billion; current ratio 2.5 (screen input). Long-term provisions $2.34 billion (likely reclamation/closure); non-current pension and post-retirement obligations $351 million. Interest expense $727 million in 2025.
+
+**Interim / quarterly (Yahoo fallback—no interim filing bodies):** H1 2026 shows sharp acceleration. Q1 2026 (period end 31 Mar 2026): revenue $3.94 billion, diluted EPS $1.67, operating cash flow $1.02 billion, free cash flow $344 million. Q2 2026 (30 Jun 2026): revenue $3.61 billion, diluted EPS $1.74, operating cash flow $1.72 billion, free cash flow $941 million. TTM free cash flow per Yahoo/screen bridge: ~$1.93 billion (operating CF TTM $4.65 billion less capex TTM $2.72 billion). This reconciles with the screen’s positive FCF display versus the negative 2025 annual FCF figure.
+
+**Items from filing bodies (non-financial, strategic only):** The 7 Jul 2026 Trail press release cites up to $850 million total potential investment (including up to $400 million from CGF) subject to definitive documentation and approvals—no audited figures. The 16 Mar 2026 Apex mine closing release confirms Teck received 7.03 million Blue Moon shares (~8% stake) plus royalties and offtake rights; no cash proceeds disclosed.
+
+**Screen-reported yield note:** The screen shows 51.0% dividend yield, which is inconsistent with $246 million of common dividends paid in 2025 (Yahoo) and likely reflects a special dividend or merger-related distribution not yet normalised in the data feed. Treat recurring dividend capacity separately from headline yield.
+
+## RISKS AND RED FLAGS
+**Cyclical:** Revenue and EBITDA remain highly correlated with copper and zinc prices. September 2026 headlines (“Copper Stocks Tumble as Tariff Doubt Reverses Record Rally,” 10 Sep 2026) highlight policy-driven volatility that screens do not capture. A copper correction would pressure EV/EBIT (already 32.1 on the screen) and the earnings base that supports the buy signal.
+
+**Merger execution:** The proposed Anglo American merger of equals (letter of transmittal mailed Jun 2026; timing refined Sep 2026 per Globe and Mail) introduces integration, regulatory approval, and governance uncertainty. A US$4.5 billion special dividend from Anglo is planned but not guaranteed until close.
+
+**Leverage and capex:** Net debt rose to $3.6 billion at end-2025 from $1.4 billion at end-2024 (Yahoo) while capex remains elevated (TTM ~$2.7 billion). Interest expense of $727 million consumes a meaningful share of EBIT ($2.38 billion in 2025). Debt restructuring headlines (Aug 2026) suggest active balance-sheet management but also highlight refinancing risk if commodity prices weaken.
+
+**Environmental and regulatory:** Long-term provisions of $2.34 billion point to material closure and reclamation obligations typical of mining; filing bodies do not contain going-concern or covenant language. Trail expansion and QB2 ramp depend on permits and government partnerships (Critical Minerals Accelerator). ESG/conservation partnerships (e.g. 1,600-hectare Beothuk Lake reserve, 27 Aug 2026) reflect ongoing stakeholder obligations.
+
+**Governance / key person:** Acting VP Investor Relations and Treasurer appointment (Jun 2026) may indicate transition during the merger period.
+
+**Accounting / earnings quality:** 2025 results include large non-operating gains (securities sale ~$877 million per Yahoo). Normalised income (~$895 million) is materially below reported $1.4 billion. 2024 included a $1.05 billion write-off and impairment charges.
+
+**Pension:** Non-current employee benefit obligations of $351 million are manageable relative to equity but warrant monitoring.
+
+No going-concern, covenant breach, or litigation disclosures were found in available filing bodies; absence reflects the lack of annual/interim filings, not confirmation of absence.
+
+RiskTags: cyclical, leverage, regulatory, governance, other
+RiskTags: cyclical, leverage, regulatory, governance, other
+
+## NEWS HIGHLIGHTS
+Coverage over the past year is substantial, dominated by copper price momentum and the Anglo American transaction.
+
+**Strategy and M&A**
+- “Teck Refines Timing Terms for Anglo American Merger and Special Dividend” (Globe and Mail, 2 Sep 2026)
+- “Teck Resources (TSX:TECK.B) Could Be 7% Overvalued After Merger Terms Emerge” (Yahoo Finance, 2 Sep 2026)—references US$4.5 billion special dividend
+- “Teck Announces the Mailing of a Letter of Transmittal in Connection with the Merger of Equals with Anglo American” (Globe and Mail, 30 Jun 2026)
+- “How The Anglo American Merger Is Reframing The Teck Resources (TSX:TECK.B) Investment Story” (Yahoo Finance, 18 Mar 2026)
+- “What Does Teck Resources (TSX:TECK.B) Debt Restructuring Mean For Its Merger Plans?” (Yahoo Finance, 12 Aug 2026)
+
+**Operations and earnings**
+- “Teck Resources (TECK.B:CA) Delivers a Strong Earnings Beat as Copper Supercycle Drives Growth” (Globe and Mail, 23 Jul 2026)
+- “Teck Resources (TSX:TECK.B) Is Up 7.3% After Record Copper-Fueled Q2 Earnings Beat” (Yahoo Finance, 24 Jul 2026)
+- “Teck Announces Dividend” (Yahoo Finance, 23 Jul 2026)
+- “Teck, Canada Growth Fund and Canada Critical Minerals Accelerator sign Agreement to Support Strategic Metals Production at Trail Smelter” (PR Newswire, 7 Jul 2026)—up to C$850 million Trail investment framework
+- “Does Teck Resources' (TSX:TECK.B) CA$850 Million Critical Minerals Bet Redefine Its Core Strategy?” (simplywall.st, 21 Jul 2026)
+
+**Asset transactions**
+- “Blue Moon Closes the Purchase of the Apex Germanium and Gallium Mine from Teck” (PR Newswire, 16 Mar 2026)
+- Blue Moon acquisition announcement (27 Feb 2026)
+
+**Management**
+- “Teck Resources Names Edwin Shadeo Acting VP of Investor Relations and Treasurer” (Globe and Mail, 24 Jun 2026)
+
+**Market / valuation debate**
+- “Teck Resources Ltd (TECK) Soars to 52-Week High, Time to Cash Out?” (Yahoo Finance, 9 Sep 2026)
+- “Copper Stocks Tumble as Tariff Doubt Reverses Record Rally” (Yahoo Finance, 10 Sep 2026)—Teck cited among names falling ~7%
+- Multiple “Is It Too Late To Consider Teck Resources…” valuation pieces (May–Jun 2026)
+
+**ESG**
+- “Canada, Nature Conservancy of Canada and Teck Resources Limited partner to conserve 1,600 hectares in Newfoundland and Labrador” (PR Newswire, 27 Aug 2026)
+
+News coverage is not thin; it is heavily tilted toward copper macro, merger mechanics, and post-rally valuation scepticism rather than deep fundamental analysis.
+
+## RESEARCH VERDICT
+Verdict: accumulate
+Risk: medium
+Confidence: 0.62
+Rationale: Quantitative cheapness and financial-health screens align with a recovering copper franchise and strong 2026 cash flow, but missing primary filings, cyclical peak-copper timing, merger binary risk, and failed deep-value/FCF-yield tests prevent full confirmation of the buy signal at current levels.

@@ -12,14 +12,14 @@
   ],
   "success_criterion": "Primary AI-judgment track outperforms ^STOXX50E after costs; rules track is the control datum. Suite B fair-lab tracks learn independently under T212-shaped costs.",
   "benchmark_ticker": "^STOXX50E",
-  "primary_excess_after_costs": null,
-  "control_excess_after_costs": null,
-  "beat_market": false,
+  "primary_excess_after_costs": 0.0049,
+  "control_excess_after_costs": 0.0049,
+  "beat_market": true,
   "beat_control": false,
-  "verdict": "insufficient_data",
+  "verdict": "beating_market",
   "reviews": {
     "rules": {
-      "reviewed_at": "2026-09-09T07:22:46.288499+00:00",
+      "reviewed_at": "2026-09-11T07:30:55.376802+00:00",
       "enough_history": false,
       "applied": false,
       "knobs_before": {
@@ -36,7 +36,7 @@
       },
       "proposed_changes": {},
       "reasons": [
-        "Need \u22652 epoch marks and \u22651 epoch trades since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, lifetime marks=2, lifetime trades=5.",
+        "Need \u22652 epoch marks and \u22651 epoch trades since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, lifetime marks=3, lifetime trades=5.",
         "No knob change warranted from current reviewed outcomes."
       ],
       "metrics": {
@@ -50,33 +50,54 @@
         "sell_count": 0,
         "positions": 5,
         "cash_fraction": 0.0,
-        "equity_marks": 2,
+        "equity_marks": 3,
         "max_sector_weight": 0.2,
         "dominant_sector": "Industrials",
-        "benchmark_return": null,
-        "excess_after_costs": null,
-        "note": "Benchmark unavailable; excess_after_costs omitted."
+        "benchmark_return": -0.0067,
+        "excess_after_costs": 0.0049,
+        "note": ""
       },
       "counterfactual_preview": {
-        "scope": "lifetime_trade_replay",
+        "scope": "rebalance_log_replay",
         "knobs": {
           "max_positions": 5,
           "skip_timing_wait": true,
           "min_conviction": 0.0,
-          "sector_cap": 0.3
+          "sector_cap": 0.3,
+          "use_adjusted_signal": false,
+          "require_research_accumulate": false,
+          "exit_confirm_screens": 2,
+          "candidate_source": "auto"
         },
-        "limitations": "Replay uses max_positions and sector_cap only; min_conviction, skip_timing_wait, and AI gates need archived weekly screens for full counterfactual P&L.",
-        "executed_trades": 5,
-        "blocked_buys": 0,
-        "blocked_orphan_sells": 0,
-        "actual_total_costs": 1.85,
-        "simulated_total_costs": 1.85,
-        "estimated_cost_savings_gbp": 0.0,
-        "actual_cost_drag": 0.0019,
+        "used_screen_buy_tier_pool": true,
+        "log_entries_total": 2,
+        "log_entries_replayed": 2,
+        "lookback_days": null,
+        "replay_from": "2026-09-09T09:22:16.764741+02:00",
+        "replay_to": "2026-09-11T09:30:16.956183+02:00",
+        "simulated_nav": 994.54,
+        "baseline_nav": 1000.0,
+        "simulated_return": -0.0055,
+        "simulated_total_costs": 1.9,
         "simulated_cost_drag": 0.0019,
-        "cost_drag_delta": 0.0,
-        "log_entries_replayed": 1,
-        "graduates_at_acted_entries": 2
+        "simulated_trade_count": 5,
+        "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
+        "actual_nav": 994.59,
+        "actual_return_over_window": -0.0054,
+        "actual_total_costs_over_window": 1.85,
+        "actual_cost_drag_over_window": 0.0019,
+        "return_delta_vs_actual": -0.0001,
+        "cost_drag_delta_vs_actual": -0.0,
+        "archive_rebalance_replay": null,
+        "archive_vs_log": {
+          "log_entries_replayed": 2,
+          "archive_passes_replayed": null,
+          "log_return_delta_vs_actual": -0.0001,
+          "archive_return_delta_vs_actual": null,
+          "return_delta_gap_archive_minus_log": null,
+          "log_simulated_return": -0.0055,
+          "archive_simulated_return": null
+        }
       },
       "note": "Forced proposal with thin history (not applied).",
       "track_id": "rules",
@@ -85,7 +106,7 @@
       "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
     },
     "ai_judgment": {
-      "reviewed_at": "2026-09-09T07:22:46.289675+00:00",
+      "reviewed_at": "2026-09-11T07:30:55.754455+00:00",
       "enough_history": false,
       "applied": false,
       "knobs_before": {
@@ -102,7 +123,7 @@
       },
       "proposed_changes": {},
       "reasons": [
-        "Need \u22652 epoch marks and \u22651 epoch trades since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, lifetime marks=2, lifetime trades=5.",
+        "Need \u22652 epoch marks and \u22651 epoch trades since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, lifetime marks=3, lifetime trades=5.",
         "No knob change warranted from current reviewed outcomes."
       ],
       "metrics": {
@@ -116,33 +137,54 @@
         "sell_count": 0,
         "positions": 5,
         "cash_fraction": 0.0,
-        "equity_marks": 2,
+        "equity_marks": 3,
         "max_sector_weight": 0.2,
         "dominant_sector": "Industrials",
-        "benchmark_return": null,
-        "excess_after_costs": null,
-        "note": "Benchmark unavailable; excess_after_costs omitted."
+        "benchmark_return": -0.0067,
+        "excess_after_costs": 0.0049,
+        "note": ""
       },
       "counterfactual_preview": {
-        "scope": "lifetime_trade_replay",
+        "scope": "rebalance_log_replay",
         "knobs": {
           "max_positions": 5,
           "skip_timing_wait": true,
           "min_conviction": 0.0,
-          "sector_cap": 0.3
+          "sector_cap": 0.3,
+          "use_adjusted_signal": true,
+          "require_research_accumulate": true,
+          "exit_confirm_screens": 2,
+          "candidate_source": "auto"
         },
-        "limitations": "Replay uses max_positions and sector_cap only; min_conviction, skip_timing_wait, and AI gates need archived weekly screens for full counterfactual P&L.",
-        "executed_trades": 5,
-        "blocked_buys": 0,
-        "blocked_orphan_sells": 0,
-        "actual_total_costs": 1.85,
-        "simulated_total_costs": 1.85,
-        "estimated_cost_savings_gbp": 0.0,
-        "actual_cost_drag": 0.0019,
+        "used_screen_buy_tier_pool": true,
+        "log_entries_total": 2,
+        "log_entries_replayed": 2,
+        "lookback_days": null,
+        "replay_from": "2026-09-09T09:22:23.004540+02:00",
+        "replay_to": "2026-09-11T09:30:24.550370+02:00",
+        "simulated_nav": 994.43,
+        "baseline_nav": 1000.0,
+        "simulated_return": -0.0056,
+        "simulated_total_costs": 1.9,
         "simulated_cost_drag": 0.0019,
-        "cost_drag_delta": 0.0,
-        "log_entries_replayed": 1,
-        "graduates_at_acted_entries": 2
+        "simulated_trade_count": 5,
+        "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
+        "actual_nav": 994.48,
+        "actual_return_over_window": -0.0055,
+        "actual_total_costs_over_window": 1.85,
+        "actual_cost_drag_over_window": 0.0019,
+        "return_delta_vs_actual": -0.0001,
+        "cost_drag_delta_vs_actual": -0.0,
+        "archive_rebalance_replay": null,
+        "archive_vs_log": {
+          "log_entries_replayed": 2,
+          "archive_passes_replayed": null,
+          "log_return_delta_vs_actual": -0.0001,
+          "archive_return_delta_vs_actual": null,
+          "return_delta_gap_archive_minus_log": null,
+          "log_simulated_return": -0.0056,
+          "archive_simulated_return": null
+        }
       },
       "note": "Forced proposal with thin history (not applied).",
       "track_id": "ai_judgment",
@@ -151,7 +193,7 @@
       "success_criterion": "Outperformance after costs vs market benchmark (^STOXX50E) on this track; AI-judgment is the primary learning track, rules is the control."
     },
     "momentum_grace": {
-      "reviewed_at": "2026-09-09T07:22:46.290780+00:00",
+      "reviewed_at": "2026-09-11T07:30:56.128091+00:00",
       "enough_history": false,
       "applied": false,
       "knobs_before": {
@@ -168,7 +210,7 @@
       },
       "proposed_changes": {},
       "reasons": [
-        "Need \u22652 epoch marks and \u22651 epoch trades since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, lifetime marks=2, lifetime trades=5.",
+        "Need \u22652 epoch marks and \u22651 epoch trades since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, lifetime marks=3, lifetime trades=5.",
         "No knob change warranted from current reviewed outcomes."
       ],
       "metrics": {
@@ -182,33 +224,54 @@
         "sell_count": 0,
         "positions": 5,
         "cash_fraction": 0.0,
-        "equity_marks": 2,
+        "equity_marks": 3,
         "max_sector_weight": 0.2,
         "dominant_sector": "Industrials",
-        "benchmark_return": null,
-        "excess_after_costs": null,
-        "note": "Benchmark unavailable; excess_after_costs omitted."
+        "benchmark_return": -0.0067,
+        "excess_after_costs": 0.0049,
+        "note": ""
       },
       "counterfactual_preview": {
-        "scope": "lifetime_trade_replay",
+        "scope": "rebalance_log_replay",
         "knobs": {
           "max_positions": 5,
           "skip_timing_wait": true,
           "min_conviction": 0.0,
-          "sector_cap": 0.3
+          "sector_cap": 0.3,
+          "use_adjusted_signal": false,
+          "require_research_accumulate": false,
+          "exit_confirm_screens": 2,
+          "candidate_source": "auto"
         },
-        "limitations": "Replay uses max_positions and sector_cap only; min_conviction, skip_timing_wait, and AI gates need archived weekly screens for full counterfactual P&L.",
-        "executed_trades": 5,
-        "blocked_buys": 0,
-        "blocked_orphan_sells": 0,
-        "actual_total_costs": 1.85,
-        "simulated_total_costs": 1.85,
-        "estimated_cost_savings_gbp": 0.0,
-        "actual_cost_drag": 0.0019,
+        "used_screen_buy_tier_pool": true,
+        "log_entries_total": 2,
+        "log_entries_replayed": 2,
+        "lookback_days": null,
+        "replay_from": "2026-09-09T09:22:28.840024+02:00",
+        "replay_to": "2026-09-11T09:30:32.151635+02:00",
+        "simulated_nav": 994.33,
+        "baseline_nav": 1000.0,
+        "simulated_return": -0.0057,
+        "simulated_total_costs": 1.9,
         "simulated_cost_drag": 0.0019,
-        "cost_drag_delta": 0.0,
-        "log_entries_replayed": 1,
-        "graduates_at_acted_entries": 2
+        "simulated_trade_count": 5,
+        "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
+        "actual_nav": 994.38,
+        "actual_return_over_window": -0.0056,
+        "actual_total_costs_over_window": 1.85,
+        "actual_cost_drag_over_window": 0.0019,
+        "return_delta_vs_actual": -0.0,
+        "cost_drag_delta_vs_actual": -0.0,
+        "archive_rebalance_replay": null,
+        "archive_vs_log": {
+          "log_entries_replayed": 2,
+          "archive_passes_replayed": null,
+          "log_return_delta_vs_actual": -0.0,
+          "archive_return_delta_vs_actual": null,
+          "return_delta_gap_archive_minus_log": null,
+          "log_simulated_return": -0.0057,
+          "archive_simulated_return": null
+        }
       },
       "note": "Forced proposal with thin history (not applied).",
       "track_id": "momentum_grace",
@@ -217,7 +280,7 @@
       "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
     },
     "graduated_allocation": {
-      "reviewed_at": "2026-09-09T07:22:46.291859+00:00",
+      "reviewed_at": "2026-09-11T07:30:56.497299+00:00",
       "enough_history": false,
       "applied": false,
       "knobs_before": {
@@ -234,7 +297,7 @@
       },
       "proposed_changes": {},
       "reasons": [
-        "Need \u22652 epoch marks and \u22651 epoch trades since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, lifetime marks=2, lifetime trades=5.",
+        "Need \u22652 epoch marks and \u22651 epoch trades since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, lifetime marks=3, lifetime trades=5.",
         "No knob change warranted from current reviewed outcomes."
       ],
       "metrics": {
@@ -248,33 +311,54 @@
         "sell_count": 0,
         "positions": 5,
         "cash_fraction": 0.4605,
-        "equity_marks": 2,
+        "equity_marks": 3,
         "max_sector_weight": 0.2,
         "dominant_sector": "Energy",
-        "benchmark_return": null,
-        "excess_after_costs": null,
-        "note": "Benchmark unavailable; excess_after_costs omitted."
+        "benchmark_return": -0.0067,
+        "excess_after_costs": 0.0057,
+        "note": ""
       },
       "counterfactual_preview": {
-        "scope": "lifetime_trade_replay",
+        "scope": "rebalance_log_replay",
         "knobs": {
           "max_positions": 5,
           "skip_timing_wait": true,
           "min_conviction": 0.0,
-          "sector_cap": 0.3
+          "sector_cap": 0.3,
+          "use_adjusted_signal": false,
+          "require_research_accumulate": false,
+          "exit_confirm_screens": 2,
+          "candidate_source": "auto"
         },
-        "limitations": "Replay uses max_positions and sector_cap only; min_conviction, skip_timing_wait, and AI gates need archived weekly screens for full counterfactual P&L.",
-        "executed_trades": 5,
-        "blocked_buys": 0,
-        "blocked_orphan_sells": 0,
-        "actual_total_costs": 1.0,
-        "simulated_total_costs": 1.0,
-        "estimated_cost_savings_gbp": 0.0,
-        "actual_cost_drag": 0.001,
-        "simulated_cost_drag": 0.001,
-        "cost_drag_delta": 0.0,
-        "log_entries_replayed": 1,
-        "graduates_at_acted_entries": 2
+        "used_screen_buy_tier_pool": true,
+        "log_entries_total": 2,
+        "log_entries_replayed": 2,
+        "lookback_days": null,
+        "replay_from": "2026-09-09T09:22:34.663273+02:00",
+        "replay_to": "2026-09-11T09:30:39.762482+02:00",
+        "simulated_nav": 994.4,
+        "baseline_nav": 1000.0,
+        "simulated_return": -0.0056,
+        "simulated_total_costs": 1.9,
+        "simulated_cost_drag": 0.0019,
+        "simulated_trade_count": 5,
+        "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
+        "actual_nav": 997.0,
+        "actual_return_over_window": -0.003,
+        "actual_total_costs_over_window": 1.0,
+        "actual_cost_drag_over_window": 0.001,
+        "return_delta_vs_actual": -0.0026,
+        "cost_drag_delta_vs_actual": -0.0009,
+        "archive_rebalance_replay": null,
+        "archive_vs_log": {
+          "log_entries_replayed": 2,
+          "archive_passes_replayed": null,
+          "log_return_delta_vs_actual": -0.0026,
+          "archive_return_delta_vs_actual": null,
+          "return_delta_gap_archive_minus_log": null,
+          "log_simulated_return": -0.0056,
+          "archive_simulated_return": null
+        }
       },
       "note": "Forced proposal with thin history (not applied).",
       "track_id": "graduated_allocation",
@@ -283,7 +367,7 @@
       "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
     },
     "technical": {
-      "reviewed_at": "2026-09-09T07:22:46.292955+00:00",
+      "reviewed_at": "2026-09-11T07:30:56.869055+00:00",
       "enough_history": false,
       "applied": false,
       "knobs_before": {
@@ -302,7 +386,7 @@
         "sector_cap": 0.25
       },
       "reasons": [
-        "Need \u22652 epoch marks and \u22651 epoch trades since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, lifetime marks=2, lifetime trades=5.",
+        "Need \u22652 epoch marks and \u22651 epoch trades since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, lifetime marks=3, lifetime trades=5.",
         "Holdings concentrated in Technology (40%) \u2014 tighten sector_cap."
       ],
       "metrics": {
@@ -316,33 +400,54 @@
         "sell_count": 0,
         "positions": 5,
         "cash_fraction": 0.5006,
-        "equity_marks": 2,
+        "equity_marks": 3,
         "max_sector_weight": 0.4,
         "dominant_sector": "Technology",
-        "benchmark_return": null,
-        "excess_after_costs": null,
-        "note": "Benchmark unavailable; excess_after_costs omitted."
+        "benchmark_return": -0.0067,
+        "excess_after_costs": 0.0058,
+        "note": ""
       },
       "counterfactual_preview": {
-        "scope": "lifetime_trade_replay",
+        "scope": "rebalance_log_replay",
         "knobs": {
           "max_positions": 5,
           "skip_timing_wait": true,
           "min_conviction": 0.0,
-          "sector_cap": 0.25
+          "sector_cap": 0.25,
+          "use_adjusted_signal": false,
+          "require_research_accumulate": false,
+          "exit_confirm_screens": 2,
+          "candidate_source": "auto"
         },
-        "limitations": "Replay uses max_positions and sector_cap only; min_conviction, skip_timing_wait, and AI gates need archived weekly screens for full counterfactual P&L.",
-        "executed_trades": 3,
-        "blocked_buys": 2,
-        "blocked_orphan_sells": 0,
-        "actual_total_costs": 0.9,
-        "simulated_total_costs": 0.54,
-        "estimated_cost_savings_gbp": 0.36,
-        "actual_cost_drag": 0.0009,
-        "simulated_cost_drag": 0.0005,
-        "cost_drag_delta": 0.0004,
-        "log_entries_replayed": 1,
-        "graduates_at_acted_entries": 2
+        "used_screen_buy_tier_pool": true,
+        "log_entries_total": 2,
+        "log_entries_replayed": 2,
+        "lookback_days": null,
+        "replay_from": "2026-09-09T09:22:07.548597+02:00",
+        "replay_to": "2026-09-11T09:30:05.413344+02:00",
+        "simulated_nav": 996.24,
+        "baseline_nav": 1000.0,
+        "simulated_return": -0.0038,
+        "simulated_total_costs": 0.95,
+        "simulated_cost_drag": 0.0009,
+        "simulated_trade_count": 5,
+        "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
+        "actual_nav": 996.26,
+        "actual_return_over_window": -0.0037,
+        "actual_total_costs_over_window": 0.9,
+        "actual_cost_drag_over_window": 0.0009,
+        "return_delta_vs_actual": -0.0,
+        "cost_drag_delta_vs_actual": -0.0,
+        "archive_rebalance_replay": null,
+        "archive_vs_log": {
+          "log_entries_replayed": 2,
+          "archive_passes_replayed": null,
+          "log_return_delta_vs_actual": -0.0,
+          "archive_return_delta_vs_actual": null,
+          "return_delta_gap_archive_minus_log": null,
+          "log_simulated_return": -0.0038,
+          "archive_simulated_return": null
+        }
       },
       "note": "Forced proposal with thin history (not applied).",
       "track_id": "technical",
@@ -351,8 +456,8 @@
       "success_criterion": "Timing/levels baseline \u2014 stock-picking tracks should beat this after costs; uses trade_plan stops/targets, not conviction rebalance."
     },
     "buy_tier_level": {
-      "reviewed_at": "2026-09-09T07:22:46.294191+00:00",
-      "enough_history": false,
+      "reviewed_at": "2026-09-11T07:30:57.397201+00:00",
+      "enough_history": true,
       "applied": false,
       "knobs_before": {
         "max_positions": 120,
@@ -368,47 +473,67 @@
       },
       "proposed_changes": {},
       "reasons": [
-        "Need \u22652 epoch marks and \u22651 epoch trades since last knob apply (or \u22654 lifetime marks and \u22652 trades when no epoch yet) \u2014 epoch marks=None, epoch trades=None, lifetime marks=2, lifetime trades=19.",
         "No knob change warranted from current reviewed outcomes."
       ],
       "metrics": {
-        "portfolio_value": 994.78,
+        "portfolio_value": 992.56,
         "contributed_capital": 1000.0,
-        "total_return": -0.0052,
-        "total_costs": 5.13,
-        "cost_drag": 0.0051,
-        "trade_count": 19,
-        "buy_count": 19,
-        "sell_count": 0,
-        "positions": 19,
-        "cash_fraction": 0.0,
-        "equity_marks": 2,
-        "max_sector_weight": 0.2105,
-        "dominant_sector": "Industrials",
-        "benchmark_return": null,
-        "excess_after_costs": null,
-        "note": "Benchmark unavailable; excess_after_costs omitted."
+        "total_return": -0.0074,
+        "total_costs": 5.44,
+        "cost_drag": 0.0054,
+        "trade_count": 22,
+        "buy_count": 20,
+        "sell_count": 2,
+        "positions": 18,
+        "cash_fraction": 0.0485,
+        "equity_marks": 5,
+        "max_sector_weight": 0.2239,
+        "dominant_sector": "Technology",
+        "benchmark_return": -0.0067,
+        "excess_after_costs": -0.0007,
+        "note": ""
       },
       "counterfactual_preview": {
-        "scope": "lifetime_trade_replay",
+        "scope": "rebalance_log_replay",
         "knobs": {
           "max_positions": 120,
           "skip_timing_wait": true,
           "min_conviction": 0.0,
-          "sector_cap": 1.0
+          "sector_cap": 1.0,
+          "use_adjusted_signal": false,
+          "require_research_accumulate": false,
+          "exit_confirm_screens": 2,
+          "candidate_source": "auto"
         },
-        "limitations": "Replay uses max_positions and sector_cap only; min_conviction, skip_timing_wait, and AI gates need archived weekly screens for full counterfactual P&L.",
-        "executed_trades": 19,
-        "blocked_buys": 0,
-        "blocked_orphan_sells": 0,
-        "actual_total_costs": 5.13,
-        "simulated_total_costs": 5.13,
-        "estimated_cost_savings_gbp": 0.0,
-        "actual_cost_drag": 0.0051,
-        "simulated_cost_drag": 0.0051,
-        "cost_drag_delta": 0.0,
-        "log_entries_replayed": 1,
-        "graduates_at_acted_entries": 2
+        "used_screen_buy_tier_pool": true,
+        "log_entries_total": 4,
+        "log_entries_replayed": 4,
+        "lookback_days": null,
+        "replay_from": "2026-09-09T09:22:40.558497+02:00",
+        "replay_to": "2026-09-11T09:30:47.244134+02:00",
+        "simulated_nav": 985.93,
+        "baseline_nav": 1000.0,
+        "simulated_return": -0.0141,
+        "simulated_total_costs": 3.23,
+        "simulated_cost_drag": 0.0032,
+        "simulated_trade_count": 22,
+        "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
+        "actual_nav": 983.65,
+        "actual_return_over_window": -0.0164,
+        "actual_total_costs_over_window": 5.44,
+        "actual_cost_drag_over_window": 0.0054,
+        "return_delta_vs_actual": 0.0023,
+        "cost_drag_delta_vs_actual": 0.0022,
+        "archive_rebalance_replay": null,
+        "archive_vs_log": {
+          "log_entries_replayed": 4,
+          "archive_passes_replayed": null,
+          "log_return_delta_vs_actual": 0.0023,
+          "archive_return_delta_vs_actual": null,
+          "return_delta_gap_archive_minus_log": null,
+          "log_simulated_return": -0.0141,
+          "archive_simulated_return": null
+        }
       },
       "note": "Frozen lab/shadow track \u2014 knobs fixed; decision-review apply skipped.",
       "track_id": "buy_tier_level",
