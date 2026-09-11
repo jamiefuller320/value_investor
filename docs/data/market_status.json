@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-11T17:29:21.327142+00:00",
+  "generated_at": "2026-09-11T17:56:14.747265+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -39,7 +39,7 @@
       "1": "asx200",
       "2": "tsx60"
     },
-    "equal_support_generated_at": "2026-09-11T15:16:32.333560+00:00"
+    "equal_support_generated_at": "2026-09-11T17:44:44.714776+00:00"
   },
   "markets": [
     {
@@ -872,7 +872,7 @@
         "hold_near_buy_count": 19,
         "not_buy_tier_count": 41,
         "never_buy_tier_count": 36,
-        "rememo_eligible_count": 8,
+        "rememo_eligible_count": 10,
         "exclusion_ready_for_priors": null
       },
       "near_miss": {
@@ -901,10 +901,9 @@
       "sprint_progress": {
         "window_days": 2,
         "run_count": 14,
-        "targets": 78,
-        "improved": 17,
+        "targets": 70,
+        "improved": 18,
         "improved_tickers": [
-          "CNR.TO",
           "IFC.TO",
           "TRI.TO",
           "L.TO",
@@ -915,14 +914,14 @@
           "OTEX.TO",
           "SU.TO"
         ],
-        "last_run_at": "2026-09-11T17:28:13.723124+00:00",
-        "runtime_cutoff_runs": 0,
+        "last_run_at": "2026-09-11T17:55:08.054245+00:00",
+        "runtime_cutoff_runs": 1,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 3,
-          "indexed_without_body": 101,
+          "indexed_without_body": 100,
           "filing_gaps": 0
         },
         "gaps_after": {
@@ -936,7 +935,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": -4,
+          "indexed_without_body": -3,
           "filing_gaps": 0
         },
         "remaining": {
@@ -948,7 +947,13 @@
         },
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": []
+        "admission_warnings": [
+          {
+            "id": "runtime_cutoff",
+            "severity": "high",
+            "summary": "1 ingest run(s) hit the runtime cutoff"
+          }
+        ]
       },
       "held_vs_market": {
         "schema_version": 1,
