@@ -50,6 +50,7 @@ class HunterFixKind(StrEnum):
     MISSING_TEST = "missing_test"
     SHORT_SKIP = "short_skip"
     LIVE_FETCH_FAILED = "live_fetch_failed"
+    TOO_MANY_URLS = "too_many_urls"
 
 
 HUNTER_FIXABLE_KINDS = frozenset(HunterFixKind)
@@ -179,6 +180,9 @@ def classify_hunter_fix_kind(result: HunterGateResult) -> HunterFixKind | None:
         return HunterFixKind.SHORT_SKIP
     if "live-fetch failed" in reason or "body too short" in reason:
         return HunterFixKind.LIVE_FETCH_FAILED
+    # Gate text: "ALLOWLIST requires 1–{N} new URL(s)" when 0 or >N URLs.
+    if "allowlist requires" in reason and "new url" in reason:
+        return HunterFixKind.TOO_MANY_URLS
     return None
 
 
