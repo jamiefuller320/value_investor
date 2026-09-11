@@ -6814,6 +6814,33 @@ def test_parked_source_hunter_aptd_l_ftse_smallcap_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_ftse_smallcap_dfs_l_builtins(tmp_path: Path):
+    """Regression: DFS.L parked IWB — dfscorporate.co.uk FY25 prelims + FY2024 AR + H1 statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("DFS.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("fy25-preliminary-results.pdf" in url for url in urls)
+    assert any("44642-dfs-ar-2024-web.pdf" in url for url in urls)
+    assert any("dfs-interim-report-h1-fy25.pdf" in url for url in urls)
+
+
+def test_parked_source_hunter_dfs_l_ftse_smallcap_has_fetchable_ir():
+    """eng-20260911-08: DFS.L has live dfscorporate.co.uk FY25 prelims + FY2024 AR + H1 statutory PDFs."""
+    assert "DFS.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("DFS.L")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("dfscorporate.co.uk" in url for url in urls)
+    assert any("fy25-preliminary-results.pdf" in url for url in urls)
+    body = fetch_filing_body(urls[0])
+    assert body
+    assert len(body) >= 50000
+
+
 def test_parked_source_hunter_ultp_l_ftse_smallcap_skip():
     """eng-20260911-06: ULTP.L Investegate RNS fails allowlist live-fetch title_mismatch; IR bot-gated."""
     assert "ULTP.L" in PARKED_SOURCE_HUNTER_SKIP
