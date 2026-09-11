@@ -124,28 +124,63 @@ jobs:
           if [ -n "$PR_NUMBER" ]; then
             ARGS+=(--pr-number "$PR_NUMBER")
           fi
+          # Agent may leave a passing SKIP/ALLOWLIST fix only in the working tree.
+          # Always continue so we can commit before re-running the merge gate.
           if ftse-engineering "${ARGS[@]}" --json | tee /tmp/hunter_fix_result.json; then
             echo "gate_pass=true" >> "$GITHUB_OUTPUT"
           else
             echo "gate_pass=false" >> "$GITHUB_OUTPUT"
           fi
 
+      # Commit before verify: hunter-merge-gate reads committed HEAD, not the
+      # working tree. Pushing first is what lets SKIP conversions clear CI.
+      - name: Commit and push hunter-fix
+        if: >-
+          steps.branch.outputs.branch != ''
+          && steps.gate.outputs.skip != 'true'
+          && steps.eligible.outputs.eligible == 'true'
+        id: commit
+        env:
+          BRANCH: ${{ steps.branch.outputs.branch }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
+            echo "No changes after hunter-fix agent"
+            exit 0
+          fi
+          git add -A
+          FIX_KIND=$(python3 -c "import json; print(json.load(open('/tmp/hunter_fix_result.json')).get('fix_kind') or 'gate')")
+          git commit -m "chore(hunter-fix): address hunter-merge-gate ${FIX_KIND}"
+          git push origin "HEAD:$BRANCH"
+          git diff --name-only origin/main...HEAD > /tmp/changed_files.txt
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
       - name: Verify hunter merge gate after fix
+        id: verify
         if: >-
           steps.branch.outputs.branch != ''
           && steps.gate.outputs.skip != 'true'
           && steps.eligible.outputs.eligible == 'true'
         run: |
           set -euo pipefail
-          ftse-engineering hunter-merge-gate \
+          if ftse-engineering hunter-merge-gate \
             --branch "${{ steps.branch.outputs.branch }}" \
             --base-ref origin/main \
             --head-ref HEAD \
-            --changed-files /tmp/changed_files.txt
+            --changed-files /tmp/changed_files.txt; then
+            echo "gate_pass=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "gate_pass=false" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
 
       - name: Park unfixable hunter PR (not eligible for fix)
         if: >-
-          steps.branch.outputs.branch != ''
+          always()
+          && steps.branch.outputs.branch != ''
           && steps.gate.outputs.skip != 'true'
           && steps.eligible.outputs.eligible == 'false'
         env:
@@ -167,15 +202,16 @@ jobs:
             --head-ref HEAD \
             || true
 
+      # Prefer verify outcome over the agent's pre-commit gate_pass: the agent
+      # may report failure against HEAD, then a committed SKIP/ALLOWLIST passes.
       - name: Park hunter PR after exhausted hunter-fix
         if: >-
-          steps.branch.outputs.branch != ''
+          always()
+          && steps.branch.outputs.branch != ''
           && (
             steps.gate.outputs.skip == 'true'
-            || (
-              steps.eligible.outputs.eligible == 'true'
-              && steps.fix.outputs.gate_pass == 'false'
-            )
+            || steps.verify.outputs.gate_pass == 'false'
+            || steps.verify.conclusion == 'failure'
           )
         env:
           BRANCH: ${{ steps.branch.outputs.branch }}
@@ -195,23 +231,3 @@ jobs:
             --base-ref origin/main \
             --head-ref HEAD \
             || true
-
-      - name: Commit and push hunter-fix
-        if: >-
-          steps.branch.outputs.branch != ''
-          && steps.gate.outputs.skip != 'true'
-          && steps.eligible.outputs.eligible == 'true'
-        env:
-          BRANCH: ${{ steps.branch.outputs.branch }}
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet && git diff --cached --quiet; then
-            echo "No staged changes after hunter-fix agent"
-            exit 0
-          fi
-          git add -A
-          FIX_KIND=$(python3 -c "import json; print(json.load(open('/tmp/hunter_fix_result.json')).get('fix_kind') or 'gate')")
-          git commit -m "chore(hunter-fix): address hunter-merge-gate ${FIX_KIND}"
-          git push origin "HEAD:$BRANCH"
