@@ -385,6 +385,15 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "CNQ": [
         "https://www.cnrl.com/content/uploads/2026/03/CNQ_2025-AIF-March-25-2026.pdf",
     ],
+    # tsx60 IWB blocker — NTR.TO parked unfetchable_iwb; SEC FY2025 40-F + exhibit PDFs.
+    "NTR.TO": [
+        "https://www.sec.gov/Archives/edgar/data/1725964/000119312526081326/d56746d40f.htm",
+        "https://www.sec.gov/Archives/edgar/data/1725964/000119312526081326/d56746dex9931.pdf",
+    ],
+    "NTR": [
+        "https://www.sec.gov/Archives/edgar/data/1725964/000119312526081326/d56746d40f.htm",
+        "https://www.sec.gov/Archives/edgar/data/1725964/000119312526081326/d56746dex9931.pdf",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
@@ -507,6 +516,7 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "ABI": ("Anheuser-Busch InBev", "Anheuser Busch InBev"),
     "RAND": ("Randstad", "Randstad N.V."),
     "NOVN": ("Novartis", "Novartis AG"),
+    "NTR": ("Nutrien", "Nutrien Ltd."),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
 }
