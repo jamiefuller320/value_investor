@@ -6927,6 +6927,34 @@ def test_parked_source_hunter_cnq_to_tsx60_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_tsx60_ntr_to_builtins(tmp_path: Path):
+    """Regression: NTR.TO parked IWB — SEC FY2025 40-F + financial-statements exhibit PDF."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("NTR.TO", path=allowlist_path)
+    assert len(rows) == 2
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("d56746d40f.htm" in url for url in urls)
+    assert any("d56746dex9931.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "annual") >= 1
+    assert len(fetch_filings_ir_allowlist("NTR", path=allowlist_path)) == 2
+
+
+def test_parked_source_hunter_ntr_to_tsx60_has_fetchable_ir():
+    """eng-20260911-12: NTR.TO has live-fetchable SEC 40-F statutory filings."""
+    assert "NTR.TO" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("NTR.TO")
+    assert len(rows) == 2
+    urls = [row["url"] for row in rows]
+    assert all("sec.gov" in url for url in urls)
+    pdf_url = next(url for url in urls if url.endswith(".pdf"))
+    body = fetch_filing_body(pdf_url)
+    assert body
+    assert len(body) >= 50000
+
+
 def test_parked_source_hunter_ultp_l_ftse_smallcap_skip():
     """eng-20260911-06: ULTP.L Investegate RNS fails allowlist live-fetch title_mismatch; IR bot-gated."""
     assert "ULTP.L" in PARKED_SOURCE_HUNTER_SKIP
