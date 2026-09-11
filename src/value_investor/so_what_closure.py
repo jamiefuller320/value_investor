@@ -145,9 +145,7 @@ def group_so_what_rows(
                 "recommended_closure": closure or None,
                 "severity": severity,
                 "so_what": _KIND_LABELS.get(kind) or sample.get("so_what"),
-                "human_action": _normalize_human_action(
-                    sample.get("human_action"), kind=kind
-                ),
+                "human_action": _normalize_human_action(sample.get("human_action"), kind=kind),
                 "human_doc_path": sample.get("human_doc_path"),
                 "count": len(tickers),
                 "tickers": tickers,
@@ -871,9 +869,7 @@ def render_so_what_markdown(section: dict[str, Any] | None = None) -> str:
         lines.extend(["", "### Human gates", ""])
         for group in gates_groups:
             action = group.get("human_action") or group.get("so_what") or group.get("label")
-            lines.append(
-                f"- **{group.get('count', 0)} names** (`{group.get('kind')}`): {action}"
-            )
+            lines.append(f"- **{group.get('count', 0)} names** (`{group.get('kind')}`): {action}")
             lines.append(f"  - Tickers: {_format_ticker_list(group.get('tickers') or [])}")
     lines.append("")
     return "\n".join(lines)
