@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-11T11:25:02+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-11T13:40:42+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -342,6 +342,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L345 | **Observe-only narrow sector-thesis overlay with issuer triggers** | Later: test a documented thesis such as UK linear-TV advertising as observe-only fields, applied only when issuer segment mix or filing language matches, not the Communication Services bucket. Compare archive/sim excess before any live bind; reuse RiskTags/caution and official series (L344) rather than a new opinion scrape. | ITV.L principal-risks bodies are readable and at least one other UK broadcast/ad name is on the buy-tier with a memo, so a peer cohort can be scored without inventing a sector blanket |
 | L352 | **Cap Sunday rememo separately from research_hard_cap** | Sunday research_hard_cap is 100 and weekly_ops is ~$84 this week. If euro_depth rememo eligibility ever spikes, Layer C could dump a rememo burst into the same envelope as the Sunday email. Prefer the existing weekday catch-up trigger (cap 3, raise only when backlog >15) over a Sunday dump; add a Sunday rememo sub-cap only if focus rememo_eligible exceeds a handful. | euro_depth Sunday rememo_eligible_count is above 5, or a future focus market shows rememo_eligible near research_hard_cap |
 | L358 | **Investegate numeric RNS-id slug title_mismatch** | Investegate announcement URLs ending in numeric RNS ids fail IR allowlist live-fetch title_mismatch even when narrative body fetches; hunters then need SKIP or alternate hosts. | Next wave of UK Investegate-heavy hunter failures, or when tuning _validate_ir_allowlist_body_content |
+| L359 | **Densify held-vs-market for admitted shards when chart packs exist** | Live FTSE may densify from docs/data/charts; admitted epoch-0 books stay on sparse equity_curve marks because allow_chart_densify is FTSE-only and shard chart packs are missing. Revisit once per-market buy-tier charts are published. | Admitted markets publish buy-tier chart JSON comparable to docs/data/charts, or weekday marks need gap-fill between sparse equity prints |
 
 ### Ops / reliability
 
@@ -425,6 +426,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L355 | **Independent verify-agent gate for hunter allowlist PRs** | After hunter PR opens, dispatch a read-only verify Cloud Agent (separate session/model) that live-checks proposed IR URLs and writes a structured approval artifact; engineering-auto-merge requires artifact approve=true in addition to CI and path guard. Use as supplement to live-fetch pytest, not a substitute. | SKIP-only hunter auto-merge tier has run cleanly for 4+ weeks and allowlist-add PRs are the throughput bottleneck |
 | L356 | **Immediate park for non-hunter unfixable PRs** | Extend immediate park_unfixable beyond hunter tasks (e.g. ci_failure pytest regressions after autofix exhausted) using the same attention parked cap. | Non-hunter pr_open tasks routinely hit 48h ci_blocked park without autofix recovery |
 | L357 | **Add pull --rebase before dashboard-bridge and library-model-review auto-commits** | Those two workflows still call git-auto-commit-action without the Sync-main-before-commit rebase used by paper-auto / eng-queue / epoch0-weekday. Same push-reject race is possible under concurrent bot writers. | Either workflow fails Commit artifacts with main -> main (fetch first), or after epoch0 rebase fix lands and we do a hygiene pass on auto-commit workflows. |
+| L360 | **Refresh buy-tier charts past first fill for densify overlap** | FTSE densify is allowed but charts currently end before the paper book fill date, so held_path stays equity_marks. Refreshing charts through the latest mark would unlock daily densified tile paths. | docs/data/charts as_of/dates lag behind buy_tier_level equity_curve last mark |
 
 ---
 
