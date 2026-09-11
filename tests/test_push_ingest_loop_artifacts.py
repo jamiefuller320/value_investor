@@ -92,3 +92,85 @@ def test_push_ingest_artifacts_does_not_commit_stale_ops_status(tmp_path: Path):
     health = _git(work, "show", "origin/main:docs/data/ingest_health_log.json").stdout
     assert '"run_at":"new"' in ops, f"ops_status was clobbered:\n{ops}"
     assert '"ok": true' in health.replace(" ", "") or '"ok":true' in health.replace(" ", "")
+
+
+def test_push_preserves_untouched_engineering_tasks(tmp_path: Path):
+    """
+    Reproduce the 2026-09-11 hunter auto-merge break:
+
+    1. Job starts on main without eng-20260911-02
+    2. Concurrent engineering-queue adds eng-20260911-02 (pr_open) on origin/main
+    3. Weekday ingest only updates health log — must not restore stale tasks JSON
+    """
+    remote = tmp_path / "remote.git"
+    work = tmp_path / "work"
+    _git(tmp_path, "init", "--bare", str(remote))
+    _git(tmp_path, "-C", str(remote), "symbolic-ref", "HEAD", "refs/heads/main")
+    _git(tmp_path, "clone", str(remote), str(work))
+    _git(work, "config", "user.email", "test@example.com")
+    _git(work, "config", "user.name", "test")
+
+    data = work / "docs" / "data"
+    data.mkdir(parents=True)
+    (data / "engineering_tasks.json").write_text(
+        '{"tasks":[{"id":"eng-old","status":"pr_open"}]}\n',
+        encoding="utf-8",
+    )
+    (data / "ingest_health_log.json").write_text('{"entries":[]}\n', encoding="utf-8")
+    (work / "scripts").mkdir()
+    script_src = Path("scripts/push_ingest_loop_artifacts.sh").read_text(encoding="utf-8")
+    (work / "scripts" / "push_ingest_loop_artifacts.sh").write_text(script_src, encoding="utf-8")
+    os.chmod(work / "scripts" / "push_ingest_loop_artifacts.sh", 0o755)
+
+    _git(
+        work,
+        "add",
+        "docs/data/engineering_tasks.json",
+        "docs/data/ingest_health_log.json",
+        "scripts",
+    )
+    _git(work, "commit", "-m", "seed")
+    _git(work, "branch", "-M", "main")
+    _git(work, "push", "-u", "origin", "main")
+
+    other = tmp_path / "other"
+    _git(tmp_path, "clone", str(remote), str(other))
+    _git(other, "config", "user.email", "test@example.com")
+    _git(other, "config", "user.name", "test")
+    (other / "docs" / "data" / "engineering_tasks.json").write_text(
+        '{"tasks":[{"id":"eng-20260911-02","status":"pr_open"},'
+        '{"id":"eng-old","status":"merged"}]}\n',
+        encoding="utf-8",
+    )
+    _git(other, "add", "docs/data/engineering_tasks.json")
+    _git(other, "commit", "-m", "chore: engineering queue recovery")
+    _git(other, "push", "origin", "main")
+
+    (data / "ingest_health_log.json").write_text(
+        '{"entries":[{"ok":true}]}\n',
+        encoding="utf-8",
+    )
+
+    env = {**os.environ, "MAX_ATTEMPTS": "2"}
+    result = subprocess.run(
+        ["bash", "scripts/push_ingest_loop_artifacts.sh", "chore: weekday ingest loop [skip ci]"],
+        cwd=work,
+        env=env,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, textwrap.dedent(
+        f"""
+        push script failed
+        stdout: {result.stdout}
+        stderr: {result.stderr}
+        """
+    )
+
+    _git(work, "fetch", "origin")
+    tasks = _git(work, "show", "origin/main:docs/data/engineering_tasks.json").stdout
+    health = _git(work, "show", "origin/main:docs/data/ingest_health_log.json").stdout
+    assert "eng-20260911-02" in tasks, f"engineering_tasks.json was clobbered:\n{tasks}"
+    assert '"status":"pr_open"' in tasks.replace(" ", "") or '"status": "pr_open"' in tasks
+    assert '"ok": true' in health.replace(" ", "") or '"ok":true' in health.replace(" ", "")
