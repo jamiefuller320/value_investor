@@ -83,7 +83,16 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://me-group.com/wp-content/uploads/2026/03/ME-Group-2025-Annual-Results-Presentation.pdf",
         "https://me-group.com/wp-content/uploads/2026/06/260601-ME-Group-Trading-Update.pdf",
         "https://me-group.com/wp-content/uploads/2026/07/260713-ME-Group-2026-Interim-Results-RNS-FINAL.pdf",
+        "https://me-group.com/wp-content/uploads/2026/07/260713-ME-Group-2026-Interim-Results-Presentation.pdf",
         "https://me-group.com/wp-content/uploads/2025/02/ME-Group-Annual-Report-2024.pdf",
+    ],
+    "MGNS.L": [
+        "https://d3s3eeezfmyz8l.cloudfront.net/pdfs/MSG-FY-2025-presentation_2026-03-16-145529_wjhq.pdf",
+        "https://d3s3eeezfmyz8l.cloudfront.net/pdfs/FY-2025-RNS-FINAL.pdf",
+        "https://d3s3eeezfmyz8l.cloudfront.net/pdfs/MSG_HY26_Presentation_FINAL_22072026.pdf",
+        "https://d3s3eeezfmyz8l.cloudfront.net/pdfs/HY2026-V12-220726-FINAL.pdf",
+        "https://d3s3eeezfmyz8l.cloudfront.net/pdfs/PPT-HY2025-FINAL.pdf",
+        "https://d3s3eeezfmyz8l.cloudfront.net/pdfs/HY-2025-RNS-FINAL.pdf",
     ],
     "GFTU.L": [
         "https://www.graftonplc.com/~/media/Files/G/Grafton-Group/2025%20FULL%20YEAR%20RESULTS%20march%202026/Grafton-Group%20plc-Final%20Results-31-December-2025-FINAL.pdf",
@@ -1742,6 +1751,12 @@ def _compose_filing_body_with_depth_sections(full_text: str) -> str | None:
     """
     if not full_text.strip():
         return None
+
+    stripped = full_text.strip()
+    if len(stripped) <= FILINGS_BODY_MAX_CHARS:
+        # IR results decks and mid-size PDFs often place FCF/pension bridges after ~28k chars;
+        # keep the full extract when it already fits the body budget.
+        return stripped
 
     lead_limit = min(_PDF_DEPTH_LEAD_CHARS, len(full_text))
     lead = full_text[:lead_limit].rstrip()
@@ -4138,6 +4153,37 @@ def _fetch_rns_filing_body_for_refetch(url: str) -> tuple[str | None, str | None
     return _fetch_rns_html_body_fallback(url)
 
 
+def _ir_allowlist_row_needs_body_refetch(row: dict[str, Any], bodies_dir: Path) -> bool:
+    """True when an on-disk IR allowlist body was truncated or lost late-slide FCF/pension lines."""
+    if not _is_ir_allowlist_row(row) or not row.get("has_body"):
+        return False
+    row_id = str(row.get("id") or "")
+    body_path = row.get("body_path")
+    candidate = Path(str(body_path)) if body_path else Path(bodies_dir) / f"{row_id}.txt"
+    if not candidate.is_file():
+        return False
+    try:
+        text = candidate.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return False
+    if not text.strip():
+        return False
+    if "[truncated]" in text:
+        return True
+    lower = text.lower()
+    if (
+        "profit to cash conversion and free cash flow" in lower
+        and "free cash flow" not in lower[-800:]
+    ):
+        return True
+    tail = text[-120:]
+    if re.search(r"Pension fundin\s*$", tail, re.IGNORECASE):
+        return True
+    if len(text) == _PDF_DEPTH_LEAD_CHARS and "free cash flow" not in lower[-1200:]:
+        return True
+    return False
+
+
 def _fetch_ir_allowlist_body(
     row: dict[str, Any],
     *,
@@ -4355,8 +4401,8 @@ def refetch_ir_allowlist_filing_bodies(
         row
         for row in ir_rows
         if row.get("url")
-        and not row.get("has_body")
         and not (skip_unfetchable and row.get("unfetchable"))
+        and (not row.get("has_body") or _ir_allowlist_row_needs_body_refetch(row, bodies_dir))
     ]
     skipped_unfetchable = sum(
         1
@@ -4403,13 +4449,17 @@ def refetch_ir_allowlist_filing_bodies(
             downloaded < max_bodies
             and _is_ir_allowlist_row(item)
             and item.get("url")
-            and not item.get("has_body")
             and not (skip_unfetchable and item.get("unfetchable"))
+            and (not item.get("has_body") or _ir_allowlist_row_needs_body_refetch(item, bodies_dir))
         ):
             if deadline_reached(deadline_monotonic):
                 deadline_hit = True
                 updated.append(item)
                 continue
+            if _ir_allowlist_row_needs_body_refetch(item, bodies_dir):
+                item.pop("unfetchable", None)
+                item.pop("unfetchable_reason", None)
+                item.pop("unfetchable_at", None)
             body = None
             fetch_source: str | None = None
             row_url = str(item.get("url") or "")
@@ -4987,6 +5037,67 @@ _INTERIM_NUMBER_PAIR_RE = re.compile(r"^\s*([\d,]+)\s+([\d,]+)\s*$")
 _HIKMA_SEGMENT_NAMES = ("Injectables", "Branded", "Hikma Rx")
 
 
+_PROFIT_TO_CASH_SECTION_RE = re.compile(
+    r"Profit to Cash Conversion and Free Cash Flow",
+    re.IGNORECASE,
+)
+_ADJUSTED_CASH_FLOW_BRIDGE_RE = re.compile(
+    r"Adjusted cash flow\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+"
+    r"Net cash interest paid[^\n]*\(\s*(\d+(?:\.\d+)?)\)[^\n]*\(\s*(\d+(?:\.\d+)?)\)\s+"
+    r"Adjusted cash tax[^\n]*\(\s*(\d+(?:\.\d+)?)\)[^\n]*\(\s*(\d+(?:\.\d+)?)\)\s+"
+    r"Pension funding[^\n]*\(\s*(\d+(?:\.\d+)?)\)[^\n]*\(\s*(\d+(?:\.\d+)?)\)\s+"
+    r"Free cash flow\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)",
+    re.IGNORECASE | re.DOTALL,
+)
+
+
+def parse_ir_adjusted_cash_flow_bridge(body_text: str) -> dict[str, Any] | None:
+    """Parse ITV-style profit-to-cash / adjusted FCF bridge slides (FY/HY results decks)."""
+    if not body_text or not _PROFIT_TO_CASH_SECTION_RE.search(body_text):
+        return None
+    match = _ADJUSTED_CASH_FLOW_BRIDGE_RE.search(body_text)
+    if match is None:
+        return None
+    groups = [float(value) for value in match.groups()]
+    (
+        adj_cf_current,
+        adj_cf_prior,
+        interest_current,
+        interest_prior,
+        tax_current,
+        tax_prior,
+        pension_current,
+        pension_prior,
+        fcf_current,
+        fcf_prior,
+    ) = groups
+    lines = [
+        {"label": "adjusted_cash_flow_current", "amount_millions": adj_cf_current},
+        {"label": "adjusted_cash_flow_prior", "amount_millions": adj_cf_prior},
+        {
+            "label": "net_cash_interest_paid_current",
+            "amount_millions": -interest_current,
+        },
+        {"label": "net_cash_interest_paid_prior", "amount_millions": -interest_prior},
+        {"label": "adjusted_cash_tax_current", "amount_millions": -tax_current},
+        {"label": "adjusted_cash_tax_prior", "amount_millions": -tax_prior},
+        {"label": "pension_funding_current", "amount_millions": -pension_current},
+        {"label": "pension_funding_prior", "amount_millions": -pension_prior},
+        {"label": "free_cash_flow_current", "amount_millions": fcf_current},
+        {"label": "free_cash_flow_prior", "amount_millions": fcf_prior},
+    ]
+    return {
+        "bridge_type": "adjusted_cash_flow_bridge",
+        "currency": "GBP",
+        "lines": lines,
+        "derived": {
+            "free_cash_flow_change_millions": fcf_current - fcf_prior,
+            "adjusted_cash_flow_change_millions": adj_cf_current - adj_cf_prior,
+        },
+        "parse_confidence": "high",
+    }
+
+
 def parse_ir_operating_cash_flow_highlights(body_text: str) -> dict[str, Any] | None:
     """Parse USD/GBP IR deck operating-cash-flow period pairs (e.g. Hikma H1 slides)."""
     if not body_text or not body_text.strip():
@@ -5181,6 +5292,9 @@ def extract_ir_presentation_metrics(
         cash_bridge = parse_ir_cash_bridge_slides(body_text)
         if cash_bridge:
             payload["bridges"].append({**source_meta, **cash_bridge})
+        adjusted_cash_bridge = parse_ir_adjusted_cash_flow_bridge(body_text)
+        if adjusted_cash_bridge:
+            payload["bridges"].append({**source_meta, **adjusted_cash_bridge})
         ocf_highlight = parse_ir_operating_cash_flow_highlights(body_text)
         if ocf_highlight:
             payload["bridges"].append({**source_meta, **ocf_highlight})
