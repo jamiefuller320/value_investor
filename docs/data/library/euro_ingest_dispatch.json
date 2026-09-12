@@ -27,7 +27,7 @@
     "primary track must beat rules control on latest review"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-12T11:19:13.745227+00:00",
+    "snapshot_at": "2026-09-12T13:38:32.554920+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 48,
     "unmeasured_buy_tier": 0,
@@ -120,7 +120,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-09-12T11:19:13.746880+00:00",
+  "evaluated_at": "2026-09-12T13:38:32.556473+00:00",
   "maintenance_markets": [
     "asx200",
     "ftse_smallcap",
@@ -141,7 +141,7 @@
       "market_id": "asx200",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=6)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=3)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
@@ -153,16 +153,16 @@
         "asx200 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-12T11:19:28.417841+00:00",
+        "snapshot_at": "2026-09-12T13:38:49.196373+00:00",
         "market_id": "asx200",
         "buy_tier_count": 29,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 6,
+        "indexed_without_body": 3,
         "bodies_min": 4,
         "bodies_median": 23,
-        "bodies_max": 128,
+        "bodies_max": 126,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
@@ -170,26 +170,20 @@
         "thin_body_tickers": [],
         "indexed_without_body_tickers": [
           "FMG.AX",
-          "JBH.AX",
-          "PXA.AX",
-          "PRN.AX"
+          "WDS.AX"
         ],
         "indexed_without_body_by_ticker": {
           "FMG.AX": 1,
-          "JBH.AX": 1,
-          "PXA.AX": 1,
-          "PRN.AX": 3
+          "WDS.AX": 2
         },
         "parked_tickers": [],
         "parked_count": 0,
         "effective_thin_body_buy_tier": 0,
         "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 6,
+        "effective_indexed_without_body": 3,
         "effective_indexed_without_body_tickers": [
           "FMG.AX",
-          "JBH.AX",
-          "PXA.AX",
-          "PRN.AX"
+          "WDS.AX"
         ],
         "ingest_exhausted": false
       },
@@ -205,7 +199,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-12T11:19:28.418693+00:00",
+      "evaluated_at": "2026-09-12T13:38:49.197151+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -231,7 +225,7 @@
         "tsx60 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-12T11:19:29.177180+00:00",
+        "snapshot_at": "2026-09-12T13:38:50.027757+00:00",
         "market_id": "tsx60",
         "buy_tier_count": 18,
         "unmeasured_buy_tier": 0,
@@ -297,7 +291,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-12T11:19:29.177831+00:00",
+      "evaluated_at": "2026-09-12T13:38:50.028258+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -317,11 +311,11 @@
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 11,
-    "skip_stream_2_now": true,
+    "hour_utc": 13,
+    "skip_stream_2_now": false,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",
-    "reason": "Head euro_depth still has filing gaps; stream 2 yields hour 11:00 UTC to the fat slot.",
+    "reason": "Head euro_depth still has filing gaps; stream 1/2 run spare fractions (0.50/0.25).",
     "config": {
       "enabled": true,
       "stream_1_target_fraction": 0.5,
