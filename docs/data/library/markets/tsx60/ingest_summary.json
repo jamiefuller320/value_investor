@@ -1,12 +1,12 @@
 {
-  "run_at": "2026-09-12T12:13:45.747737+00:00",
+  "run_at": "2026-09-12T11:18:42.567546+00:00",
   "market_id": "tsx60",
   "targets": [
     "TRI.TO",
     "SU.TO",
+    "NTR.TO",
     "CNQ.TO",
-    "CVE.TO",
-    "NTR.TO"
+    "CVE.TO"
   ],
   "target_details": [
     {
@@ -26,11 +26,19 @@
       "reason": "indexed_without_body"
     },
     {
+      "ticker": "NTR.TO",
+      "priority_score": 21.6074,
+      "filings_total": 29,
+      "filings_with_body": 9,
+      "indexed_without_body": 20,
+      "reason": "indexed_without_body"
+    },
+    {
       "ticker": "CNQ.TO",
-      "priority_score": 18.0997,
+      "priority_score": 18.4497,
       "filings_total": 37,
-      "filings_with_body": 27,
-      "indexed_without_body": 10,
+      "filings_with_body": 26,
+      "indexed_without_body": 11,
       "reason": "indexed_without_body"
     },
     {
@@ -39,14 +47,6 @@
       "filings_total": 60,
       "filings_with_body": 57,
       "indexed_without_body": 3,
-      "reason": "indexed_without_body"
-    },
-    {
-      "ticker": "NTR.TO",
-      "priority_score": 21.6074,
-      "filings_total": 29,
-      "filings_with_body": 9,
-      "indexed_without_body": 20,
       "reason": "indexed_without_body"
     }
   ],
@@ -172,19 +172,125 @@
       }
     },
     {
+      "ticker": "NTR.TO",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 29,
+        "filings_with_body": 9,
+        "indexed_without_body": 20
+      },
+      "after": {
+        "filings_total": 29,
+        "filings_with_body": 9,
+        "indexed_without_body": 20
+      },
+      "improved": false,
+      "regime": "tsx_announcements",
+      "filings_summary": {
+        "total": 29,
+        "annual": 4,
+        "interim": 24,
+        "trading_update": 0,
+        "other": 1,
+        "with_body": 9,
+        "period_coverage": {
+          "annual": {
+            "total": 4,
+            "with_body": 3
+          },
+          "interim": {
+            "total": 24,
+            "with_body": 6
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 1,
+            "with_body": 0
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": true,
+      "ir_refetch": {
+        "attempted": 2,
+        "fetched": 0,
+        "failed": 2,
+        "with_body_before": 9,
+        "with_body_after": 9,
+        "retries_used": 4,
+        "retry_log": [
+          {
+            "filing_id": "ir_6d9bedf9a757e704",
+            "url": "https://www.sec.gov/Archives/edgar/data/1725964/000119312526081326/d56746d40f.htm",
+            "attempt": 1,
+            "outcome": "retry",
+            "source": null
+          },
+          {
+            "filing_id": "ir_6d9bedf9a757e704",
+            "url": "https://www.sec.gov/Archives/edgar/data/1725964/000119312526081326/d56746d40f.htm",
+            "attempt": 2,
+            "outcome": "retry",
+            "source": null
+          },
+          {
+            "filing_id": "ir_6d9bedf9a757e704",
+            "url": "https://www.sec.gov/Archives/edgar/data/1725964/000119312526081326/d56746d40f.htm",
+            "attempt": 3,
+            "outcome": "failed",
+            "source": null
+          },
+          {
+            "filing_id": "ir_d36dc018c3e82f49",
+            "url": "https://www.sec.gov/Archives/edgar/data/1725964/000119312526081326/d56746dex9931.pdf",
+            "attempt": 1,
+            "outcome": "retry",
+            "source": null
+          },
+          {
+            "filing_id": "ir_d36dc018c3e82f49",
+            "url": "https://www.sec.gov/Archives/edgar/data/1725964/000119312526081326/d56746dex9931.pdf",
+            "attempt": 2,
+            "outcome": "retry",
+            "source": null
+          },
+          {
+            "filing_id": "ir_d36dc018c3e82f49",
+            "url": "https://www.sec.gov/Archives/edgar/data/1725964/000119312526081326/d56746dex9931.pdf",
+            "attempt": 3,
+            "outcome": "failed",
+            "source": null
+          }
+        ],
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 2,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 2,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "mandatory": true,
+        "note": "refetch_ir_allowlist_filing_bodies"
+      }
+    },
+    {
       "ticker": "CNQ.TO",
       "reason": "indexed_without_body",
       "before": {
         "filings_total": 37,
-        "filings_with_body": 27,
-        "indexed_without_body": 10
+        "filings_with_body": 26,
+        "indexed_without_body": 11
       },
       "after": {
         "filings_total": 37,
         "filings_with_body": 27,
         "indexed_without_body": 10
       },
-      "improved": false,
+      "improved": true,
       "regime": "tsx_announcements",
       "filings_summary": {
         "total": 37,
@@ -290,76 +396,71 @@
         },
         "note": "no missing IR allowlist bodies"
       }
-    },
-    {
-      "ticker": "NTR.TO",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 29,
-        "filings_with_body": 9,
-        "indexed_without_body": 20
-      },
-      "after": {
-        "filings_total": 29,
-        "filings_with_body": 11,
-        "indexed_without_body": 18
-      },
-      "improved": true,
-      "regime": "tsx_announcements",
-      "filings_summary": {
-        "total": 29,
-        "annual": 5,
-        "interim": 24,
-        "trading_update": 0,
-        "other": 0,
-        "with_body": 11,
-        "period_coverage": {
-          "annual": {
-            "total": 5,
-            "with_body": 5
-          },
-          "interim": {
-            "total": 24,
-            "with_body": 6
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 0,
-            "with_body": 0
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 11,
-        "with_body_after": 11,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 2,
-          "note": "merge_ir_allowlist_filings"
-        },
-        "note": "no missing IR allowlist bodies"
-      }
     }
   ],
   "improved": [
-    "NTR.TO"
+    "CNQ.TO"
   ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-12T12:11:07.578513+00:00",
+    "snapshot_at": "2026-09-12T11:17:40.758556+00:00",
+    "market_id": "tsx60",
+    "buy_tier_count": 18,
+    "unmeasured_buy_tier": 0,
+    "zero_body_buy_tier": 0,
+    "thin_body_buy_tier": 3,
+    "indexed_without_body": 100,
+    "bodies_min": 5,
+    "bodies_median": 32.0,
+    "bodies_max": 123,
+    "coverage_scope": "canonical_plus_shards",
+    "ftse_equivalent": false,
+    "unmeasured_tickers": [],
+    "zero_body_tickers": [],
+    "thin_body_tickers": [
+      "SU.TO",
+      "GIB-A.TO",
+      "NTR.TO"
+    ],
+    "indexed_without_body_tickers": [
+      "SU.TO",
+      "GIB-A.TO",
+      "NTR.TO",
+      "CNQ.TO",
+      "CVE.TO",
+      "TRI.TO"
+    ],
+    "indexed_without_body_by_ticker": {
+      "SU.TO": 25,
+      "GIB-A.TO": 11,
+      "NTR.TO": 20,
+      "CNQ.TO": 11,
+      "CVE.TO": 3,
+      "TRI.TO": 30
+    },
+    "parked_tickers": [
+      "GIB-A.TO"
+    ],
+    "parked_count": 1,
+    "effective_thin_body_buy_tier": 2,
+    "effective_thin_body_tickers": [
+      "SU.TO",
+      "NTR.TO"
+    ],
+    "effective_indexed_without_body": 89,
+    "effective_indexed_without_body_tickers": [
+      "SU.TO",
+      "NTR.TO",
+      "CNQ.TO",
+      "CVE.TO",
+      "TRI.TO"
+    ],
+    "ingest_exhausted": false
+  },
+  "health_after": {
+    "snapshot_at": "2026-09-12T11:18:40.480297+00:00",
     "market_id": "tsx60",
     "buy_tier_count": 18,
     "unmeasured_buy_tier": 0,
@@ -413,61 +514,6 @@
     ],
     "ingest_exhausted": false
   },
-  "health_after": {
-    "snapshot_at": "2026-09-12T12:13:43.826390+00:00",
-    "market_id": "tsx60",
-    "buy_tier_count": 18,
-    "unmeasured_buy_tier": 0,
-    "zero_body_buy_tier": 0,
-    "thin_body_buy_tier": 3,
-    "indexed_without_body": 97,
-    "bodies_min": 5,
-    "bodies_median": 32.5,
-    "bodies_max": 123,
-    "coverage_scope": "canonical_plus_shards",
-    "ftse_equivalent": false,
-    "unmeasured_tickers": [],
-    "zero_body_tickers": [],
-    "thin_body_tickers": [
-      "SU.TO",
-      "GIB-A.TO",
-      "NTR.TO"
-    ],
-    "indexed_without_body_tickers": [
-      "SU.TO",
-      "GIB-A.TO",
-      "NTR.TO",
-      "CNQ.TO",
-      "CVE.TO",
-      "TRI.TO"
-    ],
-    "indexed_without_body_by_ticker": {
-      "SU.TO": 25,
-      "GIB-A.TO": 11,
-      "NTR.TO": 18,
-      "CNQ.TO": 10,
-      "CVE.TO": 3,
-      "TRI.TO": 30
-    },
-    "parked_tickers": [
-      "GIB-A.TO"
-    ],
-    "parked_count": 1,
-    "effective_thin_body_buy_tier": 2,
-    "effective_thin_body_tickers": [
-      "SU.TO",
-      "NTR.TO"
-    ],
-    "effective_indexed_without_body": 86,
-    "effective_indexed_without_body_tickers": [
-      "SU.TO",
-      "NTR.TO",
-      "CNQ.TO",
-      "CVE.TO",
-      "TRI.TO"
-    ],
-    "ingest_exhausted": false
-  },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
@@ -480,7 +526,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "tsx60",
-    "assessed_at": "2026-09-12T12:11:08.137549+00:00",
+    "assessed_at": "2026-09-12T11:17:41.488529+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -503,16 +549,16 @@
         "filings_with_body": 9
       },
       {
+        "ticker": "CNQ.TO",
+        "indexed_without_body": 11,
+        "filings_total": 37,
+        "filings_with_body": 26
+      },
+      {
         "ticker": "GIB-A.TO",
         "indexed_without_body": 11,
         "filings_total": 20,
         "filings_with_body": 9
-      },
-      {
-        "ticker": "CNQ.TO",
-        "indexed_without_body": 10,
-        "filings_total": 37,
-        "filings_with_body": 27
       },
       {
         "ticker": "CVE.TO",
@@ -533,34 +579,34 @@
       "TRI.TO",
       "SU.TO",
       "NTR.TO",
-      "GIB-A.TO",
       "CNQ.TO",
+      "GIB-A.TO",
       "CVE.TO"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (6 tickers, top: TRI.TO(30), SU.TO(25), NTR.TO(20), GIB-A.TO(11), CNQ.TO(10))",
+      "Prefer indexed-without-body body refetch (6 tickers, top: TRI.TO(30), SU.TO(25), NTR.TO(20), CNQ.TO(11), GIB-A.TO(11))",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
       "indexed_without_body_tickers": 6,
-      "indexed_without_body_rows": 99,
+      "indexed_without_body_rows": 100,
       "thin_need_discovery": 0,
       "thin_need_bodies": 3
     }
   },
-  "used_seconds": 155.13753672299998,
+  "used_seconds": 58.234128536,
   "budget_seconds": 525.0,
-  "leftover_seconds": 369.862463277,
-  "blocker_ticker": null,
+  "leftover_seconds": 466.765871464,
+  "blocker_ticker": "NTR.TO",
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "tsx60",
-    "updated_at": "2026-09-12T12:13:43.830567+00:00",
+    "updated_at": "2026-09-12T11:18:40.485787+00:00",
     "exhausted": false,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,

@@ -4711,7 +4711,143 @@
       "priority": "medium",
       "suggestion": "Report which body file was refetched and whether it adds current-period vs historical depth — this pass fetched 2022 CH accounts, not incremental FY2025 content.",
       "recorded_at": "2026-09-06T07:48:26.505375+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Full-text extract of annual report note 19 (cash-in-transit restatement) from ME-Group-Annual-Report-2025.pdf—not addressed by CH refetch of 2019 parent interim and 2020 date-change forms.",
+      "recorded_at": "2026-09-12T12:36:40.963309+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
+      "recorded_at": "2026-09-12T12:36:40.963322+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Primary dividend-sustainability overlay on statutory FCF/dividend; warn when interim dividend is cut despite high trailing yield pass.",
+      "recorded_at": "2026-09-12T12:36:40.963328+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Expose provenance of `earnings_growth_pct` vs filing diluted EPS growth in screen output.",
+      "recorded_at": "2026-09-12T12:36:40.963332+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ops",
+      "priority": "low",
+      "suggestion": "Deprioritise CH parent-only or administrative filings in refetch scoring so fetched=2 does not imply material gap closure.",
+      "recorded_at": "2026-09-12T12:36:40.963336+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "Updated in `output/research/MEGP.L/research.md`.",
+      "recorded_at": "2026-09-12T12:36:40.963340+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Replace or supplement garbled CH OCR (`ch_04967001_MzUyMjc5MjMzMmFdaXF6a2N4.txt`) with FCA NSM Annual Report 2025 PDF/iXBRL extract so Risks, APMs, and FCF footnotes are searchable bodies.",
+      "recorded_at": "2026-09-12T12:36:40.963344+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fix IR presentation pipeline so `ir_0d388cd522a7cf4c.txt` is not truncated at the pension/FCF line and populates `ir_presentation_metrics.json` bridges.",
+      "recorded_at": "2026-09-12T12:36:40.963347+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "When statutory OCF−CapEx dividend cover is ≤1.05× and Piotroski ≤4, cap dividend-family conviction even if yield screens pass (ITV pattern).",
+      "recorded_at": "2026-09-12T12:36:40.963353+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Add CMA/Ofcom merger document ingest keyed to ticker for media deals (Sky RNS references CMA/PIIN but local corpus has no case file).",
+      "recorded_at": "2026-09-12T12:36:40.963356+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ops",
+      "priority": "low",
+      "suggestion": "Flag CH bodies with OCR quality below threshold and fall back to RNS preliminary until NSM PDF succeeds, to avoid double-counting stale narrative (Sky “discussions” vs signed deal).",
+      "recorded_at": "2026-09-12T12:36:40.963362+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Deepen Companies House PDF/iXBRL ingest for MGNS.L beyond OCR front-matter — target consolidated notes (JVs, contract assets) that refetched `ch_00521970_MzUzODczOTEzNWFkaXF6a2N4.txt` references but does not contain.",
+      "recorded_at": "2026-09-12T12:36:40.963368+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Parse “2025 in numbers” and secured-workload tables from CH annual bodies into structured fields (year, revenue, adj OP, secured workload) for automatic margin-trend and backlog/revenue overlays.",
+      "recorded_at": "2026-09-12T12:36:40.963374+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "When secured workload ÷ revenue exceeds a sector threshold (e.g. >2×) and group adjusted margin is at a multi-year high vs CH history, flag cyclical_exposure_overlay even if Piotroski passes.",
+      "recorded_at": "2026-09-12T12:36:40.963380+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Suppress screen TTM FCF in user-facing action notes when `yahoo_quarterly_cashflow` is empty and filing-aligned FCF is already policy-selected.",
+      "recorded_at": "2026-09-12T12:36:40.963383+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "prompt",
+      "priority": "low",
+      "suggestion": "On CH refetch passes, require gap-fill to cite at least three-year margin and secured-workload series when present in `filings/bodies/ch_*.txt`.",
+      "recorded_at": "2026-09-12T12:36:40.963386+00:00"
+    },
+    {
+      "ticker": "MGNS.L",
+      "name": "Morgan Sindall Group plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "Also written to `output/research/MGNS.L/research.md`.",
+      "recorded_at": "2026-09-12T12:36:40.963390+00:00"
     }
   ],
-  "updated_at": "2026-09-06T07:48:26.505377+00:00"
+  "updated_at": "2026-09-12T12:36:40.963392+00:00"
 }

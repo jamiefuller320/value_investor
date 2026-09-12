@@ -1,101 +1,89 @@
 # FirstGroup plc (FGP.L) — Research memo
 
-_Version 1 · Updated 2026-09-06T07:34:10.883707+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-12T12:21:35.701400+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-FirstGroup is a transformed UK-focused public transport operator (First Bus and First Rail) trading on low multiples—roughly 8.8× P/E, 1.4× P/B, and ~4.1% yield—while delivering adjusted EPS growth, progressive dividends, and active buybacks. The investment case rests on a diversified earnings mix (London bus contracts, open-access rail, London Overground from May 2026) and management’s guided ~£400m free cash generation over three years, against a filing-adjusted net debt of only ~£138m. The central debate is whether headline cheapness fully compensates for (1) a material free-cash-flow definition gap, (2) bus passenger-volume and policy headwinds (£3 fare cap, lower concessions funding), and (3) structural rail renationalisation as DfT train operating contracts roll off. Filings support earnings quality and going concern; cash conversion is cyclically depressed by accelerated bus electrification capex.
+FirstGroup is a UK-focused bus and rail operator whose portfolio has been reshaped toward First Bus (regional bus, London contracts, coach/M&A) and First Rail (open access, DfT management-fee TOCs transitioning to public ownership, London Overground from May 2026). The quantitative screen rates the stock a strong buy on cheapness, quality, dividend, GARP, and risk families (15/22 models, composite ~89%), anchored on roughly 8.5x P/E, ~1.3x P/B, ~4.2% yield, and filing-adjusted net debt of ~£138m rather than lease-grossed Yahoo leverage. The valuation hook is a capital-light rail pivot plus bus electrification capex that management expects to normalise, alongside repeated £100m buybacks and progressive dividends. The central debate is whether reported earnings growth and shareholder returns outweigh bus volume pressure (£3 fare cap, weaker commercial demand), open-access margin compression, and material free-cash-flow definition divergence (filing-aligned ~£363m operating cash less capex vs company-adjusted ~£114m used in some yield screens). Deep filing review broadly supports the quality-and-returns narrative but does not fully resolve FCF and near-term bus cyclicality.
 
 ## INVESTMENT THESIS
-The quantitative screen flags **Strong Buy** (15/22 models, composite 89%, all five families—cheapness, quality, dividend, GARP, risk—passed; conviction 75%, signal stable 13 weeks). That aligns with a business that has exited North American operations, rebuilt around UK bus and rail, and compounds shareholder returns: FY2026 adjusted EPS rose to **20.3p** (from 19.4p), total dividend **7.2p**, and a further **£100m** buyback was announced alongside ~£89m returned in FY2026.
-
-Value metrics are compelling versus industrials peers: P/E **8.8**, P/B **1.35**, dividend yield **4.1%**, ROE **16.7%**, Lynch PEG ~0.55 on 16% earnings growth. Quality screens largely confirm: Piotroski F-Score **8/9**, earnings quality and dividend growth models pass. Leverage looks manageable on a filing basis—**£137.7m adjusted net debt** and ~19% D/E (screen applies a leverage override because Yahoo grosses up IFRS 16 leases to 161% D/E).
-
-The screen’s main caveat—**FCF basis mismatch**—is material: filing-aligned statutory FCF **£362.6m** (OCF £615.6m less capex £253.0m per FY2026 filing/Yahoo cash flow) versus company-adjusted FCF **£113.5m** (management bridge excluding lease/debt movements and using divisional definitions). The screen policy uses **£113.5m** for yield-dependent models; this materially lowers apparent FCF yield versus a naive OCF−capex read. Financial Health fails on **current ratio 0.73** (Graham Defensive also fails)—typical for transport working-capital profiles but worth monitoring.
-
-Strategically, FirstGroup offers a value investor a cash-generative, UK-regulated asset base with visible capital return (buybacks + ~3× dividend cover moving toward 2.5×) and optionality from bus franchising and open-access rail expansion—without requiring heroic growth assumptions at current multiples.
+For a value investor, the screen’s strong-buy label rests on a rare combination: deep absolute multiples, a Piotroski F-Score of 8/9, passing earnings-quality and contrarian models, and sector-relative strength versus UK industrials peers. Business quality, in filing terms, is improving diversification: adjusted revenue rose 25% to £1,716m in FY 2026 (52 weeks to 28 March 2026) while adjusted EPS reached 20.3p (from 19.4p), with First Bus London and coach acquisitions adding scale and First Rail adding London Overground and open-access growth options. Management articulates a disciplined capital framework—adjusted net debt policy below 2.0x rail-adjusted EBITDA, ROIC above WACC, ~3x dividend cover moving toward 2.5x, and surplus cash via buybacks (£50m completed in FY 2026; further £100m announced). The screen’s leverage override (filing adjusted net debt ~£137.7m vs Yahoo D/E ~161%) aligns with RNS treatment of IFRS 16 rail leases and ring-fenced TOC cash, which better reflects economic leverage for a post-US portfolio. Failures on Graham Defensive, Financial Health (weak liquidity), and Economic Moat (ROE/margins below moat thresholds) temper “quality at any price” readings but are consistent with a cyclical, capex-heavy bus phase—not a broken balance sheet on adjusted measures. Lynch PEG ~0.53 on ~16% earnings growth supports the GARP family pass, though that growth is partly buyback-assisted and mix-shift driven.
 
 ## FINANCIAL REVIEW
-**Primary source:** RNS filing bodies (`3bf5ff09fbc5c747.txt` FY2026 results, 18 June 2026; `c1db8cdf5ad2bd84.txt` H1 2026, 18 November 2025; `4c56aaf324fdfd91.txt` pre-close trading update, 26 March 2026). Companies House annual accounts provide historical depth (FY2021–FY2026 filed); latest statutory annual report body also catalogued (`d45784fca483323c.txt`, July 2026).
+**Annual (primary: FY 2026 results RNS, 18 June 2026 — `3bf5ff09fbc5c747.txt`; Companies House group accounts through July 2025 filing provide historical continuity but FY 2026 detail is richest in the RNS body.)**
 
-### Annual trend (FY2024–FY2026)
+| Metric (Group, continuing ops unless noted) | FY 2025 | FY 2026 | Source |
+|---|---|---|---|
+| Adjusted revenue | £1,370.0m | £1,715.7m | FY 2026 RNS |
+| Adjusted operating profit | £222.8m | £219.4m | FY 2026 RNS |
+| Adjusted EPS (continuing) | 19.4p | 20.3p | FY 2026 RNS |
+| Statutory EPS | 21.3p | 21.4p | FY 2026 RNS |
+| Adjusted net debt | £86.9m | £137.7m | FY 2026 RNS |
+| Statutory net debt (incl. IFRS 16) | £985.6m | £725.3m | FY 2026 RNS |
+| Free cash flow (before acquisitions & returns) | £113.5m | £73.8m | FY 2026 RNS |
+| Dividend per share | 6.5p | 7.2p (5.0p final proposed) | FY 2026 RNS |
+| Cash generated by operations | £828.2m | £681.5m | FY 2026 RNS |
+| Capital expenditure | £(156.4)m | £(253.0)m | FY 2026 RNS |
 
-| Metric | FY2024 | FY2025 | FY2026 | Source |
-|--------|--------|--------|--------|--------|
-| Adjusted revenue | n/a in filing extract | £1,370.0m | **£1,715.7m** (+25%) | FY2026 RNS |
-| Adjusted operating profit | — | £222.8m | **£219.4m** (ex-DfT TOCs +18%) | FY2026 RNS |
-| Adjusted EPS | — | 19.4p | **20.3p** | FY2026 RNS |
-| Statutory EPS | — | 21.3p | **21.4p** | FY2026 RNS |
-| Dividend per share | — | 6.5p | **7.2p** | FY2026 RNS |
-| Free cash flow (before acquisitions & returns) | — | £113.5m | **£73.8m** | FY2026 RNS |
-| Adjusted net debt | — | £86.9m | **£137.7m** | FY2026 RNS |
-| Statutory revenue | — | £5,233.9m (restated) | **£4,751.9m** | FY2026 RNS |
+Trend: top-line adjusted revenue grew strongly (+25%), driven by First Bus London, franchising/coach mix, and rail open access, while adjusted operating profit was marginally lower (£219.4m vs £222.8m) as open-access mobilisation/competition and DfT TOC transitions (SWR to DfTO May 2025) offset bus efficiencies. Adjusted EPS still rose on buybacks (weighted average shares ~553m vs ~598m). Balance sheet: adjusted net debt increased to £137.7m after accelerated First Bus electrification capex (~£190m net theme in year), acquisitions, and ~£89m shareholder returns; statutory net debt fell materially as TOC IFRS 16 leases rolled off with SWR. Management guides ~£400m free cash generation over three years as bus capex normalises (~£80–100m from FY 2028) and TOC transition releases cash (~£90m cited in FY 2026 RNS).
 
-FY2026 revenue growth reflects First Bus London (£310m), coach acquisitions, and rail services; statutory revenue fell mainly because South Western Railway transferred to public ownership in May 2025. Adjusted group operating margin compressed slightly (12.8% vs 16.3% prior year on a like-for-like basis) as lower-margin franchised bus revenue mix increased and open-access rail margins were hit by Stirling mobilisation (~£6m) and East Coast yield competition.
+**Interim (Half-year report, 26 weeks to 27 September 2025 — `c1db8cdf5ad2bd84.txt`; Companies House interim filed November 2025.)**
 
-**First Bus FY2026:** revenue **£1,443.6m** (+33%); adjusted operating profit **£102.8m** (+7%) despite **£26m** lower fare funding, **3%** volume decline, and ~**£15m** employer NI impact. Regional bus margin **8.8%** (from 9.7%). Net bus capex **£188.2m** on electrification.
+- Adjusted revenue £833.6m (+30% vs H1 2025 £639.6m re-presented).
+- Adjusted operating profit £103.6m (H1 2025 £100.8m).
+- Adjusted EPS 9.9p (+16% vs 8.5p).
+- Interim dividend 2.2p (vs 1.7p).
+- Period-end adjusted net debt £207.6m; management then forecast FY 2026 year-end £125–135m (subsequently pre-close update widened slightly to £135–145m — see below).
+- H1 free cash outflow £(35.6)m before acquisitions/returns, explicitly tied to electrification investment (~£105m H1-weighted net capex in bus).
+- Regional bus underlying passenger volumes −4% (commercial −7%, concessions +4%); employers’ NIC cited ~£7m H1 headwind.
 
-**First Rail FY2026:** adjusted revenue **£272.4m**; open access revenue **£109.3m**; open access adjusted OP **£25.6m** (from £34.1m). DfT TOC fees in line; SWR transferred May 2025.
+**Trading update (pre-close, 26 March 2026 — `4c56aaf324fdfd91.txt`)**
 
-**Cash flow:** FY2026 operating cash flow **£615.6m** (Yahoo `financials_annual.json` matches filing bridge); capex **£253.0m**; acquisitions **£35.3m**; buybacks **£50.4m**; dividends **£38.9m**. Management reconciles to **£73.8m** “free cash flow before acquisitions and returns” vs **£113.5m** in FY2025—decline driven by accelerated First Bus electrification and higher adjusted net debt.
+Trading in line with expectations; modest adjusted EPS growth for FY 2026 reaffirmed; year-end adjusted net debt expected £135–145m (slightly above prior H1 corridor after bus acquisitions/network optimisation).
 
-**Balance sheet (28 March 2026):** reported net debt **£725.3m** including IFRS 16 lease liabilities **£850.0m**; adjusted net debt **£137.7m** (bonds/bank debt net of cash, excluding ring-fenced TOC cash **£262.4m**). Undrawn committed facilities **£364.1m**. Leverage policy: **<2.0× adjusted net debt : Rail adjusted EBITDA**.
+**Annual report RNS (1 July 2026 — `d45784fca483323c.txt`)**
 
-### Interim (H1 FY2026, 26 weeks to 27 September 2025)
+Confirms submission of full 2026 Annual Report to the NSM; substantive numbers duplicate the June results announcement—no additional numerical disclosure in the extracted body.
 
-- Adjusted revenue **£833.6m** (+30%); adjusted operating profit **£103.6m**; adjusted EPS **9.9p** (+16%).
-- First Bus revenue **£702.9m** (First Bus London **£150.2m**); adjusted OP **£42.7m**.
-- Underlying bus volumes **−4%** (commercial **−7%**, concessions **+4%**).
-- **Free cash outflow £35.6m** before acquisitions/returns (electrification-weighted capex **£105m** in H1).
-- Period-end adjusted net debt **£207.6m**; management guided FY2026 year-end **£125–135m** (pre-close update revised to **£135–145m** after further acquisitions).
+**FCF / screen reconciliation (from `screening_snapshot.json`, not blended into filing figures above)**
 
-Interim going concern: Board reviewed 18 months to 31 March 2027 and concluded **no material uncertainty**; accounts prepared on a going concern basis (`ir_032b08900a650e14.txt`).
+The screen flags FCF basis mismatch: filing-aligned ~£362.6m, screen TTM ~£302.8m, company-adjusted policy ~£113.5m. FY 2026 RNS “free cash flow” of £73.8m is management’s defined metric before acquisitions and returns; statutory adjusted cash flow was £(124.0)m after lease liability movements, buybacks, and capex. Value investors should treat FCF yield screens as sensitive to definition—not as a single uncontested number.
 
-### Trading update (26 March 2026)
+**Gaps**
 
-Both divisions **trading in line** with expectations; modest adjusted EPS growth anticipated for FY2026; year-end adjusted net debt **£135–145m**.
-
-### Gaps and reconciliations
-
-- **FCF divergence** is the critical analytical gap: do not blend filing OCF−capex (£362.6m) with management FCF (£113.5m) without stating the bridge. Screen uses company-adjusted **£113.5m**; filing-aligned **£362.6m** overstates near-term distributable cash because of lease/debt and ring-fenced cash treatments.
-- Yahoo **working capital −£388m** and **current ratio 0.73** reflect transport seasonality and contract mechanics—not contradicted by filings but explain Financial Health model failure.
-- FY2024 statutory loss (**−£15.9m** net income per Yahoo) reflects **£145m** unusual charges; normalized income was positive—use FY2025/FY2026 filing series for trend analysis.
+Historical interim bodies beyond H1 2026 and older half-years are sparse in the index (Companies House interim 2022 and 2025 only among dedicated interim accounts). Full annual report PDF narrative (risk register detail) is referenced via NSM but not fully extracted in `d45784fca483323c.txt`; going-concern language in FY 2026 RNS was truncated in the ingest extract—H1 2026 explicitly confirms going concern for 18 months to 31 March 2027 with adequate resources.
 
 ## RISKS AND RED FLAGS
-**Regulatory / policy:** UK rail renationalisation is proceeding on a fixed timetable—GWR transfers **13 December 2026**; West Coast Partnership expected around end of FY2027 (`3bf5ff09fbc5c747.txt`). Management guides **~£90m** cash inflow from transitioning TOCs/Rail Services over three years, but adjusted rail earnings will step down as contracts exit. Bus **franchising** (South Yorkshire, West Yorkshire, Wales, Liverpool, West Midlands) creates retendering risk and capital intensity; ~**£1bn** of annual regional bus revenue may be competitively franchised over five years per management.
+**Regulatory and policy** — UK rail renationalisation is explicit policy: SWR transferred May 2025; GWR notice to expire 13 December 2026; WCP expected around end FY 2027. Bus policy shifts (£3 fare cap through FY 2027, franchising in multiple regions) change revenue risk and contract mix. Open-access growth depends on ORR track-access approvals (multiple pending applications).
 
-**Cyclical / operational:** Regional bus volumes fell **3%** in FY2026 and **4%** in H1; management cites **£3 fare cap**, lower consumer confidence, and NI cost inflation (**~£15m** annualised). Open-access yields under pressure from LNER capacity additions and leisure softness. Industrial action risk noted in H1 bus operations.
+**Cyclical and operational** — FY 2026 regional bus passenger volumes −3% (1.07m journeys/day); H1 commercial volumes −7%. Open access saw yield pressure after ECML timetable changes and Stirling mobilisation costs (~£6m). Fuel/electricity exposure partially hedged (filings cite ~88% diesel hedged for FY 2027 as of June 2026).
 
-**Pension:** Legacy US scheme buyout completed FY2025; UK schemes show **net surplus £19.9m** at FY2026 year-end but H1 moved to **£29.0m deficit** on valuation experience. **~£65m** held in escrow pending 2030 triennial valuations. Sensitivities: +1 year life expectancy adds **~£29m** liabilities.
+**Pension** — UK defined benefit schemes: net surplus £22.8m moved to deficit £29.0m at H1 2026 on valuation/demographic factors; ~£65m held in escrow pending 2030 triennial outcomes; £20m returned to Group after Bus scheme 2024 valuation (November 2025). Sensitivities material (+1 year life expectancy increases liabilities ~£29–37m per filing tables).
 
-**Liquidity / leverage:** Statutory net debt **£725m** and IFRS 16 gross-up distort naive leverage ratios; adjusted net debt rose **£51m** YoY to **£137.7m** while buybacks and electrification capex continued. Current ratio **<1** fails defensive screens. **£364m** undrawn committed headroom provides cushion; going concern assessment **does not identify material uncertainties** (H1 2026).
+**Liquidity and leverage presentation** — Screen fails Financial Health and Graham Defensive (current ratio ~0.73 per snapshot). Statutory net debt ~£725m includes ~£850m IFRS 16 lease liabilities; adjusted net debt ~£138m excludes these—investors must use one consistent lens. RCF undrawn headroom ~£295m at FY 2026 year-end per RNS.
 
-**Competitive:** Open-access growth depends on ORR track-access approvals; Sheffield Hull Trains application rejected. Lumo/Stirling mobilisation and Carmarthen ramp imply **~2-year** margin recovery timeline.
+**Governance / accounting** — FY 2025 income statement restatement reclassified ~£167.6m DfT levy from revenue deduction to expense (no profit impact)—comparability requires adjusted revenue series. No adjusting items in FY 2026 per RNS.
 
-**Governance / accounting:** FY2025 income statement **restated** (+£167.6m revenue/expense reclassification for DfT levy treatment—no profit impact). Mistral Data disposal (**£48m**, completed August 2026) creates **~£4m** FY2027 rail OP headwind and **£46m** adjusting disposal gain—watch for adjusted vs statutory presentation.
+**Going concern** — H1 2026 interim: Board reasonable expectation of adequate resources for foreseeable future; FY 2026 full-year going concern section incomplete in available extract.
+
+**Competitive** — Open access competes with LNER and other operators on ECML; bus competes with active travel and policy-driven fare structures.
 
 RiskTags: regulatory, cyclical, pension, competitive, liquidity, leverage
 RiskTags: regulatory, cyclical, pension, competitive, liquidity, leverage
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate-to-heavy on capital returns and broker-style “upside” pieces**, with fewer deep operational articles. Material items (deduplicated):
+Coverage over the past year is voluminous but repetitive (buyback tranches, DirectorsTalk “upside” pieces, Kalkine thematic articles); material corporate events from RNS-aligned headlines include:
 
-| Date | Headline | Theme |
-|------|----------|-------|
-| 18 Jun 2026 | *FirstGroup boosted as it launches new buyback, confirms revenue growth* (Proactive Investors) | FY2026 results; **£100m** buyback; revenue/EPS growth |
-| 20 Jun 2026 | *FirstGroup PLC Full Year 2026 Earnings Call Highlights* (Yahoo Finance) | ~25% revenue increase; capital return |
-| 26 Mar 2026 | Pre-close trading update (RNS) | In-line trading; adj net debt **£135–145m** |
-| 18 Nov 2025 | *FirstGroup falls 10% as results beat forecasts but 'period of transition' begins* (Proactive Investors) | H1 beat but market focused on bus volumes/cash |
-| 18 Nov 2025 | *FirstGroup hit by cash outflow and rising debt* (Investors' Chronicle) | H1 FCF outflow narrative |
-| 10 Dec 2025 | *FirstGroup wins £3bn contract to run London Overground* (Proactive Investors) / *FirstGroup wins $4 billion London Overground rail contract* (Reuters, 9 Dec 2025) | Major rail contract from May 2026 |
-| 29 Jul 2026 | *Tracsis to buy FirstGroup arm for £48m* (businesscloud.co.uk) | Mistral Data disposal |
-| 24 Aug 2026 | *FirstGroup shares recover… as £48 million Mistral Data sale completes* (Proactive Investors) | Disposal completion; share volatility |
-| 12 May 2026 | *FirstGroup can grow despite rail nationalisation, says broker* (Proactive Investors) | Sell-side framing of renationalisation risk |
-| 4 Sep 2026 | *Is FirstGroup's Open Access Push Quietly Reshaping Its Rail Earnings Mix?* (Kalkine Media) | Strategy commentary on open access |
+- **FY 2026 results and £100m buyback** (18 June 2026): “FirstGroup boosted as it launches new buyback, confirms revenue growth” (Proactive Investors); “FirstGroup backs its future with £100mn buyback” (Investors’ Chronicle, 18 June 2026); yfinance earnings-call summary citing ~25% revenue growth and buyback (20 June 2026).
+- **H1 2026 share reaction** (18 November 2025): “FirstGroup falls 10% as results beat forecasts but 'period of transition' begins” (Proactive Investors); “FirstGroup hit by cash outflow and rising debt” (Investors’ Chronicle, 18 November 2025); “FirstGroup shares tumble as UK bus passenger volumes decline” (Investing.com UK, 18 November 2025).
+- **London Overground** (9–10 December 2025): “FirstGroup wins $4 billion London Overground rail contract, shares rise” (Reuters, 9 December 2025); “FirstGroup wins £3bn contract to run London Overground” (Proactive Investors, 10 December 2025).
+- **Mistral Data disposal** (~£48m, completed August 2026): “FirstGroup shares recover after near-7% early fall as £48 million Mistral Data sale completes” (Proactive Investors, 24 August 2026); “Tracsis to buy FirstGroup arm for £48m” (businesscloud.co.uk, 29 July 2026).
+- **Capital return cadence** (2026): ongoing “Transaction in Own Shares” / buyback completion articles (Globe and Mail, TipRanks, September 2026); AGM backing dividend and capital actions (30 July 2026, TipRanks).
+- **Strategy commentary** (September 2026): “How Is FirstGroup (LSE:FGP) Positioning Its Bus And Rail Operations As Transport Policy Shifts?” (Kalkine Media, 9 September 2026); “Is FirstGroup's Open Access Push Quietly Reshaping Its Rail Earnings Mix?” (4 September 2026).
 
-Routine buyback/holding announcements dominate the feed (TipRanks, Yahoo UK, Globe and Mail)—informative for capital allocation, not fundamental change. No material management scandal or regulatory enforcement actions surfaced in the manifest.
+Note: Google News also surfaced unrelated “FGP” Indian entity profit articles (August 2026)—not FirstGroup plc.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Filings confirm the screen’s cheapness/quality/dividend case—adjusted EPS growth, progressive dividends, buybacks, and manageable filing-adjusted leverage—but FCF definition divergence, bus volume pressure, and rail contract roll-off limit conviction in a outright strong-buy overlay until electrification capex normalises and post-transition cash flows are demonstrated.
+Rationale: Filings corroborate earnings resilience, adjusted leverage discipline, and shareholder-return policy supporting the strong-buy screen, while bus volume weakness, TOC transition, and unresolved FCF definitions warrant sizing discipline rather than unqualified conviction.

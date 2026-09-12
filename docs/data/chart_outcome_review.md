@@ -1,8 +1,8 @@
 # Buy-tier chart outcomes
 
-Mixed story — no terrible outcomes. 19 well timed (including MEGP.L (+12.3%), FRES.L (+9.9%), MGAM.L (+9.3%)); 6 target-then-fade; 18 underwater; 0 stop hits.
+4 terrible path(s) among 63 buy-tier charts — inspect weakest names before treating timing as benign.
 
-**Verdict:** Mixed story — no terrible outcomes (`mixed_no_terrible`)
+**Verdict:** Has terrible outcomes (`has_terrible`)
 
 Observe-only. Frozen initial recommendation levels + first crossings. Not a decision-review input.
 
@@ -10,49 +10,49 @@ Short-term underwater is expected while the hypothesis stands. The test is the l
 
 ## Counts
 
-- Charts: 61
-- Well timed: 19
-- Target then fade: 6
-- Underwater (no target): 18
-- Intact positive: 10
-- Flat: 8
-- Terrible: 0
-- Stop hits: 0
-- Target hits: 25
+- Charts: 63
+- Well timed: 11
+- Target then fade: 11
+- Underwater (no target): 25
+- Intact positive: 5
+- Flat: 7
+- Terrible: 4
+- Stop hits: 5
+- Target hits: 24
 
 ## Returns since recommendation
 
-- Median: +0.0%
-- Mean: +0.2%
-- Range: -8.6% to +12.3%
-- Median drawdown: -2.5%
-- Worst drawdown: -14.7%
+- Median: -2.6%
+- Mean: -2.8%
+- Range: -13.7% to +10.7%
+- Median drawdown: -4.1%
+- Worst drawdown: -15.6%
 
 ## Well timed
 
 | Ticker | Signal | Return | Drawdown | Days to target |
 |---|---|---:|---:|---:|
-| MEGP.L | strong_buy | +12.3% | +5.6% | 1 |
-| FRES.L | buy | +9.9% | -0.1% | 3 |
-| MGAM.L | buy | +9.3% | +2.9% | 3 |
-| AEP.L | strong_buy | +9.1% | -3.2% | 17 |
-| RS1.L | buy | +6.1% | +2.1% | 3 |
-| BYIT.L | buy | +5.4% | +0.4% | 24 |
-| VCT.L | buy | +5.3% | -1.7% | 26 |
-| RHIM.L | buy | +5.3% | -2.5% | 5 |
+| MEGP.L | strong_buy | +10.7% | +5.6% | 1 |
+| AEP.L | strong_buy | +7.8% | -3.2% | 17 |
+| MGAM.L | buy | +7.7% | +2.9% | 3 |
+| SHEL.L | buy | +7.7% | -0.3% | 28 |
+| FRES.L | buy | +5.2% | -0.1% | 3 |
+| RS1.L | buy | +4.9% | +2.1% | 3 |
+| RHIM.L | buy | +4.4% | -2.5% | 5 |
+| ABDN.L | buy | +3.2% | +0.1% | 1 |
 
 ## Weakest open returns
 
 | Ticker | Signal | Return | Drawdown | Outcome | Stop | Target |
 |---|---|---:|---:|---|---|---|
-| TPK.L | buy | -8.6% | -9.6% | underwater | no | no |
-| TRN.L | buy | -8.1% | -9.3% | underwater | no | no |
-| JD.L | buy | -7.9% | -10.5% | giveback | no | yes |
-| DATA.L | buy | -6.6% | -6.6% | giveback | no | yes |
-| IMB.L | strong_buy | -6.6% | -6.6% | underwater | no | no |
-| BTRW.L | buy | -6.0% | -6.0% | underwater | no | no |
-| FOUR.L | buy | -5.3% | -7.1% | underwater | no | no |
-| SBRY.L | buy | -5.1% | -8.5% | underwater | no | no |
+| DNLM.L | buy | -13.7% | -15.6% | terrible | yes | no |
+| BOWL.L | buy | -13.7% | -13.7% | terrible | yes | yes |
+| TPK.L | buy | -13.0% | -15.2% | underwater | no | no |
+| JD.L | buy | -12.7% | -12.7% | terrible | yes | yes |
+| BTRW.L | buy | -11.8% | -11.8% | underwater | no | no |
+| ABF.L | buy | -11.0% | -11.0% | terrible | yes | no |
+| DATA.L | buy | -9.7% | -13.6% | giveback | yes | yes |
+| JSG.L | strong_buy | -9.5% | -9.5% | underwater | no | no |
 
 _Observe-only rollup of buy-tier chart JSON. Entry is the frozen initial last (recommendation-week close), not the first bar after signal_since. Short-term underwater is expected while the hypothesis stands — the test is the longer path. Do not apply decision-review knobs or entry-timing overlays from this file._
 
