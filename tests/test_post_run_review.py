@@ -118,6 +118,10 @@ def test_build_post_run_payload_aggregates_suggestions(tmp_path: Path):
     assert len(payload["filing_coverage"]) == 2
     assert payload["system_gaps"] is not None
     assert payload["system_gaps"]["healthy_counter_distrust"]
+    so_what = payload.get("so_what_closure") or {}
+    assert "counts" in so_what
+    assert "auto_queue_by_kind" in so_what
+    assert "open_engineering_tasks" in so_what
 
 
 def test_format_post_run_review_text():

@@ -12,6 +12,7 @@ from value_investor.so_what_closure import (
     group_so_what_rows,
     render_so_what_markdown,
     scan_so_what_issues,
+    slim_so_what_for_post_run,
 )
 from value_investor.storage import read_json, write_json
 
@@ -247,3 +248,37 @@ def test_scan_backfills_filing_from_action_note_clears_bridge_gate(tmp_path: Pat
     }
     findings = scan_so_what_issues(reports=[report], artifacts_dir=tmp_path)
     assert "fcf_bridge_needed" not in {f.kind for f in findings}
+
+
+def test_slim_so_what_for_post_run_lists_open_tasks(tmp_path: Path):
+    latest = tmp_path / "latest.json"
+    write_json(
+        latest,
+        {"reports": [_report(ticker="GAP.L")]},
+    )
+    tasks_path = tmp_path / "engineering_tasks.json"
+    write_json(
+        tasks_path,
+        {
+            "tasks": [
+                {
+                    "id": "eng-20260901-01",
+                    "title": "Close FCF basis enforcement gap (batched tickers)",
+                    "area": "scoring",
+                    "status": "open",
+                    "source": "so_what_closure",
+                    "evidence": {"kind": "fcf_enforcement_gap", "batched": True},
+                    "allowed_paths": ["src/value_investor/summary.py"],
+                }
+            ]
+        },
+    )
+    rollup = slim_so_what_for_post_run(
+        latest_path=latest,
+        artifacts_dir=tmp_path,
+        tasks_path=tasks_path,
+    )
+    assert int((rollup.get("counts") or {}).get("auto_queue") or 0) >= 1
+    open_tasks = rollup.get("open_engineering_tasks") or []
+    assert len(open_tasks) == 1
+    assert open_tasks[0]["kind"] == "fcf_enforcement_gap"

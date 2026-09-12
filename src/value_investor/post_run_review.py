@@ -267,6 +267,8 @@ def build_post_run_payload(
         if row["filings_total"] > 0 and row["filings_with_body"] < max(1, row["filings_annual"])
     ]
 
+    from value_investor.so_what_closure import slim_so_what_for_post_run
+
     return {
         "run_at": effective_run_at.isoformat(),
         "signal_distribution": dict(signal_counts),
@@ -286,6 +288,10 @@ def build_post_run_payload(
                 run_at=effective_run_at,
             )
         ),
+        "so_what_closure": slim_so_what_for_post_run(
+            latest_path=data_dir / "latest.json",
+            artifacts_dir=data_dir,
+        ),
     }
 
 
@@ -296,8 +302,10 @@ Read the structured JSON at: {payload_path}
 
 It contains this week's screen distribution, buy-tier filing coverage, memo quality
 snapshots, deep-analysis excerpts, gap-fill outcomes, accumulated research-model
-suggestions (backlog + recent), and system_gaps (learning-path integrity:
-produce / persist / publish / apply, plus filing-ready vs learning_ready).
+suggestions (backlog + recent), system_gaps (learning-path integrity:
+produce / persist / publish / apply, plus filing-ready vs learning_ready), and
+so_what_closure (deterministic enforcement-gap classification plus any open
+batched engineering tasks already queued from auto_queue).
 
 Write FIVE plain-text sections with headings exactly as shown:
 
@@ -325,6 +333,12 @@ Bullets for ideas that should NOT be built yet, with a one-line revisit trigger 
 
 Rules:
 - Do not invent tickers, metrics, or filing counts — only use the JSON.
+- When so_what_closure.auto_queue_by_kind or open_engineering_tasks lists a kind or
+  title, do NOT repeat that work in PRIORITISED IMPROVEMENT PLAN (it is already
+  queued or batched for the engineering agent). Mention status in THIS WEEK'S
+  FINDINGS only if something changed. Put human_gate items in THIS WEEK with the
+  human_action from the JSON — not as duplicate engineering plan lines unless new
+  code beyond so-what batching is required.
 - Distinguish filing-ingest gaps from scoring-metadata gaps from prompt gaps.
 - Distinguish written memos from wired overlay verdicts; existence from quality
   and freshness. Unused weekly_ops + executed=0 + full memo coverage is a warning

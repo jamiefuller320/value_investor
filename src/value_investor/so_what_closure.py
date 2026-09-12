@@ -709,6 +709,68 @@ def apply_so_what_auto_queue(
     return snapshot
 
 
+def slim_so_what_for_post_run(
+    *,
+    latest_path: Path = DEFAULT_LATEST_PATH,
+    artifacts_dir: Path = ARTIFACTS_DIR,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    snapshot_path: Path = SO_WHAT_PATH,
+) -> dict[str, Any]:
+    """Classify-only so-what rollup for post-run synthesis (no queue writes)."""
+    findings = scan_so_what_issues(latest_path=latest_path, artifacts_dir=artifacts_dir)
+    snapshot_at: str | None = None
+    if snapshot_path.exists():
+        try:
+            snap = read_json(snapshot_path)
+            if isinstance(snap, dict):
+                snapshot_at = str(snap.get("generated_at") or "") or None
+        except (OSError, ValueError, TypeError):
+            snapshot_at = None
+
+    auto = [f for f in findings if f.recommended_closure == CLOSURE_AUTO_QUEUE]
+    human = [f for f in findings if f.recommended_closure == CLOSURE_HUMAN_GATE]
+    auto_by_kind = group_so_what_rows([f.to_dict() for f in auto])
+    human_by_kind = group_so_what_rows([f.to_dict() for f in human])
+
+    open_tasks: list[dict[str, Any]] = []
+    tasks_path = Path(tasks_path)
+    if tasks_path.exists():
+        eng = load_engineering_tasks(tasks_path)
+        for row in eng.get("tasks") or []:
+            if not isinstance(row, dict):
+                continue
+            if str(row.get("source") or "") != "so_what_closure":
+                continue
+            status = str(row.get("status") or "open")
+            if status not in {"open", "pr_open"}:
+                continue
+            evidence = row.get("evidence") if isinstance(row.get("evidence"), dict) else {}
+            open_tasks.append(
+                {
+                    "id": row.get("id"),
+                    "title": row.get("title"),
+                    "area": row.get("area"),
+                    "kind": evidence.get("kind"),
+                    "status": status,
+                }
+            )
+
+    return {
+        "classified_at": _iso_now(),
+        "snapshot_generated_at": snapshot_at,
+        "counts": {
+            "findings": len(findings),
+            "auto_queue": len(auto),
+            "human_gate": len(human),
+            "observe": sum(1 for f in findings if f.recommended_closure == CLOSURE_OBSERVE),
+        },
+        "auto_queue_by_kind": auto_by_kind,
+        "human_gate_by_kind": human_by_kind[:10],
+        "open_engineering_tasks": open_tasks,
+        "standard_batch_titles": dict(_BATCH_TASK_TITLES),
+    }
+
+
 def so_what_summary_for_progress(snapshot: dict[str, Any] | None = None) -> dict[str, Any]:
     """Compact rollup for progress-report consumers."""
     if snapshot is None:
