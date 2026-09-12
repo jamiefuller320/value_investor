@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-12T10:29:54.080385+00:00",
+  "generated_at": "2026-09-12T10:35:52.043292+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -768,7 +768,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=3, indexed_without_body=97)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=3, indexed_without_body=100)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": 4,
@@ -825,12 +825,12 @@
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 3,
-        "indexed_without_body": 97,
-        "bodies_median": 31.0,
+        "indexed_without_body": 100,
+        "bodies_median": 32.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
-        "parked_count": 3,
+        "parked_count": 1,
         "zero_body_tickers": [],
         "thin_body_tickers": [
           "SU.TO",
@@ -839,9 +839,7 @@
         ],
         "unmeasured_tickers": [],
         "parked_tickers": [
-          "CNQ.TO",
-          "GIB-A.TO",
-          "NTR.TO"
+          "GIB-A.TO"
         ]
       },
       "filing_gaps": 0,
@@ -900,9 +898,9 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 14,
-        "targets": 57,
-        "improved": 16,
+        "run_count": 15,
+        "targets": 62,
+        "improved": 19,
         "improved_tickers": [
           "RCI-B.TO",
           "WSP.TO",
@@ -914,7 +912,7 @@
           "TRI.TO",
           "SU.TO"
         ],
-        "last_run_at": "2026-09-12T08:18:31.583705+00:00",
+        "last_run_at": "2026-09-12T10:34:37.269370+00:00",
         "runtime_cutoff_runs": 2,
         "error_runs": 0,
         "gaps_before": {
@@ -928,21 +926,21 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 3,
-          "indexed_without_body": 97,
+          "indexed_without_body": 100,
           "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": -1,
+          "indexed_without_body": 2,
           "filing_gaps": 0
         },
         "remaining": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 3,
-          "indexed_without_body": 97,
+          "indexed_without_body": 100,
           "filing_gaps": 0
         },
         "admission_ready": true,
