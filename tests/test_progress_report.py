@@ -147,8 +147,7 @@ def test_role_coherence_flags_post_run_plan_without_queue_link(tmp_path: Path):
     payload = json.loads(latest.read_text(encoding="utf-8"))
     payload["post_run_review"] = {
         "improvement_plan": (
-            "1. [scoring] Implement unique overlay export never in queue — "
-            "expected impact: test"
+            "1. [scoring] Implement unique overlay export never in queue — expected impact: test"
         ),
     }
     latest.write_text(json.dumps(payload), encoding="utf-8")
