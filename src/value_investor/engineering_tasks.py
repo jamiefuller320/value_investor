@@ -737,7 +737,9 @@ def ensure_post_run_review_artifact(
     if not body:
         return md if md.exists() and md.stat().st_size > 0 else None
     if md.exists() and md.stat().st_size > 0:
-        if not post_run_artifact_needs_refresh(md, latest_path=latest_path, stale_hours=stale_hours):
+        if not post_run_artifact_needs_refresh(
+            md, latest_path=latest_path, stale_hours=stale_hours
+        ):
             return md
     output_dir.mkdir(parents=True, exist_ok=True)
     md.write_text(body, encoding="utf-8")
