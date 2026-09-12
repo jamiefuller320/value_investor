@@ -65,6 +65,54 @@
       "merged_at": "2026-09-12T11:19:14.575536+00:00"
     },
     {
+      "id": "eng-20260912-03",
+      "area": "ingest",
+      "title": "CH/RNS refetch ranking: current-period group accounts only + headline-period validation** — Deprioritise parent-only/admin CH forms (MEGP.L 2019/2020 fetches) a",
+      "summary": "CH/RNS refetch ranking: current-period group accounts only + headline-period validation** — Deprioritise parent-only/admin CH forms (MEGP.L 2019/2020 fetches) and IR PDF hash/class dedup (HIK.L wrong-document pattern in recent backlog); expected impact: refetch budget spent on bodies that move scoring and memos, improving source quality scores and reducing false “fetched=N” closure.",
+      "priority": "high",
+      "priority_score": 99.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "CH",
+          "RNS",
+          "MEGP.L",
+          "IR",
+          "PDF",
+          "HIK.L",
+          "N"
+        ],
+        "plan_index": 3
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for CH",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260912-02",
       "area": "ingest",
       "title": "Fix IR presentation ingest: non-truncated body storage + populate `ir_presentation_metrics.json` from allowlisted PDFs** — Address truncation at pension/FCF (IT",
@@ -80,7 +128,21 @@
           "MEGP.L",
           "MGNS.L"
         ],
-        "plan_index": 2
+        "plan_index": 2,
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260912-02",
+        "verified_at": "2026-09-12T14:49:34.524135+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_research_filings.py",
+            "tests/test_research_ingest.py",
+            "tests/test_gap_fill_deepen.py",
+            "tests/test_ingest_improvement.py",
+            "tests/test_companies_house.py"
+          ],
+          "output_tail": "........................................................................ [ 20%]\n........................................................................ [ 40%]\n........................................................................ [ 60%]\n........................................................................ [ 80%]\n......................................................................   [100%]\n358 passed in 173.04s (0:02:53)"
+        }
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for IR",
@@ -108,9 +170,18 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
+<<<<<<< Updated upstream
       "status": "open",
       "no_diff_count": 1,
       "last_no_diff_at": "2026-09-12T14:48:36.189537+00:00"
+=======
+      "status": "merged",
+      "no_diff_count": 0,
+      "branch_name": "cursor/eng-20260912-02-1de3",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/591",
+      "pr_number": 591,
+      "merged_at": "2026-09-12T14:49:34.524526+00:00"
+>>>>>>> Stashed changes
     },
     {
       "id": "eng-20260912-04",
@@ -155,54 +226,6 @@
       "result_path": "output/engineering_result_eng-20260912-04.md",
       "branch_name": "cursor/eng-20260912-04-1de3",
       "completed_at": "2026-09-12T14:49:22.199933+00:00"
-    },
-    {
-      "id": "eng-20260912-03",
-      "area": "ingest",
-      "title": "CH/RNS refetch ranking: current-period group accounts only + headline-period validation** — Deprioritise parent-only/admin CH forms (MEGP.L 2019/2020 fetches) a",
-      "summary": "CH/RNS refetch ranking: current-period group accounts only + headline-period validation** — Deprioritise parent-only/admin CH forms (MEGP.L 2019/2020 fetches) and IR PDF hash/class dedup (HIK.L wrong-document pattern in recent backlog); expected impact: refetch budget spent on bodies that move scoring and memos, improving source quality scores and reducing false “fetched=N” closure.",
-      "priority": "high",
-      "priority_score": 97.0,
-      "source": "post_run_review",
-      "evidence": {
-        "tickers": [
-          "CH",
-          "RNS",
-          "MEGP.L",
-          "IR",
-          "PDF",
-          "HIK.L",
-          "N"
-        ],
-        "plan_index": 3
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for CH",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open"
     },
     {
       "id": "eng-20260912-05",
@@ -252,7 +275,7 @@
       "title": "Close library ingest gaps for tsx60 / SU.TO (chain 1/3: 0/1 improved, run igc-20260912-02)",
       "summary": "Ingest gap-closure run igc-20260912-02 (chain root igc-20260912-02, round 1) targeted SU.TO with outstanding indexed gaps after refetch yield 0/1. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
       "priority": "high",
-      "priority_score": 88.0,
+      "priority_score": 90.0,
       "source": "ingest_gap_closure",
       "evidence": {
         "gap_closure_run_id": "igc-20260912-02",
@@ -560,6 +583,26 @@
     }
   ],
   "ingest_health": {
+    "snapshot_at": "2026-09-12T14:46:38.543902+00:00",
+    "buy_tier_count": 63,
+    "measured_tickers": 63,
+    "unmeasured_buy_tier": 0,
+    "unmeasured_tickers": [],
+    "zero_body_buy_tier": 0,
+    "zero_body_tickers": [],
+    "indexed_without_body": 10,
+    "filings_with_body": 4242
+  },
+  "queue_clearing": {
+    "attention_parked_count": 0,
+    "evaluated_at": "2026-09-12T14:49:39.727736+00:00",
+    "should_send_full_queue_warning": false
+  },
+  "micro_compile_source": "ingest_gap_closure",
+  "source_gap_closure_run_id": "igc-20260912-02",
+  "source_trial_id": "igc-20260912-02",
+  "source_chain_root_id": "igc-20260912-02",
+  "ingest_health_before": {
     "snapshot_at": "2026-09-12T12:37:13.464588+00:00",
     "buy_tier_count": 61,
     "measured_tickers": 61,
@@ -570,13 +613,6 @@
     "indexed_without_body": 9,
     "filings_with_body": 4133
   },
-  "queue_clearing": {
-    "attention_parked_count": 0,
-    "evaluated_at": "2026-09-12T14:45:30.667070+00:00",
-    "should_send_full_queue_warning": false
-  },
-  "micro_compile_source": "ingest_gap_closure",
-  "source_gap_closure_run_id": "igc-20260912-02",
-  "source_trial_id": "igc-20260912-02",
-  "source_chain_root_id": "igc-20260912-02"
+  "reprioritized_at": "2026-09-12T14:46:38.544162+00:00",
+  "reprioritized_after_task": "eng-20260912-02"
 }

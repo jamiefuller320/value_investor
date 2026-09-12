@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-12T12:37:14.114039+00:00",
+  "generated_at": "2026-09-12T14:49:34.603423+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1144,16 +1144,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-12T12:37:13.464616+00:00",
-    "queue_ui_updated_at": "2026-09-12T12:37:14.116267+00:00",
-    "task_count": 10,
+    "compiled_at": "2026-09-12T14:22:44.993546+00:00",
+    "queue_ui_updated_at": "2026-09-12T14:49:34.528509+00:00",
+    "task_count": 11,
     "status": {
       "open_count": 7,
       "pr_open_count": 0,
       "parked_count": 0,
-      "merged_count": 3,
+      "merged_count": 4,
       "failed_count": 0,
-      "next_task_id": "eng-20260912-02",
+      "next_task_id": "eng-20260912-03",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1162,11 +1162,11 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260912-02",
+        "id": "eng-20260912-03",
         "area": "ingest",
-        "title": "Fix IR presentation ingest: non-truncated body storage + populate `ir_presentation_metrics.json` from allowlisted PDFs** — Address truncation at pension/FCF (IT",
+        "title": "CH/RNS refetch ranking: current-period group accounts only + headline-period validation** — Deprioritise parent-only/admin CH forms (MEGP.L 2019/2020 fetches) a",
         "priority": "high",
-        "priority_score": 98.0,
+        "priority_score": 99.0,
         "status": "open",
         "source": "post_run_review",
         "pr_url": null,
@@ -1194,9 +1194,9 @@
         "clash_scan": "partial"
       },
       {
-        "id": "eng-20260912-03",
-        "area": "ingest",
-        "title": "CH/RNS refetch ranking: current-period group accounts only + headline-period validation** — Deprioritise parent-only/admin CH forms (MEGP.L 2019/2020 fetches) a",
+        "id": "eng-20260912-05",
+        "area": "scoring",
+        "title": "FCF basis policy: filing-aligned default, suppress or label screen TTM when `yahoo_quarterly_cashflow` empty; optional RNS reconciliation auto-pick for overlays",
         "priority": "high",
         "priority_score": 97.0,
         "status": "open",
@@ -1210,13 +1210,13 @@
         "clash_scan": "partial"
       },
       {
-        "id": "eng-20260912-05",
-        "area": "scoring",
-        "title": "FCF basis policy: filing-aligned default, suppress or label screen TTM when `yahoo_quarterly_cashflow` empty; optional RNS reconciliation auto-pick for overlays",
+        "id": "eng-20260912-21",
+        "area": "ingest",
+        "title": "Close library ingest gaps for tsx60 / SU.TO (chain 1/3: 0/1 improved, run igc-20260912-02)",
         "priority": "high",
-        "priority_score": 97.0,
+        "priority_score": 90.0,
         "status": "open",
-        "source": "post_run_review",
+        "source": "ingest_gap_closure",
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
@@ -1552,6 +1552,48 @@
       "tracks_with_post_apply_trades": 5,
       "tracks_insufficient_epoch_marks": 2,
       "all_benchmark_spans_insufficient": false
+    }
+  },
+  "queue_health": {
+    "schema_version": 1,
+    "generated_at": "2026-09-12T14:49:34.603423+00:00",
+    "overall": "active",
+    "headline": "Agent lane active.",
+    "merge_lane": {
+      "state": "idle",
+      "idle": true,
+      "running": false,
+      "blocked": false,
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+    },
+    "agent_lane": {
+      "state": "running",
+      "idle": false,
+      "running": true,
+      "blocked": false,
+      "should_dispatch": true,
+      "pause_active": false,
+      "attention_parked_count": 0,
+      "open_count": 7,
+      "pr_open_count": 0,
+      "dispatch_eligible_count": 7,
+      "blocked_task_count": 0,
+      "next_task_id": "eng-20260912-03",
+      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
+      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+    },
+    "queue_clearing": {
+      "pause_active": false,
+      "attention_parked_count": 0,
+      "evaluated_at": "2026-09-12T14:45:30.667070+00:00"
+    },
+    "ops_monitor": {
+      "run_at": "2026-09-12T07:46:35.119815+00:00",
+      "overall": "ok",
+      "should_dispatch_engineering": false
     }
   }
 }
