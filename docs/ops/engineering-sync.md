@@ -40,12 +40,15 @@ ran against present `output/post_run_review.md` artifacts.
 
 **Idle compile backstop** — when the queue is idle (`open_count=0`, `pr_open_count=0`)
 but `latest.json` still has post-run plan lines with no open engineering match,
-`ftse-engineering try-idle-compile-backstop --apply` synthesizes
-`output/post_run_review.md` from `latest.json` when needed, checks compile
-drop-risk, and compiles only if new open tasks would be added. Ops monitor runs
-this on `--apply`; `engineering-queue.yml` uses the same path instead of
-unconditional compile. It does **not** reopen merged tasks — use `email_only` for
-a fresh post-run when Analysis outruns the queue.
+`ftse-engineering try-idle-compile-backstop --apply` refreshes
+`output/post_run_review.md` from `latest.json` when the screen bundle is newer,
+checks compile drop-risk, and compiles **post-run plan + gap-fill refetch only**
+(no suggestion backlog). Ops monitor runs this on `--apply`; `engineering-queue.yml`
+uses the same path instead of unconditional compile. It does **not** reopen merged
+tasks — use `email_only` for a fresh post-run when Analysis outruns the queue.
+
+Sunday `compile` uses a **14-day** lookback on `research_model_suggestions.json`
+and skips rows that fuzzy-match **merged/parked** engineering task titles.
 
 `ftse-engineering compile-cap-audit` reports `max_tasks` truncation (post-run
 plan items beyond cap vs gap-fill/suggestion backlog).

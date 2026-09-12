@@ -405,6 +405,7 @@ def build_role_coherence(
         output_dir=output_dir,
         latest_path=latest_path,
         max_tasks=max_compile_tasks,
+        tasks_path=tasks_path,
     )
     beyond = cap_audit.get("post_run_plan_beyond_cap") or []
     if beyond:

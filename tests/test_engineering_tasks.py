@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from pathlib import Path
 
 from value_investor.agent_model_policy import save_policy
@@ -175,17 +176,175 @@ DEFER
     assert "paper_fund.py" in "".join(selected[0].blocked_paths)
 
 
+def test_suggestions_compile_respects_lookback_and_merged_skip(tmp_path: Path):
+    from datetime import UTC, datetime, timedelta
+
+    from value_investor.engineering_tasks import build_compiled_task_candidates
+
+    output_dir = tmp_path / "output"
+    output_dir.mkdir()
+    (output_dir / "post_run_review.md").write_text(
+        "PRIORITISED IMPROVEMENT PLAN\n1. [ops] Ignore — expected impact: x\n",
+        encoding="utf-8",
+    )
+    suggestions_path = tmp_path / "suggestions.json"
+    now = datetime(2026, 9, 12, tzinfo=UTC)
+    old = (now - timedelta(days=30)).isoformat()
+    recent = (now - timedelta(days=3)).isoformat()
+    suggestions_path.write_text(
+        json.dumps(
+            {
+                "suggestions": [
+                    {
+                        "ticker": "OLD.L",
+                        "area": "scoring",
+                        "priority": "high",
+                        "suggestion": "Old suggestion should be dropped by lookback",
+                        "recorded_at": old,
+                    },
+                    {
+                        "ticker": "NEW.L",
+                        "area": "scoring",
+                        "priority": "high",
+                        "suggestion": "Fresh suggestion for compile queue",
+                        "recorded_at": recent,
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "eng-old",
+                        "title": "Fresh suggestion for compile queue",
+                        "status": "merged",
+                        "area": "scoring",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    candidates = build_compiled_task_candidates(
+        output_dir=output_dir,
+        suggestions_path=suggestions_path,
+        scope="full",
+        tasks_path=tasks_path,
+        compile_since=now,
+    )
+    suggestion_tasks = [t for t in candidates if t.source == "research_model_suggestions"]
+    assert suggestion_tasks == []
+
+
+def test_ensure_post_run_artifact_refreshes_when_plan_changes(tmp_path: Path):
+    from value_investor.engineering_tasks import (
+        ensure_post_run_review_artifact,
+        post_run_plan_titles_from_text,
+    )
+
+    output_dir = tmp_path / "output"
+    output_dir.mkdir()
+    latest = tmp_path / "latest.json"
+    latest.write_text(
+        json.dumps(
+            {
+                "run_at": "2026-09-12T10:00:00+00:00",
+                "post_run_review": {"improvement_plan": "1. [scoring] First plan item"},
+            }
+        ),
+        encoding="utf-8",
+    )
+    md = ensure_post_run_review_artifact(output_dir=output_dir, latest_path=latest)
+    assert md is not None
+    latest.write_text(
+        json.dumps(
+            {
+                "run_at": "2026-09-12T12:00:00+00:00",
+                "post_run_review": {"improvement_plan": "1. [scoring] Updated plan item"},
+            }
+        ),
+        encoding="utf-8",
+    )
+    ensure_post_run_review_artifact(output_dir=output_dir, latest_path=latest)
+    titles = post_run_plan_titles_from_text(md.read_text(encoding="utf-8"))
+    assert titles == ["Updated plan item"]
+
+
+def test_backstop_scope_omits_suggestions(tmp_path: Path):
+    from value_investor.engineering_tasks import build_compiled_task_candidates
+
+    output_dir = tmp_path / "output"
+    output_dir.mkdir()
+    (output_dir / "post_run_review.md").write_text(
+        "PRIORITISED IMPROVEMENT PLAN\n1. [scoring] Plan only — expected impact: x\n",
+        encoding="utf-8",
+    )
+    suggestions_path = tmp_path / "suggestions.json"
+    suggestions_path.write_text(
+        json.dumps(
+            {
+                "suggestions": [
+                    {
+                        "ticker": "X.L",
+                        "area": "scoring",
+                        "priority": "high",
+                        "suggestion": "Should not appear in backstop scope",
+                        "recorded_at": "2026-09-12T08:00:00+00:00",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    full = build_compiled_task_candidates(
+        output_dir=output_dir,
+        suggestions_path=suggestions_path,
+        scope="full",
+        tasks_path=tmp_path / "missing_tasks.json",
+        compile_since=datetime.fromisoformat("2026-09-12T12:00:00+00:00"),
+    )
+    backstop = build_compiled_task_candidates(
+        output_dir=output_dir,
+        suggestions_path=suggestions_path,
+        scope="backstop",
+    )
+    assert any(t.source == "research_model_suggestions" for t in full)
+    assert all(t.source != "research_model_suggestions" for t in backstop)
+
+
 def test_compile_capacity_audit_flags_plan_beyond_cap(tmp_path: Path):
     from value_investor.engineering_tasks import compile_capacity_audit
 
     output_dir = tmp_path / "output"
     output_dir.mkdir()
     lines = [f"{i}. [scoring] Plan item {i} — expected impact: x" for i in range(1, 11)]
-    (output_dir / "post_run_review.md").write_text(
-        "PRIORITISED IMPROVEMENT PLAN\n" + "\n".join(lines),
+    plan_body = "\n".join(lines)
+    latest = tmp_path / "latest.json"
+    latest.write_text(
+        json.dumps(
+            {
+                "run_at": "2026-09-12T12:00:00+00:00",
+                "post_run_review": {"improvement_plan": plan_body},
+            }
+        ),
         encoding="utf-8",
     )
-    audit = compile_capacity_audit(output_dir=output_dir, max_tasks=8)
+    (output_dir / "post_run_review.md").write_text(
+        "PRIORITISED IMPROVEMENT PLAN\n" + plan_body,
+        encoding="utf-8",
+    )
+    audit = compile_capacity_audit(
+        output_dir=output_dir,
+        latest_path=latest,
+        max_tasks=8,
+        suggestions_path=tmp_path / "no_suggestions.json",
+        tasks_path=tmp_path / "no_tasks.json",
+    )
     assert audit["post_run_plan_count"] == 10
     assert len(audit["post_run_plan_beyond_cap"]) == 2
     assert audit["truncated_count"] >= 2

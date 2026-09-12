@@ -5,9 +5,9 @@ from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from value_investor.post_run_review import _parse_post_run_review
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
@@ -16,11 +16,15 @@ from value_investor.research.ingest_improvement import (
 )
 from value_investor.storage import read_json, write_json
 
+CompileScope = Literal["full", "backstop"]
+
 logger = logging.getLogger(__name__)
 
 DEFAULT_TASKS_PATH = Path("output/engineering_tasks.json")
 COMMITTED_TASKS_PATH = Path("docs/data/engineering_tasks.json")
 DEFAULT_MAX_COMPILE_TASKS = 8
+DEFAULT_SUGGESTIONS_COMPILE_LOOKBACK_DAYS = 14
+DEFAULT_POST_RUN_ARTIFACT_STALE_HOURS = 6
 DEFAULT_MAX_RUN_TASKS = 1
 DEFAULT_MIN_METRICS_FOR_SCREEN = 25
 TERMINAL_TASK_STATUSES = frozenset({"merged", "completed", "failed", "cancelled", "parked"})
@@ -392,11 +396,75 @@ def _parse_post_run_plan(post_run_path: Path) -> list[EngineeringTask]:
     return tasks
 
 
+def _parse_recorded_at(value: str | None) -> datetime | None:
+    stamp = str(value or "").strip()
+    if not stamp:
+        return None
+    try:
+        return datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
+def _filter_suggestion_rows(
+    rows: list[dict[str, Any]],
+    *,
+    lookback_days: int = DEFAULT_SUGGESTIONS_COMPILE_LOOKBACK_DAYS,
+    since: datetime | None = None,
+) -> list[dict[str, Any]]:
+    """Keep suggestions with recorded_at within the compile lookback window.
+
+    Rows without ``recorded_at`` are omitted when lookback is enabled (gap-fill
+    always stamps new rows). ``lookback_days=0`` disables date filtering (e.g.
+    ingest micro-compile on an explicit suggestions snapshot).
+    """
+    if lookback_days <= 0:
+        return [row for row in rows if isinstance(row, dict)]
+    anchor = since or datetime.now(UTC)
+    cutoff = anchor - timedelta(days=lookback_days)
+    kept: list[dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        recorded = _parse_recorded_at(str(row.get("recorded_at") or ""))
+        if recorded is None:
+            continue
+        if recorded < cutoff:
+            continue
+        kept.append(row)
+    return kept
+
+
+def _terminal_task_titles(tasks_path: Path | None) -> list[str]:
+    if tasks_path is None or not Path(tasks_path).exists():
+        return []
+    titles: list[str] = []
+    for row in load_engineering_tasks(tasks_path).get("tasks") or []:
+        if not isinstance(row, dict):
+            continue
+        if str(row.get("status") or "open") not in TERMINAL_TASK_STATUSES:
+            continue
+        title = str(row.get("title") or "").strip()
+        if title:
+            titles.append(title)
+    return titles
+
+
+def _suggestion_matches_terminal_title(suggestion: str, terminal_titles: list[str]) -> bool:
+    for title in terminal_titles:
+        if _title_keys_match(suggestion, title):
+            return True
+    return False
+
+
 def _tasks_from_suggestions(
     suggestions_path: Path,
     *,
     run_stamp: str,
     seq_start: int,
+    lookback_days: int = DEFAULT_SUGGESTIONS_COMPILE_LOOKBACK_DAYS,
+    since: datetime | None = None,
+    terminal_titles: list[str] | None = None,
 ) -> list[EngineeringTask]:
     if not suggestions_path.exists():
         return []
@@ -404,14 +472,22 @@ def _tasks_from_suggestions(
         payload = read_json(suggestions_path)
     except (OSError, ValueError, TypeError):
         return []
+    terminal = list(terminal_titles or [])
     tasks: list[EngineeringTask] = []
     seq = seq_start
-    for row in payload.get("suggestions") or []:
+    rows = _filter_suggestion_rows(
+        list(payload.get("suggestions") or []),
+        lookback_days=lookback_days,
+        since=since,
+    )
+    for row in rows:
         area = _normalize_area(str(row.get("area") or ""))
         if area not in {"ingest", "scoring", "prompt", "coverage", "ops"}:
             continue
         suggestion = str(row.get("suggestion") or "").strip()
         if not suggestion or suggestion == "--":
+            continue
+        if terminal and _suggestion_matches_terminal_title(suggestion, terminal):
             continue
         if not needs_engineering_implementation(area=area, suggestion=suggestion):
             continue
@@ -576,17 +652,18 @@ def open_task_ids_dropped_by_merge(
     return sorted(before - after)
 
 
-def ensure_post_run_review_artifact(
-    *,
-    output_dir: Path,
-    latest_path: Path = Path("docs/data/latest.json"),
-) -> Path | None:
-    """Ensure output/post_run_review.md exists, synthesizing from latest.json when needed."""
-    output_dir = Path(output_dir)
-    md = output_dir / "post_run_review.md"
-    if md.exists() and md.stat().st_size > 0:
-        return md
-    latest_path = Path(latest_path)
+def _post_run_body_from_latest(latest: dict[str, Any]) -> str | None:
+    post_run = latest.get("post_run_review")
+    if not isinstance(post_run, dict):
+        return None
+    plan = str(post_run.get("improvement_plan") or "").strip()
+    full = str(post_run.get("full_text") or "").strip()
+    if not plan and not full:
+        return None
+    return full if full else f"PRIORITISED IMPROVEMENT PLAN\n{plan}"
+
+
+def _latest_screen_run_at(latest_path: Path) -> datetime | None:
     if not latest_path.exists():
         return None
     try:
@@ -595,14 +672,82 @@ def ensure_post_run_review_artifact(
         return None
     if not isinstance(latest, dict):
         return None
-    post_run = latest.get("post_run_review")
-    if not isinstance(post_run, dict):
-        return None
-    plan = str(post_run.get("improvement_plan") or "").strip()
-    full = str(post_run.get("full_text") or "").strip()
-    if not plan and not full:
-        return None
-    body = full if full else f"PRIORITISED IMPROVEMENT PLAN\n{plan}"
+    for key in ("run_at", "updated_at", "generated_at"):
+        parsed = _parse_recorded_at(str(latest.get(key) or ""))
+        if parsed is not None:
+            return parsed
+    return None
+
+
+def post_run_artifact_needs_refresh(
+    artifact_path: Path,
+    *,
+    latest_path: Path = Path("docs/data/latest.json"),
+    stale_hours: int = DEFAULT_POST_RUN_ARTIFACT_STALE_HOURS,
+) -> bool:
+    """True when latest.json post-run plan is newer than output/post_run_review.md."""
+    artifact_path = Path(artifact_path)
+    latest_path = Path(latest_path)
+    if not latest_path.exists():
+        return False
+    try:
+        latest = read_json(latest_path)
+    except (OSError, ValueError, TypeError):
+        return False
+    if not isinstance(latest, dict):
+        return False
+    body = _post_run_body_from_latest(latest)
+    if not body:
+        return False
+    if not artifact_path.exists() or artifact_path.stat().st_size <= 0:
+        return True
+
+    latest_run = _latest_screen_run_at(latest_path)
+    if latest_run is not None:
+        mtime = datetime.fromtimestamp(artifact_path.stat().st_mtime, tz=UTC)
+        if mtime < latest_run - timedelta(hours=stale_hours):
+            return True
+
+    post_run = latest.get("post_run_review") or {}
+    plan = str(post_run.get("improvement_plan") or "")
+    if plan.strip():
+        latest_titles = post_run_plan_titles_from_text(plan)
+        try:
+            existing = _parse_post_run_review(artifact_path.read_text(encoding="utf-8"))
+            existing_titles = post_run_plan_titles_from_text(existing.improvement_plan)
+        except OSError:
+            existing_titles = []
+        if latest_titles and latest_titles != existing_titles:
+            return True
+    return False
+
+
+def ensure_post_run_review_artifact(
+    *,
+    output_dir: Path,
+    latest_path: Path = Path("docs/data/latest.json"),
+    stale_hours: int = DEFAULT_POST_RUN_ARTIFACT_STALE_HOURS,
+) -> Path | None:
+    """Ensure output/post_run_review.md matches latest.json (create or refresh when stale)."""
+    output_dir = Path(output_dir)
+    md = output_dir / "post_run_review.md"
+    latest_path = Path(latest_path)
+    if not latest_path.exists():
+        return md if md.exists() and md.stat().st_size > 0 else None
+    try:
+        latest = read_json(latest_path)
+    except (OSError, ValueError, TypeError):
+        return md if md.exists() and md.stat().st_size > 0 else None
+    if not isinstance(latest, dict):
+        return md if md.exists() and md.stat().st_size > 0 else None
+    body = _post_run_body_from_latest(latest)
+    if not body:
+        return md if md.exists() and md.stat().st_size > 0 else None
+    if md.exists() and md.stat().st_size > 0:
+        if not post_run_artifact_needs_refresh(
+            md, latest_path=latest_path, stale_hours=stale_hours
+        ):
+            return md
     output_dir.mkdir(parents=True, exist_ok=True)
     md.write_text(body, encoding="utf-8")
     return md
@@ -612,6 +757,10 @@ def build_compiled_task_candidates(
     *,
     output_dir: Path,
     suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
+    scope: CompileScope = "full",
+    tasks_path: Path | None = COMMITTED_TASKS_PATH,
+    lookback_days: int = DEFAULT_SUGGESTIONS_COMPILE_LOOKBACK_DAYS,
+    compile_since: datetime | None = None,
 ) -> list[EngineeringTask]:
     """Build deduped compile candidates without applying the max_tasks cap."""
     output_dir = Path(output_dir)
@@ -619,8 +768,19 @@ def build_compiled_task_candidates(
     tasks: list[EngineeringTask] = []
     tasks.extend(_parse_post_run_plan(output_dir / "post_run_review.md"))
     seq = len(tasks) + 1
-    tasks.extend(_tasks_from_suggestions(suggestions_path, run_stamp=run_stamp, seq_start=seq))
-    seq = len(tasks) + 1
+    if scope == "full":
+        terminal = _terminal_task_titles(tasks_path)
+        tasks.extend(
+            _tasks_from_suggestions(
+                suggestions_path,
+                run_stamp=run_stamp,
+                seq_start=seq,
+                lookback_days=lookback_days,
+                since=compile_since,
+                terminal_titles=terminal,
+            )
+        )
+        seq = len(tasks) + 1
     tasks.extend(
         _tasks_from_gap_fill(
             output_dir / "gap_fill_summary.json", run_stamp=run_stamp, seq_start=seq
@@ -634,11 +794,19 @@ def build_compiled_task_list(
     output_dir: Path,
     suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
     max_tasks: int = DEFAULT_MAX_COMPILE_TASKS,
+    scope: CompileScope = "full",
+    tasks_path: Path | None = COMMITTED_TASKS_PATH,
+    lookback_days: int = DEFAULT_SUGGESTIONS_COMPILE_LOOKBACK_DAYS,
+    compile_since: datetime | None = None,
 ) -> list[EngineeringTask]:
     """Build compiled tasks from run artifacts without writing queue files."""
     candidates = build_compiled_task_candidates(
         output_dir=output_dir,
         suggestions_path=suggestions_path,
+        scope=scope,
+        tasks_path=tasks_path,
+        lookback_days=lookback_days,
+        compile_since=compile_since,
     )
     return candidates[: max(0, int(max_tasks))]
 
@@ -649,6 +817,7 @@ def compile_capacity_audit(
     latest_path: Path = Path("docs/data/latest.json"),
     suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
     max_tasks: int = DEFAULT_MAX_COMPILE_TASKS,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
 ) -> dict[str, Any]:
     """Report compile cap truncation (post-run plan vs suggestions beyond max_tasks)."""
     output_dir = Path(output_dir)
@@ -657,6 +826,8 @@ def compile_capacity_audit(
     candidates = build_compiled_task_candidates(
         output_dir=output_dir,
         suggestions_path=suggestions_path,
+        scope="full",
+        tasks_path=tasks_path,
     )
     cap = max(0, int(max_tasks))
     capped = candidates[:cap]
@@ -689,6 +860,7 @@ def preview_compile_new_open_count(
     tasks_path: Path = COMMITTED_TASKS_PATH,
     suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
     max_tasks: int = DEFAULT_MAX_COMPILE_TASKS,
+    scope: CompileScope = "full",
 ) -> int:
     """Count open tasks that compile would add without writing queue files."""
     existing_rows = list(load_engineering_tasks(tasks_path).get("tasks") or [])
@@ -701,6 +873,8 @@ def preview_compile_new_open_count(
         output_dir=output_dir,
         suggestions_path=suggestions_path,
         max_tasks=max_tasks,
+        scope=scope,
+        tasks_path=tasks_path,
     )
     merged = _merge_task_rows(existing_rows, compiled)
     after_ids = {
@@ -760,6 +934,7 @@ def compile_engineering_tasks(
     max_tasks: int = DEFAULT_MAX_COMPILE_TASKS,
     tasks_path: Path = DEFAULT_TASKS_PATH,
     committed_path: Path = COMMITTED_TASKS_PATH,
+    scope: CompileScope = "full",
 ) -> dict[str, Any]:
     """Build a supervised engineering queue from Sunday run artifacts."""
     output_dir = Path(output_dir)
@@ -767,6 +942,8 @@ def compile_engineering_tasks(
         output_dir=output_dir,
         suggestions_path=suggestions_path,
         max_tasks=max_tasks,
+        scope=scope,
+        tasks_path=committed_path if committed_path.exists() else tasks_path,
     )
 
     existing_rows: list[dict[str, Any]] = []
@@ -840,6 +1017,8 @@ def compile_ingest_engineering_tasks_micro(
             suggestions_path,
             run_stamp=run_stamp,
             seq_start=seq_start,
+            lookback_days=0,
+            terminal_titles=_terminal_task_titles(committed_path),
         )
         if task.area == "ingest"
     ]
