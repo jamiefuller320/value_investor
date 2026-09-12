@@ -232,10 +232,9 @@ jobs:
         id: refresh
         run: |
           ADDED=0
-          if [ -f output/post_run_review.md ]; then
-            ftse-engineering --output-dir output compile --json | tee /tmp/eng_compile.json
-            ADDED=$(python3 -c "import json; print(int(json.load(open('/tmp/eng_compile.json')).get('added_open_count') or 0))")
-          fi
+          ftse-engineering ensure-post-run-artifact --output-dir output --latest-path docs/data/latest.json --json || true
+          ftse-engineering try-idle-compile-backstop --apply --output-dir output --latest-path docs/data/latest.json --json | tee /tmp/eng_idle_compile.json
+          ADDED=$(python3 -c "import json; d=json.load(open('/tmp/eng_idle_compile.json')); print(int((d.get('compile') or {}).get('added_open_count') or 0))")
           ftse-engineering list || true
           echo "tasks_added=$ADDED" >> "$GITHUB_OUTPUT"
 

@@ -64,8 +64,10 @@ from value_investor.engineering_tasks import (
     DEFAULT_MAX_COMPILE_TASKS,
     DEFAULT_MAX_RUN_TASKS,
     DEFAULT_TASKS_PATH,
+    compile_capacity_audit,
     compile_engineering_tasks,
     draft_library_ladder_engineering_tasks,
+    ensure_post_run_review_artifact,
     find_engineering_task,
     load_engineering_tasks,
     mark_task_merged_for_branch,
@@ -74,6 +76,8 @@ from value_investor.engineering_tasks import (
     sync_committed_engineering_tasks,
     validate_engineering_pr_paths_for_task_id,
 )
+from value_investor.idle_compile_backstop import run_idle_compile_backstop
+from value_investor.ops_monitor import DEFAULT_LATEST_PATH
 from value_investor.engineering_verify import verify_merged_task
 from value_investor.hunter_auto_merge import (
     evaluate_hunter_merge_gate,
@@ -121,6 +125,61 @@ def _cmd_compile(args: argparse.Namespace) -> int:
         print(f"Compiled {payload['task_count']} engineering task(s) → {args.tasks_path}")
         for row in payload.get("tasks") or []:
             print(f"  {row['id']} [{row['area']}/{row['priority']}] {row['title'][:100]}")
+    return 0
+
+
+def _cmd_ensure_post_run_artifact(args: argparse.Namespace) -> int:
+    path = ensure_post_run_review_artifact(
+        output_dir=args.output_dir,
+        latest_path=args.latest_path,
+    )
+    payload = {"path": str(path) if path else None, "created": path is not None}
+    if args.json:
+        _print_json(payload)
+    else:
+        print(path or "No post-run plan available to synthesize.")
+    return 0 if path else 1
+
+
+def _cmd_try_idle_compile_backstop(args: argparse.Namespace) -> int:
+    result = run_idle_compile_backstop(
+        apply=bool(args.apply),
+        tasks_path=args.tasks_path,
+        output_dir=args.output_dir,
+        latest_path=args.latest_path,
+        suggestions_path=args.suggestions_path,
+        max_tasks=args.max_tasks,
+    )
+    if args.json:
+        _print_json(result)
+    else:
+        decision = result.get("decision") or {}
+        print(f"Idle compile backstop: {decision.get('should_compile')} — {decision.get('reason')}")
+        if result.get("applied"):
+            compile_result = result.get("compile") or {}
+            print(f"Added {compile_result.get('added_open_count')} open task(s)")
+    return 0
+
+
+def _cmd_compile_cap_audit(args: argparse.Namespace) -> int:
+    payload = compile_capacity_audit(
+        output_dir=args.output_dir,
+        latest_path=args.latest_path,
+        suggestions_path=args.suggestions_path,
+        max_tasks=args.max_tasks,
+    )
+    if args.json:
+        _print_json(payload)
+    else:
+        print(
+            f"Candidates {payload.get('candidate_count')} capped at {payload.get('max_tasks')} "
+            f"(truncated {payload.get('truncated_count')})"
+        )
+        beyond = payload.get("post_run_plan_beyond_cap") or []
+        if beyond:
+            print(f"Post-run plan beyond cap: {len(beyond)}")
+            for title in beyond[:5]:
+                print(f"  - {str(title)[:100]}")
     return 0
 
 
@@ -1391,6 +1450,37 @@ def main(argv: list[str] | None = None) -> int:
     )
     compile_p.add_argument("--max-tasks", type=int, default=DEFAULT_MAX_COMPILE_TASKS)
     compile_p.set_defaults(func=_cmd_compile)
+
+    ensure_pr = sub.add_parser(
+        "ensure-post-run-artifact",
+        parents=[common],
+        help="Write output/post_run_review.md from latest.json when output/ is missing it",
+    )
+    ensure_pr.add_argument("--latest-path", type=Path, default=DEFAULT_LATEST_PATH)
+    ensure_pr.set_defaults(func=_cmd_ensure_post_run_artifact)
+
+    idle_bs = sub.add_parser(
+        "try-idle-compile-backstop",
+        parents=[common],
+        help="Compile when queue is idle and post-run plan lacks open tasks",
+    )
+    idle_bs.add_argument("--latest-path", type=Path, default=DEFAULT_LATEST_PATH)
+    idle_bs.add_argument("--max-tasks", type=int, default=DEFAULT_MAX_COMPILE_TASKS)
+    idle_bs.add_argument(
+        "--apply",
+        action="store_true",
+        help="Run compile when guards pass (default: evaluate only)",
+    )
+    idle_bs.set_defaults(func=_cmd_try_idle_compile_backstop)
+
+    cap_audit = sub.add_parser(
+        "compile-cap-audit",
+        parents=[common],
+        help="Show max_tasks truncation for post-run plan vs other compile candidates",
+    )
+    cap_audit.add_argument("--latest-path", type=Path, default=DEFAULT_LATEST_PATH)
+    cap_audit.add_argument("--max-tasks", type=int, default=DEFAULT_MAX_COMPILE_TASKS)
+    cap_audit.set_defaults(func=_cmd_compile_cap_audit)
 
     list_p = sub.add_parser("list", parents=[common], help="List compiled engineering tasks")
     list_p.set_defaults(func=_cmd_list)

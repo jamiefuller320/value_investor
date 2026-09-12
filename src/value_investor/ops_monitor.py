@@ -1415,6 +1415,27 @@ def run_ops_monitor(
                 }
             )
 
+        from value_investor.idle_compile_backstop import run_idle_compile_backstop
+
+        backstop = run_idle_compile_backstop(
+            apply=True,
+            tasks_path=tasks_path,
+            output_dir=Path("output"),
+            latest_path=latest_path,
+        )
+        compile_result = backstop.get("compile") or {}
+        if backstop.get("applied") and int(compile_result.get("added_open_count") or 0) > 0:
+            auto_fixes.append(
+                {
+                    "action": "idle_compile_backstop",
+                    "detail": (
+                        f"compiled {compile_result.get('added_open_count')} open task(s) from "
+                        f"post-run plan: {', '.join(compile_result.get('added_open_task_ids') or [])}"
+                    ),
+                }
+            )
+            drafted_ids = list(drafted_ids) + list(compile_result.get("added_open_task_ids") or [])
+
     dispatch = evaluate_engineering_dispatch(tasks_path=tasks_path, open_prs=open_prs)
     should_dispatch = dispatch.should_dispatch or sync_report.should_redispatch
 

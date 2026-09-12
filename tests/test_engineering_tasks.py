@@ -175,6 +175,24 @@ DEFER
     assert "paper_fund.py" in "".join(selected[0].blocked_paths)
 
 
+def test_compile_capacity_audit_flags_plan_beyond_cap(tmp_path: Path):
+    from value_investor.engineering_tasks import compile_capacity_audit
+
+    output_dir = tmp_path / "output"
+    output_dir.mkdir()
+    lines = [
+        f"{i}. [scoring] Plan item {i} — expected impact: x" for i in range(1, 11)
+    ]
+    (output_dir / "post_run_review.md").write_text(
+        "PRIORITISED IMPROVEMENT PLAN\n" + "\n".join(lines),
+        encoding="utf-8",
+    )
+    audit = compile_capacity_audit(output_dir=output_dir, max_tasks=8)
+    assert audit["post_run_plan_count"] == 10
+    assert len(audit["post_run_plan_beyond_cap"]) == 2
+    assert audit["truncated_count"] >= 2
+
+
 def test_clean_post_run_plan_title_strips_bold_and_em_dash_tail():
     from value_investor.engineering_tasks import clean_post_run_plan_title
 
