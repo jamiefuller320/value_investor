@@ -175,6 +175,16 @@ DEFER
     assert "paper_fund.py" in "".join(selected[0].blocked_paths)
 
 
+def test_clean_post_run_plan_title_strips_bold_and_em_dash_tail():
+    from value_investor.engineering_tasks import clean_post_run_plan_title
+
+    raw = (
+        "Implement canonical FCF selector with divergence flag** — "
+        "When filing, screen TTM, and company_adjusted disagree"
+    )
+    assert clean_post_run_plan_title(raw) == "Implement canonical FCF selector with divergence flag"
+
+
 def test_compile_engineering_tasks_accepts_prompt_format_without_bold(tmp_path: Path):
     """Post-run prompt asks for ``N. [area] Action`` without mandatory markdown bold."""
     output_dir = tmp_path / "output"

@@ -157,6 +157,15 @@ _PLAN_LINE = re.compile(
 )
 
 
+def clean_post_run_plan_title(raw_title: str) -> str:
+    """Normalize a post-run plan action title for queue rows and join-up matching."""
+    text = re.sub(r"\*\*", "", str(raw_title or "")).strip()
+    text = re.sub(r"\s*—\s*expected impact:.*$", "", text, flags=re.IGNORECASE).strip()
+    if " — " in text:
+        text = text.split(" — ", 1)[0].strip()
+    return text.strip("* ").strip()
+
+
 def post_run_plan_titles_from_text(improvement_plan: str) -> list[str]:
     """Extract action titles from a post-run PRIORITISED IMPROVEMENT PLAN section."""
     titles: list[str] = []
@@ -164,10 +173,7 @@ def post_run_plan_titles_from_text(improvement_plan: str) -> list[str]:
         match = _PLAN_LINE.match(line.strip())
         if not match:
             continue
-        raw_title = match.group("title").strip().strip("*").strip()
-        clean_title = re.sub(
-            r"\s*—\s*expected impact:.*$", "", raw_title, flags=re.IGNORECASE
-        ).strip()
+        clean_title = clean_post_run_plan_title(match.group("title"))
         if clean_title:
             titles.append(clean_title)
     return titles
@@ -335,8 +341,7 @@ def _task_from_plan_line(
     run_stamp: str,
     seq: int,
 ) -> EngineeringTask | None:
-    clean_title = re.sub(r"\s*—\s*expected impact:.*$", "", title, flags=re.IGNORECASE).strip()
-    clean_title = clean_title.strip("* ").strip()
+    clean_title = clean_post_run_plan_title(title)
     if not clean_title:
         return None
     normalized = _normalize_area(area)
