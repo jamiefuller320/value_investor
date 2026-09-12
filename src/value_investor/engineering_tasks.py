@@ -412,7 +412,12 @@ def _filter_suggestion_rows(
     lookback_days: int = DEFAULT_SUGGESTIONS_COMPILE_LOOKBACK_DAYS,
     since: datetime | None = None,
 ) -> list[dict[str, Any]]:
-    """Keep suggestions with recorded_at within the compile lookback window."""
+    """Keep suggestions with recorded_at within the compile lookback window.
+
+    Rows without ``recorded_at`` are omitted when lookback is enabled (gap-fill
+    always stamps new rows). ``lookback_days=0`` disables date filtering (e.g.
+    ingest micro-compile on an explicit suggestions snapshot).
+    """
     if lookback_days <= 0:
         return [row for row in rows if isinstance(row, dict)]
     anchor = since or datetime.now(UTC)
@@ -422,7 +427,9 @@ def _filter_suggestion_rows(
         if not isinstance(row, dict):
             continue
         recorded = _parse_recorded_at(str(row.get("recorded_at") or ""))
-        if recorded is None or recorded < cutoff:
+        if recorded is None:
+            continue
+        if recorded < cutoff:
             continue
         kept.append(row)
     return kept
@@ -1010,6 +1017,8 @@ def compile_ingest_engineering_tasks_micro(
             suggestions_path,
             run_stamp=run_stamp,
             seq_start=seq_start,
+            lookback_days=0,
+            terminal_titles=_terminal_task_titles(committed_path),
         )
         if task.area == "ingest"
     ]
