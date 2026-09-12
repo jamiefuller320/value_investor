@@ -13,6 +13,7 @@ from value_investor.engineering_tasks import (
     COMMITTED_TASKS_PATH,
     TERMINAL_TASK_STATUSES,
     load_engineering_tasks,
+    post_run_plan_titles_from_text,
 )
 from value_investor.ops_monitor import (
     DEFAULT_LATEST_PATH,
@@ -215,6 +216,7 @@ def build_role_coherence(
     progress: dict[str, Any],
     actionable: dict[str, Any],
     tasks_path: Path = COMMITTED_TASKS_PATH,
+    latest_path: Path = DEFAULT_LATEST_PATH,
     analysis_review_path: Path = DATA_DIR / "analysis_review.json",
     horizon_scan_path: Path = DATA_DIR / "horizon_scan.json",
     stale_proposed_days: int = 14,
@@ -353,6 +355,33 @@ def build_role_coherence(
         )
 
     eng_rows = _open_engineering_tasks(tasks_path)
+    open_eng_titles = [str(row.get("title") or "") for row in eng_rows]
+    latest = _safe_read(latest_path)
+    post_run = (latest or {}).get("post_run_review") if isinstance(latest, dict) else None
+    if isinstance(post_run, dict):
+        plan_text = str(post_run.get("improvement_plan") or "")
+        plan_titles = post_run_plan_titles_from_text(plan_text)
+        if plan_titles:
+            unlinked_plan = [
+                title for title in plan_titles if not _title_linked(title, open_eng_titles)
+            ]
+            if unlinked_plan:
+                preview = "; ".join(unlinked_plan[:3])
+                checks.append(
+                    {
+                        "id": "post_run_plan_without_queue_link",
+                        "severity": "warn",
+                        "category": "join_up",
+                        "title": "Post-run plan items without matching open engineering task",
+                        "summary": (
+                            f"{len(unlinked_plan)} prioritised plan line(s) from the latest "
+                            f"post-run review have no fuzzy match among open engineering tasks "
+                            f"({preview}). They may have been filtered at compile, dropped by "
+                            "max_tasks, or not yet compiled — re-run email compile or add tasks."
+                        ),
+                    }
+                )
+
     missing_paths = [str(row.get("id")) for row in eng_rows if not (row.get("allowed_paths") or [])]
     if missing_paths:
         checks.append(
@@ -559,6 +588,7 @@ def build_progress_report(
         progress=progress,
         actionable=actionable,
         tasks_path=tasks_path,
+        latest_path=latest_path,
         analysis_review_path=data_dir / "analysis_review.json",
         horizon_scan_path=data_dir / "horizon_scan.json",
     )

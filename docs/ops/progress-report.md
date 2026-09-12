@@ -148,6 +148,7 @@ Doctrine and wiring checks:
 - Stage 2b focus vs negative AI learning edge
 - Library breadth vs live expansion gate
 - `defer_now` items without matching queue work
+- Post-run **prioritised plan** lines without a fuzzy match among open engineering tasks
 - Stale proposed review tasks (>14 days)
 - Analysis / horizon artifacts vs proposed task queues
 - Engineering tasks missing `allowed_paths`

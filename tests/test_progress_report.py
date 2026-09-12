@@ -141,6 +141,26 @@ def test_build_progress_report_schema(tmp_path: Path, monkeypatch):
     assert payload["overall"] in {"ok", "info", "warn", "fail"}
 
 
+def test_role_coherence_flags_post_run_plan_without_queue_link(tmp_path: Path):
+    paths = _seed_minimal(tmp_path)
+    latest = paths["data_dir"] / "latest.json"
+    payload = json.loads(latest.read_text(encoding="utf-8"))
+    payload["post_run_review"] = {
+        "improvement_plan": (
+            "1. [scoring] Implement unique overlay export never in queue — "
+            "expected impact: test"
+        ),
+    }
+    latest.write_text(json.dumps(payload), encoding="utf-8")
+    checks = build_role_coherence(
+        progress={"current_focus": "stage_2b", "evidence": {}},
+        actionable={"defer_now": [], "proposed_tasks": {}, "engineering_open": []},
+        tasks_path=paths["tasks"],
+        latest_path=latest,
+    )
+    assert any(row["id"] == "post_run_plan_without_queue_link" for row in checks)
+
+
 def test_role_coherence_flags_unlinked_defer_now(tmp_path: Path):
     paths = _seed_minimal(tmp_path)
     progress = {"current_focus": "stage_2b", "evidence": {"ai_excess_after_costs": -0.02}}
@@ -153,6 +173,7 @@ def test_role_coherence_flags_unlinked_defer_now(tmp_path: Path):
         progress=progress,
         actionable=actionable,
         tasks_path=paths["tasks"],
+        latest_path=paths["data_dir"] / "latest.json",
         analysis_review_path=paths["data_dir"] / "analysis_review.json",
     )
     assert any(row["id"] == "defer_now_without_queue_link" for row in checks)

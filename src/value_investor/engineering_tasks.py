@@ -157,6 +157,22 @@ _PLAN_LINE = re.compile(
 )
 
 
+def post_run_plan_titles_from_text(improvement_plan: str) -> list[str]:
+    """Extract action titles from a post-run PRIORITISED IMPROVEMENT PLAN section."""
+    titles: list[str] = []
+    for line in improvement_plan.splitlines():
+        match = _PLAN_LINE.match(line.strip())
+        if not match:
+            continue
+        raw_title = match.group("title").strip().strip("*").strip()
+        clean_title = re.sub(
+            r"\s*—\s*expected impact:.*$", "", raw_title, flags=re.IGNORECASE
+        ).strip()
+        if clean_title:
+            titles.append(clean_title)
+    return titles
+
+
 @dataclass
 class EngineeringTask:
     id: str
