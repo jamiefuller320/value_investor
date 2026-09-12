@@ -45,6 +45,9 @@ from value_investor.scoring.conviction_timing_overlay import (
 from value_investor.scoring.cyclical_exposure_overlay import (
     enrich_signals_with_cyclical_exposure_overlay,
 )
+from value_investor.scoring.dividend_sustainability_overlay import (
+    enrich_signals_with_dividend_sustainability_overlay,
+)
 from value_investor.scoring.dividend_yield_overlay import enrich_signals_with_dividend_yield_overlay
 from value_investor.scoring.earnings_basis_overlay import enrich_signals_with_earnings_basis_overlay
 from value_investor.scoring.earnings_growth_overlay import (
@@ -209,6 +212,9 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "healthcare_price_erosion_overlay",
         "cash_conversion_overlay",
         "dividend_yield_overlay",
+        "dividend_sustainability_overlay",
+        "interim_dividend_cut_flagged",
+        "interim_dividend_cut_pct",
         "interim_quality_overlay",
         "cyclical_exposure_overlay",
         "cyclical_exposure_detected",
@@ -422,6 +428,10 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     )
     signals_out = enrich_signals_with_cash_conversion_overlay(signals_out, result.model_results)
     signals_out = enrich_signals_with_dividend_yield_overlay(signals_out, result.model_results)
+    signals_out = enrich_signals_with_dividend_sustainability_overlay(
+        signals_out,
+        result.model_results,
+    )
     signals_out = enrich_signals_with_interim_quality_overlay(signals_out, result.model_results)
     signals_out = enrich_signals_with_cyclical_exposure_overlay(
         signals_out,

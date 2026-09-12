@@ -2830,6 +2830,52 @@ def test_enrich_signals_with_interim_quality_overlay_not_triggered_on_annual_gro
     assert enriched.iloc[0]["adjusted_signal"] == "strong_buy"
 
 
+def test_enrich_signals_with_dividend_sustainability_overlay_caps_itv_like_profile():
+    from value_investor.scoring.dividend_sustainability_overlay import (
+        enrich_signals_with_dividend_sustainability_overlay,
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.53,
+                "fcf_dividend_coverage_net": 1.0,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "model_id": "high_dividend",
+                "model_name": "High Dividend Yield",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "ITV.L",
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": False,
+                "score": 3 / 9,
+                "reasons": "['F-Score=3/9']",
+                "failed_criteria": "[]",
+            },
+        ]
+    )
+
+    enriched = enrich_signals_with_dividend_sustainability_overlay(signals, model_results)
+    row = enriched.iloc[0]
+
+    assert bool(row["dividend_sustainability_overlay"]) is True
+    assert row["adjusted_signal"] == "buy"
+    assert row["conviction_score"] == pytest.approx(0.53 * 0.85)
+
+
 def test_enrich_signals_with_cyclical_exposure_overlay_flags_megp_like_profile():
     from value_investor.scoring.cyclical_exposure_overlay import (
         enrich_signals_with_cyclical_exposure_overlay,

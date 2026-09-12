@@ -43,6 +43,22 @@ _DIVIDENDS_PAID_LABELS = [
     "Common Stock Dividend Paid",
 ]
 
+_INTERIM_DIVIDEND_CUT_RES = (
+    re.compile(
+        r"interim dividend\b.{0,120}?\(\s*[−-]\s*([\d.]+)\s*%\s*\)",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"interim dividend\b.{0,120}?(?:decrease|decline|cut|reduced)\b.{0,80}?"
+        r"(?:by\s+)?([\d.]+)\s*%",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"(?:cut|reduced)\s+(?:the\s+)?interim dividend\b.{0,80}?([\d.]+)\s*%",
+        re.IGNORECASE,
+    ),
+)
+
 _INTERIM_EPS_DECLINE_RES = (
     re.compile(
         r"(?:diluted|basic|adjusted)?\s*earnings per share\b.{0,200}?"
@@ -111,6 +127,7 @@ _FILING_METRIC_KEYS = (
     "fcf_definition_divergence",
     "fcf_divergence_flagged",
     "interim_eps_decline_pct",
+    "interim_dividend_cut_pct",
     "adjusted_eps_growth_pct",
 )
 
@@ -407,6 +424,23 @@ def extract_dividends_paid_from_annual_financials(
     return abs(float(paid))
 
 
+def parse_interim_dividend_cut_pct(text: str) -> float | None:
+    """Return positive cut fraction (e.g. 0.065 for 6.5%) from interim filing prose."""
+    if not text:
+        return None
+    for pattern in _INTERIM_DIVIDEND_CUT_RES:
+        match = pattern.search(text)
+        if not match:
+            continue
+        try:
+            pct = float(match.group(1)) / 100.0
+        except (TypeError, ValueError):
+            continue
+        if pct > 0:
+            return pct
+    return None
+
+
 def parse_interim_eps_decline_pct(text: str) -> float | None:
     """Return positive decline fraction (e.g. 0.039 for 3.9%) from interim filing prose."""
     if not text:
@@ -581,6 +615,18 @@ def extract_interim_eps_decline_for_ticker(
     if not body:
         return None
     return parse_interim_eps_decline_pct(body)
+
+
+def extract_interim_dividend_cut_for_ticker(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+) -> float | None:
+    """Parse interim dividend cut from cached filing bodies."""
+    body = load_latest_interim_filing_body(ticker, output_dir=output_dir)
+    if not body:
+        return None
+    return parse_interim_dividend_cut_pct(body)
 
 
 def _iter_filing_bodies(
@@ -1933,6 +1979,15 @@ def enrich_universe_with_filing_metrics(
             if current is None or (isinstance(current, float) and pd.isna(current)):
                 out.at[index, "interim_eps_decline_pct"] = interim_decline
 
+        interim_dividend_cut = extract_interim_dividend_cut_for_ticker(
+            ticker,
+            output_dir=output_dir,
+        )
+        if interim_dividend_cut is not None:
+            current = out.at[index, "interim_dividend_cut_pct"]
+            if current is None or (isinstance(current, float) and pd.isna(current)):
+                out.at[index, "interim_dividend_cut_pct"] = interim_dividend_cut
+
         adjusted_growth = extract_adjusted_eps_growth_for_ticker(
             ticker,
             output_dir=output_dir,
@@ -1942,16 +1997,6 @@ def enrich_universe_with_filing_metrics(
             current = out.at[index, "adjusted_eps_growth_pct"]
             if current is None or (isinstance(current, float) and pd.isna(current)):
                 out.at[index, "adjusted_eps_growth_pct"] = adjusted_growth
-
-        company_adjusted, _company_currency = extract_company_adjusted_fcf_for_ticker(
-            ticker,
-            output_dir=output_dir,
-        )
-        dividends_paid = _float_or_none(out.at[index, "dividends_paid"])
-        if company_adjusted is not None and dividends_paid is not None:
-            company_coverage = fcf_dividend_coverage(company_adjusted, dividends_paid)
-            if company_coverage is not None:
-                out.at[index, "fcf_dividend_coverage_net"] = company_coverage
 
         filing_growth = resolve_model_earnings_growth(out.loc[index])
         if filing_growth is not None:

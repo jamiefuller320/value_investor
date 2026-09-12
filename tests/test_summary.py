@@ -3688,6 +3688,94 @@ def test_build_company_reports_exports_labelled_dual_coverage_and_flags(tmp_path
     assert "FCF definition divergence" in snapshot["action_note"]
 
 
+def _model_results_for_itv_dividend_sustainability() -> pd.DataFrame:
+    return pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "model_id": "high_dividend",
+                "model_name": "High Dividend Yield",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "['yield=7.1%']",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "ITV.L",
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": False,
+                "score": 3 / 9,
+                "reasons": "['F-Score=3/9']",
+                "failed_criteria": "['F-Score 3/9 below 7']",
+            },
+        ]
+    )
+
+
+def test_dividend_sustainability_overlay_caps_itv_like_profile():
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="ITV.L",
+                name="ITV plc",
+                signal="strong_buy",
+                conviction_score=0.53,
+                fcf_dividend_coverage_net=1.0,
+                fcf_dividend_coverage_gross=1.53,
+                operating_cashflow=202_000_000.0,
+                capital_expenditure=-54_000_000.0,
+                dividends_paid=190_000_000.0,
+                earnings_basis_overlay=False,
+                fcf_basis_overlay=False,
+            ),
+        ]
+    )
+    model_results = _model_results_for_itv_dividend_sustainability()
+
+    report = build_company_reports(signals, model_results)[0]
+    snapshot = report.to_dict()
+
+    assert snapshot["dividend_sustainability_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert snapshot["conviction_score"] == pytest.approx(0.382925, rel=1e-4)
+    assert snapshot["fcf_dividend_coverage"]["statutory_ocf_minus_capex"]["ratio"] == pytest.approx(
+        1.0
+    )
+    assert snapshot["fcf_dividend_coverage"]["management_cash_generated_minus_capex"][
+        "ratio"
+    ] == pytest.approx(1.53)
+    assert "Dividend-sustainability overlay" in report.summary
+
+
+def test_interim_dividend_cut_flagged_when_yield_passes_and_interim_cut():
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="MEGP.L",
+                name="ME Group International plc",
+                signal="strong_buy",
+                interim_dividend_cut_pct=0.065,
+                fcf_dividend_coverage_net=0.84,
+            ),
+        ]
+    )
+    model_results = _model_results_for_megp_dividend_overlay()
+
+    snapshot = build_company_reports(signals, model_results)[0].to_dict()
+
+    assert snapshot["interim_dividend_cut_flagged"] is True
+    assert snapshot["dividend_sustainability_overlay"] is False
+    assert "Interim dividend cut flagged" in snapshot["summary"]
+
+
+def test_parse_interim_dividend_cut_pct_from_interim_prose():
+    from value_investor.scoring.fcf import parse_interim_dividend_cut_pct
+
+    text = "The Board declared an interim dividend of 3.60p (−6.5%) per ordinary share."
+    assert parse_interim_dividend_cut_pct(text) == pytest.approx(0.065)
+
+
 def test_build_company_reports_exports_dual_leverage_display():
     signals = pd.DataFrame(
         [

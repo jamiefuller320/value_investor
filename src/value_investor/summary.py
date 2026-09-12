@@ -22,6 +22,9 @@ from value_investor.scoring.conviction_timing_overlay import (
 from value_investor.scoring.cyclical_exposure_overlay import (
     apply_cyclical_exposure_overlay_to_signal,
 )
+from value_investor.scoring.dividend_sustainability_overlay import (
+    apply_dividend_sustainability_overlay_to_signal,
+)
 from value_investor.scoring.dividend_yield_overlay import apply_dividend_yield_overlay_to_signal
 from value_investor.scoring.earnings_basis_overlay import apply_earnings_basis_overlay_to_signal
 from value_investor.scoring.earnings_growth_overlay import (
@@ -120,6 +123,8 @@ class CompanyReport:
     healthcare_price_erosion_overlay: bool = False
     cash_conversion_overlay: bool = False
     dividend_yield_overlay: bool = False
+    dividend_sustainability_overlay: bool = False
+    interim_dividend_cut_flagged: bool = False
     interim_quality_overlay: bool = False
     cyclical_exposure_overlay: bool = False
     cyclical_exposure_detected: bool = False
@@ -191,6 +196,8 @@ class CompanyReport:
             "healthcare_price_erosion_overlay": self.healthcare_price_erosion_overlay,
             "cash_conversion_overlay": self.cash_conversion_overlay,
             "dividend_yield_overlay": self.dividend_yield_overlay,
+            "dividend_sustainability_overlay": self.dividend_sustainability_overlay,
+            "interim_dividend_cut_flagged": self.interim_dividend_cut_flagged,
             "interim_quality_overlay": self.interim_quality_overlay,
             "cyclical_exposure_overlay": self.cyclical_exposure_overlay,
             "cyclical_exposure_detected": self.cyclical_exposure_detected,
@@ -267,6 +274,8 @@ class CompanyReport:
             healthcare_price_erosion_overlay=bool(data.get("healthcare_price_erosion_overlay")),
             cash_conversion_overlay=bool(data.get("cash_conversion_overlay")),
             dividend_yield_overlay=bool(data.get("dividend_yield_overlay")),
+            dividend_sustainability_overlay=bool(data.get("dividend_sustainability_overlay")),
+            interim_dividend_cut_flagged=bool(data.get("interim_dividend_cut_flagged")),
             interim_quality_overlay=bool(data.get("interim_quality_overlay")),
             cyclical_exposure_overlay=bool(data.get("cyclical_exposure_overlay")),
             cyclical_exposure_detected=bool(data.get("cyclical_exposure_detected")),
@@ -523,6 +532,8 @@ def _brief_summary(
     healthcare_price_erosion_overlay: bool = False,
     cash_conversion_overlay: bool = False,
     dividend_yield_overlay: bool = False,
+    dividend_sustainability_overlay: bool = False,
+    interim_dividend_cut_flagged: bool = False,
     interim_quality_overlay: bool = False,
     cyclical_exposure_overlay: bool = False,
     earnings_basis_overlay: bool = False,
@@ -614,6 +625,19 @@ def _brief_summary(
         parts.append(
             f"Dividend-yield overlay: high yield passes but FCF yield and earnings quality fail "
             f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+        )
+
+    if dividend_sustainability_overlay and adjusted_signal and adjusted_signal != signal:
+        parts.append(
+            f"Dividend-sustainability overlay: statutory OCF−CapEx dividend cover ≤1.05× with "
+            f"weak Piotroski while dividend screens pass "
+            f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+        )
+
+    if interim_dividend_cut_flagged:
+        parts.append(
+            "Interim dividend cut flagged: high trailing yield pass but latest interim reduced "
+            "the dividend."
         )
 
     if interim_quality_overlay and adjusted_signal and adjusted_signal != signal:
@@ -1301,6 +1325,76 @@ def build_company_reports(
         if fcf_dividend_coverage_net is not None:
             cashflow_metrics["fcf_dividend_coverage_net"] = fcf_dividend_coverage_net
 
+        labelled_fcf_dividend_coverage = build_labelled_fcf_dividend_coverage(
+            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+            fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
+        )
+        if (
+            labelled_fcf_dividend_coverage["statutory_ocf_minus_capex"]["ratio"] is None
+            and labelled_fcf_dividend_coverage["management_cash_generated_minus_capex"]["ratio"]
+            is None
+        ):
+            labelled_fcf_dividend_coverage = None
+
+        dividend_sustainability_overlay = False
+        interim_dividend_cut_flagged = False
+        sustainability_flag = row.get("dividend_sustainability_overlay")
+        cut_flag = row.get("interim_dividend_cut_flagged")
+        if sustainability_flag is not None and not (
+            isinstance(sustainability_flag, float) and pd.isna(sustainability_flag)
+        ):
+            dividend_sustainability_overlay = bool(sustainability_flag)
+        if cut_flag is not None and not (isinstance(cut_flag, float) and pd.isna(cut_flag)):
+            interim_dividend_cut_flagged = bool(cut_flag)
+        if sustainability_flag is None or (
+            isinstance(sustainability_flag, float) and pd.isna(sustainability_flag)
+        ):
+            cut_raw = row.get("interim_dividend_cut_pct")
+            interim_dividend_cut_pct = (
+                float(cut_raw)
+                if cut_raw is not None and not (isinstance(cut_raw, float) and pd.isna(cut_raw))
+                else None
+            )
+            capex_raw = row.get("capital_expenditure")
+            capital_expenditure = (
+                float(capex_raw)
+                if capex_raw is not None
+                and not (isinstance(capex_raw, float) and pd.isna(capex_raw))
+                else None
+            )
+            (
+                dividend_sustainability_overlay,
+                interim_dividend_cut_flagged,
+                adjusted_signal_str,
+                conviction_score,
+            ) = apply_dividend_sustainability_overlay_to_signal(
+                signal,
+                ticker_models=ticker_models,
+                fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+                operating_cashflow=operating_cashflow,
+                capital_expenditure=capital_expenditure,
+                dividends_paid=dividends_paid,
+                free_cashflow=free_cashflow,
+                interim_dividend_cut_pct=interim_dividend_cut_pct,
+                conviction_score=conviction_score,
+                adjusted_signal=adjusted_signal_str,
+            )
+        elif cut_flag is None or (isinstance(cut_flag, float) and pd.isna(cut_flag)):
+            cut_raw = row.get("interim_dividend_cut_pct")
+            interim_dividend_cut_pct = (
+                float(cut_raw)
+                if cut_raw is not None and not (isinstance(cut_raw, float) and pd.isna(cut_raw))
+                else None
+            )
+            from value_investor.scoring.dividend_sustainability_overlay import (
+                interim_dividend_cut_flagged as interim_dividend_cut_detected,
+            )
+
+            interim_dividend_cut_flagged = interim_dividend_cut_detected(
+                ticker_models=ticker_models,
+                interim_dividend_cut_pct=interim_dividend_cut_pct,
+            )
+
         peer_model_pass_table: dict[str, Any] = {}
         if signal in ("strong_buy", "buy"):
             if output_dir is not None:
@@ -1350,6 +1444,8 @@ def build_company_reports(
             healthcare_price_erosion_overlay=healthcare_price_erosion_overlay,
             cash_conversion_overlay=cash_conversion_overlay,
             dividend_yield_overlay=dividend_yield_overlay,
+            dividend_sustainability_overlay=dividend_sustainability_overlay,
+            interim_dividend_cut_flagged=interim_dividend_cut_flagged,
             interim_quality_overlay=interim_quality_overlay,
             cyclical_exposure_overlay=cyclical_exposure_overlay,
             earnings_basis_overlay=earnings_basis_overlay,
@@ -1430,6 +1526,8 @@ def build_company_reports(
                     healthcare_price_erosion_overlay=healthcare_price_erosion_overlay,
                     cash_conversion_overlay=cash_conversion_overlay,
                     dividend_yield_overlay=dividend_yield_overlay,
+                    dividend_sustainability_overlay=dividend_sustainability_overlay,
+                    interim_dividend_cut_flagged=interim_dividend_cut_flagged,
                     interim_quality_overlay=interim_quality_overlay,
                     cyclical_exposure_overlay=cyclical_exposure_overlay,
                     cyclical_exposure_detected=cyclical_exposure_detected,
