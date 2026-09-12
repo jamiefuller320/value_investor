@@ -14,6 +14,7 @@ from value_investor.fetch import CompanyMetrics
 from value_investor.financials import extract_statement_metrics
 from value_investor.research.filings import (
     _BUILTIN_IR_URLS,
+    _PDF_DEPTH_LEAD_CHARS,
     PARKED_SOURCE_HUNTER_SKIP,
     _apply_headline_period,
     _compose_filing_body_with_depth_sections,
@@ -28,6 +29,7 @@ from value_investor.research.filings import (
     _filing_text_is_substantive,
     _google_news_symbol_clause,
     _infer_filing_period_from_row,
+    _ir_allowlist_row_needs_body_refetch,
     _ir_body_content_hash,
     _is_other_results_rns_row,
     _issuer_matches_sec_name,
@@ -6141,9 +6143,12 @@ def test_fetch_filings_ir_allowlist_megp_l(tmp_path: Path):
     assert len(mapping["MEGP.L"]) >= 3
 
     rows = fetch_filings_ir_allowlist("MEGP.L", path=allowlist_path)
-    assert len(rows) >= 3
+    assert len(rows) >= 7
     assert all(row["source"] == "ir_allowlist" for row in rows)
     assert all("me-group.com" in row["url"] for row in rows)
+    assert any(
+        "260713-ME-Group-2026-Interim-Results-Presentation.pdf" in row["url"] for row in rows
+    )
 
 
 def test_parse_ir_cash_bridge_slides_megp_fixture():
@@ -7695,3 +7700,161 @@ def test_bxp_iwb_beximco_investegate_refetch_rejects_period_mismatch():
         )
         assert valid is False
         assert reason == "period_mismatch"
+
+
+def test_compose_filing_body_preserves_ir_deck_tail_beyond_lead_cut():
+    """eng-20260912-02: sub-80k IR decks must keep late-slide pension/FCF lines."""
+    tail = (
+        "Profit to Cash Conversion and Free Cash Flow\n"
+        "Adjusted cash flow 348 451\n"
+        "Net cash interest paid (excluding lease interest) (34) (18)\n"
+        "Adjusted cash tax2 (62) (105)\n"
+        "Pension funding (65) (3)\n"
+        "Free cash flow 187 325\n"
+    )
+    full = ("Studios revenue bridge narrative " * 900)[:28000] + tail
+    text = _compose_filing_body_with_depth_sections(full)
+    assert text is not None
+    assert "Pension funding (65) (3)" in text
+    assert "Free cash flow 187 325" in text
+    assert not text.rstrip().endswith("Pension fundin")
+
+
+def test_ir_allowlist_row_needs_body_refetch_detects_28k_cut(tmp_path: Path):
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    body_path = bodies_dir / "ir_cut.txt"
+    body_path.write_text(
+        ("x" * (_PDF_DEPTH_LEAD_CHARS - 15))
+        + "Profit to Cash Conversion and Free Cash Flow\n"
+        + "Adjusted cash tax2 (62) (105)\n"
+        + "Pension fundin",
+        encoding="utf-8",
+    )
+    row = {
+        "id": "ir_cut",
+        "source": "ir_allowlist",
+        "has_body": True,
+        "body_path": str(body_path),
+        "url": "https://www.itvplc.com/example.pdf",
+    }
+    assert _ir_allowlist_row_needs_body_refetch(row, bodies_dir) is True
+
+
+def test_parse_ir_adjusted_cash_flow_bridge_itv_slide():
+    from value_investor.research.filings import parse_ir_adjusted_cash_flow_bridge
+
+    body = (
+        "Profit to Cash Conversion and Free Cash Flow\n"
+        "Twelve months to 31 December 2025\n"
+        "Adjusted cash flow 348 451\n"
+        "Net cash interest paid (excluding lease interest) (34) (18)\n"
+        "Adjusted cash tax2 (62) (105)\n"
+        "Pension funding (65) (3)\n"
+        "Free cash flow 187 325\n"
+    )
+    parsed = parse_ir_adjusted_cash_flow_bridge(body)
+    assert parsed is not None
+    assert parsed["bridge_type"] == "adjusted_cash_flow_bridge"
+    by_label = {line["label"]: line["amount_millions"] for line in parsed["lines"]}
+    assert by_label["free_cash_flow_current"] == 187.0
+    assert by_label["pension_funding_current"] == -65.0
+
+
+def test_fetch_filings_ir_allowlist_mgns_l(tmp_path: Path):
+    """MGNS.L IR results decks are allowlisted for cash-flow bridge gap-fill."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    mapping = load_ir_url_allowlist(allowlist_path)
+    assert "MGNS.L" in mapping
+    assert len(mapping["MGNS.L"]) >= 4
+
+    rows = fetch_filings_ir_allowlist("MGNS.L", path=allowlist_path)
+    assert len(rows) >= 4
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert all("cloudfront.net/pdfs" in row["url"] for row in rows)
+    periods = {row["period"] for row in rows}
+    assert "annual" in periods
+    assert "other" in periods
+    assert any("HY26" in row["url"] or "HY2026" in row["url"] for row in rows)
+
+
+def test_refetch_ir_allowlist_filing_bodies_refetches_truncated_itv_body(
+    tmp_path: Path, monkeypatch
+):
+    """eng-20260912-02: refetch replaces 28k-cut IR bodies with full presentation extract."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+
+    rows = fetch_filings_ir_allowlist("ITV.L", path=allowlist_path)
+    fy_url = next(row["url"] for row in rows if row["period"] == "annual" and "2025" in row["url"])
+    import hashlib
+
+    digest = hashlib.sha256(fy_url.encode("utf-8")).hexdigest()[:16]
+    body_path = bodies_dir / f"ir_{digest}.txt"
+    body_path.write_text(
+        ("n" * (_PDF_DEPTH_LEAD_CHARS - 5)) + "Pension fundin",
+        encoding="utf-8",
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": f"ir_{digest}",
+                        "source": "ir_allowlist",
+                        "headline": "ITV FY2025 results presentation",
+                        "url": fy_url,
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                        "priority": 130,
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    full_body = (
+        "ITV plc Full Year Results 2025 presentation Studios segment revenue bridge. "
+        "Profit to Cash Conversion and Free Cash Flow\n"
+        "Adjusted cash flow 348 451\n"
+        "Net cash interest paid (excluding lease interest) (34) (18)\n"
+        "Adjusted cash tax2 (62) (105)\n"
+        "Pension funding (65) (3)\n"
+        "Free cash flow 187 325\n" + ("y" * 300)
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.merge_ir_allowlist_filings",
+        lambda *args, **kwargs: {"added": 0, "total_allowlist": 1, "note": "test"},
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: full_body if url == fy_url else None,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_pdf_alternate_candidates",
+        lambda _url: [],
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
+    )
+
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "ITV.L",
+        company_name="ITV plc",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["attempted"] == 1
+    saved = (filings_dir / "bodies" / f"ir_{digest}.txt").read_text(encoding="utf-8")
+    assert "Free cash flow 187 325" in saved
+    assert not saved.rstrip().endswith("Pension fundin")
