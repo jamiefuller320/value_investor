@@ -149,6 +149,7 @@ Doctrine and wiring checks:
 - Library breadth vs live expansion gate
 - `defer_now` items without matching queue work
 - Post-run **prioritised plan** lines without a fuzzy match among open engineering tasks
+- Post-run plan **truncated by compile cap** (`max_tasks`, default 8) or lower-priority candidates dropped
 - Stale proposed review tasks (>14 days)
 - Analysis / horizon artifacts vs proposed task queues
 - Engineering tasks missing `allowed_paths`

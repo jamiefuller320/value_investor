@@ -157,6 +157,15 @@ _PLAN_LINE = re.compile(
 )
 
 
+def clean_post_run_plan_title(raw_title: str) -> str:
+    """Normalize a post-run plan action title for queue rows and join-up matching."""
+    text = re.sub(r"\*\*", "", str(raw_title or "")).strip()
+    text = re.sub(r"\s*—\s*expected impact:.*$", "", text, flags=re.IGNORECASE).strip()
+    if " — " in text:
+        text = text.split(" — ", 1)[0].strip()
+    return text.strip("* ").strip()
+
+
 def post_run_plan_titles_from_text(improvement_plan: str) -> list[str]:
     """Extract action titles from a post-run PRIORITISED IMPROVEMENT PLAN section."""
     titles: list[str] = []
@@ -164,10 +173,7 @@ def post_run_plan_titles_from_text(improvement_plan: str) -> list[str]:
         match = _PLAN_LINE.match(line.strip())
         if not match:
             continue
-        raw_title = match.group("title").strip().strip("*").strip()
-        clean_title = re.sub(
-            r"\s*—\s*expected impact:.*$", "", raw_title, flags=re.IGNORECASE
-        ).strip()
+        clean_title = clean_post_run_plan_title(match.group("title"))
         if clean_title:
             titles.append(clean_title)
     return titles
@@ -335,8 +341,7 @@ def _task_from_plan_line(
     run_stamp: str,
     seq: int,
 ) -> EngineeringTask | None:
-    clean_title = re.sub(r"\s*—\s*expected impact:.*$", "", title, flags=re.IGNORECASE).strip()
-    clean_title = clean_title.strip("* ").strip()
+    clean_title = clean_post_run_plan_title(title)
     if not clean_title:
         return None
     normalized = _normalize_area(area)
@@ -571,13 +576,44 @@ def open_task_ids_dropped_by_merge(
     return sorted(before - after)
 
 
-def build_compiled_task_list(
+def ensure_post_run_review_artifact(
+    *,
+    output_dir: Path,
+    latest_path: Path = Path("docs/data/latest.json"),
+) -> Path | None:
+    """Ensure output/post_run_review.md exists, synthesizing from latest.json when needed."""
+    output_dir = Path(output_dir)
+    md = output_dir / "post_run_review.md"
+    if md.exists() and md.stat().st_size > 0:
+        return md
+    latest_path = Path(latest_path)
+    if not latest_path.exists():
+        return None
+    try:
+        latest = read_json(latest_path)
+    except (OSError, ValueError, TypeError):
+        return None
+    if not isinstance(latest, dict):
+        return None
+    post_run = latest.get("post_run_review")
+    if not isinstance(post_run, dict):
+        return None
+    plan = str(post_run.get("improvement_plan") or "").strip()
+    full = str(post_run.get("full_text") or "").strip()
+    if not plan and not full:
+        return None
+    body = full if full else f"PRIORITISED IMPROVEMENT PLAN\n{plan}"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    md.write_text(body, encoding="utf-8")
+    return md
+
+
+def build_compiled_task_candidates(
     *,
     output_dir: Path,
     suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
-    max_tasks: int = DEFAULT_MAX_COMPILE_TASKS,
 ) -> list[EngineeringTask]:
-    """Build compiled tasks from run artifacts without writing queue files."""
+    """Build deduped compile candidates without applying the max_tasks cap."""
     output_dir = Path(output_dir)
     run_stamp = datetime.now(UTC).strftime("%Y%m%d")
     tasks: list[EngineeringTask] = []
@@ -590,7 +626,89 @@ def build_compiled_task_list(
             output_dir / "gap_fill_summary.json", run_stamp=run_stamp, seq_start=seq
         )
     )
-    return _dedupe_tasks(tasks)[: max(0, int(max_tasks))]
+    return _dedupe_tasks(tasks)
+
+
+def build_compiled_task_list(
+    *,
+    output_dir: Path,
+    suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
+    max_tasks: int = DEFAULT_MAX_COMPILE_TASKS,
+) -> list[EngineeringTask]:
+    """Build compiled tasks from run artifacts without writing queue files."""
+    candidates = build_compiled_task_candidates(
+        output_dir=output_dir,
+        suggestions_path=suggestions_path,
+    )
+    return candidates[: max(0, int(max_tasks))]
+
+
+def compile_capacity_audit(
+    *,
+    output_dir: Path,
+    latest_path: Path = Path("docs/data/latest.json"),
+    suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
+    max_tasks: int = DEFAULT_MAX_COMPILE_TASKS,
+) -> dict[str, Any]:
+    """Report compile cap truncation (post-run plan vs suggestions beyond max_tasks)."""
+    output_dir = Path(output_dir)
+    ensure_post_run_review_artifact(output_dir=output_dir, latest_path=latest_path)
+    plan_tasks = _parse_post_run_plan(output_dir / "post_run_review.md")
+    candidates = build_compiled_task_candidates(
+        output_dir=output_dir,
+        suggestions_path=suggestions_path,
+    )
+    cap = max(0, int(max_tasks))
+    capped = candidates[:cap]
+    capped_keys = {task_title_key(task.title) for task in capped}
+    plan_beyond = [
+        task.title for task in plan_tasks if task_title_key(task.title) not in capped_keys
+    ]
+    truncated = candidates[cap:]
+    return {
+        "max_tasks": cap,
+        "candidate_count": len(candidates),
+        "truncated_count": len(truncated),
+        "post_run_plan_count": len(plan_tasks),
+        "post_run_plan_beyond_cap": plan_beyond,
+        "truncated_preview": [
+            {
+                "title": task.title[:160],
+                "source": task.source,
+                "area": task.area,
+                "priority_score": task.priority_score,
+            }
+            for task in truncated[:8]
+        ],
+    }
+
+
+def preview_compile_new_open_count(
+    *,
+    output_dir: Path,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
+    max_tasks: int = DEFAULT_MAX_COMPILE_TASKS,
+) -> int:
+    """Count open tasks that compile would add without writing queue files."""
+    existing_rows = list(load_engineering_tasks(tasks_path).get("tasks") or [])
+    before_ids = {
+        str(row.get("id") or "")
+        for row in existing_rows
+        if str(row.get("status") or "open") == "open" and str(row.get("id") or "")
+    }
+    compiled = build_compiled_task_list(
+        output_dir=output_dir,
+        suggestions_path=suggestions_path,
+        max_tasks=max_tasks,
+    )
+    merged = _merge_task_rows(existing_rows, compiled)
+    after_ids = {
+        str(row.get("id") or "")
+        for row in merged
+        if str(row.get("status") or "open") == "open" and str(row.get("id") or "")
+    }
+    return len(after_ids - before_ids)
 
 
 def sync_committed_engineering_tasks(

@@ -38,6 +38,18 @@ from value_investor.engineering_sync import (
 `audit_compile_drop_risk()` returns open task ids that would disappear if compile
 ran against present `output/post_run_review.md` artifacts.
 
+**Idle compile backstop** — when the queue is idle (`open_count=0`, `pr_open_count=0`)
+but `latest.json` still has post-run plan lines with no open engineering match,
+`ftse-engineering try-idle-compile-backstop --apply` synthesizes
+`output/post_run_review.md` from `latest.json` when needed, checks compile
+drop-risk, and compiles only if new open tasks would be added. Ops monitor runs
+this on `--apply`; `engineering-queue.yml` uses the same path instead of
+unconditional compile. It does **not** reopen merged tasks — use `email_only` for
+a fresh post-run when Analysis outruns the queue.
+
+`ftse-engineering compile-cap-audit` reports `max_tasks` truncation (post-run
+plan items beyond cap vs gap-fill/suggestion backlog).
+
 `ftse-engineering record-spend` re-applies the ad-hoc increment on the current
 `policy.json` (used by the agent spend-commit retry so a raced push does not
 overwrite concurrent policy edits).

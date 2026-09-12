@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-12T09:02:52+00:00",
+  "updated_at": "2026-09-12T11:26:04+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8113,6 +8113,23 @@
       "source": "cursor cloud agent post-run join-up",
       "added_at": "2026-09-12T08:58:43+00:00",
       "updated_at": "2026-09-12T09:02:52+00:00"
+    },
+    {
+      "id": "L364",
+      "category": "later",
+      "section": "ops",
+      "title": "Idle-queue compile when post-run plan lacks open tasks",
+      "summary": "After open_count=0 and pr_open_count=0, run ftse-engineering compile from output/ when latest post_run plan lines have no open queue match (join-up gap). Cheap backstop when email compile was skipped; skip if compile drop-risk or plan is older than latest run_at.",
+      "revisit_when": "post_run_plan_without_queue_link appears on two consecutive progress reports with idle queue and no email_only chain scheduled.",
+      "tags": [
+        "engineering",
+        "post_run",
+        "compile"
+      ],
+      "status": "done",
+      "source": "cursor cloud agent \u2014 idle queue re-compile question",
+      "added_at": "2026-09-12T11:20:20+00:00",
+      "updated_at": "2026-09-12T11:26:04+00:00"
     }
   ],
   "fragments": [

@@ -11,7 +11,9 @@ from value_investor.deferred_ideas import DEFAULT_STORE, list_open_fragments, lo
 from value_investor.engineering_sync import audit_compile_drop_risk
 from value_investor.engineering_tasks import (
     COMMITTED_TASKS_PATH,
+    DEFAULT_MAX_COMPILE_TASKS,
     TERMINAL_TASK_STATUSES,
+    compile_capacity_audit,
     load_engineering_tasks,
     post_run_plan_titles_from_text,
 )
@@ -217,9 +219,11 @@ def build_role_coherence(
     actionable: dict[str, Any],
     tasks_path: Path = COMMITTED_TASKS_PATH,
     latest_path: Path = DEFAULT_LATEST_PATH,
+    output_dir: Path = Path("output"),
     analysis_review_path: Path = DATA_DIR / "analysis_review.json",
     horizon_scan_path: Path = DATA_DIR / "horizon_scan.json",
     stale_proposed_days: int = 14,
+    max_compile_tasks: int = DEFAULT_MAX_COMPILE_TASKS,
 ) -> list[dict[str, Any]]:
     """Check that built components connect and each plays a logical role."""
     checks: list[dict[str, Any]] = []
@@ -367,6 +371,21 @@ def build_role_coherence(
             ]
             if unlinked_plan:
                 preview = "; ".join(unlinked_plan[:3])
+                from value_investor.idle_compile_backstop import plan_titles_only_in_terminal_queue
+
+                terminal_only = plan_titles_only_in_terminal_queue(
+                    latest_path=latest_path,
+                    tasks_path=tasks_path,
+                )
+                tail = (
+                    " All match merged/parked tasks — schedule email_only for a fresh post-run; "
+                    "idle compile backstop will not reopen them."
+                    if terminal_only and len(terminal_only) == len(unlinked_plan)
+                    else (
+                        " Queue is idle: run `ftse-engineering try-idle-compile-backstop --apply` "
+                        "when output/ or latest.json has the plan but compile was skipped."
+                    )
+                )
                 checks.append(
                     {
                         "id": "post_run_plan_without_queue_link",
@@ -376,11 +395,54 @@ def build_role_coherence(
                         "summary": (
                             f"{len(unlinked_plan)} prioritised plan line(s) from the latest "
                             f"post-run review have no fuzzy match among open engineering tasks "
-                            f"({preview}). They may have been filtered at compile, dropped by "
-                            "max_tasks, or not yet compiled — re-run email compile or add tasks."
+                            f"({preview}). They may have been filtered at compile, truncated by "
+                            f"max_tasks ({max_compile_tasks}), or not yet compiled.{tail}"
                         ),
                     }
                 )
+
+    cap_audit = compile_capacity_audit(
+        output_dir=output_dir,
+        latest_path=latest_path,
+        max_tasks=max_compile_tasks,
+    )
+    beyond = cap_audit.get("post_run_plan_beyond_cap") or []
+    if beyond:
+        preview = "; ".join(str(t)[:80] for t in beyond[:3])
+        checks.append(
+            {
+                "id": "post_run_plan_truncated_by_compile_cap",
+                "severity": "warn",
+                "category": "join_up",
+                "title": "Post-run plan exceeds compile cap",
+                "summary": (
+                    f"{len(beyond)} prioritised plan item(s) would not fit max_tasks="
+                    f"{cap_audit.get('max_tasks')} ({preview}). "
+                    "Raise cap for one compile, split across weeks, or park extras in DEFER."
+                ),
+            }
+        )
+    truncated = int(cap_audit.get("truncated_count") or 0)
+    if truncated > 0 and not beyond:
+        preview_rows = cap_audit.get("truncated_preview") or []
+        preview = "; ".join(
+            f"{row.get('source')}: {str(row.get('title') or '')[:60]}"
+            for row in preview_rows[:3]
+            if isinstance(row, dict)
+        )
+        checks.append(
+            {
+                "id": "compile_cap_truncated_candidates",
+                "severity": "info",
+                "category": "join_up",
+                "title": "Compile cap dropped lower-priority candidates",
+                "summary": (
+                    f"{truncated} compiled candidate(s) omitted by max_tasks="
+                    f"{cap_audit.get('max_tasks')} (post-run plan items kept first). "
+                    f"{preview or 'See gap-fill / research_model_suggestions backlog.'}"
+                ),
+            }
+        )
 
     missing_paths = [str(row.get("id")) for row in eng_rows if not (row.get("allowed_paths") or [])]
     if missing_paths:
@@ -589,6 +651,7 @@ def build_progress_report(
         actionable=actionable,
         tasks_path=tasks_path,
         latest_path=latest_path,
+        output_dir=Path("output"),
         analysis_review_path=data_dir / "analysis_review.json",
         horizon_scan_path=data_dir / "horizon_scan.json",
     )
