@@ -205,9 +205,10 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://thenavigatorcompany.com/wp-content/uploads/2025/02/Navigator-l-Divulgacao_Resultados_2024.pdf",
     ],
     # euro_depth parked DQ7A.IR — eng-20260910-01: prior allowlist misattributed DCC plc PDF.
+    # eng-20260912-01: donegaligroup.com https TLS is reset from datacenter ingest; http serves PDFs.
     "DQ7A.IR": [
-        "https://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf",
-        "https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
+        "http://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf",
+        "http://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf",
     ],
     # euro_depth IWB blocker — EG7.IR parked unfetchable_iwb; prior allowlist misattributed C5H.IR hub.
     "EG7.IR": [
@@ -506,6 +507,7 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "EVN": ("EVN AG",),
     "WIE": ("Wienerberger", "Wienerberger AG"),
     "C5H": ("Cairn Homes", "Cairn Homes plc"),
+    "DQ7A": ("Donegal Investment Group", "Donegal Investment"),
     "AZE": ("Azelis", "Azelis Group"),
     "AGS": ("ageas", "Ageas SA/NV"),
     "UCB": ("UCB", "UCB SA"),
@@ -3407,10 +3409,20 @@ def _url_path_endswith(url: str, suffix: str) -> bool:
     return path.endswith(suffix.lower())
 
 
+def _resolve_ir_allowlist_fetch_url(url: str) -> str:
+    """Rewrite fetch URLs when https is blocked but plain http serves the same IR PDF."""
+    parsed = urllib.parse.urlparse(str(url or ""))
+    host = parsed.netloc.lower()
+    if host.endswith("donegaligroup.com") and parsed.scheme == "https":
+        return urllib.parse.urlunparse(parsed._replace(scheme="http"))
+    return str(url or "")
+
+
 def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> str | None:
     """Download and extract plain text from a direct announcement URL."""
     if not url or not url.startswith("http"):
         return None
+    url = _resolve_ir_allowlist_fetch_url(url)
     if _is_ch_document_url(url):
         return _fetch_companies_house_body(
             {"url": url, "document_metadata_url": url, "source": "companies_house"}
@@ -3514,7 +3526,14 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     ),
     # eng-20260910-01: DQ7A.IR allowlist wrongly pointed at DCC plc annual report.
     "https://www.dcc.ie/~/media/Files/D/Dcc-Corp-v3/documents/investors/annual-and-sustainability-reports/2025/annual-report-2025.pdf": (
-        "https://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf"
+        "http://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf"
+    ),
+    # eng-20260912-01: donegaligroup.com https resets TLS; http serves the same statutory PDFs.
+    "https://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf": (
+        "http://www.donegaligroup.com/media/1316/donegal-investment-group-annual-report-financial-statements-310825-final.pdf"
+    ),
+    "https://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf": (
+        "http://www.donegaligroup.com/media/1314/stock-exchange-release-280225-final-v2.pdf"
     ),
     # eng-20260909-10: GlobeNewswire HTML IR rows fail validation; vinci.com statutory PDFs serve.
     "https://www.globenewswire.com/news-release/2026/02/05/3233287/0/en/VINCI-2025-full-year-results-Outstanding-performance-record-free-cash-flow.html": (
@@ -3704,6 +3723,8 @@ def _ir_allowlist_period_from_url(url: str) -> str:
         return "trading_update"
     if any(token in lower for token in ("interim", "half", "h1", "q1", "q2", "q3", "10-q", "10q")):
         return "interim"
+    if "stock-exchange-release" in lower and re.search(r"2802\d{2}", lower):
+        return "interim"
     return "other"
 
 
@@ -3833,12 +3854,11 @@ def _reject_duplicate_filing_body_hash(
 
 def _ir_body_title_tokens_match(row: dict[str, Any], body: str, *, ticker: str = "") -> bool:
     tokens = _ir_row_search_tokens(row)
-    url = str(row.get("url") or "").lower()
-    if "sec.gov/" in url and ticker:
+    if ticker:
         base = _base_symbol(ticker)
         for alias in _ESEF_ENTITY_SEARCH_ALIASES.get(base, ()):
             for tok in re.split(r"[^a-z0-9]+", alias.lower()):
-                if len(tok) >= 4:
+                if len(tok) >= 3 and tok not in _IR_ROW_TOKEN_SKIP:
                     tokens.add(tok)
     if not tokens:
         return True
@@ -3985,6 +4005,7 @@ def _fetch_ir_pdf_alternate_candidates(url: str) -> list[tuple[str, str]]:
     """Try alternate PDF parsers (pymupdf, OCR) when the primary extract fails validation."""
     if not url or not url.startswith("http"):
         return []
+    url = _resolve_ir_allowlist_fetch_url(url)
     try:
         raw = _http_get(url, timeout=60)
     except (urllib.error.URLError, TimeoutError, OSError) as exc:
