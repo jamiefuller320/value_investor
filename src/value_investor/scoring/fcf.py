@@ -805,6 +805,42 @@ def _financials_candidates(ticker: str, output_dir: Path | None = None) -> list[
     return candidates
 
 
+def yahoo_quarterly_cashflow_usable(financials: dict[str, Any] | None) -> bool:
+    """True when cached Yahoo financials include a usable quarterly cash-flow series."""
+    if not financials:
+        return True
+    quarterly = financials.get("quarterly_cashflow")
+    if quarterly is None:
+        return True
+    from value_investor.research.ingest import quarterly_cashflow_has_usable_series
+
+    return quarterly_cashflow_has_usable_series(quarterly)
+
+
+def resolve_screen_ttm_bases(
+    *,
+    screen_ttm: float | None,
+    financials: dict[str, Any] | None,
+    filing_aligned: float | None = None,
+    company_adjusted: float | None = None,
+) -> dict[str, Any]:
+    """Preserve raw Yahoo TTM while dropping it from policy when quarterlies are empty."""
+    raw = _float_or_none(screen_ttm)
+    unverified = bool(
+        raw is not None
+        and financials is not None
+        and not yahoo_quarterly_cashflow_usable(financials)
+    )
+    policy_screen = raw
+    if unverified and (filing_aligned is not None or company_adjusted is not None):
+        policy_screen = None
+    return {
+        "screen_ttm": raw,
+        "screen_ttm_unverified": unverified,
+        "screen_ttm_for_policy": policy_screen,
+    }
+
+
 def load_cached_financials(ticker: str, *, output_dir: Path | None = None) -> dict[str, Any] | None:
     """Load ``financials_annual.json`` from committed research stores when present."""
     for path in _financials_candidates(ticker, output_dir):
@@ -1293,6 +1329,8 @@ def reconcile_fcf(
     policy_fcf: float | None = None,
     policy_basis: str | None = None,
     bridge_resolved: bool = False,
+    screen_ttm_unverified: bool = False,
+    screen_ttm_for_policy: float | None = None,
 ) -> dict[str, Any]:
     """
     Pick one canonical FCF from screen TTM, company-adjusted, and filing OCF−CapEx.
@@ -1307,12 +1345,24 @@ def reconcile_fcf(
     filing_aligned, fiscal_year = (
         compute_filing_aligned_fcf(financials) if financials else (None, None)
     )
+    if financials and screen_ttm_for_policy is None and not screen_ttm_unverified:
+        bases = resolve_screen_ttm_bases(
+            screen_ttm=screen_ttm,
+            financials=financials,
+            filing_aligned=filing_aligned,
+            company_adjusted=company_adjusted,
+        )
+        screen_ttm = bases["screen_ttm"]
+        screen_ttm_unverified = bool(bases["screen_ttm_unverified"])
+        screen_ttm_for_policy = bases["screen_ttm_for_policy"]
     metrics_fcf = cashflow_metrics.get("free_cashflow")
     metrics_fcf = float(metrics_fcf) if metrics_fcf is not None else None
     currency = str(filing_currency or company_adjusted_currency or "USD")
 
+    policy_screen_ttm = screen_ttm_for_policy if screen_ttm_unverified else screen_ttm
+
     auto_policy = pick_fcf_majority_policy(
-        screen_ttm=screen_ttm,
+        screen_ttm=policy_screen_ttm,
         filing_aligned=filing_aligned,
         company_adjusted=company_adjusted,
     )
@@ -1341,7 +1391,10 @@ def reconcile_fcf(
     elif metrics_fcf is not None:
         canonical = metrics_fcf
         source = "cashflow_metrics"
-    elif screen_ttm is not None:
+    elif policy_screen_ttm is not None:
+        canonical = float(policy_screen_ttm)
+        source = "screen_ttm"
+    elif screen_ttm is not None and not screen_ttm_unverified:
         canonical = float(screen_ttm)
         source = "screen_ttm"
     else:
@@ -1378,6 +1431,7 @@ def reconcile_fcf(
         "canonical": canonical,
         "source": source,
         "screen_ttm": screen_ttm,
+        "screen_ttm_unverified": bool(screen_ttm_unverified),
         "cashflow_metrics_free_cashflow": metrics_fcf,
         "filing_aligned": filing_aligned,
         "company_adjusted": company_adjusted,
@@ -1417,6 +1471,12 @@ def reconcile_fcf_for_ticker(
         output_dir=output_dir,
         fiscal_year=fiscal_year,
     )
+    screen_bases = resolve_screen_ttm_bases(
+        screen_ttm=screen_ttm,
+        financials=financials,
+        filing_aligned=filing_aligned_preview,
+        company_adjusted=company_adjusted,
+    )
     bridge = load_fcf_bridge(ticker, output_dir=output_dir)
     policy_fcf = None
     policy_basis = None
@@ -1438,7 +1498,7 @@ def reconcile_fcf_for_ticker(
                 company_adjusted_currency = filing_currency
 
     bundle = reconcile_fcf(
-        screen_ttm=screen_ttm,
+        screen_ttm=screen_bases["screen_ttm"],
         financials=financials,
         company_adjusted=company_adjusted,
         company_adjusted_currency=company_adjusted_currency,
@@ -1446,6 +1506,8 @@ def reconcile_fcf_for_ticker(
         policy_fcf=policy_fcf,
         policy_basis=policy_basis,
         bridge_resolved=bridge_resolved,
+        screen_ttm_unverified=bool(screen_bases["screen_ttm_unverified"]),
+        screen_ttm_for_policy=screen_bases["screen_ttm_for_policy"],
     )
     if filing_aligned_preview is not None and bundle.get("filing_aligned") is None:
         bundle["filing_aligned"] = filing_aligned_preview
@@ -1690,13 +1752,15 @@ def format_fcf_basis_action_note(
     company_adjusted: float | None = None,
     filing_currency: str = "USD",
     company_adjusted_currency: str | None = None,
+    screen_ttm_unverified: bool = False,
 ) -> str:
     """Surface filing-aligned, screen TTM, and company-adjusted FCF side-by-side."""
     parts: list[str] = []
     if filing_aligned is not None:
         parts.append(f"filing {_format_fcf_compact(filing_aligned, currency=filing_currency)}")
     if screen_ttm is not None:
-        parts.append(f"screen TTM {_format_fcf_compact(screen_ttm, currency=filing_currency)}")
+        screen_label = "screen TTM (unverified)" if screen_ttm_unverified else "screen TTM"
+        parts.append(f"{screen_label} {_format_fcf_compact(screen_ttm, currency=filing_currency)}")
     if company_adjusted is not None:
         parts.append(
             "company-adj "
@@ -1818,6 +1882,7 @@ def append_fcf_divergence_to_action_note(
                     company_adjusted=company_adjusted,
                     filing_currency=filing_currency,
                     company_adjusted_currency=company_adjusted_currency,
+                    screen_ttm_unverified=bool(bundle.get("screen_ttm_unverified")),
                 )
             )
         elif canonical is not None and screen_ttm is not None:

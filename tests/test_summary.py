@@ -31,6 +31,7 @@ from value_investor.scoring.fcf import (
     parse_filing_aligned_from_action_note,
     parse_screen_ttm_from_action_note,
     reconcile_fcf,
+    reconcile_fcf_for_ticker,
 )
 from value_investor.scoring.sector_overrides import AGRICULTURE_COMMODITIES_SECTOR
 from value_investor.signals import Signal, assign_signal
@@ -768,6 +769,65 @@ def test_reconcile_fcf_discards_company_adjusted_outlier():
     assert bundle["policy_basis"] == "filing_aligned"
     assert "company_adjusted" in (bundle.get("auto_policy_discarded") or [])
     assert bundle["divergence_flagged"] is True
+
+
+def test_format_fcf_basis_action_note_labels_unverified_screen_ttm():
+    note = append_fcf_divergence_to_action_note(
+        "",
+        canonical=187_000_000.0,
+        screen_ttm=211_900_000.0,
+        fcf_bundle={
+            "filing_aligned": 148_000_000.0,
+            "company_adjusted": 187_000_000.0,
+            "company_adjusted_currency": "GBP",
+            "currency": "GBP",
+            "screen_ttm_unverified": True,
+            "divergence_flagged": True,
+        },
+    )
+    assert "screen TTM (unverified)" in note
+    assert "£211.9M" in note
+
+
+def test_reconcile_fcf_for_ticker_suppresses_unverified_screen_for_policy(tmp_path: Path):
+    """ITV-like: empty Yahoo quarterlies → filing/RNS policy, not lone Yahoo TTM."""
+    sources = tmp_path / "research" / "ZZZZ.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "ZZZZ.L",
+        "quarterly_cashflow": {},
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 202_000_000.0,
+                "Capital Expenditure": -54_000_000.0,
+                "Free Cash Flow": 148_000_000.0,
+            }
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    (sources / "ir_presentation_metrics.json").write_text(
+        json.dumps(
+            {
+                "bridges": [
+                    {
+                        "period": "annual FY2025",
+                        "bridge_type": "fcf_by_division",
+                        "currency": "GBP",
+                        "derived": {"total_fcf_millions": 187.0},
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    bundle = reconcile_fcf_for_ticker("ZZZZ.L", screen_ttm=211_900_000.0, output_dir=tmp_path)
+    assert bundle["screen_ttm_unverified"] is True
+    assert bundle["screen_ttm"] == pytest.approx(211_900_000.0)
+    assert bundle["canonical"] == pytest.approx(187_000_000.0)
+    assert bundle["policy_basis"] == "company_adjusted"
+    assert str(bundle["source"]).startswith("auto_majority")
+    assert bundle["auto_policy_resolved"] is True
 
 
 def test_reconcile_fcf_majority_prefers_company_when_paired_with_filing():
@@ -2289,7 +2349,8 @@ def test_build_company_reports_fcf_basis_overlay_caps_wix_style_buy(tmp_path: Pa
     assert snapshot["conviction_score"] == pytest.approx(0.8304 * 0.85)
     assert "FCF basis mismatch" in snapshot["action_note"]
     assert "filing £168.7M" in snapshot["action_note"]
-    assert "screen TTM £133.9M" in snapshot["action_note"]
+    assert "screen TTM" in snapshot["action_note"]
+    assert "£133.9M" in snapshot["action_note"]
 
 
 def test_build_company_reports_exports_fcf_basis_overlay_for_mony_style_note(

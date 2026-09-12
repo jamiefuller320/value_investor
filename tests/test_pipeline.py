@@ -40,6 +40,7 @@ from value_investor.scoring.fcf import (
     parse_adjusted_eps_growth_pct,
     parse_interim_eps_decline_pct,
     parse_screen_ttm_from_action_note,
+    reconcile_fcf_for_ticker,
     screen_ttm_from_row,
     suppress_fcf_yield_passes,
 )
@@ -2543,6 +2544,43 @@ def test_enrich_universe_with_filing_metrics_extracts_basic_eps_growth(tmp_path:
     assert row["basic_eps"] == pytest.approx(0.214)
     assert row["basic_eps_prev"] == pytest.approx(0.213)
     assert row["basic_eps_growth_pct"] == pytest.approx(0.00469483568, rel=1e-4)
+
+
+def test_enrich_universe_with_canonical_fcf_prefers_filing_when_yahoo_quarterly_empty(
+    tmp_path: Path,
+):
+    """UK half-year reporters: canonical FCF must not stay on unverified Yahoo TTM."""
+    sources = tmp_path / "research" / "ZZMG.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "ZZMG.L",
+                "quarterly_cashflow": {},
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 210_000_000.0,
+                        "Capital Expenditure": -39_300_000.0,
+                        "Free Cash Flow": 170_700_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    universe = pd.DataFrame([{"ticker": "ZZMG.L", "free_cashflow": 141_500_000.0}])
+    enriched = enrich_universe_with_canonical_fcf(universe, tmp_path)
+    row = enriched.iloc[0]
+    assert row["free_cashflow_screen_ttm"] == pytest.approx(141_500_000.0)
+    assert row["free_cashflow"] == pytest.approx(170_700_000.0)
+
+    bundle = reconcile_fcf_for_ticker(
+        "ZZMG.L",
+        screen_ttm=141_500_000.0,
+        output_dir=tmp_path,
+    )
+    assert bundle["screen_ttm_unverified"] is True
+    assert bundle["policy_basis"] == "filing_aligned"
 
 
 def test_enrich_universe_with_canonical_fcf_uses_company_adjusted_when_present(tmp_path: Path):
