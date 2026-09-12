@@ -9,14 +9,14 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any, Literal
 
-CompileScope = Literal["full", "backstop"]
-
 from value_investor.post_run_review import _parse_post_run_review
 from value_investor.research.gap_fill import DEFAULT_SUGGESTIONS_PATH
 from value_investor.research.ingest_improvement import (
     map_suggestion_to_source_ids,
 )
 from value_investor.storage import read_json, write_json
+
+CompileScope = Literal["full", "backstop"]
 
 logger = logging.getLogger(__name__)
 
