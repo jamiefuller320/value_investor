@@ -17,6 +17,8 @@ from value_investor.research.filings import (
     _PDF_DEPTH_LEAD_CHARS,
     PARKED_SOURCE_HUNTER_SKIP,
     _apply_headline_period,
+    _ch_latest_group_accounts_anchor,
+    _ch_row_eligible_for_refetch,
     _compose_filing_body_with_depth_sections,
     _compose_pdf_body_text,
     _extract_filing_document_text,
@@ -1726,8 +1728,11 @@ def test_refetch_companies_house_filing_bodies_retries_shallow_ixbrl_body(tmp_pa
             {
                 "id": row_id,
                 "source": "companies_house",
-                "headline": "Companies House accounts",
+                "headline": "Companies House accounts — accounts-with-accounts-type-group",
+                "summary": "accounts-with-accounts-type-group",
                 "url": "https://document-api.company-information.service.gov.uk/document/ch1",
+                "document_metadata_url": "https://document-api.company-information.service.gov.uk/document/ch1",
+                "published_at": "2025-09-30T00:00:00+00:00",
                 "period": "annual",
                 "has_body": True,
                 "body_path": str(filings_dir / "bodies" / f"{row_id}.txt"),
@@ -2532,9 +2537,11 @@ def test_refetch_companies_house_filing_bodies_pdf_extract(tmp_path, monkeypatch
             {
                 "id": "ch_row_1",
                 "source": "companies_house",
-                "headline": "Companies House accounts — full",
+                "headline": "Companies House accounts — accounts-with-accounts-type-group",
+                "summary": "accounts-with-accounts-type-group",
                 "url": ch_url,
                 "document_metadata_url": ch_url,
+                "published_at": "2025-09-30T00:00:00+00:00",
                 "period": "annual",
                 "has_body": False,
                 "body_path": None,
@@ -2579,9 +2586,11 @@ def test_refetch_companies_house_filing_bodies_retries_stale_has_body(tmp_path, 
             {
                 "id": "ch_stale",
                 "source": "companies_house",
-                "headline": "Companies House accounts — group",
+                "headline": "Companies House accounts — accounts-with-accounts-type-group",
+                "summary": "accounts-with-accounts-type-group",
                 "url": ch_url,
                 "document_metadata_url": ch_url,
+                "published_at": "2025-09-30T00:00:00+00:00",
                 "period": "annual",
                 "has_body": True,
                 "body_path": str(bodies_dir / "ch_stale.txt"),
@@ -2610,7 +2619,9 @@ def test_refetch_companies_house_filing_bodies_multi_indexed_rows(tmp_path, monk
         {
             "id": f"ch_row_{idx}",
             "source": "companies_house",
-            "headline": f"Companies House accounts — group {idx}",
+            "headline": "Companies House accounts — accounts-with-accounts-type-group",
+            "summary": "accounts-with-accounts-type-group",
+            "published_at": f"2025-0{idx + 1}-15T00:00:00+00:00",
             "url": f"{ch_url}{idx}",
             "document_metadata_url": f"{ch_url}{idx}",
             "period": "annual",
@@ -2624,10 +2635,11 @@ def test_refetch_companies_house_filing_bodies_multi_indexed_rows(tmp_path, monk
         json.dumps({"ticker": "MER.L", "filings": rows, "summary": {"total": 5, "with_body": 0}}),
         encoding="utf-8",
     )
-    body_text = "A" * 220 + " consolidated income pension covenant going concern"
     monkeypatch.setattr(
         "value_investor.research.filings._fetch_companies_house_body",
-        lambda row: body_text,
+        lambda row: (
+            "A" * 220 + f" consolidated income pension covenant going concern {row.get('id')}"
+        ),
     )
     result = refetch_companies_house_filing_bodies(filings_dir, max_bodies=2)
     assert result["attempted"] == 5
@@ -2635,6 +2647,236 @@ def test_refetch_companies_house_filing_bodies_multi_indexed_rows(tmp_path, monk
     assert result["with_body_after"] == 2
     saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     assert sum(1 for row in saved["filings"] if row.get("has_body")) == 2
+
+
+def test_ch_row_eligible_for_refetch_skips_megp_admin_and_stale_parent():
+    """MEGP.L regression: do not spend refetch budget on 2019 parent interim or ARD admin."""
+    ch_rows = [
+        {
+            "source": "companies_house",
+            "summary": "accounts-with-accounts-type-group",
+            "published_at": "2025-09-30T00:00:00+00:00",
+        },
+        {
+            "source": "companies_house",
+            "summary": "accounts-with-accounts-type-interim",
+            "published_at": "2019-10-11T00:00:00+00:00",
+        },
+        {
+            "source": "companies_house",
+            "summary": "change-account-reference-date-company-current-extended",
+            "published_at": "2020-03-31T00:00:00+00:00",
+        },
+    ]
+    anchor = _ch_latest_group_accounts_anchor(ch_rows)
+    assert anchor is not None
+    assert _ch_row_eligible_for_refetch(ch_rows[0], anchor=anchor) is True
+    assert _ch_row_eligible_for_refetch(ch_rows[1], anchor=anchor) is False
+    assert _ch_row_eligible_for_refetch(ch_rows[2], anchor=anchor) is False
+
+
+def test_refetch_companies_house_filing_bodies_skips_stale_and_admin(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    ch_url = "https://document-api.company-information.service.gov.uk/document/ch"
+    rows = [
+        {
+            "id": "ch_group_2025",
+            "source": "companies_house",
+            "headline": "Companies House accounts — accounts-with-accounts-type-group",
+            "summary": "accounts-with-accounts-type-group",
+            "url": f"{ch_url}/2025",
+            "document_metadata_url": f"{ch_url}/2025",
+            "published_at": "2025-09-30T00:00:00+00:00",
+            "period": "annual",
+            "has_body": False,
+            "priority": 140,
+        },
+        {
+            "id": "ch_parent_2019",
+            "source": "companies_house",
+            "headline": "Companies House accounts — accounts-with-accounts-type-interim",
+            "summary": "accounts-with-accounts-type-interim",
+            "url": f"{ch_url}/2019",
+            "document_metadata_url": f"{ch_url}/2019",
+            "published_at": "2019-10-11T00:00:00+00:00",
+            "period": "interim",
+            "has_body": False,
+            "priority": 80,
+        },
+        {
+            "id": "ch_admin_2020",
+            "source": "companies_house",
+            "headline": "Companies House accounts — change-account-reference-date-company-current-extended",
+            "summary": "change-account-reference-date-company-current-extended",
+            "url": f"{ch_url}/2020",
+            "document_metadata_url": f"{ch_url}/2020",
+            "published_at": "2020-03-31T00:00:00+00:00",
+            "period": "other",
+            "has_body": False,
+            "priority": 0,
+        },
+    ]
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {"ticker": "MEGP.L", "company_name": "ME Group International plc", "filings": rows}
+        ),
+        encoding="utf-8",
+    )
+    body_text = "A" * 220 + " consolidated income pension covenant going concern segment"
+    fetched_ids: list[str] = []
+
+    def fake_fetch(row):
+        fetched_ids.append(str(row.get("id")))
+        return body_text
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_companies_house_body",
+        fake_fetch,
+    )
+    result = refetch_companies_house_filing_bodies(filings_dir, max_bodies=5)
+    assert result["attempted"] == 1
+    assert result["skipped_ineligible"] == 2
+    assert result["fetched"] == 1
+    assert fetched_ids == ["ch_group_2025"]
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    by_id = {row["id"]: row for row in saved["filings"]}
+    assert by_id["ch_group_2025"]["has_body"] is True
+    assert by_id["ch_parent_2019"]["has_body"] is False
+    assert by_id["ch_admin_2020"]["has_body"] is False
+
+
+def test_refetch_companies_house_rejects_s838_parent_stub_body(tmp_path, monkeypatch):
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    ch_url = "https://document-api.company-information.service.gov.uk/document/ch"
+    rows = [
+        {
+            "id": "ch_group_anchor",
+            "source": "companies_house",
+            "headline": "Companies House accounts — accounts-with-accounts-type-group",
+            "summary": "accounts-with-accounts-type-group",
+            "url": f"{ch_url}/group",
+            "document_metadata_url": f"{ch_url}/group",
+            "published_at": "2025-09-30T00:00:00+00:00",
+            "period": "annual",
+            "has_body": True,
+            "body_path": None,
+            "priority": 140,
+        },
+        {
+            "id": "ch_interim_recent",
+            "source": "companies_house",
+            "headline": "Companies House accounts — accounts-with-accounts-type-interim",
+            "summary": "accounts-with-accounts-type-interim",
+            "url": ch_url,
+            "document_metadata_url": ch_url,
+            "published_at": "2025-07-01T00:00:00+00:00",
+            "period": "interim",
+            "has_body": False,
+            "priority": 80,
+        },
+    ]
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir()
+    anchor_body = "B" * 220 + " consolidated group accounts cash flow going concern segment"
+    (bodies_dir / "ch_group_anchor.txt").write_text(anchor_body, encoding="utf-8")
+    rows[0]["body_path"] = str(bodies_dir / "ch_group_anchor.txt")
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": rows}),
+        encoding="utf-8",
+    )
+    s838_body = (
+        "Interim parent company financial statements for the 6-month period ended 30 June 2025. "
+        "Prepared under sections 836 and 838 of the Companies Act 2006 for confirming distributable "
+        "reserves solely as an individual company. " + ("x" * 220)
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_companies_house_body",
+        lambda _row: s838_body,
+    )
+    result = refetch_companies_house_filing_bodies(filings_dir, max_bodies=3)
+    assert result["attempted"] == 1
+    assert result["fetched"] == 0
+    assert result["body_rejected"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is False
+
+
+def test_refetch_ir_allowlist_rejects_duplicate_pdf_hash(tmp_path: Path, monkeypatch):
+    allowlist_path = tmp_path / "ir_urls.json"
+    url_a = "https://example.com/hik-trading-update.pdf"
+    url_b = "https://example.com/hik-wrong-alias.pdf"
+    allowlist_path.write_text(
+        json.dumps({"urls": {"HIK.L": [url_a, url_b]}}),
+        encoding="utf-8",
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    digest_a = "269391cd9a247a83"
+    digest_b = "aaaaaaaaaaaaaaaa"
+    shared_body = (
+        "Trading update April 2026: revenue growth 2% to 4% and operating profit "
+        "in the range of $720 million." + ("x" * 220)
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": f"ir_{digest_a}",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — hik-trading-update.pdf",
+                        "url": url_a,
+                        "period": "trading_update",
+                        "has_body": True,
+                        "body_path": None,
+                        "body_content_hash": _ir_body_content_hash(shared_body),
+                        "priority": 130,
+                    },
+                    {
+                        "id": f"ir_{digest_b}",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — hik-wrong-alias.pdf",
+                        "url": url_b,
+                        "period": "trading_update",
+                        "has_body": False,
+                        "body_path": None,
+                        "priority": 120,
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir()
+    (bodies_dir / f"ir_{digest_a}.txt").write_text(shared_body, encoding="utf-8")
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda _url: shared_body,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_pdf_alternate_candidates",
+        lambda _url: [],
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
+    )
+
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "HIK.L",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["fetched"] == 0
+    assert result["body_rejected"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    second = next(row for row in saved["filings"] if row["id"] == f"ir_{digest_b}")
+    assert second["has_body"] is False
 
 
 def test_fetch_document_bytes_attempts_oversized_pdf_when_only_format(monkeypatch):

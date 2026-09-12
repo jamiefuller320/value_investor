@@ -3418,6 +3418,141 @@ def _ch_row_needs_body_refetch(row: dict[str, Any], bodies_dir: Path) -> bool:
     return _ch_body_lacks_financial_depth(text)
 
 
+_CH_ADMIN_ACCOUNT_PATTERNS = (
+    r"\bchange-account-reference-date\b",
+    r"\bchange-of-accounting-reference-date\b",
+    r"\bconfirmation-statement-with-updates\b",
+)
+_CH_GROUP_ACCOUNTS_SUMMARY_RE = re.compile(
+    r"accounts-(?:amended-)?with-accounts-type-(?:group|full|total-exemption-full|medium|small|micro)",
+    re.I,
+)
+_CH_INTERIM_ACCOUNTS_SUMMARY_RE = re.compile(
+    r"accounts-(?:amended-)?with-accounts-type-interim", re.I
+)
+
+
+def _ch_summary_blob(row: dict[str, Any]) -> str:
+    return f"{row.get('summary') or ''} {row.get('headline') or ''}".lower()
+
+
+def _is_ch_admin_filing_row(row: dict[str, Any]) -> bool:
+    """True for CH index rows that are admin filings, not statutory group accounts."""
+    blob = _ch_summary_blob(row)
+    if any(re.search(pat, blob) for pat in _CH_ADMIN_ACCOUNT_PATTERNS):
+        return True
+    if "accounts-type" not in blob and re.search(r"\bmade-up-date\b|\bchange-account\b", blob):
+        return True
+    return False
+
+
+def _is_ch_group_statutory_accounts_row(row: dict[str, Any]) -> bool:
+    """True when the CH description is a filed group/full statutory accounts package."""
+    if _is_ch_admin_filing_row(row):
+        return False
+    return bool(_CH_GROUP_ACCOUNTS_SUMMARY_RE.search(_ch_summary_blob(row)))
+
+
+def _ch_parse_index_date(row: dict[str, Any]) -> datetime | None:
+    prefix = str(row.get("published_at") or "")[:10]
+    if not prefix:
+        return None
+    try:
+        return datetime.strptime(prefix, "%Y-%m-%d").replace(tzinfo=UTC)
+    except ValueError:
+        return None
+
+
+def _ch_latest_group_accounts_anchor(ch_rows: list[dict[str, Any]]) -> datetime | None:
+    """Most recent filed group/full accounts date across indexed CH rows."""
+    dates: list[datetime] = []
+    for row in ch_rows:
+        if not _is_ch_group_statutory_accounts_row(row):
+            continue
+        parsed = _ch_parse_index_date(row)
+        if parsed:
+            dates.append(parsed)
+    return max(dates) if dates else None
+
+
+def _ch_row_eligible_for_refetch(
+    row: dict[str, Any],
+    *,
+    anchor: datetime | None,
+) -> bool:
+    """
+    Limit CH refetch to current-cycle group accounts (not admin or stale parent stubs).
+
+    Skips MEGP-style 2019 parent interim and 2020 accounting-reference-date forms.
+    """
+    if not _is_ch_filing_row(row) or _is_ch_admin_filing_row(row):
+        return False
+    entity = str(row.get("entity_type") or "other")
+    if entity in ("holding_disclosure",):
+        return False
+    blob = _ch_summary_blob(row)
+    pub = _ch_parse_index_date(row)
+    if _is_ch_group_statutory_accounts_row(row):
+        if anchor is None or pub is None:
+            return True
+        return (anchor - pub).days <= 730
+    if _CH_INTERIM_ACCOUNTS_SUMMARY_RE.search(blob):
+        if anchor is None or pub is None:
+            return False
+        return 0 <= (anchor - pub).days <= 450
+    return False
+
+
+def _ch_refetch_sort_key(row: dict[str, Any]) -> tuple[Any, ...]:
+    entity = str(row.get("entity_type") or "other")
+    entity_penalty = 0
+    if entity == "s838_holding":
+        entity_penalty = 1
+    elif entity == "other":
+        entity_penalty = 2
+    return (
+        entity_penalty,
+        -int(row.get("priority") or 0),
+        str(row.get("published_at") or ""),
+    )
+
+
+def _try_persist_ch_filing_body(
+    item: dict[str, Any],
+    body: str,
+    *,
+    bodies_dir: Path,
+    known_body_hashes: dict[str, str] | None = None,
+) -> tuple[dict[str, Any], str | None]:
+    """Validate period/entity, dedupe by hash, and persist a Companies House body."""
+    if not _filing_text_is_substantive(body, min_chars=200):
+        return item, "too_short"
+    updated = _apply_headline_period(item, body_snippet=body[:4000])
+    entity = str(updated.get("entity_type") or "other")
+    if entity in ("s838_holding", "holding_disclosure"):
+        return item, "parent_only_stub"
+    valid, reason = _validate_filing_body_period_content(updated, body)
+    if not valid:
+        return item, reason
+    row_id = str(updated.get("id") or "")
+    content_hash, dup_reason = _reject_duplicate_filing_body_hash(
+        row_id,
+        body,
+        known_body_hashes or {},
+    )
+    if dup_reason:
+        return item, dup_reason
+    filename = f"{updated['id']}.txt"
+    path = bodies_dir / filename
+    path.write_text(body, encoding="utf-8")
+    updated["has_body"] = True
+    updated["body_path"] = str(path)
+    updated["body_content_hash"] = content_hash
+    if known_body_hashes is not None and row_id:
+        known_body_hashes[content_hash] = row_id
+    return updated, None
+
+
 def _url_path_endswith(url: str, suffix: str) -> bool:
     """True when the URL path (ignoring query/fragment) ends with ``suffix``."""
     path = urllib.parse.urlparse(str(url or "")).path.lower()
@@ -4404,6 +4539,12 @@ def refetch_ir_allowlist_filing_bodies(
         and not (skip_unfetchable and row.get("unfetchable"))
         and (not row.get("has_body") or _ir_allowlist_row_needs_body_refetch(row, bodies_dir))
     ]
+    missing.sort(
+        key=lambda row: (
+            -int(row.get("priority") or 0),
+            str(row.get("published_at") or ""),
+        )
+    )
     skipped_unfetchable = sum(
         1
         for row in ir_rows
@@ -4442,11 +4583,14 @@ def refetch_ir_allowlist_filing_bodies(
     investegate_fallbacks = 0
     retry_log: list[dict[str, Any]] = []
     known_body_hashes = _filing_body_hashes_from_rows(filings, bodies_dir=bodies_dir)
+    body_rejected = 0
+    missing_ids = {row.get("id") for row in missing}
     updated: list[dict[str, Any]] = []
     for row in filings:
         item = dict(row)
         if (
             downloaded < max_bodies
+            and item.get("id") in missing_ids
             and _is_ir_allowlist_row(item)
             and item.get("url")
             and not (skip_unfetchable and item.get("unfetchable"))
@@ -4549,31 +4693,47 @@ def refetch_ir_allowlist_filing_bodies(
                     item["unfetchable_at"] = datetime.now(UTC).isoformat()
                     skipped_unfetchable += 1
             if body:
-                content_hash, dup_reason = _reject_duplicate_filing_body_hash(
-                    row_id,
+                valid, reject_reason = _validate_ir_allowlist_body_content(
+                    item,
                     body,
-                    known_body_hashes,
+                    ticker=ticker,
                 )
-                if dup_reason:
+                if not valid:
                     logger.debug(
                         "IR allowlist body rejected for %s: %s",
                         row_id,
-                        dup_reason,
+                        reject_reason,
                     )
+                    body_rejected += 1
                     body = None
                 else:
-                    filename = f"{item['id']}.txt"
-                    path = bodies_dir / filename
-                    path.write_text(body, encoding="utf-8")
-                    item["has_body"] = True
-                    item["body_path"] = str(path)
-                    item["body_content_hash"] = content_hash
-                    known_body_hashes[content_hash] = row_id
-                    if fetch_source and fetch_source.startswith("pdf_"):
-                        item["body_fetch_parser"] = fetch_source.removeprefix("pdf_")
-                    if fetch_source == "investegate_html":
-                        investegate_fallbacks += 1
-                    downloaded += 1
+                    item = _apply_headline_period(item, body_snippet=body[:4000])
+                    content_hash, dup_reason = _reject_duplicate_filing_body_hash(
+                        row_id,
+                        body,
+                        known_body_hashes,
+                    )
+                    if dup_reason:
+                        logger.debug(
+                            "IR allowlist body rejected for %s: %s",
+                            row_id,
+                            dup_reason,
+                        )
+                        body_rejected += 1
+                        body = None
+                    else:
+                        filename = f"{item['id']}.txt"
+                        path = bodies_dir / filename
+                        path.write_text(body, encoding="utf-8")
+                        item["has_body"] = True
+                        item["body_path"] = str(path)
+                        item["body_content_hash"] = content_hash
+                        known_body_hashes[content_hash] = row_id
+                        if fetch_source and fetch_source.startswith("pdf_"):
+                            item["body_fetch_parser"] = fetch_source.removeprefix("pdf_")
+                        if fetch_source == "investegate_html":
+                            investegate_fallbacks += 1
+                        downloaded += 1
         updated.append(item)
 
     after = sum(1 for row in updated if row.get("has_body"))
@@ -4591,6 +4751,7 @@ def refetch_ir_allowlist_filing_bodies(
         "retry_log": retry_log,
         "investegate_fallbacks": investegate_fallbacks,
         "skipped_unfetchable": skipped_unfetchable,
+        "body_rejected": body_rejected,
         "deadline_hit": deadline_hit,
         "merge": merge_meta,
         "mandatory": True,
@@ -5402,7 +5563,18 @@ def _write_bodies(
                 body = None
                 extracted_headline: str | None = None
                 if _is_ch_filing_row(row):
-                    body = _fetch_companies_house_body(row)
+                    ch_body = _fetch_companies_house_body(row)
+                    if ch_body:
+                        row, _reject_reason = _try_persist_ch_filing_body(
+                            row,
+                            ch_body,
+                            bodies_dir=bodies_dir,
+                            known_body_hashes=known_body_hashes,
+                        )
+                        if row.get("has_body"):
+                            downloaded += 1
+                    updated.append(row)
+                    continue
                 elif row.get("url"):
                     url = str(row["url"])
                     if ticker and company_name and _is_rns_body_fetch_candidate(row):
@@ -5777,32 +5949,60 @@ def refetch_companies_house_filing_bodies(
         }
 
     filings = list(payload.get("filings") or [])
+    ticker = str(payload.get("ticker") or "")
+    company_name = str(payload.get("company_name") or "")
     before = sum(1 for row in filings if row.get("has_body"))
     bodies_dir.mkdir(parents=True, exist_ok=True)
+    if ticker and company_name:
+        filings = enrich_filing_rows(
+            filings,
+            ticker=ticker,
+            company_name=company_name,
+        )
     ch_rows = [row for row in filings if _is_ch_filing_row(row)]
-    missing = [row for row in ch_rows if _ch_row_needs_body_refetch(row, bodies_dir)]
+    anchor = _ch_latest_group_accounts_anchor(ch_rows)
+    needs_body = [row for row in ch_rows if _ch_row_needs_body_refetch(row, bodies_dir)]
+    missing = [row for row in needs_body if _ch_row_eligible_for_refetch(row, anchor=anchor)]
+    skipped_ineligible = len(needs_body) - len(missing)
+    missing.sort(key=_ch_refetch_sort_key)
+    missing_ids = {row.get("id") for row in missing}
     if not missing:
         return {
             "attempted": 0,
             "fetched": 0,
             "with_body_before": before,
             "with_body_after": before,
+            "skipped_ineligible": skipped_ineligible,
             "note": "no missing CH bodies",
         }
 
     downloaded = 0
+    body_rejected = 0
+    known_body_hashes = _filing_body_hashes_from_rows(filings, bodies_dir=bodies_dir)
+    fetch_order = sorted(
+        filings,
+        key=lambda row: (0 if row.get("id") in missing_ids else 1, *_ch_refetch_sort_key(row)),
+    )
     updated: list[dict[str, Any]] = []
-    for row in filings:
+    for row in fetch_order:
         item = dict(row)
-        if downloaded < max_bodies and _ch_row_needs_body_refetch(item, bodies_dir):
+        if (
+            downloaded < max_bodies
+            and item.get("id") in missing_ids
+            and _ch_row_needs_body_refetch(item, bodies_dir)
+        ):
             body = _fetch_companies_house_body(item)
             if body:
-                filename = f"{item['id']}.txt"
-                path = bodies_dir / filename
-                path.write_text(body, encoding="utf-8")
-                item["has_body"] = True
-                item["body_path"] = str(path)
-                downloaded += 1
+                item, reject_reason = _try_persist_ch_filing_body(
+                    item,
+                    body,
+                    bodies_dir=bodies_dir,
+                    known_body_hashes=known_body_hashes,
+                )
+                if reject_reason:
+                    body_rejected += 1
+                elif item.get("has_body"):
+                    downloaded += 1
             elif item.get("has_body"):
                 item["has_body"] = False
                 item["body_path"] = None
@@ -5818,6 +6018,8 @@ def refetch_companies_house_filing_bodies(
         "fetched": downloaded,
         "with_body_before": before,
         "with_body_after": after,
+        "skipped_ineligible": skipped_ineligible,
+        "body_rejected": body_rejected,
         "note": "refetch_companies_house_filing_bodies",
     }
 
