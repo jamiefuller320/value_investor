@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-12T12:37:13.464616+00:00",
+  "compiled_at": "2026-09-12T14:22:44.993546+00:00",
   "run_at": "2026-09-12T11:21:34.513768+00:00",
-  "task_count": 10,
+  "task_count": 11,
   "tasks": [
     {
       "id": "eng-20260912-01",
@@ -228,6 +228,87 @@
         "src/value_investor/scoring/",
         "tests/test_pipeline.py",
         "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260912-21",
+      "area": "ingest",
+      "title": "Close library ingest gaps for tsx60 / SU.TO (chain 1/3: 0/1 improved, run igc-20260912-02)",
+      "summary": "Ingest gap-closure run igc-20260912-02 (chain root igc-20260912-02, round 1) targeted SU.TO with outstanding indexed gaps after refetch yield 0/1. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20260912-02",
+        "trial_id": "igc-20260912-02",
+        "chain_root_id": "igc-20260912-02",
+        "chain_round": 1,
+        "tickers": [
+          "SU.TO"
+        ],
+        "ticker": "SU.TO",
+        "market_id": "tsx60",
+        "library_market": "tsx60",
+        "universe": "library",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": true,
+        "refetch_attempted": 1,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "SU.TO"
+          ],
+          "market_id": "tsx60",
+          "universe": "library",
+          "critical_path_blocker": "indexed_without_body"
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "SU.TO"
+          ],
+          "market_id": "tsx60",
+          "universe": "library",
+          "critical_path_blocker": "indexed_without_body"
+        },
+        "compile_reason": "zero_yield_refetch"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for SU.TO",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
       ],
       "blocked_paths": [
         "src/value_investor/paper_fund.py",
@@ -486,5 +567,9 @@
     "attention_parked_count": 0,
     "evaluated_at": "2026-09-12T13:25:44.856076+00:00",
     "should_send_full_queue_warning": false
-  }
+  },
+  "micro_compile_source": "ingest_gap_closure",
+  "source_gap_closure_run_id": "igc-20260912-02",
+  "source_trial_id": "igc-20260912-02",
+  "source_chain_root_id": "igc-20260912-02"
 }
