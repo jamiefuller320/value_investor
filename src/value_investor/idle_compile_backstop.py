@@ -141,7 +141,11 @@ def evaluate_idle_compile_backstop(
             checks=checks,
         )
 
-    artifact = ensure_post_run_review_artifact(output_dir=output_dir, latest_path=latest_path)
+    artifact = ensure_post_run_review_artifact(
+        output_dir=output_dir,
+        latest_path=latest_path,
+        stale_hours=stale_hours,
+    )
     if artifact is None:
         return IdleCompileBackstopDecision(
             should_compile=False,
@@ -163,7 +167,11 @@ def evaluate_idle_compile_backstop(
             checks=checks,
         )
 
-    dropped = audit_compile_drop_risk(tasks_path=tasks_path, output_dir=output_dir)
+    dropped = audit_compile_drop_risk(
+        tasks_path=tasks_path,
+        output_dir=output_dir,
+        scope="backstop",
+    )
     checks["compile_drop_risk_ids"] = dropped
     if dropped:
         return IdleCompileBackstopDecision(
@@ -177,6 +185,7 @@ def evaluate_idle_compile_backstop(
         tasks_path=tasks_path,
         suggestions_path=suggestions_path,
         max_tasks=max_tasks,
+        scope="backstop",
     )
     checks["preview_new_open_count"] = would_add
     if would_add <= 0:
@@ -219,13 +228,18 @@ def run_idle_compile_backstop(
     if not apply or not decision.should_compile:
         return result
 
-    ensure_post_run_review_artifact(output_dir=output_dir, latest_path=latest_path)
+    ensure_post_run_review_artifact(
+        output_dir=output_dir,
+        latest_path=latest_path,
+        stale_hours=stale_hours,
+    )
     payload = compile_engineering_tasks(
         output_dir=output_dir,
         suggestions_path=suggestions_path,
         max_tasks=max_tasks,
         committed_path=tasks_path,
         tasks_path=tasks_path,
+        scope="backstop",
     )
     result["applied"] = True
     result["compile"] = {

@@ -71,9 +71,12 @@ def test_idle_backstop_compiles_when_plan_unlinked(tmp_path: Path):
         suggestions_path=missing_suggestions,
     )
     assert result["applied"] is True
-    assert int((result.get("compile") or {}).get("added_open_count") or 0) == 1
+    added = int((result.get("compile") or {}).get("added_open_count") or 0)
+    assert added == 1
     payload = json.loads(tasks_path.read_text(encoding="utf-8"))
-    assert any(row.get("status") == "open" for row in payload.get("tasks") or [])
+    open_rows = [row for row in payload.get("tasks") or [] if row.get("status") == "open"]
+    assert open_rows
+    assert all(str(row.get("source") or "") != "research_model_suggestions" for row in open_rows)
 
 
 def test_idle_backstop_skips_when_tasks_already_merged(tmp_path: Path):

@@ -13,6 +13,7 @@ from value_investor.engineering_queue import (
 from value_investor.engineering_recovery import recover_engineering_queue
 from value_investor.engineering_tasks import (
     COMMITTED_TASKS_PATH,
+    CompileScope,
     build_compiled_task_list,
     load_engineering_tasks,
     open_task_ids_dropped_by_merge,
@@ -68,13 +69,18 @@ def audit_compile_drop_risk(
     *,
     tasks_path: Path = COMMITTED_TASKS_PATH,
     output_dir: Path = Path("output"),
+    scope: CompileScope = "full",
 ) -> list[str]:
     """Open task ids that would be dropped if compile ran against output artifacts."""
     output_dir = Path(output_dir)
     if not (output_dir / "post_run_review.md").exists():
         return []
     existing_rows = list(load_engineering_tasks(tasks_path).get("tasks") or [])
-    compiled = build_compiled_task_list(output_dir=output_dir)
+    compiled = build_compiled_task_list(
+        output_dir=output_dir,
+        scope=scope,
+        tasks_path=tasks_path,
+    )
     return open_task_ids_dropped_by_merge(existing_rows, compiled)
 
 
