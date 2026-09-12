@@ -1,42 +1,111 @@
 {
-  "run_at": "2026-09-11T14:38:00.678652+00:00",
+  "run_at": "2026-09-12T07:33:44.698417+00:00",
   "market_id": "sp500",
   "targets": [
-    "WYNN"
+    "GEN",
+    "REG"
   ],
   "target_details": [
     {
-      "ticker": "WYNN",
-      "priority_score": 14.7727,
-      "filings_total": 23,
-      "filings_with_body": 22,
+      "ticker": "GEN",
+      "priority_score": 17.111500000000003,
+      "filings_total": 68,
+      "filings_with_body": 67,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    },
+    {
+      "ticker": "REG",
+      "priority_score": 14.9615,
+      "filings_total": 20,
+      "filings_with_body": 19,
       "indexed_without_body": 1,
       "reason": "indexed_without_body"
     }
   ],
   "results": [
     {
-      "ticker": "WYNN",
+      "ticker": "GEN",
       "reason": "indexed_without_body",
       "before": {
-        "filings_total": 23,
-        "filings_with_body": 22,
+        "filings_total": 68,
+        "filings_with_body": 67,
         "indexed_without_body": 1
       },
       "after": {
-        "filings_total": 23,
-        "filings_with_body": 23,
+        "filings_total": 71,
+        "filings_with_body": 71,
         "indexed_without_body": 0
       },
       "improved": true,
       "regime": "sec_edgar",
       "filings_summary": {
-        "total": 23,
+        "total": 68,
+        "annual": 5,
+        "interim": 8,
+        "trading_update": 1,
+        "other": 54,
+        "with_body": 68,
+        "period_coverage": {
+          "annual": {
+            "total": 5,
+            "with_body": 5
+          },
+          "interim": {
+            "total": 8,
+            "with_body": 8
+          },
+          "trading_update": {
+            "total": 1,
+            "with_body": 1
+          },
+          "other": {
+            "total": 54,
+            "with_body": 54
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 71,
+        "with_body_after": 71,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "note": "no missing IR allowlist bodies"
+      }
+    },
+    {
+      "ticker": "REG",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 20,
+        "filings_with_body": 19,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 20,
+        "filings_with_body": 20,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 20,
         "annual": 2,
         "interim": 7,
         "trading_update": 0,
-        "other": 14,
-        "with_body": 23,
+        "other": 11,
+        "with_body": 20,
         "period_coverage": {
           "annual": {
             "total": 2,
@@ -51,8 +120,8 @@
             "with_body": 0
           },
           "other": {
-            "total": 14,
-            "with_body": 14
+            "total": 11,
+            "with_body": 11
           }
         }
       },
@@ -62,8 +131,8 @@
         "attempted": 0,
         "fetched": 0,
         "failed": 0,
-        "with_body_before": 23,
-        "with_body_after": 23,
+        "with_body_before": 20,
+        "with_body_after": 20,
         "investegate_fallbacks": 0,
         "skipped_unfetchable": 0,
         "deadline_hit": false,
@@ -77,13 +146,14 @@
     }
   ],
   "improved": [
-    "WYNN"
+    "GEN",
+    "REG"
   ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-11T14:37:27.155899+00:00",
+    "snapshot_at": "2026-09-12T07:33:14.896339+00:00",
     "market_id": "sp500",
     "buy_tier_count": 140,
     "unmeasured_buy_tier": 0,
@@ -136,7 +206,7 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-09-11T14:38:00.664895+00:00",
+    "snapshot_at": "2026-09-12T07:33:42.261445+00:00",
     "market_id": "sp500",
     "buy_tier_count": 140,
     "unmeasured_buy_tier": 0,
@@ -230,7 +300,7 @@
   },
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-09-11T14:37:31.319928+00:00",
+    "assessed_at": "2026-09-12T07:33:21.549374+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -309,9 +379,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 25.27837967299996,
+  "used_seconds": 14.058817735999995,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3574.721620327,
+  "leftover_seconds": 3585.941182264,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -319,7 +389,7 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sp500",
-    "updated_at": "2026-09-11T14:38:00.671000+00:00",
+    "updated_at": "2026-09-12T07:33:42.269201+00:00",
     "exhausted": true,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
@@ -435,7 +505,36 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20260911-11"
+    "reason": "no parked leftover tickers remaining for hunter",
+    "tried_count": 2,
+    "candidate_count": 28,
+    "skipped_resolved_tickers": [
+      "ABI.BR",
+      "APAM.AS",
+      "BAS.DE",
+      "EVN.VI",
+      "GVR.IR",
+      "MUV2.DE",
+      "SAP.DE",
+      "SGO.PA",
+      "SKA-B.ST",
+      "UCB.BR",
+      "WIE.VI",
+      "APTV",
+      "BXP",
+      "CRH",
+      "FICO",
+      "LDOS",
+      "LMT",
+      "TSN",
+      "INTU",
+      "ULTP.L",
+      "APTD.L",
+      "BOOT.L",
+      "DFS.L",
+      "MER.L",
+      "TPT.L",
+      "GIB-A.TO"
+    ]
   }
 }
