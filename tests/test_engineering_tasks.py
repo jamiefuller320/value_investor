@@ -180,9 +180,7 @@ def test_compile_capacity_audit_flags_plan_beyond_cap(tmp_path: Path):
 
     output_dir = tmp_path / "output"
     output_dir.mkdir()
-    lines = [
-        f"{i}. [scoring] Plan item {i} — expected impact: x" for i in range(1, 11)
-    ]
+    lines = [f"{i}. [scoring] Plan item {i} — expected impact: x" for i in range(1, 11)]
     (output_dir / "post_run_review.md").write_text(
         "PRIORITISED IMPROVEMENT PLAN\n" + "\n".join(lines),
         encoding="utf-8",

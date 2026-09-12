@@ -253,8 +253,7 @@ def plan_titles_only_in_terminal_queue(
     terminal_titles = [
         str(row.get("title") or "")
         for row in rows
-        if isinstance(row, dict)
-        and str(row.get("status") or "open") in TERMINAL_TASK_STATUSES
+        if isinstance(row, dict) and str(row.get("status") or "open") in TERMINAL_TASK_STATUSES
     ]
     from value_investor.progress_report import _title_linked
 

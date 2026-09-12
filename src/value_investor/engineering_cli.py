@@ -76,8 +76,6 @@ from value_investor.engineering_tasks import (
     sync_committed_engineering_tasks,
     validate_engineering_pr_paths_for_task_id,
 )
-from value_investor.idle_compile_backstop import run_idle_compile_backstop
-from value_investor.ops_monitor import DEFAULT_LATEST_PATH
 from value_investor.engineering_verify import verify_merged_task
 from value_investor.hunter_auto_merge import (
     evaluate_hunter_merge_gate,
@@ -97,6 +95,8 @@ from value_investor.hunter_verify_agent import (
     post_pr_comment,
     run_hunter_verify_observer,
 )
+from value_investor.idle_compile_backstop import run_idle_compile_backstop
+from value_investor.ops_monitor import DEFAULT_LATEST_PATH
 from value_investor.storage import read_json
 
 

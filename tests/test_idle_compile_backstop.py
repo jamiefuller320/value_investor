@@ -5,7 +5,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from value_investor.engineering_tasks import compile_engineering_tasks, ensure_post_run_review_artifact
+from value_investor.engineering_tasks import (
+    compile_engineering_tasks,
+    ensure_post_run_review_artifact,
+)
 from value_investor.idle_compile_backstop import (
     evaluate_idle_compile_backstop,
     run_idle_compile_backstop,
