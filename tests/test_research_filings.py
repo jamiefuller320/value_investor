@@ -7201,9 +7201,11 @@ def test_fetch_filings_ir_allowlist_euro_depth_dq7a_ir_builtins(tmp_path: Path):
     assert len(rows) == 2
     assert all(row["source"] == "ir_allowlist" for row in rows)
     urls = [row["url"] for row in rows]
+    assert all(url.startswith("http://www.donegaligroup.com/") for url in urls)
     assert any("annual-report-financial-statements-310825" in url for url in urls)
     assert any("stock-exchange-release-280225" in url for url in urls)
     assert sum(1 for row in rows if row["period"] == "annual") == 1
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
 
 
 def test_load_ir_url_allowlist_canonicalizes_dq7a_ir_misattributed_dcc_url(tmp_path: Path):
@@ -7223,12 +7225,93 @@ def test_load_ir_url_allowlist_canonicalizes_dq7a_ir_misattributed_dcc_url(tmp_p
 
 
 def test_parked_source_hunter_dq7a_ir_euro_depth_has_fetchable_ir():
-    """eng-20260910-01: DQ7A.IR has live donegaligroup.com FY2025 AR + H1 stock-exchange PDFs."""
+    """eng-20260912-01: DQ7A.IR donegaligroup.com http PDFs fetch substantive FY2025 bodies."""
     assert "DQ7A.IR" not in PARKED_SOURCE_HUNTER_SKIP
     rows = fetch_filings_ir_allowlist("DQ7A.IR")
     assert len(rows) == 2
-    assert any("annual-report-financial-statements-310825" in row["url"] for row in rows)
-    assert any("stock-exchange-release-280225" in row["url"] for row in rows)
+    annual = next(row for row in rows if "annual-report-financial-statements-310825" in row["url"])
+    assert annual["url"].startswith("http://")
+    body = fetch_filing_body(annual["url"])
+    assert body
+    assert len(body) >= 10_000
+    assert "Donegal Investment Group" in body
+    valid, reason = _validate_ir_allowlist_body_content(annual, body, ticker="DQ7A.IR")
+    assert valid, reason
+    https_annual = annual["url"].replace("http://", "https://", 1)
+    body_via_https = fetch_filing_body(https_annual)
+    assert body_via_https
+    interim = next(row for row in rows if "stock-exchange-release-280225" in row["url"])
+    interim_body = fetch_filing_body(interim["url"])
+    assert interim_body
+    valid_i, reason_i = _validate_ir_allowlist_body_content(interim, interim_body, ticker="DQ7A.IR")
+    assert valid_i, reason_i
+
+
+def test_load_ir_url_allowlist_canonicalizes_dq7a_ir_https_donegal_to_http(tmp_path: Path):
+    """eng-20260912-01: stale https donegaligroup.com IR URLs rewrite to fetchable http PDFs."""
+    https_annual = (
+        "https://www.donegaligroup.com/media/1316/"
+        "donegal-investment-group-annual-report-financial-statements-310825-final.pdf"
+    )
+    live = _BUILTIN_IR_URLS["DQ7A.IR"][0]
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"DQ7A.IR": [https_annual]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live in mapping["DQ7A.IR"]
+    assert https_annual not in mapping["DQ7A.IR"]
+
+
+def test_refetch_ir_allowlist_migrates_dq7a_ir_https_donegal_url(tmp_path: Path, monkeypatch):
+    """Indexed unfetchable DQ7A.IR https rows migrate to http and clear unfetchable flags."""
+    https_annual = (
+        "https://www.donegaligroup.com/media/1316/"
+        "donegal-investment-group-annual-report-financial-statements-310825-final.pdf"
+    )
+    live = _BUILTIN_IR_URLS["DQ7A.IR"][0]
+    allowlist_path = tmp_path / "ir_urls.json"
+    allowlist_path.write_text(json.dumps({"urls": {"DQ7A.IR": [live]}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "ir_f08afed1273ca029",
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — donegal annual report",
+                        "url": https_annual,
+                        "period": "annual",
+                        "has_body": False,
+                        "unfetchable": True,
+                        "unfetchable_reason": "ir_allowlist_fetch_failed",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fake_fetch(_row, *, ticker, company_name="", investegate_cache=None):
+        return "Donegal Investment Group plc consolidated financial statements " * 30, "pdf"
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        fake_fetch,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "DQ7A.IR",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+        skip_unfetchable=False,
+    )
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    row = saved["filings"][0]
+    assert row["url"] == live
+    assert row.get("unfetchable") is not True
+    assert row["has_body"] is True
 
 
 def test_fetch_filings_ir_allowlist_euro_depth_eg7_ir_builtins(tmp_path: Path):
