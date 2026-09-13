@@ -1,50 +1,62 @@
 {
   "schema_version": 1,
-  "assessed_at": "2026-09-06T20:27:10.430375+00:00",
+  "assessed_at": "2026-09-13T10:37:15.883152+00:00",
   "purpose": "Latent learning-path gaps that healthy ops counters hide. Split produce / persist / publish / apply, and filing parity vs learning clock. Existence is not quality; unused budget is not demand met.",
   "probe_questions": [
     "Is the learning consumer seeing the research we already paid for?",
     "Would a new in-scope market inherit the same produce/persist/publish/apply miss?",
     "Which green counters (budget remaining, executed=0, memo-file coverage) would still be green if memo quality were zero?",
     "Does file existence mean freshness, or is rememo blocked by dedupe?",
-    "Are observe-sim / paper clocks accumulating on markets that look ingest-healthy?"
+    "Are observe-sim / paper clocks accumulating on markets that look ingest-healthy?",
+    "Did Sunday rememo include admitted buy-tier, or only the focus book?"
   ],
   "flag_count": 1,
   "high_flag_count": 0,
   "flags": [
     {
-      "id": "filing_ready_learning_stale",
+      "id": "thin_memo_counted_as_coverage",
       "severity": "medium",
-      "layer": "learning_clock",
-      "title": "Filing parity is not the same as a learning clock",
-      "summary": "sp500 look filing-ready but are not learning_ready (observe-sim / archive span still short or stale).",
+      "layer": "produce",
+      "title": "First-pass / zero-body memos are counted as research done",
+      "summary": "17 sampled euro_depth memos are thin or have 0 filing bodies (3 memo(s) executed this pass). Observe-sim / AI-judgment that gates on accumulate still consumes those weak labels.",
       "evidence": {
-        "markets": [
-          "sp500"
-        ]
+        "market_id": "euro_depth",
+        "thin_or_zero_body": 17,
+        "memo_count": 19,
+        "already_researched_count": 445,
+        "executed": 3
       }
     }
   ],
   "layers": {
     "produce": {
       "ladder_research": {
-        "run_at": "2026-09-06T06:22:05.695194+00:00",
+        "run_at": "2026-09-13T06:22:14.522755+00:00",
         "focus_market": "euro_depth",
         "allow_research": true,
-        "executed": 1,
-        "created": 1,
+        "executed": 3,
+        "created": 3,
         "updated": 0,
         "skipped": false,
         "budget_flag": "enforced",
         "constraining": false,
-        "remaining_usd_before": 51.6,
-        "already_researched_count": 434,
-        "dedupe_skipped_count": 45,
-        "dedupe_note": "Exact Yahoo ticker match; earlier queue market wins. Fresh memos are skipped; thin / body-lag memos rememo after ingest.",
+        "remaining_usd_before": 55.3,
+        "already_researched_count": 445,
+        "dedupe_skipped_count": 234,
+        "rememo_eligible_count": 0,
+        "research_markets": [
+          "euro_depth",
+          "sp500",
+          "asx200",
+          "ftse_smallcap",
+          "tsx60"
+        ],
+        "research_all_graduated": false,
+        "dedupe_note": "Exact Yahoo ticker match; earlier queue market wins. Each market queue puts no-memo buy-tier first, then rememo. Fresh memos are skipped; thin / body-lag memos rememo after ingest.",
         "skipped_sample": [
           {
             "market": "euro_depth",
-            "ticker": "ERIC-B.ST",
+            "ticker": "AD.AS",
             "reason": "fresh_memo"
           },
           {
@@ -54,12 +66,7 @@
           },
           {
             "market": "euro_depth",
-            "ticker": "AD.AS",
-            "reason": "fresh_memo"
-          },
-          {
-            "market": "euro_depth",
-            "ticker": "STR.VI",
+            "ticker": "ERIC-B.ST",
             "reason": "fresh_memo"
           },
           {
@@ -69,7 +76,12 @@
           },
           {
             "market": "euro_depth",
-            "ticker": "SHELL.AS",
+            "ticker": "UMI.BR",
+            "reason": "fresh_memo"
+          },
+          {
+            "market": "euro_depth",
+            "ticker": "STR.VI",
             "reason": "fresh_memo"
           },
           {
@@ -85,10 +97,10 @@
         ]
       },
       "weekly_ops": {
-        "remaining_weekly_ops_usd": 44.0,
+        "remaining_weekly_ops_usd": 46.9,
         "flag": "enforced",
         "constraining": false,
-        "estimated_spend_weekly_ops_usd_this_week": 36.0
+        "estimated_spend_weekly_ops_usd_this_week": 37.6
       },
       "live_committed": {
         "committed_count": 74,
@@ -98,12 +110,12 @@
       },
       "focus_library_research": {
         "market_id": "euro_depth",
-        "buy_tier_count": 47,
-        "memo_count": 18,
-        "sampled": 18,
+        "buy_tier_count": 45,
+        "memo_count": 19,
+        "sampled": 19,
         "thin_or_zero_body": 17,
         "missing_verdict": 0,
-        "mode_initial": 18,
+        "mode_initial": 19,
         "samples": [
           {
             "ticker": "AED.BR",
@@ -172,7 +184,25 @@
         ]
       },
       "rememo_backlog_count": 0,
-      "rememo_action": "none"
+      "rememo_action": "none",
+      "admitted_rememo": {
+        "admitted": [
+          "sp500",
+          "asx200",
+          "euro_depth",
+          "ftse_smallcap",
+          "tsx60"
+        ],
+        "research_markets": [
+          "euro_depth",
+          "ftse_smallcap",
+          "tsx60",
+          "asx200",
+          "sp500"
+        ],
+        "starved": [],
+        "weekday_backlog": 41
+      }
     },
     "persist": {
       "committed_overlay_files": [
@@ -218,6 +248,13 @@
         "ai_judgment_fair/hypothesis_integrity.json",
         "ai_judgment_fair/hypothesis_outcome_link.json",
         "ai_judgment_fair/hypothesis_outcome_link_review.json",
+        "buy_tier_level/entry_dca_overlay.json",
+        "buy_tier_level/entry_dca_overlay_review.json",
+        "buy_tier_level/exit_timing_cohorts.json",
+        "buy_tier_level/exit_timing_cohorts_review.json",
+        "buy_tier_level/hypothesis_integrity.json",
+        "buy_tier_level/hypothesis_outcome_link.json",
+        "buy_tier_level/hypothesis_outcome_link_review.json",
         "entry_dca_overlay.json",
         "entry_dca_overlay_review.json",
         "exit_timing_cohorts.json",
@@ -269,10 +306,10 @@
       "committed_not_indexed_sample": []
     },
     "apply": {
-      "buy_tier_count": 61,
-      "buy_tier_wired_count": 61,
-      "strong_buy_count": 20,
-      "strong_buy_wired_count": 20,
+      "buy_tier_count": 62,
+      "buy_tier_wired_count": 60,
+      "strong_buy_count": 16,
+      "strong_buy_wired_count": 16,
       "wired_missing_committed_verdicts": 0,
       "buy_tier_unwired_with_committed_verdict": [],
       "strong_buy_unwired_with_committed_verdict": []
@@ -285,8 +322,18 @@
           "learning_ready": null,
           "trajectory_ready": null,
           "screen_stale": false,
-          "unique_days": 14,
-          "last_screen": "2026-09-06",
+          "unique_days": 18,
+          "last_screen": "2026-09-13",
+          "observe_snapshots": 20
+        },
+        {
+          "market_id": "tsx60",
+          "filing_ready": null,
+          "learning_ready": null,
+          "trajectory_ready": null,
+          "screen_stale": false,
+          "unique_days": 10,
+          "last_screen": "2026-09-13",
           "observe_snapshots": 16
         },
         {
@@ -295,24 +342,32 @@
           "learning_ready": null,
           "trajectory_ready": null,
           "screen_stale": false,
-          "unique_days": 9,
-          "last_screen": "2026-09-06",
-          "observe_snapshots": 14
+          "unique_days": 13,
+          "last_screen": "2026-09-13",
+          "observe_snapshots": 18
         },
         {
           "market_id": "sp500",
-          "filing_ready": true,
+          "filing_ready": false,
           "learning_ready": false,
           "trajectory_ready": false,
           "screen_stale": false,
-          "unique_days": 9,
-          "last_screen": "2026-09-06",
-          "observe_snapshots": 14
+          "unique_days": 13,
+          "last_screen": "2026-09-13",
+          "observe_snapshots": 18
+        },
+        {
+          "market_id": "ftse_smallcap",
+          "filing_ready": null,
+          "learning_ready": null,
+          "trajectory_ready": null,
+          "screen_stale": false,
+          "unique_days": 10,
+          "last_screen": "2026-09-13",
+          "observe_snapshots": 15
         }
       ],
-      "filing_ready_learning_stale": [
-        "sp500"
-      ],
+      "filing_ready_learning_stale": [],
       "observe_clock_stale": []
     }
   },
