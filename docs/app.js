@@ -9,8 +9,9 @@ const SIGNAL_COLORS = {
 };
 
 const TABS = [
-  { id: "overview", label: "Overview" },
-  { id: "screener", label: "Screener" },
+    { id: "overview", label: "Overview" },
+    { id: "lifecycle", label: "Lifecycle" },
+    { id: "screener", label: "Screener" },
   { id: "trusts", label: "Trusts" },
   { id: "strong-buys", label: "Strong buys" },
   { id: "portfolio", label: "Portfolio" },
@@ -150,12 +151,25 @@ function initTabs() {
   nav.addEventListener("click", (event) => {
     const button = event.target.closest("[data-tab]");
     if (!button) return;
-    const tabId = button.dataset.tab;
-    nav.querySelectorAll(".tab").forEach((el) => el.classList.toggle("active", el === button));
-    document.querySelectorAll(".panel").forEach((panel) => {
-      panel.classList.toggle("active", panel.id === `panel-${tabId}`);
-    });
+    activateTab(button.dataset.tab, { updateHash: true });
   });
+}
+
+function activateTab(tabId, { updateHash = false } = {}) {
+  const nav = document.getElementById("tabs");
+  if (!nav || !tabId) return;
+  const button = nav.querySelector(`[data-tab="${tabId}"]`);
+  if (!button) return;
+  nav.querySelectorAll(".tab").forEach((el) => el.classList.toggle("active", el === button));
+  document.querySelectorAll(".panel").forEach((panel) => {
+    panel.classList.toggle("active", panel.id === `panel-${tabId}`);
+  });
+  if (updateHash) {
+    if (tabId === "lifecycle") syncLifecycleHash();
+    else if (location.hash && location.hash !== `#${tabId}`) {
+      history.replaceState(null, "", `#${tabId}`);
+    }
+  }
 }
 
 function stageStatusBadge(status) {
@@ -465,6 +479,7 @@ const DASHBOARD_SIDECARS = [
   ["engineering_tasks", "data/engineering_tasks.json"],
   ["ingest_deviations", "data/ingest_deviations.json"],
   ["human_tasks_checklist", "human_tasks_checklist.json"],
+  ["lifecycle_board", "data/lifecycle_board.json"],
 ];
 
 let dashboardRefreshInFlight = null;
@@ -1368,6 +1383,7 @@ function renderMarketStatusCard(row) {
     ${settingRow("Last screen", `<span class="small">${esc(fmtDate(row.last_screen_at))}</span>`)}
     ${settingRow("Last metrics", `<span class="small">${esc(fmtDate(row.last_metrics_refresh))}</span>`)}
     ${settingRow("Buy-tier shortlist", esc(String(row.shortlist_count ?? "—")))}
+    <p><button type="button" class="btn" data-open-lifecycle="${esc(row.market_id)}">Open lifecycle board</button></p>
     <h4 class="small" style="margin-top:1rem">Buy / hold / avoid</h4>
     ${marketSignalBar(counts)}
     <ul class="list-plain small">
@@ -3726,6 +3742,274 @@ function renderAutomation(data) {
   `;
 }
 
+let lifecycleMarketId = null;
+let lifecycleTrackId = null;
+
+function parseDashboardHash() {
+  const raw = String(location.hash || "").replace(/^#/, "").trim();
+  if (!raw) return null;
+  const parts = raw.split("/").filter(Boolean);
+  return { tab: parts[0], market: parts[1] || null, track: parts[2] || null };
+}
+
+function syncLifecycleHash() {
+  if (!lifecycleMarketId) {
+    history.replaceState(null, "", "#lifecycle");
+    return;
+  }
+  const parts = ["lifecycle", lifecycleMarketId];
+  if (lifecycleTrackId) parts.push(lifecycleTrackId);
+  history.replaceState(null, "", `#${parts.join("/")}`);
+}
+
+function applyDashboardHash() {
+  const parsed = parseDashboardHash();
+  if (!parsed || !parsed.tab) return;
+  if (parsed.tab === "lifecycle") {
+    if (parsed.market) lifecycleMarketId = parsed.market;
+    if (parsed.track) lifecycleTrackId = parsed.track;
+  }
+  activateTab(parsed.tab);
+}
+
+function openLifecycleBoard(marketId) {
+  if (marketId) lifecycleMarketId = marketId;
+  lifecycleTrackId = null;
+  activateTab("lifecycle", { updateHash: true });
+  const dialog = document.getElementById("market-status-dialog");
+  if (dialog && dialog.open) dialog.close();
+  if (dashboardData) renderLifecycle(dashboardData);
+}
+
+function lifecycleStatusChip(status) {
+  const key = String(status || "planned").toLowerCase();
+  const cls = {
+    observing: "stage-complete",
+    continue: "stage-active",
+    recommend: "stage-complete",
+    proposed: "stage-pending",
+    planned: "stage-pending",
+    deferred: "stage-pending",
+    fail: "stage-fail",
+  };
+  return `<span class="stage-badge ${cls[key] || "stage-active"}">${esc(key)}</span>`;
+}
+
+function lifecycleExperimentChips(experiments) {
+  const rows = Array.isArray(experiments) ? experiments : [];
+  const observing = rows.filter((row) => String(row.status || "") === "observing");
+  const other = rows.filter((row) => String(row.status || "") !== "observing");
+  const chips = observing
+    .map((row) => {
+      const status = row.assessment_status || row.status;
+      const title = row.question || row.experiment || row.factor_id;
+      return `<span class="lifecycle-exp-chip" title="${esc(title)}">${esc(row.factor_id || row.experiment || "experiment")} ${lifecycleStatusChip(status)}</span>`;
+    })
+    .join("");
+  const planned = other.length
+    ? `<details class="lifecycle-planned"><summary class="small muted">${other.length} planned / deferred</summary><ul class="list-plain small">${other
+        .map(
+          (row) =>
+            `<li><code>${esc(row.factor_id || "")}</code> ${lifecycleStatusChip(row.status)} — ${esc(row.question || "")}${
+              row.revisit_when ? ` <span class="muted">(${esc(row.revisit_when)})</span>` : ""
+            }</li>`
+        )
+        .join("")}</ul></details>`
+    : "";
+  return `${chips}${planned}`;
+}
+
+function lifecycleTickerCard(card) {
+  const conv =
+    card.conviction_score != null ? `${Math.round(Number(card.conviction_score) * 100)}%` : "";
+  const pnl =
+    card.unrealized_pnl_pct != null
+      ? `${(Number(card.unrealized_pnl_pct) * 100).toFixed(1)}%`
+      : "";
+  return `<article class="lifecycle-card" data-lifecycle-ticker="${esc(card.ticker)}">
+    <div class="lifecycle-card-head">
+      <strong>${esc(card.ticker)}</strong>
+      ${card.signal ? signalBadge(card.signal) : ""}
+    </div>
+    <div class="small muted">${esc(card.name || "")}</div>
+    <div class="small">${esc(card.column_reason || card.lifecycle_phase || "")}${
+      conv ? ` · conv ${esc(conv)}` : ""
+    }${pnl ? ` · P&amp;L ${esc(pnl)}` : ""}</div>
+  </article>`;
+}
+
+function mergeLifecycleColumns(market, track) {
+  const occupied = new Set(track && track.occupied_tickers ? track.occupied_tickers : []);
+  const removed = (track && track.screen_occupied) || {};
+  const screen = (market && market.screen_columns) || {};
+  const position = (track && (track.position_columns || track.columns)) || {};
+  const screenIds = ["not_buy_tier", "not_now", "near_buy"];
+  const positionIds = ["just_bought", "growth", "near_sell", "just_sold", "post_sale"];
+  const merged = {};
+  screenIds.forEach((id) => {
+    const packed = screen[id] || {};
+    const shown = (packed.shown || []).filter((card) => !occupied.has(card.ticker));
+    const count = Math.max(0, (packed.count || 0) - (removed[id] || 0));
+    merged[id] = { count, shown, truncated: Math.max(0, count - shown.length) };
+  });
+  positionIds.forEach((id) => {
+    const packed = position[id] || {};
+    merged[id] = {
+      count: packed.count || 0,
+      shown: packed.shown || [],
+      truncated: packed.truncated || 0,
+    };
+  });
+  return merged;
+}
+
+function findLifecycleMarket(board, marketId) {
+  const markets = (board && board.markets) || [];
+  return markets.find((row) => row.market_id === marketId) || markets[0] || null;
+}
+
+function findLifecycleTrack(market, trackId) {
+  const tracks = (market && market.tracks) || [];
+  if (trackId) {
+    const hit = tracks.find((row) => row.track_id === trackId);
+    if (hit) return hit;
+  }
+  return tracks.find((row) => row.is_default) || tracks[0] || null;
+}
+
+function renderLifecycle(data) {
+  const panel = document.getElementById("panel-lifecycle");
+  if (!panel) return;
+  bindLifecyclePanel();
+  const board = data.lifecycle_board;
+  if (!board || !(board.columns || []).length) {
+    panel.innerHTML =
+      '<div class="empty-state">Lifecycle board not published yet. Run <code>ftse-publish</code> or refresh the local dashboard so <code>data/lifecycle_board.json</code> is rebuilt.</div>';
+    return;
+  }
+  const markets = board.markets || [];
+  if (!markets.length) {
+    panel.innerHTML = '<div class="empty-state">No market screens or paper books available for the lifecycle board.</div>';
+    return;
+  }
+  if (!lifecycleMarketId || !markets.some((row) => row.market_id === lifecycleMarketId)) {
+    lifecycleMarketId = board.default_market_id || markets[0].market_id;
+  }
+  const market = findLifecycleMarket(board, lifecycleMarketId);
+  const track = findLifecycleTrack(market, lifecycleTrackId);
+  lifecycleTrackId = track ? track.track_id : null;
+  const colDefs = board.columns || [];
+  const trackColumns = mergeLifecycleColumns(market, track);
+
+  const marketOptions = markets
+    .map(
+      (row) =>
+        `<option value="${esc(row.market_id)}"${row.market_id === market.market_id ? " selected" : ""}>${esc(row.label || row.market_id)}</option>`
+    )
+    .join("");
+  const marketPills = markets
+    .filter((row) => row.is_live || row.is_focus || row.is_admitted)
+    .map((row) => {
+      const active = row.market_id === market.market_id ? " active" : "";
+      return `<button type="button" class="tab${active}" data-lifecycle-market="${esc(row.market_id)}">${esc(row.label || row.market_id)}</button>`;
+    })
+    .join("");
+  const trackPills = (market.tracks || [])
+    .map((row) => {
+      const active = track && row.track_id === track.track_id ? " active" : "";
+      return `<button type="button" class="tab${active}" data-lifecycle-track="${esc(row.track_id)}">${esc(row.track_label || row.track_id)} <span class="small muted">${row.holdings_count ?? 0}</span></button>`;
+    })
+    .join("");
+
+  const columnsHtml = colDefs
+    .map((col) => {
+      const packed = trackColumns[col.id] || { count: 0, shown: [], truncated: 0 };
+      const cards = (packed.shown || []).map(lifecycleTickerCard).join("");
+      const more = packed.truncated
+        ? `<p class="small muted lifecycle-truncated">+${packed.truncated} more</p>`
+        : "";
+      return `<section class="lifecycle-col" data-column="${esc(col.id)}">
+        <header class="lifecycle-col-header">
+          <h3>${esc(col.label)}</h3>
+          <span class="lifecycle-count">${packed.count ?? 0}</span>
+        </header>
+        <p class="small muted lifecycle-col-q">${esc(col.question || "")}</p>
+        <div class="lifecycle-exps">${lifecycleExperimentChips(col.experiments)}</div>
+        <div class="lifecycle-cards">${cards || '<p class="small muted">None</p>'}${more}</div>
+      </section>`;
+    })
+    .join("");
+
+  const counts = market.column_counts || {};
+  const countBits = colDefs
+    .map((col) => `${esc(col.label)} ${counts[col.id] ?? 0}`)
+    .join(" · ");
+
+  panel.innerHTML = `
+    <section class="card lifecycle-board-section">
+      <div class="market-status-header">
+        <div>
+          <h3>Position lifecycle</h3>
+          <p class="small muted" style="margin:0.25rem 0 0">
+            ${esc(board.note || "One market at a time — screen names plus the selected paper book.")}
+          </p>
+        </div>
+        <label class="small">Market
+          <select id="lifecycle-market-select">${marketOptions}</select>
+        </label>
+      </div>
+      <div class="tabs lifecycle-market-pills">${marketPills}</div>
+      <div class="tabs lifecycle-track-pills">${trackPills}</div>
+      <p class="small muted">${esc(market.label || market.market_id)} · ${esc(track ? track.track_label : "screen")} · ${esc(countBits)}</p>
+      <div class="lifecycle-board">${columnsHtml}</div>
+    </section>
+  `;
+}
+
+function bindLifecyclePanel() {
+  const panel = document.getElementById("panel-lifecycle");
+  if (panel && !panel.dataset.lifecycleBound) {
+    panel.dataset.lifecycleBound = "1";
+    panel.addEventListener("click", (event) => {
+      const marketBtn = event.target.closest("[data-lifecycle-market]");
+      if (marketBtn) {
+        event.preventDefault();
+        lifecycleMarketId = marketBtn.dataset.lifecycleMarket;
+        lifecycleTrackId = null;
+        syncLifecycleHash();
+        renderLifecycle(dashboardData);
+        return;
+      }
+      const trackBtn = event.target.closest("[data-lifecycle-track]");
+      if (trackBtn) {
+        event.preventDefault();
+        lifecycleTrackId = trackBtn.dataset.lifecycleTrack;
+        syncLifecycleHash();
+        renderLifecycle(dashboardData);
+      }
+    });
+    panel.addEventListener("change", (event) => {
+      if (event.target.id !== "lifecycle-market-select") return;
+      lifecycleMarketId = event.target.value;
+      lifecycleTrackId = null;
+      syncLifecycleHash();
+      renderLifecycle(dashboardData);
+    });
+  }
+  if (window.__lifecycleOpenBound) return;
+  window.__lifecycleOpenBound = true;
+  document.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-open-lifecycle]");
+    if (!btn) return;
+    event.preventDefault();
+    openLifecycleBoard(btn.dataset.openLifecycle);
+  });
+  window.addEventListener("hashchange", () => {
+    applyDashboardHash();
+    if (dashboardData) renderLifecycle(dashboardData);
+  });
+}
+
 function renderDashboard(data) {
   dashboardData = data;
   const meta = data.meta || {};
@@ -3734,7 +4018,14 @@ function renderDashboard(data) {
     ? `${meta.universe_label || "FTSE"} · ${meta.company_count || 0} companies · ${trustCount} trusts · ${meta.strong_buy_count || 0} strong buys · ${fmtDate(data.run_at)}`
   : "Awaiting first published screening run";
 
+  const parsed = parseDashboardHash();
+  if (parsed && parsed.tab === "lifecycle") {
+    if (parsed.market) lifecycleMarketId = parsed.market;
+    if (parsed.track) lifecycleTrackId = parsed.track;
+  }
+
   renderOverview(data);
+  renderLifecycle(data);
   renderScreener(data);
   renderTrusts(data);
   renderStrongBuys(data);
@@ -3743,6 +4034,7 @@ function renderDashboard(data) {
   renderPerformance(data);
   renderAnalysis(data);
   equalizeMarketTileHeights();
+  if (parsed && parsed.tab) activateTab(parsed.tab);
 }
 
 async function loadOptionalDashboardJson(path) {
