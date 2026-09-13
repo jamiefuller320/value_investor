@@ -223,6 +223,40 @@ def observe_sim_screen_should_run(
     return True, ""
 
 
+def run_admitted_equal_support_and_epoch0(
+    root: Path,
+    policy: dict[str, Any],
+    ladder_cfg: dict[str, Any],
+) -> dict[str, Any]:
+    """Stamp timing and near-miss first, then rebalance the frozen epoch-0 book.
+
+    Screen-lite leaves ``timing_signal=insufficient_data``. If epoch-0 paper ran
+    before the stamp, ``skip_timing_wait`` could not drop wait names, so those
+    names entered the book and left the near-miss counterfactual sample.
+    """
+    layers: dict[str, Any] = {}
+    if not ladder_cfg.get("equal_support_after_screen", True):
+        layers["equal_support"] = {
+            "skipped": True,
+            "reason": "equal_support_after_screen is off",
+        }
+    else:
+        layers["equal_support"] = run_equal_support_package(
+            root,
+            policy,
+            stamp_timing=bool(ladder_cfg.get("equal_support_stamp_timing", True)),
+            run_archives=bool(ladder_cfg.get("equal_support_counterfactual_archives", True)),
+        )
+    if not ladder_cfg.get("epoch0_shard_after_screen", True):
+        layers["epoch0_shard"] = {
+            "skipped": True,
+            "reason": "epoch0_shard_after_screen is off",
+        }
+    else:
+        layers["epoch0_shard"] = run_epoch0_shards_for_markets(root, policy)
+    return layers
+
+
 def run_library_ladder(
     *,
     root: Path | None = None,
@@ -731,30 +765,13 @@ def run_library_ladder(
             screened_markets,
         )
 
-    # B3b — admitted epoch-0 buy-tier-level + near-miss (no AI / no knob apply)
+    # B3b — equal-support first so timing_signal is on latest_signals before paper.
+    # Wait names stay out of the frozen book (skip_timing_wait) and on the
+    # observe-only near-miss watch for counterfactuals.
     policy = load_policy(policy_path)
-    if not ladder_cfg.get("epoch0_shard_after_screen", True):
-        result["layers"]["epoch0_shard"] = {
-            "skipped": True,
-            "reason": "epoch0_shard_after_screen is off",
-        }
-    else:
-        result["layers"]["epoch0_shard"] = run_epoch0_shards_for_markets(root, policy)
-
-    # B3c — equal-support: timing, near-miss groups, counterfactual archives, rememo list
-    policy = load_policy(policy_path)
-    if not ladder_cfg.get("equal_support_after_screen", True):
-        result["layers"]["equal_support"] = {
-            "skipped": True,
-            "reason": "equal_support_after_screen is off",
-        }
-    else:
-        result["layers"]["equal_support"] = run_equal_support_package(
-            root,
-            policy,
-            stamp_timing=bool(ladder_cfg.get("equal_support_stamp_timing", True)),
-            run_archives=bool(ladder_cfg.get("equal_support_counterfactual_archives", True)),
-        )
+    admitted_layers = run_admitted_equal_support_and_epoch0(root, policy, ladder_cfg)
+    result["layers"]["equal_support"] = admitted_layers["equal_support"]
+    result["layers"]["epoch0_shard"] = admitted_layers["epoch0_shard"]
 
     # B4 — weekday paper shard for Phase-3 markets (after weekly when enabled)
     policy = load_policy(policy_path)

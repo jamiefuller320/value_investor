@@ -15,7 +15,11 @@ from value_investor.library_dedupe import canonical_library_ticker
 from value_investor.library_near_miss_watch import write_library_near_miss_watch
 from value_investor.library_screen import screen_dir_for
 from value_investor.library_sim import save_library_run_snapshots
-from value_investor.library_timing import stamp_timing_on_signals, timing_candidate_tickers
+from value_investor.library_timing import (
+    buy_tier_needs_timing_stamp,
+    stamp_timing_on_signals,
+    timing_candidate_tickers,
+)
 from value_investor.market_shard_admission import admitted_learning_markets_for_policy
 from value_investor.research.market_store import library_rememo_eligible_tickers
 from value_investor.storage import write_json
@@ -90,6 +94,30 @@ def stamp_library_timing_archives(
         "latest_wait_count": wait_count,
         "timing_signal_present": "timing_signal" in stamped_latest.columns,
     }
+
+
+def ensure_buy_tier_timing_stamp(
+    library_root: Path,
+    market_id: str,
+    *,
+    history: dict[str, pd.DataFrame] | None = None,
+) -> dict[str, Any]:
+    """Stamp timing when buy-tier rows are still unresolved (screen-lite default)."""
+    screen_dir = screen_dir_for(Path(library_root), market_id)
+    latest_path = screen_dir / "latest_signals.csv"
+    if not latest_path.exists():
+        return {"skipped": True, "reason": "missing latest_signals.csv", "market_id": market_id}
+    try:
+        latest = pd.read_csv(latest_path)
+    except (OSError, ValueError, TypeError):
+        return {"skipped": True, "reason": "unreadable latest_signals.csv", "market_id": market_id}
+    if not buy_tier_needs_timing_stamp(latest):
+        return {
+            "skipped": True,
+            "reason": "buy_tier_timing_resolved",
+            "market_id": market_id,
+        }
+    return stamp_library_timing_archives(library_root, market_id, history=history)
 
 
 def admitted_buy_tier_rememo_targets(
@@ -315,6 +343,7 @@ __all__ = [
     "PACKAGE_FILENAME",
     "admitted_buy_tier_first_time_targets",
     "admitted_buy_tier_rememo_targets",
+    "ensure_buy_tier_timing_stamp",
     "equal_support_markets_for_policy",
     "run_admitted_counterfactual_archives",
     "run_equal_support_for_market",
