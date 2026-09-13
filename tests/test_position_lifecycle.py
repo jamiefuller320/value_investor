@@ -43,3 +43,29 @@ def test_recommit_stage_is_observing_via_entry_kind_tag():
     recommit = {row["id"]: row for row in factors_for_stage("recommit")}
     assert recommit["entry_kind_tag"]["status"] == "observing"
     assert recommit["held_addon_pyramid"]["status"] == "deferred"
+
+
+def test_board_columns_cover_every_catalog_factor():
+    from value_investor.position_lifecycle import BOARD_COLUMN_IDS, BOARD_COLUMNS, board_column_defs
+
+    catalog = lifecycle_catalog()
+    factor_ids = {str(factor["id"]) for stage in catalog["stages"] for factor in stage["factors"]}
+    mapped = {fid for col in BOARD_COLUMNS for fid in col["factor_ids"]}
+    assert tuple(col["id"] for col in BOARD_COLUMNS) == BOARD_COLUMN_IDS
+    assert mapped == factor_ids
+    columns = board_column_defs(
+        assessment={
+            "experiments": [
+                {
+                    "experiment_id": "entry_dca_overlay",
+                    "title": "DCA overlay",
+                    "status": "observing",
+                }
+            ]
+        }
+    )
+    assert len(columns) == len(BOARD_COLUMN_IDS)
+    starter = next(col for col in columns if col["id"] == "just_bought")
+    dca = next(row for row in starter["experiments"] if row["factor_id"] == "entry_dca_cadence")
+    assert dca["assessment_status"] == "observing"
+    assert dca["model_independent"] is True

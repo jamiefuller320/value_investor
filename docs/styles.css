@@ -1608,3 +1608,116 @@ tr.selected td {
 .so-what-gate-tickers {
   margin-top: 0.25rem;
 }
+
+.lifecycle-board-section {
+  overflow: hidden;
+}
+
+.lifecycle-board-section select {
+  margin-left: 0.4rem;
+  font: inherit;
+  padding: 0.25rem 0.4rem;
+}
+
+.lifecycle-market-pills,
+.lifecycle-track-pills {
+  margin: 0.6rem 0;
+}
+
+.lifecycle-board {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(11.5rem, 1fr));
+  gap: 0.55rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  align-items: start;
+}
+
+.lifecycle-col {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  min-height: 18rem;
+  min-width: 11.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.lifecycle-col-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem;
+  padding: 0.55rem 0.65rem 0.3rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.lifecycle-col-header h3 {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+
+.lifecycle-count {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.lifecycle-col-q {
+  margin: 0.4rem 0.65rem 0.25rem;
+}
+
+.lifecycle-exps {
+  padding: 0 0.55rem 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.lifecycle-exp-chip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+.lifecycle-planned {
+  margin: 0;
+}
+
+.lifecycle-cards {
+  padding: 0.35rem 0.45rem 0.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.lifecycle-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.5rem;
+}
+
+.lifecycle-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+}
+
+.lifecycle-truncated {
+  margin: 0.15rem 0 0;
+}
+
+@media (max-width: 900px) {
+  .lifecycle-board {
+    grid-template-columns: repeat(8, minmax(10.5rem, 1fr));
+  }
+}
