@@ -141,6 +141,7 @@ Rationale: Thesis unchanged.
         news_batch_path=news_batch,
         markdown_path=markdown,
         api_key="test-key",
+        structured=False,
     )
 
     prompt = mock_prompt.call_args.kwargs["prompt"]

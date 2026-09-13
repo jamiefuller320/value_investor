@@ -22,7 +22,12 @@ VERDICT_LABELS = {
 
 
 def _verdict_change_note(doc: ResearchDocument) -> str | None:
-    if doc.mode not in {"weekly_update", "gap_fill"} or not doc.weekly_updates:
+    if doc.mode not in {
+        "weekly_update",
+        "gap_fill",
+        "structured_verdict_update",
+        "structured_verdict_gap_fill",
+    } or not doc.weekly_updates:
         return None
     latest = doc.weekly_updates[-1]
     prior_verdict = latest.get("prior_verdict")
@@ -31,7 +36,8 @@ def _verdict_change_note(doc: ResearchDocument) -> str | None:
         current = VERDICT_LABELS.get(doc.research_verdict or "", doc.research_verdict or "—")
         prefix = (
             "Gap-fill verdict"
-            if latest.get("kind") == "gap_fill" or doc.mode == "gap_fill"
+            if latest.get("kind") in {"gap_fill", "gap_fill_followup"}
+            or doc.mode in {"gap_fill", "structured_verdict_gap_fill"}
             else "Verdict"
         )
         return f"{prefix} revised: {prior} → {current}"

@@ -27,6 +27,172 @@ def _screen_signal_label(signal: str) -> str:
     return labels.get(signal, signal.replace("_", " "))
 
 
+
+RATIONALE_MAX_CHARS = 240
+STRUCTURED_VERDICT_MODES = frozenset(
+    {"structured_verdict", "structured_verdict_update", "structured_verdict_gap_fill"}
+)
+
+
+def clip_rationale(value: str | None, *, limit: int = RATIONALE_MAX_CHARS) -> str | None:
+    """Clip research rationale to the Phase B / Phase C freeze budget."""
+    if value is None:
+        return None
+    text = " ".join(str(value).split()).strip()
+    if not text:
+        return None
+    if len(text) <= limit:
+        return text
+    return text[: max(0, limit - 3)].rstrip() + "..."
+
+
+def _structured_verdict_block(signal_label: str) -> str:
+    return f"""RESEARCH VERDICT
+Structured conviction overlay for the quantitative screen (does not replace the screen signal).
+Use EXACTLY these lines:
+Verdict: accumulate | neutral | caution | pass
+Risk: low | medium | high
+Confidence: 0.00–1.00 (decimal, e.g. 0.75)
+Rationale: One sentence (≤{RATIONALE_MAX_CHARS} chars) on whether research confirms, is neutral on, or weakens the {signal_label} case.
+RiskTags: regulatory | cyclical | governance | pension | competitive | liquidity | leverage | customer_concentration | key_person | litigation | accounting | other
+(Pick zero or more allowed tags as a comma-separated RiskTags line.)"""
+
+
+def _structured_verdict_prompt(
+    *,
+    ticker: str,
+    company_name: str,
+    sources_dir: Path,
+    screen_signal: str = "strong_buy",
+) -> str:
+    signal_label = _screen_signal_label(screen_signal)
+    filings_index = sources_dir / "filings" / "filings_index.json"
+    filings_bodies = sources_dir / "filings" / "bodies"
+    return f"""You are producing a structured research verdict for {company_name} ({ticker}).
+
+The quantitative screen currently rates this name as a {signal_label}.
+
+Read the source files in: {sources_dir.resolve()}
+
+Primary regulatory filings:
+- `{filings_index.resolve()}`
+- `{filings_bodies.resolve()}/`
+
+Secondary / context only:
+- `financials_annual.json` (Yahoo fallback — say when used)
+- `screening_snapshot.json`
+- `news_manifest.json`
+- `macro_context.json` (colour only — do not override the screen)
+
+Do NOT write EXECUTIVE SUMMARY, INVESTMENT THESIS, FINANCIAL REVIEW, RISKS AND RED FLAGS, or NEWS HIGHLIGHTS sections.
+
+Write ONLY:
+
+{_structured_verdict_block(signal_label)}
+
+Rules:
+- UK English, concise professional tone.
+- Do not invent numbers or filing language.
+- Prefer unresolved / lower confidence over false certainty when sources are thin.
+- Do not give buy/sell price targets.
+- Prefer filings over Yahoo for figures.
+"""
+
+
+def _structured_verdict_update_prompt(
+    *,
+    ticker: str,
+    company_name: str,
+    sources_dir: Path,
+    news_batch_path: Path,
+    existing_markdown_path: Path,
+    screen_signal: str = "strong_buy",
+    prior_verdict: str | None = None,
+    prior_risk_tags: list[str] | None = None,
+    open_questions: list[str] | None = None,
+) -> str:
+    signal_label = _screen_signal_label(screen_signal)
+    tags_block = ", ".join(prior_risk_tags or []) or "(none recorded)"
+    questions = open_questions or []
+    if questions:
+        numbered = "\n".join(f"{idx}. {q}" for idx, q in enumerate(questions, start=1))
+    else:
+        numbered = "(none)"
+    return f"""You are refreshing the structured research verdict for {company_name} ({ticker}).
+
+Screen signal: {signal_label}
+Prior verdict: {prior_verdict or "unknown"}
+Prior risk tags: {tags_block}
+
+Existing memo (may be slim or legacy essay): {existing_markdown_path.resolve()}
+Sources: {sources_dir.resolve()}
+News batch: {news_batch_path.resolve()}
+
+Open questions (if any):
+{numbered}
+
+Do NOT rewrite essay sections. Write ONLY:
+
+WEEKLY UPDATE
+≤3 short lines on what changed (or "No material change.").
+
+{_structured_verdict_block(signal_label)}
+
+Rules:
+- UK English; do not invent filing language.
+- Prefer unresolved over false confidence when sources are thin.
+- Keep Rationale ≤{RATIONALE_MAX_CHARS} characters.
+"""
+
+
+def _structured_verdict_gap_fill_prompt(
+    *,
+    ticker: str,
+    company_name: str,
+    sources_dir: Path,
+    existing_markdown_path: Path,
+    open_questions: list[str],
+    screen_signal: str = "strong_buy",
+) -> str:
+    signal_label = _screen_signal_label(screen_signal)
+    numbered = "\n".join(
+        f"{idx}. {question}" for idx, question in enumerate(open_questions, start=1)
+    )
+    source_map = sources_dir / "gap_fill_source_map.json"
+    return f"""You are closing qualitative gaps with a structured verdict only for {company_name} ({ticker}).
+
+Screen signal: {signal_label}
+Existing memo: {existing_markdown_path.resolve()}
+Source map: {source_map.resolve()}
+Filings index: {(sources_dir / "filings" / "filings_index.json").resolve()}
+Filing bodies: {(sources_dir / "filings" / "bodies").resolve()}
+
+Open questions:
+{numbered or "1. Resolve the qualitative risks highlighted for this name."}
+
+Do NOT rewrite FINANCIAL REVIEW or RISKS essay sections.
+
+Write ONLY:
+
+GAP FILL UPDATE
+For EACH open question:
+Q: <question text>
+Status: resolved | partially_resolved | unresolved
+Evidence: one or two sentences citing sources (or say still missing).
+SourcesTried: ladder steps inspected
+NextSources: concrete next sources or "none"
+
+{_structured_verdict_block(signal_label)}
+
+RESEARCH MODEL SUGGESTIONS
+0–5 bullets:
+- area: ingest | priority: high | suggestion: …
+Allowed areas: ingest, prompt, scoring, coverage, ops.
+
+Rules: UK English; do not invent numbers; prefer unresolved over false confidence.
+"""
+
+
 def _initial_prompt(
     *,
     ticker: str,
@@ -212,13 +378,25 @@ def run_initial_research_agent(
     api_key: str,
     model: str = "composer-2.5",
     cwd: str | None = None,
+    structured: bool = True,
 ) -> tuple[ResearchDocument, str | None]:
-    prompt = _initial_prompt(
-        ticker=report.ticker,
-        company_name=report.name,
-        sources_dir=sources_dir,
-        screen_signal=report.signal,
-    )
+    """Create a research document. Default Phase B: structured verdict only."""
+    if structured:
+        prompt = _structured_verdict_prompt(
+            ticker=report.ticker,
+            company_name=report.name,
+            sources_dir=sources_dir,
+            screen_signal=report.signal,
+        )
+        mode = "structured_verdict"
+    else:
+        prompt = _initial_prompt(
+            ticker=report.ticker,
+            company_name=report.name,
+            sources_dir=sources_dir,
+            screen_signal=report.signal,
+        )
+        mode = "initial"
     text, agent_id = _run_agent_prompt(
         prompt=prompt,
         api_key=api_key,
@@ -227,8 +405,28 @@ def run_initial_research_agent(
     )
     sections = parse_research_sections(text)
     verdict_fields = parse_research_verdict(sections.get("research_verdict", ""))
-    risk_tags = parse_risk_tags(sections.get("risks_and_flags", "")) or parse_risk_tags(text)
+    if not verdict_fields.get("research_verdict"):
+        raise RuntimeError(
+            f"Structured research for {report.ticker} missing parseable research_verdict"
+        )
+    risk_tags = (
+        parse_risk_tags(sections.get("risks_and_flags", ""))
+        or parse_risk_tags(sections.get("research_verdict", ""))
+        or parse_risk_tags(text)
+    )
     now = datetime.now(UTC).isoformat()
+    if structured:
+        executive_summary = ""
+        investment_thesis = ""
+        financial_review = ""
+        risks_and_flags = ""
+        news_highlights = ""
+    else:
+        executive_summary = sections["executive_summary"]
+        investment_thesis = sections["investment_thesis"]
+        financial_review = sections["financial_review"]
+        risks_and_flags = sections["risks_and_flags"]
+        news_highlights = sections["news_highlights"]
     doc = ResearchDocument(
         ticker=report.ticker,
         name=report.name,
@@ -236,16 +434,16 @@ def run_initial_research_agent(
         version=1,
         created_at=now,
         updated_at=now,
-        mode="initial",
-        executive_summary=sections["executive_summary"],
-        investment_thesis=sections["investment_thesis"],
-        financial_review=sections["financial_review"],
-        risks_and_flags=sections["risks_and_flags"],
-        news_highlights=sections["news_highlights"],
+        mode=mode,
+        executive_summary=executive_summary,
+        investment_thesis=investment_thesis,
+        financial_review=financial_review,
+        risks_and_flags=risks_and_flags,
+        news_highlights=news_highlights,
         research_verdict=verdict_fields["research_verdict"],  # type: ignore[arg-type]
         research_risk_level=verdict_fields["research_risk_level"],  # type: ignore[arg-type]
         research_confidence=verdict_fields["research_confidence"],  # type: ignore[arg-type]
-        research_rationale=verdict_fields["research_rationale"],  # type: ignore[arg-type]
+        research_rationale=clip_rationale(verdict_fields.get("research_rationale")),
         risk_tags=risk_tags,
         agent_id=agent_id,
     )
@@ -389,6 +587,7 @@ def run_gap_fill_research_agent(
     screen_signal: str | None = None,
     follow_up: bool = False,
     body_refetch: dict[str, Any] | None = None,
+    structured: bool = True,
 ) -> GapFillAgentResult:
     """Rewrite financial/risk sections to address open qualitative questions."""
     from value_investor.research.gap_fill_sources import (
@@ -396,7 +595,16 @@ def run_gap_fill_research_agent(
         parse_question_outcomes,
     )
 
-    if follow_up:
+    if structured and not follow_up:
+        prompt = _structured_verdict_gap_fill_prompt(
+            ticker=existing.ticker,
+            company_name=existing.name,
+            sources_dir=sources_dir,
+            existing_markdown_path=markdown_path,
+            open_questions=open_questions,
+            screen_signal=screen_signal or existing.signal,
+        )
+    elif follow_up:
         prompt = _gap_fill_followup_prompt(
             ticker=existing.ticker,
             company_name=existing.name,
@@ -437,11 +645,23 @@ def run_gap_fill_research_agent(
         else existing.research_confidence
     )
     new_rationale = verdict_fields.get("research_rationale") or existing.research_rationale
-    financial_review = sections.get("financial_review", "").strip() or existing.financial_review
-    risks_and_flags = sections.get("risks_and_flags", "").strip() or existing.risks_and_flags
+    if structured:
+        financial_review = existing.financial_review
+        risks_and_flags = existing.risks_and_flags
+    else:
+        financial_review = sections.get("financial_review", "").strip() or existing.financial_review
+        risks_and_flags = sections.get("risks_and_flags", "").strip() or existing.risks_and_flags
     risk_tags = (
-        parse_risk_tags(risks_and_flags) or parse_risk_tags(text) or list(existing.risk_tags)
+        parse_risk_tags(risks_and_flags)
+        or parse_risk_tags(sections.get("research_verdict", ""))
+        or parse_risk_tags(text)
+        or list(existing.risk_tags)
     )
+    new_rationale = clip_rationale(new_rationale)
+    if structured and not new_verdict:
+        raise RuntimeError(
+            f"Structured gap-fill for {existing.ticker} missing parseable research_verdict"
+        )
     weekly_entry: dict[str, str] = {
         "date": now.strftime("%Y-%m-%d"),
         "as_of": now.isoformat(),
@@ -459,7 +679,7 @@ def run_gap_fill_research_agent(
         version=existing.version + 1,
         created_at=existing.created_at,
         updated_at=now.isoformat(),
-        mode="gap_fill",
+        mode="structured_verdict_gap_fill" if structured else "gap_fill",
         executive_summary=existing.executive_summary,
         investment_thesis=existing.investment_thesis,
         financial_review=financial_review,
@@ -493,21 +713,35 @@ def run_weekly_research_update_agent(
     model: str = "composer-2.5",
     cwd: str | None = None,
     screen_signal: str | None = None,
+    structured: bool = True,
 ) -> ResearchDocument:
     from value_investor.research.gap_fill_sources import parse_question_outcomes
 
     open_qs = unresolved_questions(existing.question_outcomes)
-    prompt = _weekly_update_prompt(
-        ticker=existing.ticker,
-        company_name=existing.name,
-        sources_dir=sources_dir,
-        news_batch_path=news_batch_path,
-        existing_markdown_path=markdown_path,
-        screen_signal=screen_signal or existing.signal,
-        prior_risks=existing.risks_and_flags,
-        open_questions=open_qs,
-        prior_risk_tags=list(existing.risk_tags),
-    )
+    if structured:
+        prompt = _structured_verdict_update_prompt(
+            ticker=existing.ticker,
+            company_name=existing.name,
+            sources_dir=sources_dir,
+            news_batch_path=news_batch_path,
+            existing_markdown_path=markdown_path,
+            screen_signal=screen_signal or existing.signal,
+            prior_verdict=existing.research_verdict,
+            prior_risk_tags=list(existing.risk_tags),
+            open_questions=open_qs,
+        )
+    else:
+        prompt = _weekly_update_prompt(
+            ticker=existing.ticker,
+            company_name=existing.name,
+            sources_dir=sources_dir,
+            news_batch_path=news_batch_path,
+            existing_markdown_path=markdown_path,
+            screen_signal=screen_signal or existing.signal,
+            prior_risks=existing.risks_and_flags,
+            open_questions=open_qs,
+            prior_risk_tags=list(existing.risk_tags),
+        )
     text, agent_id = _run_agent_prompt(
         prompt=prompt,
         api_key=api_key,
@@ -531,7 +765,13 @@ def run_weekly_research_update_agent(
         if verdict_fields.get("research_confidence") is not None
         else existing.research_confidence
     )
-    new_rationale = verdict_fields.get("research_rationale") or existing.research_rationale
+    new_rationale = clip_rationale(
+        verdict_fields.get("research_rationale") or existing.research_rationale
+    )
+    if structured and not new_verdict:
+        raise RuntimeError(
+            f"Structured weekly research for {existing.ticker} missing parseable research_verdict"
+        )
     weekly_entry: dict[str, str] = {
         "date": now.strftime("%Y-%m-%d"),
         "as_of": now.isoformat(),
@@ -547,7 +787,7 @@ def run_weekly_research_update_agent(
         version=existing.version + 1,
         created_at=existing.created_at,
         updated_at=now.isoformat(),
-        mode="weekly_update",
+        mode="structured_verdict_update" if structured else "weekly_update",
         executive_summary=existing.executive_summary,
         investment_thesis=existing.investment_thesis,
         financial_review=existing.financial_review,

@@ -200,36 +200,55 @@ def parse_research_sections(text: str) -> dict[str, str]:
 
 
 def render_research_markdown(doc: ResearchDocument) -> str:
-    """Render a full research memo as markdown."""
+    """Render a research memo as markdown (essay or Phase B structured-verdict slim)."""
+    slim = doc.mode in {
+        "structured_verdict",
+        "structured_verdict_update",
+        "structured_verdict_gap_fill",
+    }
     lines = [
         f"# {doc.name} ({doc.ticker}) — Research memo",
         "",
         f"_Version {doc.version} · Updated {doc.updated_at} · Mode: {doc.mode}_",
         "",
-        f"## {SECTION_HEADINGS['executive_summary']}",
-        doc.executive_summary,
-        "",
-        f"## {SECTION_HEADINGS['investment_thesis']}",
-        doc.investment_thesis,
-        "",
-        f"## {SECTION_HEADINGS['financial_review']}",
-        doc.financial_review,
-        "",
-        f"## {SECTION_HEADINGS['risks_and_flags']}",
-        doc.risks_and_flags,
     ]
-    if doc.risk_tags:
-        lines.append(f"RiskTags: {', '.join(doc.risk_tags)}")
-    lines.extend(
-        [
-            "",
-            f"## {SECTION_HEADINGS['news_highlights']}",
-            doc.news_highlights,
-        ]
-    )
+    if slim:
+        lines.extend(
+            [
+                "_Phase B structured verdict (essay sections omitted on scheduled path)._",
+                "",
+            ]
+        )
+    else:
+        lines.extend(
+            [
+                f"## {SECTION_HEADINGS['executive_summary']}",
+                doc.executive_summary or "_(empty)_",
+                "",
+                f"## {SECTION_HEADINGS['investment_thesis']}",
+                doc.investment_thesis or "_(empty)_",
+                "",
+                f"## {SECTION_HEADINGS['financial_review']}",
+                doc.financial_review or "_(empty)_",
+                "",
+                f"## {SECTION_HEADINGS['risks_and_flags']}",
+                doc.risks_and_flags or "_(empty)_",
+            ]
+        )
+        if doc.risk_tags:
+            lines.append(f"RiskTags: {', '.join(doc.risk_tags)}")
+        lines.extend(
+            [
+                "",
+                f"## {SECTION_HEADINGS['news_highlights']}",
+                doc.news_highlights or "_(empty)_",
+            ]
+        )
     verdict_lines = _render_verdict_lines(doc)
     if verdict_lines:
         lines.extend(["", f"## {SECTION_HEADINGS['research_verdict']}", *verdict_lines])
+    if slim and doc.risk_tags:
+        lines.append(f"RiskTags: {', '.join(doc.risk_tags)}")
     outcome_lines = _render_question_outcome_lines(doc)
     if outcome_lines:
         lines.extend(["", "## OPEN QUESTIONS", *outcome_lines])

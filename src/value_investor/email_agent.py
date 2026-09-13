@@ -165,8 +165,9 @@ def main(argv: list[str] | None = None) -> int:
         "--research-gap-fill",
         action="store_true",
         help=(
-            "After deep analysis, run a research improvement loop on names/questions "
-            "called out in RED FLAGS / names worth deeper research (requires CURSOR_API_KEY)"
+            "Optional Phase B slim gap-fill on RED FLAGS / deeper-research names "
+            "(structured verdict + question outcomes only; not default Sunday). "
+            "Requires CURSOR_API_KEY"
         ),
     )
     parser.add_argument(

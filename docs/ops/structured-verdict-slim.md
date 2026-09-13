@@ -1,7 +1,7 @@
 # Structured verdict slim (Phase B — locked design)
 
-Status: **design locked** (2026-09-13). Implementation still deferred as
-**L367 Phase B** (N119 path under N120 constraint). Parent sequence:
+Status: **implemented** (2026-09-13). Design locked; runtime default is structured
+verdict slim (**L367 Phase B**) (N119 path under N120 constraint). Parent sequence:
 **L367**. Downstream consumer of freed `weekly_ops`: Phase C /
 [`pit-decision-autopsy.md`](pit-decision-autopsy.md) (**L368**). Human full-memo
 UX remains Phase D / **L366**.
@@ -297,21 +297,19 @@ slim prompt/sources before touching the gate.
 
 ## 12. Ready to lock? Blockers?
 
-**Yes — ready to lock design now.**
+**Yes — design locked; Phase B code path is implemented.**
 
-No code or data blockers for the design itself:
+Scheduled research defaults to structured-verdict modes (`structured=True` on
+initial / weekly / gap-fill agents). Sunday no longer enables essay gap-fill by
+default. Essay path remains via `structured=False` for Phase D / legacy tests.
+Phase C start is gated by `ftse-phase-c-readiness` (see
+[`pit-decision-autopsy.md`](pit-decision-autopsy.md#automated-readiness-gate)).
 
-- Machine fields and gate consumers are already identified
-  (`paper_fund.py`, `simulator.py`, `overlay.py`, `rebalance_log.slim_candidate`).
-- Phase C freeze schema already assumes this producer shape.
-- N119 / N120 / L367 already encode the policy constraint.
+Post-cutover watch:
 
-Implementation blockers (not design blockers):
-
-- Orchestrator / `email-report.yml` flag change for gap-fill must ship with the
-  agent cutover (ops coordination, not an open design choice).
-- Human decision packs will look thinner until L366 — accepted.
-- Recalibrated `estimated_memo_usd` needs post-cutover measurement.
+- Human decision packs look thinner until L366 — accepted.
+- Recalibrate `estimated_memo_usd` after a few slim Sundays (L52).
+- Confirm accumulate coverage and overlay bind do not regress.
 
 ---
 
