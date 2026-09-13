@@ -63,6 +63,34 @@ See also [`exit-timing-cohorts.md`](exit-timing-cohorts.md) for live paper cohor
 Human verify-before-trade packs remain useful for live capital, but they are
 **not** the primary learning loop.
 
+## Decision learning loop (target)
+
+Track excess vs ^FTSE / rules is necessary but not sufficient. The intended
+continuous-improvement strand is:
+
+1. **At decision time t** — freeze what the AI-judgment pass used (screen +
+   overlay + structured verdict / key filing features), not an essay.
+2. **Later** — score whether wait / buy / hold / sell was optimal vs
+   alternatives on forward marks.
+3. **Attribute** — separate **data gaps** (missing bodies, unbound FCF/EPS,
+   stale overlay) from **logic gaps** (gate/knob/policy), and let those
+   conclusions prioritize engineering work.
+
+**Design locked:** see [`pit-decision-autopsy.md`](pit-decision-autopsy.md)
+(pack schema, Suite B optimality, data-vs-logic rules, eng-queue contract,
+KPIs). Implementation remains deferred **L368**, funded by memo retarget
+**L367** Phase C; feeder features **L365**.
+
+**Phase B (producer for the freeze):** scheduled research stays always-on while
+the accumulate gate lives, but slim to structured verdict fields — design locked
+in [`structured-verdict-slim.md`](structured-verdict-slim.md) (L367 Phase B /
+N119+N120).
+
+Today: `rebalance_log.json` + PIT research (`get_research_as_of`) + knob
+counterfactuals cover (1)–(2) only partially; automated (3) is not built.
+Learning conclusions from this loop should drive other development (ingest,
+overlays, gates) ahead of prose polish or offline breadth.
+
 ## Human tasks checklist
 
 Weekly manual gates (Sunday priors review, shadow vs primary, promotion rules)

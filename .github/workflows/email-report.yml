@@ -56,7 +56,9 @@ jobs:
             # Ingest before research-docs/gap-fill so memos see thickened filing bodies
             # (email_agent also enforces this order and syncs docs/data → output/research).
             # L123: full-buy-tier cap matches weekday learning-phase deepen (62).
-            ARGS="$ARGS --deep-analysis --ingest-improvement-pass --ingest-improvement-cap 62 --research-docs --research-gap-fill --post-run-review --compile-engineering-tasks"
+            ARGS="$ARGS --deep-analysis --ingest-improvement-pass --ingest-improvement-cap 62 --research-docs --post-run-review --compile-engineering-tasks"
+            # Phase B: essay gap-fill dropped from default Sunday bundle (structured
+            # verdict slim). Optional: add --research-gap-fill for slim gap-fill.
           fi
           ftse-email $ARGS
 

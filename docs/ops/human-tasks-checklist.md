@@ -30,6 +30,8 @@ most automation — this list is what still needs a human.
 | Task | Who | Doc |
 |------|-----|-----|
 | Read **analysis review** synthesis (`analysis_review.md`) plus the observe-only **chart-outcome** mix | Human | [analysis-review.md](analysis-review.md#artifacts) |
+| Phase C readiness assessment (`phase_c_readiness.json` via `ftse-phase-c-readiness`; observe-only) | CI | [pit-decision-autopsy.md](pit-decision-autopsy.md#automated-readiness-gate) |
+| **Start Phase C freeze writer only when READY** — do not begin autopsy build on vibes or `--force-phase-b-done` alone | Human | [pit-decision-autopsy.md](pit-decision-autopsy.md#automated-readiness-gate) |
 | **Watch shard epoch-0 + near-miss** — do not fork shard AI-judgment or knob apply until epoch-0 plus the tight groups (buy-not-now, hold-near-buy) have marks; not-buy-tier / never-buy-tier are census, not the sample; FTSE stays the data lead | Human | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
 | **Watch ingest capacity** — spare sprint auto-advance is correct; three-plus maintenance books rotate one market per slot (L323); check jobs still finish | Human | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
 | Admitted-market epoch-0 + equal-support (`buy_tier_level`, timing, near-miss, exclusion/exit-timing archives; Sunday first-time then focus rememo; admitted rememo and local-open marks are weekday; no AI / no apply) | CI | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |

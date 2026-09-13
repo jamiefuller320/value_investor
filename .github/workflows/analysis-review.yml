@@ -209,6 +209,15 @@ jobs:
       - name: Compile system-gap tasks
         run: ftse-analysis-review compile-system-gaps --promote --json || true
 
+      - name: Assess Phase C readiness (observe-only)
+        run: |
+          set +e
+          ftse-phase-c-readiness --json-out docs/data/phase_c_readiness.json
+          code=$?
+          echo "phase_c_readiness_exit=$code"
+          # Deliberate gate artifact only — never fail Sunday analysis on NOT READY.
+          exit 0
+
       - name: Commit system-gap snapshot
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
@@ -217,6 +226,7 @@ jobs:
             docs/data/system_gaps.json
             docs/data/analysis_tasks.json
             docs/data/engineering_tasks.json
+            docs/data/phase_c_readiness.json
           skip_fetch: false
 
       - name: Run modelling analysis review
