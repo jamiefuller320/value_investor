@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-13T17:10:59+00:00",
+  "updated_at": "2026-09-13T17:53:07+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8536,6 +8536,72 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-51fa395c-616b-48c3-b552-4c822b99d0b0",
       "added_at": "2026-09-13T17:10:59+00:00"
+    },
+    {
+      "id": "N125",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Execute DCA on frozen epoch-0 buy_tier_level (or spawn a DCA twin)",
+      "summary": "Epoch-0 is the lump-sum control for the entry-DCA overlay. Executing 4x weekly (or spawning a per-market DCA twin) on those books would destroy the frozen cohort lab. Keep scoring as overlay; first optional execute stays on graduated_allocation after adoption-plan gates.",
+      "revisit_when": "entry_dca_adoption_plan paper_execute_graduated is ready AND a human asks whether the FTSE buy_tier_level first-entry cohort should get a second executed book (default still no \u2014 overlay on the same holdings)",
+      "tags": [
+        "dca",
+        "epoch-0",
+        "buy_tier_level",
+        "observe-only"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-51fa395c-616b-48c3-b552-4c822b99d0b0",
+      "added_at": "2026-09-13T17:53:07+00:00"
+    },
+    {
+      "id": "N126",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Fold admitted-shard DCA overlays into the Sunday FTSE weekly rollup",
+      "summary": "Admitted epoch-0 books already write per-market entry_dca_overlay.json via run_daily_automation, but learning_tracks_entry_dca.json only rolls FTSE paper-auto tracks. Do not merge SP500/ASX/EU/TSX overlays into the FTSE Sunday cadence ranking \u2014 jurisdictions, costs, and sessions confound (N118). Keep Sunday analysis on the FTSE 61-name buy_tier_level window.",
+      "revisit_when": "FTSE buy_tier_level first-entry windows have closed and scored, and a human wants a per-market (not pooled) confirmation census",
+      "tags": [
+        "dca",
+        "epoch-0",
+        "sunday",
+        "rollup"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-51fa395c-616b-48c3-b552-4c822b99d0b0",
+      "added_at": "2026-09-13T17:53:07+00:00"
+    },
+    {
+      "id": "L381",
+      "category": "later",
+      "section": "learning",
+      "title": "Cite FTSE buy_tier_level first-entry closes as DCA confirmation",
+      "summary": "This week's dca_4x_weekly ranking is from concentrated 3-name books. The FTSE epoch-0 book has 61 first-entry overlay episodes from 2026-09-07 that cannot score until the 21-day window (~2026-09-28). When they close, Sunday analysis should cite that unfiltered Suite B cohort as confirmation or contradiction \u2014 still observe-only, not an execute path.",
+      "revisit_when": "FTSE buy_tier_level entry_dca_overlay shows first_entry scored_count well above zero (window elapsed from 2026-09-07)",
+      "tags": [
+        "dca",
+        "buy_tier_level",
+        "adoption-plan"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-51fa395c-616b-48c3-b552-4c822b99d0b0",
+      "added_at": "2026-09-13T17:53:07+00:00"
+    },
+    {
+      "id": "L382",
+      "category": "later",
+      "section": "ops",
+      "title": "Backfill missed shard epoch-0 first fills into the DCA overlay",
+      "summary": "SP500 epoch-0 holds 120 names but overlay only has 4 first-entry episodes (ASX 29 vs 1). Overlay ingest only records new buys this pass; if the cold-start overlay was not persisted, later marks cannot backfill. Repair would reconstruct episodes from rebalance_log/trades without changing fills.",
+      "revisit_when": "A human wants shard-level DCA confirmation, or weekday marks show holdings far above overlay open+closed counts on admitted books",
+      "tags": [
+        "dca",
+        "epoch-0",
+        "overlay-backfill"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-51fa395c-616b-48c3-b552-4c822b99d0b0",
+      "added_at": "2026-09-13T17:53:07+00:00"
     }
   ],
   "fragments": [
