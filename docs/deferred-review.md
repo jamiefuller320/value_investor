@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T10:39:18+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T11:29:31+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -353,6 +353,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L359 | **Densify held-vs-market for admitted shards when chart packs exist** | Live FTSE may densify from docs/data/charts; admitted epoch-0 books stay on sparse equity_curve marks because allow_chart_densify is FTSE-only and shard chart packs are missing. Revisit once per-market buy-tier charts are published. | Admitted markets publish buy-tier chart JSON comparable to docs/data/charts, or weekday marks need gap-fill between sparse equity prints |
 | L365 | **Reallocate memo spend into filing-derived machine features first** | Feeder for L367 Phase C / L368: prefer P1 work that thickens the PIT information set paper-auto and autopsy can see without narrative — filing bodies, FCF basis bridges, EPS overlays, overlay bind freshness. These features matter because they improve decision inputs and gap attribution, not as memo substitutes for humans. | FTSE buy-tier filing-body parity is green and FCF/EPS overlays are bound on weekday reports, yet AI-judgment still lacks edge vs rules |
 | L366 | **Brief-reasons buy cards plus on-demand full memo** | Dashboard/email already show screen brief summaries and decision packs; Read memo exists. Add an explicit generate-memo action for humans only after the always-on accumulate gate is replaced by verdict-only research or filing-derived overlays (N119/L365). | N119 or L365 is promoted, or require_research_accumulate is retired from the primary AI-judgment track |
+| L373 | **TRI.TO Investegate Trifast EPIC collision** | TRI.TO filings_index includes 51 investegate_direct Trifast (LSE TRI) RNS bodies. filter_misattributed_filings does not drop UK RNS for tsx_announcements, so a UK EPIC homonym pollutes the Thomson Reuters corpus. | TRI.TO leftover IWB is cleared and a memo/quality pass still shows Trifast RNS in the TSX research pack |
 
 ### Ops / reliability
 
