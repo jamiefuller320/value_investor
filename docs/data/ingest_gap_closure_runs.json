@@ -9754,8 +9754,148 @@
       },
       "trigger": "verification_rerun",
       "parent_run_id": "igc-20260912-02"
+    },
+    {
+      "id": "igc-20260913-05",
+      "status": "pending_review",
+      "title": "Library ingest gap-closure rerun after engineering",
+      "summary": "Verification rerun for gap-closure run igc-20260912-02",
+      "ticker": "SU.TO",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "SU.TO"
+        ],
+        "market_id": "tsx60",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260912-02",
+      "chain_attempt": 3,
+      "recorded_at": "2026-09-13T23:53:21.667542+00:00",
+      "completed_at": "2026-09-13T23:54:08.468139+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "SU.TO"
+        ],
+        "results": [
+          {
+            "ticker": "SU.TO",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 48,
+              "filings_with_body": 31,
+              "indexed_without_body": 17
+            },
+            "after": {
+              "filings_total": 48,
+              "filings_with_body": 31,
+              "indexed_without_body": 17
+            },
+            "improved": false,
+            "regime": "tsx_announcements",
+            "filings_summary": {
+              "total": 48,
+              "annual": 5,
+              "interim": 35,
+              "trading_update": 0,
+              "other": 8,
+              "with_body": 31,
+              "period_coverage": {
+                "annual": {
+                  "total": 5,
+                  "with_body": 5
+                },
+                "interim": {
+                  "total": 35,
+                  "with_body": 18
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 8,
+                  "with_body": 8
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 4,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 31,
+              "with_body_after": 31,
+              "retries_used": 0,
+              "retry_log": [
+                {
+                  "filing_id": "ir_1ecfd48260fa8d53",
+                  "url": "https://www.sec.gov/Archives/edgar/data/311337/000110465926020411/su-20251231xex99d1.htm",
+                  "attempt": 1,
+                  "outcome": "fetched_pdf",
+                  "source": "pdf"
+                },
+                {
+                  "filing_id": "ir_04bc674a54380ccc",
+                  "url": "https://www.sec.gov/Archives/edgar/data/311337/000110465926020411/su-20251231xex99d2.htm",
+                  "attempt": 1,
+                  "outcome": "fetched_pdf",
+                  "source": "pdf"
+                },
+                {
+                  "filing_id": "ir_9a6d5e0487d78b1f",
+                  "url": "https://www.sec.gov/Archives/edgar/data/311337/000110465926020411/su-20251231xex99d3.htm",
+                  "attempt": 1,
+                  "outcome": "fetched_pdf",
+                  "source": "pdf"
+                },
+                {
+                  "filing_id": "ir_01005a839aa4d469",
+                  "url": "https://www.sec.gov/Archives/edgar/data/311337/000155837025010330/su-20250630xex99d1.htm",
+                  "attempt": 1,
+                  "outcome": "fetched_pdf",
+                  "source": "pdf"
+                }
+              ],
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 5,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "mandatory": true,
+              "note": "refetch_ir_allowlist_filing_bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "SU.TO",
+            "with_body_before": 31,
+            "with_body_after": 31,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "verification_rerun",
+      "parent_run_id": "igc-20260912-02"
     }
   ],
-  "updated_at": "2026-09-13T21:00:07.271176+00:00",
+  "updated_at": "2026-09-13T23:54:08.468150+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
