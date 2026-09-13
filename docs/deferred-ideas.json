@@ -8136,7 +8136,7 @@
       "category": "not_now",
       "section": "not_now",
       "title": "Drop narrative memos; keep structured verdict-only research for automation",
-      "summary": "If human-readable decision packs are no longer a success criterion, stop spending weekly_ops on essay sections. Emit only machine fields the paper gate uses (research_verdict, confidence, risk tags) or replace the LLM gate with filing-derived overlays. Same automation payload at lower cost; prose is not load-bearing for stage 2b.",
+      "summary": "If human-readable decision packs are no longer a success criterion, stop spending weekly_ops on essay sections. Emit only machine fields the paper gate uses (research_verdict, confidence, risk tags) or replace the LLM gate with filing-derived overlays. Same automation payload at lower cost; prose is not load-bearing for stage 2b. Phase B design locked in docs/ops/structured-verdict-slim.md (scheduled slim path under N120; not pure on-request).",
       "revisit_when": "Interim goal formally deprioritises stage-2 decision packs, or weekly_ops is binding while AI-judgment still underperforms ^FTSE after costs",
       "tags": [
         "memo",
@@ -8210,7 +8210,7 @@
       "category": "later",
       "section": "learning",
       "title": "Memo resource retarget: fund PIT decision learning, not narrative",
-      "summary": "North star for memo spend cuts: improve continuous decision learning, not cheaper essays. Phase A \u2014 cut spray/frontier/quality-gates that do not change paper-auto inputs. Phase B \u2014 keep scheduled research but slim to structured verdict fields while accumulate gate lives (N119+N120). Phase C \u2014 put freed weekly_ops into the learning loop: per-decision PIT information packs + optimality/data-vs-logic autopsy (L368), fed by thicker filing/FCF/overlay-bind features (L365). Phase D \u2014 human on-demand full memo only after cheap always-on verdict or filing replacement (L366). Learning conclusions from Phase C should prioritize subsequent eng work over breadth or prose polish. Phase C design locked in docs/ops/pit-decision-autopsy.md (L368).",
+      "summary": "North star for memo spend cuts: improve continuous decision learning, not narrative. Phase A \u2014 cut spray/frontier/quality-gates that do not change paper-auto inputs. Phase B \u2014 keep scheduled research but slim to structured verdict fields while accumulate gate lives (N119+N120); DESIGN LOCKED in docs/ops/structured-verdict-slim.md. Phase C \u2014 put freed weekly_ops into the learning loop: per-decision PIT information packs + optimality/data-vs-logic autopsy (L368), fed by thicker filing/FCF/overlay-bind features (L365); design locked in docs/ops/pit-decision-autopsy.md. Phase D \u2014 human on-demand full memo only after cheap always-on verdict or filing replacement (L366). Learning conclusions from Phase C should prioritize subsequent eng work over breadth or prose polish.",
       "revisit_when": "weekly_ops is binding while AI-judgment still underperforms ^FTSE after costs, or rebalance_log + archive overlays are thick enough to ship L368 autopsy, or FTSE buy-tier filing-body parity + FCF/EPS overlays are bound on weekday reports",
       "tags": [
         "memo",
@@ -8224,7 +8224,8 @@
         "learning",
         "PIT",
         "decision-review",
-        "L368"
+        "L368",
+        "Phase B design locked"
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-99707274-180d-5489-adf7-0b1b8ef80f0b",
@@ -8236,7 +8237,7 @@
       "section": "learning",
       "title": "Per-decision PIT autopsy: information set, optimality, data vs logic gaps",
       "summary": "Primary enhancement funded by memo resource retarget (L367 Phase C). DESIGN LOCKED in docs/ops/pit-decision-autopsy.md: freeze pack schema (rebalance_log slim + research_revision_id + structured verdict + feature_flags); Suite B fair T212 optimality at 1/4/8/12w (primary 4w); data_gap-before-logic_gap attribution; eng-autopsy-* EngineeringTask emission; KPIs (80% freeze completeness, 50% non-ambiguous attribution, >=1 eng task/month). Build only after Phase B slim + ~8w stable rebalance_log + L365 flags not trivially empty. Ambiguous rows stay human/observe until emitter ships \u2014 no checklist row yet.",
-      "revisit_when": "L367 Phase B structured-verdict slim is in flight or done, AND rebalance_log has stable screen_buy_tier/candidates coverage for >=8 weeks AND FTSE holdings/buy-tier feature_flags (filings_with_body / fcf_basis_bound / overlay_bound) are non-trivial on live reports; then implement freeze writer per docs/ops/pit-decision-autopsy.md",
+      "revisit_when": "L367 Phase B structured-verdict slim is in flight or done (docs/ops/structured-verdict-slim.md), AND rebalance_log has stable screen_buy_tier/candidates coverage for >=8 weeks AND FTSE holdings/buy-tier feature_flags (filings_with_body / fcf_basis_bound / overlay_bound) are non-trivial on live reports; then implement freeze writer per docs/ops/pit-decision-autopsy.md",
       "tags": [
         "PIT",
         "decision-review",

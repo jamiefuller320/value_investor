@@ -185,7 +185,8 @@ optimality margin and alternate set before adding narrative features.
 
 ### Prerequisites (from L368)
 
-- L367 Phase B structured-verdict slim in flight or done (N119 / N120 path).
+- L367 Phase B structured-verdict slim in flight or done (N119 / N120 path;
+  design locked in [`structured-verdict-slim.md`](structured-verdict-slim.md)).
 - ≥ **8 weeks** stable `screen_buy_tier` / `candidates` on AI-judgment `rebalance_log`.
 - L365 feeder progress far enough that `feature_flags` are not almost always false
   on FTSE holdings / buy-tier (otherwise attribution collapses to trivial data_gaps).

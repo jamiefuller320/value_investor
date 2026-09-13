@@ -81,6 +81,11 @@ continuous-improvement strand is:
 KPIs). Implementation remains deferred **L368**, funded by memo retarget
 **L367** Phase C; feeder features **L365**.
 
+**Phase B (producer for the freeze):** scheduled research stays always-on while
+the accumulate gate lives, but slim to structured verdict fields — design locked
+in [`structured-verdict-slim.md`](structured-verdict-slim.md) (L367 Phase B /
+N119+N120).
+
 Today: `rebalance_log.json` + PIT research (`get_research_as_of`) + knob
 counterfactuals cover (1)–(2) only partially; automated (3) is not built.
 Learning conclusions from this loop should drive other development (ingest,
