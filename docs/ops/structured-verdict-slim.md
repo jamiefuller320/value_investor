@@ -92,8 +92,7 @@ Derived report fields (not agent-authored, still required):
 | action-note fragment | `format_research_action_note(...)` |
 
 Schema compatibility: `ResearchDocument` **keeps** essay attributes
-(`executive_summary`, `investment_thesis`, `financial_review`,
-`risks_and_flags`, `news_highlights`) but scheduled Phase B writes leave them
+(`executive_summary`, `investment_thesis`, `financial_review`, `risks_and_flags`, `news_highlights`) but scheduled Phase B writes leave them
 **unchanged** (weekly/rememo) or **empty string** (new slim initial). Do not
 break `to_dict` / store / PIT loaders.
 
