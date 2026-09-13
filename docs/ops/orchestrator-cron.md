@@ -43,6 +43,7 @@ token instead of your user PAT.
 | `ingest-loop.yml` | External **primary** | Mon–Fri **07:05 + 10:05** → two batches (`max_targets=62`, `max_bodies=40`) | Mon–Fri 07:05 + 10:05 |
 | `analysis-review.yml` | External **primary** | `35 10 * * 0` (± optional `35 12 * * 0`) → `analysis-review.yml` | Sun 10:35 |
 | `paper-learning-review.yml` | External **primary** | `45 10 * * 0` → `paper-learning-review.yml` | Sun 10:45 |
+| `learning-director-review.yml` | External **primary** | `55 10 * * 0` → `learning-director-review.yml` | Sun 10:55 |
 | `ops-monitor.yml` | External **primary** | `45 7 * * *` + catch-up `15 13 * * *` → `ops-monitor.yml` | Daily 07:45 + 13:15 |
 | `gha-secret-hygiene.yml` | External **primary** | `20 6 * * *` → `gha-secret-hygiene.yml` (skips if no merges / workflow touches in 36h) | Daily 06:20 |
 | `ci-main-nightly.yml` | External **primary** | `30 7 * * *` → `ci-main-nightly.yml` | Daily 07:30 |
@@ -147,7 +148,8 @@ CRONJOB_API_KEY=… WORKFLOW_DISPATCH_PAT=… ./scripts/import_cron_jobs.py --al
 
 Job keys: `orchestrator-sunday`, `orchestrator-weekday-paper`, `ingest-loop-morning`,
 `ingest-loop-afternoon`,
-`analysis-review`, `ops-monitor`, `data-backup`,
+`analysis-review`, `paper-learning-review`, `learning-director-review`,
+`ops-monitor`, `data-backup`,
 `library-epoch0-weekday-asx|euro|us-edt|us-est`. Dry-run: `--dry-run --json`.
 Epoch-0 slots are also upserted automatically on learning admit and on
 `euro-ingest-dispatch --sync-cron` (see [`market-sharded-learning.md`](market-sharded-learning.md#weekday-epoch-0-local-open)).
@@ -235,6 +237,20 @@ WORKFLOW=analysis-review.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github
 ```
 
 Requires `CURSOR_API_KEY` in GitHub repo secrets. Skips cleanly if inputs are thin.
+
+### 4b. Learning Director — Sunday after paper-learning-review (~10:55 UTC)
+
+Observe-only regime / convergence / vision synthesis. **Primary:** cron-job.org
+`55 10 * * 0`. GitHub `schedule` is backup. Same-day skip if this workflow already
+succeeded today. Do not fold into the 06:20 quiet bundle — the director reads
+today's analysis-review and paper-learning artifacts.
+
+```bash
+WORKFLOW=learning-director-review.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
+```
+
+Requires `CURSOR_API_KEY` in GitHub repo secrets. Skips if `review_policy.json`
+disables it or inputs are thin.
 
 ### 5. Ops monitor — daily health + email (~07:45 UTC)
 
