@@ -655,7 +655,9 @@ def check_paper_learning_tracks(
         summary_tracks: dict[str, Any] = {}
     else:
         summary_tracks = summary.get("tracks") if isinstance(summary.get("tracks"), dict) else {}
-        missing_summary = [track_id for track_id in core_track_ids if track_id not in summary_tracks]
+        missing_summary = [
+            track_id for track_id in core_track_ids if track_id not in summary_tracks
+        ]
         if missing_summary:
             findings.append(
                 OpsFinding(

@@ -1006,9 +1006,7 @@ def _write_paper_learning_root(
         encoding="utf-8",
     )
     if not omit_review:
-        reviews = {
-            track_id: {"metrics": {"excess_after_costs": -0.28}} for track_id in tracks
-        }
+        reviews = {track_id: {"metrics": {"excess_after_costs": -0.28}} for track_id in tracks}
         if include_shadow and not shadow_in_review:
             reviews.pop("ai_judgment_calibrated", None)
         for track_id in omit_review_tracks:
@@ -1093,4 +1091,3 @@ def test_paper_learning_findings_defer_before_paper_auto_ready():
 
 def test_committed_paper_learning_tracks_are_complete():
     assert check_paper_learning_tracks() == []
-
