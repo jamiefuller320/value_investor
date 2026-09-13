@@ -63,6 +63,9 @@ from value_investor.scoring.fcf_basis_overlay import (
     enrich_signals_with_run_history_fcf_action_notes,
     honour_fcf_action_notes_on_signals,
 )
+from value_investor.scoring.fcf_profit_to_cash_conviction_overlay import (
+    enrich_signals_with_fcf_profit_to_cash_conviction_overlay,
+)
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
 from value_investor.scoring.healthcare_price_erosion_overlay import (
     enrich_signals_with_healthcare_price_erosion_overlay,
@@ -335,6 +338,8 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "fcf_dividend_coverage_net",
         "fcf_definition_divergence",
         "fcf_divergence_flagged",
+        "conviction_downgrade_flagged",
+        "profit_to_cash_yoy_drop_pp",
         "adjusted_signal",
     ]
     present = [c for c in cols if c in signals.columns]
@@ -535,6 +540,10 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     signals_out = enrich_signals_with_fcf_basis_overlay(
         signals_out,
         result.model_results,
+        output_dir=output_dir,
+    )
+    signals_out = enrich_signals_with_fcf_profit_to_cash_conviction_overlay(
+        signals_out,
         output_dir=output_dir,
     )
     signals_out = enrich_signals_with_run_history_fcf_action_notes(

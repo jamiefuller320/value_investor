@@ -50,6 +50,10 @@ from value_investor.scoring.fcf_basis_overlay import (
     fcf_basis_action_note_mismatch,
     fcf_basis_enforcement_needed,
 )
+from value_investor.scoring.fcf_profit_to_cash_conviction_overlay import (
+    apply_fcf_profit_to_cash_conviction_overlay,
+    format_fcf_profit_to_cash_conviction_note,
+)
 from value_investor.scoring.healthcare_overlay import (
     apply_healthcare_overlay_to_signal,
     piotroski_score_for_ticker,
@@ -148,6 +152,10 @@ class CompanyReport:
     fcf_dividend_coverage: dict[str, Any] | None = None
     fcf_definition_divergence: bool = False
     fcf_divergence_flagged: bool = False
+    conviction_downgrade_flagged: bool = False
+    profit_to_cash_yoy_drop_pp: float | None = None
+    profit_to_cash_pct: float | None = None
+    profit_to_cash_pct_prev: float | None = None
     adjusted_signal: str | None = None
     research_verdict: str | None = None
     research_risk_level: str | None = None
@@ -221,6 +229,10 @@ class CompanyReport:
             "fcf_dividend_coverage": self.fcf_dividend_coverage,
             "fcf_definition_divergence": self.fcf_definition_divergence,
             "fcf_divergence_flagged": self.fcf_divergence_flagged,
+            "conviction_downgrade_flagged": self.conviction_downgrade_flagged,
+            "profit_to_cash_yoy_drop_pp": self.profit_to_cash_yoy_drop_pp,
+            "profit_to_cash_pct": self.profit_to_cash_pct,
+            "profit_to_cash_pct_prev": self.profit_to_cash_pct_prev,
             "adjusted_signal": enforced.adjusted_signal,
             "research_verdict": self.research_verdict,
             "research_risk_level": self.research_risk_level,
@@ -306,6 +318,10 @@ class CompanyReport:
             fcf_dividend_coverage=data.get("fcf_dividend_coverage"),
             fcf_definition_divergence=bool(data.get("fcf_definition_divergence")),
             fcf_divergence_flagged=bool(data.get("fcf_divergence_flagged")),
+            conviction_downgrade_flagged=bool(data.get("conviction_downgrade_flagged")),
+            profit_to_cash_yoy_drop_pp=data.get("profit_to_cash_yoy_drop_pp"),
+            profit_to_cash_pct=data.get("profit_to_cash_pct"),
+            profit_to_cash_pct_prev=data.get("profit_to_cash_pct_prev"),
             adjusted_signal=data.get("adjusted_signal"),
             research_verdict=data.get("research_verdict"),
             research_risk_level=data.get("research_risk_level"),
@@ -545,6 +561,10 @@ def _brief_summary(
     quality_family_avoid_gate: bool = False,
     quality_family_avoid_gate_note: str | None = None,
     fcf_basis_overlay: bool = False,
+    conviction_downgrade_flagged: bool = False,
+    profit_to_cash_yoy_drop_pp: float | None = None,
+    profit_to_cash_pct: float | None = None,
+    profit_to_cash_pct_prev: float | None = None,
     leverage_override: bool = False,
     dual_leverage_display: bool = False,
     debt_to_equity_yahoo: float | None = None,
@@ -692,6 +712,14 @@ def _brief_summary(
             f"yield-dependent screens pass "
             f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
         )
+
+    if conviction_downgrade_flagged:
+        note = format_fcf_profit_to_cash_conviction_note(
+            profit_to_cash_pct=profit_to_cash_pct,
+            profit_to_cash_pct_prev=profit_to_cash_pct_prev,
+            profit_to_cash_yoy_drop_pp=profit_to_cash_yoy_drop_pp,
+        )
+        parts.append(f"{note}.")
 
     if dual_leverage_display:
         yahoo_text = (
@@ -1245,6 +1273,60 @@ def build_company_reports(
                 )
             )
 
+        from value_investor.scoring.fcf import extract_profit_to_cash_yoy_drop_for_ticker
+
+        profit_to_cash_pct = (
+            float(row["profit_to_cash_pct"])
+            if row.get("profit_to_cash_pct") is not None
+            and not pd.isna(row.get("profit_to_cash_pct"))
+            else None
+        )
+        profit_to_cash_pct_prev = (
+            float(row["profit_to_cash_pct_prev"])
+            if row.get("profit_to_cash_pct_prev") is not None
+            and not pd.isna(row.get("profit_to_cash_pct_prev"))
+            else None
+        )
+        drop_raw = row.get("profit_to_cash_yoy_drop_pp")
+        profit_to_cash_yoy_drop_pp = (
+            float(drop_raw)
+            if drop_raw is not None and not (isinstance(drop_raw, float) and pd.isna(drop_raw))
+            else None
+        )
+        if profit_to_cash_yoy_drop_pp is None:
+            profit_to_cash_yoy_drop_pp = extract_profit_to_cash_yoy_drop_for_ticker(
+                ticker,
+                output_dir=output_dir,
+            )
+
+        conviction_downgrade_flagged = False
+        downgrade_flag = row.get("conviction_downgrade_flagged")
+        if downgrade_flag is not None and not (
+            isinstance(downgrade_flag, float) and pd.isna(downgrade_flag)
+        ):
+            conviction_downgrade_flagged = bool(downgrade_flag)
+        else:
+            bundle_for_downgrade = dict(fcf_bundle)
+            if bundle_for_downgrade.get("screen_ttm") is None and screen_ttm is not None:
+                bundle_for_downgrade["screen_ttm"] = screen_ttm
+            conviction_downgrade_flagged, conviction_score = (
+                apply_fcf_profit_to_cash_conviction_overlay(
+                    conviction_score=conviction_score,
+                    fcf_bundle=bundle_for_downgrade,
+                    profit_to_cash_yoy_drop_pp=profit_to_cash_yoy_drop_pp,
+                )
+            )
+            if conviction_downgrade_flagged:
+                downgrade_note = format_fcf_profit_to_cash_conviction_note(
+                    profit_to_cash_pct=profit_to_cash_pct,
+                    profit_to_cash_pct_prev=profit_to_cash_pct_prev,
+                    profit_to_cash_yoy_drop_pp=profit_to_cash_yoy_drop_pp,
+                )
+                if downgrade_note not in action_note:
+                    action_note = (
+                        f"{action_note} | {downgrade_note}" if action_note else downgrade_note
+                    )
+
         leverage_override_flag = row.get("leverage_override")
         leverage_override = (
             bool(leverage_override_flag)
@@ -1447,6 +1529,10 @@ def build_company_reports(
             quality_family_avoid_gate=quality_family_avoid_gate,
             quality_family_avoid_gate_note=quality_family_avoid_gate_note,
             fcf_basis_overlay=fcf_basis_overlay,
+            conviction_downgrade_flagged=conviction_downgrade_flagged,
+            profit_to_cash_yoy_drop_pp=profit_to_cash_yoy_drop_pp,
+            profit_to_cash_pct=profit_to_cash_pct,
+            profit_to_cash_pct_prev=profit_to_cash_pct_prev,
             leverage_override=leverage_override,
             dual_leverage_display=dual_leverage_display,
             debt_to_equity_yahoo=debt_to_equity_yahoo,
@@ -1543,6 +1629,10 @@ def build_company_reports(
                     fcf_dividend_coverage=labelled_fcf_dividend_coverage,
                     fcf_definition_divergence=fcf_definition_divergence,
                     fcf_divergence_flagged=fcf_divergence_flagged,
+                    conviction_downgrade_flagged=conviction_downgrade_flagged,
+                    profit_to_cash_yoy_drop_pp=profit_to_cash_yoy_drop_pp,
+                    profit_to_cash_pct=profit_to_cash_pct,
+                    profit_to_cash_pct_prev=profit_to_cash_pct_prev,
                     adjusted_signal=adjusted_signal_str or signal,
                     research_verdict=research_verdict_str,
                     research_risk_level=research_risk_str,

@@ -71,6 +71,19 @@ _INTERIM_EPS_DECLINE_RES = (
     ),
 )
 
+_PROFIT_TO_CASH_PAIR_RES = (
+    re.compile(
+        r"Profit to cash conversion\s+(\d+(?:\.\d+)?)\s*%\s+(\d+(?:\.\d+)?)\s*%",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"Profit to cash ratio\s+(\d+(?:\.\d+)?)\s*%\s+(\d+(?:\.\d+)?)\s*%",
+        re.IGNORECASE,
+    ),
+)
+
+PROFIT_TO_CASH_YOY_DROP_THRESHOLD_PP = 15.0
+
 _ADJUSTED_EPS_GROWTH_RES = (
     re.compile(
         r"adjusted\s+eps\s+\+?\s*([\d.]+)\s*%",
@@ -129,6 +142,9 @@ _FILING_METRIC_KEYS = (
     "interim_eps_decline_pct",
     "interim_dividend_cut_pct",
     "adjusted_eps_growth_pct",
+    "profit_to_cash_pct",
+    "profit_to_cash_pct_prev",
+    "profit_to_cash_yoy_drop_pp",
 )
 
 _RESEARCH_ROOTS = (
@@ -480,6 +496,84 @@ def extract_dividends_paid_from_annual_financials(
     if paid is None:
         return None
     return abs(float(paid))
+
+
+def parse_profit_to_cash_conversion_pair(text: str) -> tuple[float, float] | None:
+    """Return latest and prior-year profit-to-cash percentages (e.g. 65.0, 83.0)."""
+    if not text:
+        return None
+    for pattern in _PROFIT_TO_CASH_PAIR_RES:
+        match = pattern.search(text)
+        if not match:
+            continue
+        try:
+            current = float(match.group(1))
+            prior = float(match.group(2))
+        except (TypeError, ValueError):
+            continue
+        if current >= 0 and prior >= 0:
+            return current, prior
+    return None
+
+
+def profit_to_cash_yoy_drop_pp(current_pct: float, prior_pct: float) -> float:
+    """Year-on-year fall in profit-to-cash conversion, in percentage points."""
+    return float(prior_pct) - float(current_pct)
+
+
+def parse_profit_to_cash_yoy_drop_pp(text: str) -> float | None:
+    """Parse filing prose for a YoY profit-to-cash drop in percentage points."""
+    pair = parse_profit_to_cash_conversion_pair(text)
+    if pair is None:
+        return None
+    drop = profit_to_cash_yoy_drop_pp(pair[0], pair[1])
+    return drop if drop > 0 else None
+
+
+def profit_to_cash_drop_triggered(
+    drop_pp: float | None,
+    *,
+    threshold: float = PROFIT_TO_CASH_YOY_DROP_THRESHOLD_PP,
+) -> bool:
+    """True when profit-to-cash fell by more than ``threshold`` percentage points YoY."""
+    if drop_pp is None or (isinstance(drop_pp, float) and pd.isna(drop_pp)):
+        return False
+    return float(drop_pp) > threshold
+
+
+def fcf_three_way_universe_divergence_flagged(
+    *,
+    filing_aligned: float | None,
+    screen_ttm: float | None,
+    company_adjusted: float | None,
+    filing_currency: str = "USD",
+    company_adjusted_currency: str | None = None,
+    threshold: float = FCF_UNIVERSE_DIVERGENCE_THRESHOLD,
+) -> bool:
+    """True when all three FCF bases exist and any pair exceeds ``threshold``."""
+    if filing_aligned is None or screen_ttm is None or company_adjusted is None:
+        return False
+    return fcf_universe_divergence_flagged(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        company_adjusted=company_adjusted,
+        filing_currency=filing_currency,
+        company_adjusted_currency=company_adjusted_currency,
+        threshold=threshold,
+    )
+
+
+def extract_profit_to_cash_yoy_drop_for_ticker(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+) -> float | None:
+    """Parse profit-to-cash YoY drop from cached annual filing bodies."""
+    for body in _iter_filing_bodies(ticker, output_dir=output_dir, periods=("annual",)):
+        parsed = parse_profit_to_cash_yoy_drop_pp(body)
+        if parsed is not None:
+            return parsed
+    return None
 
 
 def parse_interim_dividend_cut_pct(text: str) -> float | None:
@@ -2182,5 +2276,17 @@ def enrich_universe_with_filing_metrics(
         filing_growth = resolve_model_earnings_growth(out.loc[index])
         if filing_growth is not None:
             out.at[index, "earnings_growth"] = filing_growth
+
+        profit_drop = extract_profit_to_cash_yoy_drop_for_ticker(ticker, output_dir=output_dir)
+        if profit_drop is not None:
+            current_drop = out.at[index, "profit_to_cash_yoy_drop_pp"]
+            if current_drop is None or (isinstance(current_drop, float) and pd.isna(current_drop)):
+                out.at[index, "profit_to_cash_yoy_drop_pp"] = profit_drop
+            for body in _iter_filing_bodies(ticker, output_dir=output_dir, periods=("annual",)):
+                pair = parse_profit_to_cash_conversion_pair(body)
+                if pair is not None:
+                    out.at[index, "profit_to_cash_pct"] = pair[0]
+                    out.at[index, "profit_to_cash_pct_prev"] = pair[1]
+                    break
 
     return out

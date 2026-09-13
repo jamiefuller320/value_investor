@@ -23,6 +23,7 @@ from value_investor.scoring.fcf import (
     fcf_basis_divergence_flagged,
     fcf_bundle_from_persisted_report,
     fcf_filing_screen_mismatch,
+    fcf_three_way_universe_divergence_flagged,
     fcf_universe_divergence_flagged,
     fcf_values_diverge,
     labelled_fcf_dividend_coverage_for_snapshot,
@@ -31,9 +32,14 @@ from value_investor.scoring.fcf import (
     parse_adjusted_eps_growth_pct,
     parse_company_adjusted_fcf,
     parse_filing_aligned_from_action_note,
+    parse_profit_to_cash_yoy_drop_pp,
     parse_screen_ttm_from_action_note,
+    profit_to_cash_drop_triggered,
     reconcile_fcf,
     reconcile_fcf_for_ticker,
+)
+from value_investor.scoring.fcf_profit_to_cash_conviction_overlay import (
+    enrich_signals_with_fcf_profit_to_cash_conviction_overlay,
 )
 from value_investor.scoring.sector_overrides import AGRICULTURE_COMMODITIES_SECTOR
 from value_investor.signals import Signal, assign_signal
@@ -3927,6 +3933,188 @@ def _model_results_for_itv_dividend_sustainability() -> pd.DataFrame:
             },
         ]
     )
+
+
+def test_parse_profit_to_cash_yoy_drop_pp_from_fy_prose():
+    text = "Profit to cash conversion 65% 83% (18)% pts"
+    assert parse_profit_to_cash_yoy_drop_pp(text) == pytest.approx(18.0)
+    assert profit_to_cash_drop_triggered(18.0) is True
+    assert profit_to_cash_drop_triggered(15.0) is False
+
+
+def test_fcf_three_way_universe_divergence_requires_all_bases():
+    assert fcf_three_way_universe_divergence_flagged(
+        filing_aligned=148_000_000.0,
+        screen_ttm=211_900_000.0,
+        company_adjusted=187_000_000.0,
+        filing_currency="GBP",
+        company_adjusted_currency="GBP",
+    )
+    assert not fcf_three_way_universe_divergence_flagged(
+        filing_aligned=148_000_000.0,
+        screen_ttm=211_900_000.0,
+        company_adjusted=None,
+    )
+
+
+def test_build_company_reports_conviction_downgrade_on_three_way_fcf_and_profit_to_cash(
+    tmp_path: Path,
+):
+    sources = tmp_path / "research" / "ITV.L" / "sources"
+    filings_dir = sources / "filings" / "bodies"
+    filings_dir.mkdir(parents=True)
+    annual_body = filings_dir / "annual.txt"
+    annual_body.write_text(
+        "Profit to cash conversion 65% 83% (18)% pts\n"
+        "Free cash flow of £187.0m before acquisitions",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "annual",
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(annual_body),
+                        "published_at": "2026-03-05",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    financials = {
+        "ticker": "ITV.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 202_000_000.0,
+                "Capital Expenditure": -54_000_000.0,
+                "Free Cash Flow": 148_000_000.0,
+            }
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    (sources / "fcf_bridge.json").write_text(
+        json.dumps(
+            {
+                "ticker": "ITV.L",
+                "resolved": True,
+                "policy_basis": "company_adjusted",
+                "policy_fcf": 187_000_000.0,
+                "company_adjusted": 187_000_000.0,
+                "screen_ttm": 211_900_000.0,
+                "currency": "GBP",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="ITV.L",
+                name="ITV plc",
+                signal="strong_buy",
+                conviction_score=0.60,
+                free_cashflow=211_900_000.0,
+                free_cashflow_screen_ttm=211_900_000.0,
+                fcf_basis_overlay=False,
+                dividend_sustainability_overlay=False,
+            ),
+        ]
+    )
+    signals = enrich_universe_with_filing_metrics(signals, tmp_path)
+    model_results = pd.DataFrame(
+        columns=[
+            "ticker",
+            "model_id",
+            "model_name",
+            "passed",
+            "score",
+            "reasons",
+            "failed_criteria",
+        ]
+    )
+
+    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+
+    assert snapshot["conviction_downgrade_flagged"] is True
+    assert snapshot["signal"] == "strong_buy"
+    assert snapshot["adjusted_signal"] == "buy"
+    assert snapshot["fcf_basis_overlay"] is True
+    assert snapshot["conviction_score"] == pytest.approx(0.60 * 0.85 * 0.85)
+    assert snapshot["profit_to_cash_yoy_drop_pp"] == pytest.approx(18.0)
+    assert "Conviction downgrade" in snapshot["action_note"]
+    assert "65% vs 83%" in snapshot["action_note"]
+
+
+def test_enrich_signals_with_fcf_profit_to_cash_conviction_overlay(tmp_path: Path):
+    sources = tmp_path / "research" / "ITV.L" / "sources"
+    filings_dir = sources / "filings" / "bodies"
+    filings_dir.mkdir(parents=True)
+    annual_body = filings_dir / "annual.txt"
+    annual_body.write_text("Profit to cash ratio 65% 83%", encoding="utf-8")
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(annual_body),
+                        "published_at": "2026-03-05",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 202_000_000.0,
+                        "Capital Expenditure": -54_000_000.0,
+                    }
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    (sources / "fcf_bridge.json").write_text(
+        json.dumps(
+            {
+                "resolved": True,
+                "company_adjusted": 187_000_000.0,
+                "screen_ttm": 211_900_000.0,
+                "currency": "GBP",
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.80,
+                "free_cashflow": 211_900_000.0,
+                "action_note": "",
+            }
+        ]
+    )
+    enriched = enrich_signals_with_fcf_profit_to_cash_conviction_overlay(
+        signals,
+        output_dir=tmp_path,
+    )
+    row = enriched.iloc[0]
+    assert bool(row["conviction_downgrade_flagged"]) is True
+    assert row["conviction_score"] == pytest.approx(0.68)
+    assert "Conviction downgrade" in str(row["action_note"])
 
 
 def test_dividend_sustainability_overlay_caps_itv_like_profile():
