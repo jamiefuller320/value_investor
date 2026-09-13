@@ -313,6 +313,7 @@ def build_analysis_payload(
         "hypothesis_integrity": hypothesis_integrity,
         "hypothesis_outcomes": hypothesis_outcomes,
         "entry_dca_overlay": entry_dca,
+        "entry_dca_adoption": (experiment_assessment or {}).get("entry_dca_adoption"),
         "churn_health": churn_health,
         "knob_calibration_priors": knob_calibration,
         "experiment_assessment": experiment_assessment,
@@ -870,6 +871,8 @@ balancing_hint, and any selection_feedback_flags (intact losers are expected in 
 When entry_dca_overlay is present, cite readiness.ready_for_cadence_analysis,
 leading_cadence, tracks_with_closed, and model_independent_hint (DCA findings are
 expected to transfer across models — do not spawn a per-model DCA book).
+When entry_dca_adoption is present, cite current_stage and whether acked;
+do not re-request ack if acked is true. Follow plan gates — do not execute DCA.
 Note unrealized vs realized marks only if present in JSON.
 
 SYSTEM GAPS
@@ -918,9 +921,10 @@ Action contracts (include a line when the trigger fires — do not invent metric
    [paper_churn] or [offline_sim] citing intact vs broken recovery_rate or learning_hints
    (observe-only; no auto-apply thesis thresholds).
 10. If entry_dca_overlay.readiness.ready_for_cadence_analysis is true → ≥1
-   [paper_churn] or [offline_sim] citing leading_cadence, de-risk vs lump-sum, and
-   whether model_independent_hint is true (observe-only; do not execute DCA on
-   paper books until a human ack).
+   [paper_churn] or [monitoring] citing leading_cadence, entry_dca_adoption.current_stage,
+   and model_independent_hint (observe-only; do not execute DCA). If
+   entry_dca_adoption.acked is true, do not re-request human ack — follow the
+   plan gates instead.
 11. If system_gaps.flags is non-empty → ≥1 [ops], [ingest], [coverage], or
    [monitoring] citing the highest-severity flag id and layer (produce/persist/
    publish/apply/learning_clock). Prefer consumer-path fixes (wired overlay,

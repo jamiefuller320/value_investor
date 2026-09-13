@@ -92,6 +92,12 @@ ftse-experiment-assess refresh \
 
 # Inspect committed ledger (slim JSON for agents)
 ftse-experiment-assess status --data-dir docs/data --json
+
+# Record a human ack (observe-only; never auto-apply)
+ftse-experiment-assess ack --experiment-id entry_dca_overlay --decision ack_observe
+
+# Show the entry-DCA review / implementation plan
+ftse-experiment-assess plan
 ```
 
 `--sync-task-status` writes assessment evidence back into task JSON stores:
@@ -123,6 +129,8 @@ ftse-experiment-assess status --data-dir docs/data --json
 | File | Purpose |
 |------|---------|
 | `docs/data/experiment_assessment.json` | Unified ledger + recommendations list |
+| `docs/data/experiment_acks.json` | Durable human acks (survive Sunday refresh) |
+| `docs/data/entry_dca_adoption_plan.json` | DCA review/implementation stages |
 
 Consumed by:
 
@@ -143,7 +151,12 @@ When `recommendations` is non-empty:
 2. For calibration shadows — follow [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate)
 3. For exclusion shadows — follow [exclusion-ladder-replay.md](exclusion-ladder-replay.md#promotion-workflow-human-gate)
 4. For scoring tasks with `assessment_recommend` — triage via `ftse-analysis-review promote` (human only)
-5. Do **not** auto-apply — survivors are priors for refinement only
+5. For lifecycle overlay `entry_dca_overlay` — `ftse-experiment-assess ack --experiment-id entry_dca_overlay` then follow [position-lifecycle.md](position-lifecycle.md#entry-dca-adoption-plan)
+6. Do **not** auto-apply — survivors are priors for refinement only
+
+Ack is stored in `docs/data/experiment_acks.json`. Refresh reapplies it; a new
+leading cadence re-opens the gate. `human_ack_pending` counts only **unacked**
+recommend rows.
 
 ### Queue triage (2026-09-03)
 

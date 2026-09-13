@@ -64,3 +64,11 @@ def test_sunday_analysis_tasks_locks_thin_memo_promotion():
     row = next(task for task in tasks if task["id"] == "sunday-analysis-tasks")
     assert "thin_memo_counted_as_coverage" in row["summary"]
     assert "rememo-eligibility widening" in row["summary"]
+
+
+def test_sunday_entry_dca_follows_adoption_plan():
+    payload = load_human_tasks_checklist()
+    tasks = [task for section in payload["sections"] for task in section["tasks"]]
+    row = next(task for task in tasks if task["id"] == "sunday-entry-dca-cadence")
+    assert "entry_dca_adoption_plan" in row["summary"]
+    assert "Do not execute DCA" in row["summary"]

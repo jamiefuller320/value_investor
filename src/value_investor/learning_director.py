@@ -229,6 +229,9 @@ def build_learning_director_payload(
         paper_root=paper_root,
         vision=vision,
     )
+    experiment_assessment = slim_experiment_assessment_for_review(
+        _safe_read(data_dir / "experiment_assessment.json")
+    )
 
     return {
         "run_at": effective_run_at.isoformat(),
@@ -241,9 +244,7 @@ def build_learning_director_payload(
         "analysis_review": _safe_read(data_dir / "analysis_review.json"),
         "paper_learning_review": _safe_read(data_dir / "paper_learning_review.json"),
         "prior_learning_director_review": _safe_read(COMMITTED_REVIEW_PATH),
-        "experiment_assessment": slim_experiment_assessment_for_review(
-            _safe_read(data_dir / "experiment_assessment.json")
-        ),
+        "experiment_assessment": experiment_assessment,
         "exclusion_universe": slim_exclusion_universe(
             _safe_read(data_dir / "exclusion_universe_review.json")
         ),
@@ -273,6 +274,7 @@ def build_learning_director_payload(
         "entry_dca_overlay": slim_entry_dca(
             _safe_read(paper_root / "learning_tracks_entry_dca.json")
         ),
+        "entry_dca_adoption": (experiment_assessment or {}).get("entry_dca_adoption"),
         "trajectory_evidence": slim_trajectory_evidence_for_review(
             _safe_read(data_dir / "trajectory_evidence_review.json")
         ),
@@ -396,7 +398,9 @@ When hypothesis_outcomes.readiness.ready_for_thesis_outcome_analysis is true, ci
 intact vs broken recovery_rate and learning_hints — still observe-only.
 When entry_dca_overlay is present, note lifecycle coverage (perpetual factor
 inventory) and whether ready_for_cadence_analysis / model_independent_hint fire.
-Do not activate a new paper book for DCA — the overlay is the experiment.
+When entry_dca_adoption is present, cite current_stage; if acked, do not
+re-request ack and do not propose executing DCA until paper_execute_graduated
+is ready. Do not activate a new paper book for DCA — the overlay is the experiment.
 When system_gaps.flags is non-empty, name the highest-severity flag and whether
 research *production* is being mistaken for learning-path *application*
 (written≠wired, existence≠quality, filing-ready≠learning_ready).

@@ -339,3 +339,10 @@ def test_learning_director_prompt_locks_thin_memo_to_body_lag_not_policy_experim
     assert "Do not invent a rememo-policy experiment" in prompt
     assert "widening rememo_reason" in prompt
     assert "body-lag slim after ingest" in prompt
+
+
+def test_learning_director_prompt_cites_dca_adoption_plan():
+    prompt = _build_learning_director_prompt(Path("payload.json"))
+    assert "entry_dca_adoption" in prompt
+    assert "paper_execute_graduated" in prompt
+    assert "do not propose executing DCA" in prompt

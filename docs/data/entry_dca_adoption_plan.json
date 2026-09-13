@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "observe_only": true,
+  "experiment_id": "entry_dca_overlay",
+  "target_cadence": "dca_4x_weekly",
+  "updated_at": "2026-09-13T17:41:11.168021+00:00",
+  "acked": true,
+  "current_stage": "out_of_sample_first_entry",
+  "do_not": [
+    "Execute DCA on paper books until paper_execute_graduated is ready",
+    "Change starter fraction from this overlay",
+    "Spawn a per-model DCA paper book",
+    "Apply DCA to primary AI judgment or live size while beat_market is false"
+  ],
+  "stages": [
+    {
+      "id": "acked",
+      "title": "Human ack of overlay finding (observe only)",
+      "status": "done",
+      "ready": true,
+      "revisit_when": "Human records ftse-experiment-assess ack for entry_dca_overlay",
+      "do_not": "Ack is not adopt — do not execute DCA or change starter fraction",
+      "evidence": {
+        "acked": true,
+        "acked_at": "2026-09-13T17:41:11.138086+00:00",
+        "leading_cadence": "dca_4x_weekly",
+        "ready_for_cadence_analysis": true
+      }
+    },
+    {
+      "id": "out_of_sample_first_entry",
+      "title": "Confirm 4× weekly on new first-entry closes (live books)",
+      "status": "open",
+      "ready": false,
+      "revisit_when": "ai_judgment first_entry>=3, rules first_entry>=1, leading still dca_4x_weekly, fair tracks still agree",
+      "do_not": "Do not treat failing calibration shadows as live-book confirmation",
+      "evidence": {
+        "first_entry_by_track": {
+          "ai_judgment": 1,
+          "rules": 0
+        },
+        "ack_snapshot": {
+          "ai_judgment": 1,
+          "rules": 0
+        },
+        "leading_cadence": "dca_4x_weekly",
+        "fair_winning_cadence": {
+          "ai_judgment_fair": "dca_4x_weekly",
+          "rules_fair": "dca_4x_weekly"
+        },
+        "cadence_stable": true
+      }
+    },
+    {
+      "id": "paper_execute_graduated",
+      "title": "Optional: execute 4× weekly on graduated_allocation only",
+      "status": "blocked",
+      "ready": false,
+      "revisit_when": "out_of_sample_first_entry ready AND graduated_allocation equity_marks>=8",
+      "do_not": "Do not execute on primary, rules, or a new DCA paper book",
+      "evidence": {
+        "graduated_equity_marks": 6,
+        "graduated_marks_min": 8,
+        "graduated_cost_drag": 0.0454
+      }
+    },
+    {
+      "id": "primary_or_live",
+      "title": "Primary / live size — blocked",
+      "status": "blocked",
+      "ready": false,
+      "revisit_when": "Fair-cost primary beat_market is true AND paper_execute_graduated ready",
+      "do_not": "Overlay end-value vs lump-sum is not adoption truth vs ^FTSE",
+      "evidence": {
+        "beat_market": false,
+        "fair_or_primary_excess_after_costs": -0.1249
+      }
+    }
+  ],
+  "finding": {
+    "leading_cadence": "dca_4x_weekly",
+    "ready_for_cadence_analysis": true,
+    "scored_count": 22,
+    "tracks_with_closed": 9,
+    "model_independent_hint": true,
+    "first_entry_by_track": {
+      "rules": 0,
+      "ai_judgment": 1,
+      "momentum_grace": 0,
+      "graduated_allocation": 7,
+      "technical": 2,
+      "buy_tier_level": 0,
+      "ai_judgment_calibrated": 3,
+      "ai_judgment_calibrated_r2": 3,
+      "ai_judgment_calibrated_r3": 3,
+      "ai_judgment_exclusion_u4": 1,
+      "ai_judgment_fair": 1,
+      "rules_fair": 1
+    }
+  },
+  "note": "Human review/implementation plan for the 2026-09-13 overlay recommend. Never auto-apply. Revisit on Sunday or when first-entry windows close."
+}
