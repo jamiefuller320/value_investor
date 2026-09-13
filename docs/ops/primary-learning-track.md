@@ -63,6 +63,28 @@ See also [`exit-timing-cohorts.md`](exit-timing-cohorts.md) for live paper cohor
 Human verify-before-trade packs remain useful for live capital, but they are
 **not** the primary learning loop.
 
+## Decision learning loop (target)
+
+Track excess vs ^FTSE / rules is necessary but not sufficient. The intended
+continuous-improvement strand is:
+
+1. **At decision time t** — freeze what the AI-judgment pass used (screen +
+   overlay + structured verdict / key filing features), not an essay.
+2. **Later** — score whether wait / buy / hold / sell was optimal vs
+   alternatives on forward marks.
+3. **Attribute** — separate **data gaps** (missing bodies, unbound FCF/EPS,
+   stale overlay) from **logic gaps** (gate/knob/policy), and let those
+   conclusions prioritize engineering work.
+
+Today: `rebalance_log.json` + PIT research (`get_research_as_of`) + knob
+counterfactuals cover (1)–(2) only partially; automated (3) is not built
+(deferred **L368**). Memo resource retarget (**L367**) exists to fund this
+loop: cut narrative spray → keep cheap scheduled structured verdicts → invest
+in PIT packs / filing features that thicken autopsy → on-demand full memo last.
+
+Learning conclusions from this loop should drive other development (ingest,
+overlays, gates) ahead of prose polish or offline breadth.
+
 ## Human tasks checklist
 
 Weekly manual gates (Sunday priors review, shadow vs primary, promotion rules)
