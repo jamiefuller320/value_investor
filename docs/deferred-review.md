@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T11:40:11+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T12:25:47+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -225,7 +225,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L369 | **Decision-look triage strand (sift queue → look artifact) after Phase C freeze** | Phase-C-adjacent feeder: consume universe sift triggers (and holdings/buy-tier events) into a decision_look artifact that records look outcome (ignore / deepen_research / trade_review / watch) with slim screen snapshot. Thresholds are triage gates only — never imply rememo. Prefer human or bounded agent looks on the queue; feed autopsy/info-gap signals later. Scope scan to full FTSE screen first; buy-tier is priority sort not exclusivity. | L368 freeze writer live for >=4 weeks AND N121 revisited with explicit decision_look_queue schema; or Sunday triage repeatedly needs weekday price-shock looks outside holdings/boundary panels |
 | L370 | **Equal decision-freeze snapshots on admitted epoch-0 books** | Once FTSE autopsy freeze schema is proven, write the same slim decision-freeze fields on admitted-market epoch-0 buy_tier_level rebalance rows (no AI-judgment required). Segregated per-market learning makes this safe to run in parallel. This thickens equal-support data for later shard AI timing decisions; it is not Phase C attribution and must not open shard AI or decision-review apply. | FTSE L368 freeze writer is live and stable for >=4 weeks on AI-judgment, and admitted epoch-0 books have >=8 weeks of weekday marks |
 | L372 | **Wire Phase C freeze writer behind readiness exit 0** | Freeze writer must refuse to enable when ftse-phase-c-readiness is NOT READY; Sunday already writes phase_c_readiness.json observe-only. | When phase_c_readiness.json flips to ready=true and Phase B has ≥3 structured_verdict docs |
-| L374 | **Stamp equal-support timing before Sunday epoch-0 rebalance** | Sunday ftse-library shard-epoch0 currently runs in ladder B3b before equal-support stamps timing_signal onto latest_signals. That pass force-rebalances with timing=insufficient_data, so skip_timing_wait does not see wait names. Weekday local-open marks then exclude/sell those names; the next Sunday buys them back. Reorder stamp-timing before epoch-0, or refuse new buys until timing is present. | Next Sunday library ladder, or when admitted-book wait names are sold on a weekday and re-bought the following Sunday. |
 
 ### Universe & data
 
