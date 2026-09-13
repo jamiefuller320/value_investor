@@ -76,12 +76,13 @@ continuous-improvement strand is:
    stale overlay) from **logic gaps** (gate/knob/policy), and let those
    conclusions prioritize engineering work.
 
-Today: `rebalance_log.json` + PIT research (`get_research_as_of`) + knob
-counterfactuals cover (1)–(2) only partially; automated (3) is not built
-(deferred **L368**). Memo resource retarget (**L367**) exists to fund this
-loop: cut narrative spray → keep cheap scheduled structured verdicts → invest
-in PIT packs / filing features that thicken autopsy → on-demand full memo last.
+**Design locked:** see [`pit-decision-autopsy.md`](pit-decision-autopsy.md)
+(pack schema, Suite B optimality, data-vs-logic rules, eng-queue contract,
+KPIs). Implementation remains deferred **L368**, funded by memo retarget
+**L367** Phase C; feeder features **L365**.
 
+Today: `rebalance_log.json` + PIT research (`get_research_as_of`) + knob
+counterfactuals cover (1)–(2) only partially; automated (3) is not built.
 Learning conclusions from this loop should drive other development (ingest,
 overlays, gates) ahead of prose polish or offline breadth.
 
