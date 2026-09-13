@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T17:53:07+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T18:38:31+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -231,6 +231,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L372 | **Wire Phase C freeze writer behind readiness exit 0** | Freeze writer must refuse to enable when ftse-phase-c-readiness is NOT READY; Sunday already writes phase_c_readiness.json observe-only. | When phase_c_readiness.json flips to ready=true and Phase B has ≥3 structured_verdict docs |
 | L377 | **Retune just-bought vs growth on wide buy-tier-level books** | On the 120-name buy_tier_level book, Growth is often empty because sleeves sit below the starter-ratio ceiling or have already left the buy-tier (near sell). A days-held or book-relative size split may read better than the equal-weight target ratio. | After several weeks of epoch-0 marks when the Growth column is still empty on FTSE and admitted books |
 | L381 | **Cite FTSE buy_tier_level first-entry closes as DCA confirmation** | This week's dca_4x_weekly ranking is from concentrated 3-name books. The FTSE epoch-0 book has 61 first-entry overlay episodes from 2026-09-07 that cannot score until the 21-day window (~2026-09-28). When they close, Sunday analysis should cite that unfiltered Suite B cohort as confirmation or contradiction — still observe-only, not an execute path. | FTSE buy_tier_level entry_dca_overlay shows first_entry scored_count well above zero (window elapsed from 2026-09-07) |
+| L384 | **Rank DCA cadences only on completed windows** | This week's 22 first-entry scores are all sold_before_window with dca_4x_weekly filling 1 of 4 tranches. Leftover cash then mechanically beats lump-sum on short holds. Split window_elapsed vs sold_before_window (or require tranches_filled==target) before treating 4x weekly as a completed-cadence result. | FTSE buy_tier_level or live books have window_elapsed first-entry scores, or Sunday analysis next cites leading_cadence without noting incomplete tranches |
 
 ### Universe & data
 
@@ -449,6 +450,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L375 | **Keep Sunday epoch-0 from force-trading before local open** | Admitted-market Sunday shard-epoch0 uses force=True, so US/EU/TSX/smallcap books rebalance while session_gate can_act is false (before open). Weekday epoch0-weekday already honors settle. Consider Sunday mark-only or session-gated trades so rolling buys only print after local open+settle. | If Sunday force fills keep reversing weekday wait exits, or when tightening epoch-0 fill-quality vs Yahoo stamps. |
 | L378 | **Informational weekday excess digest in ops-monitor email** | When paper-track coverage is healthy, optionally include a non-alerting snapshot of AI vs ^FTSE / rules / shadow excess in the ops-monitor digest so Sunday review has a weekday trail without a human glance. | ops-monitor email is already sending on warn/fail and a one-line excess snapshot would save Sunday lookup |
 | L382 | **Backfill missed shard epoch-0 first fills into the DCA overlay** | SP500 epoch-0 holds 120 names but overlay only has 4 first-entry episodes (ASX 29 vs 1). Overlay ingest only records new buys this pass; if the cold-start overlay was not persisted, later marks cannot backfill. Repair would reconstruct episodes from rebalance_log/trades without changing fills. | A human wants shard-level DCA confirmation, or weekday marks show holdings far above overlay open+closed counts on admitted books |
+| L383 | **Say frozen knobs not frozen holdings for epoch-0** | Ops prose calls buy_tier_level a frozen book/cohort, which reads as a static holdings list. Epoch-0 is a live rules baseline: names enter/hold/exit; only picking knobs and entry mechanics (no DCA execute, no starter fraction) stay frozen. | Next edit of buy-tier-cohort-labs.md or market-sharded-learning.md admitted-start section |
 
 ---
 
