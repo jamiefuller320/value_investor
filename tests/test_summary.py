@@ -385,6 +385,29 @@ def test_healthcare_overlay_caps_strong_buy_when_negative_fcf_and_weak_piotroski
     assert "Healthcare overlay" in report.summary
 
 
+def test_healthcare_overlay_uses_trailing_fcf_when_canonical_positive():
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="PHAR.L",
+                name="Pharma Weak Ltd",
+                sector="Health Care",
+                signal="strong_buy",
+                free_cashflow=119_000_000.0,
+                free_cashflow_screen_ttm=-66_125_000.0,
+            )
+        ]
+    )
+    model_results = _healthcare_overlay_models(f_score=4)
+
+    report = build_company_reports(signals, model_results)[0]
+    snapshot = report.to_dict()
+
+    assert snapshot["healthcare_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert "Healthcare overlay" in report.summary
+
+
 def test_healthcare_overlay_not_triggered_for_hik_like_profile():
     signals = pd.DataFrame(
         [

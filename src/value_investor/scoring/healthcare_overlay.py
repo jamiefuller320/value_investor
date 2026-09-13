@@ -8,7 +8,7 @@ from typing import Any
 import pandas as pd
 
 from value_investor.models.piotroski import piotroski_snapshot_from_result
-from value_investor.scoring.fcf import resolve_free_cashflow
+from value_investor.scoring.fcf import resolve_free_cashflow, screen_ttm_from_row
 
 _SIGNAL_RANK = {
     "strong_buy": 4,
@@ -20,6 +20,14 @@ _SIGNAL_RANK = {
 
 HEALTHCARE_SECTOR_FRAGMENTS = ("healthcare", "health care")
 PIOTROSKI_WEAK_THRESHOLD = 4
+
+
+def trailing_free_cashflow_for_healthcare_overlay(row: pd.Series) -> float | None:
+    """Yahoo trailing FCF for healthcare overlay; not filing-aligned canonical."""
+    trailing = screen_ttm_from_row(row)
+    if trailing is not None:
+        return trailing
+    return resolve_free_cashflow(row)
 
 
 def is_healthcare_sector(sector: str | None) -> bool:
@@ -142,7 +150,7 @@ def enrich_signals_with_healthcare_overlay(
     for _, row in out.iterrows():
         ticker = str(row["ticker"])
         ticker_models = model_results[model_results["ticker"] == ticker]
-        free_cashflow = resolve_free_cashflow(row)
+        free_cashflow = trailing_free_cashflow_for_healthcare_overlay(row)
         existing = row.get("adjusted_signal")
         existing_adjusted = (
             str(existing)
