@@ -194,6 +194,10 @@ optimality margin and alternate set before adding narrative features.
 
 ## 9. Non-goals
 
+- Multi-market / shard Phase C autopsy before FTSE proves out (see **N122**). Equal-support
+  parallel *data* collection on admitted epoch-0 books remains in scope for later
+  (**L370**); that is not AI-judgment autopsy.
+
 - Replacing narrative memos for humans (that is L366, after always-on structured verdict).
 - Full-universe memo PIT replay (N39).
 - Gating paper-auto on `memo_quality` (N27).
