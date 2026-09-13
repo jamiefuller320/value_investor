@@ -16,12 +16,12 @@ most automation — this list is what still needs a human.
 
 | Task | Who | Doc |
 |------|-----|-----|
-| **Spot-check learning tracks** after paper-auto — AI excess vs ^FTSE, rules control, competing calibrated shadows, Suite B `buy_tier_level` after Monday cold start | Human | [primary-learning-track.md](primary-learning-track.md#commands) |
+| **Spot-check learning tracks** after paper-auto — post-settle last_run + decision-review coverage of AI vs rules, calibrated shadows, Suite B `buy_tier_level` (ops-monitor 13:15; excess interpretation stays Sunday) | CI | [ops-monitor.md](ops-monitor.md#paper-learning-tracks) |
 | Paper-auto + decision-review `--apply` (all tracks including `buy_tier_level`; shadows + cohort lab observe-only; endurance ledger) | CI | [decision-review.md](decision-review.md#commands) |
 | Admitted epoch-0 **local-open marks** (ASX / EU / US settle; not FTSE paper-auto; census refresh) | CI | [market-sharded-learning.md](market-sharded-learning.md#weekday-epoch-0-local-open) |
 | Epoch-0 weekday **cron upsert** on learning admit + `--sync-cron` (timezone buckets; residual human only for unmapped TZ) | CI | [market-sharded-learning.md](market-sharded-learning.md#weekday-epoch-0-local-open) |
 | **GHA secret hygiene** scan (skips if no merges / workflow touches in 36h) | CI | [gha-secret-hygiene.md](gha-secret-hygiene.md#automated-daily-check) |
-| **Confirm buy-tier level first fill** — Monday paper-auto should open the wide raw-screen Suite B book; knobs stay frozen | Human | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#level-book-live-monday) |
+| **Confirm buy-tier level first fill** — ops-monitor fails if the Suite B book acted empty; knobs stay frozen; do not treat NAV as promotion truth | CI | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#level-book-live-monday) |
 | Admitted-market weekday rememo (3/day per epoch-0 book after maintenance ingest; catch-up 5 if that book exceeds 15) | CI | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
 | **Clear engineering parked backlog** when dispatch pauses — triage oldest `list-parked` tasks; queue resumes when count &lt; 7 and 30m idle since last clearing action | Human | [ops-monitor.md](ops-monitor.md#engineering-parked-backlog-clearing) |
 

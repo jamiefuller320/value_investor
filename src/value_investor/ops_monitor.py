@@ -168,11 +168,17 @@ WORKFLOW_EMAIL_READY_UTC: dict[str, tuple[int, int]] = {
     "ops_monitor": (8, 0),
 }
 
+DEFAULT_PAPER_DATA_ROOT = Path("docs/data/paper_automation")
+LEARNING_TRACKS_SUMMARY_FILENAME = "learning_tracks_summary.json"
+LEARNING_TRACKS_REVIEW_FILENAME = "learning_tracks_review.json"
+
 COMMITTED_JSON_PATHS: tuple[Path, ...] = (
     DEFAULT_HEALTH_LOG_PATH,
     DEFAULT_LATEST_PATH,
     COMMITTED_TASKS_PATH,
     Path("docs/data/paper_automation/last_run.json"),
+    Path("docs/data/paper_automation") / LEARNING_TRACKS_SUMMARY_FILENAME,
+    Path("docs/data/paper_automation") / LEARNING_TRACKS_REVIEW_FILENAME,
     Path("docs/data/library/policy.json"),
 )
 
@@ -555,6 +561,206 @@ def check_latest_bundle(
             )
         ]
     return []
+
+
+def _paper_json_payload(path: Path) -> dict[str, Any] | None:
+    if not path.exists():
+        return None
+    try:
+        payload = read_json(path)
+    except (OSError, ValueError, TypeError, json.JSONDecodeError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def check_paper_learning_tracks(
+    paper_root: Path = DEFAULT_PAPER_DATA_ROOT,
+) -> list[OpsFinding]:
+    """
+    Structural weekday spot-check formerly done on the Automation tab.
+
+    Confirms post-settle paper-auto artifacts and that decision-review covered
+    the primary AI book, rules control, competing calibrated shadows, and the
+    Suite B buy_tier_level cohort. Does **not** interpret excess vs ^FTSE —
+    that stays the Sunday analysis-review / promotion gates.
+    """
+    from value_investor.knob_calibration import (
+        calibrated_shadow_track_id,
+        discover_calibration_shadow_ranks,
+    )
+    from value_investor.paper_auto_scheduling import (
+        LAST_RUN_FILENAME,
+        last_run_after_settle,
+        load_last_run,
+    )
+    from value_investor.paper_automation import (
+        AI_JUDGMENT_TRACK_ID,
+        BUY_TIER_LEVEL_SUBDIR,
+        BUY_TIER_LEVEL_TRACK_ID,
+        FUND_FILENAME,
+        RULES_TRACK_ID,
+    )
+
+    root = Path(paper_root)
+    findings: list[OpsFinding] = []
+    core_track_ids = (RULES_TRACK_ID, AI_JUDGMENT_TRACK_ID, BUY_TIER_LEVEL_TRACK_ID)
+
+    if not root.exists():
+        findings.append(
+            OpsFinding(
+                severity="warn",
+                category="paper",
+                title="Paper automation root missing",
+                summary=f"{root.as_posix()} not found — weekday paper-auto has not published yet.",
+            )
+        )
+        return findings
+
+    last_run = load_last_run(root / LAST_RUN_FILENAME)
+    if last_run is None:
+        findings.append(
+            OpsFinding(
+                severity="warn",
+                category="paper",
+                title="Paper-auto last_run.json missing",
+                summary=f"Expected {(root / LAST_RUN_FILENAME).as_posix()} after weekday paper-auto.",
+            )
+        )
+    elif not last_run_after_settle(last_run):
+        findings.append(
+            OpsFinding(
+                severity="warn",
+                category="paper",
+                title="Paper-auto last_run is pre-settle only",
+                summary=(
+                    "Committed last_run.json has gate.after_settle=false — orchestrator "
+                    "should re-dispatch a post-settle pass."
+                ),
+            )
+        )
+
+    summary = _paper_json_payload(root / LEARNING_TRACKS_SUMMARY_FILENAME)
+    if summary is None:
+        findings.append(
+            OpsFinding(
+                severity="fail",
+                category="paper",
+                title="Learning-tracks summary missing",
+                summary=(
+                    f"{(root / LEARNING_TRACKS_SUMMARY_FILENAME).as_posix()} missing or unreadable "
+                    "— weekday paper-auto did not publish a track rollup."
+                ),
+            )
+        )
+        summary_tracks: dict[str, Any] = {}
+    else:
+        summary_tracks = summary.get("tracks") if isinstance(summary.get("tracks"), dict) else {}
+        missing_summary = [track_id for track_id in core_track_ids if track_id not in summary_tracks]
+        if missing_summary:
+            findings.append(
+                OpsFinding(
+                    severity="fail",
+                    category="paper",
+                    title="Learning-tracks summary missing core tracks",
+                    summary=(
+                        "paper-auto rollup omitted "
+                        + ", ".join(missing_summary)
+                        + " (need rules, ai_judgment, buy_tier_level)."
+                    ),
+                )
+            )
+        if last_run is not None and last_run_after_settle(last_run):
+            skipped = [
+                track_id
+                for track_id in core_track_ids
+                if track_id in summary_tracks
+                and not bool((summary_tracks.get(track_id) or {}).get("acted"))
+            ]
+            if skipped:
+                findings.append(
+                    OpsFinding(
+                        severity="warn",
+                        category="paper",
+                        title="Core learning tracks did not act",
+                        summary=(
+                            "Post-settle paper-auto left acted=false for "
+                            + ", ".join(skipped)
+                            + "."
+                        ),
+                    )
+                )
+
+    review = _paper_json_payload(root / LEARNING_TRACKS_REVIEW_FILENAME)
+    if review is None:
+        findings.append(
+            OpsFinding(
+                severity="fail",
+                category="paper",
+                title="Learning-tracks review missing",
+                summary=(
+                    f"{(root / LEARNING_TRACKS_REVIEW_FILENAME).as_posix()} missing or unreadable "
+                    "— decision-review did not publish the Automation-tab comparison."
+                ),
+            )
+        )
+        reviews: dict[str, Any] = {}
+    else:
+        reviews = review.get("reviews") if isinstance(review.get("reviews"), dict) else {}
+        missing_review = [track_id for track_id in core_track_ids if track_id not in reviews]
+        if missing_review:
+            findings.append(
+                OpsFinding(
+                    severity="fail",
+                    category="paper",
+                    title="Learning-tracks review missing core tracks",
+                    summary=(
+                        "decision-review omitted "
+                        + ", ".join(missing_review)
+                        + " (need AI judgment, rules control, Suite B buy_tier_level)."
+                    ),
+                )
+            )
+
+    shadow_ids = [
+        calibrated_shadow_track_id(rank) for rank in discover_calibration_shadow_ranks(root)
+    ]
+    missing_shadows = [
+        track_id
+        for track_id in shadow_ids
+        if track_id in summary_tracks and track_id not in reviews
+    ]
+    if review is not None and missing_shadows:
+        findings.append(
+            OpsFinding(
+                severity="fail",
+                category="paper",
+                title="Calibrated shadows missing from decision-review",
+                summary=(
+                    "Competing calibrated shadows ran in paper-auto but were omitted from "
+                    "learning_tracks_review: " + ", ".join(missing_shadows) + "."
+                ),
+            )
+        )
+
+    buy_tier_row = summary_tracks.get(BUY_TIER_LEVEL_TRACK_ID) or {}
+    if isinstance(buy_tier_row, dict) and buy_tier_row.get("acted"):
+        fund = _paper_json_payload(root / BUY_TIER_LEVEL_SUBDIR / FUND_FILENAME)
+        holdings = fund.get("holdings") if isinstance(fund, dict) else None
+        if not isinstance(holdings, dict) or not holdings:
+            findings.append(
+                OpsFinding(
+                    severity="fail",
+                    category="paper",
+                    title="Buy-tier level cohort empty after acted pass",
+                    summary=(
+                        "buy_tier_level acted but automated_fund.json has no holdings — "
+                        "Monday cold start should fill the wide raw-screen Suite B book. "
+                        "Do not treat first-fill NAV as promotion truth."
+                    ),
+                )
+            )
+
+    return findings
 
 
 def _engineering_queue_needs_hourly(queue_status: dict[str, Any] | None) -> bool:
@@ -1170,6 +1376,14 @@ def finding_email_defer_reason(
     if "Recovery bundle in flight" in summary or "Recovery run in flight" in action:
         return "recovery run still in flight"
 
+    if finding.category == "paper" and now.weekday() < 5:
+        ready_h, ready_m = WORKFLOW_EMAIL_READY_UTC["paper_auto"]
+        if (now.hour, now.minute) < (ready_h, ready_m):
+            return (
+                "paper-auto scheduled slot not reached yet "
+                f"(email-ready after {ready_h:02d}:{ready_m:02d} UTC)"
+            )
+
     if finding.title.startswith("Workflow overdue:"):
         schedule_name = finding.title.removeprefix("Workflow overdue:").strip()
         key = _workflow_key_for_name(schedule_name)
@@ -1270,6 +1484,7 @@ def collect_ops_findings(
     findings.extend(check_ops_budget())
     findings.extend(check_memo_rememo_backlog())
     findings.extend(check_backtest_history())
+    findings.extend(check_paper_learning_tracks())
 
     engineering_findings, queue_status = check_engineering_queue(
         open_prs=open_prs,

@@ -48,7 +48,8 @@ WORKFLOW=ops-monitor.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_wor
 Runs after the Mon/Wed/Fri ingest loop (~07:05) and before weekday paper
 orchestrator (~08:20). Morning may **defer email** when remaining findings are
 still expected to clear later the same day (Sunday analysis-review / data-backup
-slots, quiet-bundle recovery still in flight, dashboard waiting on email-report).
+slots, quiet-bundle recovery still in flight, dashboard waiting on email-report,
+paper learning-track coverage before 10:00 UTC).
 Same-day skip applies only after a run that did **not** defer email — the 13:15
 catch-up re-checks and emails only if issues remain.
 
@@ -66,6 +67,7 @@ Alert email is skipped when **every** unfixed warn/fail is still “pending toda
 | Finding class | Deferred until |
 |---------------|----------------|
 | Workflow overdue before `WORKFLOW_EMAIL_READY_UTC` for that workflow | After that wall-clock time (e.g. analysis-review 11:00, data-backup 13:00) |
+| Paper learning-track coverage (`category=paper`) on a weekday before 10:00 UTC | After paper-auto email-ready (10:00 UTC); 13:15 catch-up is the actionable pass |
 | Recovery / quiet bundle in flight | Active recovery run finishes |
 | Dashboard stale while today's email-report still pending | email-report succeeds today |
 
@@ -173,6 +175,30 @@ successful run), scanned within a 12h window.
 | `docs/data/ops_status.json` | Latest findings, auto-fixes, workflow freshness |
 | `docs/data/ops_monitor_log.json` | Rolling daily run index (90 entries) |
 | `docs/data/backtest_health.json` | Backtest history audit and readiness (see [backtest-health.md](backtest-health.md)) |
+
+## Paper learning tracks
+
+The former weekday **Automation-tab spot-check** (CI acted; AI vs rules;
+calibrated shadows; Suite B `buy_tier_level` fill) is a detection check, not a
+human glance.
+
+`check_paper_learning_tracks` reads committed `docs/data/paper_automation/`:
+
+| Check | Severity | Notes |
+|-------|----------|-------|
+| `last_run.json` missing or `gate.after_settle=false` | warn | Orchestrator should re-dispatch a post-settle pass |
+| `learning_tracks_summary.json` / `learning_tracks_review.json` missing, or missing `rules` / `ai_judgment` / `buy_tier_level` | fail | Weekday paper-auto + decision-review did not publish the comparison |
+| Competing calibrated shadows present in the paper-auto rollup but omitted from decision-review | fail | Shadows spawned after the last paper-auto (Sunday calibrate) are ignored until they appear in the summary |
+| `buy_tier_level` acted with empty `automated_fund.json` holdings | fail | Monday cold-start fill; do not treat NAV as promotion truth |
+| Core track `acted=false` after a post-settle last_run | warn | Track skipped |
+
+Does **not** alert on `beat_market` / excess vs ^FTSE. Underperformance on the
+3% stress books is expected; interpretation stays Sunday analysis-review /
+shadow-vs-primary / promotion gates.
+
+Weekday paper findings before **10:00 UTC** defer alert email (same ready time
+as `paper-auto.yml` workflow freshness). The 13:15 catch-up is the actionable
+pass.
 
 ## CLI
 

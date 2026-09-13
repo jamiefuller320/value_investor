@@ -95,7 +95,10 @@ overlays, gates) ahead of prose polish or offline breadth.
 
 Weekly manual gates (Sunday priors review, shadow vs primary, promotion rules)
 live in [`human-tasks-checklist.md`](human-tasks-checklist.md) and on the
-dashboard **Automation → Human tasks** panel.
+dashboard **Automation → Human tasks** panel. The weekday Automation-tab
+glance after paper-auto is automated by ops-monitor — see
+[`ops-monitor.md`](ops-monitor.md#paper-learning-tracks). Excess vs ^FTSE
+interpretation stays Sunday.
 
 ## Commands
 
