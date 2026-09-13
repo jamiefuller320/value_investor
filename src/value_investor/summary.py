@@ -33,9 +33,9 @@ from value_investor.scoring.earnings_growth_overlay import (
 )
 from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
-    build_labelled_fcf_dividend_coverage,
     fcf_dividend_coverage,
     fcf_filing_screen_mismatch,
+    labelled_fcf_dividend_coverage_for_snapshot,
     ocf_definition_diverges,
     overlay_free_cashflow_from_bundle,
     reconcile_fcf_for_ticker,
@@ -978,16 +978,11 @@ def build_company_reports(
             and not (isinstance(divergence_flag_raw, float) and pd.isna(divergence_flag_raw))
             else bool(fcf_bundle.get("fcf_divergence_flagged"))
         )
-        labelled_fcf_dividend_coverage = build_labelled_fcf_dividend_coverage(
+        labelled_fcf_dividend_coverage = labelled_fcf_dividend_coverage_for_snapshot(
+            fcf_definition_divergence=fcf_definition_divergence,
             fcf_dividend_coverage_net=fcf_dividend_coverage_net,
             fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
         )
-        if (
-            labelled_fcf_dividend_coverage["statutory_ocf_minus_capex"]["ratio"] is None
-            and labelled_fcf_dividend_coverage["management_cash_generated_minus_capex"]["ratio"]
-            is None
-        ):
-            labelled_fcf_dividend_coverage = None
         passed_reasons: list[str] = []
         for _, model_row in passed.iterrows():
             passed_reasons.extend(_parse_list_field(model_row.get("reasons")))
@@ -1325,16 +1320,11 @@ def build_company_reports(
         if fcf_dividend_coverage_net is not None:
             cashflow_metrics["fcf_dividend_coverage_net"] = fcf_dividend_coverage_net
 
-        labelled_fcf_dividend_coverage = build_labelled_fcf_dividend_coverage(
+        labelled_fcf_dividend_coverage = labelled_fcf_dividend_coverage_for_snapshot(
+            fcf_definition_divergence=fcf_definition_divergence,
             fcf_dividend_coverage_net=fcf_dividend_coverage_net,
             fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
         )
-        if (
-            labelled_fcf_dividend_coverage["statutory_ocf_minus_capex"]["ratio"] is None
-            and labelled_fcf_dividend_coverage["management_cash_generated_minus_capex"]["ratio"]
-            is None
-        ):
-            labelled_fcf_dividend_coverage = None
 
         dividend_sustainability_overlay = False
         interim_dividend_cut_flagged = False

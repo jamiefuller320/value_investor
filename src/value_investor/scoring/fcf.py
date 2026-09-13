@@ -308,6 +308,27 @@ def build_labelled_fcf_dividend_coverage(
     }
 
 
+def labelled_fcf_dividend_coverage_for_snapshot(
+    *,
+    fcf_definition_divergence: bool,
+    fcf_dividend_coverage_net: float | None,
+    fcf_dividend_coverage_gross: float | None,
+) -> dict[str, dict[str, Any]] | None:
+    """Labelled dual cover for ``screening_snapshot`` only when OCF definitions diverge."""
+    if not fcf_definition_divergence:
+        return None
+    labelled = build_labelled_fcf_dividend_coverage(
+        fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+        fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
+    )
+    if (
+        labelled["statutory_ocf_minus_capex"]["ratio"] is None
+        and labelled["management_cash_generated_minus_capex"]["ratio"] is None
+    ):
+        return None
+    return labelled
+
+
 def ocf_definition_diverges(
     operating_cashflow: float | None,
     operating_cashflow_gross: float | None,

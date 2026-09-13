@@ -24,6 +24,7 @@ from value_investor.scoring.fcf import (
     fcf_filing_screen_mismatch,
     fcf_universe_divergence_flagged,
     fcf_values_diverge,
+    labelled_fcf_dividend_coverage_for_snapshot,
     ocf_definition_diverges,
     overlay_free_cashflow_from_bundle,
     parse_adjusted_eps_growth_pct,
@@ -3644,6 +3645,7 @@ def test_build_company_reports_exports_operating_cashflow_and_dual_coverage(tmp_
     assert snapshot["operating_cashflow"] == pytest.approx(90_762_000.0)
     assert snapshot["fcf_dividend_coverage_net"] == pytest.approx(25_153_000.0 / 29_769_000.0)
     assert snapshot["fcf_dividend_coverage_gross"] == pytest.approx(49_891_000.0 / 29_769_000.0)
+    assert snapshot["fcf_dividend_coverage"] is None
     assert snapshot["cashflow_metrics"]["operating_cashflow"] == pytest.approx(90_762_000.0)
 
 
@@ -3748,6 +3750,24 @@ def test_build_labelled_fcf_dividend_coverage_uses_statutory_and_management_labe
         "Management cash-generated−CapEx"
     )
     assert labelled["management_cash_generated_minus_capex"]["ratio"] == pytest.approx(1.68)
+
+
+def test_labelled_fcf_dividend_coverage_for_snapshot_requires_definition_divergence():
+    assert (
+        labelled_fcf_dividend_coverage_for_snapshot(
+            fcf_definition_divergence=False,
+            fcf_dividend_coverage_net=0.84,
+            fcf_dividend_coverage_gross=1.68,
+        )
+        is None
+    )
+    labelled = labelled_fcf_dividend_coverage_for_snapshot(
+        fcf_definition_divergence=True,
+        fcf_dividend_coverage_net=0.84,
+        fcf_dividend_coverage_gross=1.68,
+    )
+    assert labelled is not None
+    assert labelled["statutory_ocf_minus_capex"]["ratio"] == pytest.approx(0.84)
 
 
 def test_fcf_universe_divergence_flagged_at_15_pct_without_50_pct_overlay():
@@ -3901,6 +3921,7 @@ def test_dividend_sustainability_overlay_caps_itv_like_profile():
                 conviction_score=0.53,
                 fcf_dividend_coverage_net=1.0,
                 fcf_dividend_coverage_gross=1.53,
+                fcf_definition_divergence=True,
                 operating_cashflow=202_000_000.0,
                 capital_expenditure=-54_000_000.0,
                 dividends_paid=190_000_000.0,
