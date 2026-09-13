@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T07:27:44+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T07:35:12+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -219,6 +219,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L343 | **Add Nasdaq-100 ^NDX to dated macro snapshots** | US macro now carries ^GSPC for S&P market cards. nasdaq100 still has no local index in dated snapshots, so a Nasdaq paper book would have market_path none until ^NDX is stored the same way. | nasdaq100 has a paper book or observe-sim marks and the market card still has market_path none. |
 | L350 | **Post-exit evidence-readiness interrupt (not knob apply)** | After a full position close, check whether exit-shadow / exit-timing / lifecycle cohort floors newly crossed and queue a human or director review. Do not auto-apply knobs from a single exit, and never retune epoch-0 buy_tier_level (is_cohort_lab). | learning_tracks_exit_shadow.json shows ≥15 closed exits per primary track (N25) or a human asks for earlier readiness interrupts than Sunday paper-learning cadence |
 | L351 | **Revisit S&P 500 weekly paper after 12-week trajectory** | sp500 is filing-ready and admitted (epoch-0 + rememo), but learning_ready is still false (10 unique days / 7.3 weeks). Keep weekly_paper_shard_markets on euro_depth until trajectory hits 12 unique days over 12 weeks. | ftse-library learning-depth --market sp500 reports learning_ready true on canonical filings plus 12 unique screen days |
+| L368 | **Per-decision PIT autopsy: information set, optimality, data vs logic gaps** | Close the learning loop beyond track P&L and knob counterfactuals: for each AI-judgment rebalance row, freeze a joinable information pack at t (slim fields + PIT memo id/verdict/rationale + key overlays), score forward optimality vs hold/wait/alternate, and attribute misses to missing data vs policy/logic. Manual join of rebalance_log + get_research_as_of is possible today but incomplete and not automated. | rebalance_log has stable screen_buy_tier/candidates coverage for ≥8 weeks AND archive snapshots retain FCF/overlay columns on live history, or stage 2b still lacks actionable improvement signals from track-level decision-review alone |
 
 ### Universe & data
 
