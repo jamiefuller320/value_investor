@@ -194,7 +194,9 @@ def test_build_dashboard_bundle_from_signals(tmp_path: Path):
     assert bundle["experiment_assessment"]["summary"]["total"] == 1
     assert "system_gaps" in bundle
     assert bundle.get("lifecycle_board", {}).get("schema_version") == 1
-    assert any(row.get("market_id") == "ftse350" for row in bundle["lifecycle_board"].get("markets") or [])
+    assert any(
+        row.get("market_id") == "ftse350" for row in bundle["lifecycle_board"].get("markets") or []
+    )
 
 
 def test_publish_dashboard_includes_sunday_review(tmp_path: Path):
