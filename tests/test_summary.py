@@ -1129,6 +1129,123 @@ def test_build_company_reports_exports_fcf_basis_overlay_for_fgp(tmp_path: Path)
     assert "company-adj £113.5M" in snapshot["action_note"]
 
 
+def test_reconcile_fcf_binds_filing_year_company_adjusted_over_stale_bridge(tmp_path: Path):
+    """FGP-style: FY2026 bridge still carries prior-year £113.5m while RNS reports £73.8m."""
+    sources = tmp_path / "research" / "FGP.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(json.dumps(_fgp_financials()), encoding="utf-8")
+    (sources / "fcf_bridge.json").write_text(
+        json.dumps(
+            {
+                "ticker": "FGP.L",
+                "fiscal_year": "2026",
+                "period": "annual",
+                "currency": "GBP",
+                "resolved": True,
+                "policy_basis": "company_adjusted",
+                "policy_fcf": 113_500_000.0,
+                "company_adjusted": 113_500_000.0,
+            }
+        ),
+        encoding="utf-8",
+    )
+    rns_body = filings / "fy2026_results.txt"
+    rns_body.write_text(
+        "Free cash flow of £73.8m before acquisitions and returns",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "published_at": "2026-06-18T08:00:00Z",
+                        "has_body": True,
+                        "body_path": str(rns_body),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    bundle = reconcile_fcf_for_ticker(
+        "FGP.L",
+        screen_ttm=302_812_512.0,
+        output_dir=tmp_path,
+    )
+
+    assert bundle["company_adjusted"] == 73_800_000.0
+    assert bundle["company_adjusted_stale_year"] is True
+    assert bundle["company_adjusted_snapshot"] == 113_500_000.0
+    assert bundle["policy_fcf"] == 73_800_000.0
+    assert overlay_free_cashflow_from_bundle(
+        pd.Series({"free_cashflow": 362_600_000.0}),
+        bundle,
+    ) == pytest.approx(73_800_000.0)
+
+
+def test_build_company_reports_exports_filing_year_company_adjusted_stale_flag(tmp_path: Path):
+    sources = tmp_path / "research" / "FGP.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(json.dumps(_fgp_financials()), encoding="utf-8")
+    (sources / "fcf_bridge.json").write_text(
+        json.dumps(
+            {
+                "ticker": "FGP.L",
+                "fiscal_year": "2026",
+                "currency": "GBP",
+                "resolved": True,
+                "policy_basis": "company_adjusted",
+                "policy_fcf": 113_500_000.0,
+                "company_adjusted": 113_500_000.0,
+            }
+        ),
+        encoding="utf-8",
+    )
+    rns_body = filings / "fy2026_results.txt"
+    rns_body.write_text(
+        "Free cash flow of £73.8m before acquisitions and returns",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "published_at": "2026-06-18T08:00:00Z",
+                        "has_body": True,
+                        "body_path": str(rns_body),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="FGP.L",
+                signal="strong_buy",
+                free_cashflow=362_600_000.0,
+                free_cashflow_screen_ttm=302_812_512.0,
+            )
+        ]
+    )
+    model_results = _model_results_for_fgp_fcf_basis_cap()
+    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+
+    assert snapshot["fcf"]["company_adjusted"] == 73_800_000.0
+    assert snapshot["fcf"]["company_adjusted_stale_year"] is True
+    assert snapshot["cashflow_metrics"]["free_cashflow"] == 73_800_000.0
+    assert snapshot["key_metrics"]["FCF"] == "73800000.0"
+    assert "company-adj £73.8M" in snapshot["action_note"]
+
+
 def _bree_financials() -> dict:
     return {
         "ticker": "BREE.L",
