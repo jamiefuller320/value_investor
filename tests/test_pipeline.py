@@ -46,6 +46,7 @@ from value_investor.scoring.fcf import (
 )
 from value_investor.scoring.fcf_basis_overlay import (
     enrich_signals_with_fcf_basis_overlay,
+    enrich_signals_with_run_history_fcf_action_notes,
     honour_fcf_action_notes_on_signals,
 )
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
@@ -2070,6 +2071,137 @@ def test_write_screening_snapshot_enforces_vty_style_fcf_note(tmp_path: Path):
     assert written["fcf_basis_overlay"] is True
     assert written["adjusted_signal"] == "buy"
     assert written["conviction_score"] == pytest.approx(0.6598 * 0.85)
+
+
+def test_enrich_signals_with_run_history_fcf_action_notes_hik_style_strong_buy(
+    tmp_path: Path,
+):
+    """Run-history export must surface FCF divergence on strong_buy action notes."""
+    sources = tmp_path / "research" / "HIK.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "HIK.L",
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 436_000_000.0,
+                        "Capital Expenditure": -317_000_000.0,
+                        "Free Cash Flow": 119_000_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "signal": "strong_buy",
+                "action_note": "Strong Buy — neutral timing",
+                "free_cashflow": -66_125_000.0,
+                "free_cashflow_screen_ttm": -66_125_000.0,
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_run_history_fcf_action_notes(signals, output_dir=tmp_path)
+
+    note = str(enriched.iloc[0]["action_note"])
+    assert "Strong Buy — neutral timing" in note
+    assert "FCF basis mismatch" in note
+    assert "filing $119M" in note
+    assert "screen TTM −$66.1M" in note
+
+
+def test_enrich_signals_with_run_history_fcf_action_notes_skips_non_strong_buy(
+    tmp_path: Path,
+):
+    """Buy-tier names without strong_buy must not get run-history FCF notes stamped."""
+    sources = tmp_path / "research" / "HIK.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "HIK.L",
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 436_000_000.0,
+                        "Capital Expenditure": -317_000_000.0,
+                        "Free Cash Flow": 119_000_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "signal": "buy",
+                "action_note": "Buy — neutral timing",
+                "free_cashflow": -66_125_000.0,
+                "free_cashflow_screen_ttm": -66_125_000.0,
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_run_history_fcf_action_notes(signals, output_dir=tmp_path)
+
+    assert enriched.iloc[0]["action_note"] == "Buy — neutral timing"
+
+
+def test_save_run_snapshot_strong_buy_carries_fcf_divergence_action_note(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    from value_investor.backtest import load_run_snapshots, save_run_snapshot
+
+    sources = tmp_path / "research" / "HIK.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "HIK.L",
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 436_000_000.0,
+                        "Capital Expenditure": -317_000_000.0,
+                        "Free Cash Flow": 119_000_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "value_investor.backtest.snapshot_prices",
+        lambda tickers: {ticker: 10.0 for ticker in tickers} | {"^FTSE": 8000.0},
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.8,
+                "data_quality_score": 0.9,
+                "action_note": "Strong Buy — neutral timing",
+                "free_cashflow": -66_125_000.0,
+                "free_cashflow_screen_ttm": -66_125_000.0,
+            }
+        ]
+    )
+    stamped = enrich_signals_with_run_history_fcf_action_notes(signals, output_dir=tmp_path)
+    save_run_snapshot(
+        tmp_path,
+        run_at=datetime(2026, 9, 13, tzinfo=UTC),
+        signals=stamped,
+    )
+
+    row = load_run_snapshots(tmp_path)[0].signals[0]
+    assert "FCF basis mismatch" in row["action_note"]
+    assert "filing $119M" in row["action_note"]
 
 
 def test_honour_fcf_action_notes_on_signals_caps_vty_style_stale_row():
