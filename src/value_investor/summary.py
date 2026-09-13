@@ -50,6 +50,11 @@ from value_investor.scoring.fcf_basis_overlay import (
     fcf_basis_action_note_mismatch,
     fcf_basis_enforcement_needed,
 )
+from value_investor.scoring.fcf_three_way_conviction_overlay import (
+    apply_fcf_three_way_conviction_overlay,
+    build_fcf_three_way_conviction_overlay,
+    format_fcf_three_way_conviction_overlay_note,
+)
 from value_investor.scoring.healthcare_overlay import (
     apply_healthcare_overlay_to_signal,
     piotroski_score_for_ticker,
@@ -134,6 +139,8 @@ class CompanyReport:
     earnings_growth_bps_divergence_warning: bool = False
     peer_model_pass_table: dict[str, Any] = field(default_factory=dict)
     fcf_basis_overlay: bool = False
+    fcf_three_way_conviction_overlay: bool = False
+    fcf_three_way_conviction_overlay_detail: dict[str, Any] = field(default_factory=dict)
     transition_key: str | None = None
     prior_signal: str | None = None
     conviction_timing_overlay: bool = False
@@ -207,6 +214,8 @@ class CompanyReport:
             "earnings_growth_bps_divergence_warning": self.earnings_growth_bps_divergence_warning,
             "peer_model_pass_table": self.peer_model_pass_table,
             "fcf_basis_overlay": enforced.fcf_basis_overlay,
+            "fcf_three_way_conviction_overlay": self.fcf_three_way_conviction_overlay,
+            "fcf_three_way_conviction_overlay_detail": self.fcf_three_way_conviction_overlay_detail,
             "transition_key": self.transition_key,
             "prior_signal": self.prior_signal,
             "conviction_timing_overlay": self.conviction_timing_overlay,
@@ -288,6 +297,10 @@ class CompanyReport:
             ),
             peer_model_pass_table=dict(data.get("peer_model_pass_table") or {}),
             fcf_basis_overlay=bool(data.get("fcf_basis_overlay")),
+            fcf_three_way_conviction_overlay=bool(data.get("fcf_three_way_conviction_overlay")),
+            fcf_three_way_conviction_overlay_detail=dict(
+                data.get("fcf_three_way_conviction_overlay_detail") or {}
+            ),
             transition_key=data.get("transition_key"),
             prior_signal=data.get("prior_signal"),
             conviction_timing_overlay=bool(data.get("conviction_timing_overlay")),
@@ -545,6 +558,7 @@ def _brief_summary(
     quality_family_avoid_gate: bool = False,
     quality_family_avoid_gate_note: str | None = None,
     fcf_basis_overlay: bool = False,
+    fcf_three_way_conviction_overlay_note: str | None = None,
     leverage_override: bool = False,
     dual_leverage_display: bool = False,
     debt_to_equity_yahoo: float | None = None,
@@ -692,6 +706,9 @@ def _brief_summary(
             f"yield-dependent screens pass "
             f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
         )
+
+    if fcf_three_way_conviction_overlay_note:
+        parts.append(fcf_three_way_conviction_overlay_note)
 
     if dual_leverage_display:
         yahoo_text = (
@@ -1245,6 +1262,43 @@ def build_company_reports(
                 )
             )
 
+        fcf_three_way_conviction_overlay_flag = row.get("fcf_three_way_conviction_overlay")
+        if fcf_three_way_conviction_overlay_flag is not None and not (
+            isinstance(fcf_three_way_conviction_overlay_flag, float)
+            and pd.isna(fcf_three_way_conviction_overlay_flag)
+        ):
+            fcf_three_way_conviction_overlay = bool(fcf_three_way_conviction_overlay_flag)
+            fcf_three_way_conviction_overlay_detail = {
+                "fcf_three_way_conviction_overlay": fcf_three_way_conviction_overlay,
+                "profit_to_cash_current_pct": row.get("profit_to_cash_current_pct"),
+                "profit_to_cash_prior_pct": row.get("profit_to_cash_prior_pct"),
+                "profit_to_cash_yoy_decline_pp": row.get("profit_to_cash_yoy_decline_pp"),
+            }
+        else:
+            fcf_three_way_conviction_overlay_detail = build_fcf_three_way_conviction_overlay(
+                ticker=ticker,
+                fcf_bundle=fcf_bundle,
+                screen_ttm=screen_ttm,
+                output_dir=output_dir,
+            )
+            fcf_three_way_conviction_overlay, conviction_score = (
+                apply_fcf_three_way_conviction_overlay(
+                    conviction_score=conviction_score,
+                    overlay=fcf_three_way_conviction_overlay_detail,
+                )
+            )
+        fcf_three_way_conviction_overlay_note = format_fcf_three_way_conviction_overlay_note(
+            fcf_three_way_conviction_overlay_detail
+        )
+        if fcf_three_way_conviction_overlay_note and (
+            fcf_three_way_conviction_overlay_note not in action_note
+        ):
+            action_note = (
+                f"{action_note} | {fcf_three_way_conviction_overlay_note}"
+                if action_note
+                else fcf_three_way_conviction_overlay_note
+            )
+
         leverage_override_flag = row.get("leverage_override")
         leverage_override = (
             bool(leverage_override_flag)
@@ -1447,6 +1501,7 @@ def build_company_reports(
             quality_family_avoid_gate=quality_family_avoid_gate,
             quality_family_avoid_gate_note=quality_family_avoid_gate_note,
             fcf_basis_overlay=fcf_basis_overlay,
+            fcf_three_way_conviction_overlay_note=fcf_three_way_conviction_overlay_note,
             leverage_override=leverage_override,
             dual_leverage_display=dual_leverage_display,
             debt_to_equity_yahoo=debt_to_equity_yahoo,
@@ -1535,6 +1590,8 @@ def build_company_reports(
                     quality_family_avoid_gate_detail=quality_family_avoid_gate_detail,
                     peer_model_pass_table=peer_model_pass_table,
                     fcf_basis_overlay=fcf_basis_overlay,
+                    fcf_three_way_conviction_overlay=fcf_three_way_conviction_overlay,
+                    fcf_three_way_conviction_overlay_detail=fcf_three_way_conviction_overlay_detail,
                     leverage_override=leverage_override,
                     dual_leverage_display=dual_leverage_display,
                     operating_cashflow=operating_cashflow,

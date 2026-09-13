@@ -63,6 +63,9 @@ from value_investor.scoring.fcf_basis_overlay import (
     enrich_signals_with_run_history_fcf_action_notes,
     honour_fcf_action_notes_on_signals,
 )
+from value_investor.scoring.fcf_three_way_conviction_overlay import (
+    enrich_signals_with_fcf_three_way_conviction_overlay,
+)
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
 from value_investor.scoring.healthcare_price_erosion_overlay import (
     enrich_signals_with_healthcare_price_erosion_overlay,
@@ -315,6 +318,10 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "lynch_peg_model",
         "lynch_peg_statutory",
         "fcf_basis_overlay",
+        "fcf_three_way_conviction_overlay",
+        "profit_to_cash_current_pct",
+        "profit_to_cash_prior_pct",
+        "profit_to_cash_yoy_decline_pp",
         "interim_eps_decline_pct",
         "adjusted_eps_growth_pct",
         "transition_key",
@@ -535,6 +542,10 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     signals_out = enrich_signals_with_fcf_basis_overlay(
         signals_out,
         result.model_results,
+        output_dir=output_dir,
+    )
+    signals_out = enrich_signals_with_fcf_three_way_conviction_overlay(
+        signals_out,
         output_dir=output_dir,
     )
     signals_out = enrich_signals_with_run_history_fcf_action_notes(
