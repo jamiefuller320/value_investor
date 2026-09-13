@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-12T11:26:04+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T09:21:03+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -166,6 +166,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N116 | **Collapse duplicate FCF action-note ticker tasks into one scoring task** | so_what_closure fans out one Honour FCF action-note engineering task per ticker with the same allowed_paths. Each agent re-implements the overlay and often dumps a research snapshot that trips the path guard. | The next so_what compile emits more than three open fcf_note_without_overlay tasks, or the IMB/DNLM overlay is merged and later tickers still open new PRs |
 | N117 | **Shared concurrency group across eng-queue and epoch0-weekday** | ASX 00:45 UTC overlaps engineering-queue schedule. A shared concurrency group would serialize writers, but pull --rebase is the established cheaper fix; avoid extra queueing unless races persist after rebase. | epoch0-weekday still push-rejects after Sync main before commit is on main for several ASX slots. |
 | N118 | **Whole-universe buy-now-only epoch-0 meta book** | Do not run a combined mega-book that admits only triggered buy-now names alongside per-market buy_tier_level epoch-0. Cross-market P&L confounds local benchmarks/costs/sessions; buy-now is meant as an overlay on the wide level book, not a tighter live admit. Optional later: offline meta rollup of cycle/gate stats across equal-support admitted shards once marks exist. | Multiple admitted markets have sufficient epoch-0 plus buy-not-now near-miss marks under equal-support (N103), and a cross-market analytics question remains after per-shard counterfactuals |
+| N119 | **Phase C PIT autopsy beyond FTSE AI-judgment** | Autopsy design (L368) targets weekday AI-judgment rebalance freeze on FTSE paper-auto. Admitted shards have epoch-0 buy_tier_level + rememo/PIT stores but no AI track or apply; euro_depth has Sunday weekly AI logs only. Do not fork multi-market autopsy until FTSE Phase C ships and shard AI exists under doctrine. | FTSE autopsy freeze+scorer live (L368) AND a shard has AI-judgment marks (Phase 2 thickness or Phase 3 weekday pilot) with apply still gated |
 
 ---
 
