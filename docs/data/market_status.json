@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-13T08:06:40.332351+00:00",
+  "generated_at": "2026-09-13T13:23:38.650273+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -202,7 +202,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": null,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=1, thin=11, indexed_without_body=25)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=12, indexed_without_body=23)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": null,
@@ -257,17 +257,15 @@
       "filing_health": {
         "buy_tier_count": 45,
         "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 1,
-        "thin_body_buy_tier": 11,
-        "indexed_without_body": 25,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 12,
+        "indexed_without_body": 23,
         "bodies_median": 3.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
-        "parked_count": 11,
-        "zero_body_tickers": [
-          "DQ7A.IR"
-        ],
+        "parked_count": 10,
+        "zero_body_tickers": [],
         "thin_body_tickers": [
           "SGO.PA",
           "ACKB.BR",
@@ -284,13 +282,13 @@
           "APAM.AS",
           "BAS.DE",
           "EVN.VI",
-          "GVR.IR",
           "MUV2.DE",
           "SAP.DE",
-          "SGO.PA"
+          "SGO.PA",
+          "SKA-B.ST"
         ]
       },
-      "filing_gaps": 1,
+      "filing_gaps": 0,
       "paper_instrument": "buy_tier_level",
       "ai_judgment": false,
       "knob_apply": false,
@@ -348,61 +346,55 @@
         "window_days": 2,
         "run_count": 5,
         "targets": 42,
-        "improved": 25,
+        "improved": 21,
         "improved_tickers": [
-          "TTE.PA",
-          "SAN.PA",
-          "RAND.AS",
-          "BOL.ST",
-          "MELE.BR",
           "ASSA-B.ST",
           "C5H.IR",
           "NOVN.SW",
           "ESSITY-B.ST",
           "WKL.AS",
           "DG.PA",
-          "EG7.IR"
+          "EG7.IR",
+          "ACKB.BR",
+          "STR.VI",
+          "ANDR.VI",
+          "UMI.BR",
+          "POST.VI"
         ],
-        "last_run_at": "2026-09-12T10:28:32.360392+00:00",
+        "last_run_at": "2026-09-13T13:22:49.615551+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 25,
-          "indexed_without_body": 33,
+          "indexed_without_body": 83,
           "filing_gaps": 0
         },
         "gaps_after": {
           "unmeasured": 0,
-          "zero_body": 1,
-          "thin": 14,
-          "indexed_without_body": 25,
-          "filing_gaps": 1
+          "zero_body": 0,
+          "thin": 12,
+          "indexed_without_body": 23,
+          "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": 0,
-          "zero_body": 1,
-          "thin": -11,
-          "indexed_without_body": -8,
-          "filing_gaps": 1
+          "zero_body": 0,
+          "thin": -13,
+          "indexed_without_body": -60,
+          "filing_gaps": 0
         },
         "remaining": {
           "unmeasured": 0,
-          "zero_body": 1,
-          "thin": 11,
-          "indexed_without_body": 25,
-          "filing_gaps": 1
+          "zero_body": 0,
+          "thin": 12,
+          "indexed_without_body": 23,
+          "filing_gaps": 0
         },
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [
-          {
-            "id": "zero_body_stuck",
-            "severity": "high",
-            "summary": "1 zero-body buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)"
-          }
-        ]
+        "admission_warnings": []
       },
       "held_vs_market": {
         "schema_version": 1,
@@ -633,19 +625,17 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 17,
-        "targets": 68,
-        "improved": 24,
+        "run_count": 15,
+        "targets": 60,
+        "improved": 17,
         "improved_tickers": [
-          "SAP.TO",
-          "K.TO",
-          "OTEX.TO",
-          "L.TO",
-          "IFC.TO",
           "TRI.TO",
+          "OTEX.TO",
+          "SAP.TO",
           "SU.TO",
           "CNQ.TO",
-          "NTR.TO"
+          "NTR.TO",
+          "IFC.TO"
         ],
         "last_run_at": "2026-09-12T19:33:46.552609+00:00",
         "runtime_cutoff_runs": 5,
