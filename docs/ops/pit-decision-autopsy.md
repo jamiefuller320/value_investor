@@ -183,6 +183,24 @@ optimality margin and alternate set before adding narrative features.
 3. **Attributor** + eng-task emitter (`data_gap` first).
 4. Only then: dashboard/email surfaces; human ambiguous triage checklist row.
 
+### Automated readiness gate
+
+Phase C readiness is deliberate and automated: a fixed checklist of evidence
+checks (not a vibe), scored by `ftse-phase-c-readiness` and written every
+Sunday by `analysis-review.yml` to `docs/data/phase_c_readiness.json`
+(observe-only — Sunday never fails on `NOT READY`).
+
+```bash
+ftse-phase-c-readiness
+ftse-phase-c-readiness --json-out docs/data/phase_c_readiness.json
+```
+
+Exit code `0` only when all required checks pass (Phase B slim evidenced,
+≥8 weeks AI-judgment `rebalance_log` with buy-tier/candidates, non-trivial
+feature coverage). Use `--force-phase-b-done` only as an operator override for
+dry-runs — it does not invent rebalance history or feature coverage. Do **not**
+start the freeze writer until exit `0` (human gate).
+
 ### Prerequisites (from L368)
 
 - L367 Phase B structured-verdict slim in flight or done (N119 / N120 path;

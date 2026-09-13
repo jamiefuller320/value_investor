@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-10",
+  "updated_at": "2026-09-13",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -89,6 +89,22 @@
           "automated": false,
           "doc_path": "docs/ops/analysis-review.md",
           "doc_anchor": "artifacts"
+        },
+        {
+          "id": "sunday-phase-c-readiness-runs",
+          "title": "Phase C readiness assessment (observe-only)",
+          "summary": "Sunday analysis-review runs ftse-phase-c-readiness and writes docs/data/phase_c_readiness.json. Checks Phase B slim evidence, \u22658 weeks AI-judgment rebalance_log with buy-tier/candidates, and non-trivial feature coverage. Does not fail the Sunday job on NOT READY.",
+          "automated": true,
+          "doc_path": "docs/ops/pit-decision-autopsy.md",
+          "doc_anchor": "automated-readiness-gate"
+        },
+        {
+          "id": "sunday-phase-c-readiness-gate",
+          "title": "Start Phase C freeze writer only when readiness is READY",
+          "summary": "Before building or enabling the PIT autopsy freeze writer, confirm phase_c_readiness.json (or ftse-phase-c-readiness exit 0) is READY. Do not start Phase C on vibes or with --force-phase-b-done alone — that override does not invent rebalance history or feature coverage.",
+          "automated": false,
+          "doc_path": "docs/ops/pit-decision-autopsy.md",
+          "doc_anchor": "automated-readiness-gate"
         },
         {
           "id": "sunday-shard-epoch0-watch",
