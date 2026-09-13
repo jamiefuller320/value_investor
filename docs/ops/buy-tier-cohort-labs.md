@@ -22,7 +22,11 @@ This live FTSE epoch-zero **is** the intended start instrument. Admitted shards 
 - Suite: included in `--tracks all` and `--suite B`; excluded from `--suite A`
 - Cold start: committed `config.json` only — no `automated_fund.json`. First weekday paper-auto creates the fund and is epoch-zero.
 
-Spot-check after Monday paper-auto: holdings should cover the current buy-tier (minus timing-wait), and `rebalance_log` should have the first fill row.
+Spot-check after Monday paper-auto is now an **ops-monitor** check: an acted
+`buy_tier_level` pass with empty `automated_fund.json` holdings is a fail.
+Holdings should cover the current buy-tier (minus timing-wait), and
+`rebalance_log` should have the first fill row. Do **not** treat first-fill NAV
+as promotion truth.
 
 ## Dashboard: held vs market
 

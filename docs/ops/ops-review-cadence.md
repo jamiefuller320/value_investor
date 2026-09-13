@@ -15,8 +15,10 @@ map (L124 / frag-20260811-08).
 | **Quarterly** | Calendar quarter review | Deferred ideas pass (`ftse-defer status` done/drop/now) | `docs/deferred-review.md`, `docs/deferred-ideas.json` | [deferred-review.md](../deferred-review.md) |
 | **Sunday / monthly / quarterly** | After publish or before strategic review | Standardised progress rollup (stages + actionable deferred + join-up) | `docs/data/progress_report.md`, `progress_report.json` | [progress-report.md](progress-report.md) |
 
-Weekday paper-auto + decision-review are **automated**; still spot-check learning
-tracks on the Automation tab — see [human-tasks-checklist.md](human-tasks-checklist.md).
+Weekday paper-auto + decision-review are **automated**; ops-monitor (13:15
+catch-up) verifies post-settle artifacts and learning-track coverage. Excess vs
+^FTSE / shadow comparison stays Sunday — see
+[human-tasks-checklist.md](human-tasks-checklist.md).
 
 ## Owner defaults
 
@@ -32,6 +34,7 @@ tracks on the Automation tab — see [human-tasks-checklist.md](human-tasks-chec
 | Automation | Cadence | Doc |
 |------------|---------|-----|
 | Paper-auto + decision-review | Weekday | [decision-review.md](decision-review.md) |
+| Paper learning-track coverage (post-settle last_run, core tracks, calibrated shadows, buy_tier_level fill) | Daily via ops-monitor | [ops-monitor.md](ops-monitor.md#paper-learning-tracks) |
 | Email / deep analysis / gap-fill | Sunday quiet | [orchestrator-cron.md](orchestrator-cron.md) |
 | So-what auto-queue (enforcement gaps) | Daily via ops-monitor | [so-what-gap-closure.md](so-what-gap-closure.md) |
 | Engineering queue / eng-idle ingest | Hourly weekdays | [engineering-sync.md](engineering-sync.md) · [horizon-scan.md](horizon-scan.md#ingest-gap-closure-runs) |

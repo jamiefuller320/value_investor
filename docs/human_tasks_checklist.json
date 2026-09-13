@@ -14,10 +14,10 @@
         {
           "id": "weekday-verify-paper-auto",
           "title": "Spot-check learning tracks after paper-auto",
-          "summary": "Confirm weekday CI acted; on Automation tab compare AI judgment excess vs ^FTSE, rules control, competing calibrated shadow knobs, and the Suite B buy_tier_level cohort after its Monday cold start.",
-          "automated": false,
-          "doc_path": "docs/ops/primary-learning-track.md",
-          "doc_anchor": "commands"
+          "summary": "ops-monitor (13:15 catch-up) checks post-settle last_run, decision-review coverage of AI judgment vs rules, competing calibrated shadows, and Suite B buy_tier_level. Workflow freshness covers CI acted. Excess vs ^FTSE comparison stays Sunday — do not promote on weekday marks.",
+          "automated": true,
+          "doc_path": "docs/ops/ops-monitor.md",
+          "doc_anchor": "paper-learning-tracks"
         },
         {
           "id": "weekday-paper-auto-runs",
@@ -70,8 +70,8 @@
         {
           "id": "weekday-buy-tier-level-first-fill",
           "title": "Confirm buy-tier level cohort first fill",
-          "summary": "After Monday paper-auto, check docs/data/paper_automation/buy_tier_level/: empty cash should become a wide raw-screen buy-tier book under T212 costs. Knobs stay frozen. Do not treat first-fill NAV as promotion truth.",
-          "automated": false,
+          "summary": "ops-monitor fails when buy_tier_level acted with an empty book. Knobs stay frozen. Do not treat first-fill NAV as promotion truth (Sunday gates).",
+          "automated": true,
           "doc_path": "docs/ops/buy-tier-cohort-labs.md",
           "doc_anchor": "level-book-live-monday"
         }
