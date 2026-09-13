@@ -372,7 +372,9 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "DNL.AX": [
         "https://investorpa.com/announcement-pdf/20251117/220734.pdf",
         "https://announcements.asx.com.au/asxpdf/20250512/pdf/06jmnm30pch1kv.pdf",
-        "https://announcements.asx.com.au/asxpdf/20260511/pdf/06zg0w0pw5rswl.pdf",
+        # 1H26 Appendix 4D / half-year financial report (ASX 06zg0w0pw5rswl is the
+        # earnings-guidance cover PDF; IR refetch failed title_mismatch on the hash name).
+        "https://investorpa.com/announcement-pdf/20260511/291611.pdf",
     ],
     # tsx60 buy-tier deepen — unmeasured GIB-A.TO (class-share news query + no GIB-A SEC ticker).
     "GIB-A.TO": [
@@ -528,6 +530,9 @@ _ESEF_ENTITY_SEARCH_ALIASES: dict[str, tuple[str, ...]] = {
     "RAND": ("Randstad", "Randstad N.V."),
     "NOVN": ("Novartis", "Novartis AG"),
     "NTR": ("Nutrien", "Nutrien Ltd."),
+    "TRI": ("Thomson Reuters",),
+    "SU": ("Suncor", "Suncor Energy"),
+    "DNL": ("Dyno Nobel", "Incitec Pivot"),
     "AED": ("Aedifica", "Aedifica NV/SA", "Aedifica SA/NV"),
     "ASSA-B": ("ASSA ABLOY", "ASSA ABLOY AB", "ASSA ABLOY AB (publ)"),
 }
@@ -850,6 +855,16 @@ def _filing_text_is_substantive(text: str, *, min_chars: int = 200) -> bool:
     return hits >= 2 or len(text) >= 1_200
 
 
+def _filing_text_has_financial_terms(text: str, *, min_hits: int = 2) -> bool:
+    lower = (text or "").lower()
+    return sum(1 for term in _SUBSTANTIVE_FILING_TERMS if term in lower) >= min_hits
+
+
+def _sec_exhibit_body_is_financial(text: str) -> bool:
+    """True when an exhibit is a results/MD&A pack, not a policy or dividend stub."""
+    return bool(text) and len(text) >= 3_000 and _filing_text_has_financial_terms(text)
+
+
 def _sec_filing_base_url(url: str) -> str | None:
     match = re.match(
         r"(https://www\.sec\.gov/Archives/edgar/data/\d+/\d+)/",
@@ -859,14 +874,43 @@ def _sec_filing_base_url(url: str) -> str | None:
     return match.group(1) if match else None
 
 
+_SEC_IX_DOC_RE = re.compile(r"(?:^|/)?ix\?doc=([^&]+)", flags=re.I)
+
+
+def _sec_href_to_archive_url(href: str, *, base: str | None) -> str | None:
+    """Resolve EDGAR index hrefs, including site-root /Archives/ and /ix?doc= viewer links."""
+    raw = unescape(str(href or "").strip())
+    if not raw:
+        return None
+    ix = _SEC_IX_DOC_RE.search(raw)
+    if ix:
+        doc = urllib.parse.unquote(ix.group(1))
+        if doc.startswith("/"):
+            return f"https://www.sec.gov{doc}"
+        if doc.startswith("http"):
+            return doc
+        raw = doc
+    if raw.startswith("http://") or raw.startswith("https://"):
+        return raw
+    if "/archives/edgar/" in raw.lower():
+        path = raw if raw.startswith("/") else f"/{raw}"
+        if path.lower().startswith("/archives/edgar/"):
+            return f"https://www.sec.gov{path}"
+    if raw.startswith("/"):
+        return None
+    if base:
+        return f"{base}/{raw.lstrip('/')}"
+    return None
+
+
 def _resolve_sec_pdf_candidates(url: str, html: str | None = None) -> list[str]:
     """Build candidate PDF URLs when a SEC primary doc is cover-only HTML."""
     candidates: list[str] = []
     seen: set[str] = set()
     base = _sec_filing_base_url(url)
 
-    def _add(candidate: str) -> None:
-        cleaned = candidate.strip()
+    def _add(candidate: str | None) -> None:
+        cleaned = str(candidate or "").strip()
         if cleaned and cleaned not in seen:
             candidates.append(cleaned)
             seen.add(cleaned)
@@ -876,10 +920,7 @@ def _resolve_sec_pdf_candidates(url: str, html: str | None = None) -> list[str]:
 
     if html:
         for href in re.findall(r'href=["\']([^"\']+\.pdf)["\']', html, flags=re.I):
-            if href.startswith("http"):
-                _add(href)
-            elif base:
-                _add(f"{base}/{href.lstrip('/')}")
+            _add(_sec_href_to_archive_url(href, base=base))
 
     return candidates
 
@@ -888,9 +929,18 @@ def _try_sec_linked_pdf_body(url: str, html: str) -> str | None:
     """Follow SEC -pdf.htm wrappers and inline PDF hrefs to the substantive exhibit."""
     for pdf_url in _resolve_sec_pdf_candidates(url, html):
         body = fetch_filing_body(pdf_url, allow_sec_exhibits=False)
+        if body and _sec_exhibit_body_is_financial(body):
+            return body
         if body and _filing_text_is_substantive(body, min_chars=400):
             return body
     return None
+
+
+def _sec_exhibit_candidate_rank(candidate: str) -> tuple[int, int, str]:
+    name = candidate.rsplit("/", 1)[-1].lower()
+    exhibit = 0 if re.search(r"ex[-_]?99|exhibit", name) else 1
+    kind = 0 if name.endswith(".pdf") else 1
+    return (exhibit, kind, name)
 
 
 def _try_sec_exhibit_body(url: str) -> str | None:
@@ -917,28 +967,25 @@ def _try_sec_exhibit_body(url: str) -> str | None:
         return None
 
     candidates: list[str] = []
-    for href in re.findall(r'href="([^"]+\.(?:htm|pdf))"', html, flags=re.I):
+    seen: set[str] = set()
+    for href in re.findall(r"""href=["']([^"']+\.(?:htm|html|pdf))["']""", html, flags=re.I):
         if any(skip in href.lower() for skip in ("-index.htm", ".xsd", ".xml", ".xsl")):
             continue
-        if href.startswith("http"):
-            candidate = href
-        else:
-            candidate = f"{base}/{href.lstrip('/')}"
+        candidate = _sec_href_to_archive_url(href, base=base)
+        if not candidate:
+            continue
         name = candidate.rsplit("/", 1)[-1].lower()
         if name == primary_lower:
             continue
+        if candidate in seen:
+            continue
+        seen.add(candidate)
         candidates.append(candidate)
 
-    def _candidate_rank(candidate: str) -> tuple[int, str]:
-        name = candidate.rsplit("/", 1)[-1].lower()
-        if name.endswith(".pdf"):
-            return (0, name)
-        return (1, name)
-
-    candidates.sort(key=_candidate_rank)
+    candidates.sort(key=_sec_exhibit_candidate_rank)
     for exhibit_url in candidates[:8]:
         body = fetch_filing_body(exhibit_url, allow_sec_exhibits=False)
-        if body and _filing_text_is_substantive(body, min_chars=400):
+        if body and _sec_exhibit_body_is_financial(body):
             return body
     return None
 
@@ -3473,7 +3520,10 @@ def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> st
         if "sec.gov" in url:
             html = raw.decode("utf-8", errors="replace")
             text = _extract_sec_html_text(html)
-            if allow_sec_exhibits and not _filing_text_is_substantive(text, min_chars=400):
+            primary_ok = _filing_text_is_substantive(
+                text, min_chars=400
+            ) and _filing_text_has_financial_terms(text)
+            if allow_sec_exhibits and not primary_ok:
                 pdf_body = _try_sec_linked_pdf_body(url, html)
                 if pdf_body:
                     text = pdf_body
@@ -3570,6 +3620,10 @@ _IR_ALLOWLIST_URL_CANONICAL: dict[str, str] = {
     ),
     "https://www.telekom.com/en/investor-relations/publications": (
         "https://report.telekom.com/annual-report-2025/_assets/downloads/entire-dtag-ar25.pdf"
+    ),
+    # DNL.AX ir_exhausted: ASX 1H26 guidance PDF failed the IR title gate; HY accounts.
+    "https://announcements.asx.com.au/asxpdf/20260511/pdf/06zg0w0pw5rswl.pdf": (
+        "https://investorpa.com/announcement-pdf/20260511/291611.pdf"
     ),
 }
 
@@ -3707,9 +3761,20 @@ def load_ir_url_allowlist(path: Path | None = None) -> dict[str, list[str]]:
     }
 
 
+# Opaque investorpa / ASX hash names that would otherwise classify as "other".
+_IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
+    "https://investorpa.com/announcement-pdf/20251117/220734.pdf": "annual",
+    "https://investorpa.com/announcement-pdf/20260511/291611.pdf": "interim",
+}
+
+
 def _ir_allowlist_period_from_url(url: str) -> str:
     """Classify IR allowlist PDF/HTML URLs into annual / interim / trading / other."""
-    lower = str(url or "").lower()
+    cleaned = str(url or "").strip()
+    override = _IR_ALLOWLIST_URL_PERIOD.get(cleaned)
+    if override:
+        return override
+    lower = cleaned.lower()
     if any(
         token in lower
         for token in (
