@@ -14,6 +14,13 @@ from value_investor.calibration_endurance import (
     _classify_status,
     _fund_metrics_snapshot,
 )
+from value_investor.entry_dca_adoption import (
+    PLAN_FILENAME,
+    evaluate_entry_dca_adoption_plan,
+    slim_entry_dca_adoption,
+    write_entry_dca_adoption_plan,
+)
+from value_investor.experiment_acks import ACKS_FILENAME, apply_ack_to_experiment, load_acks
 from value_investor.exclusion_ladder_replay import (
     discover_exclusion_shadow_step_ids,
     exclusion_shadow_subdir,
@@ -681,11 +688,14 @@ def sync_task_assessment_status(
 
 def _summary_counts(experiments: list[dict[str, Any]]) -> dict[str, int]:
     counts = {status: 0 for status in ASSESSMENT_STATUSES}
+    pending = 0
     for row in experiments:
         status = str(row.get("status") or "proposed")
         if status in counts:
             counts[status] += 1
-    counts["human_ack_pending"] = counts.get("recommend", 0)
+        if status == "recommend" and row.get("human_ack_required"):
+            pending += 1
+    counts["human_ack_pending"] = pending
     counts["total"] = len(experiments)
     return counts
 
@@ -749,6 +759,13 @@ def refresh_experiment_assessment(
         elif exp_id and exp_id not in previous_by_id:
             row["initiated_at"] = now
 
+    acks = load_acks(data_dir)
+    for row in experiments:
+        apply_ack_to_experiment(row, acks)
+
+    dca_plan = evaluate_entry_dca_adoption_plan(data_dir=data_dir, paper_root=paper_root)
+    write_entry_dca_adoption_plan(dca_plan, data_dir=data_dir)
+
     sync_result: dict[str, Any] | None = None
     if sync_task_status:
         sync_result = sync_task_assessment_status(experiments, data_dir)
@@ -765,7 +782,7 @@ def refresh_experiment_assessment(
             "area": row.get("area"),
         }
         for row in experiments
-        if row.get("status") == "recommend"
+        if row.get("status") == "recommend" and row.get("human_ack_required")
     ]
 
     payload = {
@@ -796,6 +813,7 @@ def refresh_experiment_assessment(
         "summary": _summary_counts(experiments),
         "experiments": experiments,
         "recommendations": recommendations,
+        "entry_dca_adoption": slim_entry_dca_adoption(dca_plan),
         "task_sync": sync_result,
         "sources": {
             "calibration_shadow_endurance": str(paper_root / ENDURANCE_FILENAME),
@@ -803,6 +821,8 @@ def refresh_experiment_assessment(
             "paper_learning_tasks": str(data_dir / "paper_learning_tasks.json"),
             "learning_director_tasks": str(data_dir / "learning_director_tasks.json"),
             "trajectory_evidence_review": str(data_dir / "trajectory_evidence_review.json"),
+            "experiment_acks": str(data_dir / ACKS_FILENAME),
+            "entry_dca_adoption_plan": str(data_dir / PLAN_FILENAME),
         },
     }
     dest = output_path or (data_dir / ASSESSMENT_FILENAME)
@@ -831,6 +851,10 @@ def slim_experiment_assessment_for_review(payload: dict[str, Any] | None) -> dic
             "status": status,
             "human_ack_required": bool(row.get("human_ack_required")),
         }
+        if row.get("human_acked"):
+            slim["human_acked"] = True
+            slim["acked_at"] = row.get("acked_at")
+            slim["ack_decision"] = row.get("ack_decision")
         if row.get("track_id"):
             slim["track_id"] = row.get("track_id")
         if row.get("gate_marks") is not None:
@@ -845,10 +869,11 @@ def slim_experiment_assessment_for_review(payload: dict[str, Any] | None) -> dic
         "updated_at": payload.get("updated_at"),
         "summary": payload.get("summary"),
         "recommendations": payload.get("recommendations") or [],
+        "entry_dca_adoption": payload.get("entry_dca_adoption"),
         "by_status": {key: rows for key, rows in by_status.items() if rows},
         "note": (
             "Unified assessment loop: proposed → observing → continue | fail | recommend. "
-            "Only recommend requires human ack; never auto-apply."
+            "Only unacked recommend requires human ack; never auto-apply."
         ),
     }
 

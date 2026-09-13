@@ -468,3 +468,10 @@ def test_analysis_prompt_locks_thin_memo_to_ingest_not_rememo_widen():
     assert "forcing rememo_eligible" in prompt
     assert "widening rememo_reason" in prompt
     assert "Phase B rememo_reason lock" in prompt
+
+
+def test_analysis_prompt_follows_dca_adoption_plan_instead_of_reack():
+    prompt = _build_analysis_prompt(Path("payload.json"))
+    assert "entry_dca_adoption.current_stage" in prompt
+    assert "do not re-request human ack" in prompt
+    assert "do not execute DCA" in prompt

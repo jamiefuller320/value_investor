@@ -90,7 +90,7 @@ The same Sunday payload includes slim:
 | `exclusion_universe` | ≥1 `[offline_sim]` / `[paper_knobs]` when `ready_for_priors` or positive exclusion alpha |
 | `exclusion_ladder_replay` | ≥1 `[monitoring]` / `[paper_knobs]` spawn-shadow gate when `ready_for_shadow_spawn` (human CLI; never auto) |
 | `exit_timing_cohorts` / `exit_timing_near_miss` | ≥1 `[paper_churn]` / `[offline_sim]` when probability readiness fires |
-| `entry_dca_overlay` | ≥1 `[paper_churn]` / `[offline_sim]` when `ready_for_cadence_analysis` (cite leading cadence; do not execute DCA) |
+| `entry_dca_overlay` | ≥1 `[paper_churn]` / `[monitoring]` when `ready_for_cadence_analysis`; cite `entry_dca_adoption.current_stage`; do not re-request ack if acked; do not execute DCA |
 | `system_gaps` | ≥1 `[ops]` / `[ingest]` / `[coverage]` / `[monitoring]` when `flags` is non-empty, citing the highest-severity flag id |
 
 Cap five experiment lines; overflow goes to **DEFER**.

@@ -154,17 +154,43 @@ page. Payload: `docs/data/lifecycle_board.json` (also rebuilt by local
 | Graduated allocation paper track | **Live** — starter sizing + harvest on one rules book |
 | Lifecycle *labels* on rebalance logs | **Live** — now includes `starter` when sleeve &lt; 40% of target |
 | Full per-holding state machine | **Deferred (L177)** — catalog is the experiment inventory, not the executor |
-| DCA executed on paper books | **Not now** — overlay evidence first |
+| DCA executed on paper books | **Not now** — overlay evidence first; see [adoption plan](#entry-dca-adoption-plan) |
 | Intra-day tranche cadence | **Later** — weekday marks only |
 
 ## Human gate
 
 Sunday: when `learning_tracks_entry_dca` shows
 `ready_for_cadence_analysis=true`, read the rollup (leading cadence, mean
-de-risk, `model_independent_hint`) before changing starter fraction or
-proposing a DCA-executing track. Human ack only.
+de-risk, `model_independent_hint`) and the adoption plan. Record ack with
+`ftse-experiment-assess ack --experiment-id entry_dca_overlay` (observe-only).
+Do **not** execute DCA or change starter fraction from the overlay.
 
 See also [`capital-allocation.md`](capital-allocation.md),
 [`hypothesis-integrity.md`](hypothesis-integrity.md),
 [`exit-timing-cohorts.md`](exit-timing-cohorts.md),
 [`experiment-assessment.md`](experiment-assessment.md).
+
+## Entry DCA adoption plan
+
+Ack is not adopt. The durable plan is
+[`docs/data/entry_dca_adoption_plan.json`](../data/entry_dca_adoption_plan.json),
+refreshed with the assessment ledger. Acks live in
+[`docs/data/experiment_acks.json`](../data/experiment_acks.json) so Sunday
+refresh cannot wipe them.
+
+```bash
+ftse-experiment-assess ack --experiment-id entry_dca_overlay --decision ack_observe
+ftse-experiment-assess plan
+```
+
+| Stage | Meaning | Open when |
+|-------|---------|-----------|
+| `acked` | Human read the overlay finding | `ftse-experiment-assess ack` recorded for current `leading_cadence` |
+| `out_of_sample_first_entry` | Confirm `dca_4x_weekly` on **new** first-entry closes | Live books: `ai_judgment` first-entry ≥ 3 and `rules` ≥ 1; fair tracks still agree |
+| `paper_execute_graduated` | Optional execute 4× weekly on `graduated_allocation` only | Previous stage ready **and** graduated `equity_marks` ≥ 8 |
+| `primary_or_live` | Primary / live size | Fair-cost primary `beat_market` true **and** graduated execute ready |
+
+A new leading cadence re-opens ack. Do not spawn a per-model DCA paper book.
+Promotion metric remains net end value after extra buy costs; peak adverse £
+is diagnostic only. Track excess vs ^FTSE after fair costs remains adoption
+truth for primary/live.

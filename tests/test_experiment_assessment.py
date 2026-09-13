@@ -299,3 +299,106 @@ def test_refresh_skips_cancelled_analysis_tasks(tmp_path: Path):
     payload = refresh_experiment_assessment(data_dir, paper_root=paper_root)
     ids = [row["experiment_id"] for row in payload["experiments"]]
     assert "ana-20260728-02" not in ids
+
+
+def _write_ready_dca_rollup(paper_root: Path, *, ai_first: int = 1, rules_first: int = 0) -> None:
+    paper_root.mkdir(parents=True, exist_ok=True)
+    (paper_root / "learning_tracks_entry_dca.json").write_text(
+        json.dumps(
+            {
+                "scored_count": 22,
+                "tracks_with_closed": 9,
+                "leading_cadence": "dca_4x_weekly",
+                "model_independent_hint": True,
+                "readiness": {"ready_for_cadence_analysis": True},
+                "tracks": {
+                    "ai_judgment": {
+                        "scored_count": ai_first,
+                        "entry_kind_counts": {"first_entry": ai_first, "recommit": 3},
+                        "winning_cadence_counts": {"dca_4x_weekly": 1},
+                    },
+                    "rules": {
+                        "scored_count": 0,
+                        "entry_kind_counts": {"first_entry": rules_first, "recommit": 4},
+                        "winning_cadence_counts": {},
+                    },
+                    "ai_judgment_fair": {
+                        "scored_count": 1,
+                        "entry_kind_counts": {"first_entry": 1, "recommit": 0},
+                        "winning_cadence_counts": {"dca_4x_weekly": 1},
+                    },
+                    "rules_fair": {
+                        "scored_count": 1,
+                        "entry_kind_counts": {"first_entry": 1, "recommit": 0},
+                        "winning_cadence_counts": {"dca_4x_weekly": 1},
+                    },
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_refresh_drops_acked_dca_from_recommendations(tmp_path: Path):
+    from value_investor.experiment_acks import record_ack
+
+    data_dir = tmp_path / "data"
+    paper_root = data_dir / "paper_automation"
+    _write_ready_dca_rollup(paper_root)
+    payload = refresh_experiment_assessment(data_dir, paper_root=paper_root)
+    dca = next(row for row in payload["experiments"] if row["experiment_id"] == "entry_dca_overlay")
+    assert dca["status"] == "recommend"
+    assert dca["human_ack_required"] is True
+    assert payload["summary"]["human_ack_pending"] == 1
+    assert any(row["experiment_id"] == "entry_dca_overlay" for row in payload["recommendations"])
+
+    record_ack(
+        data_dir,
+        experiment_id="entry_dca_overlay",
+        decision="ack_observe",
+        finding=dca["forward_evidence"],
+        note="observe only",
+    )
+    again = refresh_experiment_assessment(data_dir, paper_root=paper_root)
+    dca2 = next(row for row in again["experiments"] if row["experiment_id"] == "entry_dca_overlay")
+    assert dca2["status"] == "recommend"
+    assert dca2["human_ack_required"] is False
+    assert dca2["human_acked"] is True
+    assert again["summary"]["human_ack_pending"] == 0
+    assert again["recommendations"] == []
+    assert again["entry_dca_adoption"]["acked"] is True
+    assert again["entry_dca_adoption"]["current_stage"] == "out_of_sample_first_entry"
+    slim = slim_experiment_assessment_for_review(again)
+    assert slim["recommendations"] == []
+    assert slim["entry_dca_adoption"]["acked"] is True
+
+
+def test_ack_cli_records_and_refreshes(tmp_path: Path):
+    from value_investor.experiment_assessment_cli import main as assess_main
+
+    data_dir = tmp_path / "data"
+    paper_root = data_dir / "paper_automation"
+    _write_ready_dca_rollup(paper_root)
+    refresh_experiment_assessment(data_dir, paper_root=paper_root)
+    rc = assess_main(
+        [
+            "ack",
+            "--data-dir",
+            str(data_dir),
+            "--paper-root",
+            str(paper_root),
+            "--experiment-id",
+            "entry_dca_overlay",
+            "--note",
+            "observe only",
+        ]
+    )
+    assert rc == 0
+    acks = json.loads((data_dir / "experiment_acks.json").read_text(encoding="utf-8"))
+    assert acks["acks"][0]["experiment_id"] == "entry_dca_overlay"
+    assert acks["acks"][0]["decision"] == "ack_observe"
+    ledger = json.loads((data_dir / "experiment_assessment.json").read_text(encoding="utf-8"))
+    assert ledger["summary"]["human_ack_pending"] == 0
+    plan = json.loads((data_dir / "entry_dca_adoption_plan.json").read_text(encoding="utf-8"))
+    assert plan["current_stage"] == "out_of_sample_first_entry"
+
