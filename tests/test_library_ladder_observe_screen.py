@@ -9,6 +9,7 @@ from unittest.mock import patch
 from value_investor.library_ladder import (
     _screen_observe_sim_markets,
     observe_sim_screen_should_run,
+    run_admitted_equal_support_and_epoch0,
 )
 
 
@@ -71,3 +72,31 @@ def test_observe_sim_screen_runs_even_when_research_ran():
     )
     assert enabled is False
     assert "observe_sim_screen_missing_markets" in reason
+
+
+def test_admitted_layers_stamp_equal_support_before_epoch0():
+    order: list[str] = []
+    policy = {"ladder": {"admitted_learning_markets": ["sp500"]}}
+    ladder_cfg = {
+        "equal_support_after_screen": True,
+        "equal_support_stamp_timing": True,
+        "equal_support_counterfactual_archives": True,
+        "epoch0_shard_after_screen": True,
+    }
+
+    def _equal(*_args, **_kwargs):
+        order.append("equal_support")
+        return {"skipped": False}
+
+    def _epoch0(*_args, **_kwargs):
+        order.append("epoch0")
+        return {"skipped": False}
+
+    with (
+        patch("value_investor.library_ladder.run_equal_support_package", side_effect=_equal),
+        patch("value_investor.library_ladder.run_epoch0_shards_for_markets", side_effect=_epoch0),
+    ):
+        layers = run_admitted_equal_support_and_epoch0(Path("/tmp/library"), policy, ladder_cfg)
+    assert order == ["equal_support", "epoch0"]
+    assert layers["equal_support"]["skipped"] is False
+    assert layers["epoch0_shard"]["skipped"] is False

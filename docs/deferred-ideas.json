@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-13T11:14:51+00:00",
+  "updated_at": "2026-09-13T12:25:47+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8387,6 +8387,40 @@
       "source": "https://cursor.com/agents/bc-51fa395c-616b-48c3-b552-4c822b99d0b0",
       "added_at": "2026-09-13T11:07:36+00:00",
       "updated_at": "2026-09-13T11:14:51+00:00"
+    },
+    {
+      "id": "L374",
+      "category": "later",
+      "section": "learning",
+      "title": "Stamp equal-support timing before Sunday epoch-0 rebalance",
+      "summary": "Sunday ftse-library shard-epoch0 currently runs in ladder B3b before equal-support stamps timing_signal onto latest_signals. That pass force-rebalances with timing=insufficient_data, so skip_timing_wait does not see wait names. Weekday local-open marks then exclude/sell those names; the next Sunday buys them back. Reorder stamp-timing before epoch-0, or refuse new buys until timing is present.",
+      "revisit_when": "Next Sunday library ladder, or when admitted-book wait names are sold on a weekday and re-bought the following Sunday.",
+      "tags": [
+        "epoch0",
+        "timing",
+        "skip_timing_wait",
+        "buy_not_now"
+      ],
+      "status": "done",
+      "source": "https://cursor.com/agents/bc-55bdb58a-e2d7-432a-ae46-42e3a8c02704",
+      "added_at": "2026-09-13T11:40:11+00:00",
+      "updated_at": "2026-09-13T12:25:47+00:00"
+    },
+    {
+      "id": "L375",
+      "category": "later",
+      "section": "ops",
+      "title": "Keep Sunday epoch-0 from force-trading before local open",
+      "summary": "Admitted-market Sunday shard-epoch0 uses force=True, so US/EU/TSX/smallcap books rebalance while session_gate can_act is false (before open). Weekday epoch0-weekday already honors settle. Consider Sunday mark-only or session-gated trades so rolling buys only print after local open+settle.",
+      "revisit_when": "If Sunday force fills keep reversing weekday wait exits, or when tightening epoch-0 fill-quality vs Yahoo stamps.",
+      "tags": [
+        "epoch0",
+        "session-gate",
+        "force"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-55bdb58a-e2d7-432a-ae46-42e3a8c02704",
+      "added_at": "2026-09-13T11:40:11+00:00"
     }
   ],
   "fragments": [
