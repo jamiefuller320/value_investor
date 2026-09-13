@@ -33,6 +33,7 @@ from value_investor.scoring.earnings_growth_overlay import (
 )
 from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
+    enrich_screening_snapshot_fcf_dividend_coverage,
     fcf_dividend_coverage,
     fcf_filing_screen_mismatch,
     labelled_fcf_dividend_coverage_for_snapshot,
@@ -157,7 +158,7 @@ class CompanyReport:
 
     def to_dict(self) -> dict[str, Any]:
         enforced = honour_fcf_action_note_enforcement(self)
-        return {
+        payload = {
             "ticker": self.ticker,
             "name": self.name,
             "sector": self.sector,
@@ -228,6 +229,7 @@ class CompanyReport:
             "interim_eps_decline_pct": self.interim_eps_decline_pct,
             "adjusted_eps_growth_pct": self.adjusted_eps_growth_pct,
         }
+        return enrich_screening_snapshot_fcf_dividend_coverage(payload)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> CompanyReport:

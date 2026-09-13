@@ -16,6 +16,7 @@ from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
     build_labelled_fcf_dividend_coverage,
     earnings_growth_signs_diverge,
+    enrich_screening_snapshot_fcf_dividend_coverage,
     enrich_universe_with_filing_metrics,
     extract_company_adjusted_fcf_from_reconciliation_bridges,
     fcf_action_note_mismatch,
@@ -3768,6 +3769,23 @@ def test_labelled_fcf_dividend_coverage_for_snapshot_requires_definition_diverge
     )
     assert labelled is not None
     assert labelled["statutory_ocf_minus_capex"]["ratio"] == pytest.approx(0.84)
+
+
+def test_enrich_screening_snapshot_fcf_dividend_coverage_backfills_labelled_block():
+    enriched = enrich_screening_snapshot_fcf_dividend_coverage(
+        {
+            "ticker": "MEGP.L",
+            "fcf_dividend_coverage_net": 0.84,
+            "fcf_dividend_coverage_gross": 1.68,
+            "fcf_definition_divergence": True,
+        }
+    )
+    assert enriched["fcf_dividend_coverage"]["statutory_ocf_minus_capex"]["ratio"] == pytest.approx(
+        0.84
+    )
+    assert enriched["fcf_dividend_coverage"]["management_cash_generated_minus_capex"][
+        "ratio"
+    ] == pytest.approx(1.68)
 
 
 def test_fcf_universe_divergence_flagged_at_15_pct_without_50_pct_overlay():

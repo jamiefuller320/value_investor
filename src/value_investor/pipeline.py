@@ -226,7 +226,12 @@ def _install_gap_fill_peer_table_hooks() -> None:
             except (OSError, ValueError, TypeError):
                 snapshot = None
             if isinstance(snapshot, dict):
+                from value_investor.scoring.fcf import (
+                    enrich_screening_snapshot_fcf_dividend_coverage,
+                )
+
                 snapshot["peer_model_pass_table"] = table
+                snapshot = enrich_screening_snapshot_fcf_dividend_coverage(snapshot)
                 write_json(snapshot_path, snapshot, compact=True, compress=False)
 
         map_path = resolve_json_path(sources_dir / "gap_fill_source_map.json")
