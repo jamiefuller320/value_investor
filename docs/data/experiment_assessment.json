@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-09-12T12:37:14.342252+00:00",
+  "updated_at": "2026-09-13T08:06:40.662408+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -18,8 +18,8 @@
     "promotion": "recommend rows are human-gate only — never auto-apply knobs, config, or engineering tasks"
   },
   "context": {
-    "history_run_count": 14,
-    "backtest_run_count": 13,
+    "history_run_count": 15,
+    "backtest_run_count": 14,
     "trajectory_labeled_events": 336,
     "exit_shadow_closed_total": 0,
     "experimental_track_count": 2,
@@ -27,11 +27,11 @@
     "entry_dca_ready": true
   },
   "summary": {
-    "observing": 1,
     "proposed": 0,
-    "recommend": 1,
-    "continue": 4,
     "fail": 4,
+    "observing": 0,
+    "continue": 5,
+    "recommend": 1,
     "human_ack_pending": 1,
     "total": 10
   },
@@ -138,13 +138,13 @@
       "title": "Screen rules + graduated allocation",
       "area": "paper_knobs",
       "pipeline": "paper_automation",
-      "status": "observing",
+      "status": "continue",
       "source_status": "observing",
       "human_ack_required": false,
       "track_id": "graduated_allocation",
-      "gate_marks": 3,
-      "gate_excess_after_costs": null,
-      "excess_vs_primary": null,
+      "gate_marks": 4,
+      "gate_excess_after_costs": -0.0031,
+      "excess_vs_primary": 0.2788,
       "forward_evidence": {
         "source": "learning_track_metrics",
         "use_momentum_grace": false,
@@ -297,8 +297,8 @@
           ]
         },
         "archive": {
-          "history_run_count": 14,
-          "backtest_run_count": 13,
+          "history_run_count": 15,
+          "backtest_run_count": 14,
           "simulation_ready": true
         },
         "loser_cards": {

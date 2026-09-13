@@ -4847,7 +4847,135 @@
       "priority": "medium",
       "suggestion": "Also written to `output/research/MGNS.L/research.md`.",
       "recorded_at": "2026-09-12T12:36:40.963390+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch 2026 Annual Report PDF linked from NSM notice (`d45784fca483323c.txt`) into `filings/bodies/` and parse consolidated cash-flow statement plus APM glossary for company-adjusted FCF.",
+      "recorded_at": "2026-09-13T08:06:10.267952+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Add FY 2026 results presentation to IR allowlist and parse statutory-to-adjusted FCF bridge (parity with FY 2025 `ir_5ba5b17047f87036.txt` appendix).",
+      "recorded_at": "2026-09-13T08:06:10.267968+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Auto-bind `company_adjusted` FCF to the latest filing-year divisional total (£73.8m for FY 2026) and flag when screen numerator is one fiscal year stale.",
+      "recorded_at": "2026-09-13T08:06:10.267977+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "ingest",
+      "priority": "medium",
+      "suggestion": "Improve Companies House PDF OCR for group accounts or prefer iXBRL/tag extraction over raw OCR for numeric cash-flow lines.",
+      "recorded_at": "2026-09-13T08:06:10.267981+00:00"
+    },
+    {
+      "ticker": "FGP.L",
+      "name": "FirstGroup plc",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Suppress or mark unverified screen TTM FCF when `yahoo_quarterly_cashflow` is empty for the ticker.",
+      "recorded_at": "2026-09-13T08:06:10.267985+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Fetch and body-extract H1/FY results **presentation PDFs** with structured tables for Photo.ME vs Wash.ME revenue/EBITDA by geography and site-type tags (airport, transport hub, retail)—`ir_presentation_metrics.json` has net-cash bridges but **segment_split_count: 0**.",
+      "recorded_at": "2026-09-13T08:06:10.267993+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Ingest **Investegate earnings-call transcript** or company webcast transcript when linked from alternate news (e.g. Investing.com H1 2026 item in `alternate_news.json`) to capture dividend-intent Q&A not in RNS.",
+      "recorded_at": "2026-09-13T08:06:10.267997+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "high",
+      "suggestion": "Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_definition_divergence` is true, using `ir_presentation_metrics` bridges as primary.",
+      "recorded_at": "2026-09-13T08:06:10.268004+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Map email **watchlist** to overlay **caution** when `interim_dividend_cut_flagged` and `fcf_dividend_coverage_net` < 1.0 simultaneously, even if raw signal remains strong_buy.",
+      "recorded_at": "2026-09-13T08:06:10.268007+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "name": "ME Group International plc",
+      "area": "coverage",
+      "priority": "medium",
+      "suggestion": "Populate Yahoo **quarterly cash flow** for LSE names where TTM FCF is flagged unverified (`yahoo_quarterly_cashflow: false` in gap map) to reduce filing vs screen TTM mismatch.",
+      "recorded_at": "2026-09-13T08:06:10.268011+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Prefer Companies House iXBRL over PDF OCR for group accounts (`ch_04967001_*`); current FY2025 body is highlights/strategic OCR only—Finance Review and cash notes unreadable for gap-fill.",
+      "recorded_at": "2026-09-13T08:06:10.268017+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Retry Investegate HTML/LSE NSM fetch for indexed filings with `has_body: false` (FY2024 duplicate `e030d77705f29a48`); log `body_rejected` reason from refetch metadata.",
+      "recorded_at": "2026-09-13T08:06:10.268020+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Pull FCA National Storage Mechanism XBRL/PDF for Annual Report 2025 when `2d00ad2856026ab7.txt` is published—unlock Risks, IFRS 16, and cash-flow notes.",
+      "recorded_at": "2026-09-13T08:06:10.268025+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "scoring",
+      "priority": "medium",
+      "suggestion": "Auto-compare latest CH/RNS adjusted EPS YoY to `adjusted_eps_growth_pct` and flag divergence (ITV remains +23% screen vs −11% filing).",
+      "recorded_at": "2026-09-13T08:06:10.268031+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "ops",
+      "priority": "medium",
+      "suggestion": "On CH refetch success, tag body `parse_quality: ocr|ixbrl` in gap_fill_source_map so memos do not treat OCR strategic pages as full accounts coverage.",
+      "recorded_at": "2026-09-13T08:06:10.268034+00:00"
+    },
+    {
+      "ticker": "ITV.L",
+      "name": "ITV plc",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "`output/research/ITV.L/research.md` is updated with these sections.",
+      "recorded_at": "2026-09-13T08:06:10.268038+00:00"
     }
   ],
-  "updated_at": "2026-09-12T12:36:40.963392+00:00"
+  "updated_at": "2026-09-13T08:06:10.268040+00:00"
 }

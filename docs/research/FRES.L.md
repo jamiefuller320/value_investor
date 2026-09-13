@@ -1,91 +1,68 @@
 # Fresnillo plc (FRES.L) — Research memo
 
-_Version 1 · Updated 2026-09-02T17:20:15.626221+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-13T07:57:10.912610+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Fresnillo plc (FRES.L) is the world's largest primary silver producer and Mexico's largest gold producer, with eight operating mines in Mexico and a growing exploration pipeline including the Canadian Novador project (Probe Gold). The quantitative screen rates the name as a **buy** (11/22 models; composite 58%), driven by quality, dividend, GARP and risk metrics rather than deep-value screens — P/E 13.1, ROE 53%, yield 3.7%, Piotroski 8/9. FY2025 and H1 2026 filings show record profitability on elevated precious-metals prices and a net cash balance sheet (US$1,916.6m net cash at 31 December 2025), though statutory earnings remain heavily price-dependent. The central debate is whether today's margins and dividends justify the commodity cycle peak, given declining production volumes, rising unit costs in peso terms, and Mexico-specific regulatory and related-party complexity (Peñoles/Silverstream, Met-Mex refining).
+Fresnillo is the world’s largest primary silver producer and a major Mexican gold operator, listed in London with operations concentrated in Mexico. The quantitative screen rates the name a buy (13/22 models, composite ~67%), supported by strong cash generation, dividend growth, quality metrics, and a Piotroski score of 8/9, though classic deep-value and high-yield screens fail on elevated P/B (~5.9×). Filings show a sharp earnings inflection from FY2023 through record FY2025, driven mainly by precious-metal prices and cost discipline, with net cash of US$1.9bn at year-end 2025. The central debate is whether today’s profitability and cash returns are durable as production volumes trend lower and statutory EPS is distorted by Silverstream accounting and FX-driven tax lines. Value investors can treat the screen as a quality/cash-flow entry signal, but should size for commodity and Mexico regulatory cyclicality rather than book-based margin of safety.
 
 ## INVESTMENT THESIS
-For a value-oriented investor, Fresnillo offers a **quality precious-metals franchise with balance-sheet optionality**, not a classic net-net or Graham defensive name. The screen passes Lynch PEG, Neff PEGY, Quality Value, Buffett Quality, Economic Moat, Dividend Growth, Magic Formula, Acquirer's Multiple, Piotroski (8/9) and Financial Health — five of four required factor families (cheapness, quality, dividend, GARP, risk). That profile fits a business generating filing-aligned free cash flow of US$1.89bn in FY2025 (operating cash flow US$2,290m less capex US$400m per preliminary results) against modest leverage (US$840m 4.25% senior notes due 2050; net cash US$1,916.6m).
-
-Business quality is supported by long-life Mexican assets (Herradura, Juanicipio, Fresnillo district), a disciplined dividend policy (33–50% of adjusted profit; FY2025 total distribution US$950m, or 128.92 US cents per share — above policy), and management's explicit capital allocation framework: sustain operations, fund exploration (US$260m budgeted for 2026), and opportunistic M&A (Probe Gold completed January 2026 for ~US$555m; adds ~10moz gold resources). ROE of 53% reflects earnings leverage to bullion rather than low book multiple — P/B 5.8 causes failures on Graham, Schloss, Deep Value and FCF Yield screens (screen FCF yield 0.1% reflects market capitalisation vs filing FCF, not operational weakness).
-
-The buy case rests on **(1)** net cash and dividend capacity through the cycle, **(2)** operational turnaround at Herradura and Juanicipio offsetting grade decline elsewhere, and **(3)** pipeline optionality (Guanajuato, Rodeo, Novador) not yet in reserve base. It is weakened by **structural volume decline** (FY2025 silver −13.5% to 48.7moz; 2026 guidance 42–46.5moz) and **cost inflation** re-emerging as the Mexican peso strengthens (H1 2026 adjusted production costs +20.5% half-on-half). Timing signal is neutral (RSI ~52, slightly below 200-day MA).
+For a value-oriented process, Fresnillo fits the “quality compounder at a reasonable earnings multiple” bucket more than net-net or Graham defensive value. The screen passes five factor families—cheapness, quality, dividend, GARP, and risk—with highlights including ~8.5% FCF yield (filing-aligned FY2025 basis), Lynch PEG near 0.03 on model growth, ROE ~53%, dividend yield ~3.7%, and financial health/Piotroski clearance. Business quality is anchored in long-life Mexican assets (Fresnillo, Saucito, Juanicipio, Herradura), a net-cash balance sheet, and a stated dividend policy of 33–50% of adjusted attributable profit, which management has exceeded in recent strong years (US$950m total distributions proposed for 2025, 128.92 US cents per share per preliminary results). Operational credibility improved through 2024–2025 (cost efficiencies, Juanicipio contribution, Herradura recovery) even as silver/gold volumes eased. The buy case for value investors is therefore: levered exposure to precious metals with institutional-grade reporting, strong cash conversion (H1 2025 free cash flow US$1,026m per half-year report), and shareholder returns funded by operations—not balance-sheet stretch. That aligns with the screen’s quality/dividend/GARP cluster rather than its failed Schloss/Graham/net-net checks.
 
 ## FINANCIAL REVIEW
-*Primary source: UK RNS filing body extracts. Yahoo `financials_annual.json` used only where noted for cross-check.*
+Primary source: UK RNS final/preliminary results and half-year reports (USD reporting). `filings_index.json` provides solid annual and interim coverage (no separate trading-update class; production quarters filed as interim/other). Companies House annual accounts are present but are secondary to RNS for group P&L.
 
-**Annual trend (FY2023–FY2025)**
+**Annual trajectory (RNS)**  
+- **FY2023** (Preliminary Results, 5 March 2024): Adjusted revenue US$2,869.1m (+10.6% vs 2022); gross profit US$503.2m (−6.1%); EBITDA US$655.7m (−12.7%); profit for the year US$288.3m; EPS excluding post-tax Silverstream effects US$0.310; cash and liquid funds US$534.6m; net debt US$304.4m. Headwinds: peso strength and cost inflation compressed margins despite higher metal prices.  
+- **FY2024** (Final Results, 4 March 2025): Adjusted revenue US$3,639.9m (+26.9%); gross profit US$1,246.3m (+147.7%); EBITDA US$1,547.3m (+136.0%); statutory profit for the year US$226.7m (−21.4%) with attributable profit US$140.9m after a US$182.3m pre-tax Silverstream revaluation loss tied to Peñoles’ Sabinas mine difficulties; EPS excluding Silverstream effects US$0.364 (+17.4%); cash US$1,297.8m; **net cash US$458.3m**. Operating cash strengthened materially; dividends included ordinary plus special distributions totalling US$547.5m for 2024.  
+- **FY2025** (Preliminary Results, 3 March 2026): Record adjusted revenue US$4,645.3m (+27.6%); gross profit US$2,664.1m (+113.8%); EBITDA US$2,796.2m (+80.7%); profit for the year US$1,573.8m; attributable profit US$1,384.0m; EPS excluding Silverstream effects US$2.058 (+465.4% vs 2024); cash US$2,756.5m; **net cash US$1,916.6m**. Volumes fell (silver −13.5%, gold −5.0% vs 2024) but price and cost outcomes dominated. Non-cash Silverstream loss US$132.4m (net of tax) as contract ended amid Sabinas viability concerns. Total 2025 distributions proposed US$950.0m (128.92 US cents per share).
 
-| Metric | FY2023 (Yahoo) | FY2024 (Final Results, 4 Mar 2025) | FY2025 (Preliminary Results, 3 Mar 2026) |
-|---|---|---|---|
-| Total revenue | US$2,705m | US$3,496.4m | US$4,561.2m |
-| Adjusted revenue | — | US$3,639.9m (+26.9%) | US$4,645.3m (+27.6%) |
-| Gross profit | US$503m | US$1,246.3m (+147.7%) | US$2,664.1m (+113.8%) |
-| EBITDA | US$656m | US$1,547.3m (+136.0%) | US$2,796.2m (+80.7%) |
-| Profit for the year | US$288m | US$226.7m (−21.4%) | US$1,573.8m (+594%) |
-| EPS (basic, ex-Silverstream) | — | US$0.364 | US$2.058 |
-| Cash & liquid funds | — | US$1,297.8m | US$2,756.5m |
-| Net cash/(debt) | Net debt US$304m (FY2024 filing) | Net cash US$458.3m | Net cash US$1,916.6m |
+**Interim momentum (RNS)**  
+- **H1 2024** (Half-year Report, 30 July 2024): Adjusted revenues US$1,560.2m (+9.0%); gross profit US$392.4m (+38.8%); EBITDA US$544.2m (+55.1%); profit for the period US$117.7m; interim dividend 6.40 US cents; cash US$691.0m (net debt/EBITDA 0.17× cited).  
+- **H1 2025** (2025 Half-year Report, 5 August 2025): Adjusted revenues US$1,982.9m (+27.1%); gross profit US$1,022.9m (+160.7%); EBITDA US$1,102.1m (+102.5%); profit for the period US$467.6m; free cash flow US$1,026.1m; cash US$1,823.0m; interim dividend 20.8 US cents. Silverstream buy-back for US$40.0m drove US$133.0m non-cash loss.  
+- **H1 2026** (Interim Results, 4 August 2026): Adjusted revenues US$3,413.2m (+72.1% vs H1 2025); gross profit US$2,359.4m (+130.7%); EBITDA US$2,349.7m (+113.2%); profit for the period US$1,463.4m; cash US$2,503.1m; interim dividend 43.4 US cents (US$319.8m). Production lower (silver −11.4%, gold −7.3% YoY) but prices drove results; Silverstream no longer contributes to silver volumes.
 
-FY2024 statutory profit was depressed by a US$182.3m pre-tax Silverstream revaluation loss (Sabinas mine difficulties at Peñoles) and a US$390m income tax charge (20% spot peso devaluation affecting deferred tax). FY2025 benefited from record realised prices (silver US$43.6/oz, +51.4%; gold US$3,532.7/oz, +44.0%) and termination of the Silverstream contract (non-cash loss US$132.4m after tax). Yahoo FY2025 net income US$1,384m and revenue US$4,561m align with the preliminary RNS.
+**Cross-check to Yahoo (`financials_annual.json`)**  
+Yahoo FY2025 shows total revenue ~US$4.56bn, net income ~US$1.38bn, basic EPS US$1.878, FCF ~US$1.89bn, and cash ~US$2.66bn—directionally consistent with FY2025 RNS but not used as the primary set; minor differences vs RNS EPS (US$2.058 ex-Silverstream) reflect adjustment definitions. The screen flags statutory vs filing-core EPS growth divergence (>300 bps); treat headline growth as partly non-operating/accounting-sensitive.
 
-Capex rose modestly (US$370.5m FY2024 → US$400.1m FY2025); exploration US$173.5m (+6.4%). Dividends paid US$654.3m in FY2025 including the 2024 special dividend. Balance sheet strengthened materially: net cash nearly quadrupled year-on-year.
+**Liquidity and capital**  
+Senior notes ~US$840m outstanding at FY2024 (4.250% due 2050 per FY2024 review); net cash position throughout 2025–H1 2026 per RNS. Capex guidance has run ~US$440–530m annually in recent outlook statements; Probe Gold acquisition ~US$555m completed post-FY2025 (preliminary results).
 
-**Interim trend (H1 2024 → H1 2025 → H1 2026)**
-
-| Metric | H1 2024 (Yahoo/implied) | H1 2025 (Half-year Report, 5 Aug 2025) | H1 2026 (Interim Results, 4 Aug 2026) |
-|---|---|---|---|
-| Total revenue | US$1,488.3m | US$1,936.2m (+30.1%) | US$3,382.6m (+74.7%) |
-| Gross profit | US$392.4m | US$1,022.9m (+160.7%) | US$2,359.4m (+130.7%) |
-| EBITDA | US$544.2m | US$1,102.1m (margin 56.9%) | US$2,349.7m (margin 69.5%) |
-| Profit for the period | US$117.7m | US$467.6m (+297%) | US$1,463.4m (+213%) |
-| Cash & liquid funds | — | US$1,823.0m | US$2,503.1m |
-| Interim dividend | US$0.064/sh | US$0.208/sh (US$153.3m) | US$0.434/sh (US$319.8m) |
-
-H1 2025 was a inflection point: Silverstream buyback for US$40m (non-cash H1 loss US$133m after tax); MAG Silver stake sold (US$149.5m proceeds). H1 2026 reflects further price strength (realised silver US$78.9/oz, +134.4% HoH; gold US$4,666.8/oz, +47.3%) but also **operational headwinds**: gold production −7.3% to 290.9koz, silver −11.4% to 22.0moz; adjusted production costs +20.5% on peso revaluation (+12.5%), maintenance at Saucito, and Herradura haulage. H1 2026 cash fell US$253m after Probe Gold acquisition (US$547.8m), dividends (US$797.4m), and tax/mining-rights payments (US$890m) — still leaving US$2.5bn cash.
-
-**Production and guidance**
-
-Volumes are declining even as profits surge: FY2025 silver 48.7moz (−13.5%), gold 600.3koz (−5.0%, but above guidance). San Julián DOB ceased; Silverstream contribution ended H2 2025. 2026 guidance: silver 42.0–46.5moz, gold 500–550koz, silver-equivalent 82–91moz — a step-down that management attributes to geological factors at legacy mines, partially offset by Herradura underground from 2027.
-
-**Cash flow**
-
-FY2025 net cash from operations US$2,289.7m (+76.2%); filing-aligned FCF ~US$1.89bn (screen source: `filing_aligned_ocf_capex`). FCF dividend coverage (net) 2.9× on screen TTM. H1 2026 operating cash before working capital US$2,364.7m (+114.3%).
-
-**Gaps**
-
-No standalone FY2023 RNS body in the index; FY2023 figures above are from Yahoo fallback. No `trading_update` period filings indexed. H2-only quarterly breakdown not available in filing bodies.
+**Gaps**  
+Full audited annual report PDF detail for every going-concern paragraph was not cleanly extracted from Companies House OCR in this pass; liquidity assessment relies on RNS balance-sheet disclosures. Quarterly Yahoo cashflow TTM is suppressed in the screen inputs.
 
 ## RISKS AND RED FLAGS
-**Cyclical / commodity exposure.** Earnings and the screen's ROE are dominated by bullion prices. H1 2026 interim going-concern disclosure stress-tests silver at US$55.1/oz and gold at US$3,979/oz (maintains liquidity); reverse stress at US$15/oz silver and US$998/oz gold would exhaust cash by end-2027 without mitigations — confirming high operational leverage to metal prices.
+**Cyclical and operational**  
+Results remain highly sensitive to gold/silver prices; H1 2026 profits rose sharply on price while volumes fell. Reserve depletion, grade decline, weather (e.g. Herradura), and mine-life transitions (San Julián DOB closure) are recurring themes in filings. Safety remains a material concern: fatalities reported in annual narratives (e.g. two contractor fatalities in 2024; AGM 2026 referenced fatal incidents).
 
-**Mexico regulatory and fiscal.** Special mining rights rose to 8.5% in 2025 (US$193.2m FY2025 vs US$127.0m FY2024). Effective tax rates swing with peso spot moves (52.5% FY2024, 15.1% FY2025). Management cites improved dialogue under the Sheinbaum administration but notes permitting uncertainty remains.
+**Regulatory and country**  
+Mexico concentration is extreme; filings discuss mining law changes, permitting delays, special mining rights rising to 8.5% from 2025, and political/regulatory uncertainty (partially offset by management commentary on improved dialogue post-2024 election). Payments-to-governments reporting is filed but not re-analysed here.
 
-**Related-party / governance.** Industrias Peñoles (parent of chairman Alejandro Baillères' industrial group) is counterparty to the terminated Silverstream contract and Met-Mex treatment/refining. Juanicipio non-controlling interest (44%, now Pan American Silver) took US$189.8m of FY2025 profit. Concentration of refining with a related smelter is a structural dependency.
+**Silverstream / related party / governance**  
+The Peñoles Silverstream derivative drove large non-cash P&L volatility (US$182.3m loss FY2024; contract termination/buy-back H1 2025). November 2024 RNS warned of possible “significant adjustments” to the agreement. Industrias Peñoles is the parent ecosystem; shared services and refining linkages create related-party complexity. Board independence and AGM voting scrutiny (e.g. 2024 re-election of Alberto Tiburcio: 78.03% of independent votes) are governance watchpoints.
 
-**Operational.** Declining ore grades at Fresnillo, Saucito and Ciénega; Herradura ball-mill fissure and leaching-pad delays in H1 2026. Two fatalities in both FY2024 and FY2025 despite improving TRIFR. Tailings dams explicitly listed as a principal risk in annual reports.
+**Other**  
+July 2024 cyber-security incident RNS reported unauthorised IT access; no material operational impact foreseen at announcement, but IT risk is explicit. M&A (Probe Gold, Sinda Ltd investment 2026) adds integration and capital allocation risk. Tax and FX: Mexican peso spot moves materially affect deferred tax and effective tax rates (52.5% effective rate cited FY2024 vs 30% statutory), distorting statutory earnings.
 
-**Other.** July 2024 cyber-security incident (RNS: no material operational impact foreseen at announcement). Probe Gold integration and US$95.3m Sinda Ltd stake (July 2026, post-period) add capital deployment and execution risk. Berenberg downgrade to Hold (February 2026) after share-price rally signals sell-side fatigue.
-
-RiskTags: cyclical, regulatory, governance, other
-RiskTags: cyclical, regulatory, governance, other
+RiskTags: cyclical, regulatory, governance, accounting, key_person, competitive, other
+RiskTags: cyclical, regulatory, governance, accounting, key_person, competitive, other
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is ** voluminous but shallow** — dominated by templated Kalkine Media articles linking FRES to gold/silver price moves rather than company-specific analysis. Material items from the manifest and RNS cross-reference:
+Coverage over the past year is voluminous but repetitive—much of it commodity-price and FTSE-gold-stock commentary (notably Kalkine Media, Aug 2026), alongside substantive company-driven items:
 
-- **Preliminary Results (3 March 2026):** Record FY2025 earnings; US$950m dividends; net cash US$1,916.6m — *"Fresnillo Delivers Record 2025 Earnings, Raises Dividend and Expands into Canada"* (Yahoo Finance UK, 19 May 2026); *"FTSE 100's Fresnillo shares pull back despite record blowout results"* (The Twelfth Magpie, 3 March 2026).
-- **Probe Gold acquisition:** Announced 31 October 2025 (~US$560m); completed January 2026 — adds Novador (10moz gold resource).
-- **H1 2026 interim (4 August 2026):** Revenue +74.7%; interim dividend doubled to 43.4 US cents — *"Fresnillo PLC (FNLPF) (Q2 2026) Earnings Call Highlights: Record Financial Performance"* (Yahoo Finance, 4 August 2026).
-- **Silverstream termination (H1 2025):** Peñoles buyback US$40m; removes ~1moz/year silver stream from Sabinas.
-- **Sinda Ltd investment (22 June 2026):** 5% stake, ~US$95.3m — silver exploration exposure.
-- **Berenberg downgrade to Hold** (5 February 2026) after "stellar" rally.
-- **Cyber incident** (30 July 2024 RNS): unauthorised IT access; no material impact foreseen.
+- **3 March 2026** — “Preliminary Results” / “Across The Markets: Fresnillo…” (record FY2025, dividend uplift).  
+- **4 August 2026** — “Interim Results for the six months to 30 June 2026” / Yahoo “Fresnillo H1 Earnings Call Highlights” (record H1 financials, doubled interim dividend, production down but guidance maintained).  
+- **22 January 2026** — “Fresnillo completes acquisition of Probe Gold” (Canada expansion).  
+- **31 October 2025** — “Fresnillo to acquire Probe Gold” (M&A announced).  
+- **22 July 2026** — “Fresnillo maintains 2026 production guidance after steady second-quarter performance” (Yahoo Finance UK / WSJ syndication on lower grades).  
+- **22 June 2026** — “Fresnillo announces investment in Sinda Ltd.” (IPO-linked silver exposure).  
+- **5 February 2026** — “Berenberg downgrades Fresnillo to ‘hold’ after ‘stellar’ share price rally” (Investing.com).  
+- **30 July 2024** — “Notice of cyber security incident” (RNS).  
+- **12 November 2024** — “Update on Silverstream Agreement with Peñoles” (Sabinas operational difficulties).
 
-No trading-update filings in the index; production trends are captured in quarterly production RNS (e.g. Q2 2026 report, 22 July 2026 — lower grades, guidance maintained).
+Material strategy themes: higher dividends, net-cash balance sheet, Canadian M&A, exploration pipeline (Guanajuato, Tajitos, Rodeo), and continued precious-metals leverage. Non-company news is thin on hard operational detail beyond price sentiment.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Deep research confirms the screen's quality, cash-generation and dividend case at current bullion levels, but partially offsets it with volume decline, peso-linked cost pressure and cycle-dependent earnings that failed deep-value and FCF-yield screens.
+Rationale: Filings confirm the screen’s quality, cash-flow, and dividend narrative at record FY2025/H1 2026 profitability and net cash, but cyclical price dependence, volume decline, Silverstream/accounting noise, and Mexico concentration warrant a conviction overlay rather than blind acceptance of headline EPS growth.

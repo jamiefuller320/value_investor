@@ -1,71 +1,78 @@
 # Johnson Service Group PLC (JSG.L) — Research memo
 
-_Version 1 · Updated 2026-09-12T12:24:43.238273+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-13T07:54:13.631603+00:00 · Mode: initial_
 
 ## EXECUTIVE SUMMARY
-Johnson Service Group is a UK and Ireland textile rental operator (HORECA linen and industrial workwear) that has compounded adjusted margins and returns while returning large amounts of capital via buybacks. FY2025 preliminary results (RNS, 3 March 2026) show revenue of £535.4m (+4.3%) and adjusted operating profit of £72.5m (+16.4%, margin 13.5%), with management reiterating a ≥14.0% adjusted operating margin target for 2026. The quantitative screen rates the stock as a strong buy (composite ~86%, five value families passed, P/E ~14.8, dividend yield ~3.8%, filing-aligned FCF yield supportive), with timing flagged as accumulate (RSI oversold, below 200-day MA). The central debate is whether margin resilience and buyback-driven EPS accretion outweigh cyclical HORECA volume weakness, rising leverage from capital returns, and thin reported liquidity (current ratio below 1.0 on screen inputs)—not whether the business generates cash at scale.
+Johnson Service Group is a UK and Republic of Ireland textile rental operator (HORECA linen and industrial workwear) with a long track record of margin expansion, high cash conversion, and disciplined capital returns. The quantitative screen rates the stock as a strong buy (composite 86%, all five factor families passing), anchored on mid-teens P/E, ~1.8× P/B, ~3.8% yield, filing-aligned FCF yield, and Piotroski F-Score 7/9. The value case rests on a cash-generative model, progressive dividends, and sustained buybacks (~£118.5m returned since 2022 per H1 2026 interim), while the market has de-rated the shares on softer hospitality volumes (RSI ~27, below the 200-day moving average). The central debate is whether HORECA cyclicality and rising leverage from capital returns cap organic growth, or whether cost control and competitor exits allow the group to hit its ≥14% adjusted operating margin target and re-rate.
 
 ## INVESTMENT THESIS
-For a value investor, JSG offers a cash-generative, asset-heavy service model at a mid-teens earnings multiple, with visible capital return (dividend growth and systematic buybacks since 2022) and improving adjusted returns (ROCE 17.1% in FY2025 per preliminary results). The screen’s strong buy signal is driven by breadth across cheapness (Graham enterprising, FCF yield, composite value), quality/dividend/GARP proxies (Piotroski 7/9, dividend growth, Neff PEGY, earnings quality), and a risk bucket pass despite failing strict “financial health” on liquidity. Business quality in filings supports the quality/dividend narrative: Workwear retention at 94%, energy as a share of revenue falling (7.4% in FY2025 vs 8.8% in 2024), and HORECA margin expansion to 15.3% adjusted operating margin in FY2025 even with only modest organic revenue growth (+1.0% HORECA, +2.4% Workwear). The mismatch between statutory EPS growth (~9.5%) and adjusted EPS growth (~15–20%) and the screen’s FCF basis warning (filing £100.6m vs suppressed TTM) mean the value case rests primarily on FY2025 filing cash generation and adjusted earnings, not on quarterly Yahoo cash flow (empty in sources).
+For a value investor, JSG combines reasonable absolute valuation with improving business quality metrics that screens reward but classic “Buffett/moat” models do not fully endorse. The screen passes cheapness (Graham Enterprising, FCF Yield, Acquirer’s-multiple adjacency), quality-lite (Quality Value, Earnings Quality, Piotroski), dividend (Dividend Growth, Neff PEGY), GARP (Lynch PEG on adjusted growth ~15%), and risk (Dreman Contrarian, composite risk family)—10 of 22 models with full data quality (20/20). That aligns with filing evidence: FY2025 revenue rose 4.3% to £535.4m and adjusted operating profit rose 16.4% to £72.5m (margin 13.5%), with statutory profit before tax £50.8m and operating cash flow £139.9m (Preliminary Results, year ended 31 December 2025). ROCE reached 17.1% in FY2025 and adjusted diluted EPS grew 19.8% to 12.1p, supporting the screen’s earnings-growth and quality overlays despite ROE (~13%) sitting below stricter moat thresholds. Capital allocation reinforces the thesis: dividend cover ~2.5× on adjusted EPS, ongoing £55m buyback (May 2026), and a refinanced £175m RCF to April 2030 (Interim Results, six months to 30 June 2026). Workwear retention at 94% and contract tuck-ins from failing independents add structural share-gain optionality not captured in pure multiple screens.
 
 ## FINANCIAL REVIEW
-**Primary source:** UK RNS preliminary and interim results (`filings/bodies/338b617c814e412b.txt`, `ab5038e77ea77b83.txt`), plus trading updates (`4d670a2084f2e410.txt`, `09c35ef8fa3d6c34.txt`). Companies House statutory accounts are present in the index (2019–2026 filings) but the latest detailed P&L in this pack is the March 2026 preliminary announcement; no separate full annual report body was required for the figures below.
+**Annual trend (primary: RNS preliminary results, 3 March 2026; FY2025)**
 
-**FY2025 (year ended 31 December 2025)** — Preliminary Results, 3 March 2026  
-- Revenue £535.4m (2024: £513.4m, +4.3%); organic group +1.4%.  
-- Adjusted operating profit £72.5m (+16.4%); margin 13.5% (2024: 12.1%). Adjusted EBITDA £166.8m; margin 31.2%.  
-- Statutory operating profit £58.8m; profit before tax £50.8m; diluted EPS 9.2p (+9.5%).  
-- Adjusted profit before tax £64.5m; adjusted diluted EPS 12.1p (+19.8%).  
-- Full-year dividend 4.8p (+20.0%); cover ~2.5× on adjusted EPS.  
-- Segments: HORECA revenue £389.8m, adjusted OP £59.8m (margin 15.3%); Workwear revenue £145.6m, adjusted OP £21.0m (margin 14.4%).  
-- Cash: net cash from operating activities £139.9m; free cash flow £69.1m (company definition: operating cash less textile rental spend less capital element of leases). Textile rental capex £65.8m; PPE capex £35.8m.  
-- Balance sheet / funding: net debt £159.2m including IFRS 16 (bank debt £112.4m); leverage 0.95× adjusted EBITDA vs covenant maximum 3.0×. RCF £135m at year-end (refinanced subsequently—see H1). Share buyback cash outflow £54.7m in year.  
-- ROCE 17.1% (2024: 15.5%). Defined benefit scheme IAS 19 surplus £4.9m; deficit recovery contributions ceased pending triennial valuation.
+| Metric | FY2025 | FY2024 | Source |
+|--------|--------|--------|--------|
+| Revenue | £535.4m | £513.4m | Filing |
+| Adjusted operating profit / margin | £72.5m / 13.5% | £62.3m / 12.1% | Filing |
+| Statutory operating profit | £58.8m | £54.7m | Filing |
+| Adjusted diluted EPS | 12.1p | 10.1p | Filing |
+| Statutory diluted EPS | 9.2p | 8.4p | Filing |
+| Full-year dividend | 4.8p | 4.0p | Filing |
+| Net debt (incl. IFRS 16 leases) | £159.2m | £115.6m | Filing |
+| Leverage (net debt / adj. EBITDA) | 0.95× | (prior year not restated in headline) | Filing |
+| Operating cash flow | £139.9m | £141.8m | Filing |
+| Bank debt (year-end) | £112.4m | £68.6m | Filing |
 
-The January 2026 full-year trading update (`4d670a2084f2e410.txt`) was broadly consistent with finals (revenue ~£535.6m, net debt ex-leases ~£112m); finals are used here as the authoritative set.
+Segment FY2025: HORECA revenue £389.8m, adjusted operating profit £59.8m (15.3% margin); Workwear £145.6m / £21.0m (14.4%). Organic revenue growth was 1.4% (HORECA +1.0%, Workwear +2.4%). Exceptional items totalled £6.0m (Main Market listing, reorganisation including Lancaster closure, Bristol fire, acquisition-related costs). The filing defines free cash flow as operating cash flow less textile rental capex and lease capital elements at £69.1m (vs £74.6m in 2024); the screen’s filing-aligned FCF of £100.6m corresponds to operating cash flow less PPE/intangible capex per cash flow statement (£139.9m − £39.3m capex)—investors should reconcile definitions before comparing FCF yields.
 
-**H1 2026 (six months to 30 June 2026)** — Interim Results, 8 September 2026  
-- Revenue £258.0m (+0.2%); organic revenue (0.7)% (Workwear +2.6%; HORECA (2.0)%).  
-- Adjusted operating profit £29.8m (+3.8%); margin 11.6% (+50 bps H1-on-H1). FY2025 full-year margin was 13.5%; H1 margin is seasonally lower but management maintains ≥14.0% full-year adjusted operating margin target.  
-- Statutory operating profit £25.3m; adjusted diluted EPS 5.0p (+8.7%). Interim dividend 1.8p (+12.5%).  
-- H1 free cash flow £21.2m (2025 H1: £25.0m), reflecting working capital and higher interest.  
-- Net debt £188.6m (Dec 2025: £159.2m); leverage 1.11× (target range 1.0–1.5×).  
-- April 2026: RCF refinanced to £175m (+£50m accordion), maturity April 2030. £55m buyback launched May 2026; £28.2m completed by 31 August 2026.  
-- Outlook: softer HORECA through H2 than originally hoped after a modest summer uplift; margin target ≥14.0% for FY2026 retained.
+**Interim and trading updates (primary filings)**
 
-**H1 2026 trading update** (10 July 2026, `09c35ef8fa3d6c34.txt`) previewed flat revenue £258.0m, organic (0.7)%, net debt ~£190m, and unchanged margin ambition—aligned with published interims.
+- *2025 Full Year Trading Update* (16 January 2026): Previewed revenue ~£535.6m (+4.3%), net debt excl. IFRS 16 ~£112m after £54.7m buyback outflow; margin trajectory toward ≥14% in 2026.
+- *H1 2026 Trading Update* (10 July 2026): Revenue expected flat at £258.0m; organic group revenue ~(0.7)% (HORECA ~(2.0)%, Workwear +2.6%); net debt ~£190m incl. leases; leverage toward the lower end of 1.0–1.5× target; ≥14% margin still on track.
+- *Interim Results* (8 September 2026, six months to 30 June 2026): Revenue £258.0m (+0.2%); adjusted operating profit £29.8m (+3.8%), margin 11.6% (+50 bps); adjusted diluted EPS 5.0p (+8.7%); interim dividend 1.8p (+12.5%); organic revenue (0.7)%; net debt £188.6m, leverage 1.11×; H1 free cash flow (filing definition) £21.2m vs £25.0m prior H1; RCF increased to £175m (April 2030). Outlook: modest HORECA summer uplift vs plan; softer trading expected through H2; full-year ≥14% adjusted margin still guided.
 
-**Trend summary:** Revenue growth has slowed from FY2025 into H1 2026, but profit and margin progression continue via pricing, energy tailwinds, and efficiency capex. Leverage has risen deliberately (buybacks, dividends, capex) yet remains inside the stated 1.0–1.5× band at H1. Statutory vs adjusted earnings divergence (~570 bps on growth, per screen) reflects amortisation of acquisition intangibles and £6.0m FY2025 exceptional items (Main Market costs, reorganisation, Bristol fire, contract acquisition fees).
+**Multi-year context**
 
-**Yahoo fallback:** `financials_annual.json` aligns with filing revenue (£535.4m) and net income (£37.1m) for 2025; it was not needed for headline operating metrics. Yahoo quarterly cash flow is empty (`ttm_cashflow_suppressed`); do not use Yahoo TTM FCF for valuation—the screen already flags divergence from filing-aligned FCF.
+Companies House annual accounts in the index run 2019–2026 (group accounts type); the latest detailed consolidated KPIs in this pack come from RNS preliminary and interim statements rather than a separate full annual report body in the excerpt reviewed. Yahoo `financials_annual.json` (used only for cross-check) shows revenue progression £385.7m (2022) → £465.3m (2023) → £513.4m (2024) → £535.4m (2025) and net debt £112.4m at FY2025—consistent with filings on revenue and debt; screen current ratio 0.93 and negative working capital are consistent with filing working capital dynamics but are not a going-concern flag per directors’ statements.
+
+**Gaps / reconciliations**
+
+- Yahoo TTM quarterly cash flow is suppressed in the screen inputs; rely on filing OCF/FCF, not unverified screen TTM FCF (£22.7m).
+- Statutory EPS growth (~9.4%) vs filing adjusted growth (~15.1%) diverges by >570 bps—Lynch PEG passes on adjusted basis; statutory PEG would look less compelling.
+- H1 margin (11.6%) is seasonally below full-year 13.5%; achievement of 14% requires strong H2—management explicitly reaffirms but HORECA volume risk is elevated.
 
 ## RISKS AND RED FLAGS
-- **Cyclical / customer stress:** Filings describe hospitality customers under labour, rates, and premises cost pressure, leading to challenging renewals, churn in independent HORECA, and H1 2026 organic HORECA revenue (2.0)%; interim outlook expects softer HORECA through year-end despite cost mitigation.  
-- **Competitive / pricing:** Management notes competitive markets and price-driven churn; consolidation of smaller laundries creates acquisition opportunities but also signals margin pressure industry-wide.  
-- **Leverage and capital allocation:** Net debt and leverage rose from 0.95× at Dec 2025 to 1.11× at Jun 2026, driven by buybacks (£118.5m cumulative repurchases since 2022 per H1 filing), dividends, and capex. Covenants (leverage <3×, interest cover >4×) have substantial headroom per going-concern disclosure, but reverse stress tests in FY2025/prelims assume adjusted operating profit would need to fall to ~75% of 2025 levels before facility headroom exhausts—worth monitoring if HORECA weakens further.  
-- **Liquidity presentation:** Screen current ratio ~0.93 and financial health model fail; Jun 2026 cash and equivalents £6.4m with overdraft net (£3.3m net cash per consolidated cash flow)—typical for RCF-funded working capital models but not “fortress” liquidity.  
-- **Operational / insurance:** Bristol workwear fire (Jun 2025) and site reorganisations; insurance claims pending. Middle East conflict cited in H1 2026 as affecting luxury hotel demand and potential 2027 energy costs on unhedged volumes.  
-- **Governance / succession:** Board refresh (CFO change Oct 2025; NED/SID/audit chair transitions through 2026)— orderly but worth tracking.  
-- **Pension:** IAS 19 surplus (£7.6m at Jun 2026) reduces balance-sheet pension risk; triennial valuation ongoing—outcome not in this pack.  
-- **Going concern:** Directors affirm going concern to at least 30 Jun 2027 (prelims) / 31 Dec 2027 (interim), with mitigants including capex and dividend flex.
+**Cyclical / demand:** Filings repeatedly cite hospitality cost inflation, suppressed volumes, challenging renewals, and customer churn in HORECA (Interim H1 2026; FY2025 CEO review). H1 2026 organic HORECA revenue was (2.0)%; summer seasonality was “more modest than originally anticipated.” Workwear is more resilient but not immune to industrial slowdown.
 
-RiskTags: cyclical, competitive, leverage, liquidity, other
-RiskTags: cyclical, competitive, leverage, liquidity, other
+**Leverage and liquidity:** Net debt rose from £159.2m (Dec 2025) to £188.6m (Jun 2026) as buybacks and dividends coincided with capex; leverage 1.11× sits within the 1.0–1.5× target but up from 0.95×. The screen fails Financial Health on weak liquidity (current ratio ~0.93). Covenant headroom is described as significant (leverage covenant ≤3×; interest cover ≥4×), with reverse stress to ~75% of FY2025 adjusted operating profit before facility headroom exhaustion—directors judge that implausible (going concern to at least 31 December 2027 on interim basis).
+
+**Competitive / pricing:** Labour at 46–47% of revenue; partial pass-through of UK NI and living wage (~£6m annualised NI impact cited for 2025). Price discipline causes churn but also contract wins from exiting independents (£4.9m annualised HORECA contracts FY2025; >£5m H1 2026).
+
+**Operational / insurance:** Bristol workwear fire (Jun 2025)—remediated by H1 2026; £0.4m exceptional in FY2025; insurance claim pending.
+
+**Pension:** IAS 19 surplus £4.9m (Dec 2025) rising to £7.6m (Jun 2026); triennial valuation at 30 September 2025 underway; deficit contributions ceased pending outcome—monitor for future cash calls if actuarial view diverges from accounting surplus.
+
+**Governance / execution:** Board refresh (CFO Ryan Govender from Oct 2025; NED/SID changes 2026); Main Market admission Aug 2025. Heavy reliance on adjusted metrics (£6m FY2025 exceptions).
+
+**Macro / energy:** Forward-fixed energy mitigates near term; filings flag Middle East conflict as potential pressure on unhedged 2027+ costs.
+
+No qualified audit or going-concern qualification in available filing text; principal uncertainties are trading and leverage trajectory, not solvency near term.
+
+RiskTags: cyclical, competitive, leverage, liquidity, pension, other
+RiskTags: cyclical, competitive, leverage, liquidity, pension, other
 
 ## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate-to-heavy around results and buybacks**, with less independent deep-dive research.
+Coverage over the past year is active, skewed to results, buybacks, and hospitality sentiment—not thin.
 
-- **FY2025 results (3 March 2026):** “Johnson Service Group Reports 16% Profit Growth And Margin Expansion In FY25” (DirectorsTalk Interviews, 3 March 2026); share price reaction noted as weak despite in-line results (“Johnson Service shares plunge despite in-line results”, Sharecast, 3 March 2026).  
-- **Main Market / capital return:** Admission to Main Market (Aug 2025, in FY2025 filing); AGM launch of **£55m buyback** (May 2026)—e.g. “AGM Statement & Launch of Share Buyback Programme” (LSE/Google News, 6 May 2026); ongoing tranche/cancellation headlines (TipRanks/Kalkine, Jul–Sep 2026).  
-- **H1 2026 (8–11 September 2026):** Interim results drove a cluster of earnings-call summaries (“Johnson Service Group H1 Earnings Call Highlights”, Yahoo Finance, 9 September 2026; “Johnson Service lifts margins and investor returns despite softer HORECA trading”, TipRanks, 8 September 2026). Critical tone: “Johnson Service Group (JSG) Faces Pressure As Summer Recovery Disappoints” (londoninsider.co.uk, 9 September 2026).  
-- **Jul 2026 trading update:** Share sell-off on hospitality weakness (“Johnson Service Group Shares Slump Over 12%…”, AskTraders, 10 July 2026; “Johnson Service backs outlook despite hospitality weakness”, Proactive Investors, 10 July 2026).  
-- **Governance:** “Johnson Service Group PLC Strengthens Board Structure…” (Kalkine, 3 March 2026).  
-- **Ownership:** Institutional ownership commentary (Yahoo Finance, Feb 2026); Tweedy Browne stake ~12% after buybacks (Kalkine, 29 July 2026).
-
-No material M&A closes appear in H1 2026 filing (contract acquisitions only, ~£5m+ annualised HORECA revenue added in H1).
+- **FY2025 results (3 March 2026):** “Johnson Service Group Reports 16% Profit Growth And Margin Expansion In FY25” (DirectorsTalk Interviews); board changes and FTSE 350 context (Kalkine Media, 3 March 2026); mixed share price reaction (“Johnson Service shares plunge despite in-line results,” Sharecast, 3 March 2026).
+- **Strategy / listing:** Main Market admission and capital allocation narrative in RNS; Yahoo “Johnson Service Group H2 Earnings Call Highlights” (6 March 2026) on margin path and buybacks.
+- **Capital returns:** AGM launch of buyback (May 2026); repeated TipRanks/Kalkine pieces on tranche buybacks and share cancellations (Jul–Sep 2026); Tweedy Browne stake ~12% after buybacks (Kalkine, 29 July 2026).
+- **H1 2026 (Jul–Sep 2026):** Trading update drove ~12% share slump on hospitality weakness (AskTraders, 10 July 2026; Investing.com); interim results (8 September 2026) prompted “Margin Expansion” vs “Summer Recovery Disappoints” (Yahoo/Kalkine/londoninsider, 8–11 September 2026).
+- **Sell-side:** Berenberg target nudge (Sharecast, 19 January 2026)—third-party, not verified in filings.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: Filings confirm a cash-rich, margin-expanding compounder trading at a modest multiple and returning capital aggressively, which supports the quantitative strong buy, while HORECA cyclicality, rising leverage from buybacks, and weak current-ratio metrics warrant sizing discipline until H2 2026 margin delivery is visible.
+Rationale: Filings confirm the screen’s core story—profitable growth, strong cash generation, and shareholder returns—but HORECA cyclicality, rising leverage from buybacks, and adjusted-vs-statutory earnings/FCF definition noise temper full endorsement of the strong buy without verify-before-trade on H2 margin delivery and liquidity metrics.

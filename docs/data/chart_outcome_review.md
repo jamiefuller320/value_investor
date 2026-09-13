@@ -1,6 +1,6 @@
 # Buy-tier chart outcomes
 
-4 terrible path(s) among 63 buy-tier charts — inspect weakest names before treating timing as benign.
+4 terrible path(s) among 62 buy-tier charts — inspect weakest names before treating timing as benign.
 
 **Verdict:** Has terrible outcomes (`has_terrible`)
 
@@ -10,10 +10,10 @@ Short-term underwater is expected while the hypothesis stands. The test is the l
 
 ## Counts
 
-- Charts: 63
+- Charts: 62
 - Well timed: 11
 - Target then fade: 11
-- Underwater (no target): 25
+- Underwater (no target): 24
 - Intact positive: 5
 - Flat: 7
 - Terrible: 4
@@ -22,10 +22,10 @@ Short-term underwater is expected while the hypothesis stands. The test is the l
 
 ## Returns since recommendation
 
-- Median: -2.6%
+- Median: -2.5%
 - Mean: -2.8%
 - Range: -13.7% to +10.7%
-- Median drawdown: -4.1%
+- Median drawdown: -4.3%
 - Worst drawdown: -15.6%
 
 ## Well timed

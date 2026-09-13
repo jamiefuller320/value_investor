@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-13T06:52:30.878211+00:00",
+  "generated_at": "2026-09-13T08:06:40.259720+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1144,16 +1144,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-12T14:22:44.993546+00:00",
-    "queue_ui_updated_at": "2026-09-13T06:52:30.900210+00:00",
-    "task_count": 11,
+    "compiled_at": "2026-09-13T08:06:39.474581+00:00",
+    "queue_ui_updated_at": "2026-09-13T08:06:40.263306+00:00",
+    "task_count": 19,
     "status": {
-      "open_count": 5,
+      "open_count": 13,
       "pr_open_count": 0,
       "parked_count": 0,
       "merged_count": 6,
       "failed_count": 0,
-      "next_task_id": "eng-20260912-03",
+      "next_task_id": "eng-20260913-01",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1161,6 +1161,38 @@
       "spend_blocked": false
     },
     "queued_tasks": [
+      {
+        "id": "eng-20260913-01",
+        "area": "ingest",
+        "title": "Roll out Companies House iXBRL-first (fallback structured PDF) extraction for FTSE group accounts, replacing OCR-only strategic pages",
+        "priority": "high",
+        "priority_score": 99.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260913-02",
+        "area": "scoring",
+        "title": "Bind overlay FCF numerators to latest filing-year company-adjusted totals and emit a stale-year flag when snapshot lags (FGP.L £113.5m vs £73.8m)",
+        "priority": "high",
+        "priority_score": 99.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 2,
+        "clash_scan": "partial"
+      },
       {
         "id": "eng-20260912-03",
         "area": "ingest",
@@ -1174,7 +1206,39 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 1,
+        "effective_dispatch_rank": 3,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260913-04",
+        "area": "scoring",
+        "title": "Persist dual statutory vs management FCF dividend coverage fields on screening_snapshot when `fcf_definition_divergence` is detected",
+        "priority": "high",
+        "priority_score": 97.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 4,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260913-03",
+        "area": "ingest",
+        "title": "Populate or explicitly suppress unverified screen TTM FCF when Yahoo quarterly cashflow is empty; surface “unverified TTM” on screening_snapshot",
+        "priority": "high",
+        "priority_score": 96.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 5,
         "clash_scan": "partial"
       },
       {
@@ -1190,7 +1254,71 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 2,
+        "effective_dispatch_rank": 6,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260913-06",
+        "area": "scoring",
+        "title": "Attach run-history FCF divergence flags to `docs/data/history/run_*.json.gz` `action_note` for all Strong Buy names (HIK shows mismatch in snapshot but not in h",
+        "priority": "high",
+        "priority_score": 43.0,
+        "status": "open",
+        "source": "research_model_suggestions",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 7,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260913-08",
+        "area": "scoring",
+        "title": "Attach cross-ticker model pass/score table to gap-fill output automatically from sibling `screen_run_manifest.json` files so moat/yield ranking claims (e.g. “wi",
+        "priority": "high",
+        "priority_score": 43.0,
+        "status": "open",
+        "source": "research_model_suggestions",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 8,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260913-09",
+        "area": "scoring",
+        "title": "Emit dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) with labels in screening_snapshot to prevent conflation",
+        "priority": "high",
+        "priority_score": 43.0,
+        "status": "open",
+        "source": "research_model_suggestions",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 9,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260913-15",
+        "area": "scoring",
+        "title": "Auto-flag conviction downgrade when filing-aligned FCF, company-adjusted FCF, and screen TTM diverge by >15% AND profit-to-cash falls >15pp year-on-year (ITV: 6",
+        "priority": "high",
+        "priority_score": 43.0,
+        "status": "open",
+        "source": "research_model_suggestions",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 10,
         "clash_scan": "partial"
       },
       {
@@ -1206,7 +1334,7 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 3,
+        "effective_dispatch_rank": 11,
         "clash_scan": "partial"
       },
       {
@@ -1222,7 +1350,7 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 4,
+        "effective_dispatch_rank": 12,
         "clash_scan": "partial"
       },
       {
@@ -1238,20 +1366,20 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 5,
+        "effective_dispatch_rank": 13,
         "clash_scan": "partial"
       }
     ],
     "attention_tasks": [],
     "clash_summary": {
-      "open_task_count": 5,
-      "dispatch_eligible_count": 5,
+      "open_task_count": 13,
+      "dispatch_eligible_count": 13,
       "blocked_count": 0
     }
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-09-13T06:52:30.917540+00:00",
+    "generated_at": "2026-09-13T08:06:40.263806+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
