@@ -2740,6 +2740,23 @@ def test_refetch_companies_house_filing_bodies_vct_l_zip_ixbrl_gap(tmp_path, mon
     assert (filings_dir / "bodies" / "ch_02793780_MzUwMzgzMTQyOWFkaXF6a2N4.txt").exists()
 
 
+def test_select_best_ch_body_text_prefers_ixbrl_over_shallow_pdf():
+    from value_investor.research.filings import _select_best_ch_body_text
+
+    shallow_pdf = "Strategic report and chairman's statement " + ("overview dividend revenue " * 80)
+    ixbrl = "Defined benefit pension borrowings covenant going concern cash flow " + (
+        "segment information " * 15
+    )
+    chosen = _select_best_ch_body_text(
+        [
+            (shallow_pdf, "application/pdf"),
+            (ixbrl, "application/xhtml+xml"),
+        ]
+    )
+    assert chosen is not None
+    assert "borrowings" in chosen
+
+
 def test_fetch_companies_house_body_vct_l_zip_ixbrl_end_to_end(monkeypatch):
     """End-to-end: zip-only CH metadata yields substantive Victrex accounts text."""
     import io

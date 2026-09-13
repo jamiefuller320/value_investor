@@ -284,7 +284,8 @@ MIME_PDF = "application/pdf"
 MIME_XHTML = "application/xhtml+xml"
 MIME_ZIP = "application/zip"
 MIME_XML = "application/xml"
-DOCUMENT_MIME_PRIORITY = (MIME_PDF, MIME_XHTML, MIME_ZIP, MIME_XML)
+# iXBRL/XHTML and zip packages first; structured PDF last (OCR only when PDF lacks depth).
+DOCUMENT_MIME_PRIORITY = (MIME_XHTML, MIME_ZIP, MIME_XML, MIME_PDF)
 
 
 def fetch_document_metadata(
@@ -387,7 +388,7 @@ def iter_ch_document_downloads(
     *,
     api_key: str,
 ) -> list[tuple[bytes, str]]:
-    """Download each available MIME variant for a CH filing (PDF, then iXBRL)."""
+    """Download each available MIME variant for a CH filing (iXBRL zip/XHTML, then PDF)."""
     meta = fetch_document_metadata(document_metadata_url, api_key=api_key)
     if not meta:
         return []

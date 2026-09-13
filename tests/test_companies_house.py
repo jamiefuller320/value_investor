@@ -400,3 +400,122 @@ def test_deepen_sources_skips_missing_memo(tmp_path: Path):
     )
     assert result.skipped == ["MISSING.L"]
     assert result.deepened == []
+
+
+def test_document_mime_candidates_prefers_ixbrl_before_pdf():
+    from value_investor.research.companies_house import (
+        MIME_PDF,
+        MIME_XHTML,
+        _document_mime_candidates,
+    )
+
+    resources = {
+        MIME_PDF: {"content_length": 1000},
+        MIME_XHTML: {"content_length": 500},
+    }
+    assert _document_mime_candidates(resources) == [MIME_XHTML, MIME_PDF]
+
+
+def test_fetch_companies_house_body_ixbrl_first_skips_pdf_when_depth(monkeypatch):
+    """Regression (eng-20260913-01): group accounts use iXBRL before OCR-heavy PDF."""
+    from value_investor.research.companies_house import MIME_PDF, MIME_XHTML
+    from value_investor.research.filings import _fetch_companies_house_body
+
+    meta = {
+        "links": {"document": "/document/group/content"},
+        "resources": {
+            MIME_XHTML: {"content_length": 400_000},
+            MIME_PDF: {"content_length": 40_000_000},
+        },
+    }
+    ixbrl_html = (
+        b'<html xmlns:ix="http://www.xbrl.org/2013/inlineXBRL">'
+        b"<body><p>Defined benefit pension borrowings covenant going concern cash flow "
+        b"consolidated statement segment information related party "
+        + (b"x" * 220)
+        + b"</p></body></html>"
+    )
+    pdf_calls: list[str] = []
+
+    def fake_fetch_bytes(url, *, api_key, prefer=None, metadata=None):
+        if prefer == MIME_XHTML:
+            return ixbrl_html, MIME_XHTML
+        if prefer == MIME_PDF:
+            pdf_calls.append("pdf")
+            return b"%PDF-1.4", MIME_PDF
+        return None
+
+    monkeypatch.setenv("COMPANIES_HOUSE_API_KEY", "test-key")
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.fetch_document_metadata",
+        lambda *args, **kwargs: meta,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.fetch_document_bytes",
+        fake_fetch_bytes,
+    )
+    row = {
+        "id": "ch_group_ixbrl",
+        "document_metadata_url": "https://document-api.example/doc/group",
+    }
+    body = _fetch_companies_house_body(row)
+    assert body is not None
+    assert "borrowings" in body
+    assert pdf_calls == []
+
+
+def test_fetch_companies_house_body_prefers_ixbrl_over_shallow_strategic_pdf(monkeypatch):
+    from value_investor.research.companies_house import MIME_PDF, MIME_XHTML
+    from value_investor.research.filings import _fetch_companies_house_body
+
+    meta = {
+        "links": {"document": "/document/mixed/content"},
+        "resources": {
+            MIME_XHTML: {"content_length": 300_000},
+            MIME_PDF: {"content_length": 5_000_000},
+        },
+    }
+    shallow_pdf = (
+        "Strategic report and chairman's overview for the year ended 31 December 2025. "
+        + ("Revenue increased and the outlook remains positive. " * 40)
+    )
+    ixbrl_html = (
+        b'<html xmlns:ix="http://www.xbrl.org/2013/inlineXBRL">'
+        b"<body><p>Defined benefit pension borrowings covenant going concern cash flow "
+        b"consolidated cash flow statement " + (b"x" * 220) + b"</p></body></html>"
+    )
+
+    def fake_fetch_bytes(url, *, api_key, prefer=None, metadata=None):
+        if prefer == MIME_XHTML:
+            return ixbrl_html, MIME_XHTML
+        if prefer == MIME_PDF:
+            return b"%PDF-1.4", MIME_PDF
+        return None
+
+    monkeypatch.setenv("COMPANIES_HOUSE_API_KEY", "test-key")
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.fetch_document_metadata",
+        lambda *args, **kwargs: meta,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.fetch_document_bytes",
+        fake_fetch_bytes,
+    )
+
+    def fake_extract(raw, ct):
+        if ct == MIME_PDF:
+            return shallow_pdf
+        return "Defined benefit pension borrowings covenant going concern cash flow " + ("x" * 220)
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._extract_filing_document_text",
+        fake_extract,
+    )
+    row = {
+        "id": "ch_mixed",
+        "document_metadata_url": "https://document-api.example/doc/mixed",
+    }
+    body = _fetch_companies_house_body(row)
+    assert body is not None
+    assert "borrowings" in body
+    assert "chairman's overview" not in body.lower()
