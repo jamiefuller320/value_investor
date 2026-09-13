@@ -108,6 +108,17 @@ WORKFLOW_SCHEDULES = {
         ),
         "workflow": "paper-learning-review.yml",
     },
+    "learning_director": {
+        "name": "Learning Director review",
+        "cron": "55 10 * * 0",
+        "cadence": (
+            "Sunday 10:55 UTC after paper-learning-review; **primary: cron-job.org** "
+            "55 10 * * 0. Observe-only regime/convergence/vision synthesis. "
+            "Disable via docs/data/paper_automation/review_policy.json. "
+            "docs/ops/learning-director.md; scheduling: docs/ops/orchestrator-cron.md."
+        ),
+        "workflow": "learning-director-review.yml",
+    },
     "ops_monitor": {
         "name": "FTSE Ops Monitor",
         "cron": "45 7 * * *",

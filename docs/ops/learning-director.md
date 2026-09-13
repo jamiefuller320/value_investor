@@ -68,8 +68,14 @@ Set `enabled: false` before live capital cutover.
 
 ## Weekly schedule
 
-GitHub Actions: `.github/workflows/learning-director-review.yml` — Sunday **10:55 UTC**
-(after paper-learning-review at 10:45).
+| Trigger | Schedule |
+|---------|----------|
+| **cron-job.org (primary)** | Sunday **10:55 UTC** (`55 10 * * 0`) |
+| GitHub cron (backup) | Sunday 10:55 UTC |
+| Manual | Actions → **FTSE Learning Director Review** |
+
+Runs after paper-learning-review at 10:45. Same-day skip if already succeeded.
+See [orchestrator-cron.md](orchestrator-cron.md).
 
 ## Human gate
 

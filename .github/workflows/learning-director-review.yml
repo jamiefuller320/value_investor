@@ -2,6 +2,8 @@ name: FTSE Learning Director Review
 
 # Observe-only weekly orchestration synthesis (regime, convergence, vision roadmap).
 # Disable via docs/data/paper_automation/review_policy.json before live capital.
+# Primary trigger: cron-job.org Sunday 10:55 UTC (see docs/ops/orchestrator-cron.md).
+# GitHub schedule is backup; same-day skip if workflow_dispatch already succeeded.
 on:
   schedule:
     - cron: "55 10 * * 0"

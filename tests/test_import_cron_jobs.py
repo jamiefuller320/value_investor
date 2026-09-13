@@ -205,6 +205,27 @@ def test_import_cron_jobs_epoch0_weekday_local_open_slots():
         assert "08:25" not in payload["title"]
 
 
+def test_import_cron_jobs_dry_run_learning_director_review():
+    script = Path("scripts/import_cron_jobs.py")
+    proc = subprocess.run(
+        [sys.executable, str(script), "--job", "learning-director-review", "--dry-run", "--json"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    rows = json.loads(proc.stdout)
+    assert len(rows) == 1
+    payload = rows[0]["payload"]["job"]
+    assert payload["title"] == "FTSE learning director review (Sunday)"
+    assert payload["requestMethod"] == 1
+    assert payload["schedule"]["hours"] == [10]
+    assert payload["schedule"]["minutes"] == [55]
+    assert payload["schedule"]["wdays"] == [0]
+    assert "learning-director-review.yml" in payload["url"]
+    body = json.loads(payload["extendedData"]["body"])
+    assert body["ref"] == "main"
+
+
 def test_import_cron_jobs_dry_run_ops_monitor():
     script = Path("scripts/import_cron_jobs.py")
     proc = subprocess.run(
