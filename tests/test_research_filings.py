@@ -94,6 +94,7 @@ from value_investor.research.ingest import (
     quarterly_income_has_usable_series,
     summarize_yahoo_quarterly_for_snapshot,
     supplement_company_metrics_cashflow,
+    sync_snapshot_fcf_screen_ttm_verification,
 )
 
 
@@ -351,6 +352,62 @@ def test_enrich_screening_snapshot_with_yahoo_quarterly():
     enriched = enrich_screening_snapshot_with_yahoo_quarterly(snapshot, financials)
     assert enriched["yahoo_quarterly"]["quarterly_income"][0]["period_label"] == "2025-04-30"
     assert enriched["yahoo_quarterly"]["ttm_cashflow_suppressed"] is True
+
+
+def test_sync_snapshot_fcf_screen_ttm_verification_from_action_note():
+    """Ingest must surface unverified screen TTM on ``fcf`` when quarterlies are empty."""
+    snapshot = {
+        "ticker": "GAMA.L",
+        "signal": "hold",
+        "fcf": None,
+        "action_note": "Hold — neutral timing | FCF filing-aligned $64.1M vs screen TTM $87.6M",
+    }
+    financials = {
+        "ticker": "GAMA.L",
+        "quarterly_cashflow": {},
+        "cashflow_metrics": {
+            "free_cashflow": 64_100_000.0,
+            "ttm_cashflow_suppressed": True,
+            "ttm_cashflow_suppressed_reason": "quarterly_cashflow_empty",
+        },
+    }
+    enriched = sync_snapshot_fcf_screen_ttm_verification(snapshot, financials)
+    assert enriched["fcf"]["screen_ttm_unverified"] is True
+    assert enriched["fcf"]["screen_ttm"] == pytest.approx(87_600_000.0)
+
+
+def test_fetch_annual_financials_resolves_quarterly_cashflow_from_get_cashflow(monkeypatch):
+    cashflow_df = pd.DataFrame(
+        {"2025": [119_000_000.0]},
+        index=["Free Cash Flow"],
+    )
+    quarterly_cashflow_df = pd.DataFrame(
+        {
+            pd.Timestamp("2025-06-30"): [214_000_000.0, 92_000_000.0],
+            pd.Timestamp("2024-12-31"): [150_000_000.0, 70_000_000.0],
+            pd.Timestamp("2024-09-30"): [120_000_000.0, 60_000_000.0],
+            pd.Timestamp("2024-06-30"): [110_000_000.0, 55_000_000.0],
+        },
+        index=["Operating Cash Flow", "Free Cash Flow"],
+    )
+
+    class DummyTicker:
+        financials = pd.DataFrame()
+        balance_sheet = pd.DataFrame()
+        cashflow = cashflow_df
+        quarterly_cashflow = pd.DataFrame()
+        quarterly_cash_flow = pd.DataFrame()
+
+        def get_cashflow(self, *, freq: str = "annual"):
+            if freq == "quarterly":
+                return quarterly_cashflow_df
+            return cashflow_df
+
+    monkeypatch.setattr("value_investor.research.ingest.yf.Ticker", lambda _t: DummyTicker())
+    payload = fetch_annual_financials("HIK.L")
+    assert payload["quarterly_cashflow_source"] == "get_cashflow(quarterly)"
+    assert payload["cashflow_metrics"]["free_cashflow_ttm"] == pytest.approx(277_000_000.0)
+    assert "ttm_cashflow_suppressed" not in payload["cashflow_metrics"]
 
 
 def test_operating_cashflow_aliases_from_yahoo_labels():

@@ -497,17 +497,55 @@ def summarize_yahoo_quarterly_for_snapshot(financials: dict[str, Any]) -> dict[s
     return summary
 
 
+def sync_snapshot_fcf_screen_ttm_verification(
+    snapshot: dict[str, Any],
+    financials: dict[str, Any],
+) -> dict[str, Any]:
+    """Mark ``fcf.screen_ttm_unverified`` when Yahoo quarterlies cannot support screen TTM."""
+    cashflow_metrics = financials.get("cashflow_metrics") or {}
+    quarterly_empty = not quarterly_cashflow_has_usable_series(
+        financials.get("quarterly_cashflow") or {}
+    )
+    suppressed = bool(cashflow_metrics.get("ttm_cashflow_suppressed")) or quarterly_empty
+    if not suppressed:
+        return snapshot
+
+    from value_investor.scoring.fcf import resolve_screen_ttm_bases, screen_ttm_from_row
+
+    updated = dict(snapshot)
+    existing_fcf = updated.get("fcf")
+    fcf = dict(existing_fcf) if isinstance(existing_fcf, dict) else {}
+
+    screen_ttm = fcf.get("screen_ttm")
+    if screen_ttm is None:
+        screen_ttm = screen_ttm_from_row(pd.Series(updated))
+
+    bases = resolve_screen_ttm_bases(
+        screen_ttm=screen_ttm,
+        financials=financials,
+        filing_aligned=fcf.get("filing_aligned"),
+        company_adjusted=fcf.get("company_adjusted"),
+    )
+    if not bases["screen_ttm_unverified"]:
+        return snapshot
+
+    if bases["screen_ttm"] is not None:
+        fcf["screen_ttm"] = bases["screen_ttm"]
+    fcf["screen_ttm_unverified"] = True
+    updated["fcf"] = fcf
+    return updated
+
+
 def enrich_screening_snapshot_with_yahoo_quarterly(
     snapshot: dict[str, Any],
     financials: dict[str, Any],
 ) -> dict[str, Any]:
     """Attach period-labelled Yahoo quarterly rows to a screening snapshot dict."""
-    yahoo_quarterly = summarize_yahoo_quarterly_for_snapshot(financials)
-    if not yahoo_quarterly:
-        return snapshot
     updated = dict(snapshot)
-    updated["yahoo_quarterly"] = yahoo_quarterly
-    return updated
+    yahoo_quarterly = summarize_yahoo_quarterly_for_snapshot(financials)
+    if yahoo_quarterly:
+        updated["yahoo_quarterly"] = yahoo_quarterly
+    return sync_snapshot_fcf_screen_ttm_verification(updated, financials)
 
 
 def fetch_annual_financials(ticker: str, *, years: int = FINANCIAL_YEARS) -> dict[str, Any]:
