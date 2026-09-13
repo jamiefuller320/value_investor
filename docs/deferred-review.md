@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T08:16:29+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T09:21:55+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -169,6 +169,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N119 | **Drop narrative memos; keep structured verdict-only research for automation** | If human-readable decision packs are no longer a success criterion, stop spending weekly_ops on essay sections. Emit only machine fields the paper gate uses (research_verdict, confidence, risk tags) or replace the LLM gate with filing-derived overlays. Same automation payload at lower cost; prose is not load-bearing for stage 2b. | Interim goal formally deprioritises stage-2 decision packs, or weekly_ops is binding while AI-judgment still underperforms ^FTSE after costs |
 | N120 | **Do not switch memos to on-request while accumulate gate is live** | Pure on-request memo generation would starve weekday AI-judgment of research_verdict=accumulate labels. Keep scheduled verdict production (or a filing-derived replacement) until that gate changes. | Primary track no longer requires research_verdict=accumulate, or a cheap always-on structured verdict path ships |
 | N121 | **Universe post-settle sift → decision-look queue (not rememo)** | Systematic initial sift so ALL screened names stay under surveillance: % / rate-of-change / calendar-age gates enqueue a cheap decision-making look (research vs trade vs ignore) — NOT mandatory rememo or narrative deep-review. Do not conflate with holdings surveil_position/hypothesis integrity (owned only), analysis_tasks (model experiments), or body-lag rememo caps. Park until a thin queue artifact + triage semantics are designed; keep rememo density guards intact. | Phase C (L368) freeze writer is live OR trajectory/near-miss panels still miss weekday price-shock triage on non-held full-screen names; then implement sift→decision_look_queue only (no auto-rememo) |
+| N122 | **Do not extend Phase C PIT autopsy beyond FTSE AI-judgment yet** | Phase C freeze/scorer/attribution is designed for the live FTSE weekday AI-judgment rebalance_log. Admitted markets have research stores and epoch-0 buy_tier_level logs, and euro_depth has thin weekly AI paper, but shard AI-judgment + decision-review apply are not live. Do not fork autopsy to all markets until FTSE Phase C ships and doctrine opens a shard AI track (euro_depth first), with local-benchmark optimality. | FTSE L368 freeze writer is live with KPI-complete freezes for >=8 weeks AND a shard AI-judgment track is doctrine-approved (euro_depth Phase 2/3), with stable rebalance_log candidates/buy_tier coverage on that shard |
 
 ---
 
