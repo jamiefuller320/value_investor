@@ -50,11 +50,10 @@ ALTERNATE_SOURCE_CATALOG: dict[str, list[dict[str, str]]] = {
     "uk": [
         {
             "id": "companies_house_accounts",
-            "label": "Companies House filed accounts (iXBRL-first, PDF fallback)",
+            "label": "Companies House filed accounts / annual report PDF",
             "why": (
-                "RNS body extracts are often thin; filed iXBRL/XHTML or PDF accounts hold "
-                "consolidated statements plus pension, borrowings/covenant, cash-flow, and "
-                "segment notes (structured extract before OCR on strategic front-matter)"
+                "RNS body extracts are often thin; filed PDF/iXBRL accounts hold consolidated "
+                "statements plus pension, borrowings/covenant, cash-flow, and segment notes"
             ),
         },
         {
