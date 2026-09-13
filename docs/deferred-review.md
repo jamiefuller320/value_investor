@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-12T11:26:04+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T08:08:33+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -166,6 +166,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N116 | **Collapse duplicate FCF action-note ticker tasks into one scoring task** | so_what_closure fans out one Honour FCF action-note engineering task per ticker with the same allowed_paths. Each agent re-implements the overlay and often dumps a research snapshot that trips the path guard. | The next so_what compile emits more than three open fcf_note_without_overlay tasks, or the IMB/DNLM overlay is merged and later tickers still open new PRs |
 | N117 | **Shared concurrency group across eng-queue and epoch0-weekday** | ASX 00:45 UTC overlaps engineering-queue schedule. A shared concurrency group would serialize writers, but pull --rebase is the established cheaper fix; avoid extra queueing unless races persist after rebase. | epoch0-weekday still push-rejects after Sync main before commit is on main for several ASX slots. |
 | N118 | **Whole-universe buy-now-only epoch-0 meta book** | Do not run a combined mega-book that admits only triggered buy-now names alongside per-market buy_tier_level epoch-0. Cross-market P&L confounds local benchmarks/costs/sessions; buy-now is meant as an overlay on the wide level book, not a tighter live admit. Optional later: offline meta rollup of cycle/gate stats across equal-support admitted shards once marks exist. | Multiple admitted markets have sufficient epoch-0 plus buy-not-now near-miss marks under equal-support (N103), and a cross-market analytics question remains after per-shard counterfactuals |
+| N119 | **Daily post-settle multi-market stock review scan on %/rate/time** | Do not add a new after-settle scanner that rememos or deep-reviews every market name when price %, rate, or calendar age trips. Post-settle paper-auto surveillance, body-lag rememo, Sunday boundary/news panels, and admitted epoch-0 marks already cover the useful slices; a spray review path fights L367/N77/N96/N114 and dilutes P1 live-path utilization. | L368 PIT autopsy freeze is shipping OR L190 underwater agent review is justified by repeated Sunday human gaps OR Phase 3 weekday shard pilot needs a holdings-only event gate with measured weekly_ops cost |
 
 ---
 
@@ -343,6 +344,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L352 | **Cap Sunday rememo separately from research_hard_cap** | Sunday research_hard_cap is 100 and weekly_ops is ~$84 this week. If euro_depth rememo eligibility ever spikes, Layer C could dump a rememo burst into the same envelope as the Sunday email. Prefer the existing weekday catch-up trigger (cap 3, raise only when backlog >15) over a Sunday dump; add a Sunday rememo sub-cap only if focus rememo_eligible exceeds a handful. | euro_depth Sunday rememo_eligible_count is above 5, or a future focus market shows rememo_eligible near research_hard_cap |
 | L358 | **Investegate numeric RNS-id slug title_mismatch** | Investegate announcement URLs ending in numeric RNS ids fail IR allowlist live-fetch title_mismatch even when narrative body fetches; hunters then need SKIP or alternate hosts. | Next wave of UK Investegate-heavy hunter failures, or when tuning _validate_ir_allowlist_body_content |
 | L359 | **Densify held-vs-market for admitted shards when chart packs exist** | Live FTSE may densify from docs/data/charts; admitted epoch-0 books stay on sparse equity_curve marks because allow_chart_densify is FTSE-only and shard chart packs are missing. Revisit once per-market buy-tier charts are published. | Admitted markets publish buy-tier chart JSON comparable to docs/data/charts, or weekday marks need gap-fill between sparse equity prints |
+| L365 | **Holdings-scoped price/thesis event rememo (not full-market scan)** | If event-driven research is revisited, scope it to paper/live holdings plus buy-tier with existing surveil fields (stop/target, thesis_status, signal downgrade) and keep body-lag as the primary rememo gate. Do not invent free-floating %/rate thresholds for whole-market daily scans. | L190 revisit trigger fires or hypothesis_integrity Sunday gate repeatedly needs deeper fact checks than cards provide |
 
 ### Ops / reliability
 
