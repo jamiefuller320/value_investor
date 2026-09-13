@@ -140,6 +140,7 @@ FCF_DIVERGENCE_THRESHOLD = 0.50
 FCF_FILING_SCREEN_DIVERGENCE_THRESHOLD = 0.25
 FCF_UNIVERSE_DIVERGENCE_THRESHOLD = 0.15
 FCF_DEFINITION_DIVERGENCE_THRESHOLD = 0.15
+PROFIT_TO_CASH_YOY_DECLINE_PP_THRESHOLD = 15.0
 FCF_YIELD_COMPANY_TOLERANCE = 0.25
 FCF_MAJORITY_AGREE_THRESHOLD = 0.25
 FCF_SIGN_DIVERGENCE_MIN_ABS = 50_000_000.0
@@ -386,6 +387,115 @@ def ocf_definition_diverges(
     if statutory == 0:
         return gross > 0
     return (gross - statutory) / abs(statutory) > threshold
+
+
+_PROFIT_TO_CASH_RATIO_PAIR_RES = (
+    re.compile(
+        r"profit[- ]to[- ]cash(?:\s+conversion)?(?:\s+ratio)?\s+"
+        r"(\d+(?:\.\d+)?)\s*%\s+(\d+(?:\.\d+)?)\s*%",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"profit[- ]to[- ]cash(?:\s+conversion)?\s+"
+        r"(\d+(?:\.\d+)?)\s*%\s*\(\s*\d{4}\s*:\s*(\d+(?:\.\d+)?)\s*%\s*\)",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"profit[- ]to[- ]cash(?:\s+conversion)?\s+was\s+(\d+(?:\.\d+)?)\s*%\s*"
+        r"\(\s*\d{4}\s*:\s*(\d+(?:\.\d+)?)\s*%\s*\)",
+        re.IGNORECASE,
+    ),
+)
+
+
+def parse_profit_to_cash_ratio_pair(text: str) -> tuple[float, float] | None:
+    """Return (current %, prior %) from FY-style profit-to-cash disclosure lines."""
+    if not text or not text.strip():
+        return None
+    for pattern in _PROFIT_TO_CASH_RATIO_PAIR_RES:
+        match = pattern.search(text)
+        if match is None:
+            continue
+        try:
+            current = float(match.group(1))
+            prior = float(match.group(2))
+        except (TypeError, ValueError):
+            continue
+        if not (0 < current <= 200 and 0 < prior <= 200):
+            continue
+        return current, prior
+    return None
+
+
+def profit_to_cash_yoy_decline_pp(current_pct: float, prior_pct: float) -> float:
+    """Year-on-year decline in profit-to-cash conversion (percentage points)."""
+    return float(prior_pct) - float(current_pct)
+
+
+def extract_profit_to_cash_yoy_decline_pp_from_bodies(
+    bodies: list[str],
+    *,
+    min_decline_pp: float = PROFIT_TO_CASH_YOY_DECLINE_PP_THRESHOLD,
+) -> float | None:
+    """Latest-year YoY profit-to-cash decline (pp) found across cached filing bodies."""
+    _, _, decline = _select_profit_to_cash_yoy_decline(bodies, min_decline_pp=min_decline_pp)
+    return decline
+
+
+def _select_profit_to_cash_yoy_decline(
+    bodies: list[str],
+    *,
+    min_decline_pp: float = PROFIT_TO_CASH_YOY_DECLINE_PP_THRESHOLD,
+) -> tuple[float | None, float | None, float | None]:
+    """Pick the most recent FY ratio (lowest current %) with material YoY decline."""
+    best_pair: tuple[float, float] | None = None
+    best_decline: float | None = None
+    for body in bodies:
+        pair = parse_profit_to_cash_ratio_pair(body)
+        if pair is None:
+            continue
+        decline = profit_to_cash_yoy_decline_pp(pair[0], pair[1])
+        if decline < min_decline_pp:
+            continue
+        if best_pair is None or pair[0] < best_pair[0]:
+            best_pair = pair
+            best_decline = decline
+    if best_pair is None or best_decline is None:
+        return None, None, None
+    return best_pair[0], best_pair[1], best_decline
+
+
+def profit_to_cash_yoy_decline_for_ticker(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+    min_decline_pp: float = PROFIT_TO_CASH_YOY_DECLINE_PP_THRESHOLD,
+) -> tuple[float | None, float | None, float | None]:
+    """Return (current %, prior %, decline pp) when filing prose exceeds ``min_decline_pp``."""
+    bodies = load_filing_bodies_for_ticker(ticker, output_dir=output_dir)
+    return _select_profit_to_cash_yoy_decline(bodies, min_decline_pp=min_decline_pp)
+
+
+def fcf_three_way_mismatch_flagged(
+    *,
+    filing_aligned: float | None,
+    screen_ttm: float | None,
+    company_adjusted: float | None,
+    filing_currency: str = "USD",
+    company_adjusted_currency: str | None = None,
+    threshold: float = FCF_UNIVERSE_DIVERGENCE_THRESHOLD,
+) -> bool:
+    """True when all three FCF bases are present and at least one pair exceeds ``threshold``."""
+    if filing_aligned is None or screen_ttm is None or company_adjusted is None:
+        return False
+    return fcf_universe_divergence_flagged(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        company_adjusted=company_adjusted,
+        filing_currency=filing_currency,
+        company_adjusted_currency=company_adjusted_currency,
+        threshold=threshold,
+    )
 
 
 def fcf_universe_divergence_flagged(

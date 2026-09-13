@@ -23,6 +23,7 @@ from value_investor.scoring.fcf import (
     fcf_basis_divergence_flagged,
     fcf_bundle_from_persisted_report,
     fcf_filing_screen_mismatch,
+    fcf_three_way_mismatch_flagged,
     fcf_universe_divergence_flagged,
     fcf_values_diverge,
     labelled_fcf_dividend_coverage_for_snapshot,
@@ -31,7 +32,9 @@ from value_investor.scoring.fcf import (
     parse_adjusted_eps_growth_pct,
     parse_company_adjusted_fcf,
     parse_filing_aligned_from_action_note,
+    parse_profit_to_cash_ratio_pair,
     parse_screen_ttm_from_action_note,
+    profit_to_cash_yoy_decline_pp,
     reconcile_fcf,
     reconcile_fcf_for_ticker,
 )
@@ -715,6 +718,27 @@ def test_reconcile_fcf_prefers_filing_aligned_ocf_capex():
     assert bundle["cashflow_metrics_free_cashflow"] == 119_000_000.0
 
 
+def test_parse_profit_to_cash_ratio_pair_itv_fy_style():
+    pair = parse_profit_to_cash_ratio_pair("Profit to cash ratio 65% 83%")
+    assert pair == (65.0, 83.0)
+    assert profit_to_cash_yoy_decline_pp(pair[0], pair[1]) == pytest.approx(18.0)
+
+
+def test_fcf_three_way_mismatch_requires_all_three_bases():
+    assert not fcf_three_way_mismatch_flagged(
+        filing_aligned=148_000_000.0,
+        screen_ttm=280_000_000.0,
+        company_adjusted=None,
+    )
+    assert fcf_three_way_mismatch_flagged(
+        filing_aligned=148_000_000.0,
+        screen_ttm=280_000_000.0,
+        company_adjusted=187_000_000.0,
+        filing_currency="GBP",
+        company_adjusted_currency="GBP",
+    )
+
+
 def test_fcf_values_diverge_on_sign_or_magnitude():
     assert fcf_values_diverge(119_000_000.0, -66_125_000.0) is True
     assert fcf_values_diverge(1_000_000.0, -1_000_000.0) is False
@@ -1370,6 +1394,80 @@ def test_fcf_basis_overlay_honours_action_note_predicate_below_25pct_filing_gap(
         },
     )
     assert "FCF basis mismatch" in note
+
+
+def _itv_three_way_research_sources(tmp_path: Path) -> None:
+    sources = tmp_path / "research" / "ITV.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    financials = {
+        "ticker": "ITV.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 202_000_000.0,
+                "Capital Expenditure": -54_000_000.0,
+                "Free Cash Flow": 148_000_000.0,
+            }
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    (filings / "fy_results.txt").write_text(
+        "Group adjusted free cash flow of £187.0m\nProfit to cash ratio 65% 83%\n",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings / "fy_results.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_build_company_reports_fcf_three_way_conviction_overlay_itv_style(tmp_path: Path):
+    _itv_three_way_research_sources(tmp_path)
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="ITV.L",
+                name="ITV plc",
+                sector="Communication Services",
+                signal="buy",
+                conviction_score=0.8,
+                free_cashflow=148_000_000.0,
+                free_cashflow_screen_ttm=280_000_000.0,
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "model_id": "graham_net_net",
+                "model_name": "Graham",
+                "passed": True,
+                "score": 0.7,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+
+    assert snapshot["fcf_three_way_conviction_overlay"] is True
+    assert snapshot["fcf_three_way_conviction_overlay_detail"]["profit_to_cash_yoy_decline_pp"] == (
+        pytest.approx(18.0)
+    )
+    assert "fcf three-way mismatch" in snapshot["action_note"].lower()
+    assert snapshot["conviction_score"] == pytest.approx(0.8 * 0.85 * 0.85)
 
 
 def test_build_company_reports_exports_fcf_basis_overlay_for_bowl(tmp_path: Path):
