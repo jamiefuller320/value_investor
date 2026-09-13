@@ -22,12 +22,16 @@ VERDICT_LABELS = {
 
 
 def _verdict_change_note(doc: ResearchDocument) -> str | None:
-    if doc.mode not in {
-        "weekly_update",
-        "gap_fill",
-        "structured_verdict_update",
-        "structured_verdict_gap_fill",
-    } or not doc.weekly_updates:
+    if (
+        doc.mode
+        not in {
+            "weekly_update",
+            "gap_fill",
+            "structured_verdict_update",
+            "structured_verdict_gap_fill",
+        }
+        or not doc.weekly_updates
+    ):
         return None
     latest = doc.weekly_updates[-1]
     prior_verdict = latest.get("prior_verdict")

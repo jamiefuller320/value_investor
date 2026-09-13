@@ -152,9 +152,7 @@ def check_phase_b_slim(
         )
     elif structured > 0:
         status = "fail"
-        detail = (
-            f"Only {structured} structured-verdict docs (need ≥{MIN_STRUCTURED_DOCS})."
-        )
+        detail = f"Only {structured} structured-verdict docs (need ≥{MIN_STRUCTURED_DOCS})."
     else:
         status = "fail"
         detail = "No structured_verdict* modes in research store yet."
@@ -200,11 +198,7 @@ def check_rebalance_log_span(ai_judgment_dir: Path) -> ReadinessCheck:
             _parse_ts(row.get("logged_at"))
             or _parse_ts(row.get("as_of"))
             or _parse_ts(row.get("run_at"))
-            or (
-                _parse_ts(screen_source.get("run_at"))
-                if isinstance(screen_source, dict)
-                else None
-            )
+            or (_parse_ts(screen_source.get("run_at")) if isinstance(screen_source, dict) else None)
         )
         if ts is not None:
             timestamps.append(ts)

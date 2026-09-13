@@ -27,7 +27,6 @@ def _screen_signal_label(signal: str) -> str:
     return labels.get(signal, signal.replace("_", " "))
 
 
-
 RATIONALE_MAX_CHARS = 240
 STRUCTURED_VERDICT_MODES = frozenset(
     {"structured_verdict", "structured_verdict_update", "structured_verdict_gap_fill"}
