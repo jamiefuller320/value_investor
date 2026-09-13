@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-13T15:17:02+00:00",
+  "updated_at": "2026-09-13T17:10:59+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8519,6 +8519,23 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-12afee91-b598-4e19-985d-4b76f9593333",
       "added_at": "2026-09-13T11:29:31+00:00"
+    },
+    {
+      "id": "L380",
+      "category": "later",
+      "section": "research",
+      "title": "Stop counting thin memos as already-researched without widening rememo_reason",
+      "summary": "Coverage accounting currently treats thin/zero-body first-pass memos as already researched, which fires thin_memo_counted_as_coverage. Sunday agents are locked to ingest-then-body-lag rememo. A later ladder/dedupe change could stop counting thin files as done without changing rememo_reason or daily rememo caps.",
+      "revisit_when": "After euro_depth (or the then-current focus) ingest has raised rememo_eligible_count above 0 on a Sunday, or thin_memo_counted_as_coverage still fires with rememo_eligible_count 0 after several ingest weeks.",
+      "tags": [
+        "rememo",
+        "phase-b",
+        "coverage",
+        "system-gaps"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-51fa395c-616b-48c3-b552-4c822b99d0b0",
+      "added_at": "2026-09-13T17:10:59+00:00"
     }
   ],
   "fragments": [

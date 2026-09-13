@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from value_investor.learning_director import (
+    _build_learning_director_prompt,
     build_learning_director_payload,
     compile_horizon_fragments,
     compile_learning_director_tasks,
@@ -329,3 +330,12 @@ def test_review_policy_learning_director_defaults_enabled(tmp_path: Path):
     policy = load_review_policy(policy_path)
     assert learning_director_enabled(policy_path) is True
     assert policy["learning_director"]["enabled"] is True
+
+
+def test_learning_director_prompt_locks_thin_memo_to_body_lag_not_policy_experiment():
+    prompt = _build_learning_director_prompt(Path("payload.json"))
+    assert "thin_memo_counted_as_coverage" in prompt
+    assert "ingest_then_body_lag_rememo" in prompt
+    assert "Do not invent a rememo-policy experiment" in prompt
+    assert "widening rememo_reason" in prompt
+    assert "body-lag slim after ingest" in prompt

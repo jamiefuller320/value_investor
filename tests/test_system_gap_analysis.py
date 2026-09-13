@@ -7,6 +7,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from value_investor.system_gap_analysis import (
+    THIN_MEMO_DO_NOT,
+    THIN_MEMO_REMEDY,
     build_system_gap_snapshot,
     slim_system_gaps_for_dashboard,
     slim_system_gaps_for_review,
@@ -130,6 +132,11 @@ def test_snapshot_flags_thin_memos_and_unused_budget(tmp_path: Path):
     assert "thin_memo_counted_as_coverage" in ids
     assert "research_skipped_already_done" in ids
     assert "unused_budget_zero_research" in ids
+    flag = next(row for row in snapshot["flags"] if row["id"] == "thin_memo_counted_as_coverage")
+    assert flag["evidence"]["remedy"] == THIN_MEMO_REMEDY
+    assert flag["evidence"]["do_not"] == THIN_MEMO_DO_NOT
+    assert "Do not widen rememo_reason" in flag["summary"]
+    assert "body-lag rememo" in flag["summary"]
 
 
 def test_snapshot_flags_thin_library_memos_when_ladder_executed(tmp_path: Path):
@@ -178,6 +185,10 @@ def test_snapshot_flags_thin_library_memos_when_ladder_executed(tmp_path: Path):
     assert flag["severity"] == "medium"
     assert flag["evidence"]["executed"] == 1
     assert flag["evidence"]["thin_or_zero_body"] == 6
+    assert flag["evidence"]["remedy"] == THIN_MEMO_REMEDY
+    assert flag["evidence"]["do_not"] == THIN_MEMO_DO_NOT
+    assert "Do not widen rememo_reason" in flag["summary"]
+    assert "Phase B slim verdicts" in flag["summary"]
 
 
 def test_snapshot_flags_persist_hole_and_stale_learning_clock(tmp_path: Path):

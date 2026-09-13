@@ -56,3 +56,11 @@ def test_each_section_has_human_or_automated_tasks(section):
         assert task.get("title")
         assert "automated" in task
         assert task.get("doc_path")
+
+
+def test_sunday_analysis_tasks_locks_thin_memo_promotion():
+    payload = load_human_tasks_checklist()
+    tasks = [task for section in payload["sections"] for task in section["tasks"]]
+    row = next(task for task in tasks if task["id"] == "sunday-analysis-tasks")
+    assert "thin_memo_counted_as_coverage" in row["summary"]
+    assert "rememo-eligibility widening" in row["summary"]
