@@ -178,6 +178,26 @@ def test_planned_sources_includes_ir_presentation_for_ebo_ax():
     assert len(fetch_filings_ir_allowlist("EBO.AX")) >= 4
 
 
+def test_planned_sources_includes_ir_presentation_for_tsx60_su_to():
+    """eng-20260912-21: SU.TO IWB uses SEC exhibit IR allowlist when suncor.com is bot-gated."""
+    from value_investor.research.filings import fetch_filings_ir_allowlist
+
+    inventory = {
+        "thin": ["filings_bodies"],
+        "filings_summary": {"with_body": 26, "total": 43},
+    }
+    planned = _planned_sources_for_ticker(
+        ticker="SU.TO",
+        market="tsx60",
+        inventory=inventory,
+        ingest_suggestions=[],
+        filings_with_body=26,
+    )
+    planned_ids = {row["id"] for row in planned}
+    assert "company_ir_presentation" in planned_ids
+    assert len(fetch_filings_ir_allowlist("SU.TO")) == 5
+
+
 def test_planned_sources_includes_ir_presentation_for_asx200_unmeasured():
     from value_investor.research.filings import fetch_filings_ir_allowlist
 

@@ -72,3 +72,65 @@ def test_ingest_euro_updates_summary_when_ir_merge_adds_indexes(
 
     assert int(meta["filings_summary"]["total"]) == 2
     assert meta["filings_sources"] == ["ir_allowlist"]
+
+
+@patch("value_investor.research.ingest.fetch_google_news_rss", return_value=[])
+@patch("value_investor.research.ingest.fetch_yfinance_news", return_value=[])
+@patch(
+    "value_investor.research.ingest.fetch_annual_financials", return_value={"income_statement": {}}
+)
+@patch("value_investor.research.filings.ingest_filings")
+@patch("value_investor.research.filings.refetch_ir_allowlist_filing_bodies")
+@patch(
+    "value_investor.research.filings.refetch_residual_filing_bodies", return_value={"fetched": 0}
+)
+def test_ingest_tsx60_runs_ir_allowlist_refetch_like_euro(
+    _mock_residual,
+    mock_ir_refetch,
+    mock_ingest_filings,
+    _mock_financials,
+    _mock_yf_news,
+    _mock_google_news,
+    tmp_path: Path,
+):
+    """eng-20260912-21: TSX ingest must merge/fetch builtin IR allowlist (SU.TO SEC exhibits)."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    index_path = filings_dir / "filings_index.json"
+    index_path.write_text(
+        '{"summary": {"total": 43, "with_body": 26, "annual": 5}, '
+        '"sources_used": ["sec_edgar"], "filings": []}',
+        encoding="utf-8",
+    )
+    mock_ingest_filings.return_value = {
+        "filings_index_path": str(index_path),
+        "filings_summary": {"total": 43, "with_body": 26, "annual": 5},
+        "filings_sources": ["sec_edgar"],
+    }
+
+    def _ir_refetch_side_effect(filings_dir, ticker, **kwargs):
+        index_path.write_text(
+            '{"summary": {"total": 48, "with_body": 31, "annual": 5}, '
+            '"sources_used": ["sec_edgar", "ir_allowlist"], "filings": []}',
+            encoding="utf-8",
+        )
+        return {
+            "fetched": 5,
+            "merge": {"added": 5, "total_allowlist": 5},
+        }
+
+    mock_ir_refetch.side_effect = _ir_refetch_side_effect
+
+    meta = ingest_research_sources(
+        ticker="SU.TO",
+        company_name="Suncor Energy Inc.",
+        screening_snapshot={"ticker": "SU.TO", "name": "Suncor Energy Inc.", "signal": "buy"},
+        sources_dir=tmp_path,
+        market="tsx60",
+        deepen_history=False,
+    )
+
+    mock_ir_refetch.assert_called_once()
+    assert mock_ir_refetch.call_args.kwargs["ticker"] == "SU.TO"
+    assert int(meta["filings_summary"]["with_body"]) == 31
+    assert "ir_allowlist" in meta["filings_sources"]
