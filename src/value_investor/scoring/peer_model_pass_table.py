@@ -97,6 +97,9 @@ def build_peer_model_pass_table(
             for row in models
             if row.get("model_id")
         }
+        scores = {
+            str(row.get("model_id")): row.get("score") for row in models if row.get("model_id")
+        }
         model_ids.update(passes.keys())
         peers.append(
             {
@@ -105,6 +108,7 @@ def build_peer_model_pass_table(
                 "models_passed": manifest.get("models_passed")
                 or ticker_signal.get("models_passed"),
                 "model_passes": passes,
+                "model_scores": scores,
             }
         )
 
@@ -113,6 +117,7 @@ def build_peer_model_pass_table(
     model_rows: list[dict[str, Any]] = []
     for model_id in sorted(model_ids):
         peer_passes = {peer["ticker"]: peer["model_passes"].get(model_id) for peer in peers}
+        peer_scores = {peer["ticker"]: peer["model_scores"].get(model_id) for peer in peers}
         passed_count = sum(1 for value in peer_passes.values() if value)
         model_rows.append(
             {
@@ -120,6 +125,7 @@ def build_peer_model_pass_table(
                 "passed_count": passed_count,
                 "peer_count": len(peers),
                 "peer_passes": peer_passes,
+                "peer_scores": peer_scores,
             }
         )
 
@@ -134,14 +140,107 @@ def build_peer_model_pass_table(
     }
 
 
+def ensure_sector_peer_manifests(
+    ticker: str,
+    *,
+    sector: str | None = None,
+    output_dir: Path | None = None,
+    market: str | None = None,
+) -> int:
+    """
+    Write missing ``screen_run_manifest.json`` files for sector buy-tier peers.
+
+    Gap-fill often attaches a manifest for one ticker only; sibling manifests
+    are materialized from the latest committed history run so peer tables work.
+    """
+    from value_investor.research.gap_fill_sources import (
+        _latest_history_run_paths,
+        attach_screen_run_manifest,
+    )
+    from value_investor.storage import COMMITTED_HISTORY_DIR
+
+    ticker = ticker.strip().upper()
+    roots = [root for root in _research_roots(output_dir) if root.is_dir()]
+    if not roots:
+        return 0
+
+    anchor_manifest: dict[str, Any] | None = None
+    for root in roots:
+        anchor_manifest = _load_manifest(root / ticker / "sources" / "screen_run_manifest.json")
+        if anchor_manifest is not None:
+            break
+
+    primary_root = roots[0]
+    if anchor_manifest is None:
+        sources = primary_root / ticker / "sources"
+        attach_screen_run_manifest(sources, ticker, market=market or "ftse350")
+        anchor_manifest = _load_manifest(sources / "screen_run_manifest.json")
+
+    if not anchor_manifest:
+        return 0
+
+    run_at = str(anchor_manifest.get("run_at") or "")
+    ticker_signal = anchor_manifest.get("ticker_signal") or {}
+    effective_sector = sector or str(ticker_signal.get("sector") or "")
+    if not run_at or not effective_sector:
+        return 0
+
+    paired = _latest_history_run_paths(COMMITTED_HISTORY_DIR)
+    if paired is None:
+        return 0
+    run_path, _models_path = paired
+    try:
+        run_payload = read_json(run_path)
+    except (OSError, ValueError, TypeError):
+        return 0
+    if str(run_payload.get("run_at") or "") != run_at:
+        return 0
+
+    peer_tickers: set[str] = set()
+    for row in run_payload.get("signals") or []:
+        if str(row.get("sector") or "") != effective_sector:
+            continue
+        peer_signal = str(row.get("adjusted_signal") or row.get("signal") or "").lower()
+        if peer_signal not in _BUY_SIGNALS:
+            continue
+        peer = str(row.get("ticker") or "").strip().upper()
+        if peer:
+            peer_tickers.add(peer)
+
+    written = 0
+    for peer in sorted(peer_tickers):
+        already_present = False
+        for root in roots:
+            manifest = _load_manifest(root / peer / "sources" / "screen_run_manifest.json")
+            if manifest is not None and str(manifest.get("run_at") or "") == run_at:
+                already_present = True
+                break
+        if already_present:
+            continue
+        attach_screen_run_manifest(
+            primary_root / peer / "sources",
+            peer,
+            market=market or "ftse350",
+        )
+        written += 1
+    return written
+
+
 def attach_peer_model_pass_table(
     sources_dir: Path,
     ticker: str,
     *,
     sector: str | None = None,
     output_dir: Path | None = None,
+    market: str | None = None,
 ) -> dict[str, Any]:
     """Write ``peer_model_pass_table.json`` beside gap-fill source packs."""
+    ensure_sector_peer_manifests(
+        ticker,
+        sector=sector,
+        output_dir=output_dir,
+        market=market,
+    )
     table = build_peer_model_pass_table(
         ticker,
         sector=sector,

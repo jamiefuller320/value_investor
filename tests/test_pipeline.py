@@ -630,6 +630,128 @@ def test_research_store_save_refreshes_screening_snapshot(tmp_path: Path):
     assert written["adjusted_signal"] == "hold"
 
 
+def test_prepare_gap_fill_attaches_peer_model_pass_table(tmp_path: Path, monkeypatch):
+    from unittest.mock import patch
+
+    from value_investor.research.gap_fill_sources import prepare_gap_fill_source_pack
+
+    history_dir = tmp_path / "history"
+    history_dir.mkdir()
+    monkeypatch.setattr(
+        "value_investor.research.gap_fill_sources.COMMITTED_HISTORY_DIR",
+        history_dir,
+    )
+    monkeypatch.setattr("value_investor.storage.COMMITTED_HISTORY_DIR", history_dir)
+    run_at = "2026-09-02T10:22:48.084715+00:00"
+    write_json(
+        history_dir / "run_20260902_102248.json.gz",
+        {
+            "run_at": run_at,
+            "signals": [
+                {
+                    "ticker": "MEGP.L",
+                    "signal": "strong_buy",
+                    "adjusted_signal": "buy",
+                    "sector": "Industrials",
+                    "models_passed": 15.0,
+                },
+                {
+                    "ticker": "FGP.L",
+                    "signal": "strong_buy",
+                    "adjusted_signal": "strong_buy",
+                    "sector": "Industrials",
+                    "models_passed": 14.0,
+                },
+            ],
+        },
+        compress=True,
+    )
+    write_json(
+        history_dir / "models_20260902_102248.json.gz",
+        {
+            "run_at": run_at,
+            "models": [
+                {
+                    "ticker": "MEGP.L",
+                    "model_id": "economic_moat",
+                    "passed": True,
+                    "score": 0.9,
+                },
+                {
+                    "ticker": "FGP.L",
+                    "model_id": "economic_moat",
+                    "passed": False,
+                    "score": 0.2,
+                },
+            ],
+        },
+        compress=True,
+    )
+
+    output_dir = tmp_path / "output"
+    sources_dir = output_dir / "research" / "MEGP.L" / "sources"
+    sources_dir.mkdir(parents=True)
+    write_json(
+        sources_dir / "screening_snapshot.json",
+        {"ticker": "MEGP.L", "signal": "strong_buy", "sector": "Industrials"},
+        compact=True,
+    )
+    filings_dir = sources_dir / "filings"
+    filings_dir.mkdir(parents=True)
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"summary": {"with_body": 0}, "filings": []}),
+        encoding="utf-8",
+    )
+
+    with (
+        patch(
+            "value_investor.research.gap_fill_sources.refetch_missing_filing_bodies",
+            return_value={"fetched": 0, "with_body_after": 0},
+        ),
+        patch(
+            "value_investor.research.gap_fill_sources.refetch_uk_primary_filing_bodies",
+            return_value={
+                "fetched": 0,
+                "companies_house": {},
+                "rns": {"investegate": {}, "ticker_rns": {}},
+            },
+        ),
+        patch(
+            "value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist",
+            return_value=[],
+        ),
+        patch(
+            "value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies",
+            return_value={"fetched": 0, "with_body_after": 0},
+        ),
+        patch(
+            "value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news",
+            return_value=[],
+        ),
+    ):
+        pack = prepare_gap_fill_source_pack(
+            ticker="MEGP.L",
+            company_name="ME Group International plc",
+            sources_dir=sources_dir,
+            open_questions=["widest moat in group"],
+            market="ftse350",
+        )
+
+    table_path = sources_dir / "peer_model_pass_table.json"
+    assert table_path.exists()
+    table = json.loads(table_path.read_text(encoding="utf-8"))
+    assert table["peer_count"] == 2
+    moat_row = next(row for row in table["model_rows"] if row["model_id"] == "economic_moat")
+    assert moat_row["peer_passes"]["MEGP.L"] is True
+    assert moat_row["peer_passes"]["FGP.L"] is False
+    assert moat_row["peer_scores"]["MEGP.L"] == pytest.approx(0.9)
+    assert pack["peer_model_pass_table"]["attached"] is True
+    assert (output_dir / "research" / "FGP.L" / "sources" / "screen_run_manifest.json").exists()
+
+    snapshot = json.loads((sources_dir / "screening_snapshot.json").read_text(encoding="utf-8"))
+    assert snapshot["peer_model_pass_table"]["peer_count"] == 2
+
+
 def _consumer_defensive_universe_with_plantation() -> pd.DataFrame:
     """Plantation misclassified as Consumer Defensive: cheap vs FMCG, not vs full universe."""
     return pd.DataFrame(
