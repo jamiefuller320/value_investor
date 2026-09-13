@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-12T11:26:04+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T07:13:56+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -166,6 +166,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N116 | **Collapse duplicate FCF action-note ticker tasks into one scoring task** | so_what_closure fans out one Honour FCF action-note engineering task per ticker with the same allowed_paths. Each agent re-implements the overlay and often dumps a research snapshot that trips the path guard. | The next so_what compile emits more than three open fcf_note_without_overlay tasks, or the IMB/DNLM overlay is merged and later tickers still open new PRs |
 | N117 | **Shared concurrency group across eng-queue and epoch0-weekday** | ASX 00:45 UTC overlaps engineering-queue schedule. A shared concurrency group would serialize writers, but pull --rebase is the established cheaper fix; avoid extra queueing unless races persist after rebase. | epoch0-weekday still push-rejects after Sync main before commit is on main for several ASX slots. |
 | N118 | **Whole-universe buy-now-only epoch-0 meta book** | Do not run a combined mega-book that admits only triggered buy-now names alongside per-market buy_tier_level epoch-0. Cross-market P&L confounds local benchmarks/costs/sessions; buy-now is meant as an overlay on the wide level book, not a tighter live admit. Optional later: offline meta rollup of cycle/gate stats across equal-support admitted shards once marks exist. | Multiple admitted markets have sufficient epoch-0 plus buy-not-now near-miss marks under equal-support (N103), and a cross-market analytics question remains after per-shard counterfactuals |
+| N119 | **Drop narrative memos; keep structured verdict-only research for automation** | If human-readable decision packs are no longer a success criterion, stop spending weekly_ops on essay sections. Emit only machine fields the paper gate uses (research_verdict, confidence, risk tags) or replace the LLM gate with filing-derived overlays. Same automation payload at lower cost; prose is not load-bearing for stage 2b. | Interim goal formally deprioritises stage-2 decision packs, or weekly_ops is binding while AI-judgment still underperforms ^FTSE after costs |
 
 ---
 
@@ -343,6 +344,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L352 | **Cap Sunday rememo separately from research_hard_cap** | Sunday research_hard_cap is 100 and weekly_ops is ~$84 this week. If euro_depth rememo eligibility ever spikes, Layer C could dump a rememo burst into the same envelope as the Sunday email. Prefer the existing weekday catch-up trigger (cap 3, raise only when backlog >15) over a Sunday dump; add a Sunday rememo sub-cap only if focus rememo_eligible exceeds a handful. | euro_depth Sunday rememo_eligible_count is above 5, or a future focus market shows rememo_eligible near research_hard_cap |
 | L358 | **Investegate numeric RNS-id slug title_mismatch** | Investegate announcement URLs ending in numeric RNS ids fail IR allowlist live-fetch title_mismatch even when narrative body fetches; hunters then need SKIP or alternate hosts. | Next wave of UK Investegate-heavy hunter failures, or when tuning _validate_ir_allowlist_body_content |
 | L359 | **Densify held-vs-market for admitted shards when chart packs exist** | Live FTSE may densify from docs/data/charts; admitted epoch-0 books stay on sparse equity_curve marks because allow_chart_densify is FTSE-only and shard chart packs are missing. Revisit once per-market buy-tier charts are published. | Admitted markets publish buy-tier chart JSON comparable to docs/data/charts, or weekday marks need gap-fill between sparse equity prints |
+| L365 | **Reallocate memo spend into filing-derived machine features first** | Under an automation-only criterion, prefer P1 work that changes what paper-auto sees without narrative: filing bodies, FCF basis bridges, EPS overlays, overlay bind freshness. LLM judgment is secondary once those features are thick on FTSE holdings and buy-tier. | FTSE buy-tier filing-body parity is green and FCF/EPS overlays are bound on weekday reports, yet AI-judgment still lacks edge vs rules |
 
 ### Ops / reliability
 
