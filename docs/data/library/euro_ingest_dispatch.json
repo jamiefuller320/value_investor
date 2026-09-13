@@ -2,7 +2,7 @@
   "market_id": "euro_depth",
   "focus_market": "euro_depth",
   "mode": "sprint",
-  "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=1, thin=14, indexed_without_body=25)",
+  "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=1, thin=11, indexed_without_body=25)",
   "ingest_parity_met": false,
   "ingest_exhausted": false,
   "ingest_sprint_complete": false,
@@ -23,19 +23,19 @@
   "current_phase": 2,
   "next_phase": 2,
   "phase_blockers": [
-    "need 4 weekly batch marks (have 2)",
+    "need 4 weekly batch marks (have 3)",
     "primary track must beat rules control on latest review"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-12T19:34:22.964100+00:00",
+    "snapshot_at": "2026-09-13T06:52:04.870436+00:00",
     "market_id": "euro_depth",
-    "buy_tier_count": 48,
+    "buy_tier_count": 45,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 1,
-    "thin_body_buy_tier": 14,
+    "thin_body_buy_tier": 11,
     "indexed_without_body": 25,
     "bodies_min": 1,
-    "bodies_median": 3,
+    "bodies_median": 3.0,
     "bodies_max": 98,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -52,12 +52,9 @@
       "ESSITY-B.ST",
       "SKA-B.ST",
       "MUV2.DE",
-      "APAM.AS",
-      "ASSA-B.ST",
       "UCB.BR",
-      "BAS.DE",
-      "GVR.IR",
-      "NBA.LS"
+      "APAM.AS",
+      "BAS.DE"
     ],
     "indexed_without_body_tickers": [
       "SGO.PA",
@@ -93,13 +90,11 @@
       "WIE.VI"
     ],
     "parked_count": 11,
-    "effective_thin_body_buy_tier": 5,
+    "effective_thin_body_buy_tier": 3,
     "effective_thin_body_tickers": [
       "ACKB.BR",
       "DTE.DE",
-      "ESSITY-B.ST",
-      "ASSA-B.ST",
-      "NBA.LS"
+      "ESSITY-B.ST"
     ],
     "effective_indexed_without_body": 8,
     "effective_indexed_without_body_tickers": [
@@ -120,7 +115,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-09-12T19:34:22.965241+00:00",
+  "evaluated_at": "2026-09-13T06:52:04.871899+00:00",
   "maintenance_markets": [
     "asx200",
     "ftse_smallcap",
@@ -157,7 +152,7 @@
         "tsx60 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-12T19:34:38.749429+00:00",
+        "snapshot_at": "2026-09-13T06:52:15.085643+00:00",
         "market_id": "tsx60",
         "buy_tier_count": 18,
         "unmeasured_buy_tier": 0,
@@ -173,22 +168,22 @@
         "zero_body_tickers": [],
         "thin_body_tickers": [
           "SU.TO",
-          "GIB-A.TO",
-          "NTR.TO"
+          "NTR.TO",
+          "GIB-A.TO"
         ],
         "indexed_without_body_tickers": [
           "SU.TO",
-          "GIB-A.TO",
           "NTR.TO",
           "CNQ.TO",
+          "GIB-A.TO",
           "CVE.TO",
           "TRI.TO"
         ],
         "indexed_without_body_by_ticker": {
           "SU.TO": 25,
-          "GIB-A.TO": 11,
           "NTR.TO": 18,
           "CNQ.TO": 10,
+          "GIB-A.TO": 11,
           "CVE.TO": 3,
           "TRI.TO": 30
         },
@@ -223,7 +218,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-12T19:34:38.749866+00:00",
+      "evaluated_at": "2026-09-13T06:52:15.086296+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -242,7 +237,7 @@
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 19,
+    "hour_utc": 6,
     "skip_stream_2_now": false,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",
@@ -265,7 +260,9 @@
     }
   },
   "scheduler_stream_1_markets": [
-    "asx200"
+    "sp500",
+    "asx200",
+    "ftse_smallcap"
   ],
   "scheduler_stream_2_markets": [
     "tsx60"
