@@ -339,4 +339,3 @@ def test_learning_director_prompt_locks_thin_memo_to_body_lag_not_policy_experim
     assert "Do not invent a rememo-policy experiment" in prompt
     assert "widening rememo_reason" in prompt
     assert "body-lag slim after ingest" in prompt
-

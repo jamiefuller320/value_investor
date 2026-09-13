@@ -468,4 +468,3 @@ def test_analysis_prompt_locks_thin_memo_to_ingest_not_rememo_widen():
     assert "forcing rememo_eligible" in prompt
     assert "widening rememo_reason" in prompt
     assert "Phase B rememo_reason lock" in prompt
-

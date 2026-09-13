@@ -36,8 +36,7 @@ HIGH_REMAINING_USD = 20.0
 THIN_MEMO_REMEDY = "ingest_then_body_lag_rememo"
 THIN_MEMO_DO_NOT = "widen_rememo_reason_for_thin_without_new_bodies"
 THIN_MEMO_REMEDY_SUMMARY = (
-    " Do not widen rememo_reason; thicken filings then body-lag rememo "
-    "(Phase B slim verdicts)."
+    " Do not widen rememo_reason; thicken filings then body-lag rememo (Phase B slim verdicts)."
 )
 
 PROBE_QUESTIONS = (
