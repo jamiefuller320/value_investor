@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T15:17:02+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T17:05:02+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -357,6 +357,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L365 | **Reallocate memo spend into filing-derived machine features first** | Feeder for L367 Phase C / L368: prefer P1 work that thickens the PIT information set paper-auto and autopsy can see without narrative — filing bodies, FCF basis bridges, EPS overlays, overlay bind freshness. These features matter because they improve decision inputs and gap attribution, not as memo substitutes for humans. | FTSE buy-tier filing-body parity is green and FCF/EPS overlays are bound on weekday reports, yet AI-judgment still lacks edge vs rules |
 | L366 | **Brief-reasons buy cards plus on-demand full memo** | Dashboard/email already show screen brief summaries and decision packs; Read memo exists. Add an explicit generate-memo action for humans only after the always-on accumulate gate is replaced by verdict-only research or filing-derived overlays (N119/L365). | N119 or L365 is promoted, or require_research_accumulate is retired from the primary AI-judgment track |
 | L376 | **Lifecycle board card opens memo / decision pack** | Ticker cards on the Lifecycle tab are currently display-only. Wiring click-through to the existing memo dialog or decision pack would make Sunday review of a column faster. | After the Lifecycle tab is used in a Sunday review and cards are the usual way to pick a name |
+| L379 | **Stop counting thin memos as already-researched without widening rememo_reason** | Coverage accounting currently treats thin/zero-body first-pass memos as already researched, which fires thin_memo_counted_as_coverage. Sunday agents are locked to ingest-then-body-lag rememo. A later ladder/dedupe change could stop counting thin files as done without changing rememo_reason or daily rememo caps. | After euro_depth (or the then-current focus) ingest has raised rememo_eligible_count above 0 on a Sunday, or thin_memo_counted_as_coverage still fires with rememo_eligible_count 0 after several ingest weeks. |
 
 ### Ops / reliability
 
