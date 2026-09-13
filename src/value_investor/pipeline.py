@@ -60,6 +60,7 @@ from value_investor.scoring.fcf import (
 )
 from value_investor.scoring.fcf_basis_overlay import (
     enrich_signals_with_fcf_basis_overlay,
+    enrich_signals_with_run_history_fcf_action_notes,
     honour_fcf_action_notes_on_signals,
 )
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
@@ -443,6 +444,10 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     signals_out = enrich_signals_with_fcf_basis_overlay(
         signals_out,
         result.model_results,
+        output_dir=output_dir,
+    )
+    signals_out = enrich_signals_with_run_history_fcf_action_notes(
+        signals_out,
         output_dir=output_dir,
     )
     signals_out = honour_fcf_action_notes_on_signals(signals_out)

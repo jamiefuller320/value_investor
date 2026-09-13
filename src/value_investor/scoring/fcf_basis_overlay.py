@@ -344,3 +344,92 @@ def honour_fcf_action_notes_on_signals(signals: pd.DataFrame) -> pd.DataFrame:
         out.at[index, "conviction_score"] = conviction
 
     return out
+
+
+def enrich_signals_with_run_history_fcf_action_notes(
+    signals: pd.DataFrame,
+    *,
+    output_dir: Path | None = None,
+) -> pd.DataFrame:
+    """Append FCF divergence flags to strong_buy ``action_note`` for run snapshots."""
+    if signals.empty or "action_note" not in signals.columns:
+        return signals
+
+    from value_investor.scoring.earnings_growth_overlay import (
+        build_earnings_growth_overlay,
+        format_earnings_growth_bps_warning,
+    )
+    from value_investor.scoring.fcf import (
+        append_fcf_divergence_to_action_note,
+        ocf_definition_diverges,
+        overlay_free_cashflow_from_bundle,
+        reconcile_fcf_for_ticker,
+    )
+
+    out = signals.copy()
+    for index, row in out.iterrows():
+        if str(row.get("signal") or "") != "strong_buy":
+            continue
+
+        ticker = str(row["ticker"])
+        screen_ttm = screen_ttm_from_row(row)
+        fcf_bundle = reconcile_fcf_for_ticker(
+            ticker,
+            screen_ttm=screen_ttm,
+            output_dir=output_dir,
+        )
+        canonical = overlay_free_cashflow_from_bundle(row, fcf_bundle)
+
+        coverage_gross_raw = row.get("fcf_dividend_coverage_gross")
+        fcf_dividend_coverage_gross = (
+            float(coverage_gross_raw)
+            if coverage_gross_raw is not None
+            and not (isinstance(coverage_gross_raw, float) and pd.isna(coverage_gross_raw))
+            else None
+        )
+        coverage_net_raw = row.get("fcf_dividend_coverage_net")
+        fcf_dividend_coverage_net = (
+            float(coverage_net_raw)
+            if coverage_net_raw is not None
+            and not (isinstance(coverage_net_raw, float) and pd.isna(coverage_net_raw))
+            else None
+        )
+        definition_div_raw = row.get("fcf_definition_divergence")
+        gross_ocf_raw = row.get("operating_cashflow_gross")
+        operating_cashflow_gross = (
+            float(gross_ocf_raw)
+            if gross_ocf_raw is not None
+            and not (isinstance(gross_ocf_raw, float) and pd.isna(gross_ocf_raw))
+            else None
+        )
+        operating_cashflow_raw = row.get("operating_cashflow")
+        operating_cashflow = (
+            float(operating_cashflow_raw)
+            if operating_cashflow_raw is not None
+            and not (isinstance(operating_cashflow_raw, float) and pd.isna(operating_cashflow_raw))
+            else None
+        )
+        fcf_definition_divergence = (
+            bool(definition_div_raw)
+            if definition_div_raw is not None
+            and not (isinstance(definition_div_raw, float) and pd.isna(definition_div_raw))
+            else ocf_definition_diverges(operating_cashflow, operating_cashflow_gross)
+        )
+
+        action_note = append_fcf_divergence_to_action_note(
+            str(row.get("action_note") or ""),
+            canonical=canonical,
+            screen_ttm=screen_ttm,
+            fcf_bundle=fcf_bundle,
+            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+            fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
+            fcf_definition_divergence=fcf_definition_divergence,
+        )
+        bps_warning = format_earnings_growth_bps_warning(build_earnings_growth_overlay(row))
+        if bps_warning and bps_warning not in action_note:
+            action_note = f"{action_note} | {bps_warning}" if action_note else bps_warning
+
+        if action_note != str(row.get("action_note") or ""):
+            out.at[index, "action_note"] = action_note
+
+    return out
