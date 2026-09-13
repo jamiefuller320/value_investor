@@ -44,8 +44,7 @@ def finding_from_experiment(row: dict[str, Any] | None) -> dict[str, Any]:
     return {
         "leading_cadence": evidence.get("leading_cadence") or row.get("leading_cadence"),
         "ready_for_cadence_analysis": bool(
-            evidence.get("ready_for_cadence_analysis")
-            or row.get("ready_for_cadence_analysis")
+            evidence.get("ready_for_cadence_analysis") or row.get("ready_for_cadence_analysis")
         ),
         "scored_count": evidence.get("scored_count"),
         "tracks_with_closed": evidence.get("tracks_with_closed"),

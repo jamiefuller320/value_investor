@@ -100,7 +100,7 @@ def evaluate_entry_dca_adoption_plan(
     first_entry = first_entry_by_track(rollup)
     winners = winning_cadence_by_track(rollup)
     leading = str(rollup.get("leading_cadence") or "") or None
-    ready_cadence = bool((_as_dict(rollup.get("readiness")).get("ready_for_cadence_analysis")))
+    ready_cadence = bool(_as_dict(rollup.get("readiness")).get("ready_for_cadence_analysis"))
     finding = {
         "leading_cadence": leading,
         "ready_for_cadence_analysis": ready_cadence,
@@ -128,9 +128,7 @@ def evaluate_entry_dca_adoption_plan(
         fair_winners[track_id] = winner
         if count > 0 and winner not in {None, TARGET_CADENCE}:
             fair_ok = False
-    out_of_sample_ready = bool(
-        acked and cadence_stable and live_first_entry_ok and fair_ok
-    )
+    out_of_sample_ready = bool(acked and cadence_stable and live_first_entry_ok and fair_ok)
 
     graduated = _track_metrics(review, "graduated_allocation")
     graduated_marks = int(graduated.get("equity_marks") or 0)

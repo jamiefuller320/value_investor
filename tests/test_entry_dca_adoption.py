@@ -87,7 +87,10 @@ def test_plan_stays_on_out_of_sample_after_ack(tmp_path: Path):
     record_ack(
         data,
         experiment_id="entry_dca_overlay",
-        finding={"leading_cadence": "dca_4x_weekly", "first_entry_by_track": {"ai_judgment": 1, "rules": 0}},
+        finding={
+            "leading_cadence": "dca_4x_weekly",
+            "first_entry_by_track": {"ai_judgment": 1, "rules": 0},
+        },
     )
     plan = evaluate_entry_dca_adoption_plan(data_dir=data, paper_root=paper)
     by_id = {row["id"]: row for row in plan["stages"]}

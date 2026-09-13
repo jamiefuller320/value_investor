@@ -401,4 +401,3 @@ def test_ack_cli_records_and_refreshes(tmp_path: Path):
     assert ledger["summary"]["human_ack_pending"] == 0
     plan = json.loads((data_dir / "entry_dca_adoption_plan.json").read_text(encoding="utf-8"))
     assert plan["current_stage"] == "out_of_sample_first_entry"
-

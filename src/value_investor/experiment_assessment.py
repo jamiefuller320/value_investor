@@ -20,12 +20,12 @@ from value_investor.entry_dca_adoption import (
     slim_entry_dca_adoption,
     write_entry_dca_adoption_plan,
 )
-from value_investor.experiment_acks import ACKS_FILENAME, apply_ack_to_experiment, load_acks
 from value_investor.exclusion_ladder_replay import (
     discover_exclusion_shadow_step_ids,
     exclusion_shadow_subdir,
     exclusion_shadow_track_id,
 )
+from value_investor.experiment_acks import ACKS_FILENAME, apply_ack_to_experiment, load_acks
 from value_investor.paper_automation import AI_JUDGMENT_TRACK_ID, CONFIG_FILENAME, AutomationConfig
 from value_investor.storage import COMMITTED_HISTORY_DIR, read_json, write_json
 from value_investor.trajectory_evidence import build_model_focus_candidates
