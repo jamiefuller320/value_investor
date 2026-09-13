@@ -7145,6 +7145,34 @@ def test_parked_source_hunter_ntr_to_tsx60_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_tsx60_su_to_builtins(tmp_path: Path):
+    """Regression: SU.TO IWB — SEC 40-F / Q2 6-K financial exhibit HTML (suncor.com is 403)."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("SU.TO", path=allowlist_path)
+    assert len(rows) == 5
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("su-20251231xex99d1.htm" in url for url in urls)
+    assert any("su-20250630xex99d1.htm" in url for url in urls)
+    assert {row["period"] for row in rows} <= {"annual", "interim", "other"}
+    assert len(fetch_filings_ir_allowlist("SU", path=allowlist_path)) == 5
+
+
+def test_parked_source_hunter_su_to_tsx60_has_fetchable_ir():
+    """eng-20260912-21: SU.TO has live-fetchable SEC statutory exhibit HTML."""
+    assert "SU.TO" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("SU.TO")
+    assert len(rows) == 5
+    urls = [row["url"] for row in rows]
+    assert all("sec.gov" in url for url in urls)
+    mda_url = next(url for url in urls if "su-20250630xex99d1.htm" in url)
+    body = fetch_filing_body(mda_url)
+    assert body
+    assert len(body) >= 50000
+
+
 def test_parked_source_hunter_ultp_l_ftse_smallcap_skip():
     """eng-20260911-06: ULTP.L Investegate RNS fails allowlist live-fetch title_mismatch; IR bot-gated."""
     assert "ULTP.L" in PARKED_SOURCE_HUNTER_SKIP

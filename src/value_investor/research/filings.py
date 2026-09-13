@@ -406,6 +406,22 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.sec.gov/Archives/edgar/data/1725964/000119312526081326/d56746d40f.htm",
         "https://www.sec.gov/Archives/edgar/data/1725964/000119312526081326/d56746dex9931.pdf",
     ],
+    # tsx60 IWB blocker — SU.TO gap-closure had no allowlist; suncor.com IR PDFs are bot-gated (403).
+    # SEC FY2025 40-F financial-statement exhibits + Q2 2026 interim MD&A packs (live-fetchable HTML).
+    "SU.TO": [
+        "https://www.sec.gov/Archives/edgar/data/311337/000110465926020411/su-20251231xex99d1.htm",
+        "https://www.sec.gov/Archives/edgar/data/311337/000110465926020411/su-20251231xex99d2.htm",
+        "https://www.sec.gov/Archives/edgar/data/311337/000110465926020411/su-20251231xex99d3.htm",
+        "https://www.sec.gov/Archives/edgar/data/311337/000155837025010330/su-20250630xex99d1.htm",
+        "https://www.sec.gov/Archives/edgar/data/311337/000155837025010330/su-20250630xex99d2.htm",
+    ],
+    "SU": [
+        "https://www.sec.gov/Archives/edgar/data/311337/000110465926020411/su-20251231xex99d1.htm",
+        "https://www.sec.gov/Archives/edgar/data/311337/000110465926020411/su-20251231xex99d2.htm",
+        "https://www.sec.gov/Archives/edgar/data/311337/000110465926020411/su-20251231xex99d3.htm",
+        "https://www.sec.gov/Archives/edgar/data/311337/000155837025010330/su-20250630xex99d1.htm",
+        "https://www.sec.gov/Archives/edgar/data/311337/000155837025010330/su-20250630xex99d2.htm",
+    ],
 }
 
 # Parked leftover tickers where a source-hunter pass found no fetchable IR/statutory URL.
