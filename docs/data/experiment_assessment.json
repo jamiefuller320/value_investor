@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "observe_only": true,
-  "updated_at": "2026-09-13T08:06:40.662408+00:00",
+  "updated_at": "2026-09-13T17:41:11.168212+00:00",
   "data_dir": "docs/data",
   "paper_root": "docs/data/paper_automation",
   "gates": {
@@ -19,7 +19,7 @@
   },
   "context": {
     "history_run_count": 15,
-    "backtest_run_count": 14,
+    "backtest_run_count": 15,
     "trajectory_labeled_events": 336,
     "exit_shadow_closed_total": 0,
     "experimental_track_count": 2,
@@ -27,12 +27,12 @@
     "entry_dca_ready": true
   },
   "summary": {
-    "proposed": 0,
-    "fail": 4,
-    "observing": 0,
-    "continue": 5,
     "recommend": 1,
-    "human_ack_pending": 1,
+    "continue": 5,
+    "proposed": 0,
+    "observing": 0,
+    "fail": 4,
+    "human_ack_pending": 0,
     "total": 10
   },
   "experiments": [
@@ -182,7 +182,7 @@
       "pipeline": "position_lifecycle",
       "status": "recommend",
       "source_status": "ready",
-      "human_ack_required": true,
+      "human_ack_required": false,
       "forward_evidence": {
         "source": "learning_tracks_entry_dca.json",
         "scored_count": 22,
@@ -192,7 +192,10 @@
         "model_independent_hint": true
       },
       "evidence_path": "docs/data/paper_automation/learning_tracks_entry_dca.json",
-      "initiated_at": "2026-09-04T08:29:30.298700+00:00"
+      "initiated_at": "2026-09-04T08:29:30.298700+00:00",
+      "human_acked": true,
+      "acked_at": "2026-09-13T17:41:11.138086+00:00",
+      "ack_decision": "ack_observe"
     },
     {
       "experiment_id": "ana-20260728-04",
@@ -298,7 +301,7 @@
         },
         "archive": {
           "history_run_count": 15,
-          "backtest_run_count": 14,
+          "backtest_run_count": 15,
           "simulation_ready": true
         },
         "loser_cards": {
@@ -325,24 +328,58 @@
       "evidence_path": "docs/data/learning_director_tasks.json"
     }
   ],
-  "recommendations": [
-    {
-      "experiment_id": "entry_dca_overlay",
-      "kind": "lifecycle_overlay",
-      "title": "Model-independent entry DCA / graduated-entry cadence",
-      "pipeline": "position_lifecycle",
-      "track_id": null,
-      "gate_marks": null,
-      "gate_excess_after_costs": null,
-      "area": "paper_churn"
-    }
-  ],
+  "recommendations": [],
+  "entry_dca_adoption": {
+    "observe_only": true,
+    "acked": true,
+    "current_stage": "out_of_sample_first_entry",
+    "target_cadence": "dca_4x_weekly",
+    "do_not": [
+      "Execute DCA on paper books until paper_execute_graduated is ready",
+      "Change starter fraction from this overlay",
+      "Spawn a per-model DCA paper book",
+      "Apply DCA to primary AI judgment or live size while beat_market is false"
+    ],
+    "stages": [
+      {
+        "id": "acked",
+        "status": "done",
+        "ready": true,
+        "revisit_when": "Human records ftse-experiment-assess ack for entry_dca_overlay",
+        "do_not": "Ack is not adopt — do not execute DCA or change starter fraction"
+      },
+      {
+        "id": "out_of_sample_first_entry",
+        "status": "open",
+        "ready": false,
+        "revisit_when": "ai_judgment first_entry>=3, rules first_entry>=1, leading still dca_4x_weekly, fair tracks still agree",
+        "do_not": "Do not treat failing calibration shadows as live-book confirmation"
+      },
+      {
+        "id": "paper_execute_graduated",
+        "status": "blocked",
+        "ready": false,
+        "revisit_when": "out_of_sample_first_entry ready AND graduated_allocation equity_marks>=8",
+        "do_not": "Do not execute on primary, rules, or a new DCA paper book"
+      },
+      {
+        "id": "primary_or_live",
+        "status": "blocked",
+        "ready": false,
+        "revisit_when": "Fair-cost primary beat_market is true AND paper_execute_graduated ready",
+        "do_not": "Overlay end-value vs lump-sum is not adoption truth vs ^FTSE"
+      }
+    ],
+    "note": "Human review/implementation plan for the 2026-09-13 overlay recommend. Never auto-apply. Revisit on Sunday or when first-entry windows close."
+  },
   "task_sync": null,
   "sources": {
     "calibration_shadow_endurance": "docs/data/paper_automation/calibration_shadow_endurance.json",
     "analysis_tasks": "docs/data/analysis_tasks.json",
     "paper_learning_tasks": "docs/data/paper_learning_tasks.json",
     "learning_director_tasks": "docs/data/learning_director_tasks.json",
-    "trajectory_evidence_review": "docs/data/trajectory_evidence_review.json"
+    "trajectory_evidence_review": "docs/data/trajectory_evidence_review.json",
+    "experiment_acks": "docs/data/experiment_acks.json",
+    "entry_dca_adoption_plan": "docs/data/entry_dca_adoption_plan.json"
   }
 }
