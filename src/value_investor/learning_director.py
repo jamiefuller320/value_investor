@@ -400,6 +400,11 @@ Do not activate a new paper book for DCA — the overlay is the experiment.
 When system_gaps.flags is non-empty, name the highest-severity flag and whether
 research *production* is being mistaken for learning-path *application*
 (written≠wired, existence≠quality, filing-ready≠learning_ready).
+When the flag is thin_memo_counted_as_coverage, follow the flag remedy
+(ingest_then_body_lag_rememo): thicken filings, then existing body-lag rememo.
+Do not propose forcing rememo_eligible or widening rememo_reason while disk
+bodies have not increased. Phase B rememo is structured-verdict slim, not
+a thin-file rewrite.
 
 COMPLEXITY & EXPERIMENT INVENTORY
 Cite experiment_inventory.complexity (not the raw open count alone).
@@ -433,6 +438,8 @@ If system_gaps.flags is non-empty and analysis_review.sections.system_gaps did n
 name the highest-severity flag, add
 ``N. [ops] or [research] Follow up <flag.id> — …``
 Do not propose raising weekly_ops to fix a wiring / persist / rememo-if-stale gap.
+Do not invent a rememo-policy experiment for thin memos; Phase B rememo is
+body-lag slim after ingest, not a thin-file rewrite.
 
 HORIZON FRAGMENTS
 Up to {MAX_HORIZON_FRAGMENTS} speculative observations **not** tied to existing tasks or

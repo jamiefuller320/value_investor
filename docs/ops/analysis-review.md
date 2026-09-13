@@ -106,7 +106,7 @@ It exists because healthy ops counters can hide consumer-path misses:
 | Counter that looks green | What it can hide |
 |--------------------------|------------------|
 | `weekly_ops` remaining / not constraining | Research skipped as already-done; rememo never runs |
-| Ladder `executed: 0` + `already_researched` | Thin / zero-body first-pass memos counted as coverage |
+| Ladder `executed: 0` + `already_researched` | Thin / zero-body first-pass memos counted as coverage (ingest then body-lag rememo; do not widen `rememo_reason`) |
 | Memo file exists / 100% buy-tier files | Verdict never wired onto the report the paper book reads |
 | Filing parity / maintenance ingest | Observe-sim / screen-lite clock stale; not `learning_ready` |
 | Feature tests green | Overlay JSON in `output/` never persisted to `docs/data/` |
@@ -114,7 +114,15 @@ It exists because healthy ops counters can hide consumer-path misses:
 Layers in the snapshot: **produce → persist → publish → apply**, plus
 **learning_clock** (filing-ready vs learning-ready). The analysis agent must answer
 `probe_questions` in a **SYSTEM GAPS** section and must not treat unused budget or
-file existence as proof the learning path is fed.
+file existence as proof the learning path is fed. Phase B rememo is body-lag
+slim (structured-verdict), not a thin-file rewrite — do not promote
+`thin_memo_counted_as_coverage` as rememo-eligibility widening.
+
+`thin_memo_counted_as_coverage` carries `evidence.remedy`
+`ingest_then_body_lag_rememo` and `do_not: widen_rememo_reason_for_thin_without_new_bodies`.
+Prefer `[ingest]` thicken filings or `[ops]` stop counting thin files as already
+researched. Existing `rememo_reason` already rememos thin/adequate/poor **after**
+disk bodies increase.
 
 ```bash
 ftse-analysis-review system-gaps --json

@@ -925,7 +925,11 @@ Action contracts (include a line when the trigger fires — do not invent metric
    [monitoring] citing the highest-severity flag id and layer (produce/persist/
    publish/apply/learning_clock). Prefer consumer-path fixes (wired overlay,
    persist allowlist, rememo-if-stale) over raising weekly_ops or writing more
-   first-pass memos.
+   first-pass memos. For thin_memo_counted_as_coverage, prefer [ingest] thicken
+   filings or [ops] stop counting thin files as already-researched. Do not
+   propose forcing rememo_eligible / widening rememo_reason when disk bodies
+   have not increased (Phase B rememo_reason lock; structured-verdict slim is
+   the rememo writer).
 
 Cap at 5 lines — prioritise the strongest triggers; mention deferred triggers under DEFER.
 

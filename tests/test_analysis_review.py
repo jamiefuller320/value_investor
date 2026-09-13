@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from value_investor.analysis_review import (
+    _build_analysis_prompt,
     auto_promote_system_gap_tasks,
     build_analysis_payload,
     compile_analysis_tasks,
@@ -457,3 +458,14 @@ def test_compile_system_gap_closes_cleared_flags(tmp_path: Path):
     assert by_id["ana-sgap-overlay_persist_hole"]["status"] == "done"
     assert by_id["ana-sgap-overlay_persist_hole"]["done_reason"] == "flag_cleared"
     assert "ana-sgap-overlay_persist_hole" in cleared["closed"]
+
+
+def test_analysis_prompt_locks_thin_memo_to_ingest_not_rememo_widen():
+    prompt = _build_analysis_prompt(Path("payload.json"))
+    assert "thin_memo_counted_as_coverage" in prompt
+    assert "[ingest] thicken" in prompt
+    assert "Do not" in prompt
+    assert "forcing rememo_eligible" in prompt
+    assert "widening rememo_reason" in prompt
+    assert "Phase B rememo_reason lock" in prompt
+

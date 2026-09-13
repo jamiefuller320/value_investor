@@ -32,6 +32,13 @@ OVERLAY_LAG_MIN = 3
 THIN_MEMO_MIN = 5
 LIBRARY_MEMO_SAMPLE = 40
 HIGH_REMAINING_USD = 20.0
+# Phase B rememo is body-lag slim after ingest, not a thin-file rewrite.
+THIN_MEMO_REMEDY = "ingest_then_body_lag_rememo"
+THIN_MEMO_DO_NOT = "widen_rememo_reason_for_thin_without_new_bodies"
+THIN_MEMO_REMEDY_SUMMARY = (
+    " Do not widen rememo_reason; thicken filings then body-lag rememo "
+    "(Phase B slim verdicts)."
+)
 
 PROBE_QUESTIONS = (
     "Is the learning consumer seeing the research we already paid for?",
@@ -627,6 +634,7 @@ def _build_flags(
                             "weak labels."
                         )
                     )
+                    + THIN_MEMO_REMEDY_SUMMARY
                 ),
                 evidence={
                     "market_id": library_quality.get("market_id"),
@@ -634,6 +642,8 @@ def _build_flags(
                     "memo_count": memo_lib,
                     "already_researched_count": already,
                     "executed": executed,
+                    "remedy": THIN_MEMO_REMEDY,
+                    "do_not": THIN_MEMO_DO_NOT,
                 },
             )
         )
@@ -651,11 +661,14 @@ def _build_flags(
                         if already > 0 and executed == 0
                         else f" (executed={executed})."
                     )
+                    + THIN_MEMO_REMEDY_SUMMARY
                 ),
                 evidence={
                     "thin_or_zero_body": thin_live,
                     "already_researched_count": already,
                     "executed": executed,
+                    "remedy": THIN_MEMO_REMEDY,
+                    "do_not": THIN_MEMO_DO_NOT,
                 },
             )
         )
