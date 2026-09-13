@@ -917,7 +917,10 @@ def ingest_research_sources(
                                 pass
                         filings_meta["ch_body_refetch"] = ch_refetch
 
-            elif resolve_filings_regime(market, ticker) == "euro_filings":
+            elif resolve_filings_regime(market, ticker) in {
+                "euro_filings",
+                "tsx_announcements",
+            }:
                 from value_investor.library_ingest_budget import deadline_reached
                 from value_investor.research.filings import (
                     refetch_ir_allowlist_filing_bodies,
