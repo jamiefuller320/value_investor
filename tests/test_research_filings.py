@@ -29,6 +29,7 @@ from value_investor.research.filings import (
     _filing_text_is_substantive,
     _google_news_symbol_clause,
     _infer_filing_period_from_row,
+    _ir_allowlist_period_from_url,
     _ir_allowlist_row_needs_body_refetch,
     _ir_body_content_hash,
     _is_other_results_rns_row,
@@ -36,6 +37,7 @@ from value_investor.research.filings import (
     _match_ir_row_to_investegate,
     _scrub_misattributed_filing_rows,
     _sec_edgar_supplement_allowed,
+    _sec_href_to_archive_url,
     _uk_ticker_sec_dual_listed,
     _validate_ir_allowlist_body_content,
     _validate_rns_filing_body_content,
@@ -630,6 +632,96 @@ def test_fetch_filing_body_resolves_sec_pdf_wrapper(monkeypatch):
     assert text is not None
     assert "Cash tender offer" in text
     assert "2027 3.375%" in text
+
+
+def test_sec_href_to_archive_url_resolves_site_root_and_ix_viewer():
+    base = "https://www.sec.gov/Archives/edgar/data/1075124/000119312526338256"
+    assert (
+        _sec_href_to_archive_url(
+            "/Archives/edgar/data/1075124/000119312526338256/tri-ex99_1.htm",
+            base=base,
+        )
+        == f"{base}/tri-ex99_1.htm"
+    )
+    assert (
+        _sec_href_to_archive_url(
+            "/ix?doc=/Archives/edgar/data/1075124/000119312526338256/tri-ex99_2.htm",
+            base=base,
+        )
+        == f"{base}/tri-ex99_2.htm"
+    )
+    assert _sec_href_to_archive_url("tri-ex99_3.htm", base=base) == f"{base}/tri-ex99_3.htm"
+    assert _sec_href_to_archive_url("/edgar/searchedgar/companysearch.html", base=base) is None
+
+
+def test_fetch_filing_body_follows_sec_archive_root_exhibit_hrefs(monkeypatch):
+    """TRI/SU/NTR 6-K leftover IWB: EDGAR indexes use /Archives/ hrefs, not relative files."""
+    cover_html = """
+    <html><body>
+    <div>FORM 6-K REPORT OF FOREIGN PRIVATE ISSUER</div>
+    <p>Thomson Reuters Corporation Commission File Number: 1-31349</p>
+    <p>Exhibit 99.1 Management's Discussion and Analysis is attached.</p>
+    </body></html>
+    """
+    index_html = """
+    <html><body>
+    <a href="/Archives/edgar/data/1075124/000119312526338256/tri-20260630.htm">6-K</a>
+    <a href="/Archives/edgar/data/1075124/000119312526338256/tri-ex99_1.htm">EX-99.1</a>
+    <a href="/ix?doc=/Archives/edgar/data/1075124/000119312526338256/tri-ex99_2.htm">EX-99.2</a>
+    </body></html>
+    """
+    mda = (
+        "Thomson Reuters Second Quarter Report 2026 Management's Discussion and Analysis. "
+        "Revenue increased and operating profit rose. Adjusted EBITDA and free cash flow "
+        "were $1.2 billion. Net debt declined. Going concern and pension notes follow. "
+        "Results for the six months ended June 30, 2026. "
+    ) * 20
+
+    def fake_http_get(url, headers=None, timeout=60):
+        if url.endswith("tri-20260630.htm"):
+            return cover_html.encode("utf-8")
+        if url.endswith("0001193125-26-338256-index.htm"):
+            return index_html.encode("utf-8")
+        if url.endswith("tri-ex99_1.htm"):
+            return f"<html><body>{mda}</body></html>".encode()
+        raise AssertionError(f"unexpected url: {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_http_get)
+    text = fetch_filing_body(
+        "https://www.sec.gov/Archives/edgar/data/1075124/000119312526338256/tri-20260630.htm"
+    )
+    assert text is not None
+    assert "Management's Discussion" in text
+    assert "free cash flow" in text
+
+
+def test_fetch_filing_body_skips_non_financial_sec_exhibits(monkeypatch):
+    """Code-of-conduct / dividend stubs must not fill leftover 6-K indexed-without-body rows."""
+    cover_html = "<html><body><div>FORM 6-K</div><p>Exhibit 99.1 attached.</p></body></html>"
+    index_html = """
+    <html><body>
+    <a href="/Archives/edgar/data/311337/000110465925025404/tm259647d1_6k.htm">6-K</a>
+    <a href="/Archives/edgar/data/311337/000110465925025404/tm259647d1_ex99-1.htm">EX-99.1</a>
+    </body></html>
+    """
+    policy = "POLICY STATEMENT BUSINESS CONDUCT Number CO-PS03 Document Owner CEO. " * 80
+
+    def fake_http_get(url, headers=None, timeout=60):
+        if url.endswith("tm259647d1_6k.htm"):
+            return cover_html.encode("utf-8")
+        if url.endswith("0001104659-25-025404-index.htm"):
+            return index_html.encode("utf-8")
+        if url.endswith("tm259647d1_ex99-1.htm"):
+            return f"<html><body>{policy}</body></html>".encode()
+        raise AssertionError(f"unexpected url: {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_http_get)
+    assert (
+        fetch_filing_body(
+            "https://www.sec.gov/Archives/edgar/data/311337/000110465925025404/tm259647d1_6k.htm"
+        )
+        is None
+    )
 
 
 def test_refetch_residual_filing_bodies_fetches_sec_pdf_wrapper(tmp_path, monkeypatch):
@@ -5966,7 +6058,26 @@ def test_fetch_filings_ir_allowlist_jbh_dnl_thin_builtin(tmp_path: Path):
     assert len(dnl) >= 3
     assert any("220734.pdf" in row["url"] for row in dnl)
     assert any("06jmnm30pch1kv.pdf" in row["url"] for row in dnl)
+    assert any("291611.pdf" in row["url"] for row in dnl)
+    assert not any("06zg0w0pw5rswl.pdf" in row["url"] for row in dnl)
+    by_url = {row["url"]: row["period"] for row in dnl}
+    annual_url = next(url for url in by_url if "220734.pdf" in url)
+    hy_url = next(url for url in by_url if "291611.pdf" in url)
+    assert by_url[annual_url] == "annual"
+    assert by_url[hy_url] == "interim"
     assert all(row["source"] == "ir_allowlist" for row in jbh + dnl)
+
+
+def test_load_ir_url_allowlist_canonicalizes_dnl_ax_dead_asx_guidance_url(tmp_path: Path):
+    """ASX 1H26 guidance hash PDF maps to the investorpa half-year financial report."""
+    dead = "https://announcements.asx.com.au/asxpdf/20260511/pdf/06zg0w0pw5rswl.pdf"
+    live = "https://investorpa.com/announcement-pdf/20260511/291611.pdf"
+    path = tmp_path / "ir.json"
+    path.write_text(json.dumps({"urls": {"DNL.AX": [dead]}}), encoding="utf-8")
+    mapping = load_ir_url_allowlist(path)
+    assert live in mapping["DNL.AX"]
+    assert dead not in mapping["DNL.AX"]
+    assert _ir_allowlist_period_from_url(live) == "interim"
 
 
 def test_asx_statistics_listing_page_is_index_noise():
