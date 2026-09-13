@@ -26,6 +26,100 @@ LIFECYCLE_STAGE_IDS = (
     "recommit",
 )
 
+# Visual dashboard columns (funnel left → right). Factors map onto these so the
+# UI can show stocks and the experiments that watch each stage together.
+BOARD_COLUMN_IDS = (
+    "not_buy_tier",
+    "not_now",
+    "near_buy",
+    "just_bought",
+    "growth",
+    "near_sell",
+    "just_sold",
+    "post_sale",
+)
+
+BOARD_COLUMNS: tuple[dict[str, Any], ...] = (
+    {
+        "id": "not_buy_tier",
+        "label": "Not buy tier",
+        "question": "Names currently below buy / strong_buy — census, not the watch cut.",
+        "lifecycle_stages": ("prospect",),
+        "factor_ids": ("conviction_floor", "research_gate"),
+    },
+    {
+        "id": "not_now",
+        "label": "Not now",
+        "question": "Buy-tier names blocked by timing wait this cycle.",
+        "lifecycle_stages": ("prospect",),
+        "factor_ids": ("timing_gate",),
+    },
+    {
+        "id": "near_buy",
+        "label": "Near buy threshold",
+        "question": (
+            "Ready buy-tier (not waiting) plus hold names at the pre-buy conviction floor."
+        ),
+        "lifecycle_stages": ("prospect",),
+        "factor_ids": ("entry_appetite",),
+    },
+    {
+        "id": "just_bought",
+        "label": "Just bought",
+        "question": "First capital is on the book — starter sleeve or a recent first fill.",
+        "lifecycle_stages": ("starter",),
+        "factor_ids": ("starter_fraction", "entry_dca_cadence", "first_fill_adverse_pause"),
+    },
+    {
+        "id": "growth",
+        "label": "Growth",
+        "question": "Held names adding toward or sitting at the target sleeve.",
+        "lifecycle_stages": ("build", "full"),
+        "factor_ids": (
+            "add_cadence",
+            "add_only_if_cheaper",
+            "skim_linked_remaining_adds",
+            "add_only_if_thesis_intact",
+            "max_build_window",
+            "rebalance_band",
+            "loser_tolerance",
+            "thesis_monitoring",
+        ),
+    },
+    {
+        "id": "near_sell",
+        "label": "Near sell threshold",
+        "question": "Harvest, grace, or exit-pending — still held, leaving or skimming.",
+        "lifecycle_stages": ("harvest", "grace"),
+        "factor_ids": (
+            "skim_urgency",
+            "harvest_gain_floor",
+            "exit_confirm_screens",
+            "momentum_grace",
+            "intact_thesis_dampen",
+        ),
+    },
+    {
+        "id": "just_sold",
+        "label": "Just sold",
+        "question": "Position closed on a recent mark — rotate, recover, or cut.",
+        "lifecycle_stages": ("exit",),
+        "factor_ids": ("thesis_broken_priority", "swap_score_gate", "reentry_cooldown"),
+    },
+    {
+        "id": "post_sale",
+        "label": "Post sale monitor",
+        "question": "Cooldown / recommit watch after a cycle — not a remaining DCA tranche.",
+        "lifecycle_stages": ("recommit",),
+        "factor_ids": (
+            "entry_kind_tag",
+            "prior_cycle_outcome",
+            "recommit_size",
+            "held_addon_pyramid",
+        ),
+    },
+)
+
 # Map diagnostic labels from capital_allocation.classify_lifecycle_phase → stage.
 PHASE_TO_STAGE: dict[str, str] = {
     "prospect_ready": "prospect",
@@ -423,12 +517,111 @@ def factors_for_stage(
     return []
 
 
+def _factor_index(catalog: dict[str, Any] | None = None) -> dict[str, dict[str, Any]]:
+    payload = catalog or lifecycle_catalog()
+    index: dict[str, dict[str, Any]] = {}
+    for stage in payload.get("stages") or []:
+        stage_id = str(stage.get("id") or "")
+        for factor in stage.get("factors") or []:
+            if not isinstance(factor, dict) or not factor.get("id"):
+                continue
+            index[str(factor["id"])] = {**factor, "stage_id": stage_id}
+    return index
+
+
+def board_column_defs(
+    catalog: dict[str, Any] | None = None,
+    *,
+    assessment: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
+    """Visual columns with the catalog factors (and optional ledger status) attached."""
+    factor_index = _factor_index(catalog)
+    assessment_index = _assessment_index(assessment)
+    columns: list[dict[str, Any]] = []
+    for spec in BOARD_COLUMNS:
+        experiments: list[dict[str, Any]] = []
+        for factor_id in spec["factor_ids"]:
+            factor = factor_index.get(str(factor_id))
+            if not factor:
+                continue
+            row = {
+                "factor_id": factor["id"],
+                "question": factor.get("question"),
+                "status": factor.get("status"),
+                "experiment": factor.get("experiment"),
+                "artifact": factor.get("artifact"),
+                "revisit_when": factor.get("revisit_when"),
+                "model_independent": bool(factor.get("model_independent")),
+                "lifecycle_stage": factor.get("stage_id"),
+            }
+            hit = _match_assessment(str(factor.get("experiment") or ""), assessment_index)
+            if hit:
+                row["assessment_status"] = hit.get("status")
+                row["assessment_title"] = hit.get("title")
+                row["human_ack_required"] = bool(hit.get("human_ack_required"))
+            experiments.append(row)
+        columns.append(
+            {
+                "id": spec["id"],
+                "label": spec["label"],
+                "question": spec["question"],
+                "lifecycle_stages": list(spec["lifecycle_stages"]),
+                "experiments": experiments,
+            }
+        )
+    return columns
+
+
+def _assessment_index(assessment: dict[str, Any] | None) -> dict[str, dict[str, Any]]:
+    index: dict[str, dict[str, Any]] = {}
+    if not isinstance(assessment, dict):
+        return index
+    rows: list[dict[str, Any]] = []
+    for row in assessment.get("experiments") or []:
+        if isinstance(row, dict):
+            rows.append(row)
+    for group in (assessment.get("by_status") or {}).values():
+        for row in group or []:
+            if isinstance(row, dict):
+                rows.append(row)
+    for row in rows:
+        eid = str(row.get("experiment_id") or "").strip()
+        if eid and eid not in index:
+            index[eid] = row
+        track = str(row.get("track_id") or "").strip()
+        if track and track not in index:
+            index[track] = row
+    return index
+
+
+def _match_assessment(
+    experiment_key: str, index: dict[str, dict[str, Any]]
+) -> dict[str, Any] | None:
+    key = str(experiment_key or "").strip()
+    if not key:
+        return None
+    if key in index:
+        return index[key]
+    tail = key.split(".")[-1]
+    if tail in index:
+        return index[tail]
+    # graduated_allocation_track → graduated_allocation
+    if key.endswith("_track"):
+        stem = key[: -len("_track")]
+        if stem in index:
+            return index[stem]
+    return None
+
+
 __all__ = [
+    "BOARD_COLUMNS",
+    "BOARD_COLUMN_IDS",
     "BUILD_RATIO_CEILING",
     "HARVEST_RATIO_FLOOR",
     "LIFECYCLE_STAGE_IDS",
     "PHASE_TO_STAGE",
     "STARTER_RATIO_CEILING",
+    "board_column_defs",
     "catalog_coverage",
     "factors_for_stage",
     "lifecycle_catalog",

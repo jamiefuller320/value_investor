@@ -4,7 +4,7 @@ GitHub Pages is static and cannot run ``ftse-progress-report``. This CLI serves
 ``docs/`` and exposes:
 
 - ``POST /api/progress-report`` — rebuild the Overview progress report
-- ``POST /api/refresh`` — rebuild ``market_status.json`` after local ingest/action work
+- ``POST /api/refresh`` — rebuild ``market_status.json`` and ``lifecycle_board.json`` after local ingest/action work
 """
 
 from __future__ import annotations
@@ -44,6 +44,20 @@ def _refresh_market_status(repo_root: Path) -> dict[str, Any]:
         path=repo_root / DEFAULT_MARKET_STATUS_PATH,
     )
     return {"path": str(DEFAULT_MARKET_STATUS_PATH), "payload": read_json(path)}
+
+
+def _refresh_lifecycle_board(repo_root: Path) -> dict[str, Any]:
+    from value_investor.lifecycle_board import (
+        DEFAULT_LIFECYCLE_BOARD_PATH,
+        write_lifecycle_board,
+    )
+    from value_investor.storage import read_json
+
+    path = write_lifecycle_board(
+        latest_path=repo_root / "docs" / "data" / "latest.json",
+        path=repo_root / DEFAULT_LIFECYCLE_BOARD_PATH,
+    )
+    return {"path": str(DEFAULT_LIFECYCLE_BOARD_PATH), "payload": read_json(path)}
 
 
 def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandler]:
@@ -105,6 +119,11 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
             if parsed.path == "/api/refresh":
                 try:
                     market = _refresh_market_status(repo_root)
+                    lifecycle = None
+                    try:
+                        lifecycle = _refresh_lifecycle_board(repo_root)
+                    except Exception as exc:  # noqa: BLE001
+                        sys.stderr.write(f"lifecycle board refresh skipped: {exc}\n")
                 except Exception as exc:  # noqa: BLE001 — surface to UI
                     status, body, ctype = _json_bytes(
                         {
@@ -120,7 +139,11 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
                     {
                         "ok": True,
                         "market_status": market["payload"],
-                        "paths": {"market_status": market["path"]},
+                        "lifecycle_board": (lifecycle or {}).get("payload"),
+                        "paths": {
+                            "market_status": market["path"],
+                            "lifecycle_board": (lifecycle or {}).get("path"),
+                        },
                     }
                 )
                 self._send(status, body, ctype)
@@ -190,7 +213,7 @@ def main(argv: list[str] | None = None) -> int:
     url = f"http://{args.host}:{args.port}/"
     print(f"Serving dashboard at {url}")
     print("POST /api/progress-report  →  ftse-progress-report build --write")
-    print("POST /api/refresh          →  rebuild market_status.json")
+    print("POST /api/refresh          →  rebuild market_status.json + lifecycle_board.json")
     print("Ctrl+C to stop")
     try:
         server.serve_forever()

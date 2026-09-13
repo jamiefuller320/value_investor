@@ -462,6 +462,19 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         logger.warning("System gaps assembly skipped: %s", exc)
         system_gaps = None
 
+    try:
+        from value_investor.lifecycle_board import build_lifecycle_board
+
+        lifecycle_board = build_lifecycle_board(
+            live_reports=reports,
+            live_run_at=run_at,
+            experiment_assessment=experiment_assessment,
+            paper_root=_resolve_paper_automation_dir(output_dir),
+        )
+    except Exception as exc:  # noqa: BLE001 — dashboard must still publish
+        logger.warning("Lifecycle board assembly skipped: %s", exc)
+        lifecycle_board = None
+
     return {
         "generated_at": datetime.now(UTC).isoformat(),
         "run_at": run_at,
@@ -510,6 +523,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
         "human_tasks_checklist": human_tasks_checklist,
         "market_status": market_status,
         "system_gaps": system_gaps,
+        "lifecycle_board": lifecycle_board,
     }
 
 
@@ -609,6 +623,9 @@ def publish_dashboard(
     if bundle.get("market_status"):
         write_json(data_dir / "market_status.json", bundle["market_status"], compact=False)
 
+    if bundle.get("lifecycle_board"):
+        write_json(data_dir / "lifecycle_board.json", bundle["lifecycle_board"], compact=False)
+
     if run_at := bundle.get("run_at"):
         stamp = str(run_at)[:10]
         archive_path = data_dir / "archive" / f"{stamp}.json"
@@ -654,6 +671,7 @@ def empty_dashboard_bundle() -> dict[str, Any]:
         "project_progress": None,
         "market_status": None,
         "system_gaps": None,
+        "lifecycle_board": None,
         "research": [],
         "note": "Dashboard data not published yet. Run ftse-screen and ftse-publish locally, or wait for the weekly workflow.",
     }

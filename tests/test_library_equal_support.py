@@ -7,12 +7,13 @@ from pathlib import Path
 import pandas as pd
 
 from value_investor.library_equal_support import (
+    ensure_buy_tier_timing_stamp,
     run_equal_support_package,
     stamp_library_timing_archives,
 )
 from value_investor.library_near_miss_watch import write_library_near_miss_watch
 from value_investor.library_sim import observe_sim_markets_for_policy
-from value_investor.library_timing import stamp_timing_on_signals
+from value_investor.library_timing import buy_tier_needs_timing_stamp, stamp_timing_on_signals
 
 
 def _price_history(ticker: str = "AAA") -> dict[str, pd.DataFrame]:
@@ -83,6 +84,45 @@ def test_stamp_timing_uses_market_history():
     stamped = stamp_timing_on_signals(signals, market="sp500", history=_price_history())
     assert stamped.loc[0, "timing_signal"] not in {"", None}
     assert "timing_score" in stamped.columns
+
+
+def test_buy_tier_needs_timing_stamp_when_unresolved():
+    missing = pd.DataFrame([{"ticker": "AAA", "signal": "buy"}])
+    assert buy_tier_needs_timing_stamp(missing) is True
+    insufficient = pd.DataFrame(
+        [{"ticker": "AAA", "signal": "buy", "timing_signal": "insufficient_data"}]
+    )
+    assert buy_tier_needs_timing_stamp(insufficient) is True
+    resolved = pd.DataFrame(
+        [
+            {"ticker": "AAA", "signal": "buy", "timing_signal": "wait"},
+            {"ticker": "BBB", "signal": "buy", "timing_signal": "neutral"},
+        ]
+    )
+    assert buy_tier_needs_timing_stamp(resolved) is False
+    hold_only = pd.DataFrame(
+        [{"ticker": "AAA", "signal": "hold", "timing_signal": "insufficient_data"}]
+    )
+    assert buy_tier_needs_timing_stamp(hold_only) is False
+
+
+def test_ensure_buy_tier_timing_stamp_skips_when_resolved(tmp_path: Path):
+    _seed_market(tmp_path, "sp500")
+    screen = tmp_path / "markets" / "sp500" / "screen"
+    latest = pd.read_csv(screen / "latest_signals.csv")
+    latest["timing_signal"] = ["wait", "neutral", "neutral"]
+    latest.to_csv(screen / "latest_signals.csv", index=False)
+    result = ensure_buy_tier_timing_stamp(tmp_path, "sp500", history=_price_history())
+    assert result["skipped"] is True
+    assert result["reason"] == "buy_tier_timing_resolved"
+
+
+def test_ensure_buy_tier_timing_stamp_fills_unresolved(tmp_path: Path):
+    _seed_market(tmp_path, "sp500")
+    result = ensure_buy_tier_timing_stamp(tmp_path, "sp500", history=_price_history())
+    assert result.get("skipped") is False
+    latest = pd.read_csv(tmp_path / "markets" / "sp500" / "screen" / "latest_signals.csv")
+    assert "timing_signal" in latest.columns
 
 
 def test_near_miss_splits_not_buy_tier_and_never_buy(tmp_path: Path):

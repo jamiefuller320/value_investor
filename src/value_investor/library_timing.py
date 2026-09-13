@@ -10,6 +10,7 @@ import pandas as pd
 from value_investor.technical_analysis import compute_indicators, fetch_price_history
 
 BUY_TIER = frozenset({"buy", "strong_buy"})
+RESOLVED_TIMING = frozenset({"wait", "accumulate", "neutral"})
 
 
 def _as_of_utc(value: datetime | None) -> datetime | None:
@@ -48,6 +49,27 @@ def timing_fields_from_history(
         "timing_score": tech.timing_score,
         "rsi_14": tech.rsi_14,
     }
+
+
+def buy_tier_needs_timing_stamp(signals: pd.DataFrame) -> bool:
+    """True when buy-tier rows have no resolved timing yet (wait / accumulate / neutral).
+
+    Screen-lite writes ``insufficient_data`` until equal-support (or epoch-0)
+    stamps Yahoo timing. Epoch-0 must not rebalance in that state or
+    ``skip_timing_wait`` cannot drop wait names from new buys.
+    """
+    if signals is None or signals.empty or "ticker" not in signals.columns:
+        return False
+    signal_col = "signal" if "signal" in signals.columns else None
+    if signal_col is None:
+        return False
+    buy = signals.loc[signals[signal_col].astype(str).str.strip().str.lower().isin(BUY_TIER)]
+    if buy.empty:
+        return False
+    if "timing_signal" not in buy.columns:
+        return True
+    values = buy["timing_signal"].astype(str).str.strip().str.lower()
+    return not values.isin(RESOLVED_TIMING).any()
 
 
 def timing_candidate_tickers(signals: pd.DataFrame) -> list[str]:
@@ -97,6 +119,7 @@ def stamp_timing_on_signals(
 
 
 __all__ = [
+    "buy_tier_needs_timing_stamp",
     "slice_price_history",
     "stamp_timing_on_signals",
     "timing_candidate_tickers",

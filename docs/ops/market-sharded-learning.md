@@ -100,7 +100,7 @@ Spare 50%/25% fractions apply only while a market is still *in front* of that th
 
 **Admitted start (now).** `ladder.admitted_learning_markets` is synced from the L322 threshold lists (`ingest_exhausted_markets` ∪ `ingest_parity_markets`) and currently includes `sp500`, `asx200`, `euro_depth`, `ftse_smallcap`, and `tsx60`. Equivalent resource starts immediately as:
 
-- Frozen **epoch-0** `buy_tier_level` book (`ftse-library shard-epoch0` on Sunday; `ftse-library epoch0-weekday` at local open+settle on weekdays — not FTSE paper-auto)
+- Frozen **epoch-0** `buy_tier_level` book (`ftse-library shard-epoch0` on Sunday **after** the equal-support timing stamp; `ftse-library epoch0-weekday` at local open+settle on weekdays — not FTSE paper-auto). `skip_timing_wait` drops `timing_signal=wait` from new buys so the book can run a rules entry/hold/exit lifecycle.
 - Near-miss watch (`near_miss_watch.json`). **Watch cut for the AI-fork gate:** buy-not-now and hold-near-buy. **Census / persistence only:** not-buy-tier (all below buy-tier) and never-buy-tier (dated archives, never printed buy). Do not treat the census counts as the near-miss sample.
 - Existing maintenance ingest + Layer B screen clock
 - **Equal-support package** (`ftse-library equal-support`): market-aware timing stamp, buy-tier rememo eligibility at the same body-lag rule, and per-market exclusion-universe + exit-timing archives under `markets/<id>/screen/`
@@ -114,7 +114,7 @@ It does **not** start a shard AI-judgment track or `decision-review --apply`. Wa
 |---------|--------|----------|
 | FTSE-volume ingest | Maintenance candidates include admitted ∪ exhausted ∪ live parity. Admitted markets stay on that loop when a later screen adds buy-tier names and live parity dips | Fourth sprint stream |
 | Layer B screen clock | `observe_sim_include_admitted` | Focus-only Sunday screens |
-| Paper instrument | Frozen `buy_tier_level`, Sunday epoch-0 plus weekday local-open marks (`library-epoch0-weekday.yml`) | Shard AI / knob apply / FTSE `paper-auto.yml` at 08:25 UTC |
+| Paper instrument | Frozen `buy_tier_level`, equal-support timing stamp **then** Sunday epoch-0 plus weekday local-open marks (`library-epoch0-weekday.yml`). Wait names stay out of new buys. | Shard AI / knob apply / FTSE `paper-auto.yml` at 08:25 UTC |
 | Buy-tier rememo | Same `rememo_body_lag_threshold` + weekday 3/day execution (`ftse-library rememo`). Sunday Layer C rememos the **focus** book only | `research_all_graduated` / 21-market spray (N96) |
 | First-time memos | Sunday queue puts no-memo buy-tier ahead of rememo inside each market (N114) | Weekday first-memo burst |
 | Buy-not-now | `timing_signal=wait` on buy-tier (Yahoo via market mapper, PIT on dated archives) | LSE `.L` rewrite |
@@ -132,7 +132,7 @@ ftse-library epoch0-weekday --force    # tests only; production uses session gat
 
 ### Weekday epoch-0 local-open
 
-`library-epoch0-weekday.yml` marks admitted `buy_tier_level` books after each market's open+settle (ASX 00:45, EU 08:45, US 14:15/15:15 UTC). It does **not** dispatch FTSE `paper-auto.yml`. After a mark it refreshes `equal_support_status.json` with `--census-only`.
+`library-epoch0-weekday.yml` marks admitted `buy_tier_level` books after each market's open+settle (ASX 00:45, EU 08:45, US 14:15/15:15 UTC). It does **not** dispatch FTSE `paper-auto.yml`. If buy-tier timing is still unresolved it stamps before the mark (same wait filter as Sunday). After a mark it refreshes `equal_support_status.json` with `--census-only`.
 
 **Cron registration (automated on admit).** First-time `admit_market_to_learning` upserts the timezone-bucket cron-job.org jobs for that market's session (`asx` / `euro` / `us-edt`+`us-est`). US Eastern slots also cover `America/Toronto` (`tsx60`). Markets need an explicit `MARKET_SESSION_DEFAULTS` entry — the London fallback must not silently register the EU slot. The same ensure runs on `ftse-library euro-ingest-dispatch --refresh --sync-cron` for the full admitted roster (catch-up). Requires `CRONJOB_API_KEY` + `WORKFLOW_DISPATCH_PAT` on ingest/sprint/maintenance workflows. Soft-skips when secrets are missing. Residual human when admitting a market with **no** session defaults or unmapped TZ — add `MARKET_SESSION_DEFAULTS` / extend `EPOCH0_WEEKDAY_SLOTS`, then re-run sync.
 
@@ -150,7 +150,7 @@ ftse-library epoch0-weekday --force    # tests only; production uses session gat
 
 Hosted Actions minutes are not the bind (N66). What still collides if you naive-parallel: per-job timeouts, `push_library_ingest_artifacts` checkout races, and **source** rate limits (ESEF / EDGAR / IR / Yahoo) — staggering helps those more than a fourth workflow does.
 
-**Below-tier protection against tight knobs** is a second instrument, not a reason to delay the wide book. A buy-tier-only book never sees names that never hit buy-tier. “Buy-tier but not buy now” is already the first cut on FTSE (`buy_tier_level` uses `skip_timing_wait=true`, so `timing_signal=wait` stays out). Full-screened exclusion-universe and exit-timing near-miss labs cover the rest **on FTSE** once ≥2 weekly snapshots exist. Shards get that clock by taking Layer B screens from week 0 (L320) — they do not need those archives *before* the first fill.
+**Below-tier protection against tight knobs** is a second instrument, not a reason to delay the wide book. A buy-tier-only book never sees names that never hit buy-tier. “Buy-tier but not buy now” is the first cut on the frozen book (`buy_tier_level` uses `skip_timing_wait=true`, so `timing_signal=wait` stays out of new buys and on the observe-only near-miss watch). Sunday screen-lite leaves timing unresolved until equal-support stamps it; that stamp must run **before** epoch-0 paper or wait names contaminate the book and leave the counterfactual sample. Full-screened exclusion-universe and exit-timing near-miss labs cover the rest **on FTSE** once ≥2 weekly snapshots exist. Shards get that clock by taking Layer B screens from week 0 (L320) — they do not need those archives *before* the first fill.
 
 ### Practical limits (why not every shard yesterday)
 
