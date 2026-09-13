@@ -1041,6 +1041,59 @@ def extract_company_adjusted_fcf_for_ticker(
     return None, None
 
 
+def extract_company_adjusted_fcf_from_annual_filing_bodies(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+) -> tuple[float | None, str | None]:
+    """Return company-adjusted FCF from the newest annual filing body that exposes it."""
+    default_currency = _ticker_reporting_currency(ticker)
+    for body in _iter_filing_bodies(ticker, output_dir=output_dir, periods=("annual",)):
+        amount, currency = parse_company_adjusted_fcf(body, default_currency=default_currency)
+        if amount is not None:
+            return amount, currency or default_currency
+    return None, None
+
+
+def bind_overlay_fcf_to_filing_year_company_adjusted(
+    bundle: dict[str, Any],
+    *,
+    ticker: str,
+    fiscal_year: str | None,
+    output_dir: Path | None = None,
+) -> dict[str, Any]:
+    """Rebind overlay FCF numerators to filing-year prose when bridge or IR totals lag."""
+    if fiscal_year is None:
+        return bundle
+
+    filing_amount, filing_currency = extract_company_adjusted_fcf_from_annual_filing_bodies(
+        ticker,
+        output_dir=output_dir,
+    )
+    if filing_amount is None:
+        return bundle
+
+    snapshot_amount = _float_or_none(bundle.get("company_adjusted"))
+    if snapshot_amount is not None and not fcf_within_company_tolerance(
+        filing_amount,
+        snapshot_amount,
+        filing_currency=filing_currency,
+        company_adjusted_currency=bundle.get("company_adjusted_currency"),
+        threshold=FCF_MAJORITY_AGREE_THRESHOLD,
+    ):
+        bundle["company_adjusted_stale_year"] = True
+        bundle["company_adjusted_snapshot"] = snapshot_amount
+
+    bundle["company_adjusted"] = filing_amount
+    bundle["company_adjusted_currency"] = filing_currency
+    bundle["company_adjusted_filing_year"] = str(fiscal_year)
+
+    policy_basis = str(bundle.get("policy_basis") or "")
+    if policy_basis == "company_adjusted" and isinstance(bundle.get("policy_fcf"), (int, float)):
+        bundle["policy_fcf"] = filing_amount
+    return bundle
+
+
 def fcf_basis_values_diverge(
     left: float | None,
     right: float | None,
@@ -1513,7 +1566,12 @@ def reconcile_fcf_for_ticker(
         bundle["filing_aligned"] = filing_aligned_preview
     if fiscal_year is not None and bundle.get("fiscal_year") is None:
         bundle["fiscal_year"] = fiscal_year
-    return bundle
+    return bind_overlay_fcf_to_filing_year_company_adjusted(
+        bundle,
+        ticker=ticker,
+        fiscal_year=fiscal_year,
+        output_dir=output_dir,
+    )
 
 
 def _float_or_none(value: Any) -> float | None:

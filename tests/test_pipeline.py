@@ -2600,6 +2600,73 @@ def test_enrich_universe_with_canonical_fcf_uses_company_adjusted_when_present(t
     assert row["free_cashflow"] == 113_500_000.0
 
 
+def test_enrich_universe_with_canonical_fcf_rebinds_stale_bridge_company_adjusted(
+    tmp_path: Path,
+):
+    """Pipeline export must use filing-year £73.8m when fcf_bridge.json still holds £113.5m."""
+    sources = tmp_path / "research" / "FGP.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "FGP.L",
+                "cash_flow": {
+                    "2026": {
+                        "Operating Cash Flow": 615_600_000.0,
+                        "Capital Expenditure": -253_000_000.0,
+                        "Free Cash Flow": 362_600_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (sources / "fcf_bridge.json").write_text(
+        json.dumps(
+            {
+                "ticker": "FGP.L",
+                "fiscal_year": "2026",
+                "currency": "GBP",
+                "resolved": True,
+                "policy_basis": "company_adjusted",
+                "policy_fcf": 113_500_000.0,
+                "company_adjusted": 113_500_000.0,
+            }
+        ),
+        encoding="utf-8",
+    )
+    rns_body = filings / "fy2026_results.txt"
+    rns_body.write_text(
+        "Free cash flow of £73.8m before acquisitions and returns",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "published_at": "2026-06-18T08:00:00Z",
+                        "has_body": True,
+                        "body_path": str(rns_body),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    universe = pd.DataFrame([{"ticker": "FGP.L", "free_cashflow": 362_600_000.0}])
+    enriched = enrich_universe_with_canonical_fcf(universe, tmp_path)
+    assert enriched.iloc[0]["free_cashflow"] == pytest.approx(73_800_000.0)
+    bundle = reconcile_fcf_for_ticker(
+        "FGP.L",
+        screen_ttm=362_600_000.0,
+        output_dir=tmp_path,
+    )
+    assert bundle["company_adjusted_stale_year"] is True
+
+
 def test_fcf_overlay_models_exclude_divergent_screen_ttm(tmp_path: Path):
     """FCF Yield and Earnings Quality must use company-adjusted FCF, not Yahoo screen TTM."""
     _fgp_style_research_tree(tmp_path)
