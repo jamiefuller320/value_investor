@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T07:21:16+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T07:27:44+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -347,6 +347,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L359 | **Densify held-vs-market for admitted shards when chart packs exist** | Live FTSE may densify from docs/data/charts; admitted epoch-0 books stay on sparse equity_curve marks because allow_chart_densify is FTSE-only and shard chart packs are missing. Revisit once per-market buy-tier charts are published. | Admitted markets publish buy-tier chart JSON comparable to docs/data/charts, or weekday marks need gap-fill between sparse equity prints |
 | L365 | **Reallocate memo spend into filing-derived machine features first** | Under an automation-only criterion, prefer P1 work that changes what paper-auto sees without narrative: filing bodies, FCF basis bridges, EPS overlays, overlay bind freshness. LLM judgment is secondary once those features are thick on FTSE holdings and buy-tier. | FTSE buy-tier filing-body parity is green and FCF/EPS overlays are bound on weekday reports, yet AI-judgment still lacks edge vs rules |
 | L366 | **Brief-reasons buy cards plus on-demand full memo** | Dashboard/email already show screen brief summaries and decision packs; Read memo exists. Add an explicit generate-memo action for humans only after the always-on accumulate gate is replaced by verdict-only research or filing-derived overlays (N119/L365). | N119 or L365 is promoted, or require_research_accumulate is retired from the primary AI-judgment track |
+| L367 | **Sequenced memo-cut path: structured verdict → filing features → on-demand prose** | Phase A: cut spray/frontier/quality-gates now. Phase B: slim scheduled research to verdict-only while accumulate gate lives (N119+N120). Phase C: P1 filing/FCF/overlay-bind/counterfactual fields (L365). Phase D: human on-demand full memo only after cheap always-on verdict or filing replacement (L366). | weekly_ops is binding while AI-judgment still underperforms ^FTSE after costs, or FTSE buy-tier filing-body parity + FCF/EPS overlays are bound on weekday reports |
 
 ### Ops / reliability
 
