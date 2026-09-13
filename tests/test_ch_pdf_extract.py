@@ -84,33 +84,14 @@ def test_fetch_companies_house_body_uses_ixbrl_when_pdf_empty(monkeypatch):
         "document_metadata_url": "https://document-api.example/doc/1",
         "url": "https://document-api.example/doc/1",
     }
-    meta = {
-        "links": {"document": "/document/1/content"},
-        "resources": {
-            MIME_PDF: {"content_length": 100},
-            MIME_XHTML: {"content_length": 500},
-        },
-    }
-    pdf_payload = b"%PDF-empty"
-    xhtml_payload = (
-        b"<html><body>Statutory accounts going concern note</body></html>"
-    )
+    downloads = [
+        (b"%PDF-empty", MIME_PDF),
+        (b"<html><body>Statutory accounts going concern note</body></html>", MIME_XHTML),
+    ]
 
     monkeypatch.setattr(
-        "value_investor.research.companies_house.fetch_document_metadata",
-        lambda *args, **kwargs: meta,
-    )
-
-    def fake_fetch_bytes(_meta_url, *, api_key, prefer=None, metadata=None, **_kwargs):
-        if prefer == MIME_PDF:
-            return (pdf_payload, MIME_PDF)
-        if prefer == MIME_XHTML:
-            return (xhtml_payload, MIME_XHTML)
-        return None
-
-    monkeypatch.setattr(
-        "value_investor.research.companies_house.fetch_document_bytes",
-        fake_fetch_bytes,
+        "value_investor.research.companies_house.iter_ch_document_downloads",
+        lambda *args, **kwargs: downloads,
     )
     with patch(
         "value_investor.research.filings._extract_filing_document_text",
