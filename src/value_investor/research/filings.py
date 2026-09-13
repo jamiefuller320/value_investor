@@ -5468,11 +5468,8 @@ def _write_bodies(
 def _fetch_companies_house_body(row: dict[str, Any]) -> str | None:
     """Download and extract text from a Companies House accounts filing."""
     from value_investor.research.companies_house import (
-        MIME_PDF,
-        _document_mime_candidates,
         companies_house_api_key,
-        fetch_document_bytes,
-        fetch_document_metadata,
+        iter_ch_document_downloads,
     )
 
     key = companies_house_api_key()
@@ -5482,34 +5479,15 @@ def _fetch_companies_house_body(row: dict[str, Any]) -> str | None:
     if not meta_url:
         return None
     try:
-        meta = fetch_document_metadata(meta_url, api_key=key)
-        if not meta:
-            return None
-        resources = meta.get("resources") or {}
-        candidates: list[tuple[str, str]] = []
-        for mime in _document_mime_candidates(resources):
-            fetched = fetch_document_bytes(
-                meta_url,
-                api_key=key,
-                prefer=mime,
-                metadata=meta,
-            )
-            if not fetched:
-                continue
-            raw, content_type = fetched
-            text = _extract_filing_document_text(raw, content_type)
-            if text and len(text) >= 200:
-                candidates.append((text, content_type))
-            if (
-                mime != MIME_PDF
-                and text
-                and len(text) >= 200
-                and not _ch_body_lacks_financial_depth(text)
-            ):
-                break
+        downloads = iter_ch_document_downloads(meta_url, api_key=key)
     except Exception as exc:  # noqa: BLE001
         logger.debug("CH body fetch failed for %s: %s", row.get("id"), exc)
         return None
+    candidates: list[tuple[str, str]] = []
+    for raw, content_type in downloads:
+        text = _extract_filing_document_text(raw, content_type)
+        if text and len(text) >= 200:
+            candidates.append((text, content_type))
     best_text = _select_best_ch_body_text(candidates)
     if not best_text:
         return None
