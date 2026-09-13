@@ -329,6 +329,43 @@ def labelled_fcf_dividend_coverage_for_snapshot(
     return labelled
 
 
+def enrich_screening_snapshot_fcf_dividend_coverage(
+    snapshot: dict[str, Any],
+) -> dict[str, Any]:
+    """Backfill labelled dual dividend cover on snapshot dicts that only have scalar ratios."""
+    updated = dict(snapshot)
+    existing = updated.get("fcf_dividend_coverage")
+    if isinstance(existing, dict):
+        statutory = existing.get("statutory_ocf_minus_capex") or {}
+        management = existing.get("management_cash_generated_minus_capex") or {}
+        if statutory.get("ratio") is not None or management.get("ratio") is not None:
+            return updated
+
+    net = _float_or_none(updated.get("fcf_dividend_coverage_net"))
+    gross = _float_or_none(updated.get("fcf_dividend_coverage_gross"))
+    divergence_raw = updated.get("fcf_definition_divergence")
+    if divergence_raw is not None and not (
+        isinstance(divergence_raw, float) and pd.isna(divergence_raw)
+    ):
+        divergence = bool(divergence_raw)
+    else:
+        divergence = ocf_definition_diverges(
+            _float_or_none(updated.get("operating_cashflow")),
+            _float_or_none(updated.get("operating_cashflow_gross")),
+        )
+        if divergence:
+            updated["fcf_definition_divergence"] = True
+
+    labelled = labelled_fcf_dividend_coverage_for_snapshot(
+        fcf_definition_divergence=divergence,
+        fcf_dividend_coverage_net=net,
+        fcf_dividend_coverage_gross=gross,
+    )
+    if labelled is not None:
+        updated["fcf_dividend_coverage"] = labelled
+    return updated
+
+
 def ocf_definition_diverges(
     operating_cashflow: float | None,
     operating_cashflow_gross: float | None,
