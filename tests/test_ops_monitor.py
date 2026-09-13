@@ -22,6 +22,7 @@ from value_investor.ops_monitor import (
     check_engineering_queue,
     check_ingest_health_log,
     check_latest_bundle,
+    check_paper_learning_tracks,
     check_workflow_freshness,
     draft_ops_engineering_tasks,
     filter_unresolved_workflow_failures,
@@ -661,7 +662,9 @@ def test_check_workflow_freshness_suppresses_failure_when_recovery_in_flight():
 @patch("value_investor.ops_monitor.check_workflow_freshness", return_value=([], []))
 @patch("value_investor.ops_monitor.check_memo_rememo_backlog", return_value=[])
 @patch("value_investor.ops_monitor.check_ops_budget", return_value=[])
+@patch("value_investor.ops_monitor.check_paper_learning_tracks", return_value=[])
 def test_run_ops_monitor_reverifies_after_health_log_repair(
+    _paper,
     _budget,
     _rememo,
     _workflows,
@@ -727,7 +730,9 @@ def test_run_ops_monitor_reverifies_after_health_log_repair(
 @patch("value_investor.ops_monitor.check_workflow_freshness", return_value=([], []))
 @patch("value_investor.ops_monitor.check_memo_rememo_backlog", return_value=[])
 @patch("value_investor.ops_monitor.check_ops_budget", return_value=[])
+@patch("value_investor.ops_monitor.check_paper_learning_tracks", return_value=[])
 def test_run_ops_monitor_writes_status(
+    _paper,
     _budget,
     _rememo,
     _workflows,
@@ -955,3 +960,134 @@ def test_ops_monitor_cli_exit_zero_when_email_deferred():
                 mock_email.return_value = False
                 rc = main(["run", "--json", "--email", "--allow-workflow-stale-exit-zero"])
     assert rc == 0
+
+
+_CORE_TRACK_IDS = ("rules", "ai_judgment", "buy_tier_level")
+
+
+def _track_row(*, acted: bool = True) -> dict:
+    return {"acted": acted, "trades": 1, "note": "ok"}
+
+
+def _write_paper_learning_root(
+    tmp_path: Path,
+    *,
+    after_settle: bool = True,
+    acted: bool = True,
+    holdings: bool = True,
+    include_shadow: bool = True,
+    shadow_in_review: bool = True,
+    omit_review_tracks: tuple[str, ...] = (),
+    omit_summary_tracks: tuple[str, ...] = (),
+    omit_review: bool = False,
+) -> Path:
+    paper = tmp_path / "paper_automation"
+    paper.mkdir()
+    (paper / "last_run.json").write_text(
+        json.dumps(
+            {
+                "acted": acted,
+                "gate": {"after_settle": after_settle, "can_act": after_settle},
+                "generated_at": "2026-09-11T08:30:00+00:00",
+            }
+        ),
+        encoding="utf-8",
+    )
+    tracks = {track_id: _track_row(acted=acted) for track_id in _CORE_TRACK_IDS}
+    for track_id in omit_summary_tracks:
+        tracks.pop(track_id, None)
+    if include_shadow:
+        tracks["ai_judgment_calibrated"] = _track_row(acted=True)
+        shadow_dir = paper / "ai_judgment_calibrated"
+        shadow_dir.mkdir()
+        (shadow_dir / "config.json").write_text("{}", encoding="utf-8")
+    (paper / "learning_tracks_summary.json").write_text(
+        json.dumps({"tracks": tracks}),
+        encoding="utf-8",
+    )
+    if not omit_review:
+        reviews = {track_id: {"metrics": {"excess_after_costs": -0.28}} for track_id in tracks}
+        if include_shadow and not shadow_in_review:
+            reviews.pop("ai_judgment_calibrated", None)
+        for track_id in omit_review_tracks:
+            reviews.pop(track_id, None)
+        (paper / "learning_tracks_review.json").write_text(
+            json.dumps(
+                {
+                    "reviews": reviews,
+                    "beat_market": False,
+                    "beat_control": True,
+                    "verdict": "underperforming",
+                }
+            ),
+            encoding="utf-8",
+        )
+    buy_dir = paper / "buy_tier_level"
+    buy_dir.mkdir()
+    fund_holdings = {"FOO.L": {"ticker": "FOO.L"}} if holdings else {}
+    (buy_dir / "automated_fund.json").write_text(
+        json.dumps({"cash": 0.0 if holdings else 1000.0, "holdings": fund_holdings}),
+        encoding="utf-8",
+    )
+    return paper
+
+
+def test_check_paper_learning_tracks_healthy_ignores_underperforming_excess(tmp_path: Path):
+    paper = _write_paper_learning_root(tmp_path)
+    assert check_paper_learning_tracks(paper) == []
+
+
+def test_check_paper_learning_tracks_flags_missing_review(tmp_path: Path):
+    paper = _write_paper_learning_root(tmp_path, omit_review=True)
+    titles = [row.title for row in check_paper_learning_tracks(paper)]
+    assert "Learning-tracks review missing" in titles
+
+
+def test_check_paper_learning_tracks_flags_missing_core_review_track(tmp_path: Path):
+    paper = _write_paper_learning_root(tmp_path, omit_review_tracks=("ai_judgment",))
+    titles = [row.title for row in check_paper_learning_tracks(paper)]
+    assert "Learning-tracks review missing core tracks" in titles
+
+
+def test_check_paper_learning_tracks_flags_shadow_omitted_from_review(tmp_path: Path):
+    paper = _write_paper_learning_root(tmp_path, shadow_in_review=False)
+    titles = [row.title for row in check_paper_learning_tracks(paper)]
+    assert "Calibrated shadows missing from decision-review" in titles
+
+
+def test_check_paper_learning_tracks_flags_empty_buy_tier_level(tmp_path: Path):
+    paper = _write_paper_learning_root(tmp_path, holdings=False)
+    titles = [row.title for row in check_paper_learning_tracks(paper)]
+    assert "Buy-tier level cohort empty after acted pass" in titles
+
+
+def test_check_paper_learning_tracks_warns_on_pre_settle_last_run(tmp_path: Path):
+    paper = _write_paper_learning_root(tmp_path, after_settle=False)
+    findings = check_paper_learning_tracks(paper)
+    assert any(row.title == "Paper-auto last_run is pre-settle only" for row in findings)
+
+
+def test_check_paper_learning_tracks_warns_when_root_missing(tmp_path: Path):
+    findings = check_paper_learning_tracks(tmp_path / "missing")
+    assert findings[0].title == "Paper automation root missing"
+
+
+def test_paper_learning_findings_defer_before_paper_auto_ready():
+    from value_investor.ops_monitor import finding_email_defer_reason
+
+    finding = OpsFinding(
+        severity="fail",
+        category="paper",
+        title="Learning-tracks review missing",
+        summary="missing",
+    )
+    morning = datetime(2026, 9, 11, 7, 45, tzinfo=UTC)  # Friday before 10:00
+    reason = finding_email_defer_reason(finding, workflow_checks=[], now=morning)
+    assert reason is not None
+    assert "10:00" in reason
+    afternoon = datetime(2026, 9, 11, 13, 15, tzinfo=UTC)
+    assert finding_email_defer_reason(finding, workflow_checks=[], now=afternoon) is None
+
+
+def test_committed_paper_learning_tracks_are_complete():
+    assert check_paper_learning_tracks() == []

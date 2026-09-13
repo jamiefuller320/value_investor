@@ -18,6 +18,7 @@ def test_load_dashboard_cache_busts_progress_report() -> None:
     assert '["system_gaps", "data/system_gaps.json"]' in text
     assert '["ingest_deviations", "data/ingest_deviations.json"]' in text
     assert '["human_tasks_checklist", "human_tasks_checklist.json"]' in text
+    assert '["lifecycle_board", "data/lifecycle_board.json"]' in text
     assert "async function applyDashboardSidecars(data)" in text
     assert "DASHBOARD_SIDECARS" in text
     assert "function bindDashboardAutoRefresh()" in text

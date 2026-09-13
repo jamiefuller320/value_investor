@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.decision_review import compare_learning_tracks
+from value_investor.library_equal_support import ensure_buy_tier_timing_stamp
 from value_investor.library_near_miss_watch import write_library_near_miss_watch
 from value_investor.library_sim import benchmark_for_market
 from value_investor.market_paper_adapter import write_market_screen_bundle
@@ -332,6 +333,11 @@ def run_epoch0_market_shard(
                 "knob_apply": False,
             }
     track_dir = apply_epoch0_level_config(shard_root, meta)
+    try:
+        timing_stamp = ensure_buy_tier_timing_stamp(library_root, market_id)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Epoch-0 timing stamp for %s failed: %s", market_id, exc)
+        timing_stamp = {"skipped": True, "error": str(exc), "market_id": market_id}
     bundle_path = write_market_screen_bundle(library_root, market_id, shard_root)
     cfg = default_buy_tier_level_config()
     try:
@@ -372,6 +378,11 @@ def run_epoch0_market_shard(
             "buy_tier_not_now_count": near_miss.get("buy_tier_not_now_count"),
             "hold_near_buy_count": near_miss.get("hold_near_buy_count"),
         },
+        "timing_stamp": {
+            "skipped": timing_stamp.get("skipped"),
+            "reason": timing_stamp.get("reason"),
+            "latest_wait_count": timing_stamp.get("latest_wait_count"),
+        },
     }
     append_weekday_batch_log(shard_root, batch_entry)
     evaluation = evaluate_market_phase(
@@ -387,6 +398,7 @@ def run_epoch0_market_shard(
         "screen_bundle": str(bundle_path),
         "learning_tracks": track_summary,
         "near_miss": near_miss,
+        "timing_stamp": timing_stamp,
         "phase": evaluation,
         "ai_judgment": False,
         "knob_apply": False,

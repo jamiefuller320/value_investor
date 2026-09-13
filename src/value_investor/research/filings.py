@@ -770,6 +770,38 @@ def _ch_body_lacks_financial_depth(text: str) -> bool:
     return not any(marker in lower for marker in _CH_FINANCIAL_DEPTH_MARKERS)
 
 
+def _ch_mime_priority_rank(content_type: str) -> int:
+    """Lower rank = preferred MIME (iXBRL before PDF)."""
+    from value_investor.research.companies_house import DOCUMENT_MIME_PRIORITY
+
+    ct = (content_type or "").lower()
+    for index, mime in enumerate(DOCUMENT_MIME_PRIORITY):
+        if ct == mime or mime in ct:
+            return index
+    return len(DOCUMENT_MIME_PRIORITY)
+
+
+def _is_ch_pdf_content_type(content_type: str) -> bool:
+    ct = (content_type or "").lower()
+    return ct == "application/pdf" or "pdf" in ct
+
+
+def _select_best_ch_body_text(candidates: list[tuple[str, str]]) -> str | None:
+    """Pick the best CH extract, preferring iXBRL over shallow strategic PDF/OCR."""
+    best_text: str | None = None
+    best_key: tuple[int, int] = (-1, -1)
+    for text, content_type in candidates:
+        score = _score_ch_body_text(text)
+        if _is_ch_pdf_content_type(content_type) and _ch_body_lacks_financial_depth(text):
+            score -= 5_000
+        rank = _ch_mime_priority_rank(content_type)
+        key = (score, -rank)
+        if key > best_key:
+            best_key = key
+            best_text = text
+    return best_text
+
+
 def _extract_investegate_html_text(html: str) -> str:
     """Extract the RNS announcement body from an Investegate HTML page."""
     lower = (html or "").lower()
@@ -5516,16 +5548,12 @@ def _fetch_companies_house_body(row: dict[str, Any]) -> str | None:
     except Exception as exc:  # noqa: BLE001
         logger.debug("CH body fetch failed for %s: %s", row.get("id"), exc)
         return None
-    best_text: str | None = None
-    best_score = -1
+    candidates: list[tuple[str, str]] = []
     for raw, content_type in downloads:
         text = _extract_filing_document_text(raw, content_type)
-        if not text or len(text) < 200:
-            continue
-        score = _score_ch_body_text(text)
-        if score > best_score:
-            best_score = score
-            best_text = text
+        if text and len(text) >= 200:
+            candidates.append((text, content_type))
+    best_text = _select_best_ch_body_text(candidates)
     if not best_text:
         return None
     if len(best_text) > FILINGS_BODY_MAX_CHARS:

@@ -16,12 +16,12 @@ most automation — this list is what still needs a human.
 
 | Task | Who | Doc |
 |------|-----|-----|
-| **Spot-check learning tracks** after paper-auto — AI excess vs ^FTSE, rules control, competing calibrated shadows, Suite B `buy_tier_level` after Monday cold start | Human | [primary-learning-track.md](primary-learning-track.md#commands) |
+| **Spot-check learning tracks** after paper-auto — post-settle last_run + decision-review coverage of AI vs rules, calibrated shadows, Suite B `buy_tier_level` (ops-monitor 13:15; excess interpretation stays Sunday) | CI | [ops-monitor.md](ops-monitor.md#paper-learning-tracks) |
 | Paper-auto + decision-review `--apply` (all tracks including `buy_tier_level`; shadows + cohort lab observe-only; endurance ledger) | CI | [decision-review.md](decision-review.md#commands) |
 | Admitted epoch-0 **local-open marks** (ASX / EU / US settle; not FTSE paper-auto; census refresh) | CI | [market-sharded-learning.md](market-sharded-learning.md#weekday-epoch-0-local-open) |
 | Epoch-0 weekday **cron upsert** on learning admit + `--sync-cron` (timezone buckets; residual human only for unmapped TZ) | CI | [market-sharded-learning.md](market-sharded-learning.md#weekday-epoch-0-local-open) |
 | **GHA secret hygiene** scan (skips if no merges / workflow touches in 36h) | CI | [gha-secret-hygiene.md](gha-secret-hygiene.md#automated-daily-check) |
-| **Confirm buy-tier level first fill** — Monday paper-auto should open the wide raw-screen Suite B book; knobs stay frozen | Human | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#level-book-live-monday) |
+| **Confirm buy-tier level first fill** — ops-monitor fails if the Suite B book acted empty; knobs stay frozen; do not treat NAV as promotion truth | CI | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#level-book-live-monday) |
 | Admitted-market weekday rememo (3/day per epoch-0 book after maintenance ingest; catch-up 5 if that book exceeds 15) | CI | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
 | **Clear engineering parked backlog** when dispatch pauses — triage oldest `list-parked` tasks; queue resumes when count &lt; 7 and 30m idle since last clearing action | Human | [ops-monitor.md](ops-monitor.md#engineering-parked-backlog-clearing) |
 
@@ -34,7 +34,7 @@ most automation — this list is what still needs a human.
 | **Start Phase C freeze writer only when READY** — do not begin autopsy build on vibes or `--force-phase-b-done` alone | Human | [pit-decision-autopsy.md](pit-decision-autopsy.md#automated-readiness-gate) |
 | **Watch shard epoch-0 + near-miss** — do not fork shard AI-judgment or knob apply until epoch-0 plus the tight groups (buy-not-now, hold-near-buy) have marks; not-buy-tier / never-buy-tier are census, not the sample; FTSE stays the data lead | Human | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
 | **Watch ingest capacity** — spare sprint auto-advance is correct; three-plus maintenance books rotate one market per slot (L323); check jobs still finish | Human | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
-| Admitted-market epoch-0 + equal-support (`buy_tier_level`, timing, near-miss, exclusion/exit-timing archives; Sunday first-time then focus rememo; admitted rememo and local-open marks are weekday; no AI / no apply) | CI | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
+| Admitted-market equal-support then epoch-0 (`buy_tier_level` after timing stamp so wait stays out of new buys; near-miss watch; exclusion/exit-timing archives; Sunday first-time then focus rememo; admitted rememo and local-open marks are weekday; no AI / no apply) | CI | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
 | Read **buy-cross archive** review (`buy_cross_archive_review.json`) — cross vs level comparison; do not spawn a live cross book | Human | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#cross-book-archive-only) |
 | Review **knob calibration priors** (`ranking_mode`, `ready_for_shadow_bootstrap`, `bootstrap_priors`) | Human | [knob-calibration.md](knob-calibration.md#promoting-a-prior-human-gate) |
 | Review **unified experiment assessment** (`experiment_assessment.json`) — after the 2026-09-03 human pass, task recommends should be empty (u4/exit-shadow watch; scoring on engineering queue) | Human | [experiment-assessment.md](experiment-assessment.md#human-gate) |

@@ -120,6 +120,8 @@ cat <<'EOF'
     ingest-loop-morning       Mon/Wed/Fri 07:05 UTC
     ingest-loop-afternoon     Mon/Wed/Fri 10:05 UTC
     analysis-review          Sun 10:35 UTC
+    paper-learning-review   Sun 10:45 UTC
+    learning-director-review Sun 10:55 UTC
     ops-monitor              Daily 07:45 UTC                 (jobId 8180483)
     data-backup              Sun 12:30 UTC                   (jobId 8179967)
     engineering-queue        Hourly Mon–Fri :15 UTC

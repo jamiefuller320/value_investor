@@ -125,6 +125,28 @@ Also folded into:
 Until then, collect only. Do **not** execute DCA on paper books or apply
 starter-size knobs from this overlay.
 
+## Dashboard board
+
+The dashboard **Lifecycle** tab is a per-market funnel of individual names plus
+the catalog experiments that watch each column. It is **observe-only** — the
+same diagnostic labels as `classify_lifecycle_phase()`, not the deferred L177
+state machine.
+
+| Column | Typical members | Catalog stages |
+|--------|-----------------|----------------|
+| Not buy tier | Below buy / strong_buy | prospect (ineligible) |
+| Not now | Buy-tier + `timing_signal=wait` | prospect (waitlist) |
+| Near buy threshold | Ready buy-tier; hold at the pre-buy conviction floor | prospect (ready) |
+| Just bought | Starter sleeve or first fill within 14 days | starter |
+| Growth | Build / full holdings | build + full |
+| Near sell threshold | Harvest, grace, or exit-pending still held | harvest + grace |
+| Just sold | Closed sell within 14 days | exit |
+| Post sale monitor | Cooldown or sold within 84 days | recommit |
+
+Switch market (and paper track) rather than stacking every universe on one
+page. Payload: `docs/data/lifecycle_board.json` (also rebuilt by local
+`POST /api/refresh`).
+
 ## What already runs vs what this adds
 
 | Piece | Status |
