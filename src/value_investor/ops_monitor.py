@@ -1191,6 +1191,60 @@ def check_memo_rememo_backlog() -> list[OpsFinding]:
     ]
 
 
+def check_phase_b_producer_progress(
+    research_root: Path = Path("docs/data/research"),
+    *,
+    min_structured: int = 3,
+) -> list[OpsFinding]:
+    """Flag when Phase C readiness is blocked because structured-verdict modes never land.
+
+    Does not widen weekday rememo_reason (Phase B lock). Surfaces the stall so
+    ops/eng can fix Sunday seed→persist or run a bounded rememo catch-up.
+    """
+    from value_investor.phase_c_readiness import (
+        MIN_STRUCTURED_DOCS,
+        STRUCTURED_VERDICT_MODES,
+        check_phase_b_slim,
+    )
+
+    threshold = max(int(min_structured), int(MIN_STRUCTURED_DOCS))
+    try:
+        check = check_phase_b_slim(research_root)
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title="Phase B producer progress check failed",
+                summary=str(exc),
+            )
+        ]
+
+    if check.status == "pass":
+        return []
+
+    evidence = check.evidence or {}
+    structured = int(evidence.get("structured_docs") or 0)
+    sampled = int(evidence.get("sampled_docs") or 0)
+    modes = ", ".join(sorted(STRUCTURED_VERDICT_MODES))
+    severity = "fail" if structured == 0 else "warn"
+    return [
+        OpsFinding(
+            severity=severity,
+            category="research",
+            title="Phase B structured-verdict producer stalled",
+            summary=(
+                f"{check.detail} "
+                f"({structured} structured / need ≥{threshold}; sampled={sampled}; "
+                f"modes={modes}). Sunday research-docs must seed committed memos into "
+                f"output/, write structured_verdict* updates, and persist back to "
+                f"docs/data/research — do not widen rememo_reason for mode migration."
+            ),
+            auto_fixable=False,
+        )
+    ]
+
+
 def check_backtest_history(
     history_dir: Path = COMMITTED_HISTORY_DIR,
 ) -> list[OpsFinding]:
@@ -1638,6 +1692,7 @@ def collect_ops_findings(
     findings.extend(check_latest_bundle(latest_path))
     findings.extend(check_ops_budget())
     findings.extend(check_memo_rememo_backlog())
+    findings.extend(check_phase_b_producer_progress())
     findings.extend(check_backtest_history())
     findings.extend(check_paper_learning_tracks())
 

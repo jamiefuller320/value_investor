@@ -5,7 +5,8 @@ artifacts, ingest stall detection, and the engineering queue.
 
 **Heal → re-verify → report** (when `--apply` / default in CI):
 
-1. Detect findings (artifacts, ingest health, workflows, engineering queue, …)
+1. Detect findings (artifacts, ingest health, workflows, engineering queue, Phase B
+   structured-verdict producer progress, …)
 2. Apply **safe auto-fixes** (below)
 3. **Re-run detection** so overall status reflects post-fix truth
 4. Draft supervised tasks / send email only for **unfixed** warn/fail

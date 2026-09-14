@@ -23,6 +23,7 @@ from value_investor.ops_monitor import (
     check_ingest_health_log,
     check_latest_bundle,
     check_paper_learning_tracks,
+    check_phase_b_producer_progress,
     check_workflow_freshness,
     draft_ops_engineering_tasks,
     filter_unresolved_workflow_failures,
@@ -865,6 +866,7 @@ def test_check_workflow_freshness_suppresses_failure_when_recovery_in_flight():
 
 @patch("value_investor.ops_monitor.list_open_pull_requests", return_value=[])
 @patch("value_investor.ops_monitor.check_workflow_freshness", return_value=([], []))
+@patch("value_investor.ops_monitor.check_phase_b_producer_progress", return_value=[])
 @patch("value_investor.ops_monitor.check_memo_rememo_backlog", return_value=[])
 @patch("value_investor.ops_monitor.check_ops_budget", return_value=[])
 @patch("value_investor.ops_monitor.check_paper_learning_tracks", return_value=[])
@@ -872,6 +874,7 @@ def test_run_ops_monitor_reverifies_after_health_log_repair(
     _paper,
     _budget,
     _rememo,
+    _phase_b,
     _workflows,
     _prs,
     tmp_path: Path,
@@ -933,6 +936,7 @@ def test_run_ops_monitor_reverifies_after_health_log_repair(
 
 @patch("value_investor.ops_monitor.list_open_pull_requests", return_value=[])
 @patch("value_investor.ops_monitor.check_workflow_freshness", return_value=([], []))
+@patch("value_investor.ops_monitor.check_phase_b_producer_progress", return_value=[])
 @patch("value_investor.ops_monitor.check_memo_rememo_backlog", return_value=[])
 @patch("value_investor.ops_monitor.check_ops_budget", return_value=[])
 @patch("value_investor.ops_monitor.check_paper_learning_tracks", return_value=[])
@@ -940,6 +944,7 @@ def test_run_ops_monitor_writes_status(
     _paper,
     _budget,
     _rememo,
+    _phase_b,
     _workflows,
     _prs,
     tmp_path: Path,
@@ -1296,3 +1301,32 @@ def test_paper_learning_findings_defer_before_paper_auto_ready():
 
 def test_committed_paper_learning_tracks_are_complete():
     assert check_paper_learning_tracks() == []
+
+
+def test_check_phase_b_producer_progress_flags_essay_only_store(tmp_path: Path):
+    research_root = tmp_path / "research"
+    ticker = research_root / "AAA.L"
+    ticker.mkdir(parents=True)
+    (ticker / "research.json").write_text(
+        json.dumps({"ticker": "AAA.L", "mode": "initial", "research_verdict": "accumulate"}),
+        encoding="utf-8",
+    )
+    findings = check_phase_b_producer_progress(research_root, min_structured=3)
+    assert len(findings) == 1
+    assert findings[0].severity == "fail"
+    assert "structured-verdict producer stalled" in findings[0].title.lower()
+    assert "do not widen rememo_reason" in findings[0].summary.lower()
+
+
+def test_check_phase_b_producer_progress_passes_when_structured_modes_present(tmp_path: Path):
+    research_root = tmp_path / "research"
+    for idx, mode in enumerate(
+        ("structured_verdict", "structured_verdict_update", "structured_verdict_gap_fill")
+    ):
+        ticker = research_root / f"T{idx}.L"
+        ticker.mkdir(parents=True)
+        (ticker / "research.json").write_text(
+            json.dumps({"ticker": ticker.name, "mode": mode, "research_verdict": "neutral"}),
+            encoding="utf-8",
+        )
+    assert check_phase_b_producer_progress(research_root) == []
