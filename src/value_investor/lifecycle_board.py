@@ -166,7 +166,7 @@ def tenure_scale() -> dict[str, Any]:
         "note": (
             "Held columns use days since opened_at. Sold columns use days since "
             "the closing mark. Screen columns (not buy-tier / not now / near buy) "
-            "have no stage clock yet, so they stay uncolored."
+            "use days since signal_since (fallback: weeks_at_signal × 7)."
         ),
     }
 
@@ -334,6 +334,19 @@ def _slim_card(
     elif column_id in SOLD_TENURE_COLUMNS:
         days_in_column = sold_days
         tenure_basis = "sold_at"
+    elif column_id in SCREEN_COLUMN_IDS:
+        signal_since = str(src.get("signal_since") or "").strip() or None
+        if signal_since:
+            card["signal_since"] = signal_since
+        days_in_column = _days_since(signal_since, now)
+        if days_in_column is not None:
+            tenure_basis = "signal_since"
+        else:
+            weeks = _optional_float(src.get("weeks_at_signal"))
+            if weeks is not None:
+                days_in_column = max(0.0, float(weeks) * 7.0)
+                tenure_basis = "weeks_at_signal"
+                card["weeks_at_signal"] = weeks
     if days_in_column is not None:
         card["days_in_column"] = int(days_in_column)
         card["tenure_band"] = tenure_band_for_days(days_in_column)

@@ -68,6 +68,7 @@ def test_held_name_is_not_also_on_the_screen_funnel(tmp_path: Path):
             "signal": "buy",
             "timing_signal": "wait",
             "conviction_score": 0.55,
+            "signal_since": (NOW - timedelta(days=10)).date().isoformat(),
         },
         {
             "ticker": "NEAR.L",
@@ -75,6 +76,7 @@ def test_held_name_is_not_also_on_the_screen_funnel(tmp_path: Path):
             "signal": "hold",
             "timing_signal": "neutral",
             "conviction_score": 0.4,
+            "signal_since": (NOW - timedelta(days=30)).date().isoformat(),
         },
         {
             "ticker": "SKIP.L",
@@ -161,7 +163,13 @@ def test_held_name_is_not_also_on_the_screen_funnel(tmp_path: Path):
     assert sold_card["days_in_column"] == 4
     assert sold_card["tenure_band"] == "fresh"
     wait_card = next(card for card in columns["not_now"]["shown"] if card["ticker"] == "WAIT.L")
-    assert "tenure_band" not in wait_card
+    assert wait_card["days_in_column"] == 10
+    assert wait_card["tenure_band"] == "recent"
+    assert wait_card["tenure_basis"] == "signal_since"
+    near_card = next(card for card in columns["near_buy"]["shown"] if card["ticker"] == "NEAR.L")
+    assert near_card["days_in_column"] == 30
+    assert near_card["tenure_band"] == "aging"
+    assert "signal_since" in payload["tenure"]["note"]
     assert payload["tenure"]["long_days"] == 56
     seen: set[str] = set()
     for column_id, names in tickers.items():
@@ -352,3 +360,8 @@ def test_dashboard_lifecycle_opens_experiment_cards():
     assert 'id="lifecycle-experiment-dialog"' in html
     assert ".lifecycle-card.tenure-long" in css
     assert ".lifecycle-init-box" in css
+    assert "data-lifecycle-start" in app
+    assert "lifecycle-experiment-start" in app
+    assert "startLifecycleExperimentFromCard" in app
+    assert ".lifecycle-evidence-list" in css
+    assert ".lifecycle-start-btn" in css

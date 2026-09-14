@@ -1081,9 +1081,12 @@ def build_company_reports(
         ):
             cash_conversion_overlay = bool(cash_conversion_overlay_flag)
         else:
+            trailing_fcf_for_cash_conversion = (
+                screen_ttm if screen_ttm is not None else resolve_free_cashflow(row)
+            )
             cash_conversion_overlay, adjusted_signal_str = apply_cash_conversion_overlay_to_signal(
                 signal,
-                free_cashflow=free_cashflow,
+                free_cashflow=trailing_fcf_for_cash_conversion,
                 shares_outstanding=shares_outstanding,
                 shares_outstanding_prev=shares_outstanding_prev,
                 ticker_models=ticker_models,

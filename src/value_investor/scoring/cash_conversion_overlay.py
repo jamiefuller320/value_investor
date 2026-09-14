@@ -7,7 +7,16 @@ from typing import Any
 
 import pandas as pd
 
-from value_investor.scoring.fcf import resolve_free_cashflow
+from value_investor.scoring.fcf import resolve_free_cashflow, screen_ttm_from_row
+
+
+def trailing_fcf_for_cash_conversion_overlay(row: pd.Series) -> float | None:
+    """Trailing screen FCF for overlay triggers; falls back to row canonical FCF."""
+    trailing = screen_ttm_from_row(row)
+    if trailing is not None:
+        return trailing
+    return resolve_free_cashflow(row)
+
 
 DIVIDEND_MODEL_IDS = ("high_dividend", "dividend_growth")
 SHARE_COUNT_STABLE_TOLERANCE = 1.01
@@ -140,7 +149,7 @@ def enrich_signals_with_cash_conversion_overlay(
         ticker = str(row["ticker"])
         ticker_models = model_results[model_results["ticker"] == ticker]
 
-        canonical_fcf = resolve_free_cashflow(row)
+        trailing_fcf = trailing_fcf_for_cash_conversion_overlay(row)
 
         shares = row.get("shares_outstanding")
         shares_outstanding = (
@@ -165,7 +174,7 @@ def enrich_signals_with_cash_conversion_overlay(
 
         triggered, new_adjusted = apply_cash_conversion_overlay_to_signal(
             str(row.get("signal") or "hold"),
-            free_cashflow=canonical_fcf,
+            free_cashflow=trailing_fcf,
             shares_outstanding=shares_outstanding,
             shares_outstanding_prev=shares_outstanding_prev,
             ticker_models=ticker_models,

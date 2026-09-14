@@ -95,6 +95,11 @@ def test_board_columns_cover_every_catalog_factor():
     assert dca["progress"]["scored_count"] == 22
     assert dca["initiation"]["ready_to_initiate"] is False
     assert "first_entry" in str(dca["initiation"]["waiting_for"])
+    assert dca["initiation"]["recommendation"]
+    assert dca["initiation"]["evidence"]
+    assert dca["initiation"]["start"]["action"] == "lifecycle-experiment-start"
+    assert dca["initiation"]["start"]["enabled"] is False
+    assert dca["initiation"]["start"]["payload"]["experiment_id"] == "entry_dca_overlay"
     planned = next(
         row for row in starter["experiments"] if row["factor_id"] == "first_fill_adverse_pause"
     )

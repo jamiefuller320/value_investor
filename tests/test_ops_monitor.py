@@ -436,6 +436,30 @@ def test_apply_auto_fixes_quarantines_corrupt_backtest_history(tmp_path: Path):
     assert all(row.fixed for row in findings if row.category == "backtest" and row.auto_fixable)
 
 
+def test_apply_auto_fixes_marks_orphan_fixed_when_pr_merged(tmp_path: Path):
+    from value_investor.engineering_recovery import RecoveryResult
+
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(json.dumps({"tasks": []}), encoding="utf-8")
+    findings = [
+        OpsFinding(
+            severity="warn",
+            category="engineering",
+            title="Orphaned pr_open engineering tasks",
+            summary="eng-20260912-08",
+            auto_fixable=True,
+        )
+    ]
+    with patch(
+        "value_investor.ops_monitor.recover_engineering_queue",
+        return_value=RecoveryResult(merged=["eng-20260912-08"]),
+    ):
+        fixes = apply_auto_fixes(findings, tasks_path=tasks_path, open_prs=[], apply=True)
+    assert fixes
+    assert findings[0].fixed
+    assert "marked merged" in (findings[0].action_taken or "")
+
+
 def test_apply_auto_fixes_reconciles_orphan_pr_open(tmp_path: Path):
     tasks_path = tmp_path / "engineering_tasks.json"
     tasks_path.write_text(

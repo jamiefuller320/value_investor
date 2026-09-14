@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-14T08:21:29+00:00",
+  "updated_at": "2026-09-14T07:56:15+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8533,9 +8533,10 @@
         "coverage",
         "system-gaps"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-51fa395c-616b-48c3-b552-4c822b99d0b0",
-      "added_at": "2026-09-13T17:10:59+00:00"
+      "added_at": "2026-09-13T17:10:59+00:00",
+      "updated_at": "2026-09-14T07:56:15+00:00"
     },
     {
       "id": "N125",
@@ -8636,20 +8637,39 @@
       "added_at": "2026-09-13T18:38:31+00:00"
     },
     {
-      "id": "L385",
-      "category": "later",
-      "section": "research",
-      "title": "Screen-column time-in-stage clock for lifecycle heatmap",
-      "summary": "Held/sold lifecycle cards now color by opened_at or close date. Not-buy-tier / not-now / near-buy names have no stage entry timestamp, so they stay uncolored until we persist first appearance on that funnel column.",
-      "revisit_when": "Screen history or near-miss watch records first_seen_at per ticker per funnel column",
+      "id": "N127",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Auto-enact experiment_assessment recommend rows",
+      "summary": "Recommend is human-ack only (N42). Entry DCA already has an observe-only ack plus a gated adoption plan; Sunday refresh must not execute DCA, change starter fraction, or apply to primary while beat_market is false.",
+      "revisit_when": "entry_dca_adoption_plan current_stage is paper_execute_graduated or primary_or_live AND a human explicitly asks to automate that one stage",
       "tags": [
         "lifecycle",
-        "heatmap",
-        "dashboard"
+        "experiment-assessment",
+        "recommend",
+        "entry-dca",
+        "not-now"
       ],
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0909c-587a-7ed2-ad66-ce1378d6ff08",
-      "added_at": "2026-09-14T08:21:29+00:00"
+      "added_at": "2026-09-14T07:49:49+00:00"
+    },
+    {
+      "id": "L385",
+      "category": "later",
+      "section": "research",
+      "title": "Euro-depth still-zero-disk first-pass memos after catchup",
+      "summary": "Zero-body rememo catchup unlocks memos once disk has any bodies. Names that remain memo_bodies=0 and disk_bodies=0 (e.g. AGS.BR, EL.PA, IFX.DE, REN.AS, SIE.DE, UQA.VI) still need euro_depth ingest thicken before Phase B rememo; do not rewrite empty shells.",
+      "revisit_when": "euro_depth zero_body_buy_tier drops or those six tickers gain filings_index with_body > 0",
+      "tags": [
+        "euro_depth",
+        "rememo",
+        "zero-body",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a09ee5-f24e-7566-801c-61555071e96a",
+      "added_at": "2026-09-14T07:56:15+00:00"
     }
   ],
   "fragments": [
