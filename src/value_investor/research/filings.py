@@ -3456,6 +3456,26 @@ def resolve_google_news_publisher_url(url: str | None) -> str | None:
     return _decode_google_news_article_url(url)
 
 
+def standardise_investegate_lse_fetch_url(url: str | None) -> str | None:
+    """
+    Resolve Google News wrappers and upgrade Investegate/LSE HTML to direct PDF URLs.
+
+    Shared entry point for indexed RNS body fetch (ingest, refetch, gap-fill).
+    """
+    if not url or not url.startswith("http"):
+        return url
+    if "news.google.com" in url:
+        resolved = resolve_google_news_publisher_url(url)
+        if not resolved or "news.google.com" in resolved:
+            return url
+        url = resolved
+    if "investegate.co.uk/announcement/" in url:
+        return resolve_investegate_lse_pdf_url(url) or url
+    if _is_lse_rns_url(url) and not _is_lse_rns_pdf_url(url):
+        return resolve_lse_rns_document_url(url) or url
+    return url
+
+
 def resolve_asx_publisher_document_url(url: str | None) -> str | None:
     """
     Upgrade ASX publisher landing pages to direct PDF/document URLs when possible.
@@ -3684,16 +3704,10 @@ def fetch_filing_body(url: str | None, *, allow_sec_exhibits: bool = True) -> st
         return _fetch_companies_house_body(
             {"url": url, "document_metadata_url": url, "source": "companies_house"}
         )
+    url = standardise_investegate_lse_fetch_url(url) or url
     if "news.google.com" in url:
-        resolved = resolve_google_news_publisher_url(url)
-        if not resolved or "news.google.com" in resolved:
-            return None
-        url = resolved
+        return None
     url = resolve_asx_publisher_document_url(url) or url
-    if "investegate.co.uk/announcement/" in url:
-        url = resolve_investegate_lse_pdf_url(url) or url
-    elif _is_lse_rns_url(url) and not _is_lse_rns_pdf_url(url):
-        url = resolve_lse_rns_document_url(url) or url
     headers: dict[str, str] = {}
     if "sec.gov" in url:
         headers["User-Agent"] = _sec_user_agent()
@@ -4407,10 +4421,11 @@ def _fetch_rns_filing_body_for_refetch(url: str) -> tuple[str | None, str | None
     Returns ``(body, extracted_h1_headline)`` where ``extracted_h1_headline`` is set
     only for the HTML fallback path (used to reject period/headline mismatches).
     """
-    body = fetch_filing_body(url)
+    fetch_url = standardise_investegate_lse_fetch_url(url) or url
+    body = fetch_filing_body(fetch_url)
     if body:
         return body, None
-    return _fetch_rns_html_body_fallback(url)
+    return _fetch_rns_html_body_fallback(fetch_url)
 
 
 def _ir_allowlist_row_needs_body_refetch(row: dict[str, Any], bodies_dir: Path) -> bool:
@@ -5699,6 +5714,13 @@ def _write_bodies(
                     body = _fetch_companies_house_body(row)
                 elif row.get("url"):
                     url = str(row["url"])
+                    if ticker and company_name:
+                        std_url = standardise_investegate_lse_fetch_url(url)
+                        if std_url and std_url != url and "news.google.com" not in std_url:
+                            row["url"] = std_url
+                            if row.get("source") == "google_news_investegate":
+                                row["source"] = "investegate_resolved"
+                            url = std_url
                     if ticker and company_name and _is_rns_body_fetch_candidate(row):
                         body, extracted_headline = _fetch_rns_filing_body_for_refetch(url)
                     else:
