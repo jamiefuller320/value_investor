@@ -10,12 +10,7 @@ from typing import Any
 
 import pandas as pd
 
-from value_investor.backtest import (
-    BacktestSummary,
-    compute_backtest,
-    load_run_snapshots,
-    save_run_snapshot,
-)
+from value_investor.backtest import BacktestSummary, compute_backtest, load_run_snapshots
 from value_investor.constituents import (
     DEFAULT_UNIVERSE,
     fetch_universe_constituents,
@@ -78,6 +73,7 @@ from value_investor.scoring.quality_family_avoid_gate_overlay import (
     enrich_signals_with_quality_family_avoid_gate,
 )
 from value_investor.scoring.sector_overrides import apply_sector_overrides
+from value_investor.scoring.snapshot import save_run_snapshot
 from value_investor.sector_scoring import add_sector_scores
 from value_investor.signal_stability import (
     append_signal_history,
