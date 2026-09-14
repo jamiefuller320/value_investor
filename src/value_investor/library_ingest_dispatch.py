@@ -587,8 +587,19 @@ def refresh_euro_ingest_dispatch(
     policy_path: Path = DEFAULT_POLICY_PATH,
     dispatch_path: Path = DEFAULT_DISPATCH_PATH,
     sync_cron: bool = False,
+    reconcile_parallel: bool = True,
 ) -> dict[str, Any]:
     """Evaluate, persist dispatch state, and optionally sync cron-job.org toggles."""
+    if reconcile_parallel:
+        try:
+            from value_investor.library_ingest_maintenance import reconcile_parallel_sprint_queues
+
+            reconcile_parallel_sprint_queues(
+                library_root=library_root,
+                policy_path=policy_path,
+            )
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("Parallel sprint reconcile before dispatch refresh failed: %s", exc)
     evaluation = evaluate_euro_ingest_dispatch(
         market_id=market_id,
         library_root=library_root,

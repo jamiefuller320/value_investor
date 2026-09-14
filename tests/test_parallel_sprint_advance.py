@@ -13,6 +13,7 @@ from value_investor.library_ingest_dispatch import (
 from value_investor.library_ingest_maintenance import (
     maybe_advance_parallel_sprint_on_parity,
     reconcile_parallel_sprint_queues,
+    reseed_empty_parallel_sprint_slots,
 )
 
 
@@ -175,6 +176,121 @@ def test_parallel_sprint_stream_for_market():
     assert parallel_sprint_stream_for_market("ftse_smallcap", policy=policy) is None
 
 
+def test_reseed_empty_parallel_sprint_slots_fills_queue_order(tmp_path: Path):
+    policy_path = tmp_path / "policy.json"
+    policy = {
+        "focus_market": "euro_depth",
+        "market_queue": ["sp500", "asx200", "ftse_smallcap", "tsx60"],
+        "ingest_parallel_sprint": [],
+        "ingest_parallel_sprint_2": [],
+        "focus_graduation": {"advance_parallel_sprint_on_ingest_parity": True},
+    }
+
+    def _health(market_id: str, **_kwargs):
+        if market_id == "asx200":
+            return {
+                "unmeasured_buy_tier": 0,
+                "zero_body_buy_tier": 0,
+                "thin_body_buy_tier": 0,
+                "indexed_without_body": 1,
+            }
+        return {
+            "unmeasured_buy_tier": 0,
+            "zero_body_buy_tier": 0,
+            "thin_body_buy_tier": 0,
+            "indexed_without_body": 0,
+            "ingest_exhausted": True,
+        }
+
+    saved: dict = {}
+
+    def _save(updated, path):
+        saved.clear()
+        saved.update(updated)
+
+    with (
+        patch(
+            "value_investor.library_ingest_maintenance.load_policy",
+            return_value=dict(policy),
+        ),
+        patch("value_investor.library_ingest_maintenance.save_policy", side_effect=_save),
+        patch(
+            "value_investor.library_ingest_dispatch.snapshot_library_buy_tier_filing_health",
+            side_effect=_health,
+        ),
+        patch(
+            "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
+            return_value={},
+        ),
+    ):
+        events = reseed_empty_parallel_sprint_slots(
+            library_root=tmp_path,
+            policy_path=policy_path,
+        )
+
+    assert len(events) == 1
+    assert events[0]["to_market"] == "asx200"
+    assert events[0]["parallel_stream"] == 1
+    assert saved["ingest_parallel_sprint"] == ["asx200"]
+    assert saved["ingest_parallel_sprint_2"] == []
+
+
+def test_reseed_fills_stream_two_when_two_markets_need_sprint(tmp_path: Path):
+    policy_path = tmp_path / "policy.json"
+    policy = {
+        "focus_market": "euro_depth",
+        "market_queue": ["sp500", "asx200", "ftse_smallcap"],
+        "ingest_parallel_sprint": [],
+        "ingest_parallel_sprint_2": [],
+        "focus_graduation": {"advance_parallel_sprint_on_ingest_parity": True},
+    }
+
+    def _health(market_id: str, **_kwargs):
+        if market_id in {"asx200", "ftse_smallcap"}:
+            return {
+                "unmeasured_buy_tier": 1,
+                "zero_body_buy_tier": 0,
+                "thin_body_buy_tier": 0,
+                "indexed_without_body": 0,
+            }
+        return {
+            "unmeasured_buy_tier": 0,
+            "zero_body_buy_tier": 0,
+            "thin_body_buy_tier": 0,
+            "indexed_without_body": 0,
+            "ingest_exhausted": True,
+        }
+
+    saved: dict = {}
+
+    with (
+        patch(
+            "value_investor.library_ingest_maintenance.load_policy",
+            return_value=dict(policy),
+        ),
+        patch(
+            "value_investor.library_ingest_maintenance.save_policy",
+            side_effect=lambda updated, _path: saved.update(updated),
+        ),
+        patch(
+            "value_investor.library_ingest_dispatch.snapshot_library_buy_tier_filing_health",
+            side_effect=_health,
+        ),
+        patch(
+            "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
+            return_value={},
+        ),
+    ):
+        events = reseed_empty_parallel_sprint_slots(
+            library_root=tmp_path,
+            policy_path=policy_path,
+        )
+
+    assert [e["to_market"] for e in events] == ["asx200", "ftse_smallcap"]
+    assert saved["ingest_parallel_sprint"] == ["asx200"]
+    assert saved["ingest_parallel_sprint_2"] == ["ftse_smallcap"]
+
+
 def test_reconcile_parallel_sprint_queues_advances_at_parity(tmp_path: Path):
     policy = {
         "focus_market": "euro_depth",
@@ -200,6 +316,10 @@ def test_reconcile_parallel_sprint_queues_advances_at_parity(tmp_path: Path):
             "value_investor.library_ingest_maintenance.maybe_advance_parallel_sprint_on_parity",
             return_value={"advanced": True, "from_market": "sp500", "to_market": "ftse_smallcap"},
         ) as advance,
+        patch(
+            "value_investor.library_ingest_maintenance.reseed_empty_parallel_sprint_slots",
+            return_value=[],
+        ),
         patch(
             "value_investor.library_ingest_maintenance.snapshot_library_buy_tier_filing_health",
             return_value=parity_health,

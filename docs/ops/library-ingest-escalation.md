@@ -160,7 +160,10 @@ ftse-library euro-ingest-dispatch --json
 
 Parallel sprint auto-advance (`advance_parallel_sprint_on_ingest_parity`, default true) rotates
 `market_queue` markets through stream slots when filing parity is met **or leftover
-thin/IWB ingest is exhausted** (parked after 3 complete 0-improve runs). Unmeasured
+thin/IWB ingest is exhausted** (parked after 3 complete 0-improve runs). When both
+stream lists are empty but a queue name regaps, `reseed_empty_parallel_sprint_slots`
+(reconcile + dispatch refresh) assigns the next needing markets in queue order so
+rotation and handoffs resume without manual policy edits. Unmeasured
 and zero-body names are never parked. FTSE-equivalent markets
 (`ftse_equivalent_markets`, e.g. sp500) still defer `ingest_parity_markets` until
 true raw parity **and** `learning-depth` is green. Exhausted leftovers vacate the
