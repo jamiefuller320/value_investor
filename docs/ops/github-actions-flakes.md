@@ -38,6 +38,8 @@ If the **latest** `CI` and `Deploy GitHub Pages` runs on `main` are green, older
 | `pip install -e .` — *"No matching distribution found for pandas>=2.2 (from versions: none)"* | Transient PyPI / empty index on one runner (same run's other job can succeed) | Library ingest workflows retry via `scripts/gha_pip_install.sh` (4 attempts, backoff). Re-run if it still fails after retries |
 | Euro / library ingest — *local changes to engineering_tasks.json would be overwritten by checkout* | Push script stashed only `docs/data/library/`, leaving `engineering_tasks.json` dirty when origin/main moved | `scripts/push_library_ingest_artifacts.sh` now stashes the full allowlist and restores only files the job changed |
 | Engineering agent — *Commit ad-hoc spend to main* rejected (`HEAD -> main (fetch first)`) | Two parallel `engineering-agent` runs (or ingest/queue) both push `docs/data/library/policy.json` after the agent finished | `scripts/gha_commit_engineering_spend.sh` retries with a fresh increment on `origin/main`. The step is `continue-on-error` so a spent-ledger race does not skip the draft PR |
+| Engineering queue — *Commit reconciled queue state* rejected (`HEAD -> main (fetch first)`) | Ingest/library/parallel agent pushed `main` between `git pull` and `git-auto-commit` push | `scripts/gha_commit_engineering_queue.sh` (shared `gha_commit_artifacts.sh` retry loop) |
+| Engineering queue — *Engineering sync check* / clash scan `HTTP Error 500` | Transient GitHub REST blip listing PR files | `_api_get` retries 429/5xx; re-run hourly queue if it still fails |
 
 ## Examples (2026-07-25)
 

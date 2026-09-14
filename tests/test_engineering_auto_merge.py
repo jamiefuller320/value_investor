@@ -2,10 +2,16 @@
 
 from __future__ import annotations
 
+import io
 import json
+import urllib.error
 from unittest.mock import patch
 
-from value_investor.engineering_auto_merge import evaluate_auto_merge, pr_checks_successful
+from value_investor.engineering_auto_merge import (
+    _api_get,
+    evaluate_auto_merge,
+    pr_checks_successful,
+)
 from value_investor.engineering_tasks import BLOCKED_PATHS, EngineeringTask
 
 
@@ -146,6 +152,45 @@ def test_pr_checks_successful_rejects_fail_bucket():
     assert not ok
     assert "not green" in reason
     assert "test" in reason
+
+
+def test_api_get_retries_transient_github_500():
+    calls = {"n": 0}
+
+    class _Resp:
+        def __init__(self, body: bytes) -> None:
+            self._body = body
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args: object) -> None:
+            return None
+
+        def read(self) -> bytes:
+            return self._body
+
+    def fake_urlopen(request, timeout=30):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise urllib.error.HTTPError(
+                request.full_url,
+                500,
+                "Internal Server Error",
+                hdrs=None,
+                fp=io.BytesIO(b""),
+            )
+        return _Resp(b'[{"filename": "tests/test_x.py"}]')
+
+    with (
+        patch("value_investor.engineering_auto_merge.time.sleep"),
+        patch(
+            "value_investor.engineering_auto_merge.urllib.request.urlopen", side_effect=fake_urlopen
+        ),
+    ):
+        data = _api_get("/repos/o/r/pulls/1/files", token="tok")
+    assert calls["n"] == 2
+    assert data[0]["filename"] == "tests/test_x.py"
 
 
 def test_pr_checks_successful_surfaces_unknown_json_field_errors():
