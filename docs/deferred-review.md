@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T18:38:31+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-14T07:49:49+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -173,6 +173,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N124 | **Auto-interpret weekday excess vs ^FTSE in ops-monitor** | Do not alert or auto-promote from weekday AI excess vs ^FTSE / rules. 3% stress underperformance is expected. ops-monitor now only checks that paper-auto + decision-review published complete track coverage. | Fair-cost Suite B has a thick forward window and Sunday promotion gates are being duplicated as mechanical checks |
 | N125 | **Execute DCA on frozen epoch-0 buy_tier_level (or spawn a DCA twin)** | Epoch-0 is the lump-sum control for the entry-DCA overlay. Executing 4x weekly (or spawning a per-market DCA twin) on those books would destroy the frozen cohort lab. Keep scoring as overlay; first optional execute stays on graduated_allocation after adoption-plan gates. | entry_dca_adoption_plan paper_execute_graduated is ready AND a human asks whether the FTSE buy_tier_level first-entry cohort should get a second executed book (default still no — overlay on the same holdings) |
 | N126 | **Fold admitted-shard DCA overlays into the Sunday FTSE weekly rollup** | Admitted epoch-0 books already write per-market entry_dca_overlay.json via run_daily_automation, but learning_tracks_entry_dca.json only rolls FTSE paper-auto tracks. Do not merge SP500/ASX/EU/TSX overlays into the FTSE Sunday cadence ranking — jurisdictions, costs, and sessions confound (N118). Keep Sunday analysis on the FTSE 61-name buy_tier_level window. | FTSE buy_tier_level first-entry windows have closed and scored, and a human wants a per-market (not pooled) confirmation census |
+| N127 | **Auto-enact experiment_assessment recommend rows** | Recommend is human-ack only (N42). Entry DCA already has an observe-only ack plus a gated adoption plan; Sunday refresh must not execute DCA, change starter fraction, or apply to primary while beat_market is false. | entry_dca_adoption_plan current_stage is paper_execute_graduated or primary_or_live AND a human explicitly asks to automate that one stage |
 
 ---
 
