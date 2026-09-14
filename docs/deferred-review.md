@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-14T07:56:15+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-14T09:38:20+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -49,6 +49,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260904-03 | At 64 percent Ultra used, empty engineering queue, fresh FTSE holdings/buy-tier memos, and a full 15/15 director-worker week, leftover cycle credit should sit unused. Next useful Cursor spend is next ISO week and only on a material trigger, not thin Yahoo quarterly. | surplus, ultra, p1 |
 | frag-20260906-01 | L314/L315 are not a sprint. L314 as written (filing/memo PIT on snapshots) is not worth it; the only cheap slice is allowlisting already-published FCF flags after live bind is stable, and L229 already covers that flag-in-history idea. L315 daily/fill marks wait until buy_tier_level has a thick epoch and a question Sunday-to-Sunday marks cannot answer. | archive, fcf, l314, l315, not_now |
 | frag-20260908-01 | S&P 500 screen archives skipped several August Sundays (2026-08-09, 08-23, 08-30), so unique_days lags archive_files. Cadence is running again; do not backfill invented archives. | sp500, screen-cadence, unique-days |
+| frag-20260914-01 | Recurring miss pattern: we analyze enacted choices and counterfactuals months later, but only fields frozen at decision time are fair. Default bias should be over-record cheap machine flags (revision_id, bind presence, confidence/risk enums) and under-record expensive prose. | recording, pit, counterfactual, philosophy |
 
 ---
 
@@ -174,6 +175,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N125 | **Execute DCA on frozen epoch-0 buy_tier_level (or spawn a DCA twin)** | Epoch-0 is the lump-sum control for the entry-DCA overlay. Executing 4x weekly (or spawning a per-market DCA twin) on those books would destroy the frozen cohort lab. Keep scoring as overlay; first optional execute stays on graduated_allocation after adoption-plan gates. | entry_dca_adoption_plan paper_execute_graduated is ready AND a human asks whether the FTSE buy_tier_level first-entry cohort should get a second executed book (default still no — overlay on the same holdings) |
 | N126 | **Fold admitted-shard DCA overlays into the Sunday FTSE weekly rollup** | Admitted epoch-0 books already write per-market entry_dca_overlay.json via run_daily_automation, but learning_tracks_entry_dca.json only rolls FTSE paper-auto tracks. Do not merge SP500/ASX/EU/TSX overlays into the FTSE Sunday cadence ranking — jurisdictions, costs, and sessions confound (N118). Keep Sunday analysis on the FTSE 61-name buy_tier_level window. | FTSE buy_tier_level first-entry windows have closed and scored, and a human wants a per-market (not pooled) confirmation census |
 | N127 | **Auto-enact experiment_assessment recommend rows** | Recommend is human-ack only (N42). Entry DCA already has an observe-only ack plus a gated adoption plan; Sunday refresh must not execute DCA, change starter fraction, or apply to primary while beat_market is false. | entry_dca_adoption_plan current_stage is paper_execute_graduated or primary_or_live AND a human explicitly asks to automate that one stage |
+| N128 | **Do not expand ARCHIVE_SIGNAL_FIELDS for FCF/EPS before live autopsy freeze proves out** | Archive slim cannot replay filing/FCF PIT today. Prefer extending weekday autopsy_freeze / feature_flags (L368) over bloating weekly ARCHIVE_SIGNAL_FIELDS; optional archive bind columns only after live freeze KPIs hold. | L368 freeze writer live with >=80% freeze completeness for 4+ weeks, and an offline cohort lab is blocked specifically by missing archive FCF/EPS bind columns |
 
 ---
 
@@ -233,6 +235,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L377 | **Retune just-bought vs growth on wide buy-tier-level books** | On the 120-name buy_tier_level book, Growth is often empty because sleeves sit below the starter-ratio ceiling or have already left the buy-tier (near sell). A days-held or book-relative size split may read better than the equal-weight target ratio. | After several weeks of epoch-0 marks when the Growth column is still empty on FTSE and admitted books |
 | L381 | **Cite FTSE buy_tier_level first-entry closes as DCA confirmation** | This week's dca_4x_weekly ranking is from concentrated 3-name books. The FTSE epoch-0 book has 61 first-entry overlay episodes from 2026-09-07 that cannot score until the 21-day window (~2026-09-28). When they close, Sunday analysis should cite that unfiltered Suite B cohort as confirmation or contradiction — still observe-only, not an execute path. | FTSE buy_tier_level entry_dca_overlay shows first_entry scored_count well above zero (window elapsed from 2026-09-07) |
 | L384 | **Rank DCA cadences only on completed windows** | This week's 22 first-entry scores are all sold_before_window with dca_4x_weekly filling 1 of 4 tranches. Leftover cash then mechanically beats lump-sum on short holds. Split window_elapsed vs sold_before_window (or require tranches_filled==target) before treating 4x weekly as a completed-cadence result. | FTSE buy_tier_level or live books have window_elapsed first-entry scores, or Sunday analysis next cites leading_cadence without noting incomplete tranches |
+| L386 | **Pre-experiment recording checklist: freeze fields before new learning strands** | Before opening a new analysis, counterfactual, or model-dev strand, require an explicit decision-time freeze schema (what must be on rebalance_log / archive / near-miss) and a join-later list. Prevents the recurring gap where later optimality or attribution needs fields that were never written at t. | Next new learning experiment is proposed, or when Phase C freeze writer ships and a second consumer (e.g. L370 or archive FCF bind columns) appears |
 
 ### Universe & data
 
