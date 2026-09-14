@@ -1012,9 +1012,7 @@ def check_workflow_freshness(
     return findings, checks
 
 
-def _is_orphaned_pr_open_task(
-    row: dict[str, Any], open_prs: list[dict[str, Any]] | None
-) -> bool:
+def _is_orphaned_pr_open_task(row: dict[str, Any], open_prs: list[dict[str, Any]] | None) -> bool:
     """True when pr_open has no matching open GitHub PR (or no recorded PR when PR list omitted)."""
     if str(row.get("status") or "") != "pr_open":
         return False

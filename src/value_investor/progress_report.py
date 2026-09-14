@@ -379,9 +379,7 @@ def build_role_coherence(
                     latest_path=latest_path,
                     tasks_path=tasks_path,
                 )
-                all_terminal_only = bool(
-                    terminal_only and len(terminal_only) == len(unlinked_plan)
-                )
+                all_terminal_only = bool(terminal_only and len(terminal_only) == len(unlinked_plan))
                 tail = (
                     " All match merged/parked tasks — schedule email_only for a fresh post-run; "
                     "idle compile backstop will not reopen them."
@@ -551,9 +549,7 @@ def build_integration_checks(
     open_prs: list[dict[str, Any]] | None = None
     if _github_token():
         open_prs = list_open_pull_requests()
-    eng_findings, queue_status = check_engineering_queue(
-        tasks_path=tasks_path, open_prs=open_prs
-    )
+    eng_findings, queue_status = check_engineering_queue(tasks_path=tasks_path, open_prs=open_prs)
     sync_findings, _sync = check_engineering_sync(tasks_path=tasks_path, open_prs=open_prs)
     ops_findings.extend(eng_findings)
     ops_findings.extend(sync_findings)
