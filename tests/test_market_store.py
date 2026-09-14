@@ -73,22 +73,22 @@ def test_rememo_reason_zero_body_catchup_before_full_lag_threshold():
     fresh while disk already has filings — that is the learning-path gap behind
     thin_memo_counted_as_coverage with rememo_eligible_count 0.
     """
-    assert rememo_reason(
-        grade="adequate", memo_bodies=0, disk_bodies=4, body_lag_threshold=10
-    ) == "stale_adequate_grade_zero_body_catchup_4"
-    assert rememo_reason(
-        grade="thin", memo_bodies=0, disk_bodies=1, body_lag_threshold=10
-    ) == "stale_thin_grade_zero_body_catchup_1"
+    assert (
+        rememo_reason(grade="adequate", memo_bodies=0, disk_bodies=4, body_lag_threshold=10)
+        == "stale_adequate_grade_zero_body_catchup_4"
+    )
+    assert (
+        rememo_reason(grade="thin", memo_bodies=0, disk_bodies=1, body_lag_threshold=10)
+        == "stale_thin_grade_zero_body_catchup_1"
+    )
     # Non-zero memo still waits for the full threshold (no catchup churn).
     assert (
-        rememo_reason(
-            grade="adequate", memo_bodies=2, disk_bodies=6, body_lag_threshold=10
-        )
-        is None
+        rememo_reason(grade="adequate", memo_bodies=2, disk_bodies=6, body_lag_threshold=10) is None
     )
-    assert rememo_reason(
-        grade="adequate", memo_bodies=2, disk_bodies=12, body_lag_threshold=10
-    ) == "stale_adequate_grade_body_lag_10"
+    assert (
+        rememo_reason(grade="adequate", memo_bodies=2, disk_bodies=12, body_lag_threshold=10)
+        == "stale_adequate_grade_body_lag_10"
+    )
 
 
 def test_resolve_merges_committed_when_index_is_narrow(tmp_path: Path):
@@ -174,13 +174,17 @@ def test_library_rememo_eligible_uses_canonical_filings_not_home_memo(tmp_path: 
 def test_library_rememo_eligible_zero_body_catchup_below_lag_threshold(tmp_path: Path):
     root = tmp_path / "library"
     research = root / "markets" / "euro_depth" / "screen" / "research"
-    _write_memo(research, "AED.BR", verdict="accumulate", grade="adequate", memo_bodies=0, disk_bodies=0)
+    _write_memo(
+        research, "AED.BR", verdict="accumulate", grade="adequate", memo_bodies=0, disk_bodies=0
+    )
     write_json(
         research / "AED.BR" / "sources" / "filings" / "filings_index.json",
         {"summary": {"with_body": 4, "total": 4}},
         compact=True,
     )
-    _write_memo(research, "AGS.BR", verdict="accumulate", grade="adequate", memo_bodies=0, disk_bodies=0)
+    _write_memo(
+        research, "AGS.BR", verdict="accumulate", grade="adequate", memo_bodies=0, disk_bodies=0
+    )
 
     eligible = library_rememo_eligible_tickers(
         root,
