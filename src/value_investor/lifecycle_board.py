@@ -46,6 +46,18 @@ JUST_BOUGHT_DAYS = 14
 JUST_SOLD_DAYS = 14
 POST_SALE_DAYS = 84
 
+# Time-in-column heatmap (held: days since open; sold: days since close).
+TENURE_LONG_DAYS = 56  # 8 weeks
+TENURE_BANDS: tuple[tuple[int | None, str], ...] = (
+    (7, "fresh"),
+    (21, "recent"),
+    (42, "aging"),
+    (TENURE_LONG_DAYS, "stale"),
+    (None, "long"),
+)
+HELD_TENURE_COLUMNS = frozenset({"just_bought", "growth", "near_sell"})
+SOLD_TENURE_COLUMNS = frozenset({"just_sold", "post_sale"})
+
 COLUMN_SHOW_CAPS = {
     "not_buy_tier": 16,
     "not_now": 32,
@@ -125,6 +137,38 @@ def _parse_dt(value: str | None) -> datetime | None:
     if parsed.tzinfo is None:
         parsed = parsed.replace(tzinfo=UTC)
     return parsed.astimezone(UTC)
+
+
+def tenure_band_for_days(days: float | None) -> str | None:
+    """Map days-in-column onto the green→red heatmap band."""
+    if days is None:
+        return None
+    try:
+        elapsed = max(0.0, float(days))
+    except (TypeError, ValueError):
+        return None
+    for ceiling, name in TENURE_BANDS:
+        if ceiling is None or elapsed <= ceiling:
+            return name
+    return "long"
+
+
+def tenure_scale() -> dict[str, Any]:
+    return {
+        "long_days": TENURE_LONG_DAYS,
+        "bands": [
+            {"id": "fresh", "max_days": 7, "label": "≤7d new"},
+            {"id": "recent", "max_days": 21, "label": "≤3w"},
+            {"id": "aging", "max_days": 42, "label": "≤6w"},
+            {"id": "stale", "max_days": TENURE_LONG_DAYS, "label": "≤8w"},
+            {"id": "long", "max_days": None, "label": ">8w"},
+        ],
+        "note": (
+            "Held columns use days since opened_at. Sold columns use days since "
+            "the closing mark. Screen columns (not buy-tier / not now / near buy) "
+            "use days since signal_since (fallback: weeks_at_signal × 7)."
+        ),
+    }
 
 
 def _days_since(value: str | None, now: datetime) -> float | None:
@@ -282,6 +326,31 @@ def _slim_card(
         card["sold_at"] = sold_at
     if pnl_pct is not None:
         card["unrealized_pnl_pct"] = pnl_pct
+    days_in_column: float | None = None
+    tenure_basis: str | None = None
+    if column_id in HELD_TENURE_COLUMNS:
+        days_in_column = opened_days
+        tenure_basis = "opened_at"
+    elif column_id in SOLD_TENURE_COLUMNS:
+        days_in_column = sold_days
+        tenure_basis = "sold_at"
+    elif column_id in SCREEN_COLUMN_IDS:
+        signal_since = str(src.get("signal_since") or "").strip() or None
+        if signal_since:
+            card["signal_since"] = signal_since
+        days_in_column = _days_since(signal_since, now)
+        if days_in_column is not None:
+            tenure_basis = "signal_since"
+        else:
+            weeks = _optional_float(src.get("weeks_at_signal"))
+            if weeks is not None:
+                days_in_column = max(0.0, float(weeks) * 7.0)
+                tenure_basis = "weeks_at_signal"
+                card["weeks_at_signal"] = weeks
+    if days_in_column is not None:
+        card["days_in_column"] = int(days_in_column)
+        card["tenure_band"] = tenure_band_for_days(days_in_column)
+        card["tenure_basis"] = tenure_basis
     return card
 
 
@@ -871,6 +940,7 @@ def build_lifecycle_board(
         "post_sale_days": POST_SALE_DAYS,
         "starter_ratio_ceiling": STARTER_RATIO_CEILING,
         "near_buy_conviction": DEFAULT_PRE_BUY_CONVICTION,
+        "tenure": tenure_scale(),
         "default_market_id": default_market,
         "columns": columns,
         "markets": markets,
@@ -919,8 +989,11 @@ __all__ = [
     "POSITION_COLUMN_IDS",
     "SCREEN_COLUMN_IDS",
     "SCHEMA_VERSION",
+    "TENURE_LONG_DAYS",
     "build_lifecycle_board",
     "classify_board_column",
     "merge_track_columns",
+    "tenure_band_for_days",
+    "tenure_scale",
     "write_lifecycle_board",
 ]

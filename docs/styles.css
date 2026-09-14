@@ -1682,8 +1682,17 @@ tr.selected td {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.25rem;
-  font-size: 0.75rem;
   line-height: 1.3;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 0.2rem 0.35rem;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  font-size: 0.75rem;
+  color: inherit;
+  width: 100%;
 }
 
 .lifecycle-planned {
@@ -1716,8 +1725,127 @@ tr.selected td {
   margin: 0.15rem 0 0;
 }
 
+.lifecycle-exp-chip:hover,
+.lifecycle-exp-chip:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.lifecycle-exp-ready {
+  font-size: 0.68rem;
+  padding: 0.05rem 0.35rem;
+  border-radius: 999px;
+}
+
+.lifecycle-exp-ready.ready {
+  background: rgba(46, 156, 79, 0.16);
+  color: var(--buy);
+}
+
+.lifecycle-exp-ready.waiting {
+  background: rgba(184, 134, 11, 0.16);
+  color: var(--hold);
+}
+
+.lifecycle-init-box {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.65rem 0.75rem;
+  margin: 0.35rem 0 0;
+}
+
+.lifecycle-init-box.ready {
+  border-color: rgba(46, 156, 79, 0.45);
+  background: rgba(46, 156, 79, 0.08);
+}
+
+.lifecycle-init-box.waiting {
+  border-color: rgba(184, 134, 11, 0.4);
+  background: rgba(184, 134, 11, 0.07);
+}
+
+.lifecycle-tenure-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.55rem;
+  margin: 0.35rem 0 0.65rem;
+}
+
+.lifecycle-tenure-swatch,
+.lifecycle-tenure-days {
+  font-size: 0.72rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+.lifecycle-tenure-days {
+  margin-left: 0.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.lifecycle-card.tenure-fresh,
+.lifecycle-tenure-swatch.tenure-fresh {
+  border-left: 4px solid var(--buy);
+  background: rgba(46, 156, 79, 0.12);
+}
+
+.lifecycle-card.tenure-recent,
+.lifecycle-tenure-swatch.tenure-recent {
+  border-left: 4px solid #6aa84f;
+  background: rgba(106, 168, 79, 0.12);
+}
+
+.lifecycle-card.tenure-aging,
+.lifecycle-tenure-swatch.tenure-aging {
+  border-left: 4px solid var(--hold);
+  background: rgba(184, 134, 11, 0.12);
+}
+
+.lifecycle-card.tenure-stale,
+.lifecycle-tenure-swatch.tenure-stale {
+  border-left: 4px solid #c05621;
+  background: rgba(192, 86, 33, 0.12);
+}
+
+.lifecycle-card.tenure-long,
+.lifecycle-tenure-swatch.tenure-long {
+  border-left: 4px solid var(--avoid);
+  background: rgba(179, 58, 58, 0.12);
+}
+
 @media (max-width: 900px) {
   .lifecycle-board {
     grid-template-columns: repeat(8, minmax(10.5rem, 1fr));
   }
 }
+
+
+.lifecycle-evidence-list {
+  list-style: none;
+  margin: 0.4rem 0 0.75rem;
+  padding: 0;
+}
+.lifecycle-evidence-list li {
+  display: flex;
+  gap: 0.4rem;
+  align-items: flex-start;
+  margin: 0.2rem 0;
+  font-size: 0.85rem;
+}
+.lifecycle-evidence-list li.ok .lifecycle-evidence-mark { color: #1b7f3a; }
+.lifecycle-evidence-list li.fail .lifecycle-evidence-mark { color: #9a3412; }
+.lifecycle-evidence-list li.current { font-weight: 600; }
+.lifecycle-recommendation { margin: 0.5rem 0; }
+.lifecycle-start-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin: 0.75rem 0 0.25rem;
+}
+.lifecycle-start-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.lifecycle-start-status.error { color: #b91c1c; }

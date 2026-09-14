@@ -147,6 +147,17 @@ Switch market (and paper track) rather than stacking every universe on one
 page. Payload: `docs/data/lifecycle_board.json` (also rebuilt by local
 `POST /api/refresh`).
 
+Each column’s experiment chips open a detail card (aim, catalog/ledger
+progress, artifact). A `recommend` row shows structured **evidence**, a
+**recommendation**, and a Supabase-linked **Start** button that records an
+observe-only ack when the human-ack gate is clear. Start never auto-applies
+DCA or starter fraction — `recommend` stays observe-only.
+
+Held, sold, and screen name cards use a green→red **time-in-stage** heatmap:
+≤7d fresh, ≤3w, ≤6w, ≤8w, then red beyond 8 weeks. Held columns clock
+`opened_at`; sold columns clock the closing mark; screen columns clock
+`signal_since` (fallback `weeks_at_signal × 7`).
+
 ## What already runs vs what this adds
 
 | Piece | Status |
@@ -162,7 +173,8 @@ page. Payload: `docs/data/lifecycle_board.json` (also rebuilt by local
 Sunday: when `learning_tracks_entry_dca` shows
 `ready_for_cadence_analysis=true`, read the rollup (leading cadence, mean
 de-risk, `model_independent_hint`) and the adoption plan. Record ack with
-`ftse-experiment-assess ack --experiment-id entry_dca_overlay` (observe-only).
+`ftse-experiment-assess ack --experiment-id entry_dca_overlay` (observe-only)
+or the Lifecycle card **Start** button (Supabase dashboard bridge).
 Do **not** execute DCA or change starter fraction from the overlay.
 
 See also [`capital-allocation.md`](capital-allocation.md),

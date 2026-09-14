@@ -10,6 +10,7 @@ from value_investor.lifecycle_board import (
     build_lifecycle_board,
     classify_board_column,
     merge_track_columns,
+    tenure_band_for_days,
     write_lifecycle_board,
 )
 from value_investor.position_lifecycle import BOARD_COLUMN_IDS
@@ -67,6 +68,7 @@ def test_held_name_is_not_also_on_the_screen_funnel(tmp_path: Path):
             "signal": "buy",
             "timing_signal": "wait",
             "conviction_score": 0.55,
+            "signal_since": (NOW - timedelta(days=10)).date().isoformat(),
         },
         {
             "ticker": "NEAR.L",
@@ -74,6 +76,7 @@ def test_held_name_is_not_also_on_the_screen_funnel(tmp_path: Path):
             "signal": "hold",
             "timing_signal": "neutral",
             "conviction_score": 0.4,
+            "signal_since": (NOW - timedelta(days=30)).date().isoformat(),
         },
         {
             "ticker": "SKIP.L",
@@ -153,6 +156,21 @@ def test_held_name_is_not_also_on_the_screen_funnel(tmp_path: Path):
     assert "NEAR.L" in tickers["near_buy"]
     assert "SKIP.L" in tickers["not_buy_tier"]
     assert "SOLD.L" in tickers["just_sold"]
+    hold_card = next(card for card in columns["just_bought"]["shown"] if card["ticker"] == "HOLD.L")
+    assert hold_card["days_in_column"] == 3
+    assert hold_card["tenure_band"] == "fresh"
+    sold_card = next(card for card in columns["just_sold"]["shown"] if card["ticker"] == "SOLD.L")
+    assert sold_card["days_in_column"] == 4
+    assert sold_card["tenure_band"] == "fresh"
+    wait_card = next(card for card in columns["not_now"]["shown"] if card["ticker"] == "WAIT.L")
+    assert wait_card["days_in_column"] == 10
+    assert wait_card["tenure_band"] == "recent"
+    assert wait_card["tenure_basis"] == "signal_since"
+    near_card = next(card for card in columns["near_buy"]["shown"] if card["ticker"] == "NEAR.L")
+    assert near_card["days_in_column"] == 30
+    assert near_card["tenure_band"] == "aging"
+    assert "signal_since" in payload["tenure"]["note"]
+    assert payload["tenure"]["long_days"] == 56
     seen: set[str] = set()
     for column_id, names in tickers.items():
         overlap = seen & names
@@ -211,6 +229,13 @@ def test_library_market_is_isolated_from_live(tmp_path: Path):
         card["ticker"] for card in cols["just_bought"]["shown"]
     }
     assert "AAA" in shown
+    held = next(
+        card
+        for card in list(cols["growth"]["shown"]) + list(cols["just_bought"]["shown"])
+        if card["ticker"] == "AAA"
+    )
+    assert held["days_in_column"] == 40
+    assert held["tenure_band"] == "aging"
     assert "ZZZ.L" not in shown
     assert {card["ticker"] for card in cols["near_buy"]["shown"]} == {"BBB"}
     assert {card["ticker"] for card in cols["not_buy_tier"]["shown"]} == {"CCC"}
@@ -262,3 +287,81 @@ def test_write_lifecycle_board_roundtrip(tmp_path: Path):
     assert payload["observe_only"] is True
     assert [col["id"] for col in payload["columns"]] == list(BOARD_COLUMN_IDS)
     assert dest.exists()
+
+
+def test_full_sleeve_uses_opened_at_heatmap(tmp_path: Path):
+    live_reports = [
+        {
+            "ticker": "OLD.L",
+            "name": "Old PLC",
+            "signal": "buy",
+            "timing_signal": "accumulate",
+            "conviction_score": 0.7,
+            "last_price": 10.0,
+        }
+    ]
+    paper = tmp_path / "paper"
+    btl = paper / "buy_tier_level"
+    btl.mkdir(parents=True)
+    write_json(
+        btl / "config.json",
+        {"track_id": "buy_tier_level", "is_cohort_lab": True, "max_positions": 2},
+    )
+    write_json(
+        btl / "automated_fund.json",
+        {
+            "config": {"max_positions": 2},
+            "cash": 0,
+            "holdings": {
+                "OLD.L": {
+                    "ticker": "OLD.L",
+                    "shares": 100,
+                    "avg_cost": 10,
+                    "opened_at": (NOW - timedelta(days=60)).isoformat(),
+                }
+            },
+            "trades": [],
+            "equity_curve": [{"at": NOW.isoformat(), "portfolio_value": 2000}],
+            "rebalance_state": {"exit_streak": {}, "reentry_cooldown": {}},
+        },
+    )
+    payload = build_lifecycle_board(
+        library_root=tmp_path / "library",
+        paper_root=paper,
+        shard_root=tmp_path / "shards",
+        live_reports=live_reports,
+        now=NOW,
+    )
+    ftse = next(row for row in payload["markets"] if row["market_id"] == "ftse350")
+    cols = merge_track_columns(ftse["screen_columns"], ftse["tracks"][0])
+    card = next(row for row in cols["growth"]["shown"] if row["ticker"] == "OLD.L")
+    assert card["days_in_column"] == 60
+    assert card["tenure_band"] == "long"
+
+
+def test_tenure_band_for_days_spans_eight_weeks():
+    assert tenure_band_for_days(None) is None
+    assert tenure_band_for_days(0) == "fresh"
+    assert tenure_band_for_days(7) == "fresh"
+    assert tenure_band_for_days(21) == "recent"
+    assert tenure_band_for_days(42) == "aging"
+    assert tenure_band_for_days(56) == "stale"
+    assert tenure_band_for_days(57) == "long"
+
+
+def test_dashboard_lifecycle_opens_experiment_cards():
+    app = Path("docs/app.js").read_text(encoding="utf-8")
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    css = Path("docs/styles.css").read_text(encoding="utf-8")
+    assert "function openLifecycleExperimentCard(factorId)" in app
+    assert "function renderLifecycleExperimentCard(factorId)" in app
+    assert "data-lifecycle-experiment" in app
+    assert "lifecycleTenureLegend(board.tenure)" in app
+    assert 'id="lifecycle-experiment-dialog"' in html
+    assert ".lifecycle-card.tenure-long" in css
+    assert ".lifecycle-init-box" in css
+    assert "data-lifecycle-start" in app
+    assert "lifecycle-experiment-start" in app
+    assert "startLifecycleExperimentFromCard" in app
+    assert ".lifecycle-evidence-list" in css
+    assert ".lifecycle-start-btn" in css

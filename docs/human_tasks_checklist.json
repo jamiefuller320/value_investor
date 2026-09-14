@@ -14,7 +14,7 @@
         {
           "id": "weekday-verify-paper-auto",
           "title": "Spot-check learning tracks after paper-auto",
-          "summary": "ops-monitor (13:15 catch-up) checks post-settle last_run, decision-review coverage of AI judgment vs rules, competing calibrated shadows, and Suite B buy_tier_level. Workflow freshness covers CI acted. Excess vs ^FTSE comparison stays Sunday — do not promote on weekday marks.",
+          "summary": "ops-monitor (13:15 catch-up) checks post-settle last_run, decision-review coverage of AI judgment vs rules, competing calibrated shadows, and Suite B buy_tier_level. Workflow freshness covers CI acted. Excess vs ^FTSE comparison stays Sunday \u2014 do not promote on weekday marks.",
           "automated": true,
           "doc_path": "docs/ops/ops-monitor.md",
           "doc_anchor": "paper-learning-tracks"
@@ -101,7 +101,7 @@
         {
           "id": "sunday-phase-c-readiness-gate",
           "title": "Start Phase C freeze writer only when readiness is READY",
-          "summary": "Before building or enabling the PIT autopsy freeze writer, confirm phase_c_readiness.json (or ftse-phase-c-readiness exit 0) is READY. Do not start Phase C on vibes or with --force-phase-b-done alone — that override does not invent rebalance history or feature coverage.",
+          "summary": "Before building or enabling the PIT autopsy freeze writer, confirm phase_c_readiness.json (or ftse-phase-c-readiness exit 0) is READY. Do not start Phase C on vibes or with --force-phase-b-done alone \u2014 that override does not invent rebalance history or feature coverage.",
           "automated": false,
           "doc_path": "docs/ops/pit-decision-autopsy.md",
           "doc_anchor": "automated-readiness-gate"
@@ -133,7 +133,7 @@
         {
           "id": "sunday-buy-cross-archive",
           "title": "Read buy-cross archive review",
-          "summary": "After analysis-review, read buy_cross_archive_review.json: cross-book vs level comparison, week-0 cash, names that never entered because they stayed buy-tier. Observe-only — do not spawn a live cross book from sparse historic crossings.",
+          "summary": "After analysis-review, read buy_cross_archive_review.json: cross-book vs level comparison, week-0 cash, names that never entered because they stayed buy-tier. Observe-only \u2014 do not spawn a live cross book from sparse historic crossings.",
           "automated": false,
           "doc_path": "docs/ops/buy-tier-cohort-labs.md",
           "doc_anchor": "cross-book-archive-only"
@@ -197,7 +197,7 @@
         {
           "id": "sunday-entry-dca-cadence",
           "title": "Review entry DCA cadence when overlay readiness fires",
-          "summary": "Ack recorded 2026-09-13 (observe-only). Review docs/data/entry_dca_adoption_plan.json: next gate is out-of-sample first-entry on ai_judgment/rules; optional execute on graduated_allocation after ≥8 marks. Do not execute DCA, change starter fraction, or apply to primary while beat_market is false.",
+          "summary": "Ack recorded 2026-09-13 (observe-only; CLI or Lifecycle Start via Supabase). Review docs/data/entry_dca_adoption_plan.json: next gate is out-of-sample first-entry on ai_judgment/rules; optional execute on graduated_allocation after \u22658 marks. Do not execute DCA, change starter fraction, or apply to primary while beat_market is false.",
           "automated": false,
           "doc_path": "docs/ops/position-lifecycle.md",
           "doc_anchor": "entry-dca-adoption-plan"
@@ -213,7 +213,7 @@
         {
           "id": "sunday-analysis-tasks",
           "title": "Triage analysis_tasks experiments",
-          "summary": "Persist/publish/apply high system_gaps flags auto-queue as eng-sgap-* (no agent dispatch). Triage remaining proposed produce/learning-clock flags with ftse-analysis-review promote. Phase B rememo is body-lag slim — do not promote thin_memo_counted_as_coverage as rememo-eligibility widening; thicken filings then existing rememo_reason. Scoring candidates remain eng-20260903-02 / eng-20260903-03 (observe-only; no assign_signal() edits). Keep paper_knobs and offline_sim manual; do not revive cancelled N58/N59 knob counterfactuals.",
+          "summary": "Persist/publish/apply high system_gaps flags auto-queue as eng-sgap-* (no agent dispatch). Triage remaining proposed produce/learning-clock flags with ftse-analysis-review promote. Phase B rememo is body-lag slim \u2014 do not promote thin_memo_counted_as_coverage as rememo-eligibility widening; thicken filings then existing rememo_reason. Scoring candidates remain eng-20260903-02 / eng-20260903-03 (observe-only; no assign_signal() edits). Keep paper_knobs and offline_sim manual; do not revive cancelled N58/N59 knob counterfactuals.",
           "automated": false,
           "doc_path": "docs/ops/analysis-review.md",
           "doc_anchor": "manual-promotion-to-engineering"
@@ -378,7 +378,7 @@
         {
           "id": "adhoc-review-fcf-basis-bridges",
           "title": "Override FCF auto policy only when majority/filing is wrong",
-          "summary": "Ordinary buy-tier FCF mismatches auto-resolve (majority among screen/filing/company-adjusted, else filing-aligned OCF−CapEx). Write docs/data/research/<TICKER>/sources/fcf_bridge.json only as a residual override when that auto pick is wrong, or when so-what flags fcf_bridge_needed because no filing/company figure exists. Never leave divergent Yahoo TTM as policy.",
+          "summary": "Ordinary buy-tier FCF mismatches auto-resolve (majority among screen/filing/company-adjusted, else filing-aligned OCF\u2212CapEx). Write docs/data/research/<TICKER>/sources/fcf_bridge.json only as a residual override when that auto pick is wrong, or when so-what flags fcf_bridge_needed because no filing/company figure exists. Never leave divergent Yahoo TTM as policy.",
           "automated": false,
           "doc_path": "docs/ops/fcf-basis-bridges.md",
           "doc_anchor": "when-to-review-residual"

@@ -59,13 +59,49 @@ def test_board_columns_cover_every_catalog_factor():
                 {
                     "experiment_id": "entry_dca_overlay",
                     "title": "DCA overlay",
-                    "status": "observing",
+                    "status": "recommend",
+                    "kind": "lifecycle_overlay",
+                    "human_ack_required": False,
+                    "human_acked": True,
+                    "forward_evidence": {
+                        "scored_count": 22,
+                        "tracks_with_closed": 9,
+                        "leading_cadence": "dca_4x_weekly",
+                        "ready_for_cadence_analysis": True,
+                    },
                 }
-            ]
+            ],
+            "entry_dca_adoption": {
+                "current_stage": "out_of_sample_first_entry",
+                "acked": True,
+                "stages": [
+                    {
+                        "id": "out_of_sample_first_entry",
+                        "status": "open",
+                        "ready": False,
+                        "revisit_when": "ai_judgment first_entry>=3, rules first_entry>=1",
+                        "do_not": "Do not treat failing calibration shadows as live-book confirmation",
+                    }
+                ],
+            },
         }
     )
     assert len(columns) == len(BOARD_COLUMN_IDS)
     starter = next(col for col in columns if col["id"] == "just_bought")
     dca = next(row for row in starter["experiments"] if row["factor_id"] == "entry_dca_cadence")
-    assert dca["assessment_status"] == "observing"
+    assert dca["assessment_status"] == "recommend"
     assert dca["model_independent"] is True
+    assert dca["aim"]
+    assert dca["progress"]["scored_count"] == 22
+    assert dca["initiation"]["ready_to_initiate"] is False
+    assert "first_entry" in str(dca["initiation"]["waiting_for"])
+    assert dca["initiation"]["recommendation"]
+    assert dca["initiation"]["evidence"]
+    assert dca["initiation"]["start"]["action"] == "lifecycle-experiment-start"
+    assert dca["initiation"]["start"]["enabled"] is False
+    assert dca["initiation"]["start"]["payload"]["experiment_id"] == "entry_dca_overlay"
+    planned = next(
+        row for row in starter["experiments"] if row["factor_id"] == "first_fill_adverse_pause"
+    )
+    assert planned["initiation"]["kind"] == "planned"
+    assert planned["initiation"]["ready_to_initiate"] is False
