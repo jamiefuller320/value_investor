@@ -486,6 +486,12 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "issuer IR at upplc.com/investors.upplc.com is bot-gated (403/429) and "
         "Companies House annual PDFs still fail extraction."
     ),
+    "TRI.TO": (
+        "tsx60 leftover IWB: seven SEC 6-K cover HTML primaries below the "
+        "substantiveness gate; linked EX-99.1 exhibits are dividend/notice stubs "
+        "under the financial gate and are not the indexed URLs; FY2025 40-F "
+        "(tri-20251231.htm), interim SEC packs, and newswire are already bodied."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.

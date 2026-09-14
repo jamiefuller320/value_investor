@@ -7434,6 +7434,16 @@ def test_parked_source_hunter_su_to_tsx60_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_parked_source_hunter_skip_tri_to_tsx60():
+    """eng-20260914-01: TRI.TO leftover IWB is SEC 6-K cover HTML, not missing 40-F/interim."""
+    assert "TRI.TO" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["TRI.TO"]
+    assert "6-K" in reason
+    assert "EX-99.1" in reason
+    assert "40-F" in reason
+    assert fetch_filings_ir_allowlist("TRI.TO") == []
+
+
 def test_parked_source_hunter_ultp_l_ftse_smallcap_skip():
     """eng-20260911-06: ULTP.L Investegate RNS fails allowlist live-fetch title_mismatch; IR bot-gated."""
     assert "ULTP.L" in PARKED_SOURCE_HUNTER_SKIP
