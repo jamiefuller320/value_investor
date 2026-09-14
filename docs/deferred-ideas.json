@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-14T07:56:15+00:00",
+  "updated_at": "2026-09-14T09:38:20+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8670,6 +8670,42 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a09ee5-f24e-7566-801c-61555071e96a",
       "added_at": "2026-09-14T07:56:15+00:00"
+    },
+    {
+      "id": "L386",
+      "category": "later",
+      "section": "learning",
+      "title": "Pre-experiment recording checklist: freeze fields before new learning strands",
+      "summary": "Before opening a new analysis, counterfactual, or model-dev strand, require an explicit decision-time freeze schema (what must be on rebalance_log / archive / near-miss) and a join-later list. Prevents the recurring gap where later optimality or attribution needs fields that were never written at t.",
+      "revisit_when": "Next new learning experiment is proposed, or when Phase C freeze writer ships and a second consumer (e.g. L370 or archive FCF bind columns) appears",
+      "tags": [
+        "recording",
+        "freeze",
+        "counterfactual",
+        "pit",
+        "model-dev"
+      ],
+      "status": "open",
+      "source": "weekly planning: anticipate future recording needs",
+      "added_at": "2026-09-14T09:38:20+00:00"
+    },
+    {
+      "id": "N128",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Do not expand ARCHIVE_SIGNAL_FIELDS for FCF/EPS before live autopsy freeze proves out",
+      "summary": "Archive slim cannot replay filing/FCF PIT today. Prefer extending weekday autopsy_freeze / feature_flags (L368) over bloating weekly ARCHIVE_SIGNAL_FIELDS; optional archive bind columns only after live freeze KPIs hold.",
+      "revisit_when": "L368 freeze writer live with >=80% freeze completeness for 4+ weeks, and an offline cohort lab is blocked specifically by missing archive FCF/EPS bind columns",
+      "tags": [
+        "archive",
+        "recording",
+        "L365",
+        "L368",
+        "counterfactual"
+      ],
+      "status": "open",
+      "source": "weekly planning: anticipate future recording needs",
+      "added_at": "2026-09-14T09:38:20+00:00"
     }
   ],
   "fragments": [
@@ -9148,6 +9184,19 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a08068-ac7f-7a5b-9ee4-ad24103a703e",
       "added_at": "2026-09-08T09:52:52+00:00"
+    },
+    {
+      "id": "frag-20260914-01",
+      "text": "Recurring miss pattern: we analyze enacted choices and counterfactuals months later, but only fields frozen at decision time are fair. Default bias should be over-record cheap machine flags (revision_id, bind presence, confidence/risk enums) and under-record expensive prose.",
+      "tags": [
+        "recording",
+        "pit",
+        "counterfactual",
+        "philosophy"
+      ],
+      "status": "open",
+      "source": "weekly planning conversation",
+      "added_at": "2026-09-14T09:38:20+00:00"
     }
   ],
   "schema_version": 1
