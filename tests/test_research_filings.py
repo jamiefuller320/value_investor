@@ -80,6 +80,7 @@ from value_investor.research.filings import (
     resolve_lse_rns_document_url,
     resolve_sec_cik,
     sanitize_filings_index,
+    standardise_investegate_lse_fetch_url,
     summarize_filings,
 )
 from value_investor.research.ingest import (
@@ -1801,7 +1802,7 @@ def test_fetch_rns_filing_body_for_refetch_uses_html_fallback(monkeypatch):
     )
     monkeypatch.setattr(
         "value_investor.research.filings.fetch_filing_body",
-        lambda url: None,
+        lambda url, **kwargs: None,
     )
     monkeypatch.setattr(
         "value_investor.research.filings._http_get",
@@ -1829,7 +1830,7 @@ def test_fetch_rns_filing_body_for_refetch_lse_html_fallback(monkeypatch):
     )
     monkeypatch.setattr(
         "value_investor.research.filings.fetch_filing_body",
-        lambda url: None,
+        lambda url, **kwargs: None,
     )
 
     def fake_get(url, headers=None, timeout=60):
@@ -1842,6 +1843,107 @@ def test_fetch_rns_filing_body_for_refetch_lse_html_fallback(monkeypatch):
     assert headline == "ITV plc Full Year Results 2025"
     assert body is not None
     assert "Revenue increased" in body
+
+
+def test_standardise_investegate_lse_fetch_url_decodes_google_news_to_lse(monkeypatch):
+    """eng-20260914-01: Google News wrappers must resolve to direct LSE/Investegate fetch URLs."""
+    gnews = "https://news.google.com/rss/articles/CBMiabc?oc=5"
+    lse_html = "https://docs.londonstockexchange.com/rns/itv/fy2025.html"
+    monkeypatch.setattr(
+        "value_investor.research.filings.resolve_google_news_publisher_url",
+        lambda url: lse_html if "news.google.com" in url else url,
+    )
+    assert standardise_investegate_lse_fetch_url(gnews) == lse_html
+
+
+def test_fetch_rns_filing_body_for_refetch_google_news_to_lse_html_fallback(monkeypatch):
+    """eng-20260914-01: unresolved PDF path still fetches LSE HTML after Google News decode."""
+    gnews = "https://news.google.com/rss/articles/CBMiabc?oc=5"
+    lse_html = "https://docs.londonstockexchange.com/rns/itv/fy2025.html"
+    page_html = (
+        """
+    <html><body>
+    <h1>ITV plc Full Year Results 2025</h1>
+    <p>Revenue increased 3% and operating profit rose with pension deficit reduced.</p>
+    """
+        + ("detail " * 120)
+        + """
+    </body></html>
+    """
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.resolve_google_news_publisher_url",
+        lambda url: lse_html if "news.google.com" in url else url,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url, **kwargs: None,
+    )
+
+    def fake_get(url, headers=None, timeout=60):
+        if url == lse_html:
+            return page_html.encode("utf-8")
+        raise AssertionError(url)
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_get)
+    body, headline = _fetch_rns_filing_body_for_refetch(gnews)
+    assert headline == "ITV plc Full Year Results 2025"
+    assert body is not None
+    assert "Revenue increased" in body
+
+
+def test_refetch_investegate_persists_standardised_lse_url(tmp_path, monkeypatch):
+    """eng-20260914-01: refetch rewrites Google News index URLs to LSE/Investegate direct links."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    gnews = "https://news.google.com/rss/articles/CBMiabc?oc=5"
+    lse_html = "https://docs.londonstockexchange.com/rns/itv/fy2025.html"
+    index = {
+        "ticker": "ITV.L",
+        "company_name": "ITV plc",
+        "filings": [
+            {
+                "id": "gnews_lse",
+                "source": "google_news_investegate",
+                "headline": "ITV plc Full Year Results 2025 - Investegate",
+                "published_at": "2026-03-05T00:00:00+00:00",
+                "url": gnews,
+                "period": "annual",
+                "has_body": False,
+                "body_path": None,
+                "priority": 120,
+            }
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.resolve_google_news_publisher_url",
+        lambda url: lse_html if "news.google.com" in url else url,
+    )
+
+    def fake_enrich(rows, *, ticker, company_name):
+        resolved = standardise_investegate_lse_fetch_url(str(rows[0]["url"]))
+        return [{**rows[0], "url": resolved, "source": "investegate_resolved"}]
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        fake_enrich,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_rns_filing_body_for_refetch",
+        lambda url: ("Annual results narrative " + ("x" * 220), None),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="ITV.L",
+        company_name="ITV plc",
+        max_bodies=5,
+    )
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["url"] == lse_html
+    assert saved["filings"][0]["source"] == "investegate_resolved"
+    assert (filings_dir / "bodies" / "gnews_lse.txt").exists()
 
 
 def test_ch_row_needs_body_refetch_when_body_marked_truncated(tmp_path):
