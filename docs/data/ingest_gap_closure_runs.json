@@ -10070,8 +10070,115 @@
         "per_ticker": []
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260914-03",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "CSC.AX",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "CSC.AX"
+        ],
+        "market_id": "asx200",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260914-03",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-14T20:44:25.586042+00:00",
+      "completed_at": "2026-09-14T20:45:32.705760+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": -1,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "CSC.AX"
+        ],
+        "results": [
+          {
+            "ticker": "CSC.AX",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 67,
+              "filings_with_body": 66,
+              "indexed_without_body": 1
+            },
+            "after": {
+              "filings_total": 67,
+              "filings_with_body": 65,
+              "indexed_without_body": 2
+            },
+            "improved": false,
+            "regime": "asx_announcements",
+            "filings_summary": {
+              "total": 63,
+              "annual": 18,
+              "interim": 15,
+              "trading_update": 3,
+              "other": 27,
+              "with_body": 62,
+              "period_coverage": {
+                "annual": {
+                  "total": 18,
+                  "with_body": 18
+                },
+                "interim": {
+                  "total": 15,
+                  "with_body": 15
+                },
+                "trading_update": {
+                  "total": 3,
+                  "with_body": 3
+                },
+                "other": {
+                  "total": 27,
+                  "with_body": 26
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 65,
+              "with_body_after": 65,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "CSC.AX",
+            "with_body_before": 66,
+            "with_body_after": 65,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-14T16:31:21.913778+00:00",
+  "updated_at": "2026-09-14T20:45:32.705770+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }

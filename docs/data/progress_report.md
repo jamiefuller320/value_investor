@@ -1,6 +1,6 @@
 # FTSE progress report
 
-Generated `2026-09-14T21:16:12+00:00` · overall **INFO**
+Generated `2026-09-14T21:21:41+00:00` · overall **INFO**
 
 Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.
 

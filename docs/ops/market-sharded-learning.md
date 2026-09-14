@@ -108,6 +108,43 @@ Spare 50%/25% fractions apply only while a market is still *in front* of that th
 
 It does **not** start a shard AI-judgment track or `decision-review --apply`. Watch epoch-0 and the near-miss groups first. FTSE stays the data lead (P1 live ingest / paper-auto). Euro keeps the fat sprint until its own maintenance threshold.
 
+### Progressive epoch-0 admission
+
+**Agreed end-state:** every index slice that should eventually learn gets the **same** L321/L319 package (frozen `buy_tier_level`, weekday epoch-0 marks, equal-support timing stamp, near-miss watch, FTSE-volume maintenance, weekday rememo caps). That is **not** weekly AI paper on every shard (**N94** keeps capacity-1 weekly paper on the focus book only).
+
+**Progressive ≠ simultaneous.** Do not bulk-add all graduated markets to `ladder.admitted_learning_markets` or expect epoch-0 crons for ~21 slices at once (**N96**; shared ingest runners). Admission is **serialized**:
+
+1. A market runs **sprint deepen** (focus fat slot and/or `ingest_parallel_sprint` / `_2` while on `market_queue`).
+2. It reaches **`sprint_ingest_complete`** (raw filing parity **or** leftover thin/IWB parked as exhausted).
+3. **`admit_market_to_learning`** (L322) flips equal-support; epoch-0 weekday crons register on first admit.
+4. Auto-advance + **`reseed_empty_parallel_sprint_slots`** promote the next **`market_queue`** name that still has gaps into the freed spare stream.
+
+**Three labels the dashboard conflates:**
+
+| Label | Meaning |
+|-------|---------|
+| **Graduated** (Layer A) | Manifest / grow complete; may be maintenance-only with **no** epoch-0 |
+| **On `market_queue`** | Eligible for **parallel sprint rotation** behind focus |
+| **Admitted** (L322) | Epoch-0 standard **on** — same package as other admitted books |
+
+**Breadth queue complete** ([`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md)) means the historical tradable index list has Layer A data (`sp500` … `tsx60`). It does **not** mean every graduated slice is admitted. Remaining slices (e.g. `nasdaq100`, `dax`, `aim`, …) stay **graduated, not admitted** until appended to the **committed** `docs/data/library/policy.json` → `market_queue`, sprint threshold met, and L322 runs.
+
+**Live policy shape (depth-first):** focus `euro_depth`; sprint queue typically `sp500`, `asx200`, `ftse_smallcap`, `tsx60`. When all four have completed sprint, they remain **admitted + maintenance**; the next epoch-0 admit comes from **tail expansion**, not from re-sprinting exhausted books unless a new screen reopens buy-tier gaps.
+
+#### Expanding `market_queue` (one market at a time)
+
+Use when the next T212 / `DEFAULT_MARKET_QUEUE` index should enter the sprint rotation (not for bulk “admit all”).
+
+| Step | Action |
+|------|--------|
+| 1 | Confirm **`MARKET_BENCHMARKS`** in `library_sim.py` (observe sim + screen clock). Add Yahoo index + test if missing. |
+| 2 | Confirm manifest / grow (`ftse-library grow --market <id>`) and buy-tier screen shortlist exist. |
+| 3 | Append **one** id to **`market_queue`** in committed policy (preserve order; tail append unless deliberately prioritising). |
+| 4 | Run **`ftse-library euro-ingest-dispatch --json --sync-cron`** (reconcile, reseed, dispatch, epoch-0 cron catch-up). |
+| 5 | Verify `parallel_sprint_*`, `sprint_markets`, and dashboard ingest badges; watch maintenance job duration (L323). |
+
+Do **not** hand-fill parallel stream lists except incident recovery; do **not** add a fourth equal sprint workflow. Do **not** set `ftse_equivalent_markets` unless canonical-only measurement like `sp500` is intended.
+
 **Equal-support package (market-agnostic).** Once a market is admitted, the same elements apply regardless of exchange suffix:
 
 | Element | Wiring | Not this |

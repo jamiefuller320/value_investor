@@ -127,7 +127,21 @@
       "source": "post_run_review",
       "evidence": {
         "tickers": [],
-        "plan_index": 4
+        "plan_index": 4,
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260914-04",
+        "verified_at": "2026-09-14T21:16:28.596518+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_research_filings.py",
+            "tests/test_research_ingest.py",
+            "tests/test_gap_fill_deepen.py",
+            "tests/test_ingest_improvement.py",
+            "tests/test_companies_house.py"
+          ],
+          "output_tail": "........................................................................ [ 18%]\n........................................................................ [ 37%]\n........................................................................ [ 55%]\n........................................................................ [ 74%]\n........................................................................ [ 93%]\n..........................                                               [100%]\n386 passed in 247.53s (0:04:07)"
+        }
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test",
@@ -156,11 +170,13 @@
       ],
       "auto_merge": false,
       "status": "merged",
-      "no_diff_count": 0,
+      "result_path": "output/engineering_result_eng-20260914-04.md",
       "branch_name": "cursor/eng-20260914-04-1de3",
+      "no_diff_count": 0,
+      "completed_at": "2026-09-14T20:21:46.818258+00:00",
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/636",
       "pr_number": 636,
-      "merged_at": "2026-09-14T21:16:04.728592+00:00"
+      "merged_at": "2026-09-14T21:16:28.596799+00:00"
     },
     {
       "id": "eng-20260914-05",
@@ -211,7 +227,7 @@
       "title": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
       "summary": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
       "priority": "high",
-      "priority_score": 93.0,
+      "priority_score": 95.0,
       "source": "post_run_review",
       "evidence": {
         "tickers": [
@@ -251,7 +267,7 @@
     }
   ],
   "ingest_health": {
-    "snapshot_at": "2026-09-14T19:48:19.221621+00:00",
+    "snapshot_at": "2026-09-14T21:12:17.529777+00:00",
     "buy_tier_count": 62,
     "measured_tickers": 62,
     "unmeasured_buy_tier": 0,
@@ -263,11 +279,11 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-14T21:15:56.052400+00:00",
+    "evaluated_at": "2026-09-14T21:17:39.233606+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
-    "snapshot_at": "2026-09-14T17:16:27.227648+00:00",
+    "snapshot_at": "2026-09-14T19:48:19.221621+00:00",
     "buy_tier_count": 62,
     "measured_tickers": 62,
     "unmeasured_buy_tier": 0,
@@ -277,6 +293,6 @@
     "indexed_without_body": 14,
     "filings_with_body": 4196
   },
-  "reprioritized_at": "2026-09-14T19:48:19.221730+00:00",
-  "reprioritized_after_task": "eng-20260914-01"
+  "reprioritized_at": "2026-09-14T21:12:17.529894+00:00",
+  "reprioritized_after_task": "eng-20260914-04"
 }
