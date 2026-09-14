@@ -2309,10 +2309,75 @@ def test_enrich_signals_with_run_history_fcf_action_notes_skips_non_strong_buy(
     assert enriched.iloc[0]["action_note"] == "Buy — neutral timing"
 
 
+def test_enrich_signals_with_run_history_persists_fcf_flags_for_buy_tier(
+    tmp_path: Path,
+):
+    """Buy-tier run history must carry divergence flags without stamping action notes."""
+    sources = tmp_path / "research" / "MEGP.L" / "sources"
+    filings_dir = sources / "filings" / "bodies"
+    filings_dir.mkdir(parents=True)
+    annual_body = filings_dir / "annual.txt"
+    annual_body.write_text(
+        "Cash generated from operations £115.5m while net cash generated from operating "
+        "activities was £90.8m.",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "annual",
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(annual_body),
+                        "published_at": "2026-03-23",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    financials = {
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 90_762_000.0,
+                "Capital Expenditure": -65_609_000.0,
+                "Free Cash Flow": 25_153_000.0,
+                "Cash Dividends Paid": -29_769_000.0,
+            }
+        }
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "signal": "buy",
+                "action_note": "Buy — neutral timing",
+                "free_cashflow": 25_153_000.0,
+                "free_cashflow_screen_ttm": 15_565_750.0,
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_run_history_fcf_action_notes(signals, output_dir=tmp_path)
+    row = enriched.iloc[0]
+
+    assert row["action_note"] == "Buy — neutral timing"
+    assert row["fcf_definition_divergence"] is True
+    assert row["fcf_divergence_flagged"] is True
+    assert row["fcf_dividend_coverage"]["statutory_ocf_minus_capex"]["ratio"] == pytest.approx(
+        25_153_000.0 / 29_769_000.0
+    )
+
+
 def test_save_run_snapshot_strong_buy_carries_fcf_divergence_action_note(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ):
-    from value_investor.backtest import load_run_snapshots, save_run_snapshot
+    from value_investor.backtest import load_run_snapshots
+    from value_investor.scoring.snapshot import save_run_snapshot
 
     sources = tmp_path / "research" / "HIK.L" / "sources"
     sources.mkdir(parents=True)
@@ -2358,6 +2423,46 @@ def test_save_run_snapshot_strong_buy_carries_fcf_divergence_action_note(
     row = load_run_snapshots(tmp_path)[0].signals[0]
     assert "FCF basis mismatch" in row["action_note"]
     assert "filing $119M" in row["action_note"]
+
+
+def test_save_run_snapshot_persists_labelled_dual_coverage(tmp_path: Path, monkeypatch):
+    from value_investor.backtest import load_run_snapshots
+    from value_investor.scoring.snapshot import save_run_snapshot
+
+    monkeypatch.setattr(
+        "value_investor.backtest.snapshot_prices",
+        lambda tickers: {ticker: 10.0 for ticker in tickers} | {"^FTSE": 8000.0},
+    )
+    labelled = {
+        "statutory_ocf_minus_capex": {"label": "Statutory OCF−CapEx", "ratio": 0.84},
+        "management_cash_generated_minus_capex": {
+            "label": "Management cash-generated−CapEx",
+            "ratio": 1.68,
+        },
+    }
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "signal": "buy",
+                "conviction_score": 0.7,
+                "data_quality_score": 0.9,
+                "fcf_definition_divergence": True,
+                "fcf_divergence_flagged": True,
+                "fcf_dividend_coverage": labelled,
+            }
+        ]
+    )
+    save_run_snapshot(
+        tmp_path,
+        run_at=datetime(2026, 9, 14, tzinfo=UTC),
+        signals=signals,
+    )
+
+    row = load_run_snapshots(tmp_path)[0].signals[0]
+    assert row["fcf_definition_divergence"] is True
+    assert row["fcf_divergence_flagged"] is True
+    assert row["fcf_dividend_coverage"]["statutory_ocf_minus_capex"]["ratio"] == pytest.approx(0.84)
 
 
 def test_honour_fcf_action_notes_on_signals_caps_vty_style_stale_row():

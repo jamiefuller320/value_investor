@@ -346,13 +346,16 @@ def honour_fcf_action_notes_on_signals(signals: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+_BUY_TIER_RUN_HISTORY_SIGNALS = frozenset({"strong_buy", "buy"})
+
+
 def enrich_signals_with_run_history_fcf_action_notes(
     signals: pd.DataFrame,
     *,
     output_dir: Path | None = None,
 ) -> pd.DataFrame:
-    """Append FCF divergence flags to strong_buy ``action_note`` for run snapshots."""
-    if signals.empty or "action_note" not in signals.columns:
+    """Persist FCF divergence flags for buy-tier rows; append notes on ``strong_buy`` only."""
+    if signals.empty:
         return signals
 
     from value_investor.scoring.earnings_growth_overlay import (
@@ -361,14 +364,23 @@ def enrich_signals_with_run_history_fcf_action_notes(
     )
     from value_investor.scoring.fcf import (
         append_fcf_divergence_to_action_note,
+        compute_dual_fcf_dividend_coverage,
+        extract_cashflow_metrics_from_annual_financials,
+        extract_dividends_paid_from_annual_financials,
+        extract_gross_cash_from_operations_for_ticker,
+        labelled_fcf_dividend_coverage_for_snapshot,
+        load_cached_financials,
         ocf_definition_diverges,
         overlay_free_cashflow_from_bundle,
         reconcile_fcf_for_ticker,
     )
 
     out = signals.copy()
+    if "action_note" not in out.columns:
+        out["action_note"] = ""
     for index, row in out.iterrows():
-        if str(row.get("signal") or "") != "strong_buy":
+        signal = str(row.get("signal") or "")
+        if signal not in _BUY_TIER_RUN_HISTORY_SIGNALS:
             continue
 
         ticker = str(row["ticker"])
@@ -409,12 +421,75 @@ def enrich_signals_with_run_history_fcf_action_notes(
             and not (isinstance(operating_cashflow_raw, float) and pd.isna(operating_cashflow_raw))
             else None
         )
+        if operating_cashflow_gross is None:
+            operating_cashflow_gross = extract_gross_cash_from_operations_for_ticker(
+                ticker,
+                output_dir=output_dir,
+            )
+        if (
+            operating_cashflow is None
+            or fcf_dividend_coverage_net is None
+            or fcf_dividend_coverage_gross is None
+        ):
+            financials = load_cached_financials(ticker, output_dir=output_dir)
+            if financials:
+                cash_metrics = extract_cashflow_metrics_from_annual_financials(financials)
+                if operating_cashflow is None:
+                    operating_cashflow = cash_metrics.get("operating_cashflow")
+                dividends_paid = extract_dividends_paid_from_annual_financials(financials)
+                coverage = compute_dual_fcf_dividend_coverage(
+                    operating_cashflow=operating_cashflow,
+                    operating_cashflow_gross=operating_cashflow_gross,
+                    capital_expenditure=cash_metrics.get("capital_expenditure"),
+                    dividends_paid=dividends_paid,
+                    free_cashflow=cash_metrics.get("free_cashflow"),
+                )
+                if fcf_dividend_coverage_net is None:
+                    fcf_dividend_coverage_net = coverage.get("fcf_dividend_coverage_net")
+                if fcf_dividend_coverage_gross is None:
+                    fcf_dividend_coverage_gross = coverage.get("fcf_dividend_coverage_gross")
+
         fcf_definition_divergence = (
             bool(definition_div_raw)
             if definition_div_raw is not None
             and not (isinstance(definition_div_raw, float) and pd.isna(definition_div_raw))
             else ocf_definition_diverges(operating_cashflow, operating_cashflow_gross)
         )
+        divergence_flag_raw = row.get("fcf_divergence_flagged")
+        fcf_divergence_flagged = (
+            bool(divergence_flag_raw)
+            if divergence_flag_raw is not None
+            and not (isinstance(divergence_flag_raw, float) and pd.isna(divergence_flag_raw))
+            else bool(fcf_bundle.get("fcf_divergence_flagged"))
+        )
+
+        for col in (
+            "fcf_definition_divergence",
+            "fcf_divergence_flagged",
+            "fcf_dividend_coverage_net",
+            "fcf_dividend_coverage_gross",
+            "fcf_dividend_coverage",
+        ):
+            if col not in out.columns:
+                out[col] = None
+        if fcf_definition_divergence:
+            out.loc[index, "fcf_definition_divergence"] = True
+        if fcf_divergence_flagged:
+            out.loc[index, "fcf_divergence_flagged"] = True
+        if fcf_dividend_coverage_net is not None:
+            out.loc[index, "fcf_dividend_coverage_net"] = fcf_dividend_coverage_net
+        if fcf_dividend_coverage_gross is not None:
+            out.loc[index, "fcf_dividend_coverage_gross"] = fcf_dividend_coverage_gross
+        labelled_coverage = labelled_fcf_dividend_coverage_for_snapshot(
+            fcf_definition_divergence=fcf_definition_divergence,
+            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+            fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
+        )
+        if labelled_coverage is not None:
+            out.at[index, "fcf_dividend_coverage"] = labelled_coverage
+
+        if signal != "strong_buy":
+            continue
 
         action_note = append_fcf_divergence_to_action_note(
             str(row.get("action_note") or ""),

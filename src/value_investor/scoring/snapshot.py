@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -11,6 +12,78 @@ from value_investor.research.verdict import compute_adjusted_signal
 from value_investor.scoring.fcf import screen_ttm_from_row
 from value_investor.scoring.fcf_basis_overlay import apply_fcf_export_enforcement
 from value_investor.storage import read_json, write_json
+
+_RUN_SNAPSHOT_OPTIONAL_SIGNAL_COLUMNS = (
+    "name",
+    "sector",
+    "timing_signal",
+    "timing_score",
+    "action_note",
+    "models_passed",
+    "weighted_model_score",
+    "research_verdict",
+    "adjusted_signal",
+    "research_as_of",
+    "research_confidence",
+    "fcf_basis_overlay",
+    "interim_quality_overlay",
+    "earnings_basis_overlay",
+    "interim_eps_decline_pct",
+    "adjusted_eps_growth_pct",
+    "signal_trend",
+    "weeks_at_signal",
+    "passed_families",
+    "price_vs_sma200_pct",
+    "core_order",
+    "core_limit",
+    "core_allocation_pct",
+    "tactical_limit",
+    "tactical_allocation_pct",
+    "tactical_stop_loss",
+    "tactical_take_profit",
+    "trade_plan_summary",
+    "atr_14",
+    "volume_ratio_20",
+    "operating_cashflow",
+    "operating_cashflow_gross",
+    "fcf_dividend_coverage_gross",
+    "fcf_dividend_coverage_net",
+    "fcf_definition_divergence",
+    "fcf_divergence_flagged",
+    "fcf_dividend_coverage",
+)
+
+
+def save_run_snapshot(
+    output_dir: Path,
+    *,
+    run_at: datetime,
+    signals: pd.DataFrame,
+) -> Path:
+    """Persist run history with labelled dual FCF coverage and divergence flags."""
+    from value_investor.backtest import HISTORY_DIR, RunSnapshot, snapshot_prices
+
+    history_dir = output_dir / HISTORY_DIR
+    history_dir.mkdir(parents=True, exist_ok=True)
+
+    tickers = signals["ticker"].tolist()
+    prices = snapshot_prices(tickers)
+
+    signal_cols = ["ticker", "signal", "conviction_score", "data_quality_score"]
+    for optional in _RUN_SNAPSHOT_OPTIONAL_SIGNAL_COLUMNS:
+        if optional in signals.columns:
+            signal_cols.append(optional)
+
+    snapshot = RunSnapshot(
+        run_at=run_at.isoformat(),
+        prices=prices,
+        signals=signals[signal_cols].to_dict(orient="records"),
+    )
+
+    stamp = run_at.strftime("%Y%m%d_%H%M%S")
+    path = history_dir / f"run_{stamp}.json"
+    write_json(path, snapshot.to_dict(), compact=True, compress=True)
+    return path
 
 
 def enforce_fcf_basis_in_snapshot(
