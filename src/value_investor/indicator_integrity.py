@@ -117,9 +117,7 @@ def build_research_docs_receipt(
         "error_count": len(errors),
         "errors": list(errors)[:20],
         "persisted_trees": int(persisted_trees),
-        "touched_tickers": [str(t).strip().upper() for t in touched_tickers if str(t).strip()][
-            :40
-        ],
+        "touched_tickers": [str(t).strip().upper() for t in touched_tickers if str(t).strip()][:40],
         "structured_modes_in_committed_after": stats.structured,
         "essay_modes_in_committed_after": stats.essay,
         "sampled_committed_docs": stats.sampled,
@@ -199,9 +197,7 @@ def evaluate_research_docs_receipt(
     targets = active + alumni
     persisted = int(receipt.get("persisted_trees") or 0)
     structured_after = int(receipt.get("structured_modes_in_committed_after") or 0)
-    live_structured = (
-        int(live_stats.structured) if live_stats is not None else structured_after
-    )
+    live_structured = int(live_stats.structured) if live_stats is not None else structured_after
     run_at = str(receipt.get("run_at") or "")
 
     if targets > 0 and writes == 0:
