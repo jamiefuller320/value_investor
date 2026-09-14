@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-09-13T06:49:56.541688+00:00",
-  "as_of": "2026-09-13T07:49:56.535586+01:00",
+  "updated_at": "2026-09-14T07:18:02.091370+00:00",
+  "as_of": "2026-09-14T08:18:02.082251+01:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -20,8 +20,8 @@
   "underwater_count": 0,
   "thesis_status_counts": {
     "intact": 3,
-    "weakening": 1,
-    "broken": 0,
+    "weakening": 0,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
@@ -43,11 +43,11 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0,
+      "cheapness": 0.25,
       "quality": 0.5,
-      "dividend": 0.0,
-      "garp": 0.0,
-      "risk": 0.0
+      "dividend": 0.25,
+      "garp": 0.25,
+      "risk": 0.25
     },
     "selection_feedback_flags": [],
     "balancing_hint": "maintain",
@@ -56,43 +56,35 @@
   "holdings": [
     {
       "ticker": "GLE.L",
-      "name": "MJ Gleeson plc",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
+      "name": "GLE.L",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0312,
-      "mark": 247.5,
+      "unrealized_pct": 0.0,
+      "mark": 255.4637,
       "avg_cost": 255.4637,
-      "signal": "buy",
-      "timing_signal": "insufficient_data",
-      "conviction_score": 0.3285,
-      "data_quality_score": 1.0,
-      "passed_families": [
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
         "cheapness",
+        "quality",
         "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "accumulate",
+      "research_verdict": null,
       "reasons": [
-        "conviction 33% below intact floor",
-        "still buy",
-        "research accumulate"
+        "cheapness lost and not in buy tier"
       ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00"
-      ],
-      "weaken_reasons": [
-        "conviction 33% below intact floor"
-      ],
-      "broken_reasons": []
+      "intact_reasons": [],
+      "weaken_reasons": [],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
     },
     {
       "ticker": "CAPD.L",
@@ -105,8 +97,8 @@
       "mark": 112.0,
       "avg_cost": 112.0,
       "signal": "buy",
-      "timing_signal": "insufficient_data",
-      "conviction_score": 0.6297,
+      "timing_signal": "neutral",
+      "conviction_score": 0.7125,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -122,14 +114,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 63%"
+        "conviction 71%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 63%"
+        "conviction 71%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -145,8 +137,8 @@
       "mark": 170.2,
       "avg_cost": 170.2,
       "signal": "buy",
-      "timing_signal": "insufficient_data",
-      "conviction_score": 0.3521,
+      "timing_signal": "neutral",
+      "conviction_score": 0.4125,
       "data_quality_score": 0.85,
       "passed_families": [
         "cheapness",
@@ -162,14 +154,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.85",
-        "conviction 35%"
+        "conviction 41%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.85",
-        "conviction 35%"
+        "conviction 41%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -185,7 +177,7 @@
       "mark": 68.0,
       "avg_cost": 67.648,
       "signal": "strong_buy",
-      "timing_signal": "insufficient_data",
+      "timing_signal": "neutral",
       "conviction_score": 0.7001,
       "data_quality_score": 1.0,
       "passed_families": [

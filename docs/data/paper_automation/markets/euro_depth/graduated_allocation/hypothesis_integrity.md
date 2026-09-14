@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `graduated_allocation` · updated 2026-09-13T06:49:29.978832+00:00
+Track: `graduated_allocation` · updated 2026-09-14T07:15:06.285050+00:00
 
 ## Portfolio loser feedback
 
@@ -24,12 +24,12 @@ Track: `graduated_allocation` · updated 2026-09-13T06:49:29.978832+00:00
 - data_quality 1.00
 - conviction 85%
 
-### DHL.DE — intact / hold_tolerate (+0.3%)
+### DG.PA — intact / hold_tolerate (+0.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 80%
+- conviction 93%
 
 ### SHELL.AS — intact / hold_tolerate (+0.4%)
 - still strong_buy
@@ -38,7 +38,7 @@ Track: `graduated_allocation` · updated 2026-09-13T06:49:29.978832+00:00
 - data_quality 1.00
 - conviction 78%
 
-### ERIC-B.ST — intact / hold_tolerate (+1.1%)
+### ERIC-B.ST — intact / hold_tolerate (+2.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

@@ -1,15 +1,48 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-13T08:48:54.647073+02:00",
+    "local_time": "2026-09-14T09:14:44.891604+02:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-09-13T09:00:00+02:00",
-    "settle_at": "2026-09-13T09:30:00+02:00",
+    "market_open_at": "2026-09-14T09:00:00+02:00",
+    "settle_at": "2026-09-14T09:30:00+02:00",
     "can_act": false,
-    "reason": "before market open"
+    "reason": "waiting for open settle (30 min after 09:00 Europe/Paris)"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "47b8aa86-359a-4410-b5c7-f105fffc177e",
+      "fund_id": "f213b25d-76e3-459a-ac89-1dfef961449c",
+      "acted_at": "2026-09-14T09:14:44.891604+02:00",
+      "ticker": "DHL.DE",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 3.640239,
+      "price": 55.02,
+      "gross": 200.29,
+      "cost": 0.37,
+      "net_cash": 199.92,
+      "note": "Automated exit \u2014 left target set",
+      "name": "DHL AG",
+      "avg_cost_at_exit": 54.84,
+      "position_closed": true
+    },
+    {
+      "id": "8ff7534b-10c5-4fd7-9acd-184898840a0e",
+      "fund_id": "f213b25d-76e3-459a-ac89-1dfef961449c",
+      "acted_at": "2026-09-14T09:14:44.891604+02:00",
+      "ticker": "DG.PA",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 1.789589,
+      "price": 111.45,
+      "gross": 199.45,
+      "cost": 0.37,
+      "net_cash": -199.82,
+      "note": "Automated buy",
+      "name": "Vinci SA"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +56,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 997.5,
-    "cash": 0.0,
+    "nav": 998.72,
+    "cash": 0.1,
     "max_positions": 5,
     "min_conviction": 0.0,
     "sector_cap": 0.3,
@@ -33,7 +66,7 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 199.43,
+    "target_sleeve_value": 199.74,
     "targets": [
       {
         "ticker": "AD.AS",
@@ -54,7 +87,7 @@
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "signal": "strong_buy",
         "conviction_score": 0.9335,
-        "price": 98.66
+        "price": 99.62
       },
       {
         "ticker": "SAN.PA",
@@ -71,32 +104,10 @@
         "price": 41.415
       }
     ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "DHL.DE",
-        "name": "DHL AG",
-        "reason": "No longer in the top conviction target set",
-        "shares": 3.640239,
-        "price": 55.02,
-        "value": 200.29
-      }
-    ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
-      {
-        "action": "buy",
-        "ticker": "DG.PA",
-        "name": "Vinci SA",
-        "reason": "New sleeve",
-        "value": 199.43,
-        "price": 111.45,
-        "target_value": 199.43,
-        "conviction_score": 0.9347000000000001,
-        "signal": "strong_buy"
-      }
-    ],
+    "anticipated_buys": [],
     "anticipated_holds": [
       {
         "action": "hold",
@@ -104,8 +115,18 @@
         "name": "Koninklijke Ahold Delhaize N.V.",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 197.32,
-        "target_value": 199.43,
+        "target_value": 199.74,
         "conviction_score": 0.9357000000000001,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
+        "reason": "Already near equal-weight target",
+        "value": 199.45,
+        "target_value": 199.74,
+        "conviction_score": 0.9347000000000001,
         "signal": "strong_buy"
       },
       {
@@ -114,7 +135,7 @@
         "name": "Sanofi",
         "reason": "Already near equal-weight target",
         "value": 197.79,
-        "target_value": 199.43,
+        "target_value": 199.74,
         "conviction_score": 0.8507,
         "signal": "strong_buy"
       },
@@ -124,14 +145,14 @@
         "name": "Shell plc",
         "reason": "Already near equal-weight target",
         "value": 200.38,
-        "target_value": 199.43,
+        "target_value": 199.74,
         "conviction_score": 0.775,
         "signal": "strong_buy"
       }
     ],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 5 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s); leave 3 near-target holding(s)."
+    "summary": "Next rebalance would target 5 equal-weight sleeve(s); leave 4 near-target holding(s)."
   },
   "alerts": [
     {
@@ -140,7 +161,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 98.66000366210938,
+      "mark": 99.62000274658203,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -168,23 +189,23 @@
       "timing_signal": "insufficient_data"
     },
     {
-      "ticker": "DHL.DE",
-      "name": "DHL AG",
-      "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 55.02000045776367,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "insufficient_data"
-    },
-    {
       "ticker": "SHELL.AS",
       "name": "Shell plc",
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
       "mark": 41.415000915527344,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "DG.PA",
+      "name": "Vinci SA",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 111.44999694824219,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -205,7 +226,7 @@
       "id": "f213b25d-76e3-459a-ac89-1dfef961449c",
       "created_at": "2026-09-09T07:22:23.004695+00:00"
     },
-    "cash": 0.0,
+    "cash": 0.1,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -242,17 +263,6 @@
         "take_profit": null,
         "opened_at": "2026-09-09T09:22:23.004540+02:00"
       },
-      "DHL.DE": {
-        "ticker": "DHL.DE",
-        "shares": 3.640239,
-        "avg_cost": 54.84,
-        "name": "DHL AG",
-        "sector": "Industrials",
-        "currency": "EUR",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-09-09T09:22:23.004540+02:00"
-      },
       "SHELL.AS": {
         "ticker": "SHELL.AS",
         "shares": 4.838359,
@@ -263,6 +273,17 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-09-09T09:22:23.004540+02:00"
+      },
+      "DG.PA": {
+        "ticker": "DG.PA",
+        "shares": 1.789589,
+        "avg_cost": 111.45,
+        "name": "Vinci SA",
+        "sector": "Industrials",
+        "currency": "EUR",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-14T09:14:44.891604+02:00"
       }
     },
     "trades": [
@@ -340,6 +361,38 @@
         "net_cash": -200.0,
         "note": "Automated buy",
         "name": "Shell plc"
+      },
+      {
+        "id": "47b8aa86-359a-4410-b5c7-f105fffc177e",
+        "fund_id": "f213b25d-76e3-459a-ac89-1dfef961449c",
+        "acted_at": "2026-09-14T09:14:44.891604+02:00",
+        "ticker": "DHL.DE",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 3.640239,
+        "price": 55.02,
+        "gross": 200.29,
+        "cost": 0.37,
+        "net_cash": 199.92,
+        "note": "Automated exit \u2014 left target set",
+        "name": "DHL AG",
+        "avg_cost_at_exit": 54.84,
+        "position_closed": true
+      },
+      {
+        "id": "8ff7534b-10c5-4fd7-9acd-184898840a0e",
+        "fund_id": "f213b25d-76e3-459a-ac89-1dfef961449c",
+        "acted_at": "2026-09-14T09:14:44.891604+02:00",
+        "ticker": "DG.PA",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 1.789589,
+        "price": 111.45,
+        "gross": 199.45,
+        "cost": 0.37,
+        "net_cash": -199.82,
+        "note": "Automated buy",
+        "name": "Vinci SA"
       }
     ],
     "equity_curve": [
@@ -420,22 +473,40 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-14T09:14:44.891604+02:00",
+        "portfolio_value": 696.22,
+        "cash": 0.1,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.85626,
+            "SEK": 0.0758
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-13T08:48:54.647073+02:00",
+    "last_mark_at": "2026-09-14T09:14:44.891604+02:00",
     "rebalance_state": {
-      "exit_streak": {
+      "exit_streak": {},
+      "reentry_cooldown": {
         "DHL.DE": 1
-      },
-      "reentry_cooldown": {}
+      }
     }
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (2 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "ai_judgment",
-    "generated_at": "2026-09-13T06:49:07.224395+00:00",
-    "open_count": 0,
+    "generated_at": "2026-09-14T07:14:52.016817+00:00",
+    "open_count": 1,
     "closed_count": 0,
     "by_exit_kind": {},
     "grace_vs_rotation": {
@@ -447,13 +518,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment",
-    "generated_at": "2026-09-13T06:49:07.224682+00:00",
+    "generated_at": "2026-09-14T07:14:52.017566+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -507,30 +578,37 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 0,
+      "hold_closed_count": 1,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 2,
       "gaps": [
-        "hold_recovery closed episodes=0 (target >=15)",
+        "hold_recovery closed episodes=1 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 2,
-        "recovered_to_breakeven": 1,
+        "count": 1,
+        "recovered_to_breakeven": 0,
         "close_reasons": {
-          "open": 2
+          "open": 1
         }
       },
       "closed": {
-        "count": 0
+        "count": 1,
+        "recovered_to_breakeven": 1,
+        "close_reasons": {
+          "sold_while_recovered": 1
+        }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 0
+        "count": 1,
+        "verdicts": {
+          "open": 1
+        }
       },
       "closed": {
         "count": 0
@@ -538,8 +616,8 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 2,
-      "swap_rotations": 0
+      "hold_episodes": 0,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -551,8 +629,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "ai_judgment",
-    "updated_at": "2026-09-13T06:49:07.225043+00:00",
-    "as_of": "2026-09-13T08:48:54.647073+02:00",
+    "updated_at": "2026-09-14T07:14:52.018341+00:00",
+    "as_of": "2026-09-14T09:14:44.891604+02:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -683,18 +761,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "DHL.DE",
-        "name": "DHL AG",
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0033,
-        "mark": 55.02,
-        "avg_cost": 54.84,
+        "unrealized_pct": 0.0,
+        "mark": 111.45,
+        "avg_cost": 111.45,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.7963,
+        "conviction_score": 0.9347,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -710,14 +788,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 80%"
+          "conviction 93%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 80%"
+          "conviction 93%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -769,8 +847,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0104,
-        "mark": 98.66,
+        "unrealized_pct": 0.0203,
+        "mark": 99.62,
         "avg_cost": 97.64,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
@@ -810,21 +888,28 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "ai_judgment",
-    "generated_at": "2026-09-13T06:49:07.225540+00:00",
+    "generated_at": "2026-09-14T07:14:52.019395+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 0,
+      "closed_total": 1,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 2,
+      "open_with_thesis": 1,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 0
+          "closed_count": 1,
+          "recovery_rate": 1.0,
+          "sold_underwater_rate": 0.0,
+          "mean_peak_unrealized_pct": 0.0033,
+          "mean_trough_unrealized_pct": 0.0033,
+          "outcome_labels": {
+            "recovered": 1
+          }
         },
         "broken": {
           "closed_count": 0
@@ -855,10 +940,11 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 0,
+      "hold_closed_with_thesis": 1,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
-        "hold closed with thesis=0 (target >=8)",
+        "hold closed with thesis=1 (target >=8)",
+        "hold thesis buckets thin (weakening=1; target >=3 each)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
       "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -870,8 +956,8 @@
     "schema_version": 1,
     "track_id": "ai_judgment",
     "observe_only": true,
-    "generated_at": "2026-09-13T06:49:07.225931+00:00",
-    "open_count": 0,
+    "generated_at": "2026-09-14T07:14:52.020568+00:00",
+    "open_count": 1,
     "closed_count": 0,
     "scored_count": 0,
     "scored_count_all": 0,
@@ -927,11 +1013,11 @@
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 0,
     "closed_this_pass": 0
   },
-  "generated_at": "2026-09-13T06:49:07.226058+00:00",
+  "generated_at": "2026-09-14T07:14:52.020844+00:00",
   "track_id": "ai_judgment",
   "track_label": "AI judgment (research accumulate + adjusted_signal)",
   "is_primary_learning_track": true,

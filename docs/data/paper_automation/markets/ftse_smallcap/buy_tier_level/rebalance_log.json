@@ -1682,5 +1682,323 @@
         "DFS.L": 1
       }
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-09-14T07:18:02.101390+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/ftse_smallcap/screen_latest.json",
+      "run_at": "2026-09-14T06:52:46.229201+00:00",
+      "generated_at": "2026-09-14T07:18:02.057355+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-09-14T08:18:02.082251+01:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-09-14T08:00:00+01:00",
+      "settle_at": "2026-09-14T09:15:00+01:00",
+      "can_act": false,
+      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (0 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.003,
+    "candidates": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.7001000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 68.0,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 112.0,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "SBRE.L",
+        "name": "Sabre Insurance Group plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4125,
+        "data_quality_score": 0.85,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 170.2,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.7001000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 68.0,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 112.0,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "SBRE.L",
+        "name": "Sabre Insurance Group plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.4125,
+        "data_quality_score": 0.85,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 170.2,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.55% / sell 0.05% (legacy symmetric slot 0.30%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 997.97,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 332.61,
+      "targets": [
+        {
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "signal": "buy",
+          "conviction_score": 0.7125,
+          "price": 112.0
+        },
+        {
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "signal": "strong_buy",
+          "conviction_score": 0.7001000000000001,
+          "price": 68.0
+        },
+        {
+          "ticker": "SBRE.L",
+          "name": "Sabre Insurance Group plc",
+          "signal": "buy",
+          "conviction_score": 0.4125,
+          "price": 170.2
+        }
+      ],
+      "anticipated_exits": [
+        {
+          "action": "sell",
+          "ticker": "GLE.L",
+          "name": "MJ Gleeson plc",
+          "reason": "No longer in the top conviction target set",
+          "shares": 1.000411,
+          "price": 255.4637,
+          "value": 255.57
+        }
+      ],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [
+        {
+          "action": "buy",
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "reason": "Top-up to equal weight",
+          "value": 84.97,
+          "price": 112.0,
+          "target_value": 332.61,
+          "conviction_score": 0.7125,
+          "signal": "buy"
+        },
+        {
+          "action": "buy",
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "reason": "Top-up to equal weight",
+          "value": 84.6,
+          "price": 68.0,
+          "target_value": 332.61,
+          "conviction_score": 0.7001000000000001,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "buy",
+          "ticker": "SBRE.L",
+          "name": "Sabre Insurance Group plc",
+          "reason": "Top-up to equal weight",
+          "value": 85.87,
+          "price": 170.2,
+          "target_value": 332.61,
+          "conviction_score": 0.4125,
+          "signal": "buy"
+        }
+      ],
+      "anticipated_holds": [],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 3 buy(s)."
+    },
+    "trades": [],
+    "nav_before": 997.97,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "CARD.L",
+        "shares": 3.647242,
+        "avg_cost": 67.648,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAPD.L",
+        "shares": 2.211119,
+        "avg_cost": 112.0,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "GLE.L",
+        "shares": 1.000411,
+        "avg_cost": 255.4637,
+        "sector": "Consumer Cyclical",
+        "name": "MJ Gleeson plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "SBRE.L",
+        "shares": 1.4497,
+        "avg_cost": 170.2,
+        "sector": "Financial Services",
+        "name": "Sabre Insurance Group plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "REC.L": 1,
+        "DFS.L": 1
+      }
+    },
+    "nav_after": 997.97,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "CARD.L",
+        "shares": 3.647242,
+        "avg_cost": 67.648,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAPD.L",
+        "shares": 2.211119,
+        "avg_cost": 112.0,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "GLE.L",
+        "shares": 1.000411,
+        "avg_cost": 255.4637,
+        "sector": "Consumer Cyclical",
+        "name": "MJ Gleeson plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "SBRE.L",
+        "shares": 1.4497,
+        "avg_cost": 170.2,
+        "sector": "Financial Services",
+        "name": "Sabre Insurance Group plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {
+        "GLE.L": 1
+      },
+      "reentry_cooldown": {}
+    }
   }
 ]

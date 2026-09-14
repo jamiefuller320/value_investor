@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-13T06:49:55.747591+00:00
+Track: `buy_tier_level` · updated 2026-09-14T07:18:00.603045+00:00
 
 ## Portfolio loser feedback
 
@@ -86,7 +86,7 @@ Track: `buy_tier_level` · updated 2026-09-13T06:49:55.747591+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 48%
+- conviction 57%
 
 ### DG.PA — intact / hold_tolerate (+0.0%)
 - still strong_buy
@@ -175,30 +175,30 @@ Track: `buy_tier_level` · updated 2026-09-13T06:49:55.747591+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 49%
+- conviction 58%
 
 ### VOE.VI — intact / hold_tolerate (+0.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 49%
+- conviction 58%
 
 ### JMT.LS — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 48%
+- conviction 54%
 
 ### OMV.VI — intact / hold_tolerate (+0.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 44%
+- conviction 49%
 
-### NVG.LS — weakening / watch_review (-0.0%)
+### NVG.LS — weakening / watch_review (+0.0%)
 - research verdict caution
 - still buy
 - cheapness family still passes

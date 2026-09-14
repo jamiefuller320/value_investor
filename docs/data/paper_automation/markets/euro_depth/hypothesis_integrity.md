@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `rules` · updated 2026-09-13T06:48:54.628073+00:00
+Track: `rules` · updated 2026-09-14T07:14:44.855202+00:00
 
 ## Portfolio loser feedback
 
@@ -24,12 +24,12 @@ Track: `rules` · updated 2026-09-13T06:48:54.628073+00:00
 - data_quality 1.00
 - conviction 85%
 
-### DHL.DE — intact / hold_tolerate (+0.3%)
+### DG.PA — intact / hold_tolerate (+0.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 80%
+- conviction 93%
 
 ### SHELL.AS — intact / hold_tolerate (+0.4%)
 - still strong_buy
@@ -38,7 +38,7 @@ Track: `rules` · updated 2026-09-13T06:48:54.628073+00:00
 - data_quality 1.00
 - conviction 78%
 
-### ERIC-B.ST — intact / hold_tolerate (+1.1%)
+### ERIC-B.ST — intact / hold_tolerate (+2.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

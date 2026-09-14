@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `momentum_grace` · updated 2026-09-13T06:49:18.320970+00:00
+Track: `momentum_grace` · updated 2026-09-14T07:14:59.154056+00:00
 
 ## Portfolio loser feedback
 
@@ -38,7 +38,7 @@ Track: `momentum_grace` · updated 2026-09-13T06:49:18.320970+00:00
 - data_quality 1.00
 - conviction 78%
 
-### ERIC-B.ST — intact / hold_tolerate (+1.0%)
+### ERIC-B.ST — intact / hold_tolerate (+2.0%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes

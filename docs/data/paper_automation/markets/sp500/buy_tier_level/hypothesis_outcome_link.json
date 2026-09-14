@@ -3,15 +3,15 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-09-13T06:49:51.512227+00:00",
+  "generated_at": "2026-09-14T07:17:53.770451+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 1,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 100,
+    "open_with_thesis": 99,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
@@ -20,7 +20,14 @@
         "closed_count": 0
       },
       "broken": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 0.0,
+        "sold_underwater_rate": 1.0,
+        "mean_peak_unrealized_pct": -0.0041,
+        "mean_trough_unrealized_pct": -0.0041,
+        "outcome_labels": {
+          "sold_underwater": 1
+        }
       },
       "insufficient_data": {
         "closed_count": 0
@@ -48,10 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 1,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=1 (target >=8)",
+      "hold thesis buckets thin (broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -4244,7 +4252,7 @@
       "ticker": "EMR",
       "name": "Emerson Electric Co.",
       "started_at": "2026-09-13T02:49:51.385705-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -4276,9 +4284,9 @@
       "peak_unrealized_pct": -0.0041,
       "trough_unrealized_pct": -0.0041,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-09-14T03:17:53.629128-04:00",
+      "linked_sell_trade_id": "6b56ff56-491c-4b24-87b2-7d64cdfe3cbc"
     },
     {
       "episode_id": "buy_tier_level:WYNN:2026-09-13T02:49:51.385705-04:00",
@@ -4516,6 +4524,56 @@
         "EXR": 0.0,
         "VRSN": 0.0,
         "CPAY": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-09-14T03:17:53.629128-04:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-09-14T03:17:53.629128-04:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "EMR",
+          "price": 152.19,
+          "shares": 0.054435,
+          "gross": 8.28,
+          "cost": 0.01,
+          "avg_cost_at_exit": 152.82,
+          "realized_pct": -0.0041,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0041
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "BKNG",
+          "price": 173.92,
+          "shares": 0.046783,
+          "gross": 8.14,
+          "cost": 0.01
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "EMR": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "BKNG": 0.0
       },
       "verdict": null,
       "closed_at": null

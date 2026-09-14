@@ -3,21 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "ai_judgment",
-  "generated_at": "2026-09-13T06:49:07.225540+00:00",
+  "generated_at": "2026-09-14T07:14:52.019395+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 1,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 2,
+    "open_with_thesis": 1,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.0033,
+        "mean_trough_unrealized_pct": 0.0033,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "broken": {
         "closed_count": 0
@@ -48,10 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 1,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=1 (target >=8)",
+      "hold thesis buckets thin (weakening=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -109,7 +117,7 @@
       "ticker": "DHL.DE",
       "name": "DHL AG",
       "started_at": "2026-09-13T08:48:54.647073+02:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak"
       ],
@@ -142,10 +150,63 @@
       "peak_unrealized_pct": 0.0033,
       "trough_unrealized_pct": 0.0033,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-09-14T09:14:44.891604+02:00",
+      "linked_sell_trade_id": "47b8aa86-359a-4410-b5c7-f105fffc177e"
     }
   ],
-  "swap_rotations": []
+  "swap_rotations": [
+    {
+      "rotation_id": "ai_judgment:2026-09-14T09:14:44.891604+02:00",
+      "track_id": "ai_judgment",
+      "logged_at": "2026-09-14T09:14:44.891604+02:00",
+      "status": "open",
+      "trade_cost_pct": 0.0019,
+      "sells": [
+        {
+          "ticker": "DHL.DE",
+          "price": 55.02,
+          "shares": 3.640239,
+          "gross": 200.29,
+          "cost": 0.37,
+          "avg_cost_at_exit": 54.84,
+          "realized_pct": 0.0033,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0033
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "DG.PA",
+          "price": 111.45,
+          "shares": 1.789589,
+          "gross": 199.45,
+          "cost": 0.37
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "DHL.DE": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "DG.PA": -0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    }
+  ]
 }

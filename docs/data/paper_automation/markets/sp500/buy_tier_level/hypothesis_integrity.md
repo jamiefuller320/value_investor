@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-13T06:49:51.506794+00:00
+Track: `buy_tier_level` · updated 2026-09-14T07:17:53.762965+00:00
 
 ## Portfolio loser feedback
 
@@ -9,9 +9,6 @@ Track: `buy_tier_level` · updated 2026-09-13T06:49:51.506794+00:00
 - Balancing hint: `tolerate_intact_losers`
 
 ## Holding reviews
-
-### EMR — broken / exit_candidate (-0.4%)
-- cheapness lost and not in buy tier
 
 ### DLTR — intact / hold_tolerate (-10.1%)
 - price drawdown alone does not invalidate value thesis
@@ -121,7 +118,7 @@ Track: `buy_tier_level` · updated 2026-09-13T06:49:51.506794+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 39%
+- conviction 46%
 
 ### ADBE — intact / hold_tolerate (-5.4%)
 - price drawdown alone does not invalidate value thesis
@@ -202,7 +199,7 @@ Track: `buy_tier_level` · updated 2026-09-13T06:49:51.506794+00:00
 - still buy
 - cheapness family still passes
 - data_quality 1.00
-- conviction 42%
+- conviction 49%
 
 ### ROP — intact / hold_tolerate (-4.6%)
 - still strong_buy
@@ -347,7 +344,7 @@ Track: `buy_tier_level` · updated 2026-09-13T06:49:51.506794+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 62%
+- conviction 71%
 
 ### AVY — intact / hold_tolerate (-3.2%)
 - still buy
@@ -389,7 +386,7 @@ Track: `buy_tier_level` · updated 2026-09-13T06:49:51.506794+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 49%
+- conviction 58%
 
 ### BR — intact / hold_tolerate (-3.0%)
 - still strong_buy
@@ -417,7 +414,7 @@ Track: `buy_tier_level` · updated 2026-09-13T06:49:51.506794+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 66%
+- conviction 67%
 
 ### ADSK — intact / hold_tolerate (-2.5%)
 - still buy
@@ -693,6 +690,13 @@ Track: `buy_tier_level` · updated 2026-09-13T06:49:51.506794+00:00
 - data_quality 0.95
 - conviction 44%
 
+### BKNG — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.90
+- conviction 47%
+
 ### FOX — intact / hold_tolerate (+0.1%)
 - still buy
 - research accumulate
@@ -771,7 +775,7 @@ Track: `buy_tier_level` · updated 2026-09-13T06:49:51.506794+00:00
 - still buy
 - cheapness family still passes
 - data_quality 1.00
-- conviction 69%
+- conviction 68%
 
 ### FSLR — intact / hold_tolerate (+2.2%)
 - still strong_buy
@@ -806,14 +810,14 @@ Track: `buy_tier_level` · updated 2026-09-13T06:49:51.506794+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 49%
+- conviction 58%
 
 ### NXPI — intact / hold_tolerate (+3.9%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 78%
+- conviction 79%
 
 ### APA — intact / hold_tolerate (+4.6%)
 - still strong_buy
@@ -827,7 +831,7 @@ Track: `buy_tier_level` · updated 2026-09-13T06:49:51.506794+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 65%
+- conviction 73%
 
 ### HPQ — intact / hold_tolerate (+8.7%)
 - still strong_buy

@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-13T06:49:57.333921+00:00
+Track: `buy_tier_level` · updated 2026-09-14T07:18:03.363430+00:00
 
 ## Portfolio loser feedback
 
@@ -115,7 +115,7 @@ Track: `buy_tier_level` · updated 2026-09-13T06:49:57.333921+00:00
 - still strong_buy
 - cheapness family still passes
 - data_quality 1.00
-- conviction 45%
+- conviction 54%
 
 ### CNR.TO — intact / hold_tolerate (+0.2%)
 - still buy

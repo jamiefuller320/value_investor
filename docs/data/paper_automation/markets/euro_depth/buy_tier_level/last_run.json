@@ -1,63 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-13T08:49:55.512003+02:00",
+    "local_time": "2026-09-14T09:18:00.419568+02:00",
     "trading_day": true,
     "after_settle": false,
-    "market_open_at": "2026-09-13T09:00:00+02:00",
-    "settle_at": "2026-09-13T09:30:00+02:00",
+    "market_open_at": "2026-09-14T09:00:00+02:00",
+    "settle_at": "2026-09-14T09:30:00+02:00",
     "can_act": false,
-    "reason": "before market open"
+    "reason": "waiting for open settle (30 min after 09:00 Europe/Paris)"
   },
-  "trades": [
-    {
-      "id": "25ecc4ca-828d-4676-beb9-0aa4dfb115e8",
-      "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
-      "acted_at": "2026-09-13T08:49:55.512003+02:00",
-      "ticker": "NBA.LS",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 7.637332,
-      "price": 7.16,
-      "gross": 54.68,
-      "cost": 0.1,
-      "net_cash": 54.58,
-      "note": "Automated exit \u2014 left target set",
-      "name": "Novabase S.G.P.S., S.A.",
-      "avg_cost_at_exit": 7.12,
-      "position_closed": true
-    },
-    {
-      "id": "d1ce9a5d-ed25-4735-8758-4c3cdb1d3fcd",
-      "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
-      "acted_at": "2026-09-13T08:49:55.512003+02:00",
-      "ticker": "NVG.LS",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 8.146518,
-      "price": 3.238,
-      "gross": 26.38,
-      "cost": 0.05,
-      "net_cash": -26.43,
-      "note": "Automated buy",
-      "name": "The Navigator Company, S.A."
-    },
-    {
-      "id": "70420853-f775-40df-ad04-6af91cebc3f5",
-      "fund_id": "f94efec7-c2c1-49d5-9d68-5c93d422d06e",
-      "acted_at": "2026-09-13T08:49:55.512003+02:00",
-      "ticker": "DQ7A.IR",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 2.245307,
-      "price": 12.5,
-      "gross": 28.07,
-      "cost": 0.05,
-      "net_cash": -28.12,
-      "note": "Automated buy",
-      "name": "Donegal Investment Group plc"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -81,7 +33,7 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 28.12,
+    "target_sleeve_value": 29.82,
     "targets": [
       {
         "ticker": "AD.AS",
@@ -175,13 +127,6 @@
         "price": 37.54
       },
       {
-        "ticker": "ANDR.VI",
-        "name": "Andritz AG",
-        "signal": "strong_buy",
-        "conviction_score": 0.7506,
-        "price": 84.0
-      },
-      {
         "ticker": "AED.BR",
         "name": "Aedifica NV/SA",
         "signal": "buy",
@@ -273,6 +218,20 @@
         "price": 0.765
       },
       {
+        "ticker": "DTE.DE",
+        "name": "Deutsche Telekom AG",
+        "signal": "strong_buy",
+        "conviction_score": 0.5777,
+        "price": 28.59
+      },
+      {
+        "ticker": "VOE.VI",
+        "name": "Voestalpine AG",
+        "signal": "strong_buy",
+        "conviction_score": 0.5763,
+        "price": 44.56
+      },
+      {
         "ticker": "POST.VI",
         "name": "\u00d6sterreichische Post AG",
         "signal": "buy",
@@ -280,38 +239,17 @@
         "price": 31.45
       },
       {
-        "ticker": "DTE.DE",
-        "name": "Deutsche Telekom AG",
-        "signal": "strong_buy",
-        "conviction_score": 0.48969999999999997,
-        "price": 28.59
-      },
-      {
-        "ticker": "VOE.VI",
-        "name": "Voestalpine AG",
-        "signal": "strong_buy",
-        "conviction_score": 0.4886,
-        "price": 44.56
-      },
-      {
         "ticker": "MELE.BR",
         "name": "Melexis NV",
         "signal": "buy",
-        "conviction_score": 0.48269999999999996,
+        "conviction_score": 0.5692,
         "price": 66.45
-      },
-      {
-        "ticker": "JMT.LS",
-        "name": "Jer\u00f3nimo Martins, SGPS, S.A.",
-        "signal": "buy",
-        "conviction_score": 0.4812,
-        "price": 17.92
       },
       {
         "ticker": "OMV.VI",
         "name": "OMV Aktiengesellschaft",
         "signal": "buy",
-        "conviction_score": 0.435,
+        "conviction_score": 0.49,
         "price": 71.85
       },
       {
@@ -329,7 +267,26 @@
         "price": 12.5
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "ANDR.VI",
+        "name": "Andritz AG",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.333862,
+        "price": 84.0,
+        "value": 28.04
+      },
+      {
+        "action": "sell",
+        "ticker": "JMT.LS",
+        "name": "Jer\u00f3nimo Martins, SGPS, S.A.",
+        "reason": "No longer in the top conviction target set",
+        "shares": 1.564976,
+        "price": 17.92,
+        "value": 28.04
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [],
@@ -338,9 +295,9 @@
         "action": "hold",
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.19,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.9357000000000001,
         "signal": "strong_buy"
       },
@@ -348,9 +305,9 @@
         "action": "hold",
         "ticker": "DG.PA",
         "name": "Vinci SA",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.04,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.9347000000000001,
         "signal": "strong_buy"
       },
@@ -358,9 +315,9 @@
         "action": "hold",
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.19,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.9335,
         "signal": "strong_buy"
       },
@@ -368,9 +325,9 @@
         "action": "hold",
         "ticker": "UMI.BR",
         "name": "Umicore SA",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.04,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.8817,
         "signal": "strong_buy"
       },
@@ -378,9 +335,9 @@
         "action": "hold",
         "ticker": "STR.VI",
         "name": "Strabag SE",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.04,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.8512000000000001,
         "signal": "strong_buy"
       },
@@ -388,9 +345,9 @@
         "action": "hold",
         "ticker": "SAN.PA",
         "name": "Sanofi",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.19,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.8507,
         "signal": "strong_buy"
       },
@@ -398,9 +355,9 @@
         "action": "hold",
         "ticker": "PHIA.AS",
         "name": "Koninklijke Philips N.V.",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.19,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.8380000000000001,
         "signal": "strong_buy"
       },
@@ -408,9 +365,9 @@
         "action": "hold",
         "ticker": "DHL.DE",
         "name": "DHL AG",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.19,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.7963,
         "signal": "strong_buy"
       },
@@ -418,9 +375,9 @@
         "action": "hold",
         "ticker": "LOGN.SW",
         "name": "Logitech International S.A.",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.18,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.7957000000000001,
         "signal": "strong_buy"
       },
@@ -428,9 +385,9 @@
         "action": "hold",
         "ticker": "SHELL.AS",
         "name": "Shell plc",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.19,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.775,
         "signal": "strong_buy"
       },
@@ -438,9 +395,9 @@
         "action": "hold",
         "ticker": "ACKB.BR",
         "name": "Ackermans & Van Haaren NV",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.04,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.7683000000000001,
         "signal": "strong_buy"
       },
@@ -448,9 +405,9 @@
         "action": "hold",
         "ticker": "WKL.AS",
         "name": "Wolters Kluwer N.V.",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.04,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.7634000000000001,
         "signal": "strong_buy"
       },
@@ -458,29 +415,19 @@
         "action": "hold",
         "ticker": "RAND.AS",
         "name": "Randstad N.V.",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.19,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.7518,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "ANDR.VI",
-        "name": "Andritz AG",
-        "reason": "Already near equal-weight target",
-        "value": 28.04,
-        "target_value": 28.12,
-        "conviction_score": 0.7506,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
         "ticker": "AED.BR",
         "name": "Aedifica NV/SA",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.19,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.7458,
         "signal": "buy"
       },
@@ -488,9 +435,9 @@
         "action": "hold",
         "ticker": "C5H.IR",
         "name": "Cairn Homes plc",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.04,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.7249000000000001,
         "signal": "buy"
       },
@@ -498,9 +445,9 @@
         "action": "hold",
         "ticker": "ESSITY-B.ST",
         "name": "Essity AB (publ)",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.04,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.7129000000000001,
         "signal": "buy"
       },
@@ -508,9 +455,9 @@
         "action": "hold",
         "ticker": "AKZA.AS",
         "name": "Akzo Nobel N.V.",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.19,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.7058000000000001,
         "signal": "buy"
       },
@@ -518,9 +465,9 @@
         "action": "hold",
         "ticker": "NOVN.SW",
         "name": "Novartis AG",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.04,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.7009000000000001,
         "signal": "buy"
       },
@@ -528,9 +475,9 @@
         "action": "hold",
         "ticker": "VOW.DE",
         "name": "Volkswagen AG",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.19,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.7003,
         "signal": "strong_buy"
       },
@@ -538,9 +485,9 @@
         "action": "hold",
         "ticker": "HEIA.AS",
         "name": "Heineken N.V.",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.19,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.6602,
         "signal": "buy"
       },
@@ -548,9 +495,9 @@
         "action": "hold",
         "ticker": "TTE.PA",
         "name": "TotalEnergies SE",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.19,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.6541,
         "signal": "buy"
       },
@@ -558,9 +505,9 @@
         "action": "hold",
         "ticker": "DOC.VI",
         "name": "DO & CO Aktiengesellschaft",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.19,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.65,
         "signal": "buy"
       },
@@ -568,9 +515,9 @@
         "action": "hold",
         "ticker": "VOLV-B.ST",
         "name": "AB Volvo (publ)",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.04,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.6421,
         "signal": "buy"
       },
@@ -578,9 +525,9 @@
         "action": "hold",
         "ticker": "BOL.ST",
         "name": "Boliden AB (publ)",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.19,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.6126,
         "signal": "buy"
       },
@@ -588,9 +535,9 @@
         "action": "hold",
         "ticker": "EG7.IR",
         "name": "FBD Holdings plc",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.04,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.61166,
         "signal": "strong_buy"
       },
@@ -598,79 +545,69 @@
         "action": "hold",
         "ticker": "MIO.IR",
         "name": "Mincon Group plc",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.18,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.600185,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
-        "ticker": "POST.VI",
-        "name": "\u00d6sterreichische Post AG",
-        "reason": "Already near equal-weight target",
-        "value": 28.04,
-        "target_value": 28.12,
-        "conviction_score": 0.5759000000000001,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
         "ticker": "DTE.DE",
         "name": "Deutsche Telekom AG",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.04,
-        "target_value": 28.12,
-        "conviction_score": 0.48969999999999997,
+        "target_value": 29.82,
+        "conviction_score": 0.5777,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
         "ticker": "VOE.VI",
         "name": "Voestalpine AG",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.04,
-        "target_value": 28.12,
-        "conviction_score": 0.4886,
+        "target_value": 29.82,
+        "conviction_score": 0.5763,
         "signal": "strong_buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "POST.VI",
+        "name": "\u00d6sterreichische Post AG",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 28.04,
+        "target_value": 29.82,
+        "conviction_score": 0.5759000000000001,
+        "signal": "buy"
       },
       {
         "action": "hold",
         "ticker": "MELE.BR",
         "name": "Melexis NV",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.19,
-        "target_value": 28.12,
-        "conviction_score": 0.48269999999999996,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "JMT.LS",
-        "name": "Jer\u00f3nimo Martins, SGPS, S.A.",
-        "reason": "Already near equal-weight target",
-        "value": 28.04,
-        "target_value": 28.12,
-        "conviction_score": 0.4812,
+        "target_value": 29.82,
+        "conviction_score": 0.5692,
         "signal": "buy"
       },
       {
         "action": "hold",
         "ticker": "OMV.VI",
         "name": "OMV Aktiengesellschaft",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.04,
-        "target_value": 28.12,
-        "conviction_score": 0.435,
+        "target_value": 29.82,
+        "conviction_score": 0.49,
         "signal": "buy"
       },
       {
         "action": "hold",
         "ticker": "NVG.LS",
         "name": "The Navigator Company, S.A.",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.07,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.36601,
         "signal": "buy"
       },
@@ -678,16 +615,31 @@
         "action": "hold",
         "ticker": "DQ7A.IR",
         "name": "Donegal Investment Group plc",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 28.07,
-        "target_value": 28.12,
+        "target_value": 29.82,
         "conviction_score": 0.358445,
         "signal": "buy"
       }
     ],
     "skipped": [],
-    "waitlisted": [],
-    "summary": "Next rebalance would target 35 equal-weight sleeve(s); leave 35 near-target holding(s)."
+    "waitlisted": [
+      {
+        "ticker": "ANDR.VI",
+        "name": "Andritz AG",
+        "signal": "strong_buy",
+        "conviction_score": 0.7506,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      },
+      {
+        "ticker": "JMT.LS",
+        "name": "Jer\u00f3nimo Martins, SGPS, S.A.",
+        "signal": "buy",
+        "conviction_score": 0.5427000000000001,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      }
+    ],
+    "summary": "Next rebalance would target 33 equal-weight sleeve(s); sell 2 name(s) that left the set; leave 33 near-target holding(s)."
   },
   "alerts": [
     {
@@ -699,7 +651,7 @@
       "mark": 98.66,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "AD.AS",
@@ -710,7 +662,7 @@
       "mark": 30.79,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "SAN.PA",
@@ -721,7 +673,7 @@
       "mark": 73.26,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "PHIA.AS",
@@ -732,7 +684,7 @@
       "mark": 21.14,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "LOGN.SW",
@@ -743,7 +695,7 @@
       "mark": 83.3,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "DHL.DE",
@@ -754,7 +706,7 @@
       "mark": 55.02,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "SHELL.AS",
@@ -765,7 +717,7 @@
       "mark": 41.415,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "RAND.AS",
@@ -776,7 +728,7 @@
       "mark": 37.54,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "AED.BR",
@@ -787,7 +739,7 @@
       "mark": 65.7,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "AKZA.AS",
@@ -798,7 +750,7 @@
       "mark": 58.24,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "VOW.DE",
@@ -809,7 +761,7 @@
       "mark": 81.2,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "HEIA.AS",
@@ -820,7 +772,7 @@
       "mark": 70.28,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "TTE.PA",
@@ -831,7 +783,7 @@
       "mark": 78.77,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "DOC.VI",
@@ -842,7 +794,7 @@
       "mark": 197.8,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "BOL.ST",
@@ -853,7 +805,7 @@
       "mark": 550.0,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "MIO.IR",
@@ -864,7 +816,7 @@
       "mark": 0.765,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "MELE.BR",
@@ -875,7 +827,7 @@
       "mark": 66.45,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "DG.PA",
@@ -886,7 +838,7 @@
       "mark": 111.45,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "UMI.BR",
@@ -897,7 +849,7 @@
       "mark": 22.42,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "STR.VI",
@@ -908,7 +860,7 @@
       "mark": 106.2,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "ACKB.BR",
@@ -919,7 +871,7 @@
       "mark": 272.0,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "WKL.AS",
@@ -930,18 +882,18 @@
       "mark": 66.24,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "ANDR.VI",
       "name": "Andritz AG",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
       "mark": 84.0,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "wait"
     },
     {
       "ticker": "C5H.IR",
@@ -952,7 +904,7 @@
       "mark": 2.725,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "ESSITY-B.ST",
@@ -963,7 +915,7 @@
       "mark": 261.3,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "NOVN.SW",
@@ -974,7 +926,7 @@
       "mark": 112.04,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "VOLV-B.ST",
@@ -985,7 +937,7 @@
       "mark": 340.5,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "EG7.IR",
@@ -996,7 +948,7 @@
       "mark": 18.7,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "POST.VI",
@@ -1007,7 +959,7 @@
       "mark": 31.45,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "DTE.DE",
@@ -1018,7 +970,7 @@
       "mark": 28.59,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "VOE.VI",
@@ -1029,18 +981,18 @@
       "mark": 44.56,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "JMT.LS",
       "name": "Jer\u00f3nimo Martins, SGPS, S.A.",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
       "mark": 17.92,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "wait"
     },
     {
       "ticker": "OMV.VI",
@@ -1051,7 +1003,7 @@
       "mark": 71.85,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "NVG.LS",
@@ -1062,7 +1014,7 @@
       "mark": 3.238,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "DQ7A.IR",
@@ -1073,7 +1025,7 @@
       "mark": 12.5,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "accumulate"
     }
   ],
   "fund": {
@@ -2548,21 +2500,60 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-14T09:15:06.319902+02:00",
+        "portfolio_value": 757.84,
+        "cash": 0.04,
+        "contributed_capital": 1000.0,
+        "positions": 35,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "CHF": 0.9046,
+            "EUR": 0.85621,
+            "SEK": 0.0758
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-14T09:18:00.419568+02:00",
+        "portfolio_value": 757.49,
+        "cash": 0.04,
+        "contributed_capital": 1000.0,
+        "positions": 35,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "CHF": 0.9044,
+            "EUR": 0.8562,
+            "SEK": 0.0758
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-13T08:49:55.512003+02:00",
+    "last_mark_at": "2026-09-14T09:18:00.419568+02:00",
     "rebalance_state": {
-      "exit_streak": {},
-      "reentry_cooldown": {
-        "NBA.LS": 1
-      }
+      "exit_streak": {
+        "ANDR.VI": 1,
+        "JMT.LS": 1
+      },
+      "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (3 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-13T06:49:55.745383+00:00",
+    "generated_at": "2026-09-14T07:18:00.599962+00:00",
     "open_count": 3,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -2575,13 +2566,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 1,
+    "ingested_this_pass": 0,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-13T06:49:55.746143+00:00",
+    "generated_at": "2026-09-14T07:18:00.600984+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2637,7 +2628,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 1,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 13,
+      "hold_with_data_quality_count": 14,
       "gaps": [
         "hold_recovery closed episodes=1 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
@@ -2646,10 +2637,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 14,
-        "recovered_to_breakeven": 5,
+        "count": 15,
+        "recovered_to_breakeven": 6,
         "close_reasons": {
-          "open": 14
+          "open": 15
         }
       },
       "closed": {
@@ -2674,7 +2665,7 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 1,
-      "swap_rotations": 1
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -2686,8 +2677,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-09-13T06:49:55.747591+00:00",
-    "as_of": "2026-09-13T08:49:55.512003+02:00",
+    "updated_at": "2026-09-14T07:18:00.603045+00:00",
+    "as_of": "2026-09-14T09:18:00.419568+02:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2748,7 +2739,7 @@
         "mark": 550.0,
         "avg_cost": 580.2,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.6126,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -2789,7 +2780,7 @@
         "mark": 58.24,
         "avg_cost": 60.64,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7058,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -2829,7 +2820,7 @@
         "mark": 21.14,
         "avg_cost": 21.78,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "accumulate",
         "conviction_score": 0.838,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -2869,7 +2860,7 @@
         "mark": 197.8,
         "avg_cost": 203.5,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.65,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -2909,7 +2900,7 @@
         "mark": 70.28,
         "avg_cost": 72.2,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.6602,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -2949,7 +2940,7 @@
         "mark": 65.7,
         "avg_cost": 67.1,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7458,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -2989,7 +2980,7 @@
         "mark": 81.2,
         "avg_cost": 82.9,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7003,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3030,7 +3021,7 @@
         "mark": 37.54,
         "avg_cost": 38.32,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7518,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3070,7 +3061,7 @@
         "mark": 30.79,
         "avg_cost": 31.14,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "accumulate",
         "conviction_score": 0.9357,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3110,7 +3101,7 @@
         "mark": 73.26,
         "avg_cost": 73.95,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.8507,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3150,8 +3141,8 @@
         "mark": 66.45,
         "avg_cost": 66.55,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.4827,
+        "timing_signal": "neutral",
+        "conviction_score": 0.5692,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3167,14 +3158,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 48%"
+          "conviction 57%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 48%"
+          "conviction 57%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3190,7 +3181,7 @@
         "mark": 111.45,
         "avg_cost": 111.45,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.9347,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3230,7 +3221,7 @@
         "mark": 22.42,
         "avg_cost": 22.42,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.8817,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3270,7 +3261,7 @@
         "mark": 106.2,
         "avg_cost": 106.2,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.8512,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3310,7 +3301,7 @@
         "mark": 272.0,
         "avg_cost": 272.0,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7683,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3350,7 +3341,7 @@
         "mark": 66.24,
         "avg_cost": 66.24,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7634,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3390,7 +3381,7 @@
         "mark": 84.0,
         "avg_cost": 84.0,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "wait",
         "conviction_score": 0.7506,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3430,7 +3421,7 @@
         "mark": 2.725,
         "avg_cost": 2.725,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7249,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3470,7 +3461,7 @@
         "mark": 261.3,
         "avg_cost": 261.3,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7129,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3510,7 +3501,7 @@
         "mark": 112.04,
         "avg_cost": 112.04,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7009,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3550,7 +3541,7 @@
         "mark": 340.5,
         "avg_cost": 340.5,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.6421,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3590,7 +3581,7 @@
         "mark": 18.7,
         "avg_cost": 18.7,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.6117,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -3629,7 +3620,7 @@
         "mark": 31.45,
         "avg_cost": 31.45,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.5759,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3670,8 +3661,8 @@
         "mark": 28.59,
         "avg_cost": 28.59,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.4897,
+        "timing_signal": "neutral",
+        "conviction_score": 0.5777,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3687,14 +3678,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 49%"
+          "conviction 58%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 49%"
+          "conviction 58%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3710,8 +3701,8 @@
         "mark": 44.56,
         "avg_cost": 44.56,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.4886,
+        "timing_signal": "neutral",
+        "conviction_score": 0.5763,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3727,14 +3718,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 49%"
+          "conviction 58%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 49%"
+          "conviction 58%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3750,8 +3741,8 @@
         "mark": 17.92,
         "avg_cost": 17.92,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.4812,
+        "timing_signal": "wait",
+        "conviction_score": 0.5427,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3768,14 +3759,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 48%"
+          "conviction 54%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 48%"
+          "conviction 54%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3791,8 +3782,8 @@
         "mark": 71.85,
         "avg_cost": 71.85,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.435,
+        "timing_signal": "neutral",
+        "conviction_score": 0.49,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -3809,14 +3800,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 44%"
+          "conviction 49%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 44%"
+          "conviction 49%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3828,11 +3819,11 @@
         "recommended_action": "watch_review",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0,
+        "unrealized_pct": 0.0,
         "mark": 3.238,
         "avg_cost": 3.238,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.366,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -3872,7 +3863,7 @@
         "mark": 12.5,
         "avg_cost": 12.5,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "accumulate",
         "conviction_score": 0.3584,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -3912,7 +3903,7 @@
         "mark": 55.02,
         "avg_cost": 54.84,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7963,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3952,7 +3943,7 @@
         "mark": 41.415,
         "avg_cost": 41.27,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.775,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3992,7 +3983,7 @@
         "mark": 78.77,
         "avg_cost": 78.39,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.6541,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -4032,7 +4023,7 @@
         "mark": 98.66,
         "avg_cost": 97.6,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.9335,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -4072,7 +4063,7 @@
         "mark": 83.3,
         "avg_cost": 79.96,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7957,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -4112,7 +4103,7 @@
         "mark": 0.765,
         "avg_cost": 0.71,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.6002,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -4148,7 +4139,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-13T06:49:55.749570+00:00",
+    "generated_at": "2026-09-14T07:18:00.605949+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -4156,7 +4147,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 1,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 14,
+      "open_with_thesis": 15,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -4216,7 +4207,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-09-13T06:49:55.751478+00:00",
+    "generated_at": "2026-09-14T07:18:00.608903+00:00",
     "open_count": 18,
     "closed_count": 0,
     "scored_count": 0,
@@ -4273,11 +4264,11 @@
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 1,
-    "marked_this_pass": 17,
+    "ingested_this_pass": 0,
+    "marked_this_pass": 18,
     "closed_this_pass": 0
   },
-  "generated_at": "2026-09-13T06:49:55.751839+00:00",
+  "generated_at": "2026-09-14T07:18:00.609417+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
