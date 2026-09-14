@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-14T04:38:42+00:00",
+  "generated_at": "2026-09-14T20:28:05+00:00",
   "overall": "warn",
   "progress": {
     "schema_version": 1,
-    "generated_at": "2026-09-14T04:38:42.017092+00:00",
+    "generated_at": "2026-09-14T20:28:05.075287+00:00",
     "current_focus": "stage_2b",
     "headline": "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
     "stages": [
@@ -47,20 +47,20 @@
     ],
     "evidence": {
       "screen_company_count": 248,
-      "strong_buy_count": 16,
-      "screen_run_at": "2026-09-13T06:55:57.943717+00:00",
+      "strong_buy_count": 17,
+      "screen_run_at": "2026-09-14T08:59:59.089330+00:00",
       "library_graduated_count": 21,
       "library_focus_market": "euro_depth",
       "decision_review_applied": false,
-      "ai_excess_after_costs": -0.2819,
-      "rules_excess_after_costs": -0.362,
+      "ai_excess_after_costs": -0.2858,
+      "rules_excess_after_costs": -0.3659,
       "ai_total_return": -0.2847,
       "rules_total_return": -0.354,
-      "ops_overall": "ok",
+      "ops_overall": "fail",
       "zero_body_buy_tier": 0,
       "unmeasured_buy_tier": 0,
-      "measured_tickers": 63,
-      "buy_tier_count": 63,
+      "measured_tickers": 62,
+      "buy_tier_count": 62,
       "ingest_stalled": false
     },
     "appraisal": {
@@ -68,11 +68,11 @@
         "FTSE 350 live screen and published dashboard are operational.",
         "Offline library: 21 graduated markets (focus: euro_depth).",
         "Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.",
-        "Engineering queue: 2 open, 14 merged supervised tasks.",
-        "AI-judgment track beating rules control (-28.2% vs -36.2% excess)."
+        "Engineering queue: 2 open, 1 merged supervised tasks.",
+        "AI-judgment track beating rules control (-28.6% vs -36.6% excess)."
       ],
       "gaps": [
-        "Primary AI track still below ^FTSE after costs (-28.2% excess; history still thin)."
+        "Primary AI track still below ^FTSE after costs (-28.6% excess; history still thin)."
       ],
       "next_actions": [
         "Let the learning loop accumulate before adding tracks or knobs.",
@@ -85,15 +85,15 @@
       "stalled": false,
       "zero_body_buy_tier": 0,
       "health": {
-        "snapshot_at": "2026-09-12T14:53:48.244140+00:00",
-        "buy_tier_count": 63,
-        "measured_tickers": 63,
+        "snapshot_at": "2026-09-14T07:55:21.298276+00:00",
+        "buy_tier_count": 62,
+        "measured_tickers": 62,
         "unmeasured_buy_tier": 0,
         "unmeasured_tickers": [],
         "zero_body_buy_tier": 0,
         "zero_body_tickers": [],
-        "indexed_without_body": 10,
-        "filings_with_body": 4242
+        "indexed_without_body": 13,
+        "filings_with_body": 4193
       },
       "summary": "Live buy-tier ingest now canonicalises under docs/data/research/, bootstraps missing indexes on Sunday/weekday passes, and sanitises mis-attributed RNS rows before refetching bodies.",
       "fixes": [
@@ -1813,6 +1813,38 @@
           "epoch-0",
           "sunday",
           "rollup"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N127",
+        "title": "Auto-enact experiment_assessment recommend rows",
+        "summary": "Recommend is human-ack only (N42). Entry DCA already has an observe-only ack plus a gated adoption plan; Sunday refresh must not execute DCA, change starter fraction, or apply to primary while beat_market is false.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "entry_dca_adoption_plan current_stage is paper_execute_graduated or primary_or_live AND a human explicitly asks to automate that one stage",
+        "tags": [
+          "lifecycle",
+          "experiment-assessment",
+          "recommend",
+          "entry-dca",
+          "not-now"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N128",
+        "title": "Do not expand ARCHIVE_SIGNAL_FIELDS for FCF/EPS before live autopsy freeze proves out",
+        "summary": "Archive slim cannot replay filing/FCF PIT today. Prefer extending weekday autopsy_freeze / feature_flags (L368) over bloating weekly ARCHIVE_SIGNAL_FIELDS; optional archive bind columns only after live freeze KPIs hold.",
+        "category": "not_now",
+        "section": "learning",
+        "revisit_when": "L368 freeze writer live with >=80% freeze completeness for 4+ weeks, and an offline cohort lab is blocked specifically by missing archive FCF/EPS bind columns",
+        "tags": [
+          "archive",
+          "recording",
+          "L365",
+          "L368",
+          "counterfactual"
         ],
         "status": "open"
       }
@@ -5489,21 +5521,6 @@
         "status": "open"
       },
       {
-        "id": "L380",
-        "title": "Stop counting thin memos as already-researched without widening rememo_reason",
-        "summary": "Coverage accounting currently treats thin/zero-body first-pass memos as already researched, which fires thin_memo_counted_as_coverage. Sunday agents are locked to ingest-then-body-lag rememo. A later ladder/dedupe change could stop counting thin files as done without changing rememo_reason or daily rememo caps.",
-        "category": "later",
-        "section": "research",
-        "revisit_when": "After euro_depth (or the then-current focus) ingest has raised rememo_eligible_count above 0 on a Sunday, or thin_memo_counted_as_coverage still fires with rememo_eligible_count 0 after several ingest weeks.",
-        "tags": [
-          "rememo",
-          "phase-b",
-          "coverage",
-          "system-gaps"
-        ],
-        "status": "open"
-      },
-      {
         "id": "L381",
         "title": "Cite FTSE buy_tier_level first-entry closes as DCA confirmation",
         "summary": "This week's dca_4x_weekly ranking is from concentrated 3-name books. The FTSE epoch-0 book has 61 first-entry overlay episodes from 2026-09-07 that cannot score until the 21-day window (~2026-09-28). When they close, Sunday analysis should cite that unfiltered Suite B cohort as confirmation or contradiction — still observe-only, not an execute path.",
@@ -5556,6 +5573,65 @@
           "dca",
           "sold_before_window",
           "ranking"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L385",
+        "title": "Euro-depth still-zero-disk first-pass memos after catchup",
+        "summary": "Zero-body rememo catchup unlocks memos once disk has any bodies. Names that remain memo_bodies=0 and disk_bodies=0 (e.g. AGS.BR, EL.PA, IFX.DE, REN.AS, SIE.DE, UQA.VI) still need euro_depth ingest thicken before Phase B rememo; do not rewrite empty shells.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "euro_depth zero_body_buy_tier drops or those six tickers gain filings_index with_body > 0",
+        "tags": [
+          "euro_depth",
+          "rememo",
+          "zero-body",
+          "ingest"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L387",
+        "title": "Expand ops overdue auto-dispatch beyond ingest/paper",
+        "summary": "AUTO_DISPATCH_OVERDUE_WORKFLOWS is intentionally narrow (ingest-loop + paper-auto). Consider orchestrator weekday_paper suite and other primary crons once dispatch idempotency and catch-up interaction are proven.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "After ops-monitor has successfully auto-dispatched overdue ingest or paper at least once in production without double-firing catch-up slots",
+        "tags": [
+          "ops-monitor",
+          "auto-fix",
+          "workflow-dispatch"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L388",
+        "title": "End-of-day project-management gate agent",
+        "summary": "Autonomous EOD agent that checks progress toward Phase B/C and other learning gates, then self-generates or recommends fixes for stalls. Prefer extending ftse-ops-monitor checks + drafted eng tasks first; full PM agent only if monitor findings keep being missed.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Ops-monitor Phase B/C gate checks have run for ≥4 weeks and stalls still go unnoticed without ad-hoc questions",
+        "tags": [
+          "ops-monitor",
+          "phase-b",
+          "phase-c",
+          "gates",
+          "project-management"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L390",
+        "title": "Re-seed empty parallel sprint slots on queue regap",
+        "summary": "When ingest_parallel_sprint/_2 are empty after handoffs but next_parallel_sprint_queue_market is non-null (e.g. asx200 regapped), auto-assign that market back into a spare stream so policy-visible cascade and handoff hooks match fill-down runtime.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Second incident of empty parallel streams while head still sprinting and a queue market has sprint_ingest_complete=false",
+        "tags": [
+          "ingest",
+          "cascade",
+          "P2"
         ],
         "status": "open"
       }
@@ -5823,6 +5899,17 @@
           "unique-days"
         ],
         "status": "open"
+      },
+      {
+        "id": "frag-20260914-01",
+        "text": "Recurring miss pattern: we analyze enacted choices and counterfactuals months later, but only fields frozen at decision time are fair. Default bias should be over-record cheap machine flags (revision_id, bind presence, confidence/risk enums) and under-record expensive prose.",
+        "tags": [
+          "recording",
+          "pit",
+          "counterfactual",
+          "philosophy"
+        ],
+        "status": "open"
       }
     ],
     "proposed_tasks": {
@@ -5842,30 +5929,30 @@
     },
     "engineering_open": [
       {
-        "id": "eng-20260912-08",
+        "id": "eng-20260914-04",
         "source": "engineering",
-        "title": "Add healthcare overlay flag when trailing FCF is negative AND Piotroski F-Score ≤ 4 — cap adjusted signal at neutral/caution despite composite Strong Buy.",
-        "summary": "Add healthcare overlay flag when trailing FCF is negative AND Piotroski F-Score ≤ 4 — cap adjusted signal at neutral/caution despite composite Strong Buy.",
+        "title": "Backfill `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo when `financials_annual.json` already holds values",
+        "summary": "Backfill `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo when `financials_annual.json` already holds values",
         "status": "pr_open",
         "added_at": null,
-        "area": "scoring"
+        "area": "ingest"
       },
       {
-        "id": "eng-20260912-20",
+        "id": "eng-20260914-03",
         "source": "engineering",
-        "title": "Apply a cash-conversion cap when trailing FCF is negative and the name simultaneously passes dividend screens and has an active buyback — prevents Strong Buy on",
-        "summary": "Apply a cash-conversion cap when trailing FCF is negative and the name simultaneously passes dividend screens and has an active buyback — prevents Strong Buy on earnings-only cheapness.",
+        "title": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
+        "summary": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
         "status": "open",
         "added_at": null,
-        "area": "scoring"
+        "area": "ingest"
       }
     ],
     "counts": {
       "defer_now": 0,
-      "defer_not_now": 117,
-      "defer_later": 257,
+      "defer_not_now": 119,
+      "defer_later": 260,
       "defer_security": 5,
-      "open_fragments": 19,
+      "open_fragments": 20,
       "proposed_total": 1,
       "engineering_open": 2
     }
@@ -5878,23 +5965,16 @@
         "severity": "warn",
         "category": "engineering",
         "title": "Orphaned pr_open engineering tasks",
-        "summary": "Tasks without matching open PR: eng-20260912-08"
-      },
-      {
-        "id": "ops_status_stale",
-        "severity": "warn",
-        "category": "artifacts",
-        "title": "Ops status snapshot is stale",
-        "summary": "ops_status.json dated 2026-09-12T07:46:35.119815+00:00 (44h ago). Run ftse-ops-monitor run."
+        "summary": "Tasks without matching open PR: eng-20260914-04"
       }
     ],
     "queue_status": {
       "open_count": 1,
       "pr_open_count": 1,
-      "parked_count": 3,
-      "merged_count": 14,
+      "parked_count": 2,
+      "merged_count": 1,
       "failed_count": 0,
-      "next_task_id": "eng-20260912-20",
+      "next_task_id": "eng-20260914-03",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -5910,7 +5990,7 @@
         "severity": "info",
         "category": "doctrine",
         "title": "Stage 2b focus aligned with primary learning gap",
-        "summary": "North-star focus is stage 2b while AI-judgment excess after costs is still negative (-28.2%). Breadth expansion and new tracks should stay deferred."
+        "summary": "North-star focus is stage 2b while AI-judgment excess after costs is still negative (-28.6%). Breadth expansion and new tracks should stay deferred."
       },
       {
         "id": "library_ahead_of_live",
@@ -5924,19 +6004,19 @@
         "severity": "warn",
         "category": "join_up",
         "title": "Post-run plan items without matching open engineering task",
-        "summary": "5 prioritised plan line(s) from the latest post-run review have no fuzzy match among open engineering tasks (Roll out Companies House iXBRL-first (fallback structured PDF) extraction for FTSE group accounts, replacing OCR-only strategic pages; Harden Investegate/LSE primary body fetch with structured `body_rejected` reasons, HTML/PDF retry, and NSM/XBRL pull for annual reports (FGP.L 2026 AR PDF, ITV.L `has_body: false` duplicates); Bind overlay FCF numerators to latest filing-year company-adjusted totals and emit a stale-year flag when snapshot lags (FGP.L £113.5m vs £73.8m)). They may have been filtered at compile, truncated by max_tasks (8), or not yet compiled. Queue is idle: run `ftse-engineering try-idle-compile-backstop --apply` when output/ or latest.json has the plan but compile was skipped."
+        "summary": "3 prioritised plan line(s) from the latest post-run review have no fuzzy match among open engineering tasks (Standardise Investegate/LSE direct document fetch for indexed RNS (replace Google News redirect URLs; PDF/HTML body persist to `filings/bodies/`); Companies House document-api pipeline: map CH IDs to `filings_index`, OCR/iXBRL extract with truncation detection and re-fetch; Emit labelled dual coverage metrics (statutory OCF−capex vs management-adjusted cash definitions) and persist FCF-basis divergence flags on screening_snapshot and run history for Strong Buy / buy-tier). They may have been filtered at compile, truncated by max_tasks (8), or not yet compiled. All match merged/parked tasks — schedule email_only for a fresh post-run; idle compile backstop will not reopen them."
       },
       {
         "id": "compile_cap_truncated_candidates",
         "severity": "info",
         "category": "join_up",
         "title": "Compile cap dropped lower-priority candidates",
-        "summary": "208 compiled candidate(s) omitted by max_tasks=8 (post-run plan items kept first). research_model_suggestions: Fail-closed or flag when screening_snapshot.fcf.currency is ; research_model_suggestions: Fail-closed or flag when screen FCF (1,059m) disagrees with ; research_model_suggestions: Enable cyclical_exposure for UK heavyside construction-mater"
+        "summary": "213 compiled candidate(s) omitted by max_tasks=8 (post-run plan items kept first). research_model_suggestions: Auto-flag conviction downgrade when filing-aligned FCF, comp; research_model_suggestions: Do not pass the dividend family on company-adjusted FCF when; research_model_suggestions: Do not pass dividend or FCF Yield on company-adjusted FCF (£"
       }
     ]
   },
   "so_what": {
-    "generated_at": "2026-09-14T04:38:42Z",
+    "generated_at": "2026-09-14T20:28:05Z",
     "counts": {
       "findings": 0,
       "auto_queue": 0,
