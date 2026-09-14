@@ -350,6 +350,8 @@ def test_check_workflow_freshness_marks_ingest_paper_overdue_auto_fixable_past_r
 
 
 def test_apply_auto_fixes_dispatches_overdue_ingest_and_paper():
+    from value_investor.engineering_recovery import RecoveryResult
+
     findings = [
         OpsFinding(
             severity="fail",
@@ -374,6 +376,10 @@ def test_apply_auto_fixes_dispatches_overdue_ingest_and_paper():
     with (
         patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
         patch("value_investor.ops_monitor.dispatch_workflow", side_effect=fake_dispatch),
+        patch(
+            "value_investor.ops_monitor.recover_engineering_queue",
+            return_value=RecoveryResult(),
+        ),
     ):
         fixes = apply_auto_fixes(findings, apply=True)
 
@@ -384,6 +390,8 @@ def test_apply_auto_fixes_dispatches_overdue_ingest_and_paper():
 
 
 def test_apply_auto_fixes_dispatch_failure_leaves_supervised():
+    from value_investor.engineering_recovery import RecoveryResult
+
     findings = [
         OpsFinding(
             severity="fail",
@@ -398,6 +406,10 @@ def test_apply_auto_fixes_dispatch_failure_leaves_supervised():
         patch(
             "value_investor.ops_monitor.dispatch_workflow",
             side_effect=RuntimeError("403 Workflows permission"),
+        ),
+        patch(
+            "value_investor.ops_monitor.recover_engineering_queue",
+            return_value=RecoveryResult(),
         ),
     ):
         fixes = apply_auto_fixes(findings, apply=True)

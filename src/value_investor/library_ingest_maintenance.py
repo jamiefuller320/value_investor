@@ -420,6 +420,77 @@ def maybe_advance_parallel_sprint_on_parity(
     }
 
 
+def reseed_empty_parallel_sprint_slots(
+    *,
+    library_root: Path = DEFAULT_LIBRARY_ROOT,
+    policy_path: Path = DEFAULT_POLICY_PATH,
+) -> list[dict[str, Any]]:
+    """Assign ``market_queue`` names into empty parallel sprint streams in order.
+
+    When handoffs clear ``ingest_parallel_sprint`` / ``_2`` and a queue market
+    later regaps (or was skipped), fill-down alone does not update policy.
+    Reseed restores visible cascade rotation so auto-advance can run again.
+    """
+    library_root = Path(library_root)
+    policy = load_policy(policy_path)
+    if not _parallel_sprint_advance_enabled(policy):
+        return []
+
+    events: list[dict[str, Any]] = []
+    changed = False
+    for parallel_stream in (1, 2):
+        if list_library_ingest_parallel_sprint_markets(
+            policy=policy,
+            parallel_stream=parallel_stream,
+        ):
+            continue
+        nxt = next_parallel_sprint_queue_market(
+            policy,
+            library_root=library_root,
+        )
+        if not nxt:
+            continue
+        policy, stream_after = replace_parallel_sprint_market(
+            policy,
+            parallel_stream=parallel_stream,
+            from_market=nxt,
+            to_market=nxt,
+        )
+        changed = True
+        event_row: dict[str, Any] = {
+            "reseeded": True,
+            "at": datetime.now(UTC).isoformat(),
+            "parallel_stream": parallel_stream,
+            "from_market": None,
+            "to_market": nxt,
+            "stream_markets_after": list(stream_after),
+            "ingest_parity_recorded": False,
+        }
+        history = list((policy.get("parallel_sprint_graduation") or {}).get("history") or [])
+        history.append(event_row)
+        policy["parallel_sprint_graduation"] = {
+            **(policy.get("parallel_sprint_graduation") or {}),
+            "history": history[-50:],
+        }
+        events.append(event_row)
+
+    if not changed:
+        return events
+
+    save_policy(policy, policy_path)
+    try:
+        from value_investor.library_ingest_dispatch import refresh_euro_ingest_dispatch
+
+        refresh_euro_ingest_dispatch(
+            library_root=library_root,
+            policy_path=policy_path,
+            reconcile_parallel=False,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Dispatch refresh after parallel sprint reseed failed: %s", exc)
+    return events
+
+
 def reconcile_parallel_sprint_queues(
     *,
     library_root: Path = DEFAULT_LIBRARY_ROOT,
@@ -452,6 +523,12 @@ def reconcile_parallel_sprint_queues(
             if event.get("advanced"):
                 events.append(event)
                 policy = load_policy(policy_path)
+    events.extend(
+        reseed_empty_parallel_sprint_slots(
+            library_root=library_root,
+            policy_path=policy_path,
+        )
+    )
     return events
 
 
@@ -462,6 +539,7 @@ __all__ = [
     "maybe_handoff_focus_on_ingest_parity",
     "maybe_record_exhausted_maintenance",
     "reconcile_parallel_sprint_queues",
+    "reseed_empty_parallel_sprint_slots",
     "record_ingest_exhausted_market",
     "record_ingest_parity_market",
     "run_library_ingest_maintenance",
