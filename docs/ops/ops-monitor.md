@@ -6,7 +6,8 @@ artifacts, ingest stall detection, and the engineering queue.
 **Heal → re-verify → report** (when `--apply` / default in CI):
 
 1. Detect findings (artifacts, ingest health, workflows, engineering queue, Phase B
-   structured-verdict producer progress, …)
+   structured-verdict producer progress, claimed-vs-landed indicator integrity
+   (**L389**), …)
 2. Apply **safe auto-fixes** (below)
 3. **Re-run detection** so overall status reflects post-fix truth
 4. Draft supervised tasks / send email only for **unfixed** warn/fail
@@ -179,6 +180,25 @@ successful run), scanned within a 12h window.
 | `docs/data/ops_status.json` | Latest findings, auto-fixes, workflow freshness |
 | `docs/data/ops_monitor_log.json` | Rolling daily run index (90 entries) |
 | `docs/data/backtest_health.json` | Backtest history audit and readiness (see [backtest-health.md](backtest-health.md)) |
+| `docs/data/research_docs_receipt.json` | Sunday `--research-docs` claim receipt (writes / persist / mode counts) for L389 |
+
+## Claimed-vs-landed integrity (L389)
+
+Known-issue monitors can look green while the artifact that matters never moved.
+`check_indicator_integrity` compares **claims** to **landings**:
+
+| Check | Trigger | Severity |
+|-------|---------|----------|
+| `research_docs_claimed_zero_writes` | Fresh receipt: targets &gt; 0 but `created+updated=0` | fail |
+| `research_docs_writes_not_persisted` | Fresh receipt: writes &gt; 0 but `persisted_trees=0` | fail |
+| `research_docs_writes_without_structured_modes` | Fresh receipt: writes &gt; 0 but committed store still has 0 `structured_verdict*` modes | fail |
+| `verdict_fields_without_structured_mode` | ≥5 committed memos have `research_verdict` while modes stay essay/`initial` and structured=0 | fail |
+
+Receipts are written by `ftse-email --research-docs` (committed under
+`docs/data/research_docs_receipt.json`; also under `output/`). Stale receipts
+(&gt;10 days) are ignored. Complements `check_phase_b_producer_progress` (stall
+detection) with false-green / claimed-vs-landed angles — see
+[`structured-verdict-slim.md`](structured-verdict-slim.md).
 
 ## Paper learning tracks
 

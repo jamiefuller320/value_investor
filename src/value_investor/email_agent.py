@@ -450,6 +450,7 @@ def main(argv: list[str] | None = None) -> int:
             for doc in research_summary.documents
             if getattr(doc, "ticker", None)
         ]
+        persisted = 0
         if touched:
             persisted = sync_output_research_to_committed(
                 args.output_dir,
@@ -459,6 +460,27 @@ def main(argv: list[str] | None = None) -> int:
                 f"Persisted {persisted} research memo tree(s) to docs/data/research "
                 f"(Phase B structured modes must land in the committed store)"
             )
+        from value_investor.indicator_integrity import (
+            build_research_docs_receipt,
+            write_research_docs_receipt,
+        )
+
+        receipt = build_research_docs_receipt(
+            run_at=run_at,
+            created=int(research_summary.created),
+            updated=int(research_summary.updated),
+            skipped=int(research_summary.skipped),
+            errors=list(research_summary.errors or []),
+            active_count=int(research_summary.active_count),
+            alumni_count=int(research_summary.alumni_count),
+            persisted_trees=int(persisted),
+            touched_tickers=touched,
+        )
+        receipt_path = write_research_docs_receipt(
+            receipt,
+            output_path=args.output_dir / "research_docs_receipt.json",
+        )
+        print(f"Wrote research-docs claim receipt to {receipt_path}")
         research_documents = research_documents_for_reports(reports, research_summary.documents)
 
     if args.research_gap_fill:
