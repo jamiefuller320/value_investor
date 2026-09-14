@@ -1,76 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-13T16:49:53.453726+10:00",
+    "local_time": "2026-09-14T10:46:30.366050+10:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-09-13T10:00:00+10:00",
-    "settle_at": "2026-09-13T10:30:00+10:00",
+    "market_open_at": "2026-09-14T10:00:00+10:00",
+    "settle_at": "2026-09-14T10:30:00+10:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [
-    {
-      "id": "3064b711-ed7d-4d6b-bb29-88bd4c3e5ca2",
-      "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
-      "acted_at": "2026-09-13T16:49:53.453726+10:00",
-      "ticker": "RRL.AX",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 4.290929,
-      "price": 7.72,
-      "gross": 33.13,
-      "cost": 0.06,
-      "net_cash": -33.18,
-      "note": "Automated buy",
-      "name": "Regis Resources Limited"
-    },
-    {
-      "id": "8123c8a7-6c19-4a8e-9b9a-c16ed598317f",
-      "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
-      "acted_at": "2026-09-13T16:49:53.453726+10:00",
-      "ticker": "ANN.AX",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.801306,
-      "price": 41.34,
-      "gross": 33.13,
-      "cost": 0.06,
-      "net_cash": -33.18,
-      "note": "Automated buy",
-      "name": "Ansell Limited"
-    },
-    {
-      "id": "43351fc7-159b-4c0c-a7a8-1565c0eaad11",
-      "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
-      "acted_at": "2026-09-13T16:49:53.453726+10:00",
-      "ticker": "WHC.AX",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 3.851857,
-      "price": 8.6,
-      "gross": 33.13,
-      "cost": 0.06,
-      "net_cash": -33.18,
-      "note": "Automated buy",
-      "name": "Whitehaven Coal Limited"
-    },
-    {
-      "id": "46d585d7-3365-4f87-8df5-22c661c49e3a",
-      "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
-      "acted_at": "2026-09-13T16:49:53.453726+10:00",
-      "ticker": "WAF.AX",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 8.626556,
-      "price": 3.84,
-      "gross": 33.13,
-      "cost": 0.06,
-      "net_cash": -33.18,
-      "note": "Automated buy",
-      "name": "West African Resources Limited"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -94,7 +33,7 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 33.18,
+    "target_sleeve_value": 35.63,
     "targets": [
       {
         "ticker": "SHL.AX",
@@ -151,13 +90,6 @@
         "signal": "buy",
         "conviction_score": 0.6654,
         "price": 64.88
-      },
-      {
-        "ticker": "ANN.AX",
-        "name": "Ansell Limited",
-        "signal": "buy",
-        "conviction_score": 0.663,
-        "price": 41.34
       },
       {
         "ticker": "EBO.AX",
@@ -265,13 +197,6 @@
         "price": 5.63
       },
       {
-        "ticker": "WAF.AX",
-        "name": "West African Resources Limited",
-        "signal": "strong_buy",
-        "conviction_score": 0.4416,
-        "price": 3.84
-      },
-      {
         "ticker": "BPT.AX",
         "name": "Beach Energy Limited",
         "signal": "buy",
@@ -300,7 +225,26 @@
         "price": 2.18
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "ANN.AX",
+        "name": "Ansell Limited",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.801306,
+        "price": 41.34,
+        "value": 33.13
+      },
+      {
+        "action": "sell",
+        "ticker": "WAF.AX",
+        "name": "West African Resources Limited",
+        "reason": "No longer in the top conviction target set",
+        "shares": 8.626556,
+        "price": 3.84,
+        "value": 33.13
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [],
@@ -309,9 +253,9 @@
         "action": "hold",
         "ticker": "SHL.AX",
         "name": "Sonic Healthcare Limited",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 33.42,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.8320000000000001,
         "signal": "strong_buy"
       },
@@ -319,9 +263,9 @@
         "action": "hold",
         "ticker": "RRL.AX",
         "name": "Regis Resources Limited",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 33.13,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.8220000000000001,
         "signal": "strong_buy"
       },
@@ -331,7 +275,7 @@
         "name": "Charter Hall Retail REIT",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 32.16,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.8111,
         "signal": "strong_buy"
       },
@@ -341,7 +285,7 @@
         "name": "Fortescue Ltd",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 32.29,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.7771,
         "signal": "strong_buy"
       },
@@ -351,7 +295,7 @@
         "name": "Premier Investments Limited",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 32.81,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.7100000000000001,
         "signal": "buy"
       },
@@ -359,49 +303,59 @@
         "action": "hold",
         "ticker": "HVN.AX",
         "name": "Harvey Norman Holdings Limited",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 33.23,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.6961,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
-        "ticker": "JBH.AX",
-        "name": "JB Hi-Fi Limited",
-        "reason": "Already near equal-weight target",
-        "value": 33.04,
-        "target_value": 33.18,
-        "conviction_score": 0.6654,
+        "ticker": "SOL.AX",
+        "name": "WHSP Holdings Limited",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 34.04,
+        "target_value": 35.63,
+        "conviction_score": 0.6908000000000001,
         "signal": "buy"
       },
       {
         "action": "hold",
-        "ticker": "ANN.AX",
-        "name": "Ansell Limited",
-        "reason": "Already near equal-weight target",
-        "value": 33.13,
-        "target_value": 33.18,
-        "conviction_score": 0.663,
+        "ticker": "JBH.AX",
+        "name": "JB Hi-Fi Limited",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 33.04,
+        "target_value": 35.63,
+        "conviction_score": 0.6654,
         "signal": "buy"
       },
       {
         "action": "hold",
         "ticker": "EBO.AX",
         "name": "EBOS Group Limited",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 33.4,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.6391,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "MND.AX",
+        "name": "Monadelphous Group Limited",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 34.07,
+        "target_value": 35.63,
+        "conviction_score": 0.6161000000000001,
         "signal": "buy"
       },
       {
         "action": "hold",
         "ticker": "RMD.AX",
         "name": "ResMed Inc.",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 33.24,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.6011000000000001,
         "signal": "buy"
       },
@@ -411,7 +365,7 @@
         "name": "Zimplats Holdings Limited",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 32.59,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.5862,
         "signal": "buy"
       },
@@ -421,7 +375,7 @@
         "name": "Greatland Resources Limited",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 32.33,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.5672,
         "signal": "buy"
       },
@@ -429,9 +383,9 @@
         "action": "hold",
         "ticker": "AAI.AX",
         "name": "Alcoa Corporation",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 33.33,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.5392399999999999,
         "signal": "buy"
       },
@@ -441,7 +395,7 @@
         "name": "Amcor plc",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 32.75,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.5388000000000001,
         "signal": "buy"
       },
@@ -449,19 +403,29 @@
         "action": "hold",
         "ticker": "WHC.AX",
         "name": "Whitehaven Coal Limited",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 33.13,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.535,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "WDS.AX",
+        "name": "Woodside Energy Group Ltd",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 34.99,
+        "target_value": 35.63,
+        "conviction_score": 0.5331,
         "signal": "buy"
       },
       {
         "action": "hold",
         "ticker": "BWP.AX",
         "name": "BWP Trust",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 33.02,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.5056,
         "signal": "buy"
       },
@@ -469,9 +433,9 @@
         "action": "hold",
         "ticker": "CSC.AX",
         "name": "Capstone Copper Corp.",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 33.5,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.502,
         "signal": "buy"
       },
@@ -479,10 +443,30 @@
         "action": "hold",
         "ticker": "CLW.AX",
         "name": "Charter Hall Long WALE REIT",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 32.95,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.5002,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "YAL.AX",
+        "name": "Yancoal Australia Ltd",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 33.61,
+        "target_value": 35.63,
+        "conviction_score": 0.4992,
+        "signal": "buy"
+      },
+      {
+        "action": "hold",
+        "ticker": "DNL.AX",
+        "name": "Dyno Nobel Limited",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 34.07,
+        "target_value": 35.63,
+        "conviction_score": 0.4942,
         "signal": "buy"
       },
       {
@@ -491,19 +475,19 @@
         "name": "Westgold Resources Limited",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 30.05,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.4501,
         "signal": "strong_buy"
       },
       {
         "action": "hold",
-        "ticker": "WAF.AX",
-        "name": "West African Resources Limited",
-        "reason": "Already near equal-weight target",
-        "value": 33.13,
-        "target_value": 33.18,
-        "conviction_score": 0.4416,
-        "signal": "strong_buy"
+        "ticker": "BPT.AX",
+        "name": "Beach Energy Limited",
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 34.82,
+        "target_value": 35.63,
+        "conviction_score": 0.41859999999999997,
+        "signal": "buy"
       },
       {
         "action": "hold",
@@ -511,7 +495,7 @@
         "name": "BlueScope Steel Limited",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 31.94,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.39239999999999997,
         "signal": "buy"
       },
@@ -521,7 +505,7 @@
         "name": "PEXA Group Limited",
         "reason": "Top-up below min trade size (\u00a310)",
         "value": 31.0,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.3338,
         "signal": "buy"
       },
@@ -529,16 +513,31 @@
         "action": "hold",
         "ticker": "PRN.AX",
         "name": "Perenti Limited",
-        "reason": "Already near equal-weight target",
+        "reason": "Top-up below min trade size (\u00a310)",
         "value": 33.02,
-        "target_value": 33.18,
+        "target_value": 35.63,
         "conviction_score": 0.3258,
         "signal": "buy"
       }
     ],
     "skipped": [],
-    "waitlisted": [],
-    "summary": "Next rebalance would target 29 equal-weight sleeve(s); leave 23 near-target holding(s)."
+    "waitlisted": [
+      {
+        "ticker": "ANN.AX",
+        "name": "Ansell Limited",
+        "signal": "buy",
+        "conviction_score": 0.663,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      },
+      {
+        "ticker": "WAF.AX",
+        "name": "West African Resources Limited",
+        "signal": "strong_buy",
+        "conviction_score": 0.4416,
+        "reason": "timing_signal=wait \u2014 skipped until timing improves"
+      }
+    ],
+    "summary": "Next rebalance would target 27 equal-weight sleeve(s); sell 2 name(s) that left the set; leave 27 near-target holding(s)."
   },
   "alerts": [
     {
@@ -550,7 +549,7 @@
       "mark": 16.67,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "PMV.AX",
@@ -561,7 +560,7 @@
       "mark": 11.18,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "CQR.AX",
@@ -572,7 +571,7 @@
       "mark": 3.69,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "SOL.AX",
@@ -583,7 +582,7 @@
       "mark": 43.95,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "HVN.AX",
@@ -594,7 +593,7 @@
       "mark": 4.17,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "SHL.AX",
@@ -605,7 +604,7 @@
       "mark": 19.0,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "AAI.AX",
@@ -616,7 +615,7 @@
       "mark": 67.59,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "JBH.AX",
@@ -627,7 +626,7 @@
       "mark": 64.88,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "EBO.AX",
@@ -638,7 +637,7 @@
       "mark": 16.4,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "WDS.AX",
@@ -649,7 +648,7 @@
       "mark": 32.86,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "MND.AX",
@@ -660,7 +659,7 @@
       "mark": 28.69,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "RMD.AX",
@@ -671,7 +670,7 @@
       "mark": 30.31,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "ZIM.AX",
@@ -682,7 +681,7 @@
       "mark": 16.51,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "CSC.AX",
@@ -693,7 +692,7 @@
       "mark": 14.6,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "AMC.AX",
@@ -704,7 +703,7 @@
       "mark": 59.98,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "DNL.AX",
@@ -715,7 +714,7 @@
       "mark": 3.89,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "YAL.AX",
@@ -726,7 +725,7 @@
       "mark": 6.22,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "WGX.AX",
@@ -737,7 +736,7 @@
       "mark": 5.63,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "GGP.AX",
@@ -748,7 +747,7 @@
       "mark": 10.79,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "BWP.AX",
@@ -759,7 +758,7 @@
       "mark": 3.54,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "BPT.AX",
@@ -770,7 +769,7 @@
       "mark": 0.88,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "CLW.AX",
@@ -781,7 +780,7 @@
       "mark": 3.36,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "accumulate"
     },
     {
       "ticker": "BSL.AX",
@@ -792,7 +791,7 @@
       "mark": 30.21,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "PXA.AX",
@@ -803,7 +802,7 @@
       "mark": 6.8,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "PRN.AX",
@@ -814,7 +813,7 @@
       "mark": 2.18,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "RRL.AX",
@@ -825,18 +824,18 @@
       "mark": 7.72,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "ANN.AX",
       "name": "Ansell Limited",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
       "mark": 41.34,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "wait"
     },
     {
       "ticker": "WHC.AX",
@@ -847,18 +846,18 @@
       "mark": 8.6,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "neutral"
     },
     {
       "ticker": "WAF.AX",
       "name": "West African Resources Limited",
       "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
+      "severity": "watch",
+      "message": "Technical timing is wait \u2014 avoid adding size",
       "mark": 3.84,
       "stop_loss": null,
       "take_profit": null,
-      "timing_signal": "insufficient_data"
+      "timing_signal": "wait"
     }
   ],
   "fund": {
@@ -1940,19 +1939,39 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-14T10:46:30.366050+10:00",
+        "portfolio_value": 509.94,
+        "cash": 3.94,
+        "contributed_capital": 1000.0,
+        "positions": 29,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "AUD": 0.5281
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-13T16:49:53.453726+10:00",
+    "last_mark_at": "2026-09-14T10:46:30.366050+10:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "ANN.AX": 1,
+        "WAF.AX": 1
+      },
       "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (4 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-13T06:49:53.605048+00:00",
+    "generated_at": "2026-09-14T00:46:30.755155+00:00",
     "open_count": 5,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -1971,7 +1990,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-13T06:49:53.605817+00:00",
+    "generated_at": "2026-09-14T00:46:30.756360+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2027,7 +2046,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 4,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 27,
+      "hold_with_data_quality_count": 29,
       "gaps": [
         "hold_recovery closed episodes=4 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
@@ -2036,10 +2055,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 23,
-        "recovered_to_breakeven": 4,
+        "count": 25,
+        "recovered_to_breakeven": 6,
         "close_reasons": {
-          "open": 23
+          "open": 25
         }
       },
       "closed": {
@@ -2064,7 +2083,7 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 10,
+      "hold_episodes": 2,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
@@ -2077,8 +2096,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-09-13T06:49:53.607102+00:00",
-    "as_of": "2026-09-13T16:49:53.453726+10:00",
+    "updated_at": "2026-09-14T00:46:30.758343+00:00",
+    "as_of": "2026-09-14T10:46:30.366050+10:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2139,7 +2158,7 @@
         "mark": 5.63,
         "avg_cost": 6.45,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.4501,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -2181,7 +2200,7 @@
         "mark": 6.8,
         "avg_cost": 7.55,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.3338,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -2221,7 +2240,7 @@
         "mark": 30.21,
         "avg_cost": 32.56,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.3924,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -2263,7 +2282,7 @@
         "mark": 3.69,
         "avg_cost": 3.95,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.8111,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -2304,7 +2323,7 @@
         "mark": 16.67,
         "avg_cost": 17.77,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.7771,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -2345,7 +2364,7 @@
         "mark": 10.79,
         "avg_cost": 11.49,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.5672,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -2387,7 +2406,7 @@
         "mark": 16.51,
         "avg_cost": 17.44,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.5862,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -2429,7 +2448,7 @@
         "mark": 59.98,
         "avg_cost": 63.04,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.5388,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -2470,7 +2489,7 @@
         "mark": 11.18,
         "avg_cost": 11.73,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.71,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -2510,7 +2529,7 @@
         "mark": 3.36,
         "avg_cost": 3.51,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "accumulate",
         "conviction_score": 0.5002,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -2548,7 +2567,7 @@
         "mark": 3.54,
         "avg_cost": 3.69,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "accumulate",
         "conviction_score": 0.5056,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -2586,7 +2605,7 @@
         "mark": 64.88,
         "avg_cost": 67.59,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "accumulate",
         "conviction_score": 0.6654,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -2626,7 +2645,7 @@
         "mark": 2.18,
         "avg_cost": 2.26,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.3258,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -2666,7 +2685,7 @@
         "mark": 4.17,
         "avg_cost": 4.32,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "accumulate",
         "conviction_score": 0.6961,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -2707,7 +2726,7 @@
         "mark": 30.31,
         "avg_cost": 31.39,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.6011,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -2747,7 +2766,7 @@
         "mark": 67.59,
         "avg_cost": 69.81,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.5392,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -2786,7 +2805,7 @@
         "mark": 16.4,
         "avg_cost": 16.9,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.6391,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -2827,7 +2846,7 @@
         "mark": 19.0,
         "avg_cost": 19.57,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.832,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -2867,7 +2886,7 @@
         "mark": 14.6,
         "avg_cost": 15.0,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.502,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -2908,7 +2927,7 @@
         "mark": 6.22,
         "avg_cost": 6.37,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.4992,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -2949,7 +2968,7 @@
         "mark": 43.95,
         "avg_cost": 44.45,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.6908,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -2989,7 +3008,7 @@
         "mark": 28.69,
         "avg_cost": 28.99,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.6161,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -3029,7 +3048,7 @@
         "mark": 3.89,
         "avg_cost": 3.93,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.4942,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -3070,7 +3089,7 @@
         "mark": 7.72,
         "avg_cost": 7.72,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.822,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -3110,7 +3129,7 @@
         "mark": 41.34,
         "avg_cost": 41.34,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "wait",
         "conviction_score": 0.663,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -3150,7 +3169,7 @@
         "mark": 8.6,
         "avg_cost": 8.6,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.535,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -3191,7 +3210,7 @@
         "mark": 3.84,
         "avg_cost": 3.84,
         "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "wait",
         "conviction_score": 0.4416,
         "data_quality_score": 0.9,
         "passed_families": [
@@ -3232,7 +3251,7 @@
         "mark": 0.88,
         "avg_cost": 0.87,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "accumulate",
         "conviction_score": 0.4186,
         "data_quality_score": 0.95,
         "passed_families": [
@@ -3273,7 +3292,7 @@
         "mark": 32.86,
         "avg_cost": 32.33,
         "signal": "buy",
-        "timing_signal": "insufficient_data",
+        "timing_signal": "neutral",
         "conviction_score": 0.5331,
         "data_quality_score": 1.0,
         "passed_families": [
@@ -3311,7 +3330,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-13T06:49:53.608915+00:00",
+    "generated_at": "2026-09-14T00:46:30.760974+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -3319,7 +3338,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 4,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 23,
+      "open_with_thesis": 25,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -3379,7 +3398,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-09-13T06:49:53.610283+00:00",
+    "generated_at": "2026-09-14T00:46:30.763075+00:00",
     "open_count": 5,
     "closed_count": 0,
     "scored_count": 0,
@@ -3436,11 +3455,11 @@
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 4,
-    "marked_this_pass": 1,
+    "ingested_this_pass": 0,
+    "marked_this_pass": 5,
     "closed_this_pass": 0
   },
-  "generated_at": "2026-09-13T06:49:53.610642+00:00",
+  "generated_at": "2026-09-14T00:46:30.763515+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,
