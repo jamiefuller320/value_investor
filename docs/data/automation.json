@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-14T15:52:31.487549+00:00",
+  "generated_at": "2026-09-14T16:59:18.170668+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1150,16 +1150,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-14T14:28:35.816148+00:00",
-    "queue_ui_updated_at": "2026-09-14T15:52:31.397764+00:00",
-    "task_count": 28,
+    "compiled_at": "2026-09-14T16:11:40.726013+00:00",
+    "queue_ui_updated_at": "2026-09-14T16:59:18.085084+00:00",
+    "task_count": 5,
     "status": {
-      "open_count": 8,
+      "open_count": 3,
       "pr_open_count": 0,
       "parked_count": 0,
-      "merged_count": 18,
+      "merged_count": 2,
       "failed_count": 0,
-      "next_task_id": "eng-20260914-02",
+      "next_task_id": "eng-20260914-03",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1167,22 +1167,6 @@
       "spend_blocked": false
     },
     "queued_tasks": [
-      {
-        "id": "eng-20260914-02",
-        "area": "ingest",
-        "title": "Companies House document-api pipeline: map CH IDs to `filings_index`, OCR/iXBRL extract with truncation detection and re-fetch",
-        "priority": "high",
-        "priority_score": 100.0,
-        "status": "open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "partial"
-      },
       {
         "id": "eng-20260914-03",
         "area": "ingest",
@@ -1196,7 +1180,7 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 2,
+        "effective_dispatch_rank": 1,
         "clash_scan": "partial"
       },
       {
@@ -1212,15 +1196,15 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 3,
+        "effective_dispatch_rank": 2,
         "clash_scan": "partial"
       },
       {
-        "id": "eng-20260914-01",
-        "area": "ingest",
-        "title": "Standardise Investegate/LSE direct document fetch for indexed RNS (replace Google News redirect URLs; PDF/HTML body persist to `filings/bodies/`)",
+        "id": "eng-20260914-05",
+        "area": "scoring",
+        "title": "Emit labelled dual coverage metrics (statutory OCF−capex vs management-adjusted cash definitions) and persist FCF-basis divergence flags on screening_snapshot a",
         "priority": "high",
-        "priority_score": 95.0,
+        "priority_score": 97.0,
         "status": "open",
         "source": "post_run_review",
         "pr_url": null,
@@ -1228,78 +1212,14 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 4,
-        "clash_scan": "partial"
-      },
-      {
-        "id": "eng-20260914-16",
-        "area": "scoring",
-        "title": "Do not pass the dividend family on company-adjusted FCF when filing-aligned cover is below 1.0×; fire fcf_basis_overlay when filing / TTM / adj diverge; treat a",
-        "priority": "high",
-        "priority_score": 43.0,
-        "status": "open",
-        "source": "research_model_suggestions",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 5,
-        "clash_scan": "partial"
-      },
-      {
-        "id": "eng-20260914-28",
-        "area": "scoring",
-        "title": "Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_definition",
-        "priority": "high",
-        "priority_score": 43.0,
-        "status": "open",
-        "source": "research_model_suggestions",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 6,
-        "clash_scan": "partial"
-      },
-      {
-        "id": "eng-20260914-41",
-        "area": "scoring",
-        "title": "Enable cyclical/public-capex and cash-conversion overlays for UK contractors; treat falling revenue + rising FCF as a quality warning until filing mix notes con",
-        "priority": "high",
-        "priority_score": 43.0,
-        "status": "open",
-        "source": "research_model_suggestions",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 7,
-        "clash_scan": "partial"
-      },
-      {
-        "id": "eng-20260914-42",
-        "area": "ingest",
-        "title": "Hunt fetchable IR source for parked tsx60 leftover TRI.TO",
-        "priority": "low",
-        "priority_score": 14.0,
-        "status": "open",
-        "source": "parked_source_hunter",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 8,
+        "effective_dispatch_rank": 3,
         "clash_scan": "partial"
       }
     ],
     "attention_tasks": [],
     "clash_summary": {
-      "open_task_count": 8,
-      "dispatch_eligible_count": 8,
+      "open_task_count": 3,
+      "dispatch_eligible_count": 3,
       "blocked_count": 0
     }
   },
@@ -1578,7 +1498,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-14T15:52:31.487549+00:00",
+    "generated_at": "2026-09-14T16:59:18.170668+00:00",
     "overall": "active",
     "headline": "Agent lane active.",
     "merge_lane": {
@@ -1599,18 +1519,18 @@
       "should_dispatch": true,
       "pause_active": false,
       "attention_parked_count": 0,
-      "open_count": 8,
+      "open_count": 3,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 8,
+      "dispatch_eligible_count": 3,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260914-02",
+      "next_task_id": "eng-20260914-03",
       "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
       "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-14T15:48:01.324087+00:00"
+      "evaluated_at": "2026-09-14T16:55:01.864695+00:00"
     },
     "ops_monitor": {
       "run_at": "2026-09-14T07:46:37.216700+00:00",
