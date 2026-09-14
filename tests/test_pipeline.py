@@ -1004,6 +1004,40 @@ def test_enrich_signals_with_cash_conversion_overlay_after_healthcare():
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
 
 
+def test_enrich_signals_with_healthcare_overlay_uses_trailing_fcf():
+    """Cap on negative screen TTM even when canonical free_cashflow on the row is positive."""
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "name": "Pharma Weak Ltd",
+                "sector": "Health Care",
+                "signal": "strong_buy",
+                "free_cashflow": 119_000_000.0,
+                "free_cashflow_screen_ttm": -66_125_000.0,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "PHAR.L",
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": False,
+                "score": 3 / 9,
+                "reasons": "['F-Score=3/9']",
+                "failed_criteria": "['F-Score 3/9 below 7']",
+            },
+        ]
+    )
+
+    enriched = enrich_signals_with_healthcare_overlay(signals, model_results)
+
+    assert bool(enriched.iloc[0]["healthcare_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
 def test_enrich_signals_with_cash_conversion_overlay_uses_canonical_fcf():
     """Do not cap when canonical FCF is positive even if preserved screen TTM is negative."""
     signals = pd.DataFrame(

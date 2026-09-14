@@ -627,7 +627,7 @@ def _brief_summary(
 
     if healthcare_overlay and adjusted_signal and adjusted_signal != signal:
         parts.append(
-            f"Healthcare overlay: negative FCF with weak Piotroski "
+            f"Healthcare overlay: negative trailing FCF with weak Piotroski "
             f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
         )
 
@@ -1049,10 +1049,13 @@ def build_company_reports(
             healthcare_overlay = bool(healthcare_overlay_flag)
         else:
             piotroski_score = piotroski_score_for_ticker(ticker_models)
+            trailing_fcf_for_healthcare = (
+                screen_ttm if screen_ttm is not None else resolve_free_cashflow(row)
+            )
             healthcare_overlay, adjusted_signal_str = apply_healthcare_overlay_to_signal(
                 signal,
                 sector=row.get("sector"),
-                free_cashflow=free_cashflow,
+                free_cashflow=trailing_fcf_for_healthcare,
                 piotroski_f_score=piotroski_score,
                 adjusted_signal=adjusted_signal_str,
             )
