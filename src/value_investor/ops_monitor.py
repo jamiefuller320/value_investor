@@ -1245,6 +1245,44 @@ def check_phase_b_producer_progress(
     ]
 
 
+def check_indicator_integrity(
+    *,
+    research_root: Path = Path("docs/data/research"),
+    receipt_path: Path = Path("docs/data/research_docs_receipt.json"),
+) -> list[OpsFinding]:
+    """L389: claimed-vs-landed checks for false-green indicators."""
+    from value_investor.indicator_integrity import evaluate_indicator_integrity
+
+    try:
+        raw = evaluate_indicator_integrity(
+            research_root=research_root,
+            receipt_path=receipt_path,
+        )
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title="Indicator integrity check failed",
+                summary=str(exc),
+            )
+        ]
+
+    findings: list[OpsFinding] = []
+    for row in raw:
+        severity = "fail" if row.severity == "fail" else "warn"
+        findings.append(
+            OpsFinding(
+                severity=severity,
+                category="research",
+                title=row.title,
+                summary=f"[{row.check_id}] {row.summary}",
+                auto_fixable=False,
+            )
+        )
+    return findings
+
+
 def check_backtest_history(
     history_dir: Path = COMMITTED_HISTORY_DIR,
 ) -> list[OpsFinding]:
@@ -1693,6 +1731,7 @@ def collect_ops_findings(
     findings.extend(check_ops_budget())
     findings.extend(check_memo_rememo_backlog())
     findings.extend(check_phase_b_producer_progress())
+    findings.extend(check_indicator_integrity())
     findings.extend(check_backtest_history())
     findings.extend(check_paper_learning_tracks())
 

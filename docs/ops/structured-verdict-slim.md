@@ -310,6 +310,10 @@ Post-cutover watch:
 - Human decision packs look thinner until L366 — accepted.
 - Recalibrate `estimated_memo_usd` after a few slim Sundays (L52).
 - Confirm accumulate coverage and overlay bind do not regress.
+- **L389 claimed-vs-landed:** ops-monitor compares Sunday research-docs
+  receipts (`docs/data/research_docs_receipt.json`) to committed
+  `structured_verdict*` mode counts, and flags `research_verdict` fields
+  present while modes stay essay — see [`ops-monitor.md`](ops-monitor.md#claimed-vs-landed-integrity-l389).
 
 ---
 
@@ -331,3 +335,4 @@ Post-cutover watch:
 | Spend / caps | `src/value_investor/agent_model_policy.py` (`weekly_ops`, `estimated_memo_usd≈0.4`) |
 | Sunday wire | `.github/workflows/email-report.yml` (`--research-docs --research-gap-fill`) |
 | Weekday rememo wire | `.github/workflows/ingest-loop.yml`, `library-ingest-maintenance.yml` |
+| Claimed-vs-landed integrity (L389) | `src/value_investor/indicator_integrity.py`, `ops_monitor.check_indicator_integrity` |
