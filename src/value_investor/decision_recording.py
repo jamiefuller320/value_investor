@@ -13,17 +13,15 @@ Does **not** enable the Phase C autopsy freeze writer — that stays gated on
 
 from __future__ import annotations
 
+import json
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
-import json
 
 SCHEMA_VERSION = 1
 
-PRIMARY_UNIT_OF_ANALYSIS = (
-    "One ticker on one AI-judgment rebalance day — key (logged_at, ticker)."
-)
+PRIMARY_UNIT_OF_ANALYSIS = "One ticker on one AI-judgment rebalance day — key (logged_at, ticker)."
 
 PRIMARY_FREEZE_AT_T: tuple[str, ...] = (
     "logged_at",
@@ -359,7 +357,7 @@ def preview_freeze_from_rebalance_log(
     return FreezePreviewReport(
         rebalance_log=str(path),
         entry_count=len(previews),
-        assessed_at=datetime.now(timezone.utc).isoformat(),
+        assessed_at=datetime.now(UTC).isoformat(),
         entries=previews,
         aggregate_missing=dict(
             sorted(missing_counts.items(), key=lambda item: (-item[1], item[0]))
