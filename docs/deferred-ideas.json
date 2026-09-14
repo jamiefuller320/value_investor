@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-14T13:46:25+00:00",
+  "updated_at": "2026-09-14T15:20:00+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8760,6 +8760,22 @@
       "source": "conversation: build L389 claimed-vs-landed",
       "added_at": "2026-09-14T13:46:19+00:00",
       "updated_at": "2026-09-14T13:46:25+00:00"
+    },
+    {
+      "id": "L390",
+      "category": "later",
+      "section": "ops",
+      "title": "Re-seed empty parallel sprint slots on queue regap",
+      "summary": "When ingest_parallel_sprint/_2 are empty after handoffs but next_parallel_sprint_queue_market is non-null (e.g. asx200 regapped), auto-assign that market back into a spare stream so policy-visible cascade and handoff hooks match fill-down runtime.",
+      "revisit_when": "Second incident of empty parallel streams while head still sprinting and a queue market has sprint_ingest_complete=false",
+      "tags": [
+        "ingest",
+        "cascade",
+        "P2"
+      ],
+      "status": "open",
+      "source": "cursor agent: sprint ingest not cascading diagnosis",
+      "added_at": "2026-09-14T15:20:00+00:00"
     }
   ],
   "fragments": [
