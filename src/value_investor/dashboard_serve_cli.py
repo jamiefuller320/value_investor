@@ -320,8 +320,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Serving dashboard at {url}")
     print("POST /api/progress-report  →  ftse-progress-report build --write")
     print("POST /api/refresh          →  rebuild market_status.json + lifecycle_board.json")
-    print("POST /api/lifecycle-experiment-ack → observe-ack recommend experiment
-POST /api/lifecycle-experiment-start → start graduated entry DCA execute")
+    print("POST /api/lifecycle-experiment-ack → observe-ack recommend experiment")
+    print("POST /api/lifecycle-experiment-start → start graduated entry DCA execute")
     print("Ctrl+C to stop")
     try:
         server.serve_forever()
