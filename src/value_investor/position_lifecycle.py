@@ -575,6 +575,186 @@ def experiment_progress(
     }
 
 
+def _initiation_evidence(
+    factor: dict[str, Any],
+    hit: dict[str, Any] | None,
+    *,
+    adoption: dict[str, Any] | None,
+    initiation: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """Structured gate checklist for the experiment-card apply/ack panel."""
+    evidence: list[dict[str, Any]] = []
+    catalog_status = str(factor.get("status") or "planned")
+    ledger_status = str((hit or {}).get("status") or "") or None
+    fwd = hit.get("forward_evidence") if isinstance(hit, dict) else None
+    fwd = fwd if isinstance(fwd, dict) else {}
+
+    evidence.append(
+        {
+            "id": "catalog_status",
+            "label": f"Catalog status is {catalog_status}",
+            "ok": catalog_status == "observing",
+            "detail": catalog_status,
+        }
+    )
+    evidence.append(
+        {
+            "id": "ledger_status",
+            "label": "Ledger reached recommend",
+            "ok": ledger_status == "recommend",
+            "detail": ledger_status or "none",
+        }
+    )
+    if fwd or ledger_status == "recommend":
+        leading = fwd.get("leading_cadence")
+        evidence.append(
+            {
+                "id": "leading_cadence",
+                "label": "Leading cadence identified",
+                "ok": bool(leading),
+                "detail": leading or "none",
+            }
+        )
+        ready_cadence = bool(fwd.get("ready_for_cadence_analysis"))
+        evidence.append(
+            {
+                "id": "cadence_analysis",
+                "label": "Ready for cadence analysis",
+                "ok": ready_cadence,
+                "detail": "yes" if ready_cadence else "no",
+            }
+        )
+        scored = fwd.get("scored_count")
+        tracks = fwd.get("tracks_with_closed")
+        evidence.append(
+            {
+                "id": "scored_episodes",
+                "label": "Scored episodes / tracks with closes",
+                "ok": bool(scored) and bool(tracks),
+                "detail": f"scored={scored} tracks={tracks}",
+            }
+        )
+        model_hint = fwd.get("model_independent_hint")
+        if model_hint is not None:
+            evidence.append(
+                {
+                    "id": "model_independent",
+                    "label": "Model-independent hint",
+                    "ok": bool(model_hint),
+                    "detail": "yes" if model_hint else "no",
+                }
+            )
+    if isinstance(hit, dict) and (
+        hit.get("human_ack_required") is not None or hit.get("human_acked") is not None
+    ):
+        acked = bool(hit.get("human_acked"))
+        evidence.append(
+            {
+                "id": "human_ack",
+                "label": "Human observe-ack recorded",
+                "ok": acked,
+                "detail": hit.get("ack_decision") or ("acked" if acked else "pending"),
+            }
+        )
+    if isinstance(adoption, dict):
+        current = str(adoption.get("current_stage") or "") or None
+        for row in adoption.get("stages") or []:
+            if not isinstance(row, dict) or not row.get("id"):
+                continue
+            stage_id = str(row.get("id"))
+            ready = bool(row.get("ready"))
+            status = str(row.get("status") or "")
+            evidence.append(
+                {
+                    "id": f"adoption:{stage_id}",
+                    "label": f"Adoption stage {stage_id}",
+                    "ok": ready or status == "done",
+                    "detail": status or ("ready" if ready else "blocked"),
+                    "current": stage_id == current,
+                }
+            )
+    if initiation.get("waiting_for"):
+        evidence.append(
+            {
+                "id": "waiting_for",
+                "label": "Current gate",
+                "ok": False,
+                "detail": str(initiation.get("waiting_for")),
+            }
+        )
+    return evidence
+
+
+def _initiation_recommendation(
+    initiation: dict[str, Any],
+    evidence: list[dict[str, Any]],
+) -> str:
+    kind = str(initiation.get("kind") or "")
+    if kind == "human_ack" and initiation.get("ready_to_initiate"):
+        return (
+            "Recommendation: press Start to record an observe-only human ack through the "
+            "Supabase dashboard bridge. This does not execute DCA or change starter fraction."
+        )
+    if kind == "optional_execute" and initiation.get("ready_to_initiate"):
+        return (
+            "Recommendation: optional paper execute is unblocked on graduated_allocation only. "
+            "Use the supervised CLI path — Start stays disabled so the dashboard cannot "
+            "auto-apply DCA."
+        )
+    if kind == "waiting":
+        failed = [row for row in evidence if row.get("id", "").startswith("adoption:") and not row.get("ok")]
+        if failed:
+            return (
+                "Recommendation: keep observing. Adoption gates still failing: "
+                + ", ".join(str(row.get("id", "")).split(":", 1)[-1] for row in failed[:3])
+                + ". Do not Start apply."
+            )
+        return (
+            "Recommendation: keep observing until the listed gate clears. "
+            "Do not treat recommend as apply."
+        )
+    if kind in {"planned", "deferred"}:
+        return "Recommendation: leave parked/planned until the catalog revisit trigger fires."
+    return "Recommendation: continue collecting evidence; no human start step yet."
+
+
+def _with_initiation_card_fields(
+    payload: dict[str, Any],
+    *,
+    factor: dict[str, Any],
+    hit: dict[str, Any] | None,
+    adoption: dict[str, Any] | None,
+) -> dict[str, Any]:
+    evidence = _initiation_evidence(factor, hit, adoption=adoption, initiation=payload)
+    recommendation = _initiation_recommendation(payload, evidence)
+    kind = str(payload.get("kind") or "")
+    start_enabled = bool(payload.get("ready_to_initiate")) and kind == "human_ack"
+    disabled_reason = None
+    if not start_enabled:
+        if kind == "optional_execute":
+            disabled_reason = (
+                "Optional execute stays CLI-supervised — dashboard Start only records observe-ack"
+            )
+        else:
+            disabled_reason = str(payload.get("waiting_for") or payload.get("label") or "Not ready")
+    experiment_id = str(factor.get("experiment") or (hit or {}).get("experiment_id") or "")
+    payload["evidence"] = evidence
+    payload["recommendation"] = recommendation
+    payload["start"] = {
+        "action": "lifecycle-experiment-start",
+        "enabled": start_enabled,
+        "label": "Start",
+        "disabled_reason": disabled_reason,
+        "payload": {
+            "experiment_id": experiment_id,
+            "factor_id": str(factor.get("id") or ""),
+            "kind": kind,
+            "decision": "ack_observe",
+        },
+    }
+    return payload
+
+
 def experiment_initiation(
     factor: dict[str, Any],
     hit: dict[str, Any] | None,
@@ -590,7 +770,7 @@ def experiment_initiation(
     ledger_status = str((hit or {}).get("status") or "")
     experiment_key = str(factor.get("experiment") or "")
     if catalog_status in {"planned", "deferred"}:
-        return {
+        payload = {
             "ready_to_initiate": False,
             "kind": catalog_status,
             "label": "Not collecting yet" if catalog_status == "planned" else "Parked",
@@ -598,6 +778,7 @@ def experiment_initiation(
             "do_not": "Do not spawn a paper book per factor",
             "adoption_stage": None,
         }
+        return _with_initiation_card_fields(payload, factor=factor, hit=hit, adoption=adoption)
     if ledger_status == "recommend":
         acked = bool((hit or {}).get("human_acked"))
         ack_required = bool((hit or {}).get("human_ack_required"))
@@ -611,7 +792,7 @@ def experiment_initiation(
                 listed = [str(item) for item in (adoption.get("do_not") or []) if item]
                 do_not = listed[0] if listed else "Never auto-apply"
             if current in {"", "acked"} and not acked:
-                return {
+                payload = {
                     "ready_to_initiate": True,
                     "kind": "human_ack",
                     "label": "Ready for human ack (observe-only)",
@@ -619,8 +800,9 @@ def experiment_initiation(
                     "do_not": "Ack is not adopt — do not execute DCA or change starter fraction",
                     "adoption_stage": current or "acked",
                 }
+                return _with_initiation_card_fields(payload, factor=factor, hit=hit, adoption=adoption)
             if current == "paper_execute_graduated" and bool(current_row.get("ready")):
-                return {
+                payload = {
                     "ready_to_initiate": True,
                     "kind": "optional_execute",
                     "label": "Optional: execute 4× weekly on graduated_allocation only",
@@ -628,7 +810,8 @@ def experiment_initiation(
                     "do_not": str(do_not),
                     "adoption_stage": current,
                 }
-            return {
+                return _with_initiation_card_fields(payload, factor=factor, hit=hit, adoption=adoption)
+            payload = {
                 "ready_to_initiate": False,
                 "kind": "waiting",
                 "label": "Not ready to initiate",
@@ -636,8 +819,9 @@ def experiment_initiation(
                 "do_not": str(do_not),
                 "adoption_stage": current or None,
             }
+            return _with_initiation_card_fields(payload, factor=factor, hit=hit, adoption=adoption)
         if ack_required and not acked:
-            return {
+            payload = {
                 "ready_to_initiate": True,
                 "kind": "human_ack",
                 "label": "Ready for human ack (observe-only)",
@@ -645,7 +829,8 @@ def experiment_initiation(
                 "do_not": "Recommend is not apply — never auto-apply knobs or spawn books",
                 "adoption_stage": None,
             }
-        return {
+            return _with_initiation_card_fields(payload, factor=factor, hit=hit, adoption=adoption)
+        payload = {
             "ready_to_initiate": False,
             "kind": "waiting",
             "label": "Not ready to initiate",
@@ -653,7 +838,8 @@ def experiment_initiation(
             "do_not": "Never auto-apply knobs, config, or engineering tasks",
             "adoption_stage": None,
         }
-    return {
+        return _with_initiation_card_fields(payload, factor=factor, hit=hit, adoption=adoption)
+    payload = {
         "ready_to_initiate": False,
         "kind": "observing",
         "label": "Collecting evidence",
@@ -661,6 +847,8 @@ def experiment_initiation(
         "do_not": "Observe-only until a recommend row plus human ack",
         "adoption_stage": None,
     }
+    return _with_initiation_card_fields(payload, factor=factor, hit=hit, adoption=adoption)
+
 
 
 def board_column_defs(

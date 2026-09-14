@@ -3818,26 +3818,51 @@ function renderLifecycleExperimentCard(factorId) {
   const waiting = initiation.waiting_for
     ? `<p>${esc(initiation.waiting_for)}</p>`
     : "<p class=\"muted small\">No further gate recorded.</p>";
-  const evidenceBits = [];
-  if (progress.scored_count != null) evidenceBits.push(`${progress.scored_count} scored episodes`);
-  if (progress.tracks_with_closed != null) {
-    evidenceBits.push(`${progress.tracks_with_closed} tracks with closes`);
-  }
-  if (progress.leading_cadence) evidenceBits.push(`leading ${progress.leading_cadence}`);
-  if (progress.gate_marks != null) evidenceBits.push(`${progress.gate_marks} gate marks`);
-  if (progress.ready_for_cadence_analysis != null) {
-    evidenceBits.push(
-      progress.ready_for_cadence_analysis ? "cadence analysis ready" : "cadence analysis not ready"
-    );
-  }
-  if (progress.human_acked) {
-    evidenceBits.push(`acked${progress.ack_decision ? ` (${progress.ack_decision})` : ""}`);
-  }
+  const evidenceRows = Array.isArray(initiation.evidence) ? initiation.evidence : [];
+  const evidenceHtml = evidenceRows.length
+    ? `<ul class="lifecycle-evidence-list">${evidenceRows
+        .map((item) => {
+          const ok = Boolean(item && item.ok);
+          const current = item && item.current ? " current" : "";
+          return `<li class="${ok ? "ok" : "fail"}${current}"><span class="lifecycle-evidence-mark">${
+            ok ? "✓" : "·"
+          }</span> ${esc(item.label || item.id || "gate")}${
+            item.detail ? ` <span class="muted">(${esc(String(item.detail))})</span>` : ""
+          }</li>`;
+        })
+        .join("")}</ul>`
+    : "";
+  const start = initiation.start || {};
+  const startEnabled = Boolean(start.enabled);
+  const startPayload = JSON.stringify(start.payload || {});
+  const startBtn = recommend
+    ? `<p class="lifecycle-start-row">
+        <button type="button" class="btn btn-primary lifecycle-start-btn" data-lifecycle-start="${esc(
+          startPayload
+        )}" ${startEnabled ? "" : "disabled"} title="${esc(
+          startEnabled ? "Record observe-only ack via Supabase" : start.disabled_reason || "Not ready"
+        )}">${esc(start.label || "Start")}</button>
+        <span class="small muted lifecycle-start-status" aria-live="polite"></span>
+      </p>
+      ${
+        startEnabled
+          ? ""
+          : `<p class="small muted">${esc(start.disabled_reason || "Start blocked until gates clear")}</p>`
+      }`
+    : "";
   const recommendBlock = recommend
     ? `<div class="lifecycle-init-box ${ready ? "ready" : "waiting"}">
         <p class="small" style="margin-top:0"><strong>${ready ? "Ready for next human step" : "Not ready to initiate"}</strong></p>
         <p>${esc(initiation.label || (ready ? "Ready" : "Waiting"))}</p>
         ${waiting}
+        ${
+          initiation.recommendation
+            ? `<p class="lifecycle-recommendation"><strong>Recommendation:</strong> ${esc(
+                initiation.recommendation.replace(/^Recommendation:\s*/i, "")
+              )}</p>`
+            : ""
+        }
+        ${evidenceHtml ? `<h5 class="small">Evidence</h5>${evidenceHtml}` : ""}
         ${
           initiation.do_not
             ? `<p class="small muted">Do not: ${esc(initiation.do_not)}</p>`
@@ -3848,11 +3873,20 @@ function renderLifecycleExperimentCard(factorId) {
             ? `<p class="small muted">Adoption stage <code>${esc(initiation.adoption_stage)}</code></p>`
             : ""
         }
+        ${startBtn}
         <p class="small muted">Recommend is observe-only — never auto-applied.</p>
       </div>`
     : `<div class="lifecycle-init-box waiting">
         <p class="small" style="margin-top:0"><strong>${esc(initiation.label || "Collecting")}</strong></p>
         ${initiation.waiting_for ? `<p>${esc(initiation.waiting_for)}</p>` : ""}
+        ${
+          initiation.recommendation
+            ? `<p class="lifecycle-recommendation"><strong>Recommendation:</strong> ${esc(
+                initiation.recommendation.replace(/^Recommendation:\s*/i, "")
+              )}</p>`
+            : ""
+        }
+        ${evidenceHtml ? `<h5 class="small">Evidence</h5>${evidenceHtml}` : ""}
         ${
           initiation.do_not
             ? `<p class="small muted">Do not: ${esc(initiation.do_not)}</p>`
@@ -3873,17 +3907,13 @@ function renderLifecycleExperimentCard(factorId) {
     <p>${esc(row.aim || row.question || "—")}</p>
     <h4 class="small">Progress</h4>
     <p>${esc(progress.summary || "No ledger row yet.")}</p>
-    ${
-      evidenceBits.length
-        ? `<p class="small muted">${evidenceBits.map((bit) => esc(bit)).join(" · ")}</p>`
-        : ""
-    }
     ${row.artifact ? `<p class="small muted">Artifact <code>${esc(row.artifact)}</code></p>` : ""}
     ${row.assessment_title ? `<p class="small muted">${esc(row.assessment_title)}</p>` : ""}
     <h4 class="small">${recommend ? "Recommend — initiate?" : "Next step"}</h4>
     ${recommendBlock}
   `;
 }
+
 
 function openLifecycleExperimentCard(factorId) {
   const dialog = document.getElementById("lifecycle-experiment-dialog");
@@ -3895,8 +3925,96 @@ function openLifecycleExperimentCard(factorId) {
     ? found.experiment.factor_id || found.experiment.experiment || "Lifecycle experiment"
     : "Lifecycle experiment";
   body.innerHTML = renderLifecycleExperimentCard(factorId);
+  const startBtn = body.querySelector("[data-lifecycle-start]");
+  if (startBtn) {
+    startBtn.addEventListener("click", () => {
+      void startLifecycleExperimentFromCard(startBtn);
+    });
+  }
   dialog.showModal();
 }
+
+async function startLifecycleExperimentFromCard(button) {
+  const statusEl = button.parentElement
+    ? button.parentElement.querySelector(".lifecycle-start-status")
+    : null;
+  const setStatus = (msg, isError) => {
+    if (!statusEl) return;
+    statusEl.textContent = msg || "";
+    statusEl.classList.toggle("error", Boolean(isError));
+  };
+  let payload = {};
+  try {
+    payload = JSON.parse(button.getAttribute("data-lifecycle-start") || "{}");
+  } catch (err) {
+    setStatus("Invalid start payload", true);
+    return;
+  }
+  if (!payload.experiment_id) {
+    setStatus("Missing experiment id", true);
+    return;
+  }
+  button.disabled = true;
+  setStatus("Starting…");
+  try {
+    const local = await fetch("/api/lifecycle-experiment-start", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (local.ok) {
+      const body = await local.json();
+      if (!body.ok) throw new Error(body.error || "Start API failed");
+      setStatus("Ack recorded — refreshing…");
+      await reloadDashboard({ silent: true, rebuild: true });
+      openLifecycleExperimentCard(payload.factor_id || "");
+      setStatus("Observe-ack recorded");
+      return;
+    }
+    if (local.status !== 404 && local.status !== 405) {
+      let detail = `HTTP ${local.status}`;
+      try {
+        const body = await local.json();
+        detail = body.error || detail;
+      } catch {
+        /* ignore */
+      }
+      throw new Error(detail);
+    }
+  } catch (err) {
+    if (!(err instanceof TypeError) && String(err.message) !== "API_UNAVAILABLE") {
+      // fall through to bridge only on missing local API
+      if (!String(err.message).includes("Failed to fetch")) {
+        setStatus(`Start failed: ${err.message}`, true);
+        button.disabled = false;
+        return;
+      }
+    }
+  }
+  if (!window.DashboardBridge) {
+    setStatus("Supabase bridge unavailable", true);
+    button.disabled = false;
+    return;
+  }
+  try {
+    const bridgeReady = await window.DashboardBridge.init();
+    if (!bridgeReady) throw new Error("BRIDGE_DISABLED");
+    await window.DashboardBridge.submitCommand(
+      "lifecycle-experiment-start",
+      payload,
+      (msg) => setStatus(msg || "Queued via Supabase…")
+    );
+    setStatus("Bridge finished — refreshing…");
+    await reloadDashboard({ silent: true, rebuild: true });
+    openLifecycleExperimentCard(payload.factor_id || "");
+    setStatus("Observe-ack recorded via Supabase");
+  } catch (err) {
+    setStatus(`Bridge start failed: ${err.message}`, true);
+    button.disabled = false;
+  }
+}
+
+
 
 function lifecycleExperimentChipButton(row) {
   const status = row.assessment_status || row.status;

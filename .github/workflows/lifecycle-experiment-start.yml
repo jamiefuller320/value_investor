@@ -1,0 +1,102 @@
+name: Lifecycle experiment start
+
+# Observe-only human ack from the Lifecycle experiment card Start button.
+# Dispatched by dashboard-bridge after a Supabase dashboard_commands insert.
+# Never auto-applies DCA, starter fraction, or primary/live knobs.
+on:
+  repository_dispatch:
+    types: [lifecycle-experiment-start]
+  workflow_dispatch:
+    inputs:
+      experiment_id:
+        description: Experiment id to observe-ack
+        required: true
+        type: string
+      factor_id:
+        description: Lifecycle factor id (optional)
+        required: false
+        type: string
+      kind:
+        description: Start kind (human_ack only)
+        required: false
+        default: human_ack
+        type: string
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: lifecycle-experiment-start
+  cancel-in-progress: false
+
+jobs:
+  start:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Record observe-ack + refresh board
+        env:
+          EXPERIMENT_ID: ${{ github.event.client_payload.experiment_id || github.event.inputs.experiment_id }}
+          FACTOR_ID: ${{ github.event.client_payload.factor_id || github.event.inputs.factor_id }}
+          KIND: ${{ github.event.client_payload.kind || github.event.inputs.kind || 'human_ack' }}
+          DECISION: ${{ github.event.client_payload.decision || 'ack_observe' }}
+          NOTE: ${{ github.event.client_payload.note || '' }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from value_investor.lifecycle_experiment_start import run_lifecycle_experiment_start
+
+          result = run_lifecycle_experiment_start(
+              Path("docs/data"),
+              experiment_id=os.environ.get("EXPERIMENT_ID") or "",
+              factor_id=(os.environ.get("FACTOR_ID") or None) or None,
+              kind=os.environ.get("KIND") or "human_ack",
+              decision=os.environ.get("DECISION") or "ack_observe",
+              note=os.environ.get("NOTE") or "",
+              source="dashboard_bridge",
+              acked_by="dashboard",
+          )
+          print(json.dumps(result, indent=2, sort_keys=True, default=str))
+          PY
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit dashboard slices
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: "chore: lifecycle experiment observe-ack from dashboard [skip ci]"
+          file_pattern: |
+            docs/data/experiment_acks.json
+            docs/data/experiment_assessment.json
+            docs/data/entry_dca_adoption_plan.json
+            docs/data/lifecycle_board.json
+          skip_fetch: false
+
+      - name: Notify dashboard channel
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          python3 - <<'PY'
+          from value_investor.dashboard_bridge import broadcast_dashboard_update
+          broadcast_dashboard_update(
+              event="artifact-updated",
+              payload={"artifact": "lifecycle_board", "source": "lifecycle-experiment-start"},
+          )
+          PY
