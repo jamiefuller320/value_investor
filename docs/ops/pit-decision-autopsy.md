@@ -5,6 +5,12 @@ funded by memo resource retarget **L367** Phase C. Feeder features: **L365**.
 
 Parent loop: [`primary-learning-track.md`](primary-learning-track.md#decision-learning-loop-target).
 
+Before any **new** strand (not just Phase C), lock the four anticipation questions
+with [`decision-recording-checklist.md`](decision-recording-checklist.md) /
+`ftse-decision-recording` (**L386**). This autopsy doc is the primary-track
+freeze schema; the checklist is the gate that forces the same discipline on
+other labs.
+
 This document freezes the open choices that blocked a “best Phase C” build.
 Track excess vs ^FTSE / rules remains adoption truth; autopsy is the
 **improvement signal**, not a second promotion yardstick.
