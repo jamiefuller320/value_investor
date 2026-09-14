@@ -21,6 +21,7 @@ from value_investor.scoring.conviction_timing_overlay import (
 )
 from value_investor.scoring.cyclical_exposure_overlay import (
     apply_cyclical_exposure_overlay_to_signal,
+    cyclical_exposure_for_ticker,
 )
 from value_investor.scoring.dividend_sustainability_overlay import (
     apply_dividend_sustainability_overlay_to_signal,
@@ -67,6 +68,10 @@ from value_investor.scoring.leverage_overlay import format_adjusted_net_debt_gbp
 from value_investor.scoring.peer_model_pass_table import (
     attach_peer_model_pass_table,
     build_peer_model_pass_table,
+)
+from value_investor.scoring.perimeter_break_overlay import (
+    apply_perimeter_break_overlay_to_signal,
+    perimeter_break_for_ticker,
 )
 from value_investor.scoring.quality_family_avoid_gate_overlay import (
     build_quality_family_avoid_gate_overlay,
@@ -134,6 +139,9 @@ class CompanyReport:
     interim_quality_overlay: bool = False
     cyclical_exposure_overlay: bool = False
     cyclical_exposure_detected: bool = False
+    advertising_broadcaster_detected: bool = False
+    perimeter_break_overlay: bool = False
+    perimeter_break_detected: bool = False
     earnings_basis_overlay: bool = False
     earnings_growth_overlay: dict[str, Any] = field(default_factory=dict)
     earnings_growth_bps_divergence_warning: bool = False
@@ -209,6 +217,9 @@ class CompanyReport:
             "interim_quality_overlay": self.interim_quality_overlay,
             "cyclical_exposure_overlay": self.cyclical_exposure_overlay,
             "cyclical_exposure_detected": self.cyclical_exposure_detected,
+            "advertising_broadcaster_detected": self.advertising_broadcaster_detected,
+            "perimeter_break_overlay": self.perimeter_break_overlay,
+            "perimeter_break_detected": self.perimeter_break_detected,
             "earnings_basis_overlay": self.earnings_basis_overlay,
             "earnings_growth_overlay": self.earnings_growth_overlay,
             "earnings_growth_bps_divergence_warning": self.earnings_growth_bps_divergence_warning,
@@ -290,6 +301,9 @@ class CompanyReport:
             interim_quality_overlay=bool(data.get("interim_quality_overlay")),
             cyclical_exposure_overlay=bool(data.get("cyclical_exposure_overlay")),
             cyclical_exposure_detected=bool(data.get("cyclical_exposure_detected")),
+            advertising_broadcaster_detected=bool(data.get("advertising_broadcaster_detected")),
+            perimeter_break_overlay=bool(data.get("perimeter_break_overlay")),
+            perimeter_break_detected=bool(data.get("perimeter_break_detected")),
             earnings_basis_overlay=bool(data.get("earnings_basis_overlay")),
             earnings_growth_overlay=dict(data.get("earnings_growth_overlay") or {}),
             earnings_growth_bps_divergence_warning=bool(
@@ -551,6 +565,7 @@ def _brief_summary(
     interim_dividend_cut_flagged: bool = False,
     interim_quality_overlay: bool = False,
     cyclical_exposure_overlay: bool = False,
+    perimeter_break_overlay: bool = False,
     earnings_basis_overlay: bool = False,
     earnings_growth_bps_divergence_warning: bool = False,
     conviction_timing_overlay: bool = False,
@@ -672,6 +687,13 @@ def _brief_summary(
         parts.append(
             f"Cyclical-exposure overlay: discretionary demand risk with interim EPS decline and thin "
             f"dividend cover "
+            f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+        )
+
+    if perimeter_break_overlay and adjusted_signal and adjusted_signal != signal:
+        parts.append(
+            "Perimeter-break overlay: announced carve-out/disposal — group yield strong_buy blocked "
+            f"until continuing-group figures exist "
             f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
         )
 
@@ -1159,12 +1181,37 @@ def build_company_reports(
 
         cyclical_overlay_flag = row.get("cyclical_exposure_overlay")
         cyclical_detected_flag = row.get("cyclical_exposure_detected")
+        ad_broadcaster_raw = row.get("advertising_broadcaster_detected")
+        if ad_broadcaster_raw is not None and not (
+            isinstance(ad_broadcaster_raw, float) and pd.isna(ad_broadcaster_raw)
+        ):
+            advertising_broadcaster_detected = bool(ad_broadcaster_raw)
+        else:
+            from value_investor.scoring.cyclical_exposure_overlay import (
+                advertising_broadcaster_detected as _ad_broadcaster_in_text,
+            )
+            from value_investor.scoring.fcf import load_filing_bodies_for_ticker
+
+            bodies = load_filing_bodies_for_ticker(ticker, output_dir=output_dir)
+            advertising_broadcaster_detected = any(
+                _ad_broadcaster_in_text(
+                    body,
+                    sector=row.get("sector"),
+                    name=row.get("name"),
+                )
+                for body in bodies
+            )
         if cyclical_detected_flag is not None and not (
             isinstance(cyclical_detected_flag, float) and pd.isna(cyclical_detected_flag)
         ):
             cyclical_exposure_detected = bool(cyclical_detected_flag)
         else:
-            cyclical_exposure_detected = False
+            cyclical_exposure_detected = cyclical_exposure_for_ticker(
+                ticker,
+                output_dir=output_dir,
+                sector=row.get("sector"),
+                name=row.get("name"),
+            )
 
         if cyclical_overlay_flag is not None and not (
             isinstance(cyclical_overlay_flag, float) and pd.isna(cyclical_overlay_flag)
@@ -1180,6 +1227,30 @@ def build_company_reports(
                     fcf_dividend_coverage_net=fcf_dividend_coverage_net,
                     free_cashflow=free_cashflow,
                     dividends_paid=dividends_paid,
+                    advertising_broadcaster_flag=advertising_broadcaster_detected,
+                    adjusted_signal=adjusted_signal_str,
+                )
+            )
+
+        perimeter_overlay_flag = row.get("perimeter_break_overlay")
+        perimeter_detected_flag = row.get("perimeter_break_detected")
+        if perimeter_detected_flag is not None and not (
+            isinstance(perimeter_detected_flag, float) and pd.isna(perimeter_detected_flag)
+        ):
+            perimeter_break_detected = bool(perimeter_detected_flag)
+        else:
+            perimeter_break_detected = perimeter_break_for_ticker(ticker, output_dir=output_dir)
+
+        if perimeter_overlay_flag is not None and not (
+            isinstance(perimeter_overlay_flag, float) and pd.isna(perimeter_overlay_flag)
+        ):
+            perimeter_break_overlay = bool(perimeter_overlay_flag)
+        else:
+            perimeter_break_overlay, _, adjusted_signal_str = (
+                apply_perimeter_break_overlay_to_signal(
+                    signal,
+                    perimeter_break_detected_flag=perimeter_break_detected,
+                    ticker_models=ticker_models,
                     adjusted_signal=adjusted_signal_str,
                 )
             )
@@ -1500,6 +1571,7 @@ def build_company_reports(
             interim_dividend_cut_flagged=interim_dividend_cut_flagged,
             interim_quality_overlay=interim_quality_overlay,
             cyclical_exposure_overlay=cyclical_exposure_overlay,
+            perimeter_break_overlay=perimeter_break_overlay,
             earnings_basis_overlay=earnings_basis_overlay,
             earnings_growth_bps_divergence_warning=earnings_growth_bps_divergence_warning,
             conviction_timing_overlay=conviction_timing_overlay,
@@ -1584,6 +1656,9 @@ def build_company_reports(
                     interim_quality_overlay=interim_quality_overlay,
                     cyclical_exposure_overlay=cyclical_exposure_overlay,
                     cyclical_exposure_detected=cyclical_exposure_detected,
+                    advertising_broadcaster_detected=advertising_broadcaster_detected,
+                    perimeter_break_overlay=perimeter_break_overlay,
+                    perimeter_break_detected=perimeter_break_detected,
                     earnings_basis_overlay=earnings_basis_overlay,
                     earnings_growth_overlay=earnings_growth_overlay,
                     earnings_growth_bps_divergence_warning=earnings_growth_bps_divergence_warning,

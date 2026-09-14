@@ -3328,6 +3328,70 @@ def test_enrich_signals_with_interim_quality_overlay_not_triggered_on_annual_gro
     assert enriched.iloc[0]["adjusted_signal"] == "strong_buy"
 
 
+def test_suppress_dividend_family_passes_on_pipeline_path(tmp_path: Path):
+    from value_investor.scoring.fcf import suppress_dividend_family_passes
+
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "ZZITV.L",
+                "fcf_dividend_coverage_net": 0.95,
+                "fcf_dividend_coverage_gross": 1.4,
+                "dividends_paid": 100.0,
+                "free_cashflow": 95.0,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "ZZITV.L",
+                "model_id": "high_dividend",
+                "passed": True,
+                "score": 0.8,
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+    updated = suppress_dividend_family_passes(model_results, universe, output_dir=tmp_path)
+    assert not bool(updated.iloc[0]["passed"])
+
+
+def test_enrich_signals_with_perimeter_break_overlay_caps_strong_buy(tmp_path: Path):
+    from value_investor.scoring.perimeter_break_overlay import (
+        enrich_signals_with_perimeter_break_overlay,
+    )
+
+    sources = tmp_path / "research" / "MEGP.L" / "sources" / "filings" / "bodies"
+    sources.mkdir(parents=True)
+    body = sources / "disposal.txt"
+    body.write_text(
+        "The Group agreed to sell the Media & Entertainment business unit to a strategic buyer.\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "research" / "MEGP.L" / "sources" / "filings" / "filings_index.json").write_text(
+        json.dumps({"filings": [{"period": "annual", "has_body": True, "body_path": str(body)}]}),
+        encoding="utf-8",
+    )
+    signals = pd.DataFrame([{"ticker": "MEGP.L", "signal": "strong_buy"}])
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "model_id": "high_dividend",
+                "passed": True,
+                "score": 0.8,
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_perimeter_break_overlay(
+        signals, model_results, output_dir=tmp_path
+    )
+    assert bool(enriched.iloc[0]["perimeter_break_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
 def test_enrich_signals_with_dividend_sustainability_overlay_caps_itv_like_profile():
     from value_investor.scoring.dividend_sustainability_overlay import (
         enrich_signals_with_dividend_sustainability_overlay,

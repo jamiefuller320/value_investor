@@ -51,6 +51,7 @@ from value_investor.scoring.earnings_growth_overlay import (
 from value_investor.scoring.fcf import (
     enrich_universe_with_canonical_fcf,
     enrich_universe_with_filing_metrics,
+    suppress_dividend_family_passes,
     suppress_fcf_yield_passes,
 )
 from value_investor.scoring.fcf_basis_overlay import (
@@ -69,6 +70,9 @@ from value_investor.scoring.interim_quality_overlay import (
     enrich_signals_with_interim_quality_overlay,
 )
 from value_investor.scoring.leverage_overlay import enrich_universe_with_leverage_override
+from value_investor.scoring.perimeter_break_overlay import (
+    enrich_signals_with_perimeter_break_overlay,
+)
 from value_investor.scoring.quality_family_avoid_gate_overlay import (
     enrich_signals_with_quality_family_avoid_gate,
 )
@@ -309,6 +313,9 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "interim_quality_overlay",
         "cyclical_exposure_overlay",
         "cyclical_exposure_detected",
+        "advertising_broadcaster_detected",
+        "perimeter_break_overlay",
+        "perimeter_break_detected",
         "earnings_basis_overlay",
         "earnings_growth_bps_divergence_warning",
         "lynch_peg_model",
@@ -447,6 +454,7 @@ def run_screen(
     universe_df = enrich_universe_with_leverage_override(universe_df, out_dir)
     model_results = evaluate_universe(universe_df)
     model_results = suppress_fcf_yield_passes(model_results, universe_df, output_dir=out_dir)
+    model_results = suppress_dividend_family_passes(model_results, universe_df, output_dir=out_dir)
     weight_state = load_model_weights(out_dir)
     summary = summarize_by_ticker(model_results, weights=weight_state.weights)
     signals = build_signals(universe_df, model_results, summary)
@@ -526,6 +534,11 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     signals_out = enrich_signals_with_dividend_sustainability_overlay(
         signals_out,
         result.model_results,
+    )
+    signals_out = enrich_signals_with_perimeter_break_overlay(
+        signals_out,
+        result.model_results,
+        output_dir=output_dir,
     )
     signals_out = enrich_signals_with_interim_quality_overlay(signals_out, result.model_results)
     signals_out = enrich_signals_with_cyclical_exposure_overlay(

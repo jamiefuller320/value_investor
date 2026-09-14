@@ -4053,6 +4053,132 @@ def _model_results_for_itv_dividend_sustainability() -> pd.DataFrame:
     )
 
 
+def test_suppress_dividend_family_passes_itv_like_statutory_cover(tmp_path: Path):
+    from value_investor.scoring.fcf import suppress_dividend_family_passes
+
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "fcf_dividend_coverage_net": 0.79,
+                "fcf_dividend_coverage_gross": 1.53,
+                "dividends_paid": 190_000_000.0,
+                "free_cashflow": 148_000_000.0,
+                "free_cashflow_screen_ttm": 211_900_000.0,
+            }
+        ]
+    )
+    sources = tmp_path / "research" / "ITV.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "ITV.L",
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 202_000_000.0,
+                        "Capital Expenditure": -54_000_000.0,
+                        "Free Cash Flow": 148_000_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (sources / "ir_presentation_metrics.json").write_text(
+        json.dumps(
+            {
+                "bridges": [
+                    {
+                        "period": "annual FY2025",
+                        "bridge_type": "fcf_by_division",
+                        "currency": "GBP",
+                        "derived": {"total_fcf_millions": 187.0},
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "model_id": "high_dividend",
+                "passed": True,
+                "score": 0.9,
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "ITV.L",
+                "model_id": "graham_net_net",
+                "passed": True,
+                "score": 0.7,
+                "failed_criteria": "[]",
+            },
+        ]
+    )
+
+    updated = suppress_dividend_family_passes(model_results, universe, output_dir=tmp_path)
+    high = updated[(updated["ticker"] == "ITV.L") & (updated["model_id"] == "high_dividend")].iloc[
+        0
+    ]
+    assert not bool(high["passed"])
+    assert "Dividend family suppressed" in str(high["failed_criteria"])
+
+
+def test_build_company_reports_perimeter_break_overlay_itv_style(tmp_path: Path):
+    sources = tmp_path / "research" / "ITV.L" / "sources" / "filings" / "bodies"
+    sources.mkdir(parents=True)
+    (sources / "sky_deal.txt").write_text(
+        "Sky agreed to buy the Media & Entertainment division for up to £1.6bn.\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "research" / "ITV.L" / "sources" / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "corporate_action",
+                        "has_body": True,
+                        "body_path": str(sources / "sky_deal.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="ITV.L",
+                name="ITV plc",
+                signal="strong_buy",
+                passed_families="cheapness,quality,dividend,garp,risk",
+                fcf_dividend_coverage_net=1.0,
+            )
+        ]
+    )
+    model_results = _model_results_for_itv_dividend_sustainability()
+
+    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+
+    assert snapshot["perimeter_break_detected"] is True
+    assert snapshot["perimeter_break_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+
+
+def test_advertising_broadcaster_detected_for_itv_style_prose():
+    from value_investor.scoring.cyclical_exposure_overlay import advertising_broadcaster_detected
+
+    text = "Total advertising revenue up 2% with ITV Studios performing ahead of plan."
+    assert advertising_broadcaster_detected(
+        text,
+        sector="Communication Services",
+        name="ITV plc",
+    )
+
+
 def test_dividend_sustainability_overlay_caps_itv_like_profile():
     signals = pd.DataFrame(
         [

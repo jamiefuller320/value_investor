@@ -10,6 +10,7 @@ import pandas as pd
 from value_investor.scoring.fcf import (
     fcf_action_note_mismatch,
     fcf_filing_screen_mismatch,
+    fcf_three_way_mismatch_flagged,
     reconcile_fcf_for_ticker,
     screen_ttm_from_row,
 )
@@ -255,11 +256,19 @@ def enrich_signals_with_fcf_basis_overlay(
             screen_ttm=screen_ttm,
             divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
         )
+        three_way_mismatch = fcf_three_way_mismatch_flagged(
+            filing_aligned=fcf_bundle.get("filing_aligned"),
+            screen_ttm=screen_ttm or fcf_bundle.get("screen_ttm"),
+            company_adjusted=fcf_bundle.get("company_adjusted"),
+            filing_currency=str(fcf_bundle.get("currency") or "USD"),
+            company_adjusted_currency=fcf_bundle.get("company_adjusted_currency"),
+        )
         action_note_mismatch = fcf_basis_enforcement_needed(
             action_note_mismatch=fcf_basis_action_note_mismatch(
                 fcf_bundle,
                 screen_ttm=screen_ttm,
-            ),
+            )
+            or three_way_mismatch,
             action_note=str(row.get("action_note") or ""),
         )
 

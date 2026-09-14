@@ -146,6 +146,8 @@ FCF_MAJORITY_AGREE_THRESHOLD = 0.25
 FCF_SIGN_DIVERGENCE_MIN_ABS = 50_000_000.0
 EARNINGS_GROWTH_BPS_DIVERGENCE_THRESHOLD = 0.03
 FCF_YIELD_MODEL_ID = "fcf_yield"
+DIVIDEND_FAMILY_MODEL_IDS = ("high_dividend", "dividend_growth")
+FILING_ALIGNED_DIVIDEND_COVERAGE_MIN = 1.0
 # Prefer company-adjusted, then filing-aligned, never Yahoo TTM when a non-TTM peer agrees.
 _FCF_MAJORITY_PREFERENCE = ("company_adjusted", "filing_aligned", "screen_ttm")
 _FX_TO_USD = {"USD": 1.0, "GBP": 1.35, "EUR": 1.10}
@@ -1401,6 +1403,96 @@ def suppress_fcf_yield_passes(
             out.at[index, "failed_criteria"] = _append_failed_criterion(
                 out.at[index, "failed_criteria"],
                 "FCF yield suppressed: canonical basis diverges from company filing definition",
+            )
+    return out
+
+
+def dividend_family_pass_suppressed(
+    *,
+    fcf_dividend_coverage_net: float | None,
+    fcf_dividend_coverage_gross: float | None = None,
+    company_adjusted_fcf: float | None = None,
+    dividends_paid: float | None = None,
+) -> bool:
+    """True when dividend screens pass on company-adjusted cover but filing cover is below 1.0×."""
+    if fcf_dividend_coverage_net is None or (
+        isinstance(fcf_dividend_coverage_net, float) and pd.isna(fcf_dividend_coverage_net)
+    ):
+        return False
+    if float(fcf_dividend_coverage_net) >= FILING_ALIGNED_DIVIDEND_COVERAGE_MIN:
+        return False
+    if fcf_dividend_coverage_gross is not None and not (
+        isinstance(fcf_dividend_coverage_gross, float) and pd.isna(fcf_dividend_coverage_gross)
+    ):
+        if float(fcf_dividend_coverage_gross) >= FILING_ALIGNED_DIVIDEND_COVERAGE_MIN:
+            return True
+    if company_adjusted_fcf is not None and dividends_paid is not None:
+        adj_cover = fcf_dividend_coverage(company_adjusted_fcf, dividends_paid)
+        if adj_cover is not None and adj_cover >= FILING_ALIGNED_DIVIDEND_COVERAGE_MIN:
+            return True
+    return False
+
+
+def suppress_dividend_family_passes(
+    model_results: pd.DataFrame,
+    universe: pd.DataFrame,
+    *,
+    output_dir: Path | None = None,
+) -> pd.DataFrame:
+    """Flip dividend-family passes when filing-aligned cover is below 1.0× but adjusted cover passes."""
+    if model_results.empty or universe.empty:
+        return model_results
+
+    out = model_results.copy()
+    for _, urow in universe.iterrows():
+        ticker = str(urow["ticker"])
+        screen_ttm = screen_ttm_from_row(urow)
+        bundle = reconcile_fcf_for_ticker(
+            ticker,
+            screen_ttm=screen_ttm,
+            output_dir=output_dir,
+        )
+        coverage_net = urow.get("fcf_dividend_coverage_net")
+        fcf_dividend_coverage_net = (
+            float(coverage_net)
+            if coverage_net is not None
+            and not (isinstance(coverage_net, float) and pd.isna(coverage_net))
+            else None
+        )
+        coverage_gross = urow.get("fcf_dividend_coverage_gross")
+        fcf_dividend_coverage_gross = (
+            float(coverage_gross)
+            if coverage_gross is not None
+            and not (isinstance(coverage_gross, float) and pd.isna(coverage_gross))
+            else None
+        )
+        dividends = urow.get("dividends_paid")
+        dividends_paid = (
+            float(dividends)
+            if dividends is not None and not (isinstance(dividends, float) and pd.isna(dividends))
+            else None
+        )
+        if not dividend_family_pass_suppressed(
+            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+            fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
+            company_adjusted_fcf=bundle.get("company_adjusted"),
+            dividends_paid=dividends_paid,
+        ):
+            continue
+
+        mask = (
+            (out["ticker"] == ticker)
+            & (out["model_id"].isin(DIVIDEND_FAMILY_MODEL_IDS))
+            & (out["passed"] == True)  # noqa: E712
+        )
+        if not mask.any():
+            continue
+        out.loc[mask, "passed"] = False
+        for index in out.index[mask]:
+            out.at[index, "failed_criteria"] = _append_failed_criterion(
+                out.at[index, "failed_criteria"],
+                "Dividend family suppressed: filing-aligned cover below 1.0× "
+                "(company-adjusted/management basis)",
             )
     return out
 
