@@ -1203,6 +1203,13 @@ def apply_auto_fixes(
             open_prs=open_prs,
             apply=True,
         )
+        if recovery.merged:
+            action = f"marked merged from GitHub PR: {', '.join(recovery.merged)}"
+            results.append({"action": "recover_engineering_queue", "detail": action})
+            for finding in findings:
+                if finding.title.startswith("Orphaned pr_open"):
+                    finding.fixed = True
+                    finding.action_taken = action
         if recovery.reconciled:
             action = f"reconciled pr_open → open: {', '.join(recovery.reconciled)}"
             results.append({"action": "recover_engineering_queue", "detail": action})
