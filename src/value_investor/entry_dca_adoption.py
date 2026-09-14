@@ -206,7 +206,9 @@ def evaluate_entry_dca_adoption_plan(
         ),
     ]
     current = next((row for row in stages if row["status"] != "done"), stages[-1])
-    start = matching_start(load_starts(data_dir), experiment_id="entry_dca_overlay", finding=finding)
+    start = matching_start(
+        load_starts(data_dir), experiment_id="entry_dca_overlay", finding=finding
+    )
     execute_started = start is not None
     return {
         "schema_version": 1,

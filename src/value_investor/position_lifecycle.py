@@ -804,7 +804,6 @@ def _with_initiation_card_fields(
     return payload
 
 
-
 def experiment_initiation(
     factor: dict[str, Any],
     hit: dict[str, Any] | None,

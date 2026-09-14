@@ -26,7 +26,7 @@ from value_investor.experiment_assessment import (
     ASSESSMENT_FILENAME,
     refresh_experiment_assessment,
 )
-from value_investor.experiment_starts import matching_start, record_start, load_starts
+from value_investor.experiment_starts import load_starts, matching_start, record_start
 from value_investor.lifecycle_board import (
     DEFAULT_LATEST_PATH,
     DEFAULT_LIFECYCLE_BOARD_PATH,

@@ -2,10 +2,9 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, date, datetime
+from pathlib import Path
 from typing import Any, Literal
 from uuid import uuid4
 
