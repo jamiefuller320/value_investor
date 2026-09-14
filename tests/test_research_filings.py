@@ -1844,6 +1844,26 @@ def test_fetch_rns_filing_body_for_refetch_lse_html_fallback(monkeypatch):
     assert "Revenue increased" in body
 
 
+def test_ch_row_needs_body_refetch_when_body_marked_truncated(tmp_path):
+    from value_investor.research.filings import _ch_row_needs_body_refetch
+
+    bodies_dir = tmp_path / "filings" / "bodies"
+    bodies_dir.mkdir(parents=True)
+    row_id = "ch_truncated"
+    deep_prefix = "Defined benefit pension borrowings covenant going concern cash flow " + (
+        "x" * 220
+    )
+    truncated = deep_prefix + "\n\n[truncated]"
+    (bodies_dir / f"{row_id}.txt").write_text(truncated, encoding="utf-8")
+    row = {
+        "id": row_id,
+        "source": "companies_house",
+        "has_body": True,
+        "body_path": str(bodies_dir / f"{row_id}.txt"),
+    }
+    assert _ch_row_needs_body_refetch(row, bodies_dir) is True
+
+
 def test_ch_row_needs_body_refetch_when_lacks_financial_depth(tmp_path):
     from value_investor.research.filings import _ch_row_needs_body_refetch
 
@@ -1859,6 +1879,105 @@ def test_ch_row_needs_body_refetch_when_lacks_financial_depth(tmp_path):
         "body_path": str(filings_dir / f"{row_id}.txt"),
     }
     assert _ch_row_needs_body_refetch(row, filings_dir) is True
+
+
+def test_refetch_companies_house_filing_bodies_refetches_char_truncated_body(tmp_path, monkeypatch):
+    """Regression: CH bodies capped at FILINGS_BODY_MAX_CHARS are re-fetched via document-api."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    row_id = "ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4"
+    ch_url = (
+        "https://document-api.company-information.service.gov.uk/document/"
+        "7iLf3HQWfOUlSiKOvCISIf9zIePMlIhubeQAUqF0Ivg"
+    )
+    shallow = (
+        "Defined benefit pension borrowings covenant going concern cash flow "
+        + ("y" * 400)
+        + "\n\n[truncated]"
+    )
+    refreshed = (
+        "Defined benefit pension borrowings covenant going concern cash flow "
+        + ("z" * 400)
+        + " principal risk related party segment information"
+    )
+    index = {
+        "filings": [
+            {
+                "id": row_id,
+                "source": "companies_house",
+                "headline": "Companies House accounts — group",
+                "url": ch_url,
+                "period": "annual",
+                "has_body": True,
+                "body_path": str(bodies_dir / f"{row_id}.txt"),
+            }
+        ],
+        "summary": {"total": 1, "with_body": 1},
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    (bodies_dir / f"{row_id}.txt").write_text(shallow, encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_companies_house_body",
+        lambda row: refreshed if row.get("id") == row_id else None,
+    )
+    result = refetch_companies_house_filing_bodies(filings_dir, max_bodies=3)
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    row = saved["filings"][0]
+    assert row["document_metadata_url"] == ch_url
+    assert row["ch_document_id"] == "7iLf3HQWfOUlSiKOvCISIf9zIePMlIhubeQAUqF0Ivg"
+    assert "[truncated]" not in (bodies_dir / f"{row_id}.txt").read_text(encoding="utf-8")
+    assert "principal risk" in (bodies_dir / f"{row_id}.txt").read_text(encoding="utf-8")
+
+
+def test_normalize_companies_house_index_rows_maps_document_metadata_url():
+    from value_investor.research.filings import normalize_companies_house_index_rows
+
+    ch_url = "https://document-api.company-information.service.gov.uk/document/abc123DocId"
+    rows = normalize_companies_house_index_rows(
+        [
+            {
+                "id": "ch_row",
+                "headline": "Annual accounts filed",
+                "url": ch_url,
+                "has_body": False,
+            }
+        ]
+    )
+    assert rows[0]["source"] == "companies_house"
+    assert rows[0]["document_metadata_url"] == ch_url
+    assert rows[0]["ch_document_id"] == "abc123DocId"
+
+
+def test_merge_filings_keeps_companies_house_row_alongside_same_day_rns():
+    ch_url = "https://document-api.company-information.service.gov.uk/document/ch1"
+    merged = merge_filings(
+        [
+            {
+                "id": "ch_1",
+                "source": "companies_house",
+                "headline": "Full Year Results",
+                "published_at": "2026-03-01T00:00:00+00:00",
+                "url": ch_url,
+                "document_metadata_url": ch_url,
+                "priority": 140,
+            }
+        ],
+        [
+            {
+                "id": "rns_1",
+                "source": "investegate_direct",
+                "headline": "Full Year Results",
+                "published_at": "2026-03-01T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/example/fy/1",
+                "priority": 120,
+            }
+        ],
+    )
+    assert len(merged) == 2
+    assert {row["id"] for row in merged} == {"ch_1", "rns_1"}
 
 
 def test_refetch_companies_house_filing_bodies_retries_shallow_ixbrl_body(tmp_path, monkeypatch):
@@ -3045,6 +3164,40 @@ def test_refetch_ir_allowlist_filing_bodies_prefers_unfilled_period(tmp_path, mo
     )
     assert result["fetched"] == 1
     assert fetched_ids == [_ir_id(interim_url)]
+
+
+def test_fetch_document_bytes_skips_partial_download(monkeypatch):
+    from value_investor.research.companies_house import MIME_PDF, MIME_XHTML, fetch_document_bytes
+
+    meta = {
+        "links": {"document": "/document/partial/content"},
+        "resources": {
+            MIME_PDF: {"content_length": 10_000},
+            MIME_XHTML: {"content_length": 500},
+        },
+    }
+    calls: list[str] = []
+
+    def fake_get(url, *, api_key, accept="application/json", timeout=60.0, retries=2):
+        if url.endswith("/document/partial"):
+            return json.dumps(meta).encode("utf-8")
+        calls.append(accept)
+        if accept == MIME_PDF:
+            return b"%PDF-" + (b"x" * 100)
+        return b"<html>pension borrowings covenant going concern cash flow " + (b"y" * 300)
+
+    monkeypatch.setattr("value_investor.research.companies_house._ch_get", fake_get)
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.time.sleep", lambda *_a, **_k: None
+    )
+    fetched = fetch_document_bytes(
+        "https://document-api.company-information.service.gov.uk/document/partial",
+        api_key="test-key",
+    )
+    assert fetched is not None
+    assert fetched[1] == MIME_XHTML
+    assert MIME_PDF in calls
+    assert MIME_XHTML in calls
 
 
 def test_fetch_document_bytes_attempts_oversized_pdf_when_only_format(monkeypatch):

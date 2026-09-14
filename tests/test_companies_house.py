@@ -11,6 +11,7 @@ from value_investor.research.companies_house import (
     DEEPEN_MAX_ACCOUNTS,
     DEFAULT_MAX_ACCOUNTS,
     _StripAuthOnRedirect,
+    ch_document_id_from_metadata_url,
     fetch_accounts_filing_rows,
     fetch_filings_companies_house,
     load_company_number_map,
@@ -61,6 +62,49 @@ def test_strip_auth_on_redirect_drops_authorization():
     assert "Authorization" not in new_req.headers
     assert "authorization" not in {k.lower() for k in new_req.headers}
     assert new_req.get_header("Accept") == "application/pdf"
+
+
+def test_ch_document_id_from_metadata_url():
+    url = (
+        "https://document-api.company-information.service.gov.uk/document/"
+        "7iLf3HQWfOUlSiKOvCISIf9zIePMlIhubeQAUqF0Ivg"
+    )
+    assert ch_document_id_from_metadata_url(url) == "7iLf3HQWfOUlSiKOvCISIf9zIePMlIhubeQAUqF0Ivg"
+    assert ch_document_id_from_metadata_url("https://example.com/doc") is None
+
+
+def test_fetch_accounts_filing_rows_sets_ch_document_id(monkeypatch):
+    payload = {
+        "items": [
+            {
+                "transaction_id": "tx1",
+                "description": "accounts-with-accounts-type-full",
+                "date": "2024-03-15",
+                "links": {
+                    "document_metadata": (
+                        "https://document-api.company-information.service.gov.uk/"
+                        "document/abcDocId99"
+                    )
+                },
+            }
+        ]
+    }
+
+    monkeypatch.setattr(
+        "value_investor.research.companies_house._ch_get",
+        lambda *a, **k: json.dumps(payload).encode("utf-8"),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.time.sleep",
+        lambda *_a, **_k: None,
+    )
+    rows = fetch_accounts_filing_rows(
+        company_number="00006400",
+        api_key="test-key",
+        max_accounts=1,
+    )
+    assert rows[0]["ch_document_id"] == "abcDocId99"
+    assert rows[0]["document_metadata_url"] == rows[0]["url"]
 
 
 def test_load_and_save_company_number_map(tmp_path: Path):
