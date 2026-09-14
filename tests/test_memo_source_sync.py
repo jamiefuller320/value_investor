@@ -70,7 +70,11 @@ def test_sync_output_research_to_committed_round_trip(tmp_path: Path):
     data_dir = tmp_path / "docs_data"
     out_ticker = output_dir / "research" / "EEE.L"
     out_ticker.mkdir(parents=True)
-    payload = {"ticker": "EEE.L", "mode": "structured_verdict_update", "research_verdict": "neutral"}
+    payload = {
+        "ticker": "EEE.L",
+        "mode": "structured_verdict_update",
+        "research_verdict": "neutral",
+    }
     (out_ticker / "research.json").write_text(json.dumps(payload), encoding="utf-8")
     (out_ticker / "research.md").write_text("# EEE structured\n", encoding="utf-8")
 
