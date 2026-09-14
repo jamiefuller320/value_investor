@@ -3795,24 +3795,148 @@ function lifecycleStatusChip(status) {
   return `<span class="stage-badge ${cls[key] || "stage-active"}">${esc(key)}</span>`;
 }
 
+function findLifecycleExperiment(factorId) {
+  const columns = ((dashboardData || {}).lifecycle_board || {}).columns || [];
+  for (const col of columns) {
+    const hit = (col.experiments || []).find((row) => row.factor_id === factorId);
+    if (hit) return { column: col, experiment: hit };
+  }
+  return null;
+}
+
+function renderLifecycleExperimentCard(factorId) {
+  const found = findLifecycleExperiment(factorId);
+  if (!found) {
+    return `<p class="muted">No experiment card for <code>${esc(factorId)}</code>.</p>`;
+  }
+  const row = found.experiment;
+  const progress = row.progress || {};
+  const initiation = row.initiation || {};
+  const ledger = row.assessment_status || progress.ledger_status;
+  const recommend = String(ledger || "") === "recommend";
+  const ready = Boolean(initiation.ready_to_initiate);
+  const waiting = initiation.waiting_for
+    ? `<p>${esc(initiation.waiting_for)}</p>`
+    : "<p class=\"muted small\">No further gate recorded.</p>";
+  const evidenceBits = [];
+  if (progress.scored_count != null) evidenceBits.push(`${progress.scored_count} scored episodes`);
+  if (progress.tracks_with_closed != null) {
+    evidenceBits.push(`${progress.tracks_with_closed} tracks with closes`);
+  }
+  if (progress.leading_cadence) evidenceBits.push(`leading ${progress.leading_cadence}`);
+  if (progress.gate_marks != null) evidenceBits.push(`${progress.gate_marks} gate marks`);
+  if (progress.ready_for_cadence_analysis != null) {
+    evidenceBits.push(
+      progress.ready_for_cadence_analysis ? "cadence analysis ready" : "cadence analysis not ready"
+    );
+  }
+  if (progress.human_acked) {
+    evidenceBits.push(`acked${progress.ack_decision ? ` (${progress.ack_decision})` : ""}`);
+  }
+  const recommendBlock = recommend
+    ? `<div class="lifecycle-init-box ${ready ? "ready" : "waiting"}">
+        <p class="small" style="margin-top:0"><strong>${ready ? "Ready for next human step" : "Not ready to initiate"}</strong></p>
+        <p>${esc(initiation.label || (ready ? "Ready" : "Waiting"))}</p>
+        ${waiting}
+        ${
+          initiation.do_not
+            ? `<p class="small muted">Do not: ${esc(initiation.do_not)}</p>`
+            : ""
+        }
+        ${
+          initiation.adoption_stage
+            ? `<p class="small muted">Adoption stage <code>${esc(initiation.adoption_stage)}</code></p>`
+            : ""
+        }
+        <p class="small muted">Recommend is observe-only — never auto-applied.</p>
+      </div>`
+    : `<div class="lifecycle-init-box waiting">
+        <p class="small" style="margin-top:0"><strong>${esc(initiation.label || "Collecting")}</strong></p>
+        ${initiation.waiting_for ? `<p>${esc(initiation.waiting_for)}</p>` : ""}
+        ${
+          initiation.do_not
+            ? `<p class="small muted">Do not: ${esc(initiation.do_not)}</p>`
+            : ""
+        }
+      </div>`;
+  return `
+    <p class="small muted" style="margin-top:0">${esc(found.column.label || found.column.id)} · ${esc(
+      row.lifecycle_stage || ""
+    )} · <code>${esc(row.experiment || row.factor_id)}</code></p>
+    <div class="market-card-badges">
+      ${lifecycleStatusChip(row.status)}
+      ${ledger ? lifecycleStatusChip(ledger) : ""}
+      ${row.model_independent ? '<span class="badge badge-ii-ok">model-independent</span>' : ""}
+      ${row.human_ack_required ? '<span class="badge badge-watch">human ack</span>' : ""}
+    </div>
+    <h4 class="small">Aim</h4>
+    <p>${esc(row.aim || row.question || "—")}</p>
+    <h4 class="small">Progress</h4>
+    <p>${esc(progress.summary || "No ledger row yet.")}</p>
+    ${
+      evidenceBits.length
+        ? `<p class="small muted">${evidenceBits.map((bit) => esc(bit)).join(" · ")}</p>`
+        : ""
+    }
+    ${row.artifact ? `<p class="small muted">Artifact <code>${esc(row.artifact)}</code></p>` : ""}
+    ${row.assessment_title ? `<p class="small muted">${esc(row.assessment_title)}</p>` : ""}
+    <h4 class="small">${recommend ? "Recommend — initiate?" : "Next step"}</h4>
+    ${recommendBlock}
+  `;
+}
+
+function openLifecycleExperimentCard(factorId) {
+  const dialog = document.getElementById("lifecycle-experiment-dialog");
+  const title = document.getElementById("lifecycle-experiment-title");
+  const body = document.getElementById("lifecycle-experiment-body");
+  if (!dialog || !title || !body) return;
+  const found = findLifecycleExperiment(factorId);
+  title.textContent = found
+    ? found.experiment.factor_id || found.experiment.experiment || "Lifecycle experiment"
+    : "Lifecycle experiment";
+  body.innerHTML = renderLifecycleExperimentCard(factorId);
+  dialog.showModal();
+}
+
+function lifecycleExperimentChipButton(row) {
+  const status = row.assessment_status || row.status;
+  const title = row.aim || row.question || row.experiment || row.factor_id;
+  const initiation = row.initiation || {};
+  const recommend = String(row.assessment_status || "") === "recommend";
+  const readyHint = recommend
+    ? initiation.ready_to_initiate
+      ? " · ready for next human step"
+      : " · not ready to initiate"
+    : "";
+  return `<button type="button" class="lifecycle-exp-chip" data-lifecycle-experiment="${esc(
+    row.factor_id || ""
+  )}" title="${esc(title)}${esc(readyHint)}">${esc(row.factor_id || row.experiment || "experiment")} ${lifecycleStatusChip(
+    status
+  )}${
+    recommend
+      ? `<span class="lifecycle-exp-ready ${initiation.ready_to_initiate ? "ready" : "waiting"}">${
+          initiation.ready_to_initiate ? "next step" : "waiting"
+        }</span>`
+      : ""
+  }</button>`;
+}
+
 function lifecycleExperimentChips(experiments) {
   const rows = Array.isArray(experiments) ? experiments : [];
   const observing = rows.filter((row) => String(row.status || "") === "observing");
   const other = rows.filter((row) => String(row.status || "") !== "observing");
-  const chips = observing
-    .map((row) => {
-      const status = row.assessment_status || row.status;
-      const title = row.question || row.experiment || row.factor_id;
-      return `<span class="lifecycle-exp-chip" title="${esc(title)}">${esc(row.factor_id || row.experiment || "experiment")} ${lifecycleStatusChip(status)}</span>`;
-    })
-    .join("");
+  const chips = observing.map(lifecycleExperimentChipButton).join("");
   const planned = other.length
     ? `<details class="lifecycle-planned"><summary class="small muted">${other.length} planned / deferred</summary><ul class="list-plain small">${other
         .map(
           (row) =>
-            `<li><code>${esc(row.factor_id || "")}</code> ${lifecycleStatusChip(row.status)} — ${esc(row.question || "")}${
-              row.revisit_when ? ` <span class="muted">(${esc(row.revisit_when)})</span>` : ""
-            }</li>`
+            `<li>${lifecycleExperimentChipButton(row)}<div class="small muted">${esc(row.question || "")}${
+              row.initiation && row.initiation.waiting_for
+                ? ` — waiting: ${esc(row.initiation.waiting_for)}`
+                : row.revisit_when
+                  ? ` <span class="muted">(${esc(row.revisit_when)})</span>`
+                  : ""
+            }</div></li>`
         )
         .join("")}</ul></details>`
     : "";
@@ -3826,16 +3950,39 @@ function lifecycleTickerCard(card) {
     card.unrealized_pnl_pct != null
       ? `${(Number(card.unrealized_pnl_pct) * 100).toFixed(1)}%`
       : "";
-  return `<article class="lifecycle-card" data-lifecycle-ticker="${esc(card.ticker)}">
+  const band = card.tenure_band ? ` tenure-${esc(card.tenure_band)}` : "";
+  const days =
+    card.days_in_column != null
+      ? `<span class="lifecycle-tenure-days" title="${esc(card.tenure_basis || "stage clock")}">${esc(
+          String(card.days_in_column)
+        )}d</span>`
+      : "";
+  return `<article class="lifecycle-card${band}" data-lifecycle-ticker="${esc(card.ticker)}">
     <div class="lifecycle-card-head">
       <strong>${esc(card.ticker)}</strong>
-      ${card.signal ? signalBadge(card.signal) : ""}
+      <span>${card.signal ? signalBadge(card.signal) : ""}${days}</span>
     </div>
     <div class="small muted">${esc(card.name || "")}</div>
     <div class="small">${esc(card.column_reason || card.lifecycle_phase || "")}${
       conv ? ` · conv ${esc(conv)}` : ""
     }${pnl ? ` · P&amp;L ${esc(pnl)}` : ""}</div>
   </article>`;
+}
+
+function lifecycleTenureLegend(scale) {
+  const bands = (scale && scale.bands) || [];
+  if (!bands.length) return "";
+  const items = bands
+    .map(
+      (band) =>
+        `<span class="lifecycle-tenure-swatch tenure-${esc(band.id)}">${esc(band.label)}</span>`
+    )
+    .join("");
+  return `<div class="lifecycle-tenure-legend" aria-label="Time in stage">
+    <span class="small muted">Time in stage</span>
+    ${items}
+    <span class="small muted">${esc(scale.note || "")}</span>
+  </div>`;
 }
 
 function mergeLifecycleColumns(market, track) {
@@ -3961,6 +4108,7 @@ function renderLifecycle(data) {
       <div class="tabs lifecycle-market-pills">${marketPills}</div>
       <div class="tabs lifecycle-track-pills">${trackPills}</div>
       <p class="small muted">${esc(market.label || market.market_id)} · ${esc(track ? track.track_label : "screen")} · ${esc(countBits)}</p>
+      ${lifecycleTenureLegend(board.tenure)}
       <div class="lifecycle-board">${columnsHtml}</div>
     </section>
   `;
@@ -3986,6 +4134,12 @@ function bindLifecyclePanel() {
         lifecycleTrackId = trackBtn.dataset.lifecycleTrack;
         syncLifecycleHash();
         renderLifecycle(dashboardData);
+        return;
+      }
+      const expBtn = event.target.closest("[data-lifecycle-experiment]");
+      if (expBtn) {
+        event.preventDefault();
+        openLifecycleExperimentCard(expBtn.dataset.lifecycleExperiment);
       }
     });
     panel.addEventListener("change", (event) => {

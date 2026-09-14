@@ -147,6 +147,16 @@ Switch market (and paper track) rather than stacking every universe on one
 page. Payload: `docs/data/lifecycle_board.json` (also rebuilt by local
 `POST /api/refresh`).
 
+Each column’s experiment chips open a detail card (aim, catalog/ledger
+progress, artifact). A `recommend` row also shows whether the **next human
+step** is unblocked or what the adoption/evidence gate is waiting for —
+`recommend` is never auto-applied.
+
+Held and sold name cards use a green→red **time-in-stage** heatmap: ≤7d
+fresh, ≤3w, ≤6w, ≤8w, then red beyond 8 weeks. Held columns clock
+`opened_at`; sold columns clock the closing mark. Screen columns have no
+stage clock yet and stay uncolored.
+
 ## What already runs vs what this adds
 
 | Piece | Status |
