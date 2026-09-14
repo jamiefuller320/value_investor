@@ -438,18 +438,22 @@ def active_workflow_runs(
     owner, name = repo.split("/", 1)
     seen: set[int] = set()
     active: list[dict[str, Any]] = []
-    for status in ACTIVE_RUN_STATUSES:
-        payload = github_api_get(
-            f"/repos/{owner}/{name}/actions/workflows/{workflow_file}/runs"
-            f"?per_page=5&status={status}",
-            token=token,
-        )
-        for row in list((payload or {}).get("workflow_runs") or []):
-            run_id = row.get("id")
-            if run_id is None or run_id in seen:
-                continue
-            seen.add(int(run_id))
-            active.append(row)
+    try:
+        for status in ACTIVE_RUN_STATUSES:
+            payload = github_api_get(
+                f"/repos/{owner}/{name}/actions/workflows/{workflow_file}/runs"
+                f"?per_page=5&status={status}",
+                token=token,
+            )
+            for row in list((payload or {}).get("workflow_runs") or []):
+                run_id = row.get("id")
+                if run_id is None or run_id in seen:
+                    continue
+                seen.add(int(run_id))
+                active.append(row)
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError) as exc:
+        logger.warning("active_workflow_runs(%s) failed: %s", workflow_file, exc)
+        return []
     return active
 
 

@@ -51,6 +51,7 @@ def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold(
             "value_investor.ops_monitor.latest_workflow_run",
             return_value={"id": 1, "created_at": eight_hours_ago},
         ),
+        patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
         patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
         patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
     ):
@@ -92,6 +93,7 @@ def test_check_workflow_freshness_ignores_resolved_failures():
             "value_investor.ops_monitor.recent_workflow_failures",
             return_value=[{"id": 1, "created_at": one_hour_ago}],
         ),
+        patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
         patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
     ):
         findings, checks = check_workflow_freshness(queue_status=idle_queue, now=success_at)
@@ -143,6 +145,7 @@ def test_check_workflow_freshness_engineering_queue_active_requires_hourly():
             "value_investor.ops_monitor.latest_workflow_run",
             return_value={"id": 1, "created_at": eight_hours_ago},
         ),
+        patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
         patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
         patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
     ):
@@ -658,7 +661,12 @@ def test_apply_auto_fixes_reconciles_orphan_pr_open(tmp_path: Path):
             auto_fixable=True,
         )
     ]
-    fixes = apply_auto_fixes(findings, tasks_path=tasks_path, open_prs=[], apply=True)
+    with (
+        patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
+        patch("value_investor.engineering_recovery._github_token", return_value=None),
+        patch("value_investor.engineering_recovery._github_repo", return_value=None),
+    ):
+        fixes = apply_auto_fixes(findings, tasks_path=tasks_path, open_prs=[], apply=True)
     assert fixes
     payload = load_engineering_tasks(tasks_path)
     assert payload["tasks"][0]["status"] == "open"
