@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-13",
+  "updated_at": "2026-09-14",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -303,6 +303,14 @@
       "title": "Ad hoc (when triggered)",
       "cadence": "ad_hoc",
       "tasks": [
+        {
+          "id": "adhoc-decision-recording-plan",
+          "title": "Lock recording plan before new learning strands",
+          "summary": "Before opening a new analysis, counterfactual, or model-dev strand, answer the four freeze questions (unit, freeze-at-t, join-later, never-backfill) and validate with ftse-decision-recording. Use preview-freeze for coverage gaps. Do not enable the Phase C freeze writer until readiness is READY.",
+          "automated": false,
+          "doc_path": "docs/ops/decision-recording-checklist.md",
+          "doc_anchor": "the-four-questions"
+        },
         {
           "id": "adhoc-live-capital-pack",
           "title": "Verify decision packs before live capital",
