@@ -2773,10 +2773,14 @@ def test_refetch_companies_house_filing_bodies_multi_indexed_rows(tmp_path, monk
         json.dumps({"ticker": "MER.L", "filings": rows, "summary": {"total": 5, "with_body": 0}}),
         encoding="utf-8",
     )
-    body_text = "A" * 220 + " consolidated income pension covenant going concern"
+
+    def _fake_ch_body(row: dict) -> str:
+        row_id = str(row.get("id") or "")
+        return "A" * 220 + f" consolidated income pension covenant going concern unique-{row_id}"
+
     monkeypatch.setattr(
         "value_investor.research.filings._fetch_companies_house_body",
-        lambda row: body_text,
+        _fake_ch_body,
     )
     result = refetch_companies_house_filing_bodies(filings_dir, max_bodies=2)
     assert result["attempted"] == 5
@@ -2886,6 +2890,161 @@ def test_refetch_companies_house_filing_bodies_prefers_current_group(tmp_path, m
     assert by_id["ch_parent_interim"]["has_body"] is False
     assert by_id["ch_group_current"].get("entity_type") == "consolidated"
     assert by_id["ch_old_small"].get("entity_type") == "other"
+
+
+def test_refetch_companies_house_filing_bodies_rejects_duplicate_body_hash(tmp_path, monkeypatch):
+    """CH refetch must not attach the same extract to a second indexed row (hash dedup)."""
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    ch_url = "https://document-api.company-information.service.gov.uk/document/ch-dup"
+    shared_body = (
+        "ME Group International plc consolidated income statement pension covenant going concern "
+        "borrowings segment information related party transactions notes to the financial statements."
+        + ("x" * 220)
+    )
+    content_hash = _ir_body_content_hash(shared_body)
+    primary_path = bodies_dir / "ch_primary.txt"
+    primary_path.write_text(shared_body, encoding="utf-8")
+    rows = [
+        {
+            "id": "ch_primary",
+            "source": "companies_house",
+            "headline": "Companies House accounts — accounts-with-accounts-type-group",
+            "summary": "accounts-with-accounts-type-group",
+            "url": f"{ch_url}-primary",
+            "document_metadata_url": f"{ch_url}-primary",
+            "published_at": "2025-06-15T00:00:00+00:00",
+            "period": "annual",
+            "has_body": True,
+            "body_path": str(primary_path),
+            "body_content_hash": content_hash,
+            "priority": 140,
+        },
+        {
+            "id": "ch_duplicate_candidate",
+            "source": "companies_house",
+            "headline": "Companies House accounts — accounts-with-accounts-type-group",
+            "summary": "accounts-with-accounts-type-group",
+            "url": f"{ch_url}-dup",
+            "document_metadata_url": f"{ch_url}-dup",
+            "published_at": "2025-05-01T00:00:00+00:00",
+            "has_body": False,
+            "body_path": None,
+            "priority": 140,
+        },
+    ]
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"ticker": "MEGP.L", "filings": rows, "summary": {"total": 2, "with_body": 1}}),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_companies_house_body",
+        lambda _row: shared_body,
+    )
+    result = refetch_companies_house_filing_bodies(filings_dir, max_bodies=5)
+    assert result["attempted"] == 1
+    assert result["fetched"] == 0
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    dup_row = next(r for r in saved["filings"] if r["id"] == "ch_duplicate_candidate")
+    assert dup_row["has_body"] is False
+    assert not (bodies_dir / "ch_duplicate_candidate.txt").exists()
+
+
+def test_refetch_ir_allowlist_filing_bodies_prefers_unfilled_period(tmp_path, monkeypatch):
+    """IR refetch budget prefers missing interim when annual period already has a body."""
+    import hashlib
+
+    allowlist_path = tmp_path / "ir_urls.json"
+    annual_url = "https://example.com/hik-fy2025-annual-report.pdf"
+    interim_url = "https://example.com/hik-h1-2026-interim-results.pdf"
+    spare_annual_url = "https://example.com/hik-fy2024-annual-report.pdf"
+    allowlist_path.write_text(
+        json.dumps({"urls": {"HIK.L": [annual_url, interim_url, spare_annual_url]}}),
+        encoding="utf-8",
+    )
+
+    def _ir_id(url: str) -> str:
+        return f"ir_{hashlib.sha256(url.encode()).hexdigest()[:16]}"
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    annual_body = (
+        "Hikma Pharmaceuticals PLC full year results for the year ended 31 December 2025. "
+        "Core revenue and adjusted operating profit increased across injectables and generics."
+        + ("x" * 220)
+    )
+    annual_path = bodies_dir / f"{_ir_id(annual_url)}.txt"
+    annual_path.write_text(annual_body, encoding="utf-8")
+    filings = [
+        {
+            "id": _ir_id(annual_url),
+            "source": "ir_allowlist",
+            "headline": "IR allowlist document — hik-fy2025-annual-report.pdf",
+            "url": annual_url,
+            "period": "annual",
+            "published_at": "2026-03-01T00:00:00+00:00",
+            "has_body": True,
+            "body_path": str(annual_path),
+            "body_content_hash": _ir_body_content_hash(annual_body),
+            "priority": 140,
+        },
+        {
+            "id": _ir_id(interim_url),
+            "source": "ir_allowlist",
+            "headline": "IR allowlist document — hik-h1-2026-interim-results.pdf",
+            "url": interim_url,
+            "period": "interim",
+            "published_at": "2026-08-01T00:00:00+00:00",
+            "has_body": False,
+            "body_path": None,
+            "priority": 130,
+        },
+        {
+            "id": _ir_id(spare_annual_url),
+            "source": "ir_allowlist",
+            "headline": "IR allowlist document — hik-fy2024-annual-report.pdf",
+            "url": spare_annual_url,
+            "period": "annual",
+            "published_at": "2025-03-01T00:00:00+00:00",
+            "has_body": False,
+            "body_path": None,
+            "priority": 120,
+        },
+    ]
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"ticker": "HIK.L", "filings": filings}),
+        encoding="utf-8",
+    )
+    fetched_ids: list[str] = []
+
+    def _fake_ir_fetch(row, **kwargs):
+        fetched_ids.append(str(row.get("id") or ""))
+        return (
+            "Hikma Pharmaceuticals PLC half year interim results for six months ended June 2026. "
+            "Revenue grew across injectables with adjusted operating profit up." + ("x" * 220),
+            "pdf",
+        )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_allowlist_body",
+        _fake_ir_fetch,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "HIK.L",
+        company_name="Hikma Pharmaceuticals PLC",
+        max_bodies=1,
+        allowlist_path=allowlist_path,
+    )
+    assert result["fetched"] == 1
+    assert fetched_ids == [_ir_id(interim_url)]
 
 
 def test_fetch_document_bytes_attempts_oversized_pdf_when_only_format(monkeypatch):
