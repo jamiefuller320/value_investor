@@ -702,7 +702,11 @@ def _initiation_recommendation(
             "auto-apply DCA."
         )
     if kind == "waiting":
-        failed = [row for row in evidence if row.get("id", "").startswith("adoption:") and not row.get("ok")]
+        failed = [
+            row
+            for row in evidence
+            if row.get("id", "").startswith("adoption:") and not row.get("ok")
+        ]
         if failed:
             return (
                 "Recommendation: keep observing. Adoption gates still failing: "
@@ -800,7 +804,9 @@ def experiment_initiation(
                     "do_not": "Ack is not adopt — do not execute DCA or change starter fraction",
                     "adoption_stage": current or "acked",
                 }
-                return _with_initiation_card_fields(payload, factor=factor, hit=hit, adoption=adoption)
+                return _with_initiation_card_fields(
+                    payload, factor=factor, hit=hit, adoption=adoption
+                )
             if current == "paper_execute_graduated" and bool(current_row.get("ready")):
                 payload = {
                     "ready_to_initiate": True,
@@ -810,7 +816,9 @@ def experiment_initiation(
                     "do_not": str(do_not),
                     "adoption_stage": current,
                 }
-                return _with_initiation_card_fields(payload, factor=factor, hit=hit, adoption=adoption)
+                return _with_initiation_card_fields(
+                    payload, factor=factor, hit=hit, adoption=adoption
+                )
             payload = {
                 "ready_to_initiate": False,
                 "kind": "waiting",
@@ -848,7 +856,6 @@ def experiment_initiation(
         "adoption_stage": None,
     }
     return _with_initiation_card_fields(payload, factor=factor, hit=hit, adoption=adoption)
-
 
 
 def board_column_defs(
