@@ -19,17 +19,20 @@ artifacts, ingest stall detection, and the engineering queue.
 - Quarantine corrupt or duplicate backtest history snapshots (see [backtest-health.md](backtest-health.md))
 - Reconcile engineering queue sync issues and redispatch when the agent failed on a stale task id (see [engineering-sync.md](engineering-sync.md))
 - Suppress “recent workflow failure” alerts while a recovery run for that workflow is already in flight
+- Suppress workflow-overdue findings while a run is in flight, or before that workflow’s `WORKFLOW_EMAIL_READY_UTC` slot (Monday morning cliff / pending primary cron)
+- `workflow_dispatch` overdue **ingest-loop** / **paper-auto** after email-ready when no run is active
 
 **Supervised follow-ons** (not automatic code changes):
 
-- Draft `ops` engineering tasks for unresolved failures (workflow overdue, etc.)
+- Draft `ops` engineering tasks for unresolved failures (workflow overdue outside auto-dispatch, etc.)
 - Run so-what auto-queue for no-judgment enforcement gaps (see [so-what-gap-closure.md](so-what-gap-closure.md))
 - Dispatch `engineering-queue.yml` when the queue is ready for the next PR
 
 Workflow failure **reruns** (library ladder guarded rerun, CI fix, etc.) stay in their
 dedicated `workflow_run` responders — ops monitor does not wait on long GitHub jobs
 before emailing. Healed local issues and in-flight recoveries are recorded in
-`ops_status.json` but do not generate alert email.
+`ops_status.json` but do not generate alert email. Overdue ingest/paper dispatches are
+fire-and-forget; the next ops-monitor pass confirms success.
 
 ## When it runs
 

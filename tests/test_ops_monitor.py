@@ -51,6 +51,7 @@ def test_check_workflow_freshness_engineering_queue_idle_uses_relaxed_threshold(
             "value_investor.ops_monitor.latest_workflow_run",
             return_value={"id": 1, "created_at": eight_hours_ago},
         ),
+        patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
         patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
         patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
     ):
@@ -92,6 +93,7 @@ def test_check_workflow_freshness_ignores_resolved_failures():
             "value_investor.ops_monitor.recent_workflow_failures",
             return_value=[{"id": 1, "created_at": one_hour_ago}],
         ),
+        patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
         patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
     ):
         findings, checks = check_workflow_freshness(queue_status=idle_queue, now=success_at)
@@ -143,6 +145,7 @@ def test_check_workflow_freshness_engineering_queue_active_requires_hourly():
             "value_investor.ops_monitor.latest_workflow_run",
             return_value={"id": 1, "created_at": eight_hours_ago},
         ),
+        patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
         patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
         patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
     ):
@@ -229,6 +232,179 @@ def test_check_workflow_freshness_suppresses_ops_monitor_overdue_when_recovery_a
     assert ops_overdue[0].fixed is True
     assert "Recovery run in flight" in (ops_overdue[0].action_taken or "")
     assert _overall_status(findings) != "fail"
+
+
+def test_check_workflow_freshness_suppresses_ingest_overdue_when_run_in_flight():
+    forty_hours_ago = (weekday_noon_utc() - timedelta(hours=40)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    idle_queue = {
+        "open_count": 0,
+        "pr_open_count": 0,
+        "in_flight_branch": None,
+        "in_flight_pr": None,
+    }
+
+    def fake_latest(workflow_file, **kwargs):
+        if workflow_file == "ingest-loop.yml" and kwargs.get("status") == "success":
+            return {"id": 1, "created_at": forty_hours_ago}
+        return {"id": 2, "created_at": weekday_noon_utc().strftime("%Y-%m-%dT%H:%M:%SZ")}
+
+    def fake_active(workflow_file, **kwargs):
+        if workflow_file == "ingest-loop.yml":
+            return [{"id": 34816237004, "status": "in_progress"}]
+        return []
+
+    with (
+        patch("value_investor.ops_monitor._github_token", return_value="test-token"),
+        patch("value_investor.ops_monitor.latest_workflow_run", side_effect=fake_latest),
+        patch("value_investor.ops_monitor.active_workflow_runs", side_effect=fake_active),
+        patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
+        patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
+    ):
+        findings, _checks = check_workflow_freshness(
+            queue_status=idle_queue, now=weekday_noon_utc()
+        )
+
+    ingest_overdue = [row for row in findings if row.title == "Workflow overdue: FTSE Ingest Loop"]
+    assert len(ingest_overdue) == 1
+    assert ingest_overdue[0].fixed is True
+    assert "Recovery run in flight" in (ingest_overdue[0].action_taken or "")
+    assert _overall_status(findings) != "fail"
+
+
+def test_check_workflow_freshness_suppresses_overdue_before_email_ready_slot():
+    """Monday morning cliff: weekend age exceeds max_age before primary cron finishes."""
+    monday_morning = datetime(2026, 9, 14, 7, 46, tzinfo=UTC)
+    friday_success = datetime(2026, 9, 11, 8, 26, tzinfo=UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+    idle_queue = {
+        "open_count": 0,
+        "pr_open_count": 0,
+        "in_flight_branch": None,
+        "in_flight_pr": None,
+    }
+
+    def fake_latest(workflow_file, **kwargs):
+        if (
+            workflow_file in {"ingest-loop.yml", "paper-auto.yml"}
+            and kwargs.get("status") == "success"
+        ):
+            return {"id": 1, "created_at": friday_success}
+        return {"id": 2, "created_at": monday_morning.strftime("%Y-%m-%dT%H:%M:%SZ")}
+
+    with (
+        patch("value_investor.ops_monitor._github_token", return_value="test-token"),
+        patch("value_investor.ops_monitor.latest_workflow_run", side_effect=fake_latest),
+        patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
+        patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
+        patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
+    ):
+        findings, _checks = check_workflow_freshness(queue_status=idle_queue, now=monday_morning)
+
+    overdue = [
+        row
+        for row in findings
+        if row.title
+        in {
+            "Workflow overdue: FTSE Ingest Loop",
+            "Workflow overdue: FTSE Paper Automation",
+        }
+    ]
+    assert len(overdue) == 2
+    assert all(row.fixed for row in overdue)
+    assert all("Scheduled slot not reached yet" in (row.action_taken or "") for row in overdue)
+    assert _overall_status(findings) != "fail"
+
+
+def test_check_workflow_freshness_marks_ingest_paper_overdue_auto_fixable_past_ready():
+    forty_hours_ago = (weekday_noon_utc() - timedelta(hours=40)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    idle_queue = {
+        "open_count": 0,
+        "pr_open_count": 0,
+        "in_flight_branch": None,
+        "in_flight_pr": None,
+    }
+
+    def fake_latest(workflow_file, **kwargs):
+        if (
+            workflow_file in {"ingest-loop.yml", "paper-auto.yml"}
+            and kwargs.get("status") == "success"
+        ):
+            return {"id": 1, "created_at": forty_hours_ago}
+        return {"id": 2, "created_at": weekday_noon_utc().strftime("%Y-%m-%dT%H:%M:%SZ")}
+
+    with (
+        patch("value_investor.ops_monitor._github_token", return_value="test-token"),
+        patch("value_investor.ops_monitor.latest_workflow_run", side_effect=fake_latest),
+        patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
+        patch("value_investor.ops_monitor.recent_workflow_failures", return_value=[]),
+        patch("value_investor.ops_monitor.recovery_bundle_in_flight", return_value=(False, [])),
+    ):
+        findings, _checks = check_workflow_freshness(
+            queue_status=idle_queue, now=weekday_noon_utc()
+        )
+
+    ingest = next(row for row in findings if row.title == "Workflow overdue: FTSE Ingest Loop")
+    paper = next(row for row in findings if row.title == "Workflow overdue: FTSE Paper Automation")
+    assert ingest.auto_fixable is True and ingest.fixed is False
+    assert paper.auto_fixable is True and paper.fixed is False
+
+
+def test_apply_auto_fixes_dispatches_overdue_ingest_and_paper():
+    findings = [
+        OpsFinding(
+            severity="fail",
+            category="workflows",
+            title="Workflow overdue: FTSE Ingest Loop",
+            summary="No successful run within 30h.",
+            auto_fixable=True,
+        ),
+        OpsFinding(
+            severity="fail",
+            category="workflows",
+            title="Workflow overdue: FTSE Paper Automation",
+            summary="No successful run within 28h.",
+            auto_fixable=True,
+        ),
+    ]
+    dispatched: list[str] = []
+
+    def fake_dispatch(workflow_file, **kwargs):
+        dispatched.append(workflow_file)
+
+    with (
+        patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
+        patch("value_investor.ops_monitor.dispatch_workflow", side_effect=fake_dispatch),
+    ):
+        fixes = apply_auto_fixes(findings, apply=True)
+
+    assert dispatched == ["ingest-loop.yml", "paper-auto.yml"]
+    assert {row["action"] for row in fixes} == {"dispatch_overdue_workflow"}
+    assert all(row.fixed for row in findings)
+    assert all("dispatched" in (row.action_taken or "") for row in findings)
+
+
+def test_apply_auto_fixes_dispatch_failure_leaves_supervised():
+    findings = [
+        OpsFinding(
+            severity="fail",
+            category="workflows",
+            title="Workflow overdue: FTSE Ingest Loop",
+            summary="No successful run within 30h.",
+            auto_fixable=True,
+        )
+    ]
+    with (
+        patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
+        patch(
+            "value_investor.ops_monitor.dispatch_workflow",
+            side_effect=RuntimeError("403 Workflows permission"),
+        ),
+    ):
+        fixes = apply_auto_fixes(findings, apply=True)
+
+    assert fixes == []
+    assert findings[0].fixed is False
+    assert findings[0].auto_fixable is False
+    assert "auto-dispatch failed" in (findings[0].action_taken or "")
 
 
 def test_ops_monitor_cli_email_failure_still_exits_zero_when_stale_only():
@@ -491,7 +667,12 @@ def test_apply_auto_fixes_reconciles_orphan_pr_open(tmp_path: Path):
             auto_fixable=True,
         )
     ]
-    fixes = apply_auto_fixes(findings, tasks_path=tasks_path, open_prs=[], apply=True)
+    with (
+        patch("value_investor.ops_monitor.active_workflow_runs", return_value=[]),
+        patch("value_investor.engineering_recovery._github_token", return_value=None),
+        patch("value_investor.engineering_recovery._github_repo", return_value=None),
+    ):
+        fixes = apply_auto_fixes(findings, tasks_path=tasks_path, open_prs=[], apply=True)
     assert fixes
     payload = load_engineering_tasks(tasks_path)
     assert payload["tasks"][0]["status"] == "open"
