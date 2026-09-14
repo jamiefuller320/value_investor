@@ -6044,6 +6044,7 @@ def refetch_companies_house_filing_bodies(
     }
 
     downloaded = 0
+    known_body_hashes = _filing_body_hashes_from_rows(filings, bodies_dir=bodies_dir)
     updated: list[dict[str, Any]] = []
     for row in filings:
         item = dict(row)
@@ -6060,13 +6061,28 @@ def refetch_companies_house_filing_bodies(
         ):
             body = _fetch_companies_house_body(item)
             if body:
-                filename = f"{item['id']}.txt"
-                path = bodies_dir / filename
-                path.write_text(body, encoding="utf-8")
-                item["has_body"] = True
-                item["body_path"] = str(path)
-                downloaded += 1
-            elif item.get("has_body"):
+                item = _apply_headline_period(item, body_snippet=body[:4000])
+                valid, _reason = _validate_filing_body_period_content(item, body)
+                if not valid:
+                    body = None
+                else:
+                    content_hash, dup_reason = _reject_duplicate_filing_body_hash(
+                        row_id,
+                        body,
+                        known_body_hashes,
+                    )
+                    if dup_reason:
+                        body = None
+                    else:
+                        filename = f"{item['id']}.txt"
+                        path = bodies_dir / filename
+                        path.write_text(body, encoding="utf-8")
+                        item["has_body"] = True
+                        item["body_path"] = str(path)
+                        item["body_content_hash"] = content_hash
+                        known_body_hashes[content_hash] = row_id
+                        downloaded += 1
+            if body is None and item.get("has_body"):
                 item["has_body"] = False
                 item["body_path"] = None
         updated.append(item)
