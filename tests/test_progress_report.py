@@ -7,6 +7,7 @@ from pathlib import Path
 
 from value_investor.progress_report import (
     build_actionable_items,
+    build_integration_checks,
     build_progress_report,
     build_role_coherence,
     format_progress_report_markdown,
@@ -158,6 +159,72 @@ def test_role_coherence_flags_post_run_plan_without_queue_link(tmp_path: Path):
         latest_path=latest,
     )
     assert any(row["id"] == "post_run_plan_without_queue_link" for row in checks)
+
+
+def test_role_coherence_post_run_terminal_only_is_info(tmp_path: Path):
+    paths = _seed_minimal(tmp_path)
+    latest = paths["data_dir"] / "latest.json"
+    plan_line = "Implement unique overlay export never in queue — expected impact: test"
+    payload = json.loads(latest.read_text(encoding="utf-8"))
+    payload["post_run_review"] = {"improvement_plan": f"1. [scoring] {plan_line}"}
+    latest.write_text(json.dumps(payload), encoding="utf-8")
+    tasks = paths["tasks"]
+    task_payload = json.loads(tasks.read_text(encoding="utf-8"))
+    task_payload["tasks"] = [
+        {
+            "id": "eng-parked-01",
+            "title": plan_line,
+            "status": "parked",
+            "allowed_paths": ["src/value_investor/pipeline.py"],
+        }
+    ]
+    tasks.write_text(json.dumps(task_payload), encoding="utf-8")
+    checks = build_role_coherence(
+        progress={"current_focus": "stage_2b", "evidence": {}},
+        actionable={"defer_now": [], "proposed_tasks": {}, "engineering_open": []},
+        tasks_path=tasks,
+        latest_path=latest,
+    )
+    row = next(row for row in checks if row["id"] == "post_run_plan_without_queue_link")
+    assert row["severity"] == "info"
+
+
+def test_build_integration_checks_passes_open_prs(tmp_path: Path, monkeypatch):
+    paths = _seed_minimal(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    captured: dict[str, object] = {}
+
+    def fake_check_engineering_queue(*, tasks_path, open_prs=None):
+        captured["open_prs"] = open_prs
+        return [], {"open_count": 0}
+
+    def fake_check_engineering_sync(*, tasks_path, open_prs=None):
+        captured["sync_open_prs"] = open_prs
+        return [], None
+
+    monkeypatch.setattr(
+        "value_investor.progress_report.check_engineering_queue",
+        fake_check_engineering_queue,
+    )
+    monkeypatch.setattr(
+        "value_investor.progress_report.check_engineering_sync",
+        fake_check_engineering_sync,
+    )
+    monkeypatch.setattr(
+        "value_investor.progress_report._github_token",
+        lambda: "token",
+    )
+    monkeypatch.setattr(
+        "value_investor.progress_report.list_open_pull_requests",
+        lambda: [{"headRefName": "cursor/eng-test-01"}],
+    )
+    build_integration_checks(
+        latest_path=paths["data_dir"] / "latest.json",
+        ops_path=paths["data_dir"] / "ops_status.json",
+        tasks_path=paths["tasks"],
+    )
+    assert captured["open_prs"] == [{"headRefName": "cursor/eng-test-01"}]
+    assert captured["sync_open_prs"] == [{"headRefName": "cursor/eng-test-01"}]
 
 
 def test_role_coherence_flags_unlinked_defer_now(tmp_path: Path):

@@ -1012,6 +1012,25 @@ def check_workflow_freshness(
     return findings, checks
 
 
+def _is_orphaned_pr_open_task(
+    row: dict[str, Any], open_prs: list[dict[str, Any]] | None
+) -> bool:
+    """True when pr_open has no matching open GitHub PR (or no recorded PR when PR list omitted)."""
+    if str(row.get("status") or "") != "pr_open":
+        return False
+    branch = str(row.get("branch_name") or "").strip()
+    if open_prs is not None:
+        if branch and any(
+            str(pr.get("headRefName") or pr.get("head_branch") or "").strip() == branch
+            for pr in open_prs
+        ):
+            return False
+        return True
+    if row.get("pr_url") or row.get("pr_number"):
+        return False
+    return True
+
+
 def check_engineering_queue(
     *,
     open_prs: list[dict[str, Any]] | None = None,
@@ -1024,12 +1043,7 @@ def check_engineering_queue(
     orphaned = [
         row
         for row in load_engineering_tasks(tasks_path).get("tasks") or []
-        if str(row.get("status") or "") == "pr_open"
-        and not any(
-            str(pr.get("headRefName") or pr.get("head_branch") or "").strip()
-            == str(row.get("branch_name") or "").strip()
-            for pr in (open_prs or [])
-        )
+        if _is_orphaned_pr_open_task(row, open_prs)
     ]
     if orphaned:
         ids = ", ".join(str(row.get("id")) for row in orphaned)
