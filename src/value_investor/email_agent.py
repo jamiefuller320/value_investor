@@ -399,8 +399,17 @@ def main(argv: list[str] | None = None) -> int:
         )
 
     if args.research_docs or args.research_gap_fill:
-        from value_investor.research.memo_backfill import sync_committed_sources_to_output
+        from value_investor.research.memo_backfill import (
+            sync_committed_memos_to_output,
+            sync_committed_sources_to_output,
+            sync_output_research_to_committed,
+        )
 
+        # Seed memo metadata first so weekly updates hit existing Phase A essays
+        # (structured_verdict* modes) instead of treating the output store as empty.
+        synced_memos = sync_committed_memos_to_output(args.output_dir)
+        if synced_memos:
+            print(f"Seeded committed memos into output/research for {synced_memos} ticker(s)")
         synced_sources = sync_committed_sources_to_output(args.output_dir)
         if synced_sources:
             print(f"Seeded thickened sources into output/research for {synced_sources} ticker(s)")
@@ -427,6 +436,29 @@ def main(argv: list[str] | None = None) -> int:
         except RuntimeError as err:
             print(str(err), file=sys.stderr)
             return 2
+        print(
+            "Research-docs summary: "
+            f"active={research_summary.active_count} alumni={research_summary.alumni_count} "
+            f"created={research_summary.created} updated={research_summary.updated} "
+            f"skipped={research_summary.skipped} errors={len(research_summary.errors)}"
+        )
+        if research_summary.errors:
+            for err in research_summary.errors[:12]:
+                print(f"  research error: {err}", file=sys.stderr)
+        touched = [
+            str(doc.ticker).strip().upper()
+            for doc in research_summary.documents
+            if getattr(doc, "ticker", None)
+        ]
+        if touched:
+            persisted = sync_output_research_to_committed(
+                args.output_dir,
+                tickers=touched,
+            )
+            print(
+                f"Persisted {persisted} research memo tree(s) to docs/data/research "
+                f"(Phase B structured modes must land in the committed store)"
+            )
         research_documents = research_documents_for_reports(reports, research_summary.documents)
 
     if args.research_gap_fill:
