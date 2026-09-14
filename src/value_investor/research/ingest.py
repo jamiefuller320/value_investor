@@ -323,13 +323,17 @@ def _resolve_cached_annual_financials(
     output_dir: Path | None = None,
     sources_dir: Path | None = None,
 ) -> dict[str, Any] | None:
+    from value_investor.scoring.fcf import load_cached_financials
     from value_investor.storage import read_json, resolve_json_path
 
+    normalized = ticker.strip().upper()
     candidates: list[Path] = []
     if sources_dir is not None:
         candidates.append(sources_dir / "financials_annual.json")
     if output_dir is not None:
-        candidates.append(output_dir / "research" / ticker / "sources" / "financials_annual.json")
+        candidates.append(
+            output_dir / "research" / normalized / "sources" / "financials_annual.json"
+        )
 
     for path in candidates:
         resolved = resolve_json_path(path)
@@ -341,7 +345,8 @@ def _resolve_cached_annual_financials(
             continue
         if isinstance(payload, dict) and payload.get("cash_flow"):
             return payload
-    return None
+
+    return load_cached_financials(normalized, output_dir=output_dir)
 
 
 def supplement_company_metrics_cashflow(
