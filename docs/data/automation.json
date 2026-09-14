@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-14T09:55:31.947178+00:00",
+  "generated_at": "2026-09-14T15:52:31.487549+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1150,16 +1150,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-14T09:55:31.507057+00:00",
-    "queue_ui_updated_at": "2026-09-14T09:55:31.948927+00:00",
-    "task_count": 27,
+    "compiled_at": "2026-09-14T14:28:35.816148+00:00",
+    "queue_ui_updated_at": "2026-09-14T15:52:31.397764+00:00",
+    "task_count": 28,
     "status": {
       "open_count": 8,
       "pr_open_count": 0,
-      "parked_count": 3,
-      "merged_count": 16,
+      "parked_count": 0,
+      "merged_count": 18,
       "failed_count": 0,
-      "next_task_id": "eng-20260914-01",
+      "next_task_id": "eng-20260914-02",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1168,11 +1168,11 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260914-01",
+        "id": "eng-20260914-02",
         "area": "ingest",
-        "title": "Standardise Investegate/LSE direct document fetch for indexed RNS (replace Google News redirect URLs; PDF/HTML body persist to `filings/bodies/`)",
+        "title": "Companies House document-api pipeline: map CH IDs to `filings_index`, OCR/iXBRL extract with truncation detection and re-fetch",
         "priority": "high",
-        "priority_score": 99.0,
+        "priority_score": 100.0,
         "status": "open",
         "source": "post_run_review",
         "pr_url": null,
@@ -1184,11 +1184,11 @@
         "clash_scan": "partial"
       },
       {
-        "id": "eng-20260914-02",
+        "id": "eng-20260914-03",
         "area": "ingest",
-        "title": "Companies House document-api pipeline: map CH IDs to `filings_index`, OCR/iXBRL extract with truncation detection and re-fetch",
+        "title": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
         "priority": "high",
-        "priority_score": 98.0,
+        "priority_score": 99.0,
         "status": "open",
         "source": "post_run_review",
         "pr_url": null,
@@ -1200,11 +1200,11 @@
         "clash_scan": "partial"
       },
       {
-        "id": "eng-20260914-03",
+        "id": "eng-20260914-04",
         "area": "ingest",
-        "title": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
+        "title": "Backfill `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo when `financials_annual.json` already holds values",
         "priority": "high",
-        "priority_score": 97.0,
+        "priority_score": 98.0,
         "status": "open",
         "source": "post_run_review",
         "pr_url": null,
@@ -1216,11 +1216,11 @@
         "clash_scan": "partial"
       },
       {
-        "id": "eng-20260914-05",
-        "area": "scoring",
-        "title": "Emit labelled dual coverage metrics (statutory OCF−capex vs management-adjusted cash definitions) and persist FCF-basis divergence flags on screening_snapshot a",
+        "id": "eng-20260914-01",
+        "area": "ingest",
+        "title": "Standardise Investegate/LSE direct document fetch for indexed RNS (replace Google News redirect URLs; PDF/HTML body persist to `filings/bodies/`)",
         "priority": "high",
-        "priority_score": 97.0,
+        "priority_score": 95.0,
         "status": "open",
         "source": "post_run_review",
         "pr_url": null,
@@ -1229,22 +1229,6 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 4,
-        "clash_scan": "partial"
-      },
-      {
-        "id": "eng-20260914-04",
-        "area": "ingest",
-        "title": "Backfill `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo when `financials_annual.json` already holds values",
-        "priority": "high",
-        "priority_score": 96.0,
-        "status": "open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 5,
         "clash_scan": "partial"
       },
       {
@@ -1260,7 +1244,7 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 6,
+        "effective_dispatch_rank": 5,
         "clash_scan": "partial"
       },
       {
@@ -1276,7 +1260,7 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 7,
+        "effective_dispatch_rank": 6,
         "clash_scan": "partial"
       },
       {
@@ -1292,48 +1276,27 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
+        "effective_dispatch_rank": 7,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260914-42",
+        "area": "ingest",
+        "title": "Hunt fetchable IR source for parked tsx60 leftover TRI.TO",
+        "priority": "low",
+        "priority_score": 14.0,
+        "status": "open",
+        "source": "parked_source_hunter",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
         "effective_dispatch_rank": 8,
         "clash_scan": "partial"
       }
     ],
-    "attention_tasks": [
-      {
-        "id": "eng-20260912-03",
-        "area": "ingest",
-        "title": "CH/RNS refetch ranking: current-period group accounts only + headline-period validation** — Deprioritise parent-only/admin CH forms (MEGP.L 2019/2020 fetches) a",
-        "priority": "high",
-        "priority_score": 100.0,
-        "status": "parked",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260913-03",
-        "area": "ingest",
-        "title": "Populate or explicitly suppress unverified screen TTM FCF when Yahoo quarterly cashflow is empty; surface “unverified TTM” on screening_snapshot",
-        "priority": "high",
-        "priority_score": 98.0,
-        "status": "parked",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260912-06",
-        "area": "scoring",
-        "title": "Override sector classification for plantation/agricultural issuers (e.g. map to Agriculture/Commodities) so Consumer Defensive peer-relative scores are not appl",
-        "priority": "high",
-        "priority_score": 43.0,
-        "status": "parked",
-        "source": "research_model_suggestions",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      }
-    ],
+    "attention_tasks": [],
     "clash_summary": {
       "open_task_count": 8,
       "dispatch_eligible_count": 8,
@@ -1611,6 +1574,48 @@
       "tracks_with_post_apply_trades": 5,
       "tracks_insufficient_epoch_marks": 2,
       "all_benchmark_spans_insufficient": false
+    }
+  },
+  "queue_health": {
+    "schema_version": 1,
+    "generated_at": "2026-09-14T15:52:31.487549+00:00",
+    "overall": "active",
+    "headline": "Agent lane active.",
+    "merge_lane": {
+      "state": "idle",
+      "idle": true,
+      "running": false,
+      "blocked": false,
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+    },
+    "agent_lane": {
+      "state": "running",
+      "idle": false,
+      "running": true,
+      "blocked": false,
+      "should_dispatch": true,
+      "pause_active": false,
+      "attention_parked_count": 0,
+      "open_count": 8,
+      "pr_open_count": 0,
+      "dispatch_eligible_count": 8,
+      "blocked_task_count": 0,
+      "next_task_id": "eng-20260914-02",
+      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
+      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+    },
+    "queue_clearing": {
+      "pause_active": false,
+      "attention_parked_count": 0,
+      "evaluated_at": "2026-09-14T15:48:01.324087+00:00"
+    },
+    "ops_monitor": {
+      "run_at": "2026-09-14T07:46:37.216700+00:00",
+      "overall": "fail",
+      "should_dispatch_engineering": false
     }
   }
 }
