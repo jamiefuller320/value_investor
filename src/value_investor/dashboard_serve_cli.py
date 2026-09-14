@@ -148,6 +148,58 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
                 )
                 self._send(status, body, ctype)
                 return
+            if parsed.path == "/api/lifecycle-experiment-ack":
+                try:
+                    length = int(self.headers.get("Content-Length") or "0")
+                except ValueError:
+                    length = 0
+                raw = self.rfile.read(length) if length > 0 else b"{}"
+                try:
+                    body = json.loads(raw.decode("utf-8") or "{}")
+                except json.JSONDecodeError:
+                    status, out, ctype = _json_bytes(
+                        {"ok": False, "error": "invalid JSON body"},
+                        status=400,
+                    )
+                    self._send(status, out, ctype)
+                    return
+                if not isinstance(body, dict):
+                    status, out, ctype = _json_bytes(
+                        {"ok": False, "error": "body must be a JSON object"},
+                        status=400,
+                    )
+                    self._send(status, out, ctype)
+                    return
+                try:
+                    from value_investor.lifecycle_experiment_ack import (
+                        run_lifecycle_experiment_ack,
+                    )
+
+                    result = run_lifecycle_experiment_ack(
+                        repo_root / "docs" / "data",
+                        experiment_id=str(body.get("experiment_id") or ""),
+                        factor_id=str(body.get("factor_id") or "") or None,
+                        kind=str(body.get("kind") or "human_ack"),
+                        decision=str(body.get("decision") or "ack_observe"),
+                        note=str(body.get("note") or ""),
+                        source="dashboard_local",
+                        acked_by="dashboard",
+                        paper_root=repo_root / "docs" / "data" / "paper_automation",
+                    )
+                except Exception as exc:  # noqa: BLE001 — surface to UI
+                    status, out, ctype = _json_bytes(
+                        {
+                            "ok": False,
+                            "error": str(exc),
+                            "traceback": traceback.format_exc(),
+                        },
+                        status=400,
+                    )
+                    self._send(status, out, ctype)
+                    return
+                status, out, ctype = _json_bytes({"ok": True, **result})
+                self._send(status, out, ctype)
+                return
             if parsed.path == "/api/lifecycle-experiment-start":
                 try:
                     length = int(self.headers.get("Content-Length") or "0")
@@ -179,12 +231,14 @@ def make_handler(docs_root: Path, repo_root: Path) -> type[BaseHTTPRequestHandle
                         repo_root / "docs" / "data",
                         experiment_id=str(body.get("experiment_id") or ""),
                         factor_id=str(body.get("factor_id") or "") or None,
-                        kind=str(body.get("kind") or "human_ack"),
-                        decision=str(body.get("decision") or "ack_observe"),
+                        kind=str(body.get("kind") or "optional_execute"),
+                        decision=str(body.get("decision") or "start_execute_graduated"),
                         note=str(body.get("note") or ""),
                         source="dashboard_local",
-                        acked_by="dashboard",
+                        started_by="dashboard",
                         paper_root=repo_root / "docs" / "data" / "paper_automation",
+                        track_id=str(body.get("track_id") or "graduated_allocation"),
+                        cadence=str(body.get("cadence") or "") or None,
                     )
                 except Exception as exc:  # noqa: BLE001 — surface to UI
                     status, out, ctype = _json_bytes(
@@ -266,7 +320,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Serving dashboard at {url}")
     print("POST /api/progress-report  →  ftse-progress-report build --write")
     print("POST /api/refresh          →  rebuild market_status.json + lifecycle_board.json")
-    print("POST /api/lifecycle-experiment-start → observe-ack recommend experiment")
+    print("POST /api/lifecycle-experiment-ack → observe-ack recommend experiment")
+    print("POST /api/lifecycle-experiment-start → start graduated entry DCA execute")
     print("Ctrl+C to stop")
     try:
         server.serve_forever()

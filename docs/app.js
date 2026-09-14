@@ -3832,22 +3832,34 @@ function renderLifecycleExperimentCard(factorId) {
         })
         .join("")}</ul>`
     : "";
+  const acknowledge = initiation.acknowledge || {};
+  const ackEnabled = Boolean(acknowledge.enabled);
+  const ackPayload = JSON.stringify(acknowledge.payload || {});
   const start = initiation.start || {};
   const startEnabled = Boolean(start.enabled);
   const startPayload = JSON.stringify(start.payload || {});
-  const startBtn = recommend
+  const actionBtns = recommend
     ? `<p class="lifecycle-start-row">
+        <button type="button" class="btn lifecycle-ack-btn" data-lifecycle-ack="${esc(
+          ackPayload
+        )}" ${ackEnabled ? "" : "disabled"} title="${esc(
+          ackEnabled ? "Record observe-only ack via Supabase" : acknowledge.disabled_reason || "Ack not available"
+        )}">${esc(acknowledge.label || "Acknowledge")}</button>
         <button type="button" class="btn btn-primary lifecycle-start-btn" data-lifecycle-start="${esc(
           startPayload
         )}" ${startEnabled ? "" : "disabled"} title="${esc(
-          startEnabled ? "Record observe-only ack via Supabase" : start.disabled_reason || "Not ready"
+          startEnabled
+            ? "Start graduated entry DCA execute via Supabase"
+            : start.disabled_reason || "Not ready"
         )}">${esc(start.label || "Start")}</button>
         <span class="small muted lifecycle-start-status" aria-live="polite"></span>
       </p>
       ${
-        startEnabled
+        ackEnabled || startEnabled
           ? ""
-          : `<p class="small muted">${esc(start.disabled_reason || "Start blocked until gates clear")}</p>`
+          : `<p class="small muted">${esc(
+              start.disabled_reason || acknowledge.disabled_reason || "Actions blocked until gates clear"
+            )}</p>`
       }`
     : "";
   const recommendBlock = recommend
@@ -3873,7 +3885,7 @@ function renderLifecycleExperimentCard(factorId) {
             ? `<p class="small muted">Adoption stage <code>${esc(initiation.adoption_stage)}</code></p>`
             : ""
         }
-        ${startBtn}
+        ${actionBtns}
         <p class="small muted">Recommend is observe-only — never auto-applied.</p>
       </div>`
     : `<div class="lifecycle-init-box waiting">
@@ -3925,6 +3937,12 @@ function openLifecycleExperimentCard(factorId) {
     ? found.experiment.factor_id || found.experiment.experiment || "Lifecycle experiment"
     : "Lifecycle experiment";
   body.innerHTML = renderLifecycleExperimentCard(factorId);
+  const ackBtn = body.querySelector("[data-lifecycle-ack]");
+  if (ackBtn) {
+    ackBtn.addEventListener("click", () => {
+      void acknowledgeLifecycleExperimentFromCard(ackBtn);
+    });
+  }
   const startBtn = body.querySelector("[data-lifecycle-start]");
   if (startBtn) {
     startBtn.addEventListener("click", () => {
@@ -3932,6 +3950,85 @@ function openLifecycleExperimentCard(factorId) {
     });
   }
   dialog.showModal();
+}
+
+async function acknowledgeLifecycleExperimentFromCard(button) {
+  const statusEl = button.parentElement
+    ? button.parentElement.querySelector(".lifecycle-start-status")
+    : null;
+  const setStatus = (msg, isError) => {
+    if (!statusEl) return;
+    statusEl.textContent = msg || "";
+    statusEl.classList.toggle("error", Boolean(isError));
+  };
+  let payload = {};
+  try {
+    payload = JSON.parse(button.getAttribute("data-lifecycle-ack") || "{}");
+  } catch (err) {
+    setStatus("Invalid ack payload", true);
+    return;
+  }
+  if (!payload.experiment_id) {
+    setStatus("Missing experiment id", true);
+    return;
+  }
+  button.disabled = true;
+  setStatus("Acknowledging…");
+  try {
+    const local = await fetch("/api/lifecycle-experiment-ack", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (local.ok) {
+      const body = await local.json();
+      if (!body.ok) throw new Error(body.error || "Ack API failed");
+      setStatus("Ack recorded — refreshing…");
+      await reloadDashboard({ silent: true, rebuild: true });
+      openLifecycleExperimentCard(payload.factor_id || "");
+      setStatus("Observe-ack recorded");
+      return;
+    }
+    if (local.status !== 404 && local.status !== 405) {
+      let detail = `HTTP ${local.status}`;
+      try {
+        const body = await local.json();
+        detail = body.error || detail;
+      } catch {
+        /* ignore */
+      }
+      throw new Error(detail);
+    }
+  } catch (err) {
+    if (!(err instanceof TypeError) && String(err.message) !== "API_UNAVAILABLE") {
+      if (!String(err.message).includes("Failed to fetch")) {
+        setStatus(`Ack failed: ${err.message}`, true);
+        button.disabled = false;
+        return;
+      }
+    }
+  }
+  if (!window.DashboardBridge) {
+    setStatus("Supabase bridge unavailable", true);
+    button.disabled = false;
+    return;
+  }
+  try {
+    const bridgeReady = await window.DashboardBridge.init();
+    if (!bridgeReady) throw new Error("BRIDGE_DISABLED");
+    await window.DashboardBridge.submitCommand(
+      "lifecycle-experiment-ack",
+      payload,
+      (msg) => setStatus(msg || "Queued via Supabase…")
+    );
+    setStatus("Bridge finished — refreshing…");
+    await reloadDashboard({ silent: true, rebuild: true });
+    openLifecycleExperimentCard(payload.factor_id || "");
+    setStatus("Observe-ack recorded via Supabase");
+  } catch (err) {
+    setStatus(`Bridge ack failed: ${err.message}`, true);
+    button.disabled = false;
+  }
 }
 
 async function startLifecycleExperimentFromCard(button) {
@@ -3955,7 +4052,7 @@ async function startLifecycleExperimentFromCard(button) {
     return;
   }
   button.disabled = true;
-  setStatus("Starting…");
+  setStatus("Starting execute…");
   try {
     const local = await fetch("/api/lifecycle-experiment-start", {
       method: "POST",
@@ -3965,10 +4062,10 @@ async function startLifecycleExperimentFromCard(button) {
     if (local.ok) {
       const body = await local.json();
       if (!body.ok) throw new Error(body.error || "Start API failed");
-      setStatus("Ack recorded — refreshing…");
+      setStatus("Execute started — refreshing…");
       await reloadDashboard({ silent: true, rebuild: true });
       openLifecycleExperimentCard(payload.factor_id || "");
-      setStatus("Observe-ack recorded");
+      setStatus("Graduated entry DCA execute started");
       return;
     }
     if (local.status !== 404 && local.status !== 405) {
@@ -3985,7 +4082,7 @@ async function startLifecycleExperimentFromCard(button) {
     if (!(err instanceof TypeError) && String(err.message) !== "API_UNAVAILABLE") {
       // fall through to bridge only on missing local API
       if (!String(err.message).includes("Failed to fetch")) {
-        setStatus(`Start failed: ${err.message}`, true);
+        setStatus(`Start execute failed: ${err.message}`, true);
         button.disabled = false;
         return;
       }
@@ -4007,9 +4104,9 @@ async function startLifecycleExperimentFromCard(button) {
     setStatus("Bridge finished — refreshing…");
     await reloadDashboard({ silent: true, rebuild: true });
     openLifecycleExperimentCard(payload.factor_id || "");
-    setStatus("Observe-ack recorded via Supabase");
+    setStatus("Graduated entry DCA execute started via Supabase");
   } catch (err) {
-    setStatus(`Bridge start failed: ${err.message}`, true);
+    setStatus(`Bridge start execute failed: ${err.message}`, true);
     button.disabled = false;
   }
 }

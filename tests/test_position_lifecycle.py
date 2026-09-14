@@ -97,6 +97,8 @@ def test_board_columns_cover_every_catalog_factor():
     assert "first_entry" in str(dca["initiation"]["waiting_for"])
     assert dca["initiation"]["recommendation"]
     assert dca["initiation"]["evidence"]
+    assert dca["initiation"]["acknowledge"]["action"] == "lifecycle-experiment-ack"
+    assert dca["initiation"]["acknowledge"]["enabled"] is False
     assert dca["initiation"]["start"]["action"] == "lifecycle-experiment-start"
     assert dca["initiation"]["start"]["enabled"] is False
     assert dca["initiation"]["start"]["payload"]["experiment_id"] == "entry_dca_overlay"

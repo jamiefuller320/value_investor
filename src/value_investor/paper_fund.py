@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, date, datetime
+from pathlib import Path
 from typing import Any, Literal
 from uuid import uuid4
 
@@ -1511,6 +1512,8 @@ def run_graduated_rebalance(
     reentry_cooldown_screens: int = DEFAULT_REENTRY_COOLDOWN_SCREENS,
     min_rebalance_notional_gbp: float = DEFAULT_MIN_REBALANCE_NOTIONAL_GBP,
     capital_allocation_config: Any | None = None,
+    entry_dca_execute_cadence: str | None = None,
+    entry_dca_pending_path: Path | None = None,
 ) -> list[PaperTrade]:
     """
     Graduated rebalance: trade-plan-weighted entries and urgency-based harvest skims.
@@ -1532,6 +1535,18 @@ def run_graduated_rebalance(
     alloc_cfg = capital_allocation_config or CapitalAllocationConfig()
     when = acted_at or _utcnow_iso()
     fund.apply_deposits_to(when)
+    from value_investor.entry_dca_execute import (
+        due_pending_rows,
+        load_pending,
+        mark_pending_filled,
+        resolve_cadence,
+    )
+
+    dca_cadence = resolve_cadence(entry_dca_execute_cadence)
+    pending_store = None
+    pending_rows: list[dict[str, Any]] = []
+    if entry_dca_pending_path is not None:
+        pending_store = load_pending(Path(entry_dca_pending_path))
     targets = select_automated_targets(
         candidates,
         max_positions=fund.config.max_positions,
@@ -1662,6 +1677,44 @@ def run_graduated_rebalance(
             )
         )
 
+    # Fill due entry-DCA tranches before sizing new sleeves.
+    if dca_cadence is not None and pending_store is not None:
+        as_of = _parse_date(when) or date.today()
+        for due in due_pending_rows(pending_store, as_of=as_of):
+            ticker = str(due.get("ticker") or "").strip()
+            if not ticker or ticker in sell_tickers:
+                continue
+            price = price_map.get(ticker) or 0.0
+            if price <= 0:
+                row = by_ticker.get(ticker) or {}
+                price = float(_candidate_price(row) or 0)
+            if price <= 0:
+                continue
+            notional = float(due.get("notional_gbp") or 0)
+            if notional <= REBALANCE_CASH_FLOOR or fund.cash <= REBALANCE_CASH_FLOOR:
+                continue
+            amount = min(notional, fund.cash)
+            try:
+                trades.append(
+                    fund.buy(
+                        ticker=ticker,
+                        price=float(price),
+                        sizing_mode="cash",
+                        amount=amount,
+                        name=str(due.get("name") or ticker),
+                        sector=str(due.get("sector") or ""),
+                        note=(
+                            f"Graduated buy (entry DCA tranche "
+                            f"{due.get('tranche_index')}/{due.get('tranches')})"
+                        ),
+                        acted_at=when,
+                        prices_for_nav=price_map,
+                    )
+                )
+                mark_pending_filled(pending_store, due, filled_at=when)
+            except ValueError:
+                continue
+
     ranked_targets = sorted(
         targets,
         key=lambda row: entry_appetite(row, use_adjusted_signal=use_adjusted_signal),
@@ -1709,6 +1762,26 @@ def run_graduated_rebalance(
         ):
             continue
         budget = min(shortfall, fund.cash)
+        buy_note = "Graduated buy"
+        if is_new_sleeve and dca_cadence is not None and int(dca_cadence.tranches) > 1:
+            from value_investor.entry_dca_execute import (
+                first_tranche_notional,
+                schedule_remaining_tranches,
+            )
+
+            first = first_tranche_notional(budget, dca_cadence)
+            budget = min(first, fund.cash)
+            buy_note = f"Graduated buy (entry DCA tranche 1/{dca_cadence.tranches})"
+            pending_rows.extend(
+                schedule_remaining_tranches(
+                    ticker=ticker,
+                    sleeve_notional=shortfall,
+                    cadence=dca_cadence,
+                    started_on=_parse_date(when) or date.today(),
+                    name=str(row.get("name") or ticker),
+                    sector=str(row.get("sector") or ""),
+                )
+            )
         try:
             trades.append(
                 fund.buy(
@@ -1724,13 +1797,21 @@ def run_graduated_rebalance(
                     take_profit=_optional_float(
                         (row.get("trade_plan") or {}).get("tactical_take_profit")
                     ),
-                    note="Graduated buy",
+                    note=buy_note,
                     acted_at=when,
                     prices_for_nav=price_map,
                 )
             )
         except ValueError:
             continue
+
+    if pending_store is not None and entry_dca_pending_path is not None:
+        from value_investor.entry_dca_execute import save_pending
+
+        if pending_rows:
+            pending_store["pending"] = list(pending_store.get("pending") or []) + pending_rows
+        pending_store["cadence"] = getattr(dca_cadence, "id", None) or pending_store.get("cadence")
+        save_pending(Path(entry_dca_pending_path), pending_store)
 
     tick_reentry_cooldowns(fund, skip_tickers=sold_this_pass)
     fund.record_mark(price_map, acted_at=when, note="Graduated rebalance")

@@ -94,6 +94,7 @@ Commit and wait for Pages deploy. **Generate fresh report** then uses the bridge
 | `engineering-queue` | `engineering-queue` | `engineering-queue.yml` |
 | `ops-monitor` | `ops-monitor` | `ops-monitor.yml` |
 | `refresh-queue-ui` | `refresh-queue-ui` | `dashboard-bridge.yml` |
+| `lifecycle-experiment-ack` | `lifecycle-experiment-ack` | `lifecycle-experiment-ack.yml` |
 | `lifecycle-experiment-start` | `lifecycle-experiment-start` | `lifecycle-experiment-start.yml` |
 
 ## Queue health monitor

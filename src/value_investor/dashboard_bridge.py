@@ -19,6 +19,7 @@ SUPPORTED_ACTIONS = frozenset(
         "engineering-queue",
         "ops-monitor",
         "refresh-queue-ui",
+        "lifecycle-experiment-ack",
         "lifecycle-experiment-start",
     }
 )
@@ -28,6 +29,7 @@ ACTION_REPOSITORY_DISPATCH: dict[str, str] = {
     "engineering-queue": "engineering-queue",
     "ops-monitor": "ops-monitor",
     "refresh-queue-ui": "refresh-queue-ui",
+    "lifecycle-experiment-ack": "lifecycle-experiment-ack",
     "lifecycle-experiment-start": "lifecycle-experiment-start",
 }
 

@@ -692,14 +692,15 @@ def _initiation_recommendation(
     kind = str(initiation.get("kind") or "")
     if kind == "human_ack" and initiation.get("ready_to_initiate"):
         return (
-            "Recommendation: press Start to record an observe-only human ack through the "
-            "Supabase dashboard bridge. This does not execute DCA or change starter fraction."
+            "Recommendation: press Acknowledge to record an observe-only human ack. "
+            "This does not execute DCA or change starter fraction. Start stays disabled "
+            "until paper_execute_graduated is ready."
         )
     if kind == "optional_execute" and initiation.get("ready_to_initiate"):
         return (
-            "Recommendation: optional paper execute is unblocked on graduated_allocation only. "
-            "Use the supervised CLI path — Start stays disabled so the dashboard cannot "
-            "auto-apply DCA."
+            "Recommendation: press Start to begin 4× weekly entry DCA on "
+            "graduated_allocation only. This does not change starter fraction or "
+            "apply to primary/live."
         )
     if kind == "waiting":
         failed = [
@@ -711,7 +712,7 @@ def _initiation_recommendation(
             return (
                 "Recommendation: keep observing. Adoption gates still failing: "
                 + ", ".join(str(row.get("id", "")).split(":", 1)[-1] for row in failed[:3])
-                + ". Do not Start apply."
+                + ". Acknowledge if still pending; do not Start until execute stage is ready."
             )
         return (
             "Recommendation: keep observing until the listed gate clears. "
@@ -732,28 +733,72 @@ def _with_initiation_card_fields(
     evidence = _initiation_evidence(factor, hit, adoption=adoption, initiation=payload)
     recommendation = _initiation_recommendation(payload, evidence)
     kind = str(payload.get("kind") or "")
-    start_enabled = bool(payload.get("ready_to_initiate")) and kind == "human_ack"
-    disabled_reason = None
+    ready = bool(payload.get("ready_to_initiate"))
+    experiment_id = str(factor.get("experiment") or (hit or {}).get("experiment_id") or "")
+    factor_id = str(factor.get("id") or "")
+    acked = bool((hit or {}).get("human_acked")) if isinstance(hit, dict) else False
+    leading = None
+    if isinstance(hit, dict):
+        fwd = hit.get("forward_evidence") if isinstance(hit.get("forward_evidence"), dict) else {}
+        leading = fwd.get("leading_cadence")
+    already_started = bool(payload.get("execute_started"))
+
+    ack_enabled = ready and kind == "human_ack"
+    ack_disabled_reason = None
+    if not ack_enabled:
+        if acked:
+            ack_disabled_reason = "Already acknowledged (observe-only)"
+        elif kind == "optional_execute":
+            ack_disabled_reason = "Ack already satisfied — use Start to begin graduated execute"
+        else:
+            ack_disabled_reason = str(
+                payload.get("waiting_for") or payload.get("label") or "Ack not available"
+            )
+
+    start_enabled = ready and kind == "optional_execute" and not already_started
+    start_disabled_reason = None
     if not start_enabled:
-        if kind == "optional_execute":
-            disabled_reason = (
-                "Optional execute stays CLI-supervised — dashboard Start only records observe-ack"
+        if already_started:
+            start_disabled_reason = "Graduated entry DCA execute already started"
+        elif kind == "human_ack":
+            start_disabled_reason = (
+                "Acknowledge first; Start enables only when paper_execute_graduated is ready"
+            )
+        elif kind == "waiting":
+            start_disabled_reason = str(
+                payload.get("waiting_for") or "Waiting on adoption gates before Start"
             )
         else:
-            disabled_reason = str(payload.get("waiting_for") or payload.get("label") or "Not ready")
-    experiment_id = str(factor.get("experiment") or (hit or {}).get("experiment_id") or "")
+            start_disabled_reason = str(
+                payload.get("waiting_for") or payload.get("label") or "Not ready to start"
+            )
+
     payload["evidence"] = evidence
     payload["recommendation"] = recommendation
+    payload["acknowledge"] = {
+        "action": "lifecycle-experiment-ack",
+        "enabled": ack_enabled,
+        "label": "Acknowledge",
+        "disabled_reason": ack_disabled_reason,
+        "payload": {
+            "experiment_id": experiment_id,
+            "factor_id": factor_id,
+            "kind": "human_ack",
+            "decision": "ack_observe",
+        },
+    }
     payload["start"] = {
         "action": "lifecycle-experiment-start",
         "enabled": start_enabled,
         "label": "Start",
-        "disabled_reason": disabled_reason,
+        "disabled_reason": start_disabled_reason,
         "payload": {
             "experiment_id": experiment_id,
-            "factor_id": str(factor.get("id") or ""),
-            "kind": kind,
-            "decision": "ack_observe",
+            "factor_id": factor_id,
+            "kind": "optional_execute",
+            "decision": "start_execute_graduated",
+            "track_id": "graduated_allocation",
+            "cadence": leading or "dca_4x_weekly",
         },
     }
     return payload
@@ -815,6 +860,7 @@ def experiment_initiation(
                     "waiting_for": None,
                     "do_not": str(do_not),
                     "adoption_stage": current,
+                    "execute_started": bool(adoption.get("execute_started")),
                 }
                 return _with_initiation_card_fields(
                     payload, factor=factor, hit=hit, adoption=adoption
