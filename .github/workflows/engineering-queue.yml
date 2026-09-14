@@ -369,9 +369,6 @@ jobs:
           )
           PY
 
-      - name: Sync main before queue file commit
-        run: git pull --rebase --autostash origin main
-
       - name: Compile next parked leftover source-hunter
         run: ftse-library parked-hunter-compile --json
 
@@ -379,15 +376,8 @@ jobs:
         run: ftse-engineering refresh-queue-ui --json --open-prs-json /tmp/open_prs.json || true
 
       - name: Commit reconciled queue state
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          branch: main
-          commit_message: "chore: engineering queue recovery [skip ci]"
-          file_pattern: |
-            docs/data/engineering_tasks.json
-            docs/data/automation.json
-            docs/data/latest.json
-          skip_fetch: false
+        id: queue_recovery_commit
+        run: bash scripts/gha_commit_engineering_queue.sh
 
       - name: Evaluate queue dispatch
         id: gate
@@ -455,22 +445,12 @@ jobs:
             echo "Dispatched engineering-agent for $TASK_ID"
           done
 
-      - name: Sync main before merge queue commit
-        if: steps.eng_branch.outputs.is_task == 'true'
-        run: git pull --rebase --autostash origin main
-
       - name: Commit queue state
         id: queue_merge_commit
         if: steps.eng_branch.outputs.is_task == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          branch: main
-          commit_message: "chore: update engineering queue after merge [skip ci]"
-          file_pattern: |
-            docs/data/engineering_tasks.json
-            docs/data/automation.json
-            docs/data/latest.json
-          skip_fetch: false
+        env:
+          COMMIT_MESSAGE: "chore: update engineering queue after merge [skip ci]"
+        run: bash scripts/gha_commit_engineering_queue.sh
 
       - name: Deploy dashboard after task completion
         if: steps.eng_branch.outputs.is_task == 'true' && steps.queue_merge_commit.outputs.changes_detected == 'true'
@@ -573,18 +553,13 @@ jobs:
             -f force=true
           echo "Dispatched automation-orchestrator email_only (force) after queue drain"
 
-      - name: Sync main before accelerated review log commit
-        if: steps.accel.outputs.should_dispatch == 'true'
-        run: git pull --rebase --autostash origin main
-
       - name: Commit accelerated review log
         if: steps.accel.outputs.should_dispatch == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          branch: main
-          commit_message: "chore: log mid-week email_only chain [skip ci]"
-          file_pattern: docs/data/accelerated_review.json
-          skip_fetch: false
+        env:
+          COMMIT_MESSAGE: "chore: log mid-week email_only chain [skip ci]"
+          GHA_COMMIT_OWNED: docs/data/accelerated_review.json
+          GHA_COMMIT_LABEL: Accelerated review log
+        run: bash scripts/gha_commit_engineering_queue.sh
 
       - name: Evaluate eng-idle gap-closure dispatch
         if: steps.gate.outputs.should_dispatch != 'true'

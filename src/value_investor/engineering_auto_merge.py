@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import os
 import subprocess
+import time
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
@@ -25,6 +26,9 @@ from value_investor.hunter_auto_merge import (
 )
 
 GITHUB_API_VERSION = "2022-11-28"
+_RETRYABLE_HTTP_CODES = frozenset({429, 500, 502, 503, 504})
+_DEFAULT_API_ATTEMPTS = 4
+_DEFAULT_API_BACKOFF_SECONDS = 2.0
 
 
 @dataclass
@@ -63,6 +67,27 @@ def _github_repo() -> str | None:
     return None
 
 
+def _urlopen_with_retry(request: urllib.request.Request, *, attempts: int = _DEFAULT_API_ATTEMPTS) -> bytes:
+    delay = _DEFAULT_API_BACKOFF_SECONDS
+    last_err: Exception | None = None
+    for attempt in range(1, attempts + 1):
+        try:
+            with urllib.request.urlopen(request, timeout=30) as response:
+                return response.read()
+        except urllib.error.HTTPError as err:
+            last_err = err
+            if err.code not in _RETRYABLE_HTTP_CODES or attempt >= attempts:
+                raise
+        except urllib.error.URLError as err:
+            last_err = err
+            if attempt >= attempts:
+                raise
+        time.sleep(delay)
+        delay *= 2
+    assert last_err is not None
+    raise last_err
+
+
 def _api_get(path: str, *, token: str) -> Any:
     request = urllib.request.Request(
         f"https://api.github.com{path}",
@@ -72,8 +97,8 @@ def _api_get(path: str, *, token: str) -> Any:
             "X-GitHub-Api-Version": GITHUB_API_VERSION,
         },
     )
-    with urllib.request.urlopen(request, timeout=30) as response:
-        return json.loads(response.read().decode("utf-8"))
+    body = _urlopen_with_retry(request).decode("utf-8")
+    return json.loads(body)
 
 
 def _api_request(method: str, path: str, *, token: str, payload: dict | None = None) -> Any:
@@ -92,9 +117,8 @@ def _api_request(method: str, path: str, *, token: str, payload: dict | None = N
         headers=headers,
         method=method,
     )
-    with urllib.request.urlopen(request, timeout=30) as response:
-        body = response.read().decode("utf-8")
-        return json.loads(body) if body else {}
+    body = _urlopen_with_retry(request).decode("utf-8")
+    return json.loads(body) if body else {}
 
 
 def _run_gh(args: list[str]) -> subprocess.CompletedProcess[str]:
