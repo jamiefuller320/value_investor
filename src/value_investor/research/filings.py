@@ -3612,6 +3612,32 @@ def _rank_ir_refetch_candidates(
     return enriched
 
 
+def normalize_companies_house_index_rows(
+    filings: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Map CH document-api URLs and ids onto ``filings_index`` rows for refetch."""
+    from value_investor.research.companies_house import ch_document_id_from_metadata_url
+
+    normalized: list[dict[str, Any]] = []
+    for row in filings:
+        item = dict(row)
+        if not _is_ch_filing_row(item):
+            normalized.append(item)
+            continue
+        meta_url = str(item.get("document_metadata_url") or item.get("url") or "").strip()
+        if _is_ch_document_url(meta_url):
+            item["document_metadata_url"] = meta_url
+            if not str(item.get("url") or "").startswith("http"):
+                item["url"] = meta_url
+            doc_id = ch_document_id_from_metadata_url(meta_url)
+            if doc_id:
+                item["ch_document_id"] = doc_id
+        if str(item.get("source") or "") != "companies_house" and _is_ch_document_url(meta_url):
+            item["source"] = "companies_house"
+        normalized.append(item)
+    return normalized
+
+
 def _ch_row_needs_body_refetch(row: dict[str, Any], bodies_dir: Path) -> bool:
     """True when an indexed CH row lacks a substantive on-disk body extract."""
     if not _is_ch_filing_row(row):
@@ -3628,6 +3654,8 @@ def _ch_row_needs_body_refetch(row: dict[str, Any], bodies_dir: Path) -> bool:
     except OSError:
         return True
     if not _filing_text_is_substantive(text, min_chars=200):
+        return True
+    if "[truncated]" in text:
         return True
     return _ch_body_lacks_financial_depth(text)
 
@@ -5574,15 +5602,28 @@ def extract_ir_presentation_metrics(
     return payload
 
 
+def _merge_filings_row_key(row: dict[str, Any]) -> tuple:
+    """Dedup key; CH accounts rows stay distinct from same-day RNS headlines."""
+    published = (str(row.get("published_at") or ""))[:10]
+    if _is_ch_filing_row(row):
+        stable = (
+            str(row.get("id") or "")
+            or str(row.get("ch_document_id") or "")
+            or str(row.get("document_metadata_url") or row.get("url") or "")
+        )
+        return ("ch", stable, published)
+    return (
+        (row.get("headline") or "").strip().lower(),
+        published,
+    )
+
+
 def merge_filings(*groups: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Merge filing rows, preferring entries with bodies and higher priority."""
     merged: dict[str, dict[str, Any]] = {}
     for group in groups:
         for row in group:
-            key = (
-                (row.get("headline") or "").strip().lower(),
-                (str(row.get("published_at") or ""))[:10],
-            )
+            key = _merge_filings_row_key(row)
             existing = merged.get(str(key))
             if existing is None:
                 merged[str(key)] = row
@@ -6025,7 +6066,7 @@ def refetch_companies_house_filing_bodies(
             "note": f"unreadable index: {exc}",
         }
 
-    filings = list(payload.get("filings") or [])
+    filings = normalize_companies_house_index_rows(list(payload.get("filings") or []))
     before = sum(1 for row in filings if row.get("has_body"))
     bodies_dir.mkdir(parents=True, exist_ok=True)
     ch_rows = [row for row in filings if _is_ch_filing_row(row)]
@@ -6733,7 +6774,7 @@ def sanitize_filings_index(
             "note": str(exc),
         }
 
-    filings = list(payload.get("filings") or [])
+    filings = normalize_companies_house_index_rows(list(payload.get("filings") or []))
     before = sum(1 for row in filings if row.get("has_body"))
     filtered = filter_misattributed_filings(
         filings,
@@ -6741,13 +6782,15 @@ def sanitize_filings_index(
         ticker=ticker,
         regime=regime,
     )
-    reclassified = [
-        _apply_headline_period(
-            row,
-            body_snippet=_body_snippet_for_row(row, filings_dir),
-        )
-        for row in filtered
-    ]
+    reclassified = normalize_companies_house_index_rows(
+        [
+            _apply_headline_period(
+                row,
+                body_snippet=_body_snippet_for_row(row, filings_dir),
+            )
+            for row in filtered
+        ]
+    )
     pruned = len(filings) - len(reclassified)
     changed = pruned > 0 or reclassified != filings
     if changed:
@@ -6903,6 +6946,7 @@ def ingest_filings(
     groups.append(fetch_filings_ir_allowlist(ticker))
 
     merged = merge_filings(*groups) if groups else []
+    merged = normalize_companies_house_index_rows(merged)
     if regime in {"uk_rns", "euro_filings"}:
         merged = enrich_filing_rows(
             merged,

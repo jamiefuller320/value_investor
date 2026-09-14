@@ -227,6 +227,22 @@ def _filing_id(company_number: str, transaction_id: str) -> str:
     return safe[:120]
 
 
+def ch_document_id_from_metadata_url(url: str | None) -> str | None:
+    """Extract the document-api id segment from a Companies House metadata URL."""
+    if not url or "document-api.company-information.service.gov.uk" not in url:
+        return None
+    path = urllib.parse.urlparse(str(url)).path.strip("/")
+    parts = [part for part in path.split("/") if part]
+    if len(parts) >= 2 and parts[0] == "document":
+        doc_id = parts[1].strip()
+        return doc_id or None
+    return None
+
+
+# Reject downloads that stop well short of the declared content_length (truncated HTTP body).
+_PARTIAL_DOWNLOAD_MIN_RATIO = 0.9
+
+
 def fetch_accounts_filing_rows(
     *,
     company_number: str,
@@ -256,24 +272,27 @@ def fetch_accounts_filing_rows(
         if "dormant" in description.lower():
             continue
         date = str(item.get("date") or item.get("action_date") or "")
-        rows.append(
-            {
-                "id": _filing_id(company_number, tx),
-                "source": "companies_house",
-                "headline": f"Companies House accounts — {description}",
-                "published_at": f"{date}T00:00:00+00:00" if date and "T" not in date else date,
-                "url": str(meta),
-                "period": "annual",
-                "category": "accounts",
-                "summary": description,
-                "has_body": False,
-                "body_path": None,
-                "priority": 140,
-                "provider_id": tx,
-                "company_number": company_number,
-                "document_metadata_url": str(meta),
-            }
-        )
+        meta_url = str(meta)
+        doc_id = ch_document_id_from_metadata_url(meta_url)
+        row_payload: dict[str, Any] = {
+            "id": _filing_id(company_number, tx),
+            "source": "companies_house",
+            "headline": f"Companies House accounts — {description}",
+            "published_at": f"{date}T00:00:00+00:00" if date and "T" not in date else date,
+            "url": meta_url,
+            "period": "annual",
+            "category": "accounts",
+            "summary": description,
+            "has_body": False,
+            "body_path": None,
+            "priority": 140,
+            "provider_id": tx,
+            "company_number": company_number,
+            "document_metadata_url": meta_url,
+        }
+        if doc_id:
+            row_payload["ch_document_id"] = doc_id
+        rows.append(row_payload)
         if len(rows) >= max_accounts:
             break
         time.sleep(RATE_LIMIT_SLEEP_S)
@@ -374,6 +393,19 @@ def fetch_document_bytes(
                 accept=accept,
                 timeout=DOCUMENT_DOWNLOAD_TIMEOUT_S,
             )
+            expected = int((resources.get(accept) or {}).get("content_length") or 0)
+            if (
+                512 < expected <= MAX_DOCUMENT_BYTES
+                and len(raw) < expected * _PARTIAL_DOWNLOAD_MIN_RATIO
+            ):
+                logger.info(
+                    "CH document download looks truncated for %s (%s): got %s of %s bytes",
+                    document_metadata_url,
+                    accept,
+                    len(raw),
+                    expected,
+                )
+                continue
             time.sleep(RATE_LIMIT_SLEEP_S)
             return raw, accept
         except Exception as exc:  # noqa: BLE001
