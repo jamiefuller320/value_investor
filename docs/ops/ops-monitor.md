@@ -5,7 +5,9 @@ artifacts, ingest stall detection, and the engineering queue.
 
 **Heal → re-verify → report** (when `--apply` / default in CI):
 
-1. Detect findings (artifacts, ingest health, workflows, engineering queue, …)
+1. Detect findings (artifacts, ingest health, workflows, engineering queue, Phase B
+   structured-verdict producer progress, claimed-vs-landed indicator integrity
+   (**L389**), …)
 2. Apply **safe auto-fixes** (below)
 3. **Re-run detection** so overall status reflects post-fix truth
 4. Draft supervised tasks / send email only for **unfixed** warn/fail
@@ -19,17 +21,20 @@ artifacts, ingest stall detection, and the engineering queue.
 - Quarantine corrupt or duplicate backtest history snapshots (see [backtest-health.md](backtest-health.md))
 - Reconcile engineering queue sync issues and redispatch when the agent failed on a stale task id (see [engineering-sync.md](engineering-sync.md))
 - Suppress “recent workflow failure” alerts while a recovery run for that workflow is already in flight
+- Suppress workflow-overdue findings while a run is in flight, or before that workflow’s `WORKFLOW_EMAIL_READY_UTC` slot (Monday morning cliff / pending primary cron)
+- `workflow_dispatch` overdue **ingest-loop** / **paper-auto** after email-ready when no run is active
 
 **Supervised follow-ons** (not automatic code changes):
 
-- Draft `ops` engineering tasks for unresolved failures (workflow overdue, etc.)
+- Draft `ops` engineering tasks for unresolved failures (workflow overdue outside auto-dispatch, etc.)
 - Run so-what auto-queue for no-judgment enforcement gaps (see [so-what-gap-closure.md](so-what-gap-closure.md))
 - Dispatch `engineering-queue.yml` when the queue is ready for the next PR
 
 Workflow failure **reruns** (library ladder guarded rerun, CI fix, etc.) stay in their
 dedicated `workflow_run` responders — ops monitor does not wait on long GitHub jobs
 before emailing. Healed local issues and in-flight recoveries are recorded in
-`ops_status.json` but do not generate alert email.
+`ops_status.json` but do not generate alert email. Overdue ingest/paper dispatches are
+fire-and-forget; the next ops-monitor pass confirms success.
 
 ## When it runs
 
@@ -175,6 +180,25 @@ successful run), scanned within a 12h window.
 | `docs/data/ops_status.json` | Latest findings, auto-fixes, workflow freshness |
 | `docs/data/ops_monitor_log.json` | Rolling daily run index (90 entries) |
 | `docs/data/backtest_health.json` | Backtest history audit and readiness (see [backtest-health.md](backtest-health.md)) |
+| `docs/data/research_docs_receipt.json` | Sunday `--research-docs` claim receipt (writes / persist / mode counts) for L389 |
+
+## Claimed-vs-landed integrity (L389)
+
+Known-issue monitors can look green while the artifact that matters never moved.
+`check_indicator_integrity` compares **claims** to **landings**:
+
+| Check | Trigger | Severity |
+|-------|---------|----------|
+| `research_docs_claimed_zero_writes` | Fresh receipt: targets &gt; 0 but `created+updated=0` | fail |
+| `research_docs_writes_not_persisted` | Fresh receipt: writes &gt; 0 but `persisted_trees=0` | fail |
+| `research_docs_writes_without_structured_modes` | Fresh receipt: writes &gt; 0 but committed store still has 0 `structured_verdict*` modes | fail |
+| `verdict_fields_without_structured_mode` | ≥5 committed memos have `research_verdict` while modes stay essay/`initial` and structured=0 | fail |
+
+Receipts are written by `ftse-email --research-docs` (committed under
+`docs/data/research_docs_receipt.json`; also under `output/`). Stale receipts
+(&gt;10 days) are ignored. Complements `check_phase_b_producer_progress` (stall
+detection) with false-green / claimed-vs-landed angles — see
+[`structured-verdict-slim.md`](structured-verdict-slim.md).
 
 ## Paper learning tracks
 

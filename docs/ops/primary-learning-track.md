@@ -81,6 +81,12 @@ continuous-improvement strand is:
 KPIs). Implementation remains deferred **L368**, funded by memo retarget
 **L367** Phase C; feeder features **L365**.
 
+**Recording discipline (now):** before opening a new analysis / counterfactual /
+model-dev strand, answer the four freeze questions and validate with
+[`decision-recording-checklist.md`](decision-recording-checklist.md) /
+`ftse-decision-recording` (**L386**). Observe-only `preview-freeze` is allowed
+before Phase C readiness; the freeze **writer** is not.
+
 **Phase B (producer for the freeze):** scheduled research stays always-on while
 the accumulate gate lives, but slim to structured verdict fields — design locked
 in [`structured-verdict-slim.md`](structured-verdict-slim.md) (L367 Phase B /

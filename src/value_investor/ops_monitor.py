@@ -149,6 +149,14 @@ RECOVERY_BUNDLE_WORKFLOWS: frozenset[str] = frozenset(
         "email-report.yml",
     }
 )
+# Safe to workflow_dispatch when overdue past email-ready and no run is active.
+# Keep this narrow: weekday live-path recoveries only (not Sunday quiet-bundle children).
+AUTO_DISPATCH_OVERDUE_WORKFLOWS: frozenset[str] = frozenset(
+    {
+        "ingest-loop.yml",
+        "paper-auto.yml",
+    }
+)
 ACTIVE_RUN_STATUSES: tuple[str, ...] = ("in_progress", "queued", "waiting")
 
 # Earliest UTC (hour, minute) when a workflow overdue finding is actionable on a
@@ -280,6 +288,108 @@ def github_api_get(path: str, *, token: str | None = None) -> Any:
         return json.loads(response.read().decode("utf-8"))
 
 
+def github_api_post(
+    path: str,
+    *,
+    body: dict[str, Any],
+    token: str | None = None,
+) -> Any:
+    token = token or _github_token()
+    if not token:
+        raise RuntimeError(
+            "GitHub token not configured (WORKFLOW_DISPATCH_PAT / GITHUB_TOKEN / GH_TOKEN)"
+        )
+    request = urllib.request.Request(
+        f"https://api.github.com{path}",
+        data=json.dumps(body).encode("utf-8"),
+        method="POST",
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": GITHUB_API_VERSION,
+            "Content-Type": "application/json",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=30) as response:
+        raw = response.read().decode("utf-8")
+        if not raw.strip():
+            return None
+        return json.loads(raw)
+
+
+def dispatch_workflow(
+    workflow_file: str,
+    *,
+    ref: str = "main",
+    inputs: dict[str, Any] | None = None,
+    repo: str | None = None,
+    token: str | None = None,
+) -> None:
+    """Trigger workflow_dispatch for a workflow file (204 on success)."""
+    repo = repo or _github_repo() or "jamiefuller320/value_investor"
+    token = resolve_workflow_dispatch_pat() or token or _github_token()
+    if not token:
+        raise RuntimeError(
+            "GitHub token not configured (WORKFLOW_DISPATCH_PAT / GITHUB_TOKEN / GH_TOKEN)"
+        )
+    owner, name = repo.split("/", 1)
+    github_api_post(
+        f"/repos/{owner}/{name}/actions/workflows/{workflow_file}/dispatches",
+        body={"ref": ref, "inputs": inputs or {}},
+        token=token,
+    )
+
+
+def _workflow_file_for_overdue_title(title: str) -> str | None:
+    if not title.startswith("Workflow overdue:"):
+        return None
+    schedule_name = title.removeprefix("Workflow overdue:").strip()
+    for spec in MONITORED_WORKFLOWS:
+        key = str(spec["key"])
+        schedule = WORKFLOW_SCHEDULES.get(key, {})
+        name = str(schedule.get("name") or spec["workflow"])
+        if name == schedule_name:
+            return str(spec["workflow"])
+    return None
+
+
+def _soften_overdue_finding(
+    overdue: OpsFinding,
+    *,
+    workflow: str,
+    key: str,
+    now: datetime,
+    repo: str | None,
+    token: str | None,
+) -> OpsFinding:
+    """Suppress pending/in-flight overdue; mark safe workflows auto-fixable past ready."""
+    if workflow == "ops-monitor.yml" and _running_inside_ops_monitor_workflow():
+        overdue.fixed = True
+        overdue.action_taken = "Current ops monitor run in progress; self-check suppressed"
+        return overdue
+
+    active = active_workflow_runs(workflow, repo=repo, token=token)
+    if active:
+        active_id = active[0].get("id")
+        overdue.fixed = True
+        overdue.action_taken = f"Recovery run in flight (#{active_id}); suppressed from alert"
+        return overdue
+
+    ready = WORKFLOW_EMAIL_READY_UTC.get(key)
+    if ready is not None and (now.hour, now.minute) < ready:
+        ready_h, ready_m = ready
+        overdue.fixed = True
+        overdue.action_taken = (
+            f"Scheduled slot not reached yet "
+            f"(email-ready after {ready_h:02d}:{ready_m:02d} UTC); suppressed"
+        )
+        return overdue
+
+    if workflow in AUTO_DISPATCH_OVERDUE_WORKFLOWS:
+        overdue.auto_fixable = True
+    return overdue
+
+
 def list_open_pull_requests(
     *, repo: str | None = None, token: str | None = None
 ) -> list[dict[str, Any]]:
@@ -328,18 +438,22 @@ def active_workflow_runs(
     owner, name = repo.split("/", 1)
     seen: set[int] = set()
     active: list[dict[str, Any]] = []
-    for status in ACTIVE_RUN_STATUSES:
-        payload = github_api_get(
-            f"/repos/{owner}/{name}/actions/workflows/{workflow_file}/runs"
-            f"?per_page=5&status={status}",
-            token=token,
-        )
-        for row in list((payload or {}).get("workflow_runs") or []):
-            run_id = row.get("id")
-            if run_id is None or run_id in seen:
-                continue
-            seen.add(int(run_id))
-            active.append(row)
+    try:
+        for status in ACTIVE_RUN_STATUSES:
+            payload = github_api_get(
+                f"/repos/{owner}/{name}/actions/workflows/{workflow_file}/runs"
+                f"?per_page=5&status={status}",
+                token=token,
+            )
+            for row in list((payload or {}).get("workflow_runs") or []):
+                run_id = row.get("id")
+                if run_id is None or run_id in seen:
+                    continue
+                seen.add(int(run_id))
+                active.append(row)
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError) as exc:
+        logger.warning("active_workflow_runs(%s) failed: %s", workflow_file, exc)
+        return []
     return active
 
 
@@ -868,20 +982,14 @@ def check_workflow_freshness(
                     f"(last: {last_run_at.isoformat() if last_run_at else 'never'})."
                 ),
             )
-            if workflow == "ops-monitor.yml":
-                if _running_inside_ops_monitor_workflow():
-                    overdue.fixed = True
-                    overdue.action_taken = (
-                        "Current ops monitor run in progress; self-check suppressed"
-                    )
-                else:
-                    active = active_workflow_runs(workflow, repo=repo, token=token)
-                    if active:
-                        overdue.fixed = True
-                        active_id = active[0].get("id")
-                        overdue.action_taken = (
-                            f"Recovery run in flight (#{active_id}); suppressed from alert"
-                        )
+            overdue = _soften_overdue_finding(
+                overdue,
+                workflow=workflow,
+                key=key,
+                now=now,
+                repo=repo,
+                token=token,
+            )
             findings.append(overdue)
 
     recovery_active, recovery_detail = recovery_bundle_in_flight(repo=repo, token=token)
@@ -1083,6 +1191,98 @@ def check_memo_rememo_backlog() -> list[OpsFinding]:
     ]
 
 
+def check_phase_b_producer_progress(
+    research_root: Path = Path("docs/data/research"),
+    *,
+    min_structured: int = 3,
+) -> list[OpsFinding]:
+    """Flag when Phase C readiness is blocked because structured-verdict modes never land.
+
+    Does not widen weekday rememo_reason (Phase B lock). Surfaces the stall so
+    ops/eng can fix Sunday seed→persist or run a bounded rememo catch-up.
+    """
+    from value_investor.phase_c_readiness import (
+        MIN_STRUCTURED_DOCS,
+        STRUCTURED_VERDICT_MODES,
+        check_phase_b_slim,
+    )
+
+    threshold = max(int(min_structured), int(MIN_STRUCTURED_DOCS))
+    try:
+        check = check_phase_b_slim(research_root)
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title="Phase B producer progress check failed",
+                summary=str(exc),
+            )
+        ]
+
+    if check.status == "pass":
+        return []
+
+    evidence = check.evidence or {}
+    structured = int(evidence.get("structured_docs") or 0)
+    sampled = int(evidence.get("sampled_docs") or 0)
+    modes = ", ".join(sorted(STRUCTURED_VERDICT_MODES))
+    severity = "fail" if structured == 0 else "warn"
+    return [
+        OpsFinding(
+            severity=severity,
+            category="research",
+            title="Phase B structured-verdict producer stalled",
+            summary=(
+                f"{check.detail} "
+                f"({structured} structured / need ≥{threshold}; sampled={sampled}; "
+                f"modes={modes}). Sunday research-docs must seed committed memos into "
+                f"output/, write structured_verdict* updates, and persist back to "
+                f"docs/data/research — do not widen rememo_reason for mode migration."
+            ),
+            auto_fixable=False,
+        )
+    ]
+
+
+def check_indicator_integrity(
+    *,
+    research_root: Path = Path("docs/data/research"),
+    receipt_path: Path = Path("docs/data/research_docs_receipt.json"),
+) -> list[OpsFinding]:
+    """L389: claimed-vs-landed checks for false-green indicators."""
+    from value_investor.indicator_integrity import evaluate_indicator_integrity
+
+    try:
+        raw = evaluate_indicator_integrity(
+            research_root=research_root,
+            receipt_path=receipt_path,
+        )
+    except (OSError, ValueError, TypeError) as exc:
+        return [
+            OpsFinding(
+                severity="warn",
+                category="research",
+                title="Indicator integrity check failed",
+                summary=str(exc),
+            )
+        ]
+
+    findings: list[OpsFinding] = []
+    for row in raw:
+        severity = "fail" if row.severity == "fail" else "warn"
+        findings.append(
+            OpsFinding(
+                severity=severity,
+                category="research",
+                title=row.title,
+                summary=f"[{row.check_id}] {row.summary}",
+                auto_fixable=False,
+            )
+        )
+    return findings
+
+
 def check_backtest_history(
     history_dir: Path = COMMITTED_HISTORY_DIR,
 ) -> list[OpsFinding]:
@@ -1193,6 +1393,8 @@ def apply_auto_fixes(
     tasks_path: Path = COMMITTED_TASKS_PATH,
     health_log_path: Path = DEFAULT_HEALTH_LOG_PATH,
     open_prs: list[dict[str, Any]] | None = None,
+    repo: str | None = None,
+    token: str | None = None,
     apply: bool = True,
 ) -> list[dict[str, Any]]:
     results: list[dict[str, Any]] = []
@@ -1309,6 +1511,42 @@ def apply_auto_fixes(
             if finding.title == "Memo rememo backlog exceeds in-week capacity":
                 finding.fixed = True
                 finding.action_taken = action
+
+    if apply:
+        for finding in findings:
+            if finding.fixed or not finding.auto_fixable:
+                continue
+            if not finding.title.startswith("Workflow overdue:"):
+                continue
+            workflow_file = _workflow_file_for_overdue_title(finding.title)
+            if not workflow_file or workflow_file not in AUTO_DISPATCH_OVERDUE_WORKFLOWS:
+                finding.auto_fixable = False
+                continue
+            active = active_workflow_runs(workflow_file, repo=repo, token=token)
+            if active:
+                active_id = active[0].get("id")
+                finding.fixed = True
+                finding.action_taken = (
+                    f"Recovery run in flight (#{active_id}); suppressed from alert"
+                )
+                continue
+            try:
+                dispatch_workflow(workflow_file, repo=repo, token=token)
+            except Exception as exc:  # noqa: BLE001 — leave supervised on dispatch failure
+                logger.warning("Failed to dispatch overdue %s: %s", workflow_file, exc)
+                finding.auto_fixable = False
+                finding.action_taken = f"auto-dispatch failed: {exc}"
+                continue
+            action = f"dispatched {workflow_file} recovery run"
+            results.append(
+                {
+                    "action": "dispatch_overdue_workflow",
+                    "workflow": workflow_file,
+                    "detail": action,
+                }
+            )
+            finding.fixed = True
+            finding.action_taken = action
 
     return results
 
@@ -1492,6 +1730,8 @@ def collect_ops_findings(
     findings.extend(check_latest_bundle(latest_path))
     findings.extend(check_ops_budget())
     findings.extend(check_memo_rememo_backlog())
+    findings.extend(check_phase_b_producer_progress())
+    findings.extend(check_indicator_integrity())
     findings.extend(check_backtest_history())
     findings.extend(check_paper_learning_tracks())
 
@@ -1563,6 +1803,8 @@ def run_ops_monitor(
         tasks_path=tasks_path,
         health_log_path=health_log_path,
         open_prs=open_prs,
+        repo=repo,
+        token=token,
         apply=apply_fixes,
     )
 
@@ -1602,6 +1844,22 @@ def run_ops_monitor(
             eng_failures=eng_failures,
         )
         findings = merge_healed_findings(findings, verified)
+        # Immediate re-verify may still see age-based overdue before GitHub shows
+        # the dispatched run as active — keep those findings healed.
+        dispatched = {
+            str(row.get("workflow") or "")
+            for row in auto_fixes
+            if row.get("action") == "dispatch_overdue_workflow" and row.get("workflow")
+        }
+        if dispatched:
+            for finding in findings:
+                if finding.fixed or not finding.title.startswith("Workflow overdue:"):
+                    continue
+                workflow_file = _workflow_file_for_overdue_title(finding.title)
+                if workflow_file and workflow_file in dispatched:
+                    finding.fixed = True
+                    finding.auto_fixable = True
+                    finding.action_taken = f"dispatched {workflow_file} recovery run"
 
     email_deferred, email_defer_reasons = evaluate_email_deferral(findings, workflow_checks)
 

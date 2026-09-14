@@ -181,15 +181,26 @@ def rememo_reason(
     ingest_improved: bool = False,
     has_verdict: bool = True,
 ) -> str | None:
-    """Why a memo should be rewritten, or ``None`` if it is still fresh."""
+    """Why a memo should be rewritten, or ``None`` if it is still fresh.
+
+    Phase B keeps thin/zero-body shells skipped when disk still has no bodies.
+    Once ingest lands any bodies after a zero-body first pass, rememo immediately
+    (zero-body catchup) instead of waiting for the full ``body_lag_threshold`` —
+    that threshold still gates non-zero memos so modest deepen does not churn.
+    """
     if ingest_improved:
         return "ingest_improved_bodies"
     if not has_verdict:
         return "missing_verdict"
     lag = int(disk_bodies) - int(memo_bodies)
     grade_key = str(grade or "").strip().lower()
+    weak_grade = grade_key in {"adequate", "thin", "poor", ""}
+    # First-pass / zero-body gap: memo recorded 0 bodies, ingest later wrote some.
+    # Rememo now; do not treat the shell as fresh until lag hits the full threshold.
+    if int(memo_bodies) == 0 and int(disk_bodies) > 0 and weak_grade:
+        return f"stale_{grade_key or 'missing'}_grade_zero_body_catchup_{int(disk_bodies)}"
     threshold = max(1, int(body_lag_threshold))
-    if grade_key in {"adequate", "thin", "poor", ""} and lag >= threshold:
+    if weak_grade and lag >= threshold:
         return f"stale_{grade_key or 'missing'}_grade_body_lag_{lag}"
     if lag >= max(threshold * 2, 25):
         return f"strong_grade_large_body_lag_{lag}"

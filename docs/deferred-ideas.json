@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-14T07:49:49+00:00",
+  "updated_at": "2026-09-14T13:46:25+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8533,9 +8533,10 @@
         "coverage",
         "system-gaps"
       ],
-      "status": "open",
+      "status": "done",
       "source": "https://cursor.com/agents/bc-51fa395c-616b-48c3-b552-4c822b99d0b0",
-      "added_at": "2026-09-13T17:10:59+00:00"
+      "added_at": "2026-09-13T17:10:59+00:00",
+      "updated_at": "2026-09-14T07:56:15+00:00"
     },
     {
       "id": "N125",
@@ -8652,6 +8653,113 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0909c-587a-7ed2-ad66-ce1378d6ff08",
       "added_at": "2026-09-14T07:49:49+00:00"
+    },
+    {
+      "id": "L385",
+      "category": "later",
+      "section": "research",
+      "title": "Euro-depth still-zero-disk first-pass memos after catchup",
+      "summary": "Zero-body rememo catchup unlocks memos once disk has any bodies. Names that remain memo_bodies=0 and disk_bodies=0 (e.g. AGS.BR, EL.PA, IFX.DE, REN.AS, SIE.DE, UQA.VI) still need euro_depth ingest thicken before Phase B rememo; do not rewrite empty shells.",
+      "revisit_when": "euro_depth zero_body_buy_tier drops or those six tickers gain filings_index with_body > 0",
+      "tags": [
+        "euro_depth",
+        "rememo",
+        "zero-body",
+        "ingest"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a09ee5-f24e-7566-801c-61555071e96a",
+      "added_at": "2026-09-14T07:56:15+00:00"
+    },
+    {
+      "id": "L386",
+      "category": "later",
+      "section": "learning",
+      "title": "Pre-experiment recording checklist: freeze fields before new learning strands",
+      "summary": "Before opening a new analysis, counterfactual, or model-dev strand, require an explicit decision-time freeze schema (what must be on rebalance_log / archive / near-miss) and a join-later list. Prevents the recurring gap where later optimality or attribution needs fields that were never written at t.",
+      "revisit_when": "Next new learning experiment is proposed, or when Phase C freeze writer ships and a second consumer (e.g. L370 or archive FCF bind columns) appears",
+      "tags": [
+        "recording",
+        "freeze",
+        "counterfactual",
+        "pit",
+        "model-dev"
+      ],
+      "status": "done",
+      "source": "weekly planning: anticipate future recording needs",
+      "added_at": "2026-09-14T09:38:20+00:00",
+      "updated_at": "2026-09-14T11:34:18+00:00"
+    },
+    {
+      "id": "N128",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Do not expand ARCHIVE_SIGNAL_FIELDS for FCF/EPS before live autopsy freeze proves out",
+      "summary": "Archive slim cannot replay filing/FCF PIT today. Prefer extending weekday autopsy_freeze / feature_flags (L368) over bloating weekly ARCHIVE_SIGNAL_FIELDS; optional archive bind columns only after live freeze KPIs hold.",
+      "revisit_when": "L368 freeze writer live with >=80% freeze completeness for 4+ weeks, and an offline cohort lab is blocked specifically by missing archive FCF/EPS bind columns",
+      "tags": [
+        "archive",
+        "recording",
+        "L365",
+        "L368",
+        "counterfactual"
+      ],
+      "status": "open",
+      "source": "weekly planning: anticipate future recording needs",
+      "added_at": "2026-09-14T09:38:20+00:00"
+    },
+    {
+      "id": "L387",
+      "category": "later",
+      "section": "ops",
+      "title": "Expand ops overdue auto-dispatch beyond ingest/paper",
+      "summary": "AUTO_DISPATCH_OVERDUE_WORKFLOWS is intentionally narrow (ingest-loop + paper-auto). Consider orchestrator weekday_paper suite and other primary crons once dispatch idempotency and catch-up interaction are proven.",
+      "revisit_when": "After ops-monitor has successfully auto-dispatched overdue ingest or paper at least once in production without double-firing catch-up slots",
+      "tags": [
+        "ops-monitor",
+        "auto-fix",
+        "workflow-dispatch"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a09f56-139e-76af-8652-89592ebf2fe7",
+      "added_at": "2026-09-14T10:03:39+00:00"
+    },
+    {
+      "id": "L388",
+      "category": "later",
+      "section": "ops",
+      "title": "End-of-day project-management gate agent",
+      "summary": "Autonomous EOD agent that checks progress toward Phase B/C and other learning gates, then self-generates or recommends fixes for stalls. Prefer extending ftse-ops-monitor checks + drafted eng tasks first; full PM agent only if monitor findings keep being missed.",
+      "revisit_when": "Ops-monitor Phase B/C gate checks have run for \u22654 weeks and stalls still go unnoticed without ad-hoc questions",
+      "tags": [
+        "ops-monitor",
+        "phase-b",
+        "phase-c",
+        "gates",
+        "project-management"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a09f44-be06-7408-a582-64d4310461bf",
+      "added_at": "2026-09-14T11:55:35+00:00"
+    },
+    {
+      "id": "L389",
+      "category": "later",
+      "section": "ops",
+      "title": "Claimed-vs-landed indicator integrity checks",
+      "summary": "Ops-monitor compares Sunday research-docs claim receipts (writes/persist) and present research_verdict fields against committed structured_verdict* mode landings, to catch false-green dashboards that known-issue monitors miss.",
+      "revisit_when": "After Phase B structured modes land in docs/data/research, or when adding receipts for other claimed workflows (rememo, overlay bind)",
+      "tags": [
+        "ops-monitor",
+        "integrity",
+        "phase-b",
+        "false-green",
+        "L389"
+      ],
+      "status": "done",
+      "source": "conversation: build L389 claimed-vs-landed",
+      "added_at": "2026-09-14T13:46:19+00:00",
+      "updated_at": "2026-09-14T13:46:25+00:00"
     }
   ],
   "fragments": [
@@ -9130,6 +9238,19 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a08068-ac7f-7a5b-9ee4-ad24103a703e",
       "added_at": "2026-09-08T09:52:52+00:00"
+    },
+    {
+      "id": "frag-20260914-01",
+      "text": "Recurring miss pattern: we analyze enacted choices and counterfactuals months later, but only fields frozen at decision time are fair. Default bias should be over-record cheap machine flags (revision_id, bind presence, confidence/risk enums) and under-record expensive prose.",
+      "tags": [
+        "recording",
+        "pit",
+        "counterfactual",
+        "philosophy"
+      ],
+      "status": "open",
+      "source": "weekly planning conversation",
+      "added_at": "2026-09-14T09:38:20+00:00"
     }
   ],
   "schema_version": 1

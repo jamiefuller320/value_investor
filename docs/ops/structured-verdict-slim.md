@@ -36,8 +36,8 @@ L366 work).
 
 | Path | Today | Phase B lock |
 |------|-------|--------------|
-| Sunday `--research-docs` | Full initial essay + weekly essay update (`runner.py` caps 12+12) | **Keep schedule + caps**; prompts become structured-verdict slim |
-| Weekday FTSE rememo (`ftse-research --weekday-rememo`, cap 3 / catch-up 5) | Force-initial **full** memo when body-lag / ingest improves | **Keep schedule + caps**; rememo becomes force slim initial / slim refresh |
+| Sunday `--research-docs` | Full initial essay + weekly essay update (`runner.py` caps 12+12) | **Keep schedule + caps**; prompts become structured-verdict slim. **Must** seed committed `research.json` into `output/research` before the agent pass and persist touched trees back to `docs/data/research` afterward — sources-only seed left the store empty and Phase B modes never landed. |
+| Weekday FTSE rememo (`ftse-research --weekday-rememo`, cap 3 / catch-up 5) | Force-initial **full** memo when body-lag / ingest improves | **Keep schedule + caps**; rememo becomes force slim initial / slim refresh. Do **not** widen `rememo_reason` just to flip essay → structured modes. |
 | Admitted-market weekday rememo (`ftse-library rememo`) | Same 3/day equal-support package | **Same** slim behaviour as FTSE rememo |
 | Overlay refresh before paper-auto | Binds doc → `research_verdict` / `adjusted_signal` on reports | **Unchanged** (no gate change) |
 | Timeline revisions | `revision_id` + `sources_as_of` on every save | **Unchanged** — required for Phase C `research_revision_id` |
@@ -310,6 +310,10 @@ Post-cutover watch:
 - Human decision packs look thinner until L366 — accepted.
 - Recalibrate `estimated_memo_usd` after a few slim Sundays (L52).
 - Confirm accumulate coverage and overlay bind do not regress.
+- **L389 claimed-vs-landed:** ops-monitor compares Sunday research-docs
+  receipts (`docs/data/research_docs_receipt.json`) to committed
+  `structured_verdict*` mode counts, and flags `research_verdict` fields
+  present while modes stay essay — see [`ops-monitor.md`](ops-monitor.md#claimed-vs-landed-integrity-l389).
 
 ---
 
@@ -331,3 +335,4 @@ Post-cutover watch:
 | Spend / caps | `src/value_investor/agent_model_policy.py` (`weekly_ops`, `estimated_memo_usd≈0.4`) |
 | Sunday wire | `.github/workflows/email-report.yml` (`--research-docs --research-gap-fill`) |
 | Weekday rememo wire | `.github/workflows/ingest-loop.yml`, `library-ingest-maintenance.yml` |
+| Claimed-vs-landed integrity (L389) | `src/value_investor/indicator_integrity.py`, `ops_monitor.check_indicator_integrity` |

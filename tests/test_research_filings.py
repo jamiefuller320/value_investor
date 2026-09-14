@@ -2786,6 +2786,108 @@ def test_refetch_companies_house_filing_bodies_multi_indexed_rows(tmp_path, monk
     assert sum(1 for row in saved["filings"] if row.get("has_body")) == 2
 
 
+def test_classify_filing_entity_type_ch_small_not_consolidated():
+    """SME / parent-only CH forms must not inherit the consolidated entity tag."""
+    assert (
+        classify_filing_entity_type(
+            {
+                "source": "companies_house",
+                "headline": "Companies House accounts — accounts-with-accounts-type-small",
+                "summary": "accounts-with-accounts-type-small",
+                "category": "accounts",
+            }
+        )
+        == "other"
+    )
+    assert (
+        classify_filing_entity_type(
+            {
+                "source": "companies_house",
+                "headline": "Companies House accounts — accounts-with-accounts-type-micro-entity",
+                "summary": "accounts-with-accounts-type-micro-entity",
+                "category": "accounts",
+            }
+        )
+        == "other"
+    )
+
+
+def test_refetch_companies_house_filing_bodies_prefers_current_group(tmp_path, monkeypatch):
+    """MEGP-style budget: prefer current-period group accounts over old parent/SME forms."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    ch_url = "https://document-api.company-information.service.gov.uk/document/ch"
+    rows = [
+        {
+            "id": "ch_old_small",
+            "source": "companies_house",
+            "headline": "Companies House accounts — accounts-with-accounts-type-small",
+            "summary": "accounts-with-accounts-type-small",
+            "url": f"{ch_url}-small",
+            "document_metadata_url": f"{ch_url}-small",
+            "published_at": "2019-05-01T00:00:00+00:00",
+            "has_body": False,
+            "body_path": None,
+            "priority": 140,
+        },
+        {
+            "id": "ch_parent_interim",
+            "source": "companies_house",
+            "headline": "Companies House accounts — accounts-with-accounts-type-interim",
+            "summary": "accounts-with-accounts-type-interim",
+            "url": f"{ch_url}-interim",
+            "document_metadata_url": f"{ch_url}-interim",
+            "published_at": "2024-11-01T00:00:00+00:00",
+            "has_body": False,
+            "body_path": None,
+            "priority": 140,
+        },
+        {
+            "id": "ch_group_current",
+            "source": "companies_house",
+            "headline": "Companies House accounts — accounts-with-accounts-type-group",
+            "summary": "accounts-with-accounts-type-group",
+            "url": f"{ch_url}-group",
+            "document_metadata_url": f"{ch_url}-group",
+            "published_at": "2025-06-15T00:00:00+00:00",
+            "has_body": False,
+            "body_path": None,
+            "priority": 140,
+        },
+    ]
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "ticker": "MEGP.L",
+                "filings": rows,
+                "summary": {"total": 3, "with_body": 0},
+            }
+        ),
+        encoding="utf-8",
+    )
+    fetched_ids: list[str] = []
+
+    def _fake_fetch(row: dict) -> str:
+        fetched_ids.append(str(row.get("id") or ""))
+        return "A" * 220 + " consolidated income pension covenant going concern"
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_companies_house_body",
+        _fake_fetch,
+    )
+    result = refetch_companies_house_filing_bodies(filings_dir, max_bodies=1)
+    assert result["attempted"] == 3
+    assert result["fetched"] == 1
+    assert fetched_ids == ["ch_group_current"]
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    by_id = {row["id"]: row for row in saved["filings"]}
+    assert by_id["ch_group_current"]["has_body"] is True
+    assert by_id["ch_old_small"]["has_body"] is False
+    assert by_id["ch_parent_interim"]["has_body"] is False
+    assert by_id["ch_group_current"].get("entity_type") == "consolidated"
+    assert by_id["ch_old_small"].get("entity_type") == "other"
+
+
 def test_fetch_document_bytes_attempts_oversized_pdf_when_only_format(monkeypatch):
     """Regression: do not skip PDF when it is the only available CH format."""
     from value_investor.research.companies_house import (

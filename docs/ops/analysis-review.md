@@ -121,8 +121,12 @@ slim (structured-verdict), not a thin-file rewrite — do not promote
 `thin_memo_counted_as_coverage` carries `evidence.remedy`
 `ingest_then_body_lag_rememo` and `do_not: widen_rememo_reason_for_thin_without_new_bodies`.
 Prefer `[ingest]` thicken filings or `[ops]` stop counting thin files as already
-researched. Existing `rememo_reason` already rememos thin/adequate/poor **after**
-disk bodies increase.
+researched. Existing `rememo_reason` rememos thin/adequate/poor **after** disk
+bodies increase. **Zero-body catchup:** when a first-pass memo still records
+`filings_with_body=0` but the filing index already has any `with_body`, rememo
+is eligible immediately (does not wait for the full `rememo_body_lag_threshold`).
+Still-empty disk (`memo_bodies=0` and `disk_bodies=0`) stays skipped — thicken
+ingest first; do not rewrite empty shells.
 
 ```bash
 ftse-analysis-review system-gaps --json
