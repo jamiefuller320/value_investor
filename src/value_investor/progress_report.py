@@ -21,11 +21,13 @@ from value_investor.ops_monitor import (
     DEFAULT_LATEST_PATH,
     DEFAULT_STATUS_PATH,
     OpsFinding,
+    _github_token,
     check_committed_json,
     check_engineering_queue,
     check_engineering_sync,
     check_ingest_health_log,
     check_latest_bundle,
+    list_open_pull_requests,
 )
 from value_investor.project_progress import DEFAULT_PROGRESS_PATH, build_project_progress
 from value_investor.so_what_closure import build_so_what_section, render_so_what_markdown
@@ -377,10 +379,11 @@ def build_role_coherence(
                     latest_path=latest_path,
                     tasks_path=tasks_path,
                 )
+                all_terminal_only = bool(terminal_only and len(terminal_only) == len(unlinked_plan))
                 tail = (
                     " All match merged/parked tasks — schedule email_only for a fresh post-run; "
                     "idle compile backstop will not reopen them."
-                    if terminal_only and len(terminal_only) == len(unlinked_plan)
+                    if all_terminal_only
                     else (
                         " Queue is idle: run `ftse-engineering try-idle-compile-backstop --apply` "
                         "when output/ or latest.json has the plan but compile was skipped."
@@ -389,7 +392,7 @@ def build_role_coherence(
                 checks.append(
                     {
                         "id": "post_run_plan_without_queue_link",
-                        "severity": "warn",
+                        "severity": "info" if all_terminal_only else "warn",
                         "category": "join_up",
                         "title": "Post-run plan items without matching open engineering task",
                         "summary": (
@@ -543,8 +546,11 @@ def build_integration_checks(
     ops_findings.extend(check_committed_json())
     ops_findings.extend(check_ingest_health_log())
     ops_findings.extend(check_latest_bundle(latest_path))
-    eng_findings, queue_status = check_engineering_queue(tasks_path=tasks_path)
-    sync_findings, _sync = check_engineering_sync(tasks_path=tasks_path)
+    open_prs: list[dict[str, Any]] | None = None
+    if _github_token():
+        open_prs = list_open_pull_requests()
+    eng_findings, queue_status = check_engineering_queue(tasks_path=tasks_path, open_prs=open_prs)
+    sync_findings, _sync = check_engineering_sync(tasks_path=tasks_path, open_prs=open_prs)
     ops_findings.extend(eng_findings)
     ops_findings.extend(sync_findings)
     checks.extend(_finding_rows(ops_findings))

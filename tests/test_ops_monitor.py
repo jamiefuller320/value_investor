@@ -15,6 +15,7 @@ from value_investor.ops_monitor import (
     MONITORED_WORKFLOWS,
     OpsFinding,
     OpsMonitorReport,
+    _is_orphaned_pr_open_task,
     _overall_status,
     apply_auto_fixes,
     check_backtest_history,
@@ -623,6 +624,17 @@ def test_apply_auto_fixes_quarantines_corrupt_backtest_history(tmp_path: Path):
     assert not bad.exists()
     assert list((history / "quarantine").glob("*run_20260802_123417.json.gz"))
     assert all(row.fixed for row in findings if row.category == "backtest" and row.auto_fixable)
+
+
+def test_pr_open_with_pr_url_not_orphan_when_open_prs_omitted():
+    row = {
+        "status": "pr_open",
+        "branch_name": "cursor/eng-20260914-04-1de3",
+        "pr_url": "https://github.com/org/repo/pull/636",
+        "pr_number": 636,
+    }
+    assert not _is_orphaned_pr_open_task(row, None)
+    assert _is_orphaned_pr_open_task(row, [])
 
 
 def test_apply_auto_fixes_marks_orphan_fixed_when_pr_merged(tmp_path: Path):

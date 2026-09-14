@@ -131,7 +131,9 @@ Read-only slices of ops monitor checks (no auto-fixes):
 - Committed JSON validity
 - Ingest health log / stall detection
 - Dashboard bundle freshness
-- Engineering queue orphans, sync, compile drop risk
+- Engineering queue orphans, sync, compile drop risk (loads open GitHub PRs when
+  `GITHUB_TOKEN` / workflow PAT is available, same as ops monitor; without a token,
+  `pr_open` tasks with committed `pr_url` / `pr_number` are not flagged orphaned)
 - Ops status snapshot age and consistency with project progress
 
 ### 4. So what? (gap closure)
@@ -149,6 +151,7 @@ Doctrine and wiring checks:
 - Library breadth vs live expansion gate
 - `defer_now` items without matching queue work
 - Post-run **prioritised plan** lines without a fuzzy match among open engineering tasks
+  (severity **info** when every such line already matches merged/parked tasks only)
 - Post-run plan **truncated by compile cap** (`max_tasks`, default 8) or lower-priority candidates dropped
 - Stale proposed review tasks (>14 days)
 - Analysis / horizon artifacts vs proposed task queues

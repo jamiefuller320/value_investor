@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-14T20:28:05+00:00",
-  "overall": "warn",
+  "generated_at": "2026-09-14T21:21:41+00:00",
+  "overall": "info",
   "progress": {
     "schema_version": 1,
-    "generated_at": "2026-09-14T20:28:05.075287+00:00",
+    "generated_at": "2026-09-14T21:21:41.294011+00:00",
     "current_focus": "stage_2b",
     "headline": "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
     "stages": [
@@ -68,7 +68,7 @@
         "FTSE 350 live screen and published dashboard are operational.",
         "Offline library: 21 graduated markets (focus: euro_depth).",
         "Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.",
-        "Engineering queue: 2 open, 1 merged supervised tasks.",
+        "Engineering queue: 1 open, 2 merged supervised tasks.",
         "AI-judgment track beating rules control (-28.6% vs -36.6% excess)."
       ],
       "gaps": [
@@ -5929,15 +5929,6 @@
     },
     "engineering_open": [
       {
-        "id": "eng-20260914-04",
-        "source": "engineering",
-        "title": "Backfill `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo when `financials_annual.json` already holds values",
-        "summary": "Backfill `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo when `financials_annual.json` already holds values",
-        "status": "pr_open",
-        "added_at": null,
-        "area": "ingest"
-      },
-      {
         "id": "eng-20260914-03",
         "source": "engineering",
         "title": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
@@ -5954,25 +5945,17 @@
       "defer_security": 5,
       "open_fragments": 20,
       "proposed_total": 1,
-      "engineering_open": 2
+      "engineering_open": 1
     }
   },
   "integration": {
-    "overall": "warn",
-    "checks": [
-      {
-        "id": "orphaned_pr_open_engineering_tasks",
-        "severity": "warn",
-        "category": "engineering",
-        "title": "Orphaned pr_open engineering tasks",
-        "summary": "Tasks without matching open PR: eng-20260914-04"
-      }
-    ],
+    "overall": "ok",
+    "checks": [],
     "queue_status": {
       "open_count": 1,
-      "pr_open_count": 1,
+      "pr_open_count": 0,
       "parked_count": 2,
-      "merged_count": 1,
+      "merged_count": 2,
       "failed_count": 0,
       "next_task_id": "eng-20260914-03",
       "in_flight_branch": null,
@@ -5983,7 +5966,7 @@
     }
   },
   "role_coherence": {
-    "overall": "warn",
+    "overall": "info",
     "checks": [
       {
         "id": "stage_2b_learning_edge",
@@ -6001,10 +5984,10 @@
       },
       {
         "id": "post_run_plan_without_queue_link",
-        "severity": "warn",
+        "severity": "info",
         "category": "join_up",
         "title": "Post-run plan items without matching open engineering task",
-        "summary": "3 prioritised plan line(s) from the latest post-run review have no fuzzy match among open engineering tasks (Standardise Investegate/LSE direct document fetch for indexed RNS (replace Google News redirect URLs; PDF/HTML body persist to `filings/bodies/`); Companies House document-api pipeline: map CH IDs to `filings_index`, OCR/iXBRL extract with truncation detection and re-fetch; Emit labelled dual coverage metrics (statutory OCF−capex vs management-adjusted cash definitions) and persist FCF-basis divergence flags on screening_snapshot and run history for Strong Buy / buy-tier). They may have been filtered at compile, truncated by max_tasks (8), or not yet compiled. All match merged/parked tasks — schedule email_only for a fresh post-run; idle compile backstop will not reopen them."
+        "summary": "4 prioritised plan line(s) from the latest post-run review have no fuzzy match among open engineering tasks (Standardise Investegate/LSE direct document fetch for indexed RNS (replace Google News redirect URLs; PDF/HTML body persist to `filings/bodies/`); Companies House document-api pipeline: map CH IDs to `filings_index`, OCR/iXBRL extract with truncation detection and re-fetch; Backfill `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo when `financials_annual.json` already holds values). They may have been filtered at compile, truncated by max_tasks (8), or not yet compiled. All match merged/parked tasks — schedule email_only for a fresh post-run; idle compile backstop will not reopen them."
       },
       {
         "id": "compile_cap_truncated_candidates",
@@ -6016,7 +5999,7 @@
     ]
   },
   "so_what": {
-    "generated_at": "2026-09-14T20:28:05Z",
+    "generated_at": "2026-09-14T21:21:41Z",
     "counts": {
       "findings": 0,
       "auto_queue": 0,
