@@ -178,6 +178,8 @@ class AutomationConfig:
     require_research_accumulate: bool = False
     use_momentum_grace: bool = False
     use_graduated_allocation: bool = False
+    # Human-gated entry DCA execute (graduated_allocation Start only).
+    entry_dca_execute_cadence: str | None = None
     # Calibration shadow — frozen knobs from knob_calibration priors (not decision-review).
     is_calibration_shadow: bool = False
     calibration_parent_track: str | None = None
@@ -263,6 +265,11 @@ class AutomationConfig:
             require_research_accumulate=bool(raw.get("require_research_accumulate", False)),
             use_momentum_grace=bool(raw.get("use_momentum_grace", False)),
             use_graduated_allocation=bool(raw.get("use_graduated_allocation", False)),
+            entry_dca_execute_cadence=(
+                str(raw["entry_dca_execute_cadence"]).strip()
+                if raw.get("entry_dca_execute_cadence")
+                else None
+            ),
             is_calibration_shadow=bool(raw.get("is_calibration_shadow", False)),
             calibration_parent_track=(
                 str(raw["calibration_parent_track"])
@@ -1104,8 +1111,15 @@ def run_daily_automation(
         if fund.config.mode == "technical":
             executed = run_technical_pass(fund, marked, acted_at=gate["local_time"])
         elif config.use_graduated_allocation:
+            from value_investor.entry_dca_execute import PENDING_FILENAME
+
             executed = run_graduated_rebalance(
-                fund, marked, acted_at=gate["local_time"], **rebalance_kwargs
+                fund,
+                marked,
+                acted_at=gate["local_time"],
+                entry_dca_execute_cadence=config.entry_dca_execute_cadence,
+                entry_dca_pending_path=output_dir / PENDING_FILENAME,
+                **rebalance_kwargs,
             )
         else:
             executed = run_automated_rebalance(

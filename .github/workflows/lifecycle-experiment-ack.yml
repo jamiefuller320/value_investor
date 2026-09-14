@@ -1,15 +1,15 @@
-name: Lifecycle experiment start
+name: Lifecycle experiment ack
 
-# Human Start from the Lifecycle recommend card when paper_execute_graduated is ready.
-# Authorizes and enables 4× weekly entry DCA on graduated_allocation only.
-# Never auto-applies on Sunday refresh; never touches primary/live or starter fraction.
+# Observe-only human ack from the Lifecycle experiment card Acknowledge button.
+# Dispatched by dashboard-bridge after a Supabase dashboard_commands insert.
+# Never executes DCA, starter fraction, or primary/live knobs.
 on:
   repository_dispatch:
-    types: [lifecycle-experiment-start]
+    types: [lifecycle-experiment-ack]
   workflow_dispatch:
     inputs:
       experiment_id:
-        description: Experiment id to start (entry_dca_overlay)
+        description: Experiment id to observe-ack
         required: true
         type: string
       factor_id:
@@ -17,18 +17,9 @@ on:
         required: false
         type: string
       kind:
-        description: Start kind (optional_execute only)
+        description: Ack kind (human_ack only)
         required: false
-        default: optional_execute
-        type: string
-      cadence:
-        description: Entry DCA cadence id (default leading / dca_4x_weekly)
-        required: false
-        type: string
-      track_id:
-        description: Paper track (graduated_allocation only)
-        required: false
-        default: graduated_allocation
+        default: human_ack
         type: string
 
 permissions:
@@ -36,11 +27,11 @@ permissions:
   actions: write
 
 concurrency:
-  group: lifecycle-experiment-start
+  group: lifecycle-experiment-ack
   cancel-in-progress: false
 
 jobs:
-  start:
+  ack:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -54,33 +45,29 @@ jobs:
       - name: Install package
         run: pip install -e .
 
-      - name: Start graduated entry DCA execute + refresh board
+      - name: Record observe-ack + refresh board
         env:
           EXPERIMENT_ID: ${{ github.event.client_payload.experiment_id || github.event.inputs.experiment_id }}
           FACTOR_ID: ${{ github.event.client_payload.factor_id || github.event.inputs.factor_id }}
-          KIND: ${{ github.event.client_payload.kind || github.event.inputs.kind || 'optional_execute' }}
-          DECISION: ${{ github.event.client_payload.decision || 'start_execute_graduated' }}
+          KIND: ${{ github.event.client_payload.kind || github.event.inputs.kind || 'human_ack' }}
+          DECISION: ${{ github.event.client_payload.decision || 'ack_observe' }}
           NOTE: ${{ github.event.client_payload.note || '' }}
-          CADENCE: ${{ github.event.client_payload.cadence || github.event.inputs.cadence || '' }}
-          TRACK_ID: ${{ github.event.client_payload.track_id || github.event.inputs.track_id || 'graduated_allocation' }}
         run: |
           python3 - <<'PY'
           import json
           import os
           from pathlib import Path
-          from value_investor.lifecycle_experiment_start import run_lifecycle_experiment_start
+          from value_investor.lifecycle_experiment_ack import run_lifecycle_experiment_ack
 
-          result = run_lifecycle_experiment_start(
+          result = run_lifecycle_experiment_ack(
               Path("docs/data"),
               experiment_id=os.environ.get("EXPERIMENT_ID") or "",
               factor_id=(os.environ.get("FACTOR_ID") or None) or None,
-              kind=os.environ.get("KIND") or "optional_execute",
-              decision=os.environ.get("DECISION") or "start_execute_graduated",
+              kind=os.environ.get("KIND") or "human_ack",
+              decision=os.environ.get("DECISION") or "ack_observe",
               note=os.environ.get("NOTE") or "",
               source="dashboard_bridge",
-              started_by="dashboard",
-              track_id=os.environ.get("TRACK_ID") or "graduated_allocation",
-              cadence=(os.environ.get("CADENCE") or None) or None,
+              acked_by="dashboard",
           )
           print(json.dumps(result, indent=2, sort_keys=True, default=str))
           PY
@@ -93,14 +80,12 @@ jobs:
       - name: Commit dashboard slices
         uses: stefanzweifel/git-auto-commit-action@v6
         with:
-          commit_message: "chore: lifecycle experiment start graduated execute from dashboard [skip ci]"
+          commit_message: "chore: lifecycle experiment observe-ack from dashboard [skip ci]"
           file_pattern: |
-            docs/data/experiment_starts.json
+            docs/data/experiment_acks.json
             docs/data/experiment_assessment.json
             docs/data/entry_dca_adoption_plan.json
             docs/data/lifecycle_board.json
-            docs/data/paper_automation/graduated_allocation/config.json
-            docs/data/paper_automation/graduated_allocation/entry_dca_pending.json
           skip_fetch: false
 
       - name: Notify dashboard channel
@@ -112,6 +97,6 @@ jobs:
           from value_investor.dashboard_bridge import broadcast_dashboard_update
           broadcast_dashboard_update(
               event="artifact-updated",
-              payload={"artifact": "lifecycle_board", "source": "lifecycle-experiment-start"},
+              payload={"artifact": "lifecycle_board", "source": "lifecycle-experiment-ack"},
           )
           PY

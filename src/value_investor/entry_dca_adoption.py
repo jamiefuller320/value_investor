@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.experiment_acks import load_acks, matching_ack
+from value_investor.experiment_starts import load_starts, matching_start
 from value_investor.storage import read_json, write_json
 
 PLAN_FILENAME = "entry_dca_adoption_plan.json"
@@ -205,13 +206,19 @@ def evaluate_entry_dca_adoption_plan(
         ),
     ]
     current = next((row for row in stages if row["status"] != "done"), stages[-1])
+    start = matching_start(load_starts(data_dir), experiment_id="entry_dca_overlay", finding=finding)
+    execute_started = start is not None
     return {
         "schema_version": 1,
-        "observe_only": True,
+        "observe_only": not execute_started,
         "experiment_id": "entry_dca_overlay",
         "target_cadence": TARGET_CADENCE,
         "updated_at": datetime.now(UTC).isoformat(),
         "acked": acked,
+        "execute_started": execute_started,
+        "execute_started_at": None if start is None else start.get("started_at"),
+        "execute_track_id": None if start is None else start.get("track_id"),
+        "execute_cadence": None if start is None else start.get("cadence"),
         "current_stage": current["id"],
         "do_not": [
             "Execute DCA on paper books until paper_execute_graduated is ready",
@@ -245,8 +252,12 @@ def slim_entry_dca_adoption(plan: dict[str, Any] | None) -> dict[str, Any] | Non
             }
         )
     return {
-        "observe_only": True,
+        "observe_only": bool(plan.get("observe_only", True)),
         "acked": bool(plan.get("acked")),
+        "execute_started": bool(plan.get("execute_started")),
+        "execute_started_at": plan.get("execute_started_at"),
+        "execute_track_id": plan.get("execute_track_id"),
+        "execute_cadence": plan.get("execute_cadence"),
         "current_stage": plan.get("current_stage"),
         "target_cadence": plan.get("target_cadence"),
         "do_not": list(plan.get("do_not") or []),
