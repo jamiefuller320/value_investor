@@ -56,13 +56,38 @@ def _write_memo(
 def test_rememo_reason_requires_body_lag_not_thin_alone():
     assert rememo_reason(grade="thin", memo_bodies=0, disk_bodies=0) is None
     assert rememo_reason(grade="thin", memo_bodies=0, disk_bodies=12) == (
-        "stale_thin_grade_body_lag_12"
+        "stale_thin_grade_zero_body_catchup_12"
     )
     assert rememo_reason(grade="strong", memo_bodies=5, disk_bodies=40).startswith(
         "strong_grade_large_body_lag_"
     )
     assert rememo_reason(grade="strong", memo_bodies=5, disk_bodies=8, has_verdict=False) == (
         "missing_verdict"
+    )
+
+
+def test_rememo_reason_zero_body_catchup_before_full_lag_threshold():
+    """Ingest that lands a few bodies after a 0-body first pass must rememo.
+
+    The default lag threshold (10) must not leave adequate/thin shells marked
+    fresh while disk already has filings — that is the learning-path gap behind
+    thin_memo_counted_as_coverage with rememo_eligible_count 0.
+    """
+    assert (
+        rememo_reason(grade="adequate", memo_bodies=0, disk_bodies=4, body_lag_threshold=10)
+        == "stale_adequate_grade_zero_body_catchup_4"
+    )
+    assert (
+        rememo_reason(grade="thin", memo_bodies=0, disk_bodies=1, body_lag_threshold=10)
+        == "stale_thin_grade_zero_body_catchup_1"
+    )
+    # Non-zero memo still waits for the full threshold (no catchup churn).
+    assert (
+        rememo_reason(grade="adequate", memo_bodies=2, disk_bodies=6, body_lag_threshold=10) is None
+    )
+    assert (
+        rememo_reason(grade="adequate", memo_bodies=2, disk_bodies=12, body_lag_threshold=10)
+        == "stale_adequate_grade_body_lag_10"
     )
 
 
@@ -142,8 +167,33 @@ def test_library_rememo_eligible_uses_canonical_filings_not_home_memo(tmp_path: 
         market_id="euro_depth",
         body_lag_threshold=10,
     )
-    assert eligible["ERIC-B.ST"].startswith("stale_thin_grade_body_lag_")
+    assert eligible["ERIC-B.ST"] == "stale_thin_grade_zero_body_catchup_18"
     assert "FRESH.ST" not in eligible
+
+
+def test_library_rememo_eligible_zero_body_catchup_below_lag_threshold(tmp_path: Path):
+    root = tmp_path / "library"
+    research = root / "markets" / "euro_depth" / "screen" / "research"
+    _write_memo(
+        research, "AED.BR", verdict="accumulate", grade="adequate", memo_bodies=0, disk_bodies=0
+    )
+    write_json(
+        research / "AED.BR" / "sources" / "filings" / "filings_index.json",
+        {"summary": {"with_body": 4, "total": 4}},
+        compact=True,
+    )
+    _write_memo(
+        research, "AGS.BR", verdict="accumulate", grade="adequate", memo_bodies=0, disk_bodies=0
+    )
+
+    eligible = library_rememo_eligible_tickers(
+        root,
+        tickers=["AED.BR", "AGS.BR"],
+        market_id="euro_depth",
+        body_lag_threshold=10,
+    )
+    assert eligible["AED.BR"] == "stale_adequate_grade_zero_body_catchup_4"
+    assert "AGS.BR" not in eligible
 
 
 def test_seed_home_filings_from_canonical_copies_when_focus_ahead(tmp_path: Path):

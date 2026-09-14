@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-14T07:49:49+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-14T07:56:15+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -363,7 +363,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L366 | **Brief-reasons buy cards plus on-demand full memo** | Dashboard/email already show screen brief summaries and decision packs; Read memo exists. Add an explicit generate-memo action for humans only after the always-on accumulate gate is replaced by verdict-only research or filing-derived overlays (N119/L365). | N119 or L365 is promoted, or require_research_accumulate is retired from the primary AI-judgment track |
 | L376 | **Lifecycle board card opens memo / decision pack** | Ticker cards on the Lifecycle tab are currently display-only. Wiring click-through to the existing memo dialog or decision pack would make Sunday review of a column faster. | After the Lifecycle tab is used in a Sunday review and cards are the usual way to pick a name |
 | L379 | **TRI.TO Investegate Trifast EPIC collision** | TRI.TO filings_index includes 51 investegate_direct Trifast (LSE TRI) RNS bodies. filter_misattributed_filings does not drop UK RNS for tsx_announcements, so a UK EPIC homonym pollutes the Thomson Reuters corpus. | TRI.TO leftover IWB is cleared and a memo/quality pass still shows Trifast RNS in the TSX research pack |
-| L380 | **Stop counting thin memos as already-researched without widening rememo_reason** | Coverage accounting currently treats thin/zero-body first-pass memos as already researched, which fires thin_memo_counted_as_coverage. Sunday agents are locked to ingest-then-body-lag rememo. A later ladder/dedupe change could stop counting thin files as done without changing rememo_reason or daily rememo caps. | After euro_depth (or the then-current focus) ingest has raised rememo_eligible_count above 0 on a Sunday, or thin_memo_counted_as_coverage still fires with rememo_eligible_count 0 after several ingest weeks. |
+| L385 | **Euro-depth still-zero-disk first-pass memos after catchup** | Zero-body rememo catchup unlocks memos once disk has any bodies. Names that remain memo_bodies=0 and disk_bodies=0 (e.g. AGS.BR, EL.PA, IFX.DE, REN.AS, SIE.DE, UQA.VI) still need euro_depth ingest thicken before Phase B rememo; do not rewrite empty shells. | euro_depth zero_body_buy_tier drops or those six tickers gain filings_index with_body > 0 |
 
 ### Ops / reliability
 
