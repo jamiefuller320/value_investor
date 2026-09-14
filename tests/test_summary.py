@@ -1041,7 +1041,8 @@ def test_build_company_reports_exports_reconciled_fcf(tmp_path: Path):
     )
     model_results = _model_results_for_hik_cash_conversion_cap(ticker="HIK.L")
 
-    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    snapshot = report.to_dict()
 
     assert snapshot["key_metrics"]["FCF"] == "119000000.0"
     assert snapshot["cashflow_metrics"]["free_cashflow"] == 119_000_000.0
@@ -1051,10 +1052,12 @@ def test_build_company_reports_exports_reconciled_fcf(tmp_path: Path):
     assert snapshot["fcf"]["screen_ttm"] == -66_125_000.0
     assert snapshot["fcf"]["divergence_flagged"] is True
     assert snapshot["fcf"]["filing_screen_mismatch"] is True
-    assert snapshot["cash_conversion_overlay"] is False
+    assert snapshot["cash_conversion_overlay"] is True
     assert snapshot["fcf_basis_overlay"] is True
     assert snapshot["adjusted_signal"] == "buy"
+    assert "Cash-conversion overlay" in report.summary
     assert "FCF basis mismatch" in snapshot["action_note"]
+    assert "FCF basis mismatch" in report.action_note
     assert "filing $119M" in snapshot["action_note"]
     assert "screen TTM −$66.1M" in snapshot["action_note"]
 
