@@ -283,7 +283,10 @@ def test_check_workflow_freshness_suppresses_overdue_before_email_ready_slot():
     }
 
     def fake_latest(workflow_file, **kwargs):
-        if workflow_file in {"ingest-loop.yml", "paper-auto.yml"} and kwargs.get("status") == "success":
+        if (
+            workflow_file in {"ingest-loop.yml", "paper-auto.yml"}
+            and kwargs.get("status") == "success"
+        ):
             return {"id": 1, "created_at": friday_success}
         return {"id": 2, "created_at": monday_morning.strftime("%Y-%m-%dT%H:%M:%SZ")}
 
@@ -321,7 +324,10 @@ def test_check_workflow_freshness_marks_ingest_paper_overdue_auto_fixable_past_r
     }
 
     def fake_latest(workflow_file, **kwargs):
-        if workflow_file in {"ingest-loop.yml", "paper-auto.yml"} and kwargs.get("status") == "success":
+        if (
+            workflow_file in {"ingest-loop.yml", "paper-auto.yml"}
+            and kwargs.get("status") == "success"
+        ):
             return {"id": 1, "created_at": forty_hours_ago}
         return {"id": 2, "created_at": weekday_noon_utc().strftime("%Y-%m-%dT%H:%M:%SZ")}
 
