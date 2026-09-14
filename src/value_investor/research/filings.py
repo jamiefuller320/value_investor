@@ -4664,9 +4664,7 @@ def refetch_ir_allowlist_filing_bodies(
         if str(row.get("id") or "")
     }
     enriched_by_id = {
-        str(row.get("id") or ""): row
-        for row in ranked_missing
-        if str(row.get("id") or "")
+        str(row.get("id") or ""): row for row in ranked_missing if str(row.get("id") or "")
     }
 
     investegate_cache: list[dict[str, Any]] | None = None
@@ -6042,9 +6040,7 @@ def refetch_companies_house_filing_bodies(
         if str(row.get("id") or "")
     }
     enriched_by_id = {
-        str(row.get("id") or ""): row
-        for row in ranked_missing
-        if str(row.get("id") or "")
+        str(row.get("id") or ""): row for row in ranked_missing if str(row.get("id") or "")
     }
 
     downloaded = 0
