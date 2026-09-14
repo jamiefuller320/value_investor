@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-14T16:59:18.170668+00:00",
+  "generated_at": "2026-09-14T18:48:34.869942+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1150,16 +1150,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-14T16:11:40.726013+00:00",
-    "queue_ui_updated_at": "2026-09-14T16:59:18.085084+00:00",
+    "compiled_at": "2026-09-14T17:16:27.227692+00:00",
+    "queue_ui_updated_at": "2026-09-14T18:48:34.781315+00:00",
     "task_count": 5,
     "status": {
-      "open_count": 3,
+      "open_count": 4,
       "pr_open_count": 0,
-      "parked_count": 0,
-      "merged_count": 2,
+      "parked_count": 1,
+      "merged_count": 0,
       "failed_count": 0,
-      "next_task_id": "eng-20260914-03",
+      "next_task_id": "eng-20260914-01",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1168,9 +1168,9 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260914-03",
+        "id": "eng-20260914-01",
         "area": "ingest",
-        "title": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
+        "title": "Standardise Investegate/LSE direct document fetch for indexed RNS (replace Google News redirect URLs; PDF/HTML body persist to `filings/bodies/`)",
         "priority": "high",
         "priority_score": 99.0,
         "status": "open",
@@ -1184,9 +1184,9 @@
         "clash_scan": "partial"
       },
       {
-        "id": "eng-20260914-04",
+        "id": "eng-20260914-02",
         "area": "ingest",
-        "title": "Backfill `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo when `financials_annual.json` already holds values",
+        "title": "Companies House document-api pipeline: map CH IDs to `filings_index`, OCR/iXBRL extract with truncation detection and re-fetch",
         "priority": "high",
         "priority_score": 98.0,
         "status": "open",
@@ -1200,9 +1200,9 @@
         "clash_scan": "partial"
       },
       {
-        "id": "eng-20260914-05",
-        "area": "scoring",
-        "title": "Emit labelled dual coverage metrics (statutory OCF−capex vs management-adjusted cash definitions) and persist FCF-basis divergence flags on screening_snapshot a",
+        "id": "eng-20260914-03",
+        "area": "ingest",
+        "title": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
         "priority": "high",
         "priority_score": 97.0,
         "status": "open",
@@ -1214,12 +1214,41 @@
         "blocked_by": [],
         "effective_dispatch_rank": 3,
         "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260914-04",
+        "area": "ingest",
+        "title": "Backfill `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo when `financials_annual.json` already holds values",
+        "priority": "high",
+        "priority_score": 96.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 4,
+        "clash_scan": "partial"
       }
     ],
-    "attention_tasks": [],
+    "attention_tasks": [
+      {
+        "id": "eng-20260914-05",
+        "area": "scoring",
+        "title": "Emit labelled dual coverage metrics (statutory OCF−capex vs management-adjusted cash definitions) and persist FCF-basis divergence flags on screening_snapshot a",
+        "priority": "high",
+        "priority_score": 97.0,
+        "status": "parked",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      }
+    ],
     "clash_summary": {
-      "open_task_count": 3,
-      "dispatch_eligible_count": 3,
+      "open_task_count": 4,
+      "dispatch_eligible_count": 4,
       "blocked_count": 0
     }
   },
@@ -1498,7 +1527,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-14T16:59:18.170668+00:00",
+    "generated_at": "2026-09-14T18:48:34.869942+00:00",
     "overall": "active",
     "headline": "Agent lane active.",
     "merge_lane": {
@@ -1519,18 +1548,18 @@
       "should_dispatch": true,
       "pause_active": false,
       "attention_parked_count": 0,
-      "open_count": 3,
+      "open_count": 4,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 3,
+      "dispatch_eligible_count": 4,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260914-03",
-      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
-      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+      "next_task_id": "eng-20260914-01",
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-14T16:55:01.864695+00:00"
+      "evaluated_at": "2026-09-14T18:48:29.151970+00:00"
     },
     "ops_monitor": {
       "run_at": "2026-09-14T07:46:37.216700+00:00",
