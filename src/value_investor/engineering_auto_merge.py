@@ -67,7 +67,9 @@ def _github_repo() -> str | None:
     return None
 
 
-def _urlopen_with_retry(request: urllib.request.Request, *, attempts: int = _DEFAULT_API_ATTEMPTS) -> bytes:
+def _urlopen_with_retry(
+    request: urllib.request.Request, *, attempts: int = _DEFAULT_API_ATTEMPTS
+) -> bytes:
     delay = _DEFAULT_API_BACKOFF_SECONDS
     last_err: Exception | None = None
     for attempt in range(1, attempts + 1):

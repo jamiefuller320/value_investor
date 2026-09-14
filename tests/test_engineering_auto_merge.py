@@ -2,12 +2,16 @@
 
 from __future__ import annotations
 
-import json
 import io
+import json
 import urllib.error
 from unittest.mock import patch
 
-from value_investor.engineering_auto_merge import _api_get, evaluate_auto_merge, pr_checks_successful
+from value_investor.engineering_auto_merge import (
+    _api_get,
+    evaluate_auto_merge,
+    pr_checks_successful,
+)
 from value_investor.engineering_tasks import BLOCKED_PATHS, EngineeringTask
 
 
@@ -180,7 +184,9 @@ def test_api_get_retries_transient_github_500():
 
     with (
         patch("value_investor.engineering_auto_merge.time.sleep"),
-        patch("value_investor.engineering_auto_merge.urllib.request.urlopen", side_effect=fake_urlopen),
+        patch(
+            "value_investor.engineering_auto_merge.urllib.request.urlopen", side_effect=fake_urlopen
+        ),
     ):
         data = _api_get("/repos/o/r/pulls/1/files", token="tok")
     assert calls["n"] == 2
