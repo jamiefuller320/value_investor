@@ -2117,8 +2117,15 @@ def classify_filing_entity_type(
     if source == "companies_house":
         if re.search(r"accounts-type-interim", blob):
             return "s838_holding" if body and "s838" in body else "consolidated"
-        if re.search(r"accounts-type-(?:group|full)", blob):
+        if re.search(r"accounts-type-(?:group|full)\b", blob):
             return "consolidated"
+        # Parent-only / SME CH forms are not group accounts — keep them out of the
+        # consolidated bucket so refetch ranking can spend budget on group filings.
+        if re.search(
+            r"accounts-type-(?:small|micro(?:-entity)?|medium|total-exemption(?:-full)?)\b",
+            blob,
+        ):
+            return "other"
 
     form = str(row.get("form") or category or "").upper()
     if form in SEC_ANNUAL_FORMS | SEC_INTERIM_FORMS:
@@ -3493,6 +3500,112 @@ def _is_ch_filing_row(row: dict[str, Any]) -> bool:
     )
 
 
+def _ch_accounts_description_blob(row: dict[str, Any]) -> str:
+    """Lowercased CH description/headline/category blob for account-type ranking."""
+    return (
+        f"{row.get('summary') or ''} {row.get('headline') or ''} {row.get('category') or ''}"
+    ).lower()
+
+
+def _ch_accounts_type_rank(row: dict[str, Any]) -> int:
+    """Lower is better: prefer group accounts over parent/SME CH forms."""
+    blob = _ch_accounts_description_blob(row)
+    if re.search(r"accounts-type-group\b", blob) or re.search(r"\bgroup accounts\b", blob):
+        return 0
+    if re.search(r"accounts-type-full\b", blob):
+        return 1
+    if re.search(r"accounts-type-interim\b", blob):
+        return 2
+    if re.search(r"accounts-type-(?:medium|total-exemption(?:-full)?)\b", blob):
+        return 3
+    if re.search(r"accounts-type-(?:small|micro(?:-entity)?)\b", blob):
+        return 4
+    return 3
+
+
+def _ch_entity_type_rank(entity_type: str | None) -> int:
+    """Lower is better for CH refetch budget."""
+    return {
+        "consolidated": 0,
+        "other": 1,
+        "s838_holding": 2,
+        "holding_disclosure": 3,
+    }.get(str(entity_type or "other"), 1)
+
+
+def _ch_refetch_rank_key(row: dict[str, Any]) -> tuple:
+    """
+    Sort key for Companies House body refetch.
+
+    Prefer current-period consolidated/group accounts; deprioritise parent-only
+    s.838 / holding disclosures and older SME forms (MEGP-style budget waste).
+    """
+    published = str(row.get("published_at") or "").strip()
+    return (
+        _ch_entity_type_rank(row.get("entity_type")),
+        _ch_accounts_type_rank(row),
+        0 if published else 1,
+        # Invert ISO timestamps so newer dates sort first under ascending order.
+        "".join(chr(255 - ord(ch)) for ch in published[:32].ljust(32, " ")),
+        -(int(row.get("priority") or 0)),
+        str(row.get("id") or ""),
+    )
+
+
+def _rank_ch_refetch_candidates(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Enrich CH rows with headline period/entity tags, then rank for refetch."""
+    enriched = [_apply_headline_period(row) for row in rows]
+    enriched.sort(key=_ch_refetch_rank_key)
+    return enriched
+
+
+def _ir_period_rank(period: str | None) -> int:
+    """Lower is better for IR allowlist refetch."""
+    return {
+        "annual": 0,
+        "interim": 1,
+        "trading_update": 2,
+    }.get(str(period or "other"), 3)
+
+
+def _ir_refetch_rank_key(
+    row: dict[str, Any],
+    *,
+    periods_with_body: set[str],
+) -> tuple:
+    """Prefer current-period IR docs; demote periods that already have a good body."""
+    period = str(row.get("period") or "other")
+    occupied_penalty = 1 if period in {"annual", "interim"} and period in periods_with_body else 0
+    published = str(row.get("published_at") or "").strip()
+    return (
+        occupied_penalty,
+        _ir_period_rank(period),
+        0 if published else 1,
+        "".join(chr(255 - ord(ch)) for ch in published[:32].ljust(32, " ")),
+        -(int(row.get("priority") or 0)),
+        str(row.get("id") or ""),
+    )
+
+
+def _rank_ir_refetch_candidates(
+    missing: list[dict[str, Any]],
+    *,
+    ir_rows: list[dict[str, Any]],
+    bodies_dir: Path,
+) -> list[dict[str, Any]]:
+    """Rank IR allowlist refetch candidates; prefer periods without an existing body."""
+    periods_with_body = {
+        str(row.get("period") or "other")
+        for row in ir_rows
+        if str(row.get("period") or "other") in {"annual", "interim"}
+        and row.get("has_body")
+        and not _ir_allowlist_row_needs_body_refetch(row, bodies_dir)
+    }
+    enriched = [_apply_headline_period(row) for row in missing]
+    enriched.sort(key=lambda row: _ir_refetch_rank_key(row, periods_with_body=periods_with_body))
+    return enriched
+
+
 def _ch_row_needs_body_refetch(row: dict[str, Any], bodies_dir: Path) -> bool:
     """True when an indexed CH row lacks a substantive on-disk body extract."""
     if not _is_ch_filing_row(row):
@@ -4540,6 +4653,22 @@ def refetch_ir_allowlist_filing_bodies(
             "note": "no missing IR allowlist bodies",
         }
 
+    ranked_missing = _rank_ir_refetch_candidates(
+        missing,
+        ir_rows=ir_rows,
+        bodies_dir=bodies_dir,
+    )
+    selected_ids = {
+        str(row.get("id") or "")
+        for row in ranked_missing[: max(0, int(max_bodies))]
+        if str(row.get("id") or "")
+    }
+    enriched_by_id = {
+        str(row.get("id") or ""): row
+        for row in ranked_missing
+        if str(row.get("id") or "")
+    }
+
     investegate_cache: list[dict[str, Any]] | None = None
     if str(ticker or "").upper().endswith(".L"):
         investegate_cache = fetch_filings_investegate_company(
@@ -4558,8 +4687,15 @@ def refetch_ir_allowlist_filing_bodies(
     updated: list[dict[str, Any]] = []
     for row in filings:
         item = dict(row)
+        row_id = str(item.get("id") or "")
+        enriched = enriched_by_id.get(row_id)
+        if enriched is not None:
+            for key in ("period", "entity_type", "priority"):
+                if enriched.get(key) is not None:
+                    item[key] = enriched[key]
         if (
             downloaded < max_bodies
+            and row_id in selected_ids
             and _is_ir_allowlist_row(item)
             and item.get("url")
             and not (skip_unfetchable and item.get("unfetchable"))
@@ -5899,11 +6035,33 @@ def refetch_companies_house_filing_bodies(
             "note": "no missing CH bodies",
         }
 
+    ranked_missing = _rank_ch_refetch_candidates(missing)
+    selected_ids = {
+        str(row.get("id") or "")
+        for row in ranked_missing[: max(0, int(max_bodies))]
+        if str(row.get("id") or "")
+    }
+    enriched_by_id = {
+        str(row.get("id") or ""): row
+        for row in ranked_missing
+        if str(row.get("id") or "")
+    }
+
     downloaded = 0
     updated: list[dict[str, Any]] = []
     for row in filings:
         item = dict(row)
-        if downloaded < max_bodies and _ch_row_needs_body_refetch(item, bodies_dir):
+        row_id = str(item.get("id") or "")
+        enriched = enriched_by_id.get(row_id)
+        if enriched is not None:
+            for key in ("period", "entity_type", "priority"):
+                if enriched.get(key) is not None:
+                    item[key] = enriched[key]
+        if (
+            downloaded < max_bodies
+            and row_id in selected_ids
+            and _ch_row_needs_body_refetch(item, bodies_dir)
+        ):
             body = _fetch_companies_house_body(item)
             if body:
                 filename = f"{item['id']}.txt"
