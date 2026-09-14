@@ -71,4 +71,6 @@ def test_sunday_entry_dca_follows_adoption_plan():
     tasks = [task for section in payload["sections"] for task in section["tasks"]]
     row = next(task for task in tasks if task["id"] == "sunday-entry-dca-cadence")
     assert "entry_dca_adoption_plan" in row["summary"]
-    assert "Do not execute DCA" in row["summary"]
+    assert "Do not execute DCA from ack" in row["summary"]
+    assert "Lifecycle Start" in row["summary"]
+    assert "graduated_allocation" in row["summary"]

@@ -174,8 +174,10 @@ Sunday: when `learning_tracks_entry_dca` shows
 `ready_for_cadence_analysis=true`, read the rollup (leading cadence, mean
 de-risk, `model_independent_hint`) and the adoption plan. Record ack with
 `ftse-experiment-assess ack --experiment-id entry_dca_overlay` (observe-only)
-or the Lifecycle card **Start** button (Supabase dashboard bridge).
-Do **not** execute DCA or change starter fraction from the overlay.
+or the Lifecycle card **Acknowledge** button (Supabase dashboard bridge).
+Do **not** execute DCA or change starter fraction from Acknowledge.
+When adoption reaches `paper_execute_graduated` ready, use **Start** to authorize
+and enable 4× weekly entry DCA on `graduated_allocation` only.
 
 See also [`capital-allocation.md`](capital-allocation.md),
 [`hypothesis-integrity.md`](hypothesis-integrity.md),

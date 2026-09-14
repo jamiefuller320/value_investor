@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-14T10:20:49.438599+00:00",
+  "generated_at": "2026-09-14T11:42:03.828579+00:00",
   "live_run_at": "2026-09-13T06:55:57.943717+00:00",
   "observe_only": true,
   "note": "Per-market funnel of screen names plus paper-book holdings. Classification is diagnostic — it does not run the deferred per-holding state machine. Experiments are the position-lifecycle catalog, joined to the unified assessment ledger when present. Switch market (and paper track) rather than stacking every universe on one board.",
@@ -126,6 +126,18 @@
               }
             ],
             "recommendation": "Recommendation: continue collecting evidence; no human start step yet.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Collecting evidence",
+              "payload": {
+                "experiment_id": "knob_calibration",
+                "factor_id": "conviction_floor",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -134,8 +146,10 @@
               "payload": {
                 "experiment_id": "knob_calibration",
                 "factor_id": "conviction_floor",
-                "kind": "observing",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           }
@@ -216,6 +230,18 @@
               }
             ],
             "recommendation": "Recommendation: continue collecting evidence; no human start step yet.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Collecting evidence",
+              "payload": {
+                "experiment_id": "ai_judgment_primary",
+                "factor_id": "research_gate",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -224,8 +250,10 @@
               "payload": {
                 "experiment_id": "ai_judgment_primary",
                 "factor_id": "research_gate",
-                "kind": "observing",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           }
@@ -316,6 +344,18 @@
               }
             ],
             "recommendation": "Recommendation: continue collecting evidence; no human start step yet.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Collecting evidence",
+              "payload": {
+                "experiment_id": "paper_knobs.skip_timing_wait",
+                "factor_id": "timing_gate",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -324,8 +364,10 @@
               "payload": {
                 "experiment_id": "paper_knobs.skip_timing_wait",
                 "factor_id": "timing_gate",
-                "kind": "observing",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           }
@@ -440,6 +482,18 @@
               }
             ],
             "recommendation": "Recommendation: continue collecting evidence; no human start step yet.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Collecting evidence",
+              "payload": {
+                "experiment_id": "graduated_allocation_track",
+                "factor_id": "entry_appetite",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -448,8 +502,10 @@
               "payload": {
                 "experiment_id": "graduated_allocation_track",
                 "factor_id": "entry_appetite",
-                "kind": "observing",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -570,6 +626,18 @@
               }
             ],
             "recommendation": "Recommendation: continue collecting evidence; no human start step yet.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Collecting evidence",
+              "payload": {
+                "experiment_id": "graduated_allocation_track",
+                "factor_id": "starter_fraction",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -578,8 +646,10 @@
               "payload": {
                 "experiment_id": "graduated_allocation_track",
                 "factor_id": "starter_fraction",
-                "kind": "observing",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -701,7 +771,19 @@
                 "detail": "ai_judgment first_entry>=3, rules first_entry>=1, leading still dca_4x_weekly, fair tracks still agree"
               }
             ],
-            "recommendation": "Recommendation: keep observing. Adoption gates still failing: out_of_sample_first_entry, paper_execute_graduated, primary_or_live. Do not Start apply.",
+            "recommendation": "Recommendation: keep observing. Adoption gates still failing: out_of_sample_first_entry, paper_execute_graduated, primary_or_live. Acknowledge if still pending; do not Start until execute stage is ready.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Already acknowledged (observe-only)",
+              "payload": {
+                "experiment_id": "entry_dca_overlay",
+                "factor_id": "entry_dca_cadence",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -710,8 +792,10 @@
               "payload": {
                 "experiment_id": "entry_dca_overlay",
                 "factor_id": "entry_dca_cadence",
-                "kind": "waiting",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -834,6 +918,18 @@
               }
             ],
             "recommendation": "Recommendation: leave parked/planned until the catalog revisit trigger fires.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Already acknowledged (observe-only)",
+              "payload": {
+                "experiment_id": "entry_dca_overlay",
+                "factor_id": "first_fill_adverse_pause",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -842,8 +938,10 @@
               "payload": {
                 "experiment_id": "entry_dca_overlay",
                 "factor_id": "first_fill_adverse_pause",
-                "kind": "planned",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -976,7 +1074,19 @@
                 "detail": "ai_judgment first_entry>=3, rules first_entry>=1, leading still dca_4x_weekly, fair tracks still agree"
               }
             ],
-            "recommendation": "Recommendation: keep observing. Adoption gates still failing: out_of_sample_first_entry, paper_execute_graduated, primary_or_live. Do not Start apply.",
+            "recommendation": "Recommendation: keep observing. Adoption gates still failing: out_of_sample_first_entry, paper_execute_graduated, primary_or_live. Acknowledge if still pending; do not Start until execute stage is ready.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Already acknowledged (observe-only)",
+              "payload": {
+                "experiment_id": "entry_dca_overlay",
+                "factor_id": "add_cadence",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -985,8 +1095,10 @@
               "payload": {
                 "experiment_id": "entry_dca_overlay",
                 "factor_id": "add_cadence",
-                "kind": "waiting",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -1109,6 +1221,18 @@
               }
             ],
             "recommendation": "Recommendation: leave parked/planned until the catalog revisit trigger fires.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Already acknowledged (observe-only)",
+              "payload": {
+                "experiment_id": "entry_dca_overlay",
+                "factor_id": "add_only_if_cheaper",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -1117,8 +1241,10 @@
               "payload": {
                 "experiment_id": "entry_dca_overlay",
                 "factor_id": "add_only_if_cheaper",
-                "kind": "planned",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -1241,6 +1367,18 @@
               }
             ],
             "recommendation": "Recommendation: leave parked/planned until the catalog revisit trigger fires.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Already acknowledged (observe-only)",
+              "payload": {
+                "experiment_id": "entry_dca_overlay",
+                "factor_id": "skim_linked_remaining_adds",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -1249,8 +1387,10 @@
               "payload": {
                 "experiment_id": "entry_dca_overlay",
                 "factor_id": "skim_linked_remaining_adds",
-                "kind": "planned",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -1373,6 +1513,18 @@
               }
             ],
             "recommendation": "Recommendation: leave parked/planned until the catalog revisit trigger fires.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Already acknowledged (observe-only)",
+              "payload": {
+                "experiment_id": "entry_dca_overlay",
+                "factor_id": "add_only_if_thesis_intact",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -1381,8 +1533,10 @@
               "payload": {
                 "experiment_id": "entry_dca_overlay",
                 "factor_id": "add_only_if_thesis_intact",
-                "kind": "planned",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -1505,6 +1659,18 @@
               }
             ],
             "recommendation": "Recommendation: leave parked/planned until the catalog revisit trigger fires.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Already acknowledged (observe-only)",
+              "payload": {
+                "experiment_id": "entry_dca_overlay",
+                "factor_id": "max_build_window",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -1513,8 +1679,10 @@
               "payload": {
                 "experiment_id": "entry_dca_overlay",
                 "factor_id": "max_build_window",
-                "kind": "planned",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -1601,6 +1769,18 @@
               }
             ],
             "recommendation": "Recommendation: continue collecting evidence; no human start step yet.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Collecting evidence",
+              "payload": {
+                "experiment_id": "paper_churn.min_rebalance_notional",
+                "factor_id": "rebalance_band",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -1609,8 +1789,10 @@
               "payload": {
                 "experiment_id": "paper_churn.min_rebalance_notional",
                 "factor_id": "rebalance_band",
-                "kind": "observing",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           }
@@ -1691,6 +1873,18 @@
               }
             ],
             "recommendation": "Recommendation: continue collecting evidence; no human start step yet.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Collecting evidence",
+              "payload": {
+                "experiment_id": "hypothesis_first_exit",
+                "factor_id": "loser_tolerance",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -1699,8 +1893,10 @@
               "payload": {
                 "experiment_id": "hypothesis_first_exit",
                 "factor_id": "loser_tolerance",
-                "kind": "observing",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           }
@@ -1781,6 +1977,18 @@
               }
             ],
             "recommendation": "Recommendation: continue collecting evidence; no human start step yet.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Collecting evidence",
+              "payload": {
+                "experiment_id": "hypothesis_first_exit",
+                "factor_id": "thesis_monitoring",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -1789,8 +1997,10 @@
               "payload": {
                 "experiment_id": "hypothesis_first_exit",
                 "factor_id": "thesis_monitoring",
-                "kind": "observing",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           }
@@ -1906,6 +2116,18 @@
               }
             ],
             "recommendation": "Recommendation: continue collecting evidence; no human start step yet.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Collecting evidence",
+              "payload": {
+                "experiment_id": "graduated_allocation_track",
+                "factor_id": "skim_urgency",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -1914,8 +2136,10 @@
               "payload": {
                 "experiment_id": "graduated_allocation_track",
                 "factor_id": "skim_urgency",
-                "kind": "observing",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -2026,6 +2250,18 @@
               }
             ],
             "recommendation": "Recommendation: continue collecting evidence; no human start step yet.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Collecting evidence",
+              "payload": {
+                "experiment_id": "graduated_allocation_track",
+                "factor_id": "harvest_gain_floor",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -2034,8 +2270,10 @@
               "payload": {
                 "experiment_id": "graduated_allocation_track",
                 "factor_id": "harvest_gain_floor",
-                "kind": "observing",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -2122,6 +2360,18 @@
               }
             ],
             "recommendation": "Recommendation: continue collecting evidence; no human start step yet.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Collecting evidence",
+              "payload": {
+                "experiment_id": "paper_churn.buffered_hold",
+                "factor_id": "exit_confirm_screens",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -2130,8 +2380,10 @@
               "payload": {
                 "experiment_id": "paper_churn.buffered_hold",
                 "factor_id": "exit_confirm_screens",
-                "kind": "observing",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           }
@@ -2236,6 +2488,18 @@
               }
             ],
             "recommendation": "Recommendation: continue collecting evidence; no human start step yet.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Collecting evidence",
+              "payload": {
+                "experiment_id": "momentum_grace_track",
+                "factor_id": "momentum_grace",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -2244,8 +2508,10 @@
               "payload": {
                 "experiment_id": "momentum_grace_track",
                 "factor_id": "momentum_grace",
-                "kind": "observing",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -2332,6 +2598,18 @@
               }
             ],
             "recommendation": "Recommendation: continue collecting evidence; no human start step yet.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Collecting evidence",
+              "payload": {
+                "experiment_id": "hypothesis_first_exit",
+                "factor_id": "intact_thesis_dampen",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -2340,8 +2618,10 @@
               "payload": {
                 "experiment_id": "hypothesis_first_exit",
                 "factor_id": "intact_thesis_dampen",
-                "kind": "observing",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           }
@@ -2432,6 +2712,18 @@
               }
             ],
             "recommendation": "Recommendation: continue collecting evidence; no human start step yet.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Collecting evidence",
+              "payload": {
+                "experiment_id": "hypothesis_first_exit",
+                "factor_id": "thesis_broken_priority",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -2440,8 +2732,10 @@
               "payload": {
                 "experiment_id": "hypothesis_first_exit",
                 "factor_id": "thesis_broken_priority",
-                "kind": "observing",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           }
@@ -2528,6 +2822,18 @@
               }
             ],
             "recommendation": "Recommendation: leave parked/planned until the catalog revisit trigger fires.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "exit_timing_cohorts >=10 closed swaps",
+              "payload": {
+                "experiment_id": "capital_rotation_coordinator",
+                "factor_id": "swap_score_gate",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -2536,8 +2842,10 @@
               "payload": {
                 "experiment_id": "capital_rotation_coordinator",
                 "factor_id": "swap_score_gate",
-                "kind": "planned",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           }
@@ -2618,6 +2926,18 @@
               }
             ],
             "recommendation": "Recommendation: continue collecting evidence; no human start step yet.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Collecting evidence",
+              "payload": {
+                "experiment_id": "paper_churn.reentry_cooldown",
+                "factor_id": "reentry_cooldown",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -2626,8 +2946,10 @@
               "payload": {
                 "experiment_id": "paper_churn.reentry_cooldown",
                 "factor_id": "reentry_cooldown",
-                "kind": "observing",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           }
@@ -2753,7 +3075,19 @@
                 "detail": "ai_judgment first_entry>=3, rules first_entry>=1, leading still dca_4x_weekly, fair tracks still agree"
               }
             ],
-            "recommendation": "Recommendation: keep observing. Adoption gates still failing: out_of_sample_first_entry, paper_execute_graduated, primary_or_live. Do not Start apply.",
+            "recommendation": "Recommendation: keep observing. Adoption gates still failing: out_of_sample_first_entry, paper_execute_graduated, primary_or_live. Acknowledge if still pending; do not Start until execute stage is ready.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Already acknowledged (observe-only)",
+              "payload": {
+                "experiment_id": "entry_dca_overlay",
+                "factor_id": "entry_kind_tag",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -2762,8 +3096,10 @@
               "payload": {
                 "experiment_id": "entry_dca_overlay",
                 "factor_id": "entry_kind_tag",
-                "kind": "waiting",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -2886,6 +3222,18 @@
               }
             ],
             "recommendation": "Recommendation: leave parked/planned until the catalog revisit trigger fires.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Already acknowledged (observe-only)",
+              "payload": {
+                "experiment_id": "entry_dca_overlay",
+                "factor_id": "prior_cycle_outcome",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -2894,8 +3242,10 @@
               "payload": {
                 "experiment_id": "entry_dca_overlay",
                 "factor_id": "prior_cycle_outcome",
-                "kind": "planned",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -3018,6 +3368,18 @@
               }
             ],
             "recommendation": "Recommendation: leave parked/planned until the catalog revisit trigger fires.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Already acknowledged (observe-only)",
+              "payload": {
+                "experiment_id": "entry_dca_overlay",
+                "factor_id": "recommit_size",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -3026,8 +3388,10 @@
               "payload": {
                 "experiment_id": "entry_dca_overlay",
                 "factor_id": "recommit_size",
-                "kind": "planned",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -3150,6 +3514,18 @@
               }
             ],
             "recommendation": "Recommendation: leave parked/planned until the catalog revisit trigger fires.",
+            "acknowledge": {
+              "action": "lifecycle-experiment-ack",
+              "enabled": false,
+              "label": "Acknowledge",
+              "disabled_reason": "Already acknowledged (observe-only)",
+              "payload": {
+                "experiment_id": "entry_dca_overlay",
+                "factor_id": "held_addon_pyramid",
+                "kind": "human_ack",
+                "decision": "ack_observe"
+              }
+            },
             "start": {
               "action": "lifecycle-experiment-start",
               "enabled": false,
@@ -3158,8 +3534,10 @@
               "payload": {
                 "experiment_id": "entry_dca_overlay",
                 "factor_id": "held_addon_pyramid",
-                "kind": "deferred",
-                "decision": "ack_observe"
+                "kind": "optional_execute",
+                "decision": "start_execute_graduated",
+                "track_id": "graduated_allocation",
+                "cadence": "dca_4x_weekly"
               }
             }
           },
@@ -9083,11 +9461,11 @@
                   "timing_signal": "accumulate",
                   "conviction_score": 0.782,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0266,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9111,11 +9489,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7611,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0557,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9125,11 +9503,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7313,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0698,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9139,11 +9517,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.66,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0435,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9153,11 +9531,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.6465,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0135,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9167,11 +9545,11 @@
                   "timing_signal": "accumulate",
                   "conviction_score": 0.6461,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.044,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9181,11 +9559,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.6407,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0378,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9195,11 +9573,11 @@
                   "timing_signal": "accumulate",
                   "conviction_score": 0.6042,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0334,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9209,11 +9587,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.5891,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0355,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9223,11 +9601,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.5853,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0366,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9237,11 +9615,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.5511,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0284,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9251,11 +9629,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.5362,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0894,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9265,11 +9643,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.5172,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0653,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9279,11 +9657,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.5056,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0298,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9293,11 +9671,11 @@
                   "timing_signal": "accumulate",
                   "conviction_score": 0.5002,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0342,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9307,11 +9685,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.4888,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0638,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9335,11 +9713,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.4831,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": 0.0232,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9363,11 +9741,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.4698,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.1271,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9377,11 +9755,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.4635,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0613,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9391,11 +9769,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.4492,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0345,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9405,11 +9783,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.4442,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0305,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9419,11 +9797,11 @@
                   "timing_signal": "accumulate",
                   "conviction_score": 0.3686,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": 0.0115,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9433,11 +9811,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.3414,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0792,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -9447,11 +9825,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.2838,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T20:31:58.323684+10:00",
                   "unrealized_pnl_pct": -0.0914,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 }
               ],
@@ -11544,11 +11922,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.8996,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0487,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11558,11 +11936,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.8805,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0151,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11572,11 +11950,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.8791,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0371,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11586,11 +11964,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.8596,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0575,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11600,11 +11978,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.8506,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0834,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11614,11 +11992,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.8473,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0062,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11628,11 +12006,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.8338,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0603,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11642,11 +12020,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.8213,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0511,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11656,11 +12034,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.8167,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": 0.0458,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11670,11 +12048,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.8145,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0197,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11684,11 +12062,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.8143,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0315,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11698,11 +12076,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7985,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0197,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11712,11 +12090,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7904,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": 0.0094,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11726,11 +12104,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7827,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0318,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11740,11 +12118,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.775,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0021,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11754,11 +12132,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7699,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0226,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11768,11 +12146,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7697,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0476,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11782,11 +12160,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7674,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0297,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11796,11 +12174,11 @@
                   "timing_signal": "accumulate",
                   "conviction_score": 0.76,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0076,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11810,11 +12188,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7553,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": 0.0059,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11824,11 +12202,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7526,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0895,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11838,11 +12216,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7493,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0241,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11852,11 +12230,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7492,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0447,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11866,11 +12244,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7383,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": 0.0386,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11880,11 +12258,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7383,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0625,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11894,11 +12272,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7337,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0228,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11908,11 +12286,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7335,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0375,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11922,11 +12300,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.732,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0461,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11936,11 +12314,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7226,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": 0.0149,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11950,11 +12328,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7218,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0323,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11964,11 +12342,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7206,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0215,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11978,11 +12356,11 @@
                   "timing_signal": "accumulate",
                   "conviction_score": 0.7188,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": 0.0086,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -11992,11 +12370,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7167,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0145,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -12006,11 +12384,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7132,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0146,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -12020,11 +12398,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.7121,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0097,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -12034,11 +12412,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.707,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0341,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -12048,11 +12426,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.6975,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": 0.012,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -12062,11 +12440,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.6883,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0174,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -12076,11 +12454,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.6875,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0133,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -12090,11 +12468,11 @@
                   "timing_signal": "neutral",
                   "conviction_score": 0.6856,
                   "lifecycle_phase": "full",
-                  "column_reason": "opened 6d ago",
+                  "column_reason": "opened 7d ago",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": 0.087,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 }
               ],
@@ -12118,8 +12496,8 @@
                   "column_reason": "harvest",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0127,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -12132,8 +12510,8 @@
                   "column_reason": "harvest",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.0444,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 },
                 {
@@ -12146,8 +12524,8 @@
                   "column_reason": "harvest",
                   "opened_at": "2026-09-07T06:31:56.426803-04:00",
                   "unrealized_pnl_pct": -0.01,
-                  "days_in_column": 6,
-                  "tenure_band": "fresh",
+                  "days_in_column": 7,
+                  "tenure_band": "recent",
                   "tenure_basis": "opened_at"
                 }
               ],
