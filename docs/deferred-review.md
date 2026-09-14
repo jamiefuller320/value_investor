@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-13T18:38:31+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-14T08:21:29+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -363,6 +363,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L376 | **Lifecycle board card opens memo / decision pack** | Ticker cards on the Lifecycle tab are currently display-only. Wiring click-through to the existing memo dialog or decision pack would make Sunday review of a column faster. | After the Lifecycle tab is used in a Sunday review and cards are the usual way to pick a name |
 | L379 | **TRI.TO Investegate Trifast EPIC collision** | TRI.TO filings_index includes 51 investegate_direct Trifast (LSE TRI) RNS bodies. filter_misattributed_filings does not drop UK RNS for tsx_announcements, so a UK EPIC homonym pollutes the Thomson Reuters corpus. | TRI.TO leftover IWB is cleared and a memo/quality pass still shows Trifast RNS in the TSX research pack |
 | L380 | **Stop counting thin memos as already-researched without widening rememo_reason** | Coverage accounting currently treats thin/zero-body first-pass memos as already researched, which fires thin_memo_counted_as_coverage. Sunday agents are locked to ingest-then-body-lag rememo. A later ladder/dedupe change could stop counting thin files as done without changing rememo_reason or daily rememo caps. | After euro_depth (or the then-current focus) ingest has raised rememo_eligible_count above 0 on a Sunday, or thin_memo_counted_as_coverage still fires with rememo_eligible_count 0 after several ingest weeks. |
+| L385 | **Screen-column time-in-stage clock for lifecycle heatmap** | Held/sold lifecycle cards now color by opened_at or close date. Not-buy-tier / not-now / near-buy names have no stage entry timestamp, so they stay uncolored until we persist first appearance on that funnel column. | Screen history or near-miss watch records first_seen_at per ticker per funnel column |
 
 ### Ops / reliability
 
