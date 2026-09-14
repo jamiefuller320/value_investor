@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-14T11:55:35+00:00",
+  "updated_at": "2026-09-14T13:35:52+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8740,6 +8740,24 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a09f44-be06-7408-a582-64d4310461bf",
       "added_at": "2026-09-14T11:55:35+00:00"
+    },
+    {
+      "id": "L389",
+      "category": "later",
+      "section": "ops",
+      "title": "Claimed-vs-landed indicator integrity checks",
+      "summary": "Complement known-issue monitors with anti-deception checks: when a workflow/flag claims progress (research-docs ran, verdict fields present, readiness subcheck green), verify artifact deltas (mode flips, persist to docs/data/research, non-zero created/updated). Catches false greens that gate-list monitors miss.",
+      "revisit_when": "Next unexpected gap is a green indicator that masked empty/stale artifacts, or after 2+ such incidents in a month",
+      "tags": [
+        "ops-monitor",
+        "indicators",
+        "false-green",
+        "phase-b",
+        "gates"
+      ],
+      "status": "open",
+      "source": "conversation: project-management agent vs unexpected gaps",
+      "added_at": "2026-09-14T13:35:52+00:00"
     }
   ],
   "fragments": [
