@@ -236,58 +236,12 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-<<<<<<< Updated upstream
       "status": "parked",
       "no_diff_count": 2,
       "last_no_diff_at": "2026-09-14T16:57:30.519996+00:00",
       "parked_reason": "agent produced no code changes 2 time(s) (cap 2) — manual review",
       "parked_at": "2026-09-14T16:57:30.519996+00:00",
       "parked_policy": "no_diff_cap"
-    },
-    {
-      "id": "eng-20260914-04",
-      "area": "ingest",
-      "title": "Backfill `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo when `financials_annual.json` already holds values",
-      "summary": "Backfill `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo when `financials_annual.json` already holds values",
-      "priority": "high",
-      "priority_score": 96.0,
-      "source": "post_run_review",
-      "evidence": {
-        "tickers": [],
-        "plan_index": 4
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "src/value_investor/research/gap_fill_sources.py",
-        "src/value_investor/research/ingest.py",
-        "src/value_investor/research/ingest_improvement.py",
-        "src/value_investor/research/companies_house.py",
-        "src/value_investor/companies_house.py",
-        "tests/test_research_filings.py",
-        "tests/test_research_ingest.py",
-        "tests/test_gap_fill_deepen.py",
-        "tests/test_ingest_improvement.py",
-        "tests/test_companies_house.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": false,
-      "status": "open"
-=======
-      "status": "open",
-      "no_diff_count": 1,
-      "last_no_diff_at": "2026-09-14T16:14:10.494390+00:00"
->>>>>>> Stashed changes
     }
   ],
   "ingest_health": {
