@@ -1,10 +1,11 @@
 {
-  "run_at": "2026-09-14T10:21:10.000704+00:00",
+  "run_at": "2026-09-14T13:23:32.157080+00:00",
   "market_id": "euro_depth",
   "targets": [
     "ESSITY-B.ST",
     "BOL.ST",
     "ERIC-B.ST",
+    "EG7.IR",
     "ACKB.BR",
     "DTE.DE",
     "DQ7A.IR"
@@ -29,6 +30,14 @@
     {
       "ticker": "ERIC-B.ST",
       "priority_score": 26.233500000000003,
+      "filings_total": 4,
+      "filings_with_body": 3,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    },
+    {
+      "ticker": "EG7.IR",
+      "priority_score": 19.0696,
       "filings_total": 4,
       "filings_with_body": 3,
       "indexed_without_body": 1,
@@ -241,6 +250,66 @@
       }
     },
     {
+      "ticker": "EG7.IR",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 4,
+        "filings_with_body": 3,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 3,
+        "filings_with_body": 3,
+        "indexed_without_body": 0
+      },
+      "improved": false,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 4,
+        "annual": 2,
+        "interim": 1,
+        "trading_update": 0,
+        "other": 1,
+        "with_body": 3,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 1,
+            "with_body": 1
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 1,
+            "with_body": 0
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 3,
+        "with_body_after": 3,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 2,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "note": "no missing IR allowlist bodies"
+      }
+    },
+    {
       "ticker": "ACKB.BR",
       "reason": "thin_bodies",
       "before": {
@@ -437,7 +506,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-14T10:17:37.560522+00:00",
+    "snapshot_at": "2026-09-14T13:17:51.064534+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 45,
     "unmeasured_buy_tier": 0,
@@ -506,7 +575,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-14T10:21:07.554575+00:00",
+    "snapshot_at": "2026-09-14T13:23:29.229460+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 45,
     "unmeasured_buy_tier": 0,
@@ -618,7 +687,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "euro_depth",
-    "assessed_at": "2026-09-14T10:17:40.004291+00:00",
+    "assessed_at": "2026-09-14T13:17:54.008272+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -701,9 +770,9 @@
       "thin_need_bodies": 4
     }
   },
-  "used_seconds": 205.06065204300003,
+  "used_seconds": 332.182713959,
   "budget_seconds": 2700.0,
-  "leftover_seconds": 2494.939347957,
+  "leftover_seconds": 2367.817286041,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -711,9 +780,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_depth",
-    "updated_at": "2026-09-14T10:21:07.562962+00:00",
+    "updated_at": "2026-09-14T13:23:29.238366+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 1,
+    "complete_zero_improve_runs": 2,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -871,7 +940,6 @@
       "LDOS",
       "LMT",
       "TSN",
-      "INTU",
       "ULTP.L",
       "APTD.L",
       "BOOT.L",
@@ -879,7 +947,8 @@
       "MER.L",
       "TPT.L",
       "GLE.L",
-      "GIB-A.TO"
+      "GIB-A.TO",
+      "SU.TO"
     ]
   }
 }

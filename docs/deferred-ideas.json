@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-14T11:34:18+00:00",
+  "updated_at": "2026-09-14T11:55:35+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8707,6 +8707,40 @@
       "status": "open",
       "source": "weekly planning: anticipate future recording needs",
       "added_at": "2026-09-14T09:38:20+00:00"
+    },
+    {
+      "id": "L387",
+      "category": "later",
+      "section": "ops",
+      "title": "Expand ops overdue auto-dispatch beyond ingest/paper",
+      "summary": "AUTO_DISPATCH_OVERDUE_WORKFLOWS is intentionally narrow (ingest-loop + paper-auto). Consider orchestrator weekday_paper suite and other primary crons once dispatch idempotency and catch-up interaction are proven.",
+      "revisit_when": "After ops-monitor has successfully auto-dispatched overdue ingest or paper at least once in production without double-firing catch-up slots",
+      "tags": [
+        "ops-monitor",
+        "auto-fix",
+        "workflow-dispatch"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a09f56-139e-76af-8652-89592ebf2fe7",
+      "added_at": "2026-09-14T10:03:39+00:00"
+    },
+    {
+      "id": "L388",
+      "category": "later",
+      "section": "ops",
+      "title": "End-of-day project-management gate agent",
+      "summary": "Autonomous EOD agent that checks progress toward Phase B/C and other learning gates, then self-generates or recommends fixes for stalls. Prefer extending ftse-ops-monitor checks + drafted eng tasks first; full PM agent only if monitor findings keep being missed.",
+      "revisit_when": "Ops-monitor Phase B/C gate checks have run for \u22654 weeks and stalls still go unnoticed without ad-hoc questions",
+      "tags": [
+        "ops-monitor",
+        "phase-b",
+        "phase-c",
+        "gates",
+        "project-management"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a09f44-be06-7408-a582-64d4310461bf",
+      "added_at": "2026-09-14T11:55:35+00:00"
     }
   ],
   "fragments": [

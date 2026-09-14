@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-14T11:34:18+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-14T11:55:35+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -454,6 +454,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L378 | **Informational weekday excess digest in ops-monitor email** | When paper-track coverage is healthy, optionally include a non-alerting snapshot of AI vs ^FTSE / rules / shadow excess in the ops-monitor digest so Sunday review has a weekday trail without a human glance. | ops-monitor email is already sending on warn/fail and a one-line excess snapshot would save Sunday lookup |
 | L382 | **Backfill missed shard epoch-0 first fills into the DCA overlay** | SP500 epoch-0 holds 120 names but overlay only has 4 first-entry episodes (ASX 29 vs 1). Overlay ingest only records new buys this pass; if the cold-start overlay was not persisted, later marks cannot backfill. Repair would reconstruct episodes from rebalance_log/trades without changing fills. | A human wants shard-level DCA confirmation, or weekday marks show holdings far above overlay open+closed counts on admitted books |
 | L383 | **Say frozen knobs not frozen holdings for epoch-0** | Ops prose calls buy_tier_level a frozen book/cohort, which reads as a static holdings list. Epoch-0 is a live rules baseline: names enter/hold/exit; only picking knobs and entry mechanics (no DCA execute, no starter fraction) stay frozen. | Next edit of buy-tier-cohort-labs.md or market-sharded-learning.md admitted-start section |
+| L387 | **Expand ops overdue auto-dispatch beyond ingest/paper** | AUTO_DISPATCH_OVERDUE_WORKFLOWS is intentionally narrow (ingest-loop + paper-auto). Consider orchestrator weekday_paper suite and other primary crons once dispatch idempotency and catch-up interaction are proven. | After ops-monitor has successfully auto-dispatched overdue ingest or paper at least once in production without double-firing catch-up slots |
+| L388 | **End-of-day project-management gate agent** | Autonomous EOD agent that checks progress toward Phase B/C and other learning gates, then self-generates or recommends fixes for stalls. Prefer extending ftse-ops-monitor checks + drafted eng tasks first; full PM agent only if monitor findings keep being missed. | Ops-monitor Phase B/C gate checks have run for ≥4 weeks and stalls still go unnoticed without ad-hoc questions |
 
 ---
 

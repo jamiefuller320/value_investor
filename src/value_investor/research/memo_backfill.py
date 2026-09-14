@@ -230,6 +230,59 @@ def sync_output_research_to_committed(
     return synced
 
 
+_MEMO_SEED_NAMES = (
+    "research.json",
+    "research.md",
+    "agent_id.txt",
+    "timeline.json",
+)
+
+
+def sync_committed_memos_to_output(
+    output_dir: Path,
+    *,
+    data_dir: Path = Path("docs/data"),
+    tickers: list[str] | None = None,
+) -> int:
+    """
+    Seed committed memo metadata into ``output/research`` before Sunday research-docs.
+
+    Sources-only seeding left ``ResearchStore`` empty, so Sunday treated every
+    target as a brand-new create (or skipped silently after budget/time pressure)
+    and never wrote ``structured_verdict*`` updates back through the weekly path.
+    Copying ``research.json`` (+ markdown/timeline) lets the runner update existing
+    memos with Phase B structured modes, then persist via
+    ``sync_output_research_to_committed``.
+    """
+    committed_root = data_dir / "research"
+    if not committed_root.is_dir():
+        return 0
+    wanted = {t.strip().upper() for t in (tickers or []) if t and t.strip()} or None
+    synced = 0
+    dest_root = output_dir / "research"
+    dest_root.mkdir(parents=True, exist_ok=True)
+    for ticker_dir in sorted(committed_root.iterdir()):
+        if not ticker_dir.is_dir():
+            continue
+        ticker = ticker_dir.name.strip().upper()
+        if wanted is not None and ticker not in wanted:
+            continue
+        meta_src = ticker_dir / "research.json"
+        if not meta_src.is_file():
+            continue
+        dest = dest_root / ticker_dir.name
+        dest.mkdir(parents=True, exist_ok=True)
+        for name in _MEMO_SEED_NAMES:
+            src = ticker_dir / name
+            if src.is_file():
+                shutil.copy2(src, dest / name)
+        revisions_src = ticker_dir / "revisions"
+        if revisions_src.is_dir():
+            shutil.copytree(revisions_src, dest / "revisions", dirs_exist_ok=True)
+        synced += 1
+    return synced
+
+
 def sync_committed_sources_to_output(
     output_dir: Path,
     *,
