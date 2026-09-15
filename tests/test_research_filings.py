@@ -454,6 +454,65 @@ def test_apply_cashflow_metrics_fallback_leaves_existing_values():
     assert payload["free_cashflow"] == 55_000_000.0
 
 
+def test_apply_cashflow_metrics_fallback_uses_stored_cashflow_metrics():
+    """When annual cash_flow rows are absent, use precomputed ``cashflow_metrics``."""
+    payload = {"operating_cashflow": None, "free_cashflow": None}
+    financials = {
+        "ticker": "HIK.L",
+        "cash_flow": {},
+        "quarterly_cashflow": {},
+        "cashflow_metrics": {
+            "operating_cashflow": 436_000_000.0,
+            "free_cashflow": 119_000_000.0,
+            "ttm_cashflow_suppressed": True,
+            "ttm_cashflow_suppressed_reason": "quarterly_cashflow_empty",
+        },
+    }
+    filled = apply_cashflow_metrics_fallback(payload, financials)
+    assert filled == ["operating_cashflow", "free_cashflow"]
+    assert payload["operating_cashflow"] == 436_000_000.0
+    assert payload["free_cashflow"] == 119_000_000.0
+
+
+def test_supplement_company_metrics_cashflow_uk_hik_suppressed_quarterly(tmp_path: Path):
+    """UK (.L): backfill OCF/FCF from mirrored financials when Yahoo quarterlies are empty."""
+    sources = tmp_path / "research" / "HIK.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "HIK.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 436_000_000.0,
+                "Capital Expenditure": -317_000_000.0,
+                "Free Cash Flow": 119_000_000.0,
+            },
+        },
+        "quarterly_cashflow": {},
+        "cashflow_metrics": {
+            "operating_cashflow": 436_000_000.0,
+            "free_cashflow": 119_000_000.0,
+            "ttm_cashflow_suppressed": True,
+            "ttm_cashflow_suppressed_reason": "quarterly_cashflow_empty",
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    metrics = CompanyMetrics(
+        ticker="HIK.L",
+        free_cashflow=119_000_000.0,
+        operating_cashflow=None,
+    )
+    filled = supplement_company_metrics_cashflow(
+        metrics,
+        sources_dir=sources,
+        allow_live_fetch=False,
+    )
+    assert filled == ["operating_cashflow"]
+    assert metrics.operating_cashflow == 436_000_000.0
+    assert metrics.free_cashflow == 119_000_000.0
+    assert metrics.data_sources["operating_cashflow"] == "yahoo_financials_annual"
+
+
 def test_supplement_company_metrics_cashflow_megp_uses_cached_financials(tmp_path: Path):
     sources = tmp_path / "research" / "MEGP.L" / "sources"
     sources.mkdir(parents=True)
