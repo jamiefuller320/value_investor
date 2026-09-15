@@ -8,6 +8,10 @@ from typing import Any
 import pandas as pd
 
 from value_investor.scoring.fcf import resolve_free_cashflow, screen_ttm_from_row
+from value_investor.scoring.uk_contractor_overlay import (
+    is_uk_listed_contractor,
+    uk_contractor_cash_conversion_overlay_triggered,
+)
 
 
 def trailing_fcf_for_cash_conversion_overlay(row: pd.Series) -> float | None:
@@ -78,8 +82,17 @@ def cash_conversion_overlay_triggered(
     free_cashflow: float | None,
     dividend_screen_passed_flag: bool,
     active_buyback: bool,
+    uk_contractor_revenue_fcf_warning: bool = False,
+    uk_contractor: bool = False,
+    passed_families: str | None = None,
 ) -> bool:
-    """Negative trailing FCF plus dividend pass and active buyback."""
+    """Negative trailing FCF plus dividend pass and buyback, or UK contractor revenue/FCF warning."""
+    if uk_contractor_cash_conversion_overlay_triggered(
+        uk_contractor=uk_contractor,
+        passed_families=passed_families,
+        revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
+    ):
+        return True
     if free_cashflow is None or (isinstance(free_cashflow, float) and pd.isna(free_cashflow)):
         return False
     if float(free_cashflow) >= 0:
@@ -119,6 +132,9 @@ def apply_cash_conversion_overlay_to_signal(
     shares_outstanding_prev: float | None,
     ticker_models: pd.DataFrame,
     adjusted_signal: str | None = None,
+    uk_contractor_revenue_fcf_warning: bool = False,
+    uk_contractor: bool = False,
+    passed_families: str | None = None,
 ) -> tuple[bool, str]:
     """Return overlay flag and conservative adjusted signal."""
     base_adjusted = adjusted_signal or signal
@@ -130,6 +146,9 @@ def apply_cash_conversion_overlay_to_signal(
             shares_outstanding_prev=shares_outstanding_prev,
             ticker_models=ticker_models,
         ),
+        uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
+        uk_contractor=uk_contractor,
+        passed_families=passed_families,
     ):
         return False, base_adjusted
     capped = cap_signal_for_cash_conversion_overlay(signal)
@@ -172,6 +191,19 @@ def enrich_signals_with_cash_conversion_overlay(
             else None
         )
 
+        rev_fcf_warning = row.get("uk_contractor_revenue_fcf_warning")
+        uk_contractor_revenue_fcf_warning = (
+            bool(rev_fcf_warning)
+            if rev_fcf_warning is not None
+            and not (isinstance(rev_fcf_warning, float) and pd.isna(rev_fcf_warning))
+            else False
+        )
+        uk_contractor = bool(row.get("uk_contractor")) or is_uk_listed_contractor(
+            ticker,
+            row.get("name"),
+            row.get("sector"),
+        )
+
         triggered, new_adjusted = apply_cash_conversion_overlay_to_signal(
             str(row.get("signal") or "hold"),
             free_cashflow=trailing_fcf,
@@ -179,6 +211,9 @@ def enrich_signals_with_cash_conversion_overlay(
             shares_outstanding_prev=shares_outstanding_prev,
             ticker_models=ticker_models,
             adjusted_signal=existing_adjusted,
+            uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
+            uk_contractor=uk_contractor,
+            passed_families=row.get("passed_families"),
         )
         flags.append(triggered)
         adjusted.append(new_adjusted)

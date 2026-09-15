@@ -566,6 +566,9 @@ def _brief_summary(
     filing_adjusted_net_debt_gbp: float | None = None,
     fcf_dividend_coverage_gross: float | None = None,
     fcf_dividend_coverage_net: float | None = None,
+    uk_contractor_revenue_fcf_warning: bool = False,
+    public_capex_exposure_detected: bool = False,
+    framework_backlog_growth_suppressed: bool = False,
 ) -> str:
     label = SIGNAL_LABELS.get(signal, signal)
     parts: list[str] = []
@@ -633,10 +636,16 @@ def _brief_summary(
         )
 
     if cash_conversion_overlay and adjusted_signal and adjusted_signal != signal:
-        parts.append(
-            f"Cash-conversion overlay: negative FCF with dividend screens and buyback "
-            f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
-        )
+        if uk_contractor_revenue_fcf_warning:
+            parts.append(
+                "Cash-conversion overlay: UK contractor falling revenue with rising FCF "
+                f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+            )
+        else:
+            parts.append(
+                f"Cash-conversion overlay: negative FCF with dividend screens and buyback "
+                f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+            )
 
     if dividend_yield_overlay and adjusted_signal and adjusted_signal != signal:
         parts.append(
@@ -670,10 +679,29 @@ def _brief_summary(
         )
 
     if cyclical_exposure_overlay and adjusted_signal and adjusted_signal != signal:
+        if public_capex_exposure_detected and uk_contractor_revenue_fcf_warning:
+            parts.append(
+                "Cyclical-exposure overlay: UK public-capex contractor with revenue/FCF divergence "
+                f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+            )
+        else:
+            parts.append(
+                f"Cyclical-exposure overlay: discretionary demand risk with interim EPS decline and thin "
+                f"dividend cover "
+                f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+            )
+
+    if uk_contractor_revenue_fcf_warning and not (
+        cash_conversion_overlay and adjusted_signal and adjusted_signal != signal
+    ):
         parts.append(
-            f"Cyclical-exposure overlay: discretionary demand risk with interim EPS decline and thin "
-            f"dividend cover "
-            f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+            "UK contractor quality warning: filing revenue declined while FCF rose — "
+            "confirm segment mix before sizing."
+        )
+
+    if framework_backlog_growth_suppressed:
+        parts.append(
+            "GARP growth capped: filing revenue declined — framework/order-book wins not scored as backlog growth."
         )
 
     if healthcare_price_erosion_overlay and adjusted_signal and adjusted_signal != signal:
@@ -998,6 +1026,37 @@ def build_company_reports(
             and not (isinstance(divergence_flag_raw, float) and pd.isna(divergence_flag_raw))
             else bool(fcf_bundle.get("fcf_divergence_flagged"))
         )
+        from value_investor.scoring.uk_contractor_overlay import is_uk_listed_contractor
+
+        rev_fcf_warning_raw = row.get("uk_contractor_revenue_fcf_warning")
+        uk_contractor_revenue_fcf_warning = (
+            bool(rev_fcf_warning_raw)
+            if rev_fcf_warning_raw is not None
+            and not (isinstance(rev_fcf_warning_raw, float) and pd.isna(rev_fcf_warning_raw))
+            else False
+        )
+        uk_contractor = bool(row.get("uk_contractor")) or is_uk_listed_contractor(
+            ticker,
+            row.get("name"),
+            row.get("sector"),
+        )
+        public_capex_raw = row.get("public_capex_exposure_detected")
+        public_capex_exposure_detected = (
+            bool(public_capex_raw)
+            if public_capex_raw is not None
+            and not (isinstance(public_capex_raw, float) and pd.isna(public_capex_raw))
+            else False
+        )
+        framework_suppressed_raw = row.get("framework_backlog_growth_suppressed")
+        framework_backlog_growth_suppressed = (
+            bool(framework_suppressed_raw)
+            if framework_suppressed_raw is not None
+            and not (
+                isinstance(framework_suppressed_raw, float) and pd.isna(framework_suppressed_raw)
+            )
+            else False
+        )
+
         labelled_fcf_dividend_coverage = labelled_fcf_dividend_coverage_for_snapshot(
             fcf_definition_divergence=fcf_definition_divergence,
             fcf_dividend_coverage_net=fcf_dividend_coverage_net,
@@ -1092,6 +1151,9 @@ def build_company_reports(
                 shares_outstanding_prev=shares_outstanding_prev,
                 ticker_models=ticker_models,
                 adjusted_signal=adjusted_signal_str,
+                uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
+                uk_contractor=uk_contractor,
+                passed_families=row.get("passed_families"),
             )
 
         action_note = append_fcf_divergence_to_action_note(
@@ -1182,6 +1244,9 @@ def build_company_reports(
                     free_cashflow=free_cashflow,
                     dividends_paid=dividends_paid,
                     adjusted_signal=adjusted_signal_str,
+                    uk_contractor=uk_contractor,
+                    public_capex_detected=public_capex_exposure_detected,
+                    uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
                 )
             )
 
@@ -1515,6 +1580,9 @@ def build_company_reports(
             filing_adjusted_net_debt_gbp=filing_adjusted_net_debt_gbp,
             fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
             fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+            uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
+            public_capex_exposure_detected=public_capex_exposure_detected,
+            framework_backlog_growth_suppressed=framework_backlog_growth_suppressed,
         )
 
         vs_sma = row.get("price_vs_sma200_pct")
