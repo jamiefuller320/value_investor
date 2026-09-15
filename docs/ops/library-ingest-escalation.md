@@ -163,7 +163,9 @@ Parallel sprint auto-advance (`advance_parallel_sprint_on_ingest_parity`, defaul
 thin/IWB ingest is exhausted** (parked after 3 complete 0-improve runs). When both
 stream lists are empty but a queue name regaps, `reseed_empty_parallel_sprint_slots`
 (reconcile + dispatch refresh) assigns the next needing markets in queue order so
-rotation and handoffs resume without manual policy edits. Unmeasured
+rotation and handoffs resume without manual policy edits. When the committed
+``market_queue`` is sprint-complete, the same picker walks ``DEFAULT_MARKET_QUEUE``
+so spare streams front-start graduated-but-not-yet-admitted markets. Unmeasured
 and zero-body names are never parked. FTSE-equivalent markets
 (`ftse_equivalent_markets`, e.g. sp500) still defer `ingest_parity_markets` until
 true raw parity **and** `learning-depth` is green. Exhausted leftovers vacate the
@@ -197,6 +199,10 @@ at the back of the queue: ingest loop / `ftse-library parked-hunter-compile` /
 hourly `engineering-queue.yml` compile one parked ticker; after that task is
 merged, the next ticker compiles. Stall and gap-closure compile ignore this
 source so it cannot block higher-priority ingest work.
+When the priority engineering queue is idle and role-coherence still shows a
+compile-cap backlog, `ftse-engineering try-compile-cap-drain` runs **before**
+hunter compile (score floor 25) and hunter defers until that backlog is empty —
+live-path suggestion drain outranks offline leftover hunts.
 Maintenance then uses the same deepen volume as `ingest-loop.yml`
 (`max_targets=62`, `max_bodies=40`, 2×/weekday). Do not keep a lighter library
 variant — learning needs the same body quality as soon as a market is the

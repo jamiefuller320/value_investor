@@ -30,8 +30,17 @@ DEFAULT_MIN_METRICS_FOR_SCREEN = 25
 TERMINAL_TASK_STATUSES = frozenset({"merged", "completed", "failed", "cancelled", "parked"})
 PARKED_SOURCE_HUNTER_SOURCE = "parked_source_hunter"
 HUNTER_URL_REPAIR_SOURCE = "hunter_url_repair"
-INGEST_BACKGROUND_SOURCES = frozenset({PARKED_SOURCE_HUNTER_SOURCE, HUNTER_URL_REPAIR_SOURCE})
+COMPILE_CAP_DRAIN_SOURCE = "compile_cap_drain"
+INGEST_BACKGROUND_SOURCES = frozenset(
+    {
+        PARKED_SOURCE_HUNTER_SOURCE,
+        HUNTER_URL_REPAIR_SOURCE,
+        COMPILE_CAP_DRAIN_SOURCE,
+    }
+)
 PARKED_SOURCE_HUNTER_PRIORITY_SCORE = 12.0
+# Floor for idle compile-cap drain (above hunter; below post-run / CI / so-what).
+COMPILE_CAP_DRAIN_PRIORITY_FLOOR = 25.0
 
 BLOCKED_PATHS = (
     "src/value_investor/paper_fund.py",
@@ -294,8 +303,8 @@ def _extract_tickers(*chunks: str) -> list[str]:
 def is_blocking_open_ingest_task(row: dict[str, Any]) -> bool:
     """True for an open ingest task that should block stall / gap-closure compile.
 
-    Low-priority parked-source hunter tasks sit at the back of the queue and
-    must not prevent higher-priority ingest compile.
+    Low-priority parked-source hunter tasks and idle compile-cap drain items sit
+    at the back of the queue and must not prevent higher-priority ingest compile.
     """
     if str(row.get("area") or "").lower() != "ingest":
         return False
@@ -964,13 +973,28 @@ def compile_engineering_tasks(
     from value_investor.engineering_queue import snapshot_ingest_health
 
     ingest_health = snapshot_ingest_health()
-    payload = {
-        "compiled_at": datetime.now(UTC).isoformat(),
-        "run_at": _read_run_at(output_dir),
-        "task_count": len(merged_rows),
-        "tasks": merged_rows,
-        "ingest_health": ingest_health,
-    }
+    existing_meta = {}
+    for candidate in (committed_path, tasks_path):
+        if Path(candidate).exists():
+            existing_meta = load_engineering_tasks(candidate)
+            if (
+                existing_meta.get("tasks")
+                or existing_meta.get("queue_clearing")
+                or existing_meta.get("traffic_control")
+            ):
+                break
+    from value_investor.project_traffic import preserve_queue_meta
+
+    payload = preserve_queue_meta(
+        existing_meta,
+        {
+            "compiled_at": datetime.now(UTC).isoformat(),
+            "run_at": _read_run_at(output_dir),
+            "task_count": len(merged_rows),
+            "tasks": merged_rows,
+            "ingest_health": ingest_health,
+        },
+    )
     tasks_path = Path(tasks_path)
     tasks_path.parent.mkdir(parents=True, exist_ok=True)
     write_json(tasks_path, payload, compact=False)

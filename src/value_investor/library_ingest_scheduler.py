@@ -172,9 +172,10 @@ def fill_down_markets(
                 parallel_stream=other,
             )
         )
+    from value_investor.library_ingest_dispatch import sprint_expansion_market_order
+
     filled: list[str] = []
-    for mid in list(policy.get("market_queue") or []):
-        name = str(mid or "").strip()
+    for name in sprint_expansion_market_order(policy):
         if not name or name in reserved or name not in needing_set:
             continue
         filled.append(name)

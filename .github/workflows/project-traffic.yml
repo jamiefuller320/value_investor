@@ -1,0 +1,138 @@
+name: FTSE Project Traffic
+
+# Monitor open cursor/* PRs for CI failures and merge conflicts. Pause new
+# engineering-agent dispatch while stuck, request fixes, write grounded EOD digest.
+# See docs/ops/project-traffic.md.
+on:
+  schedule:
+    # Midday + end-of-day UTC; GitHub cron is backup — prefer cron-job.org.
+    - cron: "30 12 * * 1-5"
+    - cron: "30 17 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Classify only — do not write pause state or post comments"
+        type: boolean
+        default: false
+      force:
+        description: "Run even if a successful project-traffic already ran today"
+        type: boolean
+        default: false
+  repository_dispatch:
+    types: [project-traffic]
+
+permissions:
+  contents: write
+  actions: write
+  pull-requests: write
+
+concurrency:
+  group: ftse-project-traffic
+  cancel-in-progress: false
+
+jobs:
+  traffic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e .
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: List open PRs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr list --state open --limit 100 \
+            --json number,title,url,isDraft,headRefName,updatedAt,mergeable,statusCheckRollup \
+            > /tmp/open_prs.json
+
+      - name: Run project traffic controller
+        id: traffic
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          set -euo pipefail
+          ARGS=(run --json --open-prs-json /tmp/open_prs.json)
+          if [ "${DRY_RUN:-}" = "true" ]; then
+            ARGS+=(--dry-run --no-digest)
+          else
+            ARGS+=(--write-digest)
+          fi
+          ftse-project-traffic "${ARGS[@]}" | tee /tmp/project_traffic.json
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          data = json.loads(Path("/tmp/project_traffic.json").read_text())
+          out = Path(os.environ["GITHUB_OUTPUT"])
+          dispatches = data.get("should_dispatch_conflict_agent") or []
+          with out.open("a", encoding="utf-8") as handle:
+              handle.write(f"pause_active={'true' if data.get('pause_active') else 'false'}\n")
+              handle.write(f"stuck_count={int(data.get('stuck_pr_count') or 0)}\n")
+              handle.write(f"conflict_count={len(dispatches)}\n")
+          Path("/tmp/conflict_dispatches.json").write_text(
+              json.dumps(dispatches, indent=2), encoding="utf-8"
+          )
+          print(f"pause_active={data.get('pause_active')} stuck={data.get('stuck_pr_count')}")
+          for row in data.get("stuck_prs") or []:
+              print(f"  PR #{row.get('number')} {row.get('branch')} {row.get('reasons')}")
+          PY
+
+      - name: Commit traffic artifacts
+        if: github.event.inputs.dry_run != 'true'
+        env:
+          GHA_COMMIT_OWNED: >-
+            docs/data/engineering_tasks.json
+            docs/data/project_traffic_digest.json
+            docs/data/project_traffic_digest.md
+            docs/data/queue_health.json
+            docs/data/automation.json
+            docs/data/latest.json
+          COMMIT_MESSAGE: "chore: project traffic controller [skip ci]"
+          GHA_COMMIT_LABEL: Project traffic
+        run: bash scripts/gha_commit_artifacts.sh
+
+      - name: Dispatch conflict-resolve agents
+        if: >-
+          steps.traffic.outputs.conflict_count != '0'
+          && github.event.inputs.dry_run != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
+          rows = json.loads(Path("/tmp/conflict_dispatches.json").read_text())
+          for row in rows:
+              branch = str(row.get("branch") or "")
+              pr = str(row.get("pr_number") or "")
+              task = str(row.get("task_id") or "")
+              if not branch or not pr:
+                  continue
+              cmd = [
+                  "gh", "workflow", "run", "engineering-conflict-resolve.yml",
+                  "-f", f"branch={branch}",
+                  "-f", f"pr_number={pr}",
+              ]
+              if task:
+                  cmd.extend(["-f", f"task_id={task}"])
+              print("dispatch:", " ".join(cmd))
+              subprocess.run(cmd, check=False)
+          PY

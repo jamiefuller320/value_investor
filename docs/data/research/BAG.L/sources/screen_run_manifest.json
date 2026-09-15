@@ -1,18 +1,31 @@
 {
   "ticker": "BAG.L",
-  "run_at": "2026-09-14T08:59:59.089330+00:00",
-  "attached_at": "2026-09-14T09:42:47.183641+00:00",
-  "history_run_path": "docs/data/history/run_20260914_085959.json.gz",
-  "history_models_path": "docs/data/history/models_20260914_085959.json.gz",
+  "run_at": "2026-09-15T07:43:57.741887+00:00",
+  "attached_at": "2026-09-15T11:43:38.433853+00:00",
+  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
+  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "buy": 23,
-      "strong_buy": 3,
-      "hold": 181,
-      "avoid": 41
+      "strong_buy": 17,
+      "buy": 45,
+      "hold": 144,
+      "avoid": 42
     },
-    "universe": "ftse350"
+    "strong_buy_count": 17,
+    "universe": "ftse350",
+    "universe_label": "FTSE 350",
+    "excluded_investment_vehicles": 102,
+    "include_investment_trusts": false,
+    "screen_trusts": true,
+    "trust_count": 102,
+    "trust_signal_counts": {
+      "insufficient_data": 102
+    },
+    "broker_overlay": "trading212",
+    "t212_overlay": true,
+    "ii_overlay": true,
+    "unavailable_watch_count": 0
   },
   "ticker_signal": {
     "ticker": "BAG.L",
@@ -21,11 +34,11 @@
     "data_quality_score": 1.0,
     "name": "A.G. BARR p.l.c.",
     "sector": "Consumer Defensive",
-    "timing_signal": "neutral",
-    "timing_score": 0.625,
-    "action_note": "Buy — neutral timing",
-    "models_passed": 9.0,
-    "weighted_model_score": 0.594509090909091,
+    "timing_signal": "accumulate",
+    "timing_score": 0.75,
+    "action_note": "Buy — favourable entry timing",
+    "models_passed": 8.0,
+    "weighted_model_score": 0.594,
     "research_verdict": null,
     "adjusted_signal": "buy",
     "research_as_of": null,
@@ -36,19 +49,26 @@
     "interim_eps_decline_pct": null,
     "adjusted_eps_growth_pct": 0.18639798488664988,
     "signal_trend": "stable",
-    "weeks_at_signal": 6,
+    "weeks_at_signal": 7,
     "passed_families": "cheapness,quality,dividend,garp,risk",
-    "price_vs_sma200_pct": -0.05876047259569159,
+    "price_vs_sma200_pct": -0.06502695660556992,
     "core_order": "limit",
-    "core_limit": 592.02,
-    "core_allocation_pct": 0.6,
-    "tactical_limit": 568.1,
-    "tactical_allocation_pct": 0.4,
-    "tactical_stop_loss": 533.66,
-    "tactical_take_profit": 619.12,
-    "trade_plan_summary": "Trade plan: core 60% limit £592.02; tactical 40% limit £568.10; tactical stop £533.66, target £619.12.",
-    "atr_14": 16.495,
-    "volume_ratio_20": 0.09
+    "core_limit": 588.06,
+    "core_allocation_pct": 0.65,
+    "tactical_limit": 564.3,
+    "tactical_allocation_pct": 0.35,
+    "tactical_stop_loss": 530.09,
+    "tactical_take_profit": 619.04,
+    "trade_plan_summary": "Trade plan: core 65% limit £588.06; tactical 35% limit £564.30; tactical stop £530.09, target £619.04.",
+    "atr_14": 16.2093,
+    "volume_ratio_20": 0.0017,
+    "operating_cashflow": 51000000.0,
+    "operating_cashflow_gross": null,
+    "fcf_dividend_coverage_gross": null,
+    "fcf_dividend_coverage_net": 1.0729166666666667,
+    "fcf_definition_divergence": false,
+    "fcf_divergence_flagged": false,
+    "fcf_dividend_coverage": null
   },
   "ticker_models": [
     {
@@ -133,7 +153,7 @@
       "ticker": "BAG.L",
       "model_id": "high_dividend",
       "passed": false,
-      "score": 0.5139
+      "score": 0.5231
     },
     {
       "ticker": "BAG.L",
@@ -145,19 +165,19 @@
       "ticker": "BAG.L",
       "model_id": "magic_formula",
       "passed": true,
-      "score": 0.6886
+      "score": 0.6816
     },
     {
       "ticker": "BAG.L",
       "model_id": "acquirers_multiple",
       "passed": true,
-      "score": 0.6682
+      "score": 0.6542
     },
     {
       "ticker": "BAG.L",
       "model_id": "dreman_contrarian",
-      "passed": true,
-      "score": 0.5845
+      "passed": false,
+      "score": 0.5851
     },
     {
       "ticker": "BAG.L",
@@ -184,6 +204,6 @@
       "score": 1.0
     }
   ],
-  "models_passed": 9,
+  "models_passed": 8,
   "models_total": 22
 }

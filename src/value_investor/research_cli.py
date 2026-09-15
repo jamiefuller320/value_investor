@@ -159,6 +159,25 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
+        "--phase-b-catchup",
+        action="store_true",
+        help=(
+            "Batch structured_verdict weekly updates for committed memos still on "
+            "essay/initial modes (Phase B producer catch-up). Repeat until backlog clears."
+        ),
+    )
+    parser.add_argument(
+        "--phase-b-catchup-cap",
+        type=int,
+        default=6,
+        help="Max tickers per --phase-b-catchup invocation (default: 6)",
+    )
+    parser.add_argument(
+        "--phase-b-backlog-status",
+        action="store_true",
+        help="List Phase B mode-migration backlog and write docs/data/phase_b_catchup_state.json",
+    )
+    parser.add_argument(
         "--ingest-loop-json",
         type=Path,
         default=None,
@@ -169,7 +188,7 @@ def main(argv: list[str] | None = None) -> int:
         default="",
         help=(
             "Comma-separated tickers for --deepen-sources, --weekday-rememo, "
-            "or --rememo-catchup (stale-by-age force rememo when used with rememo)"
+            "--rememo-catchup, or --phase-b-catchup"
         ),
     )
     parser.add_argument(
@@ -497,6 +516,55 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  ! {err}", file=sys.stderr)
         print(f"Wrote {args.output_dir / 'deepen_sources_summary.json'}")
         return 1 if result.errors and not result.deepened else 0
+
+    if args.phase_b_backlog_status:
+        from value_investor.research.phase_b_catchup import write_phase_b_backlog_status
+
+        status = write_phase_b_backlog_status(recommended_batch=int(args.phase_b_catchup_cap))
+        print(
+            f"Phase B catch-up backlog={status.get('backlog_count')} "
+            f"next_batch={status.get('next_batch')}"
+        )
+        print("Wrote docs/data/phase_b_catchup_state.json")
+        return 0
+
+    if args.phase_b_catchup:
+        from value_investor.research.phase_b_catchup import run_phase_b_catchup_pass
+
+        if not args.api_key and not args.dry_run:
+            print("CURSOR_API_KEY required for --phase-b-catchup", file=sys.stderr)
+            return 1
+        model = args.model or os.environ.get("CURSOR_RESEARCH_MODEL")
+        if not model:
+            try:
+                from value_investor.agent_model_policy import research_model_id
+
+                model = research_model_id()
+            except Exception:  # noqa: BLE001
+                model = "composer-2.5"
+        ticker_list = [t.strip() for t in str(args.tickers).split(",") if t.strip()] or None
+        summary = run_phase_b_catchup_pass(
+            api_key=args.api_key,
+            batch_size=int(args.phase_b_catchup_cap),
+            output_dir=args.output_dir,
+            dry_run=bool(args.dry_run),
+            model=model,
+            explicit_tickers=ticker_list,
+        )
+        print(
+            f"Phase B catch-up selected={len(summary.selected)} "
+            f"updated={len(summary.updated)} skipped={summary.skipped} "
+            f"errors={len(summary.errors)} "
+            f"backlog_before={summary.backlog_before} "
+            f"backlog_after={summary.backlog_after} "
+            f"persisted_trees={summary.persisted_trees}"
+        )
+        for ticker in summary.updated:
+            print(f"  {ticker}: structured mode landed")
+        for err in summary.errors:
+            print(f"  ! {err}", file=sys.stderr)
+        print("Wrote docs/data/phase_b_catchup_summary.json")
+        return 1 if summary.errors and not summary.updated else 0
 
     if args.rememo_backlog_status:
         from value_investor.research.weekday_rememo import write_rememo_backlog_status

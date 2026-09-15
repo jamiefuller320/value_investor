@@ -15,6 +15,7 @@ from value_investor.library_ingest_dispatch import (
     ingest_parity_met,
     list_library_ingest_parallel_sprint_markets,
     should_run_parallel_sprint_ingest,
+    sprint_expansion_market_order,
     sprint_ingest_complete,
 )
 from value_investor.library_ingest_escalation import snapshot_library_buy_tier_filing_health
@@ -133,8 +134,7 @@ def run_library_ingest_sprint(
     )
     if markets is None:
         extra = []
-        for mid in list(policy.get("market_queue") or []):
-            name = str(mid or "").strip()
+        for name in sprint_expansion_market_order(policy):
             if not name or name == head_id:
                 continue
             extra.append(name)

@@ -279,6 +279,26 @@ def default_policy() -> dict[str, Any]:
                     "the last clearing action."
                 ),
             },
+            "traffic_control": {
+                "enabled": True,
+                "stuck_pr_threshold": 2,
+                "min_fail_age_minutes": 20,
+                "resume_idle_minutes": 15,
+                "max_fix_requests_per_pr": 2,
+                "comment_cooldown_hours": 6,
+                "monitor_cursor_prs": True,
+                "pause_on_stuck": True,
+                "request_ci_fix_comments": True,
+                "request_conflict_resolve": True,
+                "digest_enabled": True,
+                "note": (
+                    "Project traffic controller (ftse-project-traffic): pause new "
+                    "engineering-agent dispatch when monitored cursor/* PRs are CI-red "
+                    "or merge-conflicting; comment to request fixes; dispatch scoped "
+                    "conflict-resolve for eng branches; write grounded EOD digest. "
+                    "Does not merge PRs — merge stays human or scoped auto-merge."
+                ),
+            },
             "hunter_url_monitor": {
                 "enabled": True,
                 "lookback_days": 30,
@@ -315,6 +335,12 @@ def load_policy(path: Path | None = None) -> dict[str, Any]:
     ):
         merged = default_policy()[key]
         file_section = dict(data.get(key) or {})
+        if key == "engineering":
+            for sub in ("auto_merge", "queue_recovery", "traffic_control", "hunter_url_monitor"):
+                sub_merged = dict(merged.get(sub) or {})
+                sub_merged.update(dict(file_section.get(sub) or {}))
+                merged[sub] = sub_merged
+                file_section.pop(sub, None)
         merged.update(file_section)
         base[key] = merged
     base["budget"] = normalize_budget(base.get("budget"))

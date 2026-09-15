@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-15T07:47:49.916305+00:00",
+  "generated_at": "2026-09-15T11:16:28.224353+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1150,14 +1150,14 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-15T07:46:56.019355+00:00",
-    "queue_ui_updated_at": "2026-09-15T07:47:49.858414+00:00",
-    "task_count": 7,
+    "compiled_at": "2026-09-15T09:01:51.712433+00:00",
+    "queue_ui_updated_at": "2026-09-15T11:16:28.124686+00:00",
+    "task_count": 13,
     "status": {
-      "open_count": 2,
+      "open_count": 9,
       "pr_open_count": 0,
       "parked_count": 2,
-      "merged_count": 3,
+      "merged_count": 2,
       "failed_count": 0,
       "next_task_id": "eng-20260915-01",
       "in_flight_branch": null,
@@ -1169,12 +1169,12 @@
     "queued_tasks": [
       {
         "id": "eng-20260915-01",
-        "area": "ops",
-        "title": "Phase B structured-verdict producer stalled",
-        "priority": "medium",
-        "priority_score": 45.0,
+        "area": "ingest",
+        "title": "Implement Investegate/LSE direct HTML/PDF fetch for indexed RNS (replace Google News redirect URLs) and persist to `filings/bodies/` with index `with_body` pari",
+        "priority": "high",
+        "priority_score": 99.0,
         "status": "open",
-        "source": "ops_monitor",
+        "source": "post_run_review",
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
@@ -1185,18 +1185,130 @@
       },
       {
         "id": "eng-20260915-02",
-        "area": "ops",
-        "title": "Verdict fields present without structured_verdict modes",
-        "priority": "medium",
-        "priority_score": 45.0,
+        "area": "ingest",
+        "title": "Companies House document-api PDF pipeline with OCR quality gates and CH-ID ↔ `filings_index` mapping; reject or quarantine truncated extracts (flag when line co",
+        "priority": "high",
+        "priority_score": 98.0,
         "status": "open",
-        "source": "ops_monitor",
+        "source": "post_run_review",
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 2,
+        "clash_scan": "full"
+      },
+      {
+        "id": "eng-20260915-03",
+        "area": "ingest",
+        "title": "Parse allowlisted IR results PDFs into structured FCF bridges and populate `ir_presentation_metrics.json` (segment revenue, dividend policy, management FCF defi",
+        "priority": "high",
+        "priority_score": 97.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 3,
+        "clash_scan": "full"
+      },
+      {
+        "id": "eng-20260915-05",
+        "area": "scoring",
+        "title": "Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade when three-",
+        "priority": "high",
+        "priority_score": 97.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 4,
+        "clash_scan": "full"
+      },
+      {
+        "id": "eng-20260915-04",
+        "area": "ingest",
+        "title": "Backfill Yahoo cash-flow fields (`operating_cashflow`, UK quarterly cash-flow where suppressed) into fetch/`CompanyMetrics` from statements already mirrored in ",
+        "priority": "high",
+        "priority_score": 96.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 5,
+        "clash_scan": "full"
+      },
+      {
+        "id": "eng-20260914-03",
+        "area": "ingest",
+        "title": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
+        "priority": "high",
+        "priority_score": 95.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 6,
+        "clash_scan": "full"
+      },
+      {
+        "id": "eng-20260915-07",
+        "area": "scoring",
+        "title": "Attach run-history FCF divergence flags to `docs/data/history/run_*.json.gz` `action_note` for all Strong Buy names (HIK shows mismatch in snapshot but not in h",
+        "priority": "high",
+        "priority_score": 43.0,
+        "status": "open",
+        "source": "research_model_suggestions",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 7,
+        "clash_scan": "full"
+      },
+      {
+        "id": "eng-20260915-09",
+        "area": "scoring",
+        "title": "Attach cross-ticker model pass/score table to gap-fill output automatically from sibling `screen_run_manifest.json` files so moat/yield ranking claims (e.g. “wi",
+        "priority": "high",
+        "priority_score": 43.0,
+        "status": "open",
+        "source": "research_model_suggestions",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 8,
+        "clash_scan": "full"
+      },
+      {
+        "id": "eng-20260915-10",
+        "area": "scoring",
+        "title": "Emit dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) with labels in screening_snapshot to prevent conflation",
+        "priority": "high",
+        "priority_score": 43.0,
+        "status": "open",
+        "source": "research_model_suggestions",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 9,
         "clash_scan": "full"
       }
     ],
@@ -1227,14 +1339,14 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 2,
-      "dispatch_eligible_count": 2,
+      "open_task_count": 9,
+      "dispatch_eligible_count": 9,
       "blocked_count": 0
     }
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-09-15T07:35:49.595915+00:00",
+    "generated_at": "2026-09-15T09:01:52.561714+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
@@ -1507,7 +1619,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-15T07:47:49.916305+00:00",
+    "generated_at": "2026-09-15T11:16:28.224353+00:00",
     "overall": "active",
     "headline": "Agent lane active.",
     "merge_lane": {
@@ -1527,24 +1639,31 @@
       "blocked": false,
       "should_dispatch": true,
       "pause_active": false,
+      "traffic_pause_active": false,
       "attention_parked_count": 0,
-      "open_count": 2,
+      "open_count": 9,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 2,
+      "dispatch_eligible_count": 9,
       "blocked_task_count": 0,
       "next_task_id": "eng-20260915-01",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
+      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
+      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-15T07:47:46.199500+00:00"
+      "evaluated_at": "2026-09-15T11:16:20.672504+00:00"
+    },
+    "traffic_control": {
+      "pause_active": false,
+      "stuck_pr_count": 0,
+      "pause_reasons": [],
+      "evaluated_at": null
     },
     "ops_monitor": {
-      "run_at": "2026-09-15T07:46:32.318230+00:00",
+      "run_at": "2026-09-14T07:46:37.216700+00:00",
       "overall": "fail",
-      "should_dispatch_engineering": true
+      "should_dispatch_engineering": false
     }
   }
 }

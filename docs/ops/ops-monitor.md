@@ -347,6 +347,18 @@ Brief dips while you are still triaging therefore do not restart the queue mid-s
 Policy keys: `engineering.queue_recovery.max_attention_parked_tasks`,
 `resume_attention_parked_below`, `resume_idle_minutes` in agent model policy.
 
+### Project traffic controller (stuck PR pause)
+
+When **2 or more** monitored `cursor/*` PRs are CI-red or merge-conflicting,
+`ftse-project-traffic` (ops-monitor + weekday `project-traffic.yml`) sets
+`traffic_control.pause_active` on `engineering_tasks.json`. That pauses
+**engineering-agent** dispatch and **parked-hunter-compile** until stuck PRs clear
+and a short idle window elapses.
+
+The controller comments on stuck PRs and may dispatch
+`engineering-conflict-resolve.yml` for `cursor/eng-*` branches. It does **not**
+merge. See [`project-traffic.md`](project-traffic.md).
+
 ### Hunter allowlist URL monitor
 
 Hourly `recover-engineering-queue` re-live-fetches allowlist URLs from hunter tasks

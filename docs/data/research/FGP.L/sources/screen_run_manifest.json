@@ -1,31 +1,44 @@
 {
   "ticker": "FGP.L",
-  "run_at": "2026-09-14T08:59:59.089330+00:00",
-  "attached_at": "2026-09-14T09:16:23.588965+00:00",
-  "history_run_path": "docs/data/history/run_20260914_085959.json.gz",
-  "history_models_path": "docs/data/history/models_20260914_085959.json.gz",
+  "run_at": "2026-09-15T07:43:57.741887+00:00",
+  "attached_at": "2026-09-15T11:07:44.102795+00:00",
+  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
+  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "buy": 23,
-      "strong_buy": 3,
-      "hold": 181,
-      "avoid": 41
+      "strong_buy": 17,
+      "buy": 45,
+      "hold": 144,
+      "avoid": 42
     },
-    "universe": "ftse350"
+    "strong_buy_count": 17,
+    "universe": "ftse350",
+    "universe_label": "FTSE 350",
+    "excluded_investment_vehicles": 102,
+    "include_investment_trusts": false,
+    "screen_trusts": true,
+    "trust_count": 102,
+    "trust_signal_counts": {
+      "insufficient_data": 102
+    },
+    "broker_overlay": "trading212",
+    "t212_overlay": true,
+    "ii_overlay": true,
+    "unavailable_watch_count": 0
   },
   "ticker_signal": {
     "ticker": "FGP.L",
     "signal": "strong_buy",
-    "conviction_score": 0.62156675,
+    "conviction_score": 0.621928,
     "data_quality_score": 1.0,
     "name": "FirstGroup plc",
     "sector": "Industrials",
-    "timing_signal": "accumulate",
-    "timing_score": 0.75,
-    "action_note": "Strong Buy — favourable entry timing | FCF basis mismatch: filing £362.6M | screen TTM (unverified) £302.8M | company-adj £73.8M",
+    "timing_signal": "neutral",
+    "timing_score": 0.625,
+    "action_note": "Strong Buy — neutral timing | FCF basis mismatch: filing £362.6M | screen TTM (unverified) £302.8M | company-adj £73.8M",
     "models_passed": 14.0,
-    "weighted_model_score": 0.745090909090909,
+    "weighted_model_score": 0.7436045454545455,
     "research_verdict": null,
     "adjusted_signal": "buy",
     "research_as_of": null,
@@ -36,19 +49,26 @@
     "interim_eps_decline_pct": null,
     "adjusted_eps_growth_pct": 0.16,
     "signal_trend": "stable",
-    "weeks_at_signal": 16,
+    "weeks_at_signal": 17,
     "passed_families": "cheapness,quality,dividend,garp,risk",
-    "price_vs_sma200_pct": -0.0509265183208785,
-    "core_order": "market",
-    "core_limit": NaN,
-    "core_allocation_pct": 0.75,
-    "tactical_limit": 161.4,
-    "tactical_allocation_pct": 0.25,
-    "tactical_stop_loss": 151.62,
-    "tactical_take_profit": 179.57,
-    "trade_plan_summary": "Trade plan: core 75% at market (~£169.90); tactical 25% limit £161.40; tactical stop £151.62, target £179.57.",
-    "atr_14": 7.4169,
-    "volume_ratio_20": 0.0482
+    "price_vs_sma200_pct": -0.04870266692712369,
+    "core_order": "limit",
+    "core_limit": 168.6,
+    "core_allocation_pct": 0.6,
+    "tactical_limit": 161.79,
+    "tactical_allocation_pct": 0.4,
+    "tactical_stop_loss": 151.98,
+    "tactical_take_profit": 179.58,
+    "trade_plan_summary": "Trade plan: core 60% limit £168.60; tactical 40% limit £161.79; tactical stop £151.98, target £179.58.",
+    "atr_14": 8.0098,
+    "volume_ratio_20": 0.0293,
+    "operating_cashflow": 615600000.0,
+    "operating_cashflow_gross": null,
+    "fcf_dividend_coverage_gross": null,
+    "fcf_dividend_coverage_net": 9.32133676092545,
+    "fcf_definition_divergence": false,
+    "fcf_divergence_flagged": true,
+    "fcf_dividend_coverage": null
   },
   "ticker_models": [
     {
@@ -85,13 +105,13 @@
       "ticker": "FGP.L",
       "model_id": "earnings_yield",
       "passed": true,
-      "score": 0.981
+      "score": 0.9713
     },
     {
       "ticker": "FGP.L",
       "model_id": "fcf_yield",
       "passed": false,
-      "score": 0.8331
+      "score": 0.8248
     },
     {
       "ticker": "FGP.L",
@@ -103,13 +123,13 @@
       "ticker": "FGP.L",
       "model_id": "lynch_peg",
       "passed": true,
-      "score": 0.4691
+      "score": 0.4637
     },
     {
       "ticker": "FGP.L",
       "model_id": "neff_pegy",
       "passed": true,
-      "score": 0.9807
+      "score": 0.9805
     },
     {
       "ticker": "FGP.L",
@@ -145,19 +165,19 @@
       "ticker": "FGP.L",
       "model_id": "magic_formula",
       "passed": true,
-      "score": 0.6996
+      "score": 0.6972
     },
     {
       "ticker": "FGP.L",
       "model_id": "acquirers_multiple",
       "passed": true,
-      "score": 0.7991
+      "score": 0.7944
     },
     {
       "ticker": "FGP.L",
       "model_id": "dreman_contrarian",
       "passed": true,
-      "score": 0.8017
+      "score": 0.7986
     },
     {
       "ticker": "FGP.L",
@@ -169,7 +189,7 @@
       "ticker": "FGP.L",
       "model_id": "composite_value",
       "passed": true,
-      "score": 0.8527
+      "score": 0.8538
     },
     {
       "ticker": "FGP.L",
