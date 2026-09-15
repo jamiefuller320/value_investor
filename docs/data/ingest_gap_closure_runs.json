@@ -10214,8 +10214,115 @@
         "per_ticker": []
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260915-02",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "APTD.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "APTD.L"
+        ],
+        "market_id": "ftse_smallcap",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260915-02",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-15T13:42:12.995421+00:00",
+      "completed_at": "2026-09-15T13:44:24.409507+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "APTD.L"
+        ],
+        "results": [
+          {
+            "ticker": "APTD.L",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 81,
+              "filings_with_body": 76,
+              "indexed_without_body": 5
+            },
+            "after": {
+              "filings_total": 81,
+              "filings_with_body": 76,
+              "indexed_without_body": 5
+            },
+            "improved": false,
+            "regime": "uk_rns",
+            "filings_summary": {
+              "total": 81,
+              "annual": 7,
+              "interim": 1,
+              "trading_update": 1,
+              "other": 72,
+              "with_body": 76,
+              "period_coverage": {
+                "annual": {
+                  "total": 7,
+                  "with_body": 2
+                },
+                "interim": {
+                  "total": 1,
+                  "with_body": 1
+                },
+                "trading_update": {
+                  "total": 1,
+                  "with_body": 1
+                },
+                "other": {
+                  "total": 23,
+                  "with_body": 23
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 76,
+              "with_body_after": 76,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 3,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "APTD.L",
+            "with_body_before": 76,
+            "with_body_after": 76,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-15T07:37:55.225995+00:00",
+  "updated_at": "2026-09-15T13:44:24.409517+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
