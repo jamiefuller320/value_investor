@@ -1,14 +1,15 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-14T07:17:57.078173+00:00
+Track: `buy_tier_level` · updated 2026-09-15T00:46:25.194259+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **9** / 28 (32% count, 31% NAV)
+- Losers: **9** / 27 (33% count, 32% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 - Selection feedback:
-  - dividend fails more often among losers (44% vs 5%)
+  - dividend fails more often among losers (44% vs 6%)
+  - garp fails more often among losers (44% vs 6%)
 
 ## Holding reviews
 
@@ -160,12 +161,6 @@ Track: `buy_tier_level` · updated 2026-09-14T07:17:57.078173+00:00
 - cheapness family still passes
 - data_quality 0.95
 - conviction 83%
-
-### PRN.AX — weakening / watch_review (-2.6%)
-- left buy tier (hold)
-- conviction 24% below intact floor
-- research accumulate
-- cheapness family still passes
 
 ### WHC.AX — intact / hold_tolerate (-2.1%)
 - still buy
