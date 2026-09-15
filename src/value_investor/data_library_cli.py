@@ -2112,6 +2112,9 @@ def cmd_library_ingest_maintenance(args: argparse.Namespace) -> int:
 
 
 def cmd_parked_hunter_compile(args: argparse.Namespace) -> int:
+    from value_investor.compile_cap_drain import (
+        should_defer_parked_hunter_for_compile_cap_drain,
+    )
     from value_investor.engineering_recovery import is_queue_clearing_pause_active
     from value_investor.library_ingest_escalation import compile_parked_source_hunter_task
     from value_investor.project_traffic import is_traffic_pause_active
@@ -2136,6 +2139,21 @@ def cmd_parked_hunter_compile(args: argparse.Namespace) -> int:
             _emit_cli_json(payload, args)
         else:
             print("parked-hunter-compile: skipped (project traffic pause — stuck PRs)")
+        return 0
+
+    defer, defer_reason = should_defer_parked_hunter_for_compile_cap_drain(
+        tasks_path=args.tasks_path,
+    )
+    if defer:
+        payload = {
+            "compiled_count": 0,
+            "reason": "deferred_for_compile_cap_drain",
+            "detail": defer_reason,
+        }
+        if args.json or args.json_path is not None:
+            _emit_cli_json(payload, args)
+        else:
+            print(f"parked-hunter-compile: skipped ({defer_reason})")
         return 0
 
     policy = load_policy(args.policy)

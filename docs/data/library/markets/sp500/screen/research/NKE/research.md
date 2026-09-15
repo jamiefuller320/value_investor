@@ -1,13 +1,13 @@
 # NIKE, Inc. (NKE) — Research memo
 
-_Version 1 · Updated 2026-09-15T07:38:25.510778+00:00 · Mode: structured_verdict_
+_Version 1 · Updated 2026-09-15T10:38:01.786166+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
 
 ## RESEARCH VERDICT
 Verdict: caution
-Risk: high
-Confidence: 0.65
-Rationale: SEC filings flag ~$300m reorganisation charges and senior finance turnover; Yahoo-sourced figures show flat revenue and materially lower earnings, weakening—not confirming—the quantitative buy signal.
-RiskTags: cyclical, competitive, governance, key_person, other
+Risk: medium
+Confidence: 0.68
+Rationale: SEC filings show nine-month net income and operating cash flow materially below the prior year despite flat revenues, while the 10-K highlights tariff costs and intense competition—tempering, not confirming, the screen buy.
+RiskTags: cyclical, competitive, regulatory, customer_concentration

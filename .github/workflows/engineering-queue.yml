@@ -369,6 +369,13 @@ jobs:
           )
           PY
 
+      - name: Drain next compile-cap / role-coherence backlog item
+        run: |
+          ftse-engineering try-compile-cap-drain --apply \
+            --output-dir output \
+            --latest-path docs/data/latest.json \
+            --json | tee /tmp/eng_compile_cap_drain.json || true
+
       - name: Compile next parked leftover source-hunter
         run: ftse-library parked-hunter-compile --json
 

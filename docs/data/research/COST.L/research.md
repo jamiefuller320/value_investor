@@ -1,80 +1,20 @@
 # Costain Group PLC (COST.L) — Research memo
 
-_Version 1 · Updated 2026-09-04T17:33:50.475588+00:00 · Mode: initial_
+_Version 2 · Updated 2026-09-15T08:51:27.139948+00:00 · Mode: structured_verdict_update_
 
-## EXECUTIVE SUMMARY
-Costain Group PLC is a UK infrastructure solutions specialist focused on transport, water, energy and defence, trading on modest multiples (P/E 16.5×, P/B 2.3×, yield 2.3%) despite a net-cash balance sheet and a record £7.0bn forward work position. FY2025 revenue fell to £1,045.7m as legacy road frameworks rolled off and HS2 was rescheduled, yet adjusted operating margin expanded to 4.5% and adjusted free cash flow reached £63.1m. H1 2026 interim results confirm profit growth, net cash of £164.4m, and unchanged full-year guidance, with management targeting a revenue and margin step-change from FY2027 as AMP8 water and grid investment ramp. The central debate is whether margin expansion and capital returns (doubled interim dividend, £20m buyback) justify the screen's buy signal while reported revenue has declined for four years and Transportation margins remain thin — or whether the order book and customer diversification into regulated utilities and aviation de-risk the cyclical construction narrative.
+_Phase B structured verdict (essay sections omitted on scheduled path)._
 
-## INVESTMENT THESIS
-The quantitative screen rates Costain a **buy**: 13 of 22 models pass across five factor families (cheapness, quality, dividend, GARP, risk), composite score 70%, data quality 20/20, with passes on Graham Enterprising, FCF Yield, Lynch/Neff PEG variants, Quality Value, Buffett Quality, Piotroski F-Score, Earnings Quality and Financial Health. Key screen metrics — P/E 16.5, P/B 2.3, yield 2.3%, ROE 15.2%, debt/equity ~13% — fit a post-turnaround contractor with improving earnings quality rather than a distressed cyclical.
-
-Business quality has improved materially. Management's stated KPI — adjusted operating margin — rose from 3.0% (FY2023) to 3.4% (FY2024) to 4.5% (FY2025), exceeding the 4.5% run-rate target per the FY2025 annual report (Companies House extract). The contract portfolio is predominantly long-term target-cost frameworks with no single-stage lump-sum contracts at year-end FY2025. Forward work grew from £5.4bn (FY2024) to a record £7.0bn (FY2025), maintained through H1 2026, with customer mix shifting toward private and regulated clients (48% of forward work at H1 2026 vs 30% in FY2023).
-
-Balance-sheet strength supports the value case: net cash £189.3m at FY2025 year-end (FY2024: £158.5m), undrawn £100m revolving credit facility extended to September 2030, and bonding facilities of £295m with utilisation of £71.2m at H1 2026. The January 2026 pension agreement removed dividend-parity constraints and eliminated scheduled deficit contributions through January 2031, with the scheme in a £62.9m IAS 19 surplus at 30 June 2026.
-
-For a value investor, the hook is a cash-rich, improving-margin business on mid-teens earnings multiples, with visible multi-year revenue from regulated infrastructure cycles (AMP8 water ~£100bn industry capex; RIIO-3 grid upgrade) and a credible path to above 5% adjusted operating margins. The screen's neutral timing signal (RSI 62, price ~23% above 200-day MA, conviction 44% on a new one-week signal) suggests accumulation rather than urgency.
-
-## FINANCIAL REVIEW
-**Primary source:** Companies House annual extracts (FY2023–FY2025) and Investegate RNS (H1 2026 interim, 14 May 2026 AGM trading update). Yahoo `financials_annual.json` used only for cross-check; figures align with filings.
-
-**Annual trend**
-
-| Metric | FY2023 | FY2024 | FY2025 |
-|--------|--------|--------|--------|
-| Revenue | £1,332.0m | £1,251.1m | £1,045.7m |
-| Adjusted operating profit | £40.1m | £43.1m | £47.1m |
-| Adjusted operating margin | 3.0% | 3.4% | 4.5% |
-| Reported operating profit | — | £31.1m | £44.8m |
-| Adjusted basic EPS | — | 14.6p | 14.5p |
-| Adjusted free cash flow | — | £27.1m | £63.1m |
-| Net cash (year-end) | — | £158.5m | £189.3m |
-| Forward work | — | £5.4bn | £7.0bn |
-
-*(FY2022 revenue £1,421.4m cited in FY2024 annual extract.)*
-
-Revenue has declined for four consecutive years, driven by completion of low-margin Regional Delivery Partnership road projects, HS2 schedule revisions, and the AMP7-to-AMP8 water transition. Profitability has diverged positively: margin expansion and lower adjusting items (£2.3m in FY2025 vs £12.0m in FY2024) lifted reported operating profit 44% year-on-year despite a 16% revenue decline. Adjusted EPS was essentially flat at 14.5p as buybacks and operating gains were offset by a higher effective tax rate and lower net finance income. Yahoo reports FY2025 operating cash flow £51.3m and FCF £48.5m — consistent with filing adjusted FCF of £63.1m (Yahoo fallback for cross-check only).
-
-**Interim and trading updates**
-
-*H1 2026 (13 August 2026):* Revenue £543.1m (+3.4%); adjusted operating profit £17.3m (+3.0%), margin 3.2%; reported PBT £19.2m; basic EPS 5.7p; net cash £164.4m after £8.2m dividends and £7.6m buybacks; adjusted free cash outflow £1.4m (H2-weighted); interim dividend doubled to 2.0p; forward work maintained at £7.0bn (91% visibility of FY2026/FY2027 consensus revenues). Natural Resources +13.3% (Water +15.1%, Energy +25.7%; margin 6.9%); Transportation −3.2% (Road −32.6%; margin 2.5%).
-
-*AGM trading update (14 May 2026):* Trading in line; FY2026 adjusted operating margin target ~4.0%; net cash expected ~£175m year-end.
-
-**Gaps:** Only one interim RNS body in the index (H1 2026); prior interim bodies absent. Annual body extracts lack full audited statements and detailed risk/viability prose. Yahoo quarterly cash-flow series is empty (TTM cashflow suppressed).
-
-## RISKS AND RED FLAGS
-**Contract and programme execution.** HS2 remains material. FY2025 revenue was reduced by a revised schedule; H1 2026 notes the programme is navigating a change in delivery strategy with Skanska-Costain-Strabag JV discussions underway. Sector news on HS2 Old Oak Common cost overruns (6 August 2026) highlights industry-wide pressure.
-
-**Revenue vs margin tension.** Four years of declining revenue despite margin gains. Transportation margins (2.5% H1 2026) lag Natural Resources (6.9%).
-
-**Customer and regulatory concentration.** Forward work includes 29% central government; water/energy exposure carries Ofwat/Ofgem regulatory risk.
-
-**Working capital and cash timing.** FY2026 net cash guidance (~£170–175m) assumes partial unwind of historic working capital benefits. H1 adjusted FCF was negative; H2 weighting introduces execution risk.
-
-**Pension.** January 2026 agreement removed dividend parity and cash contributions through January 2031; scheme in £62.9m IAS 19 surplus at H1 2026. Longevity, inflation and investment risks remain; Virgin Media / NTL judgement implications flagged.
-
-**Going concern.** Interim directors' report confirms going concern with covenant headroom under base case and severe but plausible downside (−30% revenue on work to be secured, −300bps margin). Leverage below zero; interest cover 11.8×. Principal risks unchanged from FY2025 annual report pages 36–39 (not fully extracted in body files).
-
-RiskTags: cyclical, regulatory, pension, competitive, customer_concentration, other
-RiskTags: cyclical, regulatory, pension, competitive, customer_concentration, other
-
-## NEWS HIGHLIGHTS
-Coverage is moderate but noisy — many Google News hits are false positives (generic low-cost fund articles). Material items:
-
-- **13 Aug 2026** — Half-year Financial Results / H1 Earnings Call Highlights: revenue +3.4%, adj. OP +3.0%, net cash £164.4m, interim div 2.0p, forward work £7.0bn
-- **16 Aug 2026** — UK£2.57 analyst fair value post-results (simplywall.st)
-- **15 Jul 2026** — United Utilities contract extension (RNS)
-- **9 Jun 2026** — £700m TfL Infrastructure Improvements framework (RNS)
-- **18 Jun 2026** — West Winch Housing road contract, Norfolk (RNS)
-- **14 May 2026** — AGM Trading Update: FY2026 in line, margin ~4.0%
-- **19 Mar / 10 Mar 2026** — FY2025 earnings call highlights (Yahoo): record forward work, FTSE 250 return
-- **21 Apr 2026** — Analyst targets raised to ~£2.25 (Yahoo)
-- **6 Aug 2026** — HS2 Old Oak Common cost overruns — sector construction piece (indirect risk)
-
-No M&A; strategy remains organic growth plus selective capability investment. CEO Alex Vaughan stable. £20m FY2026 buyback ongoing.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Filings confirm improving margins, net-cash balance sheet, pension de-risking and record forward work that support the quantitative buy signal, partially offset by revenue decline, HS2/programme uncertainty and sector cost-overrun noise requiring patience on the FY2027 step-change narrative.
+Rationale: Prior filings still confirm the buy case on margins, net cash and forward work; this week adds no new evidence, leaving HS2 and revenue-decline risks unchanged and patient accumulation appropriate.
+RiskTags: cyclical, regulatory, pension, competitive, customer_concentration, other
+
+## Weekly updates
+
+### 2026-09-15T08:51:27.139948+00:00
+No material change.
+News since 4 Sep is false-positive noise only; no new Costain RNS or filings.
+Quantitative buy signal is unchanged (five weeks, neutral timing); H1 2026 filing picture still drives the case.

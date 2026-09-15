@@ -1,6 +1,6 @@
 # Medtronic plc (MDT) — Research memo
 
-_Version 1 · Updated 2026-09-15T07:36:55.928615+00:00 · Mode: structured_verdict_
+_Version 1 · Updated 2026-09-15T10:36:33.438721+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,6 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.68
-Rationale: Q1 FY2027 filings show net sales and operating profit ahead of the prior-year quarter, but the extra 53rd week, MiniMed separation, hernia-mesh litigation and $25.6bn debt limit how fully filings validate the strong-buy screen, which car...
-RiskTags: regulatory, litigation, leverage, competitive
+Confidence: 0.70
+Rationale: The latest 10-Q shows stronger net sales and earnings versus the prior-year quarter and FY2026 Yahoo data shows rising revenue, EPS and FCF, which broadly supports the strong-buy screen, but MiniMed separation, hernia-mesh litigation and...
+RiskTags: regulatory, competitive, leverage, litigation

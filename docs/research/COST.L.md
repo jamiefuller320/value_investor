@@ -1,6 +1,6 @@
 # Costain Group PLC (COST.L) — Research memo
 
-_Version 1 · Updated 2026-09-14T09:53:45.341576+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-09-15T08:51:27.139948+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,6 +8,13 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.74
-Rationale: FY25 accounts and H1 26 results show profit growth, net cash and a strong forward book, aligning with the screen; HS2 programme uncertainty and inherent contract cyclicality limit conviction.
-RiskTags: cyclical, regulatory, pension, customer_concentration, competitive
+Confidence: 0.72
+Rationale: Prior filings still confirm the buy case on margins, net cash and forward work; this week adds no new evidence, leaving HS2 and revenue-decline risks unchanged and patient accumulation appropriate.
+RiskTags: cyclical, regulatory, pension, competitive, customer_concentration, other
+
+## Weekly updates
+
+### 2026-09-15T08:51:27.139948+00:00
+No material change.
+News since 4 Sep is false-positive noise only; no new Costain RNS or filings.
+Quantitative buy signal is unchanged (five weeks, neutral timing); H1 2026 filing picture still drives the case.

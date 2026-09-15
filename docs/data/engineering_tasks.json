@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-15T07:46:56.019355+00:00",
+  "compiled_at": "2026-09-15T09:01:51.712433+00:00",
   "run_at": null,
-  "task_count": 7,
+  "task_count": 13,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -50,6 +50,51 @@
       "parked_reason": "agent produced no code changes 2 time(s) (cap 2) — manual review",
       "parked_at": "2026-09-14T20:14:15.105135+00:00",
       "parked_policy": "no_diff_cap"
+    },
+    {
+      "id": "eng-20260915-01",
+      "area": "ingest",
+      "title": "Implement Investegate/LSE direct HTML/PDF fetch for indexed RNS (replace Google News redirect URLs) and persist to `filings/bodies/` with index `with_body` pari",
+      "summary": "Implement Investegate/LSE direct HTML/PDF fetch for indexed RNS (replace Google News redirect URLs) and persist to `filings/bodies/` with index `with_body` parity checks",
+      "priority": "high",
+      "priority_score": 99.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "LSE",
+          "HTML",
+          "PDF",
+          "RNS"
+        ],
+        "plan_index": 1
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for LSE",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260914-01",
@@ -118,6 +163,51 @@
       "merged_at": "2026-09-14T19:52:01.980345+00:00"
     },
     {
+      "id": "eng-20260915-02",
+      "area": "ingest",
+      "title": "Companies House document-api PDF pipeline with OCR quality gates and CH-ID ↔ `filings_index` mapping; reject or quarantine truncated extracts (flag when line co",
+      "summary": "Companies House document-api PDF pipeline with OCR quality gates and CH-ID ↔ `filings_index` mapping; reject or quarantine truncated extracts (flag when line count/hash indicates truncation)",
+      "priority": "high",
+      "priority_score": 98.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "PDF",
+          "OCR",
+          "CH",
+          "ID"
+        ],
+        "plan_index": 2
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for PDF",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260914-04",
       "area": "ingest",
       "title": "Backfill `CompanyMetrics.operating_cashflow` (and related cash-flow fields) from Yahoo when `financials_annual.json` already holds values",
@@ -179,6 +269,87 @@
       "merged_at": "2026-09-14T21:16:28.596799+00:00"
     },
     {
+      "id": "eng-20260915-03",
+      "area": "ingest",
+      "title": "Parse allowlisted IR results PDFs into structured FCF bridges and populate `ir_presentation_metrics.json` (segment revenue, dividend policy, management FCF defi",
+      "summary": "Parse allowlisted IR results PDFs into structured FCF bridges and populate `ir_presentation_metrics.json` (segment revenue, dividend policy, management FCF definitions)",
+      "priority": "high",
+      "priority_score": 97.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "IR",
+          "FCF"
+        ],
+        "plan_index": 3
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for IR",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260915-05",
+      "area": "scoring",
+      "title": "Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade when three-",
+      "summary": "Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade when three-way FCF bases diverge >15% plus profit-to-cash YoY drop >15pp",
+      "priority": "high",
+      "priority_score": 97.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "FCF",
+          "OCF"
+        ],
+        "plan_index": 5
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260914-05",
       "area": "scoring",
       "title": "Emit labelled dual coverage metrics (statutory OCF−capex vs management-adjusted cash definitions) and persist FCF-basis divergence flags on screening_snapshot a",
@@ -222,6 +393,48 @@
       "parked_policy": "no_diff_cap"
     },
     {
+      "id": "eng-20260915-04",
+      "area": "ingest",
+      "title": "Backfill Yahoo cash-flow fields (`operating_cashflow`, UK quarterly cash-flow where suppressed) into fetch/`CompanyMetrics` from statements already mirrored in ",
+      "summary": "Backfill Yahoo cash-flow fields (`operating_cashflow`, UK quarterly cash-flow where suppressed) into fetch/`CompanyMetrics` from statements already mirrored in `financials_annual.json`",
+      "priority": "high",
+      "priority_score": 96.0,
+      "source": "post_run_review",
+      "evidence": {
+        "tickers": [
+          "UK"
+        ],
+        "plan_index": 4
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for UK",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260914-03",
       "area": "ingest",
       "title": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
@@ -263,66 +476,36 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "merged",
+      "status": "open",
       "no_diff_count": 0,
-      "last_no_diff_at": "2026-09-14T22:18:45.262935+00:00",
-      "result_path": "output/engineering_result_eng-20260914-03.md",
-      "branch_name": "cursor/eng-20260914-03-1de3",
-      "completed_at": "2026-09-14T22:30:48.473892+00:00",
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/639",
-      "pr_number": 639,
-      "merged_at": "2026-09-15T07:46:44.986016+00:00"
+      "last_no_diff_at": "2026-09-14T22:18:45.262935+00:00"
     },
     {
-      "id": "eng-20260915-01",
-      "area": "ops",
-      "title": "Phase B structured-verdict producer stalled",
-      "summary": "No structured_verdict* modes in research store yet. (0 structured / need ≥3; sampled=74; modes=structured_verdict, structured_verdict_gap_fill, structured_verdict_update). Sunday research-docs must seed committed memos into output/, write structured_verdict* updates, and persist back to docs/data/research — do not widen rememo_reason for mode migration. (category: research)",
-      "priority": "medium",
-      "priority_score": 45.0,
-      "source": "ops_monitor",
+      "id": "eng-20260915-07",
+      "area": "scoring",
+      "title": "Attach run-history FCF divergence flags to `docs/data/history/run_*.json.gz` `action_note` for all Strong Buy names (HIK shows mismatch in snapshot but not in h",
+      "summary": "Attach run-history FCF divergence flags to `docs/data/history/run_*.json.gz` `action_note` for all Strong Buy names (HIK shows mismatch in snapshot but not in history export), enabling cross-ticker verification before sizing",
+      "priority": "high",
+      "priority_score": 43.0,
+      "source": "research_model_suggestions",
       "evidence": {
-        "category": "research",
-        "severity": "fail",
-        "verify_status": "passed",
-        "verify_chain_root_id": "eng-20260915-01",
-        "verified_at": "2026-09-15T08:12:45.694722+00:00",
-        "verify_pytest": {
-          "returncode": 0,
-          "paths": [
-            "tests/test_automation_status.py",
-            "tests/test_ops_monitor.py",
-            "tests/test_backtest_health.py",
-            "tests/test_engineering_sync.py",
-            "tests/test_engineering_pr_notify.py",
-            "tests/test_engineering_preflight.py"
-          ],
-          "output_tail": "........................................................................ [ 76%]\n......................                                                   [100%]\n94 passed in 2.02s"
-        }
+        "tickers": [
+          "HIK.L"
+        ],
+        "recorded_at": "2026-09-02T11:12:53.724040+00:00"
       },
       "acceptance_criteria": [
-        "Prompt or export change is covered by a parser/unit test",
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
         "No edits under blocked_paths"
       ],
       "allowed_paths": [
-        "src/value_investor/automation_status.py",
-        "src/value_investor/email_agent.py",
-        "src/value_investor/ops_monitor.py",
-        "src/value_investor/backtest_health.py",
-        "src/value_investor/engineering_recovery.py",
-        "src/value_investor/engineering_sync.py",
-        "src/value_investor/engineering_pr_notify.py",
-        "src/value_investor/engineering_preflight.py",
-        "src/value_investor/engineering_queue.py",
-        ".github/workflows/ops-monitor.yml",
-        ".github/workflows/engineering-agent.yml",
-        ".github/workflows/engineering-queue.yml",
-        "tests/test_automation_status.py",
-        "tests/test_ops_monitor.py",
-        "tests/test_backtest_health.py",
-        "tests/test_engineering_sync.py",
-        "tests/test_engineering_pr_notify.py",
-        "tests/test_engineering_preflight.py"
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
       ],
       "blocked_paths": [
         "src/value_investor/paper_fund.py",
@@ -332,50 +515,71 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "merged",
-      "no_diff_count": 0,
-      "branch_name": "cursor/eng-20260915-01-1de3",
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/645",
-      "pr_number": 645,
-      "merged_at": "2026-09-15T08:45:25.094273+00:00",
-      "result_path": "output/engineering_result_eng-20260915-01.md",
-      "completed_at": "2026-09-15T08:15:04.652575+00:00"
+      "status": "open"
     },
     {
-      "id": "eng-20260915-02",
-      "area": "ops",
-      "title": "Verdict fields present without structured_verdict modes",
-      "summary": "[verdict_fields_without_structured_mode] 74/74 committed memos have research_verdict set while mode is still essay/initial (structured=0). Looks researched; Phase B producer has not landed. (category: research)",
-      "priority": "medium",
-      "priority_score": 45.0,
-      "source": "ops_monitor",
+      "id": "eng-20260915-09",
+      "area": "scoring",
+      "title": "Attach cross-ticker model pass/score table to gap-fill output automatically from sibling `screen_run_manifest.json` files so moat/yield ranking claims (e.g. “wi",
+      "summary": "Attach cross-ticker model pass/score table to gap-fill output automatically from sibling `screen_run_manifest.json` files so moat/yield ranking claims (e.g. “widest moat in group”) are evidence-backed without manual peer lookups.",
+      "priority": "high",
+      "priority_score": 43.0,
+      "source": "research_model_suggestions",
       "evidence": {
-        "category": "research",
-        "severity": "fail"
+        "tickers": [
+          "MEGP.L"
+        ],
+        "recorded_at": "2026-09-02T11:12:53.724072+00:00"
       },
       "acceptance_criteria": [
-        "Prompt or export change is covered by a parser/unit test",
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
         "No edits under blocked_paths"
       ],
       "allowed_paths": [
-        "src/value_investor/automation_status.py",
-        "src/value_investor/email_agent.py",
-        "src/value_investor/ops_monitor.py",
-        "src/value_investor/backtest_health.py",
-        "src/value_investor/engineering_recovery.py",
-        "src/value_investor/engineering_sync.py",
-        "src/value_investor/engineering_pr_notify.py",
-        "src/value_investor/engineering_preflight.py",
-        "src/value_investor/engineering_queue.py",
-        ".github/workflows/ops-monitor.yml",
-        ".github/workflows/engineering-agent.yml",
-        ".github/workflows/engineering-queue.yml",
-        "tests/test_automation_status.py",
-        "tests/test_ops_monitor.py",
-        "tests/test_backtest_health.py",
-        "tests/test_engineering_sync.py",
-        "tests/test_engineering_pr_notify.py",
-        "tests/test_engineering_preflight.py"
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260915-10",
+      "area": "scoring",
+      "title": "Emit dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) with labels in screening_snapshot to prevent conflation",
+      "summary": "Emit dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) with labels in screening_snapshot to prevent conflation of 0.84× and 1.68×.",
+      "priority": "high",
+      "priority_score": 43.0,
+      "source": "research_model_suggestions",
+      "evidence": {
+        "tickers": [
+          "MEGP.L"
+        ],
+        "recorded_at": "2026-09-02T11:12:53.724078+00:00"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
       ],
       "blocked_paths": [
         "src/value_investor/paper_fund.py",
@@ -389,33 +593,19 @@
     }
   ],
   "ingest_health": {
-    "snapshot_at": "2026-09-14T21:12:17.529777+00:00",
+    "snapshot_at": "2026-09-15T09:01:51.712407+00:00",
     "buy_tier_count": 62,
     "measured_tickers": 62,
     "unmeasured_buy_tier": 0,
     "unmeasured_tickers": [],
     "zero_body_buy_tier": 0,
     "zero_body_tickers": [],
-    "indexed_without_body": 14,
-    "filings_with_body": 4196
+    "indexed_without_body": 19,
+    "filings_with_body": 4229
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-15T08:45:37.098428+00:00",
+    "evaluated_at": "2026-09-15T10:16:25.373212+00:00",
     "should_send_full_queue_warning": false
-  },
-  "ingest_health_before": {
-    "snapshot_at": "2026-09-14T19:48:19.221621+00:00",
-    "buy_tier_count": 62,
-    "measured_tickers": 62,
-    "unmeasured_buy_tier": 0,
-    "unmeasured_tickers": [],
-    "zero_body_buy_tier": 0,
-    "zero_body_tickers": [],
-    "indexed_without_body": 14,
-    "filings_with_body": 4196
-  },
-  "reprioritized_at": "2026-09-14T21:12:17.529894+00:00",
-  "reprioritized_after_task": "eng-20260914-04",
-  "ops_monitor_compiled": true
+  }
 }

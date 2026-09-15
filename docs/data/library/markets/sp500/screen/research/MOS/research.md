@@ -1,6 +1,6 @@
 # The Mosaic Company (MOS) — Research memo
 
-_Version 1 · Updated 2026-09-15T07:37:22.644877+00:00 · Mode: structured_verdict_
+_Version 1 · Updated 2026-09-15T10:36:54.817547+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,5 +9,5 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: caution
 Risk: high
 Confidence: 0.68
-Rationale: SEC filings show H1 2026 net losses, sharply lower gross margins (including negative Phosphate gross margin in Q2) and Brazil divestiture-related charges, weakening the buy case despite covenant compliance and debt actions.
-RiskTags: cyclical, leverage, liquidity, regulatory, litigation
+Rationale: H1 2026 filings show a net loss, sharply lower gross margin (phosphate under pressure), negative free cash flow, and new antitrust suits—partially offset by liquidity and debt actions—so research weakens, not confirms, the buy screen.
+RiskTags: cyclical, leverage, regulatory, litigation, competitive
