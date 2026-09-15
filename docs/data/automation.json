@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-15T15:16:31.530155+00:00",
+  "generated_at": "2026-09-15T16:16:40.456039+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1150,16 +1150,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-15T09:01:51.712433+00:00",
-    "queue_ui_updated_at": "2026-09-15T15:16:31.435754+00:00",
-    "task_count": 13,
+    "compiled_at": "2026-09-15T15:42:17.376977+00:00",
+    "queue_ui_updated_at": "2026-09-15T16:16:40.359284+00:00",
+    "task_count": 14,
     "status": {
-      "open_count": 0,
+      "open_count": 1,
       "pr_open_count": 1,
       "parked_count": 4,
       "merged_count": 8,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260915-11",
       "in_flight_branch": "cursor/eng-20260914-03-1de3",
       "in_flight_pr": 657,
       "spend_since_checkpoint_usd": 10.4,
@@ -1178,6 +1178,37 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": "cursor/eng-20260914-03-1de3"
+      },
+      {
+        "id": "eng-20260915-11",
+        "area": "ingest",
+        "title": "Hunt fetchable IR source for parked ftse_smallcap leftover FOXT.L",
+        "priority": "low",
+        "priority_score": 12.0,
+        "status": "open",
+        "source": "parked_source_hunter",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": false,
+        "blocked_by": [
+          {
+            "pr_number": null,
+            "branch": null,
+            "task_id": null,
+            "title": "in-flight allowlist overlap",
+            "clash_files": [
+              "src/value_investor/research/filings.py",
+              "src/value_investor/research/gap_fill_sources.py",
+              "src/value_investor/research/ingest.py",
+              "src/value_investor/research/ingest_improvement.py",
+              "src/value_investor/research/companies_house.py"
+            ],
+            "kind": "allowlist_overlap"
+          }
+        ],
+        "effective_dispatch_rank": null,
+        "clash_scan": "full"
       }
     ],
     "attention_tasks": [
@@ -1231,9 +1262,9 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 0,
+      "open_task_count": 1,
       "dispatch_eligible_count": 0,
-      "blocked_count": 0
+      "blocked_count": 1
     }
   },
   "learning_track_epoch_datum": {
@@ -1511,9 +1542,9 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-15T15:16:31.530155+00:00",
+    "generated_at": "2026-09-15T16:16:40.456039+00:00",
     "overall": "blocked",
-    "headline": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
+    "headline": "1 open task(s) blocked by file clash or policy — no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
     "merge_lane": {
       "state": "running",
       "idle": false,
@@ -1533,24 +1564,24 @@
     "agent_lane": {
       "state": "blocked",
       "idle": false,
-      "running": false,
+      "running": true,
       "blocked": true,
       "should_dispatch": false,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 0,
-      "open_count": 0,
+      "open_count": 1,
       "pr_open_count": 1,
       "dispatch_eligible_count": 0,
-      "blocked_task_count": 0,
-      "next_task_id": null,
-      "reason": "no open engineering tasks in queue",
-      "detail": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged."
+      "blocked_task_count": 1,
+      "next_task_id": "eng-20260915-11",
+      "reason": "no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
+      "detail": "1 open task(s) blocked by file clash or policy — no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-15T15:16:24.431995+00:00"
+      "evaluated_at": "2026-09-15T16:16:35.740132+00:00"
     },
     "traffic_control": {
       "pause_active": false,
