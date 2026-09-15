@@ -7537,6 +7537,15 @@ def test_fetch_filings_ir_allowlist_ftse_smallcap_mer_l_builtins(tmp_path: Path)
     assert sum(1 for row in rows if row["period"] == "interim") == 1
 
 
+def _first_fetchable_allowlist_body(urls: list[str], *, min_len: int = 50_000) -> str:
+    """Try each IR URL — host/CDN ordering is not stable across CI runs."""
+    for url in urls:
+        body = fetch_filing_body(url)
+        if body and len(body) >= min_len:
+            return body
+    pytest.fail(f"No allowlist URL returned body>={min_len}: {urls}")
+
+
 def test_parked_source_hunter_mer_l_ftse_smallcap_has_fetchable_ir():
     """eng-20260911-04: MER.L has live mearsgroup.co.uk FY2025/2024 AR + H1 statutory PDFs."""
     assert "MER.L" not in PARKED_SOURCE_HUNTER_SKIP
@@ -7545,9 +7554,7 @@ def test_parked_source_hunter_mer_l_ftse_smallcap_has_fetchable_ir():
     urls = [row["url"] for row in rows]
     assert all("mearsgroup.co.uk" in url for url in urls)
     assert any("annual-report-and-accounts-2025.pdf" in url for url in urls)
-    body = fetch_filing_body(urls[0])
-    assert body
-    assert len(body) >= 50000
+    _first_fetchable_allowlist_body(urls)
 
 
 def test_fetch_filings_ir_allowlist_ftse_smallcap_tpt_l_builtins(tmp_path: Path):

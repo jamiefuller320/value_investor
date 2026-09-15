@@ -305,6 +305,21 @@ default. Essay path remains via `structured=False` for Phase D / legacy tests.
 Phase C start is gated by `ftse-phase-c-readiness` (see
 [`pit-decision-autopsy.md`](pit-decision-autopsy.md#automated-readiness-gate)).
 
+### Phase B catch-up batches (essay → structured modes)
+
+When committed memos still have essay/`initial` modes but `research_verdict` is
+populated (ops-monitor Phase B / L389 findings), re-run the **structured weekly
+update** path in bounded batches — not weekday body-lag rememo:
+
+```bash
+ftse-research --phase-b-backlog-status          # count + next batch
+ftse-research --phase-b-catchup --dry-run       # preview selection
+ftse-research --phase-b-catchup --phase-b-catchup-cap 6
+```
+
+Repeat until `backlog_count` is 0 (respects `weekly_ops` headroom like rememo).
+Uses seed → `structured_verdict_update` → persist, same as Sunday research-docs.
+
 Post-cutover watch:
 
 - Human decision packs look thinner until L366 — accepted.
