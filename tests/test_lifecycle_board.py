@@ -374,3 +374,4 @@ def test_dashboard_lifecycle_opens_experiment_cards():
     assert ".lifecycle-ticker-chart" in css
     assert "async function mountPriceChart(body, report)" in charts
     assert "await mountPriceChart(body, report)" in charts
+    assert "levelToggleBound" in charts

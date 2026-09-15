@@ -298,13 +298,16 @@ async function mountPriceChart(body, report) {
     const payload = await response.json();
     const render = (source) => {
       body.innerHTML = renderChartBody(payload, report, source);
-      body.querySelectorAll("[data-level-source]").forEach((button) => {
-        button.addEventListener("click", () => {
-          if (button.disabled) return;
-          render(button.dataset.levelSource);
-        });
-      });
     };
+    if (!body.dataset.levelToggleBound) {
+      body.dataset.levelToggleBound = "1";
+      body.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-level-source]");
+        if (!button || button.disabled || !body.contains(button)) return;
+        event.preventDefault();
+        render(button.dataset.levelSource);
+      });
+    }
     render("current");
   } catch (err) {
     body.innerHTML = `
