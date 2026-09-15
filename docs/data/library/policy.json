@@ -452,13 +452,13 @@
     "auto_tighten_max_reescalation_rate": 0.35,
     "auto_escalate_director": false,
     "surface_escalation_candidates_in_email": true,
-    "note": "Exploration phase allows more director–worker runs per week while paper turnover is unknown; auto-tighten moves to steady cap when re-escalation rate stabilises. Shadow log surfaces escalation candidates in the Sunday email for manual approval; auto_escalate_director stays false until calibrated."
+    "note": "Exploration phase allows more director\u2013worker runs per week while paper turnover is unknown; auto-tighten moves to steady cap when re-escalation rate stabilises. Shadow log surfaces escalation candidates in the Sunday email for manual approval; auto_escalate_director stays false until calibrated."
   },
   "engineering": {
     "auto_merge": {
       "parked_hunter": "allowlist",
       "parked_hunter_verify_observer": true,
-      "note": "parked_hunter: off | skip | allowlist — scoped auto-merge for parked_source_hunter PRs after the CI hunter-merge-gate job passes. parked_hunter_verify_observer dispatches a non-blocking LLM reviewer. hunter_fix runs capped fix rounds when hunter-merge-gate fails on missing_test, short_skip, live_fetch_failed, too_many_urls, or unexpected_files; distinct failure kinds can each consume one round.",
+      "note": "parked_hunter: off | skip | allowlist \u2014 scoped auto-merge for parked_source_hunter PRs after the CI hunter-merge-gate job passes. parked_hunter_verify_observer dispatches a non-blocking LLM reviewer. hunter_fix runs capped fix rounds when hunter-merge-gate fails on missing_test, short_skip, live_fetch_failed, too_many_urls, or unexpected_files; distinct failure kinds can each consume one round. ingest_narrow: off | observe | merge \u2014 independent deterministic verify for narrow ingest eng PRs (actual diff \u22648 safe paths including tests/), then scoped auto-merge when set to merge.",
       "hunter_fix": {
         "enabled": true,
         "max_rounds": 2,
@@ -467,7 +467,9 @@
           1.0,
           2.0
         ]
-      }
+      },
+      "ingest_narrow": "merge",
+      "ingest_narrow_require_tests": true
     },
     "queue_recovery": {
       "immediate_park_unfixable_pr": true,
@@ -836,7 +838,7 @@
           {
             "market": "euro_depth",
             "ticker": "MUV2.DE",
-            "name": "Münchener Rückversicherungs-Gesellschaft Aktiengesellschaft in München",
+            "name": "M\u00fcnchener R\u00fcckversicherungs-Gesellschaft Aktiengesellschaft in M\u00fcnchen",
             "signal": "buy",
             "conviction_score": 0.6176
           },
@@ -885,7 +887,7 @@
           {
             "market": "euro_depth",
             "ticker": "POST.VI",
-            "name": "Österreichische Post AG",
+            "name": "\u00d6sterreichische Post AG",
             "signal": "buy",
             "conviction_score": 0.5241
           },

@@ -303,6 +303,7 @@ def _cmd_mark_merged(args: argparse.Namespace) -> int:
         path=_resolve_tasks_path(args.tasks_path),
         pr_url=args.pr_url,
         pr_number=args.pr_number,
+        merge_class=getattr(args, "merge_class", None),
     )
     if updated is None:
         print(f"No engineering task matched branch {args.branch}", file=sys.stderr)
@@ -1020,6 +1021,75 @@ def _cmd_try_auto_merge(args: argparse.Namespace) -> int:
     else:
         print(f"No auto-merge: {decision.reason}")
     return 0 if decision.should_merge or args.allow_skip else 1
+
+
+def _cmd_ingest_narrow_gate(args: argparse.Namespace) -> int:
+    """CI gate for #651-class ingest PRs (deterministic independent verify)."""
+    from value_investor.engineering_narrow_merge import (
+        evaluate_ingest_narrow_verify,
+        ingest_narrow_policy,
+        task_is_ingest_narrow_candidate,
+    )
+    from value_investor.engineering_queue import task_id_from_branch
+    from value_investor.engineering_tasks import find_engineering_task
+
+    branch = str(args.branch or "").strip()
+    if not branch:
+        print("--branch is required", file=sys.stderr)
+        return 2
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    task_id = task_id_from_branch(branch)
+    task = find_engineering_task(task_id, path=tasks_path) if task_id else None
+    if task is None:
+        payload = {"ok": True, "verdict": "skipped", "reason": "unknown engineering task — skipped"}
+        if args.json:
+            _print_json(payload)
+        else:
+            print("ingest-narrow-gate: skipped (unknown task)")
+        return 0
+    if not task_is_ingest_narrow_candidate(task):
+        payload = {
+            "ok": True,
+            "verdict": "skipped",
+            "reason": "not an ingest-narrow candidate — skipped",
+            "task_id": task.id,
+            "policy": ingest_narrow_policy(),
+        }
+        if args.json:
+            _print_json(payload)
+        else:
+            print("ingest-narrow-gate: skipped (not ingest-narrow)")
+        return 0
+
+    changed_path = Path(args.changed_files) if args.changed_files else None
+    if changed_path is not None:
+        changed_files = [
+            line.strip()
+            for line in changed_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+    else:
+        base_ref = str(args.base_ref or "origin/main")
+        head_ref = str(args.head_ref or "HEAD")
+        result = subprocess.run(
+            ["git", "diff", "--name-only", f"{base_ref}...{head_ref}"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        changed_files = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+
+    gate = evaluate_ingest_narrow_verify(task=task, changed_files=changed_files)
+    if args.json:
+        _print_json(gate.to_dict())
+    elif gate.verdict in {"approve", "observe", "skipped"} and gate.ok:
+        print(f"ingest-narrow-gate: {gate.verdict} — {gate.reason}")
+    else:
+        print(f"ingest-narrow-gate: fail — {gate.reason}", file=sys.stderr)
+    # observe/approve/skipped with ok are green CI; reject fails the job when policy != off
+    if gate.verdict == "reject":
+        return 1
+    return 0
 
 
 def _cmd_hunter_merge_gate(args: argparse.Namespace) -> int:
@@ -1853,6 +1923,11 @@ def main(argv: list[str] | None = None) -> int:
     merged_p.add_argument("--branch", required=True)
     merged_p.add_argument("--pr-url", default=None)
     merged_p.add_argument("--pr-number", type=int, default=None)
+    merged_p.add_argument(
+        "--merge-class",
+        default=None,
+        help="Optional merge class stamp (ci_fix|ingest_narrow|parked_hunter|human)",
+    )
     merged_p.set_defaults(func=_cmd_mark_merged)
 
     verify_merged_p = sub.add_parser(
@@ -2006,6 +2081,24 @@ def main(argv: list[str] | None = None) -> int:
         help="Exit 0 when auto-merge is not applicable (for workflow conditions)",
     )
     try_merge_p.set_defaults(func=_cmd_try_auto_merge)
+
+    ingest_narrow_p = sub.add_parser(
+        "ingest-narrow-gate",
+        parents=[common],
+        help=(
+            "CI independent-verify gate for narrow ingest PRs "
+            "(actual diff ≤8 safe paths + tests; policy off|observe|merge)"
+        ),
+    )
+    ingest_narrow_p.add_argument("--branch", required=True)
+    ingest_narrow_p.add_argument("--base-ref", default="origin/main")
+    ingest_narrow_p.add_argument("--head-ref", default="HEAD")
+    ingest_narrow_p.add_argument(
+        "--changed-files",
+        default=None,
+        help="Newline-delimited changed paths (default: git diff base...head)",
+    )
+    ingest_narrow_p.set_defaults(func=_cmd_ingest_narrow_gate)
 
     hunter_gate_p = sub.add_parser(
         "hunter-merge-gate",

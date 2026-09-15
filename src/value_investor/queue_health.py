@@ -206,6 +206,9 @@ def build_queue_health_snapshot(
 
     traffic = get_traffic_control_state(tasks_path=tasks_path)
     ops_status = _read_ops_status(ops_status_path)
+    from value_investor.engineering_narrow_merge import list_todays_engineering_merges
+
+    merges_today = list_todays_engineering_merges(tasks_path=tasks_path)
 
     overall = "ok"
     if agent_lane["blocked"] or merge_lane["blocked"]:
@@ -248,6 +251,10 @@ def build_queue_health_snapshot(
             "last_escalation_at": traffic.get("last_escalation_at"),
             "evaluated_at": traffic.get("evaluated_at"),
         },
+        "merges_today": merges_today,
+        "verified_merges_today_count": sum(
+            1 for row in merges_today if row.get("independently_verified")
+        ),
         "ops_monitor": {
             "run_at": (ops_status or {}).get("run_at"),
             "overall": (ops_status or {}).get("overall"),

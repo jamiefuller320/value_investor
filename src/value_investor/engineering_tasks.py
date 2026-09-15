@@ -1637,6 +1637,7 @@ def mark_task_merged_for_branch(
     committed_path: Path = COMMITTED_TASKS_PATH,
     pr_url: str | None = None,
     pr_number: int | None = None,
+    merge_class: str | None = None,
 ) -> EngineeringTask | None:
     from value_investor.engineering_queue import task_id_from_branch
 
@@ -1644,6 +1645,16 @@ def mark_task_merged_for_branch(
     if not task_id:
         return None
     data = load_engineering_tasks(path)
+    extra: dict[str, Any] = {}
+    if merge_class:
+        # Stamp on the row for digests; also mirror into evidence for UI/filters.
+        extra["merge_class"] = str(merge_class)
+        for row in data.get("tasks") or []:
+            if str(row.get("id")) == task_id or str(row.get("branch_name") or "") == branch:
+                evidence = dict(row.get("evidence") or {})
+                evidence["merge_class"] = str(merge_class)
+                extra["evidence"] = evidence
+                break
     for row in data.get("tasks") or []:
         if str(row.get("id")) == task_id or str(row.get("branch_name") or "") == branch:
             return mark_task_status(
@@ -1654,6 +1665,7 @@ def mark_task_merged_for_branch(
                 branch_name=branch,
                 pr_url=pr_url,
                 pr_number=pr_number,
+                **extra,
             )
     return mark_task_status(
         task_id,
@@ -1663,6 +1675,7 @@ def mark_task_merged_for_branch(
         branch_name=branch,
         pr_url=pr_url,
         pr_number=pr_number,
+        **extra,
     )
 
 

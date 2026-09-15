@@ -92,10 +92,17 @@ jobs:
           git checkout -B main origin/main
 
           PR_URL="https://github.com/${GITHUB_REPOSITORY}/pull/${PR_NUMBER}"
-          ftse-engineering mark-merged \
-            --branch "$BRANCH" \
-            --pr-url "$PR_URL" \
+          MERGE_CLASS=$(python3 -c 'import json; print(json.load(open("/tmp/auto_merge.json")).get("merge_class") or "")')
+          MARK_ARGS=(
+            mark-merged
+            --branch "$BRANCH"
+            --pr-url "$PR_URL"
             --pr-number "$PR_NUMBER"
+          )
+          if [ -n "$MERGE_CLASS" ]; then
+            MARK_ARGS+=(--merge-class "$MERGE_CLASS")
+          fi
+          ftse-engineering "${MARK_ARGS[@]}"
 
           # Prefer compile-cap / role-coherence drain over hunter on idle queue.
           ftse-engineering try-compile-cap-drain --apply \

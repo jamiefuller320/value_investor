@@ -23,8 +23,8 @@ slice of a PM agent.
 | Dispatch scoped `engineering-conflict-resolve.yml` for `cursor/eng-*` | Yes |
 | Rely on existing `ci-pr-autofix` / hunter-fix on CI failure | Yes (event-driven) |
 | Dispatch **one** scoped unstick agent after first-line exhaustion | Yes (algorithmic; eng branches; cap/cooldown) |
+| Independent verify + scoped auto-merge for **ingest_narrow** (#651-class) | Yes (deterministic path/CI/tests gate; policy `ingest_narrow`) |
 | Standing GitHub→cloud-agent listener (`subscribe_github_pr` / Automation) | **No** |
-| Merge PRs | **No** — keep restricted; loosen only with independent verification |
 | Broad Phase B/C self-healing / task invention | **No** — still deferred as L393 EOD gate agent |
 
 ## Flow
@@ -137,6 +137,25 @@ The digest cites committed artifacts (`project_progress.json`, `progress_report.
 grounded / ungrounded flags. It does **not** invent north-star claims without a
 source row. Trajectory labels: `on_track` | `blocked_by_pr_queue` | `watch_stalls` |
 `needs_evidence`.
+
+It also lists **merges today** (with `merge_class` and independently-verified flag)
+so scoped auto-merges — especially `ingest_narrow` — can be monitored from the
+digest, ops-monitor email, and queue-health dashboard card.
+
+## Ingest-narrow independent verify
+
+Policy `engineering.auto_merge.ingest_narrow` (`off` | `observe` | `merge`, default
+`merge`) enables a **deterministic** independent gate for #651-class ingest PRs:
+
+1. Task area is `ingest` (and not a parked hunter)
+2. Actual changed files ≤ 8, all under CI-fix safe prefixes, within the task
+   allowlist, and include at least one `tests/` path
+3. CI green, including the `ingest-narrow-gate` job
+4. When policy is `merge`, `engineering-auto-merge` may squash-merge and stamp
+   `merge_class=ingest_narrow` on the task for EOD monitoring
+
+This is independent of the authoring agent (path/CI/tests only — not a standing
+LLM listener). Broader eng areas remain human-merge for now (see L398).
 
 ## Merge authority (future)
 

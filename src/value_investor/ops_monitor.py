@@ -2188,6 +2188,24 @@ def format_ops_monitor_text(report: OpsMonitorReport) -> str:
         for row in report.auto_fixes:
             lines.append(f"  • {row.get('action')}: {row.get('detail')}")
         lines.append("")
+    try:
+        from value_investor.engineering_narrow_merge import list_todays_engineering_merges
+
+        merges_today = list_todays_engineering_merges()
+    except Exception:  # noqa: BLE001 — email formatting must not crash the monitor
+        merges_today = []
+    if merges_today:
+        lines.append("ENGINEERING MERGES TODAY (independent verify monitor)")
+        lines.append("-" * 40)
+        for row in merges_today:
+            pr = row.get("pr_number")
+            pr_bit = f"PR #{pr} " if pr else ""
+            verified = "verified" if row.get("independently_verified") else "human"
+            lines.append(
+                f"  • [{row.get('merge_class')}/{verified}] {pr_bit}"
+                f"{row.get('task_id')}: {row.get('title')}"
+            )
+        lines.append("")
     if report.drafted_task_ids:
         lines.append("DRAFTED ENGINEERING TASKS")
         lines.append("-" * 40)
@@ -2262,6 +2280,29 @@ def format_ops_monitor_html(report: OpsMonitorReport) -> str:
             "Afternoon catch-up will email only if issues remain.</p>"
             f"<ul>{defer_items}</ul>"
         )
+    try:
+        from value_investor.engineering_narrow_merge import list_todays_engineering_merges
+
+        merges_today = list_todays_engineering_merges()
+    except Exception:  # noqa: BLE001
+        merges_today = []
+    if merges_today:
+        merge_items = []
+        for row in merges_today:
+            pr = row.get("pr_number")
+            pr_bit = f"PR #{pr} — " if pr else ""
+            verified = "verified" if row.get("independently_verified") else "human"
+            merge_items.append(
+                "<li><code>"
+                f"{row.get('merge_class')}/{verified}</code> {pr_bit}"
+                f"{row.get('task_id')}: {row.get('title')}</li>"
+            )
+        merges_html = (
+            "<h3>Engineering merges today (independent verify monitor)</h3>"
+            f"<ul>{''.join(merge_items)}</ul>"
+        )
+    else:
+        merges_html = ""
     return f"""<!DOCTYPE html>
 <html><body style="font-family:Arial,sans-serif;color:#222;max-width:720px">
   <h2>FTSE Ops Monitor</h2>
@@ -2271,6 +2312,7 @@ def format_ops_monitor_html(report: OpsMonitorReport) -> str:
   {needs_block}
   {healed_block}
   {"<h3>Auto-fixes</h3><ul>" + fixes + "</ul>" if fixes else ""}
+  {merges_html}
   {"<h3>Workflow freshness</h3>" + workflows if workflows else ""}
   {"<p><strong>Engineering queue ready</strong> for next supervised PR.</p>" if report.should_dispatch_engineering else ""}
 </body></html>"""
