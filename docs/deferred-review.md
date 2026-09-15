@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-15T11:59:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-15T12:16:46+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -176,6 +176,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N97 | **Do not add extra S&P or ASX sprint slots for leftover IWB** | Saturday 5 Sep ran 8 spare-stream jobs per market with leftover minutes (S&P ~1000s unused, ASX ~2000s). S&P IWB stayed at 15 (8-K HTML); ASX thin is Markit latest-five plus Google News junk. More targets/runtime will not fetch those bodies. Prefer IR seeds, index-noise prune, and 8-K exhibit follow-through. | S&P 8-K residual refetch starts returning bodies, or Markit/ASX listing history exists beyond the latest five announcements |
 | N98 | **Do not spawn a 61-name buy-tier book immediately** | An unfiltered lifecycle baseline is the right control, but do not stand it up this weekend as an extra paper track. Live-path FCF/overlay bind is still the spend priority; archive u0 already gives gross EW history; a same-day spawn without a written buy-threshold/sector-cap/cost spec would starve P1 and muddy epoch zero. | Same gate as L316: human-authored Suite B spec exists and FCF-basis enforcement on live buy-tier is in flight or closed. |
 | N99 | **No per-knob counterfactual warm-start twins of a cohort book** | When the buy-tier baseline exists, compare recommended knob changes as overlays or divergence on the same held names plus a new epoch-zero datum. Do not spawn a new warm-started twin per knob recommendation — that is the calibration-shadow factory that already failed three times (N53). | A recommend-status knob has ≥4 forward weeks on the single baseline cohort and a human asks for at most one Suite B twin. |
+| N129 | **Standing GitHub→cloud-agent PM subscriptions** | Do not add always-on Cursor Automation or repo-wide subscribe_github_pr/ci for the traffic/PM role. Existing workflow_run autofix, hunter-fix, project-traffic pause/unstick, and ops-monitor already react to GitHub events. Only add a standing agent listener if that loop repeatedly cannot clear CI/conflict stuck PRs. | Traffic pause stays active for multiple weekday sessions while ci-pr-autofix/hunter-fix/conflict-resolve have already exhausted their attempts |
 
 ---
 
