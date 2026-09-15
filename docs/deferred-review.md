@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-14T15:20:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-15T09:04:13+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -366,6 +366,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L376 | **Lifecycle board card opens memo / decision pack** | Ticker cards on the Lifecycle tab are currently display-only. Wiring click-through to the existing memo dialog or decision pack would make Sunday review of a column faster. | After the Lifecycle tab is used in a Sunday review and cards are the usual way to pick a name |
 | L379 | **TRI.TO Investegate Trifast EPIC collision** | TRI.TO filings_index includes 51 investegate_direct Trifast (LSE TRI) RNS bodies. filter_misattributed_filings does not drop UK RNS for tsx_announcements, so a UK EPIC homonym pollutes the Thomson Reuters corpus. | TRI.TO leftover IWB is cleared and a memo/quality pass still shows Trifast RNS in the TSX research pack |
 | L385 | **Euro-depth still-zero-disk first-pass memos after catchup** | Zero-body rememo catchup unlocks memos once disk has any bodies. Names that remain memo_bodies=0 and disk_bodies=0 (e.g. AGS.BR, EL.PA, IFX.DE, REN.AS, SIE.DE, UQA.VI) still need euro_depth ingest thicken before Phase B rememo; do not rewrite empty shells. | euro_depth zero_body_buy_tier drops or those six tickers gain filings_index with_body > 0 |
+| L391 | **Lifecycle ticker cards: charts for non-buy-tier names** | Lifecycle name cards reuse buy-tier chart JSON; non-buy / sold names show assessment but no series until chart publish coverage expands. | Price-chart publish covers held/sold or near-buy names beyond current buy-tier weekly charts |
 
 ### Ops / reliability
 
