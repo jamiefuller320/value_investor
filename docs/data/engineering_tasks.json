@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-15T15:42:17.376977+00:00",
+  "compiled_at": "2026-09-15T17:16:29.789958+00:00",
   "run_at": null,
-  "task_count": 14,
+  "task_count": 15,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -575,6 +575,47 @@
       "merged_at": "2026-09-15T17:13:20.740748+00:00"
     },
     {
+      "id": "eng-20260915-12",
+      "area": "scoring",
+      "title": "Enable cyclical/public-capex and cash-conversion overlays for UK contractors; treat falling revenue + rising FCF as a quality warning until filing mix notes con",
+      "summary": "Enable cyclical/public-capex and cash-conversion overlays for UK contractors; treat falling revenue + rising FCF as a quality warning until filing mix notes confirm; do not score framework wins as backlog.",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "COST.L"
+        ],
+        "recorded_at": "2026-09-04T17:33:50.472095+00:00",
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260915-07",
       "area": "scoring",
       "title": "Attach run-history FCF divergence flags to `docs/data/history/run_*.json.gz` `action_note` for all Strong Buy names (HIK shows mismatch in snapshot but not in h",
@@ -784,7 +825,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-15T17:13:21.272059+00:00",
+    "evaluated_at": "2026-09-15T17:16:26.775390+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
@@ -800,7 +841,7 @@
   },
   "reprioritized_at": "2026-09-15T14:59:36.733235+00:00",
   "reprioritized_after_task": "eng-20260915-03",
-  "micro_compile_source": "parked_source_hunter",
+  "micro_compile_source": "compile_cap_drain",
   "library_market_id": "ftse_smallcap",
   "hunter_ticker": "FOXT.L",
   "traffic_control": {
