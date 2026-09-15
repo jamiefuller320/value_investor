@@ -257,7 +257,21 @@
         "tickers": [
           "UK"
         ],
-        "plan_index": 4
+        "plan_index": 4,
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260915-04",
+        "verified_at": "2026-09-15T13:54:17.254069+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_research_filings.py",
+            "tests/test_research_ingest.py",
+            "tests/test_gap_fill_deepen.py",
+            "tests/test_ingest_improvement.py",
+            "tests/test_companies_house.py"
+          ],
+          "output_tail": "........................................................................ [ 18%]\n........................................................................ [ 36%]\n........................................................................ [ 54%]\n........................................................................ [ 73%]\n........................................................................ [ 91%]\n.................................                                        [100%]\n393 passed in 250.54s (0:04:10)"
+        }
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for UK",
@@ -285,11 +299,14 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260915-04.md",
       "branch_name": "cursor/eng-20260915-04-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-15T13:04:55.034465+00:00"
+      "completed_at": "2026-09-15T13:04:55.034465+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/652",
+      "pr_number": 652,
+      "merged_at": "2026-09-15T13:54:17.254505+00:00"
     },
     {
       "id": "eng-20260915-05",
@@ -397,7 +414,7 @@
       "title": "Companies House document-api PDF pipeline with OCR quality gates and CH-ID ↔ `filings_index` mapping; reject or quarantine truncated extracts (flag when line co",
       "summary": "Companies House document-api PDF pipeline with OCR quality gates and CH-ID ↔ `filings_index` mapping; reject or quarantine truncated extracts (flag when line count/hash indicates truncation)",
       "priority": "high",
-      "priority_score": 94.0,
+      "priority_score": 96.0,
       "source": "post_run_review",
       "evidence": {
         "tickers": [
@@ -442,7 +459,7 @@
       "title": "Parse allowlisted IR results PDFs into structured FCF bridges and populate `ir_presentation_metrics.json` (segment revenue, dividend policy, management FCF defi",
       "summary": "Parse allowlisted IR results PDFs into structured FCF bridges and populate `ir_presentation_metrics.json` (segment revenue, dividend policy, management FCF definitions)",
       "priority": "high",
-      "priority_score": 93.0,
+      "priority_score": 95.0,
       "source": "post_run_review",
       "evidence": {
         "tickers": [
@@ -485,7 +502,7 @@
       "title": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
       "summary": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
       "priority": "high",
-      "priority_score": 91.0,
+      "priority_score": 93.0,
       "source": "post_run_review",
       "evidence": {
         "tickers": [
@@ -602,11 +619,8 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
-      "result_path": "output/engineering_result_eng-20260915-09.md",
-      "branch_name": "cursor/eng-20260915-09-1de3",
-      "no_diff_count": 0,
-      "completed_at": "2026-09-15T13:20:28.265073+00:00"
+      "status": "open",
+      "no_diff_count": 0
     },
     {
       "id": "eng-20260915-10",
@@ -647,6 +661,22 @@
     }
   ],
   "ingest_health": {
+    "snapshot_at": "2026-09-15T13:50:03.104613+00:00",
+    "buy_tier_count": 62,
+    "measured_tickers": 62,
+    "unmeasured_buy_tier": 0,
+    "unmeasured_tickers": [],
+    "zero_body_buy_tier": 0,
+    "zero_body_tickers": [],
+    "indexed_without_body": 22,
+    "filings_with_body": 4229
+  },
+  "queue_clearing": {
+    "attention_parked_count": 0,
+    "evaluated_at": "2026-09-15T13:54:24.127632+00:00",
+    "should_send_full_queue_warning": false
+  },
+  "ingest_health_before": {
     "snapshot_at": "2026-09-15T12:52:52.581290+00:00",
     "buy_tier_count": 62,
     "measured_tickers": 62,
@@ -657,22 +687,6 @@
     "indexed_without_body": 17,
     "filings_with_body": 4226
   },
-  "queue_clearing": {
-    "attention_parked_count": 0,
-    "evaluated_at": "2026-09-15T13:17:56.748006+00:00",
-    "should_send_full_queue_warning": false
-  },
-  "ingest_health_before": {
-    "snapshot_at": "2026-09-15T09:01:51.712407+00:00",
-    "buy_tier_count": 62,
-    "measured_tickers": 62,
-    "unmeasured_buy_tier": 0,
-    "unmeasured_tickers": [],
-    "zero_body_buy_tier": 0,
-    "zero_body_tickers": [],
-    "indexed_without_body": 19,
-    "filings_with_body": 4229
-  },
-  "reprioritized_at": "2026-09-15T12:52:52.581594+00:00",
-  "reprioritized_after_task": "eng-20260915-01"
+  "reprioritized_at": "2026-09-15T13:50:03.104781+00:00",
+  "reprioritized_after_task": "eng-20260915-04"
 }
