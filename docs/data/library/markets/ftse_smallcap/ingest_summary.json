@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-15T14:21:40.427702+00:00",
+  "run_at": "2026-09-15T15:42:17.378062+00:00",
   "market_id": "ftse_smallcap",
   "targets": [
     "APTD.L",
@@ -219,7 +219,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-15T14:18:25.893098+00:00",
+    "snapshot_at": "2026-09-15T15:35:39.752292+00:00",
     "market_id": "ftse_smallcap",
     "buy_tier_count": 10,
     "unmeasured_buy_tier": 0,
@@ -273,7 +273,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-15T14:21:37.776217+00:00",
+    "snapshot_at": "2026-09-15T15:41:11.607908+00:00",
     "market_id": "ftse_smallcap",
     "buy_tier_count": 10,
     "unmeasured_buy_tier": 0,
@@ -309,22 +309,21 @@
       "FOXT.L": 5
     },
     "parked_tickers": [
+      "APTD.L",
       "BOOT.L",
       "DFS.L",
+      "FOXT.L",
+      "GLE.L",
       "MER.L",
       "TPT.L",
       "ULTP.L"
     ],
-    "parked_count": 5,
+    "parked_count": 8,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 15,
-    "effective_indexed_without_body_tickers": [
-      "APTD.L",
-      "GLE.L",
-      "FOXT.L"
-    ],
-    "ingest_exhausted": false
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -335,10 +334,39 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 2,
+    "from_market": "ftse_smallcap",
+    "to_market": "asx200",
+    "stream_markets_after": [
+      "asx200"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "ftse_smallcap",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "APTD.L",
+        "BOOT.L",
+        "DFS.L",
+        "FOXT.L",
+        "GLE.L",
+        "MER.L",
+        "TPT.L",
+        "ULTP.L"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "at": "2026-09-15T15:41:22.244735+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "ftse_smallcap",
-    "assessed_at": "2026-09-15T14:18:27.014877+00:00",
+    "assessed_at": "2026-09-15T15:35:40.865324+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -417,9 +445,9 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 189.680616504,
+  "used_seconds": 329.68577437600004,
   "budget_seconds": 525.0,
-  "leftover_seconds": 335.319383496,
+  "leftover_seconds": 195.31422562399996,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -427,9 +455,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_smallcap",
-    "updated_at": "2026-09-15T14:21:37.781874+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-09-15T15:41:11.613217+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -481,6 +509,36 @@
         "filings_with_body": 49,
         "indexed_without_body": 8,
         "thin": false
+      },
+      {
+        "ticker": "APTD.L",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-15T15:41:11.613217+00:00",
+        "filings_total": 81,
+        "filings_with_body": 76,
+        "indexed_without_body": 5,
+        "thin": false
+      },
+      {
+        "ticker": "FOXT.L",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-15T15:41:11.613217+00:00",
+        "filings_total": 55,
+        "filings_with_body": 50,
+        "indexed_without_body": 5,
+        "thin": false
+      },
+      {
+        "ticker": "GLE.L",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-15T15:41:11.613217+00:00",
+        "filings_total": 61,
+        "filings_with_body": 56,
+        "indexed_without_body": 5,
+        "thin": false
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
@@ -495,49 +553,30 @@
       "TPT.L",
       "ULTP.L"
     ],
-    "unparked_leftover": [
-      "APTD.L",
-      "FOXT.L",
-      "GLE.L"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/ftse_smallcap/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "ftse_smallcap"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "ftse_smallcap",
+    "ingest_exhausted_markets": [
+      "euro_depth",
+      "ftse_smallcap",
+      "sp500",
+      "tsx60"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
-    "compiled_count": 0,
-    "reason": "parked hunter candidates already resolved on main",
-    "tried_count": 0,
-    "candidate_count": 25,
-    "skipped_resolved_tickers": [
-      "ABI.BR",
-      "APAM.AS",
-      "BAS.DE",
-      "EVN.VI",
-      "MUV2.DE",
-      "SAP.DE",
-      "SGO.PA",
-      "SKA-B.ST",
-      "UCB.BR",
-      "WIE.VI",
-      "APTV",
-      "BXP",
-      "CRH",
-      "FICO",
-      "LDOS",
-      "LMT",
-      "TSN",
-      "ULTP.L",
-      "BOOT.L",
-      "DFS.L",
-      "MER.L",
-      "TPT.L",
-      "SU.TO",
-      "NTR.TO",
-      "TRI.TO"
-    ]
+    "compiled_count": 1,
+    "task_ids": [
+      "eng-20260915-11"
+    ],
+    "task_count": 14,
+    "market_id": "ftse_smallcap",
+    "hunter_ticker": "FOXT.L",
+    "priority_score": 12.0
   }
 }
