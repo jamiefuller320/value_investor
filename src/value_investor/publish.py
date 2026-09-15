@@ -15,7 +15,7 @@ from value_investor.deep_analysis import _parse_deep_analysis
 from value_investor.price_charts import (
     chart_filename,
     copy_charts_to_dashboard,
-    ensure_buy_tier_charts,
+    ensure_price_charts,
     slug_ticker,
 )
 from value_investor.research.market_store import resolve_research_documents
@@ -367,7 +367,7 @@ def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
                 screen_trusts = bool(summary.get("screen_trusts"))
 
     for report in reports:
-        if report.get("signal") in ("strong_buy", "buy") and report.get("ticker"):
+        if report.get("ticker"):
             report["chart_path"] = f"data/charts/{chart_filename(str(report['ticker']))}"
 
     # Advisory Trading 212 tradability overlay (catalogue + allowlist fallback).
@@ -575,25 +575,48 @@ def publish_dashboard(
     data_dir.mkdir(parents=True, exist_ok=True)
     charts_dest = data_dir / "charts"
     charts_source = output_dir / "charts"
-    buy_tickers = [
-        str(report["ticker"])
-        for report in bundle.get("reports", [])
-        if report.get("signal") in ("strong_buy", "buy") and report.get("ticker")
-    ]
-    # Refresh missing charts from price history so popups work after publish.
-    ensure_buy_tier_charts(
-        reports=[r for r in bundle.get("reports", []) if r.get("signal") in ("strong_buy", "buy")],
-        chart_dir=charts_source,
-        fetch=True,
+    reports = [r for r in bundle.get("reports", []) if isinstance(r, dict)]
+    report_tickers = [str(r["ticker"]) for r in reports if r.get("ticker")]
+    from value_investor.lifecycle_board import (
+        lifecycle_tickers_by_market,
+        tickers_on_lifecycle_board,
     )
+
+    lifecycle_board = bundle.get("lifecycle_board")
+    lifecycle_tickers = tickers_on_lifecycle_board(lifecycle_board)
+    chart_tickers = sorted({*report_tickers, *lifecycle_tickers})
+    # Live screen reports are LSE/FTSE — fetch with that market context.
+    ensure_price_charts(
+        reports=reports,
+        chart_dir=charts_source,
+        tickers=report_tickers or None,
+        fetch=True,
+        market="ftse350",
+    )
+    for market_id, tickers in lifecycle_tickers_by_market(lifecycle_board).items():
+        missing = [
+            ticker
+            for ticker in tickers
+            if not (charts_source / chart_filename(ticker)).exists()
+            and not (charts_dest / chart_filename(ticker)).exists()
+        ]
+        if not missing:
+            continue
+        ensure_price_charts(
+            reports=reports,
+            chart_dir=charts_source,
+            tickers=missing,
+            fetch=True,
+            market=market_id,
+        )
     copy_charts_to_dashboard(
         source_dir=charts_source,
         dest_dir=charts_dest,
-        tickers=buy_tickers or None,
+        tickers=chart_tickers or None,
     )
-    # Drop stale chart files for names no longer in the buy tier.
-    if charts_dest.exists() and buy_tickers:
-        keep = {chart_filename(ticker) for ticker in buy_tickers}
+    # Drop charts that are no longer on the live screen or lifecycle board.
+    if charts_dest.exists() and chart_tickers:
+        keep = {chart_filename(ticker) for ticker in chart_tickers}
         for stale in charts_dest.glob("*.json"):
             if stale.name not in keep:
                 stale.unlink(missing_ok=True)

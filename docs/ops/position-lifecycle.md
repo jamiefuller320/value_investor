@@ -156,9 +156,9 @@ DCA or starter fraction — `recommend` stays observe-only.
 Each stock chip opens a **name data card**: live-screen assessment (signal,
 timing, conviction, research, trade plan, decision pack when present),
 chart-outcome since recommendation when published, and the same price chart
-as the screener (Latest screen / Initial recommendation levels). Charts are
-still buy-tier-only; non-buy names show assessment without a series when no
-chart JSON exists.
+as the screener (Latest screen / Initial recommendation levels). Publish keeps
+charts for the live screen **and** lifecycle shown cards (including hold/avoid
+and other-market chips), not only buy-tier.
 
 Held, sold, and screen name cards use a green→red **time-in-stage** heatmap:
 ≤7d fresh, ≤3w, ≤6w, ≤8w, then red beyond 8 weeks. Held columns clock
