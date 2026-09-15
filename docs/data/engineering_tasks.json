@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-15T17:48:19.946594+00:00",
+  "compiled_at": "2026-09-15T18:34:32.353787+00:00",
   "run_at": null,
-  "task_count": 16,
+  "task_count": 17,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -589,18 +589,18 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
-      "id": "eng-20260915-13",
+      "id": "eng-20260915-14",
       "area": "scoring",
-      "title": "Fail-closed when FCF yield is ~0.1% while canonical FCF is £100m+: treat that as a unit/FX error, not a model miss. Set fcf_definition_divergence whenever compa",
-      "summary": "Fail-closed when FCF yield is ~0.1% while canonical FCF is £100m+: treat that as a unit/FX error, not a model miss. Set fcf_definition_divergence whenever company_adjusted / filing_aligned / TTM disagree (£168.3m / £205.6m / £187.7m here). Enable cyclical/housing-RMI and cash-conversion overlays for builders-merchants. Surface dual leverage (IFRS-16 D/E vs ex-lease net cash). Do not pass quality/GARP on 8.4% ROE while moat/Buffett fail on the same ROE without a documented exception.",
+      "title": "Fail-closed or flag when screening_snapshot.fcf.currency is USD on a GBP LSE reporter, and set fcf_definition_divergence whenever screen_ttm (2,502m) disagrees ",
+      "summary": "Fail-closed or flag when screening_snapshot.fcf.currency is USD on a GBP LSE reporter, and set fcf_definition_divergence whenever screen_ttm (2,502m) disagrees with filing_aligned (3,166m). Do not pass quality/GARP/Buffett on 37% ROE while earnings growth is negative and book equity is shrinking via buybacks. Enable a tobacco-excise overlay so current-ratio < 2 is not treated as ordinary industrial illiquidity without netting duty payables, and surface dual leverage when D/E > 200% even if lease",
       "priority": "medium",
       "priority_score": 43.0,
       "source": "compile_cap_drain",
       "evidence": {
         "tickers": [
-          "GFTU.L"
+          "IMB.L"
         ],
-        "recorded_at": "2026-09-04T17:42:11.927312+00:00",
+        "recorded_at": "2026-09-04T17:50:11.064379+00:00",
         "compile_cap_drain": true,
         "origin_source": "research_model_suggestions",
         "origin_priority_score": 43.0,
@@ -627,11 +627,66 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "open"
+    },
+    {
+      "id": "eng-20260915-13",
+      "area": "scoring",
+      "title": "Fail-closed when FCF yield is ~0.1% while canonical FCF is £100m+: treat that as a unit/FX error, not a model miss. Set fcf_definition_divergence whenever compa",
+      "summary": "Fail-closed when FCF yield is ~0.1% while canonical FCF is £100m+: treat that as a unit/FX error, not a model miss. Set fcf_definition_divergence whenever company_adjusted / filing_aligned / TTM disagree (£168.3m / £205.6m / £187.7m here). Enable cyclical/housing-RMI and cash-conversion overlays for builders-merchants. Surface dual leverage (IFRS-16 D/E vs ex-lease net cash). Do not pass quality/GARP on 8.4% ROE while moat/Buffett fail on the same ROE without a documented exception.",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "GFTU.L"
+        ],
+        "recorded_at": "2026-09-04T17:42:11.927312+00:00",
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "doc": "docs/ops/engineering-sync.md",
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260915-13",
+        "verified_at": "2026-09-15T18:34:23.574217+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_pipeline.py",
+            "tests/test_summary.py"
+          ],
+          "output_tail": "........................................................................ [ 32%]\n........................................................................ [ 65%]\n........................................................................ [ 97%]\n.....                                                                    [100%]\n221 passed in 14.45s"
+        }
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260915-13.md",
       "branch_name": "cursor/eng-20260915-13-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-15T17:54:19.481524+00:00"
+      "completed_at": "2026-09-15T17:54:19.481524+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/660",
+      "pr_number": 660,
+      "merged_at": "2026-09-15T18:34:23.574688+00:00"
     },
     {
       "id": "eng-20260915-12",
@@ -907,7 +962,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-15T18:16:21.662455+00:00",
+    "evaluated_at": "2026-09-15T18:34:29.796854+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
