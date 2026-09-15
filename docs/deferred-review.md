@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-14T15:20:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-15T09:36:39+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -455,8 +455,9 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L382 | **Backfill missed shard epoch-0 first fills into the DCA overlay** | SP500 epoch-0 holds 120 names but overlay only has 4 first-entry episodes (ASX 29 vs 1). Overlay ingest only records new buys this pass; if the cold-start overlay was not persisted, later marks cannot backfill. Repair would reconstruct episodes from rebalance_log/trades without changing fills. | A human wants shard-level DCA confirmation, or weekday marks show holdings far above overlay open+closed counts on admitted books |
 | L383 | **Say frozen knobs not frozen holdings for epoch-0** | Ops prose calls buy_tier_level a frozen book/cohort, which reads as a static holdings list. Epoch-0 is a live rules baseline: names enter/hold/exit; only picking knobs and entry mechanics (no DCA execute, no starter fraction) stay frozen. | Next edit of buy-tier-cohort-labs.md or market-sharded-learning.md admitted-start section |
 | L387 | **Expand ops overdue auto-dispatch beyond ingest/paper** | AUTO_DISPATCH_OVERDUE_WORKFLOWS is intentionally narrow (ingest-loop + paper-auto). Consider orchestrator weekday_paper suite and other primary crons once dispatch idempotency and catch-up interaction are proven. | After ops-monitor has successfully auto-dispatched overdue ingest or paper at least once in production without double-firing catch-up slots |
-| L388 | **End-of-day project-management gate agent** | Autonomous EOD agent that checks progress toward Phase B/C and other learning gates, then self-generates or recommends fixes for stalls. Prefer extending ftse-ops-monitor checks + drafted eng tasks first; full PM agent only if monitor findings keep being missed. | Ops-monitor Phase B/C gate checks have run for ≥4 weeks and stalls still go unnoticed without ad-hoc questions |
 | L390 | **Re-seed empty parallel sprint slots on queue regap** | When ingest_parallel_sprint/_2 are empty after handoffs but next_parallel_sprint_queue_market is non-null (e.g. asx200 regapped), auto-assign that market back into a spare stream so policy-visible cascade and handoff hooks match fill-down runtime. | Second incident of empty parallel streams while head still sprinting and a queue market has sprint_ingest_complete=false |
+| L391 | **Loosen merge authority with independent verification** | After project-traffic pause/resume is stable, consider allowing merge only when an independent verifier (path guard + green CI + allowlist/hunter gate) agrees — never the same agent that authored the diff. | Traffic controller has paused and resumed cleanly for ≥2 weeks without false pauses, and scoped auto-merge remains green |
+| L392 | **Full EOD PM agent beyond traffic + grounded digest** | Extend beyond PR traffic control into Phase B/C gate probing, self-generated stall fixes, and broader goal appraisal. Prefer traffic controller + progress-report probes first; only grow autonomy if digests stay grounded and stalls still need human chase. | Project traffic digests have run weekday EOD for ≥4 weeks and human still spends material time chasing non-PR stalls |
 
 ---
 

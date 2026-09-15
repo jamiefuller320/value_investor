@@ -3134,6 +3134,7 @@ function renderQueueHealthMonitor(data) {
           ${settingRow("Should dispatch", agent.should_dispatch ? "yes" : "no")}
           ${agent.next_task_id ? settingRow("Next task", `<code>${esc(agent.next_task_id)}</code>`) : ""}
           ${clearing.pause_active ? settingRow("Backlog pause", `<span class="badge badge-ii-no">active</span> (${esc(String(clearing.attention_parked_count ?? 0))} parked)`) : ""}
+          ${(health.traffic_control || {}).pause_active ? settingRow("Traffic pause", `<span class="badge badge-ii-no">active</span> (${esc(String((health.traffic_control || {}).stuck_pr_count ?? 0))} stuck)`) : ""}
         </div>
         <div class="card queue-health-lane">
           <h3>Ops monitor ${ops.overall ? overallStatusBadge(ops.overall) : ""}</h3>
@@ -3144,6 +3145,8 @@ function renderQueueHealthMonitor(data) {
       <p class="small muted" style="margin-top:0.75rem">
         Auto-merge is <strong>event-driven</strong> (green CI → merge workflow), not a background merger.
         The agent lane runs when the hourly queue dispatches <code>engineering-agent</code>.
+        Project traffic pauses new PRs when monitored branches are CI-red or conflicted
+        (<a href="${esc(githubOpsDocUrl("docs/ops/project-traffic.md") || "#")}" target="_blank" rel="noopener">runbook</a>).
       </p>
     </section>`;
 }
