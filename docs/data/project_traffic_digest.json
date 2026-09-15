@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-15T17:13:18.483256+00:00",
+  "role": "end_of_day_project_traffic",
+  "trajectory": "on_track",
+  "pause_active": false,
+  "stuck_pr_count": 0,
+  "achieved": [
+    "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
+    "FTSE 350 live screen and published dashboard are operational.",
+    "Offline library: 21 graduated markets (focus: euro_depth).",
+    "Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.",
+    "Engineering queue: 9 open, 2 merged supervised tasks."
+  ],
+  "gaps": [
+    "Primary AI track still below ^FTSE after costs (-28.6% excess; history still thin)."
+  ],
+  "next_actions": [
+    "Let the learning loop accumulate before adding tracks or knobs.",
+    "Sunday chain: orchestrator → analysis-review → data-backup (cron now wired).",
+    "Prioritise buy-tier filing depth (Companies House + RNS body fetch).",
+    "Keep library growing offline; defer live universe expansion until stage 2b shows edge."
+  ],
+  "actions_taken": [
+    {
+      "kind": "remediate_queue_merge_sync",
+      "detail": "detected merge sync lag for 1 task(s): eng-20260914-03",
+      "pr_number": null,
+      "branch": null,
+      "applied": false
+    },
+    {
+      "kind": "remediate_queue_merge_sync",
+      "detail": "PM remediated queue merge sync: fixed=['eng-20260914-03']; remaining=['none']",
+      "pr_number": null,
+      "branch": null,
+      "applied": true
+    }
+  ],
+  "checkpoint_probe": {
+    "evidence_rows": [
+      {
+        "claim": "Stage 0 (UK quant core): complete",
+        "source": "docs/data/project_progress.json",
+        "grounded": true,
+        "probe": "status must be one of complete|in_progress|not_started"
+      },
+      {
+        "claim": "Stage 1 (Decision-review learning): in_progress",
+        "source": "docs/data/project_progress.json",
+        "grounded": true,
+        "probe": "status must be one of complete|in_progress|not_started"
+      },
+      {
+        "claim": "Stage 2b (Primary learning track): in_progress",
+        "source": "docs/data/project_progress.json",
+        "grounded": true,
+        "probe": "status must be one of complete|in_progress|not_started"
+      },
+      {
+        "claim": "Stage 3 (Library-ready global data): complete",
+        "source": "docs/data/project_progress.json",
+        "grounded": true,
+        "probe": "status must be one of complete|in_progress|not_started"
+      },
+      {
+        "claim": "Stage 4 (Controlled universe expansion): not_started",
+        "source": "docs/data/project_progress.json",
+        "grounded": true,
+        "probe": "status must be one of complete|in_progress|not_started"
+      },
+      {
+        "claim": "Stage 5 (Self-improving automation): not_started",
+        "source": "docs/data/project_progress.json",
+        "grounded": true,
+        "probe": "status must be one of complete|in_progress|not_started"
+      },
+      {
+        "claim": "Progress report present (generated_at=2026-09-15T12:38:22+00:00)",
+        "source": "docs/data/progress_report.json",
+        "grounded": true,
+        "probe": "progress_report.json must exist with a timestamp"
+      },
+      {
+        "claim": "So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview']",
+        "source": "docs/data/progress_report.json",
+        "grounded": true,
+        "probe": "human_gate block is structural, not free text"
+      },
+      {
+        "claim": "Queue health overall=active; headline=Agent lane active.",
+        "source": "docs/data/queue_health.json",
+        "grounded": true,
+        "probe": "queue_health.overall must be set by refresh_queue_health_ui"
+      },
+      {
+        "claim": "Ops monitor overall=ok at 2026-09-15T13:16:17.148729+00:00",
+        "source": "docs/data/ops_status.json",
+        "grounded": true,
+        "probe": "ops_status.run_at required for same-day claims"
+      },
+      {
+        "claim": "Traffic pause_active=False; stuck_pr_count=0",
+        "source": "docs/data/engineering_tasks.json#traffic_control",
+        "grounded": true,
+        "probe": "pause state must match stuck PR classification on this run"
+      }
+    ],
+    "ungrounded_count": 0,
+    "grounded_count": 11
+  },
+  "merge_authority": {
+    "status": "restricted",
+    "note": "Traffic controller may pause dispatch and request fixes; it does not merge. Loosen only with independent verification (path guard + green CI + allowlist), same as scoped auto-merge."
+  },
+  "sources": {
+    "progress_report": "docs/data/progress_report.json",
+    "project_progress": "docs/data/project_progress.json",
+    "queue_health": "docs/data/queue_health.json",
+    "ops_status": "docs/data/ops_status.json"
+  }
+}
