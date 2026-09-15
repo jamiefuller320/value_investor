@@ -1252,7 +1252,7 @@ def check_phase_b_producer_progress(
                 f"output/, write structured_verdict* updates, and persist back to "
                 f"docs/data/research — do not widen rememo_reason for mode migration."
             ),
-            auto_fixable=False,
+            auto_fixable=structured == 0,
         )
     ]
 
@@ -1503,6 +1503,32 @@ def apply_auto_fixes(
                 if finding.category == "backtest" and finding.auto_fixable:
                     finding.fixed = True
                     finding.action_taken = "; ".join(row.detail for row in repairs[:3])
+
+    phase_b_stalled = any(
+        row.title == "Phase B structured-verdict producer stalled" and not row.fixed
+        for row in findings
+    )
+    if phase_b_stalled and apply:
+        from value_investor.email_agent import repair_published_structured_verdict_to_committed
+        from value_investor.phase_c_readiness import MIN_STRUCTURED_DOCS
+
+        repaired = repair_published_structured_verdict_to_committed()
+        if repaired:
+            action = (
+                f"landed {repaired} published Phase B memo(s) into docs/data/research "
+                "(docs/research → committed store)"
+            )
+            results.append({"action": "repair_phase_b_published_memos", "detail": action})
+            for finding in findings:
+                if finding.title != "Phase B structured-verdict producer stalled":
+                    continue
+                if repaired >= MIN_STRUCTURED_DOCS:
+                    finding.fixed = True
+                    finding.action_taken = action
+                else:
+                    finding.action_taken = (
+                        f"{action}; still below ≥{MIN_STRUCTURED_DOCS} structured modes"
+                    )
 
     rememo_over = any(
         row.title == "Memo rememo backlog exceeds in-week capacity" and not row.fixed

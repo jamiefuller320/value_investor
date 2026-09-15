@@ -45,12 +45,19 @@ _PUBLISHED_MEMO_MODE_RE = re.compile(
 )
 
 
+def _normalize_published_research_mode(mode: str) -> str:
+    """Normalize mode tokens from published memo headers (``structured_verdict_`` → slim)."""
+    return mode.strip().rstrip("_")
+
+
 def _parse_published_research_mode(markdown: str) -> tuple[str, str] | None:
     """Parse ``(updated_at, mode)`` from a published research memo header line."""
     for line in markdown.splitlines()[:8]:
         match = _PUBLISHED_MEMO_MODE_RE.search(line.strip("_ "))
         if match:
-            return match.group(1).strip(), match.group(2).strip()
+            updated_at = match.group(1).strip()
+            mode = _normalize_published_research_mode(match.group(2))
+            return updated_at, mode
     return None
 
 
@@ -102,7 +109,15 @@ def repair_published_structured_verdict_to_committed(
         sections = parse_research_sections(markdown)
         verdict_fields = parse_research_verdict(sections.get("research_verdict", ""))
         if not verdict_fields.get("research_verdict"):
-            continue
+            existing_verdict = str(payload.get("research_verdict") or "").strip()
+            if not existing_verdict:
+                continue
+            verdict_fields = {
+                "research_verdict": existing_verdict,
+                "research_risk_level": payload.get("research_risk_level"),
+                "research_confidence": payload.get("research_confidence"),
+                "research_rationale": payload.get("research_rationale"),
+            }
         risk_tags = parse_risk_tags(sections.get("research_verdict", "")) or list(
             payload.get("risk_tags") or []
         )
