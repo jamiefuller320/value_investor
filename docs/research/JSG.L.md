@@ -1,6 +1,6 @@
 # Johnson Service Group PLC (JSG.L) — Research memo
 
-_Version 1 · Updated 2026-09-14T09:52:39.854279+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-09-15T08:50:15.618519+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,5 +9,12 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: FY25 and H1 RNS filings support cash generation, margin progress and covenant headroom, while softer HORECA volumes and screen-flagged statutory vs adjusted earnings gaps only modestly temper the strong buy case.
-RiskTags: cyclical, leverage, competitive, liquidity, accounting
+Rationale: Statutory H1 results largely confirm the screen’s quality-and-yield case—margin progress, dividend cover and covenant headroom—but softer HORECA and buyback-driven leverage warrant accumulation rather than full strong-buy alignment.
+RiskTags: cyclical, competitive, leverage, pension, accounting, liquidity
+
+## Weekly updates
+
+### 2026-09-15T08:50:15.618519+00:00
+8 September interim results align with July trading: adjusted operating profit +3.8%, interim dividend +12.5%, leverage 1.11x; management flags a weaker HORECA summer and softer H2 volumes.
+H1 company-defined FCF £21.2m (vs £25.0m prior year); £175m RCF refinanced to April 2030; buybacks and FIL stake disclosures continue.
+No new regulatory or accounting issues in indexed filings since the prior memo.

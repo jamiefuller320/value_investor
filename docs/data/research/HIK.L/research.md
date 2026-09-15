@@ -1,149 +1,20 @@
 # Hikma Pharmaceuticals PLC (HIK.L) — Research memo
 
-_Version 1 · Updated 2026-09-04T17:28:49.974039+00:00 · Mode: initial_
+_Version 2 · Updated 2026-09-15T08:49:01.037045+00:00 · Mode: structured_verdict_update_
 
-## EXECUTIVE SUMMARY
-Hikma Pharmaceuticals is a FTSE 100 multinational generics group spanning US injectables, MENA branded medicines, and US oral/specialty (Hikma Rx), reporting in US dollars. The quantitative screen flags a Strong Buy on cheapness (P/E 12.4, P/B 1.9), quality (ROE 15.4%), dividend yield (3.9%), and financial health (D/E 77%), with all five model families passing on complete data (20/20 metrics).
+_Phase B structured verdict (essay sections omitted on scheduled path)._
 
-Filings show FY2025 core revenue of $3,349m (+6% constant currency) and core operating profit of $741m (+3%), with H1 2026 accelerating to +9% core profit on Branded strength. The valuation hook is a BBB-rated franchise trading below mid-teens earnings despite diversified cash generation, a 5% dividend increase, and an active $250m buyback.
-
-The central debate is whether Injectables margin compression (FY2025 core margin 31.0% vs 35.3%; H1 2026 27.6%) and withdrawn medium-term guidance are a cyclical reset or a structural de-rating, particularly as net leverage rises toward 1.9x and filing-aligned FCF of $119m looks thin against ~$185m of dividends once legal-settlement cash effects are stripped out.
-
----
-
-## INVESTMENT THESIS
-For a value investor, Hikma offers a rare combination: a screen that passes Graham Enterprising, Buffett Quality, Magic Formula, Acquirer's Multiple, and Dividend Growth simultaneously, backed by a business that is genuinely profitable on a core basis rather than optically cheap.
-
-**Cheapness.** At P/E 12.4 and P/B 1.9, the market prices in sustained Injectables weakness and governance uncertainty following the February 2026 guidance reset, despite FY2025 core EBITDA of $853m and return on average invested capital of 16.0% (FY2025 results release).
-
-**Quality.** Three segments provide geographic and product diversification: Branded is the standout (FY2025 core revenue +10%, margin 26.4%; H1 2026 revenue +15%, core margin 32.5%), while Hikma Rx stabilised at ~$1bn revenue with improving mix (H1 2026 core margin 20.6%). Investment-grade ratings (S&P and Fitch BBB/stable) and covenant suspension while IG-rated support balance-sheet quality screens.
-
-**Dividend and capital return.** Total dividend rose 5% to 84 cents; interim H1 2026 increased 6% to 38 cents. The $250m buyback (H1: $175m spent; ~$227m by 5 August per interim filing) signals management confidence and directly supports per-share metrics that dividend screens capture.
-
-**Why Strong Buy, not unreserved.** The screen's FCF basis mismatch is material: filing-aligned FY2025 FCF is $119m (OCF $436m less capex $317m) versus a suppressed Yahoo TTM of ~$14m due to empty quarterly cashflow data — we use the filing figure. Even on filings, FCF/dividend coverage is tight before adjusting for the $186m sodium oxybate settlement cash flow. Injectables — historically the highest-margin engine — faces explicit margin guidance of 27–28% for 2026 versus 31% in FY2025. Management withdrew medium-term Group and Injectables margin guidance in the FY2025 release. These factors explain why deep research supports **accumulate** rather than unqualified Strong Buy confirmation.
-
----
-
-## FINANCIAL REVIEW
-*Primary source: RNS/IR filing bodies. Yahoo (`financials_annual.json`) used only where noted.*
-
-### Annual — FY2025 (year ended 31 December 2025)
-
-Source: FY2025 full-year results press release (`ir_0e40d9707e30c3b7.txt`).
-
-| Metric | FY2025 | FY2024 | Change |
-|--------|--------|--------|--------|
-| Reported revenue | $3,349m | $3,127m | +7% |
-| Core revenue (CC) | $3,349m | $3,156m | +6% / +5% CC |
-| Core operating profit | $741m | $719m | +3% |
-| Core operating margin | 22.1% | 22.8% | −70bp |
-| Reported operating profit | $542m | $612m | −11% |
-| Core EBITDA | $853m | $824m | +4% |
-| Reported profit attributable to shareholders | $402m | $359m | +12% |
-| Core profit attributable to shareholders | $503m | $495m | +2% |
-| Basic EPS (reported) | 182c | 162c | +12% |
-| Core basic EPS | 228c | 224c | +2% |
-| OCF | $436m | $564m | −23% |
-| Total dividend | 84c/sh | 80c/sh | +5% |
-
-**Segment FY2025 (core):** Injectables revenue +7% but core operating profit −6% (margin 31.0% vs 35.3%); Branded revenue +10%, core profit +19% (margin 26.4%); Hikma Rx revenue flat, core profit +5% (margin 17.3%).
-
-**Balance sheet (31 Dec 2025, filing):** Net debt $1,387m; net debt/core EBITDA 1.6x (vs 1.4x prior year). Total debt $1,604m; cash $217m (includes $111m restricted cash for legal settlement). Net assets $2,606m. FY2025 capex $197m in the release narrative; `financials_annual.json` shows total capex $317m including intangibles — we use $317m for FCF bridge consistency with Yahoo, yielding **filing-aligned FCF of $119m**.
-
-**OCF adjustment:** Excluding $186m of one-off legal-settlement cash effects, management states OCF would have increased ~10% — a important normalisation for dividend coverage analysis.
-
-**Going concern (annual report extract, `ir_0e40d9707e30c3b7.txt`):** Directors adopted going concern after severe-but-plausible downside testing showing sufficient liquidity. Covenants on major debt are suspended while dual investment-grade ratings are maintained (upgraded to BBB during 2025).
-
-### Interim — H1 2026 (six months ended 30 June 2026)
-
-Source: Half-year financial report (`5f26e81d036b3596.txt`).
-
-| Metric | H1 2026 | H1 2025 | Change |
-|--------|---------|---------|--------|
-| Revenue | $1,728m | $1,658m | +4% |
-| Core operating profit | $405m | $373m | +9% |
-| Core operating margin | 23.4% | 22.5% | +90bp |
-| Reported operating profit | $336m | $259m | +30% |
-| OCF | $214m | $161m | +33% |
-| Core basic EPS | 128c | 122c | +5% |
-| Interim dividend | 38c | 36c | +6% |
-
-**Segment H1 2026:** Branded revenue +15%, core operating profit +23% (margin 32.5%); Injectables revenue flat, core operating profit −8% (margin 27.6% vs 30.0%); Hikma Rx revenue broadly flat, core operating profit +16% (margin 20.6%).
-
-**Balance sheet (30 Jun 2026, interim):** Net debt $1,694m (+$307m vs year-end, reflecting buyback and settlement payments); net debt/trailing core EBITDA 1.9x. Undrawn committed facilities $790m. Working capital days 264 (vs 245 at year-end), driven by MENA inventory build for supply continuity.
-
-**Auditor (PwC, interim):** Nothing noted to suggest inappropriate going concern; no material uncertainties identified beyond standard review scope.
-
-### Trading update — April 2026
-
-Source: Trading statement (`94eb1f8d38a51fa6.txt`). Management reiterated FY2026 guidance: Group revenue +2% to +4%; core operating profit $720m–$770m. Injectables low-single-digit revenue growth, core margin 27–28%; Branded +6% to +8%, margin ~25%; Hikma Rx revenue broadly flat, margin close to 20%. Buyback progress to 17 April: $71.5m purchased.
-
-### Multi-year trend (Yahoo fallback for historical context only)
-
-`financials_annual.json` corroborates filing figures for FY2024–2025 and shows the 2023 earnings trough (reported net income $190m on Sudan/Special charges). Revenue has compounded from $2,517m (2022) to $3,349m (2025). This supports the screen's quality pass but does not override filing-based segment deterioration in Injectables.
-
-### Filing gaps
-
-- Pension scheme detail was not extractable from available filing bodies; the annual report (`ir_3a67962eb8770824.txt`) indexes a going-concern section but body text on defined-benefit obligations was not retrieved — treat pension risk as **unverified**.
-- Yahoo quarterly cashflow is empty (`ttm_cashflow_suppressed: true`); do not use Yahoo TTM FCF ($14.4m) for coverage analysis.
-
----
-
-## RISKS AND RED FLAGS
-**Injectables margin and guidance credibility.** FY2025 Injectables core margin fell 430bp to 31.0% on US competition (testosterone, calcitonin), geographic mix (lower-margin MENA growth), and outsourced product mix. H1 2026 margin was 27.6%, within but toward the bottom of 2026 guidance (27–28%). Management withdrew medium-term Group and Injectables margin targets after a strategic review — a red flag for forward visibility that the February 2026 share fall ("Hikma's shares plummet after guidance cut," *Investors' Chronicle*, 26 February 2026) reflected.
-
-**Legal and litigation.** A $72m sodium oxybate antitrust settlement hit reported FY2025 operating profit; $186m cash outflow (including restricted cash) depressed OCF. Hikma won a favourable Supreme Court ruling on Amarin skinny-label litigation in H1 2026, but generic pricing litigation risk remains endemic to the US portfolio.
-
-**Customer concentration.** FY2025 and H1 2026 filings disclose two–three US wholesalers each at ≥10% of Group revenue (e.g. H1 2026: 11% and 11%). Disruption at any single distributor would be material.
-
-**Governance and key-person.** Said Darwazah returned as CEO in December 2025 after his predecessor's abrupt departure ("Hikma falls to three-year low as CEO steps down," *Proactive Investors*, 15 December 2025). CFO Khalid Nabilsi moved to Deputy CEO; a permanent CFO search is ongoing (Acting CFO in place). Family-linked leadership (Darwazah) and board restructuring (Victoria Hull to Chair) add succession concentration risk.
-
-**Geopolitical and MENA exposure.** H1 2026 filings flag increased exposure to "Crisis and business disruption" from Middle East conflict (shipping, insurance, fuel inflation), partially offset by government demand. Branded H1 weighting is front-loaded; second-half marketing spend may rise.
-
-**Regulatory and trade policy.** Potential US generic drug tariffs are monitored in filings; Hikma emphasises US manufacturing (Ohio, New Jersey) as mitigation — a potential relative advantage (*Yahoo Finance*, "Hikma and Fresenius best positioned from Trump's generic drug tariffs," 23 July 2026) but policy uncertainty persists.
-
-**Leverage and capital allocation.** Net debt/core EBITDA rose from 1.6x (Dec 2025) to 1.9x (Jun 2026) as the buyback progressed. Investment-grade status suspends covenant tests, but a rating downgrade would reactivate them — noted explicitly in FY2025 going-concern language.
-
-**Liquidity / FCF.** Filing-aligned FY2025 FCF of $119m covers only ~64% of ~$185m dividends paid (Yahoo cash-flow statement, corroborating filing OCF/capex). Even normalised OCF (~$622m per management's settlement adjustment) yields healthier but not abundant headroom once capex and buyback are included.
-
-**Competitive.** US injectable pricing pressure, sodium oxybate competition in Hikma Rx, and partner supply disruptions (MENA Injectables in H1 2026) are filing-documented.
-
-RiskTags: regulatory, competitive, governance, customer_concentration, cyclical, leverage, key_person, litigation
-
----
-RiskTags: regulatory, competitive, governance, customer_concentration, cyclical, leverage, key_person, litigation
-
-## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate-to-heavy**, skewed toward broker commentary and Kalkine Media rather than deep investigative reporting.
-
-**Strategy and guidance**
-- **26 February 2026:** FY2025 results with softer 2026 outlook and withdrawn medium-term guidance; $250m buyback launched ("Hikma Pharma tumbles on softer guidance as buyback fails to soften pill," *Yahoo Finance UK*, 26 February 2026; "ii view: Hikma Pharmaceuticals injects big dose of caution," *Interactive Investor*, 19 March 2026).
-- **23 April 2026:** Trading update reiterating FY2026 guidance ("Hikma Reports Solid Start To 2026, Maintains Full-year Outlook," *DirectorsTalk Interviews*, 23 April 2026).
-- **6 August 2026:** H1 beat and guidance reaffirmed ("Hikma delivers a solid H1 performance and reiterates full year outlook," *Zawya*, 6 August 2026; "Hikma jumps 10% as brokers point to profit beat," *Yahoo Finance*, 6 August 2026).
-
-**Management and governance**
-- **December 2025:** CEO change — Said Darwazah returns; prior CEO departed immediately (*Proactive Investors*, 15 December 2025).
-- **6 August 2026:** Tobias Hestler (ex-Haleon CFO) appointed non-executive director ("Convatec Group's Tobias Hestler Joins Hikma Pharmaceuticals Board," 6 August 2026).
-- **May 2026:** Chairman Victoria Hull increased shareholding ("Independent Chairman… Buys 241% More Shares," *simplywall.st*, 2 May 2026).
-
-**M&A / ownership**
-- **4 February 2026:** Brookfield denied takeover intention (Rule 2.8 statement, filing `67c15b69ed908141.txt`) after press speculation.
-- **August 2026:** Wellington Management crossed 5% voting rights (*Kalkine Media*, 2 September 2026); earlier dipped below 5% (*Kalkine Media*, 24 July 2026).
-
-**Capital return**
-- Buyback nearing completion: "Hikma (HIK) Finalizes $250 Million Share Buyback Program," *Kalkine Media*, 28 August 2026.
-
-**Broker sentiment (post-H1)**
-- Citi, Deutsche Bank, Jefferies, and Panmure raised targets on H1 beat (e.g. "Citi sees Hikma discount as unwarranted," 12 August 2026; "Panmure Liberum raises Hikma target price to 1,900p," 4 September 2026).
-
-**Regulatory**
-- Favourable Supreme Court ruling on skinny-label litigation noted in H1 2026 filing.
-- US tariff positioning discussed in sell-side and trade press (July 2026).
-
----
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: Filings corroborate the screen's cheapness/quality case — diversified core earnings, IG balance sheet, and dividend growth — but Injectables margin pressure, withdrawn medium-term guidance, and thin filing-aligned FCF versus dividends prevent full confirmation of the Strong Buy signal.
+Rationale: Filings still support screen cheapness and quality, but Injectables margin pressure, withdrawn medium-term guidance and tight statutory FCF versus dividends only partly confirm the Strong Buy.
+RiskTags: regulatory, competitive, governance, customer_concentration, cyclical, leverage, key_person, litigation
+
+## Weekly updates
+
+### 2026-09-15T08:49:01.037045+00:00
+Since the 4 Sep memo, the news batch is mostly Kalkine and Yahoo commentary (post-H1 rally, September dividend, buyback tail) with no new Hikma RNS in sources.
+Trade press flags advancing epinephrine nasal spray filings; that is not corroborated in retrieved filing bodies here.
+The quantitative screen stays strong buy on similar cheapness/quality inputs; Injectables margin and statutory FCF versus dividends are unchanged.

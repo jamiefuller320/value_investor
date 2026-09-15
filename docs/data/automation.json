@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-15T08:45:44.425597+00:00",
+  "generated_at": "2026-09-15T09:01:52.558142+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -29,7 +29,6 @@
       "require_research_accumulate": false,
       "use_momentum_grace": false,
       "use_graduated_allocation": false,
-      "entry_dca_execute_cadence": null,
       "is_calibration_shadow": false,
       "calibration_parent_track": null,
       "is_exclusion_shadow": false,
@@ -197,15 +196,15 @@
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_weekly_ops_usd": 68.5,
+        "remaining_weekly_ops_usd": 62.9,
         "budget_note": "Estimated weekly_ops reached the 15% plan-credit pseudo limit ($3.00) — warning only, not a hard cap.",
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 66.4,
-        "estimated_spend_weekly_ops_usd_this_week": 16.0,
-        "estimated_spend_usd_this_cycle": 404.5,
+        "estimated_spend_usd_this_week": 68.4,
+        "estimated_spend_weekly_ops_usd_this_week": 21.6,
+        "estimated_spend_usd_this_cycle": 406.5,
         "week_id": "2026-W38",
         "cycle_id": "2026-09-d8"
       },
@@ -233,7 +232,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-09-15T08:16:11.524331+00:00"
+      "updated_at": "2026-09-15T07:35:43.612483+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -334,16 +333,16 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-09-15T08:27:28.606889+00:00",
-        "kind": "paper_run",
-        "title": "Paper automation acted",
-        "detail": "Rebalanced after open settle (4 trade(s))."
-      },
-      {
         "at": "2026-09-15T06:52:37.653574+00:00",
         "kind": "ladder_run",
         "title": "Library ladder run (focus euro_depth)",
         "detail": "shortlist=46 research created=29 updated=0 spend≈11.6"
+      },
+      {
+        "at": "2026-09-14T08:27:36.821874+00:00",
+        "kind": "paper_run",
+        "title": "Paper automation acted",
+        "detail": "Rebalanced after open settle (0 trade(s))."
       },
       {
         "at": "2026-09-01T09:52:07.968538+00:00",
@@ -914,49 +913,20 @@
       }
     },
     "paper_last_run": {
-      "generated_at": "2026-09-15T08:27:28.606889+00:00",
+      "generated_at": "2026-09-14T08:27:36.821874+00:00",
       "acted": true,
-      "note": "Rebalanced after open settle (4 trade(s)).",
+      "note": "Rebalanced after open settle (0 trade(s)).",
       "gate": {
-        "local_time": "2026-09-15T09:27:13.814639+01:00",
+        "local_time": "2026-09-14T09:27:22.074332+01:00",
         "trading_day": true,
         "after_settle": true,
-        "market_open_at": "2026-09-15T08:00:00+01:00",
-        "settle_at": "2026-09-15T09:15:00+01:00",
+        "market_open_at": "2026-09-14T08:00:00+01:00",
+        "settle_at": "2026-09-14T09:15:00+01:00",
         "can_act": true,
         "reason": "ok"
       },
-      "trade_count": 4,
-      "trades_sample": [
-        {
-          "acted_at": "2026-09-15T09:27:13.814639+01:00",
-          "ticker": "KLR.L",
-          "side": "sell",
-          "name": "Keller Group plc",
-          "net_cash": 205.36
-        },
-        {
-          "acted_at": "2026-09-15T09:27:13.814639+01:00",
-          "ticker": "JD.L",
-          "side": "sell",
-          "name": "JD Sports Fashion Plc",
-          "net_cash": 199.12
-        },
-        {
-          "acted_at": "2026-09-15T09:27:13.814639+01:00",
-          "ticker": "COST.L",
-          "side": "buy",
-          "name": "Costain Group PLC",
-          "net_cash": -204.2
-        },
-        {
-          "acted_at": "2026-09-15T09:27:13.814639+01:00",
-          "ticker": "CURY.L",
-          "side": "buy",
-          "name": "Currys plc",
-          "net_cash": -200.28
-        }
-      ],
+      "trade_count": 0,
+      "trades_sample": [],
       "fund": {
         "cash": 0.0,
         "nav": null,
@@ -1180,16 +1150,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-15T07:46:56.019355+00:00",
-    "queue_ui_updated_at": "2026-09-15T08:45:44.371585+00:00",
-    "task_count": 7,
+    "compiled_at": "2026-09-15T09:01:51.712433+00:00",
+    "queue_ui_updated_at": "2026-09-15T09:01:52.561218+00:00",
+    "task_count": 13,
     "status": {
-      "open_count": 1,
-      "pr_open_count": 0,
+      "open_count": 8,
+      "pr_open_count": 1,
       "parked_count": 2,
-      "merged_count": 4,
+      "merged_count": 2,
       "failed_count": 0,
-      "next_task_id": "eng-20260915-02",
+      "next_task_id": "eng-20260915-01",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1198,20 +1168,144 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260915-02",
-        "area": "ops",
-        "title": "Verdict fields present without structured_verdict modes",
-        "priority": "medium",
-        "priority_score": 45.0,
+        "id": "eng-20260915-01",
+        "area": "ingest",
+        "title": "Implement Investegate/LSE direct HTML/PDF fetch for indexed RNS (replace Google News redirect URLs) and persist to `filings/bodies/` with index `with_body` pari",
+        "priority": "high",
+        "priority_score": 99.0,
         "status": "open",
-        "source": "ops_monitor",
+        "source": "post_run_review",
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 1,
-        "clash_scan": "full"
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260915-02",
+        "area": "ingest",
+        "title": "Companies House document-api PDF pipeline with OCR quality gates and CH-ID ↔ `filings_index` mapping; reject or quarantine truncated extracts (flag when line co",
+        "priority": "high",
+        "priority_score": 98.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 2,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260915-03",
+        "area": "ingest",
+        "title": "Parse allowlisted IR results PDFs into structured FCF bridges and populate `ir_presentation_metrics.json` (segment revenue, dividend policy, management FCF defi",
+        "priority": "high",
+        "priority_score": 97.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 3,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260915-05",
+        "area": "scoring",
+        "title": "Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade when three-",
+        "priority": "high",
+        "priority_score": 97.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 4,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260915-04",
+        "area": "ingest",
+        "title": "Backfill Yahoo cash-flow fields (`operating_cashflow`, UK quarterly cash-flow where suppressed) into fetch/`CompanyMetrics` from statements already mirrored in ",
+        "priority": "high",
+        "priority_score": 96.0,
+        "status": "open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 5,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260914-03",
+        "area": "ingest",
+        "title": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
+        "priority": "high",
+        "priority_score": 95.0,
+        "status": "pr_open",
+        "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": "cursor/eng-20260914-03-1de3"
+      },
+      {
+        "id": "eng-20260915-07",
+        "area": "scoring",
+        "title": "Attach run-history FCF divergence flags to `docs/data/history/run_*.json.gz` `action_note` for all Strong Buy names (HIK shows mismatch in snapshot but not in h",
+        "priority": "high",
+        "priority_score": 43.0,
+        "status": "open",
+        "source": "research_model_suggestions",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 6,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260915-09",
+        "area": "scoring",
+        "title": "Attach cross-ticker model pass/score table to gap-fill output automatically from sibling `screen_run_manifest.json` files so moat/yield ranking claims (e.g. “wi",
+        "priority": "high",
+        "priority_score": 43.0,
+        "status": "open",
+        "source": "research_model_suggestions",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 7,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260915-10",
+        "area": "scoring",
+        "title": "Emit dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) with labels in screening_snapshot to prevent conflation",
+        "priority": "high",
+        "priority_score": 43.0,
+        "status": "open",
+        "source": "research_model_suggestions",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 8,
+        "clash_scan": "partial"
       }
     ],
     "attention_tasks": [
@@ -1241,14 +1335,14 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 1,
-      "dispatch_eligible_count": 1,
+      "open_task_count": 8,
+      "dispatch_eligible_count": 8,
       "blocked_count": 0
     }
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-09-15T08:29:21.302850+00:00",
+    "generated_at": "2026-09-15T09:01:52.561714+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
@@ -1260,13 +1354,13 @@
         "applied": false,
         "epoch_started_at": "2026-08-26T08:28:55.552465+00:00",
         "baseline_nav": 821.98,
-        "epoch_nav": 673.3,
-        "epoch_return": -0.1809,
-        "post_apply_trade_count": 18,
-        "equity_marks": 13,
+        "epoch_nav": 715.33,
+        "epoch_return": -0.1297,
+        "post_apply_trade_count": 14,
+        "equity_marks": 12,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0166,
-        "excess_after_costs": -0.1643,
+        "benchmark_return": -0.0209,
+        "excess_after_costs": -0.1088,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1337,13 +1431,13 @@
         "applied": false,
         "epoch_started_at": "2026-08-21T09:27:13.383131+01:00",
         "baseline_nav": 891.39,
-        "epoch_nav": 760.53,
-        "epoch_return": -0.1468,
-        "post_apply_trade_count": 15,
-        "equity_marks": 7,
+        "epoch_nav": 807.88,
+        "epoch_return": -0.0937,
+        "post_apply_trade_count": 11,
+        "equity_marks": 6,
         "benchmark_span_available": true,
-        "benchmark_return": -0.011,
-        "excess_after_costs": -0.1358,
+        "benchmark_return": -0.0154,
+        "excess_after_costs": -0.0783,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1360,13 +1454,13 @@
         "applied": false,
         "epoch_started_at": "2026-09-01T09:27:42.628249+01:00",
         "baseline_nav": 878.94,
-        "epoch_nav": 838.01,
-        "epoch_return": -0.0466,
-        "post_apply_trade_count": 14,
-        "equity_marks": 7,
+        "epoch_nav": 859.08,
+        "epoch_return": -0.0226,
+        "post_apply_trade_count": 10,
+        "equity_marks": 6,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0085,
-        "excess_after_costs": -0.0381,
+        "benchmark_return": -0.0129,
+        "excess_after_costs": -0.0097,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1399,9 +1493,9 @@
         "track_label": "Screen rules + graduated allocation",
         "is_primary_learning_track": false,
         "applied": true,
-        "epoch_started_at": "2026-09-15T08:29:15.293559+00:00",
-        "baseline_nav": 917.28,
-        "epoch_nav": 917.28,
+        "epoch_started_at": "2026-09-14T08:29:53.798821+00:00",
+        "baseline_nav": 938.91,
+        "epoch_nav": 938.91,
         "epoch_return": 0.0,
         "post_apply_trade_count": 0,
         "equity_marks": 0,
@@ -1427,10 +1521,10 @@
         "epoch_nav": 970.87,
         "epoch_return": 0.0,
         "post_apply_trade_count": 0,
-        "equity_marks": 23,
+        "equity_marks": 22,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0125,
-        "excess_after_costs": 0.0125,
+        "benchmark_return": -0.0169,
+        "excess_after_costs": 0.0169,
         "enough_epoch_history": false,
         "note": "",
         "knobs": {
@@ -1447,13 +1541,13 @@
         "applied": false,
         "epoch_started_at": "2026-08-12T09:36:42.012926+00:00",
         "baseline_nav": 862.27,
-        "epoch_nav": 608.03,
-        "epoch_return": -0.2948,
-        "post_apply_trade_count": 35,
-        "equity_marks": 23,
+        "epoch_nav": 645.99,
+        "epoch_return": -0.2508,
+        "post_apply_trade_count": 31,
+        "equity_marks": 22,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0125,
-        "excess_after_costs": -0.2823,
+        "benchmark_return": -0.0169,
+        "excess_after_costs": -0.234,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1470,13 +1564,13 @@
         "applied": false,
         "epoch_started_at": "2026-09-01T09:27:27.726879+01:00",
         "baseline_nav": 932.39,
-        "epoch_nav": 888.78,
-        "epoch_return": -0.0468,
-        "post_apply_trade_count": 15,
-        "equity_marks": 7,
+        "epoch_nav": 911.13,
+        "epoch_return": -0.0228,
+        "post_apply_trade_count": 11,
+        "equity_marks": 6,
         "benchmark_span_available": true,
-        "benchmark_return": -0.0085,
-        "excess_after_costs": -0.0383,
+        "benchmark_return": -0.0129,
+        "excess_after_costs": -0.0099,
         "enough_epoch_history": true,
         "note": "",
         "knobs": {
@@ -1491,7 +1585,7 @@
         "track_label": "Technical levels (stops / trade_plan)",
         "is_primary_learning_track": false,
         "applied": true,
-        "epoch_started_at": "2026-09-15T08:29:15.644881+00:00",
+        "epoch_started_at": "2026-09-14T08:29:54.112380+00:00",
         "baseline_nav": 991.28,
         "epoch_nav": 991.28,
         "epoch_return": 0.0,
@@ -1505,7 +1599,7 @@
         "knobs": {
           "max_positions": 3,
           "skip_timing_wait": true,
-          "min_conviction": 0.4,
+          "min_conviction": 0.45,
           "sector_cap": 0.2
         }
       }
@@ -1517,48 +1611,6 @@
       "tracks_with_post_apply_trades": 5,
       "tracks_insufficient_epoch_marks": 2,
       "all_benchmark_spans_insufficient": false
-    }
-  },
-  "queue_health": {
-    "schema_version": 1,
-    "generated_at": "2026-09-15T08:45:44.425597+00:00",
-    "overall": "active",
-    "headline": "Agent lane active.",
-    "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
-      "blocked": false,
-      "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
-    },
-    "agent_lane": {
-      "state": "running",
-      "idle": false,
-      "running": true,
-      "blocked": false,
-      "should_dispatch": true,
-      "pause_active": false,
-      "attention_parked_count": 0,
-      "open_count": 1,
-      "pr_open_count": 0,
-      "dispatch_eligible_count": 1,
-      "blocked_task_count": 0,
-      "next_task_id": "eng-20260915-02",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
-    },
-    "queue_clearing": {
-      "pause_active": false,
-      "attention_parked_count": 0,
-      "evaluated_at": "2026-09-15T08:45:37.098428+00:00"
-    },
-    "ops_monitor": {
-      "run_at": "2026-09-15T07:46:32.318230+00:00",
-      "overall": "fail",
-      "should_dispatch_engineering": true
     }
   }
 }
