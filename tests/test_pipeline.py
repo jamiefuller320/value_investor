@@ -3644,6 +3644,173 @@ def test_uk_contractor_revenue_fcf_warning_triggers_overlays():
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
 
 
+def test_fcf_yield_unit_fx_error_detected_for_gftu_style_screen():
+    from value_investor.scoring.fcf import fcf_yield_unit_fx_error_detected
+
+    market_cap = 12_000_000_000.0
+    screen_fcf = 12_000_000.0
+    assert fcf_yield_unit_fx_error_detected(
+        screen_ttm=screen_fcf,
+        market_cap=market_cap,
+        filing_aligned=168_300_000.0,
+        company_adjusted=205_600_000.0,
+        canonical=187_700_000.0,
+        filing_currency="GBP",
+    )
+
+
+def test_enrich_universe_with_canonical_fcf_flags_unit_fx_error(tmp_path: Path):
+    from value_investor.scoring.fcf import enrich_universe_with_canonical_fcf
+
+    sources = tmp_path / "research" / "GFTU.L" / "sources"
+    sources.mkdir(parents=True)
+    write_json(
+        sources / "financials_annual.json",
+        {
+            "cash_flow": {
+                "2025": {
+                    "Operating Cash Flow": 250_000_000.0,
+                    "Capital Expenditure": -60_000_000.0,
+                    "Free Cash Flow": 168_300_000.0,
+                }
+            }
+        },
+    )
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "GFTU.L",
+                "market_cap": 12_000_000_000.0,
+                "free_cashflow": 12_000_000.0,
+            }
+        ]
+    )
+    enriched = enrich_universe_with_canonical_fcf(universe, tmp_path)
+    row = enriched.iloc[0]
+    assert bool(row["fcf_yield_unit_fx_error"]) is True
+    assert row["free_cashflow_screen_ttm"] == pytest.approx(12_000_000.0)
+    assert row["free_cashflow"] == pytest.approx(168_300_000.0)
+
+
+def test_enrich_signals_with_fcf_basis_overlay_triggers_on_unit_fx_error():
+    from value_investor.scoring.fcf_basis_overlay import enrich_signals_with_fcf_basis_overlay
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "GFTU.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.51,
+                "fcf_yield_unit_fx_error": True,
+                "free_cashflow": 168_300_000.0,
+                "free_cashflow_screen_ttm": 12_000_000.0,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        columns=["ticker", "model_id", "passed", "score", "reasons", "failed_criteria"]
+    )
+    enriched = enrich_signals_with_fcf_basis_overlay(signals, model_results)
+    assert bool(enriched.iloc[0]["fcf_basis_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
+def test_fcf_basis_definition_divergence_on_three_way_gftu_bases():
+    from value_investor.scoring.fcf import fcf_basis_definition_divergence
+
+    assert fcf_basis_definition_divergence(
+        operating_cashflow=None,
+        operating_cashflow_gross=None,
+        filing_aligned=168_300_000.0,
+        screen_ttm=187_700_000.0,
+        company_adjusted=205_600_000.0,
+        filing_currency="GBP",
+    )
+
+
+def test_builders_merchant_overlays_trigger_for_gftu_style():
+    from value_investor.scoring.builders_merchant_overlay import (
+        enrich_signals_with_builders_merchant_detection,
+    )
+    from value_investor.scoring.cash_conversion_overlay import (
+        enrich_signals_with_cash_conversion_overlay,
+    )
+    from value_investor.scoring.cyclical_exposure_overlay import (
+        enrich_signals_with_cyclical_exposure_overlay,
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "GFTU.L",
+                "name": "Grafton Group plc",
+                "sector": "Industrials",
+                "signal": "strong_buy",
+                "passed_families": "cheapness,quality,dividend,garp,risk",
+                "housing_rmi_cyclical_detected": True,
+                "builders_merchant": True,
+                "fcf_definition_divergence": True,
+                "fcf_divergence_flagged": True,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(columns=["ticker", "model_id", "passed", "score", "reasons"])
+    detected = enrich_signals_with_builders_merchant_detection(signals)
+    assert bool(detected.iloc[0]["builders_merchant"]) is True
+    assert bool(detected.iloc[0]["cyclical_exposure_detected"]) is True
+
+    enriched = enrich_signals_with_cash_conversion_overlay(detected, model_results)
+    assert bool(enriched.iloc[0]["cash_conversion_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+    enriched = enrich_signals_with_cyclical_exposure_overlay(enriched, model_results)
+    assert bool(enriched.iloc[0]["cyclical_exposure_overlay"]) is True
+
+
+def test_suppress_quality_garp_when_buffett_and_moat_fail():
+    from value_investor.scoring.quality_garp_roe_gate import (
+        suppress_quality_garp_inconsistent_passes,
+    )
+
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "GFTU.L",
+                "model_id": "buffett_quality",
+                "passed": False,
+                "score": 0.2,
+                "failed_criteria": "['ROE too low']",
+            },
+            {
+                "ticker": "GFTU.L",
+                "model_id": "economic_moat",
+                "passed": False,
+                "score": 0.25,
+                "failed_criteria": "['ROE below 18%']",
+            },
+            {
+                "ticker": "GFTU.L",
+                "model_id": "lynch_peg",
+                "passed": True,
+                "score": 0.7,
+                "failed_criteria": "[]",
+            },
+        ]
+    )
+    suppressed = suppress_quality_garp_inconsistent_passes(model_results)
+    lynch = suppressed[suppressed["model_id"] == "lynch_peg"].iloc[0]
+    assert bool(lynch["passed"]) is False
+
+
+def test_dual_leverage_display_when_yahoo_de_high_and_filing_net_cash():
+    from value_investor.scoring.leverage_overlay import dual_leverage_display_triggered
+
+    assert dual_leverage_display_triggered(
+        yahoo_de=161.0,
+        filing_adjusted_net_debt_gbp=-109_900_000.0,
+    )
+
+
 def test_enrich_universe_with_uk_contractor_adjustments_caps_framework_backlog_growth():
     from value_investor.scoring.uk_contractor_overlay import (
         enrich_universe_with_uk_contractor_adjustments,

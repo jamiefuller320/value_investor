@@ -80,6 +80,7 @@ def fcf_basis_overlay_triggered(
     filing_screen_mismatch: bool = False,
     universe_divergence_flagged: bool = False,
     action_note_mismatch: bool = False,
+    fcf_yield_unit_fx_error: bool = False,
 ) -> bool:
     """Flag when the mismatch note would fire, or 50% divergence with a yield pass.
 
@@ -89,7 +90,12 @@ def fcf_basis_overlay_triggered(
     a cosmetic note. The legacy 50% divergence path still requires a yield-dependent
     model pass.
     """
-    if filing_screen_mismatch or universe_divergence_flagged or action_note_mismatch:
+    if (
+        filing_screen_mismatch
+        or universe_divergence_flagged
+        or action_note_mismatch
+        or fcf_yield_unit_fx_error
+    ):
         return True
     if not divergence_flagged:
         return False
@@ -209,6 +215,7 @@ def apply_fcf_basis_overlay_to_signal(
     filing_screen_mismatch: bool = False,
     universe_divergence_flagged: bool = False,
     action_note_mismatch: bool = False,
+    fcf_yield_unit_fx_error: bool = False,
 ) -> tuple[bool, str, float]:
     """Return overlay flag, conservative adjusted signal, and capped conviction."""
     base_adjusted = adjusted_signal or signal
@@ -219,6 +226,7 @@ def apply_fcf_basis_overlay_to_signal(
         filing_screen_mismatch=filing_screen_mismatch,
         universe_divergence_flagged=universe_divergence_flagged,
         action_note_mismatch=action_note_mismatch,
+        fcf_yield_unit_fx_error=fcf_yield_unit_fx_error,
     ):
         return False, base_adjusted, base_conviction
     capped_signal = cap_signal_for_fcf_basis_overlay(signal)
@@ -262,6 +270,13 @@ def enrich_signals_with_fcf_basis_overlay(
             ),
             action_note=str(row.get("action_note") or ""),
         )
+        unit_fx_raw = row.get("fcf_yield_unit_fx_error")
+        fcf_yield_unit_fx_error = (
+            bool(unit_fx_raw)
+            if unit_fx_raw is not None
+            and not (isinstance(unit_fx_raw, float) and pd.isna(unit_fx_raw))
+            else False
+        )
 
         existing = row.get("adjusted_signal")
         existing_adjusted = (
@@ -276,6 +291,7 @@ def enrich_signals_with_fcf_basis_overlay(
             filing_screen_mismatch=mismatch,
             universe_divergence_flagged=bool(fcf_bundle.get("fcf_divergence_flagged")),
             action_note_mismatch=action_note_mismatch,
+            fcf_yield_unit_fx_error=fcf_yield_unit_fx_error,
             ticker_models=ticker_models,
             conviction_score=float(row.get("conviction_score") or 0.0),
             adjusted_signal=existing_adjusted,

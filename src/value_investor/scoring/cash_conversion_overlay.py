@@ -7,6 +7,10 @@ from typing import Any
 
 import pandas as pd
 
+from value_investor.scoring.builders_merchant_overlay import (
+    builders_merchant_cash_conversion_overlay_triggered,
+    is_builders_merchant,
+)
 from value_investor.scoring.fcf import resolve_free_cashflow, screen_ttm_from_row
 from value_investor.scoring.uk_contractor_overlay import (
     is_uk_listed_contractor,
@@ -85,8 +89,18 @@ def cash_conversion_overlay_triggered(
     uk_contractor_revenue_fcf_warning: bool = False,
     uk_contractor: bool = False,
     passed_families: str | None = None,
+    builders_merchant: bool = False,
+    fcf_definition_divergence: bool = False,
+    fcf_divergence_flagged: bool = False,
 ) -> bool:
     """Negative trailing FCF plus dividend pass and buyback, or UK contractor revenue/FCF warning."""
+    if builders_merchant_cash_conversion_overlay_triggered(
+        builders_merchant=builders_merchant,
+        passed_families=passed_families,
+        fcf_definition_divergence=fcf_definition_divergence,
+        fcf_divergence_flagged=fcf_divergence_flagged,
+    ):
+        return True
     if uk_contractor_cash_conversion_overlay_triggered(
         uk_contractor=uk_contractor,
         passed_families=passed_families,
@@ -135,6 +149,9 @@ def apply_cash_conversion_overlay_to_signal(
     uk_contractor_revenue_fcf_warning: bool = False,
     uk_contractor: bool = False,
     passed_families: str | None = None,
+    builders_merchant: bool = False,
+    fcf_definition_divergence: bool = False,
+    fcf_divergence_flagged: bool = False,
 ) -> tuple[bool, str]:
     """Return overlay flag and conservative adjusted signal."""
     base_adjusted = adjusted_signal or signal
@@ -149,6 +166,9 @@ def apply_cash_conversion_overlay_to_signal(
         uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
         uk_contractor=uk_contractor,
         passed_families=passed_families,
+        builders_merchant=builders_merchant,
+        fcf_definition_divergence=fcf_definition_divergence,
+        fcf_divergence_flagged=fcf_divergence_flagged,
     ):
         return False, base_adjusted
     capped = cap_signal_for_cash_conversion_overlay(signal)
@@ -203,6 +223,25 @@ def enrich_signals_with_cash_conversion_overlay(
             row.get("name"),
             row.get("sector"),
         )
+        builders_merchant = bool(row.get("builders_merchant")) or is_builders_merchant(
+            ticker,
+            row.get("name"),
+            row.get("sector"),
+        )
+        definition_div_raw = row.get("fcf_definition_divergence")
+        fcf_definition_divergence = (
+            bool(definition_div_raw)
+            if definition_div_raw is not None
+            and not (isinstance(definition_div_raw, float) and pd.isna(definition_div_raw))
+            else False
+        )
+        divergence_flag_raw = row.get("fcf_divergence_flagged")
+        fcf_divergence_flagged = (
+            bool(divergence_flag_raw)
+            if divergence_flag_raw is not None
+            and not (isinstance(divergence_flag_raw, float) and pd.isna(divergence_flag_raw))
+            else False
+        )
 
         triggered, new_adjusted = apply_cash_conversion_overlay_to_signal(
             str(row.get("signal") or "hold"),
@@ -214,6 +253,9 @@ def enrich_signals_with_cash_conversion_overlay(
             uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
             uk_contractor=uk_contractor,
             passed_families=row.get("passed_families"),
+            builders_merchant=builders_merchant,
+            fcf_definition_divergence=fcf_definition_divergence,
+            fcf_divergence_flagged=fcf_divergence_flagged,
         )
         flags.append(triggered)
         adjusted.append(new_adjusted)

@@ -175,10 +175,12 @@ def dual_leverage_display_triggered(
     yahoo_de: float | None,
     filing_adjusted_net_debt_gbp: float | None,
 ) -> bool:
-    """True when Yahoo D/E and filing net debt should both be shown."""
+    """True when IFRS-16 Yahoo D/E and filing ex-lease net debt/cash should both be shown."""
     if yahoo_de is None or filing_adjusted_net_debt_gbp is None:
         return False
-    return float(yahoo_de) > YAHOO_DE_HIGH_THRESHOLD
+    if float(yahoo_de) <= YAHOO_DE_HIGH_THRESHOLD:
+        return False
+    return True
 
 
 def enrich_universe_with_leverage_override(
