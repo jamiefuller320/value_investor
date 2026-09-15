@@ -155,6 +155,8 @@ FCF_MAJORITY_AGREE_THRESHOLD = 0.25
 FCF_SIGN_DIVERGENCE_MIN_ABS = 50_000_000.0
 EARNINGS_GROWTH_BPS_DIVERGENCE_THRESHOLD = 0.03
 FCF_YIELD_MODEL_ID = "fcf_yield"
+FCF_YIELD_UNIT_ERROR_MAX_IMPLIED_YIELD = 0.002
+FCF_YIELD_UNIT_ERROR_MIN_CANONICAL_GBP = 100_000_000.0
 # Prefer company-adjusted, then filing-aligned, never Yahoo TTM when a non-TTM peer agrees.
 _FCF_MAJORITY_PREFERENCE = ("company_adjusted", "filing_aligned", "screen_ttm")
 _FX_TO_USD = {"USD": 1.0, "GBP": 1.35, "EUR": 1.10}
@@ -1361,8 +1363,11 @@ def fcf_yield_pass_suppressed(
     company_adjusted: float | None,
     company_adjusted_currency: str | None = None,
     filing_currency: str = "USD",
+    fcf_yield_unit_fx_error: bool = False,
 ) -> bool:
     """True when FCF Yield pass should be suppressed due to basis divergence."""
+    if fcf_yield_unit_fx_error:
+        return True
     if not divergence_flagged or company_adjusted is None:
         return False
     return not fcf_within_company_tolerance(
@@ -1371,6 +1376,86 @@ def fcf_yield_pass_suppressed(
         filing_currency=filing_currency,
         company_adjusted_currency=company_adjusted_currency,
     )
+
+
+def fcf_basis_definition_divergence(
+    *,
+    operating_cashflow: float | None,
+    operating_cashflow_gross: float | None,
+    filing_aligned: float | None,
+    screen_ttm: float | None,
+    company_adjusted: float | None,
+    filing_currency: str = "USD",
+    company_adjusted_currency: str | None = None,
+) -> bool:
+    """True when OCF definitions or FCF basis triplets disagree beyond policy thresholds."""
+    if ocf_definition_diverges(operating_cashflow, operating_cashflow_gross):
+        return True
+    return fcf_universe_divergence_flagged(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        company_adjusted=company_adjusted,
+        filing_currency=filing_currency,
+        company_adjusted_currency=company_adjusted_currency,
+    )
+
+
+def _largest_fcf_reference_usd(
+    *,
+    filing_aligned: float | None,
+    screen_ttm: float | None,
+    company_adjusted: float | None,
+    canonical: float | None,
+    filing_currency: str = "USD",
+    company_adjusted_currency: str | None = None,
+) -> float | None:
+    best: float | None = None
+    for value, currency in (
+        (filing_aligned, filing_currency),
+        (screen_ttm, filing_currency),
+        (company_adjusted, company_adjusted_currency or filing_currency),
+        (canonical, filing_currency),
+    ):
+        if value is None:
+            continue
+        usd = abs(_normalize_fcf_to_usd(float(value), currency))
+        if best is None or usd > best:
+            best = usd
+    return best
+
+
+def fcf_yield_unit_fx_error_detected(
+    *,
+    screen_ttm: float | None,
+    market_cap: float | None,
+    filing_aligned: float | None = None,
+    company_adjusted: float | None = None,
+    canonical: float | None = None,
+    filing_currency: str = "GBP",
+    company_adjusted_currency: str | None = None,
+) -> bool:
+    """Fail-closed when implied screen yield is ~0.1% but filing-scale FCF is £100m+."""
+    if screen_ttm is None or market_cap is None or float(market_cap) <= 0:
+        return False
+    implied_yield = float(screen_ttm) / float(market_cap)
+    if implied_yield > FCF_YIELD_UNIT_ERROR_MAX_IMPLIED_YIELD:
+        return False
+    reference_usd = _largest_fcf_reference_usd(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        company_adjusted=company_adjusted,
+        canonical=canonical,
+        filing_currency=filing_currency,
+        company_adjusted_currency=company_adjusted_currency,
+    )
+    min_reference_usd = _normalize_fcf_to_usd(
+        FCF_YIELD_UNIT_ERROR_MIN_CANONICAL_GBP,
+        "GBP",
+    )
+    if reference_usd is None or reference_usd < min_reference_usd:
+        return False
+    screen_usd = abs(_normalize_fcf_to_usd(float(screen_ttm), filing_currency))
+    return screen_usd < reference_usd * 0.5
 
 
 def _append_failed_criterion(existing: Any, message: str) -> list[str]:
@@ -1408,12 +1493,14 @@ def suppress_fcf_yield_passes(
             screen_ttm=screen_ttm,
             output_dir=output_dir,
         )
+        unit_fx_error = bool(urow.get("fcf_yield_unit_fx_error"))
         if not fcf_yield_pass_suppressed(
             divergence_flagged=bool(bundle.get("divergence_flagged")),
             canonical=bundle.get("canonical"),
             company_adjusted=bundle.get("company_adjusted"),
             company_adjusted_currency=bundle.get("company_adjusted_currency"),
             filing_currency=str(bundle.get("currency") or "USD"),
+            fcf_yield_unit_fx_error=unit_fx_error,
         ):
             continue
 
@@ -1425,10 +1512,15 @@ def suppress_fcf_yield_passes(
         if not mask.any():
             continue
         out.loc[mask, "passed"] = False
+        failure_message = (
+            "FCF yield suppressed: screen FCF implies unit/FX error vs filing-scale cash flow"
+            if unit_fx_error
+            else "FCF yield suppressed: canonical basis diverges from company filing definition"
+        )
         for index in out.index[mask]:
             out.at[index, "failed_criteria"] = _append_failed_criterion(
                 out.at[index, "failed_criteria"],
-                "FCF yield suppressed: canonical basis diverges from company filing definition",
+                failure_message,
             )
     return out
 
@@ -2197,11 +2289,14 @@ def enrich_universe_with_canonical_fcf(
         return universe
 
     out = universe.copy()
+    if "fcf_yield_unit_fx_error" not in out.columns:
+        out["fcf_yield_unit_fx_error"] = False
     screen_ttms: list[float | None] = []
     canonicals: list[float | None] = []
     mismatched_flags: list[bool] = []
+    unit_fx_flags: list[bool] = []
 
-    for _, row in out.iterrows():
+    for index, row in out.iterrows():
         screen_ttm = _float_or_none(row.get("free_cashflow"))
         bundle = reconcile_fcf_for_ticker(
             str(row["ticker"]),
@@ -2209,12 +2304,24 @@ def enrich_universe_with_canonical_fcf(
             output_dir=output_dir,
         )
         screen_ttms.append(screen_ttm)
+        filing_currency = str(bundle.get("currency") or "GBP")
+        unit_fx_error = fcf_yield_unit_fx_error_detected(
+            screen_ttm=screen_ttm,
+            market_cap=_float_or_none(row.get("market_cap")),
+            filing_aligned=_float_or_none(bundle.get("filing_aligned")),
+            company_adjusted=_float_or_none(bundle.get("company_adjusted")),
+            canonical=_float_or_none(bundle.get("canonical")),
+            filing_currency=filing_currency,
+            company_adjusted_currency=bundle.get("company_adjusted_currency"),
+        )
+        unit_fx_flags.append(unit_fx_error)
+        out.at[index, "fcf_yield_unit_fx_error"] = unit_fx_error
         mismatched = bool(bundle.get("filing_screen_mismatch")) or fcf_filing_screen_mismatch(
             filing_aligned=bundle.get("filing_aligned"),
             screen_ttm=screen_ttm,
             divergence_flagged=bool(bundle.get("divergence_flagged")),
         )
-        mismatched_flags.append(mismatched)
+        mismatched_flags.append(mismatched or unit_fx_error)
         if (
             bundle.get("bridge_resolved")
             and bundle.get("policy_fcf") is not None
@@ -2223,7 +2330,7 @@ def enrich_universe_with_canonical_fcf(
             canonicals.append(bundle.get("policy_fcf"))
         elif bundle.get("company_adjusted") is not None:
             canonicals.append(bundle.get("company_adjusted"))
-        elif mismatched:
+        elif mismatched or unit_fx_error:
             canonical = bundle.get("canonical")
             source = str(bundle.get("source") or "")
             if source == "screen_ttm" or source.endswith("_screen_ttm"):
@@ -2297,9 +2404,6 @@ def enrich_universe_with_filing_metrics(
 
         statutory_ocf = _float_or_none(out.at[index, "operating_cashflow"])
         gross_ocf = _float_or_none(out.at[index, "operating_cashflow_gross"])
-        definition_divergence = ocf_definition_diverges(statutory_ocf, gross_ocf)
-        out.at[index, "fcf_definition_divergence"] = definition_divergence
-
         screen_ttm = _float_or_none(row.get("free_cashflow_screen_ttm"))
         if screen_ttm is None:
             screen_ttm = _float_or_none(row.get("free_cashflow"))
@@ -2308,6 +2412,17 @@ def enrich_universe_with_filing_metrics(
             screen_ttm=screen_ttm,
             output_dir=output_dir,
         )
+        filing_currency = str(fcf_bundle.get("currency") or "GBP")
+        definition_divergence = fcf_basis_definition_divergence(
+            operating_cashflow=statutory_ocf,
+            operating_cashflow_gross=gross_ocf,
+            filing_aligned=_float_or_none(fcf_bundle.get("filing_aligned")),
+            screen_ttm=screen_ttm,
+            company_adjusted=_float_or_none(fcf_bundle.get("company_adjusted")),
+            filing_currency=filing_currency,
+            company_adjusted_currency=fcf_bundle.get("company_adjusted_currency"),
+        )
+        out.at[index, "fcf_definition_divergence"] = definition_divergence
         out.at[index, "fcf_divergence_flagged"] = bool(fcf_bundle.get("fcf_divergence_flagged"))
 
         interim_decline = extract_interim_eps_decline_for_ticker(ticker, output_dir=output_dir)

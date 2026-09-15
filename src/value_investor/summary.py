@@ -32,12 +32,13 @@ from value_investor.scoring.earnings_growth_overlay import (
     format_earnings_growth_bps_warning,
 )
 from value_investor.scoring.fcf import (
+    _float_or_none,
     append_fcf_divergence_to_action_note,
     enrich_screening_snapshot_fcf_dividend_coverage,
+    fcf_basis_definition_divergence,
     fcf_dividend_coverage,
     fcf_filing_screen_mismatch,
     labelled_fcf_dividend_coverage_for_snapshot,
-    ocf_definition_diverges,
     overlay_free_cashflow_from_bundle,
     reconcile_fcf_for_ticker,
     resolve_free_cashflow,
@@ -1013,11 +1014,20 @@ def build_company_reports(
             and not (isinstance(gross_ocf_raw, float) and pd.isna(gross_ocf_raw))
             else None
         )
+        filing_currency = str(fcf_bundle.get("currency") or "GBP")
         fcf_definition_divergence = (
             bool(definition_div_raw)
             if definition_div_raw is not None
             and not (isinstance(definition_div_raw, float) and pd.isna(definition_div_raw))
-            else ocf_definition_diverges(operating_cashflow, operating_cashflow_gross)
+            else fcf_basis_definition_divergence(
+                operating_cashflow=operating_cashflow,
+                operating_cashflow_gross=operating_cashflow_gross,
+                filing_aligned=_float_or_none(fcf_bundle.get("filing_aligned")),
+                screen_ttm=screen_ttm,
+                company_adjusted=_float_or_none(fcf_bundle.get("company_adjusted")),
+                filing_currency=filing_currency,
+                company_adjusted_currency=fcf_bundle.get("company_adjusted_currency"),
+            )
         )
         divergence_flag_raw = row.get("fcf_divergence_flagged")
         fcf_divergence_flagged = (

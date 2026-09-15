@@ -7,6 +7,10 @@ from pathlib import Path
 
 import pandas as pd
 
+from value_investor.scoring.builders_merchant_overlay import (
+    builders_merchant_cyclical_overlay_triggered,
+    is_builders_merchant,
+)
 from value_investor.scoring.fcf import (
     fcf_dividend_coverage,
     load_filing_bodies_for_ticker,
@@ -66,8 +70,16 @@ def cyclical_exposure_overlay_triggered(
     uk_contractor: bool = False,
     public_capex_detected: bool = False,
     uk_contractor_revenue_fcf_warning: bool = False,
+    builders_merchant: bool = False,
+    housing_rmi_detected: bool = False,
 ) -> bool:
     """Cyclical exposure, quality passes, interim EPS decline, and thin net FCF/dividend cover."""
+    if builders_merchant_cyclical_overlay_triggered(
+        builders_merchant=builders_merchant,
+        housing_rmi_detected=housing_rmi_detected,
+        passed_families=passed_families,
+    ):
+        return True
     if uk_contractor_cyclical_overlay_triggered(
         uk_contractor=uk_contractor,
         public_capex_detected=public_capex_detected,
@@ -130,6 +142,8 @@ def apply_cyclical_exposure_overlay_to_signal(
     uk_contractor: bool = False,
     public_capex_detected: bool = False,
     uk_contractor_revenue_fcf_warning: bool = False,
+    builders_merchant: bool = False,
+    housing_rmi_detected: bool = False,
 ) -> tuple[bool, str]:
     """Return overlay flag and conservative adjusted signal."""
     base_adjusted = adjusted_signal or signal
@@ -143,6 +157,8 @@ def apply_cyclical_exposure_overlay_to_signal(
         uk_contractor=uk_contractor,
         public_capex_detected=public_capex_detected,
         uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
+        builders_merchant=builders_merchant,
+        housing_rmi_detected=housing_rmi_detected,
     ):
         return False, base_adjusted
     capped = cap_signal_for_cyclical_exposure_overlay(signal)
@@ -214,6 +230,18 @@ def enrich_signals_with_cyclical_exposure_overlay(
             row.get("name"),
             row.get("sector"),
         )
+        builders_merchant = bool(row.get("builders_merchant")) or is_builders_merchant(
+            ticker,
+            row.get("name"),
+            row.get("sector"),
+        )
+        housing_rmi_raw = row.get("housing_rmi_cyclical_detected")
+        housing_rmi_detected = (
+            bool(housing_rmi_raw)
+            if housing_rmi_raw is not None
+            and not (isinstance(housing_rmi_raw, float) and pd.isna(housing_rmi_raw))
+            else False
+        )
         public_capex = row.get("public_capex_exposure_detected")
         public_capex_detected = (
             bool(public_capex)
@@ -234,6 +262,8 @@ def enrich_signals_with_cyclical_exposure_overlay(
             uk_contractor=uk_contractor,
             public_capex_detected=public_capex_detected,
             uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
+            builders_merchant=builders_merchant,
+            housing_rmi_detected=housing_rmi_detected,
         )
         flags.append(triggered)
         detected_flags.append(cyclical_detected)

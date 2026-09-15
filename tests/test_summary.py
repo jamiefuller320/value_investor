@@ -763,6 +763,19 @@ def test_fcf_three_way_mismatch_requires_all_three_bases():
     )
 
 
+def test_fcf_basis_definition_divergence_flags_gftu_style_triplet():
+    from value_investor.scoring.fcf import fcf_basis_definition_divergence
+
+    assert fcf_basis_definition_divergence(
+        operating_cashflow=None,
+        operating_cashflow_gross=None,
+        filing_aligned=168_300_000.0,
+        screen_ttm=187_700_000.0,
+        company_adjusted=205_600_000.0,
+        filing_currency="GBP",
+    )
+
+
 def test_fcf_values_diverge_on_sign_or_magnitude():
     assert fcf_values_diverge(119_000_000.0, -66_125_000.0) is True
     assert fcf_values_diverge(1_000_000.0, -1_000_000.0) is False

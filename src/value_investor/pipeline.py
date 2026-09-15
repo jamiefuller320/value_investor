@@ -31,6 +31,9 @@ from value_investor.models.trusts import ALL_TRUST_MODELS
 from value_investor.research.overlay import enrich_signals_with_research
 from value_investor.run_diff import RunDiff, compute_run_diff
 from value_investor.scoring import evaluate_universe, summarize_by_ticker
+from value_investor.scoring.builders_merchant_overlay import (
+    enrich_signals_with_builders_merchant_detection,
+)
 from value_investor.scoring.cash_conversion_overlay import (
     enrich_signals_with_cash_conversion_overlay,
 )
@@ -71,6 +74,9 @@ from value_investor.scoring.interim_quality_overlay import (
 from value_investor.scoring.leverage_overlay import enrich_universe_with_leverage_override
 from value_investor.scoring.quality_family_avoid_gate_overlay import (
     enrich_signals_with_quality_family_avoid_gate,
+)
+from value_investor.scoring.quality_garp_roe_gate import (
+    suppress_quality_garp_inconsistent_passes,
 )
 from value_investor.scoring.sector_overrides import apply_sector_overrides
 from value_investor.scoring.snapshot import save_run_snapshot
@@ -382,6 +388,7 @@ def run_screen(
     universe_df = enrich_universe_with_uk_contractor_adjustments(universe_df, out_dir)
     universe_df = enrich_universe_with_leverage_override(universe_df, out_dir)
     model_results = evaluate_universe(universe_df)
+    model_results = suppress_quality_garp_inconsistent_passes(model_results)
     model_results = suppress_fcf_yield_passes(model_results, universe_df, output_dir=out_dir)
     weight_state = load_model_weights(out_dir)
     summary = summarize_by_ticker(model_results, weights=weight_state.weights)
@@ -455,6 +462,10 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     signals_out = enrich_signals_with_healthcare_price_erosion_overlay(
         signals_out,
         result.model_results,
+        output_dir=output_dir,
+    )
+    signals_out = enrich_signals_with_builders_merchant_detection(
+        signals_out,
         output_dir=output_dir,
     )
     signals_out = enrich_signals_with_uk_contractor_detection(
