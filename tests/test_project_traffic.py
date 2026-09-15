@@ -242,3 +242,32 @@ def test_daily_digest_marks_ungrounded_without_progress(tmp_path: Path):
     assert "Trajectory" in md or "trajectory" in digest
     assert digest["merge_authority"]["status"] == "restricted"
     assert "end_of_day_project_traffic" == digest["role"]
+
+
+def test_daily_digest_reads_appraisal_strengths(tmp_path: Path):
+    progress = tmp_path / "project_progress.json"
+    write_json(
+        progress,
+        {
+            "headline": "Focus on stage 2b",
+            "appraisal": {
+                "strengths": ["Library graduated"],
+                "gaps": ["AI excess negative"],
+                "next_actions": ["Accumulate marks"],
+            },
+            "stages": [{"id": "0", "name": "UK", "status": "complete"}],
+        },
+        compact=False,
+    )
+    digest = build_daily_digest(
+        stuck_prs=[],
+        traffic_state={"pause_active": False},
+        actions=[],
+        project_progress_path=progress,
+        progress_report_path=tmp_path / "missing.json",
+        queue_health_path=tmp_path / "missing_qh.json",
+        ops_status_path=tmp_path / "missing_ops.json",
+    )
+    assert any("Library graduated" in row for row in digest["achieved"])
+    assert digest["gaps"] == ["AI excess negative"]
+    assert digest["next_actions"] == ["Accumulate marks"]

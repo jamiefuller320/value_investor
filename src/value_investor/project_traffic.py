@@ -814,6 +814,17 @@ def build_daily_digest(
     strengths = list((project_progress or {}).get("strengths") or [])[:5]
     gaps = list((project_progress or {}).get("gaps") or [])[:5]
     next_actions = list((project_progress or {}).get("next_actions") or [])[:5]
+    appraisal = (project_progress or {}).get("appraisal") or {}
+    if isinstance(appraisal, dict):
+        if not strengths:
+            strengths = list(appraisal.get("strengths") or [])[:5]
+        if not gaps:
+            gaps = list(appraisal.get("gaps") or [])[:5]
+        if not next_actions:
+            next_actions = list(appraisal.get("next_actions") or [])[:5]
+    headline = (project_progress or {}).get("headline")
+    if headline:
+        strengths = [str(headline), *[str(s) for s in strengths]][:5]
 
     achieved: list[str] = []
     if strengths:
