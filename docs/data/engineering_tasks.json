@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-15T17:16:29.789958+00:00",
+  "compiled_at": "2026-09-15T17:48:19.946594+00:00",
   "run_at": null,
-  "task_count": 15,
+  "task_count": 16,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -589,18 +589,18 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
-      "id": "eng-20260915-12",
+      "id": "eng-20260915-13",
       "area": "scoring",
-      "title": "Enable cyclical/public-capex and cash-conversion overlays for UK contractors; treat falling revenue + rising FCF as a quality warning until filing mix notes con",
-      "summary": "Enable cyclical/public-capex and cash-conversion overlays for UK contractors; treat falling revenue + rising FCF as a quality warning until filing mix notes confirm; do not score framework wins as backlog.",
+      "title": "Fail-closed when FCF yield is ~0.1% while canonical FCF is £100m+: treat that as a unit/FX error, not a model miss. Set fcf_definition_divergence whenever compa",
+      "summary": "Fail-closed when FCF yield is ~0.1% while canonical FCF is £100m+: treat that as a unit/FX error, not a model miss. Set fcf_definition_divergence whenever company_adjusted / filing_aligned / TTM disagree (£168.3m / £205.6m / £187.7m here). Enable cyclical/housing-RMI and cash-conversion overlays for builders-merchants. Surface dual leverage (IFRS-16 D/E vs ex-lease net cash). Do not pass quality/GARP on 8.4% ROE while moat/Buffett fail on the same ROE without a documented exception.",
       "priority": "medium",
       "priority_score": 43.0,
       "source": "compile_cap_drain",
       "evidence": {
         "tickers": [
-          "COST.L"
+          "GFTU.L"
         ],
-        "recorded_at": "2026-09-04T17:33:50.472095+00:00",
+        "recorded_at": "2026-09-04T17:42:11.927312+00:00",
         "compile_cap_drain": true,
         "origin_source": "research_model_suggestions",
         "origin_priority_score": 43.0,
@@ -627,11 +627,66 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "open"
+    },
+    {
+      "id": "eng-20260915-12",
+      "area": "scoring",
+      "title": "Enable cyclical/public-capex and cash-conversion overlays for UK contractors; treat falling revenue + rising FCF as a quality warning until filing mix notes con",
+      "summary": "Enable cyclical/public-capex and cash-conversion overlays for UK contractors; treat falling revenue + rising FCF as a quality warning until filing mix notes confirm; do not score framework wins as backlog.",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "COST.L"
+        ],
+        "recorded_at": "2026-09-04T17:33:50.472095+00:00",
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "doc": "docs/ops/engineering-sync.md",
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260915-12",
+        "verified_at": "2026-09-15T17:48:11.248369+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_pipeline.py",
+            "tests/test_summary.py"
+          ],
+          "output_tail": "........................................................................ [ 33%]\n........................................................................ [ 67%]\n.....................................................................    [100%]\n213 passed in 15.07s"
+        }
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260915-12.md",
       "branch_name": "cursor/eng-20260915-12-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-15T17:21:02.930109+00:00"
+      "completed_at": "2026-09-15T17:21:02.930109+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/658",
+      "pr_number": 658,
+      "merged_at": "2026-09-15T17:48:11.248836+00:00"
     },
     {
       "id": "eng-20260915-07",
@@ -827,14 +882,8 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "merged",
-      "result_path": "output/engineering_result_eng-20260915-11.md",
-      "branch_name": "cursor/eng-20260915-11-1de3",
-      "no_diff_count": 0,
-      "completed_at": "2026-09-15T17:35:33.128591+00:00",
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/659",
-      "pr_number": 659,
-      "merged_at": "2026-09-15T17:47:46.125403+00:00"
+      "status": "open",
+      "no_diff_count": 0
     }
   ],
   "ingest_health": {
@@ -850,7 +899,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-15T17:28:51.556239+00:00",
+    "evaluated_at": "2026-09-15T17:48:17.343996+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
