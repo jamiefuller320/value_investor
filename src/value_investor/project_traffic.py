@@ -51,6 +51,15 @@ ACTION_QUEUE_SYNC = "remediate_queue_merge_sync"
 
 QUEUE_MERGE_SYNC_FINDING_TITLE = "Engineering queue merge sync lag"
 
+ACTION_OPS_EMAIL_HANDOFF = "ops_email_handoff"
+DEFAULT_OPS_EMAIL_HANDOFF_PATH = Path("docs/data/project_traffic_ops_email_handoff.json")
+
+RECTIFICATION_QUEUE_SYNC = "remediate_queue_merge_sync"
+RECTIFICATION_UNSTICK_PRS = "request_unstick_stuck_prs"
+RECTIFICATION_DRAFT_ENG_TASK = "draft_ops_engineering_task"
+RECTIFICATION_RERUN_WORKFLOW = "rerun_or_dispatch_workflow"
+RECTIFICATION_HUMAN_TRIAGE = "human_triage"
+
 DEFAULT_STUCK_PR_THRESHOLD = 2
 DEFAULT_MIN_FAIL_AGE_MINUTES = 20
 DEFAULT_RESUME_IDLE_MINUTES = 15
@@ -861,6 +870,203 @@ def _claim_evidence_rows(
     return rows
 
 
+def planned_rectification_for_ops_finding(finding: Any) -> tuple[str, str]:
+    """Deterministic PM rectification plan for an ops-monitor email finding.
+
+    Returns ``(action_id, detail)``. Auto-execution is limited to PM v1 authority
+    (queue merge-sync + stuck-PR unstick already owned by traffic); other actions
+    are recorded for digest / human / eng-task follow-up.
+    """
+    if hasattr(finding, "title"):
+        title = str(finding.title or "")
+        category = str(finding.category or "")
+        severity = str(finding.severity or "")
+        summary = str(finding.summary or "")
+    else:
+        row = finding or {}
+        title = str(row.get("title") or "")
+        category = str(row.get("category") or "")
+        severity = str(row.get("severity") or "")
+        summary = str(row.get("summary") or "")
+
+    if title == QUEUE_MERGE_SYNC_FINDING_TITLE or title.startswith("Orphaned pr_open"):
+        return (
+            RECTIFICATION_QUEUE_SYNC,
+            "PM v1: recover/mark-merged engineering queue reconciliation",
+        )
+    if title == "Project traffic pause active" or "stuck PR" in summary.lower():
+        return (
+            RECTIFICATION_UNSTICK_PRS,
+            "PM v1: traffic pause/unstick path (CI comment / conflict-resolve)",
+        )
+    if (
+        category in {"workflows", "workflow"}
+        or title.startswith("Workflow overdue:")
+        or title.startswith("Recent workflow failure:")
+        or title.startswith("Workflow failure")
+    ):
+        return (
+            RECTIFICATION_RERUN_WORKFLOW,
+            "Rerun/dispatch via existing ops auto-fix or workflow responders; else human",
+        )
+    if severity == "fail":
+        return (
+            RECTIFICATION_DRAFT_ENG_TASK,
+            "Draft supervised ops engineering task (ops-monitor draft path)",
+        )
+    return (
+        RECTIFICATION_HUMAN_TRIAGE,
+        "Surface in PM digest for human / eng follow-up",
+    )
+
+
+def handoff_ops_monitor_email_to_pm(
+    *,
+    findings: list[Any],
+    email_subject: str,
+    email_text: str,
+    email_html: str | None = None,
+    drafted_task_ids: list[str] | None = None,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    open_prs: list[dict[str, Any]] | None = None,
+    repo: str | None = None,
+    token: str | None = None,
+    apply: bool = True,
+    handoff_path: Path = DEFAULT_OPS_EMAIL_HANDOFF_PATH,
+    update_digest: bool = True,
+) -> dict[str, Any]:
+    """Hand email-worthy ops findings to PM with planned rectification.
+
+    Keeps SMTP with the caller. Auto-remediates only queue merge-sync (existing
+    PM v1 authority); other items stay open on the handoff artifact + digest.
+    """
+    drafted_task_ids = [str(x) for x in (drafted_task_ids or []) if x]
+    items: list[dict[str, Any]] = []
+    actions: list[TrafficAction] = []
+    needs_queue_sync = False
+
+    for finding in findings:
+        if hasattr(finding, "to_dict"):
+            payload = finding.to_dict()
+        elif isinstance(finding, dict):
+            payload = dict(finding)
+        else:
+            payload = {
+                "severity": str(getattr(finding, "severity", "")),
+                "category": str(getattr(finding, "category", "")),
+                "title": str(getattr(finding, "title", "")),
+                "summary": str(getattr(finding, "summary", "")),
+            }
+        if payload.get("fixed"):
+            continue
+        severity = str(payload.get("severity") or "")
+        if severity not in {"fail", "warn"}:
+            continue
+        action_id, detail = planned_rectification_for_ops_finding(payload)
+        if action_id == RECTIFICATION_DRAFT_ENG_TASK and drafted_task_ids:
+            detail = f"{detail}; drafted={', '.join(drafted_task_ids)}"
+        item = {
+            "severity": severity,
+            "category": str(payload.get("category") or ""),
+            "title": str(payload.get("title") or ""),
+            "summary": str(payload.get("summary") or ""),
+            "planned_rectification": action_id,
+            "rectification_detail": detail,
+            "auto_attempted": False,
+            "auto_resolved": False,
+            "status": "open",
+        }
+        if action_id == RECTIFICATION_QUEUE_SYNC:
+            needs_queue_sync = True
+        items.append(item)
+
+    if needs_queue_sync:
+        lag_ids, fixed_ids, remaining_ids, sync_actions = remediate_queue_merge_sync(
+            tasks_path=tasks_path,
+            open_prs=open_prs,
+            repo=repo,
+            token=token,
+            apply=apply,
+        )
+        actions.extend(sync_actions)
+        remaining_set = set(remaining_ids)
+        for item in items:
+            if item["planned_rectification"] != RECTIFICATION_QUEUE_SYNC:
+                continue
+            item["auto_attempted"] = True
+            if apply and not remaining_set:
+                item["auto_resolved"] = True
+                item["status"] = "resolved"
+                item["rectification_detail"] = (
+                    f"{item['rectification_detail']}; cleared lag={fixed_ids or ['none']}"
+                )
+            else:
+                item["status"] = "open"
+                item["rectification_detail"] = (
+                    f"{item['rectification_detail']}; remaining={remaining_ids or lag_ids or ['unknown']}"
+                )
+
+    handoff = {
+        "schema_version": SCHEMA_VERSION,
+        "generated_at": _utcnow().isoformat(),
+        "email_subject": email_subject,
+        "email_text": email_text,
+        "email_html": email_html,
+        "drafted_task_ids": drafted_task_ids,
+        "items": items,
+        "actions": [row.to_dict() for row in actions],
+        "open_count": sum(1 for row in items if row.get("status") == "open"),
+        "resolved_count": sum(1 for row in items if row.get("status") == "resolved"),
+    }
+
+    handoff_path = Path(handoff_path)
+    if apply:
+        handoff_path.parent.mkdir(parents=True, exist_ok=True)
+        write_json(handoff_path, handoff, compact=False)
+        actions.append(
+            TrafficAction(
+                kind=ACTION_OPS_EMAIL_HANDOFF,
+                detail=(
+                    f"handed {len(items)} ops email finding(s) to PM "
+                    f"(open={handoff['open_count']}, resolved={handoff['resolved_count']})"
+                ),
+                applied=True,
+            )
+        )
+        handoff["actions"] = [row.to_dict() for row in actions]
+        write_json(handoff_path, handoff, compact=False)
+
+        if update_digest:
+            digest_json = DEFAULT_DIGEST_PATH
+            digest_md = DEFAULT_DIGEST_MARKDOWN_PATH
+            existing = _safe_read(digest_json) or {}
+            # Refresh digest slice when a prior digest exists; otherwise write a
+            # minimal handoff-focused digest so catch-up still has a grounded row.
+            if existing:
+                existing["ops_email_handoff"] = handoff
+                existing["generated_at"] = handoff["generated_at"]
+                write_daily_digest(
+                    existing,
+                    json_path=digest_json,
+                    markdown_path=digest_md,
+                )
+            else:
+                digest = build_daily_digest(
+                    stuck_prs=[],
+                    traffic_state={},
+                    actions=actions,
+                    ops_email_handoff=handoff,
+                )
+                write_daily_digest(
+                    digest,
+                    json_path=digest_json,
+                    markdown_path=digest_md,
+                )
+
+    handoff["actions"] = [row.to_dict() for row in actions]
+    return handoff
+
+
 def build_daily_digest(
     *,
     stuck_prs: list[StuckPr],
@@ -870,6 +1076,7 @@ def build_daily_digest(
     project_progress_path: Path = DEFAULT_PROJECT_PROGRESS_PATH,
     queue_health_path: Path = DEFAULT_QUEUE_HEALTH_PATH,
     ops_status_path: Path = DEFAULT_OPS_STATUS_PATH,
+    ops_email_handoff: dict[str, Any] | None = None,
     now: datetime | None = None,
 ) -> dict[str, Any]:
     """Grounded EOD summary — cites artifacts; flags ungrounded gaps."""
@@ -878,6 +1085,8 @@ def build_daily_digest(
     project_progress = _safe_read(project_progress_path)
     queue_health = _safe_read(queue_health_path)
     ops_status = _safe_read(ops_status_path)
+    if ops_email_handoff is None:
+        ops_email_handoff = _safe_read(DEFAULT_OPS_EMAIL_HANDOFF_PATH)
 
     evidence = _claim_evidence_rows(
         progress_report=progress_report,
@@ -944,11 +1153,15 @@ def build_daily_digest(
                 "(path guard + green CI + allowlist), same as scoped auto-merge."
             ),
         },
+        "ops_email_handoff": ops_email_handoff,
         "sources": {
             "progress_report": str(progress_report_path) if progress_report else None,
             "project_progress": str(project_progress_path) if project_progress else None,
             "queue_health": str(queue_health_path) if queue_health else None,
             "ops_status": str(ops_status_path) if ops_status else None,
+            "ops_email_handoff": (
+                str(DEFAULT_OPS_EMAIL_HANDOFF_PATH) if ops_email_handoff else None
+            ),
         },
     }
 
@@ -999,6 +1212,28 @@ def format_daily_digest_markdown(digest: dict[str, Any]) -> str:
             )
     else:
         lines.append("- _(none)_")
+
+    handoff = digest.get("ops_email_handoff") or {}
+    handoff_items = list(handoff.get("items") or [])
+    if handoff_items or handoff.get("email_subject"):
+        lines.extend(["", "## Ops-monitor email handoff"])
+        if handoff.get("email_subject"):
+            lines.append(f"- Email subject: `{handoff.get('email_subject')}`")
+        open_count = sum(1 for row in handoff_items if row.get("status") == "open")
+        resolved_count = sum(1 for row in handoff_items if row.get("status") == "resolved")
+        lines.append(
+            f"- Findings: {len(handoff_items)} (open={open_count}, resolved={resolved_count})"
+        )
+        for row in handoff_items[:12]:
+            lines.append(
+                f"- [{row.get('status', 'open')}] {row.get('severity', '?').upper()} "
+                f"{row.get('title')} — planned: `{row.get('planned_rectification')}`"
+                + (
+                    f" ({row.get('rectification_detail')})"
+                    if row.get("rectification_detail")
+                    else ""
+                )
+            )
 
     merge = digest.get("merge_authority") or {}
     lines.extend(

@@ -8,11 +8,16 @@ from pathlib import Path
 from value_investor.engineering_queue import evaluate_engineering_dispatch
 from value_investor.engineering_tasks import EngineeringTask
 from value_investor.project_traffic import (
+    QUEUE_MERGE_SYNC_FINDING_TITLE,
+    RECTIFICATION_HUMAN_TRIAGE,
+    RECTIFICATION_QUEUE_SYNC,
     build_daily_digest,
     classify_stuck_prs,
     evaluate_traffic_pause,
     format_daily_digest_markdown,
+    handoff_ops_monitor_email_to_pm,
     is_traffic_pause_active,
+    planned_rectification_for_ops_finding,
     preserve_queue_meta,
     remediate_queue_merge_sync,
     run_project_traffic,
@@ -338,3 +343,96 @@ def test_remediate_queue_merge_sync_marks_merged(tmp_path: Path, monkeypatch):
     assert remaining == []
     assert calls["n"] == 1
     assert any(a.kind == "remediate_queue_merge_sync" for a in actions)
+
+
+def test_planned_rectification_mapping():
+    assert (
+        planned_rectification_for_ops_finding(
+            {
+                "severity": "warn",
+                "category": "engineering",
+                "title": QUEUE_MERGE_SYNC_FINDING_TITLE,
+                "summary": "lag",
+            }
+        )[0]
+        == RECTIFICATION_QUEUE_SYNC
+    )
+    assert (
+        planned_rectification_for_ops_finding(
+            {
+                "severity": "warn",
+                "category": "ingest",
+                "title": "Buy-tier filing ingest stalled",
+                "summary": "x",
+            }
+        )[0]
+        == RECTIFICATION_HUMAN_TRIAGE
+    )
+    assert (
+        planned_rectification_for_ops_finding(
+            {
+                "severity": "fail",
+                "category": "workflows",
+                "title": "Workflow overdue: FTSE Ingest Loop",
+                "summary": "stale",
+            }
+        )[0]
+        == "rerun_or_dispatch_workflow"
+    )
+
+
+def test_handoff_ops_monitor_email_to_pm_writes_artifact(tmp_path: Path, monkeypatch):
+    handoff_path = tmp_path / "handoff.json"
+    digest_json = tmp_path / "digest.json"
+    digest_md = tmp_path / "digest.md"
+
+    monkeypatch.setattr(
+        "value_investor.project_traffic.DEFAULT_DIGEST_PATH",
+        digest_json,
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic.DEFAULT_DIGEST_MARKDOWN_PATH",
+        digest_md,
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic.remediate_queue_merge_sync",
+        lambda **kwargs: (["eng-1"], ["eng-1"], [], []),
+    )
+
+    findings = [
+        {
+            "severity": "warn",
+            "category": "engineering",
+            "title": QUEUE_MERGE_SYNC_FINDING_TITLE,
+            "summary": "lag",
+            "fixed": False,
+        },
+        {
+            "severity": "warn",
+            "category": "ingest",
+            "title": "Buy-tier filing ingest stalled",
+            "summary": "zero bodies",
+            "fixed": False,
+        },
+    ]
+    payload = handoff_ops_monitor_email_to_pm(
+        findings=findings,
+        email_subject="FTSE Ops Monitor — WARN",
+        email_text="body",
+        email_html="<p>body</p>",
+        drafted_task_ids=[],
+        apply=True,
+        handoff_path=handoff_path,
+        update_digest=True,
+    )
+    assert handoff_path.exists()
+    assert payload["email_subject"] == "FTSE Ops Monitor — WARN"
+    assert payload["resolved_count"] == 1
+    assert payload["open_count"] == 1
+    assert any(row["planned_rectification"] == RECTIFICATION_QUEUE_SYNC for row in payload["items"])
+    assert any(row["status"] == "open" for row in payload["items"])
+    assert digest_json.exists()
+    digest = digest_json.read_text(encoding="utf-8")
+    assert "ops_email_handoff" in digest
+    md = digest_md.read_text(encoding="utf-8")
+    assert "Ops-monitor email handoff" in md

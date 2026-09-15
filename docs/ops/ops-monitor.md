@@ -11,6 +11,9 @@ artifacts, ingest stall detection, and the engineering queue.
 2. Apply **safe auto-fixes** (below)
 3. **Re-run detection** so overall status reflects post-fix truth
 4. Draft supervised tasks / send email only for **unfixed** warn/fail
+5. On email send: hand the same findings to project-traffic PM with the email body
+   and a planned rectification (auto-fix only within PM v1; see
+   [project-traffic.md](project-traffic.md#ops-monitor-email-handoff-l397))
 
 **Safe auto-fixes:**
 
