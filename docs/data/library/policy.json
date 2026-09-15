@@ -486,7 +486,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-09-14T22:27:38.572136+00:00",
+  "updated_at": "2026-09-15T07:37:05.697244+00:00",
   "ingest_parity_markets": [
     "asx200",
     "euro_depth"
@@ -494,7 +494,9 @@
   "ingest_parallel_sprint": [
     "asx200"
   ],
-  "ingest_parallel_sprint_2": [],
+  "ingest_parallel_sprint_2": [
+    "ftse_smallcap"
+  ],
   "ladder": {
     "enabled": true,
     "layers": [
@@ -841,6 +843,17 @@
         "to_market": "asx200",
         "stream_markets_after": [
           "asx200"
+        ],
+        "ingest_parity_recorded": false
+      },
+      {
+        "reseeded": true,
+        "at": "2026-09-15T07:37:05.697233+00:00",
+        "parallel_stream": 2,
+        "from_market": null,
+        "to_market": "ftse_smallcap",
+        "stream_markets_after": [
+          "ftse_smallcap"
         ],
         "ingest_parity_recorded": false
       }
