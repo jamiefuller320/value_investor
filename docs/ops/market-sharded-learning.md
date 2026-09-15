@@ -129,7 +129,7 @@ It does **not** start a shard AI-judgment track or `decision-review --apply`. Wa
 
 **Breadth queue complete** ([`PROJECT_OBJECTIVE.md`](../PROJECT_OBJECTIVE.md)) means the historical tradable index list has Layer A data (`sp500` … `tsx60`). It does **not** mean every graduated slice is admitted. Remaining slices (e.g. `nasdaq100`, `dax`, `aim`, …) stay **graduated, not admitted** until appended to the **committed** `docs/data/library/policy.json` → `market_queue`, sprint threshold met, and L322 runs.
 
-**Live policy shape (depth-first):** focus `euro_depth`; sprint queue typically `sp500`, `asx200`, `ftse_smallcap`, `tsx60`. When all four have completed sprint, they remain **admitted + maintenance**; the next epoch-0 admit comes from **tail expansion**, not from re-sprinting exhausted books unless a new screen reopens buy-tier gaps.
+**Live policy shape (depth-first):** focus `euro_depth`; committed `market_queue` is often the first four tradable slices. When those are sprint-complete, **`next_parallel_sprint_queue_market`** walks the default expansion roster (`DEFAULT_MARKET_QUEUE` after the committed list) so empty spare streams front-start the next **graduated-but-not-admitted** book with filing gaps; reseed appends that id to `market_queue`. When all four have completed sprint, they remain **admitted + maintenance**; the next epoch-0 admit comes from that expansion path or **regap**, not from re-sprinting exhausted books unless a new screen reopens buy-tier gaps.
 
 #### Expanding `market_queue` (one market at a time)
 

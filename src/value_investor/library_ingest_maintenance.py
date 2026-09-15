@@ -18,6 +18,7 @@ from value_investor.library_ingest_dispatch import (
     ingest_parity_met,
     list_library_ingest_maintenance_markets,
     list_library_ingest_parallel_sprint_markets,
+    ensure_market_queue_membership,
     next_parallel_sprint_queue_market,
     parallel_sprint_stream_for_market,
     replace_parallel_sprint_market,
@@ -380,6 +381,8 @@ def maybe_advance_parallel_sprint_on_parity(
         library_root=library_root,
         vacating=market_id,
     )
+    if nxt:
+        ensure_market_queue_membership(policy, nxt)
     policy, stream_after = replace_parallel_sprint_market(
         policy,
         parallel_stream=parallel_stream,
@@ -450,6 +453,7 @@ def reseed_empty_parallel_sprint_slots(
         )
         if not nxt:
             continue
+        queue_appended = ensure_market_queue_membership(policy, nxt)
         policy, stream_after = replace_parallel_sprint_market(
             policy,
             parallel_stream=parallel_stream,
@@ -459,6 +463,7 @@ def reseed_empty_parallel_sprint_slots(
         changed = True
         event_row: dict[str, Any] = {
             "reseeded": True,
+            "market_queue_appended": queue_appended,
             "at": datetime.now(UTC).isoformat(),
             "parallel_stream": parallel_stream,
             "from_market": None,
