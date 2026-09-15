@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-14T20:46:09.020217+00:00",
+  "generated_at": "2026-09-15T07:24:23.243500+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -38,7 +38,7 @@
     "spare_sprint": {
       "1": "asx200"
     },
-    "equal_support_generated_at": "2026-09-14T19:52:05.170999+00:00"
+    "equal_support_generated_at": "2026-09-15T05:18:59.245466+00:00"
   },
   "markets": [
     {
@@ -354,15 +354,16 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 5,
-        "targets": 29,
-        "improved": 3,
+        "run_count": 6,
+        "targets": 37,
+        "improved": 5,
         "improved_tickers": [
           "DQ7A.IR",
           "NOVN.SW",
-          "C5H.IR"
+          "C5H.IR",
+          "TTE.PA"
         ],
-        "last_run_at": "2026-09-14T13:23:29.231500+00:00",
+        "last_run_at": "2026-09-15T07:23:09.950535+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -586,11 +587,11 @@
         "knob_apply": false,
         "acted": true,
         "last_run_at": "2026-09-14T07:17:57.185794+00:00",
-        "holdings": 28,
-        "nav": 523.64,
-        "cash": 37.02,
+        "holdings": 27,
+        "nav": 538.84,
+        "cash": 70.28,
         "contributed_capital": 1000.0,
-        "weekday_batch_count": 9,
+        "weekday_batch_count": 10,
         "epoch0_batch_count": 5
       },
       "equal_support": {
@@ -758,6 +759,17 @@
             "contributed_capital": 1000.0,
             "branches": {},
             "market": 516.46
+          },
+          {
+            "date": "2026-09-15",
+            "held": 468.56,
+            "nav": 538.84,
+            "held_stock": 468.56,
+            "cash": 70.28,
+            "positions": 27,
+            "contributed_capital": 1000.0,
+            "branches": {},
+            "market": 516.46
           }
         ],
         "series": [
@@ -776,12 +788,12 @@
         ],
         "branches": [],
         "last": {
-          "date": "2026-09-14",
-          "held": 486.62,
+          "date": "2026-09-15",
+          "held": 468.56,
           "market": 516.46,
-          "nav": 523.64,
-          "positions": 28,
-          "excess_pct": -0.057778
+          "nav": 538.84,
+          "positions": 27,
+          "excess_pct": -0.092747
         }
       }
     },
