@@ -1947,9 +1947,8 @@ def run_ops_monitor(
             write_digest=True,
         )
         if traffic_report.queue_sync_fixed_ids and not traffic_report.queue_sync_remaining_ids:
-            action = (
-                "project-traffic PM remediated queue merge sync: "
-                + ", ".join(traffic_report.queue_sync_fixed_ids)
+            action = "project-traffic PM remediated queue merge sync: " + ", ".join(
+                traffic_report.queue_sync_fixed_ids
             )
             auto_fixes.append(
                 {

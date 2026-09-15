@@ -171,8 +171,7 @@ def remediate_queue_merge_sync(
         TrafficAction(
             kind=ACTION_QUEUE_SYNC,
             detail=(
-                f"detected merge sync lag for {len(lag_ids)} task(s): "
-                + ", ".join(lag_ids[:8])
+                f"detected merge sync lag for {len(lag_ids)} task(s): " + ", ".join(lag_ids[:8])
             ),
             applied=False,
         )
@@ -193,9 +192,7 @@ def remediate_queue_merge_sync(
         repo=repo,
         token=token,
     )
-    remaining_ids = [
-        str(row.get("task_id") or "") for row in remaining_rows if row.get("task_id")
-    ]
+    remaining_ids = [str(row.get("task_id") or "") for row in remaining_rows if row.get("task_id")]
     fixed_ids = [task_id for task_id in lag_ids if task_id not in set(remaining_ids)]
     if not fixed_ids and fixed_from_recover:
         fixed_ids = [task_id for task_id in fixed_from_recover if task_id in set(lag_ids)]
