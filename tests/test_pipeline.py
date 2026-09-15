@@ -3811,6 +3811,27 @@ def test_dual_leverage_display_when_yahoo_de_high_and_filing_net_cash():
     )
 
 
+def test_is_uk_listed_contractor_tolerates_nan_sector_and_name():
+    """Library buy-tier health passes pandas NaN sector/name into overlays."""
+    import math
+
+    from value_investor.scoring.uk_contractor_overlay import is_uk_listed_contractor
+
+    assert is_uk_listed_contractor("COST.L", "Costain Group PLC", math.nan) is True
+    assert is_uk_listed_contractor("COST.L", math.nan, math.nan) is False
+    assert is_uk_listed_contractor("COST.L", None, float("nan")) is False
+    assert is_uk_listed_contractor(
+        "ZZINF.L",
+        "Acme Infrastructure Holdings",
+        float("nan"),
+    ) is False
+    assert is_uk_listed_contractor(
+        "ZZINF.L",
+        "Acme Infrastructure Holdings",
+        "Industrials",
+    ) is True
+
+
 def test_enrich_universe_with_uk_contractor_adjustments_caps_framework_backlog_growth():
     from value_investor.scoring.uk_contractor_overlay import (
         enrich_universe_with_uk_contractor_adjustments,
