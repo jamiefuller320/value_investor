@@ -37,6 +37,7 @@ class AutoMergeDecision:
     reason: str
     task_id: str | None = None
     pr_number: int | None = None
+    merge_class: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -44,6 +45,7 @@ class AutoMergeDecision:
             "reason": self.reason,
             "task_id": self.task_id,
             "pr_number": self.pr_number,
+            "merge_class": self.merge_class,
         }
 
 
@@ -243,13 +245,22 @@ def evaluate_auto_merge(
             task_id=task_id,
         )
 
-    if not is_parked_source_hunter_task(task) and not task_eligible_for_auto_merge(task):
+    from value_investor.engineering_narrow_merge import (
+        narrow_merge_allowed,
+        task_is_narrow_candidate,
+    )
+
+    hunter_task = is_parked_source_hunter_task(task)
+    ci_fix_eligible = task_eligible_for_auto_merge(task)
+    narrow_candidate = task_is_narrow_candidate(task)
+
+    if not hunter_task and not ci_fix_eligible and not narrow_candidate:
         return AutoMergeDecision(
             False,
             "task is not eligible for auto-merge (auto_merge=false or scope too broad)",
             task_id=task_id,
         )
-    if is_parked_source_hunter_task(task) and not hunter_task_eligible_for_auto_merge(task):
+    if hunter_task and not hunter_task_eligible_for_auto_merge(task):
         return AutoMergeDecision(
             False,
             "parked_hunter auto-merge disabled by policy",
@@ -275,7 +286,7 @@ def evaluate_auto_merge(
             pr_number=pr_number,
         )
 
-    if is_parked_source_hunter_task(task):
+    if hunter_task:
         if not hunter_task_eligible_for_auto_merge(task):
             return AutoMergeDecision(
                 False,
@@ -297,13 +308,35 @@ def evaluate_auto_merge(
             f"hunter auto-merge eligible (tier={tier}; full gate passed in CI hunter-merge-gate)",
             task_id=task_id,
             pr_number=pr_number,
+            merge_class="parked_hunter",
         )
 
+    if ci_fix_eligible:
+        return AutoMergeDecision(
+            True,
+            "CI green and diff within allowed_paths",
+            task_id=task_id,
+            pr_number=pr_number,
+            merge_class="ci_fix",
+        )
+
+    allowed, narrow_reason, merge_class = narrow_merge_allowed(
+        task=task, changed_files=changed
+    )
+    if allowed:
+        return AutoMergeDecision(
+            True,
+            narrow_reason,
+            task_id=task_id,
+            pr_number=pr_number,
+            merge_class=merge_class,
+        )
     return AutoMergeDecision(
-        True,
-        "CI green and diff within allowed_paths",
+        False,
+        narrow_reason,
         task_id=task_id,
         pr_number=pr_number,
+        merge_class=merge_class,
     )
 
 
