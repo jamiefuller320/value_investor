@@ -1110,7 +1110,12 @@ def test_enrich_filing_rows_resolves_google_wrapper(monkeypatch):
         company_name="ITV plc",
     )
     assert enriched[0]["source"] == "investegate_resolved"
-    assert "investegate.co.uk/announcement/" in enriched[0]["url"]
+    resolved_url = enriched[0]["url"]
+    assert "news.google.com" not in resolved_url
+    assert (
+        "investegate.co.uk/announcement/" in resolved_url
+        or "londonstockexchange.com" in resolved_url
+    )
     assert enriched[0]["period"] == "annual"
 
 
@@ -1147,6 +1152,66 @@ def test_enrich_filing_rows_reclassifies_trading_update(monkeypatch):
     )
     assert enriched[0]["period"] == "trading_update"
     assert enriched[0]["priority"] >= 60
+
+
+def test_enrich_filing_rows_decodes_google_news_to_lse_direct(monkeypatch):
+    """eng-20260915-01: indexed Google News URLs must rewrite to direct LSE fetch links."""
+    google_row = {
+        "id": "g_lse",
+        "source": "google_news_investegate",
+        "headline": "ITV plc Full Year Results 2025 - Investegate",
+        "published_at": "2026-03-05T00:00:00+00:00",
+        "url": "https://news.google.com/rss/articles/CBMiabc?oc=5",
+        "period": "annual",
+        "has_body": False,
+        "priority": 100,
+    }
+    lse_html = "https://docs.londonstockexchange.com/rns/itv/fy2025.html"
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.resolve_google_news_publisher_url",
+        lambda url: lse_html if "news.google.com" in url else url,
+    )
+    enriched = enrich_filing_rows(
+        [google_row],
+        ticker="ITV.L",
+        company_name="ITV plc",
+    )
+    assert enriched[0]["url"] == lse_html
+    assert enriched[0]["source"] == "investegate_resolved"
+
+
+def test_enrich_filing_rows_upgrades_investegate_html_to_lse_pdf(monkeypatch):
+    """eng-20260915-01: Investegate announcement pages upgrade to LSE PDF on enrich."""
+    ig_url = "https://www.investegate.co.uk/announcement/rns/itv--itv/fy/1"
+    lse_pdf = "https://www.londonstockexchange.com/rns-attachment/pdf/abc/itv-fy2025.pdf"
+    row = {
+        "id": "ig_fy",
+        "source": "investegate_resolved",
+        "headline": "ITV plc Full Year Results 2025",
+        "published_at": "2026-03-05T00:00:00+00:00",
+        "url": ig_url,
+        "period": "annual",
+        "has_body": False,
+        "priority": 120,
+    }
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.resolve_investegate_lse_pdf_url",
+        lambda url: lse_pdf if url == ig_url else None,
+    )
+    enriched = enrich_filing_rows(
+        [row],
+        ticker="ITV.L",
+        company_name="ITV plc",
+    )
+    assert enriched[0]["url"] == lse_pdf
 
 
 def test_resolve_investegate_document_url_finds_lse_pdf():

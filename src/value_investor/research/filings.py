@@ -1468,6 +1468,7 @@ def enrich_filing_rows(
             if item.get("source") == "google_news_investegate":
                 item["source"] = "investegate_resolved"
         item = _apply_headline_period(item, candidate=candidate)
+        item = _standardise_rns_index_row_url(item)
         url = str(item.get("url") or "")
         if url:
             seen_urls.add(url)
@@ -3475,6 +3476,21 @@ def standardise_investegate_lse_fetch_url(url: str | None) -> str | None:
     if _is_lse_rns_url(url) and not _is_lse_rns_pdf_url(url):
         return resolve_lse_rns_document_url(url) or url
     return url
+
+
+def _standardise_rns_index_row_url(row: dict[str, Any]) -> dict[str, Any]:
+    """Persist direct Investegate/LSE fetch URLs on indexed RNS rows (not Google News wrappers)."""
+    url = str(row.get("url") or "")
+    if not url:
+        return row
+    std_url = standardise_investegate_lse_fetch_url(url)
+    if not std_url or std_url == url or "news.google.com" in std_url:
+        return row
+    item = dict(row)
+    item["url"] = std_url
+    if item.get("source") == "google_news_investegate":
+        item["source"] = "investegate_resolved"
+    return item
 
 
 def resolve_asx_publisher_document_url(url: str | None) -> str | None:
@@ -5942,14 +5958,9 @@ def _write_bodies(
                 if _is_ch_filing_row(row):
                     body = _fetch_companies_house_body(row)
                 elif row.get("url"):
-                    url = str(row["url"])
                     if ticker and company_name:
-                        std_url = standardise_investegate_lse_fetch_url(url)
-                        if std_url and std_url != url and "news.google.com" not in std_url:
-                            row["url"] = std_url
-                            if row.get("source") == "google_news_investegate":
-                                row["source"] = "investegate_resolved"
-                            url = std_url
+                        row = _standardise_rns_index_row_url(row)
+                    url = str(row["url"])
                     if ticker and company_name and _is_rns_body_fetch_candidate(row):
                         body, extracted_headline = _fetch_rns_filing_body_for_refetch(url)
                     else:
@@ -6506,6 +6517,7 @@ def refetch_investegate_filing_bodies(
             and item.get("url")
             and not item.get("has_body")
         ):
+            item = _standardise_rns_index_row_url(item)
             body, extracted_headline = _fetch_rns_filing_body_for_refetch(str(item["url"]))
             if body:
                 if extracted_headline:
