@@ -7764,6 +7764,32 @@ def test_parked_source_hunter_dfs_l_ftse_smallcap_has_fetchable_ir():
     assert len(body) >= 50000
 
 
+def test_fetch_filings_ir_allowlist_ftse_smallcap_foxt_l_builtins(tmp_path: Path):
+    """Regression: FOXT.L parked IWB — foxtonsgroup.co.uk FY2025/2024 AR + H1 statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("FOXT.L", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert any("foxtons-annual-report-and-accounts-2025.pdf" in url for url in urls)
+    assert any("foxtons-annual-report-and-accounts-2024.pdf" in url for url in urls)
+    assert any("foxtons-group-plc-interim-results-2026.pdf" in url for url in urls)
+    assert sum(1 for row in rows if row["period"] == "interim") == 1
+
+
+def test_parked_source_hunter_foxt_l_ftse_smallcap_has_fetchable_ir():
+    """eng-20260915-11: FOXT.L has live foxtonsgroup.co.uk FY2025/2024 AR + H1 statutory PDFs."""
+    assert "FOXT.L" not in PARKED_SOURCE_HUNTER_SKIP
+    rows = fetch_filings_ir_allowlist("FOXT.L")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("foxtonsgroup.co.uk" in url for url in urls)
+    assert any("foxtons-annual-report-and-accounts-2025.pdf" in url for url in urls)
+    _first_fetchable_allowlist_body(urls)
+
+
 def test_fetch_filings_ir_allowlist_ftse_smallcap_gle_l_builtins(tmp_path: Path):
     """Regression: GLE.L parked IWB — mjgleesonplc.com FY2025/2024 AR + H1 statutory PDFs."""
     allowlist_path = tmp_path / "ir.json"
