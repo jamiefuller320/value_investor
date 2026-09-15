@@ -38,6 +38,12 @@ _BASIC_EPS_LABELS = [
     "Basic EPS",
 ]
 
+_REVENUE_LABELS = [
+    "Total Revenue",
+    "Operating Revenue",
+    "Revenue",
+]
+
 _DIVIDENDS_PAID_LABELS = [
     "Cash Dividends Paid",
     "Common Stock Dividend Paid",
@@ -129,6 +135,9 @@ _FILING_METRIC_KEYS = (
     "interim_eps_decline_pct",
     "interim_dividend_cut_pct",
     "adjusted_eps_growth_pct",
+    "revenue",
+    "revenue_prev",
+    "revenue_growth_filing_pct",
 )
 
 _RESEARCH_ROOTS = (
@@ -576,15 +585,21 @@ def extract_income_metrics_from_annual_financials(
         latest_rows = income_statement.get(years[0]) or {}
         metrics["net_income_adjusted"] = _annual_label_value(latest_rows, _ADJUSTED_EARNINGS_LABELS)
         metrics["basic_eps"] = _annual_label_value(latest_rows, _BASIC_EPS_LABELS)
+        metrics["revenue"] = _annual_label_value(latest_rows, _REVENUE_LABELS)
     if len(years) > 1:
         prior_rows = income_statement.get(years[1]) or {}
         metrics["net_income_adjusted_prev"] = _annual_label_value(
             prior_rows, _ADJUSTED_EARNINGS_LABELS
         )
         metrics["basic_eps_prev"] = _annual_label_value(prior_rows, _BASIC_EPS_LABELS)
+        metrics["revenue_prev"] = _annual_label_value(prior_rows, _REVENUE_LABELS)
     metrics["basic_eps_growth_pct"] = compute_yoy_growth_rate(
         metrics.get("basic_eps"),
         metrics.get("basic_eps_prev"),
+    )
+    metrics["revenue_growth_filing_pct"] = compute_yoy_growth_rate(
+        metrics.get("revenue"),
+        metrics.get("revenue_prev"),
     )
     return metrics
 

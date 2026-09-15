@@ -74,6 +74,10 @@ from value_investor.scoring.quality_family_avoid_gate_overlay import (
 )
 from value_investor.scoring.sector_overrides import apply_sector_overrides
 from value_investor.scoring.snapshot import save_run_snapshot
+from value_investor.scoring.uk_contractor_overlay import (
+    enrich_signals_with_uk_contractor_detection,
+    enrich_universe_with_uk_contractor_adjustments,
+)
 from value_investor.sector_scoring import add_sector_scores
 from value_investor.signal_stability import (
     append_signal_history,
@@ -375,6 +379,7 @@ def run_screen(
     universe_df = add_sector_scores(universe_df)
     universe_df = enrich_universe_with_canonical_fcf(universe_df, out_dir)
     universe_df = enrich_universe_with_filing_metrics(universe_df, out_dir)
+    universe_df = enrich_universe_with_uk_contractor_adjustments(universe_df, out_dir)
     universe_df = enrich_universe_with_leverage_override(universe_df, out_dir)
     model_results = evaluate_universe(universe_df)
     model_results = suppress_fcf_yield_passes(model_results, universe_df, output_dir=out_dir)
@@ -450,6 +455,10 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     signals_out = enrich_signals_with_healthcare_price_erosion_overlay(
         signals_out,
         result.model_results,
+        output_dir=output_dir,
+    )
+    signals_out = enrich_signals_with_uk_contractor_detection(
+        signals_out,
         output_dir=output_dir,
     )
     signals_out = enrich_signals_with_cash_conversion_overlay(signals_out, result.model_results)

@@ -16,6 +16,10 @@ from value_investor.scoring.interim_quality_overlay import (
     FCF_DIVIDEND_COVERAGE_MAX,
     quality_family_passed,
 )
+from value_investor.scoring.uk_contractor_overlay import (
+    is_uk_listed_contractor,
+    uk_contractor_cyclical_overlay_triggered,
+)
 
 INTERIM_EPS_DECLINE_THRESHOLD = 0.03
 
@@ -59,8 +63,18 @@ def cyclical_exposure_overlay_triggered(
     fcf_dividend_coverage_net: float | None,
     free_cashflow: float | None = None,
     dividends_paid: float | None = None,
+    uk_contractor: bool = False,
+    public_capex_detected: bool = False,
+    uk_contractor_revenue_fcf_warning: bool = False,
 ) -> bool:
     """Cyclical exposure, quality passes, interim EPS decline, and thin net FCF/dividend cover."""
+    if uk_contractor_cyclical_overlay_triggered(
+        uk_contractor=uk_contractor,
+        public_capex_detected=public_capex_detected,
+        passed_families=passed_families,
+        revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
+    ):
+        return True
     if not cyclical_exposure_detected_flag:
         return False
     if not quality_family_passed(passed_families):
@@ -113,6 +127,9 @@ def apply_cyclical_exposure_overlay_to_signal(
     free_cashflow: float | None = None,
     dividends_paid: float | None = None,
     adjusted_signal: str | None = None,
+    uk_contractor: bool = False,
+    public_capex_detected: bool = False,
+    uk_contractor_revenue_fcf_warning: bool = False,
 ) -> tuple[bool, str]:
     """Return overlay flag and conservative adjusted signal."""
     base_adjusted = adjusted_signal or signal
@@ -123,6 +140,9 @@ def apply_cyclical_exposure_overlay_to_signal(
         fcf_dividend_coverage_net=fcf_dividend_coverage_net,
         free_cashflow=free_cashflow,
         dividends_paid=dividends_paid,
+        uk_contractor=uk_contractor,
+        public_capex_detected=public_capex_detected,
+        uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
     ):
         return False, base_adjusted
     capped = cap_signal_for_cyclical_exposure_overlay(signal)
@@ -182,6 +202,26 @@ def enrich_signals_with_cyclical_exposure_overlay(
             else None
         )
 
+        rev_fcf_warning = row.get("uk_contractor_revenue_fcf_warning")
+        uk_contractor_revenue_fcf_warning = (
+            bool(rev_fcf_warning)
+            if rev_fcf_warning is not None
+            and not (isinstance(rev_fcf_warning, float) and pd.isna(rev_fcf_warning))
+            else False
+        )
+        uk_contractor = bool(row.get("uk_contractor")) or is_uk_listed_contractor(
+            ticker,
+            row.get("name"),
+            row.get("sector"),
+        )
+        public_capex = row.get("public_capex_exposure_detected")
+        public_capex_detected = (
+            bool(public_capex)
+            if public_capex is not None
+            and not (isinstance(public_capex, float) and pd.isna(public_capex))
+            else False
+        )
+
         triggered, new_adjusted = apply_cyclical_exposure_overlay_to_signal(
             str(row.get("signal") or "hold"),
             cyclical_exposure_detected_flag=cyclical_detected,
@@ -191,6 +231,9 @@ def enrich_signals_with_cyclical_exposure_overlay(
             free_cashflow=resolve_free_cashflow(row),
             dividends_paid=dividends_paid,
             adjusted_signal=existing_adjusted,
+            uk_contractor=uk_contractor,
+            public_capex_detected=public_capex_detected,
+            uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
         )
         flags.append(triggered)
         detected_flags.append(cyclical_detected)

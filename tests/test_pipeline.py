@@ -3586,3 +3586,82 @@ def test_enrich_universe_with_leverage_override_replaces_high_yahoo_de(tmp_path:
     graham = GrahamEnterprisingModel().evaluate(row.to_dict())
     assert "excessive leverage" not in graham.failed_criteria
     assert any("Debt/equity" in reason and "100%" in reason for reason in graham.reasons)
+
+
+def test_uk_contractor_revenue_fcf_warning_triggers_overlays():
+    from value_investor.scoring.cash_conversion_overlay import (
+        enrich_signals_with_cash_conversion_overlay,
+    )
+    from value_investor.scoring.cyclical_exposure_overlay import (
+        enrich_signals_with_cyclical_exposure_overlay,
+    )
+    from value_investor.scoring.uk_contractor_overlay import (
+        enrich_signals_with_uk_contractor_detection,
+        revenue_fcf_divergence_warning,
+    )
+
+    assert revenue_fcf_divergence_warning(
+        revenue_growth_pct=-0.16,
+        free_cashflow=63.1e6,
+        free_cashflow_prev=40.0e6,
+        mix_notes_confirmed=False,
+    )
+    assert not revenue_fcf_divergence_warning(
+        revenue_growth_pct=-0.16,
+        free_cashflow=63.1e6,
+        free_cashflow_prev=40.0e6,
+        mix_notes_confirmed=True,
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "COST.L",
+                "name": "Costain Group PLC",
+                "sector": "Industrials",
+                "signal": "strong_buy",
+                "passed_families": "cheapness,quality,dividend,garp,risk",
+                "uk_contractor": True,
+                "public_capex_exposure_detected": True,
+                "filing_mix_notes_confirmed": False,
+                "revenue_growth_filing_pct": -0.16,
+                "free_cashflow": 63.1e6,
+                "free_cashflow_prev": 40.0e6,
+            }
+        ]
+    )
+    detected = enrich_signals_with_uk_contractor_detection(signals)
+    assert bool(detected.iloc[0]["cyclical_exposure_detected"]) is True
+    assert bool(detected.iloc[0]["uk_contractor_revenue_fcf_warning"]) is True
+
+    model_results = pd.DataFrame(columns=["ticker", "model_id", "passed", "score", "reasons"])
+    enriched = enrich_signals_with_cash_conversion_overlay(detected, model_results)
+    assert bool(enriched.iloc[0]["cash_conversion_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+    enriched = enrich_signals_with_cyclical_exposure_overlay(enriched, model_results)
+    assert bool(enriched.iloc[0]["cyclical_exposure_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
+def test_enrich_universe_with_uk_contractor_adjustments_caps_framework_backlog_growth():
+    from value_investor.scoring.uk_contractor_overlay import (
+        enrich_universe_with_uk_contractor_adjustments,
+    )
+
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "ZZCT.L",
+                "name": "Costain Group PLC",
+                "sector": "Industrials",
+                "earnings_growth": 0.22,
+                "revenue_growth_filing_pct": -0.16,
+            }
+        ]
+    )
+    enriched = enrich_universe_with_uk_contractor_adjustments(universe)
+    row = enriched.iloc[0]
+    assert bool(row["framework_backlog_growth_suppressed"]) is True
+    assert row["earnings_growth"] == pytest.approx(-0.16)
+    assert bool(row["uk_contractor"]) is True
