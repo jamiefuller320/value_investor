@@ -224,7 +224,7 @@ def test_run_project_traffic_dry_run(tmp_path: Path, monkeypatch):
     )
     assert report.pause_active is True or len(report.stuck_prs) == 1
     assert report.digest is not None
-    assert report.digest["merge_authority"]["status"] == "restricted"
+    assert report.digest["merge_authority"]["status"] == "scoped_auto_merge"
     # dry-run must not persist pause
     assert is_traffic_pause_active(tasks_path=tasks_path) is False
 
@@ -241,7 +241,7 @@ def test_daily_digest_marks_ungrounded_without_progress(tmp_path: Path):
     )
     md = format_daily_digest_markdown(digest)
     assert "Trajectory" in md or "trajectory" in digest
-    assert digest["merge_authority"]["status"] == "restricted"
+    assert digest["merge_authority"]["status"] == "scoped_auto_merge"
     assert "end_of_day_project_traffic" == digest["role"]
 
 

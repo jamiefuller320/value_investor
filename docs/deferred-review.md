@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-15T14:03:17+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-15T18:50:52+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -367,7 +367,6 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L379 | **TRI.TO Investegate Trifast EPIC collision** | TRI.TO filings_index includes 51 investegate_direct Trifast (LSE TRI) RNS bodies. filter_misattributed_filings does not drop UK RNS for tsx_announcements, so a UK EPIC homonym pollutes the Thomson Reuters corpus. | TRI.TO leftover IWB is cleared and a memo/quality pass still shows Trifast RNS in the TSX research pack |
 | L385 | **Euro-depth still-zero-disk first-pass memos after catchup** | Zero-body rememo catchup unlocks memos once disk has any bodies. Names that remain memo_bodies=0 and disk_bodies=0 (e.g. AGS.BR, EL.PA, IFX.DE, REN.AS, SIE.DE, UQA.VI) still need euro_depth ingest thicken before Phase B rememo; do not rewrite empty shells. | euro_depth zero_body_buy_tier drops or those six tickers gain filings_index with_body > 0 |
 | L395 | **Lifecycle ticker cards: charts for non-buy-tier names** | Lifecycle name cards reuse buy-tier chart JSON; non-buy / sold names show assessment but no series until chart publish coverage expands. | Price-chart publish covers held/sold or near-buy names beyond current buy-tier weekly charts |
-| L396 | **Expand independent verify beyond ingest_narrow (scoring_narrow)** | PR #653 (scoring/summary peer-pass table) was a strong human-merge candidate with tests + narrow paths but outside ingest_narrow. Consider a second deterministic verify class before auto-merge. | After ≥3 successful ingest_narrow auto-merges on main and stable merge-today monitoring |
 
 ### Ops / reliability
 
@@ -462,6 +461,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L392 | **Loosen merge authority with independent verification** | After project-traffic pause/resume is stable, consider allowing merge only when an independent verifier (path guard + green CI + allowlist/hunter gate) agrees — never the same agent that authored the diff. | Traffic controller has paused and resumed cleanly for ≥2 weeks without false pauses, and scoped auto-merge remains green |
 | L393 | **Full EOD PM agent beyond traffic + grounded digest** | Extend beyond PR traffic control into Phase B/C gate probing, self-generated stall fixes, and broader goal appraisal. Prefer traffic controller + progress-report probes first; only grow autonomy if digests stay grounded and stalls still need human chase. | Project traffic digests have run weekday EOD for ≥4 weeks and human still spends material time chasing non-PR stalls |
 | L394 | **Traffic/PM proposes ops-monitor check extensions as eng drafts** | When EOD digests or traffic runs repeatedly flag the same ungrounded/missed stall, draft a supervised ops eng task to add a concrete ops-monitor check (allowed_paths already include ops_monitor.py). Do not let the PM agent edit ops-monitor in-place. | Project traffic digests have run ≥2 weeks and the same non-PR stall class appears in digests or human chase more than once |
+| L397 | **Expand narrow verify to ops/prompt/coverage eng classes** | ingest_narrow and scoring_narrow now have deterministic independent verify + scoped auto-merge. Broader eng areas (ops, prompt, coverage, ci) still human-merge; expand only after those two classes show clean merge quality. | ingest_narrow and scoring_narrow auto-merges run cleanly for ≥3 weeks with no path-guard incidents and EOD merge monitor shows stable verified counts |
 
 ---
 
