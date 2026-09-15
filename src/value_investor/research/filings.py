@@ -1791,6 +1791,7 @@ def _extract_filing_document_text(raw: bytes, content_type: str) -> str | None:
 
 
 _PDF_DEPTH_SECTION_MARKERS: tuple[tuple[str, int], ...] = (
+    (r"Profit to Cash Conversion and Free Cash Flow", 1),
     (r"\bCONSOLIDATED (?:STATEMENT OF )?CASH FLOW", 1),
     (r"\bCONSOLIDATED CASH FLOW STATEMENT", 1),
     (r"\bSTATEMENT OF CASH FLOWS\b", 1),
@@ -4280,6 +4281,9 @@ def _validate_ir_allowlist_body_content(
     if not _ir_body_title_tokens_match(row, body, ticker=ticker):
         return False, "title_mismatch"
 
+    if _ir_body_fcf_bridge_incomplete(body):
+        return False, "incomplete_fcf_bridge"
+
     url = str(row.get("url") or "")
     row_id = str(row.get("id") or "")
     if row_id.startswith("ir_") and url:
@@ -4426,6 +4430,32 @@ def _fetch_rns_filing_body_for_refetch(url: str) -> tuple[str | None, str | None
     if body:
         return body, None
     return _fetch_rns_html_body_fallback(fetch_url)
+
+
+def _ir_body_fcf_bridge_incomplete(body: str) -> bool:
+    """True when an IR deck advertises profit-to-cash but the FCF bridge tail is missing."""
+    if not body or not body.strip():
+        return False
+    lower = body.lower()
+    if "profit to cash conversion and free cash flow" not in lower:
+        return False
+    if parse_ir_adjusted_cash_flow_bridge(body):
+        return False
+    profit_to_cash = parse_ir_profit_to_cash_bridge(body)
+    if profit_to_cash and any(
+        str(row.get("label", "")).startswith("free_cash_flow")
+        for row in profit_to_cash.get("lines") or []
+    ):
+        return False
+    tail = body[-160:]
+    if re.search(r"Pension fundin\s*$", tail, re.IGNORECASE):
+        return True
+    if (
+        "profit to cash conversion and free cash flow" in lower
+        and "free cash flow" not in lower[-900:]
+    ):
+        return True
+    return False
 
 
 def _ir_allowlist_row_needs_body_refetch(row: dict[str, Any], bodies_dir: Path) -> bool:
@@ -5068,15 +5098,22 @@ _FCF_DIVISION_LABELS = (
     "group_items",
     "total",
 )
-_SEGMENT_REVENUE_HEADER_RE = re.compile(
-    r"\b("
-    r"Segmental core revenue|Segment revenue|Revenue by (?:business )?segment|"
-    r"Total Studios revenue|Total M&E revenue"
-    r")\b",
-    re.IGNORECASE,
+_SEGMENT_REVENUE_HEADER_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
+    (re.compile(r"\bTotal Studios revenue\d*\b", re.IGNORECASE), "total_studios_revenue"),
+    (re.compile(r"\bTotal M&E revenue\b", re.IGNORECASE), "total_me_revenue"),
+    (re.compile(r"\bITV Studios revenue\d*\b", re.IGNORECASE), "itv_studios_revenue"),
+    (re.compile(r"\bM&E revenue\b", re.IGNORECASE), "me_revenue"),
+    (re.compile(r"\bSegmental core revenue\b", re.IGNORECASE), "segmental_core_revenue"),
+    (re.compile(r"\bRevenue by (?:business )?segment\b", re.IGNORECASE), "revenue_by_segment"),
+    (re.compile(r"\bSegment revenue\b", re.IGNORECASE), "segment_revenue"),
 )
 _SEGMENT_REVENUE_LINE_RE = re.compile(
     r"^\s*([A-Za-z][A-Za-z0-9 \.&'-]+?)\s+([\d,]+(?:\.\d+)?)\s+([\d,]+(?:\.\d+)?)\s*$"
+)
+_ITV_STUDIOS_SEGMENT_LINE_RE = re.compile(
+    r"^\s*(Studios UK|Studios US|International|Global Partnerships)\s+"
+    r"([\d,]+(?:\.\d+)?)\s+([\d,]+(?:\.\d+)?)\b",
+    re.IGNORECASE | re.MULTILINE,
 )
 _GEOGRAPHIC_REGION_NAMES = (
     "Island of Ireland",
@@ -5228,42 +5265,76 @@ def parse_ir_fcf_division_bridge(body_text: str) -> dict[str, Any] | None:
     return None
 
 
-def parse_ir_segment_revenue_splits(body_text: str) -> dict[str, Any] | None:
-    """Parse segment revenue split tables from IR presentation PDF extracts."""
-    if not body_text or not body_text.strip():
-        return None
-    match = _SEGMENT_REVENUE_HEADER_RE.search(body_text)
-    if match is None:
-        return None
-    section = body_text[match.start() : match.start() + 900]
-    currency = "USD" if "$" in section[:250] else "GBP"
+def _find_segment_revenue_anchor(body_text: str) -> tuple[int, str] | None:
+    """Prefer issuer segment totals over footnote 'segment revenue' mentions."""
+    best: tuple[int, str] | None = None
+    for pattern, split_type in _SEGMENT_REVENUE_HEADER_PATTERNS:
+        match = pattern.search(body_text)
+        if match is None:
+            continue
+        if best is None or match.start() < best[0]:
+            best = (match.start(), split_type)
+    return best
+
+
+def _parse_itv_studios_segment_block(body_text: str, anchor: int) -> list[dict[str, Any]]:
+    """Parse ITV Studios UK/US/International/Global Partnerships revenue pairs."""
+    window = body_text[max(0, anchor - 900) : anchor + 200]
     segments: list[dict[str, Any]] = []
-    for line in section.splitlines()[1:]:
-        if re.match(r"^\s*Total\b", line, re.IGNORECASE):
-            break
-        row_match = _SEGMENT_REVENUE_LINE_RE.match(line)
-        if row_match is None:
-            continue
-        name = row_match.group(1).strip()
-        if name.lower() in {"total", "group", "notes"}:
-            continue
+    for row_match in _ITV_STUDIOS_SEGMENT_LINE_RE.finditer(window):
         current = _parse_table_number(row_match.group(2))
         prior = _parse_table_number(row_match.group(3))
         if current is None or prior is None:
             continue
         segments.append(
             {
-                "segment": name,
+                "segment": row_match.group(1).strip(),
                 "revenue_current": current,
                 "revenue_prior": prior,
             }
         )
-        if len(segments) >= 8:
-            break
+    return segments
+
+
+def parse_ir_segment_revenue_splits(body_text: str) -> dict[str, Any] | None:
+    """Parse segment revenue split tables from IR presentation PDF extracts."""
+    if not body_text or not body_text.strip():
+        return None
+    anchor = _find_segment_revenue_anchor(body_text)
+    if anchor is None:
+        return None
+    start, split_type = anchor
+    section = body_text[start : start + 900]
+    currency = "USD" if "$" in section[:250] else "GBP"
+    segments = _parse_itv_studios_segment_block(body_text, start)
+    if len(segments) < 2:
+        segments = []
+        for line in section.splitlines()[1:]:
+            if re.match(r"^\s*Total\b", line, re.IGNORECASE):
+                break
+            row_match = _SEGMENT_REVENUE_LINE_RE.match(line)
+            if row_match is None:
+                continue
+            name = row_match.group(1).strip()
+            if name.lower() in {"total", "group", "notes"}:
+                continue
+            current = _parse_table_number(row_match.group(2))
+            prior = _parse_table_number(row_match.group(3))
+            if current is None or prior is None:
+                continue
+            segments.append(
+                {
+                    "segment": name,
+                    "revenue_current": current,
+                    "revenue_prior": prior,
+                }
+            )
+            if len(segments) >= 8:
+                break
     if len(segments) < 2:
         return None
     return {
-        "split_type": re.sub(r"\s+", "_", match.group(1).strip().lower()),
+        "split_type": split_type,
         "currency": currency,
         "segments": segments,
         "parse_confidence": "high" if len(segments) >= 3 else "medium",
@@ -5392,6 +5463,155 @@ def parse_ir_adjusted_cash_flow_bridge(body_text: str) -> dict[str, Any] | None:
         },
         "parse_confidence": "high",
     }
+
+
+_PROFIT_TO_CASH_OPERATING_TABLE_RE = re.compile(
+    r"Adjusted EBITA\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+"
+    r"Working capital movement[^\n]*\(\s*(\d+(?:\.\d+)?)\)[^\n]*\(\s*(\d+(?:\.\d+)?)\)\s+"
+    r"(?:Adjustment for production tax credits\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+)?"
+    r"Depreciation\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+"
+    r"Share-based compensation\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+"
+    r"Acquisition of property[^\n]+\(\s*(\d+(?:\.\d+)?)\)[^\n]*\(\s*(\d+(?:\.\d+)?)\)\s+"
+    r"Lease liability payments[^\n]+\(\s*(\d+(?:\.\d+)?)\)[^\n]*\(\s*(\d+(?:\.\d+)?)\)\s+"
+    r"Adjusted cash flow\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)",
+    re.IGNORECASE | re.DOTALL,
+)
+_PROFIT_TO_CASH_RATIO_INLINE_RE = re.compile(
+    r"Profit to cash ratio\s+(\d+(?:\.\d+)?)\s*%\s+(\d+(?:\.\d+)?)\s*%",
+    re.IGNORECASE,
+)
+_ORDINARY_DIVIDEND_POLICY_RE = re.compile(
+    r"ordinary dividend of\s+([\d.]+)\s*p(?:er share)?",
+    re.IGNORECASE,
+)
+_PROPOSED_DIVIDEND_CASH_RE = re.compile(
+    r"c\.?\s*£?\s*([\d,]+)\s*m(?:illion)?",
+    re.IGNORECASE,
+)
+_FINAL_DIVIDEND_PROPOSED_RE = re.compile(
+    r"final dividend of\s+([\d.]+)\s*p",
+    re.IGNORECASE,
+)
+_FINANCIAL_HIGHLIGHTS_ORDINARY_DIVIDEND_RE = re.compile(
+    r"Ordinary dividend\s+([\d.]+)\s*p\s+([\d.]+)\s*p",
+    re.IGNORECASE,
+)
+
+
+def parse_ir_profit_to_cash_bridge(body_text: str) -> dict[str, Any] | None:
+    """Parse ITV-style profit-to-cash operating bridge and optional FCF walk."""
+    if not body_text or not _PROFIT_TO_CASH_SECTION_RE.search(body_text):
+        return None
+    match = _PROFIT_TO_CASH_OPERATING_TABLE_RE.search(body_text)
+    if match is None:
+        return None
+    values = [float(value) for value in match.groups() if value is not None]
+    if len(values) == 16:
+        (
+            ebita_current,
+            ebita_prior,
+            wc_current,
+            wc_prior,
+            _tax_credit_current,
+            _tax_credit_prior,
+            depreciation_current,
+            depreciation_prior,
+            sbc_current,
+            sbc_prior,
+            capex_current,
+            capex_prior,
+            lease_current,
+            lease_prior,
+            adj_cf_current,
+            adj_cf_prior,
+        ) = values
+    elif len(values) == 14:
+        (
+            ebita_current,
+            ebita_prior,
+            wc_current,
+            wc_prior,
+            depreciation_current,
+            depreciation_prior,
+            sbc_current,
+            sbc_prior,
+            capex_current,
+            capex_prior,
+            lease_current,
+            lease_prior,
+            adj_cf_current,
+            adj_cf_prior,
+        ) = values
+    else:
+        return None
+    lines: list[dict[str, Any]] = [
+        {"label": "adjusted_ebita_current", "amount_millions": ebita_current},
+        {"label": "adjusted_ebita_prior", "amount_millions": ebita_prior},
+        {"label": "working_capital_movement_current", "amount_millions": -wc_current},
+        {"label": "working_capital_movement_prior", "amount_millions": -wc_prior},
+        {"label": "depreciation_current", "amount_millions": depreciation_current},
+        {"label": "depreciation_prior", "amount_millions": depreciation_prior},
+        {"label": "share_based_compensation_current", "amount_millions": sbc_current},
+        {"label": "share_based_compensation_prior", "amount_millions": sbc_prior},
+        {"label": "capex_current", "amount_millions": -capex_current},
+        {"label": "capex_prior", "amount_millions": -capex_prior},
+        {"label": "lease_payments_current", "amount_millions": -lease_current},
+        {"label": "lease_payments_prior", "amount_millions": -lease_prior},
+        {"label": "adjusted_cash_flow_current", "amount_millions": adj_cf_current},
+        {"label": "adjusted_cash_flow_prior", "amount_millions": adj_cf_prior},
+    ]
+    derived: dict[str, Any] = {
+        "adjusted_cash_flow_change_millions": adj_cf_current - adj_cf_prior,
+    }
+    ratio_match = _PROFIT_TO_CASH_RATIO_INLINE_RE.search(
+        body_text[match.start() : match.end() + 400]
+    )
+    if ratio_match:
+        derived["profit_to_cash_ratio_current_pct"] = float(ratio_match.group(1))
+        derived["profit_to_cash_ratio_prior_pct"] = float(ratio_match.group(2))
+
+    fcf_tail = parse_ir_adjusted_cash_flow_bridge(body_text)
+    confidence = "medium"
+    if fcf_tail is not None:
+        confidence = "high"
+        for row in fcf_tail.get("lines") or []:
+            if str(row.get("label", "")).startswith("free_cash_flow"):
+                lines.append(row)
+        derived.update(fcf_tail.get("derived") or {})
+    return {
+        "bridge_type": "profit_to_cash_bridge",
+        "currency": "GBP",
+        "lines": lines,
+        "derived": derived,
+        "parse_confidence": confidence,
+    }
+
+
+def parse_ir_dividend_policy(body_text: str) -> dict[str, Any] | None:
+    """Extract proposed ordinary/final dividend policy lines from IR results decks."""
+    if not body_text or not body_text.strip():
+        return None
+    policy: dict[str, Any] = {"currency": "GBP", "parse_confidence": "medium"}
+    window = body_text[:12000]
+    for match in _ORDINARY_DIVIDEND_POLICY_RE.finditer(window):
+        policy["ordinary_dividend_pence"] = float(match.group(1))
+        tail = window[match.start() : match.end() + 120]
+        cash_match = _PROPOSED_DIVIDEND_CASH_RE.search(tail)
+        if cash_match:
+            policy["proposed_cash_millions"] = _parse_table_number(cash_match.group(1))
+        break
+    final_match = _FINAL_DIVIDEND_PROPOSED_RE.search(window)
+    if final_match:
+        policy["final_dividend_pence"] = float(final_match.group(1))
+    highlights = _FINANCIAL_HIGHLIGHTS_ORDINARY_DIVIDEND_RE.search(window)
+    if highlights and "ordinary_dividend_pence" not in policy:
+        policy["ordinary_dividend_pence"] = float(highlights.group(1))
+        policy["prior_ordinary_dividend_pence"] = float(highlights.group(2))
+    if "ordinary_dividend_pence" not in policy and "final_dividend_pence" not in policy:
+        return None
+    if policy.get("proposed_cash_millions") and policy.get("ordinary_dividend_pence"):
+        policy["parse_confidence"] = "high"
+    return policy
 
 
 def parse_ir_operating_cash_flow_highlights(body_text: str) -> dict[str, Any] | None:
@@ -5523,6 +5743,7 @@ def _write_ir_presentation_metrics_payload(
     payload["bridge_count"] = len(payload.get("bridges") or [])
     payload["segment_split_count"] = len(payload.get("segment_revenue_splits") or [])
     payload["lease_maturity_count"] = len(payload.get("ifrs_16_lease_maturity") or [])
+    payload["dividend_policy_count"] = len(payload.get("dividend_policy") or [])
     if sources_dir is not None:
         write_json(
             Path(sources_dir) / "ir_presentation_metrics.json",
@@ -5553,6 +5774,7 @@ def extract_ir_presentation_metrics(
         "bridges": [],
         "segment_revenue_splits": [],
         "ifrs_16_lease_maturity": [],
+        "dividend_policy": [],
         "mandatory": bool(fetch_filings_ir_allowlist(ticker)),
     }
     if not index_path.exists():
@@ -5588,9 +5810,13 @@ def extract_ir_presentation_metrics(
         cash_bridge = parse_ir_cash_bridge_slides(body_text)
         if cash_bridge:
             payload["bridges"].append({**source_meta, **cash_bridge})
-        adjusted_cash_bridge = parse_ir_adjusted_cash_flow_bridge(body_text)
-        if adjusted_cash_bridge:
-            payload["bridges"].append({**source_meta, **adjusted_cash_bridge})
+        profit_to_cash_bridge = parse_ir_profit_to_cash_bridge(body_text)
+        if profit_to_cash_bridge:
+            payload["bridges"].append({**source_meta, **profit_to_cash_bridge})
+        else:
+            adjusted_cash_bridge = parse_ir_adjusted_cash_flow_bridge(body_text)
+            if adjusted_cash_bridge:
+                payload["bridges"].append({**source_meta, **adjusted_cash_bridge})
         ocf_highlight = parse_ir_operating_cash_flow_highlights(body_text)
         if ocf_highlight:
             payload["bridges"].append({**source_meta, **ocf_highlight})
@@ -5612,6 +5838,9 @@ def extract_ir_presentation_metrics(
         lease_table = parse_ir_ifrs16_lease_maturity(body_text)
         if lease_table:
             payload["ifrs_16_lease_maturity"].append({**source_meta, **lease_table})
+        dividend_policy = parse_ir_dividend_policy(body_text)
+        if dividend_policy:
+            payload["dividend_policy"].append({**source_meta, **dividend_policy})
 
     _write_ir_presentation_metrics_payload(payload, sources_dir=sources_dir)
     return payload

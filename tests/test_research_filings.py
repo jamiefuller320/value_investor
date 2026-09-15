@@ -8583,6 +8583,151 @@ def test_parse_ir_adjusted_cash_flow_bridge_itv_slide():
     assert by_label["pension_funding_current"] == -65.0
 
 
+def test_eng_20260914_03_itv_profit_to_cash_and_dividend_parsers():
+    """eng-20260914-03: IR decks yield profit-to-cash, segment, and dividend policy metrics."""
+    from value_investor.research.filings import (
+        parse_ir_dividend_policy,
+        parse_ir_profit_to_cash_bridge,
+        parse_ir_segment_revenue_splits,
+    )
+
+    body = (
+        "Dividend: the Board has proposed a final dividend of 3.3p, giving an\n"
+        "ordinary dividend of 5.0p per share in line with last year, c.£190m, for the full year 2025\n"
+        "ITV STUDIOS\n"
+        "Studios UK 989 868 14 4\n"
+        "Studios US 310 391 (21) (18)\n"
+        "International 434 380 14 11\n"
+        "Global Partnerships 397 399 (1) 2\n"
+        "Total Studios revenue1 2,130 2,038 5 1\n"
+        "Profit to Cash Conversion and Free Cash Flow\n"
+        "Adjusted EBITA 534 542\n"
+        "Working capital movement (196) (144)\n"
+        "Adjustment for production tax credits 26 62\n"
+        "Depreciation 48 47\n"
+        "Share-based compensation 16 18\n"
+        "Acquisition of property, plant and equipment and intangible assets1 (54) (49)\n"
+        "Lease liability payments (including lease interest) (26) (25)\n"
+        "Adjusted cash flow 348 451\n"
+        "Profit to cash ratio 65% 83%\n"
+        "Adjusted cash flow 348 451\n"
+        "Net cash interest paid (excluding lease interest) (34) (18)\n"
+        "Adjusted cash tax2 (62) (105)\n"
+        "Pension funding (65) (3)\n"
+        "Free cash flow 187 325\n"
+    )
+    profit_to_cash = parse_ir_profit_to_cash_bridge(body)
+    assert profit_to_cash is not None
+    assert profit_to_cash["bridge_type"] == "profit_to_cash_bridge"
+    assert profit_to_cash["parse_confidence"] == "high"
+    by_label = {line["label"]: line["amount_millions"] for line in profit_to_cash["lines"]}
+    assert by_label["adjusted_cash_flow_current"] == 348.0
+    assert by_label["free_cash_flow_current"] == 187.0
+    assert profit_to_cash["derived"]["profit_to_cash_ratio_current_pct"] == 65.0
+
+    segments = parse_ir_segment_revenue_splits(body)
+    assert segments is not None
+    assert segments["split_type"] == "total_studios_revenue"
+    names = {row["segment"] for row in segments["segments"]}
+    assert names == {"Studios UK", "Studios US", "International", "Global Partnerships"}
+
+    dividend = parse_ir_dividend_policy(body)
+    assert dividend is not None
+    assert dividend["ordinary_dividend_pence"] == 5.0
+    assert dividend["final_dividend_pence"] == 3.3
+    assert dividend["proposed_cash_millions"] == 190.0
+
+
+def test_eng_20260914_03_ir_validation_rejects_truncated_fcf_bridge():
+    """eng-20260914-03: truncated IR PDF extracts fail validation so alternates/refetch run."""
+    import hashlib
+
+    from value_investor.research.filings import _validate_ir_allowlist_body_content
+
+    url = (
+        "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/"
+        "ITV%20Plc%202025%20FY%20Results%20Presentation.pdf"
+    )
+    row_id = f"ir_{hashlib.sha256(url.encode('utf-8')).hexdigest()[:16]}"
+    row = {
+        "id": row_id,
+        "url": url,
+        "headline": "IR allowlist document — ITV-Plc-2025-FY-Results-Presentation.pdf",
+        "period": "annual",
+    }
+    truncated = ("ITV plc Full Year Results 2025 presentation FY Results\n" * 12) + (
+        "Profit to Cash Conversion and Free Cash Flow\n"
+        "Adjusted cash flow 348 451\n"
+        "Net cash interest paid (excluding lease interest) (34) (18)\n"
+        "Adjusted cash tax2 (62) (105)\n"
+        "Pension fundin"
+    )
+    valid, reason = _validate_ir_allowlist_body_content(row, truncated, ticker="ITV.L")
+    assert valid is False
+    assert reason == "incomplete_fcf_bridge"
+
+
+def test_eng_20260914_03_extract_ir_presentation_metrics_itv_structured(tmp_path: Path):
+    from value_investor.research.filings import extract_ir_presentation_metrics
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    body_id = "ir_itv_fy25"
+    body = (
+        "ordinary dividend of 5.0p per share c.£190m\n"
+        "Studios UK 989 868\n"
+        "Total Studios revenue1 2,130 2,038\n"
+        "Profit to Cash Conversion and Free Cash Flow\n"
+        "Adjusted EBITA 534 542\n"
+        "Working capital movement (196) (144)\n"
+        "Depreciation 48 47\n"
+        "Share-based compensation 16 18\n"
+        "Acquisition of property, plant and equipment and intangible assets1 (54) (49)\n"
+        "Lease liability payments (including lease interest) (26) (25)\n"
+        "Adjusted cash flow 348 451\n"
+        "Profit to cash ratio 65% 83%\n"
+        "Adjusted cash flow 348 451\n"
+        "Net cash interest paid (excluding lease interest) (34) (18)\n"
+        "Adjusted cash tax2 (62) (105)\n"
+        "Pension funding (65) (3)\n"
+        "Free cash flow 187 325\n"
+    )
+    body_path = bodies_dir / f"{body_id}.txt"
+    body_path.write_text(body, encoding="utf-8")
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": body_id,
+                        "source": "ir_allowlist",
+                        "headline": "ITV FY2025 results presentation",
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    sources_dir = tmp_path / "sources"
+    sources_dir.mkdir()
+    metrics = extract_ir_presentation_metrics(
+        filings_dir,
+        "ITV.L",
+        sources_dir=sources_dir,
+    )
+    assert metrics["bridge_count"] >= 1
+    assert metrics["segment_split_count"] >= 1
+    assert metrics["dividend_policy_count"] == 1
+    bridge_types = {row["bridge_type"] for row in metrics["bridges"]}
+    assert "profit_to_cash_bridge" in bridge_types
+    saved = json.loads((sources_dir / "ir_presentation_metrics.json").read_text(encoding="utf-8"))
+    assert saved["dividend_policy"][0]["ordinary_dividend_pence"] == 5.0
+
+
 def test_fetch_filings_ir_allowlist_mgns_l(tmp_path: Path):
     """MGNS.L IR results decks are allowlisted for cash-flow bridge gap-fill."""
     allowlist_path = tmp_path / "empty_ir.json"
