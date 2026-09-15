@@ -1999,6 +1999,76 @@ def append_monitor_log_entry(
     return payload
 
 
+def _workflow_freshness_visual(row: dict[str, Any]) -> dict[str, str]:
+    """Email-safe colours for one workflow freshness row."""
+    stale = bool(row.get("stale"))
+    expected = bool(row.get("expected_today"))
+    unresolved = int(row.get("unresolved_failures_12h") or 0)
+    if stale and expected:
+        return {"label": "STALE", "fg": "#9b2c2c", "bg": "#fde8e8", "border": "#e8b4b4"}
+    if stale:
+        return {"label": "STALE", "fg": "#8a6d00", "bg": "#fff8e6", "border": "#e6d18a"}
+    if unresolved:
+        return {"label": "FAILURES", "fg": "#8a6d00", "bg": "#fff8e6", "border": "#e6d18a"}
+    if expected:
+        return {"label": "OK", "fg": "#1b7f3a", "bg": "#e8f5ec", "border": "#b8dfc4"}
+    return {"label": "OK", "fg": "#555555", "bg": "#f4f4f4", "border": "#dddddd"}
+
+
+def _workflow_freshness_notes(row: dict[str, Any]) -> str:
+    parts: list[str] = []
+    if row.get("stale"):
+        parts.append("overdue")
+    unresolved = int(row.get("unresolved_failures_12h") or 0)
+    if unresolved:
+        parts.append(f"{unresolved} unresolved failure(s)")
+    if not row.get("expected_today"):
+        parts.append("not scheduled today")
+    return "; ".join(parts)
+
+
+def format_workflow_freshness_html(rows: list[dict[str, Any]]) -> str:
+    """Colour-coded workflow freshness table for ops-monitor email."""
+    if not rows:
+        return ""
+    header = (
+        "<table style='border-collapse:collapse;width:100%;font-size:13px;margin-top:8px'>"
+        "<thead><tr style='background:#f0f0f0;text-align:left'>"
+        "<th style='padding:6px 8px;border:1px solid #ddd'>Status</th>"
+        "<th style='padding:6px 8px;border:1px solid #ddd'>Workflow</th>"
+        "<th style='padding:6px 8px;border:1px solid #ddd'>Last success</th>"
+        "<th style='padding:6px 8px;border:1px solid #ddd'>Age</th>"
+        "<th style='padding:6px 8px;border:1px solid #ddd'>Limit</th>"
+        "<th style='padding:6px 8px;border:1px solid #ddd'>Notes</th>"
+        "</tr></thead><tbody>"
+    )
+    body_rows: list[str] = []
+    for row in rows:
+        visual = _workflow_freshness_visual(row)
+        age = row.get("age_hours")
+        age_text = f"{age}h" if age is not None else "—"
+        if row.get("expected_today"):
+            limit_text = f"{row.get('max_age_hours')}h"
+        else:
+            limit_text = "—"
+        notes = _workflow_freshness_notes(row)
+        notes_cell = notes or "—"
+        last_at = row.get("last_success_at") or "never"
+        body_rows.append(
+            f"<tr style='background:{visual['bg']};color:#222'>"
+            f"<td style='padding:6px 8px;border:1px solid {visual['border']};"
+            f"font-weight:bold;color:{visual['fg']};white-space:nowrap'>{visual['label']}</td>"
+            f"<td style='padding:6px 8px;border:1px solid {visual['border']}'>{row.get('name')}</td>"
+            f"<td style='padding:6px 8px;border:1px solid {visual['border']};"
+            f"font-family:monospace;font-size:12px'>{last_at}</td>"
+            f"<td style='padding:6px 8px;border:1px solid {visual['border']}'>{age_text}</td>"
+            f"<td style='padding:6px 8px;border:1px solid {visual['border']}'>{limit_text}</td>"
+            f"<td style='padding:6px 8px;border:1px solid {visual['border']};color:#555'>"
+            f"{notes_cell}</td></tr>"
+        )
+    return header + "".join(body_rows) + "</tbody></table>"
+
+
 def format_ops_monitor_text(report: OpsMonitorReport) -> str:
     lines = [
         f"FTSE Ops Monitor — {report.run_at}",
@@ -2054,9 +2124,15 @@ def format_ops_monitor_text(report: OpsMonitorReport) -> str:
         lines.append("WORKFLOW FRESHNESS")
         lines.append("-" * 40)
         for row in report.workflow_checks:
-            flag = "STALE" if row.get("stale") else "ok"
+            visual = _workflow_freshness_visual(row)
+            flag = visual["label"]
+            notes = _workflow_freshness_notes(row)
+            age = row.get("age_hours")
+            age_part = f", age {age}h" if age is not None else ""
+            note_part = f" ({notes})" if notes else ""
             lines.append(
-                f"  [{flag}] {row.get('name')}: last success {row.get('last_success_at') or 'never'}"
+                f"  [{flag}] {row.get('name')}: last success "
+                f"{row.get('last_success_at') or 'never'}{age_part}{note_part}"
             )
         lines.append("")
     if report.should_dispatch_engineering:
@@ -2094,11 +2170,7 @@ def format_ops_monitor_html(report: OpsMonitorReport) -> str:
     fixes = "".join(
         f"<li>{item.get('action')}: {item.get('detail')}</li>" for item in report.auto_fixes
     )
-    workflows = "".join(
-        f"<li>{row.get('name')}: {row.get('last_success_at') or 'never'} "
-        f"{'(stale)' if row.get('stale') else ''}</li>"
-        for row in report.workflow_checks
-    )
+    workflows = format_workflow_freshness_html(report.workflow_checks)
     needs_heading = (
         "Pending today (email deferred)" if report.email_deferred else "Needs investigation"
     )
@@ -2126,7 +2198,7 @@ def format_ops_monitor_html(report: OpsMonitorReport) -> str:
   {needs_block}
   {healed_block}
   {"<h3>Auto-fixes</h3><ul>" + fixes + "</ul>" if fixes else ""}
-  {"<h3>Workflow freshness</h3><ul>" + workflows + "</ul>" if workflows else ""}
+  {"<h3>Workflow freshness</h3>" + workflows if workflows else ""}
   {"<p><strong>Engineering queue ready</strong> for next supervised PR.</p>" if report.should_dispatch_engineering else ""}
 </body></html>"""
 
