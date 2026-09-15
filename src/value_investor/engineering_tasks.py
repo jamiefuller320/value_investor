@@ -977,8 +977,10 @@ def compile_engineering_tasks(
     for candidate in (committed_path, tasks_path):
         if Path(candidate).exists():
             existing_meta = load_engineering_tasks(candidate)
-            if existing_meta.get("tasks") or existing_meta.get("queue_clearing") or existing_meta.get(
-                "traffic_control"
+            if (
+                existing_meta.get("tasks")
+                or existing_meta.get("queue_clearing")
+                or existing_meta.get("traffic_control")
             ):
                 break
     from value_investor.project_traffic import preserve_queue_meta
