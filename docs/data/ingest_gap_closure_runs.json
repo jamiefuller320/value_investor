@@ -10321,8 +10321,115 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260915-03",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "SAN.PA",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "SAN.PA"
+        ],
+        "market_id": "euro_stoxx50",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260915-03",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-15T16:53:15.297760+00:00",
+      "completed_at": "2026-09-15T16:54:16.027040+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "SAN.PA"
+        ],
+        "results": [
+          {
+            "ticker": "SAN.PA",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 6,
+              "filings_with_body": 5,
+              "indexed_without_body": 1
+            },
+            "after": {
+              "filings_total": 6,
+              "filings_with_body": 5,
+              "indexed_without_body": 1
+            },
+            "improved": false,
+            "regime": "euro_filings",
+            "filings_summary": {
+              "total": 6,
+              "annual": 2,
+              "interim": 1,
+              "trading_update": 0,
+              "other": 3,
+              "with_body": 5,
+              "period_coverage": {
+                "annual": {
+                  "total": 2,
+                  "with_body": 2
+                },
+                "interim": {
+                  "total": 1,
+                  "with_body": 1
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 3,
+                  "with_body": 2
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 5,
+              "with_body_after": 5,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 3,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "SAN.PA",
+            "with_body_before": 5,
+            "with_body_after": 5,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-15T13:44:24.409517+00:00",
+  "updated_at": "2026-09-15T16:54:16.027051+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
