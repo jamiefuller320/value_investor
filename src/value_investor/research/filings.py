@@ -5281,6 +5281,201 @@ def parse_ir_fcf_division_bridge(body_text: str) -> dict[str, Any] | None:
     return None
 
 
+_GRAFTON_FCF_TABLE_MARKER_RE = re.compile(
+    r"Free Cash Flow[\s\n]+20\d{2}[\s\n]+£['\u2019]?m",
+    re.IGNORECASE,
+)
+_GRAFTON_FCF_TABLE_END_RE = re.compile(
+    r"Adjusted Return on Capital Employed",
+    re.IGNORECASE,
+)
+_GRAFTON_FCF_ROW_LABELS: tuple[tuple[str, str], ...] = (
+    (r"Cash generated from operations", "cash_generated_from_operations"),
+    (r"Replacement capital expenditure", "replacement_capital_expenditure"),
+    (r"Proceeds on sale of property, plant and equipment", "ppe_disposal_proceeds"),
+    (
+        r"Proceeds on sale of held for sale/investment properties",
+        "investment_property_disposal_proceeds",
+    ),
+    (r"Interest received", "interest_received"),
+    (r"Interest paid", "interest_paid"),
+    (r"Payment of lease liabilities", "lease_liability_payments"),
+    (r"Deferred acquisition consideration paid", "deferred_acquisition_consideration_paid"),
+    (r"Income taxes paid", "income_taxes_paid"),
+    (r"Free cash flow", "free_cash_flow"),
+)
+_MGNS_APPENDIX_CASH_FLOW_RE = re.compile(r"4\.\s*Cash flow\.", re.IGNORECASE)
+_MGNS_APPENDIX_CASH_FLOW_END_RE = re.compile(r"5\.\s*Net cash\.", re.IGNORECASE)
+_MGNS_CASH_FLOW_ROW_LABELS: tuple[tuple[str, str], ...] = (
+    (r"Operating profit\s*[–-]\s*adjusted", "adjusted_operating_profit"),
+    (r"Depreciation", "depreciation"),
+    (r"Share option expense", "share_option_expense"),
+    (r"Change in working capital", "change_in_working_capital"),
+    (r"Net capital expenditure", "net_capital_expenditure"),
+    (r"Operating cash flow", "operating_cash_flow"),
+    (r"Income taxes paid", "income_taxes_paid"),
+    (r"Net interest received", "net_interest_received"),
+    (r"Free cash flow", "free_cash_flow"),
+)
+_MANAGEMENT_FCF_DEFINITION_RE = re.compile(
+    r"['\u2018\u2019]?"
+    r"(Free cash flow|Adjusted operating profit|Adjusted earnings|Adjusted EPS|"
+    r"Adjusted net debt(?:/\(cash\))?|Rail adjusted EBITDA|Return on Capital Employed)"
+    r"['\u2018\u2019]?\s+is\s+([^\n•]+)",
+    re.IGNORECASE,
+)
+_GRAFTON_FCF_DEFINITION_RE = re.compile(
+    r"Free cash flow is\s+([^\n•]+)",
+    re.IGNORECASE,
+)
+
+
+def _parse_ir_labeled_amount_pair_line(
+    line: str,
+    label_patterns: tuple[tuple[str, str], ...],
+) -> dict[str, Any] | None:
+    stripped = line.strip()
+    if not stripped:
+        return None
+    for pattern, slug in label_patterns:
+        match = re.match(rf"^{pattern}\s+(.+)$", stripped, re.IGNORECASE)
+        if match is None:
+            continue
+        amounts = _parse_signed_bridge_amounts(match.group(1))
+        if len(amounts) < 2:
+            continue
+        return {
+            "label": slug,
+            "amount_current": amounts[0],
+            "amount_prior": amounts[1],
+        }
+    return None
+
+
+def parse_ir_grafton_free_cash_flow_bridge(body_text: str) -> dict[str, Any] | None:
+    """Parse Grafton-style appendix free-cash-flow reconciliation tables."""
+    if not body_text or not body_text.strip():
+        return None
+    marker = _GRAFTON_FCF_TABLE_MARKER_RE.search(body_text)
+    if marker is None:
+        return None
+    tail = body_text[marker.start() :]
+    end = _GRAFTON_FCF_TABLE_END_RE.search(tail)
+    section = tail[: end.start()] if end else tail[:2500]
+    lines: list[dict[str, Any]] = []
+    for raw_line in section.splitlines():
+        parsed = _parse_ir_labeled_amount_pair_line(raw_line, _GRAFTON_FCF_ROW_LABELS)
+        if parsed is None:
+            continue
+        lines.append(
+            {
+                "label": parsed["label"],
+                "amount_millions": parsed["amount_current"],
+                "prior_amount_millions": parsed["amount_prior"],
+            }
+        )
+    if not lines:
+        return None
+    by_label = {row["label"]: row for row in lines}
+    fcf_row = by_label.get("free_cash_flow")
+    derived: dict[str, Any] = {}
+    if fcf_row is not None:
+        derived["free_cash_flow_current_millions"] = fcf_row["amount_millions"]
+        derived["free_cash_flow_prior_millions"] = fcf_row.get("prior_amount_millions")
+        derived["total_fcf_millions"] = fcf_row["amount_millions"]
+    ocf = by_label.get("cash_generated_from_operations")
+    capex = by_label.get("replacement_capital_expenditure")
+    if ocf is not None and capex is not None:
+        derived["operating_minus_replacement_capex_millions"] = (
+            ocf["amount_millions"] + capex["amount_millions"]
+        )
+    return {
+        "bridge_type": "management_free_cash_flow_bridge",
+        "currency": "GBP",
+        "lines": lines,
+        "derived": derived,
+        "parse_confidence": "high" if fcf_row is not None else "medium",
+    }
+
+
+def parse_ir_mgns_cash_flow_bridge(body_text: str) -> dict[str, Any] | None:
+    """Parse Morgan Sindall appendix cash-flow tables (operating cash flow to FCF)."""
+    if not body_text or not body_text.strip():
+        return None
+    start_match = _MGNS_APPENDIX_CASH_FLOW_RE.search(body_text)
+    if start_match is None:
+        return None
+    tail = body_text[start_match.start() :]
+    end_match = _MGNS_APPENDIX_CASH_FLOW_END_RE.search(tail)
+    section = tail[: end_match.start()] if end_match else tail[:4000]
+    lines: list[dict[str, Any]] = []
+    for raw_line in section.splitlines():
+        parsed = _parse_ir_labeled_amount_pair_line(raw_line, _MGNS_CASH_FLOW_ROW_LABELS)
+        if parsed is None:
+            continue
+        lines.append(
+            {
+                "label": parsed["label"],
+                "amount_millions": parsed["amount_current"],
+                "prior_amount_millions": parsed["amount_prior"],
+            }
+        )
+    if not lines:
+        return None
+    by_label = {row["label"]: row for row in lines}
+    fcf_row = by_label.get("free_cash_flow")
+    ocf_row = by_label.get("operating_cash_flow")
+    derived: dict[str, Any] = {}
+    if fcf_row is not None:
+        derived["free_cash_flow_current_millions"] = fcf_row["amount_millions"]
+        derived["free_cash_flow_prior_millions"] = fcf_row.get("prior_amount_millions")
+        derived["total_fcf_millions"] = fcf_row["amount_millions"]
+    if ocf_row is not None and fcf_row is not None:
+        derived["operating_to_free_cash_flow_delta_millions"] = (
+            fcf_row["amount_millions"] - ocf_row["amount_millions"]
+        )
+    return {
+        "bridge_type": "management_cash_flow_bridge",
+        "currency": "GBP",
+        "lines": lines,
+        "derived": derived,
+        "parse_confidence": "high" if fcf_row is not None and ocf_row is not None else "medium",
+    }
+
+
+def parse_ir_management_fcf_definitions(body_text: str) -> list[dict[str, Any]]:
+    """Extract issuer-defined FCF and adjacent KPI definitions from IR decks."""
+    if not body_text or not body_text.strip():
+        return []
+    definitions: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for match in _MANAGEMENT_FCF_DEFINITION_RE.finditer(body_text):
+        metric_raw = match.group(1).strip()
+        metric = re.sub(r"[^a-z0-9]+", "_", metric_raw.lower()).strip("_")
+        definition = re.sub(r"\s+", " ", match.group(2).strip())
+        if not metric or not definition or metric in seen:
+            continue
+        seen.add(metric)
+        definitions.append(
+            {
+                "metric": metric,
+                "definition": definition,
+                "parse_confidence": "high",
+            }
+        )
+    grafton = _GRAFTON_FCF_DEFINITION_RE.search(body_text)
+    if grafton and "free_cash_flow" not in seen:
+        definition = re.sub(r"\s+", " ", grafton.group(1).strip())
+        definitions.append(
+            {
+                "metric": "free_cash_flow",
+                "definition": definition,
+                "parse_confidence": "high",
+            }
+        )
+    return definitions
+
+
 def _find_segment_revenue_anchor(body_text: str) -> tuple[int, str] | None:
     """Prefer issuer segment totals over footnote 'segment revenue' mentions."""
     best: tuple[int, str] | None = None
@@ -5508,6 +5703,22 @@ _FINAL_DIVIDEND_PROPOSED_RE = re.compile(
     r"final dividend of\s+([\d.]+)\s*p",
     re.IGNORECASE,
 )
+_PROPOSED_FINAL_DIVIDEND_RE = re.compile(
+    r"proposed a final dividend of\s+([\d.]+)\s*p",
+    re.IGNORECASE,
+)
+_FULL_YEAR_DIVIDEND_RE = re.compile(
+    r"Full year dividend of\s+([\d.]+)\s*p",
+    re.IGNORECASE,
+)
+_TOTAL_DIVIDEND_PER_SHARE_RE = re.compile(
+    r"Total dividend per share\s+([\d.]+)\s*p\s+([\d.]+)\s*p",
+    re.IGNORECASE,
+)
+_DIVIDEND_COVER_RANGE_RE = re.compile(
+    r"dividend cover is expected to be in the range of\s+([\d.]+)x\s*-\s*([\d.]+)x",
+    re.IGNORECASE,
+)
 _FINANCIAL_HIGHLIGHTS_ORDINARY_DIVIDEND_RE = re.compile(
     r"Ordinary dividend\s+([\d.]+)\s*p\s+([\d.]+)\s*p",
     re.IGNORECASE,
@@ -5608,7 +5819,7 @@ def parse_ir_dividend_policy(body_text: str) -> dict[str, Any] | None:
     if not body_text or not body_text.strip():
         return None
     policy: dict[str, Any] = {"currency": "GBP", "parse_confidence": "medium"}
-    window = body_text[:12000]
+    window = body_text[:48000]
     for match in _ORDINARY_DIVIDEND_POLICY_RE.finditer(window):
         policy["ordinary_dividend_pence"] = float(match.group(1))
         tail = window[match.start() : match.end() + 120]
@@ -5619,13 +5830,35 @@ def parse_ir_dividend_policy(body_text: str) -> dict[str, Any] | None:
     final_match = _FINAL_DIVIDEND_PROPOSED_RE.search(window)
     if final_match:
         policy["final_dividend_pence"] = float(final_match.group(1))
+    proposed_final = _PROPOSED_FINAL_DIVIDEND_RE.search(window)
+    if proposed_final:
+        policy["final_dividend_pence"] = float(proposed_final.group(1))
+    full_year = _FULL_YEAR_DIVIDEND_RE.search(window)
+    if full_year:
+        policy["full_year_dividend_pence"] = float(full_year.group(1))
+    total_dps = _TOTAL_DIVIDEND_PER_SHARE_RE.search(window)
+    if total_dps:
+        policy["total_dividend_pence"] = float(total_dps.group(1))
+        policy["prior_total_dividend_pence"] = float(total_dps.group(2))
+    cover_range = _DIVIDEND_COVER_RANGE_RE.search(window)
+    if cover_range:
+        policy["dividend_cover_min"] = float(cover_range.group(1))
+        policy["dividend_cover_max"] = float(cover_range.group(2))
     highlights = _FINANCIAL_HIGHLIGHTS_ORDINARY_DIVIDEND_RE.search(window)
     if highlights and "ordinary_dividend_pence" not in policy:
         policy["ordinary_dividend_pence"] = float(highlights.group(1))
         policy["prior_ordinary_dividend_pence"] = float(highlights.group(2))
-    if "ordinary_dividend_pence" not in policy and "final_dividend_pence" not in policy:
+    if (
+        "ordinary_dividend_pence" not in policy
+        and "final_dividend_pence" not in policy
+        and "full_year_dividend_pence" not in policy
+        and "total_dividend_pence" not in policy
+        and "dividend_cover_min" not in policy
+    ):
         return None
     if policy.get("proposed_cash_millions") and policy.get("ordinary_dividend_pence"):
+        policy["parse_confidence"] = "high"
+    elif policy.get("total_dividend_pence") or policy.get("full_year_dividend_pence"):
         policy["parse_confidence"] = "high"
     return policy
 
@@ -5760,6 +5993,9 @@ def _write_ir_presentation_metrics_payload(
     payload["segment_split_count"] = len(payload.get("segment_revenue_splits") or [])
     payload["lease_maturity_count"] = len(payload.get("ifrs_16_lease_maturity") or [])
     payload["dividend_policy_count"] = len(payload.get("dividend_policy") or [])
+    payload["management_fcf_definition_count"] = len(
+        payload.get("management_fcf_definitions") or []
+    )
     if sources_dir is not None:
         write_json(
             Path(sources_dir) / "ir_presentation_metrics.json",
@@ -5791,6 +6027,7 @@ def extract_ir_presentation_metrics(
         "segment_revenue_splits": [],
         "ifrs_16_lease_maturity": [],
         "dividend_policy": [],
+        "management_fcf_definitions": [],
         "mandatory": bool(fetch_filings_ir_allowlist(ticker)),
     }
     if not index_path.exists():
@@ -5839,6 +6076,14 @@ def extract_ir_presentation_metrics(
         fcf_division = parse_ir_fcf_division_bridge(body_text)
         if fcf_division:
             payload["bridges"].append({**source_meta, **fcf_division})
+        grafton_fcf = parse_ir_grafton_free_cash_flow_bridge(body_text)
+        if grafton_fcf:
+            payload["bridges"].append({**source_meta, **grafton_fcf})
+        mgns_cash_flow = parse_ir_mgns_cash_flow_bridge(body_text)
+        if mgns_cash_flow:
+            payload["bridges"].append({**source_meta, **mgns_cash_flow})
+        for definition in parse_ir_management_fcf_definitions(body_text):
+            payload["management_fcf_definitions"].append({**source_meta, **definition})
         segment_split = parse_ir_segment_revenue_splits(body_text)
         if segment_split:
             payload["segment_revenue_splits"].append({**source_meta, **segment_split})
