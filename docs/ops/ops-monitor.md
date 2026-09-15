@@ -20,6 +20,7 @@ artifacts, ingest stall detection, and the engineering queue.
 - Grade parked engineering tasks and auto-cancel duplicates of merged work
 - Quarantine corrupt or duplicate backtest history snapshots (see [backtest-health.md](backtest-health.md))
 - Reconcile engineering queue sync issues and redispatch when the agent failed on a stale task id (see [engineering-sync.md](engineering-sync.md))
+- Detect **queue merge-sync lag** (`pr_open`/`open` after GitHub merge) and hand it to the project-traffic PM controller; **email only if PM remediation cannot clear it**
 - Suppress “recent workflow failure” alerts while a recovery run for that workflow is already in flight
 - Suppress workflow-overdue findings while a run is in flight, or before that workflow’s `WORKFLOW_EMAIL_READY_UTC` slot (Monday morning cliff / pending primary cron)
 - `workflow_dispatch` overdue **ingest-loop** / **paper-auto** after email-ready when no run is active

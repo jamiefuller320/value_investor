@@ -1522,3 +1522,72 @@ def test_repair_published_structured_verdict_to_committed(tmp_path: Path):
     assert payload["research_verdict"] == "neutral"
     assert payload["research_confidence"] == 0.55
     assert (ticker_dir / "research.md").exists()
+
+
+def test_check_engineering_queue_reports_merge_sync_lag(tmp_path: Path, monkeypatch):
+    from value_investor.project_traffic import QUEUE_MERGE_SYNC_FINDING_TITLE
+
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "eng-20260915-04",
+                        "status": "pr_open",
+                        "branch_name": "cursor/eng-20260915-04-1de3",
+                        "area": "ingest",
+                        "title": "cashflow",
+                        "summary": "x",
+                        "priority": "high",
+                        "priority_score": 50,
+                        "source": "test",
+                        "allowed_paths": ["src/value_investor/research/ingest.py"],
+                        "blocked_paths": [],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.list_merge_sync_lag_tasks",
+        lambda **kwargs: [
+            {
+                "task_id": "eng-20260915-04",
+                "branch": "cursor/eng-20260915-04-1de3",
+                "pr_number": 652,
+                "merged_at": "2026-09-15T13:49:04Z",
+            }
+        ],
+    )
+    findings, _ = check_engineering_queue(tasks_path=tasks_path, open_prs=[], token="x")
+    titles = [row.title for row in findings]
+    assert QUEUE_MERGE_SYNC_FINDING_TITLE in titles
+    sync = next(row for row in findings if row.title == QUEUE_MERGE_SYNC_FINDING_TITLE)
+    assert sync.auto_fixable is True
+    assert sync.severity == "warn"
+
+
+def test_send_ops_monitor_email_skips_when_sync_lag_healed():
+    from value_investor.ops_monitor import OpsMonitorReport, send_ops_monitor_email
+    from value_investor.project_traffic import QUEUE_MERGE_SYNC_FINDING_TITLE
+
+    report = OpsMonitorReport(
+        run_at="2026-09-15T14:00:00+00:00",
+        overall="ok",
+        findings=[
+            OpsFinding(
+                severity="warn",
+                category="engineering",
+                title=QUEUE_MERGE_SYNC_FINDING_TITLE,
+                summary="fixed",
+                auto_fixable=True,
+                fixed=True,
+                action_taken="project-traffic PM remediated",
+            )
+        ],
+    )
+    with patch("value_investor.ops_monitor.send_report_email") as send:
+        assert send_ops_monitor_email(report, only_if_not_ok=True) is False
+        send.assert_not_called()

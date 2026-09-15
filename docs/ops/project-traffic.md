@@ -22,6 +22,7 @@ slice of a PM agent.
 | Comment on stuck PRs requesting CI fix / conflict resolve | Yes |
 | Dispatch scoped `engineering-conflict-resolve.yml` for `cursor/eng-*` | Yes |
 | Rely on existing `ci-pr-autofix` / hunter-fix on CI failure | Yes (event-driven) |
+| Remediate queue merge-sync lag (`pr_open` after GitHub merge) via recover/mark-merged | Yes |
 | Merge PRs | **No** — keep restricted; loosen only with independent verification |
 | Broad Phase B/C self-healing / task invention | **No** — still deferred as L388 EOD gate agent |
 
@@ -109,6 +110,21 @@ source row. Trajectory labels: `on_track` | `blocked_by_pr_queue` | `watch_stall
 Loosening merge beyond scoped auto-merge should require **independent verification**
 (path guard + green CI + allowlist / hunter gate), not the same agent that authored
 the diff. Track as a deferred idea until traffic pause/resume has proven stable.
+
+
+
+## Queue merge-sync remediation
+
+When ops monitor sees engineering tasks still `open` / `pr_open` after their GitHub
+PR has merged (common briefly after human merge, or if the post-merge queue commit
+races), it **hands the finding to project-traffic**. Traffic runs
+`recover_engineering_queue` / mark-merged reconciliation.
+
+- If the lag clears → finding is marked fixed; ops monitor does **not** send a warn email for it.
+- If the lag remains → ops monitor keeps a warn finding and emails (existing only-if-not-ok path).
+
+This is deterministic queue bookkeeping, not merge authority and not a standing
+GitHub→agent listener.
 
 ## Related
 

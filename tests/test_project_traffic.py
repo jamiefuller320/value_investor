@@ -14,6 +14,7 @@ from value_investor.project_traffic import (
     format_daily_digest_markdown,
     is_traffic_pause_active,
     preserve_queue_meta,
+    remediate_queue_merge_sync,
     run_project_traffic,
 )
 from value_investor.storage import write_json
@@ -271,3 +272,69 @@ def test_daily_digest_reads_appraisal_strengths(tmp_path: Path):
     assert any("Library graduated" in row for row in digest["achieved"])
     assert digest["gaps"] == ["AI excess negative"]
     assert digest["next_actions"] == ["Accumulate marks"]
+
+
+def test_remediate_queue_merge_sync_marks_merged(tmp_path: Path, monkeypatch):
+    from value_investor.engineering_recovery import RecoveryResult
+
+    tasks_path = tmp_path / "engineering_tasks.json"
+    write_json(
+        tasks_path,
+        {
+            "tasks": [
+                {
+                    "id": "eng-20260915-04",
+                    "status": "pr_open",
+                    "branch_name": "cursor/eng-20260915-04-1de3",
+                    "area": "ingest",
+                    "title": "cashflow",
+                    "summary": "x",
+                    "priority": "high",
+                    "priority_score": 50,
+                    "source": "test",
+                    "allowed_paths": ["src/value_investor/research/ingest.py"],
+                    "blocked_paths": [],
+                }
+            ]
+        },
+        compact=False,
+    )
+    lag_payload = [
+        {
+            "task_id": "eng-20260915-04",
+            "branch": "cursor/eng-20260915-04-1de3",
+            "status": "pr_open",
+            "pr_number": 652,
+            "merged_at": "2026-09-15T13:49:04Z",
+        }
+    ]
+    state = {"cleared": False}
+
+    def fake_list(**kwargs):
+        return [] if state["cleared"] else list(lag_payload)
+
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.list_merge_sync_lag_tasks",
+        fake_list,
+    )
+    calls = {"n": 0}
+
+    def fake_recover(**kwargs):
+        calls["n"] += 1
+        state["cleared"] = True
+        return RecoveryResult(merged=["eng-20260915-04"])
+
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.recover_engineering_queue",
+        fake_recover,
+    )
+    lag, fixed, remaining, actions = remediate_queue_merge_sync(
+        tasks_path=tasks_path,
+        apply=True,
+        token="x",
+    )
+    assert lag == ["eng-20260915-04"]
+    assert fixed == ["eng-20260915-04"]
+    assert remaining == []
+    assert calls["n"] == 1
+    assert any(a.kind == "remediate_queue_merge_sync" for a in actions)
