@@ -87,12 +87,17 @@ ftse-project-traffic digest --write
 | Ops monitor | Also runs traffic on morning / 13:15 catch-up |
 | Manual | Actions → **FTSE Project Traffic** |
 
-Register after merge:
+Register on cron-job.org (primary):
 
 ```bash
-# Example cron-job.org import (adjust secrets)
-WORKFLOW=project-traffic.yml WORKFLOW_DISPATCH_PAT=… ./scripts/dispatch_github_workflow.sh
+WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… \
+  ./scripts/import_cron_jobs.py --job project-traffic-midday
+WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… \
+  ./scripts/import_cron_jobs.py --job project-traffic-eod
 ```
+
+If cron-job.org returns HTTP 429, wait and retry (the API is rate-limited).
+GitHub `schedule` in the workflow is backup only.
 
 See [`orchestrator-cron.md`](orchestrator-cron.md).
 
