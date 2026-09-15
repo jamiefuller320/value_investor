@@ -349,8 +349,8 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 428.1,
-    "estimated_spend_usd_this_week": 90.0,
+    "estimated_spend_usd_this_cycle": 429.3,
+    "estimated_spend_usd_this_week": 91.2,
     "week_id": "2026-W38",
     "cycle_id": "2026-09-d8",
     "weekly_ops_cap_usd": 84.5,
@@ -458,7 +458,6 @@
     "auto_merge": {
       "parked_hunter": "allowlist",
       "parked_hunter_verify_observer": true,
-      "note": "parked_hunter: off | skip | allowlist — scoped auto-merge for parked_source_hunter PRs after the CI hunter-merge-gate job passes. parked_hunter_verify_observer dispatches a non-blocking LLM reviewer. hunter_fix runs capped fix rounds when hunter-merge-gate fails on missing_test, short_skip, live_fetch_failed, too_many_urls, or unexpected_files; distinct failure kinds can each consume one round.",
       "hunter_fix": {
         "enabled": true,
         "max_rounds": 2,
@@ -467,7 +466,8 @@
           1.0,
           2.0
         ]
-      }
+      },
+      "note": "parked_hunter: off | skip | allowlist — scoped auto-merge for parked_source_hunter PRs after the CI hunter-merge-gate job passes. parked_hunter_verify_observer dispatches a non-blocking LLM reviewer. hunter_fix runs capped fix rounds when hunter-merge-gate fails on missing_test, short_skip, live_fetch_failed, too_many_urls, or unexpected_files; distinct failure kinds can each consume one round."
     },
     "queue_recovery": {
       "immediate_park_unfixable_pr": true,
@@ -476,6 +476,20 @@
       "resume_idle_minutes": 30,
       "ci_red_park_hours": 48,
       "note": "immediate_park_unfixable_pr parks open/pr_open tasks when hunter-fix is ineligible/exhausted and CI is all-red (or trust-local-gate after verify); max_attention_parked_tasks pauses engineering dispatch and emails when attention-parked backlog is full. Resume when count drops below resume_attention_parked_below and resume_idle_minutes have elapsed since the last clearing action."
+    },
+    "traffic_control": {
+      "enabled": true,
+      "stuck_pr_threshold": 2,
+      "min_fail_age_minutes": 20,
+      "resume_idle_minutes": 15,
+      "max_fix_requests_per_pr": 2,
+      "comment_cooldown_hours": 6,
+      "monitor_cursor_prs": true,
+      "pause_on_stuck": true,
+      "request_ci_fix_comments": true,
+      "request_conflict_resolve": true,
+      "digest_enabled": true,
+      "note": "Project traffic controller (ftse-project-traffic): pause new engineering-agent dispatch when monitored cursor/* PRs are CI-red or merge-conflicting; comment to request fixes; dispatch scoped conflict-resolve for eng branches; write grounded EOD digest. Does not merge PRs — merge stays human or scoped auto-merge."
     },
     "hunter_url_monitor": {
       "enabled": true,
@@ -486,7 +500,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-09-15T11:01:47.165715+00:00",
+  "updated_at": "2026-09-15T11:07:13.695195+00:00",
   "ingest_parity_markets": [
     "asx200",
     "euro_depth"
