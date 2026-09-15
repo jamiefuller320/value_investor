@@ -338,8 +338,7 @@ def _scheduler_stream_markets(
             if mid and mid not in seen:
                 needing.append(mid)
                 seen.add(mid)
-    for mid in list(policy.get("market_queue") or []):
-        name = str(mid or "").strip()
+    for name in sprint_expansion_market_order(policy):
         if not name or name == head or name in seen:
             continue
         health = snapshot_library_buy_tier_filing_health(
@@ -440,6 +439,33 @@ def all_parallel_sprint_market_ids(
     return out
 
 
+def sprint_expansion_market_order(policy: dict[str, Any]) -> list[str]:
+    """Committed queue first, then code default queue — progressive epoch-0 expansion order."""
+    from value_investor.agent_model_policy import DEFAULT_MARKET_QUEUE
+
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for raw in [*list(policy.get("market_queue") or []), *list(DEFAULT_MARKET_QUEUE)]:
+        mid = str(raw or "").strip()
+        if mid and mid not in seen:
+            seen.add(mid)
+            ordered.append(mid)
+    return ordered
+
+
+def ensure_market_queue_membership(policy: dict[str, Any], market_id: str) -> bool:
+    """Append ``market_id`` to ``market_queue`` when absent. Returns True if policy changed."""
+    mid = str(market_id or "").strip()
+    if not mid:
+        return False
+    queue = [str(m).strip() for m in (policy.get("market_queue") or []) if str(m).strip()]
+    if mid in queue:
+        return False
+    queue.append(mid)
+    policy["market_queue"] = queue
+    return True
+
+
 def next_parallel_sprint_queue_market(
     policy: dict[str, Any],
     *,
@@ -447,10 +473,15 @@ def next_parallel_sprint_queue_market(
     vacating: str | None = None,
 ) -> str | None:
     """
-    Next ``market_queue`` market that still needs sprint deepen.
+    Next market that still needs sprint deepen for a parallel stream.
+
+    Walks ``market_queue`` then the default expansion roster (see
+    ``sprint_expansion_market_order``) so spare slots can front-start
+    graduated-but-not-yet-admitted books when the committed queue is
+    sprint-complete.
 
     Skips focus, markets already in a parallel stream (except ``vacating``),
-    markets already at filing parity, and markets whose leftover gaps are parked.
+    and markets at ``sprint_ingest_complete`` (raw parity or parked exhaustion).
     """
     library_root = Path(library_root)
     focus = str(policy.get("focus_market") or "").strip()
@@ -458,8 +489,7 @@ def next_parallel_sprint_queue_market(
     if vacating:
         occupied.discard(str(vacating).strip())
     vacating_id = str(vacating or "").strip()
-    for raw in policy.get("market_queue") or []:
-        market_id = str(raw).strip()
+    for market_id in sprint_expansion_market_order(policy):
         if not market_id or market_id == focus or market_id == vacating_id or market_id in occupied:
             continue
         health = snapshot_library_buy_tier_filing_health(
@@ -707,7 +737,9 @@ __all__ = [
     "list_library_ingest_maintenance_markets",
     "list_library_ingest_parallel_sprint_markets",
     "all_parallel_sprint_market_ids",
+    "ensure_market_queue_membership",
     "next_parallel_sprint_queue_market",
+    "sprint_expansion_market_order",
     "parallel_sprint_stream_for_market",
     "replace_parallel_sprint_market",
     "list_library_ingest_sprint_markets",
