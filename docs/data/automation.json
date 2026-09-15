@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-15T17:49:31.375800+00:00",
+  "generated_at": "2026-09-15T18:16:26.315546+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1151,17 +1151,17 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-15T17:48:19.946594+00:00",
-    "queue_ui_updated_at": "2026-09-15T17:49:31.310273+00:00",
+    "queue_ui_updated_at": "2026-09-15T18:16:26.220112+00:00",
     "task_count": 16,
     "status": {
-      "open_count": 1,
-      "pr_open_count": 0,
+      "open_count": 0,
+      "pr_open_count": 1,
       "parked_count": 4,
       "merged_count": 10,
       "failed_count": 0,
-      "next_task_id": "eng-20260915-13",
-      "in_flight_branch": null,
-      "in_flight_pr": null,
+      "next_task_id": null,
+      "in_flight_branch": "cursor/eng-20260915-13-1de3",
+      "in_flight_pr": 660,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
@@ -1173,15 +1173,11 @@
         "title": "Fail-closed when FCF yield is ~0.1% while canonical FCF is £100m+: treat that as a unit/FX error, not a model miss. Set fcf_definition_divergence whenever compa",
         "priority": "medium",
         "priority_score": 43.0,
-        "status": "open",
+        "status": "pr_open",
         "source": "compile_cap_drain",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "partial"
+        "branch_name": "cursor/eng-20260915-13-1de3"
       }
     ],
     "attention_tasks": [
@@ -1235,8 +1231,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 1,
-      "dispatch_eligible_count": 1,
+      "open_task_count": 0,
+      "dispatch_eligible_count": 0,
       "blocked_count": 0
     }
   },
@@ -1515,40 +1511,46 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-15T17:49:31.375800+00:00",
-    "overall": "active",
-    "headline": "Agent lane active.",
+    "generated_at": "2026-09-15T18:16:26.315546+00:00",
+    "overall": "blocked",
+    "headline": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
     "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
-      "blocked": false,
-      "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
-    },
-    "agent_lane": {
       "state": "running",
       "idle": false,
       "running": true,
       "blocked": false,
-      "should_dispatch": true,
+      "pr_open_count": 1,
+      "open_engineering_prs": [
+        {
+          "number": 660,
+          "branch": "cursor/eng-20260915-13-1de3",
+          "draft": false
+        }
+      ],
+      "in_flight_pr": 660,
+      "detail": "Open engineering PR(s) #660 — merge fires on CI success."
+    },
+    "agent_lane": {
+      "state": "blocked",
+      "idle": false,
+      "running": false,
+      "blocked": true,
+      "should_dispatch": false,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 0,
-      "open_count": 1,
-      "pr_open_count": 0,
-      "dispatch_eligible_count": 1,
+      "open_count": 0,
+      "pr_open_count": 1,
+      "dispatch_eligible_count": 0,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260915-13",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
+      "next_task_id": null,
+      "reason": "no open engineering tasks in queue",
+      "detail": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged."
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-15T17:49:28.223178+00:00"
+      "evaluated_at": "2026-09-15T18:16:21.662455+00:00"
     },
     "traffic_control": {
       "pause_active": false,
