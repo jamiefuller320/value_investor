@@ -77,6 +77,19 @@ _MIX_NOTES_RES = tuple(
 )
 
 
+def _as_text(value: object | None) -> str:
+    """Coerce overlay text fields; pandas NaN floats are truthy and break ``.lower()``."""
+    if value is None:
+        return ""
+    try:
+        if pd.isna(value):
+            return ""
+    except (TypeError, ValueError):
+        pass
+    text = str(value).strip()
+    return "" if text.lower() == "nan" else text
+
+
 def is_uk_listed_contractor(
     ticker: str | None,
     name: str | None,
@@ -85,10 +98,10 @@ def is_uk_listed_contractor(
     """True for LSE contractors where sector overlays should apply."""
     if not ticker or not str(ticker).strip().upper().endswith(".L"):
         return False
-    name_l = (name or "").lower()
+    name_l = _as_text(name).lower()
     if any(fragment in name_l for fragment in UK_CONTRACTOR_NAME_FRAGMENTS):
         return True
-    sector_l = (sector or "").lower()
+    sector_l = _as_text(sector).lower()
     if "industrial" in sector_l and "infrastructure" in name_l:
         return True
     return False
