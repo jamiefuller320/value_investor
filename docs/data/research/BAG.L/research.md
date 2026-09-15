@@ -1,128 +1,20 @@
 # A.G. BARR p.l.c. (BAG.L) — Research memo
 
-_Version 1 · Updated 2026-09-02T08:27:40.642704+00:00 · Mode: initial_
+_Version 2 · Updated 2026-09-15T11:13:53.178288+00:00 · Mode: structured_verdict_update_
 
-## EXECUTIVE SUMMARY
-A.G. BARR is a UK branded soft-drinks group (IRN-BRU, Rubicon, Boost, FUNKIN) that delivered a solid FY25/26: revenue up 4.0% to £437.3m, adjusted PBT up 12.5% to £65.8m, and margin rebuilt to 14.8% within the 14–16% target band. The quantitative screen flags the name as a buy on cheapness (P/E 14.2, P/B 2.0), quality (ROE 14.1%), dividend (3.1% yield), and low leverage (D/E 14%), though timing is neutral with the share below its 200-day moving average. The investment case rests on a cash-generative core, disciplined capital allocation, and a stepped-up M&A/innovation strategy aimed at doubling the business; the key debate is whether recent acquisitions (Fentimans, Frobishers, Innate-Essence) and heavy capex can sustain ROCE and margins through integration, or whether supply-chain disruption and regulatory headwinds (sugar, packaging, HFSS advertising) cap upside.
+_Phase B structured verdict (essay sections omitted on scheduled path)._
 
----
-
-## INVESTMENT THESIS
-For a value investor, BAG.L combines a defensive UK consumer franchise with improving financial metrics and a balance sheet that still supports growth investment. The screen passes nine models across cheapness, quality, dividend, GARP, and risk families — notably Graham Enterprising, Lynch/Neff PEG variants, Quality Value, Dividend Growth, Magic Formula, Acquirer's Multiple, Dreman Contrarian, and Financial Health — with full data quality (20/20 metrics). Filing-backed fundamentals align with what the screen rewards: mid-teens adjusted ROCE (20.4% FY25/26), net cash at bank of £41.6m post-acquisitions, dividend growth (+11.0% to 18.71p; cover >2x on adjusted EPS of 44.24p), and low reported leverage despite a £40m revolving credit draw to fund Fentimans.
-
-Business quality is underpinned by brand equity (IRN-BRU at 32% of group revenue, down from 43% five years ago — deliberate diversification), integrated UK manufacturing, and consistent cash conversion (cash from operations £64.9m; net cash from operating activities £51.0m per Final Results). Management has articulated clear targets — revenue growth ≥4%, operating margin 14–16%, ROCE 19–21% — and met them in FY25/26 while funding capex (£30.4m) and three bolt-on deals. The FY26/27 interim trading update (Aug 2026) points to ~8% H1 revenue growth and maintained full-year profit guidance (consensus adjusted PBT £71.9m), supporting the screen's buy signal despite near-term supply-chain friction (£10m estimated H1 revenue impact).
-
----
-
-## FINANCIAL REVIEW
-*Primary source: RNS filing bodies. Yahoo `financials_annual.json` used only where noted.*
-
-### Annual results (FY25/26 vs FY24/25)
-
-**Final Results** (31 March 2026, year to 31 January 2026 — 53 weeks vs prior 52 weeks):
-
-| Metric | FY25/26 | FY24/25 | Change |
-|--------|---------|---------|--------|
-| Revenue | £437.3m | £420.4m | +4.0% |
-| Adjusted PBT | £65.8m | £58.5m | +12.5% |
-| Adjusted operating margin | 14.8% | 13.6% | +120 bps |
-| Adjusted ROCE | 20.4% | 20.8% | −40 bps |
-| Adjusted EPS (basic) | 44.24p | 39.77p | +11.2% |
-| Statutory PBT | £62.6m | £53.2m | +17.7% |
-| Statutory EPS (basic) | 42.27p | 35.81p | +18.0% |
-| Cash from operations | £64.9m | £57.6m | +12.7% |
-| Net cash from operating activities | £51.0m | £48.3m | +5.6% |
-| Net cash at bank | £41.6m | £63.9m | −34.9% |
-| Full-year dividend | 18.71p | 16.86p | +11.0% |
-| Cash capex | £30.4m | £19.2m | +58% |
-
-Revenue growth was value-led following early-2025 pricing realignment on IRN-BRU and Rubicon; volumes were broadly flat. Adjusted operating margin moved into the target 14–16% band on operational efficiencies and cost discipline. Gross profit rose to £177.3m (FY24/25: £164.3m); statutory operating profit £61.6m.
-
-**Balance sheet (31 January 2026, filing):** Total assets £514.2m; equity £345.6m (including £7.6m non-controlling interest from Innate-Essence); cash £61.4m; short-term investments £20.2m; loans and borrowings £40.0m (RCF drawn for Fentimans, partially repaid post year-end). Intangibles £162.3m reflect acquisition goodwill/brands. Inventories £31.7m; trade receivables £82.2m.
-
-**Segmental revenue (FY25/26):** Soft drinks £382.0m; Cocktail solutions (FUNKIN) £35.8m (−11% brand revenue cited in narrative); Other (MOMA, Innate-Essence) £19.5m. Largest customer contributed ~£78.2m (~18% of revenue); no other customer ≥10%.
-
-**Pension:** Defined benefit scheme surplus £0.5m (IAS 19); third Canada Life buy-in completed; scheme closed to accrual since 2016.
-
-**Multi-year trend (filing + prior-year comparatives in Final Results):** Revenue has grown from £420.4m (FY24/25) with adjusted PBT rising from £58.5m; margin expanded from 13.6% to 14.8%. Yahoo annual data (fallback) shows revenue £400.0m (2024), £317.6m (2023) — consistent directionally but filing figures preferred for FY24/25 onward.
-
-### Interim results (H1 FY25/26)
-
-**Interim Results** (30 September 2025, 26 weeks to 26 July 2025):
-
-| Metric | H1 25/26 | H1 24/25 | Change |
-|--------|----------|----------|--------|
-| Revenue | £228.1m | £221.3m | +3.1% |
-| Adjusted PBT | £35.2m | £29.3m | +20.1% |
-| Adjusted operating margin | 15.0% | 13.0% | +200 bps |
-| Adjusted EPS (basic) | 24.90p | 19.86p | +25.4% |
-| Net cash at bank | £41.3m | £43.7m | −5.5% |
-| Interim dividend | 3.44p | 3.10p | +11.0% |
-
-Soft drinks revenue +3.3% (Boost double-digit); cocktail solutions −5.2%; Other +26.8% (Innate-Essence from July 2025). Net cash from operating activities £15.7m (prior H1 £13.0m). H1 capex £11.0m; full-year capex guided ~£30m. Going concern affirmed; £20m undrawn RCF noted at interim (subsequently replaced/expanded at year-end).
-
-### Trading updates (interim guidance)
-
-- **Full Year Trading Update** (3 February 2026): Confirmed ~4% revenue to ~£437m, adjusted operating margin ~14.7%, ROCE ~20%; announced Frobishers (£13m) and post-period Fentimans (~£38m).
-- **Interim Trading Update** (4 August 2026): H1 FY26/27 revenue expected ~£246m (+8%); ~£10m revenue lost to supply-chain constraints (internal capacity programme and third-party manufacturing); full-year adjusted profit guidance maintained; double-digit full-year revenue growth anticipated.
-
-### Cash flow and capital allocation
-
-FY25/26: Cash from operations £64.9m; cash capex £30.4m; acquisition outflows £27.6m (net); dividend paid £19.2m. Management guides capex peaking ~£40m in FY26/27 before normalising £30–35m. Net debt/EBITDA target ceiling 2.5x; year-end net cash at bank £41.6m despite ~£66m M&A spend (Innate-Essence, Frobishers, Fentimans).
-
-**Yahoo fallback (FCF only):** Free cash flow £20.6m (2026) vs £29.1m (2025), reflecting higher capex and acquisition spend — consistent with filing narrative; screen FCF input £20.1m.
-
-### Filing gaps
-
-Annual and interim RNS bodies are present and comprehensive for FY25/26 and H1 FY25/26. H1 FY26/27 interim **results** are not yet filed (Notice of Results due 29 September 2026 per trading update); only the August 2026 trading update provides H1 revenue/margin guidance. Companies House annual accounts to May 2026 are indexed but RNS Final Results is the primary source used here.
-
----
-
-## RISKS AND RED FLAGS
-**Regulatory:** Management cites tightening regulation on sugar content and advertising, plus UK Deposit Return Scheme legislated for late 2027. Reformulation and packaging compliance costs are ongoing; IRN-BRU ZERO rebrand (March 2026) reflects zero-sugar positioning.
-
-**Competitive:** UK soft drinks market remains promotional; Barr faces large multinationals. FUNKIN on-trade revenue declined 11% in FY25/26 with no near-term recovery expected; Barr Brands volume pressured as consumers shift from large PET to cans.
-
-**Integration / M&A execution:** Fentimans (~£40m sales, ~£1.4m profit pre-acquisition) and Frobishers are margin-dilutive initially; integration costs treated as adjusting items. Fentimans integration may include job reductions (news, Feb 2026). ROCE guided toward lower end of 19–21% range in FY26/27–27/28.
-
-**Operational / supply chain:** Aug 2026 trading update disclosed ~£10m H1 revenue impact from stock availability issues tied to capacity upgrades and third-party manufacturing — a concrete execution risk not captured by static screens.
-
-**Customer concentration:** Largest customer ~18% of FY25/26 revenue (£78.2m); H1 concentration lower (~£40.3m) but still material.
-
-**Commodity / input costs:** Aluminium and soft fruits at record highs; energy cost spikes flagged (Middle East conflict, filing language). Hedging covers key commodities through most of 2026.
-
-**Liquidity / covenants:** £40m RCF drawn at 31 January 2026 (maturity May 2026); management states advanced discussions on replacement facility and going concern adopted after scenario testing including severe revenue decline — no covenant breach indicated under modelled scenarios. This warrants monitoring pre-trade.
-
-**Governance:** Chair transition: Mark Allen departed Jan 2026; Susan Barratt interim chair; Darren Shapland (ex-Sainsbury's CFO) appointed chair 1 September 2026. Orderly handover, but board refresh coincides with strategic acceleration.
-
-**Pension:** Largely de-risked with £0.5m surplus; remeasurement loss £7.8m in FY25/26 OCI — accounting volatility, limited balance-sheet threat.
-
-RiskTags: regulatory, competitive, customer_concentration, governance, cyclical, other
-
----
-RiskTags: regulatory, competitive, customer_concentration, governance, cyclical, other
-
-## NEWS HIGHLIGHTS
-Company-relevant coverage over the past year is **moderate but noisy** — Google News RSS returns many false positives on “bag”; filtered items below.
-
-| Date | Title | Relevance |
-|------|-------|-----------|
-| 2026-09-01 | *Ex-Sainsbury's CFO joins AG Barr as chair* (Yahoo Finance) | Governance: Darren Shapland appointed chair |
-| 2026-08-04 | *AG Barr expects sales growth despite distribution problems* (Yahoo Finance) | H1 supply-chain constraints; guidance maintained |
-| 2026-08-25 | *Why Are A.G. Barr (LSE:BAG) Shares in Focus Before the UK Budget?* (Kalkine Media) | Macro/policy sentiment; not company-specific |
-| 2026-06-05 | *With EPS Growth And More, A.G. BARR Makes An Interesting Case* (Yahoo Finance) | Positive sell-side-style commentary on EPS trajectory |
-| 2026-04-01 | *A.G. BARR H2 Earnings Call Highlights* (Yahoo Finance) | Strategy: brand investment, innovation, margin expansion |
-| 2026-03-31 | *Trending tickers: … AG Barr* (Yahoo Finance) | Final results day attention |
-| 2026-02-27 | *Jobs at risk at Fentimans following AG Barr takeover* (Yahoo Finance) | Integration/social risk at acquired brand |
-| 2026-02-03 | *Irn-Bru maker AG Barr buys Fentimans and Frobishers in deals worth over £50m* (Yahoo Finance) | Landmark M&A alongside strong FY trading update |
-| 2026-02-03 | *AG Barr strikes M&A one-two in "adult" soft drinks* (Yahoo Finance) | Strategy pivot to premium/functional adult soft drinks |
-
-Filings supplement news on product strategy (IRN-BRU ZERO launch, March 2026) and Capital Markets Day ambitions (double-the-business target). No material regulatory enforcement actions identified in the manifest.
-
----
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.72
-Rationale: Filing-backed earnings momentum, margin rebuild, dividend growth, and net-cash balance sheet support the quantitative buy signal, partially offset by M&A integration risk, H1 FY26/27 supply-chain slippage, and regulatory/cost headwinds that screens do not fully capture.
+Rationale: Filing-backed momentum and maintained FY profit guidance still support the buy screen; thin news this week neither adds nor removes known M&A, supply-chain and regulatory offsets.
+RiskTags: regulatory, competitive, customer_concentration, governance, cyclical, other
+
+## Weekly updates
+
+### 2026-09-15T11:13:53.178288+00:00
+No company-relevant news since the 2 Sep memo; the 11 Sep batch only matched an unrelated “bag” headline (Applied Nutrition).  
+No new indexed RNS or filings; H1 FY26/27 results remain scheduled for 29 Sep per the August trading update.  
+Thesis, risk set and accumulate view unchanged.
