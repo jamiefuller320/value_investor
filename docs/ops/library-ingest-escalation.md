@@ -197,6 +197,10 @@ at the back of the queue: ingest loop / `ftse-library parked-hunter-compile` /
 hourly `engineering-queue.yml` compile one parked ticker; after that task is
 merged, the next ticker compiles. Stall and gap-closure compile ignore this
 source so it cannot block higher-priority ingest work.
+When the priority engineering queue is idle and role-coherence still shows a
+compile-cap backlog, `ftse-engineering try-compile-cap-drain` runs **before**
+hunter compile (score floor 25) and hunter defers until that backlog is empty —
+live-path suggestion drain outranks offline leftover hunts.
 Maintenance then uses the same deepen volume as `ingest-loop.yml`
 (`max_targets=62`, `max_bodies=40`, 2×/weekday). Do not keep a lighter library
 variant — learning needs the same body quality as soon as a market is the

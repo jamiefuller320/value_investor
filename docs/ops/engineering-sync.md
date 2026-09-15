@@ -47,6 +47,16 @@ checks compile drop-risk, and compiles **post-run plan + gap-fill refetch only**
 uses the same path instead of unconditional compile. It does **not** reopen merged
 tasks — use `email_only` for a fresh post-run when Analysis outruns the queue.
 
+**Compile-cap / role-coherence drain** — Sunday compile keeps at most `max_tasks`
+(default 8). Role coherence flags the remainder as
+`compile_cap_truncated_candidates`. When the **priority** engineering queue is empty
+(only background sources such as `parked_source_hunter` / `compile_cap_drain` may
+be open), `ftse-engineering try-compile-cap-drain --apply` queues **one** leftover
+candidate (score floor 25, above parked hunter at 12). After that task merges, the
+next hourly queue run advances the backlog. Parked-hunter compile **defers** while
+this drain still has work so live-path suggestion backlog outranks offline leftover
+hunts. `engineering-queue.yml` runs drain before `parked-hunter-compile`.
+
 Sunday `compile` uses a **14-day** lookback on `research_model_suggestions.json`
 and skips rows that fuzzy-match **merged/parked** engineering task titles.
 

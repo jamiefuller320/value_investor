@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-14T15:20:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-15T07:52:00+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -457,6 +457,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L387 | **Expand ops overdue auto-dispatch beyond ingest/paper** | AUTO_DISPATCH_OVERDUE_WORKFLOWS is intentionally narrow (ingest-loop + paper-auto). Consider orchestrator weekday_paper suite and other primary crons once dispatch idempotency and catch-up interaction are proven. | After ops-monitor has successfully auto-dispatched overdue ingest or paper at least once in production without double-firing catch-up slots |
 | L388 | **End-of-day project-management gate agent** | Autonomous EOD agent that checks progress toward Phase B/C and other learning gates, then self-generates or recommends fixes for stalls. Prefer extending ftse-ops-monitor checks + drafted eng tasks first; full PM agent only if monitor findings keep being missed. | Ops-monitor Phase B/C gate checks have run for ≥4 weeks and stalls still go unnoticed without ad-hoc questions |
 | L390 | **Re-seed empty parallel sprint slots on queue regap** | When ingest_parallel_sprint/_2 are empty after handoffs but next_parallel_sprint_queue_market is non-null (e.g. asx200 regapped), auto-assign that market back into a spare stream so policy-visible cascade and handoff hooks match fill-down runtime. | Second incident of empty parallel streams while head still sprinting and a queue market has sprint_ingest_complete=false |
+| L391 | **Interleave hunter with compile-cap drain if backlog stays huge** | Compile-cap drain currently outranks parked hunter whenever the priority queue is idle. If the role-coherence suggestion backlog stays in the hundreds for a long stretch, consider a fixed interleave (e.g. 3 drain : 1 hunter) so offline leftover hunts are not starved. | Compile-cap drain pending_count stays above 100 for two consecutive weeks while hunter candidates remain |
 
 ---
 
