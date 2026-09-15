@@ -1,6 +1,6 @@
 # Hikma Pharmaceuticals PLC (HIK.L) — Research memo
 
-_Version 1 · Updated 2026-09-14T09:51:12.188125+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-09-15T08:49:01.037045+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,5 +9,12 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: FY2025 and H1 2026 filings back cheapness, dividends and reiterated 2026 guidance, partly offset by weaker statutory cash flow, Injectables margin pressure and withdrawn medium-term targets.
-RiskTags: regulatory, competitive, leverage, customer_concentration, litigation, governance, key_person
+Rationale: Filings still support screen cheapness and quality, but Injectables margin pressure, withdrawn medium-term guidance and tight statutory FCF versus dividends only partly confirm the Strong Buy.
+RiskTags: regulatory, competitive, governance, customer_concentration, cyclical, leverage, key_person, litigation
+
+## Weekly updates
+
+### 2026-09-15T08:49:01.037045+00:00
+Since the 4 Sep memo, the news batch is mostly Kalkine and Yahoo commentary (post-H1 rally, September dividend, buyback tail) with no new Hikma RNS in sources.
+Trade press flags advancing epinephrine nasal spray filings; that is not corroborated in retrieved filing bodies here.
+The quantitative screen stays strong buy on similar cheapness/quality inputs; Injectables margin and statutory FCF versus dividends are unchanged.

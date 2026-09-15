@@ -1,135 +1,20 @@
 # Associated British Foods plc (ABF.L) — Research memo
 
-_Version 1 · Updated 2026-09-02T08:20:22.300795+00:00 · Mode: initial_
+_Version 2 · Updated 2026-09-15T09:00:48.397916+00:00 · Mode: structured_verdict_update_
 
-## EXECUTIVE SUMMARY
-Associated British Foods is a diversified FTSE 100 group spanning Primark retail (~49% of FY2025 revenue) and global food operations (grocery, ingredients, sugar, agriculture). The quantitative screen rates the stock a **hold**: headline valuation looks reasonable (P/E 15.4, P/B 1.3, yield 3.0%, D/E 8%) and seven models pass across cheapness, dividend, GARP and risk families, but conviction is low (27%) and earnings-quality screens fail on weak free-cash conversion.
+_Phase B structured verdict (essay sections omitted on scheduled path)._
 
-The investment case rests on a quality conglomerate discount unwinding via the announced **Primark/FoodCo demerger** (target: effective before end-2027), a resilient balance sheet (leverage 1.0x at FY2025 year-end), and ongoing shareholder returns (buybacks plus 63.0p total dividend in FY2025). The central debate is whether near-term earnings pressure—Primark reinvestment in a weak consumer backdrop, structurally challenged UK bread, and a deteriorating **Sugar** division—offsets the valuation appeal. FY2026 guidance points to further declines in adjusted operating profit and EPS ex-Sugar, with Sugar now expected to post an adjusted operating **loss of £25m–£60m**.
-
----
-
-## INVESTMENT THESIS
-For a value investor, ABF is a **hold**, not an accumulate, despite passing four of four valuation-family screens.
-
-**What the screen likes:** Modest multiples on a large, liquid name with low reported leverage, a covered dividend (3.0% yield), and models such as Graham Enterprising, Magic Formula and Acquirer's Multiple clearing thresholds. Debt/equity of ~8% and a leverage ratio of 1.0x at 13 September 2025 (per interim filing) support the "risk" family pass.
-
-**What limits conviction:** Only 7 of 22 models pass; Piotroski F-Score is 5/9 (below the 7 threshold); and the screen flags an **FCF basis mismatch** (filing FCF £997m vs screen TTM £737m vs company-adjusted £71m). FY2025 free cash flow of **£648m** (interim filing) against adjusted operating profit of **£1,734m** signals weak cash conversion—partly explained by capex of **£1,234m** and working-capital swings, but nonetheless a material earnings-quality gap. Reported ROE of 8.5% sits below what one would expect from a "quality compounder" at fair value.
-
-**Business quality is mixed.** Primark retains brand strength, white-space store growth (~4% contribution in H1 FY2026) and UK market-share gains (7.0% Kantar), but like-for-likes remain negative group-wide (-2.5% YTD to Q3 FY2026) and full-year margin guidance is ~10%, down from ~11.9% in FY2025. Food brands (Twinings, Ovaltine) are resilient; US oils and bakery ingredients are cyclically soft. Sugar moved from a small FY2025 adjusted loss (£42m) to a projected **£25m–£60m** FY2026 loss, with management warning of further deterioration in FY2027.
-
-The **demerger** could unlock sum-of-the-parts value (Primark ~£9.5bn revenue; FoodCo ~£9.8bn), but one-off separation costs of ~£75m and ongoing dis-synergies below £45m, plus execution risk through 2027, argue for patience rather than aggressive sizing. Wittington Investments' continued majority ownership of both entities reduces governance concern but also limits a clean break.
-
-**Conclusion:** Cheap enough to avoid a "pass," not cheap enough—with confirmed earnings erosion and cash-flow noise—to upgrade beyond hold for a value mandate.
-
----
-
-## FINANCIAL REVIEW
-### Source note
-
-Primary figures are drawn from the **Interim Results Announcement** (24 weeks ended 28 February 2026, published 21 April 2026) and **Trading Update** (1 July 2026). These filings include consolidated FY2025 comparatives. **Companies House annual accounts** in the index (nine filings, 2021–2026) relate to **ABF Investments plc**, a group holding company—not consolidated group accounts; they are not used for group P&L. **No standalone consolidated ABF plc annual report body** is present in the filing index. Prior-year FY2024 consolidated comparatives where absent from filings are cited from **financials_annual.json (Yahoo)** with explicit fallback noted.
-
-### Annual trend (FY2023–FY2025)
-
-| Metric | FY2023 | FY2024 | FY2025 | Source |
-|--------|--------|--------|--------|--------|
-| Revenue | £19,750m | £20,073m | **£19,459m** | Yahoo FY23–24; **interim filing FY25** |
-| Adjusted operating profit | n/a | n/a | **£1,734m** | Interim filing |
-| Reported operating profit | n/a | n/a | **£1,483m** | Interim filing |
-| Profit after tax (equity) | n/a | n/a | **£1,025m** | Interim filing |
-| Adjusted EPS | n/a | n/a | **174.9p** | Interim filing |
-| Basic EPS | n/a | n/a | **141.6p** | Interim filing |
-| Free cash flow | £581m | £1,690m | **£648m** | Yahoo FY23–24; **interim filing FY25** |
-| Net debt (incl. leases) | n/a | n/a | **£2,629m** | Interim filing |
-| Leverage ratio | n/a | n/a | **1.0x** | Interim filing |
-
-Revenue peaked in FY2024 (Yahoo: £20,073m) before falling **3%** to £19,459m in FY2025. Adjusted operating profit of **£1,734m** implies a margin of ~8.9%. Reported profit was reduced by **£188m** of exceptional items, predominantly Sugar impairments (Azucarera, Vivergo closure).
-
-**Segment mix (FY2025, interim filing):**
-
-- **Retail (Primark):** Revenue £9,489m; adjusted operating profit **£1,126m** (~11.9% margin)—the profit engine.
-- **Grocery:** Revenue £4,125m; adjusted OP **£478m**.
-- **Ingredients:** Revenue £2,041m; adjusted OP **£257m**.
-- **Sugar:** Revenue £2,188m; adjusted OP **(£42m)** loss—already loss-making at year-end.
-- **Agriculture:** Revenue £1,616m; adjusted OP **£25m**.
-
-**Cash and capital allocation (FY2025, interim filing):** Operating cash flow **£2,231m**; capex **£1,234m**; free cash flow **£648m**; dividends paid **£656m** (63.0p total); share buybacks **£603m**. Net debt rose modestly; total liquidity **£2.2bn** including undrawn RCFs of **£1.5bn + £300m** (covenant-free, maturing 2029).
-
-**Pensions (interim filing):** UK defined-benefit scheme accounting **surplus** of **£1,586m** at 13 September 2025, rising to **£1,683m** at 28 February 2026.
-
-### Interim H1 FY2026 (24 weeks ended 28 February 2026)
-
-| Metric | H1 FY2026 | H1 FY2025 | Change |
-|--------|-----------|-----------|--------|
-| Revenue | **£9,470m** | £9,509m | (0.4)% |
-| Adjusted operating profit | **£691m** | £835m | (17)% |
-| Adjusted EPS | **70.7p** | 83.6p | (15)% |
-| Free cash flow | **£71m** | £27m | +£44m |
-| Net debt | **£3,027m** | £2,772m | +£255m |
-| Leverage | **1.2x** | 1.0x | +0.2x |
-
-H1 phasing was always second-half weighted. Sugar posted an H1 adjusted operating **loss of £27m** (vs +£8m profit prior year). Retail adjusted margin compressed to **10.1%** from 12.1%, reflecting markdowns and reinvestment. Grocery adjusted OP fell **20%**, driven by US oils weakness and cocoa/tariff headwinds.
-
-Directors confirmed **going concern** through to the end of the **2027 financial year**, citing adequate resources, undrawn facilities and stress-tested forecasts.
-
-### Trading update — Q3 FY2026 (published 1 July 2026)
-
-- Q3 group revenue **£5,304m** (+3% actual currency; flat constant currency).
-- YTD revenue **£14,774m** (+1% actual; -1% CC).
-- Primark Q3 sales **+3%**; like-for-likes **-2.2%**; UK +1%, US +16%.
-- **Sugar guidance widened:** full-year adjusted operating **loss £25m–£60m** (from H1 expectation of a full-year loss without a quantified range), driven by European gas-price expectations, potential Malawian kwacha devaluation and Tanzania ramp-up risk. Management flagged possible **further deterioration in FY2027**.
-- Ex-Sugar, full-year group outlook **unchanged** (still below FY2025).
-
-### Gaps
-
-- Consolidated **FY2024 and FY2023** adjusted operating profit/EPS are **not available** in filing bodies; segment-level FY2025 comparatives in the interim filing are the latest primary annual disclosure.
-- Yahoo quarterly cash-flow series is **empty** (TTM cashflow suppressed), limiting independent TTM FCF verification—a material gap given the screen's FCF mismatch flag.
-
----
-
-## RISKS AND RED FLAGS
-**Sugar cyclicality and impairment:** European sugar remains in surplus; Azucarera took further **£8m** non-cash impairment in H1 FY2026 and a **£30m** deferred tax derecognition linked to the demerger's impact on the Spanish tax group. Management sees **no visible inflection** in European sugar prices for FY2027. This is the largest earnings swing factor.
-
-**Consumer and geopolitical cyclicality:** Interim filing language cites increased instability from Middle East and Ukraine conflicts, energy/freight volatility, cautious consumer sentiment and recession risk. Primark flagged that persistent conflict could hit sales; Q3 trading softened in April–May before partial recovery in June.
-
-**Primark execution:** Heavy reinvestment (H1 capex **£210m** in Retail alone) is compressing margins while European like-for-likes remain negative (-4.8% YTD). Demerger creates standalone governance requirements; Lucy Slinger appointed Primark CFO (June 2026), Eoin Tonge confirmed CEO.
-
-**UK bread restructuring:** Hovis acquisition completed **8 July 2026** after CMA clearance (**16 June 2026**). Expected **marginally dilutive in FY2027** before accretion; restructuring costs ahead. Allied Bakeries' structural decline in pre-sliced bread drove the deal.
-
-**Demerger complexity:** ~**£75m** one-off costs; dis-synergies up to **£45m**; timetable to end-2027 with tax clearances and Listing Rules significant-transaction requirements outstanding. Sum-of-the-parts value is uncertain until standalone disclosures.
-
-**Earnings quality / FCF:** FY2025 FCF conversion weakened sharply (£648m vs £1,690m in FY2024 per Yahoo). Screen FCF basis mismatch remains unresolved without quarterly filing cash data.
-
-**Governance:** Wittington Investments (Weston family vehicle) retains majority control of both post-demerger entities—aligned but concentrated.
-
-**Going concern / liquidity:** Interim filing confirms going concern to FY2027; **£1.8bn undrawn RCFs free from performance covenants**; leverage 1.2x at H1—no immediate liquidity red flag.
-
-**Pension:** Large UK DB **accounting surplus** (£1,683m) is positive for net worth but creates volatility sensitivity to discount rates and inflation assumptions.
-
-RiskTags: cyclical, competitive, regulatory, pension, other
-
----
-RiskTags: cyclical, competitive, regulatory, pension, other
-
-## NEWS HIGHLIGHTS
-Coverage over the past year is **substantial** (60+ articles in manifest); not thin. Material items:
-
-**January 2026 — Profit warning:** *"Primark owner ABF warns weak clothing sales will hit profits"* (Financial Times, 8 Jan 2026); shares fell sharply on slashed Primark growth forecasts (*WWD*, *The Grocer*, 8–9 Jan).
-
-**April 2026 — Interim results and demerger confirmation:** *"Associated British Foods to Spin-off Primark as Fiscal First-half Profits Fall"* (21 Apr); Board decided to proceed with demerger (*"Outcome of its review of Group structure"*, 21 Apr 2026)—Primark (~£9.5bn revenue) separated from FoodCo (~£9.8bn), both intended FTSE 100 listings; George Weston to lead FoodCo, Eoin Tonge Primark; Wittington supportive.
-
-**June 2026 — Hovis regulatory clearance:** *"UK watchdog clears ABF's deal to buy bread rival Hovis"* (Yahoo Finance, 16 Jun 2026); CMA noted ABF might otherwise exit UK bakery.
-
-**July 2026 — Hovis completion and trading update:** Acquisition completed 8 Jul (*"ABF renames UK bread arm after clinching Hovis deal"*, Yahoo, 8 Jul); Q3 trading update (1 Jul) highlighted resilient group revenue but widened Sugar loss guidance; Middle East conflict cited for softer April–May Primark trading (*WSJ*, *just-food*, 1 Jul: *"Sugar woes sour ABF shares"*).
-
-**August 2026:** Consumer-sector commentary (*Kalkine Media*, 21–29 Aug) focusing on operating quality and budget-pressure resilience; no new structural announcements.
-
-**Management changes:** Joana Edwards appointed Group CFO; Lucy Slinger named Primark CFO (June 2026); ongoing **share buyback** programme (£250m additional announced November 2025).
-
----
 
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.68
-Rationale: Deep research broadly **confirms** the quantitative hold—valuation is not demanding and the balance sheet is sound, but deteriorating Sugar earnings, weak FY2025 cash conversion, and demerger execution uncertainty prevent a conviction upgrade despite strategic optionality.
+Confidence: 0.65
+Rationale: Research is neutral on the buy case: September sugar, grocery and European Primark caution matches known earnings pressure and FCF noise, not a fundamental upgrade despite cheaper multiples.
+RiskTags: cyclical, competitive, regulatory, pension, other
+
+## Weekly updates
+
+### 2026-09-15T09:00:48.397916+00:00
+On 10 September, coverage reported a ~10% share fall after the group cautioned on Sugar and grocery outlook and weak European Primark trading.  
+Primark’s UK home-delivery rollout was noted but did not offset that read-through ahead of the demerger.  
+No new primary filings since the 2 September memo; FCF/earnings-quality gaps are unchanged.

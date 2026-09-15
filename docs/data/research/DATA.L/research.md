@@ -1,122 +1,20 @@
 # GlobalData Plc (DATA.L) — Research memo
 
-_Version 1 · Updated 2026-09-02T08:12:48.072328+00:00 · Mode: initial_
+_Version 2 · Updated 2026-09-15T08:46:27.095715+00:00 · Mode: structured_verdict_update_
 
-## EXECUTIVE SUMMARY
-GlobalData is a subscription-led B2B data, analytics and AI platform serving 5,000+ enterprise clients across 20+ verticals, with high recurring revenue visibility and a proprietary-content moat. The quantitative screen flags the name as a buy on moderate valuation (P/E 21.0, P/B 2.1, D/E 59%), quality metrics (ROE 13.4%, Piotroski F-Score pass) and cash-generation screens, but conviction on the signal is low (38%) and timing is neutral with the share price slightly below the 200-day moving average.
+_Phase B structured verdict (essay sections omitted on scheduled path)._
 
-The investment hook is a cash-generative, asset-light model trading below intrinsic value on headline multiples, with management returning capital aggressively (£100m+ buybacks in FY25, £45m planned for FY26 plus a £30m tender) while pursuing a Main Market uplift and a “sum-of-the-parts” narrative. The central debate is whether underlying revenue growth (~1% in FY25 and H1 26) and compressed Adjusted EBITDA margins (34% vs 41% in FY24) are temporary transformation noise, or evidence that the Growth Transformation Plan and six FY25 acquisitions have yet to deliver on promised mid-single-digit organic growth and 40%+ margin recovery.
-
----
-
-## INVESTMENT THESIS
-For a value investor, GlobalData offers several characteristics the screen is designed to capture: recurring revenue (74–80% subscription mix per filings), high renewal rates (~89% value renewal in H1 26), low capex intensity (~2.5% of revenue), and consistent free cash flow. The screen passes nine models spanning cheapness (Graham Enterprising, Acquirer’s Multiple), quality (Magic Formula, Quality Value, Piotroski F-Score, Earnings Quality), dividend growth, FCF yield and GARP (Neff PEGY)—suggesting the market prices a durable compounder rather than a distressed asset.
-
-Business quality supports the signal. Filings describe a “build once, sell multiple times” model with Contracted Forward Revenue of £179.7m at FY25 year-end (+5% reported, +3% underlying), giving ~80% visibility to FY26 revenue consensus. AI integration (Al Hub, Ava research assistant, Microsoft Copilot partnership) is framed as augmenting proprietary data rather than commoditising it—a differentiated positioning versus generic LLM tools.
-
-However, the screen’s buy rating sits uncomfortably against operational momentum. Underlying revenue growth slowed from 4% (FY24) to 1% (FY25) and remained ~1% in H1 26, while Adjusted EBITDA fell to £110.2m (margin 34%) from £116.8m (41%) as the Group invested in sales restructuring, senior hires and acquisition integration. Operating profit rose 25% to £81.2m, but this was materially aided by a £20.5m non-cash share-based payment credit—a quality overlay the screen partially captures via Earnings Quality but worth monitoring.
-
-Capital discipline is a further value angle: net leverage remains within management’s 2–3× Adjusted EBITDA target (~1.0× on FY25 figures: net debt £114.2m vs Adjusted EBITDA £110.2m per annual report highlights), and the rebased dividend (1.5p total FY25 vs 2.5p FY24) frees cash for M&A and buybacks. The Inflexion Healthcare transaction (completed 2024) transformed the balance sheet from net debt of £243.9m (FY23) to net cash of £10.1m (FY24), before FY25 re-levered for acquisitions and capital returns.
-
-**Verdict for value investors:** the quantitative case is valid on asset quality and cash economics; the qualitative overlay is whether management can re-accelerate organic growth before goodwill-heavy intangibles (£491.5m on a £689.1m asset base per Yahoo balance sheet, FY25—used as fallback as consolidated notes are absent from filing extracts) become an impairment concern in a prolonged low-growth environment.
-
----
-
-## FINANCIAL REVIEW
-*Primary source: Companies House annual report extracts (FY22–FY25) and Investegate RNS trading updates. Yahoo `financials_annual.json` used only where filing bodies lack consolidated line items, as noted.*
-
-### Annual trend (group, FY22–FY25)
-
-| Metric | FY22 | FY23 | FY24 | FY25 |
-|--------|------|------|------|------|
-| Revenue | £243.2m | £273.1m | £285.5m | £322.1m |
-| Underlying revenue growth | +10% | n/a in extract | +4% | +1% |
-| Operating profit | £56.0m | £73.7m | £65.1m | £81.2m |
-| Operating margin | 23% | 27% | 23% | 25% |
-| Adjusted EBITDA | £86.4m* | £110.8m* | £116.8m | £110.2m |
-| Adj. EBITDA margin | 36%* | 41%* | 41% | 34% |
-| PBT | £38.4m | £41.5m | £54.9m | £69.2m |
-| EPS (statutory) | 27.1p* | 3.8p | 3.8p | 4.4p |
-| Adj. EPS (restated) | — | — | 5.1p (FY25 restated comp: 7.5p FY24 per 2024 AR) | 7.3p |
-| Contracted Forward Revenue | — | £153.4m | £171.4m | £179.7m |
-| Net (bank debt)/cash | (£249.6m) | (£243.9m) | £10.1m net cash | (£114.2m) net debt |
-| Operating cash flow | — | — | £97.6m | £83.3m |
-| Total dividend | 26.0p* | 4.6p | 2.5p | 1.5p |
-
-*FY22 Adjusted EBITDA/EPS from 2023 annual report highlights; subsequent years from respective annual report extracts.*
-
-**Revenue:** Reported growth accelerated to +13% in FY25 (£322.1m), but underlying growth was only +1%, with currency and M&A contributing the balance. FY24 delivered +5% reported / +4% underlying (£285.5m). The deceleration in organic momentum is the dominant financial narrative.
-
-**Profitability:** Adjusted EBITDA margin compressed 700bps in FY25 to 34%, reflecting Growth Transformation Plan investment, sales expansion and dilution from six acquisitions in integration. FY24 saw Adjusted EBITDA rise 5% to £116.8m despite operating profit falling 12% to £65.1m (share-based payment charges cited in strategic commentary). FY25 operating profit recovered to £81.2m (+25%), but the £20.5m share-based payment credit distorts comparability.
-
-**Balance sheet and leverage:** The Inflexion Healthcare minority sale (~£434m, completed 2024 per FY23 annual report narrative) eliminated pre-existing debt facilities and swung FY24 to net cash of £10.1m. FY25 saw net debt return to £114.2m as the Group funded acquisitions, EBT share purchases (£11.0m) and £100m in buyback programmes. Per filing capital allocation policy, management targets net debt leverage of 2–3× Adjusted EBITDA; FY25 implied leverage is ~1.0×, leaving headroom for further M&A or buybacks. *Consolidated balance sheet detail (goodwill £384.6m, total assets £689.1m, tangible book value -£187.9m) sourced from Yahoo FY25 balance sheet—filing body extracts for FY25 do not include the consolidated statement of financial position.*
-
-**Cash flow:** FY25 operating cash flow of £83.3m (annual report) remained robust despite integration and transformation costs, down from £97.6m in FY24. Yahoo reports FY25 FCF of £40.0m (operating CF £47.9m less capex £7.9m) and share repurchases of £112.5m—indicating capital returns exceeded free cash flow generation in FY25, funded partly by debt issuance (£123.5m long-term debt issued per Yahoo cash flow statement).
-
-### Interim / trading updates
-
-**Gap:** Companies House interim accounts on file (Q1 and Q2 2024) are **parent-company abridged statements** prepared under Sections 836/838 for distributable reserves—not consolidated group half-year results. No consolidated H1 2025 or H1 2026 interim accounts appear in the filings index.
-
-**H1 2026 trading update** (RNS, 9 July 2026 — filing body `46928cf80db72a4a.txt`):
-- Revenue growth ~3% (underlying ~1%)
-- Contracted Forward Revenue growth ~6% (underlying ~1%)
-- Adjusted EBITDA growth ~4–5%
-- Value renewal rate ~89% (Dec-25: 88%)
-- Full-year FY26 Adjusted EBITDA expected at **low end of consensus** (£126–134m range cited)
-- Cambridge Healthcare acquisition completed (Healthcare division)
-- Debt facilities upsized: Non-Healthcare facility +£60m to £245m; Healthcare £200m extended to December 2028
-
-**H1 2024:** No consolidated group trading update in the index; FY24 half-year commentary referenced in the FY24 annual report (31 July 2024 HY results statement cited for dividend rebasing) but the body extract is not available in the corpus.
-
-### Filing coverage gaps
-
-- FY25 annual report body extract **truncates at page 12**; Principal and Emerging Risks, Going Concern and Viability (listed on contents page 55), and consolidated financial statements (from page 115) are **not present** in the downloaded body.
-- Risk and going-concern language cannot be verified from primary filings for FY25; older annual reports (FY22–FY24) list these sections but extracts similarly lack the full risk register text.
-
----
-
-## RISKS AND RED FLAGS
-**Growth execution / cyclical:** Underlying revenue growth of ~1% for two consecutive periods (FY25, H1 26) against a stated ambition of mid-single-digit growth raises questions on whether the Growth Transformation Plan’s sales restructuring caused more disruption than anticipated (acknowledged in FY25 Chair’s statement). Elongated enterprise sales cycles in a challenging macro environment are cited in the H1 26 trading update. Healthcare underlying Contracted Forward Revenue declined ~1% at H1 26, reflecting a difficult pharmaceuticals end-market.
-
-**Margin and accounting:** Adjusted EBITDA margin fell 700bps in FY25; FY26 guidance points to low-end consensus EBITDA, with H2 margin acceleration required. FY25 PBT growth (+26%) was flattered by a £20.5m share-based payment credit—statutory EPS of 4.4p vs adjusted EPS of 7.3p indicates significant normalisation items. Yahoo flags TTM quarterly cashflow as suppressed (empty quarterly data).
-
-**Leverage and capital allocation:** FY25 net debt swing from net cash to £114.2m net debt, combined with £100m+ buybacks and six acquisitions, increases financial risk if growth does not recover. Management upsized debt facilities in July 2026 (+£60m Non-Healthcare), suggesting continued appetite for leverage-funded activity. Capital returns (£45m FY26 plan plus £8m carryover, £30m tender at 85p) may limit M&A firepower or add debt if FCF undershoots.
-
-**Goodwill / intangibles:** Goodwill and intangibles total ~£491m on ~£689m total assets (Yahoo FY25—fallback). Tangible book value is negative (~-£188m). A prolonged period of 1% underlying growth increases impairment risk, though no impairment language is available from truncated FY25 filing extracts.
-
-**Key person / governance:** Founder-CEO Mike Danson tendered 20,117,282 shares (~4.43% of his holding) in the August 2026 tender offer. While potentially tax/liquidity-driven, large insider selling alongside aggressive corporate buybacks warrants monitoring. CFO transition: Graham Lilley steps down 30 September 2026; Robert Kingston (ex-Keywords Studios, Sky) joins—execution risk during a critical transformation year. Board refresh: two long-serving NEDs (9+ years) stepping down; two new independent NEDs appointed (January–February 2026).
-
-**Competitive / technology:** Generic AI tools threaten commoditised research, though management emphasises proprietary-data grounding. Competitors such as Quantexa (exploring IPO per Reuters, August 2026—sector peer, not direct comp) highlight active capital markets for data-analytics assets. Integration of Ava into Microsoft 365 Copilot is positive but execution-dependent.
-
-**Regulatory:** As a data provider to enterprises and governments, evolving data-privacy and AI governance regimes represent ongoing compliance cost. No specific regulatory actions against GlobalData appear in the news manifest.
-
-**Going concern / covenants:** Not verifiable from available filing body extracts for FY25. Management’s stated leverage target (2–3× Adjusted EBITDA) and July 2026 facility upsizing suggest covenant headroom, but covenant terms are not in the corpus—**unresolved**.
-
-RiskTags: cyclical, competitive, governance, leverage, key_person, accounting, other
-
----
-RiskTags: cyclical, competitive, governance, leverage, key_person, accounting, other
-
-## NEWS HIGHLIGHTS
-**Company-specific coverage is thin.** The Google News RSS manifest contains almost no articles directly about GlobalData Plc; results are dominated by generic “UK data” keyword matches (FCA market-data reforms, Palantir/NHS scrutiny, LSEG contracts, macro FTSE commentary). Material company news comes primarily from RNS filings indexed in the corpus:
-
-| Date | Source | Headline / event |
-|------|--------|------------------|
-| 9 Jul 2026 | RNS | *Trading Update, Acquisition, Proposed Tender Offer* — H1 26 KPIs, Cambridge Healthcare acquisition, £30m tender, facility upsizing |
-| 11 Aug 2026 | RNS | *Results of Tender Offer and Total Voting Rights* — 35.3m shares bought at 85p (£30m); CEO tendered 20.1m shares |
-| 6 Aug 2026 | RNS | *Results of General Meeting* — 99.99% approval for tender offer resolution |
-| 23 Jun 2026 | RNS | *Launch of new £5 million Share Buyback Programme* |
-| 24 Jun 2026 | RNS | *Board changes* — Robert Kingston appointed CFO from 7 Sep 2026 |
-| Mar 2026 | FY25 Annual Report | Main Market admission expected 5 March 2026; final dividend 1.2p proposed |
-
-**Sector context (not company-specific):** *EXCLUSIVE: British data group Quantexa exploring UK or US IPO* (Reuters, 18–20 Aug 2026) signals active investor appetite for UK data-analytics businesses. *How London stock market’s big bet on data turned into a disaster* (The Telegraph, 7 Feb 2026) reflects broader scepticism on UK data-sector valuations—relevant sentiment backdrop but not GlobalData-specific.
-
-**Flag:** News coverage for DATA.L is insufficient for sentiment or event-driven analysis; RNS filings are the primary news source.
-
----
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.65
-Rationale: Deep research partially confirms the quantitative buy case on recurring-revenue quality, cash generation and moderate headline valuation, but underlying growth stagnation, margin compression and aggressive capital returns introduce execution risk that warrants accumulation rather than full conviction.
+Confidence: 0.67
+Rationale: Upgraded screen valuation partly confirms Strong Buy, but filing-backed ~1% underlying growth, FY26 EBITDA at consensus low end and unchanged governance/leverage risks still limit research conviction.
+RiskTags: cyclical, competitive, governance, leverage, key_person, accounting, other
+
+## Weekly updates
+
+### 2026-09-15T08:46:27.095715+00:00
+Screen signal moved to Strong Buy (cheaper multiples, 11/22 models); filing-backed growth, margin and capital-allocation story unchanged since 2 Sep.  
+News batch: one 4 Sep Yahoo piece citing GlobalData’s Apple/China AI hiring report—third-party research citation, not new DATA.L disclosure.  
+No new RNS or annual/interim filings in this batch; CFO transition (end-Sep) still the nearest known catalyst.

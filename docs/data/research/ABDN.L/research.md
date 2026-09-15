@@ -1,90 +1,20 @@
 # Aberdeen Group Plc (ABDN.L) — Research memo
 
-_Version 1 · Updated 2026-09-02T08:14:03.011250+00:00 · Mode: initial_
+_Version 2 · Updated 2026-09-15T08:57:28.218515+00:00 · Mode: structured_verdict_update_
 
-## EXECUTIVE SUMMARY
-Aberdeen Group is a UK wealth and investments group rebuilding around interactive investor (ii), a fast-growing direct platform, alongside an advised platform and a repositioned asset-management arm. The quantitative screen flags a **buy** on cheapness (P/E 12.0, P/B 0.9), dividend yield (5.8%), and improving earnings quality, though an FCF basis mismatch has adjusted the operational signal to **hold**. Filings show a clear profit and capital-generation inflection: FY2025 adjusted operating profit (AOP) rose to £264m and H1 2026 AOP grew 21% to £151m, with management reiterating FY2026 targets of at least £300m AOP and c.£300m net capital generation. The central debate is whether ii’s momentum and cost transformation can offset persistent net outflows in Investments and Adviser—and whether the 14.6p full-year dividend (7.3p interim maintained in H1 2026) is fully underpinned once free-cash-flow definitions are reconciled.
+_Phase B structured verdict (essay sections omitted on scheduled path)._
 
-## INVESTMENT THESIS
-For a value investor, Aberdeen offers a classic “quality at a discount” setup: the screen passes ten of 22 models across cheapness, dividend, GARP, and risk families (composite score 63%), with Graham Defensive, Schloss Low P/B, earnings yield, FCF yield, and high-dividend-yield criteria all satisfied. Book value trades below one times (P/B 0.9) despite a business mix shifting toward higher-multiple UK wealth platforms.
-
-Business quality is improving, not merely cheap. Under CEO Jason Windsor, a transformation programme has delivered £180m of annualised cost savings (per FY2025 annual report), driving AOP from £255m (FY2024) to £264m (FY2025) and H1 2026 AOP of £151m (+21% YoY). ii is the stand-out: record H1 2026 net inflows of £6.8bn, customers up 14% to 525k, and segment AOP of £84m (+18%). Capital is robust—total capital coverage 229% at H1 2026, with planned redemption of £210m Tier 1 debt—and the group re-entered the FTSE 100 in June 2026.
-
-The screen’s buy signal aligns with filing evidence of operational turnaround, but conviction is tempered by: (1) group net outflows excluding liquidity of £1.0bn in H1 2026; (2) screen FCF of $406m (filing basis) versus TTM $967.8m, triggering the adjusted hold overlay; and (3) ROE of 7.6%, below typical quality thresholds, reflecting legacy Investments drag. The value case rests on continued ii scaling, FY2026 target delivery, and eventual re-rating if outflows stabilise.
-
-## FINANCIAL REVIEW
-**Primary source hierarchy:** RNS half-year report (29 Jul 2026) and Companies House annual accounts (FY2019–FY2025 indexed; eight annual filings with bodies). No separate RNS full-year results announcement is indexed beyond Companies House FY2025 accounts (filed 19 May 2026). Detailed statutory line items in annual PDF extracts are partially OCR-corrupted; headline metrics below are taken from clearly legible highlights and RNS text. Balance-sheet and cash-flow detail falls back to Yahoo where filing bodies lack clean figures.
-
-**Annual trend (Companies House annual reports)**
-
-| Metric | FY2025 | FY2024 | FY2023 | Trend |
-|--------|--------|--------|--------|-------|
-| Adjusted operating profit | £264m | £255m | £249m | Steady rise |
-| IFRS profit before tax | £442m | £251m | £(6)m | Sharp recovery from 2023 loss |
-| Net outflows (excl. liquidity) | £1.7bn outflow | £6.1bn outflow | £13.9bn outflow | Material improvement |
-| Full-year dividend | 14.6p | 14.6p | 14.6p | Flat |
-| Net capital generation | £191m | Not clearly legible in FY2024 body | — | Rising (H1 2026 alone £163m) |
-| AUMA (year-end) | £556.0bn | Not extracted cleanly | — | +4% to H1 2026 £579.4bn |
-| 3-year investment performance | 80% of AUM | 60% | 51% (restated) | Improving |
-
-FY2025 segment AOP (annual report highlights): ii £155m (18bps cost/AUMA), Adviser £86m (NPS +45), Investments £64m (80% three-year performance). Transformation savings of £180m annualised exceeded the original £150m target.
-
-**Interim H1 2026 (RNS Half-year Financial Report, 29 Jul 2026)**
-
-- Net operating revenue: £643m (+2% vs H1 2025 £628m)
-- Adjusted operating expenses: £492m (−2%)
-- **AOP: £151m (+21%)** — on pace for FY2026 target of ≥£300m
-- IFRS profit before tax: £276m (includes £100m fair-value gain on Standard Life plc stake)
-- **Net capital generation: £163m (+47%)** — targeting c.£300m for FY2026
-- Adjusted diluted EPS: 8.2p (H1 2025: 7.5p); interim dividend maintained at **7.3p** (1.24× covered on net capital generation basis)
-- AUMA: £579.4bn (+4%); net outflows £3.0bn (excluding liquidity: £1.0bn outflow)
-- Total capital coverage: **229%** (FY2025: 218%); IFRS net assets £5.0bn
-- Cash and liquid resources: £1.6bn; distributable reserves at holdco £3.2bn
-
-Segment H1 2026: ii AOP £84m (+18%), record inflows £6.8bn; Adviser AOP £41m (stable), outflows £1.3bn; Investments AOP £38m (+9%), outflows excluding liquidity £5.6bn (including c.£4bn lower-margin equities withdrawals flagged in Q1).
-
-**Yahoo fallback (`financials_annual.json`) — used only where filing bodies lack clean statutory extracts**
-
-- FY2025 revenue: £1,745m; IFRS pretax income £442m (consistent with annual highlights)
-- **Free cash flow: £406m** (OCF £427m, capex £21m) — this is the “filing $406M” in the screen’s FCF mismatch note; screen TTM FCF $967.8M is not reconcilable from indexed quarterly cash-flow data (Yahoo quarterly cash flow empty/suppressed)
-- Balance sheet FY2025: total debt £557m; cash £1,795m; common equity £5,133m; goodwill and intangibles £1,347m
-- Dividends paid FY2025: £261m
-
-**Gaps:** No indexed trading updates. FY2024 and earlier annual bodies do not yield clean full statutory income-statement tables in extract form; segment-level FY2024 comparatives rely on highlights pages. Yahoo quarterly series unavailable for TTM reconciliation.
-
-## RISKS AND RED FLAGS
-**Asset flows:** Despite group-level improvement (FY2025 net outflows ex-liquidity £1.7bn vs FY2024 £6.1bn), H1 2026 still shows £1.0bn outflows excluding liquidity, driven by Investments (£5.6bn ex-liquidity) and Adviser (£1.3bn). The market has repeatedly punished the shares on flow disappointments (e.g. Mar 2026 coverage noting persistent outflows despite profit beats). Management acknowledges Adviser “is not yet where we want to be” and appointed a new Adviser CEO (Rich Denning) in May 2026.
-
-**Regulatory and conduct:** FY2025 chairman’s statement references extensive engagement on UK retail-investment culture reforms, targeted support, and overdue regulatory change. Interim principal-risks disclosure (nine categories: strategic, financial, conduct, regulatory/legal, process, people, technology/cyber, third party, sustainability) flags evolving AI risks, competitor activity, and cyber threats. No going-concern qualification appears in indexed bodies; liquidity and capital sections describe resources as “robust.”
-
-**Pension:** Closed DB staff scheme surplus of c.£796m–£800m is excluded from IFPR capital but supports adjusted capital generation (H1 2026: £19m benefit from surplus utilisation for DC benefits). The group assumed sponsorship of the Stagecoach Group DB scheme in 2025—a “landmark transaction” per the chairman—adding pension complexity. Phoenix Group’s 2025 decision to rebrand as Standard Life and pull some assets from Aberdeen (Reuters, 8 Sep 2025) is a related counterparty/concentration risk given Aberdeen’s c.10% stake in Standard Life plc (£867m–£900m at H1 2026, with £100m fair-value gain in H1).
-
-**Dividend and FCF:** The 5.8% screen yield and maintained 7.3p interim depend on capital-generation metrics, not straightforward GAAP FCF. Simply Wall St coverage (9 Aug 2026) questioned buying for the next dividend. Screen FCF basis mismatch (filing £406m vs TTM $967.8m) warrants verify-before-trade reconciliation before treating yield screens as fully passed.
-
-**Competitive and cyclical:** ii faces intense UK platform competition (pricing repricing already implemented). AUM-linked fees remain exposed to market levels; H1 2026 benefited £45m from favourable markets. Geopolitical and rate uncertainty flagged in interim risk update.
-
-**Governance:** Board changes in 2025–2026 (CFO Siobhan Boylan from Jul 2025; loss of director Mike O’Brien May 2025; Audit and Risk/Capital committees combined). Not a red flag per se but worth monitoring.
-
-RiskTags: regulatory, cyclical, competitive, pension, leverage, other
-RiskTags: regulatory, cyclical, competitive, pension, leverage, other
-
-## NEWS HIGHLIGHTS
-Coverage over the past year is adequate—not thin—though much is flow/regulatory/disclosure rather than deep investigative work.
-
-**Results and strategy (Jul 2026):** “Aberdeen Group lifts profit and capital generation as interactive investor drives growth” (Globe and Mail / TipRanks, 28–30 Jul 2026); “Aberdeen falls despite ‘excellent’ performance, especially from Interactive Investor” (Proactive Investors, 29 Jul 2026)—capturing the market’s flow-focused reaction to strong H1 numbers. Half-year earnings-call summary (Yahoo Finance, 29 Jul 2026) noted 21% AOP growth but adviser outflows and competitive pressures.
-
-**Corporate and index (Jun 2026):** “FTSE 100 Reshuffle: Aberdeen Returns as Berkeley and Rightmove Drop Out” (Morningstar, 4 Jun 2026); board strengthened with senior asset-management veterans (TipRanks, 2–3 Jun 2026).
-
-**Analyst and valuation (May–Aug 2026):** Citi upgrade to Buy with 25% total-return potential (Proactive Investors, 15 May 2026). Multiple notes on modest fair-value/target lifts to £2.41–£2.80 range (Yahoo Finance, 12 Aug and 14 Jul 2026). Dividend caution from Simply Wall St (9 Aug 2026).
-
-**M&A and product (Aug 2026):** “Aberdeen Goes Global With £700M Merged Fund” (Yahoo Finance, 25 Aug 2026)—real-assets fund consolidation.
-
-**Counterparty (Sep 2025):** “Phoenix to rebrand as Standard Life, pulls some assets from money manager Aberdeen” (Reuters, 8 Sep 2025)—material for Insurance Partners flows.
-
-**Governance/sentiment (Jul 2026):** Directors increased holdings through share purchases (TipRanks, 31 Jul 2026); extensive Form 8.3 and holdings RNS (routine).
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Filings confirm improving profitability, capital generation, and ii-led growth that support the quantitative buy signal on valuation and dividend metrics, but persistent Investments/Adviser outflows and unresolved FCF/dividend basis differences prevent full confirmation of the screen’s highest-conviction buy posture.
+Rationale: H1 filings still support the screen on valuation and turnaround metrics, but post-results news adds no new evidence and leaves Investments/Adviser outflows plus FCF/yield basis gaps unresolved.
+RiskTags: regulatory, cyclical, competitive, pension, leverage, other
+
+## Weekly updates
+
+### 2026-09-15T08:57:28.218515+00:00
+No new RNS or accounts since the 29 Jul 2026 half-year report; indexed filings unchanged.
+Sep press (mostly syndicated) reiterates record interactive investor inflows versus wider group outflows and dividend-sustainability debate—no fresh primary disclosures.
+Routine TR-1 / holdings notices only (e.g. Chesnara, Renalytix).

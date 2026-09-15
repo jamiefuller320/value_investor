@@ -97,7 +97,13 @@ jobs:
             --pr-url "$PR_URL" \
             --pr-number "$PR_NUMBER"
 
-          # Keep the hunter chain moving without waiting for hourly queue cron.
+          # Prefer compile-cap / role-coherence drain over hunter on idle queue.
+          ftse-engineering try-compile-cap-drain --apply \
+            --output-dir output \
+            --latest-path docs/data/latest.json \
+            --json | tee /tmp/eng_compile_cap_drain.json || true
+          # Keep the hunter chain moving without waiting for hourly queue cron
+          # (defers automatically while compile-cap drain still has work).
           ftse-library parked-hunter-compile --json | tee /tmp/parked_hunter_compile.json || true
 
           if git diff --quiet -- docs/data/engineering_tasks.json; then
