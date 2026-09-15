@@ -3,21 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-09-14T07:18:02.092506+00:00",
+  "generated_at": "2026-09-15T07:34:19.947783+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 1,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 1,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.0178,
+        "mean_trough_unrealized_pct": -0.0312,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "broken": {
         "closed_count": 0
@@ -48,10 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 1,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=1 (target >=8)",
+      "hold thesis buckets thin (weakening=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -66,7 +74,7 @@
       "ticker": "GLE.L",
       "name": "MJ Gleeson plc",
       "started_at": "2026-09-13T07:49:56.535586+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -97,8 +105,93 @@
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": 0.0,
+      "peak_unrealized_pct": 0.0178,
       "trough_unrealized_pct": -0.0312,
+      "recovered_to_breakeven": true,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-09-15T08:34:19.937778+01:00",
+      "linked_sell_trade_id": "6e9211bc-b910-47ee-b881-cb74004855cd"
+    },
+    {
+      "episode_id": "buy_tier_level:CAPD.L:2026-09-15T08:34:19.937778+01:00",
+      "track_id": "buy_tier_level",
+      "ticker": "CAPD.L",
+      "name": "Capital Limited",
+      "started_at": "2026-09-15T08:34:19.937778+01:00",
+      "status": "open",
+      "stress_triggers": [
+        "underwater"
+      ],
+      "entry_mark": 109.0,
+      "avg_cost": 111.1899,
+      "unrealized_pct_at_start": -0.0197,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "cheapness family no longer passes",
+        "still buy",
+        "research accumulate"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": -0.0197,
+      "screen_signal": "buy",
+      "effective_signal": "buy",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.7125,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0197,
+      "trough_unrealized_pct": -0.0197,
+      "recovered_to_breakeven": null,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "buy_tier_level:SBRE.L:2026-09-15T08:34:19.937778+01:00",
+      "track_id": "buy_tier_level",
+      "ticker": "SBRE.L",
+      "name": "Sabre Insurance Group plc",
+      "started_at": "2026-09-15T08:34:19.937778+01:00",
+      "status": "open",
+      "stress_triggers": [
+        "exit_streak",
+        "signal_downgrade"
+      ],
+      "entry_mark": 173.0,
+      "avg_cost": 170.2,
+      "unrealized_pct_at_start": 0.0165,
+      "thesis_status_at_start": "broken",
+      "recommended_action_at_start": "exit_candidate",
+      "thesis_reasons_at_start": [
+        "cheapness lost and not in buy tier"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": 0.0165,
+      "screen_signal": "hold",
+      "effective_signal": "hold",
+      "data_quality_score": 0.85,
+      "conviction_score": 0.30929999999999996,
+      "exit_streak_at_start": 1,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0165,
+      "trough_unrealized_pct": 0.0165,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -226,10 +319,10 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "CARD.L": -0.023,
-        "CAPD.L": 0.0,
-        "REC.L": 0.0349,
-        "GLE.L": -0.0174
+        "CARD.L": -0.0359,
+        "CAPD.L": -0.0268,
+        "REC.L": 0.0,
+        "GLE.L": 0.0
       },
       "buy_returns_since_rotation": {
         "DFS.L": 0.0
@@ -341,14 +434,80 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "REC.L": 0.0,
+        "REC.L": -0.0337,
         "DFS.L": 0.0,
-        "CARD.L": 0.0
+        "CARD.L": -0.0132
+      },
+      "buy_returns_since_rotation": {
+        "CAPD.L": -0.0268,
+        "SBRE.L": 0.0165,
+        "GLE.L": 0.0505
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-09-15T08:34:19.937778+01:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-09-15T08:34:19.937778+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.003,
+      "sells": [
+        {
+          "ticker": "GLE.L",
+          "price": 255.4637,
+          "shares": 1.000411,
+          "gross": 255.57,
+          "cost": 0.13,
+          "avg_cost_at_exit": 255.4637,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "CAPD.L",
+          "price": 109.0,
+          "shares": 0.817963,
+          "gross": 89.16,
+          "cost": 0.49
+        },
+        {
+          "ticker": "CARD.L",
+          "price": 67.1,
+          "shares": 1.273626,
+          "gross": 85.46,
+          "cost": 0.47
+        },
+        {
+          "ticker": "FOXT.L",
+          "price": 35.5,
+          "shares": 2.237334,
+          "gross": 79.43,
+          "cost": 0.44
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "GLE.L": 0.0178
       },
       "buy_returns_since_rotation": {
         "CAPD.L": 0.0,
-        "SBRE.L": 0.0,
-        "GLE.L": 0.0322
+        "CARD.L": 0.0,
+        "FOXT.L": 0.0
       },
       "verdict": null,
       "closed_at": null

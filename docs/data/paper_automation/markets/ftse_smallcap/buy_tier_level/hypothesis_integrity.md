@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-14T07:18:02.091370+00:00
+Track: `buy_tier_level` · updated 2026-09-15T07:34:19.946506+00:00
 
 ## Portfolio loser feedback
 
@@ -10,26 +10,29 @@ Track: `buy_tier_level` · updated 2026-09-14T07:18:02.091370+00:00
 
 ## Holding reviews
 
-### GLE.L — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
-
-### CAPD.L — intact / hold_tolerate (+0.0%)
+### CAPD.L — intact / hold_tolerate (-2.0%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 71%
 
-### SBRE.L — intact / hold_tolerate (+0.0%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.85
-- conviction 41%
-
-### CARD.L — intact / hold_tolerate (+0.5%)
+### CARD.L — intact / hold_tolerate (-0.6%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 70%
+
+### FOXT.L — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 40%
+
+### SBRE.L — weakening / watch_review (+1.7%)
+- left buy tier (hold)
+- conviction 31% below intact floor
+- research accumulate
+- cheapness family still passes

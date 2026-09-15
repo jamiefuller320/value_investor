@@ -1,48 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-14T09:14:59.188250+02:00",
+    "local_time": "2026-09-15T09:31:29.039772+02:00",
     "trading_day": true,
-    "after_settle": false,
-    "market_open_at": "2026-09-14T09:00:00+02:00",
-    "settle_at": "2026-09-14T09:30:00+02:00",
-    "can_act": false,
-    "reason": "waiting for open settle (30 min after 09:00 Europe/Paris)"
+    "after_settle": true,
+    "market_open_at": "2026-09-15T09:00:00+02:00",
+    "settle_at": "2026-09-15T09:30:00+02:00",
+    "can_act": true,
+    "reason": "ok"
   },
-  "trades": [
-    {
-      "id": "3a3ced87-1442-4e01-a142-250f4755e1f8",
-      "fund_id": "05b488d3-5dcb-43eb-b9fa-943b2d30ce9c",
-      "acted_at": "2026-09-14T09:14:59.188250+02:00",
-      "ticker": "DHL.DE",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 1.965729,
-      "price": 55.02,
-      "gross": 108.15,
-      "cost": 0.2,
-      "net_cash": 107.95,
-      "note": "Graduated exit \u2014 left target set",
-      "name": "DHL AG",
-      "avg_cost_at_exit": 54.84,
-      "position_closed": true
-    },
-    {
-      "id": "de7074bb-5d72-4276-b09a-6bf43d2ea119",
-      "fund_id": "05b488d3-5dcb-43eb-b9fa-943b2d30ce9c",
-      "acted_at": "2026-09-14T09:14:59.188250+02:00",
-      "ticker": "DG.PA",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 0.966755,
-      "price": 111.45,
-      "gross": 107.74,
-      "cost": 0.2,
-      "net_cash": -107.94,
-      "note": "Graduated buy",
-      "name": "Vinci SA"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -56,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 999.28,
+    "nav": 1003.1,
     "cash": 460.01,
     "max_positions": 5,
     "min_conviction": 0.0,
@@ -66,45 +33,55 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 199.86,
+    "target_sleeve_value": 200.58,
     "targets": [
       {
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "signal": "strong_buy",
         "conviction_score": 0.9357000000000001,
-        "price": 30.79
-      },
-      {
-        "ticker": "DG.PA",
-        "name": "Vinci SA",
-        "signal": "strong_buy",
-        "conviction_score": 0.9347000000000001,
-        "price": 111.45
+        "price": 31.8
       },
       {
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "signal": "strong_buy",
         "conviction_score": 0.9335,
-        "price": 99.56
+        "price": 97.28
       },
       {
-        "ticker": "SAN.PA",
-        "name": "Sanofi",
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
         "signal": "strong_buy",
-        "conviction_score": 0.8507,
-        "price": 73.26
+        "conviction_score": 0.931,
+        "price": 110.2
+      },
+      {
+        "ticker": "PHIA.AS",
+        "name": "Koninklijke Philips N.V.",
+        "signal": "strong_buy",
+        "conviction_score": 0.8380000000000001,
+        "price": 21.65
       },
       {
         "ticker": "SHELL.AS",
         "name": "Shell plc",
         "signal": "strong_buy",
         "conviction_score": 0.775,
-        "price": 41.415
+        "price": 41.965
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "SAN.PA",
+        "name": "Sanofi",
+        "reason": "No longer in the top conviction target set",
+        "shares": 1.457749,
+        "price": 75.05,
+        "value": 109.4
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [
@@ -113,21 +90,10 @@
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "reason": "Top-up to equal weight",
-        "value": 93.27,
-        "price": 30.79,
-        "target_value": 199.86,
+        "value": 90.49,
+        "price": 31.8,
+        "target_value": 200.58,
         "conviction_score": 0.9357000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "buy",
-        "ticker": "DG.PA",
-        "name": "Vinci SA",
-        "reason": "Top-up to equal weight",
-        "value": 92.11,
-        "price": 111.45,
-        "target_value": 199.86,
-        "conviction_score": 0.9347000000000001,
         "signal": "strong_buy"
       },
       {
@@ -135,21 +101,32 @@
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "reason": "Top-up to equal weight",
-        "value": 89.89,
-        "price": 99.56,
-        "target_value": 199.86,
+        "value": 93.13,
+        "price": 97.28,
+        "target_value": 200.58,
         "conviction_score": 0.9335,
         "signal": "strong_buy"
       },
       {
         "action": "buy",
-        "ticker": "SAN.PA",
-        "name": "Sanofi",
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
         "reason": "Top-up to equal weight",
-        "value": 93.06,
-        "price": 73.26,
-        "target_value": 199.86,
-        "conviction_score": 0.8507,
+        "value": 94.04,
+        "price": 110.2,
+        "target_value": 200.58,
+        "conviction_score": 0.931,
+        "signal": "strong_buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "PHIA.AS",
+        "name": "Koninklijke Philips N.V.",
+        "reason": "New sleeve",
+        "value": 200.58,
+        "price": 21.65,
+        "target_value": 200.58,
+        "conviction_score": 0.8380000000000001,
         "signal": "strong_buy"
       },
       {
@@ -157,9 +134,9 @@
         "ticker": "SHELL.AS",
         "name": "Shell plc",
         "reason": "Top-up to equal weight",
-        "value": 91.68,
-        "price": 41.415,
-        "target_value": 199.86,
+        "value": 90.96,
+        "price": 41.965,
+        "target_value": 200.58,
         "conviction_score": 0.775,
         "signal": "strong_buy"
       }
@@ -167,7 +144,7 @@
     "anticipated_holds": [],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 5 equal-weight sleeve(s); deploy cash into 5 buy(s)."
+    "summary": "Next rebalance would target 5 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 5 buy(s)."
   },
   "alerts": [
     {
@@ -176,7 +153,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 99.55999755859375,
+      "mark": 97.27999877929688,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -187,7 +164,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 30.790000915527344,
+      "mark": 31.799999237060547,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -198,7 +175,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 73.26000213623047,
+      "mark": 75.05000305175781,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -209,7 +186,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 41.415000915527344,
+      "mark": 41.96500015258789,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -220,7 +197,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 111.44999694824219,
+      "mark": 110.19999694824219,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -506,21 +483,39 @@
           "issues": []
         },
         "note": "Graduated rebalance"
+      },
+      {
+        "at": "2026-09-15T09:31:29.039772+02:00",
+        "portfolio_value": 841.18,
+        "cash": 460.01,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "EUR": 0.85631,
+            "SEK": 0.07563
+          },
+          "issues": []
+        },
+        "note": "Graduated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-14T09:14:59.188250+02:00",
+    "last_mark_at": "2026-09-15T09:31:29.039772+02:00",
     "rebalance_state": {
-      "exit_streak": {},
-      "reentry_cooldown": {
-        "DHL.DE": 1
-      }
+      "exit_streak": {
+        "SAN.PA": 1
+      },
+      "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (2 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "graduated_allocation",
-    "generated_at": "2026-09-14T07:15:06.283729+00:00",
+    "generated_at": "2026-09-15T07:31:35.954292+00:00",
     "open_count": 1,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -533,13 +528,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 1,
+    "ingested_this_pass": 0,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "graduated_allocation",
-    "generated_at": "2026-09-14T07:15:06.284331+00:00",
+    "generated_at": "2026-09-15T07:31:35.954853+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -595,7 +590,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 1,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 2,
+      "hold_with_data_quality_count": 4,
       "gaps": [
         "hold_recovery closed episodes=1 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
@@ -604,10 +599,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 1,
-        "recovered_to_breakeven": 0,
+        "count": 3,
+        "recovered_to_breakeven": 2,
         "close_reasons": {
-          "open": 1
+          "open": 3
         }
       },
       "closed": {
@@ -631,8 +626,8 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
-      "swap_rotations": 1
+      "hold_episodes": 2,
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -644,8 +639,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "graduated_allocation",
-    "updated_at": "2026-09-14T07:15:06.285050+00:00",
-    "as_of": "2026-09-14T09:14:59.188250+02:00",
+    "updated_at": "2026-09-15T07:31:35.955598+00:00",
+    "as_of": "2026-09-15T09:31:29.039772+02:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -696,18 +691,18 @@
     },
     "holdings": [
       {
-        "ticker": "AD.AS",
-        "name": "Koninklijke Ahold Delhaize N.V.",
+        "ticker": "DG.PA",
+        "name": "Vinci SA",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
         "unrealized_pct": -0.0112,
-        "mark": 30.79,
-        "avg_cost": 31.14,
+        "mark": 110.2,
+        "avg_cost": 111.45,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9357,
+        "conviction_score": 0.931,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -723,14 +718,54 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 94%"
+          "conviction 93%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 94%"
+          "conviction 93%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "ERIC-B.ST",
+        "name": "Telefonaktiebolaget LM Ericsson (publ)",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0033,
+        "mark": 97.28,
+        "avg_cost": 97.6,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.9335,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 93%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 93%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -742,12 +777,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0093,
-        "mark": 73.26,
+        "unrealized_pct": 0.0149,
+        "mark": 75.05,
         "avg_cost": 73.95,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8507,
+        "conviction_score": 0.8299,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -763,54 +798,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 85%"
+          "conviction 83%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 85%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "DG.PA",
-        "name": "Vinci SA",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 111.45,
-        "avg_cost": 111.45,
-        "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.9347,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 93%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 93%"
+          "conviction 83%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -822,8 +817,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0035,
-        "mark": 41.415,
+        "unrealized_pct": 0.0168,
+        "mark": 41.965,
         "avg_cost": 41.27,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
@@ -856,18 +851,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "ERIC-B.ST",
-        "name": "Telefonaktiebolaget LM Ericsson (publ)",
+        "ticker": "AD.AS",
+        "name": "Koninklijke Ahold Delhaize N.V.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0201,
-        "mark": 99.56,
-        "avg_cost": 97.6,
+        "unrealized_pct": 0.0212,
+        "mark": 31.8,
+        "avg_cost": 31.14,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9335,
+        "conviction_score": 0.9357,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -883,14 +878,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 93%"
+          "conviction 94%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 93%"
+          "conviction 94%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -903,7 +898,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "graduated_allocation",
-    "generated_at": "2026-09-14T07:15:06.286007+00:00",
+    "generated_at": "2026-09-15T07:31:35.956572+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -911,7 +906,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 1,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 1,
+      "open_with_thesis": 3,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -971,7 +966,7 @@
     "schema_version": 1,
     "track_id": "graduated_allocation",
     "observe_only": true,
-    "generated_at": "2026-09-14T07:15:06.287002+00:00",
+    "generated_at": "2026-09-15T07:31:35.957566+00:00",
     "open_count": 1,
     "closed_count": 0,
     "scored_count": 0,
@@ -1028,11 +1023,11 @@
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 1,
-    "marked_this_pass": 0,
+    "ingested_this_pass": 0,
+    "marked_this_pass": 1,
     "closed_this_pass": 0
   },
-  "generated_at": "2026-09-14T07:15:06.287244+00:00",
+  "generated_at": "2026-09-15T07:31:35.957789+00:00",
   "track_id": "graduated_allocation",
   "track_label": "Screen rules + graduated allocation",
   "is_primary_learning_track": false,

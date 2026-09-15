@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `ai_judgment` · updated 2026-09-14T07:14:52.018341+00:00
+Track: `ai_judgment` · updated 2026-09-15T07:31:22.173992+00:00
 
 ## Portfolio loser feedback
 
@@ -10,37 +10,37 @@ Track: `ai_judgment` · updated 2026-09-14T07:14:52.018341+00:00
 
 ## Holding reviews
 
-### AD.AS — intact / hold_tolerate (-1.2%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 94%
-
-### SAN.PA — intact / hold_tolerate (-0.9%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 85%
-
-### DG.PA — intact / hold_tolerate (+0.0%)
+### DG.PA — intact / hold_tolerate (-1.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 93%
 
-### SHELL.AS — intact / hold_tolerate (+0.4%)
+### ERIC-B.ST — intact / hold_tolerate (-0.4%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 93%
+
+### SAN.PA — intact / hold_tolerate (+1.5%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 83%
+
+### SHELL.AS — intact / hold_tolerate (+1.7%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
 - conviction 78%
 
-### ERIC-B.ST — intact / hold_tolerate (+2.0%)
+### AD.AS — intact / hold_tolerate (+2.1%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 93%
+- conviction 94%

@@ -2000,5 +2000,410 @@
       },
       "reentry_cooldown": {}
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-09-15T07:34:19.956425+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/ftse_smallcap/screen_latest.json",
+      "run_at": "2026-09-15T06:52:37.653574+00:00",
+      "generated_at": "2026-09-15T07:34:19.913633+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-09-15T08:34:19.937778+01:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-09-15T08:00:00+01:00",
+      "settle_at": "2026-09-15T09:15:00+01:00",
+      "can_act": false,
+      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (4 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.003,
+    "candidates": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.7001000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Consumer Cyclical",
+        "price": 67.1,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 109.0,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "FOXT.L",
+        "name": "Foxtons Group plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.40099999999999997,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Real Estate",
+        "price": 35.5,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "SBRE.L",
+        "name": "Sabre Insurance Group plc",
+        "signal": "hold",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.30929999999999996,
+        "data_quality_score": 0.85,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 173.0,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.7001000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "accumulate",
+        "sector": "Consumer Cyclical",
+        "price": 67.1,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 109.0,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "FOXT.L",
+        "name": "Foxtons Group plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.40099999999999997,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Real Estate",
+        "price": 35.5,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "SBRE.L",
+        "name": "Sabre Insurance Group plc",
+        "signal": "hold",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.30929999999999996,
+        "data_quality_score": 0.85,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 173.0,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.55% / sell 0.05% (legacy symmetric slot 0.30%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 990.58,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 330.15,
+      "targets": [
+        {
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "signal": "buy",
+          "conviction_score": 0.7125,
+          "price": 109.0
+        },
+        {
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "signal": "strong_buy",
+          "conviction_score": 0.7001000000000001,
+          "price": 67.1
+        },
+        {
+          "ticker": "FOXT.L",
+          "name": "Foxtons Group plc",
+          "signal": "buy",
+          "conviction_score": 0.40099999999999997,
+          "price": 35.5
+        }
+      ],
+      "anticipated_exits": [
+        {
+          "action": "sell",
+          "ticker": "SBRE.L",
+          "name": "Sabre Insurance Group plc",
+          "reason": "No longer in the top conviction target set",
+          "shares": 1.4497,
+          "price": 173.0,
+          "value": 250.8
+        }
+      ],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [
+        {
+          "action": "buy",
+          "ticker": "FOXT.L",
+          "name": "Foxtons Group plc",
+          "reason": "Top-up to equal weight",
+          "value": 250.67,
+          "price": 35.5,
+          "target_value": 330.15,
+          "conviction_score": 0.40099999999999997,
+          "signal": "buy"
+        }
+      ],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "reason": "Already near equal-weight target",
+          "value": 330.17,
+          "target_value": 330.15,
+          "conviction_score": 0.7125,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "reason": "Already near equal-weight target",
+          "value": 330.19,
+          "target_value": 330.15,
+          "conviction_score": 0.7001000000000001,
+          "signal": "strong_buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s); leave 2 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "6e9211bc-b910-47ee-b881-cb74004855cd",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-15T08:34:19.937778+01:00",
+        "ticker": "GLE.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 1.000411,
+        "price": 255.4637,
+        "gross": 255.57,
+        "cost": 0.13,
+        "net_cash": 255.44,
+        "note": "Automated exit \u2014 left target set",
+        "name": "MJ Gleeson plc",
+        "avg_cost_at_exit": 255.4637,
+        "position_closed": true
+      },
+      {
+        "id": "27678a99-964b-4077-8cbd-3ed6286bd48e",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-15T08:34:19.937778+01:00",
+        "ticker": "CAPD.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.817963,
+        "price": 109.0,
+        "gross": 89.16,
+        "cost": 0.49,
+        "net_cash": -89.65,
+        "note": "Automated buy",
+        "name": "Capital Limited"
+      },
+      {
+        "id": "b78d693b-a895-4280-9e9f-17a894c87798",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-15T08:34:19.937778+01:00",
+        "ticker": "CARD.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 1.273626,
+        "price": 67.1,
+        "gross": 85.46,
+        "cost": 0.47,
+        "net_cash": -85.93,
+        "note": "Automated buy",
+        "name": "Card Factory plc"
+      },
+      {
+        "id": "d6aaab9c-f1ef-4312-9150-f20f8ced2ed5",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-15T08:34:19.937778+01:00",
+        "ticker": "FOXT.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 2.237334,
+        "price": 35.5,
+        "gross": 79.43,
+        "cost": 0.44,
+        "net_cash": -79.86,
+        "note": "Automated buy",
+        "name": "Foxtons Group plc"
+      }
+    ],
+    "nav_before": 992.11,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "CARD.L",
+        "shares": 3.647242,
+        "avg_cost": 67.648,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAPD.L",
+        "shares": 2.211119,
+        "avg_cost": 112.0,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "GLE.L",
+        "shares": 1.000411,
+        "avg_cost": 255.4637,
+        "sector": "Consumer Cyclical",
+        "name": "MJ Gleeson plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "SBRE.L",
+        "shares": 1.4497,
+        "avg_cost": 170.2,
+        "sector": "Financial Services",
+        "name": "Sabre Insurance Group plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {
+        "GLE.L": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "nav_after": 990.58,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "CARD.L",
+        "shares": 4.920868,
+        "avg_cost": 67.5062,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAPD.L",
+        "shares": 3.029082,
+        "avg_cost": 111.1899,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "SBRE.L",
+        "shares": 1.4497,
+        "avg_cost": 170.2,
+        "sector": "Financial Services",
+        "name": "Sabre Insurance Group plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "FOXT.L",
+        "shares": 2.237334,
+        "avg_cost": 35.5,
+        "sector": "Real Estate",
+        "name": "Foxtons Group plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {
+        "SBRE.L": 1
+      },
+      "reentry_cooldown": {
+        "GLE.L": 1
+      }
+    }
   }
 ]

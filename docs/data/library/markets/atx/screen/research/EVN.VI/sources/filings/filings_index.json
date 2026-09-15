@@ -2,17 +2,20 @@
   "ticker": "EVN.VI",
   "company_name": "EVN AG",
   "market": "atx",
-  "regime": "uk_rns",
-  "fetched_at": "2026-08-16T13:06:49.934209+00:00",
-  "note": "Primary regulatory filings for research (separate from Yahoo): Ticker RNS / Investegate discovery plus Companies House accounts (up to 5 filings, historical deepen), optional IR allowlist URLs, Investegate direct RNS, and SEC 20-F when dual-listed. period=annual|interim|trading_update|other. Bodies from PDF/HTML/iXBRL when available.",
-  "sources_used": [],
+  "regime": "euro_filings",
+  "fetched_at": "2026-09-15T07:18:40.719970+00:00",
+  "note": "Euro-listed results discovery via ESEF (filings.xbrl.org when available), Belgium official / Euronext Brussels regulated-information for .BR names, Google News, optional IR allowlist URLs, Investegate (when listed), plus SEC 20-F/6-K when the issuer is dual-listed. period=annual|interim|other. Bodies when a direct HTML/PDF URL is available.",
+  "sources_used": [
+    "esef_direct",
+    "ir_allowlist"
+  ],
   "summary": {
-    "total": 0,
+    "total": 3,
     "annual": 0,
     "interim": 0,
     "trading_update": 0,
-    "other": 0,
-    "with_body": 0,
+    "other": 3,
+    "with_body": 2,
     "period_coverage": {
       "annual": {
         "total": 0,
@@ -27,11 +30,62 @@
         "with_body": 0
       },
       "other": {
-        "total": 0,
-        "with_body": 0
+        "total": 3,
+        "with_body": 2
       }
     }
   },
-  "filings": [],
-  "refetched_at": "2026-08-16T13:06:51.295118+00:00"
+  "filings": [
+    {
+      "id": "ir_07bb52dd9c03b279",
+      "source": "ir_allowlist",
+      "headline": "IR allowlist document \u2014 https://www.evn.at/en/investor-relations/publications/",
+      "published_at": null,
+      "url": "https://www.evn.at/en/investor-relations/publications/",
+      "period": "other",
+      "category": "ir_allowlist",
+      "summary": "Manual IR/results URL from docs/data/research_ir_urls.json",
+      "has_body": false,
+      "body_path": null,
+      "priority": 0,
+      "entity_type": "other",
+      "unfetchable": true,
+      "unfetchable_reason": "ir_allowlist_fetch_failed",
+      "unfetchable_at": "2026-09-15T07:18:43.654670+00:00"
+    },
+    {
+      "id": "1de226c8c5dad0db",
+      "source": "esef_direct",
+      "headline": "ESEF report period end 2024-09-30",
+      "published_at": "2024-09-30T00:00:00+00:00",
+      "url": "https://filings.xbrl.org/529900P4JZBFEVNEAE60/2024-09-30/ESEF/AT/0/evnag-2024-09-30-0-en/reports/evnag-2024-09-30-0-en.xhtml",
+      "period": "other",
+      "period_end": "2024-09-30",
+      "category": "ESEF",
+      "summary": "ESEF report period end 2024-09-30",
+      "has_body": true,
+      "body_path": "docs/data/library/markets/euro_depth/screen/research/EVN.VI/sources/filings/bodies/1de226c8c5dad0db.txt",
+      "priority": 0,
+      "entity_identifier": "529900P4JZBFEVNEAE60",
+      "entity_type": "other"
+    },
+    {
+      "id": "fbabed6c96deae7a",
+      "source": "esef_direct",
+      "headline": "ESEF report period end 2025-09-30",
+      "published_at": "2025-09-30T00:00:00+00:00",
+      "url": "https://filings.xbrl.org/529900P4JZBFEVNEAE60/2025-09-30/ESEF/AT/0/evnag-2025-09-30-2-en/reports/evnag-2025-09-30-2-en.xhtml",
+      "period": "other",
+      "period_end": "2025-09-30",
+      "category": "ESEF",
+      "summary": "ESEF report period end 2025-09-30",
+      "has_body": true,
+      "body_path": "docs/data/library/markets/euro_depth/screen/research/EVN.VI/sources/filings/bodies/fbabed6c96deae7a.txt",
+      "priority": 0,
+      "entity_identifier": "529900P4JZBFEVNEAE60",
+      "entity_type": "other"
+    }
+  ],
+  "ir_refetched_at": "2026-09-15T07:18:43.654715+00:00",
+  "residual_refetched_at": "2026-09-15T07:18:45.008676+00:00"
 }
