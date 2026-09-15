@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-15T12:16:26.004232+00:00",
+  "generated_at": "2026-09-15T12:22:54.367619+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1151,13 +1151,13 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-15T09:01:51.712433+00:00",
-    "queue_ui_updated_at": "2026-09-15T12:16:25.906329+00:00",
+    "queue_ui_updated_at": "2026-09-15T12:22:54.276325+00:00",
     "task_count": 13,
     "status": {
       "open_count": 7,
-      "pr_open_count": 2,
+      "pr_open_count": 1,
       "parked_count": 2,
-      "merged_count": 2,
+      "merged_count": 3,
       "failed_count": 0,
       "next_task_id": "eng-20260915-02",
       "in_flight_branch": "cursor/eng-20260915-01-1de3",
@@ -1242,18 +1242,6 @@
         "clash_scan": "full"
       },
       {
-        "id": "eng-20260915-05",
-        "area": "scoring",
-        "title": "Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade when three-",
-        "priority": "high",
-        "priority_score": 97.0,
-        "status": "pr_open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": "cursor/eng-20260915-05-1de3"
-      },
-      {
         "id": "eng-20260915-04",
         "area": "ingest",
         "title": "Backfill Yahoo cash-flow fields (`operating_cashflow`, UK quarterly cash-flow where suppressed) into fetch/`CompanyMetrics` from statements already mirrored in ",
@@ -1326,24 +1314,9 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
-        "dispatch_eligible": false,
-        "blocked_by": [
-          {
-            "pr_number": null,
-            "branch": null,
-            "task_id": null,
-            "title": "in-flight allowlist overlap",
-            "clash_files": [
-              "src/value_investor/pipeline.py",
-              "src/value_investor/summary.py",
-              "src/value_investor/models/",
-              "src/value_investor/scoring/",
-              "tests/test_pipeline.py"
-            ],
-            "kind": "allowlist_overlap"
-          }
-        ],
-        "effective_dispatch_rank": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
         "clash_scan": "full"
       },
       {
@@ -1357,24 +1330,9 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
-        "dispatch_eligible": false,
-        "blocked_by": [
-          {
-            "pr_number": null,
-            "branch": null,
-            "task_id": null,
-            "title": "in-flight allowlist overlap",
-            "clash_files": [
-              "src/value_investor/pipeline.py",
-              "src/value_investor/summary.py",
-              "src/value_investor/models/",
-              "src/value_investor/scoring/",
-              "tests/test_pipeline.py"
-            ],
-            "kind": "allowlist_overlap"
-          }
-        ],
-        "effective_dispatch_rank": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 2,
         "clash_scan": "full"
       },
       {
@@ -1388,24 +1346,9 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
-        "dispatch_eligible": false,
-        "blocked_by": [
-          {
-            "pr_number": null,
-            "branch": null,
-            "task_id": null,
-            "title": "in-flight allowlist overlap",
-            "clash_files": [
-              "src/value_investor/pipeline.py",
-              "src/value_investor/summary.py",
-              "src/value_investor/models/",
-              "src/value_investor/scoring/",
-              "tests/test_pipeline.py"
-            ],
-            "kind": "allowlist_overlap"
-          }
-        ],
-        "effective_dispatch_rank": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 3,
         "clash_scan": "full"
       }
     ],
@@ -1437,8 +1380,8 @@
     ],
     "clash_summary": {
       "open_task_count": 7,
-      "dispatch_eligible_count": 0,
-      "blocked_count": 7
+      "dispatch_eligible_count": 3,
+      "blocked_count": 4
     }
   },
   "learning_track_epoch_datum": {
@@ -1716,51 +1659,46 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-15T12:16:26.004232+00:00",
+    "generated_at": "2026-09-15T12:22:54.367619+00:00",
     "overall": "blocked",
-    "headline": "7 open task(s) blocked by file clash or policy — parallel cap reached — 2 pr_open, 0 agent run(s) (max_parallel=2)",
+    "headline": "queue ready — dispatch next open task",
     "merge_lane": {
       "state": "running",
       "idle": false,
       "running": true,
       "blocked": false,
-      "pr_open_count": 2,
+      "pr_open_count": 1,
       "open_engineering_prs": [
         {
           "number": 651,
           "branch": "cursor/eng-20260915-01-1de3",
           "draft": false
-        },
-        {
-          "number": 650,
-          "branch": "cursor/eng-20260915-05-1de3",
-          "draft": false
         }
       ],
       "in_flight_pr": 651,
-      "detail": "Open engineering PR(s) #651, #650 — merge fires on CI success."
+      "detail": "Open engineering PR(s) #651 — merge fires on CI success."
     },
     "agent_lane": {
       "state": "blocked",
       "idle": false,
       "running": true,
       "blocked": true,
-      "should_dispatch": false,
+      "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 0,
       "open_count": 7,
-      "pr_open_count": 2,
-      "dispatch_eligible_count": 0,
-      "blocked_task_count": 7,
+      "pr_open_count": 1,
+      "dispatch_eligible_count": 3,
+      "blocked_task_count": 4,
       "next_task_id": "eng-20260915-02",
-      "reason": "parallel cap reached — 2 pr_open, 0 agent run(s) (max_parallel=2)",
-      "detail": "7 open task(s) blocked by file clash or policy — parallel cap reached — 2 pr_open, 0 agent run(s) (max_parallel=2)"
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-15T12:16:19.214567+00:00"
+      "evaluated_at": "2026-09-15T12:22:47.689845+00:00"
     },
     "traffic_control": {
       "pause_active": false,
