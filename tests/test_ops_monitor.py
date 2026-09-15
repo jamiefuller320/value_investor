@@ -29,7 +29,9 @@ from value_investor.ops_monitor import (
     draft_ops_engineering_tasks,
     filter_unresolved_workflow_failures,
     findings_needing_investigation,
+    format_ops_monitor_html,
     format_ops_monitor_text,
+    format_workflow_freshness_html,
     merge_healed_findings,
     recovery_bundle_in_flight,
     run_ops_monitor,
@@ -743,6 +745,89 @@ def test_format_ops_monitor_text_includes_findings():
     assert "FIXED" in text
     assert "micro_compile_ingest" in text
     assert "NEEDS INVESTIGATION" not in text
+
+
+def test_format_workflow_freshness_html_colour_codes_stale_and_ok():
+    html = format_workflow_freshness_html(
+        [
+            {
+                "name": "FTSE Paper Automation",
+                "expected_today": True,
+                "stale": True,
+                "last_success_at": "2026-09-11T08:26:19+00:00",
+                "age_hours": 71.3,
+                "max_age_hours": 28,
+                "unresolved_failures_12h": 0,
+            },
+            {
+                "name": "Automation Orchestrator",
+                "expected_today": True,
+                "stale": False,
+                "last_success_at": "2026-09-15T07:38:38+00:00",
+                "age_hours": 0.1,
+                "max_age_hours": 28,
+                "unresolved_failures_12h": 0,
+            },
+            {
+                "name": "Email report",
+                "expected_today": False,
+                "stale": False,
+                "last_success_at": "2026-09-13T06:54:59+00:00",
+                "age_hours": 48.0,
+                "max_age_hours": 36,
+                "unresolved_failures_12h": 0,
+            },
+        ]
+    )
+    assert "STALE" in html
+    assert "#fde8e8" in html
+    assert "OK" in html
+    assert "#e8f5ec" in html
+    assert "not scheduled today" in html
+    assert "<table" in html
+
+
+def test_format_ops_monitor_html_includes_workflow_table():
+    report = OpsMonitorReport(
+        run_at="2026-09-15T07:46:32+00:00",
+        overall="fail",
+        workflow_checks=[
+            {
+                "name": "FTSE Ingest Loop",
+                "expected_today": False,
+                "stale": False,
+                "last_success_at": "2026-09-14T16:18:31+00:00",
+                "age_hours": 15.5,
+                "max_age_hours": 30,
+                "unresolved_failures_12h": 0,
+            }
+        ],
+    )
+    html = format_ops_monitor_html(report)
+    assert "Workflow freshness" in html
+    assert "<table" in html
+    assert "FTSE Ingest Loop" in html
+
+
+def test_format_ops_monitor_text_workflow_freshness_labels():
+    report = OpsMonitorReport(
+        run_at="2026-09-15T07:46:32+00:00",
+        overall="ok",
+        workflow_checks=[
+            {
+                "name": "Stale workflow",
+                "expected_today": True,
+                "stale": True,
+                "last_success_at": "2026-09-11T08:00:00+00:00",
+                "age_hours": 95.0,
+                "max_age_hours": 28,
+                "unresolved_failures_12h": 0,
+            }
+        ],
+    )
+    text = format_ops_monitor_text(report)
+    assert "[STALE]" in text
+    assert "overdue" in text
 
 
 def test_overall_status_ignores_fixed_findings():
