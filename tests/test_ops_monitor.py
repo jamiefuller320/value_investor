@@ -907,15 +907,24 @@ def test_send_ops_monitor_email_skips_when_only_healed(monkeypatch):
 
 
 def test_send_ops_monitor_email_sends_for_unfixed(monkeypatch):
-    sent: list[str] = []
+    sent: list[dict] = []
+    handoffs: list[dict] = []
 
     def _fake_send(**kwargs):
-        sent.append(kwargs["subject"])
+        sent.append(kwargs)
+
+    def _fake_handoff(**kwargs):
+        handoffs.append(kwargs)
+        return {"open_count": 1, "resolved_count": 0, "items": []}
 
     monkeypatch.setattr("value_investor.ops_monitor.send_report_email", _fake_send)
     monkeypatch.setattr(
         "value_investor.ops_monitor.EmailConfig.from_env",
         lambda: object(),
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic.handoff_ops_monitor_email_to_pm",
+        _fake_handoff,
     )
     report = OpsMonitorReport(
         run_at="2026-07-29T07:00:00+00:00",
@@ -930,7 +939,34 @@ def test_send_ops_monitor_email_sends_for_unfixed(monkeypatch):
         ],
     )
     assert send_ops_monitor_email(report, only_if_not_ok=True) is True
-    assert sent == ["FTSE Ops Monitor — FAIL"]
+    assert [row["subject"] for row in sent] == ["FTSE Ops Monitor — FAIL"]
+    assert "Planned rectification:" in sent[0]["text_body"]
+    assert len(handoffs) == 1
+    assert handoffs[0]["email_subject"] == "FTSE Ops Monitor — FAIL"
+    assert len(handoffs[0]["findings"]) == 1
+
+
+
+
+def test_ops_monitor_email_body_includes_planned_rectification():
+    from value_investor.ops_monitor import format_ops_monitor_html, format_ops_monitor_text
+
+    report = OpsMonitorReport(
+        run_at="2026-09-15T19:00:00+00:00",
+        overall="warn",
+        findings=[
+            OpsFinding(
+                severity="warn",
+                category="ingest",
+                title="Buy-tier filing ingest stalled",
+                summary="zero bodies",
+            )
+        ],
+    )
+    text_body = format_ops_monitor_text(report)
+    html_body = format_ops_monitor_html(report)
+    assert "Planned rectification: human_triage" in text_body
+    assert "Planned rectification: human_triage" in html_body
 
 
 def test_check_workflow_freshness_suppresses_failure_when_recovery_in_flight():

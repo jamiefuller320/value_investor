@@ -23,6 +23,8 @@ slice of a PM agent.
 | Dispatch scoped `engineering-conflict-resolve.yml` for `cursor/eng-*` | Yes |
 | Rely on existing `ci-pr-autofix` / hunter-fix on CI failure | Yes (event-driven) |
 | Remediate queue merge-sync lag (`pr_open` after GitHub merge) via recover/mark-merged | Yes |
+| Receive ops-monitor email findings + planned rectification (L397 handoff) | Yes |
+| Auto-remediate non–v1 ops email findings | **No** — record on handoff artifact / digest for human or eng draft |
 | Merge PRs | **No** — keep restricted; loosen only with independent verification |
 | Broad Phase B/C self-healing / task invention | **No** — still deferred as L388 EOD gate agent |
 
@@ -62,6 +64,7 @@ ftse-project-traffic digest --write
 | `docs/data/engineering_tasks.json` → `traffic_control` | Pause flag, stuck counts, fix-request history |
 | `docs/data/project_traffic_digest.json` | Structured EOD digest |
 | `docs/data/project_traffic_digest.md` | Human-readable digest |
+| `docs/data/project_traffic_ops_email_handoff.json` | Latest ops-monitor email package (findings + planned rectification + email body) |
 | `docs/data/queue_health.json` → `traffic_control` | Dashboard slice |
 
 ## Policy
@@ -125,6 +128,20 @@ races), it **hands the finding to project-traffic**. Traffic runs
 
 This is deterministic queue bookkeeping, not merge authority and not a standing
 GitHub→agent listener.
+
+## Ops-monitor email handoff (L397)
+
+When ops monitor is about to send a warn/fail alert email (after heal + deferral
+gates), it also calls `handoff_ops_monitor_email_to_pm`:
+
+1. Packages each unfixed finding with a deterministic `planned_rectification`
+2. Includes the email subject + text/html body on the handoff artifact
+3. Auto-remediates only queue merge-sync (existing PM v1 authority)
+4. Leaves other items open on the handoff artifact and EOD digest section
+5. Still sends SMTP (handoff failure must not block email)
+
+Planned actions include `remediate_queue_merge_sync`, `request_unstick_stuck_prs`,
+`rerun_or_dispatch_workflow`, `draft_ops_engineering_task`, and `human_triage`.
 
 ## Related
 
