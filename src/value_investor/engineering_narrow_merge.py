@@ -122,9 +122,7 @@ def task_narrow_merge_class(task: EngineeringTask) -> str | None:
     return None
 
 
-def task_is_narrow_candidate(
-    task: EngineeringTask, *, merge_class: str | None = None
-) -> bool:
+def task_is_narrow_candidate(task: EngineeringTask, *, merge_class: str | None = None) -> bool:
     found = task_narrow_merge_class(task)
     if found is None:
         return False
@@ -153,12 +151,8 @@ def changed_files_eligible_for_narrow(
     require_tests: bool | None = None,
 ) -> tuple[bool, str]:
     """Gate on the *actual* PR diff, not the wide area allowlist stored on the task."""
-    require_tests = (
-        narrow_require_tests(merge_class) if require_tests is None else require_tests
-    )
-    changed = [
-        str(path).strip().removeprefix("./") for path in changed_files if str(path).strip()
-    ]
+    require_tests = narrow_require_tests(merge_class) if require_tests is None else require_tests
+    changed = [str(path).strip().removeprefix("./") for path in changed_files if str(path).strip()]
     if not changed:
         return False, "no changed files"
     if len(changed) > AUTO_MERGE_MAX_PATHS:

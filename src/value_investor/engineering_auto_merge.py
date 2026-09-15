@@ -320,9 +320,7 @@ def evaluate_auto_merge(
             merge_class="ci_fix",
         )
 
-    allowed, narrow_reason, merge_class = narrow_merge_allowed(
-        task=task, changed_files=changed
-    )
+    allowed, narrow_reason, merge_class = narrow_merge_allowed(task=task, changed_files=changed)
     if allowed:
         return AutoMergeDecision(
             True,

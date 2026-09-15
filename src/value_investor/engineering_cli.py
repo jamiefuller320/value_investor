@@ -1928,8 +1928,7 @@ def main(argv: list[str] | None = None) -> int:
         "--merge-class",
         default=None,
         help=(
-            "Optional merge class stamp "
-            "(ci_fix|ingest_narrow|scoring_narrow|parked_hunter|human)"
+            "Optional merge class stamp (ci_fix|ingest_narrow|scoring_narrow|parked_hunter|human)"
         ),
     )
     merged_p.set_defaults(func=_cmd_mark_merged)
