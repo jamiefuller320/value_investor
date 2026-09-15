@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-15T11:02:13+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-15T11:59:00+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -460,6 +460,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L392 | **Loosen merge authority with independent verification** | After project-traffic pause/resume is stable, consider allowing merge only when an independent verifier (path guard + green CI + allowlist/hunter gate) agrees — never the same agent that authored the diff. | Traffic controller has paused and resumed cleanly for ≥2 weeks without false pauses, and scoped auto-merge remains green |
 | L393 | **Full EOD PM agent beyond traffic + grounded digest** | Extend beyond PR traffic control into Phase B/C gate probing, self-generated stall fixes, and broader goal appraisal. Prefer traffic controller + progress-report probes first; only grow autonomy if digests stay grounded and stalls still need human chase. | Project traffic digests have run weekday EOD for ≥4 weeks and human still spends material time chasing non-PR stalls |
 | L394 | **Traffic/PM proposes ops-monitor check extensions as eng drafts** | When EOD digests or traffic runs repeatedly flag the same ungrounded/missed stall, draft a supervised ops eng task to add a concrete ops-monitor check (allowed_paths already include ops_monitor.py). Do not let the PM agent edit ops-monitor in-place. | Project traffic digests have run ≥2 weeks and the same non-PR stall class appears in digests or human chase more than once |
+| L395 | **Backoff/retry for cron-job.org 429 in import_cron_jobs** | import_cron_jobs.py fails hard on HTTP 429 when listing or upserting jobs. Add Retry-After / exponential backoff so weekday job registration (e.g. project-traffic) can complete after a burst of dry-runs or parallel imports. | Next time cron registration is blocked by sustained 429s, or when adding several new cron jobs in one session |
 
 ---
 

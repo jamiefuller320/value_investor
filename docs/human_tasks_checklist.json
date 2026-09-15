@@ -362,7 +362,7 @@
         {
           "id": "adhoc-project-traffic-cron-register",
           "title": "Register project-traffic weekday crons",
-          "summary": "After project-traffic merge, upsert cron-job.org jobs for weekdays 12:30 and 17:30 UTC dispatching project-traffic.yml (GitHub schedule is backup only).",
+          "summary": "Upsert cron-job.org jobs via `scripts/import_cron_jobs.py --job project-traffic-midday` and `--job project-traffic-eod` (weekdays 12:30 + 17:30 UTC → project-traffic.yml). GitHub schedule is backup only. Re-run after cadence changes or if jobs are missing.",
           "automated": false,
           "doc_path": "docs/ops/project-traffic.md",
           "doc_anchor": "schedule"

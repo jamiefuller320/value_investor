@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-15T11:02:13+00:00",
+  "updated_at": "2026-09-15T11:59:00+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8845,6 +8845,22 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0a45e-de52-7982-b3c9-402c6616bb45",
       "added_at": "2026-09-15T11:02:13+00:00"
+    },
+    {
+      "id": "L395",
+      "category": "later",
+      "section": "ops",
+      "title": "Backoff/retry for cron-job.org 429 in import_cron_jobs",
+      "summary": "import_cron_jobs.py fails hard on HTTP 429 when listing or upserting jobs. Add Retry-After / exponential backoff so weekday job registration (e.g. project-traffic) can complete after a burst of dry-runs or parallel imports.",
+      "revisit_when": "Next time cron registration is blocked by sustained 429s, or when adding several new cron jobs in one session",
+      "tags": [
+        "cron",
+        "ops",
+        "rate-limit"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0a45e-de52-7982-b3c9-402c6616bb45",
+      "added_at": "2026-09-15T11:59:00+00:00"
     }
   ],
   "fragments": [

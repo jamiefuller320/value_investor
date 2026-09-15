@@ -243,3 +243,25 @@ def test_import_cron_jobs_dry_run_ops_monitor():
     assert payload["schedule"]["minutes"] == [45]
     assert payload["schedule"]["wdays"] == [-1]
     assert "ops-monitor.yml" in payload["url"]
+
+def test_import_cron_jobs_dry_run_project_traffic():
+    script = Path("scripts/import_cron_jobs.py")
+    for job, hour, label in (
+        ("project-traffic-midday", 12, "midday"),
+        ("project-traffic-eod", 17, "EOD"),
+    ):
+        proc = subprocess.run(
+            [sys.executable, str(script), "--job", job, "--dry-run", "--json"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        rows = json.loads(proc.stdout)
+        assert len(rows) == 1
+        payload = rows[0]["payload"]["job"]
+        assert label.lower() in payload["title"].lower()
+        assert payload["schedule"]["hours"] == [hour]
+        assert payload["schedule"]["minutes"] == [30]
+        assert payload["schedule"]["wdays"] == [1, 2, 3, 4, 5]
+        assert "project-traffic.yml" in payload["url"]
+
