@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-15T12:32:08+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-15T12:42:16+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -462,6 +462,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L394 | **Traffic/PM proposes ops-monitor check extensions as eng drafts** | When EOD digests or traffic runs repeatedly flag the same ungrounded/missed stall, draft a supervised ops eng task to add a concrete ops-monitor check (allowed_paths already include ops_monitor.py). Do not let the PM agent edit ops-monitor in-place. | Project traffic digests have run ≥2 weeks and the same non-PR stall class appears in digests or human chase more than once |
 | L395 | **Backoff/retry for cron-job.org 429 in import_cron_jobs** | import_cron_jobs.py fails hard on HTTP 429 when listing or upserting jobs. Add Retry-After / exponential backoff so weekday job registration (e.g. project-traffic) can complete after a burst of dry-runs or parallel imports. | Next time cron registration is blocked by sustained 429s, or when adding several new cron jobs in one session |
 | L396 | **Standing GitHub→agent PM listener only if escalation still cannot unstick** | Do not add always-on Cursor Automation or repo-wide subscribe_github_pr/ci. Project traffic now dispatches one scoped unstick agent after first-line autofix/comments/conflict-resolve are exhausted. Revisit a standing listener only if that algorithmic escalation still leaves pause_active across multiple weekday sessions. | traffic_control.pause_active stays true across multiple weekday sessions after an escalation agent has already run (last_escalation_at set) and CI/conflicts remain |
+| L397 | **Persist traffic blockage samples for ruleset tuning** | If chat-scoped observation of pause/escalation timing yields useful knob deltas, write durable samples (e.g. docs/data/traffic_observation.jsonl) from project-traffic runs instead of relying on a live agent conversation. | After ≥2 weeks of traffic pause/resume with at least 3 blockage episodes and a proposed knob change backed by samples |
 
 ---
 
