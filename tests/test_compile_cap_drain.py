@@ -116,9 +116,11 @@ def test_compile_cap_drain_queues_one_and_chains(tmp_path: Path):
     payload = read_json(tasks_path)
     drain = next(row for row in payload["tasks"] if row["status"] == "open")
     assert drain["source"] == COMPILE_CAP_DRAIN_SOURCE
-    assert "alpha" in drain["title"].lower() or "beta" in drain["title"].lower() or "gamma" in drain[
-        "title"
-    ].lower()
+    assert (
+        "alpha" in drain["title"].lower()
+        or "beta" in drain["title"].lower()
+        or "gamma" in drain["title"].lower()
+    )
 
     second = compile_next_compile_cap_drain_task(
         apply=True,
