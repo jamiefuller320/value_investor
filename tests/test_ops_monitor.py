@@ -29,7 +29,9 @@ from value_investor.ops_monitor import (
     draft_ops_engineering_tasks,
     filter_unresolved_workflow_failures,
     findings_needing_investigation,
+    format_ops_monitor_html,
     format_ops_monitor_text,
+    format_workflow_freshness_html,
     merge_healed_findings,
     recovery_bundle_in_flight,
     run_ops_monitor,
@@ -745,6 +747,89 @@ def test_format_ops_monitor_text_includes_findings():
     assert "NEEDS INVESTIGATION" not in text
 
 
+def test_format_workflow_freshness_html_colour_codes_stale_and_ok():
+    html = format_workflow_freshness_html(
+        [
+            {
+                "name": "FTSE Paper Automation",
+                "expected_today": True,
+                "stale": True,
+                "last_success_at": "2026-09-11T08:26:19+00:00",
+                "age_hours": 71.3,
+                "max_age_hours": 28,
+                "unresolved_failures_12h": 0,
+            },
+            {
+                "name": "Automation Orchestrator",
+                "expected_today": True,
+                "stale": False,
+                "last_success_at": "2026-09-15T07:38:38+00:00",
+                "age_hours": 0.1,
+                "max_age_hours": 28,
+                "unresolved_failures_12h": 0,
+            },
+            {
+                "name": "Email report",
+                "expected_today": False,
+                "stale": False,
+                "last_success_at": "2026-09-13T06:54:59+00:00",
+                "age_hours": 48.0,
+                "max_age_hours": 36,
+                "unresolved_failures_12h": 0,
+            },
+        ]
+    )
+    assert "STALE" in html
+    assert "#fde8e8" in html
+    assert "OK" in html
+    assert "#e8f5ec" in html
+    assert "not scheduled today" in html
+    assert "<table" in html
+
+
+def test_format_ops_monitor_html_includes_workflow_table():
+    report = OpsMonitorReport(
+        run_at="2026-09-15T07:46:32+00:00",
+        overall="fail",
+        workflow_checks=[
+            {
+                "name": "FTSE Ingest Loop",
+                "expected_today": False,
+                "stale": False,
+                "last_success_at": "2026-09-14T16:18:31+00:00",
+                "age_hours": 15.5,
+                "max_age_hours": 30,
+                "unresolved_failures_12h": 0,
+            }
+        ],
+    )
+    html = format_ops_monitor_html(report)
+    assert "Workflow freshness" in html
+    assert "<table" in html
+    assert "FTSE Ingest Loop" in html
+
+
+def test_format_ops_monitor_text_workflow_freshness_labels():
+    report = OpsMonitorReport(
+        run_at="2026-09-15T07:46:32+00:00",
+        overall="ok",
+        workflow_checks=[
+            {
+                "name": "Stale workflow",
+                "expected_today": True,
+                "stale": True,
+                "last_success_at": "2026-09-11T08:00:00+00:00",
+                "age_hours": 95.0,
+                "max_age_hours": 28,
+                "unresolved_failures_12h": 0,
+            }
+        ],
+    )
+    text = format_ops_monitor_text(report)
+    assert "[STALE]" in text
+    assert "overdue" in text
+
+
 def test_overall_status_ignores_fixed_findings():
     findings = [
         OpsFinding(
@@ -1358,3 +1443,82 @@ def test_check_phase_b_producer_progress_passes_when_structured_modes_present(tm
             encoding="utf-8",
         )
     assert check_phase_b_producer_progress(research_root) == []
+
+
+def test_parse_published_research_mode_from_structured_memo_header():
+    from value_investor.email_agent import _parse_published_research_mode
+
+    markdown = (
+        "# Example plc (EX.L) — Research memo\n\n"
+        "_Version 1 · Updated 2026-09-14T09:48:32+00:00 · Mode: structured_verdict_\n"
+    )
+    parsed = _parse_published_research_mode(markdown)
+    assert parsed == ("2026-09-14T09:48:32+00:00", "structured_verdict")
+
+
+def test_apply_auto_fixes_lands_phase_b_from_published_memos(tmp_path: Path):
+    research_root = tmp_path / "research"
+    ticker = research_root / "AAA.L"
+    ticker.mkdir(parents=True)
+    (ticker / "research.json").write_text(
+        json.dumps({"ticker": "AAA.L", "mode": "initial", "research_verdict": "accumulate"}),
+        encoding="utf-8",
+    )
+    findings = check_phase_b_producer_progress(research_root)
+    assert findings[0].auto_fixable is True
+
+    with patch(
+        "value_investor.email_agent.repair_published_structured_verdict_to_committed",
+        return_value=3,
+    ) as repair_mock:
+        fixes = apply_auto_fixes(findings, apply=True)
+
+    repair_mock.assert_called_once()
+    assert any(row.get("action") == "repair_phase_b_published_memos" for row in fixes)
+    assert findings[0].fixed is True
+    assert "landed 3 published" in (findings[0].action_taken or "")
+
+
+def test_repair_published_structured_verdict_to_committed(tmp_path: Path):
+    from value_investor.email_agent import repair_published_structured_verdict_to_committed
+
+    memo_dir = tmp_path / "docs" / "research"
+    committed_root = tmp_path / "docs" / "data" / "research"
+    memo_dir.mkdir(parents=True)
+    ticker_dir = committed_root / "EX.L"
+    ticker_dir.mkdir(parents=True)
+    (ticker_dir / "research.json").write_text(
+        json.dumps(
+            {
+                "ticker": "EX.L",
+                "name": "Example plc",
+                "mode": "initial",
+                "research_verdict": "accumulate",
+                "risk_tags": ["cyclical"],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (memo_dir / "EX.L.md").write_text(
+        "# Example plc (EX.L) — Research memo\n\n"
+        "_Version 1 · Updated 2026-09-14T10:00:00+00:00 · Mode: structured_verdict_\n\n"
+        "## RESEARCH VERDICT\n"
+        "Verdict: neutral\n"
+        "Risk: medium\n"
+        "Confidence: 0.55\n"
+        "Rationale: Slim Phase B landing.\n"
+        "RiskTags: cyclical, leverage\n",
+        encoding="utf-8",
+    )
+
+    repaired = repair_published_structured_verdict_to_committed(
+        memo_dir=memo_dir,
+        committed_root=committed_root,
+    )
+    assert repaired == 1
+    payload = json.loads((ticker_dir / "research.json").read_text(encoding="utf-8"))
+    assert payload["mode"] == "structured_verdict"
+    assert payload["updated_at"] == "2026-09-14T10:00:00+00:00"
+    assert payload["research_verdict"] == "neutral"
+    assert payload["research_confidence"] == 0.55
+    assert (ticker_dir / "research.md").exists()

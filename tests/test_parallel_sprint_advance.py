@@ -9,6 +9,7 @@ from value_investor.library_ingest_dispatch import (
     list_library_ingest_parallel_sprint_markets,
     next_parallel_sprint_queue_market,
     parallel_sprint_stream_for_market,
+    sprint_expansion_market_order,
 )
 from value_investor.library_ingest_maintenance import (
     maybe_advance_parallel_sprint_on_parity,
@@ -174,6 +175,44 @@ def test_parallel_sprint_stream_for_market():
     assert parallel_sprint_stream_for_market("sp500", policy=policy) == 1
     assert parallel_sprint_stream_for_market("asx200", policy=policy) == 2
     assert parallel_sprint_stream_for_market("ftse_smallcap", policy=policy) is None
+
+
+def test_next_parallel_sprint_picks_unadmitted_when_queue_sprint_complete():
+    """Spare slot should front-start DEFAULT_MARKET_QUEUE tail when queue is exhausted."""
+    policy = {
+        "focus_market": "euro_depth",
+        "market_queue": ["sp500", "asx200", "ftse_smallcap", "tsx60"],
+        "ingest_parallel_sprint": ["asx200"],
+        "ingest_parallel_sprint_2": [],
+    }
+    complete = {
+        "unmeasured_buy_tier": 0,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 0,
+        "ingest_exhausted": True,
+    }
+    needs_sprint = {
+        "unmeasured_buy_tier": 2,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 0,
+        "indexed_without_body": 0,
+    }
+
+    def _health(market_id: str, **_kwargs):
+        if market_id == "euro_stoxx50":
+            return needs_sprint
+        if market_id in {"sp500", "asx200", "ftse_smallcap", "tsx60"}:
+            return complete
+        return complete
+
+    with patch(
+        "value_investor.library_ingest_dispatch.snapshot_library_buy_tier_filing_health",
+        side_effect=_health,
+    ):
+        order = sprint_expansion_market_order(policy)
+        assert order.index("sp500") < order.index("euro_stoxx50")
+        assert next_parallel_sprint_queue_market(policy) == "euro_stoxx50"
 
 
 def test_reseed_empty_parallel_sprint_slots_fills_queue_order(tmp_path: Path):
