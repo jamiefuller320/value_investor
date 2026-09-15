@@ -4172,7 +4172,9 @@ function lifecycleTickerCard(card) {
           String(card.days_in_column)
         )}d</span>`
       : "";
-  return `<article class="lifecycle-card${band}" data-lifecycle-ticker="${esc(card.ticker)}">
+  return `<button type="button" class="lifecycle-card${band}" data-lifecycle-ticker="${esc(
+    card.ticker
+  )}" title="Open assessment and price chart">
     <div class="lifecycle-card-head">
       <strong>${esc(card.ticker)}</strong>
       <span>${card.signal ? signalBadge(card.signal) : ""}${days}</span>
@@ -4181,7 +4183,148 @@ function lifecycleTickerCard(card) {
     <div class="small">${esc(card.column_reason || card.lifecycle_phase || "")}${
       conv ? ` · conv ${esc(conv)}` : ""
     }${pnl ? ` · P&amp;L ${esc(pnl)}` : ""}</div>
-  </article>`;
+  </button>`;
+}
+
+function findLifecycleTickerCard(ticker) {
+  const board = (dashboardData || {}).lifecycle_board;
+  if (!board || !ticker) return null;
+  const market = findLifecycleMarket(board, lifecycleMarketId);
+  const track = findLifecycleTrack(market, lifecycleTrackId);
+  const cols = mergeLifecycleColumns(market, track);
+  for (const col of board.columns || []) {
+    const packed = cols[col.id] || {};
+    const hit = (packed.shown || []).find((row) => row.ticker === ticker);
+    if (hit) return { column: col, card: hit };
+  }
+  return null;
+}
+
+function findLifecycleReport(ticker) {
+  const reports = (dashboardData || {}).reports || [];
+  return reports.find((row) => row.ticker === ticker) || null;
+}
+
+function findChartOutcomeRow(ticker) {
+  const review = (dashboardData || {}).chart_outcome_review || {};
+  const rows = Array.isArray(review.rows) ? review.rows : [];
+  const hit = rows.find((row) => row.ticker === ticker);
+  if (hit) return hit;
+  for (const list of [review.well_timed || [], review.weakest || []]) {
+    const slim = list.find((row) => row.ticker === ticker);
+    if (slim) return slim;
+  }
+  return null;
+}
+
+function lifecycleChartOutcomeHtml(row) {
+  if (!row) return "";
+  const bits = [
+    row.return_since != null ? `return ${chartOutcomePct(row.return_since)}` : "",
+    row.max_drawdown != null ? `max DD ${chartOutcomePct(row.max_drawdown)}` : "",
+    row.target_hit ? "target hit" : "",
+    row.stop_hit ? "stop hit" : "",
+    row.days_to_target != null ? `${row.days_to_target}d to target` : "",
+  ].filter(Boolean);
+  return `
+    <div class="lifecycle-ticker-outcome">
+      <h4 class="small">Chart outcome since recommendation</h4>
+      <p>${chartOutcomeBadge(row.outcome)}${
+        bits.length ? ` <span class="small muted">${esc(bits.join(" · "))}</span>` : ""
+      }</p>
+    </div>`;
+}
+
+function renderLifecycleTickerCard(ticker) {
+  const found = findLifecycleTickerCard(ticker);
+  const card = (found && found.card) || { ticker };
+  const report = findLifecycleReport(ticker) || {};
+  const outcome = findChartOutcomeRow(ticker);
+  const signal = report.signal || card.signal;
+  const timing = report.timing_signal || card.timing_signal;
+  const conviction =
+    report.conviction_score != null ? report.conviction_score : card.conviction_score;
+  const columnLabel = found && found.column ? found.column.label || found.column.id : "";
+  const pnl =
+    card.unrealized_pnl_pct != null
+      ? `${(Number(card.unrealized_pnl_pct) * 100).toFixed(1)}%`
+      : "";
+  const tenure =
+    card.days_in_column != null
+      ? `${card.days_in_column}d in stage${card.tenure_band ? ` (${card.tenure_band})` : ""}`
+      : "";
+  const metaBits = [
+    columnLabel,
+    card.column_reason || card.lifecycle_phase || "",
+    tenure,
+    pnl ? `P&L ${pnl}` : "",
+    card.opened_at ? `opened ${(card.opened_at || "").slice(0, 10)}` : "",
+    card.sold_at ? `sold ${(card.sold_at || "").slice(0, 10)}` : "",
+  ].filter(Boolean);
+  const models =
+    report.models_passed != null
+      ? `${report.models_passed}/${report.model_count || "?"} models · ${
+          report.families_passed ?? "?"
+        }/${report.family_count || 5} families`
+      : "";
+  const rsi = report.rsi_14 != null ? `RSI ${Math.round(report.rsi_14)}` : "";
+  const stability = [report.stability_label, report.weeks_at_signal ? `${report.weeks_at_signal}w at signal` : ""]
+    .filter(Boolean)
+    .join(" · ");
+  const hasReport = Boolean(report.ticker);
+  const buyTier = signal === "strong_buy" || signal === "buy";
+  return `
+    <p class="small muted" style="margin-top:0">${esc(metaBits.join(" · ") || "Lifecycle board name")}</p>
+    <div class="market-card-badges">
+      ${signal ? signalBadge(signal) : ""}
+      ${timing ? timingBadge(timing) : ""}
+      ${iiTradabilityBadge(report)}
+      ${conviction != null ? `<span class="badge badge-neutral">Conviction ${pct(conviction)}</span>` : ""}
+    </div>
+    ${
+      report.research_verdict
+        ? `<p class="small muted">Research: ${esc(String(report.research_verdict).replace(/_/g, " "))}${
+            report.adjusted_signal && report.adjusted_signal !== report.signal
+              ? ` → ${esc(String(report.adjusted_signal).replace(/_/g, " "))}`
+              : ""
+          }</p>`
+        : ""
+    }
+    ${
+      hasReport
+        ? `<p class="small">${esc(report.action_note || "")}</p>
+           <p class="small muted">${esc([models, rsi, stability].filter(Boolean).join(" · "))}</p>
+           <p class="small"><strong>Trade plan:</strong><br>${tradePlanHtml(report)}</p>
+           ${decisionPackHtml(report)}
+           <p class="small">${esc(report.summary || "")}</p>`
+        : `<p class="small muted">No live-screen report for this ticker in the published dashboard payload (common for sold / cooldown names).</p>`
+    }
+    ${lifecycleChartOutcomeHtml(outcome)}
+    <h4 class="small">Price chart</h4>
+    <p class="small muted" style="margin-top:0">
+      Same Latest screen / Initial recommendation levels as the screener chart${
+        buyTier ? "" : " — published for buy-tier names"
+      }.
+    </p>
+    <div class="lifecycle-ticker-chart" data-lifecycle-chart-mount="${esc(ticker)}"></div>
+  `;
+}
+
+function openLifecycleTickerCard(ticker) {
+  const dialog = document.getElementById("lifecycle-ticker-dialog");
+  const title = document.getElementById("lifecycle-ticker-title");
+  const body = document.getElementById("lifecycle-ticker-body");
+  if (!dialog || !title || !body || !ticker) return;
+  const report = findLifecycleReport(ticker) || {};
+  const found = findLifecycleTickerCard(ticker);
+  const name = report.name || (found && found.card && found.card.name) || ticker;
+  title.textContent = `${name} (${ticker})`;
+  body.innerHTML = renderLifecycleTickerCard(ticker);
+  dialog.showModal();
+  const mount = body.querySelector("[data-lifecycle-chart-mount]");
+  if (mount && typeof mountPriceChart === "function") {
+    void mountPriceChart(mount, report.ticker ? report : { ticker, name });
+  }
 }
 
 function lifecycleTenureLegend(scale) {
@@ -4355,6 +4498,12 @@ function bindLifecyclePanel() {
       if (expBtn) {
         event.preventDefault();
         openLifecycleExperimentCard(expBtn.dataset.lifecycleExperiment);
+        return;
+      }
+      const tickerBtn = event.target.closest("[data-lifecycle-ticker]");
+      if (tickerBtn) {
+        event.preventDefault();
+        openLifecycleTickerCard(tickerBtn.dataset.lifecycleTicker);
       }
     });
     panel.addEventListener("change", (event) => {

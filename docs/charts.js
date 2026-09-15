@@ -283,15 +283,10 @@ function renderChartBody(payload, report, source) {
   `;
 }
 
-async function openPriceChart(report) {
-  const dialog = ensureChartDialog();
-  const title = document.getElementById("chart-title");
-  const body = document.getElementById("chart-body");
+async function mountPriceChart(body, report) {
+  if (!body) return;
   const path = chartPathForReport(report);
-  title.textContent = `${report.name || report.ticker} (${report.ticker})`;
   body.innerHTML = "<p class='muted'>Loading chart…</p>";
-  dialog.showModal();
-
   if (!path) {
     body.innerHTML = `<p class="muted">No chart path for this recommendation.</p>`;
     return;
@@ -301,7 +296,6 @@ async function openPriceChart(report) {
     const response = await fetch(path);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const payload = await response.json();
-    const defaultSource = "current";
     const render = (source) => {
       body.innerHTML = renderChartBody(payload, report, source);
       body.querySelectorAll("[data-level-source]").forEach((button) => {
@@ -311,12 +305,21 @@ async function openPriceChart(report) {
         });
       });
     };
-    render(defaultSource);
+    render("current");
   } catch (err) {
     body.innerHTML = `
       <p class="muted">Could not load price chart (${esc(err.message)}).</p>
       <p class="small muted">Charts are published for buy-tier names on the weekly dashboard update.</p>`;
   }
+}
+
+async function openPriceChart(report) {
+  const dialog = ensureChartDialog();
+  const title = document.getElementById("chart-title");
+  const body = document.getElementById("chart-body");
+  title.textContent = `${report.name || report.ticker} (${report.ticker})`;
+  dialog.showModal();
+  await mountPriceChart(body, report);
 }
 
 function bindChartButtons(root, reportsByTicker) {
