@@ -1029,6 +1029,47 @@ def find_merged_pull_for_branch(
     return dict(merged[0])
 
 
+def list_merge_sync_lag_tasks(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    repo: str | None = None,
+    token: str | None = None,
+) -> list[dict[str, Any]]:
+    """Return open/pr_open tasks whose engineering PR already merged on GitHub.
+
+    This is the queue-file vs GitHub desync that appears after a human (or
+    scoped auto) merge until mark-merged / recover commits the stamp.
+    """
+    lagged: list[dict[str, Any]] = []
+    data = load_engineering_tasks(tasks_path)
+    for row in data.get("tasks") or []:
+        if row.get("merged_at"):
+            continue
+        status = str(row.get("status") or "")
+        if status not in {IN_FLIGHT_STATUS, DISPATCHABLE_STATUS}:
+            continue
+        task_id = str(row.get("id") or "")
+        branch = str(row.get("branch_name") or "").strip()
+        if not branch:
+            branch = engineering_branch_for_task_id(task_id) or ""
+        if not branch:
+            continue
+        pr = find_merged_pull_for_branch(branch, repo=repo, token=token)
+        if not pr or not pr.get("merged_at"):
+            continue
+        lagged.append(
+            {
+                "task_id": task_id,
+                "branch": branch,
+                "status": status,
+                "pr_number": pr.get("number"),
+                "pr_url": pr.get("html_url"),
+                "merged_at": pr.get("merged_at"),
+            }
+        )
+    return lagged
+
+
 def reconcile_merged_pr_open_tasks(
     *,
     tasks_path: Path = COMMITTED_TASKS_PATH,

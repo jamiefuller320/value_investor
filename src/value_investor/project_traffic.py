@@ -47,6 +47,9 @@ ACTION_DISPATCH_CI_AUTOFIX = "dispatch_ci_autofix_hint"
 ACTION_DISPATCH_CONFLICT = "dispatch_conflict_resolve"
 ACTION_PAUSE = "pause_dispatch"
 ACTION_RESUME = "resume_dispatch"
+ACTION_QUEUE_SYNC = "remediate_queue_merge_sync"
+
+QUEUE_MERGE_SYNC_FINDING_TITLE = "Engineering queue merge sync lag"
 
 DEFAULT_STUCK_PR_THRESHOLD = 2
 DEFAULT_MIN_FAIL_AGE_MINUTES = 20
@@ -118,6 +121,9 @@ class TrafficControllerReport:
     should_dispatch_conflict_agent: list[dict[str, Any]]
     digest: dict[str, Any] | None = None
     state: dict[str, Any] = field(default_factory=dict)
+    queue_sync_lag_ids: list[str] = field(default_factory=list)
+    queue_sync_fixed_ids: list[str] = field(default_factory=list)
+    queue_sync_remaining_ids: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -131,7 +137,81 @@ class TrafficControllerReport:
             "should_dispatch_conflict_agent": list(self.should_dispatch_conflict_agent),
             "digest": self.digest,
             "state": self.state,
+            "queue_sync_lag_ids": list(self.queue_sync_lag_ids),
+            "queue_sync_fixed_ids": list(self.queue_sync_fixed_ids),
+            "queue_sync_remaining_ids": list(self.queue_sync_remaining_ids),
         }
+
+
+def remediate_queue_merge_sync(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    open_prs: list[dict[str, Any]] | None = None,
+    repo: str | None = None,
+    token: str | None = None,
+    apply: bool = True,
+) -> tuple[list[str], list[str], list[str], list[TrafficAction]]:
+    """PM-owned repair for queue rows still open/pr_open after GitHub merge.
+
+    Returns ``(lag_ids, fixed_ids, remaining_ids, actions)``. Ops monitor should
+    email only when ``remaining_ids`` is non-empty after this runs.
+    """
+    from value_investor import engineering_recovery as er
+
+    lag_rows = er.list_merge_sync_lag_tasks(
+        tasks_path=tasks_path,
+        repo=repo,
+        token=token,
+    )
+    lag_ids = [str(row.get("task_id") or "") for row in lag_rows if row.get("task_id")]
+    if not lag_ids:
+        return [], [], [], []
+
+    actions: list[TrafficAction] = [
+        TrafficAction(
+            kind=ACTION_QUEUE_SYNC,
+            detail=(
+                f"detected merge sync lag for {len(lag_ids)} task(s): "
+                + ", ".join(lag_ids[:8])
+            ),
+            applied=False,
+        )
+    ]
+    if not apply:
+        return lag_ids, [], list(lag_ids), actions
+
+    recovery = er.recover_engineering_queue(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        repo=repo,
+        token=token,
+        apply=True,
+    )
+    fixed_from_recover = [str(task_id) for task_id in (recovery.merged or []) if task_id]
+    remaining_rows = er.list_merge_sync_lag_tasks(
+        tasks_path=tasks_path,
+        repo=repo,
+        token=token,
+    )
+    remaining_ids = [
+        str(row.get("task_id") or "") for row in remaining_rows if row.get("task_id")
+    ]
+    fixed_ids = [task_id for task_id in lag_ids if task_id not in set(remaining_ids)]
+    if not fixed_ids and fixed_from_recover:
+        fixed_ids = [task_id for task_id in fixed_from_recover if task_id in set(lag_ids)]
+
+    detail = (
+        f"PM remediated queue merge sync: fixed={fixed_ids or ['none']}; "
+        f"remaining={remaining_ids or ['none']}"
+    )
+    actions.append(
+        TrafficAction(
+            kind=ACTION_QUEUE_SYNC,
+            detail=detail,
+            applied=bool(fixed_ids) and not remaining_ids,
+        )
+    )
+    return lag_ids, fixed_ids, remaining_ids, actions
 
 
 def _utcnow() -> datetime:
@@ -1038,6 +1118,15 @@ def run_project_traffic(
     if apply and state != get_traffic_control_state(tasks_path=tasks_path):
         _save_traffic_control_state(state, tasks_path=tasks_path, apply=True)
 
+    lag_ids, fixed_ids, remaining_ids, sync_actions = remediate_queue_merge_sync(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        repo=repo,
+        token=token,
+        apply=apply,
+    )
+    actions.extend(sync_actions)
+
     digest = None
     if write_digest and policy.get("digest_enabled", True):
         digest = build_daily_digest(
@@ -1058,6 +1147,9 @@ def run_project_traffic(
         should_dispatch_conflict_agent=conflict_dispatches,
         digest=digest,
         state=state,
+        queue_sync_lag_ids=lag_ids,
+        queue_sync_fixed_ids=fixed_ids,
+        queue_sync_remaining_ids=remaining_ids,
     )
 
 

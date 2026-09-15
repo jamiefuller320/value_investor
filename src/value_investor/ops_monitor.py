@@ -1033,6 +1033,8 @@ def check_engineering_queue(
     *,
     open_prs: list[dict[str, Any]] | None = None,
     tasks_path: Path = COMMITTED_TASKS_PATH,
+    repo: str | None = None,
+    token: str | None = None,
 ) -> tuple[list[OpsFinding], dict[str, Any]]:
     findings: list[OpsFinding] = []
     status = summarize_queue(tasks_path=tasks_path, open_prs=open_prs)
@@ -1051,6 +1053,29 @@ def check_engineering_queue(
                 category="engineering",
                 title="Orphaned pr_open engineering tasks",
                 summary=f"Tasks without matching open PR: {ids}",
+                auto_fixable=True,
+            )
+        )
+
+    from value_investor.engineering_recovery import list_merge_sync_lag_tasks
+    from value_investor.project_traffic import QUEUE_MERGE_SYNC_FINDING_TITLE
+
+    merge_lag = list_merge_sync_lag_tasks(
+        tasks_path=tasks_path,
+        repo=repo,
+        token=token,
+    )
+    if merge_lag:
+        ids = ", ".join(str(row.get("task_id")) for row in merge_lag[:8])
+        findings.append(
+            OpsFinding(
+                severity="warn",
+                category="engineering",
+                title=QUEUE_MERGE_SYNC_FINDING_TITLE,
+                summary=(
+                    f"{len(merge_lag)} task(s) still open/pr_open after GitHub merge: {ids}. "
+                    "Handed to project-traffic PM remediation; email only if repair fails."
+                ),
                 auto_fixable=True,
             )
         )
@@ -1415,13 +1440,19 @@ def apply_auto_fixes(
         recovery = recover_engineering_queue(
             tasks_path=tasks_path,
             open_prs=open_prs,
+            repo=repo,
+            token=token,
             apply=True,
         )
         if recovery.merged:
             action = f"marked merged from GitHub PR: {', '.join(recovery.merged)}"
             results.append({"action": "recover_engineering_queue", "detail": action})
+            from value_investor.project_traffic import QUEUE_MERGE_SYNC_FINDING_TITLE
+
             for finding in findings:
-                if finding.title.startswith("Orphaned pr_open"):
+                if finding.title.startswith("Orphaned pr_open") or finding.title == (
+                    QUEUE_MERGE_SYNC_FINDING_TITLE
+                ):
                     finding.fixed = True
                     finding.action_taken = action
         if recovery.reconciled:
@@ -1776,6 +1807,8 @@ def collect_ops_findings(
     engineering_findings, queue_status = check_engineering_queue(
         open_prs=open_prs,
         tasks_path=tasks_path,
+        repo=repo,
+        token=token,
     )
     if eng_failures is None:
         eng_failures = recent_workflow_failures(
@@ -1900,7 +1933,10 @@ def run_ops_monitor(
                     finding.action_taken = f"dispatched {workflow_file} recovery run"
 
     try:
-        from value_investor.project_traffic import run_project_traffic
+        from value_investor.project_traffic import (
+            QUEUE_MERGE_SYNC_FINDING_TITLE,
+            run_project_traffic,
+        )
 
         traffic_report = run_project_traffic(
             tasks_path=tasks_path,
@@ -1910,6 +1946,50 @@ def run_ops_monitor(
             apply=apply_fixes,
             write_digest=True,
         )
+        if traffic_report.queue_sync_fixed_ids and not traffic_report.queue_sync_remaining_ids:
+            action = (
+                "project-traffic PM remediated queue merge sync: "
+                + ", ".join(traffic_report.queue_sync_fixed_ids)
+            )
+            auto_fixes.append(
+                {
+                    "action": "traffic_remediate_queue_merge_sync",
+                    "detail": action,
+                }
+            )
+            for finding in findings:
+                if finding.title in {
+                    QUEUE_MERGE_SYNC_FINDING_TITLE,
+                } or finding.title.startswith("Orphaned pr_open"):
+                    finding.fixed = True
+                    finding.action_taken = action
+        elif traffic_report.queue_sync_remaining_ids:
+            remaining = ", ".join(traffic_report.queue_sync_remaining_ids)
+            for finding in findings:
+                if finding.title == QUEUE_MERGE_SYNC_FINDING_TITLE:
+                    finding.fixed = False
+                    finding.summary = (
+                        f"PM remediation could not clear merge sync lag for: {remaining}. "
+                        "Manual queue stamp / recover-queue required."
+                    )
+                    finding.action_taken = (
+                        "project-traffic attempted recover_engineering_queue; lag remains"
+                    )
+            if not any(f.title == QUEUE_MERGE_SYNC_FINDING_TITLE for f in findings):
+                findings.append(
+                    OpsFinding(
+                        severity="warn",
+                        category="engineering",
+                        title=QUEUE_MERGE_SYNC_FINDING_TITLE,
+                        summary=(
+                            f"PM remediation could not clear merge sync lag for: {remaining}."
+                        ),
+                        auto_fixable=False,
+                        action_taken=(
+                            "project-traffic attempted recover_engineering_queue; lag remains"
+                        ),
+                    )
+                )
         if traffic_report.pause_active:
             findings.append(
                 OpsFinding(
@@ -1928,6 +2008,7 @@ def run_ops_monitor(
             if action.applied or action.kind in {
                 "pause_dispatch",
                 "resume_dispatch",
+                "remediate_queue_merge_sync",
             }:
                 auto_fixes.append(
                     {
@@ -1948,7 +2029,8 @@ def run_ops_monitor(
         draftable = [
             row
             for row in findings
-            if finding_email_defer_reason(row, workflow_checks=workflow_checks) is None
+            if not row.fixed
+            and finding_email_defer_reason(row, workflow_checks=workflow_checks) is None
         ]
         drafted_ids = draft_ops_engineering_tasks(draftable, tasks_path=tasks_path)
 

@@ -533,3 +533,42 @@ def test_park_agent_task_cli(tmp_path: Path):
     updated = load_engineering_tasks(tasks_path)
     assert updated["tasks"][0]["status"] == "parked"
     assert updated["tasks"][0].get("parked_policy") == "workflow_permission"
+
+
+def test_list_merge_sync_lag_tasks(tmp_path: Path, monkeypatch):
+    from value_investor.engineering_recovery import list_merge_sync_lag_tasks
+
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task("eng-20260915-04", status="pr_open").to_dict()
+            | {"branch_name": "cursor/eng-20260915-04-1de3"},
+            _task("eng-20260915-09", status="open").to_dict()
+            | {"branch_name": "cursor/eng-20260915-09-1de3"},
+            _task("eng-20260915-02", status="open").to_dict(),
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    def fake_merged(branch, **kwargs):
+        mapping = {
+            "cursor/eng-20260915-04-1de3": {
+                "html_url": "https://github.com/example/repo/pull/652",
+                "number": 652,
+                "merged_at": "2026-09-15T13:49:04Z",
+            },
+            "cursor/eng-20260915-09-1de3": {
+                "html_url": "https://github.com/example/repo/pull/653",
+                "number": 653,
+                "merged_at": "2026-09-15T13:49:28Z",
+            },
+        }
+        return mapping.get(branch)
+
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.find_merged_pull_for_branch",
+        fake_merged,
+    )
+    lagged = list_merge_sync_lag_tasks(tasks_path=tasks_path, token="x")
+    ids = [row["task_id"] for row in lagged]
+    assert ids == ["eng-20260915-04", "eng-20260915-09"]

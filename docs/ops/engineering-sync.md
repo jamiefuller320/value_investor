@@ -84,6 +84,13 @@ Redispatch happens when **all** of:
 
 Dispatch target is always re-resolved to a currently open task id.
 
+## Ops monitor → PM handoff
+
+`list_merge_sync_lag_tasks()` detects `open`/`pr_open` rows whose branch already
+has a merged GitHub PR. Ops monitor raises an auto-fixable finding and
+`project-traffic.remediate_queue_merge_sync()` owns the repair. Warn email fires
+only if remediation leaves remaining lag ids.
+
 ## Related
 
 - [`ops-monitor.md`](ops-monitor.md) — daily health checks
