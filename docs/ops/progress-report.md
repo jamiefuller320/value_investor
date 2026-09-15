@@ -153,6 +153,7 @@ Doctrine and wiring checks:
 - Post-run **prioritised plan** lines without a fuzzy match among open engineering tasks
   (severity **info** when every such line already matches merged/parked tasks only)
 - Post-run plan **truncated by compile cap** (`max_tasks`, default 8) or lower-priority candidates dropped
+  (idle drain: `ftse-engineering try-compile-cap-drain --apply` — one at a time, **above** parked hunter)
 - Stale proposed review tasks (>14 days)
 - Analysis / horizon artifacts vs proposed task queues
 - Engineering tasks missing `allowed_paths`

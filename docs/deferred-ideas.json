@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-14T15:20:00+00:00",
+  "updated_at": "2026-09-15T07:52:00+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8776,6 +8776,23 @@
       "status": "open",
       "source": "cursor agent: sprint ingest not cascading diagnosis",
       "added_at": "2026-09-14T15:20:00+00:00"
+    },
+    {
+      "id": "L391",
+      "category": "later",
+      "section": "ops",
+      "title": "Interleave hunter with compile-cap drain if backlog stays huge",
+      "summary": "Compile-cap drain currently outranks parked hunter whenever the priority queue is idle. If the role-coherence suggestion backlog stays in the hundreds for a long stretch, consider a fixed interleave (e.g. 3 drain : 1 hunter) so offline leftover hunts are not starved.",
+      "revisit_when": "Compile-cap drain pending_count stays above 100 for two consecutive weeks while hunter candidates remain",
+      "tags": [
+        "engineering",
+        "compile-cap",
+        "hunter",
+        "priority"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0a403-5255-707a-915c-83d7dcf82b15",
+      "added_at": "2026-09-15T07:52:00+00:00"
     }
   ],
   "fragments": [

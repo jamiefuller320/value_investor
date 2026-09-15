@@ -27,6 +27,7 @@ from value_investor.ci_fix_tasks import (
     task_eligible_for_auto_merge,
 )
 from value_investor.cli_args import apply_parsed_globals
+from value_investor.compile_cap_drain import compile_next_compile_cap_drain_task
 from value_investor.cursor_api_key import resolve_cursor_api_key
 from value_investor.engineering_agent import (
     DEFAULT_ESTIMATED_USD,
@@ -158,6 +159,50 @@ def _cmd_try_idle_compile_backstop(args: argparse.Namespace) -> int:
         if result.get("applied"):
             compile_result = result.get("compile") or {}
             print(f"Added {compile_result.get('added_open_count')} open task(s)")
+    return 0
+
+
+def _cmd_try_compile_cap_drain(args: argparse.Namespace) -> int:
+    from value_investor.engineering_recovery import is_queue_clearing_pause_active
+
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    if is_queue_clearing_pause_active(tasks_path=tasks_path):
+        payload = {
+            "compiled_count": 0,
+            "reason": "queue_clearing_pause_active",
+        }
+        if args.json:
+            _print_json(payload)
+        else:
+            print("compile-cap-drain: skipped (attention parked backlog clearing pause)")
+        return 0
+
+    payload = compile_next_compile_cap_drain_task(
+        apply=bool(args.apply),
+        tasks_path=tasks_path,
+        committed_path=tasks_path,
+        output_dir=args.output_dir,
+        latest_path=args.latest_path,
+        suggestions_path=args.suggestions_path,
+        max_tasks=args.max_tasks,
+    )
+    if args.json:
+        _print_json(payload)
+    else:
+        compiled = int(payload.get("compiled_count") or 0)
+        reason = str(payload.get("reason") or "")
+        if compiled:
+            ids = ", ".join(payload.get("task_ids") or [])
+            print(
+                f"compile-cap-drain: added {ids} "
+                f"({payload.get('area')} / score={payload.get('priority_score')}) "
+                f"— {str(payload.get('title') or '')[:80]}"
+            )
+            remaining = payload.get("pending_remaining")
+            if remaining is not None:
+                print(f"  backlog remaining after this: {remaining}")
+        else:
+            print(f"compile-cap-drain: skipped ({reason or 'no task'})")
     return 0
 
 
@@ -1472,6 +1517,23 @@ def main(argv: list[str] | None = None) -> int:
         help="Run compile when guards pass (default: evaluate only)",
     )
     idle_bs.set_defaults(func=_cmd_try_idle_compile_backstop)
+
+    cap_drain = sub.add_parser(
+        "try-compile-cap-drain",
+        parents=[common],
+        help=(
+            "When priority engineering queue is empty, queue one compile-cap / "
+            "role-coherence backlog candidate (above parked hunter)"
+        ),
+    )
+    cap_drain.add_argument("--latest-path", type=Path, default=DEFAULT_LATEST_PATH)
+    cap_drain.add_argument("--max-tasks", type=int, default=DEFAULT_MAX_COMPILE_TASKS)
+    cap_drain.add_argument(
+        "--apply",
+        action="store_true",
+        help="Write the next backlog task when guards pass (default: evaluate only)",
+    )
+    cap_drain.set_defaults(func=_cmd_try_compile_cap_drain)
 
     cap_audit = sub.add_parser(
         "compile-cap-audit",
