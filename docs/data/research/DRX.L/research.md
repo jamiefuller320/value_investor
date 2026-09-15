@@ -1,88 +1,20 @@
 # Drax Group plc (DRX.L) — Research memo
 
-_Version 1 · Updated 2026-09-02T10:19:23.853668+00:00 · Mode: initial_
+_Version 2 · Updated 2026-09-15T11:38:44.758862+00:00 · Mode: structured_verdict_update_
 
-## EXECUTIVE SUMMARY
-Drax is pivoting from a biomass-heavy generator into a broader UK flexible-generation and renewables platform—battery storage, OCGTs, Flexitricity optimisation, and the ~£561m Bluefield Solar (BSIF) acquisition—while retaining material earnings from Drax Power Station and North American pellet supply. The quantitative screen rates the name a **hold**: cheapness and cash-flow models pass (notably filing-aligned FCF yield ~19.8%), but headline valuation metrics are distorted (P/E 86x, ROE 0.8%) and liquidity screens fail. The central debate is whether contracted Capacity Market/CfD revenues and management’s £650–800m 2029 Adjusted EBITDA ambition offset cyclical power-price pressure, rising net debt post-BSIF, and persistent biomass credibility and policy risk. Filings support a cash-generative, strategically repositioned utility; they do not yet resolve whether reported earnings quality and leverage are fully priced.
+_Phase B structured verdict (essay sections omitted on scheduled path)._
 
-## INVESTMENT THESIS
-For a value investor, **hold** is appropriate rather than accumulate or pass. The screen passes **cheapness** (FCF Yield, Acquirer’s Multiple), **GARP** (Neff PEGY 0.24 despite -36.2% growth), and **risk** (Earnings Quality, Magic Formula), with high data completeness (20/20 metrics). Filing-aligned free cash flow of **£515.8m** in FY2025 (Yahoo fallback for IFRS cash-flow statement where interim bodies give segment detail only) supports the FCF-yield hook; the screen itself flags TTM FCF suppression and a wide gap versus filing-aligned FCF.
-
-Business quality is mixed. Operationally, Drax remains system-critical—H1 2026 RNS cites ~6% of UK power and ~10% of renewables—with **£650m** of index-linked Capacity Market agreements extending visibility to 2043 (April 2026 trading update) and a biomass CfD from April 2027. Strategically, capital is shifting toward FlexGen and renewables (BESS pipeline ~710MW, three OCGTs, BSIF ~0.9GW operating plus pipeline). Against that, FY2025 reported net income collapsed on **£382.5m** impairments (Yahoo annual; primary annual body confirms large Northern Pellets charges in narrative), ROE is near zero, and net debt rose to **£1,025m** at H1 2026 (1.3x LTM Adjusted EBITDA) before full BSIF integration—above yearend 2025 **£784m** (<1.0x). The screen’s weak liquidity flag aligns with H1 working-capital outflows (ROC build) and paused buybacks. Cheap on cash, expensive on earnings, strategically evolving: a hold, not a clear deep-value buy.
-
-## FINANCIAL REVIEW
-**Annual trend (primary filings)**
-
-The filings index includes eight annual bodies (Companies House group accounts 2022–2025 plus RNS annual-report notice, 25 Mar 2026). The **2025 Full Year Results RNS (26 Feb 2026) is referenced in the AGM notice but has no separate indexed body extract**; FY2025 operating metrics below are taken from the Companies House 2025 annual report body (`ch_05562053_MzUyMDY1NTY3M2FkaXF6a2N4`, filed May 2026).
-
-| Metric | FY2023 | FY2024 | FY2025 (filings) |
-|--------|--------|--------|------------------|
-| Adjusted EBITDA | £1,214m (2023 AR) | £1,064m (2025 AR vs prior) | **£947m** (-11%) |
-| Net debt | £1,084m (2023 AR) | £992m (2024 AR KPI) | **£784m** (<1.0x Adj. EBITDA) |
-| Dividend | 23.1p | 26.0p (implied +11%) | **28.0p** proposed |
-| Biomass Gen. Adj. EBITDA | — | £814m | **£725m** (-11%) |
-
-FY2025 narrative: strong operations but **lower achieved power prices**; **£942m** cash and committed facilities; **~£317m** returned via dividends and buybacks in 2025. Management targets post-2027 Adjusted EBITDA of **£600–700m** before development spend (2025 AR), later raised to **£650–800m by 2029** including BESS (H1 2026).
-
-**IFRS/statutory layer (Yahoo fallback — filing bodies lack clean consolidated P&L tables):** revenue fell from **£7.73bn** (2023) to **£6.16bn** (2024) to **£5.39bn** (2025); net income from **£563m** to **£527m** to **£73m**, with FY2025 dominated by **£377.7m** asset impairments. Free cash flow improved to **£515.8m** (2025) from **£472m** (2024); operating cash flow **£810m**. Net debt per Yahoo **£627m** at FY2025 yearend differs from filing **£784m** (definition/timing); **filings are preferred for leverage narrative**.
-
-**Interim H1 2026 (RNS body, 30 Jul 2026)**
-
-- **Adjusted EBITDA £279m** vs **£460m** H1 2025 (−39%), mainly lower biomass achieved prices.
-- **Operating profit £265m**; **profit before tax £222m**; **adjusted basic EPS 29.8p** (65.6p prior).
-- **Net debt £1,025m**; **LTM Adjusted EBITDA £765m**; leverage **1.3x** (target ~2.0x).
-- **Cash and committed facilities £630m**; **cash £180m**; undrawn **£450m** RCF extended to 2029.
-- **Interim dividend 12.9p**; **FY2026 dividend guidance 32.2p** (+11%).
-- **FY2026 Adj. EBITDA** expected in line with consensus **£665m** (range £643–681m, Jul 2026).
-- **Going concern:** Board satisfied for ≥12 months under severe-but-plausible scenarios, with and without BSIF; bridging facility **£1,083m** for BSIF completion.
-
-**Trading update (30 Apr 2026):** reconfirmed FY2026 consensus; first **£75m** of **£450m** buyback complete; Flexitricity closed; **>£1bn** contracted forward power sales 2026–28.
-
-**H1 2026 segment highlights:** Biomass Generation Adj. EBITDA **£159m** (vs £332m); Pellet Production **£64m**; FlexGen **£77m** (Cruachan outage on units 3–4); first OCGT (Hirwaun) commissioned May 2026.
-
-**Gap note:** No indexed full-year results RNS body; Companies House OCR quality is imperfect on some line items. Quarterly Yahoo cash-flow series is empty (TTM suppressed).
-
-## RISKS AND RED FLAGS
-**Regulatory and biomass acceptability:** Principal risk per H1 2026 interim (referencing 2025 AR pp. 41–48). FCA investigation (Aug 2025–Jun 2026) into historical biomass sourcing statements **closed with no action** (18 Jun 2026 RNS), but OFGEM/industry scrutiny remains a live overhang (news coverage Aug 2025–Aug 2026 on “biomass credibility”). November 2025 **biomass CfD** (£109.90/MWh real, 2027–31) improves post-2027 visibility but policy can shift with government.
-
-**Cyclical commodity exposure:** H1 2026 earnings fell sharply on **lower forward/achieved power prices**; hedging provides partial mitigation (£1.1bn+ forward sales to 2028 per H1 RNS) but merchant tail and ROC timing drive working-capital volatility.
-
-**Leverage and liquidity:** Net debt rose **£784m → £1,025m** in six months; BSIF adds ~**£1.08bn** enterprise value funded via bridging facility. Going concern assessment is positive, but **liquidity screen failure** on the quant side is consistent with H1 ROC-related working-capital outflow (**£175m**) and buyback pause.
-
-**Operational:** Forced Cruachan outage (SPEN grid connection) into 2027; Canadian pellet strategic review ongoing; Northern Pellets impairments (**£198m** full-year 2025 per H1 commentary).
-
-**Governance/finance:** CFO medical leave (Mar 2026) with interim appointment; Frank Lemmink returned 27 May 2026. No covenant breach flagged; credit ratings **BB+ / BBB (low)** reaffirmed post-BSIF announcement.
-
-**Accounting:** Large gap between **adjusted** metrics (investor/analyst focus) and **IFRS** earnings (FY2025 net income **£73m** vs normalised **~£360m** per Yahoo). Exceptional/remeasurement volatility in commodity derivatives affects reported PBT (**£222m** adjusted path vs derivative-driven swings).
-
-**Pension:** Defined benefit **surplus £35.7m** at 30 Jun 2026 (H1 balance sheet)—not a material red flag in filings.
-
-RiskTags: regulatory, cyclical, leverage, competitive, accounting
-RiskTags: regulatory, cyclical, leverage, competitive, accounting
-
-## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate but repetitive**—heavy Kalkine/Yahoo opinion pieces on dispatchable power and grid stress, with fewer primary-source exclusives.
-
-**Material corporate events (filings + manifest):**
-
-- **26 Feb 2026:** FY2025 results (referenced; not in indexed body).
-- **25 Mar 2026:** 2025 Annual Report and AGM notice published.
-- **30 Apr 2026:** Trading update — FY2026 EBITDA on consensus; buyback progress; Capacity Market **£650m** visibility to 2043.
-- **1 Jun 2026:** Recommended **£561m** all-cash BSIF acquisition (Reuters/Yahoo: “UK's Drax to buy Bluefield Solar in $755 million renewables deal”).
-- **18 Jun 2026:** **FCA investigation closed, no action** (“UK financial watchdog closes Drax investigation” — marketscreener.com, 18 Jun 2026).
-- **Mar 2026:** Flexitricity acquired (**£36m**); first OCGT commissioned May 2026.
-- **31 Jul 2026:** BSIF scheme effective; BSIF listing cancelled Aug 2026.
-- **30 Jul 2026:** H1 2026 results — Adj. EBITDA **£279m**; dividend raised; 2029 EBITDA target **£650–800m**.
-- **Mar 2026:** Interim CFO during Frank Lemmink leave; return announced 27 May 2026.
-- **Jan 2026:** Flexitricity acquisition completed (trading update).
-- **Feb 2026:** Data-centre option at Selby site (Investors’ Chronicle, 26 Feb 2026).
-- **Aug 2025:** UK regulator biomass investigation opened (Baystreet.ca, 28 Aug 2025 — predates FCA closure).
-- **Analyst narrative:** Split targets **£8.14–£10.50** (“Drax Group Stock Draws Fresh Price Target Split”, Yahoo Finance, 12 Aug 2026); Jefferies/Citi target moves cited in trade press.
-
-**Thin spots:** Limited investigative or sell-side primary research in the manifest; much content is templated sector commentary. Ticker confusion with ASX/TSX “DRX” names appears in the feed.
 
 ## RESEARCH VERDICT
 Verdict: neutral
 Risk: medium
-Confidence: 0.62
-Rationale: Deep research confirms the screen’s hold—strong filing-backed FCF and contracted flex-gen assets support cheapness passes, but cyclical earnings pressure, BSIF-driven leverage, and unresolved biomass/regulatory overhang prevent upgrading despite strategic optionality.
+Confidence: 0.60
+Rationale: Research confirms the hold—filing-backed FCF and the flex-gen pivot stand—but thin news since H1 does not offset cyclical EBITDA, post-BSIF leverage, or biomass/regulatory overhang.
+RiskTags: regulatory, cyclical, leverage, competitive, accounting, liquidity
+
+## Weekly updates
+
+### 2026-09-15T11:38:44.758862+00:00
+No new RNS or filings in sources since the 2 Sep memo; H1 2026 and completed Bluefield Solar integration remain the latest anchors.  
+Post–2 Sep news is mostly Kalkine/ad-hoc commentary on interim results, the solar-fund deal, and flex-gen strategy, plus a 3 Sep holdings disclosure and board-appointment mention.  
+No material change to the hold case or risk profile.

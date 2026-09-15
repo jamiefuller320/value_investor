@@ -1,84 +1,20 @@
 # Vesuvius plc (VSVS.L) — Research memo
 
-_Version 1 · Updated 2026-09-02T10:20:58.633815+00:00 · Mode: initial_
+_Version 2 · Updated 2026-09-15T11:30:21.278737+00:00 · Mode: structured_verdict_update_
 
-## EXECUTIVE SUMMARY
-Vesuvius plc is a global molten-metal flow engineering group (Steel and Foundry consumables and services) whose shares screen as cheap on asset-based and income metrics—P/B ~0.8, dividend yield ~6%, EV/EBITDA ~7.2—despite a cyclical trough in return on sales (8.4% in FY25 vs a 12.5% medium-term target). The quantitative screen rates the name a buy (five models, 62% composite), but overlays flag earnings quality and free-cash-flow coverage of the dividend; adjusted screen signal is hold. Primary filings show resilient revenue (~£1.81bn FY25) alongside a sharp trading-profit decline (£151m vs £188m FY24) and leverage at the top of management’s 1.0–2.0x target (2.0x net debt/EBITDA). H1 2026 confirms modest top-line growth and strong interim cash generation, but Steel division operational failures capped profit and triggered a July trading-update sell-off. The value case rests on trough margins, self-help (£55m cost programme), bolt-on M&A, and eventual steel/foundry recovery; the debate is whether operational execution and weak European pricing recover before dividend sustainability is tested.
+_Phase B structured verdict (essay sections omitted on scheduled path)._
 
-## INVESTMENT THESIS
-For a value investor, Vesuvius offers a classic cyclical industrial at a depressed multiple on depressed earnings: the screen passes Deep Value, Acquirer’s Multiple (EV/EBITDA 7.2), High Dividend Yield, Neff PEGY (0.05), and Financial Health—four of four factor families (cheapness, dividend, GARP, risk). Book value is not impaired (tangible book ~£376m per Yahoo balance sheet FY25; P/B 0.83 in screen), and management has maintained a progressive dividend (23.6p FY25; 7.1p interim maintained in H1 2026) while returning £100m via buybacks. Business quality is supported by technology leadership (new-product sales ratio 20.5% FY25, 21.0% H1 26), global footprint close to customers, and structural exposure to India and non-ferrous foundry via PiroMET and Molten Metal Systems (MMS). The screen’s timing overlay (accumulate; RSI ~44; price below 200-day MA) aligns with buying a cyclical name into weakness, but conviction is tempered by the screen’s own FCF basis mismatch (filing £26.2m vs company-adjusted £36m vs suppressed TTM) and dividend overlay downgrade to hold—consistent with filing evidence that FY25 free cash flow (£36.0m per Final Results) covered dividends (£57.9m) only partially. Net: asset cheapness and recovery optionality support the buy signal; earnings and cash-flow quality require monitoring before full sizing.
-
-## FINANCIAL REVIEW
-**Annual (FY25 vs FY24)** — Source: Final Results RNS, 12 March 2026 (`4db8a830cf1de846.txt`).
-
-| Metric | FY25 | FY24 | Change |
-|--------|------|------|--------|
-| Revenue | £1,809.5m | £1,820.1m | −0.6% reported; +0.7% LFL |
-| Trading profit (adj.) | £151.1m | £188.0m | −19.6% |
-| Return on sales | 8.4% | 10.3% | −190bps |
-| Adjusted basic EPS | 34.2p | 43.3p | −21.0% |
-| Statutory basic EPS | 21.1p | 33.5p | −37.0% |
-| Free cash flow | £36.0m | £57.8m | −37.7% |
-| Net debt | £452.4m | £329.2m | +£123m |
-| Net debt / EBITDA (pro-forma) | 2.0x | 1.3x | +0.7x |
-| Total dividend | 23.6p | 23.5p | +0.4% |
-| ROIC (ex-Foseco goodwill) | 10.5% | 14.4% | −390bps |
-
-FY25 revenue was broadly flat while EMEA weakness drove ~80% of the trading-profit decline; cost savings delivered £17.8m (programme total £30.8m of £55m target by 2028). Cash conversion was 75%. Pension net liability £31.6m; UK plan liabilities largely insured via PIC buy-in (2021). Going concern confirmed to 30 June 2027; covenant headroom substantial (downside scenario max leverage ~1.9x vs 3.25x limit).
-
-**Interim (H1 26 vs H1 25)** — Sources: Half-year Financial Results, 30 July 2026 (`feeb6f0fd4121dc2.txt`); Half-year Report, 6 August 2025 (`525e19fc11b6d2e5.txt`).
-
-| Metric | H1 2026 | H1 2025 | Change |
-|--------|---------|---------|--------|
-| Revenue (adj.) | £913.7m | £907.5m | +0.7% reported; +1.5% CC |
-| Trading profit | £74.0m | £77.0m | −3.9% |
-| Return on sales | 8.1% | 8.5% | −40bps |
-| Adjusted basic EPS | 16.3p | 17.1p | −5.0% |
-| Free cash flow | +£27.5m | −£12.6m | Improved |
-| Net debt | £429.6m | £452.4m | −£22.8m vs Dec-25 |
-| Net debt / EBITDA (pro-forma) | 1.9x | 2.0x | −0.1x |
-
-H1 2026 narrative: positive net pricing and cost savings offset by Steel operational issues (estimated ~£6m lost profit North America; ~£2m India ramp-up); Foundry improved sharply (+32.7% trading profit CC) aided by MMS. Management guides FY26 trading profit slightly ahead of FY25 CC. H1 2025 had shown RoS compression to 8.5% amid weak EU/China pricing and adverse mix.
-
-**Trend summary:** Revenue resilience masks a two-year margin squeeze (RoS from 10.3% FY24 → 8.4% FY25 → 8.1% H1 26). Balance sheet moved from comfortable (1.3x leverage FY24) to top-of-range (2.0x FY25) after buybacks, acquisitions (PiroMET £21.9m; MMS £75.2m), and lower FCF; H1 26 shows deleveraging and cash recovery. **Yahoo fallback note:** `financials_annual.json` reports FY25 free cash flow of £26.2m vs £36.0m in the Final Results RNS—use filing figure; basis difference not reconciled in sources.
-
-**Gaps:** Annual Financial Report PRN (9 April 2026, `3d2990865b24814f.txt`) body extract contained no financial tables; all annual figures taken from Final Results RNS. No standalone FY24 Final Results body in index (H1 25 and FY25 Final Results provide the comparison chain).
-
-## RISKS AND RED FLAGS
-**Cyclical / end-market:** Steel and foundry volumes remain sensitive to global industrial production, Chinese export competition, and EU auto weakness. FY25 EMEA accounted for most profit decline; H1 26 EU+UK steel still contracting. Tariffs, trade protection, and geopolitics (Middle East cited in outlook) add forecast risk.
-
-**Operational execution:** H1 2026 Steel division failures—substandard raw materials in North America, maintenance gaps, India Vizag ramp—cost an estimated ~£8m trading profit and caused market-share loss when US steel production grew 6.3%. Management expects resolution by year-end; recurrence would undermine recovery thesis.
-
-**Leverage and capital allocation:** Net debt rose £123m in FY25 (dividends £57.9m, buybacks £34.8m, M&A £38.9m, lower FCF). Leverage at 2.0x sits at the ceiling of the 1.0–2.0x target; USPP notes reclassified to current liabilities at H1 26. Covenants comfortable today (2.0x vs 3.25x max; interest cover 14.3x) but less room for further shocks.
-
-**Dividend vs cash flow:** FY25 dividend (£57.9m) exceeded free cash flow (£36.0m per RNS). Screen dividend overlay correctly flags coverage risk; progressive policy may pressure balance sheet if margins do not recover.
-
-**Pension:** Net liability modest (£31.3m H1 26) and UK risks largely insured; German/US plans remain.
-
-**Litigation / provisions:** H1 2025 filing notes legacy US asbestos suits on pre-acquisition products—no material liability verdicts to date; environmental and closure provisions £65.6m FY25. Product quality failure listed as principal risk.
-
-**Regulatory / governance:** Complex multi-jurisdiction exposure; no governance red flags in sources. Directorate changes routine (Remuneration Committee interim chair, May 2026).
-
-**Competitive:** Chinese refractory imports pressuring European Advanced Refractories pricing; technology and robotics differentiation partially offset.
-
-RiskTags: cyclical, leverage, competitive, litigation, other
-RiskTags: cyclical, leverage, competitive, litigation, other
-
-## NEWS HIGHLIGHTS
-Coverage over the past year is adequate on results and M&A, thin on deep sell-side research.
-
-- **FY25 Final Results (12 March 2026):** “Vesuvius is positioned for recovery” — *Investors’ Chronicle* (12 March 2026); management guides FY26 profit growth CC absent extended disruption.
-- **MMS acquisition (August–November 2025):** “Vesuvius Agrees £92.7m Deal to Buy Molten Metal Systems from Morgan Advanced Materials” — *AskTraders* (23 August 2025); completed November 2025; expands non-ferrous and India exposure.
-- **PiroMET acquisition (February 2025):** Turkish refractories/robotics; £21.9m for 61.65% stake (Final Results).
-- **Share buybacks:** Second £50m programme completed April 2025; £100m total since November 2023 CME.
-- **H1 2026 trading update (27 July 2026):** Profit guidance trimmed; shares fell ~9.4% — *Investing.com* / *Proactive Investors* / *London South East* (27 July 2026); “Vesuvius warns steel division issues are proving costlier than expected.”
-- **H1 2026 results (30 July 2026):** “Vesuvius fumbles the rebound” — *Investors’ Chronicle* (31 July 2026); “Strong Free Cash Flow” — Yahoo Finance earnings-call summary (30 July 2026).
-- **Analyst narrative (April 2026):** Fair-value estimates cited around £4.76–£4.94 — Yahoo Finance (8 April 2026); not independently verified in filings.
-
-Noise: multiple articles conflate Vesuvius plc with Vesuvius India (NSE); Pompeii/volcano stories irrelevant.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: Filings confirm asset cheapness and a plausible cyclical/self-help recovery path, but FY25–H1 26 margin compression, operational setbacks, and dividend–FCF gap partially offset the quantitative buy signal until execution improves.
+Rationale: Cheapness and a plausible self-help recovery still support the screen buy, but filing-backed margin pressure, Steel ops setbacks, and dividend–FCF gap keep conviction partial.
+RiskTags: cyclical, leverage, competitive, litigation, other
+
+## Weekly updates
+
+### 2026-09-15T11:30:21.278737+00:00
+No new RNS since H1 results (30 Jul); September news only rehashes softer H1 profits, yield focus, and MMS integration.
+Buy screen unchanged (RSI ~32, neutral timing); dividend/FCF overlays still adjust the headline signal to hold.
+Thesis unchanged: cheap assets versus Steel execution and dividend coverage risks.
