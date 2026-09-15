@@ -344,6 +344,19 @@ def enrich_screening_snapshot_fcf_dividend_coverage(
 
     net = _float_or_none(updated.get("fcf_dividend_coverage_net"))
     gross = _float_or_none(updated.get("fcf_dividend_coverage_gross"))
+    if net is None or gross is None:
+        note_flag, note_net, note_gross = parse_fcf_definition_divergence_coverage_from_action_note(
+            str(updated.get("action_note") or "")
+        )
+        if note_flag:
+            updated["fcf_definition_divergence"] = True
+            if net is None and note_net is not None:
+                net = note_net
+                updated["fcf_dividend_coverage_net"] = net
+            if gross is None and note_gross is not None:
+                gross = note_gross
+                updated["fcf_dividend_coverage_gross"] = gross
+
     divergence_raw = updated.get("fcf_definition_divergence")
     if divergence_raw is not None and not (
         isinstance(divergence_raw, float) and pd.isna(divergence_raw)
@@ -1993,6 +2006,24 @@ def format_fcf_basis_action_note(
             f"{_format_fcf_compact(company_adjusted, currency=company_adjusted_currency or 'GBP')}"
         )
     return "FCF basis mismatch: " + " | ".join(parts)
+
+
+_FCF_DEFINITION_DIVERGENCE_COVERAGE_RES = re.compile(
+    r"FCF definition divergence:\s*statutory\s+([\d.]+)\s*[×x]\s+vs\s+management\s+([\d.]+)\s*[×x]",
+    re.IGNORECASE,
+)
+
+
+def parse_fcf_definition_divergence_coverage_from_action_note(
+    action_note: str | None,
+) -> tuple[bool, float | None, float | None]:
+    """Recover statutory vs management dividend cover from a persisted FCF divergence note."""
+    if not action_note:
+        return False, None, None
+    match = _FCF_DEFINITION_DIVERGENCE_COVERAGE_RES.search(action_note)
+    if not match:
+        return False, None, None
+    return True, float(match.group(1)), float(match.group(2))
 
 
 def format_fcf_definition_divergence_action_note(

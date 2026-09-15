@@ -31,6 +31,7 @@ from value_investor.scoring.fcf import (
     overlay_free_cashflow_from_bundle,
     parse_adjusted_eps_growth_pct,
     parse_company_adjusted_fcf,
+    parse_fcf_definition_divergence_coverage_from_action_note,
     parse_filing_aligned_from_action_note,
     parse_profit_to_cash_ratio_pair,
     parse_screen_ttm_from_action_note,
@@ -3910,6 +3911,40 @@ def test_enrich_screening_snapshot_fcf_dividend_coverage_backfills_labelled_bloc
     assert enriched["fcf_dividend_coverage"]["management_cash_generated_minus_capex"][
         "ratio"
     ] == pytest.approx(1.68)
+
+
+def test_parse_fcf_definition_divergence_coverage_from_action_note():
+    note = (
+        "Buy — wait for pullback | FCF basis mismatch: filing £210.9M | screen TTM £168M | "
+        "FCF definition divergence: statutory 1.99× vs management 2.81× dividend coverage"
+    )
+    flagged, net, gross = parse_fcf_definition_divergence_coverage_from_action_note(note)
+    assert flagged is True
+    assert net == pytest.approx(1.99)
+    assert gross == pytest.approx(2.81)
+
+
+def test_enrich_screening_snapshot_fcf_dividend_coverage_from_action_note_rs1_style():
+    note = (
+        "Buy — wait for pullback | FCF basis mismatch: filing £210.9M | screen TTM £168M | "
+        "FCF definition divergence: statutory 1.99× vs management 2.81× dividend coverage"
+    )
+    enriched = enrich_screening_snapshot_fcf_dividend_coverage(
+        {
+            "ticker": "RS1.L",
+            "action_note": note,
+            "fcf_definition_divergence": False,
+        }
+    )
+    assert enriched["fcf_definition_divergence"] is True
+    assert enriched["fcf_dividend_coverage_net"] == pytest.approx(1.99)
+    assert enriched["fcf_dividend_coverage_gross"] == pytest.approx(2.81)
+    assert enriched["fcf_dividend_coverage"]["statutory_ocf_minus_capex"]["ratio"] == pytest.approx(
+        1.99
+    )
+    assert enriched["fcf_dividend_coverage"]["management_cash_generated_minus_capex"][
+        "ratio"
+    ] == pytest.approx(2.81)
 
 
 def test_fcf_universe_divergence_flagged_at_15_pct_without_50_pct_overlay():
