@@ -1745,6 +1745,29 @@ def test_write_screening_snapshot_enforces_rio_style_fcf_note(tmp_path: Path):
     assert written["conviction_score"] == pytest.approx(0.6765 * 0.85)
 
 
+def test_write_screening_snapshot_backfills_labelled_dual_fcf_dividend_coverage(tmp_path: Path):
+    """Stale snapshots with scalar cover only must persist labelled statutory vs management ratios."""
+    sources = tmp_path / "research" / "MEGP.L" / "sources"
+    snapshot = {
+        "ticker": "MEGP.L",
+        "signal": "buy",
+        "fcf_dividend_coverage_net": 0.84,
+        "fcf_dividend_coverage_gross": 1.68,
+        "fcf_definition_divergence": True,
+    }
+    write_screening_snapshot(sources, snapshot)
+    written = json.loads((sources / "screening_snapshot.json").read_text(encoding="utf-8"))
+    assert written["fcf_dividend_coverage"]["statutory_ocf_minus_capex"]["label"] == (
+        "Statutory OCF−CapEx"
+    )
+    assert written["fcf_dividend_coverage"]["statutory_ocf_minus_capex"]["ratio"] == pytest.approx(
+        0.84
+    )
+    assert written["fcf_dividend_coverage"]["management_cash_generated_minus_capex"][
+        "ratio"
+    ] == pytest.approx(1.68)
+
+
 def test_enforce_fcf_basis_in_snapshot_without_research_verdict():
     """Stale snapshots with overlay=false must still honour FCF mismatch notes."""
     enforced = enforce_fcf_basis_in_snapshot(
