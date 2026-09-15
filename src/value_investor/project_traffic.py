@@ -15,6 +15,7 @@ Merge authority stays restricted — independent verification may loosen that la
 from __future__ import annotations
 
 import logging
+import os
 import re
 import subprocess
 from dataclasses import dataclass, field
@@ -45,6 +46,7 @@ ACTION_COMMENT_CI = "request_ci_fix"
 ACTION_COMMENT_CONFLICT = "request_conflict_resolve"
 ACTION_DISPATCH_CI_AUTOFIX = "dispatch_ci_autofix_hint"
 ACTION_DISPATCH_CONFLICT = "dispatch_conflict_resolve"
+ACTION_DISPATCH_ESCALATION = "dispatch_unstick_escalation"
 ACTION_PAUSE = "pause_dispatch"
 ACTION_RESUME = "resume_dispatch"
 
@@ -53,6 +55,16 @@ DEFAULT_MIN_FAIL_AGE_MINUTES = 20
 DEFAULT_RESUME_IDLE_MINUTES = 15
 DEFAULT_MAX_FIX_REQUESTS_PER_PR = 2
 DEFAULT_COMMENT_COOLDOWN_HOURS = 6
+DEFAULT_ESCALATION_MIN_PAUSE_MINUTES = 180
+DEFAULT_ESCALATION_COOLDOWN_HOURS = 12
+DEFAULT_MAX_ESCALATIONS_PER_PAUSE = 1
+
+FIRST_LINE_COMMIT_MARKERS = (
+    "chore(ci):",
+    "chore(hunter-fix):",
+    "fix(conflict):",
+    "fix(unstick):",
+)
 
 CURSOR_BRANCH_RE = re.compile(r"^cursor/[A-Za-z0-9][A-Za-z0-9._/-]*$")
 ENG_BRANCH_RE = re.compile(r"^cursor/eng-\d{8}-\d{2}-1de3$")
@@ -116,6 +128,7 @@ class TrafficControllerReport:
     stuck_prs: list[StuckPr]
     actions: list[TrafficAction]
     should_dispatch_conflict_agent: list[dict[str, Any]]
+    should_dispatch_escalation_agent: list[dict[str, Any]] = field(default_factory=list)
     digest: dict[str, Any] | None = None
     state: dict[str, Any] = field(default_factory=dict)
 
@@ -129,6 +142,7 @@ class TrafficControllerReport:
             "stuck_prs": [row.to_dict() for row in self.stuck_prs],
             "actions": [row.to_dict() for row in self.actions],
             "should_dispatch_conflict_agent": list(self.should_dispatch_conflict_agent),
+            "should_dispatch_escalation_agent": list(self.should_dispatch_escalation_agent),
             "digest": self.digest,
             "state": self.state,
         }
@@ -188,9 +202,40 @@ def _traffic_policy() -> dict[str, Any]:
         )
     except (TypeError, ValueError):
         comment_cooldown = DEFAULT_COMMENT_COOLDOWN_HOURS
+    try:
+        escalation_min_pause = max(
+            0,
+            int(
+                block.get("escalation_min_pause_minutes")
+                if block.get("escalation_min_pause_minutes") is not None
+                else DEFAULT_ESCALATION_MIN_PAUSE_MINUTES
+            ),
+        )
+    except (TypeError, ValueError):
+        escalation_min_pause = DEFAULT_ESCALATION_MIN_PAUSE_MINUTES
+    try:
+        escalation_cooldown = max(
+            1,
+            int(block.get("escalation_cooldown_hours") or DEFAULT_ESCALATION_COOLDOWN_HOURS),
+        )
+    except (TypeError, ValueError):
+        escalation_cooldown = DEFAULT_ESCALATION_COOLDOWN_HOURS
+    try:
+        max_escalations = max(
+            1,
+            int(block.get("max_escalations_per_pause") or DEFAULT_MAX_ESCALATIONS_PER_PAUSE),
+        )
+    except (TypeError, ValueError):
+        max_escalations = DEFAULT_MAX_ESCALATIONS_PER_PAUSE
     enabled = block.get("enabled")
     if enabled is None:
         enabled = True
+    escalation_enabled = block.get("escalation_enabled")
+    if escalation_enabled is None:
+        escalation_enabled = True
+    engineering_only = block.get("escalation_engineering_only")
+    if engineering_only is None:
+        engineering_only = True
     return {
         "enabled": bool(enabled),
         "stuck_pr_threshold": stuck_threshold,
@@ -203,6 +248,11 @@ def _traffic_policy() -> dict[str, Any]:
         "request_ci_fix_comments": bool(block.get("request_ci_fix_comments", True)),
         "request_conflict_resolve": bool(block.get("request_conflict_resolve", True)),
         "digest_enabled": bool(block.get("digest_enabled", True)),
+        "escalation_enabled": bool(escalation_enabled),
+        "escalation_min_pause_minutes": escalation_min_pause,
+        "escalation_cooldown_hours": escalation_cooldown,
+        "max_escalations_per_pause": max_escalations,
+        "escalation_engineering_only": bool(engineering_only),
     }
 
 
@@ -472,6 +522,257 @@ def format_ci_fix_comment(pr: StuckPr) -> str:
     )
 
 
+def _is_first_line_commit(message: str) -> bool:
+    first = (message or "").strip().split("\n", 1)[0]
+    return any(marker in first for marker in FIRST_LINE_COMMIT_MARKERS)
+
+
+def list_pr_commit_subjects(
+    pr_number: int,
+    *,
+    repo: str | None,
+    token: str | None,
+) -> list[str]:
+    """Subject lines of commits on a PR — used to detect first-line autofix."""
+    repo = (repo or os.environ.get("GITHUB_REPOSITORY") or "").strip()
+    if not repo or not token or "/" not in repo:
+        return []
+    from value_investor.ops_monitor import github_api_get
+
+    owner, name = repo.split("/", 1)
+    try:
+        rows = github_api_get(
+            f"/repos/{owner}/{name}/pulls/{pr_number}/commits?per_page=100",
+            token=token,
+        )
+    except (OSError, ValueError, RuntimeError) as exc:
+        logger.warning("PR commit lookup failed for #%s: %s", pr_number, exc)
+        return []
+    if not isinstance(rows, list):
+        return []
+    subjects: list[str] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        msg = str((row.get("commit") or {}).get("message") or "").strip()
+        if msg:
+            subjects.append(msg.split("\n", 1)[0])
+    return subjects
+
+
+def _first_line_exhausted(
+    pr: StuckPr,
+    *,
+    state: dict[str, Any],
+    first_line_commits: dict[int, list[str]] | None = None,
+) -> tuple[bool, str]:
+    """True when traffic already requested a first-line fix for this PR."""
+    entry = dict(_fix_request_history(state).get(str(pr.number)) or {})
+    count = int(entry.get("count") or 0)
+    conflict_dispatched = isinstance(state.get("conflict_resolve_dispatched"), dict) and str(
+        pr.number
+    ) in (state.get("conflict_resolve_dispatched") or {})
+    if count < 1 and not conflict_dispatched:
+        return False, "no_first_line_traffic_request"
+    subjects = list((first_line_commits or {}).get(pr.number) or [])
+    if any(_is_first_line_commit(msg) for msg in subjects):
+        return True, "first_line_commit_present"
+    if conflict_dispatched:
+        return True, "conflict_resolve_already_dispatched"
+    return True, "traffic_fix_request_recorded"
+
+
+def _escalation_sort_key(pr: StuckPr) -> tuple[int, str, int]:
+    if pr.checks_failed and pr.conflict:
+        severity = 0
+    elif pr.conflict:
+        severity = 1
+    else:
+        severity = 2
+    return (severity, str(pr.updated_at or ""), pr.number)
+
+
+def evaluate_escalation(
+    stuck_prs: list[StuckPr],
+    *,
+    state: dict[str, Any],
+    policy: dict[str, Any],
+    now: datetime,
+    conflict_dispatches: list[dict[str, Any]] | None = None,
+    first_line_commits: dict[int, list[str]] | None = None,
+    apply: bool = True,
+) -> tuple[list[TrafficAction], list[dict[str, Any]], dict[str, Any]]:
+    """Dispatch one scoped unstick agent after first-line pause+fixes are exhausted.
+
+    This is an *algorithmic* trigger, not a standing GitHub→agent listener.
+    """
+    now = now or _utcnow()
+    policy = policy or {}
+    state = dict(state)
+    actions: list[TrafficAction] = []
+    escalation_dispatches: list[dict[str, Any]] = []
+    state["should_dispatch_escalation_agent"] = []
+
+    def _skip(reason: str) -> tuple[list[TrafficAction], list[dict[str, Any]], dict[str, Any]]:
+        state["escalation_skip_reason"] = reason
+        actions.append(
+            TrafficAction(
+                kind="skip_escalation",
+                detail=reason,
+                applied=False,
+            )
+        )
+        return actions, escalation_dispatches, state
+
+    if not policy.get("escalation_enabled", True):
+        return _skip("escalation_disabled")
+    if not state.get("pause_active"):
+        return _skip("pause_inactive")
+    if (state.get("last_change") or {}).get("activated"):
+        return _skip("pause_just_activated")
+    if conflict_dispatches:
+        return _skip("first_line_conflict_resolve_in_flight")
+
+    last_action = _parse_iso(str(state.get("last_action_at") or ""))
+    if last_action is not None and last_action == now:
+        return _skip("first_line_action_this_run")
+
+    pause_started = _parse_iso(str(state.get("pause_started_at") or ""))
+    try:
+        min_pause_minutes = max(
+            0,
+            int(
+                policy.get("escalation_min_pause_minutes")
+                if policy.get("escalation_min_pause_minutes") is not None
+                else DEFAULT_ESCALATION_MIN_PAUSE_MINUTES
+            ),
+        )
+    except (TypeError, ValueError):
+        min_pause_minutes = DEFAULT_ESCALATION_MIN_PAUSE_MINUTES
+    if pause_started is None or (now - pause_started) < timedelta(minutes=min_pause_minutes):
+        return _skip("pause_too_young")
+
+    try:
+        max_n = max(
+            1,
+            int(policy.get("max_escalations_per_pause") or DEFAULT_MAX_ESCALATIONS_PER_PAUSE),
+        )
+    except (TypeError, ValueError):
+        max_n = DEFAULT_MAX_ESCALATIONS_PER_PAUSE
+    count_this = int(state.get("escalation_count_this_pause") or 0)
+    if count_this >= max_n:
+        return _skip("max_escalations_this_pause")
+
+    last_escalation = _parse_iso(str(state.get("last_escalation_at") or ""))
+    try:
+        cooldown_hours = max(
+            1,
+            int(policy.get("escalation_cooldown_hours") or DEFAULT_ESCALATION_COOLDOWN_HOURS),
+        )
+    except (TypeError, ValueError):
+        cooldown_hours = DEFAULT_ESCALATION_COOLDOWN_HOURS
+    if last_escalation is not None and (now - last_escalation) < timedelta(hours=cooldown_hours):
+        return _skip("escalation_cooldown")
+
+    engineering_only = bool(policy.get("escalation_engineering_only", True))
+    candidates: list[StuckPr] = []
+    for pr in stuck_prs:
+        if engineering_only and not ENG_BRANCH_RE.match(pr.branch):
+            actions.append(
+                TrafficAction(
+                    kind="skip_escalation",
+                    detail="not_engineering_branch",
+                    pr_number=pr.number,
+                    branch=pr.branch,
+                    applied=False,
+                )
+            )
+            continue
+        ok, reason = _first_line_exhausted(
+            pr, state=state, first_line_commits=first_line_commits
+        )
+        if not ok:
+            actions.append(
+                TrafficAction(
+                    kind="skip_escalation",
+                    detail=reason,
+                    pr_number=pr.number,
+                    branch=pr.branch,
+                    applied=False,
+                )
+            )
+            continue
+        candidates.append(pr)
+
+    if not candidates:
+        if engineering_only and stuck_prs and not any(
+            ENG_BRANCH_RE.match(pr.branch) for pr in stuck_prs
+        ):
+            return _skip("no_eligible_engineering_prs")
+        return _skip("first_line_not_exhausted")
+
+    remaining = max(0, max_n - count_this)
+    selected = sorted(candidates, key=_escalation_sort_key)[:remaining]
+    for pr in selected:
+        row = {
+            "pr_number": pr.number,
+            "branch": pr.branch,
+            "task_id": pr.task_id,
+            "head_sha": pr.head_sha,
+            "kind": "escalation",
+            "reasons": list(pr.reasons),
+        }
+        escalation_dispatches.append(row)
+        applied = False
+        detail = "dry-run"
+        if apply:
+            ok, detail = post_pr_comment(
+                pr_number=pr.number, body=format_escalation_comment(pr)
+            )
+            applied = ok
+        actions.append(
+            TrafficAction(
+                kind=ACTION_DISPATCH_ESCALATION,
+                detail=detail if apply else "eligible after first-line exhaustion",
+                pr_number=pr.number,
+                branch=pr.branch,
+                applied=applied,
+            )
+        )
+
+    if escalation_dispatches:
+        state["should_dispatch_escalation_agent"] = list(escalation_dispatches)
+        state["escalation_skip_reason"] = None
+        if apply:
+            state["last_escalation_at"] = now.isoformat()
+            state["last_escalation_reason"] = "first_line_exhausted"
+            state["last_escalation_pr_numbers"] = [
+                int(row["pr_number"]) for row in escalation_dispatches
+            ]
+            state["escalation_count_this_pause"] = count_this + len(escalation_dispatches)
+            state["last_action_at"] = now.isoformat()
+    return actions, escalation_dispatches, state
+
+
+def format_escalation_comment(pr: StuckPr) -> str:
+    task_bit = f" (task `{pr.task_id}`)" if pr.task_id else ""
+    return "\n".join(
+        [
+            "## Project traffic controller — first-line exhausted",
+            "",
+            f"PR #{pr.number}{task_bit} on `{pr.branch}` is still stuck "
+            f"({', '.join(pr.reasons) or 'unknown'}) after traffic comments and "
+            "event-driven `ci-pr-autofix` / hunter-fix / conflict-resolve had a chance to run.",
+            "",
+            "Dispatching **one scoped unstick agent** for this engineering branch. "
+            "This is an algorithmic trigger, not a standing GitHub→agent listener. "
+            "The agent must not merge the PR.",
+            "",
+            "_Automated note from `ftse-project-traffic`._",
+        ]
+    )
+
+
 def format_conflict_resolve_comment(pr: StuckPr) -> str:
     task_bit = f" (task `{pr.task_id}`)" if pr.task_id else ""
     return "\n".join(
@@ -532,6 +833,8 @@ def evaluate_traffic_pause(
         state["pause_active"] = True
         state["pause_started_at"] = now.isoformat()
         state["pause_reasons"] = reasons or [PAUSE_REASON_STUCK_THRESHOLD]
+        state["escalation_count_this_pause"] = 0
+        state["should_dispatch_escalation_agent"] = []
         state.pop("resumed_at", None)
         changes["activated"] = True
     elif pause_active:
@@ -550,6 +853,8 @@ def evaluate_traffic_pause(
             if idle_ok:
                 state["pause_active"] = False
                 state["resumed_at"] = now.isoformat()
+                state["escalation_count_this_pause"] = 0
+                state["should_dispatch_escalation_agent"] = []
                 state.pop("pause_started_at", None)
                 state.pop("pause_reasons", None)
                 state.pop("last_action_at", None)
@@ -677,6 +982,13 @@ def request_unstick_actions(
                         "head_sha": pr.head_sha,
                     }
                 )
+                dispatched = dict(state.get("conflict_resolve_dispatched") or {})
+                dispatched[str(pr.number)] = {
+                    "at": now.isoformat(),
+                    "branch": pr.branch,
+                    "head_sha": pr.head_sha,
+                }
+                state["conflict_resolve_dispatched"] = dispatched
                 actions.append(
                     TrafficAction(
                         kind=ACTION_DISPATCH_CONFLICT,
@@ -769,6 +1081,22 @@ def _claim_evidence_rows(
             "probe": "pause state must match stuck PR classification on this run",
         }
     )
+    if traffic_state.get("last_escalation_at") or traffic_state.get(
+        "should_dispatch_escalation_agent"
+    ):
+        rows.append(
+            {
+                "claim": (
+                    "Escalation "
+                    f"count_this_pause={traffic_state.get('escalation_count_this_pause') or 0}; "
+                    f"last_at={traffic_state.get('last_escalation_at')}; "
+                    f"prs={traffic_state.get('last_escalation_pr_numbers') or []}"
+                ),
+                "source": "docs/data/engineering_tasks.json#traffic_control",
+                "grounded": True,
+                "probe": "escalation fires only after first-line exhaustion + min pause",
+            }
+        )
     for pr in stuck_prs[:10]:
         rows.append(
             {
@@ -981,6 +1309,7 @@ def run_project_traffic(
                 )
             ],
             should_dispatch_conflict_agent=[],
+            should_dispatch_escalation_agent=[],
             state=state,
         )
 
@@ -1035,6 +1364,25 @@ def run_project_traffic(
         policy=policy,
     )
     actions.extend(unstick_actions)
+
+    first_line_commits: dict[int, list[str]] = {}
+    resolved_repo = (repo or os.environ.get("GITHUB_REPOSITORY") or "").strip() or None
+    if resolved_repo and token:
+        for pr in stuck:
+            first_line_commits[pr.number] = list_pr_commit_subjects(
+                pr.number, repo=resolved_repo, token=token
+            )
+
+    escalation_actions, escalation_dispatches, state = evaluate_escalation(
+        stuck,
+        state=state,
+        policy=policy,
+        now=now,
+        conflict_dispatches=conflict_dispatches,
+        first_line_commits=first_line_commits,
+        apply=apply,
+    )
+    actions.extend(escalation_actions)
     if apply and state != get_traffic_control_state(tasks_path=tasks_path):
         _save_traffic_control_state(state, tasks_path=tasks_path, apply=True)
 
@@ -1056,6 +1404,7 @@ def run_project_traffic(
         stuck_prs=stuck,
         actions=actions,
         should_dispatch_conflict_agent=conflict_dispatches,
+        should_dispatch_escalation_agent=escalation_dispatches,
         digest=digest,
         state=state,
     )
@@ -1079,4 +1428,31 @@ Rules:
 6. Push the resolved branch.
 
 When finished, write a short markdown report covering: conflicts touched, tests run, risks.
+"""
+
+
+def escalation_unstick_prompt(*, branch: str, pr_number: int, task_id: str | None) -> str:
+    task_line = f"Engineering task id: {task_id}" if task_id else "No engineering task id."
+    return f"""You are a scoped unstick follow-up for the FTSE Value Investor repo.
+
+This run is an **algorithmic escalation** from the project traffic controller after
+first-line `ci-pr-autofix` / hunter-fix / conflict-resolve and traffic comments
+did not clear the stuck PR. You are not a standing GitHub event listener.
+
+PR number: #{pr_number}
+Branch: `{branch}`
+{task_line}
+
+Rules:
+1. Stay on `{branch}` only. Do not open extra PRs and do NOT merge this PR.
+2. If the branch conflicts with origin/main, rebase or merge main and resolve
+   conflict markers only (prefer the PR's intentional changes; take main for drift).
+3. Then fix remaining CI on this PR — scoped to the failure, no drive-by refactors.
+4. Do not edit blocked paths (paper fund, simulator, policy thresholds) unless a
+   conflict marker or the failing test is inside those files.
+5. Run the most relevant pytest subset and ruff on touched Python files.
+6. Push the branch.
+
+When finished, write a short markdown report covering: what first-line already tried
+(if visible in git log), what you changed, tests run, remaining risks.
 """

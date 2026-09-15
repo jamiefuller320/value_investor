@@ -75,6 +75,10 @@ def _cmd_run(args: argparse.Namespace) -> int:
             print("conflict_dispatches:")
             for row in report.should_dispatch_conflict_agent:
                 print(f"  {row}")
+        if report.should_dispatch_escalation_agent:
+            print("escalation_dispatches:")
+            for row in report.should_dispatch_escalation_agent:
+                print(f"  {row}")
     if args.require_clear and report.stuck_prs:
         return 1
     return 0

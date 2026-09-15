@@ -244,6 +244,8 @@ def build_queue_health_snapshot(
             "pause_reasons": list(
                 traffic.get("pause_reasons") or traffic.get("stuck_reasons") or []
             ),
+            "escalation_count_this_pause": int(traffic.get("escalation_count_this_pause") or 0),
+            "last_escalation_at": traffic.get("last_escalation_at"),
             "evaluated_at": traffic.get("evaluated_at"),
         },
         "ops_monitor": {

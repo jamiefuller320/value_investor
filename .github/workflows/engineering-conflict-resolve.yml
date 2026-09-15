@@ -17,6 +17,10 @@ on:
         description: "Optional engineering task id"
         type: string
         default: ""
+      kind:
+        description: "conflict (first-line) or escalation (after first-line exhausted)"
+        type: string
+        default: "conflict"
 
 permissions:
   contents: write
@@ -75,6 +79,7 @@ jobs:
           BRANCH: ${{ steps.branch.outputs.branch }}
           PR_NUMBER: ${{ steps.branch.outputs.pr_number }}
           TASK_ID: ${{ github.event.inputs.task_id }}
+          KIND: ${{ github.event.inputs.kind || 'conflict' }}
         run: |
           set -euo pipefail
           if [ -z "${CURSOR_API_KEY:-}" ]; then
@@ -85,14 +90,23 @@ jobs:
           import os
           from pathlib import Path
           from cursor_sdk import Agent, AgentOptions, LocalAgentOptions
-          from value_investor.project_traffic import conflict_resolve_prompt
+          from value_investor.project_traffic import (
+              conflict_resolve_prompt,
+              escalation_unstick_prompt,
+          )
 
           branch = os.environ["BRANCH"]
           pr_number = int(os.environ["PR_NUMBER"])
           task_id = (os.environ.get("TASK_ID") or "").strip() or None
-          prompt = conflict_resolve_prompt(
-              branch=branch, pr_number=pr_number, task_id=task_id
-          )
+          kind = (os.environ.get("KIND") or "conflict").strip().lower()
+          if kind == "escalation":
+              prompt = escalation_unstick_prompt(
+                  branch=branch, pr_number=pr_number, task_id=task_id
+              )
+          else:
+              prompt = conflict_resolve_prompt(
+                  branch=branch, pr_number=pr_number, task_id=task_id
+              )
           Path("output").mkdir(exist_ok=True)
           Path("output/conflict_resolve_prompt.md").write_text(prompt, encoding="utf-8")
           result = Agent.prompt(
@@ -108,14 +122,15 @@ jobs:
               summary or "Agent completed without a written report.",
               encoding="utf-8",
           )
-          print(f"agent_id={result.id} status={result.status}")
+          print(f"kind={kind} agent_id={result.id} status={result.status}")
           if result.status == "error":
-              raise SystemExit(f"Conflict-resolve agent failed: {result.id}")
+              raise SystemExit(f"Unstick agent failed: {result.id}")
           PY
 
       - name: Push resolved branch
         env:
           BRANCH: ${{ steps.branch.outputs.branch }}
+          KIND: ${{ github.event.inputs.kind || 'conflict' }}
           WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
           GITHUB_TOKEN: ${{ github.token }}
         run: |
@@ -128,7 +143,11 @@ jobs:
           gh auth setup-git
           if git status --porcelain | grep -q .; then
             git add -A
-            git commit -m "fix(conflict): resolve merge conflicts with main" || true
+            if [ "${KIND:-conflict}" = "escalation" ]; then
+              git commit -m "fix(unstick): first-line-exhausted follow-up" || true
+            else
+              git commit -m "fix(conflict): resolve merge conflicts with main" || true
+            fi
           fi
           git push origin "HEAD:$BRANCH"
 
@@ -136,9 +155,18 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ steps.branch.outputs.pr_number }}
+          KIND: ${{ github.event.inputs.kind || 'conflict' }}
         run: |
-          BODY="## Conflict-resolve agent
+          if [ "${KIND:-conflict}" = "escalation" ]; then
+            BODY="## Unstick escalation agent
+          First-line CI autofix / hunter-fix / conflict-resolve did not clear this PR.
+          This follow-up is a one-shot algorithmic dispatch (not a standing listener).
+          Review the latest commit and CI. Project traffic will unpause when stuck PRs clear.
+          "
+          else
+            BODY="## Conflict-resolve agent
           Attempted to rebase/merge \`main\` and resolve conflicts on this branch.
           Review the latest commit and CI. Project traffic will unpause when stuck PRs clear.
           "
+          fi
           gh pr comment "$PR_NUMBER" --body "$BODY"

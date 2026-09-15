@@ -22,8 +22,10 @@ slice of a PM agent.
 | Comment on stuck PRs requesting CI fix / conflict resolve | Yes |
 | Dispatch scoped `engineering-conflict-resolve.yml` for `cursor/eng-*` | Yes |
 | Rely on existing `ci-pr-autofix` / hunter-fix on CI failure | Yes (event-driven) |
+| Dispatch **one** scoped unstick agent after first-line exhaustion | Yes (algorithmic; eng branches; cap/cooldown) |
+| Standing GitHub→cloud-agent listener (`subscribe_github_pr` / Automation) | **No** |
 | Merge PRs | **No** — keep restricted; loosen only with independent verification |
-| Broad Phase B/C self-healing / task invention | **No** — still deferred as L388 EOD gate agent |
+| Broad Phase B/C self-healing / task invention | **No** — still deferred as L393 EOD gate agent |
 
 ## Flow
 
@@ -32,7 +34,9 @@ flowchart LR
   A[project-traffic / ops-monitor] --> B[Classify cursor/* PRs]
   B --> C{CI red or conflict?}
   C -->|yes| D[Pause dispatch]
-  D --> E[Comment + conflict-resolve dispatch]
+  D --> E[Comment + first-line autofix / conflict-resolve]
+  E --> E2{Still paused after min pause?}
+  E2 -->|yes + first-line exhausted| E3[One escalation agent]
   C -->|no stuck| F{Was paused?}
   F -->|yes + idle| G[Resume dispatch]
   A --> H[Grounded EOD digest]
@@ -77,6 +81,31 @@ ftse-project-traffic digest --write
 | `max_fix_requests_per_pr` | 2 | Cap comments per PR (SHA-aware) |
 | `comment_cooldown_hours` | 6 | Min gap between comments on same head |
 | `digest_enabled` | true | Write EOD digest |
+| `escalation_enabled` | true | One-shot unstick agent after first-line exhaustion |
+| `escalation_min_pause_minutes` | 180 | Pause must stay active this long before escalating |
+| `escalation_cooldown_hours` | 12 | Min gap between escalations |
+| `max_escalations_per_pause` | 1 | Cap per pause episode (engineering PRs only) |
+| `escalation_engineering_only` | true | Do not escalate hunter / non-eng `cursor/*` branches |
+
+## First-line vs escalation
+
+First-line unstick is event-driven and already in the loop:
+
+- `ci-pr-autofix` / hunter-fix on CI failure
+- traffic comments
+- `engineering-conflict-resolve.yml` (`kind=conflict`) for `cursor/eng-*`
+
+Escalation fires only when **all** of these hold:
+
+1. `traffic_control.pause_active`
+2. Pause age ≥ `escalation_min_pause_minutes` (default 3 hours)
+3. Traffic already requested a first-line fix (comment and/or conflict-resolve dispatch)
+4. This run is not itself posting a first-line comment or dispatching conflict-resolve
+5. Cooldown and `max_escalations_per_pause` allow it
+
+Then `project-traffic.yml` dispatches the same workflow with `kind=escalation` —
+a scoped CI+conflict follow-up, still **no merge** and **not** a standing
+`subscribe_github_pr` listener. Resume resets the per-pause escalation counter.
 
 ## Schedule
 

@@ -81,12 +81,17 @@ jobs:
           data = json.loads(Path("/tmp/project_traffic.json").read_text())
           out = Path(os.environ["GITHUB_OUTPUT"])
           dispatches = data.get("should_dispatch_conflict_agent") or []
+          escalations = data.get("should_dispatch_escalation_agent") or []
           with out.open("a", encoding="utf-8") as handle:
               handle.write(f"pause_active={'true' if data.get('pause_active') else 'false'}\n")
               handle.write(f"stuck_count={int(data.get('stuck_pr_count') or 0)}\n")
               handle.write(f"conflict_count={len(dispatches)}\n")
+              handle.write(f"escalation_count={len(escalations)}\n")
           Path("/tmp/conflict_dispatches.json").write_text(
               json.dumps(dispatches, indent=2), encoding="utf-8"
+          )
+          Path("/tmp/escalation_dispatches.json").write_text(
+              json.dumps(escalations, indent=2), encoding="utf-8"
           )
           print(f"pause_active={data.get('pause_active')} stuck={data.get('stuck_pr_count')}")
           for row in data.get("stuck_prs") or []:
@@ -130,6 +135,37 @@ jobs:
                   "gh", "workflow", "run", "engineering-conflict-resolve.yml",
                   "-f", f"branch={branch}",
                   "-f", f"pr_number={pr}",
+              ]
+              if task:
+                  cmd.extend(["-f", f"task_id={task}"])
+              print("dispatch:", " ".join(cmd))
+              subprocess.run(cmd, check=False)
+          PY
+
+      - name: Dispatch first-line-exhausted escalation agents
+        if: >-
+          steps.traffic.outputs.escalation_count != '0'
+          && github.event.inputs.dry_run != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
+          rows = json.loads(Path("/tmp/escalation_dispatches.json").read_text())
+          for row in rows:
+              branch = str(row.get("branch") or "")
+              pr = str(row.get("pr_number") or "")
+              task = str(row.get("task_id") or "")
+              if not branch or not pr:
+                  continue
+              cmd = [
+                  "gh", "workflow", "run", "engineering-conflict-resolve.yml",
+                  "-f", f"branch={branch}",
+                  "-f", f"pr_number={pr}",
+                  "-f", "kind=escalation",
               ]
               if task:
                   cmd.extend(["-f", f"task_id={task}"])

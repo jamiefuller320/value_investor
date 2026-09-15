@@ -291,12 +291,19 @@ def default_policy() -> dict[str, Any]:
                 "request_ci_fix_comments": True,
                 "request_conflict_resolve": True,
                 "digest_enabled": True,
+                "escalation_enabled": True,
+                "escalation_min_pause_minutes": 180,
+                "escalation_cooldown_hours": 12,
+                "max_escalations_per_pause": 1,
+                "escalation_engineering_only": True,
                 "note": (
                     "Project traffic controller (ftse-project-traffic): pause new "
                     "engineering-agent dispatch when monitored cursor/* PRs are CI-red "
                     "or merge-conflicting; comment to request fixes; dispatch scoped "
-                    "conflict-resolve for eng branches; write grounded EOD digest. "
-                    "Does not merge PRs — merge stays human or scoped auto-merge."
+                    "conflict-resolve for eng branches; after pause stays active and "
+                    "first-line autofix/comments are exhausted, dispatch one scoped "
+                    "unstick agent (not a standing GitHub listener); write grounded EOD "
+                    "digest. Does not merge PRs — merge stays human or scoped auto-merge."
                 ),
             },
             "hunter_url_monitor": {

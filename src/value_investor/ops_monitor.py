@@ -1920,6 +1920,11 @@ def run_ops_monitor(
                         f"{len(traffic_report.stuck_prs)} stuck PR(s); "
                         f"reasons={traffic_report.pause_reasons or ['stuck_prs']}. "
                         "New engineering-agent dispatch is held until CI/conflicts clear."
+                        + (
+                            " Escalation agent queued after first-line exhaustion."
+                            if traffic_report.should_dispatch_escalation_agent
+                            else ""
+                        )
                     ),
                     auto_fixable=False,
                 )
@@ -1928,6 +1933,7 @@ def run_ops_monitor(
             if action.applied or action.kind in {
                 "pause_dispatch",
                 "resume_dispatch",
+                "dispatch_unstick_escalation",
             }:
                 auto_fixes.append(
                     {

@@ -356,8 +356,11 @@ When **2 or more** monitored `cursor/*` PRs are CI-red or merge-conflicting,
 and a short idle window elapses.
 
 The controller comments on stuck PRs and may dispatch
-`engineering-conflict-resolve.yml` for `cursor/eng-*` branches. It does **not**
-merge. See [`project-traffic.md`](project-traffic.md).
+`engineering-conflict-resolve.yml` for `cursor/eng-*` branches. If the pause
+stays active after first-line `ci-pr-autofix` / hunter-fix / conflict-resolve
+had a chance to run, it dispatches **one** scoped unstick agent (`kind=escalation`).
+That is an algorithmic trigger, not a standing GitHub→agent listener. It does
+**not** merge. See [`project-traffic.md`](project-traffic.md).
 
 ### Hunter allowlist URL monitor
 

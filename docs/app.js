@@ -3135,6 +3135,7 @@ function renderQueueHealthMonitor(data) {
           ${agent.next_task_id ? settingRow("Next task", `<code>${esc(agent.next_task_id)}</code>`) : ""}
           ${clearing.pause_active ? settingRow("Backlog pause", `<span class="badge badge-ii-no">active</span> (${esc(String(clearing.attention_parked_count ?? 0))} parked)`) : ""}
           ${(health.traffic_control || {}).pause_active ? settingRow("Traffic pause", `<span class="badge badge-ii-no">active</span> (${esc(String((health.traffic_control || {}).stuck_pr_count ?? 0))} stuck)`) : ""}
+          ${(health.traffic_control || {}).pause_active && (health.traffic_control || {}).last_escalation_at ? settingRow("Traffic escalation", `dispatched (${esc(String((health.traffic_control || {}).escalation_count_this_pause ?? 0))})`) : ""}
         </div>
         <div class="card queue-health-lane">
           <h3>Ops monitor ${ops.overall ? overallStatusBadge(ops.overall) : ""}</h3>
@@ -3147,6 +3148,8 @@ function renderQueueHealthMonitor(data) {
         The agent lane runs when the hourly queue dispatches <code>engineering-agent</code>.
         Project traffic pauses new PRs when monitored branches are CI-red or conflicted
         (<a href="${esc(githubOpsDocUrl("docs/ops/project-traffic.md") || "#")}" target="_blank" rel="noopener">runbook</a>).
+        After pause stays active and first-line autofix is exhausted, it may dispatch one
+        scoped unstick agent (not a standing GitHub listener).
       </p>
     </section>`;
 }
