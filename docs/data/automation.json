@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-15T09:01:52.558142+00:00",
+  "generated_at": "2026-09-15T09:14:09.101479+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1151,11 +1151,11 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-15T09:01:51.712433+00:00",
-    "queue_ui_updated_at": "2026-09-15T09:01:52.561218+00:00",
+    "queue_ui_updated_at": "2026-09-15T09:14:09.010715+00:00",
     "task_count": 13,
     "status": {
-      "open_count": 8,
-      "pr_open_count": 1,
+      "open_count": 9,
+      "pr_open_count": 0,
       "parked_count": 2,
       "merged_count": 2,
       "failed_count": 0,
@@ -1181,7 +1181,7 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 1,
-        "clash_scan": "partial"
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260915-02",
@@ -1197,7 +1197,7 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 2,
-        "clash_scan": "partial"
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260915-03",
@@ -1213,7 +1213,7 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 3,
-        "clash_scan": "partial"
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260915-05",
@@ -1229,7 +1229,7 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 4,
-        "clash_scan": "partial"
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260915-04",
@@ -1245,7 +1245,7 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 5,
-        "clash_scan": "partial"
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260914-03",
@@ -1253,11 +1253,15 @@
         "title": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
         "priority": "high",
         "priority_score": 95.0,
-        "status": "pr_open",
+        "status": "open",
         "source": "post_run_review",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": "cursor/eng-20260914-03-1de3"
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 6,
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260915-07",
@@ -1272,8 +1276,8 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 6,
-        "clash_scan": "partial"
+        "effective_dispatch_rank": 7,
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260915-09",
@@ -1288,8 +1292,8 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 7,
-        "clash_scan": "partial"
+        "effective_dispatch_rank": 8,
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260915-10",
@@ -1304,8 +1308,8 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 8,
-        "clash_scan": "partial"
+        "effective_dispatch_rank": 9,
+        "clash_scan": "full"
       }
     ],
     "attention_tasks": [
@@ -1335,8 +1339,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 8,
-      "dispatch_eligible_count": 8,
+      "open_task_count": 9,
+      "dispatch_eligible_count": 9,
       "blocked_count": 0
     }
   },
@@ -1611,6 +1615,48 @@
       "tracks_with_post_apply_trades": 5,
       "tracks_insufficient_epoch_marks": 2,
       "all_benchmark_spans_insufficient": false
+    }
+  },
+  "queue_health": {
+    "schema_version": 1,
+    "generated_at": "2026-09-15T09:14:09.101479+00:00",
+    "overall": "active",
+    "headline": "Agent lane active.",
+    "merge_lane": {
+      "state": "idle",
+      "idle": true,
+      "running": false,
+      "blocked": false,
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+    },
+    "agent_lane": {
+      "state": "running",
+      "idle": false,
+      "running": true,
+      "blocked": false,
+      "should_dispatch": true,
+      "pause_active": false,
+      "attention_parked_count": 0,
+      "open_count": 9,
+      "pr_open_count": 0,
+      "dispatch_eligible_count": 9,
+      "blocked_task_count": 0,
+      "next_task_id": "eng-20260915-01",
+      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
+      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+    },
+    "queue_clearing": {
+      "pause_active": false,
+      "attention_parked_count": 0,
+      "evaluated_at": "2026-09-15T09:14:02.094510+00:00"
+    },
+    "ops_monitor": {
+      "run_at": "2026-09-14T07:46:37.216700+00:00",
+      "overall": "fail",
+      "should_dispatch_engineering": false
     }
   }
 }
