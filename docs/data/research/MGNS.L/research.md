@@ -1,6 +1,6 @@
 # Morgan Sindall Group plc (MGNS.L) — Research memo
 
-_Version 1 · Updated 2026-09-04T18:11:13.011869+00:00 · Mode: initial_
+_Version 2 · Updated 2026-09-15T08:12:38.723922+00:00 · Mode: structured_verdict_update_
 
 ## EXECUTIVE SUMMARY
 Morgan Sindall Group is a UK-listed construction and regeneration group operating through five decentralised divisions — Partnership Housing, Mixed Use Partnerships, Fit Out, Construction and Infrastructure — with FY 2025 revenue of £5.0bn and over 8,500 employees. The quantitative screen rates the stock a **strong buy** (16/22 models, composite 76%, five factor families: cheapness, quality, dividend, GARP, risk) on P/E 11.5×, P/B 2.7×, 3.7% yield, ROE 26.1%, net-cash balance sheet and Piotroski 8/9. Primary RNS filings confirm record FY 2025 and H1 2026 earnings, a £19.1–19.5bn secured plus preferred-bidder workload, and 20% dividend growth to 158p. The valuation hook is a statistically cheap, cash-rich compounder (18% ten-year adjusted PBT CAGR per management) trading below its 200-day moving average with neutral timing. The central debate is whether cash-generative Fit Out and public-sector Construction/Infrastructure can continue to offset housing-related capital absorption, partnership losses and eventual mean reversion in Fit Out margins.
@@ -88,8 +88,21 @@ Coverage is **moderately thin** on material corporate events — earnings-centri
 
 No M&A, CEO departure or enforcement actions in the manifest.
 
+## WEEKLY UPDATE
+No new RNS since the 4 Sep memo; the 15 Sep news batch is thin Kalkine/ad-hoc commentary (London school contract, workload-to-margin) without fresh numbers.
+The strong-buy screen is now persistent (~16 weeks; composite ~81%); valuation metrics firmed slightly while price remains ~14% below the 200-day MA (RSI ~31).
+Filing-backed thesis and medium-risk overlay are unchanged.
+
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.74
-Rationale: Primary filings confirm a high-quality, net-cash compounder with accelerating earnings, a strong order book and disciplined capital returns, supporting the quantitative Strong Buy, while housing capital lock-up, cyclical construction exposure and a new/low-duration screen signal warrant phased accumulation rather than maximum conviction.
+Confidence: 0.76
+Rationale: Unchanged filings still support net-cash record earnings and order book for a persistent Strong Buy; housing capital, Fit Out normalisation and cyclical exposure keep medium risk and phased accumulation.
+RiskTags: cyclical, regulatory, competitive, other
+
+## Weekly updates
+
+### 2026-09-15T08:12:38.723922+00:00
+No new RNS since the 4 Sep memo; the 15 Sep news batch is thin Kalkine/ad-hoc commentary (London school contract, workload-to-margin) without fresh numbers.
+The strong-buy screen is now persistent (~16 weeks; composite ~81%); valuation metrics firmed slightly while price remains ~14% below the 200-day MA (RSI ~31).
+Filing-backed thesis and medium-risk overlay are unchanged.
