@@ -8,16 +8,16 @@ from pathlib import Path
 from value_investor.engineering_queue import evaluate_engineering_dispatch
 from value_investor.engineering_tasks import EngineeringTask
 from value_investor.project_traffic import (
-    build_daily_digest,
-    handoff_ops_monitor_email_to_pm,
-    planned_rectification_for_ops_finding,
     QUEUE_MERGE_SYNC_FINDING_TITLE,
     RECTIFICATION_HUMAN_TRIAGE,
     RECTIFICATION_QUEUE_SYNC,
+    build_daily_digest,
     classify_stuck_prs,
     evaluate_traffic_pause,
     format_daily_digest_markdown,
+    handoff_ops_monitor_email_to_pm,
     is_traffic_pause_active,
+    planned_rectification_for_ops_finding,
     preserve_queue_meta,
     remediate_queue_merge_sync,
     run_project_traffic,
@@ -344,31 +344,41 @@ def test_remediate_queue_merge_sync_marks_merged(tmp_path: Path, monkeypatch):
     assert calls["n"] == 1
     assert any(a.kind == "remediate_queue_merge_sync" for a in actions)
 
+
 def test_planned_rectification_mapping():
-    assert planned_rectification_for_ops_finding(
-        {
-            "severity": "warn",
-            "category": "engineering",
-            "title": QUEUE_MERGE_SYNC_FINDING_TITLE,
-            "summary": "lag",
-        }
-    )[0] == RECTIFICATION_QUEUE_SYNC
-    assert planned_rectification_for_ops_finding(
-        {
-            "severity": "warn",
-            "category": "ingest",
-            "title": "Buy-tier filing ingest stalled",
-            "summary": "x",
-        }
-    )[0] == RECTIFICATION_HUMAN_TRIAGE
-    assert planned_rectification_for_ops_finding(
-        {
-            "severity": "fail",
-            "category": "workflows",
-            "title": "Workflow overdue: FTSE Ingest Loop",
-            "summary": "stale",
-        }
-    )[0] == "rerun_or_dispatch_workflow"
+    assert (
+        planned_rectification_for_ops_finding(
+            {
+                "severity": "warn",
+                "category": "engineering",
+                "title": QUEUE_MERGE_SYNC_FINDING_TITLE,
+                "summary": "lag",
+            }
+        )[0]
+        == RECTIFICATION_QUEUE_SYNC
+    )
+    assert (
+        planned_rectification_for_ops_finding(
+            {
+                "severity": "warn",
+                "category": "ingest",
+                "title": "Buy-tier filing ingest stalled",
+                "summary": "x",
+            }
+        )[0]
+        == RECTIFICATION_HUMAN_TRIAGE
+    )
+    assert (
+        planned_rectification_for_ops_finding(
+            {
+                "severity": "fail",
+                "category": "workflows",
+                "title": "Workflow overdue: FTSE Ingest Loop",
+                "summary": "stale",
+            }
+        )[0]
+        == "rerun_or_dispatch_workflow"
+    )
 
 
 def test_handoff_ops_monitor_email_to_pm_writes_artifact(tmp_path: Path, monkeypatch):
@@ -426,4 +436,3 @@ def test_handoff_ops_monitor_email_to_pm_writes_artifact(tmp_path: Path, monkeyp
     assert "ops_email_handoff" in digest
     md = digest_md.read_text(encoding="utf-8")
     assert "Ops-monitor email handoff" in md
-

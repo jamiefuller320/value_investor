@@ -870,7 +870,6 @@ def _claim_evidence_rows(
     return rows
 
 
-
 def planned_rectification_for_ops_finding(finding: Any) -> tuple[str, str]:
     """Deterministic PM rectification plan for an ops-monitor email finding.
 
@@ -879,10 +878,10 @@ def planned_rectification_for_ops_finding(finding: Any) -> tuple[str, str]:
     are recorded for digest / human / eng-task follow-up.
     """
     if hasattr(finding, "title"):
-        title = str(getattr(finding, "title") or "")
-        category = str(getattr(finding, "category") or "")
-        severity = str(getattr(finding, "severity") or "")
-        summary = str(getattr(finding, "summary") or "")
+        title = str(finding.title or "")
+        category = str(finding.category or "")
+        severity = str(finding.severity or "")
+        summary = str(finding.summary or "")
     else:
         row = finding or {}
         title = str(row.get("title") or "")
@@ -900,9 +899,12 @@ def planned_rectification_for_ops_finding(finding: Any) -> tuple[str, str]:
             RECTIFICATION_UNSTICK_PRS,
             "PM v1: traffic pause/unstick path (CI comment / conflict-resolve)",
         )
-    if category in {"workflows", "workflow"} or title.startswith("Workflow overdue:") or title.startswith(
-        "Recent workflow failure:"
-    ) or title.startswith("Workflow failure"):
+    if (
+        category in {"workflows", "workflow"}
+        or title.startswith("Workflow overdue:")
+        or title.startswith("Recent workflow failure:")
+        or title.startswith("Workflow failure")
+    ):
         return (
             RECTIFICATION_RERUN_WORKFLOW,
             "Rerun/dispatch via existing ops auto-fix or workflow responders; else human",
@@ -1220,8 +1222,7 @@ def format_daily_digest_markdown(digest: dict[str, Any]) -> str:
         open_count = sum(1 for row in handoff_items if row.get("status") == "open")
         resolved_count = sum(1 for row in handoff_items if row.get("status") == "resolved")
         lines.append(
-            f"- Findings: {len(handoff_items)} "
-            f"(open={open_count}, resolved={resolved_count})"
+            f"- Findings: {len(handoff_items)} (open={open_count}, resolved={resolved_count})"
         )
         for row in handoff_items[:12]:
             lines.append(

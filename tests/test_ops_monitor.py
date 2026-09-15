@@ -946,8 +946,6 @@ def test_send_ops_monitor_email_sends_for_unfixed(monkeypatch):
     assert len(handoffs[0]["findings"]) == 1
 
 
-
-
 def test_ops_monitor_email_body_includes_planned_rectification():
     from value_investor.ops_monitor import format_ops_monitor_html, format_ops_monitor_text
 
