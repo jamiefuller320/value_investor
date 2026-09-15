@@ -8859,6 +8859,108 @@ def test_eng_20260914_03_extract_ir_presentation_metrics_itv_structured(tmp_path
     assert saved["dividend_policy"][0]["ordinary_dividend_pence"] == 5.0
 
 
+def test_eng_20260915_03_parse_ir_grafton_free_cash_flow_bridge_in_memory():
+    from value_investor.research.filings import parse_ir_grafton_free_cash_flow_bridge
+
+    body = (
+        "Free Cash Flow   \n 2025  \n£’m \n \n2024  \n£’m \n     \n"
+        "Cash generated from operations  310.3  298.3 \n"
+        "Replacement capital expenditure  (21.5)  (23.9) \n"
+        "Interest paid  (24.3)  (22.5) \n"
+        "Free cash flow  168.3  178.2 \n"
+        "Adjusted Return on Capital Employed   \n"
+    )
+    parsed = parse_ir_grafton_free_cash_flow_bridge(body)
+    assert parsed is not None
+    assert parsed["bridge_type"] == "management_free_cash_flow_bridge"
+    assert parsed["derived"]["total_fcf_millions"] == 168.3
+
+
+def test_eng_20260915_03_parse_ir_mgns_cash_flow_bridge_in_memory():
+    from value_investor.research.filings import parse_ir_mgns_cash_flow_bridge
+
+    body = (
+        "4. Cash flow. Operating cash flow was an inflow of £195.9m. \n"
+        " FY 2025 FY 2024 \n"
+        "Operating cash flow  195.9 134.8 \n"
+        "Income taxes paid (48.3) (43.9) \n"
+        "Free cash flow 161.5 107.0 \n"
+        "5. Net cash. Net cash at 31 December 2025 was £531.2m \n"
+    )
+    parsed = parse_ir_mgns_cash_flow_bridge(body)
+    assert parsed is not None
+    assert parsed["bridge_type"] == "management_cash_flow_bridge"
+    assert parsed["derived"]["total_fcf_millions"] == 161.5
+
+
+def test_eng_20260915_03_parse_ir_management_fcf_definitions_in_memory():
+    from value_investor.research.filings import parse_ir_management_fcf_definitions
+
+    body = (
+        "• 'Free cash flow' is the movement in adjusted net debt excluding dividends. \n"
+        "• Free cash flow is cash generated from operations less replacement capital expenditure. \n"
+    )
+    metrics = {row["metric"] for row in parse_ir_management_fcf_definitions(body)}
+    assert "free_cash_flow" in metrics
+
+
+def test_eng_20260915_03_extract_ir_presentation_metrics_gftu_and_mgns(tmp_path: Path):
+    from value_investor.research.filings import extract_ir_presentation_metrics
+
+    fixtures: tuple[tuple[str, str, Path, str, str], ...] = (
+        (
+            "GFTU.L",
+            "management_free_cash_flow_bridge",
+            "ir_gftu",
+            Path("docs/data/research/GFTU.L/sources/filings/bodies/ir_c6a7de8af8b2c4c5.txt"),
+            "annual",
+        ),
+        (
+            "MGNS.L",
+            "management_cash_flow_bridge",
+            "ir_mgns",
+            Path("docs/data/research/MGNS.L/sources/filings/bodies/ir_d4b902cce4638393.txt"),
+            "annual",
+        ),
+    )
+    for ticker, expected_bridge, body_id, fixture, period in fixtures:
+        if not fixture.is_file():
+            pytest.skip(f"{fixture} not present")
+        filings_dir = tmp_path / ticker / "filings"
+        bodies_dir = filings_dir / "bodies"
+        bodies_dir.mkdir(parents=True)
+        body_path = bodies_dir / f"{body_id}.txt"
+        body_path.write_text(fixture.read_text(encoding="utf-8"), encoding="utf-8")
+        (filings_dir / "filings_index.json").write_text(
+            json.dumps(
+                {
+                    "filings": [
+                        {
+                            "id": body_id,
+                            "source": "ir_allowlist",
+                            "headline": f"IR allowlist document — {body_id}",
+                            "period": period,
+                            "has_body": True,
+                            "body_path": str(body_path),
+                        }
+                    ]
+                }
+            ),
+            encoding="utf-8",
+        )
+        sources_dir = tmp_path / ticker / "sources"
+        sources_dir.mkdir(parents=True)
+        metrics = extract_ir_presentation_metrics(
+            filings_dir,
+            ticker,
+            sources_dir=sources_dir,
+        )
+        assert metrics["bridge_count"] >= 1
+        assert metrics["dividend_policy_count"] >= 1
+        assert (sources_dir / "ir_presentation_metrics.json").exists()
+        assert any(row["bridge_type"] == expected_bridge for row in metrics["bridges"])
+
+
 def test_fetch_filings_ir_allowlist_mgns_l(tmp_path: Path):
     """MGNS.L IR results decks are allowlisted for cash-flow bridge gap-fill."""
     allowlist_path = tmp_path / "empty_ir.json"
