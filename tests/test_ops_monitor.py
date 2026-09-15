@@ -1456,6 +1456,29 @@ def test_parse_published_research_mode_from_structured_memo_header():
     assert parsed == ("2026-09-14T09:48:32+00:00", "structured_verdict")
 
 
+def test_apply_auto_fixes_lands_phase_b_from_published_memos(tmp_path: Path):
+    research_root = tmp_path / "research"
+    ticker = research_root / "AAA.L"
+    ticker.mkdir(parents=True)
+    (ticker / "research.json").write_text(
+        json.dumps({"ticker": "AAA.L", "mode": "initial", "research_verdict": "accumulate"}),
+        encoding="utf-8",
+    )
+    findings = check_phase_b_producer_progress(research_root)
+    assert findings[0].auto_fixable is True
+
+    with patch(
+        "value_investor.email_agent.repair_published_structured_verdict_to_committed",
+        return_value=3,
+    ) as repair_mock:
+        fixes = apply_auto_fixes(findings, apply=True)
+
+    repair_mock.assert_called_once()
+    assert any(row.get("action") == "repair_phase_b_published_memos" for row in fixes)
+    assert findings[0].fixed is True
+    assert "landed 3 published" in (findings[0].action_taken or "")
+
+
 def test_repair_published_structured_verdict_to_committed(tmp_path: Path):
     from value_investor.email_agent import repair_published_structured_verdict_to_committed
 
