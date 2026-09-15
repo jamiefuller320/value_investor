@@ -9,7 +9,10 @@ from typing import Any
 import pandas as pd
 
 from value_investor.research.verdict import compute_adjusted_signal
-from value_investor.scoring.fcf import screen_ttm_from_row
+from value_investor.scoring.fcf import (
+    enrich_screening_snapshot_fcf_dividend_coverage,
+    screen_ttm_from_row,
+)
 from value_investor.scoring.fcf_basis_overlay import apply_fcf_export_enforcement
 from value_investor.storage import read_json, write_json
 
@@ -144,9 +147,11 @@ def merge_research_verdict_into_snapshot(
 def write_screening_snapshot(sources_dir: Path, snapshot: dict[str, Any]) -> Path:
     sources_dir.mkdir(parents=True, exist_ok=True)
     path = sources_dir / "screening_snapshot.json"
+    payload = enforce_fcf_basis_in_snapshot(snapshot)
+    payload = enrich_screening_snapshot_fcf_dividend_coverage(payload)
     write_json(
         path,
-        enforce_fcf_basis_in_snapshot(snapshot),
+        payload,
         compact=True,
         compress=False,
     )
