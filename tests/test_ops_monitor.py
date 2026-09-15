@@ -1358,3 +1358,59 @@ def test_check_phase_b_producer_progress_passes_when_structured_modes_present(tm
             encoding="utf-8",
         )
     assert check_phase_b_producer_progress(research_root) == []
+
+
+def test_parse_published_research_mode_from_structured_memo_header():
+    from value_investor.email_agent import _parse_published_research_mode
+
+    markdown = (
+        "# Example plc (EX.L) — Research memo\n\n"
+        "_Version 1 · Updated 2026-09-14T09:48:32+00:00 · Mode: structured_verdict_\n"
+    )
+    parsed = _parse_published_research_mode(markdown)
+    assert parsed == ("2026-09-14T09:48:32+00:00", "structured_verdict")
+
+
+def test_repair_published_structured_verdict_to_committed(tmp_path: Path):
+    from value_investor.email_agent import repair_published_structured_verdict_to_committed
+
+    memo_dir = tmp_path / "docs" / "research"
+    committed_root = tmp_path / "docs" / "data" / "research"
+    memo_dir.mkdir(parents=True)
+    ticker_dir = committed_root / "EX.L"
+    ticker_dir.mkdir(parents=True)
+    (ticker_dir / "research.json").write_text(
+        json.dumps(
+            {
+                "ticker": "EX.L",
+                "name": "Example plc",
+                "mode": "initial",
+                "research_verdict": "accumulate",
+                "risk_tags": ["cyclical"],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (memo_dir / "EX.L.md").write_text(
+        "# Example plc (EX.L) — Research memo\n\n"
+        "_Version 1 · Updated 2026-09-14T10:00:00+00:00 · Mode: structured_verdict_\n\n"
+        "## RESEARCH VERDICT\n"
+        "Verdict: neutral\n"
+        "Risk: medium\n"
+        "Confidence: 0.55\n"
+        "Rationale: Slim Phase B landing.\n"
+        "RiskTags: cyclical, leverage\n",
+        encoding="utf-8",
+    )
+
+    repaired = repair_published_structured_verdict_to_committed(
+        memo_dir=memo_dir,
+        committed_root=committed_root,
+    )
+    assert repaired == 1
+    payload = json.loads((ticker_dir / "research.json").read_text(encoding="utf-8"))
+    assert payload["mode"] == "structured_verdict"
+    assert payload["updated_at"] == "2026-09-14T10:00:00+00:00"
+    assert payload["research_verdict"] == "neutral"
+    assert payload["research_confidence"] == 0.55
+    assert (ticker_dir / "research.md").exists()

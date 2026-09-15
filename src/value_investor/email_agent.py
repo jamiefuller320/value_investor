@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import shutil
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -35,9 +36,111 @@ from value_investor.research.runner import (
 )
 from value_investor.run_diff import RunDiff
 from value_investor.simulator import SimulationComparison, simulation_comparison_from_dict
-from value_investor.storage import write_json
+from value_investor.storage import read_json, write_json
 from value_investor.summary import build_company_reports
 from value_investor.trust_summary import build_trust_reports
+
+_PUBLISHED_MEMO_MODE_RE = re.compile(
+    r"Updated\s+([^·]+)\s+·\s+Mode:\s+([\w_]+)",
+)
+
+
+def _parse_published_research_mode(markdown: str) -> tuple[str, str] | None:
+    """Parse ``(updated_at, mode)`` from a published research memo header line."""
+    for line in markdown.splitlines()[:8]:
+        match = _PUBLISHED_MEMO_MODE_RE.search(line.strip("_ "))
+        if match:
+            return match.group(1).strip(), match.group(2).strip()
+    return None
+
+
+def repair_published_structured_verdict_to_committed(
+    *,
+    memo_dir: Path = Path("docs/research"),
+    committed_root: Path = Path("docs/data/research"),
+) -> int:
+    """
+    Land Phase B structured modes into the committed store when publish updated
+    ``docs/research/*.md`` without persisting ``docs/data/research`` (pre-fix Sundays).
+    """
+    from value_investor.phase_c_readiness import STRUCTURED_VERDICT_MODES
+    from value_investor.research.document import parse_research_sections
+    from value_investor.research.verdict import parse_research_verdict, parse_risk_tags
+
+    if not memo_dir.is_dir():
+        return 0
+    repaired = 0
+    for md_path in sorted(memo_dir.glob("*.md")):
+        try:
+            markdown = md_path.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        parsed_mode = _parse_published_research_mode(markdown)
+        if parsed_mode is None:
+            continue
+        updated_at, mode = parsed_mode
+        if mode not in STRUCTURED_VERDICT_MODES:
+            continue
+
+        ticker = md_path.stem.strip().upper()
+        committed_dir = committed_root / ticker
+        json_path = committed_dir / "research.json"
+        payload: dict[str, object] | None = None
+        if json_path.is_file():
+            try:
+                raw = read_json(json_path)
+            except (OSError, ValueError, TypeError, json.JSONDecodeError):
+                raw = None
+            if isinstance(raw, dict):
+                payload = raw
+                ticker = str(payload.get("ticker") or ticker).strip().upper()
+                if str(payload.get("mode") or "") in STRUCTURED_VERDICT_MODES:
+                    continue
+        if payload is None:
+            continue
+
+        sections = parse_research_sections(markdown)
+        verdict_fields = parse_research_verdict(sections.get("research_verdict", ""))
+        if not verdict_fields.get("research_verdict"):
+            continue
+        risk_tags = parse_risk_tags(sections.get("research_verdict", "")) or list(
+            payload.get("risk_tags") or []
+        )
+
+        payload["mode"] = mode
+        payload["updated_at"] = updated_at
+        payload["research_verdict"] = verdict_fields.get("research_verdict")
+        payload["research_risk_level"] = verdict_fields.get("research_risk_level")
+        payload["research_confidence"] = verdict_fields.get("research_confidence")
+        payload["research_rationale"] = verdict_fields.get("research_rationale")
+        payload["risk_tags"] = risk_tags
+
+        committed_dir.mkdir(parents=True, exist_ok=True)
+        write_json(json_path, payload, compact=False)
+        shutil.copy2(md_path, committed_dir / "research.md")
+        repaired += 1
+    return repaired
+
+
+def _output_structured_verdict_tickers(output_dir: Path) -> list[str]:
+    """Tickers under ``output/research`` whose ``research.json`` uses Phase B modes."""
+    from value_investor.phase_c_readiness import STRUCTURED_VERDICT_MODES
+
+    root = output_dir / "research"
+    if not root.is_dir():
+        return []
+    tickers: list[str] = []
+    for path in sorted(root.glob("*/research.json")):
+        try:
+            payload = read_json(path)
+        except (OSError, ValueError, TypeError, json.JSONDecodeError):
+            continue
+        if not isinstance(payload, dict):
+            continue
+        mode = str(payload.get("mode") or "")
+        if mode in STRUCTURED_VERDICT_MODES:
+            tickers.append(path.parent.name.strip().upper())
+    return sorted(set(tickers))
 
 
 def _load_run_diff(output_dir: Path) -> RunDiff | None:
@@ -405,6 +508,14 @@ def main(argv: list[str] | None = None) -> int:
             sync_output_research_to_committed,
         )
 
+        repaired_committed = repair_published_structured_verdict_to_committed()
+        if repaired_committed:
+            print(
+                "Repaired "
+                f"{repaired_committed} committed research memo(s) from published "
+                "Phase B markdown (docs/research → docs/data/research)"
+            )
+
         # Seed memo metadata first so weekly updates hit existing Phase A essays
         # (structured_verdict* modes) instead of treating the output store as empty.
         synced_memos = sync_committed_memos_to_output(args.output_dir)
@@ -450,11 +561,14 @@ def main(argv: list[str] | None = None) -> int:
             for doc in research_summary.documents
             if getattr(doc, "ticker", None)
         ]
+        persist_tickers = sorted(
+            set(touched) | set(_output_structured_verdict_tickers(args.output_dir))
+        )
         persisted = 0
-        if touched:
+        if persist_tickers:
             persisted = sync_output_research_to_committed(
                 args.output_dir,
-                tickers=touched,
+                tickers=persist_tickers,
             )
             print(
                 f"Persisted {persisted} research memo tree(s) to docs/data/research "
@@ -474,7 +588,7 @@ def main(argv: list[str] | None = None) -> int:
             active_count=int(research_summary.active_count),
             alumni_count=int(research_summary.alumni_count),
             persisted_trees=int(persisted),
-            touched_tickers=touched,
+            touched_tickers=persist_tickers,
         )
         receipt_path = write_research_docs_receipt(
             receipt,
