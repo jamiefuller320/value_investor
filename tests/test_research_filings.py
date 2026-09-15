@@ -8798,6 +8798,84 @@ def test_eng_20260914_03_ir_validation_rejects_truncated_fcf_bridge():
     assert reason == "incomplete_fcf_bridge"
 
 
+def test_eng_20260914_03_fetch_ir_allowlist_body_rejects_truncated_then_alternate(
+    monkeypatch,
+):
+    """eng-20260914-03: truncated ITV PDF extract is rejected; full alternate parser is kept."""
+    import hashlib
+
+    url = (
+        "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/"
+        "ITV%20Plc%202025%20FY%20Results%20Presentation.pdf"
+    )
+    row_id = f"ir_{hashlib.sha256(url.encode('utf-8')).hexdigest()[:16]}"
+    row = {
+        "id": row_id,
+        "source": "ir_allowlist",
+        "headline": "IR allowlist document — ITV-Plc-2025-FY-Results-Presentation.pdf",
+        "url": url,
+        "period": "annual",
+    }
+    truncated = ("ITV plc Full Year Results 2025 presentation FY Results\n" * 12) + (
+        "Profit to Cash Conversion and Free Cash Flow\n"
+        "Adjusted cash flow 348 451\n"
+        "Net cash interest paid (excluding lease interest) (34) (18)\n"
+        "Adjusted cash tax2 (62) (105)\n"
+        "Pension fundin"
+    )
+    full_body = ("ITV plc Full Year Results 2025 presentation FY Results\n" * 12) + (
+        "Profit to Cash Conversion and Free Cash Flow\n"
+        "Adjusted EBITA 534 542\n"
+        "Working capital movement (196) (144)\n"
+        "Depreciation 48 47\n"
+        "Share-based compensation 16 18\n"
+        "Acquisition of property, plant and equipment and intangible assets1 (54) (49)\n"
+        "Lease liability payments (including lease interest) (26) (25)\n"
+        "Adjusted cash flow 348 451\n"
+        "Profit to cash ratio 65% 83%\n"
+        "Adjusted cash flow 348 451\n"
+        "Net cash interest paid (excluding lease interest) (34) (18)\n"
+        "Adjusted cash tax2 (62) (105)\n"
+        "Pension funding (65) (3)\n"
+        "Free cash flow 187 325\n" + ("z" * 300)
+    )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda _url: truncated,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_pdf_alternate_candidates",
+        lambda _url: [],
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
+    )
+
+    body, source = _fetch_ir_allowlist_body(
+        row,
+        ticker="ITV.L",
+        company_name="ITV plc",
+        investegate_cache=[],
+    )
+    assert body is None
+    assert source is None
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_pdf_alternate_candidates",
+        lambda _url: [(full_body, "pymupdf")],
+    )
+    body, source = _fetch_ir_allowlist_body(
+        row,
+        ticker="ITV.L",
+        company_name="ITV plc",
+        investegate_cache=[],
+    )
+    assert body == full_body
+    assert source == "pdf_pymupdf"
+
+
 def test_eng_20260914_03_extract_ir_presentation_metrics_itv_structured(tmp_path: Path):
     from value_investor.research.filings import extract_ir_presentation_metrics
 
