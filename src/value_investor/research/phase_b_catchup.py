@@ -13,6 +13,12 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from value_investor.agent_model_policy import (
+    SPEND_POOL_WEEKLY_OPS,
+    estimate_agent_spend_usd,
+    record_estimated_spend,
+    weekly_ops_budget_status,
+)
 from value_investor.paper_fund import BUY_SIGNALS
 from value_investor.phase_c_readiness import STRUCTURED_VERDICT_MODES
 from value_investor.research.memo_backfill import (
@@ -24,12 +30,6 @@ from value_investor.research.memo_backfill import (
 )
 from value_investor.research.runner import _process_ticker
 from value_investor.research.store import ResearchStore
-from value_investor.agent_model_policy import (
-    SPEND_POOL_WEEKLY_OPS,
-    estimate_agent_spend_usd,
-    record_estimated_spend,
-    weekly_ops_budget_status,
-)
 from value_investor.research.weekday_rememo import (
     DEFAULT_COMMITTED_RESEARCH,
     DEFAULT_LATEST_PATH,
@@ -88,9 +88,7 @@ def list_phase_b_backlog(
     """Tickers whose committed ``research.json`` is not yet a structured_verdict* mode."""
     if not committed_dir.is_dir():
         return []
-    reports_by_ticker = {
-        r.ticker.strip().upper(): r for r in load_buy_tier_reports(latest_path)
-    }
+    reports_by_ticker = {r.ticker.strip().upper(): r for r in load_buy_tier_reports(latest_path)}
     backlog: list[str] = []
     for ticker_dir in sorted(committed_dir.iterdir()):
         if not ticker_dir.is_dir():
@@ -111,9 +109,7 @@ def list_phase_b_backlog(
         if report is None:
             return (1, 2, 0.0, ticker)
         signal_rank = (
-            0
-            if report.signal == "strong_buy"
-            else (1 if report.signal in BUY_SIGNALS else 2)
+            0 if report.signal == "strong_buy" else (1 if report.signal in BUY_SIGNALS else 2)
         )
         return (0, signal_rank, -(report.conviction_score or 0.0), ticker)
 
