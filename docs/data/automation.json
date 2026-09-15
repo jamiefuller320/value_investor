@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-15T07:35:49.542471+00:00",
+  "generated_at": "2026-09-15T07:47:49.916305+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1150,16 +1150,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-14T17:16:27.227692+00:00",
-    "queue_ui_updated_at": "2026-09-15T07:35:49.572734+00:00",
-    "task_count": 5,
+    "compiled_at": "2026-09-15T07:46:56.019355+00:00",
+    "queue_ui_updated_at": "2026-09-15T07:47:49.858414+00:00",
+    "task_count": 7,
     "status": {
-      "open_count": 0,
-      "pr_open_count": 1,
+      "open_count": 2,
+      "pr_open_count": 0,
       "parked_count": 2,
-      "merged_count": 2,
+      "merged_count": 3,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260915-01",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1168,16 +1168,36 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260914-03",
-        "area": "ingest",
-        "title": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
-        "priority": "high",
-        "priority_score": 95.0,
-        "status": "pr_open",
-        "source": "post_run_review",
+        "id": "eng-20260915-01",
+        "area": "ops",
+        "title": "Phase B structured-verdict producer stalled",
+        "priority": "medium",
+        "priority_score": 45.0,
+        "status": "open",
+        "source": "ops_monitor",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": "cursor/eng-20260914-03-1de3"
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
+        "clash_scan": "full"
+      },
+      {
+        "id": "eng-20260915-02",
+        "area": "ops",
+        "title": "Verdict fields present without structured_verdict modes",
+        "priority": "medium",
+        "priority_score": 45.0,
+        "status": "open",
+        "source": "ops_monitor",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 2,
+        "clash_scan": "full"
       }
     ],
     "attention_tasks": [
@@ -1207,8 +1227,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 0,
-      "dispatch_eligible_count": 0,
+      "open_task_count": 2,
+      "dispatch_eligible_count": 2,
       "blocked_count": 0
     }
   },
@@ -1483,6 +1503,48 @@
       "tracks_with_post_apply_trades": 5,
       "tracks_insufficient_epoch_marks": 2,
       "all_benchmark_spans_insufficient": false
+    }
+  },
+  "queue_health": {
+    "schema_version": 1,
+    "generated_at": "2026-09-15T07:47:49.916305+00:00",
+    "overall": "active",
+    "headline": "Agent lane active.",
+    "merge_lane": {
+      "state": "idle",
+      "idle": true,
+      "running": false,
+      "blocked": false,
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+    },
+    "agent_lane": {
+      "state": "running",
+      "idle": false,
+      "running": true,
+      "blocked": false,
+      "should_dispatch": true,
+      "pause_active": false,
+      "attention_parked_count": 0,
+      "open_count": 2,
+      "pr_open_count": 0,
+      "dispatch_eligible_count": 2,
+      "blocked_task_count": 0,
+      "next_task_id": "eng-20260915-01",
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
+    },
+    "queue_clearing": {
+      "pause_active": false,
+      "attention_parked_count": 0,
+      "evaluated_at": "2026-09-15T07:47:46.199500+00:00"
+    },
+    "ops_monitor": {
+      "run_at": "2026-09-15T07:46:32.318230+00:00",
+      "overall": "fail",
+      "should_dispatch_engineering": true
     }
   }
 }
