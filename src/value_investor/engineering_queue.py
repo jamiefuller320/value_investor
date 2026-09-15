@@ -296,6 +296,10 @@ def evaluate_engineering_dispatch(
             count_attention_parked_tasks,
             is_queue_clearing_pause_active,
         )
+        from value_investor.project_traffic import (
+            get_traffic_control_state,
+            is_traffic_pause_active,
+        )
 
         if is_queue_clearing_pause_active(tasks_path=tasks_path):
             policy = _engineering_queue_recovery_policy()
@@ -308,6 +312,20 @@ def evaluate_engineering_dispatch(
                     f"attention parked backlog clearing pause "
                     f"({count} task(s); resume when < {resume_below} and "
                     f"{idle_minutes}m since last clearing action)"
+                ),
+                status=status,
+            )
+
+        if is_traffic_pause_active(tasks_path=tasks_path):
+            traffic = get_traffic_control_state(tasks_path=tasks_path)
+            stuck = int(traffic.get("stuck_pr_count") or 0)
+            reasons = traffic.get("pause_reasons") or traffic.get("stuck_reasons") or []
+            reason_txt = ",".join(str(r) for r in reasons) if reasons else "stuck_prs"
+            return EngineeringDispatchDecision(
+                should_dispatch=False,
+                reason=(
+                    f"project traffic pause ({stuck} stuck PR(s); {reason_txt}) — "
+                    "clear CI failures / merge conflicts before new PR generation"
                 ),
                 status=status,
             )

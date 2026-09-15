@@ -1899,6 +1899,47 @@ def run_ops_monitor(
                     finding.auto_fixable = True
                     finding.action_taken = f"dispatched {workflow_file} recovery run"
 
+    try:
+        from value_investor.project_traffic import run_project_traffic
+
+        traffic_report = run_project_traffic(
+            tasks_path=tasks_path,
+            open_prs=open_prs,
+            repo=repo,
+            token=token,
+            apply=apply_fixes,
+            write_digest=True,
+        )
+        if traffic_report.pause_active:
+            findings.append(
+                OpsFinding(
+                    severity="warn",
+                    category="engineering",
+                    title="Project traffic pause active",
+                    summary=(
+                        f"{len(traffic_report.stuck_prs)} stuck PR(s); "
+                        f"reasons={traffic_report.pause_reasons or ['stuck_prs']}. "
+                        "New engineering-agent dispatch is held until CI/conflicts clear."
+                    ),
+                    auto_fixable=False,
+                )
+            )
+        for action in traffic_report.actions:
+            if action.applied or action.kind in {
+                "pause_dispatch",
+                "resume_dispatch",
+            }:
+                auto_fixes.append(
+                    {
+                        "action": f"traffic_{action.kind}",
+                        "detail": action.detail,
+                        "pr_number": action.pr_number,
+                        "branch": action.branch,
+                    }
+                )
+    except Exception:  # noqa: BLE001 — traffic controller must not fail ops monitor
+        logger.exception("project traffic controller failed")
+
     email_deferred, email_defer_reasons = evaluate_email_deferral(findings, workflow_checks)
 
     drafted_ids: list[str] = []

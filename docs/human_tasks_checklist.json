@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-14",
+  "updated_at": "2026-09-15",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -62,10 +62,18 @@
         {
           "id": "weekday-engineering-parked-backlog-clear",
           "title": "Clear engineering parked backlog when dispatch pauses",
-          "summary": "When attention-parked count hits 8, engineering-queue emails and pauses dispatch plus parked-hunter-compile. Work oldest parks first via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action.",
+          "summary": "When attention-parked count hits 8, engineering-queue emails and pauses dispatch plus parked-hunter-compile. Work oldest parks first via `ftse-engineering list-parked` (merge, cancel, or unpark). Queue auto-resumes when count drops below 7 and 30 minutes have elapsed since the last clearing action. Separate from project-traffic pause (stuck CI/conflict PRs).",
           "automated": false,
           "doc_path": "docs/ops/ops-monitor.md",
           "doc_anchor": "engineering-parked-backlog-clearing"
+        },
+        {
+          "id": "weekday-project-traffic-runs",
+          "title": "Project traffic pause / unstick / EOD digest",
+          "summary": "Weekday project-traffic (and ops-monitor) classifies stuck cursor/* PRs, pauses new engineering-agent dispatch, comments for CI/conflict fixes, may dispatch conflict-resolve for eng branches, and writes a grounded EOD digest. Does not merge. Spot-check digest trajectory when pause is active.",
+          "automated": true,
+          "doc_path": "docs/ops/project-traffic.md",
+          "doc_anchor": "authority-v1"
         },
         {
           "id": "weekday-buy-tier-level-first-fill",
@@ -350,6 +358,14 @@
           "automated": false,
           "doc_path": "docs/ops/ops-monitor.md",
           "doc_anchor": "email-deferral-day-complete-gate"
+        },
+        {
+          "id": "adhoc-project-traffic-cron-register",
+          "title": "Register project-traffic weekday crons",
+          "summary": "After project-traffic merge, upsert cron-job.org jobs for weekdays 12:30 and 17:30 UTC dispatching project-traffic.yml (GitHub schedule is backup only).",
+          "automated": false,
+          "doc_path": "docs/ops/project-traffic.md",
+          "doc_anchor": "schedule"
         },
         {
           "id": "adhoc-rotate-cursor-api-key",
