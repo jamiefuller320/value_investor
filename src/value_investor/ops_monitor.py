@@ -2378,7 +2378,7 @@ def format_ops_monitor_html(report: OpsMonitorReport) -> str:
         )
     else:
         merges_html = ""
-        return f"""<!DOCTYPE html>
+    return f"""<!DOCTYPE html>
 <html><body style="font-family:Arial,sans-serif;color:#222;max-width:720px">
   <h2>FTSE Ops Monitor</h2>
   <p style="color:#666">{report.run_at}</p>
