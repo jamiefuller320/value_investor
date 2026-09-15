@@ -2114,6 +2114,7 @@ def cmd_library_ingest_maintenance(args: argparse.Namespace) -> int:
 def cmd_parked_hunter_compile(args: argparse.Namespace) -> int:
     from value_investor.engineering_recovery import is_queue_clearing_pause_active
     from value_investor.library_ingest_escalation import compile_parked_source_hunter_task
+    from value_investor.project_traffic import is_traffic_pause_active
 
     if is_queue_clearing_pause_active(tasks_path=args.tasks_path):
         payload = {
@@ -2124,6 +2125,17 @@ def cmd_parked_hunter_compile(args: argparse.Namespace) -> int:
             _emit_cli_json(payload, args)
         else:
             print("parked-hunter-compile: skipped (attention parked backlog clearing pause)")
+        return 0
+
+    if is_traffic_pause_active(tasks_path=args.tasks_path):
+        payload = {
+            "compiled_count": 0,
+            "reason": "traffic_control_pause_active",
+        }
+        if args.json or args.json_path is not None:
+            _emit_cli_json(payload, args)
+        else:
+            print("parked-hunter-compile: skipped (project traffic pause — stuck PRs)")
         return 0
 
     policy = load_policy(args.policy)

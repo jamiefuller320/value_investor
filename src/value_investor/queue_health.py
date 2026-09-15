@@ -101,6 +101,13 @@ def _agent_lane_snapshot(
     open_count = int(getattr(status, "open_count", 0) or 0)
     pr_open_count = int(getattr(status, "pr_open_count", 0) or 0)
     pause_active = is_queue_clearing_pause_active(tasks_path=tasks_path)
+    from value_investor.project_traffic import (
+        get_traffic_control_state,
+        is_traffic_pause_active,
+    )
+
+    traffic_pause = is_traffic_pause_active(tasks_path=tasks_path)
+    traffic_state = get_traffic_control_state(tasks_path=tasks_path)
     attention_parked = count_attention_parked_tasks(tasks_path=tasks_path)
     should_dispatch = bool(getattr(dispatch, "should_dispatch", False))
     reason = str(getattr(dispatch, "reason", "") or "")
@@ -114,6 +121,7 @@ def _agent_lane_snapshot(
     running = should_dispatch or (pr_open_count > 0 and open_count > 0)
     blocked = (
         pause_active
+        or traffic_pause
         or blocked_count > 0
         or (open_count > 0 and not should_dispatch)
         or orphan_pr_open
@@ -123,6 +131,12 @@ def _agent_lane_snapshot(
         detail = (
             f"Orphan pr_open state ({pr_open_count} pr_open, 0 open) — "
             "recover-queue should reconcile or mark merged."
+        )
+    elif traffic_pause:
+        stuck = int(traffic_state.get("stuck_pr_count") or 0)
+        detail = (
+            f"Traffic pause — {stuck} stuck PR(s). "
+            f"{reason or 'Clear CI failures / merge conflicts to resume.'}"
         )
     elif pause_active:
         detail = (
@@ -148,6 +162,7 @@ def _agent_lane_snapshot(
         "blocked": blocked,
         "should_dispatch": should_dispatch,
         "pause_active": pause_active,
+        "traffic_pause_active": traffic_pause,
         "attention_parked_count": attention_parked,
         "open_count": open_count,
         "pr_open_count": pr_open_count,
@@ -187,6 +202,9 @@ def build_queue_health_snapshot(
         clash_summary=clash_summary,
     )
     clearing = get_queue_clearing_state(tasks_path=tasks_path)
+    from value_investor.project_traffic import get_traffic_control_state
+
+    traffic = get_traffic_control_state(tasks_path=tasks_path)
     ops_status = _read_ops_status(ops_status_path)
 
     overall = "ok"
@@ -219,6 +237,14 @@ def build_queue_health_snapshot(
             "pause_active": bool(clearing.get("pause_active")),
             "attention_parked_count": int(clearing.get("attention_parked_count") or 0),
             "evaluated_at": clearing.get("evaluated_at"),
+        },
+        "traffic_control": {
+            "pause_active": bool(traffic.get("pause_active")),
+            "stuck_pr_count": int(traffic.get("stuck_pr_count") or 0),
+            "pause_reasons": list(
+                traffic.get("pause_reasons") or traffic.get("stuck_reasons") or []
+            ),
+            "evaluated_at": traffic.get("evaluated_at"),
         },
         "ops_monitor": {
             "run_at": (ops_status or {}).get("run_at"),
