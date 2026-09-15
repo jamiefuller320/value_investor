@@ -980,6 +980,67 @@ def write_lifecycle_board(
     return target
 
 
+def tickers_on_lifecycle_board(
+    board: dict[str, Any] | None,
+    *,
+    shown_only: bool = True,
+) -> list[str]:
+    """Return unique tickers shown on the lifecycle board (all markets / tracks)."""
+    by_market = lifecycle_tickers_by_market(board, shown_only=shown_only)
+    found: list[str] = []
+    seen: set[str] = set()
+    for tickers in by_market.values():
+        for ticker in tickers:
+            if ticker in seen:
+                continue
+            seen.add(ticker)
+            found.append(ticker)
+    return found
+
+
+def lifecycle_tickers_by_market(
+    board: dict[str, Any] | None,
+    *,
+    shown_only: bool = True,
+) -> dict[str, list[str]]:
+    """Map market_id → unique shown/occupied tickers on the lifecycle board."""
+    if not isinstance(board, dict):
+        return {}
+    out: dict[str, list[str]] = {}
+    for market in _as_list(board.get("markets")):
+        if not isinstance(market, dict):
+            continue
+        market_id = str(market.get("market_id") or "").strip()
+        if not market_id:
+            continue
+        found: list[str] = []
+        seen: set[str] = set()
+
+        def _add(ticker: Any) -> None:
+            text = str(ticker or "").strip()
+            if not text or text in seen:
+                return
+            seen.add(text)
+            found.append(text)
+
+        for packed in _as_dict(market.get("screen_columns")).values():
+            for card in _as_list(_as_dict(packed).get("shown")):
+                if isinstance(card, dict):
+                    _add(card.get("ticker"))
+        for track in _as_list(market.get("tracks")):
+            if not isinstance(track, dict):
+                continue
+            for ticker in _as_list(track.get("occupied_tickers")):
+                _add(ticker)
+            position = track.get("position_columns") or track.get("columns") or {}
+            for packed in _as_dict(position).values():
+                for card in _as_list(_as_dict(packed).get("shown")):
+                    if isinstance(card, dict):
+                        _add(card.get("ticker"))
+        out[market_id] = found
+    return out
+
+
 __all__ = [
     "COLUMN_SHOW_CAPS",
     "DEFAULT_LIFECYCLE_BOARD_PATH",
@@ -995,5 +1056,7 @@ __all__ = [
     "merge_track_columns",
     "tenure_band_for_days",
     "tenure_scale",
+    "tickers_on_lifecycle_board",
+    "lifecycle_tickers_by_market",
     "write_lifecycle_board",
 ]

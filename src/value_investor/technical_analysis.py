@@ -647,10 +647,13 @@ def fetch_price_history(
 
 
 def fetch_close_history(
-    tickers: list[str], *, period: str = LOOKBACK_PERIOD
+    tickers: list[str],
+    *,
+    period: str = LOOKBACK_PERIOD,
+    market: str | None = None,
 ) -> dict[str, pd.Series]:
     """Batch-fetch daily close prices (thin wrapper over OHLCV history)."""
-    frames = fetch_price_history(tickers, period=period)
+    frames = fetch_price_history(tickers, period=period, market=market)
     return {
         ticker: frame["Close"]
         for ticker, frame in frames.items()
@@ -710,12 +713,14 @@ def enrich_signals_with_technicals(
     enriched = out.merge(tech_df, on="ticker", how="left")
 
     if chart_dir is not None:
-        from value_investor.price_charts import write_buy_tier_charts_from_history
+        from value_investor.price_charts import write_price_charts_from_history
 
-        write_buy_tier_charts_from_history(
+        # All signals with history — lifecycle cards need hold/avoid charts too.
+        write_price_charts_from_history(
             signals=enriched,
             history=close_history,
             chart_dir=Path(chart_dir),
+            signal_filter=None,
         )
 
     return enriched
