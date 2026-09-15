@@ -1711,6 +1711,17 @@ tr.selected td {
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0.4rem 0.5rem;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  width: 100%;
+}
+
+.lifecycle-card:hover,
+.lifecycle-card:focus-visible {
+  border-color: var(--accent);
+  outline: none;
 }
 
 .lifecycle-card-head {
@@ -1719,6 +1730,31 @@ tr.selected td {
   align-items: center;
   justify-content: space-between;
   gap: 0.25rem;
+}
+
+.lifecycle-ticker-dialog {
+  width: min(980px, 96vw);
+}
+
+.lifecycle-ticker-body {
+  max-height: calc(88vh - 60px);
+  overflow-y: auto;
+}
+
+.lifecycle-ticker-chart {
+  margin-top: 0.35rem;
+}
+
+.lifecycle-ticker-outcome {
+  margin: 0.75rem 0 0.35rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.lifecycle-ticker-outcome h4 {
+  margin: 0 0 0.25rem;
 }
 
 .lifecycle-truncated {

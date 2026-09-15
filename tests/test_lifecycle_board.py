@@ -353,6 +353,7 @@ def test_dashboard_lifecycle_opens_experiment_cards():
     app = Path("docs/app.js").read_text(encoding="utf-8")
     html = Path("docs/index.html").read_text(encoding="utf-8")
     css = Path("docs/styles.css").read_text(encoding="utf-8")
+    charts = Path("docs/charts.js").read_text(encoding="utf-8")
     assert "function openLifecycleExperimentCard(factorId)" in app
     assert "function renderLifecycleExperimentCard(factorId)" in app
     assert "data-lifecycle-experiment" in app
@@ -365,3 +366,11 @@ def test_dashboard_lifecycle_opens_experiment_cards():
     assert "startLifecycleExperimentFromCard" in app
     assert ".lifecycle-evidence-list" in css
     assert ".lifecycle-start-btn" in css
+    assert "function openLifecycleTickerCard(ticker)" in app
+    assert "function renderLifecycleTickerCard(ticker)" in app
+    assert "data-lifecycle-ticker" in app
+    assert "data-lifecycle-chart-mount" in app
+    assert 'id="lifecycle-ticker-dialog"' in html
+    assert ".lifecycle-ticker-chart" in css
+    assert "async function mountPriceChart(body, report)" in charts
+    assert "await mountPriceChart(body, report)" in charts
