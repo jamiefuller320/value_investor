@@ -137,6 +137,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.dfscorporate.co.uk/media/qz5kd4bw/44642-dfs-ar-2024-web.pdf",
         "https://www.dfscorporate.co.uk/media/kftaxgtd/dfs-interim-report-h1-fy25.pdf",
     ],
+    # ftse_smallcap IWB blocker — FOXT.L parked unfetchable_iwb; CH PDFs fail but foxtonsgroup.co.uk statutory PDFs fetch.
+    "FOXT.L": [
+        "https://www.foxtonsgroup.co.uk/sites/foxtons/files/2026-03/foxtons-annual-report-and-accounts-2025.pdf",
+        "https://www.foxtonsgroup.co.uk/sites/foxtons/files/foxtons/investor-relations/results-centre/2024/foxtons-annual-report-and-accounts-2024.pdf",
+        "https://www.foxtonsgroup.co.uk/sites/foxtons/files/foxtons/investor-relations/results-centre/2026/foxtons-group-plc-interim-results-2026.pdf",
+    ],
     # ftse_smallcap IWB blocker — GLE.L parked unfetchable_iwb; CH PDFs fail but mjgleesonplc.com statutory PDFs fetch.
     "GLE.L": [
         "https://www.mjgleesonplc.com/media/11xbnc3y/mj-gleeson-ar-2025.pdf",
