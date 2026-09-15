@@ -49,6 +49,9 @@ from value_investor.scoring.fcf_basis_overlay import (
     enrich_signals_with_run_history_fcf_action_notes,
     honour_fcf_action_notes_on_signals,
 )
+from value_investor.scoring.fcf_three_way_conviction_overlay import (
+    enrich_signals_with_fcf_three_way_conviction_overlay,
+)
 from value_investor.scoring.healthcare_overlay import enrich_signals_with_healthcare_overlay
 from value_investor.scoring.interim_quality_overlay import (
     enrich_signals_with_interim_quality_overlay,
@@ -2463,6 +2466,59 @@ def test_save_run_snapshot_persists_labelled_dual_coverage(tmp_path: Path, monke
     assert row["fcf_definition_divergence"] is True
     assert row["fcf_divergence_flagged"] is True
     assert row["fcf_dividend_coverage"]["statutory_ocf_minus_capex"]["ratio"] == pytest.approx(0.84)
+
+
+def test_enrich_signals_with_fcf_three_way_conviction_overlay_itv_style(tmp_path: Path):
+    sources = tmp_path / "research" / "ITV.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    financials = {
+        "ticker": "ITV.L",
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 202_000_000.0,
+                "Capital Expenditure": -54_000_000.0,
+                "Free Cash Flow": 148_000_000.0,
+            }
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    (filings / "fy_results.txt").write_text(
+        "Group adjusted free cash flow of £187.0m\nProfit to cash ratio 65% 83%\n",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings / "fy_results.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "signal": "buy",
+                "conviction_score": 0.8,
+                "free_cashflow": 148_000_000.0,
+                "free_cashflow_screen_ttm": 280_000_000.0,
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_fcf_three_way_conviction_overlay(signals, output_dir=tmp_path)
+
+    row = enriched.iloc[0]
+    assert bool(row["fcf_three_way_conviction_overlay"]) is True
+    assert row["profit_to_cash_yoy_decline_pp"] == pytest.approx(18.0)
+    assert row["conviction_score"] == pytest.approx(0.8 * 0.85)
 
 
 def test_honour_fcf_action_notes_on_signals_caps_vty_style_stale_row():
