@@ -4202,6 +4202,27 @@ def test_earnings_growth_bps_diverge_flags_hik_style_gap():
     assert earnings_growth_bps_diverge(0.05, 0.08) is False
 
 
+def test_summary_import_installs_gap_fill_peer_table_hook():
+    """``ftse-research --gap-fill`` loads summary before gap-fill (no pipeline import)."""
+    import sys
+
+    for mod in (
+        "value_investor.research.gap_fill",
+        "value_investor.research.gap_fill_sources",
+        "value_investor.summary",
+        "value_investor.scoring.peer_model_pass_table",
+    ):
+        sys.modules.pop(mod, None)
+
+    import value_investor.research.gap_fill as gap_fill_mod
+    import value_investor.research.gap_fill_sources as gap_fill_sources_mod
+    import value_investor.summary  # noqa: F401
+
+    prepare = gap_fill_sources_mod.prepare_gap_fill_source_pack
+    assert getattr(prepare, "_peer_table_installed", False)
+    assert gap_fill_mod.prepare_gap_fill_source_pack is prepare
+
+
 def test_build_company_reports_exports_lynch_peg_and_bps_warning(tmp_path: Path):
     from value_investor.storage import write_json
 

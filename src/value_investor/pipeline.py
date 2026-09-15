@@ -182,79 +182,9 @@ def _output_dir_from_sources_dir(sources_dir: Path) -> Path | None:
 
 
 def _install_gap_fill_peer_table_hooks() -> None:
-    """Attach cross-ticker model pass/score tables after gap-fill source packs build."""
-    from value_investor.research import gap_fill_sources
-    from value_investor.scoring.peer_model_pass_table import attach_peer_model_pass_table
-    from value_investor.storage import read_json, resolve_json_path, write_json
+    from value_investor.scoring.peer_model_pass_table import ensure_gap_fill_peer_table_hooks
 
-    if getattr(gap_fill_sources.prepare_gap_fill_source_pack, "_peer_table_installed", False):
-        return
-
-    _original_prepare = gap_fill_sources.prepare_gap_fill_source_pack
-
-    def _prepare_with_peer_table(**kwargs: Any) -> dict[str, Any]:
-        payload = _original_prepare(**kwargs)
-        manifest = payload.get("screen_run_manifest") or {}
-        if not manifest.get("attached"):
-            return payload
-
-        sources_dir = Path(kwargs["sources_dir"])
-        ticker = str(kwargs["ticker"])
-        ticker_signal = manifest.get("ticker_signal") or {}
-        sector = ticker_signal.get("sector")
-        output_dir = _output_dir_from_sources_dir(sources_dir)
-        market = kwargs.get("market")
-
-        table = attach_peer_model_pass_table(
-            sources_dir,
-            ticker,
-            sector=str(sector) if sector else None,
-            output_dir=output_dir,
-            market=market,
-        )
-        payload["peer_model_pass_table"] = {
-            "attached": bool(table.get("attached")),
-            "peer_count": table.get("peer_count"),
-            "path": table.get("manifest_path"),
-        }
-
-        snapshot_path = resolve_json_path(sources_dir / "screening_snapshot.json")
-        if snapshot_path is not None:
-            try:
-                snapshot = read_json(snapshot_path)
-            except (OSError, ValueError, TypeError):
-                snapshot = None
-            if isinstance(snapshot, dict):
-                from value_investor.scoring.fcf import (
-                    enrich_screening_snapshot_fcf_dividend_coverage,
-                )
-
-                snapshot["peer_model_pass_table"] = table
-                snapshot = enrich_screening_snapshot_fcf_dividend_coverage(snapshot)
-                write_json(snapshot_path, snapshot, compact=True, compress=False)
-
-        map_path = resolve_json_path(sources_dir / "gap_fill_source_map.json")
-        if map_path is not None:
-            try:
-                source_map = read_json(map_path)
-            except (OSError, ValueError, TypeError):
-                source_map = dict(payload)
-            else:
-                source_map = dict(source_map)
-            source_map["peer_model_pass_table"] = payload["peer_model_pass_table"]
-            instructions = str(source_map.get("instructions") or "")
-            if "peer_model_pass_table.json" not in instructions:
-                source_map["instructions"] = (
-                    instructions.rstrip()
-                    + " Use peer_model_pass_table.json for cross-ticker model pass/score "
-                    "comparisons within the sector cohort (e.g. moat or yield rankings)."
-                )
-            write_json(map_path, source_map, compact=False, compress=False)
-
-        return payload
-
-    _prepare_with_peer_table._peer_table_installed = True  # type: ignore[attr-defined]
-    gap_fill_sources.prepare_gap_fill_source_pack = _prepare_with_peer_table
+    ensure_gap_fill_peer_table_hooks()
 
 
 _install_gap_fill_peer_table_hooks()

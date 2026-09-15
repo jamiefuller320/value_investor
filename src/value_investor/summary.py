@@ -67,6 +67,7 @@ from value_investor.scoring.leverage_overlay import format_adjusted_net_debt_gbp
 from value_investor.scoring.peer_model_pass_table import (
     attach_peer_model_pass_table,
     build_peer_model_pass_table,
+    ensure_gap_fill_peer_table_hooks,
 )
 from value_investor.scoring.quality_family_avoid_gate_overlay import (
     build_quality_family_avoid_gate_overlay,
@@ -1760,6 +1761,16 @@ def _schedule_publish_module_finalize() -> None:
         return
 
 
+def _maybe_install_gap_fill_peer_table_hooks(name: str, fromlist: tuple[str, ...]) -> None:
+    if name == "value_investor.research.gap_fill_sources":
+        ensure_gap_fill_peer_table_hooks()
+        return
+    if fromlist and "gap_fill_sources" in fromlist:
+        root = name.rstrip(".")
+        if root.endswith("value_investor.research") or root == "value_investor.research":
+            ensure_gap_fill_peer_table_hooks()
+
+
 def _install_publish_import_finalize_hook() -> None:
     """Retry publish hook install after later imports (publish-first CLI paths)."""
     import builtins
@@ -1774,6 +1785,7 @@ def _install_publish_import_finalize_hook() -> None:
         if not getattr(_import_with_publish_finalize, "_active", False):
             _import_with_publish_finalize._active = True
             try:
+                _maybe_install_gap_fill_peer_table_hooks(name, tuple(fromlist or ()))
                 _try_install_publish_fcf_hooks()
             finally:
                 _import_with_publish_finalize._active = False
@@ -1796,3 +1808,10 @@ def _schedule_deferred_fcf_export_hooks() -> None:
 
 _install_fcf_export_hooks()
 _schedule_deferred_fcf_export_hooks()
+
+try:
+    import value_investor.research.gap_fill_sources  # noqa: F401
+
+    ensure_gap_fill_peer_table_hooks()
+except ImportError:
+    pass
