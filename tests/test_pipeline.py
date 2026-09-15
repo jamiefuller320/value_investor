@@ -3820,16 +3820,22 @@ def test_is_uk_listed_contractor_tolerates_nan_sector_and_name():
     assert is_uk_listed_contractor("COST.L", "Costain Group PLC", math.nan) is True
     assert is_uk_listed_contractor("COST.L", math.nan, math.nan) is False
     assert is_uk_listed_contractor("COST.L", None, float("nan")) is False
-    assert is_uk_listed_contractor(
-        "ZZINF.L",
-        "Acme Infrastructure Holdings",
-        float("nan"),
-    ) is False
-    assert is_uk_listed_contractor(
-        "ZZINF.L",
-        "Acme Infrastructure Holdings",
-        "Industrials",
-    ) is True
+    assert (
+        is_uk_listed_contractor(
+            "ZZINF.L",
+            "Acme Infrastructure Holdings",
+            float("nan"),
+        )
+        is False
+    )
+    assert (
+        is_uk_listed_contractor(
+            "ZZINF.L",
+            "Acme Infrastructure Holdings",
+            "Industrials",
+        )
+        is True
+    )
 
 
 def test_enrich_universe_with_uk_contractor_adjustments_caps_framework_backlog_growth():
