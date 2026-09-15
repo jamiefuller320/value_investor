@@ -1,21 +1,21 @@
 {
-  "run_at": "2026-09-14T07:46:37.216700+00:00",
+  "run_at": "2026-09-15T07:46:32.318230+00:00",
   "overall": "fail",
   "findings": [
     {
       "severity": "fail",
-      "category": "workflows",
-      "title": "Workflow overdue: FTSE Ingest Loop",
-      "summary": "No successful run within 30h (last: 2026-09-12T14:50:01+00:00).",
+      "category": "research",
+      "title": "Phase B structured-verdict producer stalled",
+      "summary": "No structured_verdict* modes in research store yet. (0 structured / need ≥3; sampled=74; modes=structured_verdict, structured_verdict_gap_fill, structured_verdict_update). Sunday research-docs must seed committed memos into output/, write structured_verdict* updates, and persist back to docs/data/research — do not widen rememo_reason for mode migration.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
     },
     {
       "severity": "fail",
-      "category": "workflows",
-      "title": "Workflow overdue: FTSE Paper Automation",
-      "summary": "No successful run within 28h (last: 2026-09-11T08:26:19+00:00).",
+      "category": "research",
+      "title": "Verdict fields present without structured_verdict modes",
+      "summary": "[verdict_fields_without_structured_mode] 74/74 committed memos have research_verdict set while mode is still essay/initial (structured=0). Looks researched; Phase B producer has not landed.",
       "auto_fixable": false,
       "fixed": false,
       "action_taken": null
@@ -24,24 +24,32 @@
       "severity": "warn",
       "category": "engineering",
       "title": "Orphaned pr_open engineering tasks",
-      "summary": "Tasks without matching open PR: eng-20260912-08",
+      "summary": "Tasks without matching open PR: eng-20260914-03",
       "auto_fixable": true,
-      "fixed": false,
-      "action_taken": null
+      "fixed": true,
+      "action_taken": "marked merged from GitHub PR: eng-20260914-03"
     }
   ],
-  "auto_fixes": [],
-  "drafted_task_ids": [],
+  "auto_fixes": [
+    {
+      "action": "recover_engineering_queue",
+      "detail": "marked merged from GitHub PR: eng-20260914-03"
+    }
+  ],
+  "drafted_task_ids": [
+    "eng-20260915-01",
+    "eng-20260915-02"
+  ],
   "workflow_checks": [
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": true,
+      "expected_today": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-09-12T14:50:01+00:00",
-      "last_success_run_id": 34700435177,
-      "age_hours": 40.9,
-      "stale": true,
+      "last_success_at": "2026-09-14T16:18:31+00:00",
+      "last_success_run_id": 34867779815,
+      "age_hours": 15.5,
+      "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     },
@@ -50,9 +58,9 @@
       "name": "Automation Orchestrator",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-14T06:50:48+00:00",
-      "last_success_run_id": 34815166659,
-      "age_hours": 0.9,
+      "last_success_at": "2026-09-15T07:38:38+00:00",
+      "last_success_run_id": 34942747948,
+      "age_hours": 0.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -61,10 +69,10 @@
       "workflow": "engineering-queue.yml",
       "name": "FTSE Engineering Queue",
       "expected_today": true,
-      "max_age_hours": 3,
-      "last_success_at": "2026-09-14T07:15:30+00:00",
-      "last_success_run_id": 34817021659,
-      "age_hours": 0.5,
+      "max_age_hours": 26,
+      "last_success_at": "2026-09-15T07:34:19+00:00",
+      "last_success_run_id": 34942379558,
+      "age_hours": 0.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -74,8 +82,8 @@
       "name": "CI main nightly",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-14T07:31:00+00:00",
-      "last_success_run_id": 34818217724,
+      "last_success_at": "2026-09-15T07:31:01+00:00",
+      "last_success_run_id": 34942099171,
       "age_hours": 0.3,
       "stale": false,
       "recent_failures_24h": 0,
@@ -88,7 +96,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-13T13:21:51+00:00",
       "last_success_run_id": 34759632502,
-      "age_hours": 18.4,
+      "age_hours": 42.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -98,8 +106,8 @@
       "name": "FTSE Library Ladder",
       "expected_today": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-09-14T06:51:57+00:00",
-      "last_success_run_id": 34815244758,
+      "last_success_at": "2026-09-15T06:51:45+00:00",
+      "last_success_run_id": 34938865683,
       "age_hours": 0.9,
       "stale": false,
       "recent_failures_24h": 0,
@@ -112,7 +120,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-13T06:54:58+00:00",
       "last_success_run_id": 34743924147,
-      "age_hours": 24.9,
+      "age_hours": 48.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -122,9 +130,9 @@
       "name": "Email report",
       "expected_today": false,
       "max_age_hours": 36,
-      "last_success_at": "2026-09-13T06:54:59+00:00",
-      "last_success_run_id": 34743924948,
-      "age_hours": 24.9,
+      "last_success_at": "2026-09-14T08:58:43+00:00",
+      "last_success_run_id": 34825466193,
+      "age_hours": 22.8,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -136,7 +144,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-13T16:29:07+00:00",
       "last_success_run_id": 34768712420,
-      "age_hours": 15.3,
+      "age_hours": 39.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -146,10 +154,10 @@
       "name": "FTSE Paper Automation",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-11T08:26:19+00:00",
-      "last_success_run_id": 34579177871,
-      "age_hours": 71.3,
-      "stale": true,
+      "last_success_at": "2026-09-14T08:26:28+00:00",
+      "last_success_run_id": 34822728540,
+      "age_hours": 23.3,
+      "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     },
@@ -158,28 +166,28 @@
       "name": "FTSE Ops Monitor",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-13T16:57:27+00:00",
-      "last_success_run_id": 34770124830,
-      "age_hours": 14.8,
+      "last_success_at": "2026-09-14T18:36:21+00:00",
+      "last_success_run_id": 34881819199,
+      "age_hours": 13.2,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     }
   ],
   "queue_status": {
-    "open_count": 1,
-    "pr_open_count": 1,
-    "parked_count": 3,
-    "merged_count": 14,
+    "open_count": 0,
+    "pr_open_count": 0,
+    "parked_count": 2,
+    "merged_count": 3,
     "failed_count": 0,
-    "next_task_id": "eng-20260912-20",
+    "next_task_id": null,
     "in_flight_branch": null,
-    "in_flight_pr": 615,
+    "in_flight_pr": null,
     "spend_since_checkpoint_usd": 10.4,
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false
   },
-  "should_dispatch_engineering": false,
+  "should_dispatch_engineering": true,
   "email_deferred": false,
   "email_defer_reasons": []
 }

@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-14T17:16:27.227692+00:00",
+  "compiled_at": "2026-09-15T07:46:56.019355+00:00",
   "run_at": null,
-  "task_count": 5,
+  "task_count": 7,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -263,12 +263,107 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "no_diff_count": 0,
       "last_no_diff_at": "2026-09-14T22:18:45.262935+00:00",
       "result_path": "output/engineering_result_eng-20260914-03.md",
       "branch_name": "cursor/eng-20260914-03-1de3",
-      "completed_at": "2026-09-14T22:30:48.473892+00:00"
+      "completed_at": "2026-09-14T22:30:48.473892+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/639",
+      "pr_number": 639,
+      "merged_at": "2026-09-15T07:46:44.986016+00:00"
+    },
+    {
+      "id": "eng-20260915-01",
+      "area": "ops",
+      "title": "Phase B structured-verdict producer stalled",
+      "summary": "No structured_verdict* modes in research store yet. (0 structured / need ≥3; sampled=74; modes=structured_verdict, structured_verdict_gap_fill, structured_verdict_update). Sunday research-docs must seed committed memos into output/, write structured_verdict* updates, and persist back to docs/data/research — do not widen rememo_reason for mode migration. (category: research)",
+      "priority": "medium",
+      "priority_score": 45.0,
+      "source": "ops_monitor",
+      "evidence": {
+        "category": "research",
+        "severity": "fail"
+      },
+      "acceptance_criteria": [
+        "Prompt or export change is covered by a parser/unit test",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/automation_status.py",
+        "src/value_investor/email_agent.py",
+        "src/value_investor/ops_monitor.py",
+        "src/value_investor/backtest_health.py",
+        "src/value_investor/engineering_recovery.py",
+        "src/value_investor/engineering_sync.py",
+        "src/value_investor/engineering_pr_notify.py",
+        "src/value_investor/engineering_preflight.py",
+        "src/value_investor/engineering_queue.py",
+        ".github/workflows/ops-monitor.yml",
+        ".github/workflows/engineering-agent.yml",
+        ".github/workflows/engineering-queue.yml",
+        "tests/test_automation_status.py",
+        "tests/test_ops_monitor.py",
+        "tests/test_backtest_health.py",
+        "tests/test_engineering_sync.py",
+        "tests/test_engineering_pr_notify.py",
+        "tests/test_engineering_preflight.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260915-02",
+      "area": "ops",
+      "title": "Verdict fields present without structured_verdict modes",
+      "summary": "[verdict_fields_without_structured_mode] 74/74 committed memos have research_verdict set while mode is still essay/initial (structured=0). Looks researched; Phase B producer has not landed. (category: research)",
+      "priority": "medium",
+      "priority_score": 45.0,
+      "source": "ops_monitor",
+      "evidence": {
+        "category": "research",
+        "severity": "fail"
+      },
+      "acceptance_criteria": [
+        "Prompt or export change is covered by a parser/unit test",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/automation_status.py",
+        "src/value_investor/email_agent.py",
+        "src/value_investor/ops_monitor.py",
+        "src/value_investor/backtest_health.py",
+        "src/value_investor/engineering_recovery.py",
+        "src/value_investor/engineering_sync.py",
+        "src/value_investor/engineering_pr_notify.py",
+        "src/value_investor/engineering_preflight.py",
+        "src/value_investor/engineering_queue.py",
+        ".github/workflows/ops-monitor.yml",
+        ".github/workflows/engineering-agent.yml",
+        ".github/workflows/engineering-queue.yml",
+        "tests/test_automation_status.py",
+        "tests/test_ops_monitor.py",
+        "tests/test_backtest_health.py",
+        "tests/test_engineering_sync.py",
+        "tests/test_engineering_pr_notify.py",
+        "tests/test_engineering_preflight.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     }
   ],
   "ingest_health": {
@@ -284,7 +379,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-15T06:16:23.124575+00:00",
+    "evaluated_at": "2026-09-15T07:46:45.165316+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
@@ -299,5 +394,6 @@
     "filings_with_body": 4196
   },
   "reprioritized_at": "2026-09-14T21:12:17.529894+00:00",
-  "reprioritized_after_task": "eng-20260914-04"
+  "reprioritized_after_task": "eng-20260914-04",
+  "ops_monitor_compiled": true
 }
