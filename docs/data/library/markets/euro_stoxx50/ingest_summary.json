@@ -1,8 +1,7 @@
 {
-  "run_at": "2026-09-15T15:22:31.020511+00:00",
+  "run_at": "2026-09-15T16:49:06.390248+00:00",
   "market_id": "euro_stoxx50",
   "targets": [
-    "ENI.MI",
     "SAN.PA",
     "SGO.PA",
     "MUV2.DE",
@@ -10,14 +9,6 @@
     "BAS.DE"
   ],
   "target_details": [
-    {
-      "ticker": "ENI.MI",
-      "priority_score": 21.3929,
-      "filings_total": 53,
-      "filings_with_body": 27,
-      "indexed_without_body": 26,
-      "reason": "indexed_without_body"
-    },
     {
       "ticker": "SAN.PA",
       "priority_score": 17.1229,
@@ -45,8 +36,8 @@
     {
       "ticker": "DTE.DE",
       "priority_score": 3.6754,
-      "filings_total": 2,
-      "filings_with_body": 2,
+      "filings_total": 1,
+      "filings_with_body": 1,
       "indexed_without_body": 0,
       "reason": "thin_bodies"
     },
@@ -60,66 +51,6 @@
     }
   ],
   "results": [
-    {
-      "ticker": "ENI.MI",
-      "reason": "indexed_without_body",
-      "before": {
-        "filings_total": 53,
-        "filings_with_body": 27,
-        "indexed_without_body": 26
-      },
-      "after": {
-        "filings_total": 53,
-        "filings_with_body": 53,
-        "indexed_without_body": 0
-      },
-      "improved": true,
-      "regime": "euro_filings",
-      "filings_summary": {
-        "total": 53,
-        "annual": 0,
-        "interim": 0,
-        "trading_update": 0,
-        "other": 53,
-        "with_body": 43,
-        "period_coverage": {
-          "annual": {
-            "total": 0,
-            "with_body": 0
-          },
-          "interim": {
-            "total": 0,
-            "with_body": 0
-          },
-          "trading_update": {
-            "total": 0,
-            "with_body": 0
-          },
-          "other": {
-            "total": 53,
-            "with_body": 43
-          }
-        }
-      },
-      "ticker_budget_hit": false,
-      "ir_exhausted": false,
-      "ir_refetch": {
-        "attempted": 0,
-        "fetched": 0,
-        "failed": 0,
-        "with_body_before": 53,
-        "with_body_after": 53,
-        "investegate_fallbacks": 0,
-        "skipped_unfetchable": 0,
-        "deadline_hit": false,
-        "merge": {
-          "added": 0,
-          "total_allowlist": 1,
-          "note": "merge_ir_allowlist_filings"
-        },
-        "note": "no missing IR allowlist bodies"
-      }
-    },
     {
       "ticker": "SAN.PA",
       "reason": "indexed_without_body",
@@ -304,8 +235,8 @@
       "ticker": "DTE.DE",
       "reason": "thin_bodies",
       "before": {
-        "filings_total": 2,
-        "filings_with_body": 2,
+        "filings_total": 1,
+        "filings_with_body": 1,
         "indexed_without_body": 0
       },
       "after": {
@@ -421,20 +352,18 @@
       }
     }
   ],
-  "improved": [
-    "ENI.MI"
-  ],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-15T15:19:38.773159+00:00",
+    "snapshot_at": "2026-09-15T16:48:24.479714+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 15,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 4,
-    "indexed_without_body": 28,
+    "indexed_without_body": 2,
     "bodies_min": 1,
     "bodies_median": 3,
     "bodies_max": 95,
@@ -450,13 +379,11 @@
     ],
     "indexed_without_body_tickers": [
       "SAN.PA",
-      "SGO.PA",
-      "ENI.MI"
+      "SGO.PA"
     ],
     "indexed_without_body_by_ticker": {
       "SAN.PA": 1,
-      "SGO.PA": 1,
-      "ENI.MI": 26
+      "SGO.PA": 1
     },
     "parked_tickers": [],
     "parked_count": 0,
@@ -467,16 +394,15 @@
       "DTE.DE",
       "BAS.DE"
     ],
-    "effective_indexed_without_body": 28,
+    "effective_indexed_without_body": 2,
     "effective_indexed_without_body_tickers": [
       "SAN.PA",
-      "SGO.PA",
-      "ENI.MI"
+      "SGO.PA"
     ],
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-15T15:22:28.921584+00:00",
+    "snapshot_at": "2026-09-15T16:49:06.386344+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 15,
     "unmeasured_buy_tier": 0,
@@ -532,16 +458,10 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "euro_stoxx50",
-    "assessed_at": "2026-09-15T15:19:39.524893+00:00",
+    "assessed_at": "2026-09-15T16:48:25.338615+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
-      {
-        "ticker": "ENI.MI",
-        "indexed_without_body": 26,
-        "filings_total": 53,
-        "filings_with_body": 27
-      },
       {
         "ticker": "SAN.PA",
         "indexed_without_body": 1,
@@ -567,27 +487,26 @@
     "primary_blocker": "indexed_without_body",
     "force_discovery_scan": true,
     "auto_pin_tickers": [
-      "ENI.MI",
       "SAN.PA",
       "SGO.PA"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (3 tickers, top: ENI.MI(26), SAN.PA(1), SGO.PA(1))",
+      "Prefer indexed-without-body body refetch (2 tickers, top: SAN.PA(1), SGO.PA(1))",
       "Discovery/IR seed for 4 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 3,
-      "indexed_without_body_rows": 28,
+      "indexed_without_body_tickers": 2,
+      "indexed_without_body_rows": 2,
       "thin_need_discovery": 4,
       "thin_need_bodies": 1
     }
   },
-  "used_seconds": 168.65185785699998,
+  "used_seconds": 40.223727264000004,
   "budget_seconds": 1050.0,
-  "leftover_seconds": 881.348142143,
+  "leftover_seconds": 1009.776272736,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -595,13 +514,13 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_stoxx50",
-    "updated_at": "2026-09-15T15:22:28.922496+00:00",
+    "updated_at": "2026-09-15T16:49:06.387631+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 0,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
-    "had_complete_targets": false,
+    "had_complete_targets": true,
     "leftover_tickers": [
       "BAS.DE",
       "DTE.DE",
@@ -625,35 +544,7 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "parked hunter candidates already resolved on main",
-    "tried_count": 0,
-    "candidate_count": 25,
-    "skipped_resolved_tickers": [
-      "ABI.BR",
-      "APAM.AS",
-      "BAS.DE",
-      "EVN.VI",
-      "MUV2.DE",
-      "SAP.DE",
-      "SGO.PA",
-      "SKA-B.ST",
-      "UCB.BR",
-      "WIE.VI",
-      "APTV",
-      "BXP",
-      "CRH",
-      "FICO",
-      "LDOS",
-      "LMT",
-      "TSN",
-      "ULTP.L",
-      "BOOT.L",
-      "DFS.L",
-      "MER.L",
-      "TPT.L",
-      "SU.TO",
-      "NTR.TO",
-      "TRI.TO"
-    ]
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20260915-11"
   }
 }
