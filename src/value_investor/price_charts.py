@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import logging
 import re
+from collections.abc import Collection, Iterable
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Collection, Iterable
+from typing import Any
 
 import pandas as pd
 

@@ -1006,6 +1006,14 @@ def lifecycle_tickers_by_market(
     """Map market_id → unique shown/occupied tickers on the lifecycle board."""
     if not isinstance(board, dict):
         return {}
+
+    def _add(ticker: Any, *, seen: set[str], found: list[str]) -> None:
+        text = str(ticker or "").strip()
+        if not text or text in seen:
+            return
+        seen.add(text)
+        found.append(text)
+
     out: dict[str, list[str]] = {}
     for market in _as_list(board.get("markets")):
         if not isinstance(market, dict):
@@ -1016,27 +1024,20 @@ def lifecycle_tickers_by_market(
         found: list[str] = []
         seen: set[str] = set()
 
-        def _add(ticker: Any) -> None:
-            text = str(ticker or "").strip()
-            if not text or text in seen:
-                return
-            seen.add(text)
-            found.append(text)
-
         for packed in _as_dict(market.get("screen_columns")).values():
             for card in _as_list(_as_dict(packed).get("shown")):
                 if isinstance(card, dict):
-                    _add(card.get("ticker"))
+                    _add(card.get("ticker"), seen=seen, found=found)
         for track in _as_list(market.get("tracks")):
             if not isinstance(track, dict):
                 continue
             for ticker in _as_list(track.get("occupied_tickers")):
-                _add(ticker)
+                _add(ticker, seen=seen, found=found)
             position = track.get("position_columns") or track.get("columns") or {}
             for packed in _as_dict(position).values():
                 for card in _as_list(_as_dict(packed).get("shown")):
                     if isinstance(card, dict):
-                        _add(card.get("ticker"))
+                        _add(card.get("ticker"), seen=seen, found=found)
         out[market_id] = found
     return out
 
