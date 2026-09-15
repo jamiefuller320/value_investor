@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-15T17:13:18.483256+00:00`
+Generated: `2026-09-15T20:21:43.825438+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -29,8 +29,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- `remediate_queue_merge_sync` — detected merge sync lag for 1 task(s): eng-20260914-03 (not applied)
-- `remediate_queue_merge_sync` — PM remediated queue merge sync: fixed=['eng-20260914-03']; remaining=['none'] (applied)
+- _(none)_
 
 ## Merge authority
 - Status: **restricted**
