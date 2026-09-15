@@ -306,6 +306,19 @@ def apply_cashflow_metrics_fallback(
 ) -> list[str]:
     """Fill missing cash-flow fields on a metrics dict from annual Yahoo statements."""
     extracted = extract_cashflow_metrics_from_annual_financials(financials)
+    stored = financials.get("cashflow_metrics") or {}
+    for key in CASHFLOW_METRIC_KEYS:
+        if extracted.get(key) is not None:
+            continue
+        value = stored.get(key)
+        if value is None:
+            continue
+        try:
+            number = float(value)
+        except (TypeError, ValueError):
+            continue
+        if pd.notna(number):
+            extracted[key] = number
     filled: list[str] = []
     for key in CASHFLOW_METRIC_KEYS:
         if metrics.get(key) is not None:
@@ -343,7 +356,12 @@ def _resolve_cached_annual_financials(
             payload = read_json(resolved)
         except (OSError, ValueError, TypeError):
             continue
-        if isinstance(payload, dict) and payload.get("cash_flow"):
+        if not isinstance(payload, dict):
+            continue
+        if payload.get("cash_flow"):
+            return payload
+        stored = payload.get("cashflow_metrics") or {}
+        if any(stored.get(key) is not None for key in CASHFLOW_METRIC_KEYS):
             return payload
 
     return load_cached_financials(normalized, output_dir=output_dir)
@@ -1039,3 +1057,6 @@ def ingest_research_sources(
         "macro_context": macro_meta,
         "market": market_s,
     }
+
+
+install_fetch_cashflow_fallback()
