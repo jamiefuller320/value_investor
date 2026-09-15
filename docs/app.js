@@ -4240,7 +4240,6 @@ function renderLifecycleTickerCard(ticker) {
   const card = (found && found.card) || { ticker };
   const report = findLifecycleReport(ticker) || {};
   const outcome = findChartOutcomeRow(ticker);
-  const name = report.name || card.name || ticker;
   const signal = report.signal || card.signal;
   const timing = report.timing_signal || card.timing_signal;
   const conviction =
