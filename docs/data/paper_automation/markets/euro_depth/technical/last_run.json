@@ -1,13 +1,13 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-15T09:30:57.603572+02:00",
+    "local_time": "2026-09-16T09:16:06.295614+02:00",
     "trading_day": true,
-    "after_settle": true,
-    "market_open_at": "2026-09-15T09:00:00+02:00",
-    "settle_at": "2026-09-15T09:30:00+02:00",
-    "can_act": true,
-    "reason": "ok"
+    "after_settle": false,
+    "market_open_at": "2026-09-16T09:00:00+02:00",
+    "settle_at": "2026-09-16T09:30:00+02:00",
+    "can_act": false,
+    "reason": "waiting for open settle (30 min after 09:00 Europe/Paris)"
   },
   "trades": [],
   "plan": {
@@ -18,7 +18,7 @@
       "Names exited in the same pass are not re-bought immediately.",
       "Hard cap: 5 open names."
     ],
-    "nav": 1003.51,
+    "nav": 1003.61,
     "cash": 500.18,
     "buy_pct_nav": 0.1,
     "anticipated_exits": [],
@@ -29,35 +29,35 @@
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "reason": "Between stop and target (or levels not set)",
-        "value": 99.59
+        "value": 101.12
       },
       {
         "action": "hold",
         "ticker": "AD.AS",
         "name": "Koninklijke Ahold Delhaize N.V.",
         "reason": "Between stop and target (or levels not set)",
-        "value": 101.91
+        "value": 101.72
       },
       {
         "action": "hold",
         "ticker": "SAN.PA",
         "name": "Sanofi",
         "reason": "Between stop and target (or levels not set)",
-        "value": 101.22
+        "value": 99.4
       },
       {
         "action": "hold",
         "ticker": "PHIA.AS",
         "name": "Koninklijke Philips N.V.",
         "reason": "Between stop and target (or levels not set)",
-        "value": 99.16
+        "value": 98.8
       },
       {
         "action": "hold",
         "ticker": "LOGN.SW",
         "name": "Logitech International S.A.",
         "reason": "Between stop and target (or levels not set)",
-        "value": 101.44
+        "value": 102.39
       }
     ],
     "deferred": [
@@ -76,7 +76,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 97.37999725341797,
+      "mark": 98.87999725341797,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -87,7 +87,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 31.809999465942383,
+      "mark": 31.75,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -98,7 +98,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 75.01000213623047,
+      "mark": 73.66000366210938,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -109,7 +109,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 21.649999618530273,
+      "mark": 21.56999969482422,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -120,7 +120,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 81.23999786376953,
+      "mark": 82.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -397,9 +397,28 @@
           "issues": []
         },
         "note": "Technical pass"
+      },
+      {
+        "at": "2026-09-16T09:16:06.295614+02:00",
+        "portfolio_value": 857.49,
+        "cash": 500.18,
+        "contributed_capital": 1000.0,
+        "positions": 5,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "CHF": 0.9054,
+            "EUR": 0.85676,
+            "SEK": 0.07567
+          },
+          "issues": []
+        },
+        "note": "Technical pass"
       }
     ],
-    "last_mark_at": "2026-09-15T09:30:57.603572+02:00",
+    "last_mark_at": "2026-09-16T09:16:06.295614+02:00",
     "rebalance_state": {
       "exit_streak": {},
       "reentry_cooldown": {}
@@ -409,7 +428,7 @@
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "technical",
-    "generated_at": "2026-09-15T07:31:08.417687+00:00",
+    "generated_at": "2026-09-16T07:16:19.580567+00:00",
     "open_count": 0,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -428,7 +447,7 @@
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "technical",
-    "generated_at": "2026-09-15T07:31:08.418226+00:00",
+    "generated_at": "2026-09-16T07:16:19.580914+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -526,8 +545,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "technical",
-    "updated_at": "2026-09-15T07:31:08.418838+00:00",
-    "as_of": "2026-09-15T09:30:57.603572+02:00",
+    "updated_at": "2026-09-16T07:16:19.581356+00:00",
+    "as_of": "2026-09-16T09:16:06.295614+02:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -584,8 +603,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.006,
-        "mark": 21.65,
+        "unrealized_pct": -0.0096,
+        "mark": 21.57,
         "avg_cost": 21.78,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
@@ -618,14 +637,54 @@
         "broken_reasons": []
       },
       {
+        "ticker": "SAN.PA",
+        "name": "Sanofi",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": -0.0038,
+        "mark": 73.66,
+        "avg_cost": 73.94,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.8507,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 85%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 85%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
         "ticker": "ERIC-B.ST",
         "name": "Telefonaktiebolaget LM Ericsson (publ)",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0023,
-        "mark": 97.38,
+        "unrealized_pct": 0.0131,
+        "mark": 98.88,
         "avg_cost": 97.6,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
@@ -658,18 +717,18 @@
         "broken_reasons": []
       },
       {
-        "ticker": "SAN.PA",
-        "name": "Sanofi",
+        "ticker": "AD.AS",
+        "name": "Koninklijke Ahold Delhaize N.V.",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0145,
-        "mark": 75.01,
-        "avg_cost": 73.94,
+        "unrealized_pct": 0.0193,
+        "mark": 31.75,
+        "avg_cost": 31.15,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8299,
+        "conviction_score": 0.9089,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -685,14 +744,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 83%"
+          "conviction 91%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 83%"
+          "conviction 91%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -704,8 +763,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.017,
-        "mark": 81.24,
+        "unrealized_pct": 0.0265,
+        "mark": 82.0,
         "avg_cost": 79.88,
         "signal": "strong_buy",
         "timing_signal": "insufficient_data",
@@ -736,46 +795,6 @@
         ],
         "weaken_reasons": [],
         "broken_reasons": []
-      },
-      {
-        "ticker": "AD.AS",
-        "name": "Koninklijke Ahold Delhaize N.V.",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0212,
-        "mark": 31.81,
-        "avg_cost": 31.15,
-        "signal": "strong_buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.9357,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 94%"
-        ],
-        "intact_reasons": [
-          "still strong_buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 94%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
       }
     ],
     "note": "Hypothesis-first underwater review. Does not auto-sell. Feeds exit_urgency dampening/boost and portfolio balancing hints."
@@ -785,7 +804,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "technical",
-    "generated_at": "2026-09-15T07:31:08.419726+00:00",
+    "generated_at": "2026-09-16T07:16:19.581970+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -845,7 +864,7 @@
     "schema_version": 1,
     "track_id": "technical",
     "observe_only": true,
-    "generated_at": "2026-09-15T07:31:08.420528+00:00",
+    "generated_at": "2026-09-16T07:16:19.582504+00:00",
     "open_count": 0,
     "closed_count": 0,
     "scored_count": 0,
@@ -906,7 +925,7 @@
     "marked_this_pass": 0,
     "closed_this_pass": 0
   },
-  "generated_at": "2026-09-15T07:31:08.420756+00:00",
+  "generated_at": "2026-09-16T07:16:19.582657+00:00",
   "track_id": "technical",
   "track_label": "Technical levels (stops / trade_plan)",
   "is_primary_learning_track": false,

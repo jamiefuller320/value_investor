@@ -1,25 +1,33 @@
 {
   "market_id": "euro_stoxx50",
   "benchmark_ticker": "^STOXX50E",
-  "current_phase": 2,
-  "next_phase": 2,
+  "current_phase": 1,
+  "next_phase": 1,
   "phase1_ready": true,
   "phase2_ready": false,
-  "weekly_paper_enabled": true,
+  "phase3_ready": false,
+  "weekly_paper_enabled": false,
+  "weekday_paper_enabled": true,
   "phase1": {
-    "screen_archives": 13,
-    "observe_snapshot_count": 13,
-    "min_archives": 12,
-    "ai_beat_rules_observe_sim": true
+    "screen_archives": 14,
+    "observe_snapshot_count": 14,
+    "min_archives": 4,
+    "ai_beat_rules_observe_sim": false,
+    "phase1_require_ai_beat_rules": false
   },
   "phase2": {
     "weekly_batch_count": 1,
-    "min_weekly_batches": 8,
+    "min_weekly_batches": 4,
     "beat_control_latest": false
   },
+  "phase3": {
+    "weekday_batch_count": 0,
+    "min_weekday_batches": 8,
+    "exit_shadow_closed": 0,
+    "min_exit_shadow_closed": 8
+  },
   "blockers": [
-    "need 8 weekly batch marks (have 1)",
-    "primary track must beat rules control on latest review"
+    "euro_stoxx50 not in ladder.weekly_paper_shard_markets"
   ],
-  "evaluated_at": "2026-08-16T21:46:18.516227+00:00"
+  "evaluated_at": "2026-09-16T07:19:12.853868+00:00"
 }

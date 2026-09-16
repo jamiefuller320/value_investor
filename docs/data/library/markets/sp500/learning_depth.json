@@ -1,21 +1,23 @@
 {
   "schema_version": 1,
   "market_id": "sp500",
-  "assessed_at": "2026-09-15T07:30:52.296610+00:00",
+  "assessed_at": "2026-09-16T07:16:03.752147+00:00",
   "ftse_equivalent": true,
   "coverage_scope": "canonical",
   "canonical_path": "docs/data/library/markets/sp500/screen/research/{TICKER}/",
   "note": "Canonical screen research only. Other-shard filing indexes (e.g. nasdaq100) are not measured for FTSE-equivalent parity.",
   "filing": {
-    "buy_tier_count": 141,
-    "unmeasured_buy_tier": 0,
+    "buy_tier_count": 144,
+    "unmeasured_buy_tier": 1,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 14,
-    "bodies_min": 14,
+    "indexed_without_body": 23,
+    "bodies_min": 10,
     "bodies_median": 20,
     "bodies_max": 73,
-    "unmeasured_tickers": [],
+    "unmeasured_tickers": [
+      "AMGN"
+    ],
     "zero_body_tickers": [],
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
@@ -25,7 +27,8 @@
       "CRH",
       "TSN",
       "BXP",
-      "FICO"
+      "FICO",
+      "EFX"
     ],
     "parked_tickers": [
       "APTV",
@@ -36,37 +39,39 @@
       "LMT",
       "TSN"
     ],
-    "ingest_exhausted": true,
+    "ingest_exhausted": false,
     "effective_thin_body_buy_tier": 0,
-    "effective_indexed_without_body": 0,
-    "filing_ready": true,
+    "effective_indexed_without_body": 9,
+    "filing_ready": false,
     "ingest_parity_met": false,
-    "ingest_sprint_complete": true
+    "ingest_sprint_complete": false
   },
   "screen": {
-    "archive_files": 20,
-    "unique_days": 15,
-    "span_days": 59,
-    "span_weeks": 8.43,
+    "archive_files": 21,
+    "unique_days": 16,
+    "span_days": 60,
+    "span_weeks": 8.57,
     "first_screen": "2026-07-18",
-    "last_screen": "2026-09-15",
+    "last_screen": "2026-09-16",
     "stale": false,
     "stale_after_days": 8
   },
   "trajectory": {
     "generated": false,
     "can_generate": true,
-    "snapshot_count": 20,
-    "event_count": 1653,
-    "boundary_count": 236,
+    "snapshot_count": 21,
+    "event_count": 1722,
+    "boundary_count": 228,
     "trajectory_ready": false,
-    "ready_reason": "span 8.43w < 12w (unique_days=15; need 12 unique days over 12 weeks)",
+    "ready_reason": "span 8.57w < 12w (unique_days=16; need 12 unique days over 12 weeks)",
     "min_span_weeks": 12.0,
     "min_unique_days": 12
   },
-  "unmeasured_buy_tier": 0,
-  "unmeasured_tickers": [],
-  "filing_ready": true,
+  "unmeasured_buy_tier": 1,
+  "unmeasured_tickers": [
+    "AMGN"
+  ],
+  "filing_ready": false,
   "trajectory_ready": false,
   "learning_ready": false
 }

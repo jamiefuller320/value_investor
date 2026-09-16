@@ -349,5 +349,122 @@
     "track_label": "Technical levels (stops / trade_plan)",
     "is_primary_learning_track": false,
     "success_criterion": "Timing/levels baseline \u2014 stock-picking tracks should beat this after costs; uses trade_plan stops/targets, not conviction rebalance."
+  },
+  {
+    "reviewed_at": "2026-09-16T07:17:05.546519+00:00",
+    "enough_history": true,
+    "applied": false,
+    "knobs_before": {
+      "max_positions": 5,
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 0.3
+    },
+    "knobs_after": {
+      "max_positions": 5,
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 0.25
+    },
+    "proposed_changes": {
+      "sector_cap": 0.25
+    },
+    "reasons": [
+      "Holdings concentrated in Technology (40%) \u2014 tighten sector_cap."
+    ],
+    "metrics": {
+      "portfolio_value": 999.07,
+      "contributed_capital": 1000.0,
+      "total_return": -0.0009,
+      "total_costs": 0.9,
+      "cost_drag": 0.0009,
+      "trade_count": 5,
+      "buy_count": 5,
+      "sell_count": 0,
+      "positions": 5,
+      "cash_fraction": 0.5006,
+      "equity_marks": 7,
+      "max_sector_weight": 0.4,
+      "dominant_sector": "Technology",
+      "benchmark_return": -0.0119,
+      "excess_after_costs": 0.011,
+      "note": ""
+    },
+    "counterfactual_preview": {
+      "scope": "rebalance_log_replay",
+      "knobs": {
+        "max_positions": 5,
+        "skip_timing_wait": true,
+        "min_conviction": 0.0,
+        "sector_cap": 0.25,
+        "use_adjusted_signal": false,
+        "require_research_accumulate": false,
+        "exit_confirm_screens": 2,
+        "candidate_source": "auto"
+      },
+      "used_screen_buy_tier_pool": true,
+      "log_entries_total": 6,
+      "log_entries_replayed": 6,
+      "lookback_days": null,
+      "replay_from": "2026-09-09T09:22:07.548597+02:00",
+      "replay_to": "2026-09-16T09:16:06.295614+02:00",
+      "simulated_nav": 1003.59,
+      "baseline_nav": 1000.0,
+      "simulated_return": 0.0036,
+      "simulated_total_costs": 0.95,
+      "simulated_cost_drag": 0.0009,
+      "simulated_trade_count": 5,
+      "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
+      "actual_nav": 1003.61,
+      "actual_return_over_window": 0.0036,
+      "actual_total_costs_over_window": 0.9,
+      "actual_cost_drag_over_window": 0.0009,
+      "return_delta_vs_actual": -0.0,
+      "cost_drag_delta_vs_actual": -0.0,
+      "archive_rebalance_replay": {
+        "scope": "archive_rebalance_replay",
+        "knobs": {
+          "max_positions": 5,
+          "skip_timing_wait": true,
+          "min_conviction": 0.0,
+          "sector_cap": 0.25,
+          "use_adjusted_signal": false,
+          "require_research_accumulate": false
+        },
+        "archive_passes_replayed": 4,
+        "archive_replay_from": "2026-09-12T11:21:34.513768+00:00",
+        "archive_replay_to": "2026-09-15T07:43:57.741887+00:00",
+        "log_replay_from": "2026-09-09T09:22:07.548597+02:00",
+        "log_replay_to": "2026-09-16T09:16:06.295614+02:00",
+        "log_entries_replayed": 6,
+        "simulated_nav": 978.12,
+        "baseline_nav": 1000.0,
+        "simulated_return": -0.0219,
+        "simulated_total_costs": 0.95,
+        "simulated_cost_drag": 0.0009,
+        "simulated_trade_count": 5,
+        "limitations": "Observe-only archive walk \u2014 one rebalance per archived weekly screen from first logged pass. Does not mutate live knobs. AI overlay gates use PIT research joins (L113) when a research timeline exists under the archive parent data_dir.",
+        "actual_nav": 999.07,
+        "actual_return_over_window": -0.0009,
+        "actual_total_costs_over_window": 0.9,
+        "actual_cost_drag_over_window": 0.0009,
+        "return_delta_vs_actual": -0.021,
+        "cost_drag_delta_vs_actual": -0.0
+      },
+      "archive_vs_log": {
+        "log_entries_replayed": 6,
+        "archive_passes_replayed": 4,
+        "log_return_delta_vs_actual": -0.0,
+        "archive_return_delta_vs_actual": -0.021,
+        "return_delta_gap_archive_minus_log": -0.021,
+        "log_simulated_return": 0.0036,
+        "archive_simulated_return": -0.0219
+      }
+    },
+    "note": "Forced proposal with thin history (not applied).",
+    "track_id": "technical",
+    "track_label": "Technical levels (stops / trade_plan)",
+    "is_primary_learning_track": false,
+    "success_criterion": "Timing/levels baseline \u2014 stock-picking tracks should beat this after costs; uses trade_plan stops/targets, not conviction rebalance."
   }
 ]
