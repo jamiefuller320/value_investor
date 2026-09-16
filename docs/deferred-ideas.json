@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-16T17:30:10+00:00",
+  "updated_at": "2026-09-16T17:46:04+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9146,9 +9146,10 @@
         "workflow_failure",
         "compile-cap"
       ],
-      "status": "open",
+      "status": "done",
       "source": "conversation: does PM cancel cover all failure cases",
-      "added_at": "2026-09-16T17:30:10+00:00"
+      "added_at": "2026-09-16T17:30:10+00:00",
+      "updated_at": "2026-09-16T17:46:04+00:00"
     },
     {
       "id": "L408",
@@ -9162,9 +9163,41 @@
         "workflow_failure",
         "signature"
       ],
-      "status": "open",
+      "status": "done",
       "source": "conversation: does PM cancel cover all failure cases",
-      "added_at": "2026-09-16T17:30:10+00:00"
+      "added_at": "2026-09-16T17:30:10+00:00",
+      "updated_at": "2026-09-16T17:46:04+00:00"
+    },
+    {
+      "id": "L409",
+      "category": "later",
+      "section": "ops",
+      "title": "PM auto-rerun ingest-loop once on persistent red without success",
+      "summary": "When cancel-on-heal finds no later success, optionally dispatch one force=true ingest-loop rerun (capped) before leaving a workflow_failure eng task open. Do not invent code patches.",
+      "revisit_when": "After budget-includes-discovery + timeout skip-draft have a green week of ingest-loop",
+      "tags": [
+        "pm",
+        "ingest-loop",
+        "workflow_failure"
+      ],
+      "status": "open",
+      "source": "conversation: explore auto resolution other failure modes",
+      "added_at": "2026-09-16T17:45:53+00:00"
+    },
+    {
+      "id": "L410",
+      "category": "later",
+      "section": "ops",
+      "title": "SIGTERM flush ingest_loop.json on outer wall-clock kill",
+      "summary": "Outer timeout 75m only helps commit/chain if JSON already exists. Add signal handler or finally-block checkpoint so mid-ticker kills still emit partial JSON.",
+      "revisit_when": "If ingest-loop still fails with exit 124 and empty /tmp/ingest_loop.json after discovery budget lands",
+      "tags": [
+        "ingest-loop",
+        "timeout"
+      ],
+      "status": "open",
+      "source": "conversation: explore auto resolution other failure modes",
+      "added_at": "2026-09-16T17:45:53+00:00"
     }
   ],
   "fragments": [
