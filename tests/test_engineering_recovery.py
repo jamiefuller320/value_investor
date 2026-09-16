@@ -482,6 +482,20 @@ def test_cancel_resolved_workflow_failure_task(tmp_path: Path):
     assert updated["tasks"][0].get("cancelled_policy") == "workflow_recovered"
 
 
+def test_github_repo_falls_back_to_git_remote(monkeypatch):
+    from value_investor import engineering_recovery as er
+
+    monkeypatch.delenv("GITHUB_REPOSITORY", raising=False)
+
+    class _Result:
+        returncode = 0
+        stdout = "git@github.com:jamiefuller320/value_investor.git\n"
+        stderr = ""
+
+    monkeypatch.setattr(er.subprocess, "run", lambda *args, **kwargs: _Result())
+    assert er._github_repo() == "jamiefuller320/value_investor"
+
+
 def test_park_workflow_permission_blocked_tasks(tmp_path: Path):
     tasks_path = tmp_path / "engineering_tasks.json"
     tasks_path.write_text(

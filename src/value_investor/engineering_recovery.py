@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import re
+import subprocess
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass, field
@@ -68,11 +69,33 @@ def _github_token() -> str | None:
     return None
 
 
+def _github_repo_from_git_remote() -> str | None:
+    """Best-effort ``owner/name`` from ``origin`` when ``GITHUB_REPOSITORY`` is unset."""
+    try:
+        completed = subprocess.run(
+            ["git", "remote", "get-url", "origin"],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    url = (completed.stdout or "").strip()
+    if not url or completed.returncode != 0:
+        return None
+    # git@github.com:owner/name.git  or  https://github.com/owner/name.git
+    match = re.search(r"github\.com[:/]([^/]+)/([^/]+?)(?:\.git)?$", url)
+    if not match:
+        return None
+    return f"{match.group(1)}/{match.group(2)}"
+
+
 def _github_repo() -> str | None:
     value = os.environ.get("GITHUB_REPOSITORY")
     if value and "/" in value:
         return value
-    return None
+    return _github_repo_from_git_remote()
 
 
 def _github_api_get(path: str, *, token: str | None = None) -> Any:

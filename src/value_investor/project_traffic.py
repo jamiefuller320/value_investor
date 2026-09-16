@@ -48,6 +48,7 @@ ACTION_DISPATCH_CONFLICT = "dispatch_conflict_resolve"
 ACTION_PAUSE = "pause_dispatch"
 ACTION_RESUME = "resume_dispatch"
 ACTION_QUEUE_SYNC = "remediate_queue_merge_sync"
+ACTION_CANCEL_RECOVERED_WORKFLOW = "cancel_recovered_workflow_failure"
 
 QUEUE_MERGE_SYNC_FINDING_TITLE = "Engineering queue merge sync lag"
 
@@ -58,6 +59,7 @@ RECTIFICATION_QUEUE_SYNC = "remediate_queue_merge_sync"
 RECTIFICATION_UNSTICK_PRS = "request_unstick_stuck_prs"
 RECTIFICATION_DRAFT_ENG_TASK = "draft_ops_engineering_task"
 RECTIFICATION_RERUN_WORKFLOW = "rerun_or_dispatch_workflow"
+RECTIFICATION_CANCEL_RECOVERED_WORKFLOW = "cancel_recovered_workflow_failure"
 RECTIFICATION_HUMAN_TRIAGE = "human_triage"
 
 DEFAULT_STUCK_PR_THRESHOLD = 2
@@ -222,6 +224,47 @@ def remediate_queue_merge_sync(
         )
     )
     return lag_ids, fixed_ids, remaining_ids, actions
+
+
+def remediate_recovered_workflow_failures(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    repo: str | None = None,
+    token: str | None = None,
+    latest_success_by_workflow: dict[str, dict[str, Any]] | None = None,
+    apply: bool = True,
+) -> tuple[list[str], list[TrafficAction]]:
+    """PM v1: cancel open ``workflow_failure`` tasks whose workflow already succeeded.
+
+    Transient ingest-loop / paper-auto flakes often mint a high-priority eng task
+    that blocks compile-cap drain even after a later green run. Cancelling those
+    rows is deterministic queue bookkeeping (same rule as engineering recovery),
+    not code authorship.
+    """
+    from value_investor import engineering_recovery as er
+
+    cancelled = er.cancel_resolved_workflow_failure_tasks(
+        tasks_path=tasks_path,
+        repo=repo,
+        token=token,
+        latest_success_by_workflow=latest_success_by_workflow,
+        apply=apply,
+    )
+    if not cancelled:
+        return [], []
+
+    ids = [str(row.task_id) for row in cancelled if row.task_id]
+    preview = ", ".join(ids[:8])
+    if len(ids) > 8:
+        preview = f"{preview} (+{len(ids) - 8} more)"
+    actions = [
+        TrafficAction(
+            kind=ACTION_CANCEL_RECOVERED_WORKFLOW,
+            detail=f"PM cancelled recovered workflow_failure task(s): {preview}",
+            applied=bool(apply),
+        )
+    ]
+    return ids, actions
 
 
 def _utcnow() -> datetime:
@@ -977,8 +1020,9 @@ def planned_rectification_for_ops_finding(finding: Any) -> tuple[str, str]:
     """Deterministic PM rectification plan for an ops-monitor email finding.
 
     Returns ``(action_id, detail)``. Auto-execution is limited to PM v1 authority
-    (queue merge-sync + stuck-PR unstick already owned by traffic); other actions
-    are recorded for digest / human / eng-task follow-up.
+    (queue merge-sync, recovered workflow_failure cancel, stuck-PR unstick already
+    owned by traffic); other actions are recorded for digest / human / eng-task
+    follow-up.
     """
     if hasattr(finding, "title"):
         title = str(finding.title or "")
@@ -1009,8 +1053,9 @@ def planned_rectification_for_ops_finding(finding: Any) -> tuple[str, str]:
         or title.startswith("Workflow failure")
     ):
         return (
-            RECTIFICATION_RERUN_WORKFLOW,
-            "Rerun/dispatch via existing ops auto-fix or workflow responders; else human",
+            RECTIFICATION_CANCEL_RECOVERED_WORKFLOW,
+            "PM v1: cancel open workflow_failure eng tasks when the workflow has "
+            "succeeded after the minting failure; else rerun/dispatch / eng draft",
         )
     if severity == "fail":
         return (
@@ -1040,13 +1085,15 @@ def handoff_ops_monitor_email_to_pm(
 ) -> dict[str, Any]:
     """Hand email-worthy ops findings to PM with planned rectification.
 
-    Keeps SMTP with the caller. Auto-remediates only queue merge-sync (existing
-    PM v1 authority); other items stay open on the handoff artifact + digest.
+    Keeps SMTP with the caller. Auto-remediates queue merge-sync and recovered
+    ``workflow_failure`` cancellations (PM v1); other items stay open on the
+    handoff artifact + digest.
     """
     drafted_task_ids = [str(x) for x in (drafted_task_ids or []) if x]
     items: list[dict[str, Any]] = []
     actions: list[TrafficAction] = []
     needs_queue_sync = False
+    needs_workflow_recover_cancel = False
 
     for finding in findings:
         if hasattr(finding, "to_dict"):
@@ -1081,6 +1128,8 @@ def handoff_ops_monitor_email_to_pm(
         }
         if action_id == RECTIFICATION_QUEUE_SYNC:
             needs_queue_sync = True
+        if action_id == RECTIFICATION_CANCEL_RECOVERED_WORKFLOW:
+            needs_workflow_recover_cancel = True
         items.append(item)
 
     if needs_queue_sync:
@@ -1107,6 +1156,32 @@ def handoff_ops_monitor_email_to_pm(
                 item["status"] = "open"
                 item["rectification_detail"] = (
                     f"{item['rectification_detail']}; remaining={remaining_ids or lag_ids or ['unknown']}"
+                )
+
+    if needs_workflow_recover_cancel:
+        cancelled_ids, cancel_actions = remediate_recovered_workflow_failures(
+            tasks_path=tasks_path,
+            repo=repo,
+            token=token,
+            apply=apply,
+        )
+        actions.extend(cancel_actions)
+        cancelled_set = set(cancelled_ids)
+        for item in items:
+            if item["planned_rectification"] != RECTIFICATION_CANCEL_RECOVERED_WORKFLOW:
+                continue
+            item["auto_attempted"] = True
+            if apply and cancelled_set:
+                item["auto_resolved"] = True
+                item["status"] = "resolved"
+                item["rectification_detail"] = (
+                    f"{item['rectification_detail']}; cancelled={sorted(cancelled_set)}"
+                )
+            else:
+                item["status"] = "open"
+                item["rectification_detail"] = (
+                    f"{item['rectification_detail']}; no recovered workflow_failure "
+                    "rows to cancel — keep rerun/eng path"
                 )
 
     handoff = {
@@ -1501,6 +1576,14 @@ def run_project_traffic(
         apply=apply,
     )
     actions.extend(sync_actions)
+
+    _, workflow_cancel_actions = remediate_recovered_workflow_failures(
+        tasks_path=tasks_path,
+        repo=repo,
+        token=token,
+        apply=apply,
+    )
+    actions.extend(workflow_cancel_actions)
 
     digest = None
     if write_digest and policy.get("digest_enabled", True):
