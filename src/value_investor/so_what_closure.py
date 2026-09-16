@@ -658,6 +658,26 @@ def apply_so_what_auto_queue(
             }
         )
 
+    if generated:
+        from dataclasses import replace as dc_replace
+
+        from value_investor.engineering_narrow_scope import apply_narrow_scope_to_task
+
+        expanded: list[EngineeringTask] = []
+        seq_cursor = next_seq
+        for task in generated:
+            slices = apply_narrow_scope_to_task(task)
+            for index, scoped in enumerate(slices):
+                if index == 0:
+                    expanded.append(scoped)
+                else:
+                    expanded.append(
+                        dc_replace(scoped, id=f"eng-{run_stamp}-{seq_cursor:02d}")
+                    )
+                    seq_cursor += 1
+        generated = expanded
+        next_seq = seq_cursor
+
     if generated and not dry_run:
         merged = _merge_task_rows(rows, generated)
         payload = {

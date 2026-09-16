@@ -795,7 +795,15 @@ def build_compiled_task_candidates(
             output_dir / "gap_fill_summary.json", run_stamp=run_stamp, seq_start=seq
         )
     )
-    return _dedupe_tasks(tasks)
+    from dataclasses import replace as dc_replace
+
+    from value_investor.engineering_narrow_scope import expand_engineering_tasks_for_narrow_scope
+
+    expanded = expand_engineering_tasks_for_narrow_scope(_dedupe_tasks(tasks))
+    out: list[EngineeringTask] = []
+    for index, task in enumerate(expanded, start=1):
+        out.append(dc_replace(task, id=f"eng-{run_stamp}-{index:02d}"))
+    return out
 
 
 def build_compiled_task_list(
