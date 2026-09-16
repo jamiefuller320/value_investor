@@ -1492,6 +1492,59 @@ def test_enrich_signals_with_fcf_basis_overlay_honours_action_note_mismatch_bree
     assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.595)
 
 
+def test_fcf_ttm_suppressed_flags_bree_style_screen_filing_gap(tmp_path: Path):
+    """When Yahoo TTM is suppressed, IR £133.2m vs filing £105.8m must flag mismatch."""
+    from value_investor.scoring.fcf import reconcile_fcf_for_ticker
+
+    sources = tmp_path / "research" / "BREE.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "BREE.L",
+                "quarterly_cashflow": {},
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 150_000_000.0,
+                        "Capital Expenditure": -44_200_000.0,
+                        "Free Cash Flow": 105_800_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (filings / "ir_results.txt").write_text(
+        "Free Cash Flow of £133.2m before lease and acquisition adjustments",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings / "ir_results.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    bundle = reconcile_fcf_for_ticker(
+        "BREE.L",
+        screen_ttm=107_800_000.0,
+        output_dir=tmp_path,
+    )
+    assert bundle["screen_ttm_unverified"] is True
+    assert bundle["ttm_suppressed_screen_filing_mismatch"] is True
+    assert bundle["filing_screen_mismatch"] is True
+    assert bundle["fcf_divergence_flagged"] is True
+
+
 def test_enrich_signals_with_fcf_basis_overlay_honours_universe_divergence_note(
     tmp_path: Path,
 ):
