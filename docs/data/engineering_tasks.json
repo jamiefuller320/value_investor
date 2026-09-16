@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-16T07:52:43.250592+00:00",
+  "compiled_at": "2026-09-16T08:12:33.063791+00:00",
   "run_at": null,
-  "task_count": 19,
+  "task_count": 20,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -521,6 +521,46 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/656",
       "pr_number": 656,
       "merged_at": "2026-09-15T15:03:42.940572+00:00"
+    },
+    {
+      "id": "eng-20260916-03",
+      "area": "ingest",
+      "title": "Workflow fix: ingest-loop failure on main",
+      "summary": "GitHub workflow ingest-loop.yml failed on main. Investigate the failed run log and fix the workflow or underlying code within allowed_paths. Run: https://github.com/jamiefuller320/value_investor/actions/runs/35066797050",
+      "priority": "high",
+      "priority_score": 90.0,
+      "source": "workflow_failure",
+      "evidence": {
+        "workflow": "ingest-loop.yml",
+        "run_id": "35066797050",
+        "run_url": "https://github.com/jamiefuller320/value_investor/actions/runs/35066797050",
+        "signature": [
+          "ingest.improvement",
+          "ftse-ingest-loop",
+          "CurlError",
+          "HTTPError"
+        ]
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for .github/workflows/ingest-loop.yml",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        ".github/workflows/ingest-loop.yml",
+        "src/value_investor/ingest_loop.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "tests/test_ingest_loop.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260914-03",
@@ -1083,5 +1123,6 @@
     "stuck_pr_count": 0,
     "stuck_reasons": [],
     "evaluated_at": "2026-09-15T20:21:43.825438+00:00"
-  }
+  },
+  "workflow_failure_compiled": true
 }
