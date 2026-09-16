@@ -68,9 +68,6 @@ from value_investor.scoring.healthcare_overlay import enrich_signals_with_health
 from value_investor.scoring.healthcare_price_erosion_overlay import (
     enrich_signals_with_healthcare_price_erosion_overlay,
 )
-from value_investor.scoring.healthcare_reimbursement_overlay import (
-    enrich_signals_with_healthcare_reimbursement_overlay,
-)
 from value_investor.scoring.interim_quality_overlay import (
     enrich_signals_with_interim_quality_overlay,
 )
@@ -244,7 +241,6 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "price_to_book",
         "healthcare_overlay",
         "healthcare_price_erosion_overlay",
-        "healthcare_reimbursement_overlay",
         "cash_conversion_overlay",
         "dividend_yield_overlay",
         "dividend_sustainability_overlay",
@@ -466,10 +462,6 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
     signals_out = enrich_signals_with_healthcare_price_erosion_overlay(
         signals_out,
         result.model_results,
-        output_dir=output_dir,
-    )
-    signals_out = enrich_signals_with_healthcare_reimbursement_overlay(
-        signals_out,
         output_dir=output_dir,
     )
     signals_out = enrich_signals_with_builders_merchant_detection(

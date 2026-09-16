@@ -19,14 +19,6 @@ _SIGNAL_RANK = {
 }
 
 HEALTHCARE_SECTOR_FRAGMENTS = ("healthcare", "health care")
-ORTHOPAEDICS_WOUND_NAME_FRAGMENTS = (
-    "orthopaedic",
-    "orthopedic",
-    "wound",
-    "bioactive",
-    "smith & nephew",
-    "advanced wound",
-)
 PIOTROSKI_WEAK_THRESHOLD = 4
 
 
@@ -43,19 +35,6 @@ def is_healthcare_sector(sector: str | None) -> bool:
         return False
     norm = str(sector).strip().lower()
     return any(fragment in norm for fragment in HEALTHCARE_SECTOR_FRAGMENTS)
-
-
-def orthopaedic_or_wound_bioactive_profile(
-    sector: str | None,
-    name: str | None,
-) -> bool:
-    """True for healthcare issuers in orthopaedics / advanced wound management."""
-    if not is_healthcare_sector(sector):
-        return False
-    norm = (name or "").strip().lower()
-    if not norm:
-        return False
-    return any(fragment in norm for fragment in ORTHOPAEDICS_WOUND_NAME_FRAGMENTS)
 
 
 def _parse_list_field(value: Any) -> list[str]:

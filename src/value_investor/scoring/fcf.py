@@ -1794,7 +1794,6 @@ def reconcile_fcf(
         "fiscal_year": fiscal_year,
         "currency": currency,
         "cashflow_metrics": snapshot_metrics,
-        "ttm_cashflow_suppressed": bool(screen_ttm_unverified and not snapshot_metrics),
     }
 
 
@@ -2148,32 +2147,6 @@ def format_fcf_definition_divergence_action_note(
     if not parts:
         return "FCF definition divergence"
     return "FCF definition divergence: " + " vs ".join(parts) + " dividend coverage"
-
-
-def fcf_unverified_screen_without_cashflow_metrics(
-    fcf_bundle: dict[str, Any],
-    *,
-    screen_ttm: float | None = None,
-) -> bool:
-    """Fail-closed when suppressed TTM diverges from filing FCF without cashflow_metrics."""
-    if not fcf_bundle.get("screen_ttm_unverified"):
-        return False
-    if fcf_bundle.get("cashflow_metrics"):
-        return False
-    resolved_screen = screen_ttm if screen_ttm is not None else fcf_bundle.get("screen_ttm")
-    filing = fcf_bundle.get("filing_aligned")
-    if filing is None:
-        filing = fcf_bundle.get("canonical")
-    if filing is None or resolved_screen is None:
-        return False
-    currency = str(fcf_bundle.get("currency") or "USD")
-    return fcf_universe_divergence_flagged(
-        filing_aligned=filing,
-        screen_ttm=resolved_screen,
-        company_adjusted=fcf_bundle.get("company_adjusted"),
-        filing_currency=currency,
-        company_adjusted_currency=fcf_bundle.get("company_adjusted_currency"),
-    )
 
 
 def fcf_action_note_mismatch(

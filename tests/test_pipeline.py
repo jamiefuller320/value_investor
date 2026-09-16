@@ -3520,29 +3520,6 @@ def test_enrich_signals_with_healthcare_price_erosion_overlay_caps_hik_like_prof
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
 
 
-def test_enrich_signals_with_healthcare_reimbursement_overlay_caps_sn_style():
-    from value_investor.scoring.healthcare_reimbursement_overlay import (
-        enrich_signals_with_healthcare_reimbursement_overlay,
-    )
-
-    signals = pd.DataFrame(
-        [
-            {
-                "ticker": "SN.L",
-                "name": "Smith & Nephew plc",
-                "sector": "Healthcare",
-                "signal": "strong_buy",
-                "adjusted_signal": "strong_buy",
-            }
-        ]
-    )
-
-    enriched = enrich_signals_with_healthcare_reimbursement_overlay(signals)
-
-    assert bool(enriched.iloc[0]["healthcare_reimbursement_overlay"]) is True
-    assert enriched.iloc[0]["adjusted_signal"] == "buy"
-
-
 def test_parse_adjusted_net_debt_gbp_from_filing_prose_and_ocr_table():
     assert parse_adjusted_net_debt_gbp("Adjusted net debt of £137.7m at year-end") == pytest.approx(
         137_700_000.0
