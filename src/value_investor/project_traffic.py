@@ -629,7 +629,9 @@ def format_ci_fix_comment(pr: StuckPr) -> str:
     reason = pr.failure_reason or "ci_failing"
     check_bit = ""
     if pr.failed_check_names:
-        check_bit = " Failed checks: " + ", ".join(f"`{n}`" for n in pr.failed_check_names[:8]) + "."
+        check_bit = (
+            " Failed checks: " + ", ".join(f"`{n}`" for n in pr.failed_check_names[:8]) + "."
+        )
     return "\n".join(
         [
             "## Project traffic controller — CI failure",
@@ -1350,9 +1352,7 @@ def format_daily_digest_markdown(digest: dict[str, Any]) -> str:
     by_reason = list(common.get("by_reason") or [])
     if by_reason:
         for row in by_reason[:8]:
-            lines.append(
-                f"- `{row.get('failure_reason')}` — {row.get('count')}×"
-            )
+            lines.append(f"- `{row.get('failure_reason')}` — {row.get('count')}×")
     else:
         lines.append("- _(none recorded yet)_")
 

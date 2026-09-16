@@ -220,7 +220,9 @@ def main(argv: list[str] | None = None) -> int:
         help="Fix request kind (default: ci_check)",
     )
     record_p.add_argument("--ci", action="store_true", help="Shorthand for --kind ci_check")
-    record_p.add_argument("--merge", action="store_true", help="Shorthand for --kind merge_conflict")
+    record_p.add_argument(
+        "--merge", action="store_true", help="Shorthand for --kind merge_conflict"
+    )
     record_p.add_argument(
         "--reason",
         required=True,

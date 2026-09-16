@@ -29,8 +29,7 @@ def test_normalize_failure_reason_buckets():
         == "ci_failing:CI / test,lint"
     )
     assert (
-        normalize_failure_reason(kind=KIND_MERGE, mergeable_state="dirty")
-        == "merge_conflict:dirty"
+        normalize_failure_reason(kind=KIND_MERGE, mergeable_state="dirty") == "merge_conflict:dirty"
     )
 
 

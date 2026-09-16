@@ -150,12 +150,9 @@ def summarize_common_failure_reasons(
     return {
         "occasion_count": len(occasions),
         "by_reason": by_reason,
-        "by_kind": [
-            {"kind": kind, "count": count} for kind, count in kind_counts.most_common()
-        ],
+        "by_kind": [{"kind": kind, "count": count} for kind, count in kind_counts.most_common()],
         "by_source": [
-            {"source": source, "count": count}
-            for source, count in source_counts.most_common()
+            {"source": source, "count": count} for source, count in source_counts.most_common()
         ],
     }
 
@@ -174,9 +171,7 @@ def format_common_issues_markdown(summary: dict[str, Any]) -> str:
             prs = row.get("recent_prs") or []
             pr_bit = f" (PRs: {', '.join(f'#{n}' for n in prs)})" if prs else ""
             sources = row.get("sources") or {}
-            src_bit = (
-                "; ".join(f"{k}={v}" for k, v in sorted(sources.items())) if sources else ""
-            )
+            src_bit = "; ".join(f"{k}={v}" for k, v in sorted(sources.items())) if sources else ""
             lines.append(
                 f"- `{row.get('failure_reason')}` — {row.get('count')}×"
                 + (f" [{src_bit}]" if src_bit else "")
@@ -202,8 +197,7 @@ def format_common_issues_markdown(summary: dict[str, Any]) -> str:
     lines.extend(
         [
             "",
-            "Record: `ftse-project-traffic record-fix --pr N --kind ci_check "
-            '--reason "…"`',
+            'Record: `ftse-project-traffic record-fix --pr N --kind ci_check --reason "…"`',
             "Summarize: `ftse-project-traffic common-issues`",
         ]
     )

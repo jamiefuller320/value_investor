@@ -235,9 +235,7 @@ def _pr_check_state(
     ]
     successes = [row for row in relevant if str(row.get("conclusion") or "").lower() == "success"]
     failed_check_names = [
-        str(row.get("name") or "").strip()
-        for row in failures
-        if str(row.get("name") or "").strip()
+        str(row.get("name") or "").strip() for row in failures if str(row.get("name") or "").strip()
     ]
     return {
         "available": True,
