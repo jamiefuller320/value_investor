@@ -555,7 +555,6 @@ def test_handoff_auto_cancels_recovered_workflow_failure(tmp_path: Path, monkeyp
     assert payload["items"][0]["auto_attempted"] is True
 
 
-
 def test_handoff_ops_monitor_email_to_pm_writes_artifact(tmp_path: Path, monkeypatch):
     handoff_path = tmp_path / "handoff.json"
     digest_json = tmp_path / "digest.json"
