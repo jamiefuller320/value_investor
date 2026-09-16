@@ -25,7 +25,7 @@
     "primary track must beat rules control on latest review"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-16T17:48:36.457014+00:00",
+    "snapshot_at": "2026-09-16T17:49:14.881884+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 46,
     "unmeasured_buy_tier": 0,
@@ -103,7 +103,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-09-16T17:48:36.458739+00:00",
+  "evaluated_at": "2026-09-16T17:49:14.882420+00:00",
   "maintenance_markets": [
     "asx200",
     "euro_stoxx50",
@@ -112,6 +112,7 @@
     "tsx60"
   ],
   "ingest_exhausted_markets": [
+    "asx200",
     "euro_depth",
     "euro_stoxx50",
     "ftse_smallcap",
@@ -119,14 +120,14 @@
     "tsx60"
   ],
   "parallel_sprint_markets": [
-    "asx200"
+    "nasdaq100"
   ],
   "parallel_sprint_status": [
     {
-      "market_id": "asx200",
+      "market_id": "nasdaq100",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=1)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=4, indexed_without_body=292)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
@@ -135,37 +136,137 @@
       "current_phase": 1,
       "next_phase": 1,
       "phase_blockers": [
-        "asx200 not in ladder.weekly_paper_shard_markets"
+        "need 4 observe snapshots (have 0)"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-16T17:48:53.979316+00:00",
-        "market_id": "asx200",
-        "buy_tier_count": 28,
+        "snapshot_at": "2026-09-16T17:49:23.809802+00:00",
+        "market_id": "nasdaq100",
+        "buy_tier_count": 37,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 0,
-        "indexed_without_body": 1,
-        "bodies_min": 4,
-        "bodies_median": 23.0,
-        "bodies_max": 131,
+        "thin_body_buy_tier": 4,
+        "indexed_without_body": 292,
+        "bodies_min": 8,
+        "bodies_median": 10,
+        "bodies_max": 22,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
-        "thin_body_tickers": [],
+        "thin_body_tickers": [
+          "TRI",
+          "REGN",
+          "PCAR",
+          "MSFT"
+        ],
         "indexed_without_body_tickers": [
-          "CSC.AX"
+          "ROP",
+          "BKR",
+          "TRI",
+          "PEP",
+          "ADP",
+          "GEHC",
+          "ADBE",
+          "PDD",
+          "NXPI",
+          "CSCO",
+          "TMUS",
+          "FANG",
+          "AMGN",
+          "TXN",
+          "CCEP",
+          "REGN",
+          "ADI",
+          "WDAY",
+          "PCAR",
+          "LIN",
+          "CSX",
+          "WBD",
+          "MSFT",
+          "KDP",
+          "BKNG",
+          "MAR",
+          "ADSK",
+          "ORLY",
+          "WDC",
+          "MDLZ",
+          "GILD"
         ],
         "indexed_without_body_by_ticker": {
-          "CSC.AX": 1
+          "ROP": 8,
+          "BKR": 8,
+          "TRI": 27,
+          "PEP": 9,
+          "ADP": 8,
+          "GEHC": 8,
+          "ADBE": 9,
+          "PDD": 4,
+          "NXPI": 8,
+          "CSCO": 9,
+          "TMUS": 9,
+          "FANG": 9,
+          "AMGN": 8,
+          "TXN": 9,
+          "CCEP": 15,
+          "REGN": 10,
+          "ADI": 10,
+          "WDAY": 10,
+          "PCAR": 10,
+          "LIN": 7,
+          "CSX": 9,
+          "WBD": 8,
+          "MSFT": 10,
+          "KDP": 9,
+          "BKNG": 8,
+          "MAR": 9,
+          "ADSK": 10,
+          "ORLY": 8,
+          "WDC": 9,
+          "MDLZ": 9,
+          "GILD": 8
         },
         "parked_tickers": [],
         "parked_count": 0,
-        "effective_thin_body_buy_tier": 0,
-        "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 1,
+        "effective_thin_body_buy_tier": 4,
+        "effective_thin_body_tickers": [
+          "TRI",
+          "REGN",
+          "PCAR",
+          "MSFT"
+        ],
+        "effective_indexed_without_body": 292,
         "effective_indexed_without_body_tickers": [
-          "CSC.AX"
+          "ROP",
+          "BKR",
+          "TRI",
+          "PEP",
+          "ADP",
+          "GEHC",
+          "ADBE",
+          "PDD",
+          "NXPI",
+          "CSCO",
+          "TMUS",
+          "FANG",
+          "AMGN",
+          "TXN",
+          "CCEP",
+          "REGN",
+          "ADI",
+          "WDAY",
+          "PCAR",
+          "LIN",
+          "CSX",
+          "WBD",
+          "MSFT",
+          "KDP",
+          "BKNG",
+          "MAR",
+          "ADSK",
+          "ORLY",
+          "WDC",
+          "MDLZ",
+          "GILD"
         ],
         "ingest_exhausted": false
       },
@@ -181,7 +282,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-16T17:48:53.980398+00:00",
+      "evaluated_at": "2026-09-16T17:49:23.810768+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -209,7 +310,7 @@
         "tsx60 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-16T17:48:54.834918+00:00",
+        "snapshot_at": "2026-09-16T17:49:24.233490+00:00",
         "market_id": "tsx60",
         "buy_tier_count": 19,
         "unmeasured_buy_tier": 0,
@@ -262,13 +363,13 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-16T17:48:54.835725+00:00",
+      "evaluated_at": "2026-09-16T17:49:24.233717+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
-    "asx200",
+    "nasdaq100",
     "tsx60"
   ],
   "market_queue": [
@@ -276,7 +377,8 @@
     "asx200",
     "ftse_smallcap",
     "tsx60",
-    "euro_stoxx50"
+    "euro_stoxx50",
+    "nasdaq100"
   ],
   "ingest_cascade": {
     "enabled": true,
@@ -306,7 +408,7 @@
     }
   },
   "scheduler_stream_1_markets": [
-    "asx200"
+    "nasdaq100"
   ],
   "scheduler_stream_2_markets": [
     "tsx60"
