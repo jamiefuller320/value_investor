@@ -58,6 +58,8 @@ DEFAULT_PER_TICKER_MAX_SECONDS = 320.0
 PER_TICKER_MIN_BUDGET_SECONDS = 120.0
 DEFAULT_INGEST_REFETCH_MAX_BODIES = 40
 DEFAULT_BACKFILL_MAX_BODIES = 40
+TRANSIENT_FETCH_RETRY_ATTEMPTS = 2
+TRANSIENT_FETCH_RETRY_DELAY_SECONDS = 2.0
 UNMEASURED_PRIORITY_BONUS = 10.0
 # Buy-tier tickers with recurring indexed-without-body gaps — batch-prioritized in ingest pass.
 BODY_GAP_BATCH_TICKERS = frozenset({"ITV.L", "GFTU.L", "MGNS.L", "AEP.L"})
@@ -571,6 +573,59 @@ def _planned_sources_for_ticker(
     return planned[:3]
 
 
+def _is_transient_http_fetch_error(exc: BaseException) -> bool:
+    """True for curl_cffi/yfinance-style HTTP failures that may succeed on retry."""
+    message = str(exc).lower()
+    exc_name = type(exc).__name__.lower()
+    if "failed to perform" in message:
+        return True
+    if "httperror" in exc_name or "curlerror" in exc_name or "httperror" in message:
+        if any(code in message for code in ("502", "503", "504", "429", "520")):
+            return True
+        return True
+    return any(
+        marker in message
+        for marker in (
+            "timed out",
+            "timeout",
+            "temporarily unavailable",
+            "connection reset",
+            "503",
+            "502",
+            "429",
+        )
+    )
+
+
+def _invoke_with_transient_fetch_retry(
+    fn: Any,
+    /,
+    *args: Any,
+    **kwargs: Any,
+) -> Any:
+    """Call a filing fetch helper once, retrying transient HTTP/curl errors."""
+    last_exc: BaseException | None = None
+    for attempt in range(1, TRANSIENT_FETCH_RETRY_ATTEMPTS + 1):
+        try:
+            return fn(*args, **kwargs)
+        except Exception as exc:  # noqa: BLE001 — retry only transient fetch failures
+            last_exc = exc
+            if attempt >= TRANSIENT_FETCH_RETRY_ATTEMPTS or not _is_transient_http_fetch_error(exc):
+                raise
+            delay = TRANSIENT_FETCH_RETRY_DELAY_SECONDS * attempt
+            logger.warning(
+                "Transient fetch error in %s (attempt %d/%d): %s; retrying in %.1fs",
+                getattr(fn, "__name__", "fetch"),
+                attempt,
+                TRANSIENT_FETCH_RETRY_ATTEMPTS,
+                exc,
+                delay,
+            )
+            time.sleep(delay)
+    assert last_exc is not None
+    raise last_exc
+
+
 def _ingest_pass_should_cutoff(
     started: float,
     *,
@@ -626,38 +681,50 @@ def run_ingest_improvement_pass(
     so deepen focuses on fresh filings. ``discovery_scan_cap`` is reserved for
     later compute throttling (``None`` = no throttle).
     """
-    bootstrap_buy_tier_research(
-        reports,
-        output_dir=output_dir,
-        market=market,
-        seed_cap=bootstrap_seed_cap if bootstrap_seed_cap is not None else BOOTSTRAP_SEED_CAP,
-    )
+    pass_errors: list[str] = []
+    try:
+        bootstrap_buy_tier_research(
+            reports,
+            output_dir=output_dir,
+            market=market,
+            seed_cap=bootstrap_seed_cap if bootstrap_seed_cap is not None else BOOTSTRAP_SEED_CAP,
+        )
+    except Exception as exc:  # noqa: BLE001 — weekday loop must continue to body refetch
+        message = f"bootstrap: {exc}"
+        pass_errors.append(message)
+        logger.warning("Buy-tier bootstrap failed (continuing ingest-improvement): %s", exc)
 
     discovery_bonus_by_ticker: dict[str, float] = {}
     discovery_payload: dict[str, Any] | None = None
     if discovery_scan:
         from value_investor.ingest_discovery_scan import run_buy_tier_discovery_scan
 
-        scan = run_buy_tier_discovery_scan(
-            reports,
-            output_dir=output_dir,
-            market=market or "ftse350",
-            scan_cap=discovery_scan_cap,
-            persist_index=True,
-            persist_summary=True,
-        )
-        discovery_bonus_by_ticker = {
-            ticker: hit.priority_bonus(scan.prioritization_weights)
-            for ticker, hit in scan.hits_by_ticker().items()
-        }
-        discovery_payload = {
-            "scanned": scan.scanned,
-            "hits": scan.hits,
-            "new_rows_total": scan.new_rows_total,
-            "curiosity_total": scan.curiosity_total,
-            "errors": scan.errors,
-            "prioritization_weights": scan.prioritization_weights,
-        }
+        try:
+            scan = run_buy_tier_discovery_scan(
+                reports,
+                output_dir=output_dir,
+                market=market or "ftse350",
+                scan_cap=discovery_scan_cap,
+                persist_index=True,
+                persist_summary=True,
+            )
+            discovery_bonus_by_ticker = {
+                ticker: hit.priority_bonus(scan.prioritization_weights)
+                for ticker, hit in scan.hits_by_ticker().items()
+            }
+            discovery_payload = {
+                "scanned": scan.scanned,
+                "hits": scan.hits,
+                "new_rows_total": scan.new_rows_total,
+                "curiosity_total": scan.curiosity_total,
+                "errors": scan.errors,
+                "prioritization_weights": scan.prioritization_weights,
+            }
+        except Exception as exc:  # noqa: BLE001 — listing scan must not abort body deepen
+            message = f"discovery_scan: {exc}"
+            pass_errors.append(message)
+            discovery_payload = {"error": str(exc)}
+            logger.warning("Buy-tier discovery scan failed (continuing deepen): %s", exc)
 
     backlog_payload = load_ingest_backlog(backlog_path)
     pending_backlog = backlog_tickers(backlog_payload)
@@ -672,6 +739,7 @@ def run_ingest_improvement_pass(
         discovery_bonus_by_ticker=discovery_bonus_by_ticker,
     )
     summary = IngestImprovementSummary(targets=targets, discovery_scan=discovery_payload)
+    summary.errors.extend(pass_errors)
     summary.targets_planned = len(targets)
     if not targets:
         record_ingest_backlog_after_pass(
@@ -745,7 +813,8 @@ def run_ingest_improvement_pass(
             indexed_refetch: dict[str, Any] = {}
             residual_refetch: dict[str, Any] = {}
             if _is_uk_listed(market=market, ticker=target.ticker):
-                primary_refetch = refetch_uk_primary_filing_bodies(
+                primary_refetch = _invoke_with_transient_fetch_retry(
+                    refetch_uk_primary_filing_bodies,
                     sources_dir / "filings",
                     ticker=target.ticker,
                     company_name=target.name,
@@ -764,7 +833,8 @@ def run_ingest_improvement_pass(
                         or before
                     )
             else:
-                residual_refetch = refetch_residual_filing_bodies(
+                residual_refetch = _invoke_with_transient_fetch_retry(
+                    refetch_residual_filing_bodies,
                     sources_dir / "filings",
                     ticker=target.ticker,
                     company_name=target.name,
@@ -789,7 +859,8 @@ def run_ingest_improvement_pass(
             ir_presentation_metrics: dict[str, Any] = {}
             ir_allowlist_rows = fetch_filings_ir_allowlist(target.ticker)
             if ir_allowlist_rows:
-                ir_refetch = refetch_ir_allowlist_filing_bodies(
+                ir_refetch = _invoke_with_transient_fetch_retry(
+                    refetch_ir_allowlist_filing_bodies,
                     sources_dir / "filings",
                     target.ticker,
                     company_name=target.name,
