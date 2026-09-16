@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-16T15:29:08.315554+00:00",
+  "generated_at": "2026-09-16T16:12:40.019646+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1174,16 +1174,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-16T08:12:33.063791+00:00",
-    "queue_ui_updated_at": "2026-09-16T15:29:08.246761+00:00",
-    "task_count": 20,
+    "compiled_at": "2026-09-16T16:11:27.107623+00:00",
+    "queue_ui_updated_at": "2026-09-16T16:12:39.966574+00:00",
+    "task_count": 21,
     "status": {
       "open_count": 1,
       "pr_open_count": 0,
       "parked_count": 5,
-      "merged_count": 13,
+      "merged_count": 14,
       "failed_count": 0,
-      "next_task_id": "eng-20260916-03",
+      "next_task_id": "eng-20260916-04",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1192,13 +1192,13 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260916-03",
-        "area": "ingest",
-        "title": "Workflow fix: ingest-loop failure on main",
-        "priority": "high",
-        "priority_score": 92.0,
+        "id": "eng-20260916-04",
+        "area": "scoring",
+        "title": "Flag when [2/2]",
+        "priority": "medium",
+        "priority_score": 43.0,
         "status": "open",
-        "source": "workflow_failure",
+        "source": "compile_cap_drain",
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
@@ -1551,7 +1551,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-16T15:29:08.315554+00:00",
+    "generated_at": "2026-09-16T16:12:40.019646+00:00",
     "overall": "active",
     "headline": "Agent lane active.",
     "merge_lane": {
@@ -1577,14 +1577,14 @@
       "pr_open_count": 0,
       "dispatch_eligible_count": 1,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260916-03",
+      "next_task_id": "eng-20260916-04",
       "reason": "queue ready — dispatch next open task",
       "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-16T15:29:00.299645+00:00"
+      "evaluated_at": "2026-09-16T16:12:36.828888+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1598,6 +1598,17 @@
       "should_dispatch_engineering": true
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260916-03",
+        "title": "Workflow fix: ingest-loop failure on main",
+        "area": "ingest",
+        "pr_number": 674,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/674",
+        "merged_at": "2026-09-16T16:11:25.884730+00:00",
+        "merge_class": "ingest_narrow",
+        "auto_merge": false,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260916-02",
         "title": "Hunt fetchable IR source for parked euro_stoxx50 leftover SAN.PA",
@@ -1621,6 +1632,6 @@
         "independently_verified": false
       }
     ],
-    "verified_merges_today_count": 0
+    "verified_merges_today_count": 1
   }
 }
