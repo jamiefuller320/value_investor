@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-16T10:04:24.928123+00:00",
+  "generated_at": "2026-09-16T10:06:03.807234+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1175,17 +1175,17 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-16T08:12:33.063791+00:00",
-    "queue_ui_updated_at": "2026-09-16T10:04:24.859190+00:00",
+    "queue_ui_updated_at": "2026-09-16T10:06:03.744758+00:00",
     "task_count": 20,
     "status": {
-      "open_count": 1,
-      "pr_open_count": 2,
+      "open_count": 2,
+      "pr_open_count": 0,
       "parked_count": 5,
-      "merged_count": 11,
+      "merged_count": 12,
       "failed_count": 0,
       "next_task_id": "eng-20260916-03",
-      "in_flight_branch": "cursor/eng-20260916-02-1de3",
-      "in_flight_pr": 669,
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
@@ -1202,33 +1202,10 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
-        "dispatch_eligible": false,
-        "blocked_by": [
-          {
-            "pr_number": null,
-            "branch": null,
-            "task_id": null,
-            "title": "in-flight allowlist overlap",
-            "clash_files": [
-              "src/value_investor/research/ingest_improvement.py"
-            ],
-            "kind": "allowlist_overlap"
-          }
-        ],
-        "effective_dispatch_rank": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
         "clash_scan": "full"
-      },
-      {
-        "id": "eng-20260916-01",
-        "area": "scoring",
-        "title": "Fail-closed or flag when screen FCF (1,059m) disagrees with Yahoo/filing FCF (852m) while TTM is suppressed and cashflow_metrics is null. Turn on healthcare_pri",
-        "priority": "medium",
-        "priority_score": 43.0,
-        "status": "pr_open",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": "cursor/eng-20260916-01-1de3"
       },
       {
         "id": "eng-20260916-02",
@@ -1236,11 +1213,15 @@
         "title": "Hunt fetchable IR source for parked euro_stoxx50 leftover SAN.PA",
         "priority": "low",
         "priority_score": 12.0,
-        "status": "pr_open",
+        "status": "open",
         "source": "parked_source_hunter",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": "cursor/eng-20260916-02-1de3"
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 2,
+        "clash_scan": "full"
       }
     ],
     "attention_tasks": [
@@ -1306,9 +1287,9 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 1,
-      "dispatch_eligible_count": 0,
-      "blocked_count": 1
+      "open_task_count": 2,
+      "dispatch_eligible_count": 2,
+      "blocked_count": 0
     }
   },
   "learning_track_epoch_datum": {
@@ -1586,51 +1567,40 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-16T10:04:24.928123+00:00",
-    "overall": "blocked",
-    "headline": "1 open task(s) blocked by file clash or policy — parallel cap reached — 2 pr_open, 0 agent run(s) (max_parallel=2)",
+    "generated_at": "2026-09-16T10:06:03.807234+00:00",
+    "overall": "active",
+    "headline": "Agent lane active.",
     "merge_lane": {
+      "state": "idle",
+      "idle": true,
+      "running": false,
+      "blocked": false,
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+    },
+    "agent_lane": {
       "state": "running",
       "idle": false,
       "running": true,
       "blocked": false,
-      "pr_open_count": 2,
-      "open_engineering_prs": [
-        {
-          "number": 669,
-          "branch": "cursor/eng-20260916-02-1de3",
-          "draft": false
-        },
-        {
-          "number": 666,
-          "branch": "cursor/eng-20260916-01-1de3",
-          "draft": false
-        }
-      ],
-      "in_flight_pr": 669,
-      "detail": "Open engineering PR(s) #669, #666 — merge fires on CI success."
-    },
-    "agent_lane": {
-      "state": "blocked",
-      "idle": false,
-      "running": true,
-      "blocked": true,
-      "should_dispatch": false,
+      "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 0,
-      "open_count": 1,
-      "pr_open_count": 2,
-      "dispatch_eligible_count": 0,
-      "blocked_task_count": 1,
+      "open_count": 2,
+      "pr_open_count": 0,
+      "dispatch_eligible_count": 2,
+      "blocked_task_count": 0,
       "next_task_id": "eng-20260916-03",
-      "reason": "parallel cap reached — 2 pr_open, 0 agent run(s) (max_parallel=2)",
-      "detail": "1 open task(s) blocked by file clash or policy — parallel cap reached — 2 pr_open, 0 agent run(s) (max_parallel=2)"
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-16T10:04:20.814877+00:00"
+      "evaluated_at": "2026-09-16T10:05:58.928187+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1643,7 +1613,19 @@
       "overall": "warn",
       "should_dispatch_engineering": true
     },
-    "merges_today": [],
+    "merges_today": [
+      {
+        "task_id": "eng-20260916-01",
+        "title": "Fail-closed or flag when screen FCF (1,059m) disagrees with Yahoo/filing FCF (852m) while TTM is suppressed and cashflow_metrics is null. Turn on healthcare_pri",
+        "area": "scoring",
+        "pr_number": 666,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/666",
+        "merged_at": "2026-09-16T10:05:52.583749+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      }
+    ],
     "verified_merges_today_count": 0
   }
 }
