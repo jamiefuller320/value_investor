@@ -8385,6 +8385,46 @@ def test_refetch_ir_allowlist_migrates_eg7_ir_dead_cairnhomes_url(tmp_path: Path
     assert row["has_body"] is True
 
 
+def test_fetch_filings_ir_allowlist_euro_stoxx50_san_pa_builtins(tmp_path: Path):
+    """Regression: SAN.PA parked IWB — sanofi.com FY2025 20-F + HY2025 statutory PDFs."""
+    allowlist_path = tmp_path / "ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+
+    rows = fetch_filings_ir_allowlist("SAN.PA", path=allowlist_path)
+    assert len(rows) == 3
+    assert all(row["source"] == "ir_allowlist" for row in rows)
+    urls = [row["url"] for row in rows]
+    assert all("sanofi.com/assets/dotcom/content-app/publications" in url for url in urls)
+    assert any("form-20-f-2025-en.pdf" in url for url in urls)
+    assert any("Half-year-financial-report-2025.pdf" in url for url in urls)
+    assert {row["period"] for row in rows} == {"annual", "interim"}
+
+
+def test_parked_source_hunter_san_pa_euro_stoxx50_has_fetchable_ir():
+    """eng-20260916-02: SAN.PA has live sanofi.com Form 20-F and HY2025 PDFs."""
+    rows = fetch_filings_ir_allowlist("SAN.PA")
+    assert len(rows) == 3
+    urls = [row["url"] for row in rows]
+    assert all("sanofi.com" in url for url in urls)
+    for row in rows:
+        body = fetch_filing_body(row["url"])
+        assert body and len(body) > 5000
+
+
+def test_parked_source_hunter_skip_san_pa_euro_stoxx50():
+    """eng-20260916-02: leftover IWB is WAF-gated Euronext product press release."""
+    assert "SAN.PA" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["SAN.PA"]
+    assert "google_news_euro" in reason
+    assert "live.euronext.com" in reason
+    assert "ir_allowlist" in reason
+    euronext = (
+        "https://live.euronext.com/en/products/equities/company-news/"
+        "2026-06-23-press-release-sanofis-cenrifki-tolebrutinib-approved-eu"
+    )
+    assert fetch_filing_body(euronext) is None
+
+
 def test_parked_source_hunter_skip_sap_de_euro_depth():
     """eng-20260910-02: SAP.DE leftover IWB is bot-gated IR hub; SEC filings already bodied."""
     assert "SAP.DE" in PARKED_SOURCE_HUNTER_SKIP
