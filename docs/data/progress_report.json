@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-15T12:38:22+00:00",
+  "generated_at": "2026-09-16T16:53:21+00:00",
   "overall": "warn",
   "progress": {
     "schema_version": 1,
-    "generated_at": "2026-09-15T12:38:22.070565+00:00",
+    "generated_at": "2026-09-16T16:53:21.380187+00:00",
     "current_focus": "stage_2b",
     "headline": "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
     "stages": [
@@ -52,11 +52,11 @@
       "library_graduated_count": 21,
       "library_focus_market": "euro_depth",
       "decision_review_applied": false,
-      "ai_excess_after_costs": -0.2858,
-      "rules_excess_after_costs": -0.3659,
-      "ai_total_return": -0.2847,
-      "rules_total_return": -0.354,
-      "ops_overall": "fail",
+      "ai_excess_after_costs": -0.3153,
+      "rules_excess_after_costs": -0.3928,
+      "ai_total_return": -0.3135,
+      "rules_total_return": -0.3801,
+      "ops_overall": "warn",
       "zero_body_buy_tier": 0,
       "unmeasured_buy_tier": 0,
       "measured_tickers": 62,
@@ -68,11 +68,11 @@
         "FTSE 350 live screen and published dashboard are operational.",
         "Offline library: 21 graduated markets (focus: euro_depth).",
         "Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.",
-        "Engineering queue: 8 open, 3 merged supervised tasks.",
-        "AI-judgment track beating rules control (-28.6% vs -36.6% excess)."
+        "Engineering queue: 1 open, 14 merged supervised tasks.",
+        "AI-judgment track beating rules control (-31.5% vs -39.3% excess)."
       ],
       "gaps": [
-        "Primary AI track still below ^FTSE after costs (-28.6% excess; history still thin)."
+        "Primary AI track still below ^FTSE after costs (-31.5% excess; history still thin)."
       ],
       "next_actions": [
         "Let the learning loop accumulate before adding tracks or knobs.",
@@ -85,15 +85,15 @@
       "stalled": false,
       "zero_body_buy_tier": 0,
       "health": {
-        "snapshot_at": "2026-09-15T11:50:32.963179+00:00",
+        "snapshot_at": "2026-09-16T16:11:26.103562+00:00",
         "buy_tier_count": 62,
         "measured_tickers": 62,
         "unmeasured_buy_tier": 0,
         "unmeasured_tickers": [],
         "zero_body_buy_tier": 0,
         "zero_body_tickers": [],
-        "indexed_without_body": 17,
-        "filings_with_body": 4225
+        "indexed_without_body": 28,
+        "filings_with_body": 4162
       },
       "summary": "Live buy-tier ingest now canonicalises under docs/data/research/, bootstraps missing indexes on Sunday/weekday passes, and sanitises mis-attributed RNS rows before refetching bodies.",
       "fixes": [
@@ -1845,6 +1845,63 @@
           "n53",
           "warm-start",
           "knobs"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N129",
+        "title": "Auto-execute mechanical PR splits for oversized narrow diffs",
+        "summary": "Fully automated rewrite of an oversized eng PR into N auto-mergeable PRs remains unsafe. Prefer upstream first-principle drafting + cohesion bypass (human merge) instead.",
+        "category": "not_now",
+        "section": "ops",
+        "revisit_when": "Upstream narrow-scope drafting has been live ≥3 weeks and humans still manually rewrite oversized PRs that bypassed topic maps",
+        "tags": [
+          "auto-merge",
+          "narrow-verify",
+          "split"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N130",
+        "title": "Raise AUTO_MERGE_MAX_PATHS above 8 for narrow/ci-fix",
+        "summary": "Raising the shared cap widens both scoring_narrow/ingest_narrow and ci_fix auto-merge blast radius. Prefer upstream first-principle drafting + cohesion bypass instead.",
+        "category": "not_now",
+        "section": "ops",
+        "revisit_when": "After ≥3 weeks of clean ingest_narrow and scoring_narrow auto-merges with stable EOD verified-merge monitoring and no path-guard incidents",
+        "tags": [
+          "auto-merge",
+          "narrow-verify",
+          "path-cap"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N131",
+        "title": "Do not auto-retarget open paper stops/targets from weekly screen refreshes",
+        "summary": "Charts recompute current trade_plan each week but chart outcome scoring freezes initial levels. Paper holdings keep entry-attached stop/target except momentum-grace trailing. Do not silently rewrite open-book targets from every screen pass until post-exit and chart-outcome evidence say that helps after costs.",
+        "category": "not_now",
+        "section": "not_now",
+        "revisit_when": "exit_shadow early_exit vs good_exit balance is stable and chart giveback/well_timed cohorts show whether sticky vs refreshed targets would have mattered",
+        "tags": [
+          "trade-plan",
+          "paper",
+          "targets"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N132",
+        "title": "Do not widen FTSE news/filing ingest to full hold/avoid universe yet",
+        "summary": "Full-universe continuous news+filing deepen for observational pre-signal analysis would starve buy-tier scan-then-target and P1 live-path work. Keep retrospective backfill on entry plus buy∪boundary observe panels until those prove useful.",
+        "category": "not_now",
+        "section": "not_now",
+        "revisit_when": "buy∪boundary news_event_journal and phrase-trajectory panels show stable out-of-sample usefulness and GHA/ingest capacity has clear spare after buy-tier body drain",
+        "tags": [
+          "ingest",
+          "capacity",
+          "news",
+          "not-now"
         ],
         "status": "open"
       }
@@ -5680,16 +5737,122 @@
         "status": "open"
       },
       {
-        "id": "L395",
-        "title": "Lifecycle ticker cards: charts for non-buy-tier names",
-        "summary": "Lifecycle name cards reuse buy-tier chart JSON; non-buy / sold names show assessment but no series until chart publish coverage expands.",
+        "id": "L398",
+        "title": "Expand narrow verify to ops/prompt/coverage eng classes",
+        "summary": "ingest_narrow and scoring_narrow now have deterministic independent verify + scoped auto-merge. Broader eng areas (ops, prompt, coverage, ci) still human-merge; expand only after those two classes show clean merge quality.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "ingest_narrow and scoring_narrow auto-merges run cleanly for ≥3 weeks with no path-guard incidents and EOD merge monitor shows stable verified counts",
+        "tags": [
+          "auto-merge",
+          "independent-verify",
+          "engineering"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L399",
+        "title": "Expand narrow topic maps as new scoring overlays appear",
+        "summary": "Upstream narrow-scope drafting uses keyword→concrete path maps. When new overlays ship, extend the topic tables so compound suggestions keep splitting into ≤8-path first-principle builds instead of cohesion_bypass.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "A scoring eng task hits cohesion_bypass solely because its topic is missing from engineering_narrow_scope topic maps",
+        "tags": [
+          "auto-merge",
+          "narrow-scope",
+          "scoring"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L405",
+        "title": "Market-specific fair RT for trade-plan target floors",
+        "summary": "Trade-plan take-profit floors default to Suite A 6% round-trip + 4% net edge. Optionally bind assumed_round_trip_cost_pct from ftse-trading-costs per market so Suite B / shards use fair UK/US/EU friction instead of stress.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "Suite B fair-cost books are the primary lens for chart/decision-pack target quality, or a saved TradePlanConfig is wired per market shard",
+        "tags": [
+          "trade-plan",
+          "costs",
+          "target-spread",
+          "suite-b"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L401",
+        "title": "Pre-signal drop and recovery-to-prior-high observe metric",
+        "summary": "Many buy-tier names arrive after a large drawdown. Observe whether price recovers toward the pre-drop local high (not only back through the frozen entry), and how often that path clears the cost-aware take-profit. Distinct from L244 entry recovery and from paper hold-recovery.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "chart_outcome_review has several Sunday refreshes and drop-to-entry recovery (L244) is either live or still clearly insufficient for prior-high questions",
+        "tags": [
+          "charts",
+          "recovery",
+          "entry-timing",
+          "observe-only"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L402",
+        "title": "Precipitating-drop event join needs depth beyond buy-tier",
+        "summary": "To explain what caused the drawdown into a buy signal, join pre-signal headlines/filings and peer/market context. Buy-tier-only news_manifest and event journal miss names before they enter the target set; needs thicker offline/library or boundary-cohort history first.",
         "category": "later",
         "section": "research",
-        "revisit_when": "Price-chart publish covers held/sold or near-buy names beyond current buy-tier weekly charts",
+        "revisit_when": "news_event_journal confirmation rates leave watch on body_match events AND library or boundary cohorts have stable pre-signal news/filing coverage for names that later become buy-tier",
         "tags": [
-          "lifecycle",
-          "charts",
-          "dashboard"
+          "news",
+          "filings",
+          "data-depth",
+          "observe-only",
+          "precipitating-events"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L403",
+        "title": "Thin continuous news harvest for hold/avoid before buy-tier entry",
+        "summary": "Most FTSE holds/avoids have no research dir or news_manifest until they become buy-tier. First ingest can backfill ~1y Yahoo/Google headlines retrospectively, but that is not continuous PIT collection and misses names that never enter buy-tier as controls. Prefer a cheap headline-only watermark harvest for boundary + rotating hold sample before any body crawl (N91).",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "L401/L402 observe questions are blocked by missing pre-signal manifests on newly promoted buy-tier names, or boundary panel persistently lacks news_manifest coverage",
+        "tags": [
+          "news",
+          "data-depth",
+          "boundary",
+          "observe-only",
+          "pre-signal"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L404",
+        "title": "Unconfirmed-news vs later-filing as sentiment-vs-fundamentals observe label",
+        "summary": "Once event journal confirmation rates leave watch, label drop-window headlines that never get a later confirming filing (or get a denial/clarification) as candidate sentiment shocks versus fundamental changes. Observe-only; do not score live buys from it (N55/N303).",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "news_event_rules.json shows stable promising confirmation on body_match events with later filing ≥30d after headline, and a cohort of drop-correlated headlines with no later report exists",
+        "tags": [
+          "news",
+          "sentiment",
+          "fundamentals",
+          "event-journal",
+          "observe-only"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L406",
+        "title": "Dashboard surface for PR fix common issues",
+        "summary": "Expose docs/data/pr_fix_occasions.json common_issues on the Automation / ops dashboard so monthly review does not require CLI-only inspection.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "pr_fix_occasions has ≥20 occasions or monthly checklist review feels CLI-heavy",
+        "tags": [
+          "pr-fix",
+          "dashboard",
+          "ops"
         ],
         "status": "open"
       }
@@ -5987,106 +6150,50 @@
     },
     "engineering_open": [
       {
-        "id": "eng-20260915-01",
+        "id": "eng-20260916-04",
         "source": "engineering",
-        "title": "Implement Investegate/LSE direct HTML/PDF fetch for indexed RNS (replace Google News redirect URLs) and persist to `filings/bodies/` with index `with_body` pari",
-        "summary": "Implement Investegate/LSE direct HTML/PDF fetch for indexed RNS (replace Google News redirect URLs) and persist to `filings/bodies/` with index `with_body` parity checks",
+        "title": "Flag when [2/2]",
+        "summary": "First-principle slice 2/2 of: Enable cyclical_exposure for UK heavyside construction-materials names when GB volume language and cement-output “historic lows” are in the same tape. Flag when. no topic map — cohesion bypass keeps full area allowlist",
         "status": "pr_open",
-        "added_at": null,
-        "area": "ingest"
-      },
-      {
-        "id": "eng-20260915-02",
-        "source": "engineering",
-        "title": "Companies House document-api PDF pipeline with OCR quality gates and CH-ID ↔ `filings_index` mapping; reject or quarantine truncated extracts (flag when line co",
-        "summary": "Companies House document-api PDF pipeline with OCR quality gates and CH-ID ↔ `filings_index` mapping; reject or quarantine truncated extracts (flag when line count/hash indicates truncation)",
-        "status": "open",
-        "added_at": null,
-        "area": "ingest"
-      },
-      {
-        "id": "eng-20260915-03",
-        "source": "engineering",
-        "title": "Parse allowlisted IR results PDFs into structured FCF bridges and populate `ir_presentation_metrics.json` (segment revenue, dividend policy, management FCF defi",
-        "summary": "Parse allowlisted IR results PDFs into structured FCF bridges and populate `ir_presentation_metrics.json` (segment revenue, dividend policy, management FCF definitions)",
-        "status": "open",
-        "added_at": null,
-        "area": "ingest"
-      },
-      {
-        "id": "eng-20260915-04",
-        "source": "engineering",
-        "title": "Backfill Yahoo cash-flow fields (`operating_cashflow`, UK quarterly cash-flow where suppressed) into fetch/`CompanyMetrics` from statements already mirrored in ",
-        "summary": "Backfill Yahoo cash-flow fields (`operating_cashflow`, UK quarterly cash-flow where suppressed) into fetch/`CompanyMetrics` from statements already mirrored in `financials_annual.json`",
-        "status": "open",
-        "added_at": null,
-        "area": "ingest"
-      },
-      {
-        "id": "eng-20260914-03",
-        "source": "engineering",
-        "title": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
-        "summary": "IR results presentation ingest: allowlisted PDF fetch plus structured parse into `ir_presentation_metrics.json` (FCF bridges, segment margins, dividend policy)",
-        "status": "open",
-        "added_at": null,
-        "area": "ingest"
-      },
-      {
-        "id": "eng-20260915-07",
-        "source": "engineering",
-        "title": "Attach run-history FCF divergence flags to `docs/data/history/run_*.json.gz` `action_note` for all Strong Buy names (HIK shows mismatch in snapshot but not in h",
-        "summary": "Attach run-history FCF divergence flags to `docs/data/history/run_*.json.gz` `action_note` for all Strong Buy names (HIK shows mismatch in snapshot but not in history export), enabling cross-ticker verification before sizing",
-        "status": "open",
-        "added_at": null,
-        "area": "scoring"
-      },
-      {
-        "id": "eng-20260915-09",
-        "source": "engineering",
-        "title": "Attach cross-ticker model pass/score table to gap-fill output automatically from sibling `screen_run_manifest.json` files so moat/yield ranking claims (e.g. “wi",
-        "summary": "Attach cross-ticker model pass/score table to gap-fill output automatically from sibling `screen_run_manifest.json` files so moat/yield ranking claims (e.g. “widest moat in group”) are evidence-backed without manual peer lookups.",
-        "status": "open",
-        "added_at": null,
-        "area": "scoring"
-      },
-      {
-        "id": "eng-20260915-10",
-        "source": "engineering",
-        "title": "Emit dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) with labels in screening_snapshot to prevent conflation",
-        "summary": "Emit dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) with labels in screening_snapshot to prevent conflation of 0.84× and 1.68×.",
-        "status": "open",
         "added_at": null,
         "area": "scoring"
       }
     ],
     "counts": {
       "defer_now": 0,
-      "defer_not_now": 119,
-      "defer_later": 264,
+      "defer_not_now": 123,
+      "defer_later": 271,
       "defer_security": 5,
       "open_fragments": 20,
       "proposed_total": 1,
-      "engineering_open": 8
+      "engineering_open": 1
     }
   },
   "integration": {
     "overall": "warn",
     "checks": [
       {
+        "id": "ingest_loop_hit_runtime_cutoff",
+        "severity": "warn",
+        "category": "ingest",
+        "title": "Ingest loop hit runtime cutoff",
+        "summary": "Last run deferred 57 ticker(s) after completing 5 (per_ticker_budget) — backlog resume or chained chunk should drain remainder."
+      },
+      {
         "id": "orphaned_pr_open_engineering_tasks",
         "severity": "warn",
         "category": "engineering",
         "title": "Orphaned pr_open engineering tasks",
-        "summary": "Tasks without matching open PR: eng-20260915-01"
+        "summary": "Tasks without matching open PR: eng-20260916-04"
       }
     ],
     "queue_status": {
-      "open_count": 7,
+      "open_count": 0,
       "pr_open_count": 1,
-      "parked_count": 2,
-      "merged_count": 3,
+      "parked_count": 5,
+      "merged_count": 14,
       "failed_count": 0,
-      "next_task_id": "eng-20260915-02",
+      "next_task_id": null,
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -6102,7 +6209,7 @@
         "severity": "info",
         "category": "doctrine",
         "title": "Stage 2b focus aligned with primary learning gap",
-        "summary": "North-star focus is stage 2b while AI-judgment excess after costs is still negative (-28.6%). Breadth expansion and new tracks should stay deferred."
+        "summary": "North-star focus is stage 2b while AI-judgment excess after costs is still negative (-31.5%). Breadth expansion and new tracks should stay deferred."
       },
       {
         "id": "library_ahead_of_live",
@@ -6116,19 +6223,19 @@
         "severity": "info",
         "category": "join_up",
         "title": "Post-run plan items without matching open engineering task",
-        "summary": "1 prioritised plan line(s) from the latest post-run review have no fuzzy match among open engineering tasks (Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade when three-way FCF bases diverge >15% plus profit-to-cash YoY drop >15pp). They may have been filtered at compile, truncated by max_tasks (8), or not yet compiled. All match merged/parked tasks — schedule email_only for a fresh post-run; idle compile backstop will not reopen them."
+        "summary": "5 prioritised plan line(s) from the latest post-run review have no fuzzy match among open engineering tasks (Implement Investegate/LSE direct HTML/PDF fetch for indexed RNS (replace Google News redirect URLs) and persist to `filings/bodies/` with index `with_body` parity checks; Companies House document-api PDF pipeline with OCR quality gates and CH-ID ↔ `filings_index` mapping; reject or quarantine truncated extracts (flag when line count/hash indicates truncation); Parse allowlisted IR results PDFs into structured FCF bridges and populate `ir_presentation_metrics.json` (segment revenue, dividend policy, management FCF definitions)). They may have been filtered at compile, truncated by max_tasks (8), or not yet compiled. All match merged/parked tasks — schedule email_only for a fresh post-run; idle compile backstop will not reopen them."
       },
       {
         "id": "compile_cap_truncated_candidates",
         "severity": "info",
         "category": "join_up",
         "title": "Compile cap dropped lower-priority candidates",
-        "summary": "213 compiled candidate(s) omitted by max_tasks=8 (post-run plan items kept first). research_model_suggestions: Auto-flag conviction downgrade when filing-aligned FCF, comp; research_model_suggestions: Do not pass the dividend family on company-adjusted FCF when; research_model_suggestions: Do not pass dividend or FCF Yield on company-adjusted FCF (£ When the priority engineering queue is idle, `ftse-engineering try-compile-cap-drain --apply` queues one backlog item at a time (above parked hunter)."
+        "summary": "233 compiled candidate(s) omitted by max_tasks=8 (post-run plan items kept first). research_model_suggestions: Flag when [2/2]; research_model_suggestions: Keep the dividend-yield overlay result (FCF Yield / earnings; research_model_suggestions: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when s When the priority engineering queue is idle, `ftse-engineering try-compile-cap-drain --apply` queues one backlog item at a time (above parked hunter)."
       }
     ]
   },
   "so_what": {
-    "generated_at": "2026-09-15T12:38:22Z",
+    "generated_at": "2026-09-16T16:53:21Z",
     "counts": {
       "findings": 0,
       "auto_queue": 0,
