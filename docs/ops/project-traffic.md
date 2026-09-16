@@ -120,8 +120,11 @@ independent gate for #651/#653-class engineering PRs:
 1. Task area is `ingest` or `scoring` (and not a parked hunter)
 2. Actual changed files ≤ 8, all under CI-fix safe prefixes, within the task
    allowlist, and include at least one `tests/` path
-3. CI green, including the `eng-narrow-gate` job
-4. When policy is `merge`, `engineering-auto-merge` may squash-merge and stamp
+3. CI green. The `eng-narrow-gate` job **reports** approve / observe / reject
+   but does **not** fail CI on reject — wide ingest/scoring PRs stay
+   human-mergeable. Reject only blocks scoped auto-merge.
+4. When policy is `merge` **and** the gate verdict is `approve`,
+   `engineering-auto-merge` may squash-merge and stamp
    `merge_class=ingest_narrow` or `scoring_narrow` on the task for EOD monitoring
 
 ### Upstream drafting (first-principle builds)

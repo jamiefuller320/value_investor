@@ -1,27 +1,173 @@
 {
-  "run_at": "2026-09-15T17:47:08.824014+00:00",
+  "run_at": "2026-09-16T10:50:16.179435+00:00",
   "market_id": "sp500",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "AMGN",
+    "EFX"
+  ],
+  "target_details": [
+    {
+      "ticker": "AMGN",
+      "priority_score": 12.2752,
+      "filings_total": 0,
+      "filings_with_body": 0,
+      "indexed_without_body": 0,
+      "reason": "unmeasured"
+    },
+    {
+      "ticker": "EFX",
+      "priority_score": 17.441799999999997,
+      "filings_total": 19,
+      "filings_with_body": 10,
+      "indexed_without_body": 9,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "AMGN",
+      "reason": "unmeasured",
+      "before": {
+        "filings_total": 0,
+        "filings_with_body": 0,
+        "indexed_without_body": 0
+      },
+      "after": {
+        "filings_total": 19,
+        "filings_with_body": 19,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 19,
+        "annual": 2,
+        "interim": 7,
+        "trading_update": 0,
+        "other": 10,
+        "with_body": 10,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 7,
+            "with_body": 7
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 10,
+            "with_body": 1
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 19,
+        "with_body_after": 19,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "note": "no missing IR allowlist bodies"
+      }
+    },
+    {
+      "ticker": "EFX",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 19,
+        "filings_with_body": 10,
+        "indexed_without_body": 9
+      },
+      "after": {
+        "filings_total": 20,
+        "filings_with_body": 20,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 20,
+        "annual": 2,
+        "interim": 7,
+        "trading_update": 0,
+        "other": 11,
+        "with_body": 20,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 7,
+            "with_body": 7
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 11,
+            "with_body": 11
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 20,
+        "with_body_after": 20,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "AMGN",
+    "EFX"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-15T17:46:44.459711+00:00",
+    "snapshot_at": "2026-09-16T10:48:45.945072+00:00",
     "market_id": "sp500",
-    "buy_tier_count": 141,
-    "unmeasured_buy_tier": 0,
+    "buy_tier_count": 144,
+    "unmeasured_buy_tier": 1,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 14,
-    "bodies_min": 14,
+    "indexed_without_body": 23,
+    "bodies_min": 10,
     "bodies_median": 20,
     "bodies_max": 73,
     "coverage_scope": "canonical",
     "ftse_equivalent": true,
-    "unmeasured_tickers": [],
+    "unmeasured_tickers": [
+      "AMGN"
+    ],
     "zero_body_tickers": [],
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
@@ -31,7 +177,8 @@
       "CRH",
       "TSN",
       "BXP",
-      "FICO"
+      "FICO",
+      "EFX"
     ],
     "indexed_without_body_by_ticker": {
       "LDOS": 1,
@@ -40,7 +187,8 @@
       "CRH": 2,
       "TSN": 1,
       "BXP": 2,
-      "FICO": 5
+      "FICO": 5,
+      "EFX": 9
     },
     "parked_tickers": [
       "APTV",
@@ -54,20 +202,22 @@
     "parked_count": 7,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "effective_indexed_without_body": 9,
+    "effective_indexed_without_body_tickers": [
+      "EFX"
+    ],
+    "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-15T17:47:08.801503+00:00",
+    "snapshot_at": "2026-09-16T10:49:14.373396+00:00",
     "market_id": "sp500",
-    "buy_tier_count": 141,
+    "buy_tier_count": 144,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
     "indexed_without_body": 14,
     "bodies_min": 14,
-    "bodies_median": 20,
+    "bodies_median": 20.0,
     "bodies_max": 73,
     "coverage_scope": "canonical",
     "ftse_equivalent": true,
@@ -114,45 +264,56 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 141,
-    "hits": 0,
-    "new_rows_total": 0,
-    "curiosity_total": 0,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "FICO",
-      "APTV",
-      "BXP",
-      "CRH",
-      "LDOS",
-      "LMT",
-      "TSN"
-    ],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
-  "parity_handoff": null,
-  "parallel_sprint_handoff": {
+  "discovery_scan": null,
+  "maintenance_mode": false,
+  "parity_handoff": {
     "skipped": true,
-    "reason": "not_parallel_sprint_market",
+    "reason": "not_focus_market",
     "market_id": "sp500"
+  },
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 1,
+    "from_market": "sp500",
+    "to_market": "asx200",
+    "stream_markets_after": [
+      "asx200"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "sp500",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "APTV",
+        "BXP",
+        "CRH",
+        "FICO",
+        "LDOS",
+        "LMT",
+        "TSN"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "at": "2026-09-16T10:49:17.038074+00:00",
+    "ingest_parity_recorded": false
   },
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-09-15T17:46:52.693284+00:00",
-    "unmeasured": [],
+    "assessed_at": "2026-09-16T10:48:54.250578+00:00",
+    "unmeasured": [
+      "AMGN"
+    ],
     "zero_body": [],
     "indexed_without_body": [
+      {
+        "ticker": "EFX",
+        "indexed_without_body": 9,
+        "filings_total": 19,
+        "filings_with_body": 10
+      },
       {
         "ticker": "FICO",
         "indexed_without_body": 5,
@@ -198,32 +359,35 @@
     ],
     "thin_need_discovery": [],
     "thin_need_bodies": [],
-    "primary_blocker": "indexed_without_body",
-    "force_discovery_scan": false,
+    "primary_blocker": "unmeasured",
+    "force_discovery_scan": true,
     "auto_pin_tickers": [
+      "AMGN",
+      "EFX",
       "FICO",
       "APTV",
       "BXP",
       "CRH",
       "LDOS",
-      "LMT",
-      "TSN"
+      "LMT"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (7 tickers, top: FICO(5), APTV(2), BXP(2), CRH(2), LDOS(1))"
+      "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+      "Prefer indexed-without-body body refetch (8 tickers, top: EFX(9), FICO(5), APTV(2), BXP(2), CRH(2))",
+      "Run listing-only discovery_scan before deepen"
     ],
     "gap_counts": {
-      "unmeasured": 0,
+      "unmeasured": 1,
       "zero_body": 0,
-      "indexed_without_body_tickers": 7,
-      "indexed_without_body_rows": 14,
+      "indexed_without_body_tickers": 8,
+      "indexed_without_body_rows": 23,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 7.794516934000001,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3592.205483066,
+  "used_seconds": 11.830510288999989,
+  "budget_seconds": 2100.0,
+  "leftover_seconds": 2088.169489711,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -231,9 +395,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sp500",
-    "updated_at": "2026-09-15T17:47:08.810928+00:00",
+    "updated_at": "2026-09-16T10:49:14.387395+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 1,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -327,6 +491,7 @@
     "market_id": "sp500",
     "ingest_exhausted_markets": [
       "euro_depth",
+      "euro_stoxx50",
       "ftse_smallcap",
       "sp500",
       "tsx60"
@@ -336,7 +501,42 @@
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "open parked-source hunter already queued",
-    "task_id": "eng-20260915-11"
+    "reason": "no parked leftover tickers remaining for hunter",
+    "tried_count": 1,
+    "candidate_count": 33,
+    "skipped_resolved_tickers": [
+      "ABI.BR",
+      "APAM.AS",
+      "BAS.DE",
+      "EVN.VI",
+      "MUV2.DE",
+      "SAP.DE",
+      "SGO.PA",
+      "SKA-B.ST",
+      "UCB.BR",
+      "WIE.VI",
+      "APTV",
+      "BXP",
+      "CRH",
+      "FICO",
+      "LDOS",
+      "LMT",
+      "TSN",
+      "ULTP.L",
+      "BOOT.L",
+      "DFS.L",
+      "MER.L",
+      "TPT.L",
+      "APTD.L",
+      "FOXT.L",
+      "GLE.L",
+      "SU.TO",
+      "NTR.TO",
+      "TRI.TO",
+      "BAS.DE",
+      "DTE.DE",
+      "MUV2.DE",
+      "SGO.PA"
+    ]
   }
 }
