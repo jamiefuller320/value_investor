@@ -16,11 +16,32 @@ ftse-ingest-loop run failed
 curl_cffi.requests.exceptions.HTTPError: Failed to perform
 """
 
+TIMEOUT_LOG = """
+##[error]The action 'Run weekday ingest loop' has timed out after 90 minutes.
+"""
+
 
 def test_match_ingest_loop_signature():
     spec = match_workflow_failure_signature("ingest-loop.yml", INGEST_LOG)
     assert spec is not None
     assert spec["area"] == "ingest"
+    assert "HTTP" in spec["title"] or "curl" in spec["title"].lower()
+    assert not spec.get("skip_draft")
+
+
+def test_match_ingest_loop_timeout_skips_draft():
+    spec = match_workflow_failure_signature("ingest-loop.yml", TIMEOUT_LOG)
+    assert spec is not None
+    assert spec.get("skip_draft") is True
+    assert (
+        draft_workflow_failure_task(
+            workflow_file="ingest-loop.yml",
+            log_text=TIMEOUT_LOG,
+            run_id=1,
+            tasks_path=Path("/tmp/should_not_write_workflow_failure.json"),
+        )
+        == []
+    )
 
 
 def test_match_library_grow_json_error():

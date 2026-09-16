@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-16T12:00:10+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-16T19:03:52+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -180,6 +180,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N130 | **Raise AUTO_MERGE_MAX_PATHS above 8 for narrow/ci-fix** | Raising the shared cap widens both scoring_narrow/ingest_narrow and ci_fix auto-merge blast radius. Prefer upstream first-principle drafting + cohesion bypass instead. | After ≥3 weeks of clean ingest_narrow and scoring_narrow auto-merges with stable EOD verified-merge monitoring and no path-guard incidents |
 | N131 | **Do not auto-retarget open paper stops/targets from weekly screen refreshes** | Charts recompute current trade_plan each week but chart outcome scoring freezes initial levels. Paper holdings keep entry-attached stop/target except momentum-grace trailing. Do not silently rewrite open-book targets from every screen pass until post-exit and chart-outcome evidence say that helps after costs. | exit_shadow early_exit vs good_exit balance is stable and chart giveback/well_timed cohorts show whether sticky vs refreshed targets would have mattered |
 | N132 | **Do not widen FTSE news/filing ingest to full hold/avoid universe yet** | Full-universe continuous news+filing deepen for observational pre-signal analysis would starve buy-tier scan-then-target and P1 live-path work. Keep retrospective backfill on entry plus buy∪boundary observe panels until those prove useful. | buy∪boundary news_event_journal and phrase-trajectory panels show stable out-of-sample usefulness and GHA/ingest capacity has clear spare after buy-tier body drain |
+| N133 | **PM auto-authors workflow_failure code patches** | Do not let project-traffic invent/merge code fixes for failing workflows. Keep supervised engineering-agent for CurlError/timeout root causes; PM only cancels recovered workflow_failure rows and remediates queue bookkeeping. | After cancel_recovered_workflow_failure has proven stable in production and L393 EOD PM scope is revisited |
 
 ---
 
@@ -472,6 +473,11 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L398 | **Expand narrow verify to ops/prompt/coverage eng classes** | ingest_narrow and scoring_narrow now have deterministic independent verify + scoped auto-merge. Broader eng areas (ops, prompt, coverage, ci) still human-merge; expand only after those two classes show clean merge quality. | ingest_narrow and scoring_narrow auto-merges run cleanly for ≥3 weeks with no path-guard incidents and EOD merge monitor shows stable verified counts |
 | L399 | **Expand narrow topic maps as new scoring overlays appear** | Upstream narrow-scope drafting uses keyword→concrete path maps. When new overlays ship, extend the topic tables so compound suggestions keep splitting into ≤8-path first-principle builds instead of cohesion_bypass. | A scoring eng task hits cohesion_bypass solely because its topic is missing from engineering_narrow_scope topic maps |
 | L406 | **Dashboard surface for PR fix common issues** | Expose docs/data/pr_fix_occasions.json common_issues on the Automation / ops dashboard so monthly review does not require CLI-only inspection. | pr_fix_occasions has ≥20 occasions or monthly checklist review feels CLI-heavy |
+| L409 | **PM auto-rerun ingest-loop once on persistent red without success** | When cancel-on-heal finds no later success, optionally dispatch one force=true ingest-loop rerun (capped) before leaving a workflow_failure eng task open. Do not invent code patches. | After budget-includes-discovery + timeout skip-draft have a green week of ingest-loop |
+| L410 | **SIGTERM flush ingest_loop.json on outer wall-clock kill** | Outer timeout 75m only helps commit/chain if JSON already exists. Add signal handler or finally-block checkpoint so mid-ticker kills still emit partial JSON. | If ingest-loop still fails with exit 124 and empty /tmp/ingest_loop.json after discovery budget lands |
+| L411 | **Scoped auto-merge for compile_cap_drain when path/CI gates pass** | Drain tasks currently ship auto_merge=false and often wait on human merge, so throughput is one agent cycle plus human latency despite auto-merge already chaining the next drain after merge. Add an independent-verify class (like ingest_narrow) for compile_cap_drain with ≤8 paths and green CI. | After compile-cap backlog is still >100 with idle priority queue for a full week |
+| L412 | **Allow up to 2 concurrent compile_cap_drain opens when queue idle** | Drain is hard-capped at one open task even though max_parallel_engineering_agents is 2. When priority queue is empty, queue a second drain candidate to use the spare agent slot. | After scoped auto-merge for compile_cap_drain lands or human merge lag stays the bottleneck |
+| L413 | **Coalesce near-duplicate research_model_suggestions before drain** | About 27 of ~228 pending drain candidates share near-dup title prefixes (mostly FCF/dividend). Fuzzy-coalesce at drain/compile time to cut serial agent cycles without raising Sunday max_tasks. | When implementing drain throughput changes; measure dup rate on next progress-report truncated_count |
 
 ---
 

@@ -190,6 +190,44 @@ def test_scan_detects_new_rows_and_writes_curiosity(tmp_path: Path):
     assert curiosity["entries"]
 
 
+def test_discovery_scan_respects_max_runtime_seconds(tmp_path: Path, monkeypatch):
+    output_dir = tmp_path / "data"
+    clock = {"t": 1000.0}
+
+    def _advance_and_scan(*args, **kwargs):
+        clock["t"] += 10.0
+        return type(
+            "Hit",
+            (),
+            {
+                "ticker": "T.L",
+                "error": None,
+                "has_work": False,
+                "new_row_count": 0,
+                "curiosity": [],
+            },
+        )()
+
+    monkeypatch.setattr(
+        "value_investor.ingest_discovery_scan.scan_ticker_for_new_filings",
+        _advance_and_scan,
+    )
+    monkeypatch.setattr(
+        "value_investor.ingest_discovery_scan.time.monotonic",
+        lambda: clock["t"],
+    )
+
+    summary = run_buy_tier_discovery_scan(
+        [_report(f"T{i}.L", f"T{i}") for i in range(5)],
+        output_dir=output_dir,
+        persist_index=False,
+        persist_summary=False,
+        max_runtime_seconds=25.0,
+    )
+    assert summary.runtime_cutoff is True
+    assert summary.scanned < 5
+
+
 def test_discovery_bonus_raises_priority_and_selects_hit(tmp_path: Path):
     output_dir = tmp_path / "data"
     for ticker, total, with_body in (("HIT.L", 5, 5), ("OTH.L", 5, 5)):

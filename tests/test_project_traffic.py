@@ -9,6 +9,7 @@ from value_investor.engineering_queue import evaluate_engineering_dispatch
 from value_investor.engineering_tasks import EngineeringTask
 from value_investor.project_traffic import (
     QUEUE_MERGE_SYNC_FINDING_TITLE,
+    RECTIFICATION_CANCEL_RECOVERED_WORKFLOW,
     RECTIFICATION_HUMAN_TRIAGE,
     RECTIFICATION_QUEUE_SYNC,
     build_daily_digest,
@@ -20,6 +21,7 @@ from value_investor.project_traffic import (
     planned_rectification_for_ops_finding,
     preserve_queue_meta,
     remediate_queue_merge_sync,
+    remediate_recovered_workflow_failures,
     run_project_traffic,
 )
 from value_investor.storage import write_json
@@ -453,8 +455,104 @@ def test_planned_rectification_mapping():
                 "summary": "stale",
             }
         )[0]
-        == "rerun_or_dispatch_workflow"
+        == RECTIFICATION_CANCEL_RECOVERED_WORKFLOW
     )
+
+
+def test_remediate_recovered_workflow_failures_cancels_healed_task(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    _write_tasks(
+        tasks_path,
+        {
+            "tasks": [
+                {
+                    "id": "eng-20260916-03",
+                    "status": "open",
+                    "source": "workflow_failure",
+                    "title": "Workflow fix: ingest-loop failure on main",
+                    "evidence": {
+                        "workflow": "ingest-loop.yml",
+                        "run_id": "35066797050",
+                    },
+                }
+            ]
+        },
+    )
+    cancelled_ids, actions = remediate_recovered_workflow_failures(
+        tasks_path=tasks_path,
+        apply=True,
+        latest_success_by_workflow={
+            "ingest-loop.yml": {"id": 35111147017, "created_at": "2026-09-16T14:49:20Z"}
+        },
+    )
+    assert cancelled_ids == ["eng-20260916-03"]
+    assert any(a.kind == "cancel_recovered_workflow_failure" for a in actions)
+    from value_investor.engineering_tasks import load_engineering_tasks
+
+    updated = load_engineering_tasks(tasks_path)
+    assert updated["tasks"][0]["status"] == "cancelled"
+    assert updated["tasks"][0].get("cancelled_policy") == "workflow_recovered"
+
+
+def test_handoff_auto_cancels_recovered_workflow_failure(tmp_path: Path, monkeypatch):
+    handoff_path = tmp_path / "handoff.json"
+    digest_json = tmp_path / "digest.json"
+    digest_md = tmp_path / "digest.md"
+    tasks_path = tmp_path / "engineering_tasks.json"
+    _write_tasks(
+        tasks_path,
+        {
+            "tasks": [
+                {
+                    "id": "eng-20260916-03",
+                    "status": "open",
+                    "source": "workflow_failure",
+                    "evidence": {
+                        "workflow": "ingest-loop.yml",
+                        "run_id": "1",
+                    },
+                }
+            ]
+        },
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic.DEFAULT_DIGEST_PATH",
+        digest_json,
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic.DEFAULT_DIGEST_MARKDOWN_PATH",
+        digest_md,
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic.remediate_recovered_workflow_failures",
+        lambda **kwargs: (
+            ["eng-20260916-03"],
+            [],
+        ),
+    )
+
+    payload = handoff_ops_monitor_email_to_pm(
+        findings=[
+            {
+                "severity": "fail",
+                "category": "workflows",
+                "title": "Recent workflow failure: FTSE Ingest Loop",
+                "summary": "timed out",
+                "fixed": False,
+            }
+        ],
+        email_subject="FTSE Ops Monitor — FAIL",
+        email_text="body",
+        drafted_task_ids=[],
+        tasks_path=tasks_path,
+        apply=True,
+        handoff_path=handoff_path,
+        update_digest=False,
+    )
+    assert payload["resolved_count"] == 1
+    assert payload["items"][0]["planned_rectification"] == RECTIFICATION_CANCEL_RECOVERED_WORKFLOW
+    assert payload["items"][0]["status"] == "resolved"
+    assert payload["items"][0]["auto_attempted"] is True
 
 
 def test_handoff_ops_monitor_email_to_pm_writes_artifact(tmp_path: Path, monkeypatch):

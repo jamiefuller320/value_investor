@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-16T12:00:10+00:00",
+  "updated_at": "2026-09-16T19:03:52+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9116,6 +9116,136 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0aa0d-b305-7ee5-83da-909f89125bee",
       "added_at": "2026-09-16T12:00:10+00:00"
+    },
+    {
+      "id": "N133",
+      "category": "not_now",
+      "section": "ops",
+      "title": "PM auto-authors workflow_failure code patches",
+      "summary": "Do not let project-traffic invent/merge code fixes for failing workflows. Keep supervised engineering-agent for CurlError/timeout root causes; PM only cancels recovered workflow_failure rows and remediates queue bookkeeping.",
+      "revisit_when": "After cancel_recovered_workflow_failure has proven stable in production and L393 EOD PM scope is revisited",
+      "tags": [
+        "pm",
+        "project-traffic",
+        "workflow_failure"
+      ],
+      "status": "open",
+      "source": "conversation: compile-cap drain blocked by eng-20260916-03",
+      "added_at": "2026-09-16T17:15:36+00:00"
+    },
+    {
+      "id": "L407",
+      "category": "later",
+      "section": "ops",
+      "title": "Treat ingest-loop GHA step timeout on partial runs as non-failure",
+      "summary": "Recent ingest-loop reds are mostly step timeouts (65/90m) after soft runtime_cutoff, not CurlError. Soft budget + overhead still races the hard timeout; job fails red, mints workflow_failure, blocks compile-cap drain. Need earlier soft exit headroom and/or succeed-on-partial-commit so timeout is not a false eng task.",
+      "revisit_when": "Next cluster of ingest-loop timeout failures after #674 retries and PM cancel-on-heal land",
+      "tags": [
+        "ingest-loop",
+        "timeout",
+        "workflow_failure",
+        "compile-cap"
+      ],
+      "status": "done",
+      "source": "conversation: does PM cancel cover all failure cases",
+      "added_at": "2026-09-16T17:30:10+00:00",
+      "updated_at": "2026-09-16T17:46:04+00:00"
+    },
+    {
+      "id": "L408",
+      "category": "later",
+      "section": "ops",
+      "title": "Separate timeout vs HTTP signatures for ingest-loop workflow_failure",
+      "summary": "ingest-loop.yml signature matches ftse-ingest-loop/ingest.improvement/CurlError/HTTPError, so timeout-only logs draft the CurlError-titled eng task with fetch-retry acceptance criteria. Split timeout-headroom vs transient-HTTP signatures so responders and allowed_paths match the real failure class.",
+      "revisit_when": "When implementing succeed-on-partial or timeout headroom for ingest-loop",
+      "tags": [
+        "ingest-loop",
+        "workflow_failure",
+        "signature"
+      ],
+      "status": "done",
+      "source": "conversation: does PM cancel cover all failure cases",
+      "added_at": "2026-09-16T17:30:10+00:00",
+      "updated_at": "2026-09-16T17:46:04+00:00"
+    },
+    {
+      "id": "L409",
+      "category": "later",
+      "section": "ops",
+      "title": "PM auto-rerun ingest-loop once on persistent red without success",
+      "summary": "When cancel-on-heal finds no later success, optionally dispatch one force=true ingest-loop rerun (capped) before leaving a workflow_failure eng task open. Do not invent code patches.",
+      "revisit_when": "After budget-includes-discovery + timeout skip-draft have a green week of ingest-loop",
+      "tags": [
+        "pm",
+        "ingest-loop",
+        "workflow_failure"
+      ],
+      "status": "open",
+      "source": "conversation: explore auto resolution other failure modes",
+      "added_at": "2026-09-16T17:45:53+00:00"
+    },
+    {
+      "id": "L410",
+      "category": "later",
+      "section": "ops",
+      "title": "SIGTERM flush ingest_loop.json on outer wall-clock kill",
+      "summary": "Outer timeout 75m only helps commit/chain if JSON already exists. Add signal handler or finally-block checkpoint so mid-ticker kills still emit partial JSON.",
+      "revisit_when": "If ingest-loop still fails with exit 124 and empty /tmp/ingest_loop.json after discovery budget lands",
+      "tags": [
+        "ingest-loop",
+        "timeout"
+      ],
+      "status": "open",
+      "source": "conversation: explore auto resolution other failure modes",
+      "added_at": "2026-09-16T17:45:53+00:00"
+    },
+    {
+      "id": "L411",
+      "category": "later",
+      "section": "ops",
+      "title": "Scoped auto-merge for compile_cap_drain when path/CI gates pass",
+      "summary": "Drain tasks currently ship auto_merge=false and often wait on human merge, so throughput is one agent cycle plus human latency despite auto-merge already chaining the next drain after merge. Add an independent-verify class (like ingest_narrow) for compile_cap_drain with \u22648 paths and green CI.",
+      "revisit_when": "After compile-cap backlog is still >100 with idle priority queue for a full week",
+      "tags": [
+        "compile-cap",
+        "auto-merge",
+        "throughput"
+      ],
+      "status": "open",
+      "source": "conversation: speed up idle drain throughput",
+      "added_at": "2026-09-16T19:03:52+00:00"
+    },
+    {
+      "id": "L412",
+      "category": "later",
+      "section": "ops",
+      "title": "Allow up to 2 concurrent compile_cap_drain opens when queue idle",
+      "summary": "Drain is hard-capped at one open task even though max_parallel_engineering_agents is 2. When priority queue is empty, queue a second drain candidate to use the spare agent slot.",
+      "revisit_when": "After scoped auto-merge for compile_cap_drain lands or human merge lag stays the bottleneck",
+      "tags": [
+        "compile-cap",
+        "parallel",
+        "throughput"
+      ],
+      "status": "open",
+      "source": "conversation: speed up idle drain throughput",
+      "added_at": "2026-09-16T19:03:52+00:00"
+    },
+    {
+      "id": "L413",
+      "category": "later",
+      "section": "ops",
+      "title": "Coalesce near-duplicate research_model_suggestions before drain",
+      "summary": "About 27 of ~228 pending drain candidates share near-dup title prefixes (mostly FCF/dividend). Fuzzy-coalesce at drain/compile time to cut serial agent cycles without raising Sunday max_tasks.",
+      "revisit_when": "When implementing drain throughput changes; measure dup rate on next progress-report truncated_count",
+      "tags": [
+        "compile-cap",
+        "dedupe",
+        "suggestions"
+      ],
+      "status": "open",
+      "source": "conversation: speed up idle drain throughput",
+      "added_at": "2026-09-16T19:03:52+00:00"
     }
   ],
   "fragments": [
