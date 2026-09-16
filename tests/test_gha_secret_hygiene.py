@@ -45,6 +45,55 @@ def test_auto_merge_requires_same_repo_and_env_branch() -> None:
     assert "BRANCH: ${{ github.event.workflow_run.head_branch }}" in text
     assert '--branch "${{ github.event.workflow_run.head_branch }}"' not in text
     assert r"^cursor/eng-[0-9]{8}-[0-9]{2}-1de3$" in text
+    # Job if must skip meta eng branches (eng-narrow-gate-*) before the step runs.
+    assert "endsWith(github.event.workflow_run.head_branch, '-1de3')" in text
+    # Regex miss must skip (exit 0), not fail the workflow (2026-09-16 #35069856035).
+    assert "Skipping non-queue engineering branch" in text
+    assert "Rejecting non-engineering or unsafe branch name" not in text
+    assert 'echo "merged=false" >> "$GITHUB_OUTPUT"' in text
+
+
+def test_ingest_loop_step_timeout_has_headroom_above_soft_budget() -> None:
+    """Soft 3600s cutoff must not race the GHA step hard timeout.
+
+    Regression for 2026-09-16 runs #35066797050 / #35018323617: partial JSON
+    was written then the 65m step timed out before commit/chain.
+    """
+    import re
+
+    text = (WORKFLOWS / "ingest-loop.yml").read_text(encoding="utf-8")
+    # Dispatch default soft budget.
+    default_m = re.search(
+        r"max_runtime_seconds:.*?default:\s*\"(\d+)\"",
+        text,
+        flags=re.DOTALL,
+    )
+    assert default_m is not None
+    soft_budget_s = int(default_m.group(1))
+    assert soft_budget_s == 3600
+
+    job_m = re.search(
+        r"ingest-loop:\s*\n(?:.*\n)*?\s+timeout-minutes:\s*(\d+)",
+        text,
+    )
+    assert job_m is not None
+    job_timeout_m = int(job_m.group(1))
+
+    step_m = re.search(
+        r"name: Run weekday ingest loop\n(?:.*\n)*?\s+timeout-minutes:\s*(\d+)",
+        text,
+    )
+    assert step_m is not None
+    step_timeout_m = int(step_m.group(1))
+
+    # At least 15 minutes of wall headroom after soft budget for JSON/outputs.
+    min_step_m = (soft_budget_s // 60) + 15
+    assert step_timeout_m >= min_step_m, (
+        f"step timeout {step_timeout_m}m < soft budget headroom {min_step_m}m"
+    )
+    assert job_timeout_m > step_timeout_m
+    # Leave room for commit + chain dispatch after the loop step.
+    assert job_timeout_m >= step_timeout_m + 15
 
 
 def test_detects_untrusted_expr_in_run_block() -> None:
