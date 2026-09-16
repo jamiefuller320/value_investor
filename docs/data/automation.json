@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-16T19:16:25.656291+00:00",
+  "generated_at": "2026-09-16T20:02:43.183228+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1175,7 +1175,7 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-16T17:48:45.711973+00:00",
-    "queue_ui_updated_at": "2026-09-16T19:16:25.588356+00:00",
+    "queue_ui_updated_at": "2026-09-16T20:02:43.128767+00:00",
     "task_count": 23,
     "status": {
       "open_count": 2,
@@ -1184,8 +1184,8 @@
       "merged_count": 15,
       "failed_count": 0,
       "next_task_id": "eng-20260916-05",
-      "in_flight_branch": null,
-      "in_flight_pr": null,
+      "in_flight_branch": "cursor/compile-cap-drain-throughput-f964",
+      "in_flight_pr": 678,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
@@ -1567,18 +1567,18 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-16T19:16:25.656291+00:00",
+    "generated_at": "2026-09-16T20:02:43.183228+00:00",
     "overall": "active",
-    "headline": "Agent lane active.",
+    "headline": "Merge lane active; agent lane active.",
     "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
+      "state": "running",
+      "idle": false,
+      "running": true,
       "blocked": false,
       "pr_open_count": 0,
       "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+      "in_flight_pr": 678,
+      "detail": "In-flight PR #678 — auto-merge is event-driven (not a background merger)."
     },
     "agent_lane": {
       "state": "running",
@@ -1600,7 +1600,7 @@
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-16T19:16:20.768658+00:00"
+      "evaluated_at": "2026-09-16T20:02:38.123419+00:00"
     },
     "traffic_control": {
       "pause_active": false,
