@@ -231,10 +231,7 @@ def evaluate_compile_cap_drain(
     if slots <= 0:
         return CompileCapDrainDecision(
             should_compile=False,
-            reason=(
-                f"compile-cap drain already at max open "
-                f"({len(open_drain)}/{max_open})"
-            ),
+            reason=(f"compile-cap drain already at max open ({len(open_drain)}/{max_open})"),
             checks=checks,
         )
 
