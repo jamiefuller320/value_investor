@@ -1315,6 +1315,7 @@ def test_build_company_reports_exports_filing_year_company_adjusted_stale_flag(t
 def _bree_financials() -> dict:
     return {
         "ticker": "BREE.L",
+        "quarterly_cashflow": {},
         "cash_flow": {
             "2025": {
                 "Operating Cash Flow": 150_000_000.0,
@@ -1390,8 +1391,13 @@ def test_build_company_reports_fcf_basis_overlay_when_company_adj_diverges_bree_
     assert snapshot["adjusted_signal"] == "buy"
     assert "FCF basis mismatch" in snapshot["action_note"]
     assert "filing £105.8M" in snapshot["action_note"]
-    assert "screen TTM £107.8M" in snapshot["action_note"]
+    assert "screen TTM (unverified) £107.8M" in snapshot["action_note"]
     assert "company-adj £133.2M" in snapshot["action_note"]
+    fcf = snapshot["fcf"]
+    assert fcf["screen_ttm_unverified"] is True
+    assert fcf["ttm_suppressed_screen_filing_mismatch"] is True
+    assert fcf["filing_screen_mismatch"] is True
+    assert fcf["fcf_divergence_flagged"] is True
 
 
 def _bowl_financials() -> dict:

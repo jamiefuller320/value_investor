@@ -1756,10 +1756,23 @@ def reconcile_fcf(
         filing_currency=currency,
         company_adjusted_currency=company_adjusted_currency,
     )
-    filing_screen_mismatch = fcf_filing_screen_mismatch(
-        filing_aligned=filing_aligned if filing_aligned is not None else canonical,
+    ttm_suppressed_mismatch = fcf_ttm_suppressed_screen_filing_mismatch_flagged(
+        screen_ttm_unverified=screen_ttm_unverified,
+        filing_aligned=filing_aligned,
         screen_ttm=screen_ttm,
-        divergence_flagged=divergence_flagged,
+        company_adjusted=company_adjusted,
+        filing_currency=currency,
+        company_adjusted_currency=company_adjusted_currency,
+    )
+    if ttm_suppressed_mismatch:
+        fcf_divergence_flagged = True
+    filing_screen_mismatch = (
+        fcf_filing_screen_mismatch(
+            filing_aligned=filing_aligned if filing_aligned is not None else canonical,
+            screen_ttm=screen_ttm,
+            divergence_flagged=divergence_flagged,
+        )
+        or ttm_suppressed_mismatch
     )
 
     snapshot_metrics = (
@@ -1780,6 +1793,7 @@ def reconcile_fcf(
         "divergence_flagged": divergence_flagged,
         "fcf_divergence_flagged": fcf_divergence_flagged,
         "filing_screen_mismatch": filing_screen_mismatch,
+        "ttm_suppressed_screen_filing_mismatch": ttm_suppressed_mismatch,
         "bridge_resolved": bool(bridge_resolved) or auto_policy_resolved,
         "auto_policy_resolved": auto_policy_resolved and not bridge_resolved,
         "auto_policy_method": auto_policy.get("method") if auto_policy_resolved else None,
@@ -2021,6 +2035,39 @@ def fcf_filing_screen_mismatch(
     if filing_abs == 0:
         return False
     return abs_gap / filing_abs > threshold
+
+
+def fcf_ttm_suppressed_screen_filing_mismatch_flagged(
+    *,
+    screen_ttm_unverified: bool,
+    filing_aligned: float | None,
+    screen_ttm: float | None,
+    company_adjusted: float | None = None,
+    filing_currency: str = "GBP",
+    company_adjusted_currency: str | None = None,
+) -> bool:
+    """Flag when IR/management FCF on screen disagrees with filing/Yahoo while TTM is suppressed.
+
+    UK half-year reporters often keep a Yahoo TTM close to filing-aligned FCF even when
+    results prose cites a higher management FCF (e.g. BREE.L £133.2m vs £105.8m).
+    """
+    if not screen_ttm_unverified or filing_aligned is None:
+        return False
+    display_fcf = company_adjusted if company_adjusted is not None else screen_ttm
+    if display_fcf is None:
+        return False
+    if fcf_filing_screen_mismatch(
+        filing_aligned=filing_aligned,
+        screen_ttm=display_fcf,
+    ):
+        return True
+    return fcf_basis_values_diverge(
+        filing_aligned,
+        display_fcf,
+        left_currency=filing_currency,
+        right_currency=company_adjusted_currency or filing_currency,
+        threshold=FCF_UNIVERSE_DIVERGENCE_THRESHOLD,
+    )
 
 
 def overlay_free_cashflow_from_bundle(
