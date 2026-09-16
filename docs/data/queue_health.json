@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-15T17:13:20.861477+00:00",
+  "generated_at": "2026-09-16T07:47:20.811604+00:00",
   "overall": "active",
-  "headline": "Agent lane active.",
+  "headline": "Merge lane active; agent lane active.",
   "merge_lane": {
-    "state": "idle",
-    "idle": true,
-    "running": false,
+    "state": "running",
+    "idle": false,
+    "running": true,
     "blocked": false,
     "pr_open_count": 0,
     "open_engineering_prs": [],
-    "in_flight_pr": null,
-    "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+    "in_flight_pr": 666,
+    "detail": "In-flight PR #666 — auto-merge is event-driven (not a background merger)."
   },
   "agent_lane": {
     "state": "running",
@@ -26,24 +26,26 @@
     "pr_open_count": 0,
     "dispatch_eligible_count": 1,
     "blocked_task_count": 0,
-    "next_task_id": "eng-20260915-11",
+    "next_task_id": "eng-20260916-01",
     "reason": "queue ready — dispatch next open task",
     "detail": "queue ready — dispatch next open task"
   },
   "queue_clearing": {
     "pause_active": false,
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-15T16:16:35.740132+00:00"
+    "evaluated_at": "2026-09-16T07:46:59.111809+00:00"
   },
   "traffic_control": {
     "pause_active": false,
     "stuck_pr_count": 0,
     "pause_reasons": [],
-    "evaluated_at": "2026-09-15T17:13:18.483256+00:00"
+    "evaluated_at": "2026-09-16T07:47:17.731776+00:00"
   },
   "ops_monitor": {
-    "run_at": "2026-09-15T13:16:17.148729+00:00",
-    "overall": "ok",
+    "run_at": "2026-09-16T07:46:38.598120+00:00",
+    "overall": "warn",
     "should_dispatch_engineering": true
-  }
+  },
+  "merges_today": [],
+  "verified_merges_today_count": 0
 }

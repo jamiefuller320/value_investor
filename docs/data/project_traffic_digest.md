@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-15T20:21:43.825438+00:00`
+Generated: `2026-09-16T07:47:20.901017+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -31,8 +31,16 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 ## Traffic actions
 - _(none)_
 
+## Merges today (monitor independent verify)
+- _(none merged today)_
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 1 (open=1, resolved=0)
+- [open] WARN Ingest loop hit runtime cutoff — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+
 ## Merge authority
-- Status: **restricted**
-- Traffic controller may pause dispatch and request fixes; it does not merge. Loosen only with independent verification (path guard + green CI + allowlist), same as scoped auto-merge.
+- Status: **scoped_auto_merge**
+- Traffic controller does not merge. Scoped auto-merge may merge ci_fix, ingest_narrow / scoring_narrow (independent deterministic verify), and parked_hunter PRs. EOD lists today's merges for monitoring.
 
 Regenerate: `ftse-project-traffic run --write-digest`
