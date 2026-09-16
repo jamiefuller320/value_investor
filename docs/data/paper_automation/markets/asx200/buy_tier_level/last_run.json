@@ -1,15 +1,33 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-15T17:34:15.787058+10:00",
+    "local_time": "2026-09-16T10:46:22.824764+10:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-09-15T10:00:00+10:00",
-    "settle_at": "2026-09-15T10:30:00+10:00",
+    "market_open_at": "2026-09-16T10:00:00+10:00",
+    "settle_at": "2026-09-16T10:30:00+10:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "7aa85c93-3c4b-4f5b-baa6-315ca1a265e8",
+      "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+      "acted_at": "2026-09-16T10:46:22.824764+10:00",
+      "ticker": "YAL.AX",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 5.403849,
+      "price": 6.16,
+      "gross": 33.29,
+      "cost": 0.06,
+      "net_cash": 33.23,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Yancoal Australia Ltd",
+      "avg_cost_at_exit": 6.37,
+      "position_closed": true
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +41,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 952.47,
-    "cash": 70.28,
+    "nav": 952.41,
+    "cash": 103.51,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -218,17 +236,7 @@
         "price": 6.94
       }
     ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "YAL.AX",
-        "name": "Yancoal Australia Ltd",
-        "reason": "No longer in the top conviction target set",
-        "shares": 5.403849,
-        "price": 6.16,
-        "value": 33.29
-      }
-    ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [],
@@ -511,7 +519,7 @@
         "reason": "timing_signal=wait \u2014 skipped until timing improves"
       }
     ],
-    "summary": "Next rebalance would target 26 equal-weight sleeve(s); sell 1 name(s) that left the set; leave 26 near-target holding(s)."
+    "summary": "Next rebalance would target 26 equal-weight sleeve(s); leave 26 near-target holding(s)."
   },
   "alerts": [
     {
@@ -691,17 +699,6 @@
       "timing_signal": "neutral"
     },
     {
-      "ticker": "YAL.AX",
-      "name": "Yancoal Australia Ltd",
-      "source": "paper",
-      "severity": "watch",
-      "message": "Technical timing is wait \u2014 avoid adding size",
-      "mark": 6.16,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "wait"
-    },
-    {
       "ticker": "WGX.AX",
       "name": "Westgold Resources Limited",
       "source": "paper",
@@ -827,7 +824,7 @@
       "id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
       "created_at": "2026-09-07T10:31:58.323814+00:00"
     },
-    "cash": 70.28,
+    "cash": 103.51,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -1002,17 +999,6 @@
         "avg_cost": 3.93,
         "name": "Dyno Nobel Limited",
         "sector": "Basic Materials",
-        "currency": "AUD",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-09-07T20:31:58.323684+10:00"
-      },
-      "YAL.AX": {
-        "ticker": "YAL.AX",
-        "shares": 5.403849,
-        "avg_cost": 6.37,
-        "name": "Yancoal Australia Ltd",
-        "sector": "Energy",
         "currency": "AUD",
         "stop_loss": null,
         "take_profit": null,
@@ -1758,6 +1744,23 @@
         "name": "Perenti Limited",
         "avg_cost_at_exit": 2.26,
         "position_closed": true
+      },
+      {
+        "id": "7aa85c93-3c4b-4f5b-baa6-315ca1a265e8",
+        "fund_id": "996f4767-f6a7-479b-b4ea-3f2c56cc7d5a",
+        "acted_at": "2026-09-16T10:46:22.824764+10:00",
+        "ticker": "YAL.AX",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 5.403849,
+        "price": 6.16,
+        "gross": 33.29,
+        "cost": 0.06,
+        "net_cash": 33.23,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Yancoal Australia Ltd",
+        "avg_cost_at_exit": 6.37,
+        "position_closed": true
       }
     ],
     "equity_curve": [
@@ -1971,22 +1974,39 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-16T10:46:22.824764+10:00",
+        "portfolio_value": 552.24,
+        "cash": 103.51,
+        "contributed_capital": 1000.0,
+        "positions": 26,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "AUD": 0.5286
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-15T17:34:15.787058+10:00",
+    "last_mark_at": "2026-09-16T10:46:22.824764+10:00",
     "rebalance_state": {
-      "exit_streak": {
+      "exit_streak": {},
+      "reentry_cooldown": {
         "YAL.AX": 1
-      },
-      "reentry_cooldown": {}
+      }
     }
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (1 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-15T07:34:15.880339+00:00",
-    "open_count": 7,
+    "generated_at": "2026-09-16T00:46:23.169685+00:00",
+    "open_count": 8,
     "closed_count": 0,
     "by_exit_kind": {},
     "grace_vs_rotation": {
@@ -1998,13 +2018,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-15T07:34:15.881415+00:00",
+    "generated_at": "2026-09-16T00:46:23.170823+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -2058,29 +2078,29 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 6,
+      "hold_closed_count": 7,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 31,
       "gaps": [
-        "hold_recovery closed episodes=6 (target >=15)",
+        "hold_recovery closed episodes=7 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 25,
+        "count": 24,
         "recovered_to_breakeven": 5,
         "close_reasons": {
-          "open": 25
+          "open": 24
         }
       },
       "closed": {
-        "count": 6,
+        "count": 7,
         "recovered_to_breakeven": 4,
         "close_reasons": {
           "sold_while_recovered": 4,
-          "sold_while_underwater": 2
+          "sold_while_underwater": 3
         }
       }
     },
@@ -2097,11 +2117,11 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
+      "hold_episodes": 0,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 4,
       "swap_rotations": 0
     }
   },
@@ -2110,8 +2130,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-09-15T07:34:15.883275+00:00",
-    "as_of": "2026-09-15T17:34:15.787058+10:00",
+    "updated_at": "2026-09-16T00:46:23.172650+00:00",
+    "as_of": "2026-09-16T10:46:22.824764+10:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -2123,19 +2143,19 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 27,
+    "holding_count": 26,
     "underwater_count": 10,
     "thesis_status_counts": {
-      "intact": 25,
+      "intact": 24,
       "weakening": 2,
       "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 27,
+      "holding_count": 26,
       "loser_count": 10,
-      "loser_share": 0.3704,
-      "loser_nav_share": 0.3563,
+      "loser_share": 0.3846,
+      "loser_nav_share": 0.3702,
       "loser_share_tolerance": 0.4,
       "loser_nav_tolerance": 0.35,
       "within_tolerance": false,
@@ -2151,9 +2171,9 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.4118,
-        "dividend": 0.0588,
-        "garp": 0.0588,
+        "quality": 0.375,
+        "dividend": 0.0625,
+        "garp": 0.0625,
         "risk": 0.0
       },
       "selection_feedback_flags": [],
@@ -2735,47 +2755,6 @@
         "broken_reasons": []
       },
       {
-        "ticker": "YAL.AX",
-        "name": "Yancoal Australia Ltd",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.033,
-        "mark": 6.16,
-        "avg_cost": 6.37,
-        "signal": "buy",
-        "timing_signal": "wait",
-        "conviction_score": 0.498,
-        "data_quality_score": 0.95,
-        "passed_families": [
-          "cheapness",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [
-          "quality"
-        ],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 0.95",
-          "conviction 50%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 0.95",
-          "conviction 50%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "BWP.AX",
         "name": "BWP Trust",
         "thesis_status": "intact",
@@ -3266,28 +3245,28 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-15T07:34:15.885794+00:00",
+    "generated_at": "2026-09-16T00:46:23.175224+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 6,
+      "closed_total": 7,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 25,
+      "open_with_thesis": 24,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 6,
-          "recovery_rate": 0.6667,
-          "sold_underwater_rate": 0.3333,
-          "mean_peak_unrealized_pct": -0.008,
-          "mean_trough_unrealized_pct": -0.0095,
+          "closed_count": 7,
+          "recovery_rate": 0.5714,
+          "sold_underwater_rate": 0.4286,
+          "mean_peak_unrealized_pct": -0.0103,
+          "mean_trough_unrealized_pct": -0.0131,
           "outcome_labels": {
             "recovered": 4,
-            "sold_underwater": 2
+            "sold_underwater": 3
           }
         },
         "broken": {
@@ -3319,10 +3298,10 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 6,
+      "hold_closed_with_thesis": 7,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
-        "hold closed with thesis=6 (target >=8)",
+        "hold closed with thesis=7 (target >=8)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
       "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -3334,7 +3313,7 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-09-15T07:34:15.888248+00:00",
+    "generated_at": "2026-09-16T00:46:23.177780+00:00",
     "open_count": 3,
     "closed_count": 2,
     "scored_count": 1,
@@ -3397,7 +3376,7 @@
     "marked_this_pass": 3,
     "closed_this_pass": 0
   },
-  "generated_at": "2026-09-15T07:34:15.888666+00:00",
+  "generated_at": "2026-09-16T00:46:23.178185+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

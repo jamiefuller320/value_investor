@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-15T07:34:15.883275+00:00
+Track: `buy_tier_level` · updated 2026-09-16T00:46:23.172650+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **10** / 27 (37% count, 36% NAV)
+- Losers: **10** / 26 (38% count, 37% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
@@ -109,13 +109,6 @@ Track: `buy_tier_level` · updated 2026-09-15T07:34:15.883275+00:00
 - still buy
 - cheapness family still passes
 - data_quality 0.90
-- conviction 50%
-
-### YAL.AX — intact / hold_tolerate (-3.3%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
 - conviction 50%
 
 ### BWP.AX — intact / hold_tolerate (-3.2%)
