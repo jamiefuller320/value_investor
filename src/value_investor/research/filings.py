@@ -333,6 +333,12 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://media.saint-gobain.com/group/lettreauxactionnaires/letter-to-shareholders-n102/",
         "https://www.saint-gobain.com/en/finance/regulated-information",
     ],
+    # euro_stoxx50 IWB blocker — SAN.PA unfetchable_iwb; sanofi.com Form 20-F/HY PDFs fetch.
+    "SAN.PA": [
+        "https://www.sanofi.com/assets/dotcom/content-app/publications/annual-report-on-form-20-f/2025-01-01-form-20-f-2025-en.pdf",
+        "https://www.sanofi.com/assets/dotcom/content-app/publications/half-year-financial-reports/Half-year-financial-report-2025.pdf",
+        "https://www.sanofi.com/assets/dotcom/content-app/publications/annual-report-on-form-20-f/2024-01-01-form-20-f-2024-en.pdf",
+    ],
     "VOW.DE": [
         "https://www.volkswagen-group.com/en/press-releases/volkswagen-group-strengthens-financial-resilience-in-2025-strong-fourth-quarter-in-a-challenging-environment-20202/download?disposition=attachment",
         "https://www.volkswagen-group.com/en/publications/more/annual-report-2025-1886",
@@ -497,6 +503,12 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "substantiveness gate; linked EX-99.1 exhibits are dividend/notice stubs "
         "under the financial gate and are not the indexed URLs; FY2025 40-F "
         "(tri-20251231.htm), interim SEC packs, and newswire are already bodied."
+    ),
+    "SAN.PA": (
+        "euro_stoxx50 leftover IWB: google_news_euro Euronext company-news HTML "
+        "(live.euronext.com WAF challenge, empty body); sanofi.com Form 20-F/HY "
+        "PDFs and ESEF filings.xbrl.org packs are already bodied via ir_allowlist/"
+        "esef_direct."
     ),
 }
 
