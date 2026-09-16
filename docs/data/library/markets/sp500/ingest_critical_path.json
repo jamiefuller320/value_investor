@@ -1,9 +1,17 @@
 {
   "market_id": "sp500",
-  "assessed_at": "2026-09-15T17:46:52.693284+00:00",
-  "unmeasured": [],
+  "assessed_at": "2026-09-16T10:48:54.250578+00:00",
+  "unmeasured": [
+    "AMGN"
+  ],
   "zero_body": [],
   "indexed_without_body": [
+    {
+      "ticker": "EFX",
+      "indexed_without_body": 9,
+      "filings_total": 19,
+      "filings_with_body": 10
+    },
     {
       "ticker": "FICO",
       "indexed_without_body": 5,
@@ -49,25 +57,28 @@
   ],
   "thin_need_discovery": [],
   "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "primary_blocker": "unmeasured",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
+    "AMGN",
+    "EFX",
     "FICO",
     "APTV",
     "BXP",
     "CRH",
     "LDOS",
-    "LMT",
-    "TSN"
+    "LMT"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (7 tickers, top: FICO(5), APTV(2), BXP(2), CRH(2), LDOS(1))"
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (8 tickers, top: EFX(9), FICO(5), APTV(2), BXP(2), CRH(2))",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
-    "indexed_without_body_tickers": 7,
-    "indexed_without_body_rows": 14,
+    "indexed_without_body_tickers": 8,
+    "indexed_without_body_rows": 23,
     "thin_need_discovery": 0,
     "thin_need_bodies": 0
   }

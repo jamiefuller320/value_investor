@@ -27,9 +27,13 @@ concurrency:
 
 jobs:
   merge:
+    # Queue eng branches only (cursor/eng-YYYYMMDD-NN-1de3). Meta eng fixes
+    # such as cursor/eng-narrow-gate-* must not enter this job (2026-09-16
+    # false failure #35069856035).
     if: >-
       github.event.workflow_run.conclusion == 'success'
       && startsWith(github.event.workflow_run.head_branch, 'cursor/eng-')
+      && endsWith(github.event.workflow_run.head_branch, '-1de3')
       && github.event.workflow_run.head_repository.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
@@ -53,9 +57,14 @@ jobs:
         run: |
           set -euo pipefail
           # Reject shell metacharacters / unexpected branch shapes from PR heads.
+          # Skip (exit 0) rather than fail — job if already filters -1de3, but
+          # malformed dates must not red-X the workflow.
           if [[ ! "$BRANCH" =~ ^cursor/eng-[0-9]{8}-[0-9]{2}-1de3$ ]]; then
-            echo "Rejecting non-engineering or unsafe branch name"
-            exit 1
+            echo "Skipping non-queue engineering branch: $BRANCH"
+            echo "merged=false" >> "$GITHUB_OUTPUT"
+            echo "pr_number=" >> "$GITHUB_OUTPUT"
+            echo "task_id=" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
           ftse-engineering try-auto-merge \
             --branch "$BRANCH" \
@@ -79,8 +88,8 @@ jobs:
         run: |
           set -euo pipefail
           if [[ ! "$BRANCH" =~ ^cursor/eng-[0-9]{8}-[0-9]{2}-1de3$ ]]; then
-            echo "Rejecting non-engineering or unsafe branch name"
-            exit 1
+            echo "Skipping non-queue engineering branch: $BRANCH"
+            exit 0
           fi
           if [[ ! "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
             echo "Missing/invalid PR number from auto-merge result"

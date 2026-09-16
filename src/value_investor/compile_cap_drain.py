@@ -258,7 +258,9 @@ def compile_next_compile_cap_drain_task(
             "doc": "docs/ops/engineering-sync.md",
         }
     )
-    task = EngineeringTask(
+    from value_investor.engineering_narrow_scope import apply_narrow_scope_to_task
+
+    scoped_seed = EngineeringTask(
         id=f"eng-{run_stamp}-{seq:02d}",
         area=seed.area,
         title=seed.title[:160],
@@ -272,7 +274,31 @@ def compile_next_compile_cap_drain_task(
         allowed_paths=list(seed.allowed_paths or []),
         blocked_paths=list(seed.blocked_paths or []),
     )
-    merged_rows = _merge_task_rows(existing_rows, [task])
+    # Prefer first-principle slice already on the seed; re-apply when a compound
+    # backlog title somehow still carries a wide area allowlist.
+    scoped_tasks = apply_narrow_scope_to_task(scoped_seed)
+    drafted: list[EngineeringTask] = []
+    for offset, scoped in enumerate(scoped_tasks):
+        drafted.append(
+            EngineeringTask(
+                id=f"eng-{run_stamp}-{seq + offset:02d}",
+                area=scoped.area,
+                title=scoped.title[:160],
+                summary=(scoped.summary or scoped.title)[:500],
+                priority=scoped.priority,
+                priority_score=score,
+                source=COMPILE_CAP_DRAIN_SOURCE,
+                auto_merge=False,
+                evidence=dict(scoped.evidence or {}),
+                acceptance_criteria=list(scoped.acceptance_criteria or []),
+                allowed_paths=list(scoped.allowed_paths or []),
+                blocked_paths=list(scoped.blocked_paths or []),
+            )
+        )
+    # Drain still advances one backlog *suggestion*, but may open multiple
+    # first-principle sibling tasks when upstream scope splits the title.
+    task = drafted[0]
+    merged_rows = _merge_task_rows(existing_rows, drafted)
     open_ids_before = {
         str(row.get("id") or "")
         for row in existing_rows
@@ -301,11 +327,13 @@ def compile_next_compile_cap_drain_task(
         "task_count": len(merged_rows),
         "priority_score": score,
         "title": task.title,
+        "titles": [row.title for row in drafted],
         "area": task.area,
         "origin_source": seed.source,
-        "pending_remaining": max(0, len(pending) - len(newly_open)),
+        "pending_remaining": max(0, len(pending) - 1),
         "decision": decision.to_dict(),
         "reason": "compiled",
+        "narrow_scope_siblings": len(drafted),
     }
 
 
