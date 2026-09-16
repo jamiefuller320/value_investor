@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-15",
+  "updated_at": "2026-09-16",
   "title": "Human tasks checklist",
   "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
@@ -70,7 +70,7 @@
         {
           "id": "weekday-project-traffic-runs",
           "title": "Project traffic pause / unstick / EOD digest",
-          "summary": "Weekday project-traffic (and ops-monitor) classifies stuck cursor/* PRs, pauses new engineering-agent dispatch, comments for CI/conflict fixes, may dispatch conflict-resolve for eng branches, and writes a grounded EOD digest that lists today's eng merges (including independently verified ingest_narrow / scoring_narrow auto-merges). Spot-check digest trajectory and the merges-today list when pause is active, auto-merges land, or a narrow_cohesion_bypass task needed human merge.",
+          "summary": "Weekday project-traffic (and ops-monitor) classifies stuck cursor/* PRs, pauses new engineering-agent dispatch, comments for CI/conflict fixes (appending pr_fix_occasions.json with failure reasons), may dispatch conflict-resolve for eng branches, and writes a grounded EOD digest that lists today's eng merges (including independently verified ingest_narrow / scoring_narrow auto-merges) plus common PR-fix failure reasons. Spot-check digest trajectory and the merges-today list when pause is active, auto-merges land, or a narrow_cohesion_bypass task needed human merge.",
           "automated": true,
           "doc_path": "docs/ops/project-traffic.md",
           "doc_anchor": "authority-v1"
@@ -288,6 +288,14 @@
           "automated": false,
           "doc_path": "docs/ops/cycle-budget-surplus.md",
           "doc_anchor": "human-gate"
+        },
+        {
+          "id": "monthly-pr-fix-common-issues",
+          "title": "Review common PR check / merge fix-request reasons",
+          "summary": "Run `ftse-project-traffic common-issues` (or read docs/data/pr_fix_occasions.json). Identify recurring CI or merge-conflict failure reasons from human and traffic-controller fix requests, then fix root causes (flakes, path guards, sync races) rather than one-off PR patches.",
+          "automated": false,
+          "doc_path": "docs/ops/project-traffic.md",
+          "doc_anchor": "pr-fix-occasion-log"
         }
       ]
     },

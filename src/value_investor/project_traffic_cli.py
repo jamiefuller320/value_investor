@@ -8,6 +8,17 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from value_investor.pr_fix_occasions import (
+    DEFAULT_PR_FIX_OCCASIONS_PATH,
+    KIND_BOTH,
+    KIND_CI,
+    KIND_MERGE,
+    SOURCE_HUMAN,
+    format_common_issues_markdown,
+    load_pr_fix_occasions,
+    record_pr_fix_occasion,
+    summarize_common_failure_reasons,
+)
 from value_investor.project_traffic import (
     COMMITTED_TASKS_PATH,
     DEFAULT_DIGEST_MARKDOWN_PATH,
@@ -105,6 +116,57 @@ def _cmd_digest(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_record_fix(args: argparse.Namespace) -> int:
+    """Record a human-requested PR check / merge fix occasion."""
+    kind = str(args.kind)
+    if args.ci and args.merge:
+        kind = KIND_BOTH
+    elif args.ci:
+        kind = KIND_CI
+    elif args.merge:
+        kind = KIND_MERGE
+
+    check_names = [s.strip() for s in (args.failed_checks or "").split(",") if s.strip()]
+    result = record_pr_fix_occasion(
+        source=SOURCE_HUMAN,
+        kind=kind,
+        failure_reason=args.reason,
+        pr_number=args.pr,
+        branch=args.branch,
+        title=args.title,
+        url=args.url,
+        task_id=args.task_id,
+        head_sha=args.head_sha,
+        mergeable_state=args.mergeable_state,
+        failed_check_names=check_names,
+        notes=args.notes,
+        path=args.log_path,
+        apply=not args.dry_run,
+    )
+    entry = result["entry"]
+    if args.json:
+        _print_json(result)
+    else:
+        print(
+            f"recorded {entry['id']} source={entry['source']} kind={entry['kind']} "
+            f"reason={entry['failure_reason']!r} path={result['path']}"
+        )
+    return 0
+
+
+def _cmd_common_issues(args: argparse.Namespace) -> int:
+    payload = load_pr_fix_occasions(args.log_path)
+    summary = summarize_common_failure_reasons(
+        list(payload.get("occasions") or []),
+        limit=args.limit,
+    )
+    if args.json:
+        _print_json({"summary": summary, "updated_at": payload.get("updated_at")})
+    else:
+        print(format_common_issues_markdown(summary), end="")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Project traffic controller: pause stuck PR queues and EOD digest"
@@ -145,6 +207,50 @@ def main(argv: list[str] | None = None) -> int:
     digest_p.add_argument("--markdown-path", type=Path, default=DEFAULT_DIGEST_MARKDOWN_PATH)
     digest_p.add_argument("--json", action="store_true")
     digest_p.set_defaults(func=_cmd_digest)
+
+    record_p = sub.add_parser(
+        "record-fix",
+        help="Record a human-requested PR check/merge fix occasion + failure reason",
+    )
+    record_p.add_argument("--pr", type=int, default=None, help="Pull request number")
+    record_p.add_argument(
+        "--kind",
+        choices=sorted({KIND_CI, KIND_MERGE, KIND_BOTH}),
+        default=KIND_CI,
+        help="Fix request kind (default: ci_check)",
+    )
+    record_p.add_argument("--ci", action="store_true", help="Shorthand for --kind ci_check")
+    record_p.add_argument("--merge", action="store_true", help="Shorthand for --kind merge_conflict")
+    record_p.add_argument(
+        "--reason",
+        required=True,
+        help="Failure reason (normalized bucket label for common-issue aggregation)",
+    )
+    record_p.add_argument("--branch", default=None)
+    record_p.add_argument("--title", default=None)
+    record_p.add_argument("--url", default=None)
+    record_p.add_argument("--task-id", default=None)
+    record_p.add_argument("--head-sha", default=None)
+    record_p.add_argument("--mergeable-state", default=None)
+    record_p.add_argument(
+        "--failed-checks",
+        default=None,
+        help="Comma-separated failing check names",
+    )
+    record_p.add_argument("--notes", default=None)
+    record_p.add_argument("--log-path", type=Path, default=DEFAULT_PR_FIX_OCCASIONS_PATH)
+    record_p.add_argument("--dry-run", action="store_true")
+    record_p.add_argument("--json", action="store_true")
+    record_p.set_defaults(func=_cmd_record_fix)
+
+    common_p = sub.add_parser(
+        "common-issues",
+        help="Summarize common PR fix-request failure reasons",
+    )
+    common_p.add_argument("--log-path", type=Path, default=DEFAULT_PR_FIX_OCCASIONS_PATH)
+    common_p.add_argument("--limit", type=int, default=20)
+    common_p.add_argument("--json", action="store_true")
+    common_p.set_defaults(func=_cmd_common_issues)
 
     args = parser.parse_args(argv)
     # Ensure tasks_path is available on all subcommands

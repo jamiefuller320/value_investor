@@ -67,6 +67,7 @@ def test_classify_stuck_prs_ci_and_conflict(monkeypatch, tmp_path: Path):
                 "all_failed": True,
                 "any_success": False,
                 "completed_checks": 2,
+                "failed_check_names": ["CI / test"],
                 "latest_check_at": datetime.now(UTC) - timedelta(hours=1),
             }
         return {"available": True, "all_failed": False, "any_success": True, "completed_checks": 1}
@@ -120,6 +121,9 @@ def test_classify_stuck_prs_ci_and_conflict(monkeypatch, tmp_path: Path):
     by_num = {row.number: row for row in stuck}
     assert "ci_failing" in by_num[10].reasons
     assert "merge_conflict" in by_num[11].reasons
+    assert by_num[10].failed_check_names == ["CI / test"]
+    assert by_num[10].failure_reason == "ci_failing:CI / test"
+    assert by_num[11].failure_reason == "merge_conflict:dirty"
 
 
 def test_evaluate_traffic_pause_and_resume(tmp_path: Path, monkeypatch):
@@ -171,6 +175,77 @@ def test_dispatch_blocked_by_traffic_pause(tmp_path: Path):
     decision = evaluate_engineering_dispatch(tasks_path=tasks_path, open_prs=[])
     assert decision.should_dispatch is False
     assert "traffic pause" in decision.reason.lower()
+
+
+def test_run_project_traffic_records_fix_occasions(tmp_path: Path, monkeypatch):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    log_path = tmp_path / "pr_fix_occasions.json"
+    _write_tasks(tasks_path, {"tasks": []})
+    monkeypatch.setattr(
+        "value_investor.project_traffic._traffic_policy",
+        lambda: {
+            "enabled": True,
+            "stuck_pr_threshold": 1,
+            "min_fail_age_minutes": 0,
+            "resume_idle_minutes": 15,
+            "max_fix_requests_per_pr": 2,
+            "comment_cooldown_hours": 6,
+            "pause_on_stuck": True,
+            "monitor_cursor_prs": True,
+            "request_ci_fix_comments": True,
+            "request_conflict_resolve": False,
+            "digest_enabled": False,
+        },
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic._checks_failed_for_pr",
+        lambda *a, **k: {
+            "available": True,
+            "all_failed": True,
+            "any_success": False,
+            "completed_checks": 1,
+            "failed_check_names": ["CI / test"],
+            "latest_check_at": datetime.now(UTC) - timedelta(hours=2),
+        },
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic._enrich_pr_merge_state",
+        lambda row, **kwargs: row,
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic.post_pr_comment",
+        lambda **kwargs: (True, "comment posted"),
+    )
+    monkeypatch.setattr(
+        "value_investor.pr_fix_occasions.DEFAULT_PR_FIX_OCCASIONS_PATH",
+        log_path,
+    )
+
+    report = run_project_traffic(
+        tasks_path=tasks_path,
+        open_prs=[
+            {
+                "number": 77,
+                "title": "red",
+                "headRefName": "cursor/eng-20260916-01-1de3",
+                "html_url": "https://example/77",
+                "mergeable": True,
+                "head_sha": "def",
+            }
+        ],
+        apply=True,
+        write_digest=False,
+        now=datetime.now(UTC),
+    )
+    assert any(a.kind == "request_ci_fix" and a.applied for a in report.actions)
+    from value_investor.pr_fix_occasions import load_pr_fix_occasions
+
+    payload = load_pr_fix_occasions(log_path)
+    assert payload["occasion_count"] == 1
+    entry = payload["occasions"][0]
+    assert entry["source"] == "traffic_controller"
+    assert entry["pr_number"] == 77
+    assert "ci_failing" in entry["failure_reason"]
 
 
 def test_run_project_traffic_dry_run(tmp_path: Path, monkeypatch):
@@ -230,6 +305,7 @@ def test_run_project_traffic_dry_run(tmp_path: Path, monkeypatch):
     assert report.pause_active is True or len(report.stuck_prs) == 1
     assert report.digest is not None
     assert report.digest["merge_authority"]["status"] == "scoped_auto_merge"
+    assert "pr_fix_common_issues" in report.digest
     # dry-run must not persist pause
     assert is_traffic_pause_active(tasks_path=tasks_path) is False
 

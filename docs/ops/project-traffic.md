@@ -56,6 +56,13 @@ ftse-project-traffic run --dry-run --open-prs-json /tmp/open_prs.json
 
 # Digest only from committed artifacts
 ftse-project-traffic digest --write
+
+# Record a human-requested PR check / merge fix (agents must do this when asked)
+ftse-project-traffic record-fix --pr 123 --kind ci_check \
+  --reason "pytest: test_foo failed" --failed-checks "CI / test" --notes "chat request"
+
+# Summarize recurring failure reasons
+ftse-project-traffic common-issues
 ```
 
 ## Artifacts
@@ -65,8 +72,24 @@ ftse-project-traffic digest --write
 | `docs/data/engineering_tasks.json` → `traffic_control` | Pause flag, stuck counts, fix-request history |
 | `docs/data/project_traffic_digest.json` | Structured EOD digest |
 | `docs/data/project_traffic_digest.md` | Human-readable digest |
+| `docs/data/pr_fix_occasions.json` | Durable log of human / traffic fix-request occasions + failure reasons |
 | `docs/data/project_traffic_ops_email_handoff.json` | Latest ops-monitor email package (findings + planned rectification + email body) |
 | `docs/data/queue_health.json` → `traffic_control` | Dashboard slice |
+
+## PR fix occasion log
+
+Every time a PR check or merge is **requested to be fixed** (human chat ask, or
+traffic controller comment), record the occasion with a failure reason so common
+issues can be fixed at the root.
+
+| Source | When recorded |
+|--------|----------------|
+| `human_request` | Agent / human runs `ftse-project-traffic record-fix` after being asked to fix CI or a merge conflict |
+| `traffic_controller` | Automatic when project-traffic posts a CI-fix or conflict-resolve comment |
+
+Each occasion stores: timestamp, PR, branch, kind (`ci_check` / `merge_conflict` /
+`ci_and_merge`), normalized `failure_reason`, failed check names, and notes.
+`common-issues` (and the EOD digest section) aggregates by reason.
 
 ## Policy
 
