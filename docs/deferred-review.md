@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-16T17:15:36+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-16T17:30:10+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -473,6 +473,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L398 | **Expand narrow verify to ops/prompt/coverage eng classes** | ingest_narrow and scoring_narrow now have deterministic independent verify + scoped auto-merge. Broader eng areas (ops, prompt, coverage, ci) still human-merge; expand only after those two classes show clean merge quality. | ingest_narrow and scoring_narrow auto-merges run cleanly for ≥3 weeks with no path-guard incidents and EOD merge monitor shows stable verified counts |
 | L399 | **Expand narrow topic maps as new scoring overlays appear** | Upstream narrow-scope drafting uses keyword→concrete path maps. When new overlays ship, extend the topic tables so compound suggestions keep splitting into ≤8-path first-principle builds instead of cohesion_bypass. | A scoring eng task hits cohesion_bypass solely because its topic is missing from engineering_narrow_scope topic maps |
 | L406 | **Dashboard surface for PR fix common issues** | Expose docs/data/pr_fix_occasions.json common_issues on the Automation / ops dashboard so monthly review does not require CLI-only inspection. | pr_fix_occasions has ≥20 occasions or monthly checklist review feels CLI-heavy |
+| L407 | **Treat ingest-loop GHA step timeout on partial runs as non-failure** | Recent ingest-loop reds are mostly step timeouts (65/90m) after soft runtime_cutoff, not CurlError. Soft budget + overhead still races the hard timeout; job fails red, mints workflow_failure, blocks compile-cap drain. Need earlier soft exit headroom and/or succeed-on-partial-commit so timeout is not a false eng task. | Next cluster of ingest-loop timeout failures after #674 retries and PM cancel-on-heal land |
+| L408 | **Separate timeout vs HTTP signatures for ingest-loop workflow_failure** | ingest-loop.yml signature matches ftse-ingest-loop/ingest.improvement/CurlError/HTTPError, so timeout-only logs draft the CurlError-titled eng task with fetch-retry acceptance criteria. Split timeout-headroom vs transient-HTTP signatures so responders and allowed_paths match the real failure class. | When implementing succeed-on-partial or timeout headroom for ingest-loop |
 
 ---
 
