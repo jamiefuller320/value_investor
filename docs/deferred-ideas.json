@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-16T10:32:34+00:00",
+  "updated_at": "2026-09-16T10:57:00+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9034,6 +9034,59 @@
       "status": "open",
       "source": "trade-plan target spread follow-up",
       "added_at": "2026-09-16T10:32:34+00:00"
+    },
+    {
+      "id": "L403",
+      "category": "later",
+      "section": "research",
+      "title": "Thin continuous news harvest for hold/avoid before buy-tier entry",
+      "summary": "Most FTSE holds/avoids have no research dir or news_manifest until they become buy-tier. First ingest can backfill ~1y Yahoo/Google headlines retrospectively, but that is not continuous PIT collection and misses names that never enter buy-tier as controls. Prefer a cheap headline-only watermark harvest for boundary + rotating hold sample before any body crawl (N91).",
+      "revisit_when": "L401/L402 observe questions are blocked by missing pre-signal manifests on newly promoted buy-tier names, or boundary panel persistently lacks news_manifest coverage",
+      "tags": [
+        "news",
+        "data-depth",
+        "boundary",
+        "observe-only",
+        "pre-signal"
+      ],
+      "status": "open",
+      "source": "non-target data depth question",
+      "added_at": "2026-09-16T10:57:00+00:00"
+    },
+    {
+      "id": "L404",
+      "category": "later",
+      "section": "research",
+      "title": "Unconfirmed-news vs later-filing as sentiment-vs-fundamentals observe label",
+      "summary": "Once event journal confirmation rates leave watch, label drop-window headlines that never get a later confirming filing (or get a denial/clarification) as candidate sentiment shocks versus fundamental changes. Observe-only; do not score live buys from it (N55/N303).",
+      "revisit_when": "news_event_rules.json shows stable promising confirmation on body_match events with later filing \u226530d after headline, and a cohort of drop-correlated headlines with no later report exists",
+      "tags": [
+        "news",
+        "sentiment",
+        "fundamentals",
+        "event-journal",
+        "observe-only"
+      ],
+      "status": "open",
+      "source": "non-target data depth question",
+      "added_at": "2026-09-16T10:57:00+00:00"
+    },
+    {
+      "id": "N132",
+      "category": "not_now",
+      "section": "not_now",
+      "title": "Do not widen FTSE news/filing ingest to full hold/avoid universe yet",
+      "summary": "Full-universe continuous news+filing deepen for observational pre-signal analysis would starve buy-tier scan-then-target and P1 live-path work. Keep retrospective backfill on entry plus buy\u222aboundary observe panels until those prove useful.",
+      "revisit_when": "buy\u222aboundary news_event_journal and phrase-trajectory panels show stable out-of-sample usefulness and GHA/ingest capacity has clear spare after buy-tier body drain",
+      "tags": [
+        "ingest",
+        "capacity",
+        "news",
+        "not-now"
+      ],
+      "status": "open",
+      "source": "non-target data depth question",
+      "added_at": "2026-09-16T10:57:00+00:00"
     }
   ],
   "fragments": [
