@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-16T17:13:49.196830+00:00`
+Generated: `2026-09-16T20:20:35.725686+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -32,6 +32,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `human`/human PR #675 `eng-20260916-04` — Flag when [2/2]
 - `ingest_narrow`/verified PR #674 `eng-20260916-03` — Workflow fix: ingest-loop failure on main
 - `human`/human PR #669 `eng-20260916-02` — Hunt fetchable IR source for parked euro_stoxx50 leftover SAN.PA
 - `human`/human PR #666 `eng-20260916-01` — Fail-closed or flag when screen FCF (1,059m) disagrees with Yahoo/filing FCF (852m) while TTM is suppressed and cashflow_metrics is null. Turn on healthcare_pri
