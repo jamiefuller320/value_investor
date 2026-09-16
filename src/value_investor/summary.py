@@ -38,6 +38,7 @@ from value_investor.scoring.fcf import (
     fcf_basis_definition_divergence,
     fcf_dividend_coverage,
     fcf_filing_screen_mismatch,
+    fcf_unverified_screen_without_cashflow_metrics,
     labelled_fcf_dividend_coverage_for_snapshot,
     overlay_free_cashflow_from_bundle,
     reconcile_fcf_for_ticker,
@@ -58,10 +59,16 @@ from value_investor.scoring.fcf_three_way_conviction_overlay import (
 )
 from value_investor.scoring.healthcare_overlay import (
     apply_healthcare_overlay_to_signal,
+    orthopaedic_or_wound_bioactive_profile,
     piotroski_score_for_ticker,
 )
 from value_investor.scoring.healthcare_price_erosion_overlay import (
     apply_healthcare_price_erosion_overlay_to_signal,
+    price_erosion_for_ticker,
+)
+from value_investor.scoring.healthcare_reimbursement_overlay import (
+    apply_healthcare_reimbursement_overlay_to_signal,
+    reimbursement_risk_for_ticker,
 )
 from value_investor.scoring.interim_quality_overlay import apply_interim_quality_overlay_to_signal
 from value_investor.scoring.leverage_overlay import format_adjusted_net_debt_gbp
@@ -74,6 +81,13 @@ from value_investor.scoring.quality_family_avoid_gate_overlay import (
     build_quality_family_avoid_gate_overlay,
     compute_quality_family_composite_score,
     format_quality_family_avoid_gate_note,
+)
+from value_investor.scoring.screening_export_guard import (
+    adjust_stability_for_trade_plan_sanity,
+    apply_screening_export_guard,
+    format_sparse_model_pass_family_clause,
+    isolate_timing_action_note,
+    sparse_model_pass_detected,
 )
 from value_investor.technical_analysis import (
     TradePlan,
@@ -129,6 +143,7 @@ class CompanyReport:
     piotroski_f_score: dict[str, Any] | None = None
     healthcare_overlay: bool = False
     healthcare_price_erosion_overlay: bool = False
+    healthcare_reimbursement_overlay: bool = False
     cash_conversion_overlay: bool = False
     dividend_yield_overlay: bool = False
     dividend_sustainability_overlay: bool = False
@@ -204,6 +219,7 @@ class CompanyReport:
             "piotroski_f_score": self.piotroski_f_score,
             "healthcare_overlay": self.healthcare_overlay,
             "healthcare_price_erosion_overlay": self.healthcare_price_erosion_overlay,
+            "healthcare_reimbursement_overlay": self.healthcare_reimbursement_overlay,
             "cash_conversion_overlay": self.cash_conversion_overlay,
             "dividend_yield_overlay": self.dividend_yield_overlay,
             "dividend_sustainability_overlay": self.dividend_sustainability_overlay,
@@ -240,7 +256,9 @@ class CompanyReport:
             "interim_eps_decline_pct": self.interim_eps_decline_pct,
             "adjusted_eps_growth_pct": self.adjusted_eps_growth_pct,
         }
-        return enrich_screening_snapshot_fcf_dividend_coverage(payload)
+        return apply_screening_export_guard(
+            enrich_screening_snapshot_fcf_dividend_coverage(payload)
+        )
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> CompanyReport:
@@ -285,6 +303,7 @@ class CompanyReport:
             piotroski_f_score=data.get("piotroski_f_score"),
             healthcare_overlay=bool(data.get("healthcare_overlay")),
             healthcare_price_erosion_overlay=bool(data.get("healthcare_price_erosion_overlay")),
+            healthcare_reimbursement_overlay=bool(data.get("healthcare_reimbursement_overlay")),
             cash_conversion_overlay=bool(data.get("cash_conversion_overlay")),
             dividend_yield_overlay=bool(data.get("dividend_yield_overlay")),
             dividend_sustainability_overlay=bool(data.get("dividend_sustainability_overlay")),
@@ -547,6 +566,8 @@ def _brief_summary(
     adjusted_signal: str | None = None,
     healthcare_overlay: bool = False,
     healthcare_price_erosion_overlay: bool = False,
+    healthcare_reimbursement_overlay: bool = False,
+    sparse_model_pass: bool = False,
     cash_conversion_overlay: bool = False,
     dividend_yield_overlay: bool = False,
     dividend_sustainability_overlay: bool = False,
@@ -584,7 +605,20 @@ def _brief_summary(
     if families_passed:
         family_text = format_family_summary(passed_families)
         denom = family_count or FAMILY_COUNT
-        parts.append(f"Families: {families_passed}/{denom} ({family_text}).")
+        if sparse_model_pass:
+            sparse_clause = format_sparse_model_pass_family_clause(
+                families_passed=families_passed,
+                family_count=denom,
+                passed_families=passed_families,
+                models_passed=models_passed,
+                model_count=model_count,
+            )
+            if sparse_clause:
+                parts.append(f"{sparse_clause}")
+            else:
+                parts.append(f"Families: {families_passed}/{denom} ({family_text}).")
+        else:
+            parts.append(f"Families: {families_passed}/{denom} ({family_text}).")
 
     parts.append(
         f"Data quality: {metrics_present}/{metrics_total} ({quality_label(data_quality_score)}). "
@@ -709,6 +743,13 @@ def _brief_summary(
         parts.append(
             f"Healthcare price-erosion overlay: quality/income pass but yield screens fail with "
             f"filing pricing pressure "
+            f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+        )
+
+    if healthcare_reimbursement_overlay and adjusted_signal and adjusted_signal != signal:
+        parts.append(
+            f"Healthcare reimbursement overlay: orthopaedics / wound-bioactives or filing "
+            f"reimbursement pressure "
             f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
         )
 
@@ -1167,7 +1208,7 @@ def build_company_reports(
             )
 
         action_note = append_fcf_divergence_to_action_note(
-            str(row.get("action_note") or ""),
+            isolate_timing_action_note(str(row.get("action_note") or "")),
             canonical=free_cashflow,
             screen_ttm=screen_ttm,
             fcf_bundle=fcf_bundle,
@@ -1267,20 +1308,35 @@ def build_company_reports(
         ):
             healthcare_price_erosion_overlay = bool(healthcare_price_erosion_overlay_flag)
         else:
-            from value_investor.scoring.healthcare_price_erosion_overlay import (
-                price_erosion_for_ticker,
-            )
-
+            erosion_detected = price_erosion_for_ticker(ticker, output_dir=output_dir)
+            if orthopaedic_or_wound_bioactive_profile(row.get("sector"), row.get("name")):
+                erosion_detected = True
             healthcare_price_erosion_overlay, adjusted_signal_str = (
                 apply_healthcare_price_erosion_overlay_to_signal(
                     signal,
                     sector=row.get("sector"),
+                    name=row.get("name"),
                     passed_families=row.get("passed_families"),
                     ticker_models=ticker_models,
-                    price_erosion_detected=price_erosion_for_ticker(
-                        ticker,
-                        output_dir=output_dir,
-                    ),
+                    price_erosion_detected=erosion_detected,
+                    adjusted_signal=adjusted_signal_str,
+                )
+            )
+
+        healthcare_reimbursement_overlay_flag = row.get("healthcare_reimbursement_overlay")
+        if healthcare_reimbursement_overlay_flag is not None and not (
+            isinstance(healthcare_reimbursement_overlay_flag, float)
+            and pd.isna(healthcare_reimbursement_overlay_flag)
+        ):
+            healthcare_reimbursement_overlay = bool(healthcare_reimbursement_overlay_flag)
+        else:
+            reimbursement_detected = reimbursement_risk_for_ticker(ticker, output_dir=output_dir)
+            healthcare_reimbursement_overlay, adjusted_signal_str = (
+                apply_healthcare_reimbursement_overlay_to_signal(
+                    signal,
+                    sector=row.get("sector"),
+                    name=row.get("name"),
+                    reimbursement_detected=reimbursement_detected,
                     adjusted_signal=adjusted_signal_str,
                 )
             )
@@ -1331,6 +1387,10 @@ def build_company_reports(
         ):
             fcf_basis_overlay = True
         else:
+            unverified_without_metrics = fcf_unverified_screen_without_cashflow_metrics(
+                fcf_bundle,
+                screen_ttm=screen_ttm,
+            )
             fcf_basis_overlay, adjusted_signal_str, conviction_score = (
                 apply_fcf_basis_overlay_to_signal(
                     signal,
@@ -1338,6 +1398,7 @@ def build_company_reports(
                     filing_screen_mismatch=filing_screen_mismatch,
                     universe_divergence_flagged=fcf_divergence_flagged,
                     action_note_mismatch=fcf_action_note_mismatch,
+                    unverified_screen_without_cashflow_metrics=unverified_without_metrics,
                     ticker_models=ticker_models,
                     conviction_score=conviction_score,
                     adjusted_signal=adjusted_signal_str,
@@ -1538,10 +1599,31 @@ def build_company_reports(
                     sector=row.get("sector"),
                 )
 
+        spot_raw = row.get("close")
+        spot = (
+            float(spot_raw)
+            if spot_raw is not None and not (isinstance(spot_raw, float) and pd.isna(spot_raw))
+            else None
+        )
+        stability_label = str(row.get("stability_label") or "new")
+        stability_label, _trade_plan_downgraded = adjust_stability_for_trade_plan_sanity(
+            stability_label=stability_label,
+            weeks_at_signal=int(row.get("weeks_at_signal") or 1),
+            spot=spot,
+            trade_plan=trade_plan,
+        )
+        models_passed_count = int(row.get("models_passed") or 0)
+        model_total = int(row.get("model_count") or 0)
+        sparse_model_pass = sparse_model_pass_detected(
+            models_passed=models_passed_count,
+            model_count=model_total,
+            failed_models=failed_model_names,
+        )
+
         summary = _brief_summary(
             signal=signal,
-            models_passed=int(row.get("models_passed") or 0),
-            model_count=int(row.get("model_count") or 0),
+            models_passed=models_passed_count,
+            model_count=model_total,
             composite_score=composite_score,
             sector_composite_score=sector_composite_score,
             families_passed=int(row.get("families_passed") or 0),
@@ -1553,7 +1635,7 @@ def build_company_reports(
             weeks_at_signal=int(row.get("weeks_at_signal") or 1),
             signal_trend=str(row.get("signal_trend") or "new"),
             conviction_score=conviction_score,
-            stability_label=str(row.get("stability_label") or "new"),
+            stability_label=stability_label,
             timing_signal=str(row.get("timing_signal") or "insufficient_data"),
             timing_score=float(row.get("timing_score") or 0),
             rsi_14=float(row["rsi_14"])
@@ -1570,6 +1652,8 @@ def build_company_reports(
             adjusted_signal=adjusted_signal_str,
             healthcare_overlay=healthcare_overlay,
             healthcare_price_erosion_overlay=healthcare_price_erosion_overlay,
+            healthcare_reimbursement_overlay=healthcare_reimbursement_overlay,
+            sparse_model_pass=sparse_model_pass,
             cash_conversion_overlay=cash_conversion_overlay,
             dividend_yield_overlay=dividend_yield_overlay,
             dividend_sustainability_overlay=dividend_sustainability_overlay,
@@ -1635,7 +1719,7 @@ def build_company_reports(
                     weeks_at_signal=int(row.get("weeks_at_signal") or 1),
                     signal_trend=str(row.get("signal_trend") or "new"),
                     conviction_score=conviction_score,
-                    stability_label=str(row.get("stability_label") or "new"),
+                    stability_label=stability_label,
                     signal_since=signal_since,
                     timing_signal=str(row.get("timing_signal") or "insufficient_data"),
                     timing_score=float(row.get("timing_score") or 0),
@@ -1656,6 +1740,7 @@ def build_company_reports(
                     piotroski_f_score=piotroski_f_score,
                     healthcare_overlay=healthcare_overlay,
                     healthcare_price_erosion_overlay=healthcare_price_erosion_overlay,
+                    healthcare_reimbursement_overlay=healthcare_reimbursement_overlay,
                     cash_conversion_overlay=cash_conversion_overlay,
                     dividend_yield_overlay=dividend_yield_overlay,
                     dividend_sustainability_overlay=dividend_sustainability_overlay,

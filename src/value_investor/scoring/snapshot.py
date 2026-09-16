@@ -14,6 +14,7 @@ from value_investor.scoring.fcf import (
     screen_ttm_from_row,
 )
 from value_investor.scoring.fcf_basis_overlay import apply_fcf_export_enforcement
+from value_investor.scoring.screening_export_guard import apply_screening_export_guard
 from value_investor.storage import read_json, write_json
 
 _RUN_SNAPSHOT_OPTIONAL_SIGNAL_COLUMNS = (
@@ -149,6 +150,7 @@ def write_screening_snapshot(sources_dir: Path, snapshot: dict[str, Any]) -> Pat
     path = sources_dir / "screening_snapshot.json"
     payload = enforce_fcf_basis_in_snapshot(snapshot)
     payload = enrich_screening_snapshot_fcf_dividend_coverage(payload)
+    payload = apply_screening_export_guard(payload)
     write_json(
         path,
         payload,

@@ -8,7 +8,10 @@ from pathlib import Path
 import pandas as pd
 
 from value_investor.scoring.fcf import load_filing_bodies_for_ticker
-from value_investor.scoring.healthcare_overlay import is_healthcare_sector
+from value_investor.scoring.healthcare_overlay import (
+    is_healthcare_sector,
+    orthopaedic_or_wound_bioactive_profile,
+)
 
 YIELD_MODEL_IDS = (
     "high_dividend",
@@ -73,12 +76,15 @@ def all_yield_cheapness_models_failed(ticker_models: pd.DataFrame) -> bool:
 def healthcare_price_erosion_overlay_triggered(
     *,
     sector: str | None,
+    name: str | None = None,
     passed_families: str | None,
     ticker_models: pd.DataFrame,
     price_erosion_detected: bool,
 ) -> bool:
     if not is_healthcare_sector(sector):
         return False
+    if orthopaedic_or_wound_bioactive_profile(sector, name):
+        return True
     if not quality_or_income_family_passed(passed_families):
         return False
     if not all_yield_cheapness_models_failed(ticker_models):
@@ -105,6 +111,7 @@ def apply_healthcare_price_erosion_overlay_to_signal(
     signal: str,
     *,
     sector: str | None,
+    name: str | None = None,
     passed_families: str | None,
     ticker_models: pd.DataFrame,
     price_erosion_detected: bool,
@@ -114,6 +121,7 @@ def apply_healthcare_price_erosion_overlay_to_signal(
     base_adjusted = adjusted_signal or signal
     if not healthcare_price_erosion_overlay_triggered(
         sector=sector,
+        name=name,
         passed_families=passed_families,
         ticker_models=ticker_models,
         price_erosion_detected=price_erosion_detected,
@@ -152,10 +160,13 @@ def enrich_signals_with_healthcare_price_erosion_overlay(
             erosion_detected = bool(erosion_flag)
         else:
             erosion_detected = price_erosion_for_ticker(ticker, output_dir=output_dir)
+        if orthopaedic_or_wound_bioactive_profile(row.get("sector"), row.get("name")):
+            erosion_detected = True
 
         triggered, new_adjusted = apply_healthcare_price_erosion_overlay_to_signal(
             str(row.get("signal") or "hold"),
             sector=row.get("sector"),
+            name=row.get("name"),
             passed_families=row.get("passed_families"),
             ticker_models=ticker_models,
             price_erosion_detected=erosion_detected,

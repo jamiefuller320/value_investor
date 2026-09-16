@@ -10,6 +10,7 @@ import pandas as pd
 from value_investor.scoring.fcf import (
     fcf_action_note_mismatch,
     fcf_filing_screen_mismatch,
+    fcf_unverified_screen_without_cashflow_metrics,
     reconcile_fcf_for_ticker,
     screen_ttm_from_row,
 )
@@ -81,6 +82,7 @@ def fcf_basis_overlay_triggered(
     universe_divergence_flagged: bool = False,
     action_note_mismatch: bool = False,
     fcf_yield_unit_fx_error: bool = False,
+    unverified_screen_without_cashflow_metrics: bool = False,
 ) -> bool:
     """Flag when the mismatch note would fire, or 50% divergence with a yield pass.
 
@@ -95,6 +97,7 @@ def fcf_basis_overlay_triggered(
         or universe_divergence_flagged
         or action_note_mismatch
         or fcf_yield_unit_fx_error
+        or unverified_screen_without_cashflow_metrics
     ):
         return True
     if not divergence_flagged:
@@ -216,6 +219,7 @@ def apply_fcf_basis_overlay_to_signal(
     universe_divergence_flagged: bool = False,
     action_note_mismatch: bool = False,
     fcf_yield_unit_fx_error: bool = False,
+    unverified_screen_without_cashflow_metrics: bool = False,
 ) -> tuple[bool, str, float]:
     """Return overlay flag, conservative adjusted signal, and capped conviction."""
     base_adjusted = adjusted_signal or signal
@@ -227,6 +231,7 @@ def apply_fcf_basis_overlay_to_signal(
         universe_divergence_flagged=universe_divergence_flagged,
         action_note_mismatch=action_note_mismatch,
         fcf_yield_unit_fx_error=fcf_yield_unit_fx_error,
+        unverified_screen_without_cashflow_metrics=unverified_screen_without_cashflow_metrics,
     ):
         return False, base_adjusted, base_conviction
     capped_signal = cap_signal_for_fcf_basis_overlay(signal)
@@ -285,6 +290,10 @@ def enrich_signals_with_fcf_basis_overlay(
             else None
         )
 
+        unverified_without_metrics = fcf_unverified_screen_without_cashflow_metrics(
+            fcf_bundle,
+            screen_ttm=screen_ttm,
+        )
         triggered, new_adjusted, new_conviction = apply_fcf_basis_overlay_to_signal(
             str(row.get("signal") or "hold"),
             divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
@@ -292,6 +301,7 @@ def enrich_signals_with_fcf_basis_overlay(
             universe_divergence_flagged=bool(fcf_bundle.get("fcf_divergence_flagged")),
             action_note_mismatch=action_note_mismatch,
             fcf_yield_unit_fx_error=fcf_yield_unit_fx_error,
+            unverified_screen_without_cashflow_metrics=unverified_without_metrics,
             ticker_models=ticker_models,
             conviction_score=float(row.get("conviction_score") or 0.0),
             adjusted_signal=existing_adjusted,

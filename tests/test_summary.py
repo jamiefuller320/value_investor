@@ -4534,3 +4534,92 @@ def test_honour_and_to_dict_backfill_structured_fcf_from_note():
     snapshot = report.to_dict()
     assert snapshot["fcf"]["filing_aligned"] == pytest.approx(192_100_000.0)
     assert snapshot["fcf"]["screen_ttm"] == pytest.approx(353_200_000.0)
+
+
+def test_isolate_timing_action_note_strips_prior_memo_boilerplate():
+    from value_investor.scoring.screening_export_guard import isolate_timing_action_note
+
+    note = (
+        "Strong Buy — neutral timing | Research: Accumulate, Medium risk — "
+        "Deep research partially confirms the screen thesis from the prior memo."
+    )
+    cleaned = isolate_timing_action_note(note)
+    assert cleaned == "Strong Buy — neutral timing"
+    assert "prior memo" not in cleaned.lower()
+
+
+def test_apply_screening_export_guard_sparse_model_pass_and_trade_plan_sanity():
+    from value_investor.scoring.screening_export_guard import apply_screening_export_guard
+
+    payload = apply_screening_export_guard(
+        {
+            "ticker": "SN.L",
+            "signal": "strong_buy",
+            "models_passed": 8,
+            "model_count": 22,
+            "families_passed": 5,
+            "family_count": 5,
+            "passed_families": "cheapness,quality,dividend,garp,risk",
+            "failed_models": [],
+            "stability_label": "persistent",
+            "weeks_at_signal": 9,
+            "close": 12.5,
+            "trade_plan": {"tactical_limit": 1250.0, "core_limit": None},
+            "summary": "Strong Buy (8/22 models).",
+            "action_note": "Strong Buy — neutral timing | Research: Accumulate",
+        }
+    )
+    assert payload["sparse_model_pass"] is True
+    assert "sparse model pass" in payload["summary"]
+    assert payload["stability_label"] == "building"
+    assert payload["trade_plan_unit_warning"] is True
+    assert payload["action_note"] == "Strong Buy — neutral timing"
+
+
+def test_fcf_unverified_screen_without_cashflow_metrics_sn_style():
+    from value_investor.scoring.fcf import fcf_unverified_screen_without_cashflow_metrics
+
+    bundle = {
+        "screen_ttm_unverified": True,
+        "cashflow_metrics": None,
+        "filing_aligned": 852_000_000.0,
+        "screen_ttm": 1_059_000_000.0,
+        "currency": "GBP",
+    }
+    assert fcf_unverified_screen_without_cashflow_metrics(bundle)
+
+
+def test_build_company_reports_sn_healthcare_subsector_overlays(tmp_path: Path):
+    """Orthopaedics profile enables healthcare price-erosion and reimbursement overlays."""
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="SN.L",
+                name="Smith & Nephew plc",
+                sector="Healthcare",
+                signal="strong_buy",
+                conviction_score=0.7012,
+                free_cashflow=852_000_000.0,
+                free_cashflow_screen_ttm=1_059_000_000.0,
+                adjusted_signal="strong_buy",
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "SN.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    assert report.healthcare_price_erosion_overlay is True
+    assert report.healthcare_reimbursement_overlay is True
+    assert report.adjusted_signal == "buy"
