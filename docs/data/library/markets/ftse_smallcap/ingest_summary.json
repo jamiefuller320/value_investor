@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-16T13:33:49.608974+00:00",
+  "run_at": "2026-09-16T13:37:16.078922+00:00",
   "market_id": "ftse_smallcap",
   "targets": [],
   "target_details": [],
@@ -9,7 +9,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-16T13:33:36.131343+00:00",
+    "snapshot_at": "2026-09-16T13:37:12.828781+00:00",
     "market_id": "ftse_smallcap",
     "buy_tier_count": 10,
     "unmeasured_buy_tier": 0,
@@ -62,13 +62,13 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-09-16T13:33:45.991795+00:00",
+    "snapshot_at": "2026-09-16T13:37:13.877104+00:00",
     "market_id": "ftse_smallcap",
     "buy_tier_count": 10,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 56,
+    "indexed_without_body": 52,
     "bodies_min": 48,
     "bodies_median": 52.0,
     "bodies_max": 76,
@@ -93,67 +93,44 @@
       "TPT.L": 8,
       "MER.L": 8,
       "GLE.L": 5,
-      "APTD.L": 6,
-      "FOXT.L": 8,
+      "APTD.L": 5,
+      "FOXT.L": 5,
       "BOOT.L": 8
     },
     "parked_tickers": [
+      "APTD.L",
       "BOOT.L",
       "DFS.L",
+      "FOXT.L",
       "GLE.L",
       "MER.L",
       "TPT.L",
       "ULTP.L"
     ],
-    "parked_count": 6,
+    "parked_count": 8,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 14,
-    "effective_indexed_without_body_tickers": [
-      "APTD.L",
-      "FOXT.L"
-    ],
-    "ingest_exhausted": false
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": false,
+  "recorded_gap_closure": true,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 10,
-    "hits": 7,
-    "new_rows_total": 4,
-    "curiosity_total": 7,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "BOOT.L",
-      "DFS.L",
-      "MER.L",
-      "TPT.L",
-      "APTD.L",
-      "FOXT.L",
-      "GLE.L",
-      "ULTP.L"
-    ],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
+  "discovery_scan": null,
+  "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "skipped": true,
+    "reason": "not_parallel_sprint_market",
+    "market_id": "ftse_smallcap"
+  },
   "critical_path": {
     "market_id": "ftse_smallcap",
-    "assessed_at": "2026-09-16T13:33:37.286700+00:00",
+    "assessed_at": "2026-09-16T13:37:13.356315+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -232,18 +209,20 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 7.5437120740000125,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3592.456287926,
+  "used_seconds": 0.0008845749999863983,
+  "budget_seconds": 2100.0,
+  "leftover_seconds": 2099.999115425,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": 320.0,
-  "pin_tickers": [],
+  "per_ticker_max_seconds": null,
+  "pin_tickers": [
+    "FOXT.L"
+  ],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_smallcap",
-    "updated_at": "2026-09-16T13:33:45.998434+00:00",
-    "exhausted": false,
+    "updated_at": "2026-09-16T13:37:13.880203+00:00",
+    "exhausted": true,
     "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [
@@ -298,6 +277,26 @@
         "thin": false
       },
       {
+        "ticker": "APTD.L",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-15T15:41:11.613217+00:00",
+        "filings_total": 81,
+        "filings_with_body": 76,
+        "indexed_without_body": 5,
+        "thin": false
+      },
+      {
+        "ticker": "FOXT.L",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-15T15:41:11.613217+00:00",
+        "filings_total": 54,
+        "filings_with_body": 49,
+        "indexed_without_body": 5,
+        "thin": false
+      },
+      {
         "ticker": "GLE.L",
         "reason": "unfetchable_iwb",
         "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
@@ -320,22 +319,28 @@
       "TPT.L",
       "ULTP.L"
     ],
-    "unparked_leftover": [
-      "APTD.L",
-      "FOXT.L"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/ftse_smallcap/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "ftse_smallcap"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "ftse_smallcap",
+    "ingest_exhausted_markets": [
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_smallcap",
+      "sp500",
+      "tsx60"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
     "reason": "no parked leftover tickers remaining for hunter",
     "tried_count": 1,
-    "candidate_count": 31,
+    "candidate_count": 34,
     "skipped_resolved_tickers": [
       "ABI.BR",
       "APAM.AS",
@@ -359,10 +364,13 @@
       "DFS.L",
       "MER.L",
       "TPT.L",
+      "APTD.L",
+      "FOXT.L",
       "GLE.L",
       "SU.TO",
       "NTR.TO",
       "TRI.TO",
+      "GIB-A.TO",
       "BAS.DE",
       "DTE.DE",
       "MUV2.DE",
