@@ -32,9 +32,45 @@ _WORKFLOW_SIGNATURES: tuple[dict[str, Any], ...] = (
             "tests/test_library_ladder.py",
         ],
     },
+    # Prefer timeout-specific match before the broad HTTP/ingest patterns so
+    # GHA step kills are not drafted as CurlError eng tasks (L408).
     {
         "workflow": "ingest-loop.yml",
-        "patterns": (r"ingest.improvement", r"ftse-ingest-loop", r"CurlError", r"HTTPError"),
+        "patterns": (r"CurlError", r"HTTPError", r"curl_cffi"),
+        "title": "Workflow fix: ingest-loop HTTP/curl failure on main",
+        "area": "ingest",
+        "allowed_paths": [
+            ".github/workflows/ingest-loop.yml",
+            "src/value_investor/ingest_loop.py",
+            "src/value_investor/research/ingest_improvement.py",
+            "tests/test_ingest_loop.py",
+        ],
+    },
+    {
+        "workflow": "ingest-loop.yml",
+        "patterns": (
+            r"The action 'Run weekday ingest loop' has timed out after \d+ minutes",
+            r"ftse-ingest-loop hit outer wall-clock timeout",
+        ),
+        "title": "Workflow fix: ingest-loop GHA step timeout on main",
+        "area": "ingest",
+        "skip_draft": True,
+        "skip_reason": (
+            "GHA step/outer wall-clock timeout after soft runtime_cutoff is handled by "
+            "budget-includes-discovery + workflow timeout headroom; do not mint a "
+            "high-priority eng task that blocks compile-cap drain."
+        ),
+        "allowed_paths": [
+            ".github/workflows/ingest-loop.yml",
+            "src/value_investor/ingest_loop.py",
+            "src/value_investor/research/ingest_improvement.py",
+            "src/value_investor/ingest_discovery_scan.py",
+            "tests/test_ingest_loop.py",
+        ],
+    },
+    {
+        "workflow": "ingest-loop.yml",
+        "patterns": (r"ingest.improvement", r"ftse-ingest-loop"),
         "title": "Workflow fix: ingest-loop failure on main",
         "area": "ingest",
         "allowed_paths": [
@@ -271,6 +307,8 @@ def draft_workflow_failure_task(
     """Queue a scoped workflow-failure engineering task when logs match a signature."""
     signature = signature or match_workflow_failure_signature(workflow_file, log_text)
     if signature is None:
+        return []
+    if signature.get("skip_draft"):
         return []
 
     title = str(signature.get("title") or f"Workflow fix: {workflow_file}")[:160]
