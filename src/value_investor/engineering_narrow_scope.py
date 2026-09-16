@@ -354,10 +354,9 @@ def apply_narrow_scope_to_task(task: EngineeringTask) -> list[EngineeringTask]:
                 f"{slice_.reason}"
             )[:500]
         elif slice_.cohesion_bypass:
-            summary = (
-                f"{task.summary or parent_title} "
-                f"(narrow_cohesion_bypass: {slice_.reason})"
-            )[:500]
+            summary = (f"{task.summary or parent_title} (narrow_cohesion_bypass: {slice_.reason})")[
+                :500
+            ]
         # Keep the original id on the first slice; callers renumber siblings.
         task_id = task.id if index == 1 else f"{task.id}-s{index}"
         out.append(

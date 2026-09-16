@@ -671,9 +671,7 @@ def apply_so_what_auto_queue(
                 if index == 0:
                     expanded.append(scoped)
                 else:
-                    expanded.append(
-                        dc_replace(scoped, id=f"eng-{run_stamp}-{seq_cursor:02d}")
-                    )
+                    expanded.append(dc_replace(scoped, id=f"eng-{run_stamp}-{seq_cursor:02d}"))
                     seq_cursor += 1
         generated = expanded
         next_seq = seq_cursor
