@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-16T10:57:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-16T12:00:10+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -471,6 +471,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L394 | **Traffic/PM proposes ops-monitor check extensions as eng drafts** | When EOD digests or traffic runs repeatedly flag the same ungrounded/missed stall, draft a supervised ops eng task to add a concrete ops-monitor check (allowed_paths already include ops_monitor.py). Do not let the PM agent edit ops-monitor in-place. | Project traffic digests have run ≥2 weeks and the same non-PR stall class appears in digests or human chase more than once |
 | L398 | **Expand narrow verify to ops/prompt/coverage eng classes** | ingest_narrow and scoring_narrow now have deterministic independent verify + scoped auto-merge. Broader eng areas (ops, prompt, coverage, ci) still human-merge; expand only after those two classes show clean merge quality. | ingest_narrow and scoring_narrow auto-merges run cleanly for ≥3 weeks with no path-guard incidents and EOD merge monitor shows stable verified counts |
 | L399 | **Expand narrow topic maps as new scoring overlays appear** | Upstream narrow-scope drafting uses keyword→concrete path maps. When new overlays ship, extend the topic tables so compound suggestions keep splitting into ≤8-path first-principle builds instead of cohesion_bypass. | A scoring eng task hits cohesion_bypass solely because its topic is missing from engineering_narrow_scope topic maps |
+| L406 | **Dashboard surface for PR fix common issues** | Expose docs/data/pr_fix_occasions.json common_issues on the Automation / ops dashboard so monthly review does not require CLI-only inspection. | pr_fix_occasions has ≥20 occasions or monthly checklist review feels CLI-heavy |
 
 ---
 
