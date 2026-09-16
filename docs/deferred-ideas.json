@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-16T17:15:36+00:00",
+  "updated_at": "2026-09-16T17:30:10+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9132,6 +9132,39 @@
       "status": "open",
       "source": "conversation: compile-cap drain blocked by eng-20260916-03",
       "added_at": "2026-09-16T17:15:36+00:00"
+    },
+    {
+      "id": "L407",
+      "category": "later",
+      "section": "ops",
+      "title": "Treat ingest-loop GHA step timeout on partial runs as non-failure",
+      "summary": "Recent ingest-loop reds are mostly step timeouts (65/90m) after soft runtime_cutoff, not CurlError. Soft budget + overhead still races the hard timeout; job fails red, mints workflow_failure, blocks compile-cap drain. Need earlier soft exit headroom and/or succeed-on-partial-commit so timeout is not a false eng task.",
+      "revisit_when": "Next cluster of ingest-loop timeout failures after #674 retries and PM cancel-on-heal land",
+      "tags": [
+        "ingest-loop",
+        "timeout",
+        "workflow_failure",
+        "compile-cap"
+      ],
+      "status": "open",
+      "source": "conversation: does PM cancel cover all failure cases",
+      "added_at": "2026-09-16T17:30:10+00:00"
+    },
+    {
+      "id": "L408",
+      "category": "later",
+      "section": "ops",
+      "title": "Separate timeout vs HTTP signatures for ingest-loop workflow_failure",
+      "summary": "ingest-loop.yml signature matches ftse-ingest-loop/ingest.improvement/CurlError/HTTPError, so timeout-only logs draft the CurlError-titled eng task with fetch-retry acceptance criteria. Split timeout-headroom vs transient-HTTP signatures so responders and allowed_paths match the real failure class.",
+      "revisit_when": "When implementing succeed-on-partial or timeout headroom for ingest-loop",
+      "tags": [
+        "ingest-loop",
+        "workflow_failure",
+        "signature"
+      ],
+      "status": "open",
+      "source": "conversation: does PM cancel cover all failure cases",
+      "added_at": "2026-09-16T17:30:10+00:00"
     }
   ],
   "fragments": [
