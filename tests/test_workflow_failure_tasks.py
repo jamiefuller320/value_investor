@@ -33,12 +33,15 @@ def test_match_ingest_loop_timeout_skips_draft():
     spec = match_workflow_failure_signature("ingest-loop.yml", TIMEOUT_LOG)
     assert spec is not None
     assert spec.get("skip_draft") is True
-    assert draft_workflow_failure_task(
-        workflow_file="ingest-loop.yml",
-        log_text=TIMEOUT_LOG,
-        run_id=1,
-        tasks_path=Path("/tmp/should_not_write_workflow_failure.json"),
-    ) == []
+    assert (
+        draft_workflow_failure_task(
+            workflow_file="ingest-loop.yml",
+            log_text=TIMEOUT_LOG,
+            run_id=1,
+            tasks_path=Path("/tmp/should_not_write_workflow_failure.json"),
+        )
+        == []
+    )
 
 
 def test_match_library_grow_json_error():
