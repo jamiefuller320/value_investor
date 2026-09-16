@@ -468,7 +468,11 @@
           2.0
         ]
       },
-      "note": "parked_hunter: off | skip | allowlist — scoped auto-merge for parked_source_hunter PRs after the CI hunter-merge-gate job passes. parked_hunter_verify_observer dispatches a non-blocking LLM reviewer. hunter_fix runs capped fix rounds when hunter-merge-gate fails on missing_test, short_skip, live_fetch_failed, too_many_urls, or unexpected_files; distinct failure kinds can each consume one round."
+      "note": "parked_hunter: off | skip | allowlist — scoped auto-merge for parked_source_hunter PRs after the CI hunter-merge-gate job passes. parked_hunter_verify_observer dispatches a non-blocking LLM reviewer. hunter_fix runs capped fix rounds when hunter-merge-gate fails on missing_test, short_skip, live_fetch_failed, too_many_urls, or unexpected_files; distinct failure kinds can each consume one round. ingest_narrow / scoring_narrow: off | observe | merge — independent deterministic verify for narrow ingest/scoring eng PRs (actual diff ≤8 safe paths including tests/), then scoped auto-merge when set to merge.",
+      "ingest_narrow": "merge",
+      "ingest_narrow_require_tests": true,
+      "scoring_narrow": "merge",
+      "scoring_narrow_require_tests": true
     },
     "queue_recovery": {
       "immediate_park_unfixable_pr": true,

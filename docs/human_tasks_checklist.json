@@ -2,19 +2,19 @@
   "version": 1,
   "updated_at": "2026-09-15",
   "title": "Human tasks checklist",
-  "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context \u2014 verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
+  "summary": "Manual gates for the learning loop, knob calibration, and promotion decisions. Automated weekday runs are listed for context — verify, do not duplicate. Cadence map: docs/ops/ops-review-cadence.md.",
   "repo_docs_base": "https://github.com/jamiefuller320/value_investor/blob/main",
   "runbook_path": "docs/ops/human-tasks-checklist.md",
   "sections": [
     {
       "id": "weekday",
-      "title": "Weekday (Mon\u2013Fri)",
+      "title": "Weekday (Mon–Fri)",
       "cadence": "weekday",
       "tasks": [
         {
           "id": "weekday-verify-paper-auto",
           "title": "Spot-check learning tracks after paper-auto",
-          "summary": "ops-monitor (13:15 catch-up) checks post-settle last_run, decision-review coverage of AI judgment vs rules, competing calibrated shadows, and Suite B buy_tier_level. Workflow freshness covers CI acted. Excess vs ^FTSE comparison stays Sunday \u2014 do not promote on weekday marks.",
+          "summary": "ops-monitor (13:15 catch-up) checks post-settle last_run, decision-review coverage of AI judgment vs rules, competing calibrated shadows, and Suite B buy_tier_level. Workflow freshness covers CI acted. Excess vs ^FTSE comparison stays Sunday — do not promote on weekday marks.",
           "automated": true,
           "doc_path": "docs/ops/ops-monitor.md",
           "doc_anchor": "paper-learning-tracks"
@@ -70,7 +70,7 @@
         {
           "id": "weekday-project-traffic-runs",
           "title": "Project traffic pause / unstick / EOD digest",
-          "summary": "Weekday project-traffic (and ops-monitor) classifies stuck cursor/* PRs, pauses new engineering-agent dispatch, comments for CI/conflict fixes, may dispatch conflict-resolve for eng branches, and writes a grounded EOD digest. Does not merge. Spot-check digest trajectory when pause is active.",
+          "summary": "Weekday project-traffic (and ops-monitor) classifies stuck cursor/* PRs, pauses new engineering-agent dispatch, comments for CI/conflict fixes, may dispatch conflict-resolve for eng branches, and writes a grounded EOD digest that lists today's eng merges (including independently verified ingest_narrow / scoring_narrow auto-merges). Spot-check digest trajectory and the merges-today list when pause is active or auto-merges land.",
           "automated": true,
           "doc_path": "docs/ops/project-traffic.md",
           "doc_anchor": "authority-v1"
@@ -101,7 +101,7 @@
         {
           "id": "sunday-phase-c-readiness-runs",
           "title": "Phase C readiness assessment (observe-only)",
-          "summary": "Sunday analysis-review runs ftse-phase-c-readiness and writes docs/data/phase_c_readiness.json. Checks Phase B slim evidence, \u22658 weeks AI-judgment rebalance_log with buy-tier/candidates, and non-trivial feature coverage. Does not fail the Sunday job on NOT READY.",
+          "summary": "Sunday analysis-review runs ftse-phase-c-readiness and writes docs/data/phase_c_readiness.json. Checks Phase B slim evidence, ≥8 weeks AI-judgment rebalance_log with buy-tier/candidates, and non-trivial feature coverage. Does not fail the Sunday job on NOT READY.",
           "automated": true,
           "doc_path": "docs/ops/pit-decision-autopsy.md",
           "doc_anchor": "automated-readiness-gate"
@@ -109,7 +109,7 @@
         {
           "id": "sunday-phase-c-readiness-gate",
           "title": "Start Phase C freeze writer only when readiness is READY",
-          "summary": "Before building or enabling the PIT autopsy freeze writer, confirm phase_c_readiness.json (or ftse-phase-c-readiness exit 0) is READY. Do not start Phase C on vibes or with --force-phase-b-done alone \u2014 that override does not invent rebalance history or feature coverage.",
+          "summary": "Before building or enabling the PIT autopsy freeze writer, confirm phase_c_readiness.json (or ftse-phase-c-readiness exit 0) is READY. Do not start Phase C on vibes or with --force-phase-b-done alone — that override does not invent rebalance history or feature coverage.",
           "automated": false,
           "doc_path": "docs/ops/pit-decision-autopsy.md",
           "doc_anchor": "automated-readiness-gate"
@@ -141,7 +141,7 @@
         {
           "id": "sunday-buy-cross-archive",
           "title": "Read buy-cross archive review",
-          "summary": "After analysis-review, read buy_cross_archive_review.json: cross-book vs level comparison, week-0 cash, names that never entered because they stayed buy-tier. Observe-only \u2014 do not spawn a live cross book from sparse historic crossings.",
+          "summary": "After analysis-review, read buy_cross_archive_review.json: cross-book vs level comparison, week-0 cash, names that never entered because they stayed buy-tier. Observe-only — do not spawn a live cross book from sparse historic crossings.",
           "automated": false,
           "doc_path": "docs/ops/buy-tier-cohort-labs.md",
           "doc_anchor": "cross-book-archive-only"
@@ -173,7 +173,7 @@
         {
           "id": "sunday-promote-knobs-gate",
           "title": "Promote knob priors only when gates pass",
-          "summary": "Do not edit ai_judgment config until a shadow is surviving, ready_for_priors/score gap look sound, and confidence is acceptable. Survivors are starting priors for refinement \u2014 never auto-apply. Stress-book (3%) excess vs ^FTSE alone is not sufficient \u2014 see fair-cost gate.",
+          "summary": "Do not edit ai_judgment config until a shadow is surviving, ready_for_priors/score gap look sound, and confidence is acceptable. Survivors are starting priors for refinement — never auto-apply. Stress-book (3%) excess vs ^FTSE alone is not sufficient — see fair-cost gate.",
           "automated": false,
           "doc_path": "docs/ops/knob-calibration.md",
           "doc_anchor": "promoting-a-prior-human-gate"
@@ -205,7 +205,7 @@
         {
           "id": "sunday-entry-dca-cadence",
           "title": "Review entry DCA cadence when overlay readiness fires",
-          "summary": "Ack via CLI or Lifecycle Acknowledge (observe-only \u2014 Do not execute DCA from ack). Review docs/data/entry_dca_adoption_plan.json. When paper_execute_graduated is ready, Lifecycle Start enables 4\u00d7 weekly entry DCA on graduated_allocation only. Do not change starter fraction or apply to primary/live while beat_market is false.",
+          "summary": "Ack via CLI or Lifecycle Acknowledge (observe-only — Do not execute DCA from ack). Review docs/data/entry_dca_adoption_plan.json. When paper_execute_graduated is ready, Lifecycle Start enables 4× weekly entry DCA on graduated_allocation only. Do not change starter fraction or apply to primary/live while beat_market is false.",
           "automated": false,
           "doc_path": "docs/ops/position-lifecycle.md",
           "doc_anchor": "entry-dca-adoption-plan"
@@ -221,7 +221,7 @@
         {
           "id": "sunday-analysis-tasks",
           "title": "Triage analysis_tasks experiments",
-          "summary": "Persist/publish/apply high system_gaps flags auto-queue as eng-sgap-* (no agent dispatch). Triage remaining proposed produce/learning-clock flags with ftse-analysis-review promote. Phase B rememo is body-lag slim \u2014 do not promote thin_memo_counted_as_coverage as rememo-eligibility widening; thicken filings then existing rememo_reason. Scoring candidates remain eng-20260903-02 / eng-20260903-03 (observe-only; no assign_signal() edits). Keep paper_knobs and offline_sim manual; do not revive cancelled N58/N59 knob counterfactuals.",
+          "summary": "Persist/publish/apply high system_gaps flags auto-queue as eng-sgap-* (no agent dispatch). Triage remaining proposed produce/learning-clock flags with ftse-analysis-review promote. Phase B rememo is body-lag slim — do not promote thin_memo_counted_as_coverage as rememo-eligibility widening; thicken filings then existing rememo_reason. Scoring candidates remain eng-20260903-02 / eng-20260903-03 (observe-only; no assign_signal() edits). Keep paper_knobs and offline_sim manual; do not revive cancelled N58/N59 knob counterfactuals.",
           "automated": false,
           "doc_path": "docs/ops/analysis-review.md",
           "doc_anchor": "manual-promotion-to-engineering"
@@ -260,7 +260,7 @@
         {
           "id": "monthly-ops-review-cadence",
           "title": "Follow unified ops review cadence",
-          "summary": "Use the weekly \u2192 monthly \u2192 quarterly sequence in ops-review-cadence.md (analysis review, horizon scan, deferred ideas) rather than ad-hoc review order.",
+          "summary": "Use the weekly → monthly → quarterly sequence in ops-review-cadence.md (analysis review, horizon scan, deferred ideas) rather than ad-hoc review order.",
           "automated": false,
           "doc_path": "docs/ops/ops-review-cadence.md",
           "doc_anchor": "sequence"
@@ -322,7 +322,7 @@
         {
           "id": "adhoc-live-capital-pack",
           "title": "Verify decision packs before live capital",
-          "summary": "For real-money trades, use decision-pack verify checklist and primary sources \u2014 separate from the automated learning loop.",
+          "summary": "For real-money trades, use decision-pack verify checklist and primary sources — separate from the automated learning loop.",
           "automated": false,
           "doc_path": "docs/ops/primary-learning-track.md",
           "doc_anchor": "success-datums"
@@ -346,7 +346,7 @@
         {
           "id": "adhoc-euro-ingest-cron-reimport",
           "title": "Re-import euro ingest cron slots after cadence change",
-          "summary": "After merging library ingest cadence changes, run import_cron_jobs --all (or euro/sprint/maintenance job keys) so cron-job.org gets Mon\u2013Sat peak + daily off-peak slots and disables old weekday-only titles. Sprint \u22644\u00d7/day \u00d7 24; maintenance \u22644\u00d7/day \u00d7 62. GitHub schedule alone is best-effort.",
+          "summary": "After merging library ingest cadence changes, run import_cron_jobs --all (or euro/sprint/maintenance job keys) so cron-job.org gets Mon–Sat peak + daily off-peak slots and disables old weekday-only titles. Sprint ≤4×/day × 24; maintenance ≤4×/day × 62. GitHub schedule alone is best-effort.",
           "automated": false,
           "doc_path": "docs/ops/euro-depth-sprint.md",
           "doc_anchor": "register-euro-ingest-crons-after-cadence-changes"
@@ -394,7 +394,7 @@
         {
           "id": "adhoc-review-ingest-deviations",
           "title": "Review open ingest deviations and reprocess if needed",
-          "summary": "When Automation \u2192 Ingest deviations shows open rows (IR exhausted or weekday cap with leftover IWB), inspect the ticker. Approve writes a 7-day intensive pin for the next euro slot; dismiss closes the row for 7 days. Do not auto-replace IR URLs \u2014 that stays a judged allowlist edit.",
+          "summary": "When Automation → Ingest deviations shows open rows (IR exhausted or weekday cap with leftover IWB), inspect the ticker. Approve writes a 7-day intensive pin for the next euro slot; dismiss closes the row for 7 days. Do not auto-replace IR URLs — that stays a judged allowlist edit.",
           "automated": false,
           "doc_path": "docs/ops/ingest-deviations.md",
           "doc_anchor": "what-needs-a-human"
@@ -402,7 +402,7 @@
         {
           "id": "adhoc-review-fcf-basis-bridges",
           "title": "Override FCF auto policy only when majority/filing is wrong",
-          "summary": "Ordinary buy-tier FCF mismatches auto-resolve (majority among screen/filing/company-adjusted, else filing-aligned OCF\u2212CapEx). Write docs/data/research/<TICKER>/sources/fcf_bridge.json only as a residual override when that auto pick is wrong, or when so-what flags fcf_bridge_needed because no filing/company figure exists. Never leave divergent Yahoo TTM as policy.",
+          "summary": "Ordinary buy-tier FCF mismatches auto-resolve (majority among screen/filing/company-adjusted, else filing-aligned OCF−CapEx). Write docs/data/research/<TICKER>/sources/fcf_bridge.json only as a residual override when that auto pick is wrong, or when so-what flags fcf_bridge_needed because no filing/company figure exists. Never leave divergent Yahoo TTM as policy.",
           "automated": false,
           "doc_path": "docs/ops/fcf-basis-bridges.md",
           "doc_anchor": "when-to-review-residual"

@@ -249,6 +249,10 @@ def default_policy() -> dict[str, Any]:
             "auto_merge": {
                 "parked_hunter": "allowlist",
                 "parked_hunter_verify_observer": True,
+                "ingest_narrow": "merge",
+                "ingest_narrow_require_tests": True,
+                "scoring_narrow": "merge",
+                "scoring_narrow_require_tests": True,
                 "hunter_fix": {
                     "enabled": True,
                     "max_rounds": 2,
@@ -259,6 +263,9 @@ def default_policy() -> dict[str, Any]:
                     "parked_hunter: off | skip | allowlist — scoped auto-merge for "
                     "parked_source_hunter PRs after the CI hunter-merge-gate job passes. "
                     "parked_hunter_verify_observer dispatches a non-blocking LLM reviewer. "
+                    "ingest_narrow / scoring_narrow: off | observe | merge — independent "
+                    "deterministic verify for #651/#653-class eng PRs (actual diff ≤8 safe "
+                    "paths including tests/), then scoped auto-merge when set to merge. "
                     "hunter_fix runs capped fix rounds when hunter-merge-gate fails on "
                     "missing_test, short_skip, live_fetch_failed, too_many_urls, or "
                     "unexpected_files; distinct failure kinds can each consume one round."

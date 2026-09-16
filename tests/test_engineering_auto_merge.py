@@ -68,13 +68,13 @@ def test_evaluate_auto_merge_ready_when_scope_and_checks_ok(tmp_path):
 def test_evaluate_auto_merge_rejects_when_auto_merge_disabled(tmp_path):
     task = EngineeringTask(
         id="eng-20260802-02",
-        area="ingest",
-        title="Fetch PDFs",
+        area="ops",
+        title="Ops dashboard tweak",
         summary="x",
         priority="high",
         priority_score=90.0,
         source="post_run_review",
-        allowed_paths=["src/value_investor/research/filings.py"],
+        allowed_paths=["src/value_investor/ops_monitor.py"],
         blocked_paths=list(BLOCKED_PATHS),
         auto_merge=False,
         status="pr_open",

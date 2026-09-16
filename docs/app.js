@@ -3135,6 +3135,12 @@ function renderQueueHealthMonitor(data) {
           ${agent.next_task_id ? settingRow("Next task", `<code>${esc(agent.next_task_id)}</code>`) : ""}
           ${clearing.pause_active ? settingRow("Backlog pause", `<span class="badge badge-ii-no">active</span> (${esc(String(clearing.attention_parked_count ?? 0))} parked)`) : ""}
           ${(health.traffic_control || {}).pause_active ? settingRow("Traffic pause", `<span class="badge badge-ii-no">active</span> (${esc(String((health.traffic_control || {}).stuck_pr_count ?? 0))} stuck)`) : ""}
+          ${Array.isArray(health.merges_today) && health.merges_today.length
+            ? settingRow(
+                "Merges today",
+                `${esc(String(health.merges_today.length))} total / ${esc(String(health.verified_merges_today_count ?? health.merges_today.filter((r) => r.independently_verified).length))} verified`
+              )
+            : ""}
         </div>
         <div class="card queue-health-lane">
           <h3>Ops monitor ${ops.overall ? overallStatusBadge(ops.overall) : ""}</h3>
@@ -3142,8 +3148,22 @@ function renderQueueHealthMonitor(data) {
           ${settingRow("Dispatch signal", ops.should_dispatch_engineering ? "ready" : "hold")}
         </div>
       </div>
+      ${Array.isArray(health.merges_today) && health.merges_today.length ? `
+      <div class="card" style="margin-top:0.75rem">
+        <h3>Engineering merges today</h3>
+        <ul class="small" style="margin:0.5rem 0 0;padding-left:1.2rem">
+          ${health.merges_today.slice(0, 12).map((row) => {
+            const pr = row.pr_number ? `#${row.pr_number}` : "";
+            const href = row.pr_url || "";
+            const label = `${row.merge_class || "human"}${row.independently_verified ? "/verified" : "/human"}`;
+            const link = href ? `<a href="${esc(href)}" target="_blank" rel="noopener">${esc(pr || row.task_id || "PR")}</a>` : esc(pr || row.task_id || "");
+            return `<li><code>${esc(label)}</code> ${link} — ${esc(row.title || "")}</li>`;
+          }).join("")}
+        </ul>
+      </div>` : ""}
       <p class="small muted" style="margin-top:0.75rem">
         Auto-merge is <strong>event-driven</strong> (green CI → merge workflow), not a background merger.
+        Narrow ingest/scoring PRs (≤8 safe paths + tests) pass an independent deterministic verify gate before merge.
         The agent lane runs when the hourly queue dispatches <code>engineering-agent</code>.
         Project traffic pauses new PRs when monitored branches are CI-red or conflicted
         (<a href="${esc(githubOpsDocUrl("docs/ops/project-traffic.md") || "#")}" target="_blank" rel="noopener">runbook</a>).

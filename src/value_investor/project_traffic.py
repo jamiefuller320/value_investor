@@ -9,7 +9,7 @@ This is the bounded first slice of a project-management agent:
 * Emit an end-of-day digest that cites committed artifacts (progress report,
   north-star stages, queue health) rather than free-form claims.
 
-Merge authority stays restricted — independent verification may loosen that later.
+Merge authority is scoped auto-merge (ci_fix / ingest_narrow / scoring_narrow / parked_hunter) with independent deterministic verify; traffic itself still does not merge.
 """
 
 from __future__ import annotations
@@ -1129,6 +1129,11 @@ def build_daily_digest(
     elif ungrounded:
         trajectory = "needs_evidence"
 
+    from value_investor.engineering_narrow_merge import list_todays_engineering_merges
+
+    merges_today = list_todays_engineering_merges(tasks_path=COMMITTED_TASKS_PATH, now=now)
+    verified = [row for row in merges_today if row.get("independently_verified")]
+
     return {
         "schema_version": SCHEMA_VERSION,
         "generated_at": now.isoformat(),
@@ -1145,12 +1150,14 @@ def build_daily_digest(
             "ungrounded_count": len(ungrounded),
             "grounded_count": len(evidence) - len(ungrounded),
         },
+        "merges_today": merges_today,
+        "verified_merges_today": verified,
         "merge_authority": {
-            "status": "restricted",
+            "status": "scoped_auto_merge",
             "note": (
-                "Traffic controller may pause dispatch and request fixes; "
-                "it does not merge. Loosen only with independent verification "
-                "(path guard + green CI + allowlist), same as scoped auto-merge."
+                "Traffic controller does not merge. Scoped auto-merge may merge "
+                "ci_fix, ingest_narrow / scoring_narrow (independent deterministic "
+                "verify), and parked_hunter PRs. EOD lists today's merges for monitoring."
             ),
         },
         "ops_email_handoff": ops_email_handoff,
@@ -1212,6 +1219,20 @@ def format_daily_digest_markdown(digest: dict[str, Any]) -> str:
             )
     else:
         lines.append("- _(none)_")
+
+    lines.extend(["", "## Merges today (monitor independent verify)"])
+    merges = list(digest.get("merges_today") or [])
+    if merges:
+        for row in merges:
+            pr = row.get("pr_number")
+            pr_bit = f" PR #{pr}" if pr else ""
+            verified_label = "verified" if row.get("independently_verified") else "human"
+            lines.append(
+                f"- `{row.get('merge_class')}`/{verified_label}{pr_bit} "
+                f"`{row.get('task_id')}` — {row.get('title')}"
+            )
+    else:
+        lines.append("- _(none merged today)_")
 
     handoff = digest.get("ops_email_handoff") or {}
     handoff_items = list(handoff.get("items") or [])
