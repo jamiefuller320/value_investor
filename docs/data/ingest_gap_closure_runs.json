@@ -10572,8 +10572,115 @@
         "per_ticker": []
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260916-03",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "BPT.AX",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "BPT.AX"
+        ],
+        "market_id": "asx200",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260916-03",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-16T14:02:55.481006+00:00",
+      "completed_at": "2026-09-16T14:23:09.350735+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 10,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "BPT.AX"
+        ],
+        "results": [
+          {
+            "ticker": "BPT.AX",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 103,
+              "filings_with_body": 88,
+              "indexed_without_body": 15
+            },
+            "after": {
+              "filings_total": 103,
+              "filings_with_body": 98,
+              "indexed_without_body": 5
+            },
+            "improved": true,
+            "regime": "asx_announcements",
+            "filings_summary": {
+              "total": 78,
+              "annual": 14,
+              "interim": 4,
+              "trading_update": 0,
+              "other": 60,
+              "with_body": 78,
+              "period_coverage": {
+                "annual": {
+                  "total": 14,
+                  "with_body": 14
+                },
+                "interim": {
+                  "total": 4,
+                  "with_body": 4
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 60,
+                  "with_body": 60
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 98,
+              "with_body_after": 98,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "BPT.AX",
+            "with_body_before": 88,
+            "with_body_after": 98,
+            "improved": true
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-16T13:37:43.095945+00:00",
+  "updated_at": "2026-09-16T14:23:09.350750+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
