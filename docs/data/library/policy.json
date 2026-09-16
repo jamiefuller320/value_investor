@@ -350,8 +350,8 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 483.3,
-    "estimated_spend_usd_this_week": 145.2,
+    "estimated_spend_usd_this_cycle": 484.5,
+    "estimated_spend_usd_this_week": 146.4,
     "week_id": "2026-W38",
     "cycle_id": "2026-09-d8",
     "weekly_ops_cap_usd": 84.5,
@@ -459,6 +459,10 @@
     "auto_merge": {
       "parked_hunter": "allowlist",
       "parked_hunter_verify_observer": true,
+      "ingest_narrow": "merge",
+      "ingest_narrow_require_tests": true,
+      "scoring_narrow": "merge",
+      "scoring_narrow_require_tests": true,
       "hunter_fix": {
         "enabled": true,
         "max_rounds": 2,
@@ -468,11 +472,7 @@
           2.0
         ]
       },
-      "note": "parked_hunter: off | skip | allowlist — scoped auto-merge for parked_source_hunter PRs after the CI hunter-merge-gate job passes. parked_hunter_verify_observer dispatches a non-blocking LLM reviewer. hunter_fix runs capped fix rounds when hunter-merge-gate fails on missing_test, short_skip, live_fetch_failed, too_many_urls, or unexpected_files; distinct failure kinds can each consume one round. ingest_narrow / scoring_narrow: off | observe | merge — independent deterministic verify for narrow ingest/scoring eng PRs (actual diff ≤8 safe paths including tests/), then scoped auto-merge when set to merge.",
-      "ingest_narrow": "merge",
-      "ingest_narrow_require_tests": true,
-      "scoring_narrow": "merge",
-      "scoring_narrow_require_tests": true
+      "note": "parked_hunter: off | skip | allowlist — scoped auto-merge for parked_source_hunter PRs after the CI hunter-merge-gate job passes. parked_hunter_verify_observer dispatches a non-blocking LLM reviewer. hunter_fix runs capped fix rounds when hunter-merge-gate fails on missing_test, short_skip, live_fetch_failed, too_many_urls, or unexpected_files; distinct failure kinds can each consume one round. ingest_narrow / scoring_narrow: off | observe | merge — independent deterministic verify for narrow ingest/scoring eng PRs (actual diff ≤8 safe paths including tests/), then scoped auto-merge when set to merge."
     },
     "queue_recovery": {
       "immediate_park_unfixable_pr": true,
@@ -505,7 +505,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-09-16T06:19:03.935462+00:00",
+  "updated_at": "2026-09-16T06:42:33.848608+00:00",
   "ingest_parity_markets": [
     "asx200",
     "euro_depth"
