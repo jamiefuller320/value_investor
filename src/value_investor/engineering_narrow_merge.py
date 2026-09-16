@@ -220,6 +220,22 @@ def evaluate_narrow_verify(
             policy=policy_value,
         )
 
+    from value_investor.engineering_narrow_scope import task_has_narrow_cohesion_bypass
+
+    if task_has_narrow_cohesion_bypass(task):
+        bypass_reason = str((task.evidence or {}).get("narrow_scope_reason") or "").strip()
+        detail = bypass_reason or "coding objective needs a wider cohesive diff"
+        return NarrowVerifyResult(
+            ok=True,
+            verdict="skipped",
+            reason=f"narrow_cohesion_bypass — human merge ({detail})",
+            merge_class=resolved_class,
+            task_id=task.id,
+            pr_number=pr_number,
+            changed_files=list(changed_files),
+            policy=policy_value,
+        )
+
     eligible, reason = changed_files_eligible_for_narrow(
         changed_files, task=task, merge_class=resolved_class
     )
