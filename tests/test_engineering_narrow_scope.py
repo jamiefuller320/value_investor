@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from value_investor.ci_fix_tasks import AUTO_MERGE_MAX_PATHS
-from value_investor.engineering_narrow_merge import evaluate_scoring_narrow_verify
+from value_investor.engineering_narrow_merge import evaluate_narrow_verify
 from value_investor.engineering_narrow_scope import (
     apply_narrow_scope_to_task,
     plan_narrow_draft_scopes,
@@ -65,7 +65,9 @@ def test_cohesion_bypass_when_no_topic_map():
     assert task_has_narrow_cohesion_bypass(task)
     assert task.auto_merge is False
 
-    gate = evaluate_scoring_narrow_verify(
+    # Drain-sourced scoring tasks resolve to merge_class compile_cap_drain, not
+    # scoring_narrow — cohesion bypass still skips scoped auto-merge.
+    gate = evaluate_narrow_verify(
         task=task,
         changed_files=[
             "src/value_investor/scoring/snapshot.py",
@@ -84,6 +86,7 @@ def test_cohesion_bypass_when_no_topic_map():
     )
     assert gate.ok
     assert gate.verdict == "skipped"
+    assert gate.merge_class == "compile_cap_drain"
     assert "narrow_cohesion_bypass" in gate.reason
 
 
