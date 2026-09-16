@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-16T15:27:54.575180+00:00",
+  "run_at": "2026-09-16T17:20:32.549039+00:00",
   "market_id": "euro_stoxx50",
   "targets": [
     "SAP.DE"
@@ -81,7 +81,7 @@
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-16T15:27:40.486751+00:00",
+    "snapshot_at": "2026-09-16T17:19:04.554492+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 15,
     "unmeasured_buy_tier": 0,
@@ -128,7 +128,7 @@
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-16T15:27:50.142257+00:00",
+    "snapshot_at": "2026-09-16T17:19:19.387936+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 15,
     "unmeasured_buy_tier": 0,
@@ -163,16 +163,15 @@
       "DTE.DE",
       "MUV2.DE",
       "SAN.PA",
+      "SAP.DE",
       "SGO.PA"
     ],
-    "parked_count": 5,
+    "parked_count": 6,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
-    "effective_indexed_without_body_tickers": [
-      "SAP.DE"
-    ],
-    "ingest_exhausted": false
+    "effective_indexed_without_body": 0,
+    "effective_indexed_without_body_tickers": [],
+    "ingest_exhausted": true
   },
   "stalled": false,
   "micro_compiled": false,
@@ -183,10 +182,37 @@
   "discovery_scan": null,
   "maintenance_mode": false,
   "parity_handoff": null,
-  "parallel_sprint_handoff": null,
+  "parallel_sprint_handoff": {
+    "advanced": true,
+    "parallel_stream": 2,
+    "from_market": "euro_stoxx50",
+    "to_market": "tsx60",
+    "stream_markets_after": [
+      "tsx60"
+    ],
+    "parity_event": {
+      "recorded": false,
+      "reason": "ingest_exhausted_leftover_gaps",
+      "market_id": "euro_stoxx50",
+      "ingest_exhausted": true,
+      "exhausted_maintenance_recorded": true,
+      "parked_tickers": [
+        "BAS.DE",
+        "DTE.DE",
+        "MUV2.DE",
+        "SAN.PA",
+        "SAP.DE",
+        "SGO.PA"
+      ],
+      "learning_admitted_changed": false,
+      "learning_admitted": true
+    },
+    "at": "2026-09-16T17:19:30.005572+00:00",
+    "ingest_parity_recorded": false
+  },
   "critical_path": {
     "market_id": "euro_stoxx50",
-    "assessed_at": "2026-09-16T15:27:41.226514+00:00",
+    "assessed_at": "2026-09-16T17:19:05.404606+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -239,9 +265,9 @@
       "thin_need_bodies": 1
     }
   },
-  "used_seconds": 8.192219609999995,
+  "used_seconds": 13.136283071999998,
   "budget_seconds": 525.0,
-  "leftover_seconds": 516.8077803900001,
+  "leftover_seconds": 511.86371692800003,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -249,9 +275,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_stoxx50",
-    "updated_at": "2026-09-16T15:27:50.144011+00:00",
-    "exhausted": false,
-    "complete_zero_improve_runs": 2,
+    "updated_at": "2026-09-16T17:19:19.389731+00:00",
+    "exhausted": true,
+    "complete_zero_improve_runs": 3,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -303,6 +329,16 @@
         "filings_with_body": 1,
         "indexed_without_body": 1,
         "thin": true
+      },
+      {
+        "ticker": "SAP.DE",
+        "reason": "unfetchable_iwb",
+        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "parked_at": "2026-09-16T17:19:19.389731+00:00",
+        "filings_total": 18,
+        "filings_with_body": 17,
+        "indexed_without_body": 1,
+        "thin": false
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
@@ -315,15 +351,22 @@
       "SAP.DE",
       "SGO.PA"
     ],
-    "unparked_leftover": [
-      "SAP.DE"
-    ],
+    "unparked_leftover": [],
     "path": "docs/data/library/markets/euro_stoxx50/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "skipped": true,
-    "reason": "not_exhausted",
-    "market_id": "euro_stoxx50"
+    "recorded": true,
+    "first_time": false,
+    "market_id": "euro_stoxx50",
+    "ingest_exhausted_markets": [
+      "euro_depth",
+      "euro_stoxx50",
+      "ftse_smallcap",
+      "sp500",
+      "tsx60"
+    ],
+    "learning_admitted": true,
+    "learning_admitted_changed": false
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
@@ -358,12 +401,12 @@
       "GLE.L",
       "SU.TO",
       "NTR.TO",
-      "TRI.TO",
       "GIB-A.TO",
       "BAS.DE",
       "DTE.DE",
       "MUV2.DE",
-      "SGO.PA"
+      "SGO.PA",
+      "SAP.DE"
     ]
   }
 }
