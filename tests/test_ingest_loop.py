@@ -450,6 +450,14 @@ def test_ingest_loop_workflow_step_timeout_has_headroom_above_soft_budget() -> N
     assert step_m is not None
     step_timeout_m = int(step_m.group(1))
     assert step_timeout_m >= (soft_budget_s // 60) + 15
+    outer_m = re.search(
+        r"timeout --signal=TERM --kill-after=60s (\d+)m ftse-ingest-loop",
+        text,
+    )
+    assert outer_m is not None
+    outer_timeout_m = int(outer_m.group(1))
+    assert outer_timeout_m < step_timeout_m
+    assert outer_timeout_m >= (soft_budget_s // 60) + 10
 
 
 def test_run_weekday_ingest_loop_logs_book_deltas(tmp_path: Path, monkeypatch):

@@ -680,8 +680,13 @@ def run_ingest_improvement_pass(
     discovery runs across buy-tier first; new index rows boost target priority
     so deepen focuses on fresh filings. ``discovery_scan_cap`` is reserved for
     later compute throttling (``None`` = no throttle).
+
+    Wall-clock ``max_runtime_seconds`` covers bootstrap + discovery + deepen
+    (library already split the same way). Discovery may use at most a quarter of
+    the slot so body refetch still runs before the GHA step hard timeout.
     """
     pass_errors: list[str] = []
+    slot_started = time.monotonic()
     try:
         bootstrap_buy_tier_research(
             reports,
@@ -698,28 +703,49 @@ def run_ingest_improvement_pass(
     discovery_payload: dict[str, Any] | None = None
     if discovery_scan:
         from value_investor.ingest_discovery_scan import run_buy_tier_discovery_scan
+        from value_investor.library_ingest_budget import discovery_runtime_budget
 
+        discovery_budget = (
+            discovery_runtime_budget(float(max_runtime_seconds))
+            if max_runtime_seconds is not None
+            else None
+        )
         try:
-            scan = run_buy_tier_discovery_scan(
-                reports,
-                output_dir=output_dir,
-                market=market or "ftse350",
-                scan_cap=discovery_scan_cap,
-                persist_index=True,
-                persist_summary=True,
-            )
-            discovery_bonus_by_ticker = {
-                ticker: hit.priority_bonus(scan.prioritization_weights)
-                for ticker, hit in scan.hits_by_ticker().items()
-            }
-            discovery_payload = {
-                "scanned": scan.scanned,
-                "hits": scan.hits,
-                "new_rows_total": scan.new_rows_total,
-                "curiosity_total": scan.curiosity_total,
-                "errors": scan.errors,
-                "prioritization_weights": scan.prioritization_weights,
-            }
+            if discovery_budget is not None and discovery_budget <= 0:
+                discovery_payload = {
+                    "scanned": 0,
+                    "hits": 0,
+                    "new_rows_total": 0,
+                    "curiosity_total": 0,
+                    "errors": 0,
+                    "skipped": True,
+                    "reason": "no discovery budget remaining after bootstrap",
+                    "max_runtime_seconds": discovery_budget,
+                }
+            else:
+                scan = run_buy_tier_discovery_scan(
+                    reports,
+                    output_dir=output_dir,
+                    market=market or "ftse350",
+                    scan_cap=discovery_scan_cap,
+                    persist_index=True,
+                    persist_summary=True,
+                    max_runtime_seconds=discovery_budget,
+                )
+                discovery_bonus_by_ticker = {
+                    ticker: hit.priority_bonus(scan.prioritization_weights)
+                    for ticker, hit in scan.hits_by_ticker().items()
+                }
+                discovery_payload = {
+                    "scanned": scan.scanned,
+                    "hits": scan.hits,
+                    "new_rows_total": scan.new_rows_total,
+                    "curiosity_total": scan.curiosity_total,
+                    "errors": scan.errors,
+                    "prioritization_weights": scan.prioritization_weights,
+                    "max_runtime_seconds": discovery_budget,
+                    "runtime_cutoff": bool(scan.runtime_cutoff),
+                }
         except Exception as exc:  # noqa: BLE001 — listing scan must not abort body deepen
             message = f"discovery_scan: {exc}"
             pass_errors.append(message)
@@ -752,7 +778,8 @@ def run_ingest_improvement_pass(
 
     store = ResearchStore(output_dir)
     suggestions_by_ticker = _load_ingest_suggestions(suggestions_path)
-    started = time.monotonic()
+    # Shared wall clock with bootstrap/discovery — not a fresh timer.
+    started = slot_started
 
     for target in targets:
         should_cutoff, cutoff_reason = _ingest_pass_should_cutoff(
