@@ -23,9 +23,11 @@ slice of a PM agent.
 | Dispatch scoped `engineering-conflict-resolve.yml` for `cursor/eng-*` | Yes |
 | Rely on existing `ci-pr-autofix` / hunter-fix on CI failure | Yes (event-driven) |
 | Remediate queue merge-sync lag (`pr_open` after GitHub merge) via recover/mark-merged | Yes |
+| Cancel open `workflow_failure` eng tasks when the named workflow has succeeded after the minting failure | Yes |
 | Independent verify + scoped auto-merge for **ingest_narrow** / **scoring_narrow** | Yes (deterministic path/CI/tests gate; policy `ingest_narrow` / `scoring_narrow`) |
 | Receive ops-monitor email findings + planned rectification (L397 handoff) | Yes |
 | Auto-remediate non–v1 ops email findings | **No** — record on handoff artifact / digest for human or eng draft |
+| Author code fixes for failing workflows / invent eng patches | **No** — still supervised `workflow_failure` / engineering-agent |
 | Broad merge PRs outside scoped classes | **No** — keep restricted; loosen only with independent verification |
 | Broad Phase B/C self-healing / task invention | **No** — still deferred as L388 EOD gate agent |
 
@@ -204,11 +206,13 @@ gates), it also calls `handoff_ops_monitor_email_to_pm`:
 
 1. Packages each unfixed finding with a deterministic `planned_rectification`
 2. Includes the email subject + text/html body on the handoff artifact
-3. Auto-remediates only queue merge-sync (existing PM v1 authority)
+3. Auto-remediates queue merge-sync and recovered `workflow_failure` cancellations
+   (existing PM v1 authority)
 4. Leaves other items open on the handoff artifact and EOD digest section
 5. Still sends SMTP (handoff failure must not block email)
 
-Planned actions include `remediate_queue_merge_sync`, `request_unstick_stuck_prs`,
+Planned actions include `remediate_queue_merge_sync`,
+`cancel_recovered_workflow_failure`, `request_unstick_stuck_prs`,
 `rerun_or_dispatch_workflow`, `draft_ops_engineering_task`, and `human_triage`.
 
 ## Related
