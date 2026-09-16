@@ -182,7 +182,9 @@ jobs:
 
       - name: Run weekday ingest loop
         id: loop
-        # >= default max_runtime_seconds (3600) + ~20m overhead/headroom.
+        # Soft budget (default 3600s) now includes discovery. Outer `timeout`
+        # leaves ~15m before this step's hard limit so JSON write + commit +
+        # chain still run when Python mis-budgets (see #35066797050 / #35102954314).
         timeout-minutes: 90
         env:
           COMPANIES_HOUSE_API_KEY: ${{ secrets.COMPANIES_HOUSE_API_KEY }}
@@ -264,8 +266,12 @@ jobs:
           if [ -n "$PIN" ]; then
             ARGS+=(--pin-ticker "$PIN")
           fi
+          # 75m < 90m step timeout: leave headroom for output parse + commit + chain.
           EXIT=0
-          ftse-ingest-loop "${ARGS[@]}" || EXIT=$?
+          timeout --signal=TERM --kill-after=60s 75m ftse-ingest-loop "${ARGS[@]}" || EXIT=$?
+          if [ "$EXIT" -eq 124 ] || [ "$EXIT" -eq 137 ]; then
+            echo "ftse-ingest-loop hit outer wall-clock timeout (exit=$EXIT); continuing if JSON present"
+          fi
           if [ ! -s /tmp/ingest_loop.json ]; then
             echo "ftse-ingest-loop produced no JSON at /tmp/ingest_loop.json (exit=$EXIT)" >&2
             exit "${EXIT:-1}"
@@ -353,8 +359,8 @@ jobs:
           PY
           if [ "$EXIT" -ne 0 ]; then
             PARTIAL=$(python3 -c "import json; d=json.load(open('/tmp/ingest_loop.json')); print('yes' if d.get('partial') or (d.get('ingest_summary') or {}).get('runtime_cutoff') else 'no')")
-            if [ "$PARTIAL" = "yes" ]; then
-              echo "Partial ingest run — continuing to commit artifacts despite exit $EXIT"
+            if [ "$PARTIAL" = "yes" ] || [ "$EXIT" -eq 124 ] || [ "$EXIT" -eq 137 ]; then
+              echo "Partial/timeout ingest run — continuing to commit artifacts despite exit $EXIT"
             else
               exit "$EXIT"
             fi

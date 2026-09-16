@@ -12,6 +12,7 @@ weights are explicit for later compute throttling; defaults do not throttle.
 from __future__ import annotations
 
 import logging
+import time
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
@@ -398,12 +399,14 @@ def run_buy_tier_discovery_scan(
     summary_path: Path = DEFAULT_DISCOVERY_SCAN_SUMMARY_PATH,
     curiosity_path: Path = DEFAULT_DISCOVERY_CURIOSITY_PATH,
     weights: dict[str, float] | None = None,
+    max_runtime_seconds: float | None = None,
 ) -> DiscoveryScanSummary:
     """
     Scan buy-tier tickers for new listing rows (no body download).
 
     ``scan_cap`` is reserved for later compute throttling; ``None`` means all
-    buy-tier names (no throttle).
+    buy-tier names (no throttle). ``max_runtime_seconds`` stops mid-scan so
+    weekday FTSE deepen still inherits wall-clock budget (library already did).
     """
     buy = [row for row in reports if row.signal in ("strong_buy", "buy")]
     buy.sort(
@@ -415,7 +418,14 @@ def run_buy_tier_discovery_scan(
     summary = DiscoveryScanSummary(
         prioritization_weights={**DEFAULT_PRIORITIZATION_WEIGHTS, **(weights or {})}
     )
+    started = time.monotonic()
+    deadline = None
+    if max_runtime_seconds is not None and float(max_runtime_seconds) >= 0:
+        deadline = started + float(max_runtime_seconds)
     for report in buy:
+        if deadline is not None and time.monotonic() >= deadline:
+            summary.runtime_cutoff = True
+            break
         hit = scan_ticker_for_new_filings(
             report,
             output_dir=output_dir,
@@ -436,6 +446,7 @@ def run_buy_tier_discovery_scan(
             "run_at": datetime.now(UTC).isoformat(),
             "market": market,
             "scan_cap": scan_cap,
+            "max_runtime_seconds": max_runtime_seconds,
             **summary.to_dict(),
         }
         write_json(summary_path, payload, compact=False)
@@ -459,12 +470,13 @@ def run_buy_tier_discovery_scan(
         write_json(curiosity_path, curiosity_payload, compact=False)
 
     logger.info(
-        "Discovery scan: scanned=%d hits=%d new_rows=%d curiosity=%d errors=%d",
+        "Discovery scan: scanned=%d hits=%d new_rows=%d curiosity=%d errors=%d runtime_cutoff=%s",
         summary.scanned,
         summary.hits,
         summary.new_rows_total,
         summary.curiosity_total,
         summary.errors,
+        summary.runtime_cutoff,
     )
     return summary
 
