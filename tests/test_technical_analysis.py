@@ -13,6 +13,7 @@ from value_investor.technical_analysis import (
     compute_trade_plan,
     format_timing_summary,
     format_trade_plan_summary,
+    minimum_tactical_take_profit,
     trade_plan_from_row,
 )
 
@@ -210,3 +211,59 @@ def test_atr_stop_tightens_tactical_stop():
     assert wide is not None and tight is not None
     assert tight.tactical_stop_loss < wide.tactical_stop_loss
     assert tight.tactical_stop_loss == 84.0  # 100 - 2×8 ATR
+
+
+def test_minimum_tactical_take_profit_clears_cost_and_reward_risk():
+    cfg = TradePlanConfig(
+        tactical_target_above_limit=1.06,
+        tactical_target_above_spot=1.05,
+        assumed_round_trip_cost_pct=0.06,
+        min_net_edge_pct=0.04,
+        min_reward_risk_ratio=1.5,
+    )
+    # Cost floor: 95 × 1.10 = 104.5; spot floor 105; RR 95 + 1.5×5 = 102.5
+    floor = minimum_tactical_take_profit(
+        tactical_limit=95.0,
+        tactical_stop_loss=90.0,
+        spot=100.0,
+        config=cfg,
+    )
+    assert floor == 105.0
+
+
+def test_sma50_candidate_does_not_override_target_floors():
+    """Price just below SMA50 used to set TP=SMA50 (~6% above buy); floors must win."""
+    close = pd.Series([100.0] * 220)
+    tech = TechnicalIndicators(
+        close=100.0,
+        rsi_14=40.0,
+        sma_50=101.0,
+        sma_200=110.0,
+        timing_signal=TimingSignal.NEUTRAL,
+    )
+    plan = compute_trade_plan(close, tech, value_signal="buy")
+    assert plan is not None
+    assert plan.tactical_limit is not None
+    assert plan.tactical_stop_loss is not None
+    assert plan.tactical_take_profit is not None
+    # SMA50 alone would be 101; floors push higher.
+    assert plan.tactical_take_profit > 101.0
+    spread = plan.tactical_take_profit / plan.tactical_limit - 1.0
+    assert spread >= 0.10 - 1e-9
+    risk = plan.tactical_limit - plan.tactical_stop_loss
+    assert risk > 0
+    assert (plan.tactical_take_profit - plan.tactical_limit) / risk >= 1.5 - 1e-9
+
+
+def test_wide_sma50_still_usable_when_above_floors():
+    close = pd.Series([100.0] * 220)
+    tech = TechnicalIndicators(
+        close=100.0,
+        rsi_14=28.0,
+        sma_50=120.0,
+        sma_200=130.0,
+        timing_signal=TimingSignal.ACCUMULATE,
+    )
+    plan = compute_trade_plan(close, tech, value_signal="strong_buy")
+    assert plan is not None
+    assert plan.tactical_take_profit == 120.0

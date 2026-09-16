@@ -24,14 +24,25 @@ VOLUME_RATIO_WINDOW = 20
 
 @dataclass
 class TradePlanConfig:
-    """Tunable trade-plan thresholds (L5). Defaults match the prior hard-coded values."""
+    """Tunable trade-plan thresholds (L5).
+
+    Target floors are stress-aware by default so chart / paper take-profits clear
+    Suite A ~6% round-trip friction plus a net edge, and reward outweighs stop
+    distance. Fair-cost books can lower ``assumed_round_trip_cost_pct`` via config.
+    """
 
     core_limit_below_spot: float = 0.99
     tactical_limit_below_spot: float = 0.95
     tactical_stop_below_support: float = 0.97
     support_floor_below_spot: float = 0.92
-    tactical_target_above_limit: float = 1.06
-    tactical_target_above_spot: float = 1.05
+    # Structural multipliers (also enforced when SMA50 is used as a candidate).
+    tactical_target_above_limit: float = 1.10
+    tactical_target_above_spot: float = 1.08
+    # Cost-aware gross floor: limit × (1 + RT + min net edge). Suite A RT = 6%.
+    assumed_round_trip_cost_pct: float = 0.06
+    min_net_edge_pct: float = 0.04
+    # Upside vs stop distance (None disables).
+    min_reward_risk_ratio: float | None = 1.5
     extended_above_sma200: float = 1.03
     accumulate_core_pct_low_rsi: float = 0.75
     accumulate_core_pct: float = 0.65
@@ -168,6 +179,27 @@ def _recent_low(close: pd.Series, days: int = 20) -> float | None:
     return float(close.tail(days).min())
 
 
+def minimum_tactical_take_profit(
+    *,
+    tactical_limit: float,
+    tactical_stop_loss: float,
+    spot: float,
+    config: TradePlanConfig | None = None,
+) -> float:
+    """Lowest take-profit that clears configured cost, multiplier, and R:R floors."""
+    cfg = config or DEFAULT_TRADE_PLAN_CONFIG
+    floors = [
+        float(tactical_limit) * float(cfg.tactical_target_above_limit),
+        float(spot) * float(cfg.tactical_target_above_spot),
+        float(tactical_limit)
+        * (1.0 + float(cfg.assumed_round_trip_cost_pct) + float(cfg.min_net_edge_pct)),
+    ]
+    risk = float(tactical_limit) - float(tactical_stop_loss)
+    if risk > 0 and cfg.min_reward_risk_ratio is not None:
+        floors.append(float(tactical_limit) + float(cfg.min_reward_risk_ratio) * risk)
+    return max(floors)
+
+
 def compute_trade_plan(
     close: pd.Series,
     tech: TechnicalIndicators,
@@ -180,6 +212,9 @@ def compute_trade_plan(
 
     Core leg builds the long-term holding; tactical limit orders exploit
     short-term dips with a defined stop-loss and take-profit.
+
+    Take-profit always clears cost / multiplier / reward:risk floors. SMA50 is
+    only a technical candidate when price is below it — never a tight override.
     """
     if value_signal not in ("strong_buy", "buy") or tech.close is None:
         return None
@@ -239,15 +274,17 @@ def compute_trade_plan(
         if atr_stop > 0:
             tactical_stop_loss = _round_price(min(tactical_stop_loss, atr_stop))
 
-    if sma50 is not None and price < sma50:
-        tactical_take_profit = _round_price(sma50)
-    else:
-        tactical_take_profit = _round_price(
-            max(
-                tactical_limit * cfg.tactical_target_above_limit,
-                price * cfg.tactical_target_above_spot,
-            )
+    take_profit_candidates = [
+        minimum_tactical_take_profit(
+            tactical_limit=tactical_limit,
+            tactical_stop_loss=tactical_stop_loss,
+            spot=price,
+            config=cfg,
         )
+    ]
+    if sma50 is not None and price < sma50:
+        take_profit_candidates.append(float(sma50))
+    tactical_take_profit = _round_price(max(take_profit_candidates))
 
     summary = format_trade_plan_summary(
         core_order=core_order,
