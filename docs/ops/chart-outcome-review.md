@@ -17,7 +17,8 @@ Chart popups now show:
 
 A human can see that the story is often mixed, that stops are rarely hit, and
 that some entries were well timed. This module makes that read checkable and
-repeatable.
+repeatable. How tactical buy vs target spread is floored (cost + reward:risk) is
+documented in [trade-plan-target-spread.md](trade-plan-target-spread.md).
 
 ## How to read a mixed pass
 
