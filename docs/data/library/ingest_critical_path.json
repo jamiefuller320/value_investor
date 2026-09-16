@@ -1,53 +1,48 @@
 {
-  "market_id": "tsx60",
-  "assessed_at": "2026-09-16T07:33:47.273080+00:00",
+  "market_id": "euro_stoxx50",
+  "assessed_at": "2026-09-16T07:48:08.578415+00:00",
   "unmeasured": [],
   "zero_body": [],
   "indexed_without_body": [
     {
-      "ticker": "SU.TO",
-      "indexed_without_body": 17,
-      "filings_total": 48,
-      "filings_with_body": 31
-    },
-    {
-      "ticker": "NTR.TO",
-      "indexed_without_body": 8,
-      "filings_total": 27,
-      "filings_with_body": 19
-    },
-    {
-      "ticker": "TRI.TO",
-      "indexed_without_body": 8,
-      "filings_total": 154,
-      "filings_with_body": 146
-    },
-    {
-      "ticker": "GIB-A.TO",
+      "ticker": "SAN.PA",
       "indexed_without_body": 1,
-      "filings_total": 20,
-      "filings_with_body": 19
+      "filings_total": 6,
+      "filings_with_body": 5
+    },
+    {
+      "ticker": "SGO.PA",
+      "indexed_without_body": 1,
+      "filings_total": 2,
+      "filings_with_body": 1
     }
   ],
-  "thin_need_discovery": [],
-  "thin_need_bodies": [],
+  "thin_need_discovery": [
+    "SGO.PA",
+    "MUV2.DE",
+    "DTE.DE",
+    "BAS.DE"
+  ],
+  "thin_need_bodies": [
+    "SGO.PA"
+  ],
   "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "SU.TO",
-    "NTR.TO",
-    "TRI.TO",
-    "GIB-A.TO"
+    "SAN.PA",
+    "SGO.PA"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (4 tickers, top: SU.TO(17), NTR.TO(8), TRI.TO(8), GIB-A.TO(1))"
+    "Prefer indexed-without-body body refetch (2 tickers, top: SAN.PA(1), SGO.PA(1))",
+    "Discovery/IR seed for 4 thin ticker(s) that already have bodies for every indexed filing",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
     "unmeasured": 0,
     "zero_body": 0,
-    "indexed_without_body_tickers": 4,
-    "indexed_without_body_rows": 34,
-    "thin_need_discovery": 0,
-    "thin_need_bodies": 0
+    "indexed_without_body_tickers": 2,
+    "indexed_without_body_rows": 2,
+    "thin_need_discovery": 4,
+    "thin_need_bodies": 1
   }
 }

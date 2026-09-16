@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-16T01:16:28.655985+00:00",
+  "compiled_at": "2026-09-16T07:52:43.250592+00:00",
   "run_at": null,
-  "task_count": 18,
+  "task_count": 19,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -627,9 +627,12 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "open",
+      "status": "pr_open",
       "no_diff_count": 0,
-      "last_no_diff_at": "2026-09-16T02:18:26.216449+00:00"
+      "last_no_diff_at": "2026-09-16T02:18:26.216449+00:00",
+      "result_path": "output/engineering_result_eng-20260916-01.md",
+      "branch_name": "cursor/eng-20260916-01-1de3",
+      "completed_at": "2026-09-16T06:43:01.250570+00:00"
     },
     {
       "id": "eng-20260915-14",
@@ -995,6 +998,53 @@
       "status": "cancelled",
       "no_diff_count": 0,
       "cancelled_at": "2026-09-15T17:49:28.000706+00:00"
+    },
+    {
+      "id": "eng-20260916-02",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked euro_stoxx50 leftover SAN.PA",
+      "summary": "Library market euro_stoxx50 (EURO STOXX 50) parked SAN.PA after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivale",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "euro_stoxx50",
+        "library_market": "euro_stoxx50",
+        "hunter_market_id": "euro_stoxx50",
+        "hunter_ticker": "SAN.PA",
+        "parked_reason": "unfetchable_iwb",
+        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for SAN.PA only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     }
   ],
   "ingest_health": {
@@ -1010,7 +1060,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-16T07:48:18.069936+00:00",
+    "evaluated_at": "2026-09-16T06:37:23.627365+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
@@ -1026,12 +1076,12 @@
   },
   "reprioritized_at": "2026-09-15T17:24:15.578584+00:00",
   "reprioritized_after_task": "eng-20260914-03",
-  "micro_compile_source": "compile_cap_drain",
-  "library_market_id": "ftse_smallcap",
-  "hunter_ticker": "FOXT.L",
+  "micro_compile_source": "parked_source_hunter",
+  "library_market_id": "euro_stoxx50",
+  "hunter_ticker": "SAN.PA",
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-09-16T07:47:17.731776+00:00"
+    "evaluated_at": "2026-09-15T20:21:43.825438+00:00"
   }
 }
