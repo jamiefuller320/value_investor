@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-15T18:34:32.353787+00:00",
+  "compiled_at": "2026-09-16T01:16:28.655985+00:00",
   "run_at": null,
-  "task_count": 17,
+  "task_count": 18,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -589,6 +589,47 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
+      "id": "eng-20260916-01",
+      "area": "scoring",
+      "title": "Fail-closed or flag when screen FCF (1,059m) disagrees with Yahoo/filing FCF (852m) while TTM is suppressed and cashflow_metrics is null. Turn on healthcare_pri",
+      "summary": "Fail-closed or flag when screen FCF (1,059m) disagrees with Yahoo/filing FCF (852m) while TTM is suppressed and cashflow_metrics is null. Turn on healthcare_price_erosion / reimbursement overlays for Orthopaedics + wound-bioactives names. Do not treat 8/22 + empty failed_models as a clean five-family pass. Isolate prior-memo text from action_note so conviction 0.93 is not recycled research boilerplate. Compare LSE limits to live ADS and LSE prints before labelling cheapness persistent.",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "SN.L"
+        ],
+        "recorded_at": "2026-09-04T18:18:44.995999+00:00",
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260915-14",
       "area": "scoring",
       "title": "Fail-closed or flag when screening_snapshot.fcf.currency is USD on a GBP LSE reporter, and set fcf_definition_divergence whenever screen_ttm (2,502m) disagrees ",
@@ -967,7 +1008,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-16T00:16:08.393345+00:00",
+    "evaluated_at": "2026-09-16T01:16:25.203648+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
