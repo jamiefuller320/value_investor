@@ -7,8 +7,10 @@ Classes:
 
 * ``ingest_narrow`` — task area ``ingest`` (#651-class)
 * ``scoring_narrow`` — task area ``scoring`` (#653-class)
+* ``compile_cap_drain`` — idle role-coherence / compile-cap drain tasks (any area;
+  source ``compile_cap_drain``)
 
-Shared rules for both: actual changed files stay within the task allowlist *and*
+Shared rules: actual changed files stay within the task allowlist *and*
 the CI-fix auto-merge safe prefixes, include a ``tests/`` path (configurable),
 and stay under the path cap.
 """
@@ -31,10 +33,12 @@ from value_investor.engineering_tasks import (
 
 NARROW_POLICY_VALUES = frozenset({"off", "observe", "merge"})
 
-# merge_class → task areas that qualify (parked hunter always excluded)
+# merge_class → task areas that qualify (parked hunter always excluded).
+# ``compile_cap_drain`` is source-gated in ``task_narrow_merge_class`` (any area).
 NARROW_CLASS_AREAS: dict[str, frozenset[str]] = {
     "ingest_narrow": frozenset({"ingest"}),
     "scoring_narrow": frozenset({"scoring"}),
+    "compile_cap_drain": frozenset(),
 }
 
 NARROW_MERGE_CLASSES: tuple[str, ...] = tuple(NARROW_CLASS_AREAS)
@@ -42,16 +46,20 @@ NARROW_MERGE_CLASSES: tuple[str, ...] = tuple(NARROW_CLASS_AREAS)
 NARROW_CLASS_DEFAULT_POLICY: dict[str, str] = {
     "ingest_narrow": "merge",
     "scoring_narrow": "merge",
+    "compile_cap_drain": "merge",
 }
 
 INDEPENDENTLY_VERIFIED_MERGE_CLASSES = frozenset(
     {
         "ingest_narrow",
         "scoring_narrow",
+        "compile_cap_drain",
         "ci_fix",
         "parked_hunter",
     }
 )
+
+COMPILE_CAP_DRAIN_SOURCE = "compile_cap_drain"
 
 
 @dataclass
@@ -115,8 +123,12 @@ def task_narrow_merge_class(task: EngineeringTask) -> str | None:
     """Return the narrow merge class for this task, or None."""
     if is_parked_hunter(task):
         return None
+    if str(task.source or "").strip() == COMPILE_CAP_DRAIN_SOURCE:
+        return "compile_cap_drain"
     area = str(task.area or "").strip().lower()
     for merge_class, areas in NARROW_CLASS_AREAS.items():
+        if merge_class == "compile_cap_drain":
+            continue
         if area in areas:
             return merge_class
     return None
@@ -296,6 +308,8 @@ def classify_merge_class(task: EngineeringTask | None, *, auto_merged: bool) -> 
         return "human"
     if is_parked_hunter(task) and auto_merged:
         return "parked_hunter"
+    if str(getattr(task, "source", "") or "").strip() == COMPILE_CAP_DRAIN_SOURCE and auto_merged:
+        return "compile_cap_drain"
     if bool(task.auto_merge) and auto_merged:
         return "ci_fix"
     narrow = task_narrow_merge_class(task)

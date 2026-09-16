@@ -9,10 +9,12 @@ from unittest.mock import patch
 from value_investor.engineering_auto_merge import evaluate_auto_merge
 from value_investor.engineering_narrow_merge import (
     evaluate_ingest_narrow_verify,
+    evaluate_narrow_verify,
     evaluate_scoring_narrow_verify,
     ingest_narrow_merge_allowed,
     list_todays_engineering_merges,
     scoring_narrow_merge_allowed,
+    task_narrow_merge_class,
 )
 from value_investor.engineering_tasks import AREA_ALLOWED_PATHS, BLOCKED_PATHS, EngineeringTask
 from value_investor.project_traffic import build_daily_digest, format_daily_digest_markdown
@@ -74,6 +76,29 @@ def test_ingest_narrow_verify_approves_651_shaped_diff():
     allowed, reason = ingest_narrow_merge_allowed(task=task, changed_files=changed, policy="merge")
     assert allowed
     assert "ingest_narrow" in reason
+
+
+def test_compile_cap_drain_source_is_narrow_merge_class():
+    task = _scoring_task(source="compile_cap_drain", area="prompt", auto_merge=False)
+    assert task_narrow_merge_class(task) == "compile_cap_drain"
+    changed = [
+        "src/value_investor/research/format.py",
+        "tests/test_research_format.py",
+    ]
+    # Use a tight allowlist so the diff stays in-bounds for prompt-area paths.
+    task = _scoring_task(
+        source="compile_cap_drain",
+        area="prompt",
+        auto_merge=False,
+        allowed_paths=[
+            "src/value_investor/research/format.py",
+            "tests/test_research_format.py",
+        ],
+    )
+    result = evaluate_narrow_verify(task=task, changed_files=changed, policy="merge")
+    assert result.ok
+    assert result.verdict == "approve"
+    assert result.merge_class == "compile_cap_drain"
 
 
 def test_scoring_narrow_verify_approves_653_shaped_diff():
@@ -184,6 +209,91 @@ def test_evaluate_auto_merge_allows_scoring_narrow_when_policy_merge(tmp_path: P
     assert decision.should_merge
     assert decision.merge_class == "scoring_narrow"
     assert decision.pr_number == 653
+
+
+def test_evaluate_auto_merge_allows_compile_cap_drain_when_policy_merge(tmp_path: Path):
+    task = _scoring_task(
+        id="eng-20260916-11",
+        source="compile_cap_drain",
+        area="prompt",
+        auto_merge=False,
+        allowed_paths=[
+            "src/value_investor/research/format.py",
+            "tests/test_research_format.py",
+        ],
+    )
+    tasks_path = tmp_path / "engineering_tasks.json"
+    _write_task(tasks_path, task, branch_name="cursor/eng-20260916-11-1de3")
+    changed = [
+        "src/value_investor/research/format.py",
+        "tests/test_research_format.py",
+    ]
+    with (
+        patch(
+            "value_investor.engineering_auto_merge.find_open_pr_for_branch",
+            return_value={"number": 680, "isDraft": True},
+        ),
+        patch(
+            "value_investor.engineering_auto_merge.pr_checks_successful",
+            return_value=(True, "all checks green"),
+        ),
+        patch(
+            "value_investor.engineering_auto_merge.changed_files_for_pr",
+            return_value=changed,
+        ),
+        patch(
+            "value_investor.engineering_narrow_merge.narrow_policy",
+            return_value="merge",
+        ),
+    ):
+        decision = evaluate_auto_merge(
+            branch="cursor/eng-20260916-11-1de3",
+            tasks_path=tasks_path,
+        )
+    assert decision.should_merge
+    assert decision.merge_class == "compile_cap_drain"
+    assert decision.pr_number == 680
+
+
+def test_evaluate_auto_merge_stamps_compile_cap_drain_when_auto_merge_flag(tmp_path: Path):
+    """auto_merge=true still labels merge_class compile_cap_drain for EOD digest."""
+    task = _scoring_task(
+        id="eng-20260916-12",
+        source="compile_cap_drain",
+        area="prompt",
+        auto_merge=True,
+        allowed_paths=[
+            "src/value_investor/research/format.py",
+            "tests/test_research_format.py",
+        ],
+    )
+    tasks_path = tmp_path / "engineering_tasks.json"
+    _write_task(tasks_path, task, branch_name="cursor/eng-20260916-12-1de3")
+    changed = [
+        "src/value_investor/research/format.py",
+        "tests/test_research_format.py",
+    ]
+    with (
+        patch(
+            "value_investor.engineering_auto_merge.find_open_pr_for_branch",
+            return_value={"number": 681, "isDraft": True},
+        ),
+        patch(
+            "value_investor.engineering_auto_merge.pr_checks_successful",
+            return_value=(True, "all checks green"),
+        ),
+        patch(
+            "value_investor.engineering_auto_merge.changed_files_for_pr",
+            return_value=changed,
+        ),
+    ):
+        decision = evaluate_auto_merge(
+            branch="cursor/eng-20260916-12-1de3",
+            tasks_path=tasks_path,
+        )
+    assert decision.should_merge
+    assert decision.merge_class == "compile_cap_drain"
+    assert decision.pr_number == 681
 
 
 def test_list_todays_merges_and_digest_section(tmp_path: Path):

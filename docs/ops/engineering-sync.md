@@ -51,11 +51,16 @@ tasks — use `email_only` for a fresh post-run when Analysis outruns the queue.
 (default 8). Role coherence flags the remainder as
 `compile_cap_truncated_candidates`. When the **priority** engineering queue is empty
 (only background sources such as `parked_source_hunter` / `compile_cap_drain` may
-be open), `ftse-engineering try-compile-cap-drain --apply` queues **one** leftover
-candidate (score floor 25, above parked hunter at 12). After that task merges, the
-next hourly queue run advances the backlog. Parked-hunter compile **defers** while
-this drain still has work so live-path suggestion backlog outranks offline leftover
-hunts. `engineering-queue.yml` runs drain before `parked-hunter-compile`.
+be open), `ftse-engineering try-compile-cap-drain --apply` queues leftover
+candidates (score floor 25, above parked hunter at 12) up to **2** open drain
+tasks so idle parallel agent slots are used. Near-duplicate suggestion titles are
+coalesced before queueing. After narrow-scope, drain tasks set `auto_merge` when
+the allowlist fits the CI-fix path cap; they are also independently verifiable
+as merge class `compile_cap_drain` (any area). After a drain PR merges, the next
+hourly queue run / auto-merge handoff advances the backlog. Parked-hunter compile
+**defers** while this drain still has work so live-path suggestion backlog
+outranks offline leftover hunts. `engineering-queue.yml` runs drain before
+`parked-hunter-compile`.
 
 **Upstream narrow scope** — ingest/scoring candidates are split into first-principle
 sibling tasks with tightened concrete `allowed_paths` when compound titles map to

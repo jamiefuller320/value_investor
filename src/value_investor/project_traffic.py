@@ -9,7 +9,7 @@ This is the bounded first slice of a project-management agent:
 * Emit an end-of-day digest that cites committed artifacts (progress report,
   north-star stages, queue health) rather than free-form claims.
 
-Merge authority is scoped auto-merge (ci_fix / ingest_narrow / scoring_narrow / parked_hunter) with independent deterministic verify; traffic itself still does not merge.
+Merge authority is scoped auto-merge (ci_fix / ingest_narrow / scoring_narrow / compile_cap_drain / parked_hunter) with independent deterministic verify; traffic itself still does not merge.
 """
 
 from __future__ import annotations

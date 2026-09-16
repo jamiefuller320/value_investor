@@ -312,12 +312,15 @@ def evaluate_auto_merge(
         )
 
     if ci_fix_eligible:
+        merge_class = "ci_fix"
+        if str(getattr(task, "source", "") or "").strip() == "compile_cap_drain":
+            merge_class = "compile_cap_drain"
         return AutoMergeDecision(
             True,
             "CI green and diff within allowed_paths",
             task_id=task_id,
             pr_number=pr_number,
-            merge_class="ci_fix",
+            merge_class=merge_class,
         )
 
     allowed, narrow_reason, merge_class = narrow_merge_allowed(task=task, changed_files=changed)

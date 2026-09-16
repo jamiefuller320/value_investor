@@ -24,7 +24,7 @@ slice of a PM agent.
 | Rely on existing `ci-pr-autofix` / hunter-fix on CI failure | Yes (event-driven) |
 | Remediate queue merge-sync lag (`pr_open` after GitHub merge) via recover/mark-merged | Yes |
 | Cancel open `workflow_failure` eng tasks when the named workflow has succeeded after the minting failure | Yes |
-| Independent verify + scoped auto-merge for **ingest_narrow** / **scoring_narrow** | Yes (deterministic path/CI/tests gate; policy `ingest_narrow` / `scoring_narrow`) |
+| Independent verify + scoped auto-merge for **ingest_narrow** / **scoring_narrow** / **compile_cap_drain** | Yes (deterministic path/CI/tests gate; policy keys under `engineering.auto_merge`) |
 | Receive ops-monitor email findings + planned rectification (L397 handoff) | Yes |
 | Auto-remediate non–v1 ops email findings | **No** — record on handoff artifact / digest for human or eng draft |
 | Author code fixes for failing workflows / invent eng patches | **No** — still supervised `workflow_failure` / engineering-agent |
@@ -136,13 +136,14 @@ source row. Trajectory labels: `on_track` | `blocked_by_pr_queue` | `watch_stall
 
 
 
-## Narrow independent verify (ingest / scoring)
+## Narrow independent verify (ingest / scoring / compile_cap_drain)
 
-Policy knobs `engineering.auto_merge.ingest_narrow` and `scoring_narrow`
-(`off` | `observe` | `merge`, default `merge`) enable a **deterministic**
-independent gate for #651/#653-class engineering PRs:
+Policy knobs `engineering.auto_merge.ingest_narrow`, `scoring_narrow`, and
+`compile_cap_drain` (`off` | `observe` | `merge`, default `merge`) enable a
+**deterministic** independent gate for #651/#653-class and idle drain PRs:
 
-1. Task area is `ingest` or `scoring` (and not a parked hunter)
+1. Task area is `ingest` or `scoring`, **or** task source is `compile_cap_drain`
+   (any area; not a parked hunter)
 2. Actual changed files ≤ 8, all under CI-fix safe prefixes, within the task
    allowlist, and include at least one `tests/` path
 3. CI green. The `eng-narrow-gate` job **reports** approve / observe / reject
@@ -150,7 +151,8 @@ independent gate for #651/#653-class engineering PRs:
    human-mergeable. Reject only blocks scoped auto-merge.
 4. When policy is `merge` **and** the gate verdict is `approve`,
    `engineering-auto-merge` may squash-merge and stamp
-   `merge_class=ingest_narrow` or `scoring_narrow` on the task for EOD monitoring
+   `merge_class=ingest_narrow`, `scoring_narrow`, or `compile_cap_drain` on the
+   task for EOD monitoring
 
 ### Upstream drafting (first-principle builds)
 
