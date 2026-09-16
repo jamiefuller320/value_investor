@@ -1,9 +1,10 @@
-"""Compact price-chart payloads for buy-tier dashboard popups."""
+"""Compact price-chart payloads for dashboard popups (lifecycle + screener)."""
 
 from __future__ import annotations
 
 import logging
 import re
+from collections.abc import Collection, Iterable
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -21,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 MAX_CHART_POINTS = 180
 CHART_LOOKBACK_PERIOD = "1y"
-BUY_TIER_SIGNALS = {"strong_buy", "buy"}
+BUY_TIER_SIGNALS = frozenset({"strong_buy", "buy"})
 CROSSING_LEVEL_KEYS = (
     "core_limit",
     "tactical_limit",
@@ -394,16 +395,21 @@ def _existing_chart(chart_dir: Path, ticker: str) -> dict[str, Any] | None:
     return payload if isinstance(payload, dict) else None
 
 
-def write_buy_tier_charts_from_history(
+def write_price_charts_from_history(
     *,
     signals: pd.DataFrame,
     history: dict[str, pd.Series],
     chart_dir: Path,
     as_of: datetime | None = None,
     snapshot_dirs: list[Path] | None = None,
+    signal_filter: Collection[str] | None = None,
 ) -> list[Path]:
-    """Persist chart payloads for strong_buy / buy rows that have price history."""
-    if signals.empty or "ticker" not in signals.columns or "signal" not in signals.columns:
+    """Persist chart payloads for signal rows that have price history.
+
+    ``signal_filter`` limits which signals are written. ``None`` writes every
+    row with history (used so lifecycle cards beyond buy-tier get charts).
+    """
+    if signals.empty or "ticker" not in signals.columns:
         return []
 
     chart_dir = Path(chart_dir)
@@ -412,9 +418,12 @@ def write_buy_tier_charts_from_history(
     if parent_history not in dirs:
         dirs.append(parent_history)
 
+    rows = signals
+    if signal_filter is not None and "signal" in signals.columns:
+        rows = signals[signals["signal"].isin(list(signal_filter))]
+
     written: list[Path] = []
-    buy_tier = signals[signals["signal"].isin(["strong_buy", "buy"])]
-    for _, row in buy_tier.iterrows():
+    for _, row in rows.iterrows():
         ticker = str(row["ticker"])
         series = history.get(ticker)
         if series is None or series.empty:
@@ -439,39 +448,99 @@ def write_buy_tier_charts_from_history(
     return written
 
 
-def ensure_buy_tier_charts(
+def write_buy_tier_charts_from_history(
+    *,
+    signals: pd.DataFrame,
+    history: dict[str, pd.Series],
+    chart_dir: Path,
+    as_of: datetime | None = None,
+    snapshot_dirs: list[Path] | None = None,
+) -> list[Path]:
+    """Persist chart payloads for strong_buy / buy rows that have price history."""
+    return write_price_charts_from_history(
+        signals=signals,
+        history=history,
+        chart_dir=chart_dir,
+        as_of=as_of,
+        snapshot_dirs=snapshot_dirs,
+        signal_filter=BUY_TIER_SIGNALS,
+    )
+
+
+def _reports_for_chart_tickers(
+    reports: list[dict[str, Any]],
+    tickers: Iterable[str],
+) -> list[dict[str, Any]]:
+    by_ticker = {
+        str(report["ticker"]): report
+        for report in reports
+        if isinstance(report, dict) and report.get("ticker")
+    }
+    selected: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for raw in tickers:
+        ticker = str(raw or "").strip()
+        if not ticker or ticker in seen:
+            continue
+        seen.add(ticker)
+        report = by_ticker.get(ticker)
+        if report is not None:
+            selected.append(report)
+        else:
+            selected.append({"ticker": ticker, "name": ticker})
+    return selected
+
+
+def ensure_price_charts(
     *,
     reports: list[dict[str, Any]],
     chart_dir: Path,
+    tickers: Iterable[str] | None = None,
     as_of: datetime | None = None,
     fetch: bool = True,
+    market: str | None = None,
 ) -> list[Path]:
     """
-    Ensure chart JSON exists for buy-tier reports.
+    Ensure chart JSON exists for the requested tickers.
 
-    Uses on-disk charts when present; optionally fetches missing price history.
+    Defaults to buy-tier reports when ``tickers`` is omitted. Uses on-disk charts
+    when present; optionally fetches missing price history. Pass ``market`` so
+    non-LSE symbols (e.g. SP500 bare tickers) resolve correctly on Yahoo.
     """
     chart_dir.mkdir(parents=True, exist_ok=True)
-    buy_tier = [r for r in reports if r.get("signal") in ("strong_buy", "buy") and r.get("ticker")]
+    if tickers is None:
+        wanted = [
+            str(report["ticker"])
+            for report in reports
+            if report.get("signal") in BUY_TIER_SIGNALS and report.get("ticker")
+        ]
+    else:
+        wanted = [str(ticker) for ticker in tickers if str(ticker or "").strip()]
+
+    selected = _reports_for_chart_tickers(reports, wanted)
+    existing_paths = [
+        chart_dir / chart_filename(str(report["ticker"]))
+        for report in selected
+        if (chart_dir / chart_filename(str(report["ticker"]))).exists()
+    ]
     missing = [
         report
-        for report in buy_tier
+        for report in selected
         if not (chart_dir / chart_filename(str(report["ticker"]))).exists()
     ]
-    written: list[Path] = []
     if not missing:
-        return [
-            chart_dir / chart_filename(str(report["ticker"]))
-            for report in buy_tier
-            if (chart_dir / chart_filename(str(report["ticker"]))).exists()
-        ]
+        return existing_paths
 
     if not fetch:
-        return written
+        return existing_paths
 
     from value_investor.technical_analysis import fetch_close_history
 
-    history = fetch_close_history([str(r["ticker"]) for r in missing])
+    history = fetch_close_history(
+        [str(report["ticker"]) for report in missing],
+        market=market,
+    )
+    written: list[Path] = list(existing_paths)
     for report in missing:
         ticker = str(report["ticker"])
         series = history.get(ticker)
@@ -495,6 +564,23 @@ def ensure_buy_tier_charts(
             continue
         written.append(write_price_chart(chart_dir, payload))
     return written
+
+
+def ensure_buy_tier_charts(
+    *,
+    reports: list[dict[str, Any]],
+    chart_dir: Path,
+    as_of: datetime | None = None,
+    fetch: bool = True,
+) -> list[Path]:
+    """Ensure chart JSON exists for buy-tier reports (compat wrapper)."""
+    return ensure_price_charts(
+        reports=reports,
+        chart_dir=chart_dir,
+        tickers=None,
+        as_of=as_of,
+        fetch=fetch,
+    )
 
 
 def copy_charts_to_dashboard(

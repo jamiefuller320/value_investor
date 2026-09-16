@@ -4295,7 +4295,6 @@ function renderLifecycleTickerCard(ticker) {
     .filter(Boolean)
     .join(" · ");
   const hasReport = Boolean(report.ticker);
-  const buyTier = signal === "strong_buy" || signal === "buy";
   return `
     <p class="small muted" style="margin-top:0">${esc(metaBits.join(" · ") || "Lifecycle board name")}</p>
     <div class="market-card-badges">
@@ -4325,9 +4324,7 @@ function renderLifecycleTickerCard(ticker) {
     ${lifecycleChartOutcomeHtml(outcome)}
     <h4 class="small">Price chart</h4>
     <p class="small muted" style="margin-top:0">
-      Same Latest screen / Initial recommendation levels as the screener chart${
-        buyTier ? "" : " — published for buy-tier names"
-      }.
+      Same Latest screen / Initial recommendation levels as the screener chart.
     </p>
     <div class="lifecycle-ticker-chart" data-lifecycle-chart-mount="${esc(ticker)}"></div>
   `;

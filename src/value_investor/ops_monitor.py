@@ -1634,6 +1634,14 @@ def findings_needing_investigation(findings: list[OpsFinding]) -> list[OpsFindin
     return [row for row in findings if row.severity in {"fail", "warn"} and not row.fixed]
 
 
+def _planned_rectification_line(finding: OpsFinding) -> str:
+    """Human-readable planned rectification for email bodies."""
+    from value_investor.project_traffic import planned_rectification_for_ops_finding
+
+    action_id, detail = planned_rectification_for_ops_finding(finding)
+    return f"{action_id} — {detail}"
+
+
 def _workflow_key_for_name(schedule_name: str) -> str | None:
     name = schedule_name.strip()
     for spec in MONITORED_WORKFLOWS:
@@ -2245,6 +2253,7 @@ def format_ops_monitor_text(report: OpsMonitorReport) -> str:
                 lines.append(f"  {row.summary}")
                 if row.action_taken:
                     lines.append(f"  Action: {row.action_taken}")
+                lines.append(f"  Planned rectification: {_planned_rectification_line(row)}")
                 lines.append("")
         if healed:
             lines.append("HEALED (auto-fixed / recovery in flight)")
@@ -2318,9 +2327,13 @@ def format_ops_monitor_html(report: OpsMonitorReport) -> str:
             if row.action_taken
             else ""
         )
+        planned = (
+            "<br><span style='color:#666;font-size:12px'>"
+            f"Planned rectification: {_planned_rectification_line(row)}</span>"
+        )
         needs_rows.append(
             f"<li style='margin-bottom:10px'><strong style='color:{color}'>{row.severity.upper()}</strong> "
-            f"{row.title}<br><span style='color:#555'>{row.summary}</span>{action}</li>"
+            f"{row.title}<br><span style='color:#555'>{row.summary}</span>{action}{planned}</li>"
         )
     healed_rows = []
     for row in healed:
@@ -2404,6 +2417,9 @@ def send_ops_monitor_email(
     Skips when overall is ok, or when every remaining finding is still expected to
     clear later today (pre-slot Sunday workflows, recovery in flight, etc.).
     Auto-fixes alone do not trigger email — healed issues stay in ops_status.json.
+
+    Before SMTP, hands the same findings to project-traffic PM with the email body
+    and a deterministic planned rectification (L397 thin handoff).
     """
     if only_if_not_ok and report.email_deferred:
         logger.info(
@@ -2416,10 +2432,26 @@ def send_ops_monitor_email(
         return False
     config = config or EmailConfig.from_env()
     subject = f"FTSE Ops Monitor — {report.overall.upper()}"
+    text_body = format_ops_monitor_text(report)
+    html_body = format_ops_monitor_html(report)
+    needs = findings_needing_investigation(report.findings)
+    try:
+        from value_investor.project_traffic import handoff_ops_monitor_email_to_pm
+
+        handoff_ops_monitor_email_to_pm(
+            findings=needs,
+            email_subject=subject,
+            email_text=text_body,
+            email_html=html_body,
+            drafted_task_ids=list(report.drafted_task_ids or []),
+            apply=True,
+        )
+    except Exception:  # noqa: BLE001 — handoff must not block SMTP
+        logger.exception("PM ops-email handoff failed")
     send_report_email(
         subject=subject,
-        text_body=format_ops_monitor_text(report),
-        html_body=format_ops_monitor_html(report),
+        text_body=text_body,
+        html_body=html_body,
         config=config,
     )
     return True
