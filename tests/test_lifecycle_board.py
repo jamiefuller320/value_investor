@@ -11,6 +11,7 @@ from value_investor.lifecycle_board import (
     classify_board_column,
     merge_track_columns,
     tenure_band_for_days,
+    tickers_on_lifecycle_board,
     write_lifecycle_board,
 )
 from value_investor.position_lifecycle import BOARD_COLUMN_IDS
@@ -347,6 +348,32 @@ def test_tenure_band_for_days_spans_eight_weeks():
     assert tenure_band_for_days(42) == "aging"
     assert tenure_band_for_days(56) == "stale"
     assert tenure_band_for_days(57) == "long"
+
+
+def test_tickers_on_lifecycle_board_collects_shown_and_occupied():
+    board = {
+        "markets": [
+            {
+                "market_id": "ftse350",
+                "screen_columns": {
+                    "not_buy_tier": {
+                        "shown": [{"ticker": "HOLD.L"}, {"ticker": "HOLD.L"}],
+                        "count": 1,
+                    }
+                },
+                "tracks": [
+                    {
+                        "track_id": "rules",
+                        "occupied_tickers": ["OWN.L"],
+                        "position_columns": {
+                            "just_bought": {"shown": [{"ticker": "NEW.L"}], "count": 1}
+                        },
+                    }
+                ],
+            }
+        ]
+    }
+    assert tickers_on_lifecycle_board(board) == ["HOLD.L", "OWN.L", "NEW.L"]
 
 
 def test_dashboard_lifecycle_opens_experiment_cards():

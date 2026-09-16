@@ -10,9 +10,11 @@ from value_investor.price_charts import (
     chart_filename,
     copy_charts_to_dashboard,
     ensure_buy_tier_charts,
+    ensure_price_charts,
     first_level_crossings,
     levels_from_trade_plan,
     write_buy_tier_charts_from_history,
+    write_price_charts_from_history,
 )
 from value_investor.storage import write_json
 
@@ -52,6 +54,43 @@ def test_build_price_chart_payload_includes_levels():
     assert payload["initial_levels"] is not None
     assert payload["initial_levels_as_of"] == "2025-06-15"
     assert isinstance(payload["level_crossings"], list)
+
+
+def test_write_price_charts_from_history_includes_non_buy_when_unfiltered(tmp_path: Path):
+    signals = pd.DataFrame(
+        [
+            {"ticker": "AAA.L", "name": "Alpha", "signal": "strong_buy"},
+            {"ticker": "BBB.L", "name": "Beta", "signal": "hold"},
+        ]
+    )
+    history = {"AAA.L": _series(), "BBB.L": _series(80)}
+    written = write_price_charts_from_history(
+        signals=signals,
+        history=history,
+        chart_dir=tmp_path / "charts",
+        signal_filter=None,
+    )
+    names = sorted(path.name for path in written)
+    assert names == ["AAA.L.json", "BBB.L.json"]
+
+
+def test_ensure_price_charts_covers_explicit_non_buy_tickers(tmp_path: Path):
+    chart_dir = tmp_path / "charts"
+    chart_dir.mkdir()
+    existing = chart_dir / chart_filename("BUY.L")
+    existing.write_text('{"ticker":"BUY.L"}', encoding="utf-8")
+    written = ensure_price_charts(
+        reports=[
+            {"ticker": "BUY.L", "signal": "buy", "name": "Buy Co"},
+            {"ticker": "HOLD.L", "signal": "hold", "name": "Hold Co"},
+        ],
+        chart_dir=chart_dir,
+        tickers=["BUY.L", "HOLD.L"],
+        fetch=False,
+    )
+    assert existing in written
+    # HOLD.L missing and fetch=False → not created, only existing returned paths for present files
+    assert chart_filename("HOLD.L") not in {path.name for path in written}
 
 
 def test_write_buy_tier_charts_from_history(tmp_path: Path):
