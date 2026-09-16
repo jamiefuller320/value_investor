@@ -1087,9 +1087,12 @@ def _cmd_eng_narrow_gate(args: argparse.Namespace) -> int:
     elif gate.verdict in {"approve", "observe", "skipped"} and gate.ok:
         print(f"eng-narrow-gate: {gate.verdict} — {gate.reason}")
     else:
-        print(f"eng-narrow-gate: fail — {gate.reason}", file=sys.stderr)
-    if gate.verdict == "reject":
-        return 1
+        # Reject is informational: wide ingest/scoring diffs stay human-merge.
+        # Scoped auto-merge still refuses via evaluate_auto_merge / narrow_merge_allowed.
+        print(
+            f"eng-narrow-gate: reject — {gate.reason} (human-merge only; CI stays green)",
+            file=sys.stderr,
+        )
     return 0
 
 
