@@ -390,7 +390,6 @@ def compile_next_compile_cap_drain_task(
         for row in existing_rows
         if str(row.get("status") or "open") == "open"
     }
-    slots = max(1, int(decision.checks.get("slots_available") or 1))
     run_stamp = datetime.now(UTC).strftime("%Y%m%d")
     all_drafted: list[EngineeringTask] = []
     queued_titles: list[str] = []
