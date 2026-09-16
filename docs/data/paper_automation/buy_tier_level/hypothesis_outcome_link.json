@@ -3,24 +3,38 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-09-14T08:29:52.228337+00:00",
+  "generated_at": "2026-09-16T08:29:26.211229+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 2,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 58,
+    "open_with_thesis": 59,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.0019,
+        "mean_trough_unrealized_pct": -0.0702,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "broken": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.0988,
+        "mean_trough_unrealized_pct": 0.0988,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "insufficient_data": {
         "closed_count": 0
@@ -48,10 +62,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 2,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=2 (target >=8)",
+      "hold thesis buckets thin (weakening=1, broken=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -106,7 +121,7 @@
         }
       ],
       "peak_unrealized_pct": -0.0207,
-      "trough_unrealized_pct": -0.0317,
+      "trough_unrealized_pct": -0.0375,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -419,7 +434,7 @@
         }
       ],
       "peak_unrealized_pct": 0.0205,
-      "trough_unrealized_pct": -0.0565,
+      "trough_unrealized_pct": -0.0583,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -471,7 +486,7 @@
           "trough_unrealized_pct": 0.0205
         }
       ],
-      "peak_unrealized_pct": 0.0431,
+      "peak_unrealized_pct": 0.0575,
       "trough_unrealized_pct": 0.0205,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -525,7 +540,7 @@
         }
       ],
       "peak_unrealized_pct": 0.0169,
-      "trough_unrealized_pct": 0.0025,
+      "trough_unrealized_pct": -0.0081,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -631,7 +646,7 @@
         }
       ],
       "peak_unrealized_pct": -0.007,
-      "trough_unrealized_pct": -0.0523,
+      "trough_unrealized_pct": -0.0581,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -789,7 +804,7 @@
           "trough_unrealized_pct": -0.0763
         }
       ],
-      "peak_unrealized_pct": -0.0205,
+      "peak_unrealized_pct": -0.0155,
       "trough_unrealized_pct": -0.0763,
       "recovered_to_breakeven": null,
       "close_reason": null,
@@ -843,7 +858,7 @@
         }
       ],
       "peak_unrealized_pct": 0.0177,
-      "trough_unrealized_pct": -0.0113,
+      "trough_unrealized_pct": -0.033,
       "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
@@ -961,7 +976,7 @@
       "ticker": "SGE.L",
       "name": "The Sage Group plc",
       "started_at": "2026-09-07T09:29:59.366533+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -1004,9 +1019,9 @@
       "peak_unrealized_pct": 0.0019,
       "trough_unrealized_pct": -0.0702,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-09-16T09:29:14.824618+01:00",
+      "linked_sell_trade_id": "1f401339-6990-41bb-ad3d-09ca99ccb466"
     },
     {
       "episode_id": "buy_tier_level:ABF.L:2026-09-07T09:29:59.366533+01:00",
@@ -1202,7 +1217,16 @@
       "conviction_score": 1.0,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 4096.9858,
+          "unrealized_pct": -0.0305,
+          "peak_unrealized_pct": -0.0175,
+          "trough_unrealized_pct": -0.054
+        }
+      ],
       "peak_unrealized_pct": -0.0175,
       "trough_unrealized_pct": -0.054,
       "recovered_to_breakeven": null,
@@ -1245,8 +1269,17 @@
       "conviction_score": 0.9057000000000002,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
-      "peak_unrealized_pct": -0.0112,
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 3040.0,
+          "unrealized_pct": -0.0013,
+          "peak_unrealized_pct": -0.0013,
+          "trough_unrealized_pct": -0.0355
+        }
+      ],
+      "peak_unrealized_pct": -0.0013,
       "trough_unrealized_pct": -0.0355,
       "recovered_to_breakeven": null,
       "close_reason": null,
@@ -1288,8 +1321,17 @@
       "conviction_score": 0.8598000000000002,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
-      "peak_unrealized_pct": -0.0453,
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 278.6,
+          "unrealized_pct": -0.0149,
+          "peak_unrealized_pct": -0.0149,
+          "trough_unrealized_pct": -0.0785
+        }
+      ],
+      "peak_unrealized_pct": -0.0149,
       "trough_unrealized_pct": -0.0785,
       "recovered_to_breakeven": null,
       "close_reason": null,
@@ -1331,9 +1373,18 @@
       "conviction_score": 0.8324000000000001,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 313.4,
+          "unrealized_pct": -0.0863,
+          "peak_unrealized_pct": -0.0268,
+          "trough_unrealized_pct": -0.0863
+        }
+      ],
       "peak_unrealized_pct": -0.0268,
-      "trough_unrealized_pct": -0.056,
+      "trough_unrealized_pct": -0.0863,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -1374,10 +1425,19 @@
       "conviction_score": 0.8304000000000001,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
-      "peak_unrealized_pct": -0.0094,
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 192.6,
+          "unrealized_pct": 0.001,
+          "peak_unrealized_pct": 0.001,
+          "trough_unrealized_pct": -0.0665
+        }
+      ],
+      "peak_unrealized_pct": 0.001,
       "trough_unrealized_pct": -0.0665,
-      "recovered_to_breakeven": null,
+      "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
@@ -1417,7 +1477,16 @@
       "conviction_score": 0.8241000000000002,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 56.9,
+          "unrealized_pct": -0.2237,
+          "peak_unrealized_pct": -0.0262,
+          "trough_unrealized_pct": -0.2698
+        }
+      ],
       "peak_unrealized_pct": -0.0262,
       "trough_unrealized_pct": -0.2698,
       "recovered_to_breakeven": null,
@@ -1460,9 +1529,18 @@
       "conviction_score": 0.8040000000000002,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 767.0,
+          "unrealized_pct": -0.034,
+          "peak_unrealized_pct": -0.0076,
+          "trough_unrealized_pct": -0.034
+        }
+      ],
       "peak_unrealized_pct": -0.0076,
-      "trough_unrealized_pct": -0.0327,
+      "trough_unrealized_pct": -0.034,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -1503,7 +1581,16 @@
       "conviction_score": 0.7981000000000001,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 255.0,
+          "unrealized_pct": -0.0406,
+          "peak_unrealized_pct": -0.0203,
+          "trough_unrealized_pct": -0.0549
+        }
+      ],
       "peak_unrealized_pct": -0.0203,
       "trough_unrealized_pct": -0.0549,
       "recovered_to_breakeven": null,
@@ -1546,8 +1633,17 @@
       "conviction_score": 0.7912000000000001,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
-      "peak_unrealized_pct": -0.0265,
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 591.0,
+          "unrealized_pct": -0.0215,
+          "peak_unrealized_pct": -0.0215,
+          "trough_unrealized_pct": -0.0778
+        }
+      ],
+      "peak_unrealized_pct": -0.0215,
       "trough_unrealized_pct": -0.0778,
       "recovered_to_breakeven": null,
       "close_reason": null,
@@ -1589,7 +1685,16 @@
       "conviction_score": 0.7511000000000001,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 762.0,
+          "unrealized_pct": -0.1414,
+          "peak_unrealized_pct": -0.1093,
+          "trough_unrealized_pct": -0.1583
+        }
+      ],
       "peak_unrealized_pct": -0.1093,
       "trough_unrealized_pct": -0.1583,
       "recovered_to_breakeven": null,
@@ -1632,9 +1737,18 @@
       "conviction_score": 0.7480000000000002,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 811.0,
+          "unrealized_pct": -0.0504,
+          "peak_unrealized_pct": -0.0181,
+          "trough_unrealized_pct": -0.0504
+        }
+      ],
       "peak_unrealized_pct": -0.0181,
-      "trough_unrealized_pct": -0.0386,
+      "trough_unrealized_pct": -0.0504,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -1675,7 +1789,16 @@
       "conviction_score": 0.7405000000000002,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 148.9,
+          "unrealized_pct": -0.0552,
+          "peak_unrealized_pct": -0.0296,
+          "trough_unrealized_pct": -0.059
+        }
+      ],
       "peak_unrealized_pct": -0.0296,
       "trough_unrealized_pct": -0.059,
       "recovered_to_breakeven": null,
@@ -1718,9 +1841,18 @@
       "conviction_score": 0.7284000000000002,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 246.0,
+          "unrealized_pct": -0.0769,
+          "peak_unrealized_pct": -0.0385,
+          "trough_unrealized_pct": -0.0769
+        }
+      ],
       "peak_unrealized_pct": -0.0385,
-      "trough_unrealized_pct": -0.0732,
+      "trough_unrealized_pct": -0.0769,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -1761,10 +1893,19 @@
       "conviction_score": 0.5796,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
-      "peak_unrealized_pct": -0.0132,
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 229.999,
+          "unrealized_pct": 0.0017,
+          "peak_unrealized_pct": 0.0017,
+          "trough_unrealized_pct": -0.0201
+        }
+      ],
+      "peak_unrealized_pct": 0.0017,
       "trough_unrealized_pct": -0.0201,
-      "recovered_to_breakeven": null,
+      "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
@@ -1804,10 +1945,19 @@
       "conviction_score": 0.557915,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
-      "peak_unrealized_pct": -0.0032,
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 255.327,
+          "unrealized_pct": 0.0084,
+          "peak_unrealized_pct": 0.0084,
+          "trough_unrealized_pct": -0.0197
+        }
+      ],
+      "peak_unrealized_pct": 0.0084,
       "trough_unrealized_pct": -0.0197,
-      "recovered_to_breakeven": null,
+      "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
@@ -1847,7 +1997,16 @@
       "conviction_score": 0.4209458399999999,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 133.2,
+          "unrealized_pct": -0.0662,
+          "peak_unrealized_pct": -0.0494,
+          "trough_unrealized_pct": -0.0669
+        }
+      ],
       "peak_unrealized_pct": -0.0494,
       "trough_unrealized_pct": -0.0669,
       "recovered_to_breakeven": null,
@@ -1890,7 +2049,16 @@
       "conviction_score": 0.3978731637499999,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 202.62,
+          "unrealized_pct": 0.0067,
+          "peak_unrealized_pct": 0.007,
+          "trough_unrealized_pct": -0.0331
+        }
+      ],
       "peak_unrealized_pct": 0.007,
       "trough_unrealized_pct": -0.0331,
       "recovered_to_breakeven": true,
@@ -1933,7 +2101,16 @@
       "conviction_score": 0.39112623296874993,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 170.7,
+          "unrealized_pct": -0.0345,
+          "peak_unrealized_pct": -0.0164,
+          "trough_unrealized_pct": -0.0512
+        }
+      ],
       "peak_unrealized_pct": -0.0164,
       "trough_unrealized_pct": -0.0512,
       "recovered_to_breakeven": null,
@@ -1976,7 +2153,16 @@
       "conviction_score": 0.38764184125000006,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 955.8,
+          "unrealized_pct": -0.0477,
+          "peak_unrealized_pct": -0.0287,
+          "trough_unrealized_pct": -0.0599
+        }
+      ],
       "peak_unrealized_pct": -0.0287,
       "trough_unrealized_pct": -0.0599,
       "recovered_to_breakeven": null,
@@ -2019,9 +2205,18 @@
       "conviction_score": 0.37599588181250004,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 119.2,
+          "unrealized_pct": -0.0356,
+          "peak_unrealized_pct": -0.0118,
+          "trough_unrealized_pct": -0.0356
+        }
+      ],
       "peak_unrealized_pct": -0.0118,
-      "trough_unrealized_pct": -0.0335,
+      "trough_unrealized_pct": -0.0356,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -2062,7 +2257,16 @@
       "conviction_score": 0.40259999999999996,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 594.5,
+          "unrealized_pct": -0.0302,
+          "peak_unrealized_pct": -0.0253,
+          "trough_unrealized_pct": -0.0628
+        }
+      ],
       "peak_unrealized_pct": -0.0253,
       "trough_unrealized_pct": -0.0628,
       "recovered_to_breakeven": null,
@@ -2106,7 +2310,16 @@
       "conviction_score": 0.18766124687499997,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 78.92,
+          "unrealized_pct": -0.0392,
+          "peak_unrealized_pct": -0.0097,
+          "trough_unrealized_pct": -0.0565
+        }
+      ],
       "peak_unrealized_pct": -0.0097,
       "trough_unrealized_pct": -0.0565,
       "recovered_to_breakeven": null,
@@ -2149,7 +2362,16 @@
       "conviction_score": 0.8085200000000002,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 1025.401,
+          "unrealized_pct": -0.0239,
+          "peak_unrealized_pct": -0.0033,
+          "trough_unrealized_pct": -0.0276
+        }
+      ],
       "peak_unrealized_pct": -0.0033,
       "trough_unrealized_pct": -0.0276,
       "recovered_to_breakeven": null,
@@ -2192,9 +2414,18 @@
       "conviction_score": 0.8522000000000002,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 75.3,
+          "unrealized_pct": -0.0921,
+          "peak_unrealized_pct": -0.0302,
+          "trough_unrealized_pct": -0.0921
+        }
+      ],
       "peak_unrealized_pct": -0.0302,
-      "trough_unrealized_pct": -0.0627,
+      "trough_unrealized_pct": -0.0921,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -2236,7 +2467,16 @@
       "conviction_score": 0.7243700000000002,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 338.8,
+          "unrealized_pct": -0.0177,
+          "peak_unrealized_pct": -0.0087,
+          "trough_unrealized_pct": -0.0339
+        }
+      ],
       "peak_unrealized_pct": -0.0087,
       "trough_unrealized_pct": -0.0339,
       "recovered_to_breakeven": null,
@@ -2279,7 +2519,16 @@
       "conviction_score": 0.6704800000000001,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 194.8,
+          "unrealized_pct": -0.0117,
+          "peak_unrealized_pct": -0.0112,
+          "trough_unrealized_pct": -0.035
+        }
+      ],
       "peak_unrealized_pct": -0.0112,
       "trough_unrealized_pct": -0.035,
       "recovered_to_breakeven": null,
@@ -2322,9 +2571,18 @@
       "conviction_score": 0.6146350000000002,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 331.8,
+          "unrealized_pct": -0.0301,
+          "peak_unrealized_pct": -0.0067,
+          "trough_unrealized_pct": -0.0301
+        }
+      ],
       "peak_unrealized_pct": -0.0067,
-      "trough_unrealized_pct": -0.0263,
+      "trough_unrealized_pct": -0.0301,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -2366,9 +2624,18 @@
       "conviction_score": 0.6055230000000001,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 720.0,
+          "unrealized_pct": -0.0533,
+          "peak_unrealized_pct": -0.021,
+          "trough_unrealized_pct": -0.0533
+        }
+      ],
       "peak_unrealized_pct": -0.021,
-      "trough_unrealized_pct": -0.0454,
+      "trough_unrealized_pct": -0.0533,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -2410,8 +2677,17 @@
       "conviction_score": 0.5954250000000001,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
-      "peak_unrealized_pct": 0.01,
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 199.3,
+          "unrealized_pct": 0.0284,
+          "peak_unrealized_pct": 0.0284,
+          "trough_unrealized_pct": -0.031
+        }
+      ],
+      "peak_unrealized_pct": 0.0284,
       "trough_unrealized_pct": -0.031,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -2454,10 +2730,19 @@
       "conviction_score": 0.19980050221874995,
       "exit_streak_at_start": 0,
       "momentum_grace": false,
-      "checkpoints": [],
-      "peak_unrealized_pct": -0.0046,
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:14.824618+01:00",
+          "days_after": 7,
+          "price": 1865.5,
+          "unrealized_pct": 0.0166,
+          "peak_unrealized_pct": 0.0166,
+          "trough_unrealized_pct": -0.0294
+        }
+      ],
+      "peak_unrealized_pct": 0.0166,
       "trough_unrealized_pct": -0.0294,
-      "recovered_to_breakeven": null,
+      "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
@@ -2499,7 +2784,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0122,
-      "trough_unrealized_pct": -0.0539,
+      "trough_unrealized_pct": -0.0556,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -2585,7 +2870,7 @@
       "exit_streak_at_start": 0,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.018,
+      "peak_unrealized_pct": -0.007,
       "trough_unrealized_pct": -0.0432,
       "recovered_to_breakeven": null,
       "close_reason": null,
@@ -2630,7 +2915,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0093,
-      "trough_unrealized_pct": -0.0171,
+      "trough_unrealized_pct": -0.0214,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -2673,7 +2958,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0325,
-      "trough_unrealized_pct": -0.0455,
+      "trough_unrealized_pct": -0.0468,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -2717,7 +3002,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0038,
-      "trough_unrealized_pct": -0.0125,
+      "trough_unrealized_pct": -0.0145,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -2729,7 +3014,7 @@
       "ticker": "VCT.L",
       "name": "Victrex plc",
       "started_at": "2026-09-14T09:29:39.748440+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "exit_streak",
         "signal_downgrade"
@@ -2761,10 +3046,232 @@
       "peak_unrealized_pct": 0.0988,
       "trough_unrealized_pct": 0.0988,
       "recovered_to_breakeven": true,
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-09-16T09:29:14.824618+01:00",
+      "linked_sell_trade_id": "4bf911f8-c2ae-4abc-b851-4054115c127a"
+    },
+    {
+      "episode_id": "buy_tier_level:GNS.L:2026-09-16T09:29:14.824618+01:00",
+      "track_id": "buy_tier_level",
+      "ticker": "GNS.L",
+      "name": "Genus plc",
+      "started_at": "2026-09-16T09:29:14.824618+01:00",
+      "status": "open",
+      "stress_triggers": [
+        "signal_downgrade"
+      ],
+      "entry_mark": 2150.0,
+      "avg_cost": 2150.0,
+      "unrealized_pct_at_start": 0.0,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "cheapness family no longer passes",
+        "still buy",
+        "data_quality 0.90"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": null,
+      "unrealized_pct_at_thesis": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 0.9,
+      "conviction_score": 0.47829499999999997,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0,
+      "trough_unrealized_pct": 0.0,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "buy_tier_level:EWG.L:2026-09-16T09:29:14.824618+01:00",
+      "track_id": "buy_tier_level",
+      "ticker": "EWG.L",
+      "name": "W.A.G payment solutions plc",
+      "started_at": "2026-09-16T09:29:14.824618+01:00",
+      "status": "open",
+      "stress_triggers": [
+        "signal_downgrade"
+      ],
+      "entry_mark": 98.3,
+      "avg_cost": 98.3,
+      "unrealized_pct_at_start": 0.0,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "cheapness family no longer passes",
+        "conviction 30% below intact floor",
+        "still buy",
+        "data_quality 0.90"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": null,
+      "unrealized_pct_at_thesis": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 0.9,
+      "conviction_score": 0.30498,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0,
+      "trough_unrealized_pct": 0.0,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
+    },
+    {
+      "episode_id": "buy_tier_level:RNK.L:2026-09-16T09:29:14.824618+01:00",
+      "track_id": "buy_tier_level",
+      "ticker": "RNK.L",
+      "name": "The Rank Group Plc",
+      "started_at": "2026-09-16T09:29:14.824618+01:00",
+      "status": "open",
+      "stress_triggers": [
+        "signal_downgrade"
+      ],
+      "entry_mark": 86.306,
+      "avg_cost": 86.306,
+      "unrealized_pct_at_start": 0.0,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "cheapness family no longer passes",
+        "conviction 20% below intact floor",
+        "still buy",
+        "research accumulate"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "accumulate",
+      "unrealized_pct_at_thesis": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 1.0,
+      "conviction_score": 0.20058508413757808,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": -0.0,
+      "trough_unrealized_pct": -0.0,
+      "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
     }
   ],
-  "swap_rotations": []
+  "swap_rotations": [
+    {
+      "rotation_id": "buy_tier_level:2026-09-16T09:29:14.824618+01:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-09-16T09:29:14.824618+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0028,
+      "sells": [
+        {
+          "ticker": "VCT.L",
+          "price": 945.0,
+          "shares": 0.018963,
+          "gross": 17.92,
+          "cost": 0.0,
+          "avg_cost_at_exit": 860.0,
+          "realized_pct": 0.0988,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0988
+        },
+        {
+          "ticker": "SGE.L",
+          "price": 1000.0,
+          "shares": 0.015756,
+          "gross": 15.76,
+          "cost": 0.0,
+          "avg_cost_at_exit": 1035.0,
+          "realized_pct": -0.0338,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0338
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "GNS.L",
+          "price": 2150.0,
+          "shares": 0.007214,
+          "gross": 15.51,
+          "cost": 0.08
+        },
+        {
+          "ticker": "EWG.L",
+          "price": 98.3,
+          "shares": 0.157793,
+          "gross": 15.51,
+          "cost": 0.08
+        },
+        {
+          "ticker": "RNK.L",
+          "price": 86.306,
+          "shares": 0.028616,
+          "gross": 2.47,
+          "cost": 0.01
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "VCT.L": 0.0,
+        "SGE.L": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "GNS.L": 0.0,
+        "EWG.L": 0.0,
+        "RNK.L": -0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    }
+  ]
 }

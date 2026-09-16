@@ -690,5 +690,148 @@
     "track_label": "AI judgment exclusion ladder u4 (frozen priors)",
     "is_primary_learning_track": false,
     "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
+  },
+  {
+    "reviewed_at": "2026-09-16T08:29:30.949316+00:00",
+    "enough_history": true,
+    "applied": false,
+    "knobs_before": {
+      "max_positions": 3,
+      "skip_timing_wait": true,
+      "min_conviction": 0.35,
+      "sector_cap": 0.2
+    },
+    "knobs_after": {
+      "max_positions": 3,
+      "skip_timing_wait": true,
+      "min_conviction": 0.35,
+      "sector_cap": 0.2
+    },
+    "proposed_changes": {
+      "min_conviction": 0.4
+    },
+    "reasons": [
+      "High cost drag (11.5%) \u2014 raise min_conviction."
+    ],
+    "metrics": {
+      "portfolio_value": 775.29,
+      "contributed_capital": 1000.0,
+      "total_return": -0.2247,
+      "total_costs": 205.71,
+      "cost_drag": 0.2057,
+      "trade_count": 28,
+      "buy_count": 15,
+      "sell_count": 13,
+      "positions": 3,
+      "cash_fraction": 0.0,
+      "equity_marks": 16,
+      "max_sector_weight": 0.3473,
+      "dominant_sector": "Technology",
+      "benchmark_return": -0.0115,
+      "excess_after_costs": -0.2132,
+      "note": "",
+      "epoch": {
+        "started_at": "2026-08-21T09:27:13.383131+01:00",
+        "knobs": {
+          "max_positions": 3,
+          "skip_timing_wait": true,
+          "min_conviction": 0.35,
+          "sector_cap": 0.2
+        },
+        "seeded_from_history": true,
+        "baseline_nav": 891.39,
+        "portfolio_value": 775.29,
+        "total_return": -0.1302,
+        "total_costs": 102.25,
+        "cost_drag": 0.1147,
+        "trade_count": 14,
+        "buy_count": 7,
+        "sell_count": 7,
+        "positions": 3,
+        "cash_fraction": 0.0,
+        "equity_marks": 7,
+        "max_sector_weight": 0.3473,
+        "dominant_sector": "Technology",
+        "benchmark_return": -0.0147,
+        "excess_after_costs": -0.1156,
+        "note": ""
+      }
+    },
+    "counterfactual_preview": {
+      "scope": "rebalance_log_replay",
+      "knobs": {
+        "max_positions": 3,
+        "skip_timing_wait": true,
+        "min_conviction": 0.4,
+        "sector_cap": 0.2,
+        "use_adjusted_signal": true,
+        "require_research_accumulate": true,
+        "exit_confirm_screens": 2,
+        "candidate_source": "auto"
+      },
+      "used_screen_buy_tier_pool": false,
+      "log_entries_total": 7,
+      "log_entries_replayed": 7,
+      "lookback_days": null,
+      "replay_from": "2026-09-07T09:29:10.866142+01:00",
+      "replay_to": "2026-09-16T09:28:40.711117+01:00",
+      "simulated_nav": 1635.41,
+      "baseline_nav": 927.96,
+      "simulated_return": 0.7624,
+      "simulated_total_costs": 203.58,
+      "simulated_cost_drag": 0.2036,
+      "simulated_trade_count": 14,
+      "limitations": "Replay covers logged rebalance passes only; pre-logging history needs archive lab (L111). Names never in screen_buy_tier (hold/avoid on raw screen) still need full archive replay. Technical track replays stops/targets from logged trade_plan snapshots.",
+      "actual_nav": 777.33,
+      "actual_return_over_window": -0.1623,
+      "actual_total_costs_over_window": 102.25,
+      "actual_cost_drag_over_window": 0.1022,
+      "return_delta_vs_actual": 0.9247,
+      "cost_drag_delta_vs_actual": -0.1013,
+      "archive_rebalance_replay": {
+        "scope": "archive_rebalance_replay",
+        "knobs": {
+          "max_positions": 3,
+          "skip_timing_wait": true,
+          "min_conviction": 0.4,
+          "sector_cap": 0.2,
+          "use_adjusted_signal": true,
+          "require_research_accumulate": true
+        },
+        "archive_passes_replayed": 4,
+        "archive_replay_from": "2026-09-12T11:21:34.513768+00:00",
+        "archive_replay_to": "2026-09-15T07:43:57.741887+00:00",
+        "log_replay_from": "2026-09-07T09:29:10.866142+01:00",
+        "log_replay_to": "2026-09-16T09:28:40.711117+01:00",
+        "log_entries_replayed": 7,
+        "simulated_nav": 1758.16,
+        "baseline_nav": 927.96,
+        "simulated_return": 0.8947,
+        "simulated_total_costs": 115.95,
+        "simulated_cost_drag": 0.116,
+        "simulated_trade_count": 9,
+        "limitations": "Observe-only archive walk \u2014 one rebalance per archived weekly screen from first logged pass. Does not mutate live knobs. AI overlay gates use PIT research joins (L113) when a research timeline exists under the archive parent data_dir.",
+        "actual_nav": 766.81,
+        "actual_return_over_window": -0.1737,
+        "actual_total_costs_over_window": 102.25,
+        "actual_cost_drag_over_window": 0.1022,
+        "return_delta_vs_actual": 1.0684,
+        "cost_drag_delta_vs_actual": -0.0138
+      },
+      "archive_vs_log": {
+        "log_entries_replayed": 7,
+        "archive_passes_replayed": 4,
+        "log_return_delta_vs_actual": 0.9247,
+        "archive_return_delta_vs_actual": 1.0684,
+        "return_delta_gap_archive_minus_log": 0.1437,
+        "log_simulated_return": 0.7624,
+        "archive_simulated_return": 0.8947
+      }
+    },
+    "note": "Frozen lab/shadow track \u2014 knobs fixed; decision-review apply skipped.",
+    "track_id": "ai_judgment_exclusion_u4",
+    "track_label": "AI judgment exclusion ladder u4 (frozen priors)",
+    "is_primary_learning_track": false,
+    "success_criterion": "Control track \u2014 compare excess_after_costs to the primary AI-judgment book; do not treat rules outperformance alone as learning success."
   }
 ]

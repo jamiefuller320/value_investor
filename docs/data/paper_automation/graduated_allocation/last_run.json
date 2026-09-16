@@ -1,15 +1,48 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-14T09:28:00.240774+01:00",
+    "local_time": "2026-09-16T09:27:45.605824+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-09-14T08:00:00+01:00",
-    "settle_at": "2026-09-14T09:15:00+01:00",
+    "market_open_at": "2026-09-16T08:00:00+01:00",
+    "settle_at": "2026-09-16T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "3e4ed5a9-559e-430f-a4f9-43160bc6da4d",
+      "fund_id": "18f49ce6-d089-4b7e-8c66-19dba9618d66",
+      "acted_at": "2026-09-16T09:27:45.605824+01:00",
+      "ticker": "JD.L",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 1.482709,
+      "price": 75.2,
+      "gross": 111.5,
+      "cost": 3.34,
+      "net_cash": 108.15,
+      "note": "Graduated exit \u2014 left target set",
+      "name": "JD Sports Fashion Plc",
+      "avg_cost_at_exit": 80.3603,
+      "position_closed": true
+    },
+    {
+      "id": "b159b145-2d64-4a8b-a74a-825c6ecfec8c",
+      "fund_id": "18f49ce6-d089-4b7e-8c66-19dba9618d66",
+      "acted_at": "2026-09-16T09:27:45.605824+01:00",
+      "ticker": "POLN.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.149839,
+      "price": 811.0,
+      "gross": 121.52,
+      "cost": 3.65,
+      "net_cash": -125.16,
+      "note": "Graduated buy",
+      "name": "Pollen Street Group Limited"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +56,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 930.51,
-    "cash": 458.2,
+    "nav": 923.5,
+    "cash": 441.19,
     "max_positions": 4,
     "min_conviction": 0.6,
     "sector_cap": 0.2,
@@ -33,64 +66,46 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 229.95,
+    "target_sleeve_value": 230.01,
     "targets": [
+      {
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "signal": "buy",
+        "conviction_score": 0.9974000000000003,
+        "price": 3040.0
+      },
       {
         "ticker": "CURY.L",
         "name": "Currys plc",
         "signal": "buy",
-        "conviction_score": 0.8338000000000001,
-        "price": 148.2985
+        "conviction_score": 0.9722000000000003,
+        "price": 148.8
       },
       {
-        "ticker": "DATA.L",
-        "name": "GlobalData Plc",
+        "ticker": "DSCV.L",
+        "name": "discoverIE Group plc",
         "signal": "buy",
-        "conviction_score": 0.8235000000000001,
-        "price": 54.0
-      },
-      {
-        "ticker": "FRES.L",
-        "name": "Fresnillo plc",
-        "signal": "buy",
-        "conviction_score": 0.8058000000000002,
-        "price": 2933.0
+        "conviction_score": 0.9042000000000002,
+        "price": 767.0
       },
       {
         "ticker": "POLN.L",
         "name": "Pollen Street Group Limited",
         "signal": "strong_buy",
-        "conviction_score": 0.7088000000000001,
-        "price": 824.0
+        "conviction_score": 0.8649000000000002,
+        "price": 811.0
       }
     ],
     "anticipated_exits": [
       {
         "action": "sell",
-        "ticker": "KLR.L",
-        "name": "Keller Group plc",
+        "ticker": "FRES.L",
+        "name": "Fresnillo plc",
         "reason": "No longer in the top conviction target set",
-        "shares": 0.041924,
-        "price": 2936.0,
-        "value": 123.09
-      },
-      {
-        "action": "sell",
-        "ticker": "DSCV.L",
-        "name": "discoverIE Group plc",
-        "reason": "No longer in the top conviction target set",
-        "shares": 0.153545,
-        "price": 768.0,
-        "value": 117.92
-      },
-      {
-        "action": "sell",
-        "ticker": "JD.L",
-        "name": "JD Sports Fashion Plc",
-        "reason": "No longer in the top conviction target set",
-        "shares": 1.482709,
-        "price": 77.78,
-        "value": 115.33
+        "shares": 0.03954,
+        "price": 2923.0,
+        "value": 115.58
       }
     ],
     "anticipated_grace_holds": [],
@@ -98,53 +113,53 @@
     "anticipated_buys": [
       {
         "action": "buy",
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "reason": "Top-up to equal weight",
+        "value": 102.56,
+        "price": 3040.0,
+        "target_value": 230.01,
+        "conviction_score": 0.9974000000000003,
+        "signal": "buy"
+      },
+      {
+        "action": "buy",
         "ticker": "CURY.L",
         "name": "Currys plc",
         "reason": "New sleeve",
-        "value": 229.95,
-        "price": 148.2985,
-        "target_value": 229.95,
-        "conviction_score": 0.8338000000000001,
+        "value": 230.01,
+        "price": 148.8,
+        "target_value": 230.01,
+        "conviction_score": 0.9722000000000003,
         "signal": "buy"
       },
       {
         "action": "buy",
-        "ticker": "DATA.L",
-        "name": "GlobalData Plc",
-        "reason": "New sleeve",
-        "value": 229.95,
-        "price": 54.0,
-        "target_value": 229.95,
-        "conviction_score": 0.8235000000000001,
-        "signal": "buy"
-      },
-      {
-        "action": "buy",
-        "ticker": "FRES.L",
-        "name": "Fresnillo plc",
+        "ticker": "DSCV.L",
+        "name": "discoverIE Group plc",
         "reason": "Top-up to equal weight",
-        "value": 113.98,
-        "price": 2933.0,
-        "target_value": 229.95,
-        "conviction_score": 0.8058000000000002,
+        "value": 112.24,
+        "price": 767.0,
+        "target_value": 230.01,
+        "conviction_score": 0.9042000000000002,
         "signal": "buy"
       },
       {
         "action": "buy",
         "ticker": "POLN.L",
         "name": "Pollen Street Group Limited",
-        "reason": "New sleeve",
-        "value": 229.95,
-        "price": 824.0,
-        "target_value": 229.95,
-        "conviction_score": 0.7088000000000001,
+        "reason": "Top-up to equal weight",
+        "value": 108.49,
+        "price": 811.0,
+        "target_value": 230.01,
+        "conviction_score": 0.8649000000000002,
         "signal": "strong_buy"
       }
     ],
     "anticipated_holds": [],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 4 equal-weight sleeve(s); sell 3 name(s) that left the set; deploy cash into 4 buy(s)."
+    "summary": "Next rebalance would target 4 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 4 buy(s)."
   },
   "alerts": [
     {
@@ -153,7 +168,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 2936.0,
+      "mark": 3040.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -164,18 +179,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 768.0,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "insufficient_data"
-    },
-    {
-      "ticker": "JD.L",
-      "name": "JD Sports Fashion Plc",
-      "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 77.77999877929688,
+      "mark": 767.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -186,7 +190,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 2933.0,
+      "mark": 2923.0,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "POLN.L",
+      "name": "Pollen Street Group Limited",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 811.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -207,7 +222,7 @@
       "id": "18f49ce6-d089-4b7e-8c66-19dba9618d66",
       "created_at": "2026-09-07T08:27:50.446137+00:00"
     },
-    "cash": 458.2,
+    "cash": 441.19,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -233,17 +248,6 @@
         "take_profit": null,
         "opened_at": "2026-09-10T09:27:53.931652+01:00"
       },
-      "JD.L": {
-        "ticker": "JD.L",
-        "shares": 1.482709,
-        "avg_cost": 80.3603,
-        "name": "JD Sports Fashion Plc",
-        "sector": "Consumer Cyclical",
-        "currency": "GBP",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-09-10T09:27:53.931652+01:00"
-      },
       "FRES.L": {
         "ticker": "FRES.L",
         "shares": 0.03954,
@@ -254,6 +258,17 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-09-11T09:28:29.064814+01:00"
+      },
+      "POLN.L": {
+        "ticker": "POLN.L",
+        "shares": 0.149839,
+        "avg_cost": 811.0,
+        "name": "Pollen Street Group Limited",
+        "sector": "Financial Services",
+        "currency": "GBP",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-16T09:27:45.605824+01:00"
       }
     },
     "trades": [
@@ -444,6 +459,38 @@
         "net_cash": -121.0,
         "note": "Graduated buy",
         "name": "Fresnillo plc"
+      },
+      {
+        "id": "3e4ed5a9-559e-430f-a4f9-43160bc6da4d",
+        "fund_id": "18f49ce6-d089-4b7e-8c66-19dba9618d66",
+        "acted_at": "2026-09-16T09:27:45.605824+01:00",
+        "ticker": "JD.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 1.482709,
+        "price": 75.2,
+        "gross": 111.5,
+        "cost": 3.34,
+        "net_cash": 108.15,
+        "note": "Graduated exit \u2014 left target set",
+        "name": "JD Sports Fashion Plc",
+        "avg_cost_at_exit": 80.3603,
+        "position_closed": true
+      },
+      {
+        "id": "b159b145-2d64-4a8b-a74a-825c6ecfec8c",
+        "fund_id": "18f49ce6-d089-4b7e-8c66-19dba9618d66",
+        "acted_at": "2026-09-16T09:27:45.605824+01:00",
+        "ticker": "POLN.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.149839,
+        "price": 811.0,
+        "gross": 121.52,
+        "cost": 3.65,
+        "net_cash": -125.16,
+        "note": "Graduated buy",
+        "name": "Pollen Street Group Limited"
       }
     ],
     "equity_curve": [
@@ -566,24 +613,40 @@
           "issues": []
         },
         "note": "Graduated rebalance"
+      },
+      {
+        "at": "2026-09-16T09:27:45.605824+01:00",
+        "portfolio_value": 923.5,
+        "cash": 441.19,
+        "contributed_capital": 1000.0,
+        "positions": 4,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Graduated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-14T09:28:00.240774+01:00",
+    "last_mark_at": "2026-09-16T09:27:45.605824+01:00",
     "rebalance_state": {
       "exit_streak": {
-        "KLR.L": 1,
-        "DSCV.L": 1,
-        "JD.L": 1
+        "FRES.L": 1
       },
-      "reentry_cooldown": {}
+      "reentry_cooldown": {
+        "JD.L": 1
+      }
     }
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (2 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "graduated_allocation",
-    "generated_at": "2026-09-14T08:28:13.779152+00:00",
-    "open_count": 4,
+    "generated_at": "2026-09-16T08:27:56.727934+00:00",
+    "open_count": 5,
     "closed_count": 0,
     "by_exit_kind": {},
     "grace_vs_rotation": {
@@ -595,13 +658,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "graduated_allocation",
-    "generated_at": "2026-09-14T08:28:13.779913+00:00",
+    "generated_at": "2026-09-16T08:27:56.728502+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -655,37 +718,37 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 4,
+      "hold_closed_count": 5,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 8,
       "gaps": [
-        "hold_recovery closed episodes=4 (target >=15)",
+        "hold_recovery closed episodes=5 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 4,
-        "recovered_to_breakeven": 0,
+        "count": 3,
+        "recovered_to_breakeven": 1,
         "close_reasons": {
-          "open": 4
+          "open": 3
         }
       },
       "closed": {
-        "count": 4,
+        "count": 5,
         "recovered_to_breakeven": 1,
         "close_reasons": {
-          "sold_while_underwater": 3,
+          "sold_while_underwater": 4,
           "sold_while_recovered": 1
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 2,
+        "count": 3,
         "verdicts": {
-          "open": 2
+          "open": 3
         }
       },
       "closed": {
@@ -694,8 +757,8 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 3,
-      "swap_rotations": 0
+      "hold_episodes": 0,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -707,8 +770,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "graduated_allocation",
-    "updated_at": "2026-09-14T08:28:13.780950+00:00",
-    "as_of": "2026-09-14T09:28:00.240774+01:00",
+    "updated_at": "2026-09-16T08:27:56.729366+00:00",
+    "as_of": "2026-09-16T09:27:45.605824+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -748,7 +811,7 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.0,
+        "quality": 0.25,
         "dividend": 0.0,
         "garp": 0.0,
         "risk": 0.0
@@ -759,98 +822,18 @@
     },
     "holdings": [
       {
-        "ticker": "JD.L",
-        "name": "JD Sports Fashion Plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0321,
-        "mark": 77.78,
-        "avg_cost": 80.3603,
-        "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.7997,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 80%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 80%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "KLR.L",
-        "name": "Keller Group plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": -0.0148,
-        "mark": 2936.0,
-        "avg_cost": 2980.0,
-        "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 0.6175,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 62%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 62%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
         "ticker": "FRES.L",
         "name": "Fresnillo plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0128,
-        "mark": 2933.0,
+        "unrealized_pct": -0.0162,
+        "mark": 2923.0,
         "avg_cost": 2971.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.8058,
+        "conviction_score": 0.862,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -866,14 +849,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 81%"
+          "conviction 86%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 81%"
+          "conviction 86%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -885,12 +868,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0103,
-        "mark": 768.0,
+        "unrealized_pct": -0.0116,
+        "mark": 767.0,
         "avg_cost": 776.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.6763,
+        "conviction_score": 0.9042,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -906,14 +889,95 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 68%"
+          "conviction 90%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 68%"
+          "conviction 90%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "POLN.L",
+        "name": "Pollen Street Group Limited",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 811.0,
+        "avg_cost": 811.0,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.8649,
+        "data_quality_score": 0.9,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "quality"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.90",
+          "conviction 86%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 0.90",
+          "conviction 86%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0201,
+        "mark": 3040.0,
+        "avg_cost": 2980.0,
+        "signal": "buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 0.9974,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 100%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 100%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -926,27 +990,27 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "graduated_allocation",
-    "generated_at": "2026-09-14T08:28:13.782209+00:00",
+    "generated_at": "2026-09-16T08:27:56.730279+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 4,
+      "closed_total": 5,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 4,
+      "open_with_thesis": 3,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 4,
-          "recovery_rate": 0.25,
-          "sold_underwater_rate": 0.75,
-          "mean_peak_unrealized_pct": -0.0138,
-          "mean_trough_unrealized_pct": -0.0378,
+          "closed_count": 5,
+          "recovery_rate": 0.2,
+          "sold_underwater_rate": 0.8,
+          "mean_peak_unrealized_pct": -0.0149,
+          "mean_trough_unrealized_pct": -0.0431,
           "outcome_labels": {
-            "sold_underwater": 3,
+            "sold_underwater": 4,
             "recovered": 1
           }
         },
@@ -979,10 +1043,10 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 4,
+      "hold_closed_with_thesis": 5,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
-        "hold closed with thesis=4 (target >=8)",
+        "hold closed with thesis=5 (target >=8)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
       "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -994,71 +1058,71 @@
     "schema_version": 1,
     "track_id": "graduated_allocation",
     "observe_only": true,
-    "generated_at": "2026-09-14T08:28:13.785323+00:00",
+    "generated_at": "2026-09-16T08:27:56.732777+00:00",
     "open_count": 4,
-    "closed_count": 7,
-    "scored_count": 7,
-    "scored_count_all": 7,
+    "closed_count": 8,
+    "scored_count": 8,
+    "scored_count_all": 8,
     "recommit_scored_count": 0,
     "entry_kind_counts": {
-      "first_entry": 7,
+      "first_entry": 8,
       "recommit": 0
     },
-    "any_de_risk_count": 5,
+    "any_de_risk_count": 6,
     "winning_cadence_counts": {
-      "dca_4x_weekly": 4,
+      "dca_4x_weekly": 5,
       "dca_2x_weekly": 3
     },
     "cadence_stats": {
       "dca_2x_weekly": {
         "label": "50/50 over 1 week",
-        "scored_episodes": 7,
-        "mean_end_value_delta": 0.81,
-        "mean_de_risk_gbp": 1.6043,
-        "de_risk_rate": 0.7143,
+        "scored_episodes": 8,
+        "mean_end_value_delta": 1.1875,
+        "mean_de_risk_gbp": 1.8812,
+        "de_risk_rate": 0.75,
         "win_count": 3
       },
       "dca_4x_weekly": {
         "label": "25% weekly \u00d7 4",
-        "scored_episodes": 7,
-        "mean_end_value_delta": 1.2171,
-        "mean_de_risk_gbp": 2.4086,
-        "de_risk_rate": 0.7143,
-        "win_count": 4
+        "scored_episodes": 8,
+        "mean_end_value_delta": 1.7825,
+        "mean_de_risk_gbp": 2.825,
+        "de_risk_rate": 0.75,
+        "win_count": 5
       },
       "dca_2x_biweekly": {
         "label": "50/50 over 2 weeks",
-        "scored_episodes": 7,
-        "mean_end_value_delta": 0.81,
-        "mean_de_risk_gbp": 1.6043,
-        "de_risk_rate": 0.7143,
+        "scored_episodes": 8,
+        "mean_end_value_delta": 1.1875,
+        "mean_de_risk_gbp": 1.8812,
+        "de_risk_rate": 0.75,
         "win_count": 0
       },
       "dca_5x_weekday": {
         "label": "20% over 5 weekday marks",
-        "scored_episodes": 7,
-        "mean_end_value_delta": -1.8471,
-        "mean_de_risk_gbp": 0.9657,
-        "de_risk_rate": 0.4286,
+        "scored_episodes": 8,
+        "mean_end_value_delta": -1.6413,
+        "mean_de_risk_gbp": 1.1775,
+        "de_risk_rate": 0.5,
         "win_count": 0
       }
     },
     "readiness": {
       "ready_for_cadence_analysis": false,
-      "closed_episodes": 7,
+      "closed_episodes": 8,
       "closed_target": 12,
       "tracks_with_closed": 1,
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
-      "first_entry_scored": 7,
+      "first_entry_scored": 8,
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 4,
-    "closed_this_pass": 0
+    "closed_this_pass": 1
   },
-  "generated_at": "2026-09-14T08:28:13.785681+00:00",
+  "generated_at": "2026-09-16T08:27:56.733003+00:00",
   "track_id": "graduated_allocation",
   "track_label": "Screen rules + graduated allocation",
   "is_primary_learning_track": false,

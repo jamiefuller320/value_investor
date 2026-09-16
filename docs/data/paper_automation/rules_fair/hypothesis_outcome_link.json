@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "rules_fair",
-  "generated_at": "2026-09-14T08:29:39.713266+00:00",
+  "generated_at": "2026-09-16T08:29:14.791017+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 5,
+    "closed_total": 6,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 5,
-        "recovery_rate": 0.4,
-        "sold_underwater_rate": 0.6,
-        "mean_peak_unrealized_pct": 0.0113,
-        "mean_trough_unrealized_pct": -0.0079,
+        "closed_count": 6,
+        "recovery_rate": 0.3333,
+        "sold_underwater_rate": 0.6667,
+        "mean_peak_unrealized_pct": 0.0062,
+        "mean_trough_unrealized_pct": -0.0173,
         "outcome_labels": {
-          "sold_underwater": 3,
+          "sold_underwater": 4,
           "recovered": 2
         }
       },
@@ -56,10 +56,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 5,
+    "hold_closed_with_thesis": 6,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=5 (target >=8)",
+      "hold closed with thesis=6 (target >=8)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -290,7 +290,7 @@
       "ticker": "JD.L",
       "name": "JD Sports Fashion Plc",
       "started_at": "2026-09-11T09:30:49.150289+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -321,11 +321,11 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0194,
-      "trough_unrealized_pct": -0.0335,
+      "trough_unrealized_pct": -0.0646,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-09-16T09:29:03.300018+01:00",
+      "linked_sell_trade_id": "cc4bcc55-fd6d-4336-a182-68a7646b0717"
     },
     {
       "episode_id": "rules_fair:KLR.L:2026-09-14T09:29:27.248664+01:00",
@@ -364,9 +364,9 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0148,
+      "peak_unrealized_pct": 0.0201,
       "trough_unrealized_pct": -0.0148,
-      "recovered_to_breakeven": null,
+      "recovered_to_breakeven": true,
       "close_reason": null,
       "closed_at": null,
       "linked_sell_trade_id": null
@@ -409,7 +409,7 @@
       "momentum_grace": false,
       "checkpoints": [],
       "peak_unrealized_pct": -0.0103,
-      "trough_unrealized_pct": -0.0103,
+      "trough_unrealized_pct": -0.0116,
       "recovered_to_breakeven": null,
       "close_reason": null,
       "closed_at": null,
@@ -498,15 +498,23 @@
           "cost": 1.65
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-16T09:29:03.300018+01:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0028,
+          "avg_buy_return": -0.0146,
+          "replacement_delta": -0.0174
+        }
+      ],
       "sell_returns_since_rotation": {
-        "MEGP.L": -0.0028,
-        "AEP.L": -0.0112
+        "MEGP.L": -0.0241,
+        "AEP.L": 0.0296
       },
       "buy_returns_since_rotation": {
-        "MGNS.L": -0.0371,
-        "IMB.L": 0.0145,
-        "SN.L": -0.0183
+        "MGNS.L": -0.0133,
+        "IMB.L": 0.0084,
+        "SN.L": -0.0389
       },
       "verdict": null,
       "closed_at": null
@@ -619,14 +627,92 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "IMB.L": 0.031,
-        "MGNS.L": -0.0099,
-        "SN.L": 0.025
+        "IMB.L": 0.0249,
+        "MGNS.L": 0.0146,
+        "SN.L": 0.0034
       },
       "buy_returns_since_rotation": {
-        "KLR.L": -0.0148,
-        "DSCV.L": -0.0103,
-        "JD.L": -0.0335
+        "KLR.L": 0.0201,
+        "DSCV.L": -0.0116,
+        "JD.L": -0.0646
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "rules_fair:2026-09-16T09:29:03.300018+01:00",
+      "track_id": "rules_fair",
+      "logged_at": "2026-09-16T09:29:03.300018+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.0028,
+      "sells": [
+        {
+          "ticker": "JD.L",
+          "price": 75.24,
+          "shares": 3.775684,
+          "gross": 284.08,
+          "cost": 0.07,
+          "avg_cost_at_exit": 80.438,
+          "realized_pct": -0.0646,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0646
+        },
+        {
+          "ticker": "KLR.L",
+          "price": 3040.0,
+          "shares": 0.003888,
+          "gross": 11.82,
+          "cost": 0.0,
+          "avg_cost_at_exit": 2980.0,
+          "realized_pct": 0.0201,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0201
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "CURY.L",
+          "price": 148.9,
+          "shares": 1.976385,
+          "gross": 294.28,
+          "cost": 1.54
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "JD.L": -0.0,
+        "KLR.L": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "CURY.L": -0.0
       },
       "verdict": null,
       "closed_at": null
