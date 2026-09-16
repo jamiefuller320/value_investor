@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-16T06:08:05+00:00",
+  "updated_at": "2026-09-16T09:03:24+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -8914,6 +8914,58 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0a45e-de52-7982-b3c9-402c6616bb45",
       "added_at": "2026-09-15T18:50:52+00:00"
+    },
+    {
+      "id": "N129",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Raise AUTO_MERGE_MAX_PATHS above 8 for narrow/ci-fix",
+      "summary": "PR #666 failed eng-narrow-gate at 11>8. Raising the shared cap widens both scoring_narrow/ingest_narrow and ci_fix auto-merge blast radius; prefer human-merge or split oversized scoring PRs until narrow merges have a clean monitor streak.",
+      "revisit_when": "After \u22653 weeks of clean ingest_narrow and scoring_narrow auto-merges (L398 trigger) and EOD merge monitor shows stable verified counts with no path-guard incidents",
+      "tags": [
+        "auto-merge",
+        "narrow-verify",
+        "path-cap",
+        "scoring"
+      ],
+      "status": "open",
+      "source": "PR 666 eng-narrow-gate discussion",
+      "added_at": "2026-09-16T07:35:34+00:00"
+    },
+    {
+      "id": "L399",
+      "category": "later",
+      "section": "ops",
+      "title": "Observe-only oversized narrow-PR split planner",
+      "summary": "When eng-narrow-gate rejects for path count (e.g. 11>8), emit planned_rectification=propose_narrow_split: comment a deterministic file grouping, optionally draft sibling \u22648-path tasks, and record on PM handoff/digest. Do not rewrite or auto-merge split PRs yet.",
+      "revisit_when": "After \u22653 clean scoring_narrow/ingest_narrow auto-merges and eng-narrow-gate oversize rejects are a recurring ops-monitor/PM digest item",
+      "tags": [
+        "auto-merge",
+        "narrow-verify",
+        "rectification",
+        "split",
+        "project-traffic"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0a758-055d-7c42-b849-ee26b8c35559",
+      "added_at": "2026-09-16T09:03:24+00:00"
+    },
+    {
+      "id": "N130",
+      "category": "not_now",
+      "section": "ops",
+      "title": "Auto-execute mechanical PR splits for oversized narrow diffs",
+      "summary": "Fully automated rewrite of an oversized eng PR into N auto-mergeable PRs is unsafe without semantic cohesion: shared imports, partial scoring overlays, and which tests belong with which slice. Keep human-merge or human-led split until an observe-only planner has a clean track record.",
+      "revisit_when": "Observe-only oversized narrow-PR split planner has proposed groupings for several real rejects and humans accepted those groupings without compile/test breakage",
+      "tags": [
+        "auto-merge",
+        "narrow-verify",
+        "rectification",
+        "split"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0a758-055d-7c42-b849-ee26b8c35559",
+      "added_at": "2026-09-16T09:03:24+00:00"
     }
   ],
   "fragments": [
