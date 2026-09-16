@@ -16,7 +16,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 export GHA_COMMIT_OWNED="${GHA_COMMIT_OWNED:-docs/data/ops_status.json docs/data/ops_monitor_log.json}"
-export GHA_COMMIT_OPTIONAL="${GHA_COMMIT_OPTIONAL:-docs/data/engineering_tasks.json docs/data/ingest_health_log.json docs/data/backtest_health.json docs/data/project_traffic_digest.json docs/data/project_traffic_digest.md docs/data/queue_health.json}"
+export GHA_COMMIT_OPTIONAL="${GHA_COMMIT_OPTIONAL:-docs/data/engineering_tasks.json docs/data/ingest_health_log.json docs/data/backtest_health.json docs/data/project_traffic_digest.json docs/data/project_traffic_digest.md docs/data/pr_fix_occasions.json docs/data/queue_health.json}"
 export COMMIT_MESSAGE="${COMMIT_MESSAGE:-chore: ops monitor [skip ci]}"
 export GHA_COMMIT_LABEL="${GHA_COMMIT_LABEL:-Ops monitor}"
 

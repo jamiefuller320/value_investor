@@ -234,12 +234,16 @@ def _pr_check_state(
         if str(row.get("conclusion") or "").lower() in {"failure", "cancelled", "timed_out"}
     ]
     successes = [row for row in relevant if str(row.get("conclusion") or "").lower() == "success"]
+    failed_check_names = [
+        str(row.get("name") or "").strip() for row in failures if str(row.get("name") or "").strip()
+    ]
     return {
         "available": True,
         "head_sha": head_sha,
         "completed_checks": len(relevant),
         "all_failed": bool(relevant) and len(successes) == 0 and len(failures) == len(relevant),
         "any_success": bool(successes),
+        "failed_check_names": failed_check_names,
         "latest_check_at": max(
             (_parse_iso(str(row.get("completed_at") or "")) for row in relevant),
             default=None,

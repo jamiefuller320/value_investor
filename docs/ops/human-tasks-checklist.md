@@ -24,7 +24,7 @@ most automation — this list is what still needs a human.
 | **Confirm buy-tier level first fill** — ops-monitor fails if the Suite B book acted empty; knobs stay frozen; do not treat NAV as promotion truth | CI | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#level-book-live-monday) |
 | Admitted-market weekday rememo (3/day per epoch-0 book after maintenance ingest; catch-up 5 if that book exceeds 15) | CI | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
 | **Clear engineering parked backlog** when dispatch pauses — triage oldest `list-parked` tasks; queue resumes when count &lt; 7 and 30m idle since last clearing action (separate from project-traffic stuck-PR pause) | Human | [ops-monitor.md](ops-monitor.md#engineering-parked-backlog-clearing) |
-| **Project traffic** pause / unstick / grounded EOD digest + merges-today monitor (ops-monitor + weekday 12:30/17:30; ingest_narrow / scoring_narrow independent verify/auto-merge listed in digest; spot-check human merges for `narrow_cohesion_bypass`) | CI | [project-traffic.md](project-traffic.md#authority-v1) |
+| **Project traffic** pause / unstick / grounded EOD digest + merges-today monitor + PR fix occasion log (ops-monitor + weekday 12:30/17:30; ingest_narrow / scoring_narrow independent verify/auto-merge listed in digest; spot-check human merges for `narrow_cohesion_bypass`) | CI | [project-traffic.md](project-traffic.md#authority-v1) |
 
 ## Sunday
 
@@ -71,6 +71,7 @@ Survivors are **starting priors for learning-loop refinement** — never auto-ap
 | **Horizon scan** — weeder drops near-dups; triage remaining fragments | Human | [horizon-scan.md](horizon-scan.md#when-it-runs) |
 | Review **euro_depth filing/memo parity** vs FTSE before AI-gate / Phase 3 | Human | [market-sharded-learning.md](market-sharded-learning.md#depth-first-eu-pilot-aug-2026) |
 | Review **cycle-end Cursor surplus** — assess unused Ultra fraction, apply a 25% provisional weekly_ops bump (15% of plan credit / week is a warning on estimated USD, not a hard cap), keep or revert at the next cycle. Do not raise rememo daily caps or offline memo density from leftover credit | Human | [cycle-budget-surplus.md](cycle-budget-surplus.md#human-gate) |
+| Review **common PR fix-request reasons** (`ftse-project-traffic common-issues`) — fix recurring CI / merge-conflict root causes | Human | [project-traffic.md](project-traffic.md#pr-fix-occasion-log) |
 
 ## Quarterly
 

@@ -84,6 +84,8 @@ class StuckPr:
     checks_failed: bool = False
     conflict: bool = False
     updated_at: str | None = None
+    failed_check_names: list[str] = field(default_factory=list)
+    failure_reason: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -99,6 +101,8 @@ class StuckPr:
             "checks_failed": self.checks_failed,
             "conflict": self.conflict,
             "updated_at": self.updated_at,
+            "failed_check_names": list(self.failed_check_names),
+            "failure_reason": self.failure_reason,
         }
 
 
@@ -473,6 +477,29 @@ def classify_stuck_prs(
         head_sha = str(
             row.get("head_sha") or (head.get("sha") if isinstance(head, dict) else "") or ""
         )
+        failed_check_names = [
+            str(name).strip()
+            for name in list(check_state.get("failed_check_names") or [])
+            if str(name).strip()
+        ]
+        from value_investor.pr_fix_occasions import (
+            KIND_BOTH,
+            KIND_CI,
+            KIND_MERGE,
+            normalize_failure_reason,
+        )
+
+        if checks_failed and conflict:
+            occasion_kind = KIND_BOTH
+        elif conflict:
+            occasion_kind = KIND_MERGE
+        else:
+            occasion_kind = KIND_CI
+        failure_reason = normalize_failure_reason(
+            kind=occasion_kind,
+            failed_check_names=failed_check_names,
+            mergeable_state=mergeable_state or None,
+        )
         stuck.append(
             StuckPr(
                 number=number,
@@ -487,6 +514,8 @@ def classify_stuck_prs(
                 checks_failed=checks_failed,
                 conflict=conflict,
                 updated_at=str(row.get("updated_at") or row.get("updatedAt") or "") or None,
+                failed_check_names=failed_check_names,
+                failure_reason=failure_reason,
             )
         )
     return stuck
@@ -516,6 +545,60 @@ def _record_fix_request(
     state["fix_requests"] = history
 
 
+def _occasion_kind_for_action(action_kind: str, pr: StuckPr) -> str:
+    from value_investor.pr_fix_occasions import KIND_BOTH, KIND_CI, KIND_MERGE
+
+    if action_kind == ACTION_COMMENT_CI:
+        return KIND_CI
+    if action_kind == ACTION_COMMENT_CONFLICT:
+        return KIND_MERGE
+    if pr.checks_failed and pr.conflict:
+        return KIND_BOTH
+    if pr.conflict:
+        return KIND_MERGE
+    return KIND_CI
+
+
+def _append_pr_fix_occasion(
+    pr: StuckPr,
+    *,
+    action_kind: str,
+    apply: bool,
+    now: datetime,
+    log_path: Path | None = None,
+) -> dict[str, Any] | None:
+    """Persist a durable fix-request occasion with failure reason."""
+    from value_investor.pr_fix_occasions import (
+        SOURCE_TRAFFIC,
+        record_pr_fix_occasion,
+    )
+
+    occasion_kind = _occasion_kind_for_action(action_kind, pr)
+    try:
+        result = record_pr_fix_occasion(
+            source=SOURCE_TRAFFIC,
+            kind=occasion_kind,
+            failure_reason=pr.failure_reason,
+            pr_number=pr.number,
+            branch=pr.branch,
+            title=pr.title,
+            url=pr.url,
+            task_id=pr.task_id,
+            head_sha=pr.head_sha,
+            mergeable_state=pr.mergeable_state,
+            failed_check_names=list(pr.failed_check_names),
+            notes=f"traffic action={action_kind}",
+            details={"reasons": list(pr.reasons), "action_kind": action_kind},
+            path=log_path,
+            apply=apply,
+            now=now,
+        )
+    except (OSError, ValueError, TypeError) as exc:
+        logger.warning("PR fix occasion log failed for #%s: %s", pr.number, exc)
+        return None
+    return result.get("entry") if isinstance(result, dict) else None
+
+
 def _can_request_fix(
     state: dict[str, Any],
     *,
@@ -543,11 +626,18 @@ def _can_request_fix(
 
 def format_ci_fix_comment(pr: StuckPr) -> str:
     task_bit = f" (task `{pr.task_id}`)" if pr.task_id else ""
+    reason = pr.failure_reason or "ci_failing"
+    check_bit = ""
+    if pr.failed_check_names:
+        check_bit = (
+            " Failed checks: " + ", ".join(f"`{n}`" for n in pr.failed_check_names[:8]) + "."
+        )
     return "\n".join(
         [
             "## Project traffic controller — CI failure",
             "",
-            f"PR #{pr.number}{task_bit} on `{pr.branch}` has **failing checks**.",
+            f"PR #{pr.number}{task_bit} on `{pr.branch}` has **failing checks** "
+            f"(reason: `{reason}`).{check_bit}",
             "",
             "Please push a scoped fix (or wait for `ci-pr-autofix` / hunter-fix when eligible).",
             "New engineering-agent dispatch is **paused** while monitored PRs remain stuck,",
@@ -560,12 +650,13 @@ def format_ci_fix_comment(pr: StuckPr) -> str:
 
 def format_conflict_resolve_comment(pr: StuckPr) -> str:
     task_bit = f" (task `{pr.task_id}`)" if pr.task_id else ""
+    reason = pr.failure_reason or "merge_conflict"
     return "\n".join(
         [
             "## Project traffic controller — merge conflict",
             "",
             f"PR #{pr.number}{task_bit} on `{pr.branch}` is **not mergeable** "
-            f"(state: `{pr.mergeable_state or 'dirty'}`).",
+            f"(state: `{pr.mergeable_state or 'dirty'}`; reason: `{reason}`).",
             "",
             "Please rebase/merge `main` and resolve conflicts on this branch only.",
             "A conflict-resolve agent may be dispatched for engineering branches.",
@@ -715,6 +806,12 @@ def request_unstick_actions(
                     head_sha=pr.head_sha,
                     now=now,
                 )
+                _append_pr_fix_occasion(
+                    pr,
+                    action_kind=ACTION_COMMENT_CI,
+                    apply=apply,
+                    now=now,
+                )
                 state["last_action_at"] = now.isoformat()
             actions.append(
                 TrafficAction(
@@ -751,6 +848,12 @@ def request_unstick_actions(
                     pr_number=pr.number,
                     kind=ACTION_COMMENT_CONFLICT,
                     head_sha=pr.head_sha,
+                    now=now,
+                )
+                _append_pr_fix_occasion(
+                    pr,
+                    action_kind=ACTION_COMMENT_CONFLICT,
+                    apply=apply,
                     now=now,
                 )
                 state["last_action_at"] = now.isoformat()
@@ -1130,9 +1233,11 @@ def build_daily_digest(
         trajectory = "needs_evidence"
 
     from value_investor.engineering_narrow_merge import list_todays_engineering_merges
+    from value_investor.pr_fix_occasions import summarize_common_failure_reasons
 
     merges_today = list_todays_engineering_merges(tasks_path=COMMITTED_TASKS_PATH, now=now)
     verified = [row for row in merges_today if row.get("independently_verified")]
+    common_issues = summarize_common_failure_reasons(limit=10)
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -1152,6 +1257,7 @@ def build_daily_digest(
         },
         "merges_today": merges_today,
         "verified_merges_today": verified,
+        "pr_fix_common_issues": common_issues,
         "merge_authority": {
             "status": "scoped_auto_merge",
             "note": (
@@ -1169,6 +1275,7 @@ def build_daily_digest(
             "ops_email_handoff": (
                 str(DEFAULT_OPS_EMAIL_HANDOFF_PATH) if ops_email_handoff else None
             ),
+            "pr_fix_occasions": "docs/data/pr_fix_occasions.json",
         },
     }
 
@@ -1233,6 +1340,21 @@ def format_daily_digest_markdown(digest: dict[str, Any]) -> str:
             )
     else:
         lines.append("- _(none merged today)_")
+
+    common = digest.get("pr_fix_common_issues") or {}
+    lines.extend(
+        [
+            "",
+            "## PR fix occasions — common failure reasons",
+            f"- Occasion count: {common.get('occasion_count', 0)}",
+        ]
+    )
+    by_reason = list(common.get("by_reason") or [])
+    if by_reason:
+        for row in by_reason[:8]:
+            lines.append(f"- `{row.get('failure_reason')}` — {row.get('count')}×")
+    else:
+        lines.append("- _(none recorded yet)_")
 
     handoff = digest.get("ops_email_handoff") or {}
     handoff_items = list(handoff.get("items") or [])

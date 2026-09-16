@@ -72,6 +72,19 @@ Indexing: those bulk paths are listed in [`.cursorindexingignore`](.cursorindexi
 
 Prefer a **new agent session** for a new major workstream after a long multi-topic chat (roughly 20–30 user turns), so context tax does not compound across unrelated PRs.
 
+## PR fix occasion log (required)
+
+When a human asks you to **fix failing PR checks** or a **blocked merge**, record the
+occasion (with failure reason) before or while fixing:
+
+```bash
+ftse-project-traffic record-fix --pr <N> --kind ci_check|merge_conflict \
+  --reason "<short failure reason>" [--failed-checks "CI / test,…"] [--notes "…"]
+```
+
+Traffic controller comments also append automatically. Review aggregates with
+`ftse-project-traffic common-issues`. See [`docs/ops/project-traffic.md`](docs/ops/project-traffic.md#pr-fix-occasion-log).
+
 ## Human tasks checklist (required)
 
 When you add or change a **manual** ops step (review gate, promotion checklist,

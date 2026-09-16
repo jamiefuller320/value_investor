@@ -1,0 +1,12 @@
+# PR fix occasion log
+
+When a human asks you to fix **failing PR checks** or a **blocked merge**, record
+the occasion with the failure reason (so common issues can be fixed at the root):
+
+```bash
+ftse-project-traffic record-fix --pr <N> --kind ci_check|merge_conflict \
+  --reason "<short failure reason>" [--failed-checks "…"] [--notes "…"]
+```
+
+Traffic-controller comments append automatically. Review with
+`ftse-project-traffic common-issues`. See `docs/ops/project-traffic.md`.
