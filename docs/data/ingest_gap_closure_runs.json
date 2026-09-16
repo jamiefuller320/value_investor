@@ -10428,8 +10428,115 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260916-01",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "GIB-A.TO",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "GIB-A.TO"
+        ],
+        "market_id": "tsx60",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260916-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-16T08:23:26.471005+00:00",
+      "completed_at": "2026-09-16T08:24:30.080714+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "GIB-A.TO"
+        ],
+        "results": [
+          {
+            "ticker": "GIB-A.TO",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 20,
+              "filings_with_body": 19,
+              "indexed_without_body": 1
+            },
+            "after": {
+              "filings_total": 20,
+              "filings_with_body": 19,
+              "indexed_without_body": 1
+            },
+            "improved": false,
+            "regime": "tsx_announcements",
+            "filings_summary": {
+              "total": 20,
+              "annual": 6,
+              "interim": 14,
+              "trading_update": 0,
+              "other": 0,
+              "with_body": 19,
+              "period_coverage": {
+                "annual": {
+                  "total": 6,
+                  "with_body": 6
+                },
+                "interim": {
+                  "total": 14,
+                  "with_body": 13
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 0,
+                  "with_body": 0
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 19,
+              "with_body_after": 19,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 4,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "GIB-A.TO",
+            "with_body_before": 19,
+            "with_body_after": 19,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-15T16:54:16.027051+00:00",
+  "updated_at": "2026-09-16T08:24:30.080727+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
