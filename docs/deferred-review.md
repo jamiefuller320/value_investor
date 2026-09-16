@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-16T17:46:04+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-16T19:03:52+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -475,6 +475,9 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L406 | **Dashboard surface for PR fix common issues** | Expose docs/data/pr_fix_occasions.json common_issues on the Automation / ops dashboard so monthly review does not require CLI-only inspection. | pr_fix_occasions has ≥20 occasions or monthly checklist review feels CLI-heavy |
 | L409 | **PM auto-rerun ingest-loop once on persistent red without success** | When cancel-on-heal finds no later success, optionally dispatch one force=true ingest-loop rerun (capped) before leaving a workflow_failure eng task open. Do not invent code patches. | After budget-includes-discovery + timeout skip-draft have a green week of ingest-loop |
 | L410 | **SIGTERM flush ingest_loop.json on outer wall-clock kill** | Outer timeout 75m only helps commit/chain if JSON already exists. Add signal handler or finally-block checkpoint so mid-ticker kills still emit partial JSON. | If ingest-loop still fails with exit 124 and empty /tmp/ingest_loop.json after discovery budget lands |
+| L411 | **Scoped auto-merge for compile_cap_drain when path/CI gates pass** | Drain tasks currently ship auto_merge=false and often wait on human merge, so throughput is one agent cycle plus human latency despite auto-merge already chaining the next drain after merge. Add an independent-verify class (like ingest_narrow) for compile_cap_drain with ≤8 paths and green CI. | After compile-cap backlog is still >100 with idle priority queue for a full week |
+| L412 | **Allow up to 2 concurrent compile_cap_drain opens when queue idle** | Drain is hard-capped at one open task even though max_parallel_engineering_agents is 2. When priority queue is empty, queue a second drain candidate to use the spare agent slot. | After scoped auto-merge for compile_cap_drain lands or human merge lag stays the bottleneck |
+| L413 | **Coalesce near-duplicate research_model_suggestions before drain** | About 27 of ~228 pending drain candidates share near-dup title prefixes (mostly FCF/dividend). Fuzzy-coalesce at drain/compile time to cut serial agent cycles without raising Sunday max_tasks. | When implementing drain throughput changes; measure dup rate on next progress-report truncated_count |
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-16T17:46:04+00:00",
+  "updated_at": "2026-09-16T19:03:52+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9198,6 +9198,54 @@
       "status": "open",
       "source": "conversation: explore auto resolution other failure modes",
       "added_at": "2026-09-16T17:45:53+00:00"
+    },
+    {
+      "id": "L411",
+      "category": "later",
+      "section": "ops",
+      "title": "Scoped auto-merge for compile_cap_drain when path/CI gates pass",
+      "summary": "Drain tasks currently ship auto_merge=false and often wait on human merge, so throughput is one agent cycle plus human latency despite auto-merge already chaining the next drain after merge. Add an independent-verify class (like ingest_narrow) for compile_cap_drain with \u22648 paths and green CI.",
+      "revisit_when": "After compile-cap backlog is still >100 with idle priority queue for a full week",
+      "tags": [
+        "compile-cap",
+        "auto-merge",
+        "throughput"
+      ],
+      "status": "open",
+      "source": "conversation: speed up idle drain throughput",
+      "added_at": "2026-09-16T19:03:52+00:00"
+    },
+    {
+      "id": "L412",
+      "category": "later",
+      "section": "ops",
+      "title": "Allow up to 2 concurrent compile_cap_drain opens when queue idle",
+      "summary": "Drain is hard-capped at one open task even though max_parallel_engineering_agents is 2. When priority queue is empty, queue a second drain candidate to use the spare agent slot.",
+      "revisit_when": "After scoped auto-merge for compile_cap_drain lands or human merge lag stays the bottleneck",
+      "tags": [
+        "compile-cap",
+        "parallel",
+        "throughput"
+      ],
+      "status": "open",
+      "source": "conversation: speed up idle drain throughput",
+      "added_at": "2026-09-16T19:03:52+00:00"
+    },
+    {
+      "id": "L413",
+      "category": "later",
+      "section": "ops",
+      "title": "Coalesce near-duplicate research_model_suggestions before drain",
+      "summary": "About 27 of ~228 pending drain candidates share near-dup title prefixes (mostly FCF/dividend). Fuzzy-coalesce at drain/compile time to cut serial agent cycles without raising Sunday max_tasks.",
+      "revisit_when": "When implementing drain throughput changes; measure dup rate on next progress-report truncated_count",
+      "tags": [
+        "compile-cap",
+        "dedupe",
+        "suggestions"
+      ],
+      "status": "open",
+      "source": "conversation: speed up idle drain throughput",
+      "added_at": "2026-09-16T19:03:52+00:00"
     }
   ],
   "fragments": [
