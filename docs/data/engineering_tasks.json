@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-16T08:12:33.063791+00:00",
+  "compiled_at": "2026-09-16T16:11:27.107623+00:00",
   "run_at": null,
-  "task_count": 20,
+  "task_count": 21,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -539,7 +539,8 @@
           "ftse-ingest-loop",
           "CurlError",
           "HTTPError"
-        ]
+        ],
+        "merge_class": "ingest_narrow"
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for .github/workflows/ingest-loop.yml",
@@ -560,11 +561,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260916-03.md",
       "branch_name": "cursor/eng-20260916-03-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-16T15:33:01.219887+00:00"
+      "completed_at": "2026-09-16T15:33:01.219887+00:00",
+      "merge_class": "ingest_narrow",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/674",
+      "pr_number": 674,
+      "merged_at": "2026-09-16T16:11:25.884730+00:00"
     },
     {
       "id": "eng-20260914-03",
@@ -631,6 +636,54 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/657",
       "pr_number": 657,
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
+    },
+    {
+      "id": "eng-20260916-04",
+      "area": "scoring",
+      "title": "Flag when [2/2]",
+      "summary": "First-principle slice 2/2 of: Enable cyclical_exposure for UK heavyside construction-materials names when GB volume language and cement-output “historic lows” are in the same tape. Flag when. no topic map — cohesion bypass keeps full area allowlist",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "BREE.L"
+        ],
+        "recorded_at": "2026-09-04T18:34:24.578877+00:00",
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "Enable cyclical_exposure for UK heavyside construction-materials names when GB volume language and cement-output “historic lows” are in the same tape. Flag when",
+        "narrow_cohesion_bypass": true,
+        "narrow_split_group_id": "e80de5823414",
+        "narrow_split_index": 2,
+        "narrow_split_count": 2,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260916-01",
@@ -1153,7 +1206,7 @@
   },
   "reprioritized_at": "2026-09-16T10:07:10.046741+00:00",
   "reprioritized_after_task": "eng-20260916-02",
-  "micro_compile_source": "parked_source_hunter",
+  "micro_compile_source": "compile_cap_drain",
   "library_market_id": "euro_stoxx50",
   "hunter_ticker": "SAN.PA",
   "traffic_control": {
