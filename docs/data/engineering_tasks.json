@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-16T16:11:27.107623+00:00",
+  "compiled_at": "2026-09-16T17:28:05.423113+00:00",
   "run_at": null,
-  "task_count": 21,
+  "task_count": 22,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -638,6 +638,59 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
+      "id": "eng-20260916-05",
+      "area": "scoring",
+      "title": "Keep the dividend-yield overlay result (FCF Yield / earnings-quality fail → adjusted Buy) instead of letting prior-memo research_* lift the snapshot back to str",
+      "summary": "Keep the dividend-yield overlay result (FCF Yield / earnings-quality fail → adjusted Buy) instead of letting prior-memo research_* lift the snapshot back to strong_buy with empty failed_models. Enable cyclical_exposure for diversified miners. Flag when screen FCF (3,596m) disagrees with Yahoo/filing FCF (4,497m) while TTM is suppressed, and when name composite (0.679) sits below sector composite (0.725) on a strong_buy. Fail-closed or annotate when trade-plan limits are ~100× the live LSE price ",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "RIO.L"
+        ],
+        "recorded_at": "2026-09-04T18:45:32.862905+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "topic paths 10 > 8 — cohesion bypass (do not split one objective)",
+        "narrow_parent_title": "Keep the dividend-yield overlay result (FCF Yield / earnings-quality fail → adjusted Buy) instead of letting prior-memo research_* lift the snapshot back to str",
+        "narrow_cohesion_bypass": true,
+        "narrow_topics": [
+          "fcf",
+          "dividend"
+        ],
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/scoring/fcf.py",
+        "src/value_investor/scoring/fcf_basis_overlay.py",
+        "src/value_investor/scoring/fcf_three_way_conviction_overlay.py",
+        "src/value_investor/scoring/screening_export_guard.py",
+        "src/value_investor/scoring/snapshot.py",
+        "src/value_investor/pipeline.py",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py",
+        "src/value_investor/scoring/dividend_sustainability_overlay.py",
+        "src/value_investor/scoring/dividend_yield_overlay.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260916-04",
       "area": "scoring",
       "title": "Flag when [2/2]",
@@ -660,7 +713,18 @@
         "compile_cap_drain": true,
         "origin_source": "research_model_suggestions",
         "origin_priority_score": 43.0,
-        "doc": "docs/ops/engineering-sync.md"
+        "doc": "docs/ops/engineering-sync.md",
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260916-04",
+        "verified_at": "2026-09-16T17:27:57.769114+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_pipeline.py",
+            "tests/test_summary.py"
+          ],
+          "output_tail": "........................................................................ [ 32%]\n........................................................................ [ 64%]\n........................................................................ [ 96%]\n.......                                                                  [100%]\n223 passed in 9.69s"
+        }
       },
       "acceptance_criteria": [
         "Export or overlay behaviour is covered by a unit test",
@@ -683,11 +747,14 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260916-04.md",
       "branch_name": "cursor/eng-20260916-04-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-16T16:17:17.233529+00:00"
+      "completed_at": "2026-09-16T16:17:17.233529+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/675",
+      "pr_number": 675,
+      "merged_at": "2026-09-16T17:27:57.769655+00:00"
     },
     {
       "id": "eng-20260916-01",
@@ -1194,7 +1261,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-16T17:16:24.814788+00:00",
+    "evaluated_at": "2026-09-16T17:28:02.939688+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
