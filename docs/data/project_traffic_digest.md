@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-16T07:47:20.901017+00:00`
+Generated: `2026-09-16T17:13:49.196830+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -22,22 +22,23 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Stage 3 (Library-ready global data): complete _(source: docs/data/project_progress.json)_
 - [ok] Stage 4 (Controlled universe expansion): not_started _(source: docs/data/project_progress.json)_
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
-- [ok] Progress report present (generated_at=2026-09-15T12:38:22+00:00) _(source: docs/data/progress_report.json)_
+- [ok] Progress report present (generated_at=2026-09-16T16:53:21+00:00) _(source: docs/data/progress_report.json)_
 - [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview'] _(source: docs/data/progress_report.json)_
-- [ok] Queue health overall=active; headline=Agent lane active. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=ok at 2026-09-15T13:16:17.148729+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Queue health overall=active; headline=Merge lane active; agent lane active. _(source: docs/data/queue_health.json)_
+- [ok] Ops monitor overall=warn at 2026-09-16T07:46:38.598120+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- _(none merged today)_
+- `ingest_narrow`/verified PR #674 `eng-20260916-03` — Workflow fix: ingest-loop failure on main
+- `human`/human PR #669 `eng-20260916-02` — Hunt fetchable IR source for parked euro_stoxx50 leftover SAN.PA
+- `human`/human PR #666 `eng-20260916-01` — Fail-closed or flag when screen FCF (1,059m) disagrees with Yahoo/filing FCF (852m) while TTM is suppressed and cashflow_metrics is null. Turn on healthcare_pri
 
-## Ops-monitor email handoff
-- Email subject: `FTSE Ops Monitor — WARN`
-- Findings: 1 (open=1, resolved=0)
-- [open] WARN Ingest loop hit runtime cutoff — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+## PR fix occasions — common failure reasons
+- Occasion count: 1
+- `ruff_format` — 1×
 
 ## Merge authority
 - Status: **scoped_auto_merge**
