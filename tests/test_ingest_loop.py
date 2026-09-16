@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from unittest.mock import patch
 
@@ -19,7 +20,13 @@ from value_investor.ingest_loop import (
     reports_from_latest,
 )
 from value_investor.ingest_loop_cli import main
-from value_investor.research.ingest_improvement import IngestImprovementSummary
+from value_investor.research.ingest_improvement import (
+    IngestImprovementSummary,
+    _invoke_with_transient_fetch_retry,
+    _is_transient_http_fetch_error,
+    run_ingest_improvement_pass,
+)
+from value_investor.summary import CompanyReport
 
 
 def test_reports_from_latest_builds_company_reports(tmp_path: Path):
@@ -320,6 +327,129 @@ def test_ingest_loop_cli_writes_json_path_on_failure(tmp_path: Path):
         assert main(["run", "--json-path", str(out_path)]) == 1
     payload = json.loads(out_path.read_text(encoding="utf-8"))
     assert payload["error"] == "boom"
+
+
+def test_is_transient_http_fetch_error_matches_curl_cffi_http_error():
+    class HTTPError(Exception):
+        pass
+
+    exc = HTTPError("Failed to perform, curl: (56) Recv failure")
+    assert _is_transient_http_fetch_error(exc)
+
+
+def test_invoke_with_transient_fetch_retry_recovers_on_second_attempt():
+    calls = {"count": 0}
+
+    def flaky_fetch():
+        calls["count"] += 1
+        if calls["count"] == 1:
+            raise RuntimeError("HTTPError: Failed to perform")
+        return {"fetched": 2}
+
+    with patch(
+        "value_investor.research.ingest_improvement.time.sleep",
+        return_value=None,
+    ):
+        result = _invoke_with_transient_fetch_retry(flaky_fetch)
+    assert result == {"fetched": 2}
+    assert calls["count"] == 2
+
+
+@patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
+@patch("value_investor.research.ingest_improvement.execute_planned_alternate_sources")
+@patch("value_investor.research.ingest_improvement.ingest_research_sources")
+@patch("value_investor.research.ingest_improvement.sanitize_filings_index")
+@patch("value_investor.research.ingest_improvement.refetch_uk_primary_filing_bodies")
+@patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
+def test_run_ingest_improvement_pass_continues_after_bootstrap_http_error(
+    mock_bootstrap,
+    mock_primary_refetch,
+    mock_sanitize,
+    mock_ingest_sources,
+    mock_alternate,
+    mock_deepen,
+    tmp_path: Path,
+):
+    """Regression for ingest-loop.yml CurlError/HTTPError during bootstrap seed."""
+    mock_bootstrap.side_effect = RuntimeError(
+        "curl_cffi.requests.exceptions.HTTPError: Failed to perform"
+    )
+    output_dir = tmp_path / "output"
+    sources = output_dir / "research" / "BT-A.L" / "sources" / "filings"
+    sources.mkdir(parents=True)
+    (sources / "filings_index.json").write_text(
+        json.dumps({"summary": {"total": 2, "with_body": 0}, "filings": [{}, {}]}),
+        encoding="utf-8",
+    )
+    mock_ingest_sources.return_value = {"filings_summary": {"with_body": 0}}
+    mock_primary_refetch.return_value = {
+        "fetched": 1,
+        "companies_house": {"fetched": 1},
+        "rns": {"investegate": {}, "ticker_rns": {}, "fetched": 0},
+    }
+    mock_alternate.return_value = {"fetched": 0}
+    mock_deepen.return_value = {"skipped": True, "reason": "sufficient_bodies"}
+
+    report = CompanyReport(
+        ticker="BT-A.L",
+        name="BT Group",
+        sector="Communication Services",
+        signal="buy",
+        models_passed=10,
+        model_count=22,
+        composite_score=0.8,
+        sector_composite_score=0.7,
+        families_passed=4,
+        passed_families="cheapness",
+        data_quality_score=1.0,
+        metrics_present=20,
+        metrics_total=20,
+        weeks_at_signal=1,
+        signal_trend="new",
+        conviction_score=0.5,
+        stability_label="new",
+        timing_signal="neutral",
+        timing_score=0.0,
+        rsi_14=50.0,
+        price_vs_sma200_pct=0.0,
+        action_note="",
+        trade_plan=None,
+        summary="Test",
+        passed_models=[],
+        key_metrics={},
+    )
+
+    summary = run_ingest_improvement_pass(
+        reports=[report],
+        output_dir=output_dir,
+        market="ftse350",
+        max_targets=1,
+        suggestions_path=tmp_path / "missing.json",
+        discovery_scan=False,
+    )
+
+    assert any("bootstrap:" in row for row in summary.errors)
+    assert len(summary.results) == 1
+    mock_primary_refetch.assert_called_once()
+
+
+def test_ingest_loop_workflow_step_timeout_has_headroom_above_soft_budget() -> None:
+    """Regression for ingest-loop.yml run #35066797050 (65m step vs 3600s soft budget)."""
+    text = Path(".github/workflows/ingest-loop.yml").read_text(encoding="utf-8")
+    default_m = re.search(
+        r"max_runtime_seconds:.*?default:\s*\"(\d+)\"",
+        text,
+        flags=re.DOTALL,
+    )
+    assert default_m is not None
+    soft_budget_s = int(default_m.group(1))
+    step_m = re.search(
+        r"name: Run weekday ingest loop\n(?:.*\n)*?\s+timeout-minutes:\s*(\d+)",
+        text,
+    )
+    assert step_m is not None
+    step_timeout_m = int(step_m.group(1))
+    assert step_timeout_m >= (soft_budget_s // 60) + 15
 
 
 def test_run_weekday_ingest_loop_logs_book_deltas(tmp_path: Path, monkeypatch):
