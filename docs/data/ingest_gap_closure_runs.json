@@ -10893,8 +10893,115 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260917-01",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "TRI.TO",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "TRI.TO"
+        ],
+        "market_id": "tsx60",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260917-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-17T11:25:00.853251+00:00",
+      "completed_at": "2026-09-17T11:27:55.193558+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "TRI.TO"
+        ],
+        "results": [
+          {
+            "ticker": "TRI.TO",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 160,
+              "filings_with_body": 153,
+              "indexed_without_body": 7
+            },
+            "after": {
+              "filings_total": 160,
+              "filings_with_body": 153,
+              "indexed_without_body": 7
+            },
+            "improved": false,
+            "regime": "tsx_announcements",
+            "filings_summary": {
+              "total": 158,
+              "annual": 13,
+              "interim": 38,
+              "trading_update": 6,
+              "other": 101,
+              "with_body": 150,
+              "period_coverage": {
+                "annual": {
+                  "total": 13,
+                  "with_body": 12
+                },
+                "interim": {
+                  "total": 38,
+                  "with_body": 31
+                },
+                "trading_update": {
+                  "total": 6,
+                  "with_body": 6
+                },
+                "other": {
+                  "total": 101,
+                  "with_body": 101
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 153,
+              "with_body_after": 153,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "TRI.TO",
+            "with_body_before": 153,
+            "with_body_after": 153,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-16T20:18:06.790807+00:00",
+  "updated_at": "2026-09-17T11:27:55.193567+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
