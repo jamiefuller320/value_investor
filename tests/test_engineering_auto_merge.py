@@ -65,6 +65,62 @@ def test_evaluate_auto_merge_ready_when_scope_and_checks_ok(tmp_path):
     assert decision.pr_number == 42
 
 
+def test_evaluate_auto_merge_heals_open_status_when_live_pr_exists(tmp_path):
+    """Stamp lag: status open but PR live → restamp then continue merge eval."""
+    task = EngineeringTask(
+        id="eng-20260917-06",
+        area="scoring",
+        title="fcf: stamp lag",
+        summary="x",
+        priority="high",
+        priority_score=95.0,
+        source="compile_cap_drain",
+        allowed_paths=[
+            "src/value_investor/scoring/fcf.py",
+            "tests/test_pipeline.py",
+            "tests/test_summary.py",
+        ],
+        blocked_paths=list(BLOCKED_PATHS),
+        auto_merge=True,
+        status="open",
+    )
+    _write_task(tmp_path, task)
+    branch = "cursor/eng-20260917-06-1de3"
+    path = tmp_path / "engineering_tasks.json"
+    with (
+        patch(
+            "value_investor.engineering_recovery.find_open_pull_for_branch",
+            return_value={
+                "number": 686,
+                "html_url": "https://github.com/example/repo/pull/686",
+            },
+        ),
+        patch(
+            "value_investor.engineering_auto_merge.find_open_pr_for_branch",
+            return_value={"number": 686, "isDraft": False},
+        ),
+        patch(
+            "value_investor.engineering_auto_merge.pr_checks_successful",
+            return_value=(True, "all checks green"),
+        ),
+        patch(
+            "value_investor.engineering_auto_merge.changed_files_for_pr",
+            return_value=[
+                "src/value_investor/scoring/fcf.py",
+                "tests/test_pipeline.py",
+                "tests/test_summary.py",
+            ],
+        ),
+    ):
+        decision = evaluate_auto_merge(branch=branch, tasks_path=path)
+    assert decision.should_merge
+    assert decision.pr_number == 686
+    updated = json.loads(path.read_text(encoding="utf-8"))["tasks"][0]
+    assert updated["status"] == "pr_open"
+    assert updated["branch_name"] == branch
+    assert updated["pr_number"] == 686
+
+
 def test_evaluate_auto_merge_rejects_when_auto_merge_disabled(tmp_path):
     task = EngineeringTask(
         id="eng-20260802-02",

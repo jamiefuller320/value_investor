@@ -396,6 +396,8 @@ def _cmd_recover_queue(args: argparse.Namespace) -> int:
             print(f"Marked merged from GitHub: {', '.join(result.merged)}")
         for action in result.cancelled:
             print(f"Cancelled {action.task_id}: {action.reason}")
+        if result.restamped:
+            print(f"Restamped open → pr_open from live PR: {', '.join(result.restamped)}")
         if result.reconciled:
             print(f"Reconciled orphaned pr_open: {', '.join(result.reconciled)}")
         if result.reopened:

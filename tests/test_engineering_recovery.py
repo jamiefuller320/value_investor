@@ -586,3 +586,105 @@ def test_list_merge_sync_lag_tasks(tmp_path: Path, monkeypatch):
     lagged = list_merge_sync_lag_tasks(tasks_path=tasks_path, token="x")
     ids = [row["task_id"] for row in lagged]
     assert ids == ["eng-20260915-04", "eng-20260915-09"]
+
+
+def test_reconcile_open_tasks_with_live_prs_restamps_cleared_branch(tmp_path: Path):
+    """#686-class: open + null branch, but live PR exists → pr_open + branch + number."""
+    from value_investor.engineering_recovery import reconcile_open_tasks_with_live_prs
+
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task("eng-20260917-06", status="open").to_dict()
+            | {"auto_merge": True},
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    restamped = reconcile_open_tasks_with_live_prs(
+        tasks_path=tasks_path,
+        open_prs=[
+            {
+                "number": 686,
+                "headRefName": "cursor/eng-20260917-06-1de3",
+                "url": "https://github.com/example/repo/pull/686",
+            }
+        ],
+        apply=True,
+    )
+    assert restamped == ["eng-20260917-06"]
+    updated = load_engineering_tasks(tasks_path)["tasks"][0]
+    assert updated["status"] == "pr_open"
+    assert updated["branch_name"] == "cursor/eng-20260917-06-1de3"
+    assert updated["pr_number"] == 686
+
+
+def test_recover_does_not_orphan_reset_when_live_lookup_finds_pr(
+    tmp_path: Path, monkeypatch
+):
+    """Stale empty open_prs snapshot must not clear a fresh pr_open stamp."""
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task("eng-20260917-06", status="pr_open").to_dict()
+            | {"branch_name": "cursor/eng-20260917-06-1de3"},
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.find_merged_pull_for_branch",
+        lambda branch, **kwargs: None,
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.find_open_pull_for_branch",
+        lambda branch, **kwargs: (
+            {
+                "number": 686,
+                "html_url": "https://github.com/example/repo/pull/686",
+                "head": {"ref": branch},
+            }
+            if branch == "cursor/eng-20260917-06-1de3"
+            else None
+        ),
+    )
+
+    result = recover_engineering_queue(tasks_path=tasks_path, open_prs=[], apply=True)
+    assert result.reconciled == []
+    updated = load_engineering_tasks(tasks_path)["tasks"][0]
+    assert updated["status"] == "pr_open"
+    assert updated["branch_name"] == "cursor/eng-20260917-06-1de3"
+
+
+def test_recover_restamps_open_before_orphan_reconcile(tmp_path: Path, monkeypatch):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task("eng-20260917-06", status="open").to_dict(),
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.find_merged_pull_for_branch",
+        lambda branch, **kwargs: None,
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.find_open_pull_for_branch",
+        lambda branch, **kwargs: None,
+    )
+
+    result = recover_engineering_queue(
+        tasks_path=tasks_path,
+        open_prs=[
+            {
+                "number": 686,
+                "headRefName": "cursor/eng-20260917-06-1de3",
+                "html_url": "https://github.com/example/repo/pull/686",
+            }
+        ],
+        apply=True,
+    )
+    assert result.restamped == ["eng-20260917-06"]
+    assert result.reconciled == []
+    updated = load_engineering_tasks(tasks_path)["tasks"][0]
+    assert updated["status"] == "pr_open"
+    assert updated["pr_number"] == 686

@@ -1603,6 +1603,80 @@ def test_check_engineering_queue_reports_merge_sync_lag(tmp_path: Path, monkeypa
     assert sync.severity == "warn"
 
 
+def test_check_engineering_queue_reports_pr_open_stamp_lag(tmp_path: Path, monkeypatch):
+    from value_investor.engineering_recovery import PR_OPEN_STAMP_LAG_FINDING_TITLE
+
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "eng-20260917-06",
+                        "status": "open",
+                        "area": "scoring",
+                        "title": "fcf",
+                        "summary": "x",
+                        "priority": "high",
+                        "priority_score": 50,
+                        "source": "test",
+                        "auto_merge": True,
+                        "allowed_paths": ["src/value_investor/scoring/fcf.py"],
+                        "blocked_paths": [],
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.list_pr_open_stamp_lag_tasks",
+        lambda **kwargs: [
+            {
+                "task_id": "eng-20260917-06",
+                "branch": "cursor/eng-20260917-06-1de3",
+                "pr_number": 686,
+            }
+        ],
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.list_merge_sync_lag_tasks",
+        lambda **kwargs: [],
+    )
+    findings, _ = check_engineering_queue(tasks_path=tasks_path, open_prs=[], token="x")
+    titles = [row.title for row in findings]
+    assert PR_OPEN_STAMP_LAG_FINDING_TITLE in titles
+    lag = next(row for row in findings if row.title == PR_OPEN_STAMP_LAG_FINDING_TITLE)
+    assert lag.auto_fixable is True
+
+
+def test_apply_auto_fixes_marks_stamp_lag_fixed(tmp_path: Path):
+    from value_investor.engineering_recovery import (
+        PR_OPEN_STAMP_LAG_FINDING_TITLE,
+        RecoveryResult,
+    )
+
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(json.dumps({"tasks": []}), encoding="utf-8")
+    findings = [
+        OpsFinding(
+            severity="warn",
+            category="engineering",
+            title=PR_OPEN_STAMP_LAG_FINDING_TITLE,
+            summary="eng-20260917-06",
+            auto_fixable=True,
+        )
+    ]
+    with patch(
+        "value_investor.ops_monitor.recover_engineering_queue",
+        return_value=RecoveryResult(restamped=["eng-20260917-06"]),
+    ):
+        fixes = apply_auto_fixes(findings, tasks_path=tasks_path, open_prs=[], apply=True)
+    assert fixes
+    assert findings[0].fixed
+    assert "restamped open → pr_open" in (findings[0].action_taken or "")
+
+
 def test_send_ops_monitor_email_skips_when_sync_lag_healed():
     from value_investor.ops_monitor import OpsMonitorReport, send_ops_monitor_email
     from value_investor.project_traffic import QUEUE_MERGE_SYNC_FINDING_TITLE

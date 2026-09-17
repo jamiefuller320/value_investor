@@ -18,6 +18,7 @@ artifacts, ingest stall detection, and the engineering queue.
 **Safe auto-fixes:**
 
 - Reconcile orphaned `pr_open` engineering tasks (no matching open PR)
+- Restamp `open` → `pr_open` when a live engineering PR already exists (stamp lag after orphan-reconcile races; unblocks scoped auto-merge)
 - Normalize corrupt `ingest_health_log.json` (with sibling backup)
 - Micro-compile ingest engineering tasks when buy-tier filing ingest is stalled
 - Grade parked engineering tasks and auto-cancel duplicates of merged work

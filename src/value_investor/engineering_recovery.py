@@ -135,6 +135,7 @@ class RecoveryAction:
 @dataclass
 class RecoveryResult:
     merged: list[str] = field(default_factory=list)
+    restamped: list[str] = field(default_factory=list)
     reconciled: list[str] = field(default_factory=list)
     reopened: list[str] = field(default_factory=list)
     cancelled: list[RecoveryAction] = field(default_factory=list)
@@ -146,6 +147,7 @@ class RecoveryResult:
     def to_dict(self) -> dict[str, Any]:
         return {
             "merged": self.merged,
+            "restamped": self.restamped,
             "reconciled": self.reconciled,
             "reopened": self.reopened,
             "cancelled": [row.to_dict() for row in self.cancelled],
@@ -154,11 +156,15 @@ class RecoveryResult:
             "queue_clearing": self.queue_clearing,
             "hunter_url_monitor": self.hunter_url_monitor,
             "action_count": len(self.merged)
+            + len(self.restamped)
             + len(self.reconciled)
             + len(self.reopened)
             + len(self.cancelled)
             + len(self.parked),
         }
+
+
+PR_OPEN_STAMP_LAG_FINDING_TITLE = "Missing pr_open stamp for live engineering PR"
 
 
 def task_allows_workflow_files(row: dict[str, Any]) -> bool:
@@ -1056,6 +1062,200 @@ def find_merged_pull_for_branch(
     return dict(merged[0])
 
 
+def find_open_pull_for_branch(
+    branch: str,
+    *,
+    repo: str | None = None,
+    token: str | None = None,
+) -> dict[str, Any] | None:
+    """Return an open (including draft) PR for a head branch, if any."""
+    branch = str(branch or "").strip()
+    repo = repo or _github_repo()
+    if not branch or not repo:
+        return None
+    token = token or _github_token()
+    if not token:
+        return None
+    owner, name = repo.split("/", 1)
+    head = f"{owner}:{branch}"
+    try:
+        pulls = _github_api_get(
+            f"/repos/{owner}/{name}/pulls?state=open&head={head}&per_page=5",
+            token=token,
+        )
+    except (OSError, ValueError, RuntimeError) as exc:
+        logger.warning("Open PR lookup failed for %s: %s", branch, exc)
+        return None
+    if not isinstance(pulls, list) or not pulls:
+        return None
+    return dict(pulls[0])
+
+
+def _normalize_open_pr_row(pr: dict[str, Any], *, branch: str | None = None) -> dict[str, Any]:
+    """Normalize gh/API PR payloads to the headRefName shape used by recover."""
+    head = pr.get("head") if isinstance(pr.get("head"), dict) else {}
+    head_ref = str(
+        branch
+        or pr.get("headRefName")
+        or pr.get("head_branch")
+        or head.get("ref")
+        or ""
+    ).strip()
+    number = pr.get("number")
+    html_url = str(pr.get("html_url") or pr.get("url") or "").strip()
+    row: dict[str, Any] = {"headRefName": head_ref}
+    if number is not None:
+        try:
+            row["number"] = int(number)
+        except (TypeError, ValueError):
+            pass
+    if html_url:
+        row["html_url"] = html_url
+        row["url"] = html_url
+    return row
+
+
+def _resolve_open_pr_for_branch(
+    branch: str,
+    *,
+    open_prs: list[dict[str, Any]] | None = None,
+    repo: str | None = None,
+    token: str | None = None,
+) -> dict[str, Any] | None:
+    """Prefer an ``open_prs`` snapshot row; fall back to a live GitHub lookup.
+
+    Snapshot rows must include a PR ``number`` (as from ``gh pr list --json``).
+    A bare ``headRefName`` alone is not enough — that would let callers invent
+    stamp lag. Live API confirmation is required when the number is missing.
+    """
+    branch = str(branch or "").strip()
+    if not branch:
+        return None
+    for row in open_prs or []:
+        head = str(row.get("headRefName") or row.get("head_branch") or "").strip()
+        if head != branch:
+            continue
+        if row.get("number") is not None:
+            return _normalize_open_pr_row(row, branch=branch)
+        break
+    live = find_open_pull_for_branch(branch, repo=repo, token=token)
+    if live:
+        return _normalize_open_pr_row(live, branch=branch)
+    return None
+
+
+def list_pr_open_stamp_lag_tasks(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    open_prs: list[dict[str, Any]] | None = None,
+    repo: str | None = None,
+    token: str | None = None,
+) -> list[dict[str, Any]]:
+    """Return ``open`` tasks whose engineering branch already has an open GitHub PR.
+
+    This is the inverse of merge-sync lag: the PR exists (often undrafted and
+    CI-green) but orphan reconcile or a raced recover cleared ``pr_open`` /
+    ``branch_name``, so scoped auto-merge refuses with
+    ``task status is 'open', expected pr_open``.
+    """
+    lagged: list[dict[str, Any]] = []
+    data = load_engineering_tasks(tasks_path)
+    for row in data.get("tasks") or []:
+        if row.get("merged_at"):
+            continue
+        if str(row.get("status") or "") != DISPATCHABLE_STATUS:
+            continue
+        task_id = str(row.get("id") or "")
+        branch = str(row.get("branch_name") or "").strip()
+        if not branch:
+            branch = engineering_branch_for_task_id(task_id) or ""
+        if not branch:
+            continue
+        pr = _resolve_open_pr_for_branch(
+            branch, open_prs=open_prs, repo=repo, token=token
+        )
+        if not pr:
+            continue
+        lagged.append(
+            {
+                "task_id": task_id,
+                "branch": branch,
+                "status": DISPATCHABLE_STATUS,
+                "pr_number": pr.get("number"),
+                "pr_url": pr.get("html_url") or pr.get("url"),
+            }
+        )
+    return lagged
+
+
+def reconcile_open_tasks_with_live_prs(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    open_prs: list[dict[str, Any]] | None = None,
+    repo: str | None = None,
+    token: str | None = None,
+    apply: bool = True,
+) -> list[str]:
+    """Restamp ``open`` → ``pr_open`` when GitHub already has an open eng PR.
+
+    Used by ops-monitor autofix / recover-queue and by try-auto-merge heal.
+    """
+    restamped: list[str] = []
+    for lag in list_pr_open_stamp_lag_tasks(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        repo=repo,
+        token=token,
+    ):
+        task_id = str(lag.get("task_id") or "")
+        branch = str(lag.get("branch") or "").strip()
+        if not task_id or not branch:
+            continue
+        if apply:
+            pr_number = lag.get("pr_number")
+            mark_task_status(
+                task_id,
+                IN_FLIGHT_STATUS,
+                path=tasks_path,
+                committed_path=tasks_path,
+                branch_name=branch,
+                pr_url=str(lag.get("pr_url") or "") or None,
+                pr_number=int(pr_number) if pr_number is not None else None,
+            )
+        restamped.append(task_id)
+    return restamped
+
+
+def augment_open_prs_with_live_lookups(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    open_prs: list[dict[str, Any]] | None = None,
+    repo: str | None = None,
+    token: str | None = None,
+) -> list[dict[str, Any]]:
+    """Ensure in-flight task branches appear in the open-PR snapshot.
+
+    Prevents orphan reconcile from resetting a fresh ``pr_open`` stamp when the
+    workflow's ``gh pr list`` snapshot raced ahead of (or behind) the just-opened PR.
+    """
+    mapping = _open_pr_by_branch(list(open_prs or []))
+    data = load_engineering_tasks(tasks_path)
+    for row in data.get("tasks") or []:
+        if str(row.get("status") or "") != IN_FLIGHT_STATUS:
+            continue
+        task_id = str(row.get("id") or "")
+        branch = str(row.get("branch_name") or "").strip()
+        if not branch:
+            branch = engineering_branch_for_task_id(task_id) or ""
+        if not branch or branch in mapping:
+            continue
+        pr = find_open_pull_for_branch(branch, repo=repo, token=token)
+        if not pr:
+            continue
+        mapping[branch] = _normalize_open_pr_row(pr, branch=branch)
+    return list(mapping.values())
+
+
 def list_merge_sync_lag_tasks(
     *,
     tasks_path: Path = COMMITTED_TASKS_PATH,
@@ -1155,11 +1355,12 @@ def recover_engineering_queue(
     Run queue self-repair in order:
     1. Mark merged when GitHub shows a merged engineering PR
     2. Cancel workflow_failure tasks whose workflow has already recovered
-    3. Reconcile orphaned pr_open → open
-    4. Retry cooled-down failed tasks (or park when retries exhausted)
-    5. Park pr_open hunter tasks that are deterministically unfixable
-    6. Park pr_open tasks blocked on long-running red CI
-    7. Park open workflow-path tasks when agent push is permission-blocked
+    3. Restamp ``open`` → ``pr_open`` when a live eng PR exists (stamp lag)
+    4. Reconcile orphaned pr_open → open (after live open-PR augmentation)
+    5. Retry cooled-down failed tasks (or park when retries exhausted)
+    6. Park pr_open hunter tasks that are deterministically unfixable
+    7. Park pr_open tasks blocked on long-running red CI
+    8. Park open workflow-path tasks when agent push is permission-blocked
     """
     result = RecoveryResult()
 
@@ -1196,10 +1397,25 @@ def recover_engineering_queue(
         )
     )
 
+    result.restamped = reconcile_open_tasks_with_live_prs(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        repo=repo,
+        token=token,
+        apply=apply,
+    )
+
+    augmented_open_prs = augment_open_prs_with_live_lookups(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        repo=repo,
+        token=token,
+    )
+
     if apply:
         reconcile = reconcile_orphaned_pr_open_tasks(
             tasks_path=tasks_path,
-            open_prs=open_prs,
+            open_prs=augmented_open_prs,
         )
     else:
         reconcile = {"reset": []}
@@ -1218,7 +1434,7 @@ def recover_engineering_queue(
     result.parked.extend(
         park_unfixable_pr_open_tasks(
             tasks_path=tasks_path,
-            open_prs=open_prs,
+            open_prs=augmented_open_prs,
             repo=repo,
             token=token,
             apply=apply,
@@ -1229,7 +1445,7 @@ def recover_engineering_queue(
     result.parked.extend(
         park_ci_blocked_pr_open_tasks(
             tasks_path=tasks_path,
-            open_prs=open_prs,
+            open_prs=augmented_open_prs,
             repo=repo,
             token=token,
             ci_red_hours=int(recovery_policy["ci_red_park_hours"]),
