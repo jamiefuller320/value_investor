@@ -24,7 +24,7 @@ most automation — this list is what still needs a human.
 | **Confirm buy-tier level first fill** — ops-monitor fails if the Suite B book acted empty; knobs stay frozen; do not treat NAV as promotion truth | CI | [buy-tier-cohort-labs.md](buy-tier-cohort-labs.md#level-book-live-monday) |
 | Admitted-market weekday rememo (3/day per epoch-0 book after maintenance ingest; catch-up 5 if that book exceeds 15) | CI | [market-sharded-learning.md](market-sharded-learning.md#what-enter-learning-means) |
 | **Clear engineering parked backlog** when dispatch pauses — triage oldest `list-parked` tasks; queue resumes when count &lt; 7 and 30m idle since last clearing action (separate from project-traffic stuck-PR pause) | Human | [ops-monitor.md](ops-monitor.md#engineering-parked-backlog-clearing) |
-| **Project traffic** pause / unstick / grounded EOD digest + merges-today monitor + PR fix occasion log (ops-monitor + weekday 12:30/17:30; ingest_narrow / scoring_narrow / compile_cap_drain independent verify/auto-merge listed in digest; spot-check human merges for `narrow_cohesion_bypass`) | CI | [project-traffic.md](project-traffic.md#authority-v1) |
+| **Project traffic** pause / unstick / grounded EOD digest + merges-today monitor + PR fix occasion log (ops-monitor + weekday 12:30/17:30; ingest_narrow / scoring_narrow / compile_cap_drain independent verify/auto-merge listed in digest; spot-check wide diffs that still need human merge after `narrow_cohesion_bypass`) | CI | [project-traffic.md](project-traffic.md#authority-v1) |
 
 ## Sunday
 

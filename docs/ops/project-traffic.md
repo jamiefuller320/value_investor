@@ -164,13 +164,19 @@ objectives in a single PR.
 
 ### Cohesion bypass
 
-When a **single** coding objective cannot fit ≤8 paths without harming the
-fix (no topic map, or topic paths exceed the cap), drafting stamps
-`evidence.narrow_cohesion_bypass=true`. Then:
+When a **single** coding objective cannot fit ≤8 paths (no topic map, or one
+topic's paths alone exceed the cap), drafting stamps
+`evidence.narrow_cohesion_bypass=true` and keeps the wider allowlist sandbox.
 
-- `eng-narrow-gate` **skips** (CI stays green)
-- scoped auto-merge stays **off** — human merge only
-- the task keeps the wider allowlist needed for the objective
+When **multiple topics** in one clause union above the cap (e.g. FCF + dividend),
+drafting **splits per topic** into sibling tasks instead of one bypassed
+allowlist.
+
+Scoped auto-merge keys off the **actual PR diff**, not the bypass flag:
+
+- Diff ≤8 safe paths (within allowlist, with tests/, CI green) → may auto-merge
+  even if `narrow_cohesion_bypass` was stamped
+- Diff still too wide → reject (informational CI; human merge)
 
 This is independent of the authoring agent (path/CI/tests only — not a standing
 LLM listener). Broader eng areas (`ops`, `prompt`, `coverage`, …) remain

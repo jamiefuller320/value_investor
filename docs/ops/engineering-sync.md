@@ -64,9 +64,11 @@ outranks offline leftover hunts. `engineering-queue.yml` runs drain before
 
 **Upstream narrow scope** — ingest/scoring candidates are split into first-principle
 sibling tasks with tightened concrete `allowed_paths` when compound titles map to
-known topics. If a single objective cannot fit the ≤8 path auto-merge cap without
-harming the fix, the task stamps `narrow_cohesion_bypass` (human merge; gate skips).
-See [`project-traffic.md`](project-traffic.md#upstream-drafting-first-principle-builds).
+known topics (multi-topic unions over the path cap split **per topic**). If a
+*single* objective still cannot fit the ≤8 path cap (no topic map, or one topic
+alone is over), the task stamps `narrow_cohesion_bypass` (wider allowlist sandbox).
+Scoped auto-merge still keys off the **actual PR diff**. See
+[`project-traffic.md`](project-traffic.md#upstream-drafting-first-principle-builds).
 
 Sunday `compile` uses a **14-day** lookback on `research_model_suggestions.json`
 and skips rows that fuzzy-match **merged/parked** engineering task titles.
