@@ -515,6 +515,12 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "RNS for Bridgepoint Group (UK BPT epic collision); beachenergy.com.au IR "
         "paths 404 and Beach Energy FY26 Markit/ASX statutory PDFs are already bodied."
     ),
+    "CCEP": (
+        "nasdaq100 leftover IWB: indexed-without-body rows are duplicate investegate_direct "
+        "URLs for LSE rns-pdf buyback/PDMR RNS already bodied on the paired row; "
+        "coca-colaep.com IR returns empty and SEC 20-F/HY 6-K filings are already "
+        "bodied via sec_edgar."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
