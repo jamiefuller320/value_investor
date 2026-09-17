@@ -400,7 +400,10 @@ def test_dashboard_lifecycle_opens_experiment_cards():
     assert "data-lifecycle-chart-mount" in app
     assert 'id="lifecycle-ticker-dialog"' in html
     assert ".lifecycle-ticker-chart" in css
-    assert "async function mountPriceChart(body, report)" in charts or "async function mountPriceChart(body, report, overlays)" in charts
+    assert (
+        "async function mountPriceChart(body, report)" in charts
+        or "async function mountPriceChart(body, report, overlays)" in charts
+    )
     assert "await mountPriceChart(body, report)" in charts
     assert "levelToggleBound" in charts
     assert "function sortLifecycleCards(shown, mode, dir)" in app
