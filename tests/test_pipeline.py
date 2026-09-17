@@ -4288,6 +4288,81 @@ def test_builders_merchant_overlays_trigger_for_gftu_style():
     assert bool(enriched.iloc[0]["cyclical_exposure_overlay"]) is True
 
 
+def test_uk_heavyside_gb_cement_tape_triggers_cyclical_overlay(tmp_path: Path):
+    from value_investor.scoring.cyclical_exposure_overlay import (
+        enrich_signals_with_cyclical_exposure_overlay,
+    )
+    from value_investor.scoring.uk_heavyside_materials_overlay import (
+        cement_output_historic_lows_detected,
+        enrich_signals_with_uk_heavyside_detection,
+        gb_volume_language_detected,
+        heavyside_cyclical_tape_detected,
+    )
+
+    filing_text = (
+        "LFL revenue decreased 3% driven by lower GB volumes and Ireland deferrals. "
+        "Cement volumes were down 5% year on year."
+    )
+    news_text = (
+        "Breedon Steps Up Back British Cement Campaign as UK cement output "
+        "reportedly hit historic lows"
+    )
+    assert gb_volume_language_detected(filing_text)
+    assert cement_output_historic_lows_detected(news_text)
+    assert heavyside_cyclical_tape_detected(f"{filing_text}\n\n{news_text}")
+
+    sources = tmp_path / "research" / "BREE.L" / "sources"
+    bodies = sources / "filings" / "bodies"
+    bodies.mkdir(parents=True)
+    body_path = bodies / "interim.txt"
+    body_path.write_text(filing_text, encoding="utf-8")
+    write_json(
+        sources / "filings" / "filings_index.json",
+        {
+            "filings": [
+                {
+                    "period": "interim",
+                    "has_body": True,
+                    "body_path": str(body_path),
+                }
+            ]
+        },
+    )
+    write_json(
+        sources / "news_manifest.json",
+        {
+            "ticker": "BREE.L",
+            "articles": [
+                {
+                    "title": news_text,
+                    "summary": news_text,
+                }
+            ],
+        },
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "BREE.L",
+                "name": "Breedon Group plc",
+                "sector": "Basic Materials",
+                "signal": "strong_buy",
+                "passed_families": "cheapness,dividend,garp,risk",
+            }
+        ]
+    )
+    model_results = pd.DataFrame(columns=["ticker", "model_id", "passed", "score", "reasons"])
+    detected = enrich_signals_with_uk_heavyside_detection(signals, output_dir=tmp_path)
+    assert bool(detected.iloc[0]["uk_heavyside_materials"]) is True
+    assert bool(detected.iloc[0]["heavyside_cyclical_tape_detected"]) is True
+    assert bool(detected.iloc[0]["cyclical_exposure_detected"]) is True
+
+    enriched = enrich_signals_with_cyclical_exposure_overlay(detected, model_results)
+    assert bool(enriched.iloc[0]["cyclical_exposure_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
 def test_suppress_quality_garp_when_buffett_and_moat_fail():
     from value_investor.scoring.quality_garp_roe_gate import (
         suppress_quality_garp_inconsistent_passes,

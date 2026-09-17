@@ -1046,6 +1046,9 @@ def build_company_reports(
             else bool(fcf_bundle.get("fcf_divergence_flagged"))
         )
         from value_investor.scoring.uk_contractor_overlay import is_uk_listed_contractor
+        from value_investor.scoring.uk_heavyside_materials_overlay import (
+            is_uk_heavyside_construction_materials,
+        )
 
         rev_fcf_warning_raw = row.get("uk_contractor_revenue_fcf_warning")
         uk_contractor_revenue_fcf_warning = (
@@ -1275,6 +1278,15 @@ def build_company_reports(
                     uk_contractor=uk_contractor,
                     public_capex_detected=public_capex_exposure_detected,
                     uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
+                    uk_heavyside_materials=bool(row.get("uk_heavyside_materials"))
+                    or is_uk_heavyside_construction_materials(
+                        ticker,
+                        row.get("name"),
+                        row.get("sector"),
+                    ),
+                    heavyside_cyclical_tape_detected=bool(
+                        row.get("heavyside_cyclical_tape_detected")
+                    ),
                 )
             )
 

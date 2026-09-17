@@ -24,6 +24,10 @@ from value_investor.scoring.uk_contractor_overlay import (
     is_uk_listed_contractor,
     uk_contractor_cyclical_overlay_triggered,
 )
+from value_investor.scoring.uk_heavyside_materials_overlay import (
+    is_uk_heavyside_construction_materials,
+    uk_heavyside_cyclical_overlay_triggered,
+)
 
 INTERIM_EPS_DECLINE_THRESHOLD = 0.03
 
@@ -72,8 +76,15 @@ def cyclical_exposure_overlay_triggered(
     uk_contractor_revenue_fcf_warning: bool = False,
     builders_merchant: bool = False,
     housing_rmi_detected: bool = False,
+    uk_heavyside_materials: bool = False,
+    heavyside_cyclical_tape_detected: bool = False,
 ) -> bool:
     """Cyclical exposure, quality passes, interim EPS decline, and thin net FCF/dividend cover."""
+    if uk_heavyside_cyclical_overlay_triggered(
+        uk_heavyside_materials=uk_heavyside_materials,
+        heavyside_cyclical_tape_detected=heavyside_cyclical_tape_detected,
+    ):
+        return True
     if builders_merchant_cyclical_overlay_triggered(
         builders_merchant=builders_merchant,
         housing_rmi_detected=housing_rmi_detected,
@@ -144,6 +155,8 @@ def apply_cyclical_exposure_overlay_to_signal(
     uk_contractor_revenue_fcf_warning: bool = False,
     builders_merchant: bool = False,
     housing_rmi_detected: bool = False,
+    uk_heavyside_materials: bool = False,
+    heavyside_cyclical_tape_detected: bool = False,
 ) -> tuple[bool, str]:
     """Return overlay flag and conservative adjusted signal."""
     base_adjusted = adjusted_signal or signal
@@ -159,6 +172,8 @@ def apply_cyclical_exposure_overlay_to_signal(
         uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
         builders_merchant=builders_merchant,
         housing_rmi_detected=housing_rmi_detected,
+        uk_heavyside_materials=uk_heavyside_materials,
+        heavyside_cyclical_tape_detected=heavyside_cyclical_tape_detected,
     ):
         return False, base_adjusted
     capped = cap_signal_for_cyclical_exposure_overlay(signal)
@@ -249,6 +264,19 @@ def enrich_signals_with_cyclical_exposure_overlay(
             and not (isinstance(public_capex, float) and pd.isna(public_capex))
             else False
         )
+        uk_heavyside = bool(
+            row.get("uk_heavyside_materials")
+        ) or is_uk_heavyside_construction_materials(
+            ticker,
+            row.get("name"),
+            row.get("sector"),
+        )
+        tape_raw = row.get("heavyside_cyclical_tape_detected")
+        heavyside_tape_detected = (
+            bool(tape_raw)
+            if tape_raw is not None and not (isinstance(tape_raw, float) and pd.isna(tape_raw))
+            else False
+        )
 
         triggered, new_adjusted = apply_cyclical_exposure_overlay_to_signal(
             str(row.get("signal") or "hold"),
@@ -264,6 +292,8 @@ def enrich_signals_with_cyclical_exposure_overlay(
             uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
             builders_merchant=builders_merchant,
             housing_rmi_detected=housing_rmi_detected,
+            uk_heavyside_materials=uk_heavyside,
+            heavyside_cyclical_tape_detected=heavyside_tape_detected,
         )
         flags.append(triggered)
         detected_flags.append(cyclical_detected)
