@@ -324,6 +324,8 @@ def _slim_card(
         card["opened_at"] = opened_at
     if sold_at:
         card["sold_at"] = sold_at
+    if avg_cost is not None:
+        card["avg_cost"] = avg_cost
     if pnl_pct is not None:
         card["unrealized_pnl_pct"] = pnl_pct
     days_in_column: float | None = None
