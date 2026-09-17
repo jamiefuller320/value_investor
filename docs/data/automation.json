@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-17T11:16:29.268609+00:00",
+  "generated_at": "2026-09-17T11:35:13.910903+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1153,27 +1153,27 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-17T05:41:28.471351+00:00",
-    "queue_ui_updated_at": "2026-09-17T11:16:29.198484+00:00",
-    "task_count": 27,
+    "compiled_at": "2026-09-17T11:35:11.862888+00:00",
+    "queue_ui_updated_at": "2026-09-17T11:35:13.845227+00:00",
+    "task_count": 28,
     "status": {
       "open_count": 2,
       "pr_open_count": 0,
       "parked_count": 6,
-      "merged_count": 18,
+      "merged_count": 19,
       "failed_count": 0,
-      "next_task_id": "eng-20260917-04",
-      "in_flight_branch": "cursor/eng-20260917-04-1de3",
-      "in_flight_pr": 682,
+      "next_task_id": "eng-20260917-05",
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
     "queued_tasks": [
       {
-        "id": "eng-20260917-04",
+        "id": "eng-20260917-05",
         "area": "scoring",
-        "title": "Set fcf_definition_divergence whenever filing/Yahoo 1,861m and screen TTM 1,200.4m disagree; do not pass FCF Yield at 9.3% or a 4.0% dividend without stating th",
+        "title": "Relabel `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income (MEGP: no adjusted EPS in 67 filing bodies) to stop false “filing core” Lynch PEG fa",
         "priority": "medium",
         "priority_score": 43.0,
         "status": "open",
@@ -1558,24 +1558,18 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-17T11:16:29.268609+00:00",
+    "generated_at": "2026-09-17T11:35:13.910903+00:00",
     "overall": "active",
-    "headline": "Merge lane active; agent lane active.",
+    "headline": "Agent lane active.",
     "merge_lane": {
-      "state": "running",
-      "idle": false,
-      "running": true,
+      "state": "idle",
+      "idle": true,
+      "running": false,
       "blocked": false,
       "pr_open_count": 0,
-      "open_engineering_prs": [
-        {
-          "number": 682,
-          "branch": "cursor/eng-20260917-04-1de3",
-          "draft": false
-        }
-      ],
-      "in_flight_pr": 682,
-      "detail": "Open engineering PR(s) #682 — merge fires on CI success."
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
       "state": "running",
@@ -1590,14 +1584,14 @@
       "pr_open_count": 0,
       "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260917-04",
+      "next_task_id": "eng-20260917-05",
       "reason": "queue ready — dispatch next open task",
       "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-17T11:16:24.751914+00:00"
+      "evaluated_at": "2026-09-17T11:35:08.673229+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1611,6 +1605,17 @@
       "should_dispatch_engineering": false
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260917-04",
+        "title": "Set fcf_definition_divergence whenever filing/Yahoo 1,861m and screen TTM 1,200.4m disagree; do not pass FCF Yield at 9.3% or a 4.0% dividend without stating th",
+        "area": "scoring",
+        "pr_number": 682,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/682",
+        "merged_at": "2026-09-17T11:35:02.356084+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
       {
         "task_id": "eng-20260917-03",
         "title": "Set fcf_definition_divergence whenever retail ~£574m, Yahoo £923m and screen £645m disagree; do not pass FCF Yield at 8.8% or High Dividend Yield at 4.1% withou",

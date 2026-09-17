@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-17T05:41:28.471351+00:00",
+  "compiled_at": "2026-09-17T11:35:11.862888+00:00",
   "run_at": null,
-  "task_count": 27,
+  "task_count": 28,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -638,6 +638,52 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
+      "id": "eng-20260917-05",
+      "area": "scoring",
+      "title": "Relabel `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income (MEGP: no adjusted EPS in 67 filing bodies) to stop false “filing core” Lynch PEG fa",
+      "summary": "Relabel `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income (MEGP: no adjusted EPS in 67 filing bodies) to stop false “filing core” Lynch PEG failures and >300 bps divergence flags. (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "MEGP.L"
+        ],
+        "recorded_at": "2026-09-06T07:48:26.505330+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "Relabel `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income (MEGP: no adjusted EPS in 67 filing bodies) to stop false “filing core” Lynch PEG fa",
+        "narrow_cohesion_bypass": true,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260917-04",
       "area": "scoring",
       "title": "Set fcf_definition_divergence whenever filing/Yahoo 1,861m and screen TTM 1,200.4m disagree; do not pass FCF Yield at 9.3% or a 4.0% dividend without stating th",
@@ -662,7 +708,18 @@
         "origin_source": "research_model_suggestions",
         "origin_priority_score": 43.0,
         "preferred_merge_class": "compile_cap_drain",
-        "doc": "docs/ops/engineering-sync.md"
+        "doc": "docs/ops/engineering-sync.md",
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260917-04",
+        "verified_at": "2026-09-17T11:35:02.355393+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_pipeline.py",
+            "tests/test_summary.py"
+          ],
+          "output_tail": "........................................................................ [ 31%]\n........................................................................ [ 62%]\n........................................................................ [ 93%]\n................                                                         [100%]\n232 passed in 13.80s"
+        }
       },
       "acceptance_criteria": [
         "Export or overlay behaviour is covered by a unit test",
@@ -689,8 +746,12 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "open",
-      "no_diff_count": 0
+      "status": "merged",
+      "no_diff_count": 0,
+      "branch_name": "cursor/eng-20260917-04-1de3",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/682",
+      "pr_number": 682,
+      "merged_at": "2026-09-17T11:35:02.356084+00:00"
     },
     {
       "id": "eng-20260917-03",
@@ -1567,7 +1628,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-17T11:16:24.751914+00:00",
+    "evaluated_at": "2026-09-17T11:35:08.673229+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
