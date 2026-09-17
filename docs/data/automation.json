@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-17T20:16:53.449864+00:00",
+  "generated_at": "2026-09-17T20:28:59.052833+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1154,15 +1154,15 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-17T20:01:18.836190+00:00",
-    "queue_ui_updated_at": "2026-09-17T20:16:53.389186+00:00",
+    "queue_ui_updated_at": "2026-09-17T20:28:59.015134+00:00",
     "task_count": 32,
     "status": {
-      "open_count": 3,
-      "pr_open_count": 0,
+      "open_count": 1,
+      "pr_open_count": 1,
       "parked_count": 7,
-      "merged_count": 21,
+      "merged_count": 22,
       "failed_count": 0,
-      "next_task_id": "eng-20260917-08",
+      "next_task_id": "eng-20260917-01",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1170,22 +1170,6 @@
       "spend_blocked": false
     },
     "queued_tasks": [
-      {
-        "id": "eng-20260917-08",
-        "area": "scoring",
-        "title": "Enable cyclical_exposure for UK heavyside construction-materials names when GB volume language and cement-output “historic lows” are in the same tape [1/2]",
-        "priority": "medium",
-        "priority_score": 43.0,
-        "status": "open",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "full"
-      },
       {
         "id": "eng-20260917-01",
         "area": "scoring",
@@ -1199,8 +1183,8 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 2,
-        "clash_scan": "full"
+        "effective_dispatch_rank": 1,
+        "clash_scan": "partial"
       },
       {
         "id": "eng-20260917-09",
@@ -1208,15 +1192,11 @@
         "title": "Hunt fetchable IR source for parked nasdaq100 leftover CCEP",
         "priority": "low",
         "priority_score": 12.0,
-        "status": "open",
+        "status": "pr_open",
         "source": "parked_source_hunter",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 3,
-        "clash_scan": "full"
+        "branch_name": "cursor/eng-20260917-09-1de3"
       }
     ],
     "attention_tasks": [
@@ -1306,8 +1286,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 3,
-      "dispatch_eligible_count": 3,
+      "open_task_count": 1,
+      "dispatch_eligible_count": 1,
       "blocked_count": 0
     }
   },
@@ -1586,15 +1566,15 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-17T20:16:53.449864+00:00",
+    "generated_at": "2026-09-17T20:28:59.052833+00:00",
     "overall": "active",
-    "headline": "Agent lane active.",
+    "headline": "Merge lane active; agent lane active.",
     "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
+      "state": "running",
+      "idle": false,
+      "running": true,
       "blocked": false,
-      "pr_open_count": 0,
+      "pr_open_count": 1,
       "open_engineering_prs": [],
       "in_flight_pr": null,
       "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
@@ -1608,13 +1588,13 @@
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 0,
-      "open_count": 3,
-      "pr_open_count": 0,
-      "dispatch_eligible_count": 3,
+      "open_count": 1,
+      "pr_open_count": 1,
+      "dispatch_eligible_count": 1,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260917-08",
-      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
-      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+      "next_task_id": "eng-20260917-01",
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
@@ -1625,7 +1605,7 @@
       "pause_active": false,
       "stuck_pr_count": 0,
       "pause_reasons": [],
-      "evaluated_at": "2026-09-17T17:12:59.646599+00:00"
+      "evaluated_at": "2026-09-17T20:28:56.678903+00:00"
     },
     "ops_monitor": {
       "run_at": "2026-09-17T07:46:34.530264+00:00",
@@ -1633,6 +1613,17 @@
       "should_dispatch_engineering": false
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260917-08",
+        "title": "Enable cyclical_exposure for UK heavyside construction-materials names when GB volume language and cement-output “historic lows” are in the same tape [1/2]",
+        "area": "scoring",
+        "pr_number": 691,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/691",
+        "merged_at": "2026-09-17T20:28:58.995847+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
       {
         "task_id": "eng-20260917-06",
         "title": "fcf: Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_defin",
