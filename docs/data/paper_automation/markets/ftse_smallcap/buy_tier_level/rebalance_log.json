@@ -2746,5 +2746,356 @@
         "SBRE.L": 1
       }
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-09-17T07:27:12.479370+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/ftse_smallcap/screen_latest.json",
+      "run_at": "2026-09-17T06:53:16.488558+00:00",
+      "generated_at": "2026-09-17T07:27:12.440091+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-09-17T08:27:12.459925+01:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-09-17T08:00:00+01:00",
+      "settle_at": "2026-09-17T09:15:00+01:00",
+      "can_act": false,
+      "reason": "waiting for open settle (75 min after 08:00 Europe/London)"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (4 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.003,
+    "candidates": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.7079000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 67.8,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 112.0,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CLIG.L",
+        "name": "City of London Investment Group Plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.41609999999999997,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 485.0,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.7079000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 67.8,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 112.0,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CLIG.L",
+        "name": "City of London Investment Group Plc",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.41609999999999997,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 485.0,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.55% / sell 0.05% (legacy symmetric slot 0.30%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1002.81,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 334.27,
+      "targets": [
+        {
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "signal": "buy",
+          "conviction_score": 0.7125,
+          "price": 112.0
+        },
+        {
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "signal": "strong_buy",
+          "conviction_score": 0.7079000000000001,
+          "price": 67.8
+        },
+        {
+          "ticker": "CLIG.L",
+          "name": "City of London Investment Group Plc",
+          "signal": "buy",
+          "conviction_score": 0.41609999999999997,
+          "price": 485.0
+        }
+      ],
+      "anticipated_exits": [],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "reason": "Already near equal-weight target",
+          "value": 334.84,
+          "target_value": 334.27,
+          "conviction_score": 0.7125,
+          "signal": "buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "reason": "Already near equal-weight target",
+          "value": 334.88,
+          "target_value": 334.27,
+          "conviction_score": 0.7079000000000001,
+          "signal": "strong_buy"
+        },
+        {
+          "action": "hold",
+          "ticker": "CLIG.L",
+          "name": "City of London Investment Group Plc",
+          "reason": "Already near equal-weight target",
+          "value": 333.09,
+          "target_value": 334.27,
+          "conviction_score": 0.41609999999999997,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 3 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "5588a057-b199-416d-9f65-9c37802be296",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-17T08:27:12.459925+01:00",
+        "ticker": "FOXT.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 2.237334,
+        "price": 35.5,
+        "gross": 79.43,
+        "cost": 0.04,
+        "net_cash": 79.39,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Foxtons Group plc",
+        "avg_cost_at_exit": 35.5,
+        "position_closed": true
+      },
+      {
+        "id": "ccc681dd-4b9c-4e8a-9277-0e65d45a3196",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-17T08:27:12.459925+01:00",
+        "ticker": "CAPD.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 1.477954,
+        "price": 112.0,
+        "gross": 165.53,
+        "cost": 0.08,
+        "net_cash": 165.45,
+        "note": "Automated trim",
+        "name": "Capital Limited",
+        "avg_cost_at_exit": 111.1288
+      },
+      {
+        "id": "1496ae5d-c760-4cc4-929b-bf5aeb5b7309",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-17T08:27:12.459925+01:00",
+        "ticker": "CARD.L",
+        "side": "sell",
+        "sizing_mode": "cash",
+        "shares": 1.32942,
+        "price": 67.8,
+        "gross": 90.13,
+        "cost": 0.05,
+        "net_cash": 90.09,
+        "note": "Automated trim",
+        "name": "Card Factory plc",
+        "avg_cost_at_exit": 67.2899
+      },
+      {
+        "id": "d903744b-e9fa-4c60-98c0-bf82aa2c4ba3",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-17T08:27:12.459925+01:00",
+        "ticker": "CLIG.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.686786,
+        "price": 485.0,
+        "gross": 333.09,
+        "cost": 1.83,
+        "net_cash": -334.92,
+        "note": "Automated buy",
+        "name": "City of London Investment Group Plc"
+      }
+    ],
+    "nav_before": 1004.81,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "CARD.L",
+        "shares": 6.268626,
+        "avg_cost": 67.2899,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAPD.L",
+        "shares": 4.467601,
+        "avg_cost": 111.1288,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "FOXT.L",
+        "shares": 2.237334,
+        "avg_cost": 35.5,
+        "sector": "Real Estate",
+        "name": "Foxtons Group plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {
+        "FOXT.L": 1
+      },
+      "reentry_cooldown": {
+        "SBRE.L": 1
+      }
+    },
+    "nav_after": 1002.81,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "CARD.L",
+        "shares": 4.939206,
+        "avg_cost": 67.2899,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAPD.L",
+        "shares": 2.989647,
+        "avg_cost": 111.1288,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CLIG.L",
+        "shares": 0.686786,
+        "avg_cost": 485.0,
+        "sector": "Financial Services",
+        "name": "City of London Investment Group Plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {},
+      "reentry_cooldown": {
+        "FOXT.L": 1
+      }
+    }
   }
 ]

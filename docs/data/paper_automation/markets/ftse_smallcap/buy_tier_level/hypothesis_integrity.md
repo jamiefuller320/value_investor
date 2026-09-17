@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-16T07:19:12.084505+00:00
+Track: `buy_tier_level` · updated 2026-09-17T07:27:12.468947+00:00
 
 ## Portfolio loser feedback
 
@@ -10,17 +10,21 @@ Track: `buy_tier_level` · updated 2026-09-16T07:19:12.084505+00:00
 
 ## Holding reviews
 
-### FOXT.L — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
+### CLIG.L — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 42%
 
-### CARD.L — intact / hold_tolerate (-1.2%)
+### CARD.L — intact / hold_tolerate (+0.8%)
 - still strong_buy
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 70%
+- conviction 71%
 
-### CAPD.L — intact / hold_tolerate (-0.1%)
+### CAPD.L — intact / hold_tolerate (+0.8%)
 - still buy
 - research accumulate
 - cheapness family still passes
