@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-17T13:11:20.449011+00:00",
+  "generated_at": "2026-09-17T13:17:07.610101+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1154,7 +1154,7 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-17T13:10:13.868573+00:00",
-    "queue_ui_updated_at": "2026-09-17T13:11:20.374746+00:00",
+    "queue_ui_updated_at": "2026-09-17T13:17:07.538698+00:00",
     "task_count": 29,
     "status": {
       "open_count": 2,
@@ -1163,8 +1163,8 @@
       "merged_count": 20,
       "failed_count": 0,
       "next_task_id": "eng-20260917-06",
-      "in_flight_branch": null,
-      "in_flight_pr": null,
+      "in_flight_branch": "cursor/eng-20260917-06-1de3",
+      "in_flight_pr": 686,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
@@ -1184,7 +1184,7 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 1,
-        "clash_scan": "partial"
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260917-01",
@@ -1200,7 +1200,7 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 2,
-        "clash_scan": "partial"
+        "clash_scan": "full"
       }
     ],
     "attention_tasks": [
@@ -1558,18 +1558,24 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-17T13:11:20.449011+00:00",
+    "generated_at": "2026-09-17T13:17:07.610101+00:00",
     "overall": "active",
-    "headline": "Agent lane active.",
+    "headline": "Merge lane active; agent lane active.",
     "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
+      "state": "running",
+      "idle": false,
+      "running": true,
       "blocked": false,
       "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+      "open_engineering_prs": [
+        {
+          "number": 686,
+          "branch": "cursor/eng-20260917-06-1de3",
+          "draft": false
+        }
+      ],
+      "in_flight_pr": 686,
+      "detail": "Open engineering PR(s) #686 — merge fires on CI success."
     },
     "agent_lane": {
       "state": "running",
@@ -1591,7 +1597,7 @@
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-17T13:11:15.966520+00:00"
+      "evaluated_at": "2026-09-17T13:17:02.981316+00:00"
     },
     "traffic_control": {
       "pause_active": false,
