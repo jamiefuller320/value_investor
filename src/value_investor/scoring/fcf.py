@@ -155,6 +155,7 @@ FCF_MAJORITY_AGREE_THRESHOLD = 0.25
 FCF_SIGN_DIVERGENCE_MIN_ABS = 50_000_000.0
 EARNINGS_GROWTH_BPS_DIVERGENCE_THRESHOLD = 0.03
 FCF_YIELD_MODEL_ID = "fcf_yield"
+HIGH_DIVIDEND_MODEL_ID = "high_dividend"
 FCF_YIELD_UNIT_ERROR_MAX_IMPLIED_YIELD = 0.002
 FCF_YIELD_UNIT_ERROR_MIN_CANONICAL_GBP = 100_000_000.0
 # Prefer company-adjusted, then filing-aligned, never Yahoo TTM when a non-TTM peer agrees.
@@ -1356,6 +1357,34 @@ def fcf_within_company_tolerance(
     return abs_gap / denominator <= threshold
 
 
+def fcf_three_way_yield_basis_unresolved(
+    *,
+    filing_aligned: float | None,
+    screen_ttm: float | None,
+    company_adjusted: float | None,
+    filing_currency: str = "USD",
+    company_adjusted_currency: str | None = None,
+) -> bool:
+    """True when filing vs screen and company KPI disagree (SBRY-style, not FGP Yahoo=filing)."""
+    if filing_aligned is None or screen_ttm is None or company_adjusted is None:
+        return False
+    if not fcf_basis_values_diverge(
+        filing_aligned,
+        screen_ttm,
+        left_currency=filing_currency,
+        right_currency=filing_currency,
+        threshold=FCF_UNIVERSE_DIVERGENCE_THRESHOLD,
+    ):
+        return False
+    return fcf_universe_divergence_flagged(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        company_adjusted=company_adjusted,
+        filing_currency=filing_currency,
+        company_adjusted_currency=company_adjusted_currency,
+    )
+
+
 def fcf_yield_pass_suppressed(
     *,
     divergence_flagged: bool,
@@ -1366,9 +1395,19 @@ def fcf_yield_pass_suppressed(
     fcf_yield_unit_fx_error: bool = False,
     fcf_divergence_flagged: bool = False,
     fcf_definition_divergence: bool = False,
+    filing_aligned: float | None = None,
+    screen_ttm: float | None = None,
 ) -> bool:
     """True when FCF Yield pass should be suppressed due to basis divergence."""
     if fcf_yield_unit_fx_error:
+        return True
+    if fcf_three_way_yield_basis_unresolved(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        company_adjusted=company_adjusted,
+        filing_currency=filing_currency,
+        company_adjusted_currency=company_adjusted_currency,
+    ):
         return True
     basis_unresolved = fcf_definition_divergence or fcf_divergence_flagged or divergence_flagged
     if not basis_unresolved:
@@ -1381,6 +1420,27 @@ def fcf_yield_pass_suppressed(
         filing_currency=filing_currency,
         company_adjusted_currency=company_adjusted_currency,
     )
+
+
+def high_dividend_yield_pass_suppressed(
+    *,
+    filing_aligned: float | None,
+    screen_ttm: float | None,
+    company_adjusted: float | None,
+    filing_currency: str = "USD",
+    company_adjusted_currency: str | None = None,
+    fcf_definition_divergence: bool = False,
+) -> bool:
+    """Fail-closed on High Dividend Yield when FCF bases disagree without labelled cover."""
+    if fcf_three_way_yield_basis_unresolved(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        company_adjusted=company_adjusted,
+        filing_currency=filing_currency,
+        company_adjusted_currency=company_adjusted_currency,
+    ):
+        return True
+    return bool(fcf_definition_divergence) and company_adjusted is not None
 
 
 def fcf_basis_definition_divergence(
@@ -1499,15 +1559,18 @@ def suppress_fcf_yield_passes(
             output_dir=output_dir,
         )
         unit_fx_error = bool(urow.get("fcf_yield_unit_fx_error"))
+        filing_currency = str(bundle.get("currency") or "USD")
         if not fcf_yield_pass_suppressed(
             divergence_flagged=bool(bundle.get("divergence_flagged")),
             canonical=bundle.get("canonical"),
             company_adjusted=bundle.get("company_adjusted"),
             company_adjusted_currency=bundle.get("company_adjusted_currency"),
-            filing_currency=str(bundle.get("currency") or "USD"),
+            filing_currency=filing_currency,
             fcf_yield_unit_fx_error=unit_fx_error,
             fcf_divergence_flagged=bool(bundle.get("fcf_divergence_flagged")),
             fcf_definition_divergence=bool(bundle.get("fcf_definition_divergence")),
+            filing_aligned=bundle.get("filing_aligned"),
+            screen_ttm=screen_ttm,
         ):
             continue
 
@@ -1523,6 +1586,59 @@ def suppress_fcf_yield_passes(
             "FCF yield suppressed: screen FCF implies unit/FX error vs filing-scale cash flow"
             if unit_fx_error
             else "FCF yield suppressed: canonical basis diverges from company filing definition"
+        )
+        for index in out.index[mask]:
+            out.at[index, "failed_criteria"] = _append_failed_criterion(
+                out.at[index, "failed_criteria"],
+                failure_message,
+            )
+    return out
+
+
+def suppress_high_dividend_yield_passes(
+    model_results: pd.DataFrame,
+    universe: pd.DataFrame,
+    *,
+    output_dir: Path | None = None,
+) -> pd.DataFrame:
+    """Flip High Dividend Yield passes when FCF basis triplet is unresolved."""
+    if model_results.empty or universe.empty:
+        return model_results
+
+    out = model_results.copy()
+    for _, urow in universe.iterrows():
+        ticker = str(urow["ticker"])
+        screen_ttm = screen_ttm_from_row(urow)
+        bundle = reconcile_fcf_for_ticker(
+            ticker,
+            screen_ttm=screen_ttm,
+            output_dir=output_dir,
+        )
+        definition = bool(urow.get("fcf_definition_divergence")) or bool(
+            bundle.get("fcf_definition_divergence")
+        )
+        filing_currency = str(bundle.get("currency") or "USD")
+        if not high_dividend_yield_pass_suppressed(
+            filing_aligned=bundle.get("filing_aligned"),
+            screen_ttm=screen_ttm,
+            company_adjusted=bundle.get("company_adjusted"),
+            filing_currency=filing_currency,
+            company_adjusted_currency=bundle.get("company_adjusted_currency"),
+            fcf_definition_divergence=definition,
+        ):
+            continue
+
+        mask = (
+            (out["ticker"] == ticker)
+            & (out["model_id"] == HIGH_DIVIDEND_MODEL_ID)
+            & (out["passed"] == True)  # noqa: E712
+        )
+        if not mask.any():
+            continue
+        out.loc[mask, "passed"] = False
+        failure_message = (
+            "High dividend yield suppressed: FCF basis triplet unresolved "
+            "(state statutory vs retail FCF and buyback-inclusive cover)"
         )
         for index in out.index[mask]:
             out.at[index, "failed_criteria"] = _append_failed_criterion(

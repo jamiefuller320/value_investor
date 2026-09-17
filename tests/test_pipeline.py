@@ -43,6 +43,7 @@ from value_investor.scoring.fcf import (
     reconcile_fcf_for_ticker,
     screen_ttm_from_row,
     suppress_fcf_yield_passes,
+    suppress_high_dividend_yield_passes,
 )
 from value_investor.scoring.fcf_basis_overlay import (
     enrich_signals_with_fcf_basis_overlay,
@@ -3052,6 +3053,112 @@ def test_fcf_yield_pass_suppressed_on_jd_style_universe_divergence():
         company_adjusted_currency="GBP",
         filing_currency="GBP",
     )
+
+
+def test_fcf_yield_pass_suppressed_on_sbry_style_three_way_bases():
+    """574m retail vs 923m Yahoo vs 645m screen must fail-closed even when canonical=retail."""
+    assert fcf_yield_pass_suppressed(
+        divergence_flagged=False,
+        fcf_divergence_flagged=True,
+        fcf_definition_divergence=True,
+        canonical=574_000_000.0,
+        company_adjusted=574_000_000.0,
+        company_adjusted_currency="GBP",
+        filing_currency="GBP",
+        filing_aligned=923_000_000.0,
+        screen_ttm=645_000_000.0,
+    )
+
+
+def _sbry_three_way_research_sources(tmp_path: Path) -> None:
+    sources = tmp_path / "research" / "SBRY.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    body_path = filings / "annual.txt"
+    body_path.write_text("Retail free cash flow of £574m in the year", encoding="utf-8")
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "SBRY.L",
+                "cash_flow": {
+                    "2026": {
+                        "Operating Cash Flow": 1_100_000_000.0,
+                        "Capital Expenditure": -177_000_000.0,
+                        "Free Cash Flow": 923_000_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_suppress_fcf_yield_sbry_style_three_way_bases(tmp_path: Path):
+    _sbry_three_way_research_sources(tmp_path)
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "SBRY.L",
+                "free_cashflow": 645_000_000.0,
+                "free_cashflow_screen_ttm": 645_000_000.0,
+                "market_cap": 7_330_000_000.0,
+                "dividend_yield": 0.041,
+            }
+        ]
+    )
+    universe = enrich_universe_with_canonical_fcf(universe, tmp_path)
+    universe = enrich_universe_with_filing_metrics(universe, tmp_path)
+    assert universe.iloc[0]["fcf_definition_divergence"] is True
+
+    model_results = evaluate_universe(universe, models=[FCFYieldModel()])
+    assert bool(model_results.loc[model_results["model_id"] == "fcf_yield", "passed"].iloc[0])
+    model_results = pd.concat(
+        [
+            model_results,
+            pd.DataFrame(
+                [
+                    {
+                        "ticker": "SBRY.L",
+                        "model_id": "high_dividend",
+                        "model_name": "High Dividend Yield",
+                        "passed": True,
+                        "score": 0.8,
+                        "reasons": "[]",
+                        "failed_criteria": "[]",
+                    }
+                ]
+            ),
+        ],
+        ignore_index=True,
+    )
+
+    model_results = suppress_fcf_yield_passes(model_results, universe, output_dir=tmp_path)
+    fcf_yield = model_results.loc[model_results["model_id"] == "fcf_yield"].iloc[0]
+    assert bool(fcf_yield["passed"]) is False
+    assert "FCF yield suppressed" in str(fcf_yield["failed_criteria"])
+
+    model_results = suppress_high_dividend_yield_passes(
+        model_results,
+        universe,
+        output_dir=tmp_path,
+    )
+    high_div = model_results.loc[model_results["model_id"] == "high_dividend"].iloc[0]
+    assert bool(high_div["passed"]) is False
+    assert "High dividend yield suppressed" in str(high_div["failed_criteria"])
 
 
 def test_suppress_fcf_yield_jd_style_three_way_bases(tmp_path: Path):
