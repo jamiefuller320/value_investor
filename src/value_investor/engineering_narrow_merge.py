@@ -12,7 +12,8 @@ Classes:
 
 Shared rules: actual changed files stay within the task allowlist *and*
 the CI-fix auto-merge safe prefixes, include a ``tests/`` path (configurable),
-and stay under the path cap.
+and stay under the path cap. ``narrow_cohesion_bypass`` widens the draft
+allowlist only — merge still requires the actual diff to clear those rules.
 """
 
 from __future__ import annotations
@@ -234,19 +235,15 @@ def evaluate_narrow_verify(
 
     from value_investor.engineering_narrow_scope import task_has_narrow_cohesion_bypass
 
-    if task_has_narrow_cohesion_bypass(task):
+    # Cohesion bypass widens the *allowlist sandbox* at draft time; independent
+    # verify still gates on the actual PR diff. A narrow diff may auto-merge;
+    # a wide diff still rejects (human merge).
+    bypass = task_has_narrow_cohesion_bypass(task)
+    bypass_note = ""
+    if bypass:
         bypass_reason = str((task.evidence or {}).get("narrow_scope_reason") or "").strip()
-        detail = bypass_reason or "coding objective needs a wider cohesive diff"
-        return NarrowVerifyResult(
-            ok=True,
-            verdict="skipped",
-            reason=f"narrow_cohesion_bypass — human merge ({detail})",
-            merge_class=resolved_class,
-            task_id=task.id,
-            pr_number=pr_number,
-            changed_files=list(changed_files),
-            policy=policy_value,
-        )
+        detail = bypass_reason or "coding objective needs a wider cohesive allowlist"
+        bypass_note = f" (cohesion_bypass allowlist; {detail})"
 
     eligible, reason = changed_files_eligible_for_narrow(
         changed_files, task=task, merge_class=resolved_class
@@ -255,7 +252,7 @@ def evaluate_narrow_verify(
         return NarrowVerifyResult(
             ok=False,
             verdict="reject",
-            reason=reason,
+            reason=f"{reason}{bypass_note}" if bypass_note else reason,
             merge_class=resolved_class,
             task_id=task.id,
             pr_number=pr_number,
@@ -267,7 +264,7 @@ def evaluate_narrow_verify(
     return NarrowVerifyResult(
         ok=True,
         verdict=verdict,
-        reason=reason,
+        reason=f"{reason}{bypass_note}" if bypass_note else reason,
         merge_class=resolved_class,
         task_id=task.id,
         pr_number=pr_number,

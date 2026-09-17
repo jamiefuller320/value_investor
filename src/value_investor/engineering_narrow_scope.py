@@ -1,11 +1,14 @@
 """Upstream narrow-scope drafting for ingest/scoring engineering tasks.
 
 Splits compound suggestions into first-principle builds with tightened
-``allowed_paths``, and stamps ``narrow_cohesion_bypass`` when a single objective
-cannot fit the auto-merge path cap without harming the coding goal.
+``allowed_paths``. When several topics in one clause union above the path cap,
+split **per topic** (each topic map stays ≤ cap when possible) instead of one
+wide bypassed allowlist.
 
-The bypass keeps CI green (``eng-narrow-gate`` skips) but blocks scoped
-auto-merge — human merge only.
+``narrow_cohesion_bypass`` is reserved for a *single* unsplittable objective
+(no topic map, or one topic's paths alone exceed the cap). Bypass widens the
+coding sandbox; scoped auto-merge still keys off the **actual PR diff** (see
+``engineering_narrow_merge.evaluate_narrow_verify``).
 """
 
 from __future__ import annotations
@@ -215,6 +218,80 @@ def _ensure_tests_path(paths: list[str], area: str) -> list[str]:
     return out
 
 
+def _slice_for_single_topic(
+    *,
+    area: str,
+    clause: str,
+    topic: str,
+    max_paths: int,
+) -> NarrowScopeSlice:
+    """Build one topic slice; bypass only if that topic alone exceeds the cap."""
+    paths = _ensure_tests_path(concrete_paths_for_topics(area, [topic]), area)
+    title = f"{topic}: {clause}"[:160]
+    if len(paths) > max_paths:
+        return NarrowScopeSlice(
+            title=title,
+            allowed_paths=paths,
+            cohesion_bypass=True,
+            reason=(
+                f"topic {topic!r} paths {len(paths)} > {max_paths} — "
+                "cohesion bypass (single topic cannot fit cap)"
+            ),
+            topics=(topic,),
+        )
+    return NarrowScopeSlice(
+        title=title,
+        allowed_paths=paths,
+        cohesion_bypass=False,
+        reason=f"topics={topic} paths={len(paths)}",
+        topics=(topic,),
+    )
+
+
+def _slices_for_clause(
+    *,
+    area: str,
+    clause: str,
+    max_paths: int,
+) -> list[NarrowScopeSlice]:
+    """Scope one suggestion clause: union fit, else per-topic split, else bypass."""
+    topics = match_topics_for_clause(area, clause)
+    if not topics:
+        return [
+            NarrowScopeSlice(
+                title=clause[:160],
+                allowed_paths=_default_area_paths(area),
+                cohesion_bypass=True,
+                reason="no topic map — cohesion bypass keeps full area allowlist",
+            )
+        ]
+
+    paths = _ensure_tests_path(concrete_paths_for_topics(area, topics), area)
+    if len(paths) <= max_paths:
+        return [
+            NarrowScopeSlice(
+                title=clause[:160],
+                allowed_paths=paths,
+                cohesion_bypass=False,
+                reason=f"topics={','.join(topics)} paths={len(paths)}",
+                topics=tuple(topics),
+            )
+        ]
+
+    # Topic-union exceeds cap: split into one first-principle build per topic
+    # when each topic alone fits (e.g. FCF + dividend → two siblings, not bypass).
+    if len(topics) >= 2:
+        # Topic-union exceeds cap: split into one first-principle build per topic
+        # when each topic alone fits (e.g. FCF + dividend → two siblings, not bypass).
+        return [
+            _slice_for_single_topic(area=area, clause=clause, topic=topic, max_paths=max_paths)
+            for topic in topics
+        ]
+
+    # Single topic already over cap — true cohesion bypass.
+    return [_slice_for_single_topic(area=area, clause=clause, topic=topics[0], max_paths=max_paths)]
+
+
 def plan_narrow_draft_scopes(
     *,
     area: str,
@@ -242,41 +319,7 @@ def plan_narrow_draft_scopes(
 
     slices: list[NarrowScopeSlice] = []
     for clause in clauses:
-        topics = match_topics_for_clause(normalized, clause)
-        if not topics:
-            slices.append(
-                NarrowScopeSlice(
-                    title=clause[:160],
-                    allowed_paths=_default_area_paths(normalized),
-                    cohesion_bypass=True,
-                    reason="no topic map — cohesion bypass keeps full area allowlist",
-                )
-            )
-            continue
-        paths = _ensure_tests_path(concrete_paths_for_topics(normalized, topics), normalized)
-        if len(paths) > max_paths:
-            slices.append(
-                NarrowScopeSlice(
-                    title=clause[:160],
-                    allowed_paths=paths,
-                    cohesion_bypass=True,
-                    reason=(
-                        f"topic paths {len(paths)} > {max_paths} — "
-                        "cohesion bypass (do not split one objective)"
-                    ),
-                    topics=tuple(topics),
-                )
-            )
-        else:
-            slices.append(
-                NarrowScopeSlice(
-                    title=clause[:160],
-                    allowed_paths=paths,
-                    cohesion_bypass=False,
-                    reason=f"topics={','.join(topics)} paths={len(paths)}",
-                    topics=tuple(topics),
-                )
-            )
+        slices.extend(_slices_for_clause(area=normalized, clause=clause, max_paths=max_paths))
 
     if len(slices) == 1:
         only = slices[0]
