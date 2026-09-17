@@ -323,7 +323,9 @@ def _cmd_queue_monitor_snapshot(args: argparse.Namespace) -> int:
     out_path = Path(args.monitor_path)
     if args.append:
         append_queue_monitor_snapshot(snapshot, path=out_path, max_lines=int(args.max_lines))
-    summary = summarize_monitor_window(load_monitor_snapshots(path=out_path), hours=float(args.summary_hours))
+    summary = summarize_monitor_window(
+        load_monitor_snapshots(path=out_path), hours=float(args.summary_hours)
+    )
     write_monitor_summary(summary, path=Path(args.summary_path))
     payload = {"snapshot": snapshot, "jsonl_path": str(out_path), "summary": summary}
     if args.json:

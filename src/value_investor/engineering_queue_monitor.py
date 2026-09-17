@@ -25,7 +25,7 @@ from value_investor.project_traffic import (
     get_traffic_control_state,
     is_traffic_pause_active,
 )
-from value_investor.storage import read_json, write_json
+from value_investor.storage import write_json
 
 DEFAULT_MONITOR_JSONL = Path("docs/data/engineering_queue_monitor.jsonl")
 DEFAULT_MONITOR_SUMMARY = Path("docs/data/engineering_queue_monitor_summary.json")
@@ -52,7 +52,9 @@ def _eng_open_pr_numbers(open_prs: list[dict[str, Any]] | None) -> list[int]:
     return sorted(out)
 
 
-def _clash_summary(data: dict[str, Any], *, open_prs: list[dict[str, Any]] | None) -> dict[str, Any]:
+def _clash_summary(
+    data: dict[str, Any], *, open_prs: list[dict[str, Any]] | None
+) -> dict[str, Any]:
     reports = build_task_dispatch_reports(data, open_prs=open_prs or [], blocked_paths=[])
     annotate_dispatch_ranks(reports)
     open_reports = [r for r in reports if str(r.task.status) == "open"]
@@ -65,7 +67,9 @@ def _clash_summary(data: dict[str, Any], *, open_prs: list[dict[str, Any]] | Non
     }
 
 
-def _open_task_rows(data: dict[str, Any], *, open_prs: list[dict[str, Any]] | None) -> list[dict[str, Any]]:
+def _open_task_rows(
+    data: dict[str, Any], *, open_prs: list[dict[str, Any]] | None
+) -> list[dict[str, Any]]:
     reports = build_task_dispatch_reports(data, open_prs=open_prs or [], blocked_paths=[])
     annotate_dispatch_ranks(reports)
     rows: list[dict[str, Any]] = []
@@ -212,15 +216,23 @@ def summarize_monitor_window(
         "generated_at": now.isoformat(),
         "window_hours": hours,
         "snapshot_count": len(window),
-        "should_dispatch_true_count": _count(lambda r: (r.get("dispatch") or {}).get("should_dispatch")),
-        "traffic_pause_snapshots": _count(lambda r: (r.get("pauses") or {}).get("traffic_pause_active")),
+        "should_dispatch_true_count": _count(
+            lambda r: (r.get("dispatch") or {}).get("should_dispatch")
+        ),
+        "traffic_pause_snapshots": _count(
+            lambda r: (r.get("pauses") or {}).get("traffic_pause_active")
+        ),
         "eligible_zero_open_positive": _count(
-            lambda r: int((r.get("queue") or {}).get("open_count") or 0) > 0
-            and int((r.get("clash") or {}).get("dispatch_eligible_count") or 0) == 0
+            lambda r: (
+                int((r.get("queue") or {}).get("open_count") or 0) > 0
+                and int((r.get("clash") or {}).get("dispatch_eligible_count") or 0) == 0
+            )
         ),
         "idle_open_zero_pr_zero": _count(
-            lambda r: int((r.get("queue") or {}).get("open_count") or 0) == 0
-            and int((r.get("queue") or {}).get("pr_open_count") or 0) == 0
+            lambda r: (
+                int((r.get("queue") or {}).get("open_count") or 0) == 0
+                and int((r.get("queue") or {}).get("pr_open_count") or 0) == 0
+            )
         ),
         "median_open_eng_prs": _median(
             [len((r.get("github") or {}).get("open_engineering_pr_numbers") or []) for r in window]
@@ -286,7 +298,9 @@ def fetch_gha_workflow_runs(
     return list(raw) if isinstance(raw, list) else []
 
 
-def build_gha_activity_report(*, hours: float = 24.0, now: datetime | None = None) -> dict[str, Any]:
+def build_gha_activity_report(
+    *, hours: float = 24.0, now: datetime | None = None
+) -> dict[str, Any]:
     """Correlate engineering-queue and engineering-agent GitHub Actions runs."""
     now = now or _utcnow()
     cutoff = now - timedelta(hours=hours)

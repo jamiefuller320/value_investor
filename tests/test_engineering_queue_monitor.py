@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
@@ -72,7 +71,9 @@ def test_summarize_monitor_window(tmp_path: Path):
         }
         append_queue_monitor_snapshot(snap, path=jsonl, max_lines=10)
 
-    summary = summarize_monitor_window(load_monitor_snapshots(path=jsonl), hours=24.0, now=base + timedelta(hours=3))
+    summary = summarize_monitor_window(
+        load_monitor_snapshots(path=jsonl), hours=24.0, now=base + timedelta(hours=3)
+    )
     assert summary["snapshot_count"] == 3
     assert summary["should_dispatch_true_count"] == 2
     assert summary["eligible_zero_open_positive"] == 1
