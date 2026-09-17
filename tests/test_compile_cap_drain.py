@@ -390,5 +390,9 @@ def test_compile_cap_drain_coalesces_near_duplicate_titles(tmp_path: Path):
         max_tasks=0,
     )
     titles = [row.title.lower() for row in pending]
-    assert sum("do not pass dividend" in title for title in titles) == 1
+    # Near-dup FCF+dividend suggestions coalesce per theme, then upstream
+    # narrow-scope splits that theme into per-topic siblings (fcf + dividend).
+    assert sum("do not pass dividend" in title for title in titles) == 2
+    assert sum(title.startswith("fcf:") for title in titles) == 1
+    assert sum(title.startswith("dividend:") for title in titles) == 1
     assert any("completely different" in title for title in titles)
