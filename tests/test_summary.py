@@ -4542,6 +4542,69 @@ def test_honour_and_to_dict_backfill_structured_fcf_from_note():
     assert snapshot["fcf"]["screen_ttm"] == pytest.approx(353_200_000.0)
 
 
+def test_guard_screening_export_sbry_style_three_way_fcf(tmp_path: Path):
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    sources = tmp_path / "research" / "SBRY.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    body_path = filings / "annual.txt"
+    body_path.write_text("Retail free cash flow of £574m in the year", encoding="utf-8")
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "SBRY.L",
+                "cash_flow": {
+                    "2026": {
+                        "Operating Cash Flow": 1_100_000_000.0,
+                        "Capital Expenditure": -177_000_000.0,
+                        "Free Cash Flow": 923_000_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    snapshot = {
+        "ticker": "SBRY.L",
+        "name": "J Sainsbury plc",
+        "sector": "Consumer Defensive",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": True,
+        "conviction_score": 0.44,
+        "free_cashflow_screen_ttm": 645_000_000.0,
+        "free_cashflow": 645_000_000.0,
+        "action_note": "Buy — neutral timing",
+        "summary": "Buy (7/22 models).",
+        "failed_models": [],
+        "key_metrics": {"FCF": 645_000_000.0},
+    }
+
+    guarded = guard_screening_snapshot_export(snapshot, output_dir=tmp_path)
+
+    assert guarded["fcf_definition_divergence"] is True
+    assert guarded["fcf_divergence_flagged"] is True
+    assert "fcf basis mismatch" in guarded["action_note"].lower()
+    assert "574" in guarded["action_note"] or "£574" in guarded["action_note"]
+
+
 def test_guard_screening_export_jd_style_three_way_fcf(tmp_path: Path):
     from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
 
