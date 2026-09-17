@@ -253,6 +253,8 @@ def default_policy() -> dict[str, Any]:
                 "ingest_narrow_require_tests": True,
                 "scoring_narrow": "merge",
                 "scoring_narrow_require_tests": True,
+                "compile_cap_drain": "merge",
+                "compile_cap_drain_require_tests": True,
                 "hunter_fix": {
                     "enabled": True,
                     "max_rounds": 2,
@@ -263,9 +265,10 @@ def default_policy() -> dict[str, Any]:
                     "parked_hunter: off | skip | allowlist — scoped auto-merge for "
                     "parked_source_hunter PRs after the CI hunter-merge-gate job passes. "
                     "parked_hunter_verify_observer dispatches a non-blocking LLM reviewer. "
-                    "ingest_narrow / scoring_narrow: off | observe | merge — independent "
-                    "deterministic verify for #651/#653-class eng PRs (actual diff ≤8 safe "
+                    "ingest_narrow / scoring_narrow / compile_cap_drain: off | observe | merge — "
+                    "independent deterministic verify for eng PRs (actual diff ≤8 safe "
                     "paths including tests/), then scoped auto-merge when set to merge. "
+                    "compile_cap_drain covers idle role-coherence backlog tasks by source. "
                     "hunter_fix runs capped fix rounds when hunter-merge-gate fails on "
                     "missing_test, short_skip, live_fetch_failed, too_many_urls, or "
                     "unexpected_files; distinct failure kinds can each consume one round."

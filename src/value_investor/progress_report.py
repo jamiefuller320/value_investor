@@ -445,8 +445,8 @@ def build_role_coherence(
                     f"{cap_audit.get('max_tasks')} (post-run plan items kept first). "
                     f"{preview or 'See gap-fill / research_model_suggestions backlog.'} "
                     "When the priority engineering queue is idle, "
-                    "`ftse-engineering try-compile-cap-drain --apply` queues one "
-                    "backlog item at a time (above parked hunter)."
+                    "`ftse-engineering try-compile-cap-drain --apply` queues up to "
+                    "2 open backlog items (above parked hunter; near-dups coalesced)."
                 ),
             }
         )

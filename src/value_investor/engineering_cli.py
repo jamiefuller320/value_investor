@@ -27,7 +27,10 @@ from value_investor.ci_fix_tasks import (
     task_eligible_for_auto_merge,
 )
 from value_investor.cli_args import apply_parsed_globals
-from value_investor.compile_cap_drain import compile_next_compile_cap_drain_task
+from value_investor.compile_cap_drain import (
+    DEFAULT_MAX_OPEN_DRAIN_TASKS,
+    compile_next_compile_cap_drain_task,
+)
 from value_investor.cursor_api_key import resolve_cursor_api_key
 from value_investor.engineering_agent import (
     DEFAULT_ESTIMATED_USD,
@@ -185,6 +188,7 @@ def _cmd_try_compile_cap_drain(args: argparse.Namespace) -> int:
         latest_path=args.latest_path,
         suggestions_path=args.suggestions_path,
         max_tasks=args.max_tasks,
+        max_open_drain_tasks=int(args.max_open_drain_tasks),
     )
     if args.json:
         _print_json(payload)
@@ -1596,16 +1600,25 @@ def main(argv: list[str] | None = None) -> int:
         "try-compile-cap-drain",
         parents=[common],
         help=(
-            "When priority engineering queue is empty, queue one compile-cap / "
-            "role-coherence backlog candidate (above parked hunter)"
+            "When priority engineering queue is empty, queue compile-cap / "
+            "role-coherence backlog candidates (up to 2 open; above parked hunter)"
         ),
     )
     cap_drain.add_argument("--latest-path", type=Path, default=DEFAULT_LATEST_PATH)
     cap_drain.add_argument("--max-tasks", type=int, default=DEFAULT_MAX_COMPILE_TASKS)
     cap_drain.add_argument(
+        "--max-open-drain-tasks",
+        type=int,
+        default=DEFAULT_MAX_OPEN_DRAIN_TASKS,
+        help=(
+            "Max concurrent open/pr_open compile_cap_drain tasks "
+            f"(default: {DEFAULT_MAX_OPEN_DRAIN_TASKS})"
+        ),
+    )
+    cap_drain.add_argument(
         "--apply",
         action="store_true",
-        help="Write the next backlog task when guards pass (default: evaluate only)",
+        help="Write backlog task(s) when guards pass (default: evaluate only)",
     )
     cap_drain.set_defaults(func=_cmd_try_compile_cap_drain)
 

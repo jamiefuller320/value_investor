@@ -110,6 +110,7 @@ def test_compile_cap_drain_queues_one_and_chains(tmp_path: Path):
         latest_path=latest_path,
         suggestions_path=suggestions,
         max_tasks=2,
+        max_open_drain_tasks=1,
     )
     assert first["compiled_count"] == 1
     assert first["priority_score"] >= COMPILE_CAP_DRAIN_PRIORITY_FLOOR
@@ -122,6 +123,7 @@ def test_compile_cap_drain_queues_one_and_chains(tmp_path: Path):
         or "gamma" in drain["title"].lower()
     )
 
+    # With max_open_drain_tasks=1 (legacy serial), a second compile is blocked.
     second = compile_next_compile_cap_drain_task(
         apply=True,
         tasks_path=tasks_path,
@@ -130,9 +132,10 @@ def test_compile_cap_drain_queues_one_and_chains(tmp_path: Path):
         latest_path=latest_path,
         suggestions_path=suggestions,
         max_tasks=2,
+        max_open_drain_tasks=1,
     )
     assert second["compiled_count"] == 0
-    assert "already queued" in second["reason"]
+    assert "max open" in second["reason"] or "already" in second["reason"]
 
     drain["status"] = "merged"
     write_json(tasks_path, payload, compact=False)
@@ -144,6 +147,7 @@ def test_compile_cap_drain_queues_one_and_chains(tmp_path: Path):
         latest_path=latest_path,
         suggestions_path=suggestions,
         max_tasks=2,
+        max_open_drain_tasks=1,
     )
     assert third["compiled_count"] == 1
     assert third["task_ids"][0] != drain["id"]
@@ -245,6 +249,7 @@ def test_compile_cap_drain_allows_open_hunter_background(tmp_path: Path):
         latest_path=latest_path,
         suggestions_path=suggestions,
         max_tasks=2,
+        max_open_drain_tasks=1,
     )
     assert result["compiled_count"] == 1
     payload = read_json(tasks_path)
@@ -255,3 +260,135 @@ def test_compile_cap_drain_allows_open_hunter_background(tmp_path: Path):
     drain = next(row for row in open_rows if row["source"] == COMPILE_CAP_DRAIN_SOURCE)
     hunter = next(row for row in open_rows if row["source"] == PARKED_SOURCE_HUNTER_SOURCE)
     assert float(drain["priority_score"]) > float(hunter["priority_score"])
+
+
+def test_compile_cap_drain_fills_two_open_slots(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    write_json(tasks_path, {"tasks": []}, compact=False)
+    output_dir = tmp_path / "output"
+    output_dir.mkdir()
+    latest_path = tmp_path / "latest.json"
+    write_json(latest_path, {"run_at": "2026-09-14T12:00:00+00:00"}, compact=False)
+    suggestions = tmp_path / "suggestions.json"
+    themes = [
+        "alpha",
+        "bravo",
+        "charlie",
+        "delta",
+        "echo",
+        "foxtrot",
+        "golf",
+        "hotel",
+        "india",
+        "juliet",
+        "kilo",
+        "lima",
+    ]
+    _write_suggestions(
+        suggestions,
+        [
+            _suggestion(
+                area="prompt",
+                text=f"Dual slot unique suggestion {theme} distinct theme",
+            )
+            for theme in themes
+        ],
+    )
+    result = compile_next_compile_cap_drain_task(
+        apply=True,
+        tasks_path=tasks_path,
+        committed_path=tasks_path,
+        output_dir=output_dir,
+        latest_path=latest_path,
+        suggestions_path=suggestions,
+        max_tasks=2,
+        max_open_drain_tasks=2,
+    )
+    assert result["compiled_count"] >= 2
+    assert result["queued_suggestion_count"] == 2
+    payload = read_json(tasks_path)
+    open_drain = [
+        row
+        for row in payload["tasks"]
+        if row["status"] == "open" and row["source"] == COMPILE_CAP_DRAIN_SOURCE
+    ]
+    assert len(open_drain) == 2
+
+
+def test_compile_cap_drain_coalesces_near_duplicate_titles(tmp_path: Path):
+    from value_investor.compile_cap_drain import (
+        coalesce_compile_cap_drain_candidates,
+        drain_coalesce_key,
+        iter_compile_cap_drain_candidates,
+    )
+    from value_investor.engineering_tasks import EngineeringTask
+
+    assert drain_coalesce_key(
+        "Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m"
+    ) == drain_coalesce_key(
+        "Do not pass dividend or FCF Yield on Yahoo FCF 200m when screen TTM is suppressed"
+    )
+    kept = coalesce_compile_cap_drain_candidates(
+        [
+            EngineeringTask(
+                id="a",
+                area="scoring",
+                title="Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen",
+                summary="a",
+                priority="medium",
+                priority_score=43.0,
+                source="research_model_suggestions",
+                evidence={},
+                acceptance_criteria=[],
+                allowed_paths=[],
+                blocked_paths=[],
+            ),
+            EngineeringTask(
+                id="b",
+                area="scoring",
+                title="Do not pass dividend or FCF Yield on Yahoo FCF 200m when screen",
+                summary="b",
+                priority="medium",
+                priority_score=40.0,
+                source="research_model_suggestions",
+                evidence={},
+                acceptance_criteria=[],
+                allowed_paths=[],
+                blocked_paths=[],
+            ),
+        ]
+    )
+    assert len(kept) == 1
+    assert kept[0].id == "a"
+
+    tasks_path = tmp_path / "engineering_tasks.json"
+    write_json(tasks_path, {"tasks": []}, compact=False)
+    output_dir = tmp_path / "output"
+    output_dir.mkdir()
+    latest_path = tmp_path / "latest.json"
+    write_json(latest_path, {"run_at": "2026-09-14T12:00:00+00:00"}, compact=False)
+    suggestions = tmp_path / "suggestions.json"
+    _write_suggestions(
+        suggestions,
+        [
+            _suggestion(
+                area="scoring",
+                text="Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM",
+            ),
+            _suggestion(
+                area="scoring",
+                text="Do not pass dividend or FCF Yield on Yahoo FCF 200m when screen TTM",
+            ),
+            _suggestion(area="prompt", text="Completely different prompt suggestion unique"),
+        ],
+    )
+    pending = iter_compile_cap_drain_candidates(
+        output_dir=output_dir,
+        latest_path=latest_path,
+        suggestions_path=suggestions,
+        tasks_path=tasks_path,
+        max_tasks=0,
+    )
+    titles = [row.title.lower() for row in pending]
+    assert sum("do not pass dividend" in title for title in titles) == 1
+    assert any("completely different" in title for title in titles)
