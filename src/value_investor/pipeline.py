@@ -89,6 +89,9 @@ from value_investor.scoring.uk_contractor_overlay import (
     enrich_signals_with_uk_contractor_detection,
     enrich_universe_with_uk_contractor_adjustments,
 )
+from value_investor.scoring.uk_heavyside_materials_overlay import (
+    enrich_signals_with_uk_heavyside_detection,
+)
 from value_investor.sector_scoring import add_sector_scores
 from value_investor.signal_stability import (
     append_signal_history,
@@ -481,6 +484,10 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
         output_dir=output_dir,
     )
     signals_out = enrich_signals_with_uk_contractor_detection(
+        signals_out,
+        output_dir=output_dir,
+    )
+    signals_out = enrich_signals_with_uk_heavyside_detection(
         signals_out,
         output_dir=output_dir,
     )
