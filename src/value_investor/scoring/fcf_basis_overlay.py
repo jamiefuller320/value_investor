@@ -467,21 +467,23 @@ def enrich_signals_with_run_history_fcf_action_notes(
                     fcf_dividend_coverage_gross = coverage.get("fcf_dividend_coverage_gross")
 
         filing_currency = str(fcf_bundle.get("currency") or "GBP")
-        fcf_definition_divergence = (
-            bool(definition_div_raw)
-            if definition_div_raw is not None
-            and not (isinstance(definition_div_raw, float) and pd.isna(definition_div_raw))
-            else fcf_basis_definition_divergence(
-                operating_cashflow=operating_cashflow,
-                operating_cashflow_gross=operating_cashflow_gross,
-                filing_aligned=_float_or_none(fcf_bundle.get("filing_aligned")),
-                screen_ttm=screen_ttm,
-                company_adjusted=_float_or_none(fcf_bundle.get("company_adjusted")),
-                filing_currency=filing_currency,
-                company_adjusted_currency=fcf_bundle.get("company_adjusted_currency"),
-            )
+        computed_definition = fcf_basis_definition_divergence(
+            operating_cashflow=operating_cashflow,
+            operating_cashflow_gross=operating_cashflow_gross,
+            filing_aligned=_float_or_none(fcf_bundle.get("filing_aligned")),
+            screen_ttm=screen_ttm,
+            company_adjusted=_float_or_none(fcf_bundle.get("company_adjusted")),
+            filing_currency=filing_currency,
+            company_adjusted_currency=fcf_bundle.get("company_adjusted_currency"),
         )
-        if bool(fcf_bundle.get("fcf_definition_divergence")):
+        fcf_definition_divergence = computed_definition or bool(
+            fcf_bundle.get("fcf_definition_divergence")
+        )
+        if (
+            definition_div_raw is not None
+            and not (isinstance(definition_div_raw, float) and pd.isna(definition_div_raw))
+            and bool(definition_div_raw)
+        ):
             fcf_definition_divergence = True
         divergence_flag_raw = row.get("fcf_divergence_flagged")
         fcf_divergence_flagged = (

@@ -1385,6 +1385,27 @@ def fcf_three_way_yield_basis_unresolved(
     )
 
 
+def fcf_two_way_yield_basis_unresolved(
+    *,
+    filing_aligned: float | None,
+    screen_ttm: float | None,
+    filing_currency: str = "USD",
+) -> bool:
+    """True when filing/Yahoo FCF and screen TTM disagree (BT-A.L-style, no company KPI)."""
+    if filing_aligned is None or screen_ttm is None:
+        return False
+    return fcf_universe_divergence_flagged(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        company_adjusted=None,
+        filing_currency=filing_currency,
+        company_adjusted_currency=None,
+    ) or fcf_filing_screen_mismatch(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+    )
+
+
 def fcf_yield_pass_suppressed(
     *,
     divergence_flagged: bool,
@@ -1407,6 +1428,12 @@ def fcf_yield_pass_suppressed(
         company_adjusted=company_adjusted,
         filing_currency=filing_currency,
         company_adjusted_currency=company_adjusted_currency,
+    ):
+        return True
+    if fcf_two_way_yield_basis_unresolved(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        filing_currency=filing_currency,
     ):
         return True
     basis_unresolved = fcf_definition_divergence or fcf_divergence_flagged or divergence_flagged
@@ -1440,7 +1467,13 @@ def high_dividend_yield_pass_suppressed(
         company_adjusted_currency=company_adjusted_currency,
     ):
         return True
-    return bool(fcf_definition_divergence) and company_adjusted is not None
+    if fcf_two_way_yield_basis_unresolved(
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        filing_currency=filing_currency,
+    ):
+        return True
+    return bool(fcf_definition_divergence)
 
 
 def fcf_basis_definition_divergence(
@@ -1637,8 +1670,8 @@ def suppress_high_dividend_yield_passes(
             continue
         out.loc[mask, "passed"] = False
         failure_message = (
-            "High dividend yield suppressed: FCF basis triplet unresolved "
-            "(state statutory vs retail FCF and buyback-inclusive cover)"
+            "High dividend yield suppressed: FCF basis unresolved "
+            "(state filing vs screen TTM and buyback-inclusive cover)"
         )
         for index in out.index[mask]:
             out.at[index, "failed_criteria"] = _append_failed_criterion(
