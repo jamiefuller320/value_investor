@@ -2,6 +2,7 @@
 
 const CHART_LEVEL_STYLES = {
   last: { color: "#1a1f2e", label: "Last", dash: "" },
+  book_cost: { color: "#0f766e", label: "Book cost", dash: "5 3" },
   core_limit: { color: "#2b6cb0", label: "Core buy", dash: "6 4" },
   tactical_limit: { color: "#2e9c4f", label: "Tactical buy", dash: "6 4" },
   stop_loss: { color: "#b33a3a", label: "Stop", dash: "4 3" },
@@ -9,6 +10,21 @@ const CHART_LEVEL_STYLES = {
   sma50: { color: "#7c3aed", label: "SMA 50", dash: "2 3" },
   sma200: { color: "#64748b", label: "SMA 200", dash: "2 3" },
 };
+
+const CHART_SMA_SERIES = {
+  sma50: { key: "sma50_series", color: "#7c3aed", label: "SMA 50" },
+  sma200: { key: "sma200_series", color: "#64748b", label: "SMA 200" },
+};
+
+/** Horizontal trade levels — SMAs prefer series overlays when present. */
+const CHART_HORIZONTAL_LEVEL_KEYS = [
+  "last",
+  "book_cost",
+  "core_limit",
+  "tactical_limit",
+  "stop_loss",
+  "take_profit",
+];
 
 function chartPathForReport(report) {
   if (report?.chart_path) return report.chart_path;
@@ -39,6 +55,47 @@ function nudgeLevelLabelYs(entries, minGap = 18) {
   return sorted;
 }
 
+function tradePlanLevelsFromReport(report) {
+  const plan =
+    report && typeof report.trade_plan === "object" && report.trade_plan
+      ? report.trade_plan
+      : report || {};
+  const out = {};
+  const map = [
+    ["core_limit", "core_limit"],
+    ["tactical_limit", "tactical_limit"],
+    ["stop_loss", "tactical_stop_loss"],
+    ["stop_loss", "stop_loss"],
+    ["take_profit", "tactical_take_profit"],
+    ["take_profit", "take_profit"],
+  ];
+  for (const [dest, src] of map) {
+    if (out[dest] != null) continue;
+    const value = plan[src];
+    if (value != null && !Number.isNaN(Number(value))) out[dest] = Number(value);
+  }
+  return out;
+}
+
+function mergeChartLevels(payloadLevels, report, overlays) {
+  const merged = { ...(payloadLevels || {}) };
+  const fromReport = tradePlanLevelsFromReport(report);
+  for (const [key, value] of Object.entries(fromReport)) {
+    if (merged[key] == null && value != null) merged[key] = value;
+  }
+  const extra = overlays || {};
+  if (extra.book_cost != null && !Number.isNaN(Number(extra.book_cost))) {
+    merged.book_cost = Number(extra.book_cost);
+  }
+  return merged;
+}
+
+function hasTradePlanLevels(levels) {
+  return ["core_limit", "tactical_limit", "stop_loss", "take_profit"].some(
+    (key) => levels?.[key] != null
+  );
+}
+
 function ensureChartDialog() {
   let dialog = document.getElementById("chart-dialog");
   if (dialog) return dialog;
@@ -56,6 +113,50 @@ function ensureChartDialog() {
   return document.getElementById("chart-dialog");
 }
 
+function chartSeriesPolyline(values, xAt, yAt, color, label) {
+  if (!Array.isArray(values) || !values.length) return { path: "", legend: "" };
+  const segments = [];
+  let current = [];
+  values.forEach((value, index) => {
+    if (value == null || Number.isNaN(Number(value))) {
+      if (current.length > 1) segments.push(current);
+      current = [];
+      return;
+    }
+    current.push(`${xAt(index)},${yAt(Number(value))}`);
+  });
+  if (current.length > 1) segments.push(current);
+  if (!segments.length) return { path: "", legend: "" };
+  const path = segments
+    .map(
+      (pts) =>
+        `<polyline fill="none" stroke="${color}" stroke-width="1.6" stroke-dasharray="3 3" points="${pts.join(
+          " "
+        )}" />`
+    )
+    .join("");
+  const legend = `<span class="chart-legend-item"><span class="chart-legend-swatch" style="background:${color}"></span>${esc(
+    label
+  )}</span>`;
+  return { path, legend };
+}
+
+function dateMarkerLine(dates, markerDate, xAt, pad, label, labelOffset = 0) {
+  if (!markerDate || !dates.length) return "";
+  let markerIndex = dates.findIndex((date) => date >= markerDate);
+  if (markerIndex < 0) markerIndex = dates.length - 1;
+  for (let i = 0; i < dates.length; i += 1) {
+    if (dates[i] <= markerDate) markerIndex = i;
+    else break;
+  }
+  const mx = xAt(markerIndex);
+  const labelY = pad.top + 14 + labelOffset;
+  return `
+    <line x1="${mx}" y1="${pad.top}" x2="${mx}" y2="${pad.top + pad.plotH}"
+      stroke="#0f172a" stroke-width="1.5" stroke-dasharray="5 4" stroke-opacity="0.75" />
+    <text x="${mx + 4}" y="${labelY}" class="chart-signal-marker-label">${esc(label)}</text>`;
+}
+
 function renderPriceChartSvg(payload, levelsOverride) {
   const dates = payload.dates || [];
   const closes = payload.closes || [];
@@ -64,7 +165,18 @@ function renderPriceChartSvg(payload, levelsOverride) {
   }
 
   const levels = { ...(levelsOverride || payload.levels || {}) };
-  const activeLevels = Object.entries(CHART_LEVEL_STYLES).filter(([key]) => levels[key] != null);
+  const smaSeriesPresent = Object.values(CHART_SMA_SERIES).some((meta) =>
+    Array.isArray(payload[meta.key])
+  );
+  const activeLevels = CHART_HORIZONTAL_LEVEL_KEYS.filter((key) => levels[key] != null).map(
+    (key) => [key, CHART_LEVEL_STYLES[key]]
+  );
+  // Fall back to point-in-time SMA lines only when series overlays are absent.
+  if (!smaSeriesPresent) {
+    for (const key of ["sma50", "sma200"]) {
+      if (levels[key] != null) activeLevels.push([key, CHART_LEVEL_STYLES[key]]);
+    }
+  }
   const longestLabel = activeLevels.reduce((max, [, style]) => {
     const sample = `${style.label}`;
     const priceSample = formatChartPrice(99999.99);
@@ -73,17 +185,21 @@ function renderPriceChartSvg(payload, levelsOverride) {
   const rightPad = Math.max(168, longestLabel + 28);
   const width = 620 + rightPad;
   const height = 380;
-  const pad = { top: 28, right: rightPad, bottom: 42, left: 22 };
+  const pad = { top: 28, right: rightPad, bottom: 42, left: 22, plotH: 0 };
   const plotW = width - pad.left - pad.right;
   const plotH = height - pad.top - pad.bottom;
+  pad.plotH = plotH;
 
-  const levelValues = Object.values(levels)
-    .filter((v) => v != null && !Number.isNaN(Number(v)))
-    .map(Number);
+  const seriesValues = Object.values(CHART_SMA_SERIES).flatMap((meta) =>
+    Array.isArray(payload[meta.key])
+      ? payload[meta.key].filter((v) => v != null && !Number.isNaN(Number(v))).map(Number)
+      : []
+  );
+  const levelValues = activeLevels.map(([key]) => Number(levels[key]));
   const minClose = Math.min(...closes);
   const maxClose = Math.max(...closes);
-  const minY = Math.min(minClose, ...levelValues, minClose * 0.98);
-  const maxY = Math.max(maxClose, ...levelValues, maxClose * 1.02);
+  const minY = Math.min(minClose, ...levelValues, ...seriesValues, minClose * 0.98);
+  const maxY = Math.max(maxClose, ...levelValues, ...seriesValues, maxClose * 1.02);
   const spanY = maxY - minY || 1;
 
   const xAt = (index) => pad.left + (index / Math.max(dates.length - 1, 1)) * plotW;
@@ -131,21 +247,27 @@ function renderPriceChartSvg(payload, levelsOverride) {
     })
     .join("");
 
-  const markerDate = (payload.signal_since || payload.levels_as_of || "").slice(0, 10);
+  const smaPlots = Object.values(CHART_SMA_SERIES).map((meta) =>
+    chartSeriesPolyline(payload[meta.key], xAt, yAt, meta.color, meta.label)
+  );
+  const smaPaths = smaPlots.map((row) => row.path).join("");
+  const smaLegend = smaPlots.map((row) => row.legend).join("");
+
+  const openedAt = (payload._opened_at || "").slice(0, 10);
+  const signalSince = (payload.signal_since || payload.levels_as_of || "").slice(0, 10);
   let signalMarker = "";
-  if (markerDate) {
-    let markerIndex = dates.findIndex((date) => date >= markerDate);
-    if (markerIndex < 0) markerIndex = dates.length - 1;
-    // Prefer the last date on/before the marker when the series overshoots.
-    for (let i = 0; i < dates.length; i += 1) {
-      if (dates[i] <= markerDate) markerIndex = i;
-      else break;
-    }
-    const mx = xAt(markerIndex);
-    signalMarker = `
-      <line x1="${mx}" y1="${pad.top}" x2="${mx}" y2="${pad.top + plotH}"
-        stroke="#0f172a" stroke-width="1.5" stroke-dasharray="5 4" stroke-opacity="0.75" />
-      <text x="${mx + 4}" y="${pad.top + 14}" class="chart-signal-marker-label">Signal since ${esc(markerDate)}</text>`;
+  if (openedAt) {
+    signalMarker += dateMarkerLine(dates, openedAt, xAt, pad, `Opened ${openedAt}`, 0);
+  }
+  if (signalSince && signalSince !== openedAt) {
+    signalMarker += dateMarkerLine(
+      dates,
+      signalSince,
+      xAt,
+      pad,
+      `Signal since ${signalSince}`,
+      openedAt ? 16 : 0
+    );
   }
 
   const xLabels = dates
@@ -157,12 +279,12 @@ function renderPriceChartSvg(payload, levelsOverride) {
     )
     .join("");
 
-  const legend = activeLevels
+  const legend = `${activeLevels
     .map(
       ([, style]) =>
         `<span class="chart-legend-item"><span class="chart-legend-swatch" style="background:${style.color}"></span>${esc(style.label)}</span>`
     )
-    .join("");
+    .join("")}${smaLegend}`;
 
   return `
     <div class="price-chart-wrap">
@@ -170,6 +292,7 @@ function renderPriceChartSvg(payload, levelsOverride) {
         ${grid}
         <polygon points="${areaPoints}" fill="rgba(43,108,176,0.08)"></polygon>
         <polyline fill="none" stroke="#2b6cb0" stroke-width="2.25" points="${linePoints}" />
+        ${smaPaths}
         ${signalMarker}
         ${levelLines}
         <text x="${pad.left}" y="${pad.top + 4}" class="chart-axis-label">${formatChartPrice(maxY)}</text>
@@ -180,16 +303,26 @@ function renderPriceChartSvg(payload, levelsOverride) {
     </div>`;
 }
 
-function levelsTableHtml(levels) {
-  const rows = Object.entries(CHART_LEVEL_STYLES)
-    .filter(([key]) => levels?.[key] != null)
-    .map(
-      ([key, style]) =>
-        `<tr>
-          <td><span class="chart-legend-swatch" style="background:${style.color}"></span> ${esc(style.label)}</td>
+function levelsTableHtml(levels, { smaAsSeries = false } = {}) {
+  const keys = Object.keys(CHART_LEVEL_STYLES).filter((key) => {
+    if (levels?.[key] == null) return false;
+    if (smaAsSeries && (key === "sma50" || key === "sma200")) return true;
+    return true;
+  });
+  const rows = keys
+    .map((key) => {
+      const style = CHART_LEVEL_STYLES[key];
+      const note =
+        smaAsSeries && (key === "sma50" || key === "sma200")
+          ? ` <span class="muted small">(path)</span>`
+          : "";
+      return `<tr>
+          <td><span class="chart-legend-swatch" style="background:${style.color}"></span> ${esc(
+            style.label
+          )}${note}</td>
           <td>${formatChartPrice(levels[key])}</td>
-        </tr>`
-    )
+        </tr>`;
+    })
     .join("");
   if (!rows) return `<p class="small muted">No trade-plan levels available for this name.</p>`;
   return `
@@ -237,30 +370,45 @@ function displayLevelsForSource(payload, source) {
   return {
     ...payload.initial_levels,
     last: current.last ?? payload.initial_levels.last,
+    book_cost: current.book_cost ?? payload.initial_levels.book_cost,
   };
 }
 
-function renderChartBody(payload, report, source) {
-  const levels = displayLevelsForSource(payload, source);
+function renderChartBody(payload, report, source, overlays) {
+  const baseLevels = displayLevelsForSource(payload, source);
+  const levels = mergeChartLevels(baseLevels, report, overlays);
   const levelsAsOf = (payload.levels_as_of || payload.as_of || "").slice(0, 10);
   const initialAsOf = (payload.initial_levels_as_of || payload.signal_since || "").slice(0, 10);
   const signalSince = (payload.signal_since || "").slice(0, 10);
+  const openedAt = (overlays && overlays.opened_at ? String(overlays.opened_at) : "").slice(0, 10);
   const usingInitial = source === "initial" && payload.initial_levels;
   const planHint = !usingInitial && report.trade_plan?.trade_plan_summary
     ? `<p class="small muted">${esc(report.trade_plan.trade_plan_summary)}</p>`
     : "";
+  const smaAsSeries = Boolean(payload.sma50_series || payload.sma200_series);
   const asOfLabel = usingInitial ? initialAsOf : levelsAsOf;
-  const levelsHint = asOfLabel
-    ? `<p class="small muted">${
-        usingInitial
-          ? `Trade levels / SMAs frozen at the initial recommendation (${esc(asOfLabel)}). Last is the latest close so you can see what has played out.`
-          : `Trade levels / SMAs from the latest screen (${esc(levelsAsOf)}).`
-      }${
-        signalSince
-          ? ` Vertical line marks current signal since ${esc(signalSince)}.`
-          : ""
-      }</p>`
-    : "";
+  const tradeLevelsPresent = hasTradePlanLevels(levels);
+  let levelsHint = "";
+  if (asOfLabel) {
+    levelsHint = `<p class="small muted">${
+      usingInitial
+        ? `Trade levels frozen at the initial recommendation (${esc(asOfLabel)}). Last is the latest close so you can see what has played out.`
+        : `Trade levels from the latest screen (${esc(levelsAsOf)}).`
+    }${
+      smaAsSeries
+        ? " SMA 50 / SMA 200 plot as rolling overlays (not flat point-in-time lines)."
+        : " SMA values are point-in-time until the next chart publish adds rolling paths."
+    }${
+      signalSince ? ` Vertical line marks signal since ${esc(signalSince)}.` : ""
+    }${openedAt ? ` Opened marker ${esc(openedAt)}.` : ""}</p>`;
+  }
+  if (!tradeLevelsPresent) {
+    levelsHint += `<p class="small muted">No core/tactical buy or target/stop on this screen (common for hold/avoid). ${
+      levels.book_cost != null
+        ? "Book cost from the paper holding is shown."
+        : "Buy-tier names carry trade-plan levels; held names may show book cost after the next lifecycle board publish."
+    }</p>`;
+  }
   const hasInitial = Boolean(payload.initial_levels);
   const toggle = `
     <div class="chart-level-toggle" role="group" aria-label="Level source">
@@ -269,6 +417,7 @@ function renderChartBody(payload, report, source) {
         hasInitial ? "Show levels from the first week of this signal" : "No initial recommendation snapshot yet"
       }">Initial recommendation</button>
     </div>`;
+  const chartPayload = { ...payload, _opened_at: openedAt || null };
   return `
     <p class="small muted">
       ${esc(payload.period || "1y")} daily closes · as of ${esc((payload.as_of || "").slice(0, 10) || "—")}
@@ -277,13 +426,13 @@ function renderChartBody(payload, report, source) {
     ${toggle}
     ${planHint}
     ${levelsHint}
-    ${renderPriceChartSvg(payload, levels)}
-    ${levelsTableHtml(levels)}
+    ${renderPriceChartSvg(chartPayload, levels)}
+    ${levelsTableHtml(levels, { smaAsSeries })}
     ${hasInitial ? crossingsTableHtml(payload.level_crossings || []) : ""}
   `;
 }
 
-async function mountPriceChart(body, report) {
+async function mountPriceChart(body, report, overlays) {
   if (!body) return;
   const path = chartPathForReport(report);
   body.innerHTML = "<p class='muted'>Loading chart…</p>";
@@ -297,7 +446,7 @@ async function mountPriceChart(body, report) {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const payload = await response.json();
     const render = (source) => {
-      body.innerHTML = renderChartBody(payload, report, source);
+      body.innerHTML = renderChartBody(payload, report || {}, source, overlays || {});
     };
     if (!body.dataset.levelToggleBound) {
       body.dataset.levelToggleBound = "1";
@@ -312,7 +461,7 @@ async function mountPriceChart(body, report) {
   } catch (err) {
     body.innerHTML = `
       <p class="muted">Could not load price chart (${esc(err.message)}).</p>
-      <p class="small muted">Charts are published for buy-tier names on the weekly dashboard update.</p>`;
+      <p class="small muted">Charts are published for live-screen and lifecycle board names on dashboard update.</p>`;
   }
 }
 

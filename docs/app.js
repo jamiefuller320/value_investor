@@ -3769,7 +3769,9 @@ let lifecycleMarketId = null;
 let lifecycleTrackId = null;
 
 const LIFECYCLE_CHIP_SORT_KEY = "ftseValueInvestor.lifecycleChipSort.v1";
+const LIFECYCLE_CHIP_SORT_DIR_KEY = "ftseValueInvestor.lifecycleChipSortDir.v1";
 const LIFECYCLE_CHIP_SORT_MODES = ["board", "alpha", "stage"];
+const LIFECYCLE_CHIP_SORT_DIRS = ["asc", "desc"];
 
 function loadLifecycleChipSort() {
   try {
@@ -3789,17 +3791,43 @@ function saveLifecycleChipSort(mode) {
   }
 }
 
-let lifecycleChipSort = loadLifecycleChipSort();
+function loadLifecycleChipSortDir() {
+  try {
+    const saved = localStorage.getItem(LIFECYCLE_CHIP_SORT_DIR_KEY);
+    if (LIFECYCLE_CHIP_SORT_DIRS.includes(saved)) return saved;
+  } catch {
+    /* ignore */
+  }
+  return null;
+}
 
-function sortLifecycleCards(shown, mode) {
+function saveLifecycleChipSortDir(dir) {
+  try {
+    localStorage.setItem(LIFECYCLE_CHIP_SORT_DIR_KEY, dir);
+  } catch {
+    /* ignore */
+  }
+}
+
+let lifecycleChipSort = loadLifecycleChipSort();
+let lifecycleChipSortDir = loadLifecycleChipSortDir();
+
+function resolveLifecycleChipSortDir(mode, dir) {
+  if (LIFECYCLE_CHIP_SORT_DIRS.includes(dir)) return dir;
+  // Time in stage defaults to longest-first (desc); other modes ascending.
+  return mode === "stage" ? "desc" : "asc";
+}
+
+function sortLifecycleCards(shown, mode, dir) {
   const rows = Array.isArray(shown) ? shown.slice() : [];
+  const descending = dir === "desc";
   if (mode === "alpha") {
     rows.sort((a, b) =>
       String(a.ticker || "").localeCompare(String(b.ticker || ""), undefined, {
         sensitivity: "base",
       })
     );
-    return rows;
+    return descending ? rows.reverse() : rows;
   }
   if (mode === "stage") {
     rows.sort((a, b) => {
@@ -3814,15 +3842,16 @@ function sortLifecycleCards(shown, mode) {
       }
       if (aMissing) return 1;
       if (bMissing) return -1;
-      const delta = Number(bd) - Number(ad);
-      if (delta !== 0) return delta;
+      // Ascending = shortest in stage first; descending = longest first.
+      const delta = Number(ad) - Number(bd);
+      if (delta !== 0) return descending ? -delta : delta;
       return String(a.ticker || "").localeCompare(String(b.ticker || ""), undefined, {
         sensitivity: "base",
       });
     });
     return rows;
   }
-  return rows;
+  return descending ? rows.reverse() : rows;
 }
 
 function parseDashboardHash() {
@@ -4394,13 +4423,17 @@ function openLifecycleTickerCard(ticker) {
   if (!dialog || !title || !body || !ticker) return;
   const report = findLifecycleReport(ticker) || {};
   const found = findLifecycleTickerCard(ticker);
-  const name = report.name || (found && found.card && found.card.name) || ticker;
+  const card = (found && found.card) || {};
+  const name = report.name || card.name || ticker;
   title.textContent = `${name} (${ticker})`;
   body.innerHTML = renderLifecycleTickerCard(ticker);
   dialog.showModal();
   const mount = body.querySelector("[data-lifecycle-chart-mount]");
   if (mount && typeof mountPriceChart === "function") {
-    void mountPriceChart(mount, report.ticker ? report : { ticker, name });
+    void mountPriceChart(mount, report.ticker ? report : { ticker, name }, {
+      book_cost: card.avg_cost,
+      opened_at: card.opened_at,
+    });
   }
 }
 
@@ -4507,6 +4540,7 @@ function renderLifecycle(data) {
     ? lifecycleChipSort
     : "board";
   lifecycleChipSort = sortMode;
+  const sortDir = resolveLifecycleChipSortDir(sortMode, lifecycleChipSortDir);
   const sortOptions = [
     { id: "board", label: "Board order" },
     { id: "alpha", label: "A–Z" },
@@ -4517,11 +4551,20 @@ function renderLifecycle(data) {
         `<option value="${esc(row.id)}"${row.id === sortMode ? " selected" : ""}>${esc(row.label)}</option>`
     )
     .join("");
+  const sortDirOptions = [
+    { id: "asc", label: "Ascending" },
+    { id: "desc", label: "Descending" },
+  ]
+    .map(
+      (row) =>
+        `<option value="${esc(row.id)}"${row.id === sortDir ? " selected" : ""}>${esc(row.label)}</option>`
+    )
+    .join("");
 
   const columnsHtml = colDefs
     .map((col) => {
       const packed = trackColumns[col.id] || { count: 0, shown: [], truncated: 0 };
-      const shown = sortLifecycleCards(packed.shown || [], sortMode);
+      const shown = sortLifecycleCards(packed.shown || [], sortMode, sortDir);
       const cards = shown.map(lifecycleTickerCard).join("");
       const more = packed.truncated
         ? `<p class="small muted lifecycle-truncated">+${packed.truncated} more</p>`
@@ -4558,6 +4601,9 @@ function renderLifecycle(data) {
           </label>
           <label class="small">Sort chips
             <select id="lifecycle-chip-sort">${sortOptions}</select>
+          </label>
+          <label class="small">Order
+            <select id="lifecycle-chip-sort-dir">${sortDirOptions}</select>
           </label>
         </div>
       </div>
@@ -4609,6 +4655,13 @@ function bindLifecyclePanel() {
         const next = event.target.value;
         lifecycleChipSort = LIFECYCLE_CHIP_SORT_MODES.includes(next) ? next : "board";
         saveLifecycleChipSort(lifecycleChipSort);
+        renderLifecycle(dashboardData);
+        return;
+      }
+      if (event.target.id === "lifecycle-chip-sort-dir") {
+        const next = event.target.value;
+        lifecycleChipSortDir = LIFECYCLE_CHIP_SORT_DIRS.includes(next) ? next : "asc";
+        saveLifecycleChipSortDir(lifecycleChipSortDir);
         renderLifecycle(dashboardData);
         return;
       }

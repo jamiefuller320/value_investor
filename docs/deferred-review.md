@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-17T11:26:33+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-17T14:25:46+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -376,6 +376,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L402 | **Precipitating-drop event join needs depth beyond buy-tier** | To explain what caused the drawdown into a buy signal, join pre-signal headlines/filings and peer/market context. Buy-tier-only news_manifest and event journal miss names before they enter the target set; needs thicker offline/library or boundary-cohort history first. | news_event_journal confirmation rates leave watch on body_match events AND library or boundary cohorts have stable pre-signal news/filing coverage for names that later become buy-tier |
 | L403 | **Thin continuous news harvest for hold/avoid before buy-tier entry** | Most FTSE holds/avoids have no research dir or news_manifest until they become buy-tier. First ingest can backfill ~1y Yahoo/Google headlines retrospectively, but that is not continuous PIT collection and misses names that never enter buy-tier as controls. Prefer a cheap headline-only watermark harvest for boundary + rotating hold sample before any body crawl (N91). | L401/L402 observe questions are blocked by missing pre-signal manifests on newly promoted buy-tier names, or boundary panel persistently lacks news_manifest coverage |
 | L404 | **Unconfirmed-news vs later-filing as sentiment-vs-fundamentals observe label** | Once event journal confirmation rates leave watch, label drop-window headlines that never get a later confirming filing (or get a denial/clarification) as candidate sentiment shocks versus fundamental changes. Observe-only; do not score live buys from it (N55/N303). | news_event_rules.json shows stable promising confirmation on body_match events with later filing ≥30d after headline, and a cohort of drop-correlated headlines with no later report exists |
+| L415 | **Client-side SMA series fallback for old chart JSON** | Charts without sma50_series/sma200_series still fall back to flat point-in-time SMA lines until republish. A client-side rolling estimate on downsampled closes would be misleading; prefer ensuring publish always writes series. | If many stale chart JSON files remain after several publishes, or offline viewers need overlays without republish |
 
 ### Ops / reliability
 

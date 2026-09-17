@@ -54,6 +54,11 @@ def test_build_price_chart_payload_includes_levels():
     assert payload["initial_levels"] is not None
     assert payload["initial_levels_as_of"] == "2025-06-15"
     assert isinstance(payload["level_crossings"], list)
+    assert len(payload["sma50_series"]) == len(payload["closes"])
+    assert len(payload["sma200_series"]) == len(payload["closes"])
+    assert payload["sma50_series"][-1] == payload["levels"]["sma50"]
+    assert any(value is not None for value in payload["sma50_series"])
+    assert any(value is not None for value in payload["sma200_series"])
 
 
 def test_write_price_charts_from_history_includes_non_buy_when_unfiltered(tmp_path: Path):

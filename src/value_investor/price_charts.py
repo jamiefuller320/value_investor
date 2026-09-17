@@ -74,6 +74,32 @@ def _downsample(series: pd.Series, *, max_points: int = MAX_CHART_POINTS) -> pd.
     return sampled
 
 
+def _rolling_series_at(
+    series: pd.Series,
+    *,
+    window: int,
+    sample_index: pd.Index,
+) -> list[float | None]:
+    """Rolling mean on the full series, sampled at the same timestamps as closes."""
+    clean = series.dropna()
+    if clean.empty or window <= 0:
+        return [None] * len(sample_index)
+    rolling = clean.rolling(window).mean()
+    values: list[float | None] = []
+    for stamp in sample_index:
+        if stamp not in rolling.index:
+            values.append(None)
+            continue
+        raw = rolling.loc[stamp]
+        if isinstance(raw, pd.Series):
+            raw = raw.iloc[-1]
+        if raw is None or pd.isna(raw):
+            values.append(None)
+        else:
+            values.append(_round_price(float(raw)))
+    return values
+
+
 def levels_from_trade_plan(
     trade_plan: dict[str, Any] | None,
     *,
@@ -316,15 +342,17 @@ def build_price_chart_payload(
         ]
         dates = [date for date, value in pairs if value is not None]
         closes = [value for _, value in pairs if value is not None]
+        keep_index = [
+            index for index, value in sampled.items() if _round_price(float(value)) is not None
+        ]
+        sampled = sampled.loc[keep_index]
     if not closes:
         return None
 
-    sma50 = float(clean.rolling(50).mean().iloc[-1]) if len(clean) >= 50 else None
-    sma200 = float(clean.rolling(200).mean().iloc[-1]) if len(clean) >= 200 else None
-    if sma50 is not None and pd.isna(sma50):
-        sma50 = None
-    if sma200 is not None and pd.isna(sma200):
-        sma200 = None
+    sma50_series = _rolling_series_at(clean, window=50, sample_index=sampled.index)
+    sma200_series = _rolling_series_at(clean, window=200, sample_index=sampled.index)
+    sma50 = next((value for value in reversed(sma50_series) if value is not None), None)
+    sma200 = next((value for value in reversed(sma200_series) if value is not None), None)
 
     as_of_iso = (as_of or datetime.now(UTC)).isoformat()
     # Prefer an explicit streak start; fall back to this screen's as-of date.
@@ -370,6 +398,8 @@ def build_price_chart_payload(
         "period": CHART_LOOKBACK_PERIOD,
         "dates": dates,
         "closes": closes,
+        "sma50_series": sma50_series,
+        "sma200_series": sma200_series,
         "levels": current_levels,
         "initial_levels": resolved_initial,
         "initial_levels_as_of": resolved_initial_as_of,
