@@ -3161,6 +3161,80 @@ def test_suppress_fcf_yield_sbry_style_three_way_bases(tmp_path: Path):
     assert "High dividend yield suppressed" in str(high_div["failed_criteria"])
 
 
+def test_high_dividend_pass_suppressed_on_bt_style_two_way_fcf():
+    """Yahoo/filing ~£1861m vs screen TTM £1200.4m must fail-closed without company KPI."""
+    from value_investor.scoring.fcf import high_dividend_yield_pass_suppressed
+
+    assert high_dividend_yield_pass_suppressed(
+        filing_aligned=1_861_000_000.0,
+        screen_ttm=1_200_400_000.0,
+        company_adjusted=None,
+        filing_currency="GBP",
+        fcf_definition_divergence=False,
+    )
+
+
+def _bt_two_way_research_sources(tmp_path: Path) -> None:
+    sources = tmp_path / "research" / "BT-A.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "BT-A.L",
+                "quarterly_cashflow": {},
+                "cash_flow": {
+                    "2026": {
+                        "Operating Cash Flow": 2_500_000_000.0,
+                        "Capital Expenditure": -638_000_000.0,
+                        "Free Cash Flow": 1_861_000_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_suppress_high_dividend_bt_style_two_way_fcf(tmp_path: Path):
+    _bt_two_way_research_sources(tmp_path)
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "BT-A.L",
+                "free_cashflow": 1_200_400_000.0,
+                "free_cashflow_screen_ttm": 1_200_400_000.0,
+                "market_cap": 12_900_000_000.0,
+                "dividend_yield": 0.04,
+            }
+        ]
+    )
+    universe = enrich_universe_with_canonical_fcf(universe, tmp_path)
+    universe = enrich_universe_with_filing_metrics(universe, tmp_path)
+    assert universe.iloc[0]["fcf_definition_divergence"] is True
+
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "BT-A.L",
+                "model_id": "high_dividend",
+                "model_name": "High Dividend Yield",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+    model_results = suppress_high_dividend_yield_passes(
+        model_results,
+        universe,
+        output_dir=tmp_path,
+    )
+    high_div = model_results.iloc[0]
+    assert bool(high_div["passed"]) is False
+    assert "High dividend yield suppressed" in str(high_div["failed_criteria"])
+
+
 def test_suppress_fcf_yield_jd_style_three_way_bases(tmp_path: Path):
     sources = tmp_path / "research" / "JD.L" / "sources"
     filings = sources / "filings" / "bodies"

@@ -4671,3 +4671,77 @@ def test_guard_screening_export_jd_style_three_way_fcf(tmp_path: Path):
     assert guarded["fcf_divergence_flagged"] is True
     assert "fcf basis mismatch" in guarded["action_note"].lower()
     assert "462" in guarded["action_note"] or "£462" in guarded["action_note"]
+
+
+def test_guard_screening_export_bt_style_two_way_fcf(tmp_path: Path):
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    _bt_two_way_research_sources = tmp_path / "research" / "BT-A.L" / "sources"
+    _bt_two_way_research_sources.mkdir(parents=True)
+    (_bt_two_way_research_sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "BT-A.L",
+                "quarterly_cashflow": {},
+                "cash_flow": {
+                    "2026": {
+                        "Operating Cash Flow": 2_500_000_000.0,
+                        "Capital Expenditure": -638_000_000.0,
+                        "Free Cash Flow": 1_861_000_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "BT-A.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": False,
+            },
+            {
+                "ticker": "BT-A.L",
+                "model_id": "neff_pegy",
+                "model_name": "Neff PEGY",
+                "passed": False,
+            },
+        ]
+    )
+
+    snapshot = {
+        "ticker": "BT-A.L",
+        "name": "BT Group plc",
+        "sector": "Communication Services",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "research_verdict": "accumulate",
+        "research_risk_level": "high",
+        "fcf_basis_overlay": True,
+        "fcf_definition_divergence": False,
+        "conviction_score": 1.0,
+        "free_cashflow_screen_ttm": 1_200_400_000.0,
+        "free_cashflow": 1_861_000_000.0,
+        "action_note": "Buy — neutral timing",
+        "summary": "Buy (6/22 models).",
+        "failed_models": [],
+        "key_metrics": {"FCF": 1_861_000_000.0},
+        "dividend_yield": 0.04,
+    }
+
+    guarded = guard_screening_snapshot_export(
+        snapshot,
+        model_results=model_results,
+        output_dir=tmp_path,
+    )
+
+    assert guarded["fcf_definition_divergence"] is True
+    assert guarded["fcf_divergence_flagged"] is True
+    assert guarded["action_note"].startswith("Hold —")
+    assert guarded["summary"].startswith("Hold (")
+    assert "fcf basis mismatch" in guarded["action_note"].lower()
+    assert "1200.4" in guarded["action_note"] or "1861" in guarded["action_note"]
+    assert guarded["failed_models"] == ["FCF Yield", "Neff PEGY"]

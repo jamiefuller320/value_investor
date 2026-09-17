@@ -52,6 +52,35 @@ def failed_models_from_results(
     return rows["model_name"].astype(str).tolist()
 
 
+def _research_headline_replacement(
+    *,
+    signal: str,
+    research_verdict: str | None,
+    adjusted_signal: str | None,
+    research_risk_level: str | None = None,
+) -> str | None:
+    """Label for action_note/summary when research downgrades a buy-tier screen signal."""
+    raw = str(signal or "").strip().lower()
+    if raw not in ("strong_buy", "buy"):
+        return None
+    verdict = str(research_verdict or "").strip().lower()
+    if verdict != "accumulate":
+        return None
+    adjusted = str(adjusted_signal or signal).strip().lower()
+    risk = str(research_risk_level or "").strip().lower()
+    if raw == "strong_buy":
+        if adjusted == "strong_buy":
+            return None
+        return _SIGNAL_LABELS.get(adjusted, adjusted.replace("_", " ").title())
+    if raw == "buy":
+        if adjusted in ("hold", "avoid", "insufficient_data"):
+            return _SIGNAL_LABELS.get(adjusted, adjusted.replace("_", " ").title())
+        if risk == "high":
+            return _SIGNAL_LABELS.get("hold", "Hold")
+        return None
+    return None
+
+
 def _dedupe_pipe_segments(action_note: str) -> str:
     if not action_note or " | " not in action_note:
         return action_note
@@ -77,16 +106,22 @@ def _rewrite_action_note_headline(
     signal: str,
     research_verdict: str | None,
     adjusted_signal: str | None,
+    research_risk_level: str | None = None,
 ) -> str:
-    if not action_note or signal != "strong_buy":
+    if not action_note:
         return action_note
-    verdict = str(research_verdict or "").strip().lower()
-    adjusted = str(adjusted_signal or signal).strip().lower()
-    if verdict != "accumulate" or adjusted == "strong_buy":
+    effective = _research_headline_replacement(
+        signal=signal,
+        research_verdict=research_verdict,
+        adjusted_signal=adjusted_signal,
+        research_risk_level=research_risk_level,
+    )
+    if effective is None:
         return action_note
-    effective = _SIGNAL_LABELS.get(adjusted, adjusted.replace("_", " ").title())
-    if action_note.startswith("Strong Buy"):
+    if signal == "strong_buy" and action_note.startswith("Strong Buy"):
         return action_note.replace("Strong Buy", effective, 1)
+    if signal == "buy" and action_note.startswith("Buy"):
+        return action_note.replace("Buy", effective, 1)
     return action_note
 
 
@@ -96,16 +131,22 @@ def _rewrite_summary_headline(
     signal: str,
     research_verdict: str | None,
     adjusted_signal: str | None,
+    research_risk_level: str | None = None,
 ) -> str | None:
-    if not summary or signal != "strong_buy":
+    if not summary:
         return summary
-    verdict = str(research_verdict or "").strip().lower()
-    adjusted = str(adjusted_signal or signal).strip().lower()
-    if verdict != "accumulate" or adjusted == "strong_buy":
+    effective = _research_headline_replacement(
+        signal=signal,
+        research_verdict=research_verdict,
+        adjusted_signal=adjusted_signal,
+        research_risk_level=research_risk_level,
+    )
+    if effective is None:
         return summary
-    effective = _SIGNAL_LABELS.get(adjusted, adjusted.replace("_", " ").title())
-    if summary.startswith("Strong Buy"):
+    if signal == "strong_buy" and summary.startswith("Strong Buy"):
         return summary.replace("Strong Buy", effective, 1)
+    if signal == "buy" and summary.startswith("Buy"):
+        return summary.replace("Buy", effective, 1)
     return summary
 
 
@@ -228,6 +269,7 @@ def guard_screening_snapshot_export(
         updated["adjusted_signal"] = adjusted_str
 
     currency = str(fcf_bundle.get("currency") or _ticker_reporting_currency(ticker))
+    research_risk = updated.get("research_risk_level")
     action_note = _fix_sterling_fcf_symbols(str(updated.get("action_note") or ""), currency)
     action_note = _dedupe_pipe_segments(action_note)
     action_note = _rewrite_action_note_headline(
@@ -235,6 +277,7 @@ def guard_screening_snapshot_export(
         signal=screen_signal,
         research_verdict=str(research_verdict) if research_verdict else None,
         adjusted_signal=adjusted_str,
+        research_risk_level=str(research_risk) if research_risk is not None else None,
     )
     updated["action_note"] = action_note
     updated["summary"] = _rewrite_summary_headline(
@@ -242,6 +285,7 @@ def guard_screening_snapshot_export(
         signal=screen_signal,
         research_verdict=str(research_verdict) if research_verdict else None,
         adjusted_signal=adjusted_str,
+        research_risk_level=str(research_risk) if research_risk is not None else None,
     )
 
     from value_investor.scoring.fcf import append_fcf_divergence_to_action_note
