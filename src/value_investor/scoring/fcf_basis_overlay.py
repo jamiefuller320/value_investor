@@ -8,7 +8,9 @@ from typing import Any
 import pandas as pd
 
 from value_investor.scoring.fcf import (
+    _float_or_none,
     fcf_action_note_mismatch,
+    fcf_basis_definition_divergence,
     fcf_filing_screen_mismatch,
     reconcile_fcf_for_ticker,
     screen_ttm_from_row,
@@ -386,7 +388,6 @@ def enrich_signals_with_run_history_fcf_action_notes(
         extract_gross_cash_from_operations_for_ticker,
         labelled_fcf_dividend_coverage_for_snapshot,
         load_cached_financials,
-        ocf_definition_diverges,
         overlay_free_cashflow_from_bundle,
         reconcile_fcf_for_ticker,
     )
@@ -465,12 +466,23 @@ def enrich_signals_with_run_history_fcf_action_notes(
                 if fcf_dividend_coverage_gross is None:
                     fcf_dividend_coverage_gross = coverage.get("fcf_dividend_coverage_gross")
 
+        filing_currency = str(fcf_bundle.get("currency") or "GBP")
         fcf_definition_divergence = (
             bool(definition_div_raw)
             if definition_div_raw is not None
             and not (isinstance(definition_div_raw, float) and pd.isna(definition_div_raw))
-            else ocf_definition_diverges(operating_cashflow, operating_cashflow_gross)
+            else fcf_basis_definition_divergence(
+                operating_cashflow=operating_cashflow,
+                operating_cashflow_gross=operating_cashflow_gross,
+                filing_aligned=_float_or_none(fcf_bundle.get("filing_aligned")),
+                screen_ttm=screen_ttm,
+                company_adjusted=_float_or_none(fcf_bundle.get("company_adjusted")),
+                filing_currency=filing_currency,
+                company_adjusted_currency=fcf_bundle.get("company_adjusted_currency"),
+            )
         )
+        if bool(fcf_bundle.get("fcf_definition_divergence")):
+            fcf_definition_divergence = True
         divergence_flag_raw = row.get("fcf_divergence_flagged")
         fcf_divergence_flagged = (
             bool(divergence_flag_raw)
@@ -478,6 +490,16 @@ def enrich_signals_with_run_history_fcf_action_notes(
             and not (isinstance(divergence_flag_raw, float) and pd.isna(divergence_flag_raw))
             else bool(fcf_bundle.get("fcf_divergence_flagged"))
         )
+        if fcf_action_note_mismatch(
+            filing_aligned=fcf_bundle.get("filing_aligned"),
+            screen_ttm=screen_ttm,
+            company_adjusted=fcf_bundle.get("company_adjusted"),
+            filing_currency=filing_currency,
+            company_adjusted_currency=fcf_bundle.get("company_adjusted_currency"),
+            divergence_flagged=bool(fcf_bundle.get("divergence_flagged")),
+            fcf_definition_divergence=fcf_definition_divergence,
+        ):
+            fcf_divergence_flagged = True
 
         for col in (
             "fcf_definition_divergence",

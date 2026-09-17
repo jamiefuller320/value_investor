@@ -1364,12 +1364,17 @@ def fcf_yield_pass_suppressed(
     company_adjusted_currency: str | None = None,
     filing_currency: str = "USD",
     fcf_yield_unit_fx_error: bool = False,
+    fcf_divergence_flagged: bool = False,
+    fcf_definition_divergence: bool = False,
 ) -> bool:
     """True when FCF Yield pass should be suppressed due to basis divergence."""
     if fcf_yield_unit_fx_error:
         return True
-    if not divergence_flagged or company_adjusted is None:
+    basis_unresolved = fcf_definition_divergence or fcf_divergence_flagged or divergence_flagged
+    if not basis_unresolved:
         return False
+    if company_adjusted is None:
+        return True
     return not fcf_within_company_tolerance(
         canonical,
         company_adjusted,
@@ -1501,6 +1506,8 @@ def suppress_fcf_yield_passes(
             company_adjusted_currency=bundle.get("company_adjusted_currency"),
             filing_currency=str(bundle.get("currency") or "USD"),
             fcf_yield_unit_fx_error=unit_fx_error,
+            fcf_divergence_flagged=bool(bundle.get("fcf_divergence_flagged")),
+            fcf_definition_divergence=bool(bundle.get("fcf_definition_divergence")),
         ):
             continue
 
@@ -1781,6 +1788,18 @@ def reconcile_fcf(
         else None
     )
 
+    fcf_definition_divergence = fcf_basis_definition_divergence(
+        operating_cashflow=_float_or_none(cashflow_metrics.get("operating_cashflow")),
+        operating_cashflow_gross=None,
+        filing_aligned=filing_aligned,
+        screen_ttm=screen_ttm,
+        company_adjusted=company_adjusted,
+        filing_currency=currency,
+        company_adjusted_currency=company_adjusted_currency,
+    )
+    if ttm_suppressed_mismatch or filing_screen_mismatch or fcf_divergence_flagged:
+        fcf_definition_divergence = True
+
     return {
         "canonical": canonical,
         "source": source,
@@ -1792,6 +1811,7 @@ def reconcile_fcf(
         "company_adjusted_currency": company_adjusted_currency,
         "divergence_flagged": divergence_flagged,
         "fcf_divergence_flagged": fcf_divergence_flagged,
+        "fcf_definition_divergence": fcf_definition_divergence,
         "filing_screen_mismatch": filing_screen_mismatch,
         "ttm_suppressed_screen_filing_mismatch": ttm_suppressed_mismatch,
         "bridge_resolved": bool(bridge_resolved) or auto_policy_resolved,

@@ -3041,6 +3041,83 @@ def test_fcf_yield_pass_suppressed_when_divergence_exceeds_company_tolerance():
     )
 
 
+def test_fcf_yield_pass_suppressed_on_jd_style_universe_divergence():
+    """462m company KPI vs 830m screen vs 956m Yahoo must fail-closed without 50% pair."""
+    assert fcf_yield_pass_suppressed(
+        divergence_flagged=False,
+        fcf_divergence_flagged=True,
+        fcf_definition_divergence=True,
+        canonical=830_000_000.0,
+        company_adjusted=462_000_000.0,
+        company_adjusted_currency="GBP",
+        filing_currency="GBP",
+    )
+
+
+def test_suppress_fcf_yield_jd_style_three_way_bases(tmp_path: Path):
+    sources = tmp_path / "research" / "JD.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    body_path = filings / "fy2025_results.txt"
+    body_path.write_text(
+        "Group free cash flow of £462.0m in the period.",
+        encoding="utf-8",
+    )
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "JD.L",
+                "quarterly_cashflow": {},
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 1_200_000_000.0,
+                        "Capital Expenditure": -370_000_000.0,
+                        "Free Cash Flow": 830_000_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "published_at": "2025-04-01T08:00:00Z",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "JD.L",
+                "free_cashflow": 956_000_000.0,
+                "free_cashflow_screen_ttm": 956_000_000.0,
+                "market_cap": 4_460_000_000.0,
+            }
+        ]
+    )
+    universe = enrich_universe_with_canonical_fcf(universe, tmp_path)
+    universe = enrich_universe_with_filing_metrics(universe, tmp_path)
+    assert universe.iloc[0]["fcf_definition_divergence"] is True
+
+    model_results = evaluate_universe(universe, models=[FCFYieldModel()])
+    fcf_yield_before = model_results.loc[model_results["model_id"] == "fcf_yield", "passed"].iloc[0]
+    assert bool(fcf_yield_before) is True
+
+    model_results = suppress_fcf_yield_passes(model_results, universe, output_dir=tmp_path)
+    fcf_yield = model_results.loc[model_results["model_id"] == "fcf_yield"].iloc[0]
+    assert bool(fcf_yield["passed"]) is False
+    assert "FCF yield suppressed" in str(fcf_yield["failed_criteria"])
+
+
 def test_extract_cashflow_metrics_use_ocf_capex_for_prior_year():
     financials = {
         "cash_flow": {

@@ -4540,3 +4540,71 @@ def test_honour_and_to_dict_backfill_structured_fcf_from_note():
     snapshot = report.to_dict()
     assert snapshot["fcf"]["filing_aligned"] == pytest.approx(192_100_000.0)
     assert snapshot["fcf"]["screen_ttm"] == pytest.approx(353_200_000.0)
+
+
+def test_guard_screening_export_jd_style_three_way_fcf(tmp_path: Path):
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    sources = tmp_path / "research" / "JD.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    body_path = filings / "fy2025_results.txt"
+    body_path.write_text(
+        "Group free cash flow of £462.0m in the period.",
+        encoding="utf-8",
+    )
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "JD.L",
+                "quarterly_cashflow": {},
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 1_200_000_000.0,
+                        "Capital Expenditure": -370_000_000.0,
+                        "Free Cash Flow": 830_000_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "published_at": "2025-04-01T08:00:00Z",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    snapshot = {
+        "ticker": "JD.L",
+        "name": "JD Sports Fashion Plc",
+        "sector": "Consumer Cyclical",
+        "signal": "buy",
+        "adjusted_signal": "hold",
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": True,
+        "conviction_score": 0.68,
+        "free_cashflow_screen_ttm": 956_000_000.0,
+        "free_cashflow": 830_000_000.0,
+        "action_note": "Buy — neutral timing",
+        "summary": "Buy (11/22 models).",
+        "failed_models": [],
+        "key_metrics": {"FCF": 830_000_000.0},
+    }
+
+    guarded = guard_screening_snapshot_export(snapshot, output_dir=tmp_path)
+
+    assert guarded["fcf_definition_divergence"] is True
+    assert guarded["fcf_divergence_flagged"] is True
+    assert "fcf basis mismatch" in guarded["action_note"].lower()
+    assert "462" in guarded["action_note"] or "£462" in guarded["action_note"]

@@ -78,6 +78,10 @@ from value_investor.scoring.quality_family_avoid_gate_overlay import (
 from value_investor.scoring.quality_garp_roe_gate import (
     suppress_quality_garp_inconsistent_passes,
 )
+from value_investor.scoring.screening_export_guard import (
+    guard_signals_dataframe,
+    install_screening_export_guard_hooks,
+)
 from value_investor.scoring.sector_overrides import apply_sector_overrides
 from value_investor.scoring.snapshot import save_run_snapshot
 from value_investor.scoring.uk_contractor_overlay import (
@@ -203,6 +207,7 @@ try:
     from value_investor.summary import ensure_fcf_export_hooks
 
     ensure_fcf_export_hooks()
+    install_screening_export_guard_hooks()
 except ImportError:
     pass
 
@@ -500,6 +505,11 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
         output_dir=output_dir,
     )
     signals_out = honour_fcf_action_notes_on_signals(signals_out)
+    signals_out = guard_signals_dataframe(
+        signals_out,
+        result.model_results,
+        output_dir=output_dir,
+    )
     history = load_signal_history(output_dir)
     signals_out = enrich_signals_with_conviction_timing_overlay(
         signals_out,
