@@ -3768,6 +3768,63 @@ function renderAutomation(data) {
 let lifecycleMarketId = null;
 let lifecycleTrackId = null;
 
+const LIFECYCLE_CHIP_SORT_KEY = "ftseValueInvestor.lifecycleChipSort.v1";
+const LIFECYCLE_CHIP_SORT_MODES = ["board", "alpha", "stage"];
+
+function loadLifecycleChipSort() {
+  try {
+    const saved = localStorage.getItem(LIFECYCLE_CHIP_SORT_KEY);
+    if (LIFECYCLE_CHIP_SORT_MODES.includes(saved)) return saved;
+  } catch {
+    /* ignore */
+  }
+  return "board";
+}
+
+function saveLifecycleChipSort(mode) {
+  try {
+    localStorage.setItem(LIFECYCLE_CHIP_SORT_KEY, mode);
+  } catch {
+    /* ignore */
+  }
+}
+
+let lifecycleChipSort = loadLifecycleChipSort();
+
+function sortLifecycleCards(shown, mode) {
+  const rows = Array.isArray(shown) ? shown.slice() : [];
+  if (mode === "alpha") {
+    rows.sort((a, b) =>
+      String(a.ticker || "").localeCompare(String(b.ticker || ""), undefined, {
+        sensitivity: "base",
+      })
+    );
+    return rows;
+  }
+  if (mode === "stage") {
+    rows.sort((a, b) => {
+      const ad = a.days_in_column;
+      const bd = b.days_in_column;
+      const aMissing = ad == null || Number.isNaN(Number(ad));
+      const bMissing = bd == null || Number.isNaN(Number(bd));
+      if (aMissing && bMissing) {
+        return String(a.ticker || "").localeCompare(String(b.ticker || ""), undefined, {
+          sensitivity: "base",
+        });
+      }
+      if (aMissing) return 1;
+      if (bMissing) return -1;
+      const delta = Number(bd) - Number(ad);
+      if (delta !== 0) return delta;
+      return String(a.ticker || "").localeCompare(String(b.ticker || ""), undefined, {
+        sensitivity: "base",
+      });
+    });
+    return rows;
+  }
+  return rows;
+}
+
 function parseDashboardHash() {
   const raw = String(location.hash || "").replace(/^#/, "").trim();
   if (!raw) return null;
@@ -4446,10 +4503,26 @@ function renderLifecycle(data) {
     })
     .join("");
 
+  const sortMode = LIFECYCLE_CHIP_SORT_MODES.includes(lifecycleChipSort)
+    ? lifecycleChipSort
+    : "board";
+  lifecycleChipSort = sortMode;
+  const sortOptions = [
+    { id: "board", label: "Board order" },
+    { id: "alpha", label: "A–Z" },
+    { id: "stage", label: "Time in stage" },
+  ]
+    .map(
+      (row) =>
+        `<option value="${esc(row.id)}"${row.id === sortMode ? " selected" : ""}>${esc(row.label)}</option>`
+    )
+    .join("");
+
   const columnsHtml = colDefs
     .map((col) => {
       const packed = trackColumns[col.id] || { count: 0, shown: [], truncated: 0 };
-      const cards = (packed.shown || []).map(lifecycleTickerCard).join("");
+      const shown = sortLifecycleCards(packed.shown || [], sortMode);
+      const cards = shown.map(lifecycleTickerCard).join("");
       const more = packed.truncated
         ? `<p class="small muted lifecycle-truncated">+${packed.truncated} more</p>`
         : "";
@@ -4479,9 +4552,14 @@ function renderLifecycle(data) {
             ${esc(board.note || "One market at a time — screen names plus the selected paper book.")}
           </p>
         </div>
-        <label class="small">Market
-          <select id="lifecycle-market-select">${marketOptions}</select>
-        </label>
+        <div class="lifecycle-board-controls">
+          <label class="small">Market
+            <select id="lifecycle-market-select">${marketOptions}</select>
+          </label>
+          <label class="small">Sort chips
+            <select id="lifecycle-chip-sort">${sortOptions}</select>
+          </label>
+        </div>
       </div>
       <div class="tabs lifecycle-market-pills">${marketPills}</div>
       <div class="tabs lifecycle-track-pills">${trackPills}</div>
@@ -4527,6 +4605,13 @@ function bindLifecyclePanel() {
       }
     });
     panel.addEventListener("change", (event) => {
+      if (event.target.id === "lifecycle-chip-sort") {
+        const next = event.target.value;
+        lifecycleChipSort = LIFECYCLE_CHIP_SORT_MODES.includes(next) ? next : "board";
+        saveLifecycleChipSort(lifecycleChipSort);
+        renderLifecycle(dashboardData);
+        return;
+      }
       if (event.target.id !== "lifecycle-market-select") return;
       lifecycleMarketId = event.target.value;
       lifecycleTrackId = null;

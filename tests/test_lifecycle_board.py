@@ -402,3 +402,7 @@ def test_dashboard_lifecycle_opens_experiment_cards():
     assert "async function mountPriceChart(body, report)" in charts
     assert "await mountPriceChart(body, report)" in charts
     assert "levelToggleBound" in charts
+    assert "function sortLifecycleCards(shown, mode)" in app
+    assert 'id="lifecycle-chip-sort"' in app
+    assert "LIFECYCLE_CHIP_SORT_KEY" in app
+    assert ".lifecycle-board-controls" in css
