@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-16T16:53:21+00:00",
-  "overall": "warn",
+  "generated_at": "2026-09-17T11:54:10+00:00",
+  "overall": "info",
   "progress": {
     "schema_version": 1,
-    "generated_at": "2026-09-16T16:53:21.380187+00:00",
+    "generated_at": "2026-09-17T11:54:10.155544+00:00",
     "current_focus": "stage_2b",
     "headline": "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
     "stages": [
@@ -52,11 +52,11 @@
       "library_graduated_count": 21,
       "library_focus_market": "euro_depth",
       "decision_review_applied": false,
-      "ai_excess_after_costs": -0.3153,
-      "rules_excess_after_costs": -0.3928,
+      "ai_excess_after_costs": -0.3181,
+      "rules_excess_after_costs": -0.3957,
       "ai_total_return": -0.3135,
       "rules_total_return": -0.3801,
-      "ops_overall": "warn",
+      "ops_overall": "ok",
       "zero_body_buy_tier": 0,
       "unmeasured_buy_tier": 0,
       "measured_tickers": 62,
@@ -68,11 +68,12 @@
         "FTSE 350 live screen and published dashboard are operational.",
         "Offline library: 21 graduated markets (focus: euro_depth).",
         "Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.",
-        "Engineering queue: 1 open, 14 merged supervised tasks.",
-        "AI-judgment track beating rules control (-31.5% vs -39.3% excess)."
+        "Engineering queue: 2 open, 19 merged supervised tasks.",
+        "AI-judgment track beating rules control (-31.8% vs -39.6% excess)."
       ],
       "gaps": [
-        "Primary AI track still below ^FTSE after costs (-31.5% excess; history still thin)."
+        "Primary AI track still below ^FTSE after costs (-31.8% excess; history still thin).",
+        "Published screen bundle dated 2026-09-15 — confirm Sunday refresh."
       ],
       "next_actions": [
         "Let the learning loop accumulate before adding tracks or knobs.",
@@ -85,15 +86,15 @@
       "stalled": false,
       "zero_body_buy_tier": 0,
       "health": {
-        "snapshot_at": "2026-09-16T16:11:26.103562+00:00",
+        "snapshot_at": "2026-09-17T07:37:17.511361+00:00",
         "buy_tier_count": 62,
         "measured_tickers": 62,
         "unmeasured_buy_tier": 0,
         "unmeasured_tickers": [],
         "zero_body_buy_tier": 0,
         "zero_body_tickers": [],
-        "indexed_without_body": 28,
-        "filings_with_body": 4162
+        "indexed_without_body": 36,
+        "filings_with_body": 4142
       },
       "summary": "Live buy-tier ingest now canonicalises under docs/data/research/, bootstraps missing indexes on Sunday/weekday passes, and sanitises mis-attributed RNS rows before refetching bodies.",
       "fixes": [
@@ -1902,6 +1903,20 @@
           "capacity",
           "news",
           "not-now"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "N133",
+        "title": "PM auto-authors workflow_failure code patches",
+        "summary": "Do not let project-traffic invent/merge code fixes for failing workflows. Keep supervised engineering-agent for CurlError/timeout root causes; PM only cancels recovered workflow_failure rows and remediates queue bookkeeping.",
+        "category": "not_now",
+        "section": "ops",
+        "revisit_when": "After cancel_recovered_workflow_failure has proven stable in production and L393 EOD PM scope is revisited",
+        "tags": [
+          "pm",
+          "project-traffic",
+          "workflow_failure"
         ],
         "status": "open"
       }
@@ -5855,6 +5870,33 @@
           "ops"
         ],
         "status": "open"
+      },
+      {
+        "id": "L409",
+        "title": "PM auto-rerun ingest-loop once on persistent red without success",
+        "summary": "When cancel-on-heal finds no later success, optionally dispatch one force=true ingest-loop rerun (capped) before leaving a workflow_failure eng task open. Do not invent code patches.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "After budget-includes-discovery + timeout skip-draft have a green week of ingest-loop",
+        "tags": [
+          "pm",
+          "ingest-loop",
+          "workflow_failure"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L410",
+        "title": "SIGTERM flush ingest_loop.json on outer wall-clock kill",
+        "summary": "Outer timeout 75m only helps commit/chain if JSON already exists. Add signal handler or finally-block checkpoint so mid-ticker kills still emit partial JSON.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "If ingest-loop still fails with exit 124 and empty /tmp/ingest_loop.json after discovery budget lands",
+        "tags": [
+          "ingest-loop",
+          "timeout"
+        ],
+        "status": "open"
       }
     ],
     "defer_security": [
@@ -6150,50 +6192,44 @@
     },
     "engineering_open": [
       {
-        "id": "eng-20260916-04",
+        "id": "eng-20260917-05",
         "source": "engineering",
-        "title": "Flag when [2/2]",
-        "summary": "First-principle slice 2/2 of: Enable cyclical_exposure for UK heavyside construction-materials names when GB volume language and cement-output “historic lows” are in the same tape. Flag when. no topic map — cohesion bypass keeps full area allowlist",
-        "status": "pr_open",
+        "title": "Relabel `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income (MEGP: no adjusted EPS in 67 filing bodies) to stop false “filing core” Lynch PEG fa",
+        "summary": "Relabel `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income (MEGP: no adjusted EPS in 67 filing bodies) to stop false “filing core” Lynch PEG failures and >300 bps divergence flags. (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+        "status": "open",
+        "added_at": null,
+        "area": "scoring"
+      },
+      {
+        "id": "eng-20260917-01",
+        "source": "engineering",
+        "title": "Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_defi",
+        "summary": "Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_definition_divergence true whenever filing / TTM / adj disagree. Treat HORECA linen rental as cyclical/hospitality exposure. Populate failed_models for the 14/22 non-passes. Do not keep headline strong_buy when research_verdict is already accumulate. Stop splicing prior-memo text into action_note (the Accumulate paragraph is repeated). Fix co",
+        "status": "open",
         "added_at": null,
         "area": "scoring"
       }
     ],
     "counts": {
       "defer_now": 0,
-      "defer_not_now": 123,
-      "defer_later": 271,
+      "defer_not_now": 124,
+      "defer_later": 273,
       "defer_security": 5,
       "open_fragments": 20,
       "proposed_total": 1,
-      "engineering_open": 1
+      "engineering_open": 2
     }
   },
   "integration": {
-    "overall": "warn",
-    "checks": [
-      {
-        "id": "ingest_loop_hit_runtime_cutoff",
-        "severity": "warn",
-        "category": "ingest",
-        "title": "Ingest loop hit runtime cutoff",
-        "summary": "Last run deferred 57 ticker(s) after completing 5 (per_ticker_budget) — backlog resume or chained chunk should drain remainder."
-      },
-      {
-        "id": "orphaned_pr_open_engineering_tasks",
-        "severity": "warn",
-        "category": "engineering",
-        "title": "Orphaned pr_open engineering tasks",
-        "summary": "Tasks without matching open PR: eng-20260916-04"
-      }
-    ],
+    "overall": "ok",
+    "checks": [],
     "queue_status": {
-      "open_count": 0,
-      "pr_open_count": 1,
-      "parked_count": 5,
-      "merged_count": 14,
+      "open_count": 2,
+      "pr_open_count": 0,
+      "parked_count": 6,
+      "merged_count": 19,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260917-05",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -6209,7 +6245,7 @@
         "severity": "info",
         "category": "doctrine",
         "title": "Stage 2b focus aligned with primary learning gap",
-        "summary": "North-star focus is stage 2b while AI-judgment excess after costs is still negative (-31.5%). Breadth expansion and new tracks should stay deferred."
+        "summary": "North-star focus is stage 2b while AI-judgment excess after costs is still negative (-31.8%). Breadth expansion and new tracks should stay deferred."
       },
       {
         "id": "library_ahead_of_live",
@@ -6230,12 +6266,12 @@
         "severity": "info",
         "category": "join_up",
         "title": "Compile cap dropped lower-priority candidates",
-        "summary": "233 compiled candidate(s) omitted by max_tasks=8 (post-run plan items kept first). research_model_suggestions: Flag when [2/2]; research_model_suggestions: Keep the dividend-yield overlay result (FCF Yield / earnings; research_model_suggestions: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when s When the priority engineering queue is idle, `ftse-engineering try-compile-cap-drain --apply` queues one backlog item at a time (above parked hunter)."
+        "summary": "228 compiled candidate(s) omitted by max_tasks=8 (post-run plan items kept first). research_model_suggestions: Flag when [2/2]; research_model_suggestions: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when s; research_model_suggestions: Relabel `adjusted_eps_growth_pct` when sourced from Yahoo No When the priority engineering queue is idle, `ftse-engineering try-compile-cap-drain --apply` queues up to 2 open backlog items (above parked hunter; near-dups coalesced)."
       }
     ]
   },
   "so_what": {
-    "generated_at": "2026-09-16T16:53:21Z",
+    "generated_at": "2026-09-17T11:54:10Z",
     "counts": {
       "findings": 0,
       "auto_queue": 0,
