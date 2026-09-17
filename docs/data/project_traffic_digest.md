@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-16T20:20:35.725686+00:00`
+Generated: `2026-09-17T07:47:00.497170+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -32,10 +32,9 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `human`/human PR #675 `eng-20260916-04` — Flag when [2/2]
-- `ingest_narrow`/verified PR #674 `eng-20260916-03` — Workflow fix: ingest-loop failure on main
-- `human`/human PR #669 `eng-20260916-02` — Hunt fetchable IR source for parked euro_stoxx50 leftover SAN.PA
-- `human`/human PR #666 `eng-20260916-01` — Fail-closed or flag when screen FCF (1,059m) disagrees with Yahoo/filing FCF (852m) while TTM is suppressed and cashflow_metrics is null. Turn on healthcare_pri
+- `human`/human PR #681 `eng-20260917-03` — Set fcf_definition_divergence whenever retail ~£574m, Yahoo £923m and screen £645m disagree; do not pass FCF Yield at 8.8% or High Dividend Yield at 4.1% withou
+- `parked_hunter`/verified PR #680 `eng-20260916-06` — Hunt fetchable IR source for parked asx200 leftover BPT.AX
+- `compile_cap_drain`/verified PR #679 `eng-20260917-02` — Set fcf_definition_divergence whenever filing ~£462m, Yahoo £956m and screen £830m disagree; do not pass FCF Yield at 21.4% without stating the basis [1/2]
 
 ## PR fix occasions — common failure reasons
 - Occasion count: 1
