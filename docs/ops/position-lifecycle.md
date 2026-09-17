@@ -162,8 +162,14 @@ and other-market chips), not only buy-tier.
 
 Use **Sort chips** on the board header to reorder shown cards client-side:
 **Board order** (default conviction / opened-sold pack), **A–Z**, or **Time in
-stage** (longest `days_in_column` first). Preference is stored in
+stage**. Use **Order** for ascending vs descending (time in stage defaults to
+longest-first / descending until you change it). Preference is stored in
 `localStorage` and does not change the published payload.
+
+Lifecycle charts use the same screener price chart: buy/target/stop when the
+screen has a trade plan (buy-tier), rolling SMA overlays after chart publish,
+signal-since / opened markers, and paper **book cost** when the holding card
+includes `avg_cost`.
 
 Held, sold, and screen name cards use a green→red **time-in-stage** heatmap:
 ≤7d fresh, ≤3w, ≤6w, ≤8w, then red beyond 8 weeks. Held columns clock

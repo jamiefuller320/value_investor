@@ -160,6 +160,7 @@ def test_held_name_is_not_also_on_the_screen_funnel(tmp_path: Path):
     hold_card = next(card for card in columns["just_bought"]["shown"] if card["ticker"] == "HOLD.L")
     assert hold_card["days_in_column"] == 3
     assert hold_card["tenure_band"] == "fresh"
+    assert hold_card["avg_cost"] == 1.0
     sold_card = next(card for card in columns["just_sold"]["shown"] if card["ticker"] == "SOLD.L")
     assert sold_card["days_in_column"] == 4
     assert sold_card["tenure_band"] == "fresh"
@@ -399,10 +400,17 @@ def test_dashboard_lifecycle_opens_experiment_cards():
     assert "data-lifecycle-chart-mount" in app
     assert 'id="lifecycle-ticker-dialog"' in html
     assert ".lifecycle-ticker-chart" in css
-    assert "async function mountPriceChart(body, report)" in charts
+    assert "async function mountPriceChart(body, report)" in charts or "async function mountPriceChart(body, report, overlays)" in charts
     assert "await mountPriceChart(body, report)" in charts
     assert "levelToggleBound" in charts
-    assert "function sortLifecycleCards(shown, mode)" in app
+    assert "function sortLifecycleCards(shown, mode, dir)" in app
     assert 'id="lifecycle-chip-sort"' in app
     assert "LIFECYCLE_CHIP_SORT_KEY" in app
     assert ".lifecycle-board-controls" in css
+    assert 'id="lifecycle-chip-sort-dir"' in app
+    assert "LIFECYCLE_CHIP_SORT_DIR_KEY" in app
+    assert "resolveLifecycleChipSortDir" in app
+    assert "sma50_series" in charts
+    assert "book_cost" in charts
+    assert "mergeChartLevels" in charts
+    assert "async function mountPriceChart(body, report, overlays)" in charts
