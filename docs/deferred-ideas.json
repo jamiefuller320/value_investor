@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-17T11:26:33+00:00",
+  "updated_at": "2026-09-17T14:31:06+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9265,6 +9265,24 @@
       "source": "PR cursor/narrow-bypass-split-and-diff-gate-bb45",
       "added_at": "2026-09-17T11:26:29+00:00",
       "updated_at": "2026-09-17T11:26:33+00:00"
+    },
+    {
+      "id": "L415",
+      "category": "later",
+      "section": "ops",
+      "title": "Engineering queue: orphan reconcile races away fresh pr_open stamps",
+      "summary": "When mark-pr_open lands with branch_name but open_prs snapshot misses the just-opened PR (or pr_number null), recover-queue resets pr_open\u2192open and clears branch. Live: eng-20260917-06/#686 CI green undrafted but try-auto-merge refuses (status open expected pr_open); agent re-dispatch then fails refusing to delete the live branch. Fix: require open_prs freshness / match by branch before reset; stamp pr_number with pr_open; or skip orphan reset when gh sees an open eng PR for that branch.",
+      "revisit_when": "Next eng PR is CI-green undrafted with auto_merge but stuck on status open\u2260pr_open, or human asks to fix queue sync / #686 stamp lag",
+      "tags": [
+        "engineering-queue",
+        "pr_open",
+        "orphan-reconcile",
+        "auto-merge",
+        "race"
+      ],
+      "status": "open",
+      "source": "traffic ruleset observation / #686",
+      "added_at": "2026-09-17T14:31:06+00:00"
     }
   ],
   "fragments": [

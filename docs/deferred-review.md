@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-17T11:26:33+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-17T14:31:06+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -475,6 +475,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L406 | **Dashboard surface for PR fix common issues** | Expose docs/data/pr_fix_occasions.json common_issues on the Automation / ops dashboard so monthly review does not require CLI-only inspection. | pr_fix_occasions has ≥20 occasions or monthly checklist review feels CLI-heavy |
 | L409 | **PM auto-rerun ingest-loop once on persistent red without success** | When cancel-on-heal finds no later success, optionally dispatch one force=true ingest-loop rerun (capped) before leaving a workflow_failure eng task open. Do not invent code patches. | After budget-includes-discovery + timeout skip-draft have a green week of ingest-loop |
 | L410 | **SIGTERM flush ingest_loop.json on outer wall-clock kill** | Outer timeout 75m only helps commit/chain if JSON already exists. Add signal handler or finally-block checkpoint so mid-ticker kills still emit partial JSON. | If ingest-loop still fails with exit 124 and empty /tmp/ingest_loop.json after discovery budget lands |
+| L415 | **Engineering queue: orphan reconcile races away fresh pr_open stamps** | When mark-pr_open lands with branch_name but open_prs snapshot misses the just-opened PR (or pr_number null), recover-queue resets pr_open→open and clears branch. Live: eng-20260917-06/#686 CI green undrafted but try-auto-merge refuses (status open expected pr_open); agent re-dispatch then fails refusing to delete the live branch. Fix: require open_prs freshness / match by branch before reset; stamp pr_number with pr_open; or skip orphan reset when gh sees an open eng PR for that branch. | Next eng PR is CI-green undrafted with auto_merge but stuck on status open≠pr_open, or human asks to fix queue sync / #686 stamp lag |
 
 ---
 
