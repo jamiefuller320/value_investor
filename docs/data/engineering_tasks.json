@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-16T17:48:45.711973+00:00",
+  "compiled_at": "2026-09-17T00:00:46.460355+00:00",
   "run_at": null,
-  "task_count": 23,
+  "task_count": 24,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -636,6 +636,59 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/657",
       "pr_number": 657,
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
+    },
+    {
+      "id": "eng-20260917-01",
+      "area": "scoring",
+      "title": "Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_defi",
+      "summary": "Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_definition_divergence true whenever filing / TTM / adj disagree. Treat HORECA linen rental as cyclical/hospitality exposure. Populate failed_models for the 14/22 non-passes. Do not keep headline strong_buy when research_verdict is already accumulate. Stop splicing prior-memo text into action_note (the Accumulate paragraph is repeated). Fix co",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "JSG.L"
+        ],
+        "recorded_at": "2026-09-04T19:59:54.897164+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "topic paths 10 > 8 — cohesion bypass (do not split one objective)",
+        "narrow_parent_title": "Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_defi",
+        "narrow_cohesion_bypass": true,
+        "narrow_topics": [
+          "fcf",
+          "dividend"
+        ],
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/scoring/fcf.py",
+        "src/value_investor/scoring/fcf_basis_overlay.py",
+        "src/value_investor/scoring/fcf_three_way_conviction_overlay.py",
+        "src/value_investor/scoring/screening_export_guard.py",
+        "src/value_investor/scoring/snapshot.py",
+        "src/value_investor/pipeline.py",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py",
+        "src/value_investor/scoring/dividend_sustainability_overlay.py",
+        "src/value_investor/scoring/dividend_yield_overlay.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260916-05",
@@ -1313,7 +1366,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-16T23:16:25.993122+00:00",
+    "evaluated_at": "2026-09-17T00:00:42.603369+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
@@ -1329,7 +1382,7 @@
   },
   "reprioritized_at": "2026-09-16T10:07:10.046741+00:00",
   "reprioritized_after_task": "eng-20260916-02",
-  "micro_compile_source": "parked_source_hunter",
+  "micro_compile_source": "compile_cap_drain",
   "library_market_id": "asx200",
   "hunter_ticker": "BPT.AX",
   "traffic_control": {

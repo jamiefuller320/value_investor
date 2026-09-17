@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-16T23:16:31.605515+00:00",
+  "generated_at": "2026-09-17T00:00:48.219128+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1174,16 +1174,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-16T17:48:45.711973+00:00",
-    "queue_ui_updated_at": "2026-09-16T23:16:31.535898+00:00",
-    "task_count": 23,
+    "compiled_at": "2026-09-17T00:00:46.460355+00:00",
+    "queue_ui_updated_at": "2026-09-17T00:00:48.127029+00:00",
+    "task_count": 24,
     "status": {
       "open_count": 2,
       "pr_open_count": 0,
-      "parked_count": 5,
+      "parked_count": 6,
       "merged_count": 15,
       "failed_count": 0,
-      "next_task_id": "eng-20260916-05",
+      "next_task_id": "eng-20260917-01",
       "in_flight_branch": "cursor/compile-cap-drain-throughput-f964",
       "in_flight_pr": 678,
       "spend_since_checkpoint_usd": 10.4,
@@ -1192,9 +1192,9 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260916-05",
+        "id": "eng-20260917-01",
         "area": "scoring",
-        "title": "Keep the dividend-yield overlay result (FCF Yield / earnings-quality fail → adjusted Buy) instead of letting prior-memo research_* lift the snapshot back to str",
+        "title": "Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_defi",
         "priority": "medium",
         "priority_score": 43.0,
         "status": "open",
@@ -1257,6 +1257,18 @@
         "priority_score": 96.0,
         "status": "parked",
         "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260916-05",
+        "area": "scoring",
+        "title": "Keep the dividend-yield overlay result (FCF Yield / earnings-quality fail → adjusted Buy) instead of letting prior-memo research_* lift the snapshot back to str",
+        "priority": "medium",
+        "priority_score": 43.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
         "pr_url": null,
         "pr_number": null,
         "branch_name": null
@@ -1567,7 +1579,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-16T23:16:31.605515+00:00",
+    "generated_at": "2026-09-17T00:00:48.219128+00:00",
     "overall": "active",
     "headline": "Merge lane active; agent lane active.",
     "merge_lane": {
@@ -1593,14 +1605,14 @@
       "pr_open_count": 0,
       "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260916-05",
+      "next_task_id": "eng-20260917-01",
       "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
       "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-16T23:16:25.993122+00:00"
+      "evaluated_at": "2026-09-17T00:00:42.603369+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1613,52 +1625,7 @@
       "overall": "warn",
       "should_dispatch_engineering": true
     },
-    "merges_today": [
-      {
-        "task_id": "eng-20260916-04",
-        "title": "Flag when [2/2]",
-        "area": "scoring",
-        "pr_number": 675,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/675",
-        "merged_at": "2026-09-16T17:27:57.769655+00:00",
-        "merge_class": "human",
-        "auto_merge": false,
-        "independently_verified": false
-      },
-      {
-        "task_id": "eng-20260916-03",
-        "title": "Workflow fix: ingest-loop failure on main",
-        "area": "ingest",
-        "pr_number": 674,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/674",
-        "merged_at": "2026-09-16T16:11:25.884730+00:00",
-        "merge_class": "ingest_narrow",
-        "auto_merge": false,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260916-02",
-        "title": "Hunt fetchable IR source for parked euro_stoxx50 leftover SAN.PA",
-        "area": "ingest",
-        "pr_number": 669,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/669",
-        "merged_at": "2026-09-16T10:14:09.610310+00:00",
-        "merge_class": "human",
-        "auto_merge": false,
-        "independently_verified": false
-      },
-      {
-        "task_id": "eng-20260916-01",
-        "title": "Fail-closed or flag when screen FCF (1,059m) disagrees with Yahoo/filing FCF (852m) while TTM is suppressed and cashflow_metrics is null. Turn on healthcare_pri",
-        "area": "scoring",
-        "pr_number": 666,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/666",
-        "merged_at": "2026-09-16T10:05:52.583749+00:00",
-        "merge_class": "human",
-        "auto_merge": false,
-        "independently_verified": false
-      }
-    ],
-    "verified_merges_today_count": 1
+    "merges_today": [],
+    "verified_merges_today_count": 0
   }
 }
