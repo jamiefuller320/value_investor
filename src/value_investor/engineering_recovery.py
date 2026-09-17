@@ -1095,11 +1095,7 @@ def _normalize_open_pr_row(pr: dict[str, Any], *, branch: str | None = None) -> 
     """Normalize gh/API PR payloads to the headRefName shape used by recover."""
     head = pr.get("head") if isinstance(pr.get("head"), dict) else {}
     head_ref = str(
-        branch
-        or pr.get("headRefName")
-        or pr.get("head_branch")
-        or head.get("ref")
-        or ""
+        branch or pr.get("headRefName") or pr.get("head_branch") or head.get("ref") or ""
     ).strip()
     number = pr.get("number")
     html_url = str(pr.get("html_url") or pr.get("url") or "").strip()
@@ -1171,9 +1167,7 @@ def list_pr_open_stamp_lag_tasks(
             branch = engineering_branch_for_task_id(task_id) or ""
         if not branch:
             continue
-        pr = _resolve_open_pr_for_branch(
-            branch, open_prs=open_prs, repo=repo, token=token
-        )
+        pr = _resolve_open_pr_for_branch(branch, open_prs=open_prs, repo=repo, token=token)
         if not pr:
             continue
         lagged.append(

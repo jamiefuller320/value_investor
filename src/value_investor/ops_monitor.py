@@ -1481,9 +1481,7 @@ def apply_auto_fixes(
                     finding.fixed = True
                     finding.action_taken = action
         if recovery.restamped:
-            action = (
-                f"restamped open → pr_open from live PR: {', '.join(recovery.restamped)}"
-            )
+            action = f"restamped open → pr_open from live PR: {', '.join(recovery.restamped)}"
             results.append({"action": "recover_engineering_queue", "detail": action})
             from value_investor.engineering_recovery import PR_OPEN_STAMP_LAG_FINDING_TITLE
 

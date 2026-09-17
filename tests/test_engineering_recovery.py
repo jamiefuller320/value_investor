@@ -595,8 +595,7 @@ def test_reconcile_open_tasks_with_live_prs_restamps_cleared_branch(tmp_path: Pa
     tasks_path = tmp_path / "engineering_tasks.json"
     payload = {
         "tasks": [
-            _task("eng-20260917-06", status="open").to_dict()
-            | {"auto_merge": True},
+            _task("eng-20260917-06", status="open").to_dict() | {"auto_merge": True},
         ]
     }
     tasks_path.write_text(json.dumps(payload), encoding="utf-8")
@@ -618,9 +617,7 @@ def test_reconcile_open_tasks_with_live_prs_restamps_cleared_branch(tmp_path: Pa
     assert updated["pr_number"] == 686
 
 
-def test_recover_does_not_orphan_reset_when_live_lookup_finds_pr(
-    tmp_path: Path, monkeypatch
-):
+def test_recover_does_not_orphan_reset_when_live_lookup_finds_pr(tmp_path: Path, monkeypatch):
     """Stale empty open_prs snapshot must not clear a fresh pr_open stamp."""
     tasks_path = tmp_path / "engineering_tasks.json"
     payload = {
