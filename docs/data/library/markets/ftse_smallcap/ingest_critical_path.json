@@ -1,7 +1,9 @@
 {
   "market_id": "ftse_smallcap",
-  "assessed_at": "2026-09-16T13:37:13.356315+00:00",
-  "unmeasured": [],
+  "assessed_at": "2026-09-17T07:33:26.717030+00:00",
+  "unmeasured": [
+    "CLIG.L"
+  ],
   "zero_body": [],
   "indexed_without_body": [
     {
@@ -30,21 +32,9 @@
     },
     {
       "ticker": "APTD.L",
-      "indexed_without_body": 5,
-      "filings_total": 81,
+      "indexed_without_body": 6,
+      "filings_total": 82,
       "filings_with_body": 76
-    },
-    {
-      "ticker": "FOXT.L",
-      "indexed_without_body": 5,
-      "filings_total": 54,
-      "filings_with_body": 49
-    },
-    {
-      "ticker": "GLE.L",
-      "indexed_without_body": 5,
-      "filings_total": 59,
-      "filings_with_body": 54
     },
     {
       "ticker": "ULTP.L",
@@ -55,26 +45,27 @@
   ],
   "thin_need_discovery": [],
   "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "primary_blocker": "unmeasured",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
+    "CLIG.L",
     "BOOT.L",
     "DFS.L",
     "MER.L",
     "TPT.L",
     "APTD.L",
-    "FOXT.L",
-    "GLE.L",
     "ULTP.L"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (8 tickers, top: BOOT.L(8), DFS.L(8), MER.L(8), TPT.L(8), APTD.L(5))"
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (6 tickers, top: BOOT.L(8), DFS.L(8), MER.L(8), TPT.L(8), APTD.L(6))",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
-    "indexed_without_body_tickers": 8,
-    "indexed_without_body_rows": 52,
+    "indexed_without_body_tickers": 6,
+    "indexed_without_body_rows": 43,
     "thin_need_discovery": 0,
     "thin_need_bodies": 0
   }

@@ -1,104 +1,13 @@
 # Eni S.p.A. (ENI.MI) — Research memo
 
-_Version 1 · Updated 2026-07-25T18:39:17.481740+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-17T07:45:38.526126+00:00 · Mode: structured_verdict_
 
-## EXECUTIVE SUMMARY
-Eni screens as a **buy** on dividend yield (~5.0%), an exceptionally low PEGY (0.04), and financial-health metrics, with a composite score of 60% versus 53% sector-relative. The investment case rests on a cash-generative integrated oil and gas platform returning capital through dividends and buybacks whilst trading at modest multiples (P/E 21.3, P/B 1.3). FY 2025 results (fourth-quarter press release, February 2026) show resilient adjusted earnings, production growth, and gearing at a historically low 14–15% proforma, supporting the income-oriented screen. The central debate is whether post-2022 earnings normalisation and weak European chemicals/refining leave sufficient margin of safety, or whether portfolio monetisation (Plenitude, CCUS), upstream growth, and capital returns sustain the valuation. **Annual report and interim filing bodies are absent from the library**; only the Q4/FY 2025 results release is available as a primary source.
+_Phase B structured verdict (essay sections omitted on scheduled path)._
 
----
-
-## INVESTMENT THESIS
-For a value investor, Eni offers a rare combination of income and growth-at-a-reasonable-price characteristics within European energy. The quantitative screen passes three of four model families — **dividend, GARP, and risk** — with Neff PEGY, High Dividend Yield, Dividend Growth, and Financial Health all clearing thresholds. A 5.0% yield with demonstrated dividend continuity and an expanded 2026 buyback (4.8m shares repurchased in July 2026 per news) align with the capital-return discipline the screen favours.
-
-P/B of 1.3 and PEGY of 0.04 suggest the market prices limited growth (screen growth estimate: 1.0%) despite operational delivery: FY 2025 hydrocarbon production of 1.73 mln boe/d exceeded guidance, reserve replacement reached 167% organic, and six major projects started in the year. ROE of 5.9% is modest and reflects the earnings trough rather than structural impairment. Per the FY 2025 results release, net borrowings before lease liabilities fell to **€9.4bn** with proforma gearing of **14%**, consistent with the Financial Health pass.
-
-Business quality is adequate for a cyclical major: FY 2025 adjusted net cash before working-capital changes was **€12.5bn**, dividends and buybacks totalled **€4.98bn**, and management targets 2026 gross capex of **€7bn** with gearing of 10–15% (assuming Brent at $62/bbl). The buy signal is two weeks old and stable, though screen conviction remains low at 24% (building).
-
----
-
-## FINANCIAL REVIEW
-### Primary filing coverage
-
-The filings index (`regime = euro_filings`) contains **one document with a body extract**: the **Q4 and full-year 2025 results press release** (PR-2025-fourth-quarter-results.pdf, classified as `period: other`). **No annual report (e.g. 20-F), half-year report, or interim/quarterly filing body is indexed.** The release references Eni’s 2024 Annual Report on Form 20-F (filed 4 April 2025) but that document is not present in the library. Interim trends below therefore rely on the Q4/FY 2025 release for annual figures and on **Yahoo (`financials_annual.json`) for quarterly income only**, with fallback stated explicitly.
-
-### Full-year 2025 (primary: results release)
-
-| Metric | FY 2025 | FY 2024 | Change |
-|---|---:|---:|---|
-| Proforma adjusted EBIT | €12,223m | €14,322m | −15% |
-| Adjusted net profit (Eni shareholders) | €4,989m | €5,257m | −5% |
-| Reported net profit (Eni shareholders) | €2,608m | €2,624m | −1% |
-| Adjusted CFFO (before WC, replacement cost) | €12,496m | €13,590m | −8% |
-| Net cash from operations | €13,330m | €13,092m | +2% |
-| Organic capex | €8,521m | €8,804m | −3% |
-| Free cash flow | €5,371m | €3,806m | +41% |
-| Net borrowings (ex-lease, ex-IFRS 16) | €9,386m | €12,175m | −23% |
-| Gearing (ex-lease) | 15% | 18% | — |
-| Proforma gearing | 14% | — | — |
-| Hydrocarbon production | 1,728 kboe/d | 1,707 kboe/d | +1% |
-
-Revenue in the release is reported at segment level: group sales from operations **€82,151m** in FY 2025 versus **€88,797m** in FY 2024 (−7%). Profitability declined on weaker Brent (−14% to $69.06/bbl) and a stronger euro, partly offset by volume growth, cost discipline, and portfolio transactions (Ares into Plenitude €2bn, GIP into CCUS). Reported net profit was depressed by **€2,589m** of pre-tax special items, principally E&P impairments (€1,191m) and refining/chemicals write-downs (€905m).
-
-Segment adjusted EBIT (FY 2025): E&P **€11,163m** (−14%); GGP & Power **€1,392m** (+9%); Enilive & Plenitude **€1,208m** (+6%); Refining & Chemicals **−€689m** (loss narrowed from −€713m). Chemicals alone lost **€819m** on proforma adjusted basis.
-
-Balance sheet at 31 December 2025 (release): Eni shareholders’ equity **€47,940m** (down €4.8bn, mainly FX translation −€6.1bn and shareholder remuneration ~€5bn); total shareholders’ equity including minorities **€52,787m**; capital employed net **€67,873m**. Fixed assets fell €12bn on FX translation, disposals, and assets held for sale (Indonesia/Malaysia JV with Petronas, upstream minority stakes, Plenitude renewables).
-
-Cash returns: dividends plus buybacks **€4.98bn** (€3.08bn dividends, €1.90bn repurchases). Portfolio proceeds included KKR into Enilive (€3.57bn), Ares into Plenitude (€2bn), and asset disposals (€1.38bn).
-
-### Fourth quarter 2025 (primary: results release)
-
-Q4 showed operational resilience despite a 15% Brent decline and 9% EUR/USD appreciation: proforma adjusted EBIT **€2,865m** (+6% y-o-y); adjusted net profit (Eni shareholders) **€1,196m** (+35%); reported net profit **€90m** (−61%, reflecting €1,336m special charges). Hydrocarbon production averaged **1,839 kboe/d** (+7% y-o-y). Q4 adjusted CFFO before WC was **€3,010m** (+4%).
-
-### Interim / quarterly gap
-
-**No interim or Q1/Q2/Q3 2025 filing bodies are indexed.** Yahoo quarterly income (fallback) shows Q1 2026 revenue **€19.7bn** and group net income **€1.07bn**, but continuing-operations net income of only **€25m** after a **€1.25bn** discontinued-operations gain; Q4 2025 Yahoo net income **€543m** on revenue **€18.8bn**. These are unverified against filing text.
-
-News corroborates Q1 2026 earnings disappointment (“Eni Q1 Earnings Miss Estimates on Refining and Chemicals Loss”, 27 April 2026; “Eni raises 2026 buyback 90% after Q1 cash flow beats guidance”, 24 April 2026), but segment detail, covenant language, and pension/OPEB footnotes **cannot be verified** without annual or interim filing bodies.
-
-### Yahoo fallback (where filing lacks detail)
-
-For multi-year context only (not blended with filing figures): Yahoo shows revenue falling from **€132.5bn** (2022) to **€82.2bn** (2025), net income from **€13.9bn** to **€2.6bn**, and Yahoo FCF of **€4.1bn** (2025) versus **€5.4bn** in the release — a reconciliation gap likely reflecting definitional differences (organic capex, lease treatment, portfolio proceeds). The screening snapshot records FCF as **−€939m**, which conflicts with both sources; treat as unreliable pending reconciliation.
-
----
-
-## RISKS AND RED FLAGS
-**Primary data gap:** Only the Q4/FY 2025 results release is available as a filing body. Going-concern statements, litigation contingencies, covenant terms, and pension/OPEB actuarial disclosures **cannot be verified** from indexed sources. The release references legal provisions in adjusted cash-flow reconciliations but does not reproduce full footnotes.
-
-**Special items and impairments (filing):** FY 2025 pre-tax special charges of **€2,589m** include E&P property impairments (€570m price/reserve-related, €511m disposal-group alignment), chemicals plant impairments (€198m), refining stay-in-business write-downs (€253m), and environmental provisions (€306m in R&C, €57m in Enilive/Plenitude). Recurrence risk in a lower-price scenario is material.
-
-**Cyclical earnings:** Proforma adjusted EBIT fell 15% y-o-y despite production growth; Brent averaged $69/bbl in 2025 versus $81/bbl in 2024. Further commodity or EUR/USD weakness would pressure dividends and buybacks.
-
-**Downstream drag:** European chemicals remain in structural loss (FY 2025 adjusted loss **€819m**); refining recovery (+€130m adjusted EBIT) is margin-dependent and volatile. Q1 2026 earnings miss was attributed partly to refining/chemicals (news, April 2026).
-
-**Geopolitical and receivable risk:** Reuters reported Venezuela owed Eni c. **$3.3bn** at end-2025 (24 March 2026). Exposure spans Libya, Angola, Côte d’Ivoire, Mozambique, and Venezuela contract migration (23 July 2026). CEO comments (16 July 2026) highlight capital rotation toward Southeast Asia and Latin America amid Middle East shipping disruption.
-
-**Governance and ESG:** UN Special Rapporteur communication alleging complicity with crimes in Palestine (15 April 2026) adds reputational and regulatory overhang not captured by valuation screens.
-
-**State influence:** Partial Italian state linkage (not quantified in available sources) can affect dividend policy and strategic direction.
-
-**Forward-looking disclaimer (filing):** Management warns actual results may differ materially from targets on commodity prices, project timing, regulatory change, and macro conditions; quarterly results are not extrapolatable to full-year outcomes.
-
----
-
-## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate in depth but broad in scope**, dominated by earnings, capital returns, and project updates rather than management changes.
-
-**Strategy and capital returns:** Eni published its Capital Markets Update 2026–2030 (19 March 2026). Q1 2026 cash flow beat guidance, prompting a **90% increase in the 2026 buyback** (Investing.com, 24 April 2026). Buyback activity continued: **4.8m shares repurchased in July 2026** (Stock Titan, 15 July 2026) and **€100m / 4.26m shares in June 2026**. Dividend and shareholder remuneration policy updated (Eni, 21 July 2026).
-
-**Upstream growth:** Petronas JV for Indonesia/Malaysia satellite company (November 2025; FPSO construction started, Offshore Engineer, 24 July 2026). Baleine Phase 3 subsea EPC awarded to SLB/TechnipFMC (July 2026). Angola Greater PAJ investment (1 July 2026). Uruguay Block OFF-5 farm-in (June 2026). Gambia Block A1 exploration (8 June 2026). Saipem drilling contract in Côte d’Ivoire, $260m (24 July 2026).
-
-**Transition:** Mangystau hybrid power plant first gas output, Kazakhstan (23 July 2026). Brindisi battery plant and Chilean lithium stake (9 July 2026). BMW renewable diesel alliance (15 July 2026). CCUS JV with GIP, $670m financing (22 May 2026). Plenitude/Acea Energia acquisition pending (December 2025).
-
-**Earnings:** Q1 2026 miss on refining/chemicals (27 April 2026); FY 2025/Q4 results showed adjusted profit growth in Q4 (February 2026 release). Analyst views mixed: Jefferies Buy (14 July 2026), UBS Buy (17 June 2026), RBC/Morgan Stanley Hold (24 July / 11 July 2026).
-
-**Regulatory/geopolitical:** Venezuela contract migration deadline (Reuters, 23 July 2026). UN human-rights communication (15 April 2026).
-
-News is **thin on primary financial footnotes** (pension, covenants, contingencies) and relies heavily on secondary commentary (AD HOC NEWS syndication).
-
----
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.68
-Rationale: FY 2025 filing data confirms cash generation, deleveraging, and shareholder returns that support the quantitative buy signal, but absent annual/interim filing bodies and persistent chemicals losses leave material verification gaps before full conviction.
+Confidence: 0.62
+Rationale: FY2025 IR results cite strong cash flow, proforma gearing near 14% and higher distributions, which broadly support the screen buy, but cyclical commodity swings and geopolitical/regulatory risks limit conviction.
+RiskTags: cyclical, regulatory, leverage, litigation, other

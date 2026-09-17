@@ -1,52 +1,71 @@
 {
-  "market_id": "tsx60",
-  "assessed_at": "2026-09-16T20:15:45.770399+00:00",
-  "unmeasured": [],
+  "market_id": "ftse_smallcap",
+  "assessed_at": "2026-09-17T07:33:26.717030+00:00",
+  "unmeasured": [
+    "CLIG.L"
+  ],
   "zero_body": [],
   "indexed_without_body": [
     {
-      "ticker": "SU.TO",
-      "indexed_without_body": 17,
-      "filings_total": 48,
-      "filings_with_body": 31
-    },
-    {
-      "ticker": "NTR.TO",
+      "ticker": "BOOT.L",
       "indexed_without_body": 8,
-      "filings_total": 27,
-      "filings_with_body": 19
+      "filings_total": 60,
+      "filings_with_body": 52
     },
     {
-      "ticker": "TRI.TO",
-      "indexed_without_body": 7,
-      "filings_total": 160,
-      "filings_with_body": 153
+      "ticker": "DFS.L",
+      "indexed_without_body": 8,
+      "filings_total": 60,
+      "filings_with_body": 52
     },
     {
-      "ticker": "GIB-A.TO",
-      "indexed_without_body": 1,
-      "filings_total": 20,
-      "filings_with_body": 19
+      "ticker": "MER.L",
+      "indexed_without_body": 8,
+      "filings_total": 56,
+      "filings_with_body": 48
+    },
+    {
+      "ticker": "TPT.L",
+      "indexed_without_body": 8,
+      "filings_total": 57,
+      "filings_with_body": 49
+    },
+    {
+      "ticker": "APTD.L",
+      "indexed_without_body": 6,
+      "filings_total": 82,
+      "filings_with_body": 76
+    },
+    {
+      "ticker": "ULTP.L",
+      "indexed_without_body": 5,
+      "filings_total": 57,
+      "filings_with_body": 52
     }
   ],
   "thin_need_discovery": [],
   "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "primary_blocker": "unmeasured",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "SU.TO",
-    "NTR.TO",
-    "TRI.TO",
-    "GIB-A.TO"
+    "CLIG.L",
+    "BOOT.L",
+    "DFS.L",
+    "MER.L",
+    "TPT.L",
+    "APTD.L",
+    "ULTP.L"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (4 tickers, top: SU.TO(17), NTR.TO(8), TRI.TO(7), GIB-A.TO(1))"
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (6 tickers, top: BOOT.L(8), DFS.L(8), MER.L(8), TPT.L(8), APTD.L(6))",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
-    "indexed_without_body_tickers": 4,
-    "indexed_without_body_rows": 33,
+    "indexed_without_body_tickers": 6,
+    "indexed_without_body_rows": 43,
     "thin_need_discovery": 0,
     "thin_need_bodies": 0
   }
