@@ -145,9 +145,16 @@ def merge_research_verdict_into_snapshot(
 
 
 def write_screening_snapshot(sources_dir: Path, snapshot: dict[str, Any]) -> Path:
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
     sources_dir.mkdir(parents=True, exist_ok=True)
     path = sources_dir / "screening_snapshot.json"
-    payload = enforce_fcf_basis_in_snapshot(snapshot)
+    output_dir = _output_dir_from_sources_dir(sources_dir)
+    payload = guard_screening_snapshot_export(
+        snapshot,
+        output_dir=output_dir,
+    )
+    payload = enforce_fcf_basis_in_snapshot(payload)
     payload = enrich_screening_snapshot_fcf_dividend_coverage(payload)
     write_json(
         path,
@@ -156,6 +163,16 @@ def write_screening_snapshot(sources_dir: Path, snapshot: dict[str, Any]) -> Pat
         compress=False,
     )
     return path
+
+
+def _output_dir_from_sources_dir(sources_dir: Path) -> Path | None:
+    path = Path(sources_dir)
+    if path.name != "sources":
+        return None
+    research_dir = path.parent.parent
+    if research_dir.name != "research":
+        return None
+    return research_dir.parent
 
 
 def refresh_snapshot_from_document(output_dir: Path, doc: Any) -> bool:
