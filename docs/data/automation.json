@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-17T03:53:30.047331+00:00",
+  "generated_at": "2026-09-17T04:02:13.974593+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1175,17 +1175,17 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-17T03:52:23.594281+00:00",
-    "queue_ui_updated_at": "2026-09-17T03:53:29.976101+00:00",
+    "queue_ui_updated_at": "2026-09-17T04:02:13.907971+00:00",
     "task_count": 26,
     "status": {
       "open_count": 2,
-      "pr_open_count": 1,
+      "pr_open_count": 0,
       "parked_count": 6,
-      "merged_count": 16,
+      "merged_count": 17,
       "failed_count": 0,
       "next_task_id": "eng-20260917-03",
-      "in_flight_branch": "cursor/eng-20260916-06-1de3",
-      "in_flight_pr": 680,
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
@@ -1205,7 +1205,7 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 1,
-        "clash_scan": "full"
+        "clash_scan": "partial"
       },
       {
         "id": "eng-20260917-01",
@@ -1221,19 +1221,7 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 2,
-        "clash_scan": "full"
-      },
-      {
-        "id": "eng-20260916-06",
-        "area": "ingest",
-        "title": "Hunt fetchable IR source for parked asx200 leftover BPT.AX",
-        "priority": "low",
-        "priority_score": 12.0,
-        "status": "pr_open",
-        "source": "parked_source_hunter",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": "cursor/eng-20260916-06-1de3"
+        "clash_scan": "partial"
       }
     ],
     "attention_tasks": [
@@ -1591,24 +1579,18 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-17T03:53:30.047331+00:00",
+    "generated_at": "2026-09-17T04:02:13.974593+00:00",
     "overall": "active",
-    "headline": "Merge lane active; agent lane active.",
+    "headline": "Agent lane active.",
     "merge_lane": {
-      "state": "running",
-      "idle": false,
-      "running": true,
+      "state": "idle",
+      "idle": true,
+      "running": false,
       "blocked": false,
-      "pr_open_count": 1,
-      "open_engineering_prs": [
-        {
-          "number": 680,
-          "branch": "cursor/eng-20260916-06-1de3",
-          "draft": false
-        }
-      ],
-      "in_flight_pr": 680,
-      "detail": "Open engineering PR(s) #680 — merge fires on CI success."
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
       "state": "running",
@@ -1620,7 +1602,7 @@
       "traffic_pause_active": false,
       "attention_parked_count": 0,
       "open_count": 2,
-      "pr_open_count": 1,
+      "pr_open_count": 0,
       "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
       "next_task_id": "eng-20260917-03",
@@ -1630,7 +1612,7 @@
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-17T03:53:25.329027+00:00"
+      "evaluated_at": "2026-09-17T04:02:10.248052+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1645,6 +1627,17 @@
     },
     "merges_today": [
       {
+        "task_id": "eng-20260916-06",
+        "title": "Hunt fetchable IR source for parked asx200 leftover BPT.AX",
+        "area": "ingest",
+        "pr_number": 680,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/680",
+        "merged_at": "2026-09-17T04:01:04.468120+00:00",
+        "merge_class": "parked_hunter",
+        "auto_merge": false,
+        "independently_verified": true
+      },
+      {
         "task_id": "eng-20260917-02",
         "title": "Set fcf_definition_divergence whenever filing ~£462m, Yahoo £956m and screen £830m disagree; do not pass FCF Yield at 21.4% without stating the basis [1/2]",
         "area": "scoring",
@@ -1656,6 +1649,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 1
+    "verified_merges_today_count": 2
   }
 }
