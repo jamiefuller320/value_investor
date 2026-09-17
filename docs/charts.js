@@ -33,9 +33,12 @@ function chartPathForReport(report) {
   return `data/charts/${slug}.json`;
 }
 
-function formatChartPrice(value) {
+function formatChartPrice(value, currency) {
   if (value == null || Number.isNaN(Number(value))) return "—";
-  return `£${Number(value).toFixed(2)}`;
+  const code = String(currency || "GBP").toUpperCase();
+  const symbol =
+    code === "USD" ? "$" : code === "EUR" ? "€" : code === "AUD" ? "A$" : code === "CAD" ? "C$" : "£";
+  return `${symbol}${Number(value).toFixed(2)}`;
 }
 
 function estimateLabelWidth(text) {
@@ -164,6 +167,7 @@ function renderPriceChartSvg(payload, levelsOverride) {
     return `<p class="muted">No price series available.</p>`;
   }
 
+  const currency = payload.currency || "GBP";
   const levels = { ...(levelsOverride || payload.levels || {}) };
   const smaSeriesPresent = Object.values(CHART_SMA_SERIES).some((meta) =>
     Array.isArray(payload[meta.key])
@@ -179,7 +183,7 @@ function renderPriceChartSvg(payload, levelsOverride) {
   }
   const longestLabel = activeLevels.reduce((max, [, style]) => {
     const sample = `${style.label}`;
-    const priceSample = formatChartPrice(99999.99);
+    const priceSample = formatChartPrice(99999.99, currency);
     return Math.max(max, estimateLabelWidth(sample), estimateLabelWidth(priceSample));
   }, 90);
   const rightPad = Math.max(168, longestLabel + 28);
@@ -236,7 +240,7 @@ function renderPriceChartSvg(payload, levelsOverride) {
   const levelLines = labelEntries
     .map(({ style, value, lineY, y }) => {
       const labelX = width - pad.right + 12;
-      const priceText = formatChartPrice(value);
+      const priceText = formatChartPrice(value, currency);
       return `
         <line x1="${pad.left}" y1="${lineY}" x2="${width - pad.right}" y2="${lineY}"
           stroke="${style.color}" stroke-width="1.6" stroke-dasharray="${style.dash}" />
@@ -295,15 +299,15 @@ function renderPriceChartSvg(payload, levelsOverride) {
         ${smaPaths}
         ${signalMarker}
         ${levelLines}
-        <text x="${pad.left}" y="${pad.top + 4}" class="chart-axis-label">${formatChartPrice(maxY)}</text>
-        <text x="${pad.left}" y="${pad.top + plotH}" class="chart-axis-label">${formatChartPrice(minY)}</text>
+        <text x="${pad.left}" y="${pad.top + 4}" class="chart-axis-label">${formatChartPrice(maxY, currency)}</text>
+        <text x="${pad.left}" y="${pad.top + plotH}" class="chart-axis-label">${formatChartPrice(minY, currency)}</text>
         ${xLabels}
       </svg>
       <div class="chart-legend">${legend}</div>
     </div>`;
 }
 
-function levelsTableHtml(levels, { smaAsSeries = false } = {}) {
+function levelsTableHtml(levels, { smaAsSeries = false, currency = "GBP" } = {}) {
   const keys = Object.keys(CHART_LEVEL_STYLES).filter((key) => {
     if (levels?.[key] == null) return false;
     if (smaAsSeries && (key === "sma50" || key === "sma200")) return true;
@@ -320,7 +324,7 @@ function levelsTableHtml(levels, { smaAsSeries = false } = {}) {
           <td><span class="chart-legend-swatch" style="background:${style.color}"></span> ${esc(
             style.label
           )}${note}</td>
-          <td>${formatChartPrice(levels[key])}</td>
+          <td>${formatChartPrice(levels[key], currency)}</td>
         </tr>`;
     })
     .join("");
@@ -340,14 +344,14 @@ function crossingDirectionLabel(direction) {
   return "—";
 }
 
-function crossingsTableHtml(crossings) {
+function crossingsTableHtml(crossings, currency) {
   if (!Array.isArray(crossings) || !crossings.length) return "";
   const rows = crossings
     .map((row) => {
       const style = CHART_LEVEL_STYLES[row.key] || { color: "#64748b" };
       return `<tr>
         <td><span class="chart-legend-swatch" style="background:${style.color}"></span> ${esc(row.label || row.key)}</td>
-        <td>${formatChartPrice(row.price)}</td>
+        <td>${formatChartPrice(row.price, currency)}</td>
         <td>${row.date ? esc(row.date) : "—"}</td>
         <td>${esc(crossingDirectionLabel(row.direction))}</td>
       </tr>`;
@@ -388,13 +392,17 @@ function renderChartBody(payload, report, source, overlays) {
   const smaAsSeries = Boolean(payload.sma50_series || payload.sma200_series);
   const asOfLabel = usingInitial ? initialAsOf : levelsAsOf;
   const tradeLevelsPresent = hasTradePlanLevels(levels);
+  const levelsBasis = String(payload.levels_basis || "");
+  const currency = payload.currency || "GBP";
   let levelsHint = "";
   if (asOfLabel) {
-    levelsHint = `<p class="small muted">${
-      usingInitial
-        ? `Trade levels frozen at the initial recommendation (${esc(asOfLabel)}). Last is the latest close so you can see what has played out.`
-        : `Trade levels from the latest screen (${esc(levelsAsOf)}).`
-    }${
+    const basisLine =
+      levelsBasis === "prospective"
+        ? " Prospective buy / target / stop from current technicals (not yet held)."
+        : usingInitial
+          ? ` Trade levels frozen at the initial recommendation (${esc(asOfLabel)}). Last is the latest close so you can see what has played out.`
+          : ` Trade levels from the latest screen (${esc(levelsAsOf)}).`;
+    levelsHint = `<p class="small muted">${basisLine.trim()}${
       smaAsSeries
         ? " SMA 50 / SMA 200 plot as rolling overlays (not flat point-in-time lines)."
         : " SMA values are point-in-time until the next chart publish adds rolling paths."
@@ -403,10 +411,10 @@ function renderChartBody(payload, report, source, overlays) {
     }${openedAt ? ` Opened marker ${esc(openedAt)}.` : ""}</p>`;
   }
   if (!tradeLevelsPresent) {
-    levelsHint += `<p class="small muted">No core/tactical buy or target/stop on this screen (common for hold/avoid). ${
+    levelsHint += `<p class="small muted">No core/tactical buy or target/stop available. ${
       levels.book_cost != null
         ? "Book cost from the paper holding is shown."
-        : "Buy-tier names carry trade-plan levels; held names may show book cost after the next lifecycle board publish."
+        : "Avoid names stay without an entry plan; other screen names get prospective levels on the next chart refresh."
     }</p>`;
   }
   const hasInitial = Boolean(payload.initial_levels);
@@ -422,13 +430,14 @@ function renderChartBody(payload, report, source, overlays) {
     <p class="small muted">
       ${esc(payload.period || "1y")} daily closes · as of ${esc((payload.as_of || "").slice(0, 10) || "—")}
       ${payload.signal ? ` · ${esc(String(payload.signal).replace(/_/g, " "))}` : ""}
+      ${payload.market ? ` · ${esc(payload.market)}` : ""}
     </p>
     ${toggle}
     ${planHint}
     ${levelsHint}
     ${renderPriceChartSvg(chartPayload, levels)}
-    ${levelsTableHtml(levels, { smaAsSeries })}
-    ${hasInitial ? crossingsTableHtml(payload.level_crossings || []) : ""}
+    ${levelsTableHtml(levels, { smaAsSeries, currency })}
+    ${hasInitial ? crossingsTableHtml(payload.level_crossings || [], currency) : ""}
   `;
 }
 

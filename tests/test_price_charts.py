@@ -8,11 +8,13 @@ import pandas as pd
 from value_investor.price_charts import (
     build_price_chart_payload,
     chart_filename,
+    chart_payload_needs_refresh,
     copy_charts_to_dashboard,
     ensure_buy_tier_charts,
     ensure_price_charts,
     first_level_crossings,
     levels_from_trade_plan,
+    prospective_trade_plan_from_series,
     write_buy_tier_charts_from_history,
     write_price_charts_from_history,
 )
@@ -59,6 +61,130 @@ def test_build_price_chart_payload_includes_levels():
     assert payload["sma50_series"][-1] == payload["levels"]["sma50"]
     assert any(value is not None for value in payload["sma50_series"])
     assert any(value is not None for value in payload["sma200_series"])
+    assert payload["levels_basis"] == "trade_plan"
+    assert payload["currency"] == "GBP"
+
+
+def test_build_price_chart_payload_prospective_levels_for_hold_not_held():
+    series = _series()
+    payload = build_price_chart_payload(
+        ticker="HOLD.L",
+        name="Hold Co",
+        series=series,
+        signal="hold",
+        held=False,
+        snapshot_dirs=[],
+        as_of=datetime(2025, 6, 15, tzinfo=UTC),
+    )
+    assert payload is not None
+    assert payload["levels_basis"] == "prospective"
+    assert payload["levels"]["tactical_limit"] is not None
+    assert payload["levels"]["take_profit"] is not None
+    assert "sma50_series" in payload
+
+
+def test_build_price_chart_payload_skips_prospective_when_held():
+    series = _series()
+    payload = build_price_chart_payload(
+        ticker="OWN.L",
+        name="Owned",
+        series=series,
+        signal="hold",
+        held=True,
+        snapshot_dirs=[],
+        as_of=datetime(2025, 6, 15, tzinfo=UTC),
+    )
+    assert payload is not None
+    assert payload["levels_basis"] == "none"
+    assert payload["levels"]["tactical_limit"] is None
+
+
+def test_build_price_chart_payload_skips_avoid_prospect():
+    series = _series()
+    payload = build_price_chart_payload(
+        ticker="BAD.L",
+        name="Avoid Co",
+        series=series,
+        signal="avoid",
+        held=False,
+        snapshot_dirs=[],
+        as_of=datetime(2025, 6, 15, tzinfo=UTC),
+    )
+    assert payload is not None
+    assert payload["levels_basis"] == "none"
+
+
+def test_build_price_chart_payload_market_currency_usd():
+    series = _series()
+    payload = build_price_chart_payload(
+        ticker="AAPL",
+        name="Apple",
+        series=series,
+        signal="buy",
+        market="sp500",
+        trade_plan={"tactical_limit": 100.0, "tactical_take_profit": 120.0},
+        snapshot_dirs=[],
+        as_of=datetime(2025, 6, 15, tzinfo=UTC),
+    )
+    assert payload is not None
+    assert payload["currency"] == "USD"
+    assert payload["market"] == "sp500"
+
+
+def test_chart_payload_needs_refresh_and_prospective_helper():
+    assert chart_payload_needs_refresh(None) is True
+    assert (
+        chart_payload_needs_refresh(
+            {"sma50_series": [1], "sma200_series": [1], "dates": ["a"], "levels": {}},
+            signal="hold",
+        )
+        is True
+    )
+    assert (
+        chart_payload_needs_refresh(
+            {
+                "sma50_series": [1],
+                "sma200_series": [1],
+                "dates": ["a"],
+                "levels": {"core_limit": 1},
+            },
+            signal="hold",
+        )
+        is False
+    )
+    plan = prospective_trade_plan_from_series(_series(), signal="hold")
+    assert plan is not None
+    assert plan.get("tactical_limit") is not None
+    assert prospective_trade_plan_from_series(_series(), signal="avoid") is None
+
+
+def test_ensure_price_charts_refreshes_stale_schema(tmp_path: Path):
+    chart_dir = tmp_path / "charts"
+    chart_dir.mkdir()
+    stale = chart_dir / chart_filename("AAA.L")
+    write_json(
+        stale,
+        {
+            "ticker": "AAA.L",
+            "dates": ["2025-01-01"],
+            "closes": [100.0],
+            "levels": {"last": 100.0},
+            "signal": "hold",
+        },
+    )
+    payload = __import__("json").loads(stale.read_text(encoding="utf-8"))
+    assert chart_payload_needs_refresh(payload, signal="hold") is True
+    # fetch=False keeps the stale file on disk but does not rewrite it.
+    written = ensure_price_charts(
+        reports=[{"ticker": "AAA.L", "signal": "hold", "name": "A", "held": False}],
+        chart_dir=chart_dir,
+        tickers=["AAA.L"],
+        fetch=False,
+        refresh_stale=True,
+    )
+    assert written == [stale]
+    assert "sma50_series" not in __import__("json").loads(stale.read_text(encoding="utf-8"))
+
 
 
 def test_write_price_charts_from_history_includes_non_buy_when_unfiltered(tmp_path: Path):
