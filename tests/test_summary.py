@@ -32,6 +32,7 @@ from value_investor.scoring.fcf import (
     overlay_free_cashflow_from_bundle,
     parse_adjusted_eps_growth_pct,
     parse_company_adjusted_fcf,
+    parse_company_adjusted_from_action_note,
     parse_fcf_definition_divergence_coverage_from_action_note,
     parse_filing_aligned_from_action_note,
     parse_profit_to_cash_ratio_pair,
@@ -4564,6 +4565,24 @@ def test_fcf_bundle_from_persisted_report_prefers_note_filing_over_metrics():
     assert bundle["screen_ttm"] == pytest.approx(211_900_000.0)
 
 
+def test_parse_company_adjusted_from_action_note_fgp_style():
+    note = (
+        "Strong Buy — neutral timing | FCF basis mismatch: filing £362.6M | "
+        "screen TTM (unverified) £302.8M | company-adj £73.8M"
+    )
+    assert parse_company_adjusted_from_action_note(note) == pytest.approx(73_800_000.0)
+
+
+def test_fcf_bundle_from_persisted_report_parses_company_adj_from_note():
+    note = "FCF basis mismatch: filing £362.6M | screen TTM £362.6M | company-adj £73.8M"
+    bundle = fcf_bundle_from_persisted_report(
+        {"filing_aligned": 362_600_000.0},
+        action_note=note,
+    )
+    assert bundle["company_adjusted"] == pytest.approx(73_800_000.0)
+    assert bundle["filing_aligned"] == pytest.approx(362_600_000.0)
+
+
 def test_honour_and_to_dict_backfill_structured_fcf_from_note():
     note = "Buy — neutral timing | FCF basis mismatch: filing £192.1M | screen TTM £353.2M"
     report = CompanyReport.from_dict(
@@ -4664,6 +4683,27 @@ def test_guard_screening_export_sbry_style_three_way_fcf(tmp_path: Path):
     assert guarded["fcf_divergence_flagged"] is True
     assert "fcf basis mismatch" in guarded["action_note"].lower()
     assert "574" in guarded["action_note"] or "£574" in guarded["action_note"]
+
+
+def test_guard_screening_export_fgp_style_company_adj_from_note():
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    snapshot = {
+        "ticker": "FGP.L",
+        "signal": "strong_buy",
+        "fcf_basis_overlay": True,
+        "fcf_definition_divergence": False,
+        "fcf_divergence_flagged": False,
+        "fcf": {"filing_aligned": 362_600_000.0},
+        "action_note": (
+            "Strong Buy — neutral timing | FCF basis mismatch: filing £362.6M | "
+            "screen TTM £362.6M | company-adj £73.8M"
+        ),
+    }
+    guarded = guard_screening_snapshot_export(snapshot, model_results=None, output_dir=None)
+    assert guarded["fcf_definition_divergence"] is True
+    assert guarded["fcf_divergence_flagged"] is True
+    assert guarded["fcf"]["company_adjusted"] == pytest.approx(73_800_000.0)
 
 
 def test_guard_screening_export_jd_style_three_way_fcf(tmp_path: Path):

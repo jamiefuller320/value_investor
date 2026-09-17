@@ -159,6 +159,8 @@ FCF_YIELD_MODEL_ID = "fcf_yield"
 HIGH_DIVIDEND_MODEL_ID = "high_dividend"
 FCF_YIELD_UNIT_ERROR_MAX_IMPLIED_YIELD = 0.002
 FCF_YIELD_UNIT_ERROR_MIN_CANONICAL_GBP = 100_000_000.0
+# FGP-style: statutory filing OCF−CapEx ~5× company APM FCF while yield uses company KPI.
+FCF_COMPANY_FILING_YIELD_SUPPRESS_MIN_RATIO = 4.9
 # Prefer company-adjusted, then filing-aligned, never Yahoo TTM when a non-TTM peer agrees.
 _FCF_MAJORITY_PREFERENCE = ("company_adjusted", "filing_aligned", "screen_ttm")
 _FX_TO_USD = {"USD": 1.0, "GBP": 1.35, "EUR": 1.10}
@@ -1368,6 +1370,60 @@ def fcf_within_company_tolerance(
     return abs_gap / denominator <= threshold
 
 
+def fcf_company_filing_magnitude_ratio(
+    left: float | None,
+    right: float | None,
+) -> float | None:
+    """Return max(|left|, |right|) / min when both are non-zero (same-currency FCF bases)."""
+    if left is None or right is None:
+        return None
+    if isinstance(left, float) and pd.isna(left):
+        return None
+    if isinstance(right, float) and pd.isna(right):
+        return None
+    a, b = abs(float(left)), abs(float(right))
+    if min(a, b) <= 0:
+        return None
+    return max(a, b) / min(a, b)
+
+
+def fcf_company_filing_yield_family_suppressed(
+    *,
+    filing_aligned: float | None,
+    company_adjusted: float | None,
+    min_ratio: float = FCF_COMPANY_FILING_YIELD_SUPPRESS_MIN_RATIO,
+) -> bool:
+    """True when filing-scale FCF and company APM FCF differ by ~5× or more (FGP FY2026)."""
+    ratio = fcf_company_filing_magnitude_ratio(filing_aligned, company_adjusted)
+    return ratio is not None and ratio >= min_ratio
+
+
+def fcf_yield_on_company_when_filing_much_larger(
+    *,
+    canonical: float | None,
+    filing_aligned: float | None,
+    company_adjusted: float | None,
+    filing_currency: str = "USD",
+    company_adjusted_currency: str | None = None,
+    min_ratio: float = FCF_COMPANY_FILING_YIELD_SUPPRESS_MIN_RATIO,
+) -> bool:
+    """Fail-closed when FCF Yield uses company-adjusted FCF but filing OCF−CapEx is ~5× larger."""
+    if not fcf_company_filing_yield_family_suppressed(
+        filing_aligned=filing_aligned,
+        company_adjusted=company_adjusted,
+        min_ratio=min_ratio,
+    ):
+        return False
+    if canonical is None:
+        return True
+    return fcf_within_company_tolerance(
+        canonical,
+        company_adjusted,
+        filing_currency=filing_currency,
+        company_adjusted_currency=company_adjusted_currency,
+    )
+
+
 def fcf_three_way_yield_basis_unresolved(
     *,
     filing_aligned: float | None,
@@ -1447,6 +1503,14 @@ def fcf_yield_pass_suppressed(
         filing_currency=filing_currency,
     ):
         return True
+    if fcf_yield_on_company_when_filing_much_larger(
+        canonical=canonical,
+        filing_aligned=filing_aligned,
+        company_adjusted=company_adjusted,
+        filing_currency=filing_currency,
+        company_adjusted_currency=company_adjusted_currency,
+    ):
+        return True
     basis_unresolved = fcf_definition_divergence or fcf_divergence_flagged or divergence_flagged
     if not basis_unresolved:
         return False
@@ -1482,6 +1546,11 @@ def high_dividend_yield_pass_suppressed(
         filing_aligned=filing_aligned,
         screen_ttm=screen_ttm,
         filing_currency=filing_currency,
+    ):
+        return True
+    if fcf_company_filing_yield_family_suppressed(
+        filing_aligned=filing_aligned,
+        company_adjusted=company_adjusted,
     ):
         return True
     return bool(fcf_definition_divergence)
@@ -2096,6 +2165,18 @@ def parse_screen_ttm_from_action_note(action_note: str) -> float | None:
     return _parse_fcf_compact_value(match.group("value"))
 
 
+def parse_company_adjusted_from_action_note(action_note: str) -> float | None:
+    """Recover company-adjusted FCF from a persisted ``FCF basis mismatch`` note."""
+    match = re.search(
+        r"company-adj\s+(?P<value>[£$€−\d.,kKmM-]+)",
+        str(action_note or ""),
+        flags=re.IGNORECASE,
+    )
+    if not match:
+        return None
+    return _parse_fcf_compact_value(match.group("value"))
+
+
 def parse_filing_aligned_from_action_note(action_note: str) -> float | None:
     """Recover filing-aligned FCF from a persisted ``FCF basis mismatch`` note."""
     match = re.search(
@@ -2140,6 +2221,12 @@ def fcf_bundle_from_persisted_report(
         screen = parse_screen_ttm_from_action_note(note)
     if screen is not None:
         bundle["screen_ttm"] = screen
+
+    company = _float_or_none(bundle.get("company_adjusted"))
+    if company is None:
+        company = parse_company_adjusted_from_action_note(note)
+    if company is not None:
+        bundle["company_adjusted"] = company
 
     return bundle
 

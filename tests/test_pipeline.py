@@ -3134,6 +3134,33 @@ def test_fcf_yield_pass_suppressed_on_jd_style_universe_divergence():
     )
 
 
+def test_fcf_yield_pass_suppressed_fgp_style_company_adj_vs_filing_without_flags():
+    """£73.8m company KPI vs £362.6m filing must fail-closed even when divergence flags are false."""
+    filing = 362_600_000.0
+    company = 73_800_000.0
+    assert fcf_yield_pass_suppressed(
+        divergence_flagged=False,
+        fcf_divergence_flagged=False,
+        fcf_definition_divergence=False,
+        canonical=company,
+        company_adjusted=company,
+        company_adjusted_currency="GBP",
+        filing_currency="GBP",
+        filing_aligned=filing,
+        screen_ttm=filing,
+    )
+    from value_investor.scoring.fcf import high_dividend_yield_pass_suppressed
+
+    assert high_dividend_yield_pass_suppressed(
+        filing_aligned=filing,
+        screen_ttm=filing,
+        company_adjusted=company,
+        filing_currency="GBP",
+        company_adjusted_currency="GBP",
+        fcf_definition_divergence=False,
+    )
+
+
 def test_fcf_yield_pass_suppressed_on_sbry_style_three_way_bases():
     """574m retail vs 923m Yahoo vs 645m screen must fail-closed even when canonical=retail."""
     assert fcf_yield_pass_suppressed(
@@ -3460,6 +3487,110 @@ def test_enrich_universe_with_canonical_fcf_uses_company_adjusted_when_present(t
     row = enriched.iloc[0]
     assert row["free_cashflow_screen_ttm"] == 362_600_000.0
     assert row["free_cashflow"] == 113_500_000.0
+
+
+def _fgp_fy2026_stale_bridge_sources(tmp_path: Path) -> None:
+    sources = tmp_path / "research" / "FGP.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "FGP.L",
+                "cash_flow": {
+                    "2026": {
+                        "Operating Cash Flow": 615_600_000.0,
+                        "Capital Expenditure": -253_000_000.0,
+                        "Free Cash Flow": 362_600_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (sources / "fcf_bridge.json").write_text(
+        json.dumps(
+            {
+                "ticker": "FGP.L",
+                "fiscal_year": "2026",
+                "currency": "GBP",
+                "resolved": True,
+                "policy_basis": "company_adjusted",
+                "policy_fcf": 113_500_000.0,
+                "company_adjusted": 113_500_000.0,
+            }
+        ),
+        encoding="utf-8",
+    )
+    rns_body = filings / "fy2026_results.txt"
+    rns_body.write_text(
+        "Free cash flow of £73.8m before acquisitions and returns",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "published_at": "2026-06-18T08:00:00Z",
+                        "has_body": True,
+                        "body_path": str(rns_body),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_suppress_fcf_yield_passes_fgp_style_73_8m_company_adj(tmp_path: Path):
+    """Pipeline must flip FCF Yield when canonical is £73.8m and filing OCF−CapEx is ~5× larger."""
+    _fgp_fy2026_stale_bridge_sources(tmp_path)
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "FGP.L",
+                "free_cashflow": 362_600_000.0,
+                "market_cap": 973_000_000.0,
+            }
+        ]
+    )
+    universe = enrich_universe_with_canonical_fcf(universe, tmp_path)
+    assert universe.iloc[0]["free_cashflow"] == pytest.approx(73_800_000.0)
+    model_results = evaluate_universe(universe, models=[FCFYieldModel()])
+    assert bool(model_results.loc[model_results["model_id"] == "fcf_yield", "passed"].iloc[0])
+    model_results = pd.concat(
+        [
+            model_results,
+            pd.DataFrame(
+                [
+                    {
+                        "ticker": "FGP.L",
+                        "model_id": "high_dividend",
+                        "model_name": "High Dividend Yield",
+                        "passed": True,
+                        "score": 0.8,
+                        "reasons": "[]",
+                        "failed_criteria": "[]",
+                    }
+                ]
+            ),
+        ],
+        ignore_index=True,
+    )
+    model_results = suppress_fcf_yield_passes(model_results, universe, output_dir=tmp_path)
+    fcf_yield = model_results.loc[model_results["model_id"] == "fcf_yield"].iloc[0]
+    assert bool(fcf_yield["passed"]) is False
+    assert "FCF yield suppressed" in str(fcf_yield["failed_criteria"])
+    model_results = suppress_high_dividend_yield_passes(
+        model_results,
+        universe,
+        output_dir=tmp_path,
+    )
+    high_div = model_results.loc[model_results["model_id"] == "high_dividend"].iloc[0]
+    assert bool(high_div["passed"]) is False
+    assert "High dividend yield suppressed" in str(high_div["failed_criteria"])
 
 
 def test_enrich_universe_with_canonical_fcf_rebinds_stale_bridge_company_adjusted(
