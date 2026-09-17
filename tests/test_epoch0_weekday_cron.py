@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from unittest.mock import patch
 
 from value_investor.epoch0_weekday_cron import (
@@ -134,3 +135,11 @@ def test_refresh_dispatch_sync_cron_ensures_epoch0():
         evaluation = refresh_euro_ingest_dispatch(sync_cron=True)
     assert evaluation["epoch0_cron_sync"]["keys"] == ["library-epoch0-weekday-us-edt"]
     epoch0.assert_called_once()
+
+
+def test_epoch0_weekday_workflow_uses_artifact_commit_retry() -> None:
+    text = Path(".github/workflows/library-epoch0-weekday.yml").read_text(encoding="utf-8")
+    assert "scripts/gha_commit_artifacts.sh" in text
+    assert "stefanzweifel/git-auto-commit-action@v6" not in text
+    assert "git pull --rebase --autostash" not in text
+    assert "docs/data/paper_automation/markets/**/weekday_batch_log.json" in text
