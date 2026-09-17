@@ -239,11 +239,31 @@ def evaluate_auto_merge(
     if task is None:
         return AutoMergeDecision(False, f"unknown task {task_id}", task_id=task_id)
     if str(task.status) != "pr_open":
-        return AutoMergeDecision(
-            False,
-            f"task status is {task.status!r}, expected pr_open",
-            task_id=task_id,
-        )
+        # Heal stamp lag in-process: orphan reconcile sometimes clears pr_open
+        # while the eng PR is still open. Restamp locally so this auto-merge
+        # attempt can proceed; recover-queue / ops-monitor commit the stamp.
+        if str(task.status) == "open":
+            from value_investor.engineering_recovery import find_open_pull_for_branch
+            from value_investor.engineering_tasks import mark_task_status
+
+            live = find_open_pull_for_branch(branch, repo=repo)
+            if live and live.get("number") is not None:
+                mark_task_status(
+                    task_id,
+                    "pr_open",
+                    path=tasks_path,
+                    committed_path=tasks_path,
+                    branch_name=branch,
+                    pr_url=str(live.get("html_url") or "") or None,
+                    pr_number=int(live["number"]),
+                )
+                task = find_engineering_task(task_id, path=tasks_path)
+        if task is None or str(task.status) != "pr_open":
+            return AutoMergeDecision(
+                False,
+                f"task status is {getattr(task, 'status', None)!r}, expected pr_open",
+                task_id=task_id,
+            )
 
     from value_investor.engineering_narrow_merge import (
         narrow_merge_allowed,

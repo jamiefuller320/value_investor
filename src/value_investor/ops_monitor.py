@@ -1057,8 +1057,33 @@ def check_engineering_queue(
             )
         )
 
-    from value_investor.engineering_recovery import list_merge_sync_lag_tasks
+    from value_investor.engineering_recovery import (
+        PR_OPEN_STAMP_LAG_FINDING_TITLE,
+        list_merge_sync_lag_tasks,
+        list_pr_open_stamp_lag_tasks,
+    )
     from value_investor.project_traffic import QUEUE_MERGE_SYNC_FINDING_TITLE
+
+    stamp_lag = list_pr_open_stamp_lag_tasks(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        repo=repo,
+        token=token,
+    )
+    if stamp_lag:
+        ids = ", ".join(str(row.get("task_id")) for row in stamp_lag[:8])
+        findings.append(
+            OpsFinding(
+                severity="warn",
+                category="engineering",
+                title=PR_OPEN_STAMP_LAG_FINDING_TITLE,
+                summary=(
+                    f"{len(stamp_lag)} open task(s) already have a live eng PR but "
+                    f"lack pr_open stamp: {ids}. Ops autofix restamps via recover-queue."
+                ),
+                auto_fixable=True,
+            )
+        )
 
     merge_lag = list_merge_sync_lag_tasks(
         tasks_path=tasks_path,
@@ -1453,6 +1478,15 @@ def apply_auto_fixes(
                 if finding.title.startswith("Orphaned pr_open") or finding.title == (
                     QUEUE_MERGE_SYNC_FINDING_TITLE
                 ):
+                    finding.fixed = True
+                    finding.action_taken = action
+        if recovery.restamped:
+            action = f"restamped open → pr_open from live PR: {', '.join(recovery.restamped)}"
+            results.append({"action": "recover_engineering_queue", "detail": action})
+            from value_investor.engineering_recovery import PR_OPEN_STAMP_LAG_FINDING_TITLE
+
+            for finding in findings:
+                if finding.title == PR_OPEN_STAMP_LAG_FINDING_TITLE:
                     finding.fixed = True
                     finding.action_taken = action
         if recovery.reconciled:

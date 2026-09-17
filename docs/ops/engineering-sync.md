@@ -84,8 +84,9 @@ overwrite concurrent policy edits).
 rewrites task payloads or deletes tasks. Recovery order:
 
 1. **Mark merged** — `pr_open` / wrongly-reset `open` tasks whose engineering PR merged on GitHub
-2. **Reconcile orphans** — reset `pr_open` only when no open PR and no merged PR exists
-3. Retry failed tasks / park CI-blocked `pr_open`
+2. **Restamp pr_open** — `open` tasks whose canonical eng branch already has an open GitHub PR (stamp lag after orphan-reconcile races; also heals in `try-auto-merge`)
+3. **Reconcile orphans** — reset `pr_open` only when no open PR exists after augmenting the open-PR snapshot with live lookups for in-flight branches
+4. Retry failed tasks / park CI-blocked `pr_open`
 
 ## Auto-restart policy
 
@@ -103,6 +104,11 @@ Dispatch target is always re-resolved to a currently open task id.
 has a merged GitHub PR. Ops monitor raises an auto-fixable finding and
 `project-traffic.remediate_queue_merge_sync()` owns the repair. Warn email fires
 only if remediation leaves remaining lag ids.
+
+`list_pr_open_stamp_lag_tasks()` detects the inverse: `open` rows whose branch
+already has a **live** open eng PR. Ops-monitor autofix / `recover-queue`
+restamps via `reconcile_open_tasks_with_live_prs()` (and `try-auto-merge` heals
+in-process before evaluating merge eligibility).
 
 ## Related
 

@@ -1036,7 +1036,11 @@ def planned_rectification_for_ops_finding(finding: Any) -> tuple[str, str]:
         severity = str(row.get("severity") or "")
         summary = str(row.get("summary") or "")
 
-    if title == QUEUE_MERGE_SYNC_FINDING_TITLE or title.startswith("Orphaned pr_open"):
+    if (
+        title == QUEUE_MERGE_SYNC_FINDING_TITLE
+        or title.startswith("Orphaned pr_open")
+        or title == "Missing pr_open stamp for live engineering PR"
+    ):
         return (
             RECTIFICATION_QUEUE_SYNC,
             "PM v1: recover/mark-merged engineering queue reconciliation",
