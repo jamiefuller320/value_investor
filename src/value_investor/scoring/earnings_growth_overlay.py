@@ -41,10 +41,13 @@ def build_earnings_growth_overlay(row: pd.Series | dict[str, Any]) -> dict[str, 
     core_growth = adjusted_growth if adjusted_growth is not None else model_growth
     bps_divergence = earnings_growth_bps_diverge(statutory_growth, core_growth)
 
+    yahoo_normalized = _float_or_none(series.get("yahoo_normalized_income_growth_pct"))
+
     overlay: dict[str, Any] = {
         "statutory_earnings_growth_pct": statutory_growth,
         "model_earnings_growth_pct": model_growth,
         "adjusted_eps_growth_pct": adjusted_growth,
+        "yahoo_normalized_income_growth_pct": yahoo_normalized,
         "bps_divergence_warning": bps_divergence,
         "lynch_peg_statutory": compute_lynch_peg(trailing_pe, statutory_growth),
         "lynch_peg_model": compute_lynch_peg(trailing_pe, model_growth),

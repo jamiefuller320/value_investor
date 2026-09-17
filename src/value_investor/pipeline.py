@@ -266,6 +266,7 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "profit_to_cash_yoy_decline_pp",
         "interim_eps_decline_pct",
         "adjusted_eps_growth_pct",
+        "yahoo_normalized_income_growth_pct",
         "transition_key",
         "prior_signal",
         "conviction_timing_overlay",

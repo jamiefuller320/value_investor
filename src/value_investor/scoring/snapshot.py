@@ -33,6 +33,7 @@ _RUN_SNAPSHOT_OPTIONAL_SIGNAL_COLUMNS = (
     "earnings_basis_overlay",
     "interim_eps_decline_pct",
     "adjusted_eps_growth_pct",
+    "yahoo_normalized_income_growth_pct",
     "signal_trend",
     "weeks_at_signal",
     "passed_families",

@@ -164,6 +164,7 @@ class CompanyReport:
     research_rationale: str | None = None
     interim_eps_decline_pct: float | None = None
     adjusted_eps_growth_pct: float | None = None
+    yahoo_normalized_income_growth_pct: float | None = None
 
     def to_dict(self) -> dict[str, Any]:
         enforced = honour_fcf_action_note_enforcement(self)
@@ -239,6 +240,7 @@ class CompanyReport:
             "research_rationale": self.research_rationale,
             "interim_eps_decline_pct": self.interim_eps_decline_pct,
             "adjusted_eps_growth_pct": self.adjusted_eps_growth_pct,
+            "yahoo_normalized_income_growth_pct": self.yahoo_normalized_income_growth_pct,
         }
         return enrich_screening_snapshot_fcf_dividend_coverage(payload)
 
@@ -328,6 +330,7 @@ class CompanyReport:
             research_rationale=data.get("research_rationale"),
             interim_eps_decline_pct=data.get("interim_eps_decline_pct"),
             adjusted_eps_growth_pct=data.get("adjusted_eps_growth_pct"),
+            yahoo_normalized_income_growth_pct=data.get("yahoo_normalized_income_growth_pct"),
         )
         return report
 
@@ -462,6 +465,12 @@ def _build_screening_inputs(row: pd.Series) -> dict[str, Any]:
         isinstance(adjusted_growth, float) and pd.isna(adjusted_growth)
     ):
         inputs["adjusted_eps_growth_pct"] = float(adjusted_growth)
+
+    yahoo_normalized_growth = row.get("yahoo_normalized_income_growth_pct")
+    if yahoo_normalized_growth is not None and not (
+        isinstance(yahoo_normalized_growth, float) and pd.isna(yahoo_normalized_growth)
+    ):
+        inputs["yahoo_normalized_income_growth_pct"] = float(yahoo_normalized_growth)
 
     ncav = row.get("ncav")
     inputs["ncav_available"] = ncav is not None and not (isinstance(ncav, float) and pd.isna(ncav))
@@ -1205,6 +1214,15 @@ def build_company_reports(
             and not (isinstance(adjusted_metric, float) and pd.isna(adjusted_metric))
             else None
         )
+        yahoo_normalized_metric = row.get("yahoo_normalized_income_growth_pct")
+        yahoo_normalized_income_growth_pct = (
+            float(yahoo_normalized_metric)
+            if yahoo_normalized_metric is not None
+            and not (
+                isinstance(yahoo_normalized_metric, float) and pd.isna(yahoo_normalized_metric)
+            )
+            else None
+        )
         dividends = row.get("dividends_paid")
         dividends_paid = (
             float(dividends)
@@ -1692,6 +1710,7 @@ def build_company_reports(
                     research_rationale=research_rationale_str,
                     interim_eps_decline_pct=interim_eps_decline_pct,
                     adjusted_eps_growth_pct=adjusted_eps_growth_pct,
+                    yahoo_normalized_income_growth_pct=yahoo_normalized_income_growth_pct,
                 )
             )
         )
