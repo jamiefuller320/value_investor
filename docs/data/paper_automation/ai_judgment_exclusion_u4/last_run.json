@@ -1,64 +1,15 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-16T09:28:40.711117+01:00",
+    "local_time": "2026-09-17T09:30:09.387881+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-09-16T08:00:00+01:00",
-    "settle_at": "2026-09-16T09:15:00+01:00",
+    "market_open_at": "2026-09-17T08:00:00+01:00",
+    "settle_at": "2026-09-17T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [
-    {
-      "id": "20cfa35a-bd3b-4f20-a347-1cb8decd52bc",
-      "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
-      "acted_at": "2026-09-16T09:28:40.711117+01:00",
-      "ticker": "JD.L",
-      "side": "sell",
-      "sizing_mode": "shares",
-      "shares": 3.347839,
-      "price": 75.24,
-      "gross": 251.89,
-      "cost": 7.56,
-      "net_cash": 244.33,
-      "note": "Automated exit \u2014 left target set",
-      "name": "JD Sports Fashion Plc",
-      "avg_cost_at_exit": 80.438,
-      "position_closed": true
-    },
-    {
-      "id": "3f568499-23b9-4300-92c1-d774f517c94a",
-      "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
-      "acted_at": "2026-09-16T09:28:40.711117+01:00",
-      "ticker": "KLR.L",
-      "side": "sell",
-      "sizing_mode": "cash",
-      "shares": 0.0044,
-      "price": 3040.0,
-      "gross": 13.38,
-      "cost": 0.4,
-      "net_cash": 12.98,
-      "note": "Automated trim",
-      "name": "Keller Group plc",
-      "avg_cost_at_exit": 2980.0
-    },
-    {
-      "id": "a0ec4bf9-3845-4c56-b67a-1cb15f58b0c4",
-      "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
-      "acted_at": "2026-09-16T09:28:40.711117+01:00",
-      "ticker": "CURY.L",
-      "side": "buy",
-      "sizing_mode": "cash",
-      "shares": 1.677741,
-      "price": 148.9,
-      "gross": 249.82,
-      "cost": 7.49,
-      "net_cash": -257.31,
-      "note": "Automated buy",
-      "name": "Currys plc"
-    }
-  ],
+  "trades": [],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -72,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 777.33,
+    "nav": 783.79,
     "cash": 0.0,
     "max_positions": 3,
     "min_conviction": 0.35,
@@ -82,58 +33,47 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 259.11,
+    "target_sleeve_value": 261.26,
     "targets": [
       {
         "ticker": "KLR.L",
         "name": "Keller Group plc",
         "signal": "buy",
-        "conviction_score": 0.9974000000000003,
-        "price": 3040.0
+        "conviction_score": 1.0,
+        "price": 3108.6709
       },
       {
         "ticker": "CURY.L",
         "name": "Currys plc",
         "signal": "buy",
-        "conviction_score": 0.9722000000000003,
-        "price": 148.9
+        "conviction_score": 1.0,
+        "price": 148.2
       },
       {
         "ticker": "DSCV.L",
         "name": "discoverIE Group plc",
         "signal": "buy",
-        "conviction_score": 0.9042000000000002,
-        "price": 767.0
+        "conviction_score": 0.9542000000000003,
+        "price": 772.0
       }
     ],
     "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
     "anticipated_buys": [],
-    "anticipated_holds": [
-      {
-        "action": "hold",
-        "ticker": "KLR.L",
-        "name": "Keller Group plc",
-        "reason": "Already near equal-weight target",
-        "value": 261.34,
-        "target_value": 259.11,
-        "conviction_score": 0.9974000000000003,
-        "signal": "buy"
-      }
-    ],
+    "anticipated_holds": [],
     "skipped": [
       {
         "ticker": "CURY.L",
         "name": "Currys plc",
         "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 259.11,
-        "conviction_score": 0.9722000000000003,
+        "target_value": 261.26,
+        "conviction_score": 1.0,
         "signal": "buy"
       }
     ],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 1 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s)."
   },
   "alerts": [
     {
@@ -142,7 +82,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 3040.0,
+      "mark": 3108.6708984375,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -153,7 +93,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 767.0,
+      "mark": 772.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -164,7 +104,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 148.89999389648438,
+      "mark": 148.1999969482422,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -924,21 +864,35 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-17T09:30:09.387881+01:00",
+        "portfolio_value": 783.79,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-16T09:28:40.711117+01:00",
+    "last_mark_at": "2026-09-17T09:30:09.387881+01:00",
     "rebalance_state": {
       "exit_streak": {},
-      "reentry_cooldown": {
-        "JD.L": 1
-      }
+      "reentry_cooldown": {}
     }
   },
-  "note": "Rebalanced after open settle (3 trade(s)).",
+  "note": "Rebalanced after open settle (0 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_exclusion_u4",
-    "generated_at": "2026-09-16T08:28:52.115839+00:00",
+    "generated_at": "2026-09-17T08:30:28.212785+00:00",
     "open_count": 10,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -951,13 +905,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 1,
+    "ingested_this_pass": 0,
     "checkpoints_added_this_pass": 3
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_exclusion_u4",
-    "generated_at": "2026-09-16T08:28:52.116628+00:00",
+    "generated_at": "2026-09-17T08:30:28.213733+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1051,7 +1005,7 @@
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -1063,8 +1017,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "ai_judgment_exclusion_u4",
-    "updated_at": "2026-09-16T08:28:52.117435+00:00",
-    "as_of": "2026-09-16T09:28:40.711117+01:00",
+    "updated_at": "2026-09-17T08:30:28.214867+00:00",
+    "as_of": "2026-09-17T09:30:09.387881+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1121,12 +1075,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0116,
-        "mark": 767.0,
+        "unrealized_pct": -0.0052,
+        "mark": 772.0,
         "avg_cost": 776.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9042,
+        "conviction_score": 0.9542,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1142,14 +1096,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 90%"
+          "conviction 95%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 90%"
+          "conviction 95%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1161,12 +1115,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 148.9,
+        "unrealized_pct": -0.0047,
+        "mark": 148.2,
         "avg_cost": 148.9,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9722,
+        "conviction_score": 1.0,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1182,14 +1136,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 97%"
+          "conviction 100%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 97%"
+          "conviction 100%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -1201,12 +1155,12 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0201,
-        "mark": 3040.0,
+        "unrealized_pct": 0.0432,
+        "mark": 3108.6709,
         "avg_cost": 2980.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9974,
+        "conviction_score": 1.0,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1242,7 +1196,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "ai_judgment_exclusion_u4",
-    "generated_at": "2026-09-16T08:28:52.118474+00:00",
+    "generated_at": "2026-09-17T08:30:28.216274+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1310,7 +1264,7 @@
     "schema_version": 1,
     "track_id": "ai_judgment_exclusion_u4",
     "observe_only": true,
-    "generated_at": "2026-09-16T08:28:52.120136+00:00",
+    "generated_at": "2026-09-17T08:30:28.218490+00:00",
     "open_count": 3,
     "closed_count": 3,
     "scored_count": 2,
@@ -1369,11 +1323,11 @@
       "recommit_scored": 1
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 1,
+    "ingested_this_pass": 0,
     "marked_this_pass": 3,
-    "closed_this_pass": 1
+    "closed_this_pass": 0
   },
-  "generated_at": "2026-09-16T08:28:52.120387+00:00",
+  "generated_at": "2026-09-17T08:30:28.218871+00:00",
   "track_id": "ai_judgment_exclusion_u4",
   "track_label": "AI judgment exclusion ladder u4 (frozen priors)",
   "is_primary_learning_track": false,

@@ -3,27 +3,27 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "graduated_allocation",
-  "generated_at": "2026-09-16T08:27:56.730279+00:00",
+  "generated_at": "2026-09-17T08:28:55.133207+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 5,
+    "closed_total": 6,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 3,
+    "open_with_thesis": 2,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 5,
-        "recovery_rate": 0.2,
-        "sold_underwater_rate": 0.8,
-        "mean_peak_unrealized_pct": -0.0149,
-        "mean_trough_unrealized_pct": -0.0431,
+        "closed_count": 6,
+        "recovery_rate": 0.1667,
+        "sold_underwater_rate": 0.8333,
+        "mean_peak_unrealized_pct": -0.0146,
+        "mean_trough_unrealized_pct": -0.0386,
         "outcome_labels": {
-          "sold_underwater": 4,
+          "sold_underwater": 5,
           "recovered": 1
         }
       },
@@ -56,10 +56,10 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 5,
+    "hold_closed_with_thesis": 6,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=5 (target >=8)",
+      "hold closed with thesis=6 (target >=8)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -321,7 +321,7 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": 0.0201,
+      "peak_unrealized_pct": 0.0423,
       "trough_unrealized_pct": -0.0148,
       "recovered_to_breakeven": true,
       "close_reason": null,
@@ -365,7 +365,7 @@
       "exit_streak_at_start": 1,
       "momentum_grace": false,
       "checkpoints": [],
-      "peak_unrealized_pct": -0.0103,
+      "peak_unrealized_pct": -0.0052,
       "trough_unrealized_pct": -0.0116,
       "recovered_to_breakeven": null,
       "close_reason": null,
@@ -378,7 +378,7 @@
       "ticker": "FRES.L",
       "name": "Fresnillo plc",
       "started_at": "2026-09-14T09:28:00.240774+01:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -411,9 +411,9 @@
       "peak_unrealized_pct": -0.0128,
       "trough_unrealized_pct": -0.0162,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-09-17T09:28:34.763261+01:00",
+      "linked_sell_trade_id": "b81308bb-dc6b-4af0-a68b-dc9a35eb9f90"
     }
   ],
   "swap_rotations": [
@@ -523,16 +523,24 @@
           "cost": 3.57
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-17T09:28:34.763261+01:00",
+          "days_after": 7,
+          "avg_sell_return": 0.0238,
+          "avg_buy_return": -0.0105,
+          "replacement_delta": -0.0343
+        }
+      ],
       "sell_returns_since_rotation": {
-        "MGNS.L": 0.0156,
-        "SN.L": 0.0039,
-        "VTY.L": 0.0553
+        "MGNS.L": 0.0293,
+        "SN.L": 0.0147,
+        "VTY.L": 0.0273
       },
       "buy_returns_since_rotation": {
-        "KLR.L": 0.0201,
-        "DSCV.L": -0.0116,
-        "JD.L": -0.0642
+        "KLR.L": 0.0423,
+        "DSCV.L": -0.0052,
+        "JD.L": -0.0687
       },
       "verdict": null,
       "closed_at": null
@@ -581,10 +589,10 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "IMB.L": -0.0071
+        "IMB.L": -0.0079
       },
       "buy_returns_since_rotation": {
-        "FRES.L": -0.0162
+        "FRES.L": -0.0131
       },
       "verdict": null,
       "closed_at": null
@@ -633,10 +641,88 @@
       ],
       "checkpoints": [],
       "sell_returns_since_rotation": {
-        "JD.L": -0.0
+        "JD.L": -0.0048
       },
       "buy_returns_since_rotation": {
-        "POLN.L": 0.0
+        "POLN.L": 0.0105
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "graduated_allocation:2026-09-17T09:28:34.763261+01:00",
+      "track_id": "graduated_allocation",
+      "logged_at": "2026-09-17T09:28:34.763261+01:00",
+      "status": "open",
+      "trade_cost_pct": 0.03,
+      "sells": [
+        {
+          "ticker": "FRES.L",
+          "price": 2932.0,
+          "shares": 0.03954,
+          "gross": 115.93,
+          "cost": 3.48,
+          "avg_cost_at_exit": 2971.0,
+          "realized_pct": -0.0131,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0131
+        },
+        {
+          "ticker": "KLR.L",
+          "price": 3106.0,
+          "shares": 0.003683,
+          "gross": 11.44,
+          "cost": 0.34,
+          "avg_cost_at_exit": 2980.0,
+          "realized_pct": 0.0423,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": 0.0423
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "CURY.L",
+          "price": 148.4,
+          "shares": 0.77931,
+          "gross": 115.65,
+          "cost": 3.47
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "FRES.L": 0.0,
+        "KLR.L": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "CURY.L": -0.0
       },
       "verdict": null,
       "closed_at": null
