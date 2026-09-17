@@ -510,6 +510,11 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "PDFs and ESEF filings.xbrl.org packs are already bodied via ir_allowlist/"
         "esef_direct."
     ),
+    "BPT.AX": (
+        "asx200 leftover IWB: indexed-without-body rows are misattributed Investegate "
+        "RNS for Bridgepoint Group (UK BPT epic collision); beachenergy.com.au IR "
+        "paths 404 and Beach Energy FY26 Markit/ASX statutory PDFs are already bodied."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.

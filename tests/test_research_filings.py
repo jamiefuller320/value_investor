@@ -8439,6 +8439,36 @@ def test_parked_source_hunter_skip_sap_de_euro_depth():
     assert fetch_filing_body(rows[0]["url"]) is None
 
 
+def test_parked_source_hunter_skip_bpt_ax_asx200():
+    """eng-20260916-06: BPT.AX leftover IWB is misattributed Investegate RNS, not missing ASX filings."""
+    assert "BPT.AX" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["BPT.AX"]
+    assert "Investegate" in reason
+    assert "Bridgepoint" in reason
+    assert "Markit" in reason or "ASX" in reason
+    assert fetch_filings_ir_allowlist("BPT.AX") == []
+
+
+def test_parked_source_hunter_bpt_ax_asx200_leftover_is_bridgepoint_rns():
+    """eng-20260916-06: sample leftover Investegate row is Bridgepoint buyback RNS, not Beach Energy."""
+    leftover_url = (
+        "https://www.investegate.co.uk/announcement/rns/"
+        "bridgepoint-group-reg-s---bpt/transaction-in-own-shares/9443330"
+    )
+    body = fetch_filing_body(leftover_url)
+    assert body and len(body) > 1000
+    assert "bridgepoint-group-reg-s---bpt" in leftover_url
+    assert "Beach Energy" not in body
+    assert "XLON" in body or "J.P.Morgan" in body
+
+    markit_annual = (
+        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03118435-2A1687904"
+    )
+    statutory = fetch_filing_body(markit_annual)
+    assert statutory and len(statutory) > 5000
+    assert "Beach Energy" in statutory
+
+
 def test_parked_source_hunter_skip_abi_br_euro_depth():
     """eng-20260909-01: re-hunt — leftover IWB is 6-K cover HTML; ab-inbev IR is JS-only."""
     assert "ABI.BR" in PARKED_SOURCE_HUNTER_SKIP
