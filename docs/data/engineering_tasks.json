@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-17T11:35:11.862888+00:00",
+  "compiled_at": "2026-09-17T13:10:13.868573+00:00",
   "run_at": null,
-  "task_count": 28,
+  "task_count": 29,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -638,6 +638,61 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
+      "id": "eng-20260917-06",
+      "area": "scoring",
+      "title": "fcf: Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_defin",
+      "summary": "First-principle slice 1/2 of: Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_definition. topics=fcf paths=8",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "FGP.L"
+        ],
+        "recorded_at": "2026-09-04T16:58:24.608572+00:00",
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "topics=fcf paths=8",
+        "narrow_parent_title": "Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_definition",
+        "narrow_cohesion_bypass": false,
+        "narrow_split_group_id": "8a4a91512cd5",
+        "narrow_split_index": 1,
+        "narrow_split_count": 2,
+        "narrow_topics": [
+          "fcf"
+        ],
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/scoring/fcf.py",
+        "src/value_investor/scoring/fcf_basis_overlay.py",
+        "src/value_investor/scoring/fcf_three_way_conviction_overlay.py",
+        "src/value_investor/scoring/screening_export_guard.py",
+        "src/value_investor/scoring/snapshot.py",
+        "src/value_investor/pipeline.py",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": true,
+      "status": "open"
+    },
+    {
       "id": "eng-20260917-05",
       "area": "scoring",
       "title": "Relabel `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income (MEGP: no adjusted EPS in 67 filing bodies) to stop false “filing core” Lynch PEG fa",
@@ -658,7 +713,8 @@
         "origin_source": "research_model_suggestions",
         "origin_priority_score": 43.0,
         "preferred_merge_class": "compile_cap_drain",
-        "doc": "docs/ops/engineering-sync.md"
+        "doc": "docs/ops/engineering-sync.md",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Export or overlay behaviour is covered by a unit test",
@@ -681,11 +737,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260917-05.md",
       "branch_name": "cursor/eng-20260917-05-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-17T12:43:17.113924+00:00"
+      "completed_at": "2026-09-17T12:43:17.113924+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/685",
+      "pr_number": 685,
+      "merged_at": "2026-09-17T13:10:12.223257+00:00"
     },
     {
       "id": "eng-20260917-04",
