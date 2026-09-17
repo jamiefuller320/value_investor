@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-17T11:26:33+00:00",
+  "updated_at": "2026-09-17T14:25:46+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9265,6 +9265,22 @@
       "source": "PR cursor/narrow-bypass-split-and-diff-gate-bb45",
       "added_at": "2026-09-17T11:26:29+00:00",
       "updated_at": "2026-09-17T11:26:33+00:00"
+    },
+    {
+      "id": "L415",
+      "category": "later",
+      "section": "research",
+      "title": "Client-side SMA series fallback for old chart JSON",
+      "summary": "Charts without sma50_series/sma200_series still fall back to flat point-in-time SMA lines until republish. A client-side rolling estimate on downsampled closes would be misleading; prefer ensuring publish always writes series.",
+      "revisit_when": "If many stale chart JSON files remain after several publishes, or offline viewers need overlays without republish",
+      "tags": [
+        "charts",
+        "sma",
+        "dashboard"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0a406-561d-787e-9431-0040a8d576b7",
+      "added_at": "2026-09-17T14:25:46+00:00"
     }
   ],
   "fragments": [
