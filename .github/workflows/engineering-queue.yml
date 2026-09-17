@@ -384,6 +384,13 @@ jobs:
 
       - name: Commit reconciled queue state
         id: queue_recovery_commit
+        env:
+          GHA_COMMIT_OWNED: >-
+            docs/data/engineering_tasks.json
+            docs/data/automation.json
+            docs/data/latest.json
+            docs/data/engineering_queue_monitor.jsonl
+            docs/data/engineering_queue_monitor_summary.json
         run: bash scripts/gha_commit_engineering_queue.sh
 
       - name: Evaluate queue dispatch
@@ -420,6 +427,23 @@ jobs:
               encoding="utf-8",
           )
           PY
+
+      - name: Record queue monitor snapshot
+        env:
+          EVENT_SOURCE: ${{ github.event_name }}
+        run: |
+          GATE_JSON=/tmp/queue_status.json
+          if [ ! -f "$GATE_JSON" ]; then
+            GATE_JSON=""
+          fi
+          ARGS=(queue-monitor-snapshot --append --json
+            --open-prs-json /tmp/open_prs.json
+            --agent-running-count "${{ steps.probe.outputs.agent_running_count }}"
+            --event-source "$EVENT_SOURCE")
+          if [ -n "$GATE_JSON" ]; then
+            ARGS+=(--gate-json "$GATE_JSON")
+          fi
+          ftse-engineering "${ARGS[@]}" | tee /tmp/queue_monitor_snapshot.json
 
       - name: Dispatch engineering agent
         if: >-

@@ -301,6 +301,86 @@ def _cmd_refresh_queue_ui(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_queue_monitor_snapshot(args: argparse.Namespace) -> int:
+    from value_investor.engineering_queue_monitor import (
+        append_queue_monitor_snapshot,
+        build_queue_monitor_snapshot,
+        load_monitor_snapshots,
+        summarize_monitor_window,
+        write_monitor_summary,
+    )
+
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    open_prs = _load_open_prs_json(args.open_prs_json)
+    gate_json = _load_optional_json(args.gate_json)
+    snapshot = build_queue_monitor_snapshot(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        agent_running_count=int(args.agent_running_count or 0),
+        event_source=str(args.event_source or "manual"),
+        gate_json=gate_json,
+    )
+    out_path = Path(args.monitor_path)
+    if args.append:
+        append_queue_monitor_snapshot(snapshot, path=out_path, max_lines=int(args.max_lines))
+    summary = summarize_monitor_window(load_monitor_snapshots(path=out_path), hours=float(args.summary_hours))
+    write_monitor_summary(summary, path=Path(args.summary_path))
+    payload = {"snapshot": snapshot, "jsonl_path": str(out_path), "summary": summary}
+    if args.json:
+        _print_json(payload)
+    else:
+        disp = snapshot.get("dispatch") or {}
+        queue = snapshot.get("queue") or {}
+        print(
+            f"Monitor snapshot @ {snapshot.get('recorded_at')}: "
+            f"dispatch={disp.get('should_dispatch')} ({disp.get('reason')}) "
+            f"open={queue.get('open_count')} pr_open={queue.get('pr_open_count')}"
+        )
+        print(f"Appended → {out_path} (window summary snapshots={summary.get('snapshot_count')})")
+    return 0
+
+
+def _cmd_queue_monitor_report(args: argparse.Namespace) -> int:
+    from value_investor.engineering_queue_monitor import (
+        build_gha_activity_report,
+        build_queue_monitor_snapshot,
+        load_monitor_snapshots,
+        summarize_monitor_window,
+    )
+
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    open_prs = _load_open_prs_json(args.open_prs_json)
+    hours = float(args.hours)
+    jsonl_summary = summarize_monitor_window(
+        load_monitor_snapshots(path=Path(args.monitor_path)),
+        hours=hours,
+    )
+    gha = None
+    gha_error = None
+    if not args.skip_gha:
+        try:
+            gha = build_gha_activity_report(hours=hours)
+        except (OSError, RuntimeError, json.JSONDecodeError) as exc:
+            gha_error = str(exc)
+    live = build_queue_monitor_snapshot(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        agent_running_count=int(args.agent_running_count or 0),
+        event_source="report",
+    )
+    payload = {
+        "live_snapshot": live,
+        "jsonl_window_summary": jsonl_summary,
+        "gha_activity": gha,
+        "gha_error": gha_error,
+    }
+    if args.json:
+        _print_json(payload)
+    else:
+        print(json.dumps(payload, indent=2))
+    return 0
+
+
 def _cmd_mark_merged(args: argparse.Namespace) -> int:
     updated = mark_task_merged_for_branch(
         args.branch,
@@ -1678,6 +1758,54 @@ def main(argv: list[str] | None = None) -> int:
         help="Path to JSON array of open PRs from gh pr list --json ...",
     )
     refresh_ui_p.set_defaults(func=_cmd_refresh_queue_ui)
+
+    mon_p = sub.add_parser(
+        "queue-monitor-snapshot",
+        parents=[common],
+        help="Record dispatch/clash snapshot for queue idle diagnosis (append JSONL)",
+    )
+    mon_p.add_argument("--open-prs-json", default=None)
+    mon_p.add_argument("--agent-running-count", type=int, default=0)
+    mon_p.add_argument(
+        "--event-source",
+        default="manual",
+        help="Provenance: schedule, pull_request, workflow_dispatch, …",
+    )
+    mon_p.add_argument(
+        "--gate-json",
+        default=None,
+        help="Optional path to queue-status JSON from the same workflow tick",
+    )
+    mon_p.add_argument(
+        "--monitor-path",
+        type=Path,
+        default=Path("docs/data/engineering_queue_monitor.jsonl"),
+    )
+    mon_p.add_argument(
+        "--summary-path",
+        type=Path,
+        default=Path("docs/data/engineering_queue_monitor_summary.json"),
+    )
+    mon_p.add_argument("--append", action="store_true", help="Append one line to monitor JSONL")
+    mon_p.add_argument("--max-lines", type=int, default=192)
+    mon_p.add_argument("--summary-hours", type=float, default=24.0)
+    mon_p.set_defaults(func=_cmd_queue_monitor_snapshot)
+
+    mon_report_p = sub.add_parser(
+        "queue-monitor-report",
+        parents=[common],
+        help="Summarize monitor JSONL plus recent engineering-queue/agent GHA runs",
+    )
+    mon_report_p.add_argument("--open-prs-json", default=None)
+    mon_report_p.add_argument("--agent-running-count", type=int, default=0)
+    mon_report_p.add_argument("--hours", type=float, default=24.0)
+    mon_report_p.add_argument(
+        "--monitor-path",
+        type=Path,
+        default=Path("docs/data/engineering_queue_monitor.jsonl"),
+    )
+    mon_report_p.add_argument("--skip-gha", action="store_true")
+    mon_report_p.set_defaults(func=_cmd_queue_monitor_report)
 
     preflight_p = sub.add_parser(
         "preflight",
