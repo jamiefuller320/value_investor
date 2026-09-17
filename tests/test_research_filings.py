@@ -7455,6 +7455,18 @@ def test_parked_source_hunter_skip_tsn_sp500():
     assert fetch_filings_ir_allowlist("TSN") == []
 
 
+def test_parked_source_hunter_skip_ccep_nasdaq100():
+    """eng-20260917-09: CCEP leftover IWB is duplicate Investegate URLs, not missing SEC filings."""
+    assert "CCEP" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["CCEP"]
+    assert "investegate_direct" in reason
+    assert "rns-pdf" in reason
+    assert "sec_edgar" in reason
+    assert "20-F" in reason
+    assert fetch_filings_ir_allowlist("CCEP") == []
+    assert fetch_filing_body("https://www.coca-colaep.com/en/investors") is None
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_andr_vi_builtins(tmp_path: Path):
     """Regression: ANDR.VI parked IWB — andritz.com financial report 2025 PDF."""
     allowlist_path = tmp_path / "ir.json"
