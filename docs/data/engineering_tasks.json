@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-17T03:52:23.594281+00:00",
+  "compiled_at": "2026-09-17T05:41:28.471351+00:00",
   "run_at": null,
-  "task_count": 26,
+  "task_count": 27,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -638,21 +638,21 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
-      "id": "eng-20260917-03",
+      "id": "eng-20260917-04",
       "area": "scoring",
-      "title": "Set fcf_definition_divergence whenever retail ~£574m, Yahoo £923m and screen £645m disagree; do not pass FCF Yield at 8.8% or High Dividend Yield at 4.1% withou",
-      "summary": "Set fcf_definition_divergence whenever retail ~£574m, Yahoo £923m and screen £645m disagree; do not pass FCF Yield at 8.8% or High Dividend Yield at 4.1% without stating the basis and buyback-inclusive cover. Do not treat P/B 0.73 as confirmation while quality failed and P/E is 18.7 on compressed grocery earnings. Populate failed_models for the 15/22 non-passes. Do not keep headline buy when research_verdict is already accumulate. Stop splicing prior-memo text into action_note. Fix conviction_sc",
+      "title": "Set fcf_definition_divergence whenever filing/Yahoo 1,861m and screen TTM 1,200.4m disagree; do not pass FCF Yield at 9.3% or a 4.0% dividend without stating th",
+      "summary": "Set fcf_definition_divergence whenever filing/Yahoo 1,861m and screen TTM 1,200.4m disagree; do not pass FCF Yield at 9.3% or a 4.0% dividend without stating the basis and buyback-inclusive cover. Do not pass Neff PEGY at 0.05 when printed growth is −9.0%. Do not treat P/B 1.6 as confirmation while tangible book is 596m and net debt is 18.3bn. Populate failed_models for the 16/22 non-passes. Do not keep headline buy when research_verdict is already accumulate / high. Stop splicing prior-memo tex",
       "priority": "medium",
       "priority_score": 43.0,
       "source": "compile_cap_drain",
       "evidence": {
         "tickers": [
-          "SBRY.L"
+          "BT-A.L"
         ],
-        "recorded_at": "2026-09-04T20:17:13.989866+00:00",
+        "recorded_at": "2026-09-04T20:24:07.516757+00:00",
         "narrow_scope_mode": "cohesion_bypass",
         "narrow_scope_reason": "topic paths 10 > 8 — cohesion bypass (do not split one objective)",
-        "narrow_parent_title": "Set fcf_definition_divergence whenever retail ~£574m, Yahoo £923m and screen £645m disagree; do not pass FCF Yield at 8.8% or High Dividend Yield at 4.1% withou",
+        "narrow_parent_title": "Set fcf_definition_divergence whenever filing/Yahoo 1,861m and screen TTM 1,200.4m disagree; do not pass FCF Yield at 9.3% or a 4.0% dividend without stating th",
         "narrow_cohesion_bypass": true,
         "narrow_topics": [
           "fcf",
@@ -689,12 +689,80 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "open"
+    },
+    {
+      "id": "eng-20260917-03",
+      "area": "scoring",
+      "title": "Set fcf_definition_divergence whenever retail ~£574m, Yahoo £923m and screen £645m disagree; do not pass FCF Yield at 8.8% or High Dividend Yield at 4.1% withou",
+      "summary": "Set fcf_definition_divergence whenever retail ~£574m, Yahoo £923m and screen £645m disagree; do not pass FCF Yield at 8.8% or High Dividend Yield at 4.1% without stating the basis and buyback-inclusive cover. Do not treat P/B 0.73 as confirmation while quality failed and P/E is 18.7 on compressed grocery earnings. Populate failed_models for the 15/22 non-passes. Do not keep headline buy when research_verdict is already accumulate. Stop splicing prior-memo text into action_note. Fix conviction_sc",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "SBRY.L"
+        ],
+        "recorded_at": "2026-09-04T20:17:13.989866+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "topic paths 10 > 8 — cohesion bypass (do not split one objective)",
+        "narrow_parent_title": "Set fcf_definition_divergence whenever retail ~£574m, Yahoo £923m and screen £645m disagree; do not pass FCF Yield at 8.8% or High Dividend Yield at 4.1% withou",
+        "narrow_cohesion_bypass": true,
+        "narrow_topics": [
+          "fcf",
+          "dividend"
+        ],
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260917-03",
+        "verified_at": "2026-09-17T05:41:18.759894+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_pipeline.py",
+            "tests/test_summary.py"
+          ],
+          "output_tail": "........................................................................ [ 31%]\n........................................................................ [ 62%]\n........................................................................ [ 94%]\n.............                                                            [100%]\n229 passed in 10.91s"
+        }
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/scoring/fcf.py",
+        "src/value_investor/scoring/fcf_basis_overlay.py",
+        "src/value_investor/scoring/fcf_three_way_conviction_overlay.py",
+        "src/value_investor/scoring/screening_export_guard.py",
+        "src/value_investor/scoring/snapshot.py",
+        "src/value_investor/pipeline.py",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py",
+        "src/value_investor/scoring/dividend_sustainability_overlay.py",
+        "src/value_investor/scoring/dividend_yield_overlay.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
       "no_diff_count": 0,
       "last_no_diff_at": "2026-09-17T04:04:25.490830+00:00",
       "result_path": "output/engineering_result_eng-20260917-03.md",
       "branch_name": "cursor/eng-20260917-03-1de3",
-      "completed_at": "2026-09-17T04:38:07.615378+00:00"
+      "completed_at": "2026-09-17T04:38:07.615378+00:00",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/681",
+      "pr_number": 681,
+      "merged_at": "2026-09-17T05:41:18.760712+00:00"
     },
     {
       "id": "eng-20260917-02",
@@ -1498,7 +1566,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-17T05:16:21.546335+00:00",
+    "evaluated_at": "2026-09-17T05:41:26.363571+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
