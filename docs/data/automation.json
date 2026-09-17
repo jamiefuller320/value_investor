@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-17T15:16:29.148986+00:00",
+  "generated_at": "2026-09-17T15:42:31.197601+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1153,27 +1153,27 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-17T13:10:13.868573+00:00",
-    "queue_ui_updated_at": "2026-09-17T15:16:29.092858+00:00",
-    "task_count": 29,
+    "compiled_at": "2026-09-17T15:42:29.315492+00:00",
+    "queue_ui_updated_at": "2026-09-17T15:42:31.132787+00:00",
+    "task_count": 30,
     "status": {
       "open_count": 2,
       "pr_open_count": 0,
       "parked_count": 6,
-      "merged_count": 20,
+      "merged_count": 21,
       "failed_count": 0,
-      "next_task_id": "eng-20260917-06",
-      "in_flight_branch": "cursor/eng-20260917-06-1de3",
-      "in_flight_pr": 686,
+      "next_task_id": "eng-20260917-07",
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
     "queued_tasks": [
       {
-        "id": "eng-20260917-06",
+        "id": "eng-20260917-07",
         "area": "scoring",
-        "title": "fcf: Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_defin",
+        "title": "dividend: Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_",
         "priority": "medium",
         "priority_score": 43.0,
         "status": "open",
@@ -1558,24 +1558,18 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-17T15:16:29.148986+00:00",
+    "generated_at": "2026-09-17T15:42:31.197601+00:00",
     "overall": "active",
-    "headline": "Merge lane active; agent lane active.",
+    "headline": "Agent lane active.",
     "merge_lane": {
-      "state": "running",
-      "idle": false,
-      "running": true,
+      "state": "idle",
+      "idle": true,
+      "running": false,
       "blocked": false,
       "pr_open_count": 0,
-      "open_engineering_prs": [
-        {
-          "number": 686,
-          "branch": "cursor/eng-20260917-06-1de3",
-          "draft": false
-        }
-      ],
-      "in_flight_pr": 686,
-      "detail": "Open engineering PR(s) #686 — merge fires on CI success."
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
       "state": "running",
@@ -1590,14 +1584,14 @@
       "pr_open_count": 0,
       "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260917-06",
+      "next_task_id": "eng-20260917-07",
       "reason": "queue ready — dispatch next open task",
       "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-17T15:16:23.242187+00:00"
+      "evaluated_at": "2026-09-17T15:42:25.635094+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1611,6 +1605,17 @@
       "should_dispatch_engineering": false
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260917-06",
+        "title": "fcf: Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_defin",
+        "area": "scoring",
+        "pr_number": 686,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/686",
+        "merged_at": "2026-09-17T15:42:19.380432+00:00",
+        "merge_class": "ci_fix",
+        "auto_merge": true,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260917-05",
         "title": "Relabel `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income (MEGP: no adjusted EPS in 67 filing bodies) to stop false “filing core” Lynch PEG fa",
@@ -1667,6 +1672,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 3
+    "verified_merges_today_count": 4
   }
 }

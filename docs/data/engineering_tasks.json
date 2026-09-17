@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-17T13:10:13.868573+00:00",
+  "compiled_at": "2026-09-17T15:42:29.315492+00:00",
   "run_at": null,
-  "task_count": 29,
+  "task_count": 30,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -638,6 +638,57 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
+      "id": "eng-20260917-07",
+      "area": "scoring",
+      "title": "dividend: Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_",
+      "summary": "First-principle slice 2/2 of: Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_definition. topics=dividend paths=4",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "FGP.L"
+        ],
+        "recorded_at": "2026-09-04T16:58:24.608572+00:00",
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "topics=dividend paths=4",
+        "narrow_parent_title": "Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_definition",
+        "narrow_cohesion_bypass": false,
+        "narrow_split_group_id": "99b13f1b06bf",
+        "narrow_split_index": 2,
+        "narrow_split_count": 2,
+        "narrow_topics": [
+          "dividend"
+        ],
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/scoring/dividend_sustainability_overlay.py",
+        "src/value_investor/scoring/dividend_yield_overlay.py",
+        "src/value_investor/scoring/snapshot.py",
+        "tests/test_pipeline.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": true,
+      "status": "open"
+    },
+    {
       "id": "eng-20260917-06",
       "area": "scoring",
       "title": "fcf: Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_defin",
@@ -665,7 +716,18 @@
         "origin_priority_score": 43.0,
         "preferred_merge_class": "compile_cap_drain",
         "doc": "docs/ops/engineering-sync.md",
-        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap",
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260917-06",
+        "verified_at": "2026-09-17T15:42:19.379725+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_pipeline.py",
+            "tests/test_summary.py"
+          ],
+          "output_tail": "........................................................................ [ 29%]\n........................................................................ [ 59%]\n........................................................................ [ 89%]\n..........................                                               [100%]\n242 passed in 13.86s"
+        }
       },
       "acceptance_criteria": [
         "Export or overlay behaviour is covered by a unit test",
@@ -690,7 +752,12 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": true,
-      "status": "open"
+      "status": "merged",
+      "branch_name": "cursor/eng-20260917-06-1de3",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/686",
+      "pr_number": 686,
+      "no_diff_count": 0,
+      "merged_at": "2026-09-17T15:42:19.380432+00:00"
     },
     {
       "id": "eng-20260917-05",
@@ -1692,7 +1759,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-17T15:16:23.242187+00:00",
+    "evaluated_at": "2026-09-17T15:42:25.635094+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
