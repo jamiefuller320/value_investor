@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-17T07:47:00.497170+00:00",
+  "generated_at": "2026-09-17T17:12:59.646599+00:00",
   "role": "end_of_day_project_traffic",
   "trajectory": "on_track",
   "pause_active": false,
@@ -10,10 +10,11 @@
     "FTSE 350 live screen and published dashboard are operational.",
     "Offline library: 21 graduated markets (focus: euro_depth).",
     "Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.",
-    "Engineering queue: 9 open, 2 merged supervised tasks."
+    "Engineering queue: 2 open, 19 merged supervised tasks."
   ],
   "gaps": [
-    "Primary AI track still below ^FTSE after costs (-28.6% excess; history still thin)."
+    "Primary AI track still below ^FTSE after costs (-31.8% excess; history still thin).",
+    "Published screen bundle dated 2026-09-15 — confirm Sunday refresh."
   ],
   "next_actions": [
     "Let the learning loop accumulate before adding tracks or knobs.",
@@ -61,25 +62,13 @@
         "probe": "status must be one of complete|in_progress|not_started"
       },
       {
-        "claim": "Progress report present (generated_at=2026-09-16T16:53:21+00:00)",
-        "source": "docs/data/progress_report.json",
-        "grounded": true,
-        "probe": "progress_report.json must exist with a timestamp"
-      },
-      {
-        "claim": "So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview']",
-        "source": "docs/data/progress_report.json",
-        "grounded": true,
-        "probe": "human_gate block is structural, not free text"
-      },
-      {
-        "claim": "Queue health overall=active; headline=Merge lane active; agent lane active.",
+        "claim": "Queue health overall=blocked; headline=2 open task(s) blocked by file clash or policy — no open engineering tasks in queue",
         "source": "docs/data/queue_health.json",
         "grounded": true,
         "probe": "queue_health.overall must be set by refresh_queue_health_ui"
       },
       {
-        "claim": "Ops monitor overall=warn at 2026-09-16T07:46:38.598120+00:00",
+        "claim": "Ops monitor overall=ok at 2026-09-17T07:46:34.530264+00:00",
         "source": "docs/data/ops_status.json",
         "grounded": true,
         "probe": "ops_status.run_at required for same-day claims"
@@ -92,9 +81,42 @@
       }
     ],
     "ungrounded_count": 0,
-    "grounded_count": 11
+    "grounded_count": 9
   },
   "merges_today": [
+    {
+      "task_id": "eng-20260917-06",
+      "title": "fcf: Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_defin",
+      "area": "scoring",
+      "pr_number": 686,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/686",
+      "merged_at": "2026-09-17T15:42:19.380432+00:00",
+      "merge_class": "ci_fix",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260917-05",
+      "title": "Relabel `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income (MEGP: no adjusted EPS in 67 filing bodies) to stop false “filing core” Lynch PEG fa",
+      "area": "scoring",
+      "pr_number": 685,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/685",
+      "merged_at": "2026-09-17T13:10:12.223257+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": false,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260917-04",
+      "title": "Set fcf_definition_divergence whenever filing/Yahoo 1,861m and screen TTM 1,200.4m disagree; do not pass FCF Yield at 9.3% or a 4.0% dividend without stating th",
+      "area": "scoring",
+      "pr_number": 682,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/682",
+      "merged_at": "2026-09-17T11:35:02.356084+00:00",
+      "merge_class": "human",
+      "auto_merge": false,
+      "independently_verified": false
+    },
     {
       "task_id": "eng-20260917-03",
       "title": "Set fcf_definition_divergence whenever retail ~£574m, Yahoo £923m and screen £645m disagree; do not pass FCF Yield at 8.8% or High Dividend Yield at 4.1% withou",
@@ -130,6 +152,28 @@
     }
   ],
   "verified_merges_today": [
+    {
+      "task_id": "eng-20260917-06",
+      "title": "fcf: Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_defin",
+      "area": "scoring",
+      "pr_number": 686,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/686",
+      "merged_at": "2026-09-17T15:42:19.380432+00:00",
+      "merge_class": "ci_fix",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260917-05",
+      "title": "Relabel `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income (MEGP: no adjusted EPS in 67 filing bodies) to stop false “filing core” Lynch PEG fa",
+      "area": "scoring",
+      "pr_number": 685,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/685",
+      "merged_at": "2026-09-17T13:10:12.223257+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": false,
+      "independently_verified": true
+    },
     {
       "task_id": "eng-20260916-06",
       "title": "Hunt fetchable IR source for parked asx200 leftover BPT.AX",
@@ -186,7 +230,7 @@
   },
   "ops_email_handoff": null,
   "sources": {
-    "progress_report": "docs/data/progress_report.json",
+    "progress_report": null,
     "project_progress": "docs/data/project_progress.json",
     "queue_health": "docs/data/queue_health.json",
     "ops_status": "docs/data/ops_status.json",

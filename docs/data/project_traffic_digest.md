@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-17T07:47:00.497170+00:00`
+Generated: `2026-09-17T17:12:59.646599+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -9,29 +9,31 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - FTSE 350 live screen and published dashboard are operational.
 - Offline library: 21 graduated markets (focus: euro_depth).
 - Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.
-- Engineering queue: 9 open, 2 merged supervised tasks.
+- Engineering queue: 2 open, 19 merged supervised tasks.
 
 ## Gaps / watch
-- Primary AI track still below ^FTSE after costs (-28.6% excess; history still thin).
+- Primary AI track still below ^FTSE after costs (-31.8% excess; history still thin).
+- Published screen bundle dated 2026-09-15 — confirm Sunday refresh.
 
 ## Checkpoint probe
-- Grounded rows: 11; ungrounded: 0
+- Grounded rows: 9; ungrounded: 0
 - [ok] Stage 0 (UK quant core): complete _(source: docs/data/project_progress.json)_
 - [ok] Stage 1 (Decision-review learning): in_progress _(source: docs/data/project_progress.json)_
 - [ok] Stage 2b (Primary learning track): in_progress _(source: docs/data/project_progress.json)_
 - [ok] Stage 3 (Library-ready global data): complete _(source: docs/data/project_progress.json)_
 - [ok] Stage 4 (Controlled universe expansion): not_started _(source: docs/data/project_progress.json)_
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
-- [ok] Progress report present (generated_at=2026-09-16T16:53:21+00:00) _(source: docs/data/progress_report.json)_
-- [ok] So-what / human_gate keys present: ['counts', 'generated_at', 'high_severity', 'high_severity_groups', 'human_gate_groups', 'human_gates_preview'] _(source: docs/data/progress_report.json)_
-- [ok] Queue health overall=active; headline=Merge lane active; agent lane active. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-09-16T07:46:38.598120+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Queue health overall=blocked; headline=2 open task(s) blocked by file clash or policy — no open engineering tasks in queue _(source: docs/data/queue_health.json)_
+- [ok] Ops monitor overall=ok at 2026-09-17T07:46:34.530264+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `ci_fix`/verified PR #686 `eng-20260917-06` — fcf: Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_defin
+- `compile_cap_drain`/verified PR #685 `eng-20260917-05` — Relabel `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income (MEGP: no adjusted EPS in 67 filing bodies) to stop false “filing core” Lynch PEG fa
+- `human`/human PR #682 `eng-20260917-04` — Set fcf_definition_divergence whenever filing/Yahoo 1,861m and screen TTM 1,200.4m disagree; do not pass FCF Yield at 9.3% or a 4.0% dividend without stating th
 - `human`/human PR #681 `eng-20260917-03` — Set fcf_definition_divergence whenever retail ~£574m, Yahoo £923m and screen £645m disagree; do not pass FCF Yield at 8.8% or High Dividend Yield at 4.1% withou
 - `parked_hunter`/verified PR #680 `eng-20260916-06` — Hunt fetchable IR source for parked asx200 leftover BPT.AX
 - `compile_cap_drain`/verified PR #679 `eng-20260917-02` — Set fcf_definition_divergence whenever filing ~£462m, Yahoo £956m and screen £830m disagree; do not pass FCF Yield at 21.4% without stating the basis [1/2]
