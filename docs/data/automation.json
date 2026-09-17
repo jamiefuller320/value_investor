@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-17T02:16:24.844908+00:00",
+  "generated_at": "2026-09-17T02:45:14.170501+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1174,23 +1174,39 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-17T00:00:46.460355+00:00",
-    "queue_ui_updated_at": "2026-09-17T02:16:24.774621+00:00",
-    "task_count": 24,
+    "compiled_at": "2026-09-17T02:45:12.836937+00:00",
+    "queue_ui_updated_at": "2026-09-17T02:45:14.120784+00:00",
+    "task_count": 25,
     "status": {
-      "open_count": 2,
+      "open_count": 3,
       "pr_open_count": 0,
       "parked_count": 6,
       "merged_count": 15,
       "failed_count": 0,
-      "next_task_id": "eng-20260917-01",
-      "in_flight_branch": "cursor/compile-cap-drain-throughput-f964",
-      "in_flight_pr": 678,
+      "next_task_id": "eng-20260917-02",
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
     "queued_tasks": [
+      {
+        "id": "eng-20260917-02",
+        "area": "scoring",
+        "title": "Set fcf_definition_divergence whenever filing ~£462m, Yahoo £956m and screen £830m disagree; do not pass FCF Yield at 21.4% without stating the basis [1/2]",
+        "priority": "medium",
+        "priority_score": 43.0,
+        "status": "open",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
+        "clash_scan": "full"
+      },
       {
         "id": "eng-20260917-01",
         "area": "scoring",
@@ -1204,7 +1220,7 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 1,
+        "effective_dispatch_rank": 2,
         "clash_scan": "full"
       },
       {
@@ -1220,7 +1236,7 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 2,
+        "effective_dispatch_rank": 3,
         "clash_scan": "full"
       }
     ],
@@ -1299,8 +1315,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 2,
-      "dispatch_eligible_count": 2,
+      "open_task_count": 3,
+      "dispatch_eligible_count": 3,
       "blocked_count": 0
     }
   },
@@ -1579,18 +1595,18 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-17T02:16:24.844908+00:00",
+    "generated_at": "2026-09-17T02:45:14.170501+00:00",
     "overall": "active",
-    "headline": "Merge lane active; agent lane active.",
+    "headline": "Agent lane active.",
     "merge_lane": {
-      "state": "running",
-      "idle": false,
-      "running": true,
+      "state": "idle",
+      "idle": true,
+      "running": false,
       "blocked": false,
       "pr_open_count": 0,
       "open_engineering_prs": [],
-      "in_flight_pr": 678,
-      "detail": "In-flight PR #678 — auto-merge is event-driven (not a background merger)."
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
       "state": "running",
@@ -1601,18 +1617,18 @@
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 0,
-      "open_count": 2,
+      "open_count": 3,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 2,
+      "dispatch_eligible_count": 3,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260917-01",
+      "next_task_id": "eng-20260917-02",
       "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
       "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-17T02:16:20.107605+00:00"
+      "evaluated_at": "2026-09-17T02:45:10.322727+00:00"
     },
     "traffic_control": {
       "pause_active": false,
