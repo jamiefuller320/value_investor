@@ -1,4 +1,4 @@
-"""Shared GHA artifact commit helper (L348) for email-report + library-grow."""
+"""Shared GHA artifact commit helper (L348) for email-report, library-grow, epoch0-weekday."""
 
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ from pathlib import Path
 SCRIPT = Path("scripts/gha_commit_artifacts.sh")
 EMAIL_WORKFLOW = Path(".github/workflows/email-report.yml")
 LIBRARY_WORKFLOW = Path(".github/workflows/library-grow.yml")
+EPOCH0_WEEKDAY_WORKFLOW = Path(".github/workflows/library-epoch0-weekday.yml")
 
 
 def _git(cwd: Path, *args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -168,10 +169,16 @@ def test_artifact_commit_retries_after_push_race(tmp_path: Path):
 def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     email = EMAIL_WORKFLOW.read_text(encoding="utf-8")
     library = LIBRARY_WORKFLOW.read_text(encoding="utf-8")
+    epoch0 = EPOCH0_WEEKDAY_WORKFLOW.read_text(encoding="utf-8")
     assert "scripts/gha_commit_artifacts.sh" in email
     assert "scripts/gha_commit_artifacts.sh" in library
+    assert "scripts/gha_commit_artifacts.sh" in epoch0
     assert "stefanzweifel/git-auto-commit-action@v6" not in email
     assert "stefanzweifel/git-auto-commit-action@v6" not in library
+    assert "stefanzweifel/git-auto-commit-action@v6" not in epoch0
     assert "git pull --rebase --autostash" not in email
     assert "git pull --rebase --autostash" not in library
+    assert "git pull --rebase --autostash" not in epoch0
     assert "changes_detected" in email
+    assert "docs/data/paper_automation/markets/**/buy_tier_level/**" in epoch0
+    assert "docs/data/library/equal_support_status.json" in epoch0

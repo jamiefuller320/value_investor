@@ -90,16 +90,14 @@ jobs:
           ftse-library --root docs/data/library --policy docs/data/library/policy.json \
             equal-support --census-only --json > /tmp/equal_support_census.json || true
 
-      # Rebase before auto-commit: ASX 00:45 UTC overlaps engineering-queue
-      # schedule; without this, push rejects lose marks until a later slot.
-      - name: Sync main before commit
-        run: git pull --rebase --autostash origin main
-
+      # Shared fetch+reset overlay + push retry (L348). A lone pull --rebase
+      # before git-auto-commit still loses to engineering-queue / ingest on
+      # US 14:15–15:15 UTC (cannot lock ref / fetch first).
       - name: Commit epoch-0 weekday artifacts
-        uses: stefanzweifel/git-auto-commit-action@v6
-        with:
-          commit_message: "chore: admitted epoch-0 weekday marks [skip ci]"
-          file_pattern: >-
+        env:
+          COMMIT_MESSAGE: "chore: admitted epoch-0 weekday marks [skip ci]"
+          GHA_COMMIT_LABEL: "Library epoch-0 weekday"
+          GHA_COMMIT_OWNED: |
             docs/data/library/equal_support_status.json
             docs/data/library/markets/**/screen/near_miss_watch.json
             docs/data/paper_automation/markets/**/automated_fund.json
@@ -109,4 +107,4 @@ jobs:
             docs/data/paper_automation/markets/**/shard_phase.json
             docs/data/paper_automation/markets/**/weekday_batch_log.json
             docs/data/paper_automation/markets/**/buy_tier_level/**
-          skip_fetch: false
+        run: bash scripts/gha_commit_artifacts.sh
