@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-09-17T19:58:14.247513+00:00",
+  "compiled_at": "2026-09-17T20:01:18.836190+00:00",
   "run_at": null,
   "task_count": 32,
   "tasks": [
@@ -638,61 +638,6 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
-      "id": "eng-20260917-09",
-      "area": "scoring",
-      "title": "fcf: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf",
-      "summary": "First-principle slice 1/2 of: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_defi. topics=fcf paths=8",
-      "priority": "medium",
-      "priority_score": 43.0,
-      "source": "compile_cap_drain",
-      "evidence": {
-        "tickers": [
-          "JSG.L"
-        ],
-        "recorded_at": "2026-09-04T19:59:54.897164+00:00",
-        "narrow_scope_mode": "split",
-        "narrow_scope_reason": "topics=fcf paths=8",
-        "narrow_parent_title": "Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_defi",
-        "narrow_cohesion_bypass": false,
-        "narrow_split_group_id": "c24da7a43982",
-        "narrow_split_index": 1,
-        "narrow_split_count": 2,
-        "narrow_topics": [
-          "fcf"
-        ],
-        "compile_cap_drain": true,
-        "origin_source": "research_model_suggestions",
-        "origin_priority_score": 43.0,
-        "preferred_merge_class": "compile_cap_drain",
-        "doc": "docs/ops/engineering-sync.md",
-        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
-      },
-      "acceptance_criteria": [
-        "Export or overlay behaviour is covered by a unit test",
-        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
-        "No edits under blocked_paths"
-      ],
-      "allowed_paths": [
-        "src/value_investor/scoring/fcf.py",
-        "src/value_investor/scoring/fcf_basis_overlay.py",
-        "src/value_investor/scoring/fcf_three_way_conviction_overlay.py",
-        "src/value_investor/scoring/screening_export_guard.py",
-        "src/value_investor/scoring/snapshot.py",
-        "src/value_investor/pipeline.py",
-        "tests/test_pipeline.py",
-        "tests/test_summary.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": true,
-      "status": "open"
-    },
-    {
       "id": "eng-20260917-08",
       "area": "scoring",
       "title": "Enable cyclical_exposure for UK heavyside construction-materials names when GB volume language and cement-output “historic lows” are in the same tape [1/2]",
@@ -716,8 +661,7 @@
         "origin_source": "research_model_suggestions",
         "origin_priority_score": 43.0,
         "preferred_merge_class": "compile_cap_drain",
-        "doc": "docs/ops/engineering-sync.md",
-        "merge_class": "compile_cap_drain"
+        "doc": "docs/ops/engineering-sync.md"
       },
       "acceptance_criteria": [
         "Export or overlay behaviour is covered by a unit test",
@@ -740,15 +684,11 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "merged",
+      "status": "pr_open",
       "result_path": "output/engineering_result_eng-20260917-08.md",
       "branch_name": "cursor/eng-20260917-08-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-17T19:20:09.291495+00:00",
-      "merge_class": "compile_cap_drain",
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/691",
-      "pr_number": 691,
-      "merged_at": "2026-09-17T19:58:12.663724+00:00"
+      "completed_at": "2026-09-17T19:20:09.291495+00:00"
     },
     {
       "id": "eng-20260917-07",
@@ -1742,6 +1682,53 @@
       "cancelled_at": "2026-09-15T17:49:28.000706+00:00"
     },
     {
+      "id": "eng-20260917-09",
+      "area": "ingest",
+      "title": "Hunt fetchable IR source for parked nasdaq100 leftover CCEP",
+      "summary": "Library market nasdaq100 (Nasdaq-100) parked CCEP after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statu",
+      "priority": "low",
+      "priority_score": 12.0,
+      "source": "parked_source_hunter",
+      "evidence": {
+        "market_id": "nasdaq100",
+        "library_market": "nasdaq100",
+        "hunter_market_id": "nasdaq100",
+        "hunter_ticker": "CCEP",
+        "parked_reason": "unfetchable_iwb",
+        "parked_revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
+        "universe": "library",
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Inspect IR / exchange sources for CCEP only — do not invent URLs",
+        "If a fetchable statutory/IR body exists, add allowlist + regression test",
+        "If none exists, add PARKED_SOURCE_HUNTER_SKIP with a one-line reason",
+        "No change to live FTSE 350 ingest path, blocked_paths, or paper-fund"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260916-06",
       "area": "ingest",
       "title": "Hunt fetchable IR source for parked asx200 leftover BPT.AX",
@@ -1877,7 +1864,7 @@
   },
   "queue_clearing": {
     "attention_parked_count": 0,
-    "evaluated_at": "2026-09-17T19:59:15.340381+00:00",
+    "evaluated_at": "2026-09-17T19:16:21.460266+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
@@ -1893,9 +1880,9 @@
   },
   "reprioritized_at": "2026-09-16T10:07:10.046741+00:00",
   "reprioritized_after_task": "eng-20260916-02",
-  "micro_compile_source": "compile_cap_drain",
-  "library_market_id": "asx200",
-  "hunter_ticker": "BPT.AX",
+  "micro_compile_source": "parked_source_hunter",
+  "library_market_id": "nasdaq100",
+  "hunter_ticker": "CCEP",
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
