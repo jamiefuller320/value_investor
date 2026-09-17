@@ -135,6 +135,7 @@ _FILING_METRIC_KEYS = (
     "interim_eps_decline_pct",
     "interim_dividend_cut_pct",
     "adjusted_eps_growth_pct",
+    "yahoo_normalized_income_growth_pct",
     "revenue",
     "revenue_prev",
     "revenue_growth_filing_pct",
@@ -878,12 +879,22 @@ def extract_adjusted_eps_growth_for_ticker(
     output_dir: Path | None = None,
     financials: dict[str, Any] | None = None,
 ) -> float | None:
-    """Parse adjusted-EPS growth from filing bodies, falling back to normalized income YoY."""
+    """Parse adjusted-EPS growth from filing bodies only (not Yahoo Normalized Income)."""
+    _ = financials
     for body in _iter_filing_bodies(ticker, output_dir=output_dir):
         parsed = parse_adjusted_eps_growth_pct(body)
         if parsed is not None:
             return parsed
+    return None
 
+
+def extract_yahoo_normalized_income_growth_for_ticker(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+    financials: dict[str, Any] | None = None,
+) -> float | None:
+    """YoY growth of Yahoo ``Normalized Income`` when filing bodies lack adjusted EPS."""
     payload = (
         financials
         if financials is not None
@@ -1693,7 +1704,7 @@ def resolve_statutory_earnings_growth(row: pd.Series) -> float | None:
 
 
 def resolve_model_earnings_growth(row: pd.Series) -> float | None:
-    """Prefer filing adjusted- or basic-EPS growth over Yahoo screen TTM earnings growth."""
+    """Prefer filing-body adjusted- or basic-EPS growth over Yahoo screen TTM earnings growth."""
     adjusted = row.get("adjusted_eps_growth_pct")
     if adjusted is not None and not (isinstance(adjusted, float) and pd.isna(adjusted)):
         return float(adjusted)
@@ -2665,6 +2676,16 @@ def enrich_universe_with_filing_metrics(
             current = out.at[index, "adjusted_eps_growth_pct"]
             if current is None or (isinstance(current, float) and pd.isna(current)):
                 out.at[index, "adjusted_eps_growth_pct"] = adjusted_growth
+
+        yahoo_normalized_growth = extract_yahoo_normalized_income_growth_for_ticker(
+            ticker,
+            output_dir=output_dir,
+            financials=financials,
+        )
+        if yahoo_normalized_growth is not None:
+            current = out.at[index, "yahoo_normalized_income_growth_pct"]
+            if current is None or (isinstance(current, float) and pd.isna(current)):
+                out.at[index, "yahoo_normalized_income_growth_pct"] = yahoo_normalized_growth
 
         filing_growth = resolve_model_earnings_growth(out.loc[index])
         if filing_growth is not None:

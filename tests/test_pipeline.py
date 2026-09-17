@@ -1210,6 +1210,85 @@ def test_enrich_universe_with_filing_metrics_fills_ocf_and_adjusted_earnings(tmp
     assert row["free_cashflow"] == 15_565_750.0
 
 
+def test_enrich_universe_relabels_yahoo_normalized_income_growth_separate_from_adjusted_eps(
+    tmp_path: Path,
+):
+    """MEGP-style: no adjusted EPS in filing bodies — Yahoo Normalized Income is not filing core."""
+    sources = tmp_path / "research" / "MEGP.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "MEGP.L",
+        "income_statement": {
+            "2025": {"Normalized Income": 55_047_230.0, "Basic EPS": 0.1491},
+            "2024": {"Normalized Income": 50_000_000.0, "Basic EPS": 0.15},
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    universe = pd.DataFrame(
+        [{"ticker": "MEGP.L", "name": "ME Group International plc", "earnings_growth": -0.039}]
+    )
+    enriched = enrich_universe_with_filing_metrics(universe, tmp_path)
+    row = enriched.iloc[0]
+
+    assert row["yahoo_normalized_income_growth_pct"] == pytest.approx(0.100944603, rel=1e-4)
+    assert row["adjusted_eps_growth_pct"] is None or pd.isna(row["adjusted_eps_growth_pct"])
+    assert row["earnings_growth"] == pytest.approx(row["basic_eps_growth_pct"])
+    assert row["earnings_growth"] != pytest.approx(row["yahoo_normalized_income_growth_pct"])
+
+
+def test_enrich_signals_earnings_growth_overlay_yahoo_normalized_not_filing_core():
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "trailing_pe": 7.9,
+                "earnings_growth": -0.039,
+                "basic_eps_growth_pct": -0.006,
+                "yahoo_normalized_income_growth_pct": 0.1009,
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_earnings_growth_overlay(signals)
+
+    assert bool(enriched.iloc[0]["earnings_growth_bps_divergence_warning"]) is False
+
+
+def test_enrich_signals_earnings_basis_overlay_ignores_yahoo_normalized_income():
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.6,
+                "earnings_growth": -0.039,
+                "basic_eps_growth_pct": -0.006,
+                "yahoo_normalized_income_growth_pct": 0.1009,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "model_id": "lynch_peg",
+                "model_name": "Lynch PEG",
+                "passed": False,
+                "score": 0.2,
+                "reasons": "[]",
+                "failed_criteria": "['missing or negative earnings growth']",
+            }
+        ]
+    )
+
+    enriched = enrich_signals_with_earnings_basis_overlay(signals, model_results)
+
+    assert bool(enriched.iloc[0]["earnings_basis_overlay"]) is False
+    assert enriched.iloc[0]["adjusted_signal"] == "strong_buy"
+    assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.6)
+
+
 def test_enrich_signals_with_dividend_yield_overlay_caps_megp_like_profile():
     signals = pd.DataFrame(
         [

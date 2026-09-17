@@ -12,6 +12,7 @@ import pytest
 from value_investor.models.piotroski import PiotroskiFScoreModel, piotroski_snapshot_from_result
 from value_investor.models.risk import EarningsQualityModel
 from value_investor.scoring import evaluate_universe
+from value_investor.scoring.earnings_growth_overlay import build_earnings_growth_overlay
 from value_investor.scoring.fcf import (
     append_fcf_divergence_to_action_note,
     build_labelled_fcf_dividend_coverage,
@@ -3621,6 +3622,66 @@ def test_earnings_growth_signs_diverge_detects_fgp_style_mismatch():
 def test_parse_adjusted_eps_growth_pct_from_filing_prose():
     assert parse_adjusted_eps_growth_pct("Adjusted EPS +16% to 19.4p") == pytest.approx(0.16)
     assert parse_adjusted_eps_growth_pct("16% growth in Adjusted EPS") == pytest.approx(0.16)
+
+
+def test_build_earnings_growth_overlay_exports_yahoo_normalized_separate_from_filing_core():
+    overlay = build_earnings_growth_overlay(
+        {
+            "earnings_growth": -0.039,
+            "basic_eps_growth_pct": -0.006,
+            "yahoo_normalized_income_growth_pct": 0.1009,
+        }
+    )
+
+    assert overlay["yahoo_normalized_income_growth_pct"] == pytest.approx(0.1009)
+    assert overlay.get("adjusted_eps_growth_pct") is None
+    assert overlay["bps_divergence_warning"] is False
+
+
+def test_build_company_reports_exports_yahoo_normalized_income_growth_for_megp(tmp_path: Path):
+    sources = tmp_path / "research" / "MEGP.L" / "sources"
+    sources.mkdir(parents=True)
+    financials = {
+        "ticker": "MEGP.L",
+        "income_statement": {
+            "2025": {"Normalized Income": 55_047_230.0, "Basic EPS": 0.1491},
+            "2024": {"Normalized Income": 50_000_000.0, "Basic EPS": 0.15},
+        },
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+
+    universe = pd.DataFrame(
+        [{"ticker": "MEGP.L", "name": "ME Group International plc", "earnings_growth": -0.039}]
+    )
+    enriched = enrich_universe_with_filing_metrics(universe, tmp_path)
+    row = enriched.iloc[0].to_dict()
+    row.update({"signal": "strong_buy", "conviction_score": 0.5, "sector": "Industrials"})
+
+    model_results = pd.DataFrame(
+        columns=[
+            "ticker",
+            "model_id",
+            "model_name",
+            "passed",
+            "score",
+            "reasons",
+            "failed_criteria",
+        ]
+    )
+    report = build_company_reports(
+        pd.DataFrame([row]),
+        model_results,
+        output_dir=tmp_path,
+    )[0]
+    snapshot = report.to_dict()
+
+    assert snapshot["yahoo_normalized_income_growth_pct"] == pytest.approx(0.100944603, rel=1e-4)
+    assert snapshot.get("adjusted_eps_growth_pct") is None
+    assert snapshot["screening_inputs"]["yahoo_normalized_income_growth_pct"] == pytest.approx(
+        0.100944603,
+        rel=1e-4,
+    )
+    assert "adjusted_eps_growth_pct" not in snapshot["screening_inputs"]
 
 
 def _model_results_for_fgp_earnings_basis_cap(*, ticker: str = "FGP.L") -> pd.DataFrame:
