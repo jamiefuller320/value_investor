@@ -160,6 +160,11 @@ as the screener (Latest screen / Initial recommendation levels). Publish keeps
 charts for the live screen **and** lifecycle shown cards (including hold/avoid
 and other-market chips), not only buy-tier.
 
+Use **Sort chips** on the board header to reorder shown cards client-side:
+**Board order** (default conviction / opened-sold pack), **A–Z**, or **Time in
+stage** (longest `days_in_column` first). Preference is stored in
+`localStorage` and does not change the published payload.
+
 Held, sold, and screen name cards use a green→red **time-in-stage** heatmap:
 ≤7d fresh, ≤3w, ≤6w, ≤8w, then red beyond 8 weeks. Held columns clock
 `opened_at`; sold columns clock the closing mark; screen columns clock
