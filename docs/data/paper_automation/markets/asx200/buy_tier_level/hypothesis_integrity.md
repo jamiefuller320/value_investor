@@ -1,14 +1,17 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-16T07:19:09.464389+00:00
+Track: `buy_tier_level` · updated 2026-09-17T00:46:26.566814+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **10** / 26 (38% count, 37% NAV)
+- Losers: **10** / 27 (37% count, 35% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → outside band
 - Balancing hint: `trim_weakening_losers`
 
 ## Holding reviews
+
+### BPT.AX — broken / exit_candidate (+0.0%)
+- cheapness lost and not in buy tier
 
 ### WGX.AX — intact / hold_tolerate (-14.1%)
 - price drawdown alone does not invalidate value thesis
@@ -173,6 +176,13 @@ Track: `buy_tier_level` · updated 2026-09-16T07:19:09.464389+00:00
 - data_quality 0.95
 - conviction 83%
 
+### YAL.AX — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 51%
+
 ### RMD.AX — intact / hold_tolerate (+1.6%)
 - still buy
 - research accumulate
@@ -186,10 +196,3 @@ Track: `buy_tier_level` · updated 2026-09-16T07:19:09.464389+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 54%
-
-### BPT.AX — intact / hold_tolerate (+3.5%)
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 42%

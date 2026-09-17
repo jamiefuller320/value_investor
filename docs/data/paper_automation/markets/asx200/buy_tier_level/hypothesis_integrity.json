@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-09-16T07:19:09.464389+00:00",
-  "as_of": "2026-09-16T17:19:09.209534+10:00",
+  "updated_at": "2026-09-17T00:46:26.566814+00:00",
+  "as_of": "2026-09-17T10:46:26.262222+10:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -16,19 +16,19 @@
     "broken_urgency_boost": 0.28,
     "skip_underwater_urgency_when_intact": true
   },
-  "holding_count": 26,
+  "holding_count": 27,
   "underwater_count": 10,
   "thesis_status_counts": {
     "intact": 24,
     "weakening": 2,
-    "broken": 0,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
-    "holding_count": 26,
+    "holding_count": 27,
     "loser_count": 10,
-    "loser_share": 0.3846,
-    "loser_nav_share": 0.3697,
+    "loser_share": 0.3704,
+    "loser_nav_share": 0.3549,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
     "within_tolerance": false,
@@ -43,17 +43,49 @@
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0,
-      "quality": 0.375,
-      "dividend": 0.0625,
-      "garp": 0.0625,
-      "risk": 0.0
+      "cheapness": 0.0588,
+      "quality": 0.4118,
+      "dividend": 0.1176,
+      "garp": 0.0588,
+      "risk": 0.0588
     },
     "selection_feedback_flags": [],
     "balancing_hint": "trim_weakening_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
+    {
+      "ticker": "BPT.AX",
+      "name": "BPT.AX",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 0.87,
+      "avg_cost": 0.87,
+      "signal": null,
+      "timing_signal": null,
+      "conviction_score": null,
+      "data_quality_score": null,
+      "passed_families": [],
+      "failed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "cheapness lost and not in buy tier"
+      ],
+      "intact_reasons": [],
+      "weaken_reasons": [],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
+    },
     {
       "ticker": "WGX.AX",
       "name": "Westgold Resources Limited",
@@ -989,6 +1021,47 @@
       "broken_reasons": []
     },
     {
+      "ticker": "YAL.AX",
+      "name": "Yancoal Australia Ltd",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0,
+      "mark": 6.13,
+      "avg_cost": 6.13,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5128,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 51%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 51%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
       "ticker": "RMD.AX",
       "name": "ResMed Inc.",
       "thesis_status": "intact",
@@ -1065,47 +1138,6 @@
         "cheapness family still passes",
         "data_quality 1.00",
         "conviction 54%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "BPT.AX",
-      "name": "Beach Energy Limited",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0345,
-      "mark": 0.9,
-      "avg_cost": 0.87,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.4186,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "quality",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 42%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 42%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
