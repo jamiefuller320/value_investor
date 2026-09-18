@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-18T17:15:28+00:00",
+  "updated_at": "2026-09-18T19:01:30+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9404,6 +9404,24 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0b580-7a75-7585-a700-91fa2c6ac474",
       "added_at": "2026-09-18T17:15:28+00:00"
+    },
+    {
+      "id": "N136",
+      "category": "not_now",
+      "section": "learning",
+      "title": "Do not stack live forks on an epoch-0 child book",
+      "summary": "When entry and exit policies are both ready, adopt at most one stage into one forward book and re-score the next stage as an overlay on that path. Report child-minus-parent, not child-minus-epoch-0. A live tree (DCA book, then a timing fork of that book) or a mid-epoch clone confounds the datum and spends a scarce shadow slot. A 2x2 factorial is only for a suspected sign-changing interaction, and those arms must start together from the same date and capital.",
+      "revisit_when": "One forward book has adopted a stage policy, the next-stage overlay on that book is ready, and the overlay cannot reconstruct the counterfactual path (missing fills). Only then open one child book. Open a second arm only if that conditional effect flips sign versus the epoch-0 overlay.",
+      "tags": [
+        "epoch0",
+        "forks",
+        "dca",
+        "exit_timing",
+        "factorial"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0b580-7a75-7585-a700-91fa2c6ac474",
+      "added_at": "2026-09-18T19:01:30+00:00"
     }
   ],
   "fragments": [
