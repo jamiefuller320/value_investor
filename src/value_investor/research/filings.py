@@ -4801,8 +4801,8 @@ def _fetch_ir_pdf_alternate_candidates(url: str) -> list[tuple[str, str]]:
 
 def _ir_row_search_tokens(row: dict[str, Any]) -> set[str]:
     """Tokens from an IR allowlist URL/headline for Investegate headline matching."""
-    url = str(row.get("url") or "")
-    headline = str(row.get("headline") or "")
+    url = urllib.parse.unquote(str(row.get("url") or ""))
+    headline = urllib.parse.unquote(str(row.get("headline") or ""))
     filename = url.rsplit("/", 1)[-1].lower()
     blob = f"{filename} {headline.lower()}"
     return {
@@ -4947,15 +4947,12 @@ def _ir_allowlist_row_needs_body_refetch(row: dict[str, Any], bodies_dir: Path) 
         return False
     if "[truncated]" in text:
         return True
-    lower = text.lower()
-    if (
-        "profit to cash conversion and free cash flow" in lower
-        and "free cash flow" not in lower[-800:]
-    ):
+    if _ir_body_fcf_bridge_incomplete(text):
         return True
     tail = text[-120:]
     if re.search(r"Pension fundin\s*$", tail, re.IGNORECASE):
         return True
+    lower = text.lower()
     if len(text) == _PDF_DEPTH_LEAD_CHARS and "free cash flow" not in lower[-1200:]:
         return True
     return False
