@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-18T16:36:53+00:00",
+  "updated_at": "2026-09-18T16:37:21+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9353,6 +9353,24 @@
       "status": "open",
       "source": "PR #708 conflict resolve after #707 hygiene",
       "added_at": "2026-09-18T16:36:53+00:00"
+    },
+    {
+      "id": "L420",
+      "category": "later",
+      "section": "ops",
+      "title": "Hunter-fix PAT push still action_required (checkout extraheader)",
+      "summary": "Even with WORKFLOW_DISPATCH_PAT set and gh auth setup-git, #715 hunter-fix tip push still created pull_request CI in action_required (triggering_actor github-actions[bot]). Likely actions/checkout http.extraheader Authorization bearer GITHUB_TOKEN wins over gh credentials. Unset extraheader or push via x-access-token URL before git push.",
+      "revisit_when": "Next hunter-fix tip push lands action_required despite PAT secret present in the commit step env",
+      "tags": [
+        "github-actions",
+        "hunter-fix",
+        "action_required",
+        "WORKFLOW_DISPATCH_PAT",
+        "checkout"
+      ],
+      "status": "open",
+      "source": "conversation: #715 CI after hunter-fix PAT",
+      "added_at": "2026-09-18T16:37:21+00:00"
     }
   ],
   "fragments": [
