@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-18T18:38:33.506213+00:00",
+  "compiled_at": "2026-09-18T22:09:36.807190+00:00",
   "run_at": null,
-  "task_count": 50,
+  "task_count": 54,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2206,6 +2206,222 @@
       "merged_at": "2026-09-15T15:05:07.590899+00:00"
     },
     {
+      "id": "eng-20260918-21",
+      "area": "ingest",
+      "title": "Full-text extract of annual report note 19 (cash-in-transit restatement) from ME-Group-Annual-Report-2025.pdf—not addressed by CH refetch of 2019 parent interim",
+      "summary": "Full-text extract of annual report note 19 (cash-in-transit restatement) from ME-Group-Annual-Report-2025.pdf—not addressed by CH refetch of 2019 parent interim and 2020 date-change forms. (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "MEGP.L"
+        ],
+        "recorded_at": "2026-09-12T12:36:40.963309+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "Full-text extract of annual report note 19 (cash-in-transit restatement) from ME-Group-Annual-Report-2025.pdf—not addressed by CH refetch of 2019 parent interim",
+        "narrow_cohesion_bypass": true,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for MEGP.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "parked",
+      "parked_reason": "preflight blocked PR open — preflight failed",
+      "parked_policy": "preflight_clash",
+      "parked_at": "2026-09-18T22:20:00.785470+00:00"
+    },
+    {
+      "id": "eng-20260918-20",
+      "area": "ingest",
+      "title": "Populate `ir_presentation_metrics.json` from `ir_0d388cd522a7cf4c.txt`.",
+      "summary": "Populate `ir_presentation_metrics.json` from `ir_0d388cd522a7cf4c.txt`. (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "ITV.L"
+        ],
+        "recorded_at": "2026-09-06T07:48:26.505365+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "Populate `ir_presentation_metrics.json` from `ir_0d388cd522a7cf4c.txt`.",
+        "narrow_cohesion_bypass": true,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for ITV.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "parked",
+      "parked_reason": "preflight blocked PR open — preflight failed",
+      "parked_policy": "preflight_clash",
+      "parked_at": "2026-09-18T21:46:27.486017+00:00"
+    },
+    {
+      "id": "eng-20260918-19",
+      "area": "ingest",
+      "title": "CH OCR refetch of both `ch_04967001_MzMzODcxODY0OWFkaXF6a2N4.txt` and `ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4.txt` fails to deliver Risks and Uncertainties or pen",
+      "summary": "CH OCR refetch of both `ch_04967001_MzMzODcxODY0OWFkaXF6a2N4.txt` and `ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4.txt` fails to deliver Risks and Uncertainties or pension note 3.8 — switch to iXBRL tag extraction from Companies House document API (04967001). (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "ITV.L"
+        ],
+        "recorded_at": "2026-09-06T07:48:26.505357+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "CH OCR refetch of both `ch_04967001_MzMzODcxODY0OWFkaXF6a2N4.txt` and `ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4.txt` fails to deliver Risks and Uncertainties or pen",
+        "narrow_cohesion_bypass": true,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for ITV.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "parked",
+      "parked_reason": "preflight blocked PR open — preflight failed",
+      "parked_policy": "preflight_clash",
+      "parked_at": "2026-09-18T21:31:07.767610+00:00"
+    },
+    {
+      "id": "eng-20260918-18",
+      "area": "ingest",
+      "title": "Parse IR results-deck cash-bridge slides into `ir_presentation_metrics.json`; refetch did not add FCF lines and H1 2026 deck bridge remains missing.",
+      "summary": "Parse IR results-deck cash-bridge slides into `ir_presentation_metrics.json`; refetch did not add FCF lines and H1 2026 deck bridge remains missing. (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "HIK.L"
+        ],
+        "recorded_at": "2026-09-06T07:48:26.505307+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "Parse IR results-deck cash-bridge slides into `ir_presentation_metrics.json`; refetch did not add FCF lines and H1 2026 deck bridge remains missing.",
+        "narrow_cohesion_bypass": true,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for HIK.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "parked",
+      "parked_reason": "preflight blocked PR open — preflight failed",
+      "parked_policy": "preflight_clash",
+      "parked_at": "2026-09-18T21:00:11.782026+00:00"
+    },
+    {
       "id": "eng-20260918-17",
       "area": "ingest",
       "title": "Do not tag AGM notices/results, Payments to Governments, prospectuses, mineral-resources updates, Tomago/Boyne operating RNSs, or third-party SVM “Rio collab” i",
@@ -2456,7 +2672,8 @@
         "origin_priority_score": 40.0,
         "preferred_merge_class": "compile_cap_drain",
         "doc": "docs/ops/engineering-sync.md",
-        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for ITV.L",
@@ -2475,11 +2692,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": true,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260918-12.md",
       "branch_name": "cursor/eng-20260918-12-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-18T18:28:22.411292+00:00"
+      "completed_at": "2026-09-18T18:28:22.411292+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/718",
+      "pr_number": 718,
+      "merged_at": "2026-09-18T20:48:56.791627+00:00"
     },
     {
       "id": "eng-20260918-11",
@@ -2947,8 +3168,8 @@
     "filings_with_body": 4155
   },
   "queue_clearing": {
-    "attention_parked_count": 2,
-    "evaluated_at": "2026-09-18T18:39:28.093021+00:00",
+    "attention_parked_count": 5,
+    "evaluated_at": "2026-09-18T22:16:25.767986+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
@@ -2970,7 +3191,7 @@
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
-    "evaluated_at": "2026-09-18T16:39:00.683864+00:00"
+    "evaluated_at": "2026-09-18T19:51:52.489106+00:00"
   },
   "workflow_failure_compiled": true
 }

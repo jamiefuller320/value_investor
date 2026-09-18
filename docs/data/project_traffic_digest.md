@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-18T16:39:00.683864+00:00`
+Generated: `2026-09-18T19:51:52.489106+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -31,6 +31,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
+- `compile_cap_drain`/verified PR #717 `eng-20260918-15` — The screen still emits strong_buy on the pre-deal consolidated group (advertising yield, company-adjusted FCF, P/E 11.6) after a announced carve-out that change
 - `compile_cap_drain`/verified PR #714 `eng-20260918-14` — Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading
 - `compile_cap_drain`/verified PR #713 `eng-20260918-10` — When a sal [2/2]
 - `compile_cap_drain`/verified PR #712 `eng-20260918-11` — Require annual/interim workers to extract continuing versus discontinued / held-for-sale splits, deal terms, guidance, FCF versus dividend cover, and reporting 
