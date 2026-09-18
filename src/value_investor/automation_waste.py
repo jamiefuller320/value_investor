@@ -7,10 +7,11 @@ be added without inventing a parallel monitor.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 from value_investor.engineering_queue import (
     COMMITTED_TASKS_PATH,
