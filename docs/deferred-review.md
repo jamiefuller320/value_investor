@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-18T12:20:39+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-18T16:36:53+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -240,6 +240,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L384 | **Rank DCA cadences only on completed windows** | This week's 22 first-entry scores are all sold_before_window with dca_4x_weekly filling 1 of 4 tranches. Leftover cash then mechanically beats lump-sum on short holds. Split window_elapsed vs sold_before_window (or require tranches_filled==target) before treating 4x weekly as a completed-cadence result. | FTSE buy_tier_level or live books have window_elapsed first-entry scores, or Sunday analysis next cites leading_cadence without noting incomplete tranches |
 | L405 | **Market-specific fair RT for trade-plan target floors** | Trade-plan take-profit floors default to Suite A 6% round-trip + 4% net edge. Optionally bind assumed_round_trip_cost_pct from ftse-trading-costs per market so Suite B / shards use fair UK/US/EU friction instead of stress. | Suite B fair-cost books are the primary lens for chart/decision-pack target quality, or a saved TradePlanConfig is wired per market shard |
 | L401 | **Pre-signal drop and recovery-to-prior-high observe metric** | Many buy-tier names arrive after a large drawdown. Observe whether price recovers toward the pre-drop local high (not only back through the frozen entry), and how often that path clears the cost-aware take-profit. Distinct from L244 entry recovery and from paper hold-recovery. | chart_outcome_review has several Sunday refreshes and drop-to-entry recovery (L244) is either live or still clearly insufficient for prior-high questions |
+| L419 | **Shared NaN-safe overlay text helper for sector/name fields** | UK heavyside now coerces float NaN sector/name; other overlays mostly use str() or truthiness checks. A shared helper would prevent the next (x or '').lower() crash on pandas NaN. | Another overlay AttributeError on float/NaN sector or name in CI or ingest logs |
 
 ### Universe & data
 
