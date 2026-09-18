@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-18T14:34:45.533089+00:00",
+  "compiled_at": "2026-09-18T15:16:30.260964+00:00",
   "run_at": null,
-  "task_count": 46,
+  "task_count": 47,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2206,6 +2206,57 @@
       "merged_at": "2026-09-15T15:05:07.590899+00:00"
     },
     {
+      "id": "eng-20260918-14",
+      "area": "ingest",
+      "title": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading",
+      "summary": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading update, 31 July buyback RNS, or 2026/2032 notes consent pack. Naive first/last-of-period selection would assign Directorate Change or Share Repurchase (both tagged annual) or IR FY decks tagged interim. No task type exists to reconcile screen/Yahoo FCF bases or to mark continuing versus discontinued perimeter. (narrow_cohesion_bypass: no ",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "ITV.L"
+        ],
+        "recorded_at": "2026-09-04T16:48:11.731035+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading ",
+        "narrow_cohesion_bypass": true,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for ITV.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260918-13",
       "area": "ingest",
       "title": "It is not adequate when the live [2/2]",
@@ -2730,8 +2781,8 @@
     "filings_with_body": 4155
   },
   "queue_clearing": {
-    "attention_parked_count": 1,
-    "evaluated_at": "2026-09-18T14:35:45.261713+00:00",
+    "attention_parked_count": 2,
+    "evaluated_at": "2026-09-18T15:16:26.446837+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
