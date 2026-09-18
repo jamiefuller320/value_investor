@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-17T18:26:31+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-18T03:49:58+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -477,6 +477,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L409 | **PM auto-rerun ingest-loop once on persistent red without success** | When cancel-on-heal finds no later success, optionally dispatch one force=true ingest-loop rerun (capped) before leaving a workflow_failure eng task open. Do not invent code patches. | After budget-includes-discovery + timeout skip-draft have a green week of ingest-loop |
 | L410 | **SIGTERM flush ingest_loop.json on outer wall-clock kill** | Outer timeout 75m only helps commit/chain if JSON already exists. Add signal handler or finally-block checkpoint so mid-ticker kills still emit partial JSON. | If ingest-loop still fails with exit 124 and empty /tmp/ingest_loop.json after discovery budget lands |
 | L416 | **Migrate remaining git-auto-commit workflows to gha_commit_artifacts** | library-epoch0-weekday now uses L348 retry; other workflows still use git-auto-commit + optional pull --rebase and can fail the same main race. | Another weekday/ingest auto-commit job fails with cannot lock ref or fetch first on main |
+| L417 | **Library ingest must not clobber engineering_tasks merged stamps** | Library ingest sprint commit 1989f27 rewrote docs/data/engineering_tasks.json and reverted eng-20260917-08 from merged (#691) back to pr_open, clearing pr_number/merged_at. Recovery then reset to open; agent opened duplicate draft #692 on the same branch. Lost-update race among skip-ci main writers. | Next duplicate eng PR after a successful auto-merge, or next library-ingest commit that diffs engineering_tasks.json terminal rows |
 
 ---
 

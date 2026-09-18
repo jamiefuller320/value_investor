@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-17T18:26:31+00:00",
+  "updated_at": "2026-09-18T03:49:58+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9297,6 +9297,23 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0b097-f708-7bdf-8dc5-c370e008aa2b",
       "added_at": "2026-09-17T18:26:31+00:00"
+    },
+    {
+      "id": "L417",
+      "category": "later",
+      "section": "ops",
+      "title": "Library ingest must not clobber engineering_tasks merged stamps",
+      "summary": "Library ingest sprint commit 1989f27 rewrote docs/data/engineering_tasks.json and reverted eng-20260917-08 from merged (#691) back to pr_open, clearing pr_number/merged_at. Recovery then reset to open; agent opened duplicate draft #692 on the same branch. Lost-update race among skip-ci main writers.",
+      "revisit_when": "Next duplicate eng PR after a successful auto-merge, or next library-ingest commit that diffs engineering_tasks.json terminal rows",
+      "tags": [
+        "engineering-queue",
+        "library-ingest",
+        "lost-update",
+        "main-race"
+      ],
+      "status": "open",
+      "source": "traffic observation / #692 after #691",
+      "added_at": "2026-09-18T03:49:58+00:00"
     }
   ],
   "fragments": [
