@@ -192,7 +192,55 @@ _WORKFLOW_SIGNATURES: tuple[dict[str, Any], ...] = (
     },
 )
 
+_LIBRARY_INGEST_FAILURE_PATHS = [
+    "src/value_investor/scoring/",
+    "src/value_investor/summary.py",
+    "src/value_investor/library_screen.py",
+    "src/value_investor/library_ingest_dispatch.py",
+    "src/value_investor/library_ingest_escalation.py",
+    "src/value_investor/library_ingest_loop.py",
+    "tests/test_pipeline.py",
+    "tests/test_summary.py",
+    "tests/test_workflow_failure_tasks.py",
+]
+
 _GENERIC_WORKFLOW_SPECS: dict[str, dict[str, Any]] = {
+    "euro-ingest-loop.yml": {
+        "workflow": "euro-ingest-loop.yml",
+        "title": "Workflow fix: euro library ingest loop failure",
+        "area": "scoring",
+        "allowed_paths": [
+            ".github/workflows/euro-ingest-loop.yml",
+            *_LIBRARY_INGEST_FAILURE_PATHS,
+        ],
+    },
+    "library-ingest-sprint.yml": {
+        "workflow": "library-ingest-sprint.yml",
+        "title": "Workflow fix: library ingest sprint failure",
+        "area": "scoring",
+        "allowed_paths": [
+            ".github/workflows/library-ingest-sprint.yml",
+            *_LIBRARY_INGEST_FAILURE_PATHS,
+        ],
+    },
+    "library-ingest-sprint-2.yml": {
+        "workflow": "library-ingest-sprint-2.yml",
+        "title": "Workflow fix: library ingest sprint 2 failure",
+        "area": "scoring",
+        "allowed_paths": [
+            ".github/workflows/library-ingest-sprint-2.yml",
+            *_LIBRARY_INGEST_FAILURE_PATHS,
+        ],
+    },
+    "library-ingest-maintenance.yml": {
+        "workflow": "library-ingest-maintenance.yml",
+        "title": "Workflow fix: library ingest maintenance failure",
+        "area": "scoring",
+        "allowed_paths": [
+            ".github/workflows/library-ingest-maintenance.yml",
+            *_LIBRARY_INGEST_FAILURE_PATHS,
+        ],
+    },
     "library-model-review.yml": {
         "workflow": "library-model-review.yml",
         "title": "Workflow fix: library model review failure",

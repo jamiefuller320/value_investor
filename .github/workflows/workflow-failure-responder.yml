@@ -1,11 +1,15 @@
 name: Workflow Failure Responder
 
 # Draft supervised engineering tasks when key bundle workflows fail on main
-# without pytest failures (ingest-loop, email report, analysis review, etc.).
+# without pytest failures (ingest-loop, euro/library ingest, email report, etc.).
 on:
   workflow_run:
     workflows:
       - "FTSE Ingest Loop"
+      - "Euro library ingest loop"
+      - "Library ingest sprint (parallel)"
+      - "Library ingest sprint 2 (parallel)"
+      - "Library ingest maintenance"
       - "FTSE Email Report"
       - "FTSE Analysis Review"
       - "FTSE Library Model Review"
@@ -55,6 +59,10 @@ jobs:
         run: |
           case "$WORKFLOW_NAME" in
             "FTSE Ingest Loop") FILE="ingest-loop.yml" ;;
+            "Euro library ingest loop") FILE="euro-ingest-loop.yml" ;;
+            "Library ingest sprint (parallel)") FILE="library-ingest-sprint.yml" ;;
+            "Library ingest sprint 2 (parallel)") FILE="library-ingest-sprint-2.yml" ;;
+            "Library ingest maintenance") FILE="library-ingest-maintenance.yml" ;;
             "FTSE Email Report") FILE="email-report.yml" ;;
             "FTSE Analysis Review") FILE="analysis-review.yml" ;;
             "FTSE Library Model Review") FILE="library-model-review.yml" ;;
