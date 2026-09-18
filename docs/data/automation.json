@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-18T20:16:48.569271+00:00",
+  "generated_at": "2026-09-18T22:16:30.338589+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1153,23 +1153,39 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-18T18:38:33.506213+00:00",
-    "queue_ui_updated_at": "2026-09-18T20:16:48.512119+00:00",
-    "task_count": 50,
+    "compiled_at": "2026-09-18T22:09:36.807190+00:00",
+    "queue_ui_updated_at": "2026-09-18T22:16:30.245553+00:00",
+    "task_count": 54,
     "status": {
-      "open_count": 2,
-      "pr_open_count": 1,
-      "parked_count": 9,
-      "merged_count": 37,
+      "open_count": 3,
+      "pr_open_count": 0,
+      "parked_count": 12,
+      "merged_count": 38,
       "failed_count": 0,
-      "next_task_id": "eng-20260918-17",
-      "in_flight_branch": "cursor/eng-20260918-12-1de3",
-      "in_flight_pr": 718,
+      "next_task_id": "eng-20260918-21",
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
     "queued_tasks": [
+      {
+        "id": "eng-20260918-21",
+        "area": "ingest",
+        "title": "Full-text extract of annual report note 19 (cash-in-transit restatement) from ME-Group-Annual-Report-2025.pdf—not addressed by CH refetch of 2019 parent interim",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "open",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
+        "clash_scan": "full"
+      },
       {
         "id": "eng-20260918-17",
         "area": "ingest",
@@ -1181,34 +1197,10 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
-        "dispatch_eligible": false,
-        "blocked_by": [
-          {
-            "pr_number": null,
-            "branch": null,
-            "task_id": null,
-            "title": "in-flight allowlist overlap",
-            "clash_files": [
-              "src/value_investor/research/filings.py",
-              "tests/test_research_filings.py"
-            ],
-            "kind": "allowlist_overlap"
-          }
-        ],
-        "effective_dispatch_rank": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 2,
         "clash_scan": "full"
-      },
-      {
-        "id": "eng-20260918-12",
-        "area": "ingest",
-        "title": "Filings-first order is adequate when the live issue is annual/interim numbers, and this pack has 17 annual + 6 interim bodies [1/2]",
-        "priority": "medium",
-        "priority_score": 40.0,
-        "status": "pr_open",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": "cursor/eng-20260918-12-1de3"
       },
       {
         "id": "eng-20260918-16",
@@ -1221,21 +1213,9 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
-        "dispatch_eligible": false,
-        "blocked_by": [
-          {
-            "pr_number": null,
-            "branch": null,
-            "task_id": null,
-            "title": "in-flight allowlist overlap",
-            "clash_files": [
-              "src/value_investor/research/filings.py",
-              "tests/test_research_filings.py"
-            ],
-            "kind": "allowlist_overlap"
-          }
-        ],
-        "effective_dispatch_rank": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 3,
         "clash_scan": "full"
       }
     ],
@@ -1337,6 +1317,42 @@
         "branch_name": null
       },
       {
+        "id": "eng-20260918-20",
+        "area": "ingest",
+        "title": "Populate `ir_presentation_metrics.json` from `ir_0d388cd522a7cf4c.txt`.",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260918-19",
+        "area": "ingest",
+        "title": "CH OCR refetch of both `ch_04967001_MzMzODcxODY0OWFkaXF6a2N4.txt` and `ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4.txt` fails to deliver Risks and Uncertainties or pen",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260918-18",
+        "area": "ingest",
+        "title": "Parse IR results-deck cash-bridge slides into `ir_presentation_metrics.json`; refetch did not add FCF lines and H1 2026 deck bridge remains missing.",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
         "id": "eng-20260918-13",
         "area": "ingest",
         "title": "It is not adequate when the live [2/2]",
@@ -1350,9 +1366,9 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 2,
-      "dispatch_eligible_count": 0,
-      "blocked_count": 2
+      "open_task_count": 3,
+      "dispatch_eligible_count": 3,
+      "blocked_count": 0
     }
   },
   "learning_track_epoch_datum": {
@@ -1630,46 +1646,40 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-18T20:16:48.569271+00:00",
-    "overall": "blocked",
-    "headline": "2 open task(s) blocked by file clash or policy — no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
+    "generated_at": "2026-09-18T22:16:30.338589+00:00",
+    "overall": "active",
+    "headline": "Agent lane active.",
     "merge_lane": {
+      "state": "idle",
+      "idle": true,
+      "running": false,
+      "blocked": false,
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+    },
+    "agent_lane": {
       "state": "running",
       "idle": false,
       "running": true,
       "blocked": false,
-      "pr_open_count": 1,
-      "open_engineering_prs": [
-        {
-          "number": 718,
-          "branch": "cursor/eng-20260918-12-1de3",
-          "draft": false
-        }
-      ],
-      "in_flight_pr": 718,
-      "detail": "Open engineering PR(s) #718 — merge fires on CI success."
-    },
-    "agent_lane": {
-      "state": "blocked",
-      "idle": false,
-      "running": true,
-      "blocked": true,
-      "should_dispatch": false,
+      "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
-      "attention_parked_count": 2,
-      "open_count": 2,
-      "pr_open_count": 1,
-      "dispatch_eligible_count": 0,
-      "blocked_task_count": 2,
-      "next_task_id": "eng-20260918-17",
-      "reason": "no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
-      "detail": "2 open task(s) blocked by file clash or policy — no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)"
+      "attention_parked_count": 5,
+      "open_count": 3,
+      "pr_open_count": 0,
+      "dispatch_eligible_count": 3,
+      "blocked_task_count": 0,
+      "next_task_id": "eng-20260918-21",
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
-      "attention_parked_count": 2,
-      "evaluated_at": "2026-09-18T20:16:44.482440+00:00"
+      "attention_parked_count": 5,
+      "evaluated_at": "2026-09-18T22:16:25.767986+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1683,6 +1693,17 @@
       "should_dispatch_engineering": false
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260918-12",
+        "title": "Filings-first order is adequate when the live issue is annual/interim numbers, and this pack has 17 annual + 6 interim bodies [1/2]",
+        "area": "ingest",
+        "pr_number": 718,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/718",
+        "merged_at": "2026-09-18T20:48:56.791627+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": true,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260918-15",
         "title": "The screen still emits strong_buy on the pre-deal consolidated group (advertising yield, company-adjusted FCF, P/E 11.6) after a announced carve-out that change",
@@ -1849,6 +1870,6 @@
         "independently_verified": false
       }
     ],
-    "verified_merges_today_count": 14
+    "verified_merges_today_count": 15
   }
 }
