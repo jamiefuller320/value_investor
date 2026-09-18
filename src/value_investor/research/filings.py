@@ -679,6 +679,30 @@ _NON_RESULTS_RNS_PATTERNS = (
     r"\bholding\(s\)? in company\b",
     r"\btotal voting rights\b",
     r"\bblock listing\b",
+    r"\b(?:annual )?general meetings?\b",
+    r"\bnotice of agm\b",
+    r"\bagm results?\b",
+    r"\bpayments to governments\b",
+    r"\bprospectus\b",
+    r"\bmineral resources\b",
+    r"\bore reserves\b",
+    r"\btomago\b",
+    r"\bboyne\b.*\bsmelter\b",
+)
+
+# Headlines that must stay ``other`` / ``trading_update`` even when body text looks like results.
+_HEADLINE_BODY_PERIOD_BLOCK_PATTERNS = _NON_RESULTS_RNS_PATTERNS + (
+    r"^svm\b",
+    r"\brio collab\b",
+    r"\b(?:first|second|third|fourth|1st|2nd|3rd|4th)\s+quarter\s+"
+    r"(?:production|operations?)\b",
+    r"\bdrilling/?production\s+report\b",
+)
+
+_OPERATIONS_PRODUCTION_UPDATE_PATTERNS = (
+    r"\b(?:first|second|third|fourth|1st|2nd|3rd|4th)\s+quarter\s+"
+    r"(?:production|operations?)\s*(?:results?|report)?\b",
+    r"\bdrilling/?production\s+report\b",
 )
 
 
@@ -1792,7 +1816,11 @@ def _apply_headline_period(
         # Curated allowlist URLs (RA25 / FY-2025) beat body H1/Q4 comparatives
         # and the synthetic "IR allowlist document" headline.
         period = url_period
-    elif period == "other" and body_snippet:
+    elif (
+        period == "other"
+        and body_snippet
+        and not _headline_blocks_body_period_reclassify(classify_headline)
+    ):
         body_period = classify_filing_period(
             body_snippet[:4000],
             category=category,
@@ -2065,6 +2093,26 @@ def _epic_match_is_ambiguous_noise(
         return True
     # "ProVen VCT", "Foresight 4 VCT", etc.
     return bool(re.search(r"\b\w+\s+vct\b", lower))
+
+
+def _headline_blocks_body_period_reclassify(headline: str) -> bool:
+    """True when body OCR must not promote a routine/operating headline to results."""
+    blob = (headline or "").lower()
+    return any(re.search(pat, blob) for pat in _HEADLINE_BODY_PERIOD_BLOCK_PATTERNS)
+
+
+def _is_third_party_collateral_rns_headline(headline: str) -> bool:
+    """
+    Investegate/Google rows that mention Rio (EPIC collision) but are another issuer's RNS.
+    """
+    blob = (headline or "").strip().lower()
+    if not blob:
+        return False
+    if re.match(r"^svm\b", blob) and "rio" in blob:
+        return True
+    if re.match(r"^sovereign metals\b", blob):
+        return True
+    return False
 
 
 def headline_relevant_to_issuer(headline: str, company_name: str, ticker: str) -> bool:
@@ -2436,6 +2484,9 @@ def classify_rns_headline(
     if any(re.search(pat, blob) for pat in _TRADING_UPDATE_PATTERNS):
         return "trading_update"
 
+    if any(re.search(pat, blob) for pat in _OPERATIONS_PRODUCTION_UPDATE_PATTERNS):
+        return "trading_update"
+
     if re.search(r"\b20\d{2}\s*fy\b|\bfy\s*20\d{2}\b", blob) and re.search(
         r"\bresults presentation\b|\bfy results\b",
         blob,
@@ -2445,6 +2496,11 @@ def classify_rns_headline(
     if any(re.search(pat, blob) for pat in _ANNUAL_PATTERNS):
         return "annual"
     if any(re.search(pat, blob) for pat in _INTERIM_PATTERNS):
+        if re.search(r"\b(?:production|operations?)\b", blob) and not re.search(
+            r"\b(?:interim|half[- ]year)\s+results\b",
+            blob,
+        ):
+            return "trading_update"
         if re.search(r"\bpresentation\b", blob) and not re.search(
             r"\binterim results\b|\bhalf[- ]year results\b",
             blob,
@@ -2454,7 +2510,12 @@ def classify_rns_headline(
     # FCA-style codes sometimes appear in provider metadata.
     # Do not treat the synthetic "IR allowlist document" prefix as interim results.
     if "allowlist" not in blob:
-        if re.search(r"\b(fr|final results|annual)\b", blob):
+        if re.search(r"\b(fr|final results)\b", blob):
+            return "annual"
+        if re.search(r"\bannual\b", blob) and not re.search(
+            r"\b(?:annual )?general meetings?\b|\bagm\b",
+            blob,
+        ):
             return "annual"
         if re.search(r"\b(ir|half[- ]year report|interim results)\b", blob):
             return "interim"
@@ -2790,6 +2851,8 @@ def filter_misattributed_filings(
     for row in rows:
         headline = str(row.get("headline") or "")
         source = str(row.get("source") or "")
+        if regime == "uk_rns" and _is_third_party_collateral_rns_headline(headline):
+            continue
         if regime == "uk_rns" and (
             source == "ticker_rns_api"
             or source == "investegate_resolved"

@@ -4684,6 +4684,86 @@ def test_classify_rns_headline_annual_interim_and_trading_update():
     assert classify_rns_headline("Shell plc First Quarter 2026 Interim Dividend") == "other"
 
 
+def test_classify_rns_headline_rio_l_routine_and_operating_rns():
+    """eng-20260918-17: RIO.L AGM, ESG, smelter and production RNS period tags."""
+    assert classify_rns_headline("2026 Annual General Meeting dates") == "other"
+    assert classify_rns_headline("Notices of 2026 annual general meetings") == "other"
+    assert classify_rns_headline("Report on Payments to Governments") == "other"
+    assert classify_rns_headline("Publication of Supplementary Prospectus") == "other"
+    assert classify_rns_headline("Mineral Resources and Ore Reserves updates") == "other"
+    assert classify_rns_headline("Agreement to secure long-term future of Tomago") == "other"
+    assert classify_rns_headline("Second quarter production results") == "trading_update"
+    assert classify_rns_headline("Drilling/Production Report") == "trading_update"
+    assert classify_rns_headline("2025 Annual Report") == "annual"
+    assert classify_rns_headline("Rio Tinto Half Year Results") == "interim"
+
+
+def test_apply_headline_period_rio_l_blocks_body_upgrade_for_svm_collab():
+    """eng-20260918-17: third-party SVM collab body must not become period=annual."""
+    body = "Annual report and consolidated income statement " + ("x" * 400)
+    row = {
+        "headline": "SVM Advances U.S. Strategy as Rio Collab Concludes - Investegate",
+        "source": "investegate_resolved",
+        "period": "other",
+    }
+    updated = _apply_headline_period(dict(row), body_snippet=body)
+    assert updated["period"] == "other"
+
+
+def test_fetch_filings_investegate_company_rio_l_operating_rns_periods(monkeypatch):
+    """eng-20260918-17: Investegate fetch tags RIO operating RNS without annual inflation."""
+    html = """
+    <table>
+      <tr>
+        <td>15 Jul 2026</td><td>07:00 AM</td>
+        <td><a href="https://www.investegate.co.uk/announcement/rns/rio-tinto--rio/q2-prod/1">Second quarter production results</a></td>
+      </tr>
+      <tr>
+        <td>19 Feb 2026</td><td>07:00 AM</td>
+        <td><a href="https://www.investegate.co.uk/announcement/rns/rio-tinto--rio/annual-report/2">2025 Annual Report</a></td>
+      </tr>
+      <tr>
+        <td>10 Apr 2026</td><td>07:00 AM</td>
+        <td><a href="https://www.investegate.co.uk/announcement/rns/rio-tinto--rio/agm/3">2026 Annual General Meeting dates</a></td>
+      </tr>
+    </table>
+    """
+    monkeypatch.setattr(
+        "value_investor.research.filings._http_get",
+        lambda url, headers=None, timeout=60: html.encode("utf-8"),
+    )
+    rows = fetch_filings_investegate_company(
+        ticker="RIO.L",
+        company_name="Rio Tinto Group",
+    )
+    by_headline = {row["headline"]: row["period"] for row in rows}
+    assert by_headline["Second quarter production results"] == "trading_update"
+    assert by_headline["2025 Annual Report"] == "annual"
+    assert by_headline["2026 Annual General Meeting dates"] == "other"
+
+
+def test_filter_misattributed_filings_drops_rio_l_svm_collateral_rns():
+    rows = [
+        {
+            "id": "svm_noise",
+            "source": "investegate_resolved",
+            "headline": "SVM Advances U.S. Strategy as Rio Collab Concludes - Investegate",
+        },
+        {
+            "id": "rio_results",
+            "source": "investegate_direct",
+            "headline": "2025 Annual Report",
+        },
+    ]
+    filtered = filter_misattributed_filings(
+        rows,
+        company_name="Rio Tinto Group",
+        ticker="RIO.L",
+        regime="uk_rns",
+    )
+    assert [row["id"] for row in filtered] == ["rio_results"]
+
+
 def test_classify_filing_period_annual_and_interim():
     assert (
         classify_filing_period("Shell Plc 4th Quarter 2025 and Full Year Unaudited Results")
