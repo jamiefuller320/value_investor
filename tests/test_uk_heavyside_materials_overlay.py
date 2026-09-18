@@ -13,10 +13,7 @@ from value_investor.scoring.uk_heavyside_materials_overlay import (
 
 def test_is_uk_heavyside_tolerates_nan_sector_and_name():
     """Screen rows often carry float NaN for missing sector/name — must not raise."""
-    assert (
-        is_uk_heavyside_construction_materials("XYZ.L", float("nan"), float("nan"))
-        is False
-    )
+    assert is_uk_heavyside_construction_materials("XYZ.L", float("nan"), float("nan")) is False
     assert is_uk_heavyside_construction_materials("XYZ.L", None, math.nan) is False
     assert is_uk_heavyside_construction_materials("XYZ.L", pd.NA, pd.NA) is False
 
