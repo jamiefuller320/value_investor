@@ -116,7 +116,8 @@ failed CI workflow:
 - Branch names must match `^cursor/[A-Za-z0-9][A-Za-z0-9._/-]*$` (no shell metacharacters)
 - Package + autofix scripts installed from **main** (trusted); PR head is checked out afterward
 - Skips when the latest commit already starts with `chore(ci):` (one bot attempt per push)
-- Pytest and committed-data JSON failures are **diagnosed but not auto-fixed** on PRs
+- Pytest and committed-data JSON failures are **diagnosed but not auto-patched** on PRs
+- When the only failure is a **pre-existing live-fetch flake** (`has_fetchable_ir` / `assert None` or a fetch error, and the test function was not added in the diff), autofix posts why and **re-runs the failed jobs once** (`workflow_run.run_attempt == 1`). A second failure is left for a human. New tests and ordinary assertion failures are not re-run and are not code-patched.
 - Path-guard expand only adds non-blocked paths; blocked paths still need agent/human edits
 - Path-guard revert drops incidental research source JSON and timestamp-only
   library cache edits instead of widening scoring/hunt-task allowlists (PR 503 /

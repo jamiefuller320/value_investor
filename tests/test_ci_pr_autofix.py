@@ -10,12 +10,14 @@ from pathlib import Path
 from value_investor.ci_pr_autofix import (
     AUTOFIX_COMMIT_PREFIX,
     _suggest_companion_paths,
+    assess_no_autofix_followup,
     attempt_engineering_path_guard_autofix,
     attempt_pr_ci_autofix,
     autofix_skip_verify_pytest,
     ci_bot_already_attempted,
     classify_ci_log_failures,
     diagnose_pr_ci_failure,
+    format_pr_ci_comment,
     is_incidental_research_artifact,
     is_library_cache_json,
     is_timestamp_only_library_cache_change,
@@ -23,6 +25,7 @@ from value_investor.ci_pr_autofix import (
     path_guard_actions_skip_verify_pytest,
     path_guard_effective_changed_paths,
     run_pr_ci_autofix_pipeline,
+    function_added_in_diff,
 )
 from value_investor.engineering_tasks import validate_engineering_pr_paths_for_task_id
 
@@ -615,3 +618,72 @@ def test_ci_bot_already_attempted_detects_prefix(tmp_path: Path):
         assert ci_bot_already_attempted("HEAD")
     finally:
         os.chdir(prev)
+
+
+NTR_LOG = """
+FAILED tests/test_research_filings.py::test_parked_source_hunter_ntr_to_tsx60_has_fetchable_ir - assert None
+"""
+
+
+def test_live_fetch_flake_reruns_once_when_test_not_added():
+    diag = diagnose_pr_ci_failure(
+        branch="cursor/eng-20260918-12-1de3",
+        log_text=NTR_LOG,
+    )
+    followup = assess_no_autofix_followup(
+        diagnosis=diag,
+        autofix_reason="pytest failure — not autofixable via ruff",
+        log_text=NTR_LOG,
+        diff_text="+def test_refetch_investegate_prioritises_itv_statutory_interim_before_sky_sale(\n",
+        run_attempt=1,
+    )
+    assert followup.implementable is True
+    assert followup.action == "rerun_failed_ci"
+    assert "live-fetch" in followup.detail
+
+
+def test_live_fetch_flake_does_not_rerun_twice():
+    diag = diagnose_pr_ci_failure(
+        branch="cursor/eng-20260918-12-1de3",
+        log_text=NTR_LOG,
+    )
+    followup = assess_no_autofix_followup(
+        diagnosis=diag,
+        autofix_reason="pytest failure — not autofixable via ruff",
+        log_text=NTR_LOG,
+        diff_text="",
+        run_attempt=2,
+    )
+    assert followup.implementable is False
+    assert followup.action == "none"
+
+
+def test_new_test_assertion_is_not_auto_implemented():
+    log = "FAILED tests/test_research_filings.py::test_new_thing - AssertionError: expected 2\n"
+    diag = diagnose_pr_ci_failure(branch="cursor/eng-20260918-12-1de3", log_text=log)
+    followup = assess_no_autofix_followup(
+        diagnosis=diag,
+        autofix_reason="pytest failure — not autofixable via ruff",
+        log_text=log,
+        diff_text="+def test_new_thing():\n",
+        run_attempt=1,
+    )
+    assert followup.implementable is False
+    assert followup.action == "none"
+    body = format_pr_ci_comment(
+        diagnosis=diag,
+        failed_run_id="1",
+        failed_run_url="https://example.test/1",
+        fixed=False,
+        actions=[],
+        followup=followup,
+    )
+    assert "Why no automatic fix" in body
+    assert "Implementable now: **no**" in body
+
+
+def test_function_added_in_diff_matches_only_added_defs():
+    diff = "+def test_new_thing():\n-def test_old():\n"
+    assert function_added_in_diff("test_new_thing", diff) is True
+    assert function_added_in_diff("test_old", diff) is False
+

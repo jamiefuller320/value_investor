@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-18T17:15:28+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-18T19:08:19+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -477,6 +477,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L416 | **Migrate remaining git-auto-commit workflows to gha_commit_artifacts** | library-epoch0-weekday now uses L348 retry; other workflows still use git-auto-commit + optional pull --rebase and can fail the same main race. | Another weekday/ingest auto-commit job fails with cannot lock ref or fetch first on main |
 | L418 | **PM auto-rerun for non-eng Cursor waste loops** | cursor_workflow_fail_loop signals are digest-only today; extend project-traffic v1 only when a deterministic same-day skip / rerun path exists per workflow (analysis-review, paper-learning-review, etc.). | After eng-agent reburn stop has been stable for a week and a second Cursor workflow shows the same unresolved fail-loop pattern |
 | L420 | **Hunter-fix PAT push still action_required (checkout extraheader)** | Even with WORKFLOW_DISPATCH_PAT set and gh auth setup-git, #715 hunter-fix tip push still created pull_request CI in action_required (triggering_actor github-actions[bot]). Likely actions/checkout http.extraheader Authorization bearer GITHUB_TOKEN wins over gh credentials. Unset extraheader or push via x-access-token URL before git push. | Next hunter-fix tip push lands action_required despite PAT secret present in the commit step env |
+| L421 | **Cursor agent for non-flake pytest after PR autofix declines** | No-autofix follow-up re-runs a pre-existing live-fetch flake once and explains other pytest declines. It does not patch assertion failures. A capped agent could try a code fix when the follow-up says not implementable. | Eng PRs sit red on non-flake pytest after the one-shot live-fetch re-run and a human still has to patch them |
 
 ---
 
