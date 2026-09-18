@@ -8,6 +8,8 @@ from typing import Any
 import pandas as pd
 
 from value_investor.scoring.fcf import (
+    ADVERTISING_REVENUE_SHARE_MEDIA_THRESHOLD,
+    MEDIA_THIN_STATUTORY_FCF_DIVIDEND_COVERAGE_MAX,
     _float_or_none,
     fcf_action_note_mismatch,
     fcf_basis_definition_divergence,
@@ -547,4 +549,227 @@ def enrich_signals_with_run_history_fcf_action_notes(
         if action_note != str(row.get("action_note") or ""):
             out.at[index, "action_note"] = action_note
 
+    return out
+
+
+MEDIA_CYCLICAL_FCF_CONVICTION_MULTIPLIER = 0.85
+MEDIA_CYCLICAL_FCF_NOTE_MARKER = "media cyclicality thin fcf cover"
+PIOTROSKI_WEAK_FOR_MEDIA_CYCLICAL_FCF = 4
+
+
+def media_cyclical_thin_fcf_overlay_triggered(
+    *,
+    advertising_revenue_share: float | None,
+    piotroski_f_score: int | None,
+    statutory_fcf_dividend_coverage: float | None,
+) -> bool:
+    """Advertising-heavy media with weak Piotroski and thin statutory FCF/dividend cover."""
+    if advertising_revenue_share is None or (
+        isinstance(advertising_revenue_share, float) and pd.isna(advertising_revenue_share)
+    ):
+        return False
+    if float(advertising_revenue_share) <= ADVERTISING_REVENUE_SHARE_MEDIA_THRESHOLD:
+        return False
+    if piotroski_f_score is None:
+        return False
+    if int(piotroski_f_score) > PIOTROSKI_WEAK_FOR_MEDIA_CYCLICAL_FCF:
+        return False
+    if statutory_fcf_dividend_coverage is None or (
+        isinstance(statutory_fcf_dividend_coverage, float)
+        and pd.isna(statutory_fcf_dividend_coverage)
+    ):
+        return False
+    return float(statutory_fcf_dividend_coverage) <= MEDIA_THIN_STATUTORY_FCF_DIVIDEND_COVERAGE_MAX
+
+
+def cap_signal_for_media_cyclical_thin_fcf_overlay(signal: str) -> str:
+    """Cap at research-equivalent caution: strong_buy -> buy, buy -> hold."""
+    if signal == "strong_buy":
+        return "buy"
+    if signal == "buy":
+        return "hold"
+    return signal
+
+
+def cap_conviction_for_media_cyclical_thin_fcf_overlay(conviction_score: float) -> float:
+    """Reduce conviction when cyclical ad revenue meets thin statutory FCF cover."""
+    return max(0.0, float(conviction_score) * MEDIA_CYCLICAL_FCF_CONVICTION_MULTIPLIER)
+
+
+def apply_media_cyclical_thin_fcf_overlay_to_signal(
+    signal: str,
+    *,
+    advertising_revenue_share: float | None,
+    piotroski_f_score: int | None,
+    statutory_fcf_dividend_coverage: float | None,
+    conviction_score: float,
+    adjusted_signal: str | None = None,
+) -> tuple[bool, str, float, float | None]:
+    """Return overlay flag, conservative adjusted signal, capped conviction, and ad share."""
+    base_adjusted = adjusted_signal or signal
+    base_conviction = float(conviction_score or 0.0)
+    if not media_cyclical_thin_fcf_overlay_triggered(
+        advertising_revenue_share=advertising_revenue_share,
+        piotroski_f_score=piotroski_f_score,
+        statutory_fcf_dividend_coverage=statutory_fcf_dividend_coverage,
+    ):
+        return False, base_adjusted, base_conviction, advertising_revenue_share
+    capped_signal = cap_signal_for_media_cyclical_thin_fcf_overlay(signal)
+    return (
+        True,
+        _more_conservative_signal(base_adjusted, capped_signal),
+        cap_conviction_for_media_cyclical_thin_fcf_overlay(base_conviction),
+        advertising_revenue_share,
+    )
+
+
+def apply_media_cyclical_thin_fcf_export_enforcement(
+    *,
+    signal: str,
+    adjusted_signal: str,
+    conviction_score: float,
+    media_cyclical_thin_fcf_overlay: bool = False,
+    advertising_revenue_share: float | None = None,
+    piotroski_f_score: int | None = None,
+    statutory_fcf_dividend_coverage: float | None = None,
+) -> tuple[bool, str, float]:
+    """Re-apply media cyclical FCF caps on export/snapshot paths."""
+    if media_cyclical_thin_fcf_overlay:
+        capped = cap_signal_for_media_cyclical_thin_fcf_overlay(signal)
+        merged = _more_conservative_signal(adjusted_signal, capped)
+        if merged == adjusted_signal:
+            return True, merged, float(conviction_score or 0.0)
+        return (
+            True,
+            merged,
+            cap_conviction_for_media_cyclical_thin_fcf_overlay(float(conviction_score or 0.0)),
+        )
+    triggered, merged, conviction, _ = apply_media_cyclical_thin_fcf_overlay_to_signal(
+        signal,
+        advertising_revenue_share=advertising_revenue_share,
+        piotroski_f_score=piotroski_f_score,
+        statutory_fcf_dividend_coverage=statutory_fcf_dividend_coverage,
+        conviction_score=conviction_score,
+        adjusted_signal=adjusted_signal,
+    )
+    if not triggered:
+        return False, adjusted_signal, float(conviction_score or 0.0)
+    return True, merged, conviction
+
+
+def enrich_signals_with_media_cyclical_thin_fcf_overlay(
+    signals: pd.DataFrame,
+    model_results: pd.DataFrame,
+    *,
+    output_dir: Path | None = None,
+) -> pd.DataFrame:
+    """Flag ad-heavy media with thin statutory FCF cover and cap buy-tier conviction."""
+    from value_investor.scoring.fcf import (
+        ADVERTISING_REVENUE_SHARE_MEDIA_THRESHOLD,
+        advertising_revenue_share_for_ticker,
+        resolve_free_cashflow,
+        resolve_statutory_fcf_dividend_coverage,
+    )
+    from value_investor.scoring.healthcare_overlay import piotroski_score_for_ticker
+
+    if signals.empty:
+        return signals
+
+    out = signals.copy()
+    overlay_flags: list[bool] = []
+    ad_shares: list[float | None] = []
+    adjusted: list[str] = []
+    convictions: list[float] = []
+    cyclical_detected: list[bool] = []
+
+    for _, row in out.iterrows():
+        ticker = str(row["ticker"])
+        ticker_models = model_results[model_results["ticker"] == ticker]
+
+        share_raw = row.get("advertising_revenue_share")
+        if share_raw is not None and not (isinstance(share_raw, float) and pd.isna(share_raw)):
+            advertising_revenue_share = float(share_raw)
+        else:
+            advertising_revenue_share = advertising_revenue_share_for_ticker(
+                ticker,
+                output_dir=output_dir,
+            )
+
+        coverage_net = row.get("fcf_dividend_coverage_net")
+        fcf_dividend_coverage_net = (
+            float(coverage_net)
+            if coverage_net is not None
+            and not (isinstance(coverage_net, float) and pd.isna(coverage_net))
+            else None
+        )
+        ocf = row.get("operating_cashflow")
+        operating_cashflow = (
+            float(ocf)
+            if ocf is not None and not (isinstance(ocf, float) and pd.isna(ocf))
+            else None
+        )
+        capex = row.get("capital_expenditure")
+        capital_expenditure = (
+            float(capex)
+            if capex is not None and not (isinstance(capex, float) and pd.isna(capex))
+            else None
+        )
+        dividends = row.get("dividends_paid")
+        dividends_paid = (
+            float(dividends)
+            if dividends is not None and not (isinstance(dividends, float) and pd.isna(dividends))
+            else None
+        )
+        statutory_cover = resolve_statutory_fcf_dividend_coverage(
+            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+            operating_cashflow=operating_cashflow,
+            capital_expenditure=capital_expenditure,
+            dividends_paid=dividends_paid,
+            free_cashflow=resolve_free_cashflow(row),
+        )
+        piotroski = piotroski_score_for_ticker(ticker_models)
+
+        existing = row.get("adjusted_signal")
+        existing_adjusted = (
+            str(existing)
+            if existing is not None and not (isinstance(existing, float) and pd.isna(existing))
+            else None
+        )
+
+        triggered, new_adjusted, new_conviction, resolved_share = (
+            apply_media_cyclical_thin_fcf_overlay_to_signal(
+                str(row.get("signal") or "hold"),
+                advertising_revenue_share=advertising_revenue_share,
+                piotroski_f_score=piotroski,
+                statutory_fcf_dividend_coverage=statutory_cover,
+                conviction_score=float(row.get("conviction_score") or 0.0),
+                adjusted_signal=existing_adjusted,
+            )
+        )
+        overlay_flags.append(triggered)
+        ad_shares.append(resolved_share)
+        adjusted.append(new_adjusted)
+        convictions.append(new_conviction)
+
+        prior_cyclical = row.get("cyclical_exposure_detected")
+        cyclical = (
+            bool(prior_cyclical)
+            if (
+                prior_cyclical is not None
+                and not (isinstance(prior_cyclical, float) and pd.isna(prior_cyclical))
+            )
+            else False
+        )
+        if triggered and (
+            resolved_share is not None
+            and resolved_share > ADVERTISING_REVENUE_SHARE_MEDIA_THRESHOLD
+        ):
+            cyclical = True
+        cyclical_detected.append(cyclical)
+
+    out["media_cyclical_thin_fcf_overlay"] = overlay_flags
+    out["advertising_revenue_share"] = ad_shares
+    out["adjusted_signal"] = adjusted
+    out["conviction_score"] = convictions
+    out["cyclical_exposure_detected"] = cyclical_detected
     return out
