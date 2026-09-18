@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-18T07:20:32.908840+00:00",
+  "generated_at": "2026-09-18T17:17:38.007241+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -43,7 +43,7 @@
       "1": "sp500",
       "2": "asx200"
     },
-    "equal_support_generated_at": "2026-09-18T07:19:05.061203+00:00"
+    "equal_support_generated_at": "2026-09-18T15:16:33.731577+00:00"
   },
   "markets": [
     {
@@ -251,7 +251,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": null,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=11, indexed_without_body=17)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=11, indexed_without_body=19)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": null,
@@ -302,12 +302,12 @@
         }
       },
       "filing_health": {
-        "buy_tier_count": 46,
+        "buy_tier_count": 47,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 11,
-        "indexed_without_body": 17,
-        "bodies_median": 3.5,
+        "indexed_without_body": 19,
+        "bodies_median": 4.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
@@ -317,10 +317,10 @@
           "SGO.PA",
           "ACKB.BR",
           "EVN.VI",
-          "WIE.VI",
-          "SKA-B.ST",
-          "MUV2.DE",
           "DTE.DE",
+          "WIE.VI",
+          "MUV2.DE",
+          "SKA-B.ST",
           "UCB.BR"
         ],
         "unmeasured_tickers": [],
@@ -358,13 +358,13 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 2,
         "hold_near_buy_count": 71,
         "not_buy_tier_count": 146,
         "never_buy_tier_count": 128,
         "rememo_eligible_count": 0,
-        "exclusion_ready_for_priors": true
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 2,
@@ -392,25 +392,23 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 5,
-        "targets": 26,
-        "improved": 11,
+        "run_count": 3,
+        "targets": 17,
+        "improved": 7,
         "improved_tickers": [
-          "ASSA-B.ST",
-          "ESSITY-B.ST",
           "BOL.ST",
-          "ERIC-B.ST",
+          "ESSITY-B.ST",
           "C5H.IR",
-          "AZE.BR",
-          "EG7.IR"
+          "AMRZ.SW",
+          "TTE.PA"
         ],
-        "last_run_at": "2026-09-17T12:38:50.578871+00:00",
+        "last_run_at": "2026-09-18T17:14:50.058300+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": 13,
+          "thin": 11,
           "indexed_without_body": 17,
           "filing_gaps": 0
         },
@@ -418,21 +416,21 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 11,
-          "indexed_without_body": 17,
+          "indexed_without_body": 19,
           "filing_gaps": 0
         },
         "gap_delta": {
           "unmeasured": 0,
           "zero_body": 0,
-          "thin": -2,
-          "indexed_without_body": 0,
+          "thin": 0,
+          "indexed_without_body": 2,
           "filing_gaps": 0
         },
         "remaining": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 11,
-          "indexed_without_body": 17,
+          "indexed_without_body": 19,
           "filing_gaps": 0
         },
         "admission_ready": true,
@@ -592,7 +590,7 @@
       "is_ftse_equivalent": true,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=15)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=24)",
       "ingest_parity_met": false,
       "ingest_exhausted": true,
       "queue_rank": 1,
@@ -645,11 +643,11 @@
         }
       },
       "filing_health": {
-        "buy_tier_count": 144,
+        "buy_tier_count": 147,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 0,
-        "indexed_without_body": 15,
+        "indexed_without_body": 24,
         "bodies_median": 20.0,
         "coverage_scope": "canonical",
         "ftse_equivalent": true,
@@ -691,13 +689,13 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 5,
         "hold_near_buy_count": 152,
         "not_buy_tier_count": 356,
         "never_buy_tier_count": 329,
         "rememo_eligible_count": 12,
-        "exclusion_ready_for_priors": true
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 5,
@@ -728,32 +726,28 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 4,
-        "targets": 15,
-        "improved": 15,
+        "run_count": 2,
+        "targets": 8,
+        "improved": 8,
         "improved_tickers": [
-          "AMGN",
-          "EFX",
-          "EXE",
-          "DECK",
-          "DHI",
-          "CDW",
-          "UBER",
           "PAYX",
+          "EXE",
           "AIG",
           "LEN",
           "NKE",
-          "CRM"
+          "CRM",
+          "SNDK",
+          "ALL"
         ],
         "last_run_at": "2026-09-17T17:48:08.406919+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
-          "unmeasured": 1,
+          "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
           "indexed_without_body": 23,
-          "filing_gaps": 1
+          "filing_gaps": 0
         },
         "gaps_after": {
           "unmeasured": 0,
@@ -763,17 +757,17 @@
           "filing_gaps": 0
         },
         "gap_delta": {
-          "unmeasured": -1,
+          "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
           "indexed_without_body": -8,
-          "filing_gaps": -1
+          "filing_gaps": 0
         },
         "remaining": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 15,
+          "indexed_without_body": 24,
           "filing_gaps": 0
         },
         "admission_ready": true,
@@ -1036,13 +1030,13 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 1,
         "hold_near_buy_count": 59,
         "not_buy_tier_count": 168,
         "never_buy_tier_count": 150,
         "rememo_eligible_count": 1,
-        "exclusion_ready_for_priors": true
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 1,
@@ -1069,18 +1063,15 @@
       },
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 9,
-        "targets": 19,
-        "improved": 14,
+        "run_count": 4,
+        "targets": 8,
+        "improved": 6,
         "improved_tickers": [
-          "DNL.AX",
-          "WDS.AX",
-          "SOL.AX",
-          "CLW.AX",
           "CSC.AX",
-          "BPT.AX",
+          "WDS.AX",
           "EBO.AX",
-          "BSL.AX"
+          "BSL.AX",
+          "BPT.AX"
         ],
         "last_run_at": "2026-09-17T18:23:30.024883+00:00",
         "runtime_cutoff_runs": 0,
@@ -1089,7 +1080,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 0,
+          "indexed_without_body": 15,
           "filing_gaps": 0
         },
         "gaps_after": {
@@ -1103,7 +1094,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 0,
-          "indexed_without_body": 5,
+          "indexed_without_body": -10,
           "filing_gaps": 0
         },
         "remaining": {
@@ -1357,13 +1348,13 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 17,
         "not_buy_tier_count": 35,
         "never_buy_tier_count": 34,
         "rememo_eligible_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
@@ -1551,13 +1542,13 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 20,
         "not_buy_tier_count": 69,
         "never_buy_tier_count": 62,
         "rememo_eligible_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
@@ -1810,13 +1801,13 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 0,
         "hold_near_buy_count": 26,
         "not_buy_tier_count": 64,
         "never_buy_tier_count": 60,
         "rememo_eligible_count": 9,
-        "exclusion_ready_for_priors": true
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 0,
@@ -1992,13 +1983,13 @@
         "ai_judgment": false,
         "knob_apply": false,
         "paper_instrument": "buy_tier_level",
-        "timing_signal_present": true,
+        "timing_signal_present": false,
         "buy_tier_not_now_count": 1,
         "hold_near_buy_count": 20,
         "not_buy_tier_count": 41,
         "never_buy_tier_count": 36,
         "rememo_eligible_count": 0,
-        "exclusion_ready_for_priors": false
+        "exclusion_ready_for_priors": null
       },
       "near_miss": {
         "buy_tier_not_now_count": 1,
