@@ -578,6 +578,7 @@ def _brief_summary(
     fcf_dividend_coverage_net: float | None = None,
     uk_contractor_revenue_fcf_warning: bool = False,
     public_capex_exposure_detected: bool = False,
+    photobooth_cyclical_detected: bool = False,
     framework_backlog_growth_suppressed: bool = False,
 ) -> str:
     label = SIGNAL_LABELS.get(signal, signal)
@@ -692,6 +693,12 @@ def _brief_summary(
         if public_capex_exposure_detected and uk_contractor_revenue_fcf_warning:
             parts.append(
                 "Cyclical-exposure overlay: UK public-capex contractor with revenue/FCF divergence "
+                f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+            )
+        elif photobooth_cyclical_detected:
+            parts.append(
+                "Cyclical-exposure overlay: principal-risk discretionary demand with interim photobooth "
+                f"revenue decline and thin dividend cover "
                 f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
             )
         else:
@@ -1283,6 +1290,56 @@ def build_company_reports(
         if heavyside_cyclical_tape_detected:
             cyclical_exposure_detected = True
 
+        from value_investor.scoring.photobooth_cyclical_overlay import (
+            photobooth_cyclical_profile_detected,
+            photobooth_interim_month_revenue_decline_for_ticker,
+            principal_risk_cyclical_for_ticker,
+        )
+
+        photobooth_profile_raw = row.get("photobooth_cyclical_detected")
+        if photobooth_profile_raw is not None and not (
+            isinstance(photobooth_profile_raw, float) and pd.isna(photobooth_profile_raw)
+        ):
+            photobooth_cyclical_detected = bool(photobooth_profile_raw)
+        else:
+            principal_risk_cyclical = principal_risk_cyclical_for_ticker(
+                ticker,
+                output_dir=output_dir,
+            )
+            photobooth_decline_raw = row.get("photobooth_interim_revenue_decline_pct")
+            if photobooth_decline_raw is not None and not (
+                isinstance(photobooth_decline_raw, float) and pd.isna(photobooth_decline_raw)
+            ):
+                photobooth_interim_revenue_decline_pct = float(photobooth_decline_raw)
+            else:
+                photobooth_interim_revenue_decline_pct = (
+                    photobooth_interim_month_revenue_decline_for_ticker(
+                        ticker,
+                        output_dir=output_dir,
+                    )
+                )
+            photobooth_cyclical_detected = photobooth_cyclical_profile_detected(
+                principal_risk_cyclical=principal_risk_cyclical,
+                photobooth_interim_revenue_decline_pct=photobooth_interim_revenue_decline_pct,
+            )
+        if photobooth_cyclical_detected:
+            cyclical_exposure_detected = True
+        photobooth_decline_for_overlay = row.get("photobooth_interim_revenue_decline_pct")
+        if photobooth_decline_for_overlay is not None and not (
+            isinstance(photobooth_decline_for_overlay, float)
+            and pd.isna(photobooth_decline_for_overlay)
+        ):
+            photobooth_interim_revenue_decline_pct = float(photobooth_decline_for_overlay)
+        elif photobooth_cyclical_detected:
+            photobooth_interim_revenue_decline_pct = (
+                photobooth_interim_month_revenue_decline_for_ticker(
+                    ticker,
+                    output_dir=output_dir,
+                )
+            )
+        else:
+            photobooth_interim_revenue_decline_pct = None
+
         if cyclical_overlay_flag is not None and not (
             isinstance(cyclical_overlay_flag, float) and pd.isna(cyclical_overlay_flag)
         ):
@@ -1303,6 +1360,8 @@ def build_company_reports(
                     uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
                     uk_heavyside_materials=uk_heavyside_materials,
                     heavyside_cyclical_tape_detected=heavyside_cyclical_tape_detected,
+                    photobooth_cyclical_detected=photobooth_cyclical_detected,
+                    photobooth_interim_revenue_decline_pct=photobooth_interim_revenue_decline_pct,
                 )
             )
 
@@ -1638,6 +1697,7 @@ def build_company_reports(
             fcf_dividend_coverage_net=fcf_dividend_coverage_net,
             uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
             public_capex_exposure_detected=public_capex_exposure_detected,
+            photobooth_cyclical_detected=photobooth_cyclical_detected,
             framework_backlog_growth_suppressed=framework_backlog_growth_suppressed,
         )
 
