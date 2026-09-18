@@ -1,46 +1,115 @@
 {
-  "run_at": "2026-09-17T17:48:11.975748+00:00",
+  "run_at": "2026-09-18T17:20:22.841210+00:00",
   "market_id": "sp500",
   "targets": [
+    "CMI",
     "ALL"
   ],
   "target_details": [
     {
+      "ticker": "CMI",
+      "priority_score": 17.4938,
+      "filings_total": 19,
+      "filings_with_body": 10,
+      "indexed_without_body": 9,
+      "reason": "indexed_without_body"
+    },
+    {
       "ticker": "ALL",
       "priority_score": 17.116,
-      "filings_total": 72,
-      "filings_with_body": 71,
+      "filings_total": 92,
+      "filings_with_body": 91,
       "indexed_without_body": 1,
       "reason": "indexed_without_body"
     }
   ],
   "results": [
     {
-      "ticker": "ALL",
+      "ticker": "CMI",
       "reason": "indexed_without_body",
       "before": {
-        "filings_total": 72,
-        "filings_with_body": 71,
-        "indexed_without_body": 1
+        "filings_total": 19,
+        "filings_with_body": 10,
+        "indexed_without_body": 9
       },
       "after": {
-        "filings_total": 92,
-        "filings_with_body": 91,
-        "indexed_without_body": 1
+        "filings_total": 19,
+        "filings_with_body": 19,
+        "indexed_without_body": 0
       },
       "improved": true,
       "regime": "sec_edgar",
       "filings_summary": {
-        "total": 72,
-        "annual": 12,
-        "interim": 24,
+        "total": 19,
+        "annual": 2,
+        "interim": 7,
         "trading_update": 0,
-        "other": 36,
-        "with_body": 72,
+        "other": 10,
+        "with_body": 19,
         "period_coverage": {
           "annual": {
-            "total": 12,
-            "with_body": 12
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 7,
+            "with_body": 7
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 10,
+            "with_body": 10
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 19,
+        "with_body_after": 19,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "note": "no missing IR allowlist bodies"
+      }
+    },
+    {
+      "ticker": "ALL",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 92,
+        "filings_with_body": 91,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 93,
+        "filings_with_body": 84,
+        "indexed_without_body": 9
+      },
+      "improved": true,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 74,
+        "annual": 13,
+        "interim": 24,
+        "trading_update": 0,
+        "other": 37,
+        "with_body": 74,
+        "period_coverage": {
+          "annual": {
+            "total": 13,
+            "with_body": 13
           },
           "interim": {
             "total": 24,
@@ -51,8 +120,8 @@
             "with_body": 0
           },
           "other": {
-            "total": 36,
-            "with_body": 36
+            "total": 37,
+            "with_body": 37
           }
         }
       },
@@ -62,8 +131,8 @@
         "attempted": 0,
         "fetched": 0,
         "failed": 0,
-        "with_body_before": 91,
-        "with_body_after": 91,
+        "with_body_before": 84,
+        "with_body_after": 84,
         "investegate_fallbacks": 0,
         "skipped_unfetchable": 0,
         "deadline_hit": false,
@@ -77,22 +146,23 @@
     }
   ],
   "improved": [
+    "CMI",
     "ALL"
   ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-17T17:45:34.784281+00:00",
+    "snapshot_at": "2026-09-18T17:19:04.274545+00:00",
     "market_id": "sp500",
-    "buy_tier_count": 144,
+    "buy_tier_count": 147,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 14,
-    "bodies_min": 14,
-    "bodies_median": 20.0,
-    "bodies_max": 73,
+    "indexed_without_body": 24,
+    "bodies_min": 10,
+    "bodies_median": 20,
+    "bodies_max": 91,
     "coverage_scope": "canonical",
     "ftse_equivalent": true,
     "unmeasured_tickers": [],
@@ -100,21 +170,25 @@
     "thin_body_tickers": [],
     "indexed_without_body_tickers": [
       "LDOS",
+      "ALL",
       "APTV",
       "CRH",
       "LMT",
       "TSN",
       "BXP",
-      "FICO"
+      "FICO",
+      "CMI"
     ],
     "indexed_without_body_by_ticker": {
       "LDOS": 1,
+      "ALL": 1,
       "APTV": 2,
       "CRH": 2,
       "LMT": 1,
       "TSN": 1,
       "BXP": 2,
-      "FICO": 5
+      "FICO": 5,
+      "CMI": 9
     },
     "parked_tickers": [
       "APTV",
@@ -128,21 +202,24 @@
     "parked_count": 7,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "effective_indexed_without_body": 10,
+    "effective_indexed_without_body_tickers": [
+      "ALL",
+      "CMI"
+    ],
+    "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-17T17:48:08.401037+00:00",
+    "snapshot_at": "2026-09-18T17:20:19.852397+00:00",
     "market_id": "sp500",
-    "buy_tier_count": 144,
+    "buy_tier_count": 147,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 15,
+    "indexed_without_body": 23,
     "bodies_min": 14,
-    "bodies_median": 20.0,
-    "bodies_max": 91,
+    "bodies_median": 20,
+    "bodies_max": 84,
     "coverage_scope": "canonical",
     "ftse_equivalent": true,
     "unmeasured_tickers": [],
@@ -160,7 +237,7 @@
     ],
     "indexed_without_body_by_ticker": {
       "LDOS": 1,
-      "ALL": 1,
+      "ALL": 9,
       "APTV": 2,
       "CRH": 2,
       "LMT": 1,
@@ -180,7 +257,7 @@
     "parked_count": 7,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body": 9,
     "effective_indexed_without_body_tickers": [
       "ALL"
     ],
@@ -192,41 +269,22 @@
   "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": {
-    "scanned": 144,
-    "hits": 0,
-    "new_rows_total": 0,
-    "curiosity_total": 0,
-    "errors": 0,
-    "prioritization_weights": {
-      "new_index_rows": 8.0,
-      "new_index_row_cap": 10.0,
-      "unknown_source": 4.0,
-      "unknown_host": 2.0,
-      "strong_buy": 1.0
-    },
-    "forced_by_critical_path": false,
-    "max_runtime_seconds": 900.0,
-    "prefer_tickers": [
-      "FICO",
-      "APTV",
-      "BXP",
-      "CRH",
-      "LDOS",
-      "LMT",
-      "TSN"
-    ],
-    "runtime_cutoff": false
-  },
-  "maintenance_mode": true,
+  "discovery_scan": null,
+  "maintenance_mode": false,
   "parity_handoff": null,
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-09-17T17:45:42.203593+00:00",
+    "assessed_at": "2026-09-18T17:19:12.753998+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
+      {
+        "ticker": "CMI",
+        "indexed_without_body": 9,
+        "filings_total": 19,
+        "filings_with_body": 10
+      },
       {
         "ticker": "FICO",
         "indexed_without_body": 5,
@@ -252,6 +310,12 @@
         "filings_with_body": 63
       },
       {
+        "ticker": "ALL",
+        "indexed_without_body": 1,
+        "filings_total": 92,
+        "filings_with_body": 91
+      },
+      {
         "ticker": "LDOS",
         "indexed_without_body": 1,
         "filings_total": 19,
@@ -275,29 +339,30 @@
     "primary_blocker": "indexed_without_body",
     "force_discovery_scan": false,
     "auto_pin_tickers": [
+      "CMI",
       "FICO",
       "APTV",
       "BXP",
       "CRH",
+      "ALL",
       "LDOS",
-      "LMT",
-      "TSN"
+      "LMT"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (7 tickers, top: FICO(5), APTV(2), BXP(2), CRH(2), LDOS(1))"
+      "Prefer indexed-without-body body refetch (9 tickers, top: CMI(9), FICO(5), APTV(2), BXP(2), CRH(2))"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 7,
-      "indexed_without_body_rows": 14,
+      "indexed_without_body_tickers": 9,
+      "indexed_without_body_rows": 24,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 138.42626901900002,
-  "budget_seconds": 3600.0,
-  "leftover_seconds": 3461.573730981,
+  "used_seconds": 58.567772856999966,
+  "budget_seconds": 2100.0,
+  "leftover_seconds": 2041.432227143,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -305,7 +370,7 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sp500",
-    "updated_at": "2026-09-17T17:48:08.412322+00:00",
+    "updated_at": "2026-09-18T17:20:19.861312+00:00",
     "exhausted": false,
     "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
@@ -404,41 +469,13 @@
     "market_id": "sp500"
   },
   "parked_hunter_compile": {
-    "compiled_count": 0,
-    "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 2,
-    "candidate_count": 31,
-    "skipped_resolved_tickers": [
-      "ABI.BR",
-      "APAM.AS",
-      "BAS.DE",
-      "EVN.VI",
-      "MUV2.DE",
-      "SAP.DE",
-      "SGO.PA",
-      "SKA-B.ST",
-      "UCB.BR",
-      "WIE.VI",
-      "APTV",
-      "BXP",
-      "CRH",
-      "FICO",
-      "LDOS",
-      "LMT",
-      "TSN",
-      "ULTP.L",
-      "BOOT.L",
-      "MER.L",
-      "TPT.L",
-      "SU.TO",
-      "NTR.TO",
-      "GIB-A.TO",
-      "TRI.TO",
-      "BAS.DE",
-      "DTE.DE",
-      "MUV2.DE",
-      "SGO.PA",
-      "SAP.DE"
-    ]
+    "compiled_count": 1,
+    "task_ids": [
+      "eng-20260918-16"
+    ],
+    "task_count": 49,
+    "market_id": "nasdaq100",
+    "hunter_ticker": "PDD",
+    "priority_score": 12.0
   }
 }
