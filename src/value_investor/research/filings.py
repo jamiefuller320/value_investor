@@ -63,7 +63,9 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
     "HIK.L": [
         "https://www.hikma.com/media/wsnfgf3v/1-2025-annual-report.pdf",
         "https://www.hikma.com/media/etij3sft/hikma-pharmaceuticals-plc-2025-full-year-results-combined-press-release-vfinal.pdf",
+        "https://www.hikma.com/media/d54itxkb/hikma-pharmaceuticals-plc-2025-fy-presentation-vfinal-260226.pdf",
         "https://www.hikma.com/media/5nyls5gx/hikma-2025-interim-results-presentation-07-aug-2025.pdf",
+        "https://www.hikma.com/media/fd1dlx2a/h126-presentation-vf.pdf",
         "https://www.hikma.com/media/1u2besjf/april-2026-trading-update-vfinal.pdf",
     ],
     "ITV.L": [
@@ -4534,6 +4536,10 @@ IR_BODY_MIN_CHARS = 200
 _IR_ROW_TOKEN_SKIP = frozenset(
     {"pdf", "vfinal", "final", "allowlist", "document", "media", "files", "presentation"}
 )
+_IR_FILENAME_TOKEN_ALIASES: dict[str, tuple[str, ...]] = {
+    # Opaque Hikma deck filenames (h126 = H1 2026 interim results presentation).
+    "h126": ("interim", "results", "2026", "hikma"),
+}
 _IR_PERIOD_HEADLINE_CUES: dict[str, tuple[str, ...]] = {
     "annual": ("full year", "final results", "annual results", "annual report", "fy "),
     "interim": ("half year", "interim", "h1 ", "h2 "),
@@ -4805,11 +4811,14 @@ def _ir_row_search_tokens(row: dict[str, Any]) -> set[str]:
     headline = str(row.get("headline") or "")
     filename = url.rsplit("/", 1)[-1].lower()
     blob = f"{filename} {headline.lower()}"
-    return {
+    tokens = {
         tok
         for tok in re.split(r"[^a-z0-9]+", blob)
         if len(tok) >= 3 and tok not in _IR_ROW_TOKEN_SKIP
     }
+    for tok in list(tokens):
+        tokens.update(_IR_FILENAME_TOKEN_ALIASES.get(tok, ()))
+    return tokens
 
 
 def _match_ir_row_to_investegate(
@@ -6058,6 +6067,14 @@ _OCF_HIGHLIGHT_PAIR_RE = re.compile(
     r"Operating cash flow\s+([\d,]+)\s+([\d,]+)",
     re.IGNORECASE,
 )
+_HIKMA_CAPEX_INLINE_RE = re.compile(
+    r"H1\s*\d{2}:\s*\$(\d+(?:\.\d+)?)\s*m",
+    re.IGNORECASE,
+)
+_HIKMA_CAPEX_CHART_SECTION_RE = re.compile(
+    r"(?:Capex/revenue|Capital expenditure)",
+    re.IGNORECASE,
+)
 _SEGMENT_MARGIN_BLOCK_RE = re.compile(
     r"Core\s+operating\s+margin\s+((?:\d+(?:\.\d+)?%\s*){3,8})",
     re.IGNORECASE | re.DOTALL,
@@ -6582,32 +6599,98 @@ def extract_filing_interim_financials(
     return payload
 
 
+def _hikma_cash_flow_slide_window(body_text: str) -> str | None:
+    """Return text around Hikma cash/capex slides (chart may precede the section header)."""
+    section_match = _OCF_HIGHLIGHT_SECTION_RE.search(body_text)
+    if section_match is not None:
+        start = section_match.start()
+        return body_text[max(0, start - 2500) : start + 2500]
+    pair_match = _OCF_HIGHLIGHT_PAIR_RE.search(body_text)
+    if pair_match is None:
+        return None
+    start = pair_match.start()
+    return body_text[max(0, start - 800) : start + 2500]
+
+
+def _parse_hikma_capex_chart_token(raw: str) -> float | None:
+    cleaned = raw.replace(",", "").strip()
+    if not cleaned.isdigit():
+        return None
+    if len(cleaned) >= 4 and cleaned.endswith("1"):
+        cleaned = cleaned[:-1]
+    try:
+        value = float(cleaned)
+    except ValueError:
+        return None
+    if value > 300:
+        return None
+    return value
+
+
+def _parse_hikma_capex_millions(window: str) -> float | None:
+    inline = _HIKMA_CAPEX_INLINE_RE.search(window)
+    if inline is not None:
+        value = float(inline.group(1))
+        if 20 <= value <= 300:
+            return value
+    marker = _HIKMA_CAPEX_CHART_SECTION_RE.search(window)
+    if marker is None:
+        return None
+    tail = window[marker.end() : marker.end() + 450]
+    candidates: list[float] = []
+    for line in tail.splitlines():
+        stripped = line.strip()
+        if not stripped or any(ch in stripped for ch in "%$"):
+            continue
+        if re.fullmatch(r"[\d,\s]+", stripped):
+            for part in stripped.split():
+                parsed = _parse_hikma_capex_chart_token(part)
+                if parsed is not None:
+                    candidates.append(parsed)
+        elif re.fullmatch(r"[\d,]+", stripped):
+            parsed = _parse_hikma_capex_chart_token(stripped.replace(",", ""))
+            if parsed is not None:
+                candidates.append(parsed)
+    for value in reversed(candidates):
+        if 20 <= value <= 300:
+            return value
+    return None
+
+
 def parse_ir_operating_cash_flow_highlights(body_text: str) -> dict[str, Any] | None:
-    """Parse USD/GBP IR deck operating-cash-flow period pairs (e.g. Hikma H1 slides)."""
+    """Parse Hikma-style IR deck OCF/capex slides into OCF and OCF-minus-capex bridge lines."""
     if not body_text or not body_text.strip():
         return None
-    section_match = _OCF_HIGHLIGHT_SECTION_RE.search(body_text)
-    if section_match is None:
+    window = _hikma_cash_flow_slide_window(body_text)
+    if window is None:
         return None
-    section = body_text[section_match.start() : section_match.start() + 1200]
-    pair_match = _OCF_HIGHLIGHT_PAIR_RE.search(section)
+    pair_match = _OCF_HIGHLIGHT_PAIR_RE.search(window)
     if pair_match is None:
         return None
     prior = _parse_table_number(pair_match.group(1))
     current = _parse_table_number(pair_match.group(2))
     if prior is None or current is None:
         return None
-    currency = "USD" if "$" in section[:400] else "GBP"
-    lines = [
+    currency = "USD" if "$" in window else "GBP"
+    lines: list[dict[str, Any]] = [
         {"label": "operating_cash_flow_prior", "amount_millions": prior},
         {"label": "operating_cash_flow_current", "amount_millions": current},
     ]
+    derived: dict[str, Any] = {"operating_cash_flow_change_millions": current - prior}
+    capex_current = _parse_hikma_capex_millions(window)
+    confidence = "high"
+    if capex_current is not None:
+        lines.append({"label": "operating_cash_flow", "amount_millions": current})
+        lines.append({"label": "capex_infrastructure", "amount_millions": -capex_current})
+        derived["operating_minus_capex_millions"] = current - capex_current
+    else:
+        confidence = "medium"
     return {
         "bridge_type": "operating_cash_flow_highlight",
         "currency": currency,
         "lines": lines,
-        "derived": {"operating_cash_flow_change_millions": current - prior},
-        "parse_confidence": "high",
+        "derived": derived,
+        "parse_confidence": confidence,
     }
 
 

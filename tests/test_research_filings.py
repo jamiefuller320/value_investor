@@ -7479,7 +7479,10 @@ def test_fetch_filings_ir_allowlist_hik_l_builtin(tmp_path: Path):
     urls = {row["url"] for row in rows}
     assert any("april-2026-trading-update-vfinal.pdf" in url for url in urls)
     assert any("annual-report" in url for url in urls)
+    assert any("h126-presentation-vf.pdf" in url for url in urls)
+    assert any("2025-fy-presentation-vfinal-260226.pdf" in url for url in urls)
     assert all(row["source"] == "ir_allowlist" for row in rows)
+    assert any(row["period"] == "interim" and "h126-presentation" in row["url"] for row in rows)
 
 
 def test_fetch_filings_ir_allowlist_ebo_ax_builtin(tmp_path: Path):
@@ -7994,6 +7997,62 @@ def test_parse_ir_operating_cash_flow_highlights_hik_fixture():
     by_label = {row["label"]: row["amount_millions"] for row in parsed["lines"]}
     assert by_label["operating_cash_flow_prior"] == 198.0
     assert by_label["operating_cash_flow_current"] == 161.0
+    assert by_label["operating_cash_flow"] == 161.0
+    assert by_label["capex_infrastructure"] == -68.0
+    assert parsed["derived"]["operating_minus_capex_millions"] == 93.0
+
+
+def test_eng_20260918_18_hik_h1_2026_cash_flow_bridge_chart_before_section_header():
+    """H1 2026 deck places OCF/capex charts before the cash-flow narrative header."""
+    from value_investor.research.filings import parse_ir_operating_cash_flow_highlights
+
+    body = (
+        "June 2025 June 2026\n"
+        "Operating cash flow 161 214\n"
+        "Operating cash flow Capital expenditure\n"
+        "US                  MENA                Europe               Capex/revenue (%)\n"
+        "138\n"
+        "169 165\n"
+        "1971\n"
+        "1221\n"
+        "2. Capex/revenue excludes the portion of spend reimbursed by our partner.\n"
+        "Cash flow, capex, and balance sheet\n"
+        "Strong cash flow, robust balance sheet and continued capex\n"
+        "▪ 2026 capex of $190m–$210m (H1 26: $122m; FY25: $197m)1\n"
+    )
+    parsed = parse_ir_operating_cash_flow_highlights(body)
+    assert parsed is not None
+    by_label = {row["label"]: row["amount_millions"] for row in parsed["lines"]}
+    assert by_label["operating_cash_flow_current"] == 214.0
+    assert by_label["capex_infrastructure"] == -122.0
+    assert parsed["derived"]["operating_minus_capex_millions"] == 92.0
+
+
+def test_eng_20260918_18_fetch_hik_h1_2026_presentation_body():
+    """Regression: HIK H1 2026 results presentation PDF is fetchable and yields FCF bridge lines."""
+    import hashlib
+
+    from value_investor.research.filings import (
+        _validate_ir_allowlist_body_content,
+        fetch_filing_body,
+        parse_ir_operating_cash_flow_highlights,
+    )
+
+    url = "https://www.hikma.com/media/fd1dlx2a/h126-presentation-vf.pdf"
+    row = {
+        "id": f"ir_{hashlib.sha256(url.encode()).hexdigest()[:16]}",
+        "source": "ir_allowlist",
+        "headline": "IR allowlist document — h126-presentation-vf.pdf",
+        "url": url,
+        "period": "interim",
+    }
+    body = fetch_filing_body(url)
+    assert body is not None and len(body) > 2000
+    valid, reason = _validate_ir_allowlist_body_content(row, body, ticker="HIK.L")
+    assert valid is True, reason
+    parsed = parse_ir_operating_cash_flow_highlights(body)
+    assert parsed is not None
+    assert parsed["derived"]["operating_minus_capex_millions"] == 92.0
 
 
 def test_parse_ir_segment_operating_margins_hik_fixture():
@@ -8069,6 +8128,10 @@ def test_extract_ir_presentation_metrics_hik_interim_fixture(tmp_path: Path):
     assert (sources_dir / "ir_presentation_metrics.json").exists()
     bridge_types = {row["bridge_type"] for row in metrics["bridges"]}
     assert "operating_cash_flow_highlight" in bridge_types
+    ocf_bridge = next(
+        b for b in metrics["bridges"] if b["bridge_type"] == "operating_cash_flow_highlight"
+    )
+    assert ocf_bridge["derived"].get("operating_minus_capex_millions") == 93.0
     split_types = {row["split_type"] for row in metrics["segment_revenue_splits"]}
     assert "interim_segment_revenue" in split_types
     assert "segment_operating_margin" in split_types
