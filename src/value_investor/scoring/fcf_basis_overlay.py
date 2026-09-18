@@ -773,3 +773,70 @@ def enrich_signals_with_media_cyclical_thin_fcf_overlay(
     out["conviction_score"] = convictions
     out["cyclical_exposure_detected"] = cyclical_detected
     return out
+
+
+def apply_dividend_sustainability_export_enforcement(
+    *,
+    signal: str,
+    adjusted_signal: str,
+    conviction_score: float,
+    ticker_models: pd.DataFrame,
+    dividend_sustainability_overlay: bool = False,
+    fcf_dividend_coverage_net: float | None = None,
+    operating_cashflow: float | None = None,
+    capital_expenditure: float | None = None,
+    dividends_paid: float | None = None,
+    free_cashflow: float | None = None,
+    interim_dividend_cut_pct: float | None = None,
+) -> tuple[bool, bool, str, float]:
+    """Re-apply statutory dividend-sustainability caps on export/snapshot paths."""
+    from value_investor.scoring.dividend_sustainability_overlay import (
+        apply_dividend_sustainability_overlay_to_signal,
+        cap_conviction_for_dividend_sustainability_overlay,
+        cap_signal_for_dividend_sustainability_overlay,
+        interim_dividend_cut_flagged,
+    )
+
+    cut_flagged = interim_dividend_cut_flagged(
+        ticker_models=ticker_models,
+        interim_dividend_cut_pct=interim_dividend_cut_pct,
+    )
+    if dividend_sustainability_overlay:
+        capped = cap_signal_for_dividend_sustainability_overlay(signal)
+        merged = _more_conservative_signal(adjusted_signal, capped)
+        if merged == adjusted_signal:
+            return True, cut_flagged, merged, float(conviction_score or 0.0)
+        return (
+            True,
+            cut_flagged,
+            merged,
+            cap_conviction_for_dividend_sustainability_overlay(float(conviction_score or 0.0)),
+        )
+
+    triggered, cut_flagged, merged, conviction = apply_dividend_sustainability_overlay_to_signal(
+        signal,
+        ticker_models=ticker_models,
+        fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+        operating_cashflow=operating_cashflow,
+        capital_expenditure=capital_expenditure,
+        dividends_paid=dividends_paid,
+        free_cashflow=free_cashflow,
+        interim_dividend_cut_pct=interim_dividend_cut_pct,
+        conviction_score=conviction_score,
+        adjusted_signal=adjusted_signal,
+    )
+    if not triggered:
+        return False, cut_flagged, adjusted_signal, float(conviction_score or 0.0)
+    return True, cut_flagged, merged, conviction
+
+
+def enrich_signals_with_dividend_sustainability_overlay(
+    signals: pd.DataFrame,
+    model_results: pd.DataFrame,
+) -> pd.DataFrame:
+    """Add dividend-sustainability overlay flags and cap conviction when triggered."""
+    from value_investor.scoring.dividend_sustainability_overlay import (
+        enrich_signals_with_dividend_sustainability_overlay as _enrich,
+    )
+
+    return _enrich(signals, model_results)

@@ -3980,7 +3980,7 @@ def test_enrich_signals_with_media_cyclical_thin_fcf_overlay_caps_itv_like_profi
 
 
 def test_enrich_signals_with_dividend_sustainability_overlay_caps_itv_like_profile():
-    from value_investor.scoring.dividend_sustainability_overlay import (
+    from value_investor.scoring.fcf_basis_overlay import (
         enrich_signals_with_dividend_sustainability_overlay,
     )
 

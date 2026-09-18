@@ -17,6 +17,7 @@ from value_investor.scoring.fcf import (
     screen_ttm_from_row,
 )
 from value_investor.scoring.fcf_basis_overlay import (
+    apply_dividend_sustainability_export_enforcement,
     apply_fcf_export_enforcement,
     apply_media_cyclical_thin_fcf_export_enforcement,
 )
@@ -38,6 +39,9 @@ _RUN_SNAPSHOT_OPTIONAL_SIGNAL_COLUMNS = (
     "fcf_basis_overlay",
     "media_cyclical_thin_fcf_overlay",
     "advertising_revenue_share",
+    "dividend_sustainability_overlay",
+    "interim_dividend_cut_flagged",
+    "interim_dividend_cut_pct",
     "interim_quality_overlay",
     "earnings_basis_overlay",
     "interim_eps_decline_pct",
@@ -177,6 +181,32 @@ def enforce_fcf_basis_in_snapshot(
         updated["conviction_score"] = media_conviction
         if advertising_revenue_share is not None:
             updated["advertising_revenue_share"] = advertising_revenue_share
+
+    ticker = str(updated.get("ticker") or "")
+    ticker_models = pd.DataFrame()
+    if model_results is not None and not model_results.empty and ticker:
+        ticker_models = model_results[model_results["ticker"] == ticker]
+
+    div_overlay, cut_flagged, div_adjusted, div_conviction = (
+        apply_dividend_sustainability_export_enforcement(
+            signal=screen_signal,
+            adjusted_signal=str(updated.get("adjusted_signal") or merged_adjusted),
+            conviction_score=float(updated.get("conviction_score") or 0.0),
+            dividend_sustainability_overlay=bool(updated.get("dividend_sustainability_overlay")),
+            ticker_models=ticker_models,
+            fcf_dividend_coverage_net=_float_or_none(updated.get("fcf_dividend_coverage_net")),
+            operating_cashflow=_float_or_none(updated.get("operating_cashflow")),
+            capital_expenditure=_float_or_none(updated.get("capital_expenditure")),
+            dividends_paid=_float_or_none(updated.get("dividends_paid")),
+            free_cashflow=_float_or_none(updated.get("free_cashflow")),
+            interim_dividend_cut_pct=_float_or_none(updated.get("interim_dividend_cut_pct")),
+        )
+    )
+    updated["interim_dividend_cut_flagged"] = cut_flagged
+    if div_overlay:
+        updated["dividend_sustainability_overlay"] = True
+        updated["adjusted_signal"] = div_adjusted
+        updated["conviction_score"] = div_conviction
     return updated
 
 

@@ -43,9 +43,6 @@ from value_investor.scoring.conviction_timing_overlay import (
 from value_investor.scoring.cyclical_exposure_overlay import (
     enrich_signals_with_cyclical_exposure_overlay,
 )
-from value_investor.scoring.dividend_sustainability_overlay import (
-    enrich_signals_with_dividend_sustainability_overlay,
-)
 from value_investor.scoring.dividend_yield_overlay import enrich_signals_with_dividend_yield_overlay
 from value_investor.scoring.earnings_basis_overlay import enrich_signals_with_earnings_basis_overlay
 from value_investor.scoring.earnings_growth_overlay import (
@@ -58,6 +55,7 @@ from value_investor.scoring.fcf import (
     suppress_high_dividend_yield_passes,
 )
 from value_investor.scoring.fcf_basis_overlay import (
+    enrich_signals_with_dividend_sustainability_overlay,
     enrich_signals_with_fcf_basis_overlay,
     enrich_signals_with_media_cyclical_thin_fcf_overlay,
     enrich_signals_with_run_history_fcf_action_notes,

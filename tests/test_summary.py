@@ -5109,3 +5109,46 @@ def test_guard_screening_snapshot_export_applies_media_cyclical_thin_fcf_overlay
     assert guarded["media_cyclical_thin_fcf_overlay"] is True
     assert guarded["adjusted_signal"] == "buy"
     assert guarded["conviction_score"] == pytest.approx(0.53 * 0.85)
+
+
+def test_guard_screening_snapshot_export_applies_dividend_sustainability_overlay():
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    snapshot = {
+        "ticker": "ITV.L",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.53,
+        "fcf_dividend_coverage_net": 1.0,
+        "fcf_dividend_coverage_gross": 1.53,
+        "advertising_revenue_share": 0.2,
+        "fcf_basis_overlay": False,
+        "media_cyclical_thin_fcf_overlay": False,
+    }
+    model_results = _model_results_for_itv_dividend_sustainability()
+
+    guarded = guard_screening_snapshot_export(snapshot, model_results=model_results)
+
+    assert guarded["dividend_sustainability_overlay"] is True
+    assert guarded["adjusted_signal"] == "buy"
+    assert guarded["conviction_score"] == pytest.approx(0.53 * 0.85)
+
+
+def test_guard_screening_snapshot_export_flags_interim_dividend_cut_megp_style():
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    snapshot = {
+        "ticker": "MEGP.L",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.45,
+        "interim_dividend_cut_pct": 0.065,
+        "fcf_dividend_coverage_net": 0.84,
+    }
+    model_results = _model_results_for_megp_dividend_overlay()
+
+    guarded = guard_screening_snapshot_export(snapshot, model_results=model_results)
+
+    assert guarded["interim_dividend_cut_flagged"] is True
+    assert guarded.get("dividend_sustainability_overlay") in (False, None)
+    assert guarded["adjusted_signal"] == "strong_buy"
