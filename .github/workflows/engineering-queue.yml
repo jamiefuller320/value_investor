@@ -389,8 +389,6 @@ jobs:
             docs/data/engineering_tasks.json
             docs/data/automation.json
             docs/data/latest.json
-            docs/data/engineering_queue_monitor.jsonl
-            docs/data/engineering_queue_monitor_summary.json
         run: bash scripts/gha_commit_engineering_queue.sh
 
       - name: Evaluate queue dispatch
@@ -444,6 +442,15 @@ jobs:
             ARGS+=(--gate-json "$GATE_JSON")
           fi
           ftse-engineering "${ARGS[@]}" | tee /tmp/queue_monitor_snapshot.json
+
+      - name: Commit queue monitor snapshot
+        env:
+          GHA_COMMIT_OWNED: >-
+            docs/data/engineering_queue_monitor.jsonl
+            docs/data/engineering_queue_monitor_summary.json
+          COMMIT_MESSAGE: "chore: engineering queue monitor snapshot [skip ci]"
+          GHA_COMMIT_LABEL: Engineering queue monitor
+        run: bash scripts/gha_commit_engineering_queue.sh
 
       - name: Dispatch engineering agent
         if: >-
