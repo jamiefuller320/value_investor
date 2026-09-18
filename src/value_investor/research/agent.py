@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -31,6 +32,73 @@ RATIONALE_MAX_CHARS = 240
 STRUCTURED_VERDICT_MODES = frozenset(
     {"structured_verdict", "structured_verdict_update", "structured_verdict_gap_fill"}
 )
+
+_RESEARCH_WORKER_MARKER = "You are a **research worker**"
+
+
+def filing_extraction_discipline() -> str:
+    """Mandatory annual/interim filing extracts for director–worker and memo prompts."""
+    return """When reading annual or interim filing bodies (results, trading updates, 10-K/10-Q):
+- Split **continuing** versus **discontinued**, **held-for-sale**, and **exceptional** lines — do not blend into one revenue/EPS/FCF series.
+- Capture **deal terms** when present: buyer, structure (carve-out vs whole-company sale), headline/value, expected close, longstop, and material conditions (CMA/regulatory).
+- Capture **guidance**: management outlook ranges, revisions, and whether guidance is group-wide or segment-specific.
+- Reconcile **free cash flow versus dividend cover** using filing/cash-flow statement figures (operating cash, capex, company-adjusted FCF if disclosed) against ordinary dividends paid — state the coverage ratio explicitly.
+- State **reporting currency** and whether figures are statutory, adjusted, or pro-forma; note FX translation if material."""
+
+
+def news_extraction_discipline(*, ticker: str, company_name: str) -> str:
+    """Mandatory news-manifest digest rules for director–worker news tasks."""
+    lines = [
+        "When digesting `news_manifest.json` headlines:",
+        "- Classify M&A headlines as **carve-out / asset sale** versus **full takeover of the listed parent**; do not treat them as equivalent for thesis or residual-equity risk.",
+        "- Prefer corporate/regulatory/strategy items over entertainment or programming gossip.",
+    ]
+    if ticker.upper() == "ITV.L" or "itv plc" in company_name.lower():
+        lines.append(
+            "- For ITV plc (ITV.L): ignore **ITV-the-broadcaster** entertainment noise "
+            "(shows, ratings, presenters, schedule) unless it materially changes ad revenue "
+            "guidance or corporate strategy; prioritise Sky/Comcast deal, CMA, dividend, "
+            "Studios stub, and cash-return mechanics."
+        )
+    return "\n".join(lines)
+
+
+def worker_task_extraction_rules(
+    task_type: str,
+    *,
+    ticker: str = "",
+    company_name: str = "",
+) -> str:
+    """Task-type-specific extraction appendix for Composer research workers."""
+    normalized = (task_type or "summarize_filing_body").strip().lower()
+    if normalized == "digest_news_manifest":
+        return news_extraction_discipline(ticker=ticker, company_name=company_name)
+    if normalized == "summarize_filing_body":
+        return filing_extraction_discipline()
+    return ""
+
+
+def _augment_research_worker_prompt(prompt: str) -> str:
+    """Append extraction rules to director–worker prompts (built in director_worker.py)."""
+    if _RESEARCH_WORKER_MARKER not in prompt:
+        return prompt
+    task_type = "summarize_filing_body"
+    match = re.search(r"^Task type:\s*(\S+)", prompt, re.MULTILINE)
+    if match:
+        task_type = match.group(1)
+    ticker = ""
+    company_name = ""
+    identity = re.search(
+        r"research worker\*\* on (.+?) \(([A-Z0-9]{1,5}(?:\.[A-Z]{1,2})?)\)",
+        prompt,
+    )
+    if identity:
+        company_name = identity.group(1).strip()
+        ticker = identity.group(2).strip()
+    appendix = worker_task_extraction_rules(task_type, ticker=ticker, company_name=company_name)
+    if not appendix or appendix in prompt:
+        return prompt
+    return f"{prompt.rstrip()}\n\n{appendix}"
 
 
 def clip_rationale(value: str | None, *, limit: int = RATIONALE_MAX_CHARS) -> str | None:
@@ -234,6 +302,7 @@ Analyse the financial trend using primary filings first.
 Cover both annual results (annual report / 10-K) and interim (half-year / 10-Q / trading update) releases when present in `filings_index.json`.
 Cite figures from filing body extracts under `filings/bodies/` when available; otherwise cite `financials_annual.json` and state the fallback explicitly.
 Do not invent numbers. Note gaps if interim or annual filings are missing from the index.
+{filing_extraction_discipline()}
 
 RISKS AND RED FLAGS
 Regulatory, cyclical, governance, pension, or competitive risks not fully captured by screens.
@@ -244,6 +313,7 @@ RiskTags: regulatory | cyclical | governance | pension | competitive | liquidity
 NEWS HIGHLIGHTS
 Summarise material news from the past year: strategy shifts, management changes, regulatory actions, M&A.
 Cite article titles/dates from the manifest. Flag if news coverage is thin.
+{news_extraction_discipline(ticker=ticker, company_name=company_name)}
 
 RESEARCH VERDICT
 Structured conviction overlay for the quantitative screen (does not replace the screen signal).
@@ -309,6 +379,8 @@ Write ONE section with the heading exactly as shown:
 
 WEEKLY UPDATE
 Summarise any new information from the news batch and any new/changed annual or interim filings (10-K/10-Q, RNS, ASX, or Euro results), and whether it changes the thesis, risks, or timing.
+For new filings, apply the same discipline as FINANCIAL REVIEW: continuing vs discontinued/held-for-sale splits, deal terms, guidance revisions, filing-based FCF vs dividend cover, and reporting currency.
+For the news batch, separate carve-out/asset-sale headlines from full-parent takeover stories; ignore broadcaster entertainment noise unrelated to corporate fundamentals (see news rules for ITV.L if applicable).
 You may briefly note macro_context.json as background colour if relevant; do not let macro alone change the RESEARCH VERDICT.
 If nothing material changed, say so in 2–3 sentences.
 Reference article/filing titles and dates where relevant.
@@ -354,8 +426,9 @@ def _run_agent_prompt(
     else:
         agent = Agent.create(options)
 
+    effective_prompt = _augment_research_worker_prompt(prompt)
     try:
-        result = agent.send(prompt).wait()
+        result = agent.send(effective_prompt).wait()
     except CursorAgentError as err:
         raise RuntimeError(f"Agent run failed: {err.message}") from err
     finally:
@@ -499,6 +572,7 @@ NextSources: concrete alternate sources to seek next (or "none" if resolved)
 FINANCIAL REVIEW
 Rewrite the financial review to incorporate any newly resolved facts.
 Prefer filing body extracts; if falling back to Yahoo/news, say so. Note remaining gaps.
+{filing_extraction_discipline()}
 
 RISKS AND RED FLAGS
 Rewrite risks with the same honesty: evidenced vs still open, and which alternate source would close each open item.

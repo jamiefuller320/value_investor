@@ -37,6 +37,51 @@ _TICKER_TOKEN = re.compile(r"\b([A-Z]{1,5}(?:\.[A-Z]{1,2})?)\b")
 _DEEPER_RESEARCH_SPLIT = re.compile(
     r"(?i)names?\s+(?:worth|for)\s+deeper\s+research|\bopen questions?\b|\bred flags?\b"
 )
+_DEAL_OR_SEGMENT_CORPUS = re.compile(
+    r"(?i)carve[\-\s]?out|held[\-\s]for[\-\s]sale|discontinued|"
+    r"segment(?:ation)?|stub equity|residual|takeover|acquisition|sky|comcast"
+)
+_FCF_DIVIDEND_GAP = re.compile(r"(?i)fcf|free cash|dividend cover|yield")
+
+
+def supplement_deal_structure_questions(
+    questions: list[str],
+    corpus: str,
+    *,
+    ticker: str,
+    name: str,
+) -> list[str]:
+    """
+    Ensure gap-fill passes ask for deal/segment and cash-dividend filing evidence
+    when deep analysis hints at corporate-action or coverage tension.
+    """
+    if not _DEAL_OR_SEGMENT_CORPUS.search(corpus):
+        return questions
+    enriched = list(questions)
+    seen = {q.lower() for q in enriched}
+
+    def _add(text: str) -> None:
+        key = text.lower()
+        if key not in seen:
+            enriched.append(text)
+            seen.add(key)
+
+    _add(
+        f"From latest annual/interim filing bodies for {name} ({ticker}): "
+        "split continuing versus discontinued/held-for-sale results, state reporting "
+        "currency, and capture deal terms (buyer, structure, close timing, conditions) if any."
+    )
+    _add(
+        f"Reconcile filing-based free cash flow versus ordinary dividend cover for "
+        f"{name} ({ticker}); do not rely on screen/Yahoo TTM alone."
+    )
+    combined = " ".join(enriched).lower()
+    if ticker.upper() == "ITV.L" and not _FCF_DIVIDEND_GAP.search(combined):
+        _add(
+            "Separate Sky/Comcast carve-out headlines from full-ITV takeover stories; "
+            "ignore ITV broadcaster entertainment noise unless it changes ad-revenue guidance."
+        )
+    return enriched[:8]
 
 
 def _unresolved_questions(question_outcomes: list[dict[str, Any]]) -> list[str]:
@@ -185,6 +230,12 @@ def extract_gap_fill_targets(
         questions = questions_by_ticker.get(ticker) or [
             f"Resolve qualitative risks called out for {report.name} ({ticker}) in the weekly deep analysis"
         ]
+        questions = supplement_deal_structure_questions(
+            questions,
+            corpus,
+            ticker=report.ticker,
+            name=report.name,
+        )
         targets.append(
             GapFillTarget(
                 ticker=report.ticker,
