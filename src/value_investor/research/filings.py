@@ -657,6 +657,26 @@ _CORPORATE_ACTION_PATTERNS = (
     r"\brecommended cash offer\b",
 )
 
+_MATERIAL_FINANCING_PATTERNS = (
+    r"\bconsent solicitation\b",
+    r"\bbondholder consent\b",
+    r"\bnoteholder consent\b",
+    r"\bnotes consent\b",
+)
+
+_BUYBACK_PROGRAMME_PATTERNS = (
+    r"\bcommencement of (?:a )?(?:share )?(?:buyback|repurchase)\b",
+    r"\bshare (?:buyback|repurchase) programme\b",
+    r"\b(?:buyback|repurchase) programme\b",
+)
+
+_NON_RESULTS_RNS_PATTERNS = (
+    r"\bdirectorate change\b",
+    r"\bholding\(s\)? in company\b",
+    r"\btotal voting rights\b",
+    r"\bblock listing\b",
+)
+
 
 def _strip_html(text: str) -> str:
     cleaned = re.sub(r"<script[\s\S]*?</script>", " ", text or "", flags=re.I)
@@ -1445,18 +1465,61 @@ def _rns_row_needs_body_refetch(row: dict[str, Any], filings_dir: Path) -> bool:
     return bool(snippet and _is_investegate_ai_summary_body(snippet))
 
 
+def _headline_blob(row: dict[str, Any] | str) -> str:
+    if isinstance(row, str):
+        return (row or "").lower()
+    return str(row.get("headline") or "").lower()
+
+
 def _is_material_corporate_action_row(row: dict[str, Any]) -> bool:
     """True for sale/disposal/acquisition RNS rows that should keep body-fetch budget."""
-    headline = str(row.get("headline") or "").lower()
+    headline = _headline_blob(row)
     return any(re.search(pat, headline) for pat in _CORPORATE_ACTION_PATTERNS)
+
+
+def _is_material_financing_or_programme_row(row: dict[str, Any]) -> bool:
+    """Notes consent packs and buyback programme launches (not daily own-share purchases)."""
+    headline = _headline_blob(row)
+    if any(re.search(pat, headline) for pat in _MATERIAL_FINANCING_PATTERNS):
+        return True
+    if "transaction in own shares" in headline or "director/pdmr" in headline:
+        return False
+    return any(re.search(pat, headline) for pat in _BUYBACK_PROGRAMME_PATTERNS)
+
+
+def _is_priority_other_body_row(row: dict[str, Any]) -> bool:
+    """``period=other`` rows that should not be dropped by ingest body budgets."""
+    return _is_material_corporate_action_row(row) or _is_material_financing_or_programme_row(row)
+
+
+def _material_other_rns_refetch_priority(row: dict[str, Any]) -> int:
+    """Rank non-results RNS for Investegate refetch (ITV Sky sale, consent, buyback, TU)."""
+    if _is_material_corporate_action_row(row):
+        return 130
+    headline = _headline_blob(row)
+    if any(re.search(pat, headline) for pat in _MATERIAL_FINANCING_PATTERNS):
+        return 125
+    if _is_material_financing_or_programme_row(row):
+        return 115
+    period = str(row.get("period") or "")
+    if period == "trading_update":
+        return 100
+    return 0
 
 
 def _is_statutory_results_headline(headline: str) -> bool:
     """True when a headline is a results pack rather than AGM notice or IR deck."""
     blob = (headline or "").lower()
+    if any(re.search(pat, blob) for pat in _TRADING_UPDATE_PATTERNS):
+        return False
     if re.search(r"\bnotice of agm\b", blob):
         return False
     if re.search(r"\bannual report and accounts and notice\b", blob):
+        return False
+    if re.search(r"\bpresentation\b", blob) and not re.search(
+        r"\b(interim results|full year results|half[- ]year results)\b",
+        blob,
+    ):
         return False
     if any(re.search(pat, blob) for pat in _ANNUAL_PATTERNS + _INTERIM_PATTERNS):
         return True
@@ -1514,10 +1577,12 @@ def select_research_filing_slot_rows(
             continue
         if period == "trading_update":
             reserved.append(row)
-        elif period == "other" and _is_material_corporate_action_row(row):
+        elif period == "other" and _is_priority_other_body_row(row):
             reserved.append(row)
     reserved.sort(
         key=lambda row: (
+            0 if _is_priority_other_body_row(row) else 1,
+            -_material_other_rns_refetch_priority(row),
             -(int(row.get("priority") or 0)),
             str(row.get("published_at") or ""),
         )
@@ -2317,12 +2382,30 @@ def classify_rns_headline(
         blob,
     ):
         return "other"
+    if any(re.search(pat, blob) for pat in _NON_RESULTS_RNS_PATTERNS):
+        return "other"
+    if any(re.search(pat, blob) for pat in _MATERIAL_FINANCING_PATTERNS):
+        return "other"
+    if any(re.search(pat, blob) for pat in _BUYBACK_PROGRAMME_PATTERNS):
+        return "other"
+
+    if any(re.search(pat, blob) for pat in _TRADING_UPDATE_PATTERNS):
+        return "trading_update"
+
+    if re.search(r"\b20\d{2}\s*fy\b|\bfy\s*20\d{2}\b", blob) and re.search(
+        r"\bresults presentation\b|\bfy results\b",
+        blob,
+    ):
+        return "annual"
 
     if any(re.search(pat, blob) for pat in _ANNUAL_PATTERNS):
         return "annual"
-    if any(re.search(pat, blob) for pat in _TRADING_UPDATE_PATTERNS):
-        return "trading_update"
     if any(re.search(pat, blob) for pat in _INTERIM_PATTERNS):
+        if re.search(r"\bpresentation\b", blob) and not re.search(
+            r"\binterim results\b|\bhalf[- ]year results\b",
+            blob,
+        ):
+            return "other"
         return "interim"
     # FCA-style codes sometimes appear in provider metadata.
     # Do not treat the synthetic "IR allowlist document" prefix as interim results.
@@ -2842,6 +2925,10 @@ def _priority_score(
     lower = (headline or "").lower()
     if period == "other" and any(re.search(pat, lower) for pat in _CORPORATE_ACTION_PATTERNS):
         score += 70
+    if period == "other" and any(re.search(pat, lower) for pat in _MATERIAL_FINANCING_PATTERNS):
+        score += 68
+    if period == "other" and any(re.search(pat, lower) for pat in _BUYBACK_PROGRAMME_PATTERNS):
+        score += 65
     if any(re.search(pat, lower) for pat in _PRIORITY_PATTERNS):
         score += 20
     if "transaction in own shares" in lower or "director/pdmr" in lower:
@@ -6497,7 +6584,7 @@ def _write_bodies(
                 if (
                     period == "other"
                     and downloaded >= max(4, max_bodies // 2)
-                    and not _is_material_corporate_action_row(row)
+                    and not _is_priority_other_body_row(row)
                 ):
                     updated.append(row)
                     continue
@@ -7031,6 +7118,7 @@ def refetch_investegate_filing_bodies(
     missing = [row for row in enriched if _rns_row_needs_body_refetch(row, filings_dir)]
     missing.sort(
         key=lambda row: (
+            -_material_other_rns_refetch_priority(row),
             -_other_results_rns_priority(row),
             -(row.get("priority") or 0),
         )
@@ -7063,6 +7151,7 @@ def refetch_investegate_filing_bodies(
     enriched.sort(
         key=lambda row: (
             0 if row.get("id") in missing_ids else 1,
+            -_material_other_rns_refetch_priority(row),
             -_other_results_rns_priority(row),
             -(row.get("priority") or 0),
         )

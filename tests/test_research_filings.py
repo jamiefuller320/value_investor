@@ -34,6 +34,7 @@ from value_investor.research.filings import (
     _ir_body_content_hash,
     _is_investegate_ai_summary_body,
     _is_other_results_rns_row,
+    _is_statutory_results_headline,
     _issuer_matches_sec_name,
     _match_ir_row_to_investegate,
     _rns_row_needs_body_refetch,
@@ -1946,6 +1947,57 @@ def test_select_research_filing_slot_rows_itv_reserves_sky_sale(tmp_path: Path):
     ]
 
 
+def test_select_research_filing_slot_rows_itv_prefers_sky_over_q1_trading_update(
+    tmp_path: Path,
+):
+    """eng-20260918-14: transformative sale RNS wins the third slot over a trading update."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    rows = [
+        {
+            "id": "29bdb56d3cedb539",
+            "headline": "ITV plc Full Year Results 2025",
+            "published_at": "2026-03-05T07:02:26+00:00",
+            "period": "annual",
+            "has_body": True,
+            "body_path": str(bodies_dir / "fy.txt"),
+        },
+        {
+            "id": "d19c5d3b8e0bb46a",
+            "headline": "ITV plc Interim Results to 30 June 2026",
+            "published_at": "2026-07-31T00:00:00+00:00",
+            "period": "interim",
+            "has_body": True,
+            "body_path": str(bodies_dir / "h1.txt"),
+        },
+        {
+            "id": "10f52d865099383d",
+            "headline": "SALE OF ITV M&E BUSINESS TO SKY",
+            "published_at": "2026-07-06T06:06:26+00:00",
+            "period": "other",
+            "has_body": True,
+            "body_path": str(bodies_dir / "sky.txt"),
+        },
+        {
+            "id": "q1_trading_2026",
+            "headline": "ITV plc Q1 2026 Trading Update",
+            "published_at": "2026-04-30T00:00:00+00:00",
+            "period": "trading_update",
+            "has_body": True,
+            "body_path": str(bodies_dir / "q1.txt"),
+        },
+    ]
+    for name in ("fy.txt", "h1.txt", "sky.txt", "q1.txt"):
+        (bodies_dir / name).write_text("x" * 300, encoding="utf-8")
+    picked = select_research_filing_slot_rows(rows, filings_dir=filings_dir, max_filing_slots=3)
+    assert [row["id"] for row in picked] == [
+        "29bdb56d3cedb539",
+        "d19c5d3b8e0bb46a",
+        "10f52d865099383d",
+    ]
+
+
 def test_enrich_filing_rows_promotes_itv_sky_sale_priority():
     rows = enrich_filing_rows(
         [
@@ -1960,6 +2012,97 @@ def test_enrich_filing_rows_promotes_itv_sky_sale_priority():
         company_name="ITV plc",
     )
     assert rows[0]["priority"] >= 70
+
+
+def test_apply_headline_period_itv_material_financing_and_buyback_priority():
+    """eng-20260918-14: consent and buyback programme RNS keep refetch priority."""
+    consent = _apply_headline_period(
+        {
+            "headline": "Consent Solicitation in respect of 2026 and 2032 Notes",
+            "period": "annual",
+        }
+    )
+    assert consent["period"] == "other"
+    assert consent["priority"] >= 68
+
+    buyback = _apply_headline_period(
+        {
+            "headline": "Commencement of Share Buyback Programme",
+            "period": "annual",
+        }
+    )
+    assert buyback["period"] == "other"
+    assert buyback["priority"] >= 65
+
+
+def test_is_statutory_results_headline_excludes_q1_trading_update():
+    assert _is_statutory_results_headline("ITV plc Q1 2026 Trading Update") is False
+    assert _is_statutory_results_headline("ITV Plc 2025 FY Results Presentation") is False
+
+
+def test_refetch_investegate_prioritises_itv_sky_before_consent(tmp_path: Path, monkeypatch):
+    """eng-20260918-14: refetch budget fetches Sky sale before notes consent when capped."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    fetch_order: list[str] = []
+
+    def fake_fetch(url):
+        fetch_order.append(url)
+        return ("Narrative " + ("x" * 240), None)
+
+    index = {
+        "ticker": "ITV.L",
+        "company_name": "ITV plc",
+        "filings": [
+            {
+                "id": "consent_notes",
+                "source": "investegate_resolved",
+                "headline": "Consent Solicitation in respect of 2026 and 2032 Notes",
+                "published_at": "2026-07-20T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/itv--itv/consent/1",
+                "period": "other",
+                "has_body": False,
+                "priority": 0,
+            },
+            {
+                "id": "10f52d865099383d",
+                "source": "investegate_resolved",
+                "headline": "SALE OF ITV M&E BUSINESS TO SKY",
+                "published_at": "2026-07-06T06:06:26+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/itv--itv/sky-sale/1",
+                "period": "other",
+                "has_body": False,
+                "priority": 70,
+            },
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.filter_misattributed_filings",
+        lambda rows, **kwargs: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_rns_filing_body_for_refetch",
+        lambda url: fake_fetch(url),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="ITV.L",
+        company_name="ITV plc",
+        max_bodies=1,
+    )
+    assert result["fetched"] == 1
+    assert fetch_order == [
+        "https://www.investegate.co.uk/announcement/rns/itv--itv/sky-sale/1",
+    ]
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    by_id = {row["id"]: row for row in saved["filings"]}
+    assert by_id["10f52d865099383d"]["has_body"] is True
+    assert by_id["consent_notes"]["has_body"] is False
 
 
 def test_validate_rns_filing_body_rejects_period_mismatch():
