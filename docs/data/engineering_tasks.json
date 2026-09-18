@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-18T04:48:30.749792+00:00",
+  "compiled_at": "2026-09-18T07:58:38.099450+00:00",
   "run_at": null,
-  "task_count": 34,
+  "task_count": 35,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -638,6 +638,52 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
+      "id": "eng-20260918-02",
+      "area": "scoring",
+      "title": "Auto-flag cyclical exposure when principal-risk filings cite recession/discretionary spending and any interim month shows photobooth revenue decline >10% (MEGP",
+      "summary": "Auto-flag cyclical exposure when principal-risk filings cite recession/discretionary spending and any interim month shows photobooth revenue decline >10% (MEGP Apr −17%). (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "MEGP.L"
+        ],
+        "recorded_at": "2026-09-06T07:48:26.505336+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "Auto-flag cyclical exposure when principal-risk filings cite recession/discretionary spending and any interim month shows photobooth revenue decline >10% (MEGP ",
+        "narrow_cohesion_bypass": true,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260918-01",
       "area": "scoring",
       "title": "dividend: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; kee",
@@ -1232,7 +1278,8 @@
         "compile_cap_drain": true,
         "origin_source": "research_model_suggestions",
         "origin_priority_score": 43.0,
-        "doc": "docs/ops/engineering-sync.md"
+        "doc": "docs/ops/engineering-sync.md",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Export or overlay behaviour is covered by a unit test",
@@ -1259,11 +1306,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260917-01.md",
       "branch_name": "cursor/eng-20260917-01-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-18T07:25:32.595306+00:00"
+      "completed_at": "2026-09-18T07:25:32.595306+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/699",
+      "pr_number": 699,
+      "merged_at": "2026-09-18T07:58:36.338720+00:00"
     },
     {
       "id": "eng-20260916-05",
