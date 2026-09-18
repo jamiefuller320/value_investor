@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-18T13:14:46.331903+00:00",
+  "compiled_at": "2026-09-18T13:48:16.831372+00:00",
   "run_at": null,
-  "task_count": 42,
+  "task_count": 43,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -1094,7 +1094,8 @@
         "origin_priority_score": 43.0,
         "preferred_merge_class": "compile_cap_drain",
         "doc": "docs/ops/engineering-sync.md",
-        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Export or overlay behaviour is covered by a unit test",
@@ -1115,11 +1116,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": true,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260918-01.md",
       "branch_name": "cursor/eng-20260918-01-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-18T13:21:19.310130+00:00"
+      "completed_at": "2026-09-18T13:21:19.310130+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/710",
+      "pr_number": 710,
+      "merged_at": "2026-09-18T13:48:14.975108+00:00"
     },
     {
       "id": "eng-20260917-10",
@@ -2199,6 +2204,60 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/655",
       "pr_number": 655,
       "merged_at": "2026-09-15T15:05:07.590899+00:00"
+    },
+    {
+      "id": "eng-20260918-10",
+      "area": "ingest",
+      "title": "When a sal [2/2]",
+      "summary": "First-principle slice 2/2 of: Select the latest dated annual and interim *results* bodies (FY25 29bdb56d3cedb539, H1 2026 d19c5d3b8e0bb46a — not the 30 June period-end duplicate). When a sal. no topic map — cohesion bypass keeps full area allowlist",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "ITV.L"
+        ],
+        "recorded_at": "2026-09-04T16:48:11.730949+00:00",
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "Select the latest dated annual and interim *results* bodies (FY25 29bdb56d3cedb539, H1 2026 d19c5d3b8e0bb46a — not the 30 June period-end duplicate). When a sal",
+        "narrow_cohesion_bypass": true,
+        "narrow_split_group_id": "5c1ff1305fc7",
+        "narrow_split_index": 2,
+        "narrow_split_count": 2,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for ITV.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260918-09",
