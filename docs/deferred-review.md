@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-18T17:15:28+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-18T19:01:30+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -183,6 +183,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N133 | **PM auto-authors workflow_failure code patches** | Do not let project-traffic invent/merge code fixes for failing workflows. Keep supervised engineering-agent for CurlError/timeout root causes; PM only cancels recovered workflow_failure rows and remediates queue bookkeeping. | After cancel_recovered_workflow_failure has proven stable in production and L393 EOD PM scope is revisited |
 | N134 | **Do not change primary exit policy from weekend poor-exit intuition** | EOW read that obviously poor exits hurt the 3-slot books is directionally right (archive hold-recovery ~73%, swap replacement often wins), but live exit_shadow still has 0 closed exits — no grace/rotation split to act on. Keep buffers; do not retune exits or decision-review --apply from the qualitative read. | learning_tracks_exit_shadow shows >=10 closed exits on ai_judgment with a stable grace vs screen_rotation split; then human reviews before any knob change |
 | N135 | **Do not execute primary or epoch-0 DCA from EOW cadence agreement alone** | dca_4x_weekly remains the leading overlay cadence and will likely help entry drag, but adoption plan still needs ai_judgment first_entry>=3 (now 2) before any paper execute, and execute is graduated_allocation-only then; primary stays blocked while beat_market is false. Ack is not adopt. | entry_dca_adoption_plan out_of_sample_first_entry ready AND paper_execute_graduated stage unlocked |
+| N136 | **Do not stack live forks on an epoch-0 child book** | When entry and exit policies are both ready, adopt at most one stage into one forward book and re-score the next stage as an overlay on that path. Report child-minus-parent, not child-minus-epoch-0. A live tree (DCA book, then a timing fork of that book) or a mid-epoch clone confounds the datum and spends a scarce shadow slot. A 2x2 factorial is only for a suspected sign-changing interaction, and those arms must start together from the same date and capital. | One forward book has adopted a stage policy, the next-stage overlay on that book is ready, and the overlay cannot reconstruct the counterfactual path (missing fills). Only then open one child book. Open a second arm only if that conditional effect flips sign versus the epoch-0 overlay. |
 
 ---
 
