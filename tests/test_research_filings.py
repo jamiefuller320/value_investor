@@ -32,9 +32,11 @@ from value_investor.research.filings import (
     _ir_allowlist_period_from_url,
     _ir_allowlist_row_needs_body_refetch,
     _ir_body_content_hash,
+    _is_investegate_ai_summary_body,
     _is_other_results_rns_row,
     _issuer_matches_sec_name,
     _match_ir_row_to_investegate,
+    _rns_row_needs_body_refetch,
     _scrub_misattributed_filing_rows,
     _sec_edgar_supplement_allowed,
     _sec_href_to_archive_url,
@@ -47,6 +49,7 @@ from value_investor.research.filings import (
     classify_filing_entity_type,
     classify_filing_period,
     classify_rns_headline,
+    dedupe_rns_results_document_rows,
     enrich_filing_rows,
     fetch_filing_body,
     fetch_filings_asx_direct,
@@ -1643,6 +1646,132 @@ def test_refetch_investegate_fetches_direct_lse_pdf_url(tmp_path, monkeypatch):
     saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
     assert saved["filings"][0]["has_body"] is True
     assert (filings_dir / "bodies" / "lse_pdf1.txt").exists()
+
+
+def test_validate_rns_filing_body_rejects_investegate_ai_summary():
+    row = {
+        "headline": "ITV plc Interim Results to 30 June 2026",
+        "period": "interim",
+    }
+    summary_body = (
+        "BETA Close X ITV plc reported solid interim results for the six months ended "
+        "30 June 2026, with total group revenue up 2% to £1,887 million." + ("x" * 220)
+    )
+    assert _is_investegate_ai_summary_body(summary_body) is True
+    valid, reason = _validate_rns_filing_body_content(
+        row,
+        summary_body,
+        company_name="ITV plc",
+        ticker="ITV.L",
+    )
+    assert valid is False
+    assert reason == "investegate_summary"
+
+
+def test_dedupe_rns_results_document_rows_itv_h1_prefers_july_announcement(tmp_path: Path):
+    """eng-20260918-09: keep d19c5d3b8e0bb46a, not the 30 June period-end duplicate."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    pdf_url = "http://www.rns-pdf.londonstockexchange.com/rns/6403O_1-2026-7-30.pdf"
+    summary_path = bodies_dir / "db26438f6be61fe5.txt"
+    statutory_path = bodies_dir / "d19c5d3b8e0bb46a.txt"
+    summary_path.write_text(
+        "BETA Close X ITV plc reported solid interim results for six months ended 30 June 2026."
+        + ("x" * 220),
+        encoding="utf-8",
+    )
+    statutory_path.write_text(
+        "ITV plc Interim results for the six months ended 30 June 2026\n"
+        "ITV plc’s Interim results for the six months ended 30 June 2026 have been submitted "
+        "in full unedited text to the Financial Conduct Authority's " + ("y" * 400),
+        encoding="utf-8",
+    )
+    rows = [
+        {
+            "id": "db26438f6be61fe5",
+            "source": "investegate_resolved",
+            "headline": "ITV plc Interim Results to 30 June 2026",
+            "published_at": "2026-06-30T07:00:00+00:00",
+            "url": pdf_url,
+            "period": "interim",
+            "has_body": True,
+            "body_path": str(summary_path),
+        },
+        {
+            "id": "d19c5d3b8e0bb46a",
+            "source": "investegate_direct",
+            "headline": "ITV plc Interim Results to 30 June 2026",
+            "published_at": "2026-07-31T00:00:00+00:00",
+            "url": pdf_url,
+            "period": "interim",
+            "has_body": True,
+            "body_path": str(statutory_path),
+        },
+    ]
+    deduped, pruned = dedupe_rns_results_document_rows(rows, filings_dir=filings_dir)
+    assert pruned == 1
+    assert len(deduped) == 1
+    assert deduped[0]["id"] == "d19c5d3b8e0bb46a"
+    assert deduped[0]["body_path"] == str(statutory_path)
+
+
+def test_dedupe_rns_results_document_rows_itv_fy25_prefers_bodied_announcement(tmp_path: Path):
+    """eng-20260918-09: FY25 full-year results body 29bdb56d3cedb539 wins over index stub."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    pdf_url = "http://www.rns-pdf.londonstockexchange.com/rns/3965V_1-2026-3-4.pdf"
+    body_path = bodies_dir / "29bdb56d3cedb539.txt"
+    body_path.write_text(
+        "ITV plc full year results for the year ended 31 December 2025. "
+        "Total revenue £4.1bn with final dividend of 5.0p per share. " + ("z" * 400),
+        encoding="utf-8",
+    )
+    rows = [
+        {
+            "id": "00fcdb28c7a60c97",
+            "source": "investegate_direct",
+            "headline": "ITV plc Full Year Results 2025",
+            "published_at": "2026-03-05T00:00:00+00:00",
+            "url": pdf_url,
+            "period": "annual",
+            "has_body": False,
+        },
+        {
+            "id": "29bdb56d3cedb539",
+            "source": "investegate_resolved",
+            "headline": "ITV plc Full Year Results 2025",
+            "published_at": "2026-03-05T07:02:26+00:00",
+            "url": pdf_url,
+            "period": "annual",
+            "has_body": True,
+            "body_path": str(body_path),
+        },
+    ]
+    deduped, pruned = dedupe_rns_results_document_rows(rows, filings_dir=filings_dir)
+    assert pruned == 1
+    assert deduped[0]["id"] == "29bdb56d3cedb539"
+
+
+def test_rns_row_needs_body_refetch_flags_investegate_summary(tmp_path: Path):
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    body_path = bodies_dir / "db26438f6be61fe5.txt"
+    body_path.write_text(
+        "BETA Close X ITV plc reported interim results." + ("x" * 220),
+        encoding="utf-8",
+    )
+    row = {
+        "id": "db26438f6be61fe5",
+        "source": "investegate_resolved",
+        "url": "http://www.rns-pdf.londonstockexchange.com/rns/6403O_1-2026-7-30.pdf",
+        "has_body": True,
+        "body_path": str(body_path),
+        "period": "interim",
+    }
+    assert _rns_row_needs_body_refetch(row, filings_dir) is True
 
 
 def test_validate_rns_filing_body_rejects_period_mismatch():

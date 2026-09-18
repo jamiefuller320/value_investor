@@ -1249,12 +1249,139 @@ def _is_index_noise_row(row: dict[str, Any]) -> bool:
 def _is_rns_body_fetch_candidate(row: dict[str, Any]) -> bool:
     """True when a row points at Investegate or LSE RNS content worth body-fetching."""
     url = str(row.get("url") or "")
-    if not url or row.get("has_body"):
+    if not url:
         return False
     if "news.google.com" in url:
         return False
     source = str(row.get("source") or "")
     return source in _RNS_BODY_FETCH_SOURCES or "investegate.co.uk" in url or _is_lse_rns_url(url)
+
+
+_INVESTEGATE_AI_SUMMARY_RE = re.compile(r"^BETA\s+Close\s+X\b", re.I)
+
+
+def _is_investegate_ai_summary_body(text: str) -> bool:
+    """True for Investegate HTML AI-summary wrappers, not statutory RNS PDF extracts."""
+    return bool(_INVESTEGATE_AI_SUMMARY_RE.match((text or "").strip()))
+
+
+def _normalize_rns_document_url(url: str | None) -> str:
+    """Stable dedupe key for the same LSE/Investegate PDF attachment."""
+    text = str(url or "").strip()
+    if not text.startswith("http"):
+        return text.lower()
+    parsed = urllib.parse.urlparse(text)
+    host = parsed.netloc.lower().removeprefix("www.")
+    return f"{host}{parsed.path.rstrip('/').lower()}"
+
+
+def _rns_results_document_key(row: dict[str, Any]) -> str | None:
+    """Group annual/interim rows that share the same downloadable results document."""
+    period = str(row.get("period") or "")
+    if period not in {"annual", "interim"}:
+        return None
+    norm_url = _normalize_rns_document_url(str(row.get("url") or ""))
+    if not norm_url:
+        return None
+    return f"{period}|{norm_url}"
+
+
+def _rns_body_quality_score(row: dict[str, Any], filings_dir: Path) -> int:
+    """Higher scores win when two index rows share the same results PDF."""
+    snippet = _body_snippet_for_row(row, filings_dir) or ""
+    if not snippet:
+        return 0
+    if _is_investegate_ai_summary_body(snippet):
+        return 10
+    score = 30
+    if "submitted in full unedited text" in snippet.lower():
+        score += 50
+    if _filing_text_is_substantive(snippet, min_chars=500):
+        score += 20
+    if len(snippet) >= 3_000:
+        score += 15
+    return score
+
+
+def _prefer_rns_results_row(
+    existing: dict[str, Any],
+    candidate: dict[str, Any],
+    *,
+    filings_dir: Path,
+) -> dict[str, Any]:
+    """Pick the index row that best represents a statutory results announcement."""
+    ex_pub = str(existing.get("published_at") or "")
+    cand_pub = str(candidate.get("published_at") or "")
+    if cand_pub > ex_pub:
+        winner, loser = dict(candidate), existing
+    elif ex_pub > cand_pub:
+        winner, loser = dict(existing), candidate
+    elif _rns_body_quality_score(candidate, filings_dir) > _rns_body_quality_score(
+        existing, filings_dir
+    ):
+        winner, loser = dict(candidate), existing
+    elif _rns_body_quality_score(existing, filings_dir) > _rns_body_quality_score(
+        candidate, filings_dir
+    ):
+        winner, loser = dict(existing), candidate
+    else:
+        winner, loser = dict(existing), candidate
+    if not winner.get("has_body") and loser.get("has_body"):
+        winner = {
+            **winner,
+            "has_body": True,
+            "body_path": loser.get("body_path"),
+            "body_content_hash": loser.get("body_content_hash"),
+        }
+    return winner
+
+
+def dedupe_rns_results_document_rows(
+    filings: list[dict[str, Any]],
+    *,
+    filings_dir: Path,
+) -> tuple[list[dict[str, Any]], int]:
+    """
+    Collapse duplicate annual/interim rows that share one LSE PDF.
+
+    Keeps the latest ``published_at`` announcement (not the period-end stub date)
+    and prefers full statutory extracts over Investegate AI-summary wrappers.
+    """
+    winners: dict[str, dict[str, Any]] = {}
+    for row in filings:
+        key = _rns_results_document_key(row)
+        if not key:
+            continue
+        current = winners.get(key)
+        winners[key] = (
+            _prefer_rns_results_row(current, row, filings_dir=filings_dir) if current else dict(row)
+        )
+    if not winners:
+        return filings, 0
+    pruned = 0
+    out: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for row in filings:
+        key = _rns_results_document_key(row)
+        if not key:
+            out.append(row)
+            continue
+        if key in seen:
+            pruned += 1
+            continue
+        seen.add(key)
+        out.append(winners[key])
+    return out, pruned
+
+
+def _rns_row_needs_body_refetch(row: dict[str, Any], filings_dir: Path) -> bool:
+    """True when an RNS row lacks a body or only has an Investegate AI-summary wrapper."""
+    if not _is_rns_body_fetch_candidate(row):
+        return False
+    if not row.get("has_body"):
+        return True
+    snippet = _body_snippet_for_row(row, filings_dir)
+    return bool(snippet and _is_investegate_ai_summary_body(snippet))
 
 
 def _annual_report_microsite_media_base(publisher_url: str) -> str:
@@ -4253,6 +4380,8 @@ def _validate_rns_filing_body_content(
     """
     if not body or len(body) < IR_BODY_MIN_CHARS:
         return False, "too_short"
+    if _is_investegate_ai_summary_body(body):
+        return False, "investegate_summary"
     if extracted_headline:
         valid, reason = _validate_rns_html_headline_match(row, extracted_headline)
         if not valid:
@@ -6739,12 +6868,16 @@ def refetch_investegate_filing_bodies(
             ticker,
         )
     enriched = filtered
+    enriched, rns_doc_deduped = dedupe_rns_results_document_rows(
+        enriched,
+        filings_dir=filings_dir,
+    )
     google_news_rejected = sum(
         1
         for row in enriched
         if not row.get("has_body") and "news.google.com" in str(row.get("url") or "")
     )
-    missing = [row for row in enriched if _is_rns_body_fetch_candidate(row)]
+    missing = [row for row in enriched if _rns_row_needs_body_refetch(row, filings_dir)]
     missing.sort(
         key=lambda row: (
             -_other_results_rns_priority(row),
@@ -6752,7 +6885,7 @@ def refetch_investegate_filing_bodies(
         )
     )
     other_results_candidates = sum(1 for row in missing if _is_other_results_rns_row(row))
-    index_changed = enriched != filings or misattributed_pruned > 0
+    index_changed = enriched != filings or misattributed_pruned > 0 or rns_doc_deduped > 0
     if not missing:
         if index_changed:
             payload["filings"] = enriched
@@ -6789,8 +6922,10 @@ def refetch_investegate_filing_bodies(
             downloaded < max_bodies
             and item.get("id") in missing_ids
             and item.get("url")
-            and not item.get("has_body")
+            and _rns_row_needs_body_refetch(item, filings_dir)
         ):
+            if item.get("has_body"):
+                item = {**item, "has_body": False, "body_path": None, "body_content_hash": None}
             item = _standardise_rns_index_row_url(item)
             body, extracted_headline = _fetch_rns_filing_body_for_refetch(str(item["url"]))
             if body:
@@ -7328,8 +7463,12 @@ def sanitize_filings_index(
             for row in filtered
         ]
     )
+    reclassified, rns_doc_deduped = dedupe_rns_results_document_rows(
+        reclassified,
+        filings_dir=filings_dir,
+    )
     pruned = len(filings) - len(reclassified)
-    changed = pruned > 0 or reclassified != filings
+    changed = pruned > 0 or reclassified != filings or rns_doc_deduped > 0
     if changed:
         payload["filings"] = reclassified
         payload["summary"] = summarize_filings(reclassified)
