@@ -2105,6 +2105,118 @@ def test_refetch_investegate_prioritises_itv_sky_before_consent(tmp_path: Path, 
     assert by_id["consent_notes"]["has_body"] is False
 
 
+def test_parse_statutory_interim_results_highlights_itv_h1_2026():
+    """eng-20260918-15: H1 statutory report prose yields interim FCF/EPS for empty Yahoo quarterlies."""
+    from value_investor.research.filings import parse_statutory_interim_results_highlights
+
+    body = (
+        "ITV plc Interim results for the six months ended 30 June 2026\n"
+        "Adjusted EPS for the period was 2.2p (2025: 1.8p). Statutory EPS increased from 1.2p to 1.5p.\n"
+        "Our profit to cash conversion on a 12-month rolling basis was 63% (30 June 2025: 109%), "
+        "with free cash flow of £40 million (30 June 2025: £43 million)."
+    )
+    parsed = parse_statutory_interim_results_highlights(body)
+    assert parsed is not None
+    assert parsed["free_cash_flow_millions"] == 40.0
+    assert parsed["adjusted_eps_pence"] == 2.2
+    assert parsed["profit_to_cash_pct"] == 63.0
+
+
+def test_parse_trading_update_advertising_revenue_itv():
+    from value_investor.research.filings import parse_trading_update_advertising_revenue
+
+    body = "ITV plc Q1 2026 Trading Update\nTotal advertising revenue 824 889 (7)\n" + ("x" * 200)
+    parsed = parse_trading_update_advertising_revenue(body)
+    assert parsed is not None
+    assert parsed["current"] == 824.0
+    assert parsed["prior"] == 889.0
+    assert parsed["change_pct"] == -7.0
+
+
+def test_parse_disposal_rns_highlights_itv_sky_sale():
+    from value_investor.research.filings import parse_disposal_rns_highlights
+
+    body = (
+        "SALE OF ITV M&E BUSINESS TO SKY — up to £1.6bn consideration. "
+        "Completion subject to CMA clearance." + ("s" * 200)
+    )
+    parsed = parse_disposal_rns_highlights(body, headline="SALE OF ITV M&E BUSINESS TO SKY")
+    assert parsed is not None
+    assert parsed["counterparty"] == "Sky"
+    assert parsed["headline_consideration_gbp_billions"] == 1.6
+    assert parsed["perimeter"] == "itv_me_disposal"
+
+
+def test_extract_filing_interim_financials_itv_l(tmp_path: Path):
+    """eng-20260918-15: ingest-improvement / gap-fill can emit filing_interim_financials.json."""
+    from value_investor.research.filings import extract_filing_interim_financials
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    h1_body = bodies_dir / "h1_statutory.txt"
+    h1_body.write_text(
+        "ITV plc Interim results for the six months ended 30 June 2026\n"
+        "Adjusted EPS for the period was 2.2p (2025: 1.8p). "
+        "with free cash flow of £40 million (30 June 2025: £43 million).",
+        encoding="utf-8",
+    )
+    sky_body = bodies_dir / "sky.txt"
+    sky_body.write_text(
+        "SALE OF ITV M&E BUSINESS TO SKY — up to £1.6bn consideration." + ("s" * 200),
+        encoding="utf-8",
+    )
+    tu_body = bodies_dir / "q1.txt"
+    tu_body.write_text(
+        "ITV plc Q1 2026 Trading Update\nTotal advertising revenue 824 889 (7)\n" + ("x" * 200),
+        encoding="utf-8",
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "h1_statutory",
+                        "headline": "IR allowlist document — ITV-plc-2026-half-year-report.pdf",
+                        "url": "https://www.itvplc.com/2026-half-year-report.pdf",
+                        "period": "interim",
+                        "has_body": True,
+                        "body_path": str(h1_body),
+                        "published_at": "2026-07-31T00:00:00+00:00",
+                    },
+                    {
+                        "id": "10f52d865099383d",
+                        "headline": "SALE OF ITV M&E BUSINESS TO SKY",
+                        "period": "other",
+                        "has_body": True,
+                        "body_path": str(sky_body),
+                        "published_at": "2026-07-06T06:06:26+00:00",
+                    },
+                    {
+                        "id": "q1_trading",
+                        "headline": "ITV plc Q1 2026 Trading Update",
+                        "period": "trading_update",
+                        "has_body": True,
+                        "body_path": str(tu_body),
+                        "published_at": "2026-04-30T00:00:00+00:00",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    sources_dir = tmp_path / "sources"
+    payload = extract_filing_interim_financials(
+        filings_dir,
+        "ITV.L",
+        sources_dir=sources_dir,
+    )
+    assert payload["interim_highlights"]["free_cash_flow_millions"] == 40.0
+    assert payload["trading_update_advertising"]["current"] == 824.0
+    assert len(payload["corporate_actions"]) == 1
+    assert (sources_dir / "filing_interim_financials.json").is_file()
+
+
 def test_validate_rns_filing_body_rejects_period_mismatch():
     row = {
         "headline": "ITV plc Full Year Results 2025",
@@ -6786,13 +6898,16 @@ def test_fetch_filings_ir_allowlist_itv_l(tmp_path: Path):
     assert len(mapping["ITV.L"]) >= 3
 
     rows = fetch_filings_ir_allowlist("ITV.L", path=allowlist_path)
-    assert len(rows) == 5
+    assert len(rows) == 7
     assert all(row["source"] == "ir_allowlist" for row in rows)
     periods = {row["period"] for row in rows}
     assert "annual" in periods
     assert "interim" in periods
+    assert "trading_update" in periods
     assert all("itvplc.com" in row["url"] for row in rows)
     assert any("2026-half-year-report" in row["url"] for row in rows)
+    assert any("annual-report-2025" in row["url"] for row in rows)
+    assert any("Q1%202026%20Trading%20Update" in row["url"] for row in rows)
 
 
 def test_fetch_filings_ir_allowlist_imb_l(tmp_path: Path):
