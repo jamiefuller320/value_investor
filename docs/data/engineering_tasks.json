@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-18T13:48:16.831372+00:00",
+  "compiled_at": "2026-09-18T13:53:34.555732+00:00",
   "run_at": null,
-  "task_count": 43,
+  "task_count": 44,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2206,6 +2206,47 @@
       "merged_at": "2026-09-15T15:05:07.590899+00:00"
     },
     {
+      "id": "eng-20260918-11",
+      "area": "prompt",
+      "title": "Require annual/interim workers to extract continuing versus discontinued / held-for-sale splits, deal terms, guidance, FCF versus dividend cover, and reporting ",
+      "summary": "Require annual/interim workers to extract continuing versus discontinued / held-for-sale splits, deal terms, guidance, FCF versus dividend cover, and reporting currency; require news workers to separate carve-out from full-takeover headlines and to ignore ITV-the-broadcaster entertainment noise.",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "ITV.L"
+        ],
+        "recorded_at": "2026-09-04T16:48:11.730956+00:00",
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+      },
+      "acceptance_criteria": [
+        "Prompt or export change is covered by a parser/unit test",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/agent.py",
+        "src/value_investor/deep_analysis.py",
+        "src/value_investor/research/gap_fill.py",
+        "tests/test_deep_analysis.py",
+        "tests/test_research_gap_fill.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": true,
+      "status": "open"
+    },
+    {
       "id": "eng-20260918-10",
       "area": "ingest",
       "title": "When a sal [2/2]",
@@ -2283,7 +2324,8 @@
         "origin_source": "research_model_suggestions",
         "origin_priority_score": 40.0,
         "preferred_merge_class": "compile_cap_drain",
-        "doc": "docs/ops/engineering-sync.md"
+        "doc": "docs/ops/engineering-sync.md",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for ITV.L",
@@ -2311,11 +2353,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260918-09.md",
       "branch_name": "cursor/eng-20260918-09-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-18T13:27:03.471074+00:00"
+      "completed_at": "2026-09-18T13:27:03.471074+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/711",
+      "pr_number": 711,
+      "merged_at": "2026-09-18T13:53:33.008024+00:00"
     },
     {
       "id": "eng-20260915-11",
