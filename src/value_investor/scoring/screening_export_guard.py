@@ -23,6 +23,15 @@ from value_investor.scoring.fcf_basis_overlay import (
     apply_fcf_export_enforcement,
 )
 
+_HOSPITALITY_CYCLICAL_FRAGMENTS = (
+    "horeca",
+    "hospitality",
+    "hotel linen",
+    "linen rental",
+    "textile rental",
+    "restaurant linen",
+)
+
 _SIGNAL_LABELS = {
     "strong_buy": "Strong Buy",
     "buy": "Buy",
@@ -36,6 +45,24 @@ _FCF_BASIS_MISMATCH_SEGMENT = re.compile(
     re.IGNORECASE,
 )
 _RESEARCH_SEGMENT_PREFIX = re.compile(r"^\s*research\s*:", re.IGNORECASE)
+
+
+def hospitality_cyclical_exposure_detected(
+    *,
+    name: str | None = None,
+    sector: str | None = None,
+    action_note: str | None = None,
+    research_rationale: str | None = None,
+) -> bool:
+    """True for HORECA / linen-rental hospitality cyclicality (JSG.L-style)."""
+    blob = " ".join(
+        part
+        for part in (name, sector, action_note, research_rationale)
+        if part and str(part).strip()
+    ).lower()
+    if not blob:
+        return False
+    return any(fragment in blob for fragment in _HOSPITALITY_CYCLICAL_FRAGMENTS)
 
 
 def failed_models_from_results(
@@ -256,6 +283,14 @@ def guard_screening_snapshot_export(
     elif not updated.get("failed_models"):
         updated["failed_models"] = []
 
+    if hospitality_cyclical_exposure_detected(
+        name=updated.get("name"),
+        sector=updated.get("sector"),
+        action_note=updated.get("action_note"),
+        research_rationale=updated.get("research_rationale"),
+    ):
+        updated["cyclical_exposure_detected"] = True
+
     research_verdict = updated.get("research_verdict")
     screen_signal = str(updated.get("signal") or "hold")
     adjusted = updated.get("adjusted_signal")
@@ -322,6 +357,28 @@ def guard_screening_snapshot_export(
     return merged
 
 
+def enrich_signals_with_hospitality_cyclical_detection(signals: pd.DataFrame) -> pd.DataFrame:
+    """Flag HORECA / linen-rental cyclicality before cyclical-exposure overlay runs."""
+    if signals.empty:
+        return signals
+    out = signals.copy()
+    if "cyclical_exposure_detected" not in out.columns:
+        out["cyclical_exposure_detected"] = False
+    for index, row in out.iterrows():
+        existing = row.get("cyclical_exposure_detected")
+        if existing is not None and not (isinstance(existing, float) and pd.isna(existing)):
+            if bool(existing):
+                continue
+        if hospitality_cyclical_exposure_detected(
+            name=row.get("name"),
+            sector=row.get("sector"),
+            action_note=row.get("action_note"),
+            research_rationale=row.get("research_rationale"),
+        ):
+            out.at[index, "cyclical_exposure_detected"] = True
+    return out
+
+
 def guard_signals_dataframe(
     signals: pd.DataFrame,
     model_results: pd.DataFrame,
@@ -336,6 +393,7 @@ def guard_signals_dataframe(
         "failed_models",
         "fcf_definition_divergence",
         "fcf_divergence_flagged",
+        "cyclical_exposure_detected",
     ):
         if optional_col not in out.columns:
             out[optional_col] = None
@@ -350,6 +408,7 @@ def guard_signals_dataframe(
                 "failed_models",
                 "fcf_definition_divergence",
                 "fcf_divergence_flagged",
+                "cyclical_exposure_detected",
             ):
                 out.at[index, key] = value
     return out

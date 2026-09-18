@@ -4259,6 +4259,39 @@ def test_suppress_fcf_yield_and_dividend_jsg_style_divergent_bases(tmp_path: Pat
     assert "Dividend yield suppressed" in str(dividend["failed_criteria"])
 
 
+def test_hospitality_cyclical_detection_before_cyclical_overlay():
+    from value_investor.scoring.cyclical_exposure_overlay import (
+        enrich_signals_with_cyclical_exposure_overlay,
+    )
+    from value_investor.scoring.screening_export_guard import (
+        enrich_signals_with_hospitality_cyclical_detection,
+        hospitality_cyclical_exposure_detected,
+    )
+
+    assert hospitality_cyclical_exposure_detected(
+        action_note="Research: Accumulate — HORECA linen rental softness.",
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "JSG.L",
+                "name": "Johnson Service Group PLC",
+                "sector": "Industrials",
+                "signal": "strong_buy",
+                "action_note": "Buy — HORECA linen rental cyclicality noted in research.",
+                "passed_families": "cheapness,quality,dividend,garp,risk",
+                "interim_eps_decline_pct": 0.05,
+                "fcf_dividend_coverage_net": 0.85,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(columns=["ticker", "model_id", "passed", "score", "reasons"])
+    detected = enrich_signals_with_hospitality_cyclical_detection(signals)
+    assert bool(detected.iloc[0]["cyclical_exposure_detected"]) is True
+    enriched = enrich_signals_with_cyclical_exposure_overlay(detected, model_results)
+    assert bool(enriched.iloc[0]["cyclical_exposure_overlay"]) is True
+
+
 def test_screen_ttm_from_row_prefers_action_note_when_columns_stale():
     row = pd.Series(
         {

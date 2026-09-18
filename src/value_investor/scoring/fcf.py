@@ -2775,6 +2775,10 @@ def enrich_universe_with_filing_metrics(
                 filing_currency=filing_currency,
                 company_adjusted_currency=fcf_bundle.get("company_adjusted_currency"),
             )
+        if bool(fcf_bundle.get("fcf_definition_divergence")) or bool(
+            fcf_bundle.get("ttm_suppressed_screen_filing_mismatch")
+        ):
+            definition_divergence = True
         divergence_flagged = bool(fcf_bundle.get("fcf_divergence_flagged")) or bool(
             fcf_bundle.get("ttm_suppressed_screen_filing_mismatch")
         )
