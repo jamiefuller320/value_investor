@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-18T07:46:57.804551+00:00",
+  "generated_at": "2026-09-18T16:39:00.683864+00:00",
   "role": "end_of_day_project_traffic",
   "trajectory": "on_track",
   "pause_active": false,
@@ -62,13 +62,13 @@
         "probe": "status must be one of complete|in_progress|not_started"
       },
       {
-        "claim": "Queue health overall=active; headline=Merge lane active; agent lane active.",
+        "claim": "Queue health overall=blocked; headline=1 open task(s) blocked by file clash or policy — no open engineering tasks in queue",
         "source": "docs/data/queue_health.json",
         "grounded": true,
         "probe": "queue_health.overall must be set by refresh_queue_health_ui"
       },
       {
-        "claim": "Ops monitor overall=ok at 2026-09-17T07:46:34.530264+00:00",
+        "claim": "Ops monitor overall=warn at 2026-09-18T07:46:32.075815+00:00",
         "source": "docs/data/ops_status.json",
         "grounded": true,
         "probe": "ops_status.run_at required for same-day claims"
@@ -84,6 +84,138 @@
     "grounded_count": 9
   },
   "merges_today": [
+    {
+      "task_id": "eng-20260918-14",
+      "title": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading",
+      "area": "ingest",
+      "pr_number": 714,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/714",
+      "merged_at": "2026-09-18T15:54:58.920701+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": false,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-10",
+      "title": "When a sal [2/2]",
+      "area": "ingest",
+      "pr_number": 713,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/713",
+      "merged_at": "2026-09-18T14:34:43.656204+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": false,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-11",
+      "title": "Require annual/interim workers to extract continuing versus discontinued / held-for-sale splits, deal terms, guidance, FCF versus dividend cover, and reporting ",
+      "area": "prompt",
+      "pr_number": 712,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/712",
+      "merged_at": "2026-09-18T14:24:41.968308+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-09",
+      "title": "Select the latest dated annual and interim *results* bodies (FY25 29bdb56d3cedb539, H1 2026 d19c5d3b8e0bb46a — not the 30 June period-end duplicate) [1/2]",
+      "area": "ingest",
+      "pr_number": 711,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/711",
+      "merged_at": "2026-09-18T13:53:33.008024+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": false,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-01",
+      "title": "dividend: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; kee",
+      "area": "scoring",
+      "pr_number": 710,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/710",
+      "merged_at": "2026-09-18T13:48:14.975108+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-08",
+      "title": "dividend: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_",
+      "area": "scoring",
+      "pr_number": 709,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/709",
+      "merged_at": "2026-09-18T13:14:45.005992+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-07",
+      "title": "fcf: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_defin",
+      "area": "scoring",
+      "pr_number": 706,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/706",
+      "merged_at": "2026-09-18T12:43:14.377250+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-05",
+      "title": "dividend: Primary dividend-sustainability overlay on statutory FCF/dividend; warn when interim dividend is cut despite high trailing yield pass. [2/2]",
+      "area": "scoring",
+      "pr_number": 704,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/704",
+      "merged_at": "2026-09-18T11:57:37.253311+00:00",
+      "merge_class": "ci_fix",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-04",
+      "title": "fcf: Primary dividend-sustainability overlay on statutory FCF/dividend; warn when interim dividend is cut despite high trailing yield pass. [1/2]",
+      "area": "scoring",
+      "pr_number": 703,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/703",
+      "merged_at": "2026-09-18T10:05:32.246844+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-03",
+      "title": "fcf: Media cyclicality + thin FCF coverage overlay (advertising >40%, Piotroski ≤4, statutory FCF/dividend ≤1.1×). [1/2]",
+      "area": "scoring",
+      "pr_number": 702,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/702",
+      "merged_at": "2026-09-18T09:23:40.537566+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-02",
+      "title": "Auto-flag cyclical exposure when principal-risk filings cite recession/discretionary spending and any interim month shows photobooth revenue decline >10% (MEGP",
+      "area": "scoring",
+      "pr_number": 701,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/701",
+      "merged_at": "2026-09-18T08:35:14.452155+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": false,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260917-01",
+      "title": "Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_defi",
+      "area": "scoring",
+      "pr_number": 699,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/699",
+      "merged_at": "2026-09-18T07:58:36.338720+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": false,
+      "independently_verified": true
+    },
     {
       "task_id": "eng-20260917-10",
       "title": "fcf: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf",
@@ -108,6 +240,138 @@
     }
   ],
   "verified_merges_today": [
+    {
+      "task_id": "eng-20260918-14",
+      "title": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading",
+      "area": "ingest",
+      "pr_number": 714,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/714",
+      "merged_at": "2026-09-18T15:54:58.920701+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": false,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-10",
+      "title": "When a sal [2/2]",
+      "area": "ingest",
+      "pr_number": 713,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/713",
+      "merged_at": "2026-09-18T14:34:43.656204+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": false,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-11",
+      "title": "Require annual/interim workers to extract continuing versus discontinued / held-for-sale splits, deal terms, guidance, FCF versus dividend cover, and reporting ",
+      "area": "prompt",
+      "pr_number": 712,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/712",
+      "merged_at": "2026-09-18T14:24:41.968308+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-09",
+      "title": "Select the latest dated annual and interim *results* bodies (FY25 29bdb56d3cedb539, H1 2026 d19c5d3b8e0bb46a — not the 30 June period-end duplicate) [1/2]",
+      "area": "ingest",
+      "pr_number": 711,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/711",
+      "merged_at": "2026-09-18T13:53:33.008024+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": false,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-01",
+      "title": "dividend: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; kee",
+      "area": "scoring",
+      "pr_number": 710,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/710",
+      "merged_at": "2026-09-18T13:48:14.975108+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-08",
+      "title": "dividend: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_",
+      "area": "scoring",
+      "pr_number": 709,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/709",
+      "merged_at": "2026-09-18T13:14:45.005992+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-07",
+      "title": "fcf: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_defin",
+      "area": "scoring",
+      "pr_number": 706,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/706",
+      "merged_at": "2026-09-18T12:43:14.377250+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-05",
+      "title": "dividend: Primary dividend-sustainability overlay on statutory FCF/dividend; warn when interim dividend is cut despite high trailing yield pass. [2/2]",
+      "area": "scoring",
+      "pr_number": 704,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/704",
+      "merged_at": "2026-09-18T11:57:37.253311+00:00",
+      "merge_class": "ci_fix",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-04",
+      "title": "fcf: Primary dividend-sustainability overlay on statutory FCF/dividend; warn when interim dividend is cut despite high trailing yield pass. [1/2]",
+      "area": "scoring",
+      "pr_number": 703,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/703",
+      "merged_at": "2026-09-18T10:05:32.246844+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-03",
+      "title": "fcf: Media cyclicality + thin FCF coverage overlay (advertising >40%, Piotroski ≤4, statutory FCF/dividend ≤1.1×). [1/2]",
+      "area": "scoring",
+      "pr_number": 702,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/702",
+      "merged_at": "2026-09-18T09:23:40.537566+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-02",
+      "title": "Auto-flag cyclical exposure when principal-risk filings cite recession/discretionary spending and any interim month shows photobooth revenue decline >10% (MEGP",
+      "area": "scoring",
+      "pr_number": 701,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/701",
+      "merged_at": "2026-09-18T08:35:14.452155+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": false,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260917-01",
+      "title": "Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_defi",
+      "area": "scoring",
+      "pr_number": 699,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/699",
+      "merged_at": "2026-09-18T07:58:36.338720+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": false,
+      "independently_verified": true
+    },
     {
       "task_id": "eng-20260917-10",
       "title": "fcf: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf",
@@ -151,38 +415,7 @@
     "status": "scoped_auto_merge",
     "note": "Traffic controller does not merge. Scoped auto-merge may merge ci_fix, ingest_narrow / scoring_narrow (independent deterministic verify), and parked_hunter PRs. EOD lists today's merges for monitoring."
   },
-  "ops_email_handoff": {
-    "schema_version": 1,
-    "generated_at": "2026-09-18T07:46:57.804551+00:00",
-    "email_subject": "FTSE Ops Monitor — WARN",
-    "email_text": "FTSE Ops Monitor — 2026-09-18T07:46:32.075815+00:00\nOverall: WARN\n\nNEEDS INVESTIGATION\n----------------------------------------\n[WARN] Orphaned pr_open engineering tasks\n  Tasks without matching open PR: eng-20260917-01\n  Planned rectification: remediate_queue_merge_sync — PM v1: recover/mark-merged engineering queue reconciliation\n\nENGINEERING MERGES TODAY (independent verify monitor)\n----------------------------------------\n  • [compile_cap_drain/verified] PR #697 eng-20260917-10: fcf: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf\n  • [human/human] PR #692 eng-20260917-08: Enable cyclical_exposure for UK heavyside construction-materials names when GB volume language and cement-output “historic lows” are in the same tape [1/2]\n\nWORKFLOW FRESHNESS\n----------------------------------------\n  [OK] FTSE Ingest Loop: last success 2026-09-17T14:52:31+00:00, age 16.9h\n  [OK] Automation Orchestrator: last success 2026-09-18T06:50:49+00:00, age 0.9h\n  [OK] FTSE Engineering Queue: last success 2026-09-18T07:15:30+00:00, age 0.5h\n  [OK] CI main nightly: last success 2026-09-17T12:39:41+00:00, age 19.1h\n  [OK] Modelling analysis review: last success 2026-09-13T13:21:51+00:00, age 114.4h (not scheduled today)\n  [OK] FTSE Library Ladder: last success 2026-09-18T06:51:55+00:00, age 0.9h (not scheduled today)\n  [OK] Library model review: last success 2026-09-13T06:54:58+00:00, age 120.9h (not scheduled today)\n  [OK] Email report: last success 2026-09-15T07:42:59+00:00, age 72.1h (not scheduled today)\n  [OK] FTSE Data Backup: last success 2026-09-13T16:29:07+00:00, age 111.3h (not scheduled today)\n  [OK] FTSE Paper Automation: last success 2026-09-17T08:26:57+00:00, age 23.3h\n  [OK] FTSE Ops Monitor: last success 2026-09-17T17:37:04+00:00, age 14.2h\n",
-    "email_html": "<!DOCTYPE html>\n<html><body style=\"font-family:Arial,sans-serif;color:#222;max-width:720px\">\n  <h2>FTSE Ops Monitor</h2>\n  <p style=\"color:#666\">2026-09-18T07:46:32.075815+00:00</p>\n  <p><strong>Overall:</strong> WARN</p>\n  \n  <h3>Needs investigation</h3><ul><li style='margin-bottom:10px'><strong style='color:#b8860b'>WARN</strong> Orphaned pr_open engineering tasks<br><span style='color:#555'>Tasks without matching open PR: eng-20260917-01</span><br><span style='color:#666;font-size:12px'>Planned rectification: remediate_queue_merge_sync — PM v1: recover/mark-merged engineering queue reconciliation</span></li></ul>\n  \n  \n  <h3>Engineering merges today (independent verify monitor)</h3><ul><li><code>compile_cap_drain/verified</code> PR #697 — eng-20260917-10: fcf: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf</li><li><code>human/human</code> PR #692 — eng-20260917-08: Enable cyclical_exposure for UK heavyside construction-materials names when GB volume language and cement-output “historic lows” are in the same tape [1/2]</li></ul>\n  <h3>Workflow freshness</h3><table style='border-collapse:collapse;width:100%;font-size:13px;margin-top:8px'><thead><tr style='background:#f0f0f0;text-align:left'><th style='padding:6px 8px;border:1px solid #ddd'>Status</th><th style='padding:6px 8px;border:1px solid #ddd'>Workflow</th><th style='padding:6px 8px;border:1px solid #ddd'>Last success</th><th style='padding:6px 8px;border:1px solid #ddd'>Age</th><th style='padding:6px 8px;border:1px solid #ddd'>Limit</th><th style='padding:6px 8px;border:1px solid #ddd'>Notes</th></tr></thead><tbody><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>FTSE Ingest Loop</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-09-17T14:52:31+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>16.9h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>30h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>Automation Orchestrator</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-09-18T06:50:49+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>0.9h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>FTSE Engineering Queue</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-09-18T07:15:30+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>0.5h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>3h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>CI main nightly</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-09-17T12:39:41+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>19.1h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>Modelling analysis review</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-09-13T13:21:51+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>114.4h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>FTSE Library Ladder</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-09-18T06:51:55+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>0.9h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>Library model review</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-09-13T06:54:58+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>120.9h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>Email report</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-09-15T07:42:59+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>72.1h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#f4f4f4;color:#222'><td style='padding:6px 8px;border:1px solid #dddddd;font-weight:bold;color:#555555;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #dddddd'>FTSE Data Backup</td><td style='padding:6px 8px;border:1px solid #dddddd;font-family:monospace;font-size:12px'>2026-09-13T16:29:07+00:00</td><td style='padding:6px 8px;border:1px solid #dddddd'>111.3h</td><td style='padding:6px 8px;border:1px solid #dddddd'>—</td><td style='padding:6px 8px;border:1px solid #dddddd;color:#555'>not scheduled today</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>FTSE Paper Automation</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-09-17T08:26:57+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>23.3h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr><tr style='background:#e8f5ec;color:#222'><td style='padding:6px 8px;border:1px solid #b8dfc4;font-weight:bold;color:#1b7f3a;white-space:nowrap'>OK</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>FTSE Ops Monitor</td><td style='padding:6px 8px;border:1px solid #b8dfc4;font-family:monospace;font-size:12px'>2026-09-17T17:37:04+00:00</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>14.2h</td><td style='padding:6px 8px;border:1px solid #b8dfc4'>28h</td><td style='padding:6px 8px;border:1px solid #b8dfc4;color:#555'>—</td></tr></tbody></table>\n  \n</body></html>",
-    "drafted_task_ids": [],
-    "items": [
-      {
-        "severity": "warn",
-        "category": "engineering",
-        "title": "Orphaned pr_open engineering tasks",
-        "summary": "Tasks without matching open PR: eng-20260917-01",
-        "planned_rectification": "remediate_queue_merge_sync",
-        "rectification_detail": "PM v1: recover/mark-merged engineering queue reconciliation; cleared lag=['none']",
-        "auto_attempted": true,
-        "auto_resolved": true,
-        "status": "resolved"
-      }
-    ],
-    "actions": [
-      {
-        "kind": "ops_email_handoff",
-        "detail": "handed 1 ops email finding(s) to PM (open=0, resolved=1)",
-        "pr_number": null,
-        "branch": null,
-        "applied": true
-      }
-    ],
-    "open_count": 0,
-    "resolved_count": 1
-  },
+  "ops_email_handoff": null,
   "sources": {
     "progress_report": null,
     "project_progress": "docs/data/project_progress.json",
