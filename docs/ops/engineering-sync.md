@@ -172,6 +172,18 @@ ftse-engineering --json verify-merged --task-id eng-YYYYMMDD-NN
 ftse-engineering --json verify-merged --task-id eng-YYYYMMDD-NN --dry-run
 ```
 
+## Queue idle monitor (dispatch evidence)
+
+`engineering-queue.yml` appends one JSON line per run to
+`docs/data/engineering_queue_monitor.jsonl` (dispatch reason, clash eligibility,
+traffic pause, open/`pr_open` counts, open engineering PR numbers). Rolling
+summary: `docs/data/engineering_queue_monitor_summary.json`.
+
+```bash
+ftse-engineering queue-monitor-report --hours 24 --json
+ftse-engineering queue-monitor-snapshot --append --open-prs-json /tmp/open_prs.json --json
+```
+
 ## Library ladder → engineering draft
 
 When the offline ladder cannot run screen-lite on the focus market (usable metrics
