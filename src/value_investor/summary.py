@@ -1047,8 +1047,29 @@ def build_company_reports(
         )
         from value_investor.scoring.uk_contractor_overlay import is_uk_listed_contractor
         from value_investor.scoring.uk_heavyside_materials_overlay import (
+            heavyside_cyclical_tape_for_ticker,
             is_uk_heavyside_construction_materials,
         )
+
+        uk_heavyside_materials = bool(row.get("uk_heavyside_materials")) or (
+            is_uk_heavyside_construction_materials(
+                ticker,
+                row.get("name"),
+                row.get("sector"),
+            )
+        )
+        heavyside_tape_raw = row.get("heavyside_cyclical_tape_detected")
+        if heavyside_tape_raw is not None and not (
+            isinstance(heavyside_tape_raw, float) and pd.isna(heavyside_tape_raw)
+        ):
+            heavyside_cyclical_tape_detected = bool(heavyside_tape_raw)
+        elif uk_heavyside_materials:
+            heavyside_cyclical_tape_detected = heavyside_cyclical_tape_for_ticker(
+                ticker,
+                output_dir=output_dir,
+            )
+        else:
+            heavyside_cyclical_tape_detected = False
 
         rev_fcf_warning_raw = row.get("uk_contractor_revenue_fcf_warning")
         uk_contractor_revenue_fcf_warning = (
@@ -1259,6 +1280,8 @@ def build_company_reports(
             cyclical_exposure_detected = bool(cyclical_detected_flag)
         else:
             cyclical_exposure_detected = False
+        if heavyside_cyclical_tape_detected:
+            cyclical_exposure_detected = True
 
         if cyclical_overlay_flag is not None and not (
             isinstance(cyclical_overlay_flag, float) and pd.isna(cyclical_overlay_flag)
@@ -1278,15 +1301,8 @@ def build_company_reports(
                     uk_contractor=uk_contractor,
                     public_capex_detected=public_capex_exposure_detected,
                     uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
-                    uk_heavyside_materials=bool(row.get("uk_heavyside_materials"))
-                    or is_uk_heavyside_construction_materials(
-                        ticker,
-                        row.get("name"),
-                        row.get("sector"),
-                    ),
-                    heavyside_cyclical_tape_detected=bool(
-                        row.get("heavyside_cyclical_tape_detected")
-                    ),
+                    uk_heavyside_materials=uk_heavyside_materials,
+                    heavyside_cyclical_tape_detected=heavyside_cyclical_tape_detected,
                 )
             )
 

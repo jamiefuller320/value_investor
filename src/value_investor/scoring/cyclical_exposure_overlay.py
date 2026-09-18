@@ -25,6 +25,7 @@ from value_investor.scoring.uk_contractor_overlay import (
     uk_contractor_cyclical_overlay_triggered,
 )
 from value_investor.scoring.uk_heavyside_materials_overlay import (
+    heavyside_cyclical_tape_for_ticker,
     is_uk_heavyside_construction_materials,
     uk_heavyside_cyclical_overlay_triggered,
 )
@@ -202,6 +203,24 @@ def enrich_signals_with_cyclical_exposure_overlay(
             else None
         )
 
+        uk_heavyside = bool(
+            row.get("uk_heavyside_materials")
+        ) or is_uk_heavyside_construction_materials(
+            ticker,
+            row.get("name"),
+            row.get("sector"),
+        )
+        tape_raw = row.get("heavyside_cyclical_tape_detected")
+        if tape_raw is not None and not (isinstance(tape_raw, float) and pd.isna(tape_raw)):
+            heavyside_tape_detected = bool(tape_raw)
+        elif uk_heavyside:
+            heavyside_tape_detected = heavyside_cyclical_tape_for_ticker(
+                ticker,
+                output_dir=output_dir,
+            )
+        else:
+            heavyside_tape_detected = False
+
         cyclical_flag = row.get("cyclical_exposure_detected")
         if cyclical_flag is not None and not (
             isinstance(cyclical_flag, float) and pd.isna(cyclical_flag)
@@ -209,6 +228,8 @@ def enrich_signals_with_cyclical_exposure_overlay(
             cyclical_detected = bool(cyclical_flag)
         else:
             cyclical_detected = cyclical_exposure_for_ticker(ticker, output_dir=output_dir)
+        if heavyside_tape_detected:
+            cyclical_detected = True
 
         interim_decline = row.get("interim_eps_decline_pct")
         interim_eps_decline_pct = (
@@ -264,20 +285,6 @@ def enrich_signals_with_cyclical_exposure_overlay(
             and not (isinstance(public_capex, float) and pd.isna(public_capex))
             else False
         )
-        uk_heavyside = bool(
-            row.get("uk_heavyside_materials")
-        ) or is_uk_heavyside_construction_materials(
-            ticker,
-            row.get("name"),
-            row.get("sector"),
-        )
-        tape_raw = row.get("heavyside_cyclical_tape_detected")
-        heavyside_tape_detected = (
-            bool(tape_raw)
-            if tape_raw is not None and not (isinstance(tape_raw, float) and pd.isna(tape_raw))
-            else False
-        )
-
         triggered, new_adjusted = apply_cyclical_exposure_overlay_to_signal(
             str(row.get("signal") or "hold"),
             cyclical_exposure_detected_flag=cyclical_detected,

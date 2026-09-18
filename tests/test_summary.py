@@ -1402,6 +1402,80 @@ def test_build_company_reports_fcf_basis_overlay_when_company_adj_diverges_bree_
     assert fcf["fcf_divergence_flagged"] is True
 
 
+def _bree_heavyside_cyclical_research_sources(tmp_path: Path) -> None:
+    sources = tmp_path / "research" / "BREE.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    filing_text = (
+        "LFL revenue decreased 3% driven by lower GB volumes and Ireland deferrals. "
+        "Cement volumes were down 5% year on year."
+    )
+    news_text = (
+        "Breedon Steps Up Back British Cement Campaign as UK cement output "
+        "reportedly hit historic lows"
+    )
+    (filings / "interim.txt").write_text(filing_text, encoding="utf-8")
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "interim",
+                        "has_body": True,
+                        "body_path": str(filings / "interim.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    (sources / "news_manifest.json").write_text(
+        json.dumps(
+            {
+                "ticker": "BREE.L",
+                "articles": [{"title": news_text, "summary": news_text}],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_build_company_reports_cyclical_overlay_when_gb_cement_tape_bree_style(
+    tmp_path: Path,
+):
+    _bree_heavyside_cyclical_research_sources(tmp_path)
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker="BREE.L",
+                name="Breedon Group plc",
+                sector="Basic Materials",
+                signal="strong_buy",
+                passed_families="cheapness,dividend,garp,risk",
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "BREE.L",
+                "model_id": "graham_enterprising",
+                "model_name": "Graham Enterprising",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+
+    assert snapshot["cyclical_exposure_detected"] is True
+    assert snapshot["cyclical_exposure_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+
+
 def _bowl_financials() -> dict:
     return {
         "ticker": "BOWL.L",
