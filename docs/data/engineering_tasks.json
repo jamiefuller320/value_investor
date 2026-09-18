@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-18T13:53:34.555732+00:00",
+  "compiled_at": "2026-09-18T14:24:43.538828+00:00",
   "run_at": null,
-  "task_count": 44,
+  "task_count": 45,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2206,6 +2206,55 @@
       "merged_at": "2026-09-15T15:05:07.590899+00:00"
     },
     {
+      "id": "eng-20260918-12",
+      "area": "ingest",
+      "title": "Filings-first order is adequate when the live issue is annual/interim numbers, and this pack has 17 annual + 6 interim bodies [1/2]",
+      "summary": "First-principle slice 1/2 of: Filings-first order is adequate when the live issue is annual/interim numbers, and this pack has 17 annual + 6 interim bodies. It is not adequate when the live . topics=filings paths=2",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "ITV.L"
+        ],
+        "recorded_at": "2026-09-04T16:48:11.731029+00:00",
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "topics=filings paths=2",
+        "narrow_parent_title": "Filings-first order is adequate when the live issue is annual/interim numbers, and this pack has 17 annual + 6 interim bodies. It is not adequate when the live ",
+        "narrow_cohesion_bypass": false,
+        "narrow_split_group_id": "e60701ec57cc",
+        "narrow_split_index": 1,
+        "narrow_split_count": 2,
+        "narrow_topics": [
+          "filings"
+        ],
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for ITV.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "tests/test_research_filings.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": true,
+      "status": "open"
+    },
+    {
       "id": "eng-20260918-11",
       "area": "prompt",
       "title": "Require annual/interim workers to extract continuing versus discontinued / held-for-sale splits, deal terms, guidance, FCF versus dividend cover, and reporting ",
@@ -2223,7 +2272,8 @@
         "origin_priority_score": 40.0,
         "preferred_merge_class": "compile_cap_drain",
         "doc": "docs/ops/engineering-sync.md",
-        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Prompt or export change is covered by a parser/unit test",
@@ -2244,11 +2294,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": true,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260918-11.md",
       "branch_name": "cursor/eng-20260918-11-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-18T13:57:42.866420+00:00"
+      "completed_at": "2026-09-18T13:57:42.866420+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/712",
+      "pr_number": 712,
+      "merged_at": "2026-09-18T14:24:41.968308+00:00"
     },
     {
       "id": "eng-20260918-10",
