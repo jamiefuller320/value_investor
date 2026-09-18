@@ -4066,6 +4066,87 @@ def test_enrich_screening_snapshot_fcf_dividend_coverage_backfills_labelled_bloc
     assert enriched["fcf_dividend_coverage"]["management_cash_generated_minus_capex"][
         "ratio"
     ] == pytest.approx(1.68)
+    assert enriched["research_prompts"]
+    assert "statutory OCF−CapEx" in enriched["research_prompts"][0]
+    assert "0.84×" in enriched["research_prompts"][0]
+
+
+def test_dual_fcf_dividend_coverage_prefers_ir_management_bridge(tmp_path: Path):
+    from value_investor.scoring.fcf import dual_fcf_dividend_coverage_from_ir_presentation_metrics
+
+    ticker = "ZZIR.L"
+    sources = tmp_path / "research" / ticker / "sources"
+    sources.mkdir(parents=True)
+    (sources / "ir_presentation_metrics.json").write_text(
+        json.dumps(
+            {
+                "bridges": [
+                    {
+                        "bridge_type": "management_free_cash_flow_bridge",
+                        "period": "annual",
+                        "derived": {
+                            "operating_minus_replacement_capex_millions": 49.891,
+                        },
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    coverage = dual_fcf_dividend_coverage_from_ir_presentation_metrics(
+        ticker,
+        output_dir=tmp_path,
+        operating_cashflow=25_153_000.0,
+        dividends_paid=-29_769_000.0,
+        free_cashflow=25_153_000.0,
+    )
+    assert coverage["fcf_dividend_coverage_net"] == pytest.approx(25_153_000.0 / 29_769_000.0)
+    assert coverage["fcf_dividend_coverage_gross"] == pytest.approx(49_891_000.0 / 29_769_000.0)
+
+
+def test_enrich_screening_snapshot_ir_backfill_adds_research_prompt(tmp_path: Path):
+    ticker = "ZZIR.L"
+    sources = tmp_path / "research" / ticker / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 25_153_000.0,
+                        "Capital Expenditure": -5_000_000.0,
+                        "Free Cash Flow": 25_153_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (sources / "ir_presentation_metrics.json").write_text(
+        json.dumps(
+            {
+                "bridges": [
+                    {
+                        "bridge_type": "management_free_cash_flow_bridge",
+                        "period": "annual",
+                        "derived": {"operating_minus_replacement_capex_millions": 49.891},
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    enriched = enrich_screening_snapshot_fcf_dividend_coverage(
+        {
+            "ticker": ticker,
+            "fcf_definition_divergence": True,
+            "dividends_paid": -29_769_000.0,
+        },
+        output_dir=tmp_path,
+    )
+    assert enriched["fcf_dividend_coverage_gross"] == pytest.approx(49_891_000.0 / 29_769_000.0)
+    assert enriched["research_prompts"]
+    assert "ir_presentation_metrics.json" in enriched["research_prompts"][0]
 
 
 def test_parse_fcf_definition_divergence_coverage_from_action_note():

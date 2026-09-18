@@ -350,17 +350,238 @@ def labelled_fcf_dividend_coverage_for_snapshot(
     return labelled
 
 
+_MANAGEMENT_IR_BRIDGE_TYPES = frozenset(
+    {
+        "management_free_cash_flow_bridge",
+        "management_cash_flow_bridge",
+        "management_cash_flow",
+    }
+)
+
+
+def _ir_bridge_management_fcf_amount(bridge: dict[str, Any]) -> float | None:
+    """Return management-definition FCF (absolute currency) from an IR bridge row."""
+    derived = bridge.get("derived") or {}
+    if isinstance(derived, dict):
+        for key in (
+            "operating_minus_replacement_capex_millions",
+            "operating_minus_capex_millions",
+            "total_fcf_millions",
+            "free_cash_flow_current_millions",
+        ):
+            raw = derived.get(key)
+            if raw is None:
+                continue
+            try:
+                return float(raw) * 1_000_000.0
+            except (TypeError, ValueError):
+                continue
+
+    by_label: dict[str, dict[str, Any]] = {}
+    for row in bridge.get("lines") or []:
+        if not isinstance(row, dict):
+            continue
+        label = str(row.get("label") or "").strip()
+        if label:
+            by_label[label] = row
+
+    ocf_row = by_label.get("cash_generated_from_operations") or by_label.get("operating_cash_flow")
+    capex_row = by_label.get("replacement_capital_expenditure") or by_label.get(
+        "capex_infrastructure"
+    )
+    if ocf_row and capex_row:
+        try:
+            ocf_m = float(ocf_row.get("amount_millions"))
+            capex_m = float(capex_row.get("amount_millions"))
+        except (TypeError, ValueError):
+            return None
+        return (ocf_m + capex_m) * 1_000_000.0
+    return None
+
+
+def _select_management_ir_bridge(payload: dict[str, Any]) -> dict[str, Any] | None:
+    bridges = [row for row in (payload.get("bridges") or []) if isinstance(row, dict)]
+    if not bridges:
+        return None
+
+    def _rank(bridge: dict[str, Any]) -> tuple[int, int]:
+        bridge_type = str(bridge.get("bridge_type") or "")
+        annual = 0 if _annual_period_label(str(bridge.get("period") or "")) else 1
+        management = 0 if bridge_type in _MANAGEMENT_IR_BRIDGE_TYPES else 1
+        return (management, annual)
+
+    bridges.sort(key=_rank)
+    for bridge in bridges:
+        if _ir_bridge_management_fcf_amount(bridge) is not None:
+            return bridge
+    return None
+
+
+def dual_fcf_dividend_coverage_from_ir_presentation_metrics(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+    operating_cashflow: float | None = None,
+    operating_cashflow_gross: float | None = None,
+    capital_expenditure: float | None = None,
+    dividends_paid: float | None = None,
+    free_cashflow: float | None = None,
+) -> dict[str, float | None]:
+    """Prefer IR presentation bridges for management FCF/dividend cover when indexed."""
+    payload = load_ir_presentation_metrics(ticker, output_dir=output_dir)
+    bridge = _select_management_ir_bridge(payload) if payload else None
+    management_fcf = _ir_bridge_management_fcf_amount(bridge) if bridge else None
+
+    gross_ocf = operating_cashflow_gross
+    if management_fcf is not None and gross_ocf is None:
+        gross_cover = fcf_dividend_coverage(management_fcf, dividends_paid)
+    else:
+        gross_cover = None
+
+    coverage = compute_dual_fcf_dividend_coverage(
+        operating_cashflow=operating_cashflow,
+        operating_cashflow_gross=gross_ocf,
+        capital_expenditure=capital_expenditure,
+        dividends_paid=dividends_paid,
+        free_cashflow=free_cashflow,
+    )
+    if gross_cover is not None:
+        coverage["fcf_dividend_coverage_gross"] = gross_cover
+    return coverage
+
+
+def format_dual_fcf_dividend_cover_research_prompt(
+    *,
+    fcf_dividend_coverage_net: float | None,
+    fcf_dividend_coverage_gross: float | None,
+    ir_presentation_primary: bool = False,
+) -> str:
+    """Research prompt line requiring explicit statutory vs management dividend cover."""
+    prompt = (
+        "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management "
+        "cash-generated−CapEx (do not conflate the two definitions)."
+    )
+    if ir_presentation_primary:
+        prompt += " Prefer ir_presentation_metrics.json reconciliation bridges as primary evidence."
+    parts: list[str] = []
+    if fcf_dividend_coverage_net is not None:
+        parts.append(f"statutory {fcf_dividend_coverage_net:.2f}×")
+    if fcf_dividend_coverage_gross is not None:
+        parts.append(f"management {fcf_dividend_coverage_gross:.2f}×")
+    if parts:
+        prompt += f" Screen baseline: {' vs '.join(parts)}."
+    return prompt
+
+
+def enrich_screening_snapshot_fcf_research_prompts(
+    snapshot: dict[str, Any],
+    *,
+    output_dir: Path | None = None,
+) -> dict[str, Any]:
+    """Attach research prompts when OCF/FCF definitions diverge on the screening snapshot."""
+    updated = dict(snapshot)
+    divergence_raw = updated.get("fcf_definition_divergence")
+    if divergence_raw is None or (isinstance(divergence_raw, float) and pd.isna(divergence_raw)):
+        return updated
+    if not bool(divergence_raw):
+        return updated
+
+    ticker = str(updated.get("ticker") or "").strip().upper()
+    ir_primary = bool(ticker and load_ir_presentation_metrics(ticker, output_dir=output_dir))
+    prompt = format_dual_fcf_dividend_cover_research_prompt(
+        fcf_dividend_coverage_net=_float_or_none(updated.get("fcf_dividend_coverage_net")),
+        fcf_dividend_coverage_gross=_float_or_none(updated.get("fcf_dividend_coverage_gross")),
+        ir_presentation_primary=ir_primary,
+    )
+    existing = [
+        str(item).strip() for item in (updated.get("research_prompts") or []) if str(item).strip()
+    ]
+    if prompt not in existing:
+        existing.append(prompt)
+    updated["research_prompts"] = existing
+    return updated
+
+
+def _backfill_snapshot_dual_coverage_from_ir(
+    snapshot: dict[str, Any],
+    *,
+    output_dir: Path | None,
+) -> dict[str, Any]:
+    """Fill missing dual dividend-cover ratios from IR bridges before export."""
+    updated = dict(snapshot)
+    ticker = str(updated.get("ticker") or "").strip().upper()
+    if not ticker:
+        return updated
+
+    divergence_raw = updated.get("fcf_definition_divergence")
+    if divergence_raw is None or (isinstance(divergence_raw, float) and pd.isna(divergence_raw)):
+        divergence = ocf_definition_diverges(
+            _float_or_none(updated.get("operating_cashflow")),
+            _float_or_none(updated.get("operating_cashflow_gross")),
+        )
+    else:
+        divergence = bool(divergence_raw)
+    if not divergence:
+        return updated
+
+    net = _float_or_none(updated.get("fcf_dividend_coverage_net"))
+    gross = _float_or_none(updated.get("fcf_dividend_coverage_gross"))
+    if net is not None and gross is not None:
+        return updated
+
+    financials = load_cached_financials(ticker, output_dir=output_dir)
+    cash_metrics = extract_cashflow_metrics_from_annual_financials(financials) if financials else {}
+    operating_cashflow = _float_or_none(updated.get("operating_cashflow"))
+    if operating_cashflow is None:
+        operating_cashflow = cash_metrics.get("operating_cashflow")
+    operating_cashflow_gross = _float_or_none(updated.get("operating_cashflow_gross"))
+    if operating_cashflow_gross is None:
+        operating_cashflow_gross = extract_gross_cash_from_operations_for_ticker(
+            ticker,
+            output_dir=output_dir,
+        )
+    capital_expenditure = _float_or_none(updated.get("capital_expenditure"))
+    if capital_expenditure is None:
+        capital_expenditure = cash_metrics.get("capital_expenditure")
+    dividends_paid = _float_or_none(updated.get("dividends_paid"))
+    if dividends_paid is None and financials:
+        dividends_paid = extract_dividends_paid_from_annual_financials(financials)
+    free_cashflow = _float_or_none(updated.get("free_cashflow"))
+    if free_cashflow is None:
+        free_cashflow = cash_metrics.get("free_cashflow")
+
+    coverage = dual_fcf_dividend_coverage_from_ir_presentation_metrics(
+        ticker,
+        output_dir=output_dir,
+        operating_cashflow=operating_cashflow,
+        operating_cashflow_gross=operating_cashflow_gross,
+        capital_expenditure=capital_expenditure,
+        dividends_paid=dividends_paid,
+        free_cashflow=free_cashflow,
+    )
+    if net is None and coverage.get("fcf_dividend_coverage_net") is not None:
+        updated["fcf_dividend_coverage_net"] = coverage["fcf_dividend_coverage_net"]
+    if gross is None and coverage.get("fcf_dividend_coverage_gross") is not None:
+        updated["fcf_dividend_coverage_gross"] = coverage["fcf_dividend_coverage_gross"]
+    return updated
+
+
 def enrich_screening_snapshot_fcf_dividend_coverage(
     snapshot: dict[str, Any],
+    *,
+    output_dir: Path | None = None,
 ) -> dict[str, Any]:
     """Backfill labelled dual dividend cover on snapshot dicts that only have scalar ratios."""
-    updated = dict(snapshot)
+    updated = _backfill_snapshot_dual_coverage_from_ir(snapshot, output_dir=output_dir)
     existing = updated.get("fcf_dividend_coverage")
     if isinstance(existing, dict):
         statutory = existing.get("statutory_ocf_minus_capex") or {}
         management = existing.get("management_cash_generated_minus_capex") or {}
         if statutory.get("ratio") is not None or management.get("ratio") is not None:
-            return updated
+            return enrich_screening_snapshot_fcf_research_prompts(
+                updated,
+                output_dir=output_dir,
+            )
 
     net = _float_or_none(updated.get("fcf_dividend_coverage_net"))
     gross = _float_or_none(updated.get("fcf_dividend_coverage_gross"))
@@ -397,7 +618,7 @@ def enrich_screening_snapshot_fcf_dividend_coverage(
     )
     if labelled is not None:
         updated["fcf_dividend_coverage"] = labelled
-    return updated
+    return enrich_screening_snapshot_fcf_research_prompts(updated, output_dir=output_dir)
 
 
 def ocf_definition_diverges(

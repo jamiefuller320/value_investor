@@ -68,6 +68,7 @@ _RUN_SNAPSHOT_OPTIONAL_SIGNAL_COLUMNS = (
     "fcf_definition_divergence",
     "fcf_divergence_flagged",
     "fcf_dividend_coverage",
+    "research_prompts",
 )
 
 
@@ -247,7 +248,7 @@ def write_screening_snapshot(sources_dir: Path, snapshot: dict[str, Any]) -> Pat
         output_dir=output_dir,
     )
     payload = enforce_fcf_basis_in_snapshot(payload, output_dir=output_dir)
-    payload = enrich_screening_snapshot_fcf_dividend_coverage(payload)
+    payload = enrich_screening_snapshot_fcf_dividend_coverage(payload, output_dir=output_dir)
     write_json(
         path,
         payload,

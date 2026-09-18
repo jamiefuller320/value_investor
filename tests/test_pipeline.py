@@ -1899,6 +1899,8 @@ def test_write_screening_snapshot_backfills_labelled_dual_fcf_dividend_coverage(
     assert written["fcf_dividend_coverage"]["management_cash_generated_minus_capex"][
         "ratio"
     ] == pytest.approx(1.68)
+    assert written["research_prompts"]
+    assert "dual fcf/dividend cover" in written["research_prompts"][0].lower()
 
 
 def test_enforce_fcf_basis_in_snapshot_without_research_verdict():

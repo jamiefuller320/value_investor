@@ -345,7 +345,7 @@ def guard_screening_snapshot_export(
         model_results=model_results,
         output_dir=output_dir,
     )
-    merged = enrich_screening_snapshot_fcf_dividend_coverage(merged)
+    merged = enrich_screening_snapshot_fcf_dividend_coverage(merged, output_dir=output_dir)
 
     overlay, merged_adjusted, conviction = apply_fcf_export_enforcement(
         signal=screen_signal,
