@@ -902,6 +902,34 @@ def run_ingest_improvement_pass(
                     target.ticker,
                     sources_dir=sources_dir,
                 )
+                from value_investor.research.filings import extract_filing_interim_financials
+                from value_investor.research.ingest import attach_filing_interim_financials
+
+                extract_filing_interim_financials(
+                    sources_dir / "filings",
+                    target.ticker,
+                    sources_dir=sources_dir,
+                )
+                financials_path = sources_dir / "financials_annual.json"
+                resolved_financials = resolve_json_path(financials_path)
+                if resolved_financials is not None:
+                    try:
+                        financials_payload = read_json(resolved_financials)
+                        merged_financials = attach_filing_interim_financials(
+                            financials_payload,
+                            filings_dir=sources_dir / "filings",
+                            ticker=target.ticker,
+                            sources_dir=sources_dir,
+                        )
+                        if merged_financials.get("filing_interim_financials"):
+                            write_json(
+                                financials_path,
+                                merged_financials,
+                                compact=True,
+                                compress=False,
+                            )
+                    except (OSError, ValueError, TypeError):
+                        pass
                 if int(ir_refetch.get("fetched") or 0) > 0:
                     inventory = inspect_local_sources(sources_dir)
                     before = int(
