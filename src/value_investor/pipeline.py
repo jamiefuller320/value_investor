@@ -292,6 +292,7 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "fcf_dividend_coverage_gross",
         "fcf_dividend_coverage_net",
         "fcf_dividend_coverage",
+        "research_prompts",
         "fcf_definition_divergence",
         "fcf_divergence_flagged",
         "adjusted_signal",
