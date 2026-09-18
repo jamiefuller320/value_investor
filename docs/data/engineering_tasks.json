@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-18T20:48:58.124475+00:00",
+  "compiled_at": "2026-09-18T21:17:41.173566+00:00",
   "run_at": null,
-  "task_count": 51,
+  "task_count": 52,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2206,6 +2206,57 @@
       "merged_at": "2026-09-15T15:05:07.590899+00:00"
     },
     {
+      "id": "eng-20260918-19",
+      "area": "ingest",
+      "title": "CH OCR refetch of both `ch_04967001_MzMzODcxODY0OWFkaXF6a2N4.txt` and `ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4.txt` fails to deliver Risks and Uncertainties or pen",
+      "summary": "CH OCR refetch of both `ch_04967001_MzMzODcxODY0OWFkaXF6a2N4.txt` and `ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4.txt` fails to deliver Risks and Uncertainties or pension note 3.8 — switch to iXBRL tag extraction from Companies House document API (04967001). (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "ITV.L"
+        ],
+        "recorded_at": "2026-09-06T07:48:26.505357+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "CH OCR refetch of both `ch_04967001_MzMzODcxODY0OWFkaXF6a2N4.txt` and `ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4.txt` fails to deliver Risks and Uncertainties or pen",
+        "narrow_cohesion_bypass": true,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for ITV.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260918-18",
       "area": "ingest",
       "title": "Parse IR results-deck cash-bridge slides into `ir_presentation_metrics.json`; refetch did not add FCF lines and H1 2026 deck bridge remains missing.",
@@ -3006,8 +3057,8 @@
     "filings_with_body": 4155
   },
   "queue_clearing": {
-    "attention_parked_count": 2,
-    "evaluated_at": "2026-09-18T20:50:02.747829+00:00",
+    "attention_parked_count": 3,
+    "evaluated_at": "2026-09-18T21:17:37.997104+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {
