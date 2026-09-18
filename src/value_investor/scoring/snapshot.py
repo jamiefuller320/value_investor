@@ -9,6 +9,10 @@ from typing import Any
 import pandas as pd
 
 from value_investor.research.verdict import compute_adjusted_signal
+from value_investor.scoring.dividend_sustainability_overlay import (
+    apply_dividend_sustainability_export_enforcement,
+)
+from value_investor.scoring.dividend_yield_overlay import apply_dividend_yield_export_enforcement
 from value_investor.scoring.fcf import (
     _float_or_none,
     advertising_revenue_share_for_ticker,
@@ -17,7 +21,6 @@ from value_investor.scoring.fcf import (
     screen_ttm_from_row,
 )
 from value_investor.scoring.fcf_basis_overlay import (
-    apply_dividend_sustainability_export_enforcement,
     apply_fcf_export_enforcement,
     apply_media_cyclical_thin_fcf_export_enforcement,
 )
@@ -39,6 +42,7 @@ _RUN_SNAPSHOT_OPTIONAL_SIGNAL_COLUMNS = (
     "fcf_basis_overlay",
     "media_cyclical_thin_fcf_overlay",
     "advertising_revenue_share",
+    "dividend_yield_overlay",
     "dividend_sustainability_overlay",
     "interim_dividend_cut_flagged",
     "interim_dividend_cut_pct",
@@ -187,10 +191,21 @@ def enforce_fcf_basis_in_snapshot(
     if model_results is not None and not model_results.empty and ticker:
         ticker_models = model_results[model_results["ticker"] == ticker]
 
+    post_media_adjusted = str(updated.get("adjusted_signal") or merged_adjusted)
+    yield_overlay, yield_adjusted = apply_dividend_yield_export_enforcement(
+        signal=screen_signal,
+        adjusted_signal=post_media_adjusted,
+        ticker_models=ticker_models,
+        dividend_yield_overlay=bool(updated.get("dividend_yield_overlay")),
+    )
+    if yield_overlay:
+        updated["dividend_yield_overlay"] = True
+        updated["adjusted_signal"] = yield_adjusted
+
     div_overlay, cut_flagged, div_adjusted, div_conviction = (
         apply_dividend_sustainability_export_enforcement(
             signal=screen_signal,
-            adjusted_signal=str(updated.get("adjusted_signal") or merged_adjusted),
+            adjusted_signal=str(updated.get("adjusted_signal") or post_media_adjusted),
             conviction_score=float(updated.get("conviction_score") or 0.0),
             dividend_sustainability_overlay=bool(updated.get("dividend_sustainability_overlay")),
             ticker_models=ticker_models,
