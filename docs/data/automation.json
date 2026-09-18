@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-18T14:16:32.198693+00:00",
+  "generated_at": "2026-09-18T14:25:43.354397+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1153,16 +1153,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-18T13:53:34.555732+00:00",
-    "queue_ui_updated_at": "2026-09-18T14:16:32.126663+00:00",
-    "task_count": 44,
+    "compiled_at": "2026-09-18T14:24:43.538828+00:00",
+    "queue_ui_updated_at": "2026-09-18T14:25:43.201334+00:00",
+    "task_count": 45,
     "status": {
-      "open_count": 0,
-      "pr_open_count": 2,
+      "open_count": 1,
+      "pr_open_count": 1,
       "parked_count": 8,
-      "merged_count": 33,
+      "merged_count": 34,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260918-12",
       "in_flight_branch": "cursor/eng-20260918-10-1de3",
       "in_flight_pr": 713,
       "spend_since_checkpoint_usd": 10.4,
@@ -1171,16 +1171,32 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260918-11",
-        "area": "prompt",
-        "title": "Require annual/interim workers to extract continuing versus discontinued / held-for-sale splits, deal terms, guidance, FCF versus dividend cover, and reporting ",
+        "id": "eng-20260918-12",
+        "area": "ingest",
+        "title": "Filings-first order is adequate when the live issue is annual/interim numbers, and this pack has 17 annual + 6 interim bodies [1/2]",
         "priority": "medium",
         "priority_score": 40.0,
-        "status": "pr_open",
+        "status": "open",
         "source": "compile_cap_drain",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": "cursor/eng-20260918-11-1de3"
+        "branch_name": null,
+        "dispatch_eligible": false,
+        "blocked_by": [
+          {
+            "pr_number": null,
+            "branch": null,
+            "task_id": null,
+            "title": "in-flight allowlist overlap",
+            "clash_files": [
+              "src/value_investor/research/filings.py",
+              "tests/test_research_filings.py"
+            ],
+            "kind": "allowlist_overlap"
+          }
+        ],
+        "effective_dispatch_rank": null,
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260918-10",
@@ -1294,9 +1310,9 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 0,
+      "open_task_count": 1,
       "dispatch_eligible_count": 0,
-      "blocked_count": 0
+      "blocked_count": 1
     }
   },
   "learning_track_epoch_datum": {
@@ -1574,51 +1590,46 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-18T14:16:32.198693+00:00",
+    "generated_at": "2026-09-18T14:25:43.354397+00:00",
     "overall": "blocked",
-    "headline": "Orphan pr_open state (2 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
+    "headline": "1 open task(s) blocked by file clash or policy — no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
     "merge_lane": {
       "state": "running",
       "idle": false,
       "running": true,
       "blocked": false,
-      "pr_open_count": 2,
+      "pr_open_count": 1,
       "open_engineering_prs": [
         {
           "number": 713,
           "branch": "cursor/eng-20260918-10-1de3",
           "draft": false
-        },
-        {
-          "number": 712,
-          "branch": "cursor/eng-20260918-11-1de3",
-          "draft": false
         }
       ],
       "in_flight_pr": 713,
-      "detail": "Open engineering PR(s) #713, #712 — merge fires on CI success."
+      "detail": "Open engineering PR(s) #713 — merge fires on CI success."
     },
     "agent_lane": {
       "state": "blocked",
       "idle": false,
-      "running": false,
+      "running": true,
       "blocked": true,
       "should_dispatch": false,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 1,
-      "open_count": 0,
-      "pr_open_count": 2,
+      "open_count": 1,
+      "pr_open_count": 1,
       "dispatch_eligible_count": 0,
-      "blocked_task_count": 0,
-      "next_task_id": null,
-      "reason": "parallel cap reached — 2 pr_open, 0 agent run(s) (max_parallel=2)",
-      "detail": "Orphan pr_open state (2 pr_open, 0 open) — recover-queue should reconcile or mark merged."
+      "blocked_task_count": 1,
+      "next_task_id": "eng-20260918-12",
+      "reason": "no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
+      "detail": "1 open task(s) blocked by file clash or policy — no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 1,
-      "evaluated_at": "2026-09-18T14:16:27.911262+00:00"
+      "evaluated_at": "2026-09-18T14:25:37.807724+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1632,6 +1643,17 @@
       "should_dispatch_engineering": false
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260918-11",
+        "title": "Require annual/interim workers to extract continuing versus discontinued / held-for-sale splits, deal terms, guidance, FCF versus dividend cover, and reporting ",
+        "area": "prompt",
+        "pr_number": 712,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/712",
+        "merged_at": "2026-09-18T14:24:41.968308+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": true,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260918-09",
         "title": "Select the latest dated annual and interim *results* bodies (FY25 29bdb56d3cedb539, H1 2026 d19c5d3b8e0bb46a — not the 30 June period-end duplicate) [1/2]",
@@ -1754,6 +1776,6 @@
         "independently_verified": false
       }
     ],
-    "verified_merges_today_count": 10
+    "verified_merges_today_count": 11
   }
 }
