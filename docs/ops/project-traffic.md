@@ -26,6 +26,7 @@ slice of a PM agent.
 | Cancel open `workflow_failure` eng tasks when the named workflow has succeeded after the minting failure | Yes |
 | Independent verify + scoped auto-merge for **ingest_narrow** / **scoring_narrow** / **compile_cap_drain** | Yes (deterministic path/CI/tests gate; policy keys under `engineering.auto_merge`) |
 | Receive ops-monitor email findings + planned rectification (L397 handoff) | Yes |
+| Stop automation waste (Composer reburn / Cursor fail loops) — pause dispatch + park burning eng tasks | Yes |
 | Auto-remediate non–v1 ops email findings | **No** — record on handoff artifact / digest for human or eng draft |
 | Author code fixes for failing workflows / invent eng patches | **No** — still supervised `workflow_failure` / engineering-agent |
 | Broad merge PRs outside scoped classes | **No** — keep restricted; loosen only with independent verification |
@@ -107,6 +108,11 @@ Each occasion stores: timestamp, PR, branch, kind (`ci_check` / `merge_conflict`
 | `max_fix_requests_per_pr` | 2 | Cap comments per PR (SHA-aware) |
 | `comment_cooldown_hours` | 6 | Min gap between comments on same head |
 | `digest_enabled` | true | Write EOD digest |
+| `automation_waste_enabled` | true | Detect eng-agent reburn + Cursor workflow fail loops |
+| `waste_fail_threshold` | 3 | Failures in window before a waste signal fires |
+| `waste_window_hours` | 6 | Lookback for eng-agent reburn (12h for other Cursor workflows) |
+| `pause_on_automation_waste` | true | Pause eng dispatch when remediable waste fires |
+| `park_on_automation_waste` | true | Park the burning open task (`parked_policy=reburn_loop`) |
 
 ## Schedule
 
@@ -221,7 +227,27 @@ gates), it also calls `handoff_ops_monitor_email_to_pm`:
 
 Planned actions include `remediate_queue_merge_sync`,
 `cancel_recovered_workflow_failure`, `request_unstick_stuck_prs`,
-`rerun_or_dispatch_workflow`, `draft_ops_engineering_task`, and `human_triage`.
+`stop_automation_waste`, `rerun_or_dispatch_workflow`, `draft_ops_engineering_task`,
+and `human_triage`.
+
+## Automation waste (reburn / fail loops)
+
+Hourly eng-queue can burn Composer when the same open task fails agent preflight
+(or another Cursor workflow loops) without landing a park/PR. Ops monitor and
+project-traffic share a registry in `automation_waste.py`:
+
+| Signal | Trigger | PM v1 action |
+|--------|---------|--------------|
+| `eng_agent_reburn` | ≥3 `engineering-agent` failures in 6h while open tasks remain and no eng PR in flight | Pause dispatch + park burning task (`reburn_loop`) |
+| `cursor_workflow_fail_loop` | ≥3 failures in 12h on other Cursor-spend workflows (analysis-review, paper-learning-review, …) | Record on handoff / digest (no auto-rerun from traffic) |
+
+Root-cause companion: `engineering-agent.yml` commits parks to `main` via
+`scripts/gha_commit_engineering_park.sh` after preflight / workflow-permission
+blocks so the queue does not rediscover a still-`open` task.
+
+Extend coverage by adding rows to `CURSOR_SPEND_WORKFLOWS` in
+`src/value_investor/automation_waste.py` and (when a deterministic fix exists)
+a PM v1 remediate path.
 
 ## Related
 

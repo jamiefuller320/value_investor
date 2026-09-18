@@ -321,12 +321,19 @@ def evaluate_engineering_dispatch(
             stuck = int(traffic.get("stuck_pr_count") or 0)
             reasons = traffic.get("pause_reasons") or traffic.get("stuck_reasons") or []
             reason_txt = ",".join(str(r) for r in reasons) if reasons else "stuck_prs"
-            return EngineeringDispatchDecision(
-                should_dispatch=False,
-                reason=(
+            if "automation_waste" in reason_txt or traffic.get("automation_waste_active"):
+                detail = (
+                    f"project traffic pause ({reason_txt}) — "
+                    "automation waste hold; clear reburn / parked tasks before new PR generation"
+                )
+            else:
+                detail = (
                     f"project traffic pause ({stuck} stuck PR(s); {reason_txt}) — "
                     "clear CI failures / merge conflicts before new PR generation"
-                ),
+                )
+            return EngineeringDispatchDecision(
+                should_dispatch=False,
+                reason=detail,
                 status=status,
             )
 

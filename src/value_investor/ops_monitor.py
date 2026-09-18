@@ -1186,6 +1186,67 @@ def check_engineering_sync(
     return findings, report
 
 
+def check_automation_waste(
+    *,
+    open_prs: list[dict[str, Any]] | None = None,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    repo: str | None = None,
+    token: str | None = None,
+    recent_agent_failures: list[dict[str, Any]] | None = None,
+) -> list[OpsFinding]:
+    """Detect repetitive Cursor-spend automation that fails to land work."""
+    from value_investor.automation_waste import (
+        CURSOR_SPEND_WORKFLOWS,
+        collect_automation_waste_signals,
+        count_failures_by_workflow,
+    )
+
+    failures = (
+        list(recent_agent_failures)
+        if recent_agent_failures is not None
+        else recent_workflow_failures(
+            ENGINEERING_AGENT_WORKFLOW,
+            repo=repo,
+            token=token,
+            within_hours=6,
+        )
+    )
+
+    def _fetch(workflow: str, window_hours: float) -> list[dict[str, Any]]:
+        if workflow == ENGINEERING_AGENT_WORKFLOW:
+            return failures
+        return recent_workflow_failures(
+            workflow,
+            repo=repo,
+            token=token,
+            within_hours=int(window_hours),
+        )
+
+    workflow_counts = count_failures_by_workflow(
+        _fetch,
+        workflows=CURSOR_SPEND_WORKFLOWS,
+        window_hours=12,
+    )
+    signals = collect_automation_waste_signals(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        recent_agent_failures=failures,
+        cursor_workflow_failure_counts=workflow_counts,
+    )
+    findings: list[OpsFinding] = []
+    for signal in signals:
+        findings.append(
+            OpsFinding(
+                severity=signal.severity,
+                category="automation_waste",
+                title=signal.title,
+                summary=signal.summary,
+                auto_fixable=signal.auto_remediable,
+            )
+        )
+    return findings
+
+
 def check_ops_budget() -> list[OpsFinding]:
     status = weekly_ops_budget_status()
     if not status:
@@ -1866,6 +1927,13 @@ def collect_ops_findings(
         token=token,
         recent_agent_failures=eng_failures,
     )
+    waste_findings = check_automation_waste(
+        open_prs=open_prs,
+        tasks_path=tasks_path,
+        repo=repo,
+        token=token,
+        recent_agent_failures=eng_failures,
+    )
     workflow_findings, workflow_checks = check_workflow_freshness(
         repo=repo,
         token=token,
@@ -1874,6 +1942,7 @@ def collect_ops_findings(
     findings.extend(workflow_findings)
     findings.extend(engineering_findings)
     findings.extend(sync_findings)
+    findings.extend(waste_findings)
     return findings, queue_status, workflow_checks
 
 
@@ -1976,6 +2045,8 @@ def run_ops_monitor(
 
     try:
         from value_investor.project_traffic import (
+            ACTION_STOP_AUTOMATION_WASTE,
+            AUTOMATION_WASTE_REBURN_TITLE,
             QUEUE_MERGE_SYNC_FINDING_TITLE,
             run_project_traffic,
         )
@@ -1987,6 +2058,7 @@ def run_ops_monitor(
             token=token,
             apply=apply_fixes,
             write_digest=True,
+            recent_agent_failures=eng_failures,
         )
         if traffic_report.queue_sync_fixed_ids and not traffic_report.queue_sync_remaining_ids:
             action = "project-traffic PM remediated queue merge sync: " + ", ".join(
@@ -2031,6 +2103,26 @@ def run_ops_monitor(
                         ),
                     )
                 )
+        waste_actions = [
+            a
+            for a in traffic_report.actions
+            if a.kind == ACTION_STOP_AUTOMATION_WASTE and (a.applied or apply_fixes)
+        ]
+        if waste_actions:
+            detail = "; ".join(a.detail for a in waste_actions)
+            auto_fixes.append(
+                {
+                    "action": "traffic_stop_automation_waste",
+                    "detail": detail,
+                }
+            )
+            for finding in findings:
+                if finding.title.startswith("Automation waste:") or finding.title in {
+                    AUTOMATION_WASTE_REBURN_TITLE,
+                }:
+                    if finding.auto_fixable:
+                        finding.fixed = True
+                        finding.action_taken = detail
         if traffic_report.pause_active:
             findings.append(
                 OpsFinding(
@@ -2040,7 +2132,8 @@ def run_ops_monitor(
                     summary=(
                         f"{len(traffic_report.stuck_prs)} stuck PR(s); "
                         f"reasons={traffic_report.pause_reasons or ['stuck_prs']}. "
-                        "New engineering-agent dispatch is held until CI/conflicts clear."
+                        "New engineering-agent dispatch is held until CI/conflicts "
+                        "clear (or automation-waste hold is lifted)."
                     ),
                     auto_fixable=False,
                 )
@@ -2050,6 +2143,7 @@ def run_ops_monitor(
                 "pause_dispatch",
                 "resume_dispatch",
                 "remediate_queue_merge_sync",
+                "stop_automation_waste",
             }:
                 auto_fixes.append(
                     {
