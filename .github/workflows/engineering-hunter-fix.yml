@@ -173,6 +173,8 @@ jobs:
           fi
       # Commit before verify: hunter-merge-gate reads committed HEAD. Stage only
       # hunter-allowlisted paths so ops JSON churn cannot pollute the PR.
+      # Push with WORKFLOW_DISPATCH_PAT when set so pull_request synchronize is not
+      # attributed to github-actions[bot] (June 2026 bot-update gate → action_required).
       - name: Commit and push hunter-fix
         if: >-
           steps.branch.outputs.branch != ''
@@ -181,8 +183,17 @@ jobs:
         id: commit
         env:
           BRANCH: ${{ steps.branch.outputs.branch }}
+          WORKFLOW_DISPATCH_PAT: ${{ secrets.WORKFLOW_DISPATCH_PAT }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          if [ -n "${WORKFLOW_DISPATCH_PAT:-}" ]; then
+            export GH_TOKEN="$WORKFLOW_DISPATCH_PAT"
+          else
+            export GH_TOKEN="$GITHUB_TOKEN"
+            echo "::warning::WORKFLOW_DISPATCH_PAT not set — hunter-fix push uses GITHUB_TOKEN; CI may require manual Approve and run workflows."
+          fi
+          gh auth setup-git
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           python3 - <<'PY'
