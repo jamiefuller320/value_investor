@@ -1,89 +1,13 @@
 # Beach Energy Limited (BPT.AX) — Research memo
 
-_Version 1 · Updated 2026-09-08T16:45:30.336894+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-18T17:27:52.544546+00:00 · Mode: structured_verdict_
 
-## EXECUTIVE SUMMARY
-Beach Energy is a mid-cap Australian oil and gas producer pivoting from a heavy growth-investment phase (Waitsia, Equinox decommissioning) towards a lower-cost, gas-weighted base business supplying roughly 19% of East Coast domestic gas demand. FY26 delivered a statutory return to profit and a strengthened balance sheet (net gearing 10.6%, $983m liquidity), which supports the quantitative screen’s **buy** signal, though the screen carries no populated model metrics (data quality score 0.0). The valuation hook is a cyclically depressed equity trading off multi-year lows against recovering earnings, sub-US$30/bbl free-cash-flow breakeven, and optionality from Perth Basin gas and Cooper Basin oil. The central debate is whether FY26’s statutory profit rebound ($281m NPAT) masks a deteriorating underlying trend (underlying NPAT down 21% to $355m, 2P reserves down 10% to 156 MMboe) and whether Australian gas policy (Domestic Gas Reservation Scheme) and commodity volatility will cap re-rating.
+_Phase B structured verdict (essay sections omitted on scheduled path)._
 
-## INVESTMENT THESIS
-The quantitative screen rates BPT.AX as **buy**, but the snapshot is thin: zero models passed, no composite score, no key metrics, and timing labelled “insufficient_data.” The qualitative case nonetheless aligns with a value-oriented entry: Beach has completed its largest-ever project (Waitsia Gas Plant at 250 TJ/day), returned to statutory profitability after two loss years, and holds net debt of ~$387m against $3.3bn equity with net gearing well below its 15% target.
-
-For a value investor, the appeal rests on four pillars visible in primary filings. First, **asset-backed cash generation**: FY26 operating cash flow was $890m (FY25: $1,133m) with pre-growth free cash flow of $458m and all-in FCF of $146m during peak growth capex ($699m incurred). Management targets FCF breakeven below US$30/bbl Brent. Second, **commercial execution**: average realised gas price rose 7% to $11.5/GJ; six Waitsia LNG cargoes contributed $343m revenue. Third, **balance-sheet optionality**: $983m available liquidity after refinancing; capital redirected from the VIC/L35 divestiture (> $500m near-term capex released). Fourth, **operating discipline**: field opex fell 3% to $244m despite Waitsia start-up; Western Flank drilling achieved 100% success on nine wells.
-
-The screen’s buy signal is plausible on asset coverage and earnings normalisation, but business quality is mixed: underlying earnings are declining, reserves are shrinking faster than production, and the dividend was reset sharply (3.0 cps full-year vs prior higher distributions). This is a **cyclical value recovery** play, not a high-quality compounder.
-
-## FINANCIAL REVIEW
-**Primary source:** ASX FY26 full-year results (6 August 2026), FY26 results presentation, and 2026 Annual Report. **Interim gap:** No usable Beach Energy half-year or H1 filing body is present in the index. The indexed “Half-year Report” (Investegate, July 2026) is Bridgepoint Group (UK PE), not Beach. The FY26 Q4 Activities Report (22 July 2026) is indexed as interim but its body extract contains only Market Index page chrome — no operational or financial data. Interim trend analysis therefore relies on annual comparatives and the Q4 filing gap is flagged.
-
-**FY26 annual results (year ended 30 June 2026)**
-
-| Metric | FY26 | FY25 | Change |
-|--------|------|------|--------|
-| Production | 19.4 MMboe | 19.7 MMboe | (2%) |
-| Sales revenue | $1,801m | $1,997m | (10%) |
-| Underlying EBITDA | $1,040m | $1,136m | (8%) |
-| Underlying NPAT | $355m | $451m | (21%) |
-| Statutory NPAT | $281m | ($44m) | Return to profit |
-| Operating cash flow | $890m | $1,133m | (21%) |
-| Pre-growth FCF | $458m | $657m | (31%) |
-| All-in FCF | $146m | $329m | (56%) |
-| Net debt | $387m | $368m | +5% |
-| Net gearing | 10.6% | — | Below 15% target |
-| Available liquidity | $983m | — | +51% |
-| Dividends declared | 3.0 cps | — | Final 2.0 cps |
-| 2P reserves | 156 MMboe | 173 MMboe | (10%) |
-
-Sources: FY26 results presentation and Annual Report financial review.
-
-**Statutory vs underlying:** Statutory NPAT of $281.4m (Annual Report cash-flow reconciliation; aligns with Yahoo statutory $281.4m) compares with underlying NPAT of $355m. The FY25 statutory loss of $43.8m included a $6.1m asset impairment (Yahoo, not repeated in FY26 filing bodies). FY24 statutory loss was $475.3m including an $805.2m impairment (Yahoo fallback — not in current annual body extracts).
-
-**Cash flow and capital:** Capex incurred $699m (FY27 guidance $600–700m). Restoration/decommissioning payments rose sharply (presentation: restoration payments up 166% to $125m reflecting four offshore well abandonments). Income tax paid $180m (up 176%, reflecting strong FY25 profit). Cash at year-end $213.0m (Annual Report); interest-bearing liabilities $596.7m (Note 16 extract).
-
-**Balance sheet (FY26):** Annual Report confirms going-concern basis. Long-term restoration provisions are material (non-current provisions $874.8m per Yahoo balance sheet; filing bodies reference $17.2m additional restoration expenditure in FY26 from weather delays). No impairment charge recorded in FY26; petroleum assets of $3,891.8m tested with no write-down (auditor KAM). **Yahoo fallback for consolidated totals not in filing extract tables:** total assets $5,408m, shareholders’ equity $3,274m, net debt $384m — consistent with filing net debt ~$387m.
-
-**Multi-year trend:** Revenue peaked at $2,106m in FY25 (Yahoo) before falling to $1,921m in FY26. Underlying profitability has declined two consecutive years ($451m → $355m) despite statutory profit recovery. Free cash flow has compressed as Waitsia and Equinox consumed capital. Reserve life is shortening: production of 19.4 MMboe against 156 MMboe 2P implies ~8 years at current rates, before revisions.
-
-**FY27 guidance (results announcement):** Production 19.5–23.0 MMboe; capex $600–700m; D&A $500–550m.
-
-## RISKS AND RED FLAGS
-**Regulatory:** The Chair’s letter and MD commentary identify the proposed Domestic Gas Reservation Scheme as the “clearest example” of policy uncertainty, arguing a forced 20%-of-LNG-export domestic supply obligation would weaken price signals and deter new supply. Beach supplies ~19% of East Coast gas — direct exposure to East Coast gas market regulation.
-
-**Cyclical:** Revenue fell 10% on lower volumes (Cooper Basin flooding, Otway decline) and lower LNG pricing despite higher gas realisations. Commodity price sensitivity is explicit: management estimates +$65–85m FCF for every US$10/bbl Brent move above breakeven.
-
-**Reserves and asset quality:** 2P reserves declined 17 MMboe net of production; 3P fell to 227 MMboe. Reserve downgrade signals portfolio maturity unless exploration (Western Flank, Taroom Trough, offshore Otway) replaces depletion.
-
-**Operational:** Waitsia reached nameplate 250 TJ/day but management notes “performance issues” requiring shutdown intervention. Cooper Basin flooding caused Q3 drilling delays. Weather-related cost overruns added $17.2m restoration, $22.6m capex, and $9.7m exploration expense in FY26.
-
-**Leverage and capital allocation:** Net gearing is low (10.6%), but gross interest-bearing debt rose to $596.7m and FY27 capex guidance remains elevated ($600–700m). All-in FCF of $146m covers only a fraction of capex plus dividends; external funding capacity matters.
-
-**Governance:** Related-party transactions disclosed (gas sales to Boral, equipment hire, SGH consultancy fees linked to director Ryan Stokes). Not flagged as material but worth monitoring.
-
-**Decommissioning:** Equinox rig campaign nearing completion reduces near-term offshore abandonment obligations, but restoration provisions (~$875m+ long-term) represent a long-dated liability sensitive to discount rates and regulatory change (Annual Report notes energy transition may accelerate restoration timing).
-
-**Dividend sustainability:** Full-year dividend reset to 3.0 cps (fully franked) reflects amended capital management framework prioritising balance sheet and growth over distributions — a negative signal for income-focused value screens.
-
-**Going concern:** Annual Report explicitly states accounts prepared on a going-concern basis; no going-concern qualification identified.
-
-**Filing contamination:** Multiple indexed “BPT” filings (Investegate RNS) are Bridgepoint Group (UK), not Beach Energy — verify ticker before relying on any non-ASX source.
-
-RiskTags: regulatory, cyclical, governance, leverage, liquidity, competitive, other
-RiskTags: regulatory, cyclical, governance, leverage, liquidity, competitive, other
-
-## NEWS HIGHLIGHTS
-Coverage over the past year is voluminous but heavily skewed toward Kalkine Media commentary rather than primary sell-side or company releases. Material items:
-
-- **FY26 results (5–7 August 2026):** Statutory profit rebound to $281m on $1.8bn revenue; underlying NPAT $355m; dividend 3.0 cps. Headlines include *“Beach Energy (ASX:BPT) Profit Rebounds 742%, But Underlying Earnings Face Pressure”* (Kalkine, 6 Aug 2026) and *“Return To Profit And Dividend Cut Could Be A Game Changer”* (simplywall.st, 19 Aug 2026).
-- **Waitsia ramp-up:** Repeated coverage of 250 TJ/day nameplate and LNG export (e.g. *“Is Beach Energy (ASX:BPT) Ready As Waitsia Ramps Up?”* Kalkine, 8 Sep 2026).
-- **VIC/L35 divestiture (May 2026):** Beach sold 60% operated stake in Otway VIC/L35; Amplitude Energy acquired 50% of Artisan field (*“Beach Energy to divest 60% operated stake in Otway VIC/L35”*, Yahoo Finance, 26 May 2026).
-- **Moomba Central Optimisation (March 2026):** Santos and Beach approved US$426m Cooper Basin compression project; Beach share ~A$250m (*“Santos, Beach Energy approve $426m MCO project”*, Yahoo Finance, 9 Mar 2026).
-- **Share price weakness:** *“Beach Energy Shares Hit Five Year Low”* (thebull.com.au, 16 Jun 2026) and *“Fall To Lowest Point In Years”* (8 Jan 2026).
-- **Cooper Basin exploration:** Oil discoveries at Stunsail West and Kangaroo field communication (Yahoo, May 2026).
-- **Sector context:** Santos 10-year South Australia gas reserve deal (Yahoo, 29 Jun 2026) — competitive/supply backdrop for East Coast gas.
-
-No material M&A of Beach itself; strategy is portfolio optimisation (VIC/L35 sale) and organic drilling. News is **not thin** in volume but **low in analytical depth** — mostly price commentary and dividend yield articles rather than regulatory or operational primary sources.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.65
-Rationale: Deep research partially confirms the screen’s buy case via statutory profit recovery, low gearing, and FCF breakeven discipline, but weakens conviction on underlying earnings decline, reserve shrinkage, dividend reset, and unresolved Australian gas policy risk.
+Rationale: FY26 ASX filings show earnings recovery, ~10.6% net gearing and positive free cash flow, which supports the buy screen, but lower 2P reserves and domestic gas policy uncertainty limit conviction.
+RiskTags: cyclical, regulatory, other
