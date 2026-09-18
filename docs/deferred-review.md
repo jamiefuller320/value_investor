@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-18T16:37:21+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-18T17:15:28+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -181,6 +181,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N131 | **Do not auto-retarget open paper stops/targets from weekly screen refreshes** | Charts recompute current trade_plan each week but chart outcome scoring freezes initial levels. Paper holdings keep entry-attached stop/target except momentum-grace trailing. Do not silently rewrite open-book targets from every screen pass until post-exit and chart-outcome evidence say that helps after costs. | exit_shadow early_exit vs good_exit balance is stable and chart giveback/well_timed cohorts show whether sticky vs refreshed targets would have mattered |
 | N132 | **Do not widen FTSE news/filing ingest to full hold/avoid universe yet** | Full-universe continuous news+filing deepen for observational pre-signal analysis would starve buy-tier scan-then-target and P1 live-path work. Keep retrospective backfill on entry plus buy∪boundary observe panels until those prove useful. | buy∪boundary news_event_journal and phrase-trajectory panels show stable out-of-sample usefulness and GHA/ingest capacity has clear spare after buy-tier body drain |
 | N133 | **PM auto-authors workflow_failure code patches** | Do not let project-traffic invent/merge code fixes for failing workflows. Keep supervised engineering-agent for CurlError/timeout root causes; PM only cancels recovered workflow_failure rows and remediates queue bookkeeping. | After cancel_recovered_workflow_failure has proven stable in production and L393 EOD PM scope is revisited |
+| N134 | **Do not change primary exit policy from weekend poor-exit intuition** | EOW read that obviously poor exits hurt the 3-slot books is directionally right (archive hold-recovery ~73%, swap replacement often wins), but live exit_shadow still has 0 closed exits — no grace/rotation split to act on. Keep buffers; do not retune exits or decision-review --apply from the qualitative read. | learning_tracks_exit_shadow shows >=10 closed exits on ai_judgment with a stable grace vs screen_rotation split; then human reviews before any knob change |
+| N135 | **Do not execute primary or epoch-0 DCA from EOW cadence agreement alone** | dca_4x_weekly remains the leading overlay cadence and will likely help entry drag, but adoption plan still needs ai_judgment first_entry>=3 (now 2) before any paper execute, and execute is graduated_allocation-only then; primary stays blocked while beat_market is false. Ack is not adopt. | entry_dca_adoption_plan out_of_sample_first_entry ready AND paper_execute_graduated stage unlocked |
 
 ---
 
