@@ -9,6 +9,9 @@ from typing import Any
 import pandas as pd
 
 from value_investor.research.verdict import compute_adjusted_signal
+from value_investor.scoring.dividend_sustainability_overlay import (
+    enrich_screening_snapshot_dividend_dual_fcf_research_prompts,
+)
 from value_investor.scoring.fcf import (
     _float_or_none,
     advertising_revenue_share_for_ticker,
@@ -249,6 +252,10 @@ def write_screening_snapshot(sources_dir: Path, snapshot: dict[str, Any]) -> Pat
     )
     payload = enforce_fcf_basis_in_snapshot(payload, output_dir=output_dir)
     payload = enrich_screening_snapshot_fcf_dividend_coverage(payload, output_dir=output_dir)
+    payload = enrich_screening_snapshot_dividend_dual_fcf_research_prompts(
+        payload,
+        output_dir=output_dir,
+    )
     write_json(
         path,
         payload,
