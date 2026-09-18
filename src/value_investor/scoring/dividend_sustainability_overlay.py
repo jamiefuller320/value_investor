@@ -8,7 +8,10 @@ from typing import Any
 import pandas as pd
 
 from value_investor.scoring.cash_conversion_overlay import dividend_screen_passed
-from value_investor.scoring.dividend_yield_overlay import high_dividend_screen_passed
+from value_investor.scoring.dividend_yield_overlay import (
+    dividend_yield_family_fcf_basis_suppressed,
+    high_dividend_screen_passed,
+)
 from value_investor.scoring.fcf import resolve_free_cashflow
 from value_investor.scoring.healthcare_overlay import piotroski_score_for_ticker
 
@@ -114,6 +117,14 @@ def cap_conviction_for_dividend_sustainability_overlay(conviction_score: float) 
     return max(0.0, float(conviction_score) * DIVIDEND_SUSTAINABILITY_CONVICTION_MULTIPLIER)
 
 
+def _row_as_series(row: pd.Series | dict[str, Any] | None) -> pd.Series:
+    if row is None:
+        return pd.Series(dtype=object)
+    if isinstance(row, pd.Series):
+        return row
+    return pd.Series(row)
+
+
 def _parse_research_prompts(raw: Any) -> list[str]:
     if raw is None or (isinstance(raw, float) and pd.isna(raw)):
         return []
@@ -127,14 +138,25 @@ def dividend_family_passed_for_dual_fcf_research_prompt(
     *,
     passed_families: Any = None,
     ticker_models: pd.DataFrame,
+    row: pd.Series | dict[str, Any] | None = None,
+    output_dir: Path | None = None,
 ) -> bool:
     """True when dividend-family screens pass (model rows or ``passed_families`` text)."""
+    series = _row_as_series(row)
+    ticker = str(series.get("ticker") or "").strip().upper()
+    if dividend_yield_family_fcf_basis_suppressed(
+        ticker=ticker,
+        row=series if not series.empty else {"passed_families": passed_families},
+        output_dir=output_dir,
+    ):
+        return False
+    if dividend_screen_passed(ticker_models) or high_dividend_screen_passed(ticker_models):
+        return True
     if passed_families is not None and not (
         isinstance(passed_families, float) and pd.isna(passed_families)
     ):
-        if "dividend" in str(passed_families):
-            return True
-    return dividend_screen_passed(ticker_models) or high_dividend_screen_passed(ticker_models)
+        return "dividend" in str(passed_families)
+    return False
 
 
 def merge_dual_fcf_dividend_cover_research_prompts(
@@ -189,6 +211,8 @@ def enrich_screening_snapshot_dividend_dual_fcf_research_prompts(
     dividend_passed = dividend_family_passed_for_dual_fcf_research_prompt(
         passed_families=updated.get("passed_families"),
         ticker_models=ticker_models,
+        row=updated,
+        output_dir=output_dir,
     )
     if not dividend_passed:
         return updated
@@ -239,6 +263,8 @@ def enrich_signals_with_dividend_dual_fcf_research_prompts(
         dividend_passed = dividend_family_passed_for_dual_fcf_research_prompt(
             passed_families=row.get("passed_families"),
             ticker_models=ticker_models,
+            row=row,
+            output_dir=output_dir,
         )
         net_raw = row.get("fcf_dividend_coverage_net")
         fcf_dividend_coverage_net = (
