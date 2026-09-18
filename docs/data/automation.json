@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-18T22:16:30.338589+00:00",
+  "generated_at": "2026-09-18T23:16:27.363828+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1153,16 +1153,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-18T22:09:36.807190+00:00",
-    "queue_ui_updated_at": "2026-09-18T22:16:30.245553+00:00",
-    "task_count": 54,
+    "compiled_at": "2026-09-18T23:16:25.344671+00:00",
+    "queue_ui_updated_at": "2026-09-18T23:16:27.288655+00:00",
+    "task_count": 56,
     "status": {
       "open_count": 3,
       "pr_open_count": 0,
-      "parked_count": 12,
+      "parked_count": 14,
       "merged_count": 38,
       "failed_count": 0,
-      "next_task_id": "eng-20260918-21",
+      "next_task_id": "eng-20260918-22",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1171,9 +1171,9 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260918-21",
+        "id": "eng-20260918-22",
         "area": "ingest",
-        "title": "Full-text extract of annual report note 19 (cash-in-transit restatement) from ME-Group-Annual-Report-2025.pdf—not addressed by CH refetch of 2019 parent interim",
+        "title": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
         "priority": "medium",
         "priority_score": 40.0,
         "status": "open",
@@ -1187,9 +1187,9 @@
         "clash_scan": "full"
       },
       {
-        "id": "eng-20260918-17",
+        "id": "eng-20260918-23",
         "area": "ingest",
-        "title": "Do not tag AGM notices/results, Payments to Governments, prospectuses, mineral-resources updates, Tomago/Boyne operating RNSs, or third-party SVM “Rio collab” i",
+        "title": "Replace or supplement garbled CH OCR (`ch_04967001_MzUyMjc5MjMzMmFdaXF6a2N4.txt`) with FCA NSM Annual Report 2025 PDF/iXBRL extract so Risks, APMs, and FCF foot",
         "priority": "medium",
         "priority_score": 40.0,
         "status": "open",
@@ -1317,6 +1317,18 @@
         "branch_name": null
       },
       {
+        "id": "eng-20260918-21",
+        "area": "ingest",
+        "title": "Full-text extract of annual report note 19 (cash-in-transit restatement) from ME-Group-Annual-Report-2025.pdf—not addressed by CH refetch of 2019 parent interim",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
         "id": "eng-20260918-20",
         "area": "ingest",
         "title": "Populate `ir_presentation_metrics.json` from `ir_0d388cd522a7cf4c.txt`.",
@@ -1344,6 +1356,18 @@
         "id": "eng-20260918-18",
         "area": "ingest",
         "title": "Parse IR results-deck cash-bridge slides into `ir_presentation_metrics.json`; refetch did not add FCF lines and H1 2026 deck bridge remains missing.",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260918-17",
+        "area": "ingest",
+        "title": "Do not tag AGM notices/results, Payments to Governments, prospectuses, mineral-resources updates, Tomago/Boyne operating RNSs, or third-party SVM “Rio collab” i",
         "priority": "medium",
         "priority_score": 40.0,
         "status": "parked",
@@ -1646,7 +1670,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-18T22:16:30.338589+00:00",
+    "generated_at": "2026-09-18T23:16:27.363828+00:00",
     "overall": "active",
     "headline": "Agent lane active.",
     "merge_lane": {
@@ -1667,19 +1691,19 @@
       "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
-      "attention_parked_count": 5,
+      "attention_parked_count": 7,
       "open_count": 3,
       "pr_open_count": 0,
       "dispatch_eligible_count": 3,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260918-21",
+      "next_task_id": "eng-20260918-22",
       "reason": "queue ready — dispatch next open task",
       "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
-      "attention_parked_count": 5,
-      "evaluated_at": "2026-09-18T22:16:25.767986+00:00"
+      "attention_parked_count": 7,
+      "evaluated_at": "2026-09-18T23:16:22.301291+00:00"
     },
     "traffic_control": {
       "pause_active": false,
