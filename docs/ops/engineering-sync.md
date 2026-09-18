@@ -203,12 +203,12 @@ ftse-engineering draft-library-ladder --library-root docs/data/library --json
 
 ## Engineering PR CI + email
 
-GitHub often blocks CI on PRs opened by `GITHUB_TOKEN` until a human approves the
-workflow run (`action_required`, 0 jobs). Two layers address this:
+GitHub often blocks CI on PRs opened or updated by `GITHUB_TOKEN` until a human
+approves the workflow run (`action_required`, 0 jobs). Two layers address this:
 
 | Layer | Mechanism |
 |-------|-----------|
-| **Primary** | `engineering-agent.yml` uses `WORKFLOW_DISPATCH_PAT` for `git push` + `gh pr create` so CI starts without approval |
+| **Primary** | `engineering-agent.yml` uses `WORKFLOW_DISPATCH_PAT` for `git push` + `gh pr create` so CI starts without approval. `engineering-hunter-fix.yml` and `engineering-conflict-resolve.yml` use the same PAT for tip pushes so `synchronize` does not hit the June-2026 bot-update gate |
 | **Backup** | SMTP email via `ftse-engineering notify-pr-open` when a PR opens (includes CI approval hint when PAT was not used) |
 
 ### PAT setup (one-time)
