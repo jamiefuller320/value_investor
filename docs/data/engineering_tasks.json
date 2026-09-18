@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-17T20:33:42.189790+00:00",
+  "compiled_at": "2026-09-18T04:48:30.749792+00:00",
   "run_at": null,
-  "task_count": 33,
+  "task_count": 34,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -638,6 +638,57 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
+      "id": "eng-20260918-01",
+      "area": "scoring",
+      "title": "dividend: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; kee",
+      "summary": "First-principle slice 2/2 of: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_defi. topics=dividend paths=4",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "JSG.L"
+        ],
+        "recorded_at": "2026-09-04T19:59:54.897164+00:00",
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "topics=dividend paths=4",
+        "narrow_parent_title": "Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_defi",
+        "narrow_cohesion_bypass": false,
+        "narrow_split_group_id": "01f9a7ee46f6",
+        "narrow_split_index": 2,
+        "narrow_split_count": 2,
+        "narrow_topics": [
+          "dividend"
+        ],
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/scoring/dividend_sustainability_overlay.py",
+        "src/value_investor/scoring/dividend_yield_overlay.py",
+        "src/value_investor/scoring/snapshot.py",
+        "tests/test_pipeline.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": true,
+      "status": "open"
+    },
+    {
       "id": "eng-20260917-10",
       "area": "scoring",
       "title": "fcf: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf",
@@ -665,7 +716,8 @@
         "origin_priority_score": 43.0,
         "preferred_merge_class": "compile_cap_drain",
         "doc": "docs/ops/engineering-sync.md",
-        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Export or overlay behaviour is covered by a unit test",
@@ -690,11 +742,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": true,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260917-10.md",
       "branch_name": "cursor/eng-20260917-10-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-18T04:17:33.122504+00:00"
+      "completed_at": "2026-09-18T04:17:33.122504+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/697",
+      "pr_number": 697,
+      "merged_at": "2026-09-18T04:48:29.018731+00:00"
     },
     {
       "id": "eng-20260917-08",
