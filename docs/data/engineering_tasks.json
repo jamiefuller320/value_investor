@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-18T15:16:30.260964+00:00",
+  "compiled_at": "2026-09-18T15:55:00.901494+00:00",
   "run_at": null,
-  "task_count": 47,
+  "task_count": 48,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2206,10 +2206,10 @@
       "merged_at": "2026-09-15T15:05:07.590899+00:00"
     },
     {
-      "id": "eng-20260918-14",
+      "id": "eng-20260918-15",
       "area": "ingest",
-      "title": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading",
-      "summary": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading update, 31 July buyback RNS, or 2026/2032 notes consent pack. Naive first/last-of-period selection would assign Directorate Change or Share Repurchase (both tagged annual) or IR FY decks tagged interim. No task type exists to reconcile screen/Yahoo FCF bases or to mark continuing versus discontinued perimeter. (narrow_cohesion_bypass: no ",
+      "title": "The screen still emits strong_buy on the pre-deal consolidated group (advertising yield, company-adjusted FCF, P/E 11.6) after a announced carve-out that change",
+      "summary": "The screen still emits strong_buy on the pre-deal consolidated group (advertising yield, company-adjusted FCF, P/E 11.6) after a announced carve-out that changes the equity’s cash-flow identity. Overlays that should have fired did not: fcf_basis_overlay=false despite filing £148m vs TTM £212m vs adj £187m; cyclical_exposure_detected=false on an ad-funded broadcaster; interim_quality_overlay=false despite H1 existing and Yahoo quarterly statements empty. Dividend-family pass versus filing FCF cov",
       "priority": "medium",
       "priority_score": 40.0,
       "source": "compile_cap_drain",
@@ -2217,10 +2217,10 @@
         "tickers": [
           "ITV.L"
         ],
-        "recorded_at": "2026-09-04T16:48:11.731035+00:00",
+        "recorded_at": "2026-09-04T16:48:11.731052+00:00",
         "narrow_scope_mode": "cohesion_bypass",
         "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
-        "narrow_parent_title": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading ",
+        "narrow_parent_title": "The screen still emits strong_buy on the pre-deal consolidated group (advertising yield, company-adjusted FCF, P/E 11.6) after a announced carve-out that change",
         "narrow_cohesion_bypass": true,
         "compile_cap_drain": true,
         "origin_source": "research_model_suggestions",
@@ -2254,11 +2254,67 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "open"
+    },
+    {
+      "id": "eng-20260918-14",
+      "area": "ingest",
+      "title": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading",
+      "summary": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading update, 31 July buyback RNS, or 2026/2032 notes consent pack. Naive first/last-of-period selection would assign Directorate Change or Share Repurchase (both tagged annual) or IR FY decks tagged interim. No task type exists to reconcile screen/Yahoo FCF bases or to mark continuing versus discontinued perimeter. (narrow_cohesion_bypass: no ",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "ITV.L"
+        ],
+        "recorded_at": "2026-09-04T16:48:11.731035+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading ",
+        "narrow_cohesion_bypass": true,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "merge_class": "compile_cap_drain"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for ITV.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260918-14.md",
       "branch_name": "cursor/eng-20260918-14-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-18T15:27:55.283971+00:00"
+      "completed_at": "2026-09-18T15:27:55.283971+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/714",
+      "pr_number": 714,
+      "merged_at": "2026-09-18T15:54:58.920701+00:00"
     },
     {
       "id": "eng-20260918-13",
