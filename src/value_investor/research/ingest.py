@@ -559,6 +559,43 @@ def sync_snapshot_fcf_screen_ttm_verification(
     return updated
 
 
+def attach_filing_interim_financials(
+    financials: dict[str, Any],
+    *,
+    filings_dir: Path,
+    ticker: str,
+    sources_dir: Path,
+) -> dict[str, Any]:
+    """
+    Merge filing-derived interim/trading extracts when Yahoo quarterlies are empty.
+
+    UK half-year reporters (e.g. ITV.L) often have blank yfinance quarterly series;
+    statutory H1 bodies still carry FCF, EPS, and ad-revenue cues for overlays.
+    """
+    from value_investor.research.filings import extract_filing_interim_financials
+
+    updated = dict(financials)
+    quarterly_empty = not quarterly_cashflow_has_usable_series(
+        updated.get("quarterly_cashflow") or {}
+    ) and not quarterly_income_has_usable_series(updated.get("quarterly_income") or {})
+    if not quarterly_empty:
+        return updated
+
+    filing_interim = extract_filing_interim_financials(
+        filings_dir,
+        ticker,
+        sources_dir=sources_dir,
+    )
+    if (
+        filing_interim.get("interim_highlights")
+        or filing_interim.get("trading_update_advertising")
+        or filing_interim.get("corporate_actions")
+    ):
+        updated["filing_interim_financials"] = filing_interim
+        updated["filing_interim_financials_source"] = "filings_bodies"
+    return updated
+
+
 def enrich_screening_snapshot_with_yahoo_quarterly(
     snapshot: dict[str, Any],
     financials: dict[str, Any],
@@ -1017,6 +1054,24 @@ def ingest_research_sources(
                         )
                     except (OSError, ValueError, TypeError):
                         pass
+
+        if (
+            include_filings
+            and int((filings_meta.get("filings_summary") or {}).get("with_body") or 0) > 0
+        ):
+            financials = attach_filing_interim_financials(
+                financials,
+                filings_dir=sources_dir / "filings",
+                ticker=ticker,
+                sources_dir=sources_dir,
+            )
+            write_json(financials_path, financials, compact=True, compress=False)
+            write_json(
+                snapshot_path,
+                enrich_screening_snapshot_with_yahoo_quarterly(screening_snapshot, financials),
+                compact=True,
+                compress=False,
+            )
 
     market_s = str(market or "").strip().lower() or None
     macro_meta: dict[str, Any] = {"status": "skipped", "reason": "no_market"}
