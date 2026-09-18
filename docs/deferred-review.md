@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-18T12:20:39+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-18T16:37:21+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -240,6 +240,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L384 | **Rank DCA cadences only on completed windows** | This week's 22 first-entry scores are all sold_before_window with dca_4x_weekly filling 1 of 4 tranches. Leftover cash then mechanically beats lump-sum on short holds. Split window_elapsed vs sold_before_window (or require tranches_filled==target) before treating 4x weekly as a completed-cadence result. | FTSE buy_tier_level or live books have window_elapsed first-entry scores, or Sunday analysis next cites leading_cadence without noting incomplete tranches |
 | L405 | **Market-specific fair RT for trade-plan target floors** | Trade-plan take-profit floors default to Suite A 6% round-trip + 4% net edge. Optionally bind assumed_round_trip_cost_pct from ftse-trading-costs per market so Suite B / shards use fair UK/US/EU friction instead of stress. | Suite B fair-cost books are the primary lens for chart/decision-pack target quality, or a saved TradePlanConfig is wired per market shard |
 | L401 | **Pre-signal drop and recovery-to-prior-high observe metric** | Many buy-tier names arrive after a large drawdown. Observe whether price recovers toward the pre-drop local high (not only back through the frozen entry), and how often that path clears the cost-aware take-profit. Distinct from L244 entry recovery and from paper hold-recovery. | chart_outcome_review has several Sunday refreshes and drop-to-entry recovery (L244) is either live or still clearly insufficient for prior-high questions |
+| L419 | **Shared NaN-safe overlay text helper for sector/name fields** | UK heavyside now coerces float NaN sector/name; other overlays mostly use str() or truthiness checks. A shared helper would prevent the next (x or '').lower() crash on pandas NaN. | Another overlay AttributeError on float/NaN sector or name in CI or ingest logs |
 
 ### Universe & data
 
@@ -473,6 +474,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L410 | **SIGTERM flush ingest_loop.json on outer wall-clock kill** | Outer timeout 75m only helps commit/chain if JSON already exists. Add signal handler or finally-block checkpoint so mid-ticker kills still emit partial JSON. | If ingest-loop still fails with exit 124 and empty /tmp/ingest_loop.json after discovery budget lands |
 | L416 | **Migrate remaining git-auto-commit workflows to gha_commit_artifacts** | library-epoch0-weekday now uses L348 retry; other workflows still use git-auto-commit + optional pull --rebase and can fail the same main race. | Another weekday/ingest auto-commit job fails with cannot lock ref or fetch first on main |
 | L418 | **PM auto-rerun for non-eng Cursor waste loops** | cursor_workflow_fail_loop signals are digest-only today; extend project-traffic v1 only when a deterministic same-day skip / rerun path exists per workflow (analysis-review, paper-learning-review, etc.). | After eng-agent reburn stop has been stable for a week and a second Cursor workflow shows the same unresolved fail-loop pattern |
+| L420 | **Hunter-fix PAT push still action_required (checkout extraheader)** | Even with WORKFLOW_DISPATCH_PAT set and gh auth setup-git, #715 hunter-fix tip push still created pull_request CI in action_required (triggering_actor github-actions[bot]). Likely actions/checkout http.extraheader Authorization bearer GITHUB_TOKEN wins over gh credentials. Unset extraheader or push via x-access-token URL before git push. | Next hunter-fix tip push lands action_required despite PAT secret present in the commit step env |
 
 ---
 

@@ -287,7 +287,7 @@ failed log and take a guarded next step (no blind infinite reruns).
 | Responder | Trigger | Actions |
 |-----------|---------|---------|
 | **Library Ladder Responder** | `library-grow.yml` failure | Classify log → **one guarded rerun per ~20h** when partial success / transient / fixed corrupt-json; else draft engineering task |
-| **Workflow Failure Responder** | `ingest-loop`, `email-report`, `analysis-review`, `library-model-review`, `data-backup`, `paper-auto`, `horizon-scan`, `automation-orchestrator` failures | Match log signature → draft scoped `workflow_failure` engineering task |
+| **Workflow Failure Responder** | `ingest-loop`, `euro-ingest-loop`, `library-ingest-sprint` / `-2`, `library-ingest-maintenance`, `email-report`, `analysis-review`, `library-model-review`, `data-backup`, `paper-auto`, `horizon-scan`, `automation-orchestrator` failures | Match log signature → draft scoped `workflow_failure` engineering task |
 | **CI Fix Responder** | `CI` / `CI Main Nightly` pytest failures | Existing pytest-scoped auto-merge path |
 
 Ledger: `docs/data/library/ladder_responder_log.json` records ladder reruns for

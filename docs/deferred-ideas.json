@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-18T12:20:39+00:00",
+  "updated_at": "2026-09-18T16:37:21+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9336,6 +9336,41 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0b307-4a3d-7d8a-8dcf-d48bf27e3f66",
       "added_at": "2026-09-18T05:57:58+00:00"
+    },
+    {
+      "id": "L419",
+      "category": "later",
+      "section": "learning",
+      "title": "Shared NaN-safe overlay text helper for sector/name fields",
+      "summary": "UK heavyside now coerces float NaN sector/name; other overlays mostly use str() or truthiness checks. A shared helper would prevent the next (x or '').lower() crash on pandas NaN.",
+      "revisit_when": "Another overlay AttributeError on float/NaN sector or name in CI or ingest logs",
+      "tags": [
+        "scoring",
+        "overlay",
+        "nan",
+        "heavyside"
+      ],
+      "status": "open",
+      "source": "PR #708 conflict resolve after #707 hygiene",
+      "added_at": "2026-09-18T16:36:53+00:00"
+    },
+    {
+      "id": "L420",
+      "category": "later",
+      "section": "ops",
+      "title": "Hunter-fix PAT push still action_required (checkout extraheader)",
+      "summary": "Even with WORKFLOW_DISPATCH_PAT set and gh auth setup-git, #715 hunter-fix tip push still created pull_request CI in action_required (triggering_actor github-actions[bot]). Likely actions/checkout http.extraheader Authorization bearer GITHUB_TOKEN wins over gh credentials. Unset extraheader or push via x-access-token URL before git push.",
+      "revisit_when": "Next hunter-fix tip push lands action_required despite PAT secret present in the commit step env",
+      "tags": [
+        "github-actions",
+        "hunter-fix",
+        "action_required",
+        "WORKFLOW_DISPATCH_PAT",
+        "checkout"
+      ],
+      "status": "open",
+      "source": "conversation: #715 CI after hunter-fix PAT",
+      "added_at": "2026-09-18T16:37:21+00:00"
     }
   ],
   "fragments": [

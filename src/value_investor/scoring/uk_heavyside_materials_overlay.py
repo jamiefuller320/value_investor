@@ -51,6 +51,21 @@ _HISTORIC_LOW_RES = re.compile(
 )
 
 
+def _overlay_text(value: object | None) -> str:
+    """Coerce pandas/NaN-safe text fields from screen rows (sector/name may be float)."""
+    if value is None:
+        return ""
+    try:
+        if pd.isna(value):
+            return ""
+    except (TypeError, ValueError):
+        pass
+    text = str(value).strip()
+    if not text or text.lower() == "nan":
+        return ""
+    return text
+
+
 def is_uk_heavyside_construction_materials(
     ticker: str | None,
     name: str | None,
@@ -61,10 +76,10 @@ def is_uk_heavyside_construction_materials(
         return True
     if not ticker or not str(ticker).strip().upper().endswith(".L"):
         return False
-    name_l = (name or "").lower()
+    name_l = _overlay_text(name).lower()
     if any(fragment in name_l for fragment in UK_HEAVYSIDE_NAME_FRAGMENTS):
         return True
-    sector_l = (sector or "").lower()
+    sector_l = _overlay_text(sector).lower()
     return "basic materials" in sector_l and "materials" in name_l
 
 

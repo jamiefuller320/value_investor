@@ -85,6 +85,30 @@ def test_generic_fallback_matches_data_backup_failure():
     assert spec["title"] == "Workflow fix: data backup failure"
 
 
+def test_generic_fallback_matches_euro_ingest_attribute_error():
+    log = """
+AttributeError: 'float' object has no attribute 'lower'
+##[error]Process completed with exit code 1.
+"""
+    spec = match_workflow_failure_signature("euro-ingest-loop.yml", log)
+    assert spec is not None
+    assert spec["area"] == "scoring"
+    assert ".github/workflows/euro-ingest-loop.yml" in spec["allowed_paths"]
+    assert any("uk_heavyside" in p or p.endswith("scoring/") for p in spec["allowed_paths"])
+
+
+def test_generic_fallback_matches_library_ingest_sprint_failure():
+    log = "Traceback (most recent call last):\n##[error]Process completed with exit code 1."
+    for workflow in (
+        "library-ingest-sprint.yml",
+        "library-ingest-sprint-2.yml",
+        "library-ingest-maintenance.yml",
+    ):
+        spec = match_workflow_failure_signature(workflow, log)
+        assert spec is not None, workflow
+        assert spec["area"] == "scoring"
+
+
 def test_generic_fallback_ignored_for_unlisted_workflow():
     log = "##[error]Process completed with exit code 1."
     assert match_workflow_failure_signature("pages.yml", log) is None
@@ -93,3 +117,4 @@ def test_generic_fallback_ignored_for_unlisted_workflow():
 def test_generic_fallback_requires_failure_markers():
     log = "workflow finished normally with no issues"
     assert match_workflow_failure_signature("paper-auto.yml", log) is None
+    assert match_workflow_failure_signature("euro-ingest-loop.yml", log) is None
