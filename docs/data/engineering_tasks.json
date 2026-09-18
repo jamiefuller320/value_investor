@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-18T12:11:40.141737+00:00",
+  "compiled_at": "2026-09-18T12:43:16.261116+00:00",
   "run_at": null,
-  "task_count": 40,
+  "task_count": 41,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -638,6 +638,57 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
+      "id": "eng-20260918-08",
+      "area": "scoring",
+      "title": "dividend: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_",
+      "summary": "First-principle slice 2/2 of: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_definition. topics=dividend paths=4",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "MEGP.L"
+        ],
+        "recorded_at": "2026-09-13T08:06:10.268004+00:00",
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "topics=dividend paths=4",
+        "narrow_parent_title": "Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_definition",
+        "narrow_cohesion_bypass": false,
+        "narrow_split_group_id": "c08ea11605c3",
+        "narrow_split_index": 2,
+        "narrow_split_count": 2,
+        "narrow_topics": [
+          "dividend"
+        ],
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/scoring/dividend_sustainability_overlay.py",
+        "src/value_investor/scoring/dividend_yield_overlay.py",
+        "src/value_investor/scoring/snapshot.py",
+        "tests/test_pipeline.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": true,
+      "status": "open"
+    },
+    {
       "id": "eng-20260918-07",
       "area": "scoring",
       "title": "fcf: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_defin",
@@ -665,7 +716,8 @@
         "origin_priority_score": 43.0,
         "preferred_merge_class": "compile_cap_drain",
         "doc": "docs/ops/engineering-sync.md",
-        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Export or overlay behaviour is covered by a unit test",
@@ -690,11 +742,14 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": true,
-      "status": "pr_open",
+      "status": "merged",
       "branch_name": "cursor/eng-20260918-07-1de3",
       "pr_number": 706,
       "no_diff_count": 0,
-      "completed_at": "2026-09-18T12:16:31.722459+00:00"
+      "completed_at": "2026-09-18T12:16:31.722459+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/706",
+      "merged_at": "2026-09-18T12:43:14.377250+00:00"
     },
     {
       "id": "eng-20260918-06",
