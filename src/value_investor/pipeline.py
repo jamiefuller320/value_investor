@@ -73,6 +73,9 @@ from value_investor.scoring.interim_quality_overlay import (
     enrich_signals_with_interim_quality_overlay,
 )
 from value_investor.scoring.leverage_overlay import enrich_universe_with_leverage_override
+from value_investor.scoring.photobooth_cyclical_overlay import (
+    enrich_signals_with_photobooth_cyclical_detection,
+)
 from value_investor.scoring.quality_family_avoid_gate_overlay import (
     enrich_signals_with_quality_family_avoid_gate,
 )
@@ -499,6 +502,10 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
         result.model_results,
     )
     signals_out = enrich_signals_with_interim_quality_overlay(signals_out, result.model_results)
+    signals_out = enrich_signals_with_photobooth_cyclical_detection(
+        signals_out,
+        output_dir=output_dir,
+    )
     signals_out = enrich_signals_with_hospitality_cyclical_detection(signals_out)
     signals_out = enrich_signals_with_cyclical_exposure_overlay(
         signals_out,

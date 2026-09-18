@@ -3999,6 +3999,110 @@ def test_enrich_signals_with_cyclical_exposure_overlay_flags_megp_like_profile()
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
 
 
+def test_photobooth_cyclical_parsing_and_profile_fixture():
+    from value_investor.scoring.photobooth_cyclical_overlay import (
+        max_photobooth_interim_month_revenue_decline_pct,
+        photobooth_cyclical_profile_detected,
+        principal_risk_cyclical_language_detected,
+    )
+
+    principal_risk_body = (
+        "Principal risks and uncertainties\n"
+        "A recession or reduction in discretionary spending could reduce photobooth demand.\n"
+        "Sustainability at ME Group\n"
+    )
+    trading_update = (
+        "Trading Update\n"
+        "Photo.ME revenue down 17% in April compared with a decline of 6% in H1 2026.\n"
+    )
+
+    assert principal_risk_cyclical_language_detected(principal_risk_body) is True
+    assert (
+        principal_risk_cyclical_language_detected("Principal risks\nAudit timetable only.\n")
+        is False
+    )
+    assert max_photobooth_interim_month_revenue_decline_pct(trading_update) == pytest.approx(0.17)
+    assert photobooth_cyclical_profile_detected(
+        principal_risk_cyclical=True,
+        photobooth_interim_revenue_decline_pct=0.17,
+    )
+    assert not photobooth_cyclical_profile_detected(
+        principal_risk_cyclical=True,
+        photobooth_interim_revenue_decline_pct=0.08,
+    )
+
+
+def test_enrich_signals_with_photobooth_cyclical_detection_from_indexed_filings(tmp_path: Path):
+    from value_investor.scoring.cyclical_exposure_overlay import (
+        enrich_signals_with_cyclical_exposure_overlay,
+    )
+    from value_investor.scoring.photobooth_cyclical_overlay import (
+        enrich_signals_with_photobooth_cyclical_detection,
+    )
+
+    ticker = "MEGP.L"
+    filings_dir = tmp_path / "research" / ticker / "sources" / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    annual_body = bodies_dir / "annual_pr.txt"
+    annual_body.write_text(
+        "Principal risks and uncertainties\n"
+        "Consumer spending and recession risk may reduce vending revenue.\n"
+        "Sustainability\n",
+        encoding="utf-8",
+    )
+    trading_body = bodies_dir / "trading.txt"
+    trading_body.write_text(
+        "Photo.ME revenue down 17% in April compared with prior year trends.\n",
+        encoding="utf-8",
+    )
+    write_json(
+        filings_dir / "filings_index.json",
+        {
+            "filings": [
+                {
+                    "id": "annual_pr",
+                    "period": "annual",
+                    "published_at": "2026-03-23T00:00:00+00:00",
+                    "has_body": True,
+                    "body_path": str(annual_body),
+                },
+                {
+                    "id": "trading",
+                    "period": "interim",
+                    "published_at": "2026-06-01T00:00:00+00:00",
+                    "has_body": True,
+                    "body_path": str(trading_body),
+                },
+            ]
+        },
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": ticker,
+                "signal": "strong_buy",
+                "passed_families": "cheapness,quality,dividend,garp,risk",
+                "dividends_paid": 29_769_000.0,
+                "fcf_dividend_coverage_net": 0.85,
+            }
+        ]
+    )
+    detected = enrich_signals_with_photobooth_cyclical_detection(signals, output_dir=tmp_path)
+    row = detected.iloc[0]
+    assert bool(row["principal_risk_cyclical_detected"]) is True
+    assert row["photobooth_interim_revenue_decline_pct"] == pytest.approx(0.17)
+    assert bool(row["photobooth_cyclical_detected"]) is True
+    assert bool(row["cyclical_exposure_detected"]) is True
+
+    enriched = enrich_signals_with_cyclical_exposure_overlay(
+        detected, pd.DataFrame(), output_dir=tmp_path
+    )
+    assert bool(enriched.iloc[0]["cyclical_exposure_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
 def test_enrich_signals_with_healthcare_price_erosion_overlay_caps_hik_like_profile():
     from value_investor.scoring.healthcare_price_erosion_overlay import (
         enrich_signals_with_healthcare_price_erosion_overlay,

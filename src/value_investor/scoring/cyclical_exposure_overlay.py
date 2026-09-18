@@ -20,6 +20,9 @@ from value_investor.scoring.interim_quality_overlay import (
     FCF_DIVIDEND_COVERAGE_MAX,
     quality_family_passed,
 )
+from value_investor.scoring.photobooth_cyclical_overlay import (
+    photobooth_cyclical_overlay_triggered,
+)
 from value_investor.scoring.uk_contractor_overlay import (
     is_uk_listed_contractor,
     uk_contractor_cyclical_overlay_triggered,
@@ -79,8 +82,19 @@ def cyclical_exposure_overlay_triggered(
     housing_rmi_detected: bool = False,
     uk_heavyside_materials: bool = False,
     heavyside_cyclical_tape_detected: bool = False,
+    photobooth_cyclical_detected: bool = False,
+    photobooth_interim_revenue_decline_pct: float | None = None,
 ) -> bool:
     """Cyclical exposure, quality passes, interim EPS decline, and thin net FCF/dividend cover."""
+    if photobooth_cyclical_overlay_triggered(
+        photobooth_cyclical_detected=photobooth_cyclical_detected,
+        passed_families=passed_families,
+        photobooth_interim_revenue_decline_pct=photobooth_interim_revenue_decline_pct,
+        fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+        free_cashflow=free_cashflow,
+        dividends_paid=dividends_paid,
+    ):
+        return True
     if uk_heavyside_cyclical_overlay_triggered(
         uk_heavyside_materials=uk_heavyside_materials,
         heavyside_cyclical_tape_detected=heavyside_cyclical_tape_detected,
@@ -158,6 +172,8 @@ def apply_cyclical_exposure_overlay_to_signal(
     housing_rmi_detected: bool = False,
     uk_heavyside_materials: bool = False,
     heavyside_cyclical_tape_detected: bool = False,
+    photobooth_cyclical_detected: bool = False,
+    photobooth_interim_revenue_decline_pct: float | None = None,
 ) -> tuple[bool, str]:
     """Return overlay flag and conservative adjusted signal."""
     base_adjusted = adjusted_signal or signal
@@ -175,6 +191,8 @@ def apply_cyclical_exposure_overlay_to_signal(
         housing_rmi_detected=housing_rmi_detected,
         uk_heavyside_materials=uk_heavyside_materials,
         heavyside_cyclical_tape_detected=heavyside_cyclical_tape_detected,
+        photobooth_cyclical_detected=photobooth_cyclical_detected,
+        photobooth_interim_revenue_decline_pct=photobooth_interim_revenue_decline_pct,
     ):
         return False, base_adjusted
     capped = cap_signal_for_cyclical_exposure_overlay(signal)
@@ -285,6 +303,20 @@ def enrich_signals_with_cyclical_exposure_overlay(
             and not (isinstance(public_capex, float) and pd.isna(public_capex))
             else False
         )
+        photobooth_raw = row.get("photobooth_cyclical_detected")
+        photobooth_cyclical_detected = (
+            bool(photobooth_raw)
+            if photobooth_raw is not None
+            and not (isinstance(photobooth_raw, float) and pd.isna(photobooth_raw))
+            else False
+        )
+        photobooth_decline_raw = row.get("photobooth_interim_revenue_decline_pct")
+        photobooth_interim_revenue_decline_pct = (
+            float(photobooth_decline_raw)
+            if photobooth_decline_raw is not None
+            and not (isinstance(photobooth_decline_raw, float) and pd.isna(photobooth_decline_raw))
+            else None
+        )
         triggered, new_adjusted = apply_cyclical_exposure_overlay_to_signal(
             str(row.get("signal") or "hold"),
             cyclical_exposure_detected_flag=cyclical_detected,
@@ -301,6 +333,8 @@ def enrich_signals_with_cyclical_exposure_overlay(
             housing_rmi_detected=housing_rmi_detected,
             uk_heavyside_materials=uk_heavyside,
             heavyside_cyclical_tape_detected=heavyside_tape_detected,
+            photobooth_cyclical_detected=photobooth_cyclical_detected,
+            photobooth_interim_revenue_decline_pct=photobooth_interim_revenue_decline_pct,
         )
         flags.append(triggered)
         detected_flags.append(cyclical_detected)
