@@ -19,7 +19,7 @@ slice of a PM agent.
 | Action | Allowed? |
 |--------|----------|
 | Pause `engineering-agent` dispatch + parked-hunter-compile | Yes |
-| Comment on stuck PRs requesting CI fix / conflict resolve | Yes |
+| Comment on stuck PRs requesting CI fix / conflict resolve, including **why** CI autofix did not patch and whether a follow-up is implementable | Yes |
 | Dispatch scoped `engineering-conflict-resolve.yml` for `cursor/eng-*` | Yes |
 | Rely on existing `ci-pr-autofix` / hunter-fix on CI failure | Yes (event-driven) |
 | Remediate queue merge-sync lag (`pr_open` after GitHub merge) via recover/mark-merged | Yes |
@@ -44,6 +44,16 @@ flowchart LR
   F -->|yes + idle| G[Resume dispatch]
   A --> H[Grounded EOD digest]
 ```
+
+## CI why step
+
+Every traffic run that classifies a CI-red `cursor/*` PR calls
+`explain_stuck_ci` (same rules as `ci-pr-autofix`). The fix-request comment and
+the digest claim record **why** no code patch was applied and whether a
+follow-up is implementable. A pre-existing live-fetch flake is marked
+`rerun_failed_ci`; ordinary pytest stays not implementable. This lives in
+`ftse-project-traffic`, not in a chat session. The one-shot re-run itself is
+still performed by `ci-pr-autofix` when that workflow sees the failed run.
 
 ## Commands
 

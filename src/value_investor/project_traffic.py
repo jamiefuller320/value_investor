@@ -14,6 +14,7 @@ Merge authority is scoped auto-merge (ci_fix / ingest_narrow / scoring_narrow / 
 
 from __future__ import annotations
 
+import json
 import logging
 import re
 import subprocess
@@ -95,6 +96,10 @@ class StuckPr:
     updated_at: str | None = None
     failed_check_names: list[str] = field(default_factory=list)
     failure_reason: str | None = None
+    ci_followup_why: str | None = None
+    ci_followup_implementable: bool | None = None
+    ci_followup_action: str | None = None
+    ci_followup_detail: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -112,6 +117,10 @@ class StuckPr:
             "updated_at": self.updated_at,
             "failed_check_names": list(self.failed_check_names),
             "failure_reason": self.failure_reason,
+            "ci_followup_why": self.ci_followup_why,
+            "ci_followup_implementable": self.ci_followup_implementable,
+            "ci_followup_action": self.ci_followup_action,
+            "ci_followup_detail": self.ci_followup_detail,
         }
 
 
@@ -619,6 +628,7 @@ def classify_stuck_prs(
     token: str | None = None,
     now: datetime | None = None,
     policy: dict[str, Any] | None = None,
+    include_ci_followup: bool = False,
 ) -> list[StuckPr]:
     """Return monitored PRs that are CI-red and/or merge-conflicting."""
     now = now or _utcnow()
@@ -692,24 +702,34 @@ def classify_stuck_prs(
             failed_check_names=failed_check_names,
             mergeable_state=mergeable_state or None,
         )
-        stuck.append(
-            StuckPr(
-                number=number,
-                branch=branch,
-                title=str(row.get("title") or ""),
-                url=str(row.get("html_url") or row.get("url") or ""),
-                draft=bool(row.get("draft") or row.get("isDraft")),
-                reasons=reasons,
-                task_id=_task_id_for_branch(branch, tasks_path=tasks_path),
-                head_sha=head_sha or None,
-                mergeable_state=mergeable_state or None,
-                checks_failed=checks_failed,
-                conflict=conflict,
-                updated_at=str(row.get("updated_at") or row.get("updatedAt") or "") or None,
-                failed_check_names=failed_check_names,
-                failure_reason=failure_reason,
-            )
+        pr = StuckPr(
+            number=number,
+            branch=branch,
+            title=str(row.get("title") or ""),
+            url=str(row.get("html_url") or row.get("url") or ""),
+            draft=bool(row.get("draft") or row.get("isDraft")),
+            reasons=reasons,
+            task_id=_task_id_for_branch(branch, tasks_path=tasks_path),
+            head_sha=head_sha or None,
+            mergeable_state=mergeable_state or None,
+            checks_failed=checks_failed,
+            conflict=conflict,
+            updated_at=str(row.get("updated_at") or row.get("updatedAt") or "") or None,
+            failed_check_names=failed_check_names,
+            failure_reason=failure_reason,
         )
+        if include_ci_followup and checks_failed:
+            log_text, diff_text, attempt = fetch_latest_failed_ci_context(branch)
+            attach_ci_followup(
+                pr,
+                explain_stuck_ci(
+                    pr,
+                    log_text=log_text,
+                    diff_text=diff_text,
+                    run_attempt=attempt,
+                ),
+            )
+        stuck.append(pr)
     return stuck
 
 
@@ -816,6 +836,115 @@ def _can_request_fix(
     return True, "ok"
 
 
+def fetch_latest_failed_ci_context(branch: str) -> tuple[str, str, int]:
+    """Return (failed CI log, PR diff vs main, run attempt) for a cursor branch.
+
+    Empty strings on any lookup failure. Used by the traffic controller so the
+    no-autofix why step is not session-only.
+    """
+    if not branch.startswith("cursor/"):
+        return "", "", 1
+    listed = subprocess.run(
+        [
+            "gh",
+            "run",
+            "list",
+            "--branch",
+            branch,
+            "--workflow",
+            "CI",
+            "--limit",
+            "1",
+            "--json",
+            "databaseId,conclusion,runAttempt",
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if listed.returncode != 0:
+        return "", "", 1
+    try:
+        rows = json.loads(listed.stdout or "[]")
+    except json.JSONDecodeError:
+        return "", "", 1
+    if not rows or not isinstance(rows, list):
+        return "", "", 1
+    row = rows[0] if isinstance(rows[0], dict) else {}
+    if str(row.get("conclusion") or "") != "failure":
+        return "", "", int(row.get("runAttempt") or 1)
+    run_id = str(row.get("databaseId") or "")
+    attempt = int(row.get("runAttempt") or 1)
+    log_text = ""
+    if run_id:
+        logged = subprocess.run(
+            ["gh", "run", "view", run_id, "--log-failed"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if logged.returncode == 0:
+            log_text = logged.stdout or ""
+    diff = subprocess.run(
+        ["git", "diff", f"origin/main...origin/{branch}"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    diff_text = diff.stdout if diff.returncode == 0 else ""
+    return log_text, diff_text, attempt
+
+
+def explain_stuck_ci(
+    pr: StuckPr,
+    *,
+    log_text: str = "",
+    diff_text: str = "",
+    run_attempt: int = 1,
+) -> Any:
+    """Why CI is still red and whether a safe follow-up exists.
+
+    Delegates to PR autofix assessment when logs are present. Without logs,
+    records that pytest is out of autofix scope and does not invent a re-run.
+    """
+    from value_investor.ci_pr_autofix import (
+        NoAutofixFollowup,
+        assess_no_autofix_followup,
+        diagnose_pr_ci_failure,
+    )
+
+    if not log_text.strip():
+        names = ", ".join(pr.failed_check_names[:6]) or "unknown"
+        return NoAutofixFollowup(
+            why=(
+                "Traffic saw failing checks but no failed-job log, so it cannot "
+                f"tell a live-fetch flake from a code bug ({names})."
+            ),
+            implementable=False,
+            action="none",
+            detail=(
+                "PR autofix still only patches ruff and path-guard. "
+                "A re-run is not started without the log."
+            ),
+        )
+    diagnosis = diagnose_pr_ci_failure(branch=pr.branch, log_text=log_text)
+    return assess_no_autofix_followup(
+        diagnosis=diagnosis,
+        autofix_reason="traffic controller: CI still failing after event-driven autofix",
+        log_text=log_text,
+        diff_text=diff_text,
+        run_attempt=run_attempt,
+    )
+
+
+def attach_ci_followup(pr: StuckPr, followup: Any) -> None:
+    pr.ci_followup_why = str(getattr(followup, "why", "") or "") or None
+    implementable = getattr(followup, "implementable", None)
+    pr.ci_followup_implementable = bool(implementable) if implementable is not None else None
+    pr.ci_followup_action = str(getattr(followup, "action", "") or "") or None
+    pr.ci_followup_detail = str(getattr(followup, "detail", "") or "") or None
+
+
 def format_ci_fix_comment(pr: StuckPr) -> str:
     task_bit = f" (task `{pr.task_id}`)" if pr.task_id else ""
     reason = pr.failure_reason or "ci_failing"
@@ -824,20 +953,38 @@ def format_ci_fix_comment(pr: StuckPr) -> str:
         check_bit = (
             " Failed checks: " + ", ".join(f"`{n}`" for n in pr.failed_check_names[:8]) + "."
         )
-    return "\n".join(
-        [
-            "## Project traffic controller — CI failure",
-            "",
-            f"PR #{pr.number}{task_bit} on `{pr.branch}` has **failing checks** "
-            f"(reason: `{reason}`).{check_bit}",
-            "",
-            "Please push a scoped fix (or wait for `ci-pr-autofix` / hunter-fix when eligible).",
-            "New engineering-agent dispatch is **paused** while monitored PRs remain stuck,",
-            "so conflicts do not compound on top of red CI.",
-            "",
-            "_Automated note from `ftse-project-traffic`. Merge authority remains human/scoped auto-merge only._",
-        ]
+    lines = [
+        "## Project traffic controller — CI failure",
+        "",
+        f"PR #{pr.number}{task_bit} on `{pr.branch}` has **failing checks** "
+        f"(reason: `{reason}`).{check_bit}",
+        "",
+        "Please push a scoped fix (or wait for `ci-pr-autofix` / hunter-fix when eligible).",
+        "New engineering-agent dispatch is **paused** while monitored PRs remain stuck,",
+        "so conflicts do not compound on top of red CI.",
+        "",
+    ]
+    if pr.ci_followup_why:
+        lines.extend(
+            [
+                "**Why no automatic code fix**",
+                f"- {pr.ci_followup_why}",
+                "",
+                "**Follow-up**",
+                (
+                    "- Implementable now: **yes**"
+                    if pr.ci_followup_implementable
+                    else "- Implementable now: **no**"
+                )
+                + f" (`{pr.ci_followup_action or 'none'}`)",
+                f"- {pr.ci_followup_detail or ''}",
+                "",
+            ]
+        )
+    lines.append(
+        "_Automated note from `ftse-project-traffic`. Merge authority remains human/scoped auto-merge only._"
     )
+    return "\n".join(lines)
 
 
 def format_conflict_resolve_comment(pr: StuckPr) -> str:
@@ -1162,6 +1309,11 @@ def _claim_evidence_rows(
                 "claim": (
                     f"Stuck PR #{pr.number} `{pr.branch}` reasons={pr.reasons} "
                     f"mergeable_state={pr.mergeable_state}"
+                    + (
+                        f" ci_followup={pr.ci_followup_action}:{pr.ci_followup_why}"
+                        if pr.ci_followup_why
+                        else ""
+                    )
                 ),
                 "source": "github.pulls + check-runs",
                 "grounded": True,
@@ -1737,6 +1889,7 @@ def run_project_traffic(
         token=token,
         now=now,
         policy=policy,
+        include_ci_followup=True,
     )
     prior_pause = is_traffic_pause_active(tasks_path=tasks_path)
     state = evaluate_traffic_pause(
