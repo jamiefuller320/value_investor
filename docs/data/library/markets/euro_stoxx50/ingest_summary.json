@@ -1,15 +1,89 @@
 {
-  "run_at": "2026-09-17T15:11:15.551032+00:00",
+  "run_at": "2026-09-18T19:18:09.713848+00:00",
   "market_id": "euro_stoxx50",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "TTE.PA"
+  ],
+  "target_details": [
+    {
+      "ticker": "TTE.PA",
+      "priority_score": 28.1491,
+      "filings_total": 101,
+      "filings_with_body": 100,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "TTE.PA",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 101,
+        "filings_with_body": 100,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 103,
+        "filings_with_body": 102,
+        "indexed_without_body": 1
+      },
+      "improved": true,
+      "regime": "euro_filings",
+      "filings_summary": {
+        "total": 103,
+        "annual": 5,
+        "interim": 57,
+        "trading_update": 0,
+        "other": 41,
+        "with_body": 102,
+        "period_coverage": {
+          "annual": {
+            "total": 5,
+            "with_body": 5
+          },
+          "interim": {
+            "total": 57,
+            "with_body": 57
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 41,
+            "with_body": 40
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 102,
+        "with_body_after": 102,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 1,
+          "note": "merge_ir_allowlist_filings"
+        },
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "TTE.PA"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-17T15:10:42.367630+00:00",
+    "snapshot_at": "2026-09-18T19:15:03.070240+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 15,
     "unmeasured_buy_tier": 0,
@@ -55,16 +129,16 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-09-17T15:11:12.636200+00:00",
+    "snapshot_at": "2026-09-18T19:18:09.705909+00:00",
     "market_id": "euro_stoxx50",
     "buy_tier_count": 15,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 4,
-    "indexed_without_body": 3,
+    "indexed_without_body": 4,
     "bodies_min": 1,
     "bodies_median": 3,
-    "bodies_max": 100,
+    "bodies_max": 102,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [],
@@ -77,11 +151,13 @@
     ],
     "indexed_without_body_tickers": [
       "SAN.PA",
+      "TTE.PA",
       "SGO.PA",
       "SAP.DE"
     ],
     "indexed_without_body_by_ticker": {
       "SAN.PA": 1,
+      "TTE.PA": 1,
       "SGO.PA": 1,
       "SAP.DE": 1
     },
@@ -96,9 +172,11 @@
     "parked_count": 6,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "effective_indexed_without_body": 1,
+    "effective_indexed_without_body_tickers": [
+      "TTE.PA"
+    ],
+    "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
@@ -109,7 +187,7 @@
   "discovery_scan": {
     "scanned": 15,
     "hits": 14,
-    "new_rows_total": 0,
+    "new_rows_total": 1,
     "curiosity_total": 16,
     "errors": 0,
     "prioritization_weights": {
@@ -133,14 +211,10 @@
   },
   "maintenance_mode": true,
   "parity_handoff": null,
-  "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "euro_stoxx50"
-  },
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "euro_stoxx50",
-    "assessed_at": "2026-09-17T15:10:42.912057+00:00",
+    "assessed_at": "2026-09-18T19:15:03.492602+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -193,9 +267,9 @@
       "thin_need_bodies": 1
     }
   },
-  "used_seconds": 29.158195225,
+  "used_seconds": 185.78935185,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3570.841804775,
+  "leftover_seconds": 3414.21064815,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -203,9 +277,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "euro_stoxx50",
-    "updated_at": "2026-09-17T15:11:12.637901+00:00",
-    "exhausted": true,
-    "complete_zero_improve_runs": 5,
+    "updated_at": "2026-09-18T19:18:09.707639+00:00",
+    "exhausted": false,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -270,69 +344,29 @@
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
-    "had_complete_targets": true,
+    "had_complete_targets": false,
     "leftover_tickers": [
       "BAS.DE",
       "DTE.DE",
       "MUV2.DE",
       "SAN.PA",
       "SAP.DE",
-      "SGO.PA"
+      "SGO.PA",
+      "TTE.PA"
     ],
-    "unparked_leftover": [],
+    "unparked_leftover": [
+      "TTE.PA"
+    ],
     "path": "docs/data/library/markets/euro_stoxx50/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "recorded": true,
-    "first_time": false,
-    "market_id": "euro_stoxx50",
-    "ingest_exhausted_markets": [
-      "asx200",
-      "euro_depth",
-      "euro_stoxx50",
-      "ftse_smallcap",
-      "sp500",
-      "tsx60"
-    ],
-    "learning_admitted": true,
-    "learning_admitted_changed": false
+    "skipped": true,
+    "reason": "not_exhausted",
+    "market_id": "euro_stoxx50"
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
-    "reason": "no parked leftover tickers remaining for hunter",
-    "tried_count": 2,
-    "candidate_count": 31,
-    "skipped_resolved_tickers": [
-      "ABI.BR",
-      "APAM.AS",
-      "BAS.DE",
-      "EVN.VI",
-      "MUV2.DE",
-      "SAP.DE",
-      "SGO.PA",
-      "SKA-B.ST",
-      "UCB.BR",
-      "WIE.VI",
-      "APTV",
-      "BXP",
-      "CRH",
-      "FICO",
-      "LDOS",
-      "LMT",
-      "TSN",
-      "ULTP.L",
-      "BOOT.L",
-      "DFS.L",
-      "MER.L",
-      "TPT.L",
-      "SU.TO",
-      "NTR.TO",
-      "GIB-A.TO",
-      "BAS.DE",
-      "DTE.DE",
-      "MUV2.DE",
-      "SGO.PA",
-      "SAP.DE"
-    ]
+    "reason": "open parked-source hunter already queued",
+    "task_id": "eng-20260918-16"
   }
 }
