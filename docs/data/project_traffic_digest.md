@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-17T20:28:56.678903+00:00`
+Generated: `2026-09-18T07:46:57.804551+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -28,21 +28,20 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
-- `remediate_queue_merge_sync` — detected merge sync lag for 1 task(s): eng-20260917-08 (not applied)
-- `remediate_queue_merge_sync` — PM remediated queue merge sync: fixed=['eng-20260917-08']; remaining=['none'] (applied)
+- _(none)_
 
 ## Merges today (monitor independent verify)
-- `human`/human PR #691 `eng-20260917-08` — Enable cyclical_exposure for UK heavyside construction-materials names when GB volume language and cement-output “historic lows” are in the same tape [1/2]
-- `ci_fix`/verified PR #686 `eng-20260917-06` — fcf: Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_defin
-- `compile_cap_drain`/verified PR #685 `eng-20260917-05` — Relabel `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income (MEGP: no adjusted EPS in 67 filing bodies) to stop false “filing core” Lynch PEG fa
-- `human`/human PR #682 `eng-20260917-04` — Set fcf_definition_divergence whenever filing/Yahoo 1,861m and screen TTM 1,200.4m disagree; do not pass FCF Yield at 9.3% or a 4.0% dividend without stating th
-- `human`/human PR #681 `eng-20260917-03` — Set fcf_definition_divergence whenever retail ~£574m, Yahoo £923m and screen £645m disagree; do not pass FCF Yield at 8.8% or High Dividend Yield at 4.1% withou
-- `parked_hunter`/verified PR #680 `eng-20260916-06` — Hunt fetchable IR source for parked asx200 leftover BPT.AX
-- `compile_cap_drain`/verified PR #679 `eng-20260917-02` — Set fcf_definition_divergence whenever filing ~£462m, Yahoo £956m and screen £830m disagree; do not pass FCF Yield at 21.4% without stating the basis [1/2]
+- `compile_cap_drain`/verified PR #697 `eng-20260917-10` — fcf: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf
+- `human`/human PR #692 `eng-20260917-08` — Enable cyclical_exposure for UK heavyside construction-materials names when GB volume language and cement-output “historic lows” are in the same tape [1/2]
 
 ## PR fix occasions — common failure reasons
 - Occasion count: 1
 - `ruff_format` — 1×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 1 (open=0, resolved=1)
+- [resolved] WARN Orphaned pr_open engineering tasks — planned: `remediate_queue_merge_sync` (PM v1: recover/mark-merged engineering queue reconciliation; cleared lag=['none'])
 
 ## Merge authority
 - Status: **scoped_auto_merge**
