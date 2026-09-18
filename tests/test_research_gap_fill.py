@@ -3,6 +3,12 @@
 from __future__ import annotations
 
 from value_investor.deep_analysis import DeepAnalysis, _parse_deep_analysis
+from value_investor.research.agent import (
+    _augment_research_worker_prompt,
+    filing_extraction_discipline,
+    news_extraction_discipline,
+    worker_task_extraction_rules,
+)
 from value_investor.research.document import parse_research_sections
 from value_investor.research.format import format_gap_fill_text
 from value_investor.research.gap_fill import (
@@ -10,6 +16,7 @@ from value_investor.research.gap_fill import (
     GapFillTarget,
     _unresolved_questions,
     extract_gap_fill_targets,
+    supplement_deal_structure_questions,
 )
 from value_investor.summary import CompanyReport
 
@@ -75,6 +82,55 @@ Broad caution across the tape.
     assert "Names worth deeper research" not in parsed.executive_intro
 
 
+def test_worker_extraction_rules_cover_filing_and_news_discipline():
+    filing = worker_task_extraction_rules("summarize_filing_body")
+    assert "continuing" in filing.lower()
+    assert "held-for-sale" in filing.lower()
+    assert "dividend cover" in filing.lower()
+    assert "reporting currency" in filing.lower()
+
+    news = worker_task_extraction_rules(
+        "digest_news_manifest", ticker="ITV.L", company_name="ITV plc"
+    )
+    assert "carve-out" in news.lower()
+    assert "ITV-the-broadcaster" in news
+
+
+def test_augment_research_worker_prompt_appends_rules():
+    base = """You are a **research worker** on ITV plc (ITV.L).
+
+Task id: t1
+Task type: summarize_filing_body
+Focus: FY25 results
+Read only: /tmp/body.txt
+
+Return JSON only.
+"""
+    augmented = _augment_research_worker_prompt(base)
+    assert augmented != base
+    assert filing_extraction_discipline() in augmented
+
+
+def test_news_extraction_discipline_ignores_itv_broadcaster_noise_for_itv_l():
+    text = news_extraction_discipline(ticker="ITV.L", company_name="ITV plc")
+    assert "entertainment noise" in text.lower()
+    generic = news_extraction_discipline(ticker="AAA.L", company_name="Alpha PLC")
+    assert "ITV-the-broadcaster" not in generic
+
+
+def test_supplement_deal_structure_questions_adds_filing_prompts():
+    enriched = supplement_deal_structure_questions(
+        ["high yield vs cyclical ad market"],
+        "ITV.L carve-out to Sky; dividend yield looks high on screen",
+        ticker="ITV.L",
+        name="ITV plc",
+    )
+    assert len(enriched) >= 2
+    joined = " ".join(enriched).lower()
+    assert "continuing" in joined
+    assert "free cash flow" in joined
+
+
 def test_extract_gap_fill_targets_from_red_flags():
     analysis = DeepAnalysis(
         executive_intro="Tone is cautious.",
@@ -82,7 +138,7 @@ def test_extract_gap_fill_targets_from_red_flags():
         red_flags=(
             "NAMES WORTH DEEPER RESEARCH\n"
             "- **AEP.L** — pending OCF/qualitative business review\n"
-            "- **ITV.L** — favourable accumulate timing plus high yield\n"
+            "- **ITV.L** — Sky carve-out leaves stub equity; screen yield vs filing FCF/dividend cover\n"
             "- **HIK.L** — negative FCF vs dividend puzzle\n"
         ),
     )
@@ -96,6 +152,8 @@ def test_extract_gap_fill_targets_from_red_flags():
     assert [t.ticker for t in targets] == ["AEP.L", "ITV.L", "HIK.L"]
     assert any("OCF" in q for q in targets[0].questions)
     assert any("FCF" in q or "dividend" in q for q in targets[2].questions)
+    itv = next(t for t in targets if t.ticker == "ITV.L")
+    assert any("continuing" in q.lower() for q in itv.questions)
 
 
 def test_parse_gap_fill_update_section():

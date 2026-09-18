@@ -88,12 +88,19 @@ Do not invent figures — only use data from the JSON.
 RED FLAGS
 List qualitative risks NOT captured by the screen for the top candidates:
 regulatory risk, cyclicality, pension deficits, governance, or balance-sheet concerns.
+When JSON metrics show high yield or strong dividend-family passes, flag if filing-based FCF
+may not cover the ordinary dividend (do not assume Yahoo TTM cash flow is filing-aligned).
+If a name is in a live carve-out, held-for-sale, or discontinued-ops transition, say so and
+note residual-equity risk versus pre-deal consolidated screens.
 If data is insufficient, say so explicitly as an open question.
 Prefer bullet lines that start with the ticker (e.g. ``AEP.L: …``).
 
 NAMES WORTH DEEPER RESEARCH
 Up to 3 tickers from the top candidates, one bullet each:
 ``TICKER — open qualitative question to resolve``
+Prefer questions that force filing/news resolution on: continuing vs discontinued splits,
+deal terms and timing, guidance credibility, reporting currency, and FCF versus dividend cover
+(not screen-level yield alone).
 """
 
 
