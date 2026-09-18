@@ -4985,3 +4985,95 @@ def test_guard_screening_export_bt_style_two_way_fcf(tmp_path: Path):
     assert "fcf basis mismatch" in guarded["action_note"].lower()
     assert "1200.4" in guarded["action_note"] or "1861" in guarded["action_note"]
     assert guarded["failed_models"] == ["FCF Yield", "Neff PEGY"]
+
+
+def test_guard_screening_export_jsg_style_fcf_research_and_models(tmp_path: Path):
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    sources = tmp_path / "research" / "JSG.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "JSG.L",
+                "quarterly_cashflow": {},
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 139_900_000.0,
+                        "Capital Expenditure": -39_300_000.0,
+                        "Free Cash Flow": 100_600_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    research_block = "Research: Accumulate, Medium risk — HORECA linen rental cyclicality."
+    action_note = (
+        "Strong Buy — neutral timing | FCF basis mismatch: filing $100.6M | "
+        f"screen TTM $27.4M | {research_block} | {research_block} | {research_block}"
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "JSG.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 1.0,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "JSG.L",
+                "model_id": "high_dividend",
+                "model_name": "High Dividend Yield",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "JSG.L",
+                "model_id": "graham_enterprising",
+                "model_name": "Graham Enterprising",
+                "passed": False,
+                "score": 0.4,
+                "reasons": "[]",
+                "failed_criteria": "['leverage']",
+            },
+        ]
+    )
+
+    snapshot = {
+        "ticker": "JSG.L",
+        "name": "Johnson Service Group PLC",
+        "sector": "Industrials",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": True,
+        "conviction_score": 0.58,
+        "free_cashflow_screen_ttm": 27_400_000.0,
+        "action_note": action_note,
+        "summary": "Strong Buy (8/22 models, composite 85%).",
+        "failed_models": [],
+        "key_metrics": {"FCF": 100_600_000.0},
+    }
+
+    guarded = guard_screening_snapshot_export(
+        snapshot,
+        model_results=model_results,
+        output_dir=tmp_path,
+    )
+
+    assert guarded["fcf_definition_divergence"] is True
+    assert guarded["fcf_divergence_flagged"] is True
+    assert guarded["cyclical_exposure_detected"] is True
+    assert "Graham Enterprising" in guarded["failed_models"]
+    assert guarded["action_note"].startswith("Buy")
+    assert "filing £100.6M" in guarded["action_note"]
+    assert guarded["action_note"].count("Research: Accumulate") == 1
+    assert guarded["summary"].startswith("Buy")
+    assert guarded["signal"] == "strong_buy"

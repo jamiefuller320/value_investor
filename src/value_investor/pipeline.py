@@ -80,6 +80,7 @@ from value_investor.scoring.quality_garp_roe_gate import (
     suppress_quality_garp_inconsistent_passes,
 )
 from value_investor.scoring.screening_export_guard import (
+    enrich_signals_with_hospitality_cyclical_detection,
     guard_signals_dataframe,
     install_screening_export_guard_hooks,
 )
@@ -498,6 +499,7 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
         result.model_results,
     )
     signals_out = enrich_signals_with_interim_quality_overlay(signals_out, result.model_results)
+    signals_out = enrich_signals_with_hospitality_cyclical_detection(signals_out)
     signals_out = enrich_signals_with_cyclical_exposure_overlay(
         signals_out,
         result.model_results,
