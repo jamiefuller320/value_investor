@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-18T03:16:29.741866+00:00",
+  "generated_at": "2026-09-18T03:46:43.434455+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1154,7 +1154,7 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-17T20:33:42.189790+00:00",
-    "queue_ui_updated_at": "2026-09-18T03:16:29.669093+00:00",
+    "queue_ui_updated_at": "2026-09-18T03:46:43.367501+00:00",
     "task_count": 33,
     "status": {
       "open_count": 2,
@@ -1163,8 +1163,8 @@
       "merged_count": 23,
       "failed_count": 0,
       "next_task_id": "eng-20260917-10",
-      "in_flight_branch": "cursor/eng-20260917-08-1de3",
-      "in_flight_pr": 692,
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
@@ -1570,24 +1570,18 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-18T03:16:29.741866+00:00",
+    "generated_at": "2026-09-18T03:46:43.434455+00:00",
     "overall": "active",
-    "headline": "Merge lane active; agent lane active.",
+    "headline": "Agent lane active.",
     "merge_lane": {
-      "state": "running",
-      "idle": false,
-      "running": true,
+      "state": "idle",
+      "idle": true,
+      "running": false,
       "blocked": false,
       "pr_open_count": 0,
-      "open_engineering_prs": [
-        {
-          "number": 692,
-          "branch": "cursor/eng-20260917-08-1de3",
-          "draft": false
-        }
-      ],
-      "in_flight_pr": 692,
-      "detail": "Open engineering PR(s) #692 — merge fires on CI success."
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
       "state": "running",
@@ -1609,7 +1603,7 @@
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-18T03:16:24.430554+00:00"
+      "evaluated_at": "2026-09-18T03:46:39.111004+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1622,7 +1616,19 @@
       "overall": "ok",
       "should_dispatch_engineering": false
     },
-    "merges_today": [],
+    "merges_today": [
+      {
+        "task_id": "eng-20260917-08",
+        "title": "Enable cyclical_exposure for UK heavyside construction-materials names when GB volume language and cement-output “historic lows” are in the same tape [1/2]",
+        "area": "scoring",
+        "pr_number": 692,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/692",
+        "merged_at": "2026-09-18T03:46:31.746077+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      }
+    ],
     "verified_merges_today_count": 0
   }
 }
