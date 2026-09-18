@@ -3264,7 +3264,7 @@ def test_suppress_fcf_yield_sbry_style_three_way_bases(tmp_path: Path):
     )
     high_div = model_results.loc[model_results["model_id"] == "high_dividend"].iloc[0]
     assert bool(high_div["passed"]) is False
-    assert "High dividend yield suppressed" in str(high_div["failed_criteria"])
+    assert "Dividend yield suppressed" in str(high_div["failed_criteria"])
 
 
 def test_high_dividend_pass_suppressed_on_bt_style_two_way_fcf():
@@ -3338,7 +3338,7 @@ def test_suppress_high_dividend_bt_style_two_way_fcf(tmp_path: Path):
     )
     high_div = model_results.iloc[0]
     assert bool(high_div["passed"]) is False
-    assert "High dividend yield suppressed" in str(high_div["failed_criteria"])
+    assert "Dividend yield suppressed" in str(high_div["failed_criteria"])
 
 
 def test_suppress_fcf_yield_jd_style_three_way_bases(tmp_path: Path):
@@ -3590,7 +3590,7 @@ def test_suppress_fcf_yield_passes_fgp_style_73_8m_company_adj(tmp_path: Path):
     )
     high_div = model_results.loc[model_results["model_id"] == "high_dividend"].iloc[0]
     assert bool(high_div["passed"]) is False
-    assert "High dividend yield suppressed" in str(high_div["failed_criteria"])
+    assert "Dividend yield suppressed" in str(high_div["failed_criteria"])
 
 
 def test_enrich_universe_with_canonical_fcf_rebinds_stale_bridge_company_adjusted(
@@ -4163,6 +4163,111 @@ def test_uk_contractor_revenue_fcf_warning_triggers_overlays():
     enriched = enrich_signals_with_cyclical_exposure_overlay(enriched, model_results)
     assert bool(enriched.iloc[0]["cyclical_exposure_overlay"]) is True
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
+def _jsg_style_research_sources(tmp_path: Path) -> None:
+    sources = tmp_path / "research" / "JSG.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "JSG.L",
+                "quarterly_cashflow": {},
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 139_900_000.0,
+                        "Capital Expenditure": -39_300_000.0,
+                        "Free Cash Flow": 100_600_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_enrich_universe_preserves_jsg_style_divergent_screen_ttm(tmp_path: Path):
+    """Yahoo annual FCF must not overwrite a divergent trailing screen TTM when TTM is suppressed."""
+    _jsg_style_research_sources(tmp_path)
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "JSG.L",
+                "free_cashflow": 100_600_000.0,
+                "free_cashflow_screen_ttm": 27_400_000.0,
+                "market_cap": 2_000_000_000.0,
+                "dividend_yield": 0.032,
+            }
+        ]
+    )
+    enriched = enrich_universe_with_canonical_fcf(universe, tmp_path)
+    enriched = enrich_universe_with_filing_metrics(enriched, tmp_path)
+    row = enriched.iloc[0]
+    assert row["free_cashflow_screen_ttm"] == pytest.approx(27_400_000.0)
+    assert row["fcf_definition_divergence"] is True
+    assert row["fcf_divergence_flagged"] is True
+
+
+def test_suppress_fcf_yield_and_dividend_jsg_style_divergent_bases(tmp_path: Path):
+    _jsg_style_research_sources(tmp_path)
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "JSG.L",
+                "free_cashflow": 100_600_000.0,
+                "free_cashflow_screen_ttm": 27_400_000.0,
+                "market_cap": 2_000_000_000.0,
+                "dividend_yield": 0.032,
+            }
+        ]
+    )
+    universe = enrich_universe_with_canonical_fcf(universe, tmp_path)
+    universe = enrich_universe_with_filing_metrics(universe, tmp_path)
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "JSG.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+                "score": 1.0,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "JSG.L",
+                "model_id": "dividend_growth",
+                "model_name": "Dividend Growth",
+                "passed": True,
+                "score": 0.8,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            },
+        ]
+    )
+    model_results = suppress_fcf_yield_passes(model_results, universe, output_dir=tmp_path)
+    model_results = suppress_high_dividend_yield_passes(
+        model_results,
+        universe,
+        output_dir=tmp_path,
+    )
+    fcf_yield = model_results.loc[model_results["model_id"] == "fcf_yield"].iloc[0]
+    dividend = model_results.loc[model_results["model_id"] == "dividend_growth"].iloc[0]
+    assert bool(fcf_yield["passed"]) is False
+    assert bool(dividend["passed"]) is False
+    assert "FCF yield suppressed" in str(fcf_yield["failed_criteria"])
+    assert "Dividend yield suppressed" in str(dividend["failed_criteria"])
+
+
+def test_screen_ttm_from_row_prefers_action_note_when_columns_stale():
+    row = pd.Series(
+        {
+            "free_cashflow": 100_600_000.0,
+            "free_cashflow_screen_ttm": 100_600_000.0,
+            "action_note": ("Strong Buy | FCF basis mismatch: filing $100.6M | screen TTM $27.4M"),
+        }
+    )
+    assert screen_ttm_from_row(row) == pytest.approx(27_400_000.0)
 
 
 def test_fcf_yield_unit_fx_error_detected_for_gftu_style_screen():
