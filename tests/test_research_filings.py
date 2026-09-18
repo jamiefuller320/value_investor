@@ -3273,6 +3273,102 @@ def test_extract_ixbrl_html_text_splices_late_pension_and_covenant_notes():
     assert "CONSOLIDATED STATEMENT OF CASH FLOW" in text
 
 
+_ITV_IXBRL_FIXTURE_HTML = (
+    b'<html xmlns:ix="http://www.xbrl.org/2013/inlineXBRL">'
+    b"<body><div>Cover and contents noise only</div>"
+    b'<ix:nonNumeric name="core:DescriptionOfPrincipalRisksAndUncertaintiesTextBlock" '
+    b'contextRef="FY" escape="true">'
+    b"<p>Principal risks and uncertainties include advertising cyclicality, "
+    b"regulatory change, and pension funding volatility across the Group.</p>"
+    b"</ix:nonNumeric>"
+    b'<ix:nonNumeric name="core:PensionsTextBlock" contextRef="FY" escape="true">'
+    b"<p>3.8 Pensions - Defined benefit pension surplus of GBP 198 million after "
+    b"GBP 65 million of employer contributions and remeasurement gains.</p>"
+    b"</ix:nonNumeric>"
+    b"</body></html>"
+)
+
+
+def test_extract_ixbrl_html_text_itv_l_tag_blocks_for_risks_and_pension_note():
+    """eng-20260918-19: CH iXBRL tag narrative unlocks risks and note 3.8 for ITV.L."""
+    text = _extract_ixbrl_html_text(_ITV_IXBRL_FIXTURE_HTML.decode("utf-8"))
+    assert "Principal risks and uncertainties" in text
+    assert "3.8 Pensions" in text
+    assert "Defined benefit pension" in text
+
+
+def test_ch_row_needs_body_refetch_itv_ocr_with_lone_cash_flow_marker(tmp_path):
+    """eng-20260918-19: OCR strategic pages with a lone cash-flow mention still refetch."""
+    from value_investor.research.filings import _ch_row_needs_body_refetch
+
+    bodies_dir = tmp_path / "bodies"
+    bodies_dir.mkdir()
+    row_id = "ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4"
+    ocr_noise = (
+        "Cun punpaca ts Metdng What Meiers strategic highlights revenue £3,511m "
+        + ("fontsymbol garbled OCR " * 80)
+        + " good ree cash flow of leverage 1.0x"
+    )
+    (bodies_dir / f"{row_id}.txt").write_text(ocr_noise, encoding="utf-8")
+    row = {
+        "id": row_id,
+        "source": "companies_house",
+        "has_body": True,
+        "body_path": str(bodies_dir / f"{row_id}.txt"),
+    }
+    assert _ch_row_needs_body_refetch(row, bodies_dir) is True
+
+
+def test_fetch_companies_house_body_itv_l_prefers_ixbrl_tags_over_ocr_pdf(monkeypatch):
+    """eng-20260918-19: document-api iXBRL beats image-only PDF OCR for company 04967001."""
+    from value_investor.research.companies_house import MIME_PDF, MIME_XHTML
+    from value_investor.research.filings import _fetch_companies_house_body
+
+    ch_url = (
+        "https://document-api.company-information.service.gov.uk/document/"
+        "JjWo0_l84XtMUxVIzm6yHT_b7KWbuT-LNNskkN9LUMw"
+    )
+    row = {
+        "id": "ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4",
+        "document_metadata_url": ch_url,
+        "url": ch_url,
+        "company_number": "04967001",
+    }
+    ocr_pdf = (
+        "Strategic report chairman statement revenue overview dividend policy "
+        + ("OCR noise | fontsymbol " * 60)
+        + " free cash flow conversion 65%"
+    )
+    downloads = [
+        (b"%PDF-1.4", MIME_PDF),
+        (_ITV_IXBRL_FIXTURE_HTML, MIME_XHTML),
+    ]
+    monkeypatch.setenv("COMPANIES_HOUSE_API_KEY", "test-key")
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.iter_ch_document_downloads",
+        lambda *args, **kwargs: downloads,
+    )
+
+    real_extract = __import__(
+        "value_investor.research.filings", fromlist=["_extract_filing_document_text"]
+    )._extract_filing_document_text
+
+    def fake_extract(raw, content_type):
+        if content_type == MIME_PDF:
+            return ocr_pdf
+        return real_extract(raw, content_type)
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._extract_filing_document_text",
+        fake_extract,
+    )
+    body = _fetch_companies_house_body(row)
+    assert body is not None
+    assert "Principal risks and uncertainties" in body
+    assert "3.8 Pensions" in body
+    assert "Defined benefit pension" in body
+
+
 def test_refetch_uk_primary_filing_bodies_orchestrates_ch_and_lse(tmp_path, monkeypatch):
     filings_dir = tmp_path / "filings"
     filings_dir.mkdir()

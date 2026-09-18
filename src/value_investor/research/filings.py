@@ -741,6 +741,27 @@ _IXBRL_NARRATIVE_MARKERS: tuple[tuple[str, int], ...] = (
     (r"\bBORROWINGS\b", 3),
     (r"\bSEGMENT(?:AL)? (?:INFORMATION|ANALYSIS|REPORTING)\b", 3),
 )
+_IXBRL_NARRATIVE_TAG_HINTS: tuple[str, ...] = (
+    "principalrisksanduncertainties",
+    "principalrisk",
+    "risksanduncertainties",
+    "pensions",
+    "definedbenefit",
+    "borrowings",
+    "covenant",
+    "goingconcern",
+    "cashflow",
+    "segment",
+    "relatedparty",
+    "directorsreport",
+    "strategicreport",
+    "financereview",
+)
+_IXBRL_NONNUMERIC_RE = re.compile(
+    r"<(?:ix:)?nonNumeric\b[^>]*\bname=(['\"])([^'\"]+)\1[^>]*>"
+    r"([\s\S]*?)</(?:ix:)?nonNumeric>",
+    flags=re.I,
+)
 _INVESTEGATE_COMPANY_URL = "https://www.investegate.co.uk/company/{epic}"
 _INVESTEGATE_USER_AGENT = "value-investor-research/0.1 (+investegate; research@local)"
 _INVESTEGATE_MAX_ITEMS = 50
@@ -777,8 +798,32 @@ def _is_ixbrl_html(raw: bytes | str) -> bool:
     return "xmlns:ix=" in lower or "<ix:" in lower or "xbrl" in lower
 
 
+def _ixbrl_tag_narrative_rank(tag_name: str) -> int:
+    normalized = re.sub(r"[^a-z0-9]", "", (tag_name or "").lower())
+    for index, hint in enumerate(_IXBRL_NARRATIVE_TAG_HINTS):
+        if hint in normalized:
+            return index
+    return len(_IXBRL_NARRATIVE_TAG_HINTS)
+
+
+def _extract_ixbrl_tag_narrative(html: str) -> str:
+    """Pull narrative blocks from inline XBRL ``ix:nonNumeric`` tags (CH accounts API)."""
+    blocks: list[tuple[int, int, str]] = []
+    for index, match in enumerate(_IXBRL_NONNUMERIC_RE.finditer(html or "")):
+        tag_name = match.group(2)
+        inner = _strip_html(match.group(3))
+        if len(inner) < 40:
+            continue
+        blocks.append((_ixbrl_tag_narrative_rank(tag_name), index, inner))
+    if not blocks:
+        return ""
+    blocks.sort(key=lambda item: (item[0], item[1]))
+    return "\n\n".join(block for _, _, block in blocks)
+
+
 def _extract_ixbrl_html_text(html: str) -> str:
     """Extract readable narrative from UK Companies House iXBRL/XHTML accounts."""
+    tag_narrative = _extract_ixbrl_tag_narrative(html or "")
     cleaned = re.sub(r"<ix:header[\s\S]*?</ix:header>", " ", html or "", flags=re.I)
     cleaned = re.sub(r"<ix:hidden[\s\S]*?</ix:hidden>", " ", cleaned, flags=re.I)
     cleaned = re.sub(r"<!--[\s\S]*?-->", " ", cleaned)
@@ -802,6 +847,8 @@ def _extract_ixbrl_html_text(html: str) -> str:
     text = re.sub(r"\b20\d{2}-\d{2}-\d{2}\b", " ", text)
     text = _SEC_MEMBER_TOKEN.sub(" ", text)
     text = re.sub(r"\s+", " ", text).strip()
+    if tag_narrative:
+        text = f"{tag_narrative}\n\n{text}".strip() if text else tag_narrative
     composed = _compose_filing_body_with_depth_sections(text)
     return composed or text
 
@@ -846,12 +893,24 @@ _CH_FINANCIAL_DEPTH_MARKERS: tuple[str, ...] = (
     "going concern",
     "related party",
 )
+_CH_FINANCIAL_DEPTH_STRONG_MARKERS: tuple[str, ...] = (
+    "defined benefit",
+    "pension scheme",
+    "borrowings",
+    "covenant",
+    "principal risk",
+    "principal risks",
+    "risks and uncertainties",
+)
 
 
 def _ch_body_lacks_financial_depth(text: str) -> bool:
     """True when extracted PDF text looks like front-matter only (no notes/statements)."""
     lower = (text or "").lower()
-    return not any(marker in lower for marker in _CH_FINANCIAL_DEPTH_MARKERS)
+    if any(marker in lower for marker in _CH_FINANCIAL_DEPTH_STRONG_MARKERS):
+        return False
+    hits = sum(1 for marker in _CH_FINANCIAL_DEPTH_MARKERS if marker in lower)
+    return hits < 2
 
 
 def _ch_mime_priority_rank(content_type: str) -> int:
@@ -878,6 +937,8 @@ def _select_best_ch_body_text(candidates: list[tuple[str, str]]) -> str | None:
         score = _score_ch_body_text(text)
         if _is_ch_pdf_content_type(content_type) and _ch_body_lacks_financial_depth(text):
             score -= 5_000
+        if not _is_ch_pdf_content_type(content_type):
+            score += 2_500
         rank = _ch_mime_priority_rank(content_type)
         key = (score, -rank)
         if key > best_key:
