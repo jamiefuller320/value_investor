@@ -25,6 +25,9 @@ from value_investor.scoring.conviction_timing_overlay import (
     enrich_signals_with_conviction_timing_overlay,
     resolve_transition_key,
 )
+from value_investor.scoring.dividend_sustainability_overlay import (
+    enrich_signals_with_dividend_dual_fcf_research_prompts,
+)
 from value_investor.scoring.dividend_yield_overlay import enrich_signals_with_dividend_yield_overlay
 from value_investor.scoring.earnings_basis_overlay import enrich_signals_with_earnings_basis_overlay
 from value_investor.scoring.earnings_growth_overlay import (
@@ -1297,6 +1300,9 @@ def test_enrich_signals_with_dividend_yield_overlay_caps_megp_like_profile():
                 "name": "ME Group International plc",
                 "sector": "Industrials",
                 "signal": "strong_buy",
+                "fcf_definition_divergence": True,
+                "fcf_dividend_coverage_net": 0.84,
+                "fcf_dividend_coverage_gross": 1.68,
             }
         ]
     )
@@ -1337,6 +1343,68 @@ def test_enrich_signals_with_dividend_yield_overlay_caps_megp_like_profile():
     assert enriched.iloc[0]["signal"] == "strong_buy"
     assert bool(enriched.iloc[0]["dividend_yield_overlay"]) is True
     assert enriched.iloc[0]["adjusted_signal"] == "buy"
+    assert enriched.iloc[0]["research_prompts"]
+    assert "dual fcf/dividend cover" in enriched.iloc[0]["research_prompts"][0].lower()
+    assert "0.84×" in enriched.iloc[0]["research_prompts"][0]
+
+
+def test_enrich_signals_dividend_dual_fcf_research_prompt_requires_dividend_family():
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "fcf_definition_divergence": True,
+                "fcf_dividend_coverage_net": 0.84,
+                "fcf_dividend_coverage_gross": 1.68,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "model_id": "high_dividend",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+    enriched = enrich_signals_with_dividend_dual_fcf_research_prompts(signals, model_results)
+    assert enriched.iloc[0]["research_prompts"]
+    assert "statutory OCF−CapEx" in enriched.iloc[0]["research_prompts"][0]
+
+    no_dividend_models = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "model_id": "fcf_yield",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+    skipped = enrich_signals_with_dividend_dual_fcf_research_prompts(signals, no_dividend_models)
+    assert skipped.iloc[0]["research_prompts"] == []
+
+
+def test_write_screening_snapshot_dividend_dual_fcf_prompt_when_family_passes(tmp_path: Path):
+    sources = tmp_path / "research" / "MEGP.L" / "sources"
+    snapshot = {
+        "ticker": "MEGP.L",
+        "signal": "buy",
+        "passed_families": "cheapness,quality,dividend,garp,risk",
+        "fcf_dividend_coverage_net": 0.84,
+        "fcf_dividend_coverage_gross": 1.68,
+        "fcf_definition_divergence": True,
+    }
+    write_screening_snapshot(sources, snapshot)
+    written = json.loads((sources / "screening_snapshot.json").read_text(encoding="utf-8"))
+    assert written["research_prompts"]
+    assert "management cash-generated−CapEx" in written["research_prompts"][0]
 
 
 def test_parse_interim_eps_decline_pct_from_filing_prose():

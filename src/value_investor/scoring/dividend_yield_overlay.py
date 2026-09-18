@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pandas as pd
 
 HIGH_DIVIDEND_MODEL_ID = "high_dividend"
@@ -15,6 +17,11 @@ _SIGNAL_RANK = {
     "avoid": 1,
     "insufficient_data": 0,
 }
+
+
+def high_dividend_screen_passed(ticker_models: pd.DataFrame) -> bool:
+    """True when the High Dividend Yield screen passes for the ticker."""
+    return _model_passed(ticker_models, HIGH_DIVIDEND_MODEL_ID) is True
 
 
 def _model_passed(ticker_models: pd.DataFrame, model_id: str) -> bool | None:
@@ -71,6 +78,8 @@ def apply_dividend_yield_overlay_to_signal(
 def enrich_signals_with_dividend_yield_overlay(
     signals: pd.DataFrame,
     model_results: pd.DataFrame,
+    *,
+    output_dir: Path | None = None,
 ) -> pd.DataFrame:
     """Add dividend-yield overlay flag and cap ``adjusted_signal`` when triggered."""
     out = signals.copy()
@@ -98,4 +107,12 @@ def enrich_signals_with_dividend_yield_overlay(
 
     out["dividend_yield_overlay"] = flags
     out["adjusted_signal"] = adjusted
-    return out
+    from value_investor.scoring.dividend_sustainability_overlay import (
+        enrich_signals_with_dividend_dual_fcf_research_prompts,
+    )
+
+    return enrich_signals_with_dividend_dual_fcf_research_prompts(
+        out,
+        model_results,
+        output_dir=output_dir,
+    )
