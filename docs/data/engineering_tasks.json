@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-18T17:23:17.258338+00:00",
+  "compiled_at": "2026-09-18T18:38:33.506213+00:00",
   "run_at": null,
-  "task_count": 49,
+  "task_count": 50,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2206,6 +2206,52 @@
       "merged_at": "2026-09-15T15:05:07.590899+00:00"
     },
     {
+      "id": "eng-20260918-17",
+      "area": "ingest",
+      "title": "Do not tag AGM notices/results, Payments to Governments, prospectuses, mineral-resources updates, Tomago/Boyne operating RNSs, or third-party SVM “Rio collab” i",
+      "summary": "Do not tag AGM notices/results, Payments to Governments, prospectuses, mineral-resources updates, Tomago/Boyne operating RNSs, or third-party SVM “Rio collab” i",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "RIO.L"
+        ],
+        "recorded_at": "2026-09-04T18:45:32.862885+00:00",
+        "narrow_scope_mode": "single",
+        "narrow_scope_reason": "topics=filings paths=2",
+        "narrow_parent_title": "Do not tag AGM notices/results, Payments to Governments, prospectuses, mineral-resources updates, Tomago/Boyne operating RNSs, or third-party SVM “Rio collab” i",
+        "narrow_cohesion_bypass": false,
+        "narrow_topics": [
+          "filings"
+        ],
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for RIO.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "tests/test_research_filings.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": true,
+      "status": "open"
+    },
+    {
       "id": "eng-20260918-15",
       "area": "ingest",
       "title": "The screen still emits strong_buy on the pre-deal consolidated group (advertising yield, company-adjusted FCF, P/E 11.6) after a announced carve-out that change",
@@ -2226,7 +2272,8 @@
         "origin_source": "research_model_suggestions",
         "origin_priority_score": 40.0,
         "preferred_merge_class": "compile_cap_drain",
-        "doc": "docs/ops/engineering-sync.md"
+        "doc": "docs/ops/engineering-sync.md",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for ITV.L",
@@ -2254,11 +2301,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "no_diff_count": 0,
       "result_path": "output/engineering_result_eng-20260918-15.md",
       "branch_name": "cursor/eng-20260918-15-1de3",
-      "completed_at": "2026-09-18T18:18:40.629367+00:00"
+      "completed_at": "2026-09-18T18:18:40.629367+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/717",
+      "pr_number": 717,
+      "merged_at": "2026-09-18T18:38:31.964507+00:00"
     },
     {
       "id": "eng-20260918-14",
@@ -2913,7 +2964,7 @@
   },
   "reprioritized_at": "2026-09-16T10:07:10.046741+00:00",
   "reprioritized_after_task": "eng-20260916-02",
-  "micro_compile_source": "parked_source_hunter",
+  "micro_compile_source": "compile_cap_drain",
   "library_market_id": "nasdaq100",
   "hunter_ticker": "PDD",
   "traffic_control": {
