@@ -9491,6 +9491,48 @@ def test_compose_filing_body_preserves_ir_deck_tail_beyond_lead_cut():
     assert not text.rstrip().endswith("Pension fundin")
 
 
+def test_compose_pdf_body_text_includes_megp_note_19_cash_in_transit_restatement():
+    """MEGP FY2025 annual report: depth extract must reach note 19 cash-in-transit restatement."""
+    early = "Strategic report and KPI tables " * 950
+    borrowings_noise = " NON-CURRENT BORROWINGS bank loans " * 40
+    note_19 = (
+        "19 Cash and cash equivalents\n"
+        "Cash in hand includes an estimate for cash in transit at the year end of £7,469,000\n"
+        "Correction of prior period error – cash in transit\n"
+        "The opening balance of cash and cash equivalents at 1 November 2024 has been restated "
+        "by a reduction of £8,689,000 to correct an error in the prior year financial statements. "
+        "The group statement of cashflows for the year ended 31 October 2024 has been restated "
+        "by decreasing cash generated from operations by £1,296,000."
+    )
+    full = early[:3500] + borrowings_noise * 30 + note_19
+
+    text = _compose_filing_body_with_depth_sections(full)
+    assert text is not None
+    assert "Correction of prior period error – cash in transit" in text
+    assert "restated by a reduction of £8,689,000" in text
+    assert "£1,296,000" in text
+
+
+def test_ir_allowlist_row_needs_body_refetch_detects_megp_missing_note_19(tmp_path: Path):
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    body_path = bodies_dir / "ir_megp_ar2025.txt"
+    body_path.write_text(
+        "FY 2024 figures have been restated. Refer to note 19 of the financial statements.\n"
+        "Cash and cash equivalents includes an estimate for cash in transit at the year end.\n",
+        encoding="utf-8",
+    )
+    row = {
+        "id": "ir_megp_ar2025",
+        "source": "ir_allowlist",
+        "has_body": True,
+        "body_path": str(body_path),
+        "url": "https://me-group.com/wp-content/uploads/2026/03/ME-Group-Annual-Report-2025.pdf",
+    }
+    assert _ir_allowlist_row_needs_body_refetch(row, bodies_dir) is True
+
+
 def test_ir_allowlist_row_needs_body_refetch_detects_28k_cut(tmp_path: Path):
     filings_dir = tmp_path / "filings"
     bodies_dir = filings_dir / "bodies"

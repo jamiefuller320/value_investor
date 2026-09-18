@@ -2210,6 +2210,9 @@ _PDF_DEPTH_SECTION_MARKERS: tuple[tuple[str, int], ...] = (
     (r"\bCONSOLIDATED (?:INCOME|STATEMENT OF COMPREHENSIVE INCOME)\b", 1),
     (r"\bCONSOLIDATED BALANCE SHEET\b", 1),
     (r"\bCONSOLIDATED STATEMENT OF FINANCIAL POSITION\b", 1),
+    (r"\bCorrection of prior period error\b", 1),
+    (r"\b19\s+Cash and cash equivalents\b", 1),
+    (r"\b5\)\s*Cash in transit\b", 2),
     (r"\b(?:NOTE|NOTES)\s+(?:TO THE )?(?:FINANCIAL|GROUP) STATEMENTS\b", 2),
     (r"\bEXCEPTIONAL ITEMS?\b", 2),
     (r"\bADJUSTING ITEMS?\b", 2),
@@ -2251,6 +2254,7 @@ def _extract_pdf_depth_sections(full_text: str, *, skip_before: int = 0) -> list
             used_ranges.append((start, end))
             if len(sections) >= _PDF_DEPTH_MAX_SECTIONS:
                 return sections
+            break
     return sections
 
 
@@ -4957,6 +4961,17 @@ def _ir_allowlist_row_needs_body_refetch(row: dict[str, Any], bodies_dir: Path) 
     if re.search(r"Pension fundin\s*$", tail, re.IGNORECASE):
         return True
     if len(text) == _PDF_DEPTH_LEAD_CHARS and "free cash flow" not in lower[-1200:]:
+        return True
+    if (
+        "refer to note 19 of the financial" in lower
+        and "correction of prior period error" not in lower
+    ):
+        return True
+    url_lower = str(row.get("url") or "").lower()
+    if (
+        "me-group-annual-report-2025.pdf" in url_lower
+        and "correction of prior period error" not in lower
+    ):
         return True
     return False
 
