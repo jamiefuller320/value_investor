@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-18T08:35:15.783356+00:00",
+  "compiled_at": "2026-09-18T09:23:42.390094+00:00",
   "run_at": null,
-  "task_count": 36,
+  "task_count": 37,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -638,23 +638,23 @@
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
     },
     {
-      "id": "eng-20260918-03",
+      "id": "eng-20260918-04",
       "area": "scoring",
-      "title": "fcf: Media cyclicality + thin FCF coverage overlay (advertising >40%, Piotroski ≤4, statutory FCF/dividend ≤1.1×). [1/2]",
-      "summary": "First-principle slice 1/2 of: Media cyclicality + thin FCF coverage overlay (advertising >40%, Piotroski ≤4, statutory FCF/dividend ≤1.1×).. topics=fcf paths=8",
+      "title": "fcf: Primary dividend-sustainability overlay on statutory FCF/dividend; warn when interim dividend is cut despite high trailing yield pass. [1/2]",
+      "summary": "First-principle slice 1/2 of: Primary dividend-sustainability overlay on statutory FCF/dividend; warn when interim dividend is cut despite high trailing yield pass.. topics=fcf paths=8",
       "priority": "medium",
       "priority_score": 43.0,
       "source": "compile_cap_drain",
       "evidence": {
         "tickers": [
-          "ITV.L"
+          "MEGP.L"
         ],
-        "recorded_at": "2026-09-06T07:48:26.505370+00:00",
+        "recorded_at": "2026-09-12T12:36:40.963328+00:00",
         "narrow_scope_mode": "split",
         "narrow_scope_reason": "topics=fcf paths=8",
-        "narrow_parent_title": "Media cyclicality + thin FCF coverage overlay (advertising >40%, Piotroski ≤4, statutory FCF/dividend ≤1.1×).",
+        "narrow_parent_title": "Primary dividend-sustainability overlay on statutory FCF/dividend; warn when interim dividend is cut despite high trailing yield pass.",
         "narrow_cohesion_bypass": false,
-        "narrow_split_group_id": "d60b170db43d",
+        "narrow_split_group_id": "8f55ae342832",
         "narrow_split_index": 1,
         "narrow_split_count": 2,
         "narrow_topics": [
@@ -690,11 +690,71 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": true,
-      "status": "pr_open",
+      "status": "open"
+    },
+    {
+      "id": "eng-20260918-03",
+      "area": "scoring",
+      "title": "fcf: Media cyclicality + thin FCF coverage overlay (advertising >40%, Piotroski ≤4, statutory FCF/dividend ≤1.1×). [1/2]",
+      "summary": "First-principle slice 1/2 of: Media cyclicality + thin FCF coverage overlay (advertising >40%, Piotroski ≤4, statutory FCF/dividend ≤1.1×).. topics=fcf paths=8",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "ITV.L"
+        ],
+        "recorded_at": "2026-09-06T07:48:26.505370+00:00",
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "topics=fcf paths=8",
+        "narrow_parent_title": "Media cyclicality + thin FCF coverage overlay (advertising >40%, Piotroski ≤4, statutory FCF/dividend ≤1.1×).",
+        "narrow_cohesion_bypass": false,
+        "narrow_split_group_id": "d60b170db43d",
+        "narrow_split_index": 1,
+        "narrow_split_count": 2,
+        "narrow_topics": [
+          "fcf"
+        ],
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap",
+        "merge_class": "compile_cap_drain"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/scoring/fcf.py",
+        "src/value_investor/scoring/fcf_basis_overlay.py",
+        "src/value_investor/scoring/fcf_three_way_conviction_overlay.py",
+        "src/value_investor/scoring/screening_export_guard.py",
+        "src/value_investor/scoring/snapshot.py",
+        "src/value_investor/pipeline.py",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": true,
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260918-03.md",
       "branch_name": "cursor/eng-20260918-03-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-18T08:40:56.540106+00:00"
+      "completed_at": "2026-09-18T08:40:56.540106+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/702",
+      "pr_number": 702,
+      "merged_at": "2026-09-18T09:23:40.537566+00:00"
     },
     {
       "id": "eng-20260918-02",
