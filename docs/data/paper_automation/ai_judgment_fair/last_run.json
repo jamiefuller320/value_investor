@@ -1,11 +1,11 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-17T09:30:28.255143+01:00",
+    "local_time": "2026-09-18T09:30:41.907017+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-09-17T08:00:00+01:00",
-    "settle_at": "2026-09-17T09:15:00+01:00",
+    "market_open_at": "2026-09-18T08:00:00+01:00",
+    "settle_at": "2026-09-18T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
@@ -23,7 +23,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 848.38,
+    "nav": 853.1,
     "cash": 0.0,
     "max_positions": 3,
     "min_conviction": 0.6,
@@ -33,58 +33,71 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 282.79,
+    "target_sleeve_value": 284.34,
     "targets": [
       {
-        "ticker": "KLR.L",
-        "name": "Keller Group plc",
-        "signal": "buy",
+        "ticker": "GEN.L",
+        "name": "Genuit Group plc",
+        "signal": "strong_buy",
         "conviction_score": 1.0,
-        "price": 3108.6709
+        "price": 263.2
       },
       {
         "ticker": "CURY.L",
         "name": "Currys plc",
         "signal": "buy",
         "conviction_score": 1.0,
-        "price": 148.2
+        "price": 146.8
       },
       {
         "ticker": "DSCV.L",
         "name": "discoverIE Group plc",
         "signal": "buy",
-        "conviction_score": 0.9542000000000003,
-        "price": 772.0
+        "conviction_score": 1.0,
+        "price": 784.0
       }
     ],
-    "anticipated_exits": [],
+    "anticipated_exits": [
+      {
+        "action": "sell",
+        "ticker": "KLR.L",
+        "name": "Keller Group plc",
+        "reason": "No longer in the top conviction target set",
+        "shares": 0.092428,
+        "price": 3140.0,
+        "value": 290.22
+      }
+    ],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [],
+    "anticipated_buys": [
+      {
+        "action": "buy",
+        "ticker": "GEN.L",
+        "name": "Genuit Group plc",
+        "reason": "New sleeve",
+        "value": 284.34,
+        "price": 263.2,
+        "target_value": 284.34,
+        "conviction_score": 1.0,
+        "signal": "strong_buy"
+      }
+    ],
     "anticipated_holds": [
       {
         "action": "hold",
-        "ticker": "DSCV.L",
-        "name": "discoverIE Group plc",
-        "reason": "Already near equal-weight target",
-        "value": 284.88,
-        "target_value": 282.79,
-        "conviction_score": 0.9542000000000003,
-        "signal": "buy"
-      }
-    ],
-    "skipped": [
-      {
         "ticker": "CURY.L",
         "name": "Currys plc",
-        "reason": "Insufficient cash after higher-conviction fills",
-        "target_value": 282.79,
+        "reason": "Top-up below min trade size (\u00a310)",
+        "value": 273.56,
+        "target_value": 284.34,
         "conviction_score": 1.0,
         "signal": "buy"
       }
     ],
+    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); leave 1 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 1 buy(s); leave 1 near-target holding(s)."
   },
   "alerts": [
     {
@@ -93,7 +106,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 3108.6708984375,
+      "mark": 3140.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -104,7 +117,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 772.0,
+      "mark": 784.0,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -115,7 +128,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 148.1999969482422,
+      "mark": 146.8000030517578,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -909,11 +922,29 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-18T09:30:41.907017+01:00",
+        "portfolio_value": 853.1,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-17T09:30:28.255143+01:00",
+    "last_mark_at": "2026-09-18T09:30:41.907017+01:00",
     "rebalance_state": {
-      "exit_streak": {},
+      "exit_streak": {
+        "KLR.L": 1
+      },
       "reentry_cooldown": {}
     }
   },
@@ -921,7 +952,7 @@
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-09-17T08:30:48.784591+00:00",
+    "generated_at": "2026-09-18T08:31:05.301928+00:00",
     "open_count": 9,
     "closed_count": 0,
     "by_exit_kind": {},
@@ -935,12 +966,12 @@
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
     "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 3
+    "checkpoints_added_this_pass": 1
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-09-17T08:30:48.785458+00:00",
+    "generated_at": "2026-09-18T08:31:05.302854+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -996,7 +1027,7 @@
       "ready_for_probability_analysis": false,
       "hold_closed_count": 6,
       "swap_closed_count": 0,
-      "hold_with_data_quality_count": 8,
+      "hold_with_data_quality_count": 9,
       "gaps": [
         "hold_recovery closed episodes=6 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
@@ -1005,10 +1036,10 @@
     },
     "hold_recovery": {
       "open": {
-        "count": 2,
-        "recovered_to_breakeven": 1,
+        "count": 3,
+        "recovered_to_breakeven": 2,
         "close_reasons": {
-          "open": 2
+          "open": 3
         }
       },
       "closed": {
@@ -1033,12 +1064,12 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 1,
       "swap_rotations": 0
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
-      "swap_rotations": 1
+      "swap_rotations": 0
     }
   },
   "hypothesis_integrity": {
@@ -1046,8 +1077,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "ai_judgment_fair",
-    "updated_at": "2026-09-17T08:30:48.786552+00:00",
-    "as_of": "2026-09-17T09:30:28.255143+01:00",
+    "updated_at": "2026-09-18T08:31:05.303981+00:00",
+    "as_of": "2026-09-18T09:30:41.907017+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1098,18 +1129,18 @@
     },
     "holdings": [
       {
-        "ticker": "DSCV.L",
-        "name": "discoverIE Group plc",
+        "ticker": "CURY.L",
+        "name": "Currys plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0052,
-        "mark": 772.0,
-        "avg_cost": 776.0,
+        "unrealized_pct": -0.0141,
+        "mark": 146.8,
+        "avg_cost": 148.9,
         "signal": "buy",
         "timing_signal": "insufficient_data",
-        "conviction_score": 0.9542,
+        "conviction_score": 1.0,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -1125,28 +1156,28 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 95%"
+          "conviction 100%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 95%"
+          "conviction 100%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
       },
       {
-        "ticker": "CURY.L",
-        "name": "Currys plc",
+        "ticker": "DSCV.L",
+        "name": "discoverIE Group plc",
         "thesis_status": "intact",
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0047,
-        "mark": 148.2,
-        "avg_cost": 148.9,
+        "unrealized_pct": 0.0103,
+        "mark": 784.0,
+        "avg_cost": 776.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
         "conviction_score": 1.0,
@@ -1184,8 +1215,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0432,
-        "mark": 3108.6709,
+        "unrealized_pct": 0.0537,
+        "mark": 3140.0,
         "avg_cost": 2980.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
@@ -1225,7 +1256,7 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "ai_judgment_fair",
-    "generated_at": "2026-09-17T08:30:48.787959+00:00",
+    "generated_at": "2026-09-18T08:31:05.305438+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
@@ -1233,7 +1264,7 @@
     "hold_recovery_by_thesis": {
       "closed_total": 6,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 2,
+      "open_with_thesis": 3,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
@@ -1293,7 +1324,7 @@
     "schema_version": 1,
     "track_id": "ai_judgment_fair",
     "observe_only": true,
-    "generated_at": "2026-09-17T08:30:48.790098+00:00",
+    "generated_at": "2026-09-18T08:31:05.307582+00:00",
     "open_count": 3,
     "closed_count": 3,
     "scored_count": 2,
@@ -1356,7 +1387,7 @@
     "marked_this_pass": 3,
     "closed_this_pass": 0
   },
-  "generated_at": "2026-09-17T08:30:48.790397+00:00",
+  "generated_at": "2026-09-18T08:31:05.307884+00:00",
   "track_id": "ai_judgment_fair",
   "track_label": "AI judgment fair-cost lab (Suite B)",
   "is_primary_learning_track": false,
