@@ -213,6 +213,12 @@ The repo was bulk-formatted once (Aug 2026) so touched files rarely surface lega
 (see `.github/workflows/ci.yml` `paths-ignore`). That can hide test coupling to
 committed snapshots until a code PR runs pytest.
 
+**CI pytest parallelism:** `ci.yml` and `ci-main-nightly.yml` run the full suite
+as **four matrix shards** (`python3 -m value_investor.pytest_shard --shards 4`).
+Each shard is an independent job; together they cover every `tests/` module
+exactly once. Preflight on engineering PRs is unchanged (scoped pytest before
+open). See `src/value_investor/pytest_shard.py`.
+
 **`ci-main-nightly.yml`** runs full pytest on `main` daily (07:30 UTC via
 cron-job.org; GitHub `schedule` backup). Failures enter the same ci-fix-responder
 loop above.

@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -48,8 +48,32 @@ jobs:
           fi
           python3 scripts/check_changed_python.py --base "${BASE_REF}" --head HEAD
 
-      - name: Pytest
-        run: pytest -q
+  test:
+    needs: validate
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package + test deps
+        run: pip install -e ".[dev]"
+
+      - name: Pytest (shard ${{ matrix.shard }}/4)
+        run: |
+          set -euo pipefail
+          FILES=$(python3 -m value_investor.pytest_shard --shard "${{ matrix.shard }}" --shards 4)
+          echo "Running: $FILES"
+          pytest -q $FILES
 
   engineering-path-guard:
     if: github.event_name == 'pull_request'
