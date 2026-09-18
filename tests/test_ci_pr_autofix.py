@@ -18,6 +18,7 @@ from value_investor.ci_pr_autofix import (
     classify_ci_log_failures,
     diagnose_pr_ci_failure,
     format_pr_ci_comment,
+    function_added_in_diff,
     is_incidental_research_artifact,
     is_library_cache_json,
     is_timestamp_only_library_cache_change,
@@ -25,7 +26,6 @@ from value_investor.ci_pr_autofix import (
     path_guard_actions_skip_verify_pytest,
     path_guard_effective_changed_paths,
     run_pr_ci_autofix_pipeline,
-    function_added_in_diff,
 )
 from value_investor.engineering_tasks import validate_engineering_pr_paths_for_task_id
 
@@ -686,4 +686,3 @@ def test_function_added_in_diff_matches_only_added_defs():
     diff = "+def test_new_thing():\n-def test_old():\n"
     assert function_added_in_diff("test_new_thing", diff) is True
     assert function_added_in_diff("test_old", diff) is False
-

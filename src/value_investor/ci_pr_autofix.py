@@ -275,18 +275,11 @@ def assess_no_autofix_followup(
     live = bool(names) and all(_LIVE_FETCH_TEST_RE.search(name) for name in names)
     log_looks_transient = bool(_LIVE_FETCH_LOG_RE.search(log_text or ""))
     added = [name for name in names if function_added_in_diff(name, diff_text)]
-    if (
-        kinds == ["pytest"]
-        and live
-        and log_looks_transient
-        and not added
-        and run_attempt <= 1
-    ):
+    if kinds == ["pytest"] and live and log_looks_transient and not added and run_attempt <= 1:
         listed = ", ".join(f"`{node}`" for node in nodes[:4])
         return NoAutofixFollowup(
             why=(
-                "Pytest-only failure is outside PR autofix "
-                "(ruff and engineering path-guard only)."
+                "Pytest-only failure is outside PR autofix (ruff and engineering path-guard only)."
             ),
             implementable=True,
             action="rerun_failed_ci",
