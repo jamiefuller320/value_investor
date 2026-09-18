@@ -70,9 +70,13 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%202025%20FY%20Results%20Presentation.pdf",
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%20_%202025%20Interim%20Results%20Presentation.pdf",
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/ITV%20Plc%20FY%202024%20Results%20Presentation%20-%2006032025.pdf",
+        # Statutory FY25 accounts — filing-aligned FCF vs Yahoo/screen TTM (eng-20260918-15).
+        "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/downloads/annual-report-2025.pdf",
         # Live-path period gap — 2026 H1 statutory report + deck (held name).
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/2026-IR/2026-half-year-results-materials/ITV-plc-2026-half-year-report.pdf",
         "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/2026-IR/2026-half-year-results-materials/ITV-plc-2026-half-year-results-presentation.pdf",
+        # Q1 2026 trading update — ad-revenue cyclicality when Yahoo quarterlies are empty.
+        "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/2026-IR/ITV%20Plc%20Q1%202026%20Trading%20Update.pdf",
     ],
     # Live-path target — IMB index is own-shares/TVR; HY26 RNS was missing. IR hub is bot-gated.
     "IMB.L": [
@@ -6253,6 +6257,269 @@ def parse_ir_dividend_policy(body_text: str) -> dict[str, Any] | None:
     elif policy.get("total_dividend_pence") or policy.get("full_year_dividend_pence"):
         policy["parse_confidence"] = "high"
     return policy
+
+
+_STATUTORY_INTERIM_FCF_RE = re.compile(
+    r"free cash flow of £(\d+(?:\.\d+)?)\s*million\s*\([^)]*:\s*£(\d+(?:\.\d+)?)\s*million\)",
+    re.IGNORECASE | re.DOTALL,
+)
+_STATUTORY_INTERIM_ADJ_EPS_RE = re.compile(
+    r"Adjusted EPS for the period was\s+([\d.]+)p\s*\([^)]*:\s*([\d.]+)p\)",
+    re.IGNORECASE,
+)
+_STATUTORY_INTERIM_STAT_EPS_RE = re.compile(
+    r"Statutory EPS increased from\s+([\d.]+)p to\s+([\d.]+)p",
+    re.IGNORECASE,
+)
+_STATUTORY_INTERIM_PROFIT_TO_CASH_RE = re.compile(
+    r"profit to cash conversion on a 12-month rolling basis was\s+(\d+(?:\.\d+)?)%"
+    r"\s*\([^)]*:\s*(\d+(?:\.\d+)?)%\)",
+    re.IGNORECASE | re.DOTALL,
+)
+_TRADING_UPDATE_TOTAL_AD_REVENUE_RE = re.compile(
+    r"Total advertising revenue\s+([\d,]+)\s+([\d,]+)\s*\(([-\d]+)\)",
+    re.IGNORECASE,
+)
+_DISPOSAL_RNS_CONSIDERATION_RE = re.compile(
+    r"(?:up to )?£([\d.]+)\s*b(?:illion|n)?\s+(?:of )?(?:total )?consideration",
+    re.IGNORECASE,
+)
+
+
+def parse_statutory_interim_results_highlights(body_text: str) -> dict[str, Any] | None:
+    """Parse UK half-year statutory report prose for interim FCF, EPS, and profit-to-cash."""
+    if not body_text or not body_text.strip():
+        return None
+    if not re.search(r"\binterim results\b|\bhalf year\b", body_text, re.IGNORECASE):
+        return None
+    payload: dict[str, Any] = {"source_type": "statutory_interim_highlights", "currency": "GBP"}
+    fcf_match = _STATUTORY_INTERIM_FCF_RE.search(body_text)
+    if fcf_match:
+        payload["free_cash_flow_millions"] = float(fcf_match.group(1))
+        payload["prior_free_cash_flow_millions"] = float(fcf_match.group(2))
+    adj_eps = _STATUTORY_INTERIM_ADJ_EPS_RE.search(body_text)
+    if adj_eps:
+        payload["adjusted_eps_pence"] = float(adj_eps.group(1))
+        payload["prior_adjusted_eps_pence"] = float(adj_eps.group(2))
+        if payload["prior_adjusted_eps_pence"]:
+            payload["adjusted_eps_change_pct"] = (
+                payload["adjusted_eps_pence"] - payload["prior_adjusted_eps_pence"]
+            ) / payload["prior_adjusted_eps_pence"]
+    stat_eps = _STATUTORY_INTERIM_STAT_EPS_RE.search(body_text)
+    if stat_eps:
+        payload["prior_statutory_eps_pence"] = float(stat_eps.group(1))
+        payload["statutory_eps_pence"] = float(stat_eps.group(2))
+    ptc = _STATUTORY_INTERIM_PROFIT_TO_CASH_RE.search(body_text)
+    if ptc:
+        payload["profit_to_cash_pct"] = float(ptc.group(1))
+        payload["prior_profit_to_cash_pct"] = float(ptc.group(2))
+    if len(payload) <= 2:
+        return None
+    payload["parse_confidence"] = "high" if fcf_match and adj_eps else "medium"
+    return payload
+
+
+def parse_trading_update_advertising_revenue(body_text: str) -> dict[str, Any] | None:
+    """Parse total advertising revenue table lines from UK trading-update PDFs."""
+    if not body_text or not body_text.strip():
+        return None
+    match = _TRADING_UPDATE_TOTAL_AD_REVENUE_RE.search(body_text)
+    if match is None:
+        return None
+    current = _parse_table_number(match.group(1))
+    prior = _parse_table_number(match.group(2))
+    change_raw = match.group(3)
+    change_pct = _parse_table_number(change_raw)
+    if change_pct is not None and change_raw.strip().startswith("-"):
+        change_pct = -abs(change_pct)
+    elif change_pct is not None and "(" in match.group(0):
+        change_pct = -abs(change_pct)
+    if current is None or prior is None:
+        return None
+    return {
+        "metric": "total_advertising_revenue",
+        "currency": "GBP",
+        "unit": "million",
+        "current": current,
+        "prior": prior,
+        "change_pct": change_pct,
+        "parse_confidence": "high",
+    }
+
+
+def parse_disposal_rns_highlights(body_text: str, *, headline: str = "") -> dict[str, Any] | None:
+    """Extract carve-out / disposal terms from sale-of-business RNS bodies."""
+    blob = f"{headline}\n{body_text}".lower()
+    if not any(token in blob for token in ("sale of", "disposal", "carve-out", "carve out")):
+        return None
+    payload: dict[str, Any] = {"source_type": "corporate_action_disposal"}
+    if re.search(r"\bm&e\b|media & entertainment", blob):
+        payload["perimeter"] = "itv_me_disposal"
+    consideration = _DISPOSAL_RNS_CONSIDERATION_RE.search(body_text)
+    if consideration:
+        payload["headline_consideration_gbp_billions"] = float(consideration.group(1))
+    if "sky" in blob:
+        payload["counterparty"] = "Sky"
+    if len(payload) <= 1:
+        return None
+    payload["parse_confidence"] = "high" if payload.get("counterparty") else "medium"
+    return payload
+
+
+def _resolve_filing_body_path_for_row(row: dict[str, Any], bodies_dir: Path) -> Path | None:
+    body_path = row.get("body_path")
+    if body_path:
+        path = Path(str(body_path))
+        if path.is_file():
+            return path
+    candidate = bodies_dir / f"{row.get('id')}.txt"
+    return candidate if candidate.is_file() else None
+
+
+def _interim_filing_row_rank(row: dict[str, Any]) -> tuple:
+    headline = str(row.get("headline") or "").lower()
+    url = str(row.get("url") or "").lower()
+    statutory = 0 if ("half-year-report" in url or "interim results" in headline) else 1
+    return (
+        statutory,
+        str(row.get("published_at") or ""),
+    )
+
+
+def extract_filing_interim_financials(
+    filings_dir: Path,
+    ticker: str,
+    *,
+    sources_dir: Path | None = None,
+) -> dict[str, Any]:
+    """
+    Build structured interim/trading/corporate-action extracts from bodied filings.
+
+    Used when Yahoo quarterly income/cash-flow series are empty (typical UK half-year reporters).
+    """
+    from value_investor.storage import write_json
+
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
+    payload: dict[str, Any] = {
+        "ticker": ticker.strip().upper(),
+        "extracted_at": datetime.now(UTC).isoformat(),
+        "interim_highlights": None,
+        "trading_update_advertising": None,
+        "corporate_actions": [],
+    }
+    if not index_path.is_file():
+        payload["note"] = "no filings_index.json"
+        if sources_dir is not None:
+            write_json(
+                Path(sources_dir) / "filing_interim_financials.json",
+                payload,
+                compact=False,
+                compress=False,
+            )
+        return payload
+
+    try:
+        index = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError) as exc:
+        payload["note"] = f"unreadable index: {exc}"
+        if sources_dir is not None:
+            write_json(
+                Path(sources_dir) / "filing_interim_financials.json",
+                payload,
+                compact=False,
+                compress=False,
+            )
+        return payload
+
+    bodies_dir = filings_dir / "bodies"
+    interim_rows = [
+        row
+        for row in index.get("filings") or []
+        if isinstance(row, dict)
+        and str(row.get("period") or "") == "interim"
+        and row.get("has_body")
+    ]
+    statutory_interim = [row for row in interim_rows if _interim_filing_row_rank(row)[0] == 0]
+    interim_candidates = statutory_interim or interim_rows
+    if interim_candidates:
+        row = max(interim_candidates, key=lambda item: str(item.get("published_at") or ""))
+        interim_candidates = [row]
+    for row in interim_candidates:
+        path = _resolve_filing_body_path_for_row(row, bodies_dir)
+        if path is None:
+            continue
+        try:
+            body_text = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        highlights = parse_statutory_interim_results_highlights(body_text)
+        if highlights:
+            payload["interim_highlights"] = {
+                **highlights,
+                "source_body_id": row.get("id"),
+                "headline": row.get("headline"),
+            }
+            break
+
+    trading_rows = [
+        row
+        for row in index.get("filings") or []
+        if isinstance(row, dict)
+        and str(row.get("period") or "") == "trading_update"
+        and row.get("has_body")
+    ]
+    trading_rows.sort(key=lambda row: str(row.get("published_at") or ""), reverse=True)
+    for row in trading_rows:
+        path = _resolve_filing_body_path_for_row(row, bodies_dir)
+        if path is None:
+            continue
+        try:
+            body_text = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        ad_rev = parse_trading_update_advertising_revenue(body_text)
+        if ad_rev:
+            payload["trading_update_advertising"] = {
+                **ad_rev,
+                "source_body_id": row.get("id"),
+                "headline": row.get("headline"),
+            }
+            break
+
+    for row in index.get("filings") or []:
+        if not isinstance(row, dict) or not row.get("has_body"):
+            continue
+        if str(row.get("period") or "") != "other" or not _is_material_corporate_action_row(row):
+            continue
+        path = _resolve_filing_body_path_for_row(row, bodies_dir)
+        if path is None:
+            continue
+        try:
+            body_text = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        action = parse_disposal_rns_highlights(
+            body_text,
+            headline=str(row.get("headline") or ""),
+        )
+        if action:
+            payload["corporate_actions"].append(
+                {
+                    **action,
+                    "source_body_id": row.get("id"),
+                    "headline": row.get("headline"),
+                }
+            )
+
+    if sources_dir is not None:
+        write_json(
+            Path(sources_dir) / "filing_interim_financials.json",
+            payload,
+            compact=False,
+            compress=False,
+        )
+    return payload
 
 
 def parse_ir_operating_cash_flow_highlights(body_text: str) -> dict[str, Any] | None:

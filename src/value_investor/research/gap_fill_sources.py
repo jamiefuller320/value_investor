@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.research.filings import (
+    extract_filing_interim_financials,
     extract_ir_presentation_metrics,
     fetch_filings_ir_allowlist,
     merge_ir_allowlist_filings,
@@ -515,6 +516,11 @@ def prepare_gap_fill_source_pack(
         ticker,
         sources_dir=sources_dir,
     )
+    filing_interim_financials = extract_filing_interim_financials(
+        filings_dir,
+        ticker,
+        sources_dir=sources_dir,
+    )
 
     alternate_articles = fetch_alternate_gap_fill_news(company_name, ticker, market=market)
     alternate_path = sources_dir / "alternate_news.json"
@@ -587,6 +593,14 @@ def prepare_gap_fill_source_pack(
             "lease_maturity_count": ir_presentation_metrics.get("lease_maturity_count", 0),
             "mandatory": ir_presentation_metrics.get("mandatory", False),
             "path": str(sources_dir / "ir_presentation_metrics.json"),
+        },
+        "filing_interim_financials": {
+            "has_interim_highlights": bool(filing_interim_financials.get("interim_highlights")),
+            "has_trading_advertising": bool(
+                filing_interim_financials.get("trading_update_advertising")
+            ),
+            "corporate_action_count": len(filing_interim_financials.get("corporate_actions") or []),
+            "path": str(sources_dir / "filing_interim_financials.json"),
         },
         "alternate_news_added": added,
         "alternate_news_path": str(alternate_path),
