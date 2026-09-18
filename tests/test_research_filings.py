@@ -2105,6 +2105,142 @@ def test_refetch_investegate_prioritises_itv_sky_before_consent(tmp_path: Path, 
     assert by_id["consent_notes"]["has_body"] is False
 
 
+def test_refetch_investegate_prioritises_itv_statutory_interim_before_sky_sale(
+    tmp_path: Path, monkeypatch
+):
+    """eng-20260918-12: annual/interim numbers gaps refetch before transformative M&A RNS."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    fetch_order: list[str] = []
+
+    def fake_fetch(url):
+        fetch_order.append(url)
+        return ("Statutory interim narrative " + ("x" * 220), None)
+
+    index = {
+        "ticker": "ITV.L",
+        "company_name": "ITV plc",
+        "filings": [
+            {
+                "id": "10f52d865099383d",
+                "source": "investegate_resolved",
+                "headline": "SALE OF ITV M&E BUSINESS TO SKY",
+                "published_at": "2026-07-06T06:06:26+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/itv--itv/sky-sale/1",
+                "period": "other",
+                "has_body": False,
+                "priority": 70,
+            },
+            {
+                "id": "d19c5d3b8e0bb46a",
+                "source": "investegate_resolved",
+                "headline": "ITV plc Interim Results to 30 June 2026",
+                "published_at": "2026-07-31T00:00:00+00:00",
+                "url": "https://www.investegate.co.uk/announcement/rns/itv--itv/interim-2026/1",
+                "period": "interim",
+                "has_body": False,
+                "priority": 120,
+            },
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.filter_misattributed_filings",
+        lambda rows, **kwargs: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_rns_filing_body_for_refetch",
+        lambda url: fake_fetch(url),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="ITV.L",
+        company_name="ITV plc",
+        max_bodies=1,
+    )
+    assert result["fetched"] == 1
+    assert fetch_order == [
+        "https://www.investegate.co.uk/announcement/rns/itv--itv/interim-2026/1",
+    ]
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    by_id = {row["id"]: row for row in saved["filings"]}
+    assert by_id["d19c5d3b8e0bb46a"]["has_body"] is True
+    assert by_id["10f52d865099383d"]["has_body"] is False
+
+
+def test_refetch_ir_allowlist_itv_statutory_report_before_presentation(tmp_path: Path, monkeypatch):
+    """eng-20260918-12: IR refetch prefers H1 statutory report over results deck when capped."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+
+    rows = fetch_filings_ir_allowlist("ITV.L", path=allowlist_path)
+    statutory_url = next(row["url"] for row in rows if "2026-half-year-report" in row["url"])
+    deck_url = next(
+        row["url"]
+        for row in rows
+        if row["period"] == "interim" and "presentation" in row["url"].lower()
+    )
+    import hashlib
+
+    def row_for(url: str, period: str) -> dict:
+        digest = hashlib.sha256(url.encode("utf-8")).hexdigest()[:16]
+        return {
+            "id": f"ir_{digest}",
+            "source": "ir_allowlist",
+            "headline": f"IR allowlist document — {url.rsplit('/', 1)[-1]}",
+            "url": url,
+            "period": period,
+            "has_body": False,
+            "body_path": None,
+            "priority": 130,
+        }
+
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [row_for(deck_url, "interim"), row_for(statutory_url, "interim")]}),
+        encoding="utf-8",
+    )
+    fetch_order: list[str] = []
+
+    def fake_fetch(url):
+        fetch_order.append(url)
+        return "ITV plc Interim results six months ended 30 June 2026 free cash flow £40m " + (
+            "z" * 220
+        )
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.merge_ir_allowlist_filings",
+        lambda *args, **kwargs: {"added": 0, "total_allowlist": 2, "note": "test"},
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: fake_fetch(url) if url in {statutory_url, deck_url} else None,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_pdf_alternate_candidates",
+        lambda _url: [],
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
+    )
+
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "ITV.L",
+        company_name="ITV plc",
+        max_bodies=1,
+        allowlist_path=allowlist_path,
+    )
+    assert result["fetched"] == 1
+    assert fetch_order == [statutory_url]
+
+
 def test_parse_statutory_interim_results_highlights_itv_h1_2026():
     """eng-20260918-15: H1 statutory report prose yields interim FCF/EPS for empty Yahoo quarterlies."""
     from value_investor.research.filings import parse_statutory_interim_results_highlights
