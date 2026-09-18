@@ -29,6 +29,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 import zipfile
+from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
 from email.utils import parsedate_to_datetime
 from html import unescape
@@ -646,6 +647,14 @@ _PRIORITY_PATTERNS = (
     + _INTERIM_PATTERNS
     + _TRADING_UPDATE_PATTERNS
     + (r"\bannual report and accounts\b",)
+)
+
+_CORPORATE_ACTION_PATTERNS = (
+    r"\bsale of\b",
+    r"\bdisposal of\b",
+    r"\bacquisition of\b",
+    r"\brecommended offer\b",
+    r"\brecommended cash offer\b",
 )
 
 
@@ -1286,6 +1295,18 @@ def _rns_results_document_key(row: dict[str, Any]) -> str | None:
     return f"{period}|{norm_url}"
 
 
+def _rns_investegate_announcement_key(row: dict[str, Any]) -> str | None:
+    """Group investegate_direct vs investegate_resolved rows for one announcement page."""
+    url = str(row.get("url") or "")
+    if "investegate.co.uk/announcement/" not in url.lower():
+        return None
+    parsed = urllib.parse.urlparse(url)
+    path = parsed.path.rstrip("/").lower()
+    if not path:
+        return None
+    return f"announce|{path}"
+
+
 def _rns_body_quality_score(row: dict[str, Any], filings_dir: Path) -> int:
     """Higher scores win when two index rows share the same results PDF."""
     snippet = _body_snippet_for_row(row, filings_dir) or ""
@@ -1336,20 +1357,15 @@ def _prefer_rns_results_row(
     return winner
 
 
-def dedupe_rns_results_document_rows(
+def _dedupe_rns_rows_by_key(
     filings: list[dict[str, Any]],
     *,
     filings_dir: Path,
+    key_fn: Callable[[dict[str, Any]], str | None],
 ) -> tuple[list[dict[str, Any]], int]:
-    """
-    Collapse duplicate annual/interim rows that share one LSE PDF.
-
-    Keeps the latest ``published_at`` announcement (not the period-end stub date)
-    and prefers full statutory extracts over Investegate AI-summary wrappers.
-    """
     winners: dict[str, dict[str, Any]] = {}
     for row in filings:
-        key = _rns_results_document_key(row)
+        key = key_fn(row)
         if not key:
             continue
         current = winners.get(key)
@@ -1362,7 +1378,7 @@ def dedupe_rns_results_document_rows(
     out: list[dict[str, Any]] = []
     seen: set[str] = set()
     for row in filings:
-        key = _rns_results_document_key(row)
+        key = key_fn(row)
         if not key:
             out.append(row)
             continue
@@ -1374,6 +1390,51 @@ def dedupe_rns_results_document_rows(
     return out, pruned
 
 
+def dedupe_rns_results_document_rows(
+    filings: list[dict[str, Any]],
+    *,
+    filings_dir: Path,
+) -> tuple[list[dict[str, Any]], int]:
+    """
+    Collapse duplicate annual/interim rows that share one LSE PDF.
+
+    Keeps the latest ``published_at`` announcement (not the period-end stub date)
+    and prefers full statutory extracts over Investegate AI-summary wrappers.
+    """
+    return _dedupe_rns_rows_by_key(
+        filings,
+        filings_dir=filings_dir,
+        key_fn=_rns_results_document_key,
+    )
+
+
+def dedupe_rns_investegate_announcement_rows(
+    filings: list[dict[str, Any]],
+    *,
+    filings_dir: Path,
+) -> tuple[list[dict[str, Any]], int]:
+    """Collapse duplicate Investegate HTML rows (direct vs resolved) for one RNS page."""
+    return _dedupe_rns_rows_by_key(
+        filings,
+        filings_dir=filings_dir,
+        key_fn=_rns_investegate_announcement_key,
+    )
+
+
+def dedupe_rns_index_rows(
+    filings: list[dict[str, Any]],
+    *,
+    filings_dir: Path,
+) -> tuple[list[dict[str, Any]], int]:
+    """Apply results-PDF and Investegate announcement dedupe passes."""
+    merged, pruned_pdf = dedupe_rns_results_document_rows(filings, filings_dir=filings_dir)
+    merged, pruned_page = dedupe_rns_investegate_announcement_rows(
+        merged,
+        filings_dir=filings_dir,
+    )
+    return merged, pruned_pdf + pruned_page
+
+
 def _rns_row_needs_body_refetch(row: dict[str, Any], filings_dir: Path) -> bool:
     """True when an RNS row lacks a body or only has an Investegate AI-summary wrapper."""
     if not _is_rns_body_fetch_candidate(row):
@@ -1382,6 +1443,90 @@ def _rns_row_needs_body_refetch(row: dict[str, Any], filings_dir: Path) -> bool:
         return True
     snippet = _body_snippet_for_row(row, filings_dir)
     return bool(snippet and _is_investegate_ai_summary_body(snippet))
+
+
+def _is_material_corporate_action_row(row: dict[str, Any]) -> bool:
+    """True for sale/disposal/acquisition RNS rows that should keep body-fetch budget."""
+    headline = str(row.get("headline") or "").lower()
+    return any(re.search(pat, headline) for pat in _CORPORATE_ACTION_PATTERNS)
+
+
+def _is_statutory_results_headline(headline: str) -> bool:
+    """True when a headline is a results pack rather than AGM notice or IR deck."""
+    blob = (headline or "").lower()
+    if re.search(r"\bnotice of agm\b", blob):
+        return False
+    if re.search(r"\bannual report and accounts and notice\b", blob):
+        return False
+    if any(re.search(pat, blob) for pat in _ANNUAL_PATTERNS + _INTERIM_PATTERNS):
+        return True
+    return bool(re.search(r"\bfull year results\b|\binterim results\b", blob))
+
+
+def select_research_filing_slot_rows(
+    filings: list[dict[str, Any]],
+    *,
+    filings_dir: Path,
+    max_filing_slots: int = 3,
+) -> list[dict[str, Any]]:
+    """
+    Pick bodied filings for a bounded director-style read budget.
+
+    Prefer the latest dated annual and interim *results* bodies, then one material
+    sale/disposal or trading update ahead of routine ``other`` trivia.
+    """
+    deduped, _ = dedupe_rns_index_rows(filings, filings_dir=filings_dir)
+    picked: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+
+    def _take(row: dict[str, Any]) -> None:
+        if len(picked) >= max_filing_slots:
+            return
+        row_id = str(row.get("id") or "")
+        if not row_id or row_id in seen_ids or not row.get("has_body"):
+            return
+        seen_ids.add(row_id)
+        picked.append(row)
+
+    def _latest_results(period: str) -> dict[str, Any] | None:
+        candidates = [
+            row
+            for row in deduped
+            if str(row.get("period") or "") == period
+            and row.get("has_body")
+            and _is_statutory_results_headline(str(row.get("headline") or ""))
+        ]
+        if not candidates:
+            return None
+        return max(candidates, key=lambda row: str(row.get("published_at") or ""))
+
+    annual = _latest_results("annual")
+    if annual:
+        _take(annual)
+    interim = _latest_results("interim")
+    if interim:
+        _take(interim)
+
+    reserved: list[dict[str, Any]] = []
+    for row in deduped:
+        period = str(row.get("period") or "")
+        if not row.get("has_body"):
+            continue
+        if period == "trading_update":
+            reserved.append(row)
+        elif period == "other" and _is_material_corporate_action_row(row):
+            reserved.append(row)
+    reserved.sort(
+        key=lambda row: (
+            -(int(row.get("priority") or 0)),
+            str(row.get("published_at") or ""),
+        )
+    )
+    for row in reserved:
+        _take(row)
+        if len(picked) >= max_filing_slots:
+            break
+    return picked
 
 
 def _annual_report_microsite_media_base(publisher_url: str) -> str:
@@ -2695,6 +2840,8 @@ def _priority_score(
     elif period == "trading_update":
         score += 60
     lower = (headline or "").lower()
+    if period == "other" and any(re.search(pat, lower) for pat in _CORPORATE_ACTION_PATTERNS):
+        score += 70
     if any(re.search(pat, lower) for pat in _PRIORITY_PATTERNS):
         score += 20
     if "transaction in own shares" in lower or "director/pdmr" in lower:
@@ -6347,7 +6494,11 @@ def _write_bodies(
             period = row.get("period")
             if period in ("annual", "interim", "trading_update", "other"):
                 # Always try annual/interim/trading updates; only try a few "other" if slots remain
-                if period == "other" and downloaded >= max(4, max_bodies // 2):
+                if (
+                    period == "other"
+                    and downloaded >= max(4, max_bodies // 2)
+                    and not _is_material_corporate_action_row(row)
+                ):
                     updated.append(row)
                     continue
                 row_id = str(row.get("id") or "").strip()
@@ -6868,7 +7019,7 @@ def refetch_investegate_filing_bodies(
             ticker,
         )
     enriched = filtered
-    enriched, rns_doc_deduped = dedupe_rns_results_document_rows(
+    enriched, rns_doc_deduped = dedupe_rns_index_rows(
         enriched,
         filings_dir=filings_dir,
     )
@@ -7463,7 +7614,7 @@ def sanitize_filings_index(
             for row in filtered
         ]
     )
-    reclassified, rns_doc_deduped = dedupe_rns_results_document_rows(
+    reclassified, rns_doc_deduped = dedupe_rns_index_rows(
         reclassified,
         filings_dir=filings_dir,
     )
@@ -7637,6 +7788,8 @@ def ingest_filings(
         ticker=ticker,
         regime=regime,
     )
+    if regime in {"uk_rns", "euro_filings"}:
+        merged, _ = dedupe_rns_index_rows(merged, filings_dir=filings_dir)
     # Allow more bodies when deepening historical accounts for memo names.
     max_bodies = 20 if deepen_history else 12
     merged = _write_bodies(
@@ -7665,6 +7818,8 @@ def ingest_filings(
         )
         for row in merged
     ]
+    if regime in {"uk_rns", "euro_filings"}:
+        merged, _ = dedupe_rns_index_rows(merged, filings_dir=filings_dir)
 
     if regime == "sec_edgar":
         note = (

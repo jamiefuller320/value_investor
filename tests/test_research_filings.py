@@ -83,6 +83,7 @@ from value_investor.research.filings import (
     resolve_lse_rns_document_url,
     resolve_sec_cik,
     sanitize_filings_index,
+    select_research_filing_slot_rows,
     standardise_investegate_lse_fetch_url,
     summarize_filings,
 )
@@ -1772,6 +1773,193 @@ def test_rns_row_needs_body_refetch_flags_investegate_summary(tmp_path: Path):
         "period": "interim",
     }
     assert _rns_row_needs_body_refetch(row, filings_dir) is True
+
+
+def test_sanitize_filings_index_itv_dedupes_fy25_h1_and_sky_sale(tmp_path: Path):
+    """eng-20260918-10: ingest-improvement sanitize collapses ITV duplicate RNS rows."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    fy_pdf = "http://www.rns-pdf.londonstockexchange.com/rns/3965V_1-2026-3-4.pdf"
+    h1_pdf = "http://www.rns-pdf.londonstockexchange.com/rns/6403O_1-2026-7-30.pdf"
+    sky_url = (
+        "https://www.investegate.co.uk/announcement/rns/itv--itv/"
+        "sale-of-itv-m-e-business-to-sky-/9652927"
+    )
+    fy_body = bodies_dir / "29bdb56d3cedb539.txt"
+    h1_body = bodies_dir / "d19c5d3b8e0bb46a.txt"
+    sky_body = bodies_dir / "10f52d865099383d.txt"
+    fy_body.write_text(
+        "ITV plc full year results for the year ended 31 December 2025." + ("z" * 400)
+    )
+    h1_body.write_text(
+        "ITV plc Interim results for the six months ended 30 June 2026 have been submitted "
+        "in full unedited text to the Financial Conduct Authority's " + ("y" * 400),
+        encoding="utf-8",
+    )
+    sky_body.write_text(
+        "SALE OF ITV M&E BUSINESS TO SKY — up to £1.6bn consideration." + ("s" * 400),
+        encoding="utf-8",
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "00fcdb28c7a60c97",
+                        "source": "investegate_direct",
+                        "headline": "ITV plc Full Year Results 2025",
+                        "published_at": "2026-03-05T00:00:00+00:00",
+                        "url": fy_pdf,
+                        "period": "annual",
+                        "has_body": False,
+                    },
+                    {
+                        "id": "29bdb56d3cedb539",
+                        "source": "investegate_resolved",
+                        "headline": "ITV plc Full Year Results 2025",
+                        "published_at": "2026-03-05T07:02:26+00:00",
+                        "url": fy_pdf,
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(fy_body),
+                    },
+                    {
+                        "id": "db26438f6be61fe5",
+                        "source": "investegate_resolved",
+                        "headline": "ITV plc Interim Results to 30 June 2026",
+                        "published_at": "2026-06-30T07:00:00+00:00",
+                        "url": h1_pdf,
+                        "period": "interim",
+                        "has_body": True,
+                        "body_path": str(bodies_dir / "db26438f6be61fe5.txt"),
+                    },
+                    {
+                        "id": "d19c5d3b8e0bb46a",
+                        "source": "investegate_direct",
+                        "headline": "ITV plc Interim Results to 30 June 2026",
+                        "published_at": "2026-07-31T00:00:00+00:00",
+                        "url": h1_pdf,
+                        "period": "interim",
+                        "has_body": True,
+                        "body_path": str(h1_body),
+                    },
+                    {
+                        "id": "0b0a4b2e4b15d060",
+                        "source": "investegate_direct",
+                        "headline": "SALE OF ITV M&E BUSINESS TO SKY",
+                        "published_at": "2026-07-06T00:00:00+00:00",
+                        "url": sky_url,
+                        "period": "other",
+                        "has_body": True,
+                        "body_path": str(sky_body),
+                        "priority": 0,
+                    },
+                    {
+                        "id": "10f52d865099383d",
+                        "source": "investegate_resolved",
+                        "headline": "SALE OF ITV M&E BUSINESS TO SKY",
+                        "published_at": "2026-07-06T06:06:26+00:00",
+                        "url": sky_url,
+                        "period": "other",
+                        "has_body": True,
+                        "body_path": str(sky_body),
+                        "priority": 0,
+                    },
+                ],
+                "summary": {"total": 6, "with_body": 5, "annual": 2, "interim": 2, "other": 2},
+            }
+        ),
+        encoding="utf-8",
+    )
+    (bodies_dir / "db26438f6be61fe5.txt").write_text(
+        "BETA Close X ITV plc reported interim results." + ("x" * 220),
+        encoding="utf-8",
+    )
+    result = sanitize_filings_index(
+        filings_dir,
+        company_name="ITV plc",
+        ticker="ITV.L",
+    )
+    assert result["pruned"] == 3
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    ids = {row["id"] for row in saved["filings"]}
+    assert ids == {"29bdb56d3cedb539", "d19c5d3b8e0bb46a", "10f52d865099383d"}
+
+
+def test_select_research_filing_slot_rows_itv_reserves_sky_sale(tmp_path: Path):
+    """eng-20260918-10: three filing slots = FY25 + H1 statutory + Sky sale body."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    rows = [
+        {
+            "id": "29bdb56d3cedb539",
+            "headline": "ITV plc Full Year Results 2025",
+            "published_at": "2026-03-05T07:02:26+00:00",
+            "period": "annual",
+            "has_body": True,
+            "body_path": str(bodies_dir / "fy.txt"),
+        },
+        {
+            "id": "c91ecd81d49aebc2",
+            "headline": "Annual Report and Accounts and Notice of AGM",
+            "published_at": "2026-03-27T00:00:00+00:00",
+            "period": "annual",
+            "has_body": True,
+            "body_path": str(bodies_dir / "agm.txt"),
+        },
+        {
+            "id": "d19c5d3b8e0bb46a",
+            "headline": "ITV plc Interim Results to 30 June 2026",
+            "published_at": "2026-07-31T00:00:00+00:00",
+            "period": "interim",
+            "has_body": True,
+            "body_path": str(bodies_dir / "h1.txt"),
+        },
+        {
+            "id": "10f52d865099383d",
+            "headline": "SALE OF ITV M&E BUSINESS TO SKY",
+            "published_at": "2026-07-06T06:06:26+00:00",
+            "period": "other",
+            "has_body": True,
+            "body_path": str(bodies_dir / "sky.txt"),
+            "priority": 70,
+        },
+        {
+            "id": "screen_noise",
+            "headline": "Total Voting Rights",
+            "published_at": "2026-08-01T00:00:00+00:00",
+            "period": "other",
+            "has_body": True,
+            "body_path": str(bodies_dir / "tvr.txt"),
+            "priority": 0,
+        },
+    ]
+    for name in ("fy.txt", "agm.txt", "h1.txt", "sky.txt", "tvr.txt"):
+        (bodies_dir / name).write_text("x" * 300, encoding="utf-8")
+    picked = select_research_filing_slot_rows(rows, filings_dir=filings_dir, max_filing_slots=3)
+    assert [row["id"] for row in picked] == [
+        "29bdb56d3cedb539",
+        "d19c5d3b8e0bb46a",
+        "10f52d865099383d",
+    ]
+
+
+def test_enrich_filing_rows_promotes_itv_sky_sale_priority():
+    rows = enrich_filing_rows(
+        [
+            {
+                "id": "10f52d865099383d",
+                "headline": "SALE OF ITV M&E BUSINESS TO SKY",
+                "period": "other",
+                "has_body": True,
+            }
+        ],
+        ticker="ITV.L",
+        company_name="ITV plc",
+    )
+    assert rows[0]["priority"] >= 70
 
 
 def test_validate_rns_filing_body_rejects_period_mismatch():
