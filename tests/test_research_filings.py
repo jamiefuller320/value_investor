@@ -45,6 +45,7 @@ from value_investor.research.filings import (
     _validate_rns_filing_body_content,
     _validate_rns_html_headline_match,
     asx_markit_file_url,
+    build_filing_body_worker_assignments,
     classify_companies_house_period,
     classify_filing_entity_type,
     classify_filing_period,
@@ -1960,6 +1961,132 @@ def test_enrich_filing_rows_promotes_itv_sky_sale_priority():
         company_name="ITV plc",
     )
     assert rows[0]["priority"] >= 70
+
+
+def test_apply_headline_period_tags_itv_sky_sale_corporate_action():
+    """eng-20260918-13: transformative M&A RNS is corporate_action, not routine other."""
+    row = _apply_headline_period(
+        {
+            "headline": "SALE OF ITV M&E BUSINESS TO SKY",
+            "period": "other",
+            "priority": 0,
+        }
+    )
+    assert row["period"] == "corporate_action"
+    assert int(row["priority"]) >= 75
+
+
+def test_refetch_investegate_prioritizes_itv_sky_sale_over_trading_update(tmp_path, monkeypatch):
+    """eng-20260918-13: corp-action refetch ranks ahead of trading_update when priority=0."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    sky_url = (
+        "https://www.investegate.co.uk/announcement/rns/itv--itv/"
+        "sale-of-itv-m-e-business-to-sky-/9652927"
+    )
+    tu_url = "https://www.investegate.co.uk/announcement/rns/itv--itv/q1-trading-update/1"
+    index = {
+        "ticker": "ITV.L",
+        "company_name": "ITV plc",
+        "filings": [
+            {
+                "id": "tu_q1",
+                "source": "investegate_direct",
+                "headline": "Q1 2026 Trading Update",
+                "published_at": "2026-05-01T00:00:00+00:00",
+                "url": tu_url,
+                "period": "trading_update",
+                "has_body": False,
+                "priority": 60,
+            },
+            {
+                "id": "10f52d865099383d",
+                "source": "investegate_direct",
+                "headline": "SALE OF ITV M&E BUSINESS TO SKY",
+                "published_at": "2026-07-06T00:00:00+00:00",
+                "url": sky_url,
+                "period": "other",
+                "has_body": False,
+                "priority": 0,
+            },
+        ],
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    fetch_order: list[str] = []
+
+    def fake_fetch(url):
+        fetch_order.append(url)
+        return "Sky sale consideration up to 1.6bn " + ("x" * 220)
+
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_rns_filing_body_for_refetch",
+        lambda url: (fake_fetch(url), None),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="ITV.L",
+        company_name="ITV plc",
+        max_bodies=1,
+    )
+    assert result["fetched"] == 1
+    assert fetch_order[0] == sky_url
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    by_id = {row["id"]: row for row in saved["filings"]}
+    assert by_id["10f52d865099383d"]["has_body"] is True
+    assert by_id["10f52d865099383d"]["period"] == "corporate_action"
+
+
+def test_build_filing_body_worker_assignments_itv_sky_in_third_slot(tmp_path: Path):
+    """eng-20260918-13: assignment plan reserves Sky M&E body after FY/H1 statutory."""
+    sources_dir = tmp_path / "sources"
+    filings_dir = sources_dir / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    rows = [
+        {
+            "id": "29bdb56d3cedb539",
+            "headline": "ITV plc Full Year Results 2025",
+            "published_at": "2026-03-05T07:02:26+00:00",
+            "period": "annual",
+            "has_body": True,
+            "body_path": str(bodies_dir / "fy.txt"),
+        },
+        {
+            "id": "d19c5d3b8e0bb46a",
+            "headline": "ITV plc Interim Results to 30 June 2026",
+            "published_at": "2026-07-31T00:00:00+00:00",
+            "period": "interim",
+            "has_body": True,
+            "body_path": str(bodies_dir / "h1.txt"),
+        },
+        {
+            "id": "10f52d865099383d",
+            "headline": "SALE OF ITV M&E BUSINESS TO SKY",
+            "published_at": "2026-07-06T06:06:26+00:00",
+            "period": "corporate_action",
+            "has_body": True,
+            "body_path": str(bodies_dir / "sky.txt"),
+            "priority": 75,
+        },
+    ]
+    for name in ("fy.txt", "h1.txt", "sky.txt"):
+        (bodies_dir / name).write_text("x" * 300, encoding="utf-8")
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": rows}),
+        encoding="utf-8",
+    )
+    tasks = build_filing_body_worker_assignments(sources_dir, limit=3)
+    assert [task["filing_id"] for task in tasks] == [
+        "29bdb56d3cedb539",
+        "d19c5d3b8e0bb46a",
+        "10f52d865099383d",
+    ]
+    assert tasks[2]["period"] == "corporate_action"
+    assert tasks[2]["target"] == "filings/bodies/sky.txt"
 
 
 def test_validate_rns_filing_body_rejects_period_mismatch():

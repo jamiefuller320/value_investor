@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.research.filings import (
+    build_filing_body_worker_assignments,
     extract_ir_presentation_metrics,
     fetch_filings_ir_allowlist,
     merge_ir_allowlist_filings,
@@ -563,6 +564,7 @@ def prepare_gap_fill_source_pack(
     )
 
     inventory = inspect_local_sources(sources_dir)
+    priority_filing_bodies = build_filing_body_worker_assignments(sources_dir, limit=3)
     planned = suggest_alternate_sources(
         ticker=ticker,
         market=market,
@@ -591,10 +593,14 @@ def prepare_gap_fill_source_pack(
         "alternate_news_added": added,
         "alternate_news_path": str(alternate_path),
         "planned_alternate_sources": planned,
+        "priority_filing_bodies": priority_filing_bodies,
         "evidence_ladder": list(EVIDENCE_LADDER),
         "instructions": (
             "Walk evidence_ladder in order. Cite what was tried. "
             "Prefer filings/bodies/*.txt when present. "
+            "When priority_filing_bodies is non-empty, read those filing bodies "
+            "(statutory annual/interim plus corporate_action / trading_update M&A) "
+            "before Yahoo quarterlies or news_manifest headlines. "
             "Use screen_run_manifest.json for universe-level signal counts and "
             "ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines, "
             "segment revenue splits, and IFRS 16 lease maturity tables. "

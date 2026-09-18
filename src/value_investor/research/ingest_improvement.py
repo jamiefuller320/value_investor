@@ -17,6 +17,7 @@ from value_investor.ingest_backlog import (
     record_ingest_backlog_after_pass,
 )
 from value_investor.research.filings import (
+    build_filing_body_worker_assignments,
     fetch_filings_ir_allowlist,
     period_body_coverage,
     refetch_ir_allowlist_filing_bodies,
@@ -943,6 +944,18 @@ def run_ingest_improvement_pass(
                 company_name=target.name,
                 ticker=target.ticker,
             )
+            priority_filing_bodies = build_filing_body_worker_assignments(sources_dir, limit=3)
+            if priority_filing_bodies:
+                write_json(
+                    sources_dir / "priority_filing_bodies.json",
+                    {
+                        "ticker": target.ticker,
+                        "updated_at": datetime.now(UTC).isoformat(),
+                        "assignments": priority_filing_bodies,
+                    },
+                    compact=True,
+                    compress=False,
+                )
             after_inventory = inspect_local_sources(sources_dir)
             after = int(
                 (after_inventory.get("filings_summary") or {}).get("with_body")

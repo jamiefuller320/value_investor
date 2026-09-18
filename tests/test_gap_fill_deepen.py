@@ -399,6 +399,65 @@ def test_prepare_gap_fill_calls_ir_refetch_for_itv_l(
 @patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist", return_value=[])
 @patch("value_investor.research.gap_fill_sources.refetch_uk_primary_filing_bodies")
 @patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
+def test_prepare_gap_fill_source_pack_itv_priority_filing_bodies(
+    mock_refetch,
+    mock_primary_refetch,
+    mock_ir_refetch,
+    mock_ir_rows,
+    mock_news,
+    tmp_path: Path,
+):
+    """eng-20260918-13: gap-fill source map lists Sky M&E before news/Yahoo ladder steps."""
+    from value_investor.research.gap_fill_sources import prepare_gap_fill_source_pack
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    sky_path = bodies_dir / "10f52d865099383d.txt"
+    sky_path.write_text("Sky sale " + ("x" * 300), encoding="utf-8")
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"with_body": 1},
+                "filings": [
+                    {
+                        "id": "10f52d865099383d",
+                        "headline": "SALE OF ITV M&E BUSINESS TO SKY",
+                        "period": "corporate_action",
+                        "has_body": True,
+                        "body_path": str(sky_path),
+                        "published_at": "2026-07-06T06:06:26+00:00",
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    mock_refetch.return_value = {"fetched": 0, "with_body_after": 1}
+    mock_primary_refetch.return_value = {
+        "fetched": 0,
+        "companies_house": {"fetched": 0},
+        "rns": {"fetched": 0, "investegate": {"fetched": 0}, "ticker_rns": {"fetched": 0}},
+    }
+
+    pack = prepare_gap_fill_source_pack(
+        ticker="ITV.L",
+        company_name="ITV plc",
+        sources_dir=tmp_path,
+        open_questions=["Sky carve-out consideration"],
+        market="ftse350",
+    )
+
+    assert pack["priority_filing_bodies"]
+    assert pack["priority_filing_bodies"][0]["filing_id"] == "10f52d865099383d"
+    assert "corporate_action" in pack["instructions"]
+
+
+@patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])
+@patch("value_investor.research.gap_fill_sources.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.fetch_filings_ir_allowlist", return_value=[])
+@patch("value_investor.research.gap_fill_sources.refetch_uk_primary_filing_bodies")
+@patch("value_investor.research.gap_fill_sources.refetch_missing_filing_bodies")
 def test_prepare_gap_fill_attaches_screen_run_manifest(
     mock_refetch,
     mock_primary_refetch,

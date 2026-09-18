@@ -652,9 +652,12 @@ _PRIORITY_PATTERNS = (
 _CORPORATE_ACTION_PATTERNS = (
     r"\bsale of\b",
     r"\bdisposal of\b",
+    r"\bdisposal\b",
     r"\bacquisition of\b",
     r"\brecommended offer\b",
     r"\brecommended cash offer\b",
+    r"\bscheme of arrangement\b",
+    r"\bbusiness to\b",
 )
 
 
@@ -937,6 +940,28 @@ def _other_results_rns_priority(row: dict[str, Any]) -> int:
     if any(re.search(pat, headline) for pat in _TRADING_UPDATE_PATTERNS):
         return 100
     return 90
+
+
+def _material_corporate_action_refetch_priority(row: dict[str, Any]) -> int:
+    """Rank transformative sale/disposal RNS ahead of trading updates during refetch."""
+    period = str(row.get("period") or "other")
+    if period not in ("other", "corporate_action"):
+        return 0
+    if row.get("has_body"):
+        return 0
+    if not _is_material_corporate_action_row(row):
+        return 0
+    return 95
+
+
+def _filing_body_refetch_sort_key(row: dict[str, Any]) -> tuple[int, int, int, str]:
+    """Unified refetch ordering: mis-tagged results, then corp actions, then index priority."""
+    return (
+        -_other_results_rns_priority(row),
+        -_material_corporate_action_refetch_priority(row),
+        -(int(row.get("priority") or 0)),
+        str(row.get("published_at") or ""),
+    )
 
 
 def _filing_text_is_substantive(text: str, *, min_chars: int = 200) -> bool:
@@ -1512,7 +1537,7 @@ def select_research_filing_slot_rows(
         period = str(row.get("period") or "")
         if not row.get("has_body"):
             continue
-        if period == "trading_update":
+        if period in ("trading_update", "corporate_action"):
             reserved.append(row)
         elif period == "other" and _is_material_corporate_action_row(row):
             reserved.append(row)
@@ -1527,6 +1552,62 @@ def select_research_filing_slot_rows(
         if len(picked) >= max_filing_slots:
             break
     return picked
+
+
+def build_filing_body_worker_assignments(
+    sources_dir: Path,
+    *,
+    limit: int = 3,
+) -> list[dict[str, Any]]:
+    """
+    Ranked ``summarize_filing_body`` tasks for director/gap-fill assignment.
+
+    Prefer latest statutory annual/interim results, then transformative M&A /
+    trading-update bodies ahead of routine ``other`` trivia (ITV Sky sale pattern).
+    """
+    sources_dir = Path(sources_dir)
+    index_path = sources_dir / "filings" / "filings_index.json"
+    if not index_path.exists():
+        return []
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return []
+    filings = list(payload.get("filings") or [])
+    filings_dir = sources_dir / "filings"
+    picked = select_research_filing_slot_rows(
+        filings,
+        filings_dir=filings_dir,
+        max_filing_slots=max(1, limit),
+    )
+    tasks: list[dict[str, Any]] = []
+    for idx, row in enumerate(picked):
+        period = str(row.get("period") or "other")
+        body_path = row.get("body_path") or row.get("local_body")
+        if not body_path:
+            continue
+        rel = str(body_path)
+        normalized = rel.replace("\\", "/")
+        if "/filings/bodies/" in normalized:
+            rel = "filings/bodies/" + normalized.rsplit("/filings/bodies/", 1)[-1]
+        elif not normalized.startswith("filings/"):
+            rel = f"filings/bodies/{Path(normalized).name}"
+        task_priority = 1 if period in {"annual", "interim"} else 2
+        tasks.append(
+            {
+                "id": f"filing_{idx + 1}",
+                "type": "summarize_filing_body",
+                "target": rel,
+                "focus": (
+                    f"Extract P&L, cash, leverage, covenants, and deal terms "
+                    f"for {period} filing ({row.get('headline') or 'RNS'})"
+                ),
+                "priority": task_priority,
+                "period": period,
+                "filing_id": str(row.get("id") or ""),
+            }
+        )
+    return tasks[:limit]
 
 
 def _annual_report_microsite_media_base(publisher_url: str) -> str:
@@ -1691,6 +1772,8 @@ def _apply_headline_period(
         )
         if body_period != "other":
             period = body_period
+    if period == "other" and _is_material_corporate_action_row(item):
+        period = "corporate_action"
     item["period"] = period
     item["entity_type"] = classify_filing_entity_type(item, body_snippet=body_snippet)
     item["priority"] = _priority_score(
@@ -2839,6 +2922,8 @@ def _priority_score(
         score += 80
     elif period == "trading_update":
         score += 60
+    elif period == "corporate_action":
+        score += 75
     lower = (headline or "").lower()
     if period == "other" and any(re.search(pat, lower) for pat in _CORPORATE_ACTION_PATTERNS):
         score += 70
@@ -6478,10 +6563,7 @@ def _write_bodies(
 
     bodies_dir.mkdir(parents=True, exist_ok=True)
     # Prefer annual/interim first
-    candidates = sorted(
-        filings,
-        key=lambda row: (-int(row.get("priority") or 0), row.get("published_at") or ""),
-    )
+    candidates = sorted(filings, key=_filing_body_refetch_sort_key)
     downloaded = 0
     known_body_hashes = _filing_body_hashes_from_rows(filings, bodies_dir=bodies_dir)
     updated: list[dict[str, Any]] = []
@@ -6492,7 +6574,7 @@ def _write_bodies(
                 updated.append(row)
                 continue
             period = row.get("period")
-            if period in ("annual", "interim", "trading_update", "other"):
+            if period in ("annual", "interim", "trading_update", "corporate_action", "other"):
                 # Always try annual/interim/trading updates; only try a few "other" if slots remain
                 if (
                     period == "other"
@@ -7029,12 +7111,7 @@ def refetch_investegate_filing_bodies(
         if not row.get("has_body") and "news.google.com" in str(row.get("url") or "")
     )
     missing = [row for row in enriched if _rns_row_needs_body_refetch(row, filings_dir)]
-    missing.sort(
-        key=lambda row: (
-            -_other_results_rns_priority(row),
-            -(row.get("priority") or 0),
-        )
-    )
+    missing.sort(key=_filing_body_refetch_sort_key)
     other_results_candidates = sum(1 for row in missing if _is_other_results_rns_row(row))
     index_changed = enriched != filings or misattributed_pruned > 0 or rns_doc_deduped > 0
     if not missing:
@@ -7063,8 +7140,7 @@ def refetch_investegate_filing_bodies(
     enriched.sort(
         key=lambda row: (
             0 if row.get("id") in missing_ids else 1,
-            -_other_results_rns_priority(row),
-            -(row.get("priority") or 0),
+            *_filing_body_refetch_sort_key(row),
         )
     )
     for row in enriched:
@@ -7531,7 +7607,7 @@ def _row_counts_toward_period_coverage(row: dict[str, Any]) -> bool:
 
 def period_body_coverage(filings: list[dict[str, Any]]) -> dict[str, dict[str, int]]:
     """Count indexed filings and downloaded bodies per ``period`` tag."""
-    periods = ("annual", "interim", "trading_update", "other")
+    periods = ("annual", "interim", "trading_update", "corporate_action", "other")
     coverage = {period: {"total": 0, "with_body": 0} for period in periods}
     for row in filings:
         if not _row_counts_toward_period_coverage(row):
@@ -7549,6 +7625,7 @@ def summarize_filings(filings: list[dict[str, Any]]) -> dict[str, Any]:
     annual = sum(1 for f in filings if f.get("period") == "annual")
     interim = sum(1 for f in filings if f.get("period") == "interim")
     trading_update = sum(1 for f in filings if f.get("period") == "trading_update")
+    corporate_action = sum(1 for f in filings if f.get("period") == "corporate_action")
     other = sum(1 for f in filings if f.get("period") == "other")
     with_body = sum(1 for f in filings if f.get("has_body"))
     return {
@@ -7556,6 +7633,7 @@ def summarize_filings(filings: list[dict[str, Any]]) -> dict[str, Any]:
         "annual": annual,
         "interim": interim,
         "trading_update": trading_update,
+        "corporate_action": corporate_action,
         "other": other,
         "with_body": with_body,
         "period_coverage": period_body_coverage(filings),
