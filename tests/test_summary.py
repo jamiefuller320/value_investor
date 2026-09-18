@@ -4848,6 +4848,71 @@ def test_guard_screening_export_jd_style_three_way_fcf(tmp_path: Path):
     assert "462" in guarded["action_note"] or "£462" in guarded["action_note"]
 
 
+def test_guard_screening_export_jsg_style_stale_columns_note_screen_ttm(tmp_path: Path):
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    sources = tmp_path / "research" / "JSG.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "JSG.L",
+                "quarterly_cashflow": {},
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 139_900_000.0,
+                        "Capital Expenditure": -39_300_000.0,
+                        "Free Cash Flow": 100_600_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "JSG.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": True,
+            },
+            {
+                "ticker": "JSG.L",
+                "model_id": "dividend_growth",
+                "model_name": "Dividend Growth",
+                "passed": True,
+            },
+        ]
+    )
+    snapshot = {
+        "ticker": "JSG.L",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "research_verdict": "accumulate",
+        "fcf_basis_overlay": True,
+        "fcf_definition_divergence": False,
+        "fcf_divergence_flagged": False,
+        "free_cashflow": 100_600_000.0,
+        "free_cashflow_screen_ttm": 100_600_000.0,
+        "action_note": (
+            "Strong Buy — neutral timing | FCF basis mismatch: filing $100.6M | screen TTM $27.4M"
+        ),
+        "key_metrics": {"FCF": 100_600_000.0},
+        "market_cap": 2_000_000_000.0,
+        "dividend_yield": 0.032,
+    }
+    guarded = guard_screening_snapshot_export(
+        snapshot,
+        model_results=model_results,
+        output_dir=tmp_path,
+    )
+    assert guarded["fcf_definition_divergence"] is True
+    assert guarded["fcf_divergence_flagged"] is True
+    assert guarded["fcf"]["screen_ttm"] == pytest.approx(27_400_000.0)
+    assert "27.4" in guarded["action_note"] or "£27" in guarded["action_note"]
+
+
 def test_guard_screening_export_bt_style_two_way_fcf(tmp_path: Path):
     from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
 

@@ -157,6 +157,11 @@ FCF_SIGN_DIVERGENCE_MIN_ABS = 50_000_000.0
 EARNINGS_GROWTH_BPS_DIVERGENCE_THRESHOLD = 0.03
 FCF_YIELD_MODEL_ID = "fcf_yield"
 HIGH_DIVIDEND_MODEL_ID = "high_dividend"
+DIVIDEND_GROWTH_MODEL_ID = "dividend_growth"
+DIVIDEND_FCF_BASIS_SUPPRESS_MODEL_IDS = (
+    HIGH_DIVIDEND_MODEL_ID,
+    DIVIDEND_GROWTH_MODEL_ID,
+)
 FCF_YIELD_UNIT_ERROR_MAX_IMPLIED_YIELD = 0.002
 FCF_YIELD_UNIT_ERROR_MIN_CANONICAL_GBP = 100_000_000.0
 # FGP-style: statutory filing OCF−CapEx ~5× company APM FCF while yield uses company KPI.
@@ -1673,6 +1678,9 @@ def suppress_fcf_yield_passes(
         )
         unit_fx_error = bool(urow.get("fcf_yield_unit_fx_error"))
         filing_currency = str(bundle.get("currency") or "USD")
+        definition = bool(urow.get("fcf_definition_divergence")) or bool(
+            bundle.get("fcf_definition_divergence")
+        )
         if not fcf_yield_pass_suppressed(
             divergence_flagged=bool(bundle.get("divergence_flagged")),
             canonical=bundle.get("canonical"),
@@ -1681,7 +1689,7 @@ def suppress_fcf_yield_passes(
             filing_currency=filing_currency,
             fcf_yield_unit_fx_error=unit_fx_error,
             fcf_divergence_flagged=bool(bundle.get("fcf_divergence_flagged")),
-            fcf_definition_divergence=bool(bundle.get("fcf_definition_divergence")),
+            fcf_definition_divergence=definition,
             filing_aligned=bundle.get("filing_aligned"),
             screen_ttm=screen_ttm,
         ):
@@ -1743,14 +1751,14 @@ def suppress_high_dividend_yield_passes(
 
         mask = (
             (out["ticker"] == ticker)
-            & (out["model_id"] == HIGH_DIVIDEND_MODEL_ID)
+            & (out["model_id"].isin(DIVIDEND_FCF_BASIS_SUPPRESS_MODEL_IDS))
             & (out["passed"] == True)  # noqa: E712
         )
         if not mask.any():
             continue
         out.loc[mask, "passed"] = False
         failure_message = (
-            "High dividend yield suppressed: FCF basis unresolved "
+            "Dividend yield suppressed: FCF basis unresolved "
             "(state filing vs screen TTM and buyback-inclusive cover)"
         )
         for index in out.index[mask]:
@@ -2214,11 +2222,26 @@ def fcf_bundle_from_persisted_report(
     if filing is not None:
         bundle["filing_aligned"] = filing
 
+    note_screen = parse_screen_ttm_from_action_note(note)
     screen = _float_or_none(bundle.get("screen_ttm"))
     if screen is None:
         screen = _float_or_none(metrics.get("free_cashflow_screen_ttm"))
-    if screen is None:
-        screen = parse_screen_ttm_from_action_note(note)
+    if note_screen is not None:
+        filing_for_pick = filing if filing is not None else note_filing
+        if screen is None or (
+            filing_for_pick is not None
+            and fcf_filing_screen_mismatch(
+                filing_aligned=filing_for_pick,
+                screen_ttm=note_screen,
+            )
+            and not fcf_filing_screen_mismatch(
+                filing_aligned=filing_for_pick,
+                screen_ttm=screen,
+            )
+        ):
+            screen = note_screen
+    elif screen is None:
+        screen = note_screen
     if screen is not None:
         bundle["screen_ttm"] = screen
 
@@ -2233,10 +2256,26 @@ def fcf_bundle_from_persisted_report(
 
 def screen_ttm_from_row(row: pd.Series) -> float | None:
     """Yahoo trailing FCF preserved before canonical enrichment."""
+    note = str(row.get("action_note") or "")
+    from_note = parse_screen_ttm_from_action_note(note)
     preserved = _float_or_none(row.get("free_cashflow_screen_ttm"))
+    if from_note is not None and preserved is not None:
+        filing_hint = parse_filing_aligned_from_action_note(note)
+        filing = filing_hint or _float_or_none(row.get("free_cashflow"))
+        if (
+            filing is not None
+            and fcf_filing_screen_mismatch(
+                filing_aligned=filing,
+                screen_ttm=from_note,
+            )
+            and not fcf_filing_screen_mismatch(
+                filing_aligned=filing,
+                screen_ttm=preserved,
+            )
+        ):
+            return from_note
     if preserved is not None:
         return preserved
-    from_note = parse_screen_ttm_from_action_note(str(row.get("action_note") or ""))
     if from_note is not None:
         return from_note
     for key in ("free_cashflow", "FCF"):
@@ -2611,7 +2650,7 @@ def enrich_universe_with_canonical_fcf(
     unit_fx_flags: list[bool] = []
 
     for index, row in out.iterrows():
-        screen_ttm = _float_or_none(row.get("free_cashflow"))
+        screen_ttm = screen_ttm_from_row(row)
         bundle = reconcile_fcf_for_ticker(
             str(row["ticker"]),
             screen_ttm=screen_ttm,
@@ -2718,26 +2757,29 @@ def enrich_universe_with_filing_metrics(
 
         statutory_ocf = _float_or_none(out.at[index, "operating_cashflow"])
         gross_ocf = _float_or_none(out.at[index, "operating_cashflow_gross"])
-        screen_ttm = _float_or_none(row.get("free_cashflow_screen_ttm"))
-        if screen_ttm is None:
-            screen_ttm = _float_or_none(row.get("free_cashflow"))
+        screen_ttm = screen_ttm_from_row(out.loc[index])
         fcf_bundle = reconcile_fcf_for_ticker(
             ticker,
             screen_ttm=screen_ttm,
             output_dir=output_dir,
         )
         filing_currency = str(fcf_bundle.get("currency") or "GBP")
-        definition_divergence = fcf_basis_definition_divergence(
-            operating_cashflow=statutory_ocf,
-            operating_cashflow_gross=gross_ocf,
-            filing_aligned=_float_or_none(fcf_bundle.get("filing_aligned")),
-            screen_ttm=screen_ttm,
-            company_adjusted=_float_or_none(fcf_bundle.get("company_adjusted")),
-            filing_currency=filing_currency,
-            company_adjusted_currency=fcf_bundle.get("company_adjusted_currency"),
+        definition_divergence = bool(fcf_bundle.get("fcf_definition_divergence"))
+        if not definition_divergence:
+            definition_divergence = fcf_basis_definition_divergence(
+                operating_cashflow=statutory_ocf,
+                operating_cashflow_gross=gross_ocf,
+                filing_aligned=_float_or_none(fcf_bundle.get("filing_aligned")),
+                screen_ttm=screen_ttm,
+                company_adjusted=_float_or_none(fcf_bundle.get("company_adjusted")),
+                filing_currency=filing_currency,
+                company_adjusted_currency=fcf_bundle.get("company_adjusted_currency"),
+            )
+        divergence_flagged = bool(fcf_bundle.get("fcf_divergence_flagged")) or bool(
+            fcf_bundle.get("ttm_suppressed_screen_filing_mismatch")
         )
         out.at[index, "fcf_definition_divergence"] = definition_divergence
-        out.at[index, "fcf_divergence_flagged"] = bool(fcf_bundle.get("fcf_divergence_flagged"))
+        out.at[index, "fcf_divergence_flagged"] = divergence_flagged
 
         interim_decline = extract_interim_eps_decline_for_ticker(ticker, output_dir=output_dir)
         if interim_decline is not None:
