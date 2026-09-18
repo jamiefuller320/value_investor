@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-18T14:24:43.538828+00:00",
+  "compiled_at": "2026-09-18T14:34:45.533089+00:00",
   "run_at": null,
-  "task_count": 45,
+  "task_count": 46,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2206,6 +2206,60 @@
       "merged_at": "2026-09-15T15:05:07.590899+00:00"
     },
     {
+      "id": "eng-20260918-13",
+      "area": "ingest",
+      "title": "It is not adequate when the live [2/2]",
+      "summary": "First-principle slice 2/2 of: Filings-first order is adequate when the live issue is annual/interim numbers, and this pack has 17 annual + 6 interim bodies. It is not adequate when the live . no topic map — cohesion bypass keeps full area allowlist",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "ITV.L"
+        ],
+        "recorded_at": "2026-09-04T16:48:11.731029+00:00",
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "Filings-first order is adequate when the live issue is annual/interim numbers, and this pack has 17 annual + 6 interim bodies. It is not adequate when the live ",
+        "narrow_cohesion_bypass": true,
+        "narrow_split_group_id": "dfdc66a0b869",
+        "narrow_split_index": 2,
+        "narrow_split_count": 2,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for ITV.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260918-12",
       "area": "ingest",
       "title": "Filings-first order is adequate when the live issue is annual/interim numbers, and this pack has 17 annual + 6 interim bodies [1/2]",
@@ -2328,7 +2382,8 @@
         "origin_source": "research_model_suggestions",
         "origin_priority_score": 40.0,
         "preferred_merge_class": "compile_cap_drain",
-        "doc": "docs/ops/engineering-sync.md"
+        "doc": "docs/ops/engineering-sync.md",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for ITV.L",
@@ -2356,11 +2411,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260918-10.md",
       "branch_name": "cursor/eng-20260918-10-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-18T14:07:53.211482+00:00"
+      "completed_at": "2026-09-18T14:07:53.211482+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/713",
+      "pr_number": 713,
+      "merged_at": "2026-09-18T14:34:43.656204+00:00"
     },
     {
       "id": "eng-20260918-09",
