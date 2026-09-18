@@ -1,7 +1,6 @@
 {
   "schema_version": 1,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-09-18T00:46:33.130485+00:00",
   "framework": {
     "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
     "hold_recovery": {
@@ -53,52 +52,53 @@
       "learning_tracks_churn_health.json"
     ]
   },
-  "readiness": {
-    "ready_for_probability_analysis": false,
-    "hold_closed_count": 8,
-    "swap_closed_count": 0,
-    "hold_with_data_quality_count": 32,
-    "gaps": [
-      "hold_recovery closed episodes=8 (target >=15)",
-      "swap_rotation closed rotations=0 (target >=10)"
-    ],
-    "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
-  },
-  "hold_recovery": {
-    "open": {
-      "count": 25,
-      "recovered_to_breakeven": 9,
-      "close_reasons": {
-        "open": 25
-      }
-    },
-    "closed": {
-      "count": 8,
-      "recovered_to_breakeven": 5,
-      "close_reasons": {
-        "sold_while_recovered": 5,
-        "sold_while_underwater": 3
-      }
+  "updated_at": "2026-09-18T00:46:49.629348+00:00",
+  "hold_episodes": [
+    {
+      "episode_id": "buy_tier_level:KHC:2026-09-17T20:46:47.721135-04:00",
+      "track_id": "buy_tier_level",
+      "ticker": "KHC",
+      "name": "The Kraft Heinz Company",
+      "started_at": "2026-09-17T20:46:47.721135-04:00",
+      "status": "open",
+      "stress_triggers": [
+        "signal_downgrade"
+      ],
+      "entry_mark": 24.73,
+      "avg_cost": 24.73,
+      "unrealized_pct_at_start": 0.0,
+      "thesis_status_at_start": "weakening",
+      "recommended_action_at_start": "watch_review",
+      "thesis_reasons_at_start": [
+        "research verdict caution",
+        "cheapness family no longer passes",
+        "conviction 28% below intact floor",
+        "still buy"
+      ],
+      "failed_families_at_start": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "research_verdict_at_start": "caution",
+      "unrealized_pct_at_thesis": 0.0,
+      "screen_signal": "buy",
+      "effective_signal": "hold",
+      "data_quality_score": 0.95,
+      "conviction_score": 0.27990499999999996,
+      "exit_streak_at_start": 0,
+      "momentum_grace": false,
+      "checkpoints": [],
+      "peak_unrealized_pct": 0.0,
+      "trough_unrealized_pct": 0.0,
+      "recovered_to_breakeven": true,
+      "close_reason": null,
+      "closed_at": null,
+      "linked_sell_trade_id": null
     }
-  },
-  "swap_rotation": {
-    "open": {
-      "count": 1,
-      "verdicts": {
-        "open": 1
-      }
-    },
-    "closed": {
-      "count": 0
-    }
-  },
-  "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
-  "ingested_this_pass": {
-    "hold_episodes": 0,
-    "swap_rotations": 0
-  },
-  "checkpoints_added_this_pass": {
-    "hold_episodes": 0,
-    "swap_rotations": 0
-  }
+  ],
+  "swap_rotations": [],
+  "hypothesis_outcome_link_updated_at": "2026-09-17T20:46:47.721135-04:00"
 }

@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-17T07:27:07.580180+00:00
+Track: `buy_tier_level` · updated 2026-09-18T00:46:33.132544+00:00
 
 ## Portfolio loser feedback
 
