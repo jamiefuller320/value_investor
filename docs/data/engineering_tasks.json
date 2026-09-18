@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-18T11:57:46.925445+00:00",
+  "compiled_at": "2026-09-18T12:11:40.141737+00:00",
   "run_at": null,
-  "task_count": 39,
+  "task_count": 40,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -636,6 +636,61 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/657",
       "pr_number": 657,
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
+    },
+    {
+      "id": "eng-20260918-07",
+      "area": "scoring",
+      "title": "fcf: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_defin",
+      "summary": "First-principle slice 1/2 of: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_definition. topics=fcf paths=8",
+      "priority": "medium",
+      "priority_score": 43.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "MEGP.L"
+        ],
+        "recorded_at": "2026-09-13T08:06:10.268004+00:00",
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "topics=fcf paths=8",
+        "narrow_parent_title": "Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_definition",
+        "narrow_cohesion_bypass": false,
+        "narrow_split_group_id": "eaebe4376409",
+        "narrow_split_index": 1,
+        "narrow_split_count": 2,
+        "narrow_topics": [
+          "fcf"
+        ],
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 43.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/scoring/fcf.py",
+        "src/value_investor/scoring/fcf_basis_overlay.py",
+        "src/value_investor/scoring/fcf_three_way_conviction_overlay.py",
+        "src/value_investor/scoring/screening_export_guard.py",
+        "src/value_investor/scoring/snapshot.py",
+        "src/value_investor/pipeline.py",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": true,
+      "status": "open"
     },
     {
       "id": "eng-20260918-06",
@@ -2316,8 +2371,8 @@
     "filings_with_body": 4155
   },
   "queue_clearing": {
-    "attention_parked_count": 0,
-    "evaluated_at": "2026-09-18T11:57:43.414249+00:00",
+    "attention_parked_count": 1,
+    "evaluated_at": "2026-09-18T12:11:37.199045+00:00",
     "should_send_full_queue_warning": false
   },
   "ingest_health_before": {

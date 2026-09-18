@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-18T11:57:48.944922+00:00",
+  "generated_at": "2026-09-18T12:11:42.111294+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1153,16 +1153,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-18T11:57:46.925445+00:00",
-    "queue_ui_updated_at": "2026-09-18T11:57:48.874900+00:00",
-    "task_count": 39,
+    "compiled_at": "2026-09-18T12:11:40.141737+00:00",
+    "queue_ui_updated_at": "2026-09-18T12:11:42.038271+00:00",
+    "task_count": 40,
     "status": {
       "open_count": 2,
       "pr_open_count": 0,
-      "parked_count": 7,
+      "parked_count": 8,
       "merged_count": 29,
       "failed_count": 0,
-      "next_task_id": "eng-20260918-06",
+      "next_task_id": "eng-20260918-07",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1171,9 +1171,9 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260918-06",
+        "id": "eng-20260918-07",
         "area": "scoring",
-        "title": "Auto-bind `company_adjusted` FCF to the latest filing-year divisional total (£73.8m for FY 2026) and flag when screen numerator is one fiscal year stale.",
+        "title": "fcf: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_defin",
         "priority": "medium",
         "priority_score": 43.0,
         "status": "open",
@@ -1184,7 +1184,7 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 1,
-        "clash_scan": "full"
+        "clash_scan": "partial"
       },
       {
         "id": "eng-20260918-01",
@@ -1200,7 +1200,7 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 2,
-        "clash_scan": "full"
+        "clash_scan": "partial"
       }
     ],
     "attention_tasks": [
@@ -1236,6 +1236,18 @@
         "priority_score": 96.0,
         "status": "parked",
         "source": "post_run_review",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260918-06",
+        "area": "scoring",
+        "title": "Auto-bind `company_adjusted` FCF to the latest filing-year divisional total (£73.8m for FY 2026) and flag when screen numerator is one fiscal year stale.",
+        "priority": "medium",
+        "priority_score": 43.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
         "pr_url": null,
         "pr_number": null,
         "branch_name": null
@@ -1570,7 +1582,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-18T11:57:48.944922+00:00",
+    "generated_at": "2026-09-18T12:11:42.111294+00:00",
     "overall": "active",
     "headline": "Agent lane active.",
     "merge_lane": {
@@ -1591,19 +1603,19 @@
       "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
-      "attention_parked_count": 0,
+      "attention_parked_count": 1,
       "open_count": 2,
       "pr_open_count": 0,
       "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260918-06",
+      "next_task_id": "eng-20260918-07",
       "reason": "queue ready — dispatch next open task",
       "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
-      "attention_parked_count": 0,
-      "evaluated_at": "2026-09-18T11:57:43.414249+00:00"
+      "attention_parked_count": 1,
+      "evaluated_at": "2026-09-18T12:11:37.199045+00:00"
     },
     "traffic_control": {
       "pause_active": false,
