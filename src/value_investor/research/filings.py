@@ -1511,6 +1511,46 @@ def _material_other_rns_refetch_priority(row: dict[str, Any]) -> int:
     return 0
 
 
+def _tagged_statutory_period_refetch_priority(row: dict[str, Any]) -> int:
+    """
+    Prefer indexed annual/interim statutory results when refetching UK RNS bodies.
+
+    Filings-first is adequate for intra-year numbers when these gaps close before
+    M&A/trading ``other`` rows (ITV.L H1 statutory vs Sky sale; eng-20260918-12).
+    """
+    period = str(row.get("period") or "")
+    if period not in {"annual", "interim"}:
+        return 0
+    if not _is_statutory_results_headline(str(row.get("headline") or "")):
+        return 0
+    return 200 if period == "annual" else 195
+
+
+def _investegate_refetch_rank_key(row: dict[str, Any]) -> tuple:
+    return (
+        -_tagged_statutory_period_refetch_priority(row),
+        -_material_other_rns_refetch_priority(row),
+        -_other_results_rns_priority(row),
+        -(int(row.get("priority") or 0)),
+    )
+
+
+def _body_write_rank_key(row: dict[str, Any]) -> tuple:
+    """Sort key for residual body downloads — annual/interim statutory results first."""
+    period = str(row.get("period") or "other")
+    period_rank = _ir_period_rank(period)
+    headline = str(row.get("headline") or "")
+    statutory = 0 if _is_statutory_results_headline(headline) else 1
+    if period not in {"annual", "interim", "trading_update"}:
+        period_rank = 3
+    return (
+        period_rank,
+        statutory,
+        -int(row.get("priority") or 0),
+        str(row.get("published_at") or ""),
+    )
+
+
 def _is_statutory_results_headline(headline: str) -> bool:
     """True when a headline is a results pack rather than AGM notice or IR deck."""
     blob = (headline or "").lower()
@@ -4005,6 +4045,25 @@ def _ir_period_rank(period: str | None) -> int:
     }.get(str(period or "other"), 3)
 
 
+def _ir_allowlist_statutory_rank(row: dict[str, Any]) -> int:
+    """0 = statutory report PDF; 1 = results presentation deck (ITV IR allowlist)."""
+    if str(row.get("source") or "") != "ir_allowlist":
+        return 0
+    url = str(row.get("url") or "").lower()
+    headline = str(row.get("headline") or "").lower()
+    if "half-year-report" in url or "interim-report" in url:
+        return 0
+    if re.search(r"annual-report-\d{4}\.pdf", url) or (
+        "annual-report" in url and "presentation" not in url
+    ):
+        return 0
+    if "presentation" in url or "presentation" in headline:
+        return 1
+    if "interim results" in headline and "presentation" not in headline:
+        return 0
+    return 1
+
+
 def _ir_refetch_rank_key(
     row: dict[str, Any],
     *,
@@ -4016,6 +4075,7 @@ def _ir_refetch_rank_key(
     published = str(row.get("published_at") or "").strip()
     return (
         occupied_penalty,
+        _ir_allowlist_statutory_rank(row),
         _ir_period_rank(period),
         0 if published else 1,
         "".join(chr(255 - ord(ch)) for ch in published[:32].ljust(32, " ")),
@@ -6831,11 +6891,7 @@ def _write_bodies(
     from value_investor.library_ingest_budget import deadline_reached
 
     bodies_dir.mkdir(parents=True, exist_ok=True)
-    # Prefer annual/interim first
-    candidates = sorted(
-        filings,
-        key=lambda row: (-int(row.get("priority") or 0), row.get("published_at") or ""),
-    )
+    candidates = sorted(filings, key=_body_write_rank_key)
     downloaded = 0
     known_body_hashes = _filing_body_hashes_from_rows(filings, bodies_dir=bodies_dir)
     updated: list[dict[str, Any]] = []
@@ -7383,13 +7439,7 @@ def refetch_investegate_filing_bodies(
         if not row.get("has_body") and "news.google.com" in str(row.get("url") or "")
     )
     missing = [row for row in enriched if _rns_row_needs_body_refetch(row, filings_dir)]
-    missing.sort(
-        key=lambda row: (
-            -_material_other_rns_refetch_priority(row),
-            -_other_results_rns_priority(row),
-            -(row.get("priority") or 0),
-        )
-    )
+    missing.sort(key=_investegate_refetch_rank_key)
     other_results_candidates = sum(1 for row in missing if _is_other_results_rns_row(row))
     index_changed = enriched != filings or misattributed_pruned > 0 or rns_doc_deduped > 0
     if not missing:
@@ -7418,9 +7468,7 @@ def refetch_investegate_filing_bodies(
     enriched.sort(
         key=lambda row: (
             0 if row.get("id") in missing_ids else 1,
-            -_material_other_rns_refetch_priority(row),
-            -_other_results_rns_priority(row),
-            -(row.get("priority") or 0),
+            *_investegate_refetch_rank_key(row),
         )
     )
     for row in enriched:
