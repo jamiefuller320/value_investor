@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-18T12:44:21.490044+00:00",
+  "generated_at": "2026-09-18T13:15:47.545902+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1153,16 +1153,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-18T12:43:16.261116+00:00",
-    "queue_ui_updated_at": "2026-09-18T12:44:21.412032+00:00",
-    "task_count": 41,
+    "compiled_at": "2026-09-18T13:14:46.331903+00:00",
+    "queue_ui_updated_at": "2026-09-18T13:15:47.470371+00:00",
+    "task_count": 42,
     "status": {
       "open_count": 2,
       "pr_open_count": 0,
       "parked_count": 8,
-      "merged_count": 30,
+      "merged_count": 31,
       "failed_count": 0,
-      "next_task_id": "eng-20260918-08",
+      "next_task_id": "eng-20260918-01",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1171,9 +1171,9 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260918-08",
+        "id": "eng-20260918-01",
         "area": "scoring",
-        "title": "dividend: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_",
+        "title": "dividend: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; kee",
         "priority": "medium",
         "priority_score": 43.0,
         "status": "open",
@@ -1187,11 +1187,11 @@
         "clash_scan": "full"
       },
       {
-        "id": "eng-20260918-01",
-        "area": "scoring",
-        "title": "dividend: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; kee",
+        "id": "eng-20260918-09",
+        "area": "ingest",
+        "title": "Select the latest dated annual and interim *results* bodies (FY25 29bdb56d3cedb539, H1 2026 d19c5d3b8e0bb46a — not the 30 June period-end duplicate) [1/2]",
         "priority": "medium",
-        "priority_score": 43.0,
+        "priority_score": 40.0,
         "status": "open",
         "source": "compile_cap_drain",
         "pr_url": null,
@@ -1582,7 +1582,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-18T12:44:21.490044+00:00",
+    "generated_at": "2026-09-18T13:15:47.545902+00:00",
     "overall": "active",
     "headline": "Agent lane active.",
     "merge_lane": {
@@ -1608,14 +1608,14 @@
       "pr_open_count": 0,
       "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260918-08",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
+      "next_task_id": "eng-20260918-01",
+      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
+      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 1,
-      "evaluated_at": "2026-09-18T12:44:15.901069+00:00"
+      "evaluated_at": "2026-09-18T13:15:42.619261+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1629,6 +1629,17 @@
       "should_dispatch_engineering": false
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260918-08",
+        "title": "dividend: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_",
+        "area": "scoring",
+        "pr_number": 709,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/709",
+        "merged_at": "2026-09-18T13:14:45.005992+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": true,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260918-07",
         "title": "fcf: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_defin",
@@ -1718,6 +1729,6 @@
         "independently_verified": false
       }
     ],
-    "verified_merges_today_count": 7
+    "verified_merges_today_count": 8
   }
 }
