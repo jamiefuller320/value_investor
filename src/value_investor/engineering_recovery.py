@@ -36,6 +36,8 @@ PARKED_POLICY_NO_DIFF = "no_diff_cap"
 PARKED_POLICY_CI_BLOCKED = "ci_blocked"
 PARKED_POLICY_HUNTER_UNFIXABLE = "hunter_unfixable"
 PARKED_POLICY_WORKFLOW_PERMISSION = "workflow_permission"
+PARKED_POLICY_PREFLIGHT = "preflight_clash"
+PARKED_POLICY_REBURN = "reburn_loop"
 PARKED_POLICY_MANUAL = "manual"
 INFORMATIONAL_PARKED_POLICIES = frozenset({PARKED_POLICY_DUPLICATE, PARKED_POLICY_NO_DIFF})
 DUPLICATE_PARKED_REASON_RE = re.compile(r"duplicate|dup of|superseded", re.IGNORECASE)
@@ -44,6 +46,8 @@ WORKFLOW_PERMISSION_REASON_RE = re.compile(
     r"workflows?\s+permission|cannot push workflow",
     re.IGNORECASE,
 )
+PREFLIGHT_PARKED_REASON_RE = re.compile(r"preflight", re.IGNORECASE)
+REBURN_PARKED_REASON_RE = re.compile(r"reburn|automation waste", re.IGNORECASE)
 DEFAULT_MAX_AGENT_RETRIES = 2
 DEFAULT_MAX_NO_DIFF_RUNS = 2
 DEFAULT_RETRY_COOLDOWN_HOURS = 24
@@ -491,6 +495,10 @@ def _infer_parked_policy(reason: str, *, explicit: str | None = None) -> str:
         return PARKED_POLICY_CI_BLOCKED
     if WORKFLOW_PERMISSION_REASON_RE.search(reason):
         return PARKED_POLICY_WORKFLOW_PERMISSION
+    if REBURN_PARKED_REASON_RE.search(reason):
+        return PARKED_POLICY_REBURN
+    if PREFLIGHT_PARKED_REASON_RE.search(reason):
+        return PARKED_POLICY_PREFLIGHT
     if NO_DIFF_PARKED_REASON_RE.search(reason):
         return PARKED_POLICY_NO_DIFF
     if DUPLICATE_PARKED_REASON_RE.search(reason):
@@ -1500,6 +1508,10 @@ def classify_parked_task(
             policy = PARKED_POLICY_HUNTER_UNFIXABLE
         elif WORKFLOW_PERMISSION_REASON_RE.search(reason):
             policy = PARKED_POLICY_WORKFLOW_PERMISSION
+        elif REBURN_PARKED_REASON_RE.search(reason):
+            policy = PARKED_POLICY_REBURN
+        elif PREFLIGHT_PARKED_REASON_RE.search(reason):
+            policy = PARKED_POLICY_PREFLIGHT
         else:
             policy = PARKED_POLICY_MANUAL
 

@@ -288,10 +288,10 @@ jobs:
                   git checkout -- "$wf" 2>/dev/null || true
                 done
                 if git diff --cached --quiet; then
-                  ftse-engineering park-task \
-                    --task-id "$TASK_ID" \
-                    --reason "engineering-agent cannot push .github/workflows changes without WORKFLOW_DISPATCH_PAT Workflows permission — parked for manual fix or PAT update" \
-                    --parked-policy workflow_permission
+                  export TASK_ID
+                  export PARK_REASON="engineering-agent cannot push .github/workflows changes without WORKFLOW_DISPATCH_PAT Workflows permission — parked for manual fix or PAT update"
+                  export PARKED_POLICY=workflow_permission
+                  bash scripts/gha_commit_engineering_park.sh
                   echo "No pushable changes remain after dropping workflow files"
                   exit 1
                 fi
@@ -303,10 +303,10 @@ jobs:
                 if [ "$PUSH_RC" -ne 0 ]; then
                   echo "$PUSH_OUTPUT"
                   if echo "$PUSH_OUTPUT" | grep -qi 'without `workflows` permission'; then
-                    ftse-engineering park-task \
-                      --task-id "$TASK_ID" \
-                      --reason "engineering-agent cannot push .github/workflows changes without WORKFLOW_DISPATCH_PAT Workflows permission — parked for manual fix or PAT update" \
-                      --parked-policy workflow_permission
+                    export TASK_ID
+                    export PARK_REASON="engineering-agent cannot push .github/workflows changes without WORKFLOW_DISPATCH_PAT Workflows permission — parked for manual fix or PAT update"
+                    export PARKED_POLICY=workflow_permission
+                    bash scripts/gha_commit_engineering_park.sh
                   fi
                   exit "$PUSH_RC"
                 fi
@@ -359,10 +359,10 @@ jobs:
           print("; ".join(f"{c.get('name')}: {c.get('detail')}" for c in failed[:3]) or "preflight failed")
           PY
           <<<"$PREFLIGHT_JSON")
-            ftse-engineering park-task \
-              --task-id "$TASK_ID" \
-              --reason "preflight blocked PR open — ${REASON}" \
-              --parked-policy preflight_clash
+            export TASK_ID
+            export PARK_REASON="preflight blocked PR open — ${REASON}"
+            export PARKED_POLICY=preflight_clash
+            bash scripts/gha_commit_engineering_park.sh
             exit 1
           fi
 

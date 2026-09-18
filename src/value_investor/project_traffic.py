@@ -40,6 +40,7 @@ SCHEMA_VERSION = 1
 PAUSE_REASON_CI_FAIL = "ci_failing"
 PAUSE_REASON_CONFLICT = "merge_conflict"
 PAUSE_REASON_STUCK_THRESHOLD = "stuck_pr_threshold"
+PAUSE_REASON_AUTOMATION_WASTE = "automation_waste"
 
 ACTION_COMMENT_CI = "request_ci_fix"
 ACTION_COMMENT_CONFLICT = "request_conflict_resolve"
@@ -49,8 +50,11 @@ ACTION_PAUSE = "pause_dispatch"
 ACTION_RESUME = "resume_dispatch"
 ACTION_QUEUE_SYNC = "remediate_queue_merge_sync"
 ACTION_CANCEL_RECOVERED_WORKFLOW = "cancel_recovered_workflow_failure"
+ACTION_STOP_AUTOMATION_WASTE = "stop_automation_waste"
 
 QUEUE_MERGE_SYNC_FINDING_TITLE = "Engineering queue merge sync lag"
+AUTOMATION_WASTE_REBURN_TITLE = "Automation waste: engineering agent reburn"
+AUTOMATION_WASTE_WORKFLOW_LOOP_TITLE = "Automation waste: Cursor workflow fail loop"
 
 ACTION_OPS_EMAIL_HANDOFF = "ops_email_handoff"
 DEFAULT_OPS_EMAIL_HANDOFF_PATH = Path("docs/data/project_traffic_ops_email_handoff.json")
@@ -60,6 +64,7 @@ RECTIFICATION_UNSTICK_PRS = "request_unstick_stuck_prs"
 RECTIFICATION_DRAFT_ENG_TASK = "draft_ops_engineering_task"
 RECTIFICATION_RERUN_WORKFLOW = "rerun_or_dispatch_workflow"
 RECTIFICATION_CANCEL_RECOVERED_WORKFLOW = "cancel_recovered_workflow_failure"
+RECTIFICATION_STOP_AUTOMATION_WASTE = "stop_automation_waste"
 RECTIFICATION_HUMAN_TRIAGE = "human_triage"
 
 DEFAULT_STUCK_PR_THRESHOLD = 2
@@ -67,6 +72,8 @@ DEFAULT_MIN_FAIL_AGE_MINUTES = 20
 DEFAULT_RESUME_IDLE_MINUTES = 15
 DEFAULT_MAX_FIX_REQUESTS_PER_PR = 2
 DEFAULT_COMMENT_COOLDOWN_HOURS = 6
+DEFAULT_WASTE_FAIL_THRESHOLD = 3
+DEFAULT_WASTE_WINDOW_HOURS = 6
 
 CURSOR_BRANCH_RE = re.compile(r"^cursor/[A-Za-z0-9][A-Za-z0-9._/-]*$")
 ENG_BRANCH_RE = re.compile(r"^cursor/eng-\d{8}-\d{2}-1de3$")
@@ -267,6 +274,128 @@ def remediate_recovered_workflow_failures(
     return ids, actions
 
 
+def remediate_automation_waste(
+    *,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    open_prs: list[dict[str, Any]] | None = None,
+    recent_agent_failures: list[dict[str, Any]] | None = None,
+    cursor_workflow_failure_counts: dict[str, int] | None = None,
+    apply: bool = True,
+    now: datetime | None = None,
+    policy: dict[str, Any] | None = None,
+) -> tuple[list[dict[str, Any]], list[TrafficAction], dict[str, Any]]:
+    """PM v1: pause eng dispatch and park tasks stuck in Composer reburn loops.
+
+    Also clears a prior automation-waste hold when no remediable signal remains,
+    so stuck-PR resume logic can proceed after the idle window.
+    """
+    from value_investor.automation_waste import collect_automation_waste_signals
+    from value_investor.engineering_recovery import (
+        PARKED_POLICY_REBURN,
+        park_agent_task,
+    )
+
+    now = now or _utcnow()
+    policy = policy or _traffic_policy()
+    state = dict(get_traffic_control_state(tasks_path=tasks_path))
+    actions: list[TrafficAction] = []
+    signal_rows: list[dict[str, Any]] = []
+
+    if not policy.get("automation_waste_enabled", True):
+        return [], [], state
+
+    signals = collect_automation_waste_signals(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        recent_agent_failures=recent_agent_failures,
+        cursor_workflow_failure_counts=cursor_workflow_failure_counts,
+        eng_fail_threshold=int(policy.get("waste_fail_threshold") or DEFAULT_WASTE_FAIL_THRESHOLD),
+        eng_window_hours=float(policy.get("waste_window_hours") or DEFAULT_WASTE_WINDOW_HOURS),
+        now=now,
+    )
+    signal_rows = [row.to_dict() for row in signals]
+    remediable = [row for row in signals if row.auto_remediable]
+
+    if not remediable:
+        if state.get("automation_waste_active") or PAUSE_REASON_AUTOMATION_WASTE in list(
+            state.get("pause_reasons") or []
+        ):
+            state["automation_waste_active"] = False
+            state["automation_waste_cleared_at"] = now.isoformat()
+            reasons = [
+                r
+                for r in list(state.get("pause_reasons") or [])
+                if r != PAUSE_REASON_AUTOMATION_WASTE
+            ]
+            if reasons:
+                state["pause_reasons"] = reasons
+            else:
+                state.pop("pause_reasons", None)
+            state["last_action_at"] = now.isoformat()
+            _save_traffic_control_state(state, tasks_path=tasks_path, apply=apply)
+            actions.append(
+                TrafficAction(
+                    kind=ACTION_STOP_AUTOMATION_WASTE,
+                    detail="cleared automation-waste hold — no remediable signal",
+                    applied=bool(apply),
+                )
+            )
+        # Non-remediable signals (workflow fail loops) stay for digest/handoff only.
+        state["automation_waste_signals"] = signal_rows
+        if signal_rows and apply:
+            _save_traffic_control_state(state, tasks_path=tasks_path, apply=True)
+        return signal_rows, actions, state
+
+    parked_ids: list[str] = []
+    if policy.get("park_on_automation_waste", True):
+        for signal in remediable:
+            for task_id in signal.task_ids:
+                if not task_id:
+                    continue
+                action = park_agent_task(
+                    task_id,
+                    reason=(
+                        f"automation waste reburn — {signal.failure_count} "
+                        f"engineering-agent failure(s) in {signal.window_hours:g}h "
+                        "without an in-flight PR (PM stop_automation_waste)"
+                    ),
+                    tasks_path=tasks_path,
+                    parked_policy=PARKED_POLICY_REBURN,
+                    apply=apply,
+                )
+                if action is not None:
+                    parked_ids.append(task_id)
+
+    if policy.get("pause_on_automation_waste", True):
+        reasons = list(state.get("pause_reasons") or [])
+        if PAUSE_REASON_AUTOMATION_WASTE not in reasons:
+            reasons.append(PAUSE_REASON_AUTOMATION_WASTE)
+        state["pause_active"] = True
+        state["pause_reasons"] = reasons
+        state["automation_waste_active"] = True
+        state["automation_waste_signals"] = signal_rows
+        state["automation_waste_parked_task_ids"] = parked_ids
+        state["pause_started_at"] = state.get("pause_started_at") or now.isoformat()
+        state["last_action_at"] = now.isoformat()
+        state.pop("resumed_at", None)
+        state.pop("resume_pending", None)
+        _save_traffic_control_state(state, tasks_path=tasks_path, apply=apply)
+
+    detail_parts = [
+        f"signals={len(signals)}",
+        f"parked={','.join(parked_ids) or 'none'}",
+        f"pause={bool(policy.get('pause_on_automation_waste', True))}",
+    ]
+    actions.append(
+        TrafficAction(
+            kind=ACTION_STOP_AUTOMATION_WASTE,
+            detail="; ".join(detail_parts),
+            applied=bool(apply),
+        )
+    )
+    return signal_rows, actions, state
+
+
 def _utcnow() -> datetime:
     return datetime.now(UTC)
 
@@ -321,9 +450,24 @@ def _traffic_policy() -> dict[str, Any]:
         )
     except (TypeError, ValueError):
         comment_cooldown = DEFAULT_COMMENT_COOLDOWN_HOURS
+    try:
+        waste_fail_threshold = max(
+            1, int(block.get("waste_fail_threshold") or DEFAULT_WASTE_FAIL_THRESHOLD)
+        )
+    except (TypeError, ValueError):
+        waste_fail_threshold = DEFAULT_WASTE_FAIL_THRESHOLD
+    try:
+        waste_window_hours = max(
+            1, int(block.get("waste_window_hours") or DEFAULT_WASTE_WINDOW_HOURS)
+        )
+    except (TypeError, ValueError):
+        waste_window_hours = DEFAULT_WASTE_WINDOW_HOURS
     enabled = block.get("enabled")
     if enabled is None:
         enabled = True
+    waste_enabled = block.get("automation_waste_enabled")
+    if waste_enabled is None:
+        waste_enabled = True
     return {
         "enabled": bool(enabled),
         "stuck_pr_threshold": stuck_threshold,
@@ -336,6 +480,11 @@ def _traffic_policy() -> dict[str, Any]:
         "request_ci_fix_comments": bool(block.get("request_ci_fix_comments", True)),
         "request_conflict_resolve": bool(block.get("request_conflict_resolve", True)),
         "digest_enabled": bool(block.get("digest_enabled", True)),
+        "automation_waste_enabled": bool(waste_enabled),
+        "waste_fail_threshold": waste_fail_threshold,
+        "waste_window_hours": waste_window_hours,
+        "pause_on_automation_waste": bool(block.get("pause_on_automation_waste", True)),
+        "park_on_automation_waste": bool(block.get("park_on_automation_waste", True)),
     }
 
 
@@ -755,7 +904,9 @@ def evaluate_traffic_pause(
         state.pop("resumed_at", None)
         changes["activated"] = True
     elif pause_active:
-        if stuck_count == 0:
+        waste_hold = PAUSE_REASON_AUTOMATION_WASTE in list(state.get("pause_reasons") or [])
+        waste_active = bool(state.get("automation_waste_active"))
+        if stuck_count == 0 and not waste_hold and not waste_active:
             pause_started = _parse_iso(str(state.get("pause_started_at") or ""))
             last_action = _parse_iso(str(state.get("last_action_at") or ""))
             effective_last = last_action
@@ -778,7 +929,11 @@ def evaluate_traffic_pause(
                 state["resume_pending"] = True
                 changes["resume_pending"] = True
         else:
-            state["pause_reasons"] = reasons
+            merged_reasons = list(reasons)
+            if waste_hold or waste_active:
+                if PAUSE_REASON_AUTOMATION_WASTE not in merged_reasons:
+                    merged_reasons.append(PAUSE_REASON_AUTOMATION_WASTE)
+            state["pause_reasons"] = merged_reasons or list(state.get("pause_reasons") or [])
             state.pop("resume_pending", None)
 
     state["stuck_pr_count"] = stuck_count
@@ -1045,6 +1200,11 @@ def planned_rectification_for_ops_finding(finding: Any) -> tuple[str, str]:
             RECTIFICATION_QUEUE_SYNC,
             "PM v1: recover/mark-merged engineering queue reconciliation",
         )
+    if title.startswith("Automation waste:") or title == AUTOMATION_WASTE_REBURN_TITLE:
+        return (
+            RECTIFICATION_STOP_AUTOMATION_WASTE,
+            "PM v1: pause eng dispatch and park tasks stuck in Composer reburn loops",
+        )
     if title == "Project traffic pause active" or "stuck PR" in summary.lower():
         return (
             RECTIFICATION_UNSTICK_PRS,
@@ -1086,18 +1246,20 @@ def handoff_ops_monitor_email_to_pm(
     apply: bool = True,
     handoff_path: Path = DEFAULT_OPS_EMAIL_HANDOFF_PATH,
     update_digest: bool = True,
+    recent_agent_failures: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Hand email-worthy ops findings to PM with planned rectification.
 
-    Keeps SMTP with the caller. Auto-remediates queue merge-sync and recovered
-    ``workflow_failure`` cancellations (PM v1); other items stay open on the
-    handoff artifact + digest.
+    Keeps SMTP with the caller. Auto-remediates queue merge-sync, recovered
+    ``workflow_failure`` cancellations, and automation-waste reburn loops
+    (PM v1); other items stay open on the handoff artifact + digest.
     """
     drafted_task_ids = [str(x) for x in (drafted_task_ids or []) if x]
     items: list[dict[str, Any]] = []
     actions: list[TrafficAction] = []
     needs_queue_sync = False
     needs_workflow_recover_cancel = False
+    needs_automation_waste = False
 
     for finding in findings:
         if hasattr(finding, "to_dict"):
@@ -1134,6 +1296,8 @@ def handoff_ops_monitor_email_to_pm(
             needs_queue_sync = True
         if action_id == RECTIFICATION_CANCEL_RECOVERED_WORKFLOW:
             needs_workflow_recover_cancel = True
+        if action_id == RECTIFICATION_STOP_AUTOMATION_WASTE:
+            needs_automation_waste = True
         items.append(item)
 
     if needs_queue_sync:
@@ -1187,6 +1351,31 @@ def handoff_ops_monitor_email_to_pm(
                     f"{item['rectification_detail']}; no recovered workflow_failure "
                     "rows to cancel — keep rerun/eng path"
                 )
+
+    if needs_automation_waste:
+        _signal_rows, waste_actions, _state = remediate_automation_waste(
+            tasks_path=tasks_path,
+            open_prs=open_prs,
+            recent_agent_failures=recent_agent_failures,
+            apply=apply,
+        )
+        actions.extend(waste_actions)
+        applied_waste = any(
+            a.kind == ACTION_STOP_AUTOMATION_WASTE and a.applied for a in waste_actions
+        )
+        for item in items:
+            if item["planned_rectification"] != RECTIFICATION_STOP_AUTOMATION_WASTE:
+                continue
+            item["auto_attempted"] = True
+            if apply and applied_waste:
+                item["auto_resolved"] = True
+                item["status"] = "resolved"
+                item["rectification_detail"] = (
+                    f"{item['rectification_detail']}; "
+                    f"{'; '.join(a.detail for a in waste_actions if a.kind == ACTION_STOP_AUTOMATION_WASTE)}"
+                )
+            else:
+                item["status"] = "open"
 
     handoff = {
         "schema_version": SCHEMA_VERSION,
@@ -1494,6 +1683,8 @@ def run_project_traffic(
     apply: bool = True,
     write_digest: bool = True,
     now: datetime | None = None,
+    recent_agent_failures: list[dict[str, Any]] | None = None,
+    cursor_workflow_failure_counts: dict[str, int] | None = None,
 ) -> TrafficControllerReport:
     """Classify stuck PRs, pause/resume dispatch, request fixes, optional digest."""
     now = now or _utcnow()
@@ -1523,6 +1714,21 @@ def run_project_traffic(
 
         token = token or _github_token()
         open_prs = list_open_pull_requests(repo=repo, token=token) if token else []
+
+    if recent_agent_failures is None and policy.get("automation_waste_enabled", True):
+        try:
+            from value_investor.engineering_sync import ENGINEERING_AGENT_WORKFLOW
+            from value_investor.ops_monitor import recent_workflow_failures
+
+            recent_agent_failures = recent_workflow_failures(
+                ENGINEERING_AGENT_WORKFLOW,
+                repo=repo,
+                token=token,
+                within_hours=int(policy.get("waste_window_hours") or DEFAULT_WASTE_WINDOW_HOURS),
+            )
+        except Exception:  # noqa: BLE001
+            logger.exception("failed to load engineering-agent failures for waste monitor")
+            recent_agent_failures = []
 
     stuck = classify_stuck_prs(
         open_prs,
@@ -1588,6 +1794,19 @@ def run_project_traffic(
         apply=apply,
     )
     actions.extend(workflow_cancel_actions)
+
+    _waste_signals, waste_actions, waste_state = remediate_automation_waste(
+        tasks_path=tasks_path,
+        open_prs=open_prs,
+        recent_agent_failures=recent_agent_failures,
+        cursor_workflow_failure_counts=cursor_workflow_failure_counts,
+        apply=apply,
+        now=now,
+        policy=policy,
+    )
+    actions.extend(waste_actions)
+    if waste_state.get("pause_active") or waste_state.get("automation_waste_active") is False:
+        state = waste_state
 
     digest = None
     if write_digest and policy.get("digest_enabled", True):

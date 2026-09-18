@@ -301,12 +301,19 @@ def default_policy() -> dict[str, Any]:
                 "request_ci_fix_comments": True,
                 "request_conflict_resolve": True,
                 "digest_enabled": True,
+                "automation_waste_enabled": True,
+                "waste_fail_threshold": 3,
+                "waste_window_hours": 6,
+                "pause_on_automation_waste": True,
+                "park_on_automation_waste": True,
                 "note": (
                     "Project traffic controller (ftse-project-traffic): pause new "
                     "engineering-agent dispatch when monitored cursor/* PRs are CI-red "
                     "or merge-conflicting; comment to request fixes; dispatch scoped "
-                    "conflict-resolve for eng branches; write grounded EOD digest. "
-                    "Does not merge PRs — merge stays human or scoped auto-merge."
+                    "conflict-resolve for eng branches; stop Composer reburn loops "
+                    "(automation waste) by parking the burning task and pausing "
+                    "dispatch; write grounded EOD digest. Does not merge PRs — merge "
+                    "stays human or scoped auto-merge."
                 ),
             },
             "hunter_url_monitor": {

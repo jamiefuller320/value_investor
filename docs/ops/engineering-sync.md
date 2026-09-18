@@ -18,7 +18,7 @@ dropping still-open tasks from an older run stamp. The agent then failed with
 | **Merge guard** | `_merge_task_rows` preserves all `open` tasks, not only terminal/`pr_open` rows |
 | **Agent workflow** | Skips compile when `task_id` is provided; resolves stale ids via `resolve_dispatch_task_id` |
 | **Parallel dispatch** | `max_parallel_engineering_agents` (default 2) with **clash-aware** selection — walks priority order, skips tasks blocked by allowlist overlap, open-PR file overlap, shared mutable files (`engineering_tasks.json`, `policy.json`, …), or optional `git merge-tree` conflicts; non-competing tasks **overtake** blocked higher-priority work |
-| **Preflight before PR** | `engineering-agent.yml` runs `ftse-engineering preflight` (path guard, ruff, JSON sanity, clash scan) after push and before `gh pr create`; failures park the task (`parked_policy=preflight_clash`) |
+| **Preflight before PR** | `engineering-agent.yml` runs `ftse-engineering preflight` (path guard, ruff, JSON sanity, clash scan) after push and before `gh pr create`; failures park the task (`parked_policy=preflight_clash`) and **commit the park to `main`** via `scripts/gha_commit_engineering_park.sh` so hourly queue cannot rediscover a still-open task |
 | **So-what batching** | `so_what_closure` groups `auto_queue` findings by `(area, kind)` so shared scoring plumbing is one PR, not one per ticker |
 | **Spend commit** | `scripts/gha_commit_engineering_spend.sh` rebases onto `origin/main`, re-records spend, and retries the push. Exhausted retries are `continue-on-error` so a raced `policy.json` push cannot block the draft PR |
 | **Queue recovery** | Hourly `recover-queue` marks tasks **merged** when GitHub shows a merged PR for their branch (before orphan `pr_open` reset) |

@@ -25,6 +25,7 @@ artifacts, ingest stall detection, and the engineering queue.
 - Quarantine corrupt or duplicate backtest history snapshots (see [backtest-health.md](backtest-health.md))
 - Reconcile engineering queue sync issues and redispatch when the agent failed on a stale task id (see [engineering-sync.md](engineering-sync.md))
 - Detect **queue merge-sync lag** (`pr_open`/`open` after GitHub merge) and hand it to the project-traffic PM controller; **email only if PM remediation cannot clear it**
+- Detect **automation waste** (engineering-agent Composer reburn; Cursor workflow fail loops) and hand remediable signals to project-traffic (`stop_automation_waste` parks + pause)
 - Suppress “recent workflow failure” alerts while a recovery run for that workflow is already in flight
 - Suppress workflow-overdue findings while a run is in flight, or before that workflow’s `WORKFLOW_EMAIL_READY_UTC` slot (Monday morning cliff / pending primary cron)
 - `workflow_dispatch` overdue **ingest-loop** / **paper-auto** after email-ready when no run is active
@@ -169,6 +170,8 @@ The daily ops monitor **grades** parked tasks (no separate housekeeping loop):
 |-----------------|------------------|-------------|
 | `duplicate` (of merged task) | No | Cancel task when `duplicate_of` is merged |
 | `no_diff_cap` | No | Annotate policy only |
+| `preflight_clash` | Yes | Manual review (agent park committed to main) |
+| `reburn_loop` | Yes | Traffic PM parked after Composer reburn; triage before unpark |
 | `ci_blocked` | Yes | Manual review |
 | `manual` | Yes | Manual review |
 
@@ -359,6 +362,10 @@ When **2 or more** monitored `cursor/*` PRs are CI-red or merge-conflicting,
 `traffic_control.pause_active` on `engineering_tasks.json`. That pauses
 **engineering-agent** dispatch and **parked-hunter-compile** until stuck PRs clear
 and a short idle window elapses.
+
+The same controller also stops **automation waste**: when engineering-agent fails
+repeatedly on the same open task with no in-flight PR (Composer reburn), traffic
+parks the task (`reburn_loop`) and holds dispatch until the waste signal clears.
 
 The controller comments on stuck PRs and may dispatch
 `engineering-conflict-resolve.yml` for `cursor/eng-*` branches. It does **not**
