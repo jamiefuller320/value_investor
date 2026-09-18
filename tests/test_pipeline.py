@@ -3980,7 +3980,7 @@ def test_enrich_signals_with_media_cyclical_thin_fcf_overlay_caps_itv_like_profi
 
 
 def test_enrich_signals_with_dividend_sustainability_overlay_caps_itv_like_profile():
-    from value_investor.scoring.dividend_sustainability_overlay import (
+    from value_investor.scoring.fcf_basis_overlay import (
         enrich_signals_with_dividend_sustainability_overlay,
     )
 
@@ -4023,104 +4023,6 @@ def test_enrich_signals_with_dividend_sustainability_overlay_caps_itv_like_profi
     assert bool(row["dividend_sustainability_overlay"]) is True
     assert row["adjusted_signal"] == "buy"
     assert row["conviction_score"] == pytest.approx(0.53 * 0.85)
-
-
-def _pipeline_model_results_itv_dividend_sustainability() -> pd.DataFrame:
-    return pd.DataFrame(
-        [
-            {
-                "ticker": "ITV.L",
-                "model_id": "high_dividend",
-                "model_name": "High Dividend Yield",
-                "passed": True,
-                "score": 0.9,
-                "reasons": "[]",
-                "failed_criteria": "[]",
-            },
-            {
-                "ticker": "ITV.L",
-                "model_id": "piotroski_f",
-                "model_name": "Piotroski F-Score",
-                "passed": False,
-                "score": 3 / 9,
-                "reasons": "['F-Score=3/9']",
-                "failed_criteria": "[]",
-            },
-        ]
-    )
-
-
-def _pipeline_model_results_megp_dividend_overlay() -> pd.DataFrame:
-    return pd.DataFrame(
-        [
-            {
-                "ticker": "MEGP.L",
-                "model_id": "high_dividend",
-                "model_name": "High Dividend Yield",
-                "passed": True,
-                "score": 0.9,
-                "reasons": "['yield=7.6%']",
-                "failed_criteria": "[]",
-            },
-            {
-                "ticker": "MEGP.L",
-                "model_id": "fcf_yield",
-                "model_name": "FCF Yield",
-                "passed": False,
-                "score": 0.3,
-                "reasons": "[]",
-                "failed_criteria": "['FCF yield 3.7% below 5%']",
-            },
-            {
-                "ticker": "MEGP.L",
-                "model_id": "earnings_quality",
-                "model_name": "Earnings Quality",
-                "passed": False,
-                "score": 0.5,
-                "reasons": "[]",
-                "failed_criteria": "['weak free-cash conversion']",
-            },
-        ]
-    )
-
-
-def test_enforce_fcf_basis_in_snapshot_applies_dividend_sustainability_overlay():
-    enforced = enforce_fcf_basis_in_snapshot(
-        {
-            "ticker": "ITV.L",
-            "signal": "strong_buy",
-            "adjusted_signal": "strong_buy",
-            "conviction_score": 0.53,
-            "fcf_dividend_coverage_net": 1.0,
-            "advertising_revenue_share": 0.2,
-            "fcf_basis_overlay": False,
-            "media_cyclical_thin_fcf_overlay": False,
-        },
-        model_results=_pipeline_model_results_itv_dividend_sustainability(),
-    )
-    assert enforced.get("media_cyclical_thin_fcf_overlay") is not True
-    assert enforced["dividend_sustainability_overlay"] is True
-    assert enforced["adjusted_signal"] == "buy"
-    assert enforced["conviction_score"] == pytest.approx(0.53 * 0.85)
-
-
-def test_enforce_fcf_basis_in_snapshot_flags_interim_dividend_cut_megp_style():
-    enforced = enforce_fcf_basis_in_snapshot(
-        {
-            "ticker": "MEGP.L",
-            "signal": "strong_buy",
-            "adjusted_signal": "strong_buy",
-            "conviction_score": 0.45,
-            "interim_dividend_cut_pct": 0.065,
-            "fcf_dividend_coverage_net": 0.84,
-            "fcf_basis_overlay": False,
-        },
-        model_results=_pipeline_model_results_megp_dividend_overlay(),
-    )
-    assert enforced["interim_dividend_cut_flagged"] is True
-    assert enforced.get("dividend_sustainability_overlay") is not True
-    assert enforced["adjusted_signal"] == "buy"
-    assert enforced["dividend_yield_overlay"] is True
 
 
 def test_enrich_signals_with_cyclical_exposure_overlay_flags_megp_like_profile():

@@ -99,25 +99,3 @@ def enrich_signals_with_dividend_yield_overlay(
     out["dividend_yield_overlay"] = flags
     out["adjusted_signal"] = adjusted
     return out
-
-
-def apply_dividend_yield_export_enforcement(
-    *,
-    signal: str,
-    adjusted_signal: str,
-    ticker_models: pd.DataFrame,
-    dividend_yield_overlay: bool = False,
-) -> tuple[bool, str]:
-    """Re-apply high-yield / weak-FCF-yield caps on export and snapshot paths."""
-    if dividend_yield_overlay:
-        capped = cap_signal_for_dividend_yield_overlay(signal)
-        merged = _more_conservative_signal(adjusted_signal, capped)
-        return True, merged
-    triggered, merged = apply_dividend_yield_overlay_to_signal(
-        signal,
-        ticker_models=ticker_models,
-        adjusted_signal=adjusted_signal,
-    )
-    if not triggered:
-        return False, adjusted_signal
-    return True, merged
