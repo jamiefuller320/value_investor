@@ -3928,6 +3928,57 @@ def test_enrich_signals_with_interim_quality_overlay_not_triggered_on_annual_gro
     assert enriched.iloc[0]["adjusted_signal"] == "strong_buy"
 
 
+def test_parse_advertising_revenue_share_from_itv_style_tables():
+    from value_investor.scoring.fcf import parse_advertising_revenue_share
+
+    body = "Total advertising revenue 1,723 1,820 (5)\nTotal external revenue 3,511 3,488 1\n"
+    share = parse_advertising_revenue_share(body)
+    assert share is not None
+    assert share == pytest.approx(1_723 / 3_511, rel=1e-4)
+
+
+def test_enrich_signals_with_media_cyclical_thin_fcf_overlay_caps_itv_like_profile():
+    from value_investor.scoring.fcf_basis_overlay import (
+        enrich_signals_with_media_cyclical_thin_fcf_overlay,
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.53,
+                "fcf_dividend_coverage_net": 1.0,
+                "advertising_revenue_share": 0.49,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": False,
+                "score": 3 / 9,
+                "reasons": "['F-Score=3/9']",
+                "failed_criteria": "[]",
+            },
+        ]
+    )
+
+    enriched = enrich_signals_with_media_cyclical_thin_fcf_overlay(
+        signals,
+        model_results,
+    )
+    row = enriched.iloc[0]
+
+    assert bool(row["media_cyclical_thin_fcf_overlay"]) is True
+    assert row["adjusted_signal"] == "buy"
+    assert row["conviction_score"] == pytest.approx(0.53 * 0.85)
+    assert bool(row["cyclical_exposure_detected"]) is True
+
+
 def test_enrich_signals_with_dividend_sustainability_overlay_caps_itv_like_profile():
     from value_investor.scoring.dividend_sustainability_overlay import (
         enrich_signals_with_dividend_sustainability_overlay,

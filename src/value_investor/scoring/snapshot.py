@@ -10,10 +10,17 @@ import pandas as pd
 
 from value_investor.research.verdict import compute_adjusted_signal
 from value_investor.scoring.fcf import (
+    _float_or_none,
+    advertising_revenue_share_for_ticker,
     enrich_screening_snapshot_fcf_dividend_coverage,
+    resolve_statutory_fcf_dividend_coverage,
     screen_ttm_from_row,
 )
-from value_investor.scoring.fcf_basis_overlay import apply_fcf_export_enforcement
+from value_investor.scoring.fcf_basis_overlay import (
+    apply_fcf_export_enforcement,
+    apply_media_cyclical_thin_fcf_export_enforcement,
+)
+from value_investor.scoring.healthcare_overlay import piotroski_score_for_ticker
 from value_investor.storage import read_json, write_json
 
 _RUN_SNAPSHOT_OPTIONAL_SIGNAL_COLUMNS = (
@@ -29,6 +36,8 @@ _RUN_SNAPSHOT_OPTIONAL_SIGNAL_COLUMNS = (
     "research_as_of",
     "research_confidence",
     "fcf_basis_overlay",
+    "media_cyclical_thin_fcf_overlay",
+    "advertising_revenue_share",
     "interim_quality_overlay",
     "earnings_basis_overlay",
     "interim_eps_decline_pct",
@@ -94,6 +103,8 @@ def enforce_fcf_basis_in_snapshot(
     snapshot: dict[str, Any],
     *,
     adjusted_signal: str | None = None,
+    model_results: pd.DataFrame | None = None,
+    output_dir: Path | None = None,
 ) -> dict[str, Any]:
     """Cap buy-tier signals when FCF basis mismatch notes or flags require overlay."""
     updated = dict(snapshot)
@@ -116,6 +127,56 @@ def enforce_fcf_basis_in_snapshot(
     updated["adjusted_signal"] = merged_adjusted
     updated["fcf_basis_overlay"] = overlay
     updated["conviction_score"] = conviction
+
+    piotroski = updated.get("piotroski_f_score")
+    piotroski_f_score = (
+        int(piotroski)
+        if piotroski is not None and not (isinstance(piotroski, float) and pd.isna(piotroski))
+        else None
+    )
+    if piotroski_f_score is None and model_results is not None and not model_results.empty:
+        ticker = str(updated.get("ticker") or "")
+        piotroski_f_score = piotroski_score_for_ticker(
+            model_results[model_results["ticker"] == ticker]
+        )
+
+    ad_raw = updated.get("advertising_revenue_share")
+    advertising_revenue_share = (
+        float(ad_raw)
+        if ad_raw is not None and not (isinstance(ad_raw, float) and pd.isna(ad_raw))
+        else None
+    )
+    if advertising_revenue_share is None:
+        ticker = str(updated.get("ticker") or "")
+        if ticker:
+            advertising_revenue_share = advertising_revenue_share_for_ticker(
+                ticker,
+                output_dir=output_dir,
+            )
+    statutory_cover = resolve_statutory_fcf_dividend_coverage(
+        fcf_dividend_coverage_net=_float_or_none(updated.get("fcf_dividend_coverage_net")),
+        operating_cashflow=_float_or_none(updated.get("operating_cashflow")),
+        capital_expenditure=_float_or_none(updated.get("capital_expenditure")),
+        dividends_paid=_float_or_none(updated.get("dividends_paid")),
+        free_cashflow=_float_or_none(updated.get("free_cashflow")),
+    )
+    media_overlay, media_adjusted, media_conviction = (
+        apply_media_cyclical_thin_fcf_export_enforcement(
+            signal=screen_signal,
+            adjusted_signal=str(updated.get("adjusted_signal") or merged_adjusted),
+            conviction_score=float(updated.get("conviction_score") or 0.0),
+            media_cyclical_thin_fcf_overlay=bool(updated.get("media_cyclical_thin_fcf_overlay")),
+            advertising_revenue_share=advertising_revenue_share,
+            piotroski_f_score=piotroski_f_score,
+            statutory_fcf_dividend_coverage=statutory_cover,
+        )
+    )
+    if media_overlay:
+        updated["media_cyclical_thin_fcf_overlay"] = True
+        updated["adjusted_signal"] = media_adjusted
+        updated["conviction_score"] = media_conviction
+        if advertising_revenue_share is not None:
+            updated["advertising_revenue_share"] = advertising_revenue_share
     return updated
 
 
@@ -155,7 +216,7 @@ def write_screening_snapshot(sources_dir: Path, snapshot: dict[str, Any]) -> Pat
         snapshot,
         output_dir=output_dir,
     )
-    payload = enforce_fcf_basis_in_snapshot(payload)
+    payload = enforce_fcf_basis_in_snapshot(payload, output_dir=output_dir)
     payload = enrich_screening_snapshot_fcf_dividend_coverage(payload)
     write_json(
         path,

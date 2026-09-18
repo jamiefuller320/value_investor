@@ -509,6 +509,108 @@ def profit_to_cash_yoy_decline_for_ticker(
     return _select_profit_to_cash_yoy_decline(bodies, min_decline_pp=min_decline_pp)
 
 
+ADVERTISING_REVENUE_SHARE_MEDIA_THRESHOLD = 0.40
+MEDIA_THIN_STATUTORY_FCF_DIVIDEND_COVERAGE_MAX = 1.1
+
+_AD_REVENUE_TABLE_RES = (
+    re.compile(
+        r"Total advertising revenue(?:\s*\(\s*TAR\s*\))?\s+([\d,]+)",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"Total Advertising Revenue\s*\(\s*TAR\s\)\s+([\d,]+)",
+        re.IGNORECASE,
+    ),
+)
+_TOTAL_EXTERNAL_REVENUE_RES = re.compile(
+    r"Total external revenue\s+([\d,]+)",
+    re.IGNORECASE,
+)
+_TOTAL_GROUP_REVENUE_RES = re.compile(
+    r"^Total revenue\s+([\d,]+)",
+    re.IGNORECASE | re.MULTILINE,
+)
+
+
+def _parse_filing_table_millions(raw: str) -> float | None:
+    cleaned = str(raw or "").replace(",", "").strip()
+    if not cleaned:
+        return None
+    try:
+        value = float(cleaned)
+    except (TypeError, ValueError):
+        return None
+    if value <= 0 or value > 500_000:
+        return None
+    return value
+
+
+def parse_advertising_revenue_share(body_text: str) -> float | None:
+    """Return advertising revenue as a fraction of group revenue from IR/RNS table rows."""
+    if not body_text:
+        return None
+    ad_amount: float | None = None
+    for pattern in _AD_REVENUE_TABLE_RES:
+        match = pattern.search(body_text)
+        if match is None:
+            continue
+        ad_amount = _parse_filing_table_millions(match.group(1))
+        if ad_amount is not None:
+            break
+    if ad_amount is None:
+        return None
+
+    total_amount: float | None = None
+    external = _TOTAL_EXTERNAL_REVENUE_RES.search(body_text)
+    if external is not None:
+        total_amount = _parse_filing_table_millions(external.group(1))
+    if total_amount is None:
+        group = _TOTAL_GROUP_REVENUE_RES.search(body_text)
+        if group is not None:
+            total_amount = _parse_filing_table_millions(group.group(1))
+    if total_amount is None or total_amount <= 0 or ad_amount > total_amount:
+        return None
+    return ad_amount / total_amount
+
+
+def advertising_revenue_share_for_ticker(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+) -> float | None:
+    """Highest advertising/group revenue share found across cached filing bodies."""
+    bodies = load_filing_bodies_for_ticker(ticker, output_dir=output_dir)
+    best: float | None = None
+    for body in bodies:
+        share = parse_advertising_revenue_share(body)
+        if share is None:
+            continue
+        if best is None or share > best:
+            best = share
+    return best
+
+
+def resolve_statutory_fcf_dividend_coverage(
+    *,
+    fcf_dividend_coverage_net: float | None,
+    operating_cashflow: float | None = None,
+    capital_expenditure: float | None = None,
+    dividends_paid: float | None = None,
+    free_cashflow: float | None = None,
+) -> float | None:
+    """Statutory OCF−CapEx dividend cover for media cyclicality overlay decisions."""
+    if fcf_dividend_coverage_net is not None and not (
+        isinstance(fcf_dividend_coverage_net, float) and pd.isna(fcf_dividend_coverage_net)
+    ):
+        return float(fcf_dividend_coverage_net)
+    statutory_fcf = filing_aligned_fcf(
+        operating_cashflow,
+        capital_expenditure,
+        free_cashflow=free_cashflow,
+    )
+    return fcf_dividend_coverage(statutory_fcf, dividends_paid)
+
+
 def fcf_three_way_mismatch_flagged(
     *,
     filing_aligned: float | None,

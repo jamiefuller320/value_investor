@@ -5077,3 +5077,35 @@ def test_guard_screening_export_jsg_style_fcf_research_and_models(tmp_path: Path
     assert guarded["action_note"].count("Research: Accumulate") == 1
     assert guarded["summary"].startswith("Buy")
     assert guarded["signal"] == "strong_buy"
+
+
+def test_guard_screening_snapshot_export_applies_media_cyclical_thin_fcf_overlay():
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    snapshot = {
+        "ticker": "ITV.L",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.53,
+        "fcf_dividend_coverage_net": 1.05,
+        "advertising_revenue_share": 0.49,
+    }
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": False,
+                "score": 4 / 9,
+                "reasons": "['F-Score=4/9']",
+                "failed_criteria": "[]",
+            },
+        ]
+    )
+
+    guarded = guard_screening_snapshot_export(snapshot, model_results=model_results)
+
+    assert guarded["media_cyclical_thin_fcf_overlay"] is True
+    assert guarded["adjusted_signal"] == "buy"
+    assert guarded["conviction_score"] == pytest.approx(0.53 * 0.85)

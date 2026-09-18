@@ -339,7 +339,12 @@ def guard_screening_snapshot_export(
         if enriched_note != action_note:
             updated["action_note"] = enriched_note
 
-    merged = enforce_fcf_basis_in_snapshot(updated, adjusted_signal=adjusted_str)
+    merged = enforce_fcf_basis_in_snapshot(
+        updated,
+        adjusted_signal=adjusted_str,
+        model_results=model_results,
+        output_dir=output_dir,
+    )
     merged = enrich_screening_snapshot_fcf_dividend_coverage(merged)
 
     overlay, merged_adjusted, conviction = apply_fcf_export_enforcement(
