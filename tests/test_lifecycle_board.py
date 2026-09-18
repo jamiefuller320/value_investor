@@ -417,3 +417,6 @@ def test_dashboard_lifecycle_opens_experiment_cards():
     assert "book_cost" in charts
     assert "mergeChartLevels" in charts
     assert "async function mountPriceChart(body, report, overlays)" in charts
+    assert "levels_basis" in charts
+    assert "prospective" in charts
+    assert "formatChartPrice(value, currency)" in charts

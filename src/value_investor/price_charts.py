@@ -140,6 +140,81 @@ def trade_plan_from_signal_row(row: dict[str, Any] | None) -> dict[str, Any]:
     }
 
 
+def trade_plan_has_entry_levels(plan: dict[str, Any] | None) -> bool:
+    if not isinstance(plan, dict):
+        return False
+    return any(
+        plan.get(key) is not None
+        for key in (
+            "core_limit",
+            "tactical_limit",
+            "tactical_take_profit",
+            "take_profit",
+            "tactical_stop_loss",
+            "stop_loss",
+        )
+    )
+
+
+def prospective_trade_plan_from_series(
+    series: pd.Series,
+    *,
+    signal: str | None = None,
+) -> dict[str, Any] | None:
+    """Buy / target levels for chart display on names not yet bought.
+
+    Uses the same limit math as a live buy plan for ``buy`` / ``strong_buy`` and
+    for ``hold`` (near-buy / pre-buy screen names). Skips ``avoid``.
+    """
+    sig = str(signal or "").strip().lower()
+    if sig == "avoid":
+        return None
+    clean = series.dropna()
+    if len(clean) < 30:
+        return None
+    from value_investor.technical_analysis import (
+        TimingSignal,
+        compute_indicators,
+        compute_trade_plan,
+    )
+
+    frame = clean.to_frame(name="Close")
+    tech = compute_indicators(frame)
+    if tech.timing_signal == TimingSignal.INSUFFICIENT_DATA:
+        return None
+    # Hold prospects use buy math for chart entry levels only — does not change
+    # live trade-plan attachment (still buy-tier gated in enrich_signals).
+    plan = compute_trade_plan(frame["Close"], tech, value_signal="buy")
+    return plan.to_dict() if plan is not None else None
+
+
+def resolve_chart_trade_plan(
+    series: pd.Series,
+    *,
+    trade_plan: dict[str, Any] | None,
+    signal: str | None = None,
+    held: bool = False,
+) -> tuple[dict[str, Any] | None, str]:
+    """Return (plan, basis) where basis is trade_plan | prospective | none."""
+    if trade_plan_has_entry_levels(trade_plan):
+        return trade_plan, "trade_plan"
+    nested = None
+    if isinstance(trade_plan, dict) and isinstance(trade_plan.get("trade_plan"), dict):
+        nested = trade_plan.get("trade_plan")
+    if trade_plan_has_entry_levels(nested):
+        return nested, "trade_plan"
+    from_row = trade_plan_from_signal_row(trade_plan if isinstance(trade_plan, dict) else None)
+    if trade_plan_has_entry_levels(from_row):
+        return from_row, "trade_plan"
+    # Prospective buy/target only for names not yet bought (screen-side).
+    if held:
+        return trade_plan if isinstance(trade_plan, dict) else None, "none"
+    prospective = prospective_trade_plan_from_series(series, signal=signal)
+    if trade_plan_has_entry_levels(prospective):
+        return prospective, "prospective"
+    return trade_plan if isinstance(trade_plan, dict) else None, "none"
+
+
 def indicators_as_of(series: pd.Series, as_of: str) -> dict[str, float | None]:
     """Last close / SMAs using only bars on or before ``as_of``."""
     clean = series.dropna()
@@ -324,6 +399,8 @@ def build_price_chart_payload(
     initial_levels_as_of: str | None = None,
     existing: dict[str, Any] | None = None,
     snapshot_dirs: list[Path] | None = None,
+    market: str | None = None,
+    held: bool = False,
 ) -> dict[str, Any] | None:
     """Build a compact chart JSON for one ticker."""
     clean = series.dropna()
@@ -362,8 +439,14 @@ def build_price_chart_payload(
     elif as_of_iso:
         marker = as_of_iso[:10]
 
+    resolved_plan, levels_basis = resolve_chart_trade_plan(
+        clean,
+        trade_plan=trade_plan,
+        signal=signal,
+        held=held,
+    )
     current_levels = levels_from_trade_plan(
-        trade_plan,
+        resolved_plan,
         last=closes[-1],
         sma50=sma50,
         sma200=sma200,
@@ -388,13 +471,20 @@ def build_price_chart_payload(
         since=resolved_initial_as_of or marker,
     )
 
+    from value_investor.fx import currency_for_ticker
+
+    currency = currency_for_ticker(ticker, market=market)
+
     return {
         "ticker": ticker,
         "name": name or ticker,
         "signal": signal,
+        "market": market,
+        "currency": currency,
         "as_of": as_of_iso,
         "signal_since": marker,
         "levels_as_of": as_of_iso[:10],
+        "levels_basis": levels_basis,
         "period": CHART_LOOKBACK_PERIOD,
         "dates": dates,
         "closes": closes,
@@ -433,6 +523,7 @@ def write_price_charts_from_history(
     as_of: datetime | None = None,
     snapshot_dirs: list[Path] | None = None,
     signal_filter: Collection[str] | None = None,
+    market: str | None = None,
 ) -> list[Path]:
     """Persist chart payloads for signal rows that have price history.
 
@@ -471,6 +562,7 @@ def write_price_charts_from_history(
             else None,
             existing=_existing_chart(chart_dir, ticker),
             snapshot_dirs=dirs,
+            market=market,
         )
         if payload is None:
             continue
@@ -485,6 +577,7 @@ def write_buy_tier_charts_from_history(
     chart_dir: Path,
     as_of: datetime | None = None,
     snapshot_dirs: list[Path] | None = None,
+    market: str | None = None,
 ) -> list[Path]:
     """Persist chart payloads for strong_buy / buy rows that have price history."""
     return write_price_charts_from_history(
@@ -494,6 +587,7 @@ def write_buy_tier_charts_from_history(
         as_of=as_of,
         snapshot_dirs=snapshot_dirs,
         signal_filter=BUY_TIER_SIGNALS,
+        market=market,
     )
 
 
@@ -521,6 +615,32 @@ def _reports_for_chart_tickers(
     return selected
 
 
+def chart_payload_needs_refresh(
+    payload: dict[str, Any] | None,
+    *,
+    signal: str | None = None,
+    held: bool = False,
+) -> bool:
+    """True when chart JSON is missing SMA series or entry levels for prospects."""
+    if not isinstance(payload, dict):
+        return True
+    if "sma50_series" not in payload or "sma200_series" not in payload:
+        return True
+    dates = payload.get("dates") or []
+    series = payload.get("sma50_series") or []
+    if dates and len(series) != len(dates):
+        return True
+    sig = str(signal or payload.get("signal") or "").strip().lower()
+    if held or sig == "avoid":
+        return False
+    levels = payload.get("levels") if isinstance(payload.get("levels"), dict) else {}
+    has_entry = any(
+        levels.get(key) is not None
+        for key in ("core_limit", "tactical_limit", "take_profit", "stop_loss")
+    )
+    return not has_entry
+
+
 def ensure_price_charts(
     *,
     reports: list[dict[str, Any]],
@@ -529,6 +649,7 @@ def ensure_price_charts(
     as_of: datetime | None = None,
     fetch: bool = True,
     market: str | None = None,
+    refresh_stale: bool = True,
 ) -> list[Path]:
     """
     Ensure chart JSON exists for the requested tickers.
@@ -536,6 +657,9 @@ def ensure_price_charts(
     Defaults to buy-tier reports when ``tickers`` is omitted. Uses on-disk charts
     when present; optionally fetches missing price history. Pass ``market`` so
     non-LSE symbols (e.g. SP500 bare tickers) resolve correctly on Yahoo.
+
+    When ``refresh_stale`` is true, rebuilds charts that lack SMA series or
+    (for non-avoid) buy/target entry levels — market-agnostic schema refresh.
     """
     chart_dir.mkdir(parents=True, exist_ok=True)
     if tickers is None:
@@ -548,47 +672,68 @@ def ensure_price_charts(
         wanted = [str(ticker) for ticker in tickers if str(ticker or "").strip()]
 
     selected = _reports_for_chart_tickers(reports, wanted)
-    existing_paths = [
-        chart_dir / chart_filename(str(report["ticker"]))
-        for report in selected
-        if (chart_dir / chart_filename(str(report["ticker"]))).exists()
-    ]
-    missing = [
-        report
-        for report in selected
-        if not (chart_dir / chart_filename(str(report["ticker"]))).exists()
-    ]
-    if not missing:
-        return existing_paths
+    keep_paths: list[Path] = []
+    to_build: list[dict[str, Any]] = []
+    for report in selected:
+        path = chart_dir / chart_filename(str(report["ticker"]))
+        existing = _existing_chart(chart_dir, str(report["ticker"]))
+        needs = not path.exists() or (
+            refresh_stale
+            and chart_payload_needs_refresh(
+                existing,
+                signal=str(report.get("signal") or "") or None,
+                held=bool(report.get("held")),
+            )
+        )
+        if needs:
+            to_build.append(report)
+        elif path.exists():
+            keep_paths.append(path)
+
+    if not to_build:
+        return keep_paths
 
     if not fetch:
-        return existing_paths
+        # Cannot refresh without history — keep existing files (even if stale).
+        for report in to_build:
+            path = chart_dir / chart_filename(str(report["ticker"]))
+            if path.exists():
+                keep_paths.append(path)
+        return keep_paths
 
     from value_investor.technical_analysis import fetch_close_history
 
     history = fetch_close_history(
-        [str(report["ticker"]) for report in missing],
+        [str(report["ticker"]) for report in to_build],
         market=market,
     )
-    written: list[Path] = list(existing_paths)
-    for report in missing:
+    written: list[Path] = list(keep_paths)
+    for report in to_build:
         ticker = str(report["ticker"])
         series = history.get(ticker)
         if series is None or series.empty:
             logger.warning("No price history for chart: %s", ticker)
+            existing_path = chart_dir / chart_filename(ticker)
+            if existing_path.exists():
+                written.append(existing_path)
             continue
+        plan = (
+            report.get("trade_plan")
+            if isinstance(report.get("trade_plan"), dict)
+            else trade_plan_from_signal_row(report)
+        )
         payload = build_price_chart_payload(
             ticker=ticker,
             name=str(report.get("name") or ticker),
             series=series,
-            trade_plan=report.get("trade_plan")
-            if isinstance(report.get("trade_plan"), dict)
-            else None,
+            trade_plan=plan if isinstance(plan, dict) else None,
             signal=str(report.get("signal") or ""),
             as_of=as_of,
             signal_since=str(report["signal_since"]) if report.get("signal_since") else None,
             existing=_existing_chart(chart_dir, ticker),
             snapshot_dirs=[chart_dir.parent / "history", COMMITTED_HISTORY_DIR],
+            market=market,
+            held=bool(report.get("held")),
         )
         if payload is None:
             continue

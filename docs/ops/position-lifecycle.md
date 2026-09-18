@@ -166,10 +166,12 @@ stage**. Use **Order** for ascending vs descending (time in stage defaults to
 longest-first / descending until you change it). Preference is stored in
 `localStorage` and does not change the published payload.
 
-Lifecycle charts use the same screener price chart: buy/target/stop when the
-screen has a trade plan (buy-tier), rolling SMA overlays after chart publish,
-signal-since / opened markers, and paper **book cost** when the holding card
-includes `avg_cost`.
+Lifecycle charts use the same screener price chart across markets: buy/target/stop
+when a trade plan exists (buy-tier), **prospective** buy/target/stop from current
+technicals for not-yet-bought screen names (near-buy / hold prospects; not avoid),
+rolling SMA overlays after chart publish, signal-since / opened markers, and paper
+**book cost** when the holding card includes `avg_cost`. Prices use the market
+currency (GBP / USD / EUR / AUD / CAD).
 
 Held, sold, and screen name cards use a green→red **time-in-stage** heatmap:
 ≤7d fresh, ≤3w, ≤6w, ≤8w, then red beyond 8 weeks. Held columns clock

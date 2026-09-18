@@ -578,7 +578,7 @@ def publish_dashboard(
     reports = [r for r in bundle.get("reports", []) if isinstance(r, dict)]
     report_tickers = [str(r["ticker"]) for r in reports if r.get("ticker")]
     from value_investor.lifecycle_board import (
-        lifecycle_tickers_by_market,
+        lifecycle_chart_reports_by_market,
         tickers_on_lifecycle_board,
     )
 
@@ -586,28 +586,40 @@ def publish_dashboard(
     lifecycle_tickers = tickers_on_lifecycle_board(lifecycle_board)
     chart_tickers = sorted({*report_tickers, *lifecycle_tickers})
     # Live screen reports are LSE/FTSE — fetch with that market context.
+    # refresh_stale rebuilds charts missing SMA series or entry levels.
     ensure_price_charts(
         reports=reports,
         chart_dir=charts_source,
         tickers=report_tickers or None,
         fetch=True,
         market="ftse350",
+        refresh_stale=True,
     )
-    for market_id, tickers in lifecycle_tickers_by_market(lifecycle_board).items():
-        missing = [
-            ticker
-            for ticker in tickers
-            if not (charts_source / chart_filename(ticker)).exists()
-            and not (charts_dest / chart_filename(ticker)).exists()
-        ]
-        if not missing:
+    live_by_ticker = {
+        str(row["ticker"]): row for row in reports if isinstance(row, dict) and row.get("ticker")
+    }
+    lifecycle_reports = lifecycle_chart_reports_by_market(lifecycle_board)
+    for market_id, market_reports in lifecycle_reports.items():
+        if not market_reports:
             continue
+        # Prefer live FTSE report fields when the same ticker appears on both.
+        merged = []
+        for row in market_reports:
+            ticker = str(row.get("ticker") or "")
+            live = live_by_ticker.get(ticker)
+            if live is None:
+                merged.append(row)
+                continue
+            combined = dict(row)
+            combined.update({k: v for k, v in live.items() if v is not None})
+            merged.append(combined)
         ensure_price_charts(
-            reports=reports,
+            reports=merged,
             chart_dir=charts_source,
-            tickers=missing,
+            tickers=[str(row["ticker"]) for row in market_reports if row.get("ticker")],
             fetch=True,
             market=market_id,
+            refresh_stale=True,
         )
     copy_charts_to_dashboard(
         source_dir=charts_source,

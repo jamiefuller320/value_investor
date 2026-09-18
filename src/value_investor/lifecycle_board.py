@@ -1006,41 +1006,88 @@ def lifecycle_tickers_by_market(
     shown_only: bool = True,
 ) -> dict[str, list[str]]:
     """Map market_id → unique shown/occupied tickers on the lifecycle board."""
+    reports = lifecycle_chart_reports_by_market(board, shown_only=shown_only)
+    return {
+        market_id: [str(row["ticker"]) for row in rows if row.get("ticker")]
+        for market_id, rows in reports.items()
+    }
+
+
+def lifecycle_chart_reports_by_market(
+    board: dict[str, Any] | None,
+    *,
+    shown_only: bool = True,
+) -> dict[str, list[dict[str, Any]]]:
+    """Map market_id → slim report rows (ticker/signal/name) for chart refresh."""
+    del shown_only  # reserved; board packs already expose shown cards
     if not isinstance(board, dict):
         return {}
 
-    def _add(ticker: Any, *, seen: set[str], found: list[str]) -> None:
-        text = str(ticker or "").strip()
-        if not text or text in seen:
-            return
-        seen.add(text)
-        found.append(text)
-
-    out: dict[str, list[str]] = {}
+    out: dict[str, list[dict[str, Any]]] = {}
     for market in _as_list(board.get("markets")):
         if not isinstance(market, dict):
             continue
         market_id = str(market.get("market_id") or "").strip()
         if not market_id:
             continue
-        found: list[str] = []
-        seen: set[str] = set()
+        by_ticker: dict[str, dict[str, Any]] = {}
 
-        for packed in _as_dict(market.get("screen_columns")).values():
+        def _ingest(card: Any, *, board_column: str, held: bool) -> None:
+            if not isinstance(card, dict):
+                return
+            ticker = str(card.get("ticker") or "").strip()
+            if not ticker:
+                return
+            row = by_ticker.get(ticker)
+            if row is None:
+                row = {
+                    "ticker": ticker,
+                    "name": str(card.get("name") or ticker),
+                    "signal": str(card.get("signal") or "") or None,
+                    "signal_since": str(card.get("signal_since") or "") or None,
+                    "board_column": board_column,
+                    "held": held,
+                }
+                if card.get("avg_cost") is not None:
+                    row["avg_cost"] = card.get("avg_cost")
+                if card.get("opened_at"):
+                    row["opened_at"] = card.get("opened_at")
+                by_ticker[ticker] = row
+                return
+            # Prefer richer signal / name when merging screen + position cards.
+            if not row.get("signal") and card.get("signal"):
+                row["signal"] = str(card.get("signal"))
+            if card.get("signal_since") and not row.get("signal_since"):
+                row["signal_since"] = str(card.get("signal_since"))
+            if held:
+                row["held"] = True
+                row["board_column"] = board_column
+                if card.get("avg_cost") is not None:
+                    row["avg_cost"] = card.get("avg_cost")
+                if card.get("opened_at"):
+                    row["opened_at"] = card.get("opened_at")
+
+        for column_id, packed in _as_dict(market.get("screen_columns")).items():
             for card in _as_list(_as_dict(packed).get("shown")):
-                if isinstance(card, dict):
-                    _add(card.get("ticker"), seen=seen, found=found)
+                _ingest(card, board_column=str(column_id), held=False)
         for track in _as_list(market.get("tracks")):
             if not isinstance(track, dict):
                 continue
             for ticker in _as_list(track.get("occupied_tickers")):
-                _add(ticker, seen=seen, found=found)
+                text = str(ticker or "").strip()
+                if text and text not in by_ticker:
+                    by_ticker[text] = {
+                        "ticker": text,
+                        "name": text,
+                        "signal": None,
+                        "held": True,
+                        "board_column": "occupied",
+                    }
             position = track.get("position_columns") or track.get("columns") or {}
-            for packed in _as_dict(position).values():
+            for column_id, packed in _as_dict(position).items():
                 for card in _as_list(_as_dict(packed).get("shown")):
-                    if isinstance(card, dict):
-                        _add(card.get("ticker"), seen=seen, found=found)
-        out[market_id] = found
+                    _ingest(card, board_column=str(column_id), held=True)
+        out[market_id] = list(by_ticker.values())
     return out
 
 
@@ -1061,5 +1108,6 @@ __all__ = [
     "tenure_scale",
     "tickers_on_lifecycle_board",
     "lifecycle_tickers_by_market",
+    "lifecycle_chart_reports_by_market",
     "write_lifecycle_board",
 ]
