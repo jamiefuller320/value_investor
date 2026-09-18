@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-18T09:16:25.803632+00:00",
+  "generated_at": "2026-09-18T09:24:42.809411+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1153,34 +1153,38 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-18T08:35:15.783356+00:00",
-    "queue_ui_updated_at": "2026-09-18T09:16:25.747046+00:00",
-    "task_count": 36,
+    "compiled_at": "2026-09-18T09:23:42.390094+00:00",
+    "queue_ui_updated_at": "2026-09-18T09:24:42.735990+00:00",
+    "task_count": 37,
     "status": {
-      "open_count": 1,
-      "pr_open_count": 1,
+      "open_count": 2,
+      "pr_open_count": 0,
       "parked_count": 7,
-      "merged_count": 26,
+      "merged_count": 27,
       "failed_count": 0,
-      "next_task_id": "eng-20260918-01",
-      "in_flight_branch": "cursor/eng-20260918-03-1de3",
-      "in_flight_pr": 702,
+      "next_task_id": "eng-20260918-04",
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
     "queued_tasks": [
       {
-        "id": "eng-20260918-03",
+        "id": "eng-20260918-04",
         "area": "scoring",
-        "title": "fcf: Media cyclicality + thin FCF coverage overlay (advertising >40%, Piotroski ≤4, statutory FCF/dividend ≤1.1×). [1/2]",
+        "title": "fcf: Primary dividend-sustainability overlay on statutory FCF/dividend; warn when interim dividend is cut despite high trailing yield pass. [1/2]",
         "priority": "medium",
         "priority_score": 43.0,
-        "status": "pr_open",
+        "status": "open",
         "source": "compile_cap_drain",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": "cursor/eng-20260918-03-1de3"
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260918-01",
@@ -1193,21 +1197,9 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
-        "dispatch_eligible": false,
-        "blocked_by": [
-          {
-            "pr_number": null,
-            "branch": null,
-            "task_id": null,
-            "title": "in-flight allowlist overlap",
-            "clash_files": [
-              "src/value_investor/scoring/snapshot.py",
-              "tests/test_pipeline.py"
-            ],
-            "kind": "allowlist_overlap"
-          }
-        ],
-        "effective_dispatch_rank": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 2,
         "clash_scan": "full"
       }
     ],
@@ -1298,9 +1290,9 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 1,
-      "dispatch_eligible_count": 0,
-      "blocked_count": 1
+      "open_task_count": 2,
+      "dispatch_eligible_count": 2,
+      "blocked_count": 0
     }
   },
   "learning_track_epoch_datum": {
@@ -1578,46 +1570,40 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-18T09:16:25.803632+00:00",
-    "overall": "blocked",
-    "headline": "1 open task(s) blocked by file clash or policy — no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
+    "generated_at": "2026-09-18T09:24:42.809411+00:00",
+    "overall": "active",
+    "headline": "Agent lane active.",
     "merge_lane": {
+      "state": "idle",
+      "idle": true,
+      "running": false,
+      "blocked": false,
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+    },
+    "agent_lane": {
       "state": "running",
       "idle": false,
       "running": true,
       "blocked": false,
-      "pr_open_count": 1,
-      "open_engineering_prs": [
-        {
-          "number": 702,
-          "branch": "cursor/eng-20260918-03-1de3",
-          "draft": false
-        }
-      ],
-      "in_flight_pr": 702,
-      "detail": "Open engineering PR(s) #702 — merge fires on CI success."
-    },
-    "agent_lane": {
-      "state": "blocked",
-      "idle": false,
-      "running": true,
-      "blocked": true,
-      "should_dispatch": false,
+      "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 0,
-      "open_count": 1,
-      "pr_open_count": 1,
-      "dispatch_eligible_count": 0,
-      "blocked_task_count": 1,
-      "next_task_id": "eng-20260918-01",
-      "reason": "no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
-      "detail": "1 open task(s) blocked by file clash or policy — no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)"
+      "open_count": 2,
+      "pr_open_count": 0,
+      "dispatch_eligible_count": 2,
+      "blocked_task_count": 0,
+      "next_task_id": "eng-20260918-04",
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-18T09:16:21.657284+00:00"
+      "evaluated_at": "2026-09-18T09:24:38.346404+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1631,6 +1617,17 @@
       "should_dispatch_engineering": false
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260918-03",
+        "title": "fcf: Media cyclicality + thin FCF coverage overlay (advertising >40%, Piotroski ≤4, statutory FCF/dividend ≤1.1×). [1/2]",
+        "area": "scoring",
+        "pr_number": 702,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/702",
+        "merged_at": "2026-09-18T09:23:40.537566+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": true,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260918-02",
         "title": "Auto-flag cyclical exposure when principal-risk filings cite recession/discretionary spending and any interim month shows photobooth revenue decline >10% (MEGP",
@@ -1676,6 +1673,6 @@
         "independently_verified": false
       }
     ],
-    "verified_merges_today_count": 3
+    "verified_merges_today_count": 4
   }
 }
