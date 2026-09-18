@@ -4433,6 +4433,48 @@ def test_enrich_universe_preserves_jsg_style_divergent_screen_ttm(tmp_path: Path
     assert row["fcf_divergence_flagged"] is True
 
 
+def test_write_screening_snapshot_jsg_style_strips_dividend_family_credit(tmp_path: Path):
+    """Export must not keep dividend family when filing FCF and screen TTM disagree."""
+    _jsg_style_research_sources(tmp_path)
+    sources = tmp_path / "research" / "JSG.L" / "sources"
+    snapshot = {
+        "ticker": "JSG.L",
+        "signal": "strong_buy",
+        "passed_families": "cheapness,quality,dividend,garp,risk",
+        "families_passed": 5,
+        "free_cashflow": 100_600_000.0,
+        "free_cashflow_screen_ttm": 27_400_000.0,
+        "key_metrics": {"FCF": 100_600_000.0},
+        "market_cap": 2_000_000_000.0,
+        "dividend_yield": 0.032,
+    }
+    write_screening_snapshot(sources, snapshot)
+    written = json.loads((sources / "screening_snapshot.json").read_text(encoding="utf-8"))
+    assert "dividend" not in str(written.get("passed_families") or "")
+    assert written.get("families_passed") == 4
+    assert written.get("research_prompts") in (None, [])
+
+
+def test_jsg_style_passed_families_does_not_trigger_dual_fcf_dividend_prompt(tmp_path: Path):
+    from value_investor.scoring.dividend_sustainability_overlay import (
+        enrich_screening_snapshot_dividend_dual_fcf_research_prompts,
+    )
+
+    _jsg_style_research_sources(tmp_path)
+    snapshot = {
+        "ticker": "JSG.L",
+        "passed_families": "cheapness,quality,dividend,garp,risk",
+        "fcf_definition_divergence": True,
+        "free_cashflow": 100_600_000.0,
+        "free_cashflow_screen_ttm": 27_400_000.0,
+    }
+    enriched = enrich_screening_snapshot_dividend_dual_fcf_research_prompts(
+        snapshot,
+        output_dir=tmp_path,
+    )
+    assert enriched.get("research_prompts") in (None, [])
+
+
 def test_suppress_fcf_yield_and_dividend_jsg_style_divergent_bases(tmp_path: Path):
     _jsg_style_research_sources(tmp_path)
     universe = pd.DataFrame(
