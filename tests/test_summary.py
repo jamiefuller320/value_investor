@@ -888,6 +888,31 @@ def test_format_fcf_basis_action_note_labels_unverified_screen_ttm():
     assert "£211.9M" in note
 
 
+def test_format_fcf_basis_action_note_omits_unverified_screen_when_filing_policy_selected():
+    """MGNS-style: empty Yahoo quarterlies + filing policy → no screen TTM in user notes."""
+    financials = {
+        "quarterly_cashflow": {},
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 210_000_000.0,
+                "Capital Expenditure": -39_300_000.0,
+                "Free Cash Flow": 170_700_000.0,
+            }
+        },
+    }
+    from value_investor.scoring.fcf import reconcile_fcf
+
+    bundle = reconcile_fcf(screen_ttm=141_500_000.0, financials=financials)
+    note = append_fcf_divergence_to_action_note(
+        "Strong Buy — neutral timing",
+        canonical=170_700_000.0,
+        screen_ttm=141_500_000.0,
+        fcf_bundle=bundle,
+    )
+    assert "filing $170.7M" in note
+    assert "screen TTM" not in note
+
+
 def test_reconcile_fcf_for_ticker_suppresses_unverified_screen_for_policy(tmp_path: Path):
     """ITV-like: empty Yahoo quarterlies → filing/RNS policy, not lone Yahoo TTM."""
     sources = tmp_path / "research" / "ZZZZ.L" / "sources"
@@ -2813,6 +2838,17 @@ def test_export_enforced_report_dicts_honours_wix_style_stale_row():
 
 def test_build_company_reports_fcf_basis_overlay_caps_wix_style_buy(tmp_path: Path):
     """WIX.L-style 21% universe gap must cap buy-tier signals when FCF note would fire."""
+    sources = tmp_path / "research" / "WIX.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "quarterly_cashflow": {"2025-Q4": {"Free Cash Flow": 133_900_000.0}},
+                "cash_flow": {"2025": {"Free Cash Flow": 168_700_000.0}},
+            }
+        ),
+        encoding="utf-8",
+    )
     signals = pd.DataFrame(
         [
             _signal_row(

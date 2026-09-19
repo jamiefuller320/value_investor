@@ -2953,6 +2953,22 @@ def _format_fcf_compact(value: float, *, currency: str = "USD") -> str:
     return f"{sign}{symbol}{abs_val:.1f}"
 
 
+def suppress_unverified_screen_ttm_in_fcf_action_note(
+    *,
+    screen_ttm_unverified: bool,
+    filing_aligned: float | None,
+    company_adjusted: float | None = None,
+    policy_basis: str | None = None,
+) -> bool:
+    """True when user-facing notes should omit Yahoo screen TTM (empty quarterlies, filing policy)."""
+    if not screen_ttm_unverified or filing_aligned is None:
+        return False
+    if company_adjusted is not None:
+        return False
+    basis = str(policy_basis or "filing_aligned").strip()
+    return basis == "filing_aligned"
+
+
 def format_fcf_basis_action_note(
     *,
     filing_aligned: float | None,
@@ -2961,12 +2977,22 @@ def format_fcf_basis_action_note(
     filing_currency: str = "USD",
     company_adjusted_currency: str | None = None,
     screen_ttm_unverified: bool = False,
+    policy_basis: str | None = None,
 ) -> str:
     """Surface filing-aligned, screen TTM, and company-adjusted FCF side-by-side."""
     parts: list[str] = []
     if filing_aligned is not None:
         parts.append(f"filing {_format_fcf_compact(filing_aligned, currency=filing_currency)}")
-    if screen_ttm is not None:
+    include_screen = (
+        screen_ttm is not None
+        and not suppress_unverified_screen_ttm_in_fcf_action_note(
+            screen_ttm_unverified=screen_ttm_unverified,
+            filing_aligned=filing_aligned,
+            company_adjusted=company_adjusted,
+            policy_basis=policy_basis,
+        )
+    )
+    if include_screen:
         screen_label = "screen TTM (unverified)" if screen_ttm_unverified else "screen TTM"
         parts.append(f"{screen_label} {_format_fcf_compact(screen_ttm, currency=filing_currency)}")
     if company_adjusted is not None:
@@ -3080,6 +3106,15 @@ def append_fcf_divergence_to_action_note(
     if coverage_gross is None:
         coverage_gross = bundle.get("fcf_dividend_coverage_gross")
 
+    screen_ttm_unverified = bool(bundle.get("screen_ttm_unverified"))
+    policy_basis = bundle.get("policy_basis")
+    omit_unverified_screen = suppress_unverified_screen_ttm_in_fcf_action_note(
+        screen_ttm_unverified=screen_ttm_unverified,
+        filing_aligned=filing_for_mismatch,
+        company_adjusted=company_adjusted,
+        policy_basis=str(policy_basis) if policy_basis is not None else None,
+    )
+
     notes: list[str] = []
     if fcf_action_note_mismatch(
         filing_aligned=filing_for_mismatch,
@@ -3108,10 +3143,11 @@ def append_fcf_divergence_to_action_note(
                     company_adjusted=company_adjusted,
                     filing_currency=filing_currency,
                     company_adjusted_currency=company_adjusted_currency,
-                    screen_ttm_unverified=bool(bundle.get("screen_ttm_unverified")),
+                    screen_ttm_unverified=screen_ttm_unverified,
+                    policy_basis=str(policy_basis) if policy_basis is not None else None,
                 )
             )
-        elif canonical is not None and screen_ttm is not None:
+        elif canonical is not None and screen_ttm is not None and not omit_unverified_screen:
             notes.append(
                 format_fcf_divergence_action_note(
                     canonical,

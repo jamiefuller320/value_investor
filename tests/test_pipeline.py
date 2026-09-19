@@ -3635,6 +3635,50 @@ def test_enrich_universe_with_canonical_fcf_prefers_filing_when_yahoo_quarterly_
     assert bundle["policy_basis"] == "filing_aligned"
 
 
+def test_run_history_fcf_action_notes_omit_unverified_screen_when_filing_policy(
+    tmp_path: Path,
+):
+    """Strong-buy export notes must not cite unverified Yahoo TTM when filing wins policy."""
+    from value_investor.scoring.fcf_basis_overlay import (
+        enrich_signals_with_run_history_fcf_action_notes,
+    )
+
+    sources = tmp_path / "research" / "ZZMG.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "ZZMG.L",
+                "quarterly_cashflow": {},
+                "cash_flow": {
+                    "2025": {
+                        "Operating Cash Flow": 210_000_000.0,
+                        "Capital Expenditure": -39_300_000.0,
+                        "Free Cash Flow": 170_700_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "ZZMG.L",
+                "name": "Morgan Sindall style",
+                "signal": "strong_buy",
+                "free_cashflow": 170_700_000.0,
+                "free_cashflow_screen_ttm": 141_500_000.0,
+                "action_note": "Strong Buy — neutral timing",
+            }
+        ]
+    )
+    enriched = enrich_signals_with_run_history_fcf_action_notes(signals, output_dir=tmp_path)
+    note = str(enriched.iloc[0]["action_note"])
+    assert "filing" in note.lower()
+    assert "screen TTM" not in note
+
+
 def test_enrich_universe_with_canonical_fcf_uses_company_adjusted_when_present(tmp_path: Path):
     _fgp_style_research_tree(tmp_path)
     universe = pd.DataFrame(
