@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T21:41:29.360606+00:00",
+  "generated_at": "2026-09-19T21:46:44.596448+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1154,17 +1154,17 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-19T21:40:27.157767+00:00",
-    "queue_ui_updated_at": "2026-09-19T21:41:29.282856+00:00",
+    "queue_ui_updated_at": "2026-09-19T21:46:44.518827+00:00",
     "task_count": 68,
     "status": {
-      "open_count": 2,
+      "open_count": 1,
       "pr_open_count": 1,
       "parked_count": 0,
-      "merged_count": 49,
+      "merged_count": 50,
       "failed_count": 0,
-      "next_task_id": "eng-20260919-12",
-      "in_flight_branch": "cursor/eng-20260919-10-1de3",
-      "in_flight_pr": 744,
+      "next_task_id": "eng-20260919-08",
+      "in_flight_branch": "cursor/eng-20260919-12-1de3",
+      "in_flight_pr": 745,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
@@ -1176,15 +1176,11 @@
         "title": "When statutory OCF−CapEx dividend cover is ≤1.05× and Piotroski ≤4, cap dividend-family conviction even if yield screens pass (ITV pattern).",
         "priority": "medium",
         "priority_score": 25.0,
-        "status": "open",
+        "status": "pr_open",
         "source": "compile_cap_drain",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "full"
+        "branch_name": "cursor/eng-20260919-12-1de3"
       },
       {
         "id": "eng-20260919-08",
@@ -1197,29 +1193,31 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 2,
+        "dispatch_eligible": false,
+        "blocked_by": [
+          {
+            "pr_number": null,
+            "branch": null,
+            "task_id": null,
+            "title": "in-flight allowlist overlap",
+            "clash_files": [
+              "src/value_investor/scoring/dividend_sustainability_overlay.py",
+              "src/value_investor/scoring/dividend_yield_overlay.py",
+              "src/value_investor/scoring/snapshot.py",
+              "tests/test_pipeline.py"
+            ],
+            "kind": "allowlist_overlap"
+          }
+        ],
+        "effective_dispatch_rank": null,
         "clash_scan": "full"
-      },
-      {
-        "id": "eng-20260919-10",
-        "area": "ingest",
-        "title": "Hunt fetchable IR source for parked nasdaq100 leftover TRI",
-        "priority": "low",
-        "priority_score": 12.0,
-        "status": "pr_open",
-        "source": "parked_source_hunter",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": "cursor/eng-20260919-10-1de3"
       }
     ],
     "attention_tasks": [],
     "clash_summary": {
-      "open_task_count": 2,
-      "dispatch_eligible_count": 2,
-      "blocked_count": 0
+      "open_task_count": 1,
+      "dispatch_eligible_count": 0,
+      "blocked_count": 1
     }
   },
   "learning_track_epoch_datum": {
@@ -1497,9 +1495,9 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-19T21:41:29.360606+00:00",
-    "overall": "active",
-    "headline": "Merge lane active; agent lane active.",
+    "generated_at": "2026-09-19T21:46:44.596448+00:00",
+    "overall": "blocked",
+    "headline": "1 open task(s) blocked by file clash or policy — no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
     "merge_lane": {
       "state": "running",
       "idle": false,
@@ -1508,35 +1506,35 @@
       "pr_open_count": 1,
       "open_engineering_prs": [
         {
-          "number": 744,
-          "branch": "cursor/eng-20260919-10-1de3",
+          "number": 745,
+          "branch": "cursor/eng-20260919-12-1de3",
           "draft": false
         }
       ],
-      "in_flight_pr": 744,
-      "detail": "Open engineering PR(s) #744 — merge fires on CI success."
+      "in_flight_pr": 745,
+      "detail": "Open engineering PR(s) #745 — merge fires on CI success."
     },
     "agent_lane": {
-      "state": "running",
+      "state": "blocked",
       "idle": false,
       "running": true,
-      "blocked": false,
-      "should_dispatch": true,
+      "blocked": true,
+      "should_dispatch": false,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 0,
-      "open_count": 2,
+      "open_count": 1,
       "pr_open_count": 1,
-      "dispatch_eligible_count": 2,
-      "blocked_task_count": 0,
-      "next_task_id": "eng-20260919-12",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
+      "dispatch_eligible_count": 0,
+      "blocked_task_count": 1,
+      "next_task_id": "eng-20260919-08",
+      "reason": "no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)",
+      "detail": "1 open task(s) blocked by file clash or policy — no dispatch-eligible open task — 1 pr_open (allowlist/file/merge clash with in-flight PRs)"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-19T21:41:24.725357+00:00"
+      "evaluated_at": "2026-09-19T21:46:39.803219+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1550,6 +1548,17 @@
       "should_dispatch_engineering": false
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260919-10",
+        "title": "Hunt fetchable IR source for parked nasdaq100 leftover TRI",
+        "area": "ingest",
+        "pr_number": 744,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/744",
+        "merged_at": "2026-09-19T21:45:37.254581+00:00",
+        "merge_class": "parked_hunter",
+        "auto_merge": false,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260919-11",
         "title": "Expose provenance of `earnings_growth_pct` vs filing diluted EPS growth in screen output.",
@@ -1672,6 +1681,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 11
+    "verified_merges_today_count": 12
   }
 }
