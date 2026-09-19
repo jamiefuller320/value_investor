@@ -14,6 +14,7 @@ from value_investor.library_ingest_dispatch import (
 from value_investor.library_ingest_maintenance import (
     maybe_advance_parallel_sprint_on_parity,
     reconcile_parallel_sprint_queues,
+    refresh_buy_tier_screen_for_sprint_entry,
     reseed_empty_parallel_sprint_slots,
 )
 
@@ -87,6 +88,10 @@ def test_maybe_advance_parallel_sprint_promotes_next_market(tmp_path: Path):
             "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
             return_value={},
         ),
+        patch(
+            "value_investor.library_ingest_maintenance.refresh_buy_tier_screen_for_sprint_entry",
+            return_value={"refreshed": True, "market_id": "ftse_smallcap"},
+        ) as screen_refresh,
     ):
         event = maybe_advance_parallel_sprint_on_parity(
             market_id="sp500",
@@ -99,6 +104,8 @@ def test_maybe_advance_parallel_sprint_promotes_next_market(tmp_path: Path):
     assert event["from_market"] == "sp500"
     assert event["to_market"] == "ftse_smallcap"
     assert event["parallel_stream"] == 1
+    assert event["screen_refresh"]["refreshed"] is True
+    screen_refresh.assert_called_once()
     assert list_library_ingest_parallel_sprint_markets(policy=saved) == ["ftse_smallcap"]
     assert "sp500" in saved["ingest_parity_markets"]
 
@@ -151,6 +158,10 @@ def test_maybe_advance_skips_ftse_equivalent_until_learning_ready(tmp_path: Path
         patch(
             "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
             return_value={},
+        ),
+        patch(
+            "value_investor.library_ingest_maintenance.refresh_buy_tier_screen_for_sprint_entry",
+            return_value={"refreshed": True, "market_id": "ftse_smallcap"},
         ),
     ):
         event = maybe_advance_parallel_sprint_on_parity(
@@ -261,6 +272,10 @@ def test_reseed_empty_parallel_sprint_slots_fills_queue_order(tmp_path: Path):
             "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
             return_value={},
         ),
+        patch(
+            "value_investor.library_ingest_maintenance.refresh_buy_tier_screen_for_sprint_entry",
+            return_value={"refreshed": True, "market_id": "asx200"},
+        ),
     ):
         events = reseed_empty_parallel_sprint_slots(
             library_root=tmp_path,
@@ -270,6 +285,7 @@ def test_reseed_empty_parallel_sprint_slots_fills_queue_order(tmp_path: Path):
     assert len(events) == 1
     assert events[0]["to_market"] == "asx200"
     assert events[0]["parallel_stream"] == 1
+    assert events[0]["screen_refresh"]["refreshed"] is True
     assert saved["ingest_parallel_sprint"] == ["asx200"]
     assert saved["ingest_parallel_sprint_2"] == []
 
@@ -318,6 +334,10 @@ def test_reseed_fills_stream_two_when_two_markets_need_sprint(tmp_path: Path):
         patch(
             "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
             return_value={},
+        ),
+        patch(
+            "value_investor.library_ingest_maintenance.refresh_buy_tier_screen_for_sprint_entry",
+            return_value={"refreshed": True},
         ),
     ):
         events = reseed_empty_parallel_sprint_slots(
@@ -371,3 +391,74 @@ def test_reconcile_parallel_sprint_queues_advances_at_parity(tmp_path: Path):
 
     assert len(events) == 1
     advance.assert_called_once()
+
+
+def test_refresh_buy_tier_screen_for_sprint_entry_skips_fresh(tmp_path: Path):
+    from datetime import UTC, datetime
+
+    from value_investor.storage import write_json
+
+    market = "dax"
+    screen = tmp_path / "markets" / market / "screen"
+    screen.mkdir(parents=True)
+    write_json(
+        screen / "latest_summary.json",
+        {
+            "market": market,
+            "run_at": "2026-09-18T12:00:00+00:00",
+            "shortlist_count": 10,
+        },
+        compact=False,
+    )
+    with patch(
+        "value_investor.library_screen.run_library_screen",
+    ) as run_screen:
+        result = refresh_buy_tier_screen_for_sprint_entry(
+            tmp_path,
+            market,
+            force=False,
+            now=datetime(2026, 9, 19, 13, 0, tzinfo=UTC),
+        )
+    assert result["skipped"] is True
+    assert result["reason"] == "screen_fresh"
+    run_screen.assert_not_called()
+
+
+def test_refresh_buy_tier_screen_for_sprint_entry_force_runs(tmp_path: Path):
+    from datetime import UTC, datetime
+    from types import SimpleNamespace
+
+    from value_investor.storage import write_json
+
+    market = "cac40"
+    screen = tmp_path / "markets" / market / "screen"
+    screen.mkdir(parents=True)
+    write_json(
+        screen / "latest_summary.json",
+        {
+            "market": market,
+            "run_at": "2026-08-16T11:58:34+00:00",
+            "shortlist_count": 14,
+        },
+        compact=False,
+    )
+    fake = SimpleNamespace(
+        summary={
+            "run_at": "2026-09-19T13:00:00+00:00",
+            "shortlist_count": 15,
+            "ticker_count": 40,
+        }
+    )
+    with patch(
+        "value_investor.library_screen.run_library_screen",
+        return_value=fake,
+    ) as run_screen:
+        result = refresh_buy_tier_screen_for_sprint_entry(
+            tmp_path,
+            market,
+            force=True,
+            now=datetime(2026, 9, 19, 13, 0, tzinfo=UTC),
+        )
+    assert result["refreshed"] is True
+    assert result["prior_age_days"] == 34
+    run_screen.assert_called_once()

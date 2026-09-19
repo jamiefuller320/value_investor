@@ -931,3 +931,95 @@ def test_sprint_tiles_include_two_day_ingest_and_admission_flags(tmp_path: Path)
     assert {
         row["id"] for row in (focus["sprint_progress"] or {}).get("admission_warnings") or []
     } >= {"no_ingest_in_window"}
+
+
+def test_day0_sprint_entry_uses_awaiting_first_ingest_flag(tmp_path: Path):
+    """Freshly seated spare streams should not raise high-severity no-ingest."""
+    library = _seed_library(tmp_path / "library")
+    policy = json.loads((library / "policy.json").read_text(encoding="utf-8"))
+    policy["ingest_parallel_sprint"] = ["dax"]
+    policy["ingest_parallel_sprint_2"] = ["cac40"]
+    policy["parallel_sprint_graduation"] = {
+        "history": [
+            {
+                "at": "2026-09-19T12:08:12+00:00",
+                "parallel_stream": 1,
+                "from_market": "euro_stoxx50",
+                "to_market": "dax",
+                "stream_markets_after": ["dax"],
+            },
+            {
+                "at": "2026-09-19T12:34:58+00:00",
+                "parallel_stream": 2,
+                "from_market": "ftse_smallcap",
+                "to_market": "cac40",
+                "stream_markets_after": ["cac40"],
+            },
+        ]
+    }
+    (library / "policy.json").write_text(json.dumps(policy), encoding="utf-8")
+
+    dispatch = json.loads((library / "euro_ingest_dispatch.json").read_text(encoding="utf-8"))
+    dispatch["sprint_markets"] = ["euro_depth", "dax", "cac40"]
+    dispatch["parallel_sprint_markets"] = ["dax"]
+    dispatch["parallel_sprint_2_markets"] = ["cac40"]
+    dispatch["parallel_sprint_status"] = [
+        {
+            "market_id": "dax",
+            "mode": "sprint",
+            "ingest_parity_met": False,
+            "ingest_exhausted": False,
+            "filing_gaps": 7,
+            "filing_health": _health_snapshot(unmeasured=7, zero_body=0, thin=3, iwb=10),
+        }
+    ]
+    dispatch["parallel_sprint_2_status"] = [
+        {
+            "market_id": "cac40",
+            "mode": "sprint",
+            "ingest_parity_met": False,
+            "ingest_exhausted": False,
+            "filing_gaps": 8,
+            "filing_health": _health_snapshot(unmeasured=8, zero_body=0, thin=1, iwb=10),
+        }
+    ]
+    (library / "euro_ingest_dispatch.json").write_text(json.dumps(dispatch), encoding="utf-8")
+
+    for mid, shortlist in (("dax", 12), ("cac40", 14)):
+        screen = library / "markets" / mid / "screen"
+        screen.mkdir(parents=True, exist_ok=True)
+        write_json(
+            screen / "latest_summary.json",
+            {
+                "market": mid,
+                "run_at": "2026-08-16T11:58:34+00:00",
+                "ticker_count": 40,
+                "signal_counts": {"buy": 6, "strong_buy": 6, "hold": 20},
+                "shortlist_count": shortlist,
+            },
+            compact=False,
+        )
+
+    now = datetime(2026, 9, 19, 13, 30, tzinfo=UTC)
+    payload = build_market_status(
+        library_root=library,
+        policy_path=library / "policy.json",
+        dispatch_path=library / "euro_ingest_dispatch.json",
+        **_status_roots(tmp_path),
+        live_signal_counts={"hold": 1},
+        now=now,
+    )
+    for mid in ("dax", "cac40"):
+        row = _by_id(payload, mid)
+        assert row["ingest"] == INGEST_SPRINT
+        progress = row["sprint_progress"]
+        assert progress is not None
+        flag_ids = {flag["id"] for flag in progress["admission_warnings"]}
+        assert "awaiting_first_ingest" in flag_ids
+        assert "no_ingest_in_window" not in flag_ids
+        assert "stale_buy_tier_screen" in flag_ids
+        assert progress["sprint_entered_at"] is not None
+        awaiting = next(
+            flag for flag in progress["admission_warnings"] if flag["id"] == "awaiting_first_ingest"
+        )
+        assert awaiting["severity"] == "warn"

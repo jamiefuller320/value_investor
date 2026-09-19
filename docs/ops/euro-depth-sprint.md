@@ -117,6 +117,11 @@ Sunday screen-lite + observe sim follow the
 **ingest profile** (focus + both sprint streams + ingest-parity +
 `ftse_equivalent_markets`), so `sp500` and `asx200` keep a dated archive clock
 without taking the weekly-paper slot.
+When a queue market **enters** a parallel sprint slot (advance or reseed),
+offline screen-lite refreshes immediately so the first deepen pass targets a
+current buy-tier shortlist rather than a pre-sprint archive. Sprint Overview
+tiles use an `awaiting first ingest` flag (not high-severity `no recent ingest`)
+for the first two days after entry until a deepen run lands.
 
 `ingest_parity_met` is the FTSE quality bar for **every** library market
 (unmeasured, zero-body, thin, and `indexed_without_body` all zero).
