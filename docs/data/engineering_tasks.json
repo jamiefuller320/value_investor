@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-19T21:40:27.157767+00:00",
+  "compiled_at": "2026-09-19T22:11:39.013862+00:00",
   "run_at": null,
-  "task_count": 68,
+  "task_count": 69,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -3399,6 +3399,52 @@
       "merged_at": "2026-09-18T13:53:33.008024+00:00"
     },
     {
+      "id": "eng-20260919-13",
+      "area": "scoring",
+      "title": "When secured workload ÷ revenue exceeds a sector threshold (e.g. >2×) and group adjusted margin is at a multi-year high vs CH history, flag cyclical_exposure_ov",
+      "summary": "When secured workload ÷ revenue exceeds a sector threshold (e.g. >2×) and group adjusted margin is at a multi-year high vs CH history, flag cyclical_exposure_overlay even if Piotroski passes. (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+      "priority": "medium",
+      "priority_score": 25.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "MGNS.L"
+        ],
+        "recorded_at": "2026-09-12T12:36:40.963380+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "When secured workload ÷ revenue exceeds a sector threshold (e.g. >2×) and group adjusted margin is at a multi-year high vs CH history, flag cyclical_exposure_ov",
+        "narrow_cohesion_bypass": true,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 23.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/pipeline.py",
+        "src/value_investor/summary.py",
+        "src/value_investor/models/",
+        "src/value_investor/scoring/",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260919-12",
       "area": "scoring",
       "title": "When statutory OCF−CapEx dividend cover is ≤1.05× and Piotroski ≤4, cap dividend-family conviction even if yield screens pass (ITV pattern).",
@@ -3423,7 +3469,8 @@
         "origin_priority_score": 23.0,
         "preferred_merge_class": "compile_cap_drain",
         "doc": "docs/ops/engineering-sync.md",
-        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Export or overlay behaviour is covered by a unit test",
@@ -3444,11 +3491,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": true,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260919-12.md",
       "branch_name": "cursor/eng-20260919-12-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-19T21:44:45.816383+00:00"
+      "completed_at": "2026-09-19T21:44:45.816383+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/745",
+      "pr_number": 745,
+      "merged_at": "2026-09-19T22:11:37.651993+00:00"
     },
     {
       "id": "eng-20260919-11",
