@@ -11,7 +11,9 @@ import pandas as pd
 from value_investor.research.verdict import compute_adjusted_signal
 from value_investor.scoring.dividend_sustainability_overlay import (
     apply_dividend_sustainability_export_enforcement,
+    cap_research_verdict_for_statutory_fcf_moat_leverage_overlay,
     enrich_screening_snapshot_dividend_dual_fcf_research_prompts,
+    resolve_research_verdict_for_snapshot_merge,
 )
 from value_investor.scoring.dividend_yield_overlay import (
     enforce_dividend_yield_family_in_snapshot,
@@ -19,7 +21,6 @@ from value_investor.scoring.dividend_yield_overlay import (
 from value_investor.scoring.fcf import (
     _float_or_none,
     advertising_revenue_share_for_ticker,
-    cap_research_verdict_at_accumulate,
     enrich_screening_snapshot_fcf_dividend_coverage,
     resolve_statutory_fcf_dividend_coverage,
     screen_ttm_from_row,
@@ -30,9 +31,6 @@ from value_investor.scoring.fcf_basis_overlay import (
     apply_statutory_fcf_moat_leverage_export_enforcement,
 )
 from value_investor.scoring.healthcare_overlay import piotroski_score_for_ticker
-from value_investor.scoring.leverage_overlay import (
-    cap_research_verdict_for_statutory_fcf_moat_leverage_overlay,
-)
 from value_investor.storage import read_json, write_json
 
 _RUN_SNAPSHOT_OPTIONAL_SIGNAL_COLUMNS = (
@@ -276,7 +274,10 @@ def merge_research_verdict_into_snapshot(
         return enforce_fcf_basis_in_snapshot(snapshot)
 
     updated = dict(snapshot)
-    updated["research_verdict"] = cap_research_verdict_at_accumulate(research_verdict)
+    updated["research_verdict"] = resolve_research_verdict_for_snapshot_merge(
+        research_verdict,
+        updated,
+    )
     if research_risk_level is not None:
         updated["research_risk_level"] = research_risk_level
     if research_confidence is not None:

@@ -144,6 +144,35 @@ def _strip_dual_fcf_dividend_research_prompts(raw: Any) -> list[str]:
     return kept
 
 
+def enforce_statutory_fcf_moat_leverage_research_verdict_in_snapshot(
+    snapshot: dict[str, Any],
+) -> dict[str, Any]:
+    """Re-apply accumulate ceiling on dividend-family exports when moat leverage overlay applies."""
+    from value_investor.scoring.dividend_sustainability_overlay import (
+        cap_research_verdict_for_statutory_fcf_moat_leverage_overlay,
+    )
+
+    updated = dict(snapshot)
+    model_failures_raw = updated.get("model_failures")
+    model_failures = dict(model_failures_raw) if isinstance(model_failures_raw, dict) else None
+    capped = cap_research_verdict_for_statutory_fcf_moat_leverage_overlay(
+        updated.get("research_verdict"),  # type: ignore[arg-type]
+        ticker_models=pd.DataFrame(),
+        statutory_fcf_moat_leverage_overlay=bool(
+            updated.get("statutory_fcf_moat_leverage_overlay")
+        ),
+        fcf_dividend_coverage_net=_float_or_none(updated.get("fcf_dividend_coverage_net")),
+        operating_cashflow=_float_or_none(updated.get("operating_cashflow")),
+        capital_expenditure=_float_or_none(updated.get("capital_expenditure")),
+        dividends_paid=_float_or_none(updated.get("dividends_paid")),
+        free_cashflow=_float_or_none(updated.get("free_cashflow")),
+        model_failures=model_failures,
+    )
+    if capped != updated.get("research_verdict"):
+        updated["research_verdict"] = capped
+    return updated
+
+
 def enforce_dividend_yield_family_in_snapshot(
     snapshot: dict[str, Any],
     *,
@@ -156,7 +185,7 @@ def enforce_dividend_yield_family_in_snapshot(
         row=updated,
         output_dir=output_dir,
     ):
-        return updated
+        return enforce_statutory_fcf_moat_leverage_research_verdict_in_snapshot(updated)
     updated["research_prompts"] = _strip_dual_fcf_dividend_research_prompts(
         updated.get("research_prompts")
     )
@@ -171,7 +200,7 @@ def enforce_dividend_yield_family_in_snapshot(
                 updated["families_passed"] = max(0, int(families_passed) - 1)
             except (TypeError, ValueError):
                 pass
-    return updated
+    return enforce_statutory_fcf_moat_leverage_research_verdict_in_snapshot(updated)
 
 
 def high_dividend_screen_passed(ticker_models: pd.DataFrame) -> bool:

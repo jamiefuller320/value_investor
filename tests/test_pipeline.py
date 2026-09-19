@@ -343,6 +343,67 @@ def test_enforce_fcf_basis_caps_buy_research_verdict_when_moat_leverage_overlay(
     assert enforced["adjusted_signal"] == "hold"
 
 
+def test_merge_research_verdict_caps_buy_slug_when_hik_moat_leverage_overlay():
+    """Buy-tier research slugs must not bypass accumulate ceiling when overlay applies."""
+    from value_investor.scoring.snapshot import merge_research_verdict_into_snapshot
+
+    snapshot = {
+        "ticker": "HIK.L",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.82,
+        "fcf_dividend_coverage_net": 0.72,
+        "model_failures": {"Economic Moat": ["leverage too high"]},
+    }
+    merged = merge_research_verdict_into_snapshot(snapshot, research_verdict="buy")
+    assert merged["research_verdict"] == "accumulate"
+    assert merged["statutory_fcf_moat_leverage_overlay"] is True
+    assert merged["adjusted_signal"] == "hold"
+
+
+def test_enforce_dividend_yield_family_reapplies_moat_leverage_verdict_cap():
+    from value_investor.scoring.dividend_yield_overlay import (
+        enforce_dividend_yield_family_in_snapshot,
+    )
+
+    snapshot = {
+        "ticker": "HIK.L",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "research_verdict": "buy",
+        "passed_families": "cheapness,quality,dividend,garp,risk",
+        "fcf_dividend_coverage_net": 0.72,
+        "model_failures": {"Economic Moat": ["leverage too high"]},
+    }
+    enforced = enforce_dividend_yield_family_in_snapshot(snapshot)
+    assert enforced["research_verdict"] == "accumulate"
+
+
+def test_cap_research_verdict_for_moat_leverage_lives_in_dividend_sustainability_overlay():
+    from value_investor.scoring.dividend_sustainability_overlay import (
+        cap_research_verdict_for_statutory_fcf_moat_leverage_overlay,
+    )
+
+    assert (
+        cap_research_verdict_for_statutory_fcf_moat_leverage_overlay(
+            "buy",
+            ticker_models=pd.DataFrame(),
+            fcf_dividend_coverage_net=0.72,
+            model_failures={"Economic Moat": ["leverage too high"]},
+        )
+        == "accumulate"
+    )
+    assert (
+        cap_research_verdict_for_statutory_fcf_moat_leverage_overlay(
+            "buy",
+            ticker_models=pd.DataFrame(),
+            fcf_dividend_coverage_net=1.5,
+            model_failures={"Economic Moat": ["leverage too high"]},
+        )
+        == "buy"
+    )
+
+
 def test_sync_research_verdict_preserves_fcf_overlay_cap_for_hln_style_report(tmp_path: Path):
     report = honour_fcf_action_note_enforcement(
         _minimal_report(

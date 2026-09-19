@@ -12,7 +12,12 @@ from value_investor.scoring.dividend_yield_overlay import (
     dividend_yield_family_fcf_basis_suppressed,
     high_dividend_screen_passed,
 )
-from value_investor.scoring.fcf import resolve_free_cashflow
+from value_investor.scoring.fcf import (
+    _float_or_none,
+    cap_research_verdict_at_accumulate,
+    resolve_free_cashflow,
+    statutory_fcf_moat_leverage_overlay_triggered,
+)
 from value_investor.scoring.healthcare_overlay import piotroski_score_for_ticker
 
 STATUTORY_DIVIDEND_COVERAGE_MAX = 1.05
@@ -334,6 +339,66 @@ def apply_dividend_sustainability_overlay_to_signal(
         cut_flagged,
         _more_conservative_signal(base_adjusted, capped_signal),
         cap_conviction_for_dividend_sustainability_overlay(base_conviction),
+    )
+
+
+def cap_research_verdict_for_statutory_fcf_moat_leverage_overlay(
+    research_verdict: str | None,
+    *,
+    ticker_models: pd.DataFrame,
+    statutory_fcf_moat_leverage_overlay: bool = False,
+    fcf_dividend_coverage_net: float | None = None,
+    operating_cashflow: float | None = None,
+    capital_expenditure: float | None = None,
+    dividends_paid: float | None = None,
+    free_cashflow: float | None = None,
+    model_failures: dict[str, list[str]] | None = None,
+) -> str | None:
+    """
+    When thin statutory FCF dividend cover coincides with Economic Moat failing on
+    leverage, ceiling research verdict slugs at accumulate (HIK.L-style exports).
+    """
+    if not research_verdict:
+        return research_verdict
+    triggered = statutory_fcf_moat_leverage_overlay
+    if not triggered:
+        triggered = statutory_fcf_moat_leverage_overlay_triggered(
+            ticker_models=ticker_models,
+            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+            operating_cashflow=operating_cashflow,
+            capital_expenditure=capital_expenditure,
+            dividends_paid=dividends_paid,
+            free_cashflow=free_cashflow,
+            model_failures=model_failures,
+        )
+    if not triggered:
+        return research_verdict
+    return cap_research_verdict_at_accumulate(research_verdict)
+
+
+def resolve_research_verdict_for_snapshot_merge(
+    research_verdict: str | None,
+    snapshot: dict[str, Any],
+    *,
+    ticker_models: pd.DataFrame | None = None,
+) -> str | None:
+    """Normalize research slugs and cap at accumulate when statutory cover + moat leverage fail."""
+    normalized = cap_research_verdict_at_accumulate(research_verdict)
+    model_failures_raw = snapshot.get("model_failures")
+    model_failures = dict(model_failures_raw) if isinstance(model_failures_raw, dict) else None
+    ticker_models_frame = ticker_models if ticker_models is not None else pd.DataFrame()
+    return cap_research_verdict_for_statutory_fcf_moat_leverage_overlay(
+        normalized,
+        ticker_models=ticker_models_frame,
+        statutory_fcf_moat_leverage_overlay=bool(
+            snapshot.get("statutory_fcf_moat_leverage_overlay")
+        ),
+        fcf_dividend_coverage_net=_float_or_none(snapshot.get("fcf_dividend_coverage_net")),
+        operating_cashflow=_float_or_none(snapshot.get("operating_cashflow")),
+        capital_expenditure=_float_or_none(snapshot.get("capital_expenditure")),
+        dividends_paid=_float_or_none(snapshot.get("dividends_paid")),
+        free_cashflow=_float_or_none(snapshot.get("free_cashflow")),
+        model_failures=model_failures,
     )
 
 
