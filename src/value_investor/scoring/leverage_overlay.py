@@ -9,7 +9,9 @@ import pandas as pd
 
 from value_investor.scoring.fcf import (
     _iter_filing_bodies,
+    cap_research_verdict_at_accumulate,
     load_cached_financials,
+    statutory_fcf_moat_leverage_overlay_triggered,
 )
 
 YAHOO_DE_HIGH_THRESHOLD = 100.0
@@ -244,3 +246,37 @@ def format_adjusted_net_debt_gbp(value: float | None) -> str | None:
     if amount < 0:
         return f"£{-amount / 1_000_000:.1f}m net cash"
     return f"£{amount / 1_000_000:.1f}m adj. net debt"
+
+
+def cap_research_verdict_for_statutory_fcf_moat_leverage_overlay(
+    research_verdict: str | None,
+    *,
+    ticker_models: pd.DataFrame,
+    statutory_fcf_moat_leverage_overlay: bool = False,
+    fcf_dividend_coverage_net: float | None = None,
+    operating_cashflow: float | None = None,
+    capital_expenditure: float | None = None,
+    dividends_paid: float | None = None,
+    free_cashflow: float | None = None,
+    model_failures: dict[str, list[str]] | None = None,
+) -> str | None:
+    """
+    When thin statutory FCF dividend cover coincides with Economic Moat failing on
+    leverage, ceiling research verdict slugs at accumulate (HIK.L-style exports).
+    """
+    if not research_verdict:
+        return research_verdict
+    triggered = statutory_fcf_moat_leverage_overlay
+    if not triggered:
+        triggered = statutory_fcf_moat_leverage_overlay_triggered(
+            ticker_models=ticker_models,
+            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+            operating_cashflow=operating_cashflow,
+            capital_expenditure=capital_expenditure,
+            dividends_paid=dividends_paid,
+            free_cashflow=free_cashflow,
+            model_failures=model_failures,
+        )
+    if not triggered:
+        return research_verdict
+    return cap_research_verdict_at_accumulate(research_verdict)

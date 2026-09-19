@@ -30,6 +30,9 @@ from value_investor.scoring.fcf_basis_overlay import (
     apply_statutory_fcf_moat_leverage_export_enforcement,
 )
 from value_investor.scoring.healthcare_overlay import piotroski_score_for_ticker
+from value_investor.scoring.leverage_overlay import (
+    cap_research_verdict_for_statutory_fcf_moat_leverage_overlay,
+)
 from value_investor.storage import read_json, write_json
 
 _RUN_SNAPSHOT_OPTIONAL_SIGNAL_COLUMNS = (
@@ -241,6 +244,22 @@ def enforce_fcf_basis_in_snapshot(
         updated["statutory_fcf_moat_leverage_overlay"] = True
         updated["adjusted_signal"] = moat_adjusted
         updated["conviction_score"] = moat_conviction
+
+    capped_verdict = cap_research_verdict_for_statutory_fcf_moat_leverage_overlay(
+        updated.get("research_verdict"),  # type: ignore[arg-type]
+        ticker_models=ticker_models,
+        statutory_fcf_moat_leverage_overlay=bool(
+            updated.get("statutory_fcf_moat_leverage_overlay")
+        ),
+        fcf_dividend_coverage_net=_float_or_none(updated.get("fcf_dividend_coverage_net")),
+        operating_cashflow=_float_or_none(updated.get("operating_cashflow")),
+        capital_expenditure=_float_or_none(updated.get("capital_expenditure")),
+        dividends_paid=_float_or_none(updated.get("dividends_paid")),
+        free_cashflow=_float_or_none(updated.get("free_cashflow")),
+        model_failures=model_failures,
+    )
+    if capped_verdict != updated.get("research_verdict"):
+        updated["research_verdict"] = capped_verdict
     return updated
 
 

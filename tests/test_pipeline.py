@@ -324,6 +324,25 @@ def test_cap_research_verdict_at_accumulate_coerces_buy_slug():
     assert cap_research_verdict_at_accumulate("caution") == "caution"
 
 
+def test_enforce_fcf_basis_caps_buy_research_verdict_when_moat_leverage_overlay():
+    """Export re-enforcement must coerce buy-tier verdict slugs when overlay applies."""
+    from value_investor.scoring.snapshot import enforce_fcf_basis_in_snapshot
+
+    snapshot = {
+        "ticker": "HIK.L",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "research_verdict": "buy",
+        "conviction_score": 0.82,
+        "fcf_dividend_coverage_net": 0.72,
+        "model_failures": {"Economic Moat": ["leverage too high"]},
+    }
+    enforced = enforce_fcf_basis_in_snapshot(snapshot)
+    assert enforced["research_verdict"] == "accumulate"
+    assert enforced["statutory_fcf_moat_leverage_overlay"] is True
+    assert enforced["adjusted_signal"] == "hold"
+
+
 def test_sync_research_verdict_preserves_fcf_overlay_cap_for_hln_style_report(tmp_path: Path):
     report = honour_fcf_action_note_enforcement(
         _minimal_report(
