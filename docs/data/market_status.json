@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-19T14:10:26.502624+00:00",
+  "generated_at": "2026-09-19T14:13:03.492906+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -588,7 +588,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=7, zero_body=0, thin=4, indexed_without_body=50)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=7, zero_body=0, thin=4, indexed_without_body=56)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 7,
@@ -643,7 +643,7 @@
         "unmeasured_buy_tier": 7,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 4,
-        "indexed_without_body": 50,
+        "indexed_without_body": 56,
         "bodies_median": 2.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
@@ -676,13 +676,13 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 2,
-        "targets": 12,
-        "improved": 2,
+        "run_count": 1,
+        "targets": 1,
+        "improved": 1,
         "improved_tickers": [
           "FME.DE"
         ],
-        "last_run_at": "2026-09-19T14:08:40.013931+00:00",
+        "last_run_at": "2026-09-19T14:01:58.317069+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -693,34 +693,29 @@
           "filing_gaps": 7
         },
         "gaps_after": {
-          "unmeasured": 7,
+          "unmeasured": 6,
           "zero_body": 0,
           "thin": 4,
-          "indexed_without_body": 50,
-          "filing_gaps": 7
+          "indexed_without_body": 66,
+          "filing_gaps": 6
         },
         "gap_delta": {
-          "unmeasured": 0,
+          "unmeasured": -1,
           "zero_body": 0,
           "thin": 1,
-          "indexed_without_body": 40,
-          "filing_gaps": 0
+          "indexed_without_body": 56,
+          "filing_gaps": -1
         },
         "remaining": {
           "unmeasured": 7,
           "zero_body": 0,
           "thin": 4,
-          "indexed_without_body": 50,
+          "indexed_without_body": 56,
           "filing_gaps": 7
         },
         "admission_ready": false,
         "admission_gate": "sprint_ingest_complete",
         "admission_warnings": [
-          {
-            "id": "unmeasured_stuck",
-            "severity": "high",
-            "summary": "7 unmeasured buy-tier name(s) unchanged (cannot park; blocks sprint_ingest_complete)"
-          },
           {
             "id": "stale_buy_tier_screen",
             "severity": "warn",
