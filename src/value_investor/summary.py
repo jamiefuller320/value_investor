@@ -466,6 +466,22 @@ def _build_screening_inputs(row: pd.Series) -> dict[str, Any]:
     ):
         inputs["adjusted_eps_growth_pct"] = float(adjusted_growth)
 
+    diluted_growth = row.get("diluted_eps_growth_pct")
+    if diluted_growth is not None and not (
+        isinstance(diluted_growth, float) and pd.isna(diluted_growth)
+    ):
+        inputs["diluted_eps_growth_pct"] = float(diluted_growth)
+
+    screen_ttm_growth = row.get("earnings_growth_screen_ttm")
+    if screen_ttm_growth is None or (
+        isinstance(screen_ttm_growth, float) and pd.isna(screen_ttm_growth)
+    ):
+        screen_ttm_growth = row.get("earnings_growth_screen_ttm_pct")
+    if screen_ttm_growth is not None and not (
+        isinstance(screen_ttm_growth, float) and pd.isna(screen_ttm_growth)
+    ):
+        inputs["earnings_growth_screen_ttm_pct"] = float(screen_ttm_growth)
+
     yahoo_normalized_growth = row.get("yahoo_normalized_income_growth_pct")
     if yahoo_normalized_growth is not None and not (
         isinstance(yahoo_normalized_growth, float) and pd.isna(yahoo_normalized_growth)

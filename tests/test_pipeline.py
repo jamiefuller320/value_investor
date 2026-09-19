@@ -1287,6 +1287,8 @@ def test_enrich_universe_relabels_yahoo_normalized_income_growth_separate_from_a
     assert row["adjusted_eps_growth_pct"] is None or pd.isna(row["adjusted_eps_growth_pct"])
     assert row["earnings_growth"] == pytest.approx(row["basic_eps_growth_pct"])
     assert row["earnings_growth"] != pytest.approx(row["yahoo_normalized_income_growth_pct"])
+    assert row["earnings_growth_pct_source"] == "filing_basic_eps"
+    assert row["earnings_growth_screen_ttm"] == pytest.approx(-0.039)
 
 
 def test_enrich_signals_earnings_growth_overlay_yahoo_normalized_not_filing_core():
@@ -2947,6 +2949,27 @@ def test_enrich_signals_with_earnings_basis_overlay_falls_back_to_yahoo_without_
     assert enriched.iloc[0]["conviction_score"] == pytest.approx(0.51)
 
 
+def test_enrich_signals_with_earnings_growth_overlay_exports_provenance_columns():
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "trailing_pe": 12.0,
+                "earnings_growth": -0.039,
+                "earnings_growth_screen_ttm": -0.039,
+                "basic_eps_growth_pct": 0.045,
+                "diluted_eps_growth_pct": 0.044,
+            }
+        ]
+    )
+    enriched = enrich_signals_with_earnings_growth_overlay(signals)
+    row = enriched.iloc[0]
+    assert row["earnings_growth_pct_source"] == "yahoo_screen_ttm"
+    assert row["statutory_earnings_growth_source"] == "filing_basic_eps"
+    assert row["earnings_growth_screen_ttm_pct"] == pytest.approx(-0.039)
+    assert row["diluted_eps_growth_pct"] == pytest.approx(0.044)
+
+
 def test_enrich_signals_with_earnings_growth_overlay_exports_lynch_peg_and_bps_warning():
     signals = pd.DataFrame(
         [
@@ -3552,6 +3575,27 @@ def test_enrich_universe_with_filing_metrics_extracts_basic_eps_growth(tmp_path:
     assert row["basic_eps"] == pytest.approx(0.214)
     assert row["basic_eps_prev"] == pytest.approx(0.213)
     assert row["basic_eps_growth_pct"] == pytest.approx(0.00469483568, rel=1e-4)
+
+
+def test_enrich_universe_with_filing_metrics_extracts_diluted_eps_growth(tmp_path: Path):
+    sources = tmp_path / "research" / "TST.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "TST.L",
+                "income_statement": {
+                    "2025": {"Basic EPS": 1.0, "Diluted EPS": 0.98},
+                    "2024": {"Basic EPS": 0.9, "Diluted EPS": 0.88},
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    universe = pd.DataFrame([{"ticker": "TST.L", "name": "Test plc"}])
+    enriched = enrich_universe_with_filing_metrics(universe, tmp_path)
+    row = enriched.iloc[0]
+    assert row["diluted_eps_growth_pct"] == pytest.approx(0.98 / 0.88 - 1.0, rel=1e-4)
 
 
 def test_enrich_universe_with_canonical_fcf_prefers_filing_when_yahoo_quarterly_empty(

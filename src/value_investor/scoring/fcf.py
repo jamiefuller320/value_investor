@@ -38,6 +38,16 @@ _BASIC_EPS_LABELS = [
     "Basic EPS",
 ]
 
+_DILUTED_EPS_LABELS = [
+    "Diluted EPS",
+]
+
+EARNINGS_GROWTH_SOURCE_FILING_ADJUSTED = "filing_adjusted_eps"
+EARNINGS_GROWTH_SOURCE_FILING_BASIC = "filing_basic_eps"
+EARNINGS_GROWTH_SOURCE_FILING_DILUTED = "filing_diluted_eps"
+EARNINGS_GROWTH_SOURCE_YAHOO_SCREEN_TTM = "yahoo_screen_ttm"
+EARNINGS_GROWTH_SOURCE_YAHOO_STATUTORY = "yahoo_statutory"
+
 _REVENUE_LABELS = [
     "Total Revenue",
     "Operating Revenue",
@@ -127,6 +137,10 @@ _FILING_METRIC_KEYS = (
     "basic_eps",
     "basic_eps_prev",
     "basic_eps_growth_pct",
+    "diluted_eps",
+    "diluted_eps_prev",
+    "diluted_eps_growth_pct",
+    "earnings_growth_pct_source",
     "dividends_paid",
     "fcf_dividend_coverage_gross",
     "fcf_dividend_coverage_net",
@@ -1024,6 +1038,7 @@ def extract_income_metrics_from_annual_financials(
         latest_rows = income_statement.get(years[0]) or {}
         metrics["net_income_adjusted"] = _annual_label_value(latest_rows, _ADJUSTED_EARNINGS_LABELS)
         metrics["basic_eps"] = _annual_label_value(latest_rows, _BASIC_EPS_LABELS)
+        metrics["diluted_eps"] = _annual_label_value(latest_rows, _DILUTED_EPS_LABELS)
         metrics["revenue"] = _annual_label_value(latest_rows, _REVENUE_LABELS)
     if len(years) > 1:
         prior_rows = income_statement.get(years[1]) or {}
@@ -1031,10 +1046,15 @@ def extract_income_metrics_from_annual_financials(
             prior_rows, _ADJUSTED_EARNINGS_LABELS
         )
         metrics["basic_eps_prev"] = _annual_label_value(prior_rows, _BASIC_EPS_LABELS)
+        metrics["diluted_eps_prev"] = _annual_label_value(prior_rows, _DILUTED_EPS_LABELS)
         metrics["revenue_prev"] = _annual_label_value(prior_rows, _REVENUE_LABELS)
     metrics["basic_eps_growth_pct"] = compute_yoy_growth_rate(
         metrics.get("basic_eps"),
         metrics.get("basic_eps_prev"),
+    )
+    metrics["diluted_eps_growth_pct"] = compute_yoy_growth_rate(
+        metrics.get("diluted_eps"),
+        metrics.get("diluted_eps_prev"),
     )
     metrics["revenue_growth_filing_pct"] = compute_yoy_growth_rate(
         metrics.get("revenue"),
@@ -2203,6 +2223,16 @@ def suppress_high_dividend_yield_passes(
     return out
 
 
+def _earnings_growth_values_match(left: float | None, right: float | None) -> bool:
+    if left is None or right is None:
+        return False
+    if isinstance(left, float) and pd.isna(left):
+        return False
+    if isinstance(right, float) and pd.isna(right):
+        return False
+    return abs(float(left) - float(right)) <= max(1e-9, abs(float(right)) * 1e-6)
+
+
 def resolve_statutory_earnings_growth(row: pd.Series) -> float | None:
     """Prefer filing basic-EPS YoY growth over Yahoo statutory earnings growth."""
     basic = row.get("basic_eps_growth_pct")
@@ -2212,6 +2242,17 @@ def resolve_statutory_earnings_growth(row: pd.Series) -> float | None:
     if statutory is None or (isinstance(statutory, float) and pd.isna(statutory)):
         return None
     return float(statutory)
+
+
+def resolve_statutory_earnings_growth_source(row: pd.Series) -> str | None:
+    """Label which inputs supplied ``statutory_earnings_growth_pct``."""
+    basic = row.get("basic_eps_growth_pct")
+    if basic is not None and not (isinstance(basic, float) and pd.isna(basic)):
+        return EARNINGS_GROWTH_SOURCE_FILING_BASIC
+    statutory = row.get("earnings_growth")
+    if statutory is None or (isinstance(statutory, float) and pd.isna(statutory)):
+        return None
+    return EARNINGS_GROWTH_SOURCE_YAHOO_STATUTORY
 
 
 def resolve_model_earnings_growth(row: pd.Series) -> float | None:
@@ -2229,6 +2270,40 @@ def resolve_model_earnings_growth(row: pd.Series) -> float | None:
     if statutory is None or (isinstance(statutory, float) and pd.isna(statutory)):
         return None
     return float(statutory)
+
+
+def resolve_model_earnings_growth_source(row: pd.Series) -> str | None:
+    """Label which inputs supplied ``model_earnings_growth_pct`` / Lynch PEG model growth."""
+    adjusted = row.get("adjusted_eps_growth_pct")
+    if adjusted is not None and not (isinstance(adjusted, float) and pd.isna(adjusted)):
+        return EARNINGS_GROWTH_SOURCE_FILING_ADJUSTED
+    basic = row.get("basic_eps_growth_pct")
+    if basic is not None and not (isinstance(basic, float) and pd.isna(basic)):
+        return EARNINGS_GROWTH_SOURCE_FILING_BASIC
+    screen = row.get("earnings_growth_screen_ttm")
+    if screen is not None and not (isinstance(screen, float) and pd.isna(screen)):
+        return EARNINGS_GROWTH_SOURCE_YAHOO_SCREEN_TTM
+    statutory = row.get("earnings_growth")
+    if statutory is None or (isinstance(statutory, float) and pd.isna(statutory)):
+        return None
+    return EARNINGS_GROWTH_SOURCE_YAHOO_STATUTORY
+
+
+def resolve_earnings_growth_pct_source(row: pd.Series) -> str | None:
+    """Provenance for ``earnings_growth`` exported as ``screening_inputs.earnings_growth_pct``."""
+    explicit = row.get("earnings_growth_pct_source")
+    if explicit is not None and not (isinstance(explicit, float) and pd.isna(explicit)):
+        return str(explicit)
+    growth = _float_or_none(row.get("earnings_growth"))
+    if growth is None:
+        return None
+    screen = _float_or_none(row.get("earnings_growth_screen_ttm"))
+    if screen is not None and _earnings_growth_values_match(growth, screen):
+        return EARNINGS_GROWTH_SOURCE_YAHOO_SCREEN_TTM
+    model_growth = resolve_model_earnings_growth(row)
+    if model_growth is not None and _earnings_growth_values_match(growth, model_growth):
+        return resolve_model_earnings_growth_source(row)
+    return EARNINGS_GROWTH_SOURCE_YAHOO_STATUTORY
 
 
 def _fcf_relative_gap(left: float, right: float) -> float:
@@ -3257,5 +3332,8 @@ def enrich_universe_with_filing_metrics(
         filing_growth = resolve_model_earnings_growth(out.loc[index])
         if filing_growth is not None:
             out.at[index, "earnings_growth"] = filing_growth
+            source = resolve_model_earnings_growth_source(out.loc[index])
+            if source is not None:
+                out.at[index, "earnings_growth_pct_source"] = source
 
     return out

@@ -9,8 +9,11 @@ import pandas as pd
 from value_investor.scoring.fcf import (
     compute_lynch_peg,
     earnings_growth_bps_diverge,
+    resolve_earnings_growth_pct_source,
     resolve_model_earnings_growth,
+    resolve_model_earnings_growth_source,
     resolve_statutory_earnings_growth,
+    resolve_statutory_earnings_growth_source,
 )
 
 
@@ -42,12 +45,22 @@ def build_earnings_growth_overlay(row: pd.Series | dict[str, Any]) -> dict[str, 
     bps_divergence = earnings_growth_bps_diverge(statutory_growth, core_growth)
 
     yahoo_normalized = _float_or_none(series.get("yahoo_normalized_income_growth_pct"))
+    screen_ttm = _float_or_none(series.get("earnings_growth_screen_ttm"))
+    diluted_growth = _float_or_none(series.get("diluted_eps_growth_pct"))
+    earnings_growth_source = resolve_earnings_growth_pct_source(series)
+    statutory_source = resolve_statutory_earnings_growth_source(series)
+    model_source = resolve_model_earnings_growth_source(series)
 
     overlay: dict[str, Any] = {
         "statutory_earnings_growth_pct": statutory_growth,
         "model_earnings_growth_pct": model_growth,
         "adjusted_eps_growth_pct": adjusted_growth,
         "yahoo_normalized_income_growth_pct": yahoo_normalized,
+        "earnings_growth_screen_ttm_pct": screen_ttm,
+        "diluted_eps_growth_pct": diluted_growth,
+        "earnings_growth_pct_source": earnings_growth_source,
+        "statutory_earnings_growth_source": statutory_source,
+        "model_earnings_growth_source": model_source,
         "bps_divergence_warning": bps_divergence,
         "lynch_peg_statutory": compute_lynch_peg(trailing_pe, statutory_growth),
         "lynch_peg_model": compute_lynch_peg(trailing_pe, model_growth),
@@ -83,14 +96,29 @@ def enrich_signals_with_earnings_growth_overlay(signals: pd.DataFrame) -> pd.Dat
     warnings: list[bool] = []
     lynch_model: list[float | None] = []
     lynch_statutory: list[float | None] = []
+    earnings_growth_sources: list[str | None] = []
+    statutory_sources: list[str | None] = []
+    model_sources: list[str | None] = []
+    screen_ttm_values: list[float | None] = []
+    diluted_growth_values: list[float | None] = []
 
     for _, row in out.iterrows():
         overlay = build_earnings_growth_overlay(row)
         warnings.append(bool(overlay.get("bps_divergence_warning")))
         lynch_model.append(overlay.get("lynch_peg_model"))
         lynch_statutory.append(overlay.get("lynch_peg_statutory"))
+        earnings_growth_sources.append(overlay.get("earnings_growth_pct_source"))
+        statutory_sources.append(overlay.get("statutory_earnings_growth_source"))
+        model_sources.append(overlay.get("model_earnings_growth_source"))
+        screen_ttm_values.append(overlay.get("earnings_growth_screen_ttm_pct"))
+        diluted_growth_values.append(overlay.get("diluted_eps_growth_pct"))
 
     out["earnings_growth_bps_divergence_warning"] = warnings
     out["lynch_peg_model"] = lynch_model
     out["lynch_peg_statutory"] = lynch_statutory
+    out["earnings_growth_pct_source"] = earnings_growth_sources
+    out["statutory_earnings_growth_source"] = statutory_sources
+    out["model_earnings_growth_source"] = model_sources
+    out["earnings_growth_screen_ttm_pct"] = screen_ttm_values
+    out["diluted_eps_growth_pct"] = diluted_growth_values
     return out
