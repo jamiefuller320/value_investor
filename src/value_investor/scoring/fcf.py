@@ -1602,7 +1602,7 @@ def bind_overlay_fcf_to_filing_year_company_adjusted(
     fiscal_year: str | None,
     output_dir: Path | None = None,
 ) -> dict[str, Any]:
-    """Rebind overlay FCF numerators to filing-year prose when bridge or IR totals lag."""
+    """Rebind overlay FCF numerators to filing-year prose or divisional IR totals when lagging."""
     if fiscal_year is None:
         return bundle
 
@@ -1610,6 +1610,12 @@ def bind_overlay_fcf_to_filing_year_company_adjusted(
         ticker,
         output_dir=output_dir,
     )
+    if filing_amount is None:
+        filing_amount, filing_currency = extract_company_adjusted_fcf_from_reconciliation_bridges(
+            ticker,
+            output_dir=output_dir,
+            prefer_annual=True,
+        )
     if filing_amount is None:
         return bundle
 

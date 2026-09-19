@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -17,8 +18,17 @@ QUEUE_ALERT_KINDS = frozenset(
         "agent_failure",
         "orphan_reconcile",
         "task_parked",
+        "parked_backlog_full",
+        "parallel_cap",
+        "traffic_pause",
+        "clash_blocked",
+        "dispatch_blocked",
     }
 )
+
+# Re-email the same dispatch-block fingerprint at most once per cooldown.
+DEFAULT_DISPATCH_BLOCK_COOLDOWN_HOURS = 12.0
+QUEUE_BLOCK_NOTIFY_KEY = "queue_block_notify"
 
 
 @dataclass
@@ -149,12 +159,108 @@ class EngineeringQueueAlert:
         }
 
 
+def _parse_iso(value: str | None) -> datetime | None:
+    raw = str(value or "").strip()
+    if not raw:
+        return None
+    try:
+        return datetime.fromisoformat(raw.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
+def dispatch_block_fingerprint(kind: str, reason: str) -> str:
+    return f"{kind}|{reason.strip()}"
+
+
+def _dispatch_block_fingerprint(kind: str, reason: str) -> str:
+    return dispatch_block_fingerprint(kind, reason)
+
+
+def _classify_dispatch_block(reason: str) -> str | None:
+    """Map a gate reason to an alert kind, or None when idle / already covered."""
+    lowered = reason.strip().lower()
+    if not lowered:
+        return None
+    if lowered.startswith("queue ready"):
+        return None
+    if lowered.startswith("no open engineering tasks"):
+        return None
+    if "spend checkpoint" in lowered:
+        return None  # covered by spend_blocked
+    if "parallel cap" in lowered or "no dispatch slots" in lowered:
+        return "parallel_cap"
+    if "engineering-agent workflow(s) already running" in lowered:
+        return "parallel_cap"
+    if "project traffic pause" in lowered:
+        return "traffic_pause"
+    if "attention parked backlog clearing pause" in lowered:
+        return None  # covered by parked_backlog_full when should_send fires
+    if "clash" in lowered or "dispatch-eligible" in lowered:
+        return "clash_blocked"
+    return "dispatch_blocked"
+
+
+def _load_queue_block_notify(tasks_path: Path) -> dict[str, Any]:
+    from value_investor.engineering_tasks import load_engineering_tasks
+
+    data = load_engineering_tasks(tasks_path)
+    raw = data.get(QUEUE_BLOCK_NOTIFY_KEY)
+    return dict(raw) if isinstance(raw, dict) else {}
+
+
+def _dispatch_block_in_cooldown(
+    *,
+    fingerprint: str,
+    tasks_path: Path,
+    now: datetime | None = None,
+    cooldown_hours: float = DEFAULT_DISPATCH_BLOCK_COOLDOWN_HOURS,
+) -> bool:
+    state = _load_queue_block_notify(tasks_path)
+    if str(state.get("last_fingerprint") or "") != fingerprint:
+        return False
+    last_sent = _parse_iso(str(state.get("last_sent_at") or ""))
+    if last_sent is None:
+        return False
+    now = now or datetime.now(UTC)
+    if last_sent.tzinfo is None:
+        last_sent = last_sent.replace(tzinfo=UTC)
+    return (now - last_sent) < timedelta(hours=float(cooldown_hours))
+
+
+def mark_dispatch_block_notified(
+    *,
+    fingerprint: str,
+    tasks_path: Path | None = None,
+    apply: bool = True,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """Persist last emailed dispatch-block fingerprint (dedupe hourly re-sends)."""
+    from value_investor.engineering_tasks import COMMITTED_TASKS_PATH, load_engineering_tasks
+    from value_investor.storage import write_json
+
+    path = Path(tasks_path or COMMITTED_TASKS_PATH)
+    now = now or datetime.now(UTC)
+    data = load_engineering_tasks(path)
+    state = {
+        "last_fingerprint": fingerprint,
+        "last_sent_at": now.isoformat(),
+        "cooldown_hours": DEFAULT_DISPATCH_BLOCK_COOLDOWN_HOURS,
+    }
+    data[QUEUE_BLOCK_NOTIFY_KEY] = state
+    if apply:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        write_json(path, data, compact=False)
+    return state
+
+
 def collect_queue_block_alerts(
     *,
     recovery: dict[str, Any] | None = None,
     sync: dict[str, Any] | None = None,
     dispatch: dict[str, Any] | None = None,
     tasks_path: Path | None = None,
+    now: datetime | None = None,
 ) -> list[EngineeringQueueAlert]:
     """Build immediate email alerts for engineering queue blockers (L96)."""
     from value_investor.engineering_recovery import summarize_parked_tasks_needing_attention
@@ -166,7 +272,7 @@ def collect_queue_block_alerts(
     dispatch = dispatch or {}
     status = dict(dispatch.get("status") or {})
     tasks_path = tasks_path or COMMITTED_TASKS_PATH
-
+    now = now or datetime.now(UTC)
     queue_clearing = dict(recovery.get("queue_clearing") or {})
     if queue_clearing.get("should_send_full_queue_warning"):
         parked_rows = summarize_parked_tasks_needing_attention(tasks_path)
@@ -268,6 +374,39 @@ def collect_queue_block_alerts(
                 ),
             )
         )
+
+    # Gate says no while open work remains — parallel cap / traffic / clash, etc.
+    should_dispatch = dispatch.get("should_dispatch")
+    if should_dispatch is False and open_count > 0:
+        kind = _classify_dispatch_block(dispatch_reason)
+        if kind is not None:
+            fingerprint = _dispatch_block_fingerprint(kind, dispatch_reason)
+            if not _dispatch_block_in_cooldown(
+                fingerprint=fingerprint, tasks_path=tasks_path, now=now
+            ):
+                titles = {
+                    "parallel_cap": "Engineering dispatch at parallel cap",
+                    "traffic_pause": "Engineering dispatch paused by project traffic",
+                    "clash_blocked": "Engineering dispatch blocked by in-flight clash",
+                    "dispatch_blocked": "Engineering dispatch blocked",
+                }
+                pr_open = int(status.get("pr_open_count") or 0)
+                next_id = dispatch.get("next_task_id") or status.get("next_task_id")
+                extra = f" Open waiting: {open_count}"
+                if pr_open:
+                    extra += f"; pr_open: {pr_open}"
+                if next_id:
+                    extra += f"; next would be {next_id}"
+                alerts.append(
+                    EngineeringQueueAlert(
+                        kind=kind,
+                        title=titles.get(kind, "Engineering dispatch blocked"),
+                        summary=(
+                            f"{dispatch_reason}.{extra}. "
+                            "Merge or close a PR / clear the hold to free a slot."
+                        ),
+                    )
+                )
 
     return alerts
 

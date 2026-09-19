@@ -1,39 +1,39 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T09:17:49.553365+00:00",
-  "overall": "blocked",
-  "headline": "Dispatch paused — 0 attention-parked task(s). attention parked backlog clearing pause (0 task(s); resume when < 7 and 30m since last clearing action)",
+  "generated_at": "2026-09-19T13:23:16.753211+00:00",
+  "overall": "active",
+  "headline": "Agent lane active.",
   "merge_lane": {
-    "state": "running",
-    "idle": false,
-    "running": true,
+    "state": "idle",
+    "idle": true,
+    "running": false,
     "blocked": false,
-    "pr_open_count": 3,
+    "pr_open_count": 0,
     "open_engineering_prs": [],
     "in_flight_pr": null,
     "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
   },
   "agent_lane": {
-    "state": "blocked",
+    "state": "running",
     "idle": false,
     "running": true,
-    "blocked": true,
-    "should_dispatch": false,
-    "pause_active": true,
+    "blocked": false,
+    "should_dispatch": true,
+    "pause_active": false,
     "traffic_pause_active": false,
     "attention_parked_count": 0,
     "open_count": 2,
-    "pr_open_count": 3,
+    "pr_open_count": 0,
     "dispatch_eligible_count": 2,
     "blocked_task_count": 0,
     "next_task_id": "eng-20260918-23",
-    "reason": "attention parked backlog clearing pause (0 task(s); resume when < 7 and 30m since last clearing action)",
-    "detail": "Dispatch paused — 0 attention-parked task(s). attention parked backlog clearing pause (0 task(s); resume when < 7 and 30m since last clearing action)"
+    "reason": "queue ready — dispatch next open task",
+    "detail": "queue ready — dispatch next open task"
   },
   "queue_clearing": {
-    "pause_active": true,
-    "attention_parked_count": 1,
-    "evaluated_at": "2026-09-19T09:17:40.081473+00:00"
+    "pause_active": false,
+    "attention_parked_count": 0,
+    "evaluated_at": "2026-09-19T13:23:16.681667+00:00"
   },
   "traffic_control": {
     "pause_active": false,
@@ -46,6 +46,40 @@
     "overall": "warn",
     "should_dispatch_engineering": false
   },
-  "merges_today": [],
-  "verified_merges_today_count": 0
+  "merges_today": [
+    {
+      "task_id": "eng-20260918-17",
+      "title": "Do not tag AGM notices/results, Payments to Governments, prospectuses, mineral-resources updates, Tomago/Boyne operating RNSs, or third-party SVM “Rio collab” i",
+      "area": "ingest",
+      "pr_number": 728,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/728",
+      "merged_at": "2026-09-19T13:23:03.613342+00:00",
+      "merge_class": "ci_fix",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-06",
+      "title": "Auto-bind `company_adjusted` FCF to the latest filing-year divisional total (£73.8m for FY 2026) and flag when screen numerator is one fiscal year stale.",
+      "area": "scoring",
+      "pr_number": 727,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/727",
+      "merged_at": "2026-09-19T13:15:25.611928+00:00",
+      "merge_class": "ci_fix",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260918-22",
+      "title": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
+      "area": "ingest",
+      "pr_number": 726,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/726",
+      "merged_at": "2026-09-19T09:47:42.344061+00:00",
+      "merge_class": "ci_fix",
+      "auto_merge": true,
+      "independently_verified": true
+    }
+  ],
+  "verified_merges_today_count": 3
 }

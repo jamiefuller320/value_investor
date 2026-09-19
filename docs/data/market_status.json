@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-19T08:30:34.717790+00:00",
+  "generated_at": "2026-09-19T12:37:40.204995+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -23,8 +23,8 @@
       "live": 1,
       "focus": 1,
       "sprint": 2,
-      "admitted": 4,
-      "graduated": 15
+      "admitted": 6,
+      "graduated": 13
     },
     "sprint_count": 3,
     "maintenance_count": 19,
@@ -40,8 +40,8 @@
       "tsx60"
     ],
     "spare_sprint": {
-      "1": "euro_stoxx50",
-      "2": "ftse_smallcap"
+      "1": "dax",
+      "2": "cac40"
     },
     "equal_support_generated_at": "2026-09-18T18:32:18.640366+00:00"
   },
@@ -394,15 +394,14 @@
         "window_days": 2,
         "run_count": 5,
         "targets": 29,
-        "improved": 11,
+        "improved": 10,
         "improved_tickers": [
           "BOL.ST",
-          "ESSITY-B.ST",
-          "C5H.IR",
           "AMRZ.SW",
-          "TTE.PA"
+          "TTE.PA",
+          "C5H.IR"
         ],
-        "last_run_at": "2026-09-19T07:28:22.827696+00:00",
+        "last_run_at": "2026-09-19T10:23:40.352659+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
@@ -577,21 +576,386 @@
       }
     },
     {
-      "market_id": "euro_stoxx50",
-      "label": "EURO STOXX 50",
-      "exchange": "EU",
+      "market_id": "dax",
+      "label": "DAX",
+      "exchange": "XETRA",
       "currency": "EUR",
       "role": "sprint",
       "is_live": false,
       "is_focus": false,
       "is_graduated": true,
       "is_queue": true,
-      "is_admitted": true,
+      "is_admitted": false,
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=4, indexed_without_body=4)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=7, zero_body=0, thin=3, indexed_without_body=10)",
       "ingest_parity_met": false,
+      "ingest_exhausted": false,
+      "queue_rank": 7,
+      "shared_maintenance": false,
+      "health": "warn",
+      "coverage_pct": 1.0,
+      "honest_coverage_pct": 1.0,
+      "ticker_count": 40,
+      "stale": 0,
+      "fresh": 40,
+      "failed_fetch_count": 0,
+      "last_metrics_refresh": "2026-09-18T07:05:31.409060+00:00",
+      "last_constituents_refresh": "2026-09-18T07:05:14.576881+00:00",
+      "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
+      "signal_counts": {
+        "hold": 26,
+        "buy": 7,
+        "strong_buy": 5,
+        "avoid": 2
+      },
+      "shortlist_count": 12,
+      "strong_buy": 5,
+      "buy": 7,
+      "learning_phase": 1,
+      "learning_phase_label": "Observe",
+      "phase_blockers": [
+        "need 4 observe snapshots (have 0)"
+      ],
+      "expected_epoch0_blockers": [],
+      "learning": {
+        "current_phase": 1,
+        "next_phase": 1,
+        "phase1_ready": false,
+        "phase2_ready": false,
+        "phase3_ready": false,
+        "weekly_paper_enabled": false,
+        "weekday_paper_enabled": false,
+        "blockers": [
+          "need 4 observe snapshots (have 0)"
+        ],
+        "phase1": {
+          "screen_archives": 0,
+          "observe_snapshot_count": 0
+        },
+        "phase2": {
+          "weekly_batch_count": 0,
+          "min_weekly_batches": 0
+        }
+      },
+      "filing_health": {
+        "buy_tier_count": 12,
+        "unmeasured_buy_tier": 7,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 3,
+        "indexed_without_body": 10,
+        "bodies_median": 2.0,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
+        "ingest_exhausted": false,
+        "parked_count": 0,
+        "zero_body_tickers": [],
+        "thin_body_tickers": [
+          "MUV2.DE",
+          "BAS.DE",
+          "DTE.DE"
+        ],
+        "unmeasured_tickers": [
+          "FME.DE",
+          "DTG.DE",
+          "FRE.DE",
+          "HEN3.DE",
+          "HNR1.DE",
+          "G1A.DE",
+          "VOW3.DE"
+        ],
+        "parked_tickers": []
+      },
+      "filing_gaps": 7,
+      "paper_instrument": null,
+      "ai_judgment": null,
+      "knob_apply": null,
+      "epoch0": null,
+      "equal_support": null,
+      "near_miss": null,
+      "sprint_progress": {
+        "window_days": 2,
+        "run_count": 0,
+        "targets": 0,
+        "improved": 0,
+        "improved_tickers": [],
+        "last_run_at": null,
+        "runtime_cutoff_runs": 0,
+        "error_runs": 0,
+        "gaps_before": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 10,
+          "filing_gaps": 0
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 10,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 0,
+          "filing_gaps": 0
+        },
+        "remaining": {
+          "unmeasured": 7,
+          "zero_body": 0,
+          "thin": 3,
+          "indexed_without_body": 10,
+          "filing_gaps": 7
+        },
+        "admission_ready": false,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": [
+          {
+            "id": "no_ingest_in_window",
+            "severity": "high",
+            "summary": "No ingest runs in the last 2 days"
+          },
+          {
+            "id": "stale_buy_tier_screen",
+            "severity": "warn",
+            "summary": "Buy-tier screen is stale (last screen 2026-08-16); ingest is deepening an old shortlist"
+          }
+        ]
+      },
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "dax",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "EUR",
+        "benchmark_ticker": "^GDAXI",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^GDAXI equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
+    },
+    {
+      "market_id": "cac40",
+      "label": "CAC 40",
+      "exchange": "Euronext Paris",
+      "currency": "EUR",
+      "role": "sprint",
+      "is_live": false,
+      "is_focus": false,
+      "is_graduated": true,
+      "is_queue": true,
+      "is_admitted": false,
+      "is_ftse_equivalent": false,
+      "ingest": "sprint",
+      "ingest_stream": 2,
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=8, zero_body=0, thin=1, indexed_without_body=10)",
+      "ingest_parity_met": false,
+      "ingest_exhausted": false,
+      "queue_rank": 8,
+      "shared_maintenance": false,
+      "health": "warn",
+      "coverage_pct": 1.0,
+      "honest_coverage_pct": 1.0,
+      "ticker_count": 40,
+      "stale": 0,
+      "fresh": 40,
+      "failed_fetch_count": 0,
+      "last_metrics_refresh": "2026-09-18T07:05:50.816901+00:00",
+      "last_constituents_refresh": "2026-09-18T07:05:31.596253+00:00",
+      "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
+      "signal_counts": {
+        "hold": 18,
+        "strong_buy": 8,
+        "avoid": 8,
+        "buy": 6
+      },
+      "shortlist_count": 14,
+      "strong_buy": 8,
+      "buy": 6,
+      "learning_phase": 1,
+      "learning_phase_label": "Observe",
+      "phase_blockers": [
+        "need 4 observe snapshots (have 0)"
+      ],
+      "expected_epoch0_blockers": [],
+      "learning": {
+        "current_phase": 1,
+        "next_phase": 1,
+        "phase1_ready": false,
+        "phase2_ready": false,
+        "phase3_ready": false,
+        "weekly_paper_enabled": false,
+        "weekday_paper_enabled": false,
+        "blockers": [
+          "need 4 observe snapshots (have 0)"
+        ],
+        "phase1": {
+          "screen_archives": 0,
+          "observe_snapshot_count": 0
+        },
+        "phase2": {
+          "weekly_batch_count": 0,
+          "min_weekly_batches": 0
+        }
+      },
+      "filing_health": {
+        "buy_tier_count": 14,
+        "unmeasured_buy_tier": 8,
+        "zero_body_buy_tier": 0,
+        "thin_body_buy_tier": 1,
+        "indexed_without_body": 10,
+        "bodies_median": 5.0,
+        "coverage_scope": "canonical_plus_shards",
+        "ftse_equivalent": false,
+        "ingest_exhausted": false,
+        "parked_count": 0,
+        "zero_body_tickers": [],
+        "thin_body_tickers": [
+          "SGO.PA"
+        ],
+        "unmeasured_tickers": [
+          "TEP.PA",
+          "CAP.PA",
+          "EN.PA",
+          "CA.PA",
+          "URW.PA",
+          "PUB.PA",
+          "VIE.PA",
+          "RI.PA"
+        ],
+        "parked_tickers": []
+      },
+      "filing_gaps": 8,
+      "paper_instrument": null,
+      "ai_judgment": null,
+      "knob_apply": null,
+      "epoch0": null,
+      "equal_support": null,
+      "near_miss": null,
+      "sprint_progress": {
+        "window_days": 2,
+        "run_count": 0,
+        "targets": 0,
+        "improved": 0,
+        "improved_tickers": [],
+        "last_run_at": null,
+        "runtime_cutoff_runs": 0,
+        "error_runs": 0,
+        "gaps_before": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 10,
+          "filing_gaps": 0
+        },
+        "gaps_after": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 10,
+          "filing_gaps": 0
+        },
+        "gap_delta": {
+          "unmeasured": 0,
+          "zero_body": 0,
+          "thin": 0,
+          "indexed_without_body": 0,
+          "filing_gaps": 0
+        },
+        "remaining": {
+          "unmeasured": 8,
+          "zero_body": 0,
+          "thin": 1,
+          "indexed_without_body": 10,
+          "filing_gaps": 8
+        },
+        "admission_ready": false,
+        "admission_gate": "sprint_ingest_complete",
+        "admission_warnings": [
+          {
+            "id": "no_ingest_in_window",
+            "severity": "high",
+            "summary": "No ingest runs in the last 2 days"
+          },
+          {
+            "id": "stale_buy_tier_screen",
+            "severity": "warn",
+            "summary": "Buy-tier screen is stale (last screen 2026-08-16); ingest is deepening an old shortlist"
+          }
+        ]
+      },
+      "held_vs_market": {
+        "schema_version": 1,
+        "status": "empty",
+        "reason": "No paper book or observe-sim marks",
+        "market_id": "cac40",
+        "source": null,
+        "paper_instrument": null,
+        "currency": "EUR",
+        "benchmark_ticker": "^FCHI",
+        "held_path": null,
+        "market_path": null,
+        "branch_ready": true,
+        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
+        "points": [],
+        "series": [
+          {
+            "id": "held",
+            "label": "Held book",
+            "kind": "held",
+            "color": "#2b6cb0"
+          },
+          {
+            "id": "market",
+            "label": "^FCHI equivalent",
+            "kind": "market",
+            "color": "#64748b"
+          }
+        ],
+        "branches": [],
+        "last": null
+      }
+    },
+    {
+      "market_id": "euro_stoxx50",
+      "label": "EURO STOXX 50",
+      "exchange": "EU",
+      "currency": "EUR",
+      "role": "admitted",
+      "is_live": false,
+      "is_focus": false,
+      "is_graduated": true,
+      "is_queue": true,
+      "is_admitted": true,
+      "is_ftse_equivalent": false,
+      "ingest": "maintenance",
+      "ingest_stream": null,
+      "ingest_reason": null,
+      "ingest_parity_met": null,
       "ingest_exhausted": true,
       "queue_rank": 5,
       "shared_maintenance": true,
@@ -642,35 +1006,8 @@
           "min_weekly_batches": 4
         }
       },
-      "filing_health": {
-        "buy_tier_count": 15,
-        "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 4,
-        "indexed_without_body": 4,
-        "bodies_median": 3.0,
-        "coverage_scope": "canonical_plus_shards",
-        "ftse_equivalent": false,
-        "ingest_exhausted": false,
-        "parked_count": 6,
-        "zero_body_tickers": [],
-        "thin_body_tickers": [
-          "SGO.PA",
-          "MUV2.DE",
-          "DTE.DE",
-          "BAS.DE"
-        ],
-        "unmeasured_tickers": [],
-        "parked_tickers": [
-          "BAS.DE",
-          "DTE.DE",
-          "MUV2.DE",
-          "SAN.PA",
-          "SAP.DE",
-          "SGO.PA"
-        ]
-      },
-      "filing_gaps": 0,
+      "filing_health": null,
+      "filing_gaps": null,
       "paper_instrument": "buy_tier_level",
       "ai_judgment": false,
       "knob_apply": false,
@@ -722,49 +1059,7 @@
           "MBG.DE"
         ]
       },
-      "sprint_progress": {
-        "window_days": 2,
-        "run_count": 3,
-        "targets": 2,
-        "improved": 1,
-        "improved_tickers": [
-          "TTE.PA"
-        ],
-        "last_run_at": "2026-09-19T07:58:00.468953+00:00",
-        "runtime_cutoff_runs": 0,
-        "error_runs": 0,
-        "gaps_before": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 4,
-          "indexed_without_body": 3,
-          "filing_gaps": 0
-        },
-        "gaps_after": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 4,
-          "indexed_without_body": 4,
-          "filing_gaps": 0
-        },
-        "gap_delta": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 1,
-          "filing_gaps": 0
-        },
-        "remaining": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 4,
-          "indexed_without_body": 4,
-          "filing_gaps": 0
-        },
-        "admission_ready": true,
-        "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": []
-      },
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
@@ -843,17 +1138,17 @@
       "label": "FTSE SmallCap",
       "exchange": "LSE",
       "currency": "GBP",
-      "role": "sprint",
+      "role": "admitted",
       "is_live": false,
       "is_focus": false,
       "is_graduated": true,
       "is_queue": true,
       "is_admitted": true,
       "is_ftse_equivalent": false,
-      "ingest": "sprint",
-      "ingest_stream": 2,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=0, indexed_without_body=46)",
-      "ingest_parity_met": false,
+      "ingest": "maintenance",
+      "ingest_stream": null,
+      "ingest_reason": null,
+      "ingest_parity_met": null,
       "ingest_exhausted": true,
       "queue_rank": 3,
       "shared_maintenance": true,
@@ -905,28 +1200,8 @@
           "min_weekly_batches": 4
         }
       },
-      "filing_health": {
-        "buy_tier_count": 9,
-        "unmeasured_buy_tier": 0,
-        "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 0,
-        "indexed_without_body": 46,
-        "bodies_median": 54.0,
-        "coverage_scope": "canonical_plus_shards",
-        "ftse_equivalent": false,
-        "ingest_exhausted": false,
-        "parked_count": 4,
-        "zero_body_tickers": [],
-        "thin_body_tickers": [],
-        "unmeasured_tickers": [],
-        "parked_tickers": [
-          "BOOT.L",
-          "MER.L",
-          "TPT.L",
-          "ULTP.L"
-        ]
-      },
-      "filing_gaps": 0,
+      "filing_health": null,
+      "filing_gaps": null,
       "paper_instrument": "buy_tier_level",
       "ai_judgment": false,
       "knob_apply": false,
@@ -978,59 +1253,7 @@
           "LSL.L"
         ]
       },
-      "sprint_progress": {
-        "window_days": 2,
-        "run_count": 4,
-        "targets": 10,
-        "improved": 7,
-        "improved_tickers": [
-          "CLIG.L",
-          "APTD.L",
-          "CARD.L",
-          "DFS.L",
-          "REC.L"
-        ],
-        "last_run_at": "2026-09-19T08:28:35.857959+00:00",
-        "runtime_cutoff_runs": 0,
-        "error_runs": 1,
-        "gaps_before": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 62,
-          "filing_gaps": 0
-        },
-        "gaps_after": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 46,
-          "filing_gaps": 0
-        },
-        "gap_delta": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": -16,
-          "filing_gaps": 0
-        },
-        "remaining": {
-          "unmeasured": 0,
-          "zero_body": 0,
-          "thin": 0,
-          "indexed_without_body": 46,
-          "filing_gaps": 0
-        },
-        "admission_ready": true,
-        "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": [
-          {
-            "id": "ingest_errors",
-            "severity": "warn",
-            "summary": "1 ingest run(s) recorded errors: REC.L: Failed to perform, curl: (16) . See https://curl.se/libcurl/c/libcurl-errors.html first for more details."
-          }
-        ]
-      },
+      "sprint_progress": null,
       "held_vs_market": {
         "schema_version": 1,
         "status": "ok",
@@ -2480,174 +2703,6 @@
           {
             "id": "market",
             "label": "^STOXX50E equivalent",
-            "kind": "market",
-            "color": "#64748b"
-          }
-        ],
-        "branches": [],
-        "last": null
-      }
-    },
-    {
-      "market_id": "cac40",
-      "label": "CAC 40",
-      "exchange": "Euronext Paris",
-      "currency": "EUR",
-      "role": "graduated",
-      "is_live": false,
-      "is_focus": false,
-      "is_graduated": true,
-      "is_queue": false,
-      "is_admitted": false,
-      "is_ftse_equivalent": false,
-      "ingest": "maintenance",
-      "ingest_stream": null,
-      "ingest_reason": null,
-      "ingest_parity_met": null,
-      "ingest_exhausted": false,
-      "queue_rank": null,
-      "shared_maintenance": false,
-      "health": "ok",
-      "coverage_pct": 1.0,
-      "honest_coverage_pct": 1.0,
-      "ticker_count": 40,
-      "stale": 0,
-      "fresh": 40,
-      "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-18T07:05:50.816901+00:00",
-      "last_constituents_refresh": "2026-09-18T07:05:31.596253+00:00",
-      "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
-      "signal_counts": {
-        "hold": 18,
-        "strong_buy": 8,
-        "avoid": 8,
-        "buy": 6
-      },
-      "shortlist_count": 14,
-      "strong_buy": 8,
-      "buy": 6,
-      "learning_phase": null,
-      "learning_phase_label": "Not started",
-      "phase_blockers": [],
-      "expected_epoch0_blockers": [],
-      "learning": null,
-      "filing_health": null,
-      "filing_gaps": null,
-      "paper_instrument": null,
-      "ai_judgment": null,
-      "knob_apply": null,
-      "epoch0": null,
-      "equal_support": null,
-      "near_miss": null,
-      "sprint_progress": null,
-      "held_vs_market": {
-        "schema_version": 1,
-        "status": "empty",
-        "reason": "No paper book or observe-sim marks",
-        "market_id": "cac40",
-        "source": null,
-        "paper_instrument": null,
-        "currency": "EUR",
-        "benchmark_ticker": "^FCHI",
-        "held_path": null,
-        "market_path": null,
-        "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
-        "points": [],
-        "series": [
-          {
-            "id": "held",
-            "label": "Held book",
-            "kind": "held",
-            "color": "#2b6cb0"
-          },
-          {
-            "id": "market",
-            "label": "^FCHI equivalent",
-            "kind": "market",
-            "color": "#64748b"
-          }
-        ],
-        "branches": [],
-        "last": null
-      }
-    },
-    {
-      "market_id": "dax",
-      "label": "DAX",
-      "exchange": "XETRA",
-      "currency": "EUR",
-      "role": "graduated",
-      "is_live": false,
-      "is_focus": false,
-      "is_graduated": true,
-      "is_queue": false,
-      "is_admitted": false,
-      "is_ftse_equivalent": false,
-      "ingest": "maintenance",
-      "ingest_stream": null,
-      "ingest_reason": null,
-      "ingest_parity_met": null,
-      "ingest_exhausted": false,
-      "queue_rank": null,
-      "shared_maintenance": false,
-      "health": "ok",
-      "coverage_pct": 1.0,
-      "honest_coverage_pct": 1.0,
-      "ticker_count": 40,
-      "stale": 0,
-      "fresh": 40,
-      "failed_fetch_count": 0,
-      "last_metrics_refresh": "2026-09-18T07:05:31.409060+00:00",
-      "last_constituents_refresh": "2026-09-18T07:05:14.576881+00:00",
-      "last_screen_at": "2026-08-16T11:58:34.144147+00:00",
-      "signal_counts": {
-        "hold": 26,
-        "buy": 7,
-        "strong_buy": 5,
-        "avoid": 2
-      },
-      "shortlist_count": 12,
-      "strong_buy": 5,
-      "buy": 7,
-      "learning_phase": null,
-      "learning_phase_label": "Not started",
-      "phase_blockers": [],
-      "expected_epoch0_blockers": [],
-      "learning": null,
-      "filing_health": null,
-      "filing_gaps": null,
-      "paper_instrument": null,
-      "ai_judgment": null,
-      "knob_apply": null,
-      "epoch0": null,
-      "equal_support": null,
-      "near_miss": null,
-      "sprint_progress": null,
-      "held_vs_market": {
-        "schema_version": 1,
-        "status": "empty",
-        "reason": "No paper book or observe-sim marks",
-        "market_id": "dax",
-        "source": null,
-        "paper_instrument": null,
-        "currency": "EUR",
-        "benchmark_ticker": "^GDAXI",
-        "held_path": null,
-        "market_path": null,
-        "branch_ready": true,
-        "note": "Held-stock value vs the same capital in the local index. Knob-changed branches overlay on this chart when applied — do not spawn a twin book per knob.",
-        "points": [],
-        "series": [
-          {
-            "id": "held",
-            "label": "Held book",
-            "kind": "held",
-            "color": "#2b6cb0"
-          },
-          {
-            "id": "market",
-            "label": "^GDAXI equivalent",
             "kind": "market",
             "color": "#64748b"
           }

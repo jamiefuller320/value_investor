@@ -4684,6 +4684,86 @@ def test_classify_rns_headline_annual_interim_and_trading_update():
     assert classify_rns_headline("Shell plc First Quarter 2026 Interim Dividend") == "other"
 
 
+def test_classify_rns_headline_rio_l_routine_and_operating_rns():
+    """eng-20260918-17: RIO.L AGM, ESG, smelter and production RNS period tags."""
+    assert classify_rns_headline("2026 Annual General Meeting dates") == "other"
+    assert classify_rns_headline("Notices of 2026 annual general meetings") == "other"
+    assert classify_rns_headline("Report on Payments to Governments") == "other"
+    assert classify_rns_headline("Publication of Supplementary Prospectus") == "other"
+    assert classify_rns_headline("Mineral Resources and Ore Reserves updates") == "other"
+    assert classify_rns_headline("Agreement to secure long-term future of Tomago") == "other"
+    assert classify_rns_headline("Second quarter production results") == "trading_update"
+    assert classify_rns_headline("Drilling/Production Report") == "trading_update"
+    assert classify_rns_headline("2025 Annual Report") == "annual"
+    assert classify_rns_headline("Rio Tinto Half Year Results") == "interim"
+
+
+def test_apply_headline_period_rio_l_blocks_body_upgrade_for_svm_collab():
+    """eng-20260918-17: third-party SVM collab body must not become period=annual."""
+    body = "Annual report and consolidated income statement " + ("x" * 400)
+    row = {
+        "headline": "SVM Advances U.S. Strategy as Rio Collab Concludes - Investegate",
+        "source": "investegate_resolved",
+        "period": "other",
+    }
+    updated = _apply_headline_period(dict(row), body_snippet=body)
+    assert updated["period"] == "other"
+
+
+def test_fetch_filings_investegate_company_rio_l_operating_rns_periods(monkeypatch):
+    """eng-20260918-17: Investegate fetch tags RIO operating RNS without annual inflation."""
+    html = """
+    <table>
+      <tr>
+        <td>15 Jul 2026</td><td>07:00 AM</td>
+        <td><a href="https://www.investegate.co.uk/announcement/rns/rio-tinto--rio/q2-prod/1">Second quarter production results</a></td>
+      </tr>
+      <tr>
+        <td>19 Feb 2026</td><td>07:00 AM</td>
+        <td><a href="https://www.investegate.co.uk/announcement/rns/rio-tinto--rio/annual-report/2">2025 Annual Report</a></td>
+      </tr>
+      <tr>
+        <td>10 Apr 2026</td><td>07:00 AM</td>
+        <td><a href="https://www.investegate.co.uk/announcement/rns/rio-tinto--rio/agm/3">2026 Annual General Meeting dates</a></td>
+      </tr>
+    </table>
+    """
+    monkeypatch.setattr(
+        "value_investor.research.filings._http_get",
+        lambda url, headers=None, timeout=60: html.encode("utf-8"),
+    )
+    rows = fetch_filings_investegate_company(
+        ticker="RIO.L",
+        company_name="Rio Tinto Group",
+    )
+    by_headline = {row["headline"]: row["period"] for row in rows}
+    assert by_headline["Second quarter production results"] == "trading_update"
+    assert by_headline["2025 Annual Report"] == "annual"
+    assert by_headline["2026 Annual General Meeting dates"] == "other"
+
+
+def test_filter_misattributed_filings_drops_rio_l_svm_collateral_rns():
+    rows = [
+        {
+            "id": "svm_noise",
+            "source": "investegate_resolved",
+            "headline": "SVM Advances U.S. Strategy as Rio Collab Concludes - Investegate",
+        },
+        {
+            "id": "rio_results",
+            "source": "investegate_direct",
+            "headline": "2025 Annual Report",
+        },
+    ]
+    filtered = filter_misattributed_filings(
+        rows,
+        company_name="Rio Tinto Group",
+        ticker="RIO.L",
+        regime="uk_rns",
+    )
+    assert [row["id"] for row in filtered] == ["rio_results"]
+
+
 def test_classify_filing_period_annual_and_interim():
     assert (
         classify_filing_period("Shell Plc 4th Quarter 2025 and Full Year Unaudited Results")
@@ -7784,6 +7864,84 @@ def test_parse_ir_cash_bridge_slides_megp_fixture():
     assert by_label["operating_cash_flow"] == 115.5
     assert by_label["capex_infrastructure"] == -65.6
     assert by_label["dividends_paid"] == -29.8
+
+
+def test_eng_20260918_22_parse_ir_cash_bridge_slides_megp_h1_2026_fixture():
+    """MEGP H1 FY2026 interim deck: net-cash bridge + interim dividend policy."""
+    from value_investor.research.filings import (
+        parse_ir_cash_bridge_slides,
+        parse_ir_dividend_policy,
+    )
+
+    fixture = Path("docs/data/research/MEGP.L/sources/filings/bodies/ir_a1826e96c65c7841.txt")
+    if not fixture.is_file():
+        pytest.skip("MEGP H1 FY2026 IR body fixture not present")
+    body = fixture.read_text(encoding="utf-8")
+    parsed = parse_ir_cash_bridge_slides(body)
+    assert parsed is not None
+    assert parsed["bridge_type"] == "net_cash_bridge"
+    by_label = {row["label"]: row["amount_millions"] for row in parsed["lines"]}
+    assert by_label["opening_net_cash"] == 26.5
+    assert by_label["operating_cash_flow"] == 38.7
+    assert by_label["purchase_of_own_shares"] == -2.7
+    assert by_label["sales_of_assets"] == 0.4
+    assert by_label["capex_infrastructure"] == -5.1
+    assert by_label["dividends_paid"] == -33.9
+    assert by_label["interest_finance_lease"] == -14.5
+    assert by_label["tax"] == -1.9
+    assert by_label["closing_net_cash"] == pytest.approx(7.5, abs=0.05)
+    assert parsed["derived"]["operating_minus_capex_millions"] == pytest.approx(33.6, abs=0.05)
+    assert parsed["derived"]["fcf_minus_dividends_millions"] == pytest.approx(-0.3, abs=0.05)
+
+    dividend = parse_ir_dividend_policy(body)
+    assert dividend is not None
+    assert dividend["interim_dividend_pence"] == 3.6
+    assert dividend.get("interim_cash_millions") == 13.5
+
+
+def test_eng_20260918_22_extract_ir_presentation_metrics_megp_h1_2026(tmp_path: Path):
+    from value_investor.research.filings import extract_ir_presentation_metrics
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    body_id = "ir_a1826e96c65c7841"
+    fixture = Path("docs/data/research/MEGP.L/sources/filings/bodies/ir_a1826e96c65c7841.txt")
+    if not fixture.is_file():
+        pytest.skip("MEGP H1 FY2026 IR body fixture not present")
+    body_path = bodies_dir / f"{body_id}.txt"
+    body_path.write_text(fixture.read_text(encoding="utf-8"), encoding="utf-8")
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": body_id,
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — 260713-ME-Group-2026-Interim-Results-Presentation.pdf",
+                        "period": "interim",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    sources_dir = tmp_path / "sources"
+    sources_dir.mkdir()
+    metrics = extract_ir_presentation_metrics(
+        filings_dir,
+        "MEGP.L",
+        sources_dir=sources_dir,
+    )
+    assert metrics["bridge_count"] >= 1
+    assert metrics["dividend_policy_count"] >= 1
+    saved = json.loads((sources_dir / "ir_presentation_metrics.json").read_text(encoding="utf-8"))
+    interim_bridges = [row for row in saved["bridges"] if row.get("period") == "interim"]
+    assert interim_bridges
+    assert interim_bridges[0]["derived"].get("operating_minus_capex_millions") is not None
+    assert saved["dividend_policy"][0].get("interim_dividend_pence") == 3.6
 
 
 def test_extract_ir_presentation_metrics_from_ir_body(tmp_path: Path):
