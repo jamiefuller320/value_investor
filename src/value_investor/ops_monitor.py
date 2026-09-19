@@ -29,7 +29,6 @@ from value_investor.engineering_queue import (
     summarize_queue,
 )
 from value_investor.engineering_recovery import (
-    housekeep_parked_tasks,
     recover_engineering_queue,
     summarize_parked_tasks_needing_attention,
 )
@@ -1568,21 +1567,23 @@ def apply_auto_fixes(
             detail = f"parked {parked_action.task_id}: {parked_action.reason}"
             results.append({"action": "park_engineering_task", "detail": detail})
 
-        housekeep = housekeep_parked_tasks(tasks_path=tasks_path, apply=True)
-        for action in housekeep.cancelled:
-            detail = f"cancelled duplicate {action.task_id}" + (
-                f" (of {action.duplicate_of})" if action.duplicate_of else ""
-            )
+        housekeep_payload = dict(recovery.housekeep or {})
+        for row in housekeep_payload.get("cancelled") or []:
+            task_id = str(row.get("task_id") or "")
+            action_kind = str(row.get("action") or "housekeep")
+            detail = f"{action_kind} {task_id}: {row.get('reason') or ''}".strip()
+            if row.get("duplicate_of"):
+                detail += f" (of {row['duplicate_of']})"
             results.append({"action": "housekeep_parked_task", "detail": detail})
             for finding in findings:
                 if finding.title == "Parked engineering tasks need manual review":
                     finding.fixed = True
                     finding.action_taken = detail
-        for action in housekeep.annotated:
+        for row in housekeep_payload.get("annotated") or []:
             results.append(
                 {
                     "action": "annotate_parked_task",
-                    "detail": f"{action.task_id}: {action.reason}",
+                    "detail": f"{row.get('task_id')}: {row.get('reason') or ''}",
                 }
             )
 

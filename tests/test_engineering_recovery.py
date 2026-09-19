@@ -387,6 +387,101 @@ def test_summarize_parked_tasks_needing_attention_skips_no_diff(tmp_path: Path):
     assert summarize_parked_tasks_needing_attention(tasks_path) == []
 
 
+def test_housekeep_parked_tasks_cancels_no_diff_only_when_requested(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "eng-no-diff-01",
+                        "title": "No diff park",
+                        "status": "parked",
+                        "parked_policy": "no_diff_cap",
+                        "parked_reason": "agent produced no code changes 2 time(s) (cap 2)",
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    below_cap = housekeep_parked_tasks(
+        tasks_path=tasks_path,
+        apply=True,
+        auto_cancel_no_diff_cap=False,
+    )
+    assert below_cap.cancelled == []
+    assert load_engineering_tasks(tasks_path)["tasks"][0]["status"] == "parked"
+
+    at_cap = housekeep_parked_tasks(
+        tasks_path=tasks_path,
+        apply=True,
+        auto_cancel_no_diff_cap=True,
+    )
+    assert len(at_cap.cancelled) == 1
+    assert at_cap.cancelled[0].action == "cancel_no_diff_cap"
+    assert load_engineering_tasks(tasks_path)["tasks"][0]["status"] == "cancelled"
+
+
+def test_housekeep_parked_tasks_cancels_superseded_parked_hunter(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    {
+                        "id": "eng-hunter-parked-01",
+                        "title": "Hunt fetchable IR source for parked euro_depth leftover ESSITY-B.ST",
+                        "status": "parked",
+                        "source": "parked_source_hunter",
+                        "parked_policy": "preflight_clash",
+                        "parked_reason": "preflight blocked PR open",
+                        "evidence": {
+                            "market_id": "euro_depth",
+                            "hunter_ticker": "ESSITY-B.ST",
+                        },
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = housekeep_parked_tasks(
+        tasks_path=tasks_path,
+        apply=True,
+        auto_cancel_superseded_parked_hunter=True,
+    )
+    assert len(result.cancelled) == 1
+    assert result.cancelled[0].action == "cancel_superseded_parked_hunter"
+    updated = load_engineering_tasks(tasks_path)
+    assert updated["tasks"][0]["status"] == "cancelled"
+
+
+def test_recover_engineering_queue_includes_tier1_housekeep(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text(
+        json.dumps(
+            {
+                "tasks": [
+                    _task("eng-20260726-05", status="merged").to_dict(),
+                    _task("eng-20260804-36", status="parked").to_dict()
+                    | {
+                        "parked_policy": "duplicate",
+                        "duplicate_of": "eng-20260726-05",
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    result = recover_engineering_queue(tasks_path=tasks_path, open_prs=[], apply=True)
+    assert result.housekeep.get("action_count") == 1
+    assert result.housekeep["cancelled"][0]["action"] == "cancel_duplicate"
+    updated = load_engineering_tasks(tasks_path)
+    parked = next(row for row in updated["tasks"] if row["id"] == "eng-20260804-36")
+    assert parked["status"] == "cancelled"
+
+
 def test_housekeep_parked_tasks_cancels_duplicate_of_merged(tmp_path: Path):
     tasks_path = tmp_path / "engineering_tasks.json"
     tasks_path.write_text(

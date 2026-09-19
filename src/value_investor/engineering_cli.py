@@ -486,6 +486,13 @@ def _cmd_recover_queue(args: argparse.Namespace) -> int:
             print(f"Reopened failed tasks: {', '.join(result.reopened)}")
         for action in result.parked:
             print(f"Parked {action.task_id}: {action.reason}")
+        for row in result.housekeep.get("cancelled") or []:
+            print(
+                f"Housekeep cancelled {row.get('task_id')}: "
+                f"{row.get('action')} — {row.get('reason')}"
+            )
+        for row in result.housekeep.get("annotated") or []:
+            print(f"Housekeep annotated {row.get('task_id')}: {row.get('reason')}")
         if not result.to_dict()["action_count"]:
             print("No queue recovery actions needed")
     return 0

@@ -21,7 +21,7 @@ dropping still-open tasks from an older run stamp. The agent then failed with
 | **Preflight before PR** | `engineering-agent.yml` runs `ftse-engineering preflight` (path guard, ruff, JSON sanity, clash scan) after push and before `gh pr create`; failures park the task (`parked_policy=preflight_clash`) and **commit the park to `main`** via `scripts/gha_commit_engineering_park.sh` so hourly queue cannot rediscover a still-open task |
 | **So-what batching** | `so_what_closure` groups `auto_queue` findings by `(area, kind)` so shared scoring plumbing is one PR, not one per ticker |
 | **Spend commit** | `scripts/gha_commit_engineering_spend.sh` rebases onto `origin/main`, re-records spend, and retries the push. Exhausted retries are `continue-on-error` so a raced `policy.json` push cannot block the draft PR |
-| **Queue recovery** | Hourly `recover-queue` marks tasks **merged** when GitHub shows a merged PR for their branch (before orphan `pr_open` reset) |
+| **Queue recovery** | Hourly `recover-queue` marks tasks **merged** when GitHub shows a merged PR for their branch (before orphan `pr_open` reset); tier-1 **housekeep** on parked tasks (policy `engineering.queue_recovery`) runs before `queue_clearing` re-eval |
 | **Ops monitor** | Daily `check_engineering_sync()`; reconciles queue and can dispatch `engineering-queue.yml` |
 | **Dashboard UI** | `ftse-engineering refresh-queue-ui --open-prs-json …` on task status changes → `automation.json` + `latest.json` with `dispatch_eligible`, `blocked_by`, `effective_dispatch_rank`, and `clash_summary` |
 

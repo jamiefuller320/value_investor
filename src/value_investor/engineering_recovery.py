@@ -53,6 +53,10 @@ DEFAULT_MAX_NO_DIFF_RUNS = 2
 DEFAULT_RETRY_COOLDOWN_HOURS = 24
 DEFAULT_CI_RED_PARK_HOURS = 48
 DEFAULT_MAX_ATTENTION_PARKED_TASKS = 8
+DEFAULT_TIER1_HOUSEKEEP_ON_RECOVER = True
+DEFAULT_AUTO_CANCEL_NO_DIFF_CAP = "at_cap"
+DEFAULT_AUTO_CANCEL_SUPERSEDED_PARKED_HUNTER = True
+AUTO_CANCEL_NO_DIFF_MODES = frozenset({"off", "at_cap", "always"})
 DEFAULT_RESUME_ATTENTION_PARKED_BELOW = 7
 DEFAULT_RESUME_IDLE_MINUTES = 30
 DEFAULT_IMMEDIATE_PARK_UNFIXABLE_PR = True
@@ -147,8 +151,10 @@ class RecoveryResult:
     skipped: list[dict[str, str]] = field(default_factory=list)
     queue_clearing: dict[str, Any] = field(default_factory=dict)
     hunter_url_monitor: dict[str, Any] = field(default_factory=dict)
+    housekeep: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        housekeep_count = int(self.housekeep.get("action_count") or 0)
         return {
             "merged": self.merged,
             "restamped": self.restamped,
@@ -159,12 +165,14 @@ class RecoveryResult:
             "skipped": self.skipped,
             "queue_clearing": self.queue_clearing,
             "hunter_url_monitor": self.hunter_url_monitor,
+            "housekeep": self.housekeep,
             "action_count": len(self.merged)
             + len(self.restamped)
             + len(self.reconciled)
             + len(self.reopened)
             + len(self.cancelled)
-            + len(self.parked),
+            + len(self.parked)
+            + housekeep_count,
         }
 
 
@@ -318,13 +326,42 @@ def _engineering_queue_recovery_policy() -> dict[str, Any]:
     immediate = block.get("immediate_park_unfixable_pr")
     if immediate is None:
         immediate = DEFAULT_IMMEDIATE_PARK_UNFIXABLE_PR
+    tier1_housekeep = block.get("tier1_housekeep_on_recover")
+    if tier1_housekeep is None:
+        tier1_housekeep = DEFAULT_TIER1_HOUSEKEEP_ON_RECOVER
+    raw_no_diff = (
+        str(block.get("auto_cancel_no_diff_cap") or DEFAULT_AUTO_CANCEL_NO_DIFF_CAP).strip().lower()
+    )
+    if raw_no_diff not in AUTO_CANCEL_NO_DIFF_MODES:
+        raw_no_diff = DEFAULT_AUTO_CANCEL_NO_DIFF_CAP
+    superseded_hunter = block.get("auto_cancel_superseded_parked_hunter")
+    if superseded_hunter is None:
+        superseded_hunter = DEFAULT_AUTO_CANCEL_SUPERSEDED_PARKED_HUNTER
     return {
         "immediate_park_unfixable_pr": bool(immediate),
         "max_attention_parked_tasks": max_attention,
         "resume_attention_parked_below": resume_below,
         "resume_idle_minutes": resume_idle_minutes,
         "ci_red_park_hours": ci_red_hours,
+        "tier1_housekeep_on_recover": bool(tier1_housekeep),
+        "auto_cancel_no_diff_cap": raw_no_diff,
+        "auto_cancel_superseded_parked_hunter": bool(superseded_hunter),
     }
+
+
+def _auto_cancel_no_diff_cap_enabled(
+    policy: dict[str, Any],
+    *,
+    tasks_path: Path,
+) -> bool:
+    mode = str(policy.get("auto_cancel_no_diff_cap") or DEFAULT_AUTO_CANCEL_NO_DIFF_CAP)
+    if mode == "off":
+        return False
+    if mode == "always":
+        return True
+    attention = count_attention_parked_tasks(tasks_path=tasks_path)
+    cap = int(policy["max_attention_parked_tasks"])
+    return attention >= cap
 
 
 def count_attention_parked_tasks(*, tasks_path: Path = COMMITTED_TASKS_PATH) -> int:
@@ -1471,6 +1508,20 @@ def recover_engineering_queue(
         apply=apply,
     ).to_dict()
 
+    recovery_policy = _engineering_queue_recovery_policy()
+    if recovery_policy.get("tier1_housekeep_on_recover"):
+        result.housekeep = housekeep_parked_tasks(
+            tasks_path=tasks_path,
+            apply=apply,
+            auto_cancel_no_diff_cap=_auto_cancel_no_diff_cap_enabled(
+                recovery_policy,
+                tasks_path=tasks_path,
+            ),
+            auto_cancel_superseded_parked_hunter=bool(
+                recovery_policy.get("auto_cancel_superseded_parked_hunter")
+            ),
+        ).to_dict()
+
     result.queue_clearing = evaluate_queue_clearing_pause(
         tasks_path=tasks_path,
         apply=apply,
@@ -1595,19 +1646,32 @@ def housekeep_parked_tasks(
     tasks_path: Path = COMMITTED_TASKS_PATH,
     apply: bool = True,
     now: datetime | None = None,
+    auto_cancel_no_diff_cap: bool = False,
+    auto_cancel_superseded_parked_hunter: bool = True,
 ) -> ParkedHousekeepResult:
     """
       Grade parked tasks and take safe automatic actions.
 
       - Cancel duplicates of already-merged tasks (``duplicate_of`` + merged target).
+      - Cancel ``no_diff_cap`` parks when ``auto_cancel_no_diff_cap`` (tier-1 backlog).
+      - Cancel parked ``parked_source_hunter`` rows when ticker already on main.
       - Backfill ``parked_policy`` on informational parks (no-diff cap, duplicate).
-    Does not reopen or merge tasks — run from daily ops monitor recovery.
+    Does not reopen or merge tasks — invoked from ``recover_engineering_queue``.
     """
     now = now or datetime.now(UTC)
     result = ParkedHousekeepResult()
     data = load_engineering_tasks(tasks_path)
     tasks = list(data.get("tasks") or [])
     merged_ids = _merged_task_ids(tasks)
+
+    from value_investor.hunter_auto_merge import (
+        PARKED_SOURCE_HUNTER_SOURCE,
+        hunter_ticker_already_resolved_on_main,
+    )
+
+    no_diff_cancel_reason = (
+        "tier-1 housekeep: no_diff_cap — re-queue via post-run/compile if still live-path"
+    )
 
     for row in tasks:
         if str(row.get("status") or "") != PARKED_STATUS:
@@ -1640,6 +1704,60 @@ def housekeep_parked_tasks(
                     action="cancel_duplicate",
                     reason=cancel_reason,
                     duplicate_of=duplicate_of,
+                )
+            )
+            continue
+
+        if (
+            auto_cancel_superseded_parked_hunter
+            and str(row.get("source") or "") == PARKED_SOURCE_HUNTER_SOURCE
+        ):
+            ticker = str((row.get("evidence") or {}).get("hunter_ticker") or "").strip().upper()
+            if ticker:
+                resolved, kind, detail = hunter_ticker_already_resolved_on_main(ticker)
+                if resolved and kind is not None:
+                    cancel_reason = f"tier-1 housekeep: superseded hunter — {detail}"
+                    evidence = dict(row.get("evidence") or {})
+                    evidence["superseded_resolution"] = kind.value
+                    evidence["superseded_reason"] = detail
+                    evidence["superseded_at"] = now.isoformat()
+                    if apply:
+                        mark_task_status(
+                            task_id,
+                            "cancelled",
+                            path=tasks_path,
+                            committed_path=tasks_path,
+                            evidence=evidence,
+                            cancelled_at=now.isoformat(),
+                            cancelled_reason=cancel_reason,
+                            cancelled_policy="superseded_hunter",
+                        )
+                    result.cancelled.append(
+                        ParkedHousekeepAction(
+                            task_id=task_id,
+                            action="cancel_superseded_parked_hunter",
+                            reason=cancel_reason,
+                        )
+                    )
+                    continue
+
+        if auto_cancel_no_diff_cap and policy == PARKED_POLICY_NO_DIFF:
+            if apply:
+                mark_task_status(
+                    task_id,
+                    "cancelled",
+                    path=tasks_path,
+                    committed_path=tasks_path,
+                    parked_policy=policy,
+                    cancelled_at=now.isoformat(),
+                    cancelled_reason=no_diff_cancel_reason,
+                    cancelled_policy="no_diff_cap_housekeep",
+                )
+            result.cancelled.append(
+                ParkedHousekeepAction(
+                    task_id=task_id,
+                    action="cancel_no_diff_cap",
+                    reason=no_diff_cancel_reason,
                 )
             )
             continue

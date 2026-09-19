@@ -341,12 +341,16 @@ When **8 or more** attention-parked engineering tasks accumulate, `engineering-q
 pauses new **engineering-agent** dispatch and **parked-hunter-compile**, and sends a
 full-queue email (ordered `list-parked` summary).
 
-Human triage (oldest first):
+**Tier-1 auto housekeep** (hourly `recover-queue`, policy
+`engineering.queue_recovery`): cancels duplicate-of-merged parks, parked hunters whose
+ticker is already on `main`, and (when at the attention cap) `no_diff_cap` parks.
+`preflight_clash` / `ci_blocked` still need human triage.
+
+Human triage (oldest first) for remaining attention parks:
 
 1. `ftse-engineering list-parked`
 2. For each task: merge the PR, cancel stale work, or unpark/reopen when appropriate
-3. Duplicate/superseded hunter parks may auto-cancel during recovery — do not rely on
-   mass auto-cancel; only obvious duplicates are trimmed automatically
+3. Tier-1 trims obvious duplicates only — do not rely on it for preflight parks
 
 **Auto-resume:** dispatch restarts when attention-parked count drops **below 7** **and**
 **30 minutes** have elapsed since the last clearing action (cancel / merge / unpark).

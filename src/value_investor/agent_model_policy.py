@@ -280,13 +280,19 @@ def default_policy() -> dict[str, Any]:
                 "resume_attention_parked_below": 7,
                 "resume_idle_minutes": 30,
                 "ci_red_park_hours": 48,
+                "tier1_housekeep_on_recover": True,
+                "auto_cancel_no_diff_cap": "at_cap",
+                "auto_cancel_superseded_parked_hunter": True,
                 "note": (
                     "immediate_park_unfixable_pr parks open/pr_open tasks when hunter-fix is "
                     "ineligible/exhausted and CI is all-red (or trust-local-gate after verify); "
                     "max_attention_parked_tasks pauses engineering dispatch and emails when "
                     "attention-parked backlog is full. Resume when count drops below "
                     "resume_attention_parked_below and resume_idle_minutes have elapsed since "
-                    "the last clearing action."
+                    "the last clearing action. tier1_housekeep_on_recover runs housekeep from "
+                    "recover-queue after parking steps; auto_cancel_no_diff_cap is off | at_cap "
+                    "| always; auto_cancel_superseded_parked_hunter cancels parked hunter rows "
+                    "whose ticker is already resolved on main."
                 ),
             },
             "traffic_control": {
