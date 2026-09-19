@@ -7786,6 +7786,84 @@ def test_parse_ir_cash_bridge_slides_megp_fixture():
     assert by_label["dividends_paid"] == -29.8
 
 
+def test_eng_20260918_22_parse_ir_cash_bridge_slides_megp_h1_2026_fixture():
+    """MEGP H1 FY2026 interim deck: net-cash bridge + interim dividend policy."""
+    from value_investor.research.filings import (
+        parse_ir_cash_bridge_slides,
+        parse_ir_dividend_policy,
+    )
+
+    fixture = Path("docs/data/research/MEGP.L/sources/filings/bodies/ir_a1826e96c65c7841.txt")
+    if not fixture.is_file():
+        pytest.skip("MEGP H1 FY2026 IR body fixture not present")
+    body = fixture.read_text(encoding="utf-8")
+    parsed = parse_ir_cash_bridge_slides(body)
+    assert parsed is not None
+    assert parsed["bridge_type"] == "net_cash_bridge"
+    by_label = {row["label"]: row["amount_millions"] for row in parsed["lines"]}
+    assert by_label["opening_net_cash"] == 26.5
+    assert by_label["operating_cash_flow"] == 38.7
+    assert by_label["purchase_of_own_shares"] == -2.7
+    assert by_label["sales_of_assets"] == 0.4
+    assert by_label["capex_infrastructure"] == -5.1
+    assert by_label["dividends_paid"] == -33.9
+    assert by_label["interest_finance_lease"] == -14.5
+    assert by_label["tax"] == -1.9
+    assert by_label["closing_net_cash"] == pytest.approx(7.5, abs=0.05)
+    assert parsed["derived"]["operating_minus_capex_millions"] == pytest.approx(33.6, abs=0.05)
+    assert parsed["derived"]["fcf_minus_dividends_millions"] == pytest.approx(-0.3, abs=0.05)
+
+    dividend = parse_ir_dividend_policy(body)
+    assert dividend is not None
+    assert dividend["interim_dividend_pence"] == 3.6
+    assert dividend.get("interim_cash_millions") == 13.5
+
+
+def test_eng_20260918_22_extract_ir_presentation_metrics_megp_h1_2026(tmp_path: Path):
+    from value_investor.research.filings import extract_ir_presentation_metrics
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    body_id = "ir_a1826e96c65c7841"
+    fixture = Path("docs/data/research/MEGP.L/sources/filings/bodies/ir_a1826e96c65c7841.txt")
+    if not fixture.is_file():
+        pytest.skip("MEGP H1 FY2026 IR body fixture not present")
+    body_path = bodies_dir / f"{body_id}.txt"
+    body_path.write_text(fixture.read_text(encoding="utf-8"), encoding="utf-8")
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": body_id,
+                        "source": "ir_allowlist",
+                        "headline": "IR allowlist document — 260713-ME-Group-2026-Interim-Results-Presentation.pdf",
+                        "period": "interim",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    sources_dir = tmp_path / "sources"
+    sources_dir.mkdir()
+    metrics = extract_ir_presentation_metrics(
+        filings_dir,
+        "MEGP.L",
+        sources_dir=sources_dir,
+    )
+    assert metrics["bridge_count"] >= 1
+    assert metrics["dividend_policy_count"] >= 1
+    saved = json.loads((sources_dir / "ir_presentation_metrics.json").read_text(encoding="utf-8"))
+    interim_bridges = [row for row in saved["bridges"] if row.get("period") == "interim"]
+    assert interim_bridges
+    assert interim_bridges[0]["derived"].get("operating_minus_capex_millions") is not None
+    assert saved["dividend_policy"][0].get("interim_dividend_pence") == 3.6
+
+
 def test_extract_ir_presentation_metrics_from_ir_body(tmp_path: Path):
     from value_investor.research.filings import extract_ir_presentation_metrics
 

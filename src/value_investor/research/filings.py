@@ -5403,10 +5403,14 @@ _BRIDGE_HEADER_RE = re.compile(
     r")\b",
     re.IGNORECASE,
 )
-_CURRENCY_MILLIONS_RE = re.compile(r"£\s*(\d+(?:\.\d+)?)\s*m", re.IGNORECASE)
+_CURRENCY_MILLIONS_RE = re.compile(
+    r"£\s*(\d+(?:\.\d+)?)\s*m(?!illion)",
+    re.IGNORECASE,
+)
 _SCRAMBLED_AMOUNT_RE = re.compile(r"\((\d+(?:\.\d+)?)\)|(?<![(\d.])(\d+(?:\.\d+)?)(?!\d)")
 _MIDDLE_BRIDGE_LABELS = (
     "operating_cash_flow",
+    "purchase_of_own_shares",
     "acquisitions",
     "sales_of_assets",
     "capex_infrastructure",
@@ -5427,6 +5431,69 @@ def _currency_amounts_millions(section: str) -> list[float]:
         _parse_bridge_amount_millions(match.group(1))
         for match in _CURRENCY_MILLIONS_RE.finditer(section)
     ]
+
+
+def _opening_closing_net_cash(section: str) -> tuple[float | None, float | None]:
+    """Opening/closing £m markers near slide labels (avoids narrative £9 million noise)."""
+    opening = closing = None
+    open_match = re.search(r"Opening\s+Net\s+Cash", section, re.IGNORECASE)
+    if open_match:
+        window = section[open_match.start() : open_match.start() + 220]
+        amounts = _currency_amounts_millions(window)
+        opening = amounts[0] if amounts else None
+    close_match = re.search(r"Closing\s+Net\s+Cash", section, re.IGNORECASE)
+    if close_match:
+        window = section[close_match.start() : close_match.start() + 320]
+        amounts = _currency_amounts_millions(window)
+        if len(amounts) >= 2:
+            closing = amounts[-1]
+        elif amounts:
+            closing = amounts[0]
+    if opening is None or closing is None:
+        fallback = _currency_amounts_millions(section)
+        if opening is None and fallback:
+            opening = fallback[0]
+        if closing is None and len(fallback) >= 2:
+            closing = fallback[1]
+    return opening, closing
+
+
+def _preprocess_bridge_amount_blob(blob: str) -> str:
+    """Fix common ME Group PDF glue (``0.438.7``) and footnote digits after ``£Xm``."""
+    blob = re.sub(r"(\d\.\d)(\d{2}\.\d)", r"\1\n\2", blob)
+    blob = re.sub(r"(\d\.\d)\((\d\.\d)\)", r"\1\n(\2)", blob)
+    blob = re.sub(r"(£\s*\d+(?:\.\d+)?\s*m)\d", r"\1", blob, flags=re.IGNORECASE)
+    return blob
+
+
+def _bridge_labels_present(section: str) -> set[str]:
+    labels: set[str] = set()
+    if re.search(r"operating\s+cash\s*flow", section, re.IGNORECASE):
+        labels.add("operating_cash_flow")
+    if re.search(r"purchase\s+of\s+own\s+shares", section, re.IGNORECASE):
+        labels.add("purchase_of_own_shares")
+    if re.search(r"\bacquisitions\b", section, re.IGNORECASE):
+        labels.add("acquisitions")
+    if re.search(r"sales\s+of\s+assets", section, re.IGNORECASE):
+        labels.add("sales_of_assets")
+    if re.search(r"investment\s+in", section, re.IGNORECASE):
+        labels.add("capex_infrastructure")
+    if re.search(r"released\s+from\s+restricted", section, re.IGNORECASE):
+        labels.add("released_from_restricted_deposits")
+    if re.search(r"\btax\b", section, re.IGNORECASE):
+        labels.add("tax")
+    if re.search(r"dividends\s+paid", section, re.IGNORECASE):
+        labels.add("dividends_paid")
+    if re.search(r"interest,\s*finance", section, re.IGNORECASE):
+        labels.add("interest_finance_lease")
+    return labels
+
+
+def _derive_closing_net_cash(opening: float, middle_lines: list[dict[str, Any]]) -> float:
+    total = opening
+    for row in middle_lines:
+        total += float(row["amount_millions"])
+    return total
 
 
 def _extract_bridge_section(text: str) -> tuple[str, str] | None:
@@ -5454,6 +5521,7 @@ def _middle_bridge_amounts(section: str) -> list[float]:
         return []
     amount_blob = section[closing_idx.end() :]
     # Drop explicit opening/closing currency markers; keep the scrambled numeric cluster.
+    amount_blob = _preprocess_bridge_amount_blob(amount_blob)
     amount_blob = _CURRENCY_MILLIONS_RE.sub(" ", amount_blob)
     amounts: list[float] = []
     for match in _SCRAMBLED_AMOUNT_RE.finditer(amount_blob):
@@ -5468,17 +5536,22 @@ def _middle_bridge_amounts(section: str) -> list[float]:
             continue
         if value in {28.0, 29.0, 30.0, 31.0} and value == int(value):
             continue
-        if abs(value) < 2 and value not in {1.0, -1.6}:
+        if value > 0 and value < 0.35:
             continue
         amounts.append(value)
     return amounts
 
 
-def _map_middle_bridge_lines(amounts: list[float]) -> list[dict[str, Any]]:
+def _map_middle_bridge_lines(
+    amounts: list[float],
+    *,
+    section: str = "",
+) -> list[dict[str, Any]]:
     """Heuristically map scrambled slide amounts onto bridge line labels."""
     if not amounts:
         return []
 
+    present = _bridge_labels_present(section) if section else set()
     remaining = list(amounts)
     lines: list[dict[str, Any]] = []
 
@@ -5497,17 +5570,32 @@ def _map_middle_bridge_lines(amounts: list[float]) -> list[dict[str, Any]]:
         remaining.pop(idx)
 
     _take("operating_cash_flow", lambda value: 50 < value <= 200)
+    if "operating_cash_flow" in present:
+        _take("operating_cash_flow", lambda value: 30 <= value <= 55)
     _take("capex_infrastructure", lambda value: value <= -50)
     _take("dividends_paid", lambda value: -40 <= value <= -20, pick="min")
-    _take("acquisitions", lambda value: -25 <= value <= -15)
-    _take("interest_finance_lease", lambda value: -15 <= value <= -5)
-    _take("sales_of_assets", lambda value: 0 < value <= 10)
-    _take("released_from_restricted_deposits", lambda value: value == 1.0)
-    _take("tax", lambda value: -5 <= value <= -1)
+    if not any(row["label"] == "capex_infrastructure" for row in lines):
+        _take("capex_infrastructure", lambda value: -45 <= value <= -25)
+    if "acquisitions" in present or not present:
+        _take("acquisitions", lambda value: -25 <= value <= -15)
+    if "purchase_of_own_shares" in present:
+        _take("purchase_of_own_shares", lambda value: -5 <= value <= -2)
+    _take("interest_finance_lease", lambda value: -20 <= value <= -5, pick="min")
+    if not any(row["label"] == "capex_infrastructure" for row in lines):
+        _take("capex_infrastructure", lambda value: -10 <= value <= -3)
+    _take("sales_of_assets", lambda value: 0 < value <= 2)
+    if not any(row["label"] == "sales_of_assets" for row in lines):
+        _take("sales_of_assets", lambda value: 0 < value <= 10)
+    if "released_from_restricted_deposits" in present or not present:
+        _take("released_from_restricted_deposits", lambda value: value == 1.0)
+    _take("tax", lambda value: -5 <= value <= -1.5)
+    if not any(row["label"] == "operating_cash_flow" for row in lines):
+        _take("operating_cash_flow", lambda value: -20 <= value <= 29)
 
-    label_cycle = [
-        label for label in _MIDDLE_BRIDGE_LABELS if label not in {row["label"] for row in lines}
-    ]
+    known = {row["label"] for row in lines}
+    label_cycle = [label for label in _MIDDLE_BRIDGE_LABELS if label not in known]
+    if present:
+        label_cycle = [label for label in label_cycle if label in present]
     for amount, label in zip(remaining, label_cycle, strict=False):
         lines.append({"label": label, "amount_millions": amount})
     return lines
@@ -5526,14 +5614,17 @@ def parse_ir_cash_bridge_slides(body_text: str) -> dict[str, Any] | None:
     if extracted is None:
         return None
     bridge_type, section = extracted
-    currency_amounts = _currency_amounts_millions(section)
-    opening = currency_amounts[0] if currency_amounts else None
-    closing = currency_amounts[1] if len(currency_amounts) >= 2 else None
+    opening, closing = _opening_closing_net_cash(section)
     middle_amounts = _middle_bridge_amounts(section)
+    middle_lines = _map_middle_bridge_lines(middle_amounts, section=section)
     lines: list[dict[str, Any]] = []
     if opening is not None:
         lines.append({"label": "opening_net_cash", "amount_millions": opening})
-    lines.extend(_map_middle_bridge_lines(middle_amounts))
+    lines.extend(middle_lines)
+    if opening is not None and middle_lines:
+        derived_closing = _derive_closing_net_cash(opening, middle_lines)
+        if closing is None or (opening == closing and abs(derived_closing - opening) > 0.75):
+            closing = derived_closing
     if closing is not None:
         lines.append({"label": "closing_net_cash", "amount_millions": closing})
     if len(lines) < 2:
@@ -6151,6 +6242,18 @@ _ORDINARY_DIVIDEND_POLICY_RE = re.compile(
     r"ordinary dividend of\s+([\d.]+)\s*p(?:er share)?",
     re.IGNORECASE,
 )
+_INTERIM_DIVIDEND_POLICY_RE = re.compile(
+    r"interim dividend of\s+([\d.]+)\s*p(?:er share)?",
+    re.IGNORECASE,
+)
+_INTERIM_DIVIDEND_PER_SHARE_TABLE_RE = re.compile(
+    r"INTERIM\s+DIVIDEND\s+PER\s+SHARE[\s\S]{0,400}?H1\s+2026[\s\S]{0,120}?([\d.]+)\s*p",
+    re.IGNORECASE,
+)
+_INTERIM_DIVIDEND_CASH_RE = re.compile(
+    r"Interim dividend will return\s+£?\s*([\d,]+(?:\.\d+)?)\s*m(?:illion)?",
+    re.IGNORECASE,
+)
 _PROPOSED_DIVIDEND_CASH_RE = re.compile(
     r"c\.?\s*£?\s*([\d,]+)\s*m(?:illion)?",
     re.IGNORECASE,
@@ -6283,6 +6386,20 @@ def parse_ir_dividend_policy(body_text: str) -> dict[str, Any] | None:
         if cash_match:
             policy["proposed_cash_millions"] = _parse_table_number(cash_match.group(1))
         break
+    interim_match = _INTERIM_DIVIDEND_POLICY_RE.search(window)
+    if interim_match:
+        policy["interim_dividend_pence"] = float(interim_match.group(1))
+        tail = window[interim_match.start() : interim_match.end() + 160]
+        cash_match = _PROPOSED_DIVIDEND_CASH_RE.search(tail)
+        if cash_match:
+            policy["interim_cash_millions"] = _parse_table_number(cash_match.group(1))
+    if "interim_dividend_pence" not in policy:
+        table_match = _INTERIM_DIVIDEND_PER_SHARE_TABLE_RE.search(window)
+        if table_match:
+            policy["interim_dividend_pence"] = float(table_match.group(1))
+    interim_cash = _INTERIM_DIVIDEND_CASH_RE.search(window)
+    if interim_cash and "interim_cash_millions" not in policy:
+        policy["interim_cash_millions"] = _parse_table_number(interim_cash.group(1))
     final_match = _FINAL_DIVIDEND_PROPOSED_RE.search(window)
     if final_match:
         policy["final_dividend_pence"] = float(final_match.group(1))
@@ -6310,9 +6427,12 @@ def parse_ir_dividend_policy(body_text: str) -> dict[str, Any] | None:
         and "full_year_dividend_pence" not in policy
         and "total_dividend_pence" not in policy
         and "dividend_cover_min" not in policy
+        and "interim_dividend_pence" not in policy
     ):
         return None
     if policy.get("proposed_cash_millions") and policy.get("ordinary_dividend_pence"):
+        policy["parse_confidence"] = "high"
+    elif policy.get("interim_cash_millions") and policy.get("interim_dividend_pence"):
         policy["parse_confidence"] = "high"
     elif policy.get("total_dividend_pence") or policy.get("full_year_dividend_pence"):
         policy["parse_confidence"] = "high"
