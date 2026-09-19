@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-19T17:48:40.812456+00:00",
+  "compiled_at": "2026-09-19T18:15:44.518917+00:00",
   "run_at": null,
-  "task_count": 63,
+  "task_count": 64,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -3371,6 +3371,57 @@
       "merged_at": "2026-09-18T13:53:33.008024+00:00"
     },
     {
+      "id": "eng-20260919-08",
+      "area": "scoring",
+      "title": "dividend: When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy. [2/3]",
+      "summary": "First-principle slice 2/3 of: When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy.. topics=dividend paths=4",
+      "priority": "medium",
+      "priority_score": 25.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "HIK.L"
+        ],
+        "recorded_at": "2026-09-06T07:48:26.505319+00:00",
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "topics=dividend paths=4",
+        "narrow_parent_title": "When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy.",
+        "narrow_cohesion_bypass": false,
+        "narrow_split_group_id": "5198336d4a21",
+        "narrow_split_index": 2,
+        "narrow_split_count": 3,
+        "narrow_topics": [
+          "dividend"
+        ],
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 23.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/scoring/dividend_sustainability_overlay.py",
+        "src/value_investor/scoring/dividend_yield_overlay.py",
+        "src/value_investor/scoring/snapshot.py",
+        "tests/test_pipeline.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": true,
+      "status": "open"
+    },
+    {
       "id": "eng-20260919-07",
       "area": "scoring",
       "title": "fcf: When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy. [1/3]",
@@ -3719,8 +3770,8 @@
     "filings_with_body": 4139
   },
   "queue_clearing": {
-    "attention_parked_count": 6,
-    "evaluated_at": "2026-09-19T17:49:34.207407+00:00",
+    "attention_parked_count": 7,
+    "evaluated_at": "2026-09-19T18:15:41.790288+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
