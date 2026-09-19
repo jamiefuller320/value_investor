@@ -1,13 +1,22 @@
 {
-  "run_at": "2026-09-18T07:46:32.075815+00:00",
+  "run_at": "2026-09-19T07:46:29.555758+00:00",
   "overall": "warn",
   "findings": [
     {
       "severity": "warn",
+      "category": "ingest",
+      "title": "Ingest loop hit runtime cutoff",
+      "summary": "Last run deferred 53 ticker(s) after completing 3 (runtime_budget) — backlog resume or chained chunk should drain remainder.",
+      "auto_fixable": false,
+      "fixed": false,
+      "action_taken": null
+    },
+    {
+      "severity": "warn",
       "category": "engineering",
-      "title": "Orphaned pr_open engineering tasks",
-      "summary": "Tasks without matching open PR: eng-20260917-01",
-      "auto_fixable": true,
+      "title": "Parked engineering tasks need manual review",
+      "summary": "8 parked task(s): eng-20260918-06, eng-20260918-22, eng-20260918-21, eng-20260918-20, eng-20260918-19",
+      "auto_fixable": false,
       "fixed": false,
       "action_taken": null
     }
@@ -18,11 +27,11 @@
     {
       "workflow": "ingest-loop.yml",
       "name": "FTSE Ingest Loop",
-      "expected_today": true,
+      "expected_today": false,
       "max_age_hours": 30,
-      "last_success_at": "2026-09-17T14:52:31+00:00",
-      "last_success_run_id": 35236496356,
-      "age_hours": 16.9,
+      "last_success_at": "2026-09-18T17:48:34+00:00",
+      "last_success_run_id": 35376509965,
+      "age_hours": 14.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -32,9 +41,9 @@
       "name": "Automation Orchestrator",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-18T06:50:49+00:00",
-      "last_success_run_id": 35316673415,
-      "age_hours": 0.9,
+      "last_success_at": "2026-09-18T15:03:20+00:00",
+      "last_success_run_id": 35360052531,
+      "age_hours": 16.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -42,11 +51,11 @@
     {
       "workflow": "engineering-queue.yml",
       "name": "FTSE Engineering Queue",
-      "expected_today": true,
+      "expected_today": false,
       "max_age_hours": 3,
-      "last_success_at": "2026-09-18T07:15:30+00:00",
-      "last_success_run_id": 35318565821,
-      "age_hours": 0.5,
+      "last_success_at": "2026-09-19T05:44:20+00:00",
+      "last_success_run_id": 35424753723,
+      "age_hours": 2.0,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -56,9 +65,9 @@
       "name": "CI main nightly",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-17T12:39:41+00:00",
-      "last_success_run_id": 35222379799,
-      "age_hours": 19.1,
+      "last_success_at": "2026-09-18T12:17:49+00:00",
+      "last_success_run_id": 35343909968,
+      "age_hours": 19.5,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -70,7 +79,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-13T13:21:51+00:00",
       "last_success_run_id": 34759632502,
-      "age_hours": 114.4,
+      "age_hours": 138.4,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -82,7 +91,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-18T06:51:55+00:00",
       "last_success_run_id": 35316754228,
-      "age_hours": 0.9,
+      "age_hours": 24.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -94,7 +103,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-13T06:54:58+00:00",
       "last_success_run_id": 34743924147,
-      "age_hours": 120.9,
+      "age_hours": 144.9,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -106,7 +115,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-15T07:42:59+00:00",
       "last_success_run_id": 34943118252,
-      "age_hours": 72.1,
+      "age_hours": 96.1,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -118,7 +127,7 @@
       "max_age_hours": 36,
       "last_success_at": "2026-09-13T16:29:07+00:00",
       "last_success_run_id": 34768712420,
-      "age_hours": 111.3,
+      "age_hours": 135.3,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
@@ -126,10 +135,10 @@
     {
       "workflow": "paper-auto.yml",
       "name": "FTSE Paper Automation",
-      "expected_today": true,
+      "expected_today": false,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-17T08:26:57+00:00",
-      "last_success_run_id": 35199715583,
+      "last_success_at": "2026-09-18T08:26:20+00:00",
+      "last_success_run_id": 35324372457,
       "age_hours": 23.3,
       "stale": false,
       "recent_failures_24h": 0,
@@ -140,23 +149,23 @@
       "name": "FTSE Ops Monitor",
       "expected_today": true,
       "max_age_hours": 28,
-      "last_success_at": "2026-09-17T17:37:04+00:00",
-      "last_success_run_id": 35253826657,
-      "age_hours": 14.2,
+      "last_success_at": "2026-09-18T17:03:39+00:00",
+      "last_success_run_id": 35372105760,
+      "age_hours": 14.7,
       "stale": false,
       "recent_failures_24h": 0,
       "unresolved_failures_12h": 0
     }
   ],
   "queue_status": {
-    "open_count": 1,
-    "pr_open_count": 1,
-    "parked_count": 7,
-    "merged_count": 24,
+    "open_count": 2,
+    "pr_open_count": 0,
+    "parked_count": 15,
+    "merged_count": 38,
     "failed_count": 0,
-    "next_task_id": "eng-20260918-01",
+    "next_task_id": "eng-20260918-23",
     "in_flight_branch": null,
-    "in_flight_pr": 699,
+    "in_flight_pr": null,
     "spend_since_checkpoint_usd": 10.4,
     "spend_checkpoint_usd": 60.0,
     "spend_blocked": false

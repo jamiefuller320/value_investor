@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-18T19:51:52.489106+00:00`
+Generated: `2026-09-19T07:46:50.628410+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -31,25 +31,17 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - _(none)_
 
 ## Merges today (monitor independent verify)
-- `compile_cap_drain`/verified PR #717 `eng-20260918-15` — The screen still emits strong_buy on the pre-deal consolidated group (advertising yield, company-adjusted FCF, P/E 11.6) after a announced carve-out that change
-- `compile_cap_drain`/verified PR #714 `eng-20260918-14` — Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading
-- `compile_cap_drain`/verified PR #713 `eng-20260918-10` — When a sal [2/2]
-- `compile_cap_drain`/verified PR #712 `eng-20260918-11` — Require annual/interim workers to extract continuing versus discontinued / held-for-sale splits, deal terms, guidance, FCF versus dividend cover, and reporting 
-- `compile_cap_drain`/verified PR #711 `eng-20260918-09` — Select the latest dated annual and interim *results* bodies (FY25 29bdb56d3cedb539, H1 2026 d19c5d3b8e0bb46a — not the 30 June period-end duplicate) [1/2]
-- `compile_cap_drain`/verified PR #710 `eng-20260918-01` — dividend: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; kee
-- `compile_cap_drain`/verified PR #709 `eng-20260918-08` — dividend: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_
-- `compile_cap_drain`/verified PR #706 `eng-20260918-07` — fcf: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_defin
-- `ci_fix`/verified PR #704 `eng-20260918-05` — dividend: Primary dividend-sustainability overlay on statutory FCF/dividend; warn when interim dividend is cut despite high trailing yield pass. [2/2]
-- `compile_cap_drain`/verified PR #703 `eng-20260918-04` — fcf: Primary dividend-sustainability overlay on statutory FCF/dividend; warn when interim dividend is cut despite high trailing yield pass. [1/2]
-- `compile_cap_drain`/verified PR #702 `eng-20260918-03` — fcf: Media cyclicality + thin FCF coverage overlay (advertising >40%, Piotroski ≤4, statutory FCF/dividend ≤1.1×). [1/2]
-- `compile_cap_drain`/verified PR #701 `eng-20260918-02` — Auto-flag cyclical exposure when principal-risk filings cite recession/discretionary spending and any interim month shows photobooth revenue decline >10% (MEGP
-- `compile_cap_drain`/verified PR #699 `eng-20260917-01` — Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_defi
-- `compile_cap_drain`/verified PR #697 `eng-20260917-10` — fcf: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf
-- `human`/human PR #692 `eng-20260917-08` — Enable cyclical_exposure for UK heavyside construction-materials names when GB volume language and cement-output “historic lows” are in the same tape [1/2]
+- _(none merged today)_
 
 ## PR fix occasions — common failure reasons
 - Occasion count: 1
 - `ruff_format` — 1×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 2 (open=2, resolved=0)
+- [open] WARN Ingest loop hit runtime cutoff — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
+- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
