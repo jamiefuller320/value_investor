@@ -732,6 +732,8 @@ def profit_to_cash_yoy_decline_for_ticker(
 
 ADVERTISING_REVENUE_SHARE_MEDIA_THRESHOLD = 0.40
 MEDIA_THIN_STATUTORY_FCF_DIVIDEND_COVERAGE_MAX = 1.1
+THIN_STATUTORY_FCF_DIVIDEND_COVERAGE_MAX = 1.0
+ECONOMIC_MOAT_MODEL_ID = "economic_moat"
 
 _AD_REVENUE_TABLE_RES = (
     re.compile(
@@ -830,6 +832,109 @@ def resolve_statutory_fcf_dividend_coverage(
         free_cashflow=free_cashflow,
     )
     return fcf_dividend_coverage(statutory_fcf, dividends_paid)
+
+
+def _parse_model_failed_criteria(value: Any) -> list[str]:
+    if isinstance(value, list):
+        return [str(item) for item in value]
+    if isinstance(value, str) and value.strip():
+        try:
+            parsed = ast.literal_eval(value)
+            if isinstance(parsed, list):
+                return [str(item) for item in parsed]
+        except (SyntaxError, ValueError):
+            return [value]
+    return []
+
+
+def _failed_criteria_include_leverage(failed: list[str]) -> bool:
+    return any("leverage" in item.lower() for item in failed)
+
+
+def economic_moat_fails_on_leverage_from_model_failures(
+    model_failures: dict[str, list[str]] | None,
+) -> bool:
+    """True when persisted report failures show Economic Moat failed on leverage."""
+    if not model_failures:
+        return False
+    reasons = model_failures.get("Economic Moat")
+    if not reasons:
+        return False
+    return _failed_criteria_include_leverage([str(item) for item in reasons])
+
+
+def economic_moat_fails_on_leverage(ticker_models: pd.DataFrame) -> bool:
+    """True when Economic Moat fails specifically on excessive leverage (HIK.L-style)."""
+    if ticker_models.empty or "model_id" not in ticker_models.columns:
+        return False
+    moat = ticker_models[ticker_models["model_id"] == ECONOMIC_MOAT_MODEL_ID]
+    if moat.empty:
+        return False
+    row = moat.iloc[0]
+    if bool(row.get("passed")):
+        return False
+    failed = _parse_model_failed_criteria(row.get("failed_criteria"))
+    return _failed_criteria_include_leverage(failed)
+
+
+def statutory_fcf_dividend_cover_below_one(
+    *,
+    fcf_dividend_coverage_net: float | None,
+    operating_cashflow: float | None = None,
+    capital_expenditure: float | None = None,
+    dividends_paid: float | None = None,
+    free_cashflow: float | None = None,
+) -> bool:
+    """True when statutory OCF−CapEx dividend cover is strictly below 1.0×."""
+    cover = resolve_statutory_fcf_dividend_coverage(
+        fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+        operating_cashflow=operating_cashflow,
+        capital_expenditure=capital_expenditure,
+        dividends_paid=dividends_paid,
+        free_cashflow=free_cashflow,
+    )
+    if cover is None or (isinstance(cover, float) and pd.isna(cover)):
+        return False
+    return float(cover) < THIN_STATUTORY_FCF_DIVIDEND_COVERAGE_MAX
+
+
+def statutory_fcf_moat_leverage_overlay_triggered(
+    *,
+    ticker_models: pd.DataFrame,
+    fcf_dividend_coverage_net: float | None,
+    operating_cashflow: float | None = None,
+    capital_expenditure: float | None = None,
+    dividends_paid: float | None = None,
+    free_cashflow: float | None = None,
+    model_failures: dict[str, list[str]] | None = None,
+) -> bool:
+    """Thin statutory dividend cover with Economic Moat failing on leverage."""
+    moat_leverage_fail = economic_moat_fails_on_leverage(ticker_models)
+    if not moat_leverage_fail:
+        moat_leverage_fail = economic_moat_fails_on_leverage_from_model_failures(model_failures)
+    if not moat_leverage_fail:
+        return False
+    return statutory_fcf_dividend_cover_below_one(
+        fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+        operating_cashflow=operating_cashflow,
+        capital_expenditure=capital_expenditure,
+        dividends_paid=dividends_paid,
+        free_cashflow=free_cashflow,
+    )
+
+
+def cap_research_verdict_at_accumulate(verdict: str | None) -> str | None:
+    """Ceiling research verdict slugs at accumulate (buy/confirm cannot exceed accumulate)."""
+    if verdict is None:
+        return None
+    from value_investor.research.verdict import coerce_research_verdict
+
+    coerced = coerce_research_verdict(verdict)
+    if coerced is None:
+        return str(verdict).strip() or None
+    if coerced in ("caution", "pass"):
+        return coerced
+    return "accumulate"
 
 
 def fcf_three_way_mismatch_flagged(

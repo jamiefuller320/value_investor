@@ -16,11 +16,16 @@ from value_investor.scoring.fcf import (
     fcf_filing_screen_mismatch,
     reconcile_fcf_for_ticker,
     screen_ttm_from_row,
+    statutory_fcf_moat_leverage_overlay_triggered,
 )
 
 FCF_YIELD_DEPENDENT_MODEL_IDS = ("fcf_yield", "composite_value", "quality_value")
 FCF_BASIS_CONVICTION_MULTIPLIER = 0.85
 FCF_BASIS_MISMATCH_NOTE_MARKER = "fcf basis mismatch"
+STATUTORY_FCF_MOAT_LEVERAGE_CONVICTION_MULTIPLIER = 0.85
+STATUTORY_FCF_MOAT_LEVERAGE_NOTE_MARKER = (
+    "statutory FCF dividend cover <1.0× with Economic Moat leverage fail"
+)
 
 _SIGNAL_RANK = {
     "strong_buy": 4,
@@ -772,6 +777,146 @@ def enrich_signals_with_media_cyclical_thin_fcf_overlay(
     out["adjusted_signal"] = adjusted
     out["conviction_score"] = convictions
     out["cyclical_exposure_detected"] = cyclical_detected
+    return out
+
+
+def cap_signal_for_statutory_fcf_moat_leverage_overlay(signal: str) -> str:
+    """Cap at research-equivalent caution: strong_buy -> buy, buy -> hold."""
+    if signal == "strong_buy":
+        return "buy"
+    if signal == "buy":
+        return "hold"
+    return signal
+
+
+def cap_conviction_for_statutory_fcf_moat_leverage_overlay(conviction_score: float) -> float:
+    """Reduce conviction when thin statutory cover coincides with moat leverage fail."""
+    return max(0.0, float(conviction_score) * STATUTORY_FCF_MOAT_LEVERAGE_CONVICTION_MULTIPLIER)
+
+
+def apply_statutory_fcf_moat_leverage_overlay_to_signal(
+    signal: str,
+    *,
+    ticker_models: pd.DataFrame,
+    fcf_dividend_coverage_net: float | None,
+    operating_cashflow: float | None = None,
+    capital_expenditure: float | None = None,
+    dividends_paid: float | None = None,
+    free_cashflow: float | None = None,
+    model_failures: dict[str, list[str]] | None = None,
+    conviction_score: float,
+    adjusted_signal: str | None = None,
+) -> tuple[bool, str, float]:
+    """Return overlay flag, conservative adjusted signal, and capped conviction."""
+    base_adjusted = adjusted_signal or signal
+    base_conviction = float(conviction_score or 0.0)
+    if not statutory_fcf_moat_leverage_overlay_triggered(
+        ticker_models=ticker_models,
+        fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+        operating_cashflow=operating_cashflow,
+        capital_expenditure=capital_expenditure,
+        dividends_paid=dividends_paid,
+        free_cashflow=free_cashflow,
+        model_failures=model_failures,
+    ):
+        return False, base_adjusted, base_conviction
+    capped_signal = cap_signal_for_statutory_fcf_moat_leverage_overlay(signal)
+    return (
+        True,
+        _more_conservative_signal(base_adjusted, capped_signal),
+        cap_conviction_for_statutory_fcf_moat_leverage_overlay(base_conviction),
+    )
+
+
+def apply_statutory_fcf_moat_leverage_export_enforcement(
+    *,
+    signal: str,
+    adjusted_signal: str,
+    conviction_score: float,
+    ticker_models: pd.DataFrame,
+    statutory_fcf_moat_leverage_overlay: bool = False,
+    fcf_dividend_coverage_net: float | None = None,
+    operating_cashflow: float | None = None,
+    capital_expenditure: float | None = None,
+    dividends_paid: float | None = None,
+    free_cashflow: float | None = None,
+    model_failures: dict[str, list[str]] | None = None,
+) -> tuple[bool, str, float]:
+    """Re-apply statutory FCF + moat leverage caps on export/snapshot paths."""
+    if statutory_fcf_moat_leverage_overlay:
+        capped = cap_signal_for_statutory_fcf_moat_leverage_overlay(signal)
+        merged = _more_conservative_signal(adjusted_signal, capped)
+        if merged == adjusted_signal:
+            return True, merged, float(conviction_score or 0.0)
+        return (
+            True,
+            merged,
+            cap_conviction_for_statutory_fcf_moat_leverage_overlay(float(conviction_score or 0.0)),
+        )
+    triggered, merged, conviction = apply_statutory_fcf_moat_leverage_overlay_to_signal(
+        signal,
+        ticker_models=ticker_models,
+        fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+        operating_cashflow=operating_cashflow,
+        capital_expenditure=capital_expenditure,
+        dividends_paid=dividends_paid,
+        free_cashflow=free_cashflow,
+        model_failures=model_failures,
+        conviction_score=conviction_score,
+        adjusted_signal=adjusted_signal,
+    )
+    if not triggered:
+        return False, adjusted_signal, float(conviction_score or 0.0)
+    return True, merged, conviction
+
+
+def enrich_signals_with_statutory_fcf_moat_leverage_overlay(
+    signals: pd.DataFrame,
+    model_results: pd.DataFrame,
+) -> pd.DataFrame:
+    """Add statutory FCF + moat leverage overlay flags and cap conviction when triggered."""
+    if signals.empty:
+        return signals
+
+    out = signals.copy()
+    flags: list[bool] = []
+    adjusted: list[str] = []
+    convictions: list[float] = []
+
+    for _, row in out.iterrows():
+        ticker = str(row["ticker"])
+        ticker_models = model_results[model_results["ticker"] == ticker]
+        existing = row.get("adjusted_signal")
+        existing_adjusted = (
+            str(existing)
+            if existing is not None and not (isinstance(existing, float) and pd.isna(existing))
+            else None
+        )
+        coverage_net = row.get("fcf_dividend_coverage_net")
+        fcf_dividend_coverage_net = (
+            float(coverage_net)
+            if coverage_net is not None
+            and not (isinstance(coverage_net, float) and pd.isna(coverage_net))
+            else None
+        )
+        triggered, merged, conviction = apply_statutory_fcf_moat_leverage_overlay_to_signal(
+            str(row.get("signal") or "hold"),
+            ticker_models=ticker_models,
+            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+            operating_cashflow=_float_or_none(row.get("operating_cashflow")),
+            capital_expenditure=_float_or_none(row.get("capital_expenditure")),
+            dividends_paid=_float_or_none(row.get("dividends_paid")),
+            free_cashflow=_float_or_none(row.get("free_cashflow")),
+            conviction_score=float(row.get("conviction_score") or 0.0),
+            adjusted_signal=existing_adjusted,
+        )
+        flags.append(triggered)
+        adjusted.append(merged)
+        convictions.append(conviction)
+
+    out["statutory_fcf_moat_leverage_overlay"] = flags
+    out["adjusted_signal"] = adjusted
+    out["conviction_score"] = convictions
     return out
 
 

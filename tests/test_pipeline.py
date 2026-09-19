@@ -294,6 +294,36 @@ def test_refresh_snapshot_honours_fcf_action_note_when_overlay_false(tmp_path: P
     assert written["conviction_score"] == pytest.approx(0.8022 * 0.85)
 
 
+def test_statutory_fcf_moat_leverage_overlay_caps_buy_despite_research_accumulate():
+    """HIK.L-style thin statutory cover + moat leverage fail must not keep buy-tier adjusted signal."""
+    from value_investor.scoring.snapshot import merge_research_verdict_into_snapshot
+
+    snapshot = {
+        "ticker": "HIK.L",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.82,
+        "fcf_dividend_coverage_net": 0.72,
+        "model_failures": {"Economic Moat": ["leverage too high"]},
+    }
+    merged = merge_research_verdict_into_snapshot(
+        snapshot,
+        research_verdict="accumulate",
+    )
+    assert merged["research_verdict"] == "accumulate"
+    assert merged["statutory_fcf_moat_leverage_overlay"] is True
+    assert merged["adjusted_signal"] == "hold"
+    assert merged["conviction_score"] == pytest.approx(0.82 * 0.85)
+
+
+def test_cap_research_verdict_at_accumulate_coerces_buy_slug():
+    from value_investor.scoring.fcf import cap_research_verdict_at_accumulate
+
+    assert cap_research_verdict_at_accumulate("buy") == "accumulate"
+    assert cap_research_verdict_at_accumulate("confirm") == "accumulate"
+    assert cap_research_verdict_at_accumulate("caution") == "caution"
+
+
 def test_sync_research_verdict_preserves_fcf_overlay_cap_for_hln_style_report(tmp_path: Path):
     report = honour_fcf_action_note_enforcement(
         _minimal_report(

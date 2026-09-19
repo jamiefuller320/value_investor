@@ -18,6 +18,7 @@ from value_investor.scoring.dividend_yield_overlay import (
 from value_investor.scoring.fcf import (
     _float_or_none,
     advertising_revenue_share_for_ticker,
+    cap_research_verdict_at_accumulate,
     enrich_screening_snapshot_fcf_dividend_coverage,
     resolve_statutory_fcf_dividend_coverage,
     screen_ttm_from_row,
@@ -26,6 +27,7 @@ from value_investor.scoring.fcf_basis_overlay import (
     apply_dividend_sustainability_export_enforcement,
     apply_fcf_export_enforcement,
     apply_media_cyclical_thin_fcf_export_enforcement,
+    apply_statutory_fcf_moat_leverage_export_enforcement,
 )
 from value_investor.scoring.healthcare_overlay import piotroski_score_for_ticker
 from value_investor.storage import read_json, write_json
@@ -46,6 +48,7 @@ _RUN_SNAPSHOT_OPTIONAL_SIGNAL_COLUMNS = (
     "media_cyclical_thin_fcf_overlay",
     "advertising_revenue_share",
     "dividend_sustainability_overlay",
+    "statutory_fcf_moat_leverage_overlay",
     "interim_dividend_cut_flagged",
     "interim_dividend_cut_pct",
     "interim_quality_overlay",
@@ -214,6 +217,30 @@ def enforce_fcf_basis_in_snapshot(
         updated["dividend_sustainability_overlay"] = True
         updated["adjusted_signal"] = div_adjusted
         updated["conviction_score"] = div_conviction
+
+    model_failures_raw = updated.get("model_failures")
+    model_failures = dict(model_failures_raw) if isinstance(model_failures_raw, dict) else None
+    moat_overlay, moat_adjusted, moat_conviction = (
+        apply_statutory_fcf_moat_leverage_export_enforcement(
+            signal=screen_signal,
+            adjusted_signal=str(updated.get("adjusted_signal") or merged_adjusted),
+            conviction_score=float(updated.get("conviction_score") or 0.0),
+            ticker_models=ticker_models,
+            statutory_fcf_moat_leverage_overlay=bool(
+                updated.get("statutory_fcf_moat_leverage_overlay")
+            ),
+            fcf_dividend_coverage_net=_float_or_none(updated.get("fcf_dividend_coverage_net")),
+            operating_cashflow=_float_or_none(updated.get("operating_cashflow")),
+            capital_expenditure=_float_or_none(updated.get("capital_expenditure")),
+            dividends_paid=_float_or_none(updated.get("dividends_paid")),
+            free_cashflow=_float_or_none(updated.get("free_cashflow")),
+            model_failures=model_failures,
+        )
+    )
+    if moat_overlay:
+        updated["statutory_fcf_moat_leverage_overlay"] = True
+        updated["adjusted_signal"] = moat_adjusted
+        updated["conviction_score"] = moat_conviction
     return updated
 
 
@@ -230,7 +257,7 @@ def merge_research_verdict_into_snapshot(
         return enforce_fcf_basis_in_snapshot(snapshot)
 
     updated = dict(snapshot)
-    updated["research_verdict"] = research_verdict
+    updated["research_verdict"] = cap_research_verdict_at_accumulate(research_verdict)
     if research_risk_level is not None:
         updated["research_risk_level"] = research_risk_level
     if research_confidence is not None:
@@ -239,7 +266,7 @@ def merge_research_verdict_into_snapshot(
         updated["research_rationale"] = research_rationale
 
     screen_signal = str(updated.get("signal") or "hold")
-    research_adjusted = compute_adjusted_signal(screen_signal, research_verdict)  # type: ignore[arg-type]
+    research_adjusted = compute_adjusted_signal(screen_signal, updated["research_verdict"])  # type: ignore[arg-type]
     return enforce_fcf_basis_in_snapshot(updated, adjusted_signal=research_adjusted)
 
 
