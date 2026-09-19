@@ -596,9 +596,7 @@ def _sprint_progress(
         gate_health["ingest_exhausted"] = True
     ready = bool(ingest_parity) or sprint_ingest_complete(gate_health)
 
-    entered_in_window = (
-        sprint_entered_at is not None and sprint_entered_at >= window_start
-    )
+    entered_in_window = sprint_entered_at is not None and sprint_entered_at >= window_start
 
     warnings: list[dict[str, str]] = []
     if not window:
