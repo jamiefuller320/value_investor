@@ -9976,6 +9976,144 @@ def test_bxp_iwb_beximco_investegate_refetch_rejects_period_mismatch():
         assert reason == "period_mismatch"
 
 
+def test_eng_20260919_01_compose_itv_fy25_presentation_fcf_tail_beyond_lead_cut():
+    """eng-20260919-01: >80k ITV FY deck must splice FCF tail after 28k lead (ir_0d388cd522a7cf4c)."""
+    import hashlib
+
+    from value_investor.research.filings import (
+        _PDF_DEPTH_LEAD_CHARS,
+        parse_ir_adjusted_cash_flow_bridge,
+    )
+
+    url = (
+        "https://www.itvplc.com/~/media/Files/I/ITV-PLC-V2/"
+        "ITV%20Plc%202025%20FY%20Results%20Presentation.pdf"
+    )
+    assert hashlib.sha256(url.encode("utf-8")).hexdigest()[:16] == "0d388cd522a7cf4c"
+
+    deck_tail = (
+        "Profit to Cash Conversion and Free Cash Flow\n"
+        "Twelve months to 31 December 2025\n"
+        "Adjusted EBITA 534 542\n"
+        "Working capital movement (196) (144)\n"
+        "Depreciation 48 47\n"
+        "Share-based compensation 16 18\n"
+        "Acquisition of property, plant and equipment and intangible assets1 (54) (49)\n"
+        "Lease liability payments (including lease interest) (26) (25)\n"
+        "Adjusted cash flow 348 451\n"
+        "Profit to cash ratio 65% 83%\n"
+        "Adjusted cash flow 348 451\n"
+        "Net cash interest paid (excluding lease interest) (34) (18)\n"
+        "Adjusted cash tax2 (62) (105)\n"
+        "Pension funding (65) (3)\n"
+        "Free cash flow 187 325\n"
+    )
+    # Straddle the 28k lead boundary like the on-disk ITV body (header just before the cut).
+    prefix = ("ITV plc Full Year Results 2025 presentation FY Results\n" * 900)[:27990]
+    suffix = ("Closing appendix slide\n" * 2500)[:85000]
+    full_text = prefix + deck_tail + suffix
+    assert len(full_text) > 80_000
+    assert len(prefix + deck_tail[:20]) >= _PDF_DEPTH_LEAD_CHARS - 50
+
+    composed = _compose_filing_body_with_depth_sections(full_text)
+    assert composed is not None
+    assert "Pension funding (65) (3)" in composed
+    assert "Free cash flow 187 325" in composed
+    assert not composed.rstrip().endswith("Pension fundin")
+    assert len(composed) > _PDF_DEPTH_LEAD_CHARS
+    assert parse_ir_adjusted_cash_flow_bridge(composed) is not None
+
+
+def test_eng_20260919_01_refetch_ir_0d388cd522a7cf4c_replaces_truncated_body(
+    tmp_path: Path, monkeypatch
+):
+    """eng-20260919-01: refetch replaces ir_0d388cd522a7cf4c 28k-cut body with full FCF slide."""
+    import hashlib
+
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+
+    rows = fetch_filings_ir_allowlist("ITV.L", path=allowlist_path)
+    fy_url = next(row["url"] for row in rows if row["period"] == "annual" and "2025" in row["url"])
+    digest = hashlib.sha256(fy_url.encode("utf-8")).hexdigest()[:16]
+    assert digest == "0d388cd522a7cf4c"
+
+    body_path = bodies_dir / f"ir_{digest}.txt"
+    body_path.write_text(
+        ("n" * (_PDF_DEPTH_LEAD_CHARS - 5)) + "Pension fundin",
+        encoding="utf-8",
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": f"ir_{digest}",
+                        "source": "ir_allowlist",
+                        "headline": "ITV FY2025 results presentation",
+                        "url": fy_url,
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                        "priority": 130,
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    full_body = (
+        "ITV plc Full Year Results 2025 presentation FY Results\n"
+        * 40
+        + "Profit to Cash Conversion and Free Cash Flow\n"
+        "Adjusted EBITA 534 542\n"
+        "Working capital movement (196) (144)\n"
+        "Depreciation 48 47\n"
+        "Share-based compensation 16 18\n"
+        "Acquisition of property, plant and equipment and intangible assets1 (54) (49)\n"
+        "Lease liability payments (including lease interest) (26) (25)\n"
+        "Adjusted cash flow 348 451\n"
+        "Profit to cash ratio 65% 83%\n"
+        "Adjusted cash flow 348 451\n"
+        "Net cash interest paid (excluding lease interest) (34) (18)\n"
+        "Adjusted cash tax2 (62) (105)\n"
+        "Pension funding (65) (3)\n"
+        "Free cash flow 187 325\n" + ("y" * 400)
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.merge_ir_allowlist_filings",
+        lambda *args, **kwargs: {"added": 0, "total_allowlist": 1, "note": "test"},
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: full_body if url == fy_url else None,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_ir_pdf_alternate_candidates",
+        lambda _url: [],
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
+    )
+
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "ITV.L",
+        company_name="ITV plc",
+        max_bodies=5,
+        allowlist_path=allowlist_path,
+    )
+    assert result["attempted"] == 1
+    saved = (filings_dir / "bodies" / f"ir_{digest}.txt").read_text(encoding="utf-8")
+    assert "Free cash flow 187 325" in saved
+    assert not saved.rstrip().endswith("Pension fundin")
+
+
 def test_compose_filing_body_preserves_ir_deck_tail_beyond_lead_cut():
     """eng-20260912-02: sub-80k IR decks must keep late-slide pension/FCF lines."""
     tail = (

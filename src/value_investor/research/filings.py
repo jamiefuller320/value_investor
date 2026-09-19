@@ -2358,6 +2358,26 @@ _PDF_DEPTH_SECTION_MARKERS: tuple[tuple[str, int], ...] = (
     (r"\bRISK MANAGEMENT\b", 3),
 )
 
+_IR_PROFIT_TO_CASH_HEADING_RE = re.compile(
+    r"Profit to Cash Conversion and Free Cash Flow",
+    re.IGNORECASE,
+)
+_IR_PROFIT_TO_CASH_TAIL_CHARS = 4_000
+
+
+def _extract_ir_profit_to_cash_tail(full_text: str, *, from_pos: int = 0) -> str | None:
+    """Return the last IR profit-to-cash / FCF slide window at or after ``from_pos``."""
+    last_match: re.Match[str] | None = None
+    for match in _IR_PROFIT_TO_CASH_HEADING_RE.finditer(full_text):
+        if match.start() >= from_pos:
+            last_match = match
+    if last_match is None:
+        return None
+    start = last_match.start()
+    end = min(len(full_text), start + _IR_PROFIT_TO_CASH_TAIL_CHARS)
+    chunk = full_text[start:end].strip()
+    return chunk if len(chunk) >= 80 else None
+
 
 def _extract_pdf_depth_sections(full_text: str, *, skip_before: int = 0) -> list[str]:
     """Pull windows for cash-flow, pensions, covenants, adjusting items, and segment tables."""
@@ -2365,7 +2385,10 @@ def _extract_pdf_depth_sections(full_text: str, *, skip_before: int = 0) -> list
     used_ranges: list[tuple[int, int]] = []
     for pattern, _rank in _PDF_DEPTH_SECTION_MARKERS:
         for match in re.finditer(pattern, full_text, flags=re.I):
-            if match.start() < skip_before:
+            # Sections that straddle the lead cut (common on IR FCF slides) must still
+            # append their tail; skipping on match.start() alone left ITV FY decks at
+            # exactly 28k chars ending mid "Pension fundin".
+            if match.end() <= skip_before:
                 continue
             start = max(skip_before, match.start() - 150)
             end = min(len(full_text), match.end() + _PDF_DEPTH_SECTION_CHARS)
@@ -2407,6 +2430,13 @@ def _compose_filing_body_with_depth_sections(full_text: str) -> str | None:
         parts.append("\n\n---\n\n" + section)
 
     text = "".join(parts).strip()
+    tail_anchor = max(0, lead_limit - 500)
+    if _IR_PROFIT_TO_CASH_HEADING_RE.search(
+        full_text[tail_anchor:]
+    ) and not _IR_PROFIT_TO_CASH_HEADING_RE.search(text):
+        tail = _extract_ir_profit_to_cash_tail(full_text, from_pos=tail_anchor)
+        if tail and tail not in text:
+            text = f"{text}\n\n---\n\n{tail}".strip()
     if len(text) > FILINGS_BODY_MAX_CHARS:
         text = text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
     return text or None
@@ -7823,7 +7853,14 @@ def _write_bodies(
                     if ticker and company_name:
                         row = _standardise_rns_index_row_url(row)
                     url = str(row["url"])
-                    if ticker and company_name and _is_rns_body_fetch_candidate(row):
+                    if _is_ir_allowlist_row(row):
+                        body, _fetch_source = _fetch_ir_allowlist_body(
+                            row,
+                            ticker=ticker,
+                            company_name=company_name,
+                        )
+                        extracted_headline = None
+                    elif ticker and company_name and _is_rns_body_fetch_candidate(row):
                         body, extracted_headline = _fetch_rns_filing_body_for_refetch(url)
                     else:
                         body = fetch_filing_body(url)
