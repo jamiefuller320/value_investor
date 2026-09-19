@@ -11535,8 +11535,122 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260919-03",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "FME.DE",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "FME.DE",
+          "DTG.DE",
+          "FRE.DE",
+          "HEN3.DE",
+          "HNR1.DE",
+          "G1A.DE",
+          "VOW3.DE",
+          "HEI.DE"
+        ],
+        "market_id": "dax",
+        "universe": "library",
+        "critical_path_blocker": "unmeasured"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260919-03",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-19T13:58:44.511187+00:00",
+      "completed_at": "2026-09-19T14:02:39.563624+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": -56,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "FME.DE"
+        ],
+        "results": [
+          {
+            "ticker": "FME.DE",
+            "reason": "unmeasured",
+            "before": {
+              "filings_total": 0,
+              "filings_with_body": 0,
+              "indexed_without_body": 0
+            },
+            "after": {
+              "filings_total": 89,
+              "filings_with_body": 33,
+              "indexed_without_body": 56
+            },
+            "improved": true,
+            "regime": "euro_filings",
+            "filings_summary": {
+              "total": 75,
+              "annual": 4,
+              "interim": 4,
+              "trading_update": 0,
+              "other": 67,
+              "with_body": 13,
+              "period_coverage": {
+                "annual": {
+                  "total": 4,
+                  "with_body": 4
+                },
+                "interim": {
+                  "total": 4,
+                  "with_body": 4
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 67,
+                  "with_body": 5
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 33,
+              "with_body_after": 33,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "FME.DE",
+            "with_body_before": 0,
+            "with_body_after": 33,
+            "improved": true
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-19T08:29:31.336936+00:00",
+  "updated_at": "2026-09-19T14:02:39.563641+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
