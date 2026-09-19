@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-19T17:43:54.906738+00:00",
+  "generated_at": "2026-09-19T18:50:45.813236+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -433,7 +433,8 @@
         },
         "admission_ready": true,
         "admission_gate": "sprint_ingest_complete",
-        "admission_warnings": []
+        "admission_warnings": [],
+        "sprint_entered_at": null
       },
       "held_vs_market": {
         "schema_version": 1,
@@ -724,9 +725,10 @@
           {
             "id": "stale_buy_tier_screen",
             "severity": "warn",
-            "summary": "Buy-tier screen is stale (last screen 2026-08-16); ingest is deepening an old shortlist"
+            "summary": "Buy-tier screen is stale (last screen 2026-08-16); sprint-entry screen-lite will refresh on the next deepen slot"
           }
-        ]
+        ],
+        "sprint_entered_at": "2026-09-19T12:08:12.392684+00:00"
       },
       "held_vs_market": {
         "schema_version": 1,
@@ -909,9 +911,10 @@
           {
             "id": "stale_buy_tier_screen",
             "severity": "warn",
-            "summary": "Buy-tier screen is stale (last screen 2026-08-16); ingest is deepening an old shortlist"
+            "summary": "Buy-tier screen is stale (last screen 2026-08-16); sprint-entry screen-lite will refresh on the next deepen slot"
           }
-        ]
+        ],
+        "sprint_entered_at": "2026-09-19T12:34:58.542846+00:00"
       },
       "held_vs_market": {
         "schema_version": 1,
