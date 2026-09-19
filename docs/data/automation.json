@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T18:21:59.160911+00:00",
+  "generated_at": "2026-09-19T18:52:50.366029+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1153,16 +1153,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-19T18:21:04.721957+00:00",
-    "queue_ui_updated_at": "2026-09-19T18:21:59.095674+00:00",
-    "task_count": 65,
+    "compiled_at": "2026-09-19T18:51:47.166428+00:00",
+    "queue_ui_updated_at": "2026-09-19T18:52:50.289160+00:00",
+    "task_count": 67,
     "status": {
       "open_count": 3,
       "pr_open_count": 0,
-      "parked_count": 14,
-      "merged_count": 47,
+      "parked_count": 15,
+      "merged_count": 48,
       "failed_count": 0,
-      "next_task_id": "eng-20260919-09",
+      "next_task_id": "eng-20260919-11",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1171,9 +1171,9 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260919-09",
+        "id": "eng-20260919-11",
         "area": "scoring",
-        "title": "leverage: When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy. [3/3]",
+        "title": "Expose provenance of `earnings_growth_pct` vs filing diluted EPS growth in screen output.",
         "priority": "medium",
         "priority_score": 25.0,
         "status": "open",
@@ -1203,11 +1203,11 @@
         "clash_scan": "partial"
       },
       {
-        "id": "eng-20260918-16",
+        "id": "eng-20260919-10",
         "area": "ingest",
-        "title": "Hunt fetchable IR source for parked nasdaq100 leftover PDD",
+        "title": "Hunt fetchable IR source for parked nasdaq100 leftover TRI",
         "priority": "low",
-        "priority_score": 14.0,
+        "priority_score": 12.0,
         "status": "open",
         "source": "parked_source_hunter",
         "pr_url": null,
@@ -1384,6 +1384,18 @@
         "priority_score": 40.0,
         "status": "parked",
         "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260918-16",
+        "area": "ingest",
+        "title": "Hunt fetchable IR source for parked nasdaq100 leftover PDD",
+        "priority": "low",
+        "priority_score": 14.0,
+        "status": "parked",
+        "source": "parked_source_hunter",
         "pr_url": null,
         "pr_number": null,
         "branch_name": null
@@ -1670,9 +1682,9 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-19T18:21:59.160911+00:00",
-    "overall": "active",
-    "headline": "Agent lane active.",
+    "generated_at": "2026-09-19T18:52:50.366029+00:00",
+    "overall": "blocked",
+    "headline": "Dispatch paused — 8 attention-parked task(s). attention parked backlog clearing pause (8 task(s); resume when < 7 and 30m since last clearing action)",
     "merge_lane": {
       "state": "idle",
       "idle": true,
@@ -1684,26 +1696,26 @@
       "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
-      "state": "running",
+      "state": "blocked",
       "idle": false,
-      "running": true,
-      "blocked": false,
-      "should_dispatch": true,
-      "pause_active": false,
+      "running": false,
+      "blocked": true,
+      "should_dispatch": false,
+      "pause_active": true,
       "traffic_pause_active": false,
-      "attention_parked_count": 7,
+      "attention_parked_count": 8,
       "open_count": 3,
       "pr_open_count": 0,
       "dispatch_eligible_count": 3,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260919-09",
-      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
-      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+      "next_task_id": "eng-20260919-11",
+      "reason": "attention parked backlog clearing pause (8 task(s); resume when < 7 and 30m since last clearing action)",
+      "detail": "Dispatch paused — 8 attention-parked task(s). attention parked backlog clearing pause (8 task(s); resume when < 7 and 30m since last clearing action)"
     },
     "queue_clearing": {
-      "pause_active": false,
-      "attention_parked_count": 7,
-      "evaluated_at": "2026-09-19T18:21:55.920641+00:00"
+      "pause_active": true,
+      "attention_parked_count": 8,
+      "evaluated_at": "2026-09-19T18:52:46.252262+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1717,6 +1729,17 @@
       "should_dispatch_engineering": false
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260919-09",
+        "title": "leverage: When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy. [3/3]",
+        "area": "scoring",
+        "pr_number": 740,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/740",
+        "merged_at": "2026-09-19T18:51:45.830627+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": true,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260919-07",
         "title": "fcf: When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy. [1/3]",
@@ -1817,6 +1840,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 9
+    "verified_merges_today_count": 10
   }
 }
