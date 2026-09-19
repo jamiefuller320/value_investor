@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-18T23:16:27.363828+00:00",
+  "generated_at": "2026-09-19T00:53:14.300152+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1154,15 +1154,15 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-18T23:16:25.344671+00:00",
-    "queue_ui_updated_at": "2026-09-18T23:16:27.288655+00:00",
+    "queue_ui_updated_at": "2026-09-19T00:53:14.226914+00:00",
     "task_count": 56,
     "status": {
-      "open_count": 3,
+      "open_count": 2,
       "pr_open_count": 0,
-      "parked_count": 14,
+      "parked_count": 15,
       "merged_count": 38,
       "failed_count": 0,
-      "next_task_id": "eng-20260918-22",
+      "next_task_id": "eng-20260918-23",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1170,22 +1170,6 @@
       "spend_blocked": false
     },
     "queued_tasks": [
-      {
-        "id": "eng-20260918-22",
-        "area": "ingest",
-        "title": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
-        "priority": "medium",
-        "priority_score": 40.0,
-        "status": "open",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "full"
-      },
       {
         "id": "eng-20260918-23",
         "area": "ingest",
@@ -1199,7 +1183,7 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 2,
+        "effective_dispatch_rank": 1,
         "clash_scan": "full"
       },
       {
@@ -1215,7 +1199,7 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 3,
+        "effective_dispatch_rank": 2,
         "clash_scan": "full"
       }
     ],
@@ -1317,6 +1301,18 @@
         "branch_name": null
       },
       {
+        "id": "eng-20260918-22",
+        "area": "ingest",
+        "title": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
         "id": "eng-20260918-21",
         "area": "ingest",
         "title": "Full-text extract of annual report note 19 (cash-in-transit restatement) from ME-Group-Annual-Report-2025.pdf—not addressed by CH refetch of 2019 parent interim",
@@ -1390,8 +1386,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 3,
-      "dispatch_eligible_count": 3,
+      "open_task_count": 2,
+      "dispatch_eligible_count": 2,
       "blocked_count": 0
     }
   },
@@ -1670,9 +1666,9 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-18T23:16:27.363828+00:00",
-    "overall": "active",
-    "headline": "Agent lane active.",
+    "generated_at": "2026-09-19T00:53:14.300152+00:00",
+    "overall": "blocked",
+    "headline": "Dispatch paused — 8 attention-parked task(s). attention parked backlog clearing pause (8 task(s); resume when < 7 and 30m since last clearing action)",
     "merge_lane": {
       "state": "idle",
       "idle": true,
@@ -1684,26 +1680,26 @@
       "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
-      "state": "running",
+      "state": "blocked",
       "idle": false,
-      "running": true,
-      "blocked": false,
-      "should_dispatch": true,
-      "pause_active": false,
+      "running": false,
+      "blocked": true,
+      "should_dispatch": false,
+      "pause_active": true,
       "traffic_pause_active": false,
-      "attention_parked_count": 7,
-      "open_count": 3,
+      "attention_parked_count": 8,
+      "open_count": 2,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 3,
+      "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260918-22",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
+      "next_task_id": "eng-20260918-23",
+      "reason": "attention parked backlog clearing pause (8 task(s); resume when < 7 and 30m since last clearing action)",
+      "detail": "Dispatch paused — 8 attention-parked task(s). attention parked backlog clearing pause (8 task(s); resume when < 7 and 30m since last clearing action)"
     },
     "queue_clearing": {
-      "pause_active": false,
-      "attention_parked_count": 7,
-      "evaluated_at": "2026-09-18T23:16:22.301291+00:00"
+      "pause_active": true,
+      "attention_parked_count": 8,
+      "evaluated_at": "2026-09-19T00:53:10.731024+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1716,184 +1712,7 @@
       "overall": "warn",
       "should_dispatch_engineering": false
     },
-    "merges_today": [
-      {
-        "task_id": "eng-20260918-12",
-        "title": "Filings-first order is adequate when the live issue is annual/interim numbers, and this pack has 17 annual + 6 interim bodies [1/2]",
-        "area": "ingest",
-        "pr_number": 718,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/718",
-        "merged_at": "2026-09-18T20:48:56.791627+00:00",
-        "merge_class": "compile_cap_drain",
-        "auto_merge": true,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260918-15",
-        "title": "The screen still emits strong_buy on the pre-deal consolidated group (advertising yield, company-adjusted FCF, P/E 11.6) after a announced carve-out that change",
-        "area": "ingest",
-        "pr_number": 717,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/717",
-        "merged_at": "2026-09-18T18:38:31.964507+00:00",
-        "merge_class": "compile_cap_drain",
-        "auto_merge": false,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260918-14",
-        "title": "Four worker types plus a five-task cap force annual + interim + news + screen + gap and leave no slot for the Sky sale body (10f52d865099383d), Q1 2026 trading",
-        "area": "ingest",
-        "pr_number": 714,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/714",
-        "merged_at": "2026-09-18T15:54:58.920701+00:00",
-        "merge_class": "compile_cap_drain",
-        "auto_merge": false,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260918-10",
-        "title": "When a sal [2/2]",
-        "area": "ingest",
-        "pr_number": 713,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/713",
-        "merged_at": "2026-09-18T14:34:43.656204+00:00",
-        "merge_class": "compile_cap_drain",
-        "auto_merge": false,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260918-11",
-        "title": "Require annual/interim workers to extract continuing versus discontinued / held-for-sale splits, deal terms, guidance, FCF versus dividend cover, and reporting ",
-        "area": "prompt",
-        "pr_number": 712,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/712",
-        "merged_at": "2026-09-18T14:24:41.968308+00:00",
-        "merge_class": "compile_cap_drain",
-        "auto_merge": true,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260918-09",
-        "title": "Select the latest dated annual and interim *results* bodies (FY25 29bdb56d3cedb539, H1 2026 d19c5d3b8e0bb46a — not the 30 June period-end duplicate) [1/2]",
-        "area": "ingest",
-        "pr_number": 711,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/711",
-        "merged_at": "2026-09-18T13:53:33.008024+00:00",
-        "merge_class": "compile_cap_drain",
-        "auto_merge": false,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260918-01",
-        "title": "dividend: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; kee",
-        "area": "scoring",
-        "pr_number": 710,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/710",
-        "merged_at": "2026-09-18T13:48:14.975108+00:00",
-        "merge_class": "compile_cap_drain",
-        "auto_merge": true,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260918-08",
-        "title": "dividend: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_",
-        "area": "scoring",
-        "pr_number": 709,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/709",
-        "merged_at": "2026-09-18T13:14:45.005992+00:00",
-        "merge_class": "compile_cap_drain",
-        "auto_merge": true,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260918-07",
-        "title": "fcf: Require explicit **dual FCF dividend cover** (statutory OCF−CapEx vs management “cash generated from operations”−CapEx) in research prompts when `fcf_defin",
-        "area": "scoring",
-        "pr_number": 706,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/706",
-        "merged_at": "2026-09-18T12:43:14.377250+00:00",
-        "merge_class": "compile_cap_drain",
-        "auto_merge": true,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260918-05",
-        "title": "dividend: Primary dividend-sustainability overlay on statutory FCF/dividend; warn when interim dividend is cut despite high trailing yield pass. [2/2]",
-        "area": "scoring",
-        "pr_number": 704,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/704",
-        "merged_at": "2026-09-18T11:57:37.253311+00:00",
-        "merge_class": "ci_fix",
-        "auto_merge": true,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260918-04",
-        "title": "fcf: Primary dividend-sustainability overlay on statutory FCF/dividend; warn when interim dividend is cut despite high trailing yield pass. [1/2]",
-        "area": "scoring",
-        "pr_number": 703,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/703",
-        "merged_at": "2026-09-18T10:05:32.246844+00:00",
-        "merge_class": "compile_cap_drain",
-        "auto_merge": true,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260918-03",
-        "title": "fcf: Media cyclicality + thin FCF coverage overlay (advertising >40%, Piotroski ≤4, statutory FCF/dividend ≤1.1×). [1/2]",
-        "area": "scoring",
-        "pr_number": 702,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/702",
-        "merged_at": "2026-09-18T09:23:40.537566+00:00",
-        "merge_class": "compile_cap_drain",
-        "auto_merge": true,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260918-02",
-        "title": "Auto-flag cyclical exposure when principal-risk filings cite recession/discretionary spending and any interim month shows photobooth revenue decline >10% (MEGP",
-        "area": "scoring",
-        "pr_number": 701,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/701",
-        "merged_at": "2026-09-18T08:35:14.452155+00:00",
-        "merge_class": "compile_cap_drain",
-        "auto_merge": false,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260917-01",
-        "title": "Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_defi",
-        "area": "scoring",
-        "pr_number": 699,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/699",
-        "merged_at": "2026-09-18T07:58:36.338720+00:00",
-        "merge_class": "compile_cap_drain",
-        "auto_merge": false,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260917-10",
-        "title": "fcf: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf",
-        "area": "scoring",
-        "pr_number": 697,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/697",
-        "merged_at": "2026-09-18T04:48:29.018731+00:00",
-        "merge_class": "compile_cap_drain",
-        "auto_merge": true,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260917-08",
-        "title": "Enable cyclical_exposure for UK heavyside construction-materials names when GB volume language and cement-output “historic lows” are in the same tape [1/2]",
-        "area": "scoring",
-        "pr_number": 692,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/692",
-        "merged_at": "2026-09-18T03:46:31.746077+00:00",
-        "merge_class": "human",
-        "auto_merge": false,
-        "independently_verified": false
-      }
-    ],
-    "verified_merges_today_count": 15
+    "merges_today": [],
+    "verified_merges_today_count": 0
   }
 }
