@@ -3273,6 +3273,115 @@ def test_extract_ixbrl_html_text_splices_late_pension_and_covenant_notes():
     assert "CONSOLIDATED STATEMENT OF CASH FLOW" in text
 
 
+_ITV_IXBRL_FIXTURE_HTML = (
+    b'<html xmlns:ix="http://www.xbrl.org/2013/inlineXBRL">'
+    b"<body><div>Cover and contents noise only</div>"
+    b'<ix:nonNumeric name="core:DescriptionOfPrincipalRisksAndUncertaintiesTextBlock" '
+    b'contextRef="FY" escape="true">'
+    b"<p>Principal risks and uncertainties include advertising cyclicality, "
+    b"regulatory change, and pension funding volatility across the Group.</p>"
+    b"</ix:nonNumeric>"
+    b'<ix:nonNumeric name="core:PensionsTextBlock" contextRef="FY" escape="true">'
+    b"<p>3.8 Pensions - Defined benefit pension surplus of GBP 198 million after "
+    b"GBP 65 million of employer contributions and remeasurement gains.</p>"
+    b"</ix:nonNumeric>"
+    b"</body></html>"
+)
+
+
+def test_extract_ixbrl_html_text_itv_l_tag_blocks_for_risks_and_pension_note():
+    """eng-20260918-23: CH iXBRL tag narrative unlocks risks and note 3.8 for ITV.L."""
+    text = _extract_ixbrl_html_text(_ITV_IXBRL_FIXTURE_HTML.decode("utf-8"))
+    assert "Principal risks and uncertainties" in text
+    assert "3.8 Pensions" in text
+    assert "Defined benefit pension" in text
+
+
+def test_ch_row_needs_body_refetch_itv_ocr_with_lone_cash_flow_marker(tmp_path):
+    """eng-20260918-23: OCR strategic pages with a lone cash-flow mention still refetch."""
+    from value_investor.research.filings import _ch_row_needs_body_refetch
+
+    bodies_dir = tmp_path / "bodies"
+    bodies_dir.mkdir()
+    row_id = "ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4"
+    ocr_noise = (
+        "Cun punpaca ts Metdng What Meiers strategic highlights revenue £3,511m "
+        + ("fontsymbol garbled OCR " * 80)
+        + " good ree cash flow of leverage 1.0x"
+    )
+    (bodies_dir / f"{row_id}.txt").write_text(ocr_noise, encoding="utf-8")
+    row = {
+        "id": row_id,
+        "source": "companies_house",
+        "has_body": True,
+        "body_path": str(bodies_dir / f"{row_id}.txt"),
+    }
+    assert _ch_row_needs_body_refetch(row, bodies_dir) is True
+
+
+def test_supplement_garbled_ch_filing_bodies_itv_l_uses_annual_report_pdf(tmp_path, monkeypatch):
+    """eng-20260918-23: garbled CH OCR for ITV.L is replaced by FY2025 annual report extract."""
+    from value_investor.research.filings import supplement_garbled_ch_filing_bodies
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    row_id = "ch_04967001_MzUyMjc5MjMzMmFdiXF6a2N4"
+    garbled = (
+        "Strategic report chairman statement revenue overview "
+        + ("fontsymbol | OCR noise " * 60)
+        + " free cash flow conversion 65%"
+    )
+    annual_body = (
+        "Principal risks and uncertainties include advertising cyclicality. "
+        "Alternative performance measures reconcile adjusted operating profit to statutory. "
+        "Free cash flow footnote: adjusted free cash flow of £212m after pension contributions "
+        "and lease payments per note 3.8 Defined benefit pension scheme surplus £198m borrowings "
+        "covenant headroom going concern related party segment information cash flow statement."
+        + (" consolidated income statement " * 30)
+    )
+    index = {
+        "filings": [
+            {
+                "id": row_id,
+                "source": "companies_house",
+                "headline": "Companies House accounts — group",
+                "url": "https://document-api.company-information.service.gov.uk/document/x",
+                "period": "annual",
+                "has_body": True,
+                "body_path": str(bodies_dir / f"{row_id}.txt"),
+            }
+        ],
+        "summary": {"total": 1, "with_body": 1},
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+    (bodies_dir / f"{row_id}.txt").write_text(garbled, encoding="utf-8")
+
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filings_investegate_company",
+        lambda **kwargs: [],
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._fetch_fca_nsm_annual_report_body",
+        lambda *args, **kwargs: (annual_body, "ir_allowlist"),
+    )
+
+    result = supplement_garbled_ch_filing_bodies(
+        filings_dir,
+        ticker="ITV.L",
+        company_name="ITV plc",
+        max_bodies=2,
+    )
+    assert result["supplemented"] == 1
+    saved_text = (bodies_dir / f"{row_id}.txt").read_text(encoding="utf-8")
+    assert "fontsymbol" not in saved_text
+    assert "Principal risks and uncertainties" in saved_text
+    assert "Alternative performance measures" in saved_text
+    assert "Free cash flow footnote" in saved_text
+    saved_index = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved_index["filings"][0].get("annual_report_supplement_source") == "ir_allowlist"
+
+
 def test_refetch_uk_primary_filing_bodies_orchestrates_ch_and_lse(tmp_path, monkeypatch):
     filings_dir = tmp_path / "filings"
     filings_dir.mkdir()

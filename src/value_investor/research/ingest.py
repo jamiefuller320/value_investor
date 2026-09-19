@@ -960,6 +960,8 @@ def ingest_research_sources(
                     ch_refetch = refetch_companies_house_filing_bodies(
                         sources_dir / "filings",
                         max_bodies=12,
+                        ticker=ticker,
+                        company_name=company_name,
                     )
                     if int(ch_refetch.get("fetched") or 0) > 0:
                         index_path = sources_dir / "filings" / "filings_index.json"
