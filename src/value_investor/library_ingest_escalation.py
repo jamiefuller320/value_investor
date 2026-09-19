@@ -103,6 +103,28 @@ def library_ingest_ticker_has_gaps(
     return with_body < max(3, total // 2)
 
 
+def library_target_parity_improved(
+    before: dict[str, Any],
+    after: dict[str, Any],
+    *,
+    reason: str = "",
+) -> bool:
+    """True when a library deepen pass closed the ticker-level gap blocking sprint parity."""
+    iwb_before = int(before.get("indexed_without_body") or 0)
+    iwb_after = int(after.get("indexed_without_body") or 0)
+    if iwb_before > 0:
+        return iwb_after < iwb_before
+    bodies_before = int(before.get("filings_with_body") or 0)
+    bodies_after = int(after.get("filings_with_body") or 0)
+    if bodies_after > bodies_before:
+        return True
+    total_before = int(before.get("filings_total") or 0)
+    total_after = int(after.get("filings_total") or 0)
+    if str(reason or "").strip() == "unmeasured" and total_after > total_before:
+        return True
+    return False
+
+
 def _entries_for_market(payload: dict[str, Any], market_id: str) -> list[dict[str, Any]]:
     entries = list(payload.get("entries") or [])
     scoped = [row for row in entries if str(row.get("market_id") or "") == market_id]
@@ -316,6 +338,7 @@ def compile_parked_source_hunter_task(
     policy: dict[str, Any] | None = None,
     tasks_path: Path = COMMITTED_TASKS_PATH,
     committed_path: Path = COMMITTED_TASKS_PATH,
+    prefer_market_id: str | None = None,
 ) -> dict[str, Any]:
     """Queue one low-priority parked-ticker source hunt at the back of the queue.
 
@@ -345,6 +368,11 @@ def compile_parked_source_hunter_task(
 
     tried = _tried_parked_hunter_keys(existing_rows)
     candidates = iter_parked_hunter_candidates(library_root=library_root, policy=policy)
+    prefer = str(prefer_market_id or "").strip()
+    if prefer:
+        preferred = [row for row in candidates if row[0] == prefer]
+        if preferred:
+            candidates = preferred + [row for row in candidates if row[0] != prefer]
     from value_investor.hunter_auto_merge import hunter_ticker_already_resolved_on_main
 
     next_row: tuple[str, str, dict[str, Any]] | None = None

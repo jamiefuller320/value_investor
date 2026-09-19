@@ -302,6 +302,14 @@ def test_skips_productive_run_with_leftover_iwb(tmp_path: Path):
         was_gap_closure_run=False,
         stalled=False,
         improved=["DG.PA"],
+        deepen_results=[
+            {
+                "ticker": "DG.PA",
+                "improved": True,
+                "before": {"indexed_without_body": 2, "filings_with_body": 1},
+                "after": {"indexed_without_body": 1, "filings_with_body": 2},
+            }
+        ],
         library_root=root,
         reports=reports,
         tasks_path=tmp_path / "engineering_tasks.json",
@@ -309,6 +317,51 @@ def test_skips_productive_run_with_leftover_iwb(tmp_path: Path):
     )
     assert result["should_dispatch"] is False
     assert "improved coverage" in result["reason"]
+
+
+def test_dispatches_when_improved_without_parity_progress(tmp_path: Path):
+    root, reports = _euro_fixture(tmp_path)
+    health = {
+        **_health(zero_body=0, iwb=2),
+        "effective_indexed_without_body_tickers": ["C5H.IR"],
+        "effective_thin_body_tickers": ["ACKB.BR"],
+    }
+    result = evaluate_library_ingest_gap_closure_followup(
+        market_id="euro_depth",
+        health_before=health,
+        health_after=health,
+        was_gap_closure_run=False,
+        stalled=False,
+        improved=["C5H.IR", "TTE.PA"],
+        deepen_results=[
+            {
+                "ticker": "C5H.IR",
+                "improved": True,
+                "reason": "indexed_without_body",
+                "before": {"indexed_without_body": 1, "filings_with_body": 60},
+                "after": {"indexed_without_body": 1, "filings_with_body": 63},
+            }
+        ],
+        library_root=root,
+        reports=reports,
+        tasks_path=tmp_path / "engineering_tasks.json",
+        runs_path=tmp_path / "ingest_gap_closure_runs.json",
+    )
+    assert result["should_dispatch"] is True
+    assert result["trigger"] == "stall_slowdown"
+
+
+def test_preferred_ticker_uses_effective_iwb_first():
+    health = {
+        "unmeasured_tickers": [],
+        "zero_body_tickers": [],
+        "effective_indexed_without_body_tickers": ["C5H.IR", "TTE.PA"],
+        "effective_thin_body_tickers": ["ACKB.BR"],
+        "indexed_without_body_tickers": ["ABI.BR", "C5H.IR"],
+    }
+    from value_investor.ingest_gap_closure import preferred_library_gap_closure_ticker
+
+    assert preferred_library_gap_closure_ticker(health_after=health) == "C5H.IR"
 
 
 def test_skips_when_already_gap_closure_or_no_gaps(tmp_path: Path):

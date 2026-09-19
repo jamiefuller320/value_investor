@@ -31,6 +31,7 @@ from value_investor.library_ingest_escalation import (
     compile_parked_source_hunter_task,
     library_ingest_health_stalled,
     library_ingest_summary_path,
+    library_target_parity_improved,
     resolve_library_ingest_health_log_path,
     snapshot_library_ingest_health,
 )
@@ -594,9 +595,10 @@ def _ingest_single_library_target(
         market_id=market_id,
         canonical_only=canonical_only,
     )
-    improved = (
-        after["filings_with_body"] > before["filings_with_body"]
-        or after["filings_total"] > before["filings_total"]
+    improved = library_target_parity_improved(
+        before,
+        after,
+        reason=str(target.reason or ""),
     )
     filings_summary = meta.get("filings_summary") or {}
     ir_exhausted = int(ir_meta.get("failed") or 0) > 0 and int(ir_meta.get("fetched") or 0) == 0

@@ -584,6 +584,35 @@ def build_parser() -> argparse.ArgumentParser:
     )
     ingest_followup_p.set_defaults(func=cmd_library_ingest_gap_closure_followup)
 
+    gap_eng_p = sub.add_parser(
+        "gap-closure-engineering-compile",
+        parents=[common],
+        help=(
+            "Queue ingest engineering tasks for pending gap-closure runs "
+            "(including zero-refetch IWB failures)"
+        ),
+    )
+    gap_eng_p.add_argument(
+        "--market",
+        default="",
+        help="Limit to one library market (default: all pending runs)",
+    )
+    gap_eng_p.add_argument("--limit", type=int, default=3)
+    gap_eng_p.add_argument(
+        "--tasks-path",
+        type=Path,
+        default=Path("docs/data/engineering_tasks.json"),
+    )
+    gap_eng_p.add_argument(
+        "--runs-path",
+        type=Path,
+        default=None,
+        help="ingest_gap_closure_runs.json (default: committed path)",
+    )
+    gap_eng_p.add_argument("--json", action="store_true")
+    gap_eng_p.add_argument("--json-path", type=Path, default=None)
+    gap_eng_p.set_defaults(func=cmd_gap_closure_engineering_compile)
+
     euro_dispatch_p = sub.add_parser(
         "euro-ingest-dispatch",
         parents=[common],
@@ -651,6 +680,11 @@ def build_parser() -> argparse.ArgumentParser:
             "Queue one low-priority parked leftover source-hunter task at the "
             "back of the engineering queue"
         ),
+    )
+    parked_hunter_p.add_argument(
+        "--market",
+        default="",
+        help="Prefer parked leftovers from this library market (e.g. euro_depth)",
     )
     parked_hunter_p.add_argument(
         "--tasks-path",
@@ -2085,6 +2119,28 @@ def cmd_library_ingest_gap_closure_followup(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_gap_closure_engineering_compile(args: argparse.Namespace) -> int:
+    from value_investor.ingest_gap_closure import compile_pending_gap_closure_engineering
+
+    market = str(args.market or "").strip() or None
+    payload = compile_pending_gap_closure_engineering(
+        market_id=market,
+        limit=int(args.limit),
+        tasks_path=args.tasks_path,
+        runs_path=args.runs_path,
+    )
+    if args.json or args.json_path is not None:
+        _emit_cli_json(payload, args)
+    else:
+        compiled = int(payload.get("compiled_count") or 0)
+        print(f"gap-closure-engineering-compile: compiled={compiled} market={market or 'all'}")
+        for row in payload.get("compiled") or []:
+            print(f"  {row.get('run_id')} -> {row.get('task_id')} ({row.get('compile_reason')})")
+        for row in payload.get("skipped") or []:
+            print(f"  skip {row.get('run_id')}: {row.get('reason')}")
+    return 0
+
+
 def cmd_library_ingest_maintenance(args: argparse.Namespace) -> int:
     from value_investor.library_ingest_maintenance import run_library_ingest_maintenance
 
@@ -2157,11 +2213,13 @@ def cmd_parked_hunter_compile(args: argparse.Namespace) -> int:
         return 0
 
     policy = load_policy(args.policy)
+    prefer_market = str(getattr(args, "market", "") or "").strip() or None
     payload = compile_parked_source_hunter_task(
         library_root=args.root,
         policy=policy,
         tasks_path=args.tasks_path,
         committed_path=args.tasks_path,
+        prefer_market_id=prefer_market,
     )
     if args.json or args.json_path is not None:
         _emit_cli_json(payload, args)

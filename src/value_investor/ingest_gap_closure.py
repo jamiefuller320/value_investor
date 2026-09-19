@@ -157,9 +157,17 @@ def gap_closure_ticker_has_gaps(
         return False
     market = str(market_id or "").strip() or None
     if market:
+        from value_investor.data_library import DEFAULT_LIBRARY_ROOT
         from value_investor.library_ingest_escalation import library_ingest_ticker_has_gaps
 
-        return library_ingest_ticker_has_gaps(token, market_id=market)
+        library_root = Path(data_dir) / "library"
+        if not library_root.is_dir():
+            library_root = DEFAULT_LIBRARY_ROOT
+        return library_ingest_ticker_has_gaps(
+            token,
+            market_id=market,
+            library_root=library_root,
+        )
     from value_investor.research.ingest_improvement import (
         _filing_coverage,
         _has_outstanding_ingest_gap,
@@ -316,6 +324,10 @@ def should_auto_compile_gap_engineering(
     parent = str(run.get("parent_run_id") or run.get("parent_trial_id") or "").strip()
     if parent:
         return True, "verification_gaps_remain"
+    if stats["attempted"] <= 0 and gap_closure_ticker_has_gaps(
+        ticker, data_dir=data_dir, market_id=market_id
+    ):
+        return True, "gaps_remain_without_refetch"
     return False, "no_actionable_failure"
 
 
@@ -541,25 +553,7 @@ def mark_trial_reviewed(
     )
 
 
-def gap_closure_refetch_stats(run: dict[str, Any]) -> dict[str, int]:
-    """Sum refetch attempted/fetched across primary ingest-improvement steps."""
-    params = run.get("params") or {}
-    if str(params.get("market_id") or "").strip():
-        outcome = run.get("outcome") or {}
-        per_ticker = list(outcome.get("per_ticker") or [])
-        if per_ticker:
-            attempted = len(per_ticker)
-            fetched = sum(1 for row in per_ticker if row.get("improved"))
-            return {"attempted": attempted, "fetched": fetched}
-        results = list(outcome.get("results") or [])
-        attempted = len(results)
-        fetched = sum(1 for row in results if isinstance(row, dict) and row.get("improved"))
-        return {"attempted": attempted, "fetched": fetched}
-    outcome = run.get("outcome") or {}
-    results = outcome.get("results") or []
-    if not results or not isinstance(results[0], dict):
-        return {"attempted": 0, "fetched": 0}
-    row = results[0]
+def _refetch_stats_from_improvement_row(row: dict[str, Any]) -> dict[str, int]:
     attempted = 0
     fetched = 0
     for key in (
@@ -568,13 +562,48 @@ def gap_closure_refetch_stats(run: dict[str, Any]) -> dict[str, int]:
         "ticker_rns_refetch",
         "indexed_refetch",
         "residual_refetch",
+        "ir_refetch",
     ):
         block = row.get(key) or {}
         if not isinstance(block, dict):
             continue
         attempted += int(block.get("attempted") or 0)
         fetched += int(block.get("fetched") or 0)
+    alternate = row.get("alternate_sources") or {}
+    if isinstance(alternate, dict):
+        body_refetch = alternate.get("body_refetch") or {}
+        if isinstance(body_refetch, dict):
+            attempted += int(body_refetch.get("attempted") or 0)
+            fetched += int(body_refetch.get("fetched") or 0)
     return {"attempted": attempted, "fetched": fetched}
+
+
+def gap_closure_refetch_stats(run: dict[str, Any]) -> dict[str, int]:
+    """Sum refetch attempted/fetched across primary ingest-improvement steps."""
+    params = run.get("params") or {}
+    outcome = run.get("outcome") or {}
+    if str(params.get("market_id") or "").strip():
+        results = list(outcome.get("results") or [])
+        attempted = 0
+        fetched = 0
+        for row in results:
+            if not isinstance(row, dict):
+                continue
+            stats = _refetch_stats_from_improvement_row(row)
+            attempted += stats["attempted"]
+            fetched += stats["fetched"]
+        if results:
+            return {"attempted": attempted, "fetched": fetched}
+        per_ticker = list(outcome.get("per_ticker") or [])
+        if per_ticker:
+            attempted = len(per_ticker)
+            fetched = sum(1 for row in per_ticker if row.get("improved"))
+            return {"attempted": attempted, "fetched": fetched}
+        return {"attempted": 0, "fetched": 0}
+    results = outcome.get("results") or []
+    if not results or not isinstance(results[0], dict):
+        return {"attempted": 0, "fetched": 0}
+    return _refetch_stats_from_improvement_row(results[0])
 
 
 def trial_refetch_stats(trial: dict[str, Any]) -> dict[str, int]:
@@ -763,11 +792,54 @@ def _library_deepen_result_count(results: Any) -> int:
     )
 
 
+def deepen_result_moved_parity_needle(row: dict[str, Any]) -> bool:
+    """True when one library deepen row closed a parity-relevant filing gap."""
+    from value_investor.library_ingest_escalation import library_target_parity_improved
+
+    before = row.get("before")
+    after = row.get("after")
+    if isinstance(before, dict) and isinstance(after, dict):
+        return library_target_parity_improved(
+            before,
+            after,
+            reason=str(row.get("reason") or ""),
+        )
+    return bool(row.get("improved"))
+
+
+def _deepen_batch_moved_parity_needles(deepen_results: Any) -> bool:
+    if not isinstance(deepen_results, list) or not deepen_results:
+        return False
+    return any(
+        deepen_result_moved_parity_needle(row)
+        for row in deepen_results
+        if isinstance(row, dict)
+    )
+
+
+def _effective_gap_ticker_priority(health: dict[str, Any] | None) -> list[str]:
+    """Unparked effective IWB/thin tickers first (post-parking sprint head)."""
+    payload = health if isinstance(health, dict) else {}
+    ordered: list[str] = []
+    seen: set[str] = set()
+    for key in (
+        "effective_indexed_without_body_tickers",
+        "effective_thin_body_tickers",
+    ):
+        for token in payload.get(key) or []:
+            ticker = str(token or "").strip().upper()
+            if ticker and ticker not in seen:
+                seen.add(ticker)
+                ordered.append(ticker)
+    return ordered
+
+
 def select_library_gap_closure_candidate(
     *,
     market_id: str,
     library_root: Path | None = None,
     prefer_ticker: str | None = None,
+    health_after: dict[str, Any] | None = None,
     reports: list[Any] | None = None,
     max_candidates: int = 8,
 ) -> dict[str, Any]:
@@ -813,6 +885,17 @@ def select_library_gap_closure_candidate(
             str(row.ticker),
         ),
     )
+    effective_order = _effective_gap_ticker_priority(health_after)
+    if effective_order:
+        rank = {ticker: idx for idx, ticker in enumerate(effective_order)}
+
+        def _effective_rank(row: Any) -> int:
+            return rank.get(str(row.ticker or "").upper(), len(rank) + sticky_rank.get(str(row.reason), 9))
+
+        targets = sorted(
+            targets,
+            key=lambda row: (_effective_rank(row), -float(row.priority_score or 0.0), str(row.ticker)),
+        )
     prefer = str(prefer_ticker or "").strip().upper()
     if prefer:
         for row in targets:
@@ -869,6 +952,14 @@ def preferred_library_gap_closure_ticker(
         sample = [str(token).strip() for token in (health.get(key) or []) if str(token).strip()]
         if sample:
             return sample[0]
+    for key in ("effective_indexed_without_body_tickers", "indexed_without_body_tickers"):
+        sample = [str(token).strip() for token in (health.get(key) or []) if str(token).strip()]
+        if sample:
+            return sample[0]
+    for key in ("effective_thin_body_tickers",):
+        sample = [str(token).strip() for token in (health.get(key) or []) if str(token).strip()]
+        if sample:
+            return sample[0]
     blocker = str(blocker_ticker or "").strip()
     return blocker or None
 
@@ -880,6 +971,7 @@ def evaluate_library_ingest_gap_closure_followup(
     was_gap_closure_run: bool,
     stalled: bool = False,
     improved: Any = None,
+    health_before: dict[str, Any] | None = None,
     partial: bool = False,
     runtime_cutoff: bool = False,
     discovery_scan: Any = None,
@@ -922,11 +1014,25 @@ def evaluate_library_ingest_gap_closure_followup(
             "reason": "no outstanding library ingest gaps after batch",
         }
     improved_count = _improved_count(improved)
-    if not stalled and improved_count > 0:
-        return {
-            "should_dispatch": False,
-            "reason": "batch improved coverage; leftover gaps wait for next deepen",
-        }
+    if not stalled:
+        if isinstance(health_before, dict) and health_after:
+            gaps_before = _library_outstanding_ingest_gaps(health_before)
+            gaps_after = _library_outstanding_ingest_gaps(health_after)
+            if gaps_after < gaps_before:
+                return {
+                    "should_dispatch": False,
+                    "reason": "batch improved coverage; leftover gaps wait for next deepen",
+                }
+        elif _deepen_batch_moved_parity_needles(deepen_results):
+            return {
+                "should_dispatch": False,
+                "reason": "batch improved coverage; leftover gaps wait for next deepen",
+            }
+        elif improved_count > 0 and not deepen_results:
+            return {
+                "should_dispatch": False,
+                "reason": "batch improved coverage; leftover gaps wait for next deepen",
+            }
     if has_recent_intensive_gap_closure_run(
         runs_path=runs_path,
         within_hours=6.0,
@@ -954,6 +1060,7 @@ def evaluate_library_ingest_gap_closure_followup(
         market_id=market,
         library_root=library_root,
         prefer_ticker=prefer,
+        health_after=health_after,
         reports=reports,
     )
     if not candidate.get("should_dispatch"):
@@ -1037,6 +1144,7 @@ def evaluate_library_ingest_gap_closure_followups(
         result = evaluate_library_ingest_gap_closure_followup(
             market_id=mid,
             health_after=row.get("health_after") or {},
+            health_before=row.get("health_before"),
             was_gap_closure_run=bool(row.get("recorded_gap_closure")),
             stalled=bool(row.get("stalled")),
             improved=row.get("improved"),
@@ -1142,4 +1250,70 @@ def evaluate_eng_idle_gap_closure_dispatch(
             "Engineering queue idle with outstanding ingest gaps on paper holdings or top "
             "buy-tier candidate; intensive single-ticker closure for horizon assessment."
         ),
+    }
+
+
+def compile_pending_gap_closure_engineering(
+    *,
+    market_id: str | None = None,
+    limit: int = 3,
+    tasks_path: Path = Path("docs/data/engineering_tasks.json"),
+    runs_path: Path | None = None,
+    data_dir: Path = Path("docs/data"),
+) -> dict[str, Any]:
+    """Queue ingest engineering tasks for pending gap-closure runs that need follow-up."""
+    from value_investor.engineering_tasks import compile_ingest_engineering_task_from_trial
+
+    wanted = str(market_id or "").strip()
+    pending = list_gap_closure_runs_pending_review(path=runs_path)
+    compiled: list[dict[str, Any]] = []
+    skipped: list[dict[str, str]] = []
+    for run in pending:
+        if len(compiled) >= max(0, int(limit)):
+            break
+        params = run.get("params") or {}
+        if not params.get("require_outstanding_gaps"):
+            continue
+        row_market = str(params.get("market_id") or "").strip()
+        if wanted and row_market != wanted:
+            continue
+        should, reason = should_auto_compile_gap_engineering(
+            run,
+            data_dir=data_dir,
+            tasks_path=tasks_path,
+            runs_path=runs_path,
+        )
+        if not should:
+            skipped.append({"run_id": str(run.get("id") or ""), "reason": reason})
+            continue
+        outcome = compile_ingest_engineering_task_from_trial(
+            run,
+            tasks_path=tasks_path,
+            committed_path=tasks_path,
+            data_dir=data_dir,
+        )
+        if int(outcome.get("compiled_count") or 0) > 0:
+            compiled.append(
+                {
+                    "run_id": run.get("id"),
+                    "task_id": outcome.get("task_id"),
+                    "compile_reason": reason,
+                }
+            )
+        else:
+            skipped.append(
+                {
+                    "run_id": str(run.get("id") or ""),
+                    "reason": str(outcome.get("reason") or "compile_skipped"),
+                }
+            )
+    if compiled:
+        from value_investor.engineering_queue import refresh_engineering_queue_ui
+
+        refresh_engineering_queue_ui(tasks_path=tasks_path)
+    return {
+        "compiled_count": len(compiled),
+        "compiled": compiled,
+        "skipped": skipped,
+        "market_id": wanted or None,
     }
