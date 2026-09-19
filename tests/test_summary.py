@@ -1255,6 +1255,72 @@ def test_reconcile_fcf_binds_filing_year_company_adjusted_over_stale_bridge(tmp_
     ) == pytest.approx(73_800_000.0)
 
 
+def test_reconcile_fcf_binds_divisional_bridge_when_filing_prose_missing(tmp_path: Path):
+    """Use annual fcf_by_division total when fcf_bridge.json still holds prior-year company FCF."""
+    ticker = "ZZZZ.L"
+    sources = tmp_path / "research" / ticker / "sources"
+    (sources / "filings").mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": ticker,
+                "cash_flow": {
+                    "2026": {
+                        "Operating Cash Flow": 615_600_000.0,
+                        "Capital Expenditure": -253_000_000.0,
+                        "Free Cash Flow": 362_600_000.0,
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (sources / "fcf_bridge.json").write_text(
+        json.dumps(
+            {
+                "ticker": ticker,
+                "fiscal_year": "2026",
+                "currency": "GBP",
+                "resolved": True,
+                "policy_basis": "company_adjusted",
+                "policy_fcf": 113_500_000.0,
+                "company_adjusted": 113_500_000.0,
+            }
+        ),
+        encoding="utf-8",
+    )
+    (sources / "ir_presentation_metrics.json").write_text(
+        json.dumps(
+            {
+                "bridges": [
+                    {
+                        "period": "annual",
+                        "bridge_type": "fcf_by_division",
+                        "currency": "GBP",
+                        "derived": {"total_fcf_millions": 73.8},
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps({"filings": []}),
+        encoding="utf-8",
+    )
+
+    bundle = reconcile_fcf_for_ticker(
+        ticker,
+        screen_ttm=302_812_512.0,
+        output_dir=tmp_path,
+    )
+
+    assert bundle["company_adjusted"] == 73_800_000.0
+    assert bundle["company_adjusted_stale_year"] is True
+    assert bundle["company_adjusted_snapshot"] == 113_500_000.0
+    assert bundle["policy_fcf"] == 73_800_000.0
+
+
 def test_build_company_reports_exports_filing_year_company_adjusted_stale_flag(tmp_path: Path):
     sources = tmp_path / "research" / "FGP.L" / "sources"
     filings = sources / "filings" / "bodies"
