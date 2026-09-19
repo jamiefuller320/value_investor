@@ -1524,6 +1524,23 @@ def _cmd_notify_queue_blocked(args: argparse.Namespace) -> int:
         from value_investor.engineering_recovery import mark_queue_clearing_warned
 
         mark_queue_clearing_warned(tasks_path=tasks_path, apply=True)
+    dispatch_kinds = {"parallel_cap", "traffic_pause", "clash_blocked", "dispatch_blocked"}
+    if sent and any(alert.kind in dispatch_kinds for alert in alerts):
+        from value_investor.engineering_pr_notify import (
+            _dispatch_block_fingerprint,
+            mark_dispatch_block_notified,
+        )
+
+        dispatch = _load_optional_json(args.queue_status_json)
+        reason = str(dispatch.get("reason") or "")
+        for alert in alerts:
+            if alert.kind in dispatch_kinds:
+                mark_dispatch_block_notified(
+                    fingerprint=_dispatch_block_fingerprint(alert.kind, reason),
+                    tasks_path=tasks_path,
+                    apply=True,
+                )
+                break
     payload = {
         "alert_count": len(alerts),
         "alerts": [row.to_dict() for row in alerts],
@@ -2360,7 +2377,10 @@ def main(argv: list[str] | None = None) -> int:
     notify_block_p = sub.add_parser(
         "notify-queue-blocked",
         parents=[common],
-        help="Email when the engineering queue is blocked (checkpoint, failures, reconcile, park)",
+        help=(
+            "Email when the engineering queue is blocked (checkpoint, failures, "
+            "reconcile, park, parallel cap, traffic pause)"
+        ),
     )
     notify_block_p.add_argument(
         "--recovery-json",

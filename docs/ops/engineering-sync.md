@@ -274,5 +274,8 @@ task is auto-merge eligible so you can ignore merge for narrow CI fixes but stil
 review everything else.
 
 `notify-queue-blocked` (L96) emails when the queue processor stops dispatching due
-to spend checkpoint, agent failures, orphan `pr_open` reconcile, or newly parked
-tasks. Wired from `engineering-queue.yml` after recovery + sync + gate evaluation.
+to spend checkpoint, agent failures, orphan `pr_open` reconcile, newly parked
+tasks, **parallel cap** (open work waiting while `pr_open` fills slots), project
+traffic pause, or in-flight clash. Parallel-cap / traffic / clash alerts dedupe
+for 12h on the same reason fingerprint so hourly runs do not spam. Wired from
+`engineering-queue.yml` after recovery + sync + gate evaluation.
