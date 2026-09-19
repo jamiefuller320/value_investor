@@ -1576,6 +1576,66 @@ def test_build_company_reports_cyclical_overlay_when_gb_cement_tape_bree_style(
     assert snapshot["adjusted_signal"] == "buy"
 
 
+def test_build_company_reports_ch_backlog_margin_cyclical_mgns_style(tmp_path: Path):
+    ticker = "MGNS.L"
+    sources = tmp_path / "research" / ticker / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "cash_flow": {"2025": {"Free Cash Flow": 363_000_000.0}},
+                "ch_annual_year_in_numbers": {
+                    "years": [
+                        {
+                            "year": 2024,
+                            "adjusted_operating_margin_pct": 3.58,
+                            "secured_workload_to_revenue_ratio": 2.51,
+                        },
+                        {
+                            "year": 2025,
+                            "adjusted_operating_margin_pct": 4.5,
+                            "secured_workload_to_revenue_ratio": 2.386,
+                        },
+                    ],
+                    "latest_secured_workload_to_revenue_ratio": 2.386,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    signals = pd.DataFrame(
+        [
+            _signal_row(
+                ticker=ticker,
+                name="Morgan Sindall Group PLC",
+                sector="Industrials",
+                signal="strong_buy",
+                passed_families="cheapness,quality,dividend,garp,risk",
+            )
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": ticker,
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": True,
+                "score": 0.85,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    snapshot = build_company_reports(signals, model_results, output_dir=tmp_path)[0].to_dict()
+
+    assert snapshot["cyclical_exposure_detected"] is True
+    assert snapshot["cyclical_exposure_overlay"] is True
+    assert snapshot["adjusted_signal"] == "buy"
+    assert "secured workload/revenue" in snapshot["summary"]
+
+
 def _bowl_financials() -> dict:
     return {
         "ticker": "BOWL.L",

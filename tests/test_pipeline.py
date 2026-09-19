@@ -4506,6 +4506,99 @@ def test_enrich_universe_with_leverage_override_replaces_high_yahoo_de(tmp_path:
     assert any("Debt/equity" in reason and "100%" in reason for reason in graham.reasons)
 
 
+def _mgns_style_ch_annual_payload() -> dict:
+    return {
+        "ticker": "MGNS.L",
+        "year_count": 2,
+        "years": [
+            {
+                "year": 2024,
+                "adjusted_operating_margin_pct": 3.58,
+                "secured_workload_to_revenue_ratio": 2.51,
+            },
+            {
+                "year": 2025,
+                "adjusted_operating_margin_pct": 4.5,
+                "secured_workload_to_revenue_ratio": 2.386,
+            },
+        ],
+        "latest_secured_workload_to_revenue_ratio": 2.386,
+    }
+
+
+def test_eng_20260919_13_ch_backlog_margin_cyclical_overlay_despite_passing_piotroski(
+    tmp_path: Path,
+):
+    from value_investor.scoring.cyclical_exposure_overlay import (
+        enrich_signals_with_cyclical_exposure_overlay,
+    )
+    from value_investor.scoring.uk_contractor_overlay import (
+        adjusted_margin_at_multi_year_high,
+        ch_backlog_margin_cyclical_detected,
+        enrich_signals_with_uk_contractor_detection,
+        secured_workload_to_revenue_exceeds_threshold,
+    )
+
+    payload = _mgns_style_ch_annual_payload()
+    assert secured_workload_to_revenue_exceeds_threshold(payload)
+    assert adjusted_margin_at_multi_year_high(payload)
+    assert ch_backlog_margin_cyclical_detected(payload)
+
+    ticker = "MGNS.L"
+    sources = tmp_path / "research" / ticker / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "cash_flow": {"2025": {"Free Cash Flow": 363_000_000.0}},
+                "ch_annual_year_in_numbers": payload,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": ticker,
+                "name": "Morgan Sindall Group PLC",
+                "sector": "Industrials",
+                "signal": "strong_buy",
+                "passed_families": "cheapness,quality,dividend,garp,risk",
+                "uk_contractor": True,
+                "free_cashflow": 363_000_000.0,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": ticker,
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": True,
+                "score": 0.85,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            }
+        ]
+    )
+
+    detected = enrich_signals_with_uk_contractor_detection(signals, output_dir=tmp_path)
+    row = detected.iloc[0]
+    assert bool(row["uk_contractor_ch_backlog_margin_cyclical_detected"]) is True
+    assert bool(row["cyclical_exposure_detected"]) is True
+    assert bool(row.get("uk_contractor_revenue_fcf_warning") or False) is False
+
+    enriched = enrich_signals_with_cyclical_exposure_overlay(
+        detected,
+        model_results,
+        output_dir=tmp_path,
+    )
+    assert bool(enriched.iloc[0]["cyclical_exposure_overlay"]) is True
+    assert enriched.iloc[0]["adjusted_signal"] == "buy"
+
+
 def test_uk_contractor_revenue_fcf_warning_triggers_overlays():
     from value_investor.scoring.cash_conversion_overlay import (
         enrich_signals_with_cash_conversion_overlay,

@@ -24,7 +24,9 @@ from value_investor.scoring.photobooth_cyclical_overlay import (
     photobooth_cyclical_overlay_triggered,
 )
 from value_investor.scoring.uk_contractor_overlay import (
+    ch_backlog_margin_cyclical_for_ticker,
     is_uk_listed_contractor,
+    uk_contractor_ch_backlog_margin_cyclical_overlay_triggered,
     uk_contractor_cyclical_overlay_triggered,
 )
 from value_investor.scoring.uk_heavyside_materials_overlay import (
@@ -78,6 +80,7 @@ def cyclical_exposure_overlay_triggered(
     uk_contractor: bool = False,
     public_capex_detected: bool = False,
     uk_contractor_revenue_fcf_warning: bool = False,
+    uk_contractor_ch_backlog_margin_cyclical_detected: bool = False,
     builders_merchant: bool = False,
     housing_rmi_detected: bool = False,
     uk_heavyside_materials: bool = False,
@@ -103,6 +106,12 @@ def cyclical_exposure_overlay_triggered(
     if builders_merchant_cyclical_overlay_triggered(
         builders_merchant=builders_merchant,
         housing_rmi_detected=housing_rmi_detected,
+        passed_families=passed_families,
+    ):
+        return True
+    if uk_contractor_ch_backlog_margin_cyclical_overlay_triggered(
+        uk_contractor=uk_contractor,
+        ch_backlog_margin_cyclical_detected=uk_contractor_ch_backlog_margin_cyclical_detected,
         passed_families=passed_families,
     ):
         return True
@@ -168,6 +177,7 @@ def apply_cyclical_exposure_overlay_to_signal(
     uk_contractor: bool = False,
     public_capex_detected: bool = False,
     uk_contractor_revenue_fcf_warning: bool = False,
+    uk_contractor_ch_backlog_margin_cyclical_detected: bool = False,
     builders_merchant: bool = False,
     housing_rmi_detected: bool = False,
     uk_heavyside_materials: bool = False,
@@ -187,6 +197,7 @@ def apply_cyclical_exposure_overlay_to_signal(
         uk_contractor=uk_contractor,
         public_capex_detected=public_capex_detected,
         uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
+        uk_contractor_ch_backlog_margin_cyclical_detected=uk_contractor_ch_backlog_margin_cyclical_detected,
         builders_merchant=builders_merchant,
         housing_rmi_detected=housing_rmi_detected,
         uk_heavyside_materials=uk_heavyside_materials,
@@ -284,6 +295,22 @@ def enrich_signals_with_cyclical_exposure_overlay(
             row.get("name"),
             row.get("sector"),
         )
+        ch_backlog_raw = row.get("uk_contractor_ch_backlog_margin_cyclical_detected")
+        if ch_backlog_raw is not None and not (
+            isinstance(ch_backlog_raw, float) and pd.isna(ch_backlog_raw)
+        ):
+            uk_contractor_ch_backlog_margin_cyclical_detected = bool(ch_backlog_raw)
+        elif uk_contractor:
+            uk_contractor_ch_backlog_margin_cyclical_detected = (
+                ch_backlog_margin_cyclical_for_ticker(
+                    ticker,
+                    output_dir=output_dir,
+                )
+            )
+        else:
+            uk_contractor_ch_backlog_margin_cyclical_detected = False
+        if uk_contractor_ch_backlog_margin_cyclical_detected:
+            cyclical_detected = True
         builders_merchant = bool(row.get("builders_merchant")) or is_builders_merchant(
             ticker,
             row.get("name"),
@@ -329,6 +356,7 @@ def enrich_signals_with_cyclical_exposure_overlay(
             uk_contractor=uk_contractor,
             public_capex_detected=public_capex_detected,
             uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
+            uk_contractor_ch_backlog_margin_cyclical_detected=uk_contractor_ch_backlog_margin_cyclical_detected,
             builders_merchant=builders_merchant,
             housing_rmi_detected=housing_rmi_detected,
             uk_heavyside_materials=uk_heavyside,

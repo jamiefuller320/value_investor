@@ -9,11 +9,19 @@ from typing import Any
 import pandas as pd
 
 from value_investor.scoring.fcf import (
+    _filings_index_candidates,
     compute_yoy_growth_rate,
     load_cached_financials,
     load_filing_bodies_for_ticker,
 )
 from value_investor.scoring.interim_quality_overlay import quality_family_passed
+from value_investor.storage import read_json, resolve_json_path
+
+_RESEARCH_ROOTS = (
+    Path("docs/data/research"),
+    Path("docs/data/library/markets/ftse100/screen/research"),
+    Path("docs/data/library/markets/ftse250/screen/research"),
+)
 
 _REVENUE_LABELS = (
     "Total Revenue",
@@ -24,6 +32,7 @@ _REVENUE_LABELS = (
 REVENUE_DECLINE_THRESHOLD = 0.03
 FCF_RISE_THRESHOLD = 0.03
 FRAMEWORK_BACKLOG_GROWTH_FLOOR = 0.0
+SECURED_WORKLOAD_TO_REVENUE_THRESHOLD = 2.0
 
 UK_CONTRACTOR_NAME_FRAGMENTS = (
     "construction",
@@ -218,6 +227,111 @@ def suppress_framework_backlog_earnings_growth(
     return capped, True
 
 
+def _ch_annual_year_in_numbers_candidates(
+    ticker: str,
+    output_dir: Path | None = None,
+) -> list[Path]:
+    ticker = ticker.strip().upper()
+    candidates: list[Path] = []
+    if output_dir is not None:
+        base = Path(output_dir) / "research" / ticker / "sources"
+        candidates.append(base / "ch_annual_year_in_numbers.json")
+        candidates.append(base / "financials_annual.json")
+    for root in _RESEARCH_ROOTS:
+        base = root / ticker / "sources"
+        candidates.append(base / "ch_annual_year_in_numbers.json")
+        candidates.append(base / "financials_annual.json")
+    return candidates
+
+
+def load_ch_annual_year_in_numbers(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+) -> dict[str, Any] | None:
+    """Load Companies House ``YYYY in numbers`` series from cached research JSON."""
+    for path in _ch_annual_year_in_numbers_candidates(ticker, output_dir):
+        resolved = resolve_json_path(path)
+        if resolved is None:
+            continue
+        try:
+            payload = read_json(resolved)
+        except (OSError, ValueError, TypeError):
+            continue
+        if not isinstance(payload, dict):
+            continue
+        if path.name == "financials_annual.json":
+            embedded = payload.get("ch_annual_year_in_numbers")
+            if isinstance(embedded, dict) and embedded.get("years"):
+                return embedded
+            continue
+        if payload.get("years"):
+            return payload
+
+    for index_path in _filings_index_candidates(ticker, output_dir):
+        resolved = resolve_json_path(index_path)
+        if resolved is None:
+            continue
+        filings_dir = resolved.parent
+        if not (filings_dir / "filings_index.json").is_file():
+            continue
+        from value_investor.research.filings import extract_ch_annual_year_in_numbers
+
+        extracted = extract_ch_annual_year_in_numbers(filings_dir, ticker, sources_dir=None)
+        if extracted.get("years"):
+            return extracted
+    return None
+
+
+def secured_workload_to_revenue_exceeds_threshold(
+    ch_payload: dict[str, Any] | None,
+    *,
+    threshold: float = SECURED_WORKLOAD_TO_REVENUE_THRESHOLD,
+) -> bool:
+    if not ch_payload:
+        return False
+    ratio = ch_payload.get("latest_secured_workload_to_revenue_ratio")
+    if ratio is None:
+        years = ch_payload.get("years") or []
+        if years:
+            ratio = years[-1].get("secured_workload_to_revenue_ratio")
+    if ratio is None:
+        return False
+    return float(ratio) > threshold
+
+
+def adjusted_margin_at_multi_year_high(ch_payload: dict[str, Any] | None) -> bool:
+    """True when the latest CH adjusted operating margin is the series high."""
+    if not ch_payload:
+        return False
+    years = ch_payload.get("years") or []
+    margins = [
+        float(row["adjusted_operating_margin_pct"])
+        for row in years
+        if row.get("adjusted_operating_margin_pct") is not None
+    ]
+    if len(margins) < 2:
+        return False
+    latest = margins[-1]
+    return latest >= max(margins[:-1])
+
+
+def ch_backlog_margin_cyclical_detected(ch_payload: dict[str, Any] | None) -> bool:
+    """High secured-workload/revenue with peak adjusted margins — cyclical peak risk."""
+    return secured_workload_to_revenue_exceeds_threshold(
+        ch_payload
+    ) and adjusted_margin_at_multi_year_high(ch_payload)
+
+
+def ch_backlog_margin_cyclical_for_ticker(
+    ticker: str,
+    *,
+    output_dir: Path | None = None,
+) -> bool:
+    payload = load_ch_annual_year_in_numbers(ticker, output_dir=output_dir)
+    return ch_backlog_margin_cyclical_detected(payload)
+
+
 def enrich_universe_with_uk_contractor_adjustments(
     universe: pd.DataFrame,
     output_dir: Path | None = None,
@@ -295,6 +409,7 @@ def enrich_signals_with_uk_contractor_detection(
     public_capex_flags: list[bool] = []
     mix_flags: list[bool] = []
     revenue_fcf_warnings: list[bool] = []
+    ch_backlog_margin_flags: list[bool] = []
 
     for _, row in out.iterrows():
         ticker = str(row["ticker"])
@@ -353,6 +468,17 @@ def enrich_signals_with_uk_contractor_detection(
             mix_notes_confirmed=mix_confirmed,
         )
 
+        ch_backlog_raw = row.get("uk_contractor_ch_backlog_margin_cyclical_detected")
+        if ch_backlog_raw is not None and not (
+            isinstance(ch_backlog_raw, float) and pd.isna(ch_backlog_raw)
+        ):
+            ch_backlog_margin_detected = bool(ch_backlog_raw)
+        elif contractor:
+            ch_payload = load_ch_annual_year_in_numbers(ticker, output_dir=output_dir)
+            ch_backlog_margin_detected = ch_backlog_margin_cyclical_detected(ch_payload)
+        else:
+            ch_backlog_margin_detected = False
+
         existing_cyclical = row.get("cyclical_exposure_detected")
         cyclical_detected = False
         if existing_cyclical is not None and not (
@@ -361,17 +487,32 @@ def enrich_signals_with_uk_contractor_detection(
             cyclical_detected = bool(existing_cyclical)
         if contractor and public_capex_detected:
             cyclical_detected = True
+        if contractor and ch_backlog_margin_detected:
+            cyclical_detected = True
 
         detected_flags.append(cyclical_detected)
         public_capex_flags.append(public_capex_detected)
         mix_flags.append(mix_confirmed)
         revenue_fcf_warnings.append(rev_fcf_warning)
+        ch_backlog_margin_flags.append(ch_backlog_margin_detected)
 
     out["cyclical_exposure_detected"] = detected_flags
     out["public_capex_exposure_detected"] = public_capex_flags
     out["filing_mix_notes_confirmed"] = mix_flags
     out["uk_contractor_revenue_fcf_warning"] = revenue_fcf_warnings
+    out["uk_contractor_ch_backlog_margin_cyclical_detected"] = ch_backlog_margin_flags
     return out
+
+
+def uk_contractor_ch_backlog_margin_cyclical_overlay_triggered(
+    *,
+    uk_contractor: bool,
+    ch_backlog_margin_cyclical_detected: bool,
+    passed_families: str | None,
+) -> bool:
+    if not uk_contractor or not ch_backlog_margin_cyclical_detected:
+        return False
+    return quality_family_passed(passed_families)
 
 
 def uk_contractor_cyclical_overlay_triggered(
