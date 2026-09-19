@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-19T13:22:21+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-19T13:28:41+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -486,6 +486,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L421 | **Cursor agent for non-flake pytest after PR autofix declines** | No-autofix follow-up re-runs a pre-existing live-fetch flake once and explains other pytest declines. It does not patch assertion failures. A capped agent could try a code fix when the follow-up says not implementable. | Eng PRs sit red on non-flake pytest after the one-shot live-fetch re-run and a human still has to patch them |
 | L424 | **Hunter-fix must not ship net-empty or stripped eng tips** | On #704 hunter-fix emptied the dividend tip before human merge; on #715 it stripped ingest/gap_fill and left a leftover PR (#717). Scoped auto-merge then stamps the task merged even when the intended feature was reverted. Traffic does not detect tip emptiness. | Another eng PR is human- or bot-merged after hunter-fix with a near-empty tip or a follow-up PR that only restores stripped files |
 | L426 | **Autofix one-shot re-run for Investegate maintenance HTML flakes** | Live-fetch follow-up only matches has_fetchable_ir + assert None/URLError. Investegate scheduled-maintenance pages return short HTML and fail asserts like len(body) > 1000 (seen on #724/#725 BPT.AX leftover test). Expand safe one-shot re-run detection for that maintenance signature. | Another PR fails only on Investegate maintenance HTML while other shards are green |
+| L427 | **Traffic PM assists parked-backlog clear (orphan branch salvage / cascade cancel)** | When queue_clearing pause is active, PM could open draft PRs from orphaned eng-* branches that already passed local checks, or cancel obvious overlapping preflight_clash cascade parks. Keep human judgment for no_diff_cap and ambiguous parks; do not grant broad cancel authority. | After parallel-cap email and salvage PRs settle; next time attention-parked pause fires with orphan branches and no open PRs |
 
 ---
 
