@@ -2206,61 +2206,12 @@
       "merged_at": "2026-09-15T15:05:07.590899+00:00"
     },
     {
-      "id": "eng-20260918-22",
-      "area": "ingest",
-      "title": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
-      "summary": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
-      "priority": "medium",
-      "priority_score": 40.0,
-      "source": "compile_cap_drain",
-      "evidence": {
-        "tickers": [
-          "MEGP.L"
-        ],
-        "recorded_at": "2026-09-12T12:36:40.963322+00:00",
-        "narrow_scope_mode": "single",
-        "narrow_scope_reason": "topics=filings paths=2",
-        "narrow_parent_title": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
-        "narrow_cohesion_bypass": false,
-        "narrow_topics": [
-          "filings"
-        ],
-        "compile_cap_drain": true,
-        "origin_source": "research_model_suggestions",
-        "origin_priority_score": 40.0,
-        "preferred_merge_class": "compile_cap_drain",
-        "doc": "docs/ops/engineering-sync.md",
-        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
-      },
-      "acceptance_criteria": [
-        "Add or extend fetch logic with a focused regression test for MEGP.L",
-        "Do not change live signal thresholds or paper-fund behaviour",
-        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
-      ],
-      "allowed_paths": [
-        "src/value_investor/research/filings.py",
-        "tests/test_research_filings.py"
-      ],
-      "blocked_paths": [
-        "src/value_investor/paper_fund.py",
-        "src/value_investor/simulator.py",
-        "src/value_investor/paper_automation_cli.py",
-        ".github/workflows/paper-auto.yml",
-        "docs/data/library/policy.json"
-      ],
-      "auto_merge": true,
-      "status": "parked",
-      "parked_reason": "preflight blocked PR open — preflight failed",
-      "parked_policy": "preflight_clash",
-      "parked_at": "2026-09-18T23:29:28.309723+00:00"
-    },
-    {
       "id": "eng-20260918-23",
       "area": "ingest",
       "title": "Replace or supplement garbled CH OCR (`ch_04967001_MzUyMjc5MjMzMmFdaXF6a2N4.txt`) with FCA NSM Annual Report 2025 PDF/iXBRL extract so Risks, APMs, and FCF foot",
       "summary": "Replace or supplement garbled CH OCR (`ch_04967001_MzUyMjc5MjMzMmFdaXF6a2N4.txt`) with FCA NSM Annual Report 2025 PDF/iXBRL extract so Risks, APMs, and FCF footnotes are searchable bodies. (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
       "priority": "medium",
-      "priority_score": 40.0,
+      "priority_score": 42.0,
       "source": "compile_cap_drain",
       "evidence": {
         "tickers": [
@@ -2304,6 +2255,70 @@
       ],
       "auto_merge": false,
       "status": "open"
+    },
+    {
+      "id": "eng-20260918-22",
+      "area": "ingest",
+      "title": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
+      "summary": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "MEGP.L"
+        ],
+        "recorded_at": "2026-09-12T12:36:40.963322+00:00",
+        "narrow_scope_mode": "single",
+        "narrow_scope_reason": "topics=filings paths=2",
+        "narrow_parent_title": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
+        "narrow_cohesion_bypass": false,
+        "narrow_topics": [
+          "filings"
+        ],
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap",
+        "verify_status": "passed",
+        "verify_chain_root_id": "eng-20260918-22",
+        "verified_at": "2026-09-19T09:47:42.342920+00:00",
+        "verify_pytest": {
+          "returncode": 0,
+          "paths": [
+            "tests/test_research_filings.py"
+          ],
+          "output_tail": "........................................................................ [ 19%]\n........................................................................ [ 39%]\n........................................................................ [ 59%]\n........................................................................ [ 78%]\n........................................................................ [ 98%]\n......                                                                   [100%]\n366 passed in 474.07s (0:07:54)"
+        }
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for MEGP.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "tests/test_research_filings.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": true,
+      "status": "merged",
+      "parked_reason": "preflight blocked PR open — preflight failed",
+      "parked_policy": "preflight_clash",
+      "parked_at": "2026-09-18T23:29:28.309723+00:00",
+      "branch_name": "cursor/eng-20260918-22-1de3",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/726",
+      "pr_number": 726,
+      "no_diff_count": 0,
+      "merged_at": "2026-09-19T09:47:42.344061+00:00"
     },
     {
       "id": "eng-20260918-21",
@@ -3039,7 +3054,7 @@
       "title": "Hunt fetchable IR source for parked nasdaq100 leftover PDD",
       "summary": "Library market nasdaq100 (Nasdaq-100) parked PDD after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statut",
       "priority": "low",
-      "priority_score": 12.0,
+      "priority_score": 14.0,
       "source": "parked_source_hunter",
       "evidence": {
         "market_id": "nasdaq100",
@@ -3260,6 +3275,28 @@
     }
   ],
   "ingest_health": {
+    "snapshot_at": "2026-09-19T09:39:44.911534+00:00",
+    "buy_tier_count": 62,
+    "measured_tickers": 62,
+    "unmeasured_buy_tier": 0,
+    "unmeasured_tickers": [],
+    "zero_body_buy_tier": 0,
+    "zero_body_tickers": [],
+    "indexed_without_body": 62,
+    "filings_with_body": 4139
+  },
+  "queue_clearing": {
+    "attention_parked_count": 7,
+    "evaluated_at": "2026-09-19T09:47:48.471823+00:00",
+    "should_send_full_queue_warning": true,
+    "pause_active": true,
+    "pause_started_at": "2026-09-19T00:53:10.731024+00:00",
+    "last_change": {
+      "activated": true
+    },
+    "last_clearing_action_at": "2026-09-19T09:39:34.702498+00:00"
+  },
+  "ingest_health_before": {
     "snapshot_at": "2026-09-16T10:07:10.046461+00:00",
     "buy_tier_count": 62,
     "measured_tickers": 62,
@@ -3270,29 +3307,8 @@
     "indexed_without_body": 19,
     "filings_with_body": 4155
   },
-  "queue_clearing": {
-    "attention_parked_count": 8,
-    "evaluated_at": "2026-09-19T09:38:26.979781+00:00",
-    "should_send_full_queue_warning": true,
-    "pause_active": true,
-    "pause_started_at": "2026-09-19T00:53:10.731024+00:00",
-    "last_change": {
-      "activated": true
-    }
-  },
-  "ingest_health_before": {
-    "snapshot_at": "2026-09-15T17:24:15.578486+00:00",
-    "buy_tier_count": 62,
-    "measured_tickers": 62,
-    "unmeasured_buy_tier": 0,
-    "unmeasured_tickers": [],
-    "zero_body_buy_tier": 0,
-    "zero_body_tickers": [],
-    "indexed_without_body": 16,
-    "filings_with_body": 4160
-  },
-  "reprioritized_at": "2026-09-16T10:07:10.046741+00:00",
-  "reprioritized_after_task": "eng-20260916-02",
+  "reprioritized_at": "2026-09-19T09:39:44.911760+00:00",
+  "reprioritized_after_task": "eng-20260918-22",
   "micro_compile_source": "compile_cap_drain",
   "library_market_id": "nasdaq100",
   "hunter_ticker": "PDD",

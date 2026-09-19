@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T09:38:29.723592+00:00",
+  "generated_at": "2026-09-19T09:47:52.322229+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1154,13 +1154,13 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-18T23:16:25.344671+00:00",
-    "queue_ui_updated_at": "2026-09-19T09:38:29.622419+00:00",
+    "queue_ui_updated_at": "2026-09-19T09:47:52.253658+00:00",
     "task_count": 56,
     "status": {
       "open_count": 2,
       "pr_open_count": 0,
-      "parked_count": 15,
-      "merged_count": 38,
+      "parked_count": 14,
+      "merged_count": 39,
       "failed_count": 0,
       "next_task_id": "eng-20260918-23",
       "in_flight_branch": "cursor/eng-20260918-17-1de3",
@@ -1175,7 +1175,7 @@
         "area": "ingest",
         "title": "Replace or supplement garbled CH OCR (`ch_04967001_MzUyMjc5MjMzMmFdaXF6a2N4.txt`) with FCA NSM Annual Report 2025 PDF/iXBRL extract so Risks, APMs, and FCF foot",
         "priority": "medium",
-        "priority_score": 40.0,
+        "priority_score": 42.0,
         "status": "open",
         "source": "compile_cap_drain",
         "pr_url": null,
@@ -1191,7 +1191,7 @@
         "area": "ingest",
         "title": "Hunt fetchable IR source for parked nasdaq100 leftover PDD",
         "priority": "low",
-        "priority_score": 12.0,
+        "priority_score": 14.0,
         "status": "open",
         "source": "parked_source_hunter",
         "pr_url": null,
@@ -1296,18 +1296,6 @@
         "priority_score": 43.0,
         "status": "parked",
         "source": "research_model_suggestions",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260918-22",
-        "area": "ingest",
-        "title": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
-        "priority": "medium",
-        "priority_score": 40.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
         "pr_url": null,
         "pr_number": null,
         "branch_name": null
@@ -1666,9 +1654,9 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-19T09:38:29.723592+00:00",
+    "generated_at": "2026-09-19T09:47:52.322229+00:00",
     "overall": "blocked",
-    "headline": "Dispatch paused — 8 attention-parked task(s). attention parked backlog clearing pause (8 task(s); resume when < 7 and 30m since last clearing action)",
+    "headline": "Dispatch paused — 7 attention-parked task(s). attention parked backlog clearing pause (7 task(s); resume when < 7 and 30m since last clearing action)",
     "merge_lane": {
       "state": "running",
       "idle": false,
@@ -1698,19 +1686,19 @@
       "should_dispatch": false,
       "pause_active": true,
       "traffic_pause_active": false,
-      "attention_parked_count": 8,
+      "attention_parked_count": 7,
       "open_count": 2,
       "pr_open_count": 0,
       "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
       "next_task_id": "eng-20260918-23",
-      "reason": "attention parked backlog clearing pause (8 task(s); resume when < 7 and 30m since last clearing action)",
-      "detail": "Dispatch paused — 8 attention-parked task(s). attention parked backlog clearing pause (8 task(s); resume when < 7 and 30m since last clearing action)"
+      "reason": "attention parked backlog clearing pause (7 task(s); resume when < 7 and 30m since last clearing action)",
+      "detail": "Dispatch paused — 7 attention-parked task(s). attention parked backlog clearing pause (7 task(s); resume when < 7 and 30m since last clearing action)"
     },
     "queue_clearing": {
       "pause_active": true,
-      "attention_parked_count": 8,
-      "evaluated_at": "2026-09-19T09:38:26.979781+00:00"
+      "attention_parked_count": 7,
+      "evaluated_at": "2026-09-19T09:47:48.471823+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1723,7 +1711,19 @@
       "overall": "warn",
       "should_dispatch_engineering": false
     },
-    "merges_today": [],
-    "verified_merges_today_count": 0
+    "merges_today": [
+      {
+        "task_id": "eng-20260918-22",
+        "title": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
+        "area": "ingest",
+        "pr_number": 726,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/726",
+        "merged_at": "2026-09-19T09:47:42.344061+00:00",
+        "merge_class": "ci_fix",
+        "auto_merge": true,
+        "independently_verified": true
+      }
+    ],
+    "verified_merges_today_count": 1
   }
 }
