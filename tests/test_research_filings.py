@@ -8681,6 +8681,19 @@ def test_parked_source_hunter_skip_ccep_nasdaq100():
     assert fetch_filing_body("https://www.coca-colaep.com/en/investors") is None
 
 
+def test_parked_source_hunter_skip_tri_nasdaq100():
+    """eng-20260919-10: TRI leftover IWB is SEC 6-K cover HTML, not missing 40-F/interim packs."""
+    assert "TRI" in PARKED_SOURCE_HUNTER_SKIP
+    reason = PARKED_SOURCE_HUNTER_SKIP["TRI"]
+    assert "6-K" in reason
+    assert "substantiveness" in reason
+    assert "trifast" in reason
+    assert "40-F" in reason
+    assert "sec_edgar" in reason
+    assert fetch_filings_ir_allowlist("TRI") == []
+    assert fetch_filing_body("https://www.thomsonreuters.com/en/investors") is None
+
+
 def test_fetch_filings_ir_allowlist_euro_depth_andr_vi_builtins(tmp_path: Path):
     """Regression: ANDR.VI parked IWB — andritz.com financial report 2025 PDF."""
     allowlist_path = tmp_path / "ir.json"
