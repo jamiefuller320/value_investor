@@ -33,6 +33,44 @@ RATE_LIMIT_SLEEP_S = 0.6
 # Group accounts PDFs can be tens of MB; allow room for the S3 hop.
 DOCUMENT_DOWNLOAD_TIMEOUT_S = 300.0
 MAX_DOCUMENT_BYTES = 80_000_000
+# Image-only group accounts bury consolidated notes after the strategic report; OCR more pages.
+CH_DEEPEN_OCR_MAX_PAGES = int(os.environ.get("COMPANIES_HOUSE_DEEPEN_OCR_MAX_PAGES", "48"))
+_CH_DEEPEN_SECTION_MARKERS: tuple[tuple[str, int], ...] = (
+    (r"\bNOTES TO THE (?:CONSOLIDATED )?(?:FINANCIAL|GROUP) STATEMENTS\b", 1),
+    (r"\bCONSOLIDATED (?:STATEMENT OF )?CASH FLOW\b", 1),
+    (r"\bCONSOLIDATED (?:INCOME|STATEMENT OF COMPREHENSIVE INCOME)\b", 1),
+    (r"\b(?:NOTE|NOTES)\s+\d+[\.\s\-–—]*Contract assets\b", 2),
+    (r"\bCONTRACT ASSETS\b", 2),
+    (r"\b(?:NOTE|NOTES)\s+\d+[\.\s\-–—]*Joint ventures?\b", 2),
+    (r"\bINVESTMENTS IN JOINT VENTURES\b", 2),
+    (r"\bJOINT VENTURES?\b", 2),
+    (r"\bTRADE AND OTHER RECEIVABLES\b", 2),
+    (r"\b(?:NOTE|NOTES)\s+\d+[\.\s\-–—]*Borrowings\b", 2),
+    (r"\b(?:DEFINED BENEFIT|PENSION)\b", 2),
+    (r"\bRELATED PARTY TRANSACTIONS?\b", 3),
+    (r"\bSEGMENT(?:AL)? (?:INFORMATION|ANALYSIS|REPORTING)\b", 3),
+)
+_CH_DEEPEN_SECTION_CHARS = 6_500
+_CH_DEEPEN_MAX_SECTIONS = 10
+_CH_IXBRL_DEEPEN_TAG_HINTS: tuple[str, ...] = (
+    "contractasset",
+    "contractassets",
+    "jointventure",
+    "jointventures",
+    "investmentsinjointventures",
+    "tradereceivables",
+    "borrowings",
+    "definedbenefit",
+    "segment",
+    "relatedparty",
+    "consolidated",
+    "cashflow",
+)
+_CH_IXBRL_NONNUMERIC_RE = re.compile(
+    r"<(?:ix:)?nonNumeric\b[^>]*\bname=(['\"])([^'\"]+)\1[^>]*>"
+    r"([\s\S]*?)</(?:ix:)?nonNumeric>",
+    flags=re.I,
+)
 
 
 def companies_house_api_key(explicit: str | None = None) -> str | None:
@@ -420,6 +458,7 @@ def iter_ch_document_downloads(
     api_key: str,
 ) -> list[tuple[bytes, str]]:
     """Download each available MIME variant for a CH filing (PDF, then iXBRL)."""
+    register_enhanced_ch_body_fetch()
     meta = fetch_document_metadata(document_metadata_url, api_key=api_key)
     if not meta:
         return []
@@ -480,3 +519,205 @@ def fetch_filings_companies_house(
     except Exception as exc:  # noqa: BLE001
         logger.warning("Companies House filings failed for %s: %s", ticker, exc)
         return []
+
+
+def _ixbrl_deeper_tag_rank(tag_name: str) -> int:
+    normalized = re.sub(r"[^a-z0-9]", "", (tag_name or "").lower())
+    for index, hint in enumerate(_CH_IXBRL_DEEPEN_TAG_HINTS):
+        if hint in normalized:
+            return index
+    return len(_CH_IXBRL_DEEPEN_TAG_HINTS)
+
+
+def _extract_ixbrl_deeper_tag_narrative(html: str) -> str:
+    """Pull contractor-relevant note blocks from iXBRL ``ix:nonNumeric`` tags."""
+    from value_investor.research.filings import _strip_html
+
+    blocks: list[tuple[int, int, str]] = []
+    for index, match in enumerate(_CH_IXBRL_NONNUMERIC_RE.finditer(html or "")):
+        tag_name = match.group(2)
+        inner = _strip_html(match.group(3))
+        if len(inner) < 30:
+            continue
+        blocks.append((_ixbrl_deeper_tag_rank(tag_name), index, inner))
+    if not blocks:
+        return ""
+    blocks.sort(key=lambda item: (item[0], item[1]))
+    return "\n\n".join(block for _, _, block in blocks)
+
+
+def _splice_ch_deepen_note_sections(full_text: str) -> str:
+    """Splice consolidated note windows (contract assets, JVs) beyond OCR front-matter."""
+    if not full_text.strip():
+        return full_text
+    sections: list[str] = []
+    used_ranges: list[tuple[int, int]] = []
+    skip_before = min(8_000, len(full_text) // 4)
+    for pattern, _rank in _CH_DEEPEN_SECTION_MARKERS:
+        for match in re.finditer(pattern, full_text, flags=re.I):
+            if match.start() < skip_before:
+                continue
+            start = max(0, match.start() - 120)
+            end = min(len(full_text), match.end() + _CH_DEEPEN_SECTION_CHARS)
+            if any(start < used_end and end > used_start for used_start, used_end in used_ranges):
+                continue
+            chunk = full_text[start:end].strip()
+            if len(chunk) < 60:
+                continue
+            sections.append(chunk)
+            used_ranges.append((start, end))
+            if len(sections) >= _CH_DEEPEN_MAX_SECTIONS:
+                break
+        if len(sections) >= _CH_DEEPEN_MAX_SECTIONS:
+            break
+    if not sections:
+        return full_text
+    lead = full_text[: min(12_000, len(full_text))].rstrip()
+    return lead + "\n\n---\n\n" + "\n\n---\n\n".join(sections)
+
+
+def _deepen_ch_document_text(
+    raw: bytes,
+    content_type: str,
+    *,
+    baseline: str | None,
+) -> str | None:
+    """Re-extract CH accounts when the first pass stops at strategic-report OCR front-matter."""
+    from value_investor.research.filings import (
+        _ch_body_lacks_financial_depth,
+        _compose_filing_body_with_depth_sections,
+        _extract_filing_document_text,
+        _is_ixbrl_html,
+        _ocr_pdf_text,
+        _score_ch_body_text,
+    )
+
+    ct = (content_type or "").lower()
+    candidates: list[str] = []
+
+    if raw[:4] == b"%PDF" or "pdf" in ct:
+        if baseline and not _ch_body_lacks_financial_depth(baseline):
+            return None
+        ocr_deep = _ocr_pdf_text(raw, max_pages=CH_DEEPEN_OCR_MAX_PAGES)
+        if ocr_deep:
+            merged = _splice_ch_deepen_note_sections(ocr_deep)
+            merged = _compose_filing_body_with_depth_sections(merged) or merged
+            candidates.append(merged)
+    elif _is_ixbrl_html(raw) or "xhtml" in ct or "xml" in ct:
+        html = raw.decode("utf-8", errors="replace")
+        tag_narrative = _extract_ixbrl_deeper_tag_narrative(html)
+        if tag_narrative:
+            base = baseline or _extract_filing_document_text(raw, content_type) or ""
+            merged = f"{tag_narrative}\n\n{base}".strip() if base else tag_narrative
+            merged = _compose_filing_body_with_depth_sections(merged) or merged
+            candidates.append(merged)
+    elif ct == MIME_ZIP or raw[:2] == b"PK":
+        zip_text = _extract_filing_document_text(raw, content_type)
+        if zip_text and baseline and not _ch_body_lacks_financial_depth(zip_text):
+            return None
+        if zip_text:
+            candidates.append(zip_text)
+
+    if not candidates:
+        return None
+    best = max(candidates, key=_score_ch_body_text)
+    if baseline and _score_ch_body_text(best) <= _score_ch_body_text(baseline):
+        return None
+    return best
+
+
+def _ch_consolidated_note_depth(text: str) -> bool:
+    """True when extract reaches consolidated note disclosures (MGNS-style contractor accounts)."""
+    lower = (text or "").lower()
+    if "notes to the consolidated" in lower or "notes to the group financial" in lower:
+        return True
+    if "contract asset" in lower and any(
+        token in lower for token in ("joint venture", "joint ventures", "investments in joint")
+    ):
+        return True
+    if "contract assets" in lower and "trade and other receivables" in lower:
+        return True
+    return False
+
+
+def _select_best_ch_deepened_body(candidates: list[tuple[str, str]]) -> str | None:
+    """Pick CH body text; recover when PDF depth penalty hides consolidated note OCR."""
+    from value_investor.research.filings import (
+        _ch_body_lacks_financial_depth,
+        _score_ch_body_text,
+        _select_best_ch_body_text,
+    )
+
+    best = _select_best_ch_body_text(candidates)
+    if best:
+        return best
+    note_rich = [
+        (text, content_type)
+        for text, content_type in candidates
+        if _ch_consolidated_note_depth(text) and len(text) >= 200
+    ]
+    if note_rich:
+        return max(note_rich, key=lambda item: _score_ch_body_text(item[0]))[0]
+    shallow_ok = [
+        (text, content_type)
+        for text, content_type in candidates
+        if not _ch_body_lacks_financial_depth(text)
+    ]
+    if shallow_ok:
+        return max(shallow_ok, key=lambda item: _score_ch_body_text(item[0]))[0]
+    if candidates:
+        return max(candidates, key=lambda item: _score_ch_body_text(item[0]))[0]
+    return None
+
+
+def fetch_companies_house_filing_body(row: dict[str, Any]) -> str | None:
+    """
+    Download and extract filed-accounts text, deepening shallow PDF OCR / iXBRL stubs.
+
+    Used by the filings refetch path (via :func:`register_enhanced_ch_body_fetch`).
+    """
+    from value_investor.research.filings import (
+        FILINGS_BODY_MAX_CHARS,
+        _extract_filing_document_text,
+    )
+
+    key = companies_house_api_key()
+    if not key:
+        return None
+    meta_url = str(row.get("document_metadata_url") or row.get("url") or "")
+    if not meta_url:
+        return None
+    try:
+        downloads = iter_ch_document_downloads(meta_url, api_key=key)
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("CH body fetch failed for %s: %s", row.get("id"), exc)
+        return None
+
+    candidates: list[tuple[str, str]] = []
+    for raw, content_type in downloads:
+        text = _extract_filing_document_text(raw, content_type)
+        deepen = _deepen_ch_document_text(raw, content_type, baseline=text)
+        if deepen:
+            text = deepen
+        if text and len(text) >= 200:
+            candidates.append((text, content_type))
+    best_text = _select_best_ch_deepened_body(candidates)
+    if not best_text:
+        return None
+    if len(best_text) > FILINGS_BODY_MAX_CHARS:
+        best_text = best_text[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
+    return best_text
+
+
+def register_enhanced_ch_body_fetch() -> None:
+    """Route filings CH refetch through :func:`fetch_companies_house_filing_body`."""
+    import value_investor.research.filings as filings_mod
+
+    if getattr(filings_mod._fetch_companies_house_body, "_ch_deepened", False):
+        return
+
+    def _enhanced(row: dict[str, Any]) -> str | None:
+        return fetch_companies_house_filing_body(row)
+
+    _enhanced._ch_deepened = True  # type: ignore[attr-defined]
+    filings_mod._fetch_companies_house_body = _enhanced

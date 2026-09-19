@@ -79,6 +79,14 @@ def test_companies_house_catalog_mentions_consolidated_notes():
     assert "borrowings" in why
     assert "cash-flow" in why or "cash flow" in why
     assert "segment" in why
+    assert "contract assets" in why
+    assert "joint-venture" in why or "joint venture" in why
+
+
+def test_gap_fill_registers_enhanced_ch_body_fetch():
+    from value_investor.research import filings as filings_mod
+
+    assert getattr(filings_mod._fetch_companies_house_body, "_ch_deepened", False) is True
 
 
 @patch("value_investor.research.gap_fill_sources.fetch_alternate_gap_fill_news", return_value=[])

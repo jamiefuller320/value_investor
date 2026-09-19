@@ -8,13 +8,18 @@ from pathlib import Path
 from unittest.mock import patch
 
 from value_investor.research.companies_house import (
+    CH_DEEPEN_OCR_MAX_PAGES,
     DEEPEN_MAX_ACCOUNTS,
     DEFAULT_MAX_ACCOUNTS,
+    MIME_PDF,
+    _splice_ch_deepen_note_sections,
     _StripAuthOnRedirect,
     ch_document_id_from_metadata_url,
     fetch_accounts_filing_rows,
+    fetch_companies_house_filing_body,
     fetch_filings_companies_house,
     load_company_number_map,
+    register_enhanced_ch_body_fetch,
     resolve_company_number,
     save_company_number_map,
     search_company_number,
@@ -444,3 +449,76 @@ def test_deepen_sources_skips_missing_memo(tmp_path: Path):
     )
     assert result.skipped == ["MISSING.L"]
     assert result.deepened == []
+
+
+def test_splice_ch_deepen_note_sections_reaches_contract_assets_and_jvs():
+    """eng-20260919-02: MGNS-style OCR front-matter must not hide consolidated note sections."""
+    front_matter = "Annual Report 2025 strategic report chief executive our businesses " + (
+        "empowered teams sustainability MSCI " * 400
+    )
+    notes = (
+        " NOTES TO THE CONSOLIDATED FINANCIAL STATEMENTS "
+        " NOTE 14 Contract assets £335.4m (2024: £302.9m) trade receivables "
+        " NOTE 15 Joint ventures investments in joint ventures share of profit £12.3m "
+    )
+    merged = _splice_ch_deepen_note_sections(front_matter + notes)
+    assert "Contract assets" in merged
+    assert "Joint ventures" in merged
+    assert "335.4m" in merged
+
+
+def test_mgns_ch_filing_body_deepens_beyond_ocr_front_matter(monkeypatch):
+    """eng-20260919-02: Morgan Sindall amended CH accounts need note depth, not cover OCR."""
+    monkeypatch.setenv("COMPANIES_HOUSE_API_KEY", "test-key")
+    row = {
+        "id": "ch_00521970_MzUzODczOTEzNWFkaXF6a2N4",
+        "company_number": "00521970",
+        "document_metadata_url": (
+            "https://document-api.company-information.service.gov.uk/document/mgns-amended"
+        ),
+    }
+    shallow = "Amended Accounts Annual Report 2025 strategic report chief executive " + (
+        "our record performance in 2025 " * 120
+    )
+    deep_notes = (
+        " NOTES TO THE CONSOLIDATED FINANCIAL STATEMENTS "
+        " NOTE 14 Contract assets £335.4m (2024: £302.9m) "
+        " NOTE 15 Joint ventures investments in joint ventures "
+    )
+
+    def fake_iter(*_args, **_kwargs):
+        return [(b"%PDF-1.4", MIME_PDF)]
+
+    def fake_extract(_raw, _content_type):
+        return shallow
+
+    def fake_ocr(_raw, *, max_pages=None):
+        if max_pages is not None and max_pages >= CH_DEEPEN_OCR_MAX_PAGES:
+            return shallow + deep_notes
+        return shallow
+
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.iter_ch_document_downloads",
+        fake_iter,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._extract_filing_document_text",
+        fake_extract,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._ocr_pdf_text",
+        fake_ocr,
+    )
+
+    body = fetch_companies_house_filing_body(row)
+    assert body is not None
+    assert "Contract assets" in body
+    assert "Joint ventures" in body
+    assert "335.4m" in body
+
+
+def test_register_enhanced_ch_body_fetch_replaces_filings_hook():
+    from value_investor.research import filings as filings_mod
+
+    register_enhanced_ch_body_fetch()
+    assert getattr(filings_mod._fetch_companies_house_body, "_ch_deepened", False) is True
