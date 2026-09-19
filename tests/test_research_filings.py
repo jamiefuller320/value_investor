@@ -10221,3 +10221,106 @@ def test_refetch_ir_allowlist_filing_bodies_refetches_truncated_itv_body(
     saved = (filings_dir / "bodies" / f"ir_{digest}.txt").read_text(encoding="utf-8")
     assert "Free cash flow 187 325" in saved
     assert not saved.rstrip().endswith("Pension fundin")
+
+
+def test_eng_20260919_03_parse_ch_mgns_year_in_numbers_compact_ocr_in_memory():
+    from value_investor.research.filings import parse_ch_year_in_numbers_highlights
+
+    body = (
+        "Morgan Sindall Group plc Annual Report 2025\n"
+        "2025 in numbers\n"
+        "Strong operating performance\n"
+        "Revenue Operating profit (adjusted*)\n"
+        "£5,018.6m £225./M\n"
+        "(2024 £4 546 2m) (2024 £162 6m)\n"
+        "Operating profit Secured worktoad\n"
+        "£224.9m £11,972.2m\n"
+        "(2024 £162 0m) (2024 £11,419 3m)\n"
+        "Financial strength and shareholder returns\n"
+    )
+    parsed = parse_ch_year_in_numbers_highlights(body)
+    assert parsed is not None
+    assert parsed["year"] == 2025
+    assert parsed["revenue_millions"] == 5018.6
+    assert parsed["adjusted_operating_profit_millions"] == 225.7
+    assert parsed["secured_workload_millions"] == 11972.2
+    assert parsed["prior_revenue_millions"] == 4546.2
+    assert parsed["secured_workload_to_revenue_ratio"] == pytest.approx(2.386, rel=1e-3)
+
+
+def test_eng_20260919_03_parse_ch_mgns_year_in_numbers_multiline_in_memory():
+    from value_investor.research.filings import parse_ch_year_in_numbers_highlights
+
+    body = (
+        "2024 in numbers\n"
+        "Strong operating performance\n"
+        "Revenue\n"
+        "£4,546.2m\n"
+        "(2023: £4,117.7m)\n"
+        "Operating profit (adjusted*)\n"
+        "£162.6m\n"
+        "(2023: £141.3m)\n"
+        "Operating profit\n"
+        "£162.0m\n"
+        "(2023: £140.6m)\n"
+        "Secured workload\n"
+        "£11,419.3m\n"
+        "(2023: £8,920.2m)\n"
+        "Materiality\n"
+    )
+    parsed = parse_ch_year_in_numbers_highlights(body)
+    assert parsed is not None
+    assert parsed["year"] == 2024
+    assert parsed["adjusted_operating_profit_millions"] == 162.6
+    assert parsed["prior_adjusted_operating_margin_pct"] == pytest.approx(3.43, rel=1e-2)
+
+
+def test_eng_20260919_03_extract_ch_annual_year_in_numbers_mgns_l(tmp_path: Path):
+    from value_investor.research.filings import extract_ch_annual_year_in_numbers
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    bodies = {
+        "ch_2024": (
+            "2024 in numbers\nStrong operating performance\nRevenue\n£4,546.2m\n"
+            "(2023: £4,117.7m)\nOperating profit (adjusted*)\n£162.6m\n(2023: £141.3m)\n"
+            "Secured workload\n£11,419.3m\n(2023: £8,920.2m)\nMateriality\n"
+        ),
+        "ch_2025": (
+            "2025 in numbers\nStrong operating performance\n"
+            "Revenue Operating profit (adjusted*)\n£5,018.6m £225.7m\n"
+            "(2024 £4,546.2m) (2024 £162.6m)\nOperating profit Secured workload\n"
+            "£224.9m £11,972.2m\n(2024 £162.0m) (2024 £11,419.3m)\nFinancial strength\n"
+        ),
+    }
+    index_rows = []
+    for body_id, text in bodies.items():
+        path = bodies_dir / f"{body_id}.txt"
+        path.write_text(text, encoding="utf-8")
+        index_rows.append(
+            {
+                "id": body_id,
+                "source": "companies_house",
+                "headline": "Full accounts made up to 31 December",
+                "period": "annual",
+                "has_body": True,
+                "body_path": str(path),
+                "published_at": "2026-03-01" if body_id.endswith("2025") else "2025-03-01",
+            }
+        )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": index_rows}),
+        encoding="utf-8",
+    )
+    sources_dir = tmp_path / "sources"
+    sources_dir.mkdir()
+    payload = extract_ch_annual_year_in_numbers(
+        filings_dir,
+        "MGNS.L",
+        sources_dir=sources_dir,
+    )
+    assert payload["year_count"] == 2
+    assert payload["years"][-1]["year"] == 2025
+    assert payload["latest_secured_workload_to_revenue_ratio"] == pytest.approx(2.386, rel=1e-3)
+    assert (sources_dir / "ch_annual_year_in_numbers.json").exists()

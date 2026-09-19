@@ -6607,6 +6607,184 @@ _DISPOSAL_RNS_CONSIDERATION_RE = re.compile(
     r"(?:up to )?£([\d.]+)\s*b(?:illion|n)?\s+(?:of )?(?:total )?consideration",
     re.IGNORECASE,
 )
+_CH_YEAR_IN_NUMBERS_HEADING_RE = re.compile(r"(20\d{2})\s+in\s+numbers\b", re.IGNORECASE)
+_CH_YEAR_IN_NUMBERS_SECTION_END_RE = re.compile(
+    r"\bMateriality\b|\bFinancial strength\b|\bSocial and environmental value\b",
+    re.IGNORECASE,
+)
+_CH_PRIOR_YEAR_PAREN_AMOUNT_RE = re.compile(
+    r"\(\s*(?:20\d{2})\s*[:£]?\s*£?\s*([\d\s,.]+?)\s*m(?:illion)?\s*\)",
+    re.IGNORECASE,
+)
+
+
+def _parse_ch_spaced_million_amount(raw: str) -> float | None:
+    """Parse £m amounts from CH OCR (e.g. ``4 546 2`` → 4546.2)."""
+    cleaned = raw.strip()
+    if not cleaned:
+        return None
+    if re.fullmatch(r"\d+\./", cleaned):
+        cleaned = cleaned[:-1] + "7"
+    cleaned = cleaned.replace(",", "")
+    parts = cleaned.split()
+    if (
+        len(parts) >= 2
+        and len(parts[-1]) <= 2
+        and all(part.replace(".", "").isdigit() for part in parts)
+    ):
+        decimal_part = parts[-1].replace(".", "")
+        whole = "".join(part.replace(".", "") for part in parts[:-1])
+        if whole and decimal_part:
+            try:
+                return float(f"{whole}.{decimal_part}")
+            except ValueError:
+                return None
+    compact = cleaned.replace(" ", "").replace("/", "")
+    if compact.count(".") > 1:
+        compact = compact.replace(".", "", compact.count(".") - 1)
+    return _parse_table_number(compact)
+
+
+def _ch_year_in_numbers_section(body_text: str) -> tuple[int, str] | None:
+    match = _CH_YEAR_IN_NUMBERS_HEADING_RE.search(body_text)
+    if match is None:
+        return None
+    year = int(match.group(1))
+    tail = body_text[match.end() :]
+    end = _CH_YEAR_IN_NUMBERS_SECTION_END_RE.search(tail)
+    section = tail[: end.start()] if end else tail[:2500]
+    return year, section
+
+
+def _ch_labeled_million_pair(section: str, label_pattern: str) -> tuple[float | None, float | None]:
+    label_match = re.search(label_pattern, section, re.IGNORECASE)
+    if label_match is None:
+        return None, None
+    tail = section[label_match.end() : label_match.end() + 400]
+    current_match = re.search(
+        r"£\s*([\d\s,./]+)\s*(?:m(?:illion)?|M)\b",
+        tail,
+        re.IGNORECASE,
+    )
+    if current_match is None:
+        return None, None
+    current = _parse_ch_spaced_million_amount(current_match.group(1))
+    prior_match = _CH_PRIOR_YEAR_PAREN_AMOUNT_RE.search(tail[current_match.end() :])
+    prior = (
+        _parse_ch_spaced_million_amount(prior_match.group(1)) if prior_match is not None else None
+    )
+    return current, prior
+
+
+def _ch_year_in_numbers_amount_sequences(
+    section: str,
+) -> tuple[list[float], list[float]]:
+    block_match = re.search(
+        r"Strong operating performance([\s\S]*?)(?:Financial strength|Materiality|Social and environmental)",
+        section,
+        re.IGNORECASE,
+    )
+    block = block_match.group(1) if block_match else section[:1500]
+    amount_token_re = re.compile(r"£\s*([\d\s,./]+)\s*(?:m(?:illion)?|M)\b", re.IGNORECASE)
+    currents: list[float] = []
+    for line in block.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("("):
+            continue
+        for match in amount_token_re.finditer(line):
+            parsed = _parse_ch_spaced_million_amount(match.group(1))
+            if parsed is not None:
+                currents.append(parsed)
+    priors: list[float] = []
+    for match in _CH_PRIOR_YEAR_PAREN_AMOUNT_RE.finditer(block):
+        parsed = _parse_ch_spaced_million_amount(match.group(1))
+        if parsed is not None:
+            priors.append(parsed)
+    return currents, priors
+
+
+def parse_ch_year_in_numbers_highlights(body_text: str) -> dict[str, Any] | None:
+    """
+    Parse Morgan Sindall-style ``YYYY in numbers`` blocks from CH annual report OCR.
+
+    Extracts revenue, adjusted operating profit, and secured workload for margin and
+    backlog/revenue overlays.
+    """
+    if not body_text or not body_text.strip():
+        return None
+    located = _ch_year_in_numbers_section(body_text)
+    if located is None:
+        return None
+    year, section = located
+    currents, priors = _ch_year_in_numbers_amount_sequences(section)
+    revenue: float | None = None
+    adj_op: float | None = None
+    secured: float | None = None
+    prior_revenue: float | None = None
+    prior_adj_op: float | None = None
+    prior_secured: float | None = None
+    if len(currents) >= 3:
+        revenue = currents[0]
+        adj_op = currents[1]
+        secured = currents[3] if len(currents) >= 4 else currents[-1]
+        if len(priors) >= 3:
+            prior_revenue = priors[0]
+            prior_adj_op = priors[1]
+            prior_secured = priors[3] if len(priors) >= 4 else priors[-1]
+    if revenue is None or adj_op is None or secured is None:
+        revenue, prior_revenue = _ch_labeled_million_pair(section, r"\bRevenue\b")
+        adj_op, prior_adj_op = _ch_labeled_million_pair(
+            section,
+            r"Operating profit\s*\(\s*adjusted",
+        )
+        secured, prior_secured = _ch_labeled_million_pair(
+            section,
+            r"Secured work(?:load|toad)",
+        )
+    if revenue is None or adj_op is None or secured is None:
+        return None
+    payload: dict[str, Any] = {
+        "source_type": "ch_year_in_numbers",
+        "year": year,
+        "currency": "GBP",
+        "unit": "millions",
+        "revenue_millions": revenue,
+        "adjusted_operating_profit_millions": adj_op,
+        "secured_workload_millions": secured,
+    }
+    if prior_revenue is not None:
+        payload["prior_revenue_millions"] = prior_revenue
+    if prior_adj_op is not None:
+        payload["prior_adjusted_operating_profit_millions"] = prior_adj_op
+    if prior_secured is not None:
+        payload["prior_secured_workload_millions"] = prior_secured
+    if revenue:
+        payload["adjusted_operating_margin_pct"] = round(adj_op / revenue * 100, 2)
+    if prior_revenue and prior_adj_op is not None:
+        payload["prior_adjusted_operating_margin_pct"] = round(
+            prior_adj_op / prior_revenue * 100,
+            2,
+        )
+    if revenue:
+        payload["secured_workload_to_revenue_ratio"] = round(secured / revenue, 3)
+    if prior_revenue and prior_secured is not None:
+        payload["prior_secured_workload_to_revenue_ratio"] = round(
+            prior_secured / prior_revenue,
+            3,
+        )
+    payload["parse_confidence"] = (
+        "high"
+        if all(
+            value is not None
+            for value in (
+                prior_revenue,
+                prior_adj_op,
+                prior_secured,
+            )
+        )
+        else "medium"
+    )
+    return payload
 
 
 def parse_statutory_interim_results_highlights(body_text: str) -> dict[str, Any] | None:
@@ -6838,6 +7016,113 @@ def extract_filing_interim_financials(
     if sources_dir is not None:
         write_json(
             Path(sources_dir) / "filing_interim_financials.json",
+            payload,
+            compact=False,
+            compress=False,
+        )
+    return payload
+
+
+def extract_ch_annual_year_in_numbers(
+    filings_dir: Path,
+    ticker: str,
+    *,
+    sources_dir: Path | None = None,
+) -> dict[str, Any]:
+    """
+    Scan Companies House annual filing bodies for ``YYYY in numbers`` highlight tables.
+
+    Writes ``ch_annual_year_in_numbers.json`` when ``sources_dir`` is set.
+    """
+    from value_investor.storage import write_json
+
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
+    payload: dict[str, Any] = {
+        "ticker": ticker.strip().upper(),
+        "extracted_at": datetime.now(UTC).isoformat(),
+        "years": [],
+    }
+    if not index_path.is_file():
+        payload["note"] = "no filings_index.json"
+        if sources_dir is not None:
+            write_json(
+                Path(sources_dir) / "ch_annual_year_in_numbers.json",
+                payload,
+                compact=False,
+                compress=False,
+            )
+        return payload
+
+    try:
+        index = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError) as exc:
+        payload["note"] = f"unreadable index: {exc}"
+        if sources_dir is not None:
+            write_json(
+                Path(sources_dir) / "ch_annual_year_in_numbers.json",
+                payload,
+                compact=False,
+                compress=False,
+            )
+        return payload
+
+    bodies_dir = filings_dir / "bodies"
+    annual_ch_rows = [
+        row
+        for row in index.get("filings") or []
+        if isinstance(row, dict)
+        and str(row.get("period") or "") == "annual"
+        and row.get("has_body")
+        and _is_ch_filing_row(row)
+    ]
+    by_year: dict[int, dict[str, Any]] = {}
+    for row in annual_ch_rows:
+        path = _resolve_filing_body_path_for_row(row, bodies_dir)
+        if path is None:
+            continue
+        try:
+            body_text = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        parsed = parse_ch_year_in_numbers_highlights(body_text)
+        if parsed is None:
+            continue
+        year = int(parsed["year"])
+        existing = by_year.get(year)
+        candidate = {
+            **parsed,
+            "source_body_id": row.get("id"),
+            "headline": row.get("headline"),
+            "published_at": row.get("published_at"),
+        }
+        if existing is None or str(row.get("published_at") or "") >= str(
+            existing.get("published_at") or ""
+        ):
+            by_year[year] = candidate
+
+    years = [by_year[year] for year in sorted(by_year)]
+    payload["years"] = years
+    payload["year_count"] = len(years)
+    if years:
+        margins = [
+            row["adjusted_operating_margin_pct"]
+            for row in years
+            if row.get("adjusted_operating_margin_pct") is not None
+        ]
+        if len(margins) >= 2:
+            payload["adjusted_margin_trend_pct_points"] = round(margins[-1] - margins[0], 2)
+        ratios = [
+            row["secured_workload_to_revenue_ratio"]
+            for row in years
+            if row.get("secured_workload_to_revenue_ratio") is not None
+        ]
+        if ratios:
+            payload["latest_secured_workload_to_revenue_ratio"] = ratios[-1]
+
+    if sources_dir is not None:
+        write_json(
+            Path(sources_dir) / "ch_annual_year_in_numbers.json",
             payload,
             compact=False,
             compress=False,

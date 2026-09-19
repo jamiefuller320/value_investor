@@ -596,6 +596,28 @@ def attach_filing_interim_financials(
     return updated
 
 
+def attach_ch_annual_year_in_numbers(
+    financials: dict[str, Any],
+    *,
+    filings_dir: Path,
+    ticker: str,
+    sources_dir: Path,
+) -> dict[str, Any]:
+    """Merge CH annual ``YYYY in numbers`` series when present in filing bodies."""
+    from value_investor.research.filings import extract_ch_annual_year_in_numbers
+
+    updated = dict(financials)
+    ch_highlights = extract_ch_annual_year_in_numbers(
+        filings_dir,
+        ticker,
+        sources_dir=sources_dir,
+    )
+    if ch_highlights.get("years"):
+        updated["ch_annual_year_in_numbers"] = ch_highlights
+        updated["ch_annual_year_in_numbers_source"] = "companies_house_bodies"
+    return updated
+
+
 def enrich_screening_snapshot_with_yahoo_quarterly(
     snapshot: dict[str, Any],
     financials: dict[str, Any],
@@ -1062,6 +1084,12 @@ def ingest_research_sources(
             and int((filings_meta.get("filings_summary") or {}).get("with_body") or 0) > 0
         ):
             financials = attach_filing_interim_financials(
+                financials,
+                filings_dir=sources_dir / "filings",
+                ticker=ticker,
+                sources_dir=sources_dir,
+            )
+            financials = attach_ch_annual_year_in_numbers(
                 financials,
                 filings_dir=sources_dir / "filings",
                 ticker=ticker,
