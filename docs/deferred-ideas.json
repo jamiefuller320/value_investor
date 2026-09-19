@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-18T22:26:25+00:00",
+  "updated_at": "2026-09-19T07:50:00+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9475,6 +9475,23 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0b580-7a75-7585-a700-91fa2c6ac474",
       "added_at": "2026-09-18T22:26:25+00:00"
+    },
+    {
+      "id": "L424",
+      "category": "later",
+      "section": "ops",
+      "title": "Hunter-fix must not ship net-empty or stripped eng tips",
+      "summary": "On #704 hunter-fix emptied the dividend tip before human merge; on #715 it stripped ingest/gap_fill and left a leftover PR (#717). Scoped auto-merge then stamps the task merged even when the intended feature was reverted. Traffic does not detect tip emptiness.",
+      "revisit_when": "Another eng PR is human- or bot-merged after hunter-fix with a near-empty tip or a follow-up PR that only restores stripped files",
+      "tags": [
+        "hunter-fix",
+        "merge-authority",
+        "eng-queue",
+        "observation"
+      ],
+      "status": "open",
+      "source": "conversation: PR traffic health review 2026-09-19",
+      "added_at": "2026-09-19T07:50:00+00:00"
     }
   ],
   "fragments": [
@@ -9966,6 +9983,18 @@
       "status": "open",
       "source": "weekly planning conversation",
       "added_at": "2026-09-14T09:38:20+00:00"
+    },
+    {
+      "id": "frag-20260919-01",
+      "text": "Traffic common-issues log has almost no signal (1 human ruff_format). Live-fetch flakes and hunter-fix tip wipes are not auto-recorded as fix occasions, so EOD common-issues understates recurring CI blockers.",
+      "tags": [
+        "traffic",
+        "common-issues",
+        "observation"
+      ],
+      "status": "open",
+      "source": "conversation: PR traffic health review 2026-09-19",
+      "added_at": "2026-09-19T07:50:00+00:00"
     }
   ],
   "schema_version": 1

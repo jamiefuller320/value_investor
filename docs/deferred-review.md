@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-18T22:26:25+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-19T07:50:00+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -50,6 +50,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | frag-20260906-01 | L314/L315 are not a sprint. L314 as written (filing/memo PIT on snapshots) is not worth it; the only cheap slice is allowlisting already-published FCF flags after live bind is stable, and L229 already covers that flag-in-history idea. L315 daily/fill marks wait until buy_tier_level has a thick epoch and a question Sunday-to-Sunday marks cannot answer. | archive, fcf, l314, l315, not_now |
 | frag-20260908-01 | S&P 500 screen archives skipped several August Sundays (2026-08-09, 08-23, 08-30), so unique_days lags archive_files. Cadence is running again; do not backfill invented archives. | sp500, screen-cadence, unique-days |
 | frag-20260914-01 | Recurring miss pattern: we analyze enacted choices and counterfactuals months later, but only fields frozen at decision time are fair. Default bias should be over-record cheap machine flags (revision_id, bind presence, confidence/risk enums) and under-record expensive prose. | recording, pit, counterfactual, philosophy |
+| frag-20260919-01 | Traffic common-issues log has almost no signal (1 human ruff_format). Live-fetch flakes and hunter-fix tip wipes are not auto-recorded as fix occasions, so EOD common-issues understates recurring CI blockers. | traffic, common-issues, observation |
 
 ---
 
@@ -481,6 +482,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L418 | **PM auto-rerun for non-eng Cursor waste loops** | cursor_workflow_fail_loop signals are digest-only today; extend project-traffic v1 only when a deterministic same-day skip / rerun path exists per workflow (analysis-review, paper-learning-review, etc.). | After eng-agent reburn stop has been stable for a week and a second Cursor workflow shows the same unresolved fail-loop pattern |
 | L420 | **Hunter-fix PAT push still action_required (checkout extraheader)** | Even with WORKFLOW_DISPATCH_PAT set and gh auth setup-git, #715 hunter-fix tip push still created pull_request CI in action_required (triggering_actor github-actions[bot]). Likely actions/checkout http.extraheader Authorization bearer GITHUB_TOKEN wins over gh credentials. Unset extraheader or push via x-access-token URL before git push. | Next hunter-fix tip push lands action_required despite PAT secret present in the commit step env |
 | L421 | **Cursor agent for non-flake pytest after PR autofix declines** | No-autofix follow-up re-runs a pre-existing live-fetch flake once and explains other pytest declines. It does not patch assertion failures. A capped agent could try a code fix when the follow-up says not implementable. | Eng PRs sit red on non-flake pytest after the one-shot live-fetch re-run and a human still has to patch them |
+| L424 | **Hunter-fix must not ship net-empty or stripped eng tips** | On #704 hunter-fix emptied the dividend tip before human merge; on #715 it stripped ingest/gap_fill and left a leftover PR (#717). Scoped auto-merge then stamps the task merged even when the intended feature was reverted. Traffic does not detect tip emptiness. | Another eng PR is human- or bot-merged after hunter-fix with a near-empty tip or a follow-up PR that only restores stripped files |
 
 ---
 
