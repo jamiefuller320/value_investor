@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T22:14:03.200157+00:00",
+  "generated_at": "2026-09-19T22:43:58.390732+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1153,16 +1153,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-19T22:11:39.013862+00:00",
-    "queue_ui_updated_at": "2026-09-19T22:14:03.122562+00:00",
-    "task_count": 69,
+    "compiled_at": "2026-09-19T22:42:57.039084+00:00",
+    "queue_ui_updated_at": "2026-09-19T22:43:58.329744+00:00",
+    "task_count": 71,
     "status": {
       "open_count": 2,
       "pr_open_count": 0,
-      "parked_count": 0,
-      "merged_count": 51,
+      "parked_count": 1,
+      "merged_count": 52,
       "failed_count": 0,
-      "next_task_id": "eng-20260919-13",
+      "next_task_id": "eng-20260919-14",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1171,9 +1171,9 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260919-13",
+        "id": "eng-20260919-14",
         "area": "scoring",
-        "title": "When secured workload ÷ revenue exceeds a sector threshold (e.g. >2×) and group adjusted margin is at a multi-year high vs CH history, flag cyclical_exposure_ov",
+        "title": "Suppress screen TTM FCF in user-facing action notes when `yahoo_quarterly_cashflow` is empty and filing-aligned FCF is already policy-selected.",
         "priority": "medium",
         "priority_score": 25.0,
         "status": "open",
@@ -1187,9 +1187,9 @@
         "clash_scan": "partial"
       },
       {
-        "id": "eng-20260919-08",
+        "id": "eng-20260919-15",
         "area": "scoring",
-        "title": "dividend: When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy. [2/3]",
+        "title": "fcf: Map email **watchlist** to overlay **caution** when `interim_dividend_cut_flagged` and `fcf_dividend_coverage_net` < 1.0 simultaneously, even if raw signal",
         "priority": "medium",
         "priority_score": 25.0,
         "status": "open",
@@ -1203,7 +1203,20 @@
         "clash_scan": "partial"
       }
     ],
-    "attention_tasks": [],
+    "attention_tasks": [
+      {
+        "id": "eng-20260919-08",
+        "area": "scoring",
+        "title": "dividend: When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy. [2/3]",
+        "priority": "medium",
+        "priority_score": 25.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      }
+    ],
     "clash_summary": {
       "open_task_count": 2,
       "dispatch_eligible_count": 2,
@@ -1485,7 +1498,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-19T22:14:03.200157+00:00",
+    "generated_at": "2026-09-19T22:43:58.390732+00:00",
     "overall": "active",
     "headline": "Agent lane active.",
     "merge_lane": {
@@ -1506,19 +1519,19 @@
       "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
-      "attention_parked_count": 0,
+      "attention_parked_count": 1,
       "open_count": 2,
       "pr_open_count": 0,
       "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260919-13",
+      "next_task_id": "eng-20260919-14",
       "reason": "queue ready — dispatch next open task",
       "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
-      "attention_parked_count": 0,
-      "evaluated_at": "2026-09-19T22:13:59.114839+00:00"
+      "attention_parked_count": 1,
+      "evaluated_at": "2026-09-19T22:43:55.192173+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1532,6 +1545,17 @@
       "should_dispatch_engineering": false
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260919-13",
+        "title": "When secured workload ÷ revenue exceeds a sector threshold (e.g. >2×) and group adjusted margin is at a multi-year high vs CH history, flag cyclical_exposure_ov",
+        "area": "scoring",
+        "pr_number": 746,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/746",
+        "merged_at": "2026-09-19T22:42:55.926812+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": false,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260919-12",
         "title": "When statutory OCF−CapEx dividend cover is ≤1.05× and Piotroski ≤4, cap dividend-family conviction even if yield screens pass (ITV pattern).",
@@ -1676,6 +1700,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 13
+    "verified_merges_today_count": 14
   }
 }
