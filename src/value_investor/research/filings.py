@@ -527,6 +527,14 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "coca-colaep.com IR returns empty and SEC 20-F/HY 6-K filings are already "
         "bodied via sec_edgar."
     ),
+    "TRI": (
+        "nasdaq100 leftover IWB: eight SEC 6-K cover HTML primaries below the "
+        "substantiveness gate; linked EX-99.x exhibits are dividend/notice stubs "
+        "under the financial gate and are not the indexed URLs; Investegate "
+        "trifast--tri RNS rows are AIM epic TRI collision (already bodied, not "
+        "Thomson Reuters); thomsonreuters.com IR paths 404; FY2025 40-F, interim "
+        "SEC packs, and interim-report HTML are already bodied via sec_edgar."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
