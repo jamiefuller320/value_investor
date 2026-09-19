@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-19T14:47:43.781176+00:00",
+  "compiled_at": "2026-09-19T15:20:48.905835+00:00",
   "run_at": null,
-  "task_count": 58,
+  "task_count": 59,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2282,6 +2282,57 @@
       "merged_at": "2026-09-19T14:47:42.469308+00:00"
     },
     {
+      "id": "eng-20260919-03",
+      "area": "ingest",
+      "title": "Parse “2025 in numbers” and secured-workload tables from CH annual bodies into structured fields (year, revenue, adj OP, secured workload) for automatic margin-",
+      "summary": "Parse “2025 in numbers” and secured-workload tables from CH annual bodies into structured fields (year, revenue, adj OP, secured workload) for automatic margin-trend and backlog/revenue overlays. (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "MGNS.L"
+        ],
+        "recorded_at": "2026-09-12T12:36:40.963374+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "Parse “2025 in numbers” and secured-workload tables from CH annual bodies into structured fields (year, revenue, adj OP, secured workload) for automatic margin-",
+        "narrow_cohesion_bypass": true,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for MGNS.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260919-02",
       "area": "ingest",
       "title": "Deepen Companies House PDF/iXBRL ingest for MGNS.L beyond OCR front-matter — target consolidated notes (JVs, contract assets) that refetched `ch_00521970_MzUzOD",
@@ -2307,7 +2358,8 @@
         "origin_priority_score": 40.0,
         "preferred_merge_class": "compile_cap_drain",
         "doc": "docs/ops/engineering-sync.md",
-        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for MGNS.L",
@@ -2329,11 +2381,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": true,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260919-02.md",
       "branch_name": "cursor/eng-20260919-02-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-19T14:54:55.331526+00:00"
+      "completed_at": "2026-09-19T14:54:55.331526+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/734",
+      "pr_number": 734,
+      "merged_at": "2026-09-19T15:20:47.647527+00:00"
     },
     {
       "id": "eng-20260919-01",
