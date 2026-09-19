@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T05:46:19.760783+00:00",
+  "generated_at": "2026-09-19T09:17:49.553365+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1154,12 +1154,12 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-18T23:16:25.344671+00:00",
-    "queue_ui_updated_at": "2026-09-19T05:46:19.676104+00:00",
+    "queue_ui_updated_at": "2026-09-19T09:17:49.494855+00:00",
     "task_count": 56,
     "status": {
       "open_count": 2,
-      "pr_open_count": 0,
-      "parked_count": 15,
+      "pr_open_count": 3,
+      "parked_count": 7,
       "merged_count": 38,
       "failed_count": 0,
       "next_task_id": "eng-20260918-23",
@@ -1170,6 +1170,30 @@
       "spend_blocked": false
     },
     "queued_tasks": [
+      {
+        "id": "eng-20260918-06",
+        "area": "scoring",
+        "title": "Auto-bind `company_adjusted` FCF to the latest filing-year divisional total (£73.8m for FY 2026) and flag when screen numerator is one fiscal year stale.",
+        "priority": "medium",
+        "priority_score": 43.0,
+        "status": "pr_open",
+        "source": "compile_cap_drain",
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/727",
+        "pr_number": 727,
+        "branch_name": "cursor/eng-20260918-06-1de3"
+      },
+      {
+        "id": "eng-20260918-22",
+        "area": "ingest",
+        "title": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "pr_open",
+        "source": "compile_cap_drain",
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/726",
+        "pr_number": 726,
+        "branch_name": "cursor/eng-20260918-22-1de3"
+      },
       {
         "id": "eng-20260918-23",
         "area": "ingest",
@@ -1185,6 +1209,18 @@
         "blocked_by": [],
         "effective_dispatch_rank": 1,
         "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260918-17",
+        "area": "ingest",
+        "title": "Do not tag AGM notices/results, Payments to Governments, prospectuses, mineral-resources updates, Tomago/Boyne operating RNSs, or third-party SVM “Rio collab” i",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "pr_open",
+        "source": "compile_cap_drain",
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/728",
+        "pr_number": 728,
+        "branch_name": "cursor/eng-20260918-17-1de3"
       },
       {
         "id": "eng-20260918-16",
@@ -1241,18 +1277,6 @@
         "branch_name": null
       },
       {
-        "id": "eng-20260918-06",
-        "area": "scoring",
-        "title": "Auto-bind `company_adjusted` FCF to the latest filing-year divisional total (£73.8m for FY 2026) and flag when screen numerator is one fiscal year stale.",
-        "priority": "medium",
-        "priority_score": 43.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
         "id": "eng-20260917-07",
         "area": "scoring",
         "title": "dividend: Do not pass dividend or FCF Yield on company-adjusted FCF (£73.8m) when filing FCF is 5× larger without stating which basis the family used; keep fcf_",
@@ -1296,90 +1320,6 @@
         "priority_score": 43.0,
         "status": "parked",
         "source": "research_model_suggestions",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260918-22",
-        "area": "ingest",
-        "title": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
-        "priority": "medium",
-        "priority_score": 40.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260918-21",
-        "area": "ingest",
-        "title": "Full-text extract of annual report note 19 (cash-in-transit restatement) from ME-Group-Annual-Report-2025.pdf—not addressed by CH refetch of 2019 parent interim",
-        "priority": "medium",
-        "priority_score": 40.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260918-20",
-        "area": "ingest",
-        "title": "Populate `ir_presentation_metrics.json` from `ir_0d388cd522a7cf4c.txt`.",
-        "priority": "medium",
-        "priority_score": 40.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260918-19",
-        "area": "ingest",
-        "title": "CH OCR refetch of both `ch_04967001_MzMzODcxODY0OWFkaXF6a2N4.txt` and `ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4.txt` fails to deliver Risks and Uncertainties or pen",
-        "priority": "medium",
-        "priority_score": 40.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260918-18",
-        "area": "ingest",
-        "title": "Parse IR results-deck cash-bridge slides into `ir_presentation_metrics.json`; refetch did not add FCF lines and H1 2026 deck bridge remains missing.",
-        "priority": "medium",
-        "priority_score": 40.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260918-17",
-        "area": "ingest",
-        "title": "Do not tag AGM notices/results, Payments to Governments, prospectuses, mineral-resources updates, Tomago/Boyne operating RNSs, or third-party SVM “Rio collab” i",
-        "priority": "medium",
-        "priority_score": 40.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260918-13",
-        "area": "ingest",
-        "title": "It is not adequate when the live [2/2]",
-        "priority": "medium",
-        "priority_score": 40.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
         "pr_url": null,
         "pr_number": null,
         "branch_name": null
@@ -1666,15 +1606,15 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-19T05:46:19.760783+00:00",
+    "generated_at": "2026-09-19T09:17:49.553365+00:00",
     "overall": "blocked",
-    "headline": "Dispatch paused — 8 attention-parked task(s). attention parked backlog clearing pause (8 task(s); resume when < 7 and 30m since last clearing action)",
+    "headline": "Dispatch paused — 0 attention-parked task(s). attention parked backlog clearing pause (0 task(s); resume when < 7 and 30m since last clearing action)",
     "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
+      "state": "running",
+      "idle": false,
+      "running": true,
       "blocked": false,
-      "pr_open_count": 0,
+      "pr_open_count": 3,
       "open_engineering_prs": [],
       "in_flight_pr": null,
       "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
@@ -1682,33 +1622,33 @@
     "agent_lane": {
       "state": "blocked",
       "idle": false,
-      "running": false,
+      "running": true,
       "blocked": true,
       "should_dispatch": false,
       "pause_active": true,
       "traffic_pause_active": false,
-      "attention_parked_count": 8,
+      "attention_parked_count": 0,
       "open_count": 2,
-      "pr_open_count": 0,
+      "pr_open_count": 3,
       "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
       "next_task_id": "eng-20260918-23",
-      "reason": "attention parked backlog clearing pause (8 task(s); resume when < 7 and 30m since last clearing action)",
-      "detail": "Dispatch paused — 8 attention-parked task(s). attention parked backlog clearing pause (8 task(s); resume when < 7 and 30m since last clearing action)"
+      "reason": "attention parked backlog clearing pause (0 task(s); resume when < 7 and 30m since last clearing action)",
+      "detail": "Dispatch paused — 0 attention-parked task(s). attention parked backlog clearing pause (0 task(s); resume when < 7 and 30m since last clearing action)"
     },
     "queue_clearing": {
       "pause_active": true,
-      "attention_parked_count": 8,
-      "evaluated_at": "2026-09-19T05:46:16.341690+00:00"
+      "attention_parked_count": 1,
+      "evaluated_at": "2026-09-19T09:17:40.081473+00:00"
     },
     "traffic_control": {
       "pause_active": false,
       "stuck_pr_count": 0,
       "pause_reasons": [],
-      "evaluated_at": "2026-09-18T19:51:52.489106+00:00"
+      "evaluated_at": "2026-09-19T07:46:49.998983+00:00"
     },
     "ops_monitor": {
-      "run_at": "2026-09-18T07:46:32.075815+00:00",
+      "run_at": "2026-09-19T07:46:29.555758+00:00",
       "overall": "warn",
       "should_dispatch_engineering": false
     },
