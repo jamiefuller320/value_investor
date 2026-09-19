@@ -594,6 +594,7 @@ def _brief_summary(
     fcf_dividend_coverage_net: float | None = None,
     uk_contractor_revenue_fcf_warning: bool = False,
     public_capex_exposure_detected: bool = False,
+    uk_contractor_ch_backlog_margin_cyclical_detected: bool = False,
     photobooth_cyclical_detected: bool = False,
     framework_backlog_growth_suppressed: bool = False,
 ) -> str:
@@ -706,7 +707,13 @@ def _brief_summary(
         )
 
     if cyclical_exposure_overlay and adjusted_signal and adjusted_signal != signal:
-        if public_capex_exposure_detected and uk_contractor_revenue_fcf_warning:
+        if uk_contractor_ch_backlog_margin_cyclical_detected:
+            parts.append(
+                "Cyclical-exposure overlay: UK contractor secured workload/revenue above sector "
+                "threshold with adjusted margin at a multi-year CH high "
+                f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
+            )
+        elif public_capex_exposure_detected and uk_contractor_revenue_fcf_warning:
             parts.append(
                 "Cyclical-exposure overlay: UK public-capex contractor with revenue/FCF divergence "
                 f"(adjusted to {SIGNAL_LABELS.get(adjusted_signal, adjusted_signal)})."
@@ -1068,7 +1075,10 @@ def build_company_reports(
             and not (isinstance(divergence_flag_raw, float) and pd.isna(divergence_flag_raw))
             else bool(fcf_bundle.get("fcf_divergence_flagged"))
         )
-        from value_investor.scoring.uk_contractor_overlay import is_uk_listed_contractor
+        from value_investor.scoring.uk_contractor_overlay import (
+            ch_backlog_margin_cyclical_for_ticker,
+            is_uk_listed_contractor,
+        )
         from value_investor.scoring.uk_heavyside_materials_overlay import (
             heavyside_cyclical_tape_for_ticker,
             is_uk_heavyside_construction_materials,
@@ -1113,6 +1123,20 @@ def build_company_reports(
             and not (isinstance(public_capex_raw, float) and pd.isna(public_capex_raw))
             else False
         )
+        ch_backlog_raw = row.get("uk_contractor_ch_backlog_margin_cyclical_detected")
+        if ch_backlog_raw is not None and not (
+            isinstance(ch_backlog_raw, float) and pd.isna(ch_backlog_raw)
+        ):
+            uk_contractor_ch_backlog_margin_cyclical_detected = bool(ch_backlog_raw)
+        elif uk_contractor:
+            uk_contractor_ch_backlog_margin_cyclical_detected = (
+                ch_backlog_margin_cyclical_for_ticker(
+                    ticker,
+                    output_dir=output_dir,
+                )
+            )
+        else:
+            uk_contractor_ch_backlog_margin_cyclical_detected = False
         framework_suppressed_raw = row.get("framework_backlog_growth_suppressed")
         framework_backlog_growth_suppressed = (
             bool(framework_suppressed_raw)
@@ -1340,6 +1364,8 @@ def build_company_reports(
             )
         if photobooth_cyclical_detected:
             cyclical_exposure_detected = True
+        if uk_contractor_ch_backlog_margin_cyclical_detected:
+            cyclical_exposure_detected = True
         photobooth_decline_for_overlay = row.get("photobooth_interim_revenue_decline_pct")
         if photobooth_decline_for_overlay is not None and not (
             isinstance(photobooth_decline_for_overlay, float)
@@ -1374,6 +1400,7 @@ def build_company_reports(
                     uk_contractor=uk_contractor,
                     public_capex_detected=public_capex_exposure_detected,
                     uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
+                    uk_contractor_ch_backlog_margin_cyclical_detected=uk_contractor_ch_backlog_margin_cyclical_detected,
                     uk_heavyside_materials=uk_heavyside_materials,
                     heavyside_cyclical_tape_detected=heavyside_cyclical_tape_detected,
                     photobooth_cyclical_detected=photobooth_cyclical_detected,
@@ -1713,6 +1740,7 @@ def build_company_reports(
             fcf_dividend_coverage_net=fcf_dividend_coverage_net,
             uk_contractor_revenue_fcf_warning=uk_contractor_revenue_fcf_warning,
             public_capex_exposure_detected=public_capex_exposure_detected,
+            uk_contractor_ch_backlog_margin_cyclical_detected=uk_contractor_ch_backlog_margin_cyclical_detected,
             photobooth_cyclical_detected=photobooth_cyclical_detected,
             framework_backlog_growth_suppressed=framework_backlog_growth_suppressed,
         )
