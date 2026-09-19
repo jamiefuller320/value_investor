@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-18T22:26:25+00:00",
+  "updated_at": "2026-09-19T08:16:21+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9475,6 +9475,57 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0b580-7a75-7585-a700-91fa2c6ac474",
       "added_at": "2026-09-18T22:26:25+00:00"
+    },
+    {
+      "id": "L424",
+      "category": "later",
+      "section": "ops",
+      "title": "Hunter-fix must not ship net-empty or stripped eng tips",
+      "summary": "On #704 hunter-fix emptied the dividend tip before human merge; on #715 it stripped ingest/gap_fill and left a leftover PR (#717). Scoped auto-merge then stamps the task merged even when the intended feature was reverted. Traffic does not detect tip emptiness.",
+      "revisit_when": "Another eng PR is human- or bot-merged after hunter-fix with a near-empty tip or a follow-up PR that only restores stripped files",
+      "tags": [
+        "hunter-fix",
+        "merge-authority",
+        "eng-queue",
+        "observation"
+      ],
+      "status": "open",
+      "source": "conversation: PR traffic health review 2026-09-19",
+      "added_at": "2026-09-19T07:50:00+00:00"
+    },
+    {
+      "id": "L425",
+      "category": "later",
+      "section": "ops",
+      "title": "Preflight before Composer on eng-agent (serial clash burns)",
+      "summary": "Sep18 evening burned ~$1.2/run on distinct tasks that each failed preflight_clash on filings.py after Composer already ran. Reburn detector only stops same-task loops; run preflight (or clash gate) before launching Composer, or treat serial preflight_clash parks as waste.",
+      "revisit_when": "After parked backlog clears and eng-agent resumes, or next time overnight eng-agent spend returns without same-task reburn",
+      "tags": [
+        "spend",
+        "engineering-agent",
+        "preflight",
+        "automation-waste"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0b8a2-dc8e-7be7-8194-2300a50c4fb9",
+      "added_at": "2026-09-19T07:53:54+00:00"
+    },
+    {
+      "id": "L426",
+      "category": "later",
+      "section": "ops",
+      "title": "Autofix one-shot re-run for Investegate maintenance HTML flakes",
+      "summary": "Live-fetch follow-up only matches has_fetchable_ir + assert None/URLError. Investegate scheduled-maintenance pages return short HTML and fail asserts like len(body) > 1000 (seen on #724/#725 BPT.AX leftover test). Expand safe one-shot re-run detection for that maintenance signature.",
+      "revisit_when": "Another PR fails only on Investegate maintenance HTML while other shards are green",
+      "tags": [
+        "ci",
+        "autofix",
+        "investegate",
+        "flake"
+      ],
+      "status": "open",
+      "source": "conversation: #724/#725 CI why-step 2026-09-19",
+      "added_at": "2026-09-19T08:16:21+00:00"
     }
   ],
   "fragments": [
@@ -9966,6 +10017,18 @@
       "status": "open",
       "source": "weekly planning conversation",
       "added_at": "2026-09-14T09:38:20+00:00"
+    },
+    {
+      "id": "frag-20260919-01",
+      "text": "Traffic common-issues log has almost no signal (1 human ruff_format). Live-fetch flakes and hunter-fix tip wipes are not auto-recorded as fix occasions, so EOD common-issues understates recurring CI blockers.",
+      "tags": [
+        "traffic",
+        "common-issues",
+        "observation"
+      ],
+      "status": "open",
+      "source": "conversation: PR traffic health review 2026-09-19",
+      "added_at": "2026-09-19T07:50:00+00:00"
     }
   ],
   "schema_version": 1
