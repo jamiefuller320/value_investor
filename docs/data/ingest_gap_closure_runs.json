@@ -11321,8 +11321,115 @@
         ]
       },
       "trigger": "stall_slowdown"
+    },
+    {
+      "id": "igc-20260919-01",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "TTE.PA",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "TTE.PA"
+        ],
+        "market_id": "euro_stoxx50",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260919-01",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-19T07:54:48.036959+00:00",
+      "completed_at": "2026-09-19T07:58:55.462757+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "TTE.PA"
+        ],
+        "results": [
+          {
+            "ticker": "TTE.PA",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 103,
+              "filings_with_body": 102,
+              "indexed_without_body": 1
+            },
+            "after": {
+              "filings_total": 103,
+              "filings_with_body": 102,
+              "indexed_without_body": 1
+            },
+            "improved": false,
+            "regime": "euro_filings",
+            "filings_summary": {
+              "total": 103,
+              "annual": 5,
+              "interim": 57,
+              "trading_update": 0,
+              "other": 41,
+              "with_body": 102,
+              "period_coverage": {
+                "annual": {
+                  "total": 5,
+                  "with_body": 5
+                },
+                "interim": {
+                  "total": 57,
+                  "with_body": 57
+                },
+                "trading_update": {
+                  "total": 0,
+                  "with_body": 0
+                },
+                "other": {
+                  "total": 41,
+                  "with_body": 40
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 102,
+              "with_body_after": 102,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 1,
+                "note": "merge_ir_allowlist_filings"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "TTE.PA",
+            "with_body_before": 102,
+            "with_body_after": 102,
+            "improved": false
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-18T19:28:03.070599+00:00",
+  "updated_at": "2026-09-19T07:58:55.462768+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
