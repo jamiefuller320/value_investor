@@ -527,6 +527,13 @@ PARKED_SOURCE_HUNTER_SKIP: dict[str, str] = {
         "coca-colaep.com IR returns empty and SEC 20-F/HY 6-K filings are already "
         "bodied via sec_edgar."
     ),
+    "PDD": (
+        "nasdaq100 leftover IWB: indexed-without-body row is Nov 2025 6-K cover HTML "
+        "below the substantiveness gate; EX-99.1–99.3 AGM notice/proxy exhibits fetch "
+        "but fail the financial gate and are not the indexed URL; investor.pddholdings.com "
+        "IR returns empty and 20-F plus interim earnings 6-K packs are already bodied "
+        "via sec_edgar."
+    ),
 }
 
 # Yahoo base symbol → SEC EDGAR ticker for verified dual-listed EU issuers.
