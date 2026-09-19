@@ -8,6 +8,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from value_investor.research.companies_house import register_enhanced_ch_body_fetch
 from value_investor.research.filings import (
     extract_filing_interim_financials,
     extract_ir_presentation_metrics,
@@ -29,6 +30,8 @@ from value_investor.storage import (
     resolve_json_path,
     write_json,
 )
+
+register_enhanced_ch_body_fetch()
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +57,8 @@ ALTERNATE_SOURCE_CATALOG: dict[str, list[dict[str, str]]] = {
             "label": "Companies House filed accounts / annual report PDF",
             "why": (
                 "RNS body extracts are often thin; filed PDF/iXBRL accounts hold consolidated "
-                "statements plus pension, borrowings/covenant, cash-flow, and segment notes"
+                "statements plus pension, borrowings/covenant, cash-flow, segment notes, "
+                "contract assets, and joint-venture disclosures"
             ),
         },
         {

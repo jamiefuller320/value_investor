@@ -6,6 +6,7 @@ exposes the public surface referenced by engineering task allowlists.
 
 from value_investor.research.companies_house import (  # noqa: F401
     CH_API_BASE,
+    CH_DEEPEN_OCR_MAX_PAGES,
     CH_DOCUMENT_API_BASE,
     DEEPEN_MAX_ACCOUNTS,
     DEFAULT_COMPANY_MAP_PATH,
@@ -18,11 +19,13 @@ from value_investor.research.companies_house import (  # noqa: F401
     ch_document_id_from_metadata_url,
     companies_house_api_key,
     fetch_accounts_filing_rows,
+    fetch_companies_house_filing_body,
     fetch_document_bytes,
     fetch_document_metadata,
     fetch_filings_companies_house,
     iter_ch_document_downloads,
     load_company_number_map,
+    register_enhanced_ch_body_fetch,
     resolve_company_number,
     save_company_number_map,
     search_company_number,
@@ -30,6 +33,7 @@ from value_investor.research.companies_house import (  # noqa: F401
 
 __all__ = [
     "CH_API_BASE",
+    "CH_DEEPEN_OCR_MAX_PAGES",
     "CH_DOCUMENT_API_BASE",
     "DEEPEN_MAX_ACCOUNTS",
     "DEFAULT_COMPANY_MAP_PATH",
@@ -44,9 +48,11 @@ __all__ = [
     "fetch_accounts_filing_rows",
     "fetch_document_bytes",
     "fetch_document_metadata",
+    "fetch_companies_house_filing_body",
     "fetch_filings_companies_house",
     "iter_ch_document_downloads",
     "load_company_number_map",
+    "register_enhanced_ch_body_fetch",
     "resolve_company_number",
     "save_company_number_map",
     "search_company_number",
