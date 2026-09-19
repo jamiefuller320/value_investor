@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-18T19:01:30+00:00",
+  "updated_at": "2026-09-18T22:26:25+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9422,6 +9422,59 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0b580-7a75-7585-a700-91fa2c6ac474",
       "added_at": "2026-09-18T19:01:30+00:00"
+    },
+    {
+      "id": "L421",
+      "category": "later",
+      "section": "ops",
+      "title": "Cursor agent for non-flake pytest after PR autofix declines",
+      "summary": "No-autofix follow-up re-runs a pre-existing live-fetch flake once and explains other pytest declines. It does not patch assertion failures. A capped agent could try a code fix when the follow-up says not implementable.",
+      "revisit_when": "Eng PRs sit red on non-flake pytest after the one-shot live-fetch re-run and a human still has to patch them",
+      "tags": [
+        "ci",
+        "autofix",
+        "pytest",
+        "agent"
+      ],
+      "status": "open",
+      "source": "conversation: no-auto-fix follow-up for #718",
+      "added_at": "2026-09-18T22:25:15+00:00"
+    },
+    {
+      "id": "L422",
+      "category": "later",
+      "section": "learning",
+      "title": "Fork complement is an observe-only set, not a shadow holding",
+      "summary": "When a fork changes who is bought, do not re-buy the refused names inside the fork. Keep epoch-0 marking the full set and record the weekly complement (epoch-0 minus fork) so the selection effect stays identifiable. Downstream exit and DCA experiments run on the fork's real holdings. A price watch is not an exit cohort; simulate the refused path only if the claim is about names the filter dropped, and only if epoch-0 will stop marking them.",
+      "revisit_when": "A buy-set fork is about to open (filter, conviction floor, or exclusion step) and epoch-0 would stop or would not contain the refused names",
+      "tags": [
+        "epoch0",
+        "forks",
+        "counterfactual",
+        "near_miss",
+        "selection"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0b580-7a75-7585-a700-91fa2c6ac474",
+      "added_at": "2026-09-18T22:26:25+00:00"
+    },
+    {
+      "id": "L423",
+      "category": "later",
+      "section": "learning",
+      "title": "Shadow-buy every filter refusal into the downstream sample",
+      "summary": "If a buy/no-buy fork drops a name, downstream DCA and exit tests on the fork never see it, including when the drop was a mistake. Shadow-buy the entire refusal set at the decision date under the fork's downstream rules, and score those episodes in a refused stratum. Do not wait until a drop looks wrong, and do not pool shadow fills into the fork's live result. Skip the shadow buy when that same downstream rule is already overlaid on epoch-0, which still holds the name.",
+      "revisit_when": "A buy-set fork is open and a downstream rule runs only on the fork's actual buys, not as an overlay on epoch-0",
+      "tags": [
+        "epoch0",
+        "forks",
+        "shadow_buy",
+        "selection",
+        "downstream"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0b580-7a75-7585-a700-91fa2c6ac474",
+      "added_at": "2026-09-18T22:26:25+00:00"
     }
   ],
   "fragments": [

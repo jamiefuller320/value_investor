@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-18T19:01:30+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-18T22:26:25+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -244,6 +244,8 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L405 | **Market-specific fair RT for trade-plan target floors** | Trade-plan take-profit floors default to Suite A 6% round-trip + 4% net edge. Optionally bind assumed_round_trip_cost_pct from ftse-trading-costs per market so Suite B / shards use fair UK/US/EU friction instead of stress. | Suite B fair-cost books are the primary lens for chart/decision-pack target quality, or a saved TradePlanConfig is wired per market shard |
 | L401 | **Pre-signal drop and recovery-to-prior-high observe metric** | Many buy-tier names arrive after a large drawdown. Observe whether price recovers toward the pre-drop local high (not only back through the frozen entry), and how often that path clears the cost-aware take-profit. Distinct from L244 entry recovery and from paper hold-recovery. | chart_outcome_review has several Sunday refreshes and drop-to-entry recovery (L244) is either live or still clearly insufficient for prior-high questions |
 | L419 | **Shared NaN-safe overlay text helper for sector/name fields** | UK heavyside now coerces float NaN sector/name; other overlays mostly use str() or truthiness checks. A shared helper would prevent the next (x or '').lower() crash on pandas NaN. | Another overlay AttributeError on float/NaN sector or name in CI or ingest logs |
+| L422 | **Fork complement is an observe-only set, not a shadow holding** | When a fork changes who is bought, do not re-buy the refused names inside the fork. Keep epoch-0 marking the full set and record the weekly complement (epoch-0 minus fork) so the selection effect stays identifiable. Downstream exit and DCA experiments run on the fork's real holdings. A price watch is not an exit cohort; simulate the refused path only if the claim is about names the filter dropped, and only if epoch-0 will stop marking them. | A buy-set fork is about to open (filter, conviction floor, or exclusion step) and epoch-0 would stop or would not contain the refused names |
+| L423 | **Shadow-buy every filter refusal into the downstream sample** | If a buy/no-buy fork drops a name, downstream DCA and exit tests on the fork never see it, including when the drop was a mistake. Shadow-buy the entire refusal set at the decision date under the fork's downstream rules, and score those episodes in a refused stratum. Do not wait until a drop looks wrong, and do not pool shadow fills into the fork's live result. Skip the shadow buy when that same downstream rule is already overlaid on epoch-0, which still holds the name. | A buy-set fork is open and a downstream rule runs only on the fork's actual buys, not as an overlay on epoch-0 |
 
 ### Universe & data
 
@@ -478,6 +480,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L416 | **Migrate remaining git-auto-commit workflows to gha_commit_artifacts** | library-epoch0-weekday now uses L348 retry; other workflows still use git-auto-commit + optional pull --rebase and can fail the same main race. | Another weekday/ingest auto-commit job fails with cannot lock ref or fetch first on main |
 | L418 | **PM auto-rerun for non-eng Cursor waste loops** | cursor_workflow_fail_loop signals are digest-only today; extend project-traffic v1 only when a deterministic same-day skip / rerun path exists per workflow (analysis-review, paper-learning-review, etc.). | After eng-agent reburn stop has been stable for a week and a second Cursor workflow shows the same unresolved fail-loop pattern |
 | L420 | **Hunter-fix PAT push still action_required (checkout extraheader)** | Even with WORKFLOW_DISPATCH_PAT set and gh auth setup-git, #715 hunter-fix tip push still created pull_request CI in action_required (triggering_actor github-actions[bot]). Likely actions/checkout http.extraheader Authorization bearer GITHUB_TOKEN wins over gh credentials. Unset extraheader or push via x-access-token URL before git push. | Next hunter-fix tip push lands action_required despite PAT secret present in the commit step env |
+| L421 | **Cursor agent for non-flake pytest after PR autofix declines** | No-autofix follow-up re-runs a pre-existing live-fetch flake once and explains other pytest declines. It does not patch assertion failures. A capped agent could try a code fix when the follow-up says not implementable. | Eng PRs sit red on non-flake pytest after the one-shot live-fetch re-run and a human still has to patch them |
 
 ---
 

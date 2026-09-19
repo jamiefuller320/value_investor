@@ -71,6 +71,35 @@ class AutofixResult:
         }
 
 
+# Pre-existing live IR/SEC tests. A None body is usually a transient fetch, not a
+# logic bug the PR autofix can patch.
+_LIVE_FETCH_TEST_RE = re.compile(
+    r"(?:has_fetchable_ir|fetchable_ir|live_fetch)",
+    re.IGNORECASE,
+)
+_LIVE_FETCH_LOG_RE = re.compile(
+    r"assert None|URLError|Filing body fetch failed|PDF filing body empty",
+)
+
+
+@dataclass
+class NoAutofixFollowup:
+    """Why PR autofix declined, and whether a safe follow-up action exists."""
+
+    why: str
+    implementable: bool
+    action: str
+    detail: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "why": self.why,
+            "implementable": self.implementable,
+            "action": self.action,
+            "detail": self.detail,
+        }
+
+
 @dataclass
 class PrCiDiagnosis:
     kinds: list[str]
@@ -180,6 +209,113 @@ def diagnose_pr_ci_failure(
     )
 
 
+def pytest_failure_node_ids(diagnosis: PrCiDiagnosis) -> list[str]:
+    nodes: list[str] = []
+    for row in diagnosis.pytest_failures:
+        path = (row.get("test_path") or "").strip()
+        name = (row.get("test_name") or "").strip()
+        if path and name:
+            nodes.append(f"{path}::{name}")
+        elif path:
+            nodes.append(path)
+        elif name:
+            nodes.append(name)
+    return nodes
+
+
+def function_added_in_diff(test_name: str, diff_text: str) -> bool:
+    """True when ``diff_text`` adds ``def test_name``."""
+    if not test_name:
+        return False
+    pattern = re.compile(rf"^\+\s*def {re.escape(test_name)}\b", re.MULTILINE)
+    return pattern.search(diff_text or "") is not None
+
+
+def assess_no_autofix_followup(
+    *,
+    diagnosis: PrCiDiagnosis,
+    autofix_reason: str,
+    log_text: str,
+    diff_text: str = "",
+    run_attempt: int = 1,
+) -> NoAutofixFollowup:
+    """Explain a declined autofix and pick a safe follow-up when one exists.
+
+    The only automatic action is a single re-run of failed jobs for a
+    pre-existing live-fetch flake (``assert None`` / fetch error) that this
+    diff did not add. Code patches for pytest stay out of scope.
+    """
+    kinds = list(diagnosis.kinds)
+    reason = (autofix_reason or "").strip() or "no deterministic autofix matched"
+    if not kinds:
+        return NoAutofixFollowup(
+            why=reason,
+            implementable=False,
+            action="none",
+            detail="Could not classify the failure, so no follow-up patch or re-run.",
+        )
+    if "data_json" in kinds:
+        return NoAutofixFollowup(
+            why="Committed data JSON failures are diagnosed but not auto-fixed on PRs.",
+            implementable=False,
+            action="none",
+            detail="Repair or regenerate the JSON on the branch; a re-run will not help.",
+        )
+    autofixable = {"ruff_format", "ruff_check", "path_guard"}
+    if any(kind in autofixable for kind in kinds) and "pytest" not in kinds:
+        return NoAutofixFollowup(
+            why=reason,
+            implementable=False,
+            action="none",
+            detail="Ruff or path-guard autofix was in scope but did not produce a push.",
+        )
+
+    nodes = pytest_failure_node_ids(diagnosis)
+    names = [node.rsplit("::", 1)[-1] for node in nodes]
+    live = bool(names) and all(_LIVE_FETCH_TEST_RE.search(name) for name in names)
+    log_looks_transient = bool(_LIVE_FETCH_LOG_RE.search(log_text or ""))
+    added = [name for name in names if function_added_in_diff(name, diff_text)]
+    if kinds == ["pytest"] and live and log_looks_transient and not added and run_attempt <= 1:
+        listed = ", ".join(f"`{node}`" for node in nodes[:4])
+        return NoAutofixFollowup(
+            why=(
+                "Pytest-only failure is outside PR autofix (ruff and engineering path-guard only)."
+            ),
+            implementable=True,
+            action="rerun_failed_ci",
+            detail=(
+                f"Pre-existing live-fetch flake ({listed}); this diff did not add "
+                "the test. Re-run failed jobs once."
+            ),
+        )
+    if kinds == ["pytest"] and run_attempt > 1 and live and log_looks_transient:
+        return NoAutofixFollowup(
+            why="Pytest-only live-fetch failure already re-ran once.",
+            implementable=False,
+            action="none",
+            detail="A second automatic re-run is not applied. Inspect the fetch or skip the test.",
+        )
+    if "pytest" in kinds:
+        extra = ""
+        if added:
+            extra = " The failing test was added on this branch, so this is not treated as a pre-existing flake."
+        return NoAutofixFollowup(
+            why="Pytest failures are diagnosed on PRs but not patched by autofix.",
+            implementable=False,
+            action="none",
+            detail=(
+                "No safe automatic code change: the failure is not a pre-existing "
+                f"live-fetch flake.{extra} Patch the code or tests on the branch."
+            ),
+        )
+    return NoAutofixFollowup(
+        why=reason,
+        implementable=False,
+        action="none",
+        detail="No follow-up action for this failure mix.",
+    )
+
+
 def format_pr_ci_comment(
     *,
     diagnosis: PrCiDiagnosis,
@@ -189,6 +325,7 @@ def format_pr_ci_comment(
     actions: list[str],
     commit_sha: str | None = None,
     docs_url: str | None = None,
+    followup: NoAutofixFollowup | None = None,
 ) -> str:
     lines = ["## CI monitoring"]
     lines.append("")
@@ -229,6 +366,15 @@ def format_pr_ci_comment(
         lines.append("**Hints**")
         for hint in diagnosis.hints:
             lines.append(f"- {hint}")
+        lines.append("")
+    if followup is not None and not fixed:
+        lines.append("**Why no automatic fix**")
+        lines.append(f"- {followup.why}")
+        lines.append("")
+        lines.append("**Follow-up**")
+        verdict = "yes" if followup.implementable else "no"
+        lines.append(f"- Implementable now: **{verdict}** (`{followup.action}`)")
+        lines.append(f"- {followup.detail}")
         lines.append("")
     if docs_url:
         lines.append(f"Details: [ci-fix-automation]({docs_url})")

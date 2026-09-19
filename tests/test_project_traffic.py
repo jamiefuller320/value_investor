@@ -15,6 +15,8 @@ from value_investor.project_traffic import (
     build_daily_digest,
     classify_stuck_prs,
     evaluate_traffic_pause,
+    explain_stuck_ci,
+    format_ci_fix_comment,
     format_daily_digest_markdown,
     handoff_ops_monitor_email_to_pm,
     is_traffic_pause_active,
@@ -610,3 +612,68 @@ def test_handoff_ops_monitor_email_to_pm_writes_artifact(tmp_path: Path, monkeyp
     assert "ops_email_handoff" in digest
     md = digest_md.read_text(encoding="utf-8")
     assert "Ops-monitor email handoff" in md
+
+
+def test_explain_stuck_ci_live_fetch_is_implementable():
+    from value_investor.project_traffic import StuckPr
+
+    pr = StuckPr(
+        number=718,
+        branch="cursor/eng-20260918-12-1de3",
+        title="filings",
+        url="https://example/718",
+        draft=False,
+        reasons=["ci_failing"],
+        failed_check_names=["test (2)"],
+    )
+    log = (
+        "FAILED tests/test_research_filings.py::"
+        "test_parked_source_hunter_ntr_to_tsx60_has_fetchable_ir - assert None\n"
+    )
+    followup = explain_stuck_ci(pr, log_text=log, diff_text="", run_attempt=1)
+    assert followup.implementable is True
+    assert followup.action == "rerun_failed_ci"
+    from value_investor.project_traffic import attach_ci_followup
+
+    attach_ci_followup(pr, followup)
+    body = format_ci_fix_comment(pr)
+    assert "Why no automatic code fix" in body
+    assert "Implementable now: **yes**" in body
+
+
+def test_classify_stuck_prs_records_followup_without_log(monkeypatch, tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    _write_tasks(tasks_path, {"tasks": []})
+    monkeypatch.setattr(
+        "value_investor.project_traffic._checks_failed_for_pr",
+        lambda pr_number, **kwargs: {
+            "available": True,
+            "all_failed": True,
+            "failed_check_names": ["test (2)"],
+            "latest_check_at": datetime.now(UTC) - timedelta(hours=1),
+        },
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic._enrich_pr_merge_state",
+        lambda row, **kwargs: row,
+    )
+    monkeypatch.setattr(
+        "value_investor.project_traffic.fetch_latest_failed_ci_context",
+        lambda branch: ("", "", 1),
+    )
+    stuck = classify_stuck_prs(
+        [
+            {
+                "number": 718,
+                "title": "red",
+                "headRefName": "cursor/eng-20260918-12-1de3",
+                "html_url": "https://example/718",
+                "mergeable": True,
+            }
+        ],
+        tasks_path=tasks_path,
+        include_ci_followup=True,
+    )
+    assert len(stuck) == 1
+    assert stuck[0].ci_followup_implementable is False
+    assert "no failed-job log" in (stuck[0].ci_followup_why or "")

@@ -1,8 +1,9 @@
 name: CI PR Autofix
 
 # When CI fails on a cursor/* pull request, attempt scoped fixes (ruff; engineering
-# path-guard revert of incidental research artifacts, then allowlist expand),
-# push, and post a diagnosis comment. See docs/ops/ci-fix-automation.md.
+# path-guard revert of incidental research artifacts, then allowlist expand).
+# If nothing was pushed, explain why and re-run failed jobs once for a
+# pre-existing live-fetch flake. See docs/ops/ci-fix-automation.md.
 #
 # Security: workflow_run has access to the default GITHUB_TOKEN (write). Public fork
 # PRs must not run here. Install the package from main (trusted), then check out the
@@ -16,6 +17,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  actions: write
 
 concurrency:
   group: ci-pr-autofix-${{ github.event.workflow_run.head_branch }}
@@ -197,6 +199,65 @@ jobs:
           echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           echo "commit_message=$COMMIT_MSG" >> "$GITHUB_OUTPUT"
 
+      - name: Assess no-autofix follow-up
+        if: steps.gate.outputs.skip != 'true' && steps.autofix.outputs.fixed != 'true'
+        id: followup
+        env:
+          RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git diff origin/main...HEAD > /tmp/pr.diff || true
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          from value_investor.ci_pr_autofix import PrCiDiagnosis, assess_no_autofix_followup
+
+          result = json.loads(Path("/tmp/autofix_result.json").read_text())
+          diagnosis = {}
+          diag_path = Path("/tmp/ci_diagnosis.json")
+          if diag_path.exists():
+              diagnosis = json.loads(diag_path.read_text())
+          diagnosis = diagnosis or result.get("diagnosis") or {}
+          diag = PrCiDiagnosis(
+              kinds=list(diagnosis.get("kinds") or []),
+              branch=str(diagnosis.get("branch") or ""),
+              engineering_task_id=diagnosis.get("engineering_task_id"),
+              path_guard_violations=list(diagnosis.get("path_guard_violations") or []),
+              pytest_failures=list(diagnosis.get("pytest_failures") or []),
+              hints=list(diagnosis.get("hints") or []),
+          )
+          log_text = ""
+          log_path = Path("/tmp/ci_failed.log")
+          if log_path.exists():
+              log_text = log_path.read_text(encoding="utf-8", errors="replace")
+          diff_text = Path("/tmp/pr.diff").read_text(encoding="utf-8", errors="replace")
+          attempt = int(os.environ.get("RUN_ATTEMPT") or "1")
+          followup = assess_no_autofix_followup(
+              diagnosis=diag,
+              autofix_reason=str(result.get("reason") or ""),
+              log_text=log_text,
+              diff_text=diff_text,
+              run_attempt=attempt,
+          )
+          Path("/tmp/nofix_followup.json").write_text(
+              json.dumps(followup.to_dict(), indent=2) + "\n",
+              encoding="utf-8",
+          )
+          print(followup.to_dict())
+          action = followup.action
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"action={action}\n")
+          PY
+          if [ "$(python3 -c 'import json; print(json.load(open("/tmp/nofix_followup.json"))["action"])')" = "rerun_failed_ci" ]; then
+            echo "Re-running failed jobs for run $RUN_ID"
+            gh run rerun "$RUN_ID" --failed
+          fi
+
       - name: Comment on pull request
         if: always() && steps.gate.outputs.skip != 'true'
         env:
@@ -223,7 +284,11 @@ jobs:
           import json
           import os
           from pathlib import Path
-          from value_investor.ci_pr_autofix import PrCiDiagnosis, format_pr_ci_comment
+          from value_investor.ci_pr_autofix import (
+              NoAutofixFollowup,
+              PrCiDiagnosis,
+              format_pr_ci_comment,
+          )
 
           result = json.loads(Path("/tmp/autofix_result.json").read_text())
           diagnosis_path = Path("/tmp/ci_diagnosis.json")
@@ -239,6 +304,16 @@ jobs:
               pytest_failures=list(diagnosis.get("pytest_failures") or []),
               hints=list(diagnosis.get("hints") or []),
           )
+          followup = None
+          followup_path = Path("/tmp/nofix_followup.json")
+          if followup_path.exists():
+              raw = json.loads(followup_path.read_text())
+              followup = NoAutofixFollowup(
+                  why=str(raw.get("why") or ""),
+                  implementable=bool(raw.get("implementable")),
+                  action=str(raw.get("action") or "none"),
+                  detail=str(raw.get("detail") or ""),
+              )
           fixed = os.environ.get("PUSHED") == "true"
           body = format_pr_ci_comment(
               diagnosis=diag,
@@ -248,6 +323,7 @@ jobs:
               actions=list(result.get("actions") or []),
               commit_sha=os.environ.get("COMMIT_SHA") or None,
               docs_url=os.environ.get("DOCS_URL"),
+              followup=followup,
           )
           print(body, end="")
           PY
