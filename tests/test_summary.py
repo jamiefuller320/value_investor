@@ -299,6 +299,40 @@ def test_piotroski_snapshot_from_result_uses_details_when_present():
     assert payload["components"] == [{"name": "positive net income", "passed": True}]
 
 
+def test_enrich_signals_statutory_fcf_moat_leverage_overlay():
+    from value_investor.scoring.fcf_basis_overlay import (
+        enrich_signals_with_statutory_fcf_moat_leverage_overlay,
+    )
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "signal": "strong_buy",
+                "conviction_score": 0.9,
+                "fcf_dividend_coverage_net": 0.85,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "HIK.L",
+                "model_id": "economic_moat",
+                "model_name": "Economic Moat",
+                "passed": False,
+                "score": 0.25,
+                "failed_criteria": "['leverage too high']",
+            }
+        ]
+    )
+    enriched = enrich_signals_with_statutory_fcf_moat_leverage_overlay(signals, model_results)
+    row = enriched.iloc[0]
+    assert bool(row["statutory_fcf_moat_leverage_overlay"])
+    assert row["adjusted_signal"] == "buy"
+    assert row["conviction_score"] == pytest.approx(0.9 * 0.85)
+
+
 def test_strong_buy_confirmation_unchanged_by_snapshot_export():
     signal = assign_signal(
         models_passed=13,

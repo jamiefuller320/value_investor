@@ -59,6 +59,7 @@ from value_investor.scoring.fcf_basis_overlay import (
     enrich_signals_with_fcf_basis_overlay,
     enrich_signals_with_media_cyclical_thin_fcf_overlay,
     enrich_signals_with_run_history_fcf_action_notes,
+    enrich_signals_with_statutory_fcf_moat_leverage_overlay,
     honour_fcf_action_notes_on_signals,
 )
 from value_investor.scoring.fcf_three_way_conviction_overlay import (
@@ -268,6 +269,7 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "fcf_basis_overlay",
         "fcf_three_way_conviction_overlay",
         "media_cyclical_thin_fcf_overlay",
+        "statutory_fcf_moat_leverage_overlay",
         "advertising_revenue_share",
         "profit_to_cash_current_pct",
         "profit_to_cash_prior_pct",
@@ -529,6 +531,10 @@ def write_outputs(result: ScreenResult, output_dir: Path) -> dict[str, Path]:
         signals_out,
         result.model_results,
         output_dir=output_dir,
+    )
+    signals_out = enrich_signals_with_statutory_fcf_moat_leverage_overlay(
+        signals_out,
+        result.model_results,
     )
     signals_out = enrich_signals_with_run_history_fcf_action_notes(
         signals_out,
