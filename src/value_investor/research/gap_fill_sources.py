@@ -10,6 +10,7 @@ from typing import Any
 
 from value_investor.research.companies_house import register_enhanced_ch_body_fetch
 from value_investor.research.filings import (
+    extract_ch_annual_year_in_numbers,
     extract_filing_interim_financials,
     extract_ir_presentation_metrics,
     fetch_filings_ir_allowlist,
@@ -525,6 +526,11 @@ def prepare_gap_fill_source_pack(
         ticker,
         sources_dir=sources_dir,
     )
+    ch_annual_year_in_numbers = extract_ch_annual_year_in_numbers(
+        filings_dir,
+        ticker,
+        sources_dir=sources_dir,
+    )
 
     alternate_articles = fetch_alternate_gap_fill_news(company_name, ticker, market=market)
     alternate_path = sources_dir / "alternate_news.json"
@@ -606,6 +612,13 @@ def prepare_gap_fill_source_pack(
             "corporate_action_count": len(filing_interim_financials.get("corporate_actions") or []),
             "path": str(sources_dir / "filing_interim_financials.json"),
         },
+        "ch_annual_year_in_numbers": {
+            "year_count": int(ch_annual_year_in_numbers.get("year_count") or 0),
+            "latest_secured_workload_to_revenue_ratio": ch_annual_year_in_numbers.get(
+                "latest_secured_workload_to_revenue_ratio"
+            ),
+            "path": str(sources_dir / "ch_annual_year_in_numbers.json"),
+        },
         "alternate_news_added": added,
         "alternate_news_path": str(alternate_path),
         "planned_alternate_sources": planned,
@@ -616,6 +629,8 @@ def prepare_gap_fill_source_pack(
             "Use screen_run_manifest.json for universe-level signal counts and "
             "ir_presentation_metrics.json for presentation-grade FCF/dividend bridge lines, "
             "segment revenue splits, and IFRS 16 lease maturity tables. "
+            "Use ch_annual_year_in_numbers.json for CH annual revenue, adjusted operating "
+            "profit, secured workload, and margin/backlog ratios when present. "
             "If still unresolved, pick from planned_alternate_sources and emit "
             "RESEARCH MODEL SUGGESTIONS for ingest/prompt/scoring improvements."
         ),

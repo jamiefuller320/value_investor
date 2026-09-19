@@ -835,6 +835,7 @@ def run_ingest_improvement_pass(
                 or 0
             )
             ch_refetch: dict[str, Any] = {}
+            ch_annual_year_in_numbers: dict[str, Any] = {}
             investegate_refetch: dict[str, Any] = {}
             ticker_rns_refetch: dict[str, Any] = {}
             indexed_refetch: dict[str, Any] = {}
@@ -859,6 +860,34 @@ def run_ingest_improvement_pass(
                         or inventory.get("filings_indexed_bodies")
                         or before
                     )
+                from value_investor.research.filings import extract_ch_annual_year_in_numbers
+                from value_investor.research.ingest import attach_ch_annual_year_in_numbers
+
+                ch_annual_year_in_numbers = extract_ch_annual_year_in_numbers(
+                    sources_dir / "filings",
+                    target.ticker,
+                    sources_dir=sources_dir,
+                )
+                financials_path = sources_dir / "financials_annual.json"
+                resolved_financials = resolve_json_path(financials_path)
+                if resolved_financials is not None:
+                    try:
+                        financials_payload = read_json(resolved_financials)
+                        merged_financials = attach_ch_annual_year_in_numbers(
+                            financials_payload,
+                            filings_dir=sources_dir / "filings",
+                            ticker=target.ticker,
+                            sources_dir=sources_dir,
+                        )
+                        if merged_financials.get("ch_annual_year_in_numbers"):
+                            write_json(
+                                financials_path,
+                                merged_financials,
+                                compact=True,
+                                compress=False,
+                            )
+                    except (OSError, ValueError, TypeError):
+                        pass
             else:
                 residual_refetch = _invoke_with_transient_fetch_retry(
                     refetch_residual_filing_bodies,
@@ -1015,6 +1044,7 @@ def run_ingest_improvement_pass(
                     "mapped_source_ids": mapped_source_ids,
                     "planned_sources": [row.get("id") for row in planned],
                     "ch_refetch": ch_refetch,
+                    "ch_annual_year_in_numbers": ch_annual_year_in_numbers,
                     "investegate_refetch": investegate_refetch,
                     "ticker_rns_refetch": ticker_rns_refetch,
                     "indexed_refetch": indexed_refetch,
