@@ -765,6 +765,28 @@ _IXBRL_NARRATIVE_MARKERS: tuple[tuple[str, int], ...] = (
     (r"\bBORROWINGS\b", 3),
     (r"\bSEGMENT(?:AL)? (?:INFORMATION|ANALYSIS|REPORTING)\b", 3),
 )
+_IXBRL_NARRATIVE_TAG_HINTS: tuple[str, ...] = (
+    "principalrisksanduncertainties",
+    "principalrisk",
+    "risksanduncertainties",
+    "pensions",
+    "definedbenefit",
+    "borrowings",
+    "covenant",
+    "goingconcern",
+    "cashflow",
+    "segment",
+    "relatedparty",
+    "directorsreport",
+    "strategicreport",
+    "financereview",
+    "alternativeperformance",
+)
+_IXBRL_NONNUMERIC_RE = re.compile(
+    r"<(?:ix:)?nonNumeric\b[^>]*\bname=(['\"])([^'\"]+)\1[^>]*>"
+    r"([\s\S]*?)</(?:ix:)?nonNumeric>",
+    flags=re.I,
+)
 _INVESTEGATE_COMPANY_URL = "https://www.investegate.co.uk/company/{epic}"
 _INVESTEGATE_USER_AGENT = "value-investor-research/0.1 (+investegate; research@local)"
 _INVESTEGATE_MAX_ITEMS = 50
@@ -801,8 +823,32 @@ def _is_ixbrl_html(raw: bytes | str) -> bool:
     return "xmlns:ix=" in lower or "<ix:" in lower or "xbrl" in lower
 
 
+def _ixbrl_tag_narrative_rank(tag_name: str) -> int:
+    normalized = re.sub(r"[^a-z0-9]", "", (tag_name or "").lower())
+    for index, hint in enumerate(_IXBRL_NARRATIVE_TAG_HINTS):
+        if hint in normalized:
+            return index
+    return len(_IXBRL_NARRATIVE_TAG_HINTS)
+
+
+def _extract_ixbrl_tag_narrative(html: str) -> str:
+    """Pull narrative blocks from inline XBRL ``ix:nonNumeric`` tags (CH accounts API)."""
+    blocks: list[tuple[int, int, str]] = []
+    for index, match in enumerate(_IXBRL_NONNUMERIC_RE.finditer(html or "")):
+        tag_name = match.group(2)
+        inner = _strip_html(match.group(3))
+        if len(inner) < 40:
+            continue
+        blocks.append((_ixbrl_tag_narrative_rank(tag_name), index, inner))
+    if not blocks:
+        return ""
+    blocks.sort(key=lambda item: (item[0], item[1]))
+    return "\n\n".join(block for _, _, block in blocks)
+
+
 def _extract_ixbrl_html_text(html: str) -> str:
     """Extract readable narrative from UK Companies House iXBRL/XHTML accounts."""
+    tag_narrative = _extract_ixbrl_tag_narrative(html or "")
     cleaned = re.sub(r"<ix:header[\s\S]*?</ix:header>", " ", html or "", flags=re.I)
     cleaned = re.sub(r"<ix:hidden[\s\S]*?</ix:hidden>", " ", cleaned, flags=re.I)
     cleaned = re.sub(r"<!--[\s\S]*?-->", " ", cleaned)
@@ -826,6 +872,8 @@ def _extract_ixbrl_html_text(html: str) -> str:
     text = re.sub(r"\b20\d{2}-\d{2}-\d{2}\b", " ", text)
     text = _SEC_MEMBER_TOKEN.sub(" ", text)
     text = re.sub(r"\s+", " ", text).strip()
+    if tag_narrative:
+        text = f"{tag_narrative}\n\n{text}".strip() if text else tag_narrative
     composed = _compose_filing_body_with_depth_sections(text)
     return composed or text
 
@@ -870,12 +918,40 @@ _CH_FINANCIAL_DEPTH_MARKERS: tuple[str, ...] = (
     "going concern",
     "related party",
 )
+_CH_FINANCIAL_DEPTH_STRONG_MARKERS: tuple[str, ...] = (
+    "defined benefit",
+    "pension scheme",
+    "borrowings",
+    "covenant",
+    "principal risk",
+    "principal risks",
+    "risks and uncertainties",
+)
 
 
 def _ch_body_lacks_financial_depth(text: str) -> bool:
     """True when extracted PDF text looks like front-matter only (no notes/statements)."""
     lower = (text or "").lower()
-    return not any(marker in lower for marker in _CH_FINANCIAL_DEPTH_MARKERS)
+    if any(marker in lower for marker in _CH_FINANCIAL_DEPTH_STRONG_MARKERS):
+        return False
+    hits = sum(1 for marker in _CH_FINANCIAL_DEPTH_MARKERS if marker in lower)
+    return hits < 2
+
+
+def _ch_body_is_garbled_ocr(text: str) -> bool:
+    """True when on-disk CH extract looks like degraded OCR rather than filed accounts."""
+    if not text or not text.strip():
+        return False
+    lower = text.lower()
+    if lower.count("fontsymbol") > 2:
+        return True
+    if lower.count("|") > 30 and _score_ch_body_text(text) < 500:
+        return True
+    if _ch_body_lacks_financial_depth(text) and len(text) >= 400:
+        letters = sum(1 for ch in text if ch.isalpha())
+        if letters / len(text) < 0.45:
+            return True
+    return False
 
 
 def _ch_mime_priority_rank(content_type: str) -> int:
@@ -902,6 +978,8 @@ def _select_best_ch_body_text(candidates: list[tuple[str, str]]) -> str | None:
         score = _score_ch_body_text(text)
         if _is_ch_pdf_content_type(content_type) and _ch_body_lacks_financial_depth(text):
             score -= 5_000
+        if not _is_ch_pdf_content_type(content_type):
+            score += 2_500
         rank = _ch_mime_priority_rank(content_type)
         key = (score, -rank)
         if key > best_key:
@@ -4211,6 +4289,8 @@ def _ch_row_needs_body_refetch(row: dict[str, Any], bodies_dir: Path) -> bool:
         return True
     if "[truncated]" in text:
         return True
+    if _ch_body_is_garbled_ocr(text):
+        return True
     return _ch_body_lacks_financial_depth(text)
 
 
@@ -7442,10 +7522,210 @@ def prune_misattributed_filing_bodies(
     }
 
 
+def _ir_allowlist_statutory_annual_report_row(ticker: str) -> dict[str, Any] | None:
+    """Best IR allowlist row for the statutory annual report PDF (FCA NSM / issuer mirror)."""
+    rows = fetch_filings_ir_allowlist(ticker)
+    annual = [
+        row
+        for row in rows
+        if str(row.get("period") or "") == "annual" and _ir_allowlist_statutory_rank(row) == 0
+    ]
+    if not annual:
+        return None
+    annual.sort(
+        key=lambda row: (
+            0 if re.search(r"annual-report-20\d{2}", str(row.get("url") or ""), re.I) else 1,
+            str(row.get("url") or ""),
+        )
+    )
+    return annual[0]
+
+
+def _investegate_fca_nsm_annual_report_url(
+    ticker: str,
+    company_name: str,
+    *,
+    investegate_cache: list[dict[str, Any]] | None = None,
+) -> str | None:
+    """Resolve an LSE RNS PDF URL for the annual report (FCA National Storage Mechanism)."""
+    cache = investegate_cache
+    if cache is None:
+        cache = fetch_filings_investegate_company(ticker=ticker, company_name=company_name)
+    best_url: str | None = None
+    best_score = -1
+    for row in cache:
+        headline = str(row.get("headline") or "").lower()
+        if "annual report" not in headline:
+            continue
+        score = 0
+        if classify_filing_period(headline) == "annual":
+            score += 40
+        if "accounts" in headline:
+            score += 20
+        if re.search(r"20\d{2}", headline):
+            score += 10
+        ig_url = str(row.get("url") or "")
+        pdf_url = resolve_investegate_lse_pdf_url(ig_url)
+        if not pdf_url or not _is_lse_rns_pdf_url(pdf_url):
+            continue
+        if score > best_score:
+            best_score = score
+            best_url = pdf_url
+    return best_url
+
+
+def _fetch_fca_nsm_annual_report_body(
+    ticker: str,
+    company_name: str,
+    *,
+    investegate_cache: list[dict[str, Any]] | None = None,
+) -> tuple[str | None, str | None]:
+    """
+    Download FY annual report narrative from IR allowlist or FCA NSM (LSE RNS PDF).
+
+    Returns ``(body, source)`` where ``source`` is ``ir_allowlist`` or ``fca_nsm_lse_pdf``.
+    """
+    ir_row = _ir_allowlist_statutory_annual_report_row(ticker)
+    if ir_row:
+        body, fetch_source = _fetch_ir_allowlist_body(
+            ir_row,
+            ticker=ticker,
+            company_name=company_name,
+            investegate_cache=investegate_cache,
+        )
+        if body:
+            return body, fetch_source or "ir_allowlist"
+    nsm_url = _investegate_fca_nsm_annual_report_url(
+        ticker,
+        company_name,
+        investegate_cache=investegate_cache,
+    )
+    if nsm_url:
+        body = fetch_filing_body(nsm_url)
+        if body and _filing_text_is_substantive(body, min_chars=400):
+            return body, "fca_nsm_lse_pdf"
+        for alt_body, _parser in _fetch_ir_pdf_alternate_candidates(nsm_url):
+            if _filing_text_is_substantive(alt_body, min_chars=400):
+                return alt_body, "fca_nsm_lse_pdf"
+    return None, None
+
+
+def _merge_ch_body_with_annual_report_supplement(ch_text: str, supplement: str) -> str:
+    """Replace garbled CH OCR with the annual report extract; otherwise prepend supplement."""
+    if _ch_body_is_garbled_ocr(ch_text):
+        merged = supplement
+    else:
+        merged = f"{supplement.strip()}\n\n---\n\n{ch_text.strip()}".strip()
+    if len(merged) > FILINGS_BODY_MAX_CHARS:
+        merged = merged[:FILINGS_BODY_MAX_CHARS] + "\n\n[truncated]"
+    return merged
+
+
+def supplement_garbled_ch_filing_bodies(
+    filings_dir: Path,
+    *,
+    ticker: str,
+    company_name: str,
+    max_bodies: int = 3,
+) -> dict[str, Any]:
+    """
+    Replace or supplement garbled Companies House OCR with FY annual report PDF/iXBRL text.
+
+    Prefers IR allowlist statutory annual reports, then FCA NSM (LSE RNS PDF) via Investegate.
+    """
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
+    bodies_dir = filings_dir / "bodies"
+    if not index_path.exists() or not str(ticker or "").upper().endswith(".L"):
+        return {
+            "attempted": 0,
+            "supplemented": 0,
+            "note": "skip_non_uk_or_missing_index",
+        }
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError) as exc:
+        return {"attempted": 0, "supplemented": 0, "note": f"unreadable index: {exc}"}
+
+    filings = normalize_companies_house_index_rows(list(payload.get("filings") or []))
+    ch_rows = [row for row in filings if _is_ch_filing_row(row)]
+    targets: list[tuple[dict[str, Any], str]] = []
+    for row in ch_rows:
+        if not row.get("has_body"):
+            continue
+        row_id = str(row.get("id") or "")
+        body_path = row.get("body_path")
+        candidate = Path(str(body_path)) if body_path else bodies_dir / f"{row_id}.txt"
+        if not candidate.is_file():
+            continue
+        try:
+            text = candidate.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        if not _ch_body_is_garbled_ocr(text) and not (
+            _ch_body_lacks_financial_depth(text) and str(row.get("period") or "") == "annual"
+        ):
+            continue
+        targets.append((row, text))
+
+    if not targets:
+        return {"attempted": 0, "supplemented": 0, "note": "no garbled CH bodies"}
+
+    investegate_cache = fetch_filings_investegate_company(
+        ticker=ticker,
+        company_name=company_name,
+    )
+    supplement_body, supplement_source = _fetch_fca_nsm_annual_report_body(
+        ticker,
+        company_name,
+        investegate_cache=investegate_cache,
+    )
+    if not supplement_body:
+        return {
+            "attempted": len(targets),
+            "supplemented": 0,
+            "note": "annual_report_supplement_unavailable",
+        }
+
+    supplemented = 0
+    updated_by_id = {str(row.get("id") or ""): row for row in filings}
+    bodies_dir.mkdir(parents=True, exist_ok=True)
+    for row, existing in targets[: max(0, int(max_bodies))]:
+        row_id = str(row.get("id") or "")
+        merged = _merge_ch_body_with_annual_report_supplement(existing, supplement_body)
+        if _ch_body_lacks_financial_depth(merged):
+            continue
+        path = bodies_dir / f"{row_id}.txt"
+        path.write_text(merged, encoding="utf-8")
+        item = dict(updated_by_id.get(row_id) or row)
+        item["has_body"] = True
+        item["body_path"] = str(path)
+        item["annual_report_supplement_source"] = supplement_source
+        item["annual_report_supplement_at"] = datetime.now(UTC).isoformat()
+        updated_by_id[row_id] = item
+        supplemented += 1
+
+    if supplemented:
+        refreshed = [updated_by_id.get(str(row.get("id") or ""), row) for row in filings]
+        payload["filings"] = refreshed
+        payload["summary"] = summarize_filings(refreshed)
+        payload["ch_annual_report_supplemented_at"] = datetime.now(UTC).isoformat()
+        index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+    return {
+        "attempted": len(targets),
+        "supplemented": supplemented,
+        "supplement_source": supplement_source,
+        "note": "supplement_garbled_ch_filing_bodies",
+    }
+
+
 def refetch_companies_house_filing_bodies(
     filings_dir: Path,
     *,
     max_bodies: int = 20,
+    ticker: str = "",
+    company_name: str = "",
 ) -> dict[str, Any]:
     """
     Re-download filed-accounts PDF/iXBRL bodies for indexed CH rows without text.
@@ -7548,13 +7828,31 @@ def refetch_companies_house_filing_bodies(
     payload["summary"] = summarize_filings(updated)
     payload["ch_refetched_at"] = datetime.now(UTC).isoformat()
     index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-    return {
+    result: dict[str, Any] = {
         "attempted": len(missing),
         "fetched": downloaded,
         "with_body_before": before,
         "with_body_after": after,
         "note": "refetch_companies_house_filing_bodies",
     }
+    if ticker and company_name:
+        supplement = supplement_garbled_ch_filing_bodies(
+            filings_dir,
+            ticker=ticker,
+            company_name=company_name,
+            max_bodies=max(1, min(3, max_bodies)),
+        )
+        result["annual_report_supplement"] = supplement
+        if int(supplement.get("supplemented") or 0) > 0:
+            try:
+                payload = json.loads(index_path.read_text(encoding="utf-8"))
+            except (OSError, ValueError, TypeError):
+                pass
+            else:
+                result["with_body_after"] = sum(
+                    1 for row in payload.get("filings") or [] if row.get("has_body")
+                )
+    return result
 
 
 def refetch_investegate_filing_bodies(
@@ -7887,7 +8185,12 @@ def refetch_uk_primary_filing_bodies(
     adjusting items, and cash-flow statements), then fills remaining RNS rows.
     A residual sweep runs last for SEC Edgar and other direct URLs still lacking bodies.
     """
-    ch = refetch_companies_house_filing_bodies(filings_dir, max_bodies=max_bodies)
+    ch = refetch_companies_house_filing_bodies(
+        filings_dir,
+        max_bodies=max_bodies,
+        ticker=ticker,
+        company_name=company_name,
+    )
     rns = refetch_indexed_without_body_filing_bodies(
         filings_dir,
         ticker=ticker,
