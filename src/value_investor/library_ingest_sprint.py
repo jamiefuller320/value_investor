@@ -225,6 +225,22 @@ def run_library_ingest_sprint(
         at_parity = ingest_parity_met(health)
         max_for_run = 4 if at_parity else max_targets
         try:
+            from value_investor.library_ingest_maintenance import (
+                refresh_buy_tier_screen_for_sprint_entry,
+            )
+
+            screen_refresh = refresh_buy_tier_screen_for_sprint_entry(
+                library_root,
+                market_id,
+                force=False,
+                now=when,
+            )
+            if screen_refresh.get("refreshed") or screen_refresh.get("error"):
+                logger.info(
+                    "Sprint-entry screen for %s: %s",
+                    market_id,
+                    screen_refresh,
+                )
             loop_result: LibraryIngestLoopResult = run_library_ingest_loop(
                 market_id,
                 library_root=library_root,

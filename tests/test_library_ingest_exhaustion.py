@@ -369,6 +369,10 @@ def test_maybe_advance_on_exhaustion_vacates_and_records_maintenance(tmp_path: P
             "value_investor.library_ingest_dispatch.refresh_euro_ingest_dispatch",
             return_value={},
         ),
+        patch(
+            "value_investor.library_ingest_maintenance.refresh_buy_tier_screen_for_sprint_entry",
+            return_value={"refreshed": True, "market_id": "ftse_smallcap"},
+        ),
     ):
         event = maybe_advance_parallel_sprint_on_parity(
             market_id="sp500",

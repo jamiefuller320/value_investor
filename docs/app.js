@@ -1007,6 +1007,7 @@ function learningBookLine(row) {
 
 const ADMISSION_FLAG_LABELS = {
   no_ingest_in_window: "no recent ingest",
+  awaiting_first_ingest: "awaiting first ingest",
   runtime_cutoff: "runtime cutoff",
   ingest_errors: "ingest errors",
   zero_improve_stall: "0-improve stall",

@@ -41,6 +41,94 @@ from value_investor.library_maintenance_stagger import (
 logger = logging.getLogger(__name__)
 
 DEFAULT_MAINTENANCE_MAX_TARGETS = FTSE_MAINTENANCE_MAX_TARGETS
+# Match Overview sprint-tile stale-screen threshold (market_status.STALE_SCREEN_AFTER_DAYS).
+BUY_TIER_SCREEN_MAX_AGE_DAYS = 8
+
+
+def _parse_screen_run_at(raw: Any) -> datetime | None:
+    text = str(raw or "").strip()
+    if not text:
+        return None
+    try:
+        parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=UTC)
+    return parsed.astimezone(UTC)
+
+
+def refresh_buy_tier_screen_for_sprint_entry(
+    library_root: Path,
+    market_id: str,
+    *,
+    force: bool = False,
+    max_age_days: int = BUY_TIER_SCREEN_MAX_AGE_DAYS,
+    now: datetime | None = None,
+) -> dict[str, Any]:
+    """Refresh screen-lite so sprint ingest deepens a current buy-tier shortlist.
+
+    Called when a market enters a parallel sprint slot (advance / reseed) and again
+    at the start of a sprint ingest run when the archive clock is already stale.
+    Failures are non-fatal — ingest still proceeds on the last shortlist.
+    """
+    mid = str(market_id or "").strip()
+    if not mid:
+        return {"skipped": True, "reason": "empty_market_id"}
+    library_root = Path(library_root)
+    as_of = now if now is not None else datetime.now(UTC)
+    if as_of.tzinfo is None:
+        as_of = as_of.replace(tzinfo=UTC)
+
+    from value_investor.library_screen import run_library_screen, screen_dir_for
+    from value_investor.storage import read_json
+
+    summary_path = screen_dir_for(library_root, mid) / "latest_summary.json"
+    last_screen_at: datetime | None = None
+    if summary_path.exists():
+        try:
+            payload = read_json(summary_path)
+        except Exception:  # noqa: BLE001 — treat unreadable summary as missing
+            payload = {}
+        if isinstance(payload, dict):
+            last_screen_at = _parse_screen_run_at(payload.get("run_at"))
+
+    age_days: int | None = None
+    if last_screen_at is not None:
+        age_days = (as_of.date() - last_screen_at.date()).days
+    stale = last_screen_at is None or age_days is None or age_days > max_age_days
+    if not force and not stale:
+        return {
+            "skipped": True,
+            "reason": "screen_fresh",
+            "market_id": mid,
+            "last_screen_at": last_screen_at.isoformat() if last_screen_at else None,
+            "age_days": age_days,
+        }
+
+    try:
+        result = run_library_screen(library_root, mid, run_at=as_of)
+    except Exception as exc:  # noqa: BLE001 — entry must not fail on screen errors
+        logger.warning("Sprint-entry screen-lite for %s failed: %s", mid, exc)
+        return {
+            "refreshed": False,
+            "market_id": mid,
+            "error": str(exc),
+            "last_screen_at": last_screen_at.isoformat() if last_screen_at else None,
+            "age_days": age_days,
+        }
+
+    summary = result.summary if isinstance(result.summary, dict) else {}
+    return {
+        "refreshed": True,
+        "market_id": mid,
+        "forced": force,
+        "prior_screen_at": last_screen_at.isoformat() if last_screen_at else None,
+        "prior_age_days": age_days,
+        "run_at": summary.get("run_at") or as_of.isoformat(),
+        "shortlist_count": summary.get("shortlist_count"),
+        "ticker_count": summary.get("ticker_count"),
+    }
 
 
 @dataclass
@@ -412,6 +500,14 @@ def maybe_advance_parallel_sprint_on_parity(
     except Exception as exc:  # noqa: BLE001
         logger.warning("Dispatch refresh after parallel sprint handoff failed: %s", exc)
 
+    screen_refresh: dict[str, Any] | None = None
+    if nxt:
+        screen_refresh = refresh_buy_tier_screen_for_sprint_entry(
+            library_root,
+            nxt,
+            force=True,
+        )
+
     return {
         "advanced": True,
         "parallel_stream": parallel_stream,
@@ -419,6 +515,7 @@ def maybe_advance_parallel_sprint_on_parity(
         "to_market": nxt,
         "stream_markets_after": stream_after,
         "parity_event": parity_event,
+        "screen_refresh": screen_refresh,
         **event_row,
     }
 
@@ -477,6 +574,11 @@ def reseed_empty_parallel_sprint_slots(
             **(policy.get("parallel_sprint_graduation") or {}),
             "history": history[-50:],
         }
+        event_row["screen_refresh"] = refresh_buy_tier_screen_for_sprint_entry(
+            library_root,
+            nxt,
+            force=True,
+        )
         events.append(event_row)
 
     if not changed:
@@ -538,12 +640,14 @@ def reconcile_parallel_sprint_queues(
 
 
 __all__ = [
+    "BUY_TIER_SCREEN_MAX_AGE_DAYS",
     "DEFAULT_MAINTENANCE_MAX_TARGETS",
     "LibraryIngestMaintenanceResult",
     "maybe_advance_parallel_sprint_on_parity",
     "maybe_handoff_focus_on_ingest_parity",
     "maybe_record_exhausted_maintenance",
     "reconcile_parallel_sprint_queues",
+    "refresh_buy_tier_screen_for_sprint_entry",
     "reseed_empty_parallel_sprint_slots",
     "record_ingest_exhausted_market",
     "record_ingest_parity_market",

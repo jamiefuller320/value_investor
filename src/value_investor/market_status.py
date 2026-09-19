@@ -528,6 +528,22 @@ def _admission_warning(
     return {"id": warning_id, "severity": severity, "summary": summary}
 
 
+def _parallel_sprint_entered_at(policy: dict[str, Any], market_id: str) -> datetime | None:
+    """Latest parallel-sprint graduation / reseed timestamp that seated ``market_id``."""
+    history = _as_list(_as_dict(policy.get("parallel_sprint_graduation")).get("history"))
+    latest: datetime | None = None
+    for row in history:
+        payload = _as_dict(row)
+        if str(payload.get("to_market") or "").strip() != market_id:
+            continue
+        at = _parse_iso_dt(payload.get("at"))
+        if at is None:
+            continue
+        if latest is None or at > latest:
+            latest = at
+    return latest
+
+
 def _load_ingest_health_entries(library_root: Path, market_id: str) -> list[dict[str, Any]]:
     path = resolve_library_ingest_health_log_path(library_root, market_id)
     payload = _as_dict(_safe_read(path))
@@ -544,6 +560,7 @@ def _sprint_progress(
     ingest_parity: bool | None,
     ingest_exhausted: bool,
     now: datetime,
+    sprint_entered_at: datetime | None = None,
 ) -> dict[str, Any] | None:
     """Two-day ingest rollup and admission-progress flags for sprint tiles."""
     if ingest != INGEST_SPRINT:
@@ -579,15 +596,26 @@ def _sprint_progress(
         gate_health["ingest_exhausted"] = True
     ready = bool(ingest_parity) or sprint_ingest_complete(gate_health)
 
+    entered_in_window = sprint_entered_at is not None and sprint_entered_at >= window_start
+
     warnings: list[dict[str, str]] = []
     if not window:
-        warnings.append(
-            _admission_warning(
-                "no_ingest_in_window",
-                f"No ingest runs in the last {SPRINT_PROGRESS_WINDOW_DAYS} days",
-                severity="high",
+        if entered_in_window:
+            entered_day = sprint_entered_at.date().isoformat() if sprint_entered_at else "?"
+            warnings.append(
+                _admission_warning(
+                    "awaiting_first_ingest",
+                    f"Entered sprint on {entered_day}; waiting on the first deepen slot",
+                )
             )
-        )
+        else:
+            warnings.append(
+                _admission_warning(
+                    "no_ingest_in_window",
+                    f"No ingest runs in the last {SPRINT_PROGRESS_WINDOW_DAYS} days",
+                    severity="high",
+                )
+            )
     if cutoff_runs:
         warnings.append(
             _admission_warning(
@@ -653,12 +681,21 @@ def _sprint_progress(
             if screen_at is None
             else f"last screen {screen_at.date().isoformat()}"
         )
-        warnings.append(
-            _admission_warning(
-                "stale_buy_tier_screen",
-                f"Buy-tier screen is stale ({age}); ingest is deepening an old shortlist",
+        if entered_in_window:
+            warnings.append(
+                _admission_warning(
+                    "stale_buy_tier_screen",
+                    f"Buy-tier screen is stale ({age}); sprint-entry screen-lite "
+                    "will refresh on the next deepen slot",
+                )
             )
-        )
+        else:
+            warnings.append(
+                _admission_warning(
+                    "stale_buy_tier_screen",
+                    f"Buy-tier screen is stale ({age}); ingest is deepening an old shortlist",
+                )
+            )
     from value_investor.library_sim import MARKET_BENCHMARKS
 
     if market_id not in MARKET_BENCHMARKS:
@@ -688,6 +725,7 @@ def _sprint_progress(
         "admission_ready": ready,
         "admission_gate": "sprint_ingest_complete",
         "admission_warnings": warnings,
+        "sprint_entered_at": sprint_entered_at.isoformat() if sprint_entered_at else None,
     }
 
 
@@ -1057,6 +1095,7 @@ def build_market_status(
             ),
             ingest_exhausted=ingest_exhausted,
             now=as_of,
+            sprint_entered_at=_parallel_sprint_entered_at(policy, market_id),
         )
         held_vs_market = _held_vs_market_row(
             market_id,
