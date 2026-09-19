@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-19T07:50:00+00:00",
+  "updated_at": "2026-09-19T07:53:54+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9492,6 +9492,23 @@
       "status": "open",
       "source": "conversation: PR traffic health review 2026-09-19",
       "added_at": "2026-09-19T07:50:00+00:00"
+    },
+    {
+      "id": "L425",
+      "category": "later",
+      "section": "ops",
+      "title": "Preflight before Composer on eng-agent (serial clash burns)",
+      "summary": "Sep18 evening burned ~$1.2/run on distinct tasks that each failed preflight_clash on filings.py after Composer already ran. Reburn detector only stops same-task loops; run preflight (or clash gate) before launching Composer, or treat serial preflight_clash parks as waste.",
+      "revisit_when": "After parked backlog clears and eng-agent resumes, or next time overnight eng-agent spend returns without same-task reburn",
+      "tags": [
+        "spend",
+        "engineering-agent",
+        "preflight",
+        "automation-waste"
+      ],
+      "status": "open",
+      "source": "https://cursor.com/agents/bc-01a0b8a2-dc8e-7be7-8194-2300a50c4fb9",
+      "added_at": "2026-09-19T07:53:54+00:00"
     }
   ],
   "fragments": [

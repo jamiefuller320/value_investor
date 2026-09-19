@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-19T07:50:00+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-19T07:53:54+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -483,6 +483,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L420 | **Hunter-fix PAT push still action_required (checkout extraheader)** | Even with WORKFLOW_DISPATCH_PAT set and gh auth setup-git, #715 hunter-fix tip push still created pull_request CI in action_required (triggering_actor github-actions[bot]). Likely actions/checkout http.extraheader Authorization bearer GITHUB_TOKEN wins over gh credentials. Unset extraheader or push via x-access-token URL before git push. | Next hunter-fix tip push lands action_required despite PAT secret present in the commit step env |
 | L421 | **Cursor agent for non-flake pytest after PR autofix declines** | No-autofix follow-up re-runs a pre-existing live-fetch flake once and explains other pytest declines. It does not patch assertion failures. A capped agent could try a code fix when the follow-up says not implementable. | Eng PRs sit red on non-flake pytest after the one-shot live-fetch re-run and a human still has to patch them |
 | L424 | **Hunter-fix must not ship net-empty or stripped eng tips** | On #704 hunter-fix emptied the dividend tip before human merge; on #715 it stripped ingest/gap_fill and left a leftover PR (#717). Scoped auto-merge then stamps the task merged even when the intended feature was reverted. Traffic does not detect tip emptiness. | Another eng PR is human- or bot-merged after hunter-fix with a near-empty tip or a follow-up PR that only restores stripped files |
+| L425 | **Preflight before Composer on eng-agent (serial clash burns)** | Sep18 evening burned ~$1.2/run on distinct tasks that each failed preflight_clash on filings.py after Composer already ran. Reburn detector only stops same-task loops; run preflight (or clash gate) before launching Composer, or treat serial preflight_clash parks as waste. | After parked backlog clears and eng-agent resumes, or next time overnight eng-agent spend returns without same-task reburn |
 
 ---
 
