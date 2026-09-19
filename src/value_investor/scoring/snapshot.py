@@ -10,6 +10,7 @@ import pandas as pd
 
 from value_investor.research.verdict import compute_adjusted_signal
 from value_investor.scoring.dividend_sustainability_overlay import (
+    apply_dividend_sustainability_export_enforcement,
     enrich_screening_snapshot_dividend_dual_fcf_research_prompts,
 )
 from value_investor.scoring.dividend_yield_overlay import (
@@ -24,7 +25,6 @@ from value_investor.scoring.fcf import (
     screen_ttm_from_row,
 )
 from value_investor.scoring.fcf_basis_overlay import (
-    apply_dividend_sustainability_export_enforcement,
     apply_fcf_export_enforcement,
     apply_media_cyclical_thin_fcf_export_enforcement,
     apply_statutory_fcf_moat_leverage_export_enforcement,
