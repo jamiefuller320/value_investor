@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T13:27:28.311825+00:00",
+  "generated_at": "2026-09-19T14:07:27.512571+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1153,11 +1153,11 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-18T23:16:25.344671+00:00",
-    "queue_ui_updated_at": "2026-09-19T13:27:28.244640+00:00",
-    "task_count": 56,
+    "compiled_at": "2026-09-19T14:07:25.295331+00:00",
+    "queue_ui_updated_at": "2026-09-19T14:07:27.434086+00:00",
+    "task_count": 57,
     "status": {
-      "open_count": 2,
+      "open_count": 3,
       "pr_open_count": 0,
       "parked_count": 13,
       "merged_count": 40,
@@ -1184,7 +1184,23 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 1,
-        "clash_scan": "partial"
+        "clash_scan": "full"
+      },
+      {
+        "id": "eng-20260919-01",
+        "area": "ingest",
+        "title": "Fix IR presentation pipeline so `ir_0d388cd522a7cf4c.txt` is not truncated at the pension/FCF line and populates `ir_presentation_metrics.json` bridges.",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "open",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 2,
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260918-16",
@@ -1199,8 +1215,8 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 2,
-        "clash_scan": "partial"
+        "effective_dispatch_rank": 3,
+        "clash_scan": "full"
       }
     ],
     "attention_tasks": [
@@ -1362,8 +1378,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 2,
-      "dispatch_eligible_count": 2,
+      "open_task_count": 3,
+      "dispatch_eligible_count": 3,
       "blocked_count": 0
     }
   },
@@ -1642,9 +1658,9 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-19T13:27:28.311825+00:00",
-    "overall": "blocked",
-    "headline": "Dispatch paused — 6 attention-parked task(s). attention parked backlog clearing pause (6 task(s); resume when < 7 and 30m since last clearing action)",
+    "generated_at": "2026-09-19T14:07:27.512571+00:00",
+    "overall": "active",
+    "headline": "Agent lane active.",
     "merge_lane": {
       "state": "idle",
       "idle": true,
@@ -1656,26 +1672,26 @@
       "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
-      "state": "blocked",
+      "state": "running",
       "idle": false,
-      "running": false,
-      "blocked": true,
-      "should_dispatch": false,
-      "pause_active": true,
+      "running": true,
+      "blocked": false,
+      "should_dispatch": true,
+      "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 6,
-      "open_count": 2,
+      "open_count": 3,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 2,
+      "dispatch_eligible_count": 3,
       "blocked_task_count": 0,
       "next_task_id": "eng-20260918-23",
-      "reason": "attention parked backlog clearing pause (6 task(s); resume when < 7 and 30m since last clearing action)",
-      "detail": "Dispatch paused — 6 attention-parked task(s). attention parked backlog clearing pause (6 task(s); resume when < 7 and 30m since last clearing action)"
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
-      "pause_active": true,
+      "pause_active": false,
       "attention_parked_count": 6,
-      "evaluated_at": "2026-09-19T13:27:24.762432+00:00"
+      "evaluated_at": "2026-09-19T14:07:22.504325+00:00"
     },
     "traffic_control": {
       "pause_active": false,

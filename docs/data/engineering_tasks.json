@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-18T23:16:25.344671+00:00",
+  "compiled_at": "2026-09-19T14:07:25.295331+00:00",
   "run_at": null,
-  "task_count": 56,
+  "task_count": 57,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2273,6 +2273,57 @@
       "status": "open"
     },
     {
+      "id": "eng-20260919-01",
+      "area": "ingest",
+      "title": "Fix IR presentation pipeline so `ir_0d388cd522a7cf4c.txt` is not truncated at the pension/FCF line and populates `ir_presentation_metrics.json` bridges.",
+      "summary": "Fix IR presentation pipeline so `ir_0d388cd522a7cf4c.txt` is not truncated at the pension/FCF line and populates `ir_presentation_metrics.json` bridges. (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "ITV.L"
+        ],
+        "recorded_at": "2026-09-12T12:36:40.963347+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "Fix IR presentation pipeline so `ir_0d388cd522a7cf4c.txt` is not truncated at the pension/FCF line and populates `ir_presentation_metrics.json` bridges.",
+        "narrow_cohesion_bypass": true,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for ITV.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260918-22",
       "area": "ingest",
       "title": "Parse H1 FY2026 IR presentation (allowlist in `filings_index.json`) into structured FCF/dividend bridges like FY2025 `ir_presentation_metrics.json`.",
@@ -3303,16 +3354,13 @@
   },
   "queue_clearing": {
     "attention_parked_count": 6,
-    "evaluated_at": "2026-09-19T13:27:24.762432+00:00",
+    "evaluated_at": "2026-09-19T14:07:22.504325+00:00",
     "should_send_full_queue_warning": false,
-    "pause_active": true,
-    "pause_started_at": "2026-09-19T00:53:10.731024+00:00",
+    "pause_active": false,
     "last_change": {
-      "resume_pending": true
+      "resumed": true
     },
-    "last_clearing_action_at": "2026-09-19T13:14:58.394110+00:00",
-    "warned_at": "2026-09-19T13:13:31.714783+00:00",
-    "resume_pending": true
+    "resumed_at": "2026-09-19T14:07:22.504325+00:00"
   },
   "ingest_health_before": {
     "snapshot_at": "2026-09-16T10:07:10.046461+00:00",
