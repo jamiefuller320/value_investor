@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-19T15:20:48.905835+00:00",
+  "compiled_at": "2026-09-19T15:59:24.582842+00:00",
   "run_at": null,
-  "task_count": 59,
+  "task_count": 60,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -2282,6 +2282,57 @@
       "merged_at": "2026-09-19T14:47:42.469308+00:00"
     },
     {
+      "id": "eng-20260919-04",
+      "area": "ingest",
+      "title": "Add FY 2026 results presentation to IR allowlist and parse statutory-to-adjusted FCF bridge (parity with FY 2025 `ir_5ba5b17047f87036.txt` appendix).",
+      "summary": "Add FY 2026 results presentation to IR allowlist and parse statutory-to-adjusted FCF bridge (parity with FY 2025 `ir_5ba5b17047f87036.txt` appendix). (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+      "priority": "medium",
+      "priority_score": 40.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "FGP.L"
+        ],
+        "recorded_at": "2026-09-13T08:06:10.267968+00:00",
+        "narrow_scope_mode": "cohesion_bypass",
+        "narrow_scope_reason": "no topic map — cohesion bypass keeps full area allowlist",
+        "narrow_parent_title": "Add FY 2026 results presentation to IR allowlist and parse statutory-to-adjusted FCF bridge (parity with FY 2025 `ir_5ba5b17047f87036.txt` appendix).",
+        "narrow_cohesion_bypass": true,
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 40.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for FGP.L",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260919-03",
       "area": "ingest",
       "title": "Parse “2025 in numbers” and secured-workload tables from CH annual bodies into structured fields (year, revenue, adj OP, secured workload) for automatic margin-",
@@ -2302,7 +2353,8 @@
         "origin_source": "research_model_suggestions",
         "origin_priority_score": 40.0,
         "preferred_merge_class": "compile_cap_drain",
-        "doc": "docs/ops/engineering-sync.md"
+        "doc": "docs/ops/engineering-sync.md",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Add or extend fetch logic with a focused regression test for MGNS.L",
@@ -2330,11 +2382,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260919-03.md",
       "branch_name": "cursor/eng-20260919-03-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-19T15:32:52.669233+00:00"
+      "completed_at": "2026-09-19T15:32:52.669233+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/735",
+      "pr_number": 735,
+      "merged_at": "2026-09-19T15:59:23.603052+00:00"
     },
     {
       "id": "eng-20260919-02",
