@@ -297,7 +297,17 @@ def test_should_auto_compile_when_partial_improvement_leaves_gaps(tmp_path: Path
 def test_should_auto_compile_when_no_refetch_attempted_but_gaps_remain(tmp_path: Path):
     data_dir = tmp_path / "docs" / "data"
     market = "euro_depth"
-    filings = data_dir / "library" / "markets" / market / "screen" / "research" / "C5H.IR" / "sources" / "filings"
+    filings = (
+        data_dir
+        / "library"
+        / "markets"
+        / market
+        / "screen"
+        / "research"
+        / "C5H.IR"
+        / "sources"
+        / "filings"
+    )
     filings.mkdir(parents=True)
     (filings / "filings_index.json").write_text(
         json.dumps(

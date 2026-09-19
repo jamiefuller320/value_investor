@@ -811,9 +811,7 @@ def _deepen_batch_moved_parity_needles(deepen_results: Any) -> bool:
     if not isinstance(deepen_results, list) or not deepen_results:
         return False
     return any(
-        deepen_result_moved_parity_needle(row)
-        for row in deepen_results
-        if isinstance(row, dict)
+        deepen_result_moved_parity_needle(row) for row in deepen_results if isinstance(row, dict)
     )
 
 
@@ -890,11 +888,17 @@ def select_library_gap_closure_candidate(
         rank = {ticker: idx for idx, ticker in enumerate(effective_order)}
 
         def _effective_rank(row: Any) -> int:
-            return rank.get(str(row.ticker or "").upper(), len(rank) + sticky_rank.get(str(row.reason), 9))
+            return rank.get(
+                str(row.ticker or "").upper(), len(rank) + sticky_rank.get(str(row.reason), 9)
+            )
 
         targets = sorted(
             targets,
-            key=lambda row: (_effective_rank(row), -float(row.priority_score or 0.0), str(row.ticker)),
+            key=lambda row: (
+                _effective_rank(row),
+                -float(row.priority_score or 0.0),
+                str(row.ticker),
+            ),
         )
     prefer = str(prefer_ticker or "").strip().upper()
     if prefer:
