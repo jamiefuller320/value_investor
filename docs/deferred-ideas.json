@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-19T07:53:54+00:00",
+  "updated_at": "2026-09-19T08:16:21+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9509,6 +9509,23 @@
       "status": "open",
       "source": "https://cursor.com/agents/bc-01a0b8a2-dc8e-7be7-8194-2300a50c4fb9",
       "added_at": "2026-09-19T07:53:54+00:00"
+    },
+    {
+      "id": "L426",
+      "category": "later",
+      "section": "ops",
+      "title": "Autofix one-shot re-run for Investegate maintenance HTML flakes",
+      "summary": "Live-fetch follow-up only matches has_fetchable_ir + assert None/URLError. Investegate scheduled-maintenance pages return short HTML and fail asserts like len(body) > 1000 (seen on #724/#725 BPT.AX leftover test). Expand safe one-shot re-run detection for that maintenance signature.",
+      "revisit_when": "Another PR fails only on Investegate maintenance HTML while other shards are green",
+      "tags": [
+        "ci",
+        "autofix",
+        "investegate",
+        "flake"
+      ],
+      "status": "open",
+      "source": "conversation: #724/#725 CI why-step 2026-09-19",
+      "added_at": "2026-09-19T08:16:21+00:00"
     }
   ],
   "fragments": [
