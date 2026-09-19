@@ -640,6 +640,29 @@ def _ch_consolidated_note_depth(text: str) -> bool:
     return False
 
 
+def _filter_ch_candidates_prefer_ixbrl_over_shallow_pdf(
+    candidates: list[tuple[str, str]],
+) -> list[tuple[str, str]]:
+    """When iXBRL is available, drop strategic-only or garbled PDF OCR (e.g. ITV group accounts)."""
+    from value_investor.research.filings import (
+        _ch_body_is_garbled_ocr,
+        _ch_body_lacks_financial_depth,
+        _is_ch_pdf_content_type,
+    )
+
+    ixbrl_like = [pair for pair in candidates if not _is_ch_pdf_content_type(pair[1])]
+    if not ixbrl_like:
+        return candidates
+    kept = list(ixbrl_like)
+    for text, content_type in candidates:
+        if not _is_ch_pdf_content_type(content_type):
+            continue
+        if _ch_body_lacks_financial_depth(text) or _ch_body_is_garbled_ocr(text):
+            continue
+        kept.append((text, content_type))
+    return kept
+
+
 def _select_best_ch_deepened_body(candidates: list[tuple[str, str]]) -> str | None:
     """Pick CH body text; recover when PDF depth penalty hides consolidated note OCR."""
     from value_investor.research.filings import (
@@ -648,6 +671,7 @@ def _select_best_ch_deepened_body(candidates: list[tuple[str, str]]) -> str | No
         _select_best_ch_body_text,
     )
 
+    candidates = _filter_ch_candidates_prefer_ixbrl_over_shallow_pdf(candidates)
     best = _select_best_ch_body_text(candidates)
     if best:
         return best
