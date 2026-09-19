@@ -5899,6 +5899,256 @@ def parse_ir_geographic_revenue_share(body_text: str) -> dict[str, Any] | None:
     }
 
 
+_MEGP_PRODUCT_MARKERS_RE = re.compile(r"\bPhoto\.ME\b.*\bWash\.ME\b", re.IGNORECASE | re.DOTALL)
+_MEGP_GEO_SEGMENT_SECTION_RE = re.compile(
+    r"analysis of performance by geographic segment",
+    re.IGNORECASE,
+)
+_MEGP_GEO_PRODUCT_LINE_RE = re.compile(
+    r"^(Photo\.ME|Wash\.ME)\s+([\d,]+)\s+([\d,]+)\s+([\d,]+)\s+(?:-\s+)?([\d,]+)\s*$",
+    re.IGNORECASE | re.MULTILINE,
+)
+_MEGP_PRODUCT_SEGMENT_SECTION_RE = re.compile(
+    r"results by product segment",
+    re.IGNORECASE,
+)
+_MEGP_PRODUCT_VENDING_LINE_RE = re.compile(
+    r"^Vending revenue\s+([\d,]+)\s+([\d,]+)\s+([\d,]+)\s+([\d,]+)",
+    re.IGNORECASE | re.MULTILINE,
+)
+_MEGP_PRODUCT_EBITDA_LINE_RE = re.compile(
+    r"^EBITDA\s+([\d,]+)\s+([\d,]+)\s+([\d,]+)\s+([\d,]+)",
+    re.IGNORECASE | re.MULTILINE,
+)
+_MEGP_REPORTING_DATE_RE = re.compile(
+    r"\b(3[01]\s+(?:April|October)\s+20\d{2})\b",
+    re.IGNORECASE,
+)
+_MEGP_CORE_PHOTO_MARKER = "Integrated biometric photo identification"
+_MEGP_CORE_WASH_MARKER = "Unattended 24/7 laundry"
+_MEGP_CORE_VENDING_PAIR_RE = re.compile(
+    r"£([\d.]+)m\s+£([\d.]+)m\s+VENDING REVENUE\s*1?",
+    re.IGNORECASE,
+)
+_MEGP_CORE_EBITDA_BEFORE_LABEL_RE = re.compile(
+    r"£([\d.]+)m\s+£([\d.]+)m\s+EBITDA\b",
+    re.IGNORECASE,
+)
+_MEGP_CORE_EBITDA_AFTER_LABEL_RE = re.compile(
+    r"\bEBITDA\b\s*[\n\r]+\s*£([\d.]+)m\s+£([\d.]+)m",
+    re.IGNORECASE,
+)
+_MEGP_SITE_TYPE_TAG_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
+    ("airport", re.compile(r"\bairports?\b", re.IGNORECASE)),
+    ("transport_hub", re.compile(r"transport hubs?", re.IGNORECASE)),
+    ("retail", re.compile(r"\bretail\b", re.IGNORECASE)),
+    ("supermarket", re.compile(r"\bsupermarkets?\b", re.IGNORECASE)),
+    ("petrol_forecourt", re.compile(r"petrol forecourts?", re.IGNORECASE)),
+    ("shopping_mall", re.compile(r"shopping malls?", re.IGNORECASE)),
+)
+_MEGP_PRODUCT_SEGMENT_NAMES = ("Photo.ME", "Wash.ME", "Print.ME", "Other vending")
+
+
+def _megp_site_type_tags(body_text: str) -> list[str]:
+    tags: list[str] = []
+    for label, pattern in _MEGP_SITE_TYPE_TAG_PATTERNS:
+        if pattern.search(body_text):
+            tags.append(label)
+    return tags
+
+
+def _megp_split_meta(body_text: str, **extra: Any) -> dict[str, Any]:
+    payload: dict[str, Any] = dict(extra)
+    tags = _megp_site_type_tags(body_text)
+    if tags:
+        payload["site_type_tags"] = tags
+    return payload
+
+
+def parse_ir_megp_geographic_vending_revenue(body_text: str) -> dict[str, Any] | None:
+    """Parse ME Group IFRS 8 geographic segment vending revenue (Photo.ME vs Wash.ME)."""
+    if not body_text or not _MEGP_PRODUCT_MARKERS_RE.search(body_text):
+        return None
+    section_match = _MEGP_GEO_SEGMENT_SECTION_RE.search(body_text)
+    if section_match is None:
+        return None
+    section = body_text[section_match.start() : section_match.start() + 3500]
+    reporting_date = None
+    date_match = _MEGP_REPORTING_DATE_RE.search(section[:400])
+    if date_match:
+        reporting_date = date_match.group(1)
+    segments: list[dict[str, Any]] = []
+    for row_match in _MEGP_GEO_PRODUCT_LINE_RE.finditer(section):
+        segments.append(
+            {
+                "segment": row_match.group(1).strip(),
+                "continental_europe_thousands": _parse_table_number(row_match.group(2)),
+                "united_kingdom_ireland_thousands": _parse_table_number(row_match.group(3)),
+                "asia_pacific_thousands": _parse_table_number(row_match.group(4)),
+                "total_thousands": _parse_table_number(row_match.group(5)),
+            }
+        )
+    if len(segments) < 2:
+        return None
+    return _megp_split_meta(
+        body_text,
+        split_type="megp_geographic_vending_revenue",
+        currency="GBP",
+        unit="thousands",
+        reporting_date=reporting_date,
+        segments=segments,
+        parse_confidence="high",
+    )
+
+
+def parse_ir_megp_product_vending_ebitda(body_text: str) -> dict[str, Any] | None:
+    """Parse ME Group product-segment vending revenue and EBITDA (£'000 tables)."""
+    if not body_text or not _MEGP_PRODUCT_MARKERS_RE.search(body_text):
+        return None
+    section_match = _MEGP_PRODUCT_SEGMENT_SECTION_RE.search(body_text)
+    if section_match is None:
+        return None
+    section = body_text[section_match.start() : section_match.start() + 2500]
+    reporting_date = None
+    date_match = _MEGP_REPORTING_DATE_RE.search(section[:250])
+    if date_match:
+        reporting_date = date_match.group(1)
+    vending_match = _MEGP_PRODUCT_VENDING_LINE_RE.search(section)
+    ebitda_match = _MEGP_PRODUCT_EBITDA_LINE_RE.search(section)
+    if vending_match is None or ebitda_match is None:
+        return None
+    segments: list[dict[str, Any]] = []
+    for index, name in enumerate(_MEGP_PRODUCT_SEGMENT_NAMES):
+        revenue = _parse_table_number(vending_match.group(index + 1))
+        ebitda = _parse_table_number(ebitda_match.group(index + 1))
+        if revenue is None or ebitda is None:
+            continue
+        segments.append(
+            {
+                "segment": name,
+                "vending_revenue_thousands": revenue,
+                "ebitda_thousands": ebitda,
+            }
+        )
+    if len(segments) < 2:
+        return None
+    return _megp_split_meta(
+        body_text,
+        split_type="megp_product_vending_ebitda",
+        currency="GBP",
+        unit="thousands",
+        reporting_date=reporting_date,
+        segments=segments,
+        parse_confidence="high",
+    )
+
+
+def parse_ir_megp_presentation_fy_product_mix(body_text: str) -> dict[str, Any] | None:
+    """Parse ME Group FY results deck evolution slides (vending revenue + EBITDA by product)."""
+    if not body_text or not _MEGP_PRODUCT_MARKERS_RE.search(body_text):
+        return None
+    vend_anchor = re.search(r"FY 2025 TOTAL VENDING REVENUE1", body_text, re.IGNORECASE)
+    ebitda_anchor = re.search(r"FY 2025 GROUP EBITDA", body_text, re.IGNORECASE)
+    if vend_anchor is None or ebitda_anchor is None:
+        return None
+
+    def _evolution_amounts(anchor_start: int, *, limit: float) -> list[float]:
+        window = body_text[max(0, anchor_start - 900) : anchor_start]
+        evolutions = list(re.finditer(r"Evolution of business mix", window, re.IGNORECASE))
+        if not evolutions:
+            return []
+        slide = window[evolutions[-1].start() :]
+        return [float(value) for value in re.findall(r"£([\d.]+)m", slide) if float(value) < limit]
+
+    vending_amounts = _evolution_amounts(vend_anchor.start(), limit=500)[:4]
+    ebitda_values = _evolution_amounts(ebitda_anchor.start(), limit=100)
+    ebitda_amounts = ebitda_values[-4:] if len(ebitda_values) >= 4 else []
+    if len(vending_amounts) < 4 or len(ebitda_amounts) < 4:
+        return None
+    segments: list[dict[str, Any]] = []
+    for index, name in enumerate(_MEGP_PRODUCT_SEGMENT_NAMES):
+        segments.append(
+            {
+                "segment": name,
+                "vending_revenue_millions": vending_amounts[index],
+                "ebitda_millions": ebitda_amounts[index],
+            }
+        )
+    return _megp_split_meta(
+        body_text,
+        split_type="megp_presentation_fy_product_mix",
+        currency="GBP",
+        unit="millions",
+        fiscal_year=2025,
+        segments=segments,
+        parse_confidence="high",
+    )
+
+
+def _megp_core_business_metric_quartet(chunk: str) -> tuple[float, float, float, float] | None:
+    vending = _MEGP_CORE_VENDING_PAIR_RE.search(chunk)
+    if vending is None:
+        return None
+    tail = chunk[vending.end() : vending.end() + 900]
+    ebitda_before = _MEGP_CORE_EBITDA_BEFORE_LABEL_RE.search(tail)
+    if ebitda_before is not None:
+        return (
+            float(vending.group(1)),
+            float(vending.group(2)),
+            float(ebitda_before.group(1)),
+            float(ebitda_before.group(2)),
+        )
+    ebitda_after = _MEGP_CORE_EBITDA_AFTER_LABEL_RE.search(tail)
+    if ebitda_after is not None:
+        return (
+            float(vending.group(1)),
+            float(vending.group(2)),
+            float(ebitda_after.group(1)),
+            float(ebitda_after.group(2)),
+        )
+    return None
+
+
+def parse_ir_megp_presentation_h1_core_business(body_text: str) -> dict[str, Any] | None:
+    """Parse ME Group H1 results deck Photo.ME / Wash.ME vending revenue and EBITDA pairs."""
+    if not body_text or not _MEGP_PRODUCT_MARKERS_RE.search(body_text):
+        return None
+    if "Core Business Activity" not in body_text:
+        return None
+    segments: list[dict[str, Any]] = []
+    for marker, segment_name in (
+        (_MEGP_CORE_PHOTO_MARKER, "Photo.ME"),
+        (_MEGP_CORE_WASH_MARKER, "Wash.ME"),
+    ):
+        start = body_text.find(marker)
+        if start < 0:
+            continue
+        chunk = body_text[start : start + 3200]
+        metrics = _megp_core_business_metric_quartet(chunk)
+        if metrics is None:
+            continue
+        segments.append(
+            {
+                "segment": segment_name,
+                "vending_revenue_prior_millions": metrics[0],
+                "vending_revenue_current_millions": metrics[1],
+                "ebitda_prior_millions": metrics[2],
+                "ebitda_current_millions": metrics[3],
+            }
+        )
+    if len(segments) < 2:
+        return None
+    return _megp_split_meta(
+        body_text,
+        split_type="megp_presentation_h1_core_business",
+        currency="GBP",
+        unit="millions",
+        period_labels=["H1_2025", "H1_2026"],
+        segments=segments,
+        parse_confidence="high",
+    )
+
+
 _LEASE_MATURITY_SECTION_RE = re.compile(
     r"maturity profile of the Group.s financial liabilities",
     re.IGNORECASE,
@@ -7455,6 +7705,14 @@ def extract_ir_presentation_metrics(
         geo_share = parse_ir_geographic_revenue_share(body_text)
         if geo_share:
             payload["segment_revenue_splits"].append({**source_meta, **geo_share})
+        for megp_split in (
+            parse_ir_megp_geographic_vending_revenue(body_text),
+            parse_ir_megp_product_vending_ebitda(body_text),
+            parse_ir_megp_presentation_fy_product_mix(body_text),
+            parse_ir_megp_presentation_h1_core_business(body_text),
+        ):
+            if megp_split:
+                payload["segment_revenue_splits"].append({**source_meta, **megp_split})
         lease_table = parse_ir_ifrs16_lease_maturity(body_text)
         if lease_table:
             payload["ifrs_16_lease_maturity"].append({**source_meta, **lease_table})
