@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T13:23:16.753211+00:00",
+  "generated_at": "2026-09-19T13:26:19.481495+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1154,13 +1154,13 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-18T23:16:25.344671+00:00",
-    "queue_ui_updated_at": "2026-09-19T13:23:16.694513+00:00",
+    "queue_ui_updated_at": "2026-09-19T13:26:19.406935+00:00",
     "task_count": 56,
     "status": {
       "open_count": 2,
       "pr_open_count": 0,
-      "parked_count": 7,
-      "merged_count": 41,
+      "parked_count": 13,
+      "merged_count": 40,
       "failed_count": 0,
       "next_task_id": "eng-20260918-23",
       "in_flight_branch": null,
@@ -1284,6 +1284,78 @@
         "priority_score": 43.0,
         "status": "parked",
         "source": "research_model_suggestions",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260918-21",
+        "area": "ingest",
+        "title": "Full-text extract of annual report note 19 (cash-in-transit restatement) from ME-Group-Annual-Report-2025.pdf—not addressed by CH refetch of 2019 parent interim",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260918-20",
+        "area": "ingest",
+        "title": "Populate `ir_presentation_metrics.json` from `ir_0d388cd522a7cf4c.txt`.",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260918-19",
+        "area": "ingest",
+        "title": "CH OCR refetch of both `ch_04967001_MzMzODcxODY0OWFkaXF6a2N4.txt` and `ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4.txt` fails to deliver Risks and Uncertainties or pen",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260918-18",
+        "area": "ingest",
+        "title": "Parse IR results-deck cash-bridge slides into `ir_presentation_metrics.json`; refetch did not add FCF lines and H1 2026 deck bridge remains missing.",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260918-17",
+        "area": "ingest",
+        "title": "Do not tag AGM notices/results, Payments to Governments, prospectuses, mineral-resources updates, Tomago/Boyne operating RNSs, or third-party SVM “Rio collab” i",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
+      {
+        "id": "eng-20260918-13",
+        "area": "ingest",
+        "title": "It is not adequate when the live [2/2]",
+        "priority": "medium",
+        "priority_score": 40.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
         "pr_url": null,
         "pr_number": null,
         "branch_name": null
@@ -1570,9 +1642,9 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-19T13:23:16.753211+00:00",
-    "overall": "active",
-    "headline": "Agent lane active.",
+    "generated_at": "2026-09-19T13:26:19.481495+00:00",
+    "overall": "blocked",
+    "headline": "Dispatch paused — 6 attention-parked task(s). attention parked backlog clearing pause (6 task(s); resume when < 7 and 30m since last clearing action)",
     "merge_lane": {
       "state": "idle",
       "idle": true,
@@ -1584,26 +1656,26 @@
       "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
-      "state": "running",
+      "state": "blocked",
       "idle": false,
-      "running": true,
-      "blocked": false,
-      "should_dispatch": true,
-      "pause_active": false,
+      "running": false,
+      "blocked": true,
+      "should_dispatch": false,
+      "pause_active": true,
       "traffic_pause_active": false,
-      "attention_parked_count": 0,
+      "attention_parked_count": 6,
       "open_count": 2,
       "pr_open_count": 0,
       "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
       "next_task_id": "eng-20260918-23",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
+      "reason": "attention parked backlog clearing pause (6 task(s); resume when < 7 and 30m since last clearing action)",
+      "detail": "Dispatch paused — 6 attention-parked task(s). attention parked backlog clearing pause (6 task(s); resume when < 7 and 30m since last clearing action)"
     },
     "queue_clearing": {
-      "pause_active": false,
-      "attention_parked_count": 0,
-      "evaluated_at": "2026-09-19T13:23:16.681667+00:00"
+      "pause_active": true,
+      "attention_parked_count": 6,
+      "evaluated_at": "2026-09-19T13:26:15.499175+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1617,17 +1689,6 @@
       "should_dispatch_engineering": false
     },
     "merges_today": [
-      {
-        "task_id": "eng-20260918-17",
-        "title": "Do not tag AGM notices/results, Payments to Governments, prospectuses, mineral-resources updates, Tomago/Boyne operating RNSs, or third-party SVM “Rio collab” i",
-        "area": "ingest",
-        "pr_number": 728,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/728",
-        "merged_at": "2026-09-19T13:23:03.613342+00:00",
-        "merge_class": "ci_fix",
-        "auto_merge": true,
-        "independently_verified": true
-      },
       {
         "task_id": "eng-20260918-06",
         "title": "Auto-bind `company_adjusted` FCF to the latest filing-year divisional total (£73.8m for FY 2026) and flag when screen numerator is one fiscal year stale.",
@@ -1651,6 +1712,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 3
+    "verified_merges_today_count": 2
   }
 }
