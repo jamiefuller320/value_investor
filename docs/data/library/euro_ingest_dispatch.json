@@ -25,7 +25,7 @@
     "primary track must beat rules control on latest review"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-19T12:03:57.358228+00:00",
+    "snapshot_at": "2026-09-19T12:10:04.409211+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 47,
     "unmeasured_buy_tier": 0,
@@ -110,7 +110,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-09-19T12:03:57.359995+00:00",
+  "evaluated_at": "2026-09-19T12:10:04.410785+00:00",
   "maintenance_markets": [
     "asx200",
     "euro_stoxx50",
@@ -129,82 +129,73 @@
     "tsx60"
   ],
   "parallel_sprint_markets": [
-    "euro_stoxx50"
+    "dax"
   ],
   "parallel_sprint_status": [
     {
-      "market_id": "euro_stoxx50",
+      "market_id": "dax",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=4, indexed_without_body=4)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=7, zero_body=0, thin=3, indexed_without_body=10)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
-      "parked_tickers": [
-        "BAS.DE",
-        "DTE.DE",
-        "MUV2.DE",
-        "SAN.PA",
-        "SAP.DE",
-        "SGO.PA"
-      ],
+      "parked_tickers": [],
       "phase3_ready": false,
       "current_phase": 1,
       "next_phase": 1,
       "phase_blockers": [
-        "euro_stoxx50 not in ladder.weekly_paper_shard_markets"
+        "need 4 observe snapshots (have 0)"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-19T12:04:10.669985+00:00",
-        "market_id": "euro_stoxx50",
-        "buy_tier_count": 15,
-        "unmeasured_buy_tier": 0,
+        "snapshot_at": "2026-09-19T12:10:24.123830+00:00",
+        "market_id": "dax",
+        "buy_tier_count": 12,
+        "unmeasured_buy_tier": 7,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 4,
-        "indexed_without_body": 4,
+        "thin_body_buy_tier": 3,
+        "indexed_without_body": 10,
         "bodies_min": 1,
-        "bodies_median": 3,
-        "bodies_max": 102,
+        "bodies_median": 2,
+        "bodies_max": 9,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
-        "unmeasured_tickers": [],
+        "unmeasured_tickers": [
+          "FME.DE",
+          "DTG.DE",
+          "FRE.DE",
+          "HEN3.DE",
+          "HNR1.DE",
+          "G1A.DE",
+          "VOW3.DE"
+        ],
         "zero_body_tickers": [],
         "thin_body_tickers": [
-          "SGO.PA",
           "MUV2.DE",
-          "DTE.DE",
-          "BAS.DE"
+          "BAS.DE",
+          "DTE.DE"
         ],
         "indexed_without_body_tickers": [
-          "SAN.PA",
-          "TTE.PA",
-          "SGO.PA",
-          "SAP.DE"
+          "HEI.DE"
         ],
         "indexed_without_body_by_ticker": {
-          "SAN.PA": 1,
-          "TTE.PA": 1,
-          "SGO.PA": 1,
-          "SAP.DE": 1
+          "HEI.DE": 10
         },
-        "parked_tickers": [
-          "BAS.DE",
-          "DTE.DE",
+        "parked_tickers": [],
+        "parked_count": 0,
+        "effective_thin_body_buy_tier": 3,
+        "effective_thin_body_tickers": [
           "MUV2.DE",
-          "SAN.PA",
-          "SAP.DE",
-          "SGO.PA"
+          "BAS.DE",
+          "DTE.DE"
         ],
-        "parked_count": 6,
-        "effective_thin_body_buy_tier": 0,
-        "effective_thin_body_tickers": [],
-        "effective_indexed_without_body": 1,
+        "effective_indexed_without_body": 10,
         "effective_indexed_without_body_tickers": [
-          "TTE.PA"
+          "HEI.DE"
         ],
         "ingest_exhausted": false
       },
-      "filing_gaps": 0,
+      "filing_gaps": 7,
       "max_daily_successes": 4,
       "max_targets": 24,
       "cron_morning": true,
@@ -216,7 +207,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-19T12:04:10.670572+00:00",
+      "evaluated_at": "2026-09-19T12:10:24.124348+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -245,7 +236,7 @@
         "ftse_smallcap not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-19T12:04:11.432656+00:00",
+        "snapshot_at": "2026-09-19T12:10:25.250034+00:00",
         "market_id": "ftse_smallcap",
         "buy_tier_count": 9,
         "unmeasured_buy_tier": 0,
@@ -307,13 +298,13 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-19T12:04:11.433051+00:00",
+      "evaluated_at": "2026-09-19T12:10:25.250454+00:00",
       "should_run_parallel_ingest": true
     }
   ],
   "sprint_markets": [
     "euro_depth",
-    "euro_stoxx50",
+    "dax",
     "ftse_smallcap"
   ],
   "market_queue": [
@@ -322,7 +313,8 @@
     "ftse_smallcap",
     "tsx60",
     "euro_stoxx50",
-    "nasdaq100"
+    "nasdaq100",
+    "dax"
   ],
   "ingest_cascade": {
     "enabled": true,
@@ -352,7 +344,7 @@
     }
   },
   "scheduler_stream_1_markets": [
-    "euro_stoxx50"
+    "dax"
   ],
   "scheduler_stream_2_markets": [
     "ftse_smallcap"
