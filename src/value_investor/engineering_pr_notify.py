@@ -169,8 +169,12 @@ def _parse_iso(value: str | None) -> datetime | None:
         return None
 
 
-def _dispatch_block_fingerprint(kind: str, reason: str) -> str:
+def dispatch_block_fingerprint(kind: str, reason: str) -> str:
     return f"{kind}|{reason.strip()}"
+
+
+def _dispatch_block_fingerprint(kind: str, reason: str) -> str:
+    return dispatch_block_fingerprint(kind, reason)
 
 
 def _classify_dispatch_block(reason: str) -> str | None:
