@@ -139,11 +139,70 @@ def test_collect_queue_block_alerts_agent_failure():
 def test_collect_queue_block_alerts_idle_queue_empty():
     alerts = collect_queue_block_alerts(
         dispatch={
+            "should_dispatch": False,
             "reason": "no open engineering tasks in queue",
             "status": {"open_count": 0, "spend_blocked": False},
         }
     )
     assert alerts == []
+
+
+def test_collect_queue_block_alerts_parallel_cap(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text('{"tasks": []}', encoding="utf-8")
+    alerts = collect_queue_block_alerts(
+        dispatch={
+            "should_dispatch": False,
+            "reason": "parallel cap reached — 3 pr_open, 0 agent run(s) (max_parallel=2)",
+            "status": {"open_count": 2, "pr_open_count": 3, "next_task_id": "eng-20260918-23"},
+            "next_task_id": "eng-20260918-23",
+        },
+        tasks_path=tasks_path,
+    )
+    assert len(alerts) == 1
+    assert alerts[0].kind == "parallel_cap"
+    assert "3 pr_open" in alerts[0].summary
+    assert "eng-20260918-23" in alerts[0].summary
+
+
+def test_collect_queue_block_alerts_parallel_cap_dedupes(tmp_path: Path):
+    from value_investor.engineering_pr_notify import (
+        _dispatch_block_fingerprint,
+        mark_dispatch_block_notified,
+    )
+
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text('{"tasks": []}', encoding="utf-8")
+    reason = "parallel cap reached — 3 pr_open, 0 agent run(s) (max_parallel=2)"
+    mark_dispatch_block_notified(
+        fingerprint=_dispatch_block_fingerprint("parallel_cap", reason),
+        tasks_path=tasks_path,
+        apply=True,
+    )
+    alerts = collect_queue_block_alerts(
+        dispatch={
+            "should_dispatch": False,
+            "reason": reason,
+            "status": {"open_count": 2, "pr_open_count": 3},
+        },
+        tasks_path=tasks_path,
+    )
+    assert alerts == []
+
+
+def test_collect_queue_block_alerts_traffic_pause(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    tasks_path.write_text('{"tasks": []}', encoding="utf-8")
+    alerts = collect_queue_block_alerts(
+        dispatch={
+            "should_dispatch": False,
+            "reason": "project traffic pause (2 stuck PR(s); ci_red) — clear CI failures / merge conflicts before new PR generation",
+            "status": {"open_count": 1, "pr_open_count": 0},
+        },
+        tasks_path=tasks_path,
+    )
+    assert len(alerts) == 1
+    assert alerts[0].kind == "traffic_pause"
 
 
 @patch("value_investor.engineering_pr_notify.send_email")

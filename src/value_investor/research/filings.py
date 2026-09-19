@@ -679,6 +679,30 @@ _NON_RESULTS_RNS_PATTERNS = (
     r"\bholding\(s\)? in company\b",
     r"\btotal voting rights\b",
     r"\bblock listing\b",
+    r"\b(?:annual )?general meetings?\b",
+    r"\bnotice of agm\b",
+    r"\bagm results?\b",
+    r"\bpayments to governments\b",
+    r"\bprospectus\b",
+    r"\bmineral resources\b",
+    r"\bore reserves\b",
+    r"\btomago\b",
+    r"\bboyne\b.*\bsmelter\b",
+)
+
+# Headlines that must stay ``other`` / ``trading_update`` even when body text looks like results.
+_HEADLINE_BODY_PERIOD_BLOCK_PATTERNS = _NON_RESULTS_RNS_PATTERNS + (
+    r"^svm\b",
+    r"\brio collab\b",
+    r"\b(?:first|second|third|fourth|1st|2nd|3rd|4th)\s+quarter\s+"
+    r"(?:production|operations?)\b",
+    r"\bdrilling/?production\s+report\b",
+)
+
+_OPERATIONS_PRODUCTION_UPDATE_PATTERNS = (
+    r"\b(?:first|second|third|fourth|1st|2nd|3rd|4th)\s+quarter\s+"
+    r"(?:production|operations?)\s*(?:results?|report)?\b",
+    r"\bdrilling/?production\s+report\b",
 )
 
 
@@ -1792,7 +1816,11 @@ def _apply_headline_period(
         # Curated allowlist URLs (RA25 / FY-2025) beat body H1/Q4 comparatives
         # and the synthetic "IR allowlist document" headline.
         period = url_period
-    elif period == "other" and body_snippet:
+    elif (
+        period == "other"
+        and body_snippet
+        and not _headline_blocks_body_period_reclassify(classify_headline)
+    ):
         body_period = classify_filing_period(
             body_snippet[:4000],
             category=category,
@@ -2065,6 +2093,26 @@ def _epic_match_is_ambiguous_noise(
         return True
     # "ProVen VCT", "Foresight 4 VCT", etc.
     return bool(re.search(r"\b\w+\s+vct\b", lower))
+
+
+def _headline_blocks_body_period_reclassify(headline: str) -> bool:
+    """True when body OCR must not promote a routine/operating headline to results."""
+    blob = (headline or "").lower()
+    return any(re.search(pat, blob) for pat in _HEADLINE_BODY_PERIOD_BLOCK_PATTERNS)
+
+
+def _is_third_party_collateral_rns_headline(headline: str) -> bool:
+    """
+    Investegate/Google rows that mention Rio (EPIC collision) but are another issuer's RNS.
+    """
+    blob = (headline or "").strip().lower()
+    if not blob:
+        return False
+    if re.match(r"^svm\b", blob) and "rio" in blob:
+        return True
+    if re.match(r"^sovereign metals\b", blob):
+        return True
+    return False
 
 
 def headline_relevant_to_issuer(headline: str, company_name: str, ticker: str) -> bool:
@@ -2436,6 +2484,9 @@ def classify_rns_headline(
     if any(re.search(pat, blob) for pat in _TRADING_UPDATE_PATTERNS):
         return "trading_update"
 
+    if any(re.search(pat, blob) for pat in _OPERATIONS_PRODUCTION_UPDATE_PATTERNS):
+        return "trading_update"
+
     if re.search(r"\b20\d{2}\s*fy\b|\bfy\s*20\d{2}\b", blob) and re.search(
         r"\bresults presentation\b|\bfy results\b",
         blob,
@@ -2445,6 +2496,11 @@ def classify_rns_headline(
     if any(re.search(pat, blob) for pat in _ANNUAL_PATTERNS):
         return "annual"
     if any(re.search(pat, blob) for pat in _INTERIM_PATTERNS):
+        if re.search(r"\b(?:production|operations?)\b", blob) and not re.search(
+            r"\b(?:interim|half[- ]year)\s+results\b",
+            blob,
+        ):
+            return "trading_update"
         if re.search(r"\bpresentation\b", blob) and not re.search(
             r"\binterim results\b|\bhalf[- ]year results\b",
             blob,
@@ -2454,7 +2510,12 @@ def classify_rns_headline(
     # FCA-style codes sometimes appear in provider metadata.
     # Do not treat the synthetic "IR allowlist document" prefix as interim results.
     if "allowlist" not in blob:
-        if re.search(r"\b(fr|final results|annual)\b", blob):
+        if re.search(r"\b(fr|final results)\b", blob):
+            return "annual"
+        if re.search(r"\bannual\b", blob) and not re.search(
+            r"\b(?:annual )?general meetings?\b|\bagm\b",
+            blob,
+        ):
             return "annual"
         if re.search(r"\b(ir|half[- ]year report|interim results)\b", blob):
             return "interim"
@@ -2790,6 +2851,8 @@ def filter_misattributed_filings(
     for row in rows:
         headline = str(row.get("headline") or "")
         source = str(row.get("source") or "")
+        if regime == "uk_rns" and _is_third_party_collateral_rns_headline(headline):
+            continue
         if regime == "uk_rns" and (
             source == "ticker_rns_api"
             or source == "investegate_resolved"
@@ -5403,10 +5466,14 @@ _BRIDGE_HEADER_RE = re.compile(
     r")\b",
     re.IGNORECASE,
 )
-_CURRENCY_MILLIONS_RE = re.compile(r"£\s*(\d+(?:\.\d+)?)\s*m", re.IGNORECASE)
+_CURRENCY_MILLIONS_RE = re.compile(
+    r"£\s*(\d+(?:\.\d+)?)\s*m(?!illion)",
+    re.IGNORECASE,
+)
 _SCRAMBLED_AMOUNT_RE = re.compile(r"\((\d+(?:\.\d+)?)\)|(?<![(\d.])(\d+(?:\.\d+)?)(?!\d)")
 _MIDDLE_BRIDGE_LABELS = (
     "operating_cash_flow",
+    "purchase_of_own_shares",
     "acquisitions",
     "sales_of_assets",
     "capex_infrastructure",
@@ -5427,6 +5494,69 @@ def _currency_amounts_millions(section: str) -> list[float]:
         _parse_bridge_amount_millions(match.group(1))
         for match in _CURRENCY_MILLIONS_RE.finditer(section)
     ]
+
+
+def _opening_closing_net_cash(section: str) -> tuple[float | None, float | None]:
+    """Opening/closing £m markers near slide labels (avoids narrative £9 million noise)."""
+    opening = closing = None
+    open_match = re.search(r"Opening\s+Net\s+Cash", section, re.IGNORECASE)
+    if open_match:
+        window = section[open_match.start() : open_match.start() + 220]
+        amounts = _currency_amounts_millions(window)
+        opening = amounts[0] if amounts else None
+    close_match = re.search(r"Closing\s+Net\s+Cash", section, re.IGNORECASE)
+    if close_match:
+        window = section[close_match.start() : close_match.start() + 320]
+        amounts = _currency_amounts_millions(window)
+        if len(amounts) >= 2:
+            closing = amounts[-1]
+        elif amounts:
+            closing = amounts[0]
+    if opening is None or closing is None:
+        fallback = _currency_amounts_millions(section)
+        if opening is None and fallback:
+            opening = fallback[0]
+        if closing is None and len(fallback) >= 2:
+            closing = fallback[1]
+    return opening, closing
+
+
+def _preprocess_bridge_amount_blob(blob: str) -> str:
+    """Fix common ME Group PDF glue (``0.438.7``) and footnote digits after ``£Xm``."""
+    blob = re.sub(r"(\d\.\d)(\d{2}\.\d)", r"\1\n\2", blob)
+    blob = re.sub(r"(\d\.\d)\((\d\.\d)\)", r"\1\n(\2)", blob)
+    blob = re.sub(r"(£\s*\d+(?:\.\d+)?\s*m)\d", r"\1", blob, flags=re.IGNORECASE)
+    return blob
+
+
+def _bridge_labels_present(section: str) -> set[str]:
+    labels: set[str] = set()
+    if re.search(r"operating\s+cash\s*flow", section, re.IGNORECASE):
+        labels.add("operating_cash_flow")
+    if re.search(r"purchase\s+of\s+own\s+shares", section, re.IGNORECASE):
+        labels.add("purchase_of_own_shares")
+    if re.search(r"\bacquisitions\b", section, re.IGNORECASE):
+        labels.add("acquisitions")
+    if re.search(r"sales\s+of\s+assets", section, re.IGNORECASE):
+        labels.add("sales_of_assets")
+    if re.search(r"investment\s+in", section, re.IGNORECASE):
+        labels.add("capex_infrastructure")
+    if re.search(r"released\s+from\s+restricted", section, re.IGNORECASE):
+        labels.add("released_from_restricted_deposits")
+    if re.search(r"\btax\b", section, re.IGNORECASE):
+        labels.add("tax")
+    if re.search(r"dividends\s+paid", section, re.IGNORECASE):
+        labels.add("dividends_paid")
+    if re.search(r"interest,\s*finance", section, re.IGNORECASE):
+        labels.add("interest_finance_lease")
+    return labels
+
+
+def _derive_closing_net_cash(opening: float, middle_lines: list[dict[str, Any]]) -> float:
+    total = opening
+    for row in middle_lines:
+        total += float(row["amount_millions"])
+    return total
 
 
 def _extract_bridge_section(text: str) -> tuple[str, str] | None:
@@ -5454,6 +5584,7 @@ def _middle_bridge_amounts(section: str) -> list[float]:
         return []
     amount_blob = section[closing_idx.end() :]
     # Drop explicit opening/closing currency markers; keep the scrambled numeric cluster.
+    amount_blob = _preprocess_bridge_amount_blob(amount_blob)
     amount_blob = _CURRENCY_MILLIONS_RE.sub(" ", amount_blob)
     amounts: list[float] = []
     for match in _SCRAMBLED_AMOUNT_RE.finditer(amount_blob):
@@ -5468,17 +5599,22 @@ def _middle_bridge_amounts(section: str) -> list[float]:
             continue
         if value in {28.0, 29.0, 30.0, 31.0} and value == int(value):
             continue
-        if abs(value) < 2 and value not in {1.0, -1.6}:
+        if value > 0 and value < 0.35:
             continue
         amounts.append(value)
     return amounts
 
 
-def _map_middle_bridge_lines(amounts: list[float]) -> list[dict[str, Any]]:
+def _map_middle_bridge_lines(
+    amounts: list[float],
+    *,
+    section: str = "",
+) -> list[dict[str, Any]]:
     """Heuristically map scrambled slide amounts onto bridge line labels."""
     if not amounts:
         return []
 
+    present = _bridge_labels_present(section) if section else set()
     remaining = list(amounts)
     lines: list[dict[str, Any]] = []
 
@@ -5497,17 +5633,32 @@ def _map_middle_bridge_lines(amounts: list[float]) -> list[dict[str, Any]]:
         remaining.pop(idx)
 
     _take("operating_cash_flow", lambda value: 50 < value <= 200)
+    if "operating_cash_flow" in present:
+        _take("operating_cash_flow", lambda value: 30 <= value <= 55)
     _take("capex_infrastructure", lambda value: value <= -50)
     _take("dividends_paid", lambda value: -40 <= value <= -20, pick="min")
-    _take("acquisitions", lambda value: -25 <= value <= -15)
-    _take("interest_finance_lease", lambda value: -15 <= value <= -5)
-    _take("sales_of_assets", lambda value: 0 < value <= 10)
-    _take("released_from_restricted_deposits", lambda value: value == 1.0)
-    _take("tax", lambda value: -5 <= value <= -1)
+    if not any(row["label"] == "capex_infrastructure" for row in lines):
+        _take("capex_infrastructure", lambda value: -45 <= value <= -25)
+    if "acquisitions" in present or not present:
+        _take("acquisitions", lambda value: -25 <= value <= -15)
+    if "purchase_of_own_shares" in present:
+        _take("purchase_of_own_shares", lambda value: -5 <= value <= -2)
+    _take("interest_finance_lease", lambda value: -20 <= value <= -5, pick="min")
+    if not any(row["label"] == "capex_infrastructure" for row in lines):
+        _take("capex_infrastructure", lambda value: -10 <= value <= -3)
+    _take("sales_of_assets", lambda value: 0 < value <= 2)
+    if not any(row["label"] == "sales_of_assets" for row in lines):
+        _take("sales_of_assets", lambda value: 0 < value <= 10)
+    if "released_from_restricted_deposits" in present or not present:
+        _take("released_from_restricted_deposits", lambda value: value == 1.0)
+    _take("tax", lambda value: -5 <= value <= -1.5)
+    if not any(row["label"] == "operating_cash_flow" for row in lines):
+        _take("operating_cash_flow", lambda value: -20 <= value <= 29)
 
-    label_cycle = [
-        label for label in _MIDDLE_BRIDGE_LABELS if label not in {row["label"] for row in lines}
-    ]
+    known = {row["label"] for row in lines}
+    label_cycle = [label for label in _MIDDLE_BRIDGE_LABELS if label not in known]
+    if present:
+        label_cycle = [label for label in label_cycle if label in present]
     for amount, label in zip(remaining, label_cycle, strict=False):
         lines.append({"label": label, "amount_millions": amount})
     return lines
@@ -5526,14 +5677,17 @@ def parse_ir_cash_bridge_slides(body_text: str) -> dict[str, Any] | None:
     if extracted is None:
         return None
     bridge_type, section = extracted
-    currency_amounts = _currency_amounts_millions(section)
-    opening = currency_amounts[0] if currency_amounts else None
-    closing = currency_amounts[1] if len(currency_amounts) >= 2 else None
+    opening, closing = _opening_closing_net_cash(section)
     middle_amounts = _middle_bridge_amounts(section)
+    middle_lines = _map_middle_bridge_lines(middle_amounts, section=section)
     lines: list[dict[str, Any]] = []
     if opening is not None:
         lines.append({"label": "opening_net_cash", "amount_millions": opening})
-    lines.extend(_map_middle_bridge_lines(middle_amounts))
+    lines.extend(middle_lines)
+    if opening is not None and middle_lines:
+        derived_closing = _derive_closing_net_cash(opening, middle_lines)
+        if closing is None or (opening == closing and abs(derived_closing - opening) > 0.75):
+            closing = derived_closing
     if closing is not None:
         lines.append({"label": "closing_net_cash", "amount_millions": closing})
     if len(lines) < 2:
@@ -6151,6 +6305,18 @@ _ORDINARY_DIVIDEND_POLICY_RE = re.compile(
     r"ordinary dividend of\s+([\d.]+)\s*p(?:er share)?",
     re.IGNORECASE,
 )
+_INTERIM_DIVIDEND_POLICY_RE = re.compile(
+    r"interim dividend of\s+([\d.]+)\s*p(?:er share)?",
+    re.IGNORECASE,
+)
+_INTERIM_DIVIDEND_PER_SHARE_TABLE_RE = re.compile(
+    r"INTERIM\s+DIVIDEND\s+PER\s+SHARE[\s\S]{0,400}?H1\s+2026[\s\S]{0,120}?([\d.]+)\s*p",
+    re.IGNORECASE,
+)
+_INTERIM_DIVIDEND_CASH_RE = re.compile(
+    r"Interim dividend will return\s+£?\s*([\d,]+(?:\.\d+)?)\s*m(?:illion)?",
+    re.IGNORECASE,
+)
 _PROPOSED_DIVIDEND_CASH_RE = re.compile(
     r"c\.?\s*£?\s*([\d,]+)\s*m(?:illion)?",
     re.IGNORECASE,
@@ -6283,6 +6449,20 @@ def parse_ir_dividend_policy(body_text: str) -> dict[str, Any] | None:
         if cash_match:
             policy["proposed_cash_millions"] = _parse_table_number(cash_match.group(1))
         break
+    interim_match = _INTERIM_DIVIDEND_POLICY_RE.search(window)
+    if interim_match:
+        policy["interim_dividend_pence"] = float(interim_match.group(1))
+        tail = window[interim_match.start() : interim_match.end() + 160]
+        cash_match = _PROPOSED_DIVIDEND_CASH_RE.search(tail)
+        if cash_match:
+            policy["interim_cash_millions"] = _parse_table_number(cash_match.group(1))
+    if "interim_dividend_pence" not in policy:
+        table_match = _INTERIM_DIVIDEND_PER_SHARE_TABLE_RE.search(window)
+        if table_match:
+            policy["interim_dividend_pence"] = float(table_match.group(1))
+    interim_cash = _INTERIM_DIVIDEND_CASH_RE.search(window)
+    if interim_cash and "interim_cash_millions" not in policy:
+        policy["interim_cash_millions"] = _parse_table_number(interim_cash.group(1))
     final_match = _FINAL_DIVIDEND_PROPOSED_RE.search(window)
     if final_match:
         policy["final_dividend_pence"] = float(final_match.group(1))
@@ -6310,9 +6490,12 @@ def parse_ir_dividend_policy(body_text: str) -> dict[str, Any] | None:
         and "full_year_dividend_pence" not in policy
         and "total_dividend_pence" not in policy
         and "dividend_cover_min" not in policy
+        and "interim_dividend_pence" not in policy
     ):
         return None
     if policy.get("proposed_cash_millions") and policy.get("ordinary_dividend_pence"):
+        policy["parse_confidence"] = "high"
+    elif policy.get("interim_cash_millions") and policy.get("interim_dividend_pence"):
         policy["parse_confidence"] = "high"
     elif policy.get("total_dividend_pence") or policy.get("full_year_dividend_pence"):
         policy["parse_confidence"] = "high"
