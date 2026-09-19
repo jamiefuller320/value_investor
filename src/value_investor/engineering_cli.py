@@ -1527,7 +1527,7 @@ def _cmd_notify_queue_blocked(args: argparse.Namespace) -> int:
     dispatch_kinds = {"parallel_cap", "traffic_pause", "clash_blocked", "dispatch_blocked"}
     if sent and any(alert.kind in dispatch_kinds for alert in alerts):
         from value_investor.engineering_pr_notify import (
-            _dispatch_block_fingerprint,
+            dispatch_block_fingerprint,
             mark_dispatch_block_notified,
         )
 
@@ -1536,7 +1536,7 @@ def _cmd_notify_queue_blocked(args: argparse.Namespace) -> int:
         for alert in alerts:
             if alert.kind in dispatch_kinds:
                 mark_dispatch_block_notified(
-                    fingerprint=_dispatch_block_fingerprint(alert.kind, reason),
+                    fingerprint=dispatch_block_fingerprint(alert.kind, reason),
                     tasks_path=tasks_path,
                     apply=True,
                 )
