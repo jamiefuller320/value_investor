@@ -294,6 +294,60 @@ def test_should_auto_compile_when_partial_improvement_leaves_gaps(tmp_path: Path
     assert reason == "zero_yield_refetch"
 
 
+def test_should_auto_compile_when_no_refetch_attempted_but_gaps_remain(tmp_path: Path):
+    data_dir = tmp_path / "docs" / "data"
+    market = "euro_depth"
+    filings = (
+        data_dir
+        / "library"
+        / "markets"
+        / market
+        / "screen"
+        / "research"
+        / "C5H.IR"
+        / "sources"
+        / "filings"
+    )
+    filings.mkdir(parents=True)
+    (filings / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "summary": {"total": 3, "with_body": 2},
+                "filings": [
+                    {"period": "annual", "has_body": True},
+                    {"period": "interim", "has_body": True},
+                    {"period": "other", "has_body": False, "url": "https://example.com/a"},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    trials_path = data_dir / "ingest_gap_closure_runs.json"
+    trials_path.write_text(json.dumps({"runs": []}), encoding="utf-8")
+    eng_path = data_dir / "engineering_tasks.json"
+    eng_path.write_text(json.dumps({"tasks": []}), encoding="utf-8")
+    trial = {
+        "id": "igc-test",
+        "status": "pending_review",
+        "ticker": "C5H.IR",
+        "chain_root_id": "igc-test",
+        "params": {"require_outstanding_gaps": True, "market_id": market},
+        "outcome": {
+            "delta_filings_with_body": 0,
+            "per_ticker": [{"ticker": "C5H.IR", "improved": False}],
+            "results": [{"ir_refetch": {"attempted": 0, "fetched": 0}}],
+        },
+    }
+    should, reason = should_auto_compile_gap_engineering(
+        trial,
+        data_dir=data_dir,
+        tasks_path=eng_path,
+        runs_path=trials_path,
+    )
+    assert should is True
+    assert reason == "gaps_remain_without_refetch"
+
+
 def test_chain_exhausted_after_max_engineering_rounds(tmp_path: Path):
     data_dir = tmp_path / "docs" / "data"
     filings = data_dir / "research" / "VCT.L" / "sources" / "filings"

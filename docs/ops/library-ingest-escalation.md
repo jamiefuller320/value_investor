@@ -65,16 +65,36 @@ pass when:
 
 - ingest health is **stalled**, or
 - the batch **improved 0 tickers** and buy-tier gaps remain
-  (unmeasured, zero-body, or `indexed_without_body`)
+  (unmeasured, zero-body, or `indexed_without_body`), or
+- the batch listed tickers as improved but **parity needles did not move**
+  (typical euro case: new indexed bodies while `indexed_without_body` on the
+  same ticker stays flat — e.g. `C5H.IR` / `TTE.PA` on 2026-09-18)
 
 Partial / `runtime_cutoff` runs still skip when listing discovery itself was
 cut off or deepen never started (the discovery time cap is the fix for those).
 After the cap, a cutoff deepen that already ran ≥1 ticker and improved nobody
-**does** fire — that is today's euro failure mode (2/24 names, `improved=[]`,
-`RAND.AS` still zero-body). It does **not** fire on a productive deepen that
-still has leftover IWB. Cooldown is **6h per `market_id`** so a FTSE intensive
-does not block euro (and vice versa). An open library ingest engineering task
-for that market also skips the dispatch.
+**does** fire. A deepen that **closes** IWB/zero-body/thin on at least one
+ticker still skips (leftover gaps wait for the next ordinary deepen). Cooldown
+is **6h per `market_id`** so a FTSE intensive does not block euro (and vice
+versa). An open library ingest engineering task for that market also skips the
+dispatch.
+
+Pinned intensive follow-up prefers **effective** (unparked) IWB tickers, then
+effective thin names (`effective_indexed_without_body_tickers`, then
+`effective_thin_body_tickers` on the health snapshot).
+
+When pending gap-closure runs finish with gaps still open and **zero refetch
+attempts**, compile engineering manually or via:
+
+```bash
+ftse-library gap-closure-engineering-compile --market euro_depth --json
+```
+
+Euro parked leftovers (`ingest_exhaustion.json`) can be queued with:
+
+```bash
+ftse-library parked-hunter-compile --market euro_depth --json
+```
 
 The follow-up is wired on **every** library ingest workflow (`euro-ingest-loop.yml`,
 `library-ingest-sprint.yml`, `library-ingest-sprint-2.yml`,
