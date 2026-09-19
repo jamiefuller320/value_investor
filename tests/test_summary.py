@@ -3813,6 +3813,24 @@ def test_build_earnings_growth_overlay_exports_yahoo_normalized_separate_from_fi
     assert overlay["bps_divergence_warning"] is False
 
 
+def test_build_earnings_growth_overlay_exports_provenance_vs_filing_eps():
+    overlay = build_earnings_growth_overlay(
+        {
+            "earnings_growth": -0.039,
+            "earnings_growth_screen_ttm": -0.039,
+            "basic_eps_growth_pct": 0.04456824512534811,
+            "diluted_eps_growth_pct": 0.043,
+        }
+    )
+
+    assert overlay["earnings_growth_pct_source"] == "yahoo_screen_ttm"
+    assert overlay["statutory_earnings_growth_source"] == "filing_basic_eps"
+    assert overlay["model_earnings_growth_source"] == "filing_basic_eps"
+    assert overlay["earnings_growth_screen_ttm_pct"] == pytest.approx(-0.039)
+    assert overlay["diluted_eps_growth_pct"] == pytest.approx(0.043)
+    assert overlay["statutory_earnings_growth_pct"] == pytest.approx(0.04456824512534811)
+
+
 def test_build_company_reports_exports_yahoo_normalized_income_growth_for_megp(tmp_path: Path):
     sources = tmp_path / "research" / "MEGP.L" / "sources"
     sources.mkdir(parents=True)
@@ -3857,6 +3875,12 @@ def test_build_company_reports_exports_yahoo_normalized_income_growth_for_megp(t
         rel=1e-4,
     )
     assert "adjusted_eps_growth_pct" not in snapshot["screening_inputs"]
+    assert snapshot["screening_inputs"]["earnings_growth_pct_source"] == "filing_basic_eps"
+    assert snapshot["screening_inputs"]["statutory_earnings_growth_source"] == "filing_basic_eps"
+    assert snapshot["screening_inputs"]["earnings_growth_screen_ttm_pct"] == pytest.approx(-0.039)
+    assert snapshot["screening_inputs"]["earnings_growth_pct"] == pytest.approx(
+        row["basic_eps_growth_pct"]
+    )
 
 
 def _model_results_for_fgp_earnings_basis_cap(*, ticker: str = "FGP.L") -> pd.DataFrame:
