@@ -8135,6 +8135,160 @@ def test_eng_20260918_22_extract_ir_presentation_metrics_megp_h1_2026(tmp_path: 
     assert saved["dividend_policy"][0].get("interim_dividend_pence") == 3.6
 
 
+def test_eng_20260919_05_parse_ir_megp_presentation_h1_core_business_in_memory():
+    from value_investor.research.filings import parse_ir_megp_presentation_h1_core_business
+
+    body = (
+        "ME Group International plc\nPhoto.ME Wash.ME\nCore Business Activity\n"
+        "Integrated biometric photo identification solutions\n"
+        "£82.7m\n£77.6m\nVENDING REVENUE1\n£5.7m\n£8.2m\nCAPEX\n"
+        "£29.6m\n£27.2m\nEBITDA\n"
+        "Unattended 24/7 laundry services and launderettes\n"
+        "£47.1m\n£54.8m\nVENDING REVENUE1\n£14.4m\n£14.9m\nCAPEX\nEBITDA\n"
+        "£25.4m\n£30.7m\n"
+    )
+    parsed = parse_ir_megp_presentation_h1_core_business(body)
+    assert parsed is not None
+    segments = {row["segment"]: row for row in parsed["segments"]}
+    assert segments["Photo.ME"]["vending_revenue_prior_millions"] == 82.7
+    assert segments["Wash.ME"]["ebitda_current_millions"] == 30.7
+
+
+def test_eng_20260919_05_parse_ir_megp_geographic_vending_revenue_in_memory():
+    from value_investor.research.filings import parse_ir_megp_geographic_vending_revenue
+
+    body = (
+        "Photo.ME and Wash.ME segment note\n"
+        "analysis of performance by geographic segment:\n"
+        "31 October 2025 £’000\n"
+        "Photo.ME 107,925   15,132   43,154   -    166,211\n"
+        "Wash.ME 68,532   32,216   100   -    100,848\n"
+        "transport hubs and supermarkets\n"
+    )
+    parsed = parse_ir_megp_geographic_vending_revenue(body)
+    assert parsed is not None
+    assert parsed["split_type"] == "megp_geographic_vending_revenue"
+    assert "transport_hub" in parsed.get("site_type_tags", [])
+    photo = next(row for row in parsed["segments"] if row["segment"] == "Photo.ME")
+    assert photo["total_thousands"] == 166211.0
+
+
+def test_eng_20260919_05_parse_ir_megp_presentation_h1_core_business_fixture():
+    from value_investor.research.filings import parse_ir_megp_presentation_h1_core_business
+
+    fixture = Path("docs/data/research/MEGP.L/sources/filings/bodies/ir_a1826e96c65c7841.txt")
+    if not fixture.is_file():
+        pytest.skip("MEGP H1 FY2026 IR body fixture not present")
+    parsed = parse_ir_megp_presentation_h1_core_business(fixture.read_text(encoding="utf-8"))
+    assert parsed is not None
+    segments = {row["segment"]: row for row in parsed["segments"]}
+    assert segments["Wash.ME"]["vending_revenue_current_millions"] == pytest.approx(54.8)
+
+
+def test_eng_20260919_05_parse_ir_megp_presentation_fy_product_mix_fixture():
+    from value_investor.research.filings import parse_ir_megp_presentation_fy_product_mix
+
+    fixture = Path("docs/data/research/MEGP.L/sources/filings/bodies/ir_59ec4565fa7e453b.txt")
+    if not fixture.is_file():
+        pytest.skip("MEGP FY2025 IR body fixture not present")
+    parsed = parse_ir_megp_presentation_fy_product_mix(fixture.read_text(encoding="utf-8"))
+    assert parsed is not None
+    segments = {row["segment"]: row for row in parsed["segments"]}
+    assert segments["Photo.ME"]["vending_revenue_millions"] == pytest.approx(166.2)
+    assert segments["Wash.ME"]["ebitda_millions"] == pytest.approx(55.5)
+
+
+def test_eng_20260919_05_extract_ir_presentation_metrics_megp_segment_splits(tmp_path: Path):
+    from value_investor.research.filings import extract_ir_presentation_metrics
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    fixtures = [
+        (
+            "ir_a1826e96c65c7841",
+            Path("docs/data/research/MEGP.L/sources/filings/bodies/ir_a1826e96c65c7841.txt"),
+            "interim",
+        ),
+        (
+            "ir_59ec4565fa7e453b",
+            Path("docs/data/research/MEGP.L/sources/filings/bodies/ir_59ec4565fa7e453b.txt"),
+            "annual",
+        ),
+    ]
+    filings: list[dict[str, object]] = []
+    for body_id, fixture, period in fixtures:
+        if not fixture.is_file():
+            pytest.skip(f"{fixture} not present")
+        body_path = bodies_dir / f"{body_id}.txt"
+        body_path.write_text(fixture.read_text(encoding="utf-8"), encoding="utf-8")
+        filings.append(
+            {
+                "id": body_id,
+                "source": "ir_allowlist",
+                "headline": f"MEGP IR presentation — {body_id}",
+                "period": period,
+                "has_body": True,
+                "body_path": str(body_path),
+            }
+        )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": filings}), encoding="utf-8"
+    )
+    sources_dir = tmp_path / "sources"
+    sources_dir.mkdir()
+    metrics = extract_ir_presentation_metrics(filings_dir, "MEGP.L", sources_dir=sources_dir)
+    assert metrics["segment_split_count"] >= 2
+    split_types = {row["split_type"] for row in metrics["segment_revenue_splits"]}
+    assert "megp_presentation_h1_core_business" in split_types
+    assert "megp_presentation_fy_product_mix" in split_types
+
+
+def test_eng_20260919_05_refetch_ir_allowlist_fetches_megp_h1_presentation_body(
+    tmp_path, monkeypatch
+):
+    """MEGP H1 results presentation merges into filings index and accepts fetched PDF body."""
+    from value_investor.research.filings import refetch_ir_allowlist_filing_bodies
+
+    h1_url = (
+        "https://me-group.com/wp-content/uploads/2026/07/"
+        "260713-ME-Group-2026-Interim-Results-Presentation.pdf"
+    )
+    sample_body = (
+        "ME Group International plc Interim Results H1 2026\nCore Business Activity\n"
+        "Integrated biometric photo identification solutions\n"
+        "£82.7m\n£77.6m\nVENDING REVENUE1\n£29.6m\n£27.2m\nEBITDA\n"
+        "Unattended 24/7 laundry services and launderettes\n"
+        "£47.1m\n£54.8m\nVENDING REVENUE1\nEBITDA\n£25.4m\n£30.7m\n"
+        "Net cash bridge\n£26.5m\n" + ("detail " * 400)
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {}}),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: sample_body if url == h1_url else None,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        ticker="MEGP.L",
+        company_name="ME Group International plc",
+        max_bodies=8,
+    )
+    assert result["fetched"] >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    row = next(
+        f
+        for f in saved["filings"]
+        if "260713-ME-Group-2026-Interim-Results-Presentation.pdf" in str(f.get("url") or "")
+    )
+    assert row["has_body"] is True
+    assert row["period"] == "interim"
+
+
 def test_extract_ir_presentation_metrics_from_ir_body(tmp_path: Path):
     from value_investor.research.filings import extract_ir_presentation_metrics
 
