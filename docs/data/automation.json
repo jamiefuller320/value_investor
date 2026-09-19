@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T18:15:46.470835+00:00",
+  "generated_at": "2026-09-19T18:21:59.160911+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1153,23 +1153,39 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-19T18:15:44.518917+00:00",
-    "queue_ui_updated_at": "2026-09-19T18:15:46.399330+00:00",
-    "task_count": 64,
+    "compiled_at": "2026-09-19T18:21:04.721957+00:00",
+    "queue_ui_updated_at": "2026-09-19T18:21:59.095674+00:00",
+    "task_count": 65,
     "status": {
-      "open_count": 2,
-      "pr_open_count": 1,
+      "open_count": 3,
+      "pr_open_count": 0,
       "parked_count": 14,
-      "merged_count": 46,
+      "merged_count": 47,
       "failed_count": 0,
-      "next_task_id": "eng-20260919-08",
-      "in_flight_branch": "cursor/eng-20260919-07-1de3",
-      "in_flight_pr": 739,
+      "next_task_id": "eng-20260919-09",
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
     "queued_tasks": [
+      {
+        "id": "eng-20260919-09",
+        "area": "scoring",
+        "title": "leverage: When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy. [3/3]",
+        "priority": "medium",
+        "priority_score": 25.0,
+        "status": "open",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
+        "clash_scan": "partial"
+      },
       {
         "id": "eng-20260919-08",
         "area": "scoring",
@@ -1181,34 +1197,10 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null,
-        "dispatch_eligible": false,
-        "blocked_by": [
-          {
-            "pr_number": null,
-            "branch": null,
-            "task_id": null,
-            "title": "in-flight allowlist overlap",
-            "clash_files": [
-              "src/value_investor/scoring/snapshot.py",
-              "tests/test_pipeline.py"
-            ],
-            "kind": "allowlist_overlap"
-          }
-        ],
-        "effective_dispatch_rank": null,
-        "clash_scan": "full"
-      },
-      {
-        "id": "eng-20260919-07",
-        "area": "scoring",
-        "title": "fcf: When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy. [1/3]",
-        "priority": "medium",
-        "priority_score": 25.0,
-        "status": "pr_open",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": "cursor/eng-20260919-07-1de3"
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 2,
+        "clash_scan": "partial"
       },
       {
         "id": "eng-20260918-16",
@@ -1223,8 +1215,8 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "full"
+        "effective_dispatch_rank": 3,
+        "clash_scan": "partial"
       }
     ],
     "attention_tasks": [
@@ -1398,9 +1390,9 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 2,
-      "dispatch_eligible_count": 1,
-      "blocked_count": 1
+      "open_task_count": 3,
+      "dispatch_eligible_count": 3,
+      "blocked_count": 0
     }
   },
   "learning_track_epoch_datum": {
@@ -1678,46 +1670,40 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-19T18:15:46.470835+00:00",
-    "overall": "blocked",
-    "headline": "queue ready — dispatch next open task",
+    "generated_at": "2026-09-19T18:21:59.160911+00:00",
+    "overall": "active",
+    "headline": "Agent lane active.",
     "merge_lane": {
+      "state": "idle",
+      "idle": true,
+      "running": false,
+      "blocked": false,
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+    },
+    "agent_lane": {
       "state": "running",
       "idle": false,
       "running": true,
       "blocked": false,
-      "pr_open_count": 1,
-      "open_engineering_prs": [
-        {
-          "number": 739,
-          "branch": "cursor/eng-20260919-07-1de3",
-          "draft": false
-        }
-      ],
-      "in_flight_pr": 739,
-      "detail": "Open engineering PR(s) #739 — merge fires on CI success."
-    },
-    "agent_lane": {
-      "state": "blocked",
-      "idle": false,
-      "running": true,
-      "blocked": true,
       "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 7,
-      "open_count": 2,
-      "pr_open_count": 1,
-      "dispatch_eligible_count": 1,
-      "blocked_task_count": 1,
-      "next_task_id": "eng-20260919-08",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
+      "open_count": 3,
+      "pr_open_count": 0,
+      "dispatch_eligible_count": 3,
+      "blocked_task_count": 0,
+      "next_task_id": "eng-20260919-09",
+      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
+      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 7,
-      "evaluated_at": "2026-09-19T18:15:41.790288+00:00"
+      "evaluated_at": "2026-09-19T18:21:55.920641+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1731,6 +1717,17 @@
       "should_dispatch_engineering": false
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260919-07",
+        "title": "fcf: When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy. [1/3]",
+        "area": "scoring",
+        "pr_number": 739,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/739",
+        "merged_at": "2026-09-19T18:21:03.315344+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": true,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260919-06",
         "title": "Prefer Companies House iXBRL over PDF OCR for group accounts (`ch_04967001_*`); current FY2025 body is highlights/strategic OCR only—Finance Review and cash not",
@@ -1820,6 +1817,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 8
+    "verified_merges_today_count": 9
   }
 }
