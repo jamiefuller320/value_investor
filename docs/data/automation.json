@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T21:09:09.921964+00:00",
+  "generated_at": "2026-09-19T21:41:29.360606+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1153,27 +1153,27 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-19T18:51:47.166428+00:00",
-    "queue_ui_updated_at": "2026-09-19T21:09:09.861868+00:00",
-    "task_count": 67,
+    "compiled_at": "2026-09-19T21:40:27.157767+00:00",
+    "queue_ui_updated_at": "2026-09-19T21:41:29.282856+00:00",
+    "task_count": 68,
     "status": {
-      "open_count": 3,
-      "pr_open_count": 0,
+      "open_count": 2,
+      "pr_open_count": 1,
       "parked_count": 0,
-      "merged_count": 48,
+      "merged_count": 49,
       "failed_count": 0,
-      "next_task_id": "eng-20260919-11",
-      "in_flight_branch": null,
-      "in_flight_pr": null,
+      "next_task_id": "eng-20260919-12",
+      "in_flight_branch": "cursor/eng-20260919-10-1de3",
+      "in_flight_pr": 744,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
     "queued_tasks": [
       {
-        "id": "eng-20260919-11",
+        "id": "eng-20260919-12",
         "area": "scoring",
-        "title": "Expose provenance of `earnings_growth_pct` vs filing diluted EPS growth in screen output.",
+        "title": "When statutory OCF−CapEx dividend cover is ≤1.05× and Piotroski ≤4, cap dividend-family conviction even if yield screens pass (ITV pattern).",
         "priority": "medium",
         "priority_score": 25.0,
         "status": "open",
@@ -1208,21 +1208,17 @@
         "title": "Hunt fetchable IR source for parked nasdaq100 leftover TRI",
         "priority": "low",
         "priority_score": 12.0,
-        "status": "open",
+        "status": "pr_open",
         "source": "parked_source_hunter",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 3,
-        "clash_scan": "full"
+        "branch_name": "cursor/eng-20260919-10-1de3"
       }
     ],
     "attention_tasks": [],
     "clash_summary": {
-      "open_task_count": 3,
-      "dispatch_eligible_count": 3,
+      "open_task_count": 2,
+      "dispatch_eligible_count": 2,
       "blocked_count": 0
     }
   },
@@ -1501,18 +1497,24 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-19T21:09:09.921964+00:00",
+    "generated_at": "2026-09-19T21:41:29.360606+00:00",
     "overall": "active",
-    "headline": "Agent lane active.",
+    "headline": "Merge lane active; agent lane active.",
     "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
+      "state": "running",
+      "idle": false,
+      "running": true,
       "blocked": false,
-      "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+      "pr_open_count": 1,
+      "open_engineering_prs": [
+        {
+          "number": 744,
+          "branch": "cursor/eng-20260919-10-1de3",
+          "draft": false
+        }
+      ],
+      "in_flight_pr": 744,
+      "detail": "Open engineering PR(s) #744 — merge fires on CI success."
     },
     "agent_lane": {
       "state": "running",
@@ -1523,18 +1525,18 @@
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 0,
-      "open_count": 3,
-      "pr_open_count": 0,
-      "dispatch_eligible_count": 3,
+      "open_count": 2,
+      "pr_open_count": 1,
+      "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260919-11",
-      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
-      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+      "next_task_id": "eng-20260919-12",
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-19T21:09:06.162007+00:00"
+      "evaluated_at": "2026-09-19T21:41:24.725357+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1548,6 +1550,17 @@
       "should_dispatch_engineering": false
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260919-11",
+        "title": "Expose provenance of `earnings_growth_pct` vs filing diluted EPS growth in screen output.",
+        "area": "scoring",
+        "pr_number": 743,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/743",
+        "merged_at": "2026-09-19T21:40:25.859677+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": false,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260919-09",
         "title": "leverage: When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy. [3/3]",
@@ -1659,6 +1672,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 10
+    "verified_merges_today_count": 11
   }
 }
