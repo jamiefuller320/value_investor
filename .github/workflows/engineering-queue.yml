@@ -701,6 +701,7 @@ jobs:
 
       - name: Email engineering queue blocks
         if: steps.gate.outputs.should_dispatch != 'true'
+        id: queue_block_email
         env:
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
@@ -711,4 +712,23 @@ jobs:
           ftse-engineering notify-queue-blocked \
             --recovery-json /tmp/recovery.json \
             --sync-json /tmp/eng_sync.json \
-            --queue-status-json /tmp/queue_status.json
+            --queue-status-json /tmp/queue_status.json \
+            --json | tee /tmp/queue_block_notify.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          raw = Path("/tmp/queue_block_notify.json").read_text(encoding="utf-8")
+          data = json.loads(raw[raw.find("{") :])
+          sent = bool(data.get("sent"))
+          count = int(data.get("alert_count") or 0)
+          print(f"queue_block_alerts={count} sent={sent}")
+          PY
+
+      - name: Commit queue-block notify state
+        if: steps.gate.outputs.should_dispatch != 'true'
+        env:
+          GHA_COMMIT_OWNED: >-
+            docs/data/engineering_tasks.json
+            docs/data/automation.json
+            docs/data/latest.json
+        run: bash scripts/gha_commit_engineering_queue.sh
