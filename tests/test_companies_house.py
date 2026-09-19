@@ -12,6 +12,7 @@ from value_investor.research.companies_house import (
     DEEPEN_MAX_ACCOUNTS,
     DEFAULT_MAX_ACCOUNTS,
     MIME_PDF,
+    MIME_XHTML,
     _splice_ch_deepen_note_sections,
     _StripAuthOnRedirect,
     ch_document_id_from_metadata_url,
@@ -522,3 +523,74 @@ def test_register_enhanced_ch_body_fetch_replaces_filings_hook():
 
     register_enhanced_ch_body_fetch()
     assert getattr(filings_mod._fetch_companies_house_body, "_ch_deepened", False) is True
+
+
+_ITV_IXBRL_FIXTURE_HTML = (
+    b'<html xmlns:ix="http://www.xbrl.org/2013/inlineXBRL">'
+    b"<body><div>Cover and strategic highlights only</div>"
+    b'<ix:nonNumeric name="core:DescriptionOfPrincipalRisksAndUncertaintiesTextBlock" '
+    b'contextRef="FY" escape="true">'
+    b"<p>Principal risks and uncertainties include advertising cyclicality, "
+    b"regulatory change, and pension funding volatility across the Group.</p>"
+    b"</ix:nonNumeric>"
+    b'<ix:nonNumeric name="core:PensionsTextBlock" contextRef="FY" escape="true">'
+    b"<p>3.8 Pensions - Defined benefit pension surplus of GBP 198 million after "
+    b"GBP 65 million of employer contributions and remeasurement gains.</p>"
+    b"</ix:nonNumeric>"
+    b'<ix:nonNumeric name="core:FinanceReviewTextBlock" contextRef="FY" escape="true">'
+    b"<p>Finance Review - Adjusted free cash flow of GBP 212 million after lease "
+    b"payments and pension contributions; dividend policy unchanged.</p>"
+    b"</ix:nonNumeric>"
+    b"</body></html>"
+)
+
+
+def test_itv_ch_filing_body_prefers_ixbrl_over_garbled_pdf_ocr(monkeypatch):
+    """eng-20260919-06: ch_04967001_* group accounts must use iXBRL tags, not PDF OCR highlights."""
+    monkeypatch.setenv("COMPANIES_HOUSE_API_KEY", "test-key")
+    row = {
+        "id": "ch_04967001_MzUyMjc5MjMzMmFkaXF6a2N4",
+        "company_number": "04967001",
+        "document_metadata_url": (
+            "https://document-api.company-information.service.gov.uk/document/itv-fy2025"
+        ),
+    }
+    garbled_pdf_ocr = (
+        "Strategic report chairman highlights revenue £3,511m Metdng What Meiers "
+        + ("fontsymbol | OCR noise " * 80)
+        + " good free cash flow of leverage 1.0x dividend per share 4.5p"
+    )
+
+    def fake_iter(*_args, **_kwargs):
+        return [(b"%PDF-1.4", MIME_PDF), (_ITV_IXBRL_FIXTURE_HTML, MIME_XHTML)]
+
+    def fake_extract(raw, content_type):
+        if content_type == MIME_PDF:
+            return garbled_pdf_ocr
+        return None
+
+    def fake_ocr(_raw, *, max_pages=None):
+        if max_pages is not None and max_pages >= CH_DEEPEN_OCR_MAX_PAGES:
+            return garbled_pdf_ocr + (" strategic overview revenue growth " * 200)
+        return garbled_pdf_ocr
+
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.iter_ch_document_downloads",
+        fake_iter,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._extract_filing_document_text",
+        fake_extract,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._ocr_pdf_text",
+        fake_ocr,
+    )
+
+    body = fetch_companies_house_filing_body(row)
+    assert body is not None
+    assert "fontsymbol" not in body
+    assert "Principal risks and uncertainties" in body
+    assert "3.8 Pensions" in body
+    assert "Finance Review" in body
+    assert "Adjusted free cash flow" in body
