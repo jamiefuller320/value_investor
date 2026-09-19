@@ -4188,6 +4188,85 @@ def test_enrich_signals_with_dividend_sustainability_overlay_caps_itv_like_profi
     assert row["conviction_score"] == pytest.approx(0.53 * 0.85)
 
 
+def test_apply_dividend_sustainability_export_enforcement_caps_conviction_when_signal_precapped():
+    from value_investor.scoring.dividend_sustainability_overlay import (
+        apply_dividend_sustainability_export_enforcement,
+    )
+
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "model_id": "high_dividend",
+                "model_name": "High Dividend Yield",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "ITV.L",
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": False,
+                "score": 3 / 9,
+                "reasons": "['F-Score=3/9']",
+                "failed_criteria": "[]",
+            },
+        ]
+    )
+    triggered, _, adjusted, conviction = apply_dividend_sustainability_export_enforcement(
+        signal="strong_buy",
+        adjusted_signal="buy",
+        conviction_score=0.53,
+        ticker_models=model_results,
+        dividend_sustainability_overlay=True,
+        fcf_dividend_coverage_net=1.0,
+    )
+    assert triggered is True
+    assert adjusted == "buy"
+    assert conviction == pytest.approx(0.53 * 0.85)
+
+
+def test_enforce_fcf_basis_in_snapshot_applies_dividend_sustainability_overlay_itv_style():
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "model_id": "high_dividend",
+                "model_name": "High Dividend Yield",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "[]",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "ITV.L",
+                "model_id": "piotroski_f",
+                "model_name": "Piotroski F-Score",
+                "passed": False,
+                "score": 3 / 9,
+                "reasons": "['F-Score=3/9']",
+                "failed_criteria": "[]",
+            },
+        ]
+    )
+    snapshot = {
+        "ticker": "ITV.L",
+        "signal": "strong_buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.53,
+        "fcf_dividend_coverage_net": 1.0,
+        "fcf_basis_overlay": True,
+        "dividend_sustainability_overlay": False,
+        "advertising_revenue_share": 0.2,
+    }
+    enforced = enforce_fcf_basis_in_snapshot(snapshot, model_results=model_results)
+    assert enforced["dividend_sustainability_overlay"] is True
+    assert enforced["adjusted_signal"] == "buy"
+    assert enforced["conviction_score"] == pytest.approx(0.53 * 0.85)
+
+
 def test_enrich_signals_with_cyclical_exposure_overlay_flags_megp_like_profile():
     from value_investor.scoring.cyclical_exposure_overlay import (
         enrich_signals_with_cyclical_exposure_overlay,
