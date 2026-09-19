@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-19T14:03:25.670829+00:00",
+  "generated_at": "2026-09-19T14:09:31.606592+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -588,7 +588,7 @@
       "is_ftse_equivalent": false,
       "ingest": "sprint",
       "ingest_stream": 1,
-      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=6, zero_body=0, thin=4, indexed_without_body=66)",
+      "ingest_reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=7, zero_body=0, thin=4, indexed_without_body=56)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "queue_rank": 7,
@@ -640,11 +640,11 @@
       },
       "filing_health": {
         "buy_tier_count": 12,
-        "unmeasured_buy_tier": 6,
+        "unmeasured_buy_tier": 7,
         "zero_body_buy_tier": 0,
         "thin_body_buy_tier": 4,
-        "indexed_without_body": 66,
-        "bodies_median": 2.5,
+        "indexed_without_body": 56,
+        "bodies_median": 2.0,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "ingest_exhausted": false,
@@ -657,6 +657,7 @@
           "DTE.DE"
         ],
         "unmeasured_tickers": [
+          "HEI.DE",
           "DTG.DE",
           "FRE.DE",
           "HEN3.DE",
@@ -666,7 +667,7 @@
         ],
         "parked_tickers": []
       },
-      "filing_gaps": 6,
+      "filing_gaps": 7,
       "paper_instrument": null,
       "ai_judgment": null,
       "knob_apply": null,
@@ -706,11 +707,11 @@
           "filing_gaps": -1
         },
         "remaining": {
-          "unmeasured": 6,
+          "unmeasured": 7,
           "zero_body": 0,
           "thin": 4,
-          "indexed_without_body": 66,
-          "filing_gaps": 6
+          "indexed_without_body": 56,
+          "filing_gaps": 7
         },
         "admission_ready": false,
         "admission_gate": "sprint_ingest_complete",
