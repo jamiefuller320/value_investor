@@ -329,7 +329,9 @@ def _engineering_queue_recovery_policy() -> dict[str, Any]:
     tier1_housekeep = block.get("tier1_housekeep_on_recover")
     if tier1_housekeep is None:
         tier1_housekeep = DEFAULT_TIER1_HOUSEKEEP_ON_RECOVER
-    raw_no_diff = str(block.get("auto_cancel_no_diff_cap") or DEFAULT_AUTO_CANCEL_NO_DIFF_CAP).strip().lower()
+    raw_no_diff = (
+        str(block.get("auto_cancel_no_diff_cap") or DEFAULT_AUTO_CANCEL_NO_DIFF_CAP).strip().lower()
+    )
     if raw_no_diff not in AUTO_CANCEL_NO_DIFF_MODES:
         raw_no_diff = DEFAULT_AUTO_CANCEL_NO_DIFF_CAP
     superseded_hunter = block.get("auto_cancel_superseded_parked_hunter")
@@ -1706,7 +1708,10 @@ def housekeep_parked_tasks(
             )
             continue
 
-        if auto_cancel_superseded_parked_hunter and str(row.get("source") or "") == PARKED_SOURCE_HUNTER_SOURCE:
+        if (
+            auto_cancel_superseded_parked_hunter
+            and str(row.get("source") or "") == PARKED_SOURCE_HUNTER_SOURCE
+        ):
             ticker = str((row.get("evidence") or {}).get("hunter_ticker") or "").strip().upper()
             if ticker:
                 resolved, kind, detail = hunter_ticker_already_resolved_on_main(ticker)
