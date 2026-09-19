@@ -7932,12 +7932,94 @@ def test_fetch_filings_ir_allowlist_fgp_l(tmp_path: Path):
 
     mapping = load_ir_url_allowlist(allowlist_path)
     assert "FGP.L" in mapping
-    assert len(mapping["FGP.L"]) >= 2
+    assert len(mapping["FGP.L"]) >= 3
 
     rows = fetch_filings_ir_allowlist("FGP.L", path=allowlist_path)
-    assert len(rows) >= 2
+    assert len(rows) >= 3
     assert all(row["source"] == "ir_allowlist" for row in rows)
     assert all("firstgroupplc.com" in row["url"] for row in rows)
+    assert any(
+        "260618-firstgroup-plc-fy-2026-results-presentation.pdf" in row["url"] for row in rows
+    )
+    fy2026 = next(
+        row
+        for row in rows
+        if "260618-firstgroup-plc-fy-2026-results-presentation.pdf" in row["url"]
+    )
+    assert fy2026["period"] == "annual"
+    assert fy2026["id"] == "ir_f5cc65dca4e5855a"
+
+
+def test_eng_20260919_04_parse_ir_statutory_to_adjusted_cash_flow_bridge_fgp_fy2025_fixture():
+    from value_investor.research.filings import parse_ir_statutory_to_adjusted_cash_flow_bridge
+
+    fixture = Path("docs/data/research/FGP.L/sources/filings/bodies/ir_5ba5b17047f87036.txt")
+    if not fixture.is_file():
+        pytest.skip("FGP FY2025 IR body fixture not present")
+    parsed = parse_ir_statutory_to_adjusted_cash_flow_bridge(fixture.read_text(encoding="utf-8"))
+    assert parsed is not None
+    assert parsed["bridge_type"] == "statutory_to_adjusted_cash_flow"
+    assert parsed["derived"]["statutory_free_cash_flow_millions"] == pytest.approx(385.9)
+    assert parsed["derived"]["adjusted_free_cash_flow_millions"] == pytest.approx(113.5)
+    assert parsed["derived"]["total_fcf_millions"] == pytest.approx(113.5)
+
+
+def test_eng_20260919_04_parse_ir_statutory_to_adjusted_cash_flow_bridge_fgp_in_memory():
+    from value_investor.research.filings import parse_ir_statutory_to_adjusted_cash_flow_bridge
+
+    body = """
+Appendix: Reconciliation of Statutory to Adjusted cash flows
+£m Statutory Ring fenced cash
+movements IFRS 16 Other movements Adjusted
+Cash flow from operations 756.2 8.0 (459.5) (38.5) 266.2
+Free cash flow 391.6 46.6 (364.4) - 73.8
+"""
+    parsed = parse_ir_statutory_to_adjusted_cash_flow_bridge(body)
+    assert parsed is not None
+    assert parsed["derived"]["statutory_free_cash_flow_millions"] == pytest.approx(391.6)
+    assert parsed["derived"]["adjusted_free_cash_flow_millions"] == pytest.approx(73.8)
+
+
+def test_eng_20260919_04_refetch_ir_allowlist_fetches_fgp_fy2026_body(tmp_path, monkeypatch):
+    """FGP FY2026 results deck merges into filings index and accepts fetched PDF body."""
+    from value_investor.research.filings import refetch_ir_allowlist_filing_bodies
+
+    fy2026_url = (
+        "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/"
+        "reports-and-presentations/presentation/"
+        "260618-firstgroup-plc-fy-2026-results-presentation.pdf"
+    )
+    sample_body = (
+        "FirstGroup plc FY 2026 Full Year Results 18 June 2026\n"
+        "Statutory Ring fenced cash movements IFRS 16 Other movements Adjusted\n"
+        "Cash flow from operations 756.2 8.0 (459.5) (38.5) 266.2\n"
+        "Free cash flow 391.6 46.6 (364.4) - 73.8\n" + ("detail " * 400)
+    )
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir()
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps({"filings": [], "summary": {}}),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.fetch_filing_body",
+        lambda url: sample_body if url == fy2026_url else None,
+    )
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        ticker="FGP.L",
+        company_name="FirstGroup plc",
+        max_bodies=5,
+    )
+    assert result["fetched"] >= 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    row = next(
+        f
+        for f in saved["filings"]
+        if "260618-firstgroup-plc-fy-2026-results-presentation.pdf" in str(f.get("url") or "")
+    )
+    assert row["has_body"] is True
+    assert row["period"] == "annual"
 
 
 def test_fetch_filings_ir_allowlist_megp_l(tmp_path: Path):

@@ -108,6 +108,7 @@ _BUILTIN_IR_URLS: dict[str, list[str]] = {
         "https://www.graftonplc.com/~/media/Files/G/Grafton-Group/2025%20HYR/Grafton%20Group%20plc%20-%20Interim%20Results%20-%2030%20June%202025%20Final.pdf",
     ],
     "FGP.L": [
+        "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/presentation/260618-firstgroup-plc-fy-2026-results-presentation.pdf",
         "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/presentation/firstgroup-plc-fy-2025-results-presentation.pdf",
         "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/presentation/251118-firstgroup-plc-h1-2026-results-presentation.pdf",
         "https://www.firstgroupplc.com/~/media/Files/F/Firstgroup-Plc/reports-and-presentations/press-release/firstgroup-plc-h1-2026-results.pdf",
@@ -5971,6 +5972,94 @@ def parse_ir_fcf_division_bridge(body_text: str) -> dict[str, Any] | None:
     return None
 
 
+_FGP_STATUTORY_TO_ADJUSTED_SECTION_RE = re.compile(
+    r"Appendix:\s*Reconciliation of Statutory to Adjusted cash flows|"
+    r"Statutory Ring fenced cash\s+movements IFRS 16 Other movements Adjusted",
+    re.IGNORECASE,
+)
+_FGP_STATUTORY_TO_ADJUSTED_ROW_RE = re.compile(
+    r"^(Cash flow from operations|Free [Cc]ash [Ff]low)\s+(.+)$",
+    re.MULTILINE,
+)
+
+
+def _parse_fgp_statutory_adjusted_five_column_row(tail: str) -> list[float] | None:
+    """Parse FirstGroup appendix rows: Statutory … Adjusted (five numeric columns)."""
+    amounts: list[float] = []
+    remaining = tail.strip()
+    while remaining and len(amounts) < 5:
+        remaining = remaining.lstrip()
+        if not remaining:
+            break
+        if remaining[0] in "-–":
+            amounts.append(0.0)
+            remaining = remaining[1:]
+            continue
+        match = re.match(r"\((\d+(?:\.\d+)?)\)|(-?\d+(?:\.\d+)?)", remaining)
+        if match is None:
+            break
+        if match.group(1):
+            amounts.append(-float(match.group(1)))
+        else:
+            amounts.append(float(match.group(2)))
+        remaining = remaining[match.end() :]
+    if len(amounts) < 5:
+        return None
+    return amounts[:5]
+
+
+def parse_ir_statutory_to_adjusted_cash_flow_bridge(body_text: str) -> dict[str, Any] | None:
+    """Parse FirstGroup statutory-to-adjusted cash-flow appendix (FY/H1 results decks)."""
+    if not body_text or not body_text.strip():
+        return None
+    match = _FGP_STATUTORY_TO_ADJUSTED_SECTION_RE.search(body_text)
+    if match is None:
+        return None
+    section = body_text[match.start() : match.start() + 2800]
+    cfo_stat: float | None = None
+    cfo_adj: float | None = None
+    fcf_stat: float | None = None
+    fcf_adj: float | None = None
+    for row_match in _FGP_STATUTORY_TO_ADJUSTED_ROW_RE.finditer(section):
+        label = row_match.group(1).strip().lower()
+        columns = _parse_fgp_statutory_adjusted_five_column_row(row_match.group(2))
+        if columns is None:
+            continue
+        statutory, adjusted = columns[0], columns[4]
+        if label.startswith("cash flow from operations"):
+            cfo_stat, cfo_adj = statutory, adjusted
+        elif label.startswith("free cash flow"):
+            fcf_stat, fcf_adj = statutory, adjusted
+    if fcf_stat is None or fcf_adj is None:
+        return None
+    lines: list[dict[str, Any]] = []
+    if cfo_stat is not None and cfo_adj is not None:
+        lines.extend(
+            [
+                {"label": "cash_flow_from_operations_statutory", "amount_millions": cfo_stat},
+                {"label": "cash_flow_from_operations_adjusted", "amount_millions": cfo_adj},
+            ]
+        )
+    lines.extend(
+        [
+            {"label": "free_cash_flow_statutory", "amount_millions": fcf_stat},
+            {"label": "free_cash_flow_adjusted", "amount_millions": fcf_adj},
+        ]
+    )
+    return {
+        "bridge_type": "statutory_to_adjusted_cash_flow",
+        "currency": "GBP",
+        "lines": lines,
+        "derived": {
+            "statutory_free_cash_flow_millions": fcf_stat,
+            "adjusted_free_cash_flow_millions": fcf_adj,
+            "total_fcf_millions": fcf_adj,
+            "statutory_to_adjusted_fcf_delta_millions": fcf_adj - fcf_stat,
+        },
+        "parse_confidence": "high",
+    }
+
+
 _GRAFTON_FCF_TABLE_MARKER_RE = re.compile(
     r"Free Cash Flow[\s\n]+20\d{2}[\s\n]+£['\u2019]?m",
     re.IGNORECASE,
@@ -7343,6 +7432,9 @@ def extract_ir_presentation_metrics(
         fcf_division = parse_ir_fcf_division_bridge(body_text)
         if fcf_division:
             payload["bridges"].append({**source_meta, **fcf_division})
+        statutory_adjusted = parse_ir_statutory_to_adjusted_cash_flow_bridge(body_text)
+        if statutory_adjusted:
+            payload["bridges"].append({**source_meta, **statutory_adjusted})
         grafton_fcf = parse_ir_grafton_free_cash_flow_bridge(body_text)
         if grafton_fcf:
             payload["bridges"].append({**source_meta, **grafton_fcf})
