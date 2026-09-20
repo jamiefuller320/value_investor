@@ -33,15 +33,17 @@ While compute is unconstrained:
 
 - Weekday cron deepens up to **full buy-tier** (`max_targets=62`, `max_bodies=40`,
   ~60 min runtime).
-- Sunday email (`email-report.yml`) runs the same full-buy-tier ingest-improvement
-  cap (**62**, L123) *before* research/gap-fill so newly screened names have bodies
-  in the memo pass. Weekday drain still owns residual `indexed_without_body`.
-  The Sunday pass also sets a **wall-clock ingest budget**
-  (`--ingest-max-runtime-seconds`, default 90m / workflow 2h) so OCR/PDF deepen
-  cannot consume the whole 6h GHA job and skip Send/commit (L429).
+- Sunday email (`email-report.yml`) **does not** re-run full buy-tier OCR deepen.
+  Bodies are thickened on **Saturday night** by `ingest-loop.yml` (20:05 + 23:05 UTC
+  root batches with drain capped at 6 generations so chains finish before the
+  Sunday quiet bundle). Weekday Mon–Fri drain still owns residual
+  `indexed_without_body` during the week. Mid-week `email_only` refreshes that
+  still deepen should pass `--ingest-max-runtime-seconds` (L429). See
+  [Saturday pre-Sunday deepen](#saturday-pre-sunday-deepen).
 - After a successful batch, if `indexed_without_body > 0` **and progress was made**,
   the workflow chains another deepen (`drain_generation` 1…`max_drain_generations`,
-  default max **12**) until gaps clear or a follow-up stalls with no progress.
+  default max **12** weekdays / **6** Saturday night) until gaps clear or a follow-up
+  stalls with no progress.
 - Same-day goal: buy-tier `indexed_without_body` back near **0** after discovery.
 
 Ops monitor (agent / manual catch-up):
@@ -55,6 +57,29 @@ Re-throttle `max_targets` / daily success cap when GHA minutes bind — do not
 weaken discovery or curiosity recording.
 
 Pinned gap-closure / verification reruns skip the full scan (single-ticker cost).
+
+## Saturday pre-Sunday deepen
+
+Goal: thicken buy-tier filing bodies overnight so Sunday `email-report` can
+screen, deep-analyse, rememo, and **send** without spending hours on CH OCR.
+
+| Slot (UTC) | Role |
+|------------|------|
+| Sat **20:05** | Primary deepen root (`max_targets=62`, `max_runtime_seconds=3600`) |
+| Sat **23:05** | Catch-up if 20:05 dropped / another drain generation |
+| Drain chains | Cap **6** generations; **stop chaining** from Sunday **05:00** UTC onward so the quiet bundle (~06:20) is free |
+
+External cron keys: `ingest-loop-saturday-evening`, `ingest-loop-saturday-late`
+(see [`orchestrator-cron.md`](orchestrator-cron.md#saturday-pre-sunday-deepen)).
+Register after merge:
+
+```bash
+WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py \
+  --job ingest-loop-saturday-evening --job ingest-loop-saturday-late
+```
+
+Sunday `email-report.yml` no longer passes `--ingest-improvement-pass`. Mid-week
+`email_only` accelerated reviews may still deepen when explicitly configured.
 
 ## Curiosity
 

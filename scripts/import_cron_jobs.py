@@ -68,6 +68,16 @@ _INGEST_LOOP_INPUTS = {
         "max_runtime_seconds": "3600",
     }
 }
+# Saturday night pre-Sunday deepen: same deepen volume, but drain capped at 6 so
+# chains finish before Sunday quiet bundle (~06:20 UTC).
+_INGEST_LOOP_SATURDAY_INPUTS = {
+    "inputs": {
+        "max_targets": "62",
+        "max_bodies": "40",
+        "max_runtime_seconds": "3600",
+        "max_drain_generations": "6",
+    }
+}
 _LEGACY_INGEST_TITLES_TO_DISABLE = (
     "FTSE ingest loop (Mon/Wed/Fri morning)",
     "FTSE ingest loop (Mon/Wed/Fri afternoon)",
@@ -160,6 +170,24 @@ def _job_specs() -> list[CronJobSpec]:
             hours=[10],
             minutes=[5],
             wdays=[1, 2, 3, 4, 5],
+        ),
+        CronJobSpec(
+            key="ingest-loop-saturday-evening",
+            title="FTSE ingest loop (Saturday pre-Sunday deepen)",
+            workflow="ingest-loop.yml",
+            body={"ref": REF, **_INGEST_LOOP_SATURDAY_INPUTS},
+            hours=[20],
+            minutes=[5],
+            wdays=[6],
+        ),
+        CronJobSpec(
+            key="ingest-loop-saturday-late",
+            title="FTSE ingest loop (Saturday pre-Sunday catch-up)",
+            workflow="ingest-loop.yml",
+            body={"ref": REF, **_INGEST_LOOP_SATURDAY_INPUTS},
+            hours=[23],
+            minutes=[5],
+            wdays=[6],
         ),
         CronJobSpec(
             key="analysis-review",
