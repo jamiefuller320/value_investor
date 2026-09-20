@@ -3050,11 +3050,15 @@ def format_fcf_basis_action_note(
     if filing_aligned is not None:
         parts.append(f"filing {_format_fcf_compact(filing_aligned, currency=filing_currency)}")
     include_screen_ttm = screen_ttm is not None
+    # MGNS-style: when filing is policy and IR/management FCF is on the note, drop
+    # unverified Yahoo screen TTM; keep screen when only filing vs screen are shown
+    # (WIX/BT-style mismatch notes still need the screen column).
     if (
         include_screen_ttm
         and screen_ttm_unverified
         and filing_aligned is not None
-        and (policy_basis is None or policy_basis == "filing_aligned")
+        and policy_basis == "filing_aligned"
+        and company_adjusted is not None
     ):
         include_screen_ttm = False
     if include_screen_ttm:
