@@ -71,6 +71,31 @@ _CH_IXBRL_NONNUMERIC_RE = re.compile(
     r"([\s\S]*?)</(?:ix:)?nonNumeric>",
     flags=re.I,
 )
+_CH_IXBRL_NONFRACTION_RE = re.compile(
+    r"<(?:ix:)?nonFraction\b([^>]*?)(?:/>|>([^<]*)</(?:ix:)?nonFraction>)",
+    flags=re.I,
+)
+_CH_IXBRL_ATTR_NAME_RE = re.compile(r"""\bname=(['"])([^'"]+)\1""", flags=re.I)
+_CH_IXBRL_ATTR_UNIT_RE = re.compile(r"""\bunitRef=(['"])([^'"]+)\1""", flags=re.I)
+_CH_IXBRL_ATTR_SCALE_RE = re.compile(r"""\bscale=(['"])([^'"]+)\1""", flags=re.I)
+_CH_IXBRL_ATTR_SIGN_RE = re.compile(r"""\bsign=(['"])([^'"]+)\1""", flags=re.I)
+_CH_IXBRL_CASHFLOW_NUMERIC_HINTS: tuple[str, ...] = (
+    "netcashgeneratedfromusedinoperatingactivities",
+    "cashgeneratedfromoperations",
+    "cashflowsfromusedinoperatingactivities",
+    "purchaseofpropertyplantandequipment",
+    "purchaseoftangiblefixedassets",
+    "paymentsforcapital",
+    "netcashgeneratedfromusedininvestingactivities",
+    "netcashgeneratedfromusedinfinancingactivities",
+    "netincreaseincashandcashequivalents",
+    "increaseincashandcashequivalents",
+    "cashandcashequivalentsatendofperiod",
+    "interestpaid",
+    "taxpaid",
+    "dividendpaid",
+    "freecashflow",
+)
 
 
 def companies_house_api_key(explicit: str | None = None) -> str | None:
@@ -529,6 +554,98 @@ def _ixbrl_deeper_tag_rank(tag_name: str) -> int:
     return len(_CH_IXBRL_DEEPEN_TAG_HINTS)
 
 
+def _ixbrl_cashflow_numeric_rank(tag_name: str) -> int:
+    normalized = re.sub(r"[^a-z0-9]", "", (tag_name or "").lower())
+    for index, hint in enumerate(_CH_IXBRL_CASHFLOW_NUMERIC_HINTS):
+        if hint in normalized:
+            return index
+    return len(_CH_IXBRL_CASHFLOW_NUMERIC_HINTS)
+
+
+def _humanize_ixbrl_tag_name(tag_name: str) -> str:
+    local = (tag_name or "").split(":")[-1]
+    spaced = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", local)
+    return re.sub(r"\s+", " ", spaced).strip()
+
+
+def _format_ixbrl_scaled_amount(
+    raw_text: str,
+    *,
+    scale: int,
+    sign: str,
+    unit_ref: str,
+) -> str:
+    cleaned = (raw_text or "").replace(",", "").strip()
+    if not cleaned:
+        return ""
+    try:
+        val = float(cleaned)
+    except ValueError:
+        return cleaned
+    if sign == "-":
+        val = -val
+    if scale:
+        val *= 10 ** int(scale)
+    unit = (unit_ref or "").upper()
+    if unit.startswith("ISO4217:"):
+        unit = unit.split(":", 1)[-1]
+    currency = unit if len(unit) == 3 and unit.isalpha() else "GBP"
+    symbol = {"GBP": "£", "USD": "$", "EUR": "€"}.get(currency, f"{currency} ")
+    abs_val = abs(val)
+    if abs_val >= 1_000_000:
+        formatted = f"{symbol}{abs_val / 1_000_000:.1f}m"
+    elif abs_val >= 1_000:
+        formatted = f"{symbol}{abs_val / 1_000:.1f}k"
+    else:
+        formatted = f"{symbol}{abs_val:,.0f}"
+    if val < 0:
+        return f"({formatted})"
+    return formatted
+
+
+def _extract_ixbrl_deeper_cashflow_numeric(html: str) -> str:
+    """Pull consolidated cash-flow line items from iXBRL ``ix:nonFraction`` tags."""
+    lines: list[tuple[int, int, str]] = []
+    for index, match in enumerate(_CH_IXBRL_NONFRACTION_RE.finditer(html or "")):
+        attrs = match.group(1) or ""
+        raw_value = (match.group(2) or "").strip()
+        name_match = _CH_IXBRL_ATTR_NAME_RE.search(attrs)
+        if not name_match or not raw_value:
+            continue
+        tag_name = name_match.group(2)
+        rank = _ixbrl_cashflow_numeric_rank(tag_name)
+        if rank >= len(_CH_IXBRL_CASHFLOW_NUMERIC_HINTS):
+            continue
+        scale_match = _CH_IXBRL_ATTR_SCALE_RE.search(attrs)
+        sign_match = _CH_IXBRL_ATTR_SIGN_RE.search(attrs)
+        unit_match = _CH_IXBRL_ATTR_UNIT_RE.search(attrs)
+        scale = int(scale_match.group(2)) if scale_match else 0
+        sign = sign_match.group(2) if sign_match else ""
+        unit_ref = unit_match.group(2) if unit_match else "GBP"
+        amount = _format_ixbrl_scaled_amount(raw_value, scale=scale, sign=sign, unit_ref=unit_ref)
+        if not amount:
+            continue
+        label = _humanize_ixbrl_tag_name(tag_name)
+        lines.append((rank, index, f"{label}: {amount}"))
+    if not lines:
+        return ""
+    lines.sort(key=lambda item: (item[0], item[1]))
+    body = "\n".join(line for _, _, line in lines)
+    return f"Consolidated cash flow statement (iXBRL numeric tags):\n{body}"
+
+
+def _extract_ixbrl_deeper_tag_content(html: str) -> str:
+    """Narrative note blocks plus tagged cash-flow numerics from iXBRL."""
+    parts: list[str] = []
+    numeric = _extract_ixbrl_deeper_cashflow_numeric(html)
+    if numeric:
+        parts.append(numeric)
+    narrative = _extract_ixbrl_deeper_tag_narrative(html)
+    if narrative:
+        parts.append(narrative)
+    return "\n\n".join(parts)
+
+
 def _extract_ixbrl_deeper_tag_narrative(html: str) -> str:
     """Pull contractor-relevant note blocks from iXBRL ``ix:nonNumeric`` tags."""
     from value_investor.research.filings import _strip_html
@@ -605,7 +722,7 @@ def _deepen_ch_document_text(
             candidates.append(merged)
     elif _is_ixbrl_html(raw) or "xhtml" in ct or "xml" in ct:
         html = raw.decode("utf-8", errors="replace")
-        tag_narrative = _extract_ixbrl_deeper_tag_narrative(html)
+        tag_narrative = _extract_ixbrl_deeper_tag_content(html)
         if tag_narrative:
             base = baseline or _extract_filing_document_text(raw, content_type) or ""
             merged = f"{tag_narrative}\n\n{base}".strip() if base else tag_narrative

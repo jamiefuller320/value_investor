@@ -594,3 +594,70 @@ def test_itv_ch_filing_body_prefers_ixbrl_over_garbled_pdf_ocr(monkeypatch):
     assert "3.8 Pensions" in body
     assert "Finance Review" in body
     assert "Adjusted free cash flow" in body
+
+
+_FGP_IXBRL_FIXTURE_HTML = (
+    b'<html xmlns:ix="http://www.xbrl.org/2013/inlineXBRL">'
+    b"<body><div>Cover and strategic highlights only</div>"
+    b'<ix:nonFraction name="core:NetCashGeneratedFromUsedInOperatingActivities" '
+    b'contextRef="FY" unitRef="GBP" decimals="-3" scale="3" format="ixt:numdotdecimal">'
+    b"115500</ix:nonFraction>"
+    b'<ix:nonFraction name="core:PurchaseOfPropertyPlantAndEquipment" '
+    b'contextRef="FY" unitRef="GBP" decimals="-3" scale="3" sign="-" format="ixt:numdotdecimal">'
+    b"41700</ix:nonFraction>"
+    b'<ix:nonNumeric name="core:FinanceReviewTextBlock" contextRef="FY" escape="true">'
+    b"<p>Financial review - Adjusted free cash flow of GBP 73.8 million before acquisitions "
+    b"and disposals; statutory operating cash flow reconciles to the consolidated statement.</p>"
+    b"</ix:nonNumeric>"
+    b"</body></html>"
+)
+
+
+def test_fgp_ch_filing_body_prefers_ixbrl_cashflow_tags_over_garbled_pdf_ocr(monkeypatch):
+    """eng-20260920-06: FGP group accounts use iXBRL cash-flow tags, not PDF OCR numerics."""
+    monkeypatch.setenv("COMPANIES_HOUSE_API_KEY", "test-key")
+    row = {
+        "id": "ch_SC157176_MzUzNzM4MjMyMGFkaXF6a2N4",
+        "company_number": "SC157176",
+        "document_metadata_url": (
+            "https://document-api.company-information.service.gov.uk/document/fgp-fy2026"
+        ),
+    }
+    garbled_pdf_ocr = (
+        "First 7p FirstGroup plc Annual Report Better journeys "
+        + ("fontsymbol | OCR noise www-firstgroupple.com " * 60)
+        + " Free cash flow of £73.8m before acquisitions Adjusted operating profit up 7%"
+    )
+
+    def fake_iter(*_args, **_kwargs):
+        return [(b"%PDF-1.4", MIME_PDF), (_FGP_IXBRL_FIXTURE_HTML, MIME_XHTML)]
+
+    def fake_extract(raw, content_type):
+        if content_type == MIME_PDF:
+            return garbled_pdf_ocr
+        return None
+
+    def fake_ocr(_raw, *, max_pages=None):
+        return garbled_pdf_ocr
+
+    monkeypatch.setattr(
+        "value_investor.research.companies_house.iter_ch_document_downloads",
+        fake_iter,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._extract_filing_document_text",
+        fake_extract,
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings._ocr_pdf_text",
+        fake_ocr,
+    )
+
+    body = fetch_companies_house_filing_body(row)
+    assert body is not None
+    assert "fontsymbol" not in body
+    assert "Net Cash Generated From Used In Operating Activities" in body
+    assert "115.5m" in body
+    assert "Purchase Of Property Plant And Equipment" in body
+    assert "41.7m" in body
+    assert "Adjusted free cash flow" in body
