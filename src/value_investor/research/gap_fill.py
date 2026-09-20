@@ -10,7 +10,10 @@ from pathlib import Path
 from typing import Any
 
 from value_investor.deep_analysis import DeepAnalysis
-from value_investor.research.agent import run_gap_fill_research_agent
+from value_investor.research.agent import (
+    is_actionable_research_model_suggestion,
+    run_gap_fill_research_agent,
+)
 from value_investor.research.document import ResearchDocument
 from value_investor.research.gap_fill_sources import (
     execute_planned_alternate_sources,
@@ -292,6 +295,8 @@ def _persist_model_suggestions(
     for row in suggestions:
         text = str(row.get("suggestion") or "").strip()
         if not text or text.lower() in known:
+            continue
+        if not is_actionable_research_model_suggestion(text):
             continue
         known.add(text.lower())
         record = {
