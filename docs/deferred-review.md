@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-20T15:06:57+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-20T19:40:35+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -488,6 +488,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L426 | **Autofix one-shot re-run for Investegate maintenance HTML flakes** | Live-fetch follow-up only matches has_fetchable_ir + assert None/URLError. Investegate scheduled-maintenance pages return short HTML and fail asserts like len(body) > 1000 (seen on #724/#725 BPT.AX leftover test). Expand safe one-shot re-run detection for that maintenance signature. | Another PR fails only on Investegate maintenance HTML while other shards are green |
 | L427 | **Traffic PM assists parked-backlog clear (orphan branch salvage / cascade cancel)** | When queue_clearing pause is active, PM could open draft PRs from orphaned eng-* branches that already passed local checks, or cancel obvious overlapping preflight_clash cascade parks. Keep human judgment for no_diff_cap and ambiguous parks; do not grant broad cancel authority. | After parallel-cap email and salvage PRs settle; next time attention-parked pause fires with orphan branches and no open PRs |
 | L428 | **Ops-monitor catch-up skip after morning slot suppressions leaves ops_status stale** | When morning marks Sunday analysis-review/data-backup overdue as fixed (slot not reached) and email_deferred=false, 12:36/13:15 catch-ups skip. Committed ops_status then keeps stale workflow ages all day even after those slots succeed. | Next ops-monitor UX pass or after another Sunday where dashboard still shows stale analysis-review/data-backup after they succeeded |
+| L429 | **Sunday email-report hits 6h GHA timeout mid OCR/PDF ingest** | 2026-09-20 email-report #35514032032 (and morning recovery #35495407776) cancelled at ~6h still inside Screen/build ftse-email; logs show ongoing PDF startxref/Object Streams parsing near timeout. Send/commit/deploy skipped. Consider raising timeout-minutes, capping OCR work, or splitting ingest from report send. | Next Sunday email-report timeout or next ops pass on quiet-bundle runtime |
 
 ---
 
