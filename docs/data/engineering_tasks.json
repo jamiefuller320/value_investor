@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-20T08:18:39.492358+00:00",
+  "compiled_at": "2026-09-20T08:42:52.881734+00:00",
   "run_at": null,
-  "task_count": 73,
+  "task_count": 74,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -3399,6 +3399,47 @@
       "merged_at": "2026-09-18T13:53:33.008024+00:00"
     },
     {
+      "id": "eng-20260920-03",
+      "area": "prompt",
+      "title": "Updated in `output/research/MEGP.L/research.md`.",
+      "summary": "Updated in `output/research/MEGP.L/research.md`.",
+      "priority": "medium",
+      "priority_score": 25.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "MEGP.L"
+        ],
+        "recorded_at": "2026-09-12T12:36:40.963340+00:00",
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 20.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+      },
+      "acceptance_criteria": [
+        "Prompt or export change is covered by a parser/unit test",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/agent.py",
+        "src/value_investor/deep_analysis.py",
+        "src/value_investor/research/gap_fill.py",
+        "tests/test_deep_analysis.py",
+        "tests/test_research_gap_fill.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": true,
+      "status": "open"
+    },
+    {
       "id": "eng-20260920-02",
       "area": "scoring",
       "title": "Auto-compare latest CH/RNS adjusted EPS YoY to `adjusted_eps_growth_pct` and flag divergence (ITV remains +23% screen vs −11% filing).",
@@ -3419,7 +3460,8 @@
         "origin_source": "research_model_suggestions",
         "origin_priority_score": 23.0,
         "preferred_merge_class": "compile_cap_drain",
-        "doc": "docs/ops/engineering-sync.md"
+        "doc": "docs/ops/engineering-sync.md",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Export or overlay behaviour is covered by a unit test",
@@ -3442,11 +3484,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260920-02.md",
       "branch_name": "cursor/eng-20260920-02-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-20T08:24:23.130785+00:00"
+      "completed_at": "2026-09-20T08:24:23.130785+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/748",
+      "pr_number": 748,
+      "merged_at": "2026-09-20T08:42:52.049809+00:00"
     },
     {
       "id": "eng-20260920-01",
