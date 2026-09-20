@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-20T17:56:27.130704+00:00",
-  "occasion_count": 7,
+  "updated_at": "2026-09-20T20:23:18.297557+00:00",
+  "occasion_count": 9,
   "occasions": [
     {
       "id": "prf-20260916-001",
@@ -111,6 +111,23 @@
     },
     {
       "id": "prf-20260920-004",
+      "recorded_at": "2026-09-20T17:57:21.744621+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main",
+      "pr_number": 765,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Conflicts in automation.json, engineering_tasks.json, latest.json",
+      "details": {}
+    },
+    {
+      "id": "prf-20260920-005",
       "recorded_at": "2026-09-20T17:56:27.130704+00:00",
       "source": "human_request",
       "kind": "ci_check",
@@ -127,18 +144,45 @@
       ],
       "notes": "auto-unblock harden PR",
       "details": {}
+    },
+    {
+      "id": "prf-20260920-006",
+      "recorded_at": "2026-09-20T20:23:18.297557+00:00",
+      "source": "human_request",
+      "kind": "merge_conflict",
+      "failure_reason": "PR mergeable=CONFLICTING against main",
+      "pr_number": 766,
+      "branch": null,
+      "title": null,
+      "url": null,
+      "task_id": null,
+      "head_sha": null,
+      "mergeable_state": null,
+      "failed_check_names": [],
+      "notes": "Resolved by merging origin/main; conflict only in pr_fix_occasions.json",
+      "details": {}
     }
   ],
   "common_issues": {
     "by_reason": [
       {
-        "failure_reason": "ruff_format",
+        "failure_reason": "PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main",
         "count": 1,
         "sources": {
           "human_request": 1
         },
         "recent_prs": [
-          673
+          765
+        ]
+      },
+      {
+        "failure_reason": "PR mergeable=CONFLICTING against main",
+        "count": 1,
+        "sources": {
+          "human_request": 1
+        },
+        "recent_prs": [
+          766
         ]
       },
       {
@@ -162,16 +206,6 @@
         ]
       },
       {
-        "failure_reason": "pytest test_summary: WIX/BT action notes lost screen TTM after overly broad eng-20260919-14 suppress",
-        "count": 1,
-        "sources": {
-          "human_request": 1
-        },
-        "recent_prs": [
-          756
-        ]
-      },
-      {
         "failure_reason": "engineering_tasks.json queue_clearing + automation.json queue snapshots vs main (#757 ledger)",
         "count": 1,
         "sources": {
@@ -192,6 +226,16 @@
         ]
       },
       {
+        "failure_reason": "pytest test_summary: WIX/BT action notes lost screen TTM after overly broad eng-20260919-14 suppress",
+        "count": 1,
+        "sources": {
+          "human_request": 1
+        },
+        "recent_prs": [
+          756
+        ]
+      },
+      {
         "failure_reason": "ruff format: long logger.info line + test def wrapping",
         "count": 1,
         "sources": {
@@ -200,22 +244,26 @@
         "recent_prs": [
           766
         ]
+      },
+      {
+        "failure_reason": "ruff_format",
+        "count": 1,
+        "sources": {
+          "human_request": 1
+        },
+        "recent_prs": [
+          673
+        ]
       }
     ],
     "by_kind": [
       {
         "kind": "merge_conflict",
-        "count": 4
+        "count": 6
       },
       {
         "kind": "ci_check",
         "count": 3
-      }
-    ],
-    "by_source": [
-      {
-        "source": "human_request",
-        "count": 7
       }
     ]
   }
