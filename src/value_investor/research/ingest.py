@@ -128,13 +128,35 @@ _TTM_CASHFLOW_METRIC_KEYS = (
 
 CASHFLOW_METRIC_KEYS = tuple(_CASHFLOW_LABEL_ALIASES.keys())
 
+_YFINANCE_CASHFLOW_CAMEL_TO_LABEL: dict[str, str] = {
+    "OperatingCashFlow": "Operating Cash Flow",
+    "FreeCashFlow": "Free Cash Flow",
+    "CapitalExpenditure": "Capital Expenditure",
+}
 
-def _resolve_yahoo_quarterly_cashflow_df(stock: Any) -> tuple[pd.DataFrame | None, str | None]:
+
+def _is_lse_yahoo_ticker(ticker: str) -> bool:
+    return str(ticker or "").strip().upper().endswith(".L")
+
+
+def _normalize_yfinance_cashflow_df(df: pd.DataFrame) -> pd.DataFrame:
+    """Map yfinance camelCase cash-flow row labels to quote-summary spellings."""
+    if df is None or df.empty:
+        return df
+    renamed = df.rename(index=_YFINANCE_CASHFLOW_CAMEL_TO_LABEL)
+    return renamed
+
+
+def _resolve_yahoo_quarterly_cashflow_df(
+    stock: Any,
+    *,
+    ticker: str = "",
+) -> tuple[pd.DataFrame | None, str | None]:
     """Return the first non-empty quarterly cash-flow frame exposed by yfinance."""
     for attr in _QUARTERLY_CASHFLOW_ATTRS:
         df = getattr(stock, attr, None)
         if df is not None and not df.empty:
-            return df, attr
+            return _normalize_yfinance_cashflow_df(df), attr
     for method_name in ("get_cashflow", "get_cash_flow"):
         method = getattr(stock, method_name, None)
         if not callable(method):
@@ -144,7 +166,18 @@ def _resolve_yahoo_quarterly_cashflow_df(stock: Any) -> tuple[pd.DataFrame | Non
         except (TypeError, ValueError):
             continue
         if df is not None and not df.empty:
-            return df, f"{method_name}(quarterly)"
+            return _normalize_yfinance_cashflow_df(df), f"{method_name}(quarterly)"
+    if _is_lse_yahoo_ticker(ticker):
+        for method_name in ("get_cashflow", "get_cash_flow"):
+            method = getattr(stock, method_name, None)
+            if not callable(method):
+                continue
+            try:
+                df = method(freq="trailing")
+            except (TypeError, ValueError):
+                continue
+            if df is not None and not df.empty:
+                return _normalize_yfinance_cashflow_df(df), f"{method_name}(trailing)"
     return None, None
 
 
@@ -280,7 +313,25 @@ def extract_ttm_cashflow_metrics_from_quarterly(
             fcf_total += fcf
             fcf_count += 1
 
+    trailing_proxy = "(trailing)" in str(financials.get("quarterly_cashflow_source") or "")
+    use_period_values = trailing_proxy and len(periods) == 1
+
     metrics: dict[str, float | None] = {}
+    if use_period_values:
+        rows = quarterly.get(periods[0]) or {}
+        ocf = _annual_label_value(rows, _CASHFLOW_LABEL_ALIASES["operating_cashflow"])
+        capex = _annual_label_value(rows, _CAPEX_LABELS)
+        fcf = _annual_label_value(rows, _CASHFLOW_LABEL_ALIASES["free_cashflow"])
+        if ocf is not None:
+            metrics["operating_cashflow_ttm"] = ocf
+        if capex is not None:
+            metrics["capital_expenditure_ttm"] = capex
+        if fcf is not None:
+            metrics["free_cashflow_ttm"] = fcf
+        elif ocf is not None and capex is not None:
+            metrics["free_cashflow_ttm"] = ocf + capex
+        return metrics
+
     if ocf_count:
         metrics["operating_cashflow_ttm"] = ocf_total
     if capex_count:
@@ -798,6 +849,38 @@ def format_empty_yahoo_quarterly_cashflow_research_prompt(
     )
 
 
+def enrich_lse_yahoo_quarterly_cashflow(
+    financials: dict[str, Any],
+    ticker: str,
+) -> dict[str, Any]:
+    """
+    Backfill ``quarterly_cashflow`` for LSE tickers when Yahoo quarterlies are blank.
+
+    UK listings often omit ``quarterly_cashflow`` attrs while ``get_cashflow(trailing)``
+    still exposes TTM OCF/FCF — enough to verify screen TTM against filing bridges.
+    """
+    if not _is_lse_yahoo_ticker(ticker):
+        return financials
+    if quarterly_cashflow_has_usable_series(financials.get("quarterly_cashflow") or {}):
+        return financials
+
+    stock = yf.Ticker(str(ticker).strip().upper())
+    quarterly_df, quarterly_source = _resolve_yahoo_quarterly_cashflow_df(stock, ticker=ticker)
+    if quarterly_df is None or quarterly_df.empty or not quarterly_source:
+        return financials
+
+    updated = dict(financials)
+    updated["quarterly_cashflow"] = _df_periods(
+        quarterly_df,
+        max_periods=FINANCIAL_QUARTERS,
+    )
+    updated["quarterly_cashflow_source"] = quarterly_source
+    cashflow_metrics = extract_cashflow_metrics_from_annual_financials(updated)
+    if cashflow_metrics:
+        updated["cashflow_metrics"] = cashflow_metrics
+    return updated
+
+
 def format_cma_ofcom_merger_research_prompt(meta: dict[str, Any]) -> str | None:
     """Memo prompt line pointing researchers at the ingested CMA/Ofcom merger corpus."""
     if str(meta.get("status") or "") != "ok":
@@ -938,9 +1021,13 @@ def enrich_screening_snapshot_with_yahoo_quarterly(
 
 def fetch_annual_financials(ticker: str, *, years: int = FINANCIAL_YEARS) -> dict[str, Any]:
     """Pull up to five years of annual statements from yfinance."""
-    stock = yf.Ticker(ticker)
+    resolved_ticker = str(ticker).strip().upper()
+    stock = yf.Ticker(resolved_ticker)
     quarterly_income_df, quarterly_income_source = _resolve_yahoo_quarterly_income_df(stock)
-    quarterly_df, quarterly_source = _resolve_yahoo_quarterly_cashflow_df(stock)
+    quarterly_df, quarterly_source = _resolve_yahoo_quarterly_cashflow_df(
+        stock,
+        ticker=resolved_ticker,
+    )
     payload: dict[str, Any] = {
         "ticker": ticker,
         "fetched_at": datetime.now(UTC).isoformat(),

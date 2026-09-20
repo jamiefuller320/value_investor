@@ -15,7 +15,9 @@ from value_investor.publish import (
     research_source_prompt_lines_for_ticker,
 )
 from value_investor.research.ingest import (
+    enrich_lse_yahoo_quarterly_cashflow,
     extract_govuk_article_body,
+    fetch_annual_financials,
     format_cma_ofcom_merger_research_prompt,
     format_empty_yahoo_quarterly_cashflow_research_prompt,
     parse_cma_cases_atom,
@@ -396,6 +398,90 @@ def test_research_source_prompt_lines_for_itv_when_corpus_present(tmp_path: Path
     assert "cma_ofcom_merger.json" in lines[0]
 
 
+def test_fetch_annual_financials_lse_uses_trailing_cashflow_when_quarterly_empty(monkeypatch):
+    """eng-20260920-08: LSE names backfill quarterly_cashflow from get_cashflow(trailing)."""
+    trailing_df = pd.DataFrame(
+        {pd.Timestamp("2026-04-30"): [87660000.0, -70697000.0, 16963000.0]},
+        index=["OperatingCashFlow", "CapitalExpenditure", "FreeCashFlow"],
+    )
+
+    class DummyTicker:
+        financials = pd.DataFrame()
+        balance_sheet = pd.DataFrame()
+        cashflow = pd.DataFrame()
+        quarterly_cashflow = pd.DataFrame()
+        quarterly_cash_flow = pd.DataFrame()
+
+        def get_cashflow(self, *, freq: str = "yearly"):
+            if freq == "trailing":
+                return trailing_df
+            return pd.DataFrame()
+
+    monkeypatch.setattr("value_investor.research.ingest.yf.Ticker", lambda _t: DummyTicker())
+    payload = fetch_annual_financials("MEGP.L")
+    assert payload["quarterly_cashflow_source"] == "get_cashflow(trailing)"
+    assert payload["quarterly_cashflow"]["2026-04-30"]["Operating Cash Flow"] == pytest.approx(
+        87660000.0
+    )
+    assert payload["cashflow_metrics"]["free_cashflow_ttm"] == pytest.approx(16963000.0)
+    assert "ttm_cashflow_suppressed" not in payload["cashflow_metrics"]
+
+
+def test_enrich_lse_yahoo_quarterly_cashflow_backfills_cached_empty_quarterly(monkeypatch):
+    trailing_df = pd.DataFrame(
+        {pd.Timestamp("2026-04-30"): [87660000.0, 16963000.0]},
+        index=["OperatingCashFlow", "FreeCashFlow"],
+    )
+
+    class DummyTicker:
+        def get_cashflow(self, *, freq: str = "yearly"):
+            if freq == "trailing":
+                return trailing_df
+            return pd.DataFrame()
+
+    monkeypatch.setattr("value_investor.research.ingest.yf.Ticker", lambda _t: DummyTicker())
+    cached = {
+        "ticker": "MEGP.L",
+        "quarterly_cashflow": {},
+        "cashflow_metrics": {
+            "free_cashflow": 25153000.0,
+            "ttm_cashflow_suppressed": True,
+            "ttm_cashflow_suppressed_reason": "quarterly_cashflow_empty",
+        },
+    }
+    enriched = enrich_lse_yahoo_quarterly_cashflow(cached, "MEGP.L")
+    assert enriched["quarterly_cashflow_source"] == "get_cashflow(trailing)"
+    assert "ttm_cashflow_suppressed" not in enriched["cashflow_metrics"]
+    assert enriched["cashflow_metrics"]["free_cashflow_ttm"] == pytest.approx(16963000.0)
+
+
+def test_load_ticker_financials_annual_enriches_lse_quarterly(tmp_path: Path, monkeypatch):
+    from value_investor.publish import load_ticker_financials_annual
+
+    sources = tmp_path / "research" / "MEGP.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps({"ticker": "MEGP.L", "quarterly_cashflow": {}, "cashflow_metrics": {}}),
+        encoding="utf-8",
+    )
+    trailing_df = pd.DataFrame(
+        {pd.Timestamp("2026-04-30"): [16963000.0]},
+        index=["FreeCashFlow"],
+    )
+
+    class DummyTicker:
+        def get_cashflow(self, *, freq: str = "yearly"):
+            if freq == "trailing":
+                return trailing_df
+            return pd.DataFrame()
+
+    monkeypatch.setattr("value_investor.research.ingest.yf.Ticker", lambda _t: DummyTicker())
+    loaded = load_ticker_financials_annual("MEGP.L", output_dir=tmp_path)
+    assert loaded is not None
+    assert loaded["quarterly_cashflow_source"] == "get_cashflow(trailing)"
+    assert format_empty_yahoo_quarterly_cashflow_research_prompt(loaded) is None
+
+
 def test_format_empty_yahoo_quarterly_cashflow_research_prompt_when_suppressed():
     financials = {
         "quarterly_cashflow": {},
@@ -417,7 +503,12 @@ def test_format_empty_yahoo_quarterly_cashflow_research_prompt_skips_usable_seri
     assert format_empty_yahoo_quarterly_cashflow_research_prompt(financials) is None
 
 
-def test_research_source_prompt_lines_includes_empty_yahoo_quarterly(tmp_path: Path):
+def test_research_source_prompt_lines_includes_empty_yahoo_quarterly(tmp_path: Path, monkeypatch):
+    class DummyTicker:
+        def get_cashflow(self, *, freq: str = "yearly"):
+            return pd.DataFrame()
+
+    monkeypatch.setattr("value_investor.research.ingest.yf.Ticker", lambda _t: DummyTicker())
     sources = tmp_path / "research" / "FGP.L" / "sources"
     sources.mkdir(parents=True)
     (sources / "financials_annual.json").write_text(
@@ -438,7 +529,15 @@ def test_research_source_prompt_lines_includes_empty_yahoo_quarterly(tmp_path: P
     assert "unverified" in lines[0].lower()
 
 
-def test_annotate_reports_marks_screen_ttm_unverified_fgp_style(tmp_path: Path):
+def test_annotate_reports_marks_screen_ttm_unverified_fgp_style(tmp_path: Path, monkeypatch):
+    class DummyTicker:
+        quarterly_cashflow = pd.DataFrame()
+        quarterly_cash_flow = pd.DataFrame()
+
+        def get_cashflow(self, *, freq: str = "yearly"):
+            return pd.DataFrame()
+
+    monkeypatch.setattr("value_investor.research.ingest.yf.Ticker", lambda _t: DummyTicker())
     sources = tmp_path / "research" / "FGP.L" / "sources"
     sources.mkdir(parents=True)
     (sources / "financials_annual.json").write_text(
