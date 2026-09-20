@@ -19,6 +19,9 @@ permissions:
 jobs:
   email-report:
     runs-on: ubuntu-latest
+    # Explicit ceiling (GHA default is also 360). Ingest must finish under this via
+    # --ingest-max-runtime-seconds so Send/commit still run (L429 / 2026-09-20).
+    timeout-minutes: 360
     steps:
       - uses: actions/checkout@v5
 
@@ -50,13 +53,17 @@ jobs:
           TICKER_API_KEY: ${{ secrets.TICKER_API_KEY }}
           COMPANIES_HOUSE_API_KEY: ${{ secrets.COMPANIES_HOUSE_API_KEY }}
           COMPANIES_HOUSE_OCR: "1"
+          # Cap deepen OCR pages (default 48) so one bad PDF cannot burn hours.
+          COMPANIES_HOUSE_DEEPEN_OCR_MAX_PAGES: "16"
         run: |
           ARGS="--dry-run --publish-dashboard"
           if [ -n "$CURSOR_API_KEY" ]; then
             # Ingest before research-docs/gap-fill so memos see thickened filing bodies
             # (email_agent also enforces this order and syncs docs/data → output/research).
             # L123: full-buy-tier cap matches weekday learning-phase deepen (62).
-            ARGS="$ARGS --deep-analysis --ingest-improvement-pass --ingest-improvement-cap 62 --research-docs --post-run-review --compile-engineering-tasks"
+            # L429: wall-clock ingest budget (2h) so OCR cannot consume the whole 6h job;
+            # weekday drain owns residual indexed_without_body via backlog.
+            ARGS="$ARGS --deep-analysis --ingest-improvement-pass --ingest-improvement-cap 62 --ingest-max-runtime-seconds 7200 --research-docs --post-run-review --compile-engineering-tasks"
             # Phase B: essay gap-fill dropped from default Sunday bundle (structured
             # verdict slim). Optional: add --research-gap-fill for slim gap-fill.
           fi

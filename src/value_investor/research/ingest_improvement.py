@@ -53,6 +53,10 @@ DEFAULT_WEEKDAY_BATCH_MAX_TARGETS = 62
 # Sunday email ingest (L123) uses the same full-buy-tier cap so new screen names
 # have bodies before research/gap-fill. Do not silently drop back to a thin cap.
 DEFAULT_INGEST_IMPROVEMENT_CAP = DEFAULT_WEEKDAY_BATCH_MAX_TARGETS
+# Sunday email-report also needs a wall budget: without max_runtime_seconds the
+# cutoff helper never fires, so OCR/PDF deepen can consume the full 6h GHA job
+# and skip Send/commit (2026-09-20). Keep below job timeout-minutes headroom.
+DEFAULT_EMAIL_INGEST_MAX_RUNTIME_SECONDS = 5400
 DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP = 6
 DEFAULT_PER_TICKER_MAX_SECONDS = 320.0
 PER_TICKER_MIN_BUDGET_SECONDS = 120.0

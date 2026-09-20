@@ -182,3 +182,11 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     assert "changes_detected" in email
     assert "docs/data/paper_automation/markets/**/buy_tier_level/**" in epoch0
     assert "docs/data/library/equal_support_status.json" in epoch0
+
+
+def test_email_report_workflow_bounds_ingest_runtime() -> None:
+    """Sunday quiet bundle must not burn the 6h job on unbounded OCR deepen (L429)."""
+    email = EMAIL_WORKFLOW.read_text(encoding="utf-8")
+    assert "timeout-minutes: 360" in email
+    assert "--ingest-max-runtime-seconds 7200" in email
+    assert "COMPANIES_HOUSE_DEEPEN_OCR_MAX_PAGES" in email
