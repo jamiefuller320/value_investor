@@ -27,7 +27,10 @@ from value_investor.historical_analysis import (
 from value_investor.pipeline import run_screen, write_outputs
 from value_investor.publish import publish_dashboard
 from value_investor.research.format import research_documents_for_reports
-from value_investor.research.ingest_improvement import DEFAULT_WEEKDAY_BATCH_MAX_TARGETS
+from value_investor.research.ingest_improvement import (
+    DEFAULT_EMAIL_INGEST_MAX_RUNTIME_SECONDS,
+    DEFAULT_WEEKDAY_BATCH_MAX_TARGETS,
+)
 from value_investor.research.overlay import apply_research_overlay, enrich_signals_with_research
 from value_investor.research.runner import (
     DEFAULT_RESEARCH_WEEKLY_CAP,
@@ -330,6 +333,16 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
+        "--ingest-max-runtime-seconds",
+        type=int,
+        default=DEFAULT_EMAIL_INGEST_MAX_RUNTIME_SECONDS,
+        help=(
+            "Wall-clock budget for --ingest-improvement-pass (seconds). "
+            f"Default {DEFAULT_EMAIL_INGEST_MAX_RUNTIME_SECONDS} so Sunday email-report "
+            "cannot burn the whole GHA job on OCR/PDF deepen. Use 0 for unlimited."
+        ),
+    )
+    parser.add_argument(
         "--compile-engineering-tasks",
         action="store_true",
         help=(
@@ -509,11 +522,14 @@ def main(argv: list[str] | None = None) -> int:
         from value_investor.research.ingest_improvement import run_ingest_improvement_pass
 
         ingest_data_dir = Path("docs/data")
+        ingest_runtime = int(args.ingest_max_runtime_seconds)
         ingest_improvement_summary = run_ingest_improvement_pass(
             reports=reports,
             output_dir=ingest_data_dir,
             market="ftse350",
             max_targets=int(args.ingest_improvement_cap),
+            # 0 = unlimited (escape hatch); otherwise cut off so research/send/commit run.
+            max_runtime_seconds=None if ingest_runtime <= 0 else float(ingest_runtime),
         )
 
     if args.research_docs or args.research_gap_fill:

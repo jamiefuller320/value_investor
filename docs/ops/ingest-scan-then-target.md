@@ -37,7 +37,8 @@ While compute is unconstrained:
   Bodies are thickened on **Saturday night** by `ingest-loop.yml` (20:05 + 23:05 UTC
   root batches with drain capped at 6 generations so chains finish before the
   Sunday quiet bundle). Weekday Mon–Fri drain still owns residual
-  `indexed_without_body` during the week. See
+  `indexed_without_body` during the week. Mid-week `email_only` refreshes that
+  still deepen should pass `--ingest-max-runtime-seconds` (L429). See
   [Saturday pre-Sunday deepen](#saturday-pre-sunday-deepen).
 - After a successful batch, if `indexed_without_body > 0` **and progress was made**,
   the workflow chains another deepen (`drain_generation` 1…`max_drain_generations`,

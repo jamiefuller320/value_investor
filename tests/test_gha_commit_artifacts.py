@@ -187,12 +187,17 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
 def test_email_report_skips_full_ingest_deepen() -> None:
     """Sunday quiet bundle relies on Saturday pre-Sunday ingest-loop deepen."""
     email = EMAIL_WORKFLOW.read_text(encoding="utf-8")
-    args_lines = [line for line in email.splitlines() if line.lstrip().startswith('ARGS="$ARGS')]
+    args_lines = [
+        line for line in email.splitlines() if line.lstrip().startswith('ARGS="$ARGS')
+    ]
     assert args_lines, "expected ftse-email ARGS assignment"
     joined = "\n".join(args_lines)
     assert "--ingest-improvement-pass" not in joined
     assert "--deep-analysis" in joined
     assert "--research-docs" in joined
+    # Defense in depth from L429 even though Sunday no longer deepens.
+    assert "timeout-minutes: 360" in email
+    assert "COMPANIES_HOUSE_DEEPEN_OCR_MAX_PAGES" in email
 
 
 def test_ingest_loop_has_saturday_pre_sunday_schedules() -> None:
