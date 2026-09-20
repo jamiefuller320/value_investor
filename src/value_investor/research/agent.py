@@ -42,8 +42,16 @@ def filing_extraction_discipline() -> str:
 - Split **continuing** versus **discontinued**, **held-for-sale**, and **exceptional** lines — do not blend into one revenue/EPS/FCF series.
 - Capture **deal terms** when present: buyer, structure (carve-out vs whole-company sale), headline/value, expected close, longstop, and material conditions (CMA/regulatory).
 - Capture **guidance**: management outlook ranges, revisions, and whether guidance is group-wide or segment-specific.
-- Reconcile **free cash flow versus dividend cover** using filing/cash-flow statement figures (operating cash, capex, company-adjusted FCF if disclosed) against ordinary dividends paid — state the coverage ratio explicitly.
+- Reconcile **free cash flow versus dividend cover** using filing/cash-flow statement figures (operating cash, capex, company-adjusted FCF if disclosed) against ordinary dividends paid — report **dual cover** explicitly (statutory OCF−CapEx vs net/management FCF); do not conflate the two definitions.
 - State **reporting currency** and whether figures are statutory, adjusted, or pro-forma; note FX translation if material."""
+
+
+def screen_filing_reconciliation_discipline() -> str:
+    """Reconcile quantitative screen snapshot inputs against filing-derived figures."""
+    return """When `screening_snapshot.json` is present, reconcile it against filing bodies — do not treat Yahoo/TTM screen metrics as filing-aligned:
+- Compare screen FCF, yield, earnings growth, and dividend-family model passes to filing-derived figures; label periods when they diverge.
+- When dividend-family screens pass but filing FCF/dividend cover is below 1.0× (or an interim dividend cut is flagged), state the tension explicitly in evidence and verdict rationale.
+- If the snapshot shows `adjusted_signal` below the raw screen signal, explain which overlay tensions remain open after your review."""
 
 
 def news_extraction_discipline(*, ticker: str, company_name: str) -> str:
@@ -163,6 +171,8 @@ Rules:
 - Prefer unresolved / lower confidence over false certainty when sources are thin.
 - Do not give buy/sell price targets.
 - Prefer filings over Yahoo for figures.
+
+{screen_filing_reconciliation_discipline()}
 """
 
 
@@ -257,6 +267,7 @@ RESEARCH MODEL SUGGESTIONS
 Allowed areas: ingest, prompt, scoring, coverage, ops.
 
 Rules: UK English; do not invent numbers; prefer unresolved over false confidence.
+{screen_filing_reconciliation_discipline()}
 """
 
 
@@ -558,6 +569,8 @@ Evidence discipline:
 2. Prefer filing bodies, then filings index, Yahoo, news/alternate news, then screen snapshot.
 3. If a question stays unresolved, choose concrete ``planned_alternate_sources`` (or equally specific external sources) and say what they would unlock — do not invent their contents.
 4. Emit research-model improvements whenever local sources are structurally insufficient (thin RNS bodies, missing IR PDFs, prompt gaps, etc.).
+
+{screen_filing_reconciliation_discipline()}
 
 Write these sections with headings EXACTLY as shown:
 
