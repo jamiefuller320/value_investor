@@ -3857,6 +3857,50 @@ def test_earnings_growth_signs_diverge_detects_fgp_style_mismatch():
 def test_parse_adjusted_eps_growth_pct_from_filing_prose():
     assert parse_adjusted_eps_growth_pct("Adjusted EPS +16% to 19.4p") == pytest.approx(0.16)
     assert parse_adjusted_eps_growth_pct("16% growth in Adjusted EPS") == pytest.approx(0.16)
+    assert parse_adjusted_eps_growth_pct(
+        "Adjusted EPS was down 11% vs prior year"
+    ) == pytest.approx(-0.11)
+
+
+def test_build_company_reports_exports_adjusted_eps_filing_screen_divergence(tmp_path: Path):
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "name": "ITV plc",
+                "sector": "Communication Services",
+                "signal": "strong_buy",
+                "conviction_score": 0.52,
+                "adjusted_eps_growth_pct": -0.11,
+                "adjusted_eps_growth_screen_pct": 0.23,
+                "filing_latest_adjusted_eps_growth_pct": -0.11,
+                "adjusted_eps_filing_screen_divergence_warning": True,
+                "earnings_growth": -0.11,
+                "earnings_growth_screen_ttm_pct": 0.23,
+            }
+        ]
+    )
+    model_results = pd.DataFrame(
+        columns=[
+            "ticker",
+            "model_id",
+            "model_name",
+            "passed",
+            "score",
+            "reasons",
+            "failed_criteria",
+        ]
+    )
+    report = build_company_reports(signals, model_results, output_dir=tmp_path)[0]
+    snapshot = report.to_dict()
+
+    assert snapshot["adjusted_eps_filing_screen_divergence_warning"] is True
+    assert snapshot["adjusted_eps_growth_pct"] == pytest.approx(-0.11)
+    assert snapshot["screening_inputs"]["adjusted_eps_growth_screen_pct"] == pytest.approx(0.23)
+    assert snapshot["screening_inputs"]["filing_latest_adjusted_eps_growth_pct"] == pytest.approx(
+        -0.11
+    )
+    assert "Adjusted EPS growth mismatch" in snapshot["action_note"]
 
 
 def test_build_earnings_growth_overlay_exports_yahoo_normalized_separate_from_filing_core():

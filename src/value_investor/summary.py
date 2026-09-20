@@ -29,6 +29,7 @@ from value_investor.scoring.dividend_yield_overlay import apply_dividend_yield_o
 from value_investor.scoring.earnings_basis_overlay import apply_earnings_basis_overlay_to_signal
 from value_investor.scoring.earnings_growth_overlay import (
     build_earnings_growth_overlay,
+    format_adjusted_eps_filing_screen_divergence_warning,
     format_earnings_growth_bps_warning,
 )
 from value_investor.scoring.fcf import (
@@ -139,6 +140,7 @@ class CompanyReport:
     earnings_basis_overlay: bool = False
     earnings_growth_overlay: dict[str, Any] = field(default_factory=dict)
     earnings_growth_bps_divergence_warning: bool = False
+    adjusted_eps_filing_screen_divergence_warning: bool = False
     peer_model_pass_table: dict[str, Any] = field(default_factory=dict)
     fcf_basis_overlay: bool = False
     fcf_three_way_conviction_overlay: bool = False
@@ -215,6 +217,9 @@ class CompanyReport:
             "earnings_basis_overlay": self.earnings_basis_overlay,
             "earnings_growth_overlay": self.earnings_growth_overlay,
             "earnings_growth_bps_divergence_warning": self.earnings_growth_bps_divergence_warning,
+            "adjusted_eps_filing_screen_divergence_warning": (
+                self.adjusted_eps_filing_screen_divergence_warning
+            ),
             "peer_model_pass_table": self.peer_model_pass_table,
             "fcf_basis_overlay": enforced.fcf_basis_overlay,
             "fcf_three_way_conviction_overlay": self.fcf_three_way_conviction_overlay,
@@ -298,6 +303,9 @@ class CompanyReport:
             earnings_growth_overlay=dict(data.get("earnings_growth_overlay") or {}),
             earnings_growth_bps_divergence_warning=bool(
                 data.get("earnings_growth_bps_divergence_warning")
+            ),
+            adjusted_eps_filing_screen_divergence_warning=bool(
+                data.get("adjusted_eps_filing_screen_divergence_warning")
             ),
             peer_model_pass_table=dict(data.get("peer_model_pass_table") or {}),
             fcf_basis_overlay=bool(data.get("fcf_basis_overlay")),
@@ -466,6 +474,18 @@ def _build_screening_inputs(row: pd.Series) -> dict[str, Any]:
     ):
         inputs["adjusted_eps_growth_pct"] = float(adjusted_growth)
 
+    screen_adjusted_growth = row.get("adjusted_eps_growth_screen_pct")
+    if screen_adjusted_growth is not None and not (
+        isinstance(screen_adjusted_growth, float) and pd.isna(screen_adjusted_growth)
+    ):
+        inputs["adjusted_eps_growth_screen_pct"] = float(screen_adjusted_growth)
+
+    filing_latest_adjusted = row.get("filing_latest_adjusted_eps_growth_pct")
+    if filing_latest_adjusted is not None and not (
+        isinstance(filing_latest_adjusted, float) and pd.isna(filing_latest_adjusted)
+    ):
+        inputs["filing_latest_adjusted_eps_growth_pct"] = float(filing_latest_adjusted)
+
     diluted_growth = row.get("diluted_eps_growth_pct")
     if diluted_growth is not None and not (
         isinstance(diluted_growth, float) and pd.isna(diluted_growth)
@@ -580,6 +600,7 @@ def _brief_summary(
     cyclical_exposure_overlay: bool = False,
     earnings_basis_overlay: bool = False,
     earnings_growth_bps_divergence_warning: bool = False,
+    adjusted_eps_filing_screen_divergence_warning: bool = False,
     conviction_timing_overlay: bool = False,
     conviction_timing_overlay_note: str | None = None,
     quality_family_avoid_gate: bool = False,
@@ -763,6 +784,12 @@ def _brief_summary(
             "Earnings growth warning: statutory and filing core EPS growth diverge by >300 bps."
         )
 
+    if adjusted_eps_filing_screen_divergence_warning:
+        parts.append(
+            "Adjusted EPS growth warning: latest filing adjusted EPS YoY diverges from the "
+            "screen baseline."
+        )
+
     if conviction_timing_overlay and conviction_timing_overlay_note:
         parts.append(conviction_timing_overlay_note)
 
@@ -942,6 +969,9 @@ def build_company_reports(
         earnings_growth_bps_divergence_warning = bool(
             earnings_growth_overlay.get("bps_divergence_warning")
         )
+        adjusted_eps_filing_screen_divergence_warning = bool(
+            row.get("adjusted_eps_filing_screen_divergence_warning")
+        ) or bool(earnings_growth_overlay.get("adjusted_eps_filing_screen_divergence_warning"))
         overlay_flag = row.get("conviction_timing_overlay")
         if overlay_flag is not None and not (
             isinstance(overlay_flag, float) and pd.isna(overlay_flag)
@@ -1258,6 +1288,13 @@ def build_company_reports(
         bps_warning = format_earnings_growth_bps_warning(earnings_growth_overlay)
         if bps_warning and bps_warning not in action_note:
             action_note = f"{action_note} | {bps_warning}" if action_note else bps_warning
+        filing_screen_warning = format_adjusted_eps_filing_screen_divergence_warning(
+            earnings_growth_overlay
+        )
+        if filing_screen_warning and filing_screen_warning not in action_note:
+            action_note = (
+                f"{action_note} | {filing_screen_warning}" if action_note else filing_screen_warning
+            )
 
         dividend_yield_overlay_flag = row.get("dividend_yield_overlay")
         if dividend_yield_overlay_flag is not None and not (
@@ -1726,6 +1763,9 @@ def build_company_reports(
             cyclical_exposure_overlay=cyclical_exposure_overlay,
             earnings_basis_overlay=earnings_basis_overlay,
             earnings_growth_bps_divergence_warning=earnings_growth_bps_divergence_warning,
+            adjusted_eps_filing_screen_divergence_warning=(
+                adjusted_eps_filing_screen_divergence_warning
+            ),
             conviction_timing_overlay=conviction_timing_overlay,
             conviction_timing_overlay_note=conviction_timing_overlay_note,
             quality_family_avoid_gate=quality_family_avoid_gate,
@@ -1816,6 +1856,9 @@ def build_company_reports(
                     earnings_basis_overlay=earnings_basis_overlay,
                     earnings_growth_overlay=earnings_growth_overlay,
                     earnings_growth_bps_divergence_warning=earnings_growth_bps_divergence_warning,
+                    adjusted_eps_filing_screen_divergence_warning=(
+                        adjusted_eps_filing_screen_divergence_warning
+                    ),
                     conviction_timing_overlay=conviction_timing_overlay,
                     conviction_timing_overlay_detail=conviction_timing_overlay_detail,
                     transition_key=str(conviction_timing_overlay_detail.get("transition_key") or "")

@@ -7,6 +7,7 @@ from typing import Any
 import pandas as pd
 
 from value_investor.scoring.fcf import (
+    adjusted_eps_filing_screen_divergence,
     compute_lynch_peg,
     earnings_growth_bps_diverge,
     resolve_earnings_growth_pct_source,
@@ -38,11 +39,21 @@ def build_earnings_growth_overlay(row: pd.Series | dict[str, Any]) -> dict[str, 
 
     statutory_growth = resolve_statutory_earnings_growth(series)
     adjusted_growth = _float_or_none(series.get("adjusted_eps_growth_pct"))
+    screen_adjusted_growth = _float_or_none(series.get("adjusted_eps_growth_screen_pct"))
+    filing_latest_adjusted_growth = _float_or_none(
+        series.get("filing_latest_adjusted_eps_growth_pct")
+    )
     model_growth = resolve_model_earnings_growth(series)
     trailing_pe = _float_or_none(series.get("trailing_pe"))
 
     core_growth = adjusted_growth if adjusted_growth is not None else model_growth
     bps_divergence = earnings_growth_bps_diverge(statutory_growth, core_growth)
+    filing_screen_divergence = bool(series.get("adjusted_eps_filing_screen_divergence_warning"))
+    if not filing_screen_divergence:
+        filing_screen_divergence = adjusted_eps_filing_screen_divergence(
+            screen_adjusted_growth,
+            filing_latest_adjusted_growth,
+        )
 
     yahoo_normalized = _float_or_none(series.get("yahoo_normalized_income_growth_pct"))
     screen_ttm = _float_or_none(series.get("earnings_growth_screen_ttm"))
@@ -55,6 +66,9 @@ def build_earnings_growth_overlay(row: pd.Series | dict[str, Any]) -> dict[str, 
         "statutory_earnings_growth_pct": statutory_growth,
         "model_earnings_growth_pct": model_growth,
         "adjusted_eps_growth_pct": adjusted_growth,
+        "adjusted_eps_growth_screen_pct": screen_adjusted_growth,
+        "filing_latest_adjusted_eps_growth_pct": filing_latest_adjusted_growth,
+        "adjusted_eps_filing_screen_divergence_warning": filing_screen_divergence,
         "yahoo_normalized_income_growth_pct": yahoo_normalized,
         "earnings_growth_screen_ttm_pct": screen_ttm,
         "diluted_eps_growth_pct": diluted_growth,
@@ -71,6 +85,20 @@ def build_earnings_growth_overlay(row: pd.Series | dict[str, Any]) -> dict[str, 
             1,
         )
     return overlay
+
+
+def format_adjusted_eps_filing_screen_divergence_warning(overlay: dict[str, Any]) -> str | None:
+    """Compact action-note fragment when screen and latest filing adjusted EPS growth diverge."""
+    if not overlay.get("adjusted_eps_filing_screen_divergence_warning"):
+        return None
+    screen = overlay.get("adjusted_eps_growth_screen_pct")
+    filing = overlay.get("filing_latest_adjusted_eps_growth_pct")
+    if screen is None or filing is None:
+        return "Adjusted EPS growth mismatch: latest filing diverges from screen baseline"
+    return (
+        f"Adjusted EPS growth mismatch: screen {float(screen):.1%} vs "
+        f"latest filing {float(filing):.1%}"
+    )
 
 
 def format_earnings_growth_bps_warning(overlay: dict[str, Any]) -> str | None:
@@ -101,10 +129,14 @@ def enrich_signals_with_earnings_growth_overlay(signals: pd.DataFrame) -> pd.Dat
     model_sources: list[str | None] = []
     screen_ttm_values: list[float | None] = []
     diluted_growth_values: list[float | None] = []
+    filing_screen_warnings: list[bool] = []
 
     for _, row in out.iterrows():
         overlay = build_earnings_growth_overlay(row)
         warnings.append(bool(overlay.get("bps_divergence_warning")))
+        filing_screen_warnings.append(
+            bool(overlay.get("adjusted_eps_filing_screen_divergence_warning"))
+        )
         lynch_model.append(overlay.get("lynch_peg_model"))
         lynch_statutory.append(overlay.get("lynch_peg_statutory"))
         earnings_growth_sources.append(overlay.get("earnings_growth_pct_source"))
@@ -114,6 +146,7 @@ def enrich_signals_with_earnings_growth_overlay(signals: pd.DataFrame) -> pd.Dat
         diluted_growth_values.append(overlay.get("diluted_eps_growth_pct"))
 
     out["earnings_growth_bps_divergence_warning"] = warnings
+    out["adjusted_eps_filing_screen_divergence_warning"] = filing_screen_warnings
     out["lynch_peg_model"] = lynch_model
     out["lynch_peg_statutory"] = lynch_statutory
     out["earnings_growth_pct_source"] = earnings_growth_sources
