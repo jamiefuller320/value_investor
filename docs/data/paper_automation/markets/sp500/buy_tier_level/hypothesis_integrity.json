@@ -3,8 +3,8 @@
   "scope": "hypothesis_integrity",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "updated_at": "2026-09-18T07:19:12.993115+00:00",
-  "as_of": "2026-09-18T03:19:12.806809-04:00",
+  "updated_at": "2026-09-20T06:48:31.443913+00:00",
+  "as_of": "2026-09-20T02:48:31.321801-04:00",
   "config": {
     "underwater_pct": -0.05,
     "deep_underwater_pct": -0.15,
@@ -17,83 +17,81 @@
     "skip_underwater_urgency_when_intact": true
   },
   "holding_count": 120,
-  "underwater_count": 35,
+  "underwater_count": 44,
   "thesis_status_counts": {
-    "intact": 109,
+    "intact": 108,
     "weakening": 11,
-    "broken": 0,
+    "broken": 1,
     "insufficient_data": 0
   },
   "portfolio_feedback": {
     "holding_count": 120,
-    "loser_count": 35,
-    "loser_share": 0.2917,
-    "loser_nav_share": 0.2777,
+    "loser_count": 44,
+    "loser_share": 0.3667,
+    "loser_nav_share": 0.3515,
     "loser_share_tolerance": 0.4,
     "loser_nav_tolerance": 0.35,
-    "within_tolerance": true,
-    "intact_loser_count": 33,
-    "weakening_loser_count": 2,
+    "within_tolerance": false,
+    "intact_loser_count": 41,
+    "weakening_loser_count": 3,
     "broken_loser_count": 0,
     "family_fail_rate_losers": {
       "cheapness": 0.0,
-      "quality": 0.1429,
-      "dividend": 0.1429,
-      "garp": 0.1429,
+      "quality": 0.1364,
+      "dividend": 0.1136,
+      "garp": 0.1136,
       "risk": 0.0
     },
     "family_fail_rate_non_losers": {
-      "cheapness": 0.0471,
-      "quality": 0.2,
-      "dividend": 0.1294,
-      "garp": 0.0706,
+      "cheapness": 0.0395,
+      "quality": 0.2105,
+      "dividend": 0.1447,
+      "garp": 0.0658,
       "risk": 0.0
     },
     "selection_feedback_flags": [],
-    "balancing_hint": "tolerate_intact_losers",
+    "balancing_hint": "trim_weakening_losers",
     "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
   },
   "holdings": [
     {
-      "ticker": "CMCSA",
-      "name": "Comcast Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
+      "ticker": "EMR",
+      "name": "Emerson Electric Co.",
+      "thesis_status": "broken",
+      "recommended_action": "exit_candidate",
+      "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.1351,
-      "mark": 22.91,
-      "avg_cost": 26.49,
-      "signal": "strong_buy",
+      "unrealized_pct": 0.0171,
+      "mark": 149.92,
+      "avg_cost": 147.4,
+      "signal": "hold",
       "timing_signal": "neutral",
-      "conviction_score": 0.9496,
+      "conviction_score": 0.3231,
       "data_quality_score": 1.0,
       "passed_families": [
-        "cheapness",
         "quality",
         "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [],
+      "failed_families": [
+        "cheapness"
+      ],
       "research_verdict": "accumulate",
       "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 95%"
+        "cheapness lost and not in buy tier"
       ],
       "intact_reasons": [
-        "still strong_buy",
         "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 95%"
+        "data_quality 1.00"
       ],
-      "weaken_reasons": [],
-      "broken_reasons": []
+      "weaken_reasons": [
+        "left buy tier (hold)",
+        "conviction 32% below intact floor"
+      ],
+      "broken_reasons": [
+        "cheapness lost and not in buy tier"
+      ]
     },
     {
       "ticker": "FIS",
@@ -102,8 +100,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.1303,
-      "mark": 36.43,
+      "unrealized_pct": -0.1497,
+      "mark": 35.62,
       "avg_cost": 41.89,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -144,8 +142,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.1295,
-      "mark": 114.4,
+      "unrealized_pct": -0.1481,
+      "mark": 111.96,
       "avg_cost": 131.42,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -180,18 +178,59 @@
       "broken_reasons": []
     },
     {
+      "ticker": "CMCSA",
+      "name": "Comcast Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.1416,
+      "mark": 22.74,
+      "avg_cost": 26.49,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.9496,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 95%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 95%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
       "ticker": "DPZ",
       "name": "Domino's Pizza, Inc.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.1273,
-      "mark": 297.65,
+      "unrealized_pct": -0.1374,
+      "mark": 294.2,
       "avg_cost": 341.08,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.6412,
+      "conviction_score": 0.6525,
       "data_quality_score": 0.9,
       "passed_families": [
         "cheapness",
@@ -208,14 +247,56 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.90",
-        "conviction 64%"
+        "conviction 65%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.90",
-        "conviction 64%"
+        "conviction 65%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "WYNN",
+      "name": "Wynn Resorts, Limited",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.1077,
+      "mark": 81.68,
+      "avg_cost": 91.54,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5171,
+      "data_quality_score": 0.9,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 52%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 52%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -227,8 +308,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0978,
-      "mark": 88.33,
+      "unrealized_pct": -0.1064,
+      "mark": 87.49,
       "avg_cost": 97.91,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -262,43 +343,124 @@
       "broken_reasons": []
     },
     {
-      "ticker": "WYNN",
-      "name": "Wynn Resorts, Limited",
+      "ticker": "INTU",
+      "name": "Intuit Inc.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0937,
-      "mark": 82.96,
-      "avg_cost": 91.54,
-      "signal": "buy",
+      "unrealized_pct": -0.106,
+      "mark": 303.19,
+      "avg_cost": 339.15,
+      "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4969,
-      "data_quality_score": 0.9,
+      "conviction_score": 0.8298,
+      "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
+        "quality",
         "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [
-        "quality"
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 83%"
       ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 83%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "LVS",
+      "name": "Las Vegas Sands Corp.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0989,
+      "mark": 39.98,
+      "avg_cost": 44.37,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7105,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
         "price drawdown alone does not invalidate value thesis",
         "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 50%"
+        "data_quality 1.00",
+        "conviction 71%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 50%"
+        "data_quality 1.00",
+        "conviction 71%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "EQT",
+      "name": "EQT Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0937,
+      "mark": 50.0,
+      "avg_cost": 55.17,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7476,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 75%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 75%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -310,12 +472,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0889,
-      "mark": 43.55,
+      "unrealized_pct": -0.0933,
+      "mark": 43.34,
       "avg_cost": 47.8,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4179,
+      "conviction_score": 0.4165,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -346,100 +508,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "EQT",
-      "name": "EQT Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0874,
-      "mark": 50.35,
-      "avg_cost": 55.17,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.7381,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 74%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 74%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "SWK",
-      "name": "Stanley Black & Decker, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0846,
-      "mark": 89.12,
-      "avg_cost": 97.36,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.9007,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 90%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 90%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
       "ticker": "CAH",
       "name": "Cardinal Health, Inc.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0843,
-      "mark": 226.34,
+      "unrealized_pct": -0.0882,
+      "mark": 225.38,
       "avg_cost": 247.18,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.6255,
+      "conviction_score": 0.6432,
       "data_quality_score": 0.9,
       "passed_families": [
         "cheapness",
@@ -456,31 +536,115 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.90",
-        "conviction 63%"
+        "conviction 64%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.90",
-        "conviction 63%"
+        "conviction 64%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
     },
     {
-      "ticker": "LVS",
-      "name": "Las Vegas Sands Corp.",
+      "ticker": "DECK",
+      "name": "Deckers Outdoor Corporation",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0834,
-      "mark": 40.67,
-      "avg_cost": 44.37,
-      "signal": "buy",
+      "unrealized_pct": -0.086,
+      "mark": 78.43,
+      "avg_cost": 85.81,
+      "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7017,
+      "conviction_score": 0.5001,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend",
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 50%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 50%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "LEN",
+      "name": "Lennar Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0855,
+      "mark": 76.43,
+      "avg_cost": 83.58,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5918,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 59%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 59%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "ROP",
+      "name": "Roper Technologies, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0848,
+      "mark": 372.74,
+      "avg_cost": 407.28,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7867,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -493,20 +657,181 @@
       "research_verdict": "accumulate",
       "reasons": [
         "price drawdown alone does not invalidate value thesis",
-        "still buy",
+        "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 70%"
+        "conviction 79%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 79%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "CVS",
+      "name": "CVS Health Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0817,
+      "mark": 88.84,
+      "avg_cost": 96.74,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.8153,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 82%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 82%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "DG",
+      "name": "Dollar General Corporation",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0811,
+      "mark": 122.41,
+      "avg_cost": 133.21,
+      "signal": "buy",
+      "timing_signal": "wait",
+      "conviction_score": 0.6619,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "timing=wait while underwater",
+        "still buy",
+        "research accumulate"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 70%"
+        "conviction 66%"
+      ],
+      "weaken_reasons": [
+        "timing=wait while underwater"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "SWK",
+      "name": "Stanley Black & Decker, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0799,
+      "mark": 89.58,
+      "avg_cost": 97.36,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.8974,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 90%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 90%"
       ],
       "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "NKE",
+      "name": "NIKE, Inc.",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0753,
+      "mark": 35.51,
+      "avg_cost": 38.4,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5444,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 54%"
+      ],
+      "weaken_reasons": [
+        "research verdict caution"
+      ],
       "broken_reasons": []
     },
     {
@@ -516,8 +841,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.083,
-      "mark": 166.45,
+      "unrealized_pct": -0.0735,
+      "mark": 168.18,
       "avg_cost": 181.52,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -551,27 +876,70 @@
       "broken_reasons": []
     },
     {
-      "ticker": "ROP",
-      "name": "Roper Technologies, Inc.",
+      "ticker": "MAA",
+      "name": "Mid-America Apartment Communities, Inc.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0798,
-      "mark": 374.76,
-      "avg_cost": 407.28,
+      "unrealized_pct": -0.0732,
+      "mark": 118.93,
+      "avg_cost": 128.32,
+      "signal": "buy",
+      "timing_signal": "accumulate",
+      "conviction_score": 0.5257,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 53%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 53%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "AMCR",
+      "name": "Amcor plc",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.072,
+      "mark": 41.9,
+      "avg_cost": 45.15,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7776,
+      "conviction_score": 0.6358,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
         "quality",
         "dividend",
-        "garp",
         "risk"
       ],
-      "failed_families": [],
+      "failed_families": [
+        "garp"
+      ],
       "research_verdict": "accumulate",
       "reasons": [
         "price drawdown alone does not invalidate value thesis",
@@ -579,31 +947,31 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 78%"
+        "conviction 64%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 78%"
+        "conviction 64%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
     },
     {
-      "ticker": "INTU",
-      "name": "Intuit Inc.",
+      "ticker": "STZ",
+      "name": "Constellation Brands, Inc.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0767,
-      "mark": 313.13,
-      "avg_cost": 339.15,
+      "unrealized_pct": -0.0719,
+      "mark": 118.97,
+      "avg_cost": 128.18,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.8177,
+      "conviction_score": 0.8181,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -639,12 +1007,12 @@
       "recommended_action": "watch_review",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0746,
-      "mark": 55.72,
+      "unrealized_pct": -0.0713,
+      "mark": 55.92,
       "avg_cost": 60.21,
       "signal": "strong_buy",
       "timing_signal": "accumulate",
-      "conviction_score": 0.719,
+      "conviction_score": 0.7189,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -672,60 +1040,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "DECK",
-      "name": "Deckers Outdoor Corporation",
+      "ticker": "PPG",
+      "name": "PPG Industries, Inc.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0711,
-      "mark": 79.71,
-      "avg_cost": 85.81,
+      "unrealized_pct": -0.0712,
+      "mark": 104.52,
+      "avg_cost": 112.53,
       "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5005,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 50%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 50%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "CVS",
-      "name": "CVS Health Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0669,
-      "mark": 90.27,
-      "avg_cost": 96.74,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.793,
+      "timing_signal": "accumulate",
+      "conviction_score": 0.7821,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -742,14 +1068,55 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 79%"
+        "conviction 78%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 79%"
+        "conviction 78%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "CCL",
+      "name": "Carnival Corporation Ltd.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.071,
+      "mark": 21.84,
+      "avg_cost": 23.51,
+      "signal": "strong_buy",
+      "timing_signal": "accumulate",
+      "conviction_score": 0.7746,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 77%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 77%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -761,12 +1128,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0645,
-      "mark": 70.87,
+      "unrealized_pct": -0.0694,
+      "mark": 70.5,
       "avg_cost": 75.76,
-      "signal": "buy",
+      "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.5783,
+      "conviction_score": 0.3834,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -780,18 +1147,18 @@
       "research_verdict": "accumulate",
       "reasons": [
         "price drawdown alone does not invalidate value thesis",
-        "still buy",
+        "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 58%"
+        "conviction 38%"
       ],
       "intact_reasons": [
-        "still buy",
+        "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 58%"
+        "conviction 38%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -803,8 +1170,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0641,
-      "mark": 64.445,
+      "unrealized_pct": -0.0687,
+      "mark": 64.13,
       "avg_cost": 68.86,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -838,265 +1205,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "TROW",
-      "name": "T. Rowe Price Group, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0632,
-      "mark": 102.84,
-      "avg_cost": 109.78,
-      "signal": "strong_buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.8373,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 84%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 84%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "PPG",
-      "name": "PPG Industries, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0629,
-      "mark": 105.45,
-      "avg_cost": 112.53,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.7883,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 79%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 79%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "DG",
-      "name": "Dollar General Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.062,
-      "mark": 124.95,
-      "avg_cost": 133.21,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6558,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 66%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 66%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "MAS",
-      "name": "Masco Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0615,
-      "mark": 68.23,
-      "avg_cost": 72.7,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.9148,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 91%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 91%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "AMCR",
-      "name": "Amcor plc",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0614,
-      "mark": 42.38,
-      "avg_cost": 45.15,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6402,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 64%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 64%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "BMY",
-      "name": "Bristol-Myers Squibb Company",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0596,
-      "mark": 62.84,
-      "avg_cost": 66.82,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.8208,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 82%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 82%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
       "ticker": "UDR",
       "name": "UDR, Inc.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0596,
-      "mark": 34.21,
+      "unrealized_pct": -0.0682,
+      "mark": 33.9,
       "avg_cost": 36.38,
       "signal": "buy",
       "timing_signal": "accumulate",
-      "conviction_score": 0.7271,
+      "conviction_score": 0.7209,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -1113,262 +1233,16 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 73%"
+        "conviction 72%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 73%"
+        "conviction 72%"
       ],
       "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "AOS",
-      "name": "A. O. Smith Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0587,
-      "mark": 56.93,
-      "avg_cost": 60.48,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.8692,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 87%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 87%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "CCL",
-      "name": "Carnival Corporation Ltd.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.057,
-      "mark": 22.17,
-      "avg_cost": 23.51,
-      "signal": "strong_buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.7755,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 78%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 78%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "JKHY",
-      "name": "Jack Henry & Associates, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0569,
-      "mark": 156.21,
-      "avg_cost": 165.64,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6634,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 66%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 66%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "MAA",
-      "name": "Mid-America Apartment Communities, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0557,
-      "mark": 121.17,
-      "avg_cost": 128.32,
-      "signal": "buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.5207,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 52%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 52%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "UNH",
-      "name": "UnitedHealth Group Incorporated",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0552,
-      "mark": 375.21,
-      "avg_cost": 397.14,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5662,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "price drawdown alone does not invalidate value thesis",
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 57%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 57%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "NKE",
-      "name": "NIKE, Inc.",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": true,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0531,
-      "mark": 36.36,
-      "avg_cost": 38.4,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5461,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 55%"
-      ],
-      "weaken_reasons": [
-        "research verdict caution"
-      ],
       "broken_reasons": []
     },
     {
@@ -1378,8 +1252,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0519,
-      "mark": 252.67,
+      "unrealized_pct": -0.066,
+      "mark": 248.92,
       "avg_cost": 266.51,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -1414,28 +1288,68 @@
       "broken_reasons": []
     },
     {
-      "ticker": "FDX",
-      "name": "FedEx Corporation",
+      "ticker": "JKHY",
+      "name": "Jack Henry & Associates, Inc.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0516,
-      "mark": 305.88,
-      "avg_cost": 322.52,
-      "signal": "strong_buy",
+      "unrealized_pct": -0.0651,
+      "mark": 154.85,
+      "avg_cost": 165.64,
+      "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7142,
+      "conviction_score": 0.684,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
+        "quality",
         "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [
-        "quality"
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 68%"
       ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 68%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "MKC",
+      "name": "McCormick & Company, Incorporated",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0645,
+      "mark": 48.72,
+      "avg_cost": 52.08,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7749,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
         "price drawdown alone does not invalidate value thesis",
@@ -1443,14 +1357,55 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 71%"
+        "conviction 77%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 71%"
+        "conviction 77%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "MAS",
+      "name": "Masco Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0638,
+      "mark": 68.06,
+      "avg_cost": 72.7,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.9148,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 91%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 91%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -1462,12 +1417,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0502,
-      "mark": 194.19,
+      "unrealized_pct": -0.0585,
+      "mark": 192.49,
       "avg_cost": 204.45,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.5463,
+      "conviction_score": 0.5495,
       "data_quality_score": 0.9,
       "passed_families": [
         "cheapness",
@@ -1498,139 +1453,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "BR",
-      "name": "Broadridge Financial Solutions, Inc.",
+      "ticker": "FDX",
+      "name": "FedEx Corporation",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0496,
-      "mark": 164.31,
-      "avg_cost": 172.88,
+      "unrealized_pct": -0.0585,
+      "mark": 303.65,
+      "avg_cost": 322.52,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.8166,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 82%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 82%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "PTC",
-      "name": "PTC Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0467,
-      "mark": 134.44,
-      "avg_cost": 141.02,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5253,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 53%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 53%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "KVUE",
-      "name": "Kenvue Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0464,
-      "mark": 17.87,
-      "avg_cost": 18.74,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6704,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 67%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 67%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "LEN",
-      "name": "Lennar Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0464,
-      "mark": 79.7,
-      "avg_cost": 83.58,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6275,
+      "conviction_score": 0.7115,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -1643,35 +1477,36 @@
       ],
       "research_verdict": "accumulate",
       "reasons": [
+        "price drawdown alone does not invalidate value thesis",
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 63%"
+        "conviction 71%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 63%"
+        "conviction 71%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
     },
     {
-      "ticker": "MKC",
-      "name": "McCormick & Company, Incorporated",
+      "ticker": "AOS",
+      "name": "A. O. Smith Corporation",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0457,
-      "mark": 49.7,
-      "avg_cost": 52.08,
+      "unrealized_pct": -0.0584,
+      "mark": 56.95,
+      "avg_cost": 60.48,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7632,
+      "conviction_score": 0.8719,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -1683,18 +1518,60 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
+        "price drawdown alone does not invalidate value thesis",
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 76%"
+        "conviction 87%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 76%"
+        "conviction 87%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "ZTS",
+      "name": "Zoetis Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0582,
+      "mark": 71.4,
+      "avg_cost": 75.81,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.8433,
+      "data_quality_score": 0.9,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 84%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 84%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -1704,14 +1581,14 @@
       "name": "PulteGroup, Inc.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0451,
-      "mark": 118.84,
+      "unrealized_pct": -0.0578,
+      "mark": 117.26,
       "avg_cost": 124.45,
       "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6689,
+      "timing_signal": "accumulate",
+      "conviction_score": 0.671,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -1723,6 +1600,7 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
+        "price drawdown alone does not invalidate value thesis",
         "still buy",
         "research accumulate",
         "cheapness family still passes",
@@ -1735,46 +1613,6 @@
         "cheapness family still passes",
         "data_quality 1.00",
         "conviction 67%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "STZ",
-      "name": "Constellation Brands, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0447,
-      "mark": 122.45,
-      "avg_cost": 128.18,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.8124,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 81%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 81%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -1784,10 +1622,10 @@
       "name": "SBA Communications Corporation",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0439,
-      "mark": 181.13,
+      "unrealized_pct": -0.0573,
+      "mark": 178.59,
       "avg_cost": 189.44,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -1803,6 +1641,7 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
+        "price drawdown alone does not invalidate value thesis",
         "still buy",
         "research accumulate",
         "cheapness family still passes",
@@ -1820,19 +1659,306 @@
       "broken_reasons": []
     },
     {
+      "ticker": "BR",
+      "name": "Broadridge Financial Solutions, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0564,
+      "mark": 163.13,
+      "avg_cost": 172.88,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.8123,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 81%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 81%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "BMY",
+      "name": "Bristol-Myers Squibb Company",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0563,
+      "mark": 63.06,
+      "avg_cost": 66.82,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.8208,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 82%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 82%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "GEN",
+      "name": "Gen Digital Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0535,
+      "mark": 29.01,
+      "avg_cost": 30.65,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.8143,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 81%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 81%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
       "ticker": "INVH",
       "name": "Invitation Homes Inc.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
-      "underwater": false,
+      "underwater": true,
       "deep_underwater": false,
-      "unrealized_pct": -0.0437,
-      "mark": 27.15,
+      "unrealized_pct": -0.0521,
+      "mark": 26.91,
       "avg_cost": 28.39,
       "signal": "strong_buy",
       "timing_signal": "accumulate",
-      "conviction_score": 0.4943,
+      "conviction_score": 0.5831,
       "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 58%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 58%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "TROW",
+      "name": "T. Rowe Price Group, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0512,
+      "mark": 104.16,
+      "avg_cost": 109.78,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.8344,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 83%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 83%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "UNH",
+      "name": "UnitedHealth Group Incorporated",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": true,
+      "deep_underwater": false,
+      "unrealized_pct": -0.051,
+      "mark": 376.9,
+      "avg_cost": 397.14,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5604,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "price drawdown alone does not invalidate value thesis",
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 56%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 56%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "KVUE",
+      "name": "Kenvue Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0496,
+      "mark": 17.81,
+      "avg_cost": 18.74,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6666,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 67%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 67%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "HIG",
+      "name": "The Hartford Insurance Group, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0468,
+      "mark": 131.89,
+      "avg_cost": 138.37,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7709,
+      "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
         "quality",
@@ -1846,15 +1972,94 @@
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 49%"
+        "data_quality 0.95",
+        "conviction 77%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 77%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "PYPL",
+      "name": "PayPal Holdings, Inc.",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0464,
+      "mark": 52.41,
+      "avg_cost": 54.96,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6406,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "neutral",
+      "reasons": [
+        "research verdict neutral",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 49%"
+        "conviction 64%"
+      ],
+      "weaken_reasons": [
+        "research verdict neutral"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "HII",
+      "name": "Huntington Ingalls Industries, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0457,
+      "mark": 272.86,
+      "avg_cost": 285.93,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7156,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 72%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 72%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -1866,8 +2071,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0436,
-      "mark": 22.57,
+      "unrealized_pct": -0.0453,
+      "mark": 22.53,
       "avg_cost": 23.6,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -1900,216 +2105,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "ZBH",
-      "name": "Zimmer Biomet Holdings, Inc.",
+      "ticker": "CF",
+      "name": "CF Industries Holdings, Inc.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.039,
-      "mark": 94.25,
-      "avg_cost": 98.07,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5534,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": null,
-      "reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 55%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 55%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "HIG",
-      "name": "The Hartford Insurance Group, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0378,
-      "mark": 133.14,
-      "avg_cost": 138.37,
+      "unrealized_pct": -0.0424,
+      "mark": 127.7,
+      "avg_cost": 133.35,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7684,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 77%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 77%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "ZTS",
-      "name": "Zoetis Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0368,
-      "mark": 73.02,
-      "avg_cost": 75.81,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.8433,
-      "data_quality_score": 0.9,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 84%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 84%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "PYPL",
-      "name": "PayPal Holdings, Inc.",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0368,
-      "mark": 52.94,
-      "avg_cost": 54.96,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6377,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "neutral",
-      "reasons": [
-        "research verdict neutral",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 64%"
-      ],
-      "weaken_reasons": [
-        "research verdict neutral"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "HRL",
-      "name": "Hormel Foods Corporation",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0362,
-      "mark": 20.76,
-      "avg_cost": 21.54,
-      "signal": "buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.4711,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "neutral",
-      "reasons": [
-        "research verdict neutral",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 47%"
-      ],
-      "weaken_reasons": [
-        "research verdict neutral"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "VZ",
-      "name": "Verizon Communications Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0361,
-      "mark": 48.33,
-      "avg_cost": 50.14,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.8404,
+      "conviction_score": 0.8337,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -2125,1103 +2132,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 84%"
+        "conviction 83%"
       ],
       "intact_reasons": [
         "still strong_buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 84%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "OTIS",
-      "name": "Otis Worldwide Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0352,
-      "mark": 68.7,
-      "avg_cost": 71.21,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6725,
-      "data_quality_score": 0.9,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 67%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 67%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "PRU",
-      "name": "Prudential Financial, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0335,
-      "mark": 117.93,
-      "avg_cost": 122.02,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.7836,
-      "data_quality_score": 0.9,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 78%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 78%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "FTV",
-      "name": "Fortive Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0328,
-      "mark": 55.07,
-      "avg_cost": 56.94,
-      "signal": "buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.512,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 51%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 51%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "GDDY",
-      "name": "GoDaddy Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0312,
-      "mark": 98.15,
-      "avg_cost": 101.31,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.451,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 45%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 45%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "HII",
-      "name": "Huntington Ingalls Industries, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0307,
-      "mark": 277.14,
-      "avg_cost": 285.93,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.7123,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 71%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 71%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "SNA",
-      "name": "Snap-on Incorporated",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0297,
-      "mark": 371.62,
-      "avg_cost": 383.0,
-      "signal": "strong_buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.8019,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": null,
-      "reasons": [
-        "still strong_buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 80%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 80%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "NEM",
-      "name": "Newmont Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0289,
-      "mark": 124.39,
-      "avg_cost": 128.09,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.66,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 66%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 66%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "ALL",
-      "name": "The Allstate Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0284,
-      "mark": 252.21,
-      "avg_cost": 259.57,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.816,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 82%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 82%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "REG",
-      "name": "Regency Centers Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0284,
-      "mark": 73.12,
-      "avg_cost": 75.26,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6787,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 68%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 68%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "MCD",
-      "name": "McDonald's Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0282,
-      "mark": 248.48,
-      "avg_cost": 255.69,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.4832,
-      "data_quality_score": 0.9,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 48%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 48%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "TGT",
-      "name": "Target Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.028,
-      "mark": 159.83,
-      "avg_cost": 164.44,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5109,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 51%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 51%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "UNP",
-      "name": "Union Pacific Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0247,
-      "mark": 282.48,
-      "avg_cost": 289.62,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6323,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 63%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 63%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "DD",
-      "name": "DuPont de Nemours, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0238,
-      "mark": 128.46,
-      "avg_cost": 131.59,
-      "signal": "buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.5367,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 54%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 54%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "CI",
-      "name": "The Cigna Group",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0231,
-      "mark": 276.0,
-      "avg_cost": 282.52,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.9001,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 90%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 90%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "AVY",
-      "name": "Avery Dennison Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0227,
-      "mark": 171.09,
-      "avg_cost": 175.06,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.646,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 65%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 65%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "ALLE",
-      "name": "Allegion plc",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0222,
-      "mark": 153.63,
-      "avg_cost": 157.12,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6813,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 68%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 68%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "CDW",
-      "name": "CDW Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0209,
-      "mark": 149.2,
-      "avg_cost": 152.38,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.589,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 59%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 59%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "UPS",
-      "name": "United Parcel Service, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0207,
-      "mark": 100.17,
-      "avg_cost": 102.29,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.8598,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 86%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 86%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "BKNG",
-      "name": "Booking Holdings Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0195,
-      "mark": 170.52,
-      "avg_cost": 173.92,
-      "signal": "buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.473,
-      "data_quality_score": 0.9,
-      "passed_families": [
-        "cheapness",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "quality"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 47%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 47%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "ADP",
-      "name": "Automatic Data Processing, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0194,
-      "mark": 272.24,
-      "avg_cost": 277.62,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6441,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 64%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 64%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "DOV",
-      "name": "Dover Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0189,
-      "mark": 189.24,
-      "avg_cost": 192.88,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6647,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 66%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 66%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "BDX",
-      "name": "Becton, Dickinson and Company",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0182,
-      "mark": 181.38,
-      "avg_cost": 184.74,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5701,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 57%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 57%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "DHI",
-      "name": "D.R. Horton, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0166,
-      "mark": 140.38,
-      "avg_cost": 142.75,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.7136,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 71%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 71%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "FSLR",
-      "name": "First Solar, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0161,
-      "mark": 201.16,
-      "avg_cost": 204.45,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.7284,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 73%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 73%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "MDT",
-      "name": "Medtronic plc",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0149,
-      "mark": 92.77,
-      "avg_cost": 94.17,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.7505,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 75%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 75%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "GEN",
-      "name": "Gen Digital Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0144,
-      "mark": 30.21,
-      "avg_cost": 30.65,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.8088,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 81%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 81%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "ACGL",
-      "name": "Arch Capital Group Ltd.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0143,
-      "mark": 96.7,
-      "avg_cost": 98.1,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5149,
-      "data_quality_score": 0.9,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 51%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 51%"
+        "conviction 83%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -3233,8 +2151,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0136,
-      "mark": 133.66,
+      "unrealized_pct": -0.0424,
+      "mark": 129.75,
       "avg_cost": 135.5,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -3267,19 +2185,19 @@
       "broken_reasons": []
     },
     {
-      "ticker": "PGR",
-      "name": "The Progressive Corporation",
+      "ticker": "AVY",
+      "name": "Avery Dennison Corporation",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0121,
-      "mark": 216.29,
-      "avg_cost": 218.95,
+      "unrealized_pct": -0.042,
+      "mark": 167.71,
+      "avg_cost": 175.06,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.5885,
-      "data_quality_score": 0.95,
+      "conviction_score": 0.6477,
+      "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
         "quality",
@@ -3293,15 +2211,1144 @@
         "still buy",
         "research accumulate",
         "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 65%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 65%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "FSLR",
+      "name": "First Solar, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0415,
+      "mark": 195.96,
+      "avg_cost": 204.45,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7277,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 59%"
+        "conviction 73%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 73%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "VZ",
+      "name": "Verizon Communications Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0409,
+      "mark": 48.09,
+      "avg_cost": 50.14,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.8404,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 84%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 84%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "CDW",
+      "name": "CDW Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0406,
+      "mark": 146.19,
+      "avg_cost": 152.38,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5849,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 58%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 58%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "CTSH",
+      "name": "Cognizant Technology Solutions Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0392,
+      "mark": 59.87,
+      "avg_cost": 62.31,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.9254,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 93%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 93%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "GDDY",
+      "name": "GoDaddy Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.038,
+      "mark": 97.46,
+      "avg_cost": 101.31,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.3824,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 38%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 59%"
+        "conviction 38%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "TGT",
+      "name": "Target Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.038,
+      "mark": 158.19,
+      "avg_cost": 164.44,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5085,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 51%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 51%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "OTIS",
+      "name": "Otis Worldwide Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0378,
+      "mark": 68.52,
+      "avg_cost": 71.21,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6745,
+      "data_quality_score": 0.9,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 67%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 67%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "ALL",
+      "name": "The Allstate Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0375,
+      "mark": 249.83,
+      "avg_cost": 259.57,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.8188,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 82%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 82%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "NEM",
+      "name": "Newmont Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0365,
+      "mark": 123.41,
+      "avg_cost": 128.09,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.65,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 65%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 65%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "PTC",
+      "name": "PTC Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0364,
+      "mark": 135.89,
+      "avg_cost": 141.02,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5177,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend",
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 52%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 52%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "UNP",
+      "name": "Union Pacific Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0354,
+      "mark": 279.37,
+      "avg_cost": 289.62,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6393,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 64%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 64%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "BKNG",
+      "name": "Booking Holdings Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0346,
+      "mark": 167.9,
+      "avg_cost": 173.92,
+      "signal": "buy",
+      "timing_signal": "accumulate",
+      "conviction_score": 0.4751,
+      "data_quality_score": 0.9,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 48%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 48%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "FTV",
+      "name": "Fortive Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0341,
+      "mark": 55.0,
+      "avg_cost": 56.94,
+      "signal": "buy",
+      "timing_signal": "accumulate",
+      "conviction_score": 0.521,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 52%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 52%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "DHI",
+      "name": "D.R. Horton, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0331,
+      "mark": 138.02,
+      "avg_cost": 142.75,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7198,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 72%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 72%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "HRL",
+      "name": "Hormel Foods Corporation",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.033,
+      "mark": 20.83,
+      "avg_cost": 21.54,
+      "signal": "buy",
+      "timing_signal": "accumulate",
+      "conviction_score": 0.4663,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "neutral",
+      "reasons": [
+        "research verdict neutral",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 47%"
+      ],
+      "weaken_reasons": [
+        "research verdict neutral"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "SW",
+      "name": "Smurfit Westrock Plc",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0327,
+      "mark": 44.33,
+      "avg_cost": 45.83,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.3769,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "risk"
+      ],
+      "failed_families": [
+        "garp"
+      ],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 38%"
+      ],
+      "weaken_reasons": [
+        "research verdict caution"
+      ],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "UPS",
+      "name": "United Parcel Service, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0316,
+      "mark": 99.06,
+      "avg_cost": 102.29,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.8624,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 86%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 86%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "ALLE",
+      "name": "Allegion plc",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0308,
+      "mark": 152.28,
+      "avg_cost": 157.12,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6813,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 68%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 68%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "REG",
+      "name": "Regency Centers Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0307,
+      "mark": 72.95,
+      "avg_cost": 75.26,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6658,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 67%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 67%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "PRU",
+      "name": "Prudential Financial, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0297,
+      "mark": 118.4,
+      "avg_cost": 122.02,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7776,
+      "data_quality_score": 0.9,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 78%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 78%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "BF-B",
+      "name": "Brown-Forman Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0296,
+      "mark": 25.94,
+      "avg_cost": 26.73,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6908,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 69%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 69%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "ACN",
+      "name": "Accenture plc",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0291,
+      "mark": 181.29,
+      "avg_cost": 186.72,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.9265,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 93%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 93%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "MCD",
+      "name": "McDonald's Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0291,
+      "mark": 248.24,
+      "avg_cost": 255.69,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.4886,
+      "data_quality_score": 0.9,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 49%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 49%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "SNA",
+      "name": "Snap-on Incorporated",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0283,
+      "mark": 372.15,
+      "avg_cost": 383.0,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.8486,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 85%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 85%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "DOV",
+      "name": "Dover Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0283,
+      "mark": 187.42,
+      "avg_cost": 192.88,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6674,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 67%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 67%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "ZBH",
+      "name": "Zimmer Biomet Holdings, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0276,
+      "mark": 95.36,
+      "avg_cost": 98.07,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5462,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": null,
+      "reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 55%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 55%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "CI",
+      "name": "The Cigna Group",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0256,
+      "mark": 275.28,
+      "avg_cost": 282.52,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.9012,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 90%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 90%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "CPAY",
+      "name": "Corpay, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0256,
+      "mark": 397.76,
+      "avg_cost": 408.22,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.4401,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend",
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 44%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 44%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -3313,12 +3360,12 @@
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0121,
-      "mark": 99.39,
+      "unrealized_pct": -0.0253,
+      "mark": 98.06,
       "avg_cost": 100.61,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4172,
+      "conviction_score": 0.417,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -3347,18 +3394,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "GL",
-      "name": "Globe Life Inc.",
+      "ticker": "PGR",
+      "name": "The Progressive Corporation",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0115,
-      "mark": 172.26,
-      "avg_cost": 174.27,
+      "unrealized_pct": -0.025,
+      "mark": 213.48,
+      "avg_cost": 218.95,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.5981,
+      "conviction_score": 0.5947,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -3374,14 +3421,296 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 60%"
+        "conviction 59%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 60%"
+        "conviction 59%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "ADP",
+      "name": "Automatic Data Processing, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0231,
+      "mark": 271.22,
+      "avg_cost": 277.62,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6457,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 65%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 65%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "IBM",
+      "name": "International Business Machines Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0227,
+      "mark": 229.55,
+      "avg_cost": 234.89,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.4933,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 49%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 49%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "MDT",
+      "name": "Medtronic plc",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0217,
+      "mark": 92.13,
+      "avg_cost": 94.17,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.4865,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 49%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 49%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "BDX",
+      "name": "Becton, Dickinson and Company",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0206,
+      "mark": 180.94,
+      "avg_cost": 184.74,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.57,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 57%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 57%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "DD",
+      "name": "DuPont de Nemours, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0196,
+      "mark": 129.01,
+      "avg_cost": 131.59,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5297,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "quality"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 53%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 53%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "GD",
+      "name": "General Dynamics Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0176,
+      "mark": 353.05,
+      "avg_cost": 359.39,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.4923,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 49%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 49%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "EG",
+      "name": "Everest Group, Ltd.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0158,
+      "mark": 374.85,
+      "avg_cost": 380.87,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7938,
+      "data_quality_score": 0.9,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 79%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 79%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -3393,12 +3722,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0098,
-      "mark": 206.6,
+      "unrealized_pct": -0.0155,
+      "mark": 205.42,
       "avg_cost": 208.65,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.5131,
+      "conviction_score": 0.5975,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -3413,175 +3742,13 @@
         "still buy",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 51%"
+        "conviction 60%"
       ],
       "intact_reasons": [
         "still buy",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 51%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "CPAY",
-      "name": "Corpay, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0097,
-      "mark": 404.26,
-      "avg_cost": 408.22,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.439,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend",
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 44%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 44%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "GD",
-      "name": "General Dynamics Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0096,
-      "mark": 355.95,
-      "avg_cost": 359.39,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5736,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 57%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 57%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "BF-B",
-      "name": "Brown-Forman Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0086,
-      "mark": 26.5,
-      "avg_cost": 26.73,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6954,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 70%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 70%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "SW",
-      "name": "Smurfit Westrock Plc",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0076,
-      "mark": 45.48,
-      "avg_cost": 45.83,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.4916,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 49%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 49%"
+        "conviction 60%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -3593,8 +3760,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0073,
-      "mark": 20.5,
+      "unrealized_pct": -0.0155,
+      "mark": 20.33,
       "avg_cost": 20.65,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -3628,18 +3795,98 @@
       "broken_reasons": []
     },
     {
+      "ticker": "LHX",
+      "name": "L3Harris Technologies, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0138,
+      "mark": 247.29,
+      "avg_cost": 250.74,
+      "signal": "buy",
+      "timing_signal": "accumulate",
+      "conviction_score": 0.6487,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 65%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 65%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "SMCI",
+      "name": "Super Micro Computer, Inc.",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0126,
+      "mark": 39.09,
+      "avg_cost": 39.59,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.4253,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": "caution",
+      "reasons": [
+        "research verdict caution",
+        "still buy",
+        "cheapness family still passes"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 43%"
+      ],
+      "weaken_reasons": [
+        "research verdict caution"
+      ],
+      "broken_reasons": []
+    },
+    {
       "ticker": "CINF",
       "name": "Cincinnati Financial Corporation",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.007,
-      "mark": 169.9,
+      "unrealized_pct": -0.0123,
+      "mark": 169.0,
       "avg_cost": 171.1,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7962,
+      "conviction_score": 0.8013,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -3668,18 +3915,139 @@
       "broken_reasons": []
     },
     {
+      "ticker": "AIZ",
+      "name": "Assurant, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0123,
+      "mark": 282.23,
+      "avg_cost": 285.74,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6194,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 62%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 62%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "ACGL",
+      "name": "Arch Capital Group Ltd.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0123,
+      "mark": 96.89,
+      "avg_cost": 98.1,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5149,
+      "data_quality_score": 0.9,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend",
+        "garp"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 51%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.90",
+        "conviction 51%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "FOX",
+      "name": "Fox Corporation",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0116,
+      "mark": 57.74,
+      "avg_cost": 58.42,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6221,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 62%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 62%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
       "ticker": "AIG",
       "name": "American International Group, Inc.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.007,
-      "mark": 75.68,
+      "unrealized_pct": -0.0115,
+      "mark": 75.33,
       "avg_cost": 76.21,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.639,
+      "conviction_score": 0.641,
       "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
@@ -3709,41 +4077,42 @@
       "broken_reasons": []
     },
     {
-      "ticker": "CTSH",
-      "name": "Cognizant Technology Solutions Corporation",
+      "ticker": "INCY",
+      "name": "Incyte Corporation",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0069,
-      "mark": 61.88,
-      "avg_cost": 62.31,
-      "signal": "strong_buy",
+      "unrealized_pct": -0.0114,
+      "mark": 125.31,
+      "avg_cost": 126.75,
+      "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.9193,
-      "data_quality_score": 1.0,
+      "conviction_score": 0.5547,
+      "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
         "quality",
-        "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [],
+      "failed_families": [
+        "dividend"
+      ],
       "research_verdict": "accumulate",
       "reasons": [
-        "still strong_buy",
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 92%"
+        "data_quality 0.95",
+        "conviction 55%"
       ],
       "intact_reasons": [
-        "still strong_buy",
+        "still buy",
         "research accumulate",
         "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 92%"
+        "data_quality 0.95",
+        "conviction 55%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -3755,8 +4124,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0068,
-      "mark": 21.9,
+      "unrealized_pct": -0.0095,
+      "mark": 21.84,
       "avg_cost": 22.05,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -3789,95 +4158,14 @@
       "broken_reasons": []
     },
     {
-      "ticker": "AIZ",
-      "name": "Assurant, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0068,
-      "mark": 283.81,
-      "avg_cost": 285.74,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6196,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 62%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 62%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "DVA",
-      "name": "DaVita Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0049,
-      "mark": 183.09,
-      "avg_cost": 183.99,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.7279,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 73%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 73%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
       "ticker": "MCK",
       "name": "McKesson Corporation",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": -0.0022,
-      "mark": 879.57,
+      "unrealized_pct": -0.0078,
+      "mark": 874.65,
       "avg_cost": 881.51,
       "signal": "buy",
       "timing_signal": "neutral",
@@ -3911,138 +4199,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "EG",
-      "name": "Everest Group, Ltd.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.002,
-      "mark": 380.12,
-      "avg_cost": 380.87,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.791,
-      "data_quality_score": 0.9,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 79%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.90",
-        "conviction 79%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "LHX",
-      "name": "L3Harris Technologies, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": -0.0011,
-      "mark": 250.46,
-      "avg_cost": 250.74,
-      "signal": "buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.5606,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 56%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 56%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "PAYX",
-      "name": "Paychex, Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 116.51,
-      "avg_cost": 116.51,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5559,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 56%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 56%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "EMR",
-      "name": "Emerson Electric Co.",
+      "ticker": "EXR",
+      "name": "Extra Space Storage Inc.",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0,
-      "mark": 147.4,
-      "avg_cost": 147.4,
+      "unrealized_pct": -0.0068,
+      "mark": 136.71,
+      "avg_cost": 137.64,
       "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.4999,
+      "timing_signal": "accumulate",
+      "conviction_score": 0.4924,
       "data_quality_score": 1.0,
       "passed_families": [
         "quality",
@@ -4063,131 +4231,11 @@
         "still buy",
         "research accumulate",
         "data_quality 1.00",
-        "conviction 50%"
+        "conviction 49%"
       ],
       "weaken_reasons": [
         "cheapness family no longer passes"
       ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "FOX",
-      "name": "Fox Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0002,
-      "mark": 58.43,
-      "avg_cost": 58.42,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.6304,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 63%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 63%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "NXPI",
-      "name": "NXP Semiconductors N.V.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0005,
-      "mark": 227.95,
-      "avg_cost": 227.835,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.7935,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 79%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 79%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "CB",
-      "name": "Chubb Limited",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0009,
-      "mark": 341.9,
-      "avg_cost": 341.59,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5939,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 59%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 59%"
-      ],
-      "weaken_reasons": [],
       "broken_reasons": []
     },
     {
@@ -4197,8 +4245,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0019,
-      "mark": 145.47,
+      "unrealized_pct": -0.0066,
+      "mark": 144.23,
       "avg_cost": 145.19,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -4231,19 +4279,19 @@
       "broken_reasons": []
     },
     {
-      "ticker": "CF",
-      "name": "CF Industries Holdings, Inc.",
+      "ticker": "GL",
+      "name": "Globe Life Inc.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0035,
-      "mark": 133.82,
-      "avg_cost": 133.35,
-      "signal": "strong_buy",
-      "timing_signal": "wait",
-      "conviction_score": 0.825,
-      "data_quality_score": 1.0,
+      "unrealized_pct": -0.0049,
+      "mark": 173.42,
+      "avg_cost": 174.27,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5981,
+      "data_quality_score": 0.95,
       "passed_families": [
         "cheapness",
         "quality",
@@ -4254,59 +4302,18 @@
       "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 82%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 82%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "INCY",
-      "name": "Incyte Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0069,
-      "mark": 127.62,
-      "avg_cost": 126.75,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5591,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 56%"
+        "conviction 60%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 0.95",
-        "conviction 56%"
+        "conviction 60%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -4318,12 +4325,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0074,
-      "mark": 187.8,
+      "unrealized_pct": -0.0034,
+      "mark": 185.78,
       "avg_cost": 186.42,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7075,
+      "conviction_score": 0.7054,
       "data_quality_score": 0.9,
       "passed_families": [
         "cheapness",
@@ -4353,43 +4360,204 @@
       "broken_reasons": []
     },
     {
-      "ticker": "EXR",
-      "name": "Extra Space Storage Inc.",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
+      "ticker": "PAYX",
+      "name": "Paychex, Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0101,
-      "mark": 139.03,
-      "avg_cost": 137.64,
+      "unrealized_pct": -0.0032,
+      "mark": 116.14,
+      "avg_cost": 116.51,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4924,
+      "conviction_score": 0.6429,
       "data_quality_score": 1.0,
       "passed_families": [
+        "cheapness",
         "quality",
         "dividend",
         "garp",
         "risk"
       ],
-      "failed_families": [
-        "cheapness"
-      ],
+      "failed_families": [],
       "research_verdict": "accumulate",
       "reasons": [
-        "cheapness family no longer passes",
         "still buy",
-        "research accumulate"
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 64%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
+        "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 49%"
+        "conviction 64%"
       ],
-      "weaken_reasons": [
-        "cheapness family no longer passes"
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "CB",
+      "name": "Chubb Limited",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0028,
+      "mark": 340.64,
+      "avg_cost": 341.59,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.5939,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
       ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 59%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 59%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "DVA",
+      "name": "DaVita Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": -0.0007,
+      "mark": 183.86,
+      "avg_cost": 183.99,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7303,
+      "data_quality_score": 0.95,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [
+        "dividend"
+      ],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 73%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 0.95",
+        "conviction 73%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "NXPI",
+      "name": "NXP Semiconductors N.V.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0007,
+      "mark": 227.99,
+      "avg_cost": 227.835,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7892,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 79%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 79%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "TXT",
+      "name": "Textron Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0078,
+      "mark": 79.69,
+      "avg_cost": 79.07,
+      "signal": "buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.6948,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 69%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 69%"
+      ],
+      "weaken_reasons": [],
       "broken_reasons": []
     },
     {
@@ -4399,8 +4567,8 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0119,
-      "mark": 69.7,
+      "unrealized_pct": 0.0093,
+      "mark": 69.52,
       "avg_cost": 68.88,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -4434,213 +4602,14 @@
       "broken_reasons": []
     },
     {
-      "ticker": "IBM",
-      "name": "International Business Machines Corporation",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0122,
-      "mark": 237.75,
-      "avg_cost": 234.89,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.7523,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 75%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 75%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "XYL",
-      "name": "Xylem Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0181,
-      "mark": 107.6,
-      "avg_cost": 105.69,
-      "signal": "buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.6869,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": null,
-      "reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 69%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 69%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "ACN",
-      "name": "Accenture plc",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0191,
-      "mark": 190.29,
-      "avg_cost": 186.72,
-      "signal": "strong_buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.9198,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 92%"
-      ],
-      "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 92%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "SMCI",
-      "name": "Super Micro Computer, Inc.",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0192,
-      "mark": 40.35,
-      "avg_cost": 39.59,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.4259,
-      "data_quality_score": 0.95,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [
-        "dividend"
-      ],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 0.95",
-        "conviction 43%"
-      ],
-      "weaken_reasons": [
-        "research verdict caution"
-      ],
-      "broken_reasons": []
-    },
-    {
-      "ticker": "TXT",
-      "name": "Textron Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.0233,
-      "mark": 80.91,
-      "avg_cost": 79.07,
-      "signal": "buy",
-      "timing_signal": "accumulate",
-      "conviction_score": 0.5623,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "risk"
-      ],
-      "failed_families": [
-        "garp"
-      ],
-      "research_verdict": "accumulate",
-      "reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 56%"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 56%"
-      ],
-      "weaken_reasons": [],
-      "broken_reasons": []
-    },
-    {
       "ticker": "TRV",
       "name": "The Travelers Companies, Inc.",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0275,
-      "mark": 379.49,
+      "unrealized_pct": 0.0143,
+      "mark": 374.62,
       "avg_cost": 369.35,
       "signal": "strong_buy",
       "timing_signal": "neutral",
@@ -4673,18 +4642,96 @@
       "broken_reasons": []
     },
     {
+      "ticker": "XYL",
+      "name": "Xylem Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0177,
+      "mark": 107.56,
+      "avg_cost": 105.69,
+      "signal": "buy",
+      "timing_signal": "accumulate",
+      "conviction_score": 0.6869,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": null,
+      "reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 69%"
+      ],
+      "intact_reasons": [
+        "still buy",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 69%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
+      "ticker": "BBY",
+      "name": "Best Buy Co., Inc.",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
+      "underwater": false,
+      "deep_underwater": false,
+      "unrealized_pct": 0.0286,
+      "mark": 92.85,
+      "avg_cost": 90.27,
+      "signal": "strong_buy",
+      "timing_signal": "neutral",
+      "conviction_score": 0.7952,
+      "data_quality_score": 1.0,
+      "passed_families": [
+        "cheapness",
+        "quality",
+        "dividend",
+        "garp",
+        "risk"
+      ],
+      "failed_families": [],
+      "research_verdict": "accumulate",
+      "reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 80%"
+      ],
+      "intact_reasons": [
+        "still strong_buy",
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 80%"
+      ],
+      "weaken_reasons": [],
+      "broken_reasons": []
+    },
+    {
       "ticker": "VRSN",
       "name": "VeriSign, Inc.",
       "thesis_status": "weakening",
       "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0319,
-      "mark": 302.05,
+      "unrealized_pct": 0.0356,
+      "mark": 303.12,
       "avg_cost": 292.71,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4644,
+      "conviction_score": 0.4679,
       "data_quality_score": 0.9,
       "passed_families": [
         "quality",
@@ -4705,7 +4752,7 @@
         "still buy",
         "research accumulate",
         "data_quality 0.90",
-        "conviction 46%"
+        "conviction 47%"
       ],
       "weaken_reasons": [
         "cheapness family no longer passes"
@@ -4713,18 +4760,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "BBY",
-      "name": "Best Buy Co., Inc.",
-      "thesis_status": "intact",
-      "recommended_action": "hold_tolerate",
+      "ticker": "QCOM",
+      "name": "QUALCOMM Incorporated",
+      "thesis_status": "weakening",
+      "recommended_action": "watch_review",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0475,
-      "mark": 94.56,
-      "avg_cost": 90.27,
-      "signal": "strong_buy",
+      "unrealized_pct": 0.0532,
+      "mark": 177.72,
+      "avg_cost": 168.74,
+      "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.8008,
+      "conviction_score": 0.5794,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -4734,22 +4781,21 @@
         "risk"
       ],
       "failed_families": [],
-      "research_verdict": "accumulate",
+      "research_verdict": "caution",
       "reasons": [
-        "still strong_buy",
-        "research accumulate",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 80%"
+        "research verdict caution",
+        "still buy",
+        "cheapness family still passes"
       ],
       "intact_reasons": [
-        "still strong_buy",
-        "research accumulate",
+        "still buy",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 80%"
+        "conviction 58%"
       ],
-      "weaken_reasons": [],
+      "weaken_reasons": [
+        "research verdict caution"
+      ],
       "broken_reasons": []
     },
     {
@@ -4759,12 +4805,12 @@
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.0619,
-      "mark": 34.66,
+      "unrealized_pct": 0.0539,
+      "mark": 34.4,
       "avg_cost": 32.64,
       "signal": "strong_buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.7426,
+      "conviction_score": 0.7398,
       "data_quality_score": 0.9,
       "passed_families": [
         "cheapness",
@@ -4794,57 +4840,18 @@
       "broken_reasons": []
     },
     {
-      "ticker": "QCOM",
-      "name": "QUALCOMM Incorporated",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
-      "underwater": false,
-      "deep_underwater": false,
-      "unrealized_pct": 0.1183,
-      "mark": 188.71,
-      "avg_cost": 168.74,
-      "signal": "buy",
-      "timing_signal": "neutral",
-      "conviction_score": 0.5632,
-      "data_quality_score": 1.0,
-      "passed_families": [
-        "cheapness",
-        "quality",
-        "dividend",
-        "garp",
-        "risk"
-      ],
-      "failed_families": [],
-      "research_verdict": "caution",
-      "reasons": [
-        "research verdict caution",
-        "still buy",
-        "cheapness family still passes"
-      ],
-      "intact_reasons": [
-        "still buy",
-        "cheapness family still passes",
-        "data_quality 1.00",
-        "conviction 56%"
-      ],
-      "weaken_reasons": [
-        "research verdict caution"
-      ],
-      "broken_reasons": []
-    },
-    {
       "ticker": "HPE",
       "name": "Hewlett Packard Enterprise Company",
       "thesis_status": "intact",
       "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.1738,
-      "mark": 61.04,
+      "unrealized_pct": 0.1685,
+      "mark": 60.76,
       "avg_cost": 52.0,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.5554,
+      "conviction_score": 0.5481,
       "data_quality_score": 1.0,
       "passed_families": [
         "cheapness",
@@ -4861,14 +4868,14 @@
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 56%"
+        "conviction 55%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
         "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 56%"
+        "conviction 55%"
       ],
       "weaken_reasons": [],
       "broken_reasons": []
@@ -4876,41 +4883,42 @@
     {
       "ticker": "SWKS",
       "name": "Skyworks Solutions, Inc.",
-      "thesis_status": "weakening",
-      "recommended_action": "watch_review",
+      "thesis_status": "intact",
+      "recommended_action": "hold_tolerate",
       "underwater": false,
       "deep_underwater": false,
-      "unrealized_pct": 0.2337,
-      "mark": 91.32,
+      "unrealized_pct": 0.1991,
+      "mark": 88.76,
       "avg_cost": 74.02,
       "signal": "buy",
       "timing_signal": "neutral",
-      "conviction_score": 0.4133,
+      "conviction_score": 0.5415,
       "data_quality_score": 1.0,
       "passed_families": [
+        "cheapness",
         "dividend",
         "garp",
         "risk"
       ],
       "failed_families": [
-        "cheapness",
         "quality"
       ],
       "research_verdict": "accumulate",
       "reasons": [
-        "cheapness family no longer passes",
         "still buy",
-        "research accumulate"
+        "research accumulate",
+        "cheapness family still passes",
+        "data_quality 1.00",
+        "conviction 54%"
       ],
       "intact_reasons": [
         "still buy",
         "research accumulate",
+        "cheapness family still passes",
         "data_quality 1.00",
-        "conviction 41%"
+        "conviction 54%"
       ],
-      "weaken_reasons": [
-        "cheapness family no longer passes"
-      ],
+      "weaken_reasons": [],
       "broken_reasons": []
     }
   ],

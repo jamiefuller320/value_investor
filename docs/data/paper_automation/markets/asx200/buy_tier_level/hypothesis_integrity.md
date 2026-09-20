@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-18T07:19:15.861228+00:00
+Track: `buy_tier_level` · updated 2026-09-20T06:48:34.689046+00:00
 
 ## Portfolio loser feedback
 
@@ -16,7 +16,7 @@ Track: `buy_tier_level` · updated 2026-09-18T07:19:15.861228+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 44%
+- conviction 51%
 
 ### ZIM.AX — intact / hold_tolerate (-10.5%)
 - price drawdown alone does not invalidate value thesis
@@ -146,7 +146,7 @@ Track: `buy_tier_level` · updated 2026-09-18T07:19:15.861228+00:00
 - still buy
 - cheapness family still passes
 - data_quality 0.90
-- conviction 52%
+- conviction 51%
 
 ### SHL.AX — intact / hold_tolerate (-1.7%)
 - still strong_buy
@@ -167,7 +167,7 @@ Track: `buy_tier_level` · updated 2026-09-18T07:19:15.861228+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 54%
+- conviction 55%
 
 ### RRL.AX — intact / hold_tolerate (+1.0%)
 - still strong_buy
@@ -195,11 +195,11 @@ Track: `buy_tier_level` · updated 2026-09-18T07:19:15.861228+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 47%
+- conviction 48%
 
 ### MND.AX — intact / hold_tolerate (+5.6%)
 - still buy
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 59%
+- conviction 58%

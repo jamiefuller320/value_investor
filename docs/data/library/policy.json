@@ -518,7 +518,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-09-19T22:47:08.890927+00:00",
+  "updated_at": "2026-09-20T06:49:40.617938+00:00",
   "ingest_parity_markets": [
     "asx200",
     "euro_depth"
@@ -541,13 +541,13 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-09-18T06:52:39.495955+00:00",
+      "run_at": "2026-09-20T06:22:14.354633+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
-      "screen_shortlist": 47,
+      "screen_shortlist": 49,
       "research": {
         "model": "composer-2.5",
-        "research_cap": 100,
+        "research_cap": 95,
         "research_markets": [
           "euro_depth",
           "sp500",
@@ -564,17 +564,17 @@
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "weekly_ops_cap_usd": 84.5,
-        "estimated_spend_weekly_ops_usd_this_week": 43.6,
+        "estimated_spend_weekly_ops_usd_this_week": 46.4,
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_usd_before": 41.3,
+        "remaining_usd_before": 38.1,
         "dedupe": {
-          "already_researched_count": 450,
-          "fresh_skipped_count": 450,
+          "already_researched_count": 451,
+          "fresh_skipped_count": 451,
           "rememo_eligible_count": 0,
           "rememo_eligible_sample": [],
-          "skipped_count": 294,
+          "skipped_count": 292,
           "skipped_sample": [
             {
               "market": "euro_depth",
@@ -628,17 +628,22 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "MIO.IR",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
               "ticker": "SHELL.AS",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
+              "ticker": "MIO.IR",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
               "ticker": "ACKB.BR",
+              "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "RAND.AS",
               "reason": "fresh_memo"
             },
             {
@@ -658,43 +663,26 @@
             },
             {
               "market": "euro_depth",
-              "ticker": "RAND.AS",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
               "ticker": "EVN.VI",
-              "reason": "fresh_memo"
-            },
-            {
-              "market": "euro_depth",
-              "ticker": "WKL.AS",
               "reason": "fresh_memo"
             },
             {
               "market": "euro_depth",
               "ticker": "DTE.DE",
               "reason": "fresh_memo"
+            },
+            {
+              "market": "euro_depth",
+              "ticker": "WKL.AS",
+              "reason": "fresh_memo"
             }
           ],
           "first_time_preferred": true,
           "note": "Exact Yahoo ticker match; earlier queue market wins. Each market queue puts no-memo buy-tier first, then rememo. Fresh memos are skipped; thin / body-lag memos rememo after ingest."
         },
-        "targets": [
-          {
-            "market": "sp500",
-            "ticker": "CMI",
-            "name": "Cummins Inc.",
-            "signal": "buy",
-            "conviction_score": 0.3438
-          }
-        ],
-        "executed": 1,
-        "created": 1,
-        "updated": 0,
-        "errors": [],
-        "estimated_spend_usd": 0.4,
-        "remaining_usd_after": 40.9
+        "targets": [],
+        "dry_run": true,
+        "executed": 0
       },
       "graduation": {
         "graduated": false,

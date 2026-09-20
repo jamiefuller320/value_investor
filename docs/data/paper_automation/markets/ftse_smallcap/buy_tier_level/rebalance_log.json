@@ -3583,5 +3583,374 @@
       },
       "reentry_cooldown": {}
     }
+  },
+  {
+    "schema_version": 2,
+    "logged_at": "2026-09-20T06:48:39.598053+00:00",
+    "track_id": "buy_tier_level",
+    "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
+    "strategy_mode": "automated",
+    "screen_source": {
+      "path": "docs/data/paper_automation/markets/ftse_smallcap/screen_latest.json",
+      "run_at": "2026-09-20T06:22:14.354633+00:00",
+      "generated_at": "2026-09-20T06:48:39.556912+00:00"
+    },
+    "knob_epoch_started_at": null,
+    "gate": {
+      "local_time": "2026-09-20T07:48:39.577159+01:00",
+      "trading_day": true,
+      "after_settle": false,
+      "market_open_at": "2026-09-20T08:00:00+01:00",
+      "settle_at": "2026-09-20T09:15:00+01:00",
+      "can_act": false,
+      "reason": "before market open"
+    },
+    "acted": true,
+    "note": "Rebalanced after open settle (3 trade(s)).",
+    "selection": {
+      "skip_timing_wait": true,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "use_adjusted_signal": false,
+      "require_research_accumulate": false,
+      "use_momentum_grace": false,
+      "use_graduated_allocation": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0
+    },
+    "max_positions": 120,
+    "trade_cost_pct": 0.003,
+    "candidates": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6979000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 68.8,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 115.5,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CLIG.L",
+        "name": "City of London Investment Group Plc",
+        "signal": "hold",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.36369999999999997,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 506.0,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "screen_buy_tier": [
+      {
+        "ticker": "CARD.L",
+        "name": "Card Factory plc",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "conviction_score": 0.6979000000000001,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Consumer Cyclical",
+        "price": 68.8,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CAPD.L",
+        "name": "Capital Limited",
+        "signal": "buy",
+        "adjusted_signal": "buy",
+        "conviction_score": 0.7125,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Basic Materials",
+        "price": 115.5,
+        "research_verdict": "accumulate"
+      },
+      {
+        "ticker": "CLIG.L",
+        "name": "City of London Investment Group Plc",
+        "signal": "hold",
+        "adjusted_signal": "hold",
+        "conviction_score": 0.36369999999999997,
+        "data_quality_score": 1.0,
+        "timing_signal": "neutral",
+        "sector": "Financial Services",
+        "price": 506.0,
+        "research_verdict": "accumulate"
+      }
+    ],
+    "gate_excluded": [],
+    "plan": {
+      "rules": [
+        "Universe: only strong_buy / buy names from the latest screen.",
+        "Timing filter: names with timing_signal=wait are excluded from new buys.",
+        "Conviction floor: min_conviction=0.00.",
+        "Sector cap: disabled.",
+        "Ranking: highest conviction_score first, keep at most 120 names.",
+        "Sizing: equal-weight sleeves of current NAV after exits; buys limited by remaining cash.",
+        "Costs: buy 0.55% / sell 0.05% (legacy symmetric slot 0.30%).",
+        "Hold buffer: full exit only after 2 consecutive rebalance(s) outside the target set.",
+        "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
+        "Dust guard: skip trim/top-up adjustments below \u00a310."
+      ],
+      "nav": 1031.89,
+      "cash": 0.0,
+      "max_positions": 120,
+      "min_conviction": 0.0,
+      "sector_cap": 1.0,
+      "skip_timing_wait": true,
+      "use_momentum_grace": false,
+      "exit_confirm_screens": 2,
+      "reentry_cooldown_screens": 1,
+      "min_rebalance_notional_gbp": 10.0,
+      "target_sleeve_value": 515.87,
+      "targets": [
+        {
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "signal": "buy",
+          "conviction_score": 0.7125,
+          "price": 115.5
+        },
+        {
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "signal": "strong_buy",
+          "conviction_score": 0.6979000000000001,
+          "price": 68.8
+        }
+      ],
+      "anticipated_exits": [
+        {
+          "action": "sell",
+          "ticker": "DFS.L",
+          "name": "DFS Furniture plc",
+          "reason": "No longer in the top conviction target set",
+          "shares": 1.477489,
+          "price": 139.0,
+          "value": 205.37
+        },
+        {
+          "action": "sell",
+          "ticker": "APTD.L",
+          "name": "Aptitude Software Group plc",
+          "reason": "No longer in the top conviction target set",
+          "shares": 0.29057,
+          "price": 250.0,
+          "value": 72.64
+        }
+      ],
+      "anticipated_grace_holds": [],
+      "anticipated_trims": [],
+      "anticipated_buys": [
+        {
+          "action": "buy",
+          "ticker": "CARD.L",
+          "name": "Card Factory plc",
+          "reason": "Top-up to equal weight",
+          "value": 277.19,
+          "price": 68.8,
+          "target_value": 515.87,
+          "conviction_score": 0.6979000000000001,
+          "signal": "strong_buy"
+        }
+      ],
+      "anticipated_holds": [
+        {
+          "action": "hold",
+          "ticker": "CAPD.L",
+          "name": "Capital Limited",
+          "reason": "Already near equal-weight target",
+          "value": 515.19,
+          "target_value": 515.87,
+          "conviction_score": 0.7125,
+          "signal": "buy"
+        }
+      ],
+      "skipped": [],
+      "waitlisted": [],
+      "summary": "Next rebalance would target 2 equal-weight sleeve(s); sell 2 name(s) that left the set; deploy cash into 1 buy(s); leave 1 near-target holding(s)."
+    },
+    "trades": [
+      {
+        "id": "412d424d-c17b-493e-95b2-610feeb61029",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-20T07:48:39.577159+01:00",
+        "ticker": "CLIG.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.686786,
+        "price": 506.0,
+        "gross": 347.51,
+        "cost": 0.17,
+        "net_cash": 347.34,
+        "note": "Automated exit \u2014 left target set",
+        "name": "City of London Investment Group Plc",
+        "avg_cost_at_exit": 485.0,
+        "position_closed": true
+      },
+      {
+        "id": "b23598f2-a7e9-4e76-a6b3-e6c5269b8665",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-20T07:48:39.577159+01:00",
+        "ticker": "CAPD.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 2.680947,
+        "price": 115.5,
+        "gross": 309.65,
+        "cost": 1.7,
+        "net_cash": -311.35,
+        "note": "Automated buy",
+        "name": "Capital Limited"
+      },
+      {
+        "id": "d81b563d-de43-44ba-9ca4-a4f079b85314",
+        "fund_id": "03838038-4d8d-490e-ae4b-4b3e5a124730",
+        "acted_at": "2026-09-20T07:48:39.577159+01:00",
+        "ticker": "CARD.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.520213,
+        "price": 68.8,
+        "gross": 35.79,
+        "cost": 0.2,
+        "net_cash": -35.99,
+        "note": "Automated buy",
+        "name": "Card Factory plc"
+      }
+    ],
+    "nav_before": 1033.96,
+    "cash_before": 0.0,
+    "contributed_capital_before": 1000.0,
+    "holdings_before": [
+      {
+        "ticker": "CARD.L",
+        "shares": 2.949012,
+        "avg_cost": 67.2899,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAPD.L",
+        "shares": 1.779572,
+        "avg_cost": 111.1288,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CLIG.L",
+        "shares": 0.686786,
+        "avg_cost": 485.0,
+        "sector": "Financial Services",
+        "name": "City of London Investment Group Plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "DFS.L",
+        "shares": 1.477489,
+        "avg_cost": 139.0,
+        "sector": "Consumer Cyclical",
+        "name": "DFS Furniture plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "APTD.L",
+        "shares": 0.29057,
+        "avg_cost": 250.0,
+        "sector": "Technology",
+        "name": "Aptitude Software Group plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_before": {
+      "exit_streak": {
+        "CLIG.L": 1
+      },
+      "reentry_cooldown": {}
+    },
+    "nav_after": 1031.89,
+    "cash_after": 0.0,
+    "holdings_after": [
+      {
+        "ticker": "CARD.L",
+        "shares": 3.469225,
+        "avg_cost": 67.5163,
+        "sector": "Consumer Cyclical",
+        "name": "Card Factory plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "CAPD.L",
+        "shares": 4.460519,
+        "avg_cost": 113.7561,
+        "sector": "Basic Materials",
+        "name": "Capital Limited",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "DFS.L",
+        "shares": 1.477489,
+        "avg_cost": 139.0,
+        "sector": "Consumer Cyclical",
+        "name": "DFS Furniture plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      },
+      {
+        "ticker": "APTD.L",
+        "shares": 0.29057,
+        "avg_cost": 250.0,
+        "sector": "Technology",
+        "name": "Aptitude Software Group plc",
+        "momentum_grace": false,
+        "stop_loss": null,
+        "take_profit": null
+      }
+    ],
+    "rebalance_state_after": {
+      "exit_streak": {
+        "DFS.L": 1,
+        "APTD.L": 1
+      },
+      "reentry_cooldown": {
+        "CLIG.L": 1
+      }
+    }
   }
 ]
