@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T09:30:46.166176+00:00",
+  "generated_at": "2026-09-20T10:00:34.978088+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1155,27 +1155,27 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-20T09:29:34.226857+00:00",
-    "queue_ui_updated_at": "2026-09-20T09:30:46.087244+00:00",
-    "task_count": 76,
+    "compiled_at": "2026-09-20T09:59:32.963457+00:00",
+    "queue_ui_updated_at": "2026-09-20T10:00:34.900165+00:00",
+    "task_count": 77,
     "status": {
-      "open_count": 2,
-      "pr_open_count": 0,
+      "open_count": 1,
+      "pr_open_count": 1,
       "parked_count": 2,
-      "merged_count": 56,
+      "merged_count": 57,
       "failed_count": 0,
-      "next_task_id": "eng-20260920-05",
-      "in_flight_branch": null,
-      "in_flight_pr": null,
+      "next_task_id": "eng-20260920-06",
+      "in_flight_branch": "cursor/eng-20260920-04-1de3",
+      "in_flight_pr": 753,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
     "queued_tasks": [
       {
-        "id": "eng-20260920-05",
-        "area": "prompt",
-        "title": "Also written to `output/research/MGNS.L/research.md`.",
+        "id": "eng-20260920-06",
+        "area": "ingest",
+        "title": "Improve Companies House PDF OCR for group accounts or prefer iXBRL/tag extraction over raw OCR for numeric cash-flow lines.",
         "priority": "medium",
         "priority_score": 25.0,
         "status": "open",
@@ -1186,7 +1186,7 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 1,
-        "clash_scan": "partial"
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260920-04",
@@ -1194,15 +1194,11 @@
         "title": "Add CMA/Ofcom merger document ingest keyed to ticker for media deals (Sky RNS references CMA/PIIN but local corpus has no case file).",
         "priority": "medium",
         "priority_score": 25.0,
-        "status": "open",
+        "status": "pr_open",
         "source": "compile_cap_drain",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 2,
-        "clash_scan": "partial"
+        "branch_name": "cursor/eng-20260920-04-1de3"
       }
     ],
     "attention_tasks": [
@@ -1232,8 +1228,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 2,
-      "dispatch_eligible_count": 2,
+      "open_task_count": 1,
+      "dispatch_eligible_count": 1,
       "blocked_count": 0
     }
   },
@@ -1512,18 +1508,24 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-20T09:30:46.166176+00:00",
+    "generated_at": "2026-09-20T10:00:34.978088+00:00",
     "overall": "active",
-    "headline": "Agent lane active.",
+    "headline": "Merge lane active; agent lane active.",
     "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
+      "state": "running",
+      "idle": false,
+      "running": true,
       "blocked": false,
-      "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+      "pr_open_count": 1,
+      "open_engineering_prs": [
+        {
+          "number": 753,
+          "branch": "cursor/eng-20260920-04-1de3",
+          "draft": false
+        }
+      ],
+      "in_flight_pr": 753,
+      "detail": "Open engineering PR(s) #753 — merge fires on CI success."
     },
     "agent_lane": {
       "state": "running",
@@ -1534,18 +1536,18 @@
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 2,
-      "open_count": 2,
-      "pr_open_count": 0,
-      "dispatch_eligible_count": 2,
+      "open_count": 1,
+      "pr_open_count": 1,
+      "dispatch_eligible_count": 1,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260920-05",
-      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
-      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+      "next_task_id": "eng-20260920-06",
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 2,
-      "evaluated_at": "2026-09-20T09:30:41.861689+00:00"
+      "evaluated_at": "2026-09-20T10:00:30.491087+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1559,6 +1561,17 @@
       "should_dispatch_engineering": true
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260920-05",
+        "title": "Also written to `output/research/MGNS.L/research.md`.",
+        "area": "prompt",
+        "pr_number": 752,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/752",
+        "merged_at": "2026-09-20T09:59:31.588410+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": true,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260920-03",
         "title": "Updated in `output/research/MEGP.L/research.md`.",
@@ -1604,6 +1617,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 4
+    "verified_merges_today_count": 5
   }
 }
