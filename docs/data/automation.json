@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T10:00:34.978088+00:00",
+  "generated_at": "2026-09-20T10:07:02.689508+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1155,27 +1155,27 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-20T09:59:32.963457+00:00",
-    "queue_ui_updated_at": "2026-09-20T10:00:34.900165+00:00",
-    "task_count": 77,
+    "compiled_at": "2026-09-20T10:05:58.933198+00:00",
+    "queue_ui_updated_at": "2026-09-20T10:07:02.608352+00:00",
+    "task_count": 78,
     "status": {
       "open_count": 1,
       "pr_open_count": 1,
       "parked_count": 2,
-      "merged_count": 57,
+      "merged_count": 58,
       "failed_count": 0,
-      "next_task_id": "eng-20260920-06",
-      "in_flight_branch": "cursor/eng-20260920-04-1de3",
-      "in_flight_pr": 753,
+      "next_task_id": "eng-20260920-07",
+      "in_flight_branch": "cursor/eng-20260920-06-1de3",
+      "in_flight_pr": 754,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
     "queued_tasks": [
       {
-        "id": "eng-20260920-06",
-        "area": "ingest",
-        "title": "Improve Companies House PDF OCR for group accounts or prefer iXBRL/tag extraction over raw OCR for numeric cash-flow lines.",
+        "id": "eng-20260920-07",
+        "area": "coverage",
+        "title": "Suppress or mark unverified screen TTM FCF when `yahoo_quarterly_cashflow` is empty for the ticker.",
         "priority": "medium",
         "priority_score": 25.0,
         "status": "open",
@@ -1189,16 +1189,16 @@
         "clash_scan": "full"
       },
       {
-        "id": "eng-20260920-04",
-        "area": "coverage",
-        "title": "Add CMA/Ofcom merger document ingest keyed to ticker for media deals (Sky RNS references CMA/PIIN but local corpus has no case file).",
+        "id": "eng-20260920-06",
+        "area": "ingest",
+        "title": "Improve Companies House PDF OCR for group accounts or prefer iXBRL/tag extraction over raw OCR for numeric cash-flow lines.",
         "priority": "medium",
         "priority_score": 25.0,
         "status": "pr_open",
         "source": "compile_cap_drain",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": "cursor/eng-20260920-04-1de3"
+        "branch_name": "cursor/eng-20260920-06-1de3"
       }
     ],
     "attention_tasks": [
@@ -1508,7 +1508,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-20T10:00:34.978088+00:00",
+    "generated_at": "2026-09-20T10:07:02.689508+00:00",
     "overall": "active",
     "headline": "Merge lane active; agent lane active.",
     "merge_lane": {
@@ -1519,13 +1519,13 @@
       "pr_open_count": 1,
       "open_engineering_prs": [
         {
-          "number": 753,
-          "branch": "cursor/eng-20260920-04-1de3",
+          "number": 754,
+          "branch": "cursor/eng-20260920-06-1de3",
           "draft": false
         }
       ],
-      "in_flight_pr": 753,
-      "detail": "Open engineering PR(s) #753 — merge fires on CI success."
+      "in_flight_pr": 754,
+      "detail": "Open engineering PR(s) #754 — merge fires on CI success."
     },
     "agent_lane": {
       "state": "running",
@@ -1540,14 +1540,14 @@
       "pr_open_count": 1,
       "dispatch_eligible_count": 1,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260920-06",
+      "next_task_id": "eng-20260920-07",
       "reason": "queue ready — dispatch next open task",
       "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 2,
-      "evaluated_at": "2026-09-20T10:00:30.491087+00:00"
+      "evaluated_at": "2026-09-20T10:06:58.003319+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1561,6 +1561,17 @@
       "should_dispatch_engineering": true
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260920-04",
+        "title": "Add CMA/Ofcom merger document ingest keyed to ticker for media deals (Sky RNS references CMA/PIIN but local corpus has no case file).",
+        "area": "coverage",
+        "pr_number": 753,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/753",
+        "merged_at": "2026-09-20T10:05:57.546924+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": true,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260920-05",
         "title": "Also written to `output/research/MGNS.L/research.md`.",
@@ -1617,6 +1628,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 5
+    "verified_merges_today_count": 6
   }
 }
