@@ -848,9 +848,7 @@ def test_housekeep_cancels_mis_scoped_preflight_park(tmp_path: Path):
     assert updated.get("cancelled_policy") == "mis_scoped_allowlist"
 
 
-def test_reconcile_merged_uses_pr_number_when_branch_lookup_empty(
-    tmp_path: Path, monkeypatch
-):
+def test_reconcile_merged_uses_pr_number_when_branch_lookup_empty(tmp_path: Path, monkeypatch):
     tasks_path = tmp_path / "engineering_tasks.json"
     payload = {
         "tasks": [

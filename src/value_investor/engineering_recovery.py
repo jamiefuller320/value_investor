@@ -1269,7 +1269,9 @@ def find_merged_pull_for_branch(
         return merged[0]
     fallback = _find_merged_pull_via_gh(branch)
     if fallback:
-        logger.info("Merged PR for %s resolved via gh fallback (#%s)", branch, fallback.get("number"))
+        logger.info(
+            "Merged PR for %s resolved via gh fallback (#%s)", branch, fallback.get("number")
+        )
         return fallback
     return None
 
