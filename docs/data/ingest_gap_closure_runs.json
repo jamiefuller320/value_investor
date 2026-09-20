@@ -12130,7 +12130,7 @@
       "status": "pending_review",
       "title": "Single-ticker library ingest gap-closure pass",
       "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
-      "ticker": "FMG.AX",
+      "ticker": "HEI.DE",
       "params": {
         "max_targets": 1,
         "max_bodies": 40,
@@ -12138,66 +12138,72 @@
         "require_outstanding_gaps": true,
         "intensive_gap_closure": true,
         "pin_tickers": [
-          "FMG.AX"
+          "HEI.DE",
+          "DTG.DE",
+          "HNR1.DE",
+          "HEN3.DE",
+          "FRE.DE",
+          "G1A.DE",
+          "VOW3.DE"
         ],
-        "market_id": "asx200",
+        "market_id": "dax",
         "universe": "library",
-        "critical_path_blocker": "indexed_without_body"
+        "critical_path_blocker": "unmeasured"
       },
       "review_trigger": "horizon_scan",
       "chain_root_id": "igc-20260920-03",
       "chain_attempt": 1,
-      "recorded_at": "2026-09-20T17:07:20.003000+00:00",
-      "completed_at": "2026-09-20T17:08:44.898433+00:00",
+      "recorded_at": "2026-09-20T17:12:16.304867+00:00",
+      "completed_at": "2026-09-20T17:13:29.430777+00:00",
       "outcome": {
         "delta_filings_with_body": 0,
-        "delta_indexed_without_body": 1,
+        "delta_indexed_without_body": 0,
         "delta_zero_body_buy_tier": 0,
         "targets_planned": null,
         "targets_completed": null,
         "runtime_cutoff": false,
         "tickers": [
-          "FMG.AX"
+          "HEI.DE"
         ],
         "results": [
           {
-            "ticker": "FMG.AX",
-            "reason": "indexed_without_body",
+            "ticker": "HEI.DE",
+            "reason": "unmeasured",
             "before": {
-              "filings_total": 48,
-              "filings_with_body": 47,
-              "indexed_without_body": 1
-            },
-            "after": {
-              "filings_total": 48,
-              "filings_with_body": 48,
+              "filings_total": 0,
+              "filings_with_body": 0,
               "indexed_without_body": 0
             },
-            "improved": true,
-            "regime": "asx_announcements",
+            "after": {
+              "filings_total": 0,
+              "filings_with_body": 0,
+              "indexed_without_body": 0
+            },
+            "improved": false,
+            "regime": "euro_filings",
             "filings_summary": {
-              "total": 48,
-              "annual": 30,
+              "total": 0,
+              "annual": 0,
               "interim": 0,
-              "trading_update": 1,
-              "other": 17,
-              "with_body": 48,
+              "trading_update": 0,
+              "other": 0,
+              "with_body": 0,
               "period_coverage": {
                 "annual": {
-                  "total": 30,
-                  "with_body": 30
+                  "total": 0,
+                  "with_body": 0
                 },
                 "interim": {
                   "total": 0,
                   "with_body": 0
                 },
                 "trading_update": {
-                  "total": 1,
-                  "with_body": 1
+                  "total": 0,
+                  "with_body": 0
                 },
                 "other": {
-                  "total": 17,
-                  "with_body": 17
+                  "total": 0,
+                  "with_body": 0
                 }
               }
             },
@@ -12207,8 +12213,8 @@
               "attempted": 0,
               "fetched": 0,
               "failed": 0,
-              "with_body_before": 48,
-              "with_body_after": 48,
+              "with_body_before": 0,
+              "with_body_after": 0,
               "investegate_fallbacks": 0,
               "skipped_unfetchable": 0,
               "deadline_hit": false,
@@ -12223,16 +12229,17 @@
         ],
         "per_ticker": [
           {
-            "ticker": "FMG.AX",
-            "with_body_before": 47,
-            "with_body_after": 48,
-            "improved": true
+            "ticker": "HEI.DE",
+            "with_body_before": 0,
+            "with_body_after": 0,
+            "improved": false
           }
         ]
       },
-      "trigger": "stall_slowdown"
+      "trigger": "stall_slowdown",
+      "engineering_task_id": "eng-20260920-15"
     }
   ],
-  "updated_at": "2026-09-20T17:08:44.898443+00:00",
+  "updated_at": "2026-09-20T17:13:29.645773+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
