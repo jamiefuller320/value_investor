@@ -94,6 +94,82 @@ def apply_fcf_three_way_conviction_overlay(
     return True, cap_conviction_for_fcf_three_way_overlay(base_conviction)
 
 
+def _fcf_three_way_overlay_from_snapshot(
+    snapshot: dict[str, Any],
+    *,
+    output_dir: Path | None = None,
+) -> dict[str, Any]:
+    """Resolve three-way overlay detail from persisted flags, filing data, or action notes."""
+    flag_raw = snapshot.get("fcf_three_way_conviction_overlay")
+    if flag_raw is not None and not (isinstance(flag_raw, float) and pd.isna(flag_raw)):
+        if bool(flag_raw):
+            detail_raw = snapshot.get("fcf_three_way_conviction_overlay_detail")
+            if isinstance(detail_raw, dict) and detail_raw.get("fcf_three_way_conviction_overlay"):
+                return dict(detail_raw)
+            return {
+                "fcf_three_way_conviction_overlay": True,
+                "profit_to_cash_current_pct": snapshot.get("profit_to_cash_current_pct"),
+                "profit_to_cash_prior_pct": snapshot.get("profit_to_cash_prior_pct"),
+                "profit_to_cash_yoy_decline_pp": snapshot.get("profit_to_cash_yoy_decline_pp"),
+            }
+
+    ticker = str(snapshot.get("ticker") or "").strip().upper()
+    if ticker:
+        screen_ttm = screen_ttm_from_row(pd.Series(snapshot))
+        fcf_bundle = reconcile_fcf_for_ticker(
+            ticker,
+            screen_ttm=screen_ttm,
+            output_dir=output_dir,
+        )
+        overlay = build_fcf_three_way_conviction_overlay(
+            ticker=ticker,
+            fcf_bundle=fcf_bundle,
+            screen_ttm=screen_ttm,
+            output_dir=output_dir,
+        )
+        if overlay.get("fcf_three_way_conviction_overlay"):
+            return overlay
+
+    action_note = str(snapshot.get("action_note") or "").strip().lower()
+    if FCF_THREE_WAY_CONVICTION_NOTE_MARKER in action_note:
+        return {"fcf_three_way_conviction_overlay": True}
+    return {"fcf_three_way_conviction_overlay": False}
+
+
+def enforce_fcf_three_way_conviction_in_snapshot(
+    snapshot: dict[str, Any],
+    *,
+    output_dir: Path | None = None,
+) -> dict[str, Any]:
+    """Export path: cap conviction when three-way FCF split meets profit-to-cash decline."""
+    updated = dict(snapshot)
+    overlay = _fcf_three_way_overlay_from_snapshot(updated, output_dir=output_dir)
+    triggered, conviction = apply_fcf_three_way_conviction_overlay(
+        conviction_score=float(updated.get("conviction_score") or 0.0),
+        overlay=overlay,
+    )
+    if not triggered:
+        return updated
+
+    updated["fcf_three_way_conviction_overlay"] = True
+    updated["conviction_score"] = conviction
+    updated["profit_to_cash_current_pct"] = overlay.get("profit_to_cash_current_pct")
+    updated["profit_to_cash_prior_pct"] = overlay.get("profit_to_cash_prior_pct")
+    updated["profit_to_cash_yoy_decline_pp"] = overlay.get("profit_to_cash_yoy_decline_pp")
+    updated["fcf_three_way_conviction_overlay_detail"] = {
+        "fcf_three_way_conviction_overlay": True,
+        "profit_to_cash_current_pct": overlay.get("profit_to_cash_current_pct"),
+        "profit_to_cash_prior_pct": overlay.get("profit_to_cash_prior_pct"),
+        "profit_to_cash_yoy_decline_pp": overlay.get("profit_to_cash_yoy_decline_pp"),
+    }
+
+    note = format_fcf_three_way_conviction_overlay_note(overlay)
+    action_note = str(updated.get("action_note") or "")
+    if note and note.lower() not in action_note.lower():
+        updated["action_note"] = f"{action_note} | {note}" if action_note else note
+    return updated
+
+
 def enrich_signals_with_fcf_three_way_conviction_overlay(
     signals: pd.DataFrame,
     *,

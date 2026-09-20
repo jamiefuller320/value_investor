@@ -2022,6 +2022,82 @@ def test_write_screening_snapshot_backfills_labelled_dual_fcf_dividend_coverage(
     assert "dual fcf/dividend cover" in written["research_prompts"][0].lower()
 
 
+def _itv_three_way_research_tree(tmp_path: Path) -> None:
+    sources = tmp_path / "research" / "ITV.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    financials = {
+        "cash_flow": {
+            "2025": {
+                "Operating Cash Flow": 202_000_000.0,
+                "Capital Expenditure": -54_000_000.0,
+                "Free Cash Flow": 148_000_000.0,
+            }
+        }
+    }
+    (sources / "financials_annual.json").write_text(json.dumps(financials), encoding="utf-8")
+    (filings / "fy_results.txt").write_text(
+        "Group adjusted free cash flow of £187.0m\nProfit to cash ratio 65% 83%\n",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "period": "annual",
+                        "has_body": True,
+                        "body_path": str(filings / "fy_results.txt"),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_enforce_fcf_three_way_conviction_in_snapshot_itv_style(tmp_path: Path):
+    from value_investor.scoring.fcf_three_way_conviction_overlay import (
+        enforce_fcf_three_way_conviction_in_snapshot,
+    )
+
+    _itv_three_way_research_tree(tmp_path)
+    enforced = enforce_fcf_three_way_conviction_in_snapshot(
+        {
+            "ticker": "ITV.L",
+            "conviction_score": 0.8,
+            "free_cashflow": 148_000_000.0,
+            "free_cashflow_screen_ttm": 280_000_000.0,
+            "fcf_three_way_conviction_overlay": False,
+        },
+        output_dir=tmp_path,
+    )
+    assert enforced["fcf_three_way_conviction_overlay"] is True
+    assert enforced["profit_to_cash_yoy_decline_pp"] == pytest.approx(18.0)
+    assert enforced["conviction_score"] == pytest.approx(0.8 * 0.85)
+    assert "fcf three-way mismatch" in enforced["action_note"].lower()
+
+
+def test_write_screening_snapshot_enforces_fcf_three_way_conviction_overlay(tmp_path: Path):
+    """Stale screening snapshots must re-apply three-way FCF conviction caps on export."""
+    _itv_three_way_research_tree(tmp_path)
+    sources = tmp_path / "research" / "ITV.L" / "sources"
+    snapshot = {
+        "ticker": "ITV.L",
+        "signal": "buy",
+        "conviction_score": 0.8,
+        "free_cashflow": 148_000_000.0,
+        "free_cashflow_screen_ttm": 280_000_000.0,
+        "fcf_three_way_conviction_overlay": False,
+    }
+    write_screening_snapshot(sources, snapshot)
+    written = json.loads((sources / "screening_snapshot.json").read_text(encoding="utf-8"))
+    assert written["fcf_three_way_conviction_overlay"] is True
+    assert written["profit_to_cash_yoy_decline_pp"] == pytest.approx(18.0)
+    assert written["conviction_score"] < 0.8
+    assert "fcf three-way mismatch" in written["action_note"].lower()
+
+
 def test_enforce_fcf_basis_in_snapshot_without_research_verdict():
     """Stale snapshots with overlay=false must still honour FCF mismatch notes."""
     enforced = enforce_fcf_basis_in_snapshot(
