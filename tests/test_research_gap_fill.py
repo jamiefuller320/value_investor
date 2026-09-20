@@ -162,9 +162,53 @@ def test_is_actionable_research_model_suggestion_rejects_memo_status():
     assert not is_actionable_research_model_suggestion(
         "The memo at `output/research/MEGP.L/research.md` has been updated to version 3."
     )
+    assert not is_actionable_research_model_suggestion(
+        "`output/research/ITV.L/research.md` is updated with these sections."
+    )
+    assert not is_actionable_research_model_suggestion(
+        "The memo at `output/research/HIK.L/research.md` has been updated to version 2 "
+        "(gap_fill mode) with these sections."
+    )
     assert is_actionable_research_model_suggestion(
         "Index trading-update RNS for MEGP.L when filings_index trading_update count is zero"
     )
+
+
+def test_engineering_compile_skips_memo_status_suggestions(tmp_path: Path):
+    from value_investor.engineering_tasks import build_compiled_task_candidates
+
+    suggestions_path = tmp_path / "research_model_suggestions.json"
+    suggestions_path.write_text(
+        """{
+  "suggestions": [
+    {
+      "ticker": "ITV.L",
+      "area": "research",
+      "priority": "medium",
+      "suggestion": "`output/research/ITV.L/research.md` is updated with these sections.",
+      "recorded_at": "2026-09-13T08:06:10.268038+00:00"
+    },
+    {
+      "ticker": "MEGP.L",
+      "area": "ingest",
+      "priority": "high",
+      "suggestion": "Index trading-update RNS for MEGP.L when filings_index trading_update count is zero",
+      "recorded_at": "2026-09-13T08:06:10.268038+00:00"
+    }
+  ]
+}""",
+        encoding="utf-8",
+    )
+    candidates = build_compiled_task_candidates(
+        output_dir=tmp_path,
+        suggestions_path=suggestions_path,
+        scope="full",
+        tasks_path=tmp_path / "missing_tasks.json",
+        lookback_days=14,
+    )
+    titles = [task.title for task in candidates]
+    assert not any("ITV.L/research.md" in title for title in titles)
+    assert any("MEGP.L" in title for title in titles)
 
 
 def test_persist_model_suggestions_skips_memo_status_lines(tmp_path: Path):
@@ -180,6 +224,11 @@ def test_persist_model_suggestions_skips_memo_status_lines(tmp_path: Path):
                 "area": "research",
                 "priority": "medium",
                 "suggestion": "Updated in `output/research/MEGP.L/research.md`.",
+            },
+            {
+                "area": "research",
+                "priority": "medium",
+                "suggestion": "`output/research/ITV.L/research.md` is updated with these sections.",
             },
             {
                 "area": "ingest",

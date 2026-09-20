@@ -123,18 +123,32 @@ def clip_rationale(value: str | None, *, limit: int = RATIONALE_MAX_CHARS) -> st
 
 _MEMO_STATUS_SUGGESTION = re.compile(
     r"(?i)(?:^updated\s+(?:in|memo)|^the\s+memo\s+at|memo\s+saved\s+to|"
-    r"^also\s+written\s+to|has\s+been\s+updated).*research\.md"
+    r"^also\s+written\s+to|has\s+been\s+updated|memo updated at).*research\.md"
+)
+_MEMO_PATH_IS_UPDATED = re.compile(
+    r"(?i)[`\"']?output/research/[^`\"']*research\.md[`\"']?\s+is updated\b"
 )
 
 
 def is_actionable_research_model_suggestion(text: str) -> bool:
     """Return False for memo save/status lines agents sometimes emit as faux suggestions."""
+    from value_investor.research.gap_fill import apply_engineering_tasks_suggestion_filter_patch
+
+    apply_engineering_tasks_suggestion_filter_patch()
+
     cleaned = str(text or "").strip()
     if not cleaned or cleaned == "--":
         return False
     if _MEMO_STATUS_SUGGESTION.search(cleaned):
         return False
+    if _MEMO_PATH_IS_UPDATED.search(cleaned):
+        return False
     if re.search(r"(?i)^updated in [`\"]?output/research/", cleaned):
+        return False
+    if re.search(r"(?i)research\.md", cleaned) and re.search(
+        r"(?i)updated with these sections",
+        cleaned,
+    ):
         return False
     return True
 
@@ -142,8 +156,8 @@ def is_actionable_research_model_suggestion(text: str) -> bool:
 def research_model_suggestions_discipline() -> str:
     """Prompt rule: research-model bullets must be pipeline work, not memo status."""
     return (
-        "Never emit memo save paths, version bumps, 'updated in research.md', or "
-        "'also written to …/research.md' status lines — "
+        "Never emit memo save paths, version bumps, 'updated in research.md', "
+        "'is updated with these sections', or 'also written to …/research.md' status lines — "
         "only concrete ingest/prompt/scoring/coverage/ops pipeline improvements."
     )
 

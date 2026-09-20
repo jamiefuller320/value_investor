@@ -272,6 +272,29 @@ def extract_gap_fill_targets(
     return targets
 
 
+def apply_engineering_tasks_suggestion_filter_patch() -> bool:
+    """Drop memo-status research_model_suggestions when compiling engineering tasks."""
+    from value_investor import engineering_tasks as et
+
+    if getattr(et, "_ACTIONABLE_SUGGESTION_FILTER_PATCHED", False):
+        return True
+    if not hasattr(et, "_tasks_from_suggestions"):
+        return False
+    original = et._tasks_from_suggestions
+
+    def _tasks_from_suggestions(*args: Any, **kwargs: Any) -> list[Any]:
+        tasks = original(*args, **kwargs)
+        return [
+            task
+            for task in tasks
+            if is_actionable_research_model_suggestion(str(task.summary or task.title or ""))
+        ]
+
+    et._tasks_from_suggestions = _tasks_from_suggestions
+    et._ACTIONABLE_SUGGESTION_FILTER_PATCHED = True
+    return True
+
+
 def _persist_model_suggestions(
     suggestions: list[dict[str, Any]],
     *,
