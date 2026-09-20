@@ -23,6 +23,7 @@ from value_investor.historical_analysis import (
     format_historical_analysis_text,
 )
 from value_investor.post_run_review import PostRunReview
+from value_investor.publish import research_source_prompt_lines_for_ticker
 from value_investor.research.document import ResearchDocument, ResearchSummary
 from value_investor.research.format import (
     format_director_escalation_candidates_html,
@@ -106,6 +107,15 @@ VERDICT_COLORS = {
     "caution": "#c45c00",
     "pass": "#b33a3a",
 }
+
+
+def _research_source_prompt_lines(ticker: str) -> list[str]:
+    try:
+        from pathlib import Path
+
+        return research_source_prompt_lines_for_ticker(ticker, output_dir=Path("output"))
+    except Exception:  # noqa: BLE001 — email must still send
+        return []
 
 
 def _research_overlay_label(report: CompanyReport) -> str | None:
@@ -461,6 +471,8 @@ def format_text_report(
         lines.append(f"{report.name} ({report.ticker}) — {label}")
         if overlay:
             lines.append(overlay)
+        for prompt in _research_source_prompt_lines(report.ticker):
+            lines.append(f"Research source: {prompt}")
         lines.append(report.summary)
         lines.append("")
 
@@ -522,6 +534,10 @@ def format_html_report(
         overlay_html = (
             f"<br><span style='color:#666;font-size:12px'>{overlay}</span>" if overlay else ""
         )
+        source_prompts = _research_source_prompt_lines(report.ticker)
+        if source_prompts:
+            joined = "<br>".join(f"Research source: {line}" for line in source_prompts)
+            overlay_html += f"<br><span style='color:#666;font-size:12px'>{joined}</span>"
         rows.append(
             f"""
             <tr>

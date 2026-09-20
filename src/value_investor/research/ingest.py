@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import logging
 import re
 import urllib.parse
@@ -618,6 +619,290 @@ def attach_ch_annual_year_in_numbers(
     return updated
 
 
+CMA_CASES_ATOM_URL = "https://www.gov.uk/cma-cases.atom"
+CMA_OFCOM_MERGER_MAX_NEWS = 12
+CMA_OFCOM_MERGER_NOTE = (
+    "CMA/Ofcom merger regulatory colour only — not a substitute for issuer RNS/filings or scoring."
+)
+
+# Tickers with a live UK media/regulatory deal where RNS cites CMA/PIIN but filings omit the case file.
+CMA_OFCOM_MERGER_DEALS: dict[str, dict[str, Any]] = {
+    "ITV.L": {
+        "deal_label": "Sky / ITV Media & Entertainment merger",
+        "cma_case_slug": "sky-slash-itv-merger-inquiry",
+        "cma_atom_keywords": "Sky ITV merger",
+        "news_queries": [
+            (
+                '"ITV plc" (CMA OR Ofcom OR "public interest" OR PIIN) '
+                '(Sky OR Comcast OR "Media & Entertainment")'
+            ),
+            '"Sky" "ITV" merger inquiry CMA',
+        ],
+    },
+}
+
+
+def resolve_cma_ofcom_merger_deal(ticker: str) -> dict[str, Any] | None:
+    """Return static merger-deal config when this ticker has a mapped CMA/Ofcom watch."""
+    key = ticker.strip().upper()
+    deal = CMA_OFCOM_MERGER_DEALS.get(key)
+    return dict(deal) if deal else None
+
+
+def parse_cma_cases_atom(
+    payload: bytes,
+    *,
+    case_slug: str | None = None,
+) -> list[dict[str, Any]]:
+    """Parse gov.uk CMA case finder Atom entries."""
+    root = ET.fromstring(payload)
+    ns = {"atom": "http://www.w3.org/2005/Atom"}
+    entries: list[dict[str, Any]] = []
+    for entry in root.findall("atom:entry", ns):
+        title = _strip_html(entry.findtext("atom:title", default="", namespaces=ns))
+        updated_at = entry.findtext("atom:updated", default="", namespaces=ns) or None
+        link = ""
+        for link_el in entry.findall("atom:link", ns):
+            if link_el.get("rel") == "alternate":
+                link = str(link_el.get("href") or "")
+                break
+        slug = ""
+        if "/cma-cases/" in link:
+            slug = link.rstrip("/").split("/cma-cases/", 1)[-1]
+        row = {
+            "title": title,
+            "url": link,
+            "updated_at": updated_at,
+            "slug": slug,
+        }
+        entries.append(row)
+    if case_slug:
+        for row in entries:
+            if row.get("slug") == case_slug:
+                return [row]
+        lowered = case_slug.replace("-", " ").lower()
+        for row in entries:
+            title = str(row.get("title") or "").lower()
+            if lowered in title.replace("/", " "):
+                return [row]
+    return entries
+
+
+def _decode_json_string_fragment(raw: str) -> str:
+    try:
+        return json.loads(f'"{raw}"')
+    except (TypeError, ValueError):
+        return raw.replace("\\n", "\n").replace("\\t", "\t").replace('\\"', '"')
+
+
+def extract_govuk_article_body(html: str) -> str:
+    """Best-effort plain text from a gov.uk HTML page (CMA case pages)."""
+    match = re.search(r'"articleBody"\s*:\s*"((?:\\.|[^"\\])*)"', html)
+    if match:
+        body = _decode_json_string_fragment(match.group(1))
+        return _strip_html(body)
+    match = re.search(
+        r'<div[^>]+class="[^"]*govspeak[^"]*"[^>]*>(.*?)</div>',
+        html,
+        flags=re.DOTALL | re.IGNORECASE,
+    )
+    if match:
+        return _strip_html(match.group(1))
+    return _strip_html(html)
+
+
+def _http_get_bytes(url: str, *, timeout: int = 30) -> bytes:
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        return response.read()
+
+
+def fetch_cma_merger_case_document(case_slug: str) -> dict[str, Any] | None:
+    """Download the primary CMA merger inquiry case page for a known slug."""
+    slug = case_slug.strip().strip("/")
+    if not slug:
+        return None
+    url = f"https://www.gov.uk/cma-cases/{slug}"
+    try:
+        html = _http_get_bytes(url).decode("utf-8", errors="replace")
+    except OSError as exc:
+        logger.warning("CMA case fetch failed for %s: %s", slug, exc)
+        return None
+    body = extract_govuk_article_body(html)
+    if len(body) < 80:
+        logger.warning("CMA case body thin for %s (%d chars)", slug, len(body))
+        return None
+    title_match = re.search(r"<title>([^<]+)</title>", html, flags=re.IGNORECASE)
+    title = _strip_html(title_match.group(1)) if title_match else slug.replace("-", " ")
+    if title.endswith(" - GOV.UK"):
+        title = title[: -len(" - GOV.UK")].strip()
+    return {
+        "source": "cma_gov_uk",
+        "kind": "cma_case_page",
+        "title": title,
+        "url": url,
+        "slug": slug,
+        "body": body,
+    }
+
+
+def fetch_cma_ofcom_merger_news(
+    deal: dict[str, Any],
+    *,
+    company_name: str,
+    ticker: str,
+    market: str | None = None,
+    max_items: int = CMA_OFCOM_MERGER_MAX_NEWS,
+) -> list[dict[str, Any]]:
+    """Google News RSS for CMA/Ofcom/PIIN headlines tied to a mapped media deal."""
+    from value_investor.research.news_locale import resolve_news_locale
+
+    locale = resolve_news_locale(market, ticker)
+    queries = list(deal.get("news_queries") or [])
+    keywords = str(deal.get("cma_atom_keywords") or "").strip()
+    if keywords:
+        queries.append(f"{keywords} CMA")
+    articles: list[dict[str, Any]] = []
+    per_query = max(2, max_items // max(len(queries), 1))
+    for query in queries:
+        articles.extend(
+            fetch_google_news_rss_query(
+                query,
+                source_label="cma_ofcom_merger_news",
+                max_items=per_query,
+                hl=locale["hl"],
+                gl=locale["gl"],
+                ceid=locale["ceid"],
+            )
+        )
+        if len(articles) >= max_items:
+            break
+    merged = merge_news_articles(articles)
+    return merged[:max_items]
+
+
+def format_cma_ofcom_merger_research_prompt(meta: dict[str, Any]) -> str | None:
+    """Memo prompt line pointing researchers at the ingested CMA/Ofcom merger corpus."""
+    if str(meta.get("status") or "") != "ok":
+        return None
+    deal_label = str(meta.get("deal_label") or "UK media merger")
+    case = meta.get("cma_case") or {}
+    case_title = str(case.get("title") or "").strip()
+    case_hint = f" ({case_title})" if case_title else ""
+    return (
+        f"Live {deal_label}: read `cma_ofcom_merger.json` and text under "
+        f"`cma_ofcom_merger/bodies/` for CMA phase timetable / case updates{case_hint}; "
+        "cross-check Ofcom/PIIN references in bundled regulatory news — regulatory colour only."
+    )
+
+
+def _merge_research_prompt_lines(snapshot: dict[str, Any], prompt: str) -> dict[str, Any]:
+    updated = dict(snapshot)
+    existing = [
+        str(item).strip() for item in (updated.get("research_prompts") or []) if str(item).strip()
+    ]
+    if prompt not in existing:
+        existing.append(prompt)
+    updated["research_prompts"] = existing
+    return updated
+
+
+def enrich_screening_snapshot_cma_ofcom_merger(
+    snapshot: dict[str, Any],
+    merger_meta: dict[str, Any],
+) -> dict[str, Any]:
+    """Attach a research_prompt when a CMA/Ofcom merger case file was ingested."""
+    prompt = format_cma_ofcom_merger_research_prompt(merger_meta)
+    if not prompt:
+        return snapshot
+    return _merge_research_prompt_lines(snapshot, prompt)
+
+
+def ingest_cma_ofcom_merger_sources(
+    *,
+    ticker: str,
+    company_name: str,
+    sources_dir: Path,
+    market: str | None = None,
+) -> dict[str, Any]:
+    """
+    Fetch CMA case page text and CMA/Ofcom-themed news for mapped media-deal tickers.
+
+    Written under ``sources_dir/cma_ofcom_merger.json`` with bodies in
+    ``cma_ofcom_merger/bodies/`` for memo prompts — never used for scoring.
+    """
+    from value_investor.storage import write_json
+
+    deal = resolve_cma_ofcom_merger_deal(ticker)
+    if deal is None:
+        return {"status": "skipped", "reason": "no_deal_mapping", "ticker": ticker}
+
+    sources_dir.mkdir(parents=True, exist_ok=True)
+    bodies_dir = sources_dir / "cma_ofcom_merger" / "bodies"
+    bodies_dir.mkdir(parents=True, exist_ok=True)
+
+    payload: dict[str, Any] = {
+        "ticker": ticker.strip().upper(),
+        "deal_label": deal.get("deal_label"),
+        "fetched_at": datetime.now(UTC).isoformat(),
+        "note": CMA_OFCOM_MERGER_NOTE,
+        "status": "partial",
+    }
+
+    case_slug = str(deal.get("cma_case_slug") or "").strip()
+    cma_case: dict[str, Any] | None = None
+    if case_slug:
+        cma_case = fetch_cma_merger_case_document(case_slug)
+        if cma_case:
+            body_name = f"cma_{case_slug.replace('-', '_')}.txt"
+            body_path = bodies_dir / body_name
+            body_path.write_text(str(cma_case.get("body") or ""), encoding="utf-8")
+            payload["cma_case"] = {
+                "title": cma_case.get("title"),
+                "url": cma_case.get("url"),
+                "slug": case_slug,
+                "body_path": f"cma_ofcom_merger/bodies/{body_name}",
+                "body_chars": len(str(cma_case.get("body") or "")),
+            }
+
+    atom_url = CMA_CASES_ATOM_URL
+    keywords = str(deal.get("cma_atom_keywords") or "").strip()
+    if keywords:
+        atom_url = f"{CMA_CASES_ATOM_URL}?{urllib.parse.urlencode({'keywords': keywords})}"
+    atom_entries: list[dict[str, Any]] = []
+    try:
+        atom_entries = parse_cma_cases_atom(
+            _http_get_bytes(atom_url),
+            case_slug=case_slug or None,
+        )
+    except OSError as exc:
+        logger.warning("CMA atom fetch failed for %s: %s", ticker, exc)
+    except ET.ParseError as exc:
+        logger.warning("CMA atom parse failed for %s: %s", ticker, exc)
+    if atom_entries:
+        payload["cma_atom_matches"] = atom_entries[:5]
+
+    news = fetch_cma_ofcom_merger_news(
+        deal,
+        company_name=company_name,
+        ticker=ticker,
+        market=market,
+    )
+    if news:
+        payload["regulatory_news"] = news
+
+    if payload.get("cma_case") or news:
+        payload["status"] = "ok"
+    else:
+        payload["status"] = "empty"
+        payload["reason"] = "no_case_body_or_news"
+
+    index_path = sources_dir / "cma_ofcom_merger.json"
+    write_json(index_path, payload, compact=True, compress=False)
+    payload["index_path"] = str(index_path)
+    return payload
+
+
 def enrich_screening_snapshot_with_yahoo_quarterly(
     snapshot: dict[str, Any],
     financials: dict[str, Any],
@@ -1120,11 +1405,30 @@ def ingest_research_sources(
             logger.warning("Macro context attach failed for %s: %s", ticker, exc)
             macro_meta = {"status": "error", "error": str(exc), "market": market_s}
 
+    cma_ofcom_merger: dict[str, Any] = {"status": "skipped", "reason": "no_deal_mapping"}
+    try:
+        cma_ofcom_merger = ingest_cma_ofcom_merger_sources(
+            ticker=ticker,
+            company_name=company_name,
+            sources_dir=sources_dir,
+            market=market,
+        )
+    except Exception as exc:  # noqa: BLE001 — research should continue without merger docs
+        logger.warning("CMA/Ofcom merger ingest failed for %s: %s", ticker, exc)
+        cma_ofcom_merger = {"status": "error", "error": str(exc), "ticker": ticker}
+    if str(cma_ofcom_merger.get("status") or "") == "ok":
+        snapshot_payload = enrich_screening_snapshot_cma_ofcom_merger(
+            enrich_screening_snapshot_with_yahoo_quarterly(screening_snapshot, financials),
+            cma_ofcom_merger,
+        )
+        write_json(snapshot_path, snapshot_payload, compact=True, compress=False)
+
     written_financials = resolve_json_path(financials_path) or financials_path
     written_snapshot = resolve_json_path(snapshot_path) or snapshot_path
     written_manifest = resolve_json_path(manifest_path) or manifest_path
     written_batch = resolve_json_path(batch_path) or batch_path
     written_macro = resolve_json_path(sources_dir / "macro_context.json")
+    written_merger = resolve_json_path(sources_dir / "cma_ofcom_merger.json")
 
     return {
         "financials_path": str(written_financials),
@@ -1140,6 +1444,8 @@ def ingest_research_sources(
         "filings_regime": filings_meta.get("filings_regime"),
         "macro_context_path": str(written_macro) if written_macro else None,
         "macro_context": macro_meta,
+        "cma_ofcom_merger_path": str(written_merger) if written_merger else None,
+        "cma_ofcom_merger": cma_ofcom_merger,
         "market": market_s,
     }
 
