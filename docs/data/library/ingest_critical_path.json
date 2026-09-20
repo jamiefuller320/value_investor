@@ -1,53 +1,54 @@
 {
-  "market_id": "tsx60",
-  "assessed_at": "2026-09-20T16:37:34.436663+00:00",
-  "unmeasured": [],
+  "market_id": "dax",
+  "assessed_at": "2026-09-20T16:48:34.025984+00:00",
+  "unmeasured": [
+    "HEI.DE",
+    "DTG.DE",
+    "HNR1.DE",
+    "HEN3.DE",
+    "FRE.DE",
+    "G1A.DE",
+    "VOW3.DE"
+  ],
   "zero_body": [],
   "indexed_without_body": [
     {
-      "ticker": "SU.TO",
-      "indexed_without_body": 17,
-      "filings_total": 48,
-      "filings_with_body": 31
-    },
-    {
-      "ticker": "NTR.TO",
-      "indexed_without_body": 8,
-      "filings_total": 27,
-      "filings_with_body": 19
-    },
-    {
-      "ticker": "TRI.TO",
-      "indexed_without_body": 7,
-      "filings_total": 156,
-      "filings_with_body": 149
-    },
-    {
-      "ticker": "GIB-A.TO",
-      "indexed_without_body": 1,
-      "filings_total": 20,
-      "filings_with_body": 19
+      "ticker": "FME.DE",
+      "indexed_without_body": 41,
+      "filings_total": 88,
+      "filings_with_body": 47
     }
   ],
-  "thin_need_discovery": [],
+  "thin_need_discovery": [
+    "MUV2.DE",
+    "BAS.DE",
+    "DTE.DE"
+  ],
   "thin_need_bodies": [],
-  "primary_blocker": "indexed_without_body",
-  "force_discovery_scan": false,
+  "primary_blocker": "unmeasured",
+  "force_discovery_scan": true,
   "auto_pin_tickers": [
-    "SU.TO",
-    "NTR.TO",
-    "TRI.TO",
-    "GIB-A.TO"
+    "HEI.DE",
+    "DTG.DE",
+    "HNR1.DE",
+    "HEN3.DE",
+    "FRE.DE",
+    "G1A.DE",
+    "VOW3.DE",
+    "FME.DE"
   ],
   "recommended_actions": [
-    "Prefer indexed-without-body body refetch (4 tickers, top: SU.TO(17), NTR.TO(8), TRI.TO(7), GIB-A.TO(1))"
+    "Bootstrap 7 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
+    "Prefer indexed-without-body body refetch (1 tickers, top: FME.DE(41))",
+    "Discovery/IR seed for 3 thin ticker(s) that already have bodies for every indexed filing",
+    "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 7,
     "zero_body": 0,
-    "indexed_without_body_tickers": 4,
-    "indexed_without_body_rows": 33,
-    "thin_need_discovery": 0,
+    "indexed_without_body_tickers": 1,
+    "indexed_without_body_rows": 41,
+    "thin_need_discovery": 3,
     "thin_need_bodies": 0
   }
 }
