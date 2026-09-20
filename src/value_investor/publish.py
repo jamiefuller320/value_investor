@@ -185,7 +185,11 @@ def load_ticker_financials_annual(ticker: str, *, output_dir: Path) -> dict[str,
         payload = read_json(path)
     except (OSError, ValueError, TypeError):
         return None
-    return payload if isinstance(payload, dict) else None
+    if not isinstance(payload, dict):
+        return None
+    from value_investor.research.ingest import enrich_lse_yahoo_quarterly_cashflow
+
+    return enrich_lse_yahoo_quarterly_cashflow(payload, ticker)
 
 
 def research_source_prompt_lines_for_ticker(ticker: str, *, output_dir: Path) -> list[str]:
