@@ -5461,3 +5461,26 @@ def test_guard_screening_snapshot_export_flags_interim_dividend_cut_megp_style()
     assert guarded["interim_dividend_cut_flagged"] is True
     assert guarded.get("dividend_sustainability_overlay") in (False, None)
     assert guarded["adjusted_signal"] == "strong_buy"
+
+
+def test_guard_screening_snapshot_export_maps_watchlist_research_to_caution():
+    from value_investor.scoring.screening_export_guard import guard_screening_snapshot_export
+
+    snapshot = {
+        "ticker": "MEGP.L",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "research_verdict": "watchlist",
+        "conviction_score": 0.45,
+        "interim_dividend_cut_pct": 0.065,
+        "fcf_dividend_coverage_net": 0.84,
+    }
+    model_results = _model_results_for_megp_dividend_overlay()
+
+    guarded = guard_screening_snapshot_export(snapshot, model_results=model_results)
+
+    assert guarded["interim_dividend_cut_flagged"] is True
+    assert guarded["signal"] == "strong_buy"
+    assert guarded["research_verdict"] == "caution"
+    assert guarded["adjusted_signal"] == "buy"
+    assert guarded["conviction_score"] == pytest.approx(0.45 * 0.85)

@@ -14,6 +14,7 @@ from value_investor.scoring.fcf import (
     fcf_action_note_mismatch,
     fcf_basis_definition_divergence,
     fcf_filing_screen_mismatch,
+    neutral_watchlist_dividend_caution_triggered,
     reconcile_fcf_for_ticker,
     screen_ttm_from_row,
     statutory_fcf_moat_leverage_overlay_triggered,
@@ -920,6 +921,57 @@ def enrich_signals_with_statutory_fcf_moat_leverage_overlay(
     return out
 
 
+def apply_neutral_watchlist_dividend_caution_overlay(
+    signal: str,
+    adjusted_signal: str,
+    conviction_score: float,
+    *,
+    research_verdict: str | None,
+    interim_dividend_cut_flagged: bool,
+    fcf_dividend_coverage_net: float | None,
+) -> tuple[str, float, bool]:
+    """Treat neutral/watchlist research as caution when interim cut meets thin cover."""
+    if not neutral_watchlist_dividend_caution_triggered(
+        research_verdict=research_verdict,
+        interim_dividend_cut_flagged=interim_dividend_cut_flagged,
+        fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+    ):
+        return adjusted_signal, float(conviction_score or 0.0), False
+    from value_investor.research.verdict import (
+        adjust_conviction_for_research,
+        compute_adjusted_signal,
+    )
+
+    cautioned = compute_adjusted_signal(signal, "caution")
+    merged = _more_conservative_signal(adjusted_signal, cautioned)
+    conviction = float(conviction_score or 0.0)
+    if merged != adjusted_signal:
+        conviction = adjust_conviction_for_research(conviction, "caution")
+    return merged, conviction, True
+
+
+def enforce_neutral_watchlist_dividend_caution_in_snapshot(
+    snapshot: dict[str, Any],
+) -> dict[str, Any]:
+    """Export path: upgrade watchlist research to caution overlay when dividend flags fire."""
+    updated = dict(snapshot)
+    cut_raw = updated.get("interim_dividend_cut_flagged")
+    cut_flagged = bool(cut_raw) if cut_raw is not None else False
+    merged, conviction, applied = apply_neutral_watchlist_dividend_caution_overlay(
+        str(updated.get("signal") or "hold"),
+        str(updated.get("adjusted_signal") or updated.get("signal") or "hold"),
+        float(updated.get("conviction_score") or 0.0),
+        research_verdict=updated.get("research_verdict"),
+        interim_dividend_cut_flagged=cut_flagged,
+        fcf_dividend_coverage_net=_float_or_none(updated.get("fcf_dividend_coverage_net")),
+    )
+    if applied:
+        updated["adjusted_signal"] = merged
+        updated["conviction_score"] = conviction
+        updated["research_verdict"] = "caution"
+    return updated
+
+
 def apply_dividend_sustainability_export_enforcement(
     *,
     signal: str,
@@ -933,6 +985,7 @@ def apply_dividend_sustainability_export_enforcement(
     dividends_paid: float | None = None,
     free_cashflow: float | None = None,
     interim_dividend_cut_pct: float | None = None,
+    research_verdict: str | None = None,
 ) -> tuple[bool, bool, str, float]:
     """Re-apply statutory dividend-sustainability caps on export/snapshot paths."""
     from value_investor.scoring.dividend_sustainability_overlay import (
@@ -949,14 +1002,18 @@ def apply_dividend_sustainability_export_enforcement(
     if dividend_sustainability_overlay:
         capped = cap_signal_for_dividend_sustainability_overlay(signal)
         merged = _more_conservative_signal(adjusted_signal, capped)
-        if merged == adjusted_signal:
-            return True, cut_flagged, merged, float(conviction_score or 0.0)
-        return (
-            True,
-            cut_flagged,
-            merged,
-            cap_conviction_for_dividend_sustainability_overlay(float(conviction_score or 0.0)),
+        conviction_out = cap_conviction_for_dividend_sustainability_overlay(
+            float(conviction_score or 0.0),
         )
+        merged, conviction_out, _ = apply_neutral_watchlist_dividend_caution_overlay(
+            signal,
+            merged,
+            conviction_out,
+            research_verdict=research_verdict,
+            interim_dividend_cut_flagged=cut_flagged,
+            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+        )
+        return True, cut_flagged, merged, conviction_out
 
     triggered, cut_flagged, merged, conviction = apply_dividend_sustainability_overlay_to_signal(
         signal,
@@ -971,7 +1028,23 @@ def apply_dividend_sustainability_export_enforcement(
         adjusted_signal=adjusted_signal,
     )
     if not triggered:
-        return False, cut_flagged, adjusted_signal, float(conviction_score or 0.0)
+        merged, conviction, _ = apply_neutral_watchlist_dividend_caution_overlay(
+            signal,
+            adjusted_signal,
+            float(conviction_score or 0.0),
+            research_verdict=research_verdict,
+            interim_dividend_cut_flagged=cut_flagged,
+            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+        )
+        return False, cut_flagged, merged, conviction
+    merged, conviction, _ = apply_neutral_watchlist_dividend_caution_overlay(
+        signal,
+        merged,
+        conviction,
+        research_verdict=research_verdict,
+        interim_dividend_cut_flagged=cut_flagged,
+        fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+    )
     return True, cut_flagged, merged, conviction
 
 
