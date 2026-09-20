@@ -187,9 +187,7 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
 def test_email_report_skips_full_ingest_deepen() -> None:
     """Sunday quiet bundle relies on Saturday pre-Sunday ingest-loop deepen."""
     email = EMAIL_WORKFLOW.read_text(encoding="utf-8")
-    args_lines = [
-        line for line in email.splitlines() if line.lstrip().startswith('ARGS="$ARGS')
-    ]
+    args_lines = [line for line in email.splitlines() if line.lstrip().startswith('ARGS="$ARGS')]
     assert args_lines, "expected ftse-email ARGS assignment"
     joined = "\n".join(args_lines)
     assert "--ingest-improvement-pass" not in joined
