@@ -485,6 +485,7 @@ def _filing_index_paths_for_ticker(ticker: str, *, roots: list[Path]) -> list[Pa
 
 
 def _coverage_from_index(path: Path) -> dict[str, int]:
+    install_ch_refetch_scoring_hooks()
     from value_investor.storage import read_json
 
     coverage = {
@@ -502,6 +503,128 @@ def _coverage_from_index(path: Path) -> dict[str, int]:
     coverage["filings_with_body"] = int(summary.get("with_body") or 0)
     coverage["indexed_without_body"] = sum(1 for row in filings if not row.get("has_body"))
     return coverage
+
+
+_CH_ADMINISTRATIVE_PATTERNS = (
+    re.compile(r"\bconfirmation[- ]statement\b", re.I),
+    re.compile(r"\bannual return\b", re.I),
+    re.compile(r"\bchange of registered office\b", re.I),
+    re.compile(r"\bappointment of (?:director|secretary|corporate)\b", re.I),
+    re.compile(r"\btermination of appointment\b", re.I),
+    re.compile(r"\bstatement of capital\b", re.I),
+    re.compile(r"\bregister of (?:charges|people)\b", re.I),
+)
+
+_CH_PARENT_ONLY_ACCOUNT_TYPES = re.compile(
+    r"accounts-type-(?:small|micro(?:-entity)?|medium|total-exemption(?:-full)?)\b",
+    re.I,
+)
+
+_CH_REFETCH_HOOKS_INSTALLED = False
+
+
+def _ch_filing_text_blob(row: dict[str, Any]) -> str:
+    return (
+        f"{row.get('headline') or ''} {row.get('summary') or ''} {row.get('category') or ''}"
+    ).lower()
+
+
+def is_ch_administrative_filing(row: dict[str, Any]) -> bool:
+    """True for CH confirmation statements and other non-account administrative filings."""
+    if str(row.get("source") or "") != "companies_house":
+        return False
+    category = str(row.get("category") or "").strip().lower()
+    if category and category not in {"accounts"}:
+        return True
+    blob = _ch_filing_text_blob(row)
+    return any(pattern.search(blob) for pattern in _CH_ADMINISTRATIVE_PATTERNS)
+
+
+def is_ch_parent_only_for_gap_scoring(row: dict[str, Any]) -> bool:
+    """
+    True when a CH row is parent-only / SME and must not satisfy annual/interim gap scoring.
+
+    Consolidated group filings return False; s.838 and holding disclosures are handled separately.
+    """
+    if str(row.get("source") or "") != "companies_house":
+        return False
+    entity = str(row.get("entity_type") or "other")
+    if entity == "consolidated":
+        return False
+    if entity in {"s838_holding", "holding_disclosure"}:
+        return True
+    blob = _ch_filing_text_blob(row)
+    if _CH_PARENT_ONLY_ACCOUNT_TYPES.search(blob):
+        return True
+    if entity == "other" and re.search(r"accounts-type-interim\b", blob, flags=re.I):
+        return True
+    if re.search(r"\bparent company financial statements\b", blob, flags=re.I):
+        return True
+    return False
+
+
+def _ch_refetch_rank_key_hooked(row: dict[str, Any], *, _orig) -> tuple:
+    if is_ch_administrative_filing(row):
+        return (999, 999, 999, "", 0, str(row.get("id") or ""))
+    base = _orig(row)
+    if is_ch_parent_only_for_gap_scoring(row):
+        return (5, *base)
+    return base
+
+
+def _ch_row_needs_body_refetch_hooked(
+    row: dict[str, Any],
+    bodies_dir: Path,
+    *,
+    _orig,
+) -> bool:
+    if is_ch_administrative_filing(row):
+        return False
+    return _orig(row, bodies_dir)
+
+
+def _row_counts_toward_period_coverage_hooked(row: dict[str, Any], *, _orig) -> bool:
+    if is_ch_administrative_filing(row):
+        return False
+    if is_ch_parent_only_for_gap_scoring(row):
+        return False
+    return _orig(row)
+
+
+def install_ch_refetch_scoring_hooks(*, force: bool = False) -> bool:
+    """
+    Patch ``research.filings`` refetch / period-coverage scoring for CH parent-only rows.
+
+    Called before ingest health snapshots and ingest-loop refetch so ``fetched=2`` on
+    administrative or parent-only CH bodies does not imply material gap closure.
+    """
+    global _CH_REFETCH_HOOKS_INSTALLED
+    if _CH_REFETCH_HOOKS_INSTALLED and not force:
+        return False
+    try:
+        import value_investor.research.filings as filings_mod
+    except ImportError:
+        return False
+    if getattr(filings_mod, "_eng_queue_ch_refetch_hooks", False) and not force:
+        _CH_REFETCH_HOOKS_INSTALLED = True
+        return False
+
+    orig_rank = filings_mod._ch_refetch_rank_key
+    orig_needs = filings_mod._ch_row_needs_body_refetch
+    orig_counts = filings_mod._row_counts_toward_period_coverage
+
+    filings_mod._ch_refetch_rank_key = lambda row, _o=orig_rank: _ch_refetch_rank_key_hooked(
+        row, _orig=_o
+    )
+    filings_mod._ch_row_needs_body_refetch = lambda row, bodies_dir, _o=orig_needs: (
+        _ch_row_needs_body_refetch_hooked(row, bodies_dir, _orig=_o)
+    )
+    filings_mod._row_counts_toward_period_coverage = lambda row, _o=orig_counts: (
+        _row_counts_toward_period_coverage_hooked(row, _orig=_o)
+    )
+    filings_mod._eng_queue_ch_refetch_hooks = True
+    _CH_REFETCH_HOOKS_INSTALLED = True
+    return True
 
 
 def _buy_tier_tickers(latest_path: Path) -> list[str]:
@@ -528,6 +651,7 @@ def snapshot_ingest_health(
     research_roots: list[Path] | None = None,
 ) -> dict[str, Any]:
     """Summarise buy-tier filing body coverage from committed research stores."""
+    install_ch_refetch_scoring_hooks()
     roots = research_roots or [
         Path("docs/data/research"),
         Path("output/research"),
