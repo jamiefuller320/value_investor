@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-20T15:00:42.479977+00:00",
+  "compiled_at": "2026-09-20T16:01:34.257284+00:00",
   "run_at": null,
-  "task_count": 84,
+  "task_count": 85,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -309,6 +309,62 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/652",
       "pr_number": 652,
       "merged_at": "2026-09-15T13:54:17.254505+00:00"
+    },
+    {
+      "id": "eng-20260920-14",
+      "area": "scoring",
+      "title": "fcf: Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade when t",
+      "summary": "First-principle slice 1/2 of: Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade when three-. topics=fcf paths=8",
+      "priority": "medium",
+      "priority_score": 97.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "FCF",
+          "OCF"
+        ],
+        "plan_index": 5,
+        "narrow_scope_mode": "split",
+        "narrow_scope_reason": "topics=fcf paths=8",
+        "narrow_parent_title": "Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade when three-",
+        "narrow_cohesion_bypass": false,
+        "narrow_split_group_id": "35891ca6d62b",
+        "narrow_split_index": 1,
+        "narrow_split_count": 2,
+        "narrow_topics": [
+          "fcf"
+        ],
+        "compile_cap_drain": true,
+        "origin_source": "post_run_review",
+        "origin_priority_score": 97.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+      },
+      "acceptance_criteria": [
+        "Export or overlay behaviour is covered by a unit test",
+        "Strong-buy confirmation logic remains backward compatible unless task says otherwise",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/scoring/fcf.py",
+        "src/value_investor/scoring/fcf_basis_overlay.py",
+        "src/value_investor/scoring/fcf_three_way_conviction_overlay.py",
+        "src/value_investor/scoring/screening_export_guard.py",
+        "src/value_investor/scoring/snapshot.py",
+        "src/value_investor/pipeline.py",
+        "tests/test_pipeline.py",
+        "tests/test_summary.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": true,
+      "status": "open"
     },
     {
       "id": "eng-20260915-05",
@@ -3636,7 +3692,8 @@
         "origin_priority_score": 20.0,
         "preferred_merge_class": "compile_cap_drain",
         "doc": "docs/ops/engineering-sync.md",
-        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Prompt or export change is covered by a parser/unit test",
@@ -3657,13 +3714,17 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": true,
-      "status": "pr_open",
+      "status": "merged",
       "unparked_at": "2026-09-20T12:41:16.402820+00:00",
       "unparked_reason": "triage: preflight_clash cleared — no open cursor/eng-* PRs on GitHub",
       "result_path": "output/engineering_result_eng-20260920-10.md",
       "branch_name": "cursor/eng-20260920-10-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-20T15:40:16.803747+00:00"
+      "completed_at": "2026-09-20T15:40:16.803747+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/760",
+      "pr_number": 760,
+      "merged_at": "2026-09-20T16:01:32.875405+00:00"
     },
     {
       "id": "eng-20260920-08",
