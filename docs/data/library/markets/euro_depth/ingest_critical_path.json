@@ -1,7 +1,9 @@
 {
   "market_id": "euro_depth",
-  "assessed_at": "2026-09-19T10:17:23.724810+00:00",
-  "unmeasured": [],
+  "assessed_at": "2026-09-20T13:18:01.221235+00:00",
+  "unmeasured": [
+    "ADYEN.AS"
+  ],
   "zero_body": [],
   "indexed_without_body": [
     {
@@ -57,12 +59,13 @@
     "SGO.PA",
     "ACKB.BR",
     "DTE.DE",
-    "MUV2.DE",
     "SKA-B.ST",
+    "MUV2.DE",
     "UCB.BR",
     "APAM.AS",
     "BAS.DE",
-    "DQ7A.IR"
+    "DQ7A.IR",
+    "NBA.LS"
   ],
   "thin_need_bodies": [
     "SGO.PA",
@@ -70,29 +73,30 @@
     "WIE.VI",
     "UCB.BR"
   ],
-  "primary_blocker": "indexed_without_body",
+  "primary_blocker": "unmeasured",
   "force_discovery_scan": true,
   "auto_pin_tickers": [
+    "ADYEN.AS",
     "ABI.BR",
     "C5H.IR",
     "EVN.VI",
     "SAP.DE",
     "SGO.PA",
     "TTE.PA",
-    "UCB.BR",
-    "WIE.VI"
+    "UCB.BR"
   ],
   "recommended_actions": [
+    "Bootstrap 1 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
     "Prefer indexed-without-body body refetch (8 tickers, top: ABI.BR(12), C5H.IR(1), EVN.VI(1), SAP.DE(1), SGO.PA(1))",
-    "Discovery/IR seed for 9 thin ticker(s) that already have bodies for every indexed filing",
+    "Discovery/IR seed for 10 thin ticker(s) that already have bodies for every indexed filing",
     "Run listing-only discovery_scan before deepen"
   ],
   "gap_counts": {
-    "unmeasured": 0,
+    "unmeasured": 1,
     "zero_body": 0,
     "indexed_without_body_tickers": 8,
     "indexed_without_body_rows": 19,
-    "thin_need_discovery": 9,
+    "thin_need_discovery": 10,
     "thin_need_bodies": 4
   }
 }

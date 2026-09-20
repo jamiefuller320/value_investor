@@ -1,5 +1,5 @@
 {
-  "compiled_at": "2026-09-20T11:09:26.664583+00:00",
+  "compiled_at": "2026-09-20T13:24:48.847755+00:00",
   "run_at": null,
   "task_count": 81,
   "tasks": [
@@ -4431,7 +4431,7 @@
       "title": "Hunt fetchable IR source for parked nasdaq100 leftover PDD",
       "summary": "Library market nasdaq100 (Nasdaq-100) parked PDD after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statut",
       "priority": "low",
-      "priority_score": 14.0,
+      "priority_score": 12.0,
       "source": "parked_source_hunter",
       "evidence": {
         "market_id": "nasdaq100",
@@ -4470,12 +4470,7 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "cancelled",
-      "parked_reason": "preflight blocked PR open — preflight failed",
-      "parked_policy": "preflight_clash",
-      "parked_at": "2026-09-19T18:31:33.889461+00:00",
-      "cancelled_reason": "backlog clearing: duplicate nasdaq100 hunter park; open queue carries fresh hunter tasks",
-      "cancelled_at": "2026-09-19T20:41:16.547583+00:00"
+      "status": "cancelled"
     },
     {
       "id": "eng-20260919-10",
@@ -4746,9 +4741,9 @@
   },
   "reprioritized_at": "2026-09-19T09:39:44.911760+00:00",
   "reprioritized_after_task": "eng-20260918-22",
-  "micro_compile_source": "compile_cap_drain",
+  "micro_compile_source": "parked_source_hunter",
   "library_market_id": "nasdaq100",
-  "hunter_ticker": "TRI",
+  "hunter_ticker": "PDD",
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
