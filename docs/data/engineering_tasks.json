@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-20T10:30:38.111071+00:00",
+  "compiled_at": "2026-09-20T11:09:26.664583+00:00",
   "run_at": null,
-  "task_count": 79,
+  "task_count": 81,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -3399,6 +3399,100 @@
       "merged_at": "2026-09-18T13:53:33.008024+00:00"
     },
     {
+      "id": "eng-20260920-09",
+      "area": "ops",
+      "title": "On CH refetch success, tag body `parse_quality: ocr|ixbrl` in gap_fill_source_map so memos do not treat OCR strategic pages as full accounts coverage.",
+      "summary": "On CH refetch success, tag body `parse_quality: ocr|ixbrl` in gap_fill_source_map so memos do not treat OCR strategic pages as full accounts coverage.",
+      "priority": "medium",
+      "priority_score": 25.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "ITV.L"
+        ],
+        "recorded_at": "2026-09-13T08:06:10.268034+00:00",
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 20.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Prompt or export change is covered by a parser/unit test",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/automation_status.py",
+        "src/value_investor/email_agent.py",
+        "src/value_investor/ops_monitor.py",
+        "src/value_investor/backtest_health.py",
+        "src/value_investor/engineering_recovery.py",
+        "src/value_investor/engineering_sync.py",
+        "src/value_investor/engineering_pr_notify.py",
+        "src/value_investor/engineering_preflight.py",
+        "src/value_investor/engineering_queue.py",
+        ".github/workflows/ops-monitor.yml",
+        ".github/workflows/engineering-agent.yml",
+        ".github/workflows/engineering-queue.yml",
+        "tests/test_automation_status.py",
+        "tests/test_ops_monitor.py",
+        "tests/test_backtest_health.py",
+        "tests/test_engineering_sync.py",
+        "tests/test_engineering_pr_notify.py",
+        "tests/test_engineering_preflight.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
+      "id": "eng-20260920-10",
+      "area": "prompt",
+      "title": "`output/research/ITV.L/research.md` is updated with these sections.",
+      "summary": "`output/research/ITV.L/research.md` is updated with these sections.",
+      "priority": "medium",
+      "priority_score": 25.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "ITV.L"
+        ],
+        "recorded_at": "2026-09-13T08:06:10.268038+00:00",
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 20.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+      },
+      "acceptance_criteria": [
+        "Prompt or export change is covered by a parser/unit test",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/agent.py",
+        "src/value_investor/deep_analysis.py",
+        "src/value_investor/research/gap_fill.py",
+        "tests/test_deep_analysis.py",
+        "tests/test_research_gap_fill.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": true,
+      "status": "open"
+    },
+    {
       "id": "eng-20260920-08",
       "area": "coverage",
       "title": "Populate Yahoo **quarterly cash flow** for LSE names where TTM FCF is flagged unverified (`yahoo_quarterly_cashflow: false` in gap map) to reduce filing vs scre",
@@ -3459,7 +3553,8 @@
         "origin_priority_score": 20.0,
         "preferred_merge_class": "compile_cap_drain",
         "doc": "docs/ops/engineering-sync.md",
-        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap",
+        "merge_class": "compile_cap_drain"
       },
       "acceptance_criteria": [
         "Prompt or export change is covered by a parser/unit test",
@@ -3479,11 +3574,15 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": true,
-      "status": "pr_open",
+      "status": "merged",
       "result_path": "output/engineering_result_eng-20260920-07.md",
       "branch_name": "cursor/eng-20260920-07-1de3",
       "no_diff_count": 0,
-      "completed_at": "2026-09-20T10:42:51.004440+00:00"
+      "completed_at": "2026-09-20T10:42:51.004440+00:00",
+      "merge_class": "compile_cap_drain",
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/755",
+      "pr_number": 755,
+      "merged_at": "2026-09-20T11:09:25.330637+00:00"
     },
     {
       "id": "eng-20260920-06",
