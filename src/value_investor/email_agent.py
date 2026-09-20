@@ -632,8 +632,10 @@ def main(argv: list[str] | None = None) -> int:
             )
             return 1
         try:
+            from value_investor.engineering_sync import ensure_gap_fill_ch_parse_quality_hooks
             from value_investor.research.gap_fill import run_red_flag_gap_fill
 
+            ensure_gap_fill_ch_parse_quality_hooks()
             gap_fill_summary = run_red_flag_gap_fill(
                 deep_analysis=deep_analysis,
                 reports=reports,
