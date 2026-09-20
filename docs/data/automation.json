@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T15:05:14.732955+00:00",
+  "generated_at": "2026-09-20T15:36:40.125714+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1156,15 +1156,15 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-20T15:00:42.479977+00:00",
-    "queue_ui_updated_at": "2026-09-20T15:05:14.652107+00:00",
+    "queue_ui_updated_at": "2026-09-20T15:36:39.964903+00:00",
     "task_count": 84,
     "status": {
-      "open_count": 4,
+      "open_count": 2,
       "pr_open_count": 0,
-      "parked_count": 2,
-      "merged_count": 60,
+      "parked_count": 3,
+      "merged_count": 61,
       "failed_count": 0,
-      "next_task_id": "eng-20260920-12",
+      "next_task_id": "eng-20260920-10",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1172,38 +1172,6 @@
       "spend_blocked": false
     },
     "queued_tasks": [
-      {
-        "id": "eng-20260920-12",
-        "area": "ops",
-        "title": "Flag CH bodies with OCR quality below threshold and fall back to RNS preliminary until NSM PDF succeeds, to avoid double-counting stale narrative (Sky “discussi",
-        "priority": "medium",
-        "priority_score": 25.0,
-        "status": "open",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "partial"
-      },
-      {
-        "id": "eng-20260920-09",
-        "area": "ops",
-        "title": "On CH refetch success, tag body `parse_quality: ocr|ixbrl` in gap_fill_source_map so memos do not treat OCR strategic pages as full accounts coverage.",
-        "priority": "medium",
-        "priority_score": 25.0,
-        "status": "open",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 2,
-        "clash_scan": "partial"
-      },
       {
         "id": "eng-20260920-10",
         "area": "prompt",
@@ -1217,8 +1185,8 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 3,
-        "clash_scan": "partial"
+        "effective_dispatch_rank": 1,
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260920-08",
@@ -1233,8 +1201,8 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 4,
-        "clash_scan": "partial"
+        "effective_dispatch_rank": 2,
+        "clash_scan": "full"
       }
     ],
     "attention_tasks": [
@@ -1261,11 +1229,23 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null
+      },
+      {
+        "id": "eng-20260920-12",
+        "area": "ops",
+        "title": "Flag CH bodies with OCR quality below threshold and fall back to RNS preliminary until NSM PDF succeeds, to avoid double-counting stale narrative (Sky “discussi",
+        "priority": "medium",
+        "priority_score": 25.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
       }
     ],
     "clash_summary": {
-      "open_task_count": 4,
-      "dispatch_eligible_count": 4,
+      "open_task_count": 2,
+      "dispatch_eligible_count": 2,
       "blocked_count": 0
     }
   },
@@ -1544,7 +1524,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-20T15:05:14.732955+00:00",
+    "generated_at": "2026-09-20T15:36:40.125714+00:00",
     "overall": "active",
     "headline": "Agent lane active.",
     "merge_lane": {
@@ -1565,19 +1545,19 @@
       "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
-      "attention_parked_count": 2,
-      "open_count": 4,
+      "attention_parked_count": 3,
+      "open_count": 2,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 4,
+      "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260920-12",
+      "next_task_id": "eng-20260920-10",
       "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
       "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
     },
     "queue_clearing": {
       "pause_active": false,
-      "attention_parked_count": 2,
-      "evaluated_at": "2026-09-20T15:05:10.592524+00:00"
+      "attention_parked_count": 3,
+      "evaluated_at": "2026-09-20T15:36:36.273626+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1591,6 +1571,17 @@
       "should_dispatch_engineering": true
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260920-09",
+        "title": "On CH refetch success, tag body `parse_quality: ocr|ixbrl` in gap_fill_source_map so memos do not treat OCR strategic pages as full accounts coverage.",
+        "area": "ops",
+        "pr_number": 759,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/759",
+        "merged_at": "2026-09-20T15:35:37.854628+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": false,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260920-07",
         "title": "Suppress or mark unverified screen TTM FCF when `yahoo_quarterly_cashflow` is empty for the ticker.",
@@ -1680,6 +1671,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 8
+    "verified_merges_today_count": 9
   }
 }
