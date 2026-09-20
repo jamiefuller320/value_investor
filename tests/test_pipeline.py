@@ -4983,6 +4983,58 @@ def test_write_screening_snapshot_jsg_style_strips_dividend_family_credit(tmp_pa
     assert "dividend" not in str(written.get("passed_families") or "")
     assert written.get("families_passed") == 4
     assert written.get("research_prompts") in (None, [])
+    assert written.get("fcf_dividend_coverage") in (None, {})
+    assert written.get("fcf_dividend_coverage_net") is None
+    assert written.get("fcf_dividend_coverage_gross") is None
+
+
+def test_enrich_screening_snapshot_dividend_dual_fcf_attaches_labelled_coverage():
+    from value_investor.scoring.dividend_sustainability_overlay import (
+        enrich_screening_snapshot_dividend_dual_fcf_research_prompts,
+    )
+
+    snapshot = {
+        "ticker": "MEGP.L",
+        "passed_families": "cheapness,quality,dividend,garp,risk",
+        "fcf_definition_divergence": True,
+        "fcf_dividend_coverage_net": 0.84,
+        "fcf_dividend_coverage_gross": 1.68,
+    }
+    enriched = enrich_screening_snapshot_dividend_dual_fcf_research_prompts(snapshot)
+    labelled = enriched["fcf_dividend_coverage"]
+    assert labelled["statutory_ocf_minus_capex"]["label"] == "Statutory OCF−CapEx"
+    assert labelled["statutory_ocf_minus_capex"]["ratio"] == pytest.approx(0.84)
+    assert labelled["management_cash_generated_minus_capex"]["ratio"] == pytest.approx(1.68)
+    assert enriched["research_prompts"]
+    assert "dual fcf/dividend cover" in enriched["research_prompts"][0].lower()
+
+
+def test_write_screening_snapshot_megp_dividend_dual_cover_with_three_way_conviction_flag(
+    tmp_path: Path,
+):
+    """Dividend-family export keeps labelled dual cover while three-way conviction caps apply."""
+    sources = tmp_path / "research" / "MEGP.L" / "sources"
+    snapshot = {
+        "ticker": "MEGP.L",
+        "signal": "buy",
+        "conviction_score": 0.8,
+        "passed_families": "cheapness,quality,dividend,garp,risk",
+        "fcf_definition_divergence": True,
+        "fcf_dividend_coverage_net": 0.84,
+        "fcf_dividend_coverage_gross": 1.68,
+        "fcf_three_way_conviction_overlay": True,
+        "profit_to_cash_yoy_decline_pp": 18.0,
+        "profit_to_cash_current_pct": 65.0,
+        "profit_to_cash_prior_pct": 83.0,
+    }
+    write_screening_snapshot(sources, snapshot)
+    written = json.loads((sources / "screening_snapshot.json").read_text(encoding="utf-8"))
+    assert written["fcf_dividend_coverage"]["statutory_ocf_minus_capex"]["ratio"] == pytest.approx(
+        0.84
+    )
+    assert written["fcf_three_way_conviction_overlay"] is True
+    assert written["conviction_score"] < 0.8
+    assert "dual fcf/dividend cover" in written["research_prompts"][0].lower()
 
 
 def test_jsg_style_passed_families_does_not_trigger_dual_fcf_dividend_prompt(tmp_path: Path):
