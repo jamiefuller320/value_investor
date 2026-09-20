@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T21:04:21.890406+00:00",
+  "generated_at": "2026-09-20T21:06:22.044949+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1155,36 +1155,23 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-20T20:31:29.393649+00:00",
-    "queue_ui_updated_at": "2026-09-20T21:04:21.807925+00:00",
+    "compiled_at": "2026-09-20T21:06:20.649207+00:00",
+    "queue_ui_updated_at": "2026-09-20T21:06:21.997008+00:00",
     "task_count": 87,
     "status": {
       "open_count": 0,
-      "pr_open_count": 1,
+      "pr_open_count": 0,
       "parked_count": 1,
-      "merged_count": 65,
+      "merged_count": 66,
       "failed_count": 0,
       "next_task_id": null,
-      "in_flight_branch": "cursor/eng-20260920-13-1de3",
-      "in_flight_pr": 769,
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [
-      {
-        "id": "eng-20260920-13",
-        "area": "prompt",
-        "title": "On CH refetch passes, require gap-fill to cite at least three-year margin and secured-workload series when present in `filings/bodies/ch_*.txt`.",
-        "priority": "medium",
-        "priority_score": 25.0,
-        "status": "pr_open",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": "cursor/eng-20260920-13-1de3"
-      }
-    ],
+    "queued_tasks": [],
     "attention_tasks": [
       {
         "id": "eng-20260920-16",
@@ -1480,46 +1467,40 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-20T21:04:21.890406+00:00",
-    "overall": "blocked",
-    "headline": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
+    "generated_at": "2026-09-20T21:06:22.044949+00:00",
+    "overall": "idle",
+    "headline": "Queue and hunter idle.",
     "merge_lane": {
-      "state": "running",
-      "idle": false,
-      "running": true,
+      "state": "idle",
+      "idle": true,
+      "running": false,
       "blocked": false,
-      "pr_open_count": 1,
-      "open_engineering_prs": [
-        {
-          "number": 769,
-          "branch": "cursor/eng-20260920-13-1de3",
-          "draft": false
-        }
-      ],
-      "in_flight_pr": 769,
-      "detail": "Open engineering PR(s) #769 — merge fires on CI success."
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
-      "state": "blocked",
-      "idle": false,
+      "state": "idle",
+      "idle": true,
       "running": false,
-      "blocked": true,
+      "blocked": false,
       "should_dispatch": false,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 1,
       "open_count": 0,
-      "pr_open_count": 1,
+      "pr_open_count": 0,
       "dispatch_eligible_count": 0,
       "blocked_task_count": 0,
       "next_task_id": null,
       "reason": "no open engineering tasks in queue",
-      "detail": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged."
+      "detail": "No open engineering tasks — queue is idle."
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 1,
-      "evaluated_at": "2026-09-20T21:04:20.755873+00:00"
+      "evaluated_at": "2026-09-20T21:06:21.358054+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1533,6 +1514,17 @@
       "should_dispatch_engineering": true
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260920-13",
+        "title": "On CH refetch passes, require gap-fill to cite at least three-year margin and secured-workload series when present in `filings/bodies/ch_*.txt`.",
+        "area": "prompt",
+        "pr_number": 769,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/769",
+        "merged_at": "2026-09-20T21:05:09.508685+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": true,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260920-15",
         "title": "dividend: Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade w",
@@ -1677,6 +1669,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 13
+    "verified_merges_today_count": 14
   }
 }
