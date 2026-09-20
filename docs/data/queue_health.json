@@ -1,17 +1,23 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T15:01:29.315325+00:00",
+  "generated_at": "2026-09-20T17:19:55.696985+00:00",
   "overall": "active",
-  "headline": "Agent lane active.",
+  "headline": "Merge lane active; agent lane active.",
   "merge_lane": {
-    "state": "idle",
-    "idle": true,
-    "running": false,
+    "state": "running",
+    "idle": false,
+    "running": true,
     "blocked": false,
-    "pr_open_count": 0,
-    "open_engineering_prs": [],
-    "in_flight_pr": null,
-    "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+    "pr_open_count": 1,
+    "open_engineering_prs": [
+      {
+        "number": 764,
+        "branch": "cursor/eng-20260920-15-1de3",
+        "draft": false
+      }
+    ],
+    "in_flight_pr": 764,
+    "detail": "Open engineering PR(s) #764 — merge fires on CI success."
   },
   "agent_lane": {
     "state": "running",
@@ -21,19 +27,19 @@
     "should_dispatch": true,
     "pause_active": false,
     "traffic_pause_active": false,
-    "attention_parked_count": 1,
-    "open_count": 5,
-    "pr_open_count": 0,
-    "dispatch_eligible_count": 5,
+    "attention_parked_count": 0,
+    "open_count": 1,
+    "pr_open_count": 1,
+    "dispatch_eligible_count": 1,
     "blocked_task_count": 0,
     "next_task_id": "eng-20260920-13",
-    "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
-    "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+    "reason": "queue ready — dispatch next open task",
+    "detail": "queue ready — dispatch next open task"
   },
   "queue_clearing": {
     "pause_active": false,
-    "attention_parked_count": 4,
-    "evaluated_at": "2026-09-20T15:00:39.632199+00:00"
+    "attention_parked_count": 0,
+    "evaluated_at": "2026-09-20T17:19:42.127483+00:00"
   },
   "traffic_control": {
     "pause_active": false,
@@ -47,6 +53,50 @@
     "should_dispatch_engineering": true
   },
   "merges_today": [
+    {
+      "task_id": "eng-20260920-08",
+      "title": "Populate Yahoo **quarterly cash flow** for LSE names where TTM FCF is flagged unverified (`yahoo_quarterly_cashflow: false` in gap map) to reduce filing vs scre",
+      "area": "coverage",
+      "pr_number": 761,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/761",
+      "merged_at": "2026-09-20T17:19:39.655441+00:00",
+      "merge_class": "ci_fix",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260920-14",
+      "title": "fcf: Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade when t",
+      "area": "scoring",
+      "pr_number": 763,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/763",
+      "merged_at": "2026-09-20T17:09:33.985659+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260920-10",
+      "title": "`output/research/ITV.L/research.md` is updated with these sections.",
+      "area": "prompt",
+      "pr_number": 760,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/760",
+      "merged_at": "2026-09-20T16:01:32.875405+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": true,
+      "independently_verified": true
+    },
+    {
+      "task_id": "eng-20260920-09",
+      "title": "On CH refetch success, tag body `parse_quality: ocr|ixbrl` in gap_fill_source_map so memos do not treat OCR strategic pages as full accounts coverage.",
+      "area": "ops",
+      "pr_number": 759,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/759",
+      "merged_at": "2026-09-20T15:35:37.854628+00:00",
+      "merge_class": "compile_cap_drain",
+      "auto_merge": false,
+      "independently_verified": true
+    },
     {
       "task_id": "eng-20260920-07",
       "title": "Suppress or mark unverified screen TTM FCF when `yahoo_quarterly_cashflow` is empty for the ticker.",
@@ -136,5 +186,5 @@
       "independently_verified": true
     }
   ],
-  "verified_merges_today_count": 8
+  "verified_merges_today_count": 12
 }
