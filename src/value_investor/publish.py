@@ -24,6 +24,7 @@ from value_investor.storage import (
     DASHBOARD_ARCHIVE_KEEP,
     prune_dashboard_archives,
     read_json,
+    resolve_json_path,
     summarize_text,
     write_json,
 )
@@ -33,6 +34,7 @@ from value_investor.trust_summary import build_trust_reports
 logger = logging.getLogger(__name__)
 
 COMMITTED_PAPER_AUTOMATION = Path("docs/data/paper_automation")
+COMMITTED_RESEARCH_ROOT = Path("docs/data/research")
 
 
 def _resolve_paper_automation_dir(output_dir: Path) -> Path:
@@ -143,6 +145,59 @@ def _load_post_run_review(output_dir: Path) -> dict[str, str] | None:
 
 def _slug_ticker(ticker: str) -> str:
     return slug_ticker(ticker)
+
+
+def _resolve_research_sources_dir(ticker: str, *, output_dir: Path) -> Path | None:
+    """Prefer fresh ``output/research`` sources, then committed ``docs/data/research``."""
+    normalized = ticker.strip().upper()
+    for root in (output_dir / "research", COMMITTED_RESEARCH_ROOT):
+        candidate = root / normalized / "sources"
+        if candidate.is_dir():
+            return candidate
+    return None
+
+
+def load_cma_ofcom_merger_meta(ticker: str, *, output_dir: Path) -> dict[str, Any] | None:
+    """Load ``cma_ofcom_merger.json`` when present for a ticker research store."""
+    sources = _resolve_research_sources_dir(ticker, output_dir=output_dir)
+    if sources is None:
+        return None
+    path = resolve_json_path(sources / "cma_ofcom_merger.json")
+    if path is None:
+        return None
+    try:
+        payload = read_json(path)
+    except (OSError, ValueError, TypeError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def research_source_prompt_lines_for_ticker(ticker: str, *, output_dir: Path) -> list[str]:
+    """Export memo prompt lines for ingested secondary sources (CMA/Ofcom merger corpus)."""
+    from value_investor.research.ingest import format_cma_ofcom_merger_research_prompt
+
+    meta = load_cma_ofcom_merger_meta(ticker, output_dir=output_dir)
+    if not meta:
+        return []
+    prompt = format_cma_ofcom_merger_research_prompt(meta)
+    return [prompt] if prompt else []
+
+
+def annotate_reports_with_research_source_prompts(
+    reports: list[dict[str, Any]],
+    *,
+    output_dir: Path,
+) -> list[dict[str, Any]]:
+    """Stamp ``research_source_prompts`` on dashboard report rows when corpus exists."""
+    annotated: list[dict[str, Any]] = []
+    for row in reports:
+        updated = dict(row)
+        ticker = str(row.get("ticker") or "")
+        prompts = research_source_prompt_lines_for_ticker(ticker, output_dir=output_dir)
+        if prompts:
+            updated["research_source_prompts"] = prompts
+        annotated.append(updated)
+    return annotated
 
 
 def _load_research_documents(output_dir: Path) -> list[Any]:
@@ -267,6 +322,7 @@ def _apply_resolved_research_overlay(
 def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     """Assemble a single JSON payload for the static dashboard."""
     reports, run_at = _load_reports(output_dir)
+    reports = annotate_reports_with_research_source_prompts(reports, output_dir=output_dir)
     run_diff = _read_json(output_dir / "run_diff.json")
     backtest = _read_json(output_dir / "backtest_summary.json")
     simulation = _read_json(output_dir / "simulation_summary.json")
