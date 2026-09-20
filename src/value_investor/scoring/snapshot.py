@@ -11,10 +11,12 @@ import pandas as pd
 from value_investor.research.verdict import compute_adjusted_signal
 from value_investor.scoring.dividend_sustainability_overlay import (
     apply_dividend_sustainability_export_enforcement,
+    enforce_neutral_watchlist_dividend_caution_in_snapshot,
     enrich_screening_snapshot_dividend_dual_fcf_research_prompts,
 )
 from value_investor.scoring.dividend_yield_overlay import (
     enforce_dividend_yield_family_in_snapshot,
+    enforce_neutral_watchlist_dividend_caution_after_yield_export,
 )
 from value_investor.scoring.fcf import (
     _float_or_none,
@@ -213,11 +215,15 @@ def enforce_fcf_basis_in_snapshot(
             dividends_paid=_float_or_none(updated.get("dividends_paid")),
             free_cashflow=_float_or_none(updated.get("free_cashflow")),
             interim_dividend_cut_pct=_float_or_none(updated.get("interim_dividend_cut_pct")),
+            research_verdict=updated.get("research_verdict"),
         )
     )
     updated["interim_dividend_cut_flagged"] = cut_flagged
     if div_overlay:
         updated["dividend_sustainability_overlay"] = True
+        updated["adjusted_signal"] = div_adjusted
+        updated["conviction_score"] = div_conviction
+    elif div_adjusted != str(updated.get("adjusted_signal") or merged_adjusted):
         updated["adjusted_signal"] = div_adjusted
         updated["conviction_score"] = div_conviction
 
@@ -260,7 +266,7 @@ def enforce_fcf_basis_in_snapshot(
     )
     if capped_verdict != updated.get("research_verdict"):
         updated["research_verdict"] = capped_verdict
-    return updated
+    return enforce_neutral_watchlist_dividend_caution_in_snapshot(updated)
 
 
 def merge_research_verdict_into_snapshot(
@@ -302,6 +308,7 @@ def write_screening_snapshot(sources_dir: Path, snapshot: dict[str, Any]) -> Pat
     payload = enforce_fcf_basis_in_snapshot(payload, output_dir=output_dir)
     payload = enrich_screening_snapshot_fcf_dividend_coverage(payload, output_dir=output_dir)
     payload = enforce_dividend_yield_family_in_snapshot(payload, output_dir=output_dir)
+    payload = enforce_neutral_watchlist_dividend_caution_after_yield_export(payload)
     payload = enrich_screening_snapshot_dividend_dual_fcf_research_prompts(
         payload,
         output_dir=output_dir,

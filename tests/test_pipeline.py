@@ -4228,6 +4228,85 @@ def test_apply_dividend_sustainability_export_enforcement_caps_conviction_when_s
     assert conviction == pytest.approx(0.53 * 0.85)
 
 
+def _megp_dividend_overlay_model_results() -> pd.DataFrame:
+    return pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "model_id": "high_dividend",
+                "model_name": "High Dividend Yield",
+                "passed": True,
+                "score": 0.9,
+                "reasons": "['yield=7.6%']",
+                "failed_criteria": "[]",
+            },
+            {
+                "ticker": "MEGP.L",
+                "model_id": "fcf_yield",
+                "model_name": "FCF Yield",
+                "passed": False,
+                "score": 0.3,
+                "reasons": "[]",
+                "failed_criteria": "['FCF yield 3.7% below 5%']",
+            },
+            {
+                "ticker": "MEGP.L",
+                "model_id": "earnings_quality",
+                "model_name": "Earnings Quality",
+                "passed": False,
+                "score": 0.5,
+                "reasons": "[]",
+                "failed_criteria": "['weak free-cash conversion']",
+            },
+        ]
+    )
+
+
+def test_enforce_fcf_basis_maps_watchlist_research_to_caution_when_interim_cut_and_thin_cover():
+    """MEGP-style neutral/watchlist research must caution-cap when interim cut meets thin cover."""
+    from value_investor.scoring.snapshot import enforce_fcf_basis_in_snapshot
+
+    snapshot = {
+        "ticker": "MEGP.L",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "research_verdict": "watchlist",
+        "conviction_score": 0.45,
+        "interim_dividend_cut_pct": 0.065,
+        "fcf_dividend_coverage_net": 0.84,
+    }
+    enforced = enforce_fcf_basis_in_snapshot(
+        snapshot,
+        model_results=_megp_dividend_overlay_model_results(),
+    )
+    assert enforced["interim_dividend_cut_flagged"] is True
+    assert enforced["signal"] == "strong_buy"
+    assert enforced["research_verdict"] == "caution"
+    assert enforced["adjusted_signal"] == "buy"
+    assert enforced["conviction_score"] == pytest.approx(0.45 * 0.85)
+
+
+def test_enforce_fcf_basis_skips_watchlist_caution_when_research_accumulate():
+    from value_investor.scoring.snapshot import enforce_fcf_basis_in_snapshot
+
+    snapshot = {
+        "ticker": "MEGP.L",
+        "signal": "strong_buy",
+        "adjusted_signal": "strong_buy",
+        "research_verdict": "accumulate",
+        "conviction_score": 0.45,
+        "interim_dividend_cut_pct": 0.065,
+        "fcf_dividend_coverage_net": 0.84,
+    }
+    enforced = enforce_fcf_basis_in_snapshot(
+        snapshot,
+        model_results=_megp_dividend_overlay_model_results(),
+    )
+    assert enforced["interim_dividend_cut_flagged"] is True
+    assert enforced["research_verdict"] == "accumulate"
+    assert enforced["adjusted_signal"] == "strong_buy"
+
+
 def test_enforce_fcf_basis_in_snapshot_applies_dividend_sustainability_overlay_itv_style():
     model_results = pd.DataFrame(
         [
