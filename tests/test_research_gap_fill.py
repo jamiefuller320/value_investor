@@ -9,7 +9,9 @@ from value_investor.research.agent import (
     _augment_research_worker_prompt,
     _gap_fill_prompt,
     filing_extraction_discipline,
+    is_actionable_research_model_suggestion,
     news_extraction_discipline,
+    research_model_suggestions_discipline,
     screen_filing_reconciliation_discipline,
     worker_task_extraction_rules,
 )
@@ -18,6 +20,7 @@ from value_investor.research.format import format_gap_fill_text
 from value_investor.research.gap_fill import (
     GapFillSummary,
     GapFillTarget,
+    _persist_model_suggestions,
     _unresolved_questions,
     extract_gap_fill_targets,
     filter_questions_for_ticker,
@@ -146,6 +149,40 @@ def test_gap_fill_prompt_requires_screen_filing_reconciliation():
     assert discipline.splitlines()[0] in prompt
     assert "adjusted_signal" in prompt
     assert "dual" in prompt.lower() or "OCF" in prompt
+    assert research_model_suggestions_discipline() in prompt
+
+
+def test_is_actionable_research_model_suggestion_rejects_memo_status():
+    assert not is_actionable_research_model_suggestion(
+        "Updated in `output/research/MEGP.L/research.md`."
+    )
+    assert not is_actionable_research_model_suggestion(
+        "The memo at `output/research/MEGP.L/research.md` has been updated to version 3."
+    )
+    assert is_actionable_research_model_suggestion(
+        "Index trading-update RNS for MEGP.L when filings_index trading_update count is zero"
+    )
+
+
+def test_persist_model_suggestions_skips_memo_status_lines(tmp_path: Path):
+    path = tmp_path / "research_model_suggestions.json"
+    appended = _persist_model_suggestions(
+        [
+            {
+                "area": "research",
+                "priority": "medium",
+                "suggestion": "Updated in `output/research/MEGP.L/research.md`.",
+            },
+            {
+                "area": "ingest",
+                "priority": "high",
+                "suggestion": "Pull IR PDFs when RNS bodies are empty",
+            },
+        ],
+        path=path,
+    )
+    assert len(appended) == 1
+    assert appended[0]["suggestion"].startswith("Pull IR PDFs")
 
 
 def test_supplement_deal_structure_questions_adds_filing_prompts():

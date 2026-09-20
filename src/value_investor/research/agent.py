@@ -121,6 +121,32 @@ def clip_rationale(value: str | None, *, limit: int = RATIONALE_MAX_CHARS) -> st
     return text[: max(0, limit - 3)].rstrip() + "..."
 
 
+_MEMO_STATUS_SUGGESTION = re.compile(
+    r"(?i)(?:^updated\s+(?:in|memo)|^the\s+memo\s+at|memo\s+saved\s+to|"
+    r"has\s+been\s+updated).*research\.md"
+)
+
+
+def is_actionable_research_model_suggestion(text: str) -> bool:
+    """Return False for memo save/status lines agents sometimes emit as faux suggestions."""
+    cleaned = str(text or "").strip()
+    if not cleaned or cleaned == "--":
+        return False
+    if _MEMO_STATUS_SUGGESTION.search(cleaned):
+        return False
+    if re.search(r"(?i)^updated in [`\"]?output/research/", cleaned):
+        return False
+    return True
+
+
+def research_model_suggestions_discipline() -> str:
+    """Prompt rule: research-model bullets must be pipeline work, not memo status."""
+    return (
+        "Never emit memo save paths, version bumps, or 'updated in research.md' status lines — "
+        "only concrete ingest/prompt/scoring/coverage/ops pipeline improvements."
+    )
+
+
 def _structured_verdict_block(signal_label: str) -> str:
     return f"""RESEARCH VERDICT
 Structured conviction overlay for the quantitative screen (does not replace the screen signal).
@@ -265,6 +291,7 @@ RESEARCH MODEL SUGGESTIONS
 0–5 bullets:
 - area: ingest | priority: high | suggestion: …
 Allowed areas: ingest, prompt, scoring, coverage, ops.
+{research_model_suggestions_discipline()}
 
 Rules: UK English; do not invent numbers; prefer unresolved over false confidence.
 {screen_filing_reconciliation_discipline()}
@@ -606,6 +633,7 @@ Use EXACTLY this bullet shape:
 - area: prompt | priority: medium | suggestion: …
 Allowed areas: ingest, prompt, scoring, coverage, ops.
 Only suggest actionable pipeline changes (e.g. Companies House PDF ingest, deeper RNS body extract, IR presentation fetch). Skip empty platitudes.
+{research_model_suggestions_discipline()}
 
 Rules:
 - UK English, concise professional tone.
@@ -719,7 +747,11 @@ def run_gap_fill_research_agent(
     gap_summary = sections.get("gap_fill_update", "").strip()
     if not gap_summary:
         gap_summary = sections.get("weekly_update", "").strip()
-    model_suggestions = parse_model_suggestions(sections.get("research_model_suggestions", ""))
+    model_suggestions = [
+        row
+        for row in parse_model_suggestions(sections.get("research_model_suggestions", ""))
+        if is_actionable_research_model_suggestion(str(row.get("suggestion") or ""))
+    ]
     question_outcomes = parse_question_outcomes(gap_summary)
     verdict_fields = parse_research_verdict(sections.get("research_verdict", ""))
     now = datetime.now(UTC)
