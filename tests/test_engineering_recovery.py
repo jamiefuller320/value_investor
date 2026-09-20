@@ -780,3 +780,170 @@ def test_recover_restamps_open_before_orphan_reconcile(tmp_path: Path, monkeypat
     updated = load_engineering_tasks(tasks_path)["tasks"][0]
     assert updated["status"] == "pr_open"
     assert updated["pr_number"] == 686
+
+
+def test_allowlist_mismatches_filing_title_ops_sandbox():
+    from value_investor.engineering_recovery import allowlist_mismatches_filing_title
+
+    row = {
+        "title": "Deprioritise CH parent-only filings in refetch scoring",
+        "summary": "CH administrative filings",
+        "allowed_paths": [
+            "src/value_investor/automation_status.py",
+            "src/value_investor/ops_monitor.py",
+            "src/value_investor/engineering_recovery.py",
+            "src/value_investor/engineering_queue.py",
+            ".github/workflows/ops-monitor.yml",
+            ".github/workflows/engineering-queue.yml",
+            "tests/test_ops_monitor.py",
+        ],
+    }
+    assert allowlist_mismatches_filing_title(row) is True
+
+    ok = {
+        "title": "On CH refetch passes, cite three-year margin series",
+        "summary": "gap-fill",
+        "allowed_paths": [
+            "src/value_investor/research/gap_fill.py",
+            "src/value_investor/deep_analysis.py",
+            "tests/test_research_gap_fill.py",
+        ],
+    }
+    assert allowlist_mismatches_filing_title(ok) is False
+
+
+def test_housekeep_cancels_mis_scoped_preflight_park(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task(
+                "eng-20260920-11",
+                status="parked",
+                title="Deprioritise CH parent-only filings in refetch scoring",
+            ).to_dict()
+            | {
+                "parked_policy": "preflight_clash",
+                "parked_reason": "preflight blocked PR open — preflight failed",
+                "allowed_paths": [
+                    "src/value_investor/automation_status.py",
+                    "src/value_investor/ops_monitor.py",
+                    "src/value_investor/engineering_recovery.py",
+                    "src/value_investor/engineering_sync.py",
+                    ".github/workflows/ops-monitor.yml",
+                    ".github/workflows/engineering-agent.yml",
+                ],
+            }
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    result = housekeep_parked_tasks(
+        tasks_path=tasks_path,
+        apply=True,
+        auto_cancel_mis_scoped_allowlist=True,
+    )
+    assert any(row.action == "cancel_mis_scoped_allowlist" for row in result.cancelled)
+    updated = load_engineering_tasks(tasks_path)["tasks"][0]
+    assert updated["status"] == "cancelled"
+    assert updated.get("cancelled_policy") == "mis_scoped_allowlist"
+
+
+def test_reconcile_merged_uses_pr_number_when_branch_lookup_empty(
+    tmp_path: Path, monkeypatch
+):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task("eng-20260920-15", status="pr_open").to_dict()
+            | {
+                "branch_name": "cursor/eng-20260920-15-1de3",
+                "pr_number": 764,
+            }
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.find_merged_pull_for_branch",
+        lambda branch, **kwargs: None,
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.find_merged_pull_by_number",
+        lambda number, **kwargs: (
+            {
+                "html_url": "https://github.com/jamiefuller320/value_investor/pull/764",
+                "number": 764,
+                "merged_at": "2026-09-20T17:40:05Z",
+            }
+            if int(number) == 764
+            else None
+        ),
+    )
+
+    merged = reconcile_merged_pr_open_tasks(tasks_path=tasks_path, apply=True)
+    assert merged == ["eng-20260920-15"]
+    updated = load_engineering_tasks(tasks_path)["tasks"][0]
+    assert updated["status"] == "merged"
+    assert updated["pr_number"] == 764
+
+
+def test_find_merged_pull_falls_back_to_gh_when_rest_empty(monkeypatch):
+    from value_investor.engineering_recovery import find_merged_pull_for_branch
+
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery._github_repo",
+        lambda: "jamiefuller320/value_investor",
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery._github_token",
+        lambda: "test-token",
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery._github_api_get",
+        lambda path, token=None: [],
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery._find_merged_pull_via_gh",
+        lambda branch: {
+            "number": 761,
+            "html_url": "https://github.com/example/repo/pull/761",
+            "merged_at": "2026-09-20T16:24:16Z",
+        },
+    )
+    pr = find_merged_pull_for_branch("cursor/eng-20260920-08-1de3")
+    assert pr is not None
+    assert pr["number"] == 761
+
+
+def test_evaluate_dispatch_heals_merge_sync(tmp_path: Path, monkeypatch):
+    from value_investor.engineering_queue import evaluate_engineering_dispatch
+
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task("eng-20260920-08", status="open").to_dict()
+            | {"branch_name": "cursor/eng-20260920-08-1de3"},
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.find_merged_pull_for_branch",
+        lambda branch, **kwargs: {
+            "html_url": "https://github.com/example/repo/pull/761",
+            "number": 761,
+            "merged_at": "2026-09-20T16:24:16Z",
+        },
+    )
+    monkeypatch.setattr(
+        "value_investor.engineering_recovery.find_merged_pull_by_number",
+        lambda number, **kwargs: None,
+    )
+
+    decision = evaluate_engineering_dispatch(
+        tasks_path=tasks_path,
+        open_prs=[],
+        heal_merge_sync=True,
+    )
+    updated = load_engineering_tasks(tasks_path)["tasks"][0]
+    assert updated["status"] == "merged"
+    assert decision.should_dispatch is False
+    assert "no open" in decision.reason

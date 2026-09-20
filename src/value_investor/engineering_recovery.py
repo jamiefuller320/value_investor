@@ -60,8 +60,38 @@ AUTO_CANCEL_NO_DIFF_MODES = frozenset({"off", "at_cap", "always"})
 DEFAULT_RESUME_ATTENTION_PARKED_BELOW = 7
 DEFAULT_RESUME_IDLE_MINUTES = 30
 DEFAULT_IMMEDIATE_PARK_UNFIXABLE_PR = True
+DEFAULT_AUTO_CANCEL_MIS_SCOPED_ALLOWLIST = True
 GITHUB_API_VERSION = "2022-11-28"
 WORKFLOW_PATH_PREFIX = ".github/workflows/"
+
+# Title tokens that imply filings / CH / OCR work — not ops/workflow sandbox.
+_FILING_TITLE_RE = re.compile(
+    r"\b("
+    r"CH|Companies\s+House|OCR|iXBRL|filing|filings|gap-?fill|RNS|NSM|"
+    r"refetch|Investegate|LSE\s+direct|document-api"
+    r")\b",
+    re.IGNORECASE,
+)
+_OPS_ALLOWLIST_BASENAMES = frozenset(
+    {
+        "ops_monitor.py",
+        "engineering_queue.py",
+        "engineering_recovery.py",
+        "engineering_sync.py",
+        "engineering_preflight.py",
+        "engineering_pr_notify.py",
+        "automation_status.py",
+        "email_agent.py",
+        "backtest_health.py",
+    }
+)
+_FILING_ALLOWLIST_HINTS = (
+    "/research/",
+    "/filings",
+    "gap_fill",
+    "companies_house",
+    "/deep_analysis.py",
+)
 
 
 def _github_token() -> str | None:
@@ -72,7 +102,8 @@ def _github_token() -> str | None:
         value = os.environ.get(key)
         if value and not is_integration_token(value):
             return value
-        if value and key == "GITHUB_TOKEN":
+        # Actions injects ghs_ as GITHUB_TOKEN and often mirrors it to GH_TOKEN.
+        if value and key in {"GITHUB_TOKEN", "GH_TOKEN"}:
             return value
     return None
 
@@ -186,6 +217,45 @@ def task_allows_workflow_files(row: dict[str, Any]) -> bool:
         if text.startswith(WORKFLOW_PATH_PREFIX) or f"/{WORKFLOW_PATH_PREFIX}" in f"/{text}":
             return True
     return False
+
+
+def _normalized_allowlist_paths(row: dict[str, Any]) -> list[str]:
+    return [str(path or "").strip().replace("\\", "/") for path in (row.get("allowed_paths") or [])]
+
+
+def allowlist_mismatches_filing_title(row: dict[str, Any]) -> bool:
+    """True when a filings/CH/OCR title is paired with an ops/workflow allowlist.
+
+    Compile-cap drain occasionally maps CH refetch / OCR quality objectives onto
+    ``ops_monitor`` / ``engineering_*`` / ``.github/workflows`` sandboxes. Those
+    parks never ship the titled work and only burn parallel slots.
+    """
+    blob = f"{row.get('title') or ''} {row.get('summary') or ''}"
+    if not _FILING_TITLE_RE.search(blob):
+        return False
+    paths = _normalized_allowlist_paths(row)
+    if not paths:
+        return False
+
+    def _is_ops(path: str) -> bool:
+        if path.startswith(WORKFLOW_PATH_PREFIX) or f"/{WORKFLOW_PATH_PREFIX}" in f"/{path}":
+            return True
+        return path.rsplit("/", 1)[-1] in _OPS_ALLOWLIST_BASENAMES
+
+    def _is_filing(path: str) -> bool:
+        return any(hint in path for hint in _FILING_ALLOWLIST_HINTS)
+
+    opsish = sum(1 for path in paths if _is_ops(path))
+    filingish = sum(1 for path in paths if _is_filing(path))
+    return opsish >= 3 and filingish == 0
+
+
+def mis_scoped_allowlist_cancel_reason(row: dict[str, Any]) -> str:
+    policy = str(row.get("parked_policy") or "").strip() or "parked"
+    return (
+        f"tier-1 housekeep: mis_scoped_allowlist ({policy}) — filings/CH/OCR title "
+        "with ops/workflow allowlist; re-queue via post-run with filings paths"
+    )
 
 
 def _latest_workflow_success_run(
@@ -337,6 +407,9 @@ def _engineering_queue_recovery_policy() -> dict[str, Any]:
     superseded_hunter = block.get("auto_cancel_superseded_parked_hunter")
     if superseded_hunter is None:
         superseded_hunter = DEFAULT_AUTO_CANCEL_SUPERSEDED_PARKED_HUNTER
+    mis_scoped = block.get("auto_cancel_mis_scoped_allowlist")
+    if mis_scoped is None:
+        mis_scoped = DEFAULT_AUTO_CANCEL_MIS_SCOPED_ALLOWLIST
     return {
         "immediate_park_unfixable_pr": bool(immediate),
         "max_attention_parked_tasks": max_attention,
@@ -346,6 +419,7 @@ def _engineering_queue_recovery_policy() -> dict[str, Any]:
         "tier1_housekeep_on_recover": bool(tier1_housekeep),
         "auto_cancel_no_diff_cap": raw_no_diff,
         "auto_cancel_superseded_parked_hunter": bool(superseded_hunter),
+        "auto_cancel_mis_scoped_allowlist": bool(mis_scoped),
     }
 
 
@@ -1074,13 +1148,107 @@ def park_unfixable_pr_open_tasks(
     return parked
 
 
+def _merged_pulls_from_api_rows(pulls: Any) -> list[dict[str, Any]]:
+    if not isinstance(pulls, list):
+        return []
+    merged = [dict(row) for row in pulls if row.get("merged_at")]
+    merged.sort(key=lambda row: str(row.get("merged_at") or ""), reverse=True)
+    return merged
+
+
+def _find_merged_pull_via_gh(branch: str) -> dict[str, Any] | None:
+    """CLI fallback when the REST ``head=`` filter returns empty (Actions flakes)."""
+    branch = str(branch or "").strip()
+    if not branch:
+        return None
+    try:
+        completed = subprocess.run(
+            [
+                "gh",
+                "pr",
+                "list",
+                "--head",
+                branch,
+                "--state",
+                "merged",
+                "--limit",
+                "5",
+                "--json",
+                "number,url,mergedAt,headRefName",
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    except (OSError, subprocess.SubprocessError) as exc:
+        logger.warning("gh merged-PR fallback failed for %s: %s", branch, exc)
+        return None
+    if completed.returncode != 0:
+        logger.warning(
+            "gh merged-PR fallback non-zero for %s: %s",
+            branch,
+            (completed.stderr or completed.stdout or "").strip()[:240],
+        )
+        return None
+    try:
+        rows = json.loads(completed.stdout or "[]")
+    except json.JSONDecodeError:
+        return None
+    if not isinstance(rows, list) or not rows:
+        return None
+    rows = [row for row in rows if row.get("mergedAt") or row.get("merged_at")]
+    if not rows:
+        return None
+    rows.sort(key=lambda row: str(row.get("mergedAt") or row.get("merged_at") or ""), reverse=True)
+    top = dict(rows[0])
+    # Normalize to REST-shaped keys used by mark_task_merged_for_branch.
+    if top.get("mergedAt") and not top.get("merged_at"):
+        top["merged_at"] = top["mergedAt"]
+    if top.get("url") and not top.get("html_url"):
+        top["html_url"] = top["url"]
+    return top
+
+
+def find_merged_pull_by_number(
+    pr_number: int,
+    *,
+    repo: str | None = None,
+    token: str | None = None,
+) -> dict[str, Any] | None:
+    """Return a pull when GitHub shows it as merged (by PR number)."""
+    try:
+        number = int(pr_number)
+    except (TypeError, ValueError):
+        return None
+    if number <= 0:
+        return None
+    repo = repo or _github_repo()
+    token = token or _github_token()
+    if not repo or not token:
+        return None
+    owner, name = repo.split("/", 1)
+    try:
+        pr = _github_api_get(f"/repos/{owner}/{name}/pulls/{number}", token=token)
+    except (OSError, ValueError, RuntimeError) as exc:
+        logger.warning("Merged PR #%s lookup failed: %s", number, exc)
+        return None
+    if not isinstance(pr, dict) or not pr.get("merged_at"):
+        return None
+    return dict(pr)
+
+
 def find_merged_pull_for_branch(
     branch: str,
     *,
     repo: str | None = None,
     token: str | None = None,
 ) -> dict[str, Any] | None:
-    """Return the most recently merged closed PR for a head branch, if any."""
+    """Return the most recently merged closed PR for a head branch, if any.
+
+    Uses a URL-encoded REST ``head=`` query, then falls back to ``gh pr list``
+    when the API returns an empty list (observed on some Actions runners).
+    """
     branch = str(branch or "").strip()
     repo = repo or _github_repo()
     if not branch or not repo:
@@ -1090,21 +1258,20 @@ def find_merged_pull_for_branch(
         return None
     owner, name = repo.split("/", 1)
     head = f"{owner}:{branch}"
+    query = urllib.parse.urlencode({"state": "closed", "head": head, "per_page": "10"})
     try:
-        pulls = _github_api_get(
-            f"/repos/{owner}/{name}/pulls?state=closed&head={head}&per_page=10",
-            token=token,
-        )
+        pulls = _github_api_get(f"/repos/{owner}/{name}/pulls?{query}", token=token)
     except (OSError, ValueError, RuntimeError) as exc:
         logger.warning("Merged PR lookup failed for %s: %s", branch, exc)
-        return None
-    if not isinstance(pulls, list):
-        return None
-    merged = [row for row in pulls if row.get("merged_at")]
-    if not merged:
-        return None
-    merged.sort(key=lambda row: str(row.get("merged_at") or ""), reverse=True)
-    return dict(merged[0])
+        pulls = None
+    merged = _merged_pulls_from_api_rows(pulls)
+    if merged:
+        return merged[0]
+    fallback = _find_merged_pull_via_gh(branch)
+    if fallback:
+        logger.info("Merged PR for %s resolved via gh fallback (#%s)", branch, fallback.get("number"))
+        return fallback
+    return None
 
 
 def find_open_pull_for_branch(
@@ -1318,18 +1485,23 @@ def list_merge_sync_lag_tasks(
         branch = str(row.get("branch_name") or "").strip()
         if not branch:
             branch = engineering_branch_for_task_id(task_id) or ""
-        if not branch:
-            continue
-        pr = find_merged_pull_for_branch(branch, repo=repo, token=token)
+        pr: dict[str, Any] | None = None
+        raw_number = row.get("pr_number")
+        if raw_number is not None:
+            pr = find_merged_pull_by_number(raw_number, repo=repo, token=token)
+        if not pr and branch:
+            pr = find_merged_pull_for_branch(branch, repo=repo, token=token)
         if not pr or not pr.get("merged_at"):
             continue
+        if not branch:
+            branch = engineering_branch_for_task_id(task_id) or ""
         lagged.append(
             {
                 "task_id": task_id,
                 "branch": branch,
                 "status": status,
                 "pr_number": pr.get("number"),
-                "pr_url": pr.get("html_url"),
+                "pr_url": pr.get("html_url") or pr.get("url"),
                 "merged_at": pr.get("merged_at"),
             }
         )
@@ -1347,6 +1519,8 @@ def reconcile_merged_pr_open_tasks(
     Mark pr_open/open tasks merged when their engineering PR merged on GitHub.
 
     Runs before orphan reconcile so merged tasks are not reset to open.
+    Prefers ``pr_number`` lookup when stamped, then branch head lookup (with gh
+    fallback).
     """
     merged_ids: list[str] = []
     data = load_engineering_tasks(tasks_path)
@@ -1360,17 +1534,24 @@ def reconcile_merged_pr_open_tasks(
         branch = str(row.get("branch_name") or "").strip()
         if not branch:
             branch = engineering_branch_for_task_id(task_id) or ""
-        if not branch:
-            continue
-        pr = find_merged_pull_for_branch(branch, repo=repo, token=token)
+        pr: dict[str, Any] | None = None
+        raw_number = row.get("pr_number")
+        if raw_number is not None:
+            pr = find_merged_pull_by_number(raw_number, repo=repo, token=token)
+        if not pr and branch:
+            pr = find_merged_pull_for_branch(branch, repo=repo, token=token)
         if not pr or not pr.get("merged_at"):
+            continue
+        if not branch:
+            branch = engineering_branch_for_task_id(task_id) or ""
+        if not branch:
             continue
         if apply:
             mark_task_merged_for_branch(
                 branch,
                 path=tasks_path,
                 committed_path=tasks_path,
-                pr_url=str(pr.get("html_url") or ""),
+                pr_url=str(pr.get("html_url") or pr.get("url") or ""),
                 pr_number=int(pr["number"]) if pr.get("number") is not None else None,
             )
         merged_ids.append(task_id)
@@ -1520,6 +1701,9 @@ def recover_engineering_queue(
             auto_cancel_superseded_parked_hunter=bool(
                 recovery_policy.get("auto_cancel_superseded_parked_hunter")
             ),
+            auto_cancel_mis_scoped_allowlist=bool(
+                recovery_policy.get("auto_cancel_mis_scoped_allowlist")
+            ),
         ).to_dict()
 
     result.queue_clearing = evaluate_queue_clearing_pause(
@@ -1648,14 +1832,17 @@ def housekeep_parked_tasks(
     now: datetime | None = None,
     auto_cancel_no_diff_cap: bool = False,
     auto_cancel_superseded_parked_hunter: bool = True,
+    auto_cancel_mis_scoped_allowlist: bool = True,
 ) -> ParkedHousekeepResult:
     """
-      Grade parked tasks and take safe automatic actions.
+    Grade parked tasks and take safe automatic actions.
 
-      - Cancel duplicates of already-merged tasks (``duplicate_of`` + merged target).
-      - Cancel ``no_diff_cap`` parks when ``auto_cancel_no_diff_cap`` (tier-1 backlog).
-      - Cancel parked ``parked_source_hunter`` rows when ticker already on main.
-      - Backfill ``parked_policy`` on informational parks (no-diff cap, duplicate).
+    - Cancel duplicates of already-merged tasks (``duplicate_of`` + merged target).
+    - Cancel ``no_diff_cap`` parks when ``auto_cancel_no_diff_cap`` (tier-1 backlog).
+    - Cancel parked ``parked_source_hunter`` rows when ticker already on main.
+    - Cancel ``preflight_clash`` / ``workflow_permission`` parks whose filings/CH/OCR
+      title cannot be implemented by an ops/workflow allowlist.
+    - Backfill ``parked_policy`` on informational parks (no-diff cap, duplicate).
     Does not reopen or merge tasks — invoked from ``recover_engineering_queue``.
     """
     now = now or datetime.now(UTC)
@@ -1672,6 +1859,7 @@ def housekeep_parked_tasks(
     no_diff_cancel_reason = (
         "tier-1 housekeep: no_diff_cap — re-queue via post-run/compile if still live-path"
     )
+    mis_scope_policies = {PARKED_POLICY_PREFLIGHT, PARKED_POLICY_WORKFLOW_PERMISSION}
 
     for row in tasks:
         if str(row.get("status") or "") != PARKED_STATUS:
@@ -1740,6 +1928,31 @@ def housekeep_parked_tasks(
                         )
                     )
                     continue
+
+        if (
+            auto_cancel_mis_scoped_allowlist
+            and policy in mis_scope_policies
+            and allowlist_mismatches_filing_title(row)
+        ):
+            cancel_reason = mis_scoped_allowlist_cancel_reason(row)
+            if apply:
+                mark_task_status(
+                    task_id,
+                    "cancelled",
+                    path=tasks_path,
+                    committed_path=tasks_path,
+                    cancelled_at=now.isoformat(),
+                    cancelled_reason=cancel_reason,
+                    cancelled_policy="mis_scoped_allowlist",
+                )
+            result.cancelled.append(
+                ParkedHousekeepAction(
+                    task_id=task_id,
+                    action="cancel_mis_scoped_allowlist",
+                    reason=cancel_reason,
+                )
+            )
+            continue
 
         if auto_cancel_no_diff_cap and policy == PARKED_POLICY_NO_DIFF:
             if apply:
