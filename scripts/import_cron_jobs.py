@@ -20,6 +20,7 @@ import argparse
 import json
 import os
 import sys
+import time
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
@@ -427,6 +428,23 @@ def _job_specs() -> list[CronJobSpec]:
     ]
 
 
+# cron-job.org returns bare 429 with no Retry-After during account bursts.
+_CRONJOB_429_ATTEMPTS = 10
+_CRONJOB_429_BASE_SECONDS = 60.0
+_CRONJOB_429_MAX_SECONDS = 900.0
+
+
+def _cronjob_429_wait_seconds(attempt: int, *, retry_after: str | None = None) -> float:
+    """Seconds to sleep after a 429 before the next attempt (1-based attempt index)."""
+    if retry_after:
+        try:
+            return max(1.0, float(retry_after))
+        except ValueError:
+            pass
+    # attempt 1 → 60s, 2 → 120s, … capped at 15 minutes
+    return min(_CRONJOB_429_MAX_SECONDS, _CRONJOB_429_BASE_SECONDS * (2 ** (attempt - 1)))
+
+
 def _cronjob_request(
     method: str,
     path: str,
@@ -442,19 +460,33 @@ def _cronjob_request(
     data = None
     if payload is not None:
         data = json.dumps(payload).encode("utf-8")
-    request = urllib.request.Request(
-        f"{CRONJOB_ENDPOINT}{path}",
-        data=data,
-        headers=headers,
-        method=method,
-    )
-    try:
-        with urllib.request.urlopen(request, timeout=60) as response:
-            body = response.read().decode("utf-8")
-            return json.loads(body) if body else {}
-    except urllib.error.HTTPError as exc:
-        detail = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"{method} {path} failed ({exc.code}): {detail}") from exc
+    last_detail = ""
+    for attempt in range(1, _CRONJOB_429_ATTEMPTS + 1):
+        request = urllib.request.Request(
+            f"{CRONJOB_ENDPOINT}{path}",
+            data=data,
+            headers=headers,
+            method=method,
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=60) as response:
+                body = response.read().decode("utf-8")
+                return json.loads(body) if body else {}
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode("utf-8", errors="replace")
+            last_detail = detail
+            if exc.code != 429 or attempt >= _CRONJOB_429_ATTEMPTS:
+                raise RuntimeError(f"{method} {path} failed ({exc.code}): {detail}") from exc
+            wait = _cronjob_429_wait_seconds(
+                attempt, retry_after=exc.headers.get("Retry-After")
+            )
+            print(
+                f"cron-job.org 429 on {method} {path}; "
+                f"sleeping {wait:.0f}s (attempt {attempt}/{_CRONJOB_429_ATTEMPTS})",
+                file=sys.stderr,
+            )
+            time.sleep(wait)
+    raise RuntimeError(f"{method} {path} failed (429): {last_detail}")
 
 
 def _list_jobs(api_key: str) -> list[dict[str, Any]]:
@@ -544,12 +576,15 @@ def import_job(
     api_key: str,
     gh_pat: str,
     dry_run: bool = False,
+    existing_by_title: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     payload = _build_job_payload(spec, gh_pat)
     if dry_run:
         return {"action": "upsert", "title": spec.title, "payload": payload}
 
-    existing = {job.get("title"): job for job in _list_jobs(api_key)}
+    existing = existing_by_title
+    if existing is None:
+        existing = {job.get("title"): job for job in _list_jobs(api_key)}
     current = existing.get(spec.title)
     if current and current.get("jobId"):
         _cronjob_request(
@@ -561,7 +596,10 @@ def import_job(
         return {"action": "updated", "title": spec.title, "jobId": current["jobId"]}
 
     created = _cronjob_request("PUT", "/jobs", api_key=api_key, payload=payload)
-    return {"action": "created", "title": spec.title, "jobId": created.get("jobId")}
+    job_id = created.get("jobId")
+    if job_id is not None:
+        existing[spec.title] = {"title": spec.title, "jobId": job_id}
+    return {"action": "created", "title": spec.title, "jobId": job_id}
 
 
 def disable_legacy_ingest_jobs(
@@ -659,8 +697,18 @@ def main(argv: list[str] | None = None) -> int:
                 print(str(exc), file=sys.stderr)
                 return 1
 
+    existing_by_title: dict[str, dict[str, Any]] | None = None
+    if selected and not args.dry_run:
+        # One list call for the whole batch — cron-job.org rate-limits hard.
+        existing_by_title = {job.get("title"): job for job in _list_jobs(api_key)}
     results: list[dict[str, Any]] = [
-        import_job(spec, api_key=api_key, gh_pat=gh_pat, dry_run=args.dry_run)
+        import_job(
+            spec,
+            api_key=api_key,
+            gh_pat=gh_pat,
+            dry_run=args.dry_run,
+            existing_by_title=existing_by_title,
+        )
         for spec in selected
     ]
     if args.all or args.disable_legacy_ingest:
