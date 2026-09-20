@@ -268,3 +268,66 @@ def test_import_cron_jobs_dry_run_ops_monitor():
     assert payload["schedule"]["minutes"] == [45]
     assert payload["schedule"]["wdays"] == [-1]
     assert "ops-monitor.yml" in payload["url"]
+
+
+def _load_import_cron_jobs_module(name: str):
+    import importlib.util
+    import sys
+
+    path = Path("scripts/import_cron_jobs.py")
+    spec = importlib.util.spec_from_file_location(name, path)
+    assert spec is not None and spec.loader is not None
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_cronjob_429_wait_seconds_exponential_and_retry_after():
+    mod = _load_import_cron_jobs_module("import_cron_jobs_wait_test")
+
+    assert mod._cronjob_429_wait_seconds(1) == 60.0
+    assert mod._cronjob_429_wait_seconds(2) == 120.0
+    assert mod._cronjob_429_wait_seconds(5) == 900.0  # capped
+    assert mod._cronjob_429_wait_seconds(1, retry_after="42") == 42.0
+    assert mod._cronjob_429_wait_seconds(1, retry_after="nope") == 60.0
+
+
+def test_cronjob_request_retries_429_then_succeeds(monkeypatch):
+    import io
+    import urllib.error
+    import urllib.request
+
+    mod = _load_import_cron_jobs_module("import_cron_jobs_retry_test")
+
+    calls = {"n": 0}
+    sleeps: list[float] = []
+
+    class FakeResponse:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return False
+
+        def read(self):
+            return b'{"jobs":[]}'
+
+    def fake_urlopen(request, timeout=60):  # noqa: ARG001
+        calls["n"] += 1
+        if calls["n"] < 3:
+            raise urllib.error.HTTPError(
+                url=request.full_url,
+                code=429,
+                msg="Too Many Requests",
+                hdrs={"Retry-After": "1"},
+                fp=io.BytesIO(b""),
+            )
+        return FakeResponse()
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(mod.time, "sleep", lambda s: sleeps.append(s))
+    out = mod._cronjob_request("GET", "/jobs", api_key="k")
+    assert out == {"jobs": []}
+    assert calls["n"] == 3
+    assert sleeps == [1.0, 1.0]
