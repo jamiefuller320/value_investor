@@ -144,6 +144,17 @@ def _strip_dual_fcf_dividend_research_prompts(raw: Any) -> list[str]:
     return kept
 
 
+def enforce_neutral_watchlist_dividend_caution_after_yield_export(
+    snapshot: dict[str, Any],
+) -> dict[str, Any]:
+    """Re-apply watchlist→caution dividend overlay after yield-family export cleanup."""
+    from value_investor.scoring.dividend_sustainability_overlay import (
+        enforce_neutral_watchlist_dividend_caution_in_snapshot,
+    )
+
+    return enforce_neutral_watchlist_dividend_caution_in_snapshot(snapshot)
+
+
 def enforce_dividend_yield_family_in_snapshot(
     snapshot: dict[str, Any],
     *,
