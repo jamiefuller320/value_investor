@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-20T19:03:15.227932+00:00",
+  "compiled_at": "2026-09-20T19:13:56.679906+00:00",
   "run_at": null,
-  "task_count": 86,
+  "task_count": 87,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -763,6 +763,107 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/657",
       "pr_number": 657,
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
+    },
+    {
+      "id": "eng-20260920-16",
+      "area": "ingest",
+      "title": "Close library ingest filing gaps for DAX (dax): 7 buy-tier gaps after stalled weekday loop",
+      "summary": "Library market dax buy-tier filing deepen stalled with 7 unmeasured and 0 zero-body names (buy_tier_count=12). Improve euro_filings / ESEF / IR allowlist source coverage for representative tickers and add regression tests; verify with ftse-library ingest-loop --market dax. Sample unmeasured: HEI.DE, DTG.DE, HNR1.DE, HEN3.DE, FRE.DE.",
+      "priority": "high",
+      "priority_score": 86.0,
+      "source": "library_ingest_stall",
+      "evidence": {
+        "market_id": "dax",
+        "library_market": "dax",
+        "universe": "library",
+        "filing_health": {
+          "snapshot_at": "2026-09-20T19:13:27.743815+00:00",
+          "market_id": "dax",
+          "buy_tier_count": 12,
+          "unmeasured_buy_tier": 7,
+          "zero_body_buy_tier": 0,
+          "thin_body_buy_tier": 3,
+          "indexed_without_body": 39,
+          "bodies_min": 1,
+          "bodies_median": 2,
+          "bodies_max": 49,
+          "coverage_scope": "canonical_plus_shards",
+          "ftse_equivalent": false,
+          "unmeasured_tickers": [
+            "HEI.DE",
+            "DTG.DE",
+            "HNR1.DE",
+            "HEN3.DE",
+            "FRE.DE",
+            "G1A.DE",
+            "VOW3.DE"
+          ],
+          "zero_body_tickers": [],
+          "thin_body_tickers": [
+            "MUV2.DE",
+            "BAS.DE",
+            "DTE.DE"
+          ],
+          "indexed_without_body_tickers": [
+            "FME.DE"
+          ],
+          "indexed_without_body_by_ticker": {
+            "FME.DE": 39
+          },
+          "parked_tickers": [],
+          "parked_count": 0,
+          "effective_thin_body_buy_tier": 3,
+          "effective_thin_body_tickers": [
+            "MUV2.DE",
+            "BAS.DE",
+            "DTE.DE"
+          ],
+          "effective_indexed_without_body": 39,
+          "effective_indexed_without_body_tickers": [
+            "FME.DE"
+          ],
+          "ingest_exhausted": false
+        },
+        "filing_gaps": 7,
+        "sample_unmeasured": [
+          "HEI.DE",
+          "DTG.DE",
+          "HNR1.DE",
+          "HEN3.DE",
+          "FRE.DE"
+        ],
+        "sample_zero_body": [],
+        "rerun_library_ingest_loop": true,
+        "doc": "docs/ops/library-ingest-escalation.md"
+      },
+      "acceptance_criteria": [
+        "Representative dax buy-tier tickers gain filing indexes with bodies under the market canonical screen path",
+        "ftse-library ingest-loop --market dax reports improved > 0 on a verification run",
+        "Add focused regression tests for the source/parser fix",
+        "No change to live FTSE 350 ingest path or blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260918-08",
@@ -5037,8 +5138,8 @@
   },
   "reprioritized_at": "2026-09-19T09:39:44.911760+00:00",
   "reprioritized_after_task": "eng-20260918-22",
-  "micro_compile_source": "parked_source_hunter",
-  "library_market_id": "nasdaq100",
+  "micro_compile_source": "library_ingest_loop",
+  "library_market_id": "dax",
   "hunter_ticker": "PDD",
   "traffic_control": {
     "stuck_pr_count": 0,
@@ -5050,5 +5151,53 @@
     "last_fingerprint": "parallel_cap|parallel cap reached — 1 pr_open, 1 agent run(s) (max_parallel=2)",
     "last_sent_at": "2026-09-20T17:14:40.598827+00:00",
     "cooldown_hours": 12.0
+  },
+  "library_ingest_health": {
+    "snapshot_at": "2026-09-20T19:13:27.743815+00:00",
+    "market_id": "dax",
+    "buy_tier_count": 12,
+    "unmeasured_buy_tier": 7,
+    "zero_body_buy_tier": 0,
+    "thin_body_buy_tier": 3,
+    "indexed_without_body": 39,
+    "bodies_min": 1,
+    "bodies_median": 2,
+    "bodies_max": 49,
+    "coverage_scope": "canonical_plus_shards",
+    "ftse_equivalent": false,
+    "unmeasured_tickers": [
+      "HEI.DE",
+      "DTG.DE",
+      "HNR1.DE",
+      "HEN3.DE",
+      "FRE.DE",
+      "G1A.DE",
+      "VOW3.DE"
+    ],
+    "zero_body_tickers": [],
+    "thin_body_tickers": [
+      "MUV2.DE",
+      "BAS.DE",
+      "DTE.DE"
+    ],
+    "indexed_without_body_tickers": [
+      "FME.DE"
+    ],
+    "indexed_without_body_by_ticker": {
+      "FME.DE": 39
+    },
+    "parked_tickers": [],
+    "parked_count": 0,
+    "effective_thin_body_buy_tier": 3,
+    "effective_thin_body_tickers": [
+      "MUV2.DE",
+      "BAS.DE",
+      "DTE.DE"
+    ],
+    "effective_indexed_without_body": 39,
+    "effective_indexed_without_body_tickers": [
+      "FME.DE"
+    ],
+    "ingest_exhausted": false
   }
 }
