@@ -90,6 +90,9 @@ List qualitative risks NOT captured by the screen for the top candidates:
 regulatory risk, cyclicality, pension deficits, governance, or balance-sheet concerns.
 When JSON metrics show high yield or strong dividend-family passes, flag if filing-based FCF
 may not cover the ordinary dividend (do not assume Yahoo TTM cash flow is filing-aligned).
+Reconcile screen TTM vs filing-aligned FCF/yield when both appear in candidate JSON, and note
+dual dividend cover (statutory OCF−CapEx vs net FCF) when overlays or adjusted_signal diverge
+from the headline signal.
 If a name is in a live carve-out, held-for-sale, or discontinued-ops transition, say so and
 note residual-equity risk versus pre-deal consolidated screens.
 If data is insufficient, say so explicitly as an open question.

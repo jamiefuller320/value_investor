@@ -2,11 +2,15 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from value_investor.deep_analysis import DeepAnalysis, _parse_deep_analysis
 from value_investor.research.agent import (
     _augment_research_worker_prompt,
+    _gap_fill_prompt,
     filing_extraction_discipline,
     news_extraction_discipline,
+    screen_filing_reconciliation_discipline,
     worker_task_extraction_rules,
 )
 from value_investor.research.document import parse_research_sections
@@ -16,6 +20,7 @@ from value_investor.research.gap_fill import (
     GapFillTarget,
     _unresolved_questions,
     extract_gap_fill_targets,
+    filter_questions_for_ticker,
     supplement_deal_structure_questions,
 )
 from value_investor.summary import CompanyReport
@@ -116,6 +121,31 @@ def test_news_extraction_discipline_ignores_itv_broadcaster_noise_for_itv_l():
     assert "entertainment noise" in text.lower()
     generic = news_extraction_discipline(ticker="AAA.L", company_name="Alpha PLC")
     assert "ITV-the-broadcaster" not in generic
+
+
+def test_filter_questions_for_ticker_drops_foreign_listed_tickers():
+    questions = [
+        "Does FGP.L dividend policy affect ME Group coach exposure?",
+        "What is interim FCF/dividend cover on MEGP.L filing bodies?",
+    ]
+    kept = filter_questions_for_ticker(questions, "MEGP.L")
+    assert len(kept) == 1
+    assert "FGP.L" not in kept[0]
+    assert "MEGP.L" in kept[0]
+
+
+def test_gap_fill_prompt_requires_screen_filing_reconciliation():
+    prompt = _gap_fill_prompt(
+        ticker="MEGP.L",
+        company_name="ME Group International plc",
+        sources_dir=Path("/tmp/sources"),
+        existing_markdown_path=Path("/tmp/research.md"),
+        open_questions=["Reconcile dividend cover on filings"],
+    )
+    discipline = screen_filing_reconciliation_discipline()
+    assert discipline.splitlines()[0] in prompt
+    assert "adjusted_signal" in prompt
+    assert "dual" in prompt.lower() or "OCF" in prompt
 
 
 def test_supplement_deal_structure_questions_adds_filing_prompts():

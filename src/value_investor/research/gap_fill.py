@@ -42,6 +42,21 @@ _DEAL_OR_SEGMENT_CORPUS = re.compile(
     r"segment(?:ation)?|stub equity|residual|takeover|acquisition|sky|comcast"
 )
 _FCF_DIVIDEND_GAP = re.compile(r"(?i)fcf|free cash|dividend cover|yield")
+_LISTED_TICKER = re.compile(r"\b([A-Z]{1,5}\.L)\b")
+
+
+def filter_questions_for_ticker(questions: list[str], ticker: str) -> list[str]:
+    """Drop gap-fill questions that primarily belong to another listed ticker."""
+    target = ticker.upper()
+    kept: list[str] = []
+    for question in questions:
+        foreign = [
+            token.upper() for token in _LISTED_TICKER.findall(question) if token.upper() != target
+        ]
+        if foreign:
+            continue
+        kept.append(question)
+    return kept
 
 
 def supplement_deal_structure_questions(
@@ -236,6 +251,12 @@ def extract_gap_fill_targets(
             ticker=report.ticker,
             name=report.name,
         )
+        questions = filter_questions_for_ticker(questions, report.ticker)
+        if not questions:
+            questions = [
+                f"Resolve qualitative risks called out for {report.name} ({report.ticker}) "
+                "in the weekly deep analysis"
+            ]
         targets.append(
             GapFillTarget(
                 ticker=report.ticker,
