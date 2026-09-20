@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T12:35:42.831659+00:00",
+  "generated_at": "2026-09-20T14:57:09.733705+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1155,24 +1155,53 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-20T11:09:26.664583+00:00",
-    "queue_ui_updated_at": "2026-09-20T12:35:42.789882+00:00",
-    "task_count": 81,
+    "compiled_at": "2026-09-20T14:43:38.441094+00:00",
+    "queue_ui_updated_at": "2026-09-20T14:57:09.664701+00:00",
+    "task_count": 83,
     "status": {
-      "open_count": 0,
+      "open_count": 1,
       "pr_open_count": 0,
-      "parked_count": 3,
+      "parked_count": 4,
       "merged_count": 60,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260920-12",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [],
+    "queued_tasks": [
+      {
+        "id": "eng-20260920-12",
+        "area": "ops",
+        "title": "Flag CH bodies with OCR quality below threshold and fall back to RNS preliminary until NSM PDF succeeds, to avoid double-counting stale narrative (Sky “discussi",
+        "priority": "medium",
+        "priority_score": 25.0,
+        "status": "open",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
+        "clash_scan": "partial"
+      }
+    ],
     "attention_tasks": [
+      {
+        "id": "eng-20260920-11",
+        "area": "ops",
+        "title": "Deprioritise CH parent-only or administrative filings in refetch scoring so fetched=2 does not imply material gap closure.",
+        "priority": "medium",
+        "priority_score": 25.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
       {
         "id": "eng-20260920-09",
         "area": "ops",
@@ -1211,8 +1240,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 0,
-      "dispatch_eligible_count": 0,
+      "open_task_count": 1,
+      "dispatch_eligible_count": 1,
       "blocked_count": 0
     }
   },
@@ -1491,9 +1520,9 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-20T12:35:42.831659+00:00",
-    "overall": "idle",
-    "headline": "Queue and hunter idle.",
+    "generated_at": "2026-09-20T14:57:09.733705+00:00",
+    "overall": "active",
+    "headline": "Agent lane active.",
     "merge_lane": {
       "state": "idle",
       "idle": true,
@@ -1505,26 +1534,26 @@
       "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
+      "state": "running",
+      "idle": false,
+      "running": true,
       "blocked": false,
-      "should_dispatch": false,
+      "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
-      "attention_parked_count": 3,
-      "open_count": 0,
+      "attention_parked_count": 4,
+      "open_count": 1,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 0,
+      "dispatch_eligible_count": 1,
       "blocked_task_count": 0,
-      "next_task_id": null,
-      "reason": "no open engineering tasks in queue",
-      "detail": "No open engineering tasks — queue is idle."
+      "next_task_id": "eng-20260920-12",
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
-      "attention_parked_count": 3,
-      "evaluated_at": "2026-09-20T12:35:36.051942+00:00"
+      "attention_parked_count": 5,
+      "evaluated_at": "2026-09-20T14:43:35.031459+00:00"
     },
     "traffic_control": {
       "pause_active": false,

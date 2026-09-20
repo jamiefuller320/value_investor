@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-20T11:09:26.664583+00:00",
+  "compiled_at": "2026-09-20T14:43:38.441094+00:00",
   "run_at": null,
-  "task_count": 81,
+  "task_count": 83,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -3399,6 +3399,115 @@
       "merged_at": "2026-09-18T13:53:33.008024+00:00"
     },
     {
+      "id": "eng-20260920-11",
+      "area": "ops",
+      "title": "Deprioritise CH parent-only or administrative filings in refetch scoring so fetched=2 does not imply material gap closure.",
+      "summary": "Deprioritise CH parent-only or administrative filings in refetch scoring so fetched=2 does not imply material gap closure.",
+      "priority": "medium",
+      "priority_score": 25.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "MEGP.L"
+        ],
+        "recorded_at": "2026-09-12T12:36:40.963336+00:00",
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 5.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Prompt or export change is covered by a parser/unit test",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/automation_status.py",
+        "src/value_investor/email_agent.py",
+        "src/value_investor/ops_monitor.py",
+        "src/value_investor/backtest_health.py",
+        "src/value_investor/engineering_recovery.py",
+        "src/value_investor/engineering_sync.py",
+        "src/value_investor/engineering_pr_notify.py",
+        "src/value_investor/engineering_preflight.py",
+        "src/value_investor/engineering_queue.py",
+        ".github/workflows/ops-monitor.yml",
+        ".github/workflows/engineering-agent.yml",
+        ".github/workflows/engineering-queue.yml",
+        "tests/test_automation_status.py",
+        "tests/test_ops_monitor.py",
+        "tests/test_backtest_health.py",
+        "tests/test_engineering_sync.py",
+        "tests/test_engineering_pr_notify.py",
+        "tests/test_engineering_preflight.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "parked",
+      "parked_reason": "preflight blocked PR open — preflight failed",
+      "parked_policy": "preflight_clash",
+      "parked_at": "2026-09-20T14:47:53.315373+00:00"
+    },
+    {
+      "id": "eng-20260920-12",
+      "area": "ops",
+      "title": "Flag CH bodies with OCR quality below threshold and fall back to RNS preliminary until NSM PDF succeeds, to avoid double-counting stale narrative (Sky “discussi",
+      "summary": "Flag CH bodies with OCR quality below threshold and fall back to RNS preliminary until NSM PDF succeeds, to avoid double-counting stale narrative (Sky “discussions” vs signed deal).",
+      "priority": "medium",
+      "priority_score": 25.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "ITV.L"
+        ],
+        "recorded_at": "2026-09-12T12:36:40.963362+00:00",
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 5.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md"
+      },
+      "acceptance_criteria": [
+        "Prompt or export change is covered by a parser/unit test",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/automation_status.py",
+        "src/value_investor/email_agent.py",
+        "src/value_investor/ops_monitor.py",
+        "src/value_investor/backtest_health.py",
+        "src/value_investor/engineering_recovery.py",
+        "src/value_investor/engineering_sync.py",
+        "src/value_investor/engineering_pr_notify.py",
+        "src/value_investor/engineering_preflight.py",
+        "src/value_investor/engineering_queue.py",
+        ".github/workflows/ops-monitor.yml",
+        ".github/workflows/engineering-agent.yml",
+        ".github/workflows/engineering-queue.yml",
+        "tests/test_automation_status.py",
+        "tests/test_ops_monitor.py",
+        "tests/test_backtest_health.py",
+        "tests/test_engineering_sync.py",
+        "tests/test_engineering_pr_notify.py",
+        "tests/test_engineering_preflight.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
+    },
+    {
       "id": "eng-20260920-09",
       "area": "ops",
       "title": "On CH refetch success, tag body `parse_quality: ocr|ixbrl` in gap_fill_source_map so memos do not treat OCR strategic pages as full accounts coverage.",
@@ -4433,7 +4542,7 @@
       "title": "Hunt fetchable IR source for parked nasdaq100 leftover PDD",
       "summary": "Library market nasdaq100 (Nasdaq-100) parked PDD after ingest avenues were exhausted (unfetchable_iwb). Look at this one ticker only: if a fetchable IR or statutory filing URL exists, add an allowlist entry and a regression test. If nothing fetchable exists, record a PARKED_SOURCE_HUNTER_SKIP reason in tests/test_research_filings.py — do not invent URLs. auto_merge is off; this task is priority=low so it sits at the back of the engineering queue. Revisit when: New 10-K/10-Q (or equivalent statut",
       "priority": "low",
-      "priority_score": 14.0,
+      "priority_score": 12.0,
       "source": "parked_source_hunter",
       "evidence": {
         "market_id": "nasdaq100",
@@ -4472,12 +4581,7 @@
         "docs/data/library/policy.json"
       ],
       "auto_merge": false,
-      "status": "cancelled",
-      "parked_reason": "preflight blocked PR open — preflight failed",
-      "parked_policy": "preflight_clash",
-      "parked_at": "2026-09-19T18:31:33.889461+00:00",
-      "cancelled_reason": "backlog clearing: duplicate nasdaq100 hunter park; open queue carries fresh hunter tasks",
-      "cancelled_at": "2026-09-19T20:41:16.547583+00:00"
+      "status": "cancelled"
     },
     {
       "id": "eng-20260919-10",
@@ -4726,8 +4830,8 @@
     "filings_with_body": 4139
   },
   "queue_clearing": {
-    "attention_parked_count": 3,
-    "evaluated_at": "2026-09-20T12:35:36.051942+00:00",
+    "attention_parked_count": 5,
+    "evaluated_at": "2026-09-20T14:43:35.031459+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
@@ -4750,7 +4854,7 @@
   "reprioritized_after_task": "eng-20260918-22",
   "micro_compile_source": "compile_cap_drain",
   "library_market_id": "nasdaq100",
-  "hunter_ticker": "TRI",
+  "hunter_ticker": "PDD",
   "traffic_control": {
     "stuck_pr_count": 0,
     "stuck_reasons": [],
