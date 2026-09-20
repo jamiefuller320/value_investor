@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T14:57:09.733705+00:00",
+  "generated_at": "2026-09-20T15:00:44.803634+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1155,16 +1155,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-20T14:43:38.441094+00:00",
-    "queue_ui_updated_at": "2026-09-20T14:57:09.664701+00:00",
-    "task_count": 83,
+    "compiled_at": "2026-09-20T15:00:42.479977+00:00",
+    "queue_ui_updated_at": "2026-09-20T15:00:44.717261+00:00",
+    "task_count": 84,
     "status": {
-      "open_count": 1,
+      "open_count": 2,
       "pr_open_count": 0,
       "parked_count": 4,
       "merged_count": 60,
       "failed_count": 0,
-      "next_task_id": "eng-20260920-12",
+      "next_task_id": "eng-20260920-13",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1172,6 +1172,22 @@
       "spend_blocked": false
     },
     "queued_tasks": [
+      {
+        "id": "eng-20260920-13",
+        "area": "prompt",
+        "title": "On CH refetch passes, require gap-fill to cite at least three-year margin and secured-workload series when present in `filings/bodies/ch_*.txt`.",
+        "priority": "medium",
+        "priority_score": 25.0,
+        "status": "open",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
+        "clash_scan": "full"
+      },
       {
         "id": "eng-20260920-12",
         "area": "ops",
@@ -1185,8 +1201,8 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "partial"
+        "effective_dispatch_rank": 2,
+        "clash_scan": "full"
       }
     ],
     "attention_tasks": [
@@ -1240,8 +1256,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 1,
-      "dispatch_eligible_count": 1,
+      "open_task_count": 2,
+      "dispatch_eligible_count": 2,
       "blocked_count": 0
     }
   },
@@ -1520,7 +1536,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-20T14:57:09.733705+00:00",
+    "generated_at": "2026-09-20T15:00:44.803634+00:00",
     "overall": "active",
     "headline": "Agent lane active.",
     "merge_lane": {
@@ -1542,18 +1558,18 @@
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 4,
-      "open_count": 1,
+      "open_count": 2,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 1,
+      "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260920-12",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
+      "next_task_id": "eng-20260920-13",
+      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
+      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
     },
     "queue_clearing": {
       "pause_active": false,
-      "attention_parked_count": 5,
-      "evaluated_at": "2026-09-20T14:43:35.031459+00:00"
+      "attention_parked_count": 4,
+      "evaluated_at": "2026-09-20T15:00:39.632199+00:00"
     },
     "traffic_control": {
       "pause_active": false,

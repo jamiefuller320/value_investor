@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-20T14:43:38.441094+00:00",
+  "compiled_at": "2026-09-20T15:00:42.479977+00:00",
   "run_at": null,
-  "task_count": 83,
+  "task_count": 84,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -3399,6 +3399,47 @@
       "merged_at": "2026-09-18T13:53:33.008024+00:00"
     },
     {
+      "id": "eng-20260920-13",
+      "area": "prompt",
+      "title": "On CH refetch passes, require gap-fill to cite at least three-year margin and secured-workload series when present in `filings/bodies/ch_*.txt`.",
+      "summary": "On CH refetch passes, require gap-fill to cite at least three-year margin and secured-workload series when present in `filings/bodies/ch_*.txt`.",
+      "priority": "medium",
+      "priority_score": 25.0,
+      "source": "compile_cap_drain",
+      "evidence": {
+        "tickers": [
+          "MGNS.L"
+        ],
+        "recorded_at": "2026-09-12T12:36:40.963386+00:00",
+        "compile_cap_drain": true,
+        "origin_source": "research_model_suggestions",
+        "origin_priority_score": 5.0,
+        "preferred_merge_class": "compile_cap_drain",
+        "doc": "docs/ops/engineering-sync.md",
+        "auto_merge_reason": "allowlist fits CI-fix safe path cap"
+      },
+      "acceptance_criteria": [
+        "Prompt or export change is covered by a parser/unit test",
+        "No edits under blocked_paths"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/agent.py",
+        "src/value_investor/deep_analysis.py",
+        "src/value_investor/research/gap_fill.py",
+        "tests/test_deep_analysis.py",
+        "tests/test_research_gap_fill.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": true,
+      "status": "open"
+    },
+    {
       "id": "eng-20260920-11",
       "area": "ops",
       "title": "Deprioritise CH parent-only or administrative filings in refetch scoring so fetched=2 does not imply material gap closure.",
@@ -4830,8 +4871,8 @@
     "filings_with_body": 4139
   },
   "queue_clearing": {
-    "attention_parked_count": 5,
-    "evaluated_at": "2026-09-20T14:43:35.031459+00:00",
+    "attention_parked_count": 4,
+    "evaluated_at": "2026-09-20T15:00:39.632199+00:00",
     "should_send_full_queue_warning": false,
     "pause_active": false,
     "last_change": {
