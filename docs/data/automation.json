@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T15:00:44.803634+00:00",
+  "generated_at": "2026-09-20T15:01:29.315325+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1156,12 +1156,12 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-20T15:00:42.479977+00:00",
-    "queue_ui_updated_at": "2026-09-20T15:00:44.717261+00:00",
+    "queue_ui_updated_at": "2026-09-20T15:01:29.249569+00:00",
     "task_count": 84,
     "status": {
-      "open_count": 2,
+      "open_count": 5,
       "pr_open_count": 0,
-      "parked_count": 4,
+      "parked_count": 1,
       "merged_count": 60,
       "failed_count": 0,
       "next_task_id": "eng-20260920-13",
@@ -1186,7 +1186,7 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 1,
-        "clash_scan": "full"
+        "clash_scan": "partial"
       },
       {
         "id": "eng-20260920-12",
@@ -1202,7 +1202,55 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 2,
-        "clash_scan": "full"
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260920-09",
+        "area": "ops",
+        "title": "On CH refetch success, tag body `parse_quality: ocr|ixbrl` in gap_fill_source_map so memos do not treat OCR strategic pages as full accounts coverage.",
+        "priority": "medium",
+        "priority_score": 25.0,
+        "status": "open",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 3,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260920-10",
+        "area": "prompt",
+        "title": "`output/research/ITV.L/research.md` is updated with these sections.",
+        "priority": "medium",
+        "priority_score": 25.0,
+        "status": "open",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 4,
+        "clash_scan": "partial"
+      },
+      {
+        "id": "eng-20260920-08",
+        "area": "coverage",
+        "title": "Populate Yahoo **quarterly cash flow** for LSE names where TTM FCF is flagged unverified (`yahoo_quarterly_cashflow: false` in gap map) to reduce filing vs scre",
+        "priority": "medium",
+        "priority_score": 25.0,
+        "status": "open",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 5,
+        "clash_scan": "partial"
       }
     ],
     "attention_tasks": [
@@ -1217,47 +1265,11 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null
-      },
-      {
-        "id": "eng-20260920-09",
-        "area": "ops",
-        "title": "On CH refetch success, tag body `parse_quality: ocr|ixbrl` in gap_fill_source_map so memos do not treat OCR strategic pages as full accounts coverage.",
-        "priority": "medium",
-        "priority_score": 25.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260920-10",
-        "area": "prompt",
-        "title": "`output/research/ITV.L/research.md` is updated with these sections.",
-        "priority": "medium",
-        "priority_score": 25.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260920-08",
-        "area": "coverage",
-        "title": "Populate Yahoo **quarterly cash flow** for LSE names where TTM FCF is flagged unverified (`yahoo_quarterly_cashflow: false` in gap map) to reduce filing vs scre",
-        "priority": "medium",
-        "priority_score": 25.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
       }
     ],
     "clash_summary": {
-      "open_task_count": 2,
-      "dispatch_eligible_count": 2,
+      "open_task_count": 5,
+      "dispatch_eligible_count": 5,
       "blocked_count": 0
     }
   },
@@ -1536,7 +1548,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-20T15:00:44.803634+00:00",
+    "generated_at": "2026-09-20T15:01:29.315325+00:00",
     "overall": "active",
     "headline": "Agent lane active.",
     "merge_lane": {
@@ -1557,10 +1569,10 @@
       "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
-      "attention_parked_count": 4,
-      "open_count": 2,
+      "attention_parked_count": 1,
+      "open_count": 5,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 2,
+      "dispatch_eligible_count": 5,
       "blocked_task_count": 0,
       "next_task_id": "eng-20260920-13",
       "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
