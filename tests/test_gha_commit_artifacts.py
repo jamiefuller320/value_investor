@@ -182,3 +182,24 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     assert "changes_detected" in email
     assert "docs/data/paper_automation/markets/**/buy_tier_level/**" in epoch0
     assert "docs/data/library/equal_support_status.json" in epoch0
+
+
+def test_email_report_skips_full_ingest_deepen() -> None:
+    """Sunday quiet bundle relies on Saturday pre-Sunday ingest-loop deepen."""
+    email = EMAIL_WORKFLOW.read_text(encoding="utf-8")
+    args_lines = [
+        line for line in email.splitlines() if line.lstrip().startswith('ARGS="$ARGS')
+    ]
+    assert args_lines, "expected ftse-email ARGS assignment"
+    joined = "\n".join(args_lines)
+    assert "--ingest-improvement-pass" not in joined
+    assert "--deep-analysis" in joined
+    assert "--research-docs" in joined
+
+
+def test_ingest_loop_has_saturday_pre_sunday_schedules() -> None:
+    text = Path(".github/workflows/ingest-loop.yml").read_text(encoding="utf-8")
+    assert 'cron: "5 20 * * 6"' in text
+    assert 'cron: "5 23 * * 6"' in text
+    assert "Saturday quiet-bundle window" in text or "Sunday quiet-bundle window" in text
+    assert "max_drain_generations=6" in text

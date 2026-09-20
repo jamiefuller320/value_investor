@@ -70,8 +70,12 @@ SUITE=email_only FORCE=true ./scripts/dispatch_orchestrator.sh
 
 Or GitHub Actions → **Automation Orchestrator** → `suite=email_only`, `force=true`.
 
-**What runs:** `email-report.yml` → screen → deep analysis → ingest-improvement (cap 15) →
-gap-fill → post-run review → engineering compile → publish dashboard → SMTP email.
+**What runs:** `email-report.yml` → screen → deep analysis → research-docs →
+post-run review → engineering compile → publish dashboard → SMTP email.
+
+Sunday quiet bundle relies on **Saturday pre-Sunday ingest-loop** for filing
+bodies (no full OCR deepen inside email-report). Mid-week `email_only` may still
+add `--ingest-improvement-pass` manually when you need a refresh after eng merges.
 
 **Concurrency:** `ftse-email-report` group — only one email run at a time.
 

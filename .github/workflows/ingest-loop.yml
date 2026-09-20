@@ -1,18 +1,24 @@
 name: FTSE Ingest Loop
 
-# Weekday ingest-assess-improve loop for live FTSE buy-tier filing coverage.
-# Runs bounded ingest-improvement against docs/data/latest.json (no full screen),
-# logs ingest_health, and micro-compiles ingest engineering tasks when coverage stalls.
+# Live FTSE buy-tier filing coverage via bounded ingest-improvement against
+# docs/data/latest.json (no full screen). Logs ingest_health; micro-compiles
+# ingest engineering tasks when coverage stalls.
+#
+# Cadence:
+# - Mon–Fri 07:05 + 10:05 UTC — weekday deepen + body-gap drain
+# - Saturday 20:05 + 23:05 UTC — pre-Sunday deepen batches so Sunday email-report
+#   can screen/memo/send without burning the quiet-bundle job on OCR (L429+)
 #
 # Reliability: GitHub schedule is best-effort — use external cron → workflow_dispatch
-# (see docs/ops/orchestrator-cron.md). Two batches per ingest day (morning +
-# afternoon); gate allows multiple successes per UTC day during learning phase.
-# Learning-phase bar: scan all buy-tier, then deepen toward indexed_without_body≈0
-# same day (compute unconstrained). Volume plan: docs/ops/market-scrutiny.md
+# (see docs/ops/orchestrator-cron.md). Gate allows multiple successes per UTC day
+# during learning phase. Volume plan: docs/ops/market-scrutiny.md
 on:
   schedule:
     - cron: "5 7 * * 1-5"
     - cron: "5 10 * * 1-5"
+    # Saturday night pre-Sunday deepen (UTC). Catch-up at 23:05 if 20:05 dropped.
+    - cron: "5 20 * * 6"
+    - cron: "5 23 * * 6"
   workflow_dispatch:
     inputs:
       max_targets:
@@ -429,6 +435,13 @@ jobs:
           NEXT_DRAIN_GENERATION: ${{ steps.loop.outputs.next_drain_generation }}
           MAX_DRAIN_GENERATIONS: ${{ github.event.inputs.max_drain_generations || '12' }}
         run: |
+          # Do not chain into Sunday quiet-bundle window (orchestrator ~06:20 UTC).
+          DOW=$(date -u +%w)   # 0=Sunday … 6=Saturday
+          HOUR=$(date -u +%H)
+          if [ "$DOW" = "0" ] && [ "$HOUR" -ge 5 ]; then
+            echo "Skipping chunk chain — Sunday quiet-bundle window (hour=$HOUR UTC)"
+            exit 0
+          fi
           DEFERRED="${TARGETS_DEFERRED:-}"
           if [ -z "$DEFERRED" ] || [ "$DEFERRED" -le 0 ]; then
             echo "No deferred targets — skip chain dispatch"
@@ -445,6 +458,15 @@ jobs:
           if ! [[ "$MAX_DRAIN_GENERATIONS" =~ ^[0-9]+$ ]]; then
             echo "Rejecting unsafe max_drain_generations" >&2
             exit 1
+          fi
+          # Saturday night pre-Sunday deepen: cap chains so OCR cannot run into 06:20.
+          if [ "$DOW" = "6" ] && [ "$MAX_DRAIN_GENERATIONS" -gt 6 ]; then
+            MAX_DRAIN_GENERATIONS=6
+            echo "Saturday pre-Sunday deepen — capping max_drain_generations=6"
+          fi
+          if [ "$NEXT_GEN" -gt "$MAX_DRAIN_GENERATIONS" ]; then
+            echo "Drain generation $NEXT_GEN exceeds cap $MAX_DRAIN_GENERATIONS — stop"
+            exit 0
           fi
           gh workflow run ingest-loop.yml \
             -f max_targets="$CHUNK" \
@@ -465,11 +487,25 @@ jobs:
           NEXT_DRAIN_GENERATION: ${{ steps.loop.outputs.next_drain_generation }}
           MAX_DRAIN_GENERATIONS: ${{ github.event.inputs.max_drain_generations || '12' }}
         run: |
+          DOW=$(date -u +%w)
+          HOUR=$(date -u +%H)
+          if [ "$DOW" = "0" ] && [ "$HOUR" -ge 5 ]; then
+            echo "Skipping body-gap chain — Sunday quiet-bundle window (hour=$HOUR UTC)"
+            exit 0
+          fi
           GAPS="${INDEXED_WITHOUT_BODY:-}"
           NEXT_GEN="${NEXT_DRAIN_GENERATION:-}"
           if ! [[ "$MAX_DRAIN_GENERATIONS" =~ ^[0-9]+$ ]]; then
             echo "Rejecting unsafe max_drain_generations" >&2
             exit 1
+          fi
+          if [ "$DOW" = "6" ] && [ "$MAX_DRAIN_GENERATIONS" -gt 6 ]; then
+            MAX_DRAIN_GENERATIONS=6
+            echo "Saturday pre-Sunday deepen — capping max_drain_generations=6"
+          fi
+          if [ -n "$NEXT_GEN" ] && [ "$NEXT_GEN" -gt "$MAX_DRAIN_GENERATIONS" ]; then
+            echo "Drain generation $NEXT_GEN exceeds cap $MAX_DRAIN_GENERATIONS — stop"
+            exit 0
           fi
           echo "Buy-tier still has indexed_without_body=$GAPS — chaining drain generation $NEXT_GEN"
           gh workflow run ingest-loop.yml \

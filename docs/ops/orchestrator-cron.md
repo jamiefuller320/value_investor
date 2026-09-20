@@ -40,7 +40,7 @@ token instead of your user PAT.
 | `library-grow.yml` | Via orchestrator | ↑ | None |
 | `library-model-review.yml` | Via orchestrator | ↑ | None |
 | `paper-auto.yml` | Via orchestrator weekdays | ↑ | None |
-| `ingest-loop.yml` | External **primary** | Mon–Fri **07:05 + 10:05** → two batches (`max_targets=62`, `max_bodies=40`) | Mon–Fri 07:05 + 10:05 |
+| `ingest-loop.yml` | External **primary** | Mon–Fri **07:05 + 10:05**; Sat **20:05 + 23:05** pre-Sunday deepen → batches (`max_targets=62`, `max_bodies=40`; Sat drain cap 6) | Mon–Fri 07:05 + 10:05; Sat 20:05 + 23:05 |
 | `analysis-review.yml` | External **primary** | `35 10 * * 0` (± optional `35 12 * * 0`) → `analysis-review.yml` | Sun 10:35 |
 | `paper-learning-review.yml` | External **primary** | `45 10 * * 0` → `paper-learning-review.yml` | Sun 10:45 |
 | `learning-director-review.yml` | External **primary** | `55 10 * * 0` → `learning-director-review.yml` | Sun 10:55 |
@@ -148,7 +148,7 @@ CRONJOB_API_KEY=… WORKFLOW_DISPATCH_PAT=… ./scripts/import_cron_jobs.py --al
 ```
 
 Job keys: `orchestrator-sunday`, `orchestrator-weekday-paper`, `ingest-loop-morning`,
-`ingest-loop-afternoon`,
+`ingest-loop-afternoon`, `ingest-loop-saturday-evening`, `ingest-loop-saturday-late`,
 `analysis-review`, `paper-learning-review`, `learning-director-review`,
 `ops-monitor`, `data-backup`,
 `library-epoch0-weekday-asx|euro|us-edt|us-est`. Dry-run: `--dry-run --json`.
@@ -182,13 +182,19 @@ After merging scheduling fixes, refresh the external cron:
 WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py --job orchestrator-weekday-paper
 ```
 
-### 3. Ingest loop — weekday two batches per day
+### 3. Ingest loop — weekday batches + Saturday pre-Sunday deepen
 
-Schedules: **07:05** and **10:05 UTC** on **Mon–Fri** (`ingest-loop-morning` /
-`ingest-loop-afternoon` cron-job.org keys). Each dispatch uses learning-phase
-inputs (`max_targets=62`, `max_bodies=40`, `max_runtime_seconds=3600`). The
-workflow gate allows **up to eight successful runs per UTC day** (morning +
-afternoon + body-gap chains).
+Schedules:
+
+- **Mon–Fri 07:05 + 10:05 UTC** (`ingest-loop-morning` / `ingest-loop-afternoon`)
+- **Sat 20:05 + 23:05 UTC** (`ingest-loop-saturday-evening` / `ingest-loop-saturday-late`)
+  — thicken buy-tier bodies before Sunday email (see
+  [`ingest-scan-then-target.md`](ingest-scan-then-target.md#saturday-pre-sunday-deepen))
+
+Each dispatch uses learning-phase inputs (`max_targets=62`, `max_bodies=40`,
+`max_runtime_seconds=3600`). Saturday jobs also pass `max_drain_generations=6`.
+The workflow gate allows **up to eight successful runs per UTC day** (roots +
+body-gap chains). Drain chains **do not** continue into Sunday ≥05:00 UTC.
 
 Volume and budget context: [`market-scrutiny.md`](market-scrutiny.md).
 
@@ -200,23 +206,28 @@ Refresh external cron after merge:
 
 ```bash
 WORKFLOW_DISPATCH_PAT=… CRONJOB_API_KEY=… ./scripts/import_cron_jobs.py \
-  --job ingest-loop-morning --job ingest-loop-afternoon --disable-legacy-ingest
+  --job ingest-loop-morning --job ingest-loop-afternoon \
+  --job ingest-loop-saturday-evening --job ingest-loop-saturday-late \
+  --disable-legacy-ingest
 ```
+
+<a id="saturday-pre-sunday-deepen"></a>
 
 Disable legacy **“FTSE ingest loop (Mon/Wed/Fri*)”** jobs via `--disable-legacy-ingest`
 (they double-fired with weekday crons).
 
-Same-day gate — safe alongside GitHub `0 7` / `0 10` schedules; skips only after
-the daily success cap or while another run is active.
+Same-day gate — safe alongside GitHub schedules; skips only after the daily
+success cap or while another run is active.
 
-#### Why weekday (Mon–Fri) for live FTSE ingest?
+#### Why weekday + Saturday night for live FTSE ingest?
 
 | Factor | Notes |
 |--------|--------|
-| **FTSE gap closure** | Buy-tier deepen slots against Sunday-refreshed `latest.json` |
-| **Screen cadence** | Sunday screen refreshes buy-tier; weekday ingest deepens filings |
+| **FTSE gap closure** | Weekday deepen against Sunday-refreshed `latest.json` |
+| **Sunday email accuracy** | Saturday night drain thickens bodies so quiet-bundle report/send is not OCR-bound |
+| **Screen cadence** | Sunday screen refreshes buy-tier; weekday + Saturday ingest deepens filings |
 | **Cost** | Ingest-loop uses CH/RNS/API fetch — **not** `weekly_ops` Cursor spend |
-| **Capacity** | Learning phase: ~full buy-tier deepen per batch (`max_targets=62`) + body-gap chain (see `market-scrutiny.md`) |
+| **Capacity** | Learning phase: ~full buy-tier deepen per batch (`max_targets=62`) + body-gap chain (see `market-scrutiny.md`); Saturday drain capped at 6 |
 
 **Library euro/S&P deepen** is separate: Mon–Sat peak + daily off-peak (incl. Sunday
 after the quiet bundle) — see `euro-ingest-loop.yml` / `library-ingest-sprint.yml` /

@@ -53,10 +53,12 @@ jobs:
         run: |
           ARGS="--dry-run --publish-dashboard"
           if [ -n "$CURSOR_API_KEY" ]; then
-            # Ingest before research-docs/gap-fill so memos see thickened filing bodies
-            # (email_agent also enforces this order and syncs docs/data → output/research).
-            # L123: full-buy-tier cap matches weekday learning-phase deepen (62).
-            ARGS="$ARGS --deep-analysis --ingest-improvement-pass --ingest-improvement-cap 62 --research-docs --post-run-review --compile-engineering-tasks"
+            # Bodies are thickened on Saturday night by ingest-loop (pre-Sunday deepen
+            # batches + drain). Do not re-run full buy-tier OCR deepen here — that
+            # burned the 6h job (2026-09-20). Screen + memos + send only.
+            # Optional mid-week Analysis refresh may still pass --ingest-improvement-pass
+            # via accelerated-review email_only (docs/ops/accelerated-review-cycle.md).
+            ARGS="$ARGS --deep-analysis --research-docs --post-run-review --compile-engineering-tasks"
             # Phase B: essay gap-fill dropped from default Sunday bundle (structured
             # verdict slim). Optional: add --research-gap-fill for slim gap-fill.
           fi

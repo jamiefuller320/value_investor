@@ -54,6 +54,8 @@ WORKFLOW_SCHEDULES = {
         "cron": "17 6 * * 0",
         "cadence": (
             "Sunday quiet bundle via orchestrator (markets closed). "
+            "Filing bodies come from Saturday pre-Sunday ingest-loop deepen "
+            "(no full OCR pass inside email-report). "
             "Optional mid-week Analysis refresh: docs/ops/accelerated-review-cycle.md "
             "(email_only + force after engineering queue drains)."
         ),
@@ -76,13 +78,12 @@ WORKFLOW_SCHEDULES = {
     },
     "ingest_loop": {
         "name": "FTSE Ingest Loop",
-        "cron": "0 7,10 * * 1,3,5",
+        "cron": "5 7,10 * * 1-5; 5 20,23 * * 6",
         "cadence": (
-            "Mon/Wed/Fri 07:00 + 10:00 UTC catch-up (GitHub schedule + external cron). "
-            "Skips when this workflow already succeeded today or another run is active. "
-            "Bounded ingest-improvement on buy-tier names from docs/data/latest.json; "
-            "logs ingest_health; micro-compiles ingest engineering tasks when zero-body "
-            "buy-tier coverage stalls. External cron: docs/ops/orchestrator-cron.md."
+            "Mon–Fri 07:05 + 10:05 UTC deepen; Saturday 20:05 + 23:05 UTC "
+            "pre-Sunday deepen (drain cap 6) so Sunday email-report can send "
+            "without OCR burn. External cron: docs/ops/orchestrator-cron.md; "
+            "design: docs/ops/ingest-scan-then-target.md#saturday-pre-sunday-deepen."
         ),
         "workflow": "ingest-loop.yml",
     },

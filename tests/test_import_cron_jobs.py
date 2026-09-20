@@ -102,6 +102,31 @@ def test_import_cron_jobs_dry_run_ingest_loop_afternoon():
     assert body["inputs"]["max_bodies"] == "40"
 
 
+def test_import_cron_jobs_dry_run_ingest_loop_saturday_pre_sunday():
+    script = Path("scripts/import_cron_jobs.py")
+    for key, hour, title in (
+        ("ingest-loop-saturday-evening", 20, "FTSE ingest loop (Saturday pre-Sunday deepen)"),
+        ("ingest-loop-saturday-late", 23, "FTSE ingest loop (Saturday pre-Sunday catch-up)"),
+    ):
+        proc = subprocess.run(
+            [sys.executable, str(script), "--job", key, "--dry-run", "--json"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        rows = json.loads(proc.stdout)
+        assert len(rows) == 1, key
+        payload = rows[0]["payload"]["job"]
+        assert payload["title"] == title
+        assert payload["schedule"]["hours"] == [hour]
+        assert payload["schedule"]["minutes"] == [5]
+        assert payload["schedule"]["wdays"] == [6]
+        body = json.loads(payload["extendedData"]["body"])
+        assert body["inputs"]["max_targets"] == "62"
+        assert body["inputs"]["max_drain_generations"] == "6"
+        assert "ingest-loop.yml" in payload["url"]
+
+
 def test_import_cron_jobs_dry_run_disable_legacy_ingest():
     import os
 
