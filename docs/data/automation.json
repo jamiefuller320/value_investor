@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T06:49:46.777953+00:00",
+  "generated_at": "2026-09-20T07:47:56.319998+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1155,16 +1155,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-19T22:42:57.039084+00:00",
-    "queue_ui_updated_at": "2026-09-20T06:49:46.808490+00:00",
-    "task_count": 71,
+    "compiled_at": "2026-09-20T07:47:54.269762+00:00",
+    "queue_ui_updated_at": "2026-09-20T07:47:56.241851+00:00",
+    "task_count": 72,
     "status": {
-      "open_count": 1,
+      "open_count": 2,
       "pr_open_count": 0,
       "parked_count": 2,
       "merged_count": 52,
       "failed_count": 0,
-      "next_task_id": "eng-20260919-15",
+      "next_task_id": "eng-20260920-01",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1172,6 +1172,22 @@
       "spend_blocked": false
     },
     "queued_tasks": [
+      {
+        "id": "eng-20260920-01",
+        "area": "scoring",
+        "title": "dividend: Map email **watchlist** to overlay **caution** when `interim_dividend_cut_flagged` and `fcf_dividend_coverage_net` < 1.0 simultaneously, even if raw s",
+        "priority": "medium",
+        "priority_score": 25.0,
+        "status": "open",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
+        "clash_scan": "partial"
+      },
       {
         "id": "eng-20260919-15",
         "area": "scoring",
@@ -1185,7 +1201,7 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 1,
+        "effective_dispatch_rank": 2,
         "clash_scan": "partial"
       }
     ],
@@ -1216,8 +1232,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 1,
-      "dispatch_eligible_count": 1,
+      "open_task_count": 2,
+      "dispatch_eligible_count": 2,
       "blocked_count": 0
     }
   },
@@ -1493,5 +1509,56 @@
       "tracks_insufficient_epoch_marks": 2,
       "all_benchmark_spans_insufficient": false
     }
+  },
+  "queue_health": {
+    "schema_version": 1,
+    "generated_at": "2026-09-20T07:47:56.319998+00:00",
+    "overall": "active",
+    "headline": "Agent lane active.",
+    "merge_lane": {
+      "state": "idle",
+      "idle": true,
+      "running": false,
+      "blocked": false,
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+    },
+    "agent_lane": {
+      "state": "running",
+      "idle": false,
+      "running": true,
+      "blocked": false,
+      "should_dispatch": true,
+      "pause_active": false,
+      "traffic_pause_active": false,
+      "attention_parked_count": 2,
+      "open_count": 2,
+      "pr_open_count": 0,
+      "dispatch_eligible_count": 2,
+      "blocked_task_count": 0,
+      "next_task_id": "eng-20260920-01",
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
+    },
+    "queue_clearing": {
+      "pause_active": false,
+      "attention_parked_count": 2,
+      "evaluated_at": "2026-09-20T07:47:51.969995+00:00"
+    },
+    "traffic_control": {
+      "pause_active": false,
+      "stuck_pr_count": 0,
+      "pause_reasons": [],
+      "evaluated_at": "2026-09-20T07:46:51.927644+00:00"
+    },
+    "ops_monitor": {
+      "run_at": "2026-09-20T07:46:35.090327+00:00",
+      "overall": "warn",
+      "should_dispatch_engineering": true
+    },
+    "merges_today": [],
+    "verified_merges_today_count": 0
   }
 }
