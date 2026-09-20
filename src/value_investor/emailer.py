@@ -23,7 +23,10 @@ from value_investor.historical_analysis import (
     format_historical_analysis_text,
 )
 from value_investor.post_run_review import PostRunReview
-from value_investor.publish import research_source_prompt_lines_for_ticker
+from value_investor.publish import (
+    annotate_reports_with_screen_ttm_fcf_verification,
+    research_source_prompt_lines_for_ticker,
+)
 from value_investor.research.document import ResearchDocument, ResearchSummary
 from value_investor.research.format import (
     format_director_escalation_candidates_html,
@@ -116,6 +119,34 @@ def _research_source_prompt_lines(ticker: str) -> list[str]:
         return research_source_prompt_lines_for_ticker(ticker, output_dir=Path("output"))
     except Exception:  # noqa: BLE001 — email must still send
         return []
+
+
+def _reports_with_screen_ttm_fcf_verification(
+    reports: list[CompanyReport],
+) -> list[CompanyReport]:
+    """Reconcile export rows with cached Yahoo quarterlies before rendering the email."""
+    try:
+        from pathlib import Path
+
+        rows = annotate_reports_with_screen_ttm_fcf_verification(
+            [report.to_dict() for report in reports],
+            output_dir=Path("output"),
+        )
+        return [CompanyReport.from_dict(row) for row in rows]
+    except Exception:  # noqa: BLE001 — email must still send
+        return reports
+
+
+def _screen_ttm_unverified_email_hint(report: CompanyReport) -> str | None:
+    fcf = report.fcf if isinstance(report.fcf, dict) else {}
+    if not fcf.get("screen_ttm_unverified"):
+        return None
+    if "screen TTM (unverified)" in str(report.action_note or ""):
+        return None
+    return (
+        "FCF note: screen TTM is unverified — Yahoo quarterly cash-flow is empty; "
+        "use filing-aligned or company-adjusted figures."
+    )
 
 
 def _research_overlay_label(report: CompanyReport) -> str | None:
@@ -369,6 +400,7 @@ def format_text_report(
     excluded_investment_vehicles: int = 0,
     trust_reports: list[CompanyReport] | None = None,
 ) -> str:
+    reports = _reports_with_screen_ttm_fcf_verification(reports)
     lines = [
         f"{screen_label} Value Screen — {run_at}",
         "=" * 60,
@@ -473,6 +505,9 @@ def format_text_report(
             lines.append(overlay)
         for prompt in _research_source_prompt_lines(report.ticker):
             lines.append(f"Research source: {prompt}")
+        fcf_hint = _screen_ttm_unverified_email_hint(report)
+        if fcf_hint:
+            lines.append(fcf_hint)
         lines.append(report.summary)
         lines.append("")
 
@@ -498,6 +533,7 @@ def format_html_report(
     excluded_investment_vehicles: int = 0,
     trust_reports: list[CompanyReport] | None = None,
 ) -> str:
+    reports = _reports_with_screen_ttm_fcf_verification(reports)
     counts: dict[str, int] = {}
     for report in reports:
         counts[report.signal] = counts.get(report.signal, 0) + 1
@@ -538,6 +574,9 @@ def format_html_report(
         if source_prompts:
             joined = "<br>".join(f"Research source: {line}" for line in source_prompts)
             overlay_html += f"<br><span style='color:#666;font-size:12px'>{joined}</span>"
+        fcf_hint = _screen_ttm_unverified_email_hint(report)
+        if fcf_hint:
+            overlay_html += f"<br><span style='color:#666;font-size:12px'>{fcf_hint}</span>"
         rows.append(
             f"""
             <tr>

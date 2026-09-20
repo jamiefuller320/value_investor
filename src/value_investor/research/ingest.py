@@ -167,6 +167,15 @@ def _resolve_yahoo_quarterly_income_df(stock: Any) -> tuple[pd.DataFrame | None,
     return None, None
 
 
+def yahoo_quarterly_cashflow_suppressed(financials: dict[str, Any]) -> bool:
+    """True when Yahoo quarterlies cannot support mechanical TTM cash-flow reconciliation."""
+    cashflow_metrics = financials.get("cashflow_metrics") or {}
+    quarterly_empty = not quarterly_cashflow_has_usable_series(
+        financials.get("quarterly_cashflow") or {}
+    )
+    return bool(cashflow_metrics.get("ttm_cashflow_suppressed")) or quarterly_empty
+
+
 def quarterly_cashflow_has_usable_series(quarterly: dict[str, Any]) -> bool:
     """True when at least one quarterly period has OCF, FCF, or capex lines."""
     if not quarterly:
@@ -526,12 +535,7 @@ def sync_snapshot_fcf_screen_ttm_verification(
     financials: dict[str, Any],
 ) -> dict[str, Any]:
     """Mark ``fcf.screen_ttm_unverified`` when Yahoo quarterlies cannot support screen TTM."""
-    cashflow_metrics = financials.get("cashflow_metrics") or {}
-    quarterly_empty = not quarterly_cashflow_has_usable_series(
-        financials.get("quarterly_cashflow") or {}
-    )
-    suppressed = bool(cashflow_metrics.get("ttm_cashflow_suppressed")) or quarterly_empty
-    if not suppressed:
+    if not yahoo_quarterly_cashflow_suppressed(financials):
         return snapshot
 
     from value_investor.scoring.fcf import resolve_screen_ttm_bases, screen_ttm_from_row
@@ -781,6 +785,19 @@ def fetch_cma_ofcom_merger_news(
     return merged[:max_items]
 
 
+def format_empty_yahoo_quarterly_cashflow_research_prompt(
+    financials: dict[str, Any],
+) -> str | None:
+    """Memo prompt when Yahoo ``quarterly_cashflow`` is empty — screen TTM FCF is unverified."""
+    if not yahoo_quarterly_cashflow_suppressed(financials):
+        return None
+    return (
+        "Yahoo `quarterly_cashflow` in `financials_annual.json` is empty — treat screen TTM FCF "
+        "as unverified; reconcile against filing-aligned OCF−CapEx and any company-adjusted "
+        "bridges before citing TTM cash flow."
+    )
+
+
 def format_cma_ofcom_merger_research_prompt(meta: dict[str, Any]) -> str | None:
     """Memo prompt line pointing researchers at the ingested CMA/Ofcom merger corpus."""
     if str(meta.get("status") or "") != "ok":
@@ -912,7 +929,11 @@ def enrich_screening_snapshot_with_yahoo_quarterly(
     yahoo_quarterly = summarize_yahoo_quarterly_for_snapshot(financials)
     if yahoo_quarterly:
         updated["yahoo_quarterly"] = yahoo_quarterly
-    return sync_snapshot_fcf_screen_ttm_verification(updated, financials)
+    updated = sync_snapshot_fcf_screen_ttm_verification(updated, financials)
+    prompt = format_empty_yahoo_quarterly_cashflow_research_prompt(financials)
+    if prompt:
+        updated = _merge_research_prompt_lines(updated, prompt)
+    return updated
 
 
 def fetch_annual_financials(ticker: str, *, years: int = FINANCIAL_YEARS) -> dict[str, Any]:
