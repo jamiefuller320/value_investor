@@ -3043,12 +3043,21 @@ def format_fcf_basis_action_note(
     filing_currency: str = "USD",
     company_adjusted_currency: str | None = None,
     screen_ttm_unverified: bool = False,
+    policy_basis: str | None = None,
 ) -> str:
     """Surface filing-aligned, screen TTM, and company-adjusted FCF side-by-side."""
     parts: list[str] = []
     if filing_aligned is not None:
         parts.append(f"filing {_format_fcf_compact(filing_aligned, currency=filing_currency)}")
-    if screen_ttm is not None:
+    include_screen_ttm = screen_ttm is not None
+    if (
+        include_screen_ttm
+        and screen_ttm_unverified
+        and filing_aligned is not None
+        and (policy_basis is None or policy_basis == "filing_aligned")
+    ):
+        include_screen_ttm = False
+    if include_screen_ttm:
         screen_label = "screen TTM (unverified)" if screen_ttm_unverified else "screen TTM"
         parts.append(f"{screen_label} {_format_fcf_compact(screen_ttm, currency=filing_currency)}")
     if company_adjusted is not None:
@@ -3191,6 +3200,7 @@ def append_fcf_divergence_to_action_note(
                     filing_currency=filing_currency,
                     company_adjusted_currency=company_adjusted_currency,
                     screen_ttm_unverified=bool(bundle.get("screen_ttm_unverified")),
+                    policy_basis=str(bundle.get("policy_basis") or "") or None,
                 )
             )
         elif canonical is not None and screen_ttm is not None:

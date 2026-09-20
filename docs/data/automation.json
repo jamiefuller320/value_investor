@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T11:10:38.436829+00:00",
+  "generated_at": "2026-09-20T12:35:42.831659+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1156,37 +1156,34 @@
   },
   "engineering_queue": {
     "compiled_at": "2026-09-20T11:09:26.664583+00:00",
-    "queue_ui_updated_at": "2026-09-20T11:10:38.379653+00:00",
+    "queue_ui_updated_at": "2026-09-20T12:35:42.789882+00:00",
     "task_count": 81,
     "status": {
-      "open_count": 2,
+      "open_count": 0,
       "pr_open_count": 0,
       "parked_count": 3,
       "merged_count": 60,
       "failed_count": 0,
-      "next_task_id": "eng-20260920-09",
+      "next_task_id": null,
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [
+    "queued_tasks": [],
+    "attention_tasks": [
       {
         "id": "eng-20260920-09",
         "area": "ops",
         "title": "On CH refetch success, tag body `parse_quality: ocr|ixbrl` in gap_fill_source_map so memos do not treat OCR strategic pages as full accounts coverage.",
         "priority": "medium",
         "priority_score": 25.0,
-        "status": "open",
+        "status": "parked",
         "source": "compile_cap_drain",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "partial"
+        "branch_name": null
       },
       {
         "id": "eng-20260920-10",
@@ -1194,18 +1191,12 @@
         "title": "`output/research/ITV.L/research.md` is updated with these sections.",
         "priority": "medium",
         "priority_score": 25.0,
-        "status": "open",
+        "status": "parked",
         "source": "compile_cap_drain",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 2,
-        "clash_scan": "partial"
-      }
-    ],
-    "attention_tasks": [
+        "branch_name": null
+      },
       {
         "id": "eng-20260920-08",
         "area": "coverage",
@@ -1217,35 +1208,11 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": null
-      },
-      {
-        "id": "eng-20260919-14",
-        "area": "scoring",
-        "title": "Suppress screen TTM FCF in user-facing action notes when `yahoo_quarterly_cashflow` is empty and filing-aligned FCF is already policy-selected.",
-        "priority": "medium",
-        "priority_score": 25.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260919-08",
-        "area": "scoring",
-        "title": "dividend: When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy. [2/3]",
-        "priority": "medium",
-        "priority_score": 25.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
       }
     ],
     "clash_summary": {
-      "open_task_count": 2,
-      "dispatch_eligible_count": 2,
+      "open_task_count": 0,
+      "dispatch_eligible_count": 0,
       "blocked_count": 0
     }
   },
@@ -1524,9 +1491,9 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-20T11:10:38.436829+00:00",
-    "overall": "active",
-    "headline": "Agent lane active.",
+    "generated_at": "2026-09-20T12:35:42.831659+00:00",
+    "overall": "idle",
+    "headline": "Queue and hunter idle.",
     "merge_lane": {
       "state": "idle",
       "idle": true,
@@ -1538,26 +1505,26 @@
       "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
-      "state": "running",
-      "idle": false,
-      "running": true,
+      "state": "idle",
+      "idle": true,
+      "running": false,
       "blocked": false,
-      "should_dispatch": true,
+      "should_dispatch": false,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 3,
-      "open_count": 2,
+      "open_count": 0,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 2,
+      "dispatch_eligible_count": 0,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260920-09",
-      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
-      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+      "next_task_id": null,
+      "reason": "no open engineering tasks in queue",
+      "detail": "No open engineering tasks — queue is idle."
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 3,
-      "evaluated_at": "2026-09-20T11:10:35.496983+00:00"
+      "evaluated_at": "2026-09-20T12:35:36.051942+00:00"
     },
     "traffic_control": {
       "pause_active": false,
