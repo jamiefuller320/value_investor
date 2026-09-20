@@ -870,7 +870,28 @@ def test_reconcile_fcf_discards_company_adjusted_outlier():
     assert bundle["divergence_flagged"] is True
 
 
-def test_format_fcf_basis_action_note_labels_unverified_screen_ttm():
+def test_format_fcf_basis_action_note_omits_unverified_screen_when_filing_policy_selected():
+    """eng-20260919-14: empty Yahoo quarterlies + filing policy → no screen TTM in notes."""
+    note = append_fcf_divergence_to_action_note(
+        "",
+        canonical=148_000_000.0,
+        screen_ttm=211_900_000.0,
+        fcf_bundle={
+            "filing_aligned": 148_000_000.0,
+            "company_adjusted": 187_000_000.0,
+            "company_adjusted_currency": "GBP",
+            "currency": "GBP",
+            "screen_ttm_unverified": True,
+            "policy_basis": "filing_aligned",
+            "divergence_flagged": True,
+        },
+    )
+    assert "screen TTM" not in note
+    assert "filing £148M" in note
+    assert "company-adj £187M" in note
+
+
+def test_format_fcf_basis_action_note_labels_unverified_screen_when_company_adjusted_policy():
     note = append_fcf_divergence_to_action_note(
         "",
         canonical=187_000_000.0,
@@ -881,6 +902,7 @@ def test_format_fcf_basis_action_note_labels_unverified_screen_ttm():
             "company_adjusted_currency": "GBP",
             "currency": "GBP",
             "screen_ttm_unverified": True,
+            "policy_basis": "company_adjusted",
             "divergence_flagged": True,
         },
     )
