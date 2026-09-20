@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-20T15:06:57+00:00",
+  "updated_at": "2026-09-20T17:20:36+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9577,6 +9577,22 @@
       "status": "open",
       "source": "ops health check conversation 2026-09-20",
       "added_at": "2026-09-20T15:06:57+00:00"
+    },
+    {
+      "id": "L429",
+      "category": "later",
+      "section": "ops",
+      "title": "Compile-cap drain: reject CH filing titles mapped to ops/workflow allowlists",
+      "summary": "eng-20260920-11/12 were drain tasks whose titles were CH refetch/OCR quality but allowed_paths pointed at ops_monitor/engineering/*.py and .github/workflows, causing preflight_clash and workflow_permission parks. Upstream topic\u2192path mapping should refuse or re-narrow when the allowlist cannot implement the title.",
+      "revisit_when": "Next compile_cap_drain batch parks on preflight_clash/workflow_permission with title/allowlist mismatch, or when tightening narrow-scope topic maps",
+      "tags": [
+        "engineering-queue",
+        "compile-cap-drain",
+        "allowlist"
+      ],
+      "status": "open",
+      "source": "unblock engineering queue triage",
+      "added_at": "2026-09-20T17:20:36+00:00"
     }
   ],
   "fragments": [
