@@ -379,6 +379,16 @@ jobs:
       - name: Compile next parked leftover source-hunter
         run: ftse-library parked-hunter-compile --json
 
+      # Re-heal merge-sync after drain/compile may have mutated the ledger, and
+      # catch PRs that merged while this job was already running.
+      - name: Re-heal merge-sync before dispatch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ftse-engineering --json recover-queue \
+            --open-prs-json /tmp/open_prs.json \
+            --agent-failures-json /tmp/agent_failures.json | tee /tmp/recovery_pre_dispatch.json
+
       - name: Refresh engineering queue UI snapshot
         run: ftse-engineering refresh-queue-ui --json --open-prs-json /tmp/open_prs.json || true
 
@@ -397,7 +407,7 @@ jobs:
           FORCE: ${{ github.event.inputs.force || 'false' }}
           ENGINEERING_DISPATCH_MERGE_TREE: "1"
         run: |
-          ARGS="--json queue-status --open-prs-json /tmp/open_prs.json"
+          ARGS="--json queue-status --open-prs-json /tmp/open_prs.json --heal-merge-sync"
           ARGS="$ARGS --agent-running-count ${{ steps.probe.outputs.agent_running_count }}"
           if [ "$FORCE" = "true" ]; then
             ARGS="$ARGS --force"

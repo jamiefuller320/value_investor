@@ -283,6 +283,7 @@ def default_policy() -> dict[str, Any]:
                 "tier1_housekeep_on_recover": True,
                 "auto_cancel_no_diff_cap": "at_cap",
                 "auto_cancel_superseded_parked_hunter": True,
+                "auto_cancel_mis_scoped_allowlist": True,
                 "note": (
                     "immediate_park_unfixable_pr parks open/pr_open tasks when hunter-fix is "
                     "ineligible/exhausted and CI is all-red (or trust-local-gate after verify); "
@@ -292,7 +293,9 @@ def default_policy() -> dict[str, Any]:
                     "the last clearing action. tier1_housekeep_on_recover runs housekeep from "
                     "recover-queue after parking steps; auto_cancel_no_diff_cap is off | at_cap "
                     "| always; auto_cancel_superseded_parked_hunter cancels parked hunter rows "
-                    "whose ticker is already resolved on main."
+                    "whose ticker is already resolved on main; auto_cancel_mis_scoped_allowlist "
+                    "cancels preflight_clash/workflow_permission parks whose filings/CH/OCR "
+                    "title cannot be implemented by an ops/workflow allowlist."
                 ),
             },
             "traffic_control": {

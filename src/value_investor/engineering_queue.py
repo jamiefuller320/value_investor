@@ -282,8 +282,20 @@ def evaluate_engineering_dispatch(
     agent_running_count: int | None = None,
     max_parallel: int | None = None,
     force: bool = False,
+    heal_merge_sync: bool = False,
 ) -> EngineeringDispatchDecision:
-    """Decide whether the queue processor should dispatch engineering-agent."""
+    """Decide whether the queue processor should dispatch engineering-agent.
+
+    When ``heal_merge_sync`` is true, open/pr_open rows whose eng PR already
+    merged on GitHub are stamped ``merged`` before slot selection so a lagged
+    ledger cannot reburn the agent lane. The hourly workflow enables this on
+    the pre-dispatch ``queue-status`` call (and also re-runs ``recover-queue``).
+    """
+    if heal_merge_sync:
+        from value_investor.engineering_recovery import reconcile_merged_pr_open_tasks
+
+        reconcile_merged_pr_open_tasks(tasks_path=tasks_path, apply=True)
+
     status = summarize_queue(
         tasks_path=tasks_path,
         policy_path=policy_path,

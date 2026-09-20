@@ -332,6 +332,8 @@ for a digest regardless of status / deferral.
 | Agent finished but spend commit to `main` raced | Retry `scripts/gha_commit_engineering_spend.sh`; do **not** treat as a task failure — PR open continues (`continue-on-error`) |
 | Agent runs with **no committable code changes** | After **2** consecutive no-diff runs → `parked` (`record-no-diff` in `engineering-agent.yml`) |
 | Agent runs with **no committable code changes** | After **2** consecutive no-diff runs → `parked` (`ftse-engineering record-no-diff`; wired in `engineering-agent.yml`) |
+| `open`/`pr_open` whose eng PR already merged | Stamp → `merged` (REST `head=` + `pr_number` + `gh` fallback; also re-healed immediately before dispatch and inside `queue-status`) |
+| `preflight_clash` / `workflow_permission` with filings/CH/OCR title but ops/workflow allowlist | Cancel → `cancelled` (`mis_scoped_allowlist` housekeep) |
 
 List parked tasks: `ftse-engineering list-parked`
 
@@ -343,8 +345,10 @@ full-queue email (ordered `list-parked` summary).
 
 **Tier-1 auto housekeep** (hourly `recover-queue`, policy
 `engineering.queue_recovery`): cancels duplicate-of-merged parks, parked hunters whose
-ticker is already on `main`, and (when at the attention cap) `no_diff_cap` parks.
-`preflight_clash` / `ci_blocked` still need human triage.
+ticker is already on `main`, (when at the attention cap) `no_diff_cap` parks, and
+mis-scoped `preflight_clash` / `workflow_permission` parks whose filings/CH/OCR title
+cannot be implemented by an ops/workflow allowlist. Remaining `preflight_clash` /
+`ci_blocked` parks still need human triage.
 
 Human triage (oldest first) for remaining attention parks:
 
