@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T10:31:36.993853+00:00",
+  "generated_at": "2026-09-20T11:10:38.436829+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1155,16 +1155,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-20T10:30:38.111071+00:00",
-    "queue_ui_updated_at": "2026-09-20T10:31:36.889739+00:00",
-    "task_count": 79,
+    "compiled_at": "2026-09-20T11:09:26.664583+00:00",
+    "queue_ui_updated_at": "2026-09-20T11:10:38.379653+00:00",
+    "task_count": 81,
     "status": {
       "open_count": 2,
       "pr_open_count": 0,
-      "parked_count": 2,
-      "merged_count": 59,
+      "parked_count": 3,
+      "merged_count": 60,
       "failed_count": 0,
-      "next_task_id": "eng-20260920-08",
+      "next_task_id": "eng-20260920-09",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1173,9 +1173,9 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260920-08",
-        "area": "coverage",
-        "title": "Populate Yahoo **quarterly cash flow** for LSE names where TTM FCF is flagged unverified (`yahoo_quarterly_cashflow: false` in gap map) to reduce filing vs scre",
+        "id": "eng-20260920-09",
+        "area": "ops",
+        "title": "On CH refetch success, tag body `parse_quality: ocr|ixbrl` in gap_fill_source_map so memos do not treat OCR strategic pages as full accounts coverage.",
         "priority": "medium",
         "priority_score": 25.0,
         "status": "open",
@@ -1189,9 +1189,9 @@
         "clash_scan": "partial"
       },
       {
-        "id": "eng-20260920-07",
-        "area": "coverage",
-        "title": "Suppress or mark unverified screen TTM FCF when `yahoo_quarterly_cashflow` is empty for the ticker.",
+        "id": "eng-20260920-10",
+        "area": "prompt",
+        "title": "`output/research/ITV.L/research.md` is updated with these sections.",
         "priority": "medium",
         "priority_score": 25.0,
         "status": "open",
@@ -1206,6 +1206,18 @@
       }
     ],
     "attention_tasks": [
+      {
+        "id": "eng-20260920-08",
+        "area": "coverage",
+        "title": "Populate Yahoo **quarterly cash flow** for LSE names where TTM FCF is flagged unverified (`yahoo_quarterly_cashflow: false` in gap map) to reduce filing vs scre",
+        "priority": "medium",
+        "priority_score": 25.0,
+        "status": "parked",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null
+      },
       {
         "id": "eng-20260919-14",
         "area": "scoring",
@@ -1512,7 +1524,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-20T10:31:36.993853+00:00",
+    "generated_at": "2026-09-20T11:10:38.436829+00:00",
     "overall": "active",
     "headline": "Agent lane active.",
     "merge_lane": {
@@ -1533,19 +1545,19 @@
       "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
-      "attention_parked_count": 2,
+      "attention_parked_count": 3,
       "open_count": 2,
       "pr_open_count": 0,
       "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260920-08",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
+      "next_task_id": "eng-20260920-09",
+      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
+      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
     },
     "queue_clearing": {
       "pause_active": false,
-      "attention_parked_count": 2,
-      "evaluated_at": "2026-09-20T10:31:33.893001+00:00"
+      "attention_parked_count": 3,
+      "evaluated_at": "2026-09-20T11:10:35.496983+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1559,6 +1571,17 @@
       "should_dispatch_engineering": true
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260920-07",
+        "title": "Suppress or mark unverified screen TTM FCF when `yahoo_quarterly_cashflow` is empty for the ticker.",
+        "area": "coverage",
+        "pr_number": 755,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/755",
+        "merged_at": "2026-09-20T11:09:25.330637+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": true,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260920-06",
         "title": "Improve Companies House PDF OCR for group accounts or prefer iXBRL/tag extraction over raw OCR for numeric cash-flow lines.",
@@ -1637,6 +1660,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 7
+    "verified_merges_today_count": 8
   }
 }
