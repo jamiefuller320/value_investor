@@ -272,6 +272,63 @@ def extract_gap_fill_targets(
     return targets
 
 
+def ch_refetch_passed(
+    *,
+    ch_refetch: dict[str, Any] | None = None,
+    body_refetch: dict[str, Any] | None = None,
+) -> bool:
+    """True when this gap-fill pass downloaded new Companies House filing bodies."""
+    if int((ch_refetch or {}).get("fetched") or 0) > 0:
+        return True
+    nested = (body_refetch or {}).get("companies_house")
+    if isinstance(nested, dict) and int(nested.get("fetched") or 0) > 0:
+        return True
+    return False
+
+
+def ch_three_year_margin_secured_series_present(sources_dir: Path, *, ticker: str) -> bool:
+    """
+    True when CH annual bodies expose ≥3 years of margin and secured-workload metrics.
+
+    Scans indexed ``filings/bodies/ch_*.txt`` extracts via the year-in-numbers parser.
+    """
+    from value_investor.research.filings import extract_ch_annual_year_in_numbers
+
+    filings_dir = Path(sources_dir) / "filings"
+    bodies_dir = filings_dir / "bodies"
+    if not bodies_dir.is_dir() or not any(bodies_dir.glob("ch_*.txt")):
+        return False
+    payload = extract_ch_annual_year_in_numbers(filings_dir, ticker, sources_dir=None)
+    usable = 0
+    for row in payload.get("years") or []:
+        if not isinstance(row, dict):
+            continue
+        if row.get("adjusted_operating_margin_pct") is None:
+            continue
+        if row.get("secured_workload_to_revenue_ratio") is None and (
+            row.get("secured_workload_millions") is None
+        ):
+            continue
+        usable += 1
+    return usable >= 3
+
+
+def gap_fill_ch_refetch_prompt_context(
+    sources_dir: Path,
+    *,
+    ticker: str,
+    ch_refetch: dict[str, Any] | None = None,
+    body_refetch: dict[str, Any] | None = None,
+) -> str:
+    """Build optional CH refetch evidence discipline for gap-fill agent prompts."""
+    if not ch_refetch_passed(ch_refetch=ch_refetch, body_refetch=body_refetch):
+        return ""
+    from value_investor.research.agent import gap_fill_ch_refetch_discipline
+
+    require_series = ch_three_year_margin_secured_series_present(sources_dir, ticker=ticker)
+    return gap_fill_ch_refetch_discipline(require_margin_secured_series=require_series)
+
+
 def apply_engineering_tasks_suggestion_filter_patch() -> bool:
     """Drop memo-status research_model_suggestions when compiling engineering tasks."""
     from value_investor import engineering_tasks as et
@@ -451,6 +508,7 @@ def run_red_flag_gap_fill(
                 market=market,
             )
             body_refetch = dict(source_pack.get("body_refetch") or {})
+            ch_refetch = dict(source_pack.get("ch_refetch") or {})
             summary.fetch_attempts.append({"ticker": target.ticker, **body_refetch})
             summary.alternate_source_plans.append(
                 {
@@ -471,6 +529,8 @@ def run_red_flag_gap_fill(
                 model=model,
                 cwd=cwd,
                 screen_signal=target.report.signal,
+                ch_refetch=ch_refetch,
+                body_refetch=body_refetch,
             )
             updated = replace(agent_result.document, signal=target.report.signal)
 
@@ -509,6 +569,7 @@ def run_red_flag_gap_fill(
                     screen_signal=target.report.signal,
                     follow_up=True,
                     body_refetch=retry_refetch,
+                    ch_refetch=ch_refetch,
                 )
                 updated = replace(follow.document, signal=target.report.signal)
                 agent_result = follow

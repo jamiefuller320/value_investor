@@ -162,6 +162,24 @@ def research_model_suggestions_discipline() -> str:
     )
 
 
+def gap_fill_ch_refetch_discipline(*, require_margin_secured_series: bool) -> str:
+    """Prompt rules after a Companies House body refetch during gap-fill."""
+    lines = [
+        "Companies House refetch discipline (this pass fetched new CH bodies):",
+        "- Cite specific `filings/bodies/ch_*.txt` paths (or "
+        "`ch_annual_year_in_numbers.json`) in GAP FILL UPDATE Evidence when used.",
+    ]
+    if require_margin_secured_series:
+        lines.append(
+            "- At least three CH annual bodies expose ``YYYY in numbers`` margin and secured "
+            "workload tables — you MUST quote a multi-year series (≥3 fiscal years) of "
+            "adjusted operating margin % and secured-workload÷revenue ratio in GAP FILL UPDATE "
+            "and FINANCIAL REVIEW, with year labels and source paths; do not rely on "
+            "screen/Yahoo alone for cyclical/backlog judgement."
+        )
+    return "\n".join(lines)
+
+
 def _structured_verdict_block(signal_label: str) -> str:
     return f"""RESEARCH VERDICT
 Structured conviction overlay for the quantitative screen (does not replace the screen signal).
@@ -271,6 +289,7 @@ def _structured_verdict_gap_fill_prompt(
     existing_markdown_path: Path,
     open_questions: list[str],
     screen_signal: str = "strong_buy",
+    extra_evidence_discipline: str = "",
 ) -> str:
     signal_label = _screen_signal_label(screen_signal)
     numbered = "\n".join(
@@ -309,6 +328,7 @@ Allowed areas: ingest, prompt, scoring, coverage, ops.
 {research_model_suggestions_discipline()}
 
 Rules: UK English; do not invent numbers; prefer unresolved over false confidence.
+{extra_evidence_discipline}
 {screen_filing_reconciliation_discipline()}
 """
 
@@ -583,6 +603,7 @@ def _gap_fill_prompt(
     existing_markdown_path: Path,
     open_questions: list[str],
     screen_signal: str = "strong_buy",
+    extra_evidence_discipline: str = "",
 ) -> str:
     signal_label = _screen_signal_label(screen_signal)
     numbered = "\n".join(
@@ -611,7 +632,7 @@ Evidence discipline:
 2. Prefer filing bodies, then filings index, Yahoo, news/alternate news, then screen snapshot.
 3. If a question stays unresolved, choose concrete ``planned_alternate_sources`` (or equally specific external sources) and say what they would unlock — do not invent their contents.
 4. Emit research-model improvements whenever local sources are structurally insufficient (thin RNS bodies, missing IR PDFs, prompt gaps, etc.).
-
+{extra_evidence_discipline}
 {screen_filing_reconciliation_discipline()}
 
 Write these sections with headings EXACTLY as shown:
@@ -666,6 +687,7 @@ def _gap_fill_followup_prompt(
     existing_markdown_path: Path,
     open_questions: list[str],
     body_refetch: dict[str, Any] | None = None,
+    extra_evidence_discipline: str = "",
 ) -> str:
     numbered = "\n".join(f"{i}. {q}" for i, q in enumerate(open_questions, start=1))
     fetched = (body_refetch or {}).get("fetched")
@@ -694,6 +716,7 @@ RESEARCH MODEL SUGGESTIONS
 
 Rules: UK English; do not invent filing language; cite body paths when used;
 prefer unresolved over false confidence.
+{extra_evidence_discipline}
 """
 
 
@@ -716,13 +739,23 @@ def run_gap_fill_research_agent(
     screen_signal: str | None = None,
     follow_up: bool = False,
     body_refetch: dict[str, Any] | None = None,
+    ch_refetch: dict[str, Any] | None = None,
     structured: bool = True,
 ) -> GapFillAgentResult:
     """Rewrite financial/risk sections to address open qualitative questions."""
+    from value_investor.research.gap_fill import gap_fill_ch_refetch_prompt_context
     from value_investor.research.gap_fill_sources import (
         parse_model_suggestions,
         parse_question_outcomes,
     )
+
+    ch_discipline = gap_fill_ch_refetch_prompt_context(
+        sources_dir,
+        ticker=existing.ticker,
+        ch_refetch=ch_refetch,
+        body_refetch=body_refetch,
+    )
+    extra_evidence = f"\n{ch_discipline}\n" if ch_discipline else ""
 
     if structured and not follow_up:
         prompt = _structured_verdict_gap_fill_prompt(
@@ -732,6 +765,7 @@ def run_gap_fill_research_agent(
             existing_markdown_path=markdown_path,
             open_questions=open_questions,
             screen_signal=screen_signal or existing.signal,
+            extra_evidence_discipline=extra_evidence,
         )
     elif follow_up:
         prompt = _gap_fill_followup_prompt(
@@ -741,6 +775,7 @@ def run_gap_fill_research_agent(
             existing_markdown_path=markdown_path,
             open_questions=open_questions,
             body_refetch=body_refetch,
+            extra_evidence_discipline=extra_evidence,
         )
     else:
         prompt = _gap_fill_prompt(
@@ -750,6 +785,7 @@ def run_gap_fill_research_agent(
             existing_markdown_path=markdown_path,
             open_questions=open_questions,
             screen_signal=screen_signal or existing.signal,
+            extra_evidence_discipline=extra_evidence,
         )
     text, agent_id = _run_agent_prompt(
         prompt=prompt,

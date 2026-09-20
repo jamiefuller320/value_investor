@@ -104,6 +104,9 @@ Up to 3 tickers from the top candidates, one bullet each:
 Prefer questions that force filing/news resolution on: continuing vs discontinued splits,
 deal terms and timing, guidance credibility, reporting currency, and FCF versus dividend cover
 (not screen-level yield alone).
+For UK contractors or names with `uk_contractor_ch_backlog_margin_cyclical_detected` in the JSON,
+prefer open questions that require multi-year Companies House ``YYYY in numbers`` adjusted
+margin and secured-workload trends when CH accounts are in scope (not screen/Yahoo alone).
 """
 
 
