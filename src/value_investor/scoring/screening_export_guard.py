@@ -21,6 +21,7 @@ from value_investor.scoring.fcf import (
 from value_investor.scoring.fcf_basis_overlay import (
     action_note_has_fcf_basis_mismatch,
     apply_fcf_export_enforcement,
+    enforce_neutral_watchlist_dividend_caution_in_snapshot,
 )
 
 _HOSPITALITY_CYCLICAL_FRAGMENTS = (
@@ -359,7 +360,7 @@ def guard_screening_snapshot_export(
     merged["fcf_basis_overlay"] = overlay
     merged["adjusted_signal"] = merged_adjusted
     merged["conviction_score"] = conviction
-    return merged
+    return enforce_neutral_watchlist_dividend_caution_in_snapshot(merged)
 
 
 def enrich_signals_with_hospitality_cyclical_detection(signals: pd.DataFrame) -> pd.DataFrame:

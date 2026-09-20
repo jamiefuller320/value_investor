@@ -938,6 +938,26 @@ def statutory_fcf_dividend_cover_below_one(
     return float(cover) < THIN_STATUTORY_FCF_DIVIDEND_COVERAGE_MAX
 
 
+def neutral_watchlist_dividend_caution_triggered(
+    *,
+    research_verdict: str | None,
+    interim_dividend_cut_flagged: bool,
+    fcf_dividend_coverage_net: float | None,
+) -> bool:
+    """Email watchlist (neutral research) with interim cut and thin statutory cover."""
+    if not interim_dividend_cut_flagged:
+        return False
+    if fcf_dividend_coverage_net is None or (
+        isinstance(fcf_dividend_coverage_net, float) and pd.isna(fcf_dividend_coverage_net)
+    ):
+        return False
+    if float(fcf_dividend_coverage_net) >= THIN_STATUTORY_FCF_DIVIDEND_COVERAGE_MAX:
+        return False
+    from value_investor.research.verdict import coerce_research_verdict
+
+    return coerce_research_verdict(research_verdict) == "neutral"
+
+
 def statutory_fcf_moat_leverage_overlay_triggered(
     *,
     ticker_models: pd.DataFrame,

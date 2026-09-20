@@ -4254,7 +4254,7 @@ def test_enrich_signals_with_dividend_sustainability_overlay_caps_itv_like_profi
 
 
 def test_apply_dividend_sustainability_export_enforcement_caps_conviction_when_signal_precapped():
-    from value_investor.scoring.dividend_sustainability_overlay import (
+    from value_investor.scoring.fcf_basis_overlay import (
         apply_dividend_sustainability_export_enforcement,
     )
 
@@ -4291,6 +4291,26 @@ def test_apply_dividend_sustainability_export_enforcement_caps_conviction_when_s
     assert triggered is True
     assert adjusted == "buy"
     assert conviction == pytest.approx(0.53 * 0.85)
+
+
+def test_apply_dividend_sustainability_export_enforcement_maps_watchlist_to_caution():
+    from value_investor.scoring.fcf_basis_overlay import (
+        apply_dividend_sustainability_export_enforcement,
+    )
+
+    triggered, cut_flagged, adjusted, conviction = apply_dividend_sustainability_export_enforcement(
+        signal="strong_buy",
+        adjusted_signal="strong_buy",
+        conviction_score=0.45,
+        ticker_models=_megp_dividend_overlay_model_results(),
+        fcf_dividend_coverage_net=0.84,
+        interim_dividend_cut_pct=0.065,
+        research_verdict="watchlist",
+    )
+    assert triggered is False
+    assert cut_flagged is True
+    assert adjusted == "buy"
+    assert conviction == pytest.approx(0.45 * 0.85)
 
 
 def _megp_dividend_overlay_model_results() -> pd.DataFrame:
