@@ -261,6 +261,7 @@ def _cmd_queue_status(args: argparse.Namespace) -> int:
         agent_running_count=args.agent_running_count,
         max_parallel=args.max_parallel,
         force=args.force,
+        heal_merge_sync=bool(getattr(args, "heal_merge_sync", False)),
     )
     if args.json:
         _print_json(decision.to_dict())
@@ -1773,6 +1774,14 @@ def main(argv: list[str] | None = None) -> int:
         help="Exit 1 unless dispatch is recommended (for workflow gates)",
     )
     queue_p.add_argument("--force", action="store_true")
+    queue_p.add_argument(
+        "--heal-merge-sync",
+        action="store_true",
+        help=(
+            "Stamp open/pr_open tasks merged when GitHub shows their eng PR "
+            "already merged (prevents agent reburn on stamp lag)"
+        ),
+    )
     queue_p.set_defaults(func=_cmd_queue_status)
 
     refresh_ui_p = sub.add_parser(
