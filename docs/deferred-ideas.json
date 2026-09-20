@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-20T19:40:53+00:00",
+  "updated_at": "2026-09-20T20:23:45+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9582,6 +9582,22 @@
       "id": "L429",
       "category": "later",
       "section": "ops",
+      "title": "Compile-cap drain: reject CH filing titles mapped to ops/workflow allowlists",
+      "summary": "eng-20260920-11/12 were drain tasks whose titles were CH refetch/OCR quality but allowed_paths pointed at ops_monitor/engineering/*.py and .github/workflows, causing preflight_clash and workflow_permission parks. Upstream topic\u2192path mapping should refuse or re-narrow when the allowlist cannot implement the title.",
+      "revisit_when": "Next compile_cap_drain batch parks on preflight_clash/workflow_permission with title/allowlist mismatch, or when tightening narrow-scope topic maps",
+      "tags": [
+        "engineering-queue",
+        "compile-cap-drain",
+        "allowlist"
+      ],
+      "status": "open",
+      "source": "unblock engineering queue triage",
+      "added_at": "2026-09-20T17:20:36+00:00"
+    },
+    {
+      "id": "L430",
+      "category": "later",
+      "section": "ops",
       "title": "Sunday email-report hits 6h GHA timeout mid OCR/PDF ingest",
       "summary": "2026-09-20 email-report #35514032032 (and morning recovery #35495407776) cancelled at ~6h still inside Screen/build ftse-email; logs show ongoing PDF startxref/Object Streams parsing near timeout. Send/commit/deploy skipped. Consider raising timeout-minutes, capping OCR work, or splitting ingest from report send.",
       "revisit_when": "Next Sunday email-report timeout or next ops pass on quiet-bundle runtime",
@@ -9594,7 +9610,7 @@
       ],
       "status": "open",
       "source": "ops watch conversation 2026-09-20",
-      "added_at": "2026-09-20T19:40:53+00:00"
+      "added_at": "2026-09-20T20:23:45+00:00"
     }
   ],
   "fragments": [

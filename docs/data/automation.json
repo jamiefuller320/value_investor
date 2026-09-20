@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T17:41:10.893262+00:00",
+  "generated_at": "2026-09-20T20:22:00.599871+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1155,16 +1155,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-20T17:27:47.340511+00:00",
-    "queue_ui_updated_at": "2026-09-20T17:41:10.813072+00:00",
-    "task_count": 86,
+    "compiled_at": "2026-09-20T20:21:59.752365+00:00",
+    "queue_ui_updated_at": "2026-09-20T20:22:00.536087+00:00",
+    "task_count": 87,
     "status": {
-      "open_count": 1,
+      "open_count": 2,
       "pr_open_count": 0,
-      "parked_count": 3,
-      "merged_count": 64,
+      "parked_count": 0,
+      "merged_count": 65,
       "failed_count": 0,
-      "next_task_id": "eng-20260920-08",
+      "next_task_id": "eng-20260920-16",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1173,9 +1173,25 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260920-08",
-        "area": "coverage",
-        "title": "Populate Yahoo **quarterly cash flow** for LSE names where TTM FCF is flagged unverified (`yahoo_quarterly_cashflow: false` in gap map) to reduce filing vs scre",
+        "id": "eng-20260920-16",
+        "area": "ingest",
+        "title": "Close library ingest filing gaps for DAX (dax): 7 buy-tier gaps after stalled weekday loop",
+        "priority": "high",
+        "priority_score": 86.0,
+        "status": "open",
+        "source": "library_ingest_stall",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
+        "clash_scan": "full"
+      },
+      {
+        "id": "eng-20260920-13",
+        "area": "prompt",
+        "title": "On CH refetch passes, require gap-fill to cite at least three-year margin and secured-workload series when present in `filings/bodies/ch_*.txt`.",
         "priority": "medium",
         "priority_score": 25.0,
         "status": "open",
@@ -1185,51 +1201,14 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 1,
+        "effective_dispatch_rank": 2,
         "clash_scan": "full"
       }
     ],
-    "attention_tasks": [
-      {
-        "id": "eng-20260920-13",
-        "area": "prompt",
-        "title": "On CH refetch passes, require gap-fill to cite at least three-year margin and secured-workload series when present in `filings/bodies/ch_*.txt`.",
-        "priority": "medium",
-        "priority_score": 25.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260920-11",
-        "area": "ops",
-        "title": "Deprioritise CH parent-only or administrative filings in refetch scoring so fetched=2 does not imply material gap closure.",
-        "priority": "medium",
-        "priority_score": 25.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260920-12",
-        "area": "ops",
-        "title": "Flag CH bodies with OCR quality below threshold and fall back to RNS preliminary until NSM PDF succeeds, to avoid double-counting stale narrative (Sky “discussi",
-        "priority": "medium",
-        "priority_score": 25.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      }
-    ],
+    "attention_tasks": [],
     "clash_summary": {
-      "open_task_count": 1,
-      "dispatch_eligible_count": 1,
+      "open_task_count": 2,
+      "dispatch_eligible_count": 2,
       "blocked_count": 0
     }
   },
@@ -1508,7 +1487,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-20T17:41:10.893262+00:00",
+    "generated_at": "2026-09-20T20:22:00.599871+00:00",
     "overall": "active",
     "headline": "Agent lane active.",
     "merge_lane": {
@@ -1529,19 +1508,19 @@
       "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
-      "attention_parked_count": 3,
-      "open_count": 1,
+      "attention_parked_count": 0,
+      "open_count": 2,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 1,
+      "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260920-08",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
+      "next_task_id": "eng-20260920-16",
+      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
+      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
     },
     "queue_clearing": {
       "pause_active": false,
-      "attention_parked_count": 3,
-      "evaluated_at": "2026-09-20T17:41:06.376227+00:00"
+      "attention_parked_count": 0,
+      "evaluated_at": "2026-09-20T20:21:52.795250+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1561,8 +1540,19 @@
         "area": "scoring",
         "pr_number": 764,
         "pr_url": "https://github.com/jamiefuller320/value_investor/pull/764",
-        "merged_at": "2026-09-20T17:40:08.444175+00:00",
-        "merge_class": "compile_cap_drain",
+        "merged_at": "2026-09-20T17:47:47.777176+00:00",
+        "merge_class": "ci_fix",
+        "auto_merge": true,
+        "independently_verified": true
+      },
+      {
+        "task_id": "eng-20260920-08",
+        "title": "Populate Yahoo **quarterly cash flow** for LSE names where TTM FCF is flagged unverified (`yahoo_quarterly_cashflow: false` in gap map) to reduce filing vs scre",
+        "area": "coverage",
+        "pr_number": 761,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/761",
+        "merged_at": "2026-09-20T17:19:39.655441+00:00",
+        "merge_class": "ci_fix",
         "auto_merge": true,
         "independently_verified": true
       },
@@ -1688,6 +1678,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 12
+    "verified_merges_today_count": 13
   }
 }
