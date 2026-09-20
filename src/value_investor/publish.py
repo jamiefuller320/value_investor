@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import re
 import shutil
 from datetime import UTC, datetime
 from pathlib import Path
@@ -172,15 +173,83 @@ def load_cma_ofcom_merger_meta(ticker: str, *, output_dir: Path) -> dict[str, An
     return payload if isinstance(payload, dict) else None
 
 
+def load_ticker_financials_annual(ticker: str, *, output_dir: Path) -> dict[str, Any] | None:
+    """Load ``financials_annual.json`` from the ticker research store when present."""
+    sources = _resolve_research_sources_dir(ticker, output_dir=output_dir)
+    if sources is None:
+        return None
+    path = resolve_json_path(sources / "financials_annual.json")
+    if path is None:
+        return None
+    try:
+        payload = read_json(path)
+    except (OSError, ValueError, TypeError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
 def research_source_prompt_lines_for_ticker(ticker: str, *, output_dir: Path) -> list[str]:
     """Export memo prompt lines for ingested secondary sources (CMA/Ofcom merger corpus)."""
-    from value_investor.research.ingest import format_cma_ofcom_merger_research_prompt
+    from value_investor.research.ingest import (
+        format_cma_ofcom_merger_research_prompt,
+        format_empty_yahoo_quarterly_cashflow_research_prompt,
+    )
 
+    lines: list[str] = []
     meta = load_cma_ofcom_merger_meta(ticker, output_dir=output_dir)
-    if not meta:
-        return []
-    prompt = format_cma_ofcom_merger_research_prompt(meta)
-    return [prompt] if prompt else []
+    if meta:
+        prompt = format_cma_ofcom_merger_research_prompt(meta)
+        if prompt:
+            lines.append(prompt)
+    financials = load_ticker_financials_annual(ticker, output_dir=output_dir)
+    if financials:
+        yahoo_prompt = format_empty_yahoo_quarterly_cashflow_research_prompt(financials)
+        if yahoo_prompt:
+            lines.append(yahoo_prompt)
+    return lines
+
+
+def _mark_unverified_screen_ttm_in_action_note(action_note: str) -> str:
+    """Ensure FCF basis notes label screen TTM unverified when Yahoo quarterlies are empty."""
+    if not action_note or re.search(r"screen\s+ttm\s*\(\s*unverified\s*\)", action_note, re.I):
+        return action_note
+    return re.sub(
+        r"screen\s+ttm(?!\s*\(\s*unverified\s*\))",
+        "screen TTM (unverified)",
+        action_note,
+        count=1,
+        flags=re.IGNORECASE,
+    )
+
+
+def annotate_reports_with_screen_ttm_fcf_verification(
+    reports: list[dict[str, Any]],
+    *,
+    output_dir: Path,
+) -> list[dict[str, Any]]:
+    """Backfill ``fcf.screen_ttm_unverified`` on export rows when Yahoo quarterlies are empty."""
+    from value_investor.research.ingest import sync_snapshot_fcf_screen_ttm_verification
+
+    annotated: list[dict[str, Any]] = []
+    for row in reports:
+        updated = dict(row)
+        ticker = str(row.get("ticker") or "").strip().upper()
+        if not ticker:
+            annotated.append(updated)
+            continue
+        financials = load_ticker_financials_annual(ticker, output_dir=output_dir)
+        if not financials:
+            annotated.append(updated)
+            continue
+        synced = sync_snapshot_fcf_screen_ttm_verification(updated, financials)
+        fcf = synced.get("fcf")
+        if isinstance(fcf, dict) and fcf.get("screen_ttm_unverified"):
+            updated["fcf"] = fcf
+            note = str(updated.get("action_note") or "")
+            if note:
+                updated["action_note"] = _mark_unverified_screen_ttm_in_action_note(note)
+        annotated.append(updated)
+    return annotated
 
 
 def annotate_reports_with_research_source_prompts(
@@ -322,6 +391,7 @@ def _apply_resolved_research_overlay(
 def build_dashboard_bundle(output_dir: Path) -> dict[str, Any]:
     """Assemble a single JSON payload for the static dashboard."""
     reports, run_at = _load_reports(output_dir)
+    reports = annotate_reports_with_screen_ttm_fcf_verification(reports, output_dir=output_dir)
     reports = annotate_reports_with_research_source_prompts(reports, output_dir=output_dir)
     run_diff = _read_json(output_dir / "run_diff.json")
     backtest = _read_json(output_dir / "backtest_summary.json")

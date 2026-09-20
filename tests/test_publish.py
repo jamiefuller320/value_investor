@@ -5,9 +5,11 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pandas as pd
+import pytest
 
 from value_investor.publish import (
     annotate_reports_with_research_source_prompts,
+    annotate_reports_with_screen_ttm_fcf_verification,
     build_dashboard_bundle,
     publish_dashboard,
     research_source_prompt_lines_for_ticker,
@@ -15,6 +17,7 @@ from value_investor.publish import (
 from value_investor.research.ingest import (
     extract_govuk_article_body,
     format_cma_ofcom_merger_research_prompt,
+    format_empty_yahoo_quarterly_cashflow_research_prompt,
     parse_cma_cases_atom,
     resolve_cma_ofcom_merger_deal,
 )
@@ -391,6 +394,82 @@ def test_research_source_prompt_lines_for_itv_when_corpus_present(tmp_path: Path
     lines = research_source_prompt_lines_for_ticker("ITV.L", output_dir=tmp_path)
     assert len(lines) == 1
     assert "cma_ofcom_merger.json" in lines[0]
+
+
+def test_format_empty_yahoo_quarterly_cashflow_research_prompt_when_suppressed():
+    financials = {
+        "quarterly_cashflow": {},
+        "cashflow_metrics": {"ttm_cashflow_suppressed": True},
+    }
+    prompt = format_empty_yahoo_quarterly_cashflow_research_prompt(financials)
+    assert prompt
+    assert "quarterly_cashflow" in prompt
+    assert "unverified" in prompt.lower()
+
+
+def test_format_empty_yahoo_quarterly_cashflow_research_prompt_skips_usable_series():
+    financials = {
+        "quarterly_cashflow": {
+            "2025-06-30": {"Free Cash Flow": 100_000_000.0},
+        },
+        "cashflow_metrics": {"free_cashflow": 100_000_000.0},
+    }
+    assert format_empty_yahoo_quarterly_cashflow_research_prompt(financials) is None
+
+
+def test_research_source_prompt_lines_includes_empty_yahoo_quarterly(tmp_path: Path):
+    sources = tmp_path / "research" / "FGP.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "FGP.L",
+                "quarterly_cashflow": {},
+                "cashflow_metrics": {
+                    "ttm_cashflow_suppressed": True,
+                    "ttm_cashflow_suppressed_reason": "quarterly_cashflow_empty",
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    lines = research_source_prompt_lines_for_ticker("FGP.L", output_dir=tmp_path)
+    assert len(lines) == 1
+    assert "unverified" in lines[0].lower()
+
+
+def test_annotate_reports_marks_screen_ttm_unverified_fgp_style(tmp_path: Path):
+    sources = tmp_path / "research" / "FGP.L" / "sources"
+    sources.mkdir(parents=True)
+    (sources / "financials_annual.json").write_text(
+        json.dumps(
+            {
+                "ticker": "FGP.L",
+                "quarterly_cashflow": {},
+                "cashflow_metrics": {
+                    "ttm_cashflow_suppressed": True,
+                    "ttm_cashflow_suppressed_reason": "quarterly_cashflow_empty",
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    reports = [
+        {
+            "ticker": "FGP.L",
+            "name": "FirstGroup plc",
+            "signal": "strong_buy",
+            "fcf": {"filing_aligned": 362_600_000.0, "company_adjusted": 73_800_000.0},
+            "action_note": (
+                "Strong Buy — neutral timing | FCF basis mismatch: filing £362.6M | "
+                "screen TTM £302.8M | company-adj £73.8M"
+            ),
+        }
+    ]
+    annotated = annotate_reports_with_screen_ttm_fcf_verification(reports, output_dir=tmp_path)
+    assert annotated[0]["fcf"]["screen_ttm_unverified"] is True
+    assert annotated[0]["fcf"]["screen_ttm"] == pytest.approx(302_800_000.0)
+    assert "screen TTM (unverified)" in annotated[0]["action_note"]
 
 
 def test_annotate_reports_adds_research_source_prompts(tmp_path: Path):
