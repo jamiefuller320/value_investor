@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T12:41:18.348255+00:00",
+  "generated_at": "2026-09-20T15:00:44.160748+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1155,16 +1155,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-20T11:09:26.664583+00:00",
-    "queue_ui_updated_at": "2026-09-20T12:41:18.294321+00:00",
-    "task_count": 81,
+    "compiled_at": "2026-09-20T14:43:38.441094+00:00",
+    "queue_ui_updated_at": "2026-09-20T15:00:44.097693+00:00",
+    "task_count": 83,
     "status": {
-      "open_count": 3,
+      "open_count": 4,
       "pr_open_count": 0,
-      "parked_count": 2,
+      "parked_count": 1,
       "merged_count": 60,
       "failed_count": 0,
-      "next_task_id": "eng-20260920-09",
+      "next_task_id": "eng-20260920-12",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1172,6 +1172,22 @@
       "spend_blocked": false
     },
     "queued_tasks": [
+      {
+        "id": "eng-20260920-12",
+        "area": "ops",
+        "title": "Flag CH bodies with OCR quality below threshold and fall back to RNS preliminary until NSM PDF succeeds, to avoid double-counting stale narrative (Sky “discussi",
+        "priority": "medium",
+        "priority_score": 25.0,
+        "status": "open",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
+        "clash_scan": "partial"
+      },
       {
         "id": "eng-20260920-09",
         "area": "ops",
@@ -1185,7 +1201,7 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 1,
+        "effective_dispatch_rank": 2,
         "clash_scan": "partial"
       },
       {
@@ -1201,7 +1217,7 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 2,
+        "effective_dispatch_rank": 3,
         "clash_scan": "partial"
       },
       {
@@ -1217,27 +1233,15 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 3,
+        "effective_dispatch_rank": 4,
         "clash_scan": "partial"
       }
     ],
     "attention_tasks": [
       {
-        "id": "eng-20260919-14",
-        "area": "scoring",
-        "title": "Suppress screen TTM FCF in user-facing action notes when `yahoo_quarterly_cashflow` is empty and filing-aligned FCF is already policy-selected.",
-        "priority": "medium",
-        "priority_score": 25.0,
-        "status": "parked",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null
-      },
-      {
-        "id": "eng-20260919-08",
-        "area": "scoring",
-        "title": "dividend: When statutory FCF dividend cover <1.0× and Economic Moat fails on leverage, cap research verdict at accumulate even if adjusted_signal is buy. [2/3]",
+        "id": "eng-20260920-11",
+        "area": "ops",
+        "title": "Deprioritise CH parent-only or administrative filings in refetch scoring so fetched=2 does not imply material gap closure.",
         "priority": "medium",
         "priority_score": 25.0,
         "status": "parked",
@@ -1248,8 +1252,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 3,
-      "dispatch_eligible_count": 3,
+      "open_task_count": 4,
+      "dispatch_eligible_count": 4,
       "blocked_count": 0
     }
   },
@@ -1528,7 +1532,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-20T12:41:18.348255+00:00",
+    "generated_at": "2026-09-20T15:00:44.160748+00:00",
     "overall": "active",
     "headline": "Agent lane active.",
     "merge_lane": {
@@ -1549,19 +1553,19 @@
       "should_dispatch": true,
       "pause_active": false,
       "traffic_pause_active": false,
-      "attention_parked_count": 2,
-      "open_count": 3,
+      "attention_parked_count": 1,
+      "open_count": 4,
       "pr_open_count": 0,
-      "dispatch_eligible_count": 3,
+      "dispatch_eligible_count": 4,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260920-09",
+      "next_task_id": "eng-20260920-12",
       "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
       "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
     },
     "queue_clearing": {
       "pause_active": false,
-      "attention_parked_count": 2,
-      "evaluated_at": "2026-09-20T12:41:18.287340+00:00"
+      "attention_parked_count": 5,
+      "evaluated_at": "2026-09-20T14:43:35.031459+00:00"
     },
     "traffic_control": {
       "pause_active": false,
