@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import json
+import logging
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from value_investor.engineering_queue import (
     evaluate_engineering_dispatch,
@@ -19,8 +21,134 @@ from value_investor.engineering_tasks import (
     open_task_ids_dropped_by_merge,
     select_engineering_tasks,
 )
+from value_investor.storage import read_json, resolve_json_path, write_json
+
+logger = logging.getLogger(__name__)
 
 ENGINEERING_AGENT_WORKFLOW = "engineering-agent.yml"
+
+ParseQuality = Literal["ocr", "ixbrl"]
+
+_CH_PARSE_QUALITY_INSTRUCTION = (
+    " When ch_refetch.body_parse_quality marks a filing parse_quality ocr, treat that CH "
+    "body as strategic/OCR-only — not full filed accounts coverage; prefer ixbrl-tagged "
+    "bodies or alternate sources for statement and note evidence."
+)
+
+
+def classify_ch_body_parse_quality(text: str) -> ParseQuality:
+    """Classify on-disk Companies House body text for gap-fill memo discipline."""
+    from value_investor.research.filings import (
+        _ch_body_is_garbled_ocr,
+        _ch_body_lacks_financial_depth,
+    )
+
+    if _ch_body_is_garbled_ocr(text):
+        return "ocr"
+    if _ch_body_lacks_financial_depth(text):
+        return "ocr"
+    return "ixbrl"
+
+
+def collect_ch_filing_body_parse_quality(filings_dir: Path) -> list[dict[str, str]]:
+    """Tag each indexed Companies House body with parse_quality ocr|ixbrl."""
+    from value_investor.research.filings import _is_ch_filing_row
+
+    filings_dir = Path(filings_dir)
+    index_path = filings_dir / "filings_index.json"
+    bodies_dir = filings_dir / "bodies"
+    if not index_path.is_file():
+        return []
+    try:
+        payload = json.loads(index_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return []
+
+    tags: list[dict[str, str]] = []
+    for row in payload.get("filings") or []:
+        if not isinstance(row, dict) or not _is_ch_filing_row(row) or not row.get("has_body"):
+            continue
+        row_id = str(row.get("id") or "").strip()
+        if not row_id:
+            continue
+        body_path = row.get("body_path")
+        candidate = Path(str(body_path)) if body_path else bodies_dir / f"{row_id}.txt"
+        if not candidate.is_file():
+            continue
+        try:
+            text = candidate.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        if not text.strip():
+            continue
+        tags.append(
+            {
+                "filing_id": row_id,
+                "parse_quality": classify_ch_body_parse_quality(text),
+            }
+        )
+    return tags
+
+
+def enrich_gap_fill_ch_refetch_parse_quality(
+    sources_dir: Path,
+    payload: dict[str, Any],
+) -> dict[str, Any]:
+    """After a successful CH refetch, stamp body parse_quality on gap_fill_source_map."""
+    ch_refetch = dict(payload.get("ch_refetch") or {})
+    if int(ch_refetch.get("fetched") or 0) <= 0:
+        return payload
+
+    filings_dir = Path(sources_dir) / "filings"
+    tags = collect_ch_filing_body_parse_quality(filings_dir)
+    if not tags:
+        return payload
+
+    ch_refetch["body_parse_quality"] = tags
+    payload = dict(payload)
+    payload["ch_refetch"] = ch_refetch
+
+    instructions = str(payload.get("instructions") or "")
+    if "body_parse_quality" not in instructions:
+        payload["instructions"] = instructions.rstrip() + _CH_PARSE_QUALITY_INSTRUCTION
+
+    map_path = resolve_json_path(Path(sources_dir) / "gap_fill_source_map.json")
+    if map_path is not None:
+        try:
+            source_map = read_json(map_path)
+        except (OSError, ValueError, TypeError):
+            source_map = dict(payload)
+        else:
+            source_map = dict(source_map)
+        source_map["ch_refetch"] = ch_refetch
+        map_instructions = str(source_map.get("instructions") or payload.get("instructions") or "")
+        if "body_parse_quality" not in map_instructions:
+            map_instructions = map_instructions.rstrip() + _CH_PARSE_QUALITY_INSTRUCTION
+        source_map["instructions"] = map_instructions
+        write_json(map_path, source_map, compact=False, compress=False)
+
+    return payload
+
+
+def ensure_gap_fill_ch_parse_quality_hooks() -> None:
+    """Wrap gap-fill source pack build so CH refetch success exports body parse_quality."""
+    from value_investor.research import gap_fill_sources
+
+    if getattr(gap_fill_sources.prepare_gap_fill_source_pack, "_ch_parse_quality_installed", False):
+        return
+
+    _original_prepare = gap_fill_sources.prepare_gap_fill_source_pack
+
+    def _prepare_with_ch_parse_quality(**kwargs: Any) -> dict[str, Any]:
+        payload = _original_prepare(**kwargs)
+        try:
+            return enrich_gap_fill_ch_refetch_parse_quality(Path(kwargs["sources_dir"]), payload)
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("CH parse_quality enrichment skipped: %s", exc)
+            return payload
+
+    _prepare_with_ch_parse_quality._ch_parse_quality_installed = True  # type: ignore[attr-defined]
+    gap_fill_sources.prepare_gap_fill_source_pack = _prepare_with_ch_parse_quality
 
 
 @dataclass
@@ -204,3 +332,6 @@ def summarize_sync_findings(
             }
         )
     return rows
+
+
+ensure_gap_fill_ch_parse_quality_hooks()
