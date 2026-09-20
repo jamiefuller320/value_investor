@@ -24,6 +24,19 @@ from value_investor.scoring.fcf_basis_overlay import (
     enforce_neutral_watchlist_dividend_caution_in_snapshot,
 )
 
+_SIGNALS_EXPORT_MERGE_KEYS = frozenset(
+    {
+        "failed_models",
+        "fcf_definition_divergence",
+        "fcf_divergence_flagged",
+        "cyclical_exposure_detected",
+        "fcf_dividend_coverage",
+        "fcf_dividend_coverage_net",
+        "fcf_dividend_coverage_gross",
+        "research_prompts",
+    }
+)
+
 _HOSPITALITY_CYCLICAL_FRAGMENTS = (
     "horeca",
     "hospitality",
@@ -395,12 +408,7 @@ def guard_signals_dataframe(
     if signals.empty:
         return signals
     out = signals.copy()
-    for optional_col in (
-        "failed_models",
-        "fcf_definition_divergence",
-        "fcf_divergence_flagged",
-        "cyclical_exposure_detected",
-    ):
+    for optional_col in _SIGNALS_EXPORT_MERGE_KEYS:
         if optional_col not in out.columns:
             out[optional_col] = None
     for index, row in out.iterrows():
@@ -410,12 +418,7 @@ def guard_signals_dataframe(
             output_dir=output_dir,
         )
         for key, value in guarded.items():
-            if key in out.columns or key in (
-                "failed_models",
-                "fcf_definition_divergence",
-                "fcf_divergence_flagged",
-                "cyclical_exposure_detected",
-            ):
+            if key in out.columns or key in _SIGNALS_EXPORT_MERGE_KEYS:
                 out.at[index, key] = value
     return out
 
