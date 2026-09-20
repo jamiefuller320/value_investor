@@ -36,6 +36,9 @@ While compute is unconstrained:
 - Sunday email (`email-report.yml`) runs the same full-buy-tier ingest-improvement
   cap (**62**, L123) *before* research/gap-fill so newly screened names have bodies
   in the memo pass. Weekday drain still owns residual `indexed_without_body`.
+  The Sunday pass also sets a **wall-clock ingest budget**
+  (`--ingest-max-runtime-seconds`, default 90m / workflow 2h) so OCR/PDF deepen
+  cannot consume the whole 6h GHA job and skip Send/commit (L429).
 - After a successful batch, if `indexed_without_body > 0` **and progress was made**,
   the workflow chains another deepen (`drain_generation` 1…`max_drain_generations`,
   default max **12**) until gaps clear or a follow-up stalls with no progress.
