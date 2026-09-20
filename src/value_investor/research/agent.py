@@ -123,7 +123,7 @@ def clip_rationale(value: str | None, *, limit: int = RATIONALE_MAX_CHARS) -> st
 
 _MEMO_STATUS_SUGGESTION = re.compile(
     r"(?i)(?:^updated\s+(?:in|memo)|^the\s+memo\s+at|memo\s+saved\s+to|"
-    r"has\s+been\s+updated).*research\.md"
+    r"^also\s+written\s+to|has\s+been\s+updated).*research\.md"
 )
 
 
@@ -142,7 +142,8 @@ def is_actionable_research_model_suggestion(text: str) -> bool:
 def research_model_suggestions_discipline() -> str:
     """Prompt rule: research-model bullets must be pipeline work, not memo status."""
     return (
-        "Never emit memo save paths, version bumps, or 'updated in research.md' status lines — "
+        "Never emit memo save paths, version bumps, 'updated in research.md', or "
+        "'also written to …/research.md' status lines — "
         "only concrete ingest/prompt/scoring/coverage/ops pipeline improvements."
     )
 

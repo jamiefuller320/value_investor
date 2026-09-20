@@ -157,6 +157,9 @@ def test_is_actionable_research_model_suggestion_rejects_memo_status():
         "Updated in `output/research/MEGP.L/research.md`."
     )
     assert not is_actionable_research_model_suggestion(
+        "Also written to `output/research/MGNS.L/research.md`."
+    )
+    assert not is_actionable_research_model_suggestion(
         "The memo at `output/research/MEGP.L/research.md` has been updated to version 3."
     )
     assert is_actionable_research_model_suggestion(
@@ -168,6 +171,11 @@ def test_persist_model_suggestions_skips_memo_status_lines(tmp_path: Path):
     path = tmp_path / "research_model_suggestions.json"
     appended = _persist_model_suggestions(
         [
+            {
+                "area": "research",
+                "priority": "medium",
+                "suggestion": "Also written to `output/research/MGNS.L/research.md`.",
+            },
             {
                 "area": "research",
                 "priority": "medium",
