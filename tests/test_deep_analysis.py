@@ -36,3 +36,5 @@ def test_deep_analysis_prompt_requires_filing_and_deal_structure_questions():
     assert "carve-out" in prompt.lower()
     assert "adjusted_signal" in prompt
     assert "dual dividend cover" in prompt.lower()
+    assert "uk_contractor_ch_backlog_margin_cyclical_detected" in prompt
+    assert "secured-workload" in prompt.lower()
