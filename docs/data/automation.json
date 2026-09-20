@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T10:07:02.689508+00:00",
+  "generated_at": "2026-09-20T10:31:36.993853+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1155,23 +1155,39 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-20T10:05:58.933198+00:00",
-    "queue_ui_updated_at": "2026-09-20T10:07:02.608352+00:00",
-    "task_count": 78,
+    "compiled_at": "2026-09-20T10:30:38.111071+00:00",
+    "queue_ui_updated_at": "2026-09-20T10:31:36.889739+00:00",
+    "task_count": 79,
     "status": {
-      "open_count": 1,
-      "pr_open_count": 1,
+      "open_count": 2,
+      "pr_open_count": 0,
       "parked_count": 2,
-      "merged_count": 58,
+      "merged_count": 59,
       "failed_count": 0,
-      "next_task_id": "eng-20260920-07",
-      "in_flight_branch": "cursor/eng-20260920-06-1de3",
-      "in_flight_pr": 754,
+      "next_task_id": "eng-20260920-08",
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
     "queued_tasks": [
+      {
+        "id": "eng-20260920-08",
+        "area": "coverage",
+        "title": "Populate Yahoo **quarterly cash flow** for LSE names where TTM FCF is flagged unverified (`yahoo_quarterly_cashflow: false` in gap map) to reduce filing vs scre",
+        "priority": "medium",
+        "priority_score": 25.0,
+        "status": "open",
+        "source": "compile_cap_drain",
+        "pr_url": null,
+        "pr_number": null,
+        "branch_name": null,
+        "dispatch_eligible": true,
+        "blocked_by": [],
+        "effective_dispatch_rank": 1,
+        "clash_scan": "partial"
+      },
       {
         "id": "eng-20260920-07",
         "area": "coverage",
@@ -1185,20 +1201,8 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "full"
-      },
-      {
-        "id": "eng-20260920-06",
-        "area": "ingest",
-        "title": "Improve Companies House PDF OCR for group accounts or prefer iXBRL/tag extraction over raw OCR for numeric cash-flow lines.",
-        "priority": "medium",
-        "priority_score": 25.0,
-        "status": "pr_open",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": "cursor/eng-20260920-06-1de3"
+        "effective_dispatch_rank": 2,
+        "clash_scan": "partial"
       }
     ],
     "attention_tasks": [
@@ -1228,8 +1232,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 1,
-      "dispatch_eligible_count": 1,
+      "open_task_count": 2,
+      "dispatch_eligible_count": 2,
       "blocked_count": 0
     }
   },
@@ -1508,24 +1512,18 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-20T10:07:02.689508+00:00",
+    "generated_at": "2026-09-20T10:31:36.993853+00:00",
     "overall": "active",
-    "headline": "Merge lane active; agent lane active.",
+    "headline": "Agent lane active.",
     "merge_lane": {
-      "state": "running",
-      "idle": false,
-      "running": true,
+      "state": "idle",
+      "idle": true,
+      "running": false,
       "blocked": false,
-      "pr_open_count": 1,
-      "open_engineering_prs": [
-        {
-          "number": 754,
-          "branch": "cursor/eng-20260920-06-1de3",
-          "draft": false
-        }
-      ],
-      "in_flight_pr": 754,
-      "detail": "Open engineering PR(s) #754 — merge fires on CI success."
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
       "state": "running",
@@ -1536,18 +1534,18 @@
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 2,
-      "open_count": 1,
-      "pr_open_count": 1,
-      "dispatch_eligible_count": 1,
+      "open_count": 2,
+      "pr_open_count": 0,
+      "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260920-07",
+      "next_task_id": "eng-20260920-08",
       "reason": "queue ready — dispatch next open task",
       "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 2,
-      "evaluated_at": "2026-09-20T10:06:58.003319+00:00"
+      "evaluated_at": "2026-09-20T10:31:33.893001+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1561,6 +1559,17 @@
       "should_dispatch_engineering": true
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260920-06",
+        "title": "Improve Companies House PDF OCR for group accounts or prefer iXBRL/tag extraction over raw OCR for numeric cash-flow lines.",
+        "area": "ingest",
+        "pr_number": 754,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/754",
+        "merged_at": "2026-09-20T10:30:36.809154+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": true,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260920-04",
         "title": "Add CMA/Ofcom merger document ingest keyed to ticker for media deals (Sky RNS references CMA/PIIN but local corpus has no case file).",
@@ -1628,6 +1637,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 6
+    "verified_merges_today_count": 7
   }
 }
