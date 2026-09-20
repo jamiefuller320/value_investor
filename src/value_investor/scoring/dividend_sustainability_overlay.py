@@ -303,6 +303,8 @@ def enrich_screening_snapshot_dividend_dual_fcf_research_prompts(
     if not dividend_passed:
         return updated
 
+    from value_investor.scoring.fcf import labelled_fcf_dividend_coverage_for_snapshot
+
     net_raw = updated.get("fcf_dividend_coverage_net")
     fcf_dividend_coverage_net = (
         float(net_raw)
@@ -315,6 +317,16 @@ def enrich_screening_snapshot_dividend_dual_fcf_research_prompts(
         if gross_raw is not None and not (isinstance(gross_raw, float) and pd.isna(gross_raw))
         else None
     )
+    existing_label = updated.get("fcf_dividend_coverage")
+    if not isinstance(existing_label, dict):
+        labelled = labelled_fcf_dividend_coverage_for_snapshot(
+            fcf_definition_divergence=True,
+            fcf_dividend_coverage_net=fcf_dividend_coverage_net,
+            fcf_dividend_coverage_gross=fcf_dividend_coverage_gross,
+        )
+        if labelled is not None:
+            updated["fcf_dividend_coverage"] = labelled
+
     updated["research_prompts"] = merge_dual_fcf_dividend_cover_research_prompts(
         _parse_research_prompts(updated.get("research_prompts")),
         ticker=ticker,

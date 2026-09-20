@@ -171,6 +171,9 @@ def enforce_dividend_yield_family_in_snapshot(
     updated["research_prompts"] = _strip_dual_fcf_dividend_research_prompts(
         updated.get("research_prompts")
     )
+    updated["fcf_dividend_coverage"] = None
+    updated["fcf_dividend_coverage_net"] = None
+    updated["fcf_dividend_coverage_gross"] = None
     revised = strip_dividend_from_passed_families(updated.get("passed_families"))
     if revised != updated.get("passed_families"):
         updated["passed_families"] = revised
