@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T07:47:56.319998+00:00",
+  "generated_at": "2026-09-20T08:19:43.092427+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1155,16 +1155,16 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-20T07:47:54.269762+00:00",
-    "queue_ui_updated_at": "2026-09-20T07:47:56.241851+00:00",
-    "task_count": 72,
+    "compiled_at": "2026-09-20T08:18:39.492358+00:00",
+    "queue_ui_updated_at": "2026-09-20T08:19:43.015249+00:00",
+    "task_count": 73,
     "status": {
       "open_count": 2,
       "pr_open_count": 0,
       "parked_count": 2,
-      "merged_count": 52,
+      "merged_count": 53,
       "failed_count": 0,
-      "next_task_id": "eng-20260920-01",
+      "next_task_id": "eng-20260920-02",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -1173,9 +1173,9 @@
     },
     "queued_tasks": [
       {
-        "id": "eng-20260920-01",
+        "id": "eng-20260920-02",
         "area": "scoring",
-        "title": "dividend: Map email **watchlist** to overlay **caution** when `interim_dividend_cut_flagged` and `fcf_dividend_coverage_net` < 1.0 simultaneously, even if raw s",
+        "title": "Auto-compare latest CH/RNS adjusted EPS YoY to `adjusted_eps_growth_pct` and flag divergence (ITV remains +23% screen vs −11% filing).",
         "priority": "medium",
         "priority_score": 25.0,
         "status": "open",
@@ -1512,7 +1512,7 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-20T07:47:56.319998+00:00",
+    "generated_at": "2026-09-20T08:19:43.092427+00:00",
     "overall": "active",
     "headline": "Agent lane active.",
     "merge_lane": {
@@ -1538,14 +1538,14 @@
       "pr_open_count": 0,
       "dispatch_eligible_count": 2,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260920-01",
+      "next_task_id": "eng-20260920-02",
       "reason": "queue ready — dispatch next open task",
       "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 2,
-      "evaluated_at": "2026-09-20T07:47:51.969995+00:00"
+      "evaluated_at": "2026-09-20T08:19:39.056394+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1558,7 +1558,19 @@
       "overall": "warn",
       "should_dispatch_engineering": true
     },
-    "merges_today": [],
-    "verified_merges_today_count": 0
+    "merges_today": [
+      {
+        "task_id": "eng-20260920-01",
+        "title": "dividend: Map email **watchlist** to overlay **caution** when `interim_dividend_cut_flagged` and `fcf_dividend_coverage_net` < 1.0 simultaneously, even if raw s",
+        "area": "scoring",
+        "pr_number": 747,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/747",
+        "merged_at": "2026-09-20T08:18:38.099264+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": true,
+        "independently_verified": true
+      }
+    ],
+    "verified_merges_today_count": 1
   }
 }
