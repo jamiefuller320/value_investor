@@ -30,6 +30,9 @@ from value_investor.scoring.fcf_basis_overlay import (
     apply_statutory_fcf_moat_leverage_export_enforcement,
     enforce_neutral_watchlist_dividend_caution_in_snapshot,
 )
+from value_investor.scoring.fcf_three_way_conviction_overlay import (
+    enforce_fcf_three_way_conviction_in_snapshot,
+)
 from value_investor.scoring.healthcare_overlay import piotroski_score_for_ticker
 from value_investor.scoring.leverage_overlay import (
     cap_research_verdict_for_statutory_fcf_moat_leverage_overlay,
@@ -82,6 +85,11 @@ _RUN_SNAPSHOT_OPTIONAL_SIGNAL_COLUMNS = (
     "fcf_divergence_flagged",
     "fcf_dividend_coverage",
     "research_prompts",
+    "fcf_three_way_conviction_overlay",
+    "fcf_three_way_conviction_overlay_detail",
+    "profit_to_cash_current_pct",
+    "profit_to_cash_prior_pct",
+    "profit_to_cash_yoy_decline_pp",
 )
 
 
@@ -265,6 +273,7 @@ def enforce_fcf_basis_in_snapshot(
     )
     if capped_verdict != updated.get("research_verdict"):
         updated["research_verdict"] = capped_verdict
+    updated = enforce_fcf_three_way_conviction_in_snapshot(updated, output_dir=output_dir)
     return enforce_neutral_watchlist_dividend_caution_in_snapshot(updated)
 
 
