@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T17:14:28.486839+00:00",
+  "generated_at": "2026-09-20T17:41:10.893262+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1155,35 +1155,23 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-20T17:09:34.972666+00:00",
-    "queue_ui_updated_at": "2026-09-20T17:14:28.412141+00:00",
+    "compiled_at": "2026-09-20T17:27:47.340511+00:00",
+    "queue_ui_updated_at": "2026-09-20T17:41:10.813072+00:00",
     "task_count": 86,
     "status": {
       "open_count": 1,
-      "pr_open_count": 1,
+      "pr_open_count": 0,
       "parked_count": 3,
-      "merged_count": 63,
+      "merged_count": 64,
       "failed_count": 0,
       "next_task_id": "eng-20260920-08",
-      "in_flight_branch": "cursor/eng-20260920-15-1de3",
-      "in_flight_pr": 764,
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
     "queued_tasks": [
-      {
-        "id": "eng-20260920-15",
-        "area": "scoring",
-        "title": "dividend: Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade w",
-        "priority": "medium",
-        "priority_score": 97.0,
-        "status": "pr_open",
-        "source": "compile_cap_drain",
-        "pr_url": null,
-        "pr_number": 764,
-        "branch_name": "cursor/eng-20260920-15-1de3"
-      },
       {
         "id": "eng-20260920-08",
         "area": "coverage",
@@ -1520,24 +1508,18 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-20T17:14:28.486839+00:00",
+    "generated_at": "2026-09-20T17:41:10.893262+00:00",
     "overall": "active",
-    "headline": "Merge lane active; agent lane active.",
+    "headline": "Agent lane active.",
     "merge_lane": {
-      "state": "running",
-      "idle": false,
-      "running": true,
+      "state": "idle",
+      "idle": true,
+      "running": false,
       "blocked": false,
-      "pr_open_count": 1,
-      "open_engineering_prs": [
-        {
-          "number": 764,
-          "branch": "cursor/eng-20260920-15-1de3",
-          "draft": false
-        }
-      ],
-      "in_flight_pr": 764,
-      "detail": "Open engineering PR(s) #764 — merge fires on CI success."
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
       "state": "running",
@@ -1549,7 +1531,7 @@
       "traffic_pause_active": false,
       "attention_parked_count": 3,
       "open_count": 1,
-      "pr_open_count": 1,
+      "pr_open_count": 0,
       "dispatch_eligible_count": 1,
       "blocked_task_count": 0,
       "next_task_id": "eng-20260920-08",
@@ -1559,7 +1541,7 @@
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 3,
-      "evaluated_at": "2026-09-20T17:14:23.913582+00:00"
+      "evaluated_at": "2026-09-20T17:41:06.376227+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1573,6 +1555,17 @@
       "should_dispatch_engineering": true
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260920-15",
+        "title": "dividend: Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade w",
+        "area": "scoring",
+        "pr_number": 764,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/764",
+        "merged_at": "2026-09-20T17:40:08.444175+00:00",
+        "merge_class": "compile_cap_drain",
+        "auto_merge": true,
+        "independently_verified": true
+      },
       {
         "task_id": "eng-20260920-14",
         "title": "fcf: Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade when t",
@@ -1695,6 +1688,6 @@
         "independently_verified": true
       }
     ],
-    "verified_merges_today_count": 11
+    "verified_merges_today_count": 12
   }
 }
