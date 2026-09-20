@@ -110,6 +110,29 @@ _ADJUSTED_EPS_GROWTH_RES = (
     ),
 )
 
+_ADJUSTED_EPS_DECLINE_RES = (
+    re.compile(
+        r"adjusted\s+eps[\s\S]{0,120}?down\s+([\d.]+)\s*%",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"adjusted\s+eps\s+decreased\s+by\s+([\d.]+)\s*%",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"adjusted\s+eps\s+was\s+down\s+([\d.]+)\s*%",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"adjusted\s+eps\s+-([\d.]+)\s*%",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"adjusted\s+eps\s+[\d.]+\s*p?\s+[\d.]+\s+p?\s+\((\d+)\)",
+        re.IGNORECASE,
+    ),
+)
+
 _GROSS_OPERATING_CASHFLOW_RES = (
     re.compile(
         r"Cash generated\s+from operations\s+[£$€]?\s*([\d,.]+)\s*m\b",
@@ -149,6 +172,9 @@ _FILING_METRIC_KEYS = (
     "interim_eps_decline_pct",
     "interim_dividend_cut_pct",
     "adjusted_eps_growth_pct",
+    "adjusted_eps_growth_screen_pct",
+    "filing_latest_adjusted_eps_growth_pct",
+    "adjusted_eps_filing_screen_divergence_warning",
     "yahoo_normalized_income_growth_pct",
     "revenue",
     "revenue_prev",
@@ -1127,6 +1153,16 @@ def parse_adjusted_eps_growth_pct(text: str) -> float | None:
             continue
         if pct != 0:
             return pct
+    for pattern in _ADJUSTED_EPS_DECLINE_RES:
+        match = pattern.search(text)
+        if not match:
+            continue
+        try:
+            pct = float(match.group(1)) / 100.0
+        except (TypeError, ValueError):
+            continue
+        if pct != 0:
+            return -pct
     return None
 
 
@@ -1160,6 +1196,32 @@ def earnings_growth_signs_diverge(
     if statutory == 0 or adjusted == 0:
         return False
     return (statutory > 0) != (adjusted > 0)
+
+
+def resolve_screen_adjusted_eps_growth_baseline(row: pd.Series) -> float | None:
+    """Screen-side adjusted EPS growth before latest filing reconciliation."""
+    adjusted = _float_or_none(row.get("adjusted_eps_growth_pct"))
+    if adjusted is not None:
+        return adjusted
+    screen = _float_or_none(row.get("earnings_growth_screen_ttm"))
+    if screen is not None:
+        return screen
+    return _float_or_none(row.get("earnings_growth"))
+
+
+def adjusted_eps_filing_screen_divergence(
+    screen_growth: float | None,
+    filing_growth: float | None,
+) -> bool:
+    """True when latest CH/RNS adjusted EPS YoY disagrees materially with the screen baseline."""
+    if screen_growth is None or filing_growth is None:
+        return False
+    return earnings_growth_bps_diverge(
+        screen_growth, filing_growth
+    ) or earnings_growth_signs_diverge(
+        screen_growth,
+        filing_growth,
+    )
 
 
 def earnings_growth_bps_diverge(
@@ -3309,15 +3371,20 @@ def enrich_universe_with_filing_metrics(
             if current is None or (isinstance(current, float) and pd.isna(current)):
                 out.at[index, "interim_dividend_cut_pct"] = interim_dividend_cut
 
+        screen_adjusted_baseline = resolve_screen_adjusted_eps_growth_baseline(out.loc[index])
+        if screen_adjusted_baseline is not None:
+            out.at[index, "adjusted_eps_growth_screen_pct"] = screen_adjusted_baseline
+
         adjusted_growth = extract_adjusted_eps_growth_for_ticker(
             ticker,
             output_dir=output_dir,
             financials=financials,
         )
         if adjusted_growth is not None:
-            current = out.at[index, "adjusted_eps_growth_pct"]
-            if current is None or (isinstance(current, float) and pd.isna(current)):
-                out.at[index, "adjusted_eps_growth_pct"] = adjusted_growth
+            out.at[index, "filing_latest_adjusted_eps_growth_pct"] = adjusted_growth
+            if adjusted_eps_filing_screen_divergence(screen_adjusted_baseline, adjusted_growth):
+                out.at[index, "adjusted_eps_filing_screen_divergence_warning"] = True
+            out.at[index, "adjusted_eps_growth_pct"] = adjusted_growth
 
         yahoo_normalized_growth = extract_yahoo_normalized_income_growth_for_ticker(
             ticker,

@@ -2850,6 +2850,71 @@ def test_parse_adjusted_eps_growth_pct_from_ir_prose():
     )
 
 
+def test_parse_adjusted_eps_growth_pct_handles_filing_decline_prose():
+    body = "Adjusted EPS \n8.5p\ndown 11% vs. 2024\nAdjusted EPS 8.5p 9.6p (11)\n"
+    assert parse_adjusted_eps_growth_pct(body) == pytest.approx(-0.11)
+
+
+def test_enrich_universe_with_filing_metrics_flags_itv_like_adjusted_eps_divergence(
+    tmp_path: Path,
+):
+    """Latest interim filing -11% vs stale screen +23% on adjusted_eps_growth_pct."""
+    sources = tmp_path / "research" / "ITV.L" / "sources"
+    filings = sources / "filings" / "bodies"
+    filings.mkdir(parents=True)
+    repurchase = filings / "repurchase.txt"
+    repurchase.write_text(
+        "ITV plc share repurchase programme to reduce share capital.",
+        encoding="utf-8",
+    )
+    interim = filings / "interim.txt"
+    interim.write_text(
+        "Adjusted EPS \n8.5p\ndown 11% vs. 2024\nAdjusted EPS 8.5p 9.6p (11)\n",
+        encoding="utf-8",
+    )
+    (sources / "filings" / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "repurchase",
+                        "period": "annual",
+                        "published_at": "2026-07-31T06:14:09+00:00",
+                        "has_body": True,
+                        "body_path": str(repurchase),
+                    },
+                    {
+                        "id": "interim",
+                        "period": "interim",
+                        "published_at": "2026-07-31T00:00:00+00:00",
+                        "has_body": True,
+                        "body_path": str(interim),
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    universe = pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "name": "ITV plc",
+                "adjusted_eps_growth_pct": 0.23,
+                "earnings_growth": 0.23,
+            }
+        ]
+    )
+    enriched = enrich_universe_with_filing_metrics(universe, tmp_path)
+    row = enriched.iloc[0]
+
+    assert row["filing_latest_adjusted_eps_growth_pct"] == pytest.approx(-0.11)
+    assert row["adjusted_eps_growth_screen_pct"] == pytest.approx(0.23)
+    assert row["adjusted_eps_growth_pct"] == pytest.approx(-0.11)
+    assert bool(row["adjusted_eps_filing_screen_divergence_warning"]) is True
+
+
 def test_enrich_universe_with_filing_metrics_extracts_adjusted_eps_growth(tmp_path: Path):
     sources = tmp_path / "research" / "FGP.L" / "sources"
     filings = sources / "filings" / "bodies"
