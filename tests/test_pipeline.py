@@ -2022,6 +2022,31 @@ def test_write_screening_snapshot_backfills_labelled_dual_fcf_dividend_coverage(
     assert "dual fcf/dividend cover" in written["research_prompts"][0].lower()
 
 
+def test_guard_signals_dataframe_persists_labelled_dual_fcf_dividend_coverage():
+    """Run-history guard must not drop labelled dual cover built during export enforcement."""
+    from value_investor.scoring.screening_export_guard import guard_signals_dataframe
+
+    signals = pd.DataFrame(
+        [
+            {
+                "ticker": "MEGP.L",
+                "signal": "buy",
+                "fcf_definition_divergence": True,
+                "fcf_dividend_coverage_net": 0.84,
+                "fcf_dividend_coverage_gross": 1.68,
+            }
+        ]
+    )
+    guarded = guard_signals_dataframe(signals, pd.DataFrame())
+    row = guarded.iloc[0]
+    labelled = row["fcf_dividend_coverage"]
+    assert labelled["statutory_ocf_minus_capex"]["label"] == "Statutory OCF−CapEx"
+    assert labelled["statutory_ocf_minus_capex"]["ratio"] == pytest.approx(0.84)
+    assert labelled["management_cash_generated_minus_capex"]["ratio"] == pytest.approx(1.68)
+    prompts = row["research_prompts"]
+    assert prompts and "dual fcf/dividend cover" in str(prompts[0]).lower()
+
+
 def _itv_three_way_research_tree(tmp_path: Path) -> None:
     sources = tmp_path / "research" / "ITV.L" / "sources"
     filings = sources / "filings" / "bodies"
