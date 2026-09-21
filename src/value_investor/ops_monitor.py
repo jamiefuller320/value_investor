@@ -2126,7 +2126,9 @@ def run_ops_monitor(
                         finding.action_taken = detail
         if traffic_report.pause_active:
             stuck_n = len(traffic_report.stuck_prs)
-            reasons = traffic_report.pause_reasons or (["stuck_prs"] if stuck_n else ["traffic_hold"])
+            reasons = traffic_report.pause_reasons or (
+                ["stuck_prs"] if stuck_n else ["traffic_hold"]
+            )
             if stuck_n:
                 summary = (
                     f"{stuck_n} stuck PR(s); reasons={reasons}. "
