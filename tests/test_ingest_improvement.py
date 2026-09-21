@@ -18,6 +18,7 @@ from value_investor.research.ingest_improvement import (
     map_suggestion_to_source_ids,
     run_ingest_improvement_pass,
     select_ingest_improvement_targets,
+    ticker_deadline_budget,
 )
 from value_investor.summary import CompanyReport
 
@@ -735,6 +736,146 @@ def test_run_ingest_improvement_pass_stops_at_runtime_budget(
     assert summary.targets_deferred == 2
     assert len(summary.results) == 0
     mock_ingest_sources.assert_not_called()
+
+
+def test_ticker_deadline_budget_uses_tighter_cap():
+    started = 1_000.0
+    assert ticker_deadline_budget(
+        started,
+        max_runtime_seconds=None,
+        per_ticker_max_seconds=None,
+        now=started,
+    ) == (None, None)
+    assert ticker_deadline_budget(
+        started,
+        max_runtime_seconds=0,
+        per_ticker_max_seconds=320,
+        now=started,
+    ) == (320.0, "per_ticker_budget")
+    assert ticker_deadline_budget(
+        started,
+        max_runtime_seconds=3600,
+        per_ticker_max_seconds=None,
+        now=started + 100,
+    ) == (3500.0, "runtime_budget")
+    assert ticker_deadline_budget(
+        started,
+        max_runtime_seconds=3600,
+        per_ticker_max_seconds=320,
+        now=started + 3400,
+    ) == (200.0, "runtime_budget")
+    assert ticker_deadline_budget(
+        started,
+        max_runtime_seconds=3600,
+        per_ticker_max_seconds=320,
+        now=started + 100,
+    ) == (320.0, "per_ticker_budget")
+
+
+@patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
+@patch("value_investor.research.ingest_improvement.execute_planned_alternate_sources")
+@patch("value_investor.research.ingest_improvement.ingest_research_sources")
+@patch("value_investor.research.ingest_improvement.sanitize_filings_index")
+@patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
+def test_run_ingest_improvement_pass_aborts_slow_ticker_and_continues(
+    mock_bootstrap,
+    mock_sanitize,
+    mock_ingest_sources,
+    mock_alternate,
+    mock_deepen,
+    tmp_path: Path,
+):
+    import time
+
+    output_dir = tmp_path / "output"
+    for ticker in ("AAA.L", "BBB.L"):
+        sources = output_dir / "research" / ticker / "sources" / "filings"
+        sources.mkdir(parents=True)
+        (sources / "filings_index.json").write_text(
+            json.dumps({"summary": {"total": 0, "with_body": 0}, "filings": []}),
+            encoding="utf-8",
+        )
+
+    def _slow_ingest(**kwargs):  # noqa: ARG001
+        time.sleep(2)
+        return {"filings_summary": {"with_body": 0}}
+
+    mock_ingest_sources.side_effect = _slow_ingest
+    mock_alternate.return_value = {"fetched": 0}
+    mock_deepen.return_value = {"skipped": True, "reason": "sufficient_bodies"}
+
+    summary = run_ingest_improvement_pass(
+        reports=[
+            _report("AAA.L", "Alpha plc"),
+            _report("BBB.L", "Beta plc"),
+        ],
+        output_dir=output_dir,
+        max_targets=2,
+        suggestions_path=tmp_path / "missing.json",
+        max_runtime_seconds=30,
+        per_ticker_max_seconds=0.4,
+        discovery_scan=False,
+    )
+
+    assert mock_ingest_sources.call_count == 2
+    assert summary.runtime_cutoff is False
+    assert [row["ticker"] for row in summary.results] == ["AAA.L", "BBB.L"]
+    assert all(row.get("ticker_budget_hit") for row in summary.results)
+    assert all(row.get("cutoff_reason") == "per_ticker_budget" for row in summary.results)
+
+
+@patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")
+@patch("value_investor.research.ingest_improvement.execute_planned_alternate_sources")
+@patch("value_investor.research.ingest_improvement.ingest_research_sources")
+@patch("value_investor.research.ingest_improvement.sanitize_filings_index")
+@patch("value_investor.research.ingest_improvement.bootstrap_buy_tier_research")
+def test_run_ingest_improvement_pass_flushes_on_sigterm(
+    mock_bootstrap,
+    mock_sanitize,
+    mock_ingest_sources,
+    mock_alternate,
+    mock_deepen,
+    tmp_path: Path,
+):
+    import signal
+
+    output_dir = tmp_path / "output"
+    for ticker in ("AAA.L", "BBB.L"):
+        sources = output_dir / "research" / ticker / "sources" / "filings"
+        sources.mkdir(parents=True)
+        (sources / "filings_index.json").write_text(
+            json.dumps({"summary": {"total": 0, "with_body": 0}, "filings": []}),
+            encoding="utf-8",
+        )
+
+    def _interrupt(**kwargs):  # noqa: ARG001
+        signal.raise_signal(signal.SIGTERM)
+        return {"filings_summary": {"with_body": 0}}
+
+    mock_ingest_sources.side_effect = _interrupt
+    mock_alternate.return_value = {"fetched": 0}
+    mock_deepen.return_value = {"skipped": True, "reason": "sufficient_bodies"}
+
+    summary = run_ingest_improvement_pass(
+        reports=[
+            _report("AAA.L", "Alpha plc"),
+            _report("BBB.L", "Beta plc"),
+        ],
+        output_dir=output_dir,
+        max_targets=2,
+        suggestions_path=tmp_path / "missing.json",
+        max_runtime_seconds=30,
+        per_ticker_max_seconds=10,
+        discovery_scan=False,
+    )
+
+    assert mock_ingest_sources.call_count == 1
+    assert summary.runtime_cutoff is True
+    assert summary.partial is True
+    assert summary.cutoff_reason == "sigterm"
+    assert summary.targets_deferred == 2
+    assert summary.results == []
+    assert (output_dir / "ingest_improvement_summary.json").exists()
 
 
 @patch("value_investor.research.ingest_improvement.deepen_thin_filings_if_needed")

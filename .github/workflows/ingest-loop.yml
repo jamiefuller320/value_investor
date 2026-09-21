@@ -188,9 +188,10 @@ jobs:
 
       - name: Run weekday ingest loop
         id: loop
-        # Soft budget (default 3600s) now includes discovery. Outer `timeout`
-        # leaves ~15m before this step's hard limit so JSON write + commit +
-        # chain still run when Python mis-budgets (see #35066797050 / #35102954314).
+        # Soft budget (default 3600s) is also enforced inside each ticker via
+        # SIGALRM, and SIGTERM flushes partial JSON before this outer kill.
+        # Outer `timeout` leaves ~15m before this step's hard limit so JSON
+        # write + commit + chain still run (see #35066797050 / #35102954314).
         timeout-minutes: 90
         env:
           COMPANIES_HOUSE_API_KEY: ${{ secrets.COMPANIES_HOUSE_API_KEY }}
