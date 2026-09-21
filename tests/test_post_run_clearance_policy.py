@@ -24,12 +24,12 @@ def test_agents_md_references_clearance_policy():
 
 def test_run_post_run_clearance_cli_exposes_max_tasks():
     """Regression: analysis-review clearance step crashed without --max-tasks (2026-09-21)."""
-    from value_investor.engineering_cli import main
-
     # argparse exits 0 on --help; capture that --max-tasks is registered.
     import io
     import sys
     from contextlib import redirect_stdout
+
+    from value_investor.engineering_cli import main
 
     buf = io.StringIO()
     old = sys.argv
