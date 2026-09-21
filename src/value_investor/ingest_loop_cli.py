@@ -23,6 +23,7 @@ from value_investor.research.ingest_improvement import (
     DEFAULT_INGEST_REFETCH_MAX_BODIES,
     DEFAULT_WEEKDAY_BATCH_MAX_TARGETS,
     DEFAULT_WEEKDAY_BOOTSTRAP_SEED_CAP,
+    IngestPassInterrupted,
 )
 
 logger = logging.getLogger(__name__)
@@ -190,6 +191,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
     exit_code = 0
     result = None
     error: str | None = None
+    interrupted = False
     try:
         pin_tickers = (
             [args.pin_ticker.strip().upper()] if str(args.pin_ticker or "").strip() else None
@@ -208,6 +210,11 @@ def _cmd_run(args: argparse.Namespace) -> int:
             pin_tickers=pin_tickers,
             record_gap_closure=_gap_closure_spec(args),
         )
+    except IngestPassInterrupted as exc:
+        error = f"ingest interrupted ({exc.reason})"
+        logger.warning("Weekday ingest loop interrupted (%s); writing partial JSON", exc.reason)
+        interrupted = True
+        exit_code = 0
     except Exception as exc:  # noqa: BLE001
         error = str(exc)
         logger.exception("Weekday ingest loop failed")
@@ -226,7 +233,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
                 "gap_closure_compiled": False,
                 "gap_closure_compile": {},
                 "stalled": False,
-                "partial": False,
+                "partial": interrupted,
             }
         if error:
             payload["error"] = error

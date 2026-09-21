@@ -136,6 +136,69 @@ def test_ingest_tsx60_runs_ir_allowlist_refetch_like_euro(
     assert "ir_allowlist" in meta["filings_sources"]
 
 
+@patch("value_investor.research.ingest.fetch_google_news_rss", return_value=[])
+@patch("value_investor.research.ingest.fetch_yfinance_news", return_value=[])
+@patch(
+    "value_investor.research.ingest.fetch_annual_financials", return_value={"income_statement": {}}
+)
+@patch("value_investor.research.filings.ingest_filings")
+@patch("value_investor.research.filings.extract_ir_presentation_metrics")
+@patch("value_investor.research.filings.refetch_ir_allowlist_filing_bodies")
+@patch("value_investor.research.filings.fetch_filings_ir_allowlist")
+def test_eng_20260921_02_uk_ingest_runs_ir_results_presentation_pipeline(
+    mock_ir_rows,
+    mock_ir_refetch,
+    mock_extract_metrics,
+    mock_ingest_filings,
+    _mock_financials,
+    _mock_yf_news,
+    _mock_google_news,
+    tmp_path: Path,
+):
+    """eng-20260921-02: FTSE IR allowlist tickers refetch decks and write ir_presentation_metrics."""
+    filings_dir = tmp_path / "filings"
+    filings_dir.mkdir(parents=True)
+    index_path = filings_dir / "filings_index.json"
+    index_path.write_text(
+        '{"summary": {"total": 5, "with_body": 2, "annual": 2}, '
+        '"sources_used": ["investegate_direct"], "filings": []}',
+        encoding="utf-8",
+    )
+    mock_ingest_filings.return_value = {
+        "filings_index_path": str(index_path),
+        "filings_summary": {"total": 5, "with_body": 2, "annual": 2},
+        "filings_sources": ["investegate_direct"],
+    }
+    mock_ir_rows.return_value = [{"id": "ir_f5cc65dca4e5855a", "source": "ir_allowlist"}]
+    mock_ir_refetch.return_value = {
+        "fetched": 1,
+        "merge": {"added": 1, "total_allowlist": 4},
+        "with_body_after": 3,
+    }
+    mock_extract_metrics.return_value = {
+        "bridge_count": 2,
+        "segment_split_count": 0,
+        "lease_maturity_count": 0,
+        "mandatory": True,
+    }
+
+    meta = ingest_research_sources(
+        ticker="FGP.L",
+        company_name="FirstGroup plc",
+        screening_snapshot={"ticker": "FGP.L", "name": "FirstGroup plc", "signal": "strong_buy"},
+        sources_dir=tmp_path,
+        market="ftse350",
+        deepen_history=False,
+    )
+
+    mock_ir_refetch.assert_called_once()
+    assert mock_ir_refetch.call_args.kwargs["ticker"] == "FGP.L"
+    mock_extract_metrics.assert_called_once()
+    metrics = meta["ir_presentation_metrics"]
+    assert metrics["bridge_count"] == 2
+    assert metrics["mandatory"] is True
+
+
 def test_attach_filing_interim_financials_when_yahoo_quarterlies_empty(tmp_path: Path):
     """eng-20260918-15: ITV-like empty Yahoo quarterlies get filing_interim_financials attachment."""
     import json

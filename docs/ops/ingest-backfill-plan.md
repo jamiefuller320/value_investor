@@ -4,6 +4,15 @@ Weekday **ingest-loop** runs bounded ingest-improvement against buy-tier names i
 `docs/data/latest.json`. When the Python runtime budget is exhausted, work is
 **not lost** — artifacts commit and the backlog carries remaining tickers forward.
 
+Each ticker already inside a fetch is hard-capped at
+`min(per_ticker_max_seconds, time left in the slot)` with `SIGALRM`. Hitting the
+per-ticker cap aborts that ticker (bodies already written stay on disk) and the
+pass moves on. Hitting the slot cap, or `SIGTERM` from the workflow's
+`timeout --signal=TERM 75m`, flushes a partial summary and
+`/tmp/ingest_loop.json` so the commit and chain steps still run. The in-progress
+ticker stays deferred. A per-ticker abort is recorded as done for this pass so
+the same chain does not start it again.
+
 ## Runtime budget
 
 | Setting | Default | GHA limit |

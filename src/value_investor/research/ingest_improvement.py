@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import logging
+import signal
+import threading
 import time
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -649,6 +651,139 @@ def _ingest_pass_should_cutoff(
     return False, None
 
 
+class IngestPassInterrupted(BaseException):
+    """SIGTERM asked the ingest pass to flush a partial summary and return."""
+
+    def __init__(self, reason: str = "sigterm") -> None:
+        self.reason = reason
+        super().__init__(reason)
+
+
+class TickerBudgetExceeded(BaseException):
+    """Hard per-ticker deadline fired (SIGALRM). Not an Exception, so fetch retries do not swallow it."""
+
+    def __init__(self, reason: str) -> None:
+        self.reason = reason
+        super().__init__(reason)
+
+
+_SIGTERM_STACK: list[Any] = []
+_TICKER_DEADLINE_ARMED = False
+_TICKER_DEADLINE_PREVIOUS: Any = None
+
+
+def ticker_deadline_budget(
+    started: float,
+    *,
+    max_runtime_seconds: float | None,
+    per_ticker_max_seconds: float | None,
+    now: float | None = None,
+) -> tuple[float | None, str | None]:
+    """Seconds to allow the current ticker, and why that cap is the tighter one.
+
+    ``None`` seconds means no hard interrupt (no slot budget and no per-ticker cap).
+    """
+    current = time.monotonic() if now is None else float(now)
+    remaining: float | None = None
+    if max_runtime_seconds is not None and float(max_runtime_seconds) > 0:
+        remaining = max(0.0, float(max_runtime_seconds) - (current - float(started)))
+    per_ticker: float | None = None
+    if per_ticker_max_seconds is not None and float(per_ticker_max_seconds) > 0:
+        per_ticker = float(per_ticker_max_seconds)
+    if remaining is None and per_ticker is None:
+        return None, None
+    if remaining is None:
+        return per_ticker, "per_ticker_budget"
+    if per_ticker is None or remaining <= per_ticker:
+        return remaining, "runtime_budget"
+    return per_ticker, "per_ticker_budget"
+
+
+def _signals_usable() -> bool:
+    return (
+        threading.current_thread() is threading.main_thread()
+        and hasattr(signal, "setitimer")
+        and hasattr(signal, "SIGALRM")
+    )
+
+
+def _arm_ticker_deadline(seconds: float | None, reason: str) -> None:
+    """Raise ``TickerBudgetExceeded`` when *seconds* elapses inside this ticker."""
+    global _TICKER_DEADLINE_ARMED, _TICKER_DEADLINE_PREVIOUS
+    if seconds is None or not _signals_usable():
+        return
+    if seconds <= 0:
+        raise TickerBudgetExceeded(reason)
+
+    def _handler(signum: int, frame: Any) -> None:  # noqa: ARG001
+        if not _TICKER_DEADLINE_ARMED:
+            return
+        raise TickerBudgetExceeded(reason)
+
+    _TICKER_DEADLINE_PREVIOUS = signal.signal(signal.SIGALRM, _handler)
+    _TICKER_DEADLINE_ARMED = True
+    signal.setitimer(signal.ITIMER_REAL, max(float(seconds), 0.001))
+
+
+def _disarm_ticker_deadline() -> None:
+    global _TICKER_DEADLINE_ARMED, _TICKER_DEADLINE_PREVIOUS
+    if not _TICKER_DEADLINE_ARMED:
+        return
+    _TICKER_DEADLINE_ARMED = False
+    if _signals_usable():
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        # Drop a SIGALRM already queued for the deadline handler before restoring
+        # the previous disposition (often SIG_DFL, which would kill the process).
+        signal.signal(signal.SIGALRM, signal.SIG_IGN)
+    previous = _TICKER_DEADLINE_PREVIOUS
+    _TICKER_DEADLINE_PREVIOUS = None
+    if previous is not None and _signals_usable():
+        signal.signal(signal.SIGALRM, previous)
+
+
+def _push_ingest_sigterm_handler() -> None:
+    if not hasattr(signal, "SIGTERM") or threading.current_thread() is not threading.main_thread():
+        _SIGTERM_STACK.append(None)
+        return
+    previous = signal.getsignal(signal.SIGTERM)
+
+    def _handler(signum: int, frame: Any) -> None:  # noqa: ARG001
+        raise IngestPassInterrupted("sigterm")
+
+    signal.signal(signal.SIGTERM, _handler)
+    _SIGTERM_STACK.append(previous)
+
+
+def _pop_ingest_sigterm_handler() -> None:
+    if not _SIGTERM_STACK:
+        return
+    previous = _SIGTERM_STACK.pop()
+    if previous is not None and hasattr(signal, "SIGTERM"):
+        signal.signal(signal.SIGTERM, previous)
+
+
+def _record_ticker_budget_hit(
+    summary: IngestImprovementSummary,
+    target: IngestImprovementTarget,
+    reason: str,
+) -> None:
+    summary.results.append(
+        {
+            "ticker": target.ticker,
+            "name": target.name,
+            "improved": False,
+            "ticker_budget_hit": True,
+            "cutoff_reason": reason,
+        }
+    )
+    summary.errors.append(f"{target.ticker}: ticker deadline ({reason})")
+    logger.warning(
+        "Ingest ticker %s aborted (%s); keeping bodies already written",
+        target.ticker,
+        reason,
+    )
+
+
 def _finalize_ingest_cutoff(summary: IngestImprovementSummary, reason: str | None) -> None:
     summary.partial = True
     summary.runtime_cutoff = True
@@ -659,6 +794,70 @@ def _finalize_ingest_cutoff(summary: IngestImprovementSummary, reason: str | Non
 
 
 def run_ingest_improvement_pass(
+    *,
+    reports: list[CompanyReport],
+    output_dir: Path,
+    market: str | None = None,
+    max_targets: int = DEFAULT_INGEST_IMPROVEMENT_CAP,
+    suggestions_path: Path = DEFAULT_SUGGESTIONS_PATH,
+    bootstrap_seed_cap: int | None = None,
+    max_runtime_seconds: float | None = None,
+    per_ticker_max_seconds: float | None = DEFAULT_PER_TICKER_MAX_SECONDS,
+    backlog_path: Path = DEFAULT_BACKLOG_PATH,
+    max_bodies: int = DEFAULT_INGEST_REFETCH_MAX_BODIES,
+    require_outstanding_gaps: bool = False,
+    pin_tickers: list[str] | None = None,
+    intensive_gap_closure: bool = False,
+    prune_failed_residual_fetches: bool = False,
+    discovery_scan: bool = True,
+    discovery_scan_cap: int | None = None,
+) -> IngestImprovementSummary:
+    """Run one ingest-improvement pass, flushing a partial summary on SIGTERM."""
+    _push_ingest_sigterm_handler()
+    try:
+        return _execute_ingest_improvement_pass(
+            reports=reports,
+            output_dir=output_dir,
+            market=market,
+            max_targets=max_targets,
+            suggestions_path=suggestions_path,
+            bootstrap_seed_cap=bootstrap_seed_cap,
+            max_runtime_seconds=max_runtime_seconds,
+            per_ticker_max_seconds=per_ticker_max_seconds,
+            backlog_path=backlog_path,
+            max_bodies=max_bodies,
+            require_outstanding_gaps=require_outstanding_gaps,
+            pin_tickers=pin_tickers,
+            intensive_gap_closure=intensive_gap_closure,
+            prune_failed_residual_fetches=prune_failed_residual_fetches,
+            discovery_scan=discovery_scan,
+            discovery_scan_cap=discovery_scan_cap,
+        )
+    except IngestPassInterrupted as exc:
+        logger.warning(
+            "Ingest improvement interrupted (%s) before the pass returned; flushing partial summary",
+            exc.reason,
+        )
+        summary = IngestImprovementSummary(targets=[])
+        summary.errors.append(f"interrupted ({exc.reason})")
+        _finalize_ingest_cutoff(summary, exc.reason)
+        try:
+            write_json(
+                output_dir / "ingest_improvement_summary.json",
+                {
+                    "run_at": datetime.now(UTC).isoformat(),
+                    **summary.to_dict(),
+                },
+                compact=True,
+            )
+        except Exception:
+            logger.exception("Failed to write partial ingest summary after interrupt")
+        return summary
+    finally:
+        _pop_ingest_sigterm_handler()
+
+
+def _execute_ingest_improvement_pass(
     *,
     reports: list[CompanyReport],
     output_dir: Path,
@@ -801,7 +1000,13 @@ def run_ingest_improvement_pass(
             )
             break
 
+        deadline_s, deadline_reason = ticker_deadline_budget(
+            started,
+            max_runtime_seconds=max_runtime_seconds,
+            per_ticker_max_seconds=per_ticker_max_seconds,
+        )
         try:
+            _arm_ticker_deadline(deadline_s, deadline_reason or "per_ticker_budget")
             report = next(
                 (row for row in reports if row.ticker == target.ticker),
                 None,
@@ -1060,10 +1265,41 @@ def run_ingest_improvement_pass(
                     "deepen": deepen,
                 }
             )
+        except TickerBudgetExceeded as exc:
+            if exc.reason == "per_ticker_budget":
+                # Count the ticker done so the same chain does not start it again.
+                # Bodies written before the alarm stay on disk.
+                _record_ticker_budget_hit(summary, target, exc.reason)
+            else:
+                # Slot exhausted mid-ticker: leave it off results so the backlog
+                # prepends it for the next chain.
+                summary.errors.append(f"{target.ticker}: ticker deadline ({exc.reason})")
+                logger.warning(
+                    "Ingest ticker %s aborted (%s); keeping bodies already written",
+                    target.ticker,
+                    exc.reason,
+                )
+                _finalize_ingest_cutoff(summary, exc.reason)
+                logger.warning(
+                    "Ingest improvement stopped (%s) inside %s",
+                    exc.reason,
+                    target.ticker,
+                )
+                break
+        except IngestPassInterrupted as exc:
+            _finalize_ingest_cutoff(summary, exc.reason)
+            logger.warning(
+                "Ingest improvement interrupted (%s) during %s; flushing partial summary",
+                exc.reason,
+                target.ticker,
+            )
+            break
         except Exception as exc:  # noqa: BLE001
             message = f"{target.ticker}: {exc}"
             logger.exception("Ingest improvement pass failed for %s", target.ticker)
             summary.errors.append(message)
+        finally:
+            _disarm_ticker_deadline()
 
     summary.runtime_seconds = time.monotonic() - started
     if not summary.runtime_cutoff:
