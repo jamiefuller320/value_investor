@@ -1746,7 +1746,9 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     clearance_p.add_argument("--latest-path", type=Path, default=DEFAULT_LATEST_PATH)
-    clearance_p.add_argument("--log-path", type=Path, default=Path("docs/data/post_run_clearance.json"))
+    clearance_p.add_argument(
+        "--log-path", type=Path, default=Path("docs/data/post_run_clearance.json")
+    )
     clearance_p.add_argument(
         "--trigger",
         default="post_run_review_email",

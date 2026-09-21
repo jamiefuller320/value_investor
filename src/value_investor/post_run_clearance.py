@@ -47,7 +47,7 @@ def post_run_review_fingerprint(review: PostRunReview | dict[str, Any]) -> str:
     else:
         plan = str(review.get("improvement_plan") or "").strip()
         weaknesses = str(review.get("persistent_weaknesses") or "").strip()[:4000]
-    blob = f"{plan}\n---\n{weaknesses}".encode("utf-8")
+    blob = f"{plan}\n---\n{weaknesses}".encode()
     return hashlib.sha256(blob).hexdigest()[:20]
 
 
@@ -293,8 +293,7 @@ def run_post_run_clearance_cycle(
 
     dispatch = evaluate_engineering_dispatch(tasks_path=tasks_path)
     result["should_dispatch_engineering"] = bool(
-        dispatch.should_dispatch
-        and (status_after.open_count > 0 or tasks_added > 0)
+        dispatch.should_dispatch and (status_after.open_count > 0 or tasks_added > 0)
     )
     result["dispatch_reason"] = dispatch.reason
 

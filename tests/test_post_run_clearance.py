@@ -112,8 +112,7 @@ def test_clearance_dry_run_records_lane_c_when_plan_unlinked(tmp_path: Path):
         },
     )
     (output_dir / "post_run_review.md").write_text(
-        "PRIORITISED IMPROVEMENT PLAN\n"
-        "1. [scoring] Brand new plan line with no queue match\n",
+        "PRIORITISED IMPROVEMENT PLAN\n1. [scoring] Brand new plan line with no queue match\n",
         encoding="utf-8",
     )
     log_path = data_dir / "post_run_clearance.json"
