@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-20T17:47:51.695585+00:00",
-  "overall": "active",
-  "headline": "Agent lane active.",
+  "generated_at": "2026-09-21T07:46:51.930327+00:00",
+  "overall": "idle",
+  "headline": "Queue and hunter idle.",
   "merge_lane": {
     "state": "idle",
     "idle": true,
@@ -14,182 +14,50 @@
     "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
   },
   "agent_lane": {
-    "state": "running",
-    "idle": false,
-    "running": true,
+    "state": "idle",
+    "idle": true,
+    "running": false,
     "blocked": false,
-    "should_dispatch": true,
+    "should_dispatch": false,
     "pause_active": false,
     "traffic_pause_active": false,
-    "attention_parked_count": 0,
-    "open_count": 1,
+    "attention_parked_count": 1,
+    "open_count": 0,
     "pr_open_count": 0,
-    "dispatch_eligible_count": 1,
+    "dispatch_eligible_count": 0,
     "blocked_task_count": 0,
-    "next_task_id": "eng-20260920-13",
-    "reason": "queue ready — dispatch next open task",
-    "detail": "queue ready — dispatch next open task"
+    "next_task_id": null,
+    "reason": "no open engineering tasks in queue",
+    "detail": "No open engineering tasks — queue is idle."
   },
   "queue_clearing": {
     "pause_active": false,
-    "attention_parked_count": 0,
-    "evaluated_at": "2026-09-20T17:47:50.989877+00:00"
+    "attention_parked_count": 1,
+    "evaluated_at": "2026-09-21T07:46:51.658344+00:00"
   },
   "traffic_control": {
     "pause_active": false,
     "stuck_pr_count": 0,
     "pause_reasons": [],
-    "evaluated_at": "2026-09-20T07:46:51.927644+00:00"
+    "evaluated_at": "2026-09-21T07:46:51.677723+00:00"
   },
   "ops_monitor": {
-    "run_at": "2026-09-20T07:46:35.090327+00:00",
+    "run_at": "2026-09-21T07:46:34.299071+00:00",
     "overall": "warn",
-    "should_dispatch_engineering": true
+    "should_dispatch_engineering": false
   },
   "merges_today": [
     {
-      "task_id": "eng-20260920-15",
-      "title": "dividend: Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade w",
-      "area": "scoring",
-      "pr_number": 764,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/764",
-      "merged_at": "2026-09-20T17:47:47.777176+00:00",
-      "merge_class": "ci_fix",
-      "auto_merge": true,
-      "independently_verified": true
-    },
-    {
-      "task_id": "eng-20260920-08",
-      "title": "Populate Yahoo **quarterly cash flow** for LSE names where TTM FCF is flagged unverified (`yahoo_quarterly_cashflow: false` in gap map) to reduce filing vs scre",
-      "area": "coverage",
-      "pr_number": 761,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/761",
-      "merged_at": "2026-09-20T17:19:39.655441+00:00",
-      "merge_class": "ci_fix",
-      "auto_merge": true,
-      "independently_verified": true
-    },
-    {
-      "task_id": "eng-20260920-14",
-      "title": "fcf: Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-generated-from-operations−capex) and auto-apply conviction downgrade when t",
-      "area": "scoring",
-      "pr_number": 763,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/763",
-      "merged_at": "2026-09-20T17:09:33.985659+00:00",
-      "merge_class": "compile_cap_drain",
-      "auto_merge": true,
-      "independently_verified": true
-    },
-    {
-      "task_id": "eng-20260920-10",
-      "title": "`output/research/ITV.L/research.md` is updated with these sections.",
-      "area": "prompt",
-      "pr_number": 760,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/760",
-      "merged_at": "2026-09-20T16:01:32.875405+00:00",
-      "merge_class": "compile_cap_drain",
-      "auto_merge": true,
-      "independently_verified": true
-    },
-    {
-      "task_id": "eng-20260920-09",
-      "title": "On CH refetch success, tag body `parse_quality: ocr|ixbrl` in gap_fill_source_map so memos do not treat OCR strategic pages as full accounts coverage.",
-      "area": "ops",
-      "pr_number": 759,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/759",
-      "merged_at": "2026-09-20T15:35:37.854628+00:00",
-      "merge_class": "compile_cap_drain",
-      "auto_merge": false,
-      "independently_verified": true
-    },
-    {
-      "task_id": "eng-20260920-07",
-      "title": "Suppress or mark unverified screen TTM FCF when `yahoo_quarterly_cashflow` is empty for the ticker.",
-      "area": "coverage",
-      "pr_number": 755,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/755",
-      "merged_at": "2026-09-20T11:09:25.330637+00:00",
-      "merge_class": "compile_cap_drain",
-      "auto_merge": true,
-      "independently_verified": true
-    },
-    {
-      "task_id": "eng-20260920-06",
-      "title": "Improve Companies House PDF OCR for group accounts or prefer iXBRL/tag extraction over raw OCR for numeric cash-flow lines.",
+      "task_id": "eng-20260921-01",
+      "title": "Close stubborn ingest gaps for GFTU.L (chain 1/3: 0/234 bodies, run igc-20260921-01)",
       "area": "ingest",
-      "pr_number": 754,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/754",
-      "merged_at": "2026-09-20T10:30:36.809154+00:00",
-      "merge_class": "compile_cap_drain",
-      "auto_merge": true,
-      "independently_verified": true
-    },
-    {
-      "task_id": "eng-20260920-04",
-      "title": "Add CMA/Ofcom merger document ingest keyed to ticker for media deals (Sky RNS references CMA/PIIN but local corpus has no case file).",
-      "area": "coverage",
-      "pr_number": 753,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/753",
-      "merged_at": "2026-09-20T10:05:57.546924+00:00",
-      "merge_class": "compile_cap_drain",
-      "auto_merge": true,
-      "independently_verified": true
-    },
-    {
-      "task_id": "eng-20260920-05",
-      "title": "Also written to `output/research/MGNS.L/research.md`.",
-      "area": "prompt",
-      "pr_number": 752,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/752",
-      "merged_at": "2026-09-20T09:59:31.588410+00:00",
-      "merge_class": "compile_cap_drain",
-      "auto_merge": true,
-      "independently_verified": true
-    },
-    {
-      "task_id": "eng-20260920-03",
-      "title": "Updated in `output/research/MEGP.L/research.md`.",
-      "area": "prompt",
-      "pr_number": 751,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/751",
-      "merged_at": "2026-09-20T09:29:33.194484+00:00",
-      "merge_class": "compile_cap_drain",
-      "auto_merge": true,
-      "independently_verified": true
-    },
-    {
-      "task_id": "eng-20260919-15",
-      "title": "fcf: Map email **watchlist** to overlay **caution** when `interim_dividend_cut_flagged` and `fcf_dividend_coverage_net` < 1.0 simultaneously, even if raw signal",
-      "area": "scoring",
-      "pr_number": 750,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/750",
-      "merged_at": "2026-09-20T09:06:23.814279+00:00",
-      "merge_class": "compile_cap_drain",
-      "auto_merge": true,
-      "independently_verified": true
-    },
-    {
-      "task_id": "eng-20260920-02",
-      "title": "Auto-compare latest CH/RNS adjusted EPS YoY to `adjusted_eps_growth_pct` and flag divergence (ITV remains +23% screen vs −11% filing).",
-      "area": "scoring",
-      "pr_number": 748,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/748",
-      "merged_at": "2026-09-20T08:42:52.049809+00:00",
-      "merge_class": "compile_cap_drain",
+      "pr_number": 773,
+      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/773",
+      "merged_at": "2026-09-21T04:16:22.632040+00:00",
+      "merge_class": "human",
       "auto_merge": false,
-      "independently_verified": true
-    },
-    {
-      "task_id": "eng-20260920-01",
-      "title": "dividend: Map email **watchlist** to overlay **caution** when `interim_dividend_cut_flagged` and `fcf_dividend_coverage_net` < 1.0 simultaneously, even if raw s",
-      "area": "scoring",
-      "pr_number": 747,
-      "pr_url": "https://github.com/jamiefuller320/value_investor/pull/747",
-      "merged_at": "2026-09-20T08:18:38.099264+00:00",
-      "merge_class": "compile_cap_drain",
-      "auto_merge": true,
-      "independently_verified": true
+      "independently_verified": false
     }
   ],
-  "verified_merges_today_count": 13
+  "verified_merges_today_count": 0
 }
