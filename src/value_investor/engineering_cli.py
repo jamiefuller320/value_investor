@@ -1776,6 +1776,7 @@ def main(argv: list[str] | None = None) -> int:
         default="post_run_review_email",
         help="Dedupe key with review fingerprint (e.g. post_run_review_email, analysis_review_follow_up)",
     )
+    clearance_p.add_argument("--max-tasks", type=int, default=DEFAULT_MAX_COMPILE_TASKS)
     clearance_p.add_argument(
         "--apply",
         action="store_true",
