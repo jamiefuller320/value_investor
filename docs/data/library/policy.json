@@ -353,8 +353,8 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 726.1,
-    "estimated_spend_usd_this_week": 39.2,
+    "estimated_spend_usd_this_cycle": 724.9,
+    "estimated_spend_usd_this_week": 38.0,
     "week_id": "2026-W39",
     "cycle_id": "2026-09-d8",
     "weekly_ops_cap_usd": 84.5,
@@ -526,7 +526,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-09-21T21:09:37.548003+00:00",
+  "updated_at": "2026-09-21T21:07:58.546390+00:00",
   "ingest_parity_markets": [
     "asx200",
     "euro_depth"
@@ -535,7 +535,7 @@
     "dax"
   ],
   "ingest_parallel_sprint_2": [
-    "cac40"
+    "asx200"
   ],
   "ladder": {
     "enabled": true,
@@ -784,7 +784,8 @@
       "ftse_smallcap",
       "tsx60",
       "euro_stoxx50",
-      "nasdaq100"
+      "nasdaq100",
+      "cac40"
     ],
     "epoch0_shard_after_screen": true,
     "equal_support_after_screen": true,
@@ -1075,11 +1076,22 @@
           "cac40"
         ],
         "ingest_parity_recorded": false
+      },
+      {
+        "at": "2026-09-21T21:07:58.546379+00:00",
+        "parallel_stream": 2,
+        "from_market": "cac40",
+        "to_market": "asx200",
+        "stream_markets_after": [
+          "asx200"
+        ],
+        "ingest_parity_recorded": false
       }
     ]
   },
   "ingest_exhausted_markets": [
     "asx200",
+    "cac40",
     "euro_depth",
     "euro_stoxx50",
     "ftse_smallcap",
