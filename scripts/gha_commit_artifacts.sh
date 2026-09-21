@@ -9,7 +9,8 @@
 #
 # Owned pathspecs always overlay. Optional pathspecs overlay only when
 # origin/<ref> has not changed that exact file since START_SHA (ops-monitor
-# queue/health guard).
+# queue/health guard). Excluded pathspecs are never restored from a broad
+# owned dir (email-report must not clobber fresher ops_status.json).
 #
 # Usage:
 #   GHA_COMMIT_OWNED='docs/data/foo.json docs/data/bar' \
@@ -19,6 +20,7 @@
 # Env:
 #   GHA_COMMIT_OWNED       required — space/newline separated files, dirs, or globs
 #   GHA_COMMIT_OPTIONAL    optional exact file paths (conditional overlay)
+#   GHA_COMMIT_EXCLUDE     exact file paths skipped even when under an owned dir
 #   COMMIT_MESSAGE         commit message (required for a real commit)
 #   GHA_COMMIT_REF         default main
 #   GHA_COMMIT_REMOTE      default origin
@@ -54,6 +56,10 @@ mapfile -t OWNED_SPECS < <(read_pathspec_list "$GHA_COMMIT_OWNED")
 OPTIONAL_SPECS=()
 if [ -n "${GHA_COMMIT_OPTIONAL:-}" ]; then
   mapfile -t OPTIONAL_SPECS < <(read_pathspec_list "$GHA_COMMIT_OPTIONAL")
+fi
+EXCLUDE_SPECS=()
+if [ -n "${GHA_COMMIT_EXCLUDE:-}" ]; then
+  mapfile -t EXCLUDE_SPECS < <(read_pathspec_list "$GHA_COMMIT_EXCLUDE")
 fi
 
 START_SHA="$(git rev-parse HEAD)"
@@ -144,10 +150,25 @@ is_optional_path() {
   return 1
 }
 
+is_excluded_path() {
+  local path="$1"
+  local opt
+  for opt in "${EXCLUDE_SPECS[@]+"${EXCLUDE_SPECS[@]}"}"; do
+    if [ "$path" = "$opt" ]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
 for spec in "${OWNED_SPECS[@]}"; do
   while IFS= read -r path; do
     [ -n "$path" ] || continue
     if is_optional_path "$path"; then
+      continue
+    fi
+    if is_excluded_path "$path"; then
+      echo "Excluding $path from ${LABEL} owned overlay" >&2
       continue
     fi
     save_file "$path" "$OWNED_MANIFEST"

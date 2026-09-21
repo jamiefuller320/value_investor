@@ -84,6 +84,7 @@ def _run_script(
     owned: str,
     message: str = "chore: test artifacts [skip ci]",
     attempts: str = "5",
+    exclude: str | None = None,
 ) -> subprocess.CompletedProcess[str]:
     env = {
         **os.environ,
@@ -95,6 +96,8 @@ def _run_script(
         "GIT_AUTHOR_NAME": "test",
         "GIT_AUTHOR_EMAIL": "test@example.com",
     }
+    if exclude is not None:
+        env["GHA_COMMIT_EXCLUDE"] = exclude
     return subprocess.run(
         ["bash", "scripts/gha_commit_artifacts.sh"],
         cwd=work,
@@ -180,16 +183,64 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     assert "git pull --rebase --autostash" not in library
     assert "git pull --rebase --autostash" not in epoch0
     assert "changes_detected" in email
+    assert "GHA_COMMIT_EXCLUDE" in email
+    assert "docs/data/ops_status.json" in email
+    assert "docs/data/ops_monitor_log.json" in email
     assert "docs/data/paper_automation/markets/**/buy_tier_level/**" in epoch0
     assert "docs/data/library/equal_support_status.json" in epoch0
+
+
+def test_artifact_commit_exclude_skips_stale_ops_status(tmp_path: Path):
+    """Email docs/data owned overlay must not rewind fresher ops_status (L431)."""
+    remote, work = _seed_repo(tmp_path)
+    _write(work / "docs" / "data" / "ops_status.json", '{"run_at":"stale"}\n')
+    _write(work / "docs" / "data" / "ops_monitor_log.json", '{"entries":[]}\n')
+    _write(work / "docs" / "data" / "latest.json", '{"n":1}\n')
+    _git(work, "add", "docs/data")
+    _git(work, "commit", "-m", "seed ops")
+    _git(work, "push", "origin", "main")
+
+    other = tmp_path / "other"
+    _git(tmp_path, "clone", str(remote), str(other))
+    _git(other, "config", "user.email", "other@example.com")
+    _git(other, "config", "user.name", "other")
+    _write(other / "docs" / "data" / "ops_status.json", '{"run_at":"fresh"}\n')
+    _write(other / "docs" / "data" / "ops_monitor_log.json", '{"entries":[1]}\n')
+    _git(other, "add", "docs/data/ops_status.json", "docs/data/ops_monitor_log.json")
+    _git(other, "commit", "-m", "ops monitor")
+    _git(other, "push", "origin", "main")
+
+    # Email job still has stale checkout copies under docs/data.
+    _write(work / "docs" / "data" / "latest.json", '{"n":2}\n')
+    _write(work / "docs" / "data" / "ops_status.json", '{"run_at":"stale"}\n')
+    _write(work / "docs" / "data" / "ops_monitor_log.json", '{"entries":[]}\n')
+
+    result = _run_script(
+        work,
+        owned="docs/data",
+        exclude="docs/data/ops_status.json docs/data/ops_monitor_log.json",
+    )
+    assert result.returncode == 0, result.stderr
+    assert "Excluding docs/data/ops_status.json" in result.stderr
+    assert "Excluding docs/data/ops_monitor_log.json" in result.stderr
+
+    latest = tmp_path / "latest"
+    _git(tmp_path, "clone", str(remote), str(latest))
+    assert json.loads((latest / "docs" / "data" / "latest.json").read_text(encoding="utf-8")) == {
+        "n": 2
+    }
+    assert json.loads(
+        (latest / "docs" / "data" / "ops_status.json").read_text(encoding="utf-8")
+    ) == {"run_at": "fresh"}
+    assert json.loads(
+        (latest / "docs" / "data" / "ops_monitor_log.json").read_text(encoding="utf-8")
+    ) == {"entries": [1]}
 
 
 def test_email_report_skips_full_ingest_deepen() -> None:
     """Sunday quiet bundle relies on Saturday pre-Sunday ingest-loop deepen."""
     email = EMAIL_WORKFLOW.read_text(encoding="utf-8")
-    args_lines = [
-        line for line in email.splitlines() if line.lstrip().startswith('ARGS="$ARGS')
-    ]
+    args_lines = [line for line in email.splitlines() if line.lstrip().startswith('ARGS="$ARGS')]
     assert args_lines, "expected ftse-email ARGS assignment"
     joined = "\n".join(args_lines)
     assert "--ingest-improvement-pass" not in joined
