@@ -2125,17 +2125,26 @@ def run_ops_monitor(
                         finding.fixed = True
                         finding.action_taken = detail
         if traffic_report.pause_active:
+            stuck_n = len(traffic_report.stuck_prs)
+            reasons = traffic_report.pause_reasons or (["stuck_prs"] if stuck_n else ["traffic_hold"])
+            if stuck_n:
+                summary = (
+                    f"{stuck_n} stuck PR(s); reasons={reasons}. "
+                    "New engineering-agent dispatch is held until CI/conflicts "
+                    "clear (or automation-waste hold is lifted)."
+                )
+            else:
+                summary = (
+                    f"Dispatch pause still active (reasons={reasons}) but no stuck "
+                    "monitored PRs on this run — project-traffic should resume on "
+                    "the next controller pass unless automation-waste hold applies."
+                )
             findings.append(
                 OpsFinding(
                     severity="warn",
                     category="engineering",
                     title="Project traffic pause active",
-                    summary=(
-                        f"{len(traffic_report.stuck_prs)} stuck PR(s); "
-                        f"reasons={traffic_report.pause_reasons or ['stuck_prs']}. "
-                        "New engineering-agent dispatch is held until CI/conflicts "
-                        "clear (or automation-waste hold is lifted)."
-                    ),
+                    summary=summary,
                     auto_fixable=False,
                 )
             )

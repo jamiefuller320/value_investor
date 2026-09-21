@@ -114,7 +114,7 @@ Each occasion stores: timestamp, PR, branch, kind (`ci_check` / `merge_conflict`
 | `enabled` | true | Master switch |
 | `stuck_pr_threshold` | 2 | Pause when ≥ N stuck monitored PRs |
 | `min_fail_age_minutes` | 20 | Ignore freshly failed checks (autofix race) |
-| `resume_idle_minutes` | 15 | After clear, wait before resume |
+| `resume_idle_minutes` | 15 | Reserved for queue-clearing idle; traffic pause resumes as soon as stuck monitored PRs clear |
 | `max_fix_requests_per_pr` | 2 | Cap comments per PR (SHA-aware) |
 | `comment_cooldown_hours` | 6 | Min gap between comments on same head |
 | `digest_enabled` | true | Write EOD digest |

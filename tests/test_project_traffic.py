@@ -160,9 +160,10 @@ def test_evaluate_traffic_pause_and_resume(tmp_path: Path, monkeypatch):
     assert state["pause_active"] is True
     assert is_traffic_pause_active(tasks_path=tasks_path)
 
-    later = now + timedelta(minutes=20)
+    later = now + timedelta(minutes=1)
     resumed = evaluate_traffic_pause(stuck_prs=[], tasks_path=tasks_path, apply=True, now=later)
     assert resumed["pause_active"] is False
+    assert resumed.get("resume_pending") is not True
 
 
 def test_dispatch_blocked_by_traffic_pause(tmp_path: Path):
