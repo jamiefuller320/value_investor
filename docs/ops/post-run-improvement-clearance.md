@@ -361,6 +361,7 @@ Prefer **evidence** over shorter markdown:
 | High-priority suggestion **growth** week-on-week | post-run payload rollups |
 | Open engineering tasks aligned to P1 | `engineering_tasks.json` |
 | Persistent weaknesses **themes** stable or shrinking after Lane C | Analysis tab |
+| **Learning data completeness** score ↑ (wiring, bodies, gap penalty) | `latest.json` → `learning_data_completeness` |
 
 **Not sufficient alone:** Merged PR count without live-path verification; memo file
 existence without body quality (`system_gaps` distrust counters).
