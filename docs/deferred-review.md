@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-21T15:00:36+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-21T23:10:10+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -493,6 +493,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L429 | **Compile-cap drain: reject CH filing titles mapped to ops/workflow allowlists** | eng-20260920-11/12 were drain tasks whose titles were CH refetch/OCR quality but allowed_paths pointed at ops_monitor/engineering/*.py and .github/workflows, causing preflight_clash and workflow_permission parks. Upstream topic→path mapping should refuse or re-narrow when the allowlist cannot implement the title. | Next compile_cap_drain batch parks on preflight_clash/workflow_permission with title/allowlist mismatch, or when tightening narrow-scope topic maps |
 | L430 | **Sunday email-report hits 6h GHA timeout mid OCR/PDF ingest** | 2026-09-20 email-report #35514032032 (and morning recovery #35495407776) cancelled at ~6h still inside Screen/build ftse-email; logs show ongoing PDF startxref/Object Streams parsing near timeout. Send/commit/deploy skipped. Consider raising timeout-minutes, capping OCR work, or splitting ingest from report send. | Next Sunday email-report timeout or next ops pass on quiet-bundle runtime |
 | L431 | **Dedupe engineering queue-block emails on alert kind** | Parallel-cap mail uses the full gate reason as the 12h fingerprint, so '2 agents running' and '1 pr_open + 1 agent' both send the same day. merged_reconcile has no cooldown and uses the blocked subject even when the queue healed itself. | Another burst of FTSE Engineering queue blocked mail that is parallel cap or merged reconcile rather than a real pause |
+| L432 | **Path guard always-allow docs/data/pr_fix_occasions.json** | Recording PR fix occasions on eng-* branches fails engineering-path-guard because pr_fix_occasions.json is outside task allowed_paths. Consider adding it to PATH_GUARD_ALWAYS_ALLOWED or writing occasions from a non-eng branch. | Next eng PR CI fails solely because a CI fix occasion was committed on the eng branch |
 
 ---
 
