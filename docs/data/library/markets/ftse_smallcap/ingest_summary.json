@@ -1,15 +1,89 @@
 {
-  "run_at": "2026-09-21T07:39:29.614124+00:00",
+  "run_at": "2026-09-21T07:36:20.497553+00:00",
   "market_id": "ftse_smallcap",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "CARD.L"
+  ],
+  "target_details": [
+    {
+      "ticker": "CARD.L",
+      "priority_score": 16.9979,
+      "filings_total": 55,
+      "filings_with_body": 54,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "CARD.L",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 55,
+        "filings_with_body": 54,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 57,
+        "filings_with_body": 57,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "uk_rns",
+      "filings_summary": {
+        "total": 57,
+        "annual": 1,
+        "interim": 1,
+        "trading_update": 1,
+        "other": 54,
+        "with_body": 57,
+        "period_coverage": {
+          "annual": {
+            "total": 1,
+            "with_body": 1
+          },
+          "interim": {
+            "total": 1,
+            "with_body": 1
+          },
+          "trading_update": {
+            "total": 1,
+            "with_body": 1
+          },
+          "other": {
+            "total": 54,
+            "with_body": 54
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 57,
+        "with_body_after": 57,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "CARD.L"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-21T07:39:22.582540+00:00",
+    "snapshot_at": "2026-09-21T07:33:45.954897+00:00",
     "market_id": "ftse_smallcap",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
@@ -57,15 +131,15 @@
     "ingest_exhausted": true
   },
   "health_after": {
-    "snapshot_at": "2026-09-21T07:39:24.916209+00:00",
+    "snapshot_at": "2026-09-21T07:36:15.654047+00:00",
     "market_id": "ftse_smallcap",
     "buy_tier_count": 8,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 40,
+    "indexed_without_body": 41,
     "bodies_min": 48,
-    "bodies_median": 53.0,
+    "bodies_median": 53.5,
     "bodies_max": 81,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
@@ -81,7 +155,7 @@
       "BOOT.L"
     ],
     "indexed_without_body_by_ticker": {
-      "ULTP.L": 5,
+      "ULTP.L": 6,
       "TPT.L": 8,
       "DFS.L": 6,
       "APTD.L": 5,
@@ -93,33 +167,54 @@
       "BOOT.L",
       "DFS.L",
       "MER.L",
-      "TPT.L",
-      "ULTP.L"
+      "TPT.L"
     ],
-    "parked_count": 6,
+    "parked_count": 5,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "effective_indexed_without_body": 6,
+    "effective_indexed_without_body_tickers": [
+      "ULTP.L"
+    ],
+    "ingest_exhausted": false
   },
   "stalled": false,
   "micro_compiled": false,
   "micro_compile": {},
-  "recorded_gap_closure": true,
+  "recorded_gap_closure": false,
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
-  "discovery_scan": null,
-  "maintenance_mode": false,
-  "parity_handoff": null,
-  "parallel_sprint_handoff": {
-    "skipped": true,
-    "reason": "not_parallel_sprint_market",
-    "market_id": "ftse_smallcap"
+  "discovery_scan": {
+    "scanned": 8,
+    "hits": 6,
+    "new_rows_total": 1,
+    "curiosity_total": 5,
+    "errors": 0,
+    "prioritization_weights": {
+      "new_index_rows": 8.0,
+      "new_index_row_cap": 10.0,
+      "unknown_source": 4.0,
+      "unknown_host": 2.0,
+      "strong_buy": 1.0
+    },
+    "forced_by_critical_path": false,
+    "max_runtime_seconds": 900.0,
+    "prefer_tickers": [
+      "BOOT.L",
+      "MER.L",
+      "TPT.L",
+      "DFS.L",
+      "APTD.L",
+      "ULTP.L"
+    ],
+    "runtime_cutoff": false
   },
+  "maintenance_mode": true,
+  "parity_handoff": null,
+  "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "ftse_smallcap",
-    "assessed_at": "2026-09-21T07:39:23.736636+00:00",
+    "assessed_at": "2026-09-21T07:33:47.094837+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
@@ -184,33 +279,21 @@
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 0.0015387799999899698,
-  "budget_seconds": 2100.0,
-  "leftover_seconds": 2099.99846122,
+  "used_seconds": 147.43484356200003,
+  "budget_seconds": 3600.0,
+  "leftover_seconds": 3452.565156438,
   "blocker_ticker": null,
-  "per_ticker_max_seconds": null,
-  "pin_tickers": [
-    "ULTP.L"
-  ],
+  "per_ticker_max_seconds": 320.0,
+  "pin_tickers": [],
   "ingest_deviations": null,
   "exhaustion": {
     "schema_version": 1,
     "market_id": "ftse_smallcap",
-    "updated_at": "2026-09-21T07:39:24.922210+00:00",
-    "exhausted": true,
-    "complete_zero_improve_runs": 5,
+    "updated_at": "2026-09-21T07:36:15.660055+00:00",
+    "exhausted": false,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
-      {
-        "ticker": "ULTP.L",
-        "reason": "unfetchable_iwb",
-        "revisit_when": "New 10-K/10-Q (or equivalent statutory report) is indexed, or an IR allowlist body lands for the leftover rows",
-        "parked_at": "2026-09-08T17:18:58.408712+00:00",
-        "filings_total": 57,
-        "filings_with_body": 52,
-        "indexed_without_body": 5,
-        "thin": false
-      },
       {
         "ticker": "BOOT.L",
         "reason": "unfetchable_iwb",
@@ -263,7 +346,7 @@
       }
     ],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
-    "had_complete_targets": true,
+    "had_complete_targets": false,
     "leftover_tickers": [
       "APTD.L",
       "BOOT.L",
@@ -272,24 +355,15 @@
       "TPT.L",
       "ULTP.L"
     ],
-    "unparked_leftover": [],
+    "unparked_leftover": [
+      "ULTP.L"
+    ],
     "path": "docs/data/library/markets/ftse_smallcap/ingest_exhaustion.json"
   },
   "exhausted_maintenance": {
-    "recorded": true,
-    "first_time": false,
-    "market_id": "ftse_smallcap",
-    "ingest_exhausted_markets": [
-      "asx200",
-      "euro_depth",
-      "euro_stoxx50",
-      "ftse_smallcap",
-      "nasdaq100",
-      "sp500",
-      "tsx60"
-    ],
-    "learning_admitted": true,
-    "learning_admitted_changed": false
+    "skipped": true,
+    "reason": "not_exhausted",
+    "market_id": "ftse_smallcap"
   },
   "parked_hunter_compile": {
     "compiled_count": 0,
