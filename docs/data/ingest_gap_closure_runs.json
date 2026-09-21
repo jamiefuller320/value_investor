@@ -12534,8 +12534,115 @@
       },
       "trigger": "stall_slowdown",
       "engineering_task_id": "eng-20260921-06"
+    },
+    {
+      "id": "igc-20260921-05",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "ULTP.L",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "ULTP.L"
+        ],
+        "market_id": "ftse_smallcap",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260921-05",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-21T20:40:24.281003+00:00",
+      "completed_at": "2026-09-21T20:43:00.888242+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 1,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [
+          "ULTP.L"
+        ],
+        "results": [
+          {
+            "ticker": "ULTP.L",
+            "reason": "indexed_without_body",
+            "before": {
+              "filings_total": 58,
+              "filings_with_body": 52,
+              "indexed_without_body": 6
+            },
+            "after": {
+              "filings_total": 58,
+              "filings_with_body": 53,
+              "indexed_without_body": 5
+            },
+            "improved": true,
+            "regime": "uk_rns",
+            "filings_summary": {
+              "total": 58,
+              "annual": 6,
+              "interim": 2,
+              "trading_update": 4,
+              "other": 46,
+              "with_body": 53,
+              "period_coverage": {
+                "annual": {
+                  "total": 6,
+                  "with_body": 1
+                },
+                "interim": {
+                  "total": 2,
+                  "with_body": 2
+                },
+                "trading_update": {
+                  "total": 4,
+                  "with_body": 4
+                },
+                "other": {
+                  "total": 46,
+                  "with_body": 46
+                }
+              }
+            },
+            "ticker_budget_hit": false,
+            "ir_exhausted": false,
+            "ir_refetch": {
+              "attempted": 0,
+              "fetched": 0,
+              "failed": 0,
+              "with_body_before": 53,
+              "with_body_after": 53,
+              "investegate_fallbacks": 0,
+              "skipped_unfetchable": 0,
+              "deadline_hit": false,
+              "merge": {
+                "added": 0,
+                "total_allowlist": 0,
+                "note": "no allowlist urls for ticker"
+              },
+              "note": "no missing IR allowlist bodies"
+            }
+          }
+        ],
+        "per_ticker": [
+          {
+            "ticker": "ULTP.L",
+            "with_body_before": 52,
+            "with_body_after": 53,
+            "improved": true
+          }
+        ]
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-21T15:14:34.611049+00:00",
+  "updated_at": "2026-09-21T20:43:00.888252+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }
