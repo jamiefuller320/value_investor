@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-21T14:53:26+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-21T17:37:22+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -492,6 +492,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | L428 | **Ops-monitor catch-up skip after morning slot suppressions leaves ops_status stale** | When morning marks Sunday analysis-review/data-backup overdue as fixed (slot not reached) and email_deferred=false, 12:36/13:15 catch-ups skip. Committed ops_status then keeps stale workflow ages all day even after those slots succeed. | Next ops-monitor UX pass or after another Sunday where dashboard still shows stale analysis-review/data-backup after they succeeded |
 | L429 | **Compile-cap drain: reject CH filing titles mapped to ops/workflow allowlists** | eng-20260920-11/12 were drain tasks whose titles were CH refetch/OCR quality but allowed_paths pointed at ops_monitor/engineering/*.py and .github/workflows, causing preflight_clash and workflow_permission parks. Upstream topic→path mapping should refuse or re-narrow when the allowlist cannot implement the title. | Next compile_cap_drain batch parks on preflight_clash/workflow_permission with title/allowlist mismatch, or when tightening narrow-scope topic maps |
 | L430 | **Sunday email-report hits 6h GHA timeout mid OCR/PDF ingest** | 2026-09-20 email-report #35514032032 (and morning recovery #35495407776) cancelled at ~6h still inside Screen/build ftse-email; logs show ongoing PDF startxref/Object Streams parsing near timeout. Send/commit/deploy skipped. Consider raising timeout-minutes, capping OCR work, or splitting ingest from report send. | Next Sunday email-report timeout or next ops pass on quiet-bundle runtime |
+| L431 | **Email dashboard commit must not clobber fresher ops_status.json** | Monday 2026-09-21 email report commit a51a0ecd5 rewrote docs/data/ops_status.json to the prior-day snapshot after ops-monitor 4824d467a had already written a fresher run. Same-day ops-monitor catch-up then skips, so dashboard stays wrongly stale (email/analysis/backup overdue). | Next email-report or ops-monitor sync complaint, or when tightening GHA_COMMIT_OWNED / merge strategy for docs/data overlapping artifacts |
 
 ---
 
