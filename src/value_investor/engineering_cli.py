@@ -101,6 +101,7 @@ from value_investor.hunter_verify_agent import (
 )
 from value_investor.idle_compile_backstop import run_idle_compile_backstop
 from value_investor.ops_monitor import DEFAULT_LATEST_PATH
+from value_investor.post_run_clearance import run_post_run_clearance_cycle
 from value_investor.storage import read_json
 
 
@@ -143,6 +144,37 @@ def _cmd_ensure_post_run_artifact(args: argparse.Namespace) -> int:
     else:
         print(path or "No post-run plan available to synthesize.")
     return 0 if path else 1
+
+
+def _cmd_run_post_run_clearance(args: argparse.Namespace) -> int:
+    tasks_path = _resolve_tasks_path(args.tasks_path)
+    payload = run_post_run_clearance_cycle(
+        apply=bool(args.apply),
+        force=bool(args.force),
+        trigger=str(args.trigger),
+        output_dir=args.output_dir,
+        latest_path=args.latest_path,
+        tasks_path=tasks_path,
+        suggestions_path=args.suggestions_path,
+        log_path=args.log_path,
+        max_tasks=args.max_tasks,
+        skip_idle_backstop=bool(args.skip_idle_backstop),
+    )
+    if args.json:
+        _print_json(payload)
+    else:
+        if payload.get("skipped"):
+            print(f"Post-run clearance skipped: {payload.get('skip_reason')}")
+        else:
+            applied = "applied" if payload.get("applied") else "dry-run"
+            print(f"Post-run clearance ({applied}) trigger={payload.get('trigger')}")
+            for action in payload.get("actions") or []:
+                print(f"  - {action.get('kind')}: {action}")
+            if payload.get("should_dispatch_engineering"):
+                print("  → dispatch engineering-queue recommended")
+            if payload.get("lane_c_recommended"):
+                print("  → Lane C (email_only) recommended after queue drains")
+    return 0
 
 
 def _cmd_try_idle_compile_backstop(args: argparse.Namespace) -> int:
@@ -1726,6 +1758,40 @@ def main(argv: list[str] | None = None) -> int:
         help="Run compile when guards pass (default: evaluate only)",
     )
     idle_bs.set_defaults(func=_cmd_try_idle_compile_backstop)
+
+    clearance_p = sub.add_parser(
+        "run-post-run-clearance",
+        parents=[common],
+        help=(
+            "After a new post-run improvement review: so-what auto-queue, "
+            "compile-cap drain, optional idle backstop, dispatch signal"
+        ),
+    )
+    clearance_p.add_argument("--latest-path", type=Path, default=DEFAULT_LATEST_PATH)
+    clearance_p.add_argument(
+        "--log-path", type=Path, default=Path("docs/data/post_run_clearance.json")
+    )
+    clearance_p.add_argument(
+        "--trigger",
+        default="post_run_review_email",
+        help="Dedupe key with review fingerprint (e.g. post_run_review_email, analysis_review_follow_up)",
+    )
+    clearance_p.add_argument(
+        "--apply",
+        action="store_true",
+        help="Apply lane B bootstrap actions (default: evaluate only)",
+    )
+    clearance_p.add_argument(
+        "--force",
+        action="store_true",
+        help="Re-run even if this fingerprint+trigger already ran",
+    )
+    clearance_p.add_argument(
+        "--skip-idle-backstop",
+        action="store_true",
+        help="Skip idle compile backstop (use right after Sunday post-run compile)",
+    )
+    clearance_p.set_defaults(func=_cmd_run_post_run_clearance)
 
     cap_drain = sub.add_parser(
         "try-compile-cap-drain",

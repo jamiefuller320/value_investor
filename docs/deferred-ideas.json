@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-20T20:23:45+00:00",
+  "updated_at": "2026-09-21T11:42:01+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9611,6 +9611,24 @@
       "status": "open",
       "source": "ops watch conversation 2026-09-20",
       "added_at": "2026-09-20T20:23:45+00:00"
+    },
+    {
+      "id": "N138",
+      "category": "not_now",
+      "section": "ingest",
+      "title": "Focus-market ingest for off-buy-tier zero-filing memos",
+      "summary": "Names like AGS.BR: memo on disk (often initial/zero-body) but no longer buy-tier and filings_total=0. Sprint ingest targets buy-tier gaps only; rememo stays off until bodies land. IR may be bot-blocked (Cloudflare). Not the same as NBA-style zero-body catch-up on current buy-tier.",
+      "revisit_when": "euro_depth buy-tier filing sprint is ingest_exhausted with zero_body=0 and operators still want focus-book memo filing parity for hold-tier names with accumulate verdicts",
+      "tags": [
+        "euro_depth",
+        "ingest",
+        "system_gaps",
+        "rememo",
+        "priority"
+      ],
+      "status": "open",
+      "source": "cursor agent conversation \u2014 AGS.BR trace vs NBA.LS weekday rememo",
+      "added_at": "2026-09-21T11:42:01+00:00"
     }
   ],
   "fragments": [

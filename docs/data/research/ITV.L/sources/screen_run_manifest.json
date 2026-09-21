@@ -1,18 +1,18 @@
 {
   "ticker": "ITV.L",
-  "run_at": "2026-09-15T07:43:57.741887+00:00",
-  "attached_at": "2026-09-21T10:14:03.490548+00:00",
-  "history_run_path": "docs/data/history/run_20260915_074357.json.gz",
-  "history_models_path": "docs/data/history/models_20260915_074357.json.gz",
+  "run_at": "2026-09-21T07:39:55.690079+00:00",
+  "attached_at": "2026-09-21T13:54:30.579221+00:00",
+  "history_run_path": "docs/data/history/run_20260921_073955.json.gz",
+  "history_models_path": "docs/data/history/models_20260921_073955.json.gz",
   "universe_meta": {
     "company_count": 248,
     "signal_counts": {
-      "strong_buy": 17,
-      "buy": 45,
-      "hold": 144,
-      "avoid": 42
+      "strong_buy": 11,
+      "buy": 48,
+      "hold": 133,
+      "avoid": 56
     },
-    "strong_buy_count": 17,
+    "strong_buy_count": 11,
     "universe": "ftse350",
     "universe_label": "FTSE 350",
     "excluded_investment_vehicles": 102,
@@ -20,7 +20,10 @@
     "screen_trusts": true,
     "trust_count": 102,
     "trust_signal_counts": {
-      "insufficient_data": 102
+      "strong_buy": 17,
+      "buy": 27,
+      "hold": 43,
+      "avoid": 15
     },
     "broker_overlay": "trading212",
     "t212_overlay": true,
@@ -29,39 +32,46 @@
   },
   "ticker_signal": {
     "ticker": "ITV.L",
-    "signal": "strong_buy",
-    "conviction_score": 0.5143296875,
+    "signal": "buy",
+    "conviction_score": 0.09291189243749999,
     "data_quality_score": 1.0,
     "name": "ITV plc",
     "sector": "Communication Services",
-    "timing_signal": "accumulate",
-    "timing_score": 0.75,
-    "action_note": "Strong Buy — favourable entry timing | FCF basis mismatch: filing £148M | screen TTM (unverified) £211.9M | company-adj £187M | FCF definition divergence: statutory 0.79× vs management 1.53× dividend coverage",
-    "models_passed": 15.0,
-    "weighted_model_score": 0.6810136363636363,
+    "timing_signal": "neutral",
+    "timing_score": 0.5,
+    "action_note": "Buy — neutral timing | FCF basis mismatch: filing £148M | screen TTM (unverified) £211.9M | company-adj £187M | FCF definition divergence | fcf three-way mismatch: filing/company-adj/screen TTM FCF diverge >15% and profit-to-cash 65% vs 83% (−18pp YoY; conviction downgraded).",
+    "models_passed": 9.0,
+    "weighted_model_score": 0.64615,
     "research_verdict": null,
-    "adjusted_signal": "buy",
+    "adjusted_signal": "hold",
     "research_as_of": null,
     "research_confidence": null,
     "fcf_basis_overlay": true,
+    "media_cyclical_thin_fcf_overlay": true,
+    "advertising_revenue_share": 0.5595238095238095,
+    "dividend_sustainability_overlay": false,
+    "statutory_fcf_moat_leverage_overlay": true,
+    "interim_dividend_cut_flagged": false,
+    "interim_dividend_cut_pct": null,
     "interim_quality_overlay": false,
     "earnings_basis_overlay": false,
     "interim_eps_decline_pct": null,
-    "adjusted_eps_growth_pct": 0.23,
-    "signal_trend": "stable",
-    "weeks_at_signal": 17,
-    "passed_families": "cheapness,quality,dividend,garp,risk",
-    "price_vs_sma200_pct": -0.1084928502265807,
+    "adjusted_eps_growth_pct": -0.11,
+    "yahoo_normalized_income_growth_pct": -0.09388439160131673,
+    "signal_trend": "deteriorating",
+    "weeks_at_signal": 1,
+    "passed_families": "cheapness,risk",
+    "price_vs_sma200_pct": -0.11821763968660827,
     "core_order": "limit",
-    "core_limit": 69.39,
-    "core_allocation_pct": 0.65,
-    "tactical_limit": 66.59,
-    "tactical_allocation_pct": 0.35,
-    "tactical_stop_loss": 62.55,
-    "tactical_take_profit": 72.6,
-    "trade_plan_summary": "Trade plan: core 65% limit £69.39; tactical 35% limit £66.59; tactical stop £62.55, target £72.60.",
-    "atr_14": 1.5688,
-    "volume_ratio_20": 0.0081,
+    "core_limit": 68.36,
+    "core_allocation_pct": 0.6,
+    "tactical_limit": 65.6,
+    "tactical_allocation_pct": 0.4,
+    "tactical_stop_loss": 61.62,
+    "tactical_take_profit": 74.57,
+    "trade_plan_summary": "Trade plan: core 60% limit £68.36; tactical 40% limit £65.60; tactical stop £61.62, target £74.57.",
+    "atr_14": 1.5204,
+    "volume_ratio_20": 0.0264,
     "operating_cashflow": 202000000.0,
     "operating_cashflow_gross": 341000000.0,
     "fcf_dividend_coverage_gross": 1.53475935828877,
@@ -77,7 +87,14 @@
         "label": "Management cash-generated−CapEx",
         "ratio": 1.53475935828877
       }
-    }
+    },
+    "research_prompts": [
+      "Report dual FCF/dividend cover explicitly: statutory OCF−CapEx vs management cash-generated−CapEx (do not conflate the two definitions). Prefer ir_presentation_metrics.json reconciliation bridges as primary evidence. Screen baseline: statutory 0.79× vs management 1.53×."
+    ],
+    "fcf_three_way_conviction_overlay": true,
+    "profit_to_cash_current_pct": 65.0,
+    "profit_to_cash_prior_pct": 83.0,
+    "profit_to_cash_yoy_decline_pp": 18.0
   },
   "ticker_models": [
     {
@@ -90,7 +107,7 @@
       "ticker": "ITV.L",
       "model_id": "graham_enterprising",
       "passed": true,
-      "score": 1.0
+      "score": 0.8
     },
     {
       "ticker": "ITV.L",
@@ -114,13 +131,13 @@
       "ticker": "ITV.L",
       "model_id": "earnings_yield",
       "passed": true,
-      "score": 0.7139
+      "score": 0.7241
     },
     {
       "ticker": "ITV.L",
       "model_id": "fcf_yield",
-      "passed": true,
-      "score": 0.7247
+      "passed": false,
+      "score": 0.7366
     },
     {
       "ticker": "ITV.L",
@@ -131,19 +148,19 @@
     {
       "ticker": "ITV.L",
       "model_id": "lynch_peg",
-      "passed": true,
-      "score": 0.4925
+      "passed": false,
+      "score": 0.2
     },
     {
       "ticker": "ITV.L",
       "model_id": "neff_pegy",
-      "passed": true,
-      "score": 0.9841
+      "passed": false,
+      "score": 0.9839
     },
     {
       "ticker": "ITV.L",
       "model_id": "quality_value",
-      "passed": true,
+      "passed": false,
       "score": 1.0
     },
     {
@@ -161,32 +178,32 @@
     {
       "ticker": "ITV.L",
       "model_id": "high_dividend",
-      "passed": true,
+      "passed": false,
       "score": 0.9769
     },
     {
       "ticker": "ITV.L",
       "model_id": "dividend_growth",
-      "passed": true,
-      "score": 1.0
+      "passed": false,
+      "score": 0.6667
     },
     {
       "ticker": "ITV.L",
       "model_id": "magic_formula",
       "passed": true,
-      "score": 0.6799
+      "score": 0.6845
     },
     {
       "ticker": "ITV.L",
       "model_id": "acquirers_multiple",
       "passed": true,
-      "score": 0.7103
+      "score": 0.7383
     },
     {
       "ticker": "ITV.L",
       "model_id": "dreman_contrarian",
       "passed": true,
-      "score": 0.8113
+      "score": 0.8156
     },
     {
       "ticker": "ITV.L",
@@ -213,6 +230,6 @@
       "score": 1.0
     }
   ],
-  "models_passed": 15,
+  "models_passed": 9,
   "models_total": 22
 }

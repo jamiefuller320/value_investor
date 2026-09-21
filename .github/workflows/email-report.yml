@@ -69,6 +69,21 @@ jobs:
             # verdict slim). Optional: add --research-gap-fill for slim gap-fill.
           fi
           ftse-email $ARGS
+          # Post-run clearance runs inside ftse-email when --post-run-review succeeds;
+          # expose dispatch flag for the step below.
+          if [ -f docs/data/post_run_clearance.json ]; then
+            python3 <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path("docs/data/post_run_clearance.json").read_text())
+          last = data.get("last_run") or {}
+          Path("post_run_clearance_dispatch.env").write_text(
+              f"SHOULD_DISPATCH={'true' if last.get('should_dispatch_engineering') else 'false'}\n",
+              encoding="utf-8",
+          )
+          print("post_run_clearance last_run recorded for dispatch step")
+          PY
+          fi
 
       - name: Send email report
         env:
@@ -92,7 +107,26 @@ jobs:
             docs/data
             docs/research
             docs/data/engineering_tasks.json
+            docs/data/post_run_clearance.json
+            docs/data/so_what_closure.json
         run: bash scripts/gha_commit_artifacts.sh
+
+      - name: Dispatch engineering queue after post-run clearance
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -f post_run_clearance_dispatch.env ]; then
+            # shellcheck disable=SC1091
+            source post_run_clearance_dispatch.env
+          else
+            SHOULD_DISPATCH=false
+          fi
+          if [ "${SHOULD_DISPATCH}" = "true" ]; then
+            gh workflow run engineering-queue.yml
+            echo "Dispatched engineering-queue after post-run improvement clearance"
+          else
+            echo "Post-run clearance did not request engineering-queue dispatch"
+          fi
 
       # [skip ci] on the commit above skips this workflow's push trigger for Pages;
       # dispatch pages.yml explicitly so jamiefuller320.github.io picks up latest.json.
