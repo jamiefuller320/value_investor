@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-21T16:20:05.440765+00:00",
+  "generated_at": "2026-09-21T16:52:29.187636+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1168,36 +1168,23 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-21T16:20:02.416212+00:00",
-    "queue_ui_updated_at": "2026-09-21T16:20:05.318828+00:00",
+    "compiled_at": "2026-09-21T16:52:27.022016+00:00",
+    "queue_ui_updated_at": "2026-09-21T16:52:29.073061+00:00",
     "task_count": 92,
     "status": {
       "open_count": 0,
-      "pr_open_count": 1,
+      "pr_open_count": 0,
       "parked_count": 1,
-      "merged_count": 70,
+      "merged_count": 71,
       "failed_count": 0,
       "next_task_id": null,
-      "in_flight_branch": "cursor/eng-20260921-03-1de3",
-      "in_flight_pr": 782,
+      "in_flight_branch": null,
+      "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [
-      {
-        "id": "eng-20260921-03",
-        "area": "scoring",
-        "title": "FCF basis registry",
-        "priority": "high",
-        "priority_score": 98.0,
-        "status": "pr_open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": "cursor/eng-20260921-03-1de3"
-      }
-    ],
+    "queued_tasks": [],
     "attention_tasks": [
       {
         "id": "eng-20260920-16",
@@ -1493,46 +1480,40 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-21T16:20:05.440765+00:00",
-    "overall": "blocked",
-    "headline": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
+    "generated_at": "2026-09-21T16:52:29.187636+00:00",
+    "overall": "idle",
+    "headline": "Queue and hunter idle.",
     "merge_lane": {
-      "state": "running",
-      "idle": false,
-      "running": true,
+      "state": "idle",
+      "idle": true,
+      "running": false,
       "blocked": false,
-      "pr_open_count": 1,
-      "open_engineering_prs": [
-        {
-          "number": 782,
-          "branch": "cursor/eng-20260921-03-1de3",
-          "draft": false
-        }
-      ],
-      "in_flight_pr": 782,
-      "detail": "Open engineering PR(s) #782 — merge fires on CI success."
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
     },
     "agent_lane": {
-      "state": "blocked",
-      "idle": false,
+      "state": "idle",
+      "idle": true,
       "running": false,
-      "blocked": true,
+      "blocked": false,
       "should_dispatch": false,
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 1,
       "open_count": 0,
-      "pr_open_count": 1,
+      "pr_open_count": 0,
       "dispatch_eligible_count": 0,
       "blocked_task_count": 0,
       "next_task_id": null,
       "reason": "no open engineering tasks in queue",
-      "detail": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged."
+      "detail": "No open engineering tasks — queue is idle."
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 1,
-      "evaluated_at": "2026-09-21T16:20:04.236270+00:00"
+      "evaluated_at": "2026-09-21T16:52:28.054550+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1546,6 +1527,17 @@
       "should_dispatch_engineering": true
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260921-03",
+        "title": "FCF basis registry",
+        "area": "scoring",
+        "pr_number": 782,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/782",
+        "merged_at": "2026-09-21T16:52:12.618541+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
       {
         "task_id": "eng-20260921-02",
         "title": "IR results-presentation pipeline",
