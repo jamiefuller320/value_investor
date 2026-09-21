@@ -12389,8 +12389,45 @@
       },
       "trigger": "stall_slowdown",
       "engineering_task_id": "eng-20260921-06"
+    },
+    {
+      "id": "igc-20260921-03",
+      "status": "pending_review",
+      "title": "Single-ticker library ingest gap-closure pass",
+      "summary": "Highest-priority buy-tier name with outstanding library filing gaps.",
+      "ticker": "CCEP",
+      "params": {
+        "max_targets": 1,
+        "max_bodies": 40,
+        "max_runtime_seconds": 2100.0,
+        "require_outstanding_gaps": true,
+        "intensive_gap_closure": true,
+        "pin_tickers": [
+          "CCEP"
+        ],
+        "market_id": "nasdaq100",
+        "universe": "library",
+        "critical_path_blocker": "indexed_without_body"
+      },
+      "review_trigger": "horizon_scan",
+      "chain_root_id": "igc-20260921-03",
+      "chain_attempt": 1,
+      "recorded_at": "2026-09-21T13:42:51.435787+00:00",
+      "completed_at": "2026-09-21T13:43:49.825852+00:00",
+      "outcome": {
+        "delta_filings_with_body": 0,
+        "delta_indexed_without_body": 0,
+        "delta_zero_body_buy_tier": 0,
+        "targets_planned": null,
+        "targets_completed": null,
+        "runtime_cutoff": false,
+        "tickers": [],
+        "results": [],
+        "per_ticker": []
+      },
+      "trigger": "stall_slowdown"
     }
   ],
-  "updated_at": "2026-09-21T10:59:05.801440+00:00",
+  "updated_at": "2026-09-21T13:43:49.825869+00:00",
   "migrated_from": "docs/data/ingest_trials.json"
 }

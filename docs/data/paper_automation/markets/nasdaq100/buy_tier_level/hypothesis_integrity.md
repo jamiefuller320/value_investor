@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-21T01:43:16.888312+00:00
+Track: `buy_tier_level` · updated 2026-09-21T14:16:48.452052+00:00
 
 ## Portfolio loser feedback
 
@@ -71,12 +71,10 @@ Track: `buy_tier_level` · updated 2026-09-21T01:43:16.888312+00:00
 - data_quality 0.90
 - conviction 60%
 
-### PCAR — intact / hold_tolerate (-1.8%)
+### PCAR — weakening / watch_review (-1.8%)
+- research verdict neutral
 - still buy
-- research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 69%
 
 ### ADSK — intact / hold_tolerate (-1.5%)
 - still strong_buy

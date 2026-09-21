@@ -1,22 +1,166 @@
 {
-  "run_at": "2026-09-20T13:33:50.291079+00:00",
+  "run_at": "2026-09-21T14:29:55.154765+00:00",
   "market_id": "sp500",
-  "targets": [],
-  "target_details": [],
-  "results": [],
-  "improved": [],
+  "targets": [
+    "STE",
+    "HPQ"
+  ],
+  "target_details": [
+    {
+      "ticker": "STE",
+      "priority_score": 17.496199999999998,
+      "filings_total": 19,
+      "filings_with_body": 10,
+      "indexed_without_body": 9,
+      "reason": "indexed_without_body"
+    },
+    {
+      "ticker": "HPQ",
+      "priority_score": 17.040000000000003,
+      "filings_total": 22,
+      "filings_with_body": 21,
+      "indexed_without_body": 1,
+      "reason": "indexed_without_body"
+    }
+  ],
+  "results": [
+    {
+      "ticker": "STE",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 19,
+        "filings_with_body": 10,
+        "indexed_without_body": 9
+      },
+      "after": {
+        "filings_total": 19,
+        "filings_with_body": 19,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 19,
+        "annual": 2,
+        "interim": 7,
+        "trading_update": 0,
+        "other": 10,
+        "with_body": 19,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 7,
+            "with_body": 7
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 10,
+            "with_body": 10
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 19,
+        "with_body_after": 19,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "note": "no missing IR allowlist bodies"
+      }
+    },
+    {
+      "ticker": "HPQ",
+      "reason": "indexed_without_body",
+      "before": {
+        "filings_total": 22,
+        "filings_with_body": 21,
+        "indexed_without_body": 1
+      },
+      "after": {
+        "filings_total": 22,
+        "filings_with_body": 22,
+        "indexed_without_body": 0
+      },
+      "improved": true,
+      "regime": "sec_edgar",
+      "filings_summary": {
+        "total": 22,
+        "annual": 2,
+        "interim": 8,
+        "trading_update": 0,
+        "other": 12,
+        "with_body": 22,
+        "period_coverage": {
+          "annual": {
+            "total": 2,
+            "with_body": 2
+          },
+          "interim": {
+            "total": 8,
+            "with_body": 8
+          },
+          "trading_update": {
+            "total": 0,
+            "with_body": 0
+          },
+          "other": {
+            "total": 12,
+            "with_body": 12
+          }
+        }
+      },
+      "ticker_budget_hit": false,
+      "ir_exhausted": false,
+      "ir_refetch": {
+        "attempted": 0,
+        "fetched": 0,
+        "failed": 0,
+        "with_body_before": 22,
+        "with_body_after": 22,
+        "investegate_fallbacks": 0,
+        "skipped_unfetchable": 0,
+        "deadline_hit": false,
+        "merge": {
+          "added": 0,
+          "total_allowlist": 0,
+          "note": "no allowlist urls for ticker"
+        },
+        "note": "no missing IR allowlist bodies"
+      }
+    }
+  ],
+  "improved": [
+    "STE",
+    "HPQ"
+  ],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-20T13:33:18.329302+00:00",
+    "snapshot_at": "2026-09-21T14:29:13.827087+00:00",
     "market_id": "sp500",
-    "buy_tier_count": 143,
+    "buy_tier_count": 145,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
-    "indexed_without_body": 14,
-    "bodies_min": 14,
+    "indexed_without_body": 23,
+    "bodies_min": 10,
     "bodies_median": 20,
     "bodies_max": 74,
     "coverage_scope": "canonical",
@@ -31,7 +175,8 @@
       "LMT",
       "TSN",
       "BXP",
-      "FICO"
+      "FICO",
+      "STE"
     ],
     "indexed_without_body_by_ticker": {
       "LDOS": 1,
@@ -40,7 +185,8 @@
       "LMT": 1,
       "TSN": 1,
       "BXP": 2,
-      "FICO": 5
+      "FICO": 5,
+      "STE": 9
     },
     "parked_tickers": [
       "APTV",
@@ -54,14 +200,16 @@
     "parked_count": 7,
     "effective_thin_body_buy_tier": 0,
     "effective_thin_body_tickers": [],
-    "effective_indexed_without_body": 0,
-    "effective_indexed_without_body_tickers": [],
-    "ingest_exhausted": true
+    "effective_indexed_without_body": 9,
+    "effective_indexed_without_body_tickers": [
+      "STE"
+    ],
+    "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-20T13:33:45.665570+00:00",
+    "snapshot_at": "2026-09-21T14:29:49.906807+00:00",
     "market_id": "sp500",
-    "buy_tier_count": 143,
+    "buy_tier_count": 145,
     "unmeasured_buy_tier": 0,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 0,
@@ -115,7 +263,7 @@
   "gap_closure_compiled": false,
   "gap_closure_compile": {},
   "discovery_scan": {
-    "scanned": 143,
+    "scanned": 145,
     "hits": 0,
     "new_rows_total": 0,
     "curiosity_total": 0,
@@ -130,6 +278,7 @@
     "forced_by_critical_path": false,
     "max_runtime_seconds": 900.0,
     "prefer_tickers": [
+      "STE",
       "FICO",
       "APTV",
       "BXP",
@@ -149,10 +298,16 @@
   },
   "critical_path": {
     "market_id": "sp500",
-    "assessed_at": "2026-09-20T13:33:26.853062+00:00",
+    "assessed_at": "2026-09-21T14:29:22.899139+00:00",
     "unmeasured": [],
     "zero_body": [],
     "indexed_without_body": [
+      {
+        "ticker": "STE",
+        "indexed_without_body": 9,
+        "filings_total": 19,
+        "filings_with_body": 10
+      },
       {
         "ticker": "FICO",
         "indexed_without_body": 5,
@@ -201,6 +356,7 @@
     "primary_blocker": "indexed_without_body",
     "force_discovery_scan": false,
     "auto_pin_tickers": [
+      "STE",
       "FICO",
       "APTV",
       "BXP",
@@ -210,20 +366,20 @@
       "TSN"
     ],
     "recommended_actions": [
-      "Prefer indexed-without-body body refetch (7 tickers, top: FICO(5), APTV(2), BXP(2), CRH(2), LDOS(1))"
+      "Prefer indexed-without-body body refetch (8 tickers, top: STE(9), FICO(5), APTV(2), BXP(2), CRH(2))"
     ],
     "gap_counts": {
       "unmeasured": 0,
       "zero_body": 0,
-      "indexed_without_body_tickers": 7,
-      "indexed_without_body_rows": 14,
+      "indexed_without_body_tickers": 8,
+      "indexed_without_body_rows": 23,
       "thin_need_discovery": 0,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 10.316897466,
+  "used_seconds": 18.15382745800001,
   "budget_seconds": 3600.0,
-  "leftover_seconds": 3589.6831025339998,
+  "leftover_seconds": 3581.846172542,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -231,9 +387,9 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "sp500",
-    "updated_at": "2026-09-20T13:33:45.675292+00:00",
+    "updated_at": "2026-09-21T14:29:49.916812+00:00",
     "exhausted": true,
-    "complete_zero_improve_runs": 1,
+    "complete_zero_improve_runs": 0,
     "min_zero_runs": 3,
     "parked": [
       {
@@ -340,7 +496,7 @@
   "parked_hunter_compile": {
     "compiled_count": 0,
     "task_ids": [],
-    "task_count": 81,
+    "task_count": 92,
     "market_id": "nasdaq100",
     "hunter_ticker": "PDD",
     "priority_score": 12.0

@@ -3,28 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-09-21T01:43:04.259286+00:00",
+  "generated_at": "2026-09-21T14:16:45.276825+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 10,
+    "closed_total": 12,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 108,
+    "open_with_thesis": 106,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 7,
-        "recovery_rate": 0.7143,
-        "sold_underwater_rate": 0.2857,
-        "mean_peak_unrealized_pct": 0.0302,
-        "mean_trough_unrealized_pct": -0.0409,
+        "closed_count": 9,
+        "recovery_rate": 0.5556,
+        "sold_underwater_rate": 0.4444,
+        "mean_peak_unrealized_pct": 0.0167,
+        "mean_trough_unrealized_pct": -0.0481,
         "outcome_labels": {
           "recovered": 5,
-          "sold_underwater": 2
+          "sold_underwater": 4
         }
       },
       "broken": {
@@ -64,7 +64,7 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 10,
+    "hold_closed_with_thesis": 12,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
       "swap sell legs with thesis=0 (target >=5)"
@@ -3918,7 +3918,7 @@
       "ticker": "BSX",
       "name": "Boston Scientific Corporation",
       "started_at": "2026-09-10T11:37:59.908791-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -3960,9 +3960,9 @@
       "peak_unrealized_pct": -0.0575,
       "trough_unrealized_pct": -0.1008,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-09-21T10:16:44.862273-04:00",
+      "linked_sell_trade_id": "728540f9-0325-4b4f-97ce-692c37941524"
     },
     {
       "episode_id": "buy_tier_level:CMCSA:2026-09-13T02:49:51.385705-04:00",
@@ -4906,7 +4906,7 @@
       "ticker": "LULU",
       "name": "lululemon athletica inc.",
       "started_at": "2026-09-13T02:49:51.385705-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "underwater"
       ],
@@ -4948,9 +4948,9 @@
       "peak_unrealized_pct": -0.0031,
       "trough_unrealized_pct": -0.046,
       "recovered_to_breakeven": null,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_underwater",
+      "closed_at": "2026-09-21T10:16:44.862273-04:00",
+      "linked_sell_trade_id": "23dc00ae-8563-4041-8276-9d8ed8363390"
     },
     {
       "episode_id": "buy_tier_level:MAA:2026-09-13T02:49:51.385705-04:00",
@@ -6230,7 +6230,15 @@
           "cost": 0.01
         }
       ],
-      "checkpoints": [],
+      "checkpoints": [
+        {
+          "scored_at": "2026-09-21T10:16:44.862273-04:00",
+          "days_after": 7,
+          "avg_sell_return": -0.0149,
+          "avg_buy_return": -0.0346,
+          "replacement_delta": -0.0197
+        }
+      ],
       "sell_returns_since_rotation": {
         "EMR": -0.0149
       },
@@ -6635,6 +6643,93 @@
         "EFX": 0.0,
         "ADSK": 0.0,
         "OXY": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    },
+    {
+      "rotation_id": "buy_tier_level:2026-09-21T10:16:44.862273-04:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-09-21T10:16:44.862273-04:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "LULU",
+          "price": 98.06,
+          "shares": 0.082683,
+          "gross": 8.11,
+          "cost": 0.01,
+          "avg_cost_at_exit": 100.61,
+          "realized_pct": -0.0253,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "research verdict caution",
+            "cheapness family no longer passes",
+            "still strong_buy",
+            "data_quality 0.95"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "caution",
+          "unrealized_pct_at_thesis": -0.0253
+        },
+        {
+          "ticker": "BSX",
+          "price": 43.34,
+          "shares": 0.174033,
+          "gross": 7.54,
+          "cost": 0.01,
+          "avg_cost_at_exit": 47.8,
+          "realized_pct": -0.0933,
+          "thesis_status_at_start": "weakening",
+          "recommended_action_at_start": "watch_review",
+          "thesis_reasons_at_start": [
+            "cheapness family no longer passes",
+            "still buy",
+            "research accumulate"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": "accumulate",
+          "unrealized_pct_at_thesis": -0.0933
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "FANG",
+          "price": 192.42,
+          "shares": 0.041523,
+          "gross": 7.99,
+          "cost": 0.01
+        },
+        {
+          "ticker": "ALGN",
+          "price": 147.61,
+          "shares": 0.054129,
+          "gross": 7.99,
+          "cost": 0.01
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "LULU": 0.0,
+        "BSX": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "FANG": 0.0,
+        "ALGN": 0.0
       },
       "verdict": null,
       "closed_at": null

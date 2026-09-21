@@ -22,6 +22,7 @@ from value_investor.engineering_recovery import (
     summarize_parked_tasks,
     summarize_parked_tasks_needing_attention,
     task_allows_workflow_files,
+    unpark_agent_task,
 )
 from value_investor.engineering_tasks import (
     EngineeringTask,
@@ -79,6 +80,35 @@ def test_retry_failed_tasks_parks_when_retries_exhausted(tmp_path: Path):
     updated = load_engineering_tasks(tasks_path)
     assert updated["tasks"][0]["status"] == "parked"
     assert "manual review" in str(updated["tasks"][0].get("parked_reason"))
+
+
+def test_unpark_agent_task_reopens_and_clears_parked_fields(tmp_path: Path):
+    tasks_path = tmp_path / "engineering_tasks.json"
+    payload = {
+        "tasks": [
+            _task("eng-20260729-01", status="parked").to_dict()
+            | {
+                "parked_reason": "preflight blocked PR open — preflight failed",
+                "parked_policy": "preflight_clash",
+                "parked_at": datetime.now(UTC).isoformat(),
+            }
+        ]
+    }
+    tasks_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    action = unpark_agent_task(
+        "eng-20260729-01",
+        reason="clash cleared after parallel merges",
+        tasks_path=tasks_path,
+        apply=True,
+    )
+    assert action is not None
+    assert action.action == "unpark"
+    updated = load_engineering_tasks(tasks_path)
+    row = updated["tasks"][0]
+    assert row["status"] == "open"
+    assert "parked_reason" not in row
+    assert count_attention_parked_tasks(tasks_path=tasks_path) == 0
 
 
 def test_retry_failed_tasks_does_not_mirror_isolated_fixture_to_committed(

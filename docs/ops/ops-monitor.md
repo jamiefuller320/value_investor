@@ -3,6 +3,11 @@
 Daily operational health checks for cron-driven workflows, committed
 artifacts, ingest stall detection, and the engineering queue.
 
+Ops monitor is the daily driver for **Lane A/B** intensive clearance (ingest stall
+micro-compile, `so-what --apply`, engineering redispatch). Interpret post-run themes
+via [`post-run-improvement-clearance.md`](post-run-improvement-clearance.md) — do not
+treat Persistent weaknesses as N separate alert emails.
+
 **Heal → re-verify → report** (when `--apply` / default in CI):
 
 1. Detect findings (artifacts, ingest health, workflows, engineering queue, Phase B
@@ -353,7 +358,7 @@ cannot be implemented by an ops/workflow allowlist. Remaining `preflight_clash` 
 Human triage (oldest first) for remaining attention parks:
 
 1. `ftse-engineering list-parked`
-2. For each task: merge the PR, cancel stale work, or unpark/reopen when appropriate
+2. For each task: merge the PR, cancel stale work, or `ftse-engineering unpark-task --task-id … --reason …` when appropriate
 3. Tier-1 trims obvious duplicates only — do not rely on it for preflight parks
 
 **Auto-resume:** dispatch restarts when attention-parked count drops **below 7** **and**

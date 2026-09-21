@@ -1,10 +1,10 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-21T01:43:04.249803+00:00
+Track: `buy_tier_level` · updated 2026-09-21T14:16:45.261903+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **43** / 120 (36% count, 34% NAV)
+- Losers: **42** / 120 (35% count, 34% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 
@@ -81,14 +81,6 @@ Track: `buy_tier_level` · updated 2026-09-21T01:43:04.249803+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 75%
-
-### BSX — intact / hold_tolerate (-9.3%)
-- price drawdown alone does not invalidate value thesis
-- still buy
-- research accumulate
-- cheapness family still passes
-- data_quality 0.95
-- conviction 42%
 
 ### CAH — intact / hold_tolerate (-8.8%)
 - price drawdown alone does not invalidate value thesis
@@ -581,11 +573,6 @@ Track: `buy_tier_level` · updated 2026-09-21T01:43:04.249803+00:00
 - data_quality 0.95
 - conviction 44%
 
-### LULU — weakening / watch_review (-2.5%)
-- research verdict caution
-- still strong_buy
-- cheapness family still passes
-
 ### PGR — intact / hold_tolerate (-2.5%)
 - still buy
 - research accumulate
@@ -644,9 +631,10 @@ Track: `buy_tier_level` · updated 2026-09-21T01:43:04.249803+00:00
 
 ### TEL — intact / hold_tolerate (-1.6%)
 - still buy
+- research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 69%
+- conviction 74%
 
 ### DOC — intact / hold_tolerate (-1.6%)
 - still buy
@@ -798,6 +786,20 @@ Track: `buy_tier_level` · updated 2026-09-21T01:43:04.249803+00:00
 - data_quality 1.00
 - conviction 46%
 
+### FANG — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 44%
+
+### ALGN — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 0.95
+- conviction 42%
+
 ### NXPI — intact / hold_tolerate (+0.1%)
 - still strong_buy
 - research accumulate
@@ -863,9 +865,7 @@ Track: `buy_tier_level` · updated 2026-09-21T01:43:04.249803+00:00
 - data_quality 1.00
 - conviction 55%
 
-### SWKS — intact / hold_tolerate (+19.9%)
+### SWKS — weakening / watch_review (+19.9%)
+- research verdict caution
 - still buy
-- research accumulate
 - cheapness family still passes
-- data_quality 1.00
-- conviction 54%
