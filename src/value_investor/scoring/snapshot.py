@@ -125,6 +125,24 @@ def save_run_snapshot(
     return path
 
 
+def _piotroski_f_score_int(value: Any) -> int | None:
+    """Coerce a Piotroski payload to an int score.
+
+    Snapshots store ``piotroski_f_score`` as a structured dict (``score`` /
+    ``components``). Overlay enforcement needs the integer F-score only.
+    """
+    if isinstance(value, dict):
+        value = value.get("score")
+    if value is None or isinstance(value, bool):
+        return None
+    if isinstance(value, float) and pd.isna(value):
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
 def enforce_fcf_basis_in_snapshot(
     snapshot: dict[str, Any],
     *,
@@ -154,12 +172,7 @@ def enforce_fcf_basis_in_snapshot(
     updated["fcf_basis_overlay"] = overlay
     updated["conviction_score"] = conviction
 
-    piotroski = updated.get("piotroski_f_score")
-    piotroski_f_score = (
-        int(piotroski)
-        if piotroski is not None and not (isinstance(piotroski, float) and pd.isna(piotroski))
-        else None
-    )
+    piotroski_f_score = _piotroski_f_score_int(updated.get("piotroski_f_score"))
     if piotroski_f_score is None and model_results is not None and not model_results.empty:
         ticker = str(updated.get("ticker") or "")
         piotroski_f_score = piotroski_score_for_ticker(

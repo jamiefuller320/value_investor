@@ -2123,6 +2123,26 @@ def test_write_screening_snapshot_enforces_fcf_three_way_conviction_overlay(tmp_
     assert "fcf three-way mismatch" in written["action_note"].lower()
 
 
+def test_enforce_fcf_basis_accepts_structured_piotroski_dict():
+    """Export snapshots store piotroski_f_score as {score, components}, not an int."""
+    enforced = enforce_fcf_basis_in_snapshot(
+        {
+            "ticker": "GEN.L",
+            "signal": "hold",
+            "adjusted_signal": "hold",
+            "conviction_score": 0.4,
+            "piotroski_f_score": {
+                "score": 6,
+                "max_score": 9,
+                "passed": True,
+                "components": [],
+            },
+        }
+    )
+    assert enforced["ticker"] == "GEN.L"
+    assert enforced["piotroski_f_score"]["score"] == 6
+
+
 def test_enforce_fcf_basis_in_snapshot_without_research_verdict():
     """Stale snapshots with overlay=false must still honour FCF mismatch notes."""
     enforced = enforce_fcf_basis_in_snapshot(
