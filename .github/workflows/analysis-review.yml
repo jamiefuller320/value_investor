@@ -209,6 +209,36 @@ jobs:
       - name: Compile system-gap tasks
         run: ftse-analysis-review compile-system-gaps --promote --json || true
 
+      - name: Post-run improvement clearance (after system gaps)
+        run: |
+          ftse-engineering run-post-run-clearance \
+            --apply \
+            --trigger analysis_review_follow_up \
+            --json | tee /tmp/post_run_clearance.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path("/tmp/post_run_clearance.json").read_text())
+          out = Path("post_run_clearance_dispatch.env")
+          dispatch = "true" if data.get("should_dispatch_engineering") else "false"
+          out.write_text(f"SHOULD_DISPATCH={dispatch}\n", encoding="utf-8")
+          PY
+
+      - name: Dispatch engineering queue after analysis clearance
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -f post_run_clearance_dispatch.env ]; then
+            # shellcheck disable=SC1091
+            source post_run_clearance_dispatch.env
+          else
+            SHOULD_DISPATCH=false
+          fi
+          if [ "${SHOULD_DISPATCH}" = "true" ]; then
+            gh workflow run engineering-queue.yml
+            echo "Dispatched engineering-queue after analysis-review clearance"
+          fi
+
       - name: Assess Phase C readiness (observe-only)
         run: |
           set +e
@@ -226,6 +256,8 @@ jobs:
             docs/data/system_gaps.json
             docs/data/analysis_tasks.json
             docs/data/engineering_tasks.json
+            docs/data/post_run_clearance.json
+            docs/data/so_what_closure.json
             docs/data/phase_c_readiness.json
           skip_fetch: false
 

@@ -263,7 +263,8 @@ tasks are intentionally in flight.
 | Weekday | library-ingest-maintenance admitted rememo | A |
 | Daily 07:45 / 13:15 UTC | ops-monitor (`so-what --apply`, micro-compile, queue dispatch) | A/B |
 | Hourly | engineering-queue (clash-aware, max 2) | B |
-| Sunday | email → post-run → compile (cap 8) → publish | B + C source |
+| Sunday | email → post-run → compile (cap 8) → publish → **run-post-run-clearance** → dispatch eng queue | B (+ C signal) |
+| Sunday (after analysis-review) | system-gaps compile → **run-post-run-clearance** (`analysis_review_follow_up`) | B |
 | After eng merge (idle) | try-compile-cap-drain; optional email auto-chain | B + C |
 | On demand | accelerated email_only | C |
 
@@ -330,9 +331,13 @@ ftse-engineering try-idle-compile-backstop          # dry-run
 ftse-progress-report so-what --dry-run
 
 # Apply (automation usually owns these)
+ftse-engineering run-post-run-clearance --apply --trigger post_run_review_email
+ftse-engineering run-post-run-clearance --apply --trigger analysis_review_follow_up
 ftse-engineering try-compile-cap-drain --apply
 ftse-progress-report so-what --apply
 ftse-engineering try-idle-compile-backstop --apply   # when plan truly new
+
+# Log: docs/data/post_run_clearance.json (last_run.should_dispatch_engineering)
 
 # Ingest / rememo (Lane A)
 ftse-library rememo --json
@@ -394,3 +399,4 @@ Policy authors: when changing post-run behavior, update this doc and
 | Date | Change |
 |------|--------|
 | 2026-09-21 | Initial canonical policy (lanes A/B/C, batching, agent playbook) |
+| 2026-09-21 | Auto `run-post-run-clearance` after email post-run + analysis-review follow-up |

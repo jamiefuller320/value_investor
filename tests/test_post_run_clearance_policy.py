@@ -13,6 +13,7 @@ def test_post_run_improvement_clearance_policy_exists():
     assert "Lane C — Narrative refresh" in text
     assert "compile-cap drain" in text
     assert "so-what" in text
+    assert "run-post-run-clearance" in text
 
 
 def test_agents_md_references_clearance_policy():

@@ -39,6 +39,10 @@ findings,” or similar:
    [`docs/ops/accelerated-review-cycle.md`](docs/ops/accelerated-review-cycle.md)
    (`email_only`) when plan lines still match merged tasks.
 
+Automation runs **`ftse-engineering run-post-run-clearance --apply`** after each new
+post-run review (Sunday email bundle and analysis-review follow-up). See
+`docs/data/post_run_clearance.json` → `last_run`.
+
 **Do not** widen rememo for thin memos without new filing bodies (system_gaps remedy:
 ingest then body-lag rememo). Off-buy-tier zero-filing memos stay parked (**N138**)
 until the revisit trigger there.

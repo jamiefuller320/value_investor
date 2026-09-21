@@ -803,6 +803,33 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(f"Published dashboard data to {dashboard_path}")
 
+    if post_run_review is not None:
+        from value_investor.ops_monitor import DEFAULT_LATEST_PATH
+        from value_investor.post_run_clearance import (
+            TRIGGER_POST_RUN_EMAIL,
+            run_post_run_clearance_cycle,
+        )
+
+        latest_for_clearance = (
+            args.dashboard_dir / "data" / "latest.json"
+            if args.publish_dashboard
+            else DEFAULT_LATEST_PATH
+        )
+        clearance = run_post_run_clearance_cycle(
+            apply=True,
+            trigger=TRIGGER_POST_RUN_EMAIL,
+            output_dir=args.output_dir,
+            latest_path=latest_for_clearance,
+            skip_idle_backstop=bool(args.compile_engineering_tasks),
+        )
+        if clearance.get("skipped"):
+            print(f"Post-run clearance: skipped ({clearance.get('skip_reason')})")
+        elif clearance.get("should_dispatch_engineering"):
+            print(
+                "Post-run clearance: engineering-queue dispatch recommended "
+                f"({clearance.get('dispatch_reason')})"
+            )
+
     if (
         args.api_key
         and not args.send_only
