@@ -37,6 +37,9 @@ token instead of your user PAT.
 |----------|-------------------|------------------------------|---------------------------|
 | `automation-orchestrator.yml` | External **primary** | Sun 06:20 `SUITE=sunday`; Mon–Fri **08:25 UTC** `SUITE=weekday_paper` | Sun 06/09/12, daily 05:30, weekdays **08:25 / 11:25** |
 | `email-report.yml` | Via orchestrator | ↑ (orchestrator dispatches) | None (by design) |
+
+Post-run review in the email bundle feeds Analysis tab themes; clearance policy:
+[`post-run-improvement-clearance.md`](post-run-improvement-clearance.md).
 | `library-grow.yml` | Via orchestrator | ↑ | None |
 | `library-model-review.yml` | Via orchestrator | ↑ | None |
 | `paper-auto.yml` | Via orchestrator weekdays | ↑ | None |

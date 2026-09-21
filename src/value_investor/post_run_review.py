@@ -1,4 +1,8 @@
-"""Holistic post-run synthesis after weekly email deep analysis and gap-fill."""
+"""Holistic post-run synthesis after weekly email deep analysis and gap-fill.
+
+Ops policy for interpreting Persistent weaknesses and intensive clearance:
+``docs/ops/post-run-improvement-clearance.md``.
+"""
 
 from __future__ import annotations
 

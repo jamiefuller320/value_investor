@@ -16,6 +16,10 @@ read-only ops/engineering checks.
 Daily integration health remains **`ftse-ops-monitor`** — this report adds
 stage appraisal, deferred action lists, and role-coherence checks on top.
 
+When the report INFO-lines mention post-run plan vs merged tasks or compile-cap
+truncation, follow [`post-run-improvement-clearance.md`](post-run-improvement-clearance.md)
+(lanes B/C: drain, `email_only`) rather than opening duplicate engineering work.
+
 ## Commands
 
 ```bash
