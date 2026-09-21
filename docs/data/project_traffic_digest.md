@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-21T18:17:43.519845+00:00`
+Generated: `2026-09-21T18:56:44.883412+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -47,6 +47,11 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `engineering_tasks.json queue_clearing + automation.json queue snapshots vs main (#757 ledger)` — 1×
 - `engineering_tasks/automation/queue_health vs main after #756 merge` — 1×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 1×
+
+## Ops-monitor email handoff
+- Email subject: `FTSE Ops Monitor — WARN`
+- Findings: 1 (open=1, resolved=0)
+- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
