@@ -15,7 +15,6 @@ from value_investor.scoring.fcf import (
     fcf_action_note_mismatch,
     fcf_basis_definition_divergence,
     fcf_bundle_from_persisted_report,
-    finalize_fcf_basis_bundle,
     reconcile_fcf_for_ticker,
     screen_ttm_from_row,
 )
@@ -274,7 +273,6 @@ def _apply_export_fcf_flags(snapshot: dict[str, Any], fcf_bundle: dict[str, Any]
     snapshot["fcf_divergence_flagged"] = divergence
     fcf_bundle["fcf_definition_divergence"] = definition
     fcf_bundle["fcf_divergence_flagged"] = divergence
-    fcf_bundle = finalize_fcf_basis_bundle(fcf_bundle)
     snapshot["fcf"] = fcf_bundle
 
 
@@ -373,12 +371,8 @@ def guard_screening_snapshot_export(
         screen_ttm=fcf_bundle.get("screen_ttm"),
     )
     merged["fcf_basis_overlay"] = overlay
-    merged["fcf_basis_bound"] = overlay
     merged["adjusted_signal"] = merged_adjusted
     merged["conviction_score"] = conviction
-    fcf_out = merged.get("fcf")
-    if isinstance(fcf_out, dict):
-        merged["fcf"] = finalize_fcf_basis_bundle(fcf_out)
     return enforce_neutral_watchlist_dividend_caution_in_snapshot(merged)
 
 

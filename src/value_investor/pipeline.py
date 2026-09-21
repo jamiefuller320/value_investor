@@ -270,7 +270,6 @@ def _signal_records(signals: pd.DataFrame) -> list[dict[str, Any]]:
         "lynch_peg_model",
         "lynch_peg_statutory",
         "fcf_basis_overlay",
-        "fcf_basis_bound",
         "fcf_three_way_conviction_overlay",
         "media_cyclical_thin_fcf_overlay",
         "statutory_fcf_moat_leverage_overlay",

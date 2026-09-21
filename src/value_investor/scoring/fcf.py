@@ -1847,51 +1847,6 @@ def bind_overlay_fcf_to_filing_year_company_adjusted(
     return bundle
 
 
-def build_fcf_basis_registry(fcf_bundle: dict[str, Any]) -> dict[str, Any]:
-    """Structured filing / screen TTM / company-adjusted selection for exports and overlays."""
-    policy_basis = str(fcf_bundle.get("policy_basis") or "").strip() or None
-    policy_fcf = _float_or_none(fcf_bundle.get("policy_fcf"))
-    canonical = _float_or_none(fcf_bundle.get("canonical"))
-    selected_fcf = policy_fcf if policy_fcf is not None else canonical
-    selected_basis = policy_basis
-    if selected_basis is None and selected_fcf is not None:
-        source = str(fcf_bundle.get("source") or "")
-        if source.startswith("policy_"):
-            selected_basis = source.removeprefix("policy_")
-        elif source.endswith("_filing_aligned") or source == "auto_fallback_filing_aligned":
-            selected_basis = "filing_aligned"
-        elif source.endswith("_company_adjusted"):
-            selected_basis = "company_adjusted"
-        elif "screen_ttm" in source:
-            selected_basis = "screen_ttm"
-
-    return {
-        "selected_basis": selected_basis,
-        "selected_fcf": selected_fcf,
-        "filing_aligned": _float_or_none(fcf_bundle.get("filing_aligned")),
-        "screen_ttm": _float_or_none(fcf_bundle.get("screen_ttm")),
-        "company_adjusted": _float_or_none(fcf_bundle.get("company_adjusted")),
-        "screen_ttm_unverified": bool(fcf_bundle.get("screen_ttm_unverified")),
-        "company_adjusted_stale_year": bool(fcf_bundle.get("company_adjusted_stale_year")),
-        "fiscal_year": fcf_bundle.get("fiscal_year"),
-        "currency": fcf_bundle.get("currency"),
-        "selection_source": fcf_bundle.get("source"),
-        "bridge_resolved": bool(fcf_bundle.get("bridge_resolved")),
-        "auto_policy_method": fcf_bundle.get("auto_policy_method"),
-    }
-
-
-def finalize_fcf_basis_bundle(bundle: dict[str, Any]) -> dict[str, Any]:
-    """Align canonical FCF with policy selection and attach the basis registry."""
-    out = dict(bundle)
-    registry = build_fcf_basis_registry(out)
-    selected = registry.get("selected_fcf")
-    if selected is not None:
-        out["canonical"] = float(selected)
-    out["fcf_basis_registry"] = registry
-    return out
-
-
 def fcf_basis_values_diverge(
     left: float | None,
     right: float | None,
@@ -2761,13 +2716,12 @@ def reconcile_fcf_for_ticker(
         bundle["filing_aligned"] = filing_aligned_preview
     if fiscal_year is not None and bundle.get("fiscal_year") is None:
         bundle["fiscal_year"] = fiscal_year
-    bound = bind_overlay_fcf_to_filing_year_company_adjusted(
+    return bind_overlay_fcf_to_filing_year_company_adjusted(
         bundle,
         ticker=ticker,
         fiscal_year=fiscal_year,
         output_dir=output_dir,
     )
-    return finalize_fcf_basis_bundle(bound)
 
 
 def _float_or_none(value: Any) -> float | None:
