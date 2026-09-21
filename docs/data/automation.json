@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-21T21:16:36.897699+00:00",
+  "generated_at": "2026-09-21T22:16:36.996747+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1168,8 +1168,8 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-21T21:16:34.725172+00:00",
-    "queue_ui_updated_at": "2026-09-21T21:16:36.776883+00:00",
+    "compiled_at": "2026-09-21T22:16:34.827402+00:00",
+    "queue_ui_updated_at": "2026-09-21T22:16:36.874165+00:00",
     "task_count": 93,
     "status": {
       "open_count": 0,
@@ -1178,8 +1178,8 @@
       "merged_count": 71,
       "failed_count": 0,
       "next_task_id": null,
-      "in_flight_branch": null,
-      "in_flight_pr": null,
+      "in_flight_branch": "cursor/eng-20260921-07-1de3",
+      "in_flight_pr": 789,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
@@ -1492,18 +1492,24 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-21T21:16:36.897699+00:00",
-    "overall": "idle",
-    "headline": "Queue and hunter idle.",
+    "generated_at": "2026-09-21T22:16:36.996747+00:00",
+    "overall": "active",
+    "headline": "Merge lane active.",
     "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
+      "state": "running",
+      "idle": false,
+      "running": true,
       "blocked": false,
       "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+      "open_engineering_prs": [
+        {
+          "number": 789,
+          "branch": "cursor/eng-20260921-07-1de3",
+          "draft": false
+        }
+      ],
+      "in_flight_pr": 789,
+      "detail": "Open engineering PR(s) #789 — merge fires on CI success."
     },
     "agent_lane": {
       "state": "idle",
@@ -1525,7 +1531,7 @@
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 2,
-      "evaluated_at": "2026-09-21T21:16:35.774388+00:00"
+      "evaluated_at": "2026-09-21T22:16:35.856434+00:00"
     },
     "traffic_control": {
       "pause_active": false,
