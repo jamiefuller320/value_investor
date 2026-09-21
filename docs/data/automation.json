@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-21T17:53:27.376216+00:00",
+  "generated_at": "2026-09-21T18:16:33.037963+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1168,8 +1168,8 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-21T17:52:41.112421+00:00",
-    "queue_ui_updated_at": "2026-09-21T17:53:27.378035+00:00",
+    "compiled_at": "2026-09-21T18:16:31.402295+00:00",
+    "queue_ui_updated_at": "2026-09-21T18:16:32.936485+00:00",
     "task_count": 92,
     "status": {
       "open_count": 0,
@@ -1477,5 +1477,112 @@
       "tracks_insufficient_epoch_marks": 2,
       "all_benchmark_spans_insufficient": false
     }
+  },
+  "queue_health": {
+    "schema_version": 1,
+    "generated_at": "2026-09-21T18:16:33.037963+00:00",
+    "overall": "idle",
+    "headline": "Queue and hunter idle.",
+    "merge_lane": {
+      "state": "idle",
+      "idle": true,
+      "running": false,
+      "blocked": false,
+      "pr_open_count": 0,
+      "open_engineering_prs": [],
+      "in_flight_pr": null,
+      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+    },
+    "agent_lane": {
+      "state": "idle",
+      "idle": true,
+      "running": false,
+      "blocked": false,
+      "should_dispatch": false,
+      "pause_active": false,
+      "traffic_pause_active": false,
+      "attention_parked_count": 1,
+      "open_count": 0,
+      "pr_open_count": 0,
+      "dispatch_eligible_count": 0,
+      "blocked_task_count": 0,
+      "next_task_id": null,
+      "reason": "no open engineering tasks in queue",
+      "detail": "No open engineering tasks — queue is idle."
+    },
+    "queue_clearing": {
+      "pause_active": false,
+      "attention_parked_count": 1,
+      "evaluated_at": "2026-09-21T18:16:32.180904+00:00"
+    },
+    "traffic_control": {
+      "pause_active": false,
+      "stuck_pr_count": 0,
+      "pause_reasons": [],
+      "evaluated_at": "2026-09-20T07:46:51.927644+00:00"
+    },
+    "ops_monitor": {
+      "run_at": "2026-09-20T07:46:35.090327+00:00",
+      "overall": "warn",
+      "should_dispatch_engineering": true
+    },
+    "merges_today": [
+      {
+        "task_id": "eng-20260921-03",
+        "title": "Implement canonical FCF basis selector for overlays (filing-year statutory OCF−CapEx vs company-adjusted vs screen TTM) with explicit stale-year flag when scree",
+        "area": "scoring",
+        "pr_number": 782,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/782",
+        "merged_at": "2026-09-21T16:52:12.618541+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
+      {
+        "task_id": "eng-20260921-02",
+        "title": "Fix Companies House PDF/iXBRL download and OCR quality gate (retry, iXBRL-first, reject garbled OCR)—target ITV.L/MGNS.L failure modes cited in recent suggestio",
+        "area": "ingest",
+        "pr_number": 783,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/783",
+        "merged_at": "2026-09-21T15:15:40.820228+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
+      {
+        "task_id": "eng-20260921-05",
+        "title": "Wire `operating_cashflow` (and related cash-flow fields) from `financials_annual.json` into `CompanyMetrics` when Yahoo fetch returns None—validate on MEGP.L be",
+        "area": "ingest",
+        "pr_number": 776,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/776",
+        "merged_at": "2026-09-21T11:29:54.436741+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
+      {
+        "task_id": "eng-20260921-04",
+        "title": "Standardize IR results-presentation ingest: allowlist fetch, full-text extract, and populate `ir_presentation_metrics.json` FCF/dividend bridges (FGP.L FY2026 r",
+        "area": "ingest",
+        "pr_number": 777,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/777",
+        "merged_at": "2026-09-21T11:28:50.275597+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
+      {
+        "task_id": "eng-20260921-01",
+        "title": "Harden Investegate/LSE direct fetch for indexed RNS items (FY/HY results, annual reports)—replace Google News wrapper URLs and empty Ticker RNS bodies—starting",
+        "area": "ingest",
+        "pr_number": 773,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/773",
+        "merged_at": "2026-09-21T04:16:22.632040+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      }
+    ],
+    "verified_merges_today_count": 0
   }
 }
