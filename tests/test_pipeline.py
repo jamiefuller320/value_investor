@@ -4374,6 +4374,49 @@ def test_enrich_signals_with_dividend_sustainability_overlay_caps_itv_like_profi
     assert row["conviction_score"] == pytest.approx(0.53 * 0.85)
 
 
+def test_resolve_statutory_dividend_coverage_prefers_ocf_minus_capex_over_stored_net():
+    from value_investor.scoring.dividend_sustainability_overlay import (
+        resolve_statutory_dividend_coverage_for_overlay,
+    )
+
+    cover = resolve_statutory_dividend_coverage_for_overlay(
+        fcf_dividend_coverage_net=1.2,
+        operating_cashflow=202_000_000.0,
+        capital_expenditure=-54_000_000.0,
+        dividends_paid=200_000_000.0,
+    )
+    assert cover == pytest.approx(148_000_000.0 / 200_000_000.0)
+
+
+def test_dividend_sustainability_overlay_triggers_on_statutory_ocf_when_stored_net_high():
+    from value_investor.scoring.dividend_sustainability_overlay import (
+        dividend_sustainability_overlay_triggered,
+    )
+
+    model_results = pd.DataFrame(
+        [
+            {
+                "ticker": "ITV.L",
+                "model_id": "high_dividend",
+                "passed": True,
+            },
+            {
+                "ticker": "ITV.L",
+                "model_id": "piotroski_f",
+                "passed": False,
+                "score": 3 / 9,
+            },
+        ]
+    )
+    assert dividend_sustainability_overlay_triggered(
+        ticker_models=model_results,
+        fcf_dividend_coverage_net=1.2,
+        operating_cashflow=202_000_000.0,
+        capital_expenditure=-54_000_000.0,
+        dividends_paid=200_000_000.0,
+    )
+
+
 def test_apply_dividend_sustainability_export_enforcement_caps_conviction_when_signal_precapped():
     from value_investor.scoring.fcf_basis_overlay import (
         apply_dividend_sustainability_export_enforcement,
