@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-09-21T19:01:45.347940+00:00",
+  "run_at": "2026-09-21T20:50:14.559524+00:00",
   "market_id": "dax",
   "targets": [
     "HEI.DE",
@@ -75,8 +75,8 @@
       "ticker": "FME.DE",
       "priority_score": 23.9125,
       "filings_total": 88,
-      "filings_with_body": 49,
-      "indexed_without_body": 39,
+      "filings_with_body": 50,
+      "indexed_without_body": 38,
       "reason": "indexed_without_body"
     },
     {
@@ -530,15 +530,15 @@
       "reason": "indexed_without_body",
       "before": {
         "filings_total": 88,
-        "filings_with_body": 49,
-        "indexed_without_body": 39
+        "filings_with_body": 50,
+        "indexed_without_body": 38
       },
       "after": {
         "filings_total": 88,
         "filings_with_body": 50,
         "indexed_without_body": 38
       },
-      "improved": true,
+      "improved": false,
       "regime": "euro_filings",
       "filings_summary": {
         "total": 74,
@@ -766,23 +766,21 @@
       }
     }
   ],
-  "improved": [
-    "FME.DE"
-  ],
+  "improved": [],
   "errors": [],
   "runtime_cutoff": false,
   "partial": false,
   "health_before": {
-    "snapshot_at": "2026-09-21T18:57:23.180962+00:00",
+    "snapshot_at": "2026-09-21T20:45:03.651408+00:00",
     "market_id": "dax",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 7,
     "zero_body_buy_tier": 0,
     "thin_body_buy_tier": 3,
-    "indexed_without_body": 39,
+    "indexed_without_body": 38,
     "bodies_min": 1,
     "bodies_median": 2,
-    "bodies_max": 49,
+    "bodies_max": 50,
     "coverage_scope": "canonical_plus_shards",
     "ftse_equivalent": false,
     "unmeasured_tickers": [
@@ -804,7 +802,7 @@
       "FME.DE"
     ],
     "indexed_without_body_by_ticker": {
-      "FME.DE": 39
+      "FME.DE": 38
     },
     "parked_tickers": [],
     "parked_count": 0,
@@ -814,14 +812,14 @@
       "DTE.DE",
       "BAS.DE"
     ],
-    "effective_indexed_without_body": 39,
+    "effective_indexed_without_body": 38,
     "effective_indexed_without_body_tickers": [
       "FME.DE"
     ],
     "ingest_exhausted": false
   },
   "health_after": {
-    "snapshot_at": "2026-09-21T19:01:40.532951+00:00",
+    "snapshot_at": "2026-09-21T20:50:10.346496+00:00",
     "market_id": "dax",
     "buy_tier_count": 12,
     "unmeasured_buy_tier": 7,
@@ -880,7 +878,7 @@
   "parallel_sprint_handoff": null,
   "critical_path": {
     "market_id": "dax",
-    "assessed_at": "2026-09-21T18:57:24.020649+00:00",
+    "assessed_at": "2026-09-21T20:45:04.426269+00:00",
     "unmeasured": [
       "HEI.DE",
       "DTG.DE",
@@ -894,9 +892,9 @@
     "indexed_without_body": [
       {
         "ticker": "FME.DE",
-        "indexed_without_body": 39,
+        "indexed_without_body": 38,
         "filings_total": 88,
-        "filings_with_body": 49
+        "filings_with_body": 50
       }
     ],
     "thin_need_discovery": [
@@ -919,7 +917,7 @@
     ],
     "recommended_actions": [
       "Bootstrap 7 unmeasured buy-tier ticker(s) (IR allowlist + ESEF/news discovery)",
-      "Prefer indexed-without-body body refetch (1 tickers, top: FME.DE(39))",
+      "Prefer indexed-without-body body refetch (1 tickers, top: FME.DE(38))",
       "Discovery/IR seed for 3 thin ticker(s) that already have bodies for every indexed filing",
       "Run listing-only discovery_scan before deepen"
     ],
@@ -927,14 +925,14 @@
       "unmeasured": 7,
       "zero_body": 0,
       "indexed_without_body_tickers": 1,
-      "indexed_without_body_rows": 39,
+      "indexed_without_body_rows": 38,
       "thin_need_discovery": 3,
       "thin_need_bodies": 0
     }
   },
-  "used_seconds": 255.69409790599997,
+  "used_seconds": 305.171204448,
   "budget_seconds": 1050.0,
-  "leftover_seconds": 794.305902094,
+  "leftover_seconds": 744.828795552,
   "blocker_ticker": null,
   "per_ticker_max_seconds": 320.0,
   "pin_tickers": [],
@@ -942,13 +940,13 @@
   "exhaustion": {
     "schema_version": 1,
     "market_id": "dax",
-    "updated_at": "2026-09-21T19:01:40.535229+00:00",
+    "updated_at": "2026-09-21T20:50:10.348877+00:00",
     "exhausted": false,
-    "complete_zero_improve_runs": 0,
+    "complete_zero_improve_runs": 1,
     "min_zero_runs": 3,
     "parked": [],
     "note": "Leftover thin / indexed-without-body names parked after complete 0-improve sprints. Unmeasured and zero-body names are never parked.",
-    "had_complete_targets": false,
+    "had_complete_targets": true,
     "leftover_tickers": [
       "BAS.DE",
       "DTE.DE",
