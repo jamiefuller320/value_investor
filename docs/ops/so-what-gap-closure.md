@@ -27,6 +27,12 @@ The progress-report **So what?** section and Overview card also **group the same
 issue into one row + ticker list** (human gates and high-severity findings), so a
 long list of identical bridge/enforcement items does not repeat per name.
 
+**Learning-path gaps:** deterministic `system_gaps.json` flags (Overview tiles) are
+also scanned into so-what as `system_gap_<flag_id>` findings. They do **not**
+duplicate `eng-sgap-*` engineering rows — persist/publish/apply highs already on
+the queue are **observe**; produce / learning-clock flags stay **human_gate** with
+runbook actions (ingest → body-lag rememo; `ftse-analysis-review promote`).
+
 Structured `fcf.filing_aligned` / `screen_ttm` are recovered from persisted mismatch action notes when the `fcf` blob was dropped on overlay/export refresh, so auto policy can resolve without hand-writing bridges.
 
 First detector: buy-tier names in `docs/data/latest.json` with material screen vs

@@ -674,6 +674,11 @@ def compile_system_gap_analysis_tasks(
     return out
 
 
+def engineering_has_system_gap_task(eng_rows: list[Any], flag_id: str) -> bool:
+    """True when a non-terminal engineering row already covers this system-gap flag."""
+    return _engineering_has_system_gap(eng_rows, flag_id)
+
+
 def _engineering_has_system_gap(eng_rows: list[Any], flag_id: str) -> bool:
     token = system_gap_token(flag_id)
     terminal = frozenset({"cancelled", "failed"})

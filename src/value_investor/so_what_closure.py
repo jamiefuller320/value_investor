@@ -411,11 +411,111 @@ def _fcf_findings_from_report(
     return findings
 
 
+def _human_action_for_system_gap(flag: dict[str, Any]) -> str:
+    flag_id = str(flag.get("id") or "")
+    layer = str(flag.get("layer") or "")
+    evidence = flag.get("evidence") if isinstance(flag.get("evidence"), dict) else {}
+    if flag_id == "thin_memo_counted_as_coverage" or evidence.get("remedy"):
+        return (
+            "Lane A: ingest filing bodies for named tickers, then body-lag rememo only. "
+            "Do not widen rememo eligibility for thin/zero-body memos (system_gaps policy)."
+        )
+    if layer == "produce":
+        return (
+            "Judgment call on produce-layer gap — promote via "
+            "`ftse-analysis-review promote` when ready; prefer ingest/rememo over prompt churn."
+        )
+    if layer == "learning_clock":
+        return (
+            "Learning clock vs filing parity — review market-sharded-learning; "
+            "do not block admitted rememo on clock alone."
+        )
+    if layer in {"persist", "publish", "apply"}:
+        return (
+            "Persist/publish/apply wiring gap — Sunday analysis-review auto-promotes high "
+            "flags to eng-sgap-* (no agent dispatch until engineering review assigns)."
+        )
+    return "Review flag in Learning-path gaps card and analysis-review runbook."
+
+
+def scan_system_gap_so_what_findings(
+    *,
+    artifacts_dir: Path = ARTIFACTS_DIR,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    system_gaps: dict[str, Any] | None = None,
+) -> list[SoWhatFinding]:
+    """Map learning-path system_gaps tiles into so-what classifications."""
+    from value_investor.analysis_review import (
+        AUTO_PROMOTE_LAYERS,
+        engineering_has_system_gap_task,
+    )
+
+    if system_gaps is None:
+        gap_path = Path(artifacts_dir) / "system_gaps.json"
+        system_gaps = read_json(gap_path) if gap_path.exists() else {}
+    if not isinstance(system_gaps, dict):
+        return []
+
+    eng_rows = []
+    tasks_path = Path(tasks_path)
+    if tasks_path.exists():
+        eng_rows = load_engineering_tasks(tasks_path).get("tasks") or []
+
+    findings: list[SoWhatFinding] = []
+    for flag in system_gaps.get("flags") or []:
+        if not isinstance(flag, dict) or not flag.get("id"):
+            continue
+        flag_id = str(flag["id"])
+        layer = str(flag.get("layer") or "")
+        severity = str(flag.get("severity") or "medium")
+        title = str(flag.get("title") or flag_id)
+        summary = str(flag.get("summary") or title)
+        kind = f"system_gap_{flag_id}"
+
+        human_action = _human_action_for_system_gap(flag)
+        if layer in AUTO_PROMOTE_LAYERS and severity == "high":
+            if engineering_has_system_gap_task(eng_rows, flag_id):
+                closure = CLOSURE_OBSERVE
+                so_what = f"{summary} (tracked as eng-sgap / engineering queue — no duplicate task.)"
+            else:
+                closure = CLOSURE_HUMAN_GATE
+                so_what = summary
+        elif layer in {"produce", "learning_clock"}:
+            closure = CLOSURE_HUMAN_GATE if severity == "high" else CLOSURE_OBSERVE
+            so_what = summary
+        else:
+            closure = CLOSURE_OBSERVE
+            so_what = summary
+
+        findings.append(
+            SoWhatFinding(
+                finding_id=f"system_gap:{flag_id}",
+                kind=kind,
+                ticker=flag_id,
+                severity=severity,
+                so_what=so_what,
+                recommended_closure=closure,
+                evidence={
+                    "system_gap_flag": flag_id,
+                    "layer": layer,
+                    "title": title,
+                },
+                engineering_area=None,
+                human_action=human_action,
+                human_doc_path="docs/ops/analysis-review.md",
+            )
+        )
+
+    return findings
+
+
 def scan_so_what_issues(
     *,
     reports: list[dict[str, Any]] | None = None,
     latest_path: Path = DEFAULT_LATEST_PATH,
     artifacts_dir: Path = ARTIFACTS_DIR,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    include_system_gaps: bool = True,
 ) -> list[SoWhatFinding]:
     """Scan live reports for findings that need a so-what closure path."""
     if reports is None:
@@ -431,8 +531,20 @@ def scan_so_what_issues(
             continue
         findings.extend(_fcf_findings_from_report(report, artifacts_dir=artifacts_dir))
 
+    if include_system_gaps:
+        findings.extend(
+            scan_system_gap_so_what_findings(
+                artifacts_dir=artifacts_dir,
+                tasks_path=tasks_path,
+            )
+        )
+
     findings.sort(
-        key=lambda f: ({"high": 0, "medium": 1, "low": 2}.get(f.severity, 9), f.ticker, f.kind)
+        key=lambda f: (
+            {"high": 0, "medium": 1, "low": 2}.get(f.severity, 9),
+            f.kind,
+            f.ticker,
+        )
     )
     return findings
 
@@ -815,6 +927,11 @@ def so_what_summary_for_progress(snapshot: dict[str, Any] | None = None) -> dict
                 if isinstance(f, dict) and f.get("recommended_closure") == CLOSURE_HUMAN_GATE
             ]
         )
+    learning_path = [
+        f for f in findings if isinstance(f, dict) and str(f.get("kind") or "").startswith("system_gap_")
+    ]
+    learning_path_groups = group_so_what_rows(learning_path)
+
     return {
         "generated_at": snapshot.get("generated_at"),
         "counts": {
@@ -822,8 +939,10 @@ def so_what_summary_for_progress(snapshot: dict[str, Any] | None = None) -> dict
             "auto_queue": int(counts.get("auto_queue") or 0),
             "human_gate": int(counts.get("human_gate") or 0),
             "observe": int(counts.get("observe") or 0),
+            "learning_path_gaps": len(learning_path),
             "tasks_created": int(counts.get("tasks_created") or 0),
         },
+        "learning_path_gap_groups": learning_path_groups,
         "high_severity": [
             {
                 "finding_id": f.get("finding_id"),
@@ -961,5 +1080,14 @@ def render_so_what_markdown(section: dict[str, Any] | None = None) -> str:
             action = group.get("human_action") or group.get("so_what") or group.get("label")
             lines.append(f"- **{group.get('count', 0)} names** (`{group.get('kind')}`): {action}")
             lines.append(f"  - Tickers: {_format_ticker_list(group.get('tickers') or [])}")
+    lp_groups = summary.get("learning_path_gap_groups") or []
+    if lp_groups:
+        lines.extend(["", "### Learning-path gaps (system_gaps)", ""])
+        for group in lp_groups:
+            action = group.get("human_action") or group.get("so_what") or group.get("label")
+            lines.append(
+                f"- **`{group.get('kind', '').replace('system_gap_', '')}`** "
+                f"({group.get('recommended_closure') or '—'}): {action or group.get('so_what')}"
+            )
     lines.append("")
     return "\n".join(lines)
