@@ -9903,8 +9903,7 @@ def test_parked_source_hunter_bpt_ax_asx200_leftover_is_bridgepoint_rns(monkeypa
         "purchased the following number of its ordinary shares.</p><pre>"
         + (
             "J.P.Morgan Securities plc 2026-02-23 08:06:24 413 260.4000 XLON "
-            "05003050000000116-E0QO3HTPtWiI\n"
-            * 40
+            "05003050000000116-E0QO3HTPtWiI\n" * 40
         )
         + "</pre><p>The Company will hold the purchased shares in treasury.</p>"
         "</article></body></html>"
