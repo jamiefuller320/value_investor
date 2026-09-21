@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-21T11:16:35.999999+00:00",
+  "generated_at": "2026-09-21T11:23:10.825721+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1168,14 +1168,14 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-21T11:16:32.392240+00:00",
-    "queue_ui_updated_at": "2026-09-21T11:16:35.875321+00:00",
+    "compiled_at": "2026-09-21T11:23:08.242214+00:00",
+    "queue_ui_updated_at": "2026-09-21T11:23:10.731183+00:00",
     "task_count": 92,
     "status": {
       "open_count": 0,
-      "pr_open_count": 2,
+      "pr_open_count": 1,
       "parked_count": 3,
-      "merged_count": 67,
+      "merged_count": 68,
       "failed_count": 0,
       "next_task_id": null,
       "in_flight_branch": "cursor/eng-20260921-04-1de3",
@@ -1196,18 +1196,6 @@
         "pr_url": null,
         "pr_number": null,
         "branch_name": "cursor/eng-20260921-04-1de3"
-      },
-      {
-        "id": "eng-20260921-05",
-        "area": "scoring",
-        "title": "Dividend-sustainability overlay on statutory OCF−CapEx (and interim-cut detection)",
-        "priority": "high",
-        "priority_score": 97.0,
-        "status": "pr_open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": 776,
-        "branch_name": "cursor/eng-20260921-05-1de3"
       }
     ],
     "attention_tasks": [
@@ -1529,29 +1517,24 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-21T11:16:35.999999+00:00",
+    "generated_at": "2026-09-21T11:23:10.825721+00:00",
     "overall": "blocked",
-    "headline": "Orphan pr_open state (2 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
+    "headline": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged.",
     "merge_lane": {
       "state": "running",
       "idle": false,
       "running": true,
       "blocked": false,
-      "pr_open_count": 2,
+      "pr_open_count": 1,
       "open_engineering_prs": [
         {
           "number": 777,
           "branch": "cursor/eng-20260921-04-1de3",
           "draft": false
-        },
-        {
-          "number": 776,
-          "branch": "cursor/eng-20260921-05-1de3",
-          "draft": false
         }
       ],
       "in_flight_pr": 777,
-      "detail": "Open engineering PR(s) #777, #776 — merge fires on CI success."
+      "detail": "Open engineering PR(s) #777 — merge fires on CI success."
     },
     "agent_lane": {
       "state": "blocked",
@@ -1563,17 +1546,17 @@
       "traffic_pause_active": false,
       "attention_parked_count": 3,
       "open_count": 0,
-      "pr_open_count": 2,
+      "pr_open_count": 1,
       "dispatch_eligible_count": 0,
       "blocked_task_count": 0,
       "next_task_id": null,
-      "reason": "parallel cap reached — 2 pr_open, 0 agent run(s) (max_parallel=2)",
-      "detail": "Orphan pr_open state (2 pr_open, 0 open) — recover-queue should reconcile or mark merged."
+      "reason": "no open engineering tasks in queue",
+      "detail": "Orphan pr_open state (1 pr_open, 0 open) — recover-queue should reconcile or mark merged."
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 3,
-      "evaluated_at": "2026-09-21T11:16:34.846377+00:00"
+      "evaluated_at": "2026-09-21T11:23:09.867636+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1588,6 +1571,17 @@
     },
     "merges_today": [
       {
+        "task_id": "eng-20260921-05",
+        "title": "Dividend-sustainability overlay on statutory OCF−CapEx (and interim-cut detection)",
+        "area": "scoring",
+        "pr_number": 776,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/776",
+        "merged_at": "2026-09-21T11:21:49.390758+00:00",
+        "merge_class": "scoring_narrow",
+        "auto_merge": false,
+        "independently_verified": true
+      },
+      {
         "task_id": "eng-20260921-01",
         "title": "Universal RNS body fetcher",
         "area": "ingest",
@@ -1599,6 +1593,6 @@
         "independently_verified": false
       }
     ],
-    "verified_merges_today_count": 0
+    "verified_merges_today_count": 1
   }
 }
