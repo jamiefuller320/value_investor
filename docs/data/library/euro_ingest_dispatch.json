@@ -25,7 +25,7 @@
     "primary track must beat rules control on latest review"
   ],
   "filing_health": {
-    "snapshot_at": "2026-09-21T08:27:09.148763+00:00",
+    "snapshot_at": "2026-09-21T07:30:11.071325+00:00",
     "market_id": "euro_depth",
     "buy_tier_count": 49,
     "unmeasured_buy_tier": 0,
@@ -107,7 +107,7 @@
   "should_run_sprint_ingest": true,
   "should_run_maintenance_ingest": false,
   "should_run_ingest": true,
-  "evaluated_at": "2026-09-21T08:27:09.150350+00:00",
+  "evaluated_at": "2026-09-21T07:30:11.073145+00:00",
   "maintenance_markets": [
     "asx200",
     "euro_stoxx50",
@@ -145,7 +145,7 @@
         "dax not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-21T08:27:29.273146+00:00",
+        "snapshot_at": "2026-09-21T07:30:32.695124+00:00",
         "market_id": "dax",
         "buy_tier_count": 12,
         "unmeasured_buy_tier": 7,
@@ -204,7 +204,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-21T08:27:29.273727+00:00",
+      "evaluated_at": "2026-09-21T07:30:32.695745+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -216,7 +216,7 @@
       "market_id": "cac40",
       "focus_market": "euro_depth",
       "mode": "sprint",
-      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=7, indexed_without_body=50)",
+      "reason": "Ingest sprint: FTSE-standard depth gaps (unmeasured=0, zero_body=0, thin=9, indexed_without_body=94)",
       "ingest_parity_met": false,
       "ingest_exhausted": false,
       "ingest_sprint_complete": false,
@@ -228,26 +228,28 @@
         "cac40 not in ladder.weekly_paper_shard_markets"
       ],
       "filing_health": {
-        "snapshot_at": "2026-09-21T08:27:30.254576+00:00",
+        "snapshot_at": "2026-09-21T07:30:33.702212+00:00",
         "market_id": "cac40",
         "buy_tier_count": 13,
         "unmeasured_buy_tier": 0,
         "zero_body_buy_tier": 0,
-        "thin_body_buy_tier": 7,
-        "indexed_without_body": 50,
+        "thin_body_buy_tier": 9,
+        "indexed_without_body": 94,
         "bodies_min": 1,
         "bodies_median": 2,
-        "bodies_max": 69,
+        "bodies_max": 43,
         "coverage_scope": "canonical_plus_shards",
         "ftse_equivalent": false,
         "unmeasured_tickers": [],
         "zero_body_tickers": [],
         "thin_body_tickers": [
           "CAP.PA",
+          "TEP.PA",
           "EN.PA",
           "RI.PA",
           "SGO.PA",
           "VIE.PA",
+          "TTE.PA",
           "URW.PA",
           "CA.PA"
         ],
@@ -257,23 +259,25 @@
           "TTE.PA"
         ],
         "indexed_without_body_by_ticker": {
-          "TEP.PA": 27,
+          "TEP.PA": 45,
           "SGO.PA": 1,
-          "TTE.PA": 22
+          "TTE.PA": 48
         },
         "parked_tickers": [],
         "parked_count": 0,
-        "effective_thin_body_buy_tier": 7,
+        "effective_thin_body_buy_tier": 9,
         "effective_thin_body_tickers": [
           "CAP.PA",
+          "TEP.PA",
           "EN.PA",
           "RI.PA",
           "SGO.PA",
           "VIE.PA",
+          "TTE.PA",
           "URW.PA",
           "CA.PA"
         ],
-        "effective_indexed_without_body": 50,
+        "effective_indexed_without_body": 94,
         "effective_indexed_without_body_tickers": [
           "TEP.PA",
           "SGO.PA",
@@ -293,7 +297,7 @@
       "should_run_sprint_ingest": true,
       "should_run_maintenance_ingest": false,
       "should_run_ingest": true,
-      "evaluated_at": "2026-09-21T08:27:30.255337+00:00",
+      "evaluated_at": "2026-09-21T07:30:33.702886+00:00",
       "should_run_parallel_ingest": true
     }
   ],
@@ -317,11 +321,11 @@
     "head_market": "euro_depth",
     "head_at_parity": false,
     "head_needs_fat_slot": true,
-    "hour_utc": 8,
-    "skip_stream_2_now": true,
+    "hour_utc": 7,
+    "skip_stream_2_now": false,
     "stream_1_mode": "spare",
     "stream_2_mode": "spare",
-    "reason": "Head euro_depth still has filing gaps; stream 2 yields hour 08:00 UTC to the fat slot.",
+    "reason": "Head euro_depth still has filing gaps; stream 1/2 run spare fractions (0.50/0.25).",
     "config": {
       "enabled": true,
       "stream_1_target_fraction": 0.5,

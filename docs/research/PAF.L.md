@@ -1,6 +1,6 @@
 # Pan African Resources PLC (PAF.L) — Research memo
 
-_Version 2 · Updated 2026-09-15T08:55:49.764595+00:00 · Mode: structured_verdict_update_
+_Version 3 · Updated 2026-09-21T08:18:14.386436+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -8,8 +8,8 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.70
-Rationale: FY26 trading statement and Soweto DFS modestly weaken the hold case on earnings and growth, but cyclical gold dependence, filing FCF weakness, and UK governance remediation still cap conviction.
+Confidence: 0.73
+Rationale: Audited FY26 record output, net cash and maiden buyback support the buy screen, but filing FCF mismatch, higher FY27 AISC guidance and gold cyclicality cap conviction.
 RiskTags: regulatory, cyclical, governance, pension, competitive, leverage, accounting, key_person
 
 ## Weekly updates
@@ -18,3 +18,8 @@ RiskTags: regulatory, cyclical, governance, pension, competitive, leverage, acco
 10 Sep FY26 trading statement (RNS): EPS guided +141–151% YoY on US$4,235/oz gold and 272,373oz sold; AISC expected within US$1,870/oz guidance (~US$40m share-based payment charge noted).  
 11 Sep Soweto tailings DFS completed, supporting Mogale expansion; syndicated gold-sector commentary dominates otherwise thin news flow.  
 Hold screen unchanged (FCF/liquidity/growth-basis flags); audited FY26 results due 16 Sep 2026.
+
+### 2026-09-21T08:18:14.386436+00:00
+16 Sep audited FY26 (RNS): record production and earnings, net cash US$185.8m, record dividend, ZAR500m share buy-back from Oct 2026, FY27 guide 280–302koz; PwC unmodified opinion.  
+Chair succession and new non-executive appointments from Oct/Nov; quantitative screen upgraded to **buy** while filing vs screen FCF basis mismatch remains.  
+16–18 Sep media/earnings-call coverage largely repeats results; no further company filings since the annual results announcement.

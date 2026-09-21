@@ -1,6 +1,6 @@
 # Buy-tier chart outcomes
 
-6 terrible path(s) among 62 buy-tier charts — inspect weakest names before treating timing as benign.
+39 terrible path(s) among 727 buy-tier charts — inspect weakest names before treating timing as benign.
 
 **Verdict:** Has terrible outcomes (`has_terrible`)
 
@@ -10,49 +10,49 @@ Short-term underwater is expected while the hypothesis stands. The test is the l
 
 ## Counts
 
-- Charts: 62
-- Well timed: 11
-- Target then fade: 12
-- Underwater (no target): 26
-- Intact positive: 6
-- Flat: 1
-- Terrible: 6
+- Charts: 727
+- Well timed: 119
+- Target then fade: 2
+- Underwater (no target): 331
+- Intact positive: 132
+- Flat: 102
+- Terrible: 39
 - Stop hits: 4
-- Target hits: 24
+- Target hits: 23
 
 ## Returns since recommendation
 
-- Median: -2.6%
-- Mean: -3.2%
-- Range: -20.1% to +11.0%
-- Median drawdown: -4.2%
-- Worst drawdown: -20.1%
+- Median: -0.2%
+- Mean: -1.1%
+- Range: -98.9% to +53.0%
+- Median drawdown: -4.1%
+- Worst drawdown: -99.0%
 
 ## Well timed
 
 | Ticker | Signal | Return | Drawdown | Days to target |
 |---|---|---:|---:|---:|
-| AEP.L | strong_buy | +11.0% | -3.2% | 17 |
-| MEGP.L | strong_buy | +8.7% | +5.6% | 1 |
-| SHEL.L | buy | +8.5% | -0.3% | 28 |
-| BP.L | buy | +5.4% | +1.2% | 9 |
-| MGAM.L | buy | +5.3% | +2.9% | 3 |
-| GSK.L | buy | +5.3% | +5.3% | — |
-| BME.L | buy | +5.1% | +0.1% | 4 |
-| DOM.L | strong_buy | +4.1% | -4.3% | 2 |
+| OBM.AX | hold | +53.0% | +0.0% | — |
+| ALK.AX | hold | +51.2% | +0.0% | — |
+| WPM.TO | hold | +45.1% | +0.0% | — |
+| PRU.AX | hold | +44.2% | -0.2% | — |
+| RRL.AX | strong_buy | +41.1% | +0.0% | — |
+| HWG.L | avoid | +37.9% | +0.0% | — |
+| HOC.L | hold | +36.5% | +0.0% | — |
+| CTSH | strong_buy | +35.1% | -3.5% | — |
 
 ## Weakest open returns
 
 | Ticker | Signal | Return | Drawdown | Outcome | Stop | Target |
 |---|---|---:|---:|---|---|---|
-| DATA.L | strong_buy | -20.1% | -20.1% | terrible | no | no |
-| BTRW.L | buy | -15.3% | -15.3% | terrible | no | no |
-| TPK.L | buy | -14.1% | -15.2% | underwater | no | no |
-| BOWL.L | buy | -13.5% | -13.7% | terrible | yes | yes |
-| JD.L | buy | -13.4% | -13.4% | terrible | yes | yes |
-| DNLM.L | buy | -11.2% | -15.6% | terrible | yes | no |
-| ABF.L | buy | -10.4% | -11.0% | terrible | yes | no |
-| MGNS.L | strong_buy | -9.8% | -10.7% | underwater | no | no |
+| BCG.L | hold | -98.9% | -99.0% | terrible | no | no |
+| HEAD.L | hold | -98.0% | -98.0% | terrible | no | no |
+| RCH.L | hold | -29.3% | -31.4% | terrible | no | no |
+| EIX | hold | -29.1% | -30.8% | terrible | no | no |
+| CASY | hold | -27.7% | -28.9% | terrible | no | no |
+| APP | hold | -27.5% | -29.7% | terrible | no | no |
+| PNI.AX | hold | -23.8% | -24.1% | terrible | no | no |
+| ODFL | hold | -23.6% | -23.6% | terrible | no | no |
 
 _Observe-only rollup of buy-tier chart JSON. Entry is the frozen initial last (recommendation-week close), not the first bar after signal_since. Short-term underwater is expected while the hypothesis stands — the test is the longer path. Do not apply decision-review knobs or entry-timing overlays from this file._
 

@@ -1,10 +1,18 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-21T08:30:04+00:00",
-  "overall": "warn",
+<<<<<<< Updated upstream
+  "generated_at": "2026-09-17T11:54:10+00:00",
+  "overall": "info",
   "progress": {
     "schema_version": 1,
-    "generated_at": "2026-09-21T08:30:03.880016+00:00",
+    "generated_at": "2026-09-17T11:54:10.155544+00:00",
+=======
+  "generated_at": "2026-09-17T11:55:09+00:00",
+  "overall": "info",
+  "progress": {
+    "schema_version": 1,
+    "generated_at": "2026-09-17T11:55:09.364123+00:00",
+>>>>>>> Stashed changes
     "current_focus": "stage_2b",
     "headline": "Infrastructure and offline library are ahead of schedule; the primary AI learning track is running but not yet beating the market.",
     "stages": [
@@ -52,11 +60,11 @@
       "library_graduated_count": 21,
       "library_focus_market": "euro_depth",
       "decision_review_applied": false,
-      "ai_excess_after_costs": -0.3301,
-      "rules_excess_after_costs": -0.4078,
+      "ai_excess_after_costs": -0.3181,
+      "rules_excess_after_costs": -0.3957,
       "ai_total_return": -0.3135,
       "rules_total_return": -0.3801,
-      "ops_overall": "warn",
+      "ops_overall": "ok",
       "zero_body_buy_tier": 0,
       "unmeasured_buy_tier": 0,
       "measured_tickers": 62,
@@ -68,11 +76,11 @@
         "FTSE 350 live screen and published dashboard are operational.",
         "Offline library: 21 graduated markets (focus: euro_depth).",
         "Ops automation in place: daily monitor, tier-1 backup, external cron scheduling.",
-        "Engineering queue: 0 open, 67 merged supervised tasks.",
-        "AI-judgment track beating rules control (-33.0% vs -40.8% excess)."
+        "Engineering queue: 2 open, 19 merged supervised tasks.",
+        "AI-judgment track beating rules control (-31.8% vs -39.6% excess)."
       ],
       "gaps": [
-        "Primary AI track still below ^FTSE after costs (-33.0% excess; history still thin).",
+        "Primary AI track still below ^FTSE after costs (-31.8% excess; history still thin).",
         "Published screen bundle dated 2026-09-15 — confirm Sunday refresh."
       ],
       "next_actions": [
@@ -86,15 +94,15 @@
       "stalled": false,
       "zero_body_buy_tier": 0,
       "health": {
-        "snapshot_at": "2026-09-21T08:19:47.260300+00:00",
+        "snapshot_at": "2026-09-17T07:37:17.511361+00:00",
         "buy_tier_count": 62,
         "measured_tickers": 62,
         "unmeasured_buy_tier": 0,
         "unmeasured_tickers": [],
         "zero_body_buy_tier": 0,
         "zero_body_tickers": [],
-        "indexed_without_body": 65,
-        "filings_with_body": 4159
+        "indexed_without_body": 36,
+        "filings_with_body": 4142
       },
       "summary": "Live buy-tier ingest now canonicalises under docs/data/research/, bootstraps missing indexes on Sunday/weekday passes, and sanitises mis-attributed RNS rows before refetching bodies.",
       "fixes": [
@@ -112,18 +120,7 @@
     }
   },
   "actionable": {
-    "defer_now": [
-      {
-        "id": "L121",
-        "title": "Reconcile live vs archive exit-timing denominators",
-        "summary": "Shared episode definitions before comparing hold→breakeven vs swap-success rates",
-        "category": "later",
-        "section": "learning",
-        "revisit_when": "`exit_timing_cohorts` artifact exists and `exit_timing_near_miss.readiness.hold_closed_count` ≥ 15.",
-        "tags": [],
-        "status": "now"
-      }
-    ],
+    "defer_now": [],
     "defer_not_now": [
       {
         "id": "N1",
@@ -1930,66 +1927,6 @@
           "workflow_failure"
         ],
         "status": "open"
-      },
-      {
-        "id": "N134",
-        "title": "Do not change primary exit policy from weekend poor-exit intuition",
-        "summary": "EOW read that obviously poor exits hurt the 3-slot books is directionally right (archive hold-recovery ~73%, swap replacement often wins), but live exit_shadow still has 0 closed exits — no grace/rotation split to act on. Keep buffers; do not retune exits or decision-review --apply from the qualitative read.",
-        "category": "not_now",
-        "section": "learning",
-        "revisit_when": "learning_tracks_exit_shadow shows >=10 closed exits on ai_judgment with a stable grace vs screen_rotation split; then human reviews before any knob change",
-        "tags": [
-          "exits",
-          "exit_shadow",
-          "epoch",
-          "eow"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "N135",
-        "title": "Do not execute primary or epoch-0 DCA from EOW cadence agreement alone",
-        "summary": "dca_4x_weekly remains the leading overlay cadence and will likely help entry drag, but adoption plan still needs ai_judgment first_entry>=3 (now 2) before any paper execute, and execute is graduated_allocation-only then; primary stays blocked while beat_market is false. Ack is not adopt.",
-        "category": "not_now",
-        "section": "learning",
-        "revisit_when": "entry_dca_adoption_plan out_of_sample_first_entry ready AND paper_execute_graduated stage unlocked",
-        "tags": [
-          "dca",
-          "entry_dca",
-          "adoption"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "N136",
-        "title": "Do not stack live forks on an epoch-0 child book",
-        "summary": "When entry and exit policies are both ready, adopt at most one stage into one forward book and re-score the next stage as an overlay on that path. Report child-minus-parent, not child-minus-epoch-0. A live tree (DCA book, then a timing fork of that book) or a mid-epoch clone confounds the datum and spends a scarce shadow slot. A 2x2 factorial is only for a suspected sign-changing interaction, and those arms must start together from the same date and capital.",
-        "category": "not_now",
-        "section": "learning",
-        "revisit_when": "One forward book has adopted a stage policy, the next-stage overlay on that book is ready, and the overlay cannot reconstruct the counterfactual path (missing fills). Only then open one child book. Open a second arm only if that conditional effect flips sign versus the epoch-0 overlay.",
-        "tags": [
-          "epoch0",
-          "forks",
-          "dca",
-          "exit_timing",
-          "factorial"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "N137",
-        "title": "Eng-agent merge_tree park after successful Composer (vs concurrent PRs)",
-        "summary": "Sep18 evening burns were full Composer+pytest then park on merge_tree vs open non-eng PR (#720), not missing early preflight. Do not reorder full preflight before Composer. Prefer leave alone while parked-backlog pause holds.",
-        "category": "not_now",
-        "section": "ops",
-        "revisit_when": "Parked attention count drops below 7 and eng-agent resumes with merge_tree parks against concurrent open PRs",
-        "tags": [
-          "spend",
-          "engineering-agent",
-          "merge_tree",
-          "not_now"
-        ],
-        "status": "open"
       }
     ],
     "defer_later": [
@@ -2558,6 +2495,20 @@
         "status": "open"
       },
       {
+        "id": "L75",
+        "title": "Gap-fill: ingest — Add June 2026 trading-update RNS to IR allowlist or Investegate re-pull",
+        "summary": "Add June 2026 trading-update RNS to IR allowlist or Investegate re-pull — guidance-cut catalyst still news-only despite nine filing bodies elsewhere.",
+        "category": "later",
+        "section": "research",
+        "revisit_when": "After next weekly email gap-fill pass confirms the gap persists",
+        "tags": [
+          "gap-fill",
+          "research-model",
+          "ingest"
+        ],
+        "status": "open"
+      },
+      {
         "id": "L77",
         "title": "Gap-fill: ingest — Implement planned `company_ir_presentation` fetch from ITV IR results ce",
         "summary": "Implement planned `company_ir_presentation` fetch from ITV IR results centre to supply dividend-cover tables, FCF bridges, and covenant headroom absent from RNS HTML extracts and Yahoo.",
@@ -2992,7 +2943,7 @@
         "section": "learning",
         "revisit_when": "`exit_timing_cohorts` artifact exists and `exit_timing_near_miss.readiness.hold_closed_count` ≥ 15.",
         "tags": [],
-        "status": "now"
+        "status": "open"
       },
       {
         "id": "L125",
@@ -3629,6 +3580,20 @@
           "costs",
           "aim",
           "stamp"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L206",
+        "title": "Triage July analysis_tasks proposed queue against current archive thickness",
+        "summary": "Four ana-20260728-* proposed tasks (second weekly archive, knob counterfactual, exit-shadow dashboard, historical overlay bootstrap) may be obsolete or still blocked; drop/done/promote on next Sunday analysis review so progress-report proposed_total is honest.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "Next Sunday analysis-review human triage (~10:35 UTC)",
+        "tags": [
+          "analysis-review",
+          "triage",
+          "debt"
         ],
         "status": "open"
       },
@@ -4518,6 +4483,20 @@
         "status": "open"
       },
       {
+        "id": "L288",
+        "title": "Auto-clear library ingest pin when IWB closes",
+        "summary": "docs/data/library_ingest_pins.json is a dated intensive pin (ABI.BR through 2026-09-11). After the named ticker’s indexed-without-body count hits 0, auto-remove or expire the pin so weekday euro returns to the 24-name batch without a manual edit.",
+        "category": "later",
+        "section": "ops",
+        "revisit_when": "After the 16:15/next euro intensive ABI pin run, or when ABI.BR IWB is 0",
+        "tags": [
+          "library-ingest",
+          "pins",
+          "euro"
+        ],
+        "status": "open"
+      },
+      {
         "id": "L289",
         "title": "Retry AB InBev IR PDFs if age-gate is lifted",
         "summary": "ABI.BR allowlist now uses SEC 20-F/HY 6-K because ab-inbev.com/investors is age-gated. If the IR site starts serving direct annual/HY PDF hrefs without a birthdate wall, swap those official PDFs in for the SEC HTML mirrors.",
@@ -4914,6 +4893,23 @@
           "archive",
           "fills",
           "lifecycle"
+        ],
+        "status": "open"
+      },
+      {
+        "id": "L316",
+        "title": "Unfiltered buy-tier lifecycle baseline cohort (Suite B)",
+        "summary": "One fair-cost equal-weight paper book of raw screen buy-tier names (no extra conviction floor) as the live u0 control. Seed PIT from the current screen, freeze an epoch-zero datum, and run full entry/hold/exit lifecycle. Compare later filters and knob changes as overlays or divergence on the same holdings first — not as a 3-name hero book. Predecessor to filtered_cohort_track (15–20). Do not use 3% stress or spawn a twin per knob.",
+        "category": "later",
+        "section": "learning",
+        "revisit_when": "Human authorises one new Suite B paper book after FCF-basis enforcement on live buy-tier is in flight or closed, and a written spec exists for buy-threshold (raw screen vs adjusted_signal), sector_cap, and hold-buffer.",
+        "tags": [
+          "cohort",
+          "baseline",
+          "suite-b",
+          "lifecycle",
+          "u0",
+          "paper"
         ],
         "status": "open"
       },
@@ -5909,215 +5905,6 @@
           "timeout"
         ],
         "status": "open"
-      },
-      {
-        "id": "L415",
-        "title": "Client-side SMA series fallback for old chart JSON",
-        "summary": "Charts without sma50_series/sma200_series still fall back to flat point-in-time SMA lines until republish. A client-side rolling estimate on downsampled closes would be misleading; prefer ensuring publish always writes series.",
-        "category": "later",
-        "section": "research",
-        "revisit_when": "If many stale chart JSON files remain after several publishes, or offline viewers need overlays without republish",
-        "tags": [
-          "charts",
-          "sma",
-          "dashboard"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "L416",
-        "title": "Migrate remaining git-auto-commit workflows to gha_commit_artifacts",
-        "summary": "library-epoch0-weekday now uses L348 retry; other workflows still use git-auto-commit + optional pull --rebase and can fail the same main race.",
-        "category": "later",
-        "section": "ops",
-        "revisit_when": "Another weekday/ingest auto-commit job fails with cannot lock ref or fetch first on main",
-        "tags": [
-          "gha",
-          "flake",
-          "commit-retry"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "L418",
-        "title": "PM auto-rerun for non-eng Cursor waste loops",
-        "summary": "cursor_workflow_fail_loop signals are digest-only today; extend project-traffic v1 only when a deterministic same-day skip / rerun path exists per workflow (analysis-review, paper-learning-review, etc.).",
-        "category": "later",
-        "section": "ops",
-        "revisit_when": "After eng-agent reburn stop has been stable for a week and a second Cursor workflow shows the same unresolved fail-loop pattern",
-        "tags": [
-          "project-traffic",
-          "automation-waste",
-          "cursor"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "L419",
-        "title": "Shared NaN-safe overlay text helper for sector/name fields",
-        "summary": "UK heavyside now coerces float NaN sector/name; other overlays mostly use str() or truthiness checks. A shared helper would prevent the next (x or '').lower() crash on pandas NaN.",
-        "category": "later",
-        "section": "learning",
-        "revisit_when": "Another overlay AttributeError on float/NaN sector or name in CI or ingest logs",
-        "tags": [
-          "scoring",
-          "overlay",
-          "nan",
-          "heavyside"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "L420",
-        "title": "Hunter-fix PAT push still action_required (checkout extraheader)",
-        "summary": "Even with WORKFLOW_DISPATCH_PAT set and gh auth setup-git, #715 hunter-fix tip push still created pull_request CI in action_required (triggering_actor github-actions[bot]). Likely actions/checkout http.extraheader Authorization bearer GITHUB_TOKEN wins over gh credentials. Unset extraheader or push via x-access-token URL before git push.",
-        "category": "later",
-        "section": "ops",
-        "revisit_when": "Next hunter-fix tip push lands action_required despite PAT secret present in the commit step env",
-        "tags": [
-          "github-actions",
-          "hunter-fix",
-          "action_required",
-          "WORKFLOW_DISPATCH_PAT",
-          "checkout"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "L421",
-        "title": "Cursor agent for non-flake pytest after PR autofix declines",
-        "summary": "No-autofix follow-up re-runs a pre-existing live-fetch flake once and explains other pytest declines. It does not patch assertion failures. A capped agent could try a code fix when the follow-up says not implementable.",
-        "category": "later",
-        "section": "ops",
-        "revisit_when": "Eng PRs sit red on non-flake pytest after the one-shot live-fetch re-run and a human still has to patch them",
-        "tags": [
-          "ci",
-          "autofix",
-          "pytest",
-          "agent"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "L422",
-        "title": "Fork complement is an observe-only set, not a shadow holding",
-        "summary": "When a fork changes who is bought, do not re-buy the refused names inside the fork. Keep epoch-0 marking the full set and record the weekly complement (epoch-0 minus fork) so the selection effect stays identifiable. Downstream exit and DCA experiments run on the fork's real holdings. A price watch is not an exit cohort; simulate the refused path only if the claim is about names the filter dropped, and only if epoch-0 will stop marking them.",
-        "category": "later",
-        "section": "learning",
-        "revisit_when": "A buy-set fork is about to open (filter, conviction floor, or exclusion step) and epoch-0 would stop or would not contain the refused names",
-        "tags": [
-          "epoch0",
-          "forks",
-          "counterfactual",
-          "near_miss",
-          "selection"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "L423",
-        "title": "Shadow-buy every filter refusal into the downstream sample",
-        "summary": "If a buy/no-buy fork drops a name, downstream DCA and exit tests on the fork never see it, including when the drop was a mistake. Shadow-buy the entire refusal set at the decision date under the fork's downstream rules, and score those episodes in a refused stratum. Do not wait until a drop looks wrong, and do not pool shadow fills into the fork's live result. Skip the shadow buy when that same downstream rule is already overlaid on epoch-0, which still holds the name.",
-        "category": "later",
-        "section": "learning",
-        "revisit_when": "A buy-set fork is open and a downstream rule runs only on the fork's actual buys, not as an overlay on epoch-0",
-        "tags": [
-          "epoch0",
-          "forks",
-          "shadow_buy",
-          "selection",
-          "downstream"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "L424",
-        "title": "Hunter-fix must not ship net-empty or stripped eng tips",
-        "summary": "On #704 hunter-fix emptied the dividend tip before human merge; on #715 it stripped ingest/gap_fill and left a leftover PR (#717). Scoped auto-merge then stamps the task merged even when the intended feature was reverted. Traffic does not detect tip emptiness.",
-        "category": "later",
-        "section": "ops",
-        "revisit_when": "Another eng PR is human- or bot-merged after hunter-fix with a near-empty tip or a follow-up PR that only restores stripped files",
-        "tags": [
-          "hunter-fix",
-          "merge-authority",
-          "eng-queue",
-          "observation"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "L426",
-        "title": "Autofix one-shot re-run for Investegate maintenance HTML flakes",
-        "summary": "Live-fetch follow-up only matches has_fetchable_ir + assert None/URLError. Investegate scheduled-maintenance pages return short HTML and fail asserts like len(body) > 1000 (seen on #724/#725 BPT.AX leftover test). Expand safe one-shot re-run detection for that maintenance signature.",
-        "category": "later",
-        "section": "ops",
-        "revisit_when": "Another PR fails only on Investegate maintenance HTML while other shards are green",
-        "tags": [
-          "ci",
-          "autofix",
-          "investegate",
-          "flake"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "L427",
-        "title": "Traffic PM assists parked-backlog clear (orphan branch salvage / cascade cancel)",
-        "summary": "When queue_clearing pause is active, PM could open draft PRs from orphaned eng-* branches that already passed local checks, or cancel obvious overlapping preflight_clash cascade parks. Keep human judgment for no_diff_cap and ambiguous parks; do not grant broad cancel authority.",
-        "category": "later",
-        "section": "ops",
-        "revisit_when": "After parallel-cap email and salvage PRs settle; next time attention-parked pause fires with orphan branches and no open PRs",
-        "tags": [
-          "project-traffic",
-          "parked-backlog",
-          "pm-v1"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "L428",
-        "title": "Ops-monitor catch-up skip after morning slot suppressions leaves ops_status stale",
-        "summary": "When morning marks Sunday analysis-review/data-backup overdue as fixed (slot not reached) and email_deferred=false, 12:36/13:15 catch-ups skip. Committed ops_status then keeps stale workflow ages all day even after those slots succeed.",
-        "category": "later",
-        "section": "ops",
-        "revisit_when": "Next ops-monitor UX pass or after another Sunday where dashboard still shows stale analysis-review/data-backup after they succeeded",
-        "tags": [
-          "ops-monitor",
-          "catch-up",
-          "email-deferral",
-          "stale-status"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "L429",
-        "title": "Compile-cap drain: reject CH filing titles mapped to ops/workflow allowlists",
-        "summary": "eng-20260920-11/12 were drain tasks whose titles were CH refetch/OCR quality but allowed_paths pointed at ops_monitor/engineering/*.py and .github/workflows, causing preflight_clash and workflow_permission parks. Upstream topic→path mapping should refuse or re-narrow when the allowlist cannot implement the title.",
-        "category": "later",
-        "section": "ops",
-        "revisit_when": "Next compile_cap_drain batch parks on preflight_clash/workflow_permission with title/allowlist mismatch, or when tightening narrow-scope topic maps",
-        "tags": [
-          "engineering-queue",
-          "compile-cap-drain",
-          "allowlist"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "L430",
-        "title": "Sunday email-report hits 6h GHA timeout mid OCR/PDF ingest",
-        "summary": "2026-09-20 email-report #35514032032 (and morning recovery #35495407776) cancelled at ~6h still inside Screen/build ftse-email; logs show ongoing PDF startxref/Object Streams parsing near timeout. Send/commit/deploy skipped. Consider raising timeout-minutes, capping OCR work, or splitting ingest from report send.",
-        "category": "later",
-        "section": "ops",
-        "revisit_when": "Next Sunday email-report timeout or next ops pass on quiet-bundle runtime",
-        "tags": [
-          "email-report",
-          "timeout",
-          "ocr",
-          "ingest",
-          "quiet-bundle"
-        ],
-        "status": "open"
       }
     ],
     "defer_security": [
@@ -6394,26 +6181,6 @@
           "philosophy"
         ],
         "status": "open"
-      },
-      {
-        "id": "frag-20260919-01",
-        "text": "Traffic common-issues log has almost no signal (1 human ruff_format). Live-fetch flakes and hunter-fix tip wipes are not auto-recorded as fix occasions, so EOD common-issues understates recurring CI blockers.",
-        "tags": [
-          "traffic",
-          "common-issues",
-          "observation"
-        ],
-        "status": "open"
-      },
-      {
-        "id": "frag-20260919-02",
-        "text": "Sep18 evening eng-agent parks were merge_tree vs concurrent non-eng PR #720 after Composer+pytest already passed — not a simple preflight-reorder. Leave alone while parked-backlog pause holds.",
-        "tags": [
-          "spend",
-          "engineering-agent",
-          "merge_tree"
-        ],
-        "status": "open"
       }
     ],
     "proposed_tasks": {
@@ -6431,42 +6198,46 @@
       "horizon": [],
       "learning_director": []
     },
-    "engineering_open": [],
+    "engineering_open": [
+      {
+        "id": "eng-20260917-05",
+        "source": "engineering",
+        "title": "Relabel `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income (MEGP: no adjusted EPS in 67 filing bodies) to stop false “filing core” Lynch PEG fa",
+        "summary": "Relabel `adjusted_eps_growth_pct` when sourced from Yahoo Normalized Income (MEGP: no adjusted EPS in 67 filing bodies) to stop false “filing core” Lynch PEG failures and >300 bps divergence flags. (narrow_cohesion_bypass: no topic map — cohesion bypass keeps full area allowlist)",
+        "status": "open",
+        "added_at": null,
+        "area": "scoring"
+      },
+      {
+        "id": "eng-20260917-01",
+        "source": "engineering",
+        "title": "Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_defi",
+        "summary": "Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when screen TTM is ~27.4m and TTM is suppressed without stating which basis the family used; keep fcf_definition_divergence true whenever filing / TTM / adj disagree. Treat HORECA linen rental as cyclical/hospitality exposure. Populate failed_models for the 14/22 non-passes. Do not keep headline strong_buy when research_verdict is already accumulate. Stop splicing prior-memo text into action_note (the Accumulate paragraph is repeated). Fix co",
+        "status": "open",
+        "added_at": null,
+        "area": "scoring"
+      }
+    ],
     "counts": {
-      "defer_now": 1,
-      "defer_not_now": 128,
-      "defer_later": 283,
+      "defer_now": 0,
+      "defer_not_now": 124,
+      "defer_later": 273,
       "defer_security": 5,
-      "open_fragments": 22,
+      "open_fragments": 20,
       "proposed_total": 1,
-      "engineering_open": 0
+      "engineering_open": 2
     }
   },
   "integration": {
-    "overall": "warn",
-    "checks": [
-      {
-        "id": "ingest_loop_hit_runtime_cutoff",
-        "severity": "warn",
-        "category": "ingest",
-        "title": "Ingest loop hit runtime cutoff",
-        "summary": "Last run deferred 59 ticker(s) after completing 3 (runtime_budget) — backlog resume or chained chunk should drain remainder."
-      },
-      {
-        "id": "parked_engineering_tasks_need_manual_review",
-        "severity": "warn",
-        "category": "engineering",
-        "title": "Parked engineering tasks need manual review",
-        "summary": "1 parked task(s): eng-20260920-16"
-      }
-    ],
+    "overall": "ok",
+    "checks": [],
     "queue_status": {
-      "open_count": 0,
+      "open_count": 2,
       "pr_open_count": 0,
-      "parked_count": 1,
-      "merged_count": 67,
+      "parked_count": 6,
+      "merged_count": 19,
       "failed_count": 0,
-      "next_task_id": null,
+      "next_task_id": "eng-20260917-05",
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
@@ -6475,14 +6246,14 @@
     }
   },
   "role_coherence": {
-    "overall": "warn",
+    "overall": "info",
     "checks": [
       {
         "id": "stage_2b_learning_edge",
         "severity": "info",
         "category": "doctrine",
         "title": "Stage 2b focus aligned with primary learning gap",
-        "summary": "North-star focus is stage 2b while AI-judgment excess after costs is still negative (-33.0%). Breadth expansion and new tracks should stay deferred."
+        "summary": "North-star focus is stage 2b while AI-judgment excess after costs is still negative (-31.8%). Breadth expansion and new tracks should stay deferred."
       },
       {
         "id": "library_ahead_of_live",
@@ -6492,13 +6263,6 @@
         "summary": "21 graduated library markets vs stage 2b still in progress — library growth is correctly offline; live universe expansion remains gated."
       },
       {
-        "id": "defer_now_without_queue_link",
-        "severity": "warn",
-        "category": "join_up",
-        "title": "Deferred now items without matching queue work",
-        "summary": "1 item(s) marked `now` have no obvious engineering or review-task counterpart (L121). Promote via ftse-defer status or draft a supervised task."
-      },
-      {
         "id": "post_run_plan_without_queue_link",
         "severity": "info",
         "category": "join_up",
@@ -6506,16 +6270,20 @@
         "summary": "5 prioritised plan line(s) from the latest post-run review have no fuzzy match among open engineering tasks (Implement Investegate/LSE direct HTML/PDF fetch for indexed RNS (replace Google News redirect URLs) and persist to `filings/bodies/` with index `with_body` parity checks; Companies House document-api PDF pipeline with OCR quality gates and CH-ID ↔ `filings_index` mapping; reject or quarantine truncated extracts (flag when line count/hash indicates truncation); Parse allowlisted IR results PDFs into structured FCF bridges and populate `ir_presentation_metrics.json` (segment revenue, dividend policy, management FCF definitions)). They may have been filtered at compile, truncated by max_tasks (8), or not yet compiled. All match merged/parked tasks — schedule email_only for a fresh post-run; idle compile backstop will not reopen them."
       },
       {
-        "id": "post_run_plan_truncated_by_compile_cap",
-        "severity": "warn",
+        "id": "compile_cap_truncated_candidates",
+        "severity": "info",
         "category": "join_up",
-        "title": "Post-run plan exceeds compile cap",
-        "summary": "1 prioritised plan item(s) would not fit max_tasks=8 (Emit labeled dual FCF/dividend coverage (statutory OCF−capex vs management cash-). Raise cap for one compile, split across weeks, or park extras in DEFER."
+        "title": "Compile cap dropped lower-priority candidates",
+        "summary": "228 compiled candidate(s) omitted by max_tasks=8 (post-run plan items kept first). research_model_suggestions: Flag when [2/2]; research_model_suggestions: Do not pass dividend or FCF Yield on Yahoo FCF 100.6m when s; research_model_suggestions: Relabel `adjusted_eps_growth_pct` when sourced from Yahoo No When the priority engineering queue is idle, `ftse-engineering try-compile-cap-drain --apply` queues up to 2 open backlog items (above parked hunter; near-dups coalesced)."
       }
     ]
   },
   "so_what": {
-    "generated_at": "2026-09-21T08:30:04Z",
+<<<<<<< Updated upstream
+    "generated_at": "2026-09-17T11:54:10Z",
+=======
+    "generated_at": "2026-09-17T11:55:09Z",
+>>>>>>> Stashed changes
     "counts": {
       "findings": 0,
       "auto_queue": 0,

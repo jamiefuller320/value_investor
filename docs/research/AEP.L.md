@@ -1,103 +1,20 @@
 # AEP Plantations Plc (AEP.L) — Research memo
 
-_Version 1 · Updated 2026-09-04T19:49:52.921536+00:00 · Mode: initial_
+_Version 2 · Updated 2026-09-15T08:02:35.282287+00:00 · Mode: structured_verdict_update_
 
-## EXECUTIVE SUMMARY
-AEP Plantations is a UK-listed owner-operator of Indonesian and Malaysian palm oil estates, trading at a modest multiple on a materially stronger FY2025 earnings base and net cash balance sheet. The quantitative screen flags Strong Buy across cheapness, quality, dividend, GARP and risk families (composite ~79%, P/E ~11.4×, yield ~4.9%, ROE ~15%), consistent with filing-backed cash generation and rising shareholder returns. The central debate is whether H1 2026 underlying softness—replanting-related volume drag and post-Pinago cash deployment—is transient against a backdrop of firm CPO prices, estate expansion and active buybacks. We see a credible value case, but commodity, Indonesian policy and integration execution risks warrant phased conviction rather than full immediate sizing.
+_Phase B structured verdict (essay sections omitted on scheduled path)._
 
-## INVESTMENT THESIS
-For a value investor, AEP offers a rare combination in the palm-oil space: **asset-backed earnings, minimal leverage, and explicit capital return** at a screen-attractive valuation.
-
-**Quantitative fit.** The screen passes 19 of 22 models spanning Graham-style defensiveness (P/E ~11.4, P/B ~1.76), earnings/FCF yield, dividend yield (~4.9%), quality (ROE ~15.1%) and financial health (current ratio ~8.7× per screen). Composite score 0.79 exceeds sector-relative 0.74, with 12 weeks at Strong Buy and stable trend—suggesting signal persistence rather than a one-off datapoint.
-
-**Business quality anchors.** FY2025 Companies House annual accounts show revenue of **$465.2m** (+25% YoY), operating profit **$111.6m**, profit attributable to shareholders **$90.9m**, and cash net of short-term borrowings of **$231.8m** against net assets of **$580.7m** (minimal debt). Free cash flow was **$83.6m** in FY2025 (Yahoo fallback aligns with filing cash-flow statement: operating cash flow $113.8m less capex ~$30m). The group operates ~56k mature ha (pre-Pinago), with integrated milling, biogas/BioCNG assets and a long-run replanting programme aimed at yield uplift.
-
-**Capital allocation supports the screen.** FY2025 total dividend of **81.0 US cents per share** (pre 10-for-1 split; equivalent to 8.1 cents post-split per interim disclosure), plus **$11.4m** of buybacks, followed by a new **£8m buyback programme** from July 2026 and **$25.9m** returned in H1 2026 via dividends and repurchases. Management explicitly frames shares as undervalued—a direct alignment with the screen’s cheapness thesis.
-
-**Growth optionality without abandoning value discipline.** The **$158.3m Pinago acquisition** (May 2026) adds ~14,300 mature ha; KAP mill commissioning is targeted for December 2026; a proposed **PT AEP Nusantara IPO** (Kalimantan subsidiary) remains under review for 2027. These are upside drivers, but the core Strong Buy case rests on trailing cash earnings, balance-sheet strength and shareholder yield—not on IPO success.
-
-## FINANCIAL REVIEW
-*Primary source: UK RNS / Companies House filing bodies. Figures in USD unless stated. Note: a 10-for-1 share split completed 25 June 2026; H1 2026 interim restates prior EPS on a split-adjusted basis.*
-
-**FY2025 annual results (year ended 31 December 2025)** — *Companies House annual report body (`ch_01884630_MzUyODQ4NTgzM2FkaXF6a2N4`)*
-
-| Metric | FY2025 | FY2024 | YoY |
-|--------|--------|--------|-----|
-| Revenue | $465.2m | $372.3m | +25% |
-| Operating profit | $111.6m | $81.7m | +37% |
-| Profit before tax | $119.3m | $88.1m | +35% |
-| Profit attributable to shareholders | $90.9m | $67.5m | +35% |
-| Cash (net of ST borrowings) | $231.8m | $181.9m | +27% |
-| Net assets (ex-NCI) | $580.7m | $551.0m | +5% |
-| Basic EPS | 231.42¢* | 170.88¢* | +35% |
-| Total dividend | 81.0¢* | 51.0¢* | +59% |
-
-*Pre-split per annual report; H1 2026 interim restates FY2025 EPS at **23.14 cents** post-split.*
-
-Operational drivers in FY2025 included **6% higher own FFB production**, **18% higher third-party FFB intake**, **7% higher CPO production** and supportive CPO/PK pricing (Chairman’s statement, same filing). Yahoo `financials_annual.json` corroborates revenue ($465.2m), net income ($90.9m), total debt (~$0.5m lease-related) and FCF ($83.6m); we use filings as primary.
-
-**H1 2026 interim results (six months to 30 June 2026)** — *RNS Half-year Financial Report body (`47227f69e19e4bf7`)*
-
-| Metric | H1 2026 | H1 2025 | YoY |
-|--------|---------|---------|-----|
-| Revenue | $249.7m | $230.5m | +8.3% |
-| Gross profit | $62.8m | $62.8m | flat |
-| Profit before tax | $65.8m | $62.6m | +5.1% |
-| Profit after tax (owners) | $48.9m | $48.8m | +0.2% |
-| Basic EPS (split-adj.) | 12.71¢ | 12.33¢ | +3.1% |
-| Cash & equivalents | $109.5m | $244.7m | −55% |
-| Bank borrowings | $13.2m | nil | Pinago-related |
-| Net assets | $579.4m | $584.8m | −1% |
-
-Headline PBT growth includes a **$9.1m bargain-purchase gain** on Pinago; **excluding this, underlying PBT was ~9% lower YoY**, reflecting delayed cropping in North Sumatra and replanting in Riau, partly offset by Kalimantan strength. Own FFB production rose **2.7%** to 544.7k mt; mature plantation area rose **21%** to 74.5k ha (Pinago). Average ex-mill CPO price **$853/mt** (−1.2%); PK **$793/mt** (+7.4%).
-
-**Balance sheet and cash flow trajectory.** FY2025 ended essentially net cash with negligible group borrowings. H1 2026 cash fell primarily due to **$158.3m Pinago consideration** (funded from existing resources), **$14.6m capex**, **$9.1m buybacks**, partly offset by **$41.7m operating cash generation**. Pinago brought **$13.2m consolidated bank debt**. Net current assets remained positive ($145.1m at 30 June 2026). Retirement benefit net liabilities: **$8.0m** (H1 2026 balance sheet).
-
-**AGM trading update (five months to 31 May 2026)** — *RNS (`0218b32a6699f821`)*: own FFB **−2.7%**, CPO production **−1.8%**, with replanting and North Sumatra yield pressure; external FFB purchases **+6.5%** (Pinago contribution). Management guided that Indonesian export-governance changes have **minimal direct impact** as CPO is sold domestically to refineries.
-
-**Gaps / caveats.** Companies House interim filing in index (`ch_01884630_MzQxOTk5ODk1NGFkaXF6a2N4`, May 2024) is a legacy Anglo-Eastern parent-company stub, not consolidated H1 2025—**no statutory consolidated H1 2025 interim in index**; H1 2025 comparatives are taken from the September 2026 RNS interim body. Latest FY2025 annual report body is a partial OCR extract (financial highlights and chairman’s statement present; full notes/audit opinion not fully extracted in corpus). Yahoo quarterly cash flow is suppressed (empty quarterly series)—TTM FCF not independently verified beyond FY2025 annual.
-
-## RISKS AND RED FLAGS
-**Commodity cyclicality.** Earnings remain levered to CPO/PK prices and biodiesel-driven domestic demand (Indonesia B50). H1 2026 average CPO ex-mill was only marginally below prior year, but a price downturn would compress margins quickly given flat H1 gross profit on higher revenue.
-
-**Operational / volume risk.** A 10,000 ha replanting programme to 2030 and ageing palm profile (~22% classified “old”, average age ~14 years) suppress near-term FFB yields; H1 underlying PBT decline confirms this is not merely theoretical. Pinago contributed only **2.5 mt/ha FFB yield** in its first two months—integration and yield uplift execution matter.
-
-**Indonesian regulatory overlay.** May–September 2026 policy moves on commodity export oversight via PT Danantara (DSI) triggered share volatility (news, May 2026). Filings state limited direct impact given domestic CPO sales, but **regulatory framework evolution to end-2026/full implementation 2027** remains a monitoring point.
-
-**M&A and accounting.** Pinago purchase generated a **$9.1m bargain-purchase gain** (provisional PPA); acquisition accounting for PT Jaya Jadi Utama (post-period) is incomplete. Goodwill/intangible risk is modest today but integration assumptions could shift.
-
-**FX and translation.** H1 2026 other comprehensive loss included **$32.1m** exchange translation on IDR weakness—equity impact without immediate cash effect, but relevant for UK investors benchmarking USD NAV.
-
-**Customer concentration.** H1 2026: four Indonesian customers represented **~$89.9m (35.9%)** of revenue; Customer 1 alone **14.5%** (interim note 5). Tender-based weekly sales mitigate but do not eliminate concentration risk.
-
-**Governance / liquidity mechanics.** Aggressive daily buyback programme may represent **>25% of average LSE daily volume** (July 2026 RNS)—potential liquidity/market-impact consideration for entry sizing.
-
-**Pension.** Defined benefit / retirement obligations **~$8.0m** net liability at H1 2026; not material relative to equity but persistent.
-
-**Going concern.** H1 2026 interim explicitly states directors adopted a **going concern basis** after budgeted cash-flow stress testing (commodity prices, FX)—no going-concern qualification flagged; FY2025 auditor report in corpus excerpt noted unqualified opinion.
-
-RiskTags: cyclical, regulatory, customer_concentration, competitive, other
-RiskTags: cyclical, regulatory, customer_concentration, competitive, other
-
-## NEWS HIGHLIGHTS
-Coverage over the past year is **moderate for corporate actions but noisy on ticker confusion** (many “AEP” hits refer to US utility American Electric Power—not this issuer).
-
-**Material AEP Plantations items (from `news_manifest.json`):**
-
-- **2 Sep 2026:** H1 results—revenue +8.3% to $249.7m; PBT +5.1% to $65.8m; shares fell ~7% on underlying profit softness (*Proactive Investors*, *Investors Chronicle*).
-- **Jul–Sep 2026:** Sustained **share buyback** activity under £8m programme (*TipRanks*, *Kalkine Media*, multiple daily RNS transactions).
-- **31 Jul 2026:** **Pinago acquisition completion** and follow-on land deal (*Completion of Acquisition* RNS; *Investors Chronicle* “boosted by latest acquisition”).
-- **22 Jun 2026:** **10-for-1 share split** approved (*Sharecast*, *London South East*).
-- **15 Jun 2026:** **AGM trading update**—production softness, replanting progress (*RNS*).
-- **6 Jul 2026:** New **£8m buyback programme** announced (*RNS* / *Kalkine Media*).
-- **16 Apr 2026:** **Proposed IPO** of PT AEP Nusantara on IDX (~15% float, Kalimantan assets) (*RNS*; *idnfinancials.com*).
-- **May 2026:** **Indonesia export-control headlines** pressured palm names; AEP shares cited as falling on policy uncertainty (*Sharecast*, *London South East*, *Investors Chronicle* “Palm oil stocks struggle after Indonesian intervention”).
-- **Oct 2025:** **CB Industrial divestment** of Indonesian venture to AEP (*The Edge Malaysia*)—consistent with bolt-on land strategy.
-
-**Thin spots:** Limited sell-side depth in manifest; much coverage is syndicated buyback/H1 recap. No major management turnover flagged in indexed news.
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
 Confidence: 0.74
-Rationale: Primary filings confirm a strong FY2025 earnings and cash inflection with minimal leverage and rising shareholder returns, supporting the quantitative Strong Buy, but medium risk from commodity cyclicality, replanting-related volume softness in early 2026, and Indonesia regulatory/IPO execution items warrants phased entry rather than full immediate allocation.
+Rationale: Filing-backed FY2025/H1 value case is unchanged and still supports Strong Buy; thin post-memo news adds only buyback recap, so commodity, regulatory and replanting risks still warrant phased entry.
+RiskTags: cyclical, regulatory, customer_concentration, competitive, other
+
+## Weekly updates
+
+### 2026-09-15T08:02:35.282287+00:00
+No new RNS or filings since the 4 Sep memo; H1 2026 and Pinago remain the latest primary disclosures.  
+7–11 Sep coverage is syndicated Kalkine recap of ongoing £8m buyback purchases (~48k shares at up to ~198–204p), with no new operational or Indonesia policy items.  
+Screen still Strong Buy (~77% composite, 16 weeks, stable); timing overlay remains “wait for pullback”.
