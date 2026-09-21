@@ -1,6 +1,6 @@
 # Parked & later ideas — periodic review
 
-Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-21T11:42:01+00:00`).
+Auto-generated from [`docs/deferred-ideas.json`](deferred-ideas.json) (updated `2026-09-21T14:53:26+00:00`).
 
 Agents append parked ideas with `ftse-defer add …` and scratch fragments with `ftse-defer fragment …` (see `AGENTS.md`). Do not hand-edit this markdown; edit the JSON store or use the CLI, then `ftse-defer render`.
 
@@ -188,6 +188,7 @@ Agents append parked ideas with `ftse-defer add …` and scratch fragments with 
 | N136 | **Do not stack live forks on an epoch-0 child book** | When entry and exit policies are both ready, adopt at most one stage into one forward book and re-score the next stage as an overlay on that path. Report child-minus-parent, not child-minus-epoch-0. A live tree (DCA book, then a timing fork of that book) or a mid-epoch clone confounds the datum and spends a scarce shadow slot. A 2x2 factorial is only for a suspected sign-changing interaction, and those arms must start together from the same date and capital. | One forward book has adopted a stage policy, the next-stage overlay on that book is ready, and the overlay cannot reconstruct the counterfactual path (missing fills). Only then open one child book. Open a second arm only if that conditional effect flips sign versus the epoch-0 overlay. |
 | N137 | **Eng-agent merge_tree park after successful Composer (vs concurrent PRs)** | Sep18 evening burns were full Composer+pytest then park on merge_tree vs open non-eng PR (#720), not missing early preflight. Do not reorder full preflight before Composer. Prefer leave alone while parked-backlog pause holds. | Parked attention count drops below 7 and eng-agent resumes with merge_tree parks against concurrent open PRs |
 | N138 | **Focus-market ingest for off-buy-tier zero-filing memos** | Names like AGS.BR: memo on disk (often initial/zero-body) but no longer buy-tier and filings_total=0. Sprint ingest targets buy-tier gaps only; rememo stays off until bodies land. IR may be bot-blocked (Cloudflare). Not the same as NBA-style zero-body catch-up on current buy-tier. | euro_depth buy-tier filing sprint is ingest_exhausted with zero_body=0 and operators still want focus-book memo filing parity for hold-tier names with accumulate verdicts |
+| N139 | **Do not add a new ingest run-repair service** | Overnight deepen failed because a stuck PDF overran the between-ticker budget and the 75m timeout killed the process before JSON was written. workflow-failure-responder already matches that signature and skip_drafts it. Repair belongs in the ingest loop (hard per-ticker abort + SIGTERM flush), not a new monitor. | FTSE ingest still exits 124 with no ingest_loop.json after a per-ticker hard deadline and SIGTERM flush are in place |
 
 ---
 
