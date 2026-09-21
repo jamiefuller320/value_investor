@@ -1,6 +1,6 @@
 # ME Group International plc (MEGP.L) — Research memo
 
-_Version 1 · Updated 2026-09-20T23:45:40.917827+00:00 · Mode: structured_verdict_
+_Version 2 · Updated 2026-09-21T08:02:07.291642+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,5 +9,12 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.76
-Rationale: FY25 filings support cheap, laundry-led cash generation, but H1 FY26 PBT/EPS fell, FY26 guidance was revised to £69–74m, net cash dropped, the interim dividend was cut, and statutory FCF dividend cover stays sub-1×—tempering the strong-b...
+Rationale: Prior filings still support cheap, cash-generative laundry growth, but with no new disclosures the H1 profit dip, FY26 guidance cut, net cash erosion and accounting restatements continue to partially weaken the strong-buy case.
 RiskTags: accounting, cyclical, governance, competitive, key_person
+
+## Weekly updates
+
+### 2026-09-21T08:02:07.291642+00:00
+No new company filings or news in the batch since the last refresh.  
+The quantitative screen remains strong buy (18 weeks); dividend-family models fail on statutory FCF cover below 1×.  
+H1 softness, the FY26 guidance cut and prior accounting/governance flags are unchanged.
