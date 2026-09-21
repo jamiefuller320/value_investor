@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-21T15:00:36+00:00",
+  "updated_at": "2026-09-21T19:02:16+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9661,6 +9661,24 @@
       "status": "open",
       "source": "https://github.com/jamiefuller320/value_investor/pull/779",
       "added_at": "2026-09-21T15:00:36+00:00"
+    },
+    {
+      "id": "L432",
+      "category": "later",
+      "section": "ops",
+      "title": "Email dashboard commit must not clobber fresher ops_status.json",
+      "summary": "Monday 2026-09-21 email report commit a51a0ecd5 rewrote docs/data/ops_status.json to the prior-day snapshot after ops-monitor 4824d467a had already written a fresher run. Fixed by listing ops_status/ops_monitor_log as GHA_COMMIT_OPTIONAL on email-report so mid-run monitor advances are preserved.",
+      "revisit_when": "Next email-report or ops-monitor sync complaint about stale ops_status after a long email run",
+      "tags": [
+        "ops_status",
+        "email-report",
+        "artifact-clobber",
+        "sync"
+      ],
+      "status": "done",
+      "source": "https://github.com/jamiefuller320/value_investor/pull/786",
+      "added_at": "2026-09-21T19:02:11+00:00",
+      "updated_at": "2026-09-21T19:02:16+00:00"
     }
   ],
   "fragments": [

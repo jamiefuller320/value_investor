@@ -103,12 +103,17 @@ jobs:
           GHA_COMMIT_LABEL: "Email report"
           GHA_COMMIT_REF: ${{ github.ref_name }}
           # Includes docs/data/history/ run snapshots for backtest/sim replay.
+          # ops_status / ops_monitor_log are optional: never overlay when main
+          # advanced them mid-run (L431 — email must not clobber fresher monitor).
           GHA_COMMIT_OWNED: |
             docs/data
             docs/research
             docs/data/engineering_tasks.json
             docs/data/post_run_clearance.json
             docs/data/so_what_closure.json
+          GHA_COMMIT_OPTIONAL: |
+            docs/data/ops_status.json
+            docs/data/ops_monitor_log.json
         run: bash scripts/gha_commit_artifacts.sh
 
       - name: Dispatch engineering queue after post-run clearance

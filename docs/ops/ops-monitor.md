@@ -72,7 +72,10 @@ catch-up re-checks and emails only if issues remain.
 Artifact commit uses `scripts/gha_commit_ops_monitor.sh` → shared
 `scripts/gha_commit_artifacts.sh` (fetch + retry; also used by email-report and
 library-grow). Status files always overlay; `engineering_tasks.json` / health
-logs overlay only when `main` has not changed them since checkout. The workflow
+logs overlay only when `main` has not changed them since checkout. The email-report
+dashboard commit lists `ops_status.json` / `ops_monitor_log.json` as
+`GHA_COMMIT_OPTIONAL` so a long Sunday/Monday email run cannot clobber a fresher
+ops-monitor snapshot that landed mid-job (L432). The workflow
 commits those artifacts even when `ftse-ops-monitor` exits non-zero, then fails
 the job afterward so a red finding cannot leave `ops_status.json` stale.
 

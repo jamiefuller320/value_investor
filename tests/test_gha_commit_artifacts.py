@@ -82,6 +82,7 @@ def _run_script(
     work: Path,
     *,
     owned: str,
+    optional: str = "",
     message: str = "chore: test artifacts [skip ci]",
     attempts: str = "5",
 ) -> subprocess.CompletedProcess[str]:
@@ -95,6 +96,8 @@ def _run_script(
         "GIT_AUTHOR_NAME": "test",
         "GIT_AUTHOR_EMAIL": "test@example.com",
     }
+    if optional:
+        env["GHA_COMMIT_OPTIONAL"] = optional
     return subprocess.run(
         ["bash", "scripts/gha_commit_artifacts.sh"],
         cwd=work,
@@ -180,8 +183,65 @@ def test_email_and_library_workflows_use_shared_commit_helper() -> None:
     assert "git pull --rebase --autostash" not in library
     assert "git pull --rebase --autostash" not in epoch0
     assert "changes_detected" in email
+    assert "GHA_COMMIT_OPTIONAL" in email
+    assert "docs/data/ops_status.json" in email
+    assert "docs/data/ops_monitor_log.json" in email
     assert "docs/data/paper_automation/markets/**/buy_tier_level/**" in epoch0
     assert "docs/data/library/equal_support_status.json" in epoch0
+
+
+def test_email_dashboard_commit_does_not_clobber_fresher_ops_status(tmp_path: Path):
+    """L431: docs/data owned must not overlay ops_status when main advanced mid-run."""
+    remote, work = _seed_repo(tmp_path)
+    _write(
+        work / "docs" / "data" / "ops_status.json",
+        json.dumps({"run_at": "2026-09-20T07:46:35+00:00", "overall": "warn"}) + "\n",
+    )
+    _write(work / "docs" / "data" / "latest.json", json.dumps({"tickers": 99}) + "\n")
+    _git(work, "add", "docs/data/ops_status.json", "docs/data/latest.json")
+    _git(work, "commit", "-m", "seed stale ops_status")
+    _git(work, "push", "origin", "main")
+
+    # Long email run still holds the stale ops_status in the working tree.
+    _write(
+        work / "docs" / "data" / "ops_status.json",
+        json.dumps({"run_at": "2026-09-20T07:46:35+00:00", "overall": "warn"}) + "\n",
+    )
+    _write(work / "docs" / "data" / "latest.json", json.dumps({"tickers": 100}) + "\n")
+
+    # Concurrent ops-monitor lands a fresher snapshot on main.
+    other = tmp_path / "other"
+    _git(tmp_path, "clone", str(remote), str(other))
+    _git(other, "config", "user.email", "other@example.com")
+    _git(other, "config", "user.name", "other")
+    _write(
+        other / "docs" / "data" / "ops_status.json",
+        json.dumps({"run_at": "2026-09-21T07:46:34+00:00", "overall": "warn"}) + "\n",
+    )
+    _git(other, "add", "docs/data/ops_status.json")
+    _git(other, "commit", "-m", "ops monitor fresh")
+    _git(other, "push", "origin", "main")
+
+    result = _run_script(
+        work,
+        owned="docs/data docs/research",
+        optional="docs/data/ops_status.json docs/data/ops_monitor_log.json",
+    )
+    assert result.returncode == 0, textwrap.dedent(
+        f"""
+        artifact commit failed
+        stdout: {result.stdout}
+        stderr: {result.stderr}
+        """
+    )
+    assert "Skipping docs/data/ops_status.json" in result.stderr
+    latest = tmp_path / "latest"
+    _git(tmp_path, "clone", str(remote), str(latest))
+    ops = json.loads((latest / "docs" / "data" / "ops_status.json").read_text(encoding="utf-8"))
+    assert ops["run_at"] == "2026-09-21T07:46:34+00:00"
+    assert json.loads((latest / "docs" / "data" / "latest.json").read_text(encoding="utf-8")) == {
+        "tickers": 100
+    }
 
 
 def test_email_report_skips_full_ingest_deepen() -> None:
