@@ -1,6 +1,6 @@
 # Project traffic — end-of-day digest
 
-Generated: `2026-09-21T18:56:44.883412+00:00`
+Generated: `2026-09-21T21:10:56.422636+00:00`
 Trajectory: **on_track**
 Dispatch pause: **inactive** (stuck PRs: 0)
 
@@ -24,7 +24,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - [ok] Stage 4 (Controlled universe expansion): not_started _(source: docs/data/project_progress.json)_
 - [ok] Stage 5 (Self-improving automation): not_started _(source: docs/data/project_progress.json)_
 - [ok] Queue health overall=idle; headline=Queue and hunter idle. _(source: docs/data/queue_health.json)_
-- [ok] Ops monitor overall=warn at 2026-09-20T07:46:35.090327+00:00 _(source: docs/data/ops_status.json)_
+- [ok] Ops monitor overall=warn at 2026-09-21T18:56:17.226028+00:00 _(source: docs/data/ops_status.json)_
 - [ok] Traffic pause_active=False; stuck_pr_count=0 _(source: docs/data/engineering_tasks.json#traffic_control)_
 
 ## Traffic actions
@@ -38,7 +38,7 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `human`/human PR #773 `eng-20260921-01` — Harden Investegate/LSE direct fetch for indexed RNS items (FY/HY results, annual reports)—replace Google News wrapper URLs and empty Ticker RNS bodies—starting
 
 ## PR fix occasions — common failure reasons
-- Occasion count: 14
+- Occasion count: 16
 - `PR mergeable=CONFLICTING against main` — 4×
 - `ruff_format` — 1×
 - `dirty merge: deferred-ideas.json / deferred-review.md vs main after L424-L426 landings` — 1×
@@ -47,11 +47,6 @@ Dispatch pause: **inactive** (stuck PRs: 0)
 - `engineering_tasks.json queue_clearing + automation.json queue snapshots vs main (#757 ledger)` — 1×
 - `engineering_tasks/automation/queue_health vs main after #756 merge` — 1×
 - `PR mergeable=CONFLICTING / mergeStateStatus=DIRTY against main` — 1×
-
-## Ops-monitor email handoff
-- Email subject: `FTSE Ops Monitor — WARN`
-- Findings: 1 (open=1, resolved=0)
-- [open] WARN Parked engineering tasks need manual review — planned: `human_triage` (Surface in PM digest for human / eng follow-up)
 
 ## Merge authority
 - Status: **scoped_auto_merge**
