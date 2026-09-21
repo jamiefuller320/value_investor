@@ -1023,7 +1023,8 @@ def _extract_investegate_html_text(html: str) -> str:
         count=1,
         flags=re.I | re.S,
     )
-    return re.sub(r"\s+", " ", text).strip()
+    text = re.sub(r"\s+", " ", text).strip()
+    return _strip_investegate_ai_wrapper(text)
 
 
 def _extract_investegate_html_headline(html: str) -> str | None:
@@ -1404,9 +1405,36 @@ def _is_rns_body_fetch_candidate(row: dict[str, Any]) -> bool:
 _INVESTEGATE_AI_SUMMARY_RE = re.compile(r"^BETA\s+Close\s+X\b", re.I)
 
 
+def _strip_investegate_ai_wrapper(text: str) -> str:
+    """
+    Drop Investegate ``BETA Close X`` AI preambles when statutory RNS narrative follows.
+
+    Buyback and PDMR pages (e.g. GFTU.L) often embed the full RNS after a
+    ``Disclaimer*`` marker while the fetch gate previously rejected the whole extract.
+    """
+    cleaned = (text or "").strip()
+    if not cleaned or not _INVESTEGATE_AI_SUMMARY_RE.match(cleaned):
+        return cleaned
+    for marker in (
+        "Disclaimer*",
+        "Disclaimer",
+        "submitted in full unedited text",
+    ):
+        pos = cleaned.find(marker)
+        if pos > 0:
+            return cleaned[pos:].strip()
+    return cleaned
+
+
 def _is_investegate_ai_summary_body(text: str) -> bool:
     """True for Investegate HTML AI-summary wrappers, not statutory RNS PDF extracts."""
-    return bool(_INVESTEGATE_AI_SUMMARY_RE.match((text or "").strip()))
+    raw = (text or "").strip()
+    if not _INVESTEGATE_AI_SUMMARY_RE.match(raw):
+        return False
+    stripped = _strip_investegate_ai_wrapper(raw)
+    if stripped != raw and _filing_text_is_substantive(stripped, min_chars=200):
+        return False
+    return True
 
 
 def _normalize_rns_document_url(url: str | None) -> str:

@@ -1670,6 +1670,106 @@ def test_validate_rns_filing_body_rejects_investegate_ai_summary():
     assert reason == "investegate_summary"
 
 
+def test_eng_20260921_01_extract_investegate_html_strips_beta_wrapper_for_gftu_buyback():
+    """GFTU.L buyback RNS pages pair BETA Close X blurbs with full text after Disclaimer*."""
+    html = """
+    <html><body>
+    <h1>Transaction in Own Shares</h1>
+    <p>BETA Close X Grafton Group PLC has purchased 29,474 ordinary shares on the London
+    Stock Exchange on September 16, 2026, as part of its GBP 25,000,000 share buyback
+    program.</p>
+    <p>Disclaimer* Grafton Group PLC 17 September 2026 TRANSACTION IN OWN SHARES
+    17 September 2026 Grafton Group plc ("Grafton" or the "Company") announces that on
+    16 September 2026 it purchased, for cancellation, the following number of ordinary shares
+    of EUR0.05 each in the Company on the London Stock Exchange from Deutsche Bank AG,
+    London Branch as part of its GBP 25,000,000 share buyback programme.</p>
+    <div>Related announcements</div>
+    </body></html>
+    """
+    text = _extract_investegate_html_text(html)
+    assert not text.startswith("BETA Close X")
+    assert "TRANSACTION IN OWN SHARES" in text
+    assert "Deutsche Bank" in text
+    assert _is_investegate_ai_summary_body(text) is False
+
+
+def test_eng_20260921_01_refetch_investegate_persists_gftu_buyback_body(
+    monkeypatch, tmp_path: Path
+):
+    from value_investor.research.filings import refetch_investegate_filing_bodies
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    investegate_url = (
+        "https://www.investegate.co.uk/announcement/rns/"
+        "grafton-group-ut-cdi---gftu/transaction-in-own-shares/9776217"
+    )
+    html = """
+    <html><body>
+    <h1>Transaction in Own Shares</h1>
+    <p>BETA Close X Grafton Group PLC has purchased ordinary shares as part of its buyback.</p>
+    <p>Disclaimer* Grafton Group PLC 17 September 2026 TRANSACTION IN OWN SHARES
+    Grafton Group plc announces that on 16 September 2026 it purchased ordinary shares
+    for cancellation on the London Stock Exchange from Deutsche Bank AG, London Branch
+    as part of its share buyback programme. The volume weighted average price paid was
+    GBP 9.579934 per share and the highest price paid was GBP 9.6500 per share.</p>
+    <p>The Company intends to cancel the purchased shares and holds them in treasury until
+    cancellation. Total shares purchased in the programme to date are disclosed in the
+    accompanying table together with aggregate consideration and daily transaction counts
+    for the London Stock Exchange market on which the shares were repurchased. This
+    announcement does not update revenue, profit, cash flow or dividend guidance for the
+    group and is issued solely under the buyback programme disclosure requirements.</p>
+    </body></html>
+    """
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": "038f9a3e8161ee1b",
+                        "source": "investegate_direct",
+                        "headline": "Transaction in Own Shares",
+                        "published_at": "2026-09-17T00:00:00+00:00",
+                        "url": investegate_url,
+                        "period": "other",
+                        "has_body": False,
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fake_get(url, headers=None, timeout=60):
+        if url == investegate_url:
+            return html.encode("utf-8")
+        raise AssertionError(url)
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_get)
+    monkeypatch.setattr(
+        "value_investor.research.filings.enrich_filing_rows",
+        lambda rows, *, ticker, company_name: list(rows),
+    )
+    monkeypatch.setattr(
+        "value_investor.research.filings.filter_misattributed_filings",
+        lambda rows, **kwargs: list(rows),
+    )
+    result = refetch_investegate_filing_bodies(
+        filings_dir,
+        ticker="GFTU.L",
+        company_name="Grafton Group plc",
+        max_bodies=5,
+    )
+    assert result["attempted"] == 1
+    assert result["fetched"] == 1
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    assert saved["filings"][0]["has_body"] is True
+    body_text = (bodies_dir / "038f9a3e8161ee1b.txt").read_text(encoding="utf-8")
+    assert "TRANSACTION IN OWN SHARES" in body_text
+    assert not body_text.startswith("BETA Close X")
+
+
 def test_dedupe_rns_results_document_rows_itv_h1_prefers_july_announcement(tmp_path: Path):
     """eng-20260918-09: keep d19c5d3b8e0bb46a, not the 30 June period-end duplicate."""
     filings_dir = tmp_path / "filings"
