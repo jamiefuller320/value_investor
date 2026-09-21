@@ -1054,27 +1054,15 @@ def evaluate_traffic_pause(
         waste_hold = PAUSE_REASON_AUTOMATION_WASTE in list(state.get("pause_reasons") or [])
         waste_active = bool(state.get("automation_waste_active"))
         if stuck_count == 0 and not waste_hold and not waste_active:
-            pause_started = _parse_iso(str(state.get("pause_started_at") or ""))
-            last_action = _parse_iso(str(state.get("last_action_at") or ""))
-            effective_last = last_action
-            if pause_started and last_action and last_action < pause_started:
-                effective_last = None
-            # If never stamped an action, allow resume after pause age >= idle.
-            if effective_last is None and pause_started is not None:
-                effective_last = pause_started
-            idle_ok = effective_last is not None and (now - effective_last) >= timedelta(
-                minutes=int(policy["resume_idle_minutes"])
-            )
-            if idle_ok:
-                state["pause_active"] = False
-                state["resumed_at"] = now.isoformat()
-                state.pop("pause_started_at", None)
-                state.pop("pause_reasons", None)
-                state.pop("last_action_at", None)
-                changes["resumed"] = True
-            else:
-                state["resume_pending"] = True
-                changes["resume_pending"] = True
+            # Resume as soon as monitored stuck PRs clear — do not hold dispatch
+            # through resume_idle_minutes while ops-monitor still reports a pause.
+            state["pause_active"] = False
+            state["resumed_at"] = now.isoformat()
+            state.pop("pause_started_at", None)
+            state.pop("pause_reasons", None)
+            state.pop("last_action_at", None)
+            state.pop("resume_pending", None)
+            changes["resumed"] = True
         else:
             merged_reasons = list(reasons)
             if waste_hold or waste_active:
