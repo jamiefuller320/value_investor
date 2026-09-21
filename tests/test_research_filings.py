@@ -7443,8 +7443,55 @@ def test_fetch_filings_ir_allowlist_imb_l(tmp_path: Path):
     rows = fetch_filings_ir_allowlist("IMB.L", path=allowlist_path)
     assert len(rows) == 1
     assert rows[0]["source"] == "ir_allowlist"
+    assert rows[0]["period"] == "interim"
     assert "rns-pdf.londonstockexchange.com" in rows[0]["url"]
     assert "8727D_1-2026-5-11.pdf" in rows[0]["url"]
+
+
+def test_eng_20260921_06_imb_hy26_ir_allowlist_reclassifies_from_body(tmp_path: Path):
+    """HY26 statutory RNS was bodied as period=other; six-months body cues must tag interim."""
+    from value_investor.research.filings import _apply_headline_period, sanitize_filings_index
+
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    url = "https://www.rns-pdf.londonstockexchange.com/rns/8727D_1-2026-5-11.pdf"
+    row_id = "ir_69544cbf423b9ee8"
+    body = (
+        "REPORT FOR THE SIX MONTHS ENDED 31 MARCH 2026\n"
+        "Tobacco net revenue growth of 1.5%. NGP net revenue up 7%." + (" revenue " * 40)
+    )
+    (bodies_dir / f"{row_id}.txt").write_text(body, encoding="utf-8")
+    index = {
+        "filings": [
+            {
+                "id": row_id,
+                "source": "ir_allowlist",
+                "headline": "IR allowlist document — 8727D_1-2026-5-11.pdf",
+                "url": url,
+                "period": "other",
+                "category": "ir_allowlist",
+                "has_body": True,
+                "body_path": str(bodies_dir / f"{row_id}.txt"),
+            }
+        ]
+    }
+    (filings_dir / "filings_index.json").write_text(json.dumps(index), encoding="utf-8")
+
+    result = sanitize_filings_index(
+        filings_dir,
+        company_name="Imperial Brands PLC",
+        ticker="IMB.L",
+    )
+    assert result["reclassified"] >= 1
+    payload = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    ir_row = payload["filings"][0]
+    assert ir_row["period"] == "interim"
+    assert payload["summary"]["interim"] == 1
+    assert payload["summary"]["period_coverage"]["interim"]["with_body"] == 1
+
+    direct = _apply_headline_period(ir_row, body_snippet=body[:4000])
+    assert direct["period"] == "interim"
 
 
 def test_refetch_ir_allowlist_filing_bodies_itv_l(tmp_path: Path, monkeypatch):

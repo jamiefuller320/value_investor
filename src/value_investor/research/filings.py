@@ -643,6 +643,7 @@ _INTERIM_PATTERNS = (
     r"\binterim report\b",
     r"\bh1 results\b",
     r"\bh2 results\b",
+    r"\bsix months ended\b",
     r"\bq[1-4]\b",
     r"\bfirst quarter\b",
     r"\bsecond quarter\b",
@@ -4625,6 +4626,8 @@ def load_ir_url_allowlist(path: Path | None = None) -> dict[str, list[str]]:
 _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://investorpa.com/announcement-pdf/20251117/220734.pdf": "annual",
     "https://investorpa.com/announcement-pdf/20260511/291611.pdf": "interim",
+    # IMB.L HY26 statutory RNS — opaque LSE rns-pdf slug (eng-20260921-06).
+    "https://www.rns-pdf.londonstockexchange.com/rns/8727D_1-2026-5-11.pdf": "interim",
 }
 
 
@@ -5540,6 +5543,7 @@ def refetch_ir_allowlist_filing_bodies(
                     )
                     body = None
                 else:
+                    item = _apply_headline_period(item, body_snippet=body[:4000])
                     filename = f"{item['id']}.txt"
                     path = bodies_dir / filename
                     path.write_text(body, encoding="utf-8")
