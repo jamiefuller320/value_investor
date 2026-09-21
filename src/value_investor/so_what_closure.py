@@ -476,7 +476,9 @@ def scan_system_gap_so_what_findings(
         if layer in AUTO_PROMOTE_LAYERS and severity == "high":
             if engineering_has_system_gap_task(eng_rows, flag_id):
                 closure = CLOSURE_OBSERVE
-                so_what = f"{summary} (tracked as eng-sgap / engineering queue — no duplicate task.)"
+                so_what = (
+                    f"{summary} (tracked as eng-sgap / engineering queue — no duplicate task.)"
+                )
             else:
                 closure = CLOSURE_HUMAN_GATE
                 so_what = summary
@@ -928,7 +930,9 @@ def so_what_summary_for_progress(snapshot: dict[str, Any] | None = None) -> dict
             ]
         )
     learning_path = [
-        f for f in findings if isinstance(f, dict) and str(f.get("kind") or "").startswith("system_gap_")
+        f
+        for f in findings
+        if isinstance(f, dict) and str(f.get("kind") or "").startswith("system_gap_")
     ]
     learning_path_groups = group_so_what_rows(learning_path)
 

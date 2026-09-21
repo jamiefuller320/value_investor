@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from value_investor.learning_data_completeness import compute_learning_data_completeness
 
 
@@ -13,7 +11,12 @@ def test_completeness_score_penalizes_high_flags():
         "flag_count": 2,
         "high_flag_count": 2,
         "layers": {
-            "apply": {"buy_tier_count": 10, "buy_tier_wired_count": 10, "strong_buy_count": 2, "strong_buy_wired_count": 2},
+            "apply": {
+                "buy_tier_count": 10,
+                "buy_tier_wired_count": 10,
+                "strong_buy_count": 2,
+                "strong_buy_wired_count": 2,
+            },
             "publish": {"research_index_count": 50, "index_missing_committed_verdicts": 0},
             "produce": {
                 "live_committed": {
