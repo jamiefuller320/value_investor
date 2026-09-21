@@ -1,6 +1,6 @@
 # Imperial Brands PLC (IMB.L) — Research memo
 
-_Version 2 · Updated 2026-09-15T08:03:49.888118+00:00 · Mode: structured_verdict_update_
+_Version 1 · Updated 2026-09-21T19:10:30.121649+00:00 · Mode: structured_verdict_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,12 +9,5 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.68
-Rationale: News since 4 Sep is secondary buyback and dividend commentary only; research still confirms yield and capital returns, but missing interims and persistent leverage and GAAP-earnings flags prevent endorsing the strong-buy screen outright.
-RiskTags: regulatory, competitive, leverage, pension, governance, cyclical, liquidity
-
-## Weekly updates
-
-### 2026-09-15T08:03:49.888118+00:00
-Since the 4 Sep memo, headlines are mostly Kalkine buyback and dividend pieces (7–14 Sep), including ~210k shares at 2,487p under the £1.45bn plan.
-No new annual or interim filings in the batch; the director-declaration item is not corroborated in indexed RNS bodies here.
-Thesis, risks, and timing are unchanged.
+Rationale: HY26 results confirm progressive dividends and buybacks; FY25 statutory FCF (~£3.2bn) supports ~2× cover vs unverified screen TTM (~£2.5bn), but leverage ~2.4×, GAAP EPS decline and open FCF-definition tensions warrant buy not strong buy.
+RiskTags: regulatory, leverage, litigation, accounting
