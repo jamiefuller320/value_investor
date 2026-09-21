@@ -1,15 +1,63 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-18T09:30:18.277027+01:00",
+    "local_time": "2026-09-21T09:28:34.085429+01:00",
     "trading_day": true,
     "after_settle": true,
-    "market_open_at": "2026-09-18T08:00:00+01:00",
-    "settle_at": "2026-09-18T09:15:00+01:00",
+    "market_open_at": "2026-09-21T08:00:00+01:00",
+    "settle_at": "2026-09-21T09:15:00+01:00",
     "can_act": true,
     "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "c8c57dea-1cd3-4d3b-ba95-32c31b61d306",
+      "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+      "acted_at": "2026-09-21T09:28:34.085429+01:00",
+      "ticker": "KLR.L",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 0.085967,
+      "price": 3180.1846,
+      "gross": 273.39,
+      "cost": 8.2,
+      "net_cash": 265.19,
+      "note": "Automated exit \u2014 left target set",
+      "name": "Keller Group plc",
+      "avg_cost_at_exit": 2980.0,
+      "position_closed": true
+    },
+    {
+      "id": "99550cc5-0d09-4e7e-9f1c-80922d2226b0",
+      "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+      "acted_at": "2026-09-21T09:28:34.085429+01:00",
+      "ticker": "GEN.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.974709,
+      "price": 260.6,
+      "gross": 254.01,
+      "cost": 7.62,
+      "net_cash": -261.63,
+      "note": "Automated buy",
+      "name": "Genuit Group plc"
+    },
+    {
+      "id": "983d5232-6772-4e8d-b85e-7c8690b4aec5",
+      "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+      "acted_at": "2026-09-21T09:28:34.085429+01:00",
+      "ticker": "CURY.L",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.023934,
+      "price": 144.4,
+      "gross": 3.46,
+      "cost": 0.1,
+      "net_cash": -3.56,
+      "note": "Automated buy",
+      "name": "Currys plc"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,7 +71,7 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 788.3,
+    "nav": 777.16,
     "cash": 0.0,
     "max_positions": 3,
     "min_conviction": 0.35,
@@ -33,112 +81,91 @@
     "exit_confirm_screens": 2,
     "reentry_cooldown_screens": 1,
     "min_rebalance_notional_gbp": 10.0,
-    "target_sleeve_value": 260.07,
+    "target_sleeve_value": 256.28,
     "targets": [
       {
         "ticker": "GEN.L",
         "name": "Genuit Group plc",
         "signal": "strong_buy",
         "conviction_score": 1.0,
-        "price": 263.2
+        "price": 260.6
+      },
+      {
+        "ticker": "POLN.L",
+        "name": "Pollen Street Group Limited",
+        "signal": "strong_buy",
+        "conviction_score": 1.0,
+        "price": 828.336
       },
       {
         "ticker": "CURY.L",
         "name": "Currys plc",
         "signal": "buy",
         "conviction_score": 1.0,
-        "price": 146.8
-      },
-      {
-        "ticker": "DSCV.L",
-        "name": "discoverIE Group plc",
-        "signal": "buy",
-        "conviction_score": 1.0,
-        "price": 784.0
+        "price": 144.4
       }
     ],
     "anticipated_exits": [
       {
         "action": "sell",
-        "ticker": "KLR.L",
-        "name": "Keller Group plc",
+        "ticker": "DSCV.L",
+        "name": "discoverIE Group plc",
         "reason": "No longer in the top conviction target set",
-        "shares": 0.085967,
-        "price": 3140.0,
-        "value": 269.94
+        "shares": 0.347028,
+        "price": 799.4551,
+        "value": 277.43
       }
     ],
     "anticipated_grace_holds": [],
-    "anticipated_trims": [
-      {
-        "action": "trim",
-        "ticker": "DSCV.L",
-        "name": "discoverIE Group plc",
-        "reason": "Overweight vs equal-weight sleeve (260 target)",
-        "value": 12.0,
-        "price": 784.0,
-        "conviction_score": 1.0,
-        "signal": "buy"
-      }
-    ],
+    "anticipated_trims": [],
     "anticipated_buys": [
       {
         "action": "buy",
-        "ticker": "GEN.L",
-        "name": "Genuit Group plc",
+        "ticker": "POLN.L",
+        "name": "Pollen Street Group Limited",
         "reason": "New sleeve",
-        "value": 260.07,
-        "price": 263.2,
-        "target_value": 260.07,
+        "value": 256.28,
+        "price": 828.336,
+        "target_value": 256.28,
         "conviction_score": 1.0,
         "signal": "strong_buy"
+      },
+      {
+        "action": "buy",
+        "ticker": "CURY.L",
+        "name": "Currys plc",
+        "reason": "Top-up to equal weight",
+        "value": 10.56,
+        "price": 144.4,
+        "target_value": 256.28,
+        "conviction_score": 1.0,
+        "signal": "buy"
       }
     ],
     "anticipated_holds": [
       {
         "action": "hold",
-        "ticker": "CURY.L",
-        "name": "Currys plc",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 246.29,
-        "target_value": 260.07,
-        "conviction_score": 1.0,
-        "signal": "buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "DSCV.L",
-        "name": "discoverIE Group plc",
+        "ticker": "GEN.L",
+        "name": "Genuit Group plc",
         "reason": "Already near equal-weight target",
-        "value": 260.07,
-        "target_value": 260.07,
+        "value": 254.01,
+        "target_value": 256.28,
         "conviction_score": 1.0,
-        "signal": "buy"
+        "signal": "strong_buy"
       }
     ],
     "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 1 name(s) that left the set; trim 1 overweight sleeve(s); deploy cash into 1 buy(s); leave 2 near-target holding(s)."
+    "summary": "Next rebalance would target 3 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s); leave 1 near-target holding(s)."
   },
   "alerts": [
-    {
-      "ticker": "KLR.L",
-      "name": "Keller Group plc",
-      "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 3140.0,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": "insufficient_data"
-    },
     {
       "ticker": "DSCV.L",
       "name": "discoverIE Group plc",
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 784.0,
+      "mark": 799.455078125,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -149,7 +176,18 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 146.8000030517578,
+      "mark": 144.39999389648438,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "insufficient_data"
+    },
+    {
+      "ticker": "GEN.L",
+      "name": "Genuit Group plc",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 260.6000061035156,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "insufficient_data"
@@ -174,17 +212,6 @@
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
-      "KLR.L": {
-        "ticker": "KLR.L",
-        "shares": 0.085967,
-        "avg_cost": 2980.0,
-        "name": "Keller Group plc",
-        "sector": "Industrials",
-        "currency": "GBP",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-09-10T09:29:00.002425+01:00"
-      },
       "DSCV.L": {
         "ticker": "DSCV.L",
         "shares": 0.347028,
@@ -198,14 +225,25 @@
       },
       "CURY.L": {
         "ticker": "CURY.L",
-        "shares": 1.677741,
-        "avg_cost": 148.9,
+        "shares": 1.701675,
+        "avg_cost": 148.8367,
         "name": "Currys plc",
         "sector": "Consumer Cyclical",
         "currency": "GBP",
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-09-16T09:28:40.711117+01:00"
+      },
+      "GEN.L": {
+        "ticker": "GEN.L",
+        "shares": 0.974709,
+        "avg_cost": 260.6,
+        "name": "Genuit Group plc",
+        "sector": "Industrials",
+        "currency": "GBP",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-21T09:28:34.085429+01:00"
       }
     },
     "trades": [
@@ -651,6 +689,53 @@
         "net_cash": -257.31,
         "note": "Automated buy",
         "name": "Currys plc"
+      },
+      {
+        "id": "c8c57dea-1cd3-4d3b-ba95-32c31b61d306",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-09-21T09:28:34.085429+01:00",
+        "ticker": "KLR.L",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 0.085967,
+        "price": 3180.1846,
+        "gross": 273.39,
+        "cost": 8.2,
+        "net_cash": 265.19,
+        "note": "Automated exit \u2014 left target set",
+        "name": "Keller Group plc",
+        "avg_cost_at_exit": 2980.0,
+        "position_closed": true
+      },
+      {
+        "id": "99550cc5-0d09-4e7e-9f1c-80922d2226b0",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-09-21T09:28:34.085429+01:00",
+        "ticker": "GEN.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.974709,
+        "price": 260.6,
+        "gross": 254.01,
+        "cost": 7.62,
+        "net_cash": -261.63,
+        "note": "Automated buy",
+        "name": "Genuit Group plc"
+      },
+      {
+        "id": "983d5232-6772-4e8d-b85e-7c8690b4aec5",
+        "fund_id": "e480ee7c-fcd9-4632-8feb-d76f7435c2ed",
+        "acted_at": "2026-09-21T09:28:34.085429+01:00",
+        "ticker": "CURY.L",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.023934,
+        "price": 144.4,
+        "gross": 3.46,
+        "cost": 0.1,
+        "net_cash": -3.56,
+        "note": "Automated buy",
+        "name": "Currys plc"
       }
     ],
     "equity_curve": [
@@ -941,22 +1026,40 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-21T09:28:34.085429+01:00",
+        "portfolio_value": 777.16,
+        "cash": 0.0,
+        "contributed_capital": 1000.0,
+        "positions": 3,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-18T09:30:18.277027+01:00",
+    "last_mark_at": "2026-09-21T09:28:34.085429+01:00",
     "rebalance_state": {
       "exit_streak": {
-        "KLR.L": 1
+        "DSCV.L": 1
       },
-      "reentry_cooldown": {}
+      "reentry_cooldown": {
+        "KLR.L": 1
+      }
     }
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (3 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_exclusion_u4",
-    "generated_at": "2026-09-18T08:30:41.862362+00:00",
-    "open_count": 10,
+    "generated_at": "2026-09-21T08:28:44.243431+00:00",
+    "open_count": 11,
     "closed_count": 0,
     "by_exit_kind": {},
     "grace_vs_rotation": {
@@ -968,13 +1071,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
-    "checkpoints_added_this_pass": 1
+    "ingested_this_pass": 1,
+    "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "ai_judgment_exclusion_u4",
-    "generated_at": "2026-09-18T08:30:41.863379+00:00",
+    "generated_at": "2026-09-21T08:28:44.244088+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1028,37 +1131,37 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 6,
+      "hold_closed_count": 7,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 9,
       "gaps": [
-        "hold_recovery closed episodes=6 (target >=15)",
+        "hold_recovery closed episodes=7 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 3,
-        "recovered_to_breakeven": 2,
+        "count": 2,
+        "recovered_to_breakeven": 1,
         "close_reasons": {
-          "open": 3
+          "open": 2
         }
       },
       "closed": {
-        "count": 6,
-        "recovered_to_breakeven": 3,
+        "count": 7,
+        "recovered_to_breakeven": 4,
         "close_reasons": {
-          "sold_while_recovered": 3,
+          "sold_while_recovered": 4,
           "sold_while_underwater": 3
         }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 3,
+        "count": 4,
         "verdicts": {
-          "open": 3
+          "open": 4
         }
       },
       "closed": {
@@ -1067,11 +1170,11 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 1,
-      "swap_rotations": 0
+      "hold_episodes": 0,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
-      "hold_episodes": 0,
+      "hold_episodes": 2,
       "swap_rotations": 0
     }
   },
@@ -1080,8 +1183,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "ai_judgment_exclusion_u4",
-    "updated_at": "2026-09-18T08:30:41.864555+00:00",
-    "as_of": "2026-09-18T09:30:18.277027+01:00",
+    "updated_at": "2026-09-21T08:28:44.244760+00:00",
+    "as_of": "2026-09-21T09:28:34.085429+01:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1121,7 +1224,7 @@
       },
       "family_fail_rate_non_losers": {
         "cheapness": 0.0,
-        "quality": 0.0,
+        "quality": 0.3333,
         "dividend": 0.0,
         "garp": 0.0,
         "risk": 0.0
@@ -1138,9 +1241,9 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": -0.0141,
-        "mark": 146.8,
-        "avg_cost": 148.9,
+        "unrealized_pct": -0.0298,
+        "mark": 144.4,
+        "avg_cost": 148.8367,
         "signal": "buy",
         "timing_signal": "insufficient_data",
         "conviction_score": 1.0,
@@ -1163,6 +1266,47 @@
         ],
         "intact_reasons": [
           "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 100%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "GEN.L",
+        "name": "Genuit Group plc",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 260.6,
+        "avg_cost": 260.6,
+        "signal": "strong_buy",
+        "timing_signal": "insufficient_data",
+        "conviction_score": 1.0,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "quality"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still strong_buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 100%"
+        ],
+        "intact_reasons": [
+          "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
@@ -1178,49 +1322,9 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0103,
-        "mark": 784.0,
+        "unrealized_pct": 0.0302,
+        "mark": 799.4551,
         "avg_cost": 776.0,
-        "signal": "buy",
-        "timing_signal": "insufficient_data",
-        "conviction_score": 1.0,
-        "data_quality_score": 1.0,
-        "passed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "failed_families": [],
-        "research_verdict": "accumulate",
-        "reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 100%"
-        ],
-        "intact_reasons": [
-          "still buy",
-          "research accumulate",
-          "cheapness family still passes",
-          "data_quality 1.00",
-          "conviction 100%"
-        ],
-        "weaken_reasons": [],
-        "broken_reasons": []
-      },
-      {
-        "ticker": "KLR.L",
-        "name": "Keller Group plc",
-        "thesis_status": "intact",
-        "recommended_action": "hold_tolerate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0537,
-        "mark": 3140.0,
-        "avg_cost": 2980.0,
         "signal": "buy",
         "timing_signal": "insufficient_data",
         "conviction_score": 1.0,
@@ -1259,27 +1363,27 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "ai_judgment_exclusion_u4",
-    "generated_at": "2026-09-18T08:30:41.865980+00:00",
+    "generated_at": "2026-09-21T08:28:44.245593+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 6,
+      "closed_total": 7,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 3,
+      "open_with_thesis": 2,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 6,
-          "recovery_rate": 0.5,
-          "sold_underwater_rate": 0.5,
-          "mean_peak_unrealized_pct": 0.0173,
-          "mean_trough_unrealized_pct": -0.0091,
+          "closed_count": 7,
+          "recovery_rate": 0.5714,
+          "sold_underwater_rate": 0.4286,
+          "mean_peak_unrealized_pct": 0.0244,
+          "mean_trough_unrealized_pct": -0.0099,
           "outcome_labels": {
-            "recovered": 3,
+            "recovered": 4,
             "sold_underwater": 3
           }
         },
@@ -1312,10 +1416,10 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 6,
+      "hold_closed_with_thesis": 7,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
-        "hold closed with thesis=6 (target >=8)",
+        "hold closed with thesis=7 (target >=8)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
       "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -1327,70 +1431,71 @@
     "schema_version": 1,
     "track_id": "ai_judgment_exclusion_u4",
     "observe_only": true,
-    "generated_at": "2026-09-18T08:30:41.868303+00:00",
+    "generated_at": "2026-09-21T08:28:44.247055+00:00",
     "open_count": 3,
-    "closed_count": 3,
-    "scored_count": 2,
-    "scored_count_all": 3,
+    "closed_count": 4,
+    "scored_count": 3,
+    "scored_count_all": 4,
     "recommit_scored_count": 1,
     "entry_kind_counts": {
-      "first_entry": 2,
+      "first_entry": 3,
       "recommit": 1
     },
-    "any_de_risk_count": 2,
+    "any_de_risk_count": 3,
     "winning_cadence_counts": {
-      "dca_4x_weekly": 2
+      "dca_4x_weekly": 2,
+      "dca_5x_weekday": 1
     },
     "cadence_stats": {
       "dca_2x_weekly": {
         "label": "50/50 over 1 week",
-        "scored_episodes": 2,
-        "mean_end_value_delta": 6.56,
-        "mean_de_risk_gbp": 6.56,
-        "de_risk_rate": 1.0,
+        "scored_episodes": 3,
+        "mean_end_value_delta": 1.0433,
+        "mean_de_risk_gbp": 2.5433,
+        "de_risk_rate": 0.6667,
         "win_count": 0
       },
       "dca_4x_weekly": {
         "label": "25% weekly \u00d7 4",
-        "scored_episodes": 2,
-        "mean_end_value_delta": 9.84,
-        "mean_de_risk_gbp": 9.84,
-        "de_risk_rate": 1.0,
+        "scored_episodes": 3,
+        "mean_end_value_delta": 1.88,
+        "mean_de_risk_gbp": 6.31,
+        "de_risk_rate": 0.6667,
         "win_count": 2
       },
       "dca_2x_biweekly": {
         "label": "50/50 over 2 weeks",
-        "scored_episodes": 2,
-        "mean_end_value_delta": 6.56,
-        "mean_de_risk_gbp": 6.56,
+        "scored_episodes": 3,
+        "mean_end_value_delta": 1.36,
+        "mean_de_risk_gbp": 5.0367,
         "de_risk_rate": 1.0,
         "win_count": 0
       },
       "dca_5x_weekday": {
         "label": "20% over 5 weekday marks",
-        "scored_episodes": 2,
-        "mean_end_value_delta": 0.93,
-        "mean_de_risk_gbp": 5.91,
+        "scored_episodes": 3,
+        "mean_end_value_delta": -0.5767,
+        "mean_de_risk_gbp": 4.8267,
         "de_risk_rate": 1.0,
-        "win_count": 0
+        "win_count": 1
       }
     },
     "readiness": {
       "ready_for_cadence_analysis": false,
-      "closed_episodes": 2,
+      "closed_episodes": 3,
       "closed_target": 12,
       "tracks_with_closed": 1,
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
-      "first_entry_scored": 2,
+      "first_entry_scored": 3,
       "recommit_scored": 1
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "marked_this_pass": 3,
-    "closed_this_pass": 0
+    "closed_this_pass": 1
   },
-  "generated_at": "2026-09-18T08:30:41.868662+00:00",
+  "generated_at": "2026-09-21T08:28:44.247264+00:00",
   "track_id": "ai_judgment_exclusion_u4",
   "track_label": "AI judgment exclusion ladder u4 (frozen priors)",
   "is_primary_learning_track": false,
