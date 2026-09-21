@@ -1444,6 +1444,56 @@ def ingest_research_sources(
                         except (OSError, ValueError, TypeError):
                             pass
 
+            from value_investor.library_ingest_budget import deadline_reached
+            from value_investor.research.filings import (
+                extract_ir_presentation_metrics,
+                fetch_filings_ir_allowlist,
+                refetch_ir_allowlist_filing_bodies,
+                resolve_filings_regime,
+            )
+
+            if fetch_filings_ir_allowlist(ticker):
+                summary = filings_meta.get("filings_summary") or {}
+                regime = resolve_filings_regime(market, ticker)
+                ir_refetch = dict(filings_meta.get("ir_refetch") or {})
+                if regime not in {"euro_filings", "tsx_announcements"} and not deadline_reached(
+                    deadline_monotonic
+                ):
+                    ir_refetch = refetch_ir_allowlist_filing_bodies(
+                        sources_dir / "filings",
+                        ticker=ticker,
+                        company_name=company_name,
+                        max_bodies=12,
+                        deadline_monotonic=deadline_monotonic,
+                    )
+                    filings_meta["ir_refetch"] = ir_refetch
+                merge_added = int((ir_refetch.get("merge") or {}).get("added") or 0)
+                if int(ir_refetch.get("fetched") or 0) or merge_added > 0:
+                    index_path = sources_dir / "filings" / "filings_index.json"
+                    resolved_index = resolve_json_path(index_path)
+                    if resolved_index is not None:
+                        try:
+                            index_payload = read_json(resolved_index)
+                            filings_meta["filings_summary"] = dict(
+                                index_payload.get("summary") or summary
+                            )
+                            filings_meta["filings_sources"] = list(
+                                index_payload.get("sources_used") or []
+                            )
+                        except (OSError, ValueError, TypeError):
+                            pass
+                metrics = extract_ir_presentation_metrics(
+                    sources_dir / "filings",
+                    ticker,
+                    sources_dir=sources_dir,
+                )
+                filings_meta["ir_presentation_metrics"] = {
+                    "bridge_count": metrics.get("bridge_count", 0),
+                    "segment_split_count": metrics.get("segment_split_count", 0),
+                    "lease_maturity_count": metrics.get("lease_maturity_count", 0),
+                    "mandatory": metrics.get("mandatory", False),
+                }
+
         if deepen_history:
             from value_investor.research.gap_fill_sources import deepen_thin_filings_if_needed
 
@@ -1550,6 +1600,8 @@ def ingest_research_sources(
         "filings_summary": filings_meta.get("filings_summary") or {},
         "filings_sources": filings_meta.get("filings_sources") or [],
         "filings_regime": filings_meta.get("filings_regime"),
+        "ir_refetch": filings_meta.get("ir_refetch") or {},
+        "ir_presentation_metrics": filings_meta.get("ir_presentation_metrics") or {},
         "macro_context_path": str(written_macro) if written_macro else None,
         "macro_context": macro_meta,
         "cma_ofcom_merger_path": str(written_merger) if written_merger else None,
