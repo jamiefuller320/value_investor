@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-21T14:55:36.455147+00:00",
+  "generated_at": "2026-09-21T15:15:55.079308+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1168,54 +1168,34 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-21T14:55:31.406179+00:00",
-    "queue_ui_updated_at": "2026-09-21T14:55:36.359926+00:00",
+    "compiled_at": "2026-09-21T15:15:51.623972+00:00",
+    "queue_ui_updated_at": "2026-09-21T15:15:54.964628+00:00",
     "task_count": 92,
     "status": {
-      "open_count": 3,
-      "pr_open_count": 0,
+      "open_count": 1,
+      "pr_open_count": 1,
       "parked_count": 0,
-      "merged_count": 69,
+      "merged_count": 70,
       "failed_count": 0,
-      "next_task_id": "eng-20260921-02",
-      "in_flight_branch": null,
-      "in_flight_pr": null,
+      "next_task_id": "eng-20260920-16",
+      "in_flight_branch": "cursor/eng-20260921-03-1de3",
+      "in_flight_pr": 782,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
     "queued_tasks": [
       {
-        "id": "eng-20260921-02",
-        "area": "ingest",
-        "title": "IR results-presentation pipeline",
-        "priority": "high",
-        "priority_score": 98.0,
-        "status": "open",
-        "source": "post_run_review",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "partial"
-      },
-      {
         "id": "eng-20260921-03",
         "area": "scoring",
         "title": "FCF basis registry",
         "priority": "high",
         "priority_score": 98.0,
-        "status": "open",
+        "status": "pr_open",
         "source": "post_run_review",
         "pr_url": null,
         "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 2,
-        "clash_scan": "partial"
+        "branch_name": "cursor/eng-20260921-03-1de3"
       },
       {
         "id": "eng-20260920-16",
@@ -1230,14 +1210,14 @@
         "branch_name": null,
         "dispatch_eligible": true,
         "blocked_by": [],
-        "effective_dispatch_rank": 3,
-        "clash_scan": "partial"
+        "effective_dispatch_rank": 1,
+        "clash_scan": "full"
       }
     ],
     "attention_tasks": [],
     "clash_summary": {
-      "open_task_count": 3,
-      "dispatch_eligible_count": 3,
+      "open_task_count": 1,
+      "dispatch_eligible_count": 1,
       "blocked_count": 0
     }
   },
@@ -1516,18 +1496,24 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-21T14:55:36.455147+00:00",
+    "generated_at": "2026-09-21T15:15:55.079308+00:00",
     "overall": "active",
-    "headline": "Agent lane active.",
+    "headline": "Merge lane active; agent lane active.",
     "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
+      "state": "running",
+      "idle": false,
+      "running": true,
       "blocked": false,
-      "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+      "pr_open_count": 1,
+      "open_engineering_prs": [
+        {
+          "number": 782,
+          "branch": "cursor/eng-20260921-03-1de3",
+          "draft": false
+        }
+      ],
+      "in_flight_pr": 782,
+      "detail": "Open engineering PR(s) #782 — merge fires on CI success."
     },
     "agent_lane": {
       "state": "running",
@@ -1538,18 +1524,18 @@
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 0,
-      "open_count": 3,
-      "pr_open_count": 0,
-      "dispatch_eligible_count": 3,
+      "open_count": 1,
+      "pr_open_count": 1,
+      "dispatch_eligible_count": 1,
       "blocked_task_count": 0,
-      "next_task_id": "eng-20260921-02",
-      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
-      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+      "next_task_id": "eng-20260920-16",
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 0,
-      "evaluated_at": "2026-09-21T14:55:35.566587+00:00"
+      "evaluated_at": "2026-09-21T15:15:53.923770+00:00"
     },
     "traffic_control": {
       "pause_active": false,
@@ -1563,6 +1549,17 @@
       "should_dispatch_engineering": true
     },
     "merges_today": [
+      {
+        "task_id": "eng-20260921-02",
+        "title": "IR results-presentation pipeline",
+        "area": "ingest",
+        "pr_number": 783,
+        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/783",
+        "merged_at": "2026-09-21T15:15:40.820228+00:00",
+        "merge_class": "human",
+        "auto_merge": false,
+        "independently_verified": false
+      },
       {
         "task_id": "eng-20260921-05",
         "title": "Dividend-sustainability overlay on statutory OCF−CapEx (and interim-cut detection)",
