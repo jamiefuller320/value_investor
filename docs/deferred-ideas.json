@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-21T17:37:22+00:00",
+  "updated_at": "2026-09-21T15:00:36+00:00",
   "sessions_mined": [
     {
       "name": "Stock open dashboard behavior",
@@ -9650,18 +9650,17 @@
       "id": "L431",
       "category": "later",
       "section": "ops",
-      "title": "Email dashboard commit must not clobber fresher ops_status.json",
-      "summary": "Monday 2026-09-21 email report commit a51a0ecd5 rewrote docs/data/ops_status.json to the prior-day snapshot after ops-monitor 4824d467a had already written a fresher run. Same-day ops-monitor catch-up then skips, so dashboard stays wrongly stale (email/analysis/backup overdue).",
-      "revisit_when": "Next email-report or ops-monitor sync complaint, or when tightening GHA_COMMIT_OWNED / merge strategy for docs/data overlapping artifacts",
+      "title": "Dedupe engineering queue-block emails on alert kind",
+      "summary": "Parallel-cap mail uses the full gate reason as the 12h fingerprint, so '2 agents running' and '1 pr_open + 1 agent' both send the same day. merged_reconcile has no cooldown and uses the blocked subject even when the queue healed itself.",
+      "revisit_when": "Another burst of FTSE Engineering queue blocked mail that is parallel cap or merged reconcile rather than a real pause",
       "tags": [
-        "ops_status",
-        "email-report",
-        "artifact-clobber",
-        "sync"
+        "engineering-queue",
+        "email",
+        "parallel-cap"
       ],
       "status": "open",
-      "source": "Sunday bundle sync status check 2026-09-21",
-      "added_at": "2026-09-21T17:37:22+00:00"
+      "source": "https://github.com/jamiefuller320/value_investor/pull/779",
+      "added_at": "2026-09-21T15:00:36+00:00"
     }
   ],
   "fragments": [

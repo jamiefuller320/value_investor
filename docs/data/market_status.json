@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-09-21T15:15:07.932454+00:00",
+  "generated_at": "2026-09-21T18:59:36.621161+00:00",
   "note": "Per-market stage and health snapshot for the dashboard grid. Ingest mode uses cached dispatch + policy lists; signal mix comes from the live FTSE screen or each library latest_summary.json. Admitted markets show epoch-0 buy-tier-level + equal-support near-miss (watch cut: buy-not-now / hold-near-buy). Sprint tiles add a 2-day ingest rollup and admission-progress flags. held_vs_market plots held-stock value vs local-index equivalent; knob-changed branches overlay the same dates when applied.",
   "focus_market": "euro_depth",
   "admitted_markets": [
@@ -43,7 +43,7 @@
       "1": "dax",
       "2": "cac40"
     },
-    "equal_support_generated_at": "2026-09-21T14:16:50.943276+00:00"
+    "equal_support_generated_at": "2026-09-21T15:20:48.527144+00:00"
   },
   "markets": [
     {
@@ -74,16 +74,16 @@
       "failed_fetch_count": 0,
       "last_metrics_refresh": null,
       "last_constituents_refresh": null,
-      "last_screen_at": "2026-09-21T07:39:55.690079+00:00",
+      "last_screen_at": "2026-09-21T16:54:50.935061+00:00",
       "signal_counts": {
-        "strong_buy": 11,
-        "buy": 48,
-        "hold": 133,
-        "avoid": 56
+        "strong_buy": 13,
+        "buy": 46,
+        "hold": 131,
+        "avoid": 58
       },
       "shortlist_count": 59,
-      "strong_buy": 11,
-      "buy": 48,
+      "strong_buy": 13,
+      "buy": 46,
       "learning_phase": 4,
       "learning_phase_label": "Live screen",
       "phase_blockers": [],
@@ -224,9 +224,9 @@
           },
           {
             "date": "2026-09-21",
-            "held": 980.46,
-            "nav": 980.46,
-            "held_stock": 980.46,
+            "held": 985.2,
+            "nav": 985.2,
+            "held_stock": 985.2,
             "cash": 0.0,
             "positions": 62,
             "contributed_capital": null,
@@ -251,11 +251,11 @@
         "branches": [],
         "last": {
           "date": "2026-09-21",
-          "held": 980.46,
+          "held": 985.2,
           "market": 979.55,
-          "nav": 980.46,
+          "nav": 985.2,
           "positions": 62,
-          "excess_pct": 0.000929
+          "excess_pct": 0.005768
         }
       }
     },
@@ -723,20 +723,20 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 10,
-        "targets": 90,
-        "improved": 5,
+        "run_count": 9,
+        "targets": 79,
+        "improved": 3,
         "improved_tickers": [
           "FME.DE"
         ],
-        "last_run_at": "2026-09-21T14:40:21.920311+00:00",
+        "last_run_at": "2026-09-21T16:46:18.660009+00:00",
         "runtime_cutoff_runs": 0,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 7,
           "zero_body": 0,
           "thin": 4,
-          "indexed_without_body": 50,
+          "indexed_without_body": 46,
           "filing_gaps": 7
         },
         "gaps_after": {
@@ -750,7 +750,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": -1,
-          "indexed_without_body": -11,
+          "indexed_without_body": -7,
           "filing_gaps": 0
         },
         "remaining": {
@@ -1018,23 +1018,21 @@
       "near_miss": null,
       "sprint_progress": {
         "window_days": 2,
-        "run_count": 10,
-        "targets": 50,
-        "improved": 8,
+        "run_count": 8,
+        "targets": 38,
+        "improved": 5,
         "improved_tickers": [
-          "ORA.PA",
-          "SAN.PA",
           "TEP.PA",
           "TTE.PA"
         ],
         "last_run_at": "2026-09-21T15:14:03.887990+00:00",
-        "runtime_cutoff_runs": 6,
+        "runtime_cutoff_runs": 4,
         "error_runs": 0,
         "gaps_before": {
           "unmeasured": 0,
           "zero_body": 0,
           "thin": 9,
-          "indexed_without_body": 64,
+          "indexed_without_body": 94,
           "filing_gaps": 0
         },
         "gaps_after": {
@@ -1048,7 +1046,7 @@
           "unmeasured": 0,
           "zero_body": 0,
           "thin": -2,
-          "indexed_without_body": -63,
+          "indexed_without_body": -93,
           "filing_gaps": 0
         },
         "remaining": {
@@ -1064,7 +1062,7 @@
           {
             "id": "runtime_cutoff",
             "severity": "high",
-            "summary": "6 ingest run(s) hit the runtime cutoff"
+            "summary": "4 ingest run(s) hit the runtime cutoff"
           }
         ],
         "sprint_entered_at": "2026-09-19T12:34:58.542846+00:00"
