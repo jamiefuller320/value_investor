@@ -1,129 +1,13 @@
 # Charter Hall Retail REIT (CQR.AX) — Research memo
 
-_Version 1 · Updated 2026-07-25T12:48:08.487131+00:00 · Mode: initial_
+_Version 1 · Updated 2026-09-21T10:39:56.850881+00:00 · Mode: structured_verdict_
 
-## EXECUTIVE SUMMARY
-Charter Hall Retail REIT (CQR) is an externally managed Australian listed trust focused on convenience-oriented retail property, operated under the Charter Hall platform. The quantitative screen rates it a **Strong Buy**, anchored on a deep valuation discount (P/E 6.5, P/B 0.79), a ~6.6% distribution yield, and quality metrics (ROE 12.7%, debt/equity 45%) across five factor families: cheapness, quality, dividend, GARP, and risk. The investment case rests on a high-occupancy, necessity-based tenant mix trading below stated equity, with operating cash flow covering distributions and quarterly payouts confirmed in ASX distribution notices. The central debate is whether the market is correctly pricing rising leverage, higher interest costs, and portfolio revaluation pressure, or whether statutory earnings volatility and missing annual/interim filing bodies obscure underlying asset quality. **Annual and half-year results are indexed but not downloadable**; only distribution announcements have body extracts, limiting verification of NAV, covenants, and going-concern language.
+_Phase B structured verdict (essay sections omitted on scheduled path)._
 
----
-
-## INVESTMENT THESIS
-CQR screens as a strong buy for a value investor because it combines classic deep-value markers with income and balance-sheet characteristics that pass multiple canonical models. Twelve of twenty-two models pass, including Graham Enterprising, Schloss Low P/B, Earnings Yield, Low P/E + High Yield, Lynch PEG, Neff PEGY, Quality Value, High Dividend Yield, Dividend Growth, Dreman Contrarian, Composite Value, and Financial Health. The composite score of 0.701 sits near the sector median (0.711), with high data quality (18/20 metrics present) and persistent conviction (64%, stable for four weeks).
-
-The cheapness case is straightforward: trailing P/E of 6.5 and P/B of 0.79 imply the market prices equity well below book. An earnings yield of ~15.4% and distribution yield of 6.6% offer a dual return path—capital re-rating plus income—consistent with Neff PEGY and dividend-growth frameworks. Debt/equity of 45% satisfies Schloss and Graham enterprising leverage thresholds.
-
-Business quality, as inferred from secondary sources, supports the screen rather than contradicting it. News summaries from the FY2025 and HY2026 earnings calls cite **record portfolio occupancy of 99.1%** and a convenience-oriented tenant base—attributes that align with the screen’s quality and dividend passes (ROE 12.7%, FCF ~A$105m per the screen). Operating cash flow has been stable at roughly A$141–162m annually (FY2022–FY2025, Yahoo fallback), comfortably covering distributions of A$113–150m over the same period. ASX distribution notices confirm quarterly payouts of 6.35–6.40 cents per unit in recent quarters (100% unfranked), consistent with the screen’s dividend passes.
-
-Where the screen is less emphatic—FCF Yield (below 5% hurdle), Deep Value (EV/EBITDA elevated), Piotroski F-Score (4/9), and Acquirer’s Multiple—the gaps relate to REIT-specific accounting (fair-value movements, equity-accounted associates) and rising interest burden rather than operational collapse. For a value investor, the asymmetry is a well-occupied, income-producing portfolio at a sub-book multiple, with the market potentially over-discounting cyclical retail fears and refinancing noise.
-
----
-
-## FINANCIAL REVIEW
-### Primary filings — what is available
-
-`filings_index.json` (regime: `asx_announcements`) records **10 indexed items**: one annual (2025 AGM notice, October 2025), two interim (HY2026 results presentation and ASX release, February 2026), and seven other (distribution notices). **Only four filings have downloadable body extracts**, all distribution-related; **no annual report or half-year results body is available**.
-
-**From filing bodies (primary source):**
-
-| Period | Distribution (cents/unit) | Source | Date |
-|---|---:|---|---|
-| Quarter ended 31 Dec 2025 | 6.40 | AMIT Fund Payment Notice | 25 Feb 2026 |
-| Quarter ended 31 Mar 2026 | 6.35 | Appendix 3A.1 / AMIT Notice | 23 Mar / 27 May 2026 |
-| Quarter ended 30 Jun 2026 | 6.40 | Appendix 3A.1 | 18 Jun 2026 |
-
-All three quarterly distributions are **100% unfranked** (0% franking per Appendix 3A.1). The trust operates as an **Attribution Managed Investment Trust (AMIT)**. A DRP exists but was not applicable to these distributions. Full-year tax components are deferred to the AMMA Statement (expected August 2026). These filings confirm income continuity but contain **no operating profit, NAV, gearing, covenant, or going-concern disclosures**.
-
-**Indexed but missing bodies (gaps):**
-
-- *Annual:* “Notice of 2025 Annual General Meeting of Unitholders and Explanatory Memorandum” (3 October 2025) — no body.
-- *Interim:* “Final ASX Release CQR 2026 Half Year Results” (6 February 2026) and “Final CQR 2026 Half Year Results Presentation” (5 February 2026) — no bodies. HY2026 operational metrics (e.g. 99.1% occupancy cited in news) **cannot be verified from filing extracts**.
-
-### Operating performance — Yahoo fallback (FY2022–FY2025)
-
-All figures below are from **`financials_annual.json` (Yahoo Finance)**; primary filing bodies do not contain them.
-
-| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
-|---|---:|---:|---:|---:|
-| Operating revenue (A$m) | 200.8 | 212.8 | 214.4 | 196.6 |
-| Operating income (A$m) | 114.3 | 123.5 | 125.0 | 111.5 |
-| Net income (A$m) | 663.6 | 37.8 | 17.2 | 213.8 |
-| Basic EPS (A$) | 1.15 | 0.065 | 0.030 | 0.368 |
-| Interest expense (A$m) | 27.6 | 38.8 | 53.1 | 65.7 |
-
-Core operating revenue peaked in FY2024 before easing to A$196.6m in FY2025 (−8% year-on-year). Operating income has been broadly stable in the A$111–125m band. Reported net income is **highly volatile**, characteristic of REITs where fair-value adjustments and equity-accounted joint-venture earnings dominate statutory profit. FY2025 net income of A$213.8m was flattered by A$129.9m equity interest earnings and A$166.6m net other income/expense. FY2023–FY2024 reported profits were subdued (A$17–38m), which likely depressed trailing valuation multiples. **Statutory EPS is a poor sole gauge of economic performance**; operating cash flow is more informative.
-
-### Cash flow and distributions — Yahoo fallback
-
-| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
-|---|---:|---:|---:|---:|
-| Operating cash flow / FCF (A$m) | 158.2 | 162.2 | 148.6 | 141.1 |
-| Cash dividends paid (A$m) | 113.8 | 150.0 | 145.6 | 143.3 |
-| Interest paid (A$m) | 23.7 | 36.3 | 50.7 | 62.7 |
-
-Operating cash flow has declined modestly from A$162m to A$141m over four years (−13%), but remains **positive and in excess of distributions** each year—a supportive pattern for the ~6.6% screen yield. Interest paid has risen sharply (+164% from FY2022 to FY2025). FY2025 investing cash outflows of A$361.7m included A$404.9m in business purchases, indicating active portfolio activity. Recent quarterly distributions (6.35–6.40c) annualise to roughly 25.5c per unit, broadly consistent with FY2025 total cash distributions.
-
-### Balance sheet — Yahoo fallback (year-end)
-
-| Metric | FY2022 | FY2023 | FY2024 | FY2025 |
-|---|---:|---:|---:|---:|
-| Total assets (A$m) | 4,045 | 4,100 | 3,798 | 4,288 |
-| Investment properties (A$m) | 2,692 | 2,681 | 2,358 | 1,984 |
-| Total debt (A$m) | 1,045 | 1,200 | 1,037 | 1,449 |
-| Net debt (A$m) | 1,023 | 1,177 | 1,018 | 1,410 |
-| Stockholders’ equity (A$m) | 2,855 | 2,749 | 2,619 | 2,694 |
-| Cash (A$m) | 21.8 | 22.4 | 18.7 | 38.5 |
-
-Gross debt increased materially in FY2025 to A$1.45bn (+40% vs FY2024), lifting net debt to A$1.41bn. Investment property carrying values fell from A$2.69bn (FY2022) to A$1.98bn (FY2025), a **~26% decline**; FY2025 shows A$675.5m in assets held for sale. Cash remains minimal (A$38.5m) relative to A$285.5m current debt. Without annual/interim filing bodies, **NAV per unit, gearing covenants, and fair-value methodology cannot be verified**.
-
-### What remains missing
-
-- No annual report or half-year results text for going-concern, contingent liabilities, or debt covenant headroom.
-- Yahoo `quarterly_income` is empty; interim P&L and balance-sheet detail post-FY2025 unavailable from primary sources.
-
----
-
-## RISKS AND RED FLAGS
-**Primary filing gap.** Annual and interim results are indexed but not downloadable. Available bodies cover distributions only—no covenant compliance, related-party fee structures (external management by Charter Hall Group), property valuation assumptions, going-concern, or contingency language can be assessed from filing text.
-
-**Leverage and refinancing.** Net debt rose to A$1.41bn in FY2025 (Yahoo) while cash remains thin. Interest expense climbed to A$65.7m (+24% year-on-year; +138% vs FY2022). The FY2025 earnings-call summary (Yahoo Finance, 18 August 2025) flags **“increased debt costs and refinancing challenges.”** The screen passes Financial Health on leverage metrics (D/E 45%) but interest coverage is weak—a REIT-specific vulnerability as legacy fixed-rate debt rolls off.
-
-**Portfolio and valuation risk.** Investment property carrying values have trended down, and FY2025 includes substantial assets held for sale (A$675.5m). Without filings, it is unclear whether this reflects disciplined recycling or forced de-risking. Convenience retail is defensive relative to discretionary retail, but is not immune to tenant insolvency, rent abatements, or cap-rate expansion.
-
-**Earnings quality and screen limitations.** Statutory net income volatility makes trailing P/E potentially misleading. The screen fails FCF Yield (below 5% hurdle), Deep Value (EV/EBITDA elevated), Piotroski F-Score (4/9), Magic Formula, and Acquirer’s Multiple—signals that **cheapness may be partly accounting-driven** rather than reflecting clean operating earnings power.
-
-**Governance and structural.** As an externally managed Charter Hall REIT, investors bear management fees and potential conflicts that screens do not capture. No governance controversies appear in the news manifest.
-
-**Macro/cyclical (colour only).** Australian consumer spending, interest-rate path, and commercial-property cap rates directly affect valuations and distribution sustainability. Low P/B may signal market anticipation of further write-downs rather than mispricing. Macro markers (AUD/USD 0.70, ASX 200 ~8,772) provide regime context only and do not override the screen signal.
-
----
-
-## NEWS HIGHLIGHTS
-Coverage over the past year is **moderately thin on hard news**, dominated by retail income commentary (Kalkine, Motley Fool, Simply Wall St) and Yahoo Finance earnings summaries rather than investigative or regulatory reporting. Thirty-five articles are indexed (August 2025–July 2026).
-
-**Earnings and operations**
-- *“Charter Hall Retail REIT (ASX:CQR) FY2025 Earnings Call Highlights: Strong Portfolio Growth …”* — Yahoo Finance, 18 August 2025. Summarises robust property-value growth and high occupancy alongside higher debt costs and refinancing challenges.
-- *“Charter Hall Retail REIT (ASX:CQR) Half Year 2026 Earnings Call Highlights: Record Occupancy …”* — Yahoo Finance, 6 February 2026. Cites **record portfolio occupancy of 99.1%** and continued strategic investment.
-- *“Charter Hall Retail REIT 2026 Half Year Results”* — Australian Property Markets News, 6 February 2026.
-- *“Charter Hall Retail REIT 2025 Full Year Results”* — Australian Property Markets News, 19 August 2025.
-
-**Portfolio activity**
-- *“Buoyant convenience market leads Charter Hall Retail to scoop up four Bunnings stores for $151m”* — Business News Australia, 30 October 2025. Material acquisition activity in the convenience/big-box segment.
-
-**Distributions (consistent income focus)**
-- *“Charter Hall Retail REIT (ASX:CQR) Confirms 6.35 Cents Per Unit Distribution”* — Kalkine, 27 May 2026.
-- *“Does Charter Hall Retail REIT’s (ASX:CQR) Latest Dividend Clarify Its Long-Term Capital Allocation Priorities?”* — Yahoo Finance, 28 June 2026. Notes quarterly distribution of **A$0.064 per unit**.
-- *“Charter Hall Retail REIT reveals March 2026 distribution details”* — Motley Fool Australia, 23 March 2026.
-
-**Market commentary (lower materiality)**
-- Multiple Kalkine and Motley Fool pieces on yield (6.5%+), income appeal, and technical trading (July 2026).
-- *“Charter Hall Retail REIT (ASX:CQR): Convenience King Navigates a Bearish Technical Divergence”* — Kalkine, 25 March 2026.
-
-**Notable absences:** No management changes, regulatory actions, or covenant-related disclosures in the manifest. Strategy commentary is limited to earnings-call summaries and the Bunnings acquisition. News coverage should be treated as **supplementary**, not a substitute for filings.
-
----
 
 ## RESEARCH VERDICT
 Verdict: accumulate
 Risk: medium
-Confidence: 0.60
-Rationale: Deep research broadly supports the quantitative Strong Buy on valuation, yield, and occupancy, but missing annual/interim filing bodies, rising leverage/interest costs, and REIT earnings volatility prevent full confirmation and warrant a measured accumulate stance rather than unqualified endorsement.
+Confidence: 0.72
+Rationale: FY26 filings show 4.0% operating-earnings and 3.3% distribution growth with ~97% payout and 34.2% gearing, but the screen has no filing-aligned FCF/yield inputs (Yahoo TTM suppressed), so the strong-buy case is only partly verified.
+RiskTags: leverage, cyclical, governance
