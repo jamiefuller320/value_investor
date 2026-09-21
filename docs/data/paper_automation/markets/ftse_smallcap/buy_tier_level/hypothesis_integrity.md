@@ -1,20 +1,21 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-20T06:48:39.586754+00:00
+Track: `buy_tier_level` · updated 2026-09-21T01:43:12.619585+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 4 (0% count, 0% NAV)
+- Losers: **0** / 2 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
 ## Holding reviews
 
-### DFS.L — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
-
-### APTD.L — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
+### CARD.L — intact / hold_tolerate (+0.9%)
+- still strong_buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 70%
 
 ### CAPD.L — intact / hold_tolerate (+1.5%)
 - still buy
@@ -22,10 +23,3 @@ Track: `buy_tier_level` · updated 2026-09-20T06:48:39.586754+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 71%
-
-### CARD.L — intact / hold_tolerate (+1.9%)
-- still strong_buy
-- research accumulate
-- cheapness family still passes
-- data_quality 1.00
-- conviction 70%

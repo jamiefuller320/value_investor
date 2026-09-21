@@ -1,19 +1,16 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-20T06:48:41.784294+00:00
+Track: `buy_tier_level` · updated 2026-09-21T01:43:14.884801+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **1** / 10 (10% count, 11% NAV)
+- Losers: **1** / 9 (11% count, 11% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `tolerate_intact_losers`
 - Selection feedback:
-  - quality fails more often among losers (100% vs 11%)
+  - quality fails more often among losers (100% vs 0%)
 
 ## Holding reviews
-
-### TTE.PA — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
 
 ### VOW.DE — intact / hold_tolerate (-5.3%)
 - price drawdown alone does not invalidate value thesis
@@ -59,7 +56,7 @@ Track: `buy_tier_level` · updated 2026-09-20T06:48:41.784294+00:00
 - conviction 73%
 
 ### ADYEN.AS — weakening / watch_review (+0.0%)
-- conviction 29% below intact floor
+- conviction 34% below intact floor
 - still buy
 - research accumulate
 

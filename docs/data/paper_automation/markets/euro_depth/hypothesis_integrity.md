@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `rules` · updated 2026-09-20T06:44:35.061741+00:00
+Track: `rules` · updated 2026-09-21T01:38:50.861572+00:00
 
 ## Portfolio loser feedback
 

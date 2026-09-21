@@ -1,17 +1,14 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-20T06:48:43.730809+00:00
+Track: `buy_tier_level` · updated 2026-09-21T01:43:16.888312+00:00
 
 ## Portfolio loser feedback
 
-- Losers: **0** / 34 (0% count, 0% NAV)
+- Losers: **0** / 35 (0% count, 0% NAV)
 - Tolerance: count ≤ 40%, NAV ≤ 35% → within band
 - Balancing hint: `maintain`
 
 ## Holding reviews
-
-### KHC — broken / exit_candidate (+0.0%)
-- cheapness lost and not in buy tier
 
 ### CPRT — intact / hold_tolerate (-5.0%)
 - still strong_buy
@@ -32,7 +29,7 @@ Track: `buy_tier_level` · updated 2026-09-20T06:48:43.730809+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 63%
+- conviction 71%
 
 ### CMCSA — intact / hold_tolerate (-4.2%)
 - still strong_buy
@@ -72,7 +69,7 @@ Track: `buy_tier_level` · updated 2026-09-20T06:48:43.730809+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.90
-- conviction 53%
+- conviction 60%
 
 ### PCAR — intact / hold_tolerate (-1.8%)
 - still buy
@@ -86,7 +83,7 @@ Track: `buy_tier_level` · updated 2026-09-20T06:48:43.730809+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 53%
+- conviction 60%
 
 ### FANG — intact / hold_tolerate (-1.1%)
 - still strong_buy
@@ -133,7 +130,7 @@ Track: `buy_tier_level` · updated 2026-09-20T06:48:43.730809+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 76%
+- conviction 86%
 
 ### LIN — intact / hold_tolerate (-0.4%)
 - still buy
@@ -141,6 +138,19 @@ Track: `buy_tier_level` · updated 2026-09-20T06:48:43.730809+00:00
 - cheapness family still passes
 - data_quality 1.00
 - conviction 50%
+
+### CCEP — intact / hold_tolerate (+0.0%)
+- still buy
+- research accumulate
+- cheapness family still passes
+- data_quality 1.00
+- conviction 71%
+
+### SBUX — weakening / watch_review (+0.0%)
+- cheapness family no longer passes
+- conviction 31% below intact floor
+- still buy
+- research accumulate
 
 ### MSFT — intact / hold_tolerate (+0.7%)
 - still buy
@@ -175,7 +185,7 @@ Track: `buy_tier_level` · updated 2026-09-20T06:48:43.730809+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 64%
+- conviction 73%
 
 ### BKR — intact / hold_tolerate (+1.7%)
 - still strong_buy
@@ -210,7 +220,7 @@ Track: `buy_tier_level` · updated 2026-09-20T06:48:43.730809+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 0.95
-- conviction 45%
+- conviction 51%
 
 ### ADI — intact / hold_tolerate (+3.8%)
 - still buy
@@ -235,6 +245,6 @@ Track: `buy_tier_level` · updated 2026-09-20T06:48:43.730809+00:00
 
 ### SNDK — weakening / watch_review (+17.9%)
 - research verdict caution
-- conviction 21% below intact floor
+- conviction 25% below intact floor
 - still buy
 - cheapness family still passes

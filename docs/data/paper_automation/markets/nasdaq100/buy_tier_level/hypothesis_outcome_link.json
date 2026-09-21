@@ -3,21 +3,28 @@
   "scope": "hypothesis_outcome_link",
   "observe_only": true,
   "track_id": "buy_tier_level",
-  "generated_at": "2026-09-20T06:48:43.732841+00:00",
+  "generated_at": "2026-09-21T01:43:16.890519+00:00",
   "stamped_this_pass": {
     "hold_episodes": 0,
     "swap_rotations": 0
   },
   "hold_recovery_by_thesis": {
-    "closed_total": 0,
+    "closed_total": 1,
     "closed_unknown_thesis": 0,
-    "open_with_thesis": 14,
+    "open_with_thesis": 13,
     "by_thesis_status": {
       "intact": {
         "closed_count": 0
       },
       "weakening": {
-        "closed_count": 0
+        "closed_count": 1,
+        "recovery_rate": 1.0,
+        "sold_underwater_rate": 0.0,
+        "mean_peak_unrealized_pct": 0.0,
+        "mean_trough_unrealized_pct": 0.0,
+        "outcome_labels": {
+          "recovered": 1
+        }
       },
       "broken": {
         "closed_count": 0
@@ -48,10 +55,11 @@
   },
   "readiness": {
     "ready_for_thesis_outcome_analysis": false,
-    "hold_closed_with_thesis": 0,
+    "hold_closed_with_thesis": 1,
     "swap_sell_legs_with_thesis": 0,
     "gaps": [
-      "hold closed with thesis=0 (target >=8)",
+      "hold closed with thesis=1 (target >=8)",
+      "hold thesis buckets thin (weakening=1; target >=3 each)",
       "swap sell legs with thesis=0 (target >=5)"
     ],
     "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -66,7 +74,7 @@
       "ticker": "KHC",
       "name": "The Kraft Heinz Company",
       "started_at": "2026-09-17T20:46:47.721135-04:00",
-      "status": "open",
+      "status": "closed",
       "stress_triggers": [
         "signal_downgrade"
       ],
@@ -100,9 +108,9 @@
       "peak_unrealized_pct": 0.0,
       "trough_unrealized_pct": 0.0,
       "recovered_to_breakeven": true,
-      "close_reason": null,
-      "closed_at": null,
-      "linked_sell_trade_id": null
+      "close_reason": "sold_while_recovered",
+      "closed_at": "2026-09-20T21:43:16.812085-04:00",
+      "linked_sell_trade_id": "acea3f9c-f89e-4c34-8cf0-c024b37d491f"
     },
     {
       "episode_id": "buy_tier_level:CMCSA:2026-09-18T03:19:23.883077-04:00",
@@ -666,5 +674,64 @@
       "linked_sell_trade_id": null
     }
   ],
-  "swap_rotations": []
+  "swap_rotations": [
+    {
+      "rotation_id": "buy_tier_level:2026-09-20T21:43:16.812085-04:00",
+      "track_id": "buy_tier_level",
+      "logged_at": "2026-09-20T21:43:16.812085-04:00",
+      "status": "open",
+      "trade_cost_pct": 0.0018,
+      "sells": [
+        {
+          "ticker": "KHC",
+          "price": 24.73,
+          "shares": 1.187238,
+          "gross": 29.36,
+          "cost": 0.05,
+          "avg_cost_at_exit": 24.73,
+          "realized_pct": 0.0,
+          "thesis_status_at_start": "broken",
+          "recommended_action_at_start": "exit_candidate",
+          "thesis_reasons_at_start": [
+            "cheapness lost and not in buy tier"
+          ],
+          "failed_families_at_start": [
+            "cheapness",
+            "quality",
+            "dividend",
+            "garp",
+            "risk"
+          ],
+          "research_verdict_at_start": null,
+          "unrealized_pct_at_thesis": 0.0
+        }
+      ],
+      "buys": [
+        {
+          "ticker": "CCEP",
+          "price": 99.77,
+          "shares": 0.285946,
+          "gross": 28.53,
+          "cost": 0.05
+        },
+        {
+          "ticker": "SBUX",
+          "price": 95.83,
+          "shares": 0.007607,
+          "gross": 0.73,
+          "cost": 0.0
+        }
+      ],
+      "checkpoints": [],
+      "sell_returns_since_rotation": {
+        "KHC": 0.0
+      },
+      "buy_returns_since_rotation": {
+        "CCEP": 0.0,
+        "SBUX": 0.0
+      },
+      "verdict": null,
+      "closed_at": null
+    }
+  ]
 }

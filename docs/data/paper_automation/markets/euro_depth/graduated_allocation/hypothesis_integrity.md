@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `graduated_allocation` · updated 2026-09-20T06:45:02.128769+00:00
+Track: `graduated_allocation` · updated 2026-09-21T01:39:21.333705+00:00
 
 ## Portfolio loser feedback
 

@@ -353,14 +353,14 @@
     "plan_monthly_usd": 20.0,
     "plan_refresh_day_of_month": 8,
     "surplus_day_before_refresh": true,
-    "estimated_spend_usd_this_cycle": 686.9,
-    "estimated_spend_usd_this_week": 348.8,
-    "week_id": "2026-W38",
+    "estimated_spend_usd_this_cycle": 687.7,
+    "estimated_spend_usd_this_week": 0.8,
+    "week_id": "2026-W39",
     "cycle_id": "2026-09-d8",
     "weekly_ops_cap_usd": 84.5,
     "weekly_ops_plan_credit_share_cap": 0.15,
     "enforce_weekly_ops_cap": true,
-    "estimated_spend_weekly_ops_usd_this_week": 46.4,
+    "estimated_spend_weekly_ops_usd_this_week": 0.8,
     "note": "Cursor Ultra $200 included pool is surplus-math metadata. weekly_ops_cap_usd ring-fences orchestrator Sunday runs (email + ladder). Ad-hoc depth passes use ladder.spend_since_checkpoint_usd. Rememo daily cap stays at 3.",
     "cycle_surplus_provisional": {
       "status": "provisional",
@@ -526,7 +526,7 @@
       "note": "Re-live-fetch allowlist URLs from recently merged hunter tasks in the scoped library markets. Known canonical replacements are applied in filings.py; otherwise queue verify-rework or a low-priority hunter_url_repair engineering task."
     }
   },
-  "updated_at": "2026-09-20T20:38:34.066124+00:00",
+  "updated_at": "2026-09-21T01:44:13.699413+00:00",
   "ingest_parity_markets": [
     "asx200",
     "euro_depth"
@@ -549,7 +549,7 @@
     "research_hard_cap": 100,
     "research_all_graduated": false,
     "last_run": {
-      "run_at": "2026-09-20T06:22:14.354633+00:00",
+      "run_at": "2026-09-21T01:12:49.994931+00:00",
       "focus_market": "euro_depth",
       "focus_market_after": "euro_depth",
       "screen_shortlist": 49,
@@ -572,17 +572,22 @@
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "weekly_ops_cap_usd": 84.5,
-        "estimated_spend_weekly_ops_usd_this_week": 46.4,
+        "estimated_spend_weekly_ops_usd_this_week": 0.8,
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
         "remaining_usd_before": 38.1,
         "dedupe": {
           "already_researched_count": 451,
-          "fresh_skipped_count": 451,
-          "rememo_eligible_count": 0,
-          "rememo_eligible_sample": [],
-          "skipped_count": 292,
+          "fresh_skipped_count": 450,
+          "rememo_eligible_count": 1,
+          "rememo_eligible_sample": [
+            {
+              "ticker": "ADYEN.AS",
+              "reason": "stale_missing_grade_zero_body_catchup_2"
+            }
+          ],
+          "skipped_count": 291,
           "skipped_sample": [
             {
               "market": "euro_depth",
@@ -688,9 +693,39 @@
           "first_time_preferred": true,
           "note": "Exact Yahoo ticker match; earlier queue market wins. Each market queue puts no-memo buy-tier first, then rememo. Fresh memos are skipped; thin / body-lag memos rememo after ingest."
         },
-        "targets": [],
-        "dry_run": true,
-        "executed": 0
+        "targets": [
+          {
+            "market": "euro_depth",
+            "ticker": "ADYEN.AS",
+            "name": "Adyen N.V.",
+            "signal": "buy",
+            "conviction_score": 0.2443
+          },
+          {
+            "market": "sp500",
+            "ticker": "STE",
+            "name": "STERIS plc",
+            "signal": "buy",
+            "conviction_score": 0.3462
+          }
+        ],
+        "executed": 2,
+        "created": 2,
+        "updated": 0,
+        "errors": [],
+        "rememo_seeds": [
+          {
+            "ticker": "ADYEN.AS",
+            "focus_market": "euro_depth",
+            "action": "seeded",
+            "home_market": "aex",
+            "canonical_bodies": 2,
+            "home_bodies_before": 0,
+            "home_bodies_after": 2
+          }
+        ],
+        "estimated_spend_usd": 0.8,
+        "remaining_usd_after": 83.7
       },
       "graduation": {
         "graduated": false,

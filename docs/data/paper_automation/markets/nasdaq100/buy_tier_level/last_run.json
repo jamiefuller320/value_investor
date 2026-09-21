@@ -1,15 +1,63 @@
 {
   "acted": true,
   "gate": {
-    "local_time": "2026-09-20T02:48:43.673075-04:00",
+    "local_time": "2026-09-20T21:43:16.812085-04:00",
     "trading_day": true,
-    "after_settle": false,
+    "after_settle": true,
     "market_open_at": "2026-09-20T09:30:00-04:00",
     "settle_at": "2026-09-20T10:00:00-04:00",
-    "can_act": false,
-    "reason": "before market open"
+    "can_act": true,
+    "reason": "ok"
   },
-  "trades": [],
+  "trades": [
+    {
+      "id": "acea3f9c-f89e-4c34-8cf0-c024b37d491f",
+      "fund_id": "e97ef74a-eb76-42af-9436-ace9da81566c",
+      "acted_at": "2026-09-20T21:43:16.812085-04:00",
+      "ticker": "KHC",
+      "side": "sell",
+      "sizing_mode": "shares",
+      "shares": 1.187238,
+      "price": 24.73,
+      "gross": 29.36,
+      "cost": 0.05,
+      "net_cash": 29.31,
+      "note": "Automated exit \u2014 left target set",
+      "name": "The Kraft Heinz Company",
+      "avg_cost_at_exit": 24.73,
+      "position_closed": true
+    },
+    {
+      "id": "a960b8cf-6e05-4932-9eae-4f3ea50397b4",
+      "fund_id": "e97ef74a-eb76-42af-9436-ace9da81566c",
+      "acted_at": "2026-09-20T21:43:16.812085-04:00",
+      "ticker": "CCEP",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.285946,
+      "price": 99.77,
+      "gross": 28.53,
+      "cost": 0.05,
+      "net_cash": -28.58,
+      "note": "Automated buy",
+      "name": "Coca-Cola Europacific Partners PLC"
+    },
+    {
+      "id": "df777e06-c810-44ef-9bf4-9b7d45bc0ae1",
+      "fund_id": "e97ef74a-eb76-42af-9436-ace9da81566c",
+      "acted_at": "2026-09-20T21:43:16.812085-04:00",
+      "ticker": "SBUX",
+      "side": "buy",
+      "sizing_mode": "cash",
+      "shares": 0.007607,
+      "price": 95.83,
+      "gross": 0.73,
+      "cost": 0.0,
+      "net_cash": -0.73,
+      "note": "Automated buy",
+      "name": "Starbucks Corporation"
+    }
+  ],
   "plan": {
     "rules": [
       "Universe: only strong_buy / buy names from the latest screen.",
@@ -23,8 +71,8 @@
       "Re-entry cooldown: wait 1 rebalance(s) after a full exit before buying the same name again.",
       "Dust guard: skip trim/top-up adjustments below \u00a310."
     ],
-    "nav": 1000.31,
-    "cash": 0.0,
+    "nav": 1000.2,
+    "cash": -0.0,
     "max_positions": 120,
     "min_conviction": 0.0,
     "sector_cap": 1.0,
@@ -71,6 +119,13 @@
         "price": 129.75
       },
       {
+        "ticker": "PAYX",
+        "name": "Paychex, Inc.",
+        "signal": "strong_buy",
+        "conviction_score": 0.8584,
+        "price": 116.14
+      },
+      {
         "ticker": "BKR",
         "name": "Baker Hughes Company",
         "signal": "strong_buy",
@@ -99,11 +154,11 @@
         "price": 271.22
       },
       {
-        "ticker": "PAYX",
-        "name": "Paychex, Inc.",
-        "signal": "strong_buy",
-        "conviction_score": 0.7573000000000001,
-        "price": 116.14
+        "ticker": "CSCO",
+        "name": "Cisco Systems, Inc.",
+        "signal": "buy",
+        "conviction_score": 0.7291000000000001,
+        "price": 109.51
       },
       {
         "ticker": "KDP",
@@ -117,7 +172,14 @@
         "name": "Regeneron Pharmaceuticals, Inc.",
         "signal": "buy",
         "conviction_score": 0.7125,
-        "price": 784.85
+        "price": 784.668
+      },
+      {
+        "ticker": "TMUS",
+        "name": "T-Mobile US, Inc.",
+        "signal": "buy",
+        "conviction_score": 0.7104,
+        "price": 168.18
       },
       {
         "ticker": "CCEP",
@@ -162,13 +224,6 @@
         "price": 266.64
       },
       {
-        "ticker": "CSCO",
-        "name": "Cisco Systems, Inc.",
-        "signal": "buy",
-        "conviction_score": 0.6442,
-        "price": 109.51
-      },
-      {
         "ticker": "FANG",
         "name": "Diamondback Energy, Inc.",
         "signal": "strong_buy",
@@ -176,18 +231,25 @@
         "price": 192.42
       },
       {
-        "ticker": "TMUS",
-        "name": "T-Mobile US, Inc.",
-        "signal": "buy",
-        "conviction_score": 0.6278,
-        "price": 168.18
-      },
-      {
         "ticker": "MSFT",
         "name": "Microsoft Corporation",
         "signal": "buy",
         "conviction_score": 0.6272000000000001,
         "price": 493.78
+      },
+      {
+        "ticker": "ADSK",
+        "name": "Autodesk, Inc.",
+        "signal": "strong_buy",
+        "conviction_score": 0.5979000000000001,
+        "price": 216.95
+      },
+      {
+        "ticker": "BKNG",
+        "name": "Booking Holdings Inc.",
+        "signal": "strong_buy",
+        "conviction_score": 0.5953,
+        "price": 167.9
       },
       {
         "ticker": "WDC",
@@ -211,25 +273,18 @@
         "price": 60.85
       },
       {
-        "ticker": "ADSK",
-        "name": "Autodesk, Inc.",
-        "signal": "strong_buy",
-        "conviction_score": 0.5294,
-        "price": 216.95
-      },
-      {
-        "ticker": "BKNG",
-        "name": "Booking Holdings Inc.",
-        "signal": "strong_buy",
-        "conviction_score": 0.5271,
-        "price": 167.9
-      },
-      {
         "ticker": "CPRT",
         "name": "Copart, Inc.",
         "signal": "strong_buy",
         "conviction_score": 0.5242,
         "price": 29.28
+      },
+      {
+        "ticker": "WDAY",
+        "name": "Workday, Inc.",
+        "signal": "buy",
+        "conviction_score": 0.5138,
+        "price": 193.87
       },
       {
         "ticker": "LIN",
@@ -244,13 +299,6 @@
         "signal": "buy",
         "conviction_score": 0.4881,
         "price": 27.8
-      },
-      {
-        "ticker": "WDAY",
-        "name": "Workday, Inc.",
-        "signal": "buy",
-        "conviction_score": 0.4476,
-        "price": 193.87
       },
       {
         "ticker": "ORLY",
@@ -270,75 +318,22 @@
         "ticker": "SBUX",
         "name": "Starbucks Corporation",
         "signal": "buy",
-        "conviction_score": 0.2755,
+        "conviction_score": 0.313,
         "price": 95.83
       },
       {
         "ticker": "SNDK",
         "name": "Sandisk Corporation",
         "signal": "buy",
-        "conviction_score": 0.205445,
+        "conviction_score": 0.24649999999999997,
         "price": 1791.82
       }
     ],
-    "anticipated_exits": [
-      {
-        "action": "sell",
-        "ticker": "KHC",
-        "name": "The Kraft Heinz Company",
-        "reason": "No longer in the top conviction target set",
-        "shares": 1.187238,
-        "price": 24.73,
-        "value": 29.36
-      }
-    ],
+    "anticipated_exits": [],
     "anticipated_grace_holds": [],
     "anticipated_trims": [],
-    "anticipated_buys": [
-      {
-        "action": "buy",
-        "ticker": "CCEP",
-        "name": "Coca-Cola Europacific Partners PLC",
-        "reason": "New sleeve",
-        "value": 28.58,
-        "price": 99.77,
-        "target_value": 28.58,
-        "conviction_score": 0.7083,
-        "signal": "buy"
-      },
-      {
-        "action": "buy",
-        "ticker": "SBUX",
-        "name": "Starbucks Corporation",
-        "reason": "New sleeve",
-        "value": 0.73,
-        "price": 95.83,
-        "target_value": 28.58,
-        "conviction_score": 0.2755,
-        "signal": "buy"
-      }
-    ],
+    "anticipated_buys": [],
     "anticipated_holds": [
-      {
-        "action": "hold",
-        "ticker": "CMCSA",
-        "name": "Comcast Corporation",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 28.14,
-        "target_value": 28.58,
-        "conviction_score": 0.9400000000000001,
-        "signal": "strong_buy"
-      },
-      {
-        "action": "hold",
-        "ticker": "INTU",
-        "name": "Intuit Inc.",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 27.98,
-        "target_value": 28.58,
-        "conviction_score": 0.9285,
-        "signal": "strong_buy"
-      },
       {
         "action": "hold",
         "ticker": "PEP",
@@ -361,13 +356,13 @@
       },
       {
         "action": "hold",
-        "ticker": "QCOM",
-        "name": "QUALCOMM Incorporated",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 28.23,
+        "ticker": "CCEP",
+        "name": "Coca-Cola Europacific Partners PLC",
+        "reason": "Already near equal-weight target",
+        "value": 28.53,
         "target_value": 28.58,
-        "conviction_score": 0.6961499999999999,
-        "signal": "strong_buy"
+        "conviction_score": 0.7083,
+        "signal": "buy"
       },
       {
         "action": "hold",
@@ -381,13 +376,13 @@
       },
       {
         "action": "hold",
-        "ticker": "TMUS",
-        "name": "T-Mobile US, Inc.",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 28.01,
+        "ticker": "BKNG",
+        "name": "Booking Holdings Inc.",
+        "reason": "Already near equal-weight target",
+        "value": 28.76,
         "target_value": 28.58,
-        "conviction_score": 0.6278,
-        "signal": "buy"
+        "conviction_score": 0.5953,
+        "signal": "strong_buy"
       },
       {
         "action": "hold",
@@ -398,31 +393,60 @@
         "target_value": 28.58,
         "conviction_score": 0.5691,
         "signal": "buy"
-      },
+      }
+    ],
+    "skipped": [
       {
-        "action": "hold",
-        "ticker": "BKNG",
-        "name": "Booking Holdings Inc.",
-        "reason": "Already near equal-weight target",
-        "value": 28.76,
+        "ticker": "CMCSA",
+        "name": "Comcast Corporation",
+        "reason": "Insufficient cash after higher-conviction fills",
         "target_value": 28.58,
-        "conviction_score": 0.5271,
+        "conviction_score": 0.9400000000000001,
         "signal": "strong_buy"
       },
       {
-        "action": "hold",
+        "ticker": "INTU",
+        "name": "Intuit Inc.",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 28.58,
+        "conviction_score": 0.9285,
+        "signal": "strong_buy"
+      },
+      {
+        "ticker": "TMUS",
+        "name": "T-Mobile US, Inc.",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 28.58,
+        "conviction_score": 0.7104,
+        "signal": "buy"
+      },
+      {
+        "ticker": "QCOM",
+        "name": "QUALCOMM Incorporated",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 28.58,
+        "conviction_score": 0.6961499999999999,
+        "signal": "strong_buy"
+      },
+      {
         "ticker": "CPRT",
         "name": "Copart, Inc.",
-        "reason": "Top-up below min trade size (\u00a310)",
-        "value": 27.89,
+        "reason": "Insufficient cash after higher-conviction fills",
         "target_value": 28.58,
         "conviction_score": 0.5242,
         "signal": "strong_buy"
+      },
+      {
+        "ticker": "SBUX",
+        "name": "Starbucks Corporation",
+        "reason": "Insufficient cash after higher-conviction fills",
+        "target_value": 28.58,
+        "conviction_score": 0.313,
+        "signal": "buy"
       }
     ],
-    "skipped": [],
     "waitlisted": [],
-    "summary": "Next rebalance would target 35 equal-weight sleeve(s); sell 1 name(s) that left the set; deploy cash into 2 buy(s); leave 10 near-target holding(s)."
+    "summary": "Next rebalance would target 35 equal-weight sleeve(s); leave 6 near-target holding(s)."
   },
   "alerts": [
     {
@@ -530,7 +554,7 @@
       "source": "paper",
       "severity": "info",
       "message": "No stop/target breach; continue monitoring",
-      "mark": 784.85,
+      "mark": 784.668,
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
@@ -778,17 +802,6 @@
       "timing_signal": "neutral"
     },
     {
-      "ticker": "KHC",
-      "name": "The Kraft Heinz Company",
-      "source": "paper",
-      "severity": "info",
-      "message": "No stop/target breach; continue monitoring",
-      "mark": 24.73,
-      "stop_loss": null,
-      "take_profit": null,
-      "timing_signal": null
-    },
-    {
       "ticker": "SNDK",
       "name": "Sandisk Corporation",
       "source": "paper",
@@ -798,6 +811,28 @@
       "stop_loss": null,
       "take_profit": null,
       "timing_signal": "neutral"
+    },
+    {
+      "ticker": "CCEP",
+      "name": "Coca-Cola Europacific Partners PLC",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 99.77,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "neutral"
+    },
+    {
+      "ticker": "SBUX",
+      "name": "Starbucks Corporation",
+      "source": "paper",
+      "severity": "info",
+      "message": "No stop/target breach; continue monitoring",
+      "mark": 95.83,
+      "stop_loss": null,
+      "take_profit": null,
+      "timing_signal": "accumulate"
     }
   ],
   "fund": {
@@ -815,7 +850,7 @@
       "id": "e97ef74a-eb76-42af-9436-ace9da81566c",
       "created_at": "2026-09-18T00:46:47.721247+00:00"
     },
-    "cash": 0.0,
+    "cash": -0.0,
     "contributed_capital": 1000.0,
     "deposits_applied": 0,
     "holdings": {
@@ -1171,17 +1206,6 @@
         "take_profit": null,
         "opened_at": "2026-09-17T20:46:47.721135-04:00"
       },
-      "KHC": {
-        "ticker": "KHC",
-        "shares": 1.187238,
-        "avg_cost": 24.73,
-        "name": "The Kraft Heinz Company",
-        "sector": "Consumer Defensive",
-        "currency": "USD",
-        "stop_loss": null,
-        "take_profit": null,
-        "opened_at": "2026-09-17T20:46:47.721135-04:00"
-      },
       "SNDK": {
         "ticker": "SNDK",
         "shares": 0.019316,
@@ -1192,6 +1216,28 @@
         "stop_loss": null,
         "take_profit": null,
         "opened_at": "2026-09-17T20:46:47.721135-04:00"
+      },
+      "CCEP": {
+        "ticker": "CCEP",
+        "shares": 0.285946,
+        "avg_cost": 99.77,
+        "name": "Coca-Cola Europacific Partners PLC",
+        "sector": "Consumer Defensive",
+        "currency": "USD",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-20T21:43:16.812085-04:00"
+      },
+      "SBUX": {
+        "ticker": "SBUX",
+        "shares": 0.007607,
+        "avg_cost": 95.83,
+        "name": "Starbucks Corporation",
+        "sector": "Consumer Cyclical",
+        "currency": "USD",
+        "stop_loss": null,
+        "take_profit": null,
+        "opened_at": "2026-09-20T21:43:16.812085-04:00"
       }
     },
     "trades": [
@@ -1704,6 +1750,53 @@
         "net_cash": -29.41,
         "note": "Automated buy",
         "name": "Sandisk Corporation"
+      },
+      {
+        "id": "acea3f9c-f89e-4c34-8cf0-c024b37d491f",
+        "fund_id": "e97ef74a-eb76-42af-9436-ace9da81566c",
+        "acted_at": "2026-09-20T21:43:16.812085-04:00",
+        "ticker": "KHC",
+        "side": "sell",
+        "sizing_mode": "shares",
+        "shares": 1.187238,
+        "price": 24.73,
+        "gross": 29.36,
+        "cost": 0.05,
+        "net_cash": 29.31,
+        "note": "Automated exit \u2014 left target set",
+        "name": "The Kraft Heinz Company",
+        "avg_cost_at_exit": 24.73,
+        "position_closed": true
+      },
+      {
+        "id": "a960b8cf-6e05-4932-9eae-4f3ea50397b4",
+        "fund_id": "e97ef74a-eb76-42af-9436-ace9da81566c",
+        "acted_at": "2026-09-20T21:43:16.812085-04:00",
+        "ticker": "CCEP",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.285946,
+        "price": 99.77,
+        "gross": 28.53,
+        "cost": 0.05,
+        "net_cash": -28.58,
+        "note": "Automated buy",
+        "name": "Coca-Cola Europacific Partners PLC"
+      },
+      {
+        "id": "df777e06-c810-44ef-9bf4-9b7d45bc0ae1",
+        "fund_id": "e97ef74a-eb76-42af-9436-ace9da81566c",
+        "acted_at": "2026-09-20T21:43:16.812085-04:00",
+        "ticker": "SBUX",
+        "side": "buy",
+        "sizing_mode": "cash",
+        "shares": 0.007607,
+        "price": 95.83,
+        "gross": 0.73,
+        "cost": 0.0,
+        "net_cash": -0.73,
+        "note": "Automated buy",
+        "name": "Starbucks Corporation"
       }
     ],
     "equity_curve": [
@@ -1781,22 +1874,39 @@
           "issues": []
         },
         "note": "Automated rebalance"
+      },
+      {
+        "at": "2026-09-20T21:43:16.812085-04:00",
+        "portfolio_value": 746.86,
+        "cash": -0.0,
+        "contributed_capital": 1000.0,
+        "positions": 35,
+        "reporting_currency": "GBP",
+        "hedge_assumption": "none",
+        "fx": {
+          "rates": {
+            "GBP": 1.0,
+            "USD": 0.74671
+          },
+          "issues": []
+        },
+        "note": "Automated rebalance"
       }
     ],
-    "last_mark_at": "2026-09-20T02:48:43.673075-04:00",
+    "last_mark_at": "2026-09-20T21:43:16.812085-04:00",
     "rebalance_state": {
-      "exit_streak": {
+      "exit_streak": {},
+      "reentry_cooldown": {
         "KHC": 1
-      },
-      "reentry_cooldown": {}
+      }
     }
   },
-  "note": "Rebalanced after open settle (0 trade(s)).",
+  "note": "Rebalanced after open settle (3 trade(s)).",
   "exit_shadow_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-20T06:48:43.728628+00:00",
-    "open_count": 0,
+    "generated_at": "2026-09-21T01:43:16.886075+00:00",
+    "open_count": 1,
     "closed_count": 0,
     "by_exit_kind": {},
     "grace_vs_rotation": {
@@ -1808,13 +1918,13 @@
       }
     },
     "note": "Observe-only shadow cohort \u2014 scores post-exit price paths for learning; does not auto-tune momentum grace knobs yet. Only 0 closed exit(s) so far; wait for a thicker cohort.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 1,
     "checkpoints_added_this_pass": 0
   },
   "exit_timing_cohorts_review": {
     "schema_version": 1,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-20T06:48:43.729486+00:00",
+    "generated_at": "2026-09-21T01:43:16.886865+00:00",
     "framework": {
       "purpose": "Observe-only cohorts for hold-to-breakeven vs swap-success exit timing. Knob changes remain manual until cohorts mature (see deferred N25/L85/L117).",
       "hold_recovery": {
@@ -1868,30 +1978,37 @@
     },
     "readiness": {
       "ready_for_probability_analysis": false,
-      "hold_closed_count": 0,
+      "hold_closed_count": 1,
       "swap_closed_count": 0,
       "hold_with_data_quality_count": 14,
       "gaps": [
-        "hold_recovery closed episodes=0 (target >=15)",
+        "hold_recovery closed episodes=1 (target >=15)",
         "swap_rotation closed rotations=0 (target >=10)"
       ],
       "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met."
     },
     "hold_recovery": {
       "open": {
-        "count": 14,
-        "recovered_to_breakeven": 2,
+        "count": 13,
+        "recovered_to_breakeven": 1,
         "close_reasons": {
-          "open": 14
+          "open": 13
         }
       },
       "closed": {
-        "count": 0
+        "count": 1,
+        "recovered_to_breakeven": 1,
+        "close_reasons": {
+          "sold_while_recovered": 1
+        }
       }
     },
     "swap_rotation": {
       "open": {
-        "count": 0
+        "count": 1,
+        "verdicts": {
+          "open": 1
+        }
       },
       "closed": {
         "count": 0
@@ -1899,8 +2016,8 @@
     },
     "note": "Framework collecting \u2014 probability estimates deferred until closed cohort targets met.",
     "ingested_this_pass": {
-      "hold_episodes": 8,
-      "swap_rotations": 0
+      "hold_episodes": 0,
+      "swap_rotations": 1
     },
     "checkpoints_added_this_pass": {
       "hold_episodes": 0,
@@ -1912,8 +2029,8 @@
     "scope": "hypothesis_integrity",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "updated_at": "2026-09-20T06:48:43.730809+00:00",
-    "as_of": "2026-09-20T02:48:43.673075-04:00",
+    "updated_at": "2026-09-21T01:43:16.888312+00:00",
+    "as_of": "2026-09-20T21:43:16.812085-04:00",
     "config": {
       "underwater_pct": -0.05,
       "deep_underwater_pct": -0.15,
@@ -1925,16 +2042,16 @@
       "broken_urgency_boost": 0.28,
       "skip_underwater_urgency_when_intact": true
     },
-    "holding_count": 34,
+    "holding_count": 35,
     "underwater_count": 0,
     "thesis_status_counts": {
-      "intact": 30,
-      "weakening": 3,
-      "broken": 1,
+      "intact": 31,
+      "weakening": 4,
+      "broken": 0,
       "insufficient_data": 0
     },
     "portfolio_feedback": {
-      "holding_count": 34,
+      "holding_count": 35,
       "loser_count": 0,
       "loser_share": 0.0,
       "loser_nav_share": 0.0,
@@ -1952,49 +2069,17 @@
         "risk": 0.0
       },
       "family_fail_rate_non_losers": {
-        "cheapness": 0.0294,
-        "quality": 0.1471,
-        "dividend": 0.2647,
-        "garp": 0.2059,
-        "risk": 0.0294
+        "cheapness": 0.0286,
+        "quality": 0.1429,
+        "dividend": 0.2286,
+        "garp": 0.1714,
+        "risk": 0.0
       },
       "selection_feedback_flags": [],
       "balancing_hint": "maintain",
       "note": "Value books should tolerate a share of underwater names when thesis facts remain intact; use broken/weakening losers for rotation and selection feedback \u2014 not crude mark stops."
     },
     "holdings": [
-      {
-        "ticker": "KHC",
-        "name": "KHC",
-        "thesis_status": "broken",
-        "recommended_action": "exit_candidate",
-        "underwater": false,
-        "deep_underwater": false,
-        "unrealized_pct": 0.0,
-        "mark": 24.73,
-        "avg_cost": 24.73,
-        "signal": null,
-        "timing_signal": null,
-        "conviction_score": null,
-        "data_quality_score": null,
-        "passed_families": [],
-        "failed_families": [
-          "cheapness",
-          "quality",
-          "dividend",
-          "garp",
-          "risk"
-        ],
-        "research_verdict": null,
-        "reasons": [
-          "cheapness lost and not in buy tier"
-        ],
-        "intact_reasons": [],
-        "weaken_reasons": [],
-        "broken_reasons": [
-          "cheapness lost and not in buy tier"
-        ]
-      },
       {
         "ticker": "CPRT",
         "name": "Copart, Inc.",
@@ -2088,7 +2173,7 @@
         "avg_cost": 176.26,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6278,
+        "conviction_score": 0.7104,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2104,14 +2189,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 63%"
+          "conviction 71%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 63%"
+          "conviction 71%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2328,7 +2413,7 @@
         "avg_cost": 171.4,
         "signal": "strong_buy",
         "timing_signal": "accumulate",
-        "conviction_score": 0.5271,
+        "conviction_score": 0.5953,
         "data_quality_score": 0.9,
         "passed_families": [
           "cheapness",
@@ -2345,14 +2430,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.90",
-          "conviction 53%"
+          "conviction 60%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.90",
-          "conviction 53%"
+          "conviction 60%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2409,7 +2494,7 @@
         "avg_cost": 220.31,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.5294,
+        "conviction_score": 0.5979,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -2426,14 +2511,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.95",
-          "conviction 53%"
+          "conviction 60%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.95",
-          "conviction 53%"
+          "conviction 60%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2692,7 +2777,7 @@
         "avg_cost": 116.72,
         "signal": "strong_buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.7573,
+        "conviction_score": 0.8584,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2708,14 +2793,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 76%"
+          "conviction 86%"
         ],
         "intact_reasons": [
           "still strong_buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 76%"
+          "conviction 86%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -2759,6 +2844,87 @@
           "conviction 50%"
         ],
         "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "CCEP",
+        "name": "Coca-Cola Europacific Partners PLC",
+        "thesis_status": "intact",
+        "recommended_action": "hold_tolerate",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 99.77,
+        "avg_cost": 99.77,
+        "signal": "buy",
+        "timing_signal": "neutral",
+        "conviction_score": 0.7083,
+        "data_quality_score": 1.0,
+        "passed_families": [
+          "cheapness",
+          "quality",
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 71%"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "cheapness family still passes",
+          "data_quality 1.00",
+          "conviction 71%"
+        ],
+        "weaken_reasons": [],
+        "broken_reasons": []
+      },
+      {
+        "ticker": "SBUX",
+        "name": "Starbucks Corporation",
+        "thesis_status": "weakening",
+        "recommended_action": "watch_review",
+        "underwater": false,
+        "deep_underwater": false,
+        "unrealized_pct": 0.0,
+        "mark": 95.83,
+        "avg_cost": 95.83,
+        "signal": "buy",
+        "timing_signal": "accumulate",
+        "conviction_score": 0.313,
+        "data_quality_score": 0.9,
+        "passed_families": [
+          "dividend",
+          "garp",
+          "risk"
+        ],
+        "failed_families": [
+          "cheapness",
+          "quality"
+        ],
+        "research_verdict": "accumulate",
+        "reasons": [
+          "cheapness family no longer passes",
+          "conviction 31% below intact floor",
+          "still buy",
+          "research accumulate"
+        ],
+        "intact_reasons": [
+          "still buy",
+          "research accumulate",
+          "data_quality 0.90"
+        ],
+        "weaken_reasons": [
+          "cheapness family no longer passes",
+          "conviction 31% below intact floor"
+        ],
         "broken_reasons": []
       },
       {
@@ -2889,8 +3055,8 @@
         "recommended_action": "hold_tolerate",
         "underwater": false,
         "deep_underwater": false,
-        "unrealized_pct": 0.0132,
-        "mark": 784.85,
+        "unrealized_pct": 0.013,
+        "mark": 784.668,
         "avg_cost": 774.61,
         "signal": "buy",
         "timing_signal": "neutral",
@@ -2934,7 +3100,7 @@
         "avg_cost": 107.74,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.6442,
+        "conviction_score": 0.7291,
         "data_quality_score": 1.0,
         "passed_families": [
           "cheapness",
@@ -2950,14 +3116,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 64%"
+          "conviction 73%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 1.00",
-          "conviction 64%"
+          "conviction 73%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3135,7 +3301,7 @@
         "avg_cost": 187.76,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.4476,
+        "conviction_score": 0.5138,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -3152,14 +3318,14 @@
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.95",
-          "conviction 45%"
+          "conviction 51%"
         ],
         "intact_reasons": [
           "still buy",
           "research accumulate",
           "cheapness family still passes",
           "data_quality 0.95",
-          "conviction 45%"
+          "conviction 51%"
         ],
         "weaken_reasons": [],
         "broken_reasons": []
@@ -3296,7 +3462,7 @@
         "avg_cost": 1519.97,
         "signal": "buy",
         "timing_signal": "neutral",
-        "conviction_score": 0.2054,
+        "conviction_score": 0.2465,
         "data_quality_score": 0.95,
         "passed_families": [
           "cheapness",
@@ -3310,7 +3476,7 @@
         "research_verdict": "caution",
         "reasons": [
           "research verdict caution",
-          "conviction 21% below intact floor",
+          "conviction 25% below intact floor",
           "still buy",
           "cheapness family still passes"
         ],
@@ -3321,7 +3487,7 @@
         ],
         "weaken_reasons": [
           "research verdict caution",
-          "conviction 21% below intact floor"
+          "conviction 25% below intact floor"
         ],
         "broken_reasons": []
       }
@@ -3333,21 +3499,28 @@
     "scope": "hypothesis_outcome_link",
     "observe_only": true,
     "track_id": "buy_tier_level",
-    "generated_at": "2026-09-20T06:48:43.732841+00:00",
+    "generated_at": "2026-09-21T01:43:16.890519+00:00",
     "stamped_this_pass": {
       "hold_episodes": 0,
       "swap_rotations": 0
     },
     "hold_recovery_by_thesis": {
-      "closed_total": 0,
+      "closed_total": 1,
       "closed_unknown_thesis": 0,
-      "open_with_thesis": 14,
+      "open_with_thesis": 13,
       "by_thesis_status": {
         "intact": {
           "closed_count": 0
         },
         "weakening": {
-          "closed_count": 0
+          "closed_count": 1,
+          "recovery_rate": 1.0,
+          "sold_underwater_rate": 0.0,
+          "mean_peak_unrealized_pct": 0.0,
+          "mean_trough_unrealized_pct": 0.0,
+          "outcome_labels": {
+            "recovered": 1
+          }
         },
         "broken": {
           "closed_count": 0
@@ -3378,10 +3551,11 @@
     },
     "readiness": {
       "ready_for_thesis_outcome_analysis": false,
-      "hold_closed_with_thesis": 0,
+      "hold_closed_with_thesis": 1,
       "swap_sell_legs_with_thesis": 0,
       "gaps": [
-        "hold closed with thesis=0 (target >=8)",
+        "hold closed with thesis=1 (target >=8)",
+        "hold thesis buckets thin (weakening=1; target >=3 each)",
         "swap sell legs with thesis=0 (target >=5)"
       ],
       "note": "Hypothesis outcome linker collecting \u2014 defer thesis-based exit policy until closed cohorts mature."
@@ -3393,68 +3567,70 @@
     "schema_version": 1,
     "track_id": "buy_tier_level",
     "observe_only": true,
-    "generated_at": "2026-09-20T06:48:43.735390+00:00",
-    "open_count": 34,
-    "closed_count": 0,
-    "scored_count": 0,
-    "scored_count_all": 0,
+    "generated_at": "2026-09-21T01:43:16.893805+00:00",
+    "open_count": 35,
+    "closed_count": 1,
+    "scored_count": 1,
+    "scored_count_all": 1,
     "recommit_scored_count": 0,
     "entry_kind_counts": {
-      "first_entry": 0,
+      "first_entry": 1,
       "recommit": 0
     },
     "any_de_risk_count": 0,
-    "winning_cadence_counts": {},
+    "winning_cadence_counts": {
+      "dca_2x_weekly": 1
+    },
     "cadence_stats": {
       "dca_2x_weekly": {
         "label": "50/50 over 1 week",
-        "scored_episodes": 0,
-        "mean_end_value_delta": null,
-        "mean_de_risk_gbp": null,
-        "de_risk_rate": null,
-        "win_count": 0
+        "scored_episodes": 1,
+        "mean_end_value_delta": 0.0,
+        "mean_de_risk_gbp": 0.0,
+        "de_risk_rate": 0.0,
+        "win_count": 1
       },
       "dca_4x_weekly": {
         "label": "25% weekly \u00d7 4",
-        "scored_episodes": 0,
-        "mean_end_value_delta": null,
-        "mean_de_risk_gbp": null,
-        "de_risk_rate": null,
+        "scored_episodes": 1,
+        "mean_end_value_delta": 0.0,
+        "mean_de_risk_gbp": 0.0,
+        "de_risk_rate": 0.0,
         "win_count": 0
       },
       "dca_2x_biweekly": {
         "label": "50/50 over 2 weeks",
-        "scored_episodes": 0,
-        "mean_end_value_delta": null,
-        "mean_de_risk_gbp": null,
-        "de_risk_rate": null,
+        "scored_episodes": 1,
+        "mean_end_value_delta": 0.0,
+        "mean_de_risk_gbp": 0.0,
+        "de_risk_rate": 0.0,
         "win_count": 0
       },
       "dca_5x_weekday": {
         "label": "20% over 5 weekday marks",
-        "scored_episodes": 0,
-        "mean_end_value_delta": null,
-        "mean_de_risk_gbp": null,
-        "de_risk_rate": null,
+        "scored_episodes": 1,
+        "mean_end_value_delta": -0.03,
+        "mean_de_risk_gbp": 0.0,
+        "de_risk_rate": 0.0,
         "win_count": 0
       }
     },
     "readiness": {
       "ready_for_cadence_analysis": false,
-      "closed_episodes": 0,
+      "closed_episodes": 1,
       "closed_target": 12,
-      "tracks_with_closed": 0,
+      "tracks_with_closed": 1,
       "tracks_target": 2,
       "note": "Cadence ranking is collect-only until both gates clear. Do not promote starter-size or DCA knobs from this overlay alone.",
-      "first_entry_scored": 0,
+      "first_entry_scored": 1,
       "recommit_scored": 0
     },
     "note": "Counterfactual only \u2014 paper books still fill lump-sum (or graduated starter size). Compare across tracks before treating a cadence as model-independent.",
-    "ingested_this_pass": 0,
+    "ingested_this_pass": 2,
     "marked_this_pass": 34,
-    "closed_this_pass": 0
+    "closed_this_pass": 1
   },
-  "generated_at": "2026-09-20T06:48:43.735773+00:00",
+  "generated_at": "2026-09-21T01:43:16.894250+00:00",
   "track_id": "buy_tier_level",
   "track_label": "Buy-tier level cohort (raw screen, Suite B costs, cold start)",
   "is_primary_learning_track": false,

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-21T01:16:21.263616+00:00",
+  "generated_at": "2026-09-21T01:44:19.766637+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -201,16 +201,16 @@
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_weekly_ops_usd": 38.1,
-        "budget_note": "Estimated weekly_ops reached the 15% plan-credit pseudo limit ($3.00) — warning only, not a hard cap.",
+        "remaining_weekly_ops_usd": 83.7,
+        "budget_note": null,
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 314.0,
-        "estimated_spend_weekly_ops_usd_this_week": 46.4,
-        "estimated_spend_usd_this_cycle": 652.1,
-        "week_id": "2026-W38",
+        "estimated_spend_usd_this_week": 0.8,
+        "estimated_spend_weekly_ops_usd_this_week": 0.8,
+        "estimated_spend_usd_this_cycle": 687.7,
+        "week_id": "2026-W39",
         "cycle_id": "2026-09-d8"
       },
       "ladder": {
@@ -230,14 +230,14 @@
         "pool": "first_party"
       },
       "model_review": {
-        "last_reviewed_at": "2026-09-01T09:52:07.968556+00:00",
+        "last_reviewed_at": "2026-09-20T06:54:20.282943+00:00",
         "review_interval_days": 14
       },
       "macro_context": {
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-09-20T06:49:40.617938+00:00"
+      "updated_at": "2026-09-21T01:44:13.699413+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -272,7 +272,7 @@
       "email_report": {
         "name": "Email report",
         "cron": "17 6 * * 0",
-        "cadence": "Sunday quiet bundle via orchestrator (markets closed). Optional mid-week Analysis refresh: docs/ops/accelerated-review-cycle.md (email_only + force after engineering queue drains).",
+        "cadence": "Sunday quiet bundle via orchestrator (markets closed). Filing bodies come from Saturday pre-Sunday ingest-loop deepen (no full OCR pass inside email-report). Optional mid-week Analysis refresh: docs/ops/accelerated-review-cycle.md (email_only + force after engineering queue drains).",
         "workflow": "email-report.yml"
       },
       "engineering_agent": {
@@ -288,8 +288,8 @@
       },
       "ingest_loop": {
         "name": "FTSE Ingest Loop",
-        "cron": "0 7,10 * * 1,3,5",
-        "cadence": "Mon/Wed/Fri 07:00 + 10:00 UTC catch-up (GitHub schedule + external cron). Skips when this workflow already succeeded today or another run is active. Bounded ingest-improvement on buy-tier names from docs/data/latest.json; logs ingest_health; micro-compiles ingest engineering tasks when zero-body buy-tier coverage stalls. External cron: docs/ops/orchestrator-cron.md.",
+        "cron": "5 7,10 * * 1-5; 5 20,23 * * 6",
+        "cadence": "Mon–Fri 07:05 + 10:05 UTC deepen; Saturday 20:05 + 23:05 UTC pre-Sunday deepen (drain cap 6) so Sunday email-report can send without OCR burn. External cron: docs/ops/orchestrator-cron.md; design: docs/ops/ingest-scan-then-target.md#saturday-pre-sunday-deepen.",
         "workflow": "ingest-loop.yml"
       },
       "analysis_review": {
@@ -338,10 +338,16 @@
   "achievements": {
     "timeline": [
       {
-        "at": "2026-09-20T06:22:14.354633+00:00",
+        "at": "2026-09-21T01:12:49.994931+00:00",
         "kind": "ladder_run",
         "title": "Library ladder run (focus euro_depth)",
-        "detail": "shortlist=49 research created=None updated=None spend≈None"
+        "detail": "shortlist=49 research created=2 updated=0 spend≈0.8"
+      },
+      {
+        "at": "2026-09-20T06:54:20.282932+00:00",
+        "kind": "model_review",
+        "title": "Research model: composer-2.5 → composer-2.5",
+        "detail": "pool=first_party"
       },
       {
         "at": "2026-09-18T08:27:33.207642+00:00",
@@ -717,7 +723,7 @@
       }
     ],
     "last_ladder": {
-      "run_at": "2026-09-20T06:22:14.354633+00:00",
+      "run_at": "2026-09-21T01:12:49.994931+00:00",
       "focus_market": "euro_depth",
       "graduated_markets": [
         "sp500",
@@ -777,10 +783,10 @@
         "screen_shortlist": 49,
         "screen_strong_buy": 20,
         "screen_buy": 29,
-        "research_executed": 0,
-        "research_created": null,
-        "research_updated": null,
-        "research_estimated_spend_usd": null,
+        "research_executed": 2,
+        "research_created": 2,
+        "research_updated": 0,
+        "research_estimated_spend_usd": 0.8,
         "graduation_skipped": false,
         "graduated_to": null
       }
@@ -1151,12 +1157,19 @@
         "previous_model_id": "composer-2.5",
         "pool": "first_party",
         "available_count": 36
+      },
+      {
+        "reviewed_at": "2026-09-20T06:54:20.282932+00:00",
+        "model_id": "composer-2.5",
+        "previous_model_id": "composer-2.5",
+        "pool": "first_party",
+        "available_count": 39
       }
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-21T01:16:19.836275+00:00",
-    "queue_ui_updated_at": "2026-09-21T01:16:21.208938+00:00",
+    "compiled_at": "2026-09-21T00:16:29.042698+00:00",
+    "queue_ui_updated_at": "2026-09-21T01:44:19.797250+00:00",
     "task_count": 87,
     "status": {
       "open_count": 0,
@@ -1194,7 +1207,7 @@
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-09-20T06:49:46.830013+00:00",
+    "generated_at": "2026-09-21T01:44:19.818976+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
@@ -1464,56 +1477,5 @@
       "tracks_insufficient_epoch_marks": 2,
       "all_benchmark_spans_insufficient": false
     }
-  },
-  "queue_health": {
-    "schema_version": 1,
-    "generated_at": "2026-09-21T01:16:21.263616+00:00",
-    "overall": "idle",
-    "headline": "Queue and hunter idle.",
-    "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
-      "blocked": false,
-      "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
-    },
-    "agent_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
-      "blocked": false,
-      "should_dispatch": false,
-      "pause_active": false,
-      "traffic_pause_active": false,
-      "attention_parked_count": 1,
-      "open_count": 0,
-      "pr_open_count": 0,
-      "dispatch_eligible_count": 0,
-      "blocked_task_count": 0,
-      "next_task_id": null,
-      "reason": "no open engineering tasks in queue",
-      "detail": "No open engineering tasks — queue is idle."
-    },
-    "queue_clearing": {
-      "pause_active": false,
-      "attention_parked_count": 1,
-      "evaluated_at": "2026-09-21T01:16:20.570613+00:00"
-    },
-    "traffic_control": {
-      "pause_active": false,
-      "stuck_pr_count": 0,
-      "pause_reasons": [],
-      "evaluated_at": "2026-09-20T07:46:51.927644+00:00"
-    },
-    "ops_monitor": {
-      "run_at": "2026-09-20T07:46:35.090327+00:00",
-      "overall": "warn",
-      "should_dispatch_engineering": true
-    },
-    "merges_today": [],
-    "verified_merges_today_count": 0
   }
 }

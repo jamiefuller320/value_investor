@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `ai_judgment` · updated 2026-09-20T06:44:44.720410+00:00
+Track: `ai_judgment` · updated 2026-09-21T01:39:00.849955+00:00
 
 ## Portfolio loser feedback
 

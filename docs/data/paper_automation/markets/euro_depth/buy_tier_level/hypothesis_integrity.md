@@ -1,6 +1,6 @@
 # Hypothesis integrity (in-portfolio)
 
-Track: `buy_tier_level` · updated 2026-09-20T06:48:38.183152+00:00
+Track: `buy_tier_level` · updated 2026-09-21T01:43:11.115517+00:00
 
 ## Portfolio loser feedback
 
@@ -53,7 +53,7 @@ Track: `buy_tier_level` · updated 2026-09-20T06:48:38.183152+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 49%
+- conviction 58%
 
 ### RAND.AS — intact / hold_tolerate (-5.2%)
 - price drawdown alone does not invalidate value thesis
@@ -124,7 +124,7 @@ Track: `buy_tier_level` · updated 2026-09-20T06:48:38.183152+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 65%
+- conviction 73%
 
 ### ACKB.BR — intact / hold_tolerate (-0.2%)
 - still strong_buy
@@ -234,7 +234,7 @@ Track: `buy_tier_level` · updated 2026-09-20T06:48:38.183152+00:00
 - research accumulate
 - cheapness family still passes
 - data_quality 1.00
-- conviction 49%
+- conviction 58%
 
 ### VOE.VI — intact / hold_tolerate (+3.0%)
 - still buy
