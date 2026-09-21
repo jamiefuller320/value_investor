@@ -9884,21 +9884,61 @@ def test_parked_source_hunter_skip_bpt_ax_asx200():
     assert fetch_filings_ir_allowlist("BPT.AX") == []
 
 
-def test_parked_source_hunter_bpt_ax_asx200_leftover_is_bridgepoint_rns():
-    """eng-20260916-06: sample leftover Investegate row is Bridgepoint buyback RNS, not Beach Energy."""
+def test_parked_source_hunter_bpt_ax_asx200_leftover_is_bridgepoint_rns(monkeypatch):
+    """eng-20260916-06: sample leftover Investegate row is Bridgepoint buyback RNS, not Beach Energy.
+
+    Live Investegate/Markit fetches flake in CI; keep the attribution regression via mocked bodies.
+    """
     leftover_url = (
         "https://www.investegate.co.uk/announcement/rns/"
         "bridgepoint-group-reg-s---bpt/transaction-in-own-shares/9443330"
     )
+    markit_annual = (
+        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03118435-2A1687904"
+    )
+    investegate_html = (
+        "<!DOCTYPE html><html><body><article>"
+        "<h1>Transaction in Own Shares</h1>"
+        "<p>Bridgepoint Group plc (the &quot;Company&quot;) announces that it has "
+        "purchased the following number of its ordinary shares.</p><pre>"
+        + (
+            "J.P.Morgan Securities plc 2026-02-23 08:06:24 413 260.4000 XLON "
+            "05003050000000116-E0QO3HTPtWiI\n" * 40
+        )
+        + "</pre><p>The Company will hold the purchased shares in treasury.</p>"
+        "</article></body></html>"
+    )
+    import pymupdf
+
+    pdf_doc = pymupdf.open()
+    line_no = 0
+    for _ in range(3):
+        page = pdf_doc.new_page()
+        page.insert_text((72, 72), "Beach Energy Limited Annual Report 2025")
+        for idx in range(70):
+            page.insert_text(
+                (72, 100 + idx * 10),
+                f"Beach Energy statutory financial statements line {line_no}",
+            )
+            line_no += 1
+    markit_pdf = pdf_doc.tobytes()
+    pdf_doc.close()
+
+    def fake_http_get(url, headers=None, timeout=60):
+        if "investegate.co.uk" in url:
+            return investegate_html.encode("utf-8")
+        if "markitdigital.com" in url:
+            return markit_pdf
+        raise AssertionError(f"unexpected url {url}")
+
+    monkeypatch.setattr("value_investor.research.filings._http_get", fake_http_get)
+
     body = fetch_filing_body(leftover_url)
     assert body and len(body) > 1000
     assert "bridgepoint-group-reg-s---bpt" in leftover_url
     assert "Beach Energy" not in body
     assert "XLON" in body or "J.P.Morgan" in body
 
-    markit_annual = (
-        "https://asx.api.markitdigital.com/asx-research/1.0/file/2924-03118435-2A1687904"
-    )
     statutory = fetch_filing_body(markit_annual)
     assert statutory and len(statutory) > 5000
     assert "Beach Energy" in statutory
