@@ -641,6 +641,7 @@ _INTERIM_PATTERNS = (
     r"\bhalf[- ]year\b",
     r"\binterim results\b",
     r"\binterim report\b",
+    r"\bsix months ended\b",
     r"\bh1 results\b",
     r"\bh2 results\b",
     r"\bq[1-4]\b",
@@ -1596,6 +1597,68 @@ def dedupe_rns_index_rows(
         filings_dir=filings_dir,
     )
     return merged, pruned_pdf + pruned_page
+
+
+def _propagate_bodies_across_shared_filing_ids(
+    filings: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], int]:
+    """
+    Copy ``has_body`` from a sibling row when multiple index entries share one ``id``.
+
+    Investegate often indexes both the HTML announcement and the LSE PDF under the
+    same filing id; only one URL may have been fetched (IMB.L own-shares leftovers).
+    """
+    by_id: dict[str, list[dict[str, Any]]] = {}
+    for row in filings:
+        row_id = str(row.get("id") or "").strip()
+        if row_id:
+            by_id.setdefault(row_id, []).append(row)
+    propagated = 0
+    updated: list[dict[str, Any]] = []
+    for row in filings:
+        item = dict(row)
+        row_id = str(item.get("id") or "").strip()
+        if row_id and not item.get("has_body"):
+            donor = next(
+                (
+                    sibling
+                    for sibling in by_id.get(row_id, [])
+                    if sibling.get("has_body") and sibling.get("body_path")
+                ),
+                None,
+            )
+            if donor is not None:
+                item["has_body"] = True
+                item["body_path"] = donor.get("body_path")
+                if donor.get("body_content_hash"):
+                    item["body_content_hash"] = donor["body_content_hash"]
+                propagated += 1
+        updated.append(item)
+    return updated, propagated
+
+
+def _reconcile_ir_allowlist_row_metadata(
+    filings: list[dict[str, Any]],
+    *,
+    bodies_dir: Path,
+) -> tuple[list[dict[str, Any]], int]:
+    """Re-apply allowlist URL period overrides and body-derived tags for IR rows."""
+    reconciled = 0
+    updated: list[dict[str, Any]] = []
+    for row in filings:
+        if not _is_ir_allowlist_row(row):
+            updated.append(row)
+            continue
+        snippet = _body_snippet_for_row(row, bodies_dir)
+        refreshed = _apply_headline_period(dict(row), body_snippet=snippet)
+        if (
+            refreshed.get("period") != row.get("period")
+            or refreshed.get("priority") != row.get("priority")
+            or refreshed.get("entity_type") != row.get("entity_type")
+        ):
+            reconciled += 1
+        updated.append(refreshed)
+    return updated, reconciled
 
 
 def _rns_row_needs_body_refetch(row: dict[str, Any], filings_dir: Path) -> bool:
@@ -4625,6 +4688,8 @@ def load_ir_url_allowlist(path: Path | None = None) -> dict[str, list[str]]:
 _IR_ALLOWLIST_URL_PERIOD: dict[str, str] = {
     "https://investorpa.com/announcement-pdf/20251117/220734.pdf": "annual",
     "https://investorpa.com/announcement-pdf/20260511/291611.pdf": "interim",
+    # Imperial Brands HY26 statutory RNS — opaque LSE rns-pdf slug (eng-20260921-07).
+    "https://www.rns-pdf.londonstockexchange.com/rns/8727D_1-2026-5-11.pdf": "interim",
 }
 
 
@@ -5353,6 +5418,18 @@ def refetch_ir_allowlist_filing_bodies(
         filings = refreshed
 
     before = sum(1 for row in filings if row.get("has_body"))
+    filings, shared_body_propagated = _propagate_bodies_across_shared_filing_ids(filings)
+    filings, ir_metadata_reconciled = _reconcile_ir_allowlist_row_metadata(
+        filings,
+        bodies_dir=bodies_dir,
+    )
+    metadata_synced = stale_marked > 0 or shared_body_propagated > 0 or ir_metadata_reconciled > 0
+    if metadata_synced:
+        payload["filings"] = filings
+        payload["summary"] = summarize_filings(filings)
+        payload["ir_allowlist_metadata_synced_at"] = datetime.now(UTC).isoformat()
+        index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
     ir_rows = [row for row in filings if _is_ir_allowlist_row(row)]
     missing = [
         row
@@ -5367,20 +5444,19 @@ def refetch_ir_allowlist_filing_bodies(
         if row.get("url") and not row.get("has_body") and row.get("unfetchable")
     )
     if not missing:
-        if stale_marked:
-            payload["filings"] = filings
-            payload["summary"] = summarize_filings(filings)
-            index_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+        after_sync = sum(1 for row in filings if row.get("has_body"))
         return {
             "attempted": 0,
-            "fetched": 0,
+            "fetched": max(0, after_sync - before),
             "failed": 0,
             "with_body_before": before,
-            "with_body_after": before,
+            "with_body_after": after_sync,
             "investegate_fallbacks": 0,
             "skipped_unfetchable": skipped_unfetchable,
             "deadline_hit": False,
             "merge": merge_meta,
+            "shared_body_propagated": shared_body_propagated,
+            "ir_metadata_reconciled": ir_metadata_reconciled,
             "note": "no missing IR allowlist bodies",
         }
 
@@ -5546,6 +5622,7 @@ def refetch_ir_allowlist_filing_bodies(
                     item["has_body"] = True
                     item["body_path"] = str(path)
                     item["body_content_hash"] = content_hash
+                    item = _apply_headline_period(item, body_snippet=body[:4000])
                     known_body_hashes[content_hash] = row_id
                     if fetch_source and fetch_source.startswith("pdf_"):
                         item["body_fetch_parser"] = fetch_source.removeprefix("pdf_")
@@ -5554,6 +5631,7 @@ def refetch_ir_allowlist_filing_bodies(
                     downloaded += 1
         updated.append(item)
 
+    updated, _extra_propagated = _propagate_bodies_across_shared_filing_ids(updated)
     after = sum(1 for row in updated if row.get("has_body"))
     payload["filings"] = updated
     payload["summary"] = summarize_filings(updated)
@@ -9175,12 +9253,15 @@ def sanitize_filings_index(
             for row in filtered
         ]
     )
+    reclassified, shared_body_propagated = _propagate_bodies_across_shared_filing_ids(reclassified)
     reclassified, rns_doc_deduped = dedupe_rns_index_rows(
         reclassified,
         filings_dir=filings_dir,
     )
     pruned = len(filings) - len(reclassified)
-    changed = pruned > 0 or reclassified != filings or rns_doc_deduped > 0
+    changed = (
+        pruned > 0 or reclassified != filings or rns_doc_deduped > 0 or shared_body_propagated > 0
+    )
     if changed:
         payload["filings"] = reclassified
         payload["summary"] = summarize_filings(reclassified)

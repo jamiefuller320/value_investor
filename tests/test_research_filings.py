@@ -7443,8 +7443,119 @@ def test_fetch_filings_ir_allowlist_imb_l(tmp_path: Path):
     rows = fetch_filings_ir_allowlist("IMB.L", path=allowlist_path)
     assert len(rows) == 1
     assert rows[0]["source"] == "ir_allowlist"
+    assert rows[0]["period"] == "interim"
     assert "rns-pdf.londonstockexchange.com" in rows[0]["url"]
     assert "8727D_1-2026-5-11.pdf" in rows[0]["url"]
+
+
+def test_refetch_ir_allowlist_reconciles_imb_hy26_period(tmp_path: Path):
+    """eng-20260921-07: bodied HY26 allowlist row is re-tagged interim on metadata sync."""
+    allowlist_path = tmp_path / "empty_ir.json"
+    allowlist_path.write_text(json.dumps({"urls": {}}), encoding="utf-8")
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+
+    rows = fetch_filings_ir_allowlist("IMB.L", path=allowlist_path)
+    hy_row = rows[0]
+    body_text = (
+        "REPORT FOR THE SIX MONTHS ENDED 31 MARCH 2026\n"
+        "Tobacco net revenue growth of 1.5% supported by robust tobacco pricing.\n"
+        "Adjusted earnings per share up 5.3% driven by adjusted operating profit growth.\n"
+        "12-month free cash flow £2.6bn reflecting strong cash conversion of 98%.\n"
+        + ("detail " * 80)
+    )
+    body_path = bodies_dir / f"{hy_row['id']}.txt"
+    body_path.write_text(body_text, encoding="utf-8")
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        **hy_row,
+                        "period": "other",
+                        "priority": 0,
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    }
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = refetch_ir_allowlist_filing_bodies(
+        filings_dir,
+        "IMB.L",
+        company_name="Imperial Brands PLC",
+        allowlist_path=allowlist_path,
+    )
+    assert result["attempted"] == 0
+    assert result["ir_metadata_reconciled"] == 1
+
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    row = saved["filings"][0]
+    assert row["period"] == "interim"
+    assert int(row["priority"] or 0) > 0
+    assert saved["summary"]["interim"] == 1
+
+
+def test_sanitize_filings_index_propagates_imperial_own_share_sibling(tmp_path: Path):
+    """eng-20260921-07: Investegate HTML row inherits body from paired LSE PDF index entry."""
+    filings_dir = tmp_path / "filings"
+    bodies_dir = filings_dir / "bodies"
+    bodies_dir.mkdir(parents=True)
+    shared_id = "3931d5874e6930c7"
+    body_path = bodies_dir / "9b71856df352508f.txt"
+    body_path.write_text(
+        "Imperial Brands PLC transaction in own shares programme update.\n" + ("purchase " * 60),
+        encoding="utf-8",
+    )
+    pdf_url = "http://www.rns-pdf.londonstockexchange.com/rns/7010S_1-2026-8-28.pdf"
+    html_url = (
+        "https://www.investegate.co.uk/announcement/rns/imperial-brands--imb/"
+        "transaction-in-own-shares/9746551"
+    )
+    (filings_dir / "filings_index.json").write_text(
+        json.dumps(
+            {
+                "filings": [
+                    {
+                        "id": shared_id,
+                        "source": "investegate_direct",
+                        "headline": "Transaction in Own Shares",
+                        "published_at": "2026-08-28T00:00:00+00:00",
+                        "url": pdf_url,
+                        "period": "other",
+                        "has_body": True,
+                        "body_path": str(body_path),
+                    },
+                    {
+                        "id": shared_id,
+                        "source": "investegate_direct",
+                        "headline": "Transaction in Own Shares",
+                        "published_at": "2026-08-28T00:00:00+00:00",
+                        "url": html_url,
+                        "period": "other",
+                        "has_body": False,
+                        "body_path": None,
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = sanitize_filings_index(
+        filings_dir,
+        company_name="Imperial Brands PLC",
+        ticker="IMB.L",
+    )
+    assert result["with_body_after"] == 2
+    saved = json.loads((filings_dir / "filings_index.json").read_text(encoding="utf-8"))
+    html_row = next(row for row in saved["filings"] if row["url"] == html_url)
+    assert html_row["has_body"] is True
+    assert html_row["body_path"] == str(body_path)
 
 
 def test_refetch_ir_allowlist_filing_bodies_itv_l(tmp_path: Path, monkeypatch):
