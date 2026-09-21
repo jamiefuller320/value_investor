@@ -10,10 +10,13 @@ import pandas as pd
 
 from value_investor.research.verdict import compute_adjusted_signal
 from value_investor.scoring.dividend_sustainability_overlay import (
+    apply_dividend_sustainability_export_enforcement,
+    enforce_neutral_watchlist_dividend_caution_in_snapshot,
     enrich_screening_snapshot_dividend_dual_fcf_research_prompts,
 )
 from value_investor.scoring.dividend_yield_overlay import (
     enforce_dividend_yield_family_in_snapshot,
+    enforce_neutral_watchlist_dividend_caution_after_yield_export,
 )
 from value_investor.scoring.fcf import (
     _float_or_none,
@@ -24,11 +27,9 @@ from value_investor.scoring.fcf import (
     screen_ttm_from_row,
 )
 from value_investor.scoring.fcf_basis_overlay import (
-    apply_dividend_sustainability_export_enforcement,
     apply_fcf_export_enforcement,
     apply_media_cyclical_thin_fcf_export_enforcement,
     apply_statutory_fcf_moat_leverage_export_enforcement,
-    enforce_neutral_watchlist_dividend_caution_in_snapshot,
 )
 from value_investor.scoring.fcf_three_way_conviction_overlay import (
     enforce_fcf_three_way_conviction_in_snapshot,
@@ -329,7 +330,7 @@ def write_screening_snapshot(sources_dir: Path, snapshot: dict[str, Any]) -> Pat
     payload = enforce_fcf_basis_in_snapshot(payload, output_dir=output_dir)
     payload = enrich_screening_snapshot_fcf_dividend_coverage(payload, output_dir=output_dir)
     payload = enforce_dividend_yield_family_in_snapshot(payload, output_dir=output_dir)
-    payload = enforce_neutral_watchlist_dividend_caution_in_snapshot(payload)
+    payload = enforce_neutral_watchlist_dividend_caution_after_yield_export(payload)
     payload = enrich_screening_snapshot_dividend_dual_fcf_research_prompts(
         payload,
         output_dir=output_dir,

@@ -48,12 +48,25 @@ def resolve_statutory_dividend_coverage_for_overlay(
     free_cashflow: float | None = None,
 ) -> float | None:
     """Statutory OCF−CapEx dividend cover (never management/company-adjusted FCF)."""
+    from value_investor.scoring.fcf import fcf_dividend_coverage, filing_aligned_fcf
+
+    if (
+        operating_cashflow is not None
+        and capital_expenditure is not None
+        and dividends_paid is not None
+    ):
+        statutory_fcf = filing_aligned_fcf(
+            operating_cashflow,
+            capital_expenditure,
+            free_cashflow=free_cashflow,
+        )
+        computed = fcf_dividend_coverage(statutory_fcf, dividends_paid)
+        if computed is not None and not (isinstance(computed, float) and pd.isna(computed)):
+            return float(computed)
     if fcf_dividend_coverage_net is not None and not (
         isinstance(fcf_dividend_coverage_net, float) and pd.isna(fcf_dividend_coverage_net)
     ):
         return float(fcf_dividend_coverage_net)
-    from value_investor.scoring.fcf import fcf_dividend_coverage, filing_aligned_fcf
-
     statutory_fcf = filing_aligned_fcf(
         operating_cashflow,
         capital_expenditure,
