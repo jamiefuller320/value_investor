@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-21T10:52:39.952984+00:00",
+  "generated_at": "2026-09-21T11:00:09.143730+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -1168,18 +1168,18 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-21T10:52:36.150165+00:00",
-    "queue_ui_updated_at": "2026-09-21T10:52:39.859806+00:00",
+    "compiled_at": "2026-09-21T11:00:05.769641+00:00",
+    "queue_ui_updated_at": "2026-09-21T11:00:09.049917+00:00",
     "task_count": 92,
     "status": {
-      "open_count": 2,
-      "pr_open_count": 0,
+      "open_count": 1,
+      "pr_open_count": 1,
       "parked_count": 3,
       "merged_count": 67,
       "failed_count": 0,
       "next_task_id": "eng-20260921-04",
-      "in_flight_branch": null,
-      "in_flight_pr": null,
+      "in_flight_branch": "cursor/eng-20260921-05-1de3",
+      "in_flight_pr": 776,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
@@ -1199,7 +1199,7 @@
         "dispatch_eligible": true,
         "blocked_by": [],
         "effective_dispatch_rank": 1,
-        "clash_scan": "partial"
+        "clash_scan": "full"
       },
       {
         "id": "eng-20260921-05",
@@ -1207,15 +1207,11 @@
         "title": "Dividend-sustainability overlay on statutory OCF−CapEx (and interim-cut detection)",
         "priority": "high",
         "priority_score": 97.0,
-        "status": "open",
+        "status": "pr_open",
         "source": "post_run_review",
         "pr_url": null,
-        "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 2,
-        "clash_scan": "partial"
+        "pr_number": 776,
+        "branch_name": "cursor/eng-20260921-05-1de3"
       }
     ],
     "attention_tasks": [
@@ -1257,8 +1253,8 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 2,
-      "dispatch_eligible_count": 2,
+      "open_task_count": 1,
+      "dispatch_eligible_count": 1,
       "blocked_count": 0
     }
   },
@@ -1537,18 +1533,24 @@
   },
   "queue_health": {
     "schema_version": 1,
-    "generated_at": "2026-09-21T10:52:39.952984+00:00",
+    "generated_at": "2026-09-21T11:00:09.143730+00:00",
     "overall": "active",
-    "headline": "Agent lane active.",
+    "headline": "Merge lane active; agent lane active.",
     "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
+      "state": "running",
+      "idle": false,
+      "running": true,
       "blocked": false,
-      "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
+      "pr_open_count": 1,
+      "open_engineering_prs": [
+        {
+          "number": 776,
+          "branch": "cursor/eng-20260921-05-1de3",
+          "draft": false
+        }
+      ],
+      "in_flight_pr": 776,
+      "detail": "Open engineering PR(s) #776 — merge fires on CI success."
     },
     "agent_lane": {
       "state": "running",
@@ -1559,18 +1561,18 @@
       "pause_active": false,
       "traffic_pause_active": false,
       "attention_parked_count": 3,
-      "open_count": 2,
-      "pr_open_count": 0,
-      "dispatch_eligible_count": 2,
+      "open_count": 1,
+      "pr_open_count": 1,
+      "dispatch_eligible_count": 1,
       "blocked_task_count": 0,
       "next_task_id": "eng-20260921-04",
-      "reason": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)",
-      "detail": "queue ready — dispatch 2 open task(s) (slots=2, max_parallel=2)"
+      "reason": "queue ready — dispatch next open task",
+      "detail": "queue ready — dispatch next open task"
     },
     "queue_clearing": {
       "pause_active": false,
       "attention_parked_count": 3,
-      "evaluated_at": "2026-09-21T10:52:39.084468+00:00"
+      "evaluated_at": "2026-09-21T11:00:08.227595+00:00"
     },
     "traffic_control": {
       "pause_active": false,
