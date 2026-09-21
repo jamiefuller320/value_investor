@@ -594,6 +594,28 @@ def _cmd_list_parked(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_unpark_task(args: argparse.Namespace) -> int:
+    from value_investor.engineering_recovery import unpark_agent_task
+
+    action = unpark_agent_task(
+        str(args.task_id).strip(),
+        reason=str(args.reason).strip(),
+        tasks_path=_resolve_tasks_path(args.tasks_path),
+        apply=not args.dry_run,
+    )
+    if action is None:
+        if args.json:
+            _print_json({"unparked": False, "reason": "task not found or not parked"})
+        else:
+            print("Task not found or not parked", file=sys.stderr)
+        return 1
+    if args.json:
+        _print_json({"unparked": True, **action.to_dict()})
+    else:
+        print(f"Unparked {action.task_id}: {action.reason}")
+    return 0
+
+
 def _cmd_park_task(args: argparse.Namespace) -> int:
     from value_investor.engineering_recovery import park_agent_task
 
@@ -2102,6 +2124,24 @@ def main(argv: list[str] | None = None) -> int:
         help="Show the park action without writing the queue",
     )
     park_task_p.set_defaults(func=_cmd_park_task)
+
+    unpark_task_p = sub.add_parser(
+        "unpark-task",
+        parents=[common],
+        help="Reopen a parked task for engineering-agent dispatch",
+    )
+    unpark_task_p.add_argument("--task-id", required=True)
+    unpark_task_p.add_argument(
+        "--reason",
+        required=True,
+        help="Human-readable note stored on the recovery action",
+    )
+    unpark_task_p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show the unpark action without writing the queue",
+    )
+    unpark_task_p.set_defaults(func=_cmd_unpark_task)
 
     record_spend_p = sub.add_parser(
         "record-spend",
