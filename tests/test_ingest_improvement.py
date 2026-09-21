@@ -727,6 +727,7 @@ def test_run_ingest_improvement_pass_stops_at_runtime_budget(
         max_targets=2,
         suggestions_path=tmp_path / "missing.json",
         max_runtime_seconds=0,
+        backlog_path=tmp_path / "ingest_backlog.json",
     )
 
     assert summary.runtime_cutoff is True
@@ -815,6 +816,7 @@ def test_run_ingest_improvement_pass_aborts_slow_ticker_and_continues(
         max_runtime_seconds=30,
         per_ticker_max_seconds=0.4,
         discovery_scan=False,
+        backlog_path=tmp_path / "ingest_backlog.json",
     )
 
     assert mock_ingest_sources.call_count == 2
@@ -867,6 +869,7 @@ def test_run_ingest_improvement_pass_flushes_on_sigterm(
         max_runtime_seconds=30,
         per_ticker_max_seconds=10,
         discovery_scan=False,
+        backlog_path=tmp_path / "ingest_backlog.json",
     )
 
     assert mock_ingest_sources.call_count == 1
