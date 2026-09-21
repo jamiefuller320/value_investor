@@ -1,6 +1,6 @@
 # Currys plc (CURY.L) — Research memo
 
-_Version 3 · Updated 2026-09-21T07:48:18.254241+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-09-21T17:06:50.206071+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.73
-Rationale: Filing-backed cheapness and the 10 Sep trading update still support the screen’s strong buy, but absent fresh disclosures and unchanged cyclical, pension and execution risks keep research at accumulate.
+Rationale: Filing-backed cheapness and the 10 Sep trading update support the strong-buy screen, but no new RNS since the morning refresh and unchanged cyclical, pension and execution risks keep research at accumulate.
 RiskTags: cyclical, competitive, pension, leverage, key_person, regulatory, liquidity, accounting, other
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Chip-shortage and online-competition risks flagged in filings are unchanged; new
 Quantitative screen moved to **strong buy** (73% composite, improving); filing-backed fundamentals are unchanged since the 10 Sep trading update.  
 No new RNS, accounts or trading statements since the 15 Sep refresh—only generic post-AGM commentary in press.  
 Prior risks (cyclical demand, memory-chip costs, new CEO execution, leases/leverage) are unchanged.
+
+### 2026-09-21T17:06:50.206071+00:00
+No new RNS, accounts or trading statements since the 21 Sep morning refresh; the case still rests on the 10 Sep trading update and 28 Aug annual report.  
+News since then is only generic UK retail commentary (Kalkine)—nothing filing-grade.  
+Cyclical, pension, leverage, CEO execution and liquidity risks are unchanged.

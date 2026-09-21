@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-21T17:16:40.242861+00:00",
+  "generated_at": "2026-09-21T17:53:27.376216+00:00",
   "note": "Current automation settings and a dated achievement log assembled from library policy, ladder artifacts, and paper automation files. Paper/ladder runs currently keep only the latest snapshot plus cumulative fund trades.",
   "settings": {
     "paper": {
@@ -201,15 +201,15 @@
         "constraining": false,
         "near_limit": false,
         "budget_flag": "enforced",
-        "remaining_weekly_ops_usd": 83.7,
-        "budget_note": null,
+        "remaining_weekly_ops_usd": 70.1,
+        "budget_note": "Estimated weekly_ops reached the 15% plan-credit pseudo limit ($3.00) — warning only, not a hard cap.",
         "spend_checkpoint_usd": 60.0,
         "spend_since_checkpoint_usd": 10.4,
         "plan_refresh_day_of_month": 8,
         "surplus_day_before_refresh": true,
-        "estimated_spend_usd_this_week": 2.0,
-        "estimated_spend_weekly_ops_usd_this_week": 0.8,
-        "estimated_spend_usd_this_cycle": 688.9,
+        "estimated_spend_usd_this_week": 26.4,
+        "estimated_spend_weekly_ops_usd_this_week": 14.4,
+        "estimated_spend_usd_this_cycle": 713.3,
         "week_id": "2026-W39",
         "cycle_id": "2026-09-d8"
       },
@@ -237,7 +237,7 @@
         "enabled": true,
         "refresh_on_ladder": true
       },
-      "updated_at": "2026-09-21T03:04:22.747185+00:00"
+      "updated_at": "2026-09-21T15:23:02.415470+00:00"
     },
     "workflows": {
       "orchestrator": {
@@ -1168,40 +1168,23 @@
     ]
   },
   "engineering_queue": {
-    "compiled_at": "2026-09-21T17:16:37.277621+00:00",
-    "queue_ui_updated_at": "2026-09-21T17:16:40.122468+00:00",
-    "task_count": 93,
+    "compiled_at": "2026-09-21T17:52:41.112421+00:00",
+    "queue_ui_updated_at": "2026-09-21T17:53:27.378035+00:00",
+    "task_count": 92,
     "status": {
-      "open_count": 1,
+      "open_count": 0,
       "pr_open_count": 0,
       "parked_count": 1,
       "merged_count": 71,
       "failed_count": 0,
-      "next_task_id": "eng-20260921-06",
+      "next_task_id": null,
       "in_flight_branch": null,
       "in_flight_pr": null,
       "spend_since_checkpoint_usd": 10.4,
       "spend_checkpoint_usd": 60.0,
       "spend_blocked": false
     },
-    "queued_tasks": [
-      {
-        "id": "eng-20260921-06",
-        "area": "ingest",
-        "title": "Close stubborn ingest gaps for ITV.L (chain 1/3: 0/0 bodies, run igc-20260921-05)",
-        "priority": "high",
-        "priority_score": 88.0,
-        "status": "open",
-        "source": "ingest_gap_closure",
-        "pr_url": null,
-        "pr_number": null,
-        "branch_name": null,
-        "dispatch_eligible": true,
-        "blocked_by": [],
-        "effective_dispatch_rank": 1,
-        "clash_scan": "full"
-      }
-    ],
+    "queued_tasks": [],
     "attention_tasks": [
       {
         "id": "eng-20260920-16",
@@ -1217,14 +1200,14 @@
       }
     ],
     "clash_summary": {
-      "open_task_count": 1,
-      "dispatch_eligible_count": 1,
+      "open_task_count": 0,
+      "dispatch_eligible_count": 0,
       "blocked_count": 0
     }
   },
   "learning_track_epoch_datum": {
     "schema_version": 1,
-    "generated_at": "2026-09-21T08:31:47.621431+00:00",
+    "generated_at": "2026-09-21T17:53:27.378449+00:00",
     "observe_only": true,
     "note": "Per-track knob-epoch zero datums from decision-review apply baselines. Benchmark span needs ≥2 equity marks and ≥1 post-apply trade before epoch-scoped excess is used for knob proposals — no auto-apply from this panel.",
     "primary_learning_track": "ai_judgment",
@@ -1494,112 +1477,5 @@
       "tracks_insufficient_epoch_marks": 2,
       "all_benchmark_spans_insufficient": false
     }
-  },
-  "queue_health": {
-    "schema_version": 1,
-    "generated_at": "2026-09-21T17:16:40.242861+00:00",
-    "overall": "active",
-    "headline": "Agent lane active.",
-    "merge_lane": {
-      "state": "idle",
-      "idle": true,
-      "running": false,
-      "blocked": false,
-      "pr_open_count": 0,
-      "open_engineering_prs": [],
-      "in_flight_pr": null,
-      "detail": "No open engineering PRs — auto-merge waits for green CI on a branch."
-    },
-    "agent_lane": {
-      "state": "running",
-      "idle": false,
-      "running": true,
-      "blocked": false,
-      "should_dispatch": true,
-      "pause_active": false,
-      "traffic_pause_active": false,
-      "attention_parked_count": 1,
-      "open_count": 1,
-      "pr_open_count": 0,
-      "dispatch_eligible_count": 1,
-      "blocked_task_count": 0,
-      "next_task_id": "eng-20260921-06",
-      "reason": "queue ready — dispatch next open task",
-      "detail": "queue ready — dispatch next open task"
-    },
-    "queue_clearing": {
-      "pause_active": false,
-      "attention_parked_count": 1,
-      "evaluated_at": "2026-09-21T17:16:39.100490+00:00"
-    },
-    "traffic_control": {
-      "pause_active": false,
-      "stuck_pr_count": 0,
-      "pause_reasons": [],
-      "evaluated_at": "2026-09-20T07:46:51.927644+00:00"
-    },
-    "ops_monitor": {
-      "run_at": "2026-09-20T07:46:35.090327+00:00",
-      "overall": "warn",
-      "should_dispatch_engineering": true
-    },
-    "merges_today": [
-      {
-        "task_id": "eng-20260921-03",
-        "title": "FCF basis registry",
-        "area": "scoring",
-        "pr_number": 782,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/782",
-        "merged_at": "2026-09-21T16:52:12.618541+00:00",
-        "merge_class": "human",
-        "auto_merge": false,
-        "independently_verified": false
-      },
-      {
-        "task_id": "eng-20260921-02",
-        "title": "IR results-presentation pipeline",
-        "area": "ingest",
-        "pr_number": 783,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/783",
-        "merged_at": "2026-09-21T15:15:40.820228+00:00",
-        "merge_class": "human",
-        "auto_merge": false,
-        "independently_verified": false
-      },
-      {
-        "task_id": "eng-20260921-05",
-        "title": "Dividend-sustainability overlay on statutory OCF−CapEx (and interim-cut detection)",
-        "area": "scoring",
-        "pr_number": 776,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/776",
-        "merged_at": "2026-09-21T11:29:54.436741+00:00",
-        "merge_class": "human",
-        "auto_merge": false,
-        "independently_verified": false
-      },
-      {
-        "task_id": "eng-20260921-04",
-        "title": "Wire Yahoo/`CompanyMetrics` OCF (and related cash-flow fields) from `financials_annual.json` when fetch returns null",
-        "area": "ingest",
-        "pr_number": 777,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/777",
-        "merged_at": "2026-09-21T11:28:50.275597+00:00",
-        "merge_class": "ingest_narrow",
-        "auto_merge": false,
-        "independently_verified": true
-      },
-      {
-        "task_id": "eng-20260921-01",
-        "title": "Universal RNS body fetcher",
-        "area": "ingest",
-        "pr_number": 773,
-        "pr_url": "https://github.com/jamiefuller320/value_investor/pull/773",
-        "merged_at": "2026-09-21T04:16:22.632040+00:00",
-        "merge_class": "human",
-        "auto_merge": false,
-        "independently_verified": false
-      }
-    ],
-    "verified_merges_today_count": 1
   }
 }

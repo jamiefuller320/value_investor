@@ -1,6 +1,6 @@
 # Genuit Group plc (GEN.L) — Research memo
 
-_Version 3 · Updated 2026-09-21T07:47:14.699539+00:00 · Mode: structured_verdict_update_
+_Version 4 · Updated 2026-09-21T17:03:49.188481+00:00 · Mode: structured_verdict_update_
 
 _Phase B structured verdict (essay sections omitted on scheduled path)._
 
@@ -9,7 +9,7 @@ _Phase B structured verdict (essay sections omitted on scheduled path)._
 Verdict: accumulate
 Risk: medium
 Confidence: 0.67
-Rationale: Last filings still support near-book cheapness, ~5% yield and manageable leverage, but soft H1 volumes, margin pressure and weaker screen conviction keep the strong-buy case at phased accumulation.
+Rationale: Filings still support near-book yield and manageable leverage, but post-H1 softness, shallow model breadth and ~46% screen conviction temper a full strong buy; phased accumulation remains appropriate.
 RiskTags: cyclical, competitive, leverage, accounting, other
 
 ## Weekly updates
@@ -23,3 +23,8 @@ Screen remains **strong buy** (10/22, ~81% composite, ~62% conviction, 17w stabl
 No trading or results RNS since the 11 Aug H1 report; only routine TR-1 “Holding(s) in Company” notices (14, 17–18 Sep).
 Screen still **strong buy** (18w, stable) but headline conviction is lower (~46% vs ~62%) with 9/22 models (Neff PEGY off) and sharper negative earnings-growth inputs.
 Price remains slightly below the 200-day MA; RSI has recovered to ~44 from the mid-30s.
+
+### 2026-09-21T17:03:49.188481+00:00
+No material news since the morning refresh; the afternoon batch is empty and there is still no trading or results RNS after the 11 Aug H1 report (routine TR-1 only, 17–18 Sep).
+Screen remains **strong buy** (19w, stable) at ~46% conviction; model passes are 8/22 with Deep Value off as P/B edged above 1.0.
+RSI ~47; price still marginally below the 200-day MA—the H1 trading picture is unchanged.

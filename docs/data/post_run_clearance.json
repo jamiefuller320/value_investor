@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "last_run": {
+    "schema_version": 1,
+    "trigger": "post_run_review_email",
+    "evaluated_at": "2026-09-21T17:57:04.628971+00:00",
+    "review_source": "output/post_run_review.md",
+    "fingerprint": "baf9597b1f66c4597410",
+    "skipped": false,
+    "skip_reason": null,
+    "applied": true,
+    "lanes": {
+      "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
+    },
+    "should_dispatch_engineering": false,
+    "lane_c_recommended": true,
+    "actions": [
+      {
+        "kind": "lane_c_note",
+        "detail": "Post-run plan lines lack open queue matches — after eng merges idle, run accelerated email_only (Lane C); do not re-compile verbatim plan"
+      }
+    ],
+    "queue_before": {
+      "open_count": 0,
+      "pr_open_count": 0
+    },
+    "compile_cap_audit": {
+      "candidate_count": 11,
+      "truncated_count": 3,
+      "post_run_plan_beyond_cap": []
+    },
+    "plan_alignment": {
+      "unlinked_plan_titles": [
+        "Harden Investegate/LSE direct fetch for indexed RNS items (FY/HY results, annual reports)—replace Google News wrapper URLs and empty Ticker RNS bodies—starting with buy-tier partial coverage (PAF.L 16 missing bodies) and backlog patterns (AEP.L-style zero-body indexes).",
+        "Fix Companies House PDF/iXBRL download and OCR quality gate (retry, iXBRL-first, reject garbled OCR)—target ITV.L/MGNS.L failure modes cited in recent suggestions.",
+        "Standardize IR results-presentation ingest: allowlist fetch, full-text extract, and populate `ir_presentation_metrics.json` FCF/dividend bridges (FGP.L FY2026 report + presentation; MEGP.L H1 FY2026; HIK.L hikma.com PDFs per backlog).",
+        "Implement canonical FCF basis selector for overlays (filing-year statutory OCF−CapEx vs company-adjusted vs screen TTM) with explicit stale-year flag when screen numerator lags latest filing (FGP.L £73.8m company-adjusted vs £362.6m filing cash flow in deep analysis).",
+        "Wire `operating_cashflow` (and related cash-flow fields) from `financials_annual.json` into `CompanyMetrics` when Yahoo fetch returns None—validate on MEGP.L before re-running Piotroski/Earnings Quality."
+      ],
+      "terminal_only_titles": [
+        "Harden Investegate/LSE direct fetch for indexed RNS items (FY/HY results, annual reports)—replace Google News wrapper URLs and empty Ticker RNS bodies—starting with buy-tier partial coverage (PAF.L 16 missing bodies) and backlog patterns (AEP.L-style zero-body indexes).",
+        "Fix Companies House PDF/iXBRL download and OCR quality gate (retry, iXBRL-first, reject garbled OCR)—target ITV.L/MGNS.L failure modes cited in recent suggestions.",
+        "Standardize IR results-presentation ingest: allowlist fetch, full-text extract, and populate `ir_presentation_metrics.json` FCF/dividend bridges (FGP.L FY2026 report + presentation; MEGP.L H1 FY2026; HIK.L hikma.com PDFs per backlog).",
+        "Implement canonical FCF basis selector for overlays (filing-year statutory OCF−CapEx vs company-adjusted vs screen TTM) with explicit stale-year flag when screen numerator lags latest filing (FGP.L £73.8m company-adjusted vs £362.6m filing cash flow in deep analysis).",
+        "Wire `operating_cashflow` (and related cash-flow fields) from `financials_annual.json` into `CompanyMetrics` when Yahoo fetch returns None—validate on MEGP.L before re-running Piotroski/Earnings Quality."
+      ]
+    },
+    "compile_cap_drain_skipped": "no compile-cap / role-coherence backlog candidates remaining",
+    "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
+    "queue_after": {
+      "open_count": 0,
+      "pr_open_count": 0
+    },
+    "tasks_added_estimate": 0,
+    "dispatch_reason": "no open engineering tasks in queue"
+  },
+  "runs": [
+    {
+      "schema_version": 1,
+      "trigger": "post_run_review_email",
+      "evaluated_at": "2026-09-21T17:57:04.628971+00:00",
+      "review_source": "output/post_run_review.md",
+      "fingerprint": "baf9597b1f66c4597410",
+      "skipped": false,
+      "skip_reason": null,
+      "applied": true,
+      "lanes": {
+        "a_note": "ingest factory unchanged — weekday ingest-loop owns Lane A"
+      },
+      "should_dispatch_engineering": false,
+      "lane_c_recommended": true,
+      "actions": [
+        {
+          "kind": "lane_c_note",
+          "detail": "Post-run plan lines lack open queue matches — after eng merges idle, run accelerated email_only (Lane C); do not re-compile verbatim plan"
+        }
+      ],
+      "queue_before": {
+        "open_count": 0,
+        "pr_open_count": 0
+      },
+      "compile_cap_audit": {
+        "candidate_count": 11,
+        "truncated_count": 3,
+        "post_run_plan_beyond_cap": []
+      },
+      "plan_alignment": {
+        "unlinked_plan_titles": [
+          "Harden Investegate/LSE direct fetch for indexed RNS items (FY/HY results, annual reports)—replace Google News wrapper URLs and empty Ticker RNS bodies—starting with buy-tier partial coverage (PAF.L 16 missing bodies) and backlog patterns (AEP.L-style zero-body indexes).",
+          "Fix Companies House PDF/iXBRL download and OCR quality gate (retry, iXBRL-first, reject garbled OCR)—target ITV.L/MGNS.L failure modes cited in recent suggestions.",
+          "Standardize IR results-presentation ingest: allowlist fetch, full-text extract, and populate `ir_presentation_metrics.json` FCF/dividend bridges (FGP.L FY2026 report + presentation; MEGP.L H1 FY2026; HIK.L hikma.com PDFs per backlog).",
+          "Implement canonical FCF basis selector for overlays (filing-year statutory OCF−CapEx vs company-adjusted vs screen TTM) with explicit stale-year flag when screen numerator lags latest filing (FGP.L £73.8m company-adjusted vs £362.6m filing cash flow in deep analysis).",
+          "Wire `operating_cashflow` (and related cash-flow fields) from `financials_annual.json` into `CompanyMetrics` when Yahoo fetch returns None—validate on MEGP.L before re-running Piotroski/Earnings Quality."
+        ],
+        "terminal_only_titles": [
+          "Harden Investegate/LSE direct fetch for indexed RNS items (FY/HY results, annual reports)—replace Google News wrapper URLs and empty Ticker RNS bodies—starting with buy-tier partial coverage (PAF.L 16 missing bodies) and backlog patterns (AEP.L-style zero-body indexes).",
+          "Fix Companies House PDF/iXBRL download and OCR quality gate (retry, iXBRL-first, reject garbled OCR)—target ITV.L/MGNS.L failure modes cited in recent suggestions.",
+          "Standardize IR results-presentation ingest: allowlist fetch, full-text extract, and populate `ir_presentation_metrics.json` FCF/dividend bridges (FGP.L FY2026 report + presentation; MEGP.L H1 FY2026; HIK.L hikma.com PDFs per backlog).",
+          "Implement canonical FCF basis selector for overlays (filing-year statutory OCF−CapEx vs company-adjusted vs screen TTM) with explicit stale-year flag when screen numerator lags latest filing (FGP.L £73.8m company-adjusted vs £362.6m filing cash flow in deep analysis).",
+          "Wire `operating_cashflow` (and related cash-flow fields) from `financials_annual.json` into `CompanyMetrics` when Yahoo fetch returns None—validate on MEGP.L before re-running Piotroski/Earnings Quality."
+        ]
+      },
+      "compile_cap_drain_skipped": "no compile-cap / role-coherence backlog candidates remaining",
+      "idle_backstop_skipped": "skip_idle_backstop (fresh post-run compile)",
+      "queue_after": {
+        "open_count": 0,
+        "pr_open_count": 0
+      },
+      "tasks_added_estimate": 0,
+      "dispatch_reason": "no open engineering tasks in queue"
+    }
+  ]
+}
