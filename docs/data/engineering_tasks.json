@@ -1,7 +1,7 @@
 {
-  "compiled_at": "2026-09-21T20:50:14.554241+00:00",
+  "compiled_at": "2026-09-21T20:55:44.013955+00:00",
   "run_at": null,
-  "task_count": 93,
+  "task_count": 94,
   "tasks": [
     {
       "id": "eng-20260914-02",
@@ -1021,6 +1021,99 @@
       "pr_url": "https://github.com/jamiefuller320/value_investor/pull/657",
       "pr_number": 657,
       "merged_at": "2026-09-15T17:28:46.479225+00:00"
+    },
+    {
+      "id": "eng-20260921-07",
+      "area": "ingest",
+      "title": "Close library ingest gaps for dax / HEI.DE (chain 1/3: 0/0 improved, run igc-20260921-06)",
+      "summary": "Ingest gap-closure run igc-20260921-06 (chain root igc-20260921-06, round 1) targeted HEI.DE with outstanding indexed gaps after refetch yield 0/0. Investigate source mapping, URL resolution, or parser gaps; add a focused fix and regression test so the next pinned verification run closes the gap.",
+      "priority": "high",
+      "priority_score": 88.0,
+      "source": "ingest_gap_closure",
+      "evidence": {
+        "gap_closure_run_id": "igc-20260921-06",
+        "trial_id": "igc-20260921-06",
+        "chain_root_id": "igc-20260921-06",
+        "chain_round": 1,
+        "tickers": [
+          "HEI.DE"
+        ],
+        "ticker": "HEI.DE",
+        "market_id": "dax",
+        "library_market": "dax",
+        "universe": "library",
+        "rerun_ingest_gap_closure": true,
+        "rerun_ingest_trial": true,
+        "rerun_library_ingest_loop": true,
+        "refetch_attempted": 0,
+        "refetch_fetched": 0,
+        "gap_closure_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "HEI.DE",
+            "DTG.DE",
+            "HNR1.DE",
+            "HEN3.DE",
+            "FRE.DE",
+            "G1A.DE",
+            "VOW3.DE"
+          ],
+          "market_id": "dax",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
+        },
+        "trial_params": {
+          "max_targets": 1,
+          "max_bodies": 40,
+          "max_runtime_seconds": 2100.0,
+          "require_outstanding_gaps": true,
+          "intensive_gap_closure": true,
+          "pin_tickers": [
+            "HEI.DE",
+            "DTG.DE",
+            "HNR1.DE",
+            "HEN3.DE",
+            "FRE.DE",
+            "G1A.DE",
+            "VOW3.DE"
+          ],
+          "market_id": "dax",
+          "universe": "library",
+          "critical_path_blocker": "unmeasured"
+        },
+        "compile_reason": "gaps_remain_without_refetch"
+      },
+      "acceptance_criteria": [
+        "Add or extend fetch logic with a focused regression test for HEI.DE",
+        "Do not change live signal thresholds or paper-fund behaviour",
+        "Existing ingest-improvement pass can fetch new bodies on the next dry run"
+      ],
+      "allowed_paths": [
+        "src/value_investor/research/filings.py",
+        "src/value_investor/research/gap_fill_sources.py",
+        "src/value_investor/research/ingest.py",
+        "src/value_investor/research/ingest_improvement.py",
+        "src/value_investor/research/companies_house.py",
+        "src/value_investor/companies_house.py",
+        "tests/test_research_filings.py",
+        "tests/test_research_ingest.py",
+        "tests/test_gap_fill_deepen.py",
+        "tests/test_ingest_improvement.py",
+        "tests/test_companies_house.py"
+      ],
+      "blocked_paths": [
+        "src/value_investor/paper_fund.py",
+        "src/value_investor/simulator.py",
+        "src/value_investor/paper_automation_cli.py",
+        ".github/workflows/paper-auto.yml",
+        "docs/data/library/policy.json"
+      ],
+      "auto_merge": false,
+      "status": "open"
     },
     {
       "id": "eng-20260921-06",
@@ -5445,10 +5538,10 @@
     },
     "resumed_at": "2026-09-19T20:41:50.093893+00:00"
   },
-  "micro_compile_source": "parked_source_hunter",
+  "micro_compile_source": "ingest_gap_closure",
   "library_market_id": "nasdaq100",
   "hunter_ticker": "PDD",
-  "source_gap_closure_run_id": "igc-20260921-05",
-  "source_trial_id": "igc-20260921-05",
-  "source_chain_root_id": "igc-20260921-05"
+  "source_gap_closure_run_id": "igc-20260921-06",
+  "source_trial_id": "igc-20260921-06",
+  "source_chain_root_id": "igc-20260921-06"
 }
