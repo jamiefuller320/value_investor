@@ -678,6 +678,61 @@ def park_agent_task(
     )
 
 
+def unpark_agent_task(
+    task_id: str,
+    *,
+    reason: str,
+    tasks_path: Path = COMMITTED_TASKS_PATH,
+    apply: bool = True,
+) -> RecoveryAction | None:
+    """Reopen a parked task for engineering-agent dispatch (queue clearing triage)."""
+    from value_investor.engineering_tasks import _write_task_queue
+
+    wanted = str(task_id or "").strip()
+    if not wanted:
+        return None
+    data = load_engineering_tasks(tasks_path)
+    row = next(
+        (item for item in (data.get("tasks") or []) if str(item.get("id") or "") == wanted),
+        None,
+    )
+    if row is None:
+        return None
+    from_status = str(row.get("status") or "")
+    if from_status != PARKED_STATUS:
+        return None
+    action = RecoveryAction(
+        task_id=wanted,
+        action="unpark",
+        reason=reason,
+        from_status=from_status,
+        to_status="open",
+    )
+    if not apply:
+        return action
+    prior_row = dict(row)
+    row["status"] = "open"
+    for key in ("parked_reason", "parked_at", "parked_policy"):
+        row.pop(key, None)
+    tasks_path = Path(tasks_path)
+    tasks_path.parent.mkdir(parents=True, exist_ok=True)
+    _write_task_queue(data, path=tasks_path)
+    maybe_record_queue_clearing_action(
+        prior_row,
+        new_status="open",
+        tasks_path=tasks_path,
+        apply=True,
+    )
+    evaluate_queue_clearing_pause(tasks_path=tasks_path, apply=True)
+    try:
+        from value_investor.engineering_queue import refresh_engineering_queue_ui
+
+        refresh_engineering_queue_ui(tasks_path=tasks_path)
+    except OSError:
+        pass
+    return action
+
+
 def cancel_resolved_workflow_failure_tasks(
     *,
     tasks_path: Path = COMMITTED_TASKS_PATH,
