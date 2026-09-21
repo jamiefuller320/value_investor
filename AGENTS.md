@@ -16,6 +16,33 @@ Prefer work that serves these two, in order. Anything else should be parked with
 
 See [`docs/ops/market-sharded-learning.md`](docs/ops/market-sharded-learning.md) and [`docs/ops/euro-depth-sprint.md`](docs/ops/euro-depth-sprint.md).
 
+## Post-run persistent weaknesses & intensive clearance (required)
+
+The Analysis tab **Post-run improvement review** (`docs/data/latest.json` →
+`post_run_review`) includes a **Persistent weaknesses** section that rolls up
+hundreds of accumulated gap-fill / model suggestions into **themes**. It is **not**
+an engineering backlog and must **not** be executed as “fix every bullet.”
+
+**Canonical policy:** [`docs/ops/post-run-improvement-clearance.md`](docs/ops/post-run-improvement-clearance.md)
+
+When a user or task asks to “clear persistent weaknesses,” “intensively fix post-run
+findings,” or similar:
+
+1. Read that policy and follow the **three-lane model** (ingest factory → engineering
+   queue → narrative refresh).
+2. Align work to **P1** (FTSE buy-tier bodies, FCF basis, overlay bind, memo recency)
+   then **P2** (focus ingest sprint). Defer the rest with `ftse-defer`.
+3. Use **existing batching** — ingest-loop + gap-closure pins, `so-what --apply`,
+   compile-cap drain, narrow eng splits, clash-aware max **2** agents — never a
+   parallel “clearance queue” or one PR per ticker for shared scoring gaps.
+4. After merges with **idle queue**, refresh narrative via
+   [`docs/ops/accelerated-review-cycle.md`](docs/ops/accelerated-review-cycle.md)
+   (`email_only`) when plan lines still match merged tasks.
+
+**Do not** widen rememo for thin memos without new filing bodies (system_gaps remedy:
+ingest then body-lag rememo). Off-buy-tier zero-filing memos stay parked (**N138**)
+until the revisit trigger there.
+
 ## Parked / later ideas (required)
 
 When you give advice that is **not relevant now** or **potentially useful later** (deferred features, premature ideas, “revisit when…”, out-of-scope enhancements), **append it to the deferred-ideas store before ending the turn**:

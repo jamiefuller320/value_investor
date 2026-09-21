@@ -3,6 +3,10 @@
 Detects and repairs desync between the engineering queue processor and the
 supervised engineering agent.
 
+**Post-run “persistent weaknesses” vs this queue:** Analysis tab themes are not
+open tasks. Intensive clearance uses this queue (Lane B) plus ingest (Lane A) per
+[`post-run-improvement-clearance.md`](post-run-improvement-clearance.md).
+
 ## Problem this solves
 
 When `engineering-queue.yml` dispatches `engineering-agent.yml` with a concrete

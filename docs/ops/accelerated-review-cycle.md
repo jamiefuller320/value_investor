@@ -6,6 +6,12 @@ loop in the same calendar week, instead of waiting for the next Sunday email bun
 Use this when merged engineering changes (ingest, scoring, prompts) should be reflected
 on the dashboard **Analysis** tab before the next scheduled Sunday screen.
 
+This is **Lane C (narrative refresh)** in
+[`post-run-improvement-clearance.md`](post-run-improvement-clearance.md). Run it when
+post-run plan lines fuzzy-match **merged** engineering tasks but Persistent
+weaknesses still read like an open backlog — not as a substitute for ingest (Lane A)
+or compile-cap drain (Lane B).
+
 ## What this refreshes
 
 The GitHub Pages **Analysis** tab reads `docs/data/latest.json`:

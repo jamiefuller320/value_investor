@@ -3,6 +3,11 @@
 Daily operational health checks for cron-driven workflows, committed
 artifacts, ingest stall detection, and the engineering queue.
 
+Ops monitor is the daily driver for **Lane A/B** intensive clearance (ingest stall
+micro-compile, `so-what --apply`, engineering redispatch). Interpret post-run themes
+via [`post-run-improvement-clearance.md`](post-run-improvement-clearance.md) — do not
+treat Persistent weaknesses as N separate alert emails.
+
 **Heal → re-verify → report** (when `--apply` / default in CI):
 
 1. Detect findings (artifacts, ingest health, workflows, engineering queue, Phase B

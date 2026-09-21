@@ -97,6 +97,11 @@ Cap five experiment lines; overflow goes to **DEFER**.
 
 ## System gaps (learning-path integrity)
 
+Produce-layer flags in `system_gaps.json` (e.g. `thin_memo_counted_as_coverage`,
+`research_skipped_already_done`) overlap post-run **Persistent weaknesses**. Route
+remediation through [`post-run-improvement-clearance.md`](post-run-improvement-clearance.md)
+(Lane A ingest + body-lag rememo; do not widen rememo) — not a separate clearance queue.
+
 Sunday `analysis-review.yml` writes [`docs/data/system_gaps.json`](../data/system_gaps.json)
 **even when the modelling agent is skipped**. The snapshot is deterministic — it does
 not mine conversation transcripts.
